@@ -343,10 +343,3 @@ flowchart TD
 | Orval operationId가 다르게 생성됨 | `be-controller-builder` + `fe-route-agent` | Swagger operationId 고정 또는 route import 갱신 |
 | generated API가 mobile route에서 타입 불일치 | `qa-type-checker` 또는 `fe-route-agent` | DTO/response/read model 중 source를 확인해 재진입 |
 | tab이 4개가 되어 하단 폭/라벨이 답답함 | `fe-route-layout-agent` | label 축약 또는 탭 우선순위 재검토 |
-
-### 승인 / 실행 로그
-
-| 날짜 | 단계 | 상태 | 내용 | 작성자 |
-|------|------|------|------|--------|
-| 2026-05-27 | planning | approved | `/community` mobile route delivery spec 신규 작성. | orch-delivery |
-| 2026-05-27 | implementation | completed | backend/API/mobile UI/route/test 산출물을 spec 기준으로 작성하고 타입/테스트 검증 완료. | Codex |

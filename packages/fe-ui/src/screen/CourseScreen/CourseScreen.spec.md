@@ -119,12 +119,3 @@ route `page.tsx`는 이 screen을 `ScreenSurface`로 감싸고, screen은 `VStac
 | Screen | `CourseScreen` | `VStack` rhythm, title/action, `SectionSurface` body 소유 |
 | Feature | `CourseConsole` | surface 없이 업무 콘솔 흐름과 상태 분기 소유 |
 | Widget | `CourseFlowRail`, `CourseMetricGrid`, `CourseSectionTabs`, `CourseTableShell`, `CourseTableStatePanel` | 독립 패널/table shell에는 local `Surface` 사용 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-05-09 | CourseQueryState와 표 영역 상태 패널 계약 추가 | codex |
-| 2026-05-09 | page 내부 lower-layer 구현을 CourseConsole feature와 course widget 계층으로 분리하고 텍스트 화면 러프 추가 | codex |
-| 2026-05-09 | Course/CourseOffering/Enrollment/CoursePass 책임 분리 콘솔 pure screen 추가 | codex |
-| 2026-06-13 | route ScreenSurface, screen SectionSurface/rhythm, widget local Surface ownership 명시 | codex |

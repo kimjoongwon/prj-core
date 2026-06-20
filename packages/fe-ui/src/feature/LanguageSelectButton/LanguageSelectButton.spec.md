@@ -23,9 +23,3 @@
 - HeroUI `Dropdown`과 `Button`을 사용합니다.
 - 지원 언어는 `ko_KR`, `en_US`, `zh_CN`, `ja_JP` 네 가지입니다.
 - 라벨은 `useT`로 번역하되, catalog에 없으면 한국어 semantic key가 그대로 표시됩니다.
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-05-01 | 언어 선택 공용 feature 신규 생성 | codex |

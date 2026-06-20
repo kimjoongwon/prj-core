@@ -144,17 +144,3 @@ OIDC 클라이언트 수정
 | @heroui/react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
 | react | 기능 구현 의존성 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-05-09 | 화면 러프를 Desktop/Tablet/Mobile 기준으로 분리해 responsive 수정 form 기준을 강화 | codex |
-| 2026-05-09 | First-party/consent 수정 상태를 포함한 데스크톱/모바일 markdown 화면 러프를 추가 | codex |
-| 2026-05-09 | DB 기반 `isFirstParty` 초기화/저장 계약을 추가하고 consent 생략 정책을 first-party 상태에 맞춤 | codex |
-| 2026-05-05 | client별 로그인 화면 override를 초기화/저장하는 `loginUi` 계약과 브랜드 컬러 검증을 추가 | codex |
-| 2026-05-05 | first-party OIDC 클라이언트의 권한 동의 화면 생략 수정 계약과 custom scheme redirect URI 검증 허용 추가 | codex |
-| 2026-03-30 | 화면 데이터/이벤트 소유 경계를 상위 컨테이너 기준으로 정리 | codex |
-| 2026-03-29 | OIDC 클라이언트 수정 화면의 조회/저장/라우팅 책임 경계 정리 | codex |
-| 2026-03-28 | OIDC 클라이언트 표시명 기준 정리 | codex |
-| 2026-03-26 | 초기 화면 기획 수립 | codex |

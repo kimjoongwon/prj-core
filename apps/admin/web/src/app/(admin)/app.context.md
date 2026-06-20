@@ -408,26 +408,3 @@ AdminLayout
 3. Space 미선택 시 `/select-space`로 리다이렉트 (useSpaceGuard)
 4. PersistStore에 선택된 Space ID/이름 저장
 5. 로그아웃 시 PersistStore 초기화 후 `/admin/auth/login`으로 이동
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-05-09 | Course backend/API/Orval 구현 완료 상태, nested Course API path, route query state 렌더링 계약으로 갱신 | codex |
-| 2026-05-10 | Payment 공통 원장 도메인, Space-scoped API/Orval/admin route 계약 추가 | codex |
-| 2026-05-09 | Course backend/API/Orval 누락 re-entry 계약, Payment/Timeline/Reservation linkage, Stage 2/3 구현 대상 추가 | orch-requirement |
-| 2026-05-09 | Course/CourseOffering/Enrollment/CoursePass 관리 목표와 도메인 책임 분리 추가 | codex |
-| 2026-04-29 | 이메일 인증 관리 도메인과 FULL_ACCESS 전역 scope 목표를 추가 | codex |
-| 2026-03-11 | aggregate root 기준 spaces/tasks 경로와 API 계약으로 전환 | codex |
-| 2026-02-18 | 초기 생성 (역기획) | req-reverse-engineer |
-| 2026-02-19 | Timeline/Session 도메인 추가, GOAL-009/010 추가 | req-context-planner |
-| 2026-02-19 | Exercise 도메인 추가 (GOAL-011), 도메인 목록에 운동 종목 항목 추가 | req-context-planner |
-| 2026-02-19 | Ground 도메인 추가 (GOAL-012, 도메인 목록, Ground 맥락 섹션) | req-context-planner |
-| 2026-02-19 | Program 도메인 추가 (GOAL-013), 도메인 목록에 세션/프로그램 항목 추가, Program 맥락 섹션 추가 | orch-requirement |
-| 2026-02-20 | 삭제된 self-service 페이지(`/my-sessions`, `/my-account/change-password`) 관련 항목 정리 | OpenCode |
-| 2026-02-22 | 에셋 도메인 초안 추가 (GOAL-014, 도메인 목록 항목 추가) | orch-requirement |
-| 2026-02-22 | 도메인 명칭 오기 정정: GOAL-014 및 도메인 목록을 Asset(`/assets`) 기준으로 수정 | OpenCode |
-| 2026-02-22 | Asset 도메인 전체 기획: GOAL-015/016/017 추가, Asset 도메인 맥락 섹션 추가, 폴더/앨범 도메인 항목 추가 | orch-requirement |
-| 2026-02-25 | Inquiry 도메인 추가 (GOAL-018~023, ACT-004 상담원 역할, Inquiry 도메인 맥락 섹션) | orch-requirement |
-| 2026-02-26 | AI Form Template 도메인 추가 (GOAL-024, AI Form Template 도메인 맥락 섹션) | orch-requirement |
-| 2026-02-28 | AI Form Template 페이지 기반 기획 제거, Create/Update 상단 AiForm Feature 기준으로 정리 | Codex |

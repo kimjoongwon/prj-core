@@ -44,10 +44,3 @@
 | 보관 | 문서를 ARCHIVED 상태로 전환 |
 | 삭제 | 문서를 soft delete |
 | 본문 형식 변경 | HTML이면 CKEditor, Markdown/Plain text면 textarea로 전환 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-05-02 | 초기 생성 | Codex |
-| 2026-05-02 | HTML 본문 입력을 CKEditor 기반 에디터로 전환 | Codex |

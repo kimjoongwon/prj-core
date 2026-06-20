@@ -24,10 +24,3 @@
 | `onClickEditButton` | `/policies/[policyId]/edit` 이동 |
 | `onClickDeleteConfirm` | `useDeletePolicy` 호출 |
 | `onClickSaveAbilitiesButton` | `useSyncPolicyAbilities` 호출 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-04-28 | 정책 상세 route page 스캐폴딩 추가 | codex |
-| 2026-04-28 | 실제 PolicyAbility 응답에서 Ability ID를 매핑하도록 정리 | codex |

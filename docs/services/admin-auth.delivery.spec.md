@@ -143,11 +143,3 @@ flowchart TD
 | AUTH-VERIFY-ADMIN-BUILD | admin web build | `pnpm --filter=admin-web build` | auth/settings/public auth routes build 성공 |
 | AUTH-VERIFY-CODEGEN | IDP spec source | `pnpm --filter=@cocrepo/api codegen` 필요 시 | IDP namespace 유지, source는 core `/idp-api-json` |
 | AUTH-VERIFY-OIDC | protocol smoke | `/oidc/auth` -> `/admin/auth/interaction/[uid]` -> callback | core-api runtime에서 protocol path 유지 |
-
-## 승인 / 실행 로그
-
-| 일시 | 단계 | 결정/결과 | 작성자 | 비고 |
-|------|------|-----------|--------|------|
-| 2026-06-06 | backend physical merge approved | `idp/api` app 제거와 `core/api` 물리 통합으로 범위 확장 | 사용자 | 하위호환성 미고려, 전체 마이그레이션 |
-| 2026-06-06 | spec rewrite | 통합 인증 콘솔 + backend 물리 통합 기준으로 service spec 갱신 | Codex | `orch-delivery` owner 산출물 |
-| 2026-06-06 | web consolidation baseline | `admin/web` 단일 콘솔과 OIDC 기능 보존 기준 정리 | Codex | 이후 backend 통합 기준으로 확장 |

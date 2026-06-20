@@ -32,7 +32,7 @@
 ### 용어 정리
 
 - `reference-data definition`: `src/reference-data/definitions/**`에 있는 코드 소유 기준 데이터
-- `reference-data migration`: `src/reference-data/migrations/**`에 등록된 versioned 변경 이력
+- `reference-data migration`: `src/reference-data/migrations/**`에 등록된 versioned 기준 데이터 기록
 - `bootstrap default`: `src/bootstrap/data/**`에 있는 create-only 성격의 초기값
 - `demo data`: `src/demo-data/**`에 있는 dev/stg용 샘플 데이터
 - `bootstrap runtime`: `src/bootstrap/**`에 있는 실제 적재 orchestration

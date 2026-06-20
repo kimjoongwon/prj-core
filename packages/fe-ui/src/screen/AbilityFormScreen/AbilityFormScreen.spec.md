@@ -60,9 +60,3 @@ AbilityFormScreen
 | AbilityFormScreenChangeHandlers | 필드 변경 핸들러 계약 |
 | AbilityFormScreenProps | 공개 계약 요소 |
 | AbilityFormScreen | 공개 계약 요소 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-03-26 | 초기 화면 기획 수립 | codex |

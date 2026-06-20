@@ -78,10 +78,3 @@ TimelineSessionProgramDetailScreen
 
 - 기본 정보 영역은 `routineNameSnapshot`과 `activityCount`를 우선 사용합니다.
 - `executionPlan` 각 항목은 순서, 반복, 휴식, 운동 설명, 시간, 횟수, 이미지/영상 자산 링크를 카드 형태로 노출합니다.
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-03-29 | Program 상세 화면의 실행 운동 영역과 루틴 스냅샷 표시 규칙 추가 | codex |
-| 2026-03-26 | 초기 화면 기획 수립 | codex |

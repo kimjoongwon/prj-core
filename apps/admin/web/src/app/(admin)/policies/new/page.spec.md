@@ -23,10 +23,3 @@
 | `onClickBackButton` | `/policies` 이동 |
 | `onClickSubmitButton` | `useCreatePolicy` 호출 후 선택 Ability가 있으면 `useSyncPolicyAbilities` 호출 |
 | `onToggleAbility` | 로컬 `abilityIds` 선택 상태 변경 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-04-28 | 정책 등록 route page 스캐폴딩 추가 | codex |
-| 2026-04-28 | 생성/Ability 동기화를 실제 Orval 계약에 맞게 분리 | codex |

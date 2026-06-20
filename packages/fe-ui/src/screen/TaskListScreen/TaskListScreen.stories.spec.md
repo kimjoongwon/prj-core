@@ -16,9 +16,3 @@
 | Loading | `isLoading` fallback 렌더링을 확인 |
 | Busy | 삭제 진행 중 액션 상태를 확인 |
 | EmptyState | 빈 목록 상태를 확인 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-04-28 | TaskListScreen Storybook fixture를 `TaskDto.exercise` 기반 row 계약에 맞게 정의 | codex |

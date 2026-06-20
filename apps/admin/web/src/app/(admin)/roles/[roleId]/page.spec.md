@@ -47,12 +47,3 @@
 |------|------|
 | ScreenSurface owner | page/screen content owner |
 | 본문 | `RoleDetailScreen`가 `ScreenSurface > SectionSurface`로 상세 영역 구성 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-04-28 | 역할 Ability 직접 편집을 정책 할당 편집으로 교체 | codex |
-| 2026-04-28 | RolePolicy assignment payload와 active/priority 편집 계약 반영 | codex |
-| 2026-04-27 | 메뉴 노출과 화면 접근이 별도 권한 정책이며 page 접근은 역할 상세에서 수동 부여하는 정책을 명시 | codex |
-| 2026-04-27 | 권한 저장 성공 시 현재 로그인 사용자 권한 캐시도 무효화해 화면 접근 변경을 즉시 반영하도록 문서화 | codex |

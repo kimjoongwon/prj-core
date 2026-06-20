@@ -61,15 +61,3 @@ TaskListScreen
 | lucide-react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
 | react | 기능 구현 의존성 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-05-01 | 삭제 모달과 주요 액션 문구가 런타임 i18n을 사용하도록 반영 | codex |
-| 2026-04-28 | Storybook row fixture가 `TaskDto.exercise` 계약과 영상 준비 여부 표시 기준을 따르도록 정리 | codex |
-| 2026-04-28 | 목록 row 계약을 Page 전용 view model 대신 Orval DTO optional props로 정리 | codex |
-| 2026-04-24 | 목록 검색과 페이지네이션 검색 조건 계약을 명시적으로 정리 | codex |
-| 2026-03-29 | Task 목록의 스케줄 가능 상태 노출 계약 추가 | codex |
-| 2026-03-29 | Task 목록 화면의 조회/삭제/라우팅 책임 경계 정리 | codex |
-| 2026-03-26 | 초기 화면 기획 수립 | codex |

@@ -66,7 +66,7 @@ Next.js App Router의 root `apps/**/layout.tsx`와 필요한 named slot topology
 5. `page.tsx`는 root layout shell 안에서 콘텐츠 wiring만 담당합니다. route-level `App`/`Page`/`Layout`/surface/rhythm은 다시 만들게 두지 않습니다.
 6. `layout.tsx`는 page 데이터 fetch와 페이지 이벤트 바인딩을 직접 수행하지 않습니다. 필요한 client 로직은 feature/widget을 slot에 배치해 해결합니다.
 7. route skeleton을 구현하기 위해 로컬 ad-hoc layout primitive를 만들지 않습니다. 부족한 primitive가 있으면 `fe-layout-agent`가 먼저 보강해야 합니다.
-8. 코드 수정 시 `page.spec.md`를 함께 갱신하고 `## 변경 이력`을 남깁니다.
+8. 코드 수정 시 대응 `page.spec.md`를 함께 갱신합니다.
 9. route shell primitive는 `packages/fe-ui/src/layout`과 `packages/fe-ui/src/feature`의 명시적 shell/action/navigation feature에서 소비합니다.
 10. route shell의 `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 `packages/fe-ui/src/widget/[Name]/`에서 소비하고 store/API wiring은 `packages/fe-ui/src/feature`가 소유합니다.
 11. `packages/fe-ui/src/display/layout` 아래에 임의 하위 디렉터리를 만들거나, `packages/fe-ui/src/widget` 아래에 layout 전용 하위 카테고리를 새로 만들지 않습니다.
@@ -203,7 +203,6 @@ slot에 aside/header/footer 같은 구조가 필요하면 route layout에서 `Pa
 - `## Slot 대체 처리`
 - `## 독립 Navigation 정책`
 - `## Child Content 계약`
-- `## 변경 이력`
 
 각 섹션에는 최소 아래가 기록되어야 합니다.
 

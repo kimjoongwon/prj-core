@@ -155,17 +155,3 @@ OIDC 클라이언트 등록
 | @cocrepo/type | OIDC client 로그인 UI override 타입 |
 | @cocrepo/ui | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-05-09 | 화면 러프를 Desktop/Tablet/Mobile 기준으로 분리해 responsive form 배치 기준을 강화 | codex |
-| 2026-05-09 | First-party/consent 설정을 포함한 데스크톱/모바일 markdown 화면 러프를 추가 | codex |
-| 2026-05-09 | DB 기반 `isFirstParty` 제출 계약을 추가하고 `skipConsent`를 first-party 상태에 종속하도록 갱신 | codex |
-| 2026-05-05 | client별 로그인 화면 override를 제출하는 `loginUi` 계약과 브랜드 컬러 검증을 추가 | codex |
-| 2026-05-05 | first-party OIDC 클라이언트의 권한 동의 화면 생략 제출 계약과 custom scheme redirect URI 검증 허용 추가 | codex |
-| 2026-03-30 | 화면 데이터/이벤트 소유 경계를 상위 컨테이너 기준으로 정리 | codex |
-| 2026-03-29 | OIDC 클라이언트 등록 화면의 생성/라우팅 책임 경계 정리 | codex |
-| 2026-03-28 | OIDC 클라이언트 표시명 기준 정리 | codex |
-| 2026-03-26 | 초기 화면 기획 수립 | codex |

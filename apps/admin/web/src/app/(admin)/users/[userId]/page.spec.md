@@ -43,12 +43,3 @@
 |------|------|
 | ScreenSurface owner | page/screen content owner |
 | 본문 | `UserDetailScreen`가 `ScreenSurface > SectionSurface`로 기본 정보와 정책 할당 영역 구성 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-04-28 | placeholder 상세를 정책 직접 할당 화면으로 확장 | codex |
-| 2026-04-28 | UserPolicy assignment payload와 active/priority 편집 계약 반영 | codex |
-| 2026-03-22 | TODO 상태의 이용자 상세도 `detail/view` shell을 직접 소비하도록 본문/스펙을 정리 | codex |
-| 2026-03-21 | 이용자 상세를 `detail/view` 재사용 타깃으로 재정의하고 route-layout 계약 형식으로 재작성 | codex |

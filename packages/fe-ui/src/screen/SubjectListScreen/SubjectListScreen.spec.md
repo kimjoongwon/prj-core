@@ -63,16 +63,3 @@ SubjectListScreen
 | @cocrepo/ui | 기능 구현 의존성 |
 | @heroui/react | 유형 필터 Select |
 | mobx-react-lite | 기능 구현 의존성 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-05-01 | 깨진 유형 탭 필터를 HeroUI Select 기반 필터로 교체 | codex |
-| 2026-04-29 | 권한 대상 설명 컬럼과 화면 유형 라벨을 추가해 목록 해석성을 개선 | codex |
-| 2026-04-29 | 내부 식별자 중심 목록을 권한 대상 표시명, 한글 유형 탭, 유형 설명 중심으로 개선 | codex |
-| 2026-04-29 | group select 옵션, clearable select, 필터 후 페이지 슬라이스, row click 상세 이동 계약을 반영 | codex |
-| 2026-04-28 | 목록 row 계약을 Page 전용 view model 대신 Orval DTO optional props로 정리 | codex |
-| 2026-04-24 | 목록 검색과 페이지네이션 검색 조건 계약을 명시적으로 정리 | codex |
-| 2026-03-29 | Subject 목록 화면의 조회/검색 조건 책임 경계 정리 | codex |
-| 2026-03-26 | 초기 화면 기획 수립 | codex |

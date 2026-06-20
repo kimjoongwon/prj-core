@@ -44,11 +44,3 @@ route는 `useGetEnrollments`의 `isLoading`/`isFetching`/`isError` 상태를 `qu
 |--------|------|
 | `onClickSection` | route가 선택 섹션 href로 이동 |
 | `onClickTimeline` | route가 `/timelines`로 이동 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-05-09 | Enrollment route를 nested Course API 연동 및 query state 렌더링 완료 상태로 갱신 | codex |
-| 2026-05-09 | Stage 1 re-entry로 Enrollment backend/API/Payment linkage 계약과 Stage 2/3 필요 상태 기록 | orch-requirement |
-| 2026-05-09 | Enrollment 목록 route scaffold와 결제/예약 상태 표시 추가 | codex |

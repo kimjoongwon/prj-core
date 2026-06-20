@@ -53,14 +53,3 @@ ActionListScreen
 | @cocrepo/ui | 기능 구현 의존성 |
 | lucide-react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-05-01 | 깨진 그룹 탭 필터를 HeroUI Select 기반 필터로 교체 | codex |
-| 2026-04-29 | 권한 액션 맥락 패널, 그룹 탭 필터, 상세 진입 버튼을 반영 | codex |
-| 2026-04-28 | 목록 row 계약을 Page 전용 view model 대신 Orval DTO optional props로 정리 | codex |
-| 2026-04-24 | 목록 검색과 페이지네이션 검색 조건 계약을 명시적으로 정리 | codex |
-| 2026-03-29 | Action 목록 화면의 조회/검색 조건/이동 책임 경계 정리 | codex |
-| 2026-03-26 | 초기 화면 기획 수립 | codex |

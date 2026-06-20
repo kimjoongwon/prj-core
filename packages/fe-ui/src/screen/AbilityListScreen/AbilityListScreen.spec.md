@@ -60,12 +60,3 @@ AbilityListScreen
 | AbilityListScreenFilters | 필터 상태 계약 |
 | AbilityListScreenProps | 공개 계약 요소 |
 | AbilityListScreen | 공개 계약 요소 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-04-29 | 운영자 친화형 요약 카드, 선택 필터 칩, 확장 검색 문구, 현재 페이지 row 계약을 반영 | codex |
-| 2026-04-28 | 목록 row 계약을 Page 전용 view model 대신 Orval DTO optional props로 정리 | codex |
-| 2026-04-24 | 목록 검색과 페이지네이션 검색 조건 계약을 명시적으로 정리 | codex |
-| 2026-03-26 | 초기 화면 기획 수립 | codex |

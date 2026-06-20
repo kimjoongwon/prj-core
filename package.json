@@ -29,7 +29,6 @@
     "lint:mobile": "pnpm --filter=mobile-app run lint",
     "doctor:mobile": "pnpm --filter=mobile-app run doctor",
     "mobile:screen-targets:check": "node scripts/check-mobile-screen-targets.mjs",
-    "stage-ledger:check": "node scripts/check-stage-ledger.mjs",
     "rancher:build": "bash scripts/rancher-build.sh",
     "rancher:core-api": "pnpm rancher:build -- core-api",
     "rancher:admin-web": "pnpm rancher:build -- admin-web",

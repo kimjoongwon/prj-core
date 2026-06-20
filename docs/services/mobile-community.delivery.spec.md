@@ -90,9 +90,3 @@ flowchart TD
 | Mobile UI | `pnpm --filter=@cocrepo/mo-ui test` | Community UI 상태별 렌더링 |
 | Mobile app | `pnpm --filter=mobile-app test` | `/community` route wiring |
 | E2E | `fe-route-agent` 판단/작성 | seed/mock 준비 후 tab 진입 + 작성 흐름 |
-
-## 승인 / 실행 로그
-
-| 일시 | 단계 | 결정/결과 | 작성자 | 비고 |
-|------|------|-----------|--------|------|
-| 2026-06-01 | 문서 보완 | 기존 `/community` route spec을 service delivery 체계에 연결 | Codex | 다음 신규 community 변경 전 사용자 승인 필요 |

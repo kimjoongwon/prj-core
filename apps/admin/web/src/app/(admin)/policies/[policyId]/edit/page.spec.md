@@ -23,10 +23,3 @@
 | `onClickBackButton` | `/policies/[policyId]` 이동 |
 | `onClickSubmitButton` | `useUpdatePolicy` 호출 후 `useSyncPolicyAbilities`로 Ability 전체 동기화 |
 | `onToggleAbility` | 로컬 `abilityIds` 선택 상태 변경 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-04-28 | 정책 수정 route page 스캐폴딩 추가 | codex |
-| 2026-04-28 | 기본 정보 수정과 Ability 동기화를 실제 API 계약 기준으로 분리 | codex |

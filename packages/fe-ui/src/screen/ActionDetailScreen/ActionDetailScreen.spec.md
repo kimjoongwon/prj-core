@@ -65,10 +65,3 @@ ActionDetailScreen
 | @heroui/react | 기능 구현 의존성 |
 | lucide-react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-03-29 | Action 상세 화면의 조회/삭제/라우팅 책임 경계 정리 | codex |
-| 2026-03-26 | 초기 화면 기획 수립 | codex |

@@ -61,6 +61,3 @@ BottomSheet: 제목 선택 입력 + 내용 필수 입력 + 취소/등록
 ## Story / Unit Test
 - Story: ready, empty
 - Unit: 목록 렌더링, empty/error action delegation
-
-## 변경 이력
-- 2026-05-27: 모바일 커뮤니티 화면 planning spec 최초 작성.

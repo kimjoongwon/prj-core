@@ -93,7 +93,7 @@ widget/feature/form/collection/detail 등 하위 재사용 계층을 조합해 s
 11. `*Client`, `*Inner`, `*Base` 같은 trivial pass-through wrapper 금지
    - 단순히 props/params를 받아 바로 하위 컴포넌트에 전달하는 중간 component를 같은 page 파일 안에 두지 않음
    - page 파일 안에서 wrapper 없이 최종 exported component가 바로 렌더 책임을 가짐
-12. Screen component 수정 시 대응 `[ScreenName].spec.md` 기획 스펙 업데이트 + `## 변경 이력` 추가 필수
+12. Screen component 수정 시 대응 `[ScreenName].spec.md` 기획 스펙 업데이트 필수
    - spec에는 `## 화면 러프` 섹션을 반드시 두고 Markdown text/ASCII wireframe으로 Desktop/Tablet/모바일 또는 해당 화면의 주요 responsive 상태를 그립니다.
    - 화면 러프 없이 props/의존성 표만 남기면 실패 처리
    - 기획 스펙에는 `에이전트 배정 매트릭스`, `실행 그래프`, 백엔드 빌드 순서, 기반 세부 실행표, 승인 단계를 쓰지 않습니다.
@@ -421,7 +421,7 @@ screen component는 page-level 시각 구성과 사용자 이벤트 위임만 �
    - JSX 노드를 `checkoutStatusFeedback`, `progressStepNodes` 같은 return 밖 변수에 미리 담지 않습니다.
    - 재사용 목적이 없는 작은 JSX 조각을 `CheckoutStatusFeedback`, `ProgressSection` 같은 별도 컴포넌트로 빼지 않습니다.
    - `toCourseCardItems`, `getStatusLabel`처럼 JSX를 반환하지 않는 data mapper/helper만 lowercase 함수로 둡니다.
-17. screen component 수정 시 대응 `[ScreenName].spec.md` 기획 스펙 업데이트와 `## 변경 이력` 추가가 필수입니다.
+17. screen component 수정 시 대응 `[ScreenName].spec.md` 기획 스펙 업데이트가 필수입니다.
 18. `packages/fe-mo-ui/src/screen/index.ts` export 동기화가 필수입니다.
 19. screen spec은 `## 화면 스케치` 섹션과 fenced `text` wireframe을 반드시 포함합니다.
 20. screen 기획 스펙에는 `에이전트 배정 매트릭스`, `실행 그래프`, 백엔드 빌드 순서, 기반 세부 실행표, 승인 단계를 쓰지 않습니다. 실행 순서와 route/native wiring은 라우트 딜리버리 스펙이 소유합니다.

@@ -44,10 +44,3 @@
 | TARP-MY-001 | 신청 목록이 있음 | 화면 진입 | Space/Role/상태/신청일이 보임 |
 | TARP-MY-002 | PENDING 신청이 있음 | 취소 버튼 클릭 | `onClickCancelRequestButton`에 신청 ID 전달 |
 | TARP-MY-003 | 처리 완료 신청이 있음 | 목록 렌더링 | 취소 버튼이 비활성화됨 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-04-28 | 초기 생성 | Codex |
-| 2026-04-28 | 목록 row 계약을 Page 전용 ListItem 대신 Orval DTO optional props로 정리 | codex |

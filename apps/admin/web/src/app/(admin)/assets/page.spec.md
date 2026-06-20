@@ -39,16 +39,3 @@
 | `onCreateFolder` | route가 생성 mutation과 폴더 캐시 무효화를 처리 |
 | `onRenameFolder` | route가 수정 mutation과 폴더 캐시 무효화를 처리 |
 | `onDeleteFolder` | route가 삭제 mutation과 폴더 캐시 무효화를 처리 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-04-28 | grid 컴포넌트 명칭을 DataGrid로 통일한 구조 변경을 반영 | codex |
-| 2026-04-28 | page role을 `collection`으로 갱신 | codex |
-| 2026-04-28 | DataGrid 공식 재사용 타깃을 `data-grid`로 갱신 | codex |
-| 2026-04-22 | semantic pure screen naming sweep에 맞춰 pure screen 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
-| 2026-04-01 | `/assets` route의 조회/변경 책임을 `useAssetBrowser` 공통 hook으로 통합하고 UI는 `AssetBrowser` feature 재사용으로 전환 | codex |
-| 2026-03-29 | `AssetListScreen` pure screen와 thin route container 구조로 전환하고 persist store/API/query state 책임을 route로 이동 | codex |
-| 2026-03-26 | 브라우저 wrapper의 zero-padding 예시를 제거하고 기본 `SectionSurface` 여백 기준으로 정정 | codex |
-| 2026-03-21 | 에셋 관리 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |

@@ -100,9 +100,3 @@ flowchart TD
 | Mobile UI unit | `pnpm --filter=@cocrepo/mo-ui test` | shared screen states pass |
 | Type check | `pnpm --filter=mobile-app type-check` | 타입 오류 없음 |
 | E2E | `fe-route-agent` 판단/작성 | native device/simulator 준비 시 launch/login/reservation smoke |
-
-## 승인 / 실행 로그
-
-| 일시 | 단계 | 결정/결과 | 작성자 | 비고 |
-|------|------|-----------|--------|------|
-| 2026-06-01 | 문서 보완 | 기존 mobile route context를 service delivery 체계에 연결 | Codex | 다음 mobile reservation 변경 전 사용자 승인 필요 |

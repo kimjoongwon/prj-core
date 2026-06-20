@@ -40,9 +40,3 @@ TenantSelectScreen
 |------|------|
 | TenantSelectScreenProps | 공개 계약 요소 |
 | TenantSelectScreen | 공개 계약 요소 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-03-03 | 초기 화면 기획 수립 | codex |

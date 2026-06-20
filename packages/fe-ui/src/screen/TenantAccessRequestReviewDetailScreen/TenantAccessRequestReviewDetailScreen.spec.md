@@ -47,9 +47,3 @@
 | TARP-REVIEW-DETAIL-001 | PENDING 신청 | 화면 진입 | 승인/반려 버튼이 보임 |
 | TARP-REVIEW-DETAIL-002 | 코멘트 입력 | 승인 클릭 | `onClickApproveButton` 호출 |
 | TARP-REVIEW-DETAIL-003 | 처리 완료 신청 | 화면 진입 | 검토 액션이 비활성화됨 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-04-28 | 초기 생성 | Codex |

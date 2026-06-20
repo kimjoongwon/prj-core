@@ -88,10 +88,3 @@ InquiryDetailScreen
 | lucide-react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
 | ./hooks/useInquiryWebSocket | WebSocket status type 참조 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-03-30 | 문의 상세 실시간 상태, 메타 수정, 삭제 흐름 책임 경계 정리 | codex |
-| 2026-03-26 | 초기 화면 기획 수립 | codex |

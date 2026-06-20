@@ -44,9 +44,3 @@
 | ADMIN-TARP-DETAIL-001 | 처리 가능한 신청 | 화면 진입 | 신청자/Space/Role/사유 표시 |
 | ADMIN-TARP-DETAIL-002 | PENDING 신청 | 승인 클릭 | approve API 호출 |
 | ADMIN-TARP-DETAIL-003 | PENDING 신청 | 반려 클릭 | reject API 호출 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-04-28 | 초기 생성 | Codex |

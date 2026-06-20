@@ -33,10 +33,3 @@ idp 공개 회원가입 플로우의 순수 Page 컴포넌트입니다. route pa
 | 입력 오류 | 필드별 `errorMessage` |
 | 제출 중 | submit 버튼 loading |
 | 제출 완료 | 인증 메일 발송 완료 안내와 선택 Space 표시 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-05-06 | 회원가입 pure screen 신규 작성 | Codex |
-| 2026-05-06 | address와 선택 Space payload 책임 명시 | Codex |

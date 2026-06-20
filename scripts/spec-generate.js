@@ -194,11 +194,6 @@ ${renderRows(meta.imports.filter((item) => item.startsWith('@cocrepo/api')), 'Or
 - [ ] page role / reusable target 확정
 - [ ] 신규 \`layout.spec.md\`, story/test/e2e spec을 만들지 않음
 
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| ${DATE} | 허용 대상 route page spec 신규 생성 | codex |
 `;
 }
 
@@ -249,11 +244,6 @@ ${renderRows(meta.imports, '하위 컴포넌트', 'Screen composition 의존성'
 - [ ] route-level Surface ownership 침범 없음
 - [ ] story spec을 새로 만들지 않음
 
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| ${DATE} | 허용 대상 fe-ui Screen spec 신규 생성 | codex |
 `;
 }
 
@@ -303,11 +293,6 @@ ${renderRows(meta.imports, '의존성', 'Feature 런타임/하위 UI 의존성')
 - [ ] observer 적용 여부 확인
 - [ ] 직접 axios/fetch 대신 Orval hook 사용
 
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| ${DATE} | 허용 대상 Feature spec 신규 생성 | codex |
 `;
 }
 

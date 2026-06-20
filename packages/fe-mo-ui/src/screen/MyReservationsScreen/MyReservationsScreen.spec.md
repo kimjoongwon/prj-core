@@ -166,18 +166,3 @@ Screen Owner
 | 예약 카드가 다른 화면에서도 필요 | screen-local JSX가 재사용 component가 됨 | `fe-widget-agent` | 별도 widget 파일로 분리하고 story/test를 함께 작성한다. |
 | loading/error/empty 표현이 공통 feedback으로 부족 | reusable feedback 수정 필요 | `fe-feedback-agent` | `StatusFeedback` 계약을 먼저 갱신한다. |
 | story/unit test가 화면 계약과 불일치 | planning spec과 구현이 어긋남 | `fe-screen-agent` | source, story, unit test를 같은 화면 계약으로 맞춘다. |
-
-## 변경 이력
-
-| 날짜 | 변경 내용 |
-| --- | --- |
-| 2026-05-24 | 화면 내부 텍스트를 `@cocrepo/mo-ui` `Text` primitive로 감싸도록 렌더링 계약을 추가했습니다. |
-| 2026-05-24 | Route Delivery Spec 정책에 맞춰 screen planning spec에서 route/API 실행 세부표를 제거하고 Route 의존 계약, screen component inventory, story/unit test 계약으로 축약했습니다. |
-| 2026-05-13 | 내 예약 카드의 날짜/상태 영역에 semantic icon cue를 추가하는 계약을 반영했습니다. |
-| 2026-05-13 | Linear/Stripe 계열의 조밀한 프리미엄 모바일 톤을 반영해 shadow 제거, subtle border, 8pt 리듬, 작은 radius 계약을 추가했습니다. |
-| 2026-05-11 | 예약 목록 상태/카드 JSX를 screen 본문 안으로 인라인하고 `render*` helper 및 일회성 조각 컴포넌트 금지 계약을 추가했습니다. |
-| 2026-05-11 | screen render tree를 JSX로 전환하고 `createElement` 기반 visual composition 금지 계약을 추가했습니다. |
-| 2026-05-10 | Expo Router `CustomHeader` 아래에서 본문 safe-area만 소유하고 heroui-native semantic token을 쓰도록 렌더링 계약을 갱신했습니다. |
-| 2026-05-09 | screen 스타일 계약을 uniwind className과 tailwind-variants slot 기반으로 정리했습니다. |
-| 2026-05-09 | screen visual owner spec에 Markdown 화면 스케치를 추가했습니다. |
-| 2026-05-09 | `/reservations` route의 visual owner를 route file에서 shared screen component로 복구했습니다. |

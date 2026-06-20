@@ -210,7 +210,6 @@ pnpm release:pkg @cocrepo/db major
 - [ ] 모든 테스트 통과 (`pnpm test`)
 - [ ] 린트 통과 (`pnpm lint`)
 - [ ] 타입 체크 통과 (`pnpm type-check`)
-- [ ] 변경사항 문서화 (CHANGELOG.md)
 
 ### 배포 중
 

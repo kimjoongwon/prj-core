@@ -49,9 +49,3 @@
 | TARP-CREATE-001 | bootstrap 완료 | 화면 진입 | Space/Role select와 사유 textarea가 보임 |
 | TARP-CREATE-002 | 필수 선택값 없음 | 렌더링 | 제출 버튼이 비활성화됨 |
 | TARP-CREATE-003 | 필수 선택값 있음 | 제출 클릭 | `onClickSubmitButton`이 호출됨 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-04-28 | 초기 생성 | Codex |

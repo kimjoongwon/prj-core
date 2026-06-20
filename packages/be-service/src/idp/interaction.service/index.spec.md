@@ -17,9 +17,3 @@ OIDC interaction 흐름에서 provider 접근을 캡슐화하고, controller/use
 | 의존성 | 용도 |
 |--------|------|
 | `OidcProviderService` | oidc-provider 인스턴스 획득 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-04-28 | 미사용 logger 제거에 맞춰 service 책임과 의존성 계약 문서화 | codex |

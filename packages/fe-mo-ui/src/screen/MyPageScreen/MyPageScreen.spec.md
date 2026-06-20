@@ -195,15 +195,3 @@ route-local UI가 필요해도 raw `View`/`Text` 조합을 직접 늘리지 않�
 | `MO-UNIT-MY-PAGE-SCREEN-001` | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.test.tsx` | display name, session badge, current space, quick actions, logout button 렌더링 |
 | `MO-UNIT-MY-PAGE-SCREEN-002` | same | disabled quick action은 press handler를 호출하지 않음 |
 | `MO-UNIT-MY-PAGE-ROUTE-001` | mobile route test | `/profile` route가 `mobileAuthStore.logout()` 후 `/auth/login`으로 이동 |
-
-## 변경 이력
-
-| 날짜 | 변경 내용 | 작성자 |
-|------|-----------|--------|
-| 2026-05-24 | `DESIGN.md`와 `Rhythm / Layout Contract` 기준으로 디자인 정렬 및 리듬 계약 보강 | orch-delivery |
-| 2026-05-24 | Storybook/Test 계약을 추가하고 builder 작성 책임을 명시 | orch-delivery |
-| 2026-05-24 | 기획 표 헤더를 한글 우선으로 변경 | orch-delivery |
-| 2026-05-24 | Backend/API 계약을 endpoint/application/service/repository inventory로 분리 | orch-delivery |
-| 2026-05-24 | `QuickActionList`를 screen-local 조합에서 mobile Widget 산출물로 분리하도록 계약 수정 | orch-delivery |
-| 2026-05-24 | 화면 러프와 렌더링/API 계약을 component inventory 중심으로 보강 | orch-delivery |
-| 2026-05-24 | 모바일 하단 탭 마이 페이지 shared screen 계약 신규 작성 | orch-delivery |

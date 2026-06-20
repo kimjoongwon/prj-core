@@ -63,11 +63,3 @@ InquiryCreateScreen
 | @heroui/react | 기능 구현 의존성 |
 | lucide-react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-03-30 | 문의 생성 초기 입력 데이터, 고객 검색, AI 채우기 책임 경계 정리 | codex |
-| 2026-03-26 | 초기 화면 기획 수립 | codex |
-| 2026-06-13 | route ScreenSurface와 screen SectionSurface ownership 기준 추가 | codex |

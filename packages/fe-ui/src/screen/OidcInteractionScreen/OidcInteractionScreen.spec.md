@@ -122,18 +122,3 @@ consent:
 | OidcInteractionScreenState | 공개 계약 요소 |
 | OidcInteractionScreenProps | 공개 계약 요소 |
 | OidcInteractionScreen | 공개 계약 요소 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-05-09 | 화면 러프를 Desktop/Tablet/Mobile 기준으로 재구성하고 loading/login/consent responsive 상태를 명시 | codex |
-| 2026-05-09 | loading 복구 CTA와 모바일 login/consent markdown 화면 러프를 추가 | codex |
-| 2026-05-09 | loading 상태 문구와 4초 지연 재시도 CTA, 모바일 공통 화면 기준을 추가 | codex |
-| 2026-05-05 | interaction client 정보에 `loginUi`를 추가해 로그인/동의 widget이 client별 표시 설정을 사용할 수 있도록 갱신 | codex |
-| 2026-05-01 | loading/error 분기 문구의 런타임 i18n 번역 적용 경로 반영 | codex |
-| 2026-04-22 | OIDC 로그인/동의 상태와 액션 책임 경계 정리 | codex |
-| 2026-04-22 | OIDC 상호작용 모드와 login 폼 상태 묶음 계약 정리 | codex |
-| 2026-04-22 | OIDC 로그인 분기의 form 조합 계약 정리 | codex |
-| 2026-03-28 | OIDC 클라이언트 표시명 기준 정리 | codex |
-| 2026-03-25 | 초기 화면 기획 수립 | codex |

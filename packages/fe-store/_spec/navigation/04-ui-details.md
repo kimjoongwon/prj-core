@@ -288,9 +288,3 @@ function useIsMounted(): boolean {
 | SubNav | subNavItems가 Store에서 동적 계산 |
 | SubMenuList | subNavItems가 Store에서 동적 계산 |
 | BottomTab | navItems가 Store에서 동적 계산 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-03-08 | BottomTab "더보기" 아이콘 명세를 `MoreHorizontal`에서 `Ellipsis`로 갱신 | codex |

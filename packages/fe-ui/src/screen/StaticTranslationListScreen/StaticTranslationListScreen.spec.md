@@ -50,11 +50,3 @@ StaticTranslationListScreen
 | create modal | 언어, key, category, text, 완료 여부 입력. 기본 category는 한글 의미 key 정책에 맞춰 `공통`으로 시작 |
 | edit modal | language/key는 고정하고 category/text/완료 여부만 수정 |
 | delete modal | 선택한 key와 언어를 확인한 뒤 삭제 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-05-01 | 목록 액션, form, 삭제 확인 문구의 런타임 i18n 번역 적용 경로 반영 | codex |
-| 2026-05-01 | 정적 번역 목록 pure screen 초기 생성 | codex |
-| 2026-05-01 | 한글 의미 key 정책에 맞춰 신규 등록 기본 category를 `공통`으로 변경 | codex |

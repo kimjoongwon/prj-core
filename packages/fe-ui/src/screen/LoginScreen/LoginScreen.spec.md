@@ -156,14 +156,3 @@ LOGIN-SCREEN-ROUGH-NARROW
 |--------|-----------|------|------------------|-----------|
 | LOGIN-SCREEN-STATIC-SECTIONS | planning spec 필수 섹션 | `rg -n "^(## 목표|## 화면 러프|## Props / Event 계약|## 상태별 렌더링|## Storybook / Test Contract)" packages/fe-ui/src/screen/LoginScreen/LoginScreen.spec.md` | `orch-delivery` | Screen planning owner 섹션 존재 |
 | LOGIN-SCREEN-STATIC-MEMO | 수동 memo 금지 | `rg -n "useMemo|useCallback" packages/fe-ui/src/screen/LoginScreen packages/fe-ui/src/form/LoginForm` | `fe-screen-agent` | 허가되지 않은 수동 memo 없음 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-06-06 | 변경된 `orch-delivery` 기준에 맞춰 `LoginScreen`를 Screen planning owner로 재정리하고, route spec에 있던 화면 러프/props/event/상태별 렌더링 중복을 이 문서로 집중. 별도 `LoginForm.spec.md` 미생성 사유 기록 | Codex |
-| 2026-06-01 | admin 로그인 화면 시각 품질 보정: 보안 세션 badge, API scope hint, alert card, pill CTA, 한글 field label 기준으로 계약 갱신 | Codex |
-| 2026-05-31 | admin native login route spec 기준 surface/rhythm/error/loading/story/test 계약 보강 | Codex |
-| 2026-05-02 | 로그인 page 제목/설명/CTA/에러 문구를 런타임 i18n catalog 번역 대상으로 연결 | Codex |
-| 2026-04-22 | 로그인 제출 흐름과 폼 상태 계약 정리 | Codex |
-| 2026-03-03 | 초기 화면 기획 수립 | Codex |

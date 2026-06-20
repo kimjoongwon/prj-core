@@ -42,9 +42,3 @@ PaymentConsole
 | Widget | PaymentMetricGrid      | 결제 원장 요약 metric 표시                     |
 | Widget | PaymentTableStatePanel | loading/refreshing/error/empty 상태 표시       |
 | Widget | PaymentTable           | 결제 목록과 subject/reference 표시             |
-
-## 변경 이력
-
-| 일자       | 내용                                 | 작성자 |
-| ---------- | ------------------------------------ | ------ |
-| 2026-05-10 | Payment admin 업무 조합 feature 추가 | codex  |

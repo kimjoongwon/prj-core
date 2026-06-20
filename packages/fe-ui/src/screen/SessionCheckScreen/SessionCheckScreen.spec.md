@@ -36,10 +36,3 @@ SessionCheckScreen
 |------|------|
 | SessionCheckScreenProps | 공개 계약 요소 |
 | SessionCheckScreen | 공개 계약 요소 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-05-02 | 세션 확인 대기 메시지를 런타임 i18n catalog로 번역하도록 반영 | codex |
-| 2026-03-25 | 초기 화면 기획 수립 | codex |

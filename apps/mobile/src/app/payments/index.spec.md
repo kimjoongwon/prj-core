@@ -160,10 +160,3 @@ type ReservationPaymentCheckoutRouteState = {
 | `mobile-app` route unit/type | Verified | `pnpm --filter=mobile-app test`: 9 suites, 35 tests passed; `pnpm --filter=mobile-app type-check` passed |
 | backend/API type | Verified | `pnpm --filter=core-api type-check`, `pnpm --filter=@cocrepo/dto type-check`, `pnpm --filter=@cocrepo/service type-check`, `pnpm --filter=@cocrepo/usecase type-check`, `pnpm --filter=@cocrepo/api type-check` passed |
 | API generation | Pending | local Swagger 서버 실행 후 `pnpm --filter=@cocrepo/api codegen`로 재생성 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-05-10 | checkout route를 `/api/v1/reservations/checkout/bootstrap` + `/api/v1/reservations/checkout` 기준으로 갱신하고 Payment, Enrollment/CoursePass, Reservation 통합 흐름을 명시 | codex |
-| 2026-05-10 | provider-neutral 예약 결제 checkout route, backend contract, shared screen target, unit test contract를 추가 | codex |

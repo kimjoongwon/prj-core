@@ -15,9 +15,3 @@ Expo 기반 모바일 앱 단위 테스트가 Jest 환경에서 안정적으로 
 - `@/` 별칭을 `src/`로 연결합니다.
 - CSS import는 `test/styleMock.js`로 대체합니다.
 - `test/jestExpoRuntimeSetup.js`를 `setupFilesAfterEnv`로 로드해 Expo/Jest 런타임에서 부족한 Web API shim을 보강합니다.
-
-## 변경 이력
-
-| 날짜 | 변경 내용 |
-| --- | --- |
-| 2026-04-29 | 모바일 Jest 실행 시 Expo 런타임 shim을 로드하는 설정 의도를 문서화했습니다. |

@@ -77,7 +77,7 @@
 7. 개발자 승인 없이 `_client.tsx`, `_prefetch.ts`, `HydrationBoundary`, `dehydrate`, 서버 `QueryClient` prefetch 패턴 사용 금지
 8. 모든 `"use client"` route page/container 컴포넌트에서 `useMemo`, `useCallback` 사용 금지
 9. route page/container에서 선언하는 핸들러 이름은 `on[Event][UI]` 패턴 강제
-10. route `page.tsx` 수정 시 대응 `page.spec.md` 업데이트 + `## 변경 이력` 추가 필수
+10. route `page.tsx` 수정 시 대응 `page.spec.md` 업데이트 필수
 11. `page.spec.md`의 `## Route / Screen Mapping`에는 반드시 `page 역할`, `reusable 대상`, `screen component path`를 기록
 12. `screen component path`는 반드시 `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx` 패턴을 사용
 
@@ -258,7 +258,7 @@ route-local `hooks/`, `_components/`, `components` 폴더는 만들지 않습니
    - 생성/수정 예정 파일 목록
 5. 필요한 pure screen component가 없거나 순수하지 않으면 `fe-screen-agent` 범위 수정 필요를 먼저 명시
 6. app route page에서 data/handler/redirect를 연결
-7. 대응 `page.spec.md` 수정 + 변경 이력 추가
+7. 대응 `page.spec.md` 수정
 8. 정적 검증/타입체크
 9. 결과를 규칙별로 보고
 
@@ -319,7 +319,6 @@ echo "$TARGET_FILES" | xargs rg -n 'from\\s+"@cocrepo/ui".*\\b(App|Layout|Page|S
 - named slot 콘텐츠도 root page와 같은 규칙으로 `page.spec.md`를 둡니다.
 - hook/util/type/상태가 route-local이면 라우트 딜리버리 스펙의 `기반 계약`에 `fe-route-agent` 담당 행으로 기록하고 별도 spec을 만들지 않습니다.
 - SSR/prefetch 예외가 승인된 경우 승인 근거와 추가 파일 목록 기록
-- `## 변경 이력`에 당일 행 추가
 - route `page.tsx`만 바꾸고 spec 누락 시 실패
 
 ---

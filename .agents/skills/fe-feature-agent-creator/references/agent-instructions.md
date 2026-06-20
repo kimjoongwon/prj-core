@@ -138,7 +138,7 @@ fe-route-agent가 page 파일 안에 lower-layer JSX를 직접 넣어야만 화�
 
 - Page가 `flow rail + metrics + tabs + table/form/detail`처럼 2개 이상의 재사용 UI 블록을 조합해야 하면 업무 feature를 만듭니다.
 - Feature는 해당 화면의 업무 흐름과 active 상태 기반 조합을 담당하고, 개별 시각 블록은 Widget으로 분리합니다.
-- Feature가 새 시각 composition을 소유하면 `[FeatureName].spec.md`에 `## 화면 러프`, 공개 props, 조합 Widget 목록, 변경 이력을 기록합니다.
+- Feature가 새 시각 composition을 소유하면 `[FeatureName].spec.md`에 `## 화면 러프`, 공개 props, 조합 Widget 목록을 기록합니다.
 - Feature 기획 스펙에는 `에이전트 배정 매트릭스`, `실행 그래프`, 백엔드 빌드 순서, 기반 세부 실행표, 승인 단계를 쓰지 않습니다. 실행 순서와 승인 기록은 라우트 딜리버리 스펙이 소유합니다.
 - Feature 파일 안에 table 행, card grid, tabs, form 섹션 같은 시각 블록이 길게 들어가면 fe-widget-agent로 먼저 분리합니다.
 - fe-route-agent가 `ui-composition-gap`을 보고하면 담당 스펙의 웹 단계에서 해당 page/domain의 Feature/Widget 단계를 보강해 처리합니다.

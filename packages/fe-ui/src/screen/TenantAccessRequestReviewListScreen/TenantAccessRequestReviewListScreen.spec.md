@@ -35,11 +35,3 @@
 | TARP-REVIEW-LIST-001 | 검토 목록 있음 | 화면 진입 | 신청자/Space/Role/상태가 보임 |
 | TARP-REVIEW-LIST-002 | 목록 row 있음 | 보기 클릭 | `onClickRequestRow`에 신청 ID 전달 |
 | TARP-REVIEW-LIST-003 | 목록 없음 | 화면 진입 | emptyContent가 보임 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-05-01 | Table aria/empty/action 문구가 런타임 i18n을 사용하도록 반영 | codex |
-| 2026-04-28 | 초기 생성 | Codex |
-| 2026-04-28 | 목록 row 계약을 Page 전용 ListItem 대신 Orval DTO optional props로 정리 | codex |

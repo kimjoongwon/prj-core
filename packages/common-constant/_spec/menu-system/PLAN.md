@@ -679,10 +679,3 @@ describe('메뉴 시스템 통합', () => {
 | `apps/admin/web/src/app/providers.tsx` | 앱 Provider 조립 |
 
 ---
-
-## 변경 이력
-
-| 버전 | 날짜 | 변경 내용 |
-|------|------|----------|
-| v7.0 | 2026-01-31 | 3depth 탭, BottomTab, FAB 추가 |
-| v6.0 | - | 초기 사이드바 메뉴 시스템 |

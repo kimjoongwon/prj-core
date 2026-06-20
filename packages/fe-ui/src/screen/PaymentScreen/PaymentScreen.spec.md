@@ -77,10 +77,3 @@ route `page.tsx`는 이 screen을 `ScreenSurface`로 감싸고, screen은 `VStac
 | Screen | `PaymentScreen` | `VStack` rhythm, title/action, `SectionSurface` body 소유 |
 | Feature | `PaymentConsole` | surface 없이 결제 콘솔 흐름과 상태 분기 소유 |
 | Widget | `PaymentScopeRail`, `PaymentMetricGrid`, `PaymentTableShell`, `PaymentTableStatePanel` | 독립 패널/table shell에는 local `Surface` 사용 |
-
-## 변경 이력
-
-| 일자       | 내용                                                    | 작성자 |
-| ---------- | ------------------------------------------------------- | ------ |
-| 2026-05-10 | PaymentScreen pure screen와 텍스트 화면 러프 추가 | codex  |
-| 2026-06-13 | route ScreenSurface, screen SectionSurface/rhythm, widget local Surface ownership 명시 | codex  |

@@ -48,10 +48,3 @@
 | 필터 | key/category/language/status query state 반영 |
 | form | 등록 modal에서 필수값 입력 후 생성 요청 |
 | 수정/삭제 | row action을 통해 mutation 실행 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-05-02 | Orval 재생성 계약에 맞춰 update/delete mutation 파라미터명을 `translationId`로 정리 | codex |
-| 2026-05-01 | 정적 번역 관리 route page 초기 생성 | codex |

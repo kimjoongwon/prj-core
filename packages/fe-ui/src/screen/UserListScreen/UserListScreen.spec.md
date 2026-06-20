@@ -47,10 +47,3 @@ UserListScreen
 | UserListScreenStats | 상단 통계 카드 계약     |
 | UserListScreenProps | 공개 계약 요소          |
 | UserListScreen      | 공개 계약 요소          |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-04-28 | 목록 row 계약을 Page 전용 view model 대신 Orval DTO optional props로 정리 | codex |
-| 2026-03-26 | 초기 화면 기획 수립 | codex-worker |

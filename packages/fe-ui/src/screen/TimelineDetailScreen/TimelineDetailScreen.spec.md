@@ -83,9 +83,3 @@ TimelineDetailScreen
 | next | 기능 구현 의존성 |
 | next/link | 기능 구현 의존성 |
 | next/navigation | 기능 구현 의존성 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-03-26 | 초기 화면 기획 수립 | codex |

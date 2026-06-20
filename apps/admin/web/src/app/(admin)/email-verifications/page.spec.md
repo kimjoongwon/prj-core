@@ -68,9 +68,3 @@
 | ADMIN-EMAIL-VERIFY-LIST-002 | 목록 화면 | 이메일 검색 | URL `email` 파라미터 반영 |
 | ADMIN-EMAIL-VERIFY-LIST-003 | 목록 화면 | 상태 필터 선택 | URL `status` 파라미터 반영 |
 | ADMIN-EMAIL-VERIFY-LIST-004 | 재발송 가능 row | 재발송 클릭 | 확인 modal 표시 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-04-29 | 이메일 인증 관리 route page 초기 생성 | codex |

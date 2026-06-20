@@ -14,9 +14,3 @@ React Native UI 패키지의 단위 테스트가 Jest/Expo 환경에서 안정�
 - `src/**/*.test.ts`, `src/**/*.test.tsx`를 테스트 대상으로 삼습니다.
 - `test/jestExpoRuntimeSetup.js`를 `setupFilesAfterEnv`로 로드해 Expo/Jest 런타임에서 부족한 Web API shim을 보강합니다.
 - `src/**/*.ts`, `src/**/*.tsx`를 커버리지 대상으로 유지합니다.
-
-## 변경 이력
-
-| 날짜 | 변경 내용 |
-| --- | --- |
-| 2026-04-29 | fe-mo-ui Jest 실행 시 Expo 런타임 shim을 로드하는 설정 의도를 문서화했습니다. |

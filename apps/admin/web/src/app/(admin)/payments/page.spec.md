@@ -40,9 +40,3 @@ route는 `usePaymentData`를 통해 Orval 생성 Payment hook을 호출하고, A
 | 이벤트           | 동작                                     |
 | ---------------- | ---------------------------------------- |
 | `onClickRefresh` | route가 `useGetPayments` query를 refetch |
-
-## 변경 이력
-
-| 일자       | 내용                                                                                 | 작성자 |
-| ---------- | ------------------------------------------------------------------------------------ | ------ |
-| 2026-05-10 | Payment route scaffold, Orval 연동, Space-scoped Payment/Subject/Reference 계약 추가 | codex  |

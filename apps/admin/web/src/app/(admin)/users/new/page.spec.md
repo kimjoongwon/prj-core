@@ -56,9 +56,3 @@
 - [x] `Rendering Decision`에 `form` 재사용 타깃 명시
 - [x] `_client.tsx` 없음
 - [x] `_prefetch.ts` 없음
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-03-21 | 이용자 등록을 `form` 재사용 타깃으로 재정의하고 route-layout 계약 형식으로 재작성 | codex |

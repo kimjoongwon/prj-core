@@ -65,11 +65,6 @@ function renderSpec(pageName) {
 - 스토리 파일 기준 경로는 \`screen/${pageName}/${pageName}.stories.tsx\`입니다.
 - 기본 스토리는 공용 \`PageStoryScaffold\`를 렌더링합니다.
 
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-04-05 | 누락된 page Storybook scaffold 신규 생성 | Codex |
 `;
 }
 

@@ -61,10 +61,3 @@ CourseConsole
 | Widget | CourseOfferingTable | Offering와 Timeline 연결 표시 |
 | Widget | CourseEnrollmentTable | 결제 후 수강 신청 상태 표시 |
 | Widget | CoursePassTable | 6개월 수강권 상태 표시 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-05-09 | Orval query state를 CourseTableStatePanel로 렌더링하는 계약 추가 | codex |
-| 2026-05-09 | CourseScreen 내부에 있던 업무 조합을 feature로 분리 | codex |

@@ -30,20 +30,3 @@
 |--------|------|
 | `onClickCreateButton` | route가 `/spaces/new`로 이동 |
 | `onClickSpaceGroundName` | route가 `/spaces/[spaceId]/ground`로 이동 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-05-02 | Space 콘텐츠 언어 기준 리소스 작성 안내와 언어 선택/필터 계약 반영 | codex |
-| 2026-04-28 | route의 Page 전용 row 매핑을 제거하고 Orval DTO를 pure screen에 직접 주입하도록 정리 | codex |
-| 2026-04-28 | grid 컴포넌트 명칭을 DataGrid로 통일한 구조 변경을 반영 | codex |
-| 2026-04-28 | page role을 `collection`으로 갱신 | codex |
-| 2026-04-28 | DataGrid 공식 재사용 타깃을 `data-grid`로 갱신 | codex |
-| 2026-04-27 | 공간 목록의 수동 Space queryKey 분리를 제거하고 admin layout bootstrap/access gate와 hard reload 기반 cache 초기화 정책으로 갱신 | codex |
-| 2026-04-26 | 목록 query가 Space bootstrap 완료 후 실행되고 현재 spaceId별로 캐시를 분리하도록 반영 | codex |
-| 2026-04-24 | route가 nuqs query state를 직접 선언하도록 정리 | codex |
-| 2026-04-22 | semantic pure screen naming sweep에 맞춰 pure screen 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
-| 2026-03-29 | `SpaceListScreen` pure screen와 thin route container 구조로 전환하고 조회/라우팅을 route로 이동 | codex |
-| 2026-03-22 | 목록 콘텐츠 wrapper를 범용 `SectionSurface` 기준으로 문서화 | codex |
-| 2026-03-21 | 공간 목록 spec을 route-layout / page-builder 계약 형식으로 재작성 | codex |

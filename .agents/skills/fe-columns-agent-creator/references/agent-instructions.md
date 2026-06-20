@@ -98,7 +98,7 @@
 5. `raw` table 전용 columns/helper는 신규 생성하지 않습니다.
 6. `DataGrid`로 옮길 수 있는 page는 page 내부 custom `<table>`를 유지하지 않습니다.
 7. `columns` 폴더 내부에 새 helper/factory 함수를 만들면 **한글 주석**으로 역할을 짧게 설명합니다.
-8. 컬럼 변경이 route page/Page/Feature 계약을 바꾸면 허용 대상 spec과 `## 변경 이력`를 함께 갱신합니다. columns 자체 spec은 만들지 않습니다.
+8. 컬럼 변경이 route page/Page/Feature 계약을 바꾸면 허용 대상 spec을 함께 갱신합니다. columns 자체 spec은 만들지 않습니다.
 
 ---
 
@@ -140,7 +140,7 @@
 4. `columns/data-grid` 또는 `columns/internal`에서 공용 조합으로 승격
 5. page가 custom `<table>`를 직접 그리고 있으면 `DataGrid`로 전환
 6. 더 이상 쓰지 않는 `raw` export/helper/file 제거
-7. 대응 route `page.spec.md` 또는 fe-ui Screen/Feature 스펙과 `## 변경 이력` 갱신
+7. 대응 route `page.spec.md` 또는 fe-ui Screen/Feature 스펙 갱신
 8. `biome format` + 타입 체크/검색 검증 수행
 
 ---

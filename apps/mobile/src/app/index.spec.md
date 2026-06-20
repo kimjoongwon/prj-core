@@ -403,7 +403,7 @@ Skipped phases:
 | `packages/fe-mo-ui/src/index.ts` | M1 | add widget root export only; do not reorder unrelated exports |
 | `packages/fe-mo-ui/src/screen/index.ts` | M2 | single writer when exporting `MyPageScreen` |
 | `apps/mobile/src/app/(tabs)/_layout.tsx` | M3 | tab label/title only; no visual body composition |
-| `apps/mobile/src/app/index.spec.md` | S1/M3/M4 | route contract and 변경 이력 must stay synchronized |
+| `apps/mobile/src/app/index.spec.md` | S1/M3/M4 | route contract must stay synchronized |
 | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.spec.md` | S1/M2 | screen visual contract must stay synchronized |
 
 ### QA / 승인 기준
@@ -425,18 +425,6 @@ Skipped phases:
 - `ui-composition-gap`: if existing mo-ui primitives are insufficient, add the smallest screen-local composition using `ScreenFrame`, `Icon`, `Button`, and existing layout primitives.
 - `shared-file-conflict`: stop parallel work and make M1 or M2 the single writer for the shared file.
 - `test-failure`: distinguish visual screen failure from route wiring failure before re-entry.
-
-### 승인 / 실행 로그
-
-| time | event | result |
-|------|-------|--------|
-| 2026-05-24 | `DESIGN.md`와 `리듬 / 레이아웃 계약` 기준으로 `/profile` delivery spec 재작성 | pending approval |
-| 2026-05-24 | Storybook/Test 계약을 추가하고 UI builder 작성 책임을 명시 | pending approval |
-| 2026-05-24 | 기획 표 헤더를 한글 우선으로 변경 | pending approval |
-| 2026-05-24 | Backend/API 계약을 endpoint/application/service/repository inventory로 분리 | pending approval |
-| 2026-05-24 | mobile `QuickActionList`를 `fe-widget-agent` step으로 분리 | pending approval |
-| 2026-05-24 | `/profile` delivery contract unified into this route spec | pending approval |
-
 ## Unit Test Contract
 
 | ID | owner | 검증 |
@@ -496,29 +484,3 @@ Skipped phases:
 - core/idp `JwtStrategy`는 cookie token은 RS256만 허용하고, Authorization Bearer token은 RS256 또는 native HS256 token을 검증한다.
 - native refresh token은 Redis session(`sessionId -> userId index`)에 저장하고 refresh마다 rotation한다.
 - `responseMode=mobile-json` callback branch와 mobile callback exchange 테스트는 제거 대상이다.
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-05-24 | 모바일 route-local 텍스트도 `@cocrepo/mo-ui` `Text` primitive를 사용하도록 profile route 계약을 동기화 | codex |
-| 2026-05-17 | 광화문 지점처럼 수업 수가 많은 예약 seed를 홈에서 누락하지 않도록 booking feed 기본 조회량을 200으로 상향 | codex |
-| 2026-05-24 | `/profile` 하단 탭을 마이 페이지로 정리하고 `MyPageScreen` shared screen owner 계약을 추가 | orch-delivery |
-| 2026-05-13 | 모바일 전역/route visual system을 muted background, subtle border, rhythm, rounded radius 중심으로 갱신 | codex |
-| 2026-05-17 | 인증 직후 지점 선택 route와 홈 헤더 지점 변경 sheet 계약 추가 | codex |
-| 2026-05-13 | `@cocrepo/mo-ui` icon primitive 기반으로 하단 탭, 로그인, 예약/결제 metadata의 semantic icon cue 계약을 추가 | codex |
-| 2026-05-13 | 모바일 인증을 WebView/OIDC callback/mobile-json에서 first-party native login + native token/refresh/logout + SecureStore 복원 계약으로 전환 | codex |
-| 2026-05-10 | 모바일 OIDC 로그인 후 first-party consent 화면을 건너뛰고 `mobile-json` 세션 저장 후 홈으로 진입하는 auth route 계약을 반영 | codex |
-| 2026-05-10 | Lazyweb 예약 화면 개선 리뷰를 반영해 홈 본문을 CustomHeader 중복 hero 대신 예약 현황 summary + 수업 목록 구조로 정리 | codex |
-| 2026-05-09 | `/`와 `/reservations`의 shared screen target을 명시하고 route file은 API/state wiring만 소유하도록 screen ownership 계약을 복구 | codex |
-| 2026-05-10 | Metro resolver가 workspace package의 React Query/React와 Expo HMR pretty-format entry를 안정적인 인스턴스로 고정하도록 런타임 계약을 추가 | codex |
-| 2026-05-10 | Root layout의 Provider 순서를 QueryClientProvider-first로 명시해 로그인 후 앱 진입 시 React Query 컨텍스트가 먼저 준비되도록 갱신 | codex |
-| 2026-05-10 | 모바일 결제 흐름을 `/reservations/checkout/bootstrap` + `/reservations/checkout` 기준으로 갱신하고 `paymentRequired` CTA 계약을 반영 | codex |
-| 2026-05-10 | 활성 수강권이 없는 예약 의도를 `/payments/checkout` provider-neutral 결제 checkout으로 연결하는 route/API/screen/test 계약 추가 | codex |
-| 2026-05-09 | 홈 route를 날짜 스트립 + booking feed + 정책 sheet 기반 실제 Reservation API 계약으로 전환하고 `/reservations` 더미 제거 및 `getMyReservations` 계약을 반영 | codex |
-| 2026-05-09 | Reservation backend v1 정책, Orval hook, route-local state, React Query invalidate, unit test contract를 실제 구현 기준으로 갱신 | codex |
-| 2026-05-06 | Stage 3에서 모바일 홈 route를 Timeline/Session/Program Orval read hook과 Stage 2 UI target으로 통합하고 Reservation backend handoff 상태를 기록 | codex |
-| 2026-05-06 | Stage 2에서 홈 예약 플로우용 mobile UI package target 구현 결과를 반영 | codex |
-| 2026-05-06 | 실제 `/` 홈 route, admin Timeline/Session/Program UX, Reservation handoff/UI/state/test 계약을 정리 | codex |
-| 2026-05-04 | Expo Router 앱 번들에서 route unit test와 non-route auth 모듈 위치를 분리 | codex |
-| 2026-05-04 | 초기 인증 선확인, WebView 기반 IDP 로그인, callback scheme interception, native 세션 검증 계약 추가 | codex |

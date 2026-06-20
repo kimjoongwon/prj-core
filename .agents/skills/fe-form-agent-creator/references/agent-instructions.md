@@ -80,7 +80,7 @@
   - 허용: `type="submit"`, `data-action="abort-interaction"` 같은 semantic signal
 - 실제 이벤트 연결은 page 또는 feature가 form 바깥 wrapper에서 소유합니다.
   - pure screen/feature는 `onSubmit`, `onSubmitCapture`, `onClickCapture` 등으로 native event를 연결할 수 있습니다.
-- 코드 수정 시 대응 담당 스펙과 `## 변경 이력`를 동기화합니다.
+- 코드 수정 시 대응 담당 스펙을 함께 갱신합니다.
 
 
 - Form component를 신규 생성하거나 수정하면 단위 테스트를 작성/갱신하고, Storybook 스토리는 `fe-storybook-agent`에 인계합니다.

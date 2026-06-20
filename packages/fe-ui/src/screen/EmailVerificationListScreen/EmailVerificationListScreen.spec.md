@@ -47,9 +47,3 @@ EmailVerificationListScreen
 | empty | `조회된 이메일 인증 요청이 없습니다.` |
 | resend disabled | `canResend=false` 또는 cooldown 중이면 row action 비활성 |
 | resend modal | 이메일 주소와 기존 링크 교체 안내 표시 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-04-29 | 이메일 인증 목록 pure screen 초기 생성 | codex |

@@ -105,15 +105,3 @@ OIDC 클라이언트
 | @heroui/react | 기능 구현 의존성 |
 | lucide-react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-05-09 | 화면 러프를 Desktop/Tablet/Mobile 기준으로 분리하고 모바일 DataGrid 접근 기준을 실제 구현에 맞게 보정 | codex |
-| 2026-05-09 | first-party/consent 컬럼을 포함한 데스크톱/모바일 markdown 화면 러프를 추가 | codex |
-| 2026-05-09 | OIDC client 목록에 first-party 신뢰 구분과 consent 표시/생략 상태 컬럼을 추가 | codex |
-| 2026-04-28 | 목록 row 계약을 Page 전용 view model 대신 Orval DTO optional props로 정리 | codex |
-| 2026-04-24 | 목록 검색과 페이지네이션 검색 조건 계약을 명시적으로 정리 | codex |
-| 2026-03-29 | OIDC 클라이언트 목록 화면의 조회/검색 조건/이동 책임 경계 정리 | codex |
-| 2026-03-26 | 초기 화면 기획 수립 | codex |

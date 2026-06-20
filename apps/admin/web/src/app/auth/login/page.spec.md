@@ -286,20 +286,3 @@ flowchart TD
 | `LoginForm`이 독립 reusable planning owner가 필요해짐 | service spec `Screen/Feature Spec 인덱스` | 현 기준에서는 생성하지 않음. 필요성이 생기면 상위 spec에서 owner 계층 재검토 |
 | provider/header auth wiring에 unrelated active edits 존재 | route `LOGIN-W2-BRIDGE` | 사용자 변경을 보존하고 auth wiring 범위만 좁히거나 blocked로 보고 |
 | E2E seed credentials 없음 | `qa-fe-e2e-testing` | route-level network mock 사용 또는 fixture requirement를 blocked로 기록 |
-
-### 승인 / 실행 로그
-
-| 날짜 | 단계 | 상태 | 내용 | 작성자 |
-|------|------|------|------|--------|
-| 2026-06-06 | spec hierarchy reconciliation | completed | route/page spec을 route-local wiring/hook/state/API/E2E owner로 축소하고 `LoginScreen`/`LoginForm` 상세는 screen planning spec 참조로 전환 | Codex |
-| 2026-06-01 | visual correction | completed | 로그인 auth shell, `LoginScreen`, `LoginForm` 시각 계약을 보정한 기존 기록을 참조형 계층으로 재배치 | Codex |
-| 2026-05-31 | native login policy | approved | Admin web `/auth/login`은 native login form으로 유지하고 OIDC protocol endpoint는 별도 boundary로 유지 | Codex |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-06-06 | 변경된 `orch-delivery` 기준에 맞춰 Service -> Route/Page -> Screen planning 참조형 계층으로 재작성. 화면 러프/props/event/상태별 렌더링 중복은 `LoginScreen.spec.md`로 전환 | Codex |
-| 2026-06-01 | 로그인 화면을 상태/다음 행동 중심 auth shell과 안전한 운영 세션 LoginScreen로 재정렬 | Codex |
-| 2026-05-31 | `orch-delivery` route delivery spec으로 re-entry | Codex |
-| 2026-02-18 | 초기 생성 | req-reverse-engineer |

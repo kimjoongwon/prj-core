@@ -35,13 +35,3 @@
 | `onClickDeleteAssetButton` | route가 삭제 mutation과 목록/상세 캐시 무효화를 처리 |
 | `onChangeTargetFolderSelection` | route가 이동 대상 폴더 선택값과 검증 오류를 관리 |
 | `onClickMoveAssetButton` | route가 이동 mutation과 상세/폴더 캐시 무효화, 대상 폴더 검증을 처리 |
-
-## 변경 이력
-
-| 일자 | 내용 | 작성자 |
-|------|------|--------|
-| 2026-04-22 | semantic pure screen naming sweep에 맞춰 pure screen 경로와 component 명 계약을 semantic 이름 기준으로 갱신 | codex |
-| 2026-03-30 | route가 이동 대상 폴더 선택 상태와 validation error를 소유하도록 `AssetDetailScreen` 계약을 보강 | codex |
-| 2026-03-29 | `AssetDetailScreen` pure screen와 thin route container 구조로 전환하고 조회/삭제/이동 책임을 route로 이동 | codex |
-| 2026-03-26 | route thin container와 `AssetDetailScreen` 분리 구조를 문서화 | codex |
-| 2026-02-22 | 초기 상세 페이지 기획 | orch-screen-planner |
