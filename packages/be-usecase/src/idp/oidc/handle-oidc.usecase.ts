@@ -1,0 +1,22 @@
+import { HandleOidcCommand } from "@cocrepo/command";
+import { Inject } from "@nestjs/common";
+import { CommandHandler } from "@nestjs/cqrs";
+import {
+	IDP_OIDC_PROVIDER_SERVICE,
+	type OidcProviderPort,
+} from "@cocrepo/service";
+
+@CommandHandler(HandleOidcCommand)
+export class HandleOidcUseCase {
+	constructor(
+		@Inject(IDP_OIDC_PROVIDER_SERVICE)
+		private readonly oidcProviderService: OidcProviderPort,
+	) {}
+
+	async execute(command: HandleOidcCommand): Promise<void> {
+		const provider = this.oidcProviderService.getProvider();
+		const callback = provider.callback();
+		command.req.url = command.req.url.replace(/^\/oidc/, "") || "/";
+		await callback(command.req, command.res);
+	}
+}

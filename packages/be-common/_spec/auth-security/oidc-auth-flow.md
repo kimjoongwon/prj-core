@@ -78,12 +78,12 @@ sequenceDiagram
 | State 저장 (Redis) | `packages/be-service/src/auth/token-storage.service.ts:140-143` | `saveOidcState()` - TTL 10분, 일회용 |
 | IDP 리다이렉트 | `packages/be-controller/src/auth/auth.controller.ts` | `login()` - Authorization URL로 redirect |
 | Interaction 화면 | `packages/be-controller/src/interaction/interaction.controller.ts` | prompt에 따라 login/consent 분기 |
-| 사용자 인증 | `packages/be-service/src/idp/interaction.service/index.ts` | bcrypt 비밀번호 검증 |
-| 로그인 완료 | `packages/be-service/src/idp/interaction.service/index.ts` | interactionResult 호출 |
-| 동의 처리 | `packages/be-service/src/idp/interaction.service/index.ts` | Grant 생성/업데이트 |
-| Claims 조회 | `packages/be-service/src/oidc/account.service/index.ts` | Redis 캐시 활용 |
-| Claims 빌드 | `packages/be-service/src/oidc/account.service/index.ts` | 전체 claims 빌드 후 캐시 |
-| Claims 필터 | `packages/be-service/src/oidc/account.service/index.ts` | scope별 claims 필터링 |
+| 사용자 인증 | `packages/be-service/src/idp/interaction.service.ts` | bcrypt 비밀번호 검증 |
+| 로그인 완료 | `packages/be-service/src/idp/interaction.service.ts` | interactionResult 호출 |
+| 동의 처리 | `packages/be-service/src/idp/interaction.service.ts` | Grant 생성/업데이트 |
+| Claims 조회 | `packages/be-service/src/oidc/account.service.ts` | Redis 캐시 활용 |
+| Claims 빌드 | `packages/be-service/src/oidc/account.service.ts` | 전체 claims 빌드 후 캐시 |
+| Claims 필터 | `packages/be-service/src/oidc/account.service.ts` | scope별 claims 필터링 |
 | Callback 처리 | `packages/be-controller/src/auth/auth.controller.ts` | `handleCallback()` - 에러 처리 + 쿠키 설정 + 리다이렉트 |
 | State 검증 + 토큰 교환 | `packages/be-usecase/src/auth/handle-oidc-callback.usecase.ts` | `HandleOidcCallbackUseCase` - state 검증 → code 교환 → 쿠키 설정 |
 | IDP 토큰 교환 | `packages/be-client/src/oidc.client.ts` | `exchangeCodeForTokens()` - IDP token endpoint 호출 |
@@ -275,7 +275,7 @@ sequenceDiagram
 
 ## 6. 토큰 TTL 정리
 
-IDP에서 설정하는 토큰 수명 (`packages/be-service/src/oidc/oidc-configuration.service/index.ts`):
+IDP에서 설정하는 토큰 수명 (`packages/be-service/src/oidc/oidc-configuration.service.ts`):
 
 | 토큰 유형 | TTL | 설명 |
 |-----------|-----|------|
@@ -309,7 +309,7 @@ IDP의 `AccountService`가 scope에 따라 반환하는 claims.
 
 ### Claims 정의 (`OidcConfigurationService`)
 
-`packages/be-service/src/oidc/oidc-configuration.service/index.ts`:
+`packages/be-service/src/oidc/oidc-configuration.service.ts`:
 
 ```typescript
 claims: {
@@ -450,14 +450,14 @@ apps/core/api/src/module/
 └── interaction/interaction.module.ts      # provider/module wiring
 
 packages/be-service/src/oidc/
-├── oidc-configuration.service/index.ts    # 설정 빌드
-├── account.service/index.ts               # 사용자 계정 조회 + Redis 캐시 + Claims 빌드
+├── oidc-configuration.service.ts          # 설정 빌드
+├── account.service.ts                     # 사용자 계정 조회 + Redis 캐시 + Claims 빌드
 ├── direct-user.repository.ts              # IDP 전용 사용자 DB 조회
 ├── oidc.adapter.ts                        # Redis 기반 OIDC Adapter
 └── oidc-client.repository.ts              # OIDC 클라이언트 DB 조회
 
 packages/be-service/src/idp/
-└── interaction.service/index.ts           # 로그인/동의/취소 비즈니스 로직
+└── interaction.service.ts                 # 로그인/동의/취소 비즈니스 로직
 ```
 
 | 서비스 | 역할 |
@@ -479,14 +479,14 @@ packages/be-service/src/idp/
 | 파일 | 역할 |
 |------|------|
 | `apps/core/api/src/config/oidc.config.ts` | OIDC Provider 설정 (issuer, cookie, JWKS) |
-| `packages/be-service/src/oidc/oidc-configuration.service/index.ts` | OIDC Provider 설정 빌드 (clients, claims, TTL, PKCE, resourceIndicators) |
-| `packages/be-service/src/oidc/account.service/index.ts` | 사용자 계정 조회 + Redis 캐시 + Claims 매핑 |
+| `packages/be-service/src/oidc/oidc-configuration.service.ts` | OIDC Provider 설정 빌드 (clients, claims, TTL, PKCE, resourceIndicators) |
+| `packages/be-service/src/oidc/account.service.ts` | 사용자 계정 조회 + Redis 캐시 + Claims 매핑 |
 | `packages/be-service/src/oidc/direct-user.repository.ts` | IDP 전용 사용자 DB 조회 (Tenant-free, Global PrismaClient) |
 | `packages/be-service/src/oidc/oidc.adapter.ts` | Redis 기반 OIDC Adapter (세션/토큰/Grant 저장) |
 | `packages/be-service/src/oidc/oidc-client.repository.ts` | OIDC 클라이언트 DB 조회 |
 | `packages/be-controller/src/oidc/oidc.controller.ts` | oidc-provider 미들웨어 라우팅 (모든 /oidc/* 엔드포인트 위임) |
 | `packages/be-controller/src/interaction/interaction.controller.ts` | Interaction HTTP 라우팅 |
-| `packages/be-service/src/idp/interaction.service/index.ts` | 로그인/동의/취소 비즈니스 로직 |
+| `packages/be-service/src/idp/interaction.service.ts` | 로그인/동의/취소 비즈니스 로직 |
 
 ### Core API
 

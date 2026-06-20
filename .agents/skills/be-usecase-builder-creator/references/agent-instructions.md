@@ -59,6 +59,8 @@ Nest CQRS 기반 UseCase handler를 생성하는 역할입니다. Command/Query 
 - handler 한 개에서만 쓰더라도 여러 출처 조합, field rename, policy 보정, 복잡한 result shaping이 있으면 `{handler}.input.ts`, `{handler}.result.ts`, `{handler}.mapper.ts`처럼 별도 파일로 분리합니다.
 - 둘 이상의 handler가 공유하는 context/mapper/helper는 `{domain}.context.ts`, `{domain}.mapper.ts`, `{domain}.support.ts`처럼 별도 파일로 분리합니다.
 - domain을 넘는 shared type은 `@cocrepo/type`, pure 런타임 utility는 `@cocrepo/toolkit`에 둡니다.
+- `packages/be-usecase/src`에는 DI provider, `ConfigService`/env, Request/Response, Service/Repository/Client, time/random, 외부 protocol에 닿는 `export function` 또는 exported arrow helper를 만들지 않습니다. 이런 로직은 `@cocrepo/service` support service, client, aggregate/domain object로 올립니다.
+- UseCase 내부의 순수 mapper/normalizer/parser 함수는 creator skill이 허용한 전용 파일에서만 사용합니다. 여러 package/domain이 공유할 수 있으면 `@cocrepo/toolkit`으로 이동하고, 이미 존재하는 exported helper 예외는 만지는 시점에 service/toolkit/mapper owner로 정리하거나 차단 사유로 보고합니다.
 - pagination처럼 여러 usecase domain이 공유하는 계약/빌더를 `packages/be-usecase/src/common`에 만들지 않습니다.
 - Handler class 이름은 `{Verb}{Domain}UseCase` 형태를 기본으로 합니다.
 - Handler는 application/usecase layer입니다. 작업 흐름 조율을 수행하고 도메인 규칙은 `@cocrepo/aggregate` AggregateRootService 또는 AggregateRootEntity에 위임합니다.
@@ -126,5 +128,6 @@ export * from "./confirm-reservation.usecase";
 - [ ] DTO import 없음
 - [ ] Command input을 Aggregate/Service/Client input으로 그대로 위임하거나 필요한 경우에만 별도 mapper/input 파일에서 변환함
 - [ ] 여러 input source를 조합할 때 소스 경로 또는 출처명 alias를 유지함
+- [ ] 변경 범위에 DI/config/request/external protocol에 닿는 exported free function/helper가 남아 있지 않음
 - [ ] handler array와 barrel export 추가
 - [ ] Module provider 등록은 `be-module-builder` 책임으로 남김

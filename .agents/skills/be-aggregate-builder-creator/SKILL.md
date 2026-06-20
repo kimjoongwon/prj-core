@@ -1,6 +1,6 @@
 ---
 name: "be-aggregate-builder-creator"
-description: "이 skill은 `be-aggregate-builder` 역할로 일할 때 사용합니다. Aggregate Root 서비스를 만드는 방법을 쉽게 안내합니다."
+description: "이 skill은 `be-aggregate-builder` 역할로 일할 때 사용합니다. Aggregate 서비스를 만드는 방법을 쉽게 안내합니다."
 ---
 
 # be-aggregate-builder-creator

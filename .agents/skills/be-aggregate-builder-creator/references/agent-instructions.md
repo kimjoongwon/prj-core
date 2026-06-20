@@ -6,18 +6,18 @@
 
 ---
 
-# Aggregate Root 서비스 빌더
+# Aggregate 서비스 빌더
 
-Aggregate root service provider를 생성하는 역할입니다.
+Aggregate service provider를 생성하는 역할입니다.
 
 ## 범위
 
-이 역할은 `@cocrepo/aggregate` package의 aggregate root service provider를 소유합니다.
-여기서 AggregateRoot는 entity가 아니라 service layer의 aggregate root service입니다.
+이 역할은 `@cocrepo/aggregate` package의 aggregate service provider를 소유합니다.
+여기서 Aggregate는 entity가 아니라 service layer의 aggregate service입니다.
 
 ## Owns
 
-- `packages/be-aggregate/src/{domain}/{domain}.aggregate-root.ts`
+- `packages/be-aggregate/src/{domain}/{domain}.aggregate.ts`
 - `packages/be-aggregate/src/{domain}/index.ts`
 - `packages/be-aggregate/src/index.ts`
 - 필요한 경우 `packages/be-aggregate/package.json`, `tsconfig.json`
@@ -33,24 +33,24 @@ Aggregate root service provider를 생성하는 역할입니다.
 ## Naming / Layout
 
 - package: `@cocrepo/aggregate`
-- file: `packages/be-aggregate/src/{domain}/{domain}.aggregate-root.ts`
-- class: `{Domain}AggregateRoot`
+- file: `packages/be-aggregate/src/{domain}/{domain}.aggregate.ts`
+- class: `{Domain}Aggregate`
 - domain barrel: `packages/be-aggregate/src/{domain}/index.ts`
 - package barrel: `packages/be-aggregate/src/index.ts`
 
 예:
 
 ```txt
-packages/be-aggregate/src/reservation/reservation.aggregate-root.ts
-export class ReservationAggregateRoot
+packages/be-aggregate/src/reservation/reservation.aggregate.ts
+export class ReservationAggregate
 ```
 
 ## 규칙
 
-- `{Domain}AggregateRoot`는 Nest `@Injectable()` provider입니다.
-- `{Domain}AggregateRoot`는 aggregate root service이며 entity가 아닙니다.
-- `{Domain}AggregateRoot` class는 class당 하나의 파일을 가집니다.
-- aggregate-root class 파일에는 top-level type/helper/mapper/constant를 함께 두지 않습니다. 입력/Payload/Result/helper는 같은 domain 폴더의 별도 파일로 분리합니다.
+- `{Domain}Aggregate`는 Nest `@Injectable()` provider입니다.
+- `{Domain}Aggregate`는 aggregate service이며 entity가 아닙니다.
+- `{Domain}Aggregate` class는 class당 하나의 파일을 가집니다.
+- aggregate class 파일에는 top-level type/helper/mapper/constant를 함께 두지 않습니다. 입력/Payload/Result/helper는 같은 domain 폴더의 별도 파일로 분리합니다.
 - aggregate root entity는 `@cocrepo/entity`에 둡니다.
 - DTO, Command/Query class, Request, Response, Express 객체를 받지 않습니다.
 - public method는 `{Domain}Input`, `{Domain}Payload` 같은 aggregate-owned application/domain 입력 타입을 받습니다.
@@ -71,7 +71,7 @@ import { ReservationsRepository } from "@cocrepo/repository";
 import { Injectable, NotFoundException } from "@nestjs/common";
 
 @Injectable()
-export class ReservationAggregateRoot {
+export class ReservationAggregate {
   constructor(private readonly repository: ReservationsRepository) {}
 
   async cancel(input: {

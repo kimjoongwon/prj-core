@@ -1,11 +1,11 @@
 import { USER_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/context";
-import type { QueryUsersDto } from "@cocrepo/dto";
 import type { Prisma } from "@cocrepo/prisma";
 import { UsersRepository } from "@cocrepo/repository";
 import { Email, HashedPassword, Phone, PlainPassword } from "@cocrepo/vo";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { AuthCacheService } from "../auth/auth-cache.service";
+import type { GetUsersInput } from "./get-users.input";
 import type { GetUsersResult } from "./get-users.result";
 
 @Injectable()
@@ -38,9 +38,9 @@ export class UserService {
 	 * x-space-id 기준으로 현재 Tenant를 해석하고,
 	 * 현재 tenant role이 FULL_ACCESS면 전체 사용자,
 	 * 그 외에는 현재 Tenant의 Space 사용자만 필터링합니다.
-	 * DTO → Prisma 변환을 Service에서 수행하고 Repository에는 원시값만 전달합니다.
+	 * UseCase에서 Prisma 조건으로 변환한 입력에 Space scope를 합성합니다.
 	 */
-	async getUsersBySpace(query: QueryUsersDto): Promise<GetUsersResult> {
+	async getUsersBySpace(input: GetUsersInput): Promise<GetUsersResult> {
 		const currentSpaceId = this.spaceCtx.spaceId;
 		const scopedSpaceIds = this.spaceCtx.spaceIds;
 
@@ -48,29 +48,16 @@ export class UserService {
 			`회원 목록 조회: requestedSpaceId=${currentSpaceId ?? "없음"}, scope=${scopedSpaceIds?.join(",") ?? "all"}`,
 		);
 
-		const baseWhere: Partial<Prisma.UserWhereInput> =
-			scopedSpaceIds === undefined
-				? {}
-				: {
-						tenants: {
-							some: {
-								spaceId: { in: scopedSpaceIds },
-								removedAt: null,
-							},
-						},
-					};
-
-		const where = query.toPrismaWhere(baseWhere);
-		const orderBy = query.toPrismaOrderBy();
+		const where = this.applySpaceScope(input.where, scopedSpaceIds);
 
 		const [{ users, totalCount }, stats] = await Promise.all([
 			this.repository.findManyBySpaceIds({
 				where,
-				orderBy,
-				skip: query.skip ?? 0,
-				take: query.take ?? 10,
+				orderBy: input.orderBy,
+				skip: input.skip ?? 0,
+				take: input.take ?? 10,
 				spaceIds: scopedSpaceIds,
-				includedRoleNames: query.roles,
+				includedRoleNames: input.roles,
 			}),
 			this.repository.countStatsBySpaceIds({
 				spaceIds: scopedSpaceIds,
@@ -81,6 +68,31 @@ export class UserService {
 			users,
 			totalCount,
 			stats,
+		};
+	}
+
+	private applySpaceScope(
+		where: Prisma.UserWhereInput,
+		scopedSpaceIds?: string[],
+	): Prisma.UserWhereInput {
+		if (scopedSpaceIds === undefined) {
+			return where;
+		}
+
+		const existingTenants = where.tenants as
+			| { some?: Record<string, unknown> }
+			| undefined;
+		const existingTenantSome = existingTenants?.some ?? {};
+
+		return {
+			...where,
+			tenants: {
+				some: {
+					...existingTenantSome,
+					spaceId: { in: scopedSpaceIds },
+					removedAt: null,
+				},
+			},
 		};
 	}
 

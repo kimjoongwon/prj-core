@@ -1,7 +1,10 @@
+import {
+	AuthContext,
+	SpaceContext,
+} from "@cocrepo/context";
 import { InquiryAggregate } from "@cocrepo/aggregate";
 import { InquiriesController } from "@cocrepo/controller";
 import { InquiriesRepository } from "@cocrepo/repository";
-import { AuthContext, SpaceContext } from "@cocrepo/service";
 import { InquiryCommandHandlers, InquiryQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";

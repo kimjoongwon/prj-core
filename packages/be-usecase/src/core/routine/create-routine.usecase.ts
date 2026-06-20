@@ -1,6 +1,6 @@
+import { AuthContext } from "@cocrepo/context";
 import { RoutineAggregate } from "@cocrepo/aggregate";
 import { CreateRoutineCommand } from "@cocrepo/command";
-import { AuthContext } from "@cocrepo/service";
 import { UnauthorizedException } from "@nestjs/common";
 import { CommandHandler } from "@nestjs/cqrs";
 

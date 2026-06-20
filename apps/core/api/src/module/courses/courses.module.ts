@@ -1,3 +1,4 @@
+import { SpaceContext } from "@cocrepo/context";
 import { CourseAggregate } from "@cocrepo/aggregate";
 import { CoursesController } from "@cocrepo/controller";
 import {
@@ -5,7 +6,6 @@ import {
 	PaymentsRepository,
 	TimelinesRepository,
 } from "@cocrepo/repository";
-import { SpaceContext } from "@cocrepo/service";
 import { CourseCommandHandlers, CourseQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";

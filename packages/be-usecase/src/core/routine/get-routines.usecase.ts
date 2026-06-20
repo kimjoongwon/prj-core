@@ -1,6 +1,5 @@
 import { RoutineAggregate } from "@cocrepo/aggregate";
 import { GetRoutinesQuery } from "@cocrepo/command";
-import { SpaceScope as SpaceScopeEnum } from "@cocrepo/dto";
 import { buildOffsetPaginatedResponse } from "@cocrepo/toolkit";
 import { QueryHandler } from "@nestjs/cqrs";
 
@@ -11,7 +10,9 @@ export class GetRoutinesUseCase {
 	async execute(query: GetRoutinesQuery): Promise<unknown> {
 		const skip = query.query.skip ?? 0;
 		const take = query.query.take ?? 10;
-		const spaceScope = query.query.spaceScope ?? SpaceScopeEnum.CURRENT;
+		const spaceScope =
+			query.query.spaceScope ??
+			("CURRENT" as NonNullable<typeof query.query.spaceScope>);
 		const routineResult = await this.routinesService.findRoutines({
 			spaceScope,
 			skip,

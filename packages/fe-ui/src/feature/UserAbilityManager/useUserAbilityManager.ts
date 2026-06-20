@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
 import type { AbilityFormData } from "../../form/AbilityFormModal";
 import type { AbilityRule } from "../../widget/AbilityRuleList";

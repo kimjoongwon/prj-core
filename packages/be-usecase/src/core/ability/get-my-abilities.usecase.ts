@@ -1,7 +1,6 @@
 import { AbilityAggregate } from "@cocrepo/aggregate";
 import { GetMyAbilitiesQuery } from "@cocrepo/command";
 import { CONTEXT_KEYS, USER_ERRORS } from "@cocrepo/constant";
-import { type UserDto } from "@cocrepo/dto";
 import { Logger, UnauthorizedException } from "@nestjs/common";
 import { QueryHandler } from "@nestjs/cqrs";
 import { ClsService } from "nestjs-cls";
@@ -16,7 +15,16 @@ export class GetMyAbilitiesUseCase {
 	) {}
 
 	execute(): Promise<unknown> {
-		const user = this.cls.get<UserDto | undefined>(CONTEXT_KEYS.AUTH_USER);
+		const user = this.cls.get<
+			| {
+					id: string;
+					tenants?: Array<{
+						spaceId: string;
+						roleId?: string | null;
+					}>;
+			  }
+			| undefined
+		>(CONTEXT_KEYS.AUTH_USER);
 		if (!user?.id) {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}

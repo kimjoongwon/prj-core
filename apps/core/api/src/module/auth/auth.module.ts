@@ -1,3 +1,5 @@
+import { JwtStrategy } from "@cocrepo/be-common";
+import { SpaceContext } from "@cocrepo/context";
 import {
 	AbilityAggregate,
 	AuthAuditLogAggregate,
@@ -23,20 +25,16 @@ import {
 	AuthCacheService,
 	EmailProvider,
 	EmailService,
+	IDP_INTERACTION_LOGIN_SERVICE,
 	InteractionLoginService,
-	JwtStrategy,
 	RedisService,
 	SmtpEmailProvider,
-	SpaceContext,
 	TemplateService,
 	TokenService,
 	TokenStorageService,
 	UserService,
 } from "@cocrepo/service";
-import {
-	AuthUseCaseProviders,
-	IDP_INTERACTION_LOGIN_SERVICE,
-} from "@cocrepo/usecase";
+import { AuthUseCaseProviders } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { InteractionModule } from "../interaction/interaction.module";

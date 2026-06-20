@@ -91,10 +91,14 @@ export function validateFields(
 		const fieldResult = validateSingleField(fieldValue, fieldValidation);
 
 		if (!fieldResult.isValid) {
-			return {
-				isValid: false,
-				errorMessage: fieldResult.errorMessage,
-			};
+			if (fieldResult.errorMessage !== undefined) {
+				return {
+					isValid: false,
+					errorMessage: fieldResult.errorMessage,
+				};
+			}
+
+			return { isValid: false };
 		}
 	}
 

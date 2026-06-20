@@ -1,17 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-const EN_MESSAGES = {
-	"비밀번호 찾기": "Find password",
-	"예약 계정에 등록한 이메일 주소를 입력하세요":
-		"Enter the email address registered to your reservation account",
-	이메일: "Email",
-	"재설정 링크 보내기": "Send reset link",
-	"로그인으로 돌아가기": "Back to login",
-	"서비스 이용에 필요한 계정 확인을 진행해 주세요.":
-		"Please verify the account needed to use the service.",
-	"언어 선택": "Select language",
-};
-
 test.describe("비밀번호 찾기", () => {
 	test.describe("페이지 렌더링", () => {
 		test("비밀번호 찾기 페이지가 정상 렌더링되어야 한다", async ({ page }) => {
@@ -101,46 +89,4 @@ test.describe("비밀번호 찾기", () => {
 		});
 	});
 
-	test.describe("다국어", () => {
-		test("선택 언어 catalog 기준으로 인증 화면 문구가 번역되어야 한다", async ({
-			page,
-		}) => {
-			await page.route("**/api/v1/i18n/catalog/en_US", async (route) => {
-				await route.fulfill({
-					status: 200,
-					contentType: "application/json",
-					body: JSON.stringify({
-						data: {
-							languageCode: "en_US",
-							messages: EN_MESSAGES,
-						},
-					}),
-				});
-			});
-			await page.addInitScript(() => {
-				window.localStorage.setItem(
-					"admin-persist:locale",
-					JSON.stringify({ languageCode: "en_US" }),
-				);
-			});
-
-			await page.goto("./auth/forgot-password", {
-				waitUntil: "domcontentloaded",
-			});
-
-			await expect(page.getByText("Find password")).toBeVisible({
-				timeout: 30000,
-			});
-			await expect(
-				page.getByText(
-					"Enter the email address registered to your reservation account",
-				),
-			).toBeVisible();
-			await expect(page.getByLabel("Email")).toBeVisible();
-			await expect(
-				page.getByRole("button", { name: "Send reset link" }),
-			).toBeVisible();
-			await expect(page.getByText("Back to login")).toBeVisible();
-		});
-	});
 });

@@ -1,6 +1,8 @@
 import { MASKING_PRESETS } from "@cocrepo/constant";
 import type { ActionConfig, ActionMaskingConfig } from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
+import { MASKING_ACTION_PRESET_MAP } from "./masking-action-preset-map";
+import { MASKING_PRESET_FIELD_NAMES } from "./masking-preset-field-names";
 
 /**
  * 마스킹 서비스
@@ -23,6 +25,46 @@ import { Injectable, Logger } from "@nestjs/common";
 @Injectable()
 export class MaskingService {
 	private readonly logger = new Logger(MaskingService.name);
+
+	/**
+	 * CASL masking action 후보 목록을 반환합니다.
+	 *
+	 * @returns 마스킹 policy action 이름 목록
+	 */
+	getMaskingActionNames(): string[] {
+		return Object.keys(MASKING_ACTION_PRESET_MAP);
+	}
+
+	/**
+	 * 허용된 CASL masking action 목록을 응답 필드별 masking config로 변환합니다.
+	 *
+	 * @param actionNames - 현재 사용자에게 허용된 masking action 이름 목록
+	 * @returns 필드명과 masking config의 Map
+	 */
+	createMaskingRulesForActions(
+		actionNames: Iterable<string>,
+	): Map<string, ActionConfig> {
+		const maskingRules = new Map<string, ActionConfig>();
+
+		for (const actionName of actionNames) {
+			const preset = MASKING_ACTION_PRESET_MAP[actionName.toUpperCase()];
+			if (!preset) {
+				continue;
+			}
+
+			const fieldNames = MASKING_PRESET_FIELD_NAMES[preset] ?? [];
+			const config: ActionConfig = {
+				type: "masking",
+				preset,
+			};
+
+			for (const fieldName of fieldNames) {
+				maskingRules.set(fieldName, config);
+			}
+		}
+
+		return maskingRules;
+	}
 
 	/**
 	 * Action config를 사용해 값 마스킹

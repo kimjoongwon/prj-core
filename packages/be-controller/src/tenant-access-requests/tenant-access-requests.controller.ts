@@ -1,3 +1,4 @@
+import { AuthContext } from "@cocrepo/context";
 import {
 	ApproveTenantAccessRequestCommand,
 	GetTenantAccessRequestForReviewQuery,
@@ -19,7 +20,6 @@ import {
 	TenantAccessRequestPaginationMetaDto,
 } from "@cocrepo/dto";
 import { TenantAccessRequest } from "@cocrepo/entity";
-import { AuthContext } from "@cocrepo/service";
 import {
 	Body,
 	Controller,

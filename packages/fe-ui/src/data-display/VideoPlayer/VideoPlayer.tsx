@@ -1,3 +1,5 @@
+"use client";
+
 import { Modal, useOverlayState } from "@heroui/react";
 import { Maximize, Minimize, Pause, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";

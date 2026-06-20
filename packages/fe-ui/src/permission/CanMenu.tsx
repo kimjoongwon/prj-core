@@ -1,3 +1,5 @@
+"use client";
+
 import { useMenuPermission } from "@cocrepo/store";
 import type { ReactNode } from "react";
 

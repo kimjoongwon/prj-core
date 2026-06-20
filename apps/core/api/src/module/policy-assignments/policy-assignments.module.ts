@@ -1,3 +1,4 @@
+import { SpaceContext } from "@cocrepo/context";
 import { PolicyAssignmentAggregate } from "@cocrepo/aggregate";
 import { PolicyAssignmentsController } from "@cocrepo/controller";
 import {
@@ -7,7 +8,6 @@ import {
 	UserPoliciesRepository,
 	UsersRepository,
 } from "@cocrepo/repository";
-import { SpaceContext } from "@cocrepo/service";
 import {
 	PolicyAssignmentCommandHandlers,
 	PolicyAssignmentQueryHandlers,

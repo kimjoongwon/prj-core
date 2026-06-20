@@ -1,7 +1,10 @@
+import {
+	AuthContext,
+	SpaceContext,
+} from "@cocrepo/context";
 import { TimelineAggregate } from "@cocrepo/aggregate";
 import { TimelinesController } from "@cocrepo/controller";
 import { RoutinesRepository, TimelinesRepository } from "@cocrepo/repository";
-import { AuthContext, SpaceContext } from "@cocrepo/service";
 import {
 	TimelineCommandHandlers,
 	TimelineQueryHandlers,

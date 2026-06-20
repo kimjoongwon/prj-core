@@ -1,3 +1,5 @@
+"use client";
+
 import { add, createRange, isSame, startOf, subtract } from "@cocrepo/toolkit";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";

@@ -1,4 +1,3 @@
-import { MASKING_PRESETS } from "@cocrepo/constant";
 import { MaskingService } from "@cocrepo/service";
 import type { ActionConfig } from "@cocrepo/type";
 import {
@@ -49,48 +48,6 @@ export const ApplyMasking = (subject: string): MethodDecorator => {
 		return descriptor;
 	};
 };
-
-/**
- * 마스킹 Action 이름과 프리셋 매핑
- */
-const MASKING_ACTION_PRESET_MAP: Record<string, string> = {
-	"READ:MASKED:EMAIL": MASKING_PRESETS.EMAIL,
-	"READ:MASKED:PHONE": MASKING_PRESETS.PHONE,
-	"READ:MASKED:NAME": MASKING_PRESETS.NAME,
-	"READ:MASKED:SSN": MASKING_PRESETS.SSN,
-	"READ:MASKED:CARD": MASKING_PRESETS.CARD,
-	"READ:MASKED:ACCOUNT": MASKING_PRESETS.ACCOUNT,
-};
-
-/**
- * 마스킹 Action에서 필드 타입 추출
- *
- * @param action - 마스킹 Action 이름 (예: 'READ:MASKED:EMAIL')
- * @returns 필드 타입 (예: 'EMAIL')
- */
-function getMaskingFieldType(action: string): string | null {
-	const match = action.match(/^READ:MASKED:(\w+)$/);
-	return match?.[1] ?? null;
-}
-
-/**
- * 필드 타입을 일반적인 필드명으로 변환
- *
- * @param fieldType - 필드 타입 (예: 'EMAIL')
- * @returns 필드명 배열 (예: ['email'])
- */
-function getFieldNamesForType(fieldType: string): string[] {
-	const fieldTypeMap: Record<string, string[]> = {
-		EMAIL: ["email"],
-		PHONE: ["phone", "mobile", "telephone", "phoneNumber", "mobileNumber"],
-		NAME: ["name", "fullName", "displayName", "userName"],
-		SSN: ["ssn", "socialSecurityNumber", "residentNumber"],
-		CARD: ["cardNumber", "creditCard", "debitCard"],
-		ACCOUNT: ["accountNumber", "bankAccount"],
-	};
-
-	return fieldTypeMap[fieldType] ?? [];
-}
 
 /**
  * 마스킹 인터셉터
@@ -192,12 +149,10 @@ export class MaskingInterceptor implements NestInterceptor {
 		ability: AppAbility,
 		subjectName: string,
 	): Map<string, ActionConfig> {
-		const maskingRules = new Map<string, ActionConfig>();
+		const grantedActions: string[] = [];
 
 		// 모든 마스킹 Action에 대해 권한 확인
-		for (const [actionName, preset] of Object.entries(
-			MASKING_ACTION_PRESET_MAP,
-		)) {
+		for (const actionName of this.maskingService.getMaskingActionNames()) {
 			const action = actionName as Actions;
 
 			// Subject에 대한 마스킹 권한이 있는지 확인
@@ -209,23 +164,11 @@ export class MaskingInterceptor implements NestInterceptor {
 			const hasPermissionWithoutPrefix = ability.can(action, subjectName);
 
 			if (hasPermissionWithPrefix || hasPermissionWithoutPrefix) {
-				const fieldType = getMaskingFieldType(actionName);
-				if (fieldType) {
-					const fieldNames = getFieldNamesForType(fieldType);
-					const config: ActionConfig = {
-						type: "masking" as const,
-						preset,
-					};
-
-					// 해당 필드 타입의 모든 가능한 필드명에 대해 마스킹 규칙 추가
-					for (const fieldName of fieldNames) {
-						maskingRules.set(fieldName, config);
-					}
-				}
+				grantedActions.push(actionName);
 			}
 		}
 
-		return maskingRules;
+		return this.maskingService.createMaskingRulesForActions(grantedActions);
 	}
 
 	/**

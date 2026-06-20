@@ -7,8 +7,8 @@
   },
   "references": [
     { "path": "../common-constant" },
+    { "path": "../be-context" },
     { "path": "../be-decorator" },
-    { "path": "../be-dto" },
     { "path": "../be-entity" },
     { "path": "../be-prisma" },
     { "path": "../be-repository" },

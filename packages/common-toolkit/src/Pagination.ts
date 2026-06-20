@@ -1,10 +1,32 @@
 import type {
+	IPageMeta,
 	OffsetPaginatedResponse,
 	OffsetPaginationMeta,
 	OffsetStatsPaginatedResponse,
 	PagePaginatedResponse,
 	PagePaginationMeta,
 } from "@cocrepo/type";
+
+export function buildOffsetPageMeta(
+	skip: number = 0,
+	take: number = 10,
+	totalCount: number = 0,
+): IPageMeta {
+	if (take === 0) {
+		throw new Error("Take must be greater than 0");
+	}
+
+	const page = Math.floor((skip || 0) / take) + 1;
+	const pageCount = Math.ceil(totalCount / take);
+	return {
+		skip,
+		take,
+		totalCount,
+		pageCount,
+		hasPreviousPage: page > 1,
+		hasNextPage: page < pageCount,
+	};
+}
 
 export function buildOffsetPaginationMeta(
 	total: number,

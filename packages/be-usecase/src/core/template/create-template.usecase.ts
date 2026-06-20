@@ -7,6 +7,20 @@ export class CreateTemplateUseCase {
 	constructor(private readonly templateService: TemplateService) {}
 
 	execute(command: CreateTemplateCommand): Promise<unknown> {
-		return this.templateService.create(command.input);
+		const input = command.input;
+		return this.templateService.create({
+			code: input.code,
+			name: input.name,
+			type: input.type,
+			subject: input.subject,
+			content: input.content,
+			description: input.description,
+			variables: input.variables?.map((variable) => ({
+				name: variable.name,
+				description: variable.description,
+				defaultValue: variable.defaultValue,
+				isRequired: variable.isRequired,
+			})),
+		});
 	}
 }

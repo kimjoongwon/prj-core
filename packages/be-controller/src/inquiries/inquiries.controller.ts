@@ -1,4 +1,8 @@
 import {
+	AuthContext,
+	SpaceContext,
+} from "@cocrepo/context";
+import {
 	AssignInquiryCommand,
 	CreateInquiryCommand,
 	DeleteInquiryCommand,
@@ -43,7 +47,6 @@ import {
 } from "@cocrepo/dto";
 import { Inquiry, InquiryParticipant } from "@cocrepo/entity";
 import type { InquiryPriority, InquiryStatus } from "@cocrepo/prisma";
-import { AuthContext, SpaceContext } from "@cocrepo/service";
 import {
 	Body,
 	Controller,

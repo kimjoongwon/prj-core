@@ -1,11 +1,14 @@
+import {
+	AuthContext,
+	SpaceContext,
+} from "@cocrepo/context";
 import { ContentAggregate } from "@cocrepo/aggregate";
 import { GetCommunityPostsQuery } from "@cocrepo/command";
 import { COMMON_ERRORS } from "@cocrepo/constant";
-import { CommunityPostDto } from "@cocrepo/dto";
-import { AuthContext, SpaceContext } from "@cocrepo/service";
 import { buildOffsetPaginationMeta } from "@cocrepo/toolkit";
 import { UnauthorizedException } from "@nestjs/common";
 import { QueryHandler } from "@nestjs/cqrs";
+import type { CommunityPostResult } from "./community-post.result";
 
 @QueryHandler(GetCommunityPostsQuery)
 export class GetCommunityPostsUseCase {
@@ -46,7 +49,7 @@ export class GetCommunityPostsUseCase {
 		record: Awaited<
 			ReturnType<ContentAggregate["listCommunityPosts"]>
 		>["items"][number],
-	): CommunityPostDto {
+	): CommunityPostResult {
 		return {
 			authorName: record.creator?.name ?? "회원",
 			createdAt: record.createdAt,

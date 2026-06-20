@@ -11,7 +11,5 @@ Playwright E2E helper package shared across admin/idp/test-e2e.
 - `loginToConsole`
 - `navigateToLoginForm`
 - `navigateToConsentForm`
-- `mockAdminShell`
-- `mockApi`
 - `expectSpaceHeader`
 - `capturePageErrors`

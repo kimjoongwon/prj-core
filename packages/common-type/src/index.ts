@@ -162,6 +162,10 @@ export type {
 	TwitterConfig,
 } from "./config.types";
 // ============================================
+// HTTP request-like 계약 타입
+// ============================================
+export type { HttpRequestLike } from "./http-request-like";
+// ============================================
 // Hook 계약 타입
 // ============================================
 export type {

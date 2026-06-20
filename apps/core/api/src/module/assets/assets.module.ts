@@ -1,11 +1,13 @@
+import {
+	AuthContext,
+	SpaceContext,
+} from "@cocrepo/context";
 import { AssetAggregate } from "@cocrepo/aggregate";
 import { AssetsController } from "@cocrepo/controller";
 import { AssetsRepository, FoldersRepository } from "@cocrepo/repository";
 import {
-	AuthContext,
 	ObjectStorageService,
 	S3CompatibleStorageService,
-	SpaceContext,
 } from "@cocrepo/service";
 import { AssetCommandHandlers, AssetQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";

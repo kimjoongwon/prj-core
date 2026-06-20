@@ -2,6 +2,7 @@
 
 // Pagination utilities
 export type {
+	IPageMeta,
 	OffsetPaginatedResponse,
 	OffsetPaginationMeta,
 	OffsetStatsPaginatedResponse,
@@ -54,11 +55,16 @@ export type { Validation } from "./src/Form";
 // Form validation utilities
 export { validateFields, validateSingleField } from "./src/Form";
 export { parseAcceptLanguage } from "./src/Language";
+export {
+	resolveHttpClientIp,
+	resolveHttpUserAgent,
+} from "./src/HttpRequest";
 export type { LogData, Logger } from "./src/Logger";
 // Logger utilities
 export { createLogger } from "./src/Logger";
 export {
 	buildOffsetPaginatedResponse,
+	buildOffsetPageMeta,
 	buildOffsetPaginationMeta,
 	buildOffsetStatsPaginatedResponse,
 	buildPagePaginatedResponse,
@@ -84,6 +90,7 @@ import * as DateTimeModule from "./src/DateTime";
 import * as DeviceModule from "./src/Device";
 import * as EnvironmentModule from "./src/Environment";
 import * as FormModule from "./src/Form";
+import * as HttpRequestModule from "./src/HttpRequest";
 import * as LoggerModule from "./src/Logger";
 import * as PaginationModule from "./src/Pagination";
 import * as PathModule from "./src/Path";
@@ -132,6 +139,11 @@ export const form = {
 	validateFields: FormModule.validateFields,
 } as const;
 
+export const httpRequest = {
+	resolveClientIp: HttpRequestModule.resolveHttpClientIp,
+	resolveUserAgent: HttpRequestModule.resolveHttpUserAgent,
+} as const;
+
 export const logger = {
 	create: LoggerModule.createLogger,
 } as const;
@@ -145,6 +157,7 @@ export const path = {
 export const pagination = {
 	buildPageMeta: PaginationModule.buildPagePaginationMeta,
 	buildPageResponse: PaginationModule.buildPagePaginatedResponse,
+	buildOffsetPageMeta: PaginationModule.buildOffsetPageMeta,
 	buildMeta: PaginationModule.buildOffsetPaginationMeta,
 	buildResponse: PaginationModule.buildOffsetPaginatedResponse,
 	buildStatsResponse: PaginationModule.buildOffsetStatsPaginatedResponse,

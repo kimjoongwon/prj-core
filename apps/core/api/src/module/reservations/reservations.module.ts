@@ -1,4 +1,8 @@
 import {
+	AuthContext,
+	SpaceContext,
+} from "@cocrepo/context";
+import {
 	CourseAggregate,
 	PaymentAggregate,
 	ReservationAggregate,
@@ -11,7 +15,6 @@ import {
 	TenantsRepository,
 	TimelinesRepository,
 } from "@cocrepo/repository";
-import { AuthContext, SpaceContext } from "@cocrepo/service";
 import { ReservationUseCaseProviders } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";

@@ -21,6 +21,7 @@ declare module "frappe-gantt" {
 		view_mode?: ViewMode;
 		date_format?: string;
 		language?: string;
+		popup?: null | ((task: Task) => string);
 		popup_trigger?: string;
 		custom_popup_html?: (task: Task) => string;
 		on_click?: (task: Task) => void;

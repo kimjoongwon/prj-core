@@ -1,10 +1,3 @@
-import {
-	CreateTemplateDto,
-	PreviewTemplateDto,
-	QueryTemplateDto,
-	SendTestTemplateDto,
-	UpdateTemplateDto,
-} from "@cocrepo/dto";
 import { Template } from "@cocrepo/entity";
 import { TemplateType } from "@cocrepo/prisma";
 import { TemplatesRepository } from "@cocrepo/repository";
@@ -19,6 +12,13 @@ import {
 import type { RenderedTemplateResult } from "./rendered-template-result";
 import type { SendTestResult } from "./send-test-result";
 import type { SubstituteResult } from "./substitute-result";
+import type {
+	CreateTemplateInput,
+	GetTemplatesInput,
+	PreviewTemplateInput,
+	SendTestTemplateInput,
+	UpdateTemplateInput,
+} from "./template-service.input";
 
 @Injectable()
 export class TemplateService {
@@ -33,17 +33,15 @@ export class TemplateService {
 	/**
 	 * 템플릿 목록 조회
 	 */
-	async getTemplates(
-		query: QueryTemplateDto,
-	): Promise<{ data: Template[]; totalCount: number }> {
-		const where = query.toPrismaWhere();
-		const orderBy = query.toPrismaOrderBy();
-
+	async getTemplates(input: GetTemplatesInput): Promise<{
+		data: Template[];
+		totalCount: number;
+	}> {
 		return this.repository.findMany({
-			where,
-			orderBy,
-			skip: query.skip,
-			take: query.take,
+			where: input.where,
+			orderBy: input.orderBy,
+			skip: input.skip,
+			take: input.take,
 		});
 	}
 
@@ -102,34 +100,34 @@ export class TemplateService {
 	 * - 유형별 필드 검증
 	 * - 변수가 있으면 함께 생성
 	 */
-	async create(dto: CreateTemplateDto): Promise<Template> {
-		this.logger.debug(`템플릿 생성 시도: code=${dto.code}`);
+	async create(input: CreateTemplateInput): Promise<Template> {
+		this.logger.debug(`템플릿 생성 시도: code=${input.code}`);
 
 		// 코드 중복 검사
-		const existing = await this.repository.findByCode(dto.code);
+		const existing = await this.repository.findByCode(input.code);
 		if (existing) {
 			throw new ConflictException(
-				`이미 존재하는 템플릿 코드입니다: ${dto.code}`,
+				`이미 존재하는 템플릿 코드입니다: ${input.code}`,
 			);
 		}
 
 		// 유형별 필드 검증
-		this.validateTypeConstraints(dto.type, dto.subject, dto.content);
+		this.validateTypeConstraints(input.type, input.subject, input.content);
 
 		const templateData = {
-			code: dto.code,
-			name: dto.name,
-			type: dto.type,
-			subject: dto.subject ?? null,
-			content: dto.content,
-			description: dto.description ?? null,
+			code: input.code,
+			name: input.name,
+			type: input.type,
+			subject: input.subject ?? null,
+			content: input.content,
+			description: input.description ?? null,
 		};
 
 		// 변수가 있으면 함께 생성
-		if (dto.variables && dto.variables.length > 0) {
+		if (input.variables && input.variables.length > 0) {
 			return this.repository.createWithVariables(
 				templateData,
-				dto.variables.map((v) => ({
+				input.variables.map((v) => ({
 					name: v.name,
 					description: v.description,
 					defaultValue: v.defaultValue,
@@ -147,7 +145,7 @@ export class TemplateService {
 	 * - 유형별 필드 검증 (기존 type 사용)
 	 * - 변수가 있으면 전체 교체
 	 */
-	async update(id: string, dto: UpdateTemplateDto): Promise<Template> {
+	async update(id: string, input: UpdateTemplateInput): Promise<Template> {
 		this.logger.debug(`템플릿 수정 시도: ${id.slice(-8)}`);
 
 		const template = await this.repository.findByIdOrThrow(id);
@@ -155,23 +153,23 @@ export class TemplateService {
 		// 유형별 필드 검증 (기존 template의 type 사용)
 		this.validateTypeConstraints(
 			template.type,
-			dto.subject !== undefined ? dto.subject : template.subject,
-			dto.content !== undefined ? dto.content : template.content,
+			input.subject !== undefined ? input.subject : template.subject,
+			input.content !== undefined ? input.content : template.content,
 		);
 
 		const templateData: Record<string, unknown> = {};
-		if (dto.name !== undefined) templateData.name = dto.name;
-		if (dto.subject !== undefined) templateData.subject = dto.subject;
-		if (dto.content !== undefined) templateData.content = dto.content;
-		if (dto.description !== undefined)
-			templateData.description = dto.description;
+		if (input.name !== undefined) templateData.name = input.name;
+		if (input.subject !== undefined) templateData.subject = input.subject;
+		if (input.content !== undefined) templateData.content = input.content;
+		if (input.description !== undefined)
+			templateData.description = input.description;
 
 		// 변수가 있으면 전체 교체
-		if (dto.variables !== undefined) {
+		if (input.variables !== undefined) {
 			return this.repository.updateWithVariables(
 				id,
 				templateData,
-				(dto.variables ?? []).map((v) => ({
+				(input.variables ?? []).map((v) => ({
 					name: v.name,
 					description: v.description,
 					defaultValue: v.defaultValue,
@@ -225,7 +223,7 @@ export class TemplateService {
 	 */
 	async preview(
 		id: string,
-		dto: PreviewTemplateDto,
+		input: PreviewTemplateInput,
 	): Promise<{
 		type: TemplateType;
 		subject: string | null;
@@ -234,7 +232,7 @@ export class TemplateService {
 	}> {
 		const template = await this.repository.findByIdOrThrow(id);
 
-		const result = this.substituteVariables(template, dto.variables);
+		const result = this.substituteVariables(template, input.variables);
 
 		return {
 			type: template.type,
@@ -253,7 +251,7 @@ export class TemplateService {
 	 */
 	async sendTest(
 		id: string,
-		dto: SendTestTemplateDto,
+		input: SendTestTemplateInput,
 	): Promise<SendTestResult> {
 		this.logger.debug(`템플릿 테스트 발송: ${id.slice(-8)}`);
 
@@ -270,7 +268,7 @@ export class TemplateService {
 		if (template.variables && template.variables.length > 0) {
 			const missingVariables = template.variables
 				.filter(
-					(v) => v.isRequired && !dto.variables[v.name] && !v.defaultValue,
+					(v) => v.isRequired && !input.variables[v.name] && !v.defaultValue,
 				)
 				.map((v) => v.name);
 
@@ -282,14 +280,14 @@ export class TemplateService {
 		}
 
 		// 수신자 형식 검증
-		this.validateRecipient(template.type, dto.recipient);
+		this.validateRecipient(template.type, input.recipient);
 
 		// 변수 치환
-		const substituted = this.substituteVariables(template, dto.variables);
+		const substituted = this.substituteVariables(template, input.variables);
 
 		// TODO: 실제 발송 서비스 연동 (현재는 로그만 남김)
 		this.logger.warn(
-			`[테스트 발송] type=${template.type}, recipient=${dto.recipient}, ` +
+			`[테스트 발송] type=${template.type}, recipient=${input.recipient}, ` +
 				`subject=${substituted.subject}, contentLength=${substituted.content.length}`,
 		);
 

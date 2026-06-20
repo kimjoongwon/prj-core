@@ -75,8 +75,8 @@ export {
 } from "./pipe";
 // Providers
 export { GeneratorProvider } from "./provider";
-// Strategies - JwtStrategy는 be-service로 이동
-// export { JwtStrategy } from "./strategy";
+// Strategies
+export { JwtStrategy } from "./strategy";
 export type {
 	ResponseWrapOptions,
 	WrappedResponse,

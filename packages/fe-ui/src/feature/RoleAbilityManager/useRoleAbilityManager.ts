@@ -1,3 +1,5 @@
+"use client";
+
 import { makeAutoObservable, runInAction } from "mobx";
 import { useState } from "react";
 import type { AbilityFormData } from "../../form/AbilityFormModal";

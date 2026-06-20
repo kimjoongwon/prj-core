@@ -1,7 +1,7 @@
+import { SpaceContext } from "@cocrepo/context";
 import { PaymentAggregate } from "@cocrepo/aggregate";
 import { GetPaymentsQuery } from "@cocrepo/command";
 import { COMMON_ERRORS } from "@cocrepo/constant";
-import { SpaceContext } from "@cocrepo/service";
 import { buildOffsetStatsPaginatedResponse } from "@cocrepo/toolkit";
 import { UnauthorizedException } from "@nestjs/common";
 import { QueryHandler } from "@nestjs/cqrs";

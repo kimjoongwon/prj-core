@@ -1,10 +1,5 @@
 export { AccountService } from "./account.service";
-export type { AuthUserData } from "./auth-user.data";
-export { DirectPrismaProvider } from "./direct-prisma.provider";
-export { DirectUserRepository } from "./direct-user.repository";
 export { RedisOidcAdapter } from "./oidc.adapter";
-export type { OidcClientData } from "./oidc-client.data";
-export { OidcClientRepository } from "./oidc-client.repository";
 export type { JwksKeys, OidcConfig } from "./oidc-config";
 export { OidcConfigurationService } from "./oidc-configuration.service";
 export { OidcProviderService } from "./oidc-provider.service";

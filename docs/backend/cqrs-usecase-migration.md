@@ -58,7 +58,7 @@ HTTP request
 | `be-module-builder` | `apps/core/api/src/module/**` module/provider/router wiring |
 | `be-command-builder` | `packages/be-command/src/**` Command/Query message와 input/result |
 | `be-usecase-builder` | `packages/be-usecase/src/**` UseCase/EventHandler/Saga provider |
-| `be-aggregate-builder` | `packages/be-aggregate/src/**` Aggregate Root service |
+| `be-aggregate-builder` | `packages/be-aggregate/src/**` Aggregate service |
 | `be-service-builder` | `packages/be-service/src/**` 지원 Service |
 | `be-client-builder` | `packages/be-client/src/**` 외부 provider Client |
 | `be-repository-builder` | `packages/be-repository/src/**` persistence Repository |

@@ -7,6 +7,18 @@ export class UpdateTemplateUseCase {
 	constructor(private readonly templateService: TemplateService) {}
 
 	execute(command: UpdateTemplateCommand): Promise<unknown> {
-		return this.templateService.update(command.templateId, command.input);
+		const input = command.input;
+		return this.templateService.update(command.templateId, {
+			name: input.name,
+			subject: input.subject,
+			content: input.content,
+			description: input.description,
+			variables: input.variables?.map((variable) => ({
+				name: variable.name,
+				description: variable.description,
+				defaultValue: variable.defaultValue,
+				isRequired: variable.isRequired,
+			})),
+		});
 	}
 }

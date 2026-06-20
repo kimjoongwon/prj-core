@@ -71,7 +71,6 @@ if (!globalWithPlaywrightResolver.__cocrepoPlaywrightResolvePatched) {
 const { defineConfig, devices } = configRequire("@playwright/test") as typeof import("@playwright/test");
 
 const e2eEnvironment = process.env.E2E_ENV;
-const e2eMode = process.env.E2E_MODE ?? "real";
 const skipAdminSetup = process.env.SKIP_ADMIN_SETUP === "1";
 const e2eTarget = process.env.E2E_TARGET ?? "all";
 const chromiumLaunchOptions = {
@@ -82,7 +81,7 @@ const reuseExistingServer = shouldUseLocalRuntime && !process.env.CI;
 const includesAdminTarget = e2eTarget === "admin" || e2eTarget === "all";
 const includesStorybookTarget =
 	e2eTarget === "storybook" || e2eTarget === "all";
-const shouldUseAdminSetup = !skipAdminSetup && e2eMode !== "mock";
+const shouldUseAdminSetup = !skipAdminSetup;
 
 function ensureTrailingSlash(url: string) {
 	return url.endsWith("/") ? url : `${url}/`;
@@ -179,10 +178,6 @@ const storybookServer = {
 
 function getWebServers() {
 	if (e2eTarget === "admin") {
-		if (e2eMode === "mock") {
-			return [adminWebServer];
-		}
-
 		return [seededCoreApiServer, adminWebServer];
 	}
 
@@ -191,7 +186,7 @@ function getWebServers() {
 	}
 
 	return [
-		coreApiServer,
+		seededCoreApiServer,
 		adminWebServer,
 		storybookServer,
 	];
@@ -255,35 +250,14 @@ export default defineConfig({
 
     // ── Admin ──
     {
-      name: "admin-mock-chromium",
+      name: "admin-chromium",
       testMatch: "**/apps/admin/web/src/**/*.e2e.ts",
-      grep: /@mock/,
-      use: {
-        ...devices["Desktop Chrome"],
-        baseURL: adminBaseUrl,
-        launchOptions: chromiumLaunchOptions,
-      },
-    },
-    {
-      name: "admin-real-chromium",
-      testMatch: "**/apps/admin/web/src/**/*.e2e.ts",
-      grep: /@real/,
       dependencies: shouldUseAdminSetup ? ["admin-setup"] : [],
       use: {
         ...devices["Desktop Chrome"],
         baseURL: adminBaseUrl,
         launchOptions: chromiumLaunchOptions,
         storageState: adminAuthStorageStatePath,
-      },
-    },
-    {
-      name: "admin-mobile",
-      testMatch: "**/apps/admin/web/src/**/*.e2e.ts",
-      grep: /@mock/,
-      use: {
-        ...devices["Pixel 5"],
-        baseURL: adminBaseUrl,
-        launchOptions: chromiumLaunchOptions,
       },
     },
 

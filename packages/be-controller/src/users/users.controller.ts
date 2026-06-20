@@ -1,3 +1,4 @@
+import { SpaceContext } from "@cocrepo/context";
 import {
 	GetUserDetailForSpaceQuery,
 	GetUsersBySpaceQuery,
@@ -16,7 +17,6 @@ import {
 	UserPaginationMetaDto,
 	UserStatsDto,
 } from "@cocrepo/dto";
-import { SpaceContext } from "@cocrepo/service";
 import {
 	Controller,
 	Get,

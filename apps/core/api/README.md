@@ -8,7 +8,7 @@ NestJS 기반 코어 API 애플리케이션입니다. 현재 백엔드 경계는
 Controller
   -> CommandBus / QueryBus
   -> UseCase handler
-  -> aggregate root service
+  -> aggregate service
   -> repository
   -> database
 ```

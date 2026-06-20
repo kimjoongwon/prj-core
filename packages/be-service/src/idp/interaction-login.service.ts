@@ -1,7 +1,9 @@
+import {
+	OidcDirectPrismaProvider,
+	OidcDirectUsersRepository,
+} from "@cocrepo/repository";
 import { Email, HashedPassword, PlainPassword } from "@cocrepo/vo";
 import { Injectable, Logger } from "@nestjs/common";
-import { DirectPrismaProvider } from "../oidc/direct-prisma.provider";
-import { DirectUserRepository } from "../oidc/direct-user.repository";
 import { POLICY_CACHE_TTL_MS } from "./interaction-login.constants";
 import type { LoginValidationResult } from "./login-validation-result";
 import type { SecurityPolicyCache } from "./security-policy-cache";
@@ -21,8 +23,8 @@ export class InteractionLoginService {
 	private policyCache: SecurityPolicyCache | null = null;
 
 	constructor(
-		private readonly directUserRepository: DirectUserRepository,
-		private readonly directPrismaProvider: DirectPrismaProvider,
+		private readonly directUserRepository: OidcDirectUsersRepository,
+		private readonly directPrismaProvider: OidcDirectPrismaProvider,
 	) {}
 
 	/**

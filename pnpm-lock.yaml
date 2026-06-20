@@ -323,6 +323,9 @@ importers:
       '@cocrepo/constant':
         specifier: workspace:*
         version: link:../../../packages/common-constant
+      '@cocrepo/context':
+        specifier: workspace:*
+        version: link:../../../packages/be-context
       '@cocrepo/controller':
         specifier: workspace:*
         version: link:../../../packages/be-controller
@@ -1477,36 +1480,6 @@ importers:
         specifier: 'catalog:'
         version: 5.9.3
 
-  packages/be-gateway:
-    devDependencies:
-      '@cocrepo/tsconfig':
-        specifier: workspace:*
-        version: link:../common-tsconfig
-      '@nestjs/common':
-        specifier: ^11.1.3
-        version: 11.1.10(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2)
-      '@nestjs/config':
-        specifier: ^4.0.2
-        version: 4.0.2(@nestjs/common@11.1.10(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(rxjs@7.8.2)
-      '@nestjs/testing':
-        specifier: ^11.1.6
-        version: 11.1.10(@nestjs/common@11.1.10(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.10)(@nestjs/platform-express@11.1.10)
-      '@types/jest':
-        specifier: ^30.0.0
-        version: 30.0.0
-      '@types/node':
-        specifier: 'catalog:'
-        version: 24.10.4
-      jest:
-        specifier: ^30.1.3
-        version: 30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2))(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.18))(@types/node@24.10.4)(typescript@5.9.3))
-      ts-jest:
-        specifier: ^29.4.1
-        version: 29.4.6(@babel/core@7.28.5)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@30.3.0(@babel/core@7.28.5))(esbuild@0.27.2)(jest-util@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2)))(typescript@5.9.3)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
   packages/be-prisma:
     dependencies:
       '@cocrepo/constant':
@@ -1603,6 +1576,9 @@ importers:
       '@cocrepo/vo':
         specifier: workspace:*
         version: link:../be-vo
+      '@prisma/adapter-pg':
+        specifier: ^7.0.0
+        version: 7.2.0
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
@@ -1619,6 +1595,9 @@ importers:
       '@nestjs/common':
         specifier: ^11.1.3
         version: 11.1.10(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/config':
+        specifier: ^4.0.2
+        version: 4.0.2(@nestjs/common@11.1.10(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(rxjs@7.8.2)
       '@nestjs/testing':
         specifier: ^11.1.3
         version: 11.1.10(@nestjs/common@11.1.10(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.10)(@nestjs/platform-express@11.1.10)
@@ -1628,12 +1607,18 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 24.10.4
+      '@types/pg':
+        specifier: ^8.11.10
+        version: 8.16.0
       jest:
         specifier: ^30.2.0
         version: 30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2))(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.18))(@types/node@24.10.4)(typescript@5.9.3))
       nestjs-cls:
         specifier: ^6.1.0
         version: 6.1.0(@nestjs/common@11.1.10(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.10)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      pg:
+        specifier: ^8.16.0
+        version: 8.16.3
       ts-jest:
         specifier: ^29.4.0
         version: 29.4.6(@babel/core@7.28.5)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@30.3.0(@babel/core@7.28.5))(esbuild@0.27.2)(jest-util@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2)))(typescript@5.9.3)
@@ -1652,9 +1637,6 @@ importers:
       '@cocrepo/decorator':
         specifier: workspace:*
         version: link:../be-decorator
-      '@cocrepo/dto':
-        specifier: workspace:*
-        version: link:../be-dto
       '@cocrepo/entity':
         specifier: workspace:*
         version: link:../be-entity
@@ -1701,9 +1683,6 @@ importers:
       '@nestjs/jwt':
         specifier: ^11.0.0
         version: 11.0.2(@nestjs/common@11.1.10(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))
-      '@nestjs/passport':
-        specifier: ^11.0.5
-        version: 11.0.5(@nestjs/common@11.1.10(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(passport@0.7.0)
       '@nestjs/swagger':
         specifier: ^11.2.0
         version: 11.2.3(@nestjs/common@11.1.10(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.10)(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)
@@ -1716,6 +1695,9 @@ importers:
       '@types/bcrypt':
         specifier: ^5.0.2
         version: 5.0.2
+      '@types/express':
+        specifier: ^5.0.3
+        version: 5.0.6
       '@types/jest':
         specifier: ^30.0.0
         version: 30.0.0
@@ -1749,12 +1731,6 @@ importers:
       nodemailer:
         specifier: ^7.0.6
         version: 7.0.12
-      passport:
-        specifier: ^0.7.0
-        version: 0.7.0
-      passport-jwt:
-        specifier: ^4.0.1
-        version: 4.0.1
       pg:
         specifier: ^8.16.0
         version: 8.16.3
@@ -1779,6 +1755,9 @@ importers:
       '@cocrepo/constant':
         specifier: workspace:*
         version: link:../common-constant
+      '@cocrepo/context':
+        specifier: workspace:*
+        version: link:../be-context
       '@cocrepo/dto':
         specifier: workspace:*
         version: link:../be-dto
@@ -1819,6 +1798,9 @@ importers:
       '@types/express':
         specifier: ^5.0.3
         version: 5.0.6
+      '@types/jest':
+        specifier: ^30.0.0
+        version: 30.0.0
       '@types/jsonwebtoken':
         specifier: ^9.0.10
         version: 9.0.10
@@ -1831,12 +1813,18 @@ importers:
       express:
         specifier: ^5.1.0
         version: 5.2.1
+      jest:
+        specifier: ^30.1.3
+        version: 30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2))(ts-node@10.9.2(@swc/core@1.15.7(@swc/helpers@0.5.18))(@types/node@24.10.4)(typescript@5.9.3))
       jsonwebtoken:
         specifier: ^9.0.2
         version: 9.0.3
       nestjs-cls:
         specifier: ^6.1.0
         version: 6.1.0(@nestjs/common@11.1.10(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.10)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      ts-jest:
+        specifier: ^29.4.1
+        version: 29.4.6(@babel/core@7.28.5)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@30.3.0(@babel/core@7.28.5))(esbuild@0.27.2)(jest-util@30.3.0)(jest@30.2.0(@types/node@24.10.4)(esbuild-register@3.6.0(esbuild@0.27.2)))(typescript@5.9.3)
       typescript:
         specifier: 'catalog:'
         version: 5.9.3

@@ -83,7 +83,7 @@ export function isProduction(): boolean {
  * });
  * ```
  */
-export function getConfigByEnvironment<T>(configs: Record<string, T>): T {
+export function getConfigByEnvironment<T>(configs: Record<string, T> & { 운영: T }): T {
 	const env = getCurrentEnvironment();
-	return configs[env.name] || configs.운영; // 기본값으로 운영 환경 설정 사용
+	return configs[env.name] ?? configs.운영; // 기본값으로 운영 환경 설정 사용
 }

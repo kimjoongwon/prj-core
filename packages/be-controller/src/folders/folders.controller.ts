@@ -1,3 +1,4 @@
+import { AuthContext } from "@cocrepo/context";
 import { RolesGuard } from "@cocrepo/be-common";
 import {
 	CreateFolderCommand,
@@ -20,7 +21,6 @@ import {
 	UpdateFolderDto,
 } from "@cocrepo/dto";
 import { Folder } from "@cocrepo/entity";
-import { AuthContext } from "@cocrepo/service";
 import {
 	Body,
 	Controller,

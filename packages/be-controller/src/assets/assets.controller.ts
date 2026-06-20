@@ -1,3 +1,4 @@
+import { AuthContext } from "@cocrepo/context";
 import { RolesGuard } from "@cocrepo/be-common";
 import {
 	DeleteAssetCommand,
@@ -21,7 +22,6 @@ import {
 	MoveAssetDto,
 	UploadAssetDto,
 } from "@cocrepo/dto";
-import { AuthContext } from "@cocrepo/service";
 import {
 	Body,
 	Controller,

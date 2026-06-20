@@ -1,3 +1,5 @@
+"use client";
+
 import {
 	type PaymentDto,
 	type PaymentReferenceDto,

@@ -1,50 +1,9 @@
-import { expect, type Page, test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 const LOCAL_ADMIN_LOGIN_EMAIL =
 	process.env.E2E_ADMIN_EMAIL ?? "admin@plate.com";
 const LOCAL_ADMIN_LOGIN_PASSWORD =
 	process.env.E2E_ADMIN_PASSWORD ?? "rkdmf12!@";
-const SPACE_ID = "space-admin-login-e2e";
-
-const routeAuthenticatedAdminShellApis = async (page: Page) => {
-	await page.route("**/api/v1/auth/verify-token**", async (route) => {
-		await route.fulfill({
-			json: {
-				data: {
-					valid: true,
-					hasFullAccess: true,
-				},
-			},
-		});
-	});
-	await page.route("**/api/v1/auth/current-space**", async (route) => {
-		await route.fulfill({
-			json: {
-				data: {
-					id: SPACE_ID,
-					ground: {
-						name: "플랫폼 운영본부",
-					},
-				},
-			},
-		});
-	});
-	await page.route("**/api/v1/auth/my-spaces**", async (route) => {
-		await route.fulfill({
-			json: {
-				data: [
-					{
-						id: SPACE_ID,
-						ground: {
-							name: "플랫폼 운영본부",
-						},
-					},
-				],
-			},
-		});
-	});
-};
-
 test.describe("로그인 페이지 테스트 @real", () => {
 	test("로그인 페이지 진입 시 native 로그인 폼이 표시되어야 한다", async ({
 		page,
@@ -62,7 +21,6 @@ test.describe("로그인 페이지 테스트 @real", () => {
 	test("로컬 개발 기본 관리자 계정으로 로그인에 성공해야 한다", async ({
 		page,
 	}) => {
-		await routeAuthenticatedAdminShellApis(page);
 		await page.goto("auth/login");
 
 		await expect(page.getByLabel("이메일")).toHaveValue(

@@ -2,8 +2,8 @@
 
 Cocrepo backend support service package.
 
-Aggregate root service providers are promoted to `@cocrepo/aggregate` and named
-`{Domain}AggregateRoot`. This package keeps infrastructure/support providers such
+Aggregate service providers are promoted to `@cocrepo/aggregate` and named
+`{Domain}Aggregate`. This package keeps infrastructure/support providers such
 as token, Redis, Prisma, email, object storage, masking, template, i18n, and user
 lookup services.
 
@@ -47,12 +47,12 @@ export class UsersModule {}
 - **src/template/**: template rendering support
 - **src/user/**: user lookup support used by auth strategy
 
-> **참고**: 도메인 aggregate root service는 `@cocrepo/aggregate`, 사용자 과업 중심 workflow 조합은 `@cocrepo/usecase`가 담당합니다.
+> **참고**: 도메인 aggregate service는 `@cocrepo/aggregate`, 사용자 과업 중심 workflow 조합은 `@cocrepo/usecase`가 담당합니다.
 
 ## 의존성
 
 ### Dependencies
-- @cocrepo/dto - DTO 클래스
+- @cocrepo/context - 요청/공간 context
 - @cocrepo/entity - Entity 클래스
 - @cocrepo/prisma - Prisma 클라이언트
 - @cocrepo/repository - Repository 레이어
@@ -86,7 +86,7 @@ pnpm format
 
 ## 주의사항
 
-- Aggregate root service를 새로 만들 때는 이 패키지가 아니라 `@cocrepo/aggregate`에 `{Domain}AggregateRoot`로 추가합니다
+- Aggregate service를 새로 만들 때는 이 패키지가 아니라 `@cocrepo/aggregate`에 `{Domain}Aggregate`로 추가합니다
 - Repository는 `@cocrepo/repository` 패키지에서 import해야 합니다
 - Config 타입은 `@cocrepo/type` 패키지에서 import됩니다
 - NestJS의 Dependency Injection을 사용하여 서비스를 주입받습니다

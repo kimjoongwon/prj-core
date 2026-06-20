@@ -2,7 +2,12 @@ module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
   rootDir: ".",
-  testMatch: ["**/__tests__/**/*.spec.ts", "**/__tests__/**/*.test.ts"],
+  testMatch: [
+    "**/__tests__/**/*.spec.ts",
+    "**/__tests__/**/*.test.ts",
+    "**/src/**/*.spec.ts",
+    "**/src/**/*.test.ts",
+  ],
   moduleFileExtensions: ["ts", "js", "json"],
   setupFiles: ["reflect-metadata"],
   moduleNameMapper: {
@@ -11,7 +16,6 @@ module.exports = {
     "^@cocrepo/prisma$": "<rootDir>/__tests__/mocks/prisma.ts",
     "^@cocrepo/entity$": "<rootDir>/../be-entity/dist",
     "^@cocrepo/vo$": "<rootDir>/../be-vo/dist",
-    "^@cocrepo/dto$": "<rootDir>/../be-dto/dist",
     "^@cocrepo/toolkit$": "<rootDir>/../common-toolkit/dist",
     "^@cocrepo/constant$": "<rootDir>/../common-constant/dist",
     "^@cocrepo/type$": "<rootDir>/../common-type/dist",

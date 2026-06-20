@@ -1,3 +1,5 @@
+"use client";
+
 import { useCreateInquiry } from "@cocrepo/api/core/inquiries";
 
 import { ADMIN_PATHS } from "@cocrepo/constant";

@@ -31,6 +31,28 @@ export const OIDC_RUNTIME_MANAGED_CLIENT_IDS = [
 	"swagger-web",
 ] as const;
 
+/** 기본 first-party admin web OIDC 클라이언트 ID */
+export const DEFAULT_OIDC_CLIENT_ID = "admin-web";
+
+/** first-party native/mobile OIDC 클라이언트 ID */
+export const MOBILE_NATIVE_CLIENT_ID = "user-mobile";
+
+/** legacy OIDC client id를 canonical id로 정규화하기 위한 map */
+export const LEGACY_OIDC_CLIENT_ID_MAP = {
+	admin: "admin-web",
+	storybook: "storybook-web",
+	idpWeb: "idp-web",
+	swagger: "swagger-web",
+	"prj-core-swagger": "swagger-web",
+} as const;
+
+/** canonical OIDC client id에서 허용할 legacy alias 목록 */
+export const LEGACY_OIDC_CLIENT_IDS_BY_CANONICAL_ID = {
+	"admin-web": ["admin"],
+	"storybook-web": ["storybook"],
+	"swagger-web": ["swagger", "prj-core-swagger"],
+} as const;
+
 /** 모델 타입 필터 옵션 */
 export const MODEL_TYPE_OPTIONS = [
 	{ value: "", label: "전체" },

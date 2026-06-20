@@ -24,6 +24,7 @@ module.exports = {
 				tsconfig: {
 					module: "commonjs",
 					target: "es2022",
+					rootDir: "..",
 					esModuleInterop: true,
 					allowSyntheticDefaultImports: true,
 					experimentalDecorators: true,

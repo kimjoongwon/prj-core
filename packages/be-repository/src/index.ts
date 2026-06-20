@@ -18,8 +18,13 @@ export { EmailVerificationsRepository } from "./email-verifications.repository";
 export { FoldersRepository } from "./folders.repository";
 export { InquiriesRepository } from "./inquiries.repository";
 export { InquiryThreadsRepository } from "./inquiry-threads.repository";
+export type { OidcAuthUserData } from "./oidc-auth-user.data";
 export { OidcClientsRepository } from "./oidc-clients.repository";
+export { OidcDirectPrismaProvider } from "./oidc-direct-prisma.provider";
+export { OidcDirectUsersRepository } from "./oidc-direct-users.repository";
 export { OidcModelsRepository } from "./oidc-models.repository";
+export type { OidcRuntimeClientData } from "./oidc-runtime-client.data";
+export { OidcRuntimeClientsRepository } from "./oidc-runtime-clients.repository";
 export { PasswordHistoriesRepository } from "./password-histories.repository";
 export {
 	type CreatePaymentReferenceInput,

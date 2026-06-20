@@ -1,3 +1,4 @@
+import { JwtStrategy } from "@cocrepo/be-common";
 import { TaskAggregate } from "@cocrepo/aggregate";
 import {
 	PRISMA_SERVICE_TOKEN,
@@ -5,7 +6,6 @@ import {
 import { SpaceScope } from "@cocrepo/dto";
 import {
 	AuthCacheService,
-	JwtStrategy,
 	TokenStorageService,
 } from "@cocrepo/service";
 import { INestApplication, Injectable } from "@nestjs/common";

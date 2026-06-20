@@ -1,7 +1,7 @@
+import { SpaceContext } from "@cocrepo/context";
 import { TimelineAggregate } from "@cocrepo/aggregate";
 import { UpdateTimelineCommand } from "@cocrepo/command";
 import { TIMELINE_ERRORS } from "@cocrepo/constant";
-import { SpaceContext } from "@cocrepo/service";
 import { UnauthorizedException } from "@nestjs/common";
 import { CommandHandler } from "@nestjs/cqrs";
 

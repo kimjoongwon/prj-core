@@ -42,6 +42,13 @@ export interface GanttTask {
 	custom_class?: string;
 }
 
+type FrappeGanttCallbackTask = Omit<GanttTask, "start" | "end" | "progress" | "dependencies"> & {
+	start: string | Date;
+	end: string | Date;
+	progress?: number;
+	dependencies?: string | string[];
+};
+
 export interface TimelineChartProps<T extends TimelineItem = TimelineItem> {
 	/** 타임라인 아이템 목록 */
 	items: T[];
@@ -73,10 +80,29 @@ function getStyleClass(styleType?: TimelineStyleType): string {
 			return "gantt-in-progress";
 		case "group":
 			return "gantt-group";
-		case "pending":
 		default:
 			return "gantt-pending";
 	}
+}
+
+function toDateString(value: string | Date): string {
+	return typeof value === "string" ? value : value.toISOString().slice(0, 10);
+}
+
+function toGanttTask(task: FrappeGanttCallbackTask): GanttTask {
+	const dependencies = Array.isArray(task.dependencies)
+		? task.dependencies.join(", ")
+		: task.dependencies;
+
+	return {
+		id: task.id,
+		name: task.name,
+		start: toDateString(task.start),
+		end: toDateString(task.end),
+		progress: task.progress ?? 0,
+		dependencies,
+		custom_class: task.custom_class,
+	};
 }
 
 /** 타임라인 아이템을 frappe-gantt 형식으로 변환 */
@@ -480,17 +506,23 @@ export const TimelineChart = observer(
 				date_format: "YYYY-MM-DD",
 				language: "ko",
 				popup: null,
-				on_click: (task: unknown) => {
-					onItemClickRef.current?.(task as GanttTask);
+				on_click: (task: FrappeGanttCallbackTask) => {
+					onItemClickRef.current?.(toGanttTask(task));
 				},
-				on_date_change: (task: unknown, start: Date, end: Date) => {
-					onDateChangeRef.current?.(task as GanttTask, start, end);
+				on_date_change: (
+					task: FrappeGanttCallbackTask,
+					start: Date,
+					end: Date,
+				) => {
+					onDateChangeRef.current?.(toGanttTask(task), start, end);
 				},
-				on_progress_change: (task: unknown, progress: number) => {
-					onProgressChangeRef.current?.(task as GanttTask, progress);
+				on_progress_change: (
+					task: FrappeGanttCallbackTask,
+					progress: number,
+				) => {
+					onProgressChangeRef.current?.(toGanttTask(task), progress);
 				},
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			} as any);
+			});
 
 			return () => {
 				if (containerRef.current) {

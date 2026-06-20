@@ -1,3 +1,5 @@
+"use client";
+
 import { tools } from "@cocrepo/toolkit";
 import type {
 	Paths,

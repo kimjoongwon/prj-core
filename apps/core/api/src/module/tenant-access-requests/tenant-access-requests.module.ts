@@ -1,3 +1,4 @@
+import { AuthContext } from "@cocrepo/context";
 import { TenantAccessRequestAggregate } from "@cocrepo/aggregate";
 import { TenantAccessRequestsController } from "@cocrepo/controller";
 import {
@@ -5,7 +6,6 @@ import {
 	TenantsRepository,
 	UsersRepository,
 } from "@cocrepo/repository";
-import { AuthContext } from "@cocrepo/service";
 import {
 	TenantAccessRequestCommandHandlers,
 	TenantAccessRequestQueryHandlers,

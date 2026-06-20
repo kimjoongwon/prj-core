@@ -1,12 +1,11 @@
 import { InteractionController } from "@cocrepo/controller";
 import {
-	InteractionLoginService as ServiceInteractionLoginService,
-	InteractionService,
-} from "@cocrepo/service";
-import {
 	IDP_INTERACTION_LOGIN_SERVICE,
-	InteractionUseCaseProviders,
-} from "@cocrepo/usecase";
+	InteractionService,
+	OidcRedirectUrlService,
+	InteractionLoginService as ServiceInteractionLoginService,
+} from "@cocrepo/service";
+import { InteractionUseCaseProviders } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { OidcModule } from "../oidc/oidc.module";
@@ -18,6 +17,7 @@ import { OidcModule } from "../oidc/oidc.module";
 		...InteractionUseCaseProviders,
 		ServiceInteractionLoginService,
 		InteractionService,
+		OidcRedirectUrlService,
 		{
 			provide: IDP_INTERACTION_LOGIN_SERVICE,
 			useExisting: ServiceInteractionLoginService,

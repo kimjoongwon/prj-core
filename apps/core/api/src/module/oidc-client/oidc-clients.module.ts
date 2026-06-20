@@ -1,11 +1,11 @@
 import { OidcClientAggregate } from "@cocrepo/aggregate";
 import { OidcClientsController } from "@cocrepo/controller";
 import { OidcClientsRepository } from "@cocrepo/repository";
-import { OidcProviderService } from "@cocrepo/service";
 import {
 	IDP_OIDC_PROVIDER_SERVICE,
-	OidcClientUseCaseProviders,
-} from "@cocrepo/usecase";
+	OidcProviderService,
+} from "@cocrepo/service";
+import { OidcClientUseCaseProviders } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { OidcModule } from "../oidc/oidc.module";

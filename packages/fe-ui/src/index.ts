@@ -1,3 +1,5 @@
+"use client";
+
 export type { Key } from "react-aria-components";
 export * from "./action";
 export * from "./cell";

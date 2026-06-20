@@ -23,19 +23,25 @@ export function parseAcceptLanguage(header?: string): LanguageCode {
 	const languages = header
 		.split(",")
 		.map((lang) => {
-			const [code, qValue] = lang.trim().split(";q=");
-			const quality = qValue ? Number.parseFloat(qValue) : 1.0;
+			const [rawCode = "", rawQuality] = lang.trim().split(";q=");
+			const quality = rawQuality ? Number.parseFloat(rawQuality) : 1.0;
 			// 하이픈(-)을 언더스코어(_)로 변환: en-US → en_US
-			return { code: code.replace("-", "_"), quality };
+			return { code: rawCode.replace("-", "_"), quality };
 		})
 		.sort((a, b) => b.quality - a.quality);
 
 	// 지원되는 첫 번째 언어 찾기
 	for (const { code } of languages) {
+		const [requestedLanguage] = code.split("_");
 		const matched = supportedLanguages.find(
-			(lang: LanguageCode) =>
-				lang.toLowerCase() === code.toLowerCase() ||
-				lang.split("_")[0] === code.split("_")[0],
+			(lang: LanguageCode) => {
+				const [supportedLanguage] = lang.split("_");
+				return (
+					lang.toLowerCase() === code.toLowerCase() ||
+					(requestedLanguage !== undefined &&
+						supportedLanguage === requestedLanguage)
+				);
+			},
 		);
 		if (matched) return matched as LanguageCode;
 	}

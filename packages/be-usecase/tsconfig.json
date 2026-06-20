@@ -11,6 +11,7 @@
     { "path": "../be-command" },
     { "path": "../be-event" },
     { "path": "../common-constant" },
+    { "path": "../be-context" },
     { "path": "../common-toolkit" },
     { "path": "../be-dto" },
     { "path": "../be-prisma" },

@@ -1,45 +1,45 @@
 # @cocrepo/aggregate
 
-Aggregate root service provider package.
+Aggregate service provider package.
 
-This package owns domain services that sit at the center of an aggregate root.
-Classes are named `{Domain}AggregateRoot` and are Nest providers.
+This package owns domain services that sit at the center of an aggregate.
+Classes are named `{Domain}Aggregate` and are Nest providers.
 
 ```txt
-packages/be-aggregate/src/{domain}/{domain}.aggregate-root.ts
+packages/be-aggregate/src/{domain}/{domain}.aggregate.ts
 ```
 
 Aggregate root entity classes remain in `@cocrepo/entity`.
 
-## Current Promoted Roots
+## Current Aggregates
 
-- `AbilityAggregateRoot`
-- `ActionAggregateRoot`
-- `AssetAggregateRoot`
-- `AuthAuditLogAggregateRoot`
-- `ContentAggregateRoot`
-- `CourseAggregateRoot`
-- `EmailVerificationAggregateRoot`
-- `FolderAggregateRoot`
-- `IdpAccountAggregateRoot`
-- `IdpDashboardAggregateRoot`
-- `OidcClientAggregateRoot`
-- `OidcSessionAggregateRoot`
-- `InquiryAggregateRoot`
-- `PaymentAggregateRoot`
-- `PolicyAggregateRoot`
-- `PolicyAssignmentAggregateRoot`
-- `ReservationAggregateRoot`
-- `RoleAggregateRoot`
-- `RoutineAggregateRoot`
-- `SecurityPolicyAggregateRoot`
-- `ServiceDocumentAggregateRoot`
-- `SpaceAggregateRoot`
-- `SubjectAggregateRoot`
-- `TaskAggregateRoot`
-- `TenantAccessRequestAggregateRoot`
-- `TimelineAggregateRoot`
-- `TranslationCatalogAggregateRoot`
+- `AbilityAggregate`
+- `ActionAggregate`
+- `AssetAggregate`
+- `AuthAuditLogAggregate`
+- `ContentAggregate`
+- `CourseAggregate`
+- `EmailVerificationAggregate`
+- `FolderAggregate`
+- `IdpAccountAggregate`
+- `IdpDashboardAggregate`
+- `OidcClientAggregate`
+- `OidcSessionAggregate`
+- `InquiryAggregate`
+- `PaymentAggregate`
+- `PolicyAggregate`
+- `PolicyAssignmentAggregate`
+- `ReservationAggregate`
+- `RoleAggregate`
+- `RoutineAggregate`
+- `SecurityPolicyAggregate`
+- `ServiceDocumentAggregate`
+- `SpaceAggregate`
+- `SubjectAggregate`
+- `TaskAggregate`
+- `TenantAccessRequestAggregate`
+- `TimelineAggregate`
+- `TranslationCatalogAggregate`
 
 `UserService`, `TemplateService`, `EmailService`, token, Redis, Prisma, object
 storage, masking, and i18n providers stay in `@cocrepo/service` as support

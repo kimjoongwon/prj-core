@@ -69,23 +69,6 @@ test.describe("Subject 상세 페이지", () => {
 				!entitySubject,
 				"entity Subject seed가 없어 검증할 수 없습니다.",
 			);
-			await page.route("**/api/v1/subjects/**/fields", async (route) => {
-				await route.fulfill({
-					status: 200,
-					contentType: "application/json",
-					body: JSON.stringify({
-						data: [
-							{
-								name: "email",
-								displayName: "이메일",
-								type: "String",
-								isRequired: true,
-								isRelation: false,
-							},
-						],
-					}),
-				});
-			});
 
 			// When: Subject 상세 페이지로 직접 이동
 			await page.goto(`./subjects/${entitySubject!.id}`);

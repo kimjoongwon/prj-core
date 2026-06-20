@@ -1,3 +1,7 @@
+import {
+	AuthContext,
+	SpaceContext,
+} from "@cocrepo/context";
 import { RolesGuard } from "@cocrepo/be-common";
 import {
 	CreateTaskCommand,
@@ -25,7 +29,6 @@ import {
 	UpdateExerciseDto,
 } from "@cocrepo/dto";
 import { Routine, Task } from "@cocrepo/entity";
-import { AuthContext, SpaceContext } from "@cocrepo/service";
 import {
 	Body,
 	Controller,

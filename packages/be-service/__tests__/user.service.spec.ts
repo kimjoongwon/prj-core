@@ -154,12 +154,12 @@ describe("UserService", () => {
 
 	describe("getUsersBySpace", () => {
 		it("비 FULL_ACCESS면 현재 tenant의 spaceId 1개만 기준으로 사용자 목록과 통계를 조회해야 한다", async () => {
-			const query = {
+			const input = {
+				where: { removedAt: null },
+				orderBy: [{ createdAt: "desc" as const }],
 				skip: 10,
 				take: 20,
-				toPrismaWhere: jest.fn().mockReturnValue({ removedAt: null }),
-				toPrismaOrderBy: jest.fn().mockReturnValue([{ createdAt: "desc" }]),
-			} as any;
+			};
 			const repositoryResult = {
 				users: [mockUser],
 				totalCount: 1,
@@ -192,18 +192,18 @@ describe("UserService", () => {
 			mockRepository.countStatsBySpaceIds.mockResolvedValue(statsResult as any);
 			(service as any).spaceCtx = mockSpaceContext;
 
-			const result = await service.getUsersBySpace(query);
+			const result = await service.getUsersBySpace(input);
 
-			expect(query.toPrismaWhere).toHaveBeenCalledWith({
-				tenants: {
-					some: {
-						spaceId: { in: ["space-header-id"] },
-						removedAt: null,
+			expect(mockRepository.findManyBySpaceIds).toHaveBeenCalledWith({
+				where: {
+					removedAt: null,
+					tenants: {
+						some: {
+							spaceId: { in: ["space-header-id"] },
+							removedAt: null,
+						},
 					},
 				},
-			});
-			expect(mockRepository.findManyBySpaceIds).toHaveBeenCalledWith({
-				where: { removedAt: null },
 				orderBy: [{ createdAt: "desc" }],
 				skip: 10,
 				take: 20,
@@ -221,12 +221,12 @@ describe("UserService", () => {
 		});
 
 		it("FULL_ACCESS면 전체 사용자 목록과 통계를 조회해야 한다", async () => {
-			const query = {
+			const input = {
+				where: { removedAt: null },
+				orderBy: [{ createdAt: "desc" as const }],
 				skip: 0,
 				take: 10,
-				toPrismaWhere: jest.fn().mockReturnValue({ removedAt: null }),
-				toPrismaOrderBy: jest.fn().mockReturnValue([{ createdAt: "desc" }]),
-			} as any;
+			};
 			const repositoryResult = {
 				users: [mockUser],
 				totalCount: 1,
@@ -259,9 +259,8 @@ describe("UserService", () => {
 			mockRepository.countStatsBySpaceIds.mockResolvedValue(statsResult as any);
 			(service as any).spaceCtx = mockSpaceContext;
 
-			const result = await service.getUsersBySpace(query);
+			const result = await service.getUsersBySpace(input);
 
-			expect(query.toPrismaWhere).toHaveBeenCalledWith({});
 			expect(mockRepository.findManyBySpaceIds).toHaveBeenCalledWith({
 				where: { removedAt: null },
 				orderBy: [{ createdAt: "desc" }],
@@ -281,12 +280,12 @@ describe("UserService", () => {
 		});
 
 		it("현재 tenant role이 FULL_ACCESS인 branch space도 전체 사용자 목록과 통계를 조회해야 한다", async () => {
-			const query = {
+			const input = {
+				where: { removedAt: null },
+				orderBy: [{ createdAt: "desc" as const }],
 				skip: 0,
 				take: 20,
-				toPrismaWhere: jest.fn().mockReturnValue({ removedAt: null }),
-				toPrismaOrderBy: jest.fn().mockReturnValue([{ createdAt: "desc" }]),
-			} as any;
+			};
 			const repositoryResult = {
 				users: [mockUser],
 				totalCount: 1,
@@ -319,9 +318,8 @@ describe("UserService", () => {
 			mockRepository.countStatsBySpaceIds.mockResolvedValue(statsResult as any);
 			(service as any).spaceCtx = mockSpaceContext;
 
-			const result = await service.getUsersBySpace(query);
+			const result = await service.getUsersBySpace(input);
 
-			expect(query.toPrismaWhere).toHaveBeenCalledWith({});
 			expect(mockRepository.findManyBySpaceIds).toHaveBeenCalledWith({
 				where: { removedAt: null },
 				orderBy: [{ createdAt: "desc" }],

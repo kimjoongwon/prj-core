@@ -2,6 +2,10 @@
 
 // be-common imports
 import {
+	AuthContext,
+	SpaceContext,
+} from "@cocrepo/context";
+import {
 	AuthMiddleware,
 	DtoTransformInterceptor,
 	LoggerMiddleware,
@@ -9,13 +13,11 @@ import {
 	ResponseEntityInterceptor,
 	SpaceAccessGuard,
 	SpaceScopeInterceptor,
+	JwtStrategy,
 } from "@cocrepo/be-common";
 import {
 	AuthCacheService,
-	AuthContext,
 	I18nModule,
-	JwtStrategy,
-	SpaceContext,
 	TokenStorageService,
 } from "@cocrepo/service";
 import {

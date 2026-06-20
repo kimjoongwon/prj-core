@@ -1,3 +1,5 @@
+"use client";
+
 import { useFeaturePermission } from "@cocrepo/store";
 import type { ReactNode } from "react";
 

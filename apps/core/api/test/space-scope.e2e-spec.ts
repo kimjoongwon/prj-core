@@ -1,3 +1,5 @@
+import { JwtStrategy } from "@cocrepo/be-common";
+import { SpaceContext } from "@cocrepo/context";
 import { TaskAggregate } from "@cocrepo/aggregate";
 import {
 	PRISMA_SERVICE_TOKEN,
@@ -7,8 +9,6 @@ import { UsersRepository,
 	SpacesRepository } from "@cocrepo/repository";
 import {
 	AuthCacheService,
-	JwtStrategy,
-	SpaceContext,
 	TokenStorageService,
 	UserService,
 } from "@cocrepo/service";

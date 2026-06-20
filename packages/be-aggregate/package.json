@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "description": "Aggregate root service providers for cocrepo backend domains",
+  "description": "Aggregate service providers for cocrepo backend domains",
   "files": [
     "dist",
     "README.md"
