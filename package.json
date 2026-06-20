@@ -45,8 +45,8 @@
     "wt:merge": "pnpm exec tsx scripts/wt.ts merge",
     "wt:finish": "pnpm exec tsx scripts/wt.ts finish",
     "wt:rm": "pnpm exec tsx scripts/wt.ts rm",
-    "lint": "turbo lint",
-    "lint:fix": "turbo lint:fix",
+    "lint": "pnpm run lint:repo && turbo lint",
+    "lint:fix": "pnpm run lint:repo:fix && turbo lint:fix",
     "format": "turbo format",
     "test": "turbo test",
     "test:e2e": "pnpm test:admin:mock && pnpm test:api:e2e",
@@ -85,7 +85,11 @@
     "spec:audit:strict:missing": "node scripts/spec-audit.js --fail-on-missing",
     "spec:audit:strict:orphan": "node scripts/spec-audit.js --fail-on-orphan",
     "spec:generate": "node scripts/spec-generate.js",
-    "spec:generate:dry": "node scripts/spec-generate.js --dry-run"
+    "spec:generate:dry": "node scripts/spec-generate.js --dry-run",
+    "lint:repo": "biome lint scripts --no-errors-on-unmatched --files-ignore-unknown=true",
+    "lint:repo:fix": "biome lint scripts --write --unsafe --no-errors-on-unmatched --files-ignore-unknown=true",
+    "lint:repo:prod": "echo 'No production root lint targets'",
+    "lint:prod": "pnpm run lint:repo:prod && turbo lint:prod"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

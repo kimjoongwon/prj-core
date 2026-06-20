@@ -24,33 +24,34 @@
   "scripts": {
     "build": "echo 'Build not needed - using source files directly'",
     "start:dev": "echo 'Development mode - no build needed'",
-    "lint": "echo 'Linting skipped for now'",
-    "lint:fix": "echo 'Linting skipped for now'",
+    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
     "test": "node ./node_modules/jest/bin/jest.js --config ./jest.config.js --runInBand --passWithNoTests",
     "type-check": "tsc --noEmit -p tsconfig.typecheck.json",
     "type-check:prod": "tsc --noEmit -p tsconfig.prod.json",
-    "clean": "rm -rf .turbo && rm -rf node_modules"
+    "clean": "rm -rf .turbo && rm -rf node_modules",
+    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
   },
   "author": "kimjoongwon",
   "license": "ISC",
-	"dependencies": {
-		"@cocrepo/hook": "workspace:*",
-		"@cocrepo/toolkit": "workspace:*",
-		"@cocrepo/type": "workspace:*",
-		"mobx": "catalog:",
-		"mobx-react-lite": "catalog:",
-		"tailwind-variants": "^3.2.2"
-	},
-	"peerDependencies": {
-		"@gorhom/bottom-sheet": ">=5.2.9",
-		"heroui-native": "^1.0.4",
-		"lottie-react-native": ">=7.3.8",
-		"react-native-svg": ">=15.15.0",
-		"react-native-safe-area-context": ">=5.6.0",
-		"uniwind": ">=1.6.0"
-	},
-	"devDependencies": {
-		"@gorhom/bottom-sheet": "catalog:",
+  "dependencies": {
+    "@cocrepo/hook": "workspace:*",
+    "@cocrepo/toolkit": "workspace:*",
+    "@cocrepo/type": "workspace:*",
+    "mobx": "catalog:",
+    "mobx-react-lite": "catalog:",
+    "tailwind-variants": "^3.2.2"
+  },
+  "peerDependencies": {
+    "@gorhom/bottom-sheet": ">=5.2.9",
+    "heroui-native": "^1.0.4",
+    "lottie-react-native": ">=7.3.8",
+    "react-native-svg": ">=15.15.0",
+    "react-native-safe-area-context": ">=5.6.0",
+    "uniwind": ">=1.6.0"
+  },
+  "devDependencies": {
+    "@gorhom/bottom-sheet": "catalog:",
     "@expo/metro-runtime": "~55.0.10",
     "@storybook/react-native": "10.4.0",
     "@testing-library/react-native": "^13.3.3",
@@ -62,18 +63,18 @@
     "heroui-native": "catalog:",
     "jest": "^29.7.0",
     "jest-expo": "~55.0.16",
-		"lottie-react-native": "~7.3.8",
+    "lottie-react-native": "~7.3.8",
     "@types/react": "catalog:",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-native": "0.83.6",
     "react-native-reanimated": "4.2.1",
-		"react-native-safe-area-context": "~5.6.2",
-		"react-native-svg": "15.15.3",
-		"react-native-worklets": "0.7.4",
-		"react-test-renderer": "19.2.0",
-		"storybook": "10.3.6",
-		"uniwind": "^1.6.3",
-		"typescript": "catalog:"
-	}
+    "react-native-safe-area-context": "~5.6.2",
+    "react-native-svg": "15.15.3",
+    "react-native-worklets": "0.7.4",
+    "react-test-renderer": "19.2.0",
+    "storybook": "10.3.6",
+    "uniwind": "^1.6.3",
+    "typescript": "catalog:"
+  }
 }

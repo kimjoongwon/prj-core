@@ -1,7 +1,7 @@
 // NODE_ENV를 기반으로 한 통합 Orval 설정 파일
 // 환경별로 다른 API URL을 사용하되, 나머지 설정은 동일하게 유지
 
-const http = require("http");
+const http = require("node:http");
 
 const serverEnvironments = {
   development: "http://localhost:3006/api-json",

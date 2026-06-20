@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "lib": ["ES2022"],
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "noEmit": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2022",
+    "types": ["node", "detox"]
+  },
+  "include": ["detox.config.js", "e2e/**/*.d.ts", "e2e/**/*.js"],
+  "exclude": ["node_modules"]
+}

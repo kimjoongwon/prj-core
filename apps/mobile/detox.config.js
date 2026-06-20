@@ -1,4 +1,4 @@
-/** @type {import('detox').DetoxConfig} */
+/** @type {Detox.DetoxConfig} */
 module.exports = {
 	testRunner: {
 		args: {

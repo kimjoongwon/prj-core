@@ -5,6 +5,9 @@
   "description": "Shared TypeScript configuration",
   "scripts": {
     "type-check": "echo 'No TypeScript sources to check'",
-    "type-check:prod": "echo 'No production TypeScript sources to check'"
+    "type-check:prod": "echo 'No production TypeScript sources to check'",
+    "lint": "echo 'No lint targets'",
+    "lint:fix": "echo 'No lint targets'",
+    "lint:prod": "echo 'No production lint targets'"
   }
 }

@@ -13,7 +13,7 @@
 import { generateKeyPair, exportJWK, calculateJwkThumbprint } from "jose";
 
 async function main() {
-	const { publicKey, privateKey } = await generateKeyPair("RS256");
+	const { privateKey } = await generateKeyPair("RS256");
 
 	const privateJwk = await exportJWK(privateKey);
 	const kid = await calculateJwkThumbprint(privateJwk, "sha256");

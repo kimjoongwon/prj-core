@@ -44,9 +44,11 @@ const PureSliderComponent = forwardRef<
     <HeroSlider.Output key="output" />,
     <HeroSlider.Track key="track">
       <HeroSlider.Fill key="fill" />
-      {thumbValues.map((_, index) => (
-        <HeroSlider.Thumb index={index} key={index} />
-      ))}
+      {thumbValues.map((_, index) => {
+        // Slider thumbs are positional controls, so their thumb index is their identity.
+        const thumbKey = `slider-thumb-${index}`;
+        return <HeroSlider.Thumb index={index} key={thumbKey} />;
+      })}
     </HeroSlider.Track>,
   ];
   return (

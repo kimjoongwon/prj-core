@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "reference:prepare": "pnpm --filter @cocrepo/constant build",
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc --noEmit -p tsconfig.typecheck.json",
     "type-check:prod": "tsc --noEmit -p tsconfig.prod.json",
     "generate": "prisma generate && node ./scripts/fix-generated-client-module-format.mjs",
     "schema:check": "tsx ./scripts/validate-schema-conventions.ts",
@@ -46,7 +46,10 @@
     "db:e2e:reset": "pnpm reference:prepare && tsx ./scripts/reset-e2e-database.ts",
     "clean": "rm -rf dist && rm -rf node_modules",
     "test": "vitest --passWithNoTests",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
   },
   "prisma": {
     "seed": "tsx seed.ts"

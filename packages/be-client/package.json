@@ -19,7 +19,10 @@
     "format": "biome check --write .",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
-    "clean": "rm -rf dist && rm -rf node_modules"
+    "clean": "rm -rf dist && rm -rf node_modules",
+    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
   },
   "peerDependencies": {
     "@nestjs/common": "^11.1.3",

@@ -1,5 +1,5 @@
-const path = require("path");
-const fs = require("fs");
+const fs = require("node:fs");
+const path = require("node:path");
 const { RunScriptWebpackPlugin } = require("run-script-webpack-plugin");
 
 /**
@@ -44,35 +44,30 @@ class WatchPackagesPlugin {
   }
 }
 
-module.exports = function (options, webpack) {
-  return {
-    ...options,
-    entry: ["webpack/hot/poll?100", options.entry],
-    externals: [
-      function ({ request }, callback) {
-        // 번들에 포함: @cocrepo workspace 패키지, HMR 클라이언트
-        if (
-          request === "webpack/hot/poll?100" ||
-          /^@cocrepo\//.test(request)
-        ) {
-          return callback();
-        }
-        // 번들에 포함: 상대/절대 경로 import (번들된 @cocrepo 패키지 내부 파일)
-        if (request.startsWith(".") || request.startsWith("/")) {
-          return callback();
-        }
-        // external 처리: npm 패키지, Node.js 내장 모듈 등 모든 bare specifier
-        return callback(null, "commonjs " + request);
-      },
-    ],
-    plugins: [
-      ...options.plugins,
-      new webpack.HotModuleReplacementPlugin(),
-      new RunScriptWebpackPlugin({
-        name: options.output.filename,
-        autoRestart: false,
-      }),
-      new WatchPackagesPlugin(),
-    ],
-  };
-};
+module.exports = (options, webpack) => ({
+  ...options,
+  entry: ["webpack/hot/poll?100", options.entry],
+  externals: [
+    ({ request }, callback) => {
+      // 번들에 포함: @cocrepo workspace 패키지, HMR 클라이언트
+      if (request === "webpack/hot/poll?100" || /^@cocrepo\//.test(request)) {
+        return callback();
+      }
+      // 번들에 포함: 상대/절대 경로 import (번들된 @cocrepo 패키지 내부 파일)
+      if (request.startsWith(".") || request.startsWith("/")) {
+        return callback();
+      }
+      // external 처리: npm 패키지, Node.js 내장 모듈 등 모든 bare specifier
+      return callback(null, `commonjs ${request}`);
+    },
+  ],
+  plugins: [
+    ...options.plugins,
+    new webpack.HotModuleReplacementPlugin(),
+    new RunScriptWebpackPlugin({
+      name: options.output.filename,
+      autoRestart: false,
+    }),
+    new WatchPackagesPlugin(),
+  ],
+});

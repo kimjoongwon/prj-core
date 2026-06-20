@@ -17,16 +17,19 @@
     "build": "tsc --build",
     "start:dev": "tsc --build --watch",
     "format": "biome check --write .",
-    "clean": "rm -rf dist && rm -rf node_modules"
+    "clean": "rm -rf dist && rm -rf node_modules",
+    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
   },
-	"dependencies": {
-		"@cocrepo/prisma": "workspace:*",
-		"@cocrepo/decorator": "workspace:*",
-		"@cocrepo/type": "workspace:*",
-		"@cocrepo/enum": "workspace:*",
-		"@nestjs/cqrs": "^11.0.3",
-		"class-transformer": "^0.5.1"
-	},
+  "dependencies": {
+    "@cocrepo/prisma": "workspace:*",
+    "@cocrepo/decorator": "workspace:*",
+    "@cocrepo/type": "workspace:*",
+    "@cocrepo/enum": "workspace:*",
+    "@nestjs/cqrs": "^11.0.3",
+    "class-transformer": "^0.5.1"
+  },
   "peerDependencies": {
     "@nestjs/common": "^11.1.3",
     "@nestjs/swagger": "^11.2.0"

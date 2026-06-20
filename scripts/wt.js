@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-"use strict";
 
-const fs = require("fs");
-const path = require("path");
-const { spawnSync } = require("child_process");
+
+const fs = require("node:fs");
+const path = require("node:path");
+const { spawnSync } = require("node:child_process");
 
 const DEFAULT_CONFIG = {
   worktreeRoot: "../wt",
@@ -166,7 +166,7 @@ function runInit(configOverride) {
   }
 
   ensureDir(path.dirname(configPath));
-  fs.writeFileSync(configPath, JSON.stringify(DEFAULT_CONFIG, null, 2) + "\n", "utf8");
+  fs.writeFileSync(configPath, `${JSON.stringify(DEFAULT_CONFIG, null, 2)}\n`, "utf8");
   console.log(`Config created: ${configPath}`);
 }
 
@@ -1561,7 +1561,7 @@ function executePullRequestMerge({ repoRoot, prNumber, strategy, auto, admin, de
   return { command, output };
 }
 
-function normalizeRepoPath(value) {
+function _normalizeRepoPath(value) {
   return String(value || "").replace(/\\/g, "/");
 }
 
@@ -1778,7 +1778,7 @@ function loadRegistry(registryPath) {
 
 function saveRegistry(registryPath, registry) {
   ensureDir(path.dirname(registryPath));
-  fs.writeFileSync(registryPath, JSON.stringify(registry, null, 2) + "\n", "utf8");
+  fs.writeFileSync(registryPath, `${JSON.stringify(registry, null, 2)}\n`, "utf8");
 }
 
 function sanitizeTicket(input) {

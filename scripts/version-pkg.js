@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-const { execSync } = require("child_process");
-const fs = require("fs");
-const path = require("path");
+const { execSync } = require("node:child_process");
+const fs = require("node:fs");
+const path = require("node:path");
 
 const [, , packageName, versionType = "patch"] = process.argv;
 
@@ -72,7 +72,7 @@ try {
   const updatedPkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
 
   console.log(`\n✅ 버전 업데이트 완료: v${currentVersion} → v${updatedPkg.version}\n`);
-} catch (error) {
+} catch (_error) {
   console.error("\n❌ 버전 업데이트 실패\n");
   process.exit(1);
 }

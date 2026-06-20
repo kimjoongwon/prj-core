@@ -8,7 +8,6 @@ import { View } from "react-native";
 import { Card as HeroCard, cardClassNames } from "heroui-native";
 import { Text } from "../../data-display/Text";
 type HeroCardProps = ComponentPropsWithoutRef<typeof HeroCard>;
-type HeroCardHeaderProps = ComponentPropsWithoutRef<typeof HeroCard.Header>;
 type HeroCardTitleProps = ComponentPropsWithoutRef<typeof HeroCard.Title>;
 type HeroCardDescriptionProps = ComponentPropsWithoutRef<
   typeof HeroCard.Description

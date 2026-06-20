@@ -7,7 +7,6 @@ module.exports = {
   moduleNameMapper: {
     "^@cocrepo/command$": "<rootDir>/../../../../packages/be-command/dist",
     "^@cocrepo/db$": "<rootDir>/../../../packages/db/src",
-    "^@cocrepo/utils$": "<rootDir>/../../../packages/shared-utils/src",
     "^@cocrepo/utils$": "<rootDir>/../../../packages/shared-vars/src",
     "^@shared$": "<rootDir>/shared/index",
     "^@shared/(.*)$": "<rootDir>/shared/$1",
@@ -30,7 +29,6 @@ module.exports = {
             "@shared": ["./shared/index"],
             "@shared/*": ["./shared/*"],
             "@cocrepo/db": ["../../packages/db/src"],
-            "@cocrepo/utils": ["../../packages/shared-utils/src"],
             "@cocrepo/utils": ["../../packages/shared-vars/src"],
           },
         },

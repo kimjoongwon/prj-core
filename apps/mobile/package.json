@@ -7,7 +7,8 @@
     "start:dev": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "lint": "expo lint",
+    "lint": "expo lint && pnpm run lint:e2e",
+    "lint:e2e": "eslint \"e2e/**/*.js\" --no-warn-ignored",
     "test": "node ./node_modules/jest/bin/jest.js --config ./jest.config.js --runInBand",
     "test:watch": "node ./node_modules/jest/bin/jest.js --config ./jest.config.js --watch",
     "test:e2e": "detox test --configuration ios.sim.debug",
@@ -16,8 +17,11 @@
     "test:e2e:build:ios": "detox build --configuration ios.sim.debug",
     "test:e2e:build:android": "detox build --configuration android.emu.debug",
     "doctor": "expo-doctor",
-    "type-check": "tsc --noEmit -p tsconfig.typecheck.json",
-    "type-check:prod": "tsc --noEmit"
+    "type-check": "tsc --noEmit -p tsconfig.typecheck.json && pnpm run type-check:e2e",
+    "type-check:e2e": "tsc --noEmit -p tsconfig.e2e.json",
+    "type-check:prod": "tsc --noEmit",
+    "lint:fix": "expo lint --fix && pnpm run lint:e2e -- --fix",
+    "lint:prod": "eslint \"src/**/*.{ts,tsx}\" --no-warn-ignored"
   },
   "dependencies": {
     "@cocrepo/api": "workspace:*",

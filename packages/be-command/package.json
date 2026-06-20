@@ -5,7 +5,10 @@
     "access": "public"
   },
   "description": "CQRS command and query message contracts for cocrepo",
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
@@ -13,11 +16,12 @@
     "type-check:prod": "tsc --noEmit",
     "build": "rm -rf dist && tsc --build",
     "start:dev": "tsc --build --watch",
-    "lint": "biome check .",
-    "lint:fix": "biome check --write .",
+    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
     "format": "biome check --write .",
     "test": "jest --passWithNoTests",
-    "clean": "rm -rf dist && rm -rf node_modules"
+    "clean": "rm -rf dist && rm -rf node_modules",
+    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
   },
   "dependencies": {
     "@cocrepo/dto": "workspace:*",

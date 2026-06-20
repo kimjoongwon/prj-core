@@ -44,13 +44,17 @@ export default registerAs<AppConfig>("app", () => {
 	return {
 		nodeEnv: process.env.NODE_ENV || "development",
 		name: process.env.APP_NAME || "Onora",
-		adminEmail: process.env.APP_ADMIN_EMAIL,
 		workingDirectory: process.cwd(),
-		frontendDomain: process.env.FRONTEND_DOMAIN,
 		backendDomain: process.env.BACKEND_DOMAIN ?? "http://localhost",
 		port: Number(process.env.APP_PORT) || 3006,
 		apiPrefix: process.env.API_PREFIX || "api",
 		fallbackLanguage: process.env.APP_FALLBACK_LANGUAGE || "en",
 		headerLanguage: process.env.APP_HEADER_LANGUAGE || "x-custom-lang",
+		...(process.env.APP_ADMIN_EMAIL
+			? { adminEmail: process.env.APP_ADMIN_EMAIL }
+			: {}),
+		...(process.env.FRONTEND_DOMAIN
+			? { frontendDomain: process.env.FRONTEND_DOMAIN }
+			: {}),
 	};
 });

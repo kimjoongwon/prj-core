@@ -17,7 +17,10 @@
     "android": "expo start --android --port 8083",
     "storybook:generate": "sb-rn-get-stories --config-path ./.rnstorybook",
     "type-check": "pnpm run storybook:generate && tsc --noEmit",
-    "type-check:prod": "pnpm run storybook:generate && tsc --noEmit"
+    "type-check:prod": "pnpm run storybook:generate && tsc --noEmit",
+    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
   },
   "dependencies": {
     "@cocrepo/api": "workspace:*",

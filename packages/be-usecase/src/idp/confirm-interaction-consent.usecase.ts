@@ -1,15 +1,13 @@
 import { ConfirmInteractionConsentCommand } from "@cocrepo/command";
-import { Inject } from "@nestjs/common";
+import { InteractionService } from "@cocrepo/service";
 import { ConfigService } from "@nestjs/config";
 import { CommandHandler } from "@nestjs/cqrs";
-import { IDP_INTERACTION_SERVICE, type InteractionPort } from "./idp.ports";
 import { toAbsoluteOidcUrl } from "./idp-local.support";
 
 @CommandHandler(ConfirmInteractionConsentCommand)
 export class ConfirmInteractionConsentUseCase {
 	constructor(
-		@Inject(IDP_INTERACTION_SERVICE)
-		private readonly interactionService: InteractionPort,
+		private readonly interactionService: InteractionService,
 		private readonly configService: ConfigService,
 	) {}
 

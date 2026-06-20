@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-const fs = require("fs");
-const path = require("path");
-const readline = require("readline");
+const fs = require("node:fs");
+const path = require("node:path");
+const readline = require("node:readline");
 
 // 사용 가능한 앱 목록
 const availableApps = ["admin", "server", "storybook"];
@@ -27,7 +27,7 @@ function prompt(question) {
 // 앱 선택 함수
 async function selectApps() {
   console.log("\n📱 업데이트할 앱을 선택해주세요:");
-  console.log("=" + "=".repeat(59));
+  console.log(`=${"=".repeat(59)}`);
 
   const appsToUpdate = [];
 
@@ -41,7 +41,7 @@ async function selectApps() {
     }
   }
 
-  console.log("=" + "=".repeat(59) + "\n");
+  console.log(`=${"=".repeat(59)}\n`);
 
   return appsToUpdate;
 }
@@ -119,7 +119,7 @@ function updateAppDependencies(apps, packageVersions) {
     });
 
     if (updated) {
-      fs.writeFileSync(appPkgPath, JSON.stringify(appPkg, null, 2) + "\n");
+      fs.writeFileSync(appPkgPath, `${JSON.stringify(appPkg, null, 2)}\n`);
       console.log(`  💾 ${appName} package.json 업데이트 완료\n`);
     } else {
       console.log(`  ℹ️  ${appName}는 업데이트할 의존성이 없습니다.\n`);

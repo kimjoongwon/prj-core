@@ -80,6 +80,24 @@ const OptionalText = ({
   }
   return <Text className={className}>{value}</Text>;
 };
+const getPrimitiveNodeKey = (node: ReactNode) => {
+  if (typeof node === "string" || typeof node === "number") {
+    return String(node);
+  }
+  return undefined;
+};
+const getDisplayNodeKey = (
+  scope: string,
+  ownerId: string,
+  node: ReactNode,
+  position: number,
+) => {
+  const primitiveKey = getPrimitiveNodeKey(node);
+  if (primitiveKey) {
+    return `${scope}-${ownerId}-${primitiveKey}`;
+  }
+  return `${scope}-${ownerId}-position-${position}`;
+};
 const CapacityText = ({ item }: { item: BookingClassFeedItem }) => {
   const parts = [
     item.availableCount === undefined
@@ -113,30 +131,49 @@ const ExerciseTags = ({ item }: { item: BookingClassFeedItem }) => {
   }
   return (
     <View className={classNames.tags()}>
-      {item.previewExerciseTags.map((tag, index) => (
-        <ExerciseTag key={`exercise-tag-${index}`} tag={tag} />
-      ))}
+      {item.previewExerciseTags.map((tag, index) => {
+        const tagKey = getDisplayNodeKey("exercise-tag", item.id, tag, index);
+        return <ExerciseTag key={tagKey} tag={tag} />;
+      })}
     </View>
   );
 };
+interface BookingMetaEntry {
+  key: string;
+  value: ReactNode;
+}
+const isBookingMetaEntry = (
+  entry: BookingMetaEntry | undefined,
+): entry is BookingMetaEntry => entry !== undefined;
 const BookingMeta = ({ item }: { item: BookingClassFeedItem }) => {
-  const meta = [
-    item.coachName ? (
-      <Text className={classNames.metaText()}>Coach {item.coachName}</Text>
-    ) : undefined,
-    item.level,
-    item.routineLabel,
-  ].filter(Boolean);
+  const metaCandidates: Array<BookingMetaEntry | undefined> = [
+    item.coachName
+      ? {
+          key: "coach",
+          value: <>Coach {item.coachName}</>,
+        }
+      : undefined,
+    item.level
+      ? {
+          key: "level",
+          value: item.level,
+        }
+      : undefined,
+    item.routineLabel
+      ? {
+          key: "routine",
+          value: item.routineLabel,
+        }
+      : undefined,
+  ];
+  const meta = metaCandidates.filter(isBookingMetaEntry);
   if (!meta.length) {
     return null;
   }
   return (
     <View className={classNames.meta()}>
-      {meta.map((value, index) => (
-        <Text
-          key={`booking-class-meta-${index}`}
-          className={classNames.metaText()}
-        >
+      {meta.map(({ key, value }) => (
+        <Text key={key} className={classNames.metaText()}>
           {value}
         </Text>
       ))}

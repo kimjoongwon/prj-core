@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const ROOT = process.cwd();
 const DATE = new Date().toISOString().slice(0, 10);
@@ -110,12 +110,20 @@ function extractMeta(code) {
 
   const exportRe = /\bexport\s+(?:interface|type|class|const|function|enum)\s+([A-Za-z0-9_]+)/g;
   let m;
-  while ((m = exportRe.exec(code)) !== null) exportNames.push(m[1]);
+  m = exportRe.exec(code);
+  while (m !== null) {
+    exportNames.push(m[1]);
+    m = exportRe.exec(code);
+  }
 
   if (/\bexport\s+default\b/.test(code)) exportNames.push('default export');
 
   const importRe = /from\s+["']([^"']+)["']/g;
-  while ((m = importRe.exec(code)) !== null) importSources.push(m[1]);
+  m = importRe.exec(code);
+  while (m !== null) {
+    importSources.push(m[1]);
+    m = importRe.exec(code);
+  }
 
   return {
     exports: unique(exportNames).slice(0, 12),

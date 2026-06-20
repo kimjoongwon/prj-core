@@ -6,6 +6,7 @@ import { Icon } from "../../icon";
 import { Card } from "../../layout/Card";
 import { Text } from "../../data-display/Text";
 export interface ReservationCheckoutSummaryItem {
+  id?: string;
   label: ReactNode;
   value: ReactNode;
 }
@@ -28,15 +29,38 @@ const SummaryItem = ({ item }: { item: ReservationCheckoutSummaryItem }) => (
     </Text>
   </View>
 );
+const toPrimitiveKeyPart = (node: ReactNode) => {
+  if (typeof node === "string" || typeof node === "number") {
+    return String(node);
+  }
+  return undefined;
+};
+const getSummaryItemKey = (
+  item: ReservationCheckoutSummaryItem,
+  position: number,
+) => {
+  const generatedKey = [
+    "reservation-checkout-summary",
+    toPrimitiveKeyPart(item.label),
+    toPrimitiveKeyPart(item.value),
+  ]
+    .filter(Boolean)
+    .join(":");
+
+  return (
+    item.id || generatedKey || `reservation-checkout-summary-position-${position}`
+  );
+};
 const SummaryItems = ({
   items,
 }: {
   items: readonly ReservationCheckoutSummaryItem[];
 }) => (
   <>
-    {items.map((item, index) => (
-      <SummaryItem item={item} key={`reservation-checkout-summary-${index}`} />
-    ))}
+    {items.map((item, index) => {
+      const itemKey = getSummaryItemKey(item, index);
+      return <SummaryItem item={item} key={itemKey} />;
+    })}
   </>
 );
 const AmountRow = ({

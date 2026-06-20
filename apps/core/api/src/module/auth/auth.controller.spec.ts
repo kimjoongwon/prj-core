@@ -64,10 +64,11 @@ describe("AuthController", () => {
 		expect(commandBus.execute).toHaveBeenCalledWith(
 			expect.any(GetAuthLoginRedirectCommand),
 		);
-		const command = commandBus.execute.mock
-			.calls[0][0] as GetAuthLoginRedirectCommand;
-		expect(command.clientId).toBe("admin-web");
-		expect(command.returnTo).toBe("/admin/dashboard");
+		const command = commandBus.execute.mock.calls[0]?.[0];
+		expect(command).toBeInstanceOf(GetAuthLoginRedirectCommand);
+		const loginCommand = command as GetAuthLoginRedirectCommand;
+		expect(loginCommand.clientId).toBe("admin-web");
+		expect(loginCommand.returnTo).toBe("/admin/dashboard");
 		expect(response.redirect).toHaveBeenCalledWith(
 			"https://idp.example.com/oidc/auth?client_id=admin-web",
 		);
@@ -91,11 +92,12 @@ describe("AuthController", () => {
 		expect(commandBus.execute).toHaveBeenCalledWith(
 			expect.any(RefreshTokenWithIdpCommand),
 		);
-		const command = commandBus.execute.mock
-			.calls[0][0] as RefreshTokenWithIdpCommand;
-		expect(command.refreshTokenCookie).toBe("test-refresh-token");
-		expect(command.refreshTokenHeader).toBeUndefined();
-		expect(command.sessionId).toBe("admin-web.test-session-id");
+		const command = commandBus.execute.mock.calls[0]?.[0];
+		expect(command).toBeInstanceOf(RefreshTokenWithIdpCommand);
+		const refreshCommand = command as RefreshTokenWithIdpCommand;
+		expect(refreshCommand.refreshTokenCookie).toBe("test-refresh-token");
+		expect(refreshCommand.refreshTokenHeader).toBeUndefined();
+		expect(refreshCommand.sessionId).toBe("admin-web.test-session-id");
 		expect(result).toEqual({ accessToken: "next-access-token" });
 	});
 
@@ -116,8 +118,10 @@ describe("AuthController", () => {
 		expect(queryBus.execute).toHaveBeenCalledWith(
 			expect.any(GetCurrentSpaceQuery),
 		);
-		const query = queryBus.execute.mock.calls[0][0] as GetCurrentSpaceQuery;
-		expect(query.requestedSpaceId).toBe("space-test-id");
+		const query = queryBus.execute.mock.calls[0]?.[0];
+		expect(query).toBeInstanceOf(GetCurrentSpaceQuery);
+		const currentSpaceQuery = query as GetCurrentSpaceQuery;
+		expect(currentSpaceQuery.requestedSpaceId).toBe("space-test-id");
 		expect(result).toEqual({ id: "space-test-id" });
 	});
 

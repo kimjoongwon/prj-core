@@ -352,7 +352,7 @@ describe("Space Scope API (E2E)", () => {
 		expect(tasksRepoCalls[0]).toMatchObject({
 			type: "findManyTasks",
 		});
-		expect(tasksRepoCalls[0].spaceIds).toBeUndefined();
+		expect(tasksRepoCalls[0]?.spaceIds).toBeUndefined();
 	});
 
 	it("spaces 목록도 현재 scope 기준으로 spaceIds를 전달한다", async () => {

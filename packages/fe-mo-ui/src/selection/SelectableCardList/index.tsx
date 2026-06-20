@@ -54,6 +54,18 @@ const toAccessibleText = (value: ReactNode) => {
   }
   return undefined;
 };
+const getDisplayNodeKey = (
+  scope: string,
+  ownerValue: string,
+  node: ReactNode,
+  position: number,
+) => {
+  const accessibleText = toAccessibleText(node);
+  if (accessibleText) {
+    return `${scope}-${ownerValue}-${accessibleText}`;
+  }
+  return `${scope}-${ownerValue}-position-${position}`;
+};
 const createSelectHandler = (
   item: SelectableCardItem,
   config: SelectableCardConfig,
@@ -101,9 +113,10 @@ const SelectableTags = ({ item }: { item: SelectableCardItem }) => {
   }
   return (
     <View className={classNames.tags()}>
-      {item.tags.map((tag, index) => (
-        <SelectableTag key={`tag-${index}`} tag={tag} />
-      ))}
+      {item.tags.map((tag, index) => {
+        const tagKey = getDisplayNodeKey("tag", item.value, tag, index);
+        return <SelectableTag key={tagKey} tag={tag} />;
+      })}
     </View>
   );
 };
@@ -113,9 +126,10 @@ const SelectableMetaList = ({ item }: { item: SelectableCardItem }) => {
   }
   return (
     <View className={classNames.meta()}>
-      {item.meta.map((meta, index) => (
-        <SelectableMeta key={`meta-${index}`} meta={meta} />
-      ))}
+      {item.meta.map((meta, index) => {
+        const metaKey = getDisplayNodeKey("meta", item.value, meta, index);
+        return <SelectableMeta key={metaKey} meta={meta} />;
+      })}
     </View>
   );
 };
@@ -153,11 +167,9 @@ const SelectionIndicator = ({
 };
 const SelectableCard = ({
   config,
-  index,
   item,
 }: {
   config: SelectableCardConfig;
-  index: number;
   item: SelectableCardItem;
 }) => {
   const isSelected = config.selectedValue === item.value;
@@ -176,7 +188,6 @@ const SelectableCard = ({
       }}
       isDisabled={isDisabled}
       isSelected={isSelected}
-      key={item.value || `selectable-card-${index}`}
       className={slotClassNames.card()}
       onPress={createSelectHandler(item, config)}
       style={[config.cardStyle, isSelected ? config.selectedCardStyle : null]}
@@ -222,12 +233,11 @@ const SelectableCards = ({
   items: readonly SelectableCardItem[];
 }) => (
   <>
-    {items.map((item, index) => (
+    {items.map((item) => (
       <SelectableCard
         config={config}
-        index={index}
         item={item}
-        key={item.value || `selectable-card-${index}`}
+        key={item.value}
       />
     ))}
   </>

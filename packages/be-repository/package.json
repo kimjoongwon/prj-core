@@ -25,7 +25,10 @@
     "start:dev": "tsc --build --watch",
     "format": "biome check --write .",
     "clean": "rm -rf dist && rm -rf node_modules",
-    "test": "jest --passWithNoTests"
+    "test": "jest --passWithNoTests",
+    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
   },
   "dependencies": {
     "@cocrepo/constant": "workspace:*",

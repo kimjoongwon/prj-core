@@ -6,6 +6,7 @@ import { Text } from "../Text";
 export type SummaryListItemState = "complete" | "missing" | "warning";
 export interface SummaryListItem {
   helperText?: ReactNode;
+  id?: string;
   label: ReactNode;
   placeholder?: ReactNode;
   state?: SummaryListItemState;
@@ -33,20 +34,30 @@ const getDisplayedValue = (item: SummaryListItem) =>
   item.value ?? item.placeholder ?? "Not selected";
 const hasSummaryValue = (item: SummaryListItem) =>
   item.value !== undefined && item.value !== null && item.value !== false;
-const SummaryItem = ({
-  index,
-  item,
-}: {
-  index: number;
-  item: SummaryListItem;
-}) => {
+const toPrimitiveKeyPart = (node: ReactNode) => {
+  if (typeof node === "string" || typeof node === "number") {
+    return String(node);
+  }
+  return undefined;
+};
+const getSummaryItemKey = (item: SummaryListItem, position: number) => {
+  const generatedKey = [
+    "summary-item",
+    toPrimitiveKeyPart(item.label),
+    toPrimitiveKeyPart(getDisplayedValue(item)),
+  ]
+    .filter(Boolean)
+    .join(":");
+
+  return item.id || generatedKey || `summary-item-position-${position}`;
+};
+const SummaryItem = ({ item }: { item: SummaryListItem }) => {
   const state = item.state ?? (hasSummaryValue(item) ? "complete" : "missing");
   return (
     <View
       accessibilityState={{
         disabled: state === "missing",
       }}
-      key={`summary-item-${index}`}
       className={classNames.item()}
     >
       <View className={classNames.itemRow()}>
@@ -71,9 +82,10 @@ const SummaryItem = ({
 };
 const SummaryItems = ({ items }: { items: readonly SummaryListItem[] }) => (
   <>
-    {items.map((item, index) => (
-      <SummaryItem item={item} index={index} key={`summary-item-${index}`} />
-    ))}
+    {items.map((item, index) => {
+      const itemKey = getSummaryItemKey(item, index);
+      return <SummaryItem item={item} key={itemKey} />;
+    })}
   </>
 );
 const SummaryListComponent = observer((props: SummaryListProps) => {

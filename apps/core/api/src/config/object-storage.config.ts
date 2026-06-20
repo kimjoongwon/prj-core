@@ -125,11 +125,11 @@ export default registerAs<ObjectStorageConfig>("objectStorage", () => {
 		provider,
 		accessKeyId: process.env.OBJECT_STORAGE_ACCESS_KEY!,
 		secretAccessKey: process.env.OBJECT_STORAGE_SECRET_KEY!,
-		apiToken,
 		region: process.env.OBJECT_STORAGE_REGION!,
 		bucket,
-		endpoint,
-		publicBaseUrl,
 		forcePathStyle: resolveForcePathStyle(provider, forcePathStyle),
+		...(apiToken ? { apiToken } : {}),
+		...(endpoint ? { endpoint } : {}),
+		...(publicBaseUrl ? { publicBaseUrl } : {}),
 	};
 });

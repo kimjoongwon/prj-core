@@ -22,12 +22,13 @@ export default registerAs<RedisConfig>("redis", () => {
 
 	const isDevelopment = process.env.NODE_ENV !== "production";
 
-	const config = {
+	const password = process.env.REDIS_PASSWORD || undefined;
+	const config: RedisConfig = {
 		host:
 			process.env.REDIS_HOST ||
 			(isDevelopment ? "localhost" : "redis.cocdev.co.kr"),
 		port: Number(process.env.REDIS_PORT) || 6379,
-		password: process.env.REDIS_PASSWORD || undefined,
+		...(password ? { password } : {}),
 	};
 
 	// 설정값 로깅 (비밀번호 제외)

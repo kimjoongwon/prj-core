@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 
 /**
  * 모든 패키지의 번들 사이즈를 분석하고 표시
@@ -75,7 +75,7 @@ function showAllBundleSizes() {
   });
 
   // 결과 출력
-  console.log("\n" + "=".repeat(80));
+  console.log(`\n${"=".repeat(80)}`);
   console.log("📦 모든 패키지 번들 사이즈 분석");
   console.log("=".repeat(80));
 
@@ -96,14 +96,14 @@ function showAllBundleSizes() {
       const diff =
         cjsKb && esmKb
           ? (
-              ((Math.abs(cjsKb - esmKb) / Math.max(cjsKb, esmKb)) * 100).toFixed(
+              `${((Math.abs(cjsKb - esmKb) / Math.max(cjsKb, esmKb)) * 100).toFixed(
                 1
-              ) + "%"
+              )}%`
             ).padEnd(10)
           : "-".padEnd(10);
 
       console.log(
-        `${pkg.name.padEnd(30)} ${pkg.version.padEnd(10)} ${(pkg.cjs + " KB").padEnd(10)} ${(pkg.esm + " KB").padEnd(10)} ${(pkg.dts + " KB").padEnd(10)} ${diff}`
+        `${pkg.name.padEnd(30)} ${pkg.version.padEnd(10)} ${(`${pkg.cjs} KB`).padEnd(10)} ${(`${pkg.esm} KB`).padEnd(10)} ${(`${pkg.dts} KB`).padEnd(10)} ${diff}`
       );
     });
 
@@ -114,7 +114,7 @@ function showAllBundleSizes() {
 
     console.log("-".repeat(80));
     console.log(
-      `${"합계".padEnd(30)} ${"".padEnd(10)} ${(totalCjs.toFixed(2) + " KB").padEnd(10)} ${(totalEsm.toFixed(2) + " KB").padEnd(10)} ${(totalDts.toFixed(2) + " KB").padEnd(10)}`
+      `${"합계".padEnd(30)} ${"".padEnd(10)} ${(`${totalCjs.toFixed(2)} KB`).padEnd(10)} ${(`${totalEsm.toFixed(2)} KB`).padEnd(10)} ${(`${totalDts.toFixed(2)} KB`).padEnd(10)}`
     );
   }
 
@@ -130,7 +130,7 @@ function showAllBundleSizes() {
     });
   }
 
-  console.log("\n" + "=".repeat(80) + "\n");
+  console.log(`\n${"=".repeat(80)}\n`);
 
   // 통계
   console.log("📊 통계:");

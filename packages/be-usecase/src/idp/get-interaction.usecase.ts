@@ -1,17 +1,13 @@
 import { GetInteractionQuery } from "@cocrepo/command";
-import { Inject } from "@nestjs/common";
+import { InteractionService } from "@cocrepo/service";
 import { QueryHandler } from "@nestjs/cqrs";
-import { IDP_INTERACTION_SERVICE, type InteractionPort } from "./idp.ports";
 
 @QueryHandler(GetInteractionQuery)
 export class GetInteractionUseCase {
 	private readonly isDev =
 		process.env.NODE_ENV !== "production" && process.env.NODE_ENV !== "staging";
 
-	constructor(
-		@Inject(IDP_INTERACTION_SERVICE)
-		private readonly interactionService: InteractionPort,
-	) {}
+	constructor(private readonly interactionService: InteractionService) {}
 
 	async execute(query: GetInteractionQuery) {
 		const interaction = await this.interactionService.getInteractionDetails(

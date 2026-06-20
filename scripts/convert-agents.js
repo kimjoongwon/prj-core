@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const agentsDir = '.claude/agents';
 const outputDir = '.opencode/agents';
@@ -32,7 +32,7 @@ files.forEach(file => {
 
   // 에이전트명 추출
   const nameMatch = oldFrontmatter.match(/name:\s*(.+)/);
-  const name = nameMatch ? nameMatch[1].trim() : '';
+  const _name = nameMatch ? nameMatch[1].trim() : '';
 
   // 설명 추출
   const descMatch = oldFrontmatter.match(/description:\s*(.+)/);

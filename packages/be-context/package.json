@@ -7,7 +7,10 @@
     "build": "tsc --build",
     "type-check": "tsc --noEmit",
     "type-check:prod": "tsc --noEmit",
-    "start:dev": "tsc --build --watch"
+    "start:dev": "tsc --build --watch",
+    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
   },
   "dependencies": {
     "@cocrepo/constant": "workspace:*",

@@ -121,15 +121,14 @@ const PureSelectComponent = forwardRef<
         <HeroSelect.Value key="value" placeholder={placeholder} />
         <HeroSelect.TriggerIndicator key="indicator" />
       </HeroSelect.Trigger>,
-      <HeroSelect.Portal
-        children={[
+      <HeroSelect.Portal key="portal">
+        {[
           <HeroSelect.Overlay key="overlay" />,
           <HeroSelect.Content key="content" presentation={presentation}>
             {contentChildren}
           </HeroSelect.Content>,
         ]}
-        key="portal"
-      />,
+      </HeroSelect.Portal>,
     ];
     return (
       <HeroSelect

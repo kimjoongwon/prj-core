@@ -99,19 +99,6 @@ const SYSTEM_SPACE_ID =
 	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
 const SYSTEM_GROUND_NAME = "플랫폼 운영본부";
 
-function isDashboardUrl(url: string): boolean {
-	try {
-		const parsed = new URL(url);
-		const target = new URL(dashboardUrl);
-		return (
-			parsed.origin === target.origin &&
-			parsed.pathname.startsWith(target.pathname)
-		);
-	} catch {
-		return false;
-	}
-}
-
 async function seedConsolePersist(page: ConsoleLoginPageLike) {
 	const accessToken = await readConsoleAccessToken(page);
 	const response = await page.request.post(

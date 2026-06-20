@@ -10,17 +10,18 @@
     "start:e2e": "node ./scripts/start-e2e.mjs",
     "start:debug": "set -a; [ -f .env ] && . ./.env; set +a; APP_PORT=${CORE_API_PORT:-${APP_PORT:-3006}} nest build --webpack --webpackPath webpack.config.js --watch",
     "start:prod": "node dist/main",
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc --noEmit -p tsconfig.test.json",
     "type-check:prod": "tsc --noEmit -p tsconfig.build.json",
-    "lint": "biome check src",
-    "lint:fix": "biome check --write src",
+    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
     "format": "biome check --write src",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "NODE_OPTIONS='--experimental-vm-modules' jest --config ./test/jest-e2e.json",
-    "clean": "rm -rf dist && rm -rf node_modules"
+    "clean": "rm -rf dist && rm -rf node_modules",
+    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.883.0",

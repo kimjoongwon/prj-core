@@ -5,7 +5,9 @@
     "moduleResolution": "Node16",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": false,
+    "strict": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true,
     "skipLibCheck": true,
     "paths": {
       "@shared/*": ["./src/shared/*"],

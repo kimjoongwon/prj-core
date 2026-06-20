@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const { execSync } = require("child_process");
+const { execSync } = require("node:child_process");
 
 const args = process.argv.slice(2);
 
@@ -29,8 +29,8 @@ function checkNpmAuth() {
     const username = execSync("npm whoami", { encoding: "utf8" }).trim();
     console.log(`✅ npm 로그인 확인: ${username}\n`);
     return true;
-  } catch (error) {
-    console.log("\n" + "=".repeat(60));
+  } catch (_error) {
+    console.log(`\n${"=".repeat(60)}`);
     console.error("❌ npm 토큰이 만료되었거나 로그인되지 않았습니다.");
     console.log("=".repeat(60));
     console.log("\n💡 다음 명령어로 로그인하세요:\n");
@@ -39,7 +39,7 @@ function checkNpmAuth() {
     console.log(
       "   npm config set //registry.npmjs.org/:_authToken=YOUR_TOKEN\n"
     );
-    console.log("=".repeat(60) + "\n");
+    console.log(`${"=".repeat(60)}\n`);
     return false;
   }
 }
@@ -84,17 +84,17 @@ function releaseAll() {
       console.log("\n⏭️  Apps 의존성 업데이트 건너뛰기 (DRY RUN)");
     }
 
-    console.log("\n" + "=".repeat(60));
+    console.log(`\n${"=".repeat(60)}`);
     console.log(`✅ 전체 패키지 릴리즈 완료!${dryRun ? " (DRY RUN)" : ""}`);
-    console.log("=".repeat(60) + "\n");
+    console.log(`${"=".repeat(60)}\n`);
 
     if (dryRun) {
       console.log("💡 실제 배포를 하려면 --dry-run 플래그를 제거하세요.\n");
     }
   } catch (error) {
-    console.log("\n" + "=".repeat(60));
+    console.log(`\n${"=".repeat(60)}`);
     console.error(`❌ 릴리즈 실패: ${error.message}`);
-    console.log("=".repeat(60) + "\n");
+    console.log(`${"=".repeat(60)}\n`);
     process.exit(1);
   }
 }
@@ -146,17 +146,17 @@ function releaseSingle(pkgName) {
       console.log("\n⏭️  Apps 의존성 업데이트 건너뛰기 (DRY RUN)");
     }
 
-    console.log("\n" + "=".repeat(60));
+    console.log(`\n${"=".repeat(60)}`);
     console.log(`✅ ${pkgName} 릴리즈 완료!${dryRun ? " (DRY RUN)" : ""}`);
-    console.log("=".repeat(60) + "\n");
+    console.log(`${"=".repeat(60)}\n`);
 
     if (dryRun) {
       console.log("💡 실제 배포를 하려면 --dry-run 플래그를 제거하세요.\n");
     }
   } catch (error) {
-    console.log("\n" + "=".repeat(60));
+    console.log(`\n${"=".repeat(60)}`);
     console.error(`❌ 릴리즈 실패: ${error.message}`);
-    console.log("=".repeat(60) + "\n");
+    console.log(`${"=".repeat(60)}\n`);
     process.exit(1);
   }
 }

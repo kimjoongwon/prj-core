@@ -10,10 +10,11 @@
     "start": "next start",
     "type-check": "tsc --noEmit",
     "type-check:prod": "tsc --noEmit --incremental false",
-    "lint": "biome check .",
-    "lint:fix": "biome check --write .",
+    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
     "format": "biome check --write .",
-    "clean": "rm -rf node_modules && rm -rf .next"
+    "clean": "rm -rf node_modules && rm -rf .next",
+    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
   },
   "dependencies": {
     "@cocrepo/toolkit": "workspace:^",

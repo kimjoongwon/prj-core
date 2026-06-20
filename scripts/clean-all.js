@@ -1,7 +1,6 @@
 #!/usr/bin/env node
-const { execSync } = require("child_process");
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 
 const rootDir = path.join(__dirname, "..");
 
@@ -87,7 +86,7 @@ nmCount += findAndRemove(path.join(rootDir, "packages"), "node_modules");
 nmCount += findAndRemove(path.join(rootDir, "apps"), "node_modules");
 console.log(`   ✓ ${nmCount}개의 node_modules 폴더 삭제됨`);
 
-console.log("\n" + "=".repeat(50));
+console.log(`\n${"=".repeat(50)}`);
 console.log("✅ 전체 정리 완료!");
 console.log("=".repeat(50));
 console.log("\n💡 다시 설치하려면: pnpm install\n");

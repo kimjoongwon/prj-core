@@ -24,6 +24,5 @@ export default defineConfig({
 	// - prod: cross-env로 DATABASE_URL_PROD → DATABASE_URL로 매핑
 	datasource: {
 		url: env("DATABASE_URL"),
-		directUrl: env("DIRECT_URL"),
 	},
 });

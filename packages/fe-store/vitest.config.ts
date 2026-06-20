@@ -1,9 +1,11 @@
 import path from "node:path";
 import react from "@vitejs/plugin-react-swc";
-import { defineConfig } from "vitest/config";
+import { defineConfig, type ViteUserConfig } from "vitest/config";
+
+const plugins = [react()] as unknown as ViteUserConfig["plugins"];
 
 export default defineConfig({
-	plugins: [react()],
+	plugins,
 	resolve: {
 		alias: {
 			// @cocrepo/toolkit package.json points to dist/*, but workspace uses root build artifacts.

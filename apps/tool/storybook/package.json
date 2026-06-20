@@ -14,7 +14,10 @@
 		"type-check": "tsc --noEmit --incremental false",
 		"type-check:prod": "tsc --noEmit --incremental false -p tsconfig.prod.json",
 		"start:dev": "storybook dev -p ${STORYBOOK_PORT:-6006}",
-		"build-storybook": "storybook build"
+		"build-storybook": "storybook build",
+		"lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+		"lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+		"lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
 	},
 	"license": "ISC",
 	"dependencies": {

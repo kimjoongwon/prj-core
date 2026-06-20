@@ -25,14 +25,14 @@ import { ExtractJwt, Strategy } from "passport-jwt";
 export class TestJwtStrategy extends PassportStrategy(Strategy) {
 	constructor(
 		@Inject(PRISMA_SERVICE_TOKEN) private readonly prisma: any,
-		private readonly cls: ClsService,
+		cls: ClsService,
 	) {
 		super({
 			jwtFromRequest: ExtractJwt.fromExtractors([
 				(req: Request) => {
 					const authHeader = req.headers?.authorization;
 					if (authHeader?.startsWith("Bearer ")) {
-						const token = authHeader.split(" ")[1];
+						const token = authHeader.slice("Bearer ".length);
 						cls.set(CONTEXT_KEYS.TOKEN, token);
 						return token;
 					}

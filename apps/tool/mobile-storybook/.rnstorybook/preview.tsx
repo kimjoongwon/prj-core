@@ -1,4 +1,4 @@
-import type { Preview } from "@storybook/react-native";
+import type { Decorator, Preview } from "@storybook/react-native";
 import { setLoginRedirectUrl } from "@cocrepo/api/core/client";
 import { setIdpLoginRedirectUrl } from "@cocrepo/api/idp/client";
 import type { HeroUINativeConfig } from "@cocrepo/mo-ui";
@@ -62,7 +62,7 @@ const DESIGN_SYSTEM_CONFIG: HeroUINativeConfig = {
 	},
 };
 
-const withMobileRuntime: Preview["decorators"][number] = (Story, context) => {
+const withMobileRuntime: Decorator = (Story, context) => {
 	const storybookTheme = getStorybookTheme(context.globals?.storybookTheme);
 	const canvasBackground = STORYBOOK_THEME_BACKGROUNDS[storybookTheme];
 	Uniwind.setTheme(storybookTheme);

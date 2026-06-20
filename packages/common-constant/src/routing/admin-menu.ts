@@ -262,13 +262,18 @@ const ADMIN_NAV_SCOPE_KIND_BY_ID: Partial<Record<string, ScreenScopeKind>> = {
 };
 
 function applyAdminNavScopeKinds(navItems: NavItemConfig[]): NavItemConfig[] {
-	return navItems.map((navItem) => ({
-		...navItem,
-		scopeKind: ADMIN_NAV_SCOPE_KIND_BY_ID[navItem.id] ?? navItem.scopeKind,
-		children: navItem.children
+	return navItems.map((navItem) => {
+		const scopeKind = ADMIN_NAV_SCOPE_KIND_BY_ID[navItem.id] ?? navItem.scopeKind;
+		const children = navItem.children
 			? applyAdminNavScopeKinds(navItem.children)
-			: undefined,
-	}));
+			: undefined;
+
+		return {
+			...navItem,
+			...(scopeKind ? { scopeKind } : {}),
+			...(children ? { children } : {}),
+		};
+	});
 }
 
 export const ADMIN_NAV_ITEMS: NavItemConfig[] = applyAdminNavScopeKinds(
@@ -305,10 +310,10 @@ export const ADMIN_MENU_PERMISSION_LEAFS: AdminMenuPermissionLeaf[] =
 				leafId: child.id,
 				leafLabel: child.label,
 				leafSubject: child.subject,
-				path: child.path,
-				icon: navItem.icon,
 				depth: 2 as const,
 				requiredSubjects: [navItem.subject, child.subject],
+				...(child.path ? { path: child.path } : {}),
+				...(navItem.icon ? { icon: navItem.icon } : {}),
 			}));
 		}
 
@@ -320,10 +325,10 @@ export const ADMIN_MENU_PERMISSION_LEAFS: AdminMenuPermissionLeaf[] =
 				leafId: navItem.id,
 				leafLabel: navItem.label,
 				leafSubject: navItem.subject,
-				path: navItem.path,
-				icon: navItem.icon,
 				depth: 1 as const,
 				requiredSubjects: [navItem.subject],
+				...(navItem.path ? { path: navItem.path } : {}),
+				...(navItem.icon ? { icon: navItem.icon } : {}),
 			},
 		];
 	});
