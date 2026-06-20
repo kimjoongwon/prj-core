@@ -26,6 +26,8 @@
 - `packages/fe-hook`은 app route와 package feature/screen이 소비하는 reusable hook을 소유합니다.
 - app route 아래 `hooks/` 폴더를 만들지 않습니다. route에서 반복되거나 테스트 대상이 되는 hook/helper는 `packages/fe-hook/src`로 올립니다.
 - hook은 UI 런타임 컴포넌트를 import하지 않습니다. router, native bridge, window/document 같은 런타임 값은 가능한 한 adapter/value로 주입받습니다.
+- hook은 순수해야 하며 `@heroui/react`, `heroui-native`, router, browser/native API, toast/overlay/provider, 특정 UI 라이브러리 같은 런타임 의존성을 직접 품지 않습니다.
+- `packages/fe-hook/package.json`에 새 라이브러리 의존성을 추가하지 않습니다. 불가피한 외부 런타임 값은 hook option, callback, adapter, plain value로 주입받고 실제 라이브러리 호출은 route/feature/screen 소유 파일에 둡니다.
 - route page 안의 단순 일회성 상태/wiring은 `fe-route-agent`가 page 파일 안에서 직접 처리할 수 있지만, 별도 hook 파일로 분리하는 순간 `fe-hook-agent` 소유입니다.
 
 ## 재사용 우선 점검 (필수)
@@ -63,5 +65,6 @@
 
 - 기존 hook과 사용처를 확인했습니다.
 - 소스/export/test가 동기화되었습니다.
+- hook source와 `packages/fe-hook/package.json`에 UI/플랫폼/서드파티 런타임 의존성이 새로 들어가지 않았음을 확인했습니다.
 - 라우트 딜리버리 스펙의 `Hook 인벤토리`와 `에이전트 배정 매트릭스`가 신규/수정 산출물과 일치합니다.
 - `@cocrepo/hook` 테스트 또는 필요한 단위 테스트 명령 결과를 보고합니다.

@@ -43,6 +43,9 @@ const AdminTasksNewRoute = observer(() => {
 		onChangeVideoFileId: (value) => {
 			state.videoFileId = value;
 		},
+		onAssetBrowserNotify: ({ title, description }) => {
+			toast.success(title, { description });
+		},
 	});
 
 	const { mutate: createTask, isPending } = useCreateTask({

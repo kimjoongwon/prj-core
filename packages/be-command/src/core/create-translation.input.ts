@@ -1,4 +1,4 @@
-import type { LanguageCode } from "@cocrepo/prisma";
+import type { LanguageCode } from "@cocrepo/constant";
 
 export interface CreateTranslationCommandInput {
 	languageCode: LanguageCode;

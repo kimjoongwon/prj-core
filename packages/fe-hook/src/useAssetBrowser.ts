@@ -19,7 +19,6 @@ import type {
 	DataGridQueryStates,
 	DataGridSetQueryStates,
 } from "@cocrepo/type";
-import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 
@@ -37,6 +36,32 @@ export interface AssetBrowserQueryStates extends DataGridQueryStates {
 	status: string;
 	folderId: string;
 }
+
+/**
+ * AssetBrowser mutation 성공 알림을 구분하는 키입니다.
+ */
+export type AssetBrowserNotificationKind =
+	| "assetUploadSuccess"
+	| "assetDeleteSuccess"
+	| "folderCreateSuccess"
+	| "folderRenameSuccess"
+	| "folderDeleteSuccess";
+
+/**
+ * AssetBrowser가 UI adapter에 전달하는 알림 payload입니다.
+ */
+export interface AssetBrowserNotification {
+	kind: AssetBrowserNotificationKind;
+	title: string;
+	description: string;
+}
+
+/**
+ * AssetBrowser 알림을 실제 UI 구현으로 연결하는 adapter입니다.
+ */
+export type AssetBrowserNotify = (
+	notification: AssetBrowserNotification,
+) => void;
 
 export interface AssetBrowserBindings {
 	assets?: AssetDto[];
@@ -67,6 +92,7 @@ export interface UseAssetBrowserOptions {
 	forcedKind?: AssetKind;
 	forcedStatus?: AssetStatus;
 	onDeleteAssetSuccess?: (assetId: string) => void;
+	onNotify?: AssetBrowserNotify;
 }
 
 /**
@@ -77,6 +103,7 @@ export function useAssetBrowser({
 	forcedKind,
 	forcedStatus,
 	onDeleteAssetSuccess,
+	onNotify,
 }: UseAssetBrowserOptions = {}): AssetBrowserBindings {
 	const queryClient = useQueryClient();
 	const persistStore = usePersistStore();
@@ -160,7 +187,11 @@ export function useAssetBrowser({
 			await queryClient.invalidateQueries({
 				queryKey: ["/api/v1/assets"],
 			});
-			toast.success("업로드 완료", { description: "에셋이 업로드되었습니다." });
+			onNotify?.({
+				kind: "assetUploadSuccess",
+				title: "업로드 완료",
+				description: "에셋이 업로드되었습니다.",
+			});
 		},
 		onDeleteAsset: async (assetId) => {
 			await removeAssetMutation.mutateAsync({ assetId });
@@ -168,7 +199,11 @@ export function useAssetBrowser({
 				queryKey: ["/api/v1/assets"],
 			});
 			onDeleteAssetSuccess?.(assetId);
-			toast.success("삭제 완료", { description: "에셋이 삭제되었습니다." });
+			onNotify?.({
+				kind: "assetDeleteSuccess",
+				title: "삭제 완료",
+				description: "에셋이 삭제되었습니다.",
+			});
 		},
 		onCreateFolder: async (input) => {
 			const response = await createFolderMutation.mutateAsync({
@@ -177,7 +212,9 @@ export function useAssetBrowser({
 			await queryClient.invalidateQueries({
 				queryKey: getGetFoldersQueryKey(),
 			});
-			toast.success("폴더 생성 완료", {
+			onNotify?.({
+				kind: "folderCreateSuccess",
+				title: "폴더 생성 완료",
 				description: "새 폴더가 생성되었습니다.",
 			});
 
@@ -199,7 +236,9 @@ export function useAssetBrowser({
 			await queryClient.invalidateQueries({
 				queryKey: getGetFoldersQueryKey(),
 			});
-			toast.success("폴더 수정 완료", {
+			onNotify?.({
+				kind: "folderRenameSuccess",
+				title: "폴더 수정 완료",
 				description: "폴더가 수정되었습니다.",
 			});
 		},
@@ -208,7 +247,9 @@ export function useAssetBrowser({
 			await queryClient.invalidateQueries({
 				queryKey: getGetFoldersQueryKey(),
 			});
-			toast.success("폴더 삭제 완료", {
+			onNotify?.({
+				kind: "folderDeleteSuccess",
+				title: "폴더 삭제 완료",
 				description: "폴더가 삭제되었습니다.",
 			});
 		},

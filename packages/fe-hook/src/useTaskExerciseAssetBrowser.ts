@@ -2,7 +2,11 @@
 
 import { type AssetDto, useGetAssetById } from "@cocrepo/api/assets";
 import { useState } from "react";
-import { type AssetBrowserBindings, useAssetBrowser } from "./useAssetBrowser";
+import {
+	type AssetBrowserBindings,
+	type AssetBrowserNotify,
+	useAssetBrowser,
+} from "./useAssetBrowser";
 
 type TaskAssetSlot = "image" | "video" | null;
 
@@ -11,6 +15,7 @@ export interface UseTaskExerciseAssetBrowserProps {
 	videoFileId: string;
 	onChangeImageFileId: (value: string) => void;
 	onChangeVideoFileId: (value: string) => void;
+	onAssetBrowserNotify?: AssetBrowserNotify;
 }
 
 export interface UseTaskExerciseAssetBrowserReturn {
@@ -34,6 +39,7 @@ export function useTaskExerciseAssetBrowser({
 	videoFileId,
 	onChangeImageFileId,
 	onChangeVideoFileId,
+	onAssetBrowserNotify,
 }: UseTaskExerciseAssetBrowserProps): UseTaskExerciseAssetBrowserReturn {
 	const [activeAssetSlot, setActiveAssetSlot] = useState<TaskAssetSlot>(null);
 	const { data: selectedImageAssetResponse } = useGetAssetById(imageFileId, {
@@ -63,6 +69,7 @@ export function useTaskExerciseAssetBrowser({
 				onChangeVideoFileId("");
 			}
 		},
+		onNotify: onAssetBrowserNotify,
 	});
 
 	const onOpenAssetBrowser = (slot: Exclude<TaskAssetSlot, null>) => {

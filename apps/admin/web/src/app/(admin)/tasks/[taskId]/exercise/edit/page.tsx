@@ -57,6 +57,9 @@ const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 		onChangeVideoFileId: (value) => {
 			state.videoFileId = value;
 		},
+		onAssetBrowserNotify: ({ title, description }) => {
+			toast.success(title, { description });
+		},
 	});
 
 	useEffect(() => {

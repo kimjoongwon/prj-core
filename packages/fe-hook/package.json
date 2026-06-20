@@ -48,7 +48,6 @@
     "@cocrepo/store": "workspace:*",
     "@cocrepo/toolkit": "workspace:*",
     "@cocrepo/type": "workspace:*",
-    "@heroui/react": "catalog:",
     "@tanstack/react-query": "catalog:",
     "next": "^16.1.0",
     "nuqs": "catalog:"
