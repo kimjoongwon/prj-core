@@ -10,6 +10,7 @@ import { BadRequestException } from "@nestjs/common";
 import { ContentAggregate } from "../src/content/content.aggregate";
 
 const spaceId = "11111111-1111-4111-8111-111111111111";
+const tenantId = "33333333-3333-4333-8333-333333333333";
 const userId = "22222222-2222-4222-8222-222222222222";
 
 describe("ContentAggregate", () => {
@@ -58,13 +59,13 @@ describe("ContentAggregate", () => {
 				text: "  함께 운동해요.  ",
 				title: "  새 글  ",
 			},
-			spaceId,
+			tenantId,
 			userId,
 		});
 
 		expect(result).toBe(createdPost);
 		expect(repository.createCommunityPost).toHaveBeenCalledWith({
-			spaceId,
+			tenantId,
 			text: "함께 운동해요.",
 			title: "새 글",
 			userId,
@@ -77,7 +78,7 @@ describe("ContentAggregate", () => {
 				dto: {
 					text: "   ",
 				},
-				spaceId,
+				tenantId,
 				userId,
 			}),
 		).rejects.toThrow(BadRequestException);

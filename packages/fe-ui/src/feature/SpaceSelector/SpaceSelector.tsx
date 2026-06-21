@@ -8,7 +8,11 @@ import { Button } from "../../action/Button/Button";
 
 export interface SpaceSelectorProps {
 	/** Space 변경 시 콜백 (서버에 현재 Space를 반영한 뒤 상태를 갱신) */
-	onChangeSpace?: (spaceId: string, groundName: string) => void;
+	onChangeSpace?: (
+		tenantId: string,
+		groundName: string,
+		spaceId: string,
+	) => void;
 }
 
 /**
@@ -28,19 +32,23 @@ export const SpaceSelector = observer(
 
 		// 현재 Space 정보
 		const currentSpace =
-			persistStore.spaceId && persistStore.groundName
-				? { id: persistStore.spaceId, name: persistStore.groundName }
+			persistStore.tenantId && persistStore.groundName
+				? { id: persistStore.tenantId, name: persistStore.groundName }
 				: null;
 
 		// 선택 가능한 Space 목록
 		const spaces = persistStore.spaces || [];
 
-		const handleSelectSpace = (spaceId: string, groundName: string) => {
+		const handleSelectSpace = (
+			tenantId: string,
+			groundName: string,
+			spaceId: string,
+		) => {
 			// 현재 선택된 Space와 동일하면 무시
-			if (spaceId === persistStore.spaceId) return;
+			if (tenantId === persistStore.tenantId) return;
 
 			// 현재 Space 반영은 상위에서 API 호출 및 store 동기화를 담당합니다.
-			onChangeSpace?.(spaceId, groundName);
+			onChangeSpace?.(tenantId, groundName, spaceId);
 		};
 
 		// Hydration 완료 전에는 렌더링하지 않음 (SSR/CSR 불일치 방지)
@@ -87,16 +95,20 @@ export const SpaceSelector = observer(
 					<Dropdown.Menu aria-label="Space 선택" className="min-w-[200px]">
 						{spaces.map((space) => (
 							<Dropdown.Item
-								id={space.spaceId}
-								key={space.spaceId}
+								id={space.tenantId}
+								key={space.tenantId}
 								isDisabled={!canChangeSpace}
 								className={
-									space.spaceId === currentSpace.id
+									space.tenantId === currentSpace.id
 										? "bg-accent-soft text-accent"
 										: ""
 								}
 								onAction={() =>
-									handleSelectSpace(space.spaceId, space.groundName)
+									handleSelectSpace(
+										space.tenantId,
+										space.groundName,
+										space.spaceId,
+									)
 								}
 							>
 								<span className="flex items-center gap-2">
@@ -106,7 +118,7 @@ export const SpaceSelector = observer(
 										</Avatar.Fallback>
 									</Avatar>
 									<span className="font-medium">{space.groundName}</span>
-									{space.spaceId === currentSpace.id ? (
+									{space.tenantId === currentSpace.id ? (
 										<Check className="h-4 w-4 text-accent" size={16} />
 									) : null}
 								</span>

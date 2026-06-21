@@ -156,7 +156,7 @@
 
 - `useOverlayState`로 3개 모달 상태 관리 (deleteModal, previewModal, sendTestModal)
 - 캐시 무효화: `getGetTemplateQueryKey(templateId)` 사용
-- FULL_ACCESS 권한 필요
+- PLATFORM_ADMIN 권한 필요
 - `TemplateContentViewer`, `VariableReadTable`는 내용만 렌더링하며 SectionSurface는 페이지가 `ScreenSurface`, `SectionSurface`로 제공
 
 ## 구현 체크리스트

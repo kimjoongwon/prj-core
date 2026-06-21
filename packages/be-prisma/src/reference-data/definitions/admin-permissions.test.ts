@@ -3,11 +3,11 @@ import {
 	ADMIN_PAGE_ACCESS_ITEMS,
 } from "@cocrepo/constant";
 import { describe, expect, it } from "vitest";
-import { fullAccessAbilitySeedData } from "./abilities";
+import { platformAdminAbilitySeedData } from "./abilities";
 import { subjectSeedData } from "./actions-subjects";
 import {
-	adminFullAccessAbilitySeedData,
-	adminManageMenuAccessAbilitySeedData,
+	adminPlatformAdminAbilitySeedData,
+	adminCompanyManagerMenuAccessAbilitySeedData,
 	adminMenuSubjectSeedData,
 	adminPageSubjectSeedData,
 	legacyAdminMenuSubjectNames,
@@ -32,12 +32,12 @@ describe("admin permission derived seeds", () => {
 		);
 	});
 
-	it("creates page subjects and FULL_ACCESS grants from the page catalog", () => {
+	it("creates page subjects and PLATFORM_ADMIN grants from the page catalog", () => {
 		const pageSubjects = ADMIN_PAGE_ACCESS_ITEMS.map((item) => item.subject);
 		const derivedPageSubjects = adminPageSubjectSeedData.map(
 			(subject) => subject.name,
 		);
-		const pageAccessGrants = adminFullAccessAbilitySeedData
+		const pageAccessGrants = adminPlatformAdminAbilitySeedData
 			.filter((ability) => ability.actionName === "access")
 			.map((ability) => ability.subject);
 
@@ -47,43 +47,43 @@ describe("admin permission derived seeds", () => {
 
 	it("includes menu grants for newly added admin menus like assets", () => {
 		expect(
-			adminFullAccessAbilitySeedData.some(
+			adminPlatformAdminAbilitySeedData.some(
 				(ability) =>
 					ability.subject === "menu:assets" && ability.actionName === "manage",
 			),
 		).toBe(true);
 		expect(
-			adminFullAccessAbilitySeedData.some(
+			adminPlatformAdminAbilitySeedData.some(
 				(ability) =>
 					ability.subject === "menu:assets:list" &&
 					ability.actionName === "manage",
 			),
 		).toBe(true);
 		expect(
-			adminFullAccessAbilitySeedData.some(
+			adminPlatformAdminAbilitySeedData.some(
 				(ability) =>
 					ability.subject === "page:assets:list" &&
 					ability.actionName === "access",
 			),
 		).toBe(true);
 		expect(
-			adminFullAccessAbilitySeedData.some(
+			adminPlatformAdminAbilitySeedData.some(
 				(ability) =>
 					ability.subject === "page:assets:detail" &&
 					ability.actionName === "access",
 			),
 		).toBe(true);
 		expect(
-			adminManageMenuAccessAbilitySeedData.some(
+			adminCompanyManagerMenuAccessAbilitySeedData.some(
 				(ability) =>
 					ability.subject === "menu:assets" && ability.actionName === "access",
 			),
 		).toBe(true);
 	});
 
-	it("keeps FULL_ACCESS as a true super role with manage all", () => {
+	it("keeps PLATFORM_ADMIN as a true super role with manage all", () => {
 		expect(
-			fullAccessAbilitySeedData.some(
+			platformAdminAbilitySeedData.some(
 				(ability) =>
 					ability.subject === "all" &&
 					ability.actionName === "manage" &&
@@ -127,20 +127,20 @@ describe("admin permission derived seeds", () => {
 		}
 	});
 
-	it("removes legacy admin FULL_ACCESS menu/page grants from the seed set", () => {
+	it("removes legacy admin PLATFORM_ADMIN menu/page grants from the seed set", () => {
 		expect(
-			fullAccessAbilitySeedData.some(
+			platformAdminAbilitySeedData.some(
 				(ability) => ability.subject === "menu:schedules",
 			),
 		).toBe(false);
 		expect(
-			fullAccessAbilitySeedData.some(
+			platformAdminAbilitySeedData.some(
 				(ability) => ability.subject === "menu:files",
 			),
 		).toBe(false);
 		for (const subjectName of legacyRolePageSubjectNames) {
 			expect(
-				fullAccessAbilitySeedData.some(
+				platformAdminAbilitySeedData.some(
 					(ability) =>
 						ability.subject === subjectName && ability.actionName === "access",
 				),

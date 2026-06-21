@@ -10,7 +10,14 @@ const tenantAccessRequestInclude = {
 	reviewer: true,
 	space: {
 		include: {
-			ground: true,
+			company: {
+				include: {
+					grounds: {
+						where: { removedAt: null },
+						orderBy: { createdAt: "asc" },
+					},
+				},
+			},
 		},
 	},
 	requestedRole: true,
@@ -34,6 +41,20 @@ export class TenantAccessRequestsRepository {
 		>,
 	) {}
 
+	private toTenantAccessRequest(
+		result: Prisma.TenantAccessRequestGetPayload<{
+			include: typeof tenantAccessRequestInclude;
+		}>,
+	): TenantAccessRequest {
+		const [primaryGround] = result.space?.company?.grounds ?? [];
+		if (primaryGround) {
+			(result.space as unknown as { ground?: unknown }).ground =
+				primaryGround;
+		}
+
+		return plainToInstance(TenantAccessRequest, result);
+	}
+
 	async findById(id: string): Promise<TenantAccessRequest | null> {
 		this.logger.debug(`테넌트 접근 신청 조회: ${id.slice(-8)}`);
 
@@ -52,7 +73,7 @@ export class TenantAccessRequestsRepository {
 			include: tenantAccessRequestInclude,
 		});
 
-		return result ? plainToInstance(TenantAccessRequest, result) : null;
+		return result ? this.toTenantAccessRequest(result) : null;
 	}
 
 	async findPendingByRequesterAndSpace(
@@ -98,7 +119,7 @@ export class TenantAccessRequestsRepository {
 		]);
 
 		return {
-			items: items.map((item) => plainToInstance(TenantAccessRequest, item)),
+			items: items.map((item) => this.toTenantAccessRequest(item)),
 			totalCount,
 		};
 	}
@@ -115,7 +136,7 @@ export class TenantAccessRequestsRepository {
 			include: tenantAccessRequestInclude,
 		});
 
-		return plainToInstance(TenantAccessRequest, result);
+		return this.toTenantAccessRequest(result);
 	}
 
 	async updateById(
@@ -130,6 +151,6 @@ export class TenantAccessRequestsRepository {
 			include: tenantAccessRequestInclude,
 		});
 
-		return plainToInstance(TenantAccessRequest, result);
+		return this.toTenantAccessRequest(result);
 	}
 }

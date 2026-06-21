@@ -18,8 +18,8 @@ export class QueryPaymentDto extends PrismaQueryDto<Prisma.PaymentWhereInput> {
 	@StringFieldOptional({ description: "결제명/제공자/대상 통합 검색" })
 	search?: string;
 
-	@UUIDFieldOptional({ description: "스페이스 ID 필터" })
-	spaceId?: string;
+	@UUIDFieldOptional({ description: "테넌트 ID 필터" })
+	tenantId?: string;
 
 	@UUIDFieldOptional({ description: "결제자 User ID 필터" })
 	payerUserId?: string;

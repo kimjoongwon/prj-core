@@ -14,14 +14,14 @@ function onlyUnexpectedPageErrors(pageErrors: string[]) {
 	);
 }
 
-const SYSTEM_SPACE_ID = (
-	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3"
+const SYSTEM_TENANT_ID = (
+	process.env.E2E_SYSTEM_TENANT_ID ?? "71ddca20-1752-466e-b4da-879ebdbe54e3"
 ).toLowerCase();
 const ADMIN_API_BASE_URL = new URL(
 	"/api/v1/",
 	process.env.E2E_CORE_API_BASE_URL ?? "http://localhost:3000/",
 ).toString();
-const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_SPACE_ID);
+const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_TENANT_ID);
 
 type FolderListResponse = {
 	data?: Array<{

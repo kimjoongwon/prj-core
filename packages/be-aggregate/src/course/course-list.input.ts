@@ -5,6 +5,6 @@ export interface CourseListInput {
 	take?: number;
 	search?: string | null;
 	status?: CourseStatus;
-	spaceId?: string;
+	tenantId?: string;
 	sort?: string[];
 }

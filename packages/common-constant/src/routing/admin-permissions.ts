@@ -18,7 +18,7 @@ export interface AdminCrudBundle {
 
 const CRUD_ACTIONS = ["create", "read", "update", "delete", "manage"] as const;
 
-const ADMIN_GLOBAL_FULL_ACCESS_PAGE_PREFIXES = [
+const ADMIN_GLOBAL_PLATFORM_ADMIN_PAGE_PREFIXES = [
 	"abilities:",
 	"actions:",
 	"email-verifications:",
@@ -29,7 +29,7 @@ const ADMIN_GLOBAL_FULL_ACCESS_PAGE_PREFIXES = [
 
 export function resolveAdminPageScopeKind(pageId: string): ScreenScopeKind {
 	if (
-		ADMIN_GLOBAL_FULL_ACCESS_PAGE_PREFIXES.some((prefix) =>
+		ADMIN_GLOBAL_PLATFORM_ADMIN_PAGE_PREFIXES.some((prefix) =>
 			pageId.startsWith(prefix),
 		)
 	) {

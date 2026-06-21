@@ -30,7 +30,7 @@ export class PaymentAggregate {
 	async findPayments(
 		params: PaymentListInput = {},
 	): Promise<{ payments: Payment[]; total: number }> {
-		const spaceIds = this.resolveReadableSpaceIds(params.spaceId);
+		const spaceIds = this.resolveReadableSpaceIds();
 		this.logger.debug(
 			`결제 목록 조회: spaceIds=${spaceIds?.length ?? "all"}개`,
 		);
@@ -47,7 +47,7 @@ export class PaymentAggregate {
 
 	@Transactional()
 	async createPayment(data: CreatePaymentInput): Promise<Payment> {
-		const spaceId = this.resolveWritableSpaceId(data.spaceId);
+		const tenantId = this.resolveWritableTenantId();
 		let currency: CurrencyCode;
 		try {
 			currency = CurrencyCode.create(data.currency ?? "KRW");
@@ -83,7 +83,7 @@ export class PaymentAggregate {
 
 		return this.repository.create({
 			data: {
-				spaceId,
+				tenantId,
 				payerUserId: data.payerUserId,
 				title: data.title,
 				status,
@@ -167,7 +167,8 @@ export class PaymentAggregate {
 		spaceIds?: string[],
 	): Prisma.PaymentWhereInput {
 		const where: Prisma.PaymentWhereInput = {
-			...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
+			...(spaceIds ? { tenant: { spaceId: { in: spaceIds } } } : {}),
+			...(params.tenantId ? { tenantId: params.tenantId } : {}),
 			...(params.payerUserId ? { payerUserId: params.payerUserId } : {}),
 			...(params.status ? { status: params.status } : {}),
 			...(params.method ? { method: params.method } : {}),
@@ -271,13 +272,13 @@ export class PaymentAggregate {
 		);
 	}
 
-	private resolveWritableSpaceId(spaceId?: string): string {
-		const targetSpaceId = spaceId ?? this.spaceContext.spaceId;
-		if (!targetSpaceId) {
+	private resolveWritableTenantId(): string {
+		const tenantId = this.spaceContext.tenantId;
+		if (!tenantId || !this.spaceContext.spaceId) {
 			throw new BadRequestException(PAYMENT_ERRORS.SPACE_NOT_SELECTED);
 		}
-		this.assertCanWriteSpace(targetSpaceId);
-		return targetSpaceId;
+		this.assertCanWriteSpace(this.spaceContext.spaceId);
+		return tenantId;
 	}
 
 	private assertCanWriteSpace(spaceId: string): void {

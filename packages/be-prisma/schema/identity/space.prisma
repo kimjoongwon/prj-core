@@ -2,11 +2,13 @@
 // Space Domain - 공간 도메인
 // ============================================================================
 //
-// Space는 실제 부모 row를 가지는 공간 기반 모델입니다.
-// Ground를 통해 시설 정보가 1:1 상세로 부여됩니다.
+// Space는 접근 제어와 테넌트 소속의 기준이 되는 공간 기반 모델입니다.
+// Company를 통해 사업자 정보를 1:1 상세로 부여하고,
+// Ground는 Company 아래에서 여러 서비스 시설을 구체화합니다.
 //
 // 관계 구조:
-//   Space (BASE) ◄─── Ground (DETAIL: name, address, phone, email, businessNo)
+//   Space (BASE) ◄─── Company (DETAIL: businessNo, legal contact)
+//                    └─── Ground[] (CHILD: service facilities)
 //     │
 //     ├─── SpaceClassification ─── Category (분류)
 //     ├─── SpaceAssociation ─── Group (그룹핑)
@@ -17,50 +19,60 @@
 // @schema-type: BASE
 // @schema-owner: true
 // @aggregate-root: true
-// @description: Ground 등 1:1 상세 모델의 공통 identity와 소속 관계를 제공하는 공간 기반 모델
+// @description: Company 등 1:1 상세 모델의 공통 identity와 소속 관계를 제공하는 공간 기반 모델
 // @ownership: independent
 // @scope: space
-// @materialized-by: Ground
+// @materialized-by: Company
 /// @displayName 공간
 model Space {
-  id                  String               @id @default(uuid())
-  createdAt           DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt           DateTime?            @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt           DateTime?            @map("removed_at") @db.Timestamptz(6)
+  id                   String                @id @default(uuid())
+  createdAt            DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime?             @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt            DateTime?             @map("removed_at") @db.Timestamptz(6)
   /// @displayName 콘텐츠 언어
-  contentLanguageCode LanguageCode         @default(ko_KR) @map("content_language_code")
-  ground              Ground?
-  associations        SpaceAssociation[]
-  classification      SpaceClassification?
-  tenants             Tenant[]
-  emailVerifications  EmailVerification[]
+  contentLanguageCode  LanguageCode          @default(ko_KR) @map("content_language_code")
+  company              Company?
+  associations         SpaceAssociation[]
+  classification       SpaceClassification?
+  tenants              Tenant[]
+  emailVerifications   EmailVerification[]
   tenantAccessRequests TenantAccessRequest[]
-  // Space소속 리소스
-  categories     Category[]
-  groups         Group[]
-  contents       Content[]
-  timelines      Timeline[]
-  courses        Course[]
-  courseOfferings CourseOffering[]
-  tasks          Task[]
-  safeWallets    SafeWallet[]
-  routines       Routine[]
-  reservations   Reservation[]
-  payments       Payment[]
-  paymentSubjects PaymentSubject[]
-  paymentReferences PaymentReference[]
-  policies       Policy[]
-  // Asset 도메인
-  folders        Folder[]
-  assets         Asset[]
-  albums         Album[]
-  albumEntries   AlbumEntry[]
-  derivatives    Derivative[]
-  // Inquiry 도메인
-  inquiries      Inquiry[]
 
   @@index([contentLanguageCode])
   @@map("spaces")
+}
+
+// @schema-type: DETAIL
+// @description: Space에 사업자/회사 정보를 부여하는 1:1 상세 모델
+// @relation-pattern: one-to-one
+// @ownership: dependent
+// @scope: space
+// @materializes: Space
+// @business-fields: name, label, address, phone, email, businessNo
+/// @displayName 회사
+model Company {
+  id              String    @id @default(uuid())
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt       DateTime? @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 회사명
+  name            String
+  /// @displayName 라벨
+  label           String?
+  /// @displayName 주소
+  address         String
+  /// @displayName 전화번호
+  phone           String
+  /// @displayName 이메일
+  email           String
+  /// @displayName 사업자등록번호
+  businessNo      String    @unique @map("business_no")
+  spaceId         String    @unique @map("space_id")
+  logoImageFileId String?   @map("logo_image_file_id")
+  space           Space     @relation(fields: [spaceId], references: [id])
+  grounds         Ground[]
+
+  @@map("companies")
 }
 
 // @schema-type: JOIN
@@ -107,35 +119,33 @@ model SpaceAssociation {
   @@map("space_associations")
 }
 
-// @schema-type: DETAIL
-// @description: Space에 시설 정보를 부여하는 1:1 상세 모델
-// @relation-pattern: one-to-one
+// @schema-type: CHILD
+// @description: Company 아래에서 서비스 시설 정보를 구체화하는 자식 모델
+// @relation-pattern: one-to-many
 // @ownership: dependent
 // @scope: space
-// @materializes: Space (1:1)
-// @business-fields: name, label, address, phone, email, businessNo
+// @extends: Company
+// @service-fields: name, label, address, phone, email, imageFileId
 /// @displayName 시설
 model Ground {
-  id              String    @id @default(uuid())
-  createdAt       DateTime  @default(now()) @map("created_at")
-  updatedAt       DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt       DateTime? @map("removed_at") @db.Timestamptz(6)
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime? @map("removed_at") @db.Timestamptz(6)
   /// @displayName 이름
-  name            String
+  name        String
   /// @displayName 라벨
-  label           String?
+  label       String?
   /// @displayName 주소
-  address         String
+  address     String
   /// @displayName 전화번호
-  phone           String
+  phone       String
   /// @displayName 이메일
-  email           String
-  /// @displayName 사업자등록번호
-  businessNo      String    @unique @map("business_no")
-  spaceId         String    @unique @map("space_id")
-  logoImageFileId String?   @map("logo_image_file_id")
-  imageFileId     String?   @map("image_file_id")
-  space           Space     @relation(fields: [spaceId], references: [id])
+  email       String
+  companyId   String    @map("company_id")
+  imageFileId String?   @map("image_file_id")
+  company     Company   @relation(fields: [companyId], references: [id])
 
+  @@index([companyId])
   @@map("grounds")
 }

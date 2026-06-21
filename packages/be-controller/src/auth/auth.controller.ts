@@ -242,7 +242,7 @@ export class AuthController {
 		operationId: "getSignUpSpaces",
 		summary: "회원가입 Space 목록 조회",
 		description:
-			"회원가입 전 사용자가 선택할 수 있는 Space 목록을 반환합니다. x-space-id 헤더 없이 호출할 수 있습니다.",
+			"회원가입 전 사용자가 선택할 수 있는 Space 목록을 반환합니다. x-tenant-id 헤더 없이 호출할 수 있습니다.",
 	})
 	@ApiErrors(500)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK, { isArray: true })
@@ -273,7 +273,7 @@ export class AuthController {
 	@ResponseMessage("회원가입 성공")
 	async signUp(
 		@Body() signUpDto: SignUpPayloadDto,
-		@Headers(REQUEST_HEADER_KEYS.SPACE_ID) requestedSpaceId?: string,
+		@Headers(REQUEST_HEADER_KEYS.TENANT_ID) requestedSpaceId?: string,
 	) {
 		if (requestedSpaceId && requestedSpaceId !== signUpDto.spaceId) {
 			throw new BadRequestException("SIGN_UP_SPACE_HEADER_MISMATCH");
@@ -325,7 +325,7 @@ export class AuthController {
 		operationId: "getMySpaces",
 		summary: "내 Space 목록 조회",
 		description:
-			"현재 인증된 사용자가 접근 가능한 Space 목록을 반환합니다. x-space-id 헤더 없이도 호출할 수 있습니다.",
+			"현재 인증된 사용자가 접근 가능한 Space 목록을 반환합니다. x-tenant-id 헤더 없이도 호출할 수 있습니다.",
 	})
 	@ApiCookieAuth(Token.ACCESS)
 	@ApiSecurity("oauth2", ["openid", "profile", "email", "roles"])
@@ -343,7 +343,7 @@ export class AuthController {
 		operationId: "getCurrentSpace",
 		summary: "현재 선택 Space 조회",
 		description:
-			"요청의 x-space-id 헤더를 기준으로 Space를 반환합니다. 헤더가 없거나 유효하지 않으면 접근 가능한 기본 Space를 반환합니다.",
+			"요청의 x-tenant-id 헤더를 기준으로 Space를 반환합니다. 헤더가 없거나 유효하지 않으면 접근 가능한 기본 Space를 반환합니다.",
 	})
 	@ApiCookieAuth(Token.ACCESS)
 	@ApiSecurity("oauth2", ["openid", "profile", "email", "roles"])
@@ -352,7 +352,7 @@ export class AuthController {
 	@ResponseMessage("현재 Space 조회 성공")
 	async getCurrentSpace(@Req() req: Request) {
 		return this.queryBus.execute(
-			new GetCurrentSpaceQuery(this.readSpaceIdHeader(req)),
+			new GetCurrentSpaceQuery(this.readTenantIdHeader(req)),
 		);
 	}
 
@@ -361,19 +361,19 @@ export class AuthController {
 	@Post("current-space")
 	@ApiOperation({
 		operationId: "setCurrentSpace",
-		summary: "현재 선택 Space 변경",
+		summary: "현재 선택 Tenant 변경",
 		description:
-			"사용자가 접근 가능한 Space 중 하나를 선택 가능 대상으로 검증하고 반환합니다.",
+			"사용자가 접근 가능한 Tenant 중 하나를 선택 가능 대상으로 검증하고 Space 정보를 반환합니다.",
 	})
 	@ApiCookieAuth(Token.ACCESS)
 	@ApiSecurity("oauth2", ["openid", "profile", "email", "roles"])
 	@ApiBody({
 		type: SetCurrentSpaceDto,
-		description: "현재 선택할 Space ID",
+		description: "현재 선택할 Tenant ID",
 	})
 	@ApiErrors(401, 403, 500)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
-	@ResponseMessage("현재 Space 변경 성공")
+	@ResponseMessage("현재 Tenant 변경 성공")
 	async setCurrentSpace(@Body() dto: SetCurrentSpaceDto) {
 		return this.commandBus.execute(new SetCurrentSpaceCommand(dto));
 	}
@@ -440,14 +440,14 @@ export class AuthController {
 		return this.queryBus.execute(new GetAuthAuditLogStatsQuery());
 	}
 
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@SkipSpaceCheck()
 	@HttpCode(HttpStatus.OK)
 	@Post("users/:userId/unlock")
 	@ApiOperation({
 		operationId: "unlockAccount",
 		summary: "계정 잠금 해제",
-		description: "잠긴 계정을 해제합니다. FULL_ACCESS 권한이 필요합니다.",
+		description: "잠긴 계정을 해제합니다. PLATFORM_ADMIN 권한이 필요합니다.",
 	})
 	@ApiParam({ name: "userId", type: String })
 	@ApiAuth()
@@ -458,7 +458,7 @@ export class AuthController {
 		return this.commandBus.execute(new UnlockAccountCommand(userId));
 	}
 
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@SkipSpaceCheck()
 	@HttpCode(HttpStatus.OK)
 	@Post("users/:userId/force-reset-password")
@@ -466,7 +466,7 @@ export class AuthController {
 		operationId: "forceResetPassword",
 		summary: "비밀번호 강제 재설정",
 		description:
-			"임시 비밀번호를 생성하여 이메일로 발송합니다. FULL_ACCESS 권한이 필요합니다.",
+			"임시 비밀번호를 생성하여 이메일로 발송합니다. PLATFORM_ADMIN 권한이 필요합니다.",
 	})
 	@ApiParam({ name: "userId", type: String })
 	@ApiAuth()
@@ -477,7 +477,7 @@ export class AuthController {
 		return this.commandBus.execute(new ForceResetPasswordCommand(userId));
 	}
 
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@SkipSpaceCheck()
 	@HttpCode(HttpStatus.OK)
 	@Post("users/:userId/invalidate-sessions")
@@ -485,7 +485,7 @@ export class AuthController {
 		operationId: "invalidateUserSessions",
 		summary: "사용자 전체 세션 무효화",
 		description:
-			"특정 사용자의 모든 세션을 강제 종료합니다. FULL_ACCESS 권한이 필요합니다.",
+			"특정 사용자의 모든 세션을 강제 종료합니다. PLATFORM_ADMIN 권한이 필요합니다.",
 	})
 	@ApiParam({ name: "userId", type: String })
 	@ApiAuth()
@@ -496,8 +496,8 @@ export class AuthController {
 		return this.commandBus.execute(new InvalidateUserSessionsCommand(userId));
 	}
 
-	private readSpaceIdHeader(req: Request): string | undefined {
-		const headerValue = req.headers[REQUEST_HEADER_KEYS.SPACE_ID];
+	private readTenantIdHeader(req: Request): string | undefined {
+		const headerValue = req.headers[REQUEST_HEADER_KEYS.TENANT_ID];
 		if (typeof headerValue === "string") {
 			return headerValue;
 		}

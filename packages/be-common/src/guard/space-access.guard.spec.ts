@@ -55,7 +55,7 @@ describe("SpaceAccessGuard", () => {
 			{
 				id: "tenant-1",
 				spaceId: "space-001",
-				role: { name: "VIEW" },
+				role: { name: "MEMBER" },
 			},
 		],
 		...overrides,
@@ -144,8 +144,8 @@ describe("SpaceAccessGuard", () => {
 			});
 		});
 
-		describe("x-space-id 헤더 검증", () => {
-			it("인증된 사용자가 x-space-id 없이 요청하면 BadRequestException을 던져야 한다", () => {
+		describe("x-tenant-id 헤더 검증", () => {
+			it("인증된 사용자가 x-tenant-id 없이 요청하면 BadRequestException을 던져야 한다", () => {
 				// Given
 				mockReflector.getAllAndOverride.mockReturnValue(undefined);
 				const user = createMockUser();
@@ -159,11 +159,11 @@ describe("SpaceAccessGuard", () => {
 				// When & Then
 				expect(() => guard.canActivate(context)).toThrow(BadRequestException);
 				expect(() => guard.canActivate(context)).toThrow(
-					"x-space-id 헤더가 필요합니다",
+					"x-tenant-id 헤더가 필요합니다",
 				);
 			});
 
-			it("인증 + x-space-id + 해당 tenant가 있으면 true를 반환해야 한다", () => {
+			it("인증 + x-tenant-id + 해당 tenant가 있으면 true를 반환해야 한다", () => {
 				// Given
 				mockReflector.getAllAndOverride.mockReturnValue(undefined);
 				const user = createMockUser();
@@ -181,7 +181,7 @@ describe("SpaceAccessGuard", () => {
 				expect(result).toBe(true);
 			});
 
-			it("tenant.space.id가 x-space-id와 일치하면 true를 반환해야 한다", () => {
+			it("tenant.space.id가 x-tenant-id와 일치하면 true를 반환해야 한다", () => {
 				// Given
 				mockReflector.getAllAndOverride.mockReturnValue(undefined);
 				const user = createMockUser({
@@ -190,7 +190,7 @@ describe("SpaceAccessGuard", () => {
 							id: "tenant-1",
 							spaceId: undefined,
 							space: { id: "space-001" },
-							role: { name: "VIEW" },
+							role: { name: "MEMBER" },
 						},
 					],
 				});
@@ -208,7 +208,7 @@ describe("SpaceAccessGuard", () => {
 				expect(result).toBe(true);
 			});
 
-			it("인증 + x-space-id + 해당 tenant가 없으면 ForbiddenException을 던져야 한다", () => {
+			it("인증 + x-tenant-id + 해당 tenant가 없으면 ForbiddenException을 던져야 한다", () => {
 				// Given
 				mockReflector.getAllAndOverride.mockReturnValue(undefined);
 				const user = createMockUser();
@@ -228,7 +228,7 @@ describe("SpaceAccessGuard", () => {
 		});
 
 		describe("tenants가 비정상인 경우", () => {
-			it("인증 + x-space-id + tenants가 null이면 ForbiddenException을 던져야 한다", () => {
+			it("인증 + x-tenant-id + tenants가 null이면 ForbiddenException을 던져야 한다", () => {
 				// Given
 				mockReflector.getAllAndOverride.mockReturnValue(undefined);
 				const user = createMockUser({ tenants: null });
@@ -246,7 +246,7 @@ describe("SpaceAccessGuard", () => {
 				);
 			});
 
-			it("인증 + x-space-id + tenants가 undefined이면 ForbiddenException을 던져야 한다", () => {
+			it("인증 + x-tenant-id + tenants가 undefined이면 ForbiddenException을 던져야 한다", () => {
 				// Given
 				mockReflector.getAllAndOverride.mockReturnValue(undefined);
 				const user = createMockUser({ tenants: undefined });

@@ -15,12 +15,12 @@ export class PoliciesRepository {
 		>,
 	) {}
 
-	async findManyBySpaceId(spaceId: string): Promise<Policy[]> {
-		this.logger.debug(`Policy 목록 조회: spaceId=${spaceId.slice(-8)}`);
+	async findManyByTenantId(tenantId: string): Promise<Policy[]> {
+		this.logger.debug(`Policy 목록 조회: tenantId=${tenantId.slice(-8)}`);
 
 		const results = await this.txHost.tx.policy.findMany({
 			where: {
-				spaceId,
+				tenantId,
 				removedAt: null,
 			},
 			include: this.includePolicyDetails(),
@@ -30,15 +30,15 @@ export class PoliciesRepository {
 		return results.map((result) => plainToInstance(Policy, result));
 	}
 
-	async findByIdInSpace(id: string, spaceId: string): Promise<Policy | null> {
+	async findByIdInTenant(id: string, tenantId: string): Promise<Policy | null> {
 		this.logger.debug(
-			`Policy 조회: id=${id.slice(-8)}, spaceId=${spaceId.slice(-8)}`,
+			`Policy 조회: id=${id.slice(-8)}, tenantId=${tenantId.slice(-8)}`,
 		);
 
 		const result = await this.txHost.tx.policy.findFirst({
 			where: {
 				id,
-				spaceId,
+				tenantId,
 				removedAt: null,
 			},
 			include: this.includePolicyDetails(),
@@ -47,13 +47,13 @@ export class PoliciesRepository {
 		return result ? plainToInstance(Policy, result) : null;
 	}
 
-	async findByNameInSpace(
-		spaceId: string,
+	async findByNameInTenant(
+		tenantId: string,
 		name: string,
 	): Promise<Policy | null> {
 		const result = await this.txHost.tx.policy.findFirst({
 			where: {
-				spaceId,
+				tenantId,
 				name,
 				removedAt: null,
 			},
@@ -62,16 +62,16 @@ export class PoliciesRepository {
 		return result ? plainToInstance(Policy, result) : null;
 	}
 
-	async findActivePolicyIdsInSpace(
+	async findActivePolicyIdsInTenant(
 		policyIds: string[],
-		spaceId: string,
+		tenantId: string,
 	): Promise<string[]> {
 		if (policyIds.length === 0) return [];
 
 		const results = await this.txHost.tx.policy.findMany({
 			where: {
 				id: { in: policyIds },
-				spaceId,
+				tenantId,
 				removedAt: null,
 			},
 			select: { id: true },
@@ -82,7 +82,7 @@ export class PoliciesRepository {
 
 	async create(data: Prisma.PolicyUncheckedCreateInput): Promise<Policy> {
 		this.logger.debug(
-			`Policy 생성: spaceId=${data.spaceId.slice(-8)}, name=${data.name}`,
+			`Policy 생성: tenantId=${data.tenantId.slice(-8)}, name=${data.name}`,
 		);
 
 		const result = await this.txHost.tx.policy.create({

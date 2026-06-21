@@ -29,7 +29,7 @@ const resolveReturnTo = (params: Record<string, string | string[] | undefined>) 
 const findSpaceByItem = (
   spaces: readonly SpaceDto[],
   item: SpaceListItemInfo,
-) => spaces.find((space) => space.id === item.id);
+) => spaces.find((space) => space.tenantId === item.id);
 
 const getSelectionErrorDescription = (error: unknown) => {
   const status = (error as { response?: { status?: number } })?.response?.status;
@@ -53,7 +53,7 @@ const SpaceSelectRoute = observer(() => {
   >;
   const returnTo = resolveReturnTo(rawParams);
   const [selectedSpaceId, setSelectedSpaceId] = useState<string | null>(
-    mobileApiScopeStore.spaceId,
+    mobileApiScopeStore.tenantId,
   );
   const [selectionErrorDescription, setSelectionErrorDescription] = useState("");
   const requestOptions = { baseURL: getIdpApiBaseUrl() };
@@ -96,7 +96,7 @@ const SpaceSelectRoute = observer(() => {
     setSelectionErrorDescription("");
     try {
       const response = await setCurrentSpaceMutation.mutateAsync({
-        spaceId: item.id,
+        tenantId: item.id,
       });
       await mobileAuthStore.selectSpace(response.data ?? selectedSpace);
       await queryClient.invalidateQueries();

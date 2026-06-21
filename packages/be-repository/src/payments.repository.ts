@@ -6,7 +6,7 @@ import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-pr
 import { plainToInstance } from "class-transformer";
 
 const paymentInclude = {
-	space: true,
+	tenant: true,
 	payer: true,
 	subjects: {
 		where: { removedAt: null },
@@ -20,12 +20,12 @@ const paymentInclude = {
 
 export type CreatePaymentSubjectInput = Omit<
 	Prisma.PaymentSubjectUncheckedCreateInput,
-	"paymentId" | "spaceId"
+	"paymentId" | "tenantId"
 >;
 
 export type CreatePaymentReferenceInput = Omit<
 	Prisma.PaymentReferenceUncheckedCreateInput,
-	"paymentId" | "spaceId"
+	"paymentId" | "tenantId"
 >;
 
 @Injectable()
@@ -95,7 +95,7 @@ export class PaymentsRepository {
 				data: params.subjects.map((subject) => ({
 					...subject,
 					paymentId: payment.id,
-					spaceId: payment.spaceId,
+					tenantId: payment.tenantId,
 				})),
 			});
 		}
@@ -105,7 +105,7 @@ export class PaymentsRepository {
 				data: params.references.map((reference) => ({
 					...reference,
 					paymentId: payment.id,
-					spaceId: payment.spaceId,
+					tenantId: payment.tenantId,
 				})),
 			});
 		}

@@ -1,15 +1,15 @@
 {
-  "FULL_ACCESS": {
-    "name": "フルアクセス",
-    "description": "システムのすべての権限を持つフルアクセスロール"
+  "PLATFORM_ADMIN": {
+    "name": "プラットフォーム管理者",
+    "description": "プラットフォーム全体を運用し、すべてのSpaceとシステムリソースにアクセスするロール"
   },
-  "MANAGE": {
-    "name": "管理",
-    "description": "管理業務を行うロール"
+  "COMPANY_MANAGER": {
+    "name": "Company管理者",
+    "description": "特定のCompanyで拠点、会員、予約、コンテンツなどの運用リソースを管理するロール"
   },
-  "VIEW": {
-    "name": "閲覧",
-    "description": "基本閲覧ロール"
+  "MEMBER": {
+    "name": "会員",
+    "description": "自分の情報と予約を管理し、施設とコンテンツを閲覧できるロール"
   },
   "category": {
     "SHARED": "共有",

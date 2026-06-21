@@ -38,7 +38,9 @@ export class AssetAggregate {
 		const spaceIds = this.spaceContext.spaceIds;
 		const where = this.applySpaceScope(
 			query.toPrismaWhere(
-				spaceIds === undefined ? undefined : { spaceId: { in: spaceIds } },
+				spaceIds === undefined
+					? undefined
+					: { tenant: { spaceId: { in: spaceIds } } },
 			),
 			spaceIds,
 		);
@@ -85,7 +87,7 @@ export class AssetAggregate {
 		if (
 			!targetFolder ||
 			targetFolder.removedAt ||
-			targetFolder.spaceId !== currentSpaceId
+			targetFolder.tenant?.spaceId !== currentSpaceId
 		) {
 			throw new NotFoundException("이동할 폴더를 찾을 수 없습니다");
 		}
@@ -106,7 +108,7 @@ export class AssetAggregate {
 
 		if (
 			this.spaceContext.spaceIds !== undefined &&
-			asset.spaceId !== this.getCurrentSpaceId()
+			asset.tenant?.spaceId !== this.getCurrentSpaceId()
 		) {
 			throw new ForbiddenException("현재 Space의 에셋만 삭제할 수 있습니다");
 		}
@@ -126,12 +128,13 @@ export class AssetAggregate {
 
 		const normalizedOriginalName = normalizeUploadedFileName(file.originalname);
 		const spaceId = this.getCurrentSpaceId();
+		const tenantId = this.getCurrentTenantId();
 		const targetFolder = await this.foldersRepository.findById(dto.folderId);
 
 		if (
 			!targetFolder ||
 			targetFolder.removedAt ||
-			targetFolder.spaceId !== spaceId
+			targetFolder.tenant?.spaceId !== spaceId
 		) {
 			throw new NotFoundException("업로드할 폴더를 찾을 수 없습니다");
 		}
@@ -156,7 +159,7 @@ export class AssetAggregate {
 		});
 
 		const asset = await this.assetsRepository.create({
-			spaceId,
+			tenantId,
 			folderId: dto.folderId,
 			kind,
 			status: AssetStatus.READY,
@@ -178,18 +181,35 @@ export class AssetAggregate {
 
 		if (!spaceId) {
 			throw new BadRequestException(
-				"x-space-id 헤더가 필요합니다. Space를 선택해주세요.",
+				"x-tenant-id 헤더가 필요합니다. Space를 선택해주세요.",
 			);
 		}
 
 		return spaceId;
 	}
 
+	private getCurrentTenantId(): string {
+		const tenantId = this.spaceContext.tenantId;
+
+		if (!tenantId) {
+			throw new BadRequestException(
+				"x-tenant-id 헤더가 필요합니다. Tenant를 선택해주세요.",
+			);
+		}
+
+		return tenantId;
+	}
+
 	private async getCurrentSpaceAsset(assetId: string): Promise<Asset> {
 		const asset = await this.assetsRepository.findByIdWithRelations(assetId);
 		this.getCurrentSpaceId();
 
-		if (!asset || asset.removedAt || !this.canReadSpace(asset.spaceId)) {
+		if (
+			!asset ||
+			asset.removedAt ||
+			!asset.tenant?.spaceId ||
+			!this.canReadSpace(asset.tenant.spaceId)
+		) {
 			throw new NotFoundException("에셋을 찾을 수 없습니다");
 		}
 
@@ -206,7 +226,7 @@ export class AssetAggregate {
 
 		return {
 			...where,
-			spaceId: { in: spaceIds },
+			tenant: { spaceId: { in: spaceIds } },
 		};
 	}
 

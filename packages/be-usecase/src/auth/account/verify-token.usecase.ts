@@ -16,19 +16,19 @@ export class VerifyTokenUseCase {
 		const tenant = this.cls.get<SpaceTenantLike | undefined>(
 			CONTEXT_KEYS.TENANT,
 		);
-		const spaceId = this.cls.get<string | undefined>(CONTEXT_KEYS.SPACE_ID);
+		const tenantId = this.cls.get<string | undefined>(CONTEXT_KEYS.TENANT_ID);
 		if (!token) {
 			throw new UnauthorizedException("토큰이 존재하지 않습니다");
 		}
-		if (spaceId && !tenant) {
-			throw new ForbiddenException("해당 Space에 대한 테넌트가 없습니다.");
+		if (tenantId && !tenant) {
+			throw new ForbiddenException("해당 Tenant에 대한 접근 권한이 없습니다.");
 		}
 
 		const payload = decodeAccessToken(token);
 		const accessTokenExpiresAt =
 			((payload as { exp?: number }).exp || 0) * 1000;
 		const refreshTokenExpiresAt = Date.now() + 30 * 24 * 60 * 60 * 1000;
-		const hasFullAccess = tenant?.role?.name === SYSTEM_ROLES.FULL_ACCESS;
+		const hasFullAccess = tenant?.role?.name === SYSTEM_ROLES.PLATFORM_ADMIN;
 
 		return {
 			valid: true,

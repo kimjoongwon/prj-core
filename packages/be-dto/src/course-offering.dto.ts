@@ -17,15 +17,15 @@ import { AbstractDto } from "./abstract.dto";
 import { CourseDto } from "./course.dto";
 import { CoursePassDto } from "./course-pass.dto";
 import { EnrollmentDto } from "./enrollment.dto";
-import { SpaceDto } from "./space.dto";
+import { TenantDto } from "./tenant.dto";
 import { TimelineDto } from "./timeline.dto";
 
 export class CourseOfferingDto extends AbstractDto implements CourseOffering {
 	@UUIDField({ description: "코스 ID" })
 	courseId!: string;
 
-	@UUIDField({ description: "소속 Space ID" })
-	spaceId!: string;
+	@UUIDField({ description: "소속 Tenant ID" })
+	tenantId!: string;
 
 	@UUIDFieldOptional({ description: "연결 Timeline ID", nullable: true })
 	timelineId!: string | null;
@@ -65,11 +65,11 @@ export class CourseOfferingDto extends AbstractDto implements CourseOffering {
 	})
 	course?: CourseDto;
 
-	@ClassField(() => SpaceDto, {
-		description: "소속 Space",
+	@ClassField(() => TenantDto, {
+		description: "소속 Tenant",
 		required: false,
 	})
-	space?: SpaceDto;
+	tenant?: TenantDto;
 
 	@ClassField(() => TimelineDto, {
 		description: "연결 Timeline",

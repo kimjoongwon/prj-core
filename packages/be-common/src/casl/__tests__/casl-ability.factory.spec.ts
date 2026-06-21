@@ -16,11 +16,11 @@ describe("CaslAbilityFactory", () => {
 
 	beforeEach(async () => {
 		mockRolePoliciesRepository = {
-			findActiveByRoleIdsInSpace: jest.fn(),
+			findActiveByRoleIdsInTenant: jest.fn(),
 		} as unknown as jest.Mocked<RolePoliciesRepository>;
 
 		mockUserPoliciesRepository = {
-			findActiveByUserIdInSpace: jest.fn(),
+			findActiveByUserIdInTenant: jest.fn(),
 		} as unknown as jest.Mocked<UserPoliciesRepository>;
 
 		mockClsService = {
@@ -66,7 +66,7 @@ describe("CaslAbilityFactory", () => {
 		} as unknown as UserDto;
 
 		mockClsService.get.mockReturnValueOnce("space-1");
-		mockRolePoliciesRepository.findActiveByRoleIdsInSpace.mockResolvedValue([
+		mockRolePoliciesRepository.findActiveByRoleIdsInTenant.mockResolvedValue([
 			{
 				priority: 1,
 				createdAt: new Date("2026-01-01T00:00:00.000Z"),
@@ -85,7 +85,7 @@ describe("CaslAbilityFactory", () => {
 				},
 			},
 		] as never);
-		mockUserPoliciesRepository.findActiveByUserIdInSpace.mockResolvedValue(
+		mockUserPoliciesRepository.findActiveByUserIdInTenant.mockResolvedValue(
 			[] as never,
 		);
 
@@ -110,7 +110,7 @@ describe("CaslAbilityFactory", () => {
 		} as unknown as UserDto;
 
 		mockClsService.get.mockReturnValueOnce("space-1");
-		mockRolePoliciesRepository.findActiveByRoleIdsInSpace.mockResolvedValue([
+		mockRolePoliciesRepository.findActiveByRoleIdsInTenant.mockResolvedValue([
 			{
 				priority: 1,
 				createdAt: new Date("2026-01-01T00:00:00.000Z"),
@@ -129,7 +129,7 @@ describe("CaslAbilityFactory", () => {
 				},
 			},
 		] as never);
-		mockUserPoliciesRepository.findActiveByUserIdInSpace.mockResolvedValue([
+		mockUserPoliciesRepository.findActiveByUserIdInTenant.mockResolvedValue([
 			{
 				priority: 10,
 				createdAt: new Date("2026-01-01T00:00:00.000Z"),
@@ -176,7 +176,7 @@ describe("CaslAbilityFactory", () => {
 		const ability = await factory.createForUser(user);
 		expect(ability.can("READ", "entity:User")).toBe(false);
 		expect(
-			mockRolePoliciesRepository.findActiveByRoleIdsInSpace,
+			mockRolePoliciesRepository.findActiveByRoleIdsInTenant,
 		).not.toHaveBeenCalled();
 	});
 
@@ -191,29 +191,29 @@ describe("CaslAbilityFactory", () => {
 					id: "tenant-full-access",
 					spaceId: "space-1",
 					roleId: "role-full-access",
-					role: { id: "role-full-access", name: "FULL_ACCESS" },
+					role: { id: "role-full-access", name: "PLATFORM_ADMIN" },
 				},
 				{
 					id: "tenant-manage",
 					spaceId: "space-1",
 					roleId: "role-manage",
-					role: { id: "role-manage", name: "MANAGE" },
+					role: { id: "role-manage", name: "COMPANY_MANAGER" },
 				},
 			],
 		} as unknown as UserDto;
 
 		mockClsService.get.mockReturnValueOnce("space-1");
-		mockRolePoliciesRepository.findActiveByRoleIdsInSpace.mockResolvedValue(
+		mockRolePoliciesRepository.findActiveByRoleIdsInTenant.mockResolvedValue(
 			[] as never,
 		);
-		mockUserPoliciesRepository.findActiveByUserIdInSpace.mockResolvedValue(
+		mockUserPoliciesRepository.findActiveByUserIdInTenant.mockResolvedValue(
 			[] as never,
 		);
 
 		await factory.createForUser(user);
 
 		expect(
-			mockRolePoliciesRepository.findActiveByRoleIdsInSpace,
+			mockRolePoliciesRepository.findActiveByRoleIdsInTenant,
 		).toHaveBeenCalledWith(["role-full-access"], "space-1");
 	});
 });

@@ -31,7 +31,7 @@ import { ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("EMAIL_VERIFICATIONS")
 @Controller()
-@Roles([SYSTEM_ROLES.FULL_ACCESS])
+@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 @SkipSpaceCheck()
 export class EmailVerificationsController {
 	constructor(
@@ -44,7 +44,7 @@ export class EmailVerificationsController {
 		operationId: "getEmailVerifications",
 		summary: "이메일 인증 목록 조회",
 		description:
-			"회원가입 이메일 인증 요청을 전역 FULL_ACCESS 기준으로 조회합니다.",
+			"회원가입 이메일 인증 요청을 전역 PLATFORM_ADMIN 기준으로 조회합니다.",
 	})
 	@ApiAuth()
 	@ApiErrors(401, 403, 500)

@@ -16,7 +16,7 @@ export class RoutineDto extends AbstractDto implements Routine {
 	label: string;
 
 	@StringField()
-	spaceId: string;
+	tenantId: string;
 
 	@StringFieldOptional()
 	creatorId: string | null;

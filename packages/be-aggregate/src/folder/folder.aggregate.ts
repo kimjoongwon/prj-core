@@ -29,7 +29,9 @@ export class FolderAggregate {
 		const spaceIds = this.spaceContext.spaceIds;
 		const where = this.applySpaceScope(
 			query.toPrismaWhere(
-				spaceIds === undefined ? undefined : { spaceId: { in: spaceIds } },
+				spaceIds === undefined
+					? undefined
+					: { tenant: { spaceId: { in: spaceIds } } },
 			),
 			spaceIds,
 		);
@@ -54,6 +56,7 @@ export class FolderAggregate {
 		creatorId: string,
 	): Promise<Folder> {
 		const spaceId = this.getRequiredSpaceId();
+		const tenantId = this.getRequiredTenantId();
 		const folder = new Folder();
 		folder.parentFolderId = input.parentFolderId ?? null;
 		folder.name = input.name.trim();
@@ -69,7 +72,7 @@ export class FolderAggregate {
 			);
 			if (
 				!parentFolder ||
-				parentFolder.spaceId !== spaceId ||
+				parentFolder.tenant?.spaceId !== spaceId ||
 				parentFolder.removedAt
 			) {
 				throw new NotFoundException("상위 폴더를 찾을 수 없습니다");
@@ -101,7 +104,7 @@ export class FolderAggregate {
 		);
 
 		return this.foldersRepository.create({
-			spaceId,
+			tenantId,
 			parentFolderId: folder.parentFolderId,
 			name: folder.name,
 			path,
@@ -221,7 +224,7 @@ export class FolderAggregate {
 		const folder = await this.foldersRepository.findByIdWithChildren(folderId);
 		const spaceId = this.getRequiredSpaceId();
 
-		if (!folder || folder.spaceId !== spaceId || folder.removedAt) {
+		if (!folder || folder.tenant?.spaceId !== spaceId || folder.removedAt) {
 			throw new NotFoundException("폴더를 찾을 수 없습니다");
 		}
 
@@ -240,11 +243,22 @@ export class FolderAggregate {
 		const spaceId = this.spaceContext.spaceId;
 		if (!spaceId) {
 			throw new BadRequestException(
-				"x-space-id 헤더가 필요합니다. Space를 선택해주세요.",
+				"x-tenant-id 헤더가 필요합니다. Space를 선택해주세요.",
 			);
 		}
 
 		return spaceId;
+	}
+
+	private getRequiredTenantId(): string {
+		const tenantId = this.spaceContext.tenantId;
+		if (!tenantId) {
+			throw new BadRequestException(
+				"x-tenant-id 헤더가 필요합니다. Tenant를 선택해주세요.",
+			);
+		}
+
+		return tenantId;
 	}
 
 	private applySpaceScope(
@@ -257,7 +271,7 @@ export class FolderAggregate {
 
 		return {
 			...where,
-			spaceId: { in: spaceIds },
+			tenant: { spaceId: { in: spaceIds } },
 		};
 	}
 

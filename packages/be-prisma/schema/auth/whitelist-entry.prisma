@@ -8,6 +8,7 @@ enum WhitelistType {
   EMAIL_DOMAIN
   CORS_ORIGIN
 }
+
 // @schema-type: CATALOG
 // @schema-owner: true
 // @aggregate-root: true

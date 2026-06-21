@@ -7,8 +7,10 @@ export interface TenantWithRelations {
 		isSystem: boolean;
 	};
 	space?: {
-		ground?: {
-			name: string;
+		company?: {
+			grounds?: Array<{
+				name: string;
+			}>;
 		};
 	};
 }

@@ -70,9 +70,16 @@ describe("PersistStore", () => {
 		it("localStorage에서 저장된 데이터를 hydrateFromStorage로 복원해야 한다", () => {
 			// Given
 			const storedData = {
+				tenantId: "tenant-123",
 				spaceId: "space-123",
 				groundName: "Test Ground",
-				spaces: [{ spaceId: "space-123", groundName: "Test Ground" }],
+				spaces: [
+					{
+						tenantId: "tenant-123",
+						spaceId: "space-123",
+						groundName: "Test Ground",
+					},
+				],
 				...createNativeAuthSession(),
 			};
 			mockLocalStorage.getItem.mockReturnValue(JSON.stringify(storedData));
@@ -82,6 +89,7 @@ describe("PersistStore", () => {
 			store.hydrateFromStorage();
 
 			// Then
+			expect(store.tenantId).toBe("tenant-123");
 			expect(store.spaceId).toBe("space-123");
 			expect(store.groundName).toBe("Test Ground");
 			expect(store.spaces).toHaveLength(1);
@@ -97,9 +105,16 @@ describe("PersistStore", () => {
 		it("legacy 저장 데이터에 native session 필드가 없으면 null로 복원해야 한다", () => {
 			// Given
 			const storedData = {
+				tenantId: "tenant-123",
 				spaceId: "space-123",
 				groundName: "Test Ground",
-				spaces: [{ spaceId: "space-123", groundName: "Test Ground" }],
+				spaces: [
+					{
+						tenantId: "tenant-123",
+						spaceId: "space-123",
+						groundName: "Test Ground",
+					},
+				],
 			};
 			mockLocalStorage.getItem.mockReturnValue(JSON.stringify(storedData));
 
@@ -156,16 +171,17 @@ describe("PersistStore", () => {
 	describe("setSpace", () => {
 		it("Space 정보를 설정해야 한다", () => {
 			// When
-			persistStore.setSpace("space-456", "New Ground");
+			persistStore.setSpace("tenant-456", "New Ground", null, "space-456");
 
 			// Then
+			expect(persistStore.tenantId).toBe("tenant-456");
 			expect(persistStore.spaceId).toBe("space-456");
 			expect(persistStore.groundName).toBe("New Ground");
 		});
 
 		it("Space 정보를 localStorage 자동 저장 대상에 포함해야 한다", async () => {
 			// When
-			persistStore.setSpace("space-456", "New Ground");
+			persistStore.setSpace("tenant-456", "New Ground", null, "space-456");
 			await Promise.resolve();
 
 			// Then
@@ -176,6 +192,7 @@ describe("PersistStore", () => {
 				];
 			expect(latestCall?.[0]).toBe(STORAGE_KEY);
 			expect(JSON.parse(latestCall?.[1] as string)).toMatchObject({
+				tenantId: "tenant-456",
 				spaceId: "space-456",
 				groundName: "New Ground",
 			});
@@ -185,12 +202,13 @@ describe("PersistStore", () => {
 	describe("clearSpace", () => {
 		it("Space 정보를 초기화해야 한다", () => {
 			// Given
-			persistStore.setSpace("space-123", "Test");
+			persistStore.setSpace("tenant-123", "Test", null, "space-123");
 
 			// When
 			persistStore.clearSpace();
 
 			// Then
+			expect(persistStore.tenantId).toBeNull();
 			expect(persistStore.spaceId).toBeNull();
 			expect(persistStore.groundName).toBeNull();
 		});
@@ -200,8 +218,8 @@ describe("PersistStore", () => {
 		it("Space 목록을 설정해야 한다", () => {
 			// Given
 			const spaces: SpaceInfo[] = [
-				{ spaceId: "space-1", groundName: "Ground 1" },
-				{ spaceId: "space-2", groundName: "Ground 2" },
+				{ tenantId: "tenant-1", spaceId: "space-1", groundName: "Ground 1" },
+				{ tenantId: "tenant-2", spaceId: "space-2", groundName: "Ground 2" },
 			];
 
 			// When
@@ -270,9 +288,13 @@ describe("PersistStore", () => {
 	describe("clearNativeAuthSession", () => {
 		it("native auth 세션 정보만 초기화해야 한다", () => {
 			// Given
-			persistStore.setSpace("space-123", "Test Ground");
+			persistStore.setSpace("tenant-123", "Test Ground", null, "space-123");
 			persistStore.setSpaces([
-				{ spaceId: "space-123", groundName: "Test Ground" },
+				{
+					tenantId: "tenant-123",
+					spaceId: "space-123",
+					groundName: "Test Ground",
+				},
 			]);
 			persistStore.setSpaceSelectionResolved(false);
 			persistStore.setNativeAuthSession(createNativeAuthSession());
@@ -288,6 +310,7 @@ describe("PersistStore", () => {
 			expect(persistStore.refreshTokenExpiresAt).toBeNull();
 			expect(persistStore.isAuthenticated).toBe(false);
 			expect(persistStore.needsTokenRefresh).toBe(false);
+			expect(persistStore.tenantId).toBe("tenant-123");
 			expect(persistStore.spaceId).toBe("space-123");
 			expect(persistStore.groundName).toBe("Test Ground");
 			expect(persistStore.spaces).toHaveLength(1);
@@ -456,8 +479,10 @@ describe("PersistStore", () => {
 	describe("clear", () => {
 		it("모든 상태를 초기화해야 한다", () => {
 			// Given
-			persistStore.setSpace("space-123", "Test");
-			persistStore.setSpaces([{ spaceId: "space-1", groundName: "G1" }]);
+			persistStore.setSpace("tenant-123", "Test", null, "space-123");
+			persistStore.setSpaces([
+				{ tenantId: "tenant-1", spaceId: "space-1", groundName: "G1" },
+			]);
 			persistStore.setSpaceSelectionResolved(false);
 			persistStore.setNativeAuthSession(createNativeAuthSession());
 
@@ -465,6 +490,7 @@ describe("PersistStore", () => {
 			persistStore.clear();
 
 			// Then
+			expect(persistStore.tenantId).toBeNull();
 			expect(persistStore.spaceId).toBeNull();
 			expect(persistStore.groundName).toBeNull();
 			expect(persistStore.spaces).toEqual([]);

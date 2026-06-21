@@ -9,6 +9,7 @@ enum GroupTypes {
   Asset
   User
 }
+
 // @schema-type: ROOT
 // @schema-owner: true
 // @aggregate-root: true
@@ -27,14 +28,14 @@ model Group {
   type              GroupTypes         @default(User)
   /// @displayName 라벨
   label             String?
-  spaceId           String             @map("space_id")
+  tenantId          String             @map("tenant_id")
   creatorId         String?            @map("creator_id")
-  space             Space              @relation(fields: [spaceId], references: [id])
+  tenant            Tenant             @relation(fields: [tenantId], references: [id])
   creator           User?              @relation(fields: [creatorId], references: [id])
   roleAssociations  RoleAssociation[]
   spaceAssociations SpaceAssociation[]
   userAssociations  UserAssociation[]
 
-  @@index([spaceId])
+  @@index([tenantId])
   @@map("groups")
 }

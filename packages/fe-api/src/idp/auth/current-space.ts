@@ -16,7 +16,7 @@ type CurrentSpaceResponse = {
 };
 
 type SetCurrentSpacePayload = {
-	spaceId: string;
+	tenantId: string;
 };
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];

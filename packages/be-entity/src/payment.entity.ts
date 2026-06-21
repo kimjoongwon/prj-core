@@ -8,11 +8,11 @@ import { AbstractEntity } from "./abstract.entity";
 import type { Enrollment } from "./enrollment.entity";
 import type { PaymentReference } from "./payment-reference.entity";
 import type { PaymentSubject } from "./payment-subject.entity";
-import type { Space } from "./space.entity";
+import type { Tenant } from "./tenant.entity";
 import type { User } from "./user.entity";
 
 export class Payment extends AbstractEntity implements PaymentEntity {
-	spaceId!: string;
+	tenantId!: string;
 	payerUserId!: string | null;
 	title!: string;
 	status!: PaymentStatus;
@@ -29,7 +29,7 @@ export class Payment extends AbstractEntity implements PaymentEntity {
 	memo!: string | null;
 	metadata!: Prisma.JsonValue | null;
 
-	space?: Space;
+	tenant?: Tenant;
 	payer?: User | null;
 	subjects?: PaymentSubject[];
 	references?: PaymentReference[];

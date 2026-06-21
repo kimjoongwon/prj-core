@@ -38,7 +38,7 @@ describe("RolesGuard", () => {
 				id: "tenant-1",
 				spaceId: "space-001",
 				role: {
-					name: SYSTEM_ROLES.VIEW,
+					name: SYSTEM_ROLES.MEMBER,
 				},
 			},
 		],
@@ -49,7 +49,7 @@ describe("RolesGuard", () => {
 		id: "tenant-1",
 		spaceId: "space-001",
 		role: {
-			name: SYSTEM_ROLES.VIEW,
+			name: SYSTEM_ROLES.MEMBER,
 		},
 		...overrides,
 	});
@@ -114,7 +114,7 @@ describe("RolesGuard", () => {
 		describe("사용자 인증 검증", () => {
 			it("사용자가 없으면 UnauthorizedException을 던져야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([SYSTEM_ROLES.VIEW]);
+				mockReflector.get.mockReturnValue([SYSTEM_ROLES.MEMBER]);
 				mockClsService.get.mockReturnValue(undefined);
 				const context = createMockExecutionContext();
 
@@ -127,7 +127,7 @@ describe("RolesGuard", () => {
 
 			it("사용자에게 테넌트가 없으면 ForbiddenException을 던져야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([SYSTEM_ROLES.VIEW]);
+				mockReflector.get.mockReturnValue([SYSTEM_ROLES.MEMBER]);
 				const user = createMockUser({ tenants: null });
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
@@ -144,7 +144,7 @@ describe("RolesGuard", () => {
 
 			it("사용자에게 빈 테넌트 배열이면 ForbiddenException을 던져야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([SYSTEM_ROLES.VIEW]);
+				mockReflector.get.mockReturnValue([SYSTEM_ROLES.MEMBER]);
 				const user = createMockUser({ tenants: [] });
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
@@ -161,7 +161,7 @@ describe("RolesGuard", () => {
 
 			it("테넌트 역할의 name이 없으면 ForbiddenException을 던져야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([SYSTEM_ROLES.VIEW]);
+				mockReflector.get.mockReturnValue([SYSTEM_ROLES.MEMBER]);
 				const user = createMockUser({
 					tenants: [{ id: "tenant-1", role: {} }],
 				});
@@ -182,7 +182,7 @@ describe("RolesGuard", () => {
 
 			it("테넌트에 역할이 없으면 ForbiddenException을 던져야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([SYSTEM_ROLES.VIEW]);
+				mockReflector.get.mockReturnValue([SYSTEM_ROLES.MEMBER]);
 				const user = createMockUser({
 					tenants: [{ id: "tenant-1", role: null }],
 				});
@@ -205,7 +205,7 @@ describe("RolesGuard", () => {
 		describe("CLS 기반 테넌트 사용", () => {
 			it("CLS에서 tenant가 없으면 ForbiddenException을 던져야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([SYSTEM_ROLES.VIEW]);
+				mockReflector.get.mockReturnValue([SYSTEM_ROLES.MEMBER]);
 				const user = createMockUser();
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
@@ -223,25 +223,25 @@ describe("RolesGuard", () => {
 
 			it("CLS에서 올바른 tenant로 역할을 확인해야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([SYSTEM_ROLES.MANAGE]);
+				mockReflector.get.mockReturnValue([SYSTEM_ROLES.COMPANY_MANAGER]);
 				const user = createMockUser({
 					tenants: [
 						{
 							id: "tenant-1",
 							spaceId: "space-001",
-							role: { name: SYSTEM_ROLES.VIEW },
+							role: { name: SYSTEM_ROLES.MEMBER },
 						},
 						{
 							id: "tenant-2",
 							spaceId: "space-002",
-							role: { name: SYSTEM_ROLES.MANAGE },
+							role: { name: SYSTEM_ROLES.COMPANY_MANAGER },
 						},
 					],
 				});
 				const tenant = createMockTenant({
 					id: "tenant-2",
 					spaceId: "space-002",
-					role: { name: SYSTEM_ROLES.MANAGE },
+					role: { name: SYSTEM_ROLES.COMPANY_MANAGER },
 				});
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
@@ -262,7 +262,7 @@ describe("RolesGuard", () => {
 		describe("역할 권한 검증", () => {
 			it("사용자의 역할이 요구된 역할과 일치하면 true를 반환해야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([SYSTEM_ROLES.VIEW]);
+				mockReflector.get.mockReturnValue([SYSTEM_ROLES.MEMBER]);
 				const user = createMockUser();
 				const tenant = createMockTenant();
 				mockClsService.get.mockImplementation((key: string) => {
@@ -281,7 +281,7 @@ describe("RolesGuard", () => {
 
 			it("사용자의 역할이 요구된 역할과 일치하지 않으면 ForbiddenException을 던져야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([SYSTEM_ROLES.MANAGE]);
+				mockReflector.get.mockReturnValue([SYSTEM_ROLES.COMPANY_MANAGER]);
 				const user = createMockUser();
 				const tenant = createMockTenant();
 				mockClsService.get.mockImplementation((key: string) => {
@@ -301,8 +301,8 @@ describe("RolesGuard", () => {
 			it("여러 역할 중 하나라도 일치하면 true를 반환해야 한다", () => {
 				// Given
 				mockReflector.get.mockReturnValue([
-					SYSTEM_ROLES.MANAGE,
-					SYSTEM_ROLES.VIEW,
+					SYSTEM_ROLES.COMPANY_MANAGER,
+					SYSTEM_ROLES.MEMBER,
 				]);
 				const user = createMockUser();
 				const tenant = createMockTenant();
@@ -320,20 +320,20 @@ describe("RolesGuard", () => {
 				expect(result).toBe(true);
 			});
 
-			it("MANAGE 역할을 가진 사용자가 MANAGE 역할이 필요한 엔드포인트에 접근하면 true를 반환해야 한다", () => {
+			it("COMPANY_MANAGER 역할을 가진 사용자가 COMPANY_MANAGER 역할이 필요한 엔드포인트에 접근하면 true를 반환해야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([SYSTEM_ROLES.MANAGE]);
+				mockReflector.get.mockReturnValue([SYSTEM_ROLES.COMPANY_MANAGER]);
 				const user = createMockUser({
 					tenants: [
 						{
 							id: "tenant-1",
 							main: true,
-							role: { name: SYSTEM_ROLES.MANAGE },
+							role: { name: SYSTEM_ROLES.COMPANY_MANAGER },
 						},
 					],
 				});
 				const tenant = createMockTenant({
-					role: { name: SYSTEM_ROLES.MANAGE },
+					role: { name: SYSTEM_ROLES.COMPANY_MANAGER },
 				});
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
@@ -349,20 +349,20 @@ describe("RolesGuard", () => {
 				expect(result).toBe(true);
 			});
 
-			it("FULL_ACCESS 역할을 가진 사용자가 FULL_ACCESS 역할이 필요한 엔드포인트에 접근하면 true를 반환해야 한다", () => {
+			it("PLATFORM_ADMIN 역할을 가진 사용자가 PLATFORM_ADMIN 역할이 필요한 엔드포인트에 접근하면 true를 반환해야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([SYSTEM_ROLES.FULL_ACCESS]);
+				mockReflector.get.mockReturnValue([SYSTEM_ROLES.PLATFORM_ADMIN]);
 				const user = createMockUser({
 					tenants: [
 						{
 							id: "tenant-1",
 							main: true,
-							role: { name: SYSTEM_ROLES.FULL_ACCESS },
+							role: { name: SYSTEM_ROLES.PLATFORM_ADMIN },
 						},
 					],
 				});
 				const tenant = createMockTenant({
-					role: { name: SYSTEM_ROLES.FULL_ACCESS },
+					role: { name: SYSTEM_ROLES.PLATFORM_ADMIN },
 				});
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
@@ -378,9 +378,9 @@ describe("RolesGuard", () => {
 				expect(result).toBe(true);
 			});
 
-			it("VIEW 역할을 가진 사용자가 FULL_ACCESS 역할이 필요한 엔드포인트에 접근하면 ForbiddenException을 던져야 한다", () => {
+			it("MEMBER 역할을 가진 사용자가 PLATFORM_ADMIN 역할이 필요한 엔드포인트에 접근하면 ForbiddenException을 던져야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([SYSTEM_ROLES.FULL_ACCESS]);
+				mockReflector.get.mockReturnValue([SYSTEM_ROLES.PLATFORM_ADMIN]);
 				const user = createMockUser();
 				const tenant = createMockTenant();
 				mockClsService.get.mockImplementation((key: string) => {

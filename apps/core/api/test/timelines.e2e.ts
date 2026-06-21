@@ -31,7 +31,7 @@ import { getTestAuth, TestJwtStrategy } from "./helpers/test-auth.helper";
 describe("Timelines API (E2E)", () => {
 	let app: INestApplication;
 	let jwtToken: string;
-	let spaceId: string;
+	let tenantId: string;
 	let userId: string;
 
 	// 테스트 중 생성된 리소스 ID를 추적하여 정리
@@ -51,7 +51,7 @@ describe("Timelines API (E2E)", () => {
 		try {
 			const auth = await getTestAuth(app);
 			jwtToken = auth.jwtToken;
-			spaceId = auth.spaceId;
+			tenantId = auth.tenantId;
 			userId = auth.userId;
 		} catch (error) {
 			console.warn(`테스트 인증 설정 실패: ${error}`);
@@ -60,14 +60,14 @@ describe("Timelines API (E2E)", () => {
 
 	afterAll(async () => {
 		// 테스트 중 생성된 Timeline 데이터 정리 (세션/프로그램은 cascade로 삭제됨)
-		if (jwtToken && spaceId) {
+		if (jwtToken && tenantId) {
 			for (const timelineId of createdTimelineIds) {
 				try {
 					// 세션이 있는 경우 먼저 세션 목록을 조회하여 세션 삭제
 					const sessionsRes = await request(app.getHttpServer())
 						.get(`/api/v1/timelines/${timelineId}/sessions`)
 						.set("Authorization", `Bearer ${jwtToken}`)
-						.set("x-space-id", spaceId);
+						.set("x-tenant-id", tenantId);
 
 					if (sessionsRes.status === 200 && sessionsRes.body.data?.length > 0) {
 						for (const session of sessionsRes.body.data) {
@@ -77,7 +77,7 @@ describe("Timelines API (E2E)", () => {
 									`/api/v1/timelines/${timelineId}/sessions/${session.id}/programs`,
 								)
 								.set("Authorization", `Bearer ${jwtToken}`)
-								.set("x-space-id", spaceId);
+								.set("x-tenant-id", tenantId);
 
 							if (
 								programsRes.status === 200 &&
@@ -89,7 +89,7 @@ describe("Timelines API (E2E)", () => {
 											`/api/v1/timelines/${timelineId}/sessions/${session.id}/programs/${program.id}`,
 										)
 										.set("Authorization", `Bearer ${jwtToken}`)
-										.set("x-space-id", spaceId);
+										.set("x-tenant-id", tenantId);
 								}
 							}
 
@@ -99,7 +99,7 @@ describe("Timelines API (E2E)", () => {
 									`/api/v1/timelines/${timelineId}/sessions/${session.id}`,
 								)
 								.set("Authorization", `Bearer ${jwtToken}`)
-								.set("x-space-id", spaceId);
+								.set("x-tenant-id", tenantId);
 						}
 					}
 
@@ -107,7 +107,7 @@ describe("Timelines API (E2E)", () => {
 					await request(app.getHttpServer())
 						.delete(`/api/v1/timelines/${timelineId}`)
 						.set("Authorization", `Bearer ${jwtToken}`)
-						.set("x-space-id", spaceId);
+						.set("x-tenant-id", tenantId);
 				} catch {
 					// 이미 삭제되었거나 존재하지 않으면 무시
 				}
@@ -118,7 +118,7 @@ describe("Timelines API (E2E)", () => {
 					await request(app.getHttpServer())
 						.delete(`/api/v1/routines/${routineId}`)
 						.set("Authorization", `Bearer ${jwtToken}`)
-						.set("x-space-id", spaceId);
+						.set("x-tenant-id", tenantId);
 				} catch {
 					// 이미 삭제되었거나 프로그램에서 사용 중이면 무시
 				}
@@ -143,13 +143,13 @@ describe("Timelines API (E2E)", () => {
 		describe("GET /api/v1/timelines", () => {
 			it("인증된 사용자는 타임라인 목록을 조회할 수 있어야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId) return;
+				if (!jwtToken || !tenantId) return;
 
 				// When
 				const response = await request(app.getHttpServer())
 					.get("/api/v1/timelines")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -160,14 +160,14 @@ describe("Timelines API (E2E)", () => {
 
 			it("페이지네이션 파라미터로 타임라인 목록을 조회할 수 있어야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId) return;
+				if (!jwtToken || !tenantId) return;
 
 				// When
 				const response = await request(app.getHttpServer())
 					.get("/api/v1/timelines")
 					.query({ skip: 0, take: 5 })
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -180,7 +180,7 @@ describe("Timelines API (E2E)", () => {
 		describe("POST /api/v1/timelines", () => {
 			it("유효한 데이터로 타임라인을 등록할 수 있어야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId) return;
+				if (!jwtToken || !tenantId) return;
 
 				const createDto = {
 					name: `테스트 타임라인 ${Date.now()}`,
@@ -191,7 +191,7 @@ describe("Timelines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.post("/api/v1/timelines")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId)
+					.set("x-tenant-id", tenantId)
 					.send(createDto);
 
 				// Then
@@ -201,7 +201,7 @@ describe("Timelines API (E2E)", () => {
 				expect(response.body.data.name).toBe(createDto.name);
 				expect(response.body.data.description).toBe(createDto.description);
 				expect(response.body.data.id).toBeDefined();
-				expect(response.body.data.spaceId).toBe(spaceId);
+				expect(response.body.data.tenantId).toBe(tenantId);
 
 				// 후속 테스트용 ID 저장 및 정리 목록에 추가
 				testTimelineId = response.body.data.id;
@@ -212,27 +212,27 @@ describe("Timelines API (E2E)", () => {
 		describe("GET /api/v1/timelines/:timelineId", () => {
 			it("ID로 타임라인 상세를 조회할 수 있어야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId || !testTimelineId) return;
+				if (!jwtToken || !tenantId || !testTimelineId) return;
 
 				// When
 				const response = await request(app.getHttpServer())
 					.get(`/api/v1/timelines/${testTimelineId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then
 				expect(response.status).toBe(200);
 				expect(response.body.httpStatus).toBe(200);
 				expect(response.body.data.id).toBe(testTimelineId);
 				expect(response.body.data.name).toBeDefined();
-				expect(response.body.data.spaceId).toBe(spaceId);
+				expect(response.body.data.tenantId).toBe(tenantId);
 			});
 		});
 
 		describe("PATCH /api/v1/timelines/:timelineId", () => {
 			it("타임라인의 name을 수정할 수 있어야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId || !testTimelineId) return;
+				if (!jwtToken || !tenantId || !testTimelineId) return;
 
 				const updateDto = {
 					name: "수정된 타임라인명",
@@ -243,7 +243,7 @@ describe("Timelines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.patch(`/api/v1/timelines/${testTimelineId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId)
+					.set("x-tenant-id", tenantId)
 					.send(updateDto);
 
 				// Then
@@ -258,7 +258,7 @@ describe("Timelines API (E2E)", () => {
 		describe("POST /api/v1/timelines/:timelineId/sessions", () => {
 			it("타임라인에 세션을 등록할 수 있어야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId || !testTimelineId) return;
+				if (!jwtToken || !tenantId || !testTimelineId) return;
 
 				const createDto = {
 					name: `테스트 세션 ${Date.now()}`,
@@ -277,7 +277,7 @@ describe("Timelines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.post(`/api/v1/timelines/${testTimelineId}/sessions`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId)
+					.set("x-tenant-id", tenantId)
 					.send(createDto);
 
 				// Then
@@ -295,13 +295,13 @@ describe("Timelines API (E2E)", () => {
 		describe("GET /api/v1/timelines/:timelineId/sessions", () => {
 			it("타임라인의 세션 목록을 조회할 수 있어야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId || !testTimelineId) return;
+				if (!jwtToken || !tenantId || !testTimelineId) return;
 
 				// When
 				const response = await request(app.getHttpServer())
 					.get(`/api/v1/timelines/${testTimelineId}/sessions`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -320,13 +320,13 @@ describe("Timelines API (E2E)", () => {
 		describe("GET /api/v1/timelines/:timelineId/sessions/:sessionId", () => {
 			it("ID로 세션 상세를 조회할 수 있어야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId || !testTimelineId || !testSessionId) return;
+				if (!jwtToken || !tenantId || !testTimelineId || !testSessionId) return;
 
 				// When
 				const response = await request(app.getHttpServer())
 					.get(`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -339,7 +339,7 @@ describe("Timelines API (E2E)", () => {
 		describe("PATCH /api/v1/timelines/:timelineId/sessions/:sessionId", () => {
 			it("세션의 name을 수정할 수 있어야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId || !testTimelineId || !testSessionId) return;
+				if (!jwtToken || !tenantId || !testTimelineId || !testSessionId) return;
 
 				const updateDto = {
 					name: "수정된 세션명",
@@ -352,7 +352,7 @@ describe("Timelines API (E2E)", () => {
 						`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}`,
 					)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId)
+					.set("x-tenant-id", tenantId)
 					.send(updateDto);
 
 				// Then
@@ -366,19 +366,17 @@ describe("Timelines API (E2E)", () => {
 		describe("POST /api/v1/timelines/:timelineId/sessions/:sessionId/programs", () => {
 			it("세션에 프로그램을 등록할 수 있어야 한다 (루틴/강사 조회 후 등록)", async () => {
 				// Given: 등록을 위해 기존 Routine ID와 Instructor(User) ID가 필요
-				if (!jwtToken || !spaceId || !testTimelineId || !testSessionId) return;
+				if (!jwtToken || !tenantId || !testTimelineId || !testSessionId) return;
 
 				const routineCreateDto = {
 					name: `프로그램용 루틴 ${Date.now()}`,
 					label: "프로그램 등록 테스트 루틴",
-					spaceId,
-					creatorId: userId,
 				};
 
 				const routineCreateResponse = await request(app.getHttpServer())
 					.post("/api/v1/routines")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId)
+					.set("x-tenant-id", tenantId)
 					.send(routineCreateDto);
 
 				expect(routineCreateResponse.status).toBe(201);
@@ -400,7 +398,7 @@ describe("Timelines API (E2E)", () => {
 						`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}/programs`,
 					)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId)
+					.set("x-tenant-id", tenantId)
 					.send(createDto);
 
 				// Then
@@ -419,7 +417,7 @@ describe("Timelines API (E2E)", () => {
 		describe("GET /api/v1/timelines/:timelineId/sessions/:sessionId/programs", () => {
 			it("세션의 프로그램 목록을 조회할 수 있어야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId || !testTimelineId || !testSessionId) return;
+				if (!jwtToken || !tenantId || !testTimelineId || !testSessionId) return;
 
 				// When
 				const response = await request(app.getHttpServer())
@@ -427,7 +425,7 @@ describe("Timelines API (E2E)", () => {
 						`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}/programs`,
 					)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -442,7 +440,7 @@ describe("Timelines API (E2E)", () => {
 				// Given
 				if (
 					!jwtToken ||
-					!spaceId ||
+					!tenantId ||
 					!testTimelineId ||
 					!testSessionId ||
 					!testProgramId
@@ -460,7 +458,7 @@ describe("Timelines API (E2E)", () => {
 						`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}/programs/${testProgramId}`,
 					)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId)
+					.set("x-tenant-id", tenantId)
 					.send(updateDto);
 
 				// Then
@@ -475,7 +473,7 @@ describe("Timelines API (E2E)", () => {
 				// Given
 				if (
 					!jwtToken ||
-					!spaceId ||
+					!tenantId ||
 					!testTimelineId ||
 					!testSessionId ||
 					!testProgramId
@@ -488,7 +486,7 @@ describe("Timelines API (E2E)", () => {
 						`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}/programs/${testProgramId}`,
 					)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then: 204 No Content
 				expect(deleteResponse.status).toBe(204);
@@ -500,7 +498,7 @@ describe("Timelines API (E2E)", () => {
 						`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}/programs`,
 					)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				expect(listResponse.status).toBe(200);
 				const ids = listResponse.body.data.map((p: { id: string }) => p.id);
@@ -514,7 +512,7 @@ describe("Timelines API (E2E)", () => {
 		describe("DELETE /api/v1/timelines/:timelineId/sessions/:sessionId", () => {
 			it("세션을 삭제하면 204 No Content를 반환해야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId || !testTimelineId || !testSessionId) return;
+				if (!jwtToken || !tenantId || !testTimelineId || !testSessionId) return;
 
 				// When
 				const deleteResponse = await request(app.getHttpServer())
@@ -522,7 +520,7 @@ describe("Timelines API (E2E)", () => {
 						`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}`,
 					)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then: 204 No Content
 				expect(deleteResponse.status).toBe(204);
@@ -532,7 +530,7 @@ describe("Timelines API (E2E)", () => {
 				const getResponse = await request(app.getHttpServer())
 					.get(`/api/v1/timelines/${testTimelineId}/sessions/${testSessionId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				expect(getResponse.status).toBe(404);
 
@@ -544,7 +542,7 @@ describe("Timelines API (E2E)", () => {
 		describe("DELETE /api/v1/timelines/:timelineId", () => {
 			it("세션이 없는 타임라인을 삭제하면 204 No Content를 반환해야 한다", async () => {
 				// Given: 삭제 전용 타임라인 생성 (세션 없음)
-				if (!jwtToken || !spaceId) return;
+				if (!jwtToken || !tenantId) return;
 
 				const createDto = {
 					name: `삭제용 타임라인 ${Date.now()}`,
@@ -554,7 +552,7 @@ describe("Timelines API (E2E)", () => {
 				const createResponse = await request(app.getHttpServer())
 					.post("/api/v1/timelines")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId)
+					.set("x-tenant-id", tenantId)
 					.send(createDto);
 
 				expect(createResponse.status).toBe(201);
@@ -564,7 +562,7 @@ describe("Timelines API (E2E)", () => {
 				const deleteResponse = await request(app.getHttpServer())
 					.delete(`/api/v1/timelines/${deleteTargetId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then: 204 No Content
 				expect(deleteResponse.status).toBe(204);
@@ -574,7 +572,7 @@ describe("Timelines API (E2E)", () => {
 				const getResponse = await request(app.getHttpServer())
 					.get(`/api/v1/timelines/${deleteTargetId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				expect(getResponse.status).toBe(404);
 			});
@@ -684,8 +682,8 @@ describe("Timelines API (E2E)", () => {
 			});
 		});
 
-		describe("x-space-id 헤더 누락", () => {
-			it("x-space-id 없이 타임라인 목록 조회 시 400 또는 403을 반환해야 한다", async () => {
+		describe("x-tenant-id 헤더 누락", () => {
+			it("x-tenant-id 없이 타임라인 목록 조회 시 400 또는 403을 반환해야 한다", async () => {
 				// Given
 				if (!jwtToken) return;
 
@@ -702,7 +700,7 @@ describe("Timelines API (E2E)", () => {
 		describe("입력 검증 실패 (400)", () => {
 			it("name 없이 타임라인 등록 시 400을 반환해야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId) return;
+				if (!jwtToken || !tenantId) return;
 
 				const invalidDto = {
 					description: "이름이 없는 타임라인",
@@ -713,7 +711,7 @@ describe("Timelines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.post("/api/v1/timelines")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId)
+					.set("x-tenant-id", tenantId)
 					.send(invalidDto);
 
 				// Then
@@ -722,13 +720,13 @@ describe("Timelines API (E2E)", () => {
 
 			it("유효하지 않은 UUID로 타임라인 상세 조회 시 400을 반환해야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId) return;
+				if (!jwtToken || !tenantId) return;
 
 				// When
 				const response = await request(app.getHttpServer())
 					.get("/api/v1/timelines/not-a-valid-uuid")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then
 				expect(response.status).toBe(400);
@@ -736,13 +734,13 @@ describe("Timelines API (E2E)", () => {
 
 			it("유효하지 않은 UUID로 세션 목록 조회 시 400을 반환해야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId) return;
+				if (!jwtToken || !tenantId) return;
 
 				// When
 				const response = await request(app.getHttpServer())
 					.get("/api/v1/timelines/not-a-uuid/sessions")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then
 				expect(response.status).toBe(400);
@@ -752,7 +750,7 @@ describe("Timelines API (E2E)", () => {
 		describe("리소스 미존재 (404)", () => {
 			it("존재하지 않는 타임라인 ID로 상세 조회 시 404를 반환해야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId) return;
+				if (!jwtToken || !tenantId) return;
 
 				const nonExistentId = "00000000-0000-0000-0000-000000000099";
 
@@ -760,7 +758,7 @@ describe("Timelines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.get(`/api/v1/timelines/${nonExistentId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then
 				expect(response.status).toBe(404);
@@ -768,7 +766,7 @@ describe("Timelines API (E2E)", () => {
 
 			it("존재하지 않는 타임라인 ID로 수정 시 404를 반환해야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId) return;
+				if (!jwtToken || !tenantId) return;
 
 				const nonExistentId = "00000000-0000-0000-0000-000000000099";
 
@@ -776,7 +774,7 @@ describe("Timelines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.patch(`/api/v1/timelines/${nonExistentId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId)
+					.set("x-tenant-id", tenantId)
 					.send({ name: "수정 시도" });
 
 				// Then
@@ -785,7 +783,7 @@ describe("Timelines API (E2E)", () => {
 
 			it("존재하지 않는 타임라인 ID로 삭제 시 404를 반환해야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId) return;
+				if (!jwtToken || !tenantId) return;
 
 				const nonExistentId = "00000000-0000-0000-0000-000000000099";
 
@@ -793,7 +791,7 @@ describe("Timelines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.delete(`/api/v1/timelines/${nonExistentId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then
 				expect(response.status).toBe(404);
@@ -801,7 +799,7 @@ describe("Timelines API (E2E)", () => {
 
 			it("존재하지 않는 타임라인의 세션 목록 조회 시 404를 반환해야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId) return;
+				if (!jwtToken || !tenantId) return;
 
 				const nonExistentId = "00000000-0000-0000-0000-000000000099";
 
@@ -809,7 +807,7 @@ describe("Timelines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.get(`/api/v1/timelines/${nonExistentId}/sessions`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then
 				expect(response.status).toBe(404);
@@ -817,13 +815,13 @@ describe("Timelines API (E2E)", () => {
 
 			it("존재하지 않는 세션 ID로 상세 조회 시 404를 반환해야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId) return;
+				if (!jwtToken || !tenantId) return;
 
 				// 유효한 타임라인 생성 후 존재하지 않는 세션 ID로 조회
 				const timelineRes = await request(app.getHttpServer())
 					.post("/api/v1/timelines")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId)
+					.set("x-tenant-id", tenantId)
 					.send({ name: `404 세션 테스트 타임라인 ${Date.now()}` });
 
 				if (timelineRes.status !== 201) return;
@@ -838,7 +836,7 @@ describe("Timelines API (E2E)", () => {
 						`/api/v1/timelines/${tempTimelineId}/sessions/${nonExistentSessionId}`,
 					)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then
 				expect(response.status).toBe(404);
@@ -851,13 +849,13 @@ describe("Timelines API (E2E)", () => {
 	describe("Edge Cases", () => {
 		it("타임라인 목록 응답에 stats(통계) 정보가 포함되어야 한다", async () => {
 			// Given
-			if (!jwtToken || !spaceId) return;
+			if (!jwtToken || !tenantId) return;
 
 			// When
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/timelines")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("x-space-id", spaceId);
+				.set("x-tenant-id", tenantId);
 
 			// Then
 			expect(response.status).toBe(200);
@@ -867,7 +865,7 @@ describe("Timelines API (E2E)", () => {
 
 		it("빈 body로 타임라인 수정 시 200을 반환해야 한다 (변경사항 없음)", async () => {
 			// Given: 수정 테스트용 타임라인 생성
-			if (!jwtToken || !spaceId) return;
+			if (!jwtToken || !tenantId) return;
 
 			const createDto = {
 				name: `빈 수정 테스트 타임라인 ${Date.now()}`,
@@ -877,7 +875,7 @@ describe("Timelines API (E2E)", () => {
 			const createResponse = await request(app.getHttpServer())
 				.post("/api/v1/timelines")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("x-space-id", spaceId)
+				.set("x-tenant-id", tenantId)
 				.send(createDto);
 
 			expect(createResponse.status).toBe(201);
@@ -888,7 +886,7 @@ describe("Timelines API (E2E)", () => {
 			const updateResponse = await request(app.getHttpServer())
 				.patch(`/api/v1/timelines/${timelineId}`)
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("x-space-id", spaceId)
+				.set("x-tenant-id", tenantId)
 				.send({});
 
 			// Then: 변경사항 없이 200 반환
@@ -898,14 +896,14 @@ describe("Timelines API (E2E)", () => {
 
 		it("검색어로 타임라인 목록을 필터링할 수 있어야 한다", async () => {
 			// Given
-			if (!jwtToken || !spaceId) return;
+			if (!jwtToken || !tenantId) return;
 
 			// When
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/timelines")
 				.query({ search: "테스트" })
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("x-space-id", spaceId);
+				.set("x-tenant-id", tenantId);
 
 			// Then
 			expect(response.status).toBe(200);
@@ -914,12 +912,12 @@ describe("Timelines API (E2E)", () => {
 
 		it("세션 목록 조회 응답에 meta(페이지네이션) 정보가 포함되어야 한다", async () => {
 			// Given: 세션을 가진 타임라인 생성
-			if (!jwtToken || !spaceId) return;
+			if (!jwtToken || !tenantId) return;
 
 			const createTimelineRes = await request(app.getHttpServer())
 				.post("/api/v1/timelines")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("x-space-id", spaceId)
+				.set("x-tenant-id", tenantId)
 				.send({
 					name: `세션 페이지네이션 테스트 타임라인 ${Date.now()}`,
 				});
@@ -933,7 +931,7 @@ describe("Timelines API (E2E)", () => {
 				.get(`/api/v1/timelines/${tempTimelineId}/sessions`)
 				.query({ skip: 0, take: 10 })
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("x-space-id", spaceId);
+				.set("x-tenant-id", tenantId);
 
 			// Then
 			expect(response.status).toBe(200);

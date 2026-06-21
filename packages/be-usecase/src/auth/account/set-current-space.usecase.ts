@@ -17,18 +17,19 @@ export class SetCurrentSpaceUseCase {
 
 	async execute(command: SetCurrentSpaceCommand): Promise<AuthSpaceResult> {
 		const user = this.cls.get<UserWithTenantsLike>(CONTEXT_KEYS.AUTH_USER);
-		if (
-			!user?.tenants?.some((tenant) => tenant.spaceId === command.input.spaceId)
-		) {
-			throw new ForbiddenException("해당 Space를 선택할 권한이 없습니다");
+		const tenant = user?.tenants?.find(
+			(tenant) => tenant.id === command.input.tenantId,
+		);
+		if (!tenant) {
+			throw new ForbiddenException("해당 Tenant를 선택할 권한이 없습니다");
 		}
 
 		const spaces = await getAccessibleSpacesForUser(this.spacesService, user);
 		const selectedSpace = spaces.find(
-			(space) => space.id === command.input.spaceId,
+			(space) => space.tenantId === command.input.tenantId,
 		);
 		if (!selectedSpace) {
-			throw new BadRequestException("선택한 Space를 찾을 수 없습니다");
+			throw new BadRequestException("선택한 Tenant의 Space를 찾을 수 없습니다");
 		}
 
 		return selectedSpace;

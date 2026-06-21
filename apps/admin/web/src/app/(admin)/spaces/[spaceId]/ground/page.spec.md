@@ -9,7 +9,7 @@
 
 ### 목적
 
-특정 시설(Ground)의 상세 정보를 조회합니다. 기본 정보, 이미지, 연결된 Space 정보를 표시합니다.
+Company가 보유한 대표 서비스 시설(Ground)의 상세 정보를 조회합니다. Company의 사업자 정보와 Ground의 기본 정보, 이미지, 연결된 Space 정보를 표시합니다.
 
 ### 주요 기능
 
@@ -24,9 +24,9 @@
 
 | 행위자 | 접근 가능 여부 | 비고 |
 |-------|---------------|------|
-| ACT-001 (FULL_ACCESS) | 가능 | 조회 + 수정 버튼 표시 |
-| ACT-002 (MANAGE) | 가능 (조회만) | 수정 버튼 미표시 |
-| ACT-003 (VIEW) | 가능 (조회만) | 수정 버튼 미표시 |
+| ACT-001 (PLATFORM_ADMIN) | 가능 | 조회 + 수정 버튼 표시 |
+| ACT-002 (COMPANY_MANAGER) | 가능 (조회만) | 수정 버튼 미표시 |
+| ACT-003 (MEMBER) | 가능 (조회만) | 수정 버튼 미표시 |
 
 ## L4: 화면 구조 (Screen)
 
@@ -40,7 +40,7 @@
 │   ├── 주소 (address)
 │   ├── 전화번호 (phone)
 │   ├── 이메일 (email)
-│   ├── 사업자등록번호 (businessNo)
+│   ├── 회사 사업자등록번호 (businessNo)
 │   ├── 등록일 (createdAt)
 │   └── 수정일 (updatedAt)
 ├── 섹션 영역 (title="이미지") [이미지 있을 때만]
@@ -59,7 +59,7 @@
 | address | 주소 | 텍스트 | - |
 | phone | 전화번호 | 텍스트 | - |
 | email | 이메일 | 텍스트 (링크) | mailto: 링크 |
-| businessNo | 사업자등록번호 | 텍스트 | - |
+| businessNo | 회사 사업자등록번호 | 텍스트 | Company에서 파생 |
 | createdAt | 등록일 | 날짜 포맷 | - |
 | updatedAt | 수정일 | 날짜 포맷 | 없으면 "-" |
 | logoImageFileId | 로고 이미지 | Image | 없으면 섹션 미표시 |

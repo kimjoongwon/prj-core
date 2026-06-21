@@ -13,10 +13,13 @@ import { setNestApp } from "../src/setNestApp";
 
 const TEST_JWT_SECRET = "test-jwt-secret-e2e";
 const USER_ID = "00000000-0000-4000-8000-000000000021";
-const SPACE_MANAGE_ID = "11111111-1111-4111-8111-111111111111";
-const SPACE_FULL_ACCESS_ID = "22222222-2222-4222-8222-222222222222";
-const SPACE_VIEW_ID = "33333333-3333-4333-8333-333333333333";
+const COMPANY_MANAGER_SPACE_ID = "11111111-1111-4111-8111-111111111111";
+const PLATFORM_ADMIN_SPACE_ID = "22222222-2222-4222-8222-222222222222";
+const MEMBER_SPACE_ID = "33333333-3333-4333-8333-333333333333";
 const UNKNOWN_SPACE_ID = "55555555-5555-4555-8555-555555555555";
+const COMPANY_MANAGER_TENANT_ID = "10000000-0000-4000-8000-000000000021";
+const PLATFORM_ADMIN_TENANT_ID = "20000000-0000-4000-8000-000000000021";
+const MEMBER_TENANT_ID = "30000000-0000-4000-8000-000000000021";
 const SPACE_RESULT_ID = "66666666-6666-4666-8666-666666666666";
 const GROUND_ID = "77777777-7777-4777-8777-777777777777";
 
@@ -26,19 +29,19 @@ function createTestUser() {
 		email: "spaces-e2e@example.com",
 		tenants: [
 			{
-				id: "10000000-0000-4000-8000-000000000021",
-				spaceId: SPACE_MANAGE_ID,
-				role: { name: SYSTEM_ROLES.MANAGE },
+				id: COMPANY_MANAGER_TENANT_ID,
+				spaceId: COMPANY_MANAGER_SPACE_ID,
+				role: { name: SYSTEM_ROLES.COMPANY_MANAGER },
 			},
 			{
-				id: "20000000-0000-4000-8000-000000000021",
-				spaceId: SPACE_FULL_ACCESS_ID,
-				role: { name: SYSTEM_ROLES.FULL_ACCESS },
+				id: PLATFORM_ADMIN_TENANT_ID,
+				spaceId: PLATFORM_ADMIN_SPACE_ID,
+				role: { name: SYSTEM_ROLES.PLATFORM_ADMIN },
 			},
 			{
-				id: "30000000-0000-4000-8000-000000000021",
-				spaceId: SPACE_VIEW_ID,
-				role: { name: SYSTEM_ROLES.VIEW },
+				id: MEMBER_TENANT_ID,
+				spaceId: MEMBER_SPACE_ID,
+				role: { name: SYSTEM_ROLES.MEMBER },
 			},
 		],
 	};
@@ -149,7 +152,7 @@ describe("Spaces API (E2E)", () => {
 		expect(response.status).toBe(401);
 	});
 
-	it("인증은 있지만 x-space-id가 없으면 400을 반환해야 한다", async () => {
+	it("인증은 있지만 x-tenant-id가 없으면 400을 반환해야 한다", async () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/spaces")
 			.set("Authorization", `Bearer ${jwtToken}`);
@@ -157,25 +160,25 @@ describe("Spaces API (E2E)", () => {
 		expect(response.status).toBe(400);
 	});
 
-	it("비 FULL_ACCESS tenant는 현재 선택한 space 하나만 목록 필터로 전달해야 한다", async () => {
+	it("비 PLATFORM_ADMIN tenant는 현재 선택한 space 하나만 목록 필터로 전달해야 한다", async () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/spaces")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-space-id", SPACE_VIEW_ID);
+			.set("x-tenant-id", MEMBER_TENANT_ID);
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
 		expect(response.body.data).toBeInstanceOf(Array);
 		expect(spaceServiceMock.listSpaces).toHaveBeenCalledWith({
-			spaceIds: [SPACE_VIEW_ID],
+			spaceIds: [MEMBER_SPACE_ID],
 		});
 	});
 
-	it("FULL_ACCESS tenant는 전체 space 조회로 전달해야 한다", async () => {
+	it("PLATFORM_ADMIN tenant는 전체 space 조회로 전달해야 한다", async () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/spaces")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-space-id", SPACE_FULL_ACCESS_ID);
+			.set("x-tenant-id", PLATFORM_ADMIN_TENANT_ID);
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
@@ -186,33 +189,33 @@ describe("Spaces API (E2E)", () => {
 
 	it("현재 접근 가능한 space의 ground는 조회할 수 있어야 한다", async () => {
 		const response = await request(app.getHttpServer())
-			.get(`/api/v1/spaces/${SPACE_VIEW_ID}/ground`)
+			.get(`/api/v1/spaces/${MEMBER_SPACE_ID}/ground`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-space-id", SPACE_VIEW_ID);
+			.set("x-tenant-id", MEMBER_TENANT_ID);
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
-		expect(response.body.data.spaceId).toBe(SPACE_VIEW_ID);
+		expect(response.body.data.spaceId).toBe(MEMBER_SPACE_ID);
 		expect(spaceServiceMock.getGroundBySpaceId).toHaveBeenCalledWith(
-			SPACE_VIEW_ID,
+			MEMBER_SPACE_ID,
 		);
 	});
 
-	it("비 FULL_ACCESS tenant는 다른 space ground 조회 시 403을 반환해야 한다", async () => {
+	it("비 PLATFORM_ADMIN tenant는 다른 space ground 조회 시 403을 반환해야 한다", async () => {
 		const response = await request(app.getHttpServer())
-			.get(`/api/v1/spaces/${SPACE_MANAGE_ID}/ground`)
+			.get(`/api/v1/spaces/${COMPANY_MANAGER_SPACE_ID}/ground`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-space-id", SPACE_VIEW_ID);
+			.set("x-tenant-id", MEMBER_TENANT_ID);
 
 		expect(response.status).toBe(403);
 		expect(spaceServiceMock.getGroundBySpaceId).not.toHaveBeenCalled();
 	});
 
-	it("FULL_ACCESS tenant는 다른 space ground도 조회할 수 있어야 한다", async () => {
+	it("PLATFORM_ADMIN tenant는 다른 space ground도 조회할 수 있어야 한다", async () => {
 		const response = await request(app.getHttpServer())
 			.get(`/api/v1/spaces/${UNKNOWN_SPACE_ID}/ground`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-space-id", SPACE_FULL_ACCESS_ID);
+			.set("x-tenant-id", PLATFORM_ADMIN_TENANT_ID);
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
@@ -232,14 +235,14 @@ describe("Spaces API (E2E)", () => {
 			businessNo: "1234567890",
 			logoImageFileId: null,
 			imageFileId: null,
-			spaceId: SPACE_MANAGE_ID,
+			spaceId: COMPANY_MANAGER_SPACE_ID,
 			contentLanguageCode: "ko_KR",
 		};
 
 		const response = await request(app.getHttpServer())
 			.post("/api/v1/spaces")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-space-id", SPACE_MANAGE_ID)
+			.set("x-tenant-id", COMPANY_MANAGER_TENANT_ID)
 			.send(createDto);
 
 		expect(response.status).toBe(201);
@@ -257,24 +260,24 @@ describe("Spaces API (E2E)", () => {
 		};
 
 		const response = await request(app.getHttpServer())
-			.patch(`/api/v1/spaces/${SPACE_VIEW_ID}/ground`)
+			.patch(`/api/v1/spaces/${MEMBER_SPACE_ID}/ground`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-space-id", SPACE_VIEW_ID)
+			.set("x-tenant-id", MEMBER_TENANT_ID)
 			.send(updateDto);
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
 		expect(spaceServiceMock.updateGroundBySpaceId).toHaveBeenCalledWith(
-			SPACE_VIEW_ID,
+			MEMBER_SPACE_ID,
 			updateDto,
 		);
 	});
 
 	it("접근 불가한 space의 ground 수정은 403을 반환해야 한다", async () => {
 		const response = await request(app.getHttpServer())
-			.patch(`/api/v1/spaces/${SPACE_MANAGE_ID}/ground`)
+			.patch(`/api/v1/spaces/${COMPANY_MANAGER_SPACE_ID}/ground`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-space-id", SPACE_VIEW_ID)
+			.set("x-tenant-id", MEMBER_TENANT_ID)
 			.send({ name: "Blocked update" });
 
 		expect(response.status).toBe(403);
@@ -285,7 +288,7 @@ describe("Spaces API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/spaces/not-a-valid-uuid/ground")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-space-id", SPACE_VIEW_ID);
+			.set("x-tenant-id", MEMBER_TENANT_ID);
 
 		expect(response.status).toBe(400);
 		expect(spaceServiceMock.getGroundBySpaceId).not.toHaveBeenCalled();

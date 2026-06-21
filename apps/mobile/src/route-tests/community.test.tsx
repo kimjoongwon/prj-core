@@ -153,7 +153,8 @@ describe("mobile community tab route", () => {
 		mockInvalidateQueries.mockReset();
 		mobileApiScopeStore.clear();
 		mobileApiScopeStore.setSpaceInfo({
-			spaceId: "space-1",
+			tenantId: "tenant-1",
+      spaceId: "space-1",
 			groundName: "강남점",
 			contentLanguageCode: "ko_KR",
 		});

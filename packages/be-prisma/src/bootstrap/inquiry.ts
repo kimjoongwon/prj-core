@@ -8,6 +8,7 @@ import {
 } from "../demo-data";
 import type { PrismaClient } from "../generated/client/client";
 import { Prisma } from "../generated/client/client";
+import { requireTenantIdForSpace } from "./tenant-scope";
 
 /**
  * inquiry 도메인 데모 데이터를 단계적으로 적재합니다.
@@ -23,7 +24,11 @@ export async function createInquiryDomainData(
 	console.log("========================================");
 
 	const users = await prisma.user.findMany();
-	const grounds = await prisma.ground.findMany();
+	const grounds = await prisma.ground.findMany({
+		include: {
+			company: true,
+		},
+	});
 
 	// Inquiry seeds reference users/grounds by business keys, so materialize
 	// lookup maps once before the staged inserts below.
@@ -33,7 +38,7 @@ export async function createInquiryDomainData(
 	console.log("\n[1/6] Inquiry 생성 중...");
 	// Later inquiry child tables are all keyed off the inquiry number from the
 	// seed source, so we keep the resolved DB ids here.
-	const inquiryByNumber = new Map<string, { id: string; spaceId: string }>();
+	const inquiryByNumber = new Map<string, { id: string }>();
 	let inquiryCreated = 0;
 	let inquirySkipped = 0;
 
@@ -53,6 +58,11 @@ export async function createInquiryDomainData(
 			const assignee = inquiryData.assigneeEmail
 				? userByEmail.get(inquiryData.assigneeEmail)
 				: null;
+			const tenantId = await requireTenantIdForSpace(
+				prisma,
+				ground.company.spaceId,
+				assignee?.id ?? customer?.id,
+			);
 
 			const now = new Date();
 			const slaResponseDue = new Date(now.getTime() + 24 * 60 * 60 * 1000);
@@ -60,7 +70,7 @@ export async function createInquiryDomainData(
 
 			const inquiry = await prisma.inquiry.create({
 				data: {
-					spaceId: ground.spaceId,
+					tenantId,
 					inquiryNumber: inquiryData.inquiryNumber,
 					title: inquiryData.title,
 					category: inquiryData.category as
@@ -112,14 +122,12 @@ export async function createInquiryDomainData(
 
 			inquiryByNumber.set(inquiryData.inquiryNumber, {
 				id: inquiry.id,
-				spaceId: inquiry.spaceId,
 			});
 			inquiryCreated++;
 			console.log(`  - Inquiry 생성: ${inquiryData.inquiryNumber}`);
 		} else {
 			inquiryByNumber.set(inquiryData.inquiryNumber, {
 				id: existing.id,
-				spaceId: existing.spaceId,
 			});
 			inquirySkipped++;
 		}

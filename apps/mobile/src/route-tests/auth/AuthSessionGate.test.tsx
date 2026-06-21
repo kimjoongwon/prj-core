@@ -107,6 +107,7 @@ describe("AuthSessionGate", () => {
 	it("세션 검증 시 현재 Space를 Core API 요청 scope에 연결한다", async () => {
 		const currentSpace = {
 			id: "space-branch",
+			tenantId: "tenant-branch",
 			contentLanguageCode: "ko_KR",
 			ground: { address: "서울 강남구", name: "강남점" },
 		};
@@ -118,6 +119,7 @@ describe("AuthSessionGate", () => {
 							contentLanguageCode: "ko_KR",
 							groundName: "강남점",
 							spaceId: "space-branch",
+							tenantId: "tenant-branch",
 						})
 					: null,
 		);
@@ -140,6 +142,7 @@ describe("AuthSessionGate", () => {
 
 		expect(verified).toBe(true);
 		expect(mobileAuthStore.authStatus).toBe("authenticated");
+		expect(mobileApiScopeStore.tenantId).toBe("tenant-branch");
 		expect(mobileApiScopeStore.spaceId).toBe("space-branch");
 		expect(mobileApiScopeStore.groundName).toBe("강남점");
 		expect(mobileApiScopeStore.isSpaceSelectionResolved).toBe(true);

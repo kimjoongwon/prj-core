@@ -10,7 +10,7 @@ import { PrismaQueryDto } from "./prisma-query.dto";
 /**
  * Course 목록 조회용 Query DTO
  *
- * 자동 매핑: status(enum), spaceId(*Id)
+ * 자동 매핑: status(enum), tenantId(*Id)
  * 커스텀 처리: search(name OR description)
  */
 export class QueryCourseDto extends PrismaQueryDto<Prisma.CourseWhereInput> {
@@ -22,8 +22,8 @@ export class QueryCourseDto extends PrismaQueryDto<Prisma.CourseWhereInput> {
 	})
 	status?: CourseStatus;
 
-	@UUIDFieldOptional({ description: "스페이스 ID 필터" })
-	spaceId?: string;
+	@UUIDFieldOptional({ description: "테넌트 ID 필터" })
+	tenantId?: string;
 
 	@StringFieldOptional({
 		each: true,

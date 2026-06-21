@@ -12,6 +12,7 @@ import {
 	RepeatCycleTypes,
 	SessionTypes,
 } from "../generated/client/enums";
+import { requireTenantIdForSpace } from "./tenant-scope";
 
 /**
  * seed key에서 결정론적 UUID를 만듭니다.
@@ -152,6 +153,7 @@ export async function createTimelineSessionExerciseDomainData(
 	const [grounds, creators, fallbackUser] = await Promise.all([
 		prisma.ground.findMany({
 			where: { name: { in: timelineGroundNames } },
+			include: { company: true },
 		}),
 		prisma.user.findMany({ where: { email: { in: creatorEmails } } }),
 		prisma.user.findFirst({ where: { email: "admin@plate.com" } }),
@@ -182,6 +184,11 @@ export async function createTimelineSessionExerciseDomainData(
 		}
 
 		const creator = creatorByEmail.get(timelineData.creatorEmail);
+		const tenantId = await requireTenantIdForSpace(
+			prisma,
+			ground.company.spaceId,
+			creator?.id,
+		);
 		const existingTimeline = await prisma.timeline.findUnique({
 			where: { id: timelineData.id },
 		});
@@ -191,14 +198,14 @@ export async function createTimelineSessionExerciseDomainData(
 			update: {
 				name: timelineData.name,
 				description: timelineData.description,
-				spaceId: ground.spaceId,
+				tenantId,
 				creatorId: creator?.id ?? null,
 			},
 			create: {
 				id: timelineData.id,
 				name: timelineData.name,
 				description: timelineData.description,
-				spaceId: ground.spaceId,
+				tenantId,
 				creatorId: creator?.id,
 			},
 		});
@@ -232,6 +239,11 @@ export async function createTimelineSessionExerciseDomainData(
 		const creatorId = timelineCreatorEmail
 			? (creatorByEmail.get(timelineCreatorEmail)?.id ?? fallbackUser.id)
 			: fallbackUser.id;
+		const tenantId = await requireTenantIdForSpace(
+			prisma,
+			ground.company.spaceId,
+			creatorId,
+		);
 
 		const selectedTaskIds: string[] = [];
 
@@ -255,12 +267,12 @@ export async function createTimelineSessionExerciseDomainData(
 			await prisma.task.upsert({
 				where: { id: taskId },
 				update: {
-					spaceId: ground.spaceId,
+					tenantId,
 					creatorId: creatorId ?? null,
 				},
 				create: {
 					id: taskId,
-					spaceId: ground.spaceId,
+					tenantId,
 					creatorId,
 				},
 			});
@@ -341,6 +353,11 @@ export async function createTimelineSessionExerciseDomainData(
 		const creatorId = creatorEmail
 			? (creatorByEmail.get(creatorEmail)?.id ?? fallbackUser.id)
 			: fallbackUser.id;
+		const tenantId = await requireTenantIdForSpace(
+			prisma,
+			ground.company.spaceId,
+			creatorId,
+		);
 
 		const routineCount = Math.min(
 			4,
@@ -361,14 +378,14 @@ export async function createTimelineSessionExerciseDomainData(
 			await prisma.routine.upsert({
 				where: { id: routineId },
 				update: {
-					spaceId: ground.spaceId,
+					tenantId,
 					creatorId: creatorId ?? null,
 					name: `${template.name} 루틴 ${idx + 1}`,
 					label: `${groundName} ${template.level}`,
 				},
 				create: {
 					id: routineId,
-					spaceId: ground.spaceId,
+					tenantId,
 					creatorId,
 					name: `${template.name} 루틴 ${idx + 1}`,
 					label: `${groundName} ${template.level}`,

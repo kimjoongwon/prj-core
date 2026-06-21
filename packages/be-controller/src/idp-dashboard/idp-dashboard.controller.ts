@@ -18,7 +18,7 @@ import { ApiOperation, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("IDP_DASHBOARD")
 @Controller()
-@Roles([SYSTEM_ROLES.FULL_ACCESS])
+@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 @SkipSpaceCheck()
 export class IdpDashboardController {
 	constructor(private readonly queryBus: QueryBus) {}

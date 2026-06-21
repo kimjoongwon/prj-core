@@ -11,9 +11,9 @@ export * from "./ai-agent-log.entity";
 export * from "./album.entity";
 export * from "./album-entry.entity";
 export * from "./asset.entity";
-export * from "./assignment.entity";
 export * from "./auth-audit-log.entity";
 export * from "./category.entity";
+export * from "./company.entity";
 // Course Domain Entities
 export * from "./course.entity";
 export * from "./course-offering.entity";

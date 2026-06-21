@@ -258,7 +258,7 @@ function selectTimelineSeedsByGround() {
 
 async function ensureFallbackRoutine(params: {
 	prisma: PrismaClient;
-	spaceId: string;
+	tenantId: string;
 	creatorId?: string | null;
 	groundName: string;
 }) {
@@ -266,14 +266,14 @@ async function ensureFallbackRoutine(params: {
 	return params.prisma.routine.upsert({
 		where: { id: routineId },
 		update: {
-			spaceId: params.spaceId,
+			tenantId: params.tenantId,
 			creatorId: params.creatorId ?? null,
 			name: "모바일 예약 데모 루틴",
 			label: `${params.groundName} 모바일 데모`,
 		},
 		create: {
 			id: routineId,
-			spaceId: params.spaceId,
+			tenantId: params.tenantId,
 			creatorId: params.creatorId ?? null,
 			name: "모바일 예약 데모 루틴",
 			label: `${params.groundName} 모바일 데모`,
@@ -290,14 +290,14 @@ async function ensureFallbackRoutine(params: {
 
 async function findRoutineForProgram(params: {
 	prisma: PrismaClient;
-	spaceId: string;
+	tenantId: string;
 	creatorId?: string | null;
 	groundName: string;
 	seedKey: string;
 }) {
 	const routines = await params.prisma.routine.findMany({
 		where: {
-			spaceId: params.spaceId,
+			tenantId: params.tenantId,
 			removedAt: null,
 		},
 		include: {
@@ -350,7 +350,24 @@ export async function createMobileReservationDemoData(
 	const [timelines, users, fallbackInstructor] = await Promise.all([
 		prisma.timeline.findMany({
 			where: { id: { in: timelineIds }, removedAt: null },
-			include: { space: { include: { ground: true } } },
+			include: {
+				tenant: {
+					include: {
+						space: {
+							include: {
+								company: {
+									include: {
+										grounds: {
+											where: { removedAt: null },
+											orderBy: { createdAt: "asc" },
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		}),
 		prisma.user.findMany({
 			where: { email: { in: userEmails } },
@@ -389,7 +406,8 @@ export async function createMobileReservationDemoData(
 			continue;
 		}
 
-		const groundName = timeline.space.ground?.name ?? timelineSeed.groundName;
+		const [primaryGround] = timeline.tenant.space.company?.grounds ?? [];
+		const groundName = primaryGround?.name ?? timelineSeed.groundName;
 		const courseId = stableUuid(`mobile-demo-course:${groundName}`);
 		const offeringId = stableUuid(`mobile-demo-offering:${timeline.id}`);
 
@@ -399,7 +417,7 @@ export async function createMobileReservationDemoData(
 		await prisma.course.upsert({
 			where: { id: courseId },
 			update: {
-				spaceId: timeline.spaceId,
+				tenantId: timeline.tenantId,
 				name: `${groundName} 모바일 예약 패스`,
 				description: "모바일 예약 피드 검증을 위한 2026년 5월 데모 수강권",
 				durationMonths: 1,
@@ -409,7 +427,7 @@ export async function createMobileReservationDemoData(
 			},
 			create: {
 				id: courseId,
-				spaceId: timeline.spaceId,
+				tenantId: timeline.tenantId,
 				name: `${groundName} 모바일 예약 패스`,
 				description: "모바일 예약 피드 검증을 위한 2026년 5월 데모 수강권",
 				durationMonths: 1,
@@ -427,7 +445,7 @@ export async function createMobileReservationDemoData(
 			where: { id: offeringId },
 			update: {
 				courseId,
-				spaceId: timeline.spaceId,
+				tenantId: timeline.tenantId,
 				timelineId: timeline.id,
 				timelineProvisioningMode: TimelineProvisioningMode.SHARED,
 				name: "2026년 5월 모바일 예약 오픈",
@@ -441,7 +459,7 @@ export async function createMobileReservationDemoData(
 			create: {
 				id: offeringId,
 				courseId,
-				spaceId: timeline.spaceId,
+				tenantId: timeline.tenantId,
 				timelineId: timeline.id,
 				timelineProvisioningMode: TimelineProvisioningMode.SHARED,
 				name: "2026년 5월 모바일 예약 오픈",
@@ -501,7 +519,7 @@ export async function createMobileReservationDemoData(
 
 				const routine = await findRoutineForProgram({
 					prisma,
-					spaceId: timeline.spaceId,
+					tenantId: timeline.tenantId,
 					creatorId: timeline.creatorId,
 					groundName,
 					seedKey: `${timeline.id}:${dateKey}:${slot.code}`,
@@ -695,7 +713,7 @@ export async function createMobileReservationDemoData(
 			await prisma.reservation.upsert({
 				where: { id: reservationId },
 				update: {
-					spaceId: timeline.spaceId,
+					tenantId: timeline.tenantId,
 					userId: user.id,
 					coursePassId,
 					timelineId: timeline.id,
@@ -712,7 +730,7 @@ export async function createMobileReservationDemoData(
 				},
 				create: {
 					id: reservationId,
-					spaceId: timeline.spaceId,
+					tenantId: timeline.tenantId,
 					userId: user.id,
 					coursePassId,
 					timelineId: timeline.id,

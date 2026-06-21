@@ -51,7 +51,7 @@ export class FoldersController {
 	@Get()
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.VIEW, SYSTEM_ROLES.MANAGE, SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.MEMBER, SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "getFolders",
 		summary: "폴더 목록 조회",
@@ -69,7 +69,7 @@ export class FoldersController {
 	@Post()
 	@HttpCode(HttpStatus.CREATED)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.MANAGE, SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "createFolder",
 		summary: "폴더 생성",
@@ -96,7 +96,7 @@ export class FoldersController {
 	@Patch(":folderId")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.MANAGE, SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "updateFolder",
 		summary: "폴더 수정",
@@ -120,7 +120,7 @@ export class FoldersController {
 	@Delete(":folderId")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.MANAGE, SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "deleteFolder",
 		summary: "폴더 삭제",

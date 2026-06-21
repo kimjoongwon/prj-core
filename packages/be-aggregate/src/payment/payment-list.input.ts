@@ -9,7 +9,7 @@ export interface PaymentListInput {
 	skip?: number;
 	take?: number;
 	search?: string | null;
-	spaceId?: string;
+	tenantId?: string;
 	payerUserId?: string;
 	status?: PaymentStatus;
 	method?: PaymentMethod;

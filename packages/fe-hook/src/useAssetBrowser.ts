@@ -143,7 +143,7 @@ export function useAssetBrowser({
 	};
 	const isStoreReady =
 		persistStore.isHydrated && persistStore.isSpaceSelectionResolved;
-	const hasSelectedSpace = Boolean(persistStore.spaceId);
+	const hasSelectedSpace = Boolean(persistStore.tenantId);
 	const isQueryEnabled = isStoreReady && hasSelectedSpace && enabled;
 
 	const { data: assetsResponse, isLoading: isLoadingAssets } = useGetAssets(

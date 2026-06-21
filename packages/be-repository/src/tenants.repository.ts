@@ -36,7 +36,6 @@ export class TenantsRepository {
 				user: true,
 				space: true,
 				role: true,
-				assignments: true,
 			},
 		});
 

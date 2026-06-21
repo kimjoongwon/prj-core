@@ -11,7 +11,7 @@ import type { Derivative } from "./derivative.entity";
 import type { Document } from "./document.entity";
 import type { Folder } from "./folder.entity";
 import type { Image } from "./image.entity";
-import type { Space } from "./space.entity";
+import type { Tenant } from "./tenant.entity";
 import type { User } from "./user.entity";
 import type { Video } from "./video.entity";
 
@@ -19,7 +19,7 @@ export class Asset extends AbstractEntity implements AssetEntity {
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	spaceId!: string;
+	tenantId!: string;
 	folderId!: string;
 	kind!: AssetKind;
 	status!: AssetStatus;
@@ -39,7 +39,7 @@ export class Asset extends AbstractEntity implements AssetEntity {
 	// ============================================================================
 	// 관계 필드 (선택적)
 	// ============================================================================
-	space?: Space;
+	tenant?: Tenant;
 	folder?: Folder;
 	creator?: User | null;
 	image?: Image | null;

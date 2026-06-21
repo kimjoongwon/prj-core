@@ -22,7 +22,7 @@ export class GetCourseOfferingsUseCase {
 			take,
 			search: query.query.search ?? null,
 			courseId: query.query.courseId,
-			spaceId: query.query.spaceId,
+			tenantId: query.query.tenantId,
 			timelineId: query.query.timelineId,
 			status: query.query.status,
 			timelineProvisioningMode: query.query.timelineProvisioningMode,

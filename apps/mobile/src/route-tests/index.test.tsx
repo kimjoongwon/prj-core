@@ -403,6 +403,7 @@ describe("mobile reservation booking routes", () => {
   beforeEach(() => {
     mobileApiScopeStore.clear();
     mobileApiScopeStore.setSpaceInfo({
+      tenantId: "tenant-1",
       spaceId: "space-1",
       groundName: "강남점",
       contentLanguageCode: "ko_KR",

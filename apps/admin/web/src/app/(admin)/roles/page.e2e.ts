@@ -5,9 +5,9 @@ const ADMIN_API_BASE_URL = new URL(
 	"/api/v1",
 	process.env.E2E_CORE_API_BASE_URL ?? "http://localhost:3000/",
 ).toString();
-const SYSTEM_SPACE_ID =
-	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
-const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_SPACE_ID);
+const SYSTEM_TENANT_ID =
+	process.env.E2E_SYSTEM_TENANT_ID ?? "71ddca20-1752-466e-b4da-879ebdbe54e3";
+const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_TENANT_ID);
 const roleListHeading = (page: Page) =>
 	page.getByRole("heading", { name: "역할 목록", exact: true });
 
@@ -42,10 +42,10 @@ test.describe("역할 목록 페이지", () => {
 
 			// Then: 시스템 역할 3종 확인 (exact: true로 info 텍스트의 부분 매칭 방지)
 			await expect(
-				page.getByText("FULL_ACCESS", { exact: true }),
+				page.getByText("PLATFORM_ADMIN", { exact: true }),
 			).toBeVisible();
-			await expect(page.getByText("MANAGE", { exact: true })).toBeVisible();
-			await expect(page.getByText("VIEW", { exact: true })).toBeVisible();
+			await expect(page.getByText("COMPANY_MANAGER", { exact: true })).toBeVisible();
+			await expect(page.getByText("MEMBER", { exact: true })).toBeVisible();
 		});
 
 		test("역할 추가 버튼이 표시되어야 한다", async ({ page }) => {
@@ -194,13 +194,13 @@ test.describe("역할 목록 페이지", () => {
 		});
 	});
 
-	// ── E2E-005: 조회 권한 사용자 제한 확인 ──
+	// ── E2E-005: Company 관리자 권한 제한 확인 ──
 
-	test.describe("[E2E-005] 조회 권한 제한 (MANAGE 사용자)", () => {
-		test.skip(true, "MANAGE 사용자 로그인 설정 필요");
+	test.describe("[E2E-005] Company 관리자 권한 제한", () => {
+		test.skip(true, "COMPANY_MANAGER 사용자 로그인 설정 필요");
 
 		test("역할 추가 버튼이 숨겨져야 한다", async ({ page }) => {
-			// Given: MANAGE 사용자로 역할 목록 진입
+			// Given: COMPANY_MANAGER 사용자로 역할 목록 진입
 			await gotoRoleListPage(page);
 
 			// Then: 역할 추가 버튼 숨김

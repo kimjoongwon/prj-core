@@ -20,12 +20,12 @@
 
 | ID | 화면명 | 경로 | 설명 | 필요 권한 |
 |----|--------|------|------|----------|
-| L4-SCR-001 | 역할 목록 | `/roles` | 전체 역할 목록 표시 | MANAGE |
-| L4-SCR-002 | 역할 상세 | `/roles/:roleId` | 역할 상세 정보 및 부여된 Ability 목록 | MANAGE |
-| L4-SCR-003 | 역할 등록 | `/roles/new` | 새 역할 생성 폼 | FULL_ACCESS |
-| L4-SCR-004 | 역할 수정 | `/roles/:roleId/edit` | 역할 정보 수정 폼 | FULL_ACCESS |
-| L4-SCR-005 | Role 권한 설정 | `/roles/:roleId/abilities` | Role에 Ability 부여 (Grant 관리) | FULL_ACCESS |
-| L4-SCR-006 | User 예외 권한 설정 | `/users/:userId/abilities` | User에 예외 Ability 부여 (Grant 관리) | FULL_ACCESS |
+| L4-SCR-001 | 역할 목록 | `/roles` | 전체 역할 목록 표시 | COMPANY_MANAGER |
+| L4-SCR-002 | 역할 상세 | `/roles/:roleId` | 역할 상세 정보 및 부여된 Ability 목록 | COMPANY_MANAGER |
+| L4-SCR-003 | 역할 등록 | `/roles/new` | 새 역할 생성 폼 | PLATFORM_ADMIN |
+| L4-SCR-004 | 역할 수정 | `/roles/:roleId/edit` | 역할 정보 수정 폼 | PLATFORM_ADMIN |
+| L4-SCR-005 | Role 권한 설정 | `/roles/:roleId/abilities` | Role에 Ability 부여 (Grant 관리) | PLATFORM_ADMIN |
+| L4-SCR-006 | User 예외 권한 설정 | `/users/:userId/abilities` | User에 예외 Ability 부여 (Grant 관리) | PLATFORM_ADMIN |
 
 ### 화면 흐름도
 
@@ -72,7 +72,7 @@
      │────────────────────────>│                            │
      │                         │  SpaceAccessGuard 검사     │
      │                         │  RolesGuard 검사            │
-     │                         │  (MANAGE/FULL_ACCESS)       │
+     │                         │  (COMPANY_MANAGER/PLATFORM_ADMIN)       │
      │                         │                            │
      │                         │  SELECT * FROM roles       │
      │                         │───────────────────────────>│

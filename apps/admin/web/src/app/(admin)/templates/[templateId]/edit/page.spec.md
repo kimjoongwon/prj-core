@@ -158,7 +158,7 @@
 - 수정 시 code, type은 전송하지 않음 (읽기 전용)
 - 변수 업데이트는 전체 교체 방식 (Set semantics): id 있으면 수정, 없으면 생성, 요청에 없으면 삭제
 - 로컬 상태 관리: `useLocalObservable` (MobX)
-- FULL_ACCESS 권한 필요
+- PLATFORM_ADMIN 권한 필요
 - `TemplateForm`은 입력 블록만 렌더링하며 SectionSurface는 페이지가 `ScreenSurface`, `SectionSurface`로 제공
 
 ## 구현 체크리스트

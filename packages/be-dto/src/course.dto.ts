@@ -11,11 +11,11 @@ import { AbstractDto } from "./abstract.dto";
 import { CourseOfferingDto } from "./course-offering.dto";
 import { CoursePassDto } from "./course-pass.dto";
 import { EnrollmentDto } from "./enrollment.dto";
-import { SpaceDto } from "./space.dto";
+import { TenantDto } from "./tenant.dto";
 
 export class CourseDto extends AbstractDto implements Course {
-	@UUIDField({ description: "소속 Space ID" })
-	spaceId!: string;
+	@UUIDField({ description: "소속 Tenant ID" })
+	tenantId!: string;
 
 	@StringField({ description: "코스명", minLength: 1, maxLength: 120 })
 	name!: string;
@@ -50,11 +50,11 @@ export class CourseDto extends AbstractDto implements Course {
 	@NumberField({ description: "활성 수강 등록 수", int: true, min: 0 })
 	activeEnrollmentCount!: number;
 
-	@ClassField(() => SpaceDto, {
-		description: "소속 Space",
+	@ClassField(() => TenantDto, {
+		description: "소속 Tenant",
 		required: false,
 	})
-	space?: SpaceDto;
+	tenant?: TenantDto;
 
 	@ClassField(() => CourseOfferingDto, {
 		description: "코스 개설 목록",

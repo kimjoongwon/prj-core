@@ -50,7 +50,7 @@ export class TenantAccessRequestsController {
 		operationId: "getTenantAccessRequests",
 		summary: "테넌트 접근 신청 승인 목록 조회",
 		description:
-			"FULL_ACCESS는 전체 신청을, MANAGE는 본인이 관리하는 Space의 신청만 조회합니다.",
+			"PLATFORM_ADMIN은 전체 신청을, COMPANY_MANAGER는 본인이 관리하는 Space의 신청만 조회합니다.",
 	})
 	@ApiAuth()
 	@ApiErrors({ status: 401, message: USER_ERRORS.USER_NOT_FOUND }, 500)
@@ -77,7 +77,7 @@ export class TenantAccessRequestsController {
 		operationId: "getTenantAccessRequest",
 		summary: "테넌트 접근 신청 상세 조회",
 		description:
-			"FULL_ACCESS는 전체 신청을, MANAGE는 본인이 관리하는 Space의 신청만 상세 조회합니다.",
+			"PLATFORM_ADMIN은 전체 신청을, COMPANY_MANAGER는 본인이 관리하는 Space의 신청만 상세 조회합니다.",
 	})
 	@ApiAuth()
 	@ApiParam({
@@ -112,7 +112,7 @@ export class TenantAccessRequestsController {
 		operationId: "approveTenantAccessRequest",
 		summary: "테넌트 접근 신청 승인",
 		description:
-			"승인 시 requester의 user+space Tenant를 생성하거나 roleId를 갱신합니다. MANAGE는 본인 Space의 non-FULL_ACCESS 신청만 승인할 수 있습니다.",
+			"승인 시 requester의 user+space Tenant를 생성하거나 roleId를 갱신합니다. COMPANY_MANAGER는 본인 Space의 non-PLATFORM_ADMIN 신청만 승인할 수 있습니다.",
 	})
 	@ApiAuth()
 	@ApiParam({
@@ -129,7 +129,7 @@ export class TenantAccessRequestsController {
 		{ status: 403, message: "해당 Space 신청을 처리할 권한이 없습니다" },
 		{
 			status: 403,
-			message: "MANAGE 권한자는 FULL_ACCESS 역할 신청을 승인할 수 없습니다",
+			message: "COMPANY_MANAGER 권한자는 PLATFORM_ADMIN 역할 신청을 승인할 수 없습니다",
 		},
 		{ status: 404, message: "테넌트 접근 신청을 찾을 수 없습니다" },
 		500,
@@ -157,7 +157,7 @@ export class TenantAccessRequestsController {
 		operationId: "rejectTenantAccessRequest",
 		summary: "테넌트 접근 신청 반려",
 		description:
-			"FULL_ACCESS는 전체 신청을, MANAGE는 본인이 관리하는 Space의 신청만 반려합니다. FULL_ACCESS 역할 신청도 반려할 수 있습니다.",
+			"PLATFORM_ADMIN은 전체 신청을, COMPANY_MANAGER는 본인이 관리하는 Space의 신청만 반려합니다. PLATFORM_ADMIN 역할 신청도 반려할 수 있습니다.",
 	})
 	@ApiAuth()
 	@ApiParam({

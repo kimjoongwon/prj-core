@@ -1,6 +1,5 @@
 export * from "./update-ability.dto";
 export * from "./update-action.dto";
-export * from "./update-assignment.dto";
 export * from "./update-exercise.dto";
 export * from "./update-ground.dto";
 export * from "./update-oidc-client.dto";

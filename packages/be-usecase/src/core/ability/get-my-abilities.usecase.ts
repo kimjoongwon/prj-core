@@ -18,10 +18,6 @@ export class GetMyAbilitiesUseCase {
 		const user = this.cls.get<
 			| {
 					id: string;
-					tenants?: Array<{
-						spaceId: string;
-						roleId?: string | null;
-					}>;
 			  }
 			| undefined
 		>(CONTEXT_KEYS.AUTH_USER);
@@ -29,24 +25,23 @@ export class GetMyAbilitiesUseCase {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
 
-		const spaceId = this.cls.get<string | undefined>(CONTEXT_KEYS.SPACE_ID);
-		if (!spaceId) {
+		const tenant = this.cls.get<
+			| {
+					id: string;
+					roleId?: string | null;
+			  }
+			| undefined
+		>(CONTEXT_KEYS.TENANT);
+		if (!tenant?.id) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		const roleIds = Array.from(
-			new Set(
-				(user.tenants ?? [])
-					.filter((tenant) => tenant.spaceId === spaceId)
-					.map((tenant) => tenant.roleId)
-					.filter((roleId): roleId is string => Boolean(roleId)),
-			),
-		);
+		const roleIds = tenant.roleId ? [tenant.roleId] : [];
 
 		this.logger.debug(
-			`현재 사용자 권한 조회: userId=${user.id.slice(-8)}, spaceId=${spaceId.slice(-8)}, roleIds=${roleIds.length}`,
+			`현재 사용자 권한 조회: userId=${user.id.slice(-8)}, tenantId=${tenant.id.slice(-8)}, roleIds=${roleIds.length}`,
 		);
 
-		return this.abilitiesService.getMergedAbilities(roleIds, user.id, spaceId);
+		return this.abilitiesService.getMergedAbilities(roleIds, user.id, tenant.id);
 	}
 }

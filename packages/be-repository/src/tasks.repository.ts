@@ -28,9 +28,9 @@ export class TasksRepository {
 
 		const where: Prisma.TaskWhereInput = {
 			removedAt: null,
-			...(params.spaceIds ? { spaceId: { in: params.spaceIds } } : {}),
+			...(params.spaceIds ? { tenant: { spaceId: { in: params.spaceIds } } } : {}),
 			...(params.contentLanguageCode
-				? { space: { contentLanguageCode: params.contentLanguageCode } }
+				? { tenant: { space: { contentLanguageCode: params.contentLanguageCode } } }
 				: {}),
 			exercise: {
 				is: {
@@ -47,7 +47,7 @@ export class TasksRepository {
 				where,
 				include: {
 					exercise: true,
-					space: { select: { id: true } },
+					tenant: { select: { id: true, spaceId: true } },
 					creator: { select: { id: true, name: true } },
 				},
 				orderBy: { createdAt: "desc" },
@@ -70,7 +70,7 @@ export class TasksRepository {
 			where: {
 				id: taskId,
 				removedAt: null,
-				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
+				...(spaceIds ? { tenant: { spaceId: { in: spaceIds } } } : {}),
 				exercise: {
 					is: {
 						removedAt: null,
@@ -79,7 +79,7 @@ export class TasksRepository {
 			},
 			include: {
 				exercise: true,
-				space: { select: { id: true } },
+				tenant: { select: { id: true, spaceId: true } },
 				creator: { select: { id: true, name: true } },
 			},
 		});
@@ -101,7 +101,7 @@ export class TasksRepository {
 			where: {
 				id: { in: taskIds },
 				removedAt: null,
-				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
+				...(spaceIds ? { tenant: { spaceId: { in: spaceIds } } } : {}),
 				exercise: {
 					is: {
 						removedAt: null,
@@ -110,7 +110,7 @@ export class TasksRepository {
 			},
 			include: {
 				exercise: true,
-				space: { select: { id: true } },
+				tenant: { select: { id: true, spaceId: true } },
 				creator: { select: { id: true, name: true } },
 			},
 		});
@@ -144,7 +144,7 @@ export class TasksRepository {
 			data,
 			include: {
 				exercise: true,
-				space: { select: { id: true } },
+				tenant: { select: { id: true, spaceId: true } },
 				creator: { select: { id: true, name: true } },
 			},
 		});
@@ -169,7 +169,7 @@ export class TasksRepository {
 			where: { id: taskId },
 			include: {
 				exercise: true,
-				space: { select: { id: true } },
+				tenant: { select: { id: true, spaceId: true } },
 				creator: { select: { id: true, name: true } },
 			},
 		});
@@ -196,7 +196,7 @@ export class TasksRepository {
 			where: { id: taskId },
 			include: {
 				exercise: true,
-				space: { select: { id: true } },
+				tenant: { select: { id: true, spaceId: true } },
 				creator: { select: { id: true, name: true } },
 			},
 		});

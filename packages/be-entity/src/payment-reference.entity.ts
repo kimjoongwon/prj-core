@@ -5,14 +5,14 @@ import type {
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Payment } from "./payment.entity";
-import type { Space } from "./space.entity";
+import type { Tenant } from "./tenant.entity";
 
 export class PaymentReference
 	extends AbstractEntity
 	implements PaymentReferenceEntity
 {
 	paymentId!: string;
-	spaceId!: string;
+	tenantId!: string;
 	serviceCode!: string;
 	referenceType!: PaymentReferenceType;
 	referenceId!: string;
@@ -21,5 +21,5 @@ export class PaymentReference
 	metadata!: Prisma.JsonValue | null;
 
 	payment?: Payment;
-	space?: Space;
+	tenant?: Tenant;
 }

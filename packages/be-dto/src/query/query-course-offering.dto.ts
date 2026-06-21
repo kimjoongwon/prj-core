@@ -15,7 +15,7 @@ import { PrismaQueryDto } from "./prisma-query.dto";
 /**
  * CourseOffering 목록 조회용 Query DTO
  *
- * 자동 매핑: courseId, spaceId, timelineId, status, timelineProvisioningMode
+ * 자동 매핑: courseId, tenantId, timelineId, status, timelineProvisioningMode
  * 커스텀 처리: search(name OR course.name OR timeline.name), recruitingOnly
  */
 export class QueryCourseOfferingDto extends PrismaQueryDto<Prisma.CourseOfferingWhereInput> {
@@ -27,8 +27,8 @@ export class QueryCourseOfferingDto extends PrismaQueryDto<Prisma.CourseOffering
 	@UUIDFieldOptional({ description: "코스 ID 필터" })
 	courseId?: string;
 
-	@UUIDFieldOptional({ description: "스페이스 ID 필터" })
-	spaceId?: string;
+	@UUIDFieldOptional({ description: "테넌트 ID 필터" })
+	tenantId?: string;
 
 	@UUIDFieldOptional({ description: "타임라인 ID 필터" })
 	timelineId?: string;

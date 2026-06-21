@@ -13,7 +13,7 @@ import { PrismaQueryDto } from "../query/prisma-query.dto";
  *
  * 자동 매핑:
  * - name -> containsFilter (일반 string)
- * - parentFolderId, spaceId -> 정확 매칭 (*Id)
+ * - parentFolderId, tenantId -> 정확 매칭 (*Id)
  *
  * 커스텀 처리:
  * - statusFilter -> removedAt 필터
@@ -22,8 +22,8 @@ export class FolderQueryDto extends PrismaQueryDto<Prisma.FolderWhereInput> {
 	@UUIDFieldOptional({ description: "상위 폴더 ID 필터 (null이면 루트)" })
 	parentFolderId?: string;
 
-	@UUIDFieldOptional({ description: "스페이스 ID 필터" })
-	spaceId?: string;
+	@UUIDFieldOptional({ description: "테넌트 ID 필터" })
+	tenantId?: string;
 
 	@StringFieldOptional({ description: "폴더명 검색 (부분 일치)" })
 	name?: string;

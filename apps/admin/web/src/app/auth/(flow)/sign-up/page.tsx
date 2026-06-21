@@ -241,7 +241,7 @@ const SignUpRoutePage = observer(() => {
 		request: selectedSpaceId
 			? {
 					headers: {
-						[REQUEST_HEADER_KEYS.SPACE_ID]: selectedSpaceId,
+						[REQUEST_HEADER_KEYS.TENANT_ID]: selectedSpaceId,
 					},
 				}
 			: undefined,

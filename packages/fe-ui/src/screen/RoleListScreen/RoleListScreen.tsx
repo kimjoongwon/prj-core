@@ -88,7 +88,7 @@ export const RoleListScreen = observer(
 				<VStack gap={4}>
 					<div className="rounded-xl bg-warning-50 p-4 dark:bg-warning-900/20">
 						<p className="text-sm text-warning-700 dark:text-warning-400">
-							<strong>참고:</strong> 시스템 역할(FULL_ACCESS, MANAGE, VIEW)은
+							<strong>참고:</strong> 시스템 역할(PLATFORM_ADMIN, COMPANY_MANAGER, MEMBER)은
 							수정하거나 삭제할 수 없습니다. 권한 설정은 각 역할의 상세
 							페이지에서 관리할 수 있습니다.
 						</p>

@@ -20,7 +20,10 @@ export class FoldersRepository {
 	async findById(id: string): Promise<Folder | null> {
 		this.logger.debug(`ID로 조회: ${id.slice(-8)}`);
 
-		const result = await this.txHost.tx.folder.findUnique({ where: { id } });
+		const result = await this.txHost.tx.folder.findUnique({
+			where: { id },
+			include: { tenant: true },
+		});
 
 		return result ? plainToInstance(Folder, result) : null;
 	}
@@ -31,6 +34,7 @@ export class FoldersRepository {
 		const result = await this.txHost.tx.folder.findUnique({
 			where: { id },
 			include: {
+				tenant: true,
 				children: {
 					orderBy: { sortOrder: "asc" },
 				},
@@ -53,7 +57,8 @@ export class FoldersRepository {
 		this.logger.debug(`Space별 폴더 조회: ${spaceId.slice(-8)}`);
 
 		const result = await this.txHost.tx.folder.findMany({
-			where: { spaceId },
+			where: { tenant: { spaceId } },
+			include: { tenant: true },
 			orderBy: [{ path: "asc" }],
 		});
 
@@ -67,6 +72,7 @@ export class FoldersRepository {
 
 		const result = await this.txHost.tx.folder.findMany({
 			where: { parentFolderId },
+			include: { tenant: true },
 			orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
 		});
 

@@ -1,5 +1,6 @@
 import type { PrismaClient } from "../generated/client/client";
 import { SYSTEM_SPACE_ID } from "../reference-data/constants";
+import { syncReferenceData } from "../reference-data/sync-reference-data";
 import { createAssetDomainData } from "./asset";
 import { ensureSecurityPolicyDefaults } from "./defaults";
 import { createInquiryDomainData } from "./inquiry";
@@ -26,9 +27,10 @@ export async function runBootstrap(prisma: PrismaClient): Promise<void> {
 	// 3) branch classification + domain demo data that depends on those primitives
 	const systemBootstrap = await ensureSystemBootstrap(prisma);
 
-	await createRegularUsersAndGrounds(prisma, systemBootstrap.manageRole);
+	await createRegularUsersAndGrounds(prisma, systemBootstrap.companyManagerRole);
 	await classifyGroundSpacesAsBranch(prisma, SYSTEM_SPACE_ID);
 	await createHierarchicalTenants(prisma, SYSTEM_SPACE_ID);
+	await syncReferenceData(prisma);
 	await createTimelineSessionExerciseDomainData(prisma);
 	await createMobileReservationDemoData(prisma);
 	await ensureSecurityPolicyDefaults(prisma);

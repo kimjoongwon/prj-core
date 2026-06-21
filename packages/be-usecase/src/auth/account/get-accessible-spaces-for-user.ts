@@ -14,8 +14,21 @@ export async function getAccessibleSpacesForUser(
 	const tenantSpaceIds = getOrderedTenantSpaceIds(user);
 	const spaces = await spacesService.findByIdsWithGround(tenantSpaceIds);
 	const spaceById = new Map(spaces.map((space) => [space.id, space]));
+	const tenantBySpaceId = new Map(
+		(user.tenants ?? []).map((tenant) => [tenant.spaceId, tenant]),
+	);
 
-	return tenantSpaceIds
-		.map((spaceId) => spaceById.get(spaceId))
-		.filter((space): space is AuthSpaceResult => Boolean(space));
+	const results: AuthSpaceResult[] = [];
+	for (const spaceId of tenantSpaceIds) {
+		const space = spaceById.get(spaceId);
+		const tenant = tenantBySpaceId.get(spaceId);
+		if (space && tenant) {
+			results.push({
+				...space,
+				tenantId: tenant.id,
+			});
+		}
+	}
+
+	return results;
 }

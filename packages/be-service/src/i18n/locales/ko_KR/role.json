@@ -1,15 +1,15 @@
 {
-  "FULL_ACCESS": {
-    "name": "전체 접근",
-    "description": "시스템의 모든 권한을 가진 전체 접근 역할"
+  "PLATFORM_ADMIN": {
+    "name": "플랫폼 관리자",
+    "description": "플랫폼 전체를 운영하고 모든 Space와 시스템 리소스에 접근하는 역할"
   },
-  "MANAGE": {
-    "name": "관리",
-    "description": "관리 업무를 수행하는 역할"
+  "COMPANY_MANAGER": {
+    "name": "Company 관리자",
+    "description": "특정 Company의 지점, 회원, 예약, 콘텐츠 등 운영 리소스를 관리하는 역할"
   },
-  "VIEW": {
-    "name": "조회",
-    "description": "기본 조회 역할"
+  "MEMBER": {
+    "name": "회원",
+    "description": "자신의 정보와 예약을 관리하고 시설/콘텐츠를 조회하는 역할"
   },
   "category": {
     "SHARED": "공유",

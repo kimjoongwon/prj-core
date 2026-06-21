@@ -49,7 +49,7 @@ export class ServiceDocumentsController {
 	@Get()
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "getServiceDocuments",
 		summary: "서비스 문서 목록 조회",
@@ -67,7 +67,7 @@ export class ServiceDocumentsController {
 	@Post()
 	@HttpCode(HttpStatus.CREATED)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "createServiceDocument",
 		summary: "서비스 문서 등록",
@@ -88,7 +88,7 @@ export class ServiceDocumentsController {
 	@Patch(":serviceDocumentId")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "updateServiceDocument",
 		summary: "서비스 문서 수정",
@@ -120,7 +120,7 @@ export class ServiceDocumentsController {
 	@Patch(":serviceDocumentId/publish")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "publishServiceDocument",
 		summary: "서비스 문서 게시",
@@ -147,7 +147,7 @@ export class ServiceDocumentsController {
 	@Patch(":serviceDocumentId/archive")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "archiveServiceDocument",
 		summary: "서비스 문서 보관",
@@ -173,7 +173,7 @@ export class ServiceDocumentsController {
 	@Delete(":serviceDocumentId")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "deleteServiceDocument",
 		summary: "서비스 문서 삭제",

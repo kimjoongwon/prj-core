@@ -25,11 +25,11 @@ export function useAbilityBootstrap(options: UseAbilityBootstrapOptions = {}) {
 		!isDisabled &&
 		persistStore.isHydrated &&
 		persistStore.isSpaceSelectionResolved &&
-		Boolean(persistStore.spaceId);
+		Boolean(persistStore.tenantId);
 	const query = useGetMyAbilities({
 		query: {
 			enabled: canLoadAbilities,
-			queryKey: ["/api/v1/abilities/my", persistStore.spaceId],
+			queryKey: ["/api/v1/abilities/my", persistStore.tenantId],
 			staleTime: 1000 * 60 * 5,
 			gcTime: 1000 * 60 * 10,
 		},

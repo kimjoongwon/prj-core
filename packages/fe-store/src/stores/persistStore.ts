@@ -16,6 +16,7 @@ export interface PersistStoreConfig {
  * Space 정보 인터페이스 (선택 가능한 Space 목록용)
  */
 export interface SpaceInfo {
+	tenantId: string;
 	spaceId: string;
 	groundName: string;
 	contentLanguageCode?: string | null;
@@ -25,6 +26,7 @@ export interface SpaceInfo {
  * 영속 저장 데이터 인터페이스
  */
 interface PersistedData {
+	tenantId: string | null;
 	spaceId: string | null;
 	groundName: string | null;
 	contentLanguageCode: string | null;
@@ -47,7 +49,7 @@ export interface NativeAuthSession {
 /**
  * PersistStore - 영속 데이터 및 인증 상태 통합 관리
  *
- * - Space/Ground 정보 (spaceId, groundName)
+ * - Tenant/Space/Ground 정보 (tenantId, spaceId, groundName)
  * - 토큰 만료 시간 (httpOnly 쿠키 환경용, number 타입으로 단순 저장)
  * - localStorage 자동 동기화
  *
@@ -60,13 +62,14 @@ export interface NativeAuthSession {
  * });
  *
  * // 사용
- * persistStore.setSpace("space-123", "Ground Name");
+ * persistStore.setSpace("tenant-123", "Ground Name", null, "space-123");
  * persistStore.setTokenExpiries(accessExpiresAt, refreshExpiresAt);
  * persistStore.clear();
  * ```
  */
 export class PersistStore {
 	// Space/Ground 정보
+	tenantId: string | null = null;
 	spaceId: string | null = null;
 	groundName: string | null = null;
 	contentLanguageCode: string | null = null;
@@ -108,6 +111,7 @@ export class PersistStore {
 		if (stored) {
 			try {
 				const data: PersistedData = JSON.parse(stored);
+				this.tenantId = data.tenantId;
 				this.spaceId = data.spaceId;
 				this.groundName = data.groundName;
 				this.contentLanguageCode = data.contentLanguageCode ?? null;
@@ -133,6 +137,7 @@ export class PersistStore {
 
 		reaction(
 			() => ({
+				tenantId: this.tenantId,
 				spaceId: this.spaceId,
 				groundName: this.groundName,
 				contentLanguageCode: this.contentLanguageCode,
@@ -152,18 +157,21 @@ export class PersistStore {
 	// === Space/Ground 관련 ===
 
 	/**
-	 * Space 및 Ground 정보 설정
+	 * Tenant 및 Ground 정보 설정
 	 */
 	setSpace(
-		spaceId: string,
+		tenantId: string,
 		groundName: string,
 		contentLanguageCode?: string | null,
+		spaceId?: string | null,
 	): void {
-		this.spaceId = spaceId;
+		this.tenantId = tenantId;
+		const selectedSpace = this.spaces.find((space) => space.tenantId === tenantId);
+		this.spaceId = spaceId ?? selectedSpace?.spaceId ?? null;
 		this.groundName = groundName;
 		this.contentLanguageCode =
 			contentLanguageCode === undefined
-				? (this.spaces.find((space) => space.spaceId === spaceId)
+				? (selectedSpace
 						?.contentLanguageCode ?? null)
 				: contentLanguageCode;
 	}
@@ -176,6 +184,7 @@ export class PersistStore {
 	 * Space 정보 초기화
 	 */
 	clearSpace(): void {
+		this.tenantId = null;
 		this.spaceId = null;
 		this.groundName = null;
 		this.contentLanguageCode = null;
@@ -272,6 +281,7 @@ export class PersistStore {
 	 * 모든 상태 초기화 (로그아웃 시 호출)
 	 */
 	clear(): void {
+		this.tenantId = null;
 		this.spaceId = null;
 		this.groundName = null;
 		this.contentLanguageCode = null;

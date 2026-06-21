@@ -2,9 +2,9 @@ import { getAdminSpaceRequestHeaders } from "@cocrepo/e2e";
 import { expect, test } from "@playwright/test";
 
 const ADMIN_API_BASE_URL = "http://localhost:3000/api/v1";
-const SYSTEM_SPACE_ID =
-	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
-const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_SPACE_ID);
+const SYSTEM_TENANT_ID =
+	process.env.E2E_SYSTEM_TENANT_ID ?? "71ddca20-1752-466e-b4da-879ebdbe54e3";
+const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_TENANT_ID);
 const TEST_VIDEO_FILE_ID = "11111111-1111-4111-8111-111111111111";
 
 test.describe("태스크 목록 페이지", () => {

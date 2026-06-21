@@ -11,8 +11,8 @@ export interface HeaderSpaceSelectorSpace extends SpaceInfo {}
 export interface HeaderSpaceSelectorProps {
 	/** 선택 가능한 Space 목록 */
 	spaces: SpaceInfo[];
-	/** 현재 선택된 Space ID */
-	currentSpaceId: string | null;
+	/** 현재 선택된 Tenant ID */
+	currentTenantId: string | null;
 	/** 현재 선택된 Space 이름 */
 	currentSpaceName: string | null;
 	/**

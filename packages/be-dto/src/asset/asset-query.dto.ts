@@ -13,7 +13,7 @@ import { PrismaQueryDto } from "../query/prisma-query.dto";
  * 에셋 목록 조회용 Query DTO
  *
  * 자동 매핑:
- * - folderId, spaceId -> 정확 매칭 (*Id)
+ * - folderId, tenantId -> 정확 매칭 (*Id)
  * - kind, status -> 직접 매핑 (enum)
  *
  * 커스텀 처리:
@@ -24,8 +24,8 @@ export class AssetQueryDto extends PrismaQueryDto<Prisma.AssetWhereInput> {
 	@UUIDFieldOptional({ description: "폴더 ID 필터" })
 	folderId?: string;
 
-	@UUIDFieldOptional({ description: "스페이스 ID 필터" })
-	spaceId?: string;
+	@UUIDFieldOptional({ description: "테넌트 ID 필터" })
+	tenantId?: string;
 
 	@EnumFieldOptional(() => AssetKind, { description: "에셋 타입 필터" })
 	kind?: AssetKind;

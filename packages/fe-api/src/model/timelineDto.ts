@@ -18,7 +18,6 @@ export interface TimelineDto {
 	/** @nullable */
 	removedAt: string | null;
 	tenantId: string;
-	spaceId: string;
 	creatorId?: string;
 	name: string;
 	description?: string;

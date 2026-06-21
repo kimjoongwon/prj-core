@@ -1,5 +1,4 @@
 export * from "./create-action.dto";
-export * from "./create-assignment.dto";
 export * from "./create-exercise.dto";
 export * from "./create-ground.dto";
 export * from "./create-oidc-client.dto";

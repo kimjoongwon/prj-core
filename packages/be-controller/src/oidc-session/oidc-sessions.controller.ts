@@ -34,7 +34,7 @@ import { ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("OIDC_SESSIONS")
 @Controller()
-@Roles([SYSTEM_ROLES.FULL_ACCESS])
+@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 @SkipSpaceCheck()
 export class OidcSessionsController {
 	constructor(

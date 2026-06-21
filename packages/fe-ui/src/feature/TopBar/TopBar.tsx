@@ -38,20 +38,20 @@ export const TopBar = observer(function TopBar() {
 			mutation: {
 				onSuccess: (response, variables) => {
 					const currentSpace = response.data;
+					const selectedSpace = persistStore.spaces.find(
+						(space) => space.tenantId === variables.tenantId,
+					);
 					const nextGroundName =
 						currentSpace?.ground?.name ??
-						persistStore.spaces.find(
-							(space) => space.spaceId === variables.spaceId,
-						)?.groundName ??
+						selectedSpace?.groundName ??
 						"";
 					const nextContentLanguageCode =
-						persistStore.spaces.find(
-							(space) => space.spaceId === variables.spaceId,
-						)?.contentLanguageCode ?? null;
+						selectedSpace?.contentLanguageCode ?? null;
 					persistStore.setSpace(
-						variables.spaceId,
+						variables.tenantId,
 						nextGroundName,
 						nextContentLanguageCode,
+						currentSpace?.id ?? selectedSpace?.spaceId ?? null,
 					);
 					window.location.reload();
 				},
@@ -86,7 +86,7 @@ export const TopBar = observer(function TopBar() {
 			return;
 		}
 
-		setCurrentSpaceMutate({ spaceId: space.spaceId });
+		setCurrentSpaceMutate({ tenantId: space.tenantId });
 	};
 
 	const onChangeLanguage = (
@@ -131,7 +131,7 @@ export const TopBar = observer(function TopBar() {
 					<ThemeToggleButton compact className={utilityButtonClassName} />
 					<HeaderSpaceSelector
 						spaces={persistStore.spaces}
-						currentSpaceId={persistStore.spaceId}
+						currentTenantId={persistStore.tenantId}
 						currentSpaceName={persistStore.groundName}
 						onSpaceSelect={onSelectSpace}
 					/>

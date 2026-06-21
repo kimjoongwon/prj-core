@@ -46,9 +46,28 @@ describe("SpacesRepository", () => {
 
 	const mockSpaceWithGround = {
 		...mockSpaceData,
-		ground: {
-			id: "ground-test-id",
-			name: "Test Ground",
+		company: {
+			id: "company-test-id",
+			name: "Test Company",
+			label: "Test Label",
+			address: "Seoul",
+			phone: "02-0000-0000",
+			email: "ground@example.com",
+			businessNo: "123-45-67890",
+			spaceId: mockSpaceData.id,
+			logoImageFileId: null,
+			grounds: [
+				{
+					id: "ground-test-id",
+					name: "Test Ground",
+					label: "Test Label",
+					address: "Seoul",
+					phone: "02-0000-0000",
+					email: "ground@example.com",
+					companyId: "company-test-id",
+					imageFileId: null,
+				},
+			],
 		},
 	};
 
@@ -147,10 +166,21 @@ describe("SpacesRepository", () => {
 			// Then
 			expect(mockTxHost.tx.space.findUnique).toHaveBeenCalledWith({
 				where: { id: spaceId },
-				include: { ground: true },
+				include: {
+					company: {
+						include: {
+							grounds: {
+								where: { removedAt: null },
+								orderBy: { createdAt: "asc" },
+							},
+						},
+					},
+				},
 			});
 			expect(result).toBeInstanceOf(Space);
 			expect(result?.ground).toBeDefined();
+			expect(result?.grounds).toHaveLength(1);
+			expect(result?.ground?.businessNo).toBe("123-45-67890");
 		});
 
 		it("Space가 없으면 null을 반환해야 한다", async () => {

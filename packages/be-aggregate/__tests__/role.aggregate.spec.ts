@@ -11,8 +11,8 @@ describe("RoleAggregate", () => {
 
 	const mockRole = {
 		id: "role-test-id",
-		name: SYSTEM_ROLES.VIEW,
-		description: "기본 조회 역할",
+		name: SYSTEM_ROLES.MEMBER,
+		description: "회원 기본 역할",
 		createdAt: new Date("2024-01-01"),
 		updatedAt: new Date("2024-01-01"),
 	};
@@ -66,7 +66,7 @@ describe("RoleAggregate", () => {
 	});
 
 	describe("getDefaultUserRole", () => {
-		it("기본 VIEW 역할을 조회해야 한다", async () => {
+		it("기본 MEMBER 역할을 조회해야 한다", async () => {
 			// Given
 			mockRepository.findByName.mockResolvedValue(mockRole as unknown as Role);
 
@@ -74,12 +74,12 @@ describe("RoleAggregate", () => {
 			const result = await service.getDefaultUserRole();
 
 			// Then
-			expect(mockRepository.findByName).toHaveBeenCalledWith(SYSTEM_ROLES.VIEW);
+			expect(mockRepository.findByName).toHaveBeenCalledWith(SYSTEM_ROLES.MEMBER);
 			expect(result).toEqual(mockRole);
-			expect(result?.name).toBe(SYSTEM_ROLES.VIEW);
+			expect(result?.name).toBe(SYSTEM_ROLES.MEMBER);
 		});
 
-		it("VIEW 역할이 없으면 null을 반환해야 한다", async () => {
+		it("MEMBER 역할이 없으면 null을 반환해야 한다", async () => {
 			// Given
 			mockRepository.findByName.mockResolvedValue(null);
 
@@ -96,7 +96,7 @@ describe("RoleAggregate", () => {
 			// Given
 			const mockRoles = [
 				mockRole,
-				{ ...mockRole, id: "role-2", name: SYSTEM_ROLES.MANAGE },
+				{ ...mockRole, id: "role-2", name: SYSTEM_ROLES.COMPANY_MANAGER },
 			];
 			mockRepository.findAll.mockResolvedValue(mockRoles as unknown as Role[]);
 

@@ -19,7 +19,7 @@
 //
 // 데이터 관계 개념:
 //   - Tenant: User가 접근 가능한 Space + Role 목록 (권한/자격)
-//   - 현재 작업 중인 Space는 클라이언트에서 관리 (x-space-id 헤더)
+//   - 현재 작업 중인 Tenant는 클라이언트에서 관리 (x-tenant-id 헤더)
 //
 // ============================================================================
 
@@ -32,66 +32,66 @@
 // @extended-by: Profile
 /// @displayName 사용자
 model User {
-  id                  String              @id @default(uuid())
-  updatedAt           DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
-  createdAt           DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
-  removedAt           DateTime?           @map("removed_at") @db.Timestamptz(6)
+  id                           String                @id @default(uuid())
+  updatedAt                    DateTime?             @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdAt                    DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  removedAt                    DateTime?             @map("removed_at") @db.Timestamptz(6)
   /// @displayName 전화번호
-  phone               String              @unique
+  phone                        String                @unique
   /// @displayName 이름
-  name                String              @unique
+  name                         String                @unique
   /// @displayName 이메일
-  email               String              @unique
+  email                        String                @unique
   /// @displayName 비밀번호
-  password            String
+  password                     String
   /// @displayName 로그인 실패 횟수
-  failedLoginAttempts Int                 @default(0) @map("failed_login_attempts")
+  failedLoginAttempts          Int                   @default(0) @map("failed_login_attempts")
   /// @displayName 잠금 해제 시각
-  lockedUntil         DateTime?           @map("locked_until") @db.Timestamptz(6)
+  lockedUntil                  DateTime?             @map("locked_until") @db.Timestamptz(6)
   /// @displayName 영구 잠금 여부
-  isPermanentlyLocked Boolean             @default(false) @map("is_permanently_locked")
+  isPermanentlyLocked          Boolean               @default(false) @map("is_permanently_locked")
   /// @displayName 비밀번호 변경 필요
-  mustChangePassword  Boolean             @default(false) @map("must_change_password")
+  mustChangePassword           Boolean               @default(false) @map("must_change_password")
   /// @displayName 비밀번호 변경일
-  passwordChangedAt   DateTime?           @map("password_changed_at") @db.Timestamptz(6)
+  passwordChangedAt            DateTime?             @map("password_changed_at") @db.Timestamptz(6)
   /// @displayName 마지막 로그인 시각
-  lastLoginAt         DateTime?           @map("last_login_at") @db.Timestamptz(6)
+  lastLoginAt                  DateTime?             @map("last_login_at") @db.Timestamptz(6)
   /// @displayName 마지막 로그인 IP
-  lastLoginIp         String?             @map("last_login_ip")
+  lastLoginIp                  String?               @map("last_login_ip")
   /// @displayName 활성 상태
-  isActive            Boolean             @default(true) @map("is_active")
-  profiles            Profile[]
-  tenants             Tenant[]
-  tenantAccessRequests TenantAccessRequest[] @relation("TenantAccessRequestRequester")
+  isActive                     Boolean               @default(true) @map("is_active")
+  profiles                     Profile[]
+  tenants                      Tenant[]
+  tenantAccessRequests         TenantAccessRequest[] @relation("TenantAccessRequestRequester")
   reviewedTenantAccessRequests TenantAccessRequest[] @relation("TenantAccessRequestReviewer")
-  classification      UserClassification?
-  associations        UserAssociation[]
-  userPolicies        UserPolicy[]
-  passwordHistory     PasswordHistory[]
-  authAuditLogs       AuthAuditLog[]
-  emailVerifications  EmailVerification[]
+  classification               UserClassification?
+  associations                 UserAssociation[]
+  userPolicies                 UserPolicy[]
+  passwordHistory              PasswordHistory[]
+  authAuditLogs                AuthAuditLog[]
+  emailVerifications           EmailVerification[]
   // Creator 관계
-  createdCategories   Category[]
-  createdGroups       Group[]
-  createdContents     Content[]
-  createdTimelines    Timeline[]
-  enrollments         Enrollment[]
-  coursePasses        CoursePass[]
-  payments            Payment[]
-  createdTasks        Task[]
-  createdSafeWallets  SafeWallet[]
-  createdRoutines     Routine[]
-  reservations         Reservation[]
+  createdCategories            Category[]
+  createdGroups                Group[]
+  createdContents              Content[]
+  createdTimelines             Timeline[]
+  enrollments                  Enrollment[]
+  coursePasses                 CoursePass[]
+  payments                     Payment[]
+  createdTasks                 Task[]
+  createdSafeWallets           SafeWallet[]
+  createdRoutines              Routine[]
+  reservations                 Reservation[]
   // Asset 도메인 Creator 관계
-  createdAssets       Asset[]
-  createdFolders      Folder[]
-  createdAlbums       Album[]
+  createdAssets                Asset[]
+  createdFolders               Folder[]
+  createdAlbums                Album[]
   // Inquiry 도메인
-  customerInquiries   Inquiry[]           @relation("InquiryCustomer")
-  assignedInquiries   Inquiry[]           @relation("InquiryAssignee")
-  inquiryMessages     InquiryMessage[]
-  inquiryParticipants InquiryParticipant[]
-  createdThreads      InquiryThread[]
+  customerInquiries            Inquiry[]             @relation("InquiryCustomer")
+  assignedInquiries            Inquiry[]             @relation("InquiryAssignee")
+  inquiryMessages              InquiryMessage[]
+  inquiryParticipants          InquiryParticipant[]
+  createdThreads               InquiryThread[]
 
   @@map("users")
 }

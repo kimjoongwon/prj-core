@@ -97,7 +97,7 @@ export class TimelineAggregate {
 		return this.repository.createTimeline({
 			name: input.name,
 			description: input.description ?? null,
-			spaceId,
+			tenantId: this.getRequiredTenantId(),
 			creatorId,
 		});
 	}
@@ -118,7 +118,7 @@ export class TimelineAggregate {
 		if (input.name && input.name !== timeline.name) {
 			const duplicateCount = await this.repository.countTimelinesWithName(
 				input.name,
-				timeline.spaceId,
+				timeline.tenant.spaceId,
 				timelineId,
 			);
 			if (duplicateCount > 0) {
@@ -151,6 +151,17 @@ export class TimelineAggregate {
 		}
 
 		await this.repository.softDeleteTimeline(timelineId);
+	}
+
+	private getRequiredTenantId(): string {
+		const tenantId = this.spaceContext.tenantId;
+		if (!tenantId) {
+			throw new BadRequestException(
+				"x-tenant-id 헤더가 필요합니다. Tenant를 선택해주세요.",
+			);
+		}
+
+		return tenantId;
 	}
 
 	// ============================================================================

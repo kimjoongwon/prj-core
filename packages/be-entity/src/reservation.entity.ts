@@ -6,7 +6,7 @@ import { AbstractAggregateEntity } from "./abstract-aggregate.entity";
 import type { CoursePass } from "./course-pass.entity";
 import type { Program } from "./program.entity";
 import type { Session } from "./session.entity";
-import type { Space } from "./space.entity";
+import type { Tenant } from "./tenant.entity";
 import type { Timeline } from "./timeline.entity";
 import type { User } from "./user.entity";
 
@@ -14,7 +14,7 @@ export class Reservation
 	extends AbstractAggregateEntity
 	implements ReservationEntity
 {
-	spaceId!: string;
+	tenantId!: string;
 	userId!: string;
 	coursePassId!: string;
 	timelineId!: string;
@@ -29,7 +29,7 @@ export class Reservation
 	canceledAt!: Date | null;
 	cancelReason!: string | null;
 
-	space?: Space;
+	tenant?: Tenant;
 	user?: User;
 	coursePass?: CoursePass;
 	timeline?: Timeline;

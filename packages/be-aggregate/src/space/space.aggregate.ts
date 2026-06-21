@@ -24,7 +24,7 @@ export class SpaceAggregate {
 	}
 
 	/**
-	 * Ground detail이 있는 Space 목록 조회
+	 * Company/Ground detail이 있는 Space 목록 조회
 	 */
 	async listSpaces(params?: {
 		spaceIds?: string[];
@@ -38,7 +38,7 @@ export class SpaceAggregate {
 	}
 
 	/**
-	 * Space의 Ground detail 조회
+	 * Space의 Company 아래 Ground detail 조회
 	 */
 	async getGroundBySpaceId(spaceId: string): Promise<Ground> {
 		const ground = await this.repository.findGroundBySpaceId(spaceId);
@@ -66,7 +66,7 @@ export class SpaceAggregate {
 	}
 
 	/**
-	 * Space + Ground detail 생성
+	 * Space + Company/Ground detail 생성
 	 */
 	@Transactional()
 	async createSpaceWithGround(dto: CreateGroundDto): Promise<Space> {
@@ -86,19 +86,28 @@ export class SpaceAggregate {
 		});
 
 		return this.repository.createGroundBySpaceId(space.id, {
-			name: dto.name,
-			label: dto.label ?? null,
-			address: dto.address,
-			phone: dto.phone,
-			email: dto.email,
-			businessNo: dto.businessNo,
-			logoImageFileId: dto.logoImageFileId ?? null,
-			imageFileId: dto.imageFileId ?? null,
+			company: {
+				name: dto.name,
+				label: dto.label ?? null,
+				address: dto.address,
+				phone: dto.phone,
+				email: dto.email,
+				businessNo: dto.businessNo,
+				logoImageFileId: dto.logoImageFileId ?? null,
+			},
+			ground: {
+				name: dto.name,
+				label: dto.label ?? null,
+				address: dto.address,
+				phone: dto.phone,
+				email: dto.email,
+				imageFileId: dto.imageFileId ?? null,
+			},
 		});
 	}
 
 	/**
-	 * Space의 Ground detail 수정
+	 * Space의 Company/Ground detail 수정
 	 */
 	async updateGroundBySpaceId(
 		spaceId: string,
@@ -113,17 +122,26 @@ export class SpaceAggregate {
 		}
 
 		return this.repository.updateGroundBySpaceId(spaceId, {
-			...(dto.name !== undefined && { name: dto.name }),
-			...(dto.label !== undefined && { label: dto.label }),
-			...(dto.address !== undefined && { address: dto.address }),
-			...(dto.phone !== undefined && { phone: dto.phone }),
-			...(dto.email !== undefined && { email: dto.email }),
-			...(dto.logoImageFileId !== undefined && {
-				logoImageFileId: dto.logoImageFileId,
-			}),
-			...(dto.imageFileId !== undefined && {
-				imageFileId: dto.imageFileId,
-			}),
+			company: {
+				...(dto.name !== undefined && { name: dto.name }),
+				...(dto.label !== undefined && { label: dto.label }),
+				...(dto.address !== undefined && { address: dto.address }),
+				...(dto.phone !== undefined && { phone: dto.phone }),
+				...(dto.email !== undefined && { email: dto.email }),
+				...(dto.logoImageFileId !== undefined && {
+					logoImageFileId: dto.logoImageFileId,
+				}),
+			},
+			ground: {
+				...(dto.name !== undefined && { name: dto.name }),
+				...(dto.label !== undefined && { label: dto.label }),
+				...(dto.address !== undefined && { address: dto.address }),
+				...(dto.phone !== undefined && { phone: dto.phone }),
+				...(dto.email !== undefined && { email: dto.email }),
+				...(dto.imageFileId !== undefined && {
+					imageFileId: dto.imageFileId,
+				}),
+			},
 		});
 	}
 

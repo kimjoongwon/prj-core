@@ -91,8 +91,6 @@ export default observer(function AbilityNewPage() {
 			conditions: conditionsObject,
 			inverted: state.inverted,
 			reason: state.inverted ? state.reason.trim() || undefined : undefined,
-			isActive: true,
-			priority: 0,
 		};
 
 		createAbility({ data: dto });

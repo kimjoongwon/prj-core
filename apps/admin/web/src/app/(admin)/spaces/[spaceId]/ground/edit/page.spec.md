@@ -9,30 +9,30 @@
 
 ### 목적
 
-기존 시설(Ground)의 정보를 수정합니다. 사업자등록번호는 변경 불가하며, 기본 정보와 이미지를 수정할 수 있습니다. 플랫폼 관리자(FULL_ACCESS)만 사용 가능합니다.
+기존 회사(Company)와 대표 서비스 시설(Ground)의 표시 정보를 수정합니다. 사업자등록번호는 Company 식별자라 변경 불가하며, 기본 정보와 이미지를 수정할 수 있습니다. 플랫폼 관리자(PLATFORM_ADMIN)만 사용 가능합니다.
 
 ### 주요 기능
 
 | ID | 기능 | 설명 |
 |----|------|------|
 | F-001 | 현재 정보 로드 | 기존 시설 정보를 폼에 미리 채워 표시 |
-| F-002 | 기본 정보 수정 | 시설명, 라벨, 주소, 전화번호, 이메일 수정 (사업자등록번호 제외) |
+| F-002 | 기본 정보 수정 | 시설명, 라벨, 주소, 전화번호, 이메일 수정 (회사 사업자등록번호 제외) |
 | F-003 | 이미지 수정 | 로고 이미지, 대표 이미지 변경 |
 | F-004 | 수정 제출 | 유효성 검사 후 PATCH API 호출 |
 | F-005 | 취소 | 상세 페이지(`/spaces/[spaceId]/ground`)로 이동 |
 
 ### 특이사항
 
-- `businessNo`(사업자등록번호)는 수정 불가 - 읽기 전용 표시
-- 등록 시 자동 생성된 Space는 Ground 수정으로 변경 불가 (Space 관리는 별도)
+- `businessNo`(회사 사업자등록번호)는 수정 불가 - 읽기 전용 표시
+- 등록 시 자동 생성된 Space는 Company/대표 Ground 수정으로 변경 불가 (Space 관리는 별도)
 
 ### 접근 권한
 
 | 행위자 | 접근 가능 여부 | 비고 |
 |-------|---------------|------|
-| ACT-001 (FULL_ACCESS) | 가능 | - |
-| ACT-002 (MANAGE) | 불가 | 403 또는 리다이렉트 |
-| ACT-003 (VIEW) | 불가 | 403 또는 리다이렉트 |
+| ACT-001 (PLATFORM_ADMIN) | 가능 | - |
+| ACT-002 (COMPANY_MANAGER) | 불가 | 403 또는 리다이렉트 |
+| ACT-003 (MEMBER) | 불가 | 403 또는 리다이렉트 |
 
 ## L4: 화면 구조 (Screen)
 
@@ -64,7 +64,7 @@
 | address | 주소 | Input (text) | O | O | 최소 1자 이상 |
 | phone | 전화번호 | Input (tel) | O | O | 전화번호 형식 |
 | email | 이메일 | Input (email) | O | O | 이메일 형식 |
-| businessNo | 사업자등록번호 | Input (text, disabled) | - | X | 읽기 전용 |
+| businessNo | 회사 사업자등록번호 | Input (text, disabled) | - | X | Company 식별자라 읽기 전용 |
 | logoImageFileId | 로고 이미지 | FileUpload | X | O | 이미지 파일 |
 | imageFileId | 대표 이미지 | FileUpload | X | O | 이미지 파일 |
 

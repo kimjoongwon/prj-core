@@ -29,8 +29,8 @@ export class RoleAggregate {
 	 * 회원가입 시 사용
 	 */
 	getDefaultUserRole(): Promise<Role | null> {
-		this.logger.debug("기본 사용자 역할(VIEW) 조회");
-		return this.repository.findByName(SYSTEM_ROLES.VIEW);
+		this.logger.debug("기본 사용자 역할(MEMBER) 조회");
+		return this.repository.findByName(SYSTEM_ROLES.MEMBER);
 	}
 
 	/**

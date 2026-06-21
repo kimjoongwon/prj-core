@@ -18,8 +18,8 @@ export class PaymentReferenceDto
 	@UUIDField({ description: "결제 ID" })
 	paymentId!: string;
 
-	@UUIDField({ description: "소속 Space ID" })
-	spaceId!: string;
+	@UUIDField({ description: "소속 Tenant ID" })
+	tenantId!: string;
 
 	@StringField({ description: "서비스 코드", maxLength: 80 })
 	serviceCode!: string;

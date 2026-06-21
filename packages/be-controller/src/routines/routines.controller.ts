@@ -102,7 +102,7 @@ export class RoutinesController {
 	@Post()
 	@HttpCode(HttpStatus.CREATED)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.MANAGE, SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "createRoutine",
 		summary: "루틴 등록",
@@ -130,7 +130,7 @@ export class RoutinesController {
 	 */
 	@Patch(":routineId")
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.MANAGE, SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "updateRoutine",
 		summary: "루틴 수정",
@@ -169,7 +169,7 @@ export class RoutinesController {
 	@Delete(":routineId")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.MANAGE, SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "deleteRoutine",
 		summary: "루틴 삭제",

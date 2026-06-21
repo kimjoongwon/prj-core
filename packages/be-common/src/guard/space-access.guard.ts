@@ -10,7 +10,10 @@ import {
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { ClsService } from "nestjs-cls";
-import { resolveTenantSpaceId } from "../util/permission.util";
+import {
+	resolveCurrentTenantById,
+	resolveTenantSpaceId,
+} from "../util/permission.util";
 
 @Injectable()
 export class SpaceAccessGuard implements CanActivate {
@@ -39,11 +42,11 @@ export class SpaceAccessGuard implements CanActivate {
 		// 인증되지 않은 요청은 skip (JwtAuthGuard가 이미 처리)
 		if (!user) return true;
 
-		// CLS에서 spaceId 확인
-		const spaceId = this.cls.get<string | undefined>(CONTEXT_KEYS.SPACE_ID);
-		if (!spaceId) {
+		// CLS에서 tenantId 확인
+		const tenantId = this.cls.get<string | undefined>(CONTEXT_KEYS.TENANT_ID);
+		if (!tenantId) {
 			throw new BadRequestException(
-				"x-space-id 헤더가 필요합니다. Space를 선택해주세요.",
+				"x-tenant-id 헤더가 필요합니다. Tenant를 선택해주세요.",
 			);
 		}
 
@@ -52,13 +55,15 @@ export class SpaceAccessGuard implements CanActivate {
 			throw new ForbiddenException("사용자에게 할당된 테넌트가 없습니다.");
 		}
 
-		const tenant = user.tenants.find(
-			(t: TenantDto) =>
-				resolveTenantSpaceId(t) === spaceId && t.removedAt == null,
-		);
+		const tenant =
+			this.cls.get<TenantDto | undefined>(CONTEXT_KEYS.TENANT) ??
+			resolveCurrentTenantById(user.tenants, tenantId);
 		if (!tenant) {
-			throw new ForbiddenException("해당 Space에 대한 접근 권한이 없습니다.");
+			throw new ForbiddenException("해당 Tenant에 대한 접근 권한이 없습니다.");
 		}
+
+		this.cls.set(CONTEXT_KEYS.TENANT, tenant);
+		this.cls.set(CONTEXT_KEYS.SPACE_ID, resolveTenantSpaceId(tenant));
 
 		return true;
 	}

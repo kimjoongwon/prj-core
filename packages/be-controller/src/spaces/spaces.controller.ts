@@ -48,7 +48,7 @@ export class SpacesController {
 	@ApiOperation({
 		operationId: "getSpaces",
 		summary: "공간 목록 조회",
-		description: "Ground detail이 있는 Space 목록을 조회합니다.",
+		description: "Company와 Ground detail이 있는 Space 목록을 조회합니다.",
 	})
 	@ApiAuth()
 	@ApiErrors(401, 500)
@@ -68,7 +68,8 @@ export class SpacesController {
 	@ApiOperation({
 		operationId: "getSpaceGround",
 		summary: "공간의 시설 detail 조회",
-		description: "Space에 종속된 1:1 Ground detail을 조회합니다.",
+		description:
+			"Space의 Company 아래에 연결된 대표 서비스 Ground detail을 조회합니다.",
 	})
 	@ApiAuth()
 	@ApiParam({
@@ -91,12 +92,12 @@ export class SpacesController {
 	@ApiOperation({
 		operationId: "createSpace",
 		summary: "공간 생성",
-		description: "Space root와 Ground detail을 함께 생성합니다.",
+		description: "Space root와 Company/Ground detail을 함께 생성합니다.",
 	})
 	@ApiAuth()
 	@ApiBody({
 		type: CreateGroundDto,
-		description: "공간 생성에 필요한 Ground detail 정보",
+		description: "공간 생성에 필요한 Company/Ground detail 정보",
 	})
 	@ApiErrors(401, 409, 500)
 	@ApiResponseEntity(SpaceDto, HttpStatus.CREATED)
@@ -109,7 +110,8 @@ export class SpacesController {
 	@ApiOperation({
 		operationId: "updateSpaceGround",
 		summary: "공간의 시설 detail 수정",
-		description: "Space에 종속된 1:1 Ground detail을 수정합니다.",
+		description:
+			"Space의 Company 아래에 연결된 대표 서비스 Ground detail을 수정합니다.",
 	})
 	@ApiAuth()
 	@ApiParam({
@@ -119,7 +121,7 @@ export class SpacesController {
 	})
 	@ApiBody({
 		type: UpdateGroundDto,
-		description: "수정할 Ground detail 정보",
+		description: "수정할 Company/Ground detail 정보",
 	})
 	@ApiErrors(401, 404, 500)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)

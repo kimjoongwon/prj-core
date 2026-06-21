@@ -19,7 +19,7 @@ const createAbility = (
 	}) as AbilityResponseDto;
 
 describe("resolveAbilityBootstrapRules", () => {
-	it("FULL_ACCESS이면 abilities 응답이 비어 있어도 manage all rule을 반환해야 한다", () => {
+	it("PLATFORM_ADMIN이면 abilities 응답이 비어 있어도 manage all rule을 반환해야 한다", () => {
 		const rules = resolveAbilityBootstrapRules({
 			abilities: [],
 			hasFullAccess: true,

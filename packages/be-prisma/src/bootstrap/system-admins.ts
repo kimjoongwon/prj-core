@@ -1,6 +1,6 @@
 import { hash } from "bcrypt";
 import type { Prisma, PrismaClient, User } from "../generated/client/client";
-import { SYSTEM_SPACE_ID } from "../reference-data/constants";
+import { SYSTEM_SPACE_ID, SYSTEM_TENANT_ID } from "../reference-data/constants";
 import { systemAdminSeedData } from "./data/system-users";
 
 type SystemAdminDbClient = PrismaClient | Prisma.TransactionClient;
@@ -57,7 +57,7 @@ async function ensureSystemAdminProfile(
 
 export async function ensureSystemAdminUsers(
 	db: SystemAdminDbClient,
-	fullAccessRoleId: string,
+	platformAdminRoleId: string,
 	options?: {
 		emails?: readonly string[];
 	},
@@ -137,7 +137,7 @@ export async function ensureSystemAdminUsers(
 			where: {
 				userId: systemAdminUser.id,
 				spaceId: SYSTEM_SPACE_ID,
-				roleId: fullAccessRoleId,
+				roleId: platformAdminRoleId,
 				removedAt: null,
 			},
 		});
@@ -145,9 +145,12 @@ export async function ensureSystemAdminUsers(
 		if (!existingTenant) {
 			await db.tenant.create({
 				data: {
+					...(userData.email === "admin@plate.com"
+						? { id: SYSTEM_TENANT_ID }
+						: {}),
 					userId: systemAdminUser.id,
 					spaceId: SYSTEM_SPACE_ID,
-					roleId: fullAccessRoleId,
+					roleId: platformAdminRoleId,
 				},
 			});
 			console.log(`System admin tenant created: ${userData.email}`);

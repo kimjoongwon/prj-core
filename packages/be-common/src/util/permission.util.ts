@@ -44,45 +44,28 @@ export function isRootSpaceCategory(tenant: TenantDto): boolean {
 }
 
 /**
- * 현재 x-space-id에 대응하는 Tenant를 고릅니다.
- * 우선순위:
- * 1. 같은 spaceId + 제거되지 않은 레코드
- * 2. FULL_ACCESS 역할이 있으면 해당 tenant
- * 3. 그 외 첫 번째 tenant
+ * 현재 x-tenant-id에 대응하는 Tenant를 고릅니다.
  */
-export function resolveCurrentTenantForSpace(
+export function resolveCurrentTenantById(
 	tenants: TenantDto[] | null | undefined,
-	spaceId?: string,
+	tenantId?: string,
 ): TenantDto | undefined {
 	if (!tenants?.length) {
 		return undefined;
 	}
-	if (!spaceId) {
+	if (!tenantId) {
 		return undefined;
 	}
 
-	const candidates = tenants.filter(
-		(tenant) =>
-			resolveTenantSpaceId(tenant) === spaceId && tenant.removedAt == null,
+	return tenants.find(
+		(tenant) => tenant.id === tenantId && tenant.removedAt == null,
 	);
-	if (!candidates.length) {
-		return undefined;
-	}
-
-	const fullAccessTenant = candidates.find(
-		(tenant) => tenant.role?.name === SYSTEM_ROLES.FULL_ACCESS,
-	);
-	if (fullAccessTenant) {
-		return fullAccessTenant;
-	}
-
-	return candidates[0];
 }
 
 /**
  * 모든 Space 데이터에 접근 가능한지 확인
- * 현재 선택된 Tenant role이 FULL_ACCESS인 경우 전체 조회를 허용합니다.
+ * 현재 선택된 Tenant role이 PLATFORM_ADMIN인 경우 전체 조회를 허용합니다.
  */
 export function canAccessAllSpaces(tenant: TenantDto): boolean {
-	return tenant.role?.name === SYSTEM_ROLES.FULL_ACCESS;
+	return tenant.role?.name === SYSTEM_ROLES.PLATFORM_ADMIN;
 }

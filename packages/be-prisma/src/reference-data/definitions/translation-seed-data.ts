@@ -151,15 +151,15 @@ const translationDefinitions = [
 		},
 	),
 	defineTranslation(
-		"화면은 현재 선택한 tenant role이 FULL_ACCESS일 때만 열 수 있습니다.",
+		"화면은 현재 선택한 tenant role이 PLATFORM_ADMIN일 때만 열 수 있습니다.",
 		"프론트 UI",
 		{
 			ko_KR:
-				"화면은 현재 선택한 tenant role이 FULL_ACCESS일 때만 열 수 있습니다.",
+				"화면은 현재 선택한 tenant role이 PLATFORM_ADMIN일 때만 열 수 있습니다.",
 			en_US:
-				"can only be opened when the currently selected tenant role has FULL_ACCESS.",
-			zh_CN: "仅当当前选择的 tenant role 为 FULL_ACCESS 时才能打开。",
-			ja_JP: "は現在選択中のtenant roleがFULL_ACCESSの場合のみ開けます。",
+				"can only be opened when the currently selected tenant role has PLATFORM_ADMIN.",
+			zh_CN: "仅当当前选择的 tenant role 为 PLATFORM_ADMIN 时才能打开。",
+			ja_JP: "は現在選択中のtenant roleがPLATFORM_ADMINの場合のみ開けます。",
 		},
 	),
 	defineTranslation(
@@ -188,17 +188,17 @@ const translationDefinitions = [
 		},
 	),
 	defineTranslation(
-		"현재 선택한 tenant role이 FULL_ACCESS가 아니면 global 관리 화면은 열 수 없습니다. 헤더에서 FULL_ACCESS tenant로 전환한 뒤 다시 시도해 주세요.",
+		"현재 선택한 tenant role이 PLATFORM_ADMIN이 아니면 global 관리 화면은 열 수 없습니다. 헤더에서 PLATFORM_ADMIN tenant로 전환한 뒤 다시 시도해 주세요.",
 		"프론트 UI",
 		{
 			ko_KR:
-				"현재 선택한 tenant role이 FULL_ACCESS가 아니면 global 관리 화면은 열 수 없습니다. 헤더에서 FULL_ACCESS tenant로 전환한 뒤 다시 시도해 주세요.",
+				"현재 선택한 tenant role이 PLATFORM_ADMIN이 아니면 global 관리 화면은 열 수 없습니다. 헤더에서 PLATFORM_ADMIN tenant로 전환한 뒤 다시 시도해 주세요.",
 			en_US:
-				"Global management pages require the selected tenant role to have FULL_ACCESS. Switch to a FULL_ACCESS tenant in the header and try again.",
+				"Global management pages require the selected tenant role to have PLATFORM_ADMIN. Switch to a PLATFORM_ADMIN tenant in the header and try again.",
 			zh_CN:
-				"全局管理页面要求当前选择的 tenant role 为 FULL_ACCESS。请在页头切换到 FULL_ACCESS tenant 后重试。",
+				"全局管理页面要求当前选择的 tenant role 为 PLATFORM_ADMIN。请在页头切换到 PLATFORM_ADMIN tenant 后重试。",
 			ja_JP:
-				"global管理画面を開くには、選択中のtenant roleがFULL_ACCESSである必要があります。ヘッダーでFULL_ACCESS tenantに切り替えて再試行してください。",
+				"global管理画面を開くには、選択中のtenant roleがPLATFORM_ADMINである必要があります。ヘッダーでPLATFORM_ADMIN tenantに切り替えて再試行してください。",
 		},
 	),
 	defineTranslation("이전 화면", "프론트 UI", {

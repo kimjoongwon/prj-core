@@ -13,16 +13,16 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 - **상태 관리**: MobX
 - **API**: Orval 자동 생성 React Query 훅
 - **레이아웃**: AdminLayout (데스크톱: Header + Sidebar, 모바일: Header + BottomTab + FAB)
-- **인증**: JWT + X-Space-ID 헤더 기반 Multi-Tenancy
+- **인증**: JWT + X-Tenant-ID 헤더 기반 Multi-Tenancy (`Tenant.spaceId` 파생 scope)
 - **브랜드**: "오노라(Onora)" (AppLogo)
 
 ## L1: 사용자 (행위자)
 
 | ID | 행위자 | 역할 | 설명 |
 |----|-------|------|------|
-| ACT-001 | 플랫폼 관리자 | FULL_ACCESS | 전체 시스템 접근 권한. System Space에서 모든 Space의 데이터를 조회/관리 |
-| ACT-002 | Space 관리자 | MANAGE | 특정 Space 내의 리소스를 관리. 회원, 예약, 콘텐츠, 알림 등 운영 업무 담당 |
-| ACT-003 | 조회자 | VIEW | 특정 Space 내의 리소스를 조회만 가능. 수정/삭제 권한 없음 |
+| ACT-001 | 플랫폼 관리자 | PLATFORM_ADMIN | 전체 시스템 접근 권한. System Space에서 모든 Space의 데이터를 조회/관리 |
+| ACT-002 | Company 관리자 | COMPANY_MANAGER | 특정 Company의 지점, 회원, 예약, 콘텐츠, 알림 등 운영 업무 담당 |
+| ACT-003 | 회원 | MEMBER | 자신의 정보와 예약을 관리하고 시설/콘텐츠를 조회 |
 | ACT-004 | 상담원 | AGENT | 특정 Space 내에서 문의 접수, 처리, 응답 담당. 문의 관련 리소스만 관리 |
 
 ## L2: 사용자 목표 (Goal)
@@ -64,7 +64,7 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | 대시보드 | `/dashboard` | 주요 지표 대시보드 | 폴더 존재 |
 | 시설 (Spaces) | `/spaces` | 시설(Ground) CRUD 관리. Space를 구체화하는 물리적 시설 (이름, 주소, 사업자번호 등) | 기획 중 |
 | 회원 (Users) | `/users` | 회원 CRUD 관리 | 목록 구현 완료, 상세/등록/수정 TODO |
-| 이메일 인증 | `/email-verifications` | 회원가입 전 이메일 인증 요청 목록 조회와 재발송 관리. User 생성 전 데이터이므로 FULL_ACCESS 전역 scope로 운영 | 구현 중 |
+| 이메일 인증 | `/email-verifications` | 회원가입 전 이메일 인증 요청 목록 조회와 재발송 관리. User 생성 전 데이터이므로 PLATFORM_ADMIN 전역 scope로 운영 | 구현 중 |
 | 역할 (Roles) | `/roles` | 역할 정의 및 관리 | 구현 중 |
 | 권한 정의 (Abilities) | `/abilities` | 권한(Ability) CRUD 관리 | 구현 중 |
 | 액션 (Actions) | `/actions` | 액션 CRUD 관리 | 구현 중 |
@@ -132,22 +132,24 @@ Space
 - 폴더별 필터링
 - 검색
 
-## Ground 도메인 맥락
+## Company/Ground 도메인 맥락
 
-Ground는 Space를 구체화하는 물리적 시설입니다. Space 자체는 추상 컨테이너(id만 존재)이고, Ground가 실제 비즈니스 의미(이름, 주소, 사업자번호 등)를 부여합니다.
+Company는 Space를 구체화하는 사업자/운영사 상세입니다. Space 자체는 접근 제어와 테넌트 소속의 기준이고, Company가 사업자번호 같은 회사 정체성을 부여합니다. Ground는 Company 아래의 서비스 시설이며 시설명, 현장 연락처, 이미지처럼 서비스 운영에 가까운 의미를 가집니다. 하나의 Company는 여러 Ground를 보유할 수 있습니다.
 
 ```
-Space (추상) ◄─── Ground (구체화: name, address, phone, email, businessNo)
+Space (접근/테넌트 기준) ◄─── Company (사업자: businessNo, contact)
+                           └─── Ground[] (서비스 시설: name, address, image)
   │
   ├─── Timeline (학기/시즌)
   ├─── Routine (커리큘럼)
   └─── Task/Exercise (운동)
 ```
 
-- Ground와 Space는 1:1 관계입니다
-- Ground 등록 시 새 Space가 자동으로 함께 생성됩니다 (서버에서 처리)
-- FULL_ACCESS 역할만 시설 등록/수정이 가능합니다 (플랫폼 관리자 전용)
-- `businessNo`(사업자등록번호)는 유니크하며 한 번 등록 후 변경 불가합니다
+- Company와 Space는 1:1 관계이고, Company와 Ground는 1:N 관계입니다
+- 현재 Admin의 `/spaces/[spaceId]/ground` 단수 화면은 Company의 대표 Ground를 조회/수정합니다
+- Company/Ground 등록 시 새 Space와 첫 Ground가 자동으로 함께 생성됩니다 (서버에서 처리)
+- PLATFORM_ADMIN 역할만 시설 등록/수정이 가능합니다 (플랫폼 관리자 전용)
+- `businessNo`(회사 사업자등록번호)는 Company의 유니크 식별자이며 한 번 등록 후 변경 불가합니다
 
 ## Program 도메인 맥락
 
@@ -193,8 +195,8 @@ Course
 
 | 대상 | 책임 | 소유/연결 |
 |------|------|----------|
-| Course | 무엇을 배우는지, 기본 수강 기간/가격/정책을 정의 | Space scope root |
-| CourseOffering | 개설된 반/기수/코호트, 모집 기간, 정원, Timeline 연결을 관리 | Course + Space + Timeline |
+| Course | 무엇을 배우는지, 기본 수강 기간/가격/정책을 정의 | Tenant-owned root |
+| CourseOffering | 개설된 반/기수/코호트, 모집 기간, 정원, Timeline 연결을 관리 | Course + Tenant + Timeline |
 | Enrollment | 회원이 CourseOffering에 결제/등록된 상태와 유효기간을 관리 | User + CourseOffering + Payment linkage |
 | CoursePass | 결제 성공 후 발급되는 6개월 기본 수강 권리와 잔여 예약 권리를 관리 | Enrollment 1:1 기본, Reservation이 소비 |
 | Timeline/Session/Program | 수강 권리가 실제 실행되는 일정/회차/프로그램 | CourseOffering 또는 Enrollment에 연결 |
@@ -208,8 +210,8 @@ Course 계열 Prisma/DTO/Entity/Repository/Service/UseCase/Controller/Module과 
 
 | 타입 | 필수 필드/규칙 |
 |------|---------------|
-| Course | `id`, `spaceId`, `name`, `description`, `durationMonths` 기본 6, `basePriceAmount`, `currency`, `status`, `activeOfferingCount`, `activeEnrollmentCount`, soft delete |
-| CourseOffering | `id`, `courseId`, `spaceId`, `timelineId` 또는 `timelineProvisioningMode`, `name`, `startsAt`, `endsAt`, `enrollmentStartsAt`, `enrollmentEndsAt`, `capacity`, `enrolledCount`, `status`; Course/Space/Timeline 동일 scope 검증 |
+| Course | `id`, `tenantId`, `name`, `description`, `durationMonths` 기본 6, `basePriceAmount`, `currency`, `status`, `activeOfferingCount`, `activeEnrollmentCount`, soft delete |
+| CourseOffering | `id`, `courseId`, `tenantId`, `timelineId` 또는 `timelineProvisioningMode`, `name`, `startsAt`, `endsAt`, `enrollmentStartsAt`, `enrollmentEndsAt`, `capacity`, `enrolledCount`, `status`; Course/Tenant/Timeline의 `Tenant.spaceId` 파생 scope 검증 |
 | Enrollment | `id`, `userId`, `courseId`, `courseOfferingId`, `coursePassId`, `assignedTimelineId`, `paymentStatus`, `paymentProvider`, `paymentExternalId`, `paidAt`, `validFrom`, `validUntil`, `status`; 결제 성공 시 CoursePass 발급 |
 | CoursePass | `id`, `enrollmentId`, `userId`, `courseId`, `courseOfferingId`, `timelineId`, `kind`, `issuedAt`, `validFrom`, `expiresAt`, `reservationLimit`, `reservationUsedCount`, `reservationRemainingCount`, `status` |
 | Reservation linkage | 기존 Reservation에 `coursePassId`를 추가해 좌석 점유가 어떤 수강 권리를 소비했는지 추적; 예약 생성 시 pass 유효기간, Timeline 범위, 잔여 예약권을 검증 |
@@ -242,10 +244,10 @@ Course 계열 Prisma/DTO/Entity/Repository/Service/UseCase/Controller/Module과 
 
 #### Service / Repository / Controller Rules
 
-- CourseOffering 생성/수정은 `courseId`, `spaceId`, `timelineId`의 scope 일치를 검증합니다.
+- CourseOffering 생성/수정은 `courseId`, `tenantId`, `timelineId`의 scope 일치를 검증하되, 실제 Space 범위는 `tenantId -> Tenant.spaceId`로 파생합니다.
 - Enrollment 활성화는 `paymentStatus=PAID` 또는 관리자 수동 grant 사유가 있을 때만 CoursePass를 발급합니다.
 - CoursePass 기본 유효기간은 결제/발급 기준 6개월이며 Course별 정책으로 override 가능합니다.
-- Reservation 생성은 `coursePassId`를 필수 입력으로 받고, 해당 pass가 같은 사용자, 같은 Space, 연결된 Timeline/Session/Program 범위에 속하며 잔여 예약권이 있을 때만 성공합니다.
+- Reservation 생성은 `coursePassId`를 필수 입력으로 받고, 해당 pass가 같은 사용자, 같은 `Tenant.spaceId` 파생 범위, 연결된 Timeline/Session/Program 범위에 속하며 잔여 예약권이 있을 때만 성공합니다.
 - 목록 API는 `ApiResponseEntity(..., { isArray: true })` 형태와 Orval 생성 React Query hook을 유지하기 위해 기존 Timeline/Reservation controller 패턴을 따릅니다.
 
 ### Orval / Frontend Handoff
@@ -263,10 +265,11 @@ Admin route는 `_course-data.ts` mock을 사용하지 않습니다. `useCourseDa
 
 ## Payment 도메인 맥락
 
-Payment는 특정 서비스에 종속되지 않는 Space-scoped 결제 원장입니다. Course 결제는 `serviceCode=course`와 `subjectType=COURSE_OFFERING|ENROLLMENT|COURSE_PASS`로 기록하고, 앞으로 Product나 Subscription이 추가되어도 같은 Payment root에 `PaymentSubject`를 추가해 확장합니다.
+Payment는 특정 서비스에 종속되지 않는 tenant-owned 결제 원장입니다. Course 결제는 `serviceCode=course`와 `subjectType=COURSE_OFFERING|ENROLLMENT|COURSE_PASS`로 기록하고, 앞으로 Product나 Subscription이 추가되어도 같은 Payment root에 `PaymentSubject`를 추가해 확장합니다.
 
 ```
-Space
+Tenant
+  ├─── Space (scope는 Tenant.spaceId에서 파생)
   └─── Payment
           ├─── PaymentSubject
           │       ├─── serviceCode (course, product, subscription ...)
@@ -281,7 +284,7 @@ Space
 ### 핵심 원칙
 
 1. **공통 원장**: Payment는 Course, Product, Subscription 같은 여러 서비스가 공유합니다.
-2. **Space scope**: 목록과 상세 조회는 `SpaceContext.spaceIds` 기준으로 제한하고, FULL_ACCESS가 아닌 관리자는 다른 Space 결제를 볼 수 없습니다.
+2. **Tenant-derived scope**: 요청은 `x-tenant-id`로 받고, 목록과 상세 조회는 `Tenant.spaceId`에서 파생한 `SpaceContext.spaceIds` 기준으로 제한합니다. PLATFORM_ADMIN이 아닌 관리자는 다른 Space 결제를 볼 수 없습니다.
 3. **대상/참조 분리**: `PaymentSubject`는 무엇을 결제했는지, `PaymentReference`는 어떤 운영 리소스나 외부 ID와 연결되는지 추적합니다.
 4. **Course 연결**: Enrollment는 `paymentId`로 Payment를 참조하고, Payment reference는 Enrollment/CoursePass 역추적을 보조합니다.
 
@@ -289,7 +292,7 @@ Space
 
 | Resource | Endpoint | OperationId | 용도 |
 |----------|----------|-------------|------|
-| Payment | `GET /api/v1/payments` | `getPayments` | `/payments` 목록, Space/상태/수단/대상/참조 필터 |
+| Payment | `GET /api/v1/payments` | `getPayments` | `/payments` 목록, Tenant/상태/수단/대상/참조 필터 |
 | Payment | `GET /api/v1/payments/:paymentId` | `getPaymentById` | Payment 상세와 subject/reference 확인 |
 | Payment | `POST /api/v1/payments` | `createPayment` | 서비스별 결제 성공/수동 기록 생성 |
 | Payment | `PATCH /api/v1/payments/:paymentId` | `updatePayment` | 결제 상태/제공자/영수증/메모 보정 |
@@ -404,7 +407,7 @@ AdminLayout
 ## 인증/인가 흐름
 
 1. JWT 토큰으로 인증 (Authorization 헤더)
-2. X-Space-ID 헤더로 현재 Space 지정 (필수)
-3. Space 미선택 시 `/select-space`로 리다이렉트 (useSpaceGuard)
-4. PersistStore에 선택된 Space ID/이름 저장
+2. X-Tenant-ID 헤더로 현재 Tenant 지정 (필수)
+3. Tenant 미선택 시 `/select-space`로 리다이렉트 (useSpaceGuard)
+4. PersistStore에 선택된 Tenant ID와 파생 Space ID/이름 저장
 5. 로그아웃 시 PersistStore 초기화 후 `/admin/auth/login`으로 이동

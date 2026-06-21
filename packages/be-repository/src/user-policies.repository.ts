@@ -16,12 +16,12 @@ export class UserPoliciesRepository {
 		>,
 	) {}
 
-	async findByUserIdInSpace(
+	async findByUserIdInTenant(
 		userId: string,
-		spaceId: string,
+		tenantId: string,
 	): Promise<UserPolicy[]> {
 		const results = await this.txHost.tx.userPolicy.findMany({
-			where: this.buildUserPolicyWhere(userId, spaceId),
+			where: this.buildUserPolicyWhere(userId, tenantId),
 			include: this.includePolicyAbilities(),
 			orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
 		});
@@ -29,13 +29,13 @@ export class UserPoliciesRepository {
 		return results.map((result) => plainToInstance(UserPolicy, result));
 	}
 
-	async findActiveByUserIdInSpace(
+	async findActiveByUserIdInTenant(
 		userId: string,
-		spaceId: string,
+		tenantId: string,
 	): Promise<UserPolicy[]> {
 		const results = await this.txHost.tx.userPolicy.findMany({
 			where: {
-				...this.buildUserPolicyWhere(userId, spaceId),
+				...this.buildUserPolicyWhere(userId, tenantId),
 				isActive: true,
 			},
 			include: this.includePolicyAbilities(),
@@ -48,7 +48,7 @@ export class UserPoliciesRepository {
 	async syncByUserId(
 		userId: string,
 		items: PolicyAssignmentInput[],
-		spaceId: string,
+		tenantId: string,
 	): Promise<UserPolicy[]> {
 		this.logger.debug(
 			`UserPolicy 동기화: userId=${userId.slice(-8)}, count=${items.length}`,
@@ -57,7 +57,7 @@ export class UserPoliciesRepository {
 		const uniqueItems = this.dedupeByPolicyId(items);
 		const policyIds = uniqueItems.map((item) => item.policyId);
 
-		await this.softRemoveMissing(userId, policyIds, spaceId);
+		await this.softRemoveMissing(userId, policyIds, tenantId);
 
 		await Promise.all(
 			uniqueItems.map((item) =>
@@ -89,7 +89,7 @@ export class UserPoliciesRepository {
 				policyId: { in: policyIds },
 				removedAt: null,
 				policy: {
-					spaceId,
+					tenantId,
 					removedAt: null,
 				},
 			},
@@ -114,12 +114,12 @@ export class UserPoliciesRepository {
 		return result.count;
 	}
 
-	private buildUserPolicyWhere(userId: string, spaceId: string) {
+	private buildUserPolicyWhere(userId: string, tenantId: string) {
 		return {
 			userId,
 			removedAt: null,
 			policy: {
-				spaceId,
+				tenantId,
 				removedAt: null,
 			},
 		} satisfies Prisma.UserPolicyWhereInput;
@@ -128,14 +128,14 @@ export class UserPoliciesRepository {
 	private async softRemoveMissing(
 		userId: string,
 		policyIds: string[],
-		spaceId: string,
+		tenantId: string,
 	): Promise<void> {
 		await this.txHost.tx.userPolicy.updateMany({
 			where: {
 				userId,
 				removedAt: null,
 				policy: {
-					spaceId,
+					tenantId,
 					removedAt: null,
 				},
 				...(policyIds.length > 0 ? { policyId: { notIn: policyIds } } : {}),

@@ -63,7 +63,7 @@ const getTabHeaderTitle = (props: BottomTabHeaderProps) => {
 const findSpaceByItem = (
 	spaces: readonly SpaceDto[],
 	item: SpaceListItemInfo,
-) => spaces.find((space) => space.id === item.id);
+) => spaces.find((space) => space.tenantId === item.id);
 
 const getHeaderSubtitle = () =>
 	mobileApiScopeStore.groundName || "지점 선택";
@@ -72,7 +72,7 @@ const MobileTabHeader = observer((props: BottomTabHeaderProps) => {
 	const queryClient = useQueryClient();
 	const [isSpaceSheetOpen, setIsSpaceSheetOpen] = useState(false);
 	const [selectedSpaceId, setSelectedSpaceId] = useState<string | null>(
-		mobileApiScopeStore.spaceId,
+		mobileApiScopeStore.tenantId,
 	);
 	const [selectionErrorDescription, setSelectionErrorDescription] =
 		useState("");
@@ -96,7 +96,7 @@ const MobileTabHeader = observer((props: BottomTabHeaderProps) => {
 	const spaceItems = toSpaceListItemInfos(spaceInfos);
 
 	const onPressSubtitle = () => {
-		setSelectedSpaceId(mobileApiScopeStore.spaceId);
+		setSelectedSpaceId(mobileApiScopeStore.tenantId);
 		setSelectionErrorDescription("");
 		setIsSpaceSheetOpen(true);
 	};
@@ -113,13 +113,13 @@ const MobileTabHeader = observer((props: BottomTabHeaderProps) => {
 		setSelectionErrorDescription("");
 		try {
 			const response = await setCurrentSpaceMutation.mutateAsync({
-				spaceId: item.id,
+				tenantId: item.id,
 			});
 			const selectedSpace = response.data ?? findSpaceByItem(rawSpaces, item);
 			if (selectedSpace) {
 				await mobileAuthStore.selectSpace(selectedSpace);
 			} else {
-				const selectedInfo = spaceInfos.find((space) => space.spaceId === item.id);
+				const selectedInfo = spaceInfos.find((space) => space.tenantId === item.id);
 				if (selectedInfo) {
 					await mobileAuthStore.selectSpaceInfo(selectedInfo);
 				}

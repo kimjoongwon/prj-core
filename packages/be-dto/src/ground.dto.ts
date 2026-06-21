@@ -8,6 +8,7 @@ import {
 import type { Ground as GroundEntity } from "@cocrepo/prisma";
 import { Expose } from "class-transformer";
 import { AbstractDto } from "./abstract.dto";
+import { CompanyDto } from "./company.dto";
 import { SpaceDto } from "./space.dto";
 
 export class GroundDto extends AbstractDto implements GroundEntity {
@@ -27,14 +28,21 @@ export class GroundDto extends AbstractDto implements GroundEntity {
 	@StringField()
 	email: string;
 
+	@UUIDField()
+	companyId: string;
+
+	@UUIDFieldOptional({ nullable: true })
+	imageFileId: string | null;
+
+	@ClassField(() => CompanyDto, { required: false, nullable: true })
+	company?: CompanyDto | null;
+
+	// Flattened Company fields kept for current Space/Ground API responses.
 	@StringField()
 	businessNo: string;
 
 	@UUIDFieldOptional({ nullable: true })
 	logoImageFileId: string | null;
-
-	@UUIDFieldOptional({ nullable: true })
-	imageFileId: string | null;
 
 	@UUIDField()
 	spaceId: string;

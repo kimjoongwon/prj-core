@@ -55,7 +55,7 @@
 | **Operation ID** | `createRole` |
 | **설명** | 새로운 역할을 생성합니다. |
 | **인증** | Bearer Token |
-| **권한** | `@Roles([FULL_ACCESS])` |
+| **권한** | `@Roles([PLATFORM_ADMIN])` |
 | **Status Code** | 201 Created |
 | **Response** | `RoleDto` |
 | **에러** | 400 (유효성 오류), 401, 403, 409 (이름 중복), 500 |

@@ -20,7 +20,7 @@ export async function assertE2eSeedContract(
 		prisma.role.findMany({
 			where: {
 				name: {
-					in: ["FULL_ACCESS", "MANAGE", "VIEW"],
+					in: ["PLATFORM_ADMIN", "COMPANY_MANAGER", "MEMBER"],
 				},
 			},
 			select: {
@@ -47,7 +47,7 @@ export async function assertE2eSeedContract(
 		missingContracts.push("admin OIDC client (admin-web)");
 	}
 
-	for (const roleName of ["FULL_ACCESS", "MANAGE", "VIEW"]) {
+	for (const roleName of ["PLATFORM_ADMIN", "COMPANY_MANAGER", "MEMBER"]) {
 		if (!roleNames.has(roleName)) {
 			missingContracts.push(`role (${roleName})`);
 		}

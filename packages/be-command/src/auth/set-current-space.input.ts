@@ -1,3 +1,3 @@
 export interface SetCurrentSpaceCommandInput {
-	spaceId: string;
+	tenantId: string;
 }

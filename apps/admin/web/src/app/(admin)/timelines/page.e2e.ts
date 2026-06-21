@@ -3,9 +3,9 @@ import { expect, type Locator, type Page, test } from "@playwright/test";
 
 const ADMIN_API_BASE_URL = "http://localhost:3000/api/v1";
 const TIMELINE_LIST_PATH = "/admin/timelines";
-const SYSTEM_SPACE_ID =
-	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
-const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_SPACE_ID);
+const SYSTEM_TENANT_ID =
+	process.env.E2E_SYSTEM_TENANT_ID ?? "71ddca20-1752-466e-b4da-879ebdbe54e3";
+const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_TENANT_ID);
 
 function toAdminPath(href: string) {
 	return href.startsWith("/admin") ? href : `/admin${href}`;

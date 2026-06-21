@@ -127,7 +127,7 @@ function getStatusTone(status?: string): PaymentStatusTone {
  * 결제 Space 라벨을 계산합니다.
  */
 function getSpaceLabel(payment: PaymentDto) {
-	return payment.space?.ground?.name ?? payment.spaceId;
+	return payment.tenant?.space?.ground?.name ?? payment.tenantId;
 }
 
 /**
@@ -223,14 +223,14 @@ function toSummary(payments: PaymentDto[]): PaymentDataSummary {
 			(payment.subjects ?? []).map((subject) => subject.serviceCode),
 		),
 	);
-	const spaceIds = new Set(payments.map((payment) => payment.spaceId));
+	const tenantIds = new Set(payments.map((payment) => payment.tenantId));
 
 	return {
 		totalPaymentCount: payments.length,
 		paidAmountLabel: formatCurrency(paidAmount, fallbackCurrency),
 		pendingPaymentCount,
 		serviceCount: serviceCodes.size,
-		spaceCount: spaceIds.size,
+		spaceCount: tenantIds.size,
 	};
 }
 

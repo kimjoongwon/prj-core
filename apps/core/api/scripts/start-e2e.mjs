@@ -4,6 +4,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const apiRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const DEFAULT_E2E_DATABASE_NAME = "plate_e2e";
 
 function loadEnvFile() {
 	const envPath = resolve(apiRoot, ".env");
@@ -42,13 +43,25 @@ function getE2eDatabaseUrl() {
 		return explicitDatabaseUrl;
 	}
 
-	if (process.env.ALLOW_E2E_DB_RESET === "1" && process.env.DATABASE_URL) {
-		return process.env.DATABASE_URL;
+	if (process.env.DATABASE_URL) {
+		return toDefaultE2eDatabaseUrl(process.env.DATABASE_URL);
 	}
 
 	throw new Error(
-		"E2E_DATABASE_URL or TEST_DATABASE_URL is required for core-api start:e2e.",
+		"E2E_DATABASE_URL, TEST_DATABASE_URL, or DATABASE_URL is required for core-api start:e2e.",
 	);
+}
+
+function toDefaultE2eDatabaseUrl(databaseUrl) {
+	const parsedUrl = new URL(databaseUrl);
+	const databaseName = decodeURIComponent(parsedUrl.pathname.replace(/^\//, ""));
+
+	if (!databaseName) {
+		throw new Error("DATABASE_URL must include a database name.");
+	}
+
+	parsedUrl.pathname = `/${encodeURIComponent(DEFAULT_E2E_DATABASE_NAME)}`;
+	return parsedUrl.toString();
 }
 
 function getOrigin(url) {
@@ -82,7 +95,6 @@ process.env.DATABASE_URL = databaseUrl;
 process.env.DIRECT_URL =
 	process.env.E2E_DIRECT_URL ??
 	process.env.TEST_DIRECT_URL ??
-	process.env.DIRECT_URL ??
 	databaseUrl;
 process.env.NODE_ENV = "test";
 process.env.ENABLE_NEST_DEVTOOLS = "false";

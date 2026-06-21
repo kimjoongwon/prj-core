@@ -195,7 +195,7 @@ const AbilityStoreBootstrapper = observer(function AbilityStoreBootstrapper({
 		useVerifyToken({
 			query: {
 				enabled: shouldVerifyCurrentTenant,
-				queryKey: ["/api/v1/auth/verify-token", persistStore.spaceId],
+				queryKey: ["/api/v1/auth/verify-token", persistStore.tenantId],
 				retry: false,
 				refetchOnWindowFocus: false,
 			},
@@ -258,7 +258,7 @@ const NavigationScopeBootstrapper = observer(
 		const { data: verifyTokenResponse } = useVerifyToken({
 			query: {
 				enabled: shouldVerifyCurrentTenant,
-				queryKey: ["/api/v1/auth/verify-token", persistStore.spaceId],
+				queryKey: ["/api/v1/auth/verify-token", persistStore.tenantId],
 				retry: false,
 				refetchOnWindowFocus: false,
 			},

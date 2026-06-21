@@ -4,13 +4,13 @@ import type {
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Asset } from "./asset.entity";
-import type { Space } from "./space.entity";
+import type { Tenant } from "./tenant.entity";
 
 export class Derivative extends AbstractEntity implements DerivativeEntity {
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	spaceId!: string;
+	tenantId!: string;
 	assetId!: string;
 	kind!: DerivativeKind;
 	profile!: string;
@@ -28,7 +28,7 @@ export class Derivative extends AbstractEntity implements DerivativeEntity {
 	// ============================================================================
 	// 관계 필드 (선택적)
 	// ============================================================================
-	space?: Space;
+	tenant?: Tenant;
 	asset?: Asset;
 
 	// ============================================================================

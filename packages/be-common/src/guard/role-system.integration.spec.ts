@@ -28,27 +28,35 @@ describe("Role 시스템 통합 테스트", () => {
 
 	describe("상수/Enum 값 정합성 검증", () => {
 		describe("SYSTEM_ROLES 상수", () => {
-			it("FULL_ACCESS, MANAGE, VIEW 3개만 포함해야 한다", () => {
+			it("PLATFORM_ADMIN, COMPANY_MANAGER, MEMBER 3개만 포함해야 한다", () => {
 				// Given
 				const roleNames = Object.keys(SYSTEM_ROLES);
 
 				// Then
 				expect(roleNames).toHaveLength(3);
-				expect(SYSTEM_ROLES.FULL_ACCESS).toBe("FULL_ACCESS");
-				expect(SYSTEM_ROLES.MANAGE).toBe("MANAGE");
-				expect(SYSTEM_ROLES.VIEW).toBe("VIEW");
+				expect(SYSTEM_ROLES.PLATFORM_ADMIN).toBe("PLATFORM_ADMIN");
+				expect(SYSTEM_ROLES.COMPANY_MANAGER).toBe("COMPANY_MANAGER");
+				expect(SYSTEM_ROLES.MEMBER).toBe("MEMBER");
 			});
 
-			it("이전 이름(SUPER_ADMIN, ADMIN, USER)이 없어야 한다", () => {
+			it("이전 이름(FULL_ACCESS, MANAGE, SPACE_MANAGER, VIEW, SUPER_ADMIN, ADMIN, USER)이 없어야 한다", () => {
 				// Given
 				const roleValues = Object.values(SYSTEM_ROLES);
 
 				// Then
+				expect(roleValues).not.toContain("FULL_ACCESS");
+				expect(roleValues).not.toContain("MANAGE");
+				expect(roleValues).not.toContain("SPACE_MANAGER");
+				expect(roleValues).not.toContain("VIEW");
 				expect(roleValues).not.toContain("SUPER_ADMIN");
 				expect(roleValues).not.toContain("ADMIN");
 				expect(roleValues).not.toContain("USER");
 
 				// 키에도 존재하면 안 됨
+				expect(SYSTEM_ROLES).not.toHaveProperty("FULL_ACCESS");
+				expect(SYSTEM_ROLES).not.toHaveProperty("MANAGE");
+				expect(SYSTEM_ROLES).not.toHaveProperty("SPACE_MANAGER");
+				expect(SYSTEM_ROLES).not.toHaveProperty("VIEW");
 				expect(SYSTEM_ROLES).not.toHaveProperty("SUPER_ADMIN");
 				expect(SYSTEM_ROLES).not.toHaveProperty("ADMIN");
 				expect(SYSTEM_ROLES).not.toHaveProperty("USER");
@@ -212,11 +220,11 @@ describe("Role 시스템 통합 테스트", () => {
 		});
 
 		describe("RolesGuard 교차 검증", () => {
-			it("FULL_ACCESS 사용자 -> RolesGuard([FULL_ACCESS]) 통과", () => {
+			it("PLATFORM_ADMIN 사용자 -> RolesGuard([PLATFORM_ADMIN]) 통과", () => {
 				// Given
-				mockReflector.get.mockReturnValue([SYSTEM_ROLES.FULL_ACCESS]);
-				const user = createMockUser(SYSTEM_ROLES.FULL_ACCESS);
-				const tenant = createMockTenant(SYSTEM_ROLES.FULL_ACCESS);
+				mockReflector.get.mockReturnValue([SYSTEM_ROLES.PLATFORM_ADMIN]);
+				const user = createMockUser(SYSTEM_ROLES.PLATFORM_ADMIN);
+				const tenant = createMockTenant(SYSTEM_ROLES.PLATFORM_ADMIN);
 				setupCls(user, tenant);
 				const context = createMockExecutionContext();
 
@@ -227,11 +235,11 @@ describe("Role 시스템 통합 테스트", () => {
 				expect(result).toBe(true);
 			});
 
-			it("MANAGE 사용자 -> RolesGuard([FULL_ACCESS]) 거부", () => {
+			it("COMPANY_MANAGER 사용자 -> RolesGuard([PLATFORM_ADMIN]) 거부", () => {
 				// Given
-				mockReflector.get.mockReturnValue([SYSTEM_ROLES.FULL_ACCESS]);
-				const user = createMockUser(SYSTEM_ROLES.MANAGE);
-				const tenant = createMockTenant(SYSTEM_ROLES.MANAGE);
+				mockReflector.get.mockReturnValue([SYSTEM_ROLES.PLATFORM_ADMIN]);
+				const user = createMockUser(SYSTEM_ROLES.COMPANY_MANAGER);
+				const tenant = createMockTenant(SYSTEM_ROLES.COMPANY_MANAGER);
 				setupCls(user, tenant);
 				const context = createMockExecutionContext();
 
@@ -241,11 +249,11 @@ describe("Role 시스템 통합 테스트", () => {
 				);
 			});
 
-			it("MANAGE 사용자 -> RolesGuard([MANAGE]) 통과", () => {
+			it("COMPANY_MANAGER 사용자 -> RolesGuard([COMPANY_MANAGER]) 통과", () => {
 				// Given
-				mockReflector.get.mockReturnValue([SYSTEM_ROLES.MANAGE]);
-				const user = createMockUser(SYSTEM_ROLES.MANAGE);
-				const tenant = createMockTenant(SYSTEM_ROLES.MANAGE);
+				mockReflector.get.mockReturnValue([SYSTEM_ROLES.COMPANY_MANAGER]);
+				const user = createMockUser(SYSTEM_ROLES.COMPANY_MANAGER);
+				const tenant = createMockTenant(SYSTEM_ROLES.COMPANY_MANAGER);
 				setupCls(user, tenant);
 				const context = createMockExecutionContext();
 
@@ -256,14 +264,14 @@ describe("Role 시스템 통합 테스트", () => {
 				expect(result).toBe(true);
 			});
 
-			it("VIEW 사용자 -> RolesGuard([MANAGE, VIEW]) 통과 (여러 역할 중 하나 일치)", () => {
+			it("MEMBER 사용자 -> RolesGuard([COMPANY_MANAGER, MEMBER]) 통과 (여러 역할 중 하나 일치)", () => {
 				// Given
 				mockReflector.get.mockReturnValue([
-					SYSTEM_ROLES.MANAGE,
-					SYSTEM_ROLES.VIEW,
+					SYSTEM_ROLES.COMPANY_MANAGER,
+					SYSTEM_ROLES.MEMBER,
 				]);
-				const user = createMockUser(SYSTEM_ROLES.VIEW);
-				const tenant = createMockTenant(SYSTEM_ROLES.VIEW);
+				const user = createMockUser(SYSTEM_ROLES.MEMBER);
+				const tenant = createMockTenant(SYSTEM_ROLES.MEMBER);
 				setupCls(user, tenant);
 				const context = createMockExecutionContext();
 
@@ -284,8 +292,8 @@ describe("Role 시스템 통합 테스트", () => {
 					parent: { name: "공유" },
 					children: [],
 				};
-				const user = createMockUser(SYSTEM_ROLES.VIEW, category);
-				const tenant = createMockTenant(SYSTEM_ROLES.VIEW, category);
+				const user = createMockUser(SYSTEM_ROLES.MEMBER, category);
+				const tenant = createMockTenant(SYSTEM_ROLES.MEMBER, category);
 				setupCls(user, tenant);
 				const context = createMockExecutionContext();
 
@@ -300,8 +308,8 @@ describe("Role 시스템 통합 테스트", () => {
 				// Given - 워크스페이스의 계층에 공개가 없음
 				mockReflector.get.mockReturnValue([RoleCategoryName.PUBLIC]);
 				const category = { name: "워크스페이스", parent: null, children: [] };
-				const user = createMockUser(SYSTEM_ROLES.MANAGE, category);
-				const tenant = createMockTenant(SYSTEM_ROLES.MANAGE, category);
+				const user = createMockUser(SYSTEM_ROLES.COMPANY_MANAGER, category);
+				const tenant = createMockTenant(SYSTEM_ROLES.COMPANY_MANAGER, category);
 				setupCls(user, tenant);
 				const context = createMockExecutionContext();
 
@@ -317,9 +325,9 @@ describe("Role 시스템 통합 테스트", () => {
 				// Given
 				mockReflector.get.mockReturnValue(["일반"]);
 				const associations = [{ group: { name: "일반" } }];
-				const user = createMockUser(SYSTEM_ROLES.VIEW, undefined, associations);
+				const user = createMockUser(SYSTEM_ROLES.MEMBER, undefined, associations);
 				const tenant = createMockTenant(
-					SYSTEM_ROLES.VIEW,
+					SYSTEM_ROLES.MEMBER,
 					undefined,
 					associations,
 				);
@@ -337,9 +345,9 @@ describe("Role 시스템 통합 테스트", () => {
 				// Given
 				mockReflector.get.mockReturnValue(["프리미엄"]);
 				const associations = [{ group: { name: "일반" } }];
-				const user = createMockUser(SYSTEM_ROLES.VIEW, undefined, associations);
+				const user = createMockUser(SYSTEM_ROLES.MEMBER, undefined, associations);
 				const tenant = createMockTenant(
-					SYSTEM_ROLES.VIEW,
+					SYSTEM_ROLES.MEMBER,
 					undefined,
 					associations,
 				);
@@ -356,9 +364,9 @@ describe("Role 시스템 통합 테스트", () => {
 		describe("에러 메시지 검증", () => {
 			it("RolesGuard 거부 시 에러 메시지에 새 역할 이름이 포함되어야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([SYSTEM_ROLES.FULL_ACCESS]);
-				const user = createMockUser(SYSTEM_ROLES.VIEW);
-				const tenant = createMockTenant(SYSTEM_ROLES.VIEW);
+				mockReflector.get.mockReturnValue([SYSTEM_ROLES.PLATFORM_ADMIN]);
+				const user = createMockUser(SYSTEM_ROLES.MEMBER);
+				const tenant = createMockTenant(SYSTEM_ROLES.MEMBER);
 				setupCls(user, tenant);
 				const context = createMockExecutionContext();
 
@@ -370,11 +378,12 @@ describe("Role 시스템 통합 테스트", () => {
 					expect(error).toBeInstanceOf(ForbiddenException);
 					const message = (error as ForbiddenException).message;
 					expect(message).toContain("[RolesGuard] 접근 거부");
-					expect(message).toContain("VIEW");
-					expect(message).toContain("FULL_ACCESS");
+					expect(message).toContain("MEMBER");
+					expect(message).toContain("PLATFORM_ADMIN");
 					// 이전 이름이 포함되면 안 됨
-					expect(message).not.toContain("SUPER_ADMIN");
-					expect(message).not.toContain("USER");
+					expect(message).not.toMatch(
+						/(^|[^A-Z_])(FULL_ACCESS|MANAGE|SPACE_MANAGER|VIEW|SUPER_ADMIN|ADMIN|USER)([^A-Z_]|$)/,
+					);
 				}
 			});
 
@@ -386,8 +395,8 @@ describe("Role 시스템 통합 테스트", () => {
 					parent: { name: "공유" },
 					children: [],
 				};
-				const user = createMockUser(SYSTEM_ROLES.VIEW, category);
-				const tenant = createMockTenant(SYSTEM_ROLES.VIEW, category);
+				const user = createMockUser(SYSTEM_ROLES.MEMBER, category);
+				const tenant = createMockTenant(SYSTEM_ROLES.MEMBER, category);
 				setupCls(user, tenant);
 				const context = createMockExecutionContext();
 
@@ -407,9 +416,9 @@ describe("Role 시스템 통합 테스트", () => {
 				// Given
 				mockReflector.get.mockReturnValue(["프리미엄"]);
 				const associations = [{ group: { name: "일반" } }];
-				const user = createMockUser(SYSTEM_ROLES.VIEW, undefined, associations);
+				const user = createMockUser(SYSTEM_ROLES.MEMBER, undefined, associations);
 				const tenant = createMockTenant(
-					SYSTEM_ROLES.VIEW,
+					SYSTEM_ROLES.MEMBER,
 					undefined,
 					associations,
 				);

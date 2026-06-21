@@ -18,12 +18,12 @@ import {
 import { AbstractDto } from "./abstract.dto";
 import { PaymentReferenceDto } from "./payment-reference.dto";
 import { PaymentSubjectDto } from "./payment-subject.dto";
-import { SpaceDto } from "./space.dto";
+import { TenantDto } from "./tenant.dto";
 import { UserDto } from "./user.dto";
 
 export class PaymentDto extends AbstractDto implements Payment {
-	@UUIDField({ description: "소속 Space ID" })
-	spaceId!: string;
+	@UUIDField({ description: "소속 Tenant ID" })
+	tenantId!: string;
 
 	@UUIDFieldOptional({ description: "결제자 User ID", nullable: true })
 	payerUserId!: string | null;
@@ -97,11 +97,11 @@ export class PaymentDto extends AbstractDto implements Payment {
 
 	metadata!: Prisma.JsonValue | null;
 
-	@ClassField(() => SpaceDto, {
-		description: "소속 Space",
+	@ClassField(() => TenantDto, {
+		description: "소속 Tenant",
 		required: false,
 	})
-	space?: SpaceDto;
+	tenant?: TenantDto;
 
 	@ClassField(() => UserDto, {
 		description: "결제자",

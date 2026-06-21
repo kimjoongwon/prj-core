@@ -10,6 +10,7 @@ import {
 } from "../demo-data";
 import type { PrismaClient } from "../generated/client/client";
 import { Prisma } from "../generated/client/client";
+import { requireTenantIdForSpace } from "./tenant-scope";
 
 /**
  * asset 도메인 데모 데이터를 계층 순서대로 적재합니다.
@@ -40,6 +41,11 @@ export async function createAssetDomainData(
 	const adminUser = await prisma.user.findFirst({
 		where: { email: "admin@plate.com" },
 	});
+	const systemTenantId = await requireTenantIdForSpace(
+		prisma,
+		systemSpace.id,
+		adminUser?.id,
+	);
 	const creatorEmails = [
 		...new Set(
 			[
@@ -77,7 +83,7 @@ export async function createAssetDomainData(
 
 			const folder = await prisma.folder.create({
 				data: {
-					spaceId: systemSpace.id,
+					tenantId: systemTenantId,
 					name: folderData.name,
 					path: folderData.path,
 					parentFolderId,
@@ -118,7 +124,7 @@ export async function createAssetDomainData(
 
 			const asset = await prisma.asset.create({
 				data: {
-					spaceId: systemSpace.id,
+					tenantId: systemTenantId,
 					folderId: folder.id,
 					kind: assetData.kind as "IMAGE" | "VIDEO" | "DOCUMENT",
 					status: "READY",
@@ -276,7 +282,7 @@ export async function createAssetDomainData(
 		if (!existing) {
 			await prisma.derivative.create({
 				data: {
-					spaceId: systemSpace.id,
+					tenantId: systemTenantId,
 					assetId: sourceAsset.id,
 					kind: derivativeData.kind as
 						| "THUMBNAIL"
@@ -322,14 +328,14 @@ export async function createAssetDomainData(
 		const existing = await prisma.album.findFirst({
 			where: {
 				name: albumData.name,
-				spaceId: systemSpace.id,
+				tenantId: systemTenantId,
 			},
 		});
 
 		if (!existing) {
 			const album = await prisma.album.create({
 				data: {
-					spaceId: systemSpace.id,
+					tenantId: systemTenantId,
 					name: albumData.name,
 					description: albumData.description,
 					coverAssetId,
@@ -374,7 +380,7 @@ export async function createAssetDomainData(
 		if (!existing) {
 			await prisma.albumEntry.create({
 				data: {
-					spaceId: systemSpace.id,
+					tenantId: systemTenantId,
 					albumId: album.id,
 					assetId: asset.id,
 					position: entryData.position,

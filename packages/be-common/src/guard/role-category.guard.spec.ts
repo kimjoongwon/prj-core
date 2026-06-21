@@ -38,13 +38,11 @@ describe("RoleCategoryGuard", () => {
 				id: "tenant-1",
 				spaceId: "space-001",
 				role: {
-					name: "VIEW",
+					name: "MEMBER",
 					classification: {
 						category: {
-							name: "공개",
-							parent: {
-								name: "공유",
-							},
+							name: "워크스페이스",
+							parent: null,
 							children: [],
 						},
 					},
@@ -59,13 +57,11 @@ describe("RoleCategoryGuard", () => {
 		id: "tenant-1",
 		spaceId: "space-001",
 		role: {
-			name: "VIEW",
+			name: "MEMBER",
 			classification: {
 				category: {
-					name: "공개",
-					parent: {
-						name: "공유",
-					},
+					name: "워크스페이스",
+					parent: null,
 					children: [],
 				},
 			},
@@ -225,11 +221,11 @@ describe("RoleCategoryGuard", () => {
 							id: "tenant-1",
 							spaceId: "space-001",
 							role: {
-								name: "VIEW",
+								name: "MEMBER",
 								classification: {
 									category: {
-										name: "공개",
-										parent: { name: "공유" },
+										name: "워크스페이스",
+										parent: null,
 										children: [],
 									},
 								},
@@ -240,7 +236,7 @@ describe("RoleCategoryGuard", () => {
 							id: "tenant-2",
 							spaceId: "space-002",
 							role: {
-								name: "MANAGE",
+								name: "COMPANY_MANAGER",
 								classification: {
 									category: {
 										name: "워크스페이스",
@@ -257,7 +253,7 @@ describe("RoleCategoryGuard", () => {
 					id: "tenant-2",
 					spaceId: "space-002",
 					role: {
-						name: "MANAGE",
+						name: "COMPANY_MANAGER",
 						classification: {
 							category: { name: "워크스페이스", parent: null, children: [] },
 						},
@@ -283,7 +279,7 @@ describe("RoleCategoryGuard", () => {
 		describe("카테고리 권한 검증", () => {
 			it("사용자의 카테고리가 요구된 카테고리와 일치하면 true를 반환해야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([RoleCategoryName.PUBLIC]);
+				mockReflector.get.mockReturnValue([RoleCategoryName.WORKSPACE]);
 				const user = createMockUser();
 				const tenant = createMockTenant();
 				mockClsService.get.mockImplementation((key: string) => {
@@ -304,8 +300,21 @@ describe("RoleCategoryGuard", () => {
 			it("사용자의 상위 카테고리가 요구된 카테고리와 일치하면 true를 반환해야 한다", () => {
 				// Given
 				mockReflector.get.mockReturnValue([RoleCategoryName.SHARED]);
-				const user = createMockUser();
-				const tenant = createMockTenant();
+				const tenant = createMockTenant({
+					role: {
+						name: "MEMBER",
+						classification: {
+							category: {
+								name: "공개",
+								parent: { name: "공유" },
+								children: [],
+							},
+						},
+					},
+				});
+				const user = createMockUser({
+					tenants: [tenant],
+				});
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
 					if (key === CONTEXT_KEYS.TENANT) return tenant;
@@ -326,7 +335,7 @@ describe("RoleCategoryGuard", () => {
 				mockReflector.get.mockReturnValue([RoleCategoryName.RESTRICTED]);
 				const tenant = createMockTenant({
 					role: {
-						name: "MANAGE",
+						name: "COMPANY_MANAGER",
 						classification: {
 							category: {
 								name: "워크스페이스",
@@ -361,7 +370,7 @@ describe("RoleCategoryGuard", () => {
 
 			it("사용자의 카테고리가 요구된 카테고리와 일치하지 않으면 ForbiddenException을 던져야 한다", () => {
 				// Given
-				mockReflector.get.mockReturnValue([RoleCategoryName.WORKSPACE]);
+				mockReflector.get.mockReturnValue([RoleCategoryName.PUBLIC]);
 				const user = createMockUser();
 				const tenant = createMockTenant();
 				mockClsService.get.mockImplementation((key: string) => {
@@ -384,7 +393,7 @@ describe("RoleCategoryGuard", () => {
 				mockReflector.get.mockReturnValue([RoleCategoryName.SHARED]);
 				const tenant = createMockTenant({
 					role: {
-						name: "VIEW",
+						name: "MEMBER",
 						classification: null,
 					},
 				});

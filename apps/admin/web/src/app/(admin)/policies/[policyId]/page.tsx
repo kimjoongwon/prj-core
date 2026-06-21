@@ -146,7 +146,7 @@ function mapAbility(ability: AbilityResponseDto): PolicyDetailScreenAbility {
 function mapPolicy(policy: PolicyResponseDto): PolicyDetailScreenPolicy {
 	return {
 		id: policy.id,
-		spaceId: policy.spaceId,
+		tenantId: policy.tenantId,
 		name: policy.name,
 		displayName: policy.displayName,
 		description: policy.description,

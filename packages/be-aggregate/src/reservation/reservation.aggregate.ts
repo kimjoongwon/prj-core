@@ -201,7 +201,10 @@ export class ReservationAggregate {
 		params: ReservationCheckoutInput,
 	): Promise<ReservationCheckoutResult> {
 		this.assertCheckoutPaymentMethod(params.paymentMethod);
-		await this.assertUserCanBookSpace(params.userId, params.spaceId);
+		const tenantId = await this.assertUserCanBookSpace(
+			params.userId,
+			params.spaceId,
+		);
 
 		const existingByKey = await this.repository.findByUserAndIdempotencyKey(
 			params.userId,
@@ -288,7 +291,10 @@ export class ReservationAggregate {
 			`예약 생성 요청: user=${params.userId.slice(-8)}, program=${params.input.programId.slice(-8)}`,
 		);
 
-		await this.assertUserCanBookSpace(params.userId, params.spaceId);
+		const tenantId = await this.assertUserCanBookSpace(
+			params.userId,
+			params.spaceId,
+		);
 
 		const existingByKey = await this.repository.findByUserAndIdempotencyKey(
 			params.userId,
@@ -351,7 +357,7 @@ export class ReservationAggregate {
 		}
 
 		const reservation = await this.repository.create({
-			spaceId: params.spaceId,
+			tenantId,
 			userId: params.userId,
 			coursePassId,
 			timelineId: params.input.timelineId,
@@ -524,7 +530,7 @@ export class ReservationAggregate {
 		const result = await this.coursesRepository.findManyOfferings({
 			where: {
 				course: { is: { status: CourseStatus.ACTIVE } },
-				spaceId: params.spaceId,
+				tenant: { spaceId: params.spaceId },
 				status: {
 					in: [CourseOfferingStatus.ENROLLING, CourseOfferingStatus.ACTIVE],
 				},
@@ -572,7 +578,7 @@ export class ReservationAggregate {
 			throw new NotFoundException(COURSE_ERRORS.COURSE_OFFERING_NOT_FOUND);
 		}
 		if (
-			courseOffering.spaceId !== params.spaceId ||
+			courseOffering.tenant?.spaceId !== params.spaceId ||
 			courseOffering.timelineId !== params.timelineId
 		) {
 			throw new BadRequestException(
@@ -627,7 +633,6 @@ export class ReservationAggregate {
 				},
 			],
 			requestedAt: new Date(),
-			spaceId: params.spaceId,
 			status: PaymentStatus.PAID,
 			subjects: [
 				{
@@ -740,7 +745,7 @@ export class ReservationAggregate {
 	private async assertUserCanBookSpace(
 		userId: string,
 		spaceId: string,
-	): Promise<void> {
+	): Promise<string> {
 		const tenant = await this.tenantsRepository.findActiveByUserIdAndSpaceId(
 			userId,
 			spaceId,
@@ -748,6 +753,7 @@ export class ReservationAggregate {
 		if (!tenant) {
 			throw new ForbiddenException(RESERVATION_ERRORS.SPACE_ACCESS_REQUIRED);
 		}
+		return tenant.id;
 	}
 
 	private async assertCoursePassCanReserve(params: {
@@ -776,8 +782,7 @@ export class ReservationAggregate {
 			);
 		}
 
-		const passSpaceId =
-			coursePass.courseOffering?.spaceId ?? coursePass.course?.spaceId;
+		const passSpaceId = coursePass.courseOffering?.tenant?.spaceId;
 		if (!passSpaceId || passSpaceId !== params.spaceId) {
 			throw new ForbiddenException(COURSE_ERRORS.COURSE_PASS_SPACE_MISMATCH);
 		}
@@ -806,10 +811,15 @@ export class ReservationAggregate {
 			return;
 		}
 
+		const nextWaitlistedSpaceId = nextWaitlisted.tenant?.spaceId;
+		if (!nextWaitlistedSpaceId) {
+			throw new BadRequestException(RESERVATION_ERRORS.INVALID_DATA);
+		}
+
 		const coursePassId = await this.assertCoursePassCanReserve({
 			coursePassId: nextWaitlisted.coursePassId,
 			userId: nextWaitlisted.userId,
-			spaceId: nextWaitlisted.spaceId,
+			spaceId: nextWaitlistedSpaceId,
 			timelineId: nextWaitlisted.timelineId,
 			occurrenceStartAt: nextWaitlisted.occurrenceStartAt,
 		});
@@ -1105,10 +1115,7 @@ export class ReservationAggregate {
 				validFrom: { lte: params.to },
 				expiresAt: { gte: params.from },
 				reservationRemainingCount: { gt: 0 },
-				OR: [
-					{ courseOffering: { spaceId: params.spaceId } },
-					{ course: { spaceId: params.spaceId } },
-				],
+				courseOffering: { tenant: { spaceId: params.spaceId } },
 			},
 			orderBy: [{ expiresAt: "asc" }],
 			take: 200,

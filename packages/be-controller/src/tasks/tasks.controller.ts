@@ -136,7 +136,7 @@ export class TasksController {
 	@Post()
 	@HttpCode(HttpStatus.CREATED)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.MANAGE, SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "createTask",
 		summary: "Task 생성",
@@ -166,7 +166,7 @@ export class TasksController {
 
 	@Patch(":taskId/exercise")
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.MANAGE, SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "updateTaskExercise",
 		summary: "Task의 Exercise detail 수정",
@@ -202,7 +202,7 @@ export class TasksController {
 	@Delete(":taskId")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.MANAGE, SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "deleteTask",
 		summary: "Task 삭제",

@@ -29,13 +29,13 @@ export interface GroundSeedData {
 	isSystem?: boolean; // System Space에 연결되는 Ground
 }
 
-// 11명의 다양한 역할 유저 데이터 (FULL_ACCESS 2명, MANAGE 3명, VIEW 6명)
+// 11명의 다양한 역할 유저 데이터 (PLATFORM_ADMIN 2명, COMPANY_MANAGER 3명, MEMBER 6명)
 export const userSeedData: UserSeedData[] = [
 	...systemAdminSeedData.map((user) => ({
 		...user,
-		role: "FULL_ACCESS",
+		role: "PLATFORM_ADMIN",
 	})),
-	// MANAGE 3명 - 각 지점 관리자
+	// COMPANY_MANAGER 3명 - 각 지점 관리자
 	{
 		email: "manager.gwanghwamun@f45.kr",
 		phone: "01023456789",
@@ -44,7 +44,7 @@ export const userSeedData: UserSeedData[] = [
 			name: "이점장",
 			nickname: "광화문점장",
 		},
-		role: "MANAGE",
+		role: "COMPANY_MANAGER",
 	},
 	{
 		email: "manager.gangnam@f45.kr",
@@ -54,7 +54,7 @@ export const userSeedData: UserSeedData[] = [
 			name: "박매니저",
 			nickname: "강남매니저",
 		},
-		role: "MANAGE",
+		role: "COMPANY_MANAGER",
 	},
 	{
 		email: "manager.itaewon@crossfit.kr",
@@ -64,9 +64,9 @@ export const userSeedData: UserSeedData[] = [
 			name: "최코치",
 			nickname: "이태원코치",
 		},
-		role: "MANAGE",
+		role: "COMPANY_MANAGER",
 	},
-	// VIEW 6명 - 실제 회원들
+	// MEMBER 6명 - 실제 회원들
 	{
 		email: "minsu.kim92@gmail.com",
 		phone: "01056789012",
@@ -75,7 +75,7 @@ export const userSeedData: UserSeedData[] = [
 			name: "김민수",
 			nickname: "민수",
 		},
-		role: "VIEW",
+		role: "MEMBER",
 	},
 	{
 		email: "seoyeon_lee@naver.com",
@@ -85,7 +85,7 @@ export const userSeedData: UserSeedData[] = [
 			name: "이서연",
 			nickname: "서연",
 		},
-		role: "VIEW",
+		role: "MEMBER",
 	},
 	{
 		email: "yejun.park@kakao.com",
@@ -95,7 +95,7 @@ export const userSeedData: UserSeedData[] = [
 			name: "박예준",
 			nickname: "예준",
 		},
-		role: "VIEW",
+		role: "MEMBER",
 	},
 	{
 		email: "jiwoo0315@gmail.com",
@@ -105,7 +105,7 @@ export const userSeedData: UserSeedData[] = [
 			name: "최지우",
 			nickname: "지우",
 		},
-		role: "VIEW",
+		role: "MEMBER",
 	},
 	{
 		email: "hayoon.jung@naver.com",
@@ -115,7 +115,7 @@ export const userSeedData: UserSeedData[] = [
 			name: "정하윤",
 			nickname: "하윤",
 		},
-		role: "VIEW",
+		role: "MEMBER",
 	},
 	{
 		email: "doyoon.kang@gmail.com",
@@ -125,7 +125,7 @@ export const userSeedData: UserSeedData[] = [
 			name: "강도윤",
 			nickname: "도윤",
 		},
-		role: "VIEW",
+		role: "MEMBER",
 	},
 ];
 
@@ -235,7 +235,7 @@ export interface UserGroundMappingData {
 
 // 유저와 그라운드 매핑 (정합성 보장 - 역할에 맞는 논리적 연결)
 export const userGroundMapping: UserGroundMappingData[] = [
-	// FULL_ACCESS - 플랫폼 운영본부 (System Space)
+	// PLATFORM_ADMIN - 플랫폼 운영본부 (System Space)
 	{
 		userEmail: "admin@plate.com",
 		groundNames: ["플랫폼 운영본부"],
@@ -244,7 +244,7 @@ export const userGroundMapping: UserGroundMappingData[] = [
 		userEmail: "wallydevplan@gmail.com",
 		groundNames: ["플랫폼 운영본부"],
 	},
-	// MANAGE - 담당 지점만 (F45 계열)
+	// COMPANY_MANAGER - 담당 지점만 (F45 계열)
 	{
 		userEmail: "manager.gwanghwamun@f45.kr",
 		groundNames: ["F45 광화문"],
@@ -253,12 +253,12 @@ export const userGroundMapping: UserGroundMappingData[] = [
 		userEmail: "manager.gangnam@f45.kr",
 		groundNames: ["F45 강남1호", "F45 삼성"], // 강남 지역 담당
 	},
-	// MANAGE - 크로스핏 담당
+	// COMPANY_MANAGER - 크로스핏 담당
 	{
 		userEmail: "manager.itaewon@crossfit.kr",
 		groundNames: ["크로스핏 이태원", "크로스핏 마포"],
 	},
-	// VIEW - 가입한 지점 (일반 회원)
+	// MEMBER - 가입한 지점 (일반 회원)
 	{
 		userEmail: "minsu.kim92@gmail.com",
 		groundNames: ["F45 광화문"], // 광화문 회원

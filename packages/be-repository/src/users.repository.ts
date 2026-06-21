@@ -71,7 +71,14 @@ export class UsersRepository {
 						},
 						space: {
 							include: {
-								ground: true,
+								company: {
+									include: {
+										grounds: {
+											where: { removedAt: null },
+											orderBy: { createdAt: "asc" },
+										},
+									},
+								},
 								classification: {
 									include: {
 										category: {
@@ -166,7 +173,14 @@ export class UsersRepository {
 						},
 						space: {
 							include: {
-								ground: true,
+									company: {
+										include: {
+											grounds: {
+												where: { removedAt: null },
+												orderBy: { createdAt: "asc" },
+											},
+										},
+									},
 								classification: {
 									include: {
 										category: {
@@ -373,7 +387,14 @@ export class UsersRepository {
 						role: true,
 						space: {
 							include: {
-								ground: true,
+									company: {
+										include: {
+											grounds: {
+												where: { removedAt: null },
+												orderBy: { createdAt: "asc" },
+											},
+										},
+									},
 							},
 						},
 					},

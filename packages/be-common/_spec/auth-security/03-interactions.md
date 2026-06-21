@@ -128,15 +128,15 @@
 | POST | `/api/v1/auth/my-sessions/:grantId/revoke` | 특정 세션 종료 | JWT | - | `{message}` |
 | POST | `/api/v1/auth/my-sessions/revoke-others` | 다른 모든 세션 종료 | JWT | - | `{message, revokedCount}` |
 
-#### Phase 3: 관리자 보안 API (FULL_ACCESS 전용)
+#### Phase 3: 관리자 보안 API (PLATFORM_ADMIN 전용)
 
 | 메서드 | 경로 | 설명 | 인증 | 요청 | 응답 |
 |--------|------|------|------|------|------|
-| GET | `/api/v1/auth-audit-logs` | 감사 로그 목록 | JWT + FULL_ACCESS | query: `{email?, result?, startDate?, endDate?, skip, take}` | `{data: AuditLog[], meta}` |
-| POST | `/api/v1/users/:userId/unlock` | 계정 잠금 해제 | JWT + FULL_ACCESS | - | `{message}` |
-| POST | `/api/v1/users/:userId/force-reset-password` | 비밀번호 강제 재설정 | JWT + FULL_ACCESS | - | `{message}` |
-| POST | `/api/v1/users/:userId/invalidate-sessions` | 전체 세션 무효화 | JWT + FULL_ACCESS | - | `{message, revokedCount}` |
-| GET | `/api/v1/users/:userId/auth-audit-logs` | 특정 사용자 감사 로그 | JWT + FULL_ACCESS | query: `{skip, take}` | `{data: AuditLog[], meta}` |
+| GET | `/api/v1/auth-audit-logs` | 감사 로그 목록 | JWT + PLATFORM_ADMIN | query: `{email?, result?, startDate?, endDate?, skip, take}` | `{data: AuditLog[], meta}` |
+| POST | `/api/v1/users/:userId/unlock` | 계정 잠금 해제 | JWT + PLATFORM_ADMIN | - | `{message}` |
+| POST | `/api/v1/users/:userId/force-reset-password` | 비밀번호 강제 재설정 | JWT + PLATFORM_ADMIN | - | `{message}` |
+| POST | `/api/v1/users/:userId/invalidate-sessions` | 전체 세션 무효화 | JWT + PLATFORM_ADMIN | - | `{message, revokedCount}` |
+| GET | `/api/v1/users/:userId/auth-audit-logs` | 특정 사용자 감사 로그 | JWT + PLATFORM_ADMIN | query: `{skip, take}` | `{data: AuditLog[], meta}` |
 
 ### API 응답 에러 코드
 

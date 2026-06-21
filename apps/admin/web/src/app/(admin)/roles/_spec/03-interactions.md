@@ -66,7 +66,7 @@
 | **Operation ID** | `getRoles` |
 | **설명** | 모든 역할 목록을 조회합니다. Group/Category 정보를 포함합니다. |
 | **인증** | Bearer Token |
-| **권한** | `@Roles([MANAGE, FULL_ACCESS])` |
+| **권한** | `@Roles([COMPANY_MANAGER, PLATFORM_ADMIN])` |
 | **Request** | 없음 (전체 목록 반환) |
 | **Response** | `RoleDto[]` |
 | **에러** | 401 (인증 실패), 403 (권한 없음), 500 (서버 에러) |
@@ -80,8 +80,8 @@
   "data": [
     {
       "id": "uuid",
-      "name": "FULL_ACCESS",
-      "displayName": "전체 접근",
+      "name": "PLATFORM_ADMIN",
+      "displayName": "플랫폼 관리자",
       "description": "시스템의 모든 기능에 접근 가능합니다",
       "isSystem": true,
       "classification": {

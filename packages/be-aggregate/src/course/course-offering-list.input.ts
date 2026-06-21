@@ -8,7 +8,7 @@ export interface CourseOfferingListInput {
 	take?: number;
 	search?: string | null;
 	courseId?: string;
-	spaceId?: string;
+	tenantId?: string;
 	timelineId?: string;
 	status?: CourseOfferingStatus;
 	timelineProvisioningMode?: TimelineProvisioningMode;

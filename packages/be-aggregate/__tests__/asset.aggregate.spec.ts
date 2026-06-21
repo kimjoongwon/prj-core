@@ -34,6 +34,7 @@ describe("AssetAggregate", () => {
 		} as jest.Mocked<ObjectStorageService>;
 
 		mockSpaceContext = {
+			tenantId: "tenant-123",
 			spaceId: "space-123",
 		} as SpaceContext;
 
@@ -53,7 +54,7 @@ describe("AssetAggregate", () => {
 		service = module.get<AssetAggregate>(AssetAggregate);
 	});
 
-	it("FULL_ACCESS 목록 조회는 spaceId 필터 없이 전체 에셋을 요청해야 한다", async () => {
+	it("PLATFORM_ADMIN 목록 조회는 spaceId 필터 없이 전체 에셋을 요청해야 한다", async () => {
 		mockAssetsRepository.findMany.mockResolvedValue({
 			assets: [],
 			totalCount: 0,
@@ -80,7 +81,7 @@ describe("AssetAggregate", () => {
 		const findManyInput = mockAssetsRepository.findMany.mock.calls[0][0];
 		expect(findManyInput.where).toEqual(
 			expect.objectContaining({
-				spaceId: { in: ["space-123", "space-parent"] },
+				tenant: { spaceId: { in: ["space-123", "space-parent"] } },
 			}),
 		);
 	});
@@ -98,7 +99,8 @@ describe("AssetAggregate", () => {
 
 		mockFoldersRepository.findById.mockResolvedValue({
 			id: "folder-123",
-			spaceId: "space-123",
+			tenantId: "tenant-123",
+			tenant: { id: "tenant-123", spaceId: "space-123" },
 			removedAt: null,
 		} as never);
 		mockObjectStorageService.putObject.mockResolvedValue({
@@ -112,7 +114,7 @@ describe("AssetAggregate", () => {
 					createdAt: new Date(),
 					updatedAt: new Date(),
 					removedAt: null,
-					spaceId: data.spaceId,
+					tenantId: data.tenantId,
 					folderId: data.folderId,
 					kind: data.kind,
 					status: data.status,
@@ -124,6 +126,7 @@ describe("AssetAggregate", () => {
 					checksum: data.checksum as string | null,
 					metadata: data.metadata ?? null,
 					creatorId: data.creatorId as string | null,
+					tenant: { id: "tenant-123", spaceId: "space-123" },
 				}) as never,
 		);
 
@@ -150,7 +153,7 @@ describe("AssetAggregate", () => {
 		);
 		expect(mockAssetsRepository.create).toHaveBeenCalledWith(
 			expect.objectContaining({
-				spaceId: "space-123",
+				tenantId: "tenant-123",
 				folderId: "folder-123",
 				kind: AssetKind.IMAGE,
 				status: AssetStatus.READY,
@@ -184,7 +187,8 @@ describe("AssetAggregate", () => {
 
 		mockFoldersRepository.findById.mockResolvedValue({
 			id: "folder-123",
-			spaceId: "space-123",
+			tenantId: "tenant-123",
+			tenant: { id: "tenant-123", spaceId: "space-123" },
 			removedAt: null,
 		} as never);
 		mockObjectStorageService.putObject.mockResolvedValue({
@@ -198,7 +202,7 @@ describe("AssetAggregate", () => {
 					createdAt: new Date(),
 					updatedAt: new Date(),
 					removedAt: null,
-					spaceId: data.spaceId,
+					tenantId: data.tenantId,
 					folderId: data.folderId,
 					kind: data.kind,
 					status: data.status,
@@ -246,7 +250,8 @@ describe("AssetAggregate", () => {
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			removedAt: null,
-			spaceId: "space-123",
+			tenantId: "tenant-123",
+			tenant: { id: "tenant-123", spaceId: "space-123" },
 			folderId: "folder-123",
 			kind: AssetKind.IMAGE,
 			status: AssetStatus.READY,
@@ -279,7 +284,8 @@ describe("AssetAggregate", () => {
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			removedAt: null,
-			spaceId: "space-123",
+			tenantId: "tenant-123",
+			tenant: { id: "tenant-123", spaceId: "space-123" },
 			folderId: "folder-123",
 			kind: AssetKind.DOCUMENT,
 			status: AssetStatus.READY,
@@ -321,7 +327,8 @@ describe("AssetAggregate", () => {
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			removedAt: null,
-			spaceId: "space-123",
+			tenantId: "tenant-123",
+			tenant: { id: "tenant-123", spaceId: "space-123" },
 			folderId: "folder-123",
 			kind: AssetKind.IMAGE,
 			status: AssetStatus.READY,

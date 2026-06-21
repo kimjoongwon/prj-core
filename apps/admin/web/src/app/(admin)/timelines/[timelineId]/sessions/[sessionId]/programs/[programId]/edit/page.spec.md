@@ -26,7 +26,7 @@
 |------|------|------|:----:|------|
 | name | 프로그램 이름 | TextInput | O | 프로그램 이름 입력 |
 | routineId | 루틴 | Select (검색 가능) | O | 현재+상위 Space 루틴 목록에서 선택 |
-| instructorId | 강사 | Select (검색 가능) | O | 현재 Space의 MANAGE 이상 역할 사용자 목록에서 선택 |
+| instructorId | 강사 | Select (검색 가능) | O | 현재 Space의 COMPANY_MANAGER 이상 역할 사용자 목록에서 선택 |
 | capacity | 정원 | NumberInput | O | 최소 1명 |
 | level | 난이도 | Select | X | 초급 / 중급 / 고급 (없음 선택 가능) |
 
@@ -36,7 +36,7 @@
 |------|-----|------|
 | SSR 프리페칭 | `prefetchGetProgramQuery({ timelineId, sessionId, programId })` | 현재 프로그램 정보 (폼 초기값) |
 | 폼 로드 | `useGetRoutines({ spaceId, includeParent: true })` | 루틴 선택 목록 |
-| 폼 로드 | `useGetUsers({ spaceId, minRole: 'MANAGE' })` | 강사 선택 목록 |
+| 폼 로드 | `useGetUsers({ spaceId, minRole: 'COMPANY_MANAGER' })` | 강사 선택 목록 |
 | 수정 제출 | `useUpdateProgram()` | 프로그램 수정 |
 
 ## 이벤트 핸들러
@@ -60,7 +60,7 @@
 
 - **루틴 변경 시 중복 확인**: 다른 루틴으로 변경할 경우 세션 내 중복 여부 확인 (서버 응답 처리)
 - **루틴 목록 범위**: 현재 Space의 루틴 + 상위 Space(플랫폼) 루틴 모두 포함
-- **강사 목록**: 현재 Space에서 MANAGE 이상 역할을 가진 사용자만 표시
+- **강사 목록**: 현재 Space에서 COMPANY_MANAGER 이상 역할을 가진 사용자만 표시
 
 ## 구현 체크리스트
 

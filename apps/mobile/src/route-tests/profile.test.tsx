@@ -80,6 +80,7 @@ describe("mobile profile tab route", () => {
 			mobileApiScopeStore.setSpaceInfo({
 				groundName: "광화문 스튜디오",
 				spaceId: "space-1",
+				tenantId: "tenant-1",
 			});
 		});
 		jest.spyOn(mobileAuthStore, "logout").mockResolvedValue(undefined);

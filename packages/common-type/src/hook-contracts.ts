@@ -159,6 +159,7 @@ export interface UseLayoutReturn<
  * useSpaceGuard가 의존하는 PersistStore 최소 계약
  */
 export interface SpaceGuardPersistStoreLike {
+	tenantId?: string | null;
 	spaceId?: string | null;
 	groundName?: string | null;
 	isHydrated?: boolean;
@@ -197,6 +198,7 @@ export interface UseSpaceGuardReturn {
  */
 export interface SpaceBootstrapSpaceLike {
 	id?: string | null;
+	tenantId?: string | null;
 	contentLanguageCode?: string | null;
 	ground?: {
 		name?: string | null;
@@ -207,6 +209,7 @@ export interface SpaceBootstrapSpaceLike {
  * Persist 계층에 저장할 Space 선택 항목 계약
  */
 export interface SpaceBootstrapSelection {
+	tenantId: string;
 	spaceId: string;
 	groundName: string;
 	contentLanguageCode?: string | null;
@@ -219,9 +222,10 @@ export interface SpaceBootstrapStoreLike {
 	isSpaceSelectionResolved?: boolean;
 	setSpaces: (spaces: SpaceBootstrapSelection[]) => void;
 	setSpace: (
-		spaceId: string,
+		tenantId: string,
 		groundName: string,
 		contentLanguageCode?: string | null,
+		spaceId?: string | null,
 	) => void;
 	clearSpace: () => void;
 	setSpaceSelectionResolved: (resolved: boolean) => void;

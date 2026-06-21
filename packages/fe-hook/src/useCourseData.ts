@@ -164,7 +164,7 @@ const coursePassKindLabels: Record<string, string> = {
  * CourseOffering의 Space 라벨을 계산합니다.
  */
 function getSpaceLabel(offering: CourseOfferingDto) {
-	return offering.space?.ground?.name ?? offering.spaceId;
+	return offering.tenant?.space?.ground?.name ?? offering.tenantId;
 }
 
 /**

@@ -140,7 +140,14 @@ export class OidcDirectUsersRepository {
 						role: true,
 						space: {
 							include: {
-								ground: true,
+								company: {
+									include: {
+										grounds: {
+											where: { removedAt: null },
+											orderBy: { createdAt: "asc" },
+										},
+									},
+								},
 							},
 						},
 					},

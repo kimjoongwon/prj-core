@@ -10,7 +10,7 @@ interface PersistStoreStub {
 	accessToken: string;
 	refreshToken: string;
 	sessionId: string;
-	spaceId: string;
+	tenantId: string;
 	accessTokenExpiresAt: number;
 	refreshTokenExpiresAt: number;
 }
@@ -46,7 +46,7 @@ describe("customAxios", () => {
 			accessToken: "old-access-token",
 			refreshToken: "old-refresh-token",
 			sessionId: "session-id",
-			spaceId: "space-id",
+			tenantId: "tenant-id",
 			accessTokenExpiresAt: Date.now() - 1000,
 			refreshTokenExpiresAt: Date.now() + 60000,
 		};

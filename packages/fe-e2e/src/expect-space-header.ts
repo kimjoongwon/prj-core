@@ -1,22 +1,23 @@
 import type { E2ERouteLike } from "./e2e-route-like";
 
-const DEFAULT_SYSTEM_SPACE_ID =
-	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
+const DEFAULT_SYSTEM_TENANT_ID =
+	process.env.E2E_SYSTEM_TENANT_ID ??
+	"71ddca20-1752-466e-b4da-879ebdbe54e3";
 
 export function expectSpaceHeader(
 	route: E2ERouteLike,
-	spaceId = DEFAULT_SYSTEM_SPACE_ID,
+	tenantId = DEFAULT_SYSTEM_TENANT_ID,
 ) {
 	const headers = route.request().headers();
-	const actualSpaceId = headers["x-space-id"];
+	const actualTenantId = headers["x-tenant-id"];
 
-	if (!actualSpaceId) {
-		throw new Error("x-space-id header is missing.");
+	if (!actualTenantId) {
+		throw new Error("x-tenant-id header is missing.");
 	}
 
-	if (actualSpaceId.toLowerCase() !== spaceId.toLowerCase()) {
+	if (actualTenantId.toLowerCase() !== tenantId.toLowerCase()) {
 		throw new Error(
-			`x-space-id header mismatch. Expected ${spaceId}, received ${actualSpaceId}.`,
+			`x-tenant-id header mismatch. Expected ${tenantId}, received ${actualTenantId}.`,
 		);
 	}
 }

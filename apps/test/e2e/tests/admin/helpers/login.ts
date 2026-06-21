@@ -1,6 +1,8 @@
 import type { Page } from "@playwright/test";
 
-/** 시드 데이터 기준 System Space (플랫폼 운영본부) */
+/** 시드 데이터 기준 System Tenant/Space (플랫폼 운영본부) */
+const SYSTEM_TENANT_ID =
+	process.env.E2E_SYSTEM_TENANT_ID ?? "71ddca20-1752-466e-b4da-879ebdbe54e3";
 const SYSTEM_SPACE_ID =
 	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
 const SYSTEM_GROUND_NAME = "플랫폼 운영본부";
@@ -41,9 +43,11 @@ const ADMIN_PREWARM_PATHS = [
 ];
 
 type AdminPersistSnapshot = {
+	tenantId: string | null;
 	spaceId: string | null;
 	groundName: string | null;
 	spaces: Array<{
+		tenantId: string;
 		spaceId: string;
 		groundName: string;
 	}>;
@@ -64,9 +68,10 @@ type NativeAuthSession = {
 
 function buildAdminPersistSnapshot(
 	raw: string | null,
-	nextSpace: { spaceId: string; groundName: string },
+	nextSpace: { tenantId: string; spaceId: string; groundName: string },
 ): AdminPersistSnapshot {
 	const fallbackSnapshot: AdminPersistSnapshot = {
+		tenantId: nextSpace.tenantId,
 		spaceId: nextSpace.spaceId,
 		groundName: nextSpace.groundName,
 		spaces: [nextSpace],
@@ -85,17 +90,26 @@ function buildAdminPersistSnapshot(
 		const parsed = JSON.parse(raw) as Partial<AdminPersistSnapshot>;
 		const spaces = Array.isArray(parsed.spaces)
 			? parsed.spaces.filter(
-					(space): space is { spaceId: string; groundName: string } =>
+					(
+						space,
+					): space is {
+						tenantId: string;
+						spaceId: string;
+						groundName: string;
+					} =>
+						typeof space?.tenantId === "string" &&
+						space.tenantId.length > 0 &&
 						typeof space?.spaceId === "string" &&
 						space.spaceId.length > 0 &&
 						typeof space.groundName === "string",
 				)
 			: [];
 		const hasSystemSpace = spaces.some(
-			(space) => space.spaceId === nextSpace.spaceId,
+			(space) => space.tenantId === nextSpace.tenantId,
 		);
 
 		return {
+			tenantId: nextSpace.tenantId,
 			spaceId: nextSpace.spaceId,
 			groundName: nextSpace.groundName,
 			spaces: hasSystemSpace ? spaces : [nextSpace, ...spaces],
@@ -131,13 +145,14 @@ async function ensureAdminDashboard(page: Page) {
 
 export async function seedAdminPersist(
 	page: Page,
-	nextSpace: { spaceId: string; groundName: string },
+	nextSpace: { tenantId: string; spaceId: string; groundName: string },
 ) {
 	await ensureAdminDashboard(page);
 	await page.evaluate(
 		({ storageKey, nextSpaceValue }) => {
 			const raw = window.localStorage.getItem(storageKey);
 			const fallbackSnapshot = {
+				tenantId: nextSpaceValue.tenantId,
 				spaceId: nextSpaceValue.spaceId,
 				groundName: nextSpaceValue.groundName,
 				spaces: [nextSpaceValue],
@@ -150,14 +165,24 @@ export async function seedAdminPersist(
 
 			try {
 				const parsed = raw ? JSON.parse(raw) : fallbackSnapshot;
-				const spaces: Array<{ spaceId: string; groundName: string }> =
+				const spaces: Array<{
+					tenantId: string;
+					spaceId: string;
+					groundName: string;
+				}> =
 					Array.isArray(parsed?.spaces)
 						? parsed.spaces.filter(
 								(
 									space: unknown,
-								): space is { spaceId: string; groundName: string } =>
+								): space is {
+									tenantId: string;
+									spaceId: string;
+									groundName: string;
+								} =>
 									typeof space === "object" &&
 									space !== null &&
+									typeof (space as { tenantId?: unknown }).tenantId ===
+										"string" &&
 									typeof (space as { spaceId?: unknown }).spaceId ===
 										"string" &&
 									typeof (space as { groundName?: unknown }).groundName ===
@@ -165,12 +190,13 @@ export async function seedAdminPersist(
 							)
 						: [];
 				const hasSystemSpace = spaces.some(
-					(space) => space.spaceId === nextSpaceValue.spaceId,
+					(space) => space.tenantId === nextSpaceValue.tenantId,
 				);
 
 				window.localStorage.setItem(
 					storageKey,
 					JSON.stringify({
+						tenantId: nextSpaceValue.tenantId,
 						spaceId: nextSpaceValue.spaceId,
 						groundName: nextSpaceValue.groundName,
 						spaces: hasSystemSpace ? spaces : [nextSpaceValue, ...spaces],
@@ -215,8 +241,8 @@ export async function readAdminPersist(page: Page) {
 			}
 
 			try {
-				const parsed = JSON.parse(raw) as { spaceId?: string | null };
-				return typeof parsed.spaceId === "string" && parsed.spaceId.length > 0;
+		const parsed = JSON.parse(raw) as { spaceId?: string | null };
+		return typeof parsed.spaceId === "string" && parsed.spaceId.length > 0;
 			} catch {
 				return false;
 			}
@@ -235,6 +261,7 @@ export async function readAdminPersist(page: Page) {
 	}
 
 	return buildAdminPersistSnapshot(raw, {
+		tenantId: SYSTEM_TENANT_ID,
 		spaceId: SYSTEM_SPACE_ID,
 		groundName: SYSTEM_GROUND_NAME,
 	});
@@ -243,7 +270,7 @@ export async function readAdminPersist(page: Page) {
 /**
  * Admin 앱에 native 로그인 플로우를 수행합니다.
  *
- * 1. /admin/auth/login에서 시드 데이터의 FULL_ACCESS 계정으로 로그인
+ * 1. /admin/auth/login에서 시드 데이터의 PLATFORM_ADMIN 계정으로 로그인
  * 2. native access/refresh token을 admin-persist에 저장
  * 3. current-space API로 System Space 선택 가능 여부를 확인
  * 4. Admin 대시보드로 리다이렉트
@@ -254,7 +281,7 @@ export async function loginToAdmin(page: Page) {
 	const session = await requestNativeLogin(page);
 	await writeAdminNativeSession(page, session);
 	const currentSpaceResponse = await page.request.post(CURRENT_SPACE_URL, {
-		data: { spaceId: SYSTEM_SPACE_ID },
+		data: { tenantId: SYSTEM_TENANT_ID },
 		headers: {
 			Authorization: `Bearer ${session.accessToken}`,
 		},
@@ -264,10 +291,13 @@ export async function loginToAdmin(page: Page) {
 	}
 
 	const currentSpaceBody = (await currentSpaceResponse.json()) as {
-		data?: { id?: string; ground?: { name?: string } };
+		data?: { id?: string; tenantId?: string | null; ground?: { name?: string } };
 	};
 	if (currentSpaceBody.data?.id !== SYSTEM_SPACE_ID) {
 		throw new Error("현재 Space 검증 결과가 기대한 Space와 일치하지 않습니다.");
+	}
+	if (currentSpaceBody.data?.tenantId !== SYSTEM_TENANT_ID) {
+		throw new Error("현재 Tenant 검증 결과가 기대한 Tenant와 일치하지 않습니다.");
 	}
 
 	const currentSpaceName =
@@ -277,6 +307,7 @@ export async function loginToAdmin(page: Page) {
 	}
 
 	await seedAdminPersist(page, {
+		tenantId: SYSTEM_TENANT_ID,
 		spaceId: SYSTEM_SPACE_ID,
 		groundName: currentSpaceName,
 	});

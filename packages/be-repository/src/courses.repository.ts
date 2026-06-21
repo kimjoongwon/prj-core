@@ -11,12 +11,12 @@ import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-pr
 import { plainToInstance } from "class-transformer";
 
 const courseInclude = {
-	space: true,
+	tenant: true,
 } satisfies Prisma.CourseInclude;
 
 const courseOfferingInclude = {
 	course: true,
-	space: true,
+	tenant: true,
 	timeline: true,
 } satisfies Prisma.CourseOfferingInclude;
 
@@ -25,7 +25,7 @@ const enrollmentInclude = {
 	course: true,
 	courseOffering: {
 		include: {
-			space: true,
+			tenant: true,
 			timeline: true,
 		},
 	},
@@ -41,7 +41,7 @@ const coursePassInclude = {
 			course: true,
 			courseOffering: {
 				include: {
-					space: true,
+					tenant: true,
 					timeline: true,
 				},
 			},
@@ -52,7 +52,7 @@ const coursePassInclude = {
 	course: true,
 	courseOffering: {
 		include: {
-			space: true,
+			tenant: true,
 			timeline: true,
 		},
 	},

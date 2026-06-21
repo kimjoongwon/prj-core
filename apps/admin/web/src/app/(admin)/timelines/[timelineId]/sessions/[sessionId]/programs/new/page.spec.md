@@ -9,7 +9,7 @@
 1. 관리자가 세션 상세 페이지의 "프로그램 등록" 버튼을 클릭한다
 2. 프로그램 등록 폼이 표시된다
 3. 루틴 선택 드롭다운에서 현재 Space(및 상위 Space)의 루틴 목록을 확인한다
-4. 강사 선택 드롭다운에서 현재 Space의 MANAGE 이상 역할 사용자 목록을 확인한다
+4. 강사 선택 드롭다운에서 현재 Space의 COMPANY_MANAGER 이상 역할 사용자 목록을 확인한다
 5. 필수 항목(프로그램 이름, 루틴, 강사, 정원)을 입력한다
 6. 난이도(선택)를 설정한다
 7. "등록" 버튼을 클릭하면 프로그램이 생성되고 세션 상세 페이지로 돌아간다
@@ -29,7 +29,7 @@
 |------|------|------|:----:|------|
 | name | 프로그램 이름 | TextInput | O | 프로그램 이름 입력 |
 | routineId | 루틴 | Select (검색 가능) | O | 현재+상위 Space 루틴 목록에서 선택 |
-| instructorId | 강사 | Select (검색 가능) | O | 현재 Space의 MANAGE 이상 역할 사용자 목록에서 선택 |
+| instructorId | 강사 | Select (검색 가능) | O | 현재 Space의 COMPANY_MANAGER 이상 역할 사용자 목록에서 선택 |
 | capacity | 정원 | NumberInput | O | 최소 1명, 최대 제한 없음 |
 | level | 난이도 | Select | X | 초급 / 중급 / 고급 (없음 선택 가능) |
 
@@ -39,7 +39,7 @@
 |------|-----|------|
 | SSR 프리페칭 | `prefetchGetSessionQuery({ timelineId, sessionId })` | 세션명/타임라인명 표시용 |
 | 폼 로드 | `useGetRoutines({ spaceId, includeParent: true })` | 루틴 선택 목록 |
-| 폼 로드 | `useGetUsers({ spaceId, minRole: 'MANAGE' })` | 강사 선택 목록 |
+| 폼 로드 | `useGetUsers({ spaceId, minRole: 'COMPANY_MANAGER' })` | 강사 선택 목록 |
 | 등록 제출 | `useCreateProgram()` | 프로그램 등록 |
 
 ## 이벤트 핸들러
@@ -63,7 +63,7 @@
 
 - **루틴 중복 불가**: 이미 같은 루틴이 이 세션에 등록되어 있으면 에러 표시 (서버 응답 처리)
 - **루틴 목록 범위**: 현재 Space의 루틴 + 상위 Space(플랫폼) 루틴 모두 포함
-- **강사 목록**: 현재 Space에서 MANAGE 이상 역할을 가진 사용자만 표시
+- **강사 목록**: 현재 Space에서 COMPANY_MANAGER 이상 역할을 가진 사용자만 표시
 
 ## 구현 체크리스트
 

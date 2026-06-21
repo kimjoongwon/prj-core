@@ -53,7 +53,7 @@ export class TemplatesController {
 	@Get()
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "getTemplates",
 		summary: "템플릿 목록 조회",
@@ -71,7 +71,7 @@ export class TemplatesController {
 	@Get(":templateId")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "getTemplate",
 		summary: "템플릿 상세 조회",
@@ -94,7 +94,7 @@ export class TemplatesController {
 	@Post()
 	@HttpCode(HttpStatus.CREATED)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "createTemplate",
 		summary: "템플릿 등록",
@@ -115,7 +115,7 @@ export class TemplatesController {
 	@Patch(":templateId")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "updateTemplate",
 		summary: "템플릿 수정",
@@ -145,7 +145,7 @@ export class TemplatesController {
 	@Delete(":templateId")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "deleteTemplate",
 		summary: "템플릿 삭제",
@@ -168,7 +168,7 @@ export class TemplatesController {
 	@Patch(":templateId/toggle-status")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "toggleTemplateStatus",
 		summary: "템플릿 활성/비활성 토글",
@@ -193,7 +193,7 @@ export class TemplatesController {
 	@Post(":templateId/preview")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "previewTemplate",
 		summary: "템플릿 미리보기",
@@ -222,7 +222,7 @@ export class TemplatesController {
 	@Post(":templateId/send-test")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "sendTestTemplate",
 		summary: "템플릿 발송 테스트",

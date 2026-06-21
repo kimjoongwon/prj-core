@@ -8,7 +8,7 @@ import { getTestAuth, TestJwtStrategy } from "./helpers/test-auth.helper";
 describe("Templates API E2E 테스트", () => {
 	let app: INestApplication;
 	let jwtToken: string;
-	let spaceId: string;
+	let tenantId: string;
 
 	const createdTemplateIds: string[] = [];
 	const TEST_PREFIX = `E2E_TEMPLATE_${Date.now()}`;
@@ -26,20 +26,20 @@ describe("Templates API E2E 테스트", () => {
 		try {
 			const auth = await getTestAuth(app);
 			jwtToken = auth.jwtToken;
-			spaceId = auth.spaceId;
+			tenantId = auth.tenantId;
 		} catch (error) {
 			console.warn(`테스트 인증 설정 실패: ${error}`);
 		}
 	}, 60000);
 
 	afterAll(async () => {
-		if (jwtToken && spaceId) {
+		if (jwtToken && tenantId) {
 			for (const templateId of createdTemplateIds) {
 				try {
 					await request(app.getHttpServer())
 						.delete(`/api/v1/templates/${templateId}`)
 						.set("Authorization", `Bearer ${jwtToken}`)
-						.set("x-space-id", spaceId);
+						.set("x-tenant-id", tenantId);
 				} catch {
 					// 이미 삭제된 데이터는 무시
 				}
@@ -52,16 +52,16 @@ describe("Templates API E2E 테스트", () => {
 	}, 30000);
 
 	describe("목록 조회", () => {
-		it("Given 인증과 x-space-id 헤더가 있을 때 When 템플릿 목록을 조회하면 Then 200과 ResponseEntity 목록을 반환해야 한다", async () => {
+		it("Given 인증과 x-tenant-id 헤더가 있을 때 When 템플릿 목록을 조회하면 Then 200과 ResponseEntity 목록을 반환해야 한다", async () => {
 			// Given
-			if (!jwtToken || !spaceId) return;
+			if (!jwtToken || !tenantId) return;
 
 			// When
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/templates")
 				.query({ skip: 0, take: 10 })
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("x-space-id", spaceId);
+				.set("x-tenant-id", tenantId);
 
 			// Then
 			expect(response.status).toBe(200);
@@ -75,7 +75,7 @@ describe("Templates API E2E 테스트", () => {
 	describe("생성", () => {
 		it("Given 유효한 템플릿 데이터와 필수 헤더가 있을 때 When 템플릿을 생성하면 Then 201과 생성된 템플릿을 반환해야 한다", async () => {
 			// Given
-			if (!jwtToken || !spaceId) return;
+			if (!jwtToken || !tenantId) return;
 
 			const createDto = {
 				code: `${TEST_PREFIX}_CODE_${Date.now()}`,
@@ -90,7 +90,7 @@ describe("Templates API E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.post("/api/v1/templates")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("x-space-id", spaceId)
+				.set("x-tenant-id", tenantId)
 				.send(createDto);
 
 			// Then
@@ -106,7 +106,7 @@ describe("Templates API E2E 테스트", () => {
 
 		it("Given code 필드가 누락된 데이터가 있을 때 When 템플릿을 생성하면 Then 400을 반환해야 한다", async () => {
 			// Given
-			if (!jwtToken || !spaceId) return;
+			if (!jwtToken || !tenantId) return;
 
 			const invalidDto = {
 				name: `${TEST_PREFIX}_INVALID_${Date.now()}`,
@@ -120,7 +120,7 @@ describe("Templates API E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.post("/api/v1/templates")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("x-space-id", spaceId)
+				.set("x-tenant-id", tenantId)
 				.send(invalidDto);
 
 			// Then
@@ -131,7 +131,7 @@ describe("Templates API E2E 테스트", () => {
 	describe("단건 조회", () => {
 		it("Given 존재하지 않는 templateId가 있을 때 When 단건 조회하면 Then 404를 반환해야 한다", async () => {
 			// Given
-			if (!jwtToken || !spaceId) return;
+			if (!jwtToken || !tenantId) return;
 
 			const nonExistentTemplateId = "00000000-0000-0000-0000-000000000099";
 
@@ -139,7 +139,7 @@ describe("Templates API E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.get(`/api/v1/templates/${nonExistentTemplateId}`)
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("x-space-id", spaceId);
+				.set("x-tenant-id", tenantId);
 
 			// Then
 			expect(response.status).toBe(404);
@@ -149,12 +149,12 @@ describe("Templates API E2E 테스트", () => {
 	describe("인증", () => {
 		it("Given 인증 토큰 없이 요청할 때 When 템플릿 목록을 조회하면 Then 401을 반환해야 한다", async () => {
 			// Given
-			if (!spaceId) return;
+			if (!tenantId) return;
 
 			// When
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/templates")
-				.set("x-space-id", spaceId);
+				.set("x-tenant-id", tenantId);
 
 			// Then
 			expect(response.status).toBe(401);

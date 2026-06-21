@@ -41,7 +41,7 @@ Axios Interceptor                 ├─ SpaceAccessGuard ─→ X-Space-ID + Te
 |------|-------|------|--------|
 | 1 | `JwtAuthGuard` | JWT 토큰 검증, `request.user` 설정 | 글로벌 (`@PublicRoute` 제외) |
 | 2 | `SpaceAccessGuard` | X-Space-ID 필수 검증 + Tenant 매칭 | 글로벌 (`@PublicRoute`/`@SkipSpaceCheck` 제외) |
-| 3 | `RolesGuard` | `tenant.role.name` 검증 | `@Roles(SYSTEM_ROLES.MANAGE)` |
+| 3 | `RolesGuard` | `tenant.role.name` 검증 | `@Roles(SYSTEM_ROLES.COMPANY_MANAGER)` |
 | 4 | `RoleCategoryGuard` | Role의 Category 계층 검증 | `@RoleCategories(RoleCategoryNames.SHARED)` |
 | 5 | `RoleGroupGuard` | Role의 Group 검증 | `@RoleGroups(RoleGroupNames.TRUSTED)` |
 
@@ -113,8 +113,9 @@ class SpaceContext {
 ```
 SpaceCategory (ROOT, BRANCH 등)
     ↓ SpaceClassification
-Space (추상 컨테이너)
-    ├── Ground (구체화: name, address, phone 등) [1:1]
+Space (접근/테넌트 컨테이너)
+    ├── Company (구체화: 사업자등록번호, 법인/운영사 연락처 등) [1:1]
+    │   └── Ground[] (서비스 시설: 시설명, 현장 연락처, 이미지 등) [1:N]
     ├── SpaceClassification → Category (분류 체계)
     ├── SpaceAssociation → Group (그룹핑)
     └── Tenant (Bridge) ←── User + Role 연결
@@ -127,9 +128,9 @@ Space (추상 컨테이너)
 같은 User가 여러 Space에서 다른 Role을 가질 수 있음:
 ```
 User A:
-  ├─ space-001 에서 FULL_ACCESS (System Space)
-  ├─ space-002 에서 MANAGE
-  └─ space-003 에서 VIEW
+  ├─ space-001 에서 PLATFORM_ADMIN (System Space)
+  ├─ space-002 에서 COMPANY_MANAGER
+  └─ space-003 에서 MEMBER
 ```
 
 ---
@@ -183,7 +184,7 @@ AXIOS_INSTANCE.interceptors.request.use((config) => {
 ```typescript
 import { canAccessAllSpaces, isRootSpaceCategory } from "@cocrepo/be-common";
 
-// Service에서 전체 접근 권한 확인
+// Service에서 플랫폼 관리자 권한 확인
 if (canAccessAllSpaces(tenant)) {
   return this.repository.findAll();  // ROOT Space: 전체 조회
 }
@@ -212,4 +213,4 @@ return this.repository.findBySpaceId(spaceId);  // 일반: Space 필터링
 | UsersService | ✅ | 일부 | 목록은 SpaceContext, 상세/생성/수정/삭제는 파라미터 |
 | SpacesService | - | ✅ | Space 자체 관리라 SpaceContext 불필요 |
 | RolesService | - | ✅ | 시스템 수준 조회 |
-| SpacesService | - | ✅ | Space root는 파라미터 기반, Ground detail은 `/spaces/:spaceId/ground` nested route로 처리 |
+| SpacesService | - | ✅ | Space root는 파라미터 기반, Company/Ground detail은 `/spaces/:spaceId/ground` nested route로 처리 |

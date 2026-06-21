@@ -7,11 +7,13 @@ export const CONTEXT_KEYS = {
 	USER_ID: "request.userId",
 	LANGUAGE: "request.language_key",
 	TENANT: "request.tenant_key",
+	/** 현재 요청 Tenant ID (x-tenant-id 헤더) */
+	TENANT_ID: "request.tenant_id",
 	TOKEN: "request.token_key",
 	/** 현재 세션 ID (sessionId 쿠키) */
 	SESSION_ID: "request.session_id",
 	SERVICE_NAME: "request.service_name_key",
-	/** 요청된 Space ID (x-space-id 헤더) - undefined이면 선택되지 않은 상태 */
+	/** 현재 Tenant에서 파생된 Space ID - undefined이면 선택되지 않은 상태 */
 	SPACE_ID: "request.space_id",
 	/** SpaceScopeInterceptor가 계산한 최종 Space IDs (데코레이터 기반)
 	 * - undefined: 슈퍼매니저 (전체 조회)
@@ -26,5 +28,5 @@ export const CONTEXT_KEYS = {
 export const REQUEST_HEADER_KEYS = {
 	LANGUAGE: "x-language",
 	REFRESH_TOKEN: "x-refresh-token",
-	SPACE_ID: "x-space-id",
+	TENANT_ID: "x-tenant-id",
 } as const;

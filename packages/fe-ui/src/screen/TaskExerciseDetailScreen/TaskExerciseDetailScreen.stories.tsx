@@ -60,7 +60,7 @@ const defaultArgs = {
 			valueOf: (..._args: never[]) => undefined,
 		},
 		imageFileId: "image-file-1",
-		spaceId: "space-1",
+		tenantId: "space-1",
 		updatedAt: "2026-04-14T09:00:00.000Z",
 		videoAssetHref: {
 			anchor: (..._args: never[]) => undefined,

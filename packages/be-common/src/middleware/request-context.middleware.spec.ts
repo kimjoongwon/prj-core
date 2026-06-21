@@ -24,7 +24,7 @@ describe("RequestContextMiddleware", () => {
 				id: "tenant-1",
 				spaceId: "space-001",
 				role: {
-					name: "VIEW",
+					name: "MEMBER",
 					classification: {
 						category: {
 							name: "공개",
@@ -83,7 +83,7 @@ describe("RequestContextMiddleware", () => {
 				// Given
 				const user = createMockUser();
 				mockReq = {
-					headers: { [REQUEST_HEADER_KEYS.SPACE_ID]: "space-001" },
+					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "space-001" },
 					user,
 				} as unknown as Partial<Request>;
 
@@ -120,11 +120,11 @@ describe("RequestContextMiddleware", () => {
 		});
 
 		describe("Space/Tenant 설정", () => {
-			it("x-space-id와 매칭되는 tenant가 있으면 TENANT를 설정해야 한다", async () => {
+			it("x-tenant-id와 매칭되는 tenant가 있으면 TENANT를 설정해야 한다", async () => {
 				// Given
 				const user = createMockUser();
 				mockReq = {
-					headers: { [REQUEST_HEADER_KEYS.SPACE_ID]: "space-001" },
+					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "space-001" },
 					user,
 				} as unknown as Partial<Request>;
 
@@ -142,23 +142,23 @@ describe("RequestContextMiddleware", () => {
 				);
 			});
 
-			it("같은 spaceId에서 FULL_ACCESS tenant가 있으면 해당 tenant를 우선 저장해야 한다", async () => {
+			it("같은 spaceId에서 PLATFORM_ADMIN tenant가 있으면 해당 tenant를 우선 저장해야 한다", async () => {
 				const user = createMockUser({
 					tenants: [
 						{
 							id: "tenant-view",
 							spaceId: "space-001",
-							role: { name: "VIEW" },
+							role: { name: "MEMBER" },
 						},
 						{
 							id: "tenant-full-access",
 							spaceId: "space-001",
-							role: { name: "FULL_ACCESS" },
+							role: { name: "PLATFORM_ADMIN" },
 						},
 					],
 				});
 				mockReq = {
-					headers: { [REQUEST_HEADER_KEYS.SPACE_ID]: "space-001" },
+					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "space-001" },
 					user,
 				} as unknown as Partial<Request>;
 
@@ -176,13 +176,13 @@ describe("RequestContextMiddleware", () => {
 						{
 							id: "tenant-deleted",
 							spaceId: "space-001",
-							role: { name: "FULL_ACCESS" },
+							role: { name: "PLATFORM_ADMIN" },
 							removedAt: new Date(),
 						},
 					],
 				});
 				mockReq = {
-					headers: { [REQUEST_HEADER_KEYS.SPACE_ID]: "space-001" },
+					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "space-001" },
 					user,
 				} as unknown as Partial<Request>;
 
@@ -194,7 +194,7 @@ describe("RequestContextMiddleware", () => {
 				);
 			});
 
-			it("x-space-id가 없으면 SPACE_ID를 undefined로 설정해야 한다", async () => {
+			it("x-tenant-id가 없으면 SPACE_ID를 undefined로 설정해야 한다", async () => {
 				// Given
 				const user = createMockUser();
 				mockReq = { headers: {}, user } as unknown as Partial<Request>;
@@ -209,11 +209,11 @@ describe("RequestContextMiddleware", () => {
 				);
 			});
 
-			it("x-space-id와 매칭되는 tenant가 없으면 TENANT를 undefined로 설정해야 한다", async () => {
+			it("x-tenant-id와 매칭되는 tenant가 없으면 TENANT를 undefined로 설정해야 한다", async () => {
 				// Given
 				const user = createMockUser();
 				mockReq = {
-					headers: { [REQUEST_HEADER_KEYS.SPACE_ID]: "non-existent-space" },
+					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "non-existent-space" },
 					user,
 				} as unknown as Partial<Request>;
 
@@ -235,7 +235,7 @@ describe("RequestContextMiddleware", () => {
 					throw new Error("CLS 에러");
 				});
 				mockReq = {
-					headers: { [REQUEST_HEADER_KEYS.SPACE_ID]: "space-001" },
+					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "space-001" },
 					user: createMockUser(),
 				} as unknown as Partial<Request>;
 

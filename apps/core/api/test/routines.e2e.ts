@@ -10,15 +10,14 @@ import { getTestAuth, TestJwtStrategy } from "./helpers/test-auth.helper";
  *
  * - GET    /api/v1/routines              목록 조회 (인증 필요)
  * - GET    /api/v1/routines/:routineId   상세 조회 (인증 필요)
- * - POST   /api/v1/routines              등록 (MANAGE/FULL_ACCESS)
- * - PATCH  /api/v1/routines/:routineId   수정 (MANAGE/FULL_ACCESS)
- * - DELETE /api/v1/routines/:routineId   삭제 (MANAGE/FULL_ACCESS, 204 No Content)
+ * - POST   /api/v1/routines              등록 (COMPANY_MANAGER/PLATFORM_ADMIN)
+ * - PATCH  /api/v1/routines/:routineId   수정 (COMPANY_MANAGER/PLATFORM_ADMIN)
+ * - DELETE /api/v1/routines/:routineId   삭제 (COMPANY_MANAGER/PLATFORM_ADMIN, 204 No Content)
  */
 describe("Routines API (E2E)", () => {
 	let app: INestApplication;
 	let jwtToken: string;
-	let spaceId: string;
-	let userId: string;
+	let tenantId: string;
 
 	// 테스트 중 생성된 Routine ID를 추적하여 정리
 	const createdRoutineIds: string[] = [];
@@ -36,8 +35,7 @@ describe("Routines API (E2E)", () => {
 		try {
 			const auth = await getTestAuth(app);
 			jwtToken = auth.jwtToken;
-			spaceId = auth.spaceId;
-			userId = auth.userId;
+			tenantId = auth.tenantId;
 		} catch (error) {
 			console.warn(`테스트 인증 설정 실패: ${error}`);
 		}
@@ -45,13 +43,13 @@ describe("Routines API (E2E)", () => {
 
 	afterAll(async () => {
 		// 테스트 중 생성된 Routine 데이터 정리
-		if (jwtToken && spaceId) {
+		if (jwtToken && tenantId) {
 			for (const routineId of createdRoutineIds) {
 				try {
 					await request(app.getHttpServer())
 						.delete(`/api/v1/routines/${routineId}`)
 						.set("Authorization", `Bearer ${jwtToken}`)
-						.set("x-space-id", spaceId);
+						.set("x-tenant-id", tenantId);
 				} catch {
 					// 이미 삭제되었거나 존재하지 않으면 무시
 				}
@@ -70,13 +68,13 @@ describe("Routines API (E2E)", () => {
 		describe("GET /api/v1/routines", () => {
 			it("인증된 사용자는 루틴 목록을 조회할 수 있어야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId) return;
+				if (!jwtToken || !tenantId) return;
 
 				// When
 				const response = await request(app.getHttpServer())
 					.get("/api/v1/routines")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -86,14 +84,14 @@ describe("Routines API (E2E)", () => {
 
 			it("페이지네이션 파라미터로 루틴 목록을 조회할 수 있어야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId) return;
+				if (!jwtToken || !tenantId) return;
 
 				// When
 				const response = await request(app.getHttpServer())
 					.get("/api/v1/routines")
 					.query({ skip: 0, take: 5 })
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -105,14 +103,14 @@ describe("Routines API (E2E)", () => {
 
 			it("검색어로 루틴 목록을 필터링할 수 있어야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId) return;
+				if (!jwtToken || !tenantId) return;
 
 				// When
 				const response = await request(app.getHttpServer())
 					.get("/api/v1/routines")
 					.query({ search: "테스트" })
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then
 				expect(response.status).toBe(200);
@@ -123,20 +121,18 @@ describe("Routines API (E2E)", () => {
 		describe("POST /api/v1/routines", () => {
 			it("유효한 데이터로 루틴을 등록할 수 있어야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId || !userId) return;
+				if (!jwtToken || !tenantId) return;
 
 				const createDto = {
 					name: `테스트 루틴 ${Date.now()}`,
 					label: "테스트 레이블",
-					spaceId,
-					creatorId: userId,
 				};
 
 				// When
 				const response = await request(app.getHttpServer())
 					.post("/api/v1/routines")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId)
+					.set("x-tenant-id", tenantId)
 					.send(createDto);
 
 				// Then
@@ -145,7 +141,7 @@ describe("Routines API (E2E)", () => {
 				expect(response.body.data).toBeDefined();
 				expect(response.body.data.name).toBe(createDto.name);
 				expect(response.body.data.label).toBe(createDto.label);
-				expect(response.body.data.spaceId).toBe(spaceId);
+				expect(response.body.data.tenantId).toBe(tenantId);
 				expect(response.body.data.id).toBeDefined();
 
 				// 후속 테스트용 ID 저장 및 정리 목록에 추가
@@ -157,27 +153,27 @@ describe("Routines API (E2E)", () => {
 		describe("GET /api/v1/routines/:routineId", () => {
 			it("ID로 루틴 상세를 조회할 수 있어야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId || !testRoutineId) return;
+				if (!jwtToken || !tenantId || !testRoutineId) return;
 
 				// When
 				const response = await request(app.getHttpServer())
 					.get(`/api/v1/routines/${testRoutineId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then
 				expect(response.status).toBe(200);
 				expect(response.body.httpStatus).toBe(200);
 				expect(response.body.data.id).toBe(testRoutineId);
 				expect(response.body.data.name).toBeDefined();
-				expect(response.body.data.spaceId).toBeDefined();
+				expect(response.body.data.tenantId).toBeDefined();
 			});
 		});
 
 		describe("PATCH /api/v1/routines/:routineId", () => {
 			it("루틴의 name을 수정할 수 있어야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId || !testRoutineId) return;
+				if (!jwtToken || !tenantId || !testRoutineId) return;
 
 				const updateDto = {
 					name: "수정된 루틴명",
@@ -188,7 +184,7 @@ describe("Routines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.patch(`/api/v1/routines/${testRoutineId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId)
+					.set("x-tenant-id", tenantId)
 					.send(updateDto);
 
 				// Then
@@ -201,19 +197,17 @@ describe("Routines API (E2E)", () => {
 		describe("DELETE /api/v1/routines/:routineId", () => {
 			it("루틴을 삭제하면 204 No Content를 반환해야 한다", async () => {
 				// Given: 삭제 전용 루틴 생성
-				if (!jwtToken || !spaceId || !userId) return;
+				if (!jwtToken || !tenantId) return;
 
 				const createDto = {
 					name: `삭제용 루틴 ${Date.now()}`,
 					label: "삭제 테스트",
-					spaceId,
-					creatorId: userId,
 				};
 
 				const createResponse = await request(app.getHttpServer())
 					.post("/api/v1/routines")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId)
+					.set("x-tenant-id", tenantId)
 					.send(createDto);
 
 				expect(createResponse.status).toBe(201);
@@ -223,7 +217,7 @@ describe("Routines API (E2E)", () => {
 				const deleteResponse = await request(app.getHttpServer())
 					.delete(`/api/v1/routines/${deleteTargetId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then: 204 No Content
 				expect(deleteResponse.status).toBe(204);
@@ -233,7 +227,7 @@ describe("Routines API (E2E)", () => {
 				const getResponse = await request(app.getHttpServer())
 					.get(`/api/v1/routines/${deleteTargetId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				expect(getResponse.status).toBe(404);
 			});
@@ -268,7 +262,7 @@ describe("Routines API (E2E)", () => {
 				// When
 				const response = await request(app.getHttpServer())
 					.post("/api/v1/routines")
-					.send({ name: "test", label: "test", spaceId: "test" });
+					.send({ name: "test", label: "test" });
 
 				// Then
 				expect(response.status).toBe(401);
@@ -295,8 +289,8 @@ describe("Routines API (E2E)", () => {
 			});
 		});
 
-		describe("x-space-id 헤더 누락", () => {
-			it("x-space-id 없이 목록 조회 시 400 또는 403을 반환해야 한다", async () => {
+		describe("x-tenant-id 헤더 누락", () => {
+			it("x-tenant-id 없이 목록 조회 시 400 또는 403을 반환해야 한다", async () => {
 				// Given
 				if (!jwtToken) return;
 
@@ -313,11 +307,10 @@ describe("Routines API (E2E)", () => {
 		describe("입력 검증 실패 (400)", () => {
 			it("name 없이 루틴 등록 시 400을 반환해야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId) return;
+				if (!jwtToken || !tenantId) return;
 
 				const invalidDto = {
 					label: "레이블만 있음",
-					spaceId,
 					// name 누락
 				};
 
@@ -325,7 +318,7 @@ describe("Routines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.post("/api/v1/routines")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId)
+					.set("x-tenant-id", tenantId)
 					.send(invalidDto);
 
 				// Then
@@ -334,13 +327,13 @@ describe("Routines API (E2E)", () => {
 
 			it("유효하지 않은 UUID로 상세 조회 시 400을 반환해야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId) return;
+				if (!jwtToken || !tenantId) return;
 
 				// When
 				const response = await request(app.getHttpServer())
 					.get("/api/v1/routines/not-a-valid-uuid")
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then
 				expect(response.status).toBe(400);
@@ -350,7 +343,7 @@ describe("Routines API (E2E)", () => {
 		describe("리소스 미존재 (404)", () => {
 			it("존재하지 않는 루틴 ID로 상세 조회 시 404를 반환해야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId) return;
+				if (!jwtToken || !tenantId) return;
 
 				const nonExistentId = "00000000-0000-0000-0000-000000000099";
 
@@ -358,7 +351,7 @@ describe("Routines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.get(`/api/v1/routines/${nonExistentId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then
 				expect(response.status).toBe(404);
@@ -366,7 +359,7 @@ describe("Routines API (E2E)", () => {
 
 			it("존재하지 않는 루틴 ID로 수정 시 404를 반환해야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId) return;
+				if (!jwtToken || !tenantId) return;
 
 				const nonExistentId = "00000000-0000-0000-0000-000000000099";
 
@@ -374,7 +367,7 @@ describe("Routines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.patch(`/api/v1/routines/${nonExistentId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId)
+					.set("x-tenant-id", tenantId)
 					.send({ name: "수정 시도" });
 
 				// Then
@@ -383,7 +376,7 @@ describe("Routines API (E2E)", () => {
 
 			it("존재하지 않는 루틴 ID로 삭제 시 404를 반환해야 한다", async () => {
 				// Given
-				if (!jwtToken || !spaceId) return;
+				if (!jwtToken || !tenantId) return;
 
 				const nonExistentId = "00000000-0000-0000-0000-000000000099";
 
@@ -391,7 +384,7 @@ describe("Routines API (E2E)", () => {
 				const response = await request(app.getHttpServer())
 					.delete(`/api/v1/routines/${nonExistentId}`)
 					.set("Authorization", `Bearer ${jwtToken}`)
-					.set("x-space-id", spaceId);
+					.set("x-tenant-id", tenantId);
 
 				// Then
 				expect(response.status).toBe(404);
@@ -404,14 +397,14 @@ describe("Routines API (E2E)", () => {
 	describe("Edge Cases", () => {
 		it("목록 조회 응답에 meta(페이지네이션) 정보가 포함되어야 한다", async () => {
 			// Given
-			if (!jwtToken || !spaceId) return;
+			if (!jwtToken || !tenantId) return;
 
 			// When
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/routines")
 				.query({ skip: 0, take: 10 })
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("x-space-id", spaceId);
+				.set("x-tenant-id", tenantId);
 
 			// Then
 			expect(response.status).toBe(200);
@@ -424,19 +417,17 @@ describe("Routines API (E2E)", () => {
 
 		it("빈 body로 루틴 수정 시 200을 반환해야 한다 (변경사항 없음)", async () => {
 			// Given: 수정 테스트용 루틴 생성
-			if (!jwtToken || !spaceId || !userId) return;
+			if (!jwtToken || !tenantId) return;
 
 			const createDto = {
 				name: `빈 수정 테스트 루틴 ${Date.now()}`,
 				label: "원본 레이블",
-				spaceId,
-				creatorId: userId,
 			};
 
 			const createResponse = await request(app.getHttpServer())
 				.post("/api/v1/routines")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("x-space-id", spaceId)
+				.set("x-tenant-id", tenantId)
 				.send(createDto);
 
 			expect(createResponse.status).toBe(201);
@@ -447,7 +438,7 @@ describe("Routines API (E2E)", () => {
 			const updateResponse = await request(app.getHttpServer())
 				.patch(`/api/v1/routines/${routineId}`)
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("x-space-id", spaceId)
+				.set("x-tenant-id", tenantId)
 				.send({});
 
 			// Then: 변경사항 없이 200 반환
@@ -457,19 +448,17 @@ describe("Routines API (E2E)", () => {
 
 		it("루틴 상세 조회 결과에 programs 필드가 포함되어야 한다", async () => {
 			// Given
-			if (!jwtToken || !spaceId || !userId) return;
+			if (!jwtToken || !tenantId) return;
 
 			const createDto = {
 				name: `programs 포함 확인 루틴 ${Date.now()}`,
 				label: "테스트 레이블",
-				spaceId,
-				creatorId: userId,
 			};
 
 			const createResponse = await request(app.getHttpServer())
 				.post("/api/v1/routines")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("x-space-id", spaceId)
+				.set("x-tenant-id", tenantId)
 				.send(createDto);
 
 			expect(createResponse.status).toBe(201);
@@ -480,7 +469,7 @@ describe("Routines API (E2E)", () => {
 			const response = await request(app.getHttpServer())
 				.get(`/api/v1/routines/${routineId}`)
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("x-space-id", spaceId);
+				.set("x-tenant-id", tenantId);
 
 			// Then
 			expect(response.status).toBe(200);

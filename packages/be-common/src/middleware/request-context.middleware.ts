@@ -5,7 +5,10 @@ import { Injectable, type NestMiddleware } from "@nestjs/common";
 import type { NextFunction, Request, Response } from "express";
 import { ClsService } from "nestjs-cls";
 import { AppLogger } from "../util/app-logger.util";
-import { resolveCurrentTenantForSpace } from "../util/permission.util";
+import {
+	resolveCurrentTenantById,
+	resolveTenantSpaceId,
+} from "../util/permission.util";
 
 /**
  * CLS 컨텍스트를 설정하는 Middleware
@@ -13,7 +16,7 @@ import { resolveCurrentTenantForSpace } from "../util/permission.util";
  * Guard 이전에 실행되어, Guard에서 CLS를 통해 user/tenant 정보에 접근 가능
  * AuthMiddleware가 먼저 실행되어 request.user가 설정된 상태에서 동작
  *
- * 최소 정보만 저장: AUTH_USER, USER_ID, SPACE_ID, TENANT, LANGUAGE
+ * 최소 정보만 저장: AUTH_USER, USER_ID, TENANT_ID, TENANT, SPACE_ID, LANGUAGE
  * 접근 제어 로직은 SpaceScopeInterceptor에서 처리
  */
 @Injectable()
@@ -33,6 +36,7 @@ export class RequestContextMiddleware implements NestMiddleware {
 			// 예상치 못한 에러가 발생해도 기본값으로 설정하여 요청이 계속 진행되도록 함
 			this.cls.set(CONTEXT_KEYS.AUTH_USER, undefined);
 			this.cls.set(CONTEXT_KEYS.USER_ID, undefined);
+			this.cls.set(CONTEXT_KEYS.TENANT_ID, undefined);
 			this.cls.set(CONTEXT_KEYS.SPACE_ID, undefined);
 			this.cls.set(CONTEXT_KEYS.TENANT, undefined);
 		}
@@ -60,22 +64,25 @@ export class RequestContextMiddleware implements NestMiddleware {
 		const language = parseAcceptLanguage(languageFromHeader);
 		this.cls.set(CONTEXT_KEYS.LANGUAGE, language);
 
-		// Space ID 설정 (x-space-id 헤더)
-		const spaceId = this.readRequestHeader(
+		// Tenant ID 설정 (x-tenant-id 헤더)
+		const tenantId = this.readRequestHeader(
 			request,
-			REQUEST_HEADER_KEYS.SPACE_ID,
+			REQUEST_HEADER_KEYS.TENANT_ID,
 		);
-		this.cls.set(CONTEXT_KEYS.SPACE_ID, spaceId || undefined);
+		this.cls.set(CONTEXT_KEYS.TENANT_ID, tenantId || undefined);
 
-		// Tenant 설정 (spaceId가 있는 경우)
-		const tenant = resolveCurrentTenantForSpace(user?.tenants, spaceId);
+		// Tenant 설정 및 Space ID 파생
+		const tenant = resolveCurrentTenantById(user?.tenants, tenantId);
+		const spaceId = tenant ? resolveTenantSpaceId(tenant) : undefined;
 		this.cls.set(CONTEXT_KEYS.TENANT, tenant);
+		this.cls.set(CONTEXT_KEYS.SPACE_ID, spaceId);
 
 		if (user && tenant) {
 			this.logger.dev("Request 컨텍스트 설정 완료", {
 				userId: user.id.slice(-8),
-				spaceId: spaceId?.slice(-8),
+				requestedTenantId: tenantId?.slice(-8),
 				tenantId: tenant.id.slice(-8),
+				spaceId: spaceId?.slice(-8),
 				language,
 			});
 		}

@@ -63,7 +63,20 @@ export class QueryTenantAccessRequestDto extends PrismaQueryDto<Prisma.TenantAcc
 			where.OR = [
 				{ requester: { name: search } },
 				{ requester: { email: search } },
-				{ space: { ground: { is: { name: search } } } },
+				{
+					space: {
+						company: {
+							is: {
+								grounds: {
+									some: {
+										removedAt: null,
+										name: search,
+									},
+								},
+							},
+						},
+					},
+				},
 				{ requestedRole: { displayName: search } },
 				{ requestedRole: { name: search } },
 			];

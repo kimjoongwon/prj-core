@@ -32,9 +32,9 @@ export class RoutinesRepository {
 
 		const whereCondition = {
 			removedAt: null,
-			...(params.spaceIds ? { spaceId: { in: params.spaceIds } } : {}),
+			...(params.spaceIds ? { tenant: { spaceId: { in: params.spaceIds } } } : {}),
 			...(params.contentLanguageCode
-				? { space: { contentLanguageCode: params.contentLanguageCode } }
+				? { tenant: { space: { contentLanguageCode: params.contentLanguageCode } } }
 				: {}),
 			...(params.search
 				? { name: { contains: params.search, mode: "insensitive" as const } }
@@ -45,6 +45,7 @@ export class RoutinesRepository {
 			this.txHost.tx.routine.findMany({
 				where: whereCondition,
 				include: {
+					tenant: { select: { id: true, spaceId: true } },
 					_count: {
 						select: {
 							activities: { where: { removedAt: null } },
@@ -90,9 +91,10 @@ export class RoutinesRepository {
 			where: {
 				id: routineId,
 				removedAt: null,
-				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
+				...(spaceIds ? { tenant: { spaceId: { in: spaceIds } } } : {}),
 			},
 			include: {
+				tenant: { select: { id: true, spaceId: true } },
 				_count: {
 					select: {
 						activities: { where: { removedAt: null } },
@@ -124,7 +126,7 @@ export class RoutinesRepository {
 	async createRoutine(data: {
 		name: string;
 		label: string;
-		spaceId: string;
+		tenantId: string;
 		creatorId?: string;
 		activities?: {
 			taskId: string;
@@ -140,7 +142,7 @@ export class RoutinesRepository {
 			data: {
 				name: data.name,
 				label: data.label,
-				spaceId: data.spaceId,
+				tenantId: data.tenantId,
 				creatorId: data.creatorId ?? null,
 				activities: data.activities
 					? {

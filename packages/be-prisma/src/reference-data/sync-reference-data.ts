@@ -7,6 +7,7 @@ import type {
 } from "../generated/client/client";
 import { Prisma } from "../generated/client/client";
 import { CategoryTypes } from "../generated/client/enums";
+import { ensureSystemAdminUsers } from "../bootstrap/system-admins";
 import { SYSTEM_SPACE_ID } from "./constants";
 import {
 	abilitySeedData,
@@ -50,7 +51,37 @@ async function ensureSystemSpace(db: DbClient): Promise<void> {
 	});
 }
 
-async function syncSpaceCategories(db: DbClient): Promise<void> {
+async function ensureSystemTenantId(
+	db: DbClient,
+	roles: Record<string, Role>,
+): Promise<string> {
+	const platformAdminRole = roles.PLATFORM_ADMIN;
+	if (!platformAdminRole) {
+		throw new Error("PLATFORM_ADMIN role is required for system tenant.");
+	}
+
+	await ensureSystemAdminUsers(db, platformAdminRole.id);
+
+	const systemTenant = await db.tenant.findFirst({
+		where: {
+			spaceId: SYSTEM_SPACE_ID,
+			roleId: platformAdminRole.id,
+			removedAt: null,
+		},
+		orderBy: { createdAt: "asc" },
+	});
+
+	if (!systemTenant) {
+		throw new Error("System tenant was not created.");
+	}
+
+	return systemTenant.id;
+}
+
+async function syncSpaceCategories(
+	db: DbClient,
+	tenantId: string,
+): Promise<void> {
 	const categoryMap = new Map<string, { id: string }>();
 
 	// Parent-child category links are resolved in memory as we upsert categories
@@ -65,14 +96,14 @@ async function syncSpaceCategories(db: DbClient): Promise<void> {
 			where: { name: spaceCategoryEnum.name },
 			update: {
 				type: categoryData.type as CategoryTypes,
-				spaceId: SYSTEM_SPACE_ID,
+				tenantId,
 				parentId,
 				removedAt: null,
 			},
 			create: {
 				name: spaceCategoryEnum.name,
 				type: categoryData.type as CategoryTypes,
-				spaceId: SYSTEM_SPACE_ID,
+				tenantId,
 				parentId,
 			},
 		});
@@ -98,7 +129,7 @@ async function syncSpaceCategories(db: DbClient): Promise<void> {
 	});
 }
 
-async function syncSpaceGroups(db: DbClient): Promise<void> {
+async function syncSpaceGroups(db: DbClient, tenantId: string): Promise<void> {
 	// Group rows do not have a single natural unique key for this lookup shape,
 	// so we restore/create them and then ensure the space association exists.
 	for (const groupData of spaceGroupSeedData) {
@@ -107,7 +138,7 @@ async function syncSpaceGroups(db: DbClient): Promise<void> {
 			where: {
 				name: spaceGroupEnum.name,
 				type: "Space",
-				spaceId: SYSTEM_SPACE_ID,
+				tenantId,
 			},
 		});
 
@@ -116,7 +147,7 @@ async function syncSpaceGroups(db: DbClient): Promise<void> {
 				data: {
 					name: spaceGroupEnum.name,
 					type: "Space",
-					spaceId: SYSTEM_SPACE_ID,
+					tenantId,
 				},
 			});
 		} else if (group.removedAt) {
@@ -168,7 +199,7 @@ async function syncRoles(db: DbClient): Promise<Record<string, Role>> {
 	return roles;
 }
 
-async function syncRoleCategories(db: DbClient): Promise<void> {
+async function syncRoleCategories(db: DbClient, tenantId: string): Promise<void> {
 	for (const categoryData of roleCategorySeedData) {
 		const roleCategoryEnum = categoryData.roleCategoryEnum;
 
@@ -176,13 +207,13 @@ async function syncRoleCategories(db: DbClient): Promise<void> {
 			where: { name: roleCategoryEnum.name },
 			update: {
 				type: categoryData.type as CategoryTypes,
-				spaceId: SYSTEM_SPACE_ID,
+				tenantId,
 				removedAt: null,
 			},
 			create: {
 				name: roleCategoryEnum.name,
 				type: categoryData.type as CategoryTypes,
-				spaceId: SYSTEM_SPACE_ID,
+				tenantId,
 			},
 		});
 	}
@@ -226,7 +257,10 @@ async function syncRoleClassifications(
 	}
 }
 
-async function syncRoleGroups(db: DbClient): Promise<Record<string, Group>> {
+async function syncRoleGroups(
+	db: DbClient,
+	tenantId: string,
+): Promise<Record<string, Group>> {
 	const groups: Record<string, Group> = {};
 
 	for (const groupData of roleGroupSeedData) {
@@ -235,7 +269,7 @@ async function syncRoleGroups(db: DbClient): Promise<Record<string, Group>> {
 			where: {
 				name: roleGroupEnum.name,
 				type: "Role",
-				spaceId: SYSTEM_SPACE_ID,
+				tenantId,
 			},
 		});
 
@@ -244,7 +278,7 @@ async function syncRoleGroups(db: DbClient): Promise<Record<string, Group>> {
 				data: {
 					name: roleGroupEnum.name,
 					type: "Role",
-					spaceId: SYSTEM_SPACE_ID,
+					tenantId,
 				},
 			});
 		} else if (group.removedAt) {
@@ -429,7 +463,7 @@ async function syncAbilitiesAndPolicies(
 		}
 	}
 
-	const activeSpaces = await db.space.findMany({
+	const activeTenants = await db.tenant.findMany({
 		where: { removedAt: null },
 		select: { id: true },
 	});
@@ -471,7 +505,7 @@ async function syncAbilitiesAndPolicies(
 		);
 	}
 
-	// Phase 2: create system policies per active space and assign them to roles.
+	// Phase 2: create system policies per active tenant and assign them to roles.
 	for (const [roleName, abilityIds] of abilityIdsByRoleName.entries()) {
 		const role = roles[roleName];
 		if (!role) {
@@ -480,11 +514,11 @@ async function syncAbilitiesAndPolicies(
 
 		const policyName = getSystemPolicyName(roleName);
 
-		for (const space of activeSpaces) {
+		for (const tenant of activeTenants) {
 			const policy = await db.policy.upsert({
 				where: {
-					spaceId_name: {
-						spaceId: space.id,
+					tenantId_name: {
+						tenantId: tenant.id,
 						name: policyName,
 					},
 				},
@@ -495,7 +529,7 @@ async function syncAbilitiesAndPolicies(
 					removedAt: null,
 				},
 				create: {
-					spaceId: space.id,
+					tenantId: tenant.id,
 					name: policyName,
 					displayName: `${role.displayName ?? role.name} 기본 정책`,
 					description: `${role.displayName ?? role.name} 역할에 자동 할당되는 시스템 권한 정책입니다.`,
@@ -666,13 +700,14 @@ export async function syncReferenceData(
 	// Execution order matters because later catalogs depend on ids created by
 	// earlier ones, especially system space -> taxonomy -> roles -> policies.
 	await ensureSystemSpace(db);
-	await syncSpaceCategories(db);
-	await syncSpaceGroups(db);
-
 	const roles = await syncRoles(db);
-	await syncRoleCategories(db);
+	const systemTenantId = await ensureSystemTenantId(db, roles);
+
+	await syncSpaceCategories(db, systemTenantId);
+	await syncSpaceGroups(db, systemTenantId);
+	await syncRoleCategories(db, systemTenantId);
 	await syncRoleClassifications(db, roles);
-	const groups = await syncRoleGroups(db);
+	const groups = await syncRoleGroups(db, systemTenantId);
 	await syncRoleAssociations(db, roles, groups);
 
 	const subjects = await syncSubjects(db);

@@ -42,7 +42,7 @@ export class PolicyAssignmentsController {
 	) {}
 
 	@Get("roles/:roleId")
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "getRolePolicies",
 		summary: "Role Policy 목록 조회",
@@ -65,7 +65,7 @@ export class PolicyAssignmentsController {
 
 	@Put("roles/:roleId")
 	@HttpCode(HttpStatus.OK)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "syncRolePolicies",
 		summary: "Role Policy 동기화",
@@ -97,7 +97,7 @@ export class PolicyAssignmentsController {
 	}
 
 	@Get("users/:userId")
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "getUserPolicies",
 		summary: "User Policy 목록 조회",
@@ -120,7 +120,7 @@ export class PolicyAssignmentsController {
 
 	@Put("users/:userId")
 	@HttpCode(HttpStatus.OK)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "syncUserPolicies",
 		summary: "User Policy 동기화",

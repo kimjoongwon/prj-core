@@ -51,8 +51,9 @@ export function useSpaceBootstrap<
 
 		spaceStore.setSpaces(
 			spaces
-				.filter((space) => space.id && space.ground)
+				.filter((space) => space.id && space.tenantId && space.ground)
 				.map((space) => ({
+					tenantId: space.tenantId!,
 					spaceId: space.id!,
 					groundName: space.ground?.name ?? "",
 					contentLanguageCode: space.contentLanguageCode ?? null,
@@ -65,14 +66,15 @@ export function useSpaceBootstrap<
 			return;
 		}
 
-		if (currentSpace?.id) {
+		if (currentSpace?.id && currentSpace.tenantId) {
 			spaceStore.setSpace(
-				currentSpace.id,
+				currentSpace.tenantId,
 				resolveCurrentSpaceGroundName(currentSpace, spaces),
 				currentSpace.contentLanguageCode ??
 					spaces.find((space) => space.id === currentSpace.id)
 						?.contentLanguageCode ??
 					null,
+				currentSpace.id,
 			);
 		} else {
 			spaceStore.clearSpace();

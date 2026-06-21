@@ -355,9 +355,9 @@ private mergeAbilities(roleAbilities, userAbilities): AbilityWithPriority[] {
 
 | 역할명 | 상수 | 설명 |
 |--------|------|------|
-| `FULL_ACCESS` | `SYSTEM_ROLES.FULL_ACCESS` | 시스템 전체 관리 권한 (구 SUPER_ADMIN) |
-| `MANAGE` | `SYSTEM_ROLES.MANAGE` | 일반 관리 권한 (구 ADMIN) |
-| `VIEW` | `SYSTEM_ROLES.VIEW` | 기본 조회 권한 (구 USER) |
+| `PLATFORM_ADMIN` | `SYSTEM_ROLES.PLATFORM_ADMIN` | 시스템 전체 관리 권한 (구 SUPER_ADMIN) |
+| `COMPANY_MANAGER` | `SYSTEM_ROLES.COMPANY_MANAGER` | 특정 Company 운영 권한 (구 ADMIN) |
+| `MEMBER` | `SYSTEM_ROLES.MEMBER` | 회원 기본 권한 (구 USER) |
 
 ### Role Category (역할 카테고리)
 
@@ -441,10 +441,10 @@ const ALLOWED_TEMPLATE_VARIABLES = [
 
 | ID | 테스트 | 유형 | 설명 |
 |----|--------|------|------|
-| L10-TST-001 | GET /roles - 정상 | happy | MANAGE 권한으로 역할 목록 조회 |
+| L10-TST-001 | GET /roles - 정상 | happy | COMPANY_MANAGER 권한으로 역할 목록 조회 |
 | L10-TST-002 | GET /roles - 미인증 | error | 토큰 없이 요청 시 401 |
-| L10-TST-003 | GET /roles - 권한 없음 | error | VIEW 역할로 요청 시 403 |
-| L10-TST-004 | POST /roles - 정상 | happy | FULL_ACCESS로 역할 생성 |
+| L10-TST-003 | GET /roles - 권한 없음 | error | MEMBER 역할로 요청 시 403 |
+| L10-TST-004 | POST /roles - 정상 | happy | PLATFORM_ADMIN로 역할 생성 |
 | L10-TST-005 | POST /roles - 중복 이름 | error | 이미 존재하는 이름으로 생성 시 409 |
 | L10-TST-006 | PATCH /roles/:roleId - 정상 | happy | displayName 수정 성공 |
 | L10-TST-007 | PATCH /roles/:roleId - 시스템 역할 | error | isSystem=true 역할 수정 시 403 |

@@ -3,10 +3,10 @@ import { AbstractEntity } from "./abstract.entity";
 import type { CourseOffering } from "./course-offering.entity";
 import type { CoursePass } from "./course-pass.entity";
 import type { Enrollment } from "./enrollment.entity";
-import type { Space } from "./space.entity";
+import type { Tenant } from "./tenant.entity";
 
 export class Course extends AbstractEntity implements CourseEntity {
-	spaceId!: string;
+	tenantId!: string;
 	name!: string;
 	durationMonths!: number;
 	basePriceAmount!: number;
@@ -17,7 +17,7 @@ export class Course extends AbstractEntity implements CourseEntity {
 
 	description!: string | null;
 
-	space?: Space;
+	tenant?: Tenant;
 	offerings?: CourseOffering[];
 	enrollments?: Enrollment[];
 	passes?: CoursePass[];

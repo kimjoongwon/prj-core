@@ -33,7 +33,7 @@ interface PersistStoreRef {
 	refreshToken?: string | null;
 	refreshTokenExpiresAt?: number | null;
 	sessionId?: string | null;
-	spaceId?: string | null;
+	tenantId?: string | null;
 }
 let persistStoreRef: PersistStoreRef | null = null;
 
@@ -119,7 +119,7 @@ const syncSessionHeaders = (config: InternalAxiosRequestConfig) => {
 	const headers = AxiosHeaders.from(config.headers);
 	const accessToken = persistStoreRef?.accessToken;
 	const refreshToken = persistStoreRef?.refreshToken;
-	const spaceId = persistStoreRef?.spaceId;
+	const tenantId = persistStoreRef?.tenantId;
 	const languageCode = localeStoreRef?.languageCode;
 
 	if (accessToken) {
@@ -130,8 +130,8 @@ const syncSessionHeaders = (config: InternalAxiosRequestConfig) => {
 		headers.set(REQUEST_HEADER_KEYS.REFRESH_TOKEN, refreshToken);
 	}
 
-	if (spaceId) {
-		headers.set(REQUEST_HEADER_KEYS.SPACE_ID, spaceId);
+	if (tenantId) {
+		headers.set(REQUEST_HEADER_KEYS.TENANT_ID, tenantId);
 	}
 
 	if (languageCode) {
@@ -146,7 +146,7 @@ AXIOS_INSTANCE.interceptors.request.use((config) => {
 	const headers = AxiosHeaders.from(config.headers);
 	const accessToken = persistStoreRef?.accessToken;
 	const refreshToken = persistStoreRef?.refreshToken;
-	const spaceId = persistStoreRef?.spaceId;
+	const tenantId = persistStoreRef?.tenantId;
 
 	if (accessToken && !headers.has("Authorization")) {
 		headers.set("Authorization", `Bearer ${accessToken}`);
@@ -156,8 +156,8 @@ AXIOS_INSTANCE.interceptors.request.use((config) => {
 		headers.set(REQUEST_HEADER_KEYS.REFRESH_TOKEN, refreshToken);
 	}
 
-	if (spaceId) {
-		headers.set(REQUEST_HEADER_KEYS.SPACE_ID, spaceId);
+	if (tenantId) {
+		headers.set(REQUEST_HEADER_KEYS.TENANT_ID, tenantId);
 	}
 
 	const languageCode = localeStoreRef?.languageCode;

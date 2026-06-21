@@ -52,7 +52,7 @@
 | **Operation ID** | `getRoleById` |
 | **설명** | ID로 역할을 상세 조회합니다. |
 | **인증** | Bearer Token |
-| **권한** | `@Roles([MANAGE, FULL_ACCESS])` |
+| **권한** | `@Roles([COMPANY_MANAGER, PLATFORM_ADMIN])` |
 | **Path Params** | `id` (UUID) - 역할 ID |
 | **Response** | `RoleDto` |
 | **에러** | 401, 403, 404 (역할 없음), 500 |
@@ -69,7 +69,7 @@
 | **Operation ID** | `updateRole` |
 | **설명** | 역할 정보를 수정합니다. displayName, description만 수정 가능. 시스템 역할은 수정 불가. |
 | **인증** | Bearer Token |
-| **권한** | `@Roles([FULL_ACCESS])` |
+| **권한** | `@Roles([PLATFORM_ADMIN])` |
 | **Path Params** | `id` (UUID) - 역할 ID |
 | **Response** | `RoleDto` |
 | **에러** | 400 (시스템 역할 수정 시도), 401, 403, 404, 500 |

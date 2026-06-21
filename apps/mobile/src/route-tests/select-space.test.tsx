@@ -104,6 +104,7 @@ const branchSpace = {
   },
   id: "space-branch",
   removedAt: null,
+  tenantId: "tenant-branch",
   updatedAt: "2026-05-17T00:00:00.000Z",
 };
 
@@ -116,6 +117,7 @@ const platformSpace = {
     spaceId: "61ddca20-1752-466e-b4da-879ebdbe54e3",
   },
   id: "61ddca20-1752-466e-b4da-879ebdbe54e3",
+  tenantId: "tenant-system",
 };
 
 describe("mobile select space route", () => {
@@ -129,7 +131,7 @@ describe("mobile select space route", () => {
     mobileApiScopeStore.clear();
   });
 
-  it("플랫폼 운영본부를 제외한 지점 목록을 보여주고 선택 지점을 x-space-id scope로 저장한다", async () => {
+  it("플랫폼 운영본부를 제외한 지점 목록을 보여주고 선택 지점을 x-tenant-id scope로 저장한다", async () => {
     mockUseGetMySpaces.mockReturnValue({
       data: { data: [platformSpace, branchSpace] },
       isError: false,
@@ -144,11 +146,12 @@ describe("mobile select space route", () => {
     expect(screen.getByText("강남점:서울 강남구 테헤란로")).toBeTruthy();
     expect(screen.queryByText(/플랫폼 운영본부/)).toBeNull();
 
-    fireEvent.press(screen.getByLabelText("space-space-branch"));
+    fireEvent.press(screen.getByLabelText("space-tenant-branch"));
 
     await waitFor(() => {
-      expect(mockMutateAsync).toHaveBeenCalledWith({ spaceId: "space-branch" });
+      expect(mockMutateAsync).toHaveBeenCalledWith({ tenantId: "tenant-branch" });
     });
+    expect(mobileApiScopeStore.tenantId).toBe("tenant-branch");
     expect(mobileApiScopeStore.spaceId).toBe("space-branch");
     expect(mobileApiScopeStore.groundName).toBe("강남점");
     expect(mockInvalidateQueries).toHaveBeenCalled();

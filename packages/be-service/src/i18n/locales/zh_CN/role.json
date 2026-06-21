@@ -1,15 +1,15 @@
 {
-  "FULL_ACCESS": {
-    "name": "完全访问",
-    "description": "拥有所有系统权限的完全访问角色"
+  "PLATFORM_ADMIN": {
+    "name": "平台管理员",
+    "description": "负责运营整个平台并访问所有 Space 和系统资源的角色"
   },
-  "MANAGE": {
-    "name": "管理",
-    "description": "执行管理任务的角色"
+  "COMPANY_MANAGER": {
+    "name": "公司管理员",
+    "description": "管理特定 Company 中的网点、会员、预约、内容等运营资源的角色"
   },
-  "VIEW": {
-    "name": "查看",
-    "description": "基本查看角色"
+  "MEMBER": {
+    "name": "会员",
+    "description": "管理自己的信息和预约，并可查看设施和内容的角色"
   },
   "category": {
     "SHARED": "共享",

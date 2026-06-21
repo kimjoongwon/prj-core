@@ -9,7 +9,7 @@ import { getTestAuth, TestJwtStrategy } from "./helpers/test-auth.helper";
 describe("Actions API E2E 테스트", () => {
 	let app: INestApplication;
 	let jwtToken: string;
-	let spaceId: string;
+	let tenantId: string;
 
 	const createdActionIds: string[] = [];
 	const TEST_PREFIX = `E2E_ACTION_${Date.now()}`;
@@ -29,20 +29,20 @@ describe("Actions API E2E 테스트", () => {
 				roleCategoryName: RoleCategoryName.WORKSPACE,
 			});
 			jwtToken = auth.jwtToken;
-			spaceId = auth.spaceId;
+			tenantId = auth.tenantId;
 		} catch (error) {
 			console.warn(`테스트 인증 설정 실패: ${error}`);
 		}
 	}, 60000);
 
 	afterAll(async () => {
-		if (jwtToken && spaceId) {
+		if (jwtToken && tenantId) {
 			for (const actionId of createdActionIds) {
 				try {
 					await request(app.getHttpServer())
 						.delete(`/api/v1/actions/${actionId}`)
 						.set("Authorization", `Bearer ${jwtToken}`)
-						.set("x-space-id", spaceId);
+						.set("x-tenant-id", tenantId);
 				} catch {
 					// 이미 삭제된 데이터는 무시
 				}
@@ -85,9 +85,9 @@ describe("Actions API E2E 테스트", () => {
 	});
 
 	describe("POST /api/v1/actions", () => {
-		it("Given 인증 토큰과 x-space-id 헤더 및 유효한 데이터가 있을 때 When 액션을 생성하면 Then 201과 생성된 액션을 반환해야 한다", async () => {
+		it("Given 인증 토큰과 x-tenant-id 헤더 및 유효한 데이터가 있을 때 When 액션을 생성하면 Then 201과 생성된 액션을 반환해야 한다", async () => {
 			// Given
-			if (!jwtToken || !spaceId) return;
+			if (!jwtToken || !tenantId) return;
 
 			const createDto = {
 				name: `${TEST_PREFIX}_NAME_${Date.now()}`,
@@ -105,7 +105,7 @@ describe("Actions API E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.post("/api/v1/actions")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("x-space-id", spaceId)
+				.set("x-tenant-id", tenantId)
 				.send(createDto);
 
 			// Then
@@ -120,7 +120,7 @@ describe("Actions API E2E 테스트", () => {
 
 		it("Given 필수 필드가 누락된 데이터가 있을 때 When 액션을 생성하면 Then 400을 반환해야 한다", async () => {
 			// Given
-			if (!jwtToken || !spaceId) return;
+			if (!jwtToken || !tenantId) return;
 
 			const invalidDto = {
 				displayName: "이름 누락",
@@ -133,7 +133,7 @@ describe("Actions API E2E 테스트", () => {
 			const response = await request(app.getHttpServer())
 				.post("/api/v1/actions")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("x-space-id", spaceId)
+				.set("x-tenant-id", tenantId)
 				.send(invalidDto);
 
 			// Then
@@ -142,7 +142,7 @@ describe("Actions API E2E 테스트", () => {
 
 		it("Given 인증 토큰 없이 요청할 때 When 액션을 생성하면 Then 401을 반환해야 한다", async () => {
 			// Given
-			if (!spaceId) return;
+			if (!tenantId) return;
 
 			const createDto = {
 				name: `${TEST_PREFIX}_UNAUTH_${Date.now()}`,
@@ -153,7 +153,7 @@ describe("Actions API E2E 테스트", () => {
 			// When
 			const response = await request(app.getHttpServer())
 				.post("/api/v1/actions")
-				.set("x-space-id", spaceId)
+				.set("x-tenant-id", tenantId)
 				.send(createDto);
 
 			// Then

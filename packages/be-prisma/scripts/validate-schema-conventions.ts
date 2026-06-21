@@ -85,7 +85,6 @@ const expectedOwner: Record<string, string> = {
 	GroupTypes: "taxonomy/group.prisma",
 
 	Tenant: "identity/tenant.prisma",
-	Assignment: "identity/tenant.prisma",
 
 	TenantAccessRequest: "identity/tenant-access-request.prisma",
 	TenantAccessRequestStatus: "identity/tenant-access-request.prisma",
@@ -165,6 +164,7 @@ const expectedOwner: Record<string, string> = {
 	SafeConfirmation: "wallet/safe.prisma",
 
 	Space: "identity/space.prisma",
+	Company: "identity/space.prisma",
 	SpaceClassification: "identity/space.prisma",
 	SpaceAssociation: "identity/space.prisma",
 	Ground: "identity/space.prisma",

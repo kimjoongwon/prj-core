@@ -22,7 +22,7 @@ export class GetCoursesUseCase {
 			take,
 			search: query.query.search ?? null,
 			status: query.query.status,
-			spaceId: query.query.spaceId,
+			tenantId: query.query.tenantId,
 			sort: query.query.sort,
 		});
 		return buildOffsetStatsPaginatedResponse(

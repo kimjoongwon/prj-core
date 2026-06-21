@@ -9,6 +9,7 @@ import { Button } from "../action/Button/Button";
  * Space 정보 인터페이스
  */
 export interface SpaceInfo {
+	tenantId: string;
 	spaceId: string;
 	groundName: string;
 }
@@ -16,8 +17,8 @@ export interface SpaceInfo {
 export interface SpaceSelectorDropdownProps {
 	/** 선택 가능한 Space 목록 */
 	spaces: SpaceInfo[];
-	/** 현재 선택된 Space ID */
-	currentSpaceId: string | null;
+	/** 현재 선택된 Tenant ID */
+	currentTenantId: string | null;
 	/** 현재 선택된 Space 이름 */
 	currentSpaceName: string | null;
 	/** Space 선택 핸들러 */
@@ -33,10 +34,10 @@ export interface SpaceSelectorDropdownProps {
  * ```tsx
  * <SpaceSelectorDropdown
  *   spaces={[
- *     { spaceId: "1", groundName: "Space A" },
- *     { spaceId: "2", groundName: "Space B" },
+ *     { tenantId: "t1", spaceId: "1", groundName: "Space A" },
+ *     { tenantId: "t2", spaceId: "2", groundName: "Space B" },
  *   ]}
- *   currentSpaceId="1"
+ *   currentTenantId="t1"
  *   currentSpaceName="Space A"
  *   onSpaceSelect={(space) => console.log("Selected:", space)}
  * />
@@ -44,7 +45,7 @@ export interface SpaceSelectorDropdownProps {
  */
 export const SpaceSelectorDropdown = observer(function SpaceSelectorDropdown({
 	spaces,
-	currentSpaceId,
+	currentTenantId,
 	currentSpaceName,
 	onSpaceSelect,
 }: SpaceSelectorDropdownProps) {
@@ -80,22 +81,22 @@ export const SpaceSelectorDropdown = observer(function SpaceSelectorDropdown({
 				<Dropdown.Menu
 					aria-label="Space 선택"
 					onAction={(key) => {
-						const selectedSpace = spaces.find((s) => s.spaceId === key);
-						if (selectedSpace && selectedSpace.spaceId !== currentSpaceId) {
+						const selectedSpace = spaces.find((s) => s.tenantId === key);
+						if (selectedSpace && selectedSpace.tenantId !== currentTenantId) {
 							onSpaceSelect(selectedSpace);
 						}
 					}}
 				>
 					{spaces.map((space) => (
 						<Dropdown.Item
-							id={space.spaceId}
-							key={space.spaceId}
+							id={space.tenantId}
+							key={space.tenantId}
 							className={
-								space.spaceId === currentSpaceId ? "text-accent" : undefined
+								space.tenantId === currentTenantId ? "text-accent" : undefined
 							}
 						>
 							<span className="flex items-center gap-2">
-								{space.spaceId === currentSpaceId ? (
+								{space.tenantId === currentTenantId ? (
 									<Check className="w-4 h-4 text-accent" size={16} />
 								) : (
 									<Building2 className="w-4 h-4 text-muted" size={16} />

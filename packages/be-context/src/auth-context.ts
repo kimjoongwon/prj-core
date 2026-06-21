@@ -43,7 +43,12 @@ export class AuthContext {
 		return this.cls.get<TenantDto>(CONTEXT_KEYS.TENANT);
 	}
 
-	/** 현재 Space ID */
+	/** 현재 Tenant ID */
+	get tenantId(): string | undefined {
+		return this.cls.get<string>(CONTEXT_KEYS.TENANT_ID);
+	}
+
+	/** 현재 Tenant에서 파생된 Space ID */
 	get spaceId(): string | undefined {
 		return this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
 	}

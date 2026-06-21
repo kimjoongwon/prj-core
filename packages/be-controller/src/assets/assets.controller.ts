@@ -64,7 +64,7 @@ export class AssetsController {
 	@Get()
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.VIEW, SYSTEM_ROLES.MANAGE, SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.MEMBER, SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "getAssets",
 		summary: "에셋 목록 조회",
@@ -82,7 +82,7 @@ export class AssetsController {
 	@Get(":assetId")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.VIEW, SYSTEM_ROLES.MANAGE, SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.MEMBER, SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "getAssetById",
 		summary: "에셋 상세 조회",
@@ -104,7 +104,7 @@ export class AssetsController {
 	@Get(":assetId/content")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.VIEW, SYSTEM_ROLES.MANAGE, SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.MEMBER, SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "getAssetContent",
 		summary: "에셋 원본 조회",
@@ -153,7 +153,7 @@ export class AssetsController {
 	@HttpCode(HttpStatus.CREATED)
 	@UseGuards(RolesGuard)
 	@UseInterceptors(FileInterceptor("file"))
-	@Roles([SYSTEM_ROLES.MANAGE, SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "uploadAsset",
 		summary: "에셋 업로드",
@@ -198,7 +198,7 @@ export class AssetsController {
 	@Patch(":assetId/move")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.MANAGE, SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "moveAsset",
 		summary: "에셋 폴더 이동",
@@ -227,7 +227,7 @@ export class AssetsController {
 	@Delete(":assetId")
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.MANAGE, SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "removeAsset",
 		summary: "에셋 삭제",

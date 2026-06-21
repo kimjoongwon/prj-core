@@ -123,7 +123,6 @@ const AdminSpacesNewRoute = observer(() => {
 					| "en_US"
 					| "zh_CN"
 					| "ja_JP",
-				spaceId: "",
 			},
 		});
 	};

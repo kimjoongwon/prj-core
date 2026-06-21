@@ -3,9 +3,11 @@ import { expect, type Locator, type Page, test } from "@playwright/test";
 
 const API_BASE_URL = "http://localhost:3000/api/v1";
 const TEST_VIDEO_FILE_ID = "11111111-1111-4111-8111-111111111111";
+const SYSTEM_TENANT_ID =
+	process.env.E2E_SYSTEM_TENANT_ID ?? "71ddca20-1752-466e-b4da-879ebdbe54e3";
 const SYSTEM_SPACE_ID =
 	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
-const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_SPACE_ID);
+const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_TENANT_ID);
 
 interface IdOnlyDto {
 	id: string;
@@ -51,13 +53,16 @@ async function ensureAdminCurrentSpace(page: Page) {
 		`${API_BASE_URL}/auth/current-space`,
 		{
 			headers: getSpaceHeaders(),
-			data: { spaceId: SYSTEM_SPACE_ID },
+			data: { tenantId: SYSTEM_TENANT_ID },
 		},
 	);
 	expect(response.ok()).toBeTruthy();
 
-	const body = (await response.json()) as ApiItemResponse<IdOnlyDto>;
+	const body = (await response.json()) as ApiItemResponse<
+		IdOnlyDto & { tenantId?: string | null }
+	>;
 	expect(body.data?.id).toBe(SYSTEM_SPACE_ID);
+	expect(body.data?.tenantId).toBe(SYSTEM_TENANT_ID);
 }
 
 async function waitForRoutineToBeSelectable(page: Page, routineId: string) {
@@ -89,7 +94,7 @@ async function waitForRoutineToBeSelectable(page: Page, routineId: string) {
 
 async function getFirstInstructor(page: Page) {
 	const usersResponse = await page.request.get(
-		`${API_BASE_URL}/users?take=20&skip=0&status=active&roles=MANAGE&roles=FULL_ACCESS`,
+		`${API_BASE_URL}/users?take=20&skip=0&status=active&roles=COMPANY_MANAGER&roles=PLATFORM_ADMIN`,
 		{ headers: getSpaceHeaders() },
 	);
 	test.skip(

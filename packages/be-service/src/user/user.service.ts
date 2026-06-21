@@ -35,8 +35,8 @@ export class UserService {
 
 	/**
 	 * 현재 선택 Space 내 사용자 목록 조회
-	 * x-space-id 기준으로 현재 Tenant를 해석하고,
-	 * 현재 tenant role이 FULL_ACCESS면 전체 사용자,
+	 * x-tenant-id 기준으로 현재 Tenant를 해석하고,
+	 * 현재 tenant role이 PLATFORM_ADMIN이면 전체 사용자,
 	 * 그 외에는 현재 Tenant의 Space 사용자만 필터링합니다.
 	 * UseCase에서 Prisma 조건으로 변환한 입력에 Space scope를 합성합니다.
 	 */

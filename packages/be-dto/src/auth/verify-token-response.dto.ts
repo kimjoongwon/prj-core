@@ -12,7 +12,7 @@ export class VerifyTokenResponseDto {
 
 	@ApiProperty({
 		description:
-			"현재 `x-space-id`로 해석된 tenant role이 `FULL_ACCESS`인지 여부",
+			"현재 `x-tenant-id`로 해석된 tenant role이 `PLATFORM_ADMIN`인지 여부",
 	})
 	hasFullAccess!: boolean;
 }

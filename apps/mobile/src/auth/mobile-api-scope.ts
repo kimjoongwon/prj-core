@@ -13,6 +13,7 @@ export const MOBILE_PLATFORM_GROUND_NAME = "플랫폼 운영본부";
 export const MOBILE_SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
 
 export interface MobileSpaceInfo {
+  tenantId: string;
   spaceId: string;
   groundName: string;
   address?: string | null;
@@ -34,7 +35,7 @@ const resolveGroundAddress = (space: SpaceDto) =>
   space.ground?.address ?? space.ground?.label ?? null;
 
 export const isSelectableMobileSpace = (space: SpaceDto) =>
-  Boolean(space.id && space.ground) &&
+  Boolean(space.id && space.tenantId && space.ground) &&
   space.id !== MOBILE_SYSTEM_SPACE_ID &&
   space.ground?.name !== MOBILE_PLATFORM_GROUND_NAME;
 
@@ -45,9 +46,11 @@ export const toMobileSpaceInfo = (space: SpaceDto): MobileSpaceInfo => ({
   imageFileId: space.ground?.imageFileId ?? null,
   logoImageFileId: space.ground?.logoImageFileId ?? null,
   spaceId: space.id,
+  tenantId: space.tenantId ?? "",
 });
 
 class MobileApiScopeStore {
+  tenantId: string | null = null;
   spaceId: string | null = null;
   groundName: string | null = null;
   address: string | null = null;
@@ -71,7 +74,10 @@ class MobileApiScopeStore {
   }
 
   setSpace(space: SpaceDto) {
-    const existingSpace = this.spaces.find((item) => item.spaceId === space.id);
+    const existingSpace = this.spaces.find(
+      (item) => item.tenantId === space.tenantId,
+    );
+    this.tenantId = space.tenantId ?? existingSpace?.tenantId ?? null;
     this.spaceId = space.id;
     this.groundName =
       resolveGroundName(space) ||
@@ -86,6 +92,7 @@ class MobileApiScopeStore {
   }
 
   setSpaceInfo(space: MobileSpaceInfo, resolved = true) {
+    this.tenantId = space.tenantId;
     this.spaceId = space.spaceId;
     this.groundName = space.groundName || null;
     this.address = space.address ?? null;
@@ -94,6 +101,7 @@ class MobileApiScopeStore {
   }
 
   clearSpace() {
+    this.tenantId = null;
     this.spaceId = null;
     this.groundName = null;
     this.address = null;
@@ -102,6 +110,7 @@ class MobileApiScopeStore {
   }
 
   markSpaceSelectionPending() {
+    this.tenantId = null;
     this.spaceId = null;
     this.groundName = null;
     this.address = null;
@@ -128,6 +137,7 @@ class MobileApiScopeStore {
   }
 
   clear() {
+    this.tenantId = null;
     this.spaceId = null;
     this.groundName = null;
     this.address = null;

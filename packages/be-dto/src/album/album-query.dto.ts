@@ -13,14 +13,14 @@ import { PrismaQueryDto } from "../query/prisma-query.dto";
  *
  * 자동 매핑:
  * - name -> containsFilter (일반 string)
- * - spaceId -> 정확 매핑 (*Id)
+ * - tenantId -> 정확 매핑 (*Id)
  *
  * 커스텀 처리:
  * - statusFilter -> removedAt 필터
  */
 export class AlbumQueryDto extends PrismaQueryDto<Prisma.AlbumWhereInput> {
-	@UUIDFieldOptional({ description: "스페이스 ID 필터" })
-	spaceId?: string;
+	@UUIDFieldOptional({ description: "테넌트 ID 필터" })
+	tenantId?: string;
 
 	@StringFieldOptional({ description: "앨범명 검색 (부분 일치)" })
 	name?: string;

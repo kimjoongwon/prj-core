@@ -3,8 +3,7 @@ import type { LanguageCode } from "@cocrepo/prisma";
 export interface UpdateSpaceGroundCommandInput {
 	contentLanguageCode?: LanguageCode;
 	name?: string;
-	spaceId?: string;
-	label?: string;
+	label?: string | null;
 	address?: string;
 	phone?: string;
 	email?: string;

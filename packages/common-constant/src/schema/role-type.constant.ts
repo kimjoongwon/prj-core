@@ -1,6 +1,6 @@
 export enum RoleType {
-	VIEW = "VIEW",
-	MANAGE = "MANAGE",
+	MEMBER = "MEMBER",
+	COMPANY_MANAGER = "COMPANY_MANAGER",
 }
 
 /**
@@ -8,9 +8,9 @@ export enum RoleType {
  * Prisma Roles enum 대체 (동적 역할 생성 지원)
  */
 export const SYSTEM_ROLES = {
-	FULL_ACCESS: "FULL_ACCESS",
-	MANAGE: "MANAGE",
-	VIEW: "VIEW",
+	PLATFORM_ADMIN: "PLATFORM_ADMIN",
+	COMPANY_MANAGER: "COMPANY_MANAGER",
+	MEMBER: "MEMBER",
 } as const;
 
 export type SystemRoleName = (typeof SYSTEM_ROLES)[keyof typeof SYSTEM_ROLES];

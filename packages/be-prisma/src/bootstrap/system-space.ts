@@ -20,7 +20,7 @@ const systemSpaceGroupNames = [
 ] as const;
 
 export interface SystemBootstrapResult {
-	manageRole: Role;
+	companyManagerRole: Role;
 	superAdminUser: User;
 }
 
@@ -63,14 +63,14 @@ async function ensureSystemSpaceGroups(prisma: PrismaClient): Promise<void> {
 		const existingGroup = await prisma.group.findFirst({
 			where: {
 				name: groupName,
-				spaceId: firstTenant.spaceId,
+				tenantId: firstTenant.id,
 			},
 		});
 
 		if (!existingGroup) {
 			await prisma.group.create({
 				data: {
-					spaceId: firstTenant.spaceId,
+					tenantId: firstTenant.id,
 					name: groupName,
 					type: "Space",
 				},
@@ -94,12 +94,18 @@ export async function ensureSystemBootstrap(
 	// Reference data must exist before bootstrap because role/system-space
 	// contracts are reused immediately below.
 	const referenceData = await syncReferenceData(prisma);
-	const fullAccessRole = getRequiredRole(referenceData.roles, "FULL_ACCESS");
-	const manageRole = getRequiredRole(referenceData.roles, "MANAGE");
+	const platformAdminRole = getRequiredRole(
+		referenceData.roles,
+		"PLATFORM_ADMIN",
+	);
+	const companyManagerRole = getRequiredRole(
+		referenceData.roles,
+		"COMPANY_MANAGER",
+	);
 
 	const superAdminUsers = await ensureSystemAdminUsers(
 		prisma,
-		fullAccessRole.id,
+		platformAdminRole.id,
 	);
 	const [superAdminUser] = superAdminUsers;
 	if (!superAdminUser) {
@@ -111,7 +117,7 @@ export async function ensureSystemBootstrap(
 	// One ground in the demo dataset is treated as the canonical system ground.
 	const systemGroundData = groundSeedData.find((ground) => ground.isSystem);
 	if (systemGroundData) {
-		await prisma.ground.upsert({
+		const systemCompany = await prisma.company.upsert({
 			where: { businessNo: systemGroundData.businessNo },
 			update: {
 				name: systemGroundData.name,
@@ -130,13 +136,43 @@ export async function ensureSystemBootstrap(
 				spaceId: SYSTEM_SPACE_ID,
 			},
 		});
+		const systemGround = await prisma.ground.findFirst({
+			where: {
+				companyId: systemCompany.id,
+				name: systemGroundData.name,
+			},
+		});
+
+		if (systemGround) {
+			await prisma.ground.update({
+				where: { id: systemGround.id },
+				data: {
+					name: systemGroundData.name,
+					label: systemGroundData.label,
+					address: systemGroundData.address,
+					phone: systemGroundData.phone,
+					email: systemGroundData.email,
+				},
+			});
+		} else {
+			await prisma.ground.create({
+				data: {
+					name: systemGroundData.name,
+					label: systemGroundData.label,
+					address: systemGroundData.address,
+					phone: systemGroundData.phone,
+					email: systemGroundData.email,
+					companyId: systemCompany.id,
+				},
+			});
+		}
 		console.log(`System Ground 생성 완료: ${systemGroundData.name}`);
 	}
 
 	await ensureSystemSpaceGroups(prisma);
 
 	return {
-		manageRole,
+		companyManagerRole,
 		superAdminUser,
 	};
 }
@@ -149,7 +185,7 @@ export async function ensureSystemBootstrap(
  */
 export async function createRegularUsersAndGrounds(
 	prisma: PrismaClient,
-	adminRole: Role,
+	companyManagerRole: Role,
 ): Promise<void> {
 	console.log("일반 유저들과 그라운드 생성 시작...");
 
@@ -173,14 +209,20 @@ export async function createRegularUsersAndGrounds(
 
 		try {
 			const existingGround = await prisma.ground.findFirst({
-				where: { businessNo: groundData.businessNo },
+				where: { company: { businessNo: groundData.businessNo } },
+				include: { company: true },
 			});
 
 			if (!existingGround) {
 				let space = await prisma.space.findFirst({
 					where: {
-						ground: {
-							name: groundData.name,
+						company: {
+							grounds: {
+								some: {
+									removedAt: null,
+									name: groundData.name,
+								},
+							},
 						},
 					},
 				});
@@ -215,7 +257,7 @@ export async function createRegularUsersAndGrounds(
 					where: {
 						userId: adminUser.id,
 						spaceId: space.id,
-						roleId: adminRole.id,
+						roleId: companyManagerRole.id,
 					},
 				});
 
@@ -224,12 +266,12 @@ export async function createRegularUsersAndGrounds(
 						data: {
 							userId: adminUser.id,
 							spaceId: space.id,
-							roleId: adminRole.id,
+							roleId: companyManagerRole.id,
 						},
 					});
 				}
 
-				const ground = await prisma.ground.create({
+				const company = await prisma.company.create({
 					data: {
 						name: groundData.name,
 						label: groundData.label,
@@ -238,6 +280,16 @@ export async function createRegularUsersAndGrounds(
 						email: groundData.email,
 						businessNo: groundData.businessNo,
 						spaceId: space.id,
+					},
+				});
+				const ground = await prisma.ground.create({
+					data: {
+						name: groundData.name,
+						label: groundData.label,
+						address: groundData.address,
+						phone: groundData.phone,
+						email: groundData.email,
+						companyId: company.id,
 					},
 				});
 
@@ -250,7 +302,7 @@ export async function createRegularUsersAndGrounds(
 				console.log(`그라운드 이미 존재: ${groundData.name}`);
 				createdGrounds.push({
 					ground: existingGround,
-					spaceId: existingGround.spaceId,
+					spaceId: existingGround.company.spaceId,
 				});
 			}
 		} catch (error) {
@@ -261,7 +313,7 @@ export async function createRegularUsersAndGrounds(
 	// Second pass: attach regular demo users to the spaces that were just
 	// created, using the explicit ground mapping table as the source of truth.
 	for (const userData of userSeedData) {
-		if (userData.role === "FULL_ACCESS") {
+		if (userData.role === "PLATFORM_ADMIN") {
 			continue;
 		}
 
@@ -316,10 +368,10 @@ export async function createRegularUsersAndGrounds(
 				},
 			});
 
-			const assignedRole = roleMap[userData.role || "VIEW"];
+			const assignedRole = roleMap[userData.role || "MEMBER"];
 			if (!assignedRole) {
 				throw new Error(
-					`유저 role을 찾을 수 없습니다: ${userData.email} -> ${userData.role || "VIEW"}`,
+					`유저 role을 찾을 수 없습니다: ${userData.email} -> ${userData.role || "MEMBER"}`,
 				);
 			}
 
@@ -344,7 +396,7 @@ export async function createRegularUsersAndGrounds(
 			}
 
 			console.log(
-				`유저 생성 완료: ${userData.profile.name} [${userData.role || "VIEW"}] (그라운드 ${userGrounds.length}개 소속)`,
+				`유저 생성 완료: ${userData.profile.name} [${userData.role || "MEMBER"}] (그라운드 ${userGrounds.length}개 소속)`,
 			);
 		} catch (error) {
 			console.error(`일반 유저 생성 실패 (${userData.profile.name}):`, error);
@@ -364,7 +416,9 @@ export async function classifyGroundSpacesAsBranch(
 	prisma: PrismaClient,
 	systemSpaceId = SYSTEM_SPACE_ID,
 ): Promise<void> {
-	console.log("Ground Space에 BRANCH SpaceClassification 할당 시작...");
+	console.log(
+		"Company/Ground가 연결된 Space에 BRANCH SpaceClassification 할당 시작...",
+	);
 
 	const branchCategory = await prisma.category.findFirst({
 		where: { name: "지점", type: "Space" },
@@ -375,20 +429,24 @@ export async function classifyGroundSpacesAsBranch(
 		return;
 	}
 
-	const grounds = await prisma.ground.findMany();
+	const grounds = await prisma.ground.findMany({
+		include: {
+			company: true,
+		},
+	});
 	let syncedCount = 0;
 
 	// Every non-system ground space should classify as BRANCH, while the system
 	// space keeps the ROOT classification established by reference data.
 	for (const ground of grounds) {
-		if (ground.spaceId === systemSpaceId) {
+		if (ground.company.spaceId === systemSpaceId) {
 			continue;
 		}
 
 		await prisma.spaceClassification.upsert({
-			where: { spaceId: ground.spaceId },
+			where: { spaceId: ground.company.spaceId },
 			create: {
-				spaceId: ground.spaceId,
+				spaceId: ground.company.spaceId,
 				categoryId: branchCategory.id,
 			},
 			update: {
@@ -397,11 +455,13 @@ export async function classifyGroundSpacesAsBranch(
 		});
 		syncedCount++;
 		console.log(
-			`  - BRANCH 할당: ${ground.name} (spaceId=${ground.spaceId.slice(-8)})`,
+			`  - BRANCH 할당: ${ground.name} (spaceId=${ground.company.spaceId.slice(-8)})`,
 		);
 	}
 
-	console.log(`Ground Space BRANCH 할당 완료! (동기화: ${syncedCount}개)`);
+	console.log(
+		`Company/Ground Space BRANCH 할당 완료! (동기화: ${syncedCount}개)`,
+	);
 }
 
 /**
@@ -413,17 +473,21 @@ export async function createHierarchicalTenants(
 	prisma: PrismaClient,
 	systemSpaceId = SYSTEM_SPACE_ID,
 ): Promise<void> {
-	console.log("계층적 Tenant 생성 시작 (ROOT FULL_ACCESS → BRANCH MANAGE)...");
+	console.log(
+		"계층적 Tenant 생성 시작 (ROOT PLATFORM_ADMIN → BRANCH COMPANY_MANAGER)...",
+	);
 
-	const manageRole = await prisma.role.findFirst({
+	const companyManagerRole = await prisma.role.findFirst({
 		where: {
-			name: "MANAGE",
+			name: "COMPANY_MANAGER",
 			removedAt: null,
 		},
 	});
 
-	if (!manageRole) {
-		throw new Error("MANAGE role is required before creating branch tenants.");
+	if (!companyManagerRole) {
+		throw new Error(
+			"COMPANY_MANAGER role is required before creating branch tenants.",
+		);
 	}
 
 	const rootTenants = await prisma.tenant.findMany({
@@ -459,8 +523,8 @@ export async function createHierarchicalTenants(
 	let createdCount = 0;
 	let skippedCount = 0;
 
-	// System admins keep FULL_ACCESS only on ROOT. Branch memberships are MANAGE
-	// so selecting a branch x-space-id does not open global resource scope.
+	// System admins keep PLATFORM_ADMIN only on ROOT. Branch memberships are
+	// COMPANY_MANAGER so selecting a branch x-tenant-id does not open global resource scope.
 	for (const rootTenant of rootTenants) {
 		for (const branchSpace of branchSpaces) {
 			const existingTenants = await prisma.tenant.findMany({
@@ -480,7 +544,7 @@ export async function createHierarchicalTenants(
 					data: {
 						userId: rootTenant.userId,
 						spaceId: branchSpace.id,
-						roleId: manageRole.id,
+						roleId: companyManagerRole.id,
 					},
 				});
 				createdCount++;
@@ -488,7 +552,7 @@ export async function createHierarchicalTenants(
 			}
 
 			const needsRoleUpdate = existingTenants.some(
-				(tenant) => tenant.roleId !== manageRole.id,
+				(tenant) => tenant.roleId !== companyManagerRole.id,
 			);
 			if (needsRoleUpdate) {
 				await prisma.tenant.updateMany({
@@ -498,7 +562,7 @@ export async function createHierarchicalTenants(
 						},
 					},
 					data: {
-						roleId: manageRole.id,
+						roleId: companyManagerRole.id,
 					},
 				});
 				createdCount++;

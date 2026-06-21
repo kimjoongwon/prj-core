@@ -12,9 +12,6 @@ export class CategoryDto extends AbstractDto implements Category {
 	@UUIDField()
 	tenantId: string;
 
-	@UUIDField()
-	spaceId: string;
-
 	@UUIDFieldOptional()
 	creatorId: string | null;
 

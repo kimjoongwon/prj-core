@@ -6,7 +6,7 @@
 
 ## 사용자 시나리오
 
-1. FULL_ACCESS 관리자가 회원 메뉴 하위 이메일 인증 화면에 진입합니다.
+1. PLATFORM_ADMIN 관리자가 회원 메뉴 하위 이메일 인증 화면에 진입합니다.
 2. 회원가입 전 생성된 이메일 인증 요청의 이메일, 이름, 상태, 발송 상태, 발송 횟수, 만료 시각, 인증 시각을 확인합니다.
 3. 이메일 검색과 상태 필터로 인증 요청을 좁혀 봅니다.
 4. 아직 인증 완료되지 않았고 cooldown이 지난 요청에 인증 메일을 재발송합니다.
@@ -36,7 +36,7 @@
 
 | 시점 | API | 설명 |
 |------|-----|------|
-| 클라이언트 렌더 | `useGetEmailVerifications({ take, skip, email, status })` | FULL_ACCESS 전역 이메일 인증 목록 조회 |
+| 클라이언트 렌더 | `useGetEmailVerifications({ take, skip, email, status })` | PLATFORM_ADMIN 전역 이메일 인증 목록 조회 |
 | 재발송 확인 | `useResendEmailVerification({ emailVerificationId })` | 인증 링크를 새 토큰으로 회전하고 메일 재발송 |
 
 ## 이벤트 핸들러
@@ -58,7 +58,7 @@
 | page subject | generated route catalog의 `/email-verifications` page subject |
 | scopeKind | `global-full-access-only` |
 
-이메일 인증 요청은 User 생성 전에 존재하므로 tenant/space scope가 아니라 FULL_ACCESS 전역 관리 대상으로 취급합니다.
+이메일 인증 요청은 User 생성 전에 존재하므로 tenant/space scope가 아니라 PLATFORM_ADMIN 전역 관리 대상으로 취급합니다.
 
 ## E2E 관점
 

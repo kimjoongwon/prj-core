@@ -131,8 +131,8 @@
 | `content/content.prisma` | `Post`, `Content`, `TextTypes` |
 | `content/template.prisma` | `Template`, `TemplateVariable`, `TemplateType` |
 | `content/translation.prisma` | `Translation`, `LanguageCode` |
-| `identity/space.prisma` | `Space`, `SpaceClassification`, `SpaceAssociation`, `Ground` |
-| `identity/tenant.prisma` | `Tenant`, `Assignment` |
+| `identity/space.prisma` | `Space`, `Company`, `SpaceClassification`, `SpaceAssociation`, `Ground` |
+| `identity/tenant.prisma` | `Tenant` |
 | `identity/user.prisma` | `User`, `UserClassification`, `UserAssociation`, `Profile` |
 | `inquiry/inquiry-ai.prisma` | `AIAgentLog`, `AIAgentAction` |
 | `inquiry/inquiry-thread.prisma` | `InquiryThread`, `InquiryMessage`, `InquiryParticipant`, `InquiryAttachment`, `InquiryParticipantRole`, `SenderType`, `ThreadStatus`, `MessageContentType`, `AttachmentFileType` |

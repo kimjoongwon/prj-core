@@ -16,23 +16,23 @@ model Policy {
   removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
 
   /// @displayName 공간 ID
-  spaceId String @map("space_id")
+  tenantId    String  @map("tenant_id")
   /// @displayName 정책 식별자
-  name String
+  name        String
   /// @displayName 표시명
   displayName String? @map("display_name")
   /// @displayName 설명
   description String?
   /// @displayName 시스템 정책 여부
-  isSystem Boolean @default(false) @map("is_system")
+  isSystem    Boolean @default(false) @map("is_system")
 
-  space           Space           @relation(fields: [spaceId], references: [id])
+  tenant          Tenant          @relation(fields: [tenantId], references: [id])
   policyAbilities PolicyAbility[]
   rolePolicies    RolePolicy[]
   userPolicies    UserPolicy[]
 
-  @@unique([spaceId, name])
-  @@index([spaceId])
+  @@unique([tenantId, name])
+  @@index([tenantId])
   @@index([isSystem])
   @@map("policies")
 }
@@ -52,7 +52,7 @@ model PolicyAbility {
   removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
 
   /// @displayName 정책 ID
-  policyId String @map("policy_id")
+  policyId  String @map("policy_id")
   /// @displayName 권한 ID
   abilityId String @map("ability_id")
 
@@ -80,13 +80,13 @@ model RolePolicy {
   removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
 
   /// @displayName 역할 ID
-  roleId String @map("role_id")
+  roleId   String  @map("role_id")
   /// @displayName 정책 ID
-  policyId String @map("policy_id")
+  policyId String  @map("policy_id")
   /// @displayName 활성화 여부
   isActive Boolean @default(true) @map("is_active")
   /// @displayName 우선순위
-  priority Int @default(0)
+  priority Int     @default(0)
 
   role   Role   @relation(fields: [roleId], references: [id])
   policy Policy @relation(fields: [policyId], references: [id])
@@ -113,13 +113,13 @@ model UserPolicy {
   removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
 
   /// @displayName 사용자 ID
-  userId String @map("user_id")
+  userId   String  @map("user_id")
   /// @displayName 정책 ID
-  policyId String @map("policy_id")
+  policyId String  @map("policy_id")
   /// @displayName 활성화 여부
   isActive Boolean @default(true) @map("is_active")
   /// @displayName 우선순위
-  priority Int @default(10)
+  priority Int     @default(10)
 
   user   User   @relation(fields: [userId], references: [id])
   policy Policy @relation(fields: [policyId], references: [id])

@@ -1,7 +1,7 @@
 import { navigateToConsentForm, navigateToLoginForm } from "@cocrepo/e2e";
 import { expect, type Page, test } from "@playwright/test";
 
-/** 시드 데이터 기준 FULL_ACCESS 계정 */
+/** 시드 데이터 기준 PLATFORM_ADMIN 계정 */
 const ADMIN_EMAIL = "admin@plate.com";
 const ADMIN_PASSWORD = "rkdmf12!@";
 

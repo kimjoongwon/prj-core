@@ -12,8 +12,8 @@ import { AbstractDto } from "../abstract.dto";
  * 파생 리소스 DTO
  */
 export class DerivativeDto extends AbstractDto {
-	@UUIDField({ description: "소속 Space ID" })
-	spaceId!: string;
+	@UUIDField({ description: "소속 Tenant ID" })
+	tenantId!: string;
 
 	@UUIDField({ description: "원본 에셋 ID" })
 	assetId!: string;

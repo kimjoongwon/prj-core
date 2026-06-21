@@ -21,6 +21,7 @@ import { BadRequestException, ConflictException } from "@nestjs/common";
 import { ReservationAggregate } from "../src/reservation/reservation.aggregate";
 
 const spaceId = "11111111-1111-4111-8111-111111111111";
+const tenantId = "66666666-6666-4666-8666-666666666666";
 const userId = "22222222-2222-4222-8222-222222222222";
 const timelineId = "33333333-3333-4333-8333-333333333333";
 const sessionId = "44444444-4444-4444-8444-444444444444";
@@ -61,7 +62,7 @@ describe("ReservationAggregate", () => {
 			coursesRepository,
 		);
 		tenantsRepository.findActiveByUserIdAndSpaceId.mockResolvedValue({
-			id: "tenant-id",
+			id: tenantId,
 		} as Awaited<
 			ReturnType<TenantsRepository["findActiveByUserIdAndSpaceId"]>
 		>);
@@ -288,12 +289,14 @@ function buildCoursePass(): CoursePass {
 		reservationRemainingCount: 48,
 		status: CoursePassStatus.ACTIVE,
 		courseOffering: {
-			spaceId,
+			tenantId,
+			tenant: { id: tenantId, spaceId },
 		},
 		course: {
-			spaceId,
+			tenantId,
+			tenant: { id: tenantId, spaceId },
 		},
-	} as CoursePass;
+	} as unknown as CoursePass;
 }
 
 function buildProgram(input: { capacity: number }): BookingProgramRecord {
@@ -328,14 +331,14 @@ function buildProgram(input: { capacity: number }): BookingProgramRecord {
 				createdAt: new Date("2026-01-01T00:00:00.000Z"),
 				updatedAt: null,
 				removedAt: null,
-				spaceId,
+				tenantId,
 				creatorId: null,
 				name: "June",
 				description: null,
 			},
 		},
 		programActivities: [],
-	} as BookingProgramRecord;
+	} as unknown as BookingProgramRecord;
 }
 
 function buildReservation(input: Partial<Reservation> = {}): Reservation {
@@ -344,7 +347,8 @@ function buildReservation(input: Partial<Reservation> = {}): Reservation {
 		createdAt: new Date("2026-01-01T00:00:00.000Z"),
 		updatedAt: null,
 		removedAt: null,
-		spaceId,
+		tenantId,
+		tenant: { id: tenantId, spaceId },
 		userId,
 		coursePassId,
 		timelineId,

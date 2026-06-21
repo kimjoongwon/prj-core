@@ -40,7 +40,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("OIDC_CLIENTS")
 @Controller()
-@Roles([SYSTEM_ROLES.FULL_ACCESS])
+@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 @SkipSpaceCheck()
 export class OidcClientsController {
 	constructor(

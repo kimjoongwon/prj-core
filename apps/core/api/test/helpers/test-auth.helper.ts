@@ -14,6 +14,7 @@ import { ClsService } from "nestjs-cls";
 import { ExtractJwt, Strategy } from "passport-jwt";
 
 interface TestAuthTenant {
+	id: string;
 	spaceId: string;
 	role?: {
 		name?: string | null;
@@ -91,6 +92,7 @@ export async function getTestAuth(
 	options: TestAuthOptions = {},
 ): Promise<{
 	jwtToken: string;
+	tenantId: string;
 	spaceId: string;
 	userId: string;
 }> {
@@ -101,7 +103,7 @@ export async function getTestAuth(
 		options.userEmail ?? process.env.E2E_API_AUTH_EMAIL ?? "admin@plate.com";
 	const roleName =
 		options.roleName ??
-		(options.roleCategoryName || options.spaceId ? undefined : "FULL_ACCESS");
+		(options.roleCategoryName || options.spaceId ? undefined : "PLATFORM_ADMIN");
 	const roleCategoryName =
 		typeof options.roleCategoryName === "string"
 			? options.roleCategoryName
@@ -173,6 +175,7 @@ export async function getTestAuth(
 
 	return {
 		jwtToken: token,
+		tenantId: tenant.id,
 		spaceId: tenant.spaceId,
 		userId: user.id,
 	};

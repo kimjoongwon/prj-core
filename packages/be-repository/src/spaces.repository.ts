@@ -1,4 +1,4 @@
-import { Ground, Space } from "@cocrepo/entity";
+import { Company, Ground, Space } from "@cocrepo/entity";
 import { LanguageCode, Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
@@ -15,6 +15,48 @@ export class SpacesRepository {
 		>,
 	) {
 		this.logger = new Logger("SpacesRepository");
+	}
+
+	private toGroundWithCompany(
+		result: Prisma.GroundGetPayload<{ include: { company: true } }>,
+	): Ground {
+		const ground = plainToInstance(Ground, result);
+		const company = plainToInstance(Company, result.company);
+		ground.company = company;
+		ground.businessNo = result.company.businessNo;
+		ground.spaceId = result.company.spaceId;
+		ground.logoImageFileId = result.company.logoImageFileId;
+		return ground;
+	}
+
+	private toSpaceWithCompanyGround(
+		result: Prisma.SpaceGetPayload<{
+			include: { company: { include: { grounds: true } } };
+		}>,
+	): Space {
+		const space = plainToInstance(Space, result);
+		if (!result.company) {
+			return space;
+		}
+
+		const company = plainToInstance(Company, result.company);
+		space.company = company;
+
+		if (result.company.grounds.length > 0) {
+			const grounds = result.company.grounds.map((companyGround) => {
+				const ground = this.toGroundWithCompany({
+					...companyGround,
+					company: result.company,
+				});
+				ground.space = space;
+				return ground;
+			});
+			company.grounds = grounds;
+			space.grounds = grounds;
+			space.ground = grounds[0];
+		}
+
+		return space;
 	}
 
 	/**
@@ -39,11 +81,18 @@ export class SpacesRepository {
 		const result = await this.txHost.tx.space.findUnique({
 			where: { id },
 			include: {
-				ground: true,
+				company: {
+					include: {
+						grounds: {
+							where: { removedAt: null },
+							orderBy: { createdAt: "asc" },
+						},
+					},
+				},
 			},
 		});
 
-		return result ? plainToInstance(Space, result) : null;
+		return result ? this.toSpaceWithCompanyGround(result) : null;
 	}
 
 	/**
@@ -67,9 +116,14 @@ export class SpacesRepository {
 			...(queryParams.contentLanguageCode
 				? { contentLanguageCode: queryParams.contentLanguageCode }
 				: {}),
-			ground: {
+			company: {
 				is: {
 					removedAt: null,
+					grounds: {
+						some: {
+							removedAt: null,
+						},
+					},
 					...(queryParams.search
 						? {
 								OR: [
@@ -85,6 +139,17 @@ export class SpacesRepository {
 											mode: "insensitive",
 										},
 									},
+									{
+										grounds: {
+											some: {
+												removedAt: null,
+												name: {
+													contains: queryParams.search,
+													mode: "insensitive",
+												},
+											},
+										},
+									},
 								],
 							}
 						: {}),
@@ -96,7 +161,14 @@ export class SpacesRepository {
 			this.txHost.tx.space.findMany({
 				where,
 				include: {
-					ground: true,
+					company: {
+						include: {
+							grounds: {
+								where: { removedAt: null },
+								orderBy: { createdAt: "asc" },
+							},
+						},
+					},
 				},
 				orderBy: { createdAt: "desc" },
 				skip: queryParams.skip,
@@ -105,7 +177,10 @@ export class SpacesRepository {
 			this.txHost.tx.space.count({ where }),
 		]);
 
-		return [results.map((result) => plainToInstance(Space, result)), total];
+		return [
+			results.map((result) => this.toSpaceWithCompanyGround(result)),
+			total,
+		];
 	}
 
 	/**
@@ -130,31 +205,42 @@ export class SpacesRepository {
 
 		const result = await this.txHost.tx.ground.findFirst({
 			where: {
-				spaceId,
 				removedAt: null,
+				company: {
+					spaceId,
+					removedAt: null,
+				},
 			},
 			include: {
-				space: true,
+				company: true,
 			},
+			orderBy: { createdAt: "asc" },
 		});
 
-		return result ? plainToInstance(Ground, result) : null;
+		return result ? this.toGroundWithCompany(result) : null;
 	}
 
 	/**
-	 * 사업자등록번호로 Ground 조회
+	 * 사업자등록번호로 Company의 Ground 조회
 	 */
 	async findGroundByBusinessNo(businessNo: string): Promise<Ground | null> {
 		this.logger.debug(`사업자등록번호로 Ground 조회: ${businessNo}`);
 
 		const result = await this.txHost.tx.ground.findFirst({
 			where: {
-				businessNo,
 				removedAt: null,
+				company: {
+					businessNo,
+					removedAt: null,
+				},
 			},
+			include: {
+				company: true,
+			},
+			orderBy: { createdAt: "asc" },
 		});
 
-		return result ? plainToInstance(Ground, result) : null;
+		return result ? this.toGroundWithCompany(result) : null;
 	}
 
 	/**
@@ -167,115 +253,32 @@ export class SpacesRepository {
 			data: data ?? {},
 		});
 
-		await this.cloneSystemPoliciesToSpace(result.id);
-
 		return plainToInstance(Space, result);
 	}
 
-	private async cloneSystemPoliciesToSpace(spaceId: string): Promise<void> {
-		const sourcePolicies = await this.txHost.tx.policy.findMany({
-			where: {
-				spaceId: { not: spaceId },
-				isSystem: true,
-				removedAt: null,
-			},
-			include: {
-				policyAbilities: {
-					where: { removedAt: null },
-					select: { abilityId: true },
-				},
-				rolePolicies: {
-					where: { removedAt: null },
-					select: {
-						roleId: true,
-						isActive: true,
-						priority: true,
-					},
-				},
-			},
-			orderBy: { createdAt: "asc" },
-		});
-
-		const sourcePolicyByName = new Map(
-			sourcePolicies.map((policy) => [policy.name, policy]),
-		);
-
-		for (const sourcePolicy of sourcePolicyByName.values()) {
-			const policy = await this.txHost.tx.policy.upsert({
-				where: {
-					spaceId_name: {
-						spaceId,
-						name: sourcePolicy.name,
-					},
-				},
-				update: {
-					displayName: sourcePolicy.displayName,
-					description: sourcePolicy.description,
-					isSystem: true,
-					removedAt: null,
-				},
-				create: {
-					spaceId,
-					name: sourcePolicy.name,
-					displayName: sourcePolicy.displayName,
-					description: sourcePolicy.description,
-					isSystem: true,
-				},
-			});
-
-			for (const policyAbility of sourcePolicy.policyAbilities) {
-				await this.txHost.tx.policyAbility.upsert({
-					where: {
-						policyId_abilityId: {
-							policyId: policy.id,
-							abilityId: policyAbility.abilityId,
-						},
-					},
-					update: { removedAt: null },
-					create: {
-						policyId: policy.id,
-						abilityId: policyAbility.abilityId,
-					},
-				});
-			}
-
-			for (const rolePolicy of sourcePolicy.rolePolicies) {
-				await this.txHost.tx.rolePolicy.upsert({
-					where: {
-						roleId_policyId: {
-							roleId: rolePolicy.roleId,
-							policyId: policy.id,
-						},
-					},
-					update: {
-						isActive: rolePolicy.isActive,
-						priority: rolePolicy.priority,
-						removedAt: null,
-					},
-					create: {
-						roleId: rolePolicy.roleId,
-						policyId: policy.id,
-						isActive: rolePolicy.isActive,
-						priority: rolePolicy.priority,
-					},
-				});
-			}
-		}
-	}
-
 	/**
-	 * Space에 Ground detail 생성
+	 * Space에 Company와 Ground detail 생성
 	 */
 	async createGroundBySpaceId(
 		spaceId: string,
-		data: Omit<Prisma.GroundUncheckedCreateInput, "spaceId">,
+		data: {
+			company: Omit<Prisma.CompanyUncheckedCreateInput, "spaceId">;
+			ground: Omit<Prisma.GroundUncheckedCreateInput, "companyId">;
+		},
 	): Promise<Space> {
 		this.logger.debug(`Space에 Ground 생성: ${spaceId.slice(-8)}`);
 
+		const company = await this.txHost.tx.company.create({
+			data: {
+				...data.company,
+				spaceId,
+			},
+		});
+
 		await this.txHost.tx.ground.create({
 			data: {
-				...data,
-				spaceId,
+				...data.ground,
+				companyId: company.id,
 			},
 		});
 
@@ -319,18 +322,41 @@ export class SpacesRepository {
 	}
 
 	/**
-	 * Space의 Ground detail 수정
+	 * Space의 Company와 Ground detail 수정
 	 */
 	async updateGroundBySpaceId(
 		spaceId: string,
-		data: Prisma.GroundUncheckedUpdateInput,
+		data: {
+			company?: Prisma.CompanyUncheckedUpdateInput;
+			ground?: Prisma.GroundUncheckedUpdateInput;
+		},
 	): Promise<Space> {
 		this.logger.debug(`Space의 Ground 수정: ${spaceId.slice(-8)}`);
 
-		await this.txHost.tx.ground.update({
+		const company = await this.txHost.tx.company.update({
 			where: { spaceId },
-			data,
+			data: data.company ?? {},
 		});
+
+		if (data.ground) {
+			const ground = await this.txHost.tx.ground.findFirst({
+				where: {
+					companyId: company.id,
+					removedAt: null,
+				},
+				orderBy: { createdAt: "asc" },
+				select: { id: true },
+			});
+
+			if (!ground) {
+				throw new Error("GROUND_UPDATE_FAILED");
+			}
+
+			await this.txHost.tx.ground.update({
+				where: { id: ground.id },
+				data: data.ground,
+			});
+		}
 
 		const space = await this.findByIdWithGround(spaceId);
 		if (!space) {
@@ -395,10 +421,19 @@ export class SpacesRepository {
 
 		const results = await this.txHost.tx.space.findMany({
 			where: { id: { in: ids }, removedAt: null },
-			include: { ground: true },
+			include: {
+				company: {
+					include: {
+						grounds: {
+							where: { removedAt: null },
+							orderBy: { createdAt: "asc" },
+						},
+					},
+				},
+			},
 			orderBy: { createdAt: "desc" },
 		});
 
-		return results.map((result) => plainToInstance(Space, result));
+		return results.map((result) => this.toSpaceWithCompanyGround(result));
 	}
 }

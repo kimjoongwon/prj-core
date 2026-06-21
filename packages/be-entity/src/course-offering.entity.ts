@@ -7,7 +7,7 @@ import { AbstractEntity } from "./abstract.entity";
 import type { Course } from "./course.entity";
 import type { CoursePass } from "./course-pass.entity";
 import type { Enrollment } from "./enrollment.entity";
-import type { Space } from "./space.entity";
+import type { Tenant } from "./tenant.entity";
 import type { Timeline } from "./timeline.entity";
 
 export class CourseOffering
@@ -15,7 +15,7 @@ export class CourseOffering
 	implements CourseOfferingEntity
 {
 	courseId!: string;
-	spaceId!: string;
+	tenantId!: string;
 	timelineProvisioningMode!: TimelineProvisioningMode;
 	name!: string;
 	startsAt!: Date;
@@ -29,7 +29,7 @@ export class CourseOffering
 	enrollmentEndsAt!: Date | null;
 
 	course?: Course;
-	space?: Space;
+	tenant?: Tenant;
 	timeline?: Timeline | null;
 	enrollments?: Enrollment[];
 	passes?: CoursePass[];

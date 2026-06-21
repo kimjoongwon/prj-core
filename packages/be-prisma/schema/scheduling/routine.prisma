@@ -15,17 +15,17 @@ model Routine {
   createdAt  DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt  DateTime?  @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt  DateTime?  @map("removed_at") @db.Timestamptz(6)
-  spaceId    String     @map("space_id")
+  tenantId   String     @map("tenant_id")
   creatorId  String?    @map("creator_id")
   name       String
   label      String
-  space      Space      @relation(fields: [spaceId], references: [id])
+  tenant     Tenant     @relation(fields: [tenantId], references: [id])
   creator    User?      @relation(fields: [creatorId], references: [id])
   activities Activity[]
   programs   Program[]
 
-  @@index([spaceId])
-  @@index([spaceId, name])
+  @@index([tenantId])
+  @@index([tenantId, name])
   @@map("routines")
 }
 

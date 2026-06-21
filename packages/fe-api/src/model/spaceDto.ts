@@ -16,6 +16,8 @@ import type { SpaceClassificationDto } from "./spaceClassificationDto";
 
 export interface SpaceDto {
 	id: string;
+	/** 이 Space 접근에 사용할 Tenant ID */
+	tenantId?: string | null;
 	createdAt: string;
 	updatedAt: string;
 	/** @nullable */

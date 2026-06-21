@@ -30,7 +30,7 @@ export interface TaskExerciseDetailScreenExercise {
 	videoAssetHref?: Route;
 	createdAt: string;
 	updatedAt?: string | null;
-	spaceId?: string | null;
+	tenantId?: string | null;
 }
 export interface TaskExerciseDetailScreenRoutine {
 	id: string;
@@ -226,7 +226,7 @@ export const TaskExerciseDetailScreen = observer(
 								<div>
 									<label className="text-sm text-muted">Space ID</label>
 									<p className="mt-1 font-mono text-sm">
-										{exercise.spaceId ?? "-"}
+										{exercise.tenantId ?? "-"}
 									</p>
 								</div>
 							</div>

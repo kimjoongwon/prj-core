@@ -8,7 +8,7 @@
 
 import { Ability, AbilityBuilder } from "@casl/ability";
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import type { UserDto } from "@cocrepo/dto";
+import type { TenantDto, UserDto } from "@cocrepo/dto";
 import type { RolePolicy, UserPolicy } from "@cocrepo/entity";
 import type {
 	Ability as PrismaAbility,
@@ -21,7 +21,10 @@ import {
 } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
-import { resolveCurrentTenantForSpace } from "../util/permission.util";
+import {
+	resolveCurrentTenantById,
+	resolveTenantSpaceId,
+} from "../util/permission.util";
 import type { Actions, AppAbility, AppAbilityClass, Subjects } from "./types";
 
 /**
@@ -87,7 +90,7 @@ export class CaslAbilityFactory {
 	 * @returns 사용자의 권한이 적용된 AppAbility 객체
 	 *
 	 * @description
-	 * 1. x-space-id 헤더에서 현재 spaceId를 가져와 해당 tenant 찾기
+	 * 1. x-tenant-id 헤더에서 현재 tenant를 가져와 spaceId 파생
 	 * 2. RolePolicy로 Role 기반 정책 조회 (RolePolicy → Policy → Ability)
 	 * 3. UserPolicy로 User 예외 정책 조회 (UserPolicy → Policy → Ability)
 	 * 4. 권한 병합 (User 권한이 Role 권한보다 우선 - priority 기반)
@@ -100,13 +103,18 @@ export class CaslAbilityFactory {
 			Ability as AppAbilityClass,
 		);
 
-		// x-space-id 헤더에서 현재 spaceId를 가져와서 해당 tenant 찾기
-		const spaceId = this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
-		const currentTenant = resolveCurrentTenantForSpace(user.tenants, spaceId);
+		// x-tenant-id 헤더에서 현재 tenant를 가져와서 spaceId 파생
+		const tenantId = this.cls.get<string>(CONTEXT_KEYS.TENANT_ID);
+		const currentTenant =
+			this.cls.get<TenantDto | undefined>(CONTEXT_KEYS.TENANT) ??
+			resolveCurrentTenantById(user.tenants, tenantId);
+		const spaceId = currentTenant
+			? resolveTenantSpaceId(currentTenant)
+			: this.cls.get<string | undefined>(CONTEXT_KEYS.SPACE_ID);
 
-		if (!spaceId || !currentTenant?.role) {
+		if (!tenantId || !spaceId || !currentTenant?.role) {
 			this.logger.warn(
-				`사용자에게 현재 Space의 Tenant 또는 Role이 없습니다: userId=${user.id}, spaceId=${spaceId}`,
+				`사용자에게 현재 Tenant 또는 Role이 없습니다: userId=${user.id}, tenantId=${tenantId}, spaceId=${spaceId}`,
 			);
 			return abilityBuilder.build();
 		}
@@ -117,9 +125,9 @@ export class CaslAbilityFactory {
 		);
 
 		const rolePolicies =
-			await this.rolePoliciesRepository.findActiveByRoleIdsInSpace(
+			await this.rolePoliciesRepository.findActiveByRoleIdsInTenant(
 				[roleId],
-				spaceId,
+				currentTenant.id,
 			);
 		const roleAbilities = this.expandRolePolicyAbilities(rolePolicies);
 		this.logger.debug(
@@ -127,9 +135,9 @@ export class CaslAbilityFactory {
 		);
 
 		const userPolicies =
-			await this.userPoliciesRepository.findActiveByUserIdInSpace(
+			await this.userPoliciesRepository.findActiveByUserIdInTenant(
 				user.id,
-				spaceId,
+				currentTenant.id,
 			);
 		const userAbilities = this.expandUserPolicyAbilities(userPolicies);
 		this.logger.debug(

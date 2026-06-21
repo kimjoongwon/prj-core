@@ -9,7 +9,6 @@
 //   Role (ROOT)
 //     │
 //     ├─── RolePolicy ─── Policy ─── PolicyAbility ─── Ability (권한 정의)
-//     ├─── Assignment ─── Tenant (추가 역할 할당)
 //     ├─── RoleClassification ─── Category (분류)
 //     ├─── RoleAssociation ─── Group (그룹핑)
 //     └─── Tenant (JOIN: User + Space + Role)
@@ -38,11 +37,10 @@ model Role {
   /// @displayName 시스템 역할 여부
   isSystem    Boolean @default(false) @map("is_system")
 
-  assignments    Assignment[]
-  associations   RoleAssociation[]
-  classification RoleClassification?
-  rolePolicies   RolePolicy[]
-  tenants        Tenant[]
+  associations                  RoleAssociation[]
+  classification                RoleClassification?
+  rolePolicies                  RolePolicy[]
+  tenants                       Tenant[]
   requestedTenantAccessRequests TenantAccessRequest[] @relation("TenantAccessRequestRequestedRole")
   previousTenantAccessRequests  TenantAccessRequest[] @relation("TenantAccessRequestPreviousRole")
 

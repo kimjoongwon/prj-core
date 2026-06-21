@@ -245,6 +245,7 @@ class MobileAuthStore {
     });
     const currentSpace = currentSpaceResponse.data;
     if (
+      currentSpace?.tenantId === storedSpaceSelection.tenantId &&
       currentSpace?.id === storedSpaceSelection.spaceId &&
       isSelectableMobileSpace(currentSpace)
     ) {

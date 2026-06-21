@@ -38,15 +38,15 @@ export class PolicyAggregate {
 	) {}
 
 	async listPolicies(): Promise<Policy[]> {
-		const spaceId = this.requireSpaceId();
-		return this.policiesRepository.findManyBySpaceId(spaceId);
+		const tenantId = this.requireTenantId();
+		return this.policiesRepository.findManyByTenantId(tenantId);
 	}
 
 	async getPolicyById(policyId: string): Promise<Policy> {
-		const spaceId = this.requireSpaceId();
-		const policy = await this.policiesRepository.findByIdInSpace(
+		const tenantId = this.requireTenantId();
+		const policy = await this.policiesRepository.findByIdInTenant(
 			policyId,
-			spaceId,
+			tenantId,
 		);
 
 		if (!policy) {
@@ -57,11 +57,11 @@ export class PolicyAggregate {
 	}
 
 	async createPolicy(dto: CreatePolicyDto): Promise<Policy> {
-		const spaceId = this.requireSpaceId();
-		this.logger.debug(`Policy 생성: name=${dto.name}, spaceId=${spaceId}`);
+		const tenantId = this.requireTenantId();
+		this.logger.debug(`Policy 생성: name=${dto.name}, tenantId=${tenantId}`);
 
-		const existing = await this.policiesRepository.findByNameInSpace(
-			spaceId,
+		const existing = await this.policiesRepository.findByNameInTenant(
+			tenantId,
 			dto.name,
 		);
 		if (existing) {
@@ -69,7 +69,7 @@ export class PolicyAggregate {
 		}
 
 		return this.policiesRepository.create({
-			spaceId,
+			tenantId,
 			name: dto.name,
 			displayName: dto.displayName ?? null,
 			description: dto.description ?? null,
@@ -81,8 +81,8 @@ export class PolicyAggregate {
 		const policy = await this.getPolicyById(policyId);
 
 		if (dto.name && dto.name !== policy.name) {
-			const existing = await this.policiesRepository.findByNameInSpace(
-				policy.spaceId,
+			const existing = await this.policiesRepository.findByNameInTenant(
+				policy.tenantId,
 				dto.name,
 			);
 			if (existing) {
@@ -143,11 +143,11 @@ export class PolicyAggregate {
 		}
 	}
 
-	private requireSpaceId(): string {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
+	private requireTenantId(): string {
+		const tenantId = this.spaceContext.tenantId;
+		if (!tenantId) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
-		return spaceId;
+		return tenantId;
 	}
 }

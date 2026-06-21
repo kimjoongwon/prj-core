@@ -1,9 +1,9 @@
 import { getAdminSpaceRequestHeaders } from "@cocrepo/e2e";
 import { expect, type Page, test } from "@playwright/test";
 
-const SYSTEM_SPACE_ID =
-	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
-const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_SPACE_ID);
+const SYSTEM_TENANT_ID =
+	process.env.E2E_SYSTEM_TENANT_ID ?? "71ddca20-1752-466e-b4da-879ebdbe54e3";
+const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_TENANT_ID);
 
 test.describe("Subject 상세 페이지", () => {
 	// ── E2E-008: Subject 필드 조회 (entity vs non-entity) ──

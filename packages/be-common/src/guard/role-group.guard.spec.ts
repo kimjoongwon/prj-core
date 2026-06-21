@@ -37,7 +37,7 @@ describe("RoleGroupGuard", () => {
 				id: "tenant-1",
 				spaceId: "space-001",
 				role: {
-					name: "VIEW",
+					name: "MEMBER",
 					associations: [
 						{
 							group: {
@@ -55,7 +55,7 @@ describe("RoleGroupGuard", () => {
 		id: "tenant-1",
 		spaceId: "space-001",
 		role: {
-			name: "VIEW",
+			name: "MEMBER",
 			associations: [
 				{
 					group: {
@@ -218,7 +218,7 @@ describe("RoleGroupGuard", () => {
 							id: "tenant-1",
 							spaceId: "space-001",
 							role: {
-								name: "VIEW",
+								name: "MEMBER",
 								associations: [{ group: { name: "일반" } }],
 							},
 						},
@@ -226,7 +226,7 @@ describe("RoleGroupGuard", () => {
 							id: "tenant-2",
 							spaceId: "space-002",
 							role: {
-								name: "MANAGE",
+								name: "COMPANY_MANAGER",
 								associations: [{ group: { name: "관리자" } }],
 							},
 						},
@@ -236,7 +236,7 @@ describe("RoleGroupGuard", () => {
 					id: "tenant-2",
 					spaceId: "space-002",
 					role: {
-						name: "MANAGE",
+						name: "COMPANY_MANAGER",
 						associations: [{ group: { name: "관리자" } }],
 					},
 				});
@@ -319,7 +319,7 @@ describe("RoleGroupGuard", () => {
 				mockReflector.get.mockReturnValue(["관리자"]);
 				const tenant = createMockTenant({
 					role: {
-						name: "VIEW",
+						name: "MEMBER",
 						associations: [
 							{ group: { name: "일반" } },
 							{ group: { name: "관리자" } },
@@ -348,7 +348,7 @@ describe("RoleGroupGuard", () => {
 				mockReflector.get.mockReturnValue(["일반"]);
 				const tenant = createMockTenant({
 					role: {
-						name: "VIEW",
+						name: "MEMBER",
 						associations: null,
 					},
 				});
@@ -371,7 +371,7 @@ describe("RoleGroupGuard", () => {
 				mockReflector.get.mockReturnValue(["일반"]);
 				const tenant = createMockTenant({
 					role: {
-						name: "VIEW",
+						name: "MEMBER",
 						associations: [],
 					},
 				});
@@ -394,7 +394,7 @@ describe("RoleGroupGuard", () => {
 				mockReflector.get.mockReturnValue(["일반"]);
 				const tenant = createMockTenant({
 					role: {
-						name: "VIEW",
+						name: "MEMBER",
 						associations: [{ group: null }, { group: { name: "일반" } }],
 					},
 				});

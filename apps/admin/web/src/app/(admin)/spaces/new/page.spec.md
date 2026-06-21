@@ -9,29 +9,29 @@
 
 ### 목적
 
-새 시설(Ground)을 등록합니다. 시설 등록 시 서버에서 새 Space가 자동으로 함께 생성됩니다. 플랫폼 관리자(FULL_ACCESS)만 사용 가능합니다.
+새 회사(Company)와 첫 서비스 시설(Ground)을 등록합니다. 등록 시 서버에서 새 Space가 자동으로 함께 생성됩니다. 플랫폼 관리자(PLATFORM_ADMIN)만 사용 가능합니다.
 
 ### 주요 기능
 
 | ID | 기능 | 설명 |
 |----|------|------|
-| F-001 | 기본 정보 입력 | 시설명(필수), 라벨, 주소(필수), 전화번호(필수), 이메일(필수), 사업자등록번호(필수) |
+| F-001 | 기본 정보 입력 | 시설명(필수), 라벨, 주소(필수), 전화번호(필수), 이메일(필수), 회사 사업자등록번호(필수) |
 | F-002 | 이미지 업로드 | 로고 이미지, 대표 이미지 파일 업로드 |
 | F-003 | 등록 제출 | 유효성 검사 후 API 호출 |
 | F-004 | 취소 | 목록 페이지(`/spaces`)로 이동 |
 
 ### 특이사항
 
-- Ground 등록 시 서버에서 새 Space를 자동 생성 (클라이언트에서 별도 처리 불필요)
-- `businessNo`(사업자등록번호)는 유니크. 중복 시 서버 에러 처리 필요
+- Company/Ground 등록 시 서버에서 새 Space와 대표 Ground를 자동 생성 (클라이언트에서 별도 처리 불필요)
+- `businessNo`(회사 사업자등록번호)는 유니크. 중복 시 서버 에러 처리 필요
 
 ### 접근 권한
 
 | 행위자 | 접근 가능 여부 | 비고 |
 |-------|---------------|------|
-| ACT-001 (FULL_ACCESS) | 가능 | - |
-| ACT-002 (MANAGE) | 불가 | - |
-| ACT-003 (VIEW) | 불가 | - |
+| ACT-001 (PLATFORM_ADMIN) | 가능 | - |
+| ACT-002 (COMPANY_MANAGER) | 불가 | - |
+| ACT-003 (MEMBER) | 불가 | - |
 
 ## L4: 화면 구조 (Screen)
 
@@ -66,7 +66,7 @@
 | address | 주소 | Input (text) | O | 최소 1자 이상 |
 | phone | 전화번호 | Input (tel) | O | 전화번호 형식 |
 | email | 이메일 | Input (email) | O | 이메일 형식 |
-| businessNo | 사업자등록번호 | Input (text) | O | 10자리 숫자 (000-00-00000) |
+| businessNo | 회사 사업자등록번호 | Input (text) | O | 10자리 숫자 (000-00-00000) |
 | logoImageFileId | 로고 이미지 | FileUpload | X | 이미지 파일 (jpg, png, webp) |
 | imageFileId | 대표 이미지 | FileUpload | X | 이미지 파일 (jpg, png, webp) |
 
@@ -84,7 +84,7 @@
 
 | 메서드 | 엔드포인트 | Orval 훅 | 설명 |
 |--------|-----------|----------|------|
-| POST | `/api/v1/spaces` | `useCreateSpace()` | 시설 등록 (Space 자동 생성) |
+| POST | `/api/v1/spaces` | `useCreateSpace()` | Company/Ground 등록 (Space 자동 생성) |
 
 ## 런타임 책임
 
@@ -100,7 +100,7 @@
   address: string;        // 주소 (필수)
   phone: string;          // 전화번호 (필수)
   email: string;          // 이메일 (필수)
-  businessNo: string;     // 사업자등록번호 (필수, 유니크)
+  businessNo: string;     // 회사 사업자등록번호 (필수, 유니크)
   logoImageFileId?: string; // 로고 이미지 파일 ID (선택)
   imageFileId?: string;   // 대표 이미지 파일 ID (선택)
 }

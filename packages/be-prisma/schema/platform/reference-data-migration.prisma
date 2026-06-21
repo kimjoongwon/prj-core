@@ -10,10 +10,10 @@
 // @scope: global
 /// @displayName 기준 데이터 migration 이력
 model ReferenceDataMigrationHistory {
-  id          String    @id
+  id          String   @id
   checksum    String
   description String
-  appliedAt   DateTime  @default(now()) @map("applied_at") @db.Timestamptz(6)
+  appliedAt   DateTime @default(now()) @map("applied_at") @db.Timestamptz(6)
 
   @@map("reference_data_migration_history")
 }

@@ -4,18 +4,18 @@ function toAdminPath(href: string) {
 	return href.startsWith("/admin") ? href : `/admin${href}`;
 }
 
-async function openFullAccessRoleDetail(page: Page) {
+async function openPlatformAdminRoleDetail(page: Page) {
 	await page.goto("./roles");
 	await page.waitForLoadState("networkidle");
 
-	const fullAccessRow = page
+	const platformAdminRow = page
 		.getByRole("row")
-		.filter({ has: page.getByText("FULL_ACCESS", { exact: true }) })
+		.filter({ has: page.getByText("PLATFORM_ADMIN", { exact: true }) })
 		.first();
-	await expect(fullAccessRow).toBeVisible();
-	const detailAction = fullAccessRow
+	await expect(platformAdminRow).toBeVisible();
+	const detailAction = platformAdminRow
 		.getByRole("link", { name: "상세" })
-		.or(fullAccessRow.getByRole("button", { name: "상세" }))
+		.or(platformAdminRow.getByRole("button", { name: "상세" }))
 		.first();
 	const href = await detailAction.getAttribute("href").catch(() => null);
 	if (href) {
@@ -34,17 +34,17 @@ test.describe("역할 상세 페이지", () => {
 		test("역할 상세에 기본 정보와 정책 할당 섹션이 표시되어야 한다", async ({
 			page,
 		}) => {
-			// Given: 역할 목록에서 FULL_ACCESS 상세 버튼 클릭
-			await openFullAccessRoleDetail(page);
+			// Given: 역할 목록에서 PLATFORM_ADMIN 상세 버튼 클릭
+			await openPlatformAdminRoleDetail(page);
 
 			await expect(
-				page.getByRole("heading", { name: /역할 상세: 전체 접근/ }),
+				page.getByRole("heading", { name: /역할 상세: 플랫폼 관리자/ }),
 			).toBeVisible();
 			await expect(
 				page.getByRole("heading", { name: "기본 정보" }),
 			).toBeVisible();
 			await expect(
-				page.getByText("FULL_ACCESS", { exact: true }),
+				page.getByText("PLATFORM_ADMIN", { exact: true }),
 			).toBeVisible();
 			await expect(
 				page.getByRole("heading", { name: "정책 할당" }),
@@ -56,7 +56,7 @@ test.describe("역할 상세 페이지", () => {
 
 		test("정책 편집 버튼이 표시되어야 한다", async ({ page }) => {
 			// Given: 역할 상세 페이지
-			await openFullAccessRoleDetail(page);
+			await openPlatformAdminRoleDetail(page);
 
 			await expect(
 				page.getByRole("button", { name: "정책 편집" }),
@@ -67,11 +67,11 @@ test.describe("역할 상세 페이지", () => {
 	// ── E2E-004: 시스템 역할 보호 확인 ──
 
 	test.describe("[E2E-004] 시스템 역할 보호", () => {
-		test("시스템 역할(FULL_ACCESS) 상세에서 수정/삭제 버튼이 없어야 한다", async ({
+		test("시스템 역할(PLATFORM_ADMIN) 상세에서 수정/삭제 버튼이 없어야 한다", async ({
 			page,
 		}) => {
-			// Given: 역할 목록에서 FULL_ACCESS 상세 클릭
-			await openFullAccessRoleDetail(page);
+			// Given: 역할 목록에서 PLATFORM_ADMIN 상세 클릭
+			await openPlatformAdminRoleDetail(page);
 
 			await expect(page.getByText("시스템 역할")).toBeVisible();
 			await expect(page.getByText("예", { exact: true })).toBeVisible();

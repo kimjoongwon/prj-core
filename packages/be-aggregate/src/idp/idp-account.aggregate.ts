@@ -76,7 +76,16 @@ export class IdpAccountAggregate {
 		const [spaces, roles] = await Promise.all([
 			this.txHost.tx.space.findMany({
 				where: this.applySpaceFilter({ removedAt: null }),
-				include: { ground: true },
+				include: {
+					company: {
+						include: {
+							grounds: {
+								where: { removedAt: null },
+								orderBy: { createdAt: "asc" },
+							},
+						},
+					},
+				},
 				orderBy: { createdAt: "desc" },
 			}),
 			this.txHost.tx.role.findMany({
@@ -85,11 +94,14 @@ export class IdpAccountAggregate {
 			}),
 		]);
 
-		const spaceOptions = spaces.map((space) => ({
-			value: space.id,
-			label: space.ground?.name ?? space.id,
-			description: space.ground?.label ?? space.ground?.address ?? undefined,
-		}));
+		const spaceOptions = spaces.map((space) => {
+			const [primaryGround] = space.company?.grounds ?? [];
+			return {
+				value: space.id,
+				label: primaryGround?.name ?? space.id,
+				description: primaryGround?.label ?? primaryGround?.address ?? undefined,
+			};
+		});
 		const roleOptions = roles.map((role) => ({
 			value: role.id,
 			label: role.displayName ?? role.name,
@@ -238,7 +250,14 @@ export class IdpAccountAggregate {
 			include: {
 				space: {
 					include: {
-						ground: true,
+						company: {
+							include: {
+								grounds: {
+									where: { removedAt: null },
+									orderBy: { createdAt: "asc" },
+								},
+							},
+						},
 					},
 				},
 				role: true,
@@ -246,17 +265,20 @@ export class IdpAccountAggregate {
 			orderBy: [{ createdAt: "desc" }],
 		});
 
-		return tenants.map((tenant) => ({
-			tenantId: tenant.id,
-			spaceId: tenant.spaceId,
-			spaceName: tenant.space.ground?.name ?? tenant.spaceId,
-			spaceLabel: tenant.space.ground?.label ?? null,
-			roleId: tenant.roleId,
-			roleName: tenant.role.name,
-			roleDisplayName: tenant.role.displayName ?? null,
-			grantedAt: tenant.createdAt,
-			updatedAt: tenant.updatedAt ?? null,
-		}));
+		return tenants.map((tenant) => {
+			const [primaryGround] = tenant.space.company?.grounds ?? [];
+			return {
+				tenantId: tenant.id,
+				spaceId: tenant.spaceId,
+				spaceName: primaryGround?.name ?? tenant.spaceId,
+				spaceLabel: primaryGround?.label ?? null,
+				roleId: tenant.roleId,
+				roleName: tenant.role.name,
+				roleDisplayName: tenant.role.displayName ?? null,
+				grantedAt: tenant.createdAt,
+				updatedAt: tenant.updatedAt ?? null,
+			};
+		});
 	}
 
 	private applySpaceScope(where: Prisma.UserWhereInput): Prisma.UserWhereInput {

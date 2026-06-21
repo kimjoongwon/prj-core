@@ -8,9 +8,6 @@ export class TaskDto extends AbstractDto implements TaskEntity {
 	@UUIDField()
 	tenantId: string;
 
-	@UUIDField()
-	spaceId: string;
-
 	@UUIDFieldOptional()
 	creatorId: string | null;
 

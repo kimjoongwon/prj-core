@@ -61,7 +61,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 		const { data: instructorsResponse } = useGetUsers({
 			take: 50,
 			skip: 0,
-			roles: ["MANAGE", "FULL_ACCESS"],
+			roles: ["COMPANY_MANAGER", "PLATFORM_ADMIN"],
 			status: "active",
 		});
 		const instructors = (instructorsResponse?.data ?? []) as UserDto[];

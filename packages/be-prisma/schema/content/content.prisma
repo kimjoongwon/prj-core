@@ -41,13 +41,13 @@ model Content {
   /// @displayName 본문
   text        String?   @db.VarChar(1000)
   fileId      String?   @map("file_id")
-  spaceId     String    @map("space_id")
+  tenantId    String    @map("tenant_id")
   creatorId   String?   @map("creator_id")
-  space       Space     @relation(fields: [spaceId], references: [id])
+  tenant      Tenant    @relation(fields: [tenantId], references: [id])
   creator     User?     @relation(fields: [creatorId], references: [id])
   post        Post?
 
-  @@index([spaceId])
+  @@index([tenantId])
   @@map("contents")
 }
 

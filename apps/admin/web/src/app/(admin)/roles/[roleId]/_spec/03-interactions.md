@@ -139,7 +139,7 @@
 | **Operation ID** | `getRoleById` |
 | **설명** | ID로 역할을 상세 조회합니다. |
 | **인증** | Bearer Token |
-| **권한** | `@Roles([MANAGE, FULL_ACCESS])` |
+| **권한** | `@Roles([COMPANY_MANAGER, PLATFORM_ADMIN])` |
 | **Path Params** | `id` (UUID) - 역할 ID |
 | **Response** | `RoleDto` |
 | **에러** | 401, 403, 404 (역할 없음), 500 |
@@ -156,7 +156,7 @@
 | **Operation ID** | `deleteRole` |
 | **설명** | 역할을 소프트 삭제합니다. 시스템 역할 및 연결된 사용자가 있는 역할은 삭제 불가. |
 | **인증** | Bearer Token |
-| **권한** | `@Roles([FULL_ACCESS])` |
+| **권한** | `@Roles([PLATFORM_ADMIN])` |
 | **Path Params** | `id` (UUID) - 역할 ID |
 | **Response** | `RoleDto` (삭제된 역할 정보) |
 | **에러** | 400 (시스템 역할 / 연결된 사용자 존재), 401, 403, 404, 500 |
@@ -236,7 +236,7 @@
 | **Operation ID** | `getAbilities` |
 | **설명** | 전체 Ability 목록을 조회합니다. 권한 정의 목록 화면에서 사용합니다. |
 | **인증** | Bearer Token |
-| **권한** | `@Roles([MANAGE, FULL_ACCESS])` |
+| **권한** | `@Roles([COMPANY_MANAGER, PLATFORM_ADMIN])` |
 | **Status** | **신규 구현 필요** |
 
 **Query Params**:
@@ -294,7 +294,7 @@
 | **Operation ID** | `syncRolePolicies` |
 | **설명** | 특정 Role에 대한 Policy assignment를 전체 동기화합니다. |
 | **인증** | Bearer Token |
-| **권한** | `@Roles([FULL_ACCESS])` |
+| **권한** | `@Roles([PLATFORM_ADMIN])` |
 | **Path Params** | `roleId` (UUID) - Role ID |
 | **Status** | **신규 구현 필요** |
 

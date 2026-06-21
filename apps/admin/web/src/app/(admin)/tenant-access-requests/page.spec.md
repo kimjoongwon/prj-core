@@ -8,7 +8,7 @@
 
 ## 화면 목적
 
-`FULL_ACCESS` 또는 Space `MANAGE` 승인자가 처리 가능한 접근 신청 목록을 확인하고 상세 검토 화면으로 이동한다.
+`PLATFORM_ADMIN` 또는 `COMPANY_MANAGER` 승인자가 처리 가능한 접근 신청 목록을 확인하고 상세 검토 화면으로 이동한다.
 
 ## Route / Screen Mapping
 

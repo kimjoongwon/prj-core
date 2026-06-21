@@ -34,7 +34,7 @@ export const AccessGate = observer(function AccessGate({
 		useVerifyToken({
 			query: {
 				enabled: shouldVerifyCurrentTenant,
-				queryKey: ["/api/v1/auth/verify-token", persistStore.spaceId],
+				queryKey: ["/api/v1/auth/verify-token", persistStore.tenantId],
 				retry: false,
 				refetchOnWindowFocus: false,
 			},
@@ -78,7 +78,7 @@ export const AccessGate = observer(function AccessGate({
 
 	const forbiddenDescription = isScopeAccessible
 		? `${t(pageAccessItem.pageLabel)} ${t("화면을 열 수 있는 화면 접근 권한이 현재 선택한 Space 권한에 없습니다.")}`
-		: `${t(pageAccessItem.pageLabel)} ${t("화면은 현재 선택한 tenant role이 FULL_ACCESS일 때만 열 수 있습니다.")}`;
+		: `${t(pageAccessItem.pageLabel)} ${t("화면은 현재 선택한 tenant role이 PLATFORM_ADMIN일 때만 열 수 있습니다.")}`;
 
 	/**
 	 * 접근 권한 fallback에서 이전 화면으로 돌아갑니다.

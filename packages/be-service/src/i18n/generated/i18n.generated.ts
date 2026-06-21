@@ -281,15 +281,15 @@ export type I18nTranslations = {
         };
     };
     "role": {
-        "FULL_ACCESS": {
+        "PLATFORM_ADMIN": {
             "name": string;
             "description": string;
         };
-        "MANAGE": {
+        "COMPANY_MANAGER": {
             "name": string;
             "description": string;
         };
-        "VIEW": {
+        "MEMBER": {
             "name": string;
             "description": string;
         };

@@ -19,7 +19,7 @@ export class GetCurrentSpaceUseCase {
 		return resolveCurrentSpace(
 			this.spacesService,
 			user,
-			query.requestedSpaceId,
+			query.requestedTenantId,
 		);
 	}
 }

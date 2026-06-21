@@ -10,7 +10,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { GroupTypes } from "./groupTypes";
-import type { SpaceDto } from "./spaceDto";
+import type { TenantDto } from "./tenantDto";
 
 export interface GroupDto {
 	id: string;
@@ -23,7 +23,6 @@ export interface GroupDto {
 	/** @nullable */
 	label?: string | null;
 	type: GroupTypes;
-	spaceId: string;
 	creatorId?: string;
-	space?: SpaceDto;
+	tenant?: TenantDto;
 }

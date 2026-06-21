@@ -32,9 +32,9 @@ export class PolicyAssignmentAggregate {
 	) {}
 
 	async getRolePolicies(roleId: string): Promise<RolePolicy[]> {
-		const spaceId = this.requireSpaceId();
+		const tenantId = this.requireTenantId();
 		await this.assertRoleExists(roleId);
-		return this.rolePoliciesRepository.findByRoleIdInSpace(roleId, spaceId);
+		return this.rolePoliciesRepository.findByRoleIdInTenant(roleId, tenantId);
 	}
 
 	@Transactional()
@@ -42,28 +42,28 @@ export class PolicyAssignmentAggregate {
 		roleId: string,
 		rolePolicies: SyncRolePoliciesDto["rolePolicies"],
 	): Promise<RolePolicy[]> {
-		const spaceId = this.requireSpaceId();
+		const tenantId = this.requireTenantId();
 		await this.assertRoleExists(roleId);
-		await this.assertPoliciesBelongToSpace(
+		await this.assertPoliciesBelongToTenant(
 			rolePolicies.map((policy) => policy.policyId),
-			spaceId,
+			tenantId,
 		);
 
 		this.logger.debug(
-			`RolePolicy 동기화: roleId=${roleId.slice(-8)}, spaceId=${spaceId.slice(-8)}`,
+			`RolePolicy 동기화: roleId=${roleId.slice(-8)}, tenantId=${tenantId.slice(-8)}`,
 		);
 
 		return this.rolePoliciesRepository.syncByRoleId(
 			roleId,
 			rolePolicies,
-			spaceId,
+			tenantId,
 		);
 	}
 
 	async getUserPolicies(userId: string): Promise<UserPolicy[]> {
-		const spaceId = this.requireSpaceId();
+		const tenantId = this.requireTenantId();
 		await this.assertUserExists(userId);
-		return this.userPoliciesRepository.findByUserIdInSpace(userId, spaceId);
+		return this.userPoliciesRepository.findByUserIdInTenant(userId, tenantId);
 	}
 
 	@Transactional()
@@ -71,21 +71,21 @@ export class PolicyAssignmentAggregate {
 		userId: string,
 		userPolicies: SyncUserPoliciesDto["userPolicies"],
 	): Promise<UserPolicy[]> {
-		const spaceId = this.requireSpaceId();
+		const tenantId = this.requireTenantId();
 		await this.assertUserExists(userId);
-		await this.assertPoliciesBelongToSpace(
+		await this.assertPoliciesBelongToTenant(
 			userPolicies.map((policy) => policy.policyId),
-			spaceId,
+			tenantId,
 		);
 
 		this.logger.debug(
-			`UserPolicy 동기화: userId=${userId.slice(-8)}, spaceId=${spaceId.slice(-8)}`,
+			`UserPolicy 동기화: userId=${userId.slice(-8)}, tenantId=${tenantId.slice(-8)}`,
 		);
 
 		return this.userPoliciesRepository.syncByUserId(
 			userId,
 			userPolicies,
-			spaceId,
+			tenantId,
 		);
 	}
 
@@ -103,33 +103,33 @@ export class PolicyAssignmentAggregate {
 		}
 	}
 
-	private async assertPoliciesBelongToSpace(
+	private async assertPoliciesBelongToTenant(
 		policyIds: string[],
-		spaceId: string,
+		tenantId: string,
 	): Promise<void> {
 		const uniquePolicyIds = Array.from(new Set(policyIds));
 		if (uniquePolicyIds.length === 0) return;
 
 		const scopedPolicyIds =
-			await this.policiesRepository.findActivePolicyIdsInSpace(
+			await this.policiesRepository.findActivePolicyIdsInTenant(
 				uniquePolicyIds,
-				spaceId,
+				tenantId,
 			);
 		const scopedSet = new Set(scopedPolicyIds);
 		const invalidIds = uniquePolicyIds.filter((id) => !scopedSet.has(id));
 
 		if (invalidIds.length > 0) {
 			throw new BadRequestException(
-				`현재 Space의 정책만 할당할 수 있습니다: ${invalidIds.join(", ")}`,
+				`현재 Tenant의 정책만 할당할 수 있습니다: ${invalidIds.join(", ")}`,
 			);
 		}
 	}
 
-	private requireSpaceId(): string {
-		const spaceId = this.spaceContext.spaceId;
-		if (!spaceId) {
+	private requireTenantId(): string {
+		const tenantId = this.spaceContext.tenantId;
+		if (!tenantId) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
-		return spaceId;
+		return tenantId;
 	}
 }

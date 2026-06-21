@@ -13,7 +13,7 @@ interface AdminDerivedSubjectSeedData {
 }
 
 interface AdminDerivedAbilitySeedData {
-	roleName: "FULL_ACCESS" | "MANAGE";
+	roleName: "PLATFORM_ADMIN" | "COMPANY_MANAGER";
 	subject: string;
 	actionName: "manage" | "access";
 	inverted: false;
@@ -108,7 +108,7 @@ const PREVIOUS_ADMIN_MENU_SUBJECT_NAMES = [
 	"menu:settings:ui-configs",
 ] as const;
 
-const MANAGE_EXCLUDED_ADMIN_MENU_SUBJECTS = new Set<string>([
+const COMPANY_MANAGER_EXCLUDED_ADMIN_MENU_SUBJECTS = new Set<string>([
 	"menu:templates",
 	"menu:templates:list",
 	"menu:users:email-verifications",
@@ -173,16 +173,16 @@ export const legacyAdminPageSubjectNames: string[] = [
 	"page:role-categories:edit",
 ];
 
-export const adminFullAccessAbilitySeedData: AdminDerivedAbilitySeedData[] = [
+export const adminPlatformAdminAbilitySeedData: AdminDerivedAbilitySeedData[] = [
 	...adminMenuSubjectSeedData.map((subject) => ({
-		roleName: "FULL_ACCESS" as const,
+		roleName: "PLATFORM_ADMIN" as const,
 		subject: subject.name,
 		actionName: "manage" as const,
 		inverted: false as const,
 		description: `${subject.displayName} 메뉴 전체 권한`,
 	})),
 	...adminPageSubjectSeedData.map((subject) => ({
-		roleName: "FULL_ACCESS" as const,
+		roleName: "PLATFORM_ADMIN" as const,
 		subject: subject.name,
 		actionName: "access" as const,
 		inverted: false as const,
@@ -190,11 +190,16 @@ export const adminFullAccessAbilitySeedData: AdminDerivedAbilitySeedData[] = [
 	})),
 ];
 
-export const adminManageMenuAccessAbilitySeedData: AdminDerivedAbilitySeedData[] =
+// 기존 reference-data migration은 checksum 검증 대상이므로 당시 export 이름을 유지합니다.
+export const adminFullAccessAbilitySeedData = adminPlatformAdminAbilitySeedData;
+
+export const adminCompanyManagerMenuAccessAbilitySeedData: AdminDerivedAbilitySeedData[] =
 	adminMenuSubjectSeedData
-		.filter((subject) => !MANAGE_EXCLUDED_ADMIN_MENU_SUBJECTS.has(subject.name))
+		.filter(
+			(subject) => !COMPANY_MANAGER_EXCLUDED_ADMIN_MENU_SUBJECTS.has(subject.name),
+		)
 		.map((subject) => ({
-			roleName: "MANAGE" as const,
+			roleName: "COMPANY_MANAGER" as const,
 			subject: subject.name,
 			actionName: "access" as const,
 			inverted: false as const,

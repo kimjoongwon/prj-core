@@ -78,7 +78,7 @@ const AdminTasksTaskIdExerciseRoute = observer(() => {
 									: undefined,
 								createdAt: exercise.createdAt,
 								updatedAt: exercise.updatedAt,
-								spaceId: exercise.task?.spaceId,
+								tenantId: exercise.task?.tenantId,
 							}
 						: undefined
 				}

@@ -16,13 +16,13 @@ import type { HeaderSpaceSelectorProps } from "./type";
  * const persistStore = usePersistStore();
  *
  * const handleSpaceSelect = (space: SpaceInfo) => {
- *   persistStore.setSpace(space.spaceId, space.groundName);
+ *   persistStore.setSpace(space.tenantId, space.groundName, undefined, space.spaceId);
  *   window.location.reload();
  * };
  *
  * <HeaderSpaceSelector
  *   spaces={persistStore.spaces}
- *   currentSpaceId={persistStore.spaceId}
+ *   currentTenantId={persistStore.tenantId}
  *   currentSpaceName={persistStore.groundName}
  *   onSpaceSelect={handleSpaceSelect}
  * />
@@ -30,14 +30,14 @@ import type { HeaderSpaceSelectorProps } from "./type";
  */
 export const HeaderSpaceSelector = observer(function HeaderSpaceSelector({
 	spaces,
-	currentSpaceId,
+	currentTenantId,
 	currentSpaceName,
 	onSpaceSelect,
 }: HeaderSpaceSelectorProps) {
 	return (
 		<SpaceSelectorDropdown
 			spaces={spaces}
-			currentSpaceId={currentSpaceId}
+			currentTenantId={currentTenantId}
 			currentSpaceName={currentSpaceName}
 			onSpaceSelect={onSpaceSelect}
 		/>

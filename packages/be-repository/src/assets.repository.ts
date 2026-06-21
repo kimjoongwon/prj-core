@@ -35,7 +35,7 @@ export class AssetsRepository {
 				video: true,
 				document: true,
 				folder: true,
-				space: true,
+				tenant: true,
 			},
 		});
 

@@ -24,7 +24,7 @@ export class GetPaymentsUseCase {
 			skip,
 			take,
 			search: query.query.search ?? null,
-			spaceId: query.query.spaceId,
+			tenantId: query.query.tenantId,
 			payerUserId: query.query.payerUserId,
 			status: query.query.status,
 			method: query.query.method,

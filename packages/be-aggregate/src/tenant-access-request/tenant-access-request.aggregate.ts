@@ -159,10 +159,10 @@ export class TenantAccessRequestAggregate {
 
 		if (
 			params.action === "approve" &&
-			params.request.requestedRole?.name === SYSTEM_ROLES.FULL_ACCESS
+			params.request.requestedRole?.name === SYSTEM_ROLES.PLATFORM_ADMIN
 		) {
 			throw new ForbiddenException(
-				"MANAGE 권한자는 FULL_ACCESS 역할 신청을 승인할 수 없습니다",
+				"COMPANY_MANAGER 권한자는 PLATFORM_ADMIN 역할 신청을 승인할 수 없습니다",
 			);
 		}
 	}
@@ -180,10 +180,10 @@ export class TenantAccessRequestAggregate {
 
 		return {
 			hasFullAccess: activeTenants.some(
-				(tenant) => tenant.role?.name === SYSTEM_ROLES.FULL_ACCESS,
+				(tenant) => tenant.role?.name === SYSTEM_ROLES.PLATFORM_ADMIN,
 			),
 			managedSpaceIds: activeTenants
-				.filter((tenant) => tenant.role?.name === SYSTEM_ROLES.MANAGE)
+				.filter((tenant) => tenant.role?.name === SYSTEM_ROLES.COMPANY_MANAGER)
 				.map((tenant) => tenant.spaceId)
 				.filter((spaceId): spaceId is string => Boolean(spaceId)),
 		};

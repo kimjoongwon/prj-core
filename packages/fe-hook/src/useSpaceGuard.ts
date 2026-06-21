@@ -50,8 +50,8 @@ export function createUseSpaceGuard<
 				return;
 			}
 
-			// spaceId가 없으면 Alert 표시
-			if (!persistStore?.spaceId) {
+			// tenantId가 없으면 Alert 표시
+			if (!persistStore?.tenantId) {
 				setShowAlert(true);
 			} else {
 				setShowAlert(false);
@@ -59,7 +59,7 @@ export function createUseSpaceGuard<
 		}, [
 			persistStore?.isHydrated,
 			persistStore?.isSpaceSelectionResolved,
-			persistStore?.spaceId,
+			persistStore?.tenantId,
 		]);
 
 		const handleConfirm = () => {
@@ -76,7 +76,7 @@ export function createUseSpaceGuard<
 			showAlert,
 			handleConfirm,
 			handleDismiss,
-			hasSpace: !!persistStore?.spaceId,
+			hasSpace: !!persistStore?.tenantId,
 			groundName: persistStore?.groundName ?? null,
 		};
 	};

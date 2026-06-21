@@ -406,26 +406,26 @@ describe("감사 로그 조회", () => {
   it("이메일로 필터링이 동작해야 한다")
   it("결과(SUCCESS/FAILURE/LOCKED)로 필터링이 동작해야 한다")
   it("날짜 범위 필터링이 동작해야 한다")
-  it("FULL_ACCESS가 아닌 사용자는 403이어야 한다")
+  it("PLATFORM_ADMIN이 아닌 사용자는 403이어야 한다")
 })
 
 describe("계정 잠금 해제", () => {
   it("잠긴 계정을 해제해야 한다 (failedLoginAttempts=0, lockedUntil=null, isPermanentlyLocked=false)")
   it("이미 잠금 해제된 계정에 대해서도 에러 없이 성공해야 한다")
-  it("FULL_ACCESS가 아닌 사용자는 403이어야 한다")
+  it("PLATFORM_ADMIN이 아닌 사용자는 403이어야 한다")
 })
 
 describe("비밀번호 강제 재설정", () => {
   it("임시 비밀번호를 생성하고 이메일로 발송해야 한다")
   it("mustChangePassword를 true로 설정해야 한다")
   it("기존 비밀번호 해시를 히스토리에 저장해야 한다")
-  it("FULL_ACCESS가 아닌 사용자는 403이어야 한다")
+  it("PLATFORM_ADMIN이 아닌 사용자는 403이어야 한다")
 })
 
 describe("전체 세션 무효화", () => {
   it("해당 사용자의 모든 OIDC Grant를 폐기해야 한다")
   it("폐기된 세션 수를 반환해야 한다")
-  it("FULL_ACCESS가 아닌 사용자는 403이어야 한다")
+  it("PLATFORM_ADMIN이 아닌 사용자는 403이어야 한다")
 })
 ```
 
@@ -502,7 +502,7 @@ describe("SessionCard", () => {
 17. 내 세션 목록 API (main server, Redis OIDC 세션 조회)
 18. 세션 종료 API (main server)
 19. SessionCard 위젯 + /my-sessions 페이지 (admin)
-20. 감사 로그 조회 API (main server, FULL_ACCESS)
+20. 감사 로그 조회 API (main server, PLATFORM_ADMIN)
 21. AuditResultBadge + UserAgentCell (packages/fe-ui)
 22. /auth-audit-logs 페이지 (admin)
 23. 계정 잠금 해제 API (main server)

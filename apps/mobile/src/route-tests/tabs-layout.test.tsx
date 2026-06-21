@@ -182,6 +182,7 @@ describe("mobile expo tabs layout", () => {
       address: "서울 강남구",
       groundName: "강남점",
       spaceId: "space-branch",
+      tenantId: "tenant-branch",
     });
   });
 

@@ -6,14 +6,14 @@ import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-pr
 import { plainToInstance } from "class-transformer";
 
 const reservationInclude = {
-	space: true,
+	tenant: true,
 	user: true,
 	coursePass: {
 		include: {
 			course: true,
 			courseOffering: {
 				include: {
-					space: true,
+					tenant: true,
 					timeline: true,
 				},
 			},
@@ -78,7 +78,7 @@ export class ReservationsRepository {
 			where: {
 				id: params.reservationId,
 				userId: params.userId,
-				spaceId: params.spaceId,
+				tenant: { spaceId: params.spaceId },
 				removedAt: null,
 			},
 			include: reservationInclude,
@@ -125,7 +125,7 @@ export class ReservationsRepository {
 					removedAt: null,
 					timeline: {
 						id: params.timelineId,
-						spaceId: params.spaceId,
+						tenant: { spaceId: params.spaceId },
 						removedAt: null,
 					},
 				},
@@ -171,7 +171,7 @@ export class ReservationsRepository {
 					removedAt: null,
 					...(params.timelineId ? { timelineId: params.timelineId } : {}),
 					timeline: {
-						spaceId: params.spaceId,
+						tenant: { spaceId: params.spaceId },
 						removedAt: null,
 					},
 					OR: [
@@ -221,7 +221,7 @@ export class ReservationsRepository {
 
 		const result = await this.txHost.tx.reservation.findMany({
 			where: {
-				spaceId: params.spaceId,
+				tenant: { spaceId: params.spaceId },
 				programId: { in: params.programIds },
 				occurrenceStartAt: {
 					gte: params.from,
@@ -245,7 +245,7 @@ export class ReservationsRepository {
 		take?: number;
 	}): Promise<{ items: Reservation[]; totalCount: number }> {
 		const where: Prisma.ReservationWhereInput = {
-			spaceId: params.spaceId,
+			tenant: { spaceId: params.spaceId },
 			userId: params.userId,
 			removedAt: null,
 			...(params.status ? { status: params.status } : {}),

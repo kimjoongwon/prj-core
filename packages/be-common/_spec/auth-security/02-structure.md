@@ -33,7 +33,7 @@
 | AUTH-FEA-301 | 내 세션 목록 API | main server | 여정 8 | Redis OIDC 세션에서 현재 사용자의 활성 세션 조회 |
 | AUTH-FEA-302 | 다른 기기 세션 종료 | main server | 여정 8 | 특정 세션 또는 현재 세션 외 모든 세션 종료 |
 | AUTH-FEA-303 | 내 세션 관리 UI | admin | 여정 8 | 세션 카드 목록 (현재 세션 강조, 종료 버튼) |
-| AUTH-FEA-304 | 감사 로그 조회 API | main server | 여정 9 | 필터링/페이지네이션 감사 로그 조회 (FULL_ACCESS) |
+| AUTH-FEA-304 | 감사 로그 조회 API | main server | 여정 9 | 필터링/페이지네이션 감사 로그 조회 (PLATFORM_ADMIN) |
 | AUTH-FEA-305 | 감사 로그 Admin UI | admin | 여정 9 | DataGrid: 시간, 이메일, 결과, IP, UA |
 | AUTH-FEA-306 | 계정 잠금 해제 API | main server | 여정 9 | 관리자가 잠긴 계정 해제 (failedLoginAttempts 리셋) |
 | AUTH-FEA-307 | 비밀번호 강제 재설정 API | main server | 여정 9 | 임시 비밀번호 생성 → 이메일 발송 → 다음 로그인 시 변경 강제 |
@@ -239,7 +239,7 @@
    "모든 다른 기기에서 로그아웃"
 ```
 
-#### `/auth-audit-logs` - 로그인 감사 로그 (신규, FULL_ACCESS)
+#### `/auth-audit-logs` - 로그인 감사 로그 (신규, PLATFORM_ADMIN)
 
 ```
 페이지 헤더 영역 title="로그인 감사 로그"
@@ -258,7 +258,7 @@
       └─ User Agent (UserAgentCell: 브라우저/OS 아이콘)
 ```
 
-#### `/users/[userId]` 보안 탭 - 사용자 보안 관리 (수정, FULL_ACCESS)
+#### `/users/[userId]` 보안 탭 - 사용자 보안 관리 (수정, PLATFORM_ADMIN)
 
 ```
 섹션 영역 title="보안 정보"

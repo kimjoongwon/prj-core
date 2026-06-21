@@ -9,6 +9,7 @@ export * from "./auth";
 export * from "./auth-audit-log.dto";
 export * from "./category.dto";
 export * from "./community";
+export * from "./company.dto";
 export * from "./constant";
 export * from "./course.dto";
 export * from "./course-offering.dto";

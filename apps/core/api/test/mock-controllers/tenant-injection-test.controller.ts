@@ -108,36 +108,36 @@ export class GuardTestController {
 
 	// ==================== RolesGuard 테스트 ====================
 
-	@Get("roles/view")
+	@Get("roles/member")
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.VIEW])
-	async testRolesView() {
-		return new ResponseEntity(HttpStatus.OK, "VIEW 역할 권한 테스트 성공", {
-			message: "VIEW 역할로 접근 성공",
-			roleRequired: ["VIEW"],
+	@Roles([SYSTEM_ROLES.MEMBER])
+	async testRolesMember() {
+		return new ResponseEntity(HttpStatus.OK, "MEMBER 역할 권한 테스트 성공", {
+			message: "MEMBER 역할로 접근 성공",
+			roleRequired: ["MEMBER"],
 		});
 	}
 
-	@Get("roles/manage")
+	@Get("roles/company-manager")
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.MANAGE])
-	async testRolesManage() {
-		return new ResponseEntity(HttpStatus.OK, "MANAGE 역할 권한 테스트 성공", {
-			message: "MANAGE 역할로 접근 성공",
-			roleRequired: ["MANAGE"],
+	@Roles([SYSTEM_ROLES.COMPANY_MANAGER])
+	async testRolesCompanyManager() {
+		return new ResponseEntity(HttpStatus.OK, "COMPANY_MANAGER 역할 권한 테스트 성공", {
+			message: "COMPANY_MANAGER 역할로 접근 성공",
+			roleRequired: ["COMPANY_MANAGER"],
 		});
 	}
 
-	@Get("roles/full-access")
+	@Get("roles/platform-admin")
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
-	async testRolesFullAccess() {
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
+	async testRolesPlatformAdmin() {
 		return new ResponseEntity(
 			HttpStatus.OK,
-			"FULL_ACCESS 역할 권한 테스트 성공",
+			"PLATFORM_ADMIN 역할 권한 테스트 성공",
 			{
-				message: "FULL_ACCESS 역할로 접근 성공",
-				roleRequired: ["FULL_ACCESS"],
+				message: "PLATFORM_ADMIN 역할로 접근 성공",
+				roleRequired: ["PLATFORM_ADMIN"],
 			},
 		);
 	}
@@ -147,12 +147,12 @@ export class GuardTestController {
 	@Get("combined/workspace-category-and-role")
 	@UseGuards(RoleCategoryGuard, RolesGuard)
 	@RoleCategories([RoleCategoryName.WORKSPACE])
-	@Roles([SYSTEM_ROLES.MANAGE])
+	@Roles([SYSTEM_ROLES.COMPANY_MANAGER])
 	async testCombinedWorkspaceCategoryAndRole() {
 		return new ResponseEntity(HttpStatus.OK, "복합 권한 테스트 성공", {
-			message: "워크스페이스 카테고리 + MANAGE 역할 권한으로 접근 성공",
+			message: "워크스페이스 카테고리 + COMPANY_MANAGER 역할 권한으로 접근 성공",
 			categoryRequired: ["워크스페이스"],
-			roleRequired: ["MANAGE"],
+			roleRequired: ["COMPANY_MANAGER"],
 		});
 	}
 }

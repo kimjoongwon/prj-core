@@ -41,10 +41,10 @@ describe("SpaceScopeInterceptor", () => {
 		interceptor = new SpaceScopeInterceptor(mockCls as never, mockReflector);
 	});
 
-	it("현재 tenant role이 FULL_ACCESS면 전체 조회 scope를 열어야 한다", () => {
+	it("현재 tenant role이 PLATFORM_ADMIN이면 전체 조회 scope를 열어야 한다", () => {
 		mockCls.get.mockImplementation((key: string) => {
 			if (key === CONTEXT_KEYS.TENANT) {
-				return { id: "tenant-1", role: { name: "FULL_ACCESS" } };
+				return { id: "tenant-1", role: { name: "PLATFORM_ADMIN" } };
 			}
 			if (key === CONTEXT_KEYS.SPACE_ID) return "space-1";
 			return undefined;
@@ -59,10 +59,10 @@ describe("SpaceScopeInterceptor", () => {
 		expect(next.handle).toHaveBeenCalled();
 	});
 
-	it("현재 tenant role이 FULL_ACCESS가 아니면 x-space-id 한 개로 scope를 고정해야 한다", () => {
+	it("현재 tenant role이 PLATFORM_ADMIN이 아니면 x-tenant-id 한 개로 scope를 고정해야 한다", () => {
 		mockCls.get.mockImplementation((key: string) => {
 			if (key === CONTEXT_KEYS.TENANT) {
-				return { id: "tenant-1", role: { name: "MANAGE" } };
+				return { id: "tenant-1", role: { name: "COMPANY_MANAGER" } };
 			}
 			if (key === CONTEXT_KEYS.SPACE_ID) return "space-1";
 			return undefined;
@@ -76,14 +76,14 @@ describe("SpaceScopeInterceptor", () => {
 		expect(next.handle).toHaveBeenCalled();
 	});
 
-	it("현재 tenant role이 FULL_ACCESS가 아니면 tenant.space.id로 scope를 고정해야 한다", () => {
+	it("현재 tenant role이 PLATFORM_ADMIN이 아니면 tenant.space.id로 scope를 고정해야 한다", () => {
 		mockCls.get.mockImplementation((key: string) => {
 			if (key === CONTEXT_KEYS.TENANT) {
 				return {
 					id: "tenant-1",
 					spaceId: undefined,
 					space: { id: "space-1" },
-					role: { name: "MANAGE" },
+					role: { name: "COMPANY_MANAGER" },
 				};
 			}
 			if (key === CONTEXT_KEYS.SPACE_ID) return "space-1";
@@ -98,7 +98,7 @@ describe("SpaceScopeInterceptor", () => {
 		expect(next.handle).toHaveBeenCalled();
 	});
 
-	it("보호 라우트에서 x-space-id가 없으면 BadRequestException을 던져야 한다", () => {
+	it("보호 라우트에서 x-tenant-id가 없으면 BadRequestException을 던져야 한다", () => {
 		mockCls.get.mockReturnValue(undefined);
 
 		expect(() => interceptor.intercept(createContext(), next)).toThrow(
@@ -106,7 +106,7 @@ describe("SpaceScopeInterceptor", () => {
 		);
 	});
 
-	it("보호 라우트에서 x-space-id에 매칭되는 tenant가 없으면 ForbiddenException을 던져야 한다", () => {
+	it("보호 라우트에서 x-tenant-id에 매칭되는 tenant가 없으면 ForbiddenException을 던져야 한다", () => {
 		mockCls.get.mockImplementation((key: string) => {
 			if (key === CONTEXT_KEYS.SPACE_ID) return "space-1";
 			return undefined;

@@ -21,7 +21,12 @@ import { ClsService } from "nestjs-cls";
 export class SpaceContext {
 	constructor(private readonly cls: ClsService) {}
 
-	/** 현재 요청의 Space ID (x-space-id 헤더) */
+	/** 현재 요청의 Tenant ID (x-tenant-id 헤더) */
+	get tenantId(): string | undefined {
+		return this.cls.get<string>(CONTEXT_KEYS.TENANT_ID);
+	}
+
+	/** 현재 요청 Tenant에서 파생된 Space ID */
 	get spaceId(): string | undefined {
 		return this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
 	}
@@ -38,7 +43,7 @@ export class SpaceContext {
 
 	/**
 	 * 쿼리 필터용 Space IDs
-	 * - undefined: 전체 조회 (FULL_ACCESS)
+	 * - undefined: 전체 조회 (PLATFORM_ADMIN)
 	 * - [id]: 현재 선택 Space만 조회
 	 */
 	get spaceIds(): string[] | undefined {
@@ -46,13 +51,24 @@ export class SpaceContext {
 	}
 
 	/**
-	 * Prisma Where 절용 Space 필터
+	 * Prisma Where 절용 Tenant 소유 리소스 필터
 	 * undefined면 전체, * 필터 없음)
-	 * { spaceId: { in: [...] } } 형태
+	 * { tenant: { spaceId: { in: [...] } } } 형태
 	 */
-	get spaceFilter(): { spaceId: { in: string[] } } | undefined {
+	get spaceFilter():
+		| { tenant: { spaceId: { in: string[] } } }
+		| undefined {
 		const ids = this.spaceIds;
-		return ids ? { spaceId: { in: ids } } : undefined;
+		return ids ? { tenant: { spaceId: { in: ids } } } : undefined;
+	}
+
+	/**
+	 * Prisma Where 절용 현재 Tenant 필터
+	 * 생성/수정처럼 현재 선택 Tenant 하나에 묶어야 할 때 사용합니다.
+	 */
+	get tenantFilter(): { tenantId: string } | undefined {
+		const tenantId = this.tenantId;
+		return tenantId ? { tenantId } : undefined;
 	}
 
 	/**

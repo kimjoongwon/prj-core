@@ -9,7 +9,7 @@ import { Chip } from "../../data-display/Chip/Chip";
 import { Checkbox } from "../../selection/Checkbox/Checkbox";
 export interface PolicyDetailScreenPolicy {
 	id: string;
-	spaceId?: string | null;
+	tenantId?: string | null;
 	name: string;
 	displayName?: string | null;
 	description?: string | null;
@@ -144,7 +144,7 @@ export const PolicyDetailScreen = observer((props: PolicyDetailScreenProps) => {
 					<SectionSurface top={<PageTitleBar level={2} title="기본 정보" />}>
 						<div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
 							<Info label="정책 ID" value={props.policy.id} />
-							<Info label="Space ID" value={props.policy.spaceId || "-"} />
+							<Info label="Tenant ID" value={props.policy.tenantId || "-"} />
 							<Info label="이름" value={props.policy.name} />
 							<Info label="표시명" value={props.policy.displayName || "-"} />
 							<Info

@@ -90,6 +90,8 @@ const CONSENT_TIMEOUT_MS = 30000;
 const DEFAULT_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@plate.com";
 const DEFAULT_PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? "rkdmf12!@";
 const CONSOLE_PERSIST_KEY = "admin-persist";
+const SYSTEM_TENANT_ID =
+	process.env.E2E_SYSTEM_TENANT_ID ?? "71ddca20-1752-466e-b4da-879ebdbe54e3";
 const SYSTEM_SPACE_ID =
 	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
 const SYSTEM_GROUND_NAME = "플랫폼 운영본부";
@@ -99,7 +101,7 @@ async function seedConsolePersist(page: ConsoleLoginPageLike) {
 	const response = await page.request.post(
 		buildApiUrl("/api/v1/auth/current-space"),
 		{
-			data: { spaceId: SYSTEM_SPACE_ID },
+			data: { tenantId: SYSTEM_TENANT_ID },
 			headers: {
 				Authorization: `Bearer ${accessToken}`,
 			},
@@ -113,6 +115,7 @@ async function seedConsolePersist(page: ConsoleLoginPageLike) {
 	const payload = (await response.json()) as {
 		data?: {
 			id?: string;
+			tenantId?: string | null;
 			ground?: {
 				name?: string;
 			};
@@ -122,6 +125,9 @@ async function seedConsolePersist(page: ConsoleLoginPageLike) {
 	if (payload.data?.id !== SYSTEM_SPACE_ID) {
 		throw new Error("Selected console space did not match the system space.");
 	}
+	if (payload.data?.tenantId !== SYSTEM_TENANT_ID) {
+		throw new Error("Selected console tenant did not match the system tenant.");
+	}
 
 	const groundName = payload.data.ground?.name ?? SYSTEM_GROUND_NAME;
 	const now = Date.now();
@@ -129,6 +135,7 @@ async function seedConsolePersist(page: ConsoleLoginPageLike) {
 	await page.evaluate(
 		({
 			storageKey,
+			tenantId,
 			spaceId,
 			selectedGroundName,
 			accessTokenExpiresAt,
@@ -138,13 +145,14 @@ async function seedConsolePersist(page: ConsoleLoginPageLike) {
 			const current = raw ? JSON.parse(raw) : {};
 			window.localStorage.setItem(
 				storageKey,
-				JSON.stringify({
-					...current,
-					spaceId,
-					groundName: selectedGroundName,
-					spaces: [{ spaceId, groundName: selectedGroundName }],
-					accessTokenExpiresAt:
-						typeof current.accessTokenExpiresAt === "number"
+					JSON.stringify({
+						...current,
+						tenantId,
+						spaceId,
+						groundName: selectedGroundName,
+						spaces: [{ tenantId, spaceId, groundName: selectedGroundName }],
+						accessTokenExpiresAt:
+							typeof current.accessTokenExpiresAt === "number"
 							? current.accessTokenExpiresAt
 							: accessTokenExpiresAt,
 					refreshTokenExpiresAt:
@@ -156,6 +164,7 @@ async function seedConsolePersist(page: ConsoleLoginPageLike) {
 		},
 		{
 			storageKey: CONSOLE_PERSIST_KEY,
+			tenantId: SYSTEM_TENANT_ID,
 			spaceId: SYSTEM_SPACE_ID,
 			selectedGroundName: groundName,
 			accessTokenExpiresAt: now + 60 * 60 * 1000,

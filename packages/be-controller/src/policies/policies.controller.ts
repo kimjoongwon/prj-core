@@ -49,7 +49,7 @@ export class PoliciesController {
 	) {}
 
 	@Get()
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "getPolicies",
 		summary: "Policy 목록 조회",
@@ -64,7 +64,7 @@ export class PoliciesController {
 	}
 
 	@Get(":policyId")
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "getPolicyById",
 		summary: "Policy 상세 조회",
@@ -85,7 +85,7 @@ export class PoliciesController {
 
 	@Post()
 	@HttpCode(HttpStatus.CREATED)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "createPolicy",
 		summary: "Policy 생성",
@@ -105,7 +105,7 @@ export class PoliciesController {
 
 	@Patch(":policyId")
 	@HttpCode(HttpStatus.OK)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "updatePolicy",
 		summary: "Policy 수정",
@@ -133,7 +133,7 @@ export class PoliciesController {
 
 	@Delete(":policyId")
 	@HttpCode(HttpStatus.OK)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "deletePolicy",
 		summary: "Policy 삭제",
@@ -154,7 +154,7 @@ export class PoliciesController {
 
 	@Put(":policyId/abilities")
 	@HttpCode(HttpStatus.OK)
-	@Roles([SYSTEM_ROLES.FULL_ACCESS])
+	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
 		operationId: "syncPolicyAbilities",
 		summary: "Policy Ability 동기화",

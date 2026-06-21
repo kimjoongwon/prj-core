@@ -47,7 +47,7 @@ export class CourseAggregate {
 	async findCourses(
 		params: CourseListInput = {},
 	): Promise<{ courses: Course[]; total: number }> {
-		const spaceIds = this.resolveReadableSpaceIds(params.spaceId);
+		const spaceIds = this.resolveReadableSpaceIds();
 		this.logger.debug(
 			`코스 목록 조회: spaceIds=${spaceIds?.length ?? "all"}개`,
 		);
@@ -65,7 +65,7 @@ export class CourseAggregate {
 	async findCourseOfferings(
 		params: CourseOfferingListInput = {},
 	): Promise<{ courseOfferings: CourseOffering[]; total: number }> {
-		const spaceIds = this.resolveReadableSpaceIds(params.spaceId);
+		const spaceIds = this.resolveReadableSpaceIds();
 		const result = await this.repository.findManyOfferings({
 			where: this.buildCourseOfferingWhere(params, spaceIds),
 			orderBy: this.toCourseOfferingOrderBy(params.sort),
@@ -143,7 +143,10 @@ export class CourseAggregate {
 			);
 		}
 
-		await this.assertTimelineBelongsToSpace(timelineId, courseOffering.spaceId);
+		await this.assertTimelineBelongsToSpace(
+			timelineId,
+			this.resolveCourseOfferingSpaceId(courseOffering),
+		);
 
 		const validFrom = enrollment.validFrom ?? enrollment.paidAt ?? new Date();
 		const expiresAt =
@@ -178,7 +181,8 @@ export class CourseAggregate {
 		if (!offering) {
 			throw new NotFoundException(COURSE_ERRORS.COURSE_OFFERING_NOT_FOUND);
 		}
-		this.assertCanWriteSpace(offering.spaceId);
+		const offeringSpaceId = this.resolveCourseOfferingSpaceId(offering);
+		this.assertCanWriteSpace(offeringSpaceId);
 
 		if (offering.courseId !== data.courseId) {
 			throw new BadRequestException(COURSE_ERRORS.ENROLLMENT_SCOPE_INVALID);
@@ -193,12 +197,12 @@ export class CourseAggregate {
 		if (data.assignedTimelineId) {
 			await this.assertTimelineBelongsToSpace(
 				data.assignedTimelineId,
-				offering.spaceId,
+				offeringSpaceId,
 			);
 		}
 
 		if (data.paymentId) {
-			await this.assertPaymentBelongsToSpace(data.paymentId, offering.spaceId);
+			await this.assertPaymentBelongsToSpace(data.paymentId, offeringSpaceId);
 		}
 
 		const status = data.status ?? EnrollmentStatus.PENDING;
@@ -243,7 +247,7 @@ export class CourseAggregate {
 		}
 
 		const payment = await this.paymentsRepository.findById(paymentId);
-		if (!payment || payment.spaceId !== spaceId) {
+		if (!payment || payment.tenant?.spaceId !== spaceId) {
 			throw new BadRequestException(COURSE_ERRORS.ENROLLMENT_SCOPE_INVALID);
 		}
 	}
@@ -253,7 +257,8 @@ export class CourseAggregate {
 		spaceIds?: string[],
 	): Prisma.CourseWhereInput {
 		const where: Prisma.CourseWhereInput = {
-			...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
+			...(spaceIds ? { tenant: { spaceId: { in: spaceIds } } } : {}),
+			...(params.tenantId ? { tenantId: params.tenantId } : {}),
 			...(params.status ? { status: params.status } : {}),
 		};
 
@@ -270,7 +275,8 @@ export class CourseAggregate {
 		spaceIds?: string[],
 	): Prisma.CourseOfferingWhereInput {
 		const where: Prisma.CourseOfferingWhereInput = {
-			...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
+			...(spaceIds ? { tenant: { spaceId: { in: spaceIds } } } : {}),
+			...(params.tenantId ? { tenantId: params.tenantId } : {}),
 			...(params.courseId ? { courseId: params.courseId } : {}),
 			...(params.timelineId ? { timelineId: params.timelineId } : {}),
 			...(params.status ? { status: params.status } : {}),
@@ -317,7 +323,9 @@ export class CourseAggregate {
 		spaceIds?: string[],
 	): Prisma.EnrollmentWhereInput {
 		const where: Prisma.EnrollmentWhereInput = {
-			...(spaceIds ? { courseOffering: { spaceId: { in: spaceIds } } } : {}),
+			...(spaceIds
+				? { courseOffering: { tenant: { spaceId: { in: spaceIds } } } }
+				: {}),
 			...(params.courseId ? { courseId: params.courseId } : {}),
 			...(params.courseOfferingId
 				? { courseOfferingId: params.courseOfferingId }
@@ -356,7 +364,9 @@ export class CourseAggregate {
 		spaceIds?: string[],
 	): Prisma.CoursePassWhereInput {
 		const where: Prisma.CoursePassWhereInput = {
-			...(spaceIds ? { courseOffering: { spaceId: { in: spaceIds } } } : {}),
+			...(spaceIds
+				? { courseOffering: { tenant: { spaceId: { in: spaceIds } } } }
+				: {}),
 			...(params.courseId ? { courseId: params.courseId } : {}),
 			...(params.courseOfferingId
 				? { courseOfferingId: params.courseOfferingId }
@@ -495,9 +505,18 @@ export class CourseAggregate {
 
 	private resolveEnrollmentSpaceId(enrollment: Enrollment): string {
 		const spaceId =
-			enrollment.courseOffering?.spaceId ?? enrollment.course?.spaceId;
+			enrollment.courseOffering?.tenant?.spaceId ??
+			enrollment.course?.tenant?.spaceId;
 		if (!spaceId) {
 			throw new BadRequestException(COURSE_ERRORS.ENROLLMENT_SCOPE_INVALID);
+		}
+		return spaceId;
+	}
+
+	private resolveCourseOfferingSpaceId(courseOffering: CourseOffering): string {
+		const spaceId = courseOffering.tenant?.spaceId;
+		if (!spaceId) {
+			throw new BadRequestException(COURSE_ERRORS.COURSE_OFFERING_SCOPE_INVALID);
 		}
 		return spaceId;
 	}

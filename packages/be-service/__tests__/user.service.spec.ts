@@ -163,7 +163,7 @@ describe("UserService", () => {
 	});
 
 	describe("getUsersBySpace", () => {
-		it("비 FULL_ACCESS면 현재 tenant의 spaceId 1개만 기준으로 사용자 목록과 통계를 조회해야 한다", async () => {
+		it("비 PLATFORM_ADMIN이면 현재 tenant의 spaceId 1개만 기준으로 사용자 목록과 통계를 조회해야 한다", async () => {
 			const input = {
 				where: { removedAt: null },
 				orderBy: [{ createdAt: "desc" as const }],
@@ -189,7 +189,7 @@ describe("UserService", () => {
 					spaceId: "space-header-id",
 					role: {
 						id: "role-manage-id",
-						name: "MANAGE",
+						name: "COMPANY_MANAGER",
 					},
 				},
 				requireSpaceId: jest.fn(),
@@ -234,7 +234,7 @@ describe("UserService", () => {
 			});
 		});
 
-		it("FULL_ACCESS면 전체 사용자 목록과 통계를 조회해야 한다", async () => {
+		it("PLATFORM_ADMIN이면 전체 사용자 목록과 통계를 조회해야 한다", async () => {
 			const input = {
 				where: { removedAt: null },
 				orderBy: [{ createdAt: "desc" as const }],
@@ -260,7 +260,7 @@ describe("UserService", () => {
 					spaceId: "space-root-id",
 					role: {
 						id: "role-full-access-id",
-						name: "FULL_ACCESS",
+						name: "PLATFORM_ADMIN",
 					},
 				},
 				requireSpaceId: jest.fn(),
@@ -297,7 +297,7 @@ describe("UserService", () => {
 			});
 		});
 
-		it("현재 tenant role이 FULL_ACCESS인 branch space도 전체 사용자 목록과 통계를 조회해야 한다", async () => {
+		it("현재 tenant role이 PLATFORM_ADMIN인 branch space도 전체 사용자 목록과 통계를 조회해야 한다", async () => {
 			const input = {
 				where: { removedAt: null },
 				orderBy: [{ createdAt: "desc" as const }],
@@ -323,7 +323,7 @@ describe("UserService", () => {
 					spaceId: "space-branch-id",
 					role: {
 						id: "role-full-access-id",
-						name: "FULL_ACCESS",
+						name: "PLATFORM_ADMIN",
 					},
 				},
 				requireSpaceId: jest.fn(),

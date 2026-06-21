@@ -62,7 +62,7 @@ export const AccessDeniedScreen = observer(
 											"메뉴 노출 권한이 있어도 화면 접근 권한이 따로 꺼져 있으면 URL 직접 접근은 막힙니다. 역할 상세의 화면 접근 섹션에서 해당 페이지를 켜면 다시 열 수 있습니다.",
 										)
 									: t(
-											"현재 선택한 tenant role이 FULL_ACCESS가 아니면 global 관리 화면은 열 수 없습니다. 헤더에서 FULL_ACCESS tenant로 전환한 뒤 다시 시도해 주세요.",
+											"현재 선택한 tenant role이 PLATFORM_ADMIN이 아니면 global 관리 화면은 열 수 없습니다. 헤더에서 PLATFORM_ADMIN tenant로 전환한 뒤 다시 시도해 주세요.",
 										)}
 							</p>
 						</div>

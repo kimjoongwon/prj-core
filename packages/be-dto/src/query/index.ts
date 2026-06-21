@@ -2,7 +2,6 @@ export * from "./page-meta.dto";
 export * from "./prisma-query.dto";
 export * from "./query.dto";
 export * from "./query-action.dto";
-export * from "./query-assignment.dto";
 export * from "./query-auth-audit-log.dto";
 export * from "./query-course.dto";
 export * from "./query-course-offering.dto";

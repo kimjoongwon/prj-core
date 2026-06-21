@@ -12,9 +12,9 @@ Admin/통합 인증 콘솔/Storybook E2E 테스트는 Playwright 워크스페이
 E2E_DATABASE_URL=postgresql://cocrepo:devpassword@localhost:5432/plate_e2e?schema=public \
 pnpm --filter=test-e2e test:admin
 
-# Admin local full-stack E2E (명시 alias)
+# Admin local full-stack E2E (실행 명령 직접 호출)
 E2E_DATABASE_URL=postgresql://cocrepo:devpassword@localhost:5432/plate_e2e?schema=public \
-pnpm --filter=test-e2e test:admin:real
+pnpm --filter=test-e2e test:admin:run
 
 # Core API real DB E2E
 E2E_DATABASE_URL=postgresql://cocrepo:devpassword@localhost:5432/plate_e2e?schema=public \
@@ -46,7 +46,7 @@ pnpm --filter=test-e2e test:storybook:prod
 
 ## Seeded real DB 정책
 
-- `test:admin`, `test:admin:real`, `test:api:e2e`는 실행 전에 `@cocrepo/prisma db:e2e:reset`을 호출합니다.
+- `test:admin`, `test:admin:run`, `test:api:e2e`는 실행 전에 `@cocrepo/prisma db:e2e:reset`을 호출합니다.
 - `db:e2e:reset`은 현재 Prisma schema를 `db push --force-reset`으로 반영한 뒤 `PRISMA_SEED_PROFILE=e2e` seed를 실행합니다.
 - `E2E_DATABASE_URL` 또는 `TEST_DATABASE_URL`은 DB 이름에 `e2e` 또는 `test`를 포함해야 합니다.
 - 이름 규칙을 만족하지 않는 DB는 reset을 거부합니다. 정말 일회성 disposable DB라면 `ALLOW_E2E_DB_RESET=1`을 명시합니다.

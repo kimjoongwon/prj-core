@@ -61,7 +61,7 @@ model Course {
   createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt             DateTime?        @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt             DateTime?        @map("removed_at") @db.Timestamptz(6)
-  spaceId               String           @map("space_id")
+  tenantId              String           @map("tenant_id")
   name                  String
   description           String?
   durationMonths        Int              @default(6) @map("duration_months")
@@ -70,13 +70,13 @@ model Course {
   status                CourseStatus     @default(DRAFT)
   activeOfferingCount   Int              @default(0) @map("active_offering_count")
   activeEnrollmentCount Int              @default(0) @map("active_enrollment_count")
-  space                 Space            @relation(fields: [spaceId], references: [id])
+  tenant                Tenant           @relation(fields: [tenantId], references: [id])
   offerings             CourseOffering[]
   enrollments           Enrollment[]
   passes                CoursePass[]
 
-  @@index([spaceId])
-  @@index([spaceId, status])
+  @@index([tenantId])
+  @@index([tenantId, status])
   @@index([name])
   @@map("courses")
 }
@@ -95,7 +95,7 @@ model CourseOffering {
   updatedAt                DateTime?                @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt                DateTime?                @map("removed_at") @db.Timestamptz(6)
   courseId                 String                   @map("course_id")
-  spaceId                  String                   @map("space_id")
+  tenantId                 String                   @map("tenant_id")
   timelineId               String?                  @map("timeline_id")
   timelineProvisioningMode TimelineProvisioningMode @default(SHARED) @map("timeline_provisioning_mode")
   name                     String
@@ -107,15 +107,15 @@ model CourseOffering {
   enrolledCount            Int                      @default(0) @map("enrolled_count")
   status                   CourseOfferingStatus     @default(DRAFT)
   course                   Course                   @relation(fields: [courseId], references: [id])
-  space                    Space                    @relation(fields: [spaceId], references: [id])
+  tenant                   Tenant                   @relation(fields: [tenantId], references: [id])
   timeline                 Timeline?                @relation(fields: [timelineId], references: [id])
   enrollments              Enrollment[]
   passes                   CoursePass[]
 
   @@index([courseId])
-  @@index([spaceId])
+  @@index([tenantId])
   @@index([timelineId])
-  @@index([spaceId, status])
+  @@index([tenantId, status])
   @@index([startsAt, endsAt])
   @@map("course_offerings")
 }

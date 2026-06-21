@@ -100,9 +100,9 @@ export interface UserAgreementMappingData {
 	agreements: AgreementType[];
 }
 
-// FULL_ACCESS(admin@plate.com)은 시스템 관리자이므로 일반 회원 약관 흐름에서 제외합니다.
+// PLATFORM_ADMIN(admin@plate.com)은 시스템 관리자이므로 일반 회원 약관 흐름에서 제외합니다.
 export const userAgreementMapping: UserAgreementMappingData[] = [
-	// MANAGE들 - 필수 + 마케팅 동의
+	// COMPANY_MANAGER 계정 - 필수 + 마케팅 동의
 	{
 		userEmail: "manager.gwanghwamun@f45.kr",
 		agreements: ["TERMS_OF_SERVICE", "PRIVACY_POLICY", "MARKETING_CONSENT"],
@@ -115,7 +115,7 @@ export const userAgreementMapping: UserAgreementMappingData[] = [
 		userEmail: "manager.itaewon@crossfit.kr",
 		agreements: ["TERMS_OF_SERVICE", "PRIVACY_POLICY", "LOCATION_CONSENT"],
 	},
-	// VIEW들 - 다양한 동의 패턴 (테스트 시나리오)
+	// MEMBER 계정 - 다양한 동의 패턴 (테스트 시나리오)
 	{
 		userEmail: "minsu.kim92@gmail.com",
 		agreements: [

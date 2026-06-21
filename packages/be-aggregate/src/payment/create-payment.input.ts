@@ -7,7 +7,7 @@ import type {
 export interface CreatePaymentInput
 	extends Omit<
 		Prisma.PaymentUncheckedCreateInput,
-		| "spaceId"
+		| "tenantId"
 		| "totalAmount"
 		| "currency"
 		| "status"
@@ -16,7 +16,6 @@ export interface CreatePaymentInput
 		| "references"
 		| "enrollments"
 	> {
-	spaceId?: string;
 	status?: PaymentStatus;
 	totalAmount?: number;
 	currency?: string;

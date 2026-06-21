@@ -47,22 +47,22 @@
       "id": "L1-ACT-001",
       "level": 1,
       "type": "actor",
-      "name": "슈퍼 관리자",
-      "description": "시스템 전체 관리 권한 보유 (SUPER_ADMIN)"
+      "name": "플랫폼 관리자",
+      "description": "시스템 전체 관리 권한 보유 (PLATFORM_ADMIN)"
     },
     {
       "id": "L1-ACT-002",
       "level": 1,
       "type": "actor",
-      "name": "관리자",
-      "description": "일반 관리 권한 보유 (ADMIN)"
+      "name": "Company 관리자",
+      "description": "특정 Company 운영 권한 보유 (COMPANY_MANAGER)"
     },
     {
       "id": "L1-ACT-003",
       "level": 1,
       "type": "actor",
-      "name": "일반 사용자",
-      "description": "기본 서비스 이용 권한 (USER)"
+      "name": "회원",
+      "description": "본인 정보/예약 관리 및 시설/콘텐츠 조회 권한 (MEMBER)"
     },
     {
       "id": "L2-GOL-001",

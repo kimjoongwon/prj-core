@@ -1,6 +1,6 @@
 import {
-	adminFullAccessAbilitySeedData,
-	adminManageMenuAccessAbilitySeedData,
+	adminPlatformAdminAbilitySeedData,
+	adminCompanyManagerMenuAccessAbilitySeedData,
 } from "./admin-permissions";
 
 /**
@@ -17,7 +17,7 @@ import {
  * - update: 수정 권한
  * - delete: 삭제 권한
  * - access: 접근 권한 (메뉴 등)
- * - manage: 모든 권한 (FULL_ACCESS용)
+ * - manage: 모든 권한 (PLATFORM_ADMIN용)
  * - export: 내보내기 권한
  * - import: 가져오기 권한
  * - approve: 승인 권한
@@ -75,12 +75,12 @@ export interface AbilitySeedData {
 
 // 배열이 역할별로 나뉘어 있어도 sync 단계에서는 동일한 Ability 테이블에 누적 적용됩니다.
 /**
- * FULL_ACCESS 권한 시드 데이터
+ * PLATFORM_ADMIN 권한 시드 데이터
  * - manage all: 모든 권한
  */
-const staticFullAccessAbilitySeedData: AbilitySeedData[] = [
+const staticPlatformAdminAbilitySeedData: AbilitySeedData[] = [
 	{
-		roleName: "FULL_ACCESS",
+		roleName: "PLATFORM_ADMIN",
 		subject: "all",
 		actionName: "manage",
 		inverted: false,
@@ -90,28 +90,28 @@ const staticFullAccessAbilitySeedData: AbilitySeedData[] = [
 	// 기능 manage
 	// ============================================================================
 	{
-		roleName: "FULL_ACCESS",
+		roleName: "PLATFORM_ADMIN",
 		subject: "feature:export",
 		actionName: "manage",
 		inverted: false,
 		description: "내보내기 전체 권한",
 	},
 	{
-		roleName: "FULL_ACCESS",
+		roleName: "PLATFORM_ADMIN",
 		subject: "feature:import",
 		actionName: "manage",
 		inverted: false,
 		description: "가져오기 전체 권한",
 	},
 	{
-		roleName: "FULL_ACCESS",
+		roleName: "PLATFORM_ADMIN",
 		subject: "feature:bulk-delete",
 		actionName: "manage",
 		inverted: false,
 		description: "일괄 삭제 전체 권한",
 	},
 	{
-		roleName: "FULL_ACCESS",
+		roleName: "PLATFORM_ADMIN",
 		subject: "feature:send-notification",
 		actionName: "manage",
 		inverted: false,
@@ -122,21 +122,21 @@ const staticFullAccessAbilitySeedData: AbilitySeedData[] = [
 	// FAB Quick Actions manage (v7.0)
 	// ============================================================================
 	{
-		roleName: "FULL_ACCESS",
+		roleName: "PLATFORM_ADMIN",
 		subject: "quickAction:todayReservation",
 		actionName: "manage",
 		inverted: false,
 		description: "오늘 예약 바로가기 전체 권한",
 	},
 	{
-		roleName: "FULL_ACCESS",
+		roleName: "PLATFORM_ADMIN",
 		subject: "quickAction:quickReservation",
 		actionName: "manage",
 		inverted: false,
 		description: "빠른 예약 전체 권한",
 	},
 	{
-		roleName: "FULL_ACCESS",
+		roleName: "PLATFORM_ADMIN",
 		subject: "quickAction:userSearch",
 		actionName: "manage",
 		inverted: false,
@@ -147,49 +147,49 @@ const staticFullAccessAbilitySeedData: AbilitySeedData[] = [
 	// 엔티티 manage
 	// ============================================================================
 	{
-		roleName: "FULL_ACCESS",
+		roleName: "PLATFORM_ADMIN",
 		subject: "entity:User",
 		actionName: "manage",
 		inverted: false,
 		description: "사용자 엔티티 전체 권한",
 	},
 	{
-		roleName: "FULL_ACCESS",
+		roleName: "PLATFORM_ADMIN",
 		subject: "entity:Ground",
 		actionName: "manage",
 		inverted: false,
 		description: "시설 엔티티 전체 권한",
 	},
 	{
-		roleName: "FULL_ACCESS",
+		roleName: "PLATFORM_ADMIN",
 		subject: "entity:Space",
 		actionName: "manage",
 		inverted: false,
 		description: "공간 엔티티 전체 권한",
 	},
 	{
-		roleName: "FULL_ACCESS",
+		roleName: "PLATFORM_ADMIN",
 		subject: "entity:Reservation",
 		actionName: "manage",
 		inverted: false,
 		description: "예약 엔티티 전체 권한",
 	},
 	{
-		roleName: "FULL_ACCESS",
+		roleName: "PLATFORM_ADMIN",
 		subject: "entity:Content",
 		actionName: "manage",
 		inverted: false,
 		description: "콘텐츠 엔티티 전체 권한",
 	},
 	{
-		roleName: "FULL_ACCESS",
+		roleName: "PLATFORM_ADMIN",
 		subject: "entity:Role",
 		actionName: "manage",
 		inverted: false,
 		description: "역할 엔티티 전체 권한",
 	},
 	{
-		roleName: "FULL_ACCESS",
+		roleName: "PLATFORM_ADMIN",
 		subject: "entity:Ability",
 		actionName: "manage",
 		inverted: false,
@@ -197,49 +197,49 @@ const staticFullAccessAbilitySeedData: AbilitySeedData[] = [
 	},
 ];
 
-export const fullAccessAbilitySeedData: AbilitySeedData[] = [
-	...staticFullAccessAbilitySeedData,
-	...adminFullAccessAbilitySeedData,
+export const platformAdminAbilitySeedData: AbilitySeedData[] = [
+	...staticPlatformAdminAbilitySeedData,
+	...adminPlatformAdminAbilitySeedData,
 ];
 
 /**
- * MANAGE 권한 시드 데이터
+ * COMPANY_MANAGER 권한 시드 데이터
  * - 현재 admin catalog 기준 운영 메뉴 access
  * - 엔티티: User, Reservation manage / Ground read, update
  */
-export const manageAbilitySeedData: AbilitySeedData[] = [
-	...adminManageMenuAccessAbilitySeedData,
+export const companyManagerAbilitySeedData: AbilitySeedData[] = [
+	...adminCompanyManagerMenuAccessAbilitySeedData,
 	// 엔티티 권한
 	{
-		roleName: "MANAGE",
+		roleName: "COMPANY_MANAGER",
 		subject: "entity:User",
 		actionName: "manage",
 		inverted: false,
 		description: "사용자 엔티티 관리 권한",
 	},
 	{
-		roleName: "MANAGE",
+		roleName: "COMPANY_MANAGER",
 		subject: "entity:Reservation",
 		actionName: "manage",
 		inverted: false,
 		description: "예약 엔티티 관리 권한",
 	},
 	{
-		roleName: "MANAGE",
+		roleName: "COMPANY_MANAGER",
 		subject: "entity:Ground",
 		actionName: "read",
 		inverted: false,
 		description: "시설 조회 권한",
 	},
 	{
-		roleName: "MANAGE",
+		roleName: "COMPANY_MANAGER",
 		subject: "entity:Ground",
 		actionName: "update",
 		inverted: false,
 		description: "시설 수정 권한",
 	},
 	{
-		roleName: "MANAGE",
+		roleName: "COMPANY_MANAGER",
 		subject: "entity:Content",
 		actionName: "manage",
 		inverted: false,
@@ -247,14 +247,14 @@ export const manageAbilitySeedData: AbilitySeedData[] = [
 	},
 	// 기능 권한
 	{
-		roleName: "MANAGE",
+		roleName: "COMPANY_MANAGER",
 		subject: "feature:export",
 		actionName: "access",
 		inverted: false,
 		description: "내보내기 권한",
 	},
 	{
-		roleName: "MANAGE",
+		roleName: "COMPANY_MANAGER",
 		subject: "feature:send-notification",
 		actionName: "access",
 		inverted: false,
@@ -262,7 +262,7 @@ export const manageAbilitySeedData: AbilitySeedData[] = [
 	},
 	// 일괄 삭제 불가 (inverted=true)
 	{
-		roleName: "MANAGE",
+		roleName: "COMPANY_MANAGER",
 		subject: "feature:bulk-delete",
 		actionName: "access",
 		inverted: true,
@@ -271,14 +271,14 @@ export const manageAbilitySeedData: AbilitySeedData[] = [
 ];
 
 /**
- * VIEW 권한 시드 데이터
+ * MEMBER 권한 시드 데이터
  * - 자신의 데이터만 read, update 가능 (conditions 사용)
  * - 자신의 예약만 create, read 가능
  */
-export const viewAbilitySeedData: AbilitySeedData[] = [
+export const memberAbilitySeedData: AbilitySeedData[] = [
 	// 자신의 User 정보만 조회/수정 가능
 	{
-		roleName: "VIEW",
+		roleName: "MEMBER",
 		subject: "entity:User",
 		actionName: "read",
 		inverted: false,
@@ -286,7 +286,7 @@ export const viewAbilitySeedData: AbilitySeedData[] = [
 		conditions: { id: "{{ user.id }}" },
 	},
 	{
-		roleName: "VIEW",
+		roleName: "MEMBER",
 		subject: "entity:User",
 		actionName: "update",
 		inverted: false,
@@ -295,14 +295,14 @@ export const viewAbilitySeedData: AbilitySeedData[] = [
 	},
 	// 자신의 예약만 생성/조회 가능
 	{
-		roleName: "VIEW",
+		roleName: "MEMBER",
 		subject: "entity:Reservation",
 		actionName: "create",
 		inverted: false,
 		description: "예약 생성 권한",
 	},
 	{
-		roleName: "VIEW",
+		roleName: "MEMBER",
 		subject: "entity:Reservation",
 		actionName: "read",
 		inverted: false,
@@ -310,7 +310,7 @@ export const viewAbilitySeedData: AbilitySeedData[] = [
 		conditions: { userId: "{{ user.id }}" },
 	},
 	{
-		roleName: "VIEW",
+		roleName: "MEMBER",
 		subject: "entity:Reservation",
 		actionName: "update",
 		inverted: false,
@@ -319,7 +319,7 @@ export const viewAbilitySeedData: AbilitySeedData[] = [
 	},
 	// 시설 정보 조회
 	{
-		roleName: "VIEW",
+		roleName: "MEMBER",
 		subject: "entity:Ground",
 		actionName: "read",
 		inverted: false,
@@ -327,7 +327,7 @@ export const viewAbilitySeedData: AbilitySeedData[] = [
 	},
 	// 콘텐츠 조회
 	{
-		roleName: "VIEW",
+		roleName: "MEMBER",
 		subject: "entity:Content",
 		actionName: "read",
 		inverted: false,
@@ -339,41 +339,41 @@ export const viewAbilitySeedData: AbilitySeedData[] = [
  * 모든 Ability 시드 데이터를 하나로 합침
  */
 export const abilitySeedData: AbilitySeedData[] = [
-	...fullAccessAbilitySeedData,
-	...manageAbilitySeedData,
-	...viewAbilitySeedData,
+	...platformAdminAbilitySeedData,
+	...companyManagerAbilitySeedData,
+	...memberAbilitySeedData,
 ];
 
 /**
  * 권한 매핑 요약 (문서화용)
  *
- * FULL_ACCESS:
+ * PLATFORM_ADMIN:
  * - manage all + 현재 admin menu/page catalog의 canonical grant
  * - 제한 없음
  *
- * MANAGE:
+ * COMPANY_MANAGER:
  * - 메뉴: 현재 admin catalog 기준 운영 메뉴 access
  * - 템플릿, low-level 권한 카탈로그 메뉴는 기본 제외
  * - 엔티티: User MANAGE, Reservation MANAGE, Ground READ/UPDATE, Content MANAGE
  * - 기능: 내보내기, 알림발송 가능 / 일괄삭제 불가
  *
- * VIEW:
+ * MEMBER:
  * - 엔티티: 자신의 User READ/UPDATE, 자신의 Reservation CREATE/READ/UPDATE
  * - 엔티티: Ground READ, Content READ
  * - 메뉴/기능 접근 없음 (일반 사용자는 Admin 패널 미접근)
  */
 export const permissionSummary = {
-	FULL_ACCESS: {
+	PLATFORM_ADMIN: {
 		description: "시스템 전체 관리자",
 		permissions: "manage all + 현재 admin menu/page catalog의 canonical grant",
 	},
-	MANAGE: {
-		description: "지점 관리자",
+	COMPANY_MANAGER: {
+		description: "Company 관리자",
 		permissions:
 			"현재 admin 운영 메뉴 접근, User/Reservation/Content 관리, Ground 조회/수정, 내보내기/알림발송 가능",
 	},
-	VIEW: {
-		description: "일반 사용자",
+	MEMBER: {
+		description: "회원",
 		permissions: "자신의 정보/예약만 접근, 시설/콘텐츠 조회",
 	},
 };
