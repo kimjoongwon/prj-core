@@ -1,10 +1,19 @@
 import { createHash, randomUUID } from "node:crypto";
 import { extname } from "node:path";
 import { SpaceContext } from "@cocrepo/context";
-import { AssetQueryDto, MoveAssetDto, UploadAssetDto } from "@cocrepo/dto";
 import { Asset } from "@cocrepo/entity";
+import type {
+	GetAssetsQueryInput,
+	MoveAssetCommandInput,
+	UploadAssetCommandInput,
+} from "@cocrepo/input";
 import { AssetKind, AssetStatus, type Prisma } from "@cocrepo/prisma";
-import { AssetsRepository, FoldersRepository } from "@cocrepo/repository";
+import {
+	AssetsRepository,
+	buildAssetQueryOrderBy,
+	buildAssetQueryWhere,
+	FoldersRepository,
+} from "@cocrepo/repository";
 import { ObjectStorageService } from "@cocrepo/service";
 import { Checksum, FileSize, StorageKey } from "@cocrepo/vo";
 import {
@@ -14,8 +23,6 @@ import {
 	Logger,
 	NotFoundException,
 } from "@nestjs/common";
-import type { AssetContentPayload } from "./asset-content-payload";
-import type { AssetPayload } from "./asset-payload";
 import { normalizeUploadedFileName } from "./normalize-uploaded-file-name";
 import type { UploadedAssetFile } from "./uploaded-asset-file";
 
@@ -30,14 +37,13 @@ export class AssetAggregate {
 		private readonly spaceContext: SpaceContext,
 	) {}
 
-	async getAssets(
-		query: AssetQueryDto,
-	): Promise<{ data: AssetPayload[]; totalCount: number }> {
+	async getAssets(query: GetAssetsQueryInput) {
 		const spaceId = this.getCurrentSpaceId();
 		this.logger.debug(`에셋 목록 조회: space=${spaceId.slice(-8)}`);
 		const spaceIds = this.spaceContext.spaceIds;
 		const where = this.applySpaceScope(
-			query.toPrismaWhere(
+			buildAssetQueryWhere(
+				query,
 				spaceIds === undefined
 					? undefined
 					: { tenant: { spaceId: { in: spaceIds } } },
@@ -47,7 +53,7 @@ export class AssetAggregate {
 
 		const assetResult = await this.assetsRepository.findMany({
 			where,
-			orderBy: query.sort?.length ? query.toPrismaOrderBy() : undefined,
+			orderBy: buildAssetQueryOrderBy(query),
 			skip: query.skip,
 			take: query.take,
 		});
@@ -58,12 +64,12 @@ export class AssetAggregate {
 		};
 	}
 
-	async getAssetById(assetId: string): Promise<AssetPayload> {
+	async getAssetById(assetId: string) {
 		const asset = await this.getCurrentSpaceAsset(assetId);
 		return this.serializeAsset(asset);
 	}
 
-	async getAssetContent(assetId: string): Promise<AssetContentPayload> {
+	async getAssetContent(assetId: string) {
 		const asset = await this.getCurrentSpaceAsset(assetId);
 		const object = await this.objectStorageService.getObject(asset.storageKey);
 
@@ -77,7 +83,10 @@ export class AssetAggregate {
 		};
 	}
 
-	async moveAsset(assetId: string, dto: MoveAssetDto): Promise<AssetPayload> {
+	async moveAsset(
+		assetId: string,
+		dto: MoveAssetCommandInput,
+	) {
 		const currentSpaceId = this.getCurrentSpaceId();
 		const asset = await this.getCurrentSpaceAsset(assetId);
 		const targetFolder = await this.foldersRepository.findById(
@@ -118,10 +127,10 @@ export class AssetAggregate {
 	}
 
 	async uploadAsset(
-		dto: UploadAssetDto,
+		dto: UploadAssetCommandInput,
 		file: UploadedAssetFile | undefined,
 		creatorId: string,
-	): Promise<AssetPayload> {
+	) {
 		if (!file) {
 			throw new BadRequestException("업로드할 파일이 필요합니다");
 		}
@@ -235,7 +244,7 @@ export class AssetAggregate {
 		return spaceIds === undefined || spaceIds.includes(spaceId);
 	}
 
-	private serializeAsset(asset: Asset): AssetPayload {
+	private serializeAsset(asset: Asset) {
 		return {
 			...asset,
 			sizeBytes: Number(asset.sizeBytes),

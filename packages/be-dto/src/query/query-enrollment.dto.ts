@@ -62,32 +62,4 @@ export class QueryEnrollmentDto extends PrismaQueryDto<Prisma.EnrollmentWhereInp
 		return ["search", "timelineId", "validOn"];
 	}
 
-	toPrismaWhere(
-		baseWhere?: Partial<Prisma.EnrollmentWhereInput>,
-	): Prisma.EnrollmentWhereInput {
-		const where = super.toPrismaWhere(baseWhere);
-
-		if (this.timelineId) {
-			where.assignedTimelineId = this.timelineId;
-		}
-
-		if (this.validOn) {
-			where.validFrom = { lte: this.validOn };
-			where.validUntil = { gte: this.validOn };
-		}
-
-		if (this.search) {
-			const search = this.containsFilter(this.search);
-			where.OR = [
-				{ user: { name: search } },
-				{ user: { email: search } },
-				{ course: { name: search } },
-				{ courseOffering: { name: search } },
-				{ paymentProvider: search },
-				{ paymentExternalId: search },
-			];
-		}
-
-		return where;
-	}
 }

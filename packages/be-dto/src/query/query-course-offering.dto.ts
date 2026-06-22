@@ -62,43 +62,4 @@ export class QueryCourseOfferingDto extends PrismaQueryDto<Prisma.CourseOffering
 		return ["search", "recruitingOnly"];
 	}
 
-	toPrismaWhere(
-		baseWhere?: Partial<Prisma.CourseOfferingWhereInput>,
-	): Prisma.CourseOfferingWhereInput {
-		const where = super.toPrismaWhere(baseWhere);
-
-		if (this.search) {
-			const search = this.containsFilter(this.search);
-			where.OR = [
-				{ name: search },
-				{ course: { name: search } },
-				{ timeline: { is: { name: search } } },
-			];
-		}
-
-		if (this.recruitingOnly) {
-			const now = new Date();
-			const existingAnd = Array.isArray(where.AND)
-				? where.AND
-				: where.AND
-					? [where.AND]
-					: [];
-
-			where.AND = [
-				...existingAnd,
-				{ status: CourseOfferingStatus.ENROLLING },
-				{
-					OR: [
-						{ enrollmentStartsAt: null },
-						{ enrollmentStartsAt: { lte: now } },
-					],
-				},
-				{
-					OR: [{ enrollmentEndsAt: null }, { enrollmentEndsAt: { gte: now } }],
-				},
-			];
-		}
-
-		return where;
-	}
 }

@@ -79,7 +79,7 @@ widget/feature/form/collection/detail 등 하위 재사용 계층을 조합해 s
    - 금지 예: `src/screen/AddressEmailVerifyScreen.tsx`
    - 금지 예: `src/screen/AddressEmailVerifyScreen.spec.md`
 7. screen component props의 이벤트 이름은 `on[Event][UI]` 패턴 강제
-8. screen component가 route shell primitive를 직접 소유하지 않음
+8. screen component가 route layout primitive를 직접 소유하지 않음
    - 금지 예: route `Page`, `Surface` 책임 침범
    - 신규 screen implementation에서 `Surface`, 제거된 detail/form 이전 방식 surface wrapper 사용 금지
    - `ScreenSurface`는 `packages/fe-ui/src/screen/index.ts`의 public screen export boundary에서만 적용
@@ -434,7 +434,7 @@ screen component는 page-level 시각 구성과 사용자 이벤트 위임만 �
 - `window`, `document`, `cookies`, `headers` 접근
 - `React.createElement` 또는 `createElement` 기반 시각 composition
 - JSX를 반환하는 `render*` helper 함수
-- route shell/layout/테스트 파일(`_layout.tsx`, `_prefetch.ts`, `index.spec.md`)의 소유권 침범
+- route layout/layout/테스트 파일(`_layout.tsx`, `_prefetch.ts`, `index.spec.md`)의 소유권 침범
 - route screen을 감싸는 wrapper 목적의 trivial `*Client`, `*Inner` 컴포넌트
 
 ### Do

@@ -198,7 +198,7 @@ export const OidcClientDetailScreen = observer(
 									</dd>
 								</div>
 								<div>
-									<dt className="text-sm text-muted mb-1">로그인 셸 URL</dt>
+									<dt className="text-sm text-muted mb-1">로그인 화면 URL</dt>
 									<dd className="font-mono text-sm break-all">
 										{client.loginUrl || "-"}
 									</dd>

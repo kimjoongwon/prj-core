@@ -1,15 +1,19 @@
-import {
-	CreateServiceDocumentDto,
-	QueryServiceDocumentDto,
-	UpdateServiceDocumentDto,
-} from "@cocrepo/dto";
 import { ServiceDocument } from "@cocrepo/entity";
+import type {
+	CreateServiceDocumentCommandInput,
+	GetServiceDocumentsQueryInput,
+	UpdateServiceDocumentCommandInput,
+} from "@cocrepo/input";
 import {
 	type Prisma,
 	ServiceDocumentKind,
 	ServiceDocumentPlatform,
 } from "@cocrepo/prisma";
-import { ServiceDocumentsRepository } from "@cocrepo/repository";
+import {
+	buildServiceDocumentQueryOrderBy,
+	buildServiceDocumentQueryWhere,
+	ServiceDocumentsRepository,
+} from "@cocrepo/repository";
 import {
 	BadRequestException,
 	ConflictException,
@@ -25,10 +29,10 @@ export class ServiceDocumentAggregate {
 	constructor(private readonly repository: ServiceDocumentsRepository) {}
 
 	async getServiceDocuments(
-		query: QueryServiceDocumentDto,
+		query: GetServiceDocumentsQueryInput,
 	): Promise<{ data: ServiceDocument[]; totalCount: number }> {
-		const where = query.toPrismaWhere();
-		const orderBy = query.toPrismaOrderBy();
+		const where = buildServiceDocumentQueryWhere(query);
+		const orderBy = buildServiceDocumentQueryOrderBy(query);
 
 		return this.repository.findMany({
 			where,
@@ -46,7 +50,9 @@ export class ServiceDocumentAggregate {
 		return document;
 	}
 
-	async create(dto: CreateServiceDocumentDto): Promise<ServiceDocument> {
+	async create(
+		dto: CreateServiceDocumentCommandInput,
+	): Promise<ServiceDocument> {
 		this.logger.debug(`서비스 문서 생성: ${dto.kind} ${dto.version}`);
 
 		const platform = this.resolvePlatform(dto.platform);
@@ -83,7 +89,7 @@ export class ServiceDocumentAggregate {
 
 	async update(
 		id: string,
-		dto: UpdateServiceDocumentDto,
+		dto: UpdateServiceDocumentCommandInput,
 	): Promise<ServiceDocument> {
 		const document = await this.getServiceDocumentById(id);
 		this.assertEditable(document);

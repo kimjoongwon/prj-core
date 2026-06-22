@@ -1,8 +1,12 @@
-import type { ApproveTenantAccessRequestCommandInput } from "./approve-tenant-access-request.input";
-export class ApproveTenantAccessRequestCommand {
+import type { ApproveTenantAccessRequestCommandInput } from "@cocrepo/input";
+export class ApproveTenantAccessRequestCommand implements ApproveTenantAccessRequestCommandInput {
+	readonly reviewComment?: ApproveTenantAccessRequestCommandInput["reviewComment"];
+
 	constructor(
 		readonly tenantAccessRequestId: string,
 		readonly reviewerId: string,
-		readonly input: ApproveTenantAccessRequestCommandInput,
-	) {}
+		input: ApproveTenantAccessRequestCommandInput,
+	) {
+		Object.assign(this, input);
+	}
 }

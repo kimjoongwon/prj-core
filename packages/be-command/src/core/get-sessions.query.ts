@@ -1,8 +1,17 @@
-import type { QuerySessionDto } from "@cocrepo/dto";
+import type { GetSessionsQueryInput } from "@cocrepo/input";
 
-export class GetSessionsQuery {
+export class GetSessionsQuery implements GetSessionsQueryInput {
+	readonly timelineId!: string;
+	readonly search?: GetSessionsQueryInput["search"];
+	readonly skip?: GetSessionsQueryInput["skip"];
+	readonly take?: GetSessionsQueryInput["take"];
+	readonly sort?: GetSessionsQueryInput["sort"];
+
 	constructor(
-		readonly timelineId: string,
-		readonly query: QuerySessionDto,
-	) {}
+		timelineId: string,
+		input: GetSessionsQueryInput,
+	) {
+		Object.assign(this, input);
+		this.timelineId = timelineId;
+	}
 }

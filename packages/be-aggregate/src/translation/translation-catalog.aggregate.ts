@@ -1,10 +1,10 @@
 import { LanguageCode, supportedLanguages } from "@cocrepo/constant";
-import {
-	CreateTranslationDto,
-	GetTranslationsDto,
-	UpdateTranslationDto,
-} from "@cocrepo/dto";
 import { Translation } from "@cocrepo/entity";
+import type {
+	CreateTranslationCommandInput,
+	GetTranslationsQueryInput,
+	UpdateTranslationCommandInput,
+} from "@cocrepo/input";
 import type { LanguageCode as PrismaLanguageCode } from "@cocrepo/prisma";
 import { TranslationsRepository } from "@cocrepo/repository";
 import { buildPagePaginatedResponse } from "@cocrepo/toolkit";
@@ -24,7 +24,7 @@ export class TranslationCatalogAggregate {
 	constructor(private readonly repository: TranslationsRepository) {}
 
 	async getTranslations(
-		query: GetTranslationsDto,
+		query: GetTranslationsQueryInput,
 	): Promise<PagePaginatedResponse<Translation[]>> {
 		const page = query.page && query.page > 0 ? query.page : 1;
 		const limit = query.limit && query.limit > 0 ? query.limit : 20;
@@ -78,7 +78,7 @@ export class TranslationCatalogAggregate {
 		};
 	}
 
-	async create(dto: CreateTranslationDto): Promise<Translation> {
+	async create(dto: CreateTranslationCommandInput): Promise<Translation> {
 		this.logger.debug(`번역 생성 시도: ${dto.languageCode}:${dto.key}`);
 
 		const existing = await this.repository.findByLanguageAndKey(
@@ -100,7 +100,10 @@ export class TranslationCatalogAggregate {
 		});
 	}
 
-	async update(id: string, dto: UpdateTranslationDto): Promise<Translation> {
+	async update(
+		id: string,
+		dto: UpdateTranslationCommandInput,
+	): Promise<Translation> {
 		this.logger.debug(`번역 수정 시도: ${id.slice(-8)}`);
 
 		await this.getTranslationById(id);

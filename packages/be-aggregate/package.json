@@ -26,11 +26,11 @@
     "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
   },
   "dependencies": {
-    "@cocrepo/constant": "workspace:*",
-    "@cocrepo/context": "workspace:*",
-    "@cocrepo/dto": "workspace:*",
-    "@cocrepo/entity": "workspace:*",
-    "@cocrepo/prisma": "workspace:*",
+		"@cocrepo/constant": "workspace:*",
+		"@cocrepo/context": "workspace:*",
+		"@cocrepo/entity": "workspace:*",
+		"@cocrepo/input": "workspace:*",
+		"@cocrepo/prisma": "workspace:*",
     "@cocrepo/repository": "workspace:*",
     "@cocrepo/service": "workspace:*",
     "@cocrepo/toolkit": "workspace:*",

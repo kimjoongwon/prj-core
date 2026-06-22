@@ -69,36 +69,4 @@ export class QueryCoursePassDto extends PrismaQueryDto<Prisma.CoursePassWhereInp
 		return ["search", "validOn", "expiresBefore"];
 	}
 
-	toPrismaWhere(
-		baseWhere?: Partial<Prisma.CoursePassWhereInput>,
-	): Prisma.CoursePassWhereInput {
-		const where = super.toPrismaWhere(baseWhere);
-
-		if (this.validOn) {
-			where.validFrom = { lte: this.validOn };
-			where.expiresAt = { gte: this.validOn };
-		}
-
-		if (this.expiresBefore) {
-			where.expiresAt = {
-				...(typeof where.expiresAt === "object" && where.expiresAt !== null
-					? where.expiresAt
-					: {}),
-				lte: this.expiresBefore,
-			};
-		}
-
-		if (this.search) {
-			const search = this.containsFilter(this.search);
-			where.OR = [
-				{ user: { name: search } },
-				{ user: { email: search } },
-				{ course: { name: search } },
-				{ courseOffering: { name: search } },
-				{ timeline: { name: search } },
-			];
-		}
-
-		return where;
-	}
 }

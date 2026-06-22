@@ -18,8 +18,8 @@ export class SubmitInteractionLoginUseCase {
 
 	async execute(command: SubmitInteractionLoginCommand) {
 		const result = await this.interactionLoginService.validateUser(
-			command.input.email,
-			command.input.password,
+			command.email,
+			command.password,
 			resolveHttpClientIp(command.req),
 			resolveHttpUserAgent(command.req),
 		);
@@ -39,7 +39,7 @@ export class SubmitInteractionLoginUseCase {
 			command.req,
 			command.res,
 			result.userId!,
-			command.input.remember || false,
+			command.remember || false,
 		);
 
 		return {

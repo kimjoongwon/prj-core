@@ -15,20 +15,20 @@ export class GetEnrollmentsUseCase {
 
 	async execute(query: GetEnrollmentsQuery): Promise<unknown> {
 		this.requireSpaceId();
-		const skip = query.query.skip ?? 0;
-		const take = query.query.take ?? 10;
+		const skip = query.skip ?? 0;
+		const take = query.take ?? 10;
 		const result = await this.courseService.findEnrollments({
 			skip,
 			take,
-			search: query.query.search ?? null,
-			courseId: query.query.courseId,
-			courseOfferingId: query.query.courseOfferingId,
-			userId: query.query.userId,
-			timelineId: query.query.timelineId,
-			paymentStatus: query.query.paymentStatus,
-			status: query.query.status,
-			validOn: query.query.validOn,
-			sort: query.query.sort,
+			search: query.search ?? null,
+			courseId: query.courseId,
+			courseOfferingId: query.courseOfferingId,
+			userId: query.userId,
+			timelineId: query.timelineId,
+			paymentStatus: query.paymentStatus,
+			status: query.status,
+			validOn: query.validOn,
+			sort: query.sort,
 		});
 		return buildOffsetStatsPaginatedResponse(
 			result.enrollments,

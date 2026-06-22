@@ -1,0 +1,28 @@
+import type { GetAssetsQueryInput } from "@cocrepo/input";
+import type { Prisma } from "@cocrepo/prisma";
+import {
+	containsFilter,
+	removedAtFilter,
+	toPrismaOrderBy,
+} from "./query-input.mapper";
+
+export function buildAssetQueryWhere(
+	input: GetAssetsQueryInput,
+	baseWhere?: Prisma.AssetWhereInput,
+): Prisma.AssetWhereInput {
+	return {
+		...(baseWhere ?? {}),
+		...(input.folderId ? { folderId: input.folderId } : {}),
+		...(input.tenantId ? { tenantId: input.tenantId } : {}),
+		...(input.kind ? { kind: input.kind } : {}),
+		...(input.status ? { status: input.status } : {}),
+		...(input.search ? { originalName: containsFilter(input.search) } : {}),
+		removedAt: removedAtFilter(input.statusFilter === "deleted"),
+	};
+}
+
+export function buildAssetQueryOrderBy(input: GetAssetsQueryInput) {
+	return toPrismaOrderBy(input.sort, {
+		allowedFields: ["createdAt", "originalName", "sizeBytes"],
+	}) as Prisma.AssetOrderByWithRelationInput[];
+}

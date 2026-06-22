@@ -1,0 +1,42 @@
+{
+  "name": "@cocrepo/input",
+  "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Layer input contracts for cocrepo backend",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "type-check:prod": "tsc --noEmit",
+    "build": "rm -rf dist && tsc --build",
+    "start:dev": "tsc --build --watch",
+    "format": "biome check --write .",
+    "clean": "rm -rf dist && rm -rf node_modules",
+    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
+    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
+  },
+  "dependencies": {
+    "@cocrepo/constant": "workspace:*",
+    "@cocrepo/prisma": "workspace:*",
+    "@cocrepo/type": "workspace:*"
+  },
+  "devDependencies": {
+    "@cocrepo/tsconfig": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  }
+}

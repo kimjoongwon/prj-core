@@ -47,7 +47,7 @@ export class EmailVerificationsRepository {
 
 	async findMany(params: {
 		where: Prisma.EmailVerificationWhereInput;
-		orderBy: Record<string, "asc" | "desc">[];
+		orderBy: Prisma.EmailVerificationOrderByWithRelationInput[];
 		skip: number;
 		take: number;
 	}): Promise<{ items: EmailVerification[]; totalCount: number }> {

@@ -1,7 +1,12 @@
-import type { UpdateRoleCommandInput } from "./update-role.input";
-export class UpdateRoleCommand {
+import type { UpdateRoleCommandInput } from "@cocrepo/input";
+export class UpdateRoleCommand implements UpdateRoleCommandInput {
+	readonly displayName?: UpdateRoleCommandInput["displayName"];
+	readonly description?: UpdateRoleCommandInput["description"];
+
 	constructor(
 		readonly roleId: string,
-		readonly input: UpdateRoleCommandInput,
-	) {}
+		input: UpdateRoleCommandInput,
+	) {
+		Object.assign(this, input);
+	}
 }

@@ -9,7 +9,7 @@ export class UpdateSpaceGroundUseCase {
 	execute(command: UpdateSpaceGroundCommand): Promise<unknown> {
 		return this.spaceService.updateGroundBySpaceId(
 			command.spaceId,
-			command.input,
+			command,
 		);
 	}
 }

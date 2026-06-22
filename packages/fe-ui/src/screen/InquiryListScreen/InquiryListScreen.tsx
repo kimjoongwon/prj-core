@@ -62,7 +62,7 @@ export interface InquiryListScreenProps {
 	onClickStatusFilter: (status: string | undefined) => void;
 }
 
-function InquiriesScreenShellFallback() {
+function InquiriesScreenFallback() {
 	return (
 		<div className="space-y-5">
 			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface/70">
@@ -107,7 +107,7 @@ export const InquiryListScreen = observer(
 		];
 
 		if (isLoading) {
-			return <InquiriesScreenShellFallback />;
+			return <InquiriesScreenFallback />;
 		}
 
 		return (

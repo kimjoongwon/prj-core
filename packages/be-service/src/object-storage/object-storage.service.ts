@@ -1,5 +1,5 @@
 import type { GetObjectResult } from "./get-object.result";
-import type { PutObjectInput } from "./put-object.input";
+import type { PutObjectInput } from "@cocrepo/input";
 import type { PutObjectResult } from "./put-object.result";
 
 export abstract class ObjectStorageService {

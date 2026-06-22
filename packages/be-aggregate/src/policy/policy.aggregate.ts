@@ -1,10 +1,9 @@
 import { USER_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/context";
 import type {
-	CreatePolicyDto,
-	SyncPolicyAbilitiesDto,
-	UpdatePolicyDto,
-} from "@cocrepo/dto";
+	CreatePolicyCommandInput,
+	UpdatePolicyCommandInput,
+} from "@cocrepo/input";
 import { Policy, PolicyAbility } from "@cocrepo/entity";
 import {
 	AbilitiesRepository,
@@ -56,7 +55,7 @@ export class PolicyAggregate {
 		return policy;
 	}
 
-	async createPolicy(dto: CreatePolicyDto): Promise<Policy> {
+	async createPolicy(dto: CreatePolicyCommandInput): Promise<Policy> {
 		const tenantId = this.requireTenantId();
 		this.logger.debug(`Policy 생성: name=${dto.name}, tenantId=${tenantId}`);
 
@@ -77,7 +76,10 @@ export class PolicyAggregate {
 		});
 	}
 
-	async updatePolicy(policyId: string, dto: UpdatePolicyDto): Promise<Policy> {
+	async updatePolicy(
+		policyId: string,
+		dto: UpdatePolicyCommandInput,
+	): Promise<Policy> {
 		const policy = await this.getPolicyById(policyId);
 
 		if (dto.name && dto.name !== policy.name) {
@@ -120,7 +122,7 @@ export class PolicyAggregate {
 	@Transactional()
 	async syncPolicyAbilities(
 		policyId: string,
-		abilityIds: SyncPolicyAbilitiesDto["abilityIds"],
+		abilityIds: string[],
 	): Promise<PolicyAbility[]> {
 		await this.getPolicyById(policyId);
 		await this.assertAbilitiesExist(abilityIds);

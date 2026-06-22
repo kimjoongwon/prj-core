@@ -104,8 +104,8 @@ Rhythm: root `VStack` vertical gap=section, card inner `VStack` gap=block, horiz
 | 영역 | 컴포넌트 | 계층 | 재사용/신규 | 소스/대상 | Props/이벤트 | 소스 담당 `agent_type` | 소비/Wiring `agent_type` |
 |------|-----------|------|-------------|-----------|--------------|-------------------------|---------------------------|
 | route header | `CustomHeader` | Navigation/Layout | reuse | `packages/fe-mo-ui/src/navigation/CustomHeader` via `(tabs)/_layout.tsx` | title `"마이"`, subtitle `currentSpaceName` | `fe-navigation-agent` | `fe-route-layout-agent` |
-| screen shell | `MyPageScreen` | Screen | new | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.tsx` | all props above | `fe-screen-agent` | `fe-route-agent` |
-| screen shell | `ScreenFrame` | Layout | reuse | `packages/fe-mo-ui/src/layout/ScreenFrame` | body safe-area, scroll content | `fe-layout-agent` | `fe-screen-agent` |
+| screen layout | `MyPageScreen` | Screen | new | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.tsx` | all props above | `fe-screen-agent` | `fe-route-agent` |
+| screen layout | `ScreenFrame` | Layout | reuse | `packages/fe-mo-ui/src/layout/ScreenFrame` | body safe-area, scroll content | `fe-layout-agent` | `fe-screen-agent` |
 | A/B | `Card` | Layout | reuse | `packages/fe-mo-ui/src/layout/Card` | `bg-surface`, `border-border`, `rounded-lg`, `p-4` | `fe-layout-agent` | `fe-screen-agent` |
 | A | `AccountSummary` section | DataDisplay / screen-local | new | `MyPageScreen.tsx` internal section, no package export | `displayName`, `accountDescription`, `isAuthenticated` | `fe-screen-agent` | `fe-screen-agent` |
 | A | `Icon` | Icon | reuse | `packages/fe-mo-ui/src/icon/Icon` | `userRound` | none | `fe-screen-agent` |

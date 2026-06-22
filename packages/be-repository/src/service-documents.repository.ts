@@ -54,7 +54,7 @@ export class ServiceDocumentsRepository {
 
 	async findMany(params: {
 		where: Prisma.ServiceDocumentWhereInput;
-		orderBy: Record<string, "asc" | "desc">[];
+		orderBy: Prisma.ServiceDocumentOrderByWithRelationInput[];
 		skip?: number;
 		take?: number;
 	}): Promise<{ data: ServiceDocument[]; totalCount: number }> {

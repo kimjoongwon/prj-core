@@ -33,17 +33,4 @@ export class QueryAuthAuditLogDto extends PrismaQueryDto<Prisma.AuthAuditLogWher
 		return ["startDate", "endDate"];
 	}
 
-	toPrismaWhere(
-		baseWhere?: Partial<Prisma.AuthAuditLogWhereInput>,
-	): Prisma.AuthAuditLogWhereInput {
-		const where = super.toPrismaWhere(baseWhere);
-
-		// 날짜 범위 필터: startDate/endDate -> createdAt gte/lte
-		const dateRange = this.dateRangeFilter(this.startDate, this.endDate);
-		if (dateRange) {
-			where.createdAt = dateRange as Prisma.AuthAuditLogWhereInput["createdAt"];
-		}
-
-		return where;
-	}
 }

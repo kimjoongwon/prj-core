@@ -28,7 +28,7 @@ InquiryListScreen
 | 컴포넌트 | 출처 | 사용 위치 |
 | --- | --- | --- |
 | `SectionSurface` | `@cocrepo/ui` | 콘텐츠 그룹과 elevation 구성 |
-| `InquiriesScreenShellFallback` | `현재 파일` | 로딩/대기 상태 표시 |
+| `InquiriesScreenFallback` | `현재 파일` | 로딩/대기 상태 표시 |
 | `PageTitleBar` | `@cocrepo/ui` | 상단 제목, 설명, 주요 액션 표시 |
 | `Button` | `@heroui/react` | 사용자 액션 실행 |
 | `Plus` | `lucide-react` | 아이콘으로 상태나 액션을 시각화 |

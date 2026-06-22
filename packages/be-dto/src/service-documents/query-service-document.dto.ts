@@ -40,23 +40,4 @@ export class QueryServiceDocumentDto extends PrismaQueryDto<Prisma.ServiceDocume
 		return ["search", "locale"];
 	}
 
-	toPrismaWhere(
-		baseWhere?: Partial<Prisma.ServiceDocumentWhereInput>,
-	): Prisma.ServiceDocumentWhereInput {
-		const where = super.toPrismaWhere(baseWhere);
-
-		if (this.locale) {
-			where.locale = this.locale;
-		}
-
-		if (this.search) {
-			where.OR = [
-				{ title: { contains: this.search, mode: "insensitive" } },
-				{ summary: { contains: this.search, mode: "insensitive" } },
-				{ version: { contains: this.search, mode: "insensitive" } },
-			];
-		}
-
-		return where;
-	}
 }

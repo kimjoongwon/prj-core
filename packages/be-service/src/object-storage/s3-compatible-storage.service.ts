@@ -10,7 +10,7 @@ import { ConfigService } from "@nestjs/config";
 import type { GetObjectResult } from "./get-object.result";
 import { normalizeMetadataValue } from "./normalize-metadata-value";
 import { ObjectStorageService } from "./object-storage.service";
-import type { PutObjectInput } from "./put-object.input";
+import type { PutObjectInput } from "@cocrepo/input";
 import type { PutObjectResult } from "./put-object.result";
 import { resolveRegion } from "./resolve-region";
 

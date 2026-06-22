@@ -53,35 +53,4 @@ export class QueryTenantAccessRequestDto extends PrismaQueryDto<Prisma.TenantAcc
 		return ["search"];
 	}
 
-	toPrismaWhere(
-		baseWhere?: Partial<Prisma.TenantAccessRequestWhereInput>,
-	): Prisma.TenantAccessRequestWhereInput {
-		const where = super.toPrismaWhere(baseWhere);
-
-		if (this.search) {
-			const search = this.containsFilter(this.search);
-			where.OR = [
-				{ requester: { name: search } },
-				{ requester: { email: search } },
-				{
-					space: {
-						company: {
-							is: {
-								grounds: {
-									some: {
-										removedAt: null,
-										name: search,
-									},
-								},
-							},
-						},
-					},
-				},
-				{ requestedRole: { displayName: search } },
-				{ requestedRole: { name: search } },
-			];
-		}
-
-		return where;
-	}
 }

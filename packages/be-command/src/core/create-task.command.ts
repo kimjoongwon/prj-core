@@ -1,8 +1,17 @@
-import type { CreateTaskCommandInput } from "./create-task.input";
-export class CreateTaskCommand {
+import type { CreateTaskCommandInput } from "@cocrepo/input";
+export class CreateTaskCommand implements CreateTaskCommandInput {
+	readonly name!: CreateTaskCommandInput["name"];
+	readonly description!: CreateTaskCommandInput["description"];
+	readonly imageFileId!: CreateTaskCommandInput["imageFileId"];
+	readonly duration!: CreateTaskCommandInput["duration"];
+	readonly count!: CreateTaskCommandInput["count"];
+	readonly videoFileId!: CreateTaskCommandInput["videoFileId"];
+
 	constructor(
-		readonly input: CreateTaskCommandInput,
+		input: CreateTaskCommandInput,
 		readonly spaceId: string,
 		readonly creatorId: string,
-	) {}
+	) {
+		Object.assign(this, input);
+	}
 }

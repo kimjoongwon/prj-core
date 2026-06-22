@@ -1,11 +1,9 @@
-import type { QueryOidcSessionDto } from "@cocrepo/dto";
+import type { GetOidcSessionsQueryInput } from "@cocrepo/input";
 import { RedisService } from "@cocrepo/service";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { INDEX_SEGMENTS } from "./index-segments";
 import { OIDC_KEY_PREFIX } from "./oidc-key-prefix";
 import { OIDC_MODEL_TYPES } from "./oidc-model-types";
-import type { OidcRedisSession } from "./oidc-redis-session";
-import type { OidcSessionStats } from "./oidc-session-stats";
 
 @Injectable()
 export class OidcSessionAggregate {
@@ -18,8 +16,8 @@ export class OidcSessionAggregate {
 	 */
 	private async collectAllSessions(
 		targetTypes: string[],
-	): Promise<OidcRedisSession[]> {
-		const allSessions: OidcRedisSession[] = [];
+	) {
+		const allSessions = [];
 
 		for (const modelType of targetTypes) {
 			const pattern = `${OIDC_KEY_PREFIX}:${modelType}:*`;
@@ -61,10 +59,7 @@ export class OidcSessionAggregate {
 		return allSessions;
 	}
 
-	async getMany(query: QueryOidcSessionDto): Promise<{
-		data: OidcRedisSession[];
-		totalCount: number;
-	}> {
+	async getMany(query: GetOidcSessionsQueryInput) {
 		this.logger.debug("OIDC 세션/토큰 목록 조회 (Redis)");
 
 		const targetTypes = query.modelType ? [query.modelType] : OIDC_MODEL_TYPES;
@@ -95,7 +90,7 @@ export class OidcSessionAggregate {
 	/**
 	 * 모델 타입별 세션/토큰 통계 조회
 	 */
-	async getStats(): Promise<OidcSessionStats> {
+	async getStats() {
 		this.logger.debug("OIDC 세션/토큰 통계 조회");
 
 		const byModelType: Record<string, number> = {};

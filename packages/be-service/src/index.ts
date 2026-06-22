@@ -13,7 +13,6 @@ export { TokenService } from "./auth/token.service";
 export { TokenStorageService } from "./auth/token-storage.service";
 export {
 	EmailProvider,
-	type EmailSendInput,
 	EmailService,
 	SmtpEmailProvider,
 } from "./email";
@@ -21,7 +20,6 @@ export { EmailModule } from "./email/email.module";
 export { MaskingService } from "./masking/masking.service";
 export {
 	ObjectStorageService,
-	type PutObjectInput,
 	type PutObjectResult,
 	S3CompatibleStorageService,
 } from "./object-storage";

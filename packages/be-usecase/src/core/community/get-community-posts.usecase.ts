@@ -17,8 +17,8 @@ export class GetCommunityPostsUseCase {
 
 	async execute(query: GetCommunityPostsQuery): Promise<unknown> {
 		const context = this.requireCommunityContext();
-		const skip = query.query.skip ?? 0;
-		const take = query.query.take ?? 20;
+		const skip = query.skip ?? 0;
+		const take = query.take ?? 20;
 		const result = await this.contentService.listCommunityPosts({
 			...context,
 			skip,

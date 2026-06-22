@@ -24,7 +24,7 @@ export const dynamic = "force-dynamic";
  *
  * 계층 구조:
  * - App (app/layout.tsx) - body wrapper
- *     - app/layout.tsx - route shell 직접 조립
+ *     - app/layout.tsx - route layout 직접 조립
  */
 export default function RootLayout({
 	children,

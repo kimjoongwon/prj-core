@@ -12,10 +12,10 @@ export class FindTasksUseCase {
 
 	async execute(query: FindTasksQuery): Promise<unknown> {
 		this.logger.debug("Task 목록 조회");
-		const skip = query.params.skip ?? 0;
-		const take = query.params.take ?? 10;
+		const skip = query.skip ?? 0;
+		const take = query.take ?? 10;
 		const taskResult = await this.taskService.findTasks({
-			...query.params,
+			...query,
 			skip,
 			take,
 		});

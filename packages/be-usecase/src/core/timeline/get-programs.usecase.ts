@@ -8,8 +8,8 @@ export class GetProgramsUseCase {
 	constructor(private readonly timelinesService: TimelineAggregate) {}
 
 	async execute(query: GetProgramsQuery): Promise<unknown> {
-		const skip = query.query.skip ?? 0;
-		const take = query.query.take ?? 10;
+		const skip = query.skip ?? 0;
+		const take = query.take ?? 10;
 		const programResult = await this.timelinesService.findProgramsInSession(
 			query.sessionId,
 			{

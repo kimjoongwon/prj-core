@@ -7,7 +7,7 @@ export class CreateActionUseCase {
 	constructor(private readonly actionsService: ActionAggregate) {}
 
 	execute(command: CreateActionCommand): Promise<unknown> {
-		const input = command.input;
+		const input = command;
 		return this.actionsService.createAction({
 			name: input.name,
 			displayName: input.displayName,

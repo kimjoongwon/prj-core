@@ -7,6 +7,6 @@ export class CreateAbilityUseCase {
 	constructor(private readonly abilitiesService: AbilityAggregate) {}
 
 	execute(command: CreateAbilityCommand): Promise<unknown> {
-		return this.abilitiesService.createAbility(command.input);
+		return this.abilitiesService.createAbility(command);
 	}
 }

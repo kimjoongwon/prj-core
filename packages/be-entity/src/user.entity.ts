@@ -24,6 +24,18 @@ type TenantWithSpace = Tenant & {
 	} | null;
 };
 
+type UserTenantSnapshotLike = {
+	id: string;
+	spaceId?: string | null;
+	space?: {
+		spaceClassification?: {
+			category?: {
+				name?: string | null;
+			} | null;
+		} | null;
+	} | null;
+};
+
 export class User extends AbstractEntity implements UserEntityType {
 	// ============================================================================
 	// 필수 필드
@@ -93,7 +105,7 @@ export class User extends AbstractEntity implements UserEntityType {
 	/**
 	 * DTO로부터 Entity 생성 (팩토리)
 	 */
-	static fromDto<T extends { id: string; tenants?: TenantWithSpace[] }>(
+	static fromDto<T extends { id: string; tenants?: UserTenantSnapshotLike[] }>(
 		dto: T,
 	): User {
 		const user = new User();

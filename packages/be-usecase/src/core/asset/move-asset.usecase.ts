@@ -7,6 +7,6 @@ export class MoveAssetUseCase {
 	constructor(private readonly assetService: AssetAggregate) {}
 
 	execute(command: MoveAssetCommand): Promise<unknown> {
-		return this.assetService.moveAsset(command.assetId, command.input);
+		return this.assetService.moveAsset(command.assetId, command);
 	}
 }

@@ -1,6 +1,17 @@
 import { Template } from "@cocrepo/entity";
+import type {
+	CreateTemplateInput,
+	GetTemplatesInput,
+	PreviewTemplateInput,
+	SendTestTemplateInput,
+	UpdateTemplateInput,
+} from "@cocrepo/input";
 import { TemplateType } from "@cocrepo/prisma";
-import { TemplatesRepository } from "@cocrepo/repository";
+import {
+	buildTemplateQueryOrderBy,
+	buildTemplateQueryWhere,
+	TemplatesRepository,
+} from "@cocrepo/repository";
 import { Email, Phone } from "@cocrepo/vo";
 import {
 	BadRequestException,
@@ -12,13 +23,6 @@ import {
 import type { RenderedTemplateResult } from "./rendered-template-result";
 import type { SendTestResult } from "./send-test-result";
 import type { SubstituteResult } from "./substitute-result";
-import type {
-	CreateTemplateInput,
-	GetTemplatesInput,
-	PreviewTemplateInput,
-	SendTestTemplateInput,
-	UpdateTemplateInput,
-} from "./template-service.input";
 
 @Injectable()
 export class TemplateService {
@@ -38,8 +42,8 @@ export class TemplateService {
 		totalCount: number;
 	}> {
 		return this.repository.findMany({
-			where: input.where,
-			orderBy: input.orderBy,
+			where: buildTemplateQueryWhere(input),
+			orderBy: buildTemplateQueryOrderBy(input),
 			skip: input.skip,
 			take: input.take,
 		});

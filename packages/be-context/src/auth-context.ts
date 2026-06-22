@@ -1,5 +1,5 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import type { TenantDto, UserDto } from "@cocrepo/dto";
+import type { ContextTenantSnapshot, ContextUserSnapshot } from "@cocrepo/type";
 import { User } from "@cocrepo/entity";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
@@ -33,14 +33,14 @@ export class AuthContext {
 	// Raw Data (CLS 직접 접근)
 	// ═══════════════════════════════════════════════════════════
 
-	/** 원본 UserDto */
-	get userDto(): UserDto | undefined {
-		return this.cls.get<UserDto>(CONTEXT_KEYS.AUTH_USER);
+	/** 원본 ContextUserSnapshot */
+	get userDto(): ContextUserSnapshot | undefined {
+		return this.cls.get<ContextUserSnapshot>(CONTEXT_KEYS.AUTH_USER);
 	}
 
-	/** 원본 TenantDto */
-	get tenantDto(): TenantDto | undefined {
-		return this.cls.get<TenantDto>(CONTEXT_KEYS.TENANT);
+	/** 원본 ContextTenantSnapshot */
+	get tenantDto(): ContextTenantSnapshot | undefined {
+		return this.cls.get<ContextTenantSnapshot>(CONTEXT_KEYS.TENANT);
 	}
 
 	/** 현재 Tenant ID */

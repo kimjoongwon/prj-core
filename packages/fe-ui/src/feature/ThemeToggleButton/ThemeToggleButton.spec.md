@@ -6,7 +6,7 @@
 
 ## 역할
 
-- 공용 shell과 인증 화면에서 light/dark theme 전환 버튼을 제공합니다.
+- 공용 레이아웃과 인증 화면에서 light/dark theme 전환 버튼을 제공합니다.
 - `DesignSystemProvider`가 관리하는 테마 상태와 `heroui-theme` 저장 키를 재사용합니다.
 - 앱별 header/auth layout은 동일한 토글 구현을 `@cocrepo/ui`를 통해 공유합니다.
 

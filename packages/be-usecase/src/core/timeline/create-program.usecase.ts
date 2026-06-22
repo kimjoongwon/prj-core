@@ -8,11 +8,11 @@ export class CreateProgramUseCase {
 
 	execute(command: CreateProgramCommand): Promise<unknown> {
 		return this.timelinesService.createProgramInSession(command.sessionId, {
-			name: command.input.name,
-			routineId: command.input.routineId,
-			instructorId: command.input.instructorId,
-			capacity: command.input.capacity,
-			level: command.input.level ?? null,
+			name: command.name,
+			routineId: command.routineId,
+			instructorId: command.instructorId,
+			capacity: command.capacity,
+			level: command.level ?? null,
 		});
 	}
 }

@@ -102,7 +102,7 @@
 | `apps/*/src/app/**/page.tsx` | pure screen component import/use, API 조회, redirect, router/search params 해석, handler wiring, page props 조립 |
 | `apps/*/src/app/**/route.meta.ts` | admin route catalog가 소비하는 page/menu subject, label, route metadata 계약 |
 | root `apps/*/src/app/layout.tsx` | `Providers > App(main)` 진입점 |
-| route group/domain/auth `apps/*/src/app/**/layout.tsx` | 기본 생성 금지. shell은 root `app/layout.tsx`로 흡수 |
+| route group/domain/auth `apps/*/src/app/**/layout.tsx` | 기본 생성 금지. 공통 레이아웃은 root `app/layout.tsx`로 흡수 |
 
 ### 1.3 route layout과의 경계
 

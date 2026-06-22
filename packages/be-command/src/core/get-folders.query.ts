@@ -1,5 +1,15 @@
-import type { FolderQueryDto } from "@cocrepo/dto";
+import type { GetFoldersQueryInput } from "@cocrepo/input";
 
-export class GetFoldersQuery {
-	constructor(readonly query: FolderQueryDto) {}
+export class GetFoldersQuery implements GetFoldersQueryInput {
+	readonly parentFolderId?: GetFoldersQueryInput["parentFolderId"];
+	readonly tenantId?: GetFoldersQueryInput["tenantId"];
+	readonly name?: GetFoldersQueryInput["name"];
+	readonly statusFilter?: GetFoldersQueryInput["statusFilter"];
+	readonly sort?: GetFoldersQueryInput["sort"];
+	readonly skip?: GetFoldersQueryInput["skip"];
+	readonly take?: GetFoldersQueryInput["take"];
+
+	constructor(input: GetFoldersQueryInput) {
+		Object.assign(this, input);
+	}
 }

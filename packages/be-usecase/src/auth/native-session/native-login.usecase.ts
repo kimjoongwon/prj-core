@@ -32,8 +32,8 @@ export class NativeLoginUseCase {
 
 	async execute(command: NativeLoginCommand) {
 		const result = await this.interactionLoginService.validateUser(
-			command.input.email,
-			command.input.password,
+			command.email,
+			command.password,
 			resolveHttpClientIp(command.req),
 			resolveHttpUserAgent(command.req),
 			MOBILE_NATIVE_CLIENT_ID,

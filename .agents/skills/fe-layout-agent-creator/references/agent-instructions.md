@@ -22,7 +22,7 @@
 ## 모바일 규칙
 
 - 이 섹션은 `packages/fe-mo-ui/src/layout/**` 대상에만 적용합니다.
-- Expo Router `_layout.tsx`, tab/shell wiring, route navigation option은 `fe-route-layout-agent` 책임입니다.
+- Expo Router `_layout.tsx`, tab/layout wiring, route navigation option은 `fe-route-layout-agent` 책임입니다.
 - 기본 구현은 기존 `@cocrepo/mo-ui` layout primitive와 `heroui-native/*` 공개 계약 재노출을 우선합니다.
 - `ScreenFrame`, `Card`, `ListGroup`, `ScreenActionBar`처럼 순수 구조와 배치를 제공하는 primitive는 layout owner가 담당합니다.
 - `BottomSheet`, `Dialog`, `Popover`처럼 open/close overlay 의미가 강한 primitive는 `fe-overlay-agent` owner로 넘깁니다.
@@ -91,7 +91,7 @@ Next.js App Router의 `apps/**/layout.tsx`와 Expo Router `_layout.tsx`는 `fe-r
 
 ### 3. 핵심 책임
 
-- `Layout`은 전역/세그먼트 셸의 큰 구조 슬롯을 제공합니다.
+- `Layout`은 전역/세그먼트 레이아웃의 큰 구조 슬롯을 제공합니다.
 - `Layout`은 flat primitive이며 내부에 `layout/Layout` 같은 중첩 폴더를 만들지 않습니다.
 - `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 widget 계층이며 이 하위 에이전트 범위가 아닙니다.
 - `ScreenSurface`, `SectionSurface`, `Surface`는 별도 surface 계층이며, 이 하위 에이전트는 구조 primitive가 screen/feature/widget surface ownership과 자연스럽게 조합되도록 돕습니다.
@@ -122,7 +122,7 @@ Next.js App Router의 `apps/**/layout.tsx`와 Expo Router `_layout.tsx`는 `fe-r
 `App(header/footer/leftAside/rightAside/main) > Page(children) > Screen`
 
 - `App`: `header`, `footer`, `leftAside`, `rightAside`, `main` 구조 슬롯을 받는 최상위 root app structure owner
-- `Layout`: 서비스/세그먼트 공통 셸
+- `Layout`: 서비스/세그먼트 공통 레이아웃
 - `Page`: `children`만 받는 페이지 콘텐츠 boundary. `App`의 슬롯 props를 위임하거나 재사용하지 않습니다.
 
 ### 5.2 구조와 표면의 분리

@@ -1,7 +1,12 @@
-import type { GrantIdpAccountAccessCommandInput } from "./grant-idp-account-access.input";
-export class GrantIdpAccountAccessCommand {
+import type { GrantIdpAccountAccessCommandInput } from "@cocrepo/input";
+export class GrantIdpAccountAccessCommand implements GrantIdpAccountAccessCommandInput {
+	readonly spaceId!: GrantIdpAccountAccessCommandInput["spaceId"];
+	readonly roleId!: GrantIdpAccountAccessCommandInput["roleId"];
+
 	constructor(
 		readonly userId: string,
-		readonly input: GrantIdpAccountAccessCommandInput,
-	) {}
+		input: GrantIdpAccountAccessCommandInput,
+	) {
+		Object.assign(this, input);
+	}
 }

@@ -1,18 +1,18 @@
 import { SpaceContext } from "@cocrepo/context";
 import type {
-	GrantIdpAccountAccessDto,
-	QueryIdpAccountDto,
-} from "@cocrepo/dto";
+	GetIdpAccountsQueryInput,
+	GrantIdpAccountAccessCommandInput,
+} from "@cocrepo/input";
 import type { Prisma, PrismaClient } from "@cocrepo/prisma";
-import { AuthAuditLogsRepository } from "@cocrepo/repository";
+import {
+	AuthAuditLogsRepository,
+	buildIdpAccountQueryOrderBy,
+	buildIdpAccountQueryWhere,
+} from "@cocrepo/repository";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import type { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import { ACCOUNT_SELECT } from "./account-select";
-import type { IdpAccountInfo } from "./idp-account.info";
-import type { IdpAccountAccessGrantInfo } from "./idp-account-access-grant.info";
-import type { IdpAccountAccessGrantFormBootstrap } from "./idp-account-access-grant-form.bootstrap";
-import type { IdpAccountDetailInfo } from "./idp-account-detail.info";
 
 @Injectable()
 export class IdpAccountAggregate {
@@ -26,16 +26,13 @@ export class IdpAccountAggregate {
 		private readonly auditLogsRepository: AuthAuditLogsRepository,
 	) {}
 
-	async getMany(query: QueryIdpAccountDto): Promise<{
-		data: IdpAccountInfo[];
-		totalCount: number;
-	}> {
+	async getMany(query: GetIdpAccountsQueryInput) {
 		this.logger.debug("IDP 계정 목록 조회");
 
 		const where = this.applySpaceScope(
-			query.toPrismaWhere({ removedAt: null }),
+			buildIdpAccountQueryWhere(query, { removedAt: null }),
 		);
-		const orderBy = query.toPrismaOrderBy();
+		const orderBy = buildIdpAccountQueryOrderBy(query);
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 20;
 
@@ -53,7 +50,7 @@ export class IdpAccountAggregate {
 		return { data: users, totalCount };
 	}
 
-	async getById(userId: string): Promise<IdpAccountDetailInfo> {
+	async getById(userId: string) {
 		this.logger.debug(`IDP 계정 상세 조회: ${userId.slice(-8)}`);
 
 		const user = await this.findAccountInScope(userId);
@@ -66,9 +63,7 @@ export class IdpAccountAggregate {
 		return this.auditLogsRepository.findByUserId(userId, limit);
 	}
 
-	async getAccessGrantFormBootstrap(
-		userId: string,
-	): Promise<IdpAccountAccessGrantFormBootstrap> {
+	async getAccessGrantFormBootstrap(userId: string) {
 		this.logger.debug(`계정 접근 권한 부여 폼 조회: ${userId.slice(-8)}`);
 
 		await this.findAccountInScope(userId);
@@ -133,8 +128,8 @@ export class IdpAccountAggregate {
 
 	async grantAccess(
 		userId: string,
-		dto: GrantIdpAccountAccessDto,
-	): Promise<IdpAccountDetailInfo> {
+		dto: GrantIdpAccountAccessCommandInput,
+	) {
 		this.logger.debug(
 			`계정 접근 권한 부여: user=${userId.slice(-8)}, space=${dto.spaceId.slice(-8)}, role=${dto.roleId.slice(-8)}`,
 		);
@@ -185,7 +180,7 @@ export class IdpAccountAggregate {
 		return this.getById(userId);
 	}
 
-	async toggleActive(userId: string): Promise<IdpAccountInfo> {
+	async toggleActive(userId: string) {
 		this.logger.debug(`계정 활성/비활성 토글: ${userId.slice(-8)}`);
 
 		const user = await this.txHost.tx.user.findFirst({
@@ -226,7 +221,7 @@ export class IdpAccountAggregate {
 		});
 	}
 
-	private async findAccountInScope(userId: string): Promise<IdpAccountInfo> {
+	private async findAccountInScope(userId: string) {
 		const user = await this.txHost.tx.user.findFirst({
 			where: this.applySpaceScope({ id: userId, removedAt: null }),
 			select: ACCOUNT_SELECT,
@@ -239,9 +234,7 @@ export class IdpAccountAggregate {
 		return user;
 	}
 
-	private async getAccessGrants(
-		userId: string,
-	): Promise<IdpAccountAccessGrantInfo[]> {
+	private async getAccessGrants(userId: string) {
 		const tenants = await this.txHost.tx.tenant.findMany({
 			where: this.applyTenantSpaceScope({
 				userId,

@@ -1,5 +1,5 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import type { UserDto } from "@cocrepo/dto";
+import type { ContextUserSnapshot } from "@cocrepo/type";
 import {
 	RolePoliciesRepository,
 	UserPoliciesRepository,
@@ -63,7 +63,7 @@ describe("CaslAbilityFactory", () => {
 					role: { id: "role-1" },
 				},
 			],
-		} as unknown as UserDto;
+		} as unknown as ContextUserSnapshot;
 
 		mockClsService.get.mockReturnValueOnce("space-1");
 		mockRolePoliciesRepository.findActiveByRoleIdsInTenant.mockResolvedValue([
@@ -107,7 +107,7 @@ describe("CaslAbilityFactory", () => {
 					role: { id: "role-1" },
 				},
 			],
-		} as unknown as UserDto;
+		} as unknown as ContextUserSnapshot;
 
 		mockClsService.get.mockReturnValueOnce("space-1");
 		mockRolePoliciesRepository.findActiveByRoleIdsInTenant.mockResolvedValue([
@@ -167,7 +167,7 @@ describe("CaslAbilityFactory", () => {
 					role: { id: "role-1" },
 				},
 			],
-		} as unknown as UserDto;
+		} as unknown as ContextUserSnapshot;
 
 		mockClsService.get.mockImplementation((key) =>
 			key === CONTEXT_KEYS.SPACE_ID ? undefined : undefined,
@@ -200,7 +200,7 @@ describe("CaslAbilityFactory", () => {
 					role: { id: "role-manage", name: "COMPANY_MANAGER" },
 				},
 			],
-		} as unknown as UserDto;
+		} as unknown as ContextUserSnapshot;
 
 		mockClsService.get.mockReturnValueOnce("space-1");
 		mockRolePoliciesRepository.findActiveByRoleIdsInTenant.mockResolvedValue(

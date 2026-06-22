@@ -8,7 +8,7 @@
 
 import { Ability, AbilityBuilder } from "@casl/ability";
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import type { TenantDto, UserDto } from "@cocrepo/dto";
+import type { ContextTenantSnapshot, ContextUserSnapshot } from "@cocrepo/type";
 import type { RolePolicy, UserPolicy } from "@cocrepo/entity";
 import type {
 	Ability as PrismaAbility,
@@ -86,7 +86,7 @@ export class CaslAbilityFactory {
 	/**
 	 * 사용자를 위한 CASL Ability 객체를 생성합니다.
 	 *
-	 * @param user - 현재 사용자 정보 (UserDto)
+	 * @param user - 현재 사용자 정보 (ContextUserSnapshot)
 	 * @returns 사용자의 권한이 적용된 AppAbility 객체
 	 *
 	 * @description
@@ -98,7 +98,7 @@ export class CaslAbilityFactory {
 	 * 6. conditions 파싱 (템플릿 변수 치환)
 	 * 7. CAN/CAN_NOT에 따라 can/cannot 호출
 	 */
-	async createForUser(user: UserDto): Promise<AppAbility> {
+	async createForUser(user: ContextUserSnapshot): Promise<AppAbility> {
 		const abilityBuilder = new AbilityBuilder<AppAbility>(
 			Ability as AppAbilityClass,
 		);
@@ -106,7 +106,7 @@ export class CaslAbilityFactory {
 		// x-tenant-id 헤더에서 현재 tenant를 가져와서 spaceId 파생
 		const tenantId = this.cls.get<string>(CONTEXT_KEYS.TENANT_ID);
 		const currentTenant =
-			this.cls.get<TenantDto | undefined>(CONTEXT_KEYS.TENANT) ??
+			this.cls.get<ContextTenantSnapshot | undefined>(CONTEXT_KEYS.TENANT) ??
 			resolveCurrentTenantById(user.tenants, tenantId);
 		const spaceId = currentTenant
 			? resolveTenantSpaceId(currentTenant)
@@ -276,8 +276,8 @@ export class CaslAbilityFactory {
 	 * @returns 템플릿 변수 치환에 사용할 컨텍스트 객체
 	 */
 	private buildUserContext(
-		user: UserDto,
-		currentTenant: NonNullable<UserDto["tenants"]>[number],
+		user: ContextUserSnapshot,
+		currentTenant: NonNullable<ContextUserSnapshot["tenants"]>[number],
 	): Record<string, unknown> {
 		// 역할 카테고리
 		const roleCategory =

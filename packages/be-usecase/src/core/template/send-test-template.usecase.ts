@@ -8,8 +8,8 @@ export class SendTestTemplateUseCase {
 
 	async execute(command: SendTestTemplateCommand): Promise<unknown> {
 		return this.templateService.sendTest(command.templateId, {
-			recipient: command.input.recipient,
-			variables: command.input.variables,
+			recipient: command.recipient,
+			variables: command.variables,
 		});
 	}
 }

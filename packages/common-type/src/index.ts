@@ -162,6 +162,15 @@ export type {
 	SMTPConfig,
 	TwitterConfig,
 } from "./config.types";
+export type {
+	ContextAssociationSnapshot,
+	ContextCategorySnapshot,
+	ContextClassificationSnapshot,
+	ContextRoleSnapshot,
+	ContextSpaceSnapshot,
+	ContextTenantSnapshot,
+	ContextUserSnapshot,
+} from "./context-snapshot";
 // ============================================
 // Hook 계약 타입
 // ============================================
@@ -235,6 +244,7 @@ export type {
 	PagePaginatedResponse,
 	PagePaginationMeta,
 } from "./pagination";
+export { SpaceScope } from "./space-scope";
 // ============================================
 // Store 계약 타입
 // ============================================

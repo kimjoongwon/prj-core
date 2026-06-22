@@ -73,12 +73,9 @@ export class TasksController {
 
 		return this.queryBus.execute(
 			new FindTasksQuery({
+				...query,
 				spaceId,
 				spaceScope,
-				skip: query.skip,
-				take: query.take,
-				search: query.search,
-				contentLanguageCode: query.contentLanguageCode,
 			}),
 		);
 	}

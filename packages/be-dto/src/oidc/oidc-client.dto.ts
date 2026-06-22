@@ -30,7 +30,7 @@ export class OidcClientDto extends AbstractDto implements OidcClient {
 	})
 	redirectUris: string[];
 
-	@StringFieldOptional({ description: "로그인 셸 URL" })
+	@StringFieldOptional({ description: "로그인 화면 URL" })
 	loginUrl: string | null;
 
 	@StringFieldOptional({ description: "인증 성공 후 기본 복귀 URL" })

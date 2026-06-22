@@ -109,15 +109,8 @@ export class InquiriesController {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		const where = query.toPrismaWhere();
-		const orderBy = query.toPrismaOrderBy();
 		return this.queryBus.execute(
-			new ListInquiriesQuery({
-				where,
-				orderBy,
-				skip: query.skip,
-				take: query.take,
-			}),
+			new ListInquiriesQuery(query),
 		);
 	}
 
@@ -512,8 +505,7 @@ export class InquiriesController {
 		return this.queryBus.execute(
 			new GetInquiryMessagesQuery({
 				inquiryId,
-				skip: query.skip,
-				take: query.take,
+				...query,
 			}),
 		);
 	}

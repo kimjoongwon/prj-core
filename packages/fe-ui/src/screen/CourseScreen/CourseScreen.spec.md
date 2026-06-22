@@ -118,4 +118,4 @@ route `page.tsx`는 이 screen을 `ScreenSurface`로 감싸고, screen은 `VStac
 | Route page | `apps/admin/web/src/app/(admin)/courses/page.tsx` | `ScreenSurface`를 명시하고 screen props를 조립 |
 | Screen | `CourseScreen` | `VStack` rhythm, title/action, `SectionSurface` body 소유 |
 | Feature | `CourseConsole` | surface 없이 업무 콘솔 흐름과 상태 분기 소유 |
-| Widget | `CourseFlowRail`, `CourseMetricGrid`, `CourseSectionTabs`, `CourseTableShell`, `CourseTableStatePanel` | 독립 패널/table shell에는 local `Surface` 사용 |
+| Widget | `CourseFlowRail`, `CourseMetricGrid`, `CourseSectionTabs`, `CourseTablePanel`, `CourseTableStatePanel` | 독립 테이블 패널에는 local `Surface` 사용 |

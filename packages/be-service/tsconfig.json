@@ -10,6 +10,7 @@
     { "path": "../be-context" },
     { "path": "../be-decorator" },
     { "path": "../be-entity" },
+    { "path": "../be-input" },
     { "path": "../be-prisma" },
     { "path": "../be-repository" },
     { "path": "../common-toolkit" },

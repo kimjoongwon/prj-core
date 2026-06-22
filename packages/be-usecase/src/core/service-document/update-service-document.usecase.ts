@@ -11,7 +11,7 @@ export class UpdateServiceDocumentUseCase {
 	execute(command: UpdateServiceDocumentCommand): Promise<unknown> {
 		return this.serviceDocumentService.update(
 			command.serviceDocumentId,
-			command.input,
+			command,
 		);
 	}
 }

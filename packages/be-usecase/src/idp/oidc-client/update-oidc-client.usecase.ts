@@ -13,7 +13,7 @@ export class UpdateOidcClientUseCase {
 	async execute(command: UpdateOidcClientCommand): Promise<unknown> {
 		const client = await this.oidcClientService.update(
 			command.oidcClientId,
-			command.input,
+			command,
 		);
 		await this.oidcProviderService.reload();
 		return client;

@@ -7,6 +7,6 @@ export class CreateSpaceUseCase {
 	constructor(private readonly spaceService: SpaceAggregate) {}
 
 	execute(command: CreateSpaceCommand): Promise<unknown> {
-		return this.spaceService.createSpaceWithGround(command.input);
+		return this.spaceService.createSpaceWithGround(command);
 	}
 }

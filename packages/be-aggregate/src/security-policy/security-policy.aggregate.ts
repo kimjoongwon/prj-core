@@ -1,5 +1,5 @@
-import type { UpdateSecurityPolicyDto } from "@cocrepo/dto";
 import type { SecurityPolicy } from "@cocrepo/entity";
+import type { UpdateSecurityPolicyCommandInput } from "@cocrepo/input";
 import { SecurityPoliciesRepository } from "@cocrepo/repository";
 import { RedisService } from "@cocrepo/service";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
@@ -53,7 +53,7 @@ export class SecurityPolicyAggregate {
 	/**
 	 * 보안 정책을 수정합니다
 	 */
-	async update(dto: UpdateSecurityPolicyDto): Promise<SecurityPolicy> {
+	async update(dto: UpdateSecurityPolicyCommandInput): Promise<SecurityPolicy> {
 		this.logger.debug("보안 정책 수정");
 
 		const existing = await this.repository.findByKey("default");

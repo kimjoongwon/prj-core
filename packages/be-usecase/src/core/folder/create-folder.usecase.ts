@@ -7,6 +7,6 @@ export class CreateFolderUseCase {
 	constructor(private readonly folderService: FolderAggregate) {}
 
 	execute(command: CreateFolderCommand): Promise<unknown> {
-		return this.folderService.createFolder(command.input, command.creatorId);
+		return this.folderService.createFolder(command, command.creatorId);
 	}
 }

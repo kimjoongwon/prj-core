@@ -33,7 +33,7 @@ export interface OidcClientDto {
 	name: string;
 	/** 리다이렉트 URI 목록 */
 	redirectUris: string[];
-	/** 로그인 셸 URL */
+	/** 로그인 화면 URL */
 	loginUrl?: string;
 	/** 인증 성공 후 기본 복귀 URL */
 	defaultReturnTo?: string;

@@ -8,7 +8,7 @@ export class UploadAssetUseCase {
 
 	execute(command: UploadAssetCommand): Promise<unknown> {
 		return this.assetService.uploadAsset(
-			command.input,
+			command,
 			command.file,
 			command.creatorId,
 		);

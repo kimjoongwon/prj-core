@@ -22,7 +22,7 @@ model OidcClient {
   name                    String
   /// @displayName 리다이렉트 URI 목록
   redirectUris            String[]  @map("redirect_uris")
-  /// @displayName 로그인 셸 URL
+  /// @displayName 로그인 화면 URL
   loginUrl                String?   @map("login_url")
   /// @displayName 기본 복귀 URL
   defaultReturnTo         String?   @map("default_return_to")

@@ -17,7 +17,7 @@ export class UpdateActionUseCase {
 				ACTION_ERRORS.SYSTEM_ACTION_MODIFY_NOT_ALLOWED,
 			);
 		}
-		const input = command.input;
+		const input = command;
 		return this.actionsService.updateAction(command.actionId, {
 			...(input.name !== undefined && { name: input.name }),
 			...(input.displayName !== undefined && {

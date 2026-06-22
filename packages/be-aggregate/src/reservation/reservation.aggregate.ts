@@ -4,13 +4,6 @@ import {
 	RESERVATION_ERRORS,
 } from "@cocrepo/constant";
 import type {
-	BookingFeedItemDto,
-	ReservationCheckoutBootstrapDto,
-	ReservationCheckoutContextDto,
-	ReservationCheckoutOptionDto,
-} from "@cocrepo/dto";
-import { ReservationCheckoutProgressStatus } from "@cocrepo/dto";
-import type {
 	CourseOffering,
 	CoursePass,
 	Enrollment,
@@ -50,19 +43,20 @@ import { Transactional } from "@nestjs-cls/transactional";
 import { CourseAggregate } from "../course/course.aggregate";
 import { PaymentAggregate } from "../payment/payment.aggregate";
 import { ACTIVE_RESERVATION_STATUSES } from "./active-reservation-statuses";
-import type { BookingFeedInput } from "./booking-feed.input";
+import type {
+	BookingFeedInput,
+	CreateReservationInput,
+	ReservationCheckoutBootstrapInput,
+	ReservationCheckoutInput,
+} from "@cocrepo/input";
 import { CHECKOUT_PAYMENT_METHODS } from "./checkout-payment-methods";
 import { CHECKOUT_PAYMENT_PROVIDER } from "./checkout-payment-provider";
 import { CONFIRMED_CANCEL_CUTOFF_HOURS } from "./confirmed-cancel-cutoff-hours";
-import type { CreateReservationInput } from "./create-reservation.input";
 import { DEFAULT_FEED_WINDOW_DAYS } from "./default-feed-window-days";
 import { DEFAULT_SESSION_DURATION_MINUTES } from "./default-session-duration-minutes";
 import { FEW_LEFT_THRESHOLD } from "./few-left-threshold";
 import { RESERVATION_AVAILABILITY } from "./reservation-availability";
-import type { ReservationCheckoutInput } from "./reservation-checkout.input";
-import type { ReservationCheckoutResult } from "./reservation-checkout.result";
-import type { ReservationCheckoutBootstrapInput } from "./reservation-checkout-bootstrap.input";
-import type { ReservationCreateResult } from "./reservation-create.result";
+import { ReservationCheckoutProgressStatus } from "./reservation-checkout-progress-status";
 
 @Injectable()
 export class ReservationAggregate {
@@ -76,9 +70,7 @@ export class ReservationAggregate {
 		private readonly courseService?: CourseAggregate,
 	) {}
 
-	async getBookingFeed(
-		input: BookingFeedInput,
-	): Promise<{ items: BookingFeedItemDto[]; totalCount: number }> {
+	async getBookingFeed(input: BookingFeedInput) {
 		const feedWindow = this.resolveFeedWindow(input.from, input.to);
 		const programs = await this.repository.findBookingPrograms({
 			spaceId: input.spaceId,
@@ -168,9 +160,7 @@ export class ReservationAggregate {
 		return this.repository.findMine(params);
 	}
 
-	async getCheckoutBootstrap(
-		input: ReservationCheckoutBootstrapInput,
-	): Promise<ReservationCheckoutBootstrapDto> {
+	async getCheckoutBootstrap(input: ReservationCheckoutBootstrapInput) {
 		await this.assertUserCanBookSpace(input.userId, input.spaceId);
 
 		const checkoutOccurrence =
@@ -197,9 +187,7 @@ export class ReservationAggregate {
 	}
 
 	@Transactional()
-	async checkout(
-		params: ReservationCheckoutInput,
-	): Promise<ReservationCheckoutResult> {
+	async checkout(params: ReservationCheckoutInput) {
 		this.assertCheckoutPaymentMethod(params.paymentMethod);
 		const tenantId = await this.assertUserCanBookSpace(
 			params.userId,
@@ -286,7 +274,7 @@ export class ReservationAggregate {
 		spaceId: string;
 		userId: string;
 		input: CreateReservationInput;
-	}): Promise<ReservationCreateResult> {
+	}) {
 		this.logger.debug(
 			`예약 생성 요청: user=${params.userId.slice(-8)}, program=${params.input.programId.slice(-8)}`,
 		);
@@ -426,9 +414,7 @@ export class ReservationAggregate {
 		return canceled;
 	}
 
-	private async toExistingCheckoutResult(
-		reservation: Reservation,
-	): Promise<ReservationCheckoutResult> {
+	private async toExistingCheckoutResult(reservation: Reservation) {
 		const coursePass =
 			reservation.coursePass ??
 			(await this.getCoursesRepository().findCoursePassById(
@@ -455,9 +441,7 @@ export class ReservationAggregate {
 		};
 	}
 
-	private createCompletedCheckoutProgressSteps(
-		reservation: Reservation,
-	): ReservationCheckoutResult["progressSteps"] {
+	private createCompletedCheckoutProgressSteps(reservation: Reservation) {
 		return [
 			{
 				id: "reservation-context",
@@ -522,7 +506,7 @@ export class ReservationAggregate {
 	private async findCheckoutOptionsByTimelineIds(params: {
 		spaceId: string;
 		timelineIds: readonly string[];
-	}): Promise<Map<string, ReservationCheckoutOptionDto[]>> {
+	}) {
 		if (!this.coursesRepository || params.timelineIds.length === 0) {
 			return new Map();
 		}
@@ -539,7 +523,10 @@ export class ReservationAggregate {
 			orderBy: [{ startsAt: "asc" }, { createdAt: "asc" }],
 			take: 200,
 		});
-		const optionsByTimeline = new Map<string, ReservationCheckoutOptionDto[]>();
+		const optionsByTimeline = new Map<
+			string,
+			Array<ReturnType<typeof this.toCheckoutOption>>
+		>();
 
 		for (const offering of result.items) {
 			if (!offering.timelineId) {
@@ -557,7 +544,7 @@ export class ReservationAggregate {
 	private async findCheckoutOptionsForTimeline(params: {
 		spaceId: string;
 		timelineId: string;
-	}): Promise<ReservationCheckoutOptionDto[]> {
+	}) {
 		const optionsByTimeline = await this.findCheckoutOptionsByTimelineIds({
 			spaceId: params.spaceId,
 			timelineIds: [params.timelineId],
@@ -679,7 +666,7 @@ export class ReservationAggregate {
 		endsAt: Date;
 		program: BookingProgramRecord;
 		startsAt: Date;
-	}): ReservationCheckoutContextDto {
+	}) {
 		return {
 			coachName: params.coachName,
 			feedItemId: `${params.program.id}:${params.startsAt.toISOString()}`,
@@ -694,9 +681,7 @@ export class ReservationAggregate {
 		};
 	}
 
-	private toCheckoutOption(
-		courseOffering: CourseOffering,
-	): ReservationCheckoutOptionDto {
+	private toCheckoutOption(courseOffering: CourseOffering) {
 		return {
 			courseId: courseOffering.courseId,
 			courseName: courseOffering.course?.name ?? courseOffering.name,
@@ -1017,8 +1002,8 @@ export class ReservationAggregate {
 		userId: string;
 		coachName: string | null;
 		coursePasses: CoursePass[];
-		checkoutOptions: ReservationCheckoutOptionDto[];
-	}): BookingFeedItemDto {
+		checkoutOptions: Array<ReturnType<typeof this.toCheckoutOption>>;
+	}) {
 		const confirmedCount = params.reservations.filter(
 			(reservation) => reservation.status === ReservationStatus.CONFIRMED,
 		).length;
@@ -1144,7 +1129,7 @@ export class ReservationAggregate {
 	}
 
 	private resolveCtaLabel(params: {
-		availabilityStatus: BookingFeedItemDto["availabilityStatus"];
+		availabilityStatus: (typeof RESERVATION_AVAILABILITY)[keyof typeof RESERVATION_AVAILABILITY];
 		myReservationStatus: ReservationStatus | null;
 		paymentRequired?: boolean;
 	}): string {
@@ -1173,7 +1158,7 @@ export class ReservationAggregate {
 		startsAt: Date;
 		availableSeatCount: number;
 		myReservationStatus: ReservationStatus | null;
-	}): BookingFeedItemDto["availabilityStatus"] {
+	}): (typeof RESERVATION_AVAILABILITY)[keyof typeof RESERVATION_AVAILABILITY] {
 		if (params.myReservationStatus === ReservationStatus.CONFIRMED) {
 			return RESERVATION_AVAILABILITY.RESERVED;
 		}

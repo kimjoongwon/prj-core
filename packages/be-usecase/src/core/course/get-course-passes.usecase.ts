@@ -15,22 +15,22 @@ export class GetCoursePassesUseCase {
 
 	async execute(query: GetCoursePassesQuery): Promise<unknown> {
 		this.requireSpaceId();
-		const skip = query.query.skip ?? 0;
-		const take = query.query.take ?? 10;
+		const skip = query.skip ?? 0;
+		const take = query.take ?? 10;
 		const result = await this.courseService.findCoursePasses({
 			skip,
 			take,
-			search: query.query.search ?? null,
-			courseId: query.query.courseId,
-			courseOfferingId: query.query.courseOfferingId,
-			enrollmentId: query.query.enrollmentId,
-			userId: query.query.userId,
-			timelineId: query.query.timelineId,
-			status: query.query.status,
-			kind: query.query.kind,
-			validOn: query.query.validOn,
-			expiresBefore: query.query.expiresBefore,
-			sort: query.query.sort,
+			search: query.search ?? null,
+			courseId: query.courseId,
+			courseOfferingId: query.courseOfferingId,
+			enrollmentId: query.enrollmentId,
+			userId: query.userId,
+			timelineId: query.timelineId,
+			status: query.status,
+			kind: query.kind,
+			validOn: query.validOn,
+			expiresBefore: query.expiresBefore,
+			sort: query.sort,
 		});
 		return buildOffsetStatsPaginatedResponse(
 			result.coursePasses,

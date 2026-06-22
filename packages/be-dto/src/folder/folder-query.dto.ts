@@ -50,19 +50,4 @@ export class FolderQueryDto extends PrismaQueryDto<Prisma.FolderWhereInput> {
 		return ["statusFilter"];
 	}
 
-	/**
-	 * DTO 필드를 Prisma where 조건으로 변환합니다.
-	 */
-	toPrismaWhere(
-		baseWhere?: Partial<Prisma.FolderWhereInput>,
-	): Prisma.FolderWhereInput {
-		const where = super.toPrismaWhere(baseWhere);
-
-		// 삭제 상태 필터
-		where.removedAt = this.removedAtFilter(
-			this.statusFilter === DeleteFilter.DELETED,
-		);
-
-		return where;
 	}
-}

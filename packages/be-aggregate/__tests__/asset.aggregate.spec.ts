@@ -354,13 +354,8 @@ describe("AssetAggregate", () => {
 
 function createAssetQuery(): Parameters<AssetAggregate["getAssets"]>[0] {
 	return {
-		toPrismaWhere: (baseWhere = {}) => ({
-			...baseWhere,
-			removedAt: null,
-		}),
-		toPrismaOrderBy: () => [],
 		sort: [],
 		skip: 0,
 		take: 20,
-	} as Parameters<AssetAggregate["getAssets"]>[0];
+	};
 }

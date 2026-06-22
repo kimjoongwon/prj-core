@@ -342,7 +342,7 @@ Pure UI → Widget → Feature → Page
 packages/fe-ui/src/display/
 ```
 
-> **주의**: widget, feature, layout shell, page 컴포넌트는 이 하위 에이전트의 담당이 아닙니다.
+> **주의**: widget, feature, layout block, page 컴포넌트는 이 하위 에이전트의 담당이 아닙니다.
 
 ---
 
@@ -469,7 +469,7 @@ export function useAdminLayout() {}
 
 ### 페이지 구조 재사용 기준
 
-**Web 페이지 셸과 헤더는 `Page`, `PageTitleBar`를 재사용하고, screen 표현 레이어는 `surface/ScreenSurface`와 `surface/SectionSurface`를 사용합니다. feature/widget local panel은 `surface/Surface`만 사용하고 제거된 detail/form 이전 방식 surface wrapper는 신규 웹 호출부에서 사용하지 않습니다.**
+**Web 페이지 레이아웃과 헤더는 `Page`, `PageTitleBar`를 재사용하고, screen 표현 레이어는 `surface/ScreenSurface`와 `surface/SectionSurface`를 사용합니다. feature/widget local panel은 `surface/Surface`만 사용하고 제거된 detail/form 이전 방식 surface wrapper는 신규 웹 호출부에서 사용하지 않습니다.**
 
 #### 컴포넌트 위치
 
@@ -501,7 +501,7 @@ packages/fe-ui/src/
 
 | 컴포넌트 | 역할 |
 |----------|------|
-| `Page` | 페이지 shell 슬롯 (`top`, `leftAside`, `rightAside`, `bottom`) |
+| `Page` | 페이지 layout 슬롯 (`top`, `leftAside`, `rightAside`, `bottom`) |
 | `PageTitleBar` | title, description, actions 헤더 |
 | `VStack`, `HStack`, `Spacer` | screen 전용 정렬/간격 rhythm primitive |
 

@@ -18,25 +18,25 @@ export class GetPaymentsUseCase {
 		if (!spaceId) {
 			throw new UnauthorizedException(COMMON_ERRORS.SPACE_NOT_SELECTED);
 		}
-		const skip = query.query.skip ?? 0;
-		const take = query.query.take ?? 10;
+		const skip = query.skip ?? 0;
+		const take = query.take ?? 10;
 		const result = await this.paymentService.findPayments({
 			skip,
 			take,
-			search: query.query.search ?? null,
-			tenantId: query.query.tenantId,
-			payerUserId: query.query.payerUserId,
-			status: query.query.status,
-			method: query.query.method,
-			provider: query.query.provider,
-			providerOrderId: query.query.providerOrderId,
-			subjectType: query.query.subjectType,
-			subjectId: query.query.subjectId,
-			referenceType: query.query.referenceType,
-			referenceId: query.query.referenceId,
-			approvedFrom: query.query.approvedFrom,
-			approvedUntil: query.query.approvedUntil,
-			sort: query.query.sort,
+			search: query.search ?? null,
+			tenantId: query.tenantId,
+			payerUserId: query.payerUserId,
+			status: query.status,
+			method: query.method,
+			provider: query.provider,
+			providerOrderId: query.providerOrderId,
+			subjectType: query.subjectType,
+			subjectId: query.subjectId,
+			referenceType: query.referenceType,
+			referenceId: query.referenceId,
+			approvedFrom: query.approvedFrom,
+			approvedUntil: query.approvedUntil,
+			sort: query.sort,
 		});
 		return buildOffsetStatsPaginatedResponse(
 			result.payments,

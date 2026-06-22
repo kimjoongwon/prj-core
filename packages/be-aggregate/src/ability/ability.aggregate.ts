@@ -13,8 +13,8 @@ import {
 	toAbilityUpdateData,
 } from "./ability-persistence.mapper";
 import type { AbilityWithAssignment } from "./ability-with-assignment";
-import type { CreateAbilityInput } from "./create-ability.input";
-import type { UpdateAbilityInput } from "./update-ability.input";
+import type { CreateAbilityInput } from "@cocrepo/input";
+import type { UpdateAbilityInput } from "@cocrepo/input";
 
 /**
  * Ability 서비스 (CASL ABAC 기반)

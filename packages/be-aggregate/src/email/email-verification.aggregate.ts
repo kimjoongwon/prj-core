@@ -1,8 +1,12 @@
 import type {
-	EmailVerificationDto,
-	QueryEmailVerificationDto,
-} from "@cocrepo/dto";
-import { EmailVerificationsRepository } from "@cocrepo/repository";
+	EmailVerificationCreateInput,
+	GetEmailVerificationsQueryInput,
+} from "@cocrepo/input";
+import {
+	buildEmailVerificationQueryOrderBy,
+	buildEmailVerificationQueryWhere,
+	EmailVerificationsRepository,
+} from "@cocrepo/repository";
 import { EmailService } from "@cocrepo/service";
 import { Email, EmailVerificationToken, Phone } from "@cocrepo/vo";
 import {
@@ -12,9 +16,7 @@ import {
 	Injectable,
 	Logger,
 } from "@nestjs/common";
-import type { EmailVerificationCreateInput } from "./email-verification-create-input";
 import { EMAIL_VERIFICATION_ERROR } from "./email-verification-error";
-import type { EmailVerificationRequestResult } from "./email-verification-request-result";
 import { RESEND_COOLDOWN_MS } from "./resend-cooldown-ms";
 import { TOKEN_TTL_MS } from "./token-ttl-ms";
 
@@ -27,9 +29,7 @@ export class EmailVerificationAggregate {
 		private readonly emailService: EmailService,
 	) {}
 
-	async requestVerification(
-		input: EmailVerificationCreateInput,
-	): Promise<EmailVerificationRequestResult> {
+	async requestVerification(input: EmailVerificationCreateInput) {
 		const email = Email.create(input.email);
 		const phone = Phone.create(input.phone);
 		const normalizedInput = {
@@ -79,7 +79,7 @@ export class EmailVerificationAggregate {
 		};
 	}
 
-	async resend(id: string): Promise<EmailVerificationDto> {
+	async resend(id: string) {
 		const existing = await this.repository.findById(id);
 		if (!existing || existing.removedAt) {
 			throw new BadRequestException(EMAIL_VERIFICATION_ERROR.INVALID_TOKEN);
@@ -109,14 +109,11 @@ export class EmailVerificationAggregate {
 		return this.toDto(latest ?? updated);
 	}
 
-	async getMany(query: QueryEmailVerificationDto): Promise<{
-		data: EmailVerificationDto[];
-		totalCount: number;
-	}> {
-		const where = query.toPrismaWhere({ removedAt: null });
+	async getMany(query: GetEmailVerificationsQueryInput) {
+		const where = buildEmailVerificationQueryWhere(query, { removedAt: null });
 		const verificationResult = await this.repository.findMany({
 			where,
-			orderBy: query.toPrismaOrderBy(),
+			orderBy: buildEmailVerificationQueryOrderBy(query),
 			skip: query.skip ?? 0,
 			take: query.take ?? 20,
 		});
@@ -172,7 +169,7 @@ export class EmailVerificationAggregate {
 		sendCount: number;
 		lastSendStatus: string | null;
 		verifiedUserId: string | null;
-	}): EmailVerificationDto {
+	}) {
 		const resendAvailableAt = this.getResendAvailableAt(
 			verification.lastSentAt,
 		);

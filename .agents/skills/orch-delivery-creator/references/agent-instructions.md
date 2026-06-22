@@ -37,7 +37,7 @@ Service Delivery Spec
 
 - 화면에 보이는 신규/수정 산출물은 구현 전에 담당 스펙에 Markdown 출력물을 기록합니다.
 - 서비스 딜리버리 스펙은 서비스 수준의 정보 위계, navigation, 상태/다음 행동, platform density, route/page 및 Screen/Feature 스펙 참조만 소유합니다.
-- route/page 딜리버리 spec은 route shell, route-local 상태 흐름, Screen/Feature 조합 관계를 소유합니다.
+- route/page 딜리버리 spec은 route layout, route-local 상태 흐름, Screen/Feature 조합 관계를 소유합니다.
 - Screen/Feature 기획 스펙은 reusable UI의 상세 화면 러프, props/event, 상태별 렌더링, Storybook 상태 계약과 단위 테스트 계약을 소유합니다.
 - UI 영향이 없으면 관련 디자인 항목에 `no UI design impact`와 사유를 기록합니다.
 
@@ -257,7 +257,7 @@ route-local hook/util/type/상태는 웹/모바일 모두 route/page 스펙의 `
 - Platform density: Admin web의 스캔성/반복 작업 효율과 모바일의 안전 영역/touch 대상/편안한 상태 확인 차이를 적습니다.
 - Shared component strategy: 재사용할 screen/feature/widget/form/data-grid/status/empty/error 패턴을 적습니다.
 - 색상 역할: hex나 외부 palette가 아니라 `canvas`, `surface`, `primary`, `danger`, `muted`, `border` 같은 역할로만 기록합니다.
-- route별 세부 route shell은 각 생성된 route/page 딜리버리 spec의 `디자인 정렬`에 기록합니다. reusable UI의 실제 화면 러프와 리듬 계약은 Screen/Feature 기획 스펙에 기록하고 서비스 스펙은 경로만 참조합니다.
+- route별 세부 route layout은 각 생성된 route/page 딜리버리 spec의 `디자인 정렬`에 기록합니다. reusable UI의 실제 화면 러프와 리듬 계약은 Screen/Feature 기획 스펙에 기록하고 서비스 스펙은 경로만 참조합니다.
 - 백엔드/codegen-only처럼 UI 영향이 없으면 `no UI design impact`와 사유를 기록합니다.
 
 ### Spec 참조 맵
@@ -384,7 +384,7 @@ Screen/Feature 기획 스펙은 matrix를 소유하지 않고 route/page 스펙�
 ### 목표
 ### Screen/Feature Spec 참조
 ### 디자인 정렬
-### Route Shell / 조합 러프
+### Route Layout / 조합 러프
 ### Route-local 상태 / 이벤트
 ### 컴포넌트 인벤토리
 ### 기반 Slice
@@ -402,7 +402,7 @@ Screen/Feature 기획 스펙은 matrix를 소유하지 않고 route/page 스펙�
 - `상위 서비스 Spec`에는 `docs/services/{service-name}.delivery.spec.md` 경로와 관련 service 단계 id를 기록합니다.
 - `목표`는 해당 route/page의 목적과 성공 기준만 적습니다.
 - `Screen/Feature 스펙 참조`에는 route가 소비하거나 생성/수정하는 Screen/Feature 기획 스펙 경로, 섹션/행 id, 소유 계약을 기록합니다. 변경되는 Feature가 없으면 `none-current`와 사유를 적습니다.
-- `디자인 정렬`과 `Route Shell / 조합 러프`는 `DESIGN.md`와 서비스 스펙의 `DESIGN.md 기반 디자인 방향`을 route 단위로 구체화하되, reusable Screen/Feature의 상세 화면 러프는 기획 스펙을 참조합니다.
+- `디자인 정렬`과 `Route Layout / 조합 러프`는 `DESIGN.md`와 서비스 스펙의 `DESIGN.md 기반 디자인 방향`을 route 단위로 구체화하되, reusable Screen/Feature의 상세 화면 러프는 기획 스펙을 참조합니다.
 - `컴포넌트 인벤토리`에는 route가 무엇을 렌더링/조합하는지 적고, props/event/상태별 렌더링 상세는 Screen/Feature 기획 스펙을 참조합니다.
 - 신규/수정 Screen/Feature 기획 스펙에는 재사용 검토, 생성 폴더, 재활용 컴포넌트, 신규 조합 의존, 이름 기준, 출력물, 필수 상태를 기록합니다.
 - `기반 Slice`와 `백엔드 / API Slice`에는 서비스 스펙의 전체 계약 중 해당 route가 직접 소비하는 hook/type/store/API/operationId만 기록합니다.

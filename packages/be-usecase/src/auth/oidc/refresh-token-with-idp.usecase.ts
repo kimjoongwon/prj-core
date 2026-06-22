@@ -36,7 +36,7 @@ export class RefreshTokenWithIdpUseCase {
 		const clientId = resolveClientIdFromSessionId(command.sessionId);
 		const client = await resolveOidcClient(this.oidcClientService, clientId, {
 			requireActive: false,
-			requireAuthShell: false,
+			requireLoginPage: false,
 		});
 		const tokenResponse = await this.oidcClient.refreshTokens(
 			refreshToken,

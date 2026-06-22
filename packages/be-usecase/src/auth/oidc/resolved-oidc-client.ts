@@ -5,5 +5,5 @@ export interface ResolvedOidcClient {
 	loginUrl: string | null;
 	defaultReturnTo: string | null;
 	scope: string;
-	hasAuthShell: boolean;
+	hasLoginPage: boolean;
 }

@@ -1,5 +1,5 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import type { TenantDto } from "@cocrepo/dto";
+import type { ContextTenantSnapshot } from "@cocrepo/type";
 import { Injectable } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
 
@@ -31,9 +31,9 @@ export class SpaceContext {
 		return this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
 	}
 
-	/** 현재 TenantDto */
-	get tenant(): TenantDto | undefined {
-		return this.cls.get<TenantDto>(CONTEXT_KEYS.TENANT);
+	/** 현재 ContextTenantSnapshot */
+	get tenant(): ContextTenantSnapshot | undefined {
+		return this.cls.get<ContextTenantSnapshot>(CONTEXT_KEYS.TENANT);
 	}
 
 	// ═══════════════════════════════════════════════════════════

@@ -1,6 +1,6 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { PUBLIC_ROUTE_KEY, SKIP_SPACE_CHECK_KEY } from "@cocrepo/decorator";
-import { TenantDto, UserDto } from "@cocrepo/dto";
+import type { ContextTenantSnapshot, ContextUserSnapshot } from "@cocrepo/type";
 import {
 	BadRequestException,
 	type CanActivate,
@@ -37,7 +37,7 @@ export class SpaceAccessGuard implements CanActivate {
 		);
 		if (skipSpaceCheck) return true;
 
-		const user = this.cls.get<UserDto | undefined>(CONTEXT_KEYS.AUTH_USER);
+		const user = this.cls.get<ContextUserSnapshot | undefined>(CONTEXT_KEYS.AUTH_USER);
 
 		// 인증되지 않은 요청은 skip (JwtAuthGuard가 이미 처리)
 		if (!user) return true;
@@ -56,7 +56,7 @@ export class SpaceAccessGuard implements CanActivate {
 		}
 
 		const tenant =
-			this.cls.get<TenantDto | undefined>(CONTEXT_KEYS.TENANT) ??
+			this.cls.get<ContextTenantSnapshot | undefined>(CONTEXT_KEYS.TENANT) ??
 			resolveCurrentTenantById(user.tenants, tenantId);
 		if (!tenant) {
 			throw new ForbiddenException("해당 Tenant에 대한 접근 권한이 없습니다.");

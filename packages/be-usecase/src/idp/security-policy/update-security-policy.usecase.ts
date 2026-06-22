@@ -9,6 +9,6 @@ export class UpdateSecurityPolicyUseCase {
 	) {}
 
 	execute(command: UpdateSecurityPolicyCommand): Promise<unknown> {
-		return this.securityPolicyService.update(command.input);
+		return this.securityPolicyService.update(command);
 	}
 }

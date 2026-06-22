@@ -45,7 +45,7 @@ Mermaid가 렌더되지 않는 viewer에서는 아래 텍스트 흐름을 기준
 | 영역 | 파일 | 역할 |
 |------|------|------|
 | 모바일 인증 설정 | `apps/mobile/src/auth/auth-config.ts` | Auth/Core API base URL, `user-mobile`, login/callback path, 보호 route 목록 |
-| 루트 셸 | `apps/mobile/src/app/_layout.tsx` | `QueryClientProvider`, design system, `AuthSessionGate`, API client bootstrap |
+| 루트 레이아웃 | `apps/mobile/src/app/_layout.tsx` | `QueryClientProvider`, design system, `AuthSessionGate`, API client bootstrap |
 | 세션 게이트 | `apps/mobile/src/auth/AuthSessionGate.tsx` | 앱 최초 route 진입 전 세션 확인, 로그인/홈 redirect, splash hide |
 | 로그인 route | `apps/mobile/src/app/auth/login.tsx` | full-screen WebView 로그인 컨테이너, callback scheme interception |
 | callback route | `apps/mobile/src/app/auth/callback.tsx` | code/state 교환, token 저장, native session 검증 후 redirect |
@@ -133,7 +133,7 @@ sequenceDiagram
 | 5 | WebView | `GET /api/v1/auth/oidc/login?clientId=user-mobile&returnTo=native-callback`을 로드합니다. |
 | 6 | IDP | `/oidc/auth` 또는 `/interaction/[uid]`로 로그인 interaction을 진행합니다. |
 | 7 | IDP | 로그인 성공 후 `kr.co.cocdev.onoramobile://auth/callback?code=...&state=...`로 이동합니다. |
-| 8 | WebView shell | custom scheme navigation을 가로채고 Expo Router `/auth/callback`으로 변환합니다. |
+| 8 | WebView 컨테이너 | custom scheme navigation을 가로채고 Expo Router `/auth/callback`으로 변환합니다. |
 | 9 | `/auth/callback` | `GET /api/v1/auth/callback?clientId=user-mobile&code=...&state=...&responseMode=mobile-json`을 호출합니다. |
 | 10 | IDP API | `{ data: accessToken, refreshToken, expiresAt, user }`를 반환합니다. |
 | 11 | Mobile App | `mobileApiScopeStore`에 token을 저장합니다. |
@@ -183,7 +183,7 @@ Mobile App
 
 ### 3. WebView login route
 
-`/auth/login`은 native form을 렌더링하지 않습니다. 로그인 UI와 문구는 admin auth interaction 화면이 소유하고, 모바일 route는 full-screen WebView shell만 제공합니다.
+`/auth/login`은 native form을 렌더링하지 않습니다. 로그인 UI와 문구는 admin auth interaction 화면이 소유하고, 모바일 route는 full-screen WebView 컨테이너만 제공합니다.
 
 생성되는 login URL의 형태:
 
@@ -208,7 +208,7 @@ WebView는 다음 drift를 감지하면 현재 navigation을 막고 `user-mobile
 
 | 감지 대상 | 막는 이유 |
 |-----------|----------|
-| `/auth/login` | admin auth shell route로 잘못 이동하는 경우 방지 |
+| `/auth/login` | admin 인증 route로 잘못 이동하는 경우 방지 |
 | `/api/v1/auth/oidc/login`인데 `clientId !== user-mobile` | 다른 client flow 혼입 방지 |
 | `/oidc/auth`인데 `client_id !== user-mobile` | `admin-web` 등 web client authorization으로 drift 방지 |
 | Android에서 `localhost` redirect | `10.0.2.2`로 보정해 host dev server 연결 유지 |

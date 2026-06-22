@@ -14,7 +14,7 @@ export class CreateReservationUseCase {
 
 	async execute(command: CreateReservationCommand): Promise<unknown> {
 		const context = this.context.requireContext();
-		const input = command.input;
+		const input = command;
 
 		const createResult = await this.reservationService.createWithResult({
 			spaceId: context.spaceId,

@@ -1,4 +1,4 @@
-import type { SpaceScope } from "@cocrepo/dto";
+import type { SpaceScope } from "@cocrepo/type";
 
 export class GetRoutineByIdQuery {
 	constructor(

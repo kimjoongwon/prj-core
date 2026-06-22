@@ -2,9 +2,7 @@ import { SpaceContext } from "@cocrepo/context";
 import type { Prisma } from "@cocrepo/prisma";
 import { AuthAuditLogsRepository } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
-import type { AuditLogStats } from "./audit-log-stats";
-import type { GetAuditLogsInput } from "./get-audit-logs.input";
-import type { GetAuditLogsResult } from "./get-audit-logs.result";
+import type { GetAuditLogsInput } from "@cocrepo/input";
 
 /**
  * 인증 감사 로그 서비스
@@ -30,7 +28,7 @@ export class AuthAuditLogAggregate {
 	 * @param input - 조회 조건 (필터, 정렬, 페이지네이션)
 	 * @returns 감사 로그 배열 및 총 개수
 	 */
-	async getAuditLogs(input: GetAuditLogsInput): Promise<GetAuditLogsResult> {
+	async getAuditLogs(input: GetAuditLogsInput) {
 		this.logger.debug("감사 로그 목록 조회");
 
 		return this.repository.findMany({
@@ -59,7 +57,7 @@ export class AuthAuditLogAggregate {
 	/**
 	 * 오늘 감사 로그 통계 조회
 	 */
-	async getStats(): Promise<AuditLogStats> {
+	async getStats() {
 		this.logger.debug("감사 로그 통계 조회");
 		const scopedWhere = this.createScopedWhere();
 

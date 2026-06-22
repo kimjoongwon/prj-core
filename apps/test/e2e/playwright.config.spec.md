@@ -10,4 +10,4 @@
 - Admin local 대상은 seeded Core API와 Admin Web을 함께 기동하는 full-stack 실행만 제공한다.
 - `PLAYWRIGHT_BROWSERS_PATH`가 상대 경로이면 e2e 패키지 기준 절대 경로로 정규화한다.
 - Playwright 테스트 런너와 sidecar 테스트 파일이 동일한 패키지 인스턴스를 사용하도록 `@playwright/test`, `playwright/test`, `playwright` 모듈 해석을 고정한다.
-- API 앱은 Nest `ConfigModule`이 `.env`를 로드하므로, Playwright webServer 명령은 dotenv 파일을 쉘 `source`로 해석하지 않는다.
+- API 앱은 Nest `ConfigModule`이 `.env`를 로드하므로, Playwright webServer 명령은 dotenv 파일을 명령줄 `source`로 해석하지 않는다.

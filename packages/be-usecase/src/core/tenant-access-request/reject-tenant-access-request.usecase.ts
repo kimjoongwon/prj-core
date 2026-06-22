@@ -12,7 +12,7 @@ export class RejectTenantAccessRequestUseCase {
 		return this.tenantAccessRequestService.reject({
 			tenantAccessRequestId: command.tenantAccessRequestId,
 			reviewerId: command.reviewerId,
-			reviewComment: command.input.reviewComment,
+			reviewComment: command.reviewComment,
 		});
 	}
 }

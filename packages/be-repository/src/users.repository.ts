@@ -214,7 +214,7 @@ export class UsersRepository {
 	 */
 	async findManyBySpaceIds(params: {
 		where: Prisma.UserWhereInput;
-		orderBy: Record<string, "asc" | "desc">[];
+		orderBy: Prisma.UserOrderByWithRelationInput[];
 		skip: number;
 		take: number;
 		spaceIds?: string[];

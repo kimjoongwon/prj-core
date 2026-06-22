@@ -39,16 +39,4 @@ export class QueryCourseDto extends PrismaQueryDto<Prisma.CourseWhereInput> {
 		return ["search"];
 	}
 
-	toPrismaWhere(
-		baseWhere?: Partial<Prisma.CourseWhereInput>,
-	): Prisma.CourseWhereInput {
-		const where = super.toPrismaWhere(baseWhere);
-
-		if (this.search) {
-			const search = this.containsFilter(this.search);
-			where.OR = [{ name: search }, { description: search }];
-		}
-
-		return where;
-	}
 }

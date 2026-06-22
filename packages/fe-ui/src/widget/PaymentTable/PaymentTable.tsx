@@ -2,7 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import { Chip } from "../../data-display/Chip/Chip";
-import { PaymentTableShell } from "../PaymentTableShell";
+import { PaymentTablePanel } from "../PaymentTablePanel";
 import type { PaymentRow } from "../Payment.types";
 
 export interface PaymentTableProps {
@@ -11,7 +11,7 @@ export interface PaymentTableProps {
 
 export const PaymentTable = observer(({ payments }: PaymentTableProps) => {
 	return (
-		<PaymentTableShell
+		<PaymentTablePanel
 			title="Payment"
 			description="현재 Space 권한 안의 결제 원장과 Course/Product 대상 연결을 확인합니다."
 			minWidthClassName="min-w-[1080px]"
@@ -59,7 +59,7 @@ export const PaymentTable = observer(({ payments }: PaymentTableProps) => {
 					<td className="px-3 py-4 text-muted">{payment.approvedAtLabel}</td>
 				</tr>
 			))}
-		</PaymentTableShell>
+		</PaymentTablePanel>
 	);
 });
 

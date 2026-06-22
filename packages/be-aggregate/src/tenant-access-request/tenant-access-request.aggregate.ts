@@ -1,7 +1,10 @@
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import type { TenantAccessRequest } from "@cocrepo/entity";
+import type { ListTenantAccessRequestsForReviewQueryInput } from "@cocrepo/input";
 import type { Prisma, TenantAccessRequestStatus } from "@cocrepo/prisma";
 import {
+	buildTenantAccessRequestQueryOrderBy,
+	buildTenantAccessRequestQueryWhere,
 	TenantAccessRequestsRepository,
 	TenantsRepository,
 	UsersRepository,
@@ -24,22 +27,21 @@ export class TenantAccessRequestAggregate {
 		private readonly usersRepository: UsersRepository,
 	) {}
 
-	async listForReview(params: {
-		reviewerId: string;
-		where: Prisma.TenantAccessRequestWhereInput;
-		orderBy: Prisma.TenantAccessRequestOrderByWithRelationInput[];
-		skip?: number;
-		take?: number;
-	}): Promise<{ items: TenantAccessRequest[]; totalCount: number }> {
+	async listForReview(
+		params: ListTenantAccessRequestsForReviewQueryInput,
+	): Promise<{ items: TenantAccessRequest[]; totalCount: number }> {
 		const scope = await this.getReviewerScope(params.reviewerId);
-		const scopedWhere = this.applyReviewerScope(params.where, scope);
+		const scopedWhere = this.applyReviewerScope(
+			buildTenantAccessRequestQueryWhere(params),
+			scope,
+		);
 
 		return this.repository.findMany({
 			where: {
 				...scopedWhere,
 				removedAt: null,
 			},
-			orderBy: params.orderBy,
+			orderBy: buildTenantAccessRequestQueryOrderBy(params),
 			skip: params.skip,
 			take: params.take,
 		});

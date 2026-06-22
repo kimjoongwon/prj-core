@@ -15,19 +15,19 @@ export class GetCourseOfferingsUseCase {
 
 	async execute(query: GetCourseOfferingsQuery): Promise<unknown> {
 		this.requireSpaceId();
-		const skip = query.query.skip ?? 0;
-		const take = query.query.take ?? 10;
+		const skip = query.skip ?? 0;
+		const take = query.take ?? 10;
 		const result = await this.courseService.findCourseOfferings({
 			skip,
 			take,
-			search: query.query.search ?? null,
-			courseId: query.query.courseId,
-			tenantId: query.query.tenantId,
-			timelineId: query.query.timelineId,
-			status: query.query.status,
-			timelineProvisioningMode: query.query.timelineProvisioningMode,
-			recruitingOnly: query.query.recruitingOnly,
-			sort: query.query.sort,
+			search: query.search ?? null,
+			courseId: query.courseId,
+			tenantId: query.tenantId,
+			timelineId: query.timelineId,
+			status: query.status,
+			timelineProvisioningMode: query.timelineProvisioningMode,
+			recruitingOnly: query.recruitingOnly,
+			sort: query.sort,
 		});
 		return buildOffsetStatsPaginatedResponse(
 			result.courseOfferings,

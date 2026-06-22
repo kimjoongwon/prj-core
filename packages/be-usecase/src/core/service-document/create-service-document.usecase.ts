@@ -9,6 +9,6 @@ export class CreateServiceDocumentUseCase {
 	) {}
 
 	execute(command: CreateServiceDocumentCommand): Promise<unknown> {
-		return this.serviceDocumentService.create(command.input);
+		return this.serviceDocumentService.create(command);
 	}
 }

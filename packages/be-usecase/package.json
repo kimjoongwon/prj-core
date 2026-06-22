@@ -30,7 +30,6 @@
     "@cocrepo/command": "workspace:*",
     "@cocrepo/constant": "workspace:*",
     "@cocrepo/context": "workspace:*",
-    "@cocrepo/dto": "workspace:*",
     "@cocrepo/event": "workspace:*",
     "@cocrepo/prisma": "workspace:*",
     "@cocrepo/service": "workspace:*",

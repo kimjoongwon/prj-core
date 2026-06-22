@@ -13,10 +13,10 @@
 | route | owner spec | 설명 |
 |------|------------|------|
 | `/` | `apps/mobile/src/app/index.spec.md` | 예약 플랫폼 홈 탭 |
-| `/(tabs)` | `apps/mobile/src/app/index.spec.md` | Expo Router 하단 탭 shell |
+| `/(tabs)` | `apps/mobile/src/app/index.spec.md` | Expo Router 하단 탭 layout |
 | `/reservations` | `apps/mobile/src/app/index.spec.md` | 예약 탭 |
 | `/profile` | `apps/mobile/src/app/index.spec.md` | 내 정보 탭 + 로그아웃 |
-| `/_layout` | `apps/mobile/src/app/_layout.tsx` | Expo Router root shell |
+| `/_layout` | `apps/mobile/src/app/_layout.tsx` | Expo Router root layout |
 | `/auth/login` | `apps/mobile/src/app/index.spec.md` | first-party native 로그인 진입 라우트 |
 
 `(tabs)` route group은 URL segment를 만들지 않으므로 실제 홈 route는 `/`이며, route owner file은 `apps/mobile/src/app/(tabs)/index.tsx`입니다.

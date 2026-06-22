@@ -126,7 +126,7 @@
 | Text를 Button/Chip children으로 | 테마 깨짐 발생 |
 | inline style | Tailwind/HeroUI만 사용 |
 | render/constructor에서 localStorage hydrate | hydration mismatch 유발 |
-| Page가 소유해야 할 title/action/shell까지 Feature가 침범 | Page/PageTitleBar 책임 중복 |
+| Page가 소유해야 할 title/action/layout까지 Feature가 침범 | Page/PageTitleBar 책임 중복 |
 | `ScreenSurface`, `SectionSurface`, 제거된 detail/form 이전 방식 surface wrapper 직접 사용 | route/screen 표면은 feature가 소유하지 않음 |
 | Widget으로 분리 가능한 table/card/tabs/flow rail JSX를 Feature 파일에 대량 내장 | 재사용성 저하 |
 
@@ -207,7 +207,7 @@ Feature가 page에서 분리된 업무 콘솔/관리 패널이면 다음 순서�
 | `[기능]Form` | 폼 기능 | LoginForm, SearchForm |
 
 > `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 feature가 아니라 widget입니다. feature는 해당 widget에 store/API/router를 연결하는 래퍼만 담당합니다.
-> reusable shell/slot/hook 이름에는 `Admin`, `Management` 같은 앱/도메인 접두사를 붙이지 않습니다. 예: `TopBar`, `SideNavigation`, `useCourseData`.
+> reusable layout/slot/hook 이름에는 `Admin`, `Management` 같은 앱/도메인 접두사를 붙이지 않습니다. 예: `TopBar`, `SideNavigation`, `useCourseData`.
 
 ### 4.3 파일 구조 생성
 

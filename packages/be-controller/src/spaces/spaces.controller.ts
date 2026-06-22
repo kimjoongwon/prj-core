@@ -57,9 +57,8 @@ export class SpacesController {
 	async getSpaces(@Query() query: QuerySpaceDto) {
 		return this.queryBus.execute(
 			new ListSpacesQuery({
+				...query,
 				spaceIds: this.spaceContext.spaceIds,
-				search: query.search,
-				contentLanguageCode: query.contentLanguageCode,
 			}),
 		);
 	}

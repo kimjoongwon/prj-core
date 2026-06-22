@@ -16,6 +16,6 @@ export class CreateRoutineUseCase {
 		if (!userId) {
 			throw new UnauthorizedException("로그인이 필요합니다");
 		}
-		return this.routinesService.createRoutine(command.input, userId);
+		return this.routinesService.createRoutine(command, userId);
 	}
 }

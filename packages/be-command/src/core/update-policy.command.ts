@@ -1,7 +1,14 @@
-import type { UpdatePolicyCommandInput } from "./update-policy.input";
-export class UpdatePolicyCommand {
+import type { UpdatePolicyCommandInput } from "@cocrepo/input";
+export class UpdatePolicyCommand implements UpdatePolicyCommandInput {
+	readonly name?: UpdatePolicyCommandInput["name"];
+	readonly displayName?: UpdatePolicyCommandInput["displayName"];
+	readonly description?: UpdatePolicyCommandInput["description"];
+	readonly isSystem?: UpdatePolicyCommandInput["isSystem"];
+
 	constructor(
 		readonly policyId: string,
-		readonly input: UpdatePolicyCommandInput,
-	) {}
+		input: UpdatePolicyCommandInput,
+	) {
+		Object.assign(this, input);
+	}
 }

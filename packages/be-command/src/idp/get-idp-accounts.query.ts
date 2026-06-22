@@ -1,5 +1,14 @@
-import type { QueryIdpAccountDto } from "@cocrepo/dto";
+import type { GetIdpAccountsQueryInput } from "@cocrepo/input";
 
-export class GetIdpAccountsQuery {
-	constructor(readonly query: QueryIdpAccountDto) {}
+export class GetIdpAccountsQuery implements GetIdpAccountsQueryInput {
+	readonly search?: string;
+	readonly isActive?: boolean;
+	readonly isLocked?: boolean;
+	readonly sort?: string[];
+	readonly skip?: number;
+	readonly take?: number;
+
+	constructor(input: GetIdpAccountsQueryInput) {
+		Object.assign(this, input);
+	}
 }

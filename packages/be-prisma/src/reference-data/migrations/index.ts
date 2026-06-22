@@ -2,7 +2,7 @@ import { initialReferenceDataMigration } from "./20260317190000_initial-referenc
 import { authEmailTemplatesMigration } from "./20260323143000_auth-email-templates";
 import { legacySystemRoleBridgeMigration } from "./20260323150000_legacy-system-role-bridge";
 import { secondarySuperManagerMigration } from "./20260323160000_secondary-super-manager";
-import { oidcClientAuthShellFieldsMigration } from "./20260325110000_oidc-client-auth-shell-fields";
+import { oidcClientLoginPageFieldsMigration } from "./20260325110000_oidc-client-login-page-fields";
 import { adminMenuPageReferenceCatalogMigration } from "./20260406120000_admin-menu-page-reference-catalog";
 import { oidcClientIdRenameMigration } from "./20260414110000_oidc-client-id-rename";
 import { systemAdminBranchManageTenantsMigration } from "./20260427030000_system-admin-branch-manage-tenants";
@@ -16,7 +16,7 @@ export const referenceDataMigrations: ReferenceDataMigration[] = [
 	authEmailTemplatesMigration,
 	legacySystemRoleBridgeMigration,
 	secondarySuperManagerMigration,
-	oidcClientAuthShellFieldsMigration,
+	oidcClientLoginPageFieldsMigration,
 	adminMenuPageReferenceCatalogMigration,
 	oidcClientIdRenameMigration,
 	systemAdminBranchManageTenantsMigration,

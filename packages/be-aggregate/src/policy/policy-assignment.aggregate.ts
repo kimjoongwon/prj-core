@@ -1,7 +1,10 @@
 import { USER_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/context";
-import type { SyncRolePoliciesDto, SyncUserPoliciesDto } from "@cocrepo/dto";
 import { RolePolicy, UserPolicy } from "@cocrepo/entity";
+import type {
+	SyncRolePolicyInputItem,
+	SyncUserPolicyInputItem,
+} from "@cocrepo/input";
 import {
 	PoliciesRepository,
 	RolePoliciesRepository,
@@ -40,7 +43,7 @@ export class PolicyAssignmentAggregate {
 	@Transactional()
 	async syncRolePolicies(
 		roleId: string,
-		rolePolicies: SyncRolePoliciesDto["rolePolicies"],
+		rolePolicies: SyncRolePolicyInputItem[],
 	): Promise<RolePolicy[]> {
 		const tenantId = this.requireTenantId();
 		await this.assertRoleExists(roleId);
@@ -69,7 +72,7 @@ export class PolicyAssignmentAggregate {
 	@Transactional()
 	async syncUserPolicies(
 		userId: string,
-		userPolicies: SyncUserPoliciesDto["userPolicies"],
+		userPolicies: SyncUserPolicyInputItem[],
 	): Promise<UserPolicy[]> {
 		const tenantId = this.requireTenantId();
 		await this.assertUserExists(userId);

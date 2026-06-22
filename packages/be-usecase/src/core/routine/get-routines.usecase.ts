@@ -8,17 +8,17 @@ export class GetRoutinesUseCase {
 	constructor(private readonly routinesService: RoutineAggregate) {}
 
 	async execute(query: GetRoutinesQuery): Promise<unknown> {
-		const skip = query.query.skip ?? 0;
-		const take = query.query.take ?? 10;
+		const skip = query.skip ?? 0;
+		const take = query.take ?? 10;
 		const spaceScope =
-			query.query.spaceScope ??
-			("CURRENT" as NonNullable<typeof query.query.spaceScope>);
+			query.spaceScope ??
+			("CURRENT" as NonNullable<typeof query.spaceScope>);
 		const routineResult = await this.routinesService.findRoutines({
 			spaceScope,
 			skip,
 			take,
-			search: query.query.search,
-			contentLanguageCode: query.query.contentLanguageCode,
+			search: query.search,
+			contentLanguageCode: query.contentLanguageCode,
 		});
 		return buildOffsetPaginatedResponse(
 			routineResult.routines,

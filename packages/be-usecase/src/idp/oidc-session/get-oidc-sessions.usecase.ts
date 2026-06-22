@@ -8,10 +8,10 @@ export class GetOidcSessionsUseCase {
 	constructor(private readonly oidcSessionService: OidcSessionAggregate) {}
 
 	async execute(query: GetOidcSessionsQuery): Promise<unknown> {
-		const skip = query.query.skip ?? 0;
-		const take = query.query.take ?? 20;
+		const skip = query.skip ?? 0;
+		const take = query.take ?? 20;
 		const oidcSessionResult = await this.oidcSessionService.getMany(
-			query.query,
+			query,
 		);
 		return {
 			data: oidcSessionResult.data,

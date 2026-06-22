@@ -12,7 +12,7 @@ export class ApproveTenantAccessRequestUseCase {
 		return this.tenantAccessRequestService.approve({
 			tenantAccessRequestId: command.tenantAccessRequestId,
 			reviewerId: command.reviewerId,
-			reviewComment: command.input.reviewComment,
+			reviewComment: command.reviewComment,
 		});
 	}
 }

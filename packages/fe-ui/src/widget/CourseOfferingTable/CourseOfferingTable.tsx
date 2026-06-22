@@ -5,7 +5,7 @@ import { ExternalLink } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
-import { CourseTableShell } from "../CourseTableShell";
+import { CourseTablePanel } from "../CourseTablePanel";
 import type { CourseOfferingRow } from "../Course.types";
 
 export interface CourseOfferingTableProps {
@@ -49,7 +49,7 @@ const CourseOfferingTimelineButton = observer(
 export const CourseOfferingTable = observer(
 	({ offerings, onClickTimeline }: CourseOfferingTableProps) => {
 		return (
-			<CourseTableShell
+			<CourseTablePanel
 				title="CourseOffering"
 				description="지점, 기수, 모집 정원, 연결된 Timeline을 확인합니다."
 				minWidthClassName="min-w-[900px]"
@@ -91,7 +91,7 @@ export const CourseOfferingTable = observer(
 						</td>
 					</tr>
 				))}
-			</CourseTableShell>
+			</CourseTablePanel>
 		);
 	},
 );

@@ -10,7 +10,15 @@ import {
 	type SenderType,
 	type SentimentType,
 } from "@cocrepo/prisma";
-import { InquiriesRepository } from "@cocrepo/repository";
+import type {
+	FillInquiryFormInput,
+	ListInquiriesQueryInput,
+} from "@cocrepo/input";
+import {
+	buildInquiryQueryOrderBy,
+	buildInquiryQueryWhere,
+	InquiriesRepository,
+} from "@cocrepo/repository";
 import {
 	BadRequestException,
 	Injectable,
@@ -18,21 +26,11 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
-import type { FillInquiryFormInput } from "./fill-inquiry-form-input";
-import type { FillInquiryFormResult } from "./fill-inquiry-form-result";
 import { INQUIRY_CATEGORY_LABELS } from "./inquiry-category-labels";
 import { INQUIRY_CHANNEL_LABELS } from "./inquiry-channel-labels";
-import type { InquiryCreateUpdateFormBootstrap } from "./inquiry-create-update-form-bootstrap";
-import type { InquiryFormFieldMeta } from "./inquiry-form-field-meta";
-import type { InquiryFormOptionItem } from "./inquiry-form-option-item";
-import type { InquiryFormPatch } from "./inquiry-form-patch";
-import type { InquiryFormSchema } from "./inquiry-form-schema";
-import type { InquiryFormUiPaths } from "./inquiry-form-ui-paths";
 import { INQUIRY_PRIORITY_LABELS } from "./inquiry-priority-labels";
 import { INQUIRY_SOURCE_LABELS } from "./inquiry-source-labels";
-import type { InquiryStats } from "./inquiry-stats";
 import { INQUIRY_STATUS_LABELS } from "./inquiry-status-labels";
-import type { SentimentAnalysisResult } from "./sentiment-analysis-result";
 import { VALID_STATUS_TRANSITIONS } from "./valid-status-transitions";
 
 @Injectable()
@@ -85,16 +83,17 @@ export class InquiryAggregate {
 	/**
 	 * 목록 조회
 	 */
-	async list(params: {
-		where: Prisma.InquiryWhereInput;
-		orderBy: Prisma.InquiryOrderByWithRelationInput[];
-		skip?: number;
-		take?: number;
-		spaceIds?: string[];
-	}): Promise<{ items: Inquiry[]; totalCount: number }> {
+	async list(
+		params: ListInquiriesQueryInput,
+	): Promise<{ items: Inquiry[]; totalCount: number }> {
 		return this.repository.findMany({
-			...params,
-			where: this.applySpaceScope(params.where, params.spaceIds),
+			where: this.applySpaceScope(
+				buildInquiryQueryWhere(params),
+				params.spaceIds,
+			),
+			orderBy: buildInquiryQueryOrderBy(params),
+			skip: params.skip,
+			take: params.take,
 		});
 	}
 
@@ -102,7 +101,7 @@ export class InquiryAggregate {
 	// Create/Update Form Bootstrap + AI Fill
 	// ============================================================================
 
-	async getCreateFormBootstrap(): Promise<InquiryCreateUpdateFormBootstrap> {
+	async getCreateFormBootstrap() {
 		return {
 			mode: "CREATE",
 			defaultObject: {
@@ -124,7 +123,7 @@ export class InquiryAggregate {
 	async getUpdateFormBootstrap(
 		inquiryId: string,
 		spaceIds?: string[],
-	): Promise<InquiryCreateUpdateFormBootstrap> {
+	) {
 		const inquiry = await this.findByIdWithDetails(inquiryId, spaceIds);
 
 		return {
@@ -145,7 +144,7 @@ export class InquiryAggregate {
 		};
 	}
 
-	fillFormWithAi(input: FillInquiryFormInput): FillInquiryFormResult {
+	fillFormWithAi(input: FillInquiryFormInput) {
 		const schemas = this.buildAiSchemas(input.mode);
 		const selectedSchema = schemas.find(
 			(schema) => schema.key === input.schemaKey,
@@ -213,7 +212,7 @@ export class InquiryAggregate {
 			title: nextTitle,
 		});
 
-		const patches: InquiryFormPatch[] = [];
+		const patches: Array<{ path: string; value: unknown }> = [];
 		const maybePush = (path: string, value: unknown) => {
 			if (!requestedPaths.includes(path)) {
 				return;
@@ -454,7 +453,7 @@ export class InquiryAggregate {
 	/**
 	 * 상태별/카테고리별 통계
 	 */
-	async getStats(spaceIds?: string[]): Promise<InquiryStats> {
+	async getStats(spaceIds?: string[]) {
 		this.logger.debug(
 			`문의 통계 조회: spaceIds=${spaceIds?.length ?? "all"}개`,
 		);
@@ -506,7 +505,7 @@ export class InquiryAggregate {
 	 * 감정 분석
 	 * 실제 구현은 별도 AI 서비스 또는 UseCase에서 처리
 	 */
-	async analyzeSentiment(inquiryId: string): Promise<SentimentAnalysisResult> {
+	async analyzeSentiment(inquiryId: string) {
 		this.logger.debug(`감정 분석 요청: ${inquiryId.slice(-8)}`);
 
 		// 존재 확인
@@ -564,7 +563,7 @@ export class InquiryAggregate {
 	// Private 메서드
 	// ============================================================================
 
-	private buildFormOptions(): Record<string, InquiryFormOptionItem[]> {
+	private buildFormOptions() {
 		return {
 			category: Object.values(InquiryCategory).map((value) => ({
 				value,
@@ -589,7 +588,7 @@ export class InquiryAggregate {
 		};
 	}
 
-	private buildUiPaths(mode: "CREATE" | "UPDATE"): InquiryFormUiPaths {
+	private buildUiPaths(mode: "CREATE" | "UPDATE") {
 		if (mode === "UPDATE") {
 			return {
 				readOnlyPaths: ["channel", "source"],
@@ -606,7 +605,17 @@ export class InquiryAggregate {
 
 	private buildFieldMeta(
 		mode: "CREATE" | "UPDATE",
-	): Record<string, InquiryFormFieldMeta> {
+	): Record<
+		string,
+		{
+			label: string;
+			ai?: {
+				fillable: boolean;
+				defaultChecked?: boolean;
+				reason?: string;
+			};
+		}
+	> {
 		const isCreate = mode === "CREATE";
 
 		return {
@@ -648,7 +657,7 @@ export class InquiryAggregate {
 		};
 	}
 
-	private buildAiSchemas(mode: "CREATE" | "UPDATE"): InquiryFormSchema[] {
+	private buildAiSchemas(mode: "CREATE" | "UPDATE") {
 		if (mode === "UPDATE") {
 			return [
 				{

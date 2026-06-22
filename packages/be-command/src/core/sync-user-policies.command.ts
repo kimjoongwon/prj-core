@@ -1,7 +1,11 @@
-import type { SyncUserPoliciesCommandInput } from "./sync-user-policies.input";
-export class SyncUserPoliciesCommand {
+import type { SyncUserPoliciesCommandInput } from "@cocrepo/input";
+export class SyncUserPoliciesCommand implements SyncUserPoliciesCommandInput {
+	readonly userPolicies!: SyncUserPoliciesCommandInput["userPolicies"];
+
 	constructor(
 		readonly userId: string,
-		readonly input: SyncUserPoliciesCommandInput,
-	) {}
+		input: SyncUserPoliciesCommandInput,
+	) {
+		Object.assign(this, input);
+	}
 }

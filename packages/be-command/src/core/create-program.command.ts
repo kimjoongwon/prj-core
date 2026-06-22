@@ -1,7 +1,15 @@
-import type { CreateProgramCommandInput } from "./create-program.input";
-export class CreateProgramCommand {
+import type { CreateProgramCommandInput } from "@cocrepo/input";
+export class CreateProgramCommand implements CreateProgramCommandInput {
+	readonly name!: CreateProgramCommandInput["name"];
+	readonly routineId!: CreateProgramCommandInput["routineId"];
+	readonly instructorId!: CreateProgramCommandInput["instructorId"];
+	readonly capacity!: CreateProgramCommandInput["capacity"];
+	readonly level!: CreateProgramCommandInput["level"];
+
 	constructor(
 		readonly sessionId: string,
-		readonly input: CreateProgramCommandInput,
-	) {}
+		input: CreateProgramCommandInput,
+	) {
+		Object.assign(this, input);
+	}
 }

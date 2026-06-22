@@ -9,20 +9,20 @@ export async function resolveOidcClient(
 	clientId: string,
 	options?: {
 		requireActive?: boolean;
-		requireAuthShell?: boolean;
+		requireLoginPage?: boolean;
 	},
 ): Promise<ResolvedOidcClient> {
 	const lookupCandidates = getOidcClientIdCandidates(clientId);
 	let lastNotFoundError: NotFoundException | undefined;
 	let client:
-		| Awaited<ReturnType<OidcClientAggregate["getAuthShellClientByClientId"]>>
+		| Awaited<ReturnType<OidcClientAggregate["getLoginPageClientByClientId"]>>
 		| Awaited<ReturnType<OidcClientAggregate["getByClientId"]>>
 		| undefined;
 
 	for (const lookupClientId of lookupCandidates) {
 		try {
-			client = options?.requireAuthShell
-				? await oidcClientService.getAuthShellClientByClientId({
+			client = options?.requireLoginPage
+				? await oidcClientService.getLoginPageClientByClientId({
 						clientId: lookupClientId,
 						requireActive: options.requireActive,
 					})
@@ -60,18 +60,18 @@ export async function resolveOidcClient(
 		defaultReturnTo: client.defaultReturnTo,
 		scope: client.scope,
 	});
-	const hasAuthShell = Boolean(
+	const hasLoginPage = Boolean(
 		runtimeClient.loginUrl && runtimeClient.defaultReturnTo,
 	);
 
-	if (options?.requireAuthShell && !hasAuthShell) {
+	if (options?.requireLoginPage && !hasLoginPage) {
 		throw new BadRequestException(
-			"로그인 셸 URL과 기본 복귀 URL이 설정되지 않았습니다",
+			"로그인 화면 URL과 기본 복귀 URL이 설정되지 않았습니다",
 		);
 	}
 
 	return {
 		...runtimeClient,
-		hasAuthShell,
+		hasLoginPage,
 	};
 }

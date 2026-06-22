@@ -2,7 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import { Chip } from "../../data-display/Chip/Chip";
-import { CourseTableShell } from "../CourseTableShell";
+import { CourseTablePanel } from "../CourseTablePanel";
 import type { CoursePassRow } from "../Course.types";
 
 export interface CoursePassTableProps {
@@ -11,7 +11,7 @@ export interface CoursePassTableProps {
 
 export const CoursePassTable = observer(({ passes }: CoursePassTableProps) => {
 	return (
-		<CourseTableShell
+		<CourseTablePanel
 			title="CoursePass"
 			description="6개월 수강권의 발급일, 만료일, 잔여 예약 권리를 관리합니다."
 			minWidthClassName="min-w-[820px]"
@@ -46,7 +46,7 @@ export const CoursePassTable = observer(({ passes }: CoursePassTableProps) => {
 					</td>
 				</tr>
 			))}
-		</CourseTableShell>
+		</CourseTablePanel>
 	);
 });
 

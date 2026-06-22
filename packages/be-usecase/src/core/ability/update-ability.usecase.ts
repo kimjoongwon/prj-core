@@ -17,7 +17,7 @@ export class UpdateAbilityUseCase {
 		}
 		return this.abilitiesService.updateAbility(
 			command.abilityId,
-			command.input,
+			command,
 		);
 	}
 }

@@ -12,10 +12,10 @@ export class ListTenantAccessRequestsForReviewUseCase {
 	async execute(
 		query: ListTenantAccessRequestsForReviewQuery,
 	): Promise<unknown> {
-		const skip = query.params.skip ?? 0;
-		const take = query.params.take ?? 10;
+		const skip = query.skip ?? 0;
+		const take = query.take ?? 10;
 		const tenantAccessRequestResult =
-			await this.tenantAccessRequestService.listForReview(query.params);
+			await this.tenantAccessRequestService.listForReview(query);
 		return buildOffsetPaginatedResponse(
 			tenantAccessRequestResult.items,
 			tenantAccessRequestResult.totalCount,

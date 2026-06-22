@@ -1,7 +1,12 @@
-import type { LogoutNativeMobileSessionCommandInput } from "./logout-native-mobile-session.input";
-export class LogoutNativeMobileSessionCommand {
+import type { LogoutNativeMobileSessionCommandInput } from "@cocrepo/input";
+export class LogoutNativeMobileSessionCommand implements LogoutNativeMobileSessionCommandInput {
+	readonly sessionId!: LogoutNativeMobileSessionCommandInput["sessionId"];
+	readonly refreshToken?: LogoutNativeMobileSessionCommandInput["refreshToken"];
+
 	constructor(
-		readonly input: LogoutNativeMobileSessionCommandInput,
+		input: LogoutNativeMobileSessionCommandInput,
 		readonly authorizationHeader?: string,
-	) {}
+	) {
+		Object.assign(this, input);
+	}
 }

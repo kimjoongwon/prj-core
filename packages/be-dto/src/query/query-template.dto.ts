@@ -28,19 +28,4 @@ export class QueryTemplateDto extends PrismaQueryDto<Prisma.TemplateWhereInput> 
 		return ["search"];
 	}
 
-	toPrismaWhere(
-		baseWhere?: Partial<Prisma.TemplateWhereInput>,
-	): Prisma.TemplateWhereInput {
-		const where = super.toPrismaWhere(baseWhere);
-
-		// 코드(code) 또는 이름(name) 통합 검색 (OR 조건, insensitive)
-		if (this.search) {
-			where.OR = [
-				{ code: { contains: this.search, mode: "insensitive" } },
-				{ name: { contains: this.search, mode: "insensitive" } },
-			];
-		}
-
-		return where;
-	}
 }

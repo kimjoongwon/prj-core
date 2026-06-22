@@ -1,10 +1,10 @@
-import type { BookingFeedItemDto } from "@cocrepo/dto";
+import { ReservationAvailabilityStatus } from "./reservation-availability-status";
 
 export const RESERVATION_AVAILABILITY = {
-	AVAILABLE: "AVAILABLE" as BookingFeedItemDto["availabilityStatus"],
-	FEW_LEFT: "FEW_LEFT" as BookingFeedItemDto["availabilityStatus"],
-	WAITLIST_OPEN: "WAITLIST_OPEN" as BookingFeedItemDto["availabilityStatus"],
-	RESERVED: "RESERVED" as BookingFeedItemDto["availabilityStatus"],
-	WAITLISTED: "WAITLISTED" as BookingFeedItemDto["availabilityStatus"],
-	BOOKING_CLOSED: "BOOKING_CLOSED" as BookingFeedItemDto["availabilityStatus"],
+	AVAILABLE: ReservationAvailabilityStatus.AVAILABLE,
+	FEW_LEFT: ReservationAvailabilityStatus.FEW_LEFT,
+	WAITLIST_OPEN: ReservationAvailabilityStatus.WAITLIST_OPEN,
+	RESERVED: ReservationAvailabilityStatus.RESERVED,
+	WAITLISTED: ReservationAvailabilityStatus.WAITLISTED,
+	BOOKING_CLOSED: ReservationAvailabilityStatus.BOOKING_CLOSED,
 } as const;

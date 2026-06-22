@@ -63,11 +63,8 @@ export class TenantAccessRequestsController {
 		const reviewerId = this.getAuthenticatedUserId();
 		return this.queryBus.execute(
 			new ListTenantAccessRequestsForReviewQuery({
+				...query,
 				reviewerId,
-				where: query.toPrismaWhere(),
-				orderBy: query.toPrismaOrderBy(),
-				skip: query.skip,
-				take: query.take,
 			}),
 		);
 	}

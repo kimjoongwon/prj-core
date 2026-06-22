@@ -118,7 +118,7 @@ const AuthLoginRoute = observer(() => {
 				<View className={classNames.form()}>
 					<View className={classNames.field()}>
 						<Text className={classNames.label()}>이메일</Text>
-						<View className={classNames.inputShell()}>
+						<View className={classNames.inputFrame()}>
 							<Icon name="mail" size="sm" tone="muted" />
 							<TextInput
 								accessibilityLabel="이메일"
@@ -139,7 +139,7 @@ const AuthLoginRoute = observer(() => {
 
 					<View className={classNames.field()}>
 						<Text className={classNames.label()}>비밀번호</Text>
-						<View className={classNames.inputShell()}>
+						<View className={classNames.inputFrame()}>
 							<Icon name="lockKeyhole" size="sm" tone="muted" />
 							<TextInput
 								accessibilityLabel="비밀번호"
@@ -205,7 +205,7 @@ const loginRouteClassNames = tv({
 		header: "gap-2 border-b border-border pb-6 pt-8",
 		input:
 			"min-h-12 flex-1 text-[15px] text-foreground",
-		inputShell:
+		inputFrame:
 			"min-h-12 flex-row items-center gap-2 rounded-lg border border-border bg-surface px-3",
 		keyboardView: "flex-1 justify-center",
 		label: "text-[13px] font-bold leading-5 text-foreground",

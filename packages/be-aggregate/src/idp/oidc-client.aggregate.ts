@@ -1,7 +1,11 @@
-import type { QueryOidcClientDto } from "@cocrepo/dto";
 import type { OidcClient } from "@cocrepo/entity";
+import type { GetOidcClientsQueryInput } from "@cocrepo/input";
 import { Prisma } from "@cocrepo/prisma";
-import { OidcClientsRepository } from "@cocrepo/repository";
+import {
+	buildOidcClientQueryOrderBy,
+	buildOidcClientQueryWhere,
+	OidcClientsRepository,
+} from "@cocrepo/repository";
 import type { JsonValue } from "@cocrepo/type";
 import { OidcClientId, RedirectUri } from "@cocrepo/vo";
 import {
@@ -18,14 +22,14 @@ export class OidcClientAggregate {
 
 	constructor(private readonly repository: OidcClientsRepository) {}
 
-	async getMany(query: QueryOidcClientDto): Promise<{
+	async getMany(query: GetOidcClientsQueryInput): Promise<{
 		data: OidcClient[];
 		totalCount: number;
 	}> {
 		this.logger.debug("OIDC 클라이언트 목록 조회");
 
-		const where = query.toPrismaWhere({ removedAt: null });
-		const orderBy = query.toPrismaOrderBy();
+		const where = buildOidcClientQueryWhere(query, { removedAt: null });
+		const orderBy = buildOidcClientQueryOrderBy(query);
 
 		return this.repository.findMany({
 			where,
@@ -155,7 +159,7 @@ export class OidcClientAggregate {
 		return client;
 	}
 
-	async getAuthShellClientByClientId(params: {
+	async getLoginPageClientByClientId(params: {
 		clientId: string;
 		requireActive?: boolean;
 	}): Promise<OidcClient> {
@@ -167,7 +171,7 @@ export class OidcClientAggregate {
 
 		if (!client.loginUrl || !client.defaultReturnTo) {
 			throw new BadRequestException(
-				"로그인 셸 URL과 기본 복귀 URL이 설정되지 않았습니다",
+				"로그인 화면 URL과 기본 복귀 URL이 설정되지 않았습니다",
 			);
 		}
 

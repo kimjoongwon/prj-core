@@ -30,7 +30,7 @@ type DtoConstructor = new (...arguments_: unknown[]) => unknown;
  * @example
  * // Controller에서 더 이상 수동 변환 불필요
  * @Get(':id')
- * @ApiResponseEntity(UserDto, HttpStatus.OK)
+ * @ApiResponseEntity(ContextUserSnapshot, HttpStatus.OK)
  * async getUser(@Param('id') id: string) {
  *   return await this.service.getById(id); // Entity 반환 → 자동으로 DTO 변환됨
  * }

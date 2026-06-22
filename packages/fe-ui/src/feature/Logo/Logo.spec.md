@@ -8,7 +8,7 @@
 
 이 파일은 feature 계층의 핵심 동작을 담당합니다.
 상위 레이어와 하위 레이어를 연결하며, 런타임에서 실제 사용자 흐름/비즈니스 흐름에 직접 관여합니다.
-plain 로고와 console shell 전용 브랜드 variant를 모두 제공합니다.
+plain 로고와 console layout 전용 브랜드 variant를 모두 제공합니다.
 
 ## 공개 계약
 

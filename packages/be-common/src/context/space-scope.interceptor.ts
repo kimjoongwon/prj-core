@@ -1,6 +1,6 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { PUBLIC_ROUTE_KEY, SKIP_SPACE_CHECK_KEY } from "@cocrepo/decorator";
-import type { TenantDto } from "@cocrepo/dto";
+import type { ContextTenantSnapshot } from "@cocrepo/type";
 import {
 	BadRequestException,
 	type CallHandler,
@@ -35,7 +35,7 @@ export class SpaceScopeInterceptor implements NestInterceptor {
 	) {}
 
 	intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
-		const tenant = this.cls.get<TenantDto>(CONTEXT_KEYS.TENANT);
+		const tenant = this.cls.get<ContextTenantSnapshot>(CONTEXT_KEYS.TENANT);
 		const tenantId = this.cls.get<string>(CONTEXT_KEYS.TENANT_ID);
 		const spaceId = this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
 		const shouldEnforceSpace =

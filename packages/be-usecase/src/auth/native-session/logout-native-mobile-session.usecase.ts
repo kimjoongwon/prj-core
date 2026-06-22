@@ -16,9 +16,9 @@ export class LogoutNativeMobileSessionUseCase {
 		let sessionId: SessionId;
 		let refreshToken: NativeRefreshToken | null;
 		try {
-			sessionId = SessionId.fromString(command.input.sessionId);
-			refreshToken = command.input.refreshToken
-				? NativeRefreshToken.create(command.input.refreshToken)
+			sessionId = SessionId.fromString(command.sessionId);
+			refreshToken = command.refreshToken
+				? NativeRefreshToken.create(command.refreshToken)
 				: null;
 		} catch {
 			throw new UnauthorizedException("리프레시 토큰이 유효하지 않습니다");

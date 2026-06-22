@@ -1,4 +1,4 @@
-import type { UserDto } from "@cocrepo/dto";
+import type { ContextUserSnapshot } from "@cocrepo/type";
 import { User } from "@cocrepo/entity";
 import { PrismaService } from "@cocrepo/service";
 import type { Provider, Type } from "@nestjs/common";
@@ -64,8 +64,8 @@ export const createTestUser = (
 };
 
 export const createTestUserDto = (
-	overrides: Partial<UserDto> = {},
-): UserDto => {
+	overrides: Partial<ContextUserSnapshot> = {},
+): ContextUserSnapshot => {
 	return {
 		id: "user-test-id",
 		spaceId: "space-test-id",
@@ -92,7 +92,7 @@ export const createTestUserDto = (
 			},
 		],
 		...overrides,
-	} as UserDto;
+	} as ContextUserSnapshot;
 };
 
 export const createTestUserEntity = (overrides: Partial<User> = {}): User => {

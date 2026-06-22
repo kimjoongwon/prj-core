@@ -7,7 +7,7 @@
 ## 역할
 
 IDP 대시보드 화면의 pure screen 컴포넌트입니다.
-통계와 로그인 추이 조회는 route thin container가 소유하고 이 파일은 detail shell 안의 시각 조합만 담당합니다.
+통계와 로그인 추이 조회는 route thin container가 소유하고 이 파일은 detail layout 안의 시각 조합만 담당합니다.
 
 ## 디자인 스케치
 

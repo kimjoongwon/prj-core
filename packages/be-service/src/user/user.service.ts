@@ -1,11 +1,15 @@
 import { USER_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/context";
+import type { GetUsersInput } from "@cocrepo/input";
 import type { Prisma } from "@cocrepo/prisma";
-import { UsersRepository } from "@cocrepo/repository";
+import {
+	buildUserQueryOrderBy,
+	buildUserQueryWhere,
+	UsersRepository,
+} from "@cocrepo/repository";
 import { Email, HashedPassword, Phone, PlainPassword } from "@cocrepo/vo";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { AuthCacheService } from "../auth/auth-cache.service";
-import type { GetUsersInput } from "./get-users.input";
 import type { GetUsersResult } from "./get-users.result";
 
 @Injectable()
@@ -48,12 +52,15 @@ export class UserService {
 			`회원 목록 조회: requestedSpaceId=${currentSpaceId ?? "없음"}, scope=${scopedSpaceIds?.join(",") ?? "all"}`,
 		);
 
-		const where = this.applySpaceScope(input.where, scopedSpaceIds);
+		const where = this.applySpaceScope(
+			buildUserQueryWhere(input),
+			scopedSpaceIds,
+		);
 
 		const [{ users, totalCount }, stats] = await Promise.all([
 			this.repository.findManyBySpaceIds({
 				where,
-				orderBy: input.orderBy,
+				orderBy: buildUserQueryOrderBy(input),
 				skip: input.skip ?? 0,
 				take: input.take ?? 10,
 				spaceIds: scopedSpaceIds,

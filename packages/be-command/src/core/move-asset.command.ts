@@ -1,7 +1,11 @@
-import type { MoveAssetCommandInput } from "./move-asset.input";
-export class MoveAssetCommand {
+import type { MoveAssetCommandInput } from "@cocrepo/input";
+export class MoveAssetCommand implements MoveAssetCommandInput {
+	readonly targetFolderId!: MoveAssetCommandInput["targetFolderId"];
+
 	constructor(
 		readonly assetId: string,
-		readonly input: MoveAssetCommandInput,
-	) {}
+		input: MoveAssetCommandInput,
+	) {
+		Object.assign(this, input);
+	}
 }

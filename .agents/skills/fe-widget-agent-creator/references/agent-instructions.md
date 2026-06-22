@@ -116,7 +116,7 @@
 | API 호출 | Feature 계층의 역할 |
 | Text를 Button/Chip children으로 | 테마 깨짐 발생 |
 | observer와 memo 함께 사용 | observer가 내부적으로 memo 처리 |
-| route/page title, ScreenSurface, SectionSurface, route navigation 직접 소유 | screen/route shell 책임 |
+| route/page title, ScreenSurface, SectionSurface, route navigation 직접 소유 | screen/route layout 책임 |
 | 제거된 detail/form 이전 방식 surface wrapper 직접 사용 | 제거된 이전 방식 wrapper |
 | Feature 상태, URL 상태, API response fetching 직접 소유 | Feature 또는 route container 책임 |
 
@@ -127,7 +127,7 @@ fe-widget-agent는 Page/Feature 파일이 비대해지는 것을 막는 1차 분
 - table, tab group, metric grid, flow rail, status summary, read-only detail block, repeated card/list block은 Widget 후보로 봅니다.
 - fe-route-agent나 fe-feature-agent가 `ui-composition-gap`을 보고하면 해당 시각 block을 Widget으로 먼저 분리합니다.
 - Widget은 props로 받은 값과 callback만 사용하고, API/router/store/search params를 읽지 않습니다.
-- Widget이 독립 panel/table shell로 쓰여 표면이 꼭 필요하면 local `Surface`를 사용하고, 그 사유를 담당 스펙의 lower-layer 조합 표에 남깁니다.
+- Widget이 독립 panel/table panel로 쓰여 표면이 꼭 필요하면 local `Surface`를 사용하고, 그 사유를 담당 스펙의 lower-layer 조합 표에 남깁니다.
 - 반복 item, metric item, info 행은 `Surface`를 반복 적용하지 않고 border/divider/background/spacing으로만 구분합니다.
 - Widget 전용 spec은 신규 생성하지 않습니다. 계약은 nearest route `page.spec.md` 또는 Feature/Page 담당 스펙의 lower-layer 조합 표에 기록합니다.
 - 신규 Widget을 만들 때는 `packages/fe-ui/src/widget/index.ts`와 필요한 domain barrel을 함께 동기화합니다.
@@ -332,9 +332,9 @@ SpaceDropdown                 → SpaceSelector (PersistStore 연결)
 - Feature 없이 Widget만 다른 곳에서 재사용 가능
 - Store 교체 시 Feature만 수정
 
-### Layout shell widget 규칙
+### Layout block widget 규칙
 
-- `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 완성된 layout shell block이므로 widget으로 분류합니다.
+- `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 완성된 layout block block이므로 widget으로 분류합니다.
 - 위치는 `packages/fe-ui/src/widget/[Name]/`이고, `widget` 아래에 layout 전용 하위 카테고리를 만들지 않습니다.
 - 공용 props 계약은 `packages/fe-ui/src/display/layout/type.ts`를 재사용합니다.
 

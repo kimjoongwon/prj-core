@@ -2,7 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import { Chip } from "../../data-display/Chip/Chip";
-import { CourseTableShell } from "../CourseTableShell";
+import { CourseTablePanel } from "../CourseTablePanel";
 import type { CourseRow } from "../Course.types";
 
 export interface CourseTableProps {
@@ -11,7 +11,7 @@ export interface CourseTableProps {
 
 export const CourseTable = observer(({ courses }: CourseTableProps) => {
 	return (
-		<CourseTableShell
+		<CourseTablePanel
 			title="Course"
 			description="무엇을 배우는지와 기본 수강 상품 정책을 관리합니다."
 			minWidthClassName="min-w-[760px]"
@@ -44,7 +44,7 @@ export const CourseTable = observer(({ courses }: CourseTableProps) => {
 					</td>
 				</tr>
 			))}
-		</CourseTableShell>
+		</CourseTablePanel>
 	);
 });
 

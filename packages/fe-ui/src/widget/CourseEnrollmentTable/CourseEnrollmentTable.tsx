@@ -2,7 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 import { Chip } from "../../data-display/Chip/Chip";
-import { CourseTableShell } from "../CourseTableShell";
+import { CourseTablePanel } from "../CourseTablePanel";
 import type { CourseEnrollmentRow } from "../Course.types";
 
 export interface CourseEnrollmentTableProps {
@@ -12,7 +12,7 @@ export interface CourseEnrollmentTableProps {
 export const CourseEnrollmentTable = observer(
 	({ enrollments }: CourseEnrollmentTableProps) => {
 		return (
-			<CourseTableShell
+			<CourseTablePanel
 				title="Enrollment"
 				description="결제 이후 활성화되는 수강 신청 상태와 예약 사용 현황을 봅니다."
 				minWidthClassName="min-w-[880px]"
@@ -51,7 +51,7 @@ export const CourseEnrollmentTable = observer(
 						</td>
 					</tr>
 				))}
-			</CourseTableShell>
+			</CourseTablePanel>
 		);
 	},
 );

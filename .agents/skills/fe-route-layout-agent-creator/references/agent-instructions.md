@@ -35,16 +35,16 @@
 ### 재사용 우선 점검 (필수)
 
 - 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
-- PC/Web shell 후보는 `@cocrepo/ui` export만 보지 말고 원본 라이브러리 `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
+- PC/Web layout 후보는 `@cocrepo/ui` export만 보지 말고 원본 라이브러리 `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
 - 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
-- `Page`, `Layout`, `Tabs`, `Dropdown`, `Modal`, `Drawer` 등으로 표현 가능한 shell UI를 raw `div`/`button` + className 조합으로 재구현하지 않습니다.
+- `Page`, `Layout`, `Tabs`, `Dropdown`, `Modal`, `Drawer` 등으로 표현 가능한 layout UI를 raw `div`/`button` + className 조합으로 재구현하지 않습니다.
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 구현을 금지합니다.
 
 ### FE route layout 역할
 
 Next.js App Router의 root `apps/**/layout.tsx`와 필요한 named slot topology를 생성/수정하는 전용 에이전트입니다.
-이 에이전트는 root 서버 `layout.tsx`에서 `App`/provider 진입점과 공통 shell을 package UI/feature로 직접 조립합니다.
+이 에이전트는 root 서버 `layout.tsx`에서 `App`/provider 진입점과 공통 layout을 package UI/feature로 직접 조립합니다.
 
 ---
 
@@ -58,17 +58,17 @@ Next.js App Router의 root `apps/**/layout.tsx`와 필요한 named slot topology
    - `App`: 최상위 root structure owner
    - root `app/layout.tsx`: `TopBar`, `SideNavigation`, `AccessGate`, 모바일 navigation/action feature를 직접 조립
    - route group/domain/auth `layout.tsx`: 기본 생성 금지
-   - `RouteFrame`처럼 pathname으로 shell을 고르는 package feature 생성 금지
+   - `RouteFrame`처럼 pathname으로 layout을 고르는 package feature 생성 금지
 4. route layout은 surface/rhythm을 소유하지 않고 구조/slot topology만 소유합니다.
    - route layout에서 `ScreenSurface`/`SectionSurface`/`Surface` 사용 금지
    - route layout에서 `VStack`/`HStack`/`Spacer` 사용 금지
    - screen 계층이 `ScreenSurface`와 `SectionSurface`를 소유합니다.
-5. `page.tsx`는 root layout shell 안에서 콘텐츠 wiring만 담당합니다. route-level `App`/`Page`/`Layout`/surface/rhythm은 다시 만들게 두지 않습니다.
+5. `page.tsx`는 root layout block 안에서 콘텐츠 wiring만 담당합니다. route-level `App`/`Page`/`Layout`/surface/rhythm은 다시 만들게 두지 않습니다.
 6. `layout.tsx`는 page 데이터 fetch와 페이지 이벤트 바인딩을 직접 수행하지 않습니다. 필요한 client 로직은 feature/widget을 slot에 배치해 해결합니다.
 7. route skeleton을 구현하기 위해 로컬 ad-hoc layout primitive를 만들지 않습니다. 부족한 primitive가 있으면 `fe-layout-agent`가 먼저 보강해야 합니다.
 8. 코드 수정 시 대응 `page.spec.md`를 함께 갱신합니다.
-9. route shell primitive는 `packages/fe-ui/src/layout`과 `packages/fe-ui/src/feature`의 명시적 shell/action/navigation feature에서 소비합니다.
-10. route shell의 `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 `packages/fe-ui/src/widget/[Name]/`에서 소비하고 store/API wiring은 `packages/fe-ui/src/feature`가 소유합니다.
+9. route layout primitive는 `packages/fe-ui/src/layout`과 `packages/fe-ui/src/feature`의 명시적 layout/action/navigation feature에서 소비합니다.
+10. route layout의 `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 `packages/fe-ui/src/widget/[Name]/`에서 소비하고 store/API wiring은 `packages/fe-ui/src/feature`가 소유합니다.
 11. `packages/fe-ui/src/display/layout` 아래에 임의 하위 디렉터리를 만들거나, `packages/fe-ui/src/widget` 아래에 layout 전용 하위 카테고리를 새로 만들지 않습니다.
 12. named slot은 기본값이 아니라 예외 패턴입니다. 아래 경우에만 사용합니다.
    - 목록 유지 + detail/inspector 독립 전환
@@ -88,8 +88,8 @@ Next.js App Router의 root `apps/**/layout.tsx`와 필요한 named slot topology
 
 | 상황 | 사용 여부 | 설명 |
 |------|----------|------|
-| root `apps/**/layout.tsx` 신규/수정 | O | `App` + provider 진입점 + 공통 shell 직접 조립 |
-| route group/domain/auth `layout.tsx` 신규 작성 | X | shell은 root `app/layout.tsx`에 집중 |
+| root `apps/**/layout.tsx` 신규/수정 | O | `App` + provider 진입점 + 공통 layout 직접 조립 |
+| route group/domain/auth `layout.tsx` 신규 작성 | X | layout은 root `app/layout.tsx`에 집중 |
 | 기존 route group/domain/auth `layout.tsx` 정리 | O | 제거하거나 root `app/layout.tsx`로 흡수 |
 | named slot(`@detail`, `@modal`) topology 설계/구현 | O | 병렬 영역과 대체 처리 파일 구성 |
 | 탭/서브네비게이션이 있는 route layout 구현 | O | 메뉴 계약 소비 |
@@ -124,7 +124,7 @@ Next.js App Router의 root `apps/**/layout.tsx`와 필요한 named slot topology
 
 ### 3.1 서버 skeleton ownership
 
-웹 root `app/layout.tsx`는 앱 전체 뼈대와 공통 shell을 서버 파일 안에서 직접 선언합니다.
+웹 root `app/layout.tsx`는 앱 전체 뼈대와 공통 layout을 서버 파일 안에서 직접 선언합니다.
 
 예시 개념:
 
@@ -133,19 +133,19 @@ Next.js App Router의 root `apps/**/layout.tsx`와 필요한 named slot topology
 ```
 
 - `App`은 root 구조 슬롯 owner이며 `header`, `footer`, `leftAside`, `rightAside`, `main` props를 받습니다.
-- `App`은 root shell의 기본 배치, aside visibility/width, main scroll/background/padding을 소유합니다. root `app/layout.tsx`에서 slot을 Tailwind wrapper로 감싸지 않습니다.
+- `App`은 root layout의 기본 배치, aside visibility/width, main scroll/background/padding을 소유합니다. root `app/layout.tsx`에서 slot을 Tailwind wrapper로 감싸지 않습니다.
 - `Providers`는 auth refresh, i18n, ability, Space bootstrap/guard, navigation scope checker 같은 전역 side effect와 overlay를 소유합니다.
 - `Page`는 `children`만 받는 콘텐츠 boundary이며 root App 슬롯을 재사용하지 않습니다.
-- route group/domain/auth layout은 만들지 않고, root `app/layout.tsx`가 package UI/feature로 shell을 직접 조립합니다.
-- `RouteFrame`처럼 pathname으로 route shell을 선택하는 중간 feature를 만들지 않습니다.
+- route group/domain/auth layout은 만들지 않고, root `app/layout.tsx`가 package UI/feature로 layout을 직접 조립합니다.
+- `RouteFrame`처럼 pathname으로 route layout을 선택하는 중간 feature를 만들지 않습니다.
 - route layout은 surface/elevation/rhythm을 결정하지 않습니다.
 - route-level skeleton 아래의 시각 표면은 screen 계층이 `ScreenSurface`와 `SectionSurface`로 소유합니다.
 
 ### 3.2 `page.tsx`와의 경계
 
 - root `app/layout.tsx`는 `Providers > App(header/leftAside/main/footer)` owner입니다.
-- `page.tsx`는 root layout shell의 `children`으로 들어갑니다.
-- route 전체 shell/header/aside/모바일 action 구조는 root `app/layout.tsx`가 package UI/feature를 직접 조립해 소유합니다.
+- `page.tsx`는 root layout block의 `children`으로 들어갑니다.
+- route 전체 layout/header/aside/모바일 action 구조는 root `app/layout.tsx`가 package UI/feature를 직접 조립해 소유합니다.
 - screen/page surface topology는 screen 계층에서 소유합니다.
 - `page.tsx`는 목록, 폼, 상세, 액션, API 연동 같은 콘텐츠 로직만 구현합니다.
 - `page.tsx`가 콘텐츠-level raw bordered container를 직접 만들지 않도록 child 계약에서 screen `ScreenSurface`/`SectionSurface` 사용 원칙을 명시합니다.
@@ -154,7 +154,7 @@ Next.js App Router의 root `apps/**/layout.tsx`와 필요한 named slot topology
 
 - root `layout.tsx`는 서버 파일로 유지합니다.
 - 경로 기반 활성 탭, client-only 네비게이션, 인터랙티브 필터 바는 root layout이 client feature/widget을 slot에 배치해 해결합니다.
-- pathname 기반 shell selector feature를 만들지 않습니다.
+- pathname 기반 layout selector feature를 만들지 않습니다.
 
 ### 3.4 Parallel Routes / Slots
 
@@ -163,7 +163,7 @@ Next.js App Router의 root `apps/**/layout.tsx`와 필요한 named slot topology
 - `children`은 implicit slot입니다.
 - slot을 쓰면 `layout.tsx`는 skeleton owner, `@slot/**/page.tsx`는 slot 콘텐츠 owner가 됩니다.
 - hard reload에서 unmatched slot이 생길 수 있으므로 `default.tsx` 대체 처리 정책이 필요합니다.
-- modal은 필요 시 intercepting route와 함께 사용하되, slot shell은 여전히 `layout.tsx`가 소유합니다.
+- modal은 필요 시 intercepting route와 함께 사용하되, slot layout은 여전히 `layout.tsx`가 소유합니다.
 
 예시:
 
@@ -211,7 +211,7 @@ slot에 aside/header/footer 같은 구조가 필요하면 route layout에서 `Pa
 - `children`과 named slot이 어디에 마운트되는지
 - 각 slot의 key, 담당 파일, 대체 처리 파일, URL 매핑
 - soft/hard navigation에서 slot이 어떻게 유지/복구되는지
-- 상위 layout에서 이미 소유한 shell이 무엇인지
+- 상위 layout에서 이미 소유한 layout이 무엇인지
 
 ---
 
@@ -220,7 +220,7 @@ slot에 aside/header/footer 같은 구조가 필요하면 route layout에서 `Pa
 1. route 폴더와 상위 layout 체인을 스캔합니다.
 2. route `page.spec.md`를 읽고 skeleton ownership과 child content 계약을 확정합니다.
 3. named slot이 필요한 케이스인지 먼저 판정하고, 불필요하면 `children` 단일 구조를 유지합니다.
-4. 기존 route group/domain/auth `layout.tsx`가 있으면 App/Page/surface/rhythm/shell 소유권을 root `app/layout.tsx`로 흡수하고 제거합니다.
+4. 기존 route group/domain/auth `layout.tsx`가 있으면 App/Page/surface/rhythm/layout 소유권을 root `app/layout.tsx`로 흡수하고 제거합니다.
 5. slot을 쓰는 경우 각 `@slot/default.tsx` 대체 처리를 먼저 정의합니다.
 6. 필요한 재사용 primitive가 없으면 즉시 `fe-layout-agent` 필요성을 보고하고 무리하게 로컬 구현하지 않습니다.
 7. 서버 `layout.tsx`에서 skeleton과 slot prop wiring을 조립합니다.
@@ -262,7 +262,7 @@ find [Route경로] -type f \( -name 'page.tsx' -o -name '_client.tsx' \) -print 
 작업 결과에는 반드시 아래를 포함합니다.
 
 1. 읽은 route `page.spec.md` 목록
-2. 상위 layout에서 상속받은 shell과 현재 route가 추가한 skeleton
+2. 상위 layout에서 상속받은 layout과 현재 route가 추가한 skeleton
 3. slot topology와 각 `default.tsx` 대체 처리 반영 내역
 4. `Page` / screen `ScreenSurface` / `SectionSurface` ownership 반영 내역
 5. `page.tsx` / `@slot/**/page.tsx`와의 경계 정리 결과
@@ -303,9 +303,9 @@ find [Route경로] -type f \( -name 'page.tsx' -o -name '_client.tsx' \) -print 
 
 - 작업 시작 전에 `apps/mobile/src/app/**/_layout.tsx`와 Expo Router native 구조를 먼저 검색합니다.
 - 대상 route의 상위 `_layout.tsx`, `app.context.md`, child `index.spec.md`를 먼저 읽습니다.
-- header/shell 후보가 없다고 판단하기 전에 원본 라이브러리 `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source를 확인합니다.
+- header/layout 후보가 없다고 판단하기 전에 원본 라이브러리 `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source를 확인합니다.
 - 동일 책임의 중복 구현을 금지합니다.
-- Expo Router header/shell은 기존 `@cocrepo/mo-ui` `CustomHeader`와 native navigator options로 먼저 해결하고, raw `View`/`Text`/`Pressable` header를 새로 만들지 않습니다.
+- Expo Router header/layout은 기존 `@cocrepo/mo-ui` `CustomHeader`와 native navigator options로 먼저 해결하고, raw `View`/`Text`/`Pressable` header를 새로 만들지 않습니다.
 
 ### fe-route-layout-agent
 
@@ -314,30 +314,30 @@ Expo Router native 런타임 기준의 `apps/mobile/src/app/**/_layout.tsx`를 �
 ### 담당 범위
 
 - `apps/mobile/src/app/**/_layout.tsx`
-- 대응 모바일 route `index.spec.md`의 Layout/Shell 섹션
-- route-level navigator shell (`Stack`, `Tabs`, `Drawer`, `Slot`)
+- 대응 모바일 route `index.spec.md`의 Layout/Layout 섹션
+- route-level navigator layout (`Stack`, `Tabs`, `Drawer`, `Slot`)
 - route-level provider boundary 와 screen options wiring
 
 ### 핵심 원칙
 
-- Expo Router 의 navigator shell 을 route 단위에서 조립합니다.
+- Expo Router 의 navigator layout 을 route 단위에서 조립합니다.
 - root provider 는 가능한 한 `apps/mobile/src/app/_layout.tsx`에 유지하고, 하위 route 는 필요한 navigator 만 추가합니다.
 - 프로젝트 provider 는 직접 `heroui-native/provider`가 아니라 `@cocrepo/mo-ui`의 `DesignSystemProvider`를 우선 사용합니다.
-- header/shell UI가 필요하면 `CustomHeader`, `Tabs`, `ScreenFrame`, `DesignSystemProvider` 같은 기존 `@cocrepo/mo-ui` 계약을 우선 사용합니다.
+- header/layout UI가 필요하면 `CustomHeader`, `Tabs`, `ScreenFrame`, `DesignSystemProvider` 같은 기존 `@cocrepo/mo-ui` 계약을 우선 사용합니다.
 - Next.js `layout.tsx`, named slot, `@slot`, intercepting route 개념은 사용하지 않습니다.
 - `screenOptions`, `presentation`, `headerShown` 등 Expo Router / React Navigation native 규칙만 다룹니다.
 - layout component를 `observer`로 감쌀 때 `observer(function Name() { ... })` 패턴을 금지합니다.
   - `const [LayoutName] = observer(() => { ... })` 형태로 선언한 뒤 `export default [LayoutName]`으로 내보냅니다.
-- layout shell 스타일은 uniwind `className` 계열 prop과 `tailwind-variants` slot/variant를 우선 사용하고 `StyleSheet`/`StyleSheet.create`는 만들지 않습니다.
+- layout block 스타일은 uniwind `className` 계열 prop과 `tailwind-variants` slot/variant를 우선 사용하고 `StyleSheet`/`StyleSheet.create`는 만들지 않습니다.
 - `style` 객체는 React Navigation `screenOptions`처럼 className으로 표현하기 어려운 native option object에만 제한합니다.
-- 코드를 수정하면 route `index.spec.md`의 Layout/Shell 섹션을 함께 갱신합니다.
+- 코드를 수정하면 route `index.spec.md`의 Layout/Layout 섹션을 함께 갱신합니다.
 
 ### Do
 
 - `Stack`, `Tabs`, `Drawer`, `Slot` 중 필요한 navigator 만 선택합니다.
-- screen name / presentation / header 정책을 route `index.spec.md`의 Layout/Shell 섹션과 동기화합니다.
+- screen name / presentation / header 정책을 route `index.spec.md`의 Layout/Layout 섹션과 동기화합니다.
 - native header customization은 `CustomHeader` 재사용 여부와 배제 이유를 먼저 기록합니다.
-- 상위 route shell 과 중복되는 navigator 를 제거합니다.
+- 상위 route layout 과 중복되는 navigator 를 제거합니다.
 - 루트 gesture/provider 경계를 임의로 여러 번 중첩하지 않습니다.
 
 ### 금지
@@ -350,12 +350,12 @@ Expo Router native 런타임 기준의 `apps/mobile/src/app/**/_layout.tsx`를 �
 ### 출력
 
 - route layout 코드: `apps/mobile/src/app/**/_layout.tsx`
-- route layout 계약: `apps/mobile/src/app/**/index.spec.md`의 Layout/Shell 섹션
+- route layout 계약: `apps/mobile/src/app/**/index.spec.md`의 Layout/Layout 섹션
 
 ### 보고 포맷
 
 - 수정한 `_layout.tsx` 경로
 - 사용한 navigator 종류
-- 재사용한 header/shell component 또는 신규 shell UI가 필요한 이유
-- provider / shell ownership 변경점
-- 함께 갱신한 route `index.spec.md`의 Layout/Shell 섹션
+- 재사용한 header/layout component 또는 신규 layout UI가 필요한 이유
+- provider / layout ownership 변경점
+- 함께 갱신한 route `index.spec.md`의 Layout/Layout 섹션

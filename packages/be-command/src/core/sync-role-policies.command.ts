@@ -1,7 +1,11 @@
-import type { SyncRolePoliciesCommandInput } from "./sync-role-policies.input";
-export class SyncRolePoliciesCommand {
+import type { SyncRolePoliciesCommandInput } from "@cocrepo/input";
+export class SyncRolePoliciesCommand implements SyncRolePoliciesCommandInput {
+	readonly rolePolicies!: SyncRolePoliciesCommandInput["rolePolicies"];
+
 	constructor(
 		readonly roleId: string,
-		readonly input: SyncRolePoliciesCommandInput,
-	) {}
+		input: SyncRolePoliciesCommandInput,
+	) {
+		Object.assign(this, input);
+	}
 }

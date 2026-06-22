@@ -56,15 +56,7 @@ export class ReservationsController {
 	@ResponseMessage("예약 Booking Feed 조회 성공")
 	getBookingFeed(@Query() query: QueryBookingFeedDto) {
 		return this.queryBus.execute(
-			new GetReservationBookingFeedQuery({
-				dateFrom: query.dateFrom,
-				dateTo: query.dateTo,
-				programId: query.programId,
-				search: query.search,
-				skip: query.skip,
-				take: query.take,
-				timelineId: query.timelineId,
-			}),
+			new GetReservationBookingFeedQuery(query),
 		);
 	}
 
@@ -82,12 +74,7 @@ export class ReservationsController {
 	@ResponseMessage("예약 결제 Bootstrap 조회 성공")
 	getCheckoutBootstrap(@Query() query: QueryReservationCheckoutBootstrapDto) {
 		return this.queryBus.execute(
-			new GetReservationCheckoutBootstrapQuery({
-				occurrenceStartAt: query.occurrenceStartAt,
-				programId: query.programId,
-				sessionId: query.sessionId,
-				timelineId: query.timelineId,
-			}),
+			new GetReservationCheckoutBootstrapQuery(query),
 		);
 	}
 
@@ -141,13 +128,7 @@ export class ReservationsController {
 	@ResponseMessage("내 예약 목록 조회 성공")
 	getMine(@Query() query: QueryMyReservationsDto) {
 		return this.queryBus.execute(
-			new GetMyReservationsQuery({
-				from: query.from,
-				skip: query.skip,
-				status: query.status,
-				take: query.take,
-				to: query.to,
-			}),
+			new GetMyReservationsQuery(query),
 		);
 	}
 }

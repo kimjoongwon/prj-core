@@ -7,6 +7,6 @@ export class CreateRoleUseCase {
 	constructor(private readonly rolesService: RoleAggregate) {}
 
 	execute(command: CreateRoleCommand): Promise<unknown> {
-		return this.rolesService.create(command.input);
+		return this.rolesService.create(command);
 	}
 }

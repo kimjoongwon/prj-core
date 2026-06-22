@@ -11,7 +11,7 @@
 ## 공통
 
 - Navigation primitive는 primitive 계층에서 이동, 현재 위치, 탐색 가능한 구조의 펼침, view switching을 표현합니다. 예: `Link`, `Tabs`, `Pagination`, `Breadcrumbs`, `Accordion`, `Disclosure`, `DisclosureGroup`, 모바일 `CustomHeader`.
-- menu tree, side nav, bottom tab, route-shell navigation composition, menu 계약은 `fe-menu-agent`가 소유합니다. 해당 파일이 필요하면 멈추고 보고합니다.
+- menu tree, side nav, bottom tab, route-layout navigation composition, menu 계약은 `fe-menu-agent`가 소유합니다. 해당 파일이 필요하면 멈추고 보고합니다.
 - command button, typed/freeform input, navigation 밖의 choice control, overlay, data display, 피드백, layout, widget, feature, screen, route, data-grid 파일은 소유하지 않습니다.
 - 새 컴포넌트를 만들기 전에 upstream HeroUI/HeroUI Native와 기존 `@cocrepo/ui` 또는 `@cocrepo/mo-ui` leaf를 먼저 재사용합니다.
 - 소스, 같은 위치의 단위 테스트, 가까운 barrel export 변경은 같은 담당 변경 안에서 함께 처리합니다.

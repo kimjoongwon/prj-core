@@ -128,40 +128,4 @@ export class QueryInquiryDto extends PrismaQueryDto<Prisma.InquiryWhereInput> {
 	// -------------------------------------------------------------------------
 	// Prisma 변환
 	// -------------------------------------------------------------------------
-	/**
-	 * DTO 필드를 Prisma where 조건으로 변환합니다.
-	 * 자동 매핑: category, channel, priority, assigneeId, customerId
-	 * 커스텀: search, status, inquiryStatus, startDate/endDate
-	 */
-	toPrismaWhere(
-		baseWhere?: Partial<Prisma.InquiryWhereInput>,
-	): Prisma.InquiryWhereInput {
-		const where = super.toPrismaWhere(baseWhere);
-
-		// 삭제 상태 필터 (DeleteFilter -> removedAt)
-		where.removedAt = this.removedAtFilter(
-			this.status === DeleteFilter.DELETED,
-		);
-
-		// 검색어 (제목, 고객명 OR 검색)
-		if (this.search) {
-			where.OR = [
-				{ title: this.containsFilter(this.search) },
-				{ customer: { name: this.containsFilter(this.search) } },
-			];
-		}
-
-		// 문의 상태 (inquiryStatus -> status 필드)
-		if (this.inquiryStatus) {
-			where.status = this.inquiryStatus;
-		}
-
-		// 날짜 범위 (startDate/endDate -> createdAt)
-		const dateRange = this.dateRangeFilter(this.startDate, this.endDate);
-		if (dateRange) {
-			where.createdAt = dateRange;
-		}
-
-		return where;
 	}
-}

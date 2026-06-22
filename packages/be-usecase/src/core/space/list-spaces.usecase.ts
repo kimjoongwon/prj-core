@@ -12,7 +12,7 @@ export class ListSpacesUseCase {
 
 	async execute(query: ListSpacesQuery): Promise<unknown> {
 		this.logger.debug("공간 목록 조회");
-		const spaceResult = await this.spaceService.listSpaces(query.params);
+		const spaceResult = await this.spaceService.listSpaces(query);
 		const skip = 0;
 		const take = spaceResult.spaces.length;
 		return buildOffsetPaginatedResponse(

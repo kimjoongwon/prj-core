@@ -396,7 +396,7 @@ export const OidcClientForm = observer(
 					<div className="space-y-6 p-6">
 						<h3 className="text-lg font-semibold">앱 복귀 설정 (선택)</h3>
 						<Input
-							label="로그인 셸 URL"
+							label="로그인 화면 URL"
 							placeholder="/admin/auth/login 또는 https://app.example.com/auth/login"
 							value={state.loginUrl}
 							onValueChange={(v) => {

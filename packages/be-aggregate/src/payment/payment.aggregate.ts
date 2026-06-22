@@ -15,8 +15,8 @@ import {
 	Logger,
 } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
-import type { CreatePaymentInput } from "./create-payment.input";
-import type { PaymentListInput } from "./payment-list.input";
+import type { CreatePaymentInput } from "@cocrepo/input";
+import type { PaymentListInput } from "@cocrepo/input";
 
 @Injectable()
 export class PaymentAggregate {

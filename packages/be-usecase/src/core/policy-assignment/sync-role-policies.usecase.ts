@@ -11,7 +11,7 @@ export class SyncRolePoliciesUseCase {
 	execute(command: SyncRolePoliciesCommand): Promise<unknown> {
 		return this.policyAssignmentService.syncRolePolicies(
 			command.roleId,
-			command.input.rolePolicies,
+			command.rolePolicies,
 		);
 	}
 }

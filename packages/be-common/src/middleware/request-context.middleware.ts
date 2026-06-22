@@ -1,5 +1,5 @@
 import { CONTEXT_KEYS, REQUEST_HEADER_KEYS } from "@cocrepo/constant";
-import { UserDto } from "@cocrepo/dto";
+import type { ContextUserSnapshot } from "@cocrepo/type";
 import { parseAcceptLanguage } from "@cocrepo/toolkit";
 import { Injectable, type NestMiddleware } from "@nestjs/common";
 import type { NextFunction, Request, Response } from "express";
@@ -45,7 +45,7 @@ export class RequestContextMiddleware implements NestMiddleware {
 	}
 
 	private setRequestContext(request: Request): void {
-		const user = request.user as UserDto;
+		const user = request.user as ContextUserSnapshot;
 
 		// User 설정
 		if (user) {

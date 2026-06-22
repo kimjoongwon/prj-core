@@ -30,12 +30,13 @@
     "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
     "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
   },
-  "dependencies": {
-    "@cocrepo/constant": "workspace:*",
-    "@cocrepo/entity": "workspace:*",
-    "@cocrepo/enum": "workspace:*",
-    "@cocrepo/prisma": "workspace:*",
-    "@cocrepo/type": "workspace:*",
+	"dependencies": {
+		"@cocrepo/constant": "workspace:*",
+		"@cocrepo/entity": "workspace:*",
+		"@cocrepo/enum": "workspace:*",
+		"@cocrepo/input": "workspace:*",
+		"@cocrepo/prisma": "workspace:*",
+		"@cocrepo/type": "workspace:*",
     "@cocrepo/vo": "workspace:*",
     "@prisma/adapter-pg": "^7.0.0",
     "class-transformer": "^0.5.1"

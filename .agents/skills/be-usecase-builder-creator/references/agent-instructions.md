@@ -69,13 +69,13 @@ Nest CQRS 기반 UseCase handler를 생성하는 역할입니다. Command/Query 
 - EventHandler 안에서 CommandBus를 주입하거나 execute하지 않습니다. Event 이후 다른 UseCase/Command를 실행해야 하면 Saga로 분리합니다.
 - Saga는 Event → Command 변환만 담당하고 도메인 service를 직접 조합하지 않습니다.
 - Handler에서 Prisma/Repository를 직접 호출하지 않습니다. 예외가 필요한 read projection은 담당 스펙에 명시하고 repository query method를 통해 호출합니다.
-- Handler에서 DTO를 import하거나 domain service로 넘기지 않습니다. write Command의 `input`을 application/usecase 입력으로 취급합니다.
+- Handler에서 DTO를 import하거나 domain service로 넘기지 않습니다. write Command 자체를 application/usecase 입력으로 취급하고, `command.input` 중첩 접근을 만들지 않습니다.
 - Query handler는 behaviorful Query DTO나 Query params를 read filter 입력으로 취급할 수 있습니다. Query DTO 자체의 필터 메서드는 `be-query-dto-builder`가 소유합니다.
-- Command input이 Aggregate/Service/Client input과 구조적으로 호환되면 그대로 위임할 수 있습니다. 여러 출처 조합, field rename, policy 보정이 필요할 때만 별도 mapper/input 파일에서 target input으로 변환합니다.
+- Command/Query가 Aggregate/Service/Client input과 구조적으로 호환되면 메시지 객체를 그대로 위임할 수 있습니다. 여러 출처 조합, field rename, policy 보정이 필요할 때만 별도 mapper/input 파일에서 target input으로 변환합니다.
 - Handler에서 Prisma create/update input을 만들지 않습니다. persistence 입력 변환은 Aggregate/Repository owner가 수행합니다.
 - `@Inject(TOKEN)`로 Service/Client/Aggregate provider를 주입하더라도 생성자 파라미터 타입은 `@cocrepo/service`, `@cocrepo/client`, `@cocrepo/aggregate`가 export하는 실제 class 타입을 사용합니다.
 - UseCase에서 Service/Client/Aggregate class의 메서드 목록을 복제한 `*Port` interface/type을 import하거나 새로 만들지 않습니다. DI token은 런타임 provider 선택만 담당하며, 타입 별칭으로 계약을 다시 선언하지 않습니다.
-- 여러 출처의 값을 조합해 target input을 만들 때는 `command.input.xxx`, `context.userId`, `entity.id`처럼 값의 원천을 보존합니다. 반복이 길면 `const input = command.input`처럼 출처명 alias까지만 사용하고 deep destructuring으로 bare variable을 남발하지 않습니다.
+- 여러 출처의 값을 조합해 target input을 만들 때는 `command.xxx`, `context.userId`, `entity.id`처럼 값의 원천을 보존합니다. 반복이 길면 `const input = command`처럼 출처명 alias까지만 사용하고 deep destructuring으로 bare variable을 남발하지 않습니다.
 - `@CommandHandler` / `@QueryHandler` decorator를 사용합니다.
 - handler array는 module builder가 providers에 등록할 수 있게 export합니다.
 - 이전 방식 app/boundary/external 명칭을 신규로 만들지 않습니다.

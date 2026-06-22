@@ -16,25 +16,4 @@ export class QueryIdpAccountDto extends PrismaQueryDto<Prisma.UserWhereInput> {
 		return ["search", "isLocked"];
 	}
 
-	toPrismaWhere(
-		baseWhere?: Partial<Prisma.UserWhereInput>,
-	): Prisma.UserWhereInput {
-		const autoWhere = super.toPrismaWhere(baseWhere);
-
-		if (this.search) {
-			autoWhere.OR = [
-				{ name: { contains: this.search, mode: "insensitive" } },
-				{ email: { contains: this.search, mode: "insensitive" } },
-			];
-		}
-
-		if (this.isLocked === true) {
-			autoWhere.OR = [
-				{ isPermanentlyLocked: true },
-				{ lockedUntil: { gt: new Date() } },
-			];
-		}
-
-		return autoWhere;
-	}
 }

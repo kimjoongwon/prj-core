@@ -1,8 +1,16 @@
 import { SpaceContext } from "@cocrepo/context";
-import { FolderQueryDto } from "@cocrepo/dto";
 import { Folder } from "@cocrepo/entity";
+import type {
+	CreateFolderInput,
+	GetFoldersQueryInput,
+	UpdateFolderInput,
+} from "@cocrepo/input";
 import type { Prisma } from "@cocrepo/prisma";
-import { FoldersRepository } from "@cocrepo/repository";
+import {
+	buildFolderQueryOrderBy,
+	buildFolderQueryWhere,
+	FoldersRepository,
+} from "@cocrepo/repository";
 import {
 	BadRequestException,
 	ConflictException,
@@ -10,8 +18,6 @@ import {
 	Logger,
 	NotFoundException,
 } from "@nestjs/common";
-import type { CreateFolderInput } from "./create-folder.input";
-import type { UpdateFolderInput } from "./update-folder.input";
 
 @Injectable()
 export class FolderAggregate {
@@ -23,12 +29,13 @@ export class FolderAggregate {
 	) {}
 
 	async getFolders(
-		query: FolderQueryDto,
+		query: GetFoldersQueryInput,
 	): Promise<{ data: Folder[]; totalCount: number }> {
 		const spaceId = this.getRequiredSpaceId();
 		const spaceIds = this.spaceContext.spaceIds;
 		const where = this.applySpaceScope(
-			query.toPrismaWhere(
+			buildFolderQueryWhere(
+				query,
 				spaceIds === undefined
 					? undefined
 					: { tenant: { spaceId: { in: spaceIds } } },
@@ -40,7 +47,7 @@ export class FolderAggregate {
 
 		const folderResult = await this.foldersRepository.findMany({
 			where,
-			orderBy: query.sort?.length ? query.toPrismaOrderBy() : undefined,
+			orderBy: buildFolderQueryOrderBy(query),
 			skip: query.skip,
 			take: query.take,
 		});

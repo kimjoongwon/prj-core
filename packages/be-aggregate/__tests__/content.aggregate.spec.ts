@@ -55,11 +55,9 @@ describe("ContentAggregate", () => {
 		repository.createCommunityPost.mockResolvedValue(createdPost as never);
 
 		const result = await service.createCommunityPost({
-			dto: {
-				text: "  함께 운동해요.  ",
-				title: "  새 글  ",
-			},
 			tenantId,
+			text: "  함께 운동해요.  ",
+			title: "  새 글  ",
 			userId,
 		});
 
@@ -75,10 +73,8 @@ describe("ContentAggregate", () => {
 	it("본문이 비어 있으면 게시글을 생성하지 않는다", async () => {
 		await expect(
 			service.createCommunityPost({
-				dto: {
-					text: "   ",
-				},
 				tenantId,
+				text: "   ",
 				userId,
 			}),
 		).rejects.toThrow(BadRequestException);

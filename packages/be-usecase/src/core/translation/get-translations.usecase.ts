@@ -9,6 +9,6 @@ export class GetTranslationsUseCase {
 	) {}
 
 	execute(query: GetTranslationsQuery): Promise<unknown> {
-		return this.translationCatalogService.getTranslations(query.query);
+		return this.translationCatalogService.getTranslations(query);
 	}
 }

@@ -12,7 +12,7 @@ export class GetReservationCheckoutBootstrapUseCase {
 
 	execute(query: GetReservationCheckoutBootstrapQuery): Promise<unknown> {
 		const context = this.context.requireContext();
-		const params = query.params;
+		const params = query;
 
 		return this.reservationService.getCheckoutBootstrap({
 			spaceId: context.spaceId,

@@ -112,7 +112,7 @@ consent:
 ## 상태별 렌더링
 
 - loading: "로그인 화면을 준비하고 있어요"와 "잠시 후 안전한 인증 화면으로 이동합니다."를 표시하고, 4초 이상 지속되면 `onClickRecoveryButton` 기반 "다시 시도" CTA를 표시한다.
-- login/consent/error: route shell의 모바일 폭 안에서 카드와 CTA가 넘치지 않도록 단일 컬럼 기준을 유지한다.
+- login/consent/error: route layout의 모바일 폭 안에서 카드와 CTA가 넘치지 않도록 단일 컬럼 기준을 유지한다.
 
 ## 구성 요소
 

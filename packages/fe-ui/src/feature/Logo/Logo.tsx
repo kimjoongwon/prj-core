@@ -16,7 +16,7 @@ export interface AppLogoProps {
 	subtitle?: string;
 	/** 텍스트 숨김 여부 */
 	compact?: boolean;
-	/** 콘솔 shell 전용 스타일 여부 */
+	/** 콘솔 layout 전용 스타일 여부 */
 	variant?: "plain" | "console";
 	/** 추가 클래스명 */
 	className?: string;

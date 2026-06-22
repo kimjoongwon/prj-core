@@ -1,7 +1,13 @@
-import type { UpdateTranslationCommandInput } from "./update-translation.input";
-export class UpdateTranslationCommand {
+import type { UpdateTranslationCommandInput } from "@cocrepo/input";
+export class UpdateTranslationCommand implements UpdateTranslationCommandInput {
+	readonly text?: UpdateTranslationCommandInput["text"];
+	readonly category?: UpdateTranslationCommandInput["category"];
+	readonly isTranslated?: UpdateTranslationCommandInput["isTranslated"];
+
 	constructor(
 		readonly translationId: string,
-		readonly input: UpdateTranslationCommandInput,
-	) {}
+		input: UpdateTranslationCommandInput,
+	) {
+		Object.assign(this, input);
+	}
 }

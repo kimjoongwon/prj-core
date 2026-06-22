@@ -1,8 +1,12 @@
-import type { UploadAssetCommandInput } from "./upload-asset.input";
-export class UploadAssetCommand {
+import type { UploadAssetCommandInput } from "@cocrepo/input";
+export class UploadAssetCommand implements UploadAssetCommandInput {
+	readonly folderId!: UploadAssetCommandInput["folderId"];
+
 	constructor(
-		readonly input: UploadAssetCommandInput,
+		input: UploadAssetCommandInput,
 		readonly file: Express.Multer.File | undefined,
 		readonly creatorId: string,
-	) {}
+	) {
+		Object.assign(this, input);
+	}
 }

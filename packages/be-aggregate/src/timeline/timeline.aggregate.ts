@@ -14,13 +14,13 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
-import type { CreateProgramInput } from "./create-program.input";
-import type { CreateSessionInput } from "./create-session.input";
-import type { CreateTimelineInput } from "./create-timeline.input";
-import type { ProgramActivitySnapshotInput } from "./program-activity-snapshot.input";
-import type { UpdateProgramInput } from "./update-program.input";
-import type { UpdateSessionInput } from "./update-session.input";
-import type { UpdateTimelineInput } from "./update-timeline.input";
+import type { CreateProgramInput } from "@cocrepo/input";
+import type { CreateSessionInput } from "@cocrepo/input";
+import type { CreateTimelineInput } from "@cocrepo/input";
+import type { ProgramActivitySnapshotInput } from "@cocrepo/input";
+import type { UpdateProgramInput } from "@cocrepo/input";
+import type { UpdateSessionInput } from "@cocrepo/input";
+import type { UpdateTimelineInput } from "@cocrepo/input";
 
 @Injectable()
 export class TimelineAggregate {

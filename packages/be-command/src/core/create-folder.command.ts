@@ -1,7 +1,12 @@
-import type { CreateFolderCommandInput } from "./create-folder.input";
-export class CreateFolderCommand {
+import type { CreateFolderCommandInput } from "@cocrepo/input";
+export class CreateFolderCommand implements CreateFolderCommandInput {
+	readonly parentFolderId?: CreateFolderCommandInput["parentFolderId"];
+	readonly name!: CreateFolderCommandInput["name"];
+
 	constructor(
-		readonly input: CreateFolderCommandInput,
+		input: CreateFolderCommandInput,
 		readonly creatorId: string,
-	) {}
+	) {
+		Object.assign(this, input);
+	}
 }

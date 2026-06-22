@@ -514,7 +514,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 ### 책임 분리
 
-- `fe-menu-agent`: 메뉴 트리, 탭 계약, `PageTabs`/`BottomTab`/`SideNav`/`QuickActionFAB` 같은 feature와 route shell이 소비할 메뉴 widget 조합 규칙
+- `fe-menu-agent`: 메뉴 트리, 탭 계약, `PageTabs`/`BottomTab`/`SideNav`/`QuickActionFAB` 같은 feature와 route layout이 소비할 메뉴 widget 조합 규칙
 - `fe-route-layout-agent`: 실제 `layout.tsx` 파일에서 skeleton 조립
 - `fe-route-agent`: route skeleton 안의 실제 페이지 콘텐츠 구현
 
@@ -972,7 +972,7 @@ React Native / Expo Native 기준의 메뉴 primitive 계약을 `packages/fe-mo-
 ### 금지
 
 - `packages/fe-ui/**` 메뉴 규칙이나 웹 route 계약을 복사하지 않습니다.
-- `BottomTab`, `FAB`, `Sidebar` 같은 higher-level navigation shell 을 이 역할 안에 섞지 않습니다.
+- `BottomTab`, `FAB`, `Sidebar` 같은 higher-level navigation layout 을 이 역할 안에 섞지 않습니다.
 - `Accordion`, `Card`, `Dialog` 등 비메뉴 layout leaf 를 함께 소유하지 않습니다.
 
 ### 보고 포맷

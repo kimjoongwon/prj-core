@@ -8,11 +8,10 @@ export class GetTemplatesUseCase {
 	constructor(private readonly templateService: TemplateService) {}
 
 	async execute(query: GetTemplatesQuery): Promise<unknown> {
-		const skip = query.query.skip ?? 0;
-		const take = query.query.take ?? 10;
+		const skip = query.skip ?? 0;
+		const take = query.take ?? 10;
 		const templateResult = await this.templateService.getTemplates({
-			where: query.query.toPrismaWhere(),
-			orderBy: query.query.toPrismaOrderBy(),
+			...query,
 			skip,
 			take,
 		});

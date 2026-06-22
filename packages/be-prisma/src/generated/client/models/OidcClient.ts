@@ -785,7 +785,7 @@ export type $OidcClientPayload<ExtArgs extends runtime.Types.Extensions.Internal
      */
     redirectUris: string[]
     /**
-     * @displayName 로그인 셸 URL
+     * @displayName 로그인 화면 URL
      */
     loginUrl: string | null
     /**

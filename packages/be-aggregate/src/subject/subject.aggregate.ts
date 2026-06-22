@@ -2,8 +2,6 @@ import { Subject } from "@cocrepo/entity";
 import { getDmmfParser } from "@cocrepo/prisma";
 import { SubjectsRepository } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
-import type { SubjectInfo } from "./subject.info";
-import type { SubjectFieldInfo } from "./subject-field.info";
 
 /**
  * Subject 서비스 (Repository 기반)
@@ -13,7 +11,16 @@ import type { SubjectFieldInfo } from "./subject-field.info";
 @Injectable()
 export class SubjectAggregate {
 	private readonly logger = new Logger(SubjectAggregate.name);
-	private cachedFieldsByModel: Map<string, SubjectFieldInfo[]> | null = null;
+	private cachedFieldsByModel: Map<
+		string,
+		Array<{
+			name: string;
+			displayName: string | null;
+			type: string;
+			isRequired: boolean;
+			isRelation: boolean;
+		}>
+	> | null = null;
 
 	constructor(private readonly repository: SubjectsRepository) {}
 
@@ -22,7 +29,7 @@ export class SubjectAggregate {
 	 *
 	 * @returns Subject 배열
 	 */
-	async getSubjects(): Promise<SubjectInfo[]> {
+	async getSubjects() {
 		this.logger.debug("모든 Subject 조회");
 
 		const subjects = await this.repository.findAll();
@@ -39,7 +46,7 @@ export class SubjectAggregate {
 	 * @param group - 그룹명 (all, entity, menu, feature)
 	 * @returns Subject 배열
 	 */
-	async getSubjectsByGroup(group: string): Promise<SubjectInfo[]> {
+	async getSubjectsByGroup(group: string) {
 		this.logger.debug(`그룹별 Subject 조회: ${group}`);
 
 		const subjects = await this.repository.findByGroup(group);
@@ -55,7 +62,7 @@ export class SubjectAggregate {
 	 * @param id - Subject ID
 	 * @returns Subject 정보 또는 null
 	 */
-	async getSubjectById(id: string): Promise<SubjectInfo | null> {
+	async getSubjectById(id: string) {
 		this.logger.debug(`Subject ID로 조회: ${id}`);
 
 		const subject = await this.repository.findById(id);
@@ -75,7 +82,7 @@ export class SubjectAggregate {
 	 * @param name - Subject 이름
 	 * @returns Subject 정보 또는 null
 	 */
-	async getSubjectByName(name: string): Promise<SubjectInfo | null> {
+	async getSubjectByName(name: string) {
 		this.logger.debug(`Subject 조회: ${name}`);
 
 		const subject = await this.repository.findByName(name);
@@ -105,7 +112,7 @@ export class SubjectAggregate {
 	 * @param subjectName - Subject 이름 (Prisma 모델명)
 	 * @returns 필드 정보 배열
 	 */
-	async getSubjectFields(subjectName: string): Promise<SubjectFieldInfo[]> {
+	async getSubjectFields(subjectName: string) {
 		this.logger.debug(`Subject 필드 조회: ${subjectName}`);
 
 		await this.loadFieldsCache();
@@ -148,7 +155,7 @@ export class SubjectAggregate {
 	/**
 	 * Subject Entity를 SubjectInfo로 변환
 	 */
-	private toSubjectInfo(subject: Subject): SubjectInfo {
+	private toSubjectInfo(subject: Subject) {
 		return {
 			id: subject.id,
 			name: subject.name,
@@ -202,7 +209,7 @@ export class SubjectAggregate {
 	 * @param subjectName - Subject 이름
 	 * @returns 필드 정보 배열
 	 */
-	private getFieldsForSubject(subjectName: string): SubjectFieldInfo[] {
+	private getFieldsForSubject(subjectName: string) {
 		if (!this.cachedFieldsByModel) {
 			return [];
 		}

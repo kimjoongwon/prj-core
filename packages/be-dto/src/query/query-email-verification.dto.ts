@@ -23,17 +23,4 @@ export class QueryEmailVerificationDto extends PrismaQueryDto<Prisma.EmailVerifi
 		return ["startDate", "endDate"];
 	}
 
-	toPrismaWhere(
-		baseWhere?: Partial<Prisma.EmailVerificationWhereInput>,
-	): Prisma.EmailVerificationWhereInput {
-		const where = super.toPrismaWhere(baseWhere);
-		const dateRange = this.dateRangeFilter(this.startDate, this.endDate);
-
-		if (dateRange) {
-			where.createdAt =
-				dateRange as Prisma.EmailVerificationWhereInput["createdAt"];
-		}
-
-		return where;
-	}
 }

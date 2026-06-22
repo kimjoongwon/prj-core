@@ -1,8 +1,8 @@
-import type { PreviewTemplateDto } from "@cocrepo/dto";
+import type { PreviewTemplateQueryInput } from "@cocrepo/input";
 
 export class PreviewTemplateQuery {
 	constructor(
 		readonly templateId: string,
-		readonly dto: PreviewTemplateDto,
+		readonly dto: PreviewTemplateQueryInput,
 	) {}
 }

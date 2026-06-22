@@ -1,5 +1,15 @@
-import type { CreateReservationCommandInput } from "./create-reservation.input";
+import type { CreateReservationCommandInput } from "@cocrepo/input";
 
-export class CreateReservationCommand {
-	constructor(readonly input: CreateReservationCommandInput) {}
+export class CreateReservationCommand implements CreateReservationCommandInput {
+	readonly coursePassId?: CreateReservationCommandInput["coursePassId"];
+	readonly timelineId!: CreateReservationCommandInput["timelineId"];
+	readonly sessionId!: CreateReservationCommandInput["sessionId"];
+	readonly programId!: CreateReservationCommandInput["programId"];
+	readonly occurrenceStartAt!: CreateReservationCommandInput["occurrenceStartAt"];
+	readonly idempotencyKey!: CreateReservationCommandInput["idempotencyKey"];
+	readonly memo?: CreateReservationCommandInput["memo"];
+
+	constructor(input: CreateReservationCommandInput) {
+		Object.assign(this, input);
+	}
 }

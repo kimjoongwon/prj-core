@@ -76,4 +76,4 @@ route `page.tsx`는 이 screen을 `ScreenSurface`로 감싸고, screen은 `VStac
 | Route page | `apps/admin/web/src/app/(admin)/payments/page.tsx` | `ScreenSurface`를 명시하고 screen props를 조립 |
 | Screen | `PaymentScreen` | `VStack` rhythm, title/action, `SectionSurface` body 소유 |
 | Feature | `PaymentConsole` | surface 없이 결제 콘솔 흐름과 상태 분기 소유 |
-| Widget | `PaymentScopeRail`, `PaymentMetricGrid`, `PaymentTableShell`, `PaymentTableStatePanel` | 독립 패널/table shell에는 local `Surface` 사용 |
+| Widget | `PaymentScopeRail`, `PaymentMetricGrid`, `PaymentTablePanel`, `PaymentTableStatePanel` | 독립 테이블 패널에는 local `Surface` 사용 |

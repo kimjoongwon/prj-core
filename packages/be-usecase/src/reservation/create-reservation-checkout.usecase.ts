@@ -12,7 +12,7 @@ export class CreateReservationCheckoutUseCase {
 
 	async execute(command: CreateReservationCheckoutCommand): Promise<unknown> {
 		const context = this.context.requireContext();
-		const input = command.input;
+		const input = command;
 
 		return this.reservationService.checkout({
 			spaceId: context.spaceId,

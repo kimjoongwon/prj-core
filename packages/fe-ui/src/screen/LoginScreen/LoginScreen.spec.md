@@ -104,7 +104,7 @@ LOGIN-SCREEN-ROUGH-NARROW
 
 | row id | 영역 | 리듬/컴포넌트 | 방향/정렬 | gap preset | 감싸는 대상 | 필수 규칙 |
 |--------|------|---------------|-----------|------------|-------------|-----------|
-| LOGIN-SCREEN-RHYTHM-FORM | root form | native `form` + `SectionSurface` | full-width / stretch | n/a | 전체 login surface | route shell 안에서 width만 소비하고 internal layout은 screen이 소유 |
+| LOGIN-SCREEN-RHYTHM-FORM | root form | native `form` + `SectionSurface` | full-width / stretch | n/a | 전체 login surface | route layout 안에서 width만 소비하고 internal layout은 screen이 소유 |
 | LOGIN-SCREEN-RHYTHM-SURFACE | surface body | `VStack` | vertical / stretch | `section` | header, session hint, form, feedback, CTA | same elevation surface 중첩 금지 |
 | LOGIN-SCREEN-RHYTHM-HEADER | header | `VStack` + badge `HStack` | vertical / start | `block`, `inline` | badge, title, caption | title/caption long text 줄바꿈 허용 |
 | LOGIN-SCREEN-RHYTHM-HINT | session hint | `HStack` | horizontal / center | `block` | status dot, helper text | 좁은 폭에서 text wrap 허용 |

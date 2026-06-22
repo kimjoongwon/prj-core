@@ -1,4 +1,9 @@
-import type { RefreshNativeMobileSessionCommandInput } from "./refresh-native-mobile-session.input";
-export class RefreshNativeMobileSessionCommand {
-	constructor(readonly input: RefreshNativeMobileSessionCommandInput) {}
+import type { RefreshNativeMobileSessionCommandInput } from "@cocrepo/input";
+export class RefreshNativeMobileSessionCommand implements RefreshNativeMobileSessionCommandInput {
+	readonly sessionId!: RefreshNativeMobileSessionCommandInput["sessionId"];
+	readonly refreshToken!: RefreshNativeMobileSessionCommandInput["refreshToken"];
+
+	constructor(input: RefreshNativeMobileSessionCommandInput) {
+		Object.assign(this, input);
+	}
 }

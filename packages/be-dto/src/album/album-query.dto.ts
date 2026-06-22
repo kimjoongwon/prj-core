@@ -47,19 +47,4 @@ export class AlbumQueryDto extends PrismaQueryDto<Prisma.AlbumWhereInput> {
 		return ["statusFilter"];
 	}
 
-	/**
-	 * DTO 필드를 Prisma where 조건으로 변환합니다.
-	 */
-	toPrismaWhere(
-		baseWhere?: Partial<Prisma.AlbumWhereInput>,
-	): Prisma.AlbumWhereInput {
-		const where = super.toPrismaWhere(baseWhere);
-
-		// 삭제 상태 필터
-		where.removedAt = this.removedAtFilter(
-			this.statusFilter === DeleteFilter.DELETED,
-		);
-
-		return where;
 	}
-}

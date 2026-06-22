@@ -21,16 +21,16 @@ export class CreateInquiryUseCase {
 		return this.inquiryService.create(
 			{
 				tenantId,
-				title: command.input.title,
-				category: command.input.category,
-				channel: command.input.channel,
-				source: command.input.source,
-				priority: command.input.priority,
-				customerId: command.input.customerId,
-				assigneeId: command.input.assigneeId,
+				title: command.title,
+				category: command.category,
+				channel: command.channel,
+				source: command.source,
+				priority: command.priority,
+				customerId: command.customerId,
+				assigneeId: command.assigneeId,
 			},
 			command.actorUserId,
-			command.input.content,
+			command.content,
 		);
 	}
 }

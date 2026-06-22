@@ -20,8 +20,8 @@
 | `/select-space` | `apps/mobile/src/app/select-space.tsx` | 인증 직후 또는 지점 변경 시 `x-space-id`를 확정하는 지점 선택 화면 |
 | `/reservations` | `apps/mobile/src/app/(tabs)/reservations.tsx` | `getMyReservations` 기반 내 예약/대기 목록 |
 | `/profile` | `apps/mobile/src/app/(tabs)/profile.tsx` | 마이 페이지 + 계정 상태 + 빠른 이동 + 로그아웃 |
-| `/(tabs)` | `apps/mobile/src/app/(tabs)/_layout.tsx` | Expo Router 하단 탭 shell |
-| `/_layout` | `apps/mobile/src/app/_layout.tsx` | QueryClientProvider-first shell + DesignSystemProvider + AuthSessionGate + IDP bootstrap shell |
+| `/(tabs)` | `apps/mobile/src/app/(tabs)/_layout.tsx` | Expo Router 하단 탭 layout |
+| `/_layout` | `apps/mobile/src/app/_layout.tsx` | QueryClientProvider-first layout + DesignSystemProvider + AuthSessionGate + IDP bootstrap layout |
 | `/auth/login` | `apps/mobile/src/app/auth/login.tsx` | first-party native email/password 로그인 route |
 
 ## Shared Screen Targets
@@ -273,7 +273,7 @@ Rhythm: root screen vertical gap=section, card inner gap=block, row meta gap=den
 
 | 영역 | 리듬 컴포넌트 | 방향/정렬 | gap preset | 감싸는 대상 | 재사용/신규 | 소스/대상 | 담당 `agent_type` | 비고 |
 |------|---------------|-----------|------------|-------------|-------------|-----------|-------------------|------|
-| route shell | `CustomHeader` + tab layout | route layout owned | n/a | header title/subtitle, bottom tab | reuse/modify | `apps/mobile/src/app/(tabs)/_layout.tsx` | `fe-route-layout-agent` | route는 body rhythm을 직접 만들지 않음 |
+| route layout | `CustomHeader` + tab layout | route layout owned | n/a | header title/subtitle, bottom tab | reuse/modify | `apps/mobile/src/app/(tabs)/_layout.tsx` | `fe-route-layout-agent` | route는 body rhythm을 직접 만들지 않음 |
 | screen root | `VStack` | vertical / stretch | `section` | account card, current space card, quick actions, logout | reuse | `packages/fe-mo-ui/src/rhythm/VStack` | `fe-screen-agent` | screen body의 기본 세로 rhythm owner |
 | summary cards | `VStack` + `HStack` | vertical + row horizontal | `block`, `inline`, `dense` | account/current-space copy와 icon/status | reuse | `packages/fe-mo-ui/src/rhythm` | `fe-screen-agent` | 긴 이름/지점명 줄바꿈 허용 |
 | quick actions | `VStack` + row `HStack` + `ListGroup` | vertical list / row horizontal | `flush`, row `inline`, meta `dense` | 내 예약/결제/설정 rows | new + reuse | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.tsx` | `fe-widget-agent` | row touch target은 44px 이상 |
@@ -288,7 +288,7 @@ Rhythm: root screen vertical gap=section, card inner gap=block, row meta gap=den
 | route container | `/profile` route | Route | modify | `apps/mobile/src/app/(tabs)/profile.tsx` | auth/space/logout/navigation props | `fe-route-agent` | `fe-route-agent` |
 | screen owner | `MyPageScreen` | Screen | new | `packages/fe-mo-ui/src/screen/MyPageScreen/MyPageScreen.tsx` | `displayName`, `currentSpaceName`, `quickActions: QuickActionListItem[]`, `onPressLogout` | `fe-screen-agent` | `fe-route-agent` |
 | quick action widget | `QuickActionList` | Widget | new | `packages/fe-mo-ui/src/widget/QuickActionList/QuickActionList.tsx` | `items`, `onPress`, disabled row behavior | `fe-widget-agent` | `fe-screen-agent` |
-| layout primitives | `ScreenFrame`, `Card`, `ListGroup` | Layout/DataDisplay | reuse | `@cocrepo/mo-ui` existing layout exports | body shell, section cards, widget rows | `fe-layout-agent` | `fe-widget-agent`, `fe-screen-agent` |
+| layout primitives | `ScreenFrame`, `Card`, `ListGroup` | Layout/DataDisplay | reuse | `@cocrepo/mo-ui` existing layout exports | body layout, section cards, widget rows | `fe-layout-agent` | `fe-widget-agent`, `fe-screen-agent` |
 | rhythm primitives | `VStack`, `HStack` | Layout/Rhythm | reuse | `packages/fe-mo-ui/src/rhythm` | semantic gap: `section`, `block`, `inline`, `dense`, `flush` | `fe-screen-agent`, `fe-widget-agent` | `fe-route-agent` |
 | status primitive | `Chip` | DataDisplay | reuse | `packages/fe-mo-ui/src/data-display/Chip` | login state chip | `fe-data-display-agent` | `fe-screen-agent` |
 | action primitive | `Button` | Action | reuse | `packages/fe-mo-ui/src/action/Button` | logout button | `fe-control-agent` | `fe-screen-agent` |
@@ -460,7 +460,7 @@ Skipped phases:
 | `mobile-app` type | Verified | `pnpm --filter=mobile-app type-check` passed |
 | `mobile-app` E2E smoke | Pending | native runtime fixture 준비 후 검증 |
 
-## Auth Shell 계약
+## Auth Layout 계약
 
 - `AuthSessionGate`는 초기 route 렌더 전에 `mobileAuthStore.verifySession()`으로 memory/SecureStore native 세션을 복원하고 세션을 확인한다.
 - Root layout은 `QueryClientProvider`를 `DesignSystemProvider`보다 바깥에 배치해 heroui-native와 route hook이 같은 React Query 컨텍스트를 공유한다.

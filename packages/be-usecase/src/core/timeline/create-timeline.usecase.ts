@@ -22,6 +22,6 @@ export class CreateTimelineUseCase {
 		if (!userId) {
 			throw new UnauthorizedException(TIMELINE_ERRORS.NOT_FOUND);
 		}
-		return this.timelinesService.createTimeline(command.input, spaceId, userId);
+		return this.timelinesService.createTimeline(command, spaceId, userId);
 	}
 }

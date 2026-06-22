@@ -16,7 +16,7 @@ export class GetMyReservationsUseCase {
 		query: GetMyReservationsQuery,
 	): Promise<OffsetPaginatedResponse<unknown[]>> {
 		const context = this.context.requireContext();
-		const params = query.params;
+		const params = query;
 		const skip = params.skip ?? 0;
 		const take = params.take ?? 20;
 		const result = await this.reservationService.getMine({

@@ -1,8 +1,8 @@
 import { SYSTEM_ROLES } from "@cocrepo/constant";
-import type { TenantDto } from "@cocrepo/dto";
+import type { ContextTenantSnapshot } from "@cocrepo/type";
 import { SpaceCategoryName } from "@cocrepo/enum";
 
-type TenantWithSpaceCategory = TenantDto & {
+type TenantWithSpaceCategory = ContextTenantSnapshot & {
 	space?: {
 		classification?: {
 			category?: {
@@ -22,7 +22,7 @@ type TenantWithSpaceCategory = TenantDto & {
 	} | null;
 };
 
-function resolveTenantSpaceCategoryName(tenant: TenantDto): string | undefined {
+function resolveTenantSpaceCategoryName(tenant: ContextTenantSnapshot): string | undefined {
 	const tenantWithSpaceCategory = tenant as TenantWithSpaceCategory;
 	return (
 		tenantWithSpaceCategory.space?.classification?.category?.name ??
@@ -32,14 +32,14 @@ function resolveTenantSpaceCategoryName(tenant: TenantDto): string | undefined {
 	);
 }
 
-export function resolveTenantSpaceId(tenant: TenantDto): string | undefined {
+export function resolveTenantSpaceId(tenant: ContextTenantSnapshot): string | undefined {
 	return tenant.space?.id ?? tenant.spaceId ?? undefined;
 }
 
 /**
  * 현재 선택된 Tenant가 System(ROOT) Space인지 확인합니다.
  */
-export function isRootSpaceCategory(tenant: TenantDto): boolean {
+export function isRootSpaceCategory(tenant: ContextTenantSnapshot): boolean {
 	return resolveTenantSpaceCategoryName(tenant) === SpaceCategoryName.ROOT.name;
 }
 
@@ -47,9 +47,9 @@ export function isRootSpaceCategory(tenant: TenantDto): boolean {
  * 현재 x-tenant-id에 대응하는 Tenant를 고릅니다.
  */
 export function resolveCurrentTenantById(
-	tenants: TenantDto[] | null | undefined,
+	tenants: ContextTenantSnapshot[] | null | undefined,
 	tenantId?: string,
-): TenantDto | undefined {
+): ContextTenantSnapshot | undefined {
 	if (!tenants?.length) {
 		return undefined;
 	}
@@ -66,6 +66,6 @@ export function resolveCurrentTenantById(
  * 모든 Space 데이터에 접근 가능한지 확인
  * 현재 선택된 Tenant role이 PLATFORM_ADMIN인 경우 전체 조회를 허용합니다.
  */
-export function canAccessAllSpaces(tenant: TenantDto): boolean {
+export function canAccessAllSpaces(tenant: ContextTenantSnapshot): boolean {
 	return tenant.role?.name === SYSTEM_ROLES.PLATFORM_ADMIN;
 }

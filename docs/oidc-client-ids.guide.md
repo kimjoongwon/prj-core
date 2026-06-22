@@ -8,7 +8,7 @@
 | --- | --- | --- | --- | --- |
 | Admin Web | `admin-web` | Confidential | `client_secret_post` | 기본 로그인 client입니다. |
 | Mobile App | `user-mobile` | Public | `none` | PKCE 필수 native/mobile client입니다. |
-| Storybook | `storybook-web` | Confidential | `client_secret_post` | Storybook auth shell에서 사용합니다. |
+| Storybook | `storybook-web` | Confidential | `client_secret_post` | Storybook 로그인 화면에서 사용합니다. |
 | Swagger UI | `swagger-web` | Public | `none` | Swagger OAuth2 + PKCE 인증에 사용합니다. |
 
 ## Runtime managed clients

@@ -11,9 +11,9 @@ export class GetServiceDocumentsUseCase {
 
 	async execute(query: GetServiceDocumentsQuery): Promise<unknown> {
 		const serviceDocumentResult =
-			await this.serviceDocumentService.getServiceDocuments(query.query);
-		const skip = query.query.skip ?? 0;
-		const take = query.query.take ?? 10;
+			await this.serviceDocumentService.getServiceDocuments(query);
+		const skip = query.skip ?? 0;
+		const take = query.take ?? 10;
 		return buildOffsetPaginatedResponse(
 			serviceDocumentResult.data,
 			serviceDocumentResult.totalCount,

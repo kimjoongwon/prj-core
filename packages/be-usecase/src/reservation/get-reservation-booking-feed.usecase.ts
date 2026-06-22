@@ -16,7 +16,7 @@ export class GetReservationBookingFeedUseCase {
 		query: GetReservationBookingFeedQuery,
 	): Promise<OffsetPaginatedResponse<unknown[]>> {
 		const context = this.context.requireContext();
-		const params = query.params;
+		const params = query;
 		const skip = params.skip ?? 0;
 		const take = params.take ?? 50;
 		const result = await this.reservationService.getBookingFeed({

@@ -1,7 +1,12 @@
-import type { UpdateFolderCommandInput } from "./update-folder.input";
-export class UpdateFolderCommand {
+import type { UpdateFolderCommandInput } from "@cocrepo/input";
+export class UpdateFolderCommand implements UpdateFolderCommandInput {
+	readonly parentFolderId?: UpdateFolderCommandInput["parentFolderId"];
+	readonly name?: UpdateFolderCommandInput["name"];
+
 	constructor(
 		readonly folderId: string,
-		readonly input: UpdateFolderCommandInput,
-	) {}
+		input: UpdateFolderCommandInput,
+	) {
+		Object.assign(this, input);
+	}
 }

@@ -8,7 +8,6 @@
   "references": [
     { "path": "../common-constant" },
     { "path": "../be-decorator" },
-    { "path": "../be-dto" },
     { "path": "../be-entity" },
     { "path": "../common-enum" },
     { "path": "../be-prisma" },

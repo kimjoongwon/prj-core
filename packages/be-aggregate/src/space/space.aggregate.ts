@@ -1,5 +1,8 @@
-import type { CreateGroundDto, UpdateGroundDto } from "@cocrepo/dto";
 import { Ground, Space } from "@cocrepo/entity";
+import type {
+	CreateSpaceCommandInput,
+	UpdateSpaceGroundCommandInput,
+} from "@cocrepo/input";
 import type { LanguageCode, Prisma } from "@cocrepo/prisma";
 import { SpacesRepository } from "@cocrepo/repository";
 import {
@@ -69,7 +72,7 @@ export class SpaceAggregate {
 	 * Space + Company/Ground detail 생성
 	 */
 	@Transactional()
-	async createSpaceWithGround(dto: CreateGroundDto): Promise<Space> {
+	async createSpaceWithGround(dto: CreateSpaceCommandInput): Promise<Space> {
 		this.logger.debug(`공간 생성: businessNo=${dto.businessNo}`);
 
 		const existing = await this.repository.findGroundByBusinessNo(
@@ -111,7 +114,7 @@ export class SpaceAggregate {
 	 */
 	async updateGroundBySpaceId(
 		spaceId: string,
-		dto: UpdateGroundDto,
+		dto: UpdateSpaceGroundCommandInput,
 	): Promise<Space> {
 		await this.getGroundBySpaceId(spaceId);
 

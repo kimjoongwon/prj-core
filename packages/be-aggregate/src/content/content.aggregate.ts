@@ -4,8 +4,10 @@ import {
 } from "@cocrepo/repository";
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
-import type { CommunityPostCreateInput } from "./community-post-create.input";
-import type { CommunityPostListInput } from "./community-post-list.input";
+import type {
+	CommunityPostCreateInput,
+	CommunityPostListInput,
+} from "@cocrepo/input";
 
 @Injectable()
 export class ContentAggregate {
@@ -29,8 +31,8 @@ export class ContentAggregate {
 	async createCommunityPost(
 		input: CommunityPostCreateInput,
 	): Promise<CommunityPostRecord> {
-		const text = input.dto.text.trim();
-		const title = input.dto.title?.trim() || null;
+		const text = input.text.trim();
+		const title = input.title?.trim() || null;
 
 		if (!text) {
 			throw new BadRequestException("게시글 본문을 입력해 주세요.");

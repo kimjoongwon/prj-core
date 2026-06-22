@@ -1,7 +1,13 @@
-import type { UpdateRoutineCommandInput } from "./update-routine.input";
-export class UpdateRoutineCommand {
+import type { UpdateRoutineCommandInput } from "@cocrepo/input";
+export class UpdateRoutineCommand implements UpdateRoutineCommandInput {
+	readonly activities?: UpdateRoutineCommandInput["activities"];
+	readonly name?: UpdateRoutineCommandInput["name"];
+	readonly label?: UpdateRoutineCommandInput["label"];
+
 	constructor(
 		readonly routineId: string,
-		readonly input: UpdateRoutineCommandInput,
-	) {}
+		input: UpdateRoutineCommandInput,
+	) {
+		Object.assign(this, input);
+	}
 }

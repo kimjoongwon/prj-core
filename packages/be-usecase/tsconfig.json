@@ -13,7 +13,6 @@
     { "path": "../common-constant" },
     { "path": "../be-context" },
     { "path": "../common-toolkit" },
-    { "path": "../be-dto" },
     { "path": "../be-prisma" },
     { "path": "../be-service" },
     { "path": "../be-vo" }

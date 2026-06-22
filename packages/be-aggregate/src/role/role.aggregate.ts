@@ -1,6 +1,9 @@
 import { SYSTEM_ROLES } from "@cocrepo/constant";
-import { CreateRoleDto, UpdateRoleDto } from "@cocrepo/dto";
 import { Role } from "@cocrepo/entity";
+import type {
+	CreateRoleCommandInput,
+	UpdateRoleCommandInput,
+} from "@cocrepo/input";
 import { RolesRepository } from "@cocrepo/repository";
 import {
 	BadRequestException,
@@ -45,7 +48,7 @@ export class RoleAggregate {
 	 * - 이름 중복 불가
 	 * - isSystem은 자동으로 false로 설정
 	 */
-	async create(dto: CreateRoleDto): Promise<Role> {
+	async create(dto: CreateRoleCommandInput): Promise<Role> {
 		this.logger.debug(`역할 생성 시도: name=${dto.name}`);
 
 		// 이름 중복 체크
@@ -67,7 +70,7 @@ export class RoleAggregate {
 	 * - 시스템 역할 수정 불가
 	 * - name은 수정 불가 (UpdateRoleDto에서 제외됨)
 	 */
-	async update(id: string, dto: UpdateRoleDto): Promise<Role> {
+	async update(id: string, dto: UpdateRoleCommandInput): Promise<Role> {
 		this.logger.debug(`역할 수정 시도: ${id.slice(-8)}`);
 
 		const role = await this.repository.findById(id);

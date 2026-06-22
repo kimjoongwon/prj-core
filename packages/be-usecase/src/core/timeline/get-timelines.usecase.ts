@@ -15,13 +15,13 @@ export class GetTimelinesUseCase {
 
 	async execute(query: GetTimelinesQuery): Promise<unknown> {
 		this.requireTimelineSpaceId();
-		const skip = query.query.skip ?? 0;
-		const take = query.query.take ?? 10;
+		const skip = query.skip ?? 0;
+		const take = query.take ?? 10;
 		const timelineResult = await this.timelinesService.findTimelines({
 			skip,
 			take,
-			search: query.query.search ?? null,
-			contentLanguageCode: query.query.contentLanguageCode,
+			search: query.search ?? null,
+			contentLanguageCode: query.contentLanguageCode,
 		});
 		return buildOffsetStatsPaginatedResponse(
 			timelineResult.timelines,

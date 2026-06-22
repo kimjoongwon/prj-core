@@ -63,8 +63,8 @@
 
 ## 렌더링 계약
 
-- Expo Router의 `CustomHeader`가 상단 safe-area와 header를 소유하고, screen은 본문 safe-area shell만 적용한다.
-- `ScreenFrame`으로 본문 safe-area shell을 적용한다.
+- Expo Router의 `CustomHeader`가 상단 safe-area와 header를 소유하고, screen은 본문 safe-area 레이아웃만 적용한다.
+- `ScreenFrame`으로 본문 safe-area 레이아웃을 적용한다.
 - 시각 스타일은 `StyleSheet`가 아니라 uniwind `className`과 `tailwind-variants` slot/variant로 정의한다.
 - render tree는 JSX로 작성하고 `createElement` 기반 visual composition을 사용하지 않는다.
 - 사용자 노출 텍스트는 `@cocrepo/mo-ui` `Text` primitive로 감싸고, `react-native` `Text`를 직접 import하지 않는다.

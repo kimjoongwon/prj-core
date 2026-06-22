@@ -1,8 +1,17 @@
-import type { UpdateTaskExerciseCommandInput } from "./update-task-exercise.input";
-export class UpdateTaskExerciseCommand {
+import type { UpdateTaskExerciseCommandInput } from "@cocrepo/input";
+export class UpdateTaskExerciseCommand implements UpdateTaskExerciseCommandInput {
+	readonly name?: UpdateTaskExerciseCommandInput["name"];
+	readonly description?: UpdateTaskExerciseCommandInput["description"];
+	readonly imageFileId?: UpdateTaskExerciseCommandInput["imageFileId"];
+	readonly duration?: UpdateTaskExerciseCommandInput["duration"];
+	readonly count?: UpdateTaskExerciseCommandInput["count"];
+	readonly videoFileId?: UpdateTaskExerciseCommandInput["videoFileId"];
+
 	constructor(
 		readonly taskId: string,
-		readonly input: UpdateTaskExerciseCommandInput,
+		input: UpdateTaskExerciseCommandInput,
 		readonly spaceId: string,
-	) {}
+	) {
+		Object.assign(this, input);
+	}
 }

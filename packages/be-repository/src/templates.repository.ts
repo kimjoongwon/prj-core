@@ -59,7 +59,7 @@ export class TemplatesRepository {
 	 */
 	async findMany(params: {
 		where: Prisma.TemplateWhereInput;
-		orderBy: Record<string, "asc" | "desc">[];
+		orderBy: Prisma.TemplateOrderByWithRelationInput[];
 		skip?: number;
 		take?: number;
 	}): Promise<{ data: Template[]; totalCount: number }> {

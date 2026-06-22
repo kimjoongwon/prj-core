@@ -58,24 +58,4 @@ export class AssetQueryDto extends PrismaQueryDto<Prisma.AssetWhereInput> {
 		return ["search", "statusFilter"];
 	}
 
-	/**
-	 * DTO 필드를 Prisma where 조건으로 변환합니다.
-	 */
-	toPrismaWhere(
-		baseWhere?: Partial<Prisma.AssetWhereInput>,
-	): Prisma.AssetWhereInput {
-		const where = super.toPrismaWhere(baseWhere);
-
-		// 검색어 -> originalName 부분 일치
-		if (this.search) {
-			where.originalName = this.containsFilter(this.search);
-		}
-
-		// 삭제 상태 필터
-		where.removedAt = this.removedAtFilter(
-			this.statusFilter === DeleteFilter.DELETED,
-		);
-
-		return where;
 	}
-}

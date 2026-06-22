@@ -7,7 +7,7 @@ export class UpdateTemplateUseCase {
 	constructor(private readonly templateService: TemplateService) {}
 
 	execute(command: UpdateTemplateCommand): Promise<unknown> {
-		const input = command.input;
+		const input = command;
 		return this.templateService.update(command.templateId, {
 			name: input.name,
 			subject: input.subject,

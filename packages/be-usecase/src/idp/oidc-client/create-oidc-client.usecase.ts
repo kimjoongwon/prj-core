@@ -11,7 +11,7 @@ export class CreateOidcClientUseCase {
 	) {}
 
 	async execute(command: CreateOidcClientCommand): Promise<unknown> {
-		const input = command.input;
+		const input = command;
 		const client = await this.oidcClientService.create({
 			clientId: input.clientId,
 			clientSecret: input.clientSecret,

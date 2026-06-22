@@ -15,15 +15,15 @@ export class GetCoursesUseCase {
 
 	async execute(query: GetCoursesQuery): Promise<unknown> {
 		this.requireSpaceId();
-		const skip = query.query.skip ?? 0;
-		const take = query.query.take ?? 10;
+		const skip = query.skip ?? 0;
+		const take = query.take ?? 10;
 		const result = await this.courseService.findCourses({
 			skip,
 			take,
-			search: query.query.search ?? null,
-			status: query.query.status,
-			tenantId: query.query.tenantId,
-			sort: query.query.sort,
+			search: query.search ?? null,
+			status: query.status,
+			tenantId: query.tenantId,
+			sort: query.sort,
 		});
 		return buildOffsetStatsPaginatedResponse(
 			result.courses,

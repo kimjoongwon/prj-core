@@ -3,7 +3,7 @@ import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import type { RenderedTemplateResult } from "../template";
 import { TemplateService } from "../template/template.service";
 import { EmailProvider } from "./email-provider";
-import type { EmailSendInput } from "./email-send-input";
+import type { EmailSendInput } from "@cocrepo/input";
 import { EMAIL_TEMPLATE_CODES } from "./email-template-codes";
 
 /**

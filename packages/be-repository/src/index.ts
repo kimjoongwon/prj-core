@@ -8,6 +8,10 @@ export { ActionsRepository } from "./actions.repository";
 export { AIAgentLogsRepository } from "./ai-agent-logs.repository";
 export { AlbumsRepository } from "./albums.repository";
 export { AssetsRepository } from "./assets.repository";
+export {
+	buildAssetQueryOrderBy,
+	buildAssetQueryWhere,
+} from "./asset-query.mapper";
 export { AuthAuditLogsRepository } from "./auth-audit-logs.repository";
 export {
 	type CommunityPostRecord,
@@ -15,11 +19,31 @@ export {
 } from "./contents.repository";
 export { CoursesRepository } from "./courses.repository";
 export { EmailVerificationsRepository } from "./email-verifications.repository";
+export {
+	buildEmailVerificationQueryOrderBy,
+	buildEmailVerificationQueryWhere,
+} from "./email-verification-query.mapper";
 export { FoldersRepository } from "./folders.repository";
+export {
+	buildFolderQueryOrderBy,
+	buildFolderQueryWhere,
+} from "./folder-query.mapper";
 export { InquiriesRepository } from "./inquiries.repository";
 export { InquiryThreadsRepository } from "./inquiry-threads.repository";
+export {
+	buildInquiryQueryOrderBy,
+	buildInquiryQueryWhere,
+} from "./inquiry-query.mapper";
+export {
+	buildIdpAccountQueryOrderBy,
+	buildIdpAccountQueryWhere,
+} from "./idp-account-query.mapper";
 export type { OidcAuthUserData } from "./oidc-auth-user.data";
 export { OidcClientsRepository } from "./oidc-clients.repository";
+export {
+	buildOidcClientQueryOrderBy,
+	buildOidcClientQueryWhere,
+} from "./oidc-client-query.mapper";
 export { OidcDirectPrismaProvider } from "./oidc-direct-prisma.provider";
 export { OidcDirectUsersRepository } from "./oidc-direct-users.repository";
 export { OidcModelsRepository } from "./oidc-models.repository";
@@ -44,14 +68,30 @@ export { RoutinesRepository } from "./routines.repository";
 export { SafeWalletsRepository } from "./safe-wallets.repository";
 export { SecurityPoliciesRepository } from "./security-policies.repository";
 export { ServiceDocumentsRepository } from "./service-documents.repository";
+export {
+	buildServiceDocumentQueryOrderBy,
+	buildServiceDocumentQueryWhere,
+} from "./service-document-query.mapper";
 export { SpacesRepository } from "./spaces.repository";
 export { SubjectsRepository } from "./subjects.repository";
 export { TasksRepository } from "./tasks.repository";
 export { TemplatesRepository } from "./templates.repository";
+export {
+	buildTemplateQueryOrderBy,
+	buildTemplateQueryWhere,
+} from "./template-query.mapper";
 export { TenantAccessRequestsRepository } from "./tenant-access-requests.repository";
+export {
+	buildTenantAccessRequestQueryOrderBy,
+	buildTenantAccessRequestQueryWhere,
+} from "./tenant-access-request-query.mapper";
 export { TenantsRepository } from "./tenants.repository";
 export { TimelinesRepository } from "./timelines.repository";
 export { TranslationsRepository } from "./translations.repository";
 export { UserPoliciesRepository } from "./user-policies.repository";
 export { UsersRepository } from "./users.repository";
+export {
+	buildUserQueryOrderBy,
+	buildUserQueryWhere,
+} from "./user-query.mapper";
 export { WhitelistEntriesRepository } from "./whitelist-entries.repository";

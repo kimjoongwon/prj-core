@@ -8,9 +8,9 @@ export class GetIdpAccountsUseCase {
 	constructor(private readonly idpAccountService: IdpAccountAggregate) {}
 
 	async execute(query: GetIdpAccountsQuery): Promise<unknown> {
-		const skip = query.query.skip ?? 0;
-		const take = query.query.take ?? 20;
-		const idpAccountResult = await this.idpAccountService.getMany(query.query);
+		const skip = query.skip ?? 0;
+		const take = query.take ?? 20;
+		const idpAccountResult = await this.idpAccountService.getMany(query);
 		return {
 			data: idpAccountResult.data,
 			meta: buildOffsetPageMeta(skip, take, idpAccountResult.totalCount),

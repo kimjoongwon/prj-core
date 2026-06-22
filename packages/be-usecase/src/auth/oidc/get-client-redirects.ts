@@ -7,7 +7,7 @@ export async function getClientRedirects(
 ): Promise<{
 	loginUrl: string | null;
 	defaultReturnTo: string | null;
-	hasAuthShell: boolean;
+	hasLoginPage: boolean;
 }> {
 	const client = await resolveOidcClient(oidcClientService, clientId, {
 		requireActive: false,
@@ -16,6 +16,6 @@ export async function getClientRedirects(
 	return {
 		loginUrl: client.loginUrl,
 		defaultReturnTo: client.defaultReturnTo,
-		hasAuthShell: client.hasAuthShell,
+		hasLoginPage: client.hasLoginPage,
 	};
 }

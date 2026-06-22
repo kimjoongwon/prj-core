@@ -7,7 +7,7 @@
 ## 역할
 
 보안 정책 설정 화면의 pure screen 컴포넌트입니다.
-정책 조회, 저장 mutation, 성공 상태 관리는 route thin container가 소유하고 이 파일은 form shell과 로컬 입력 상태만 담당합니다.
+정책 조회, 저장 mutation, 성공 상태 관리는 route thin container가 소유하고 이 파일은 폼 영역과 로컬 입력 상태만 담당합니다.
 
 ## 디자인 스케치
 

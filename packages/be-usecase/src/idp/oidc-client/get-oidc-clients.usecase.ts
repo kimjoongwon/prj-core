@@ -8,9 +8,9 @@ export class GetOidcClientsUseCase {
 	constructor(private readonly oidcClientService: OidcClientAggregate) {}
 
 	async execute(query: GetOidcClientsQuery): Promise<unknown> {
-		const skip = query.query.skip ?? 0;
-		const take = query.query.take ?? 20;
-		const oidcClientResult = await this.oidcClientService.getMany(query.query);
+		const skip = query.skip ?? 0;
+		const take = query.take ?? 20;
+		const oidcClientResult = await this.oidcClientService.getMany(query);
 		return {
 			data: oidcClientResult.data,
 			meta: buildOffsetPageMeta(skip, take, oidcClientResult.totalCount),

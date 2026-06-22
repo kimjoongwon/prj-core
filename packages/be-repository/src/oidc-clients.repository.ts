@@ -41,7 +41,7 @@ export class OidcClientsRepository {
 
 	async findMany(params: {
 		where: Prisma.OidcClientWhereInput;
-		orderBy: Record<string, "asc" | "desc">[];
+		orderBy: Prisma.OidcClientOrderByWithRelationInput[];
 		skip?: number;
 		take?: number;
 	}): Promise<{ data: OidcClient[]; totalCount: number }> {

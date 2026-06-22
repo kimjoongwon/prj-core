@@ -74,13 +74,13 @@ export const Variants: Story = {
 	),
 };
 
-export const TableShell: Story = {
+export const TablePanel: Story = {
 	render: () => (
 		<Surface className="overflow-hidden p-0">
 			<div className="flex items-center justify-between border-border border-b px-5 py-4">
 				<div>
 					<p className="text-sm font-semibold">최근 결제</p>
-					<p className="mt-1 text-xs text-muted">widget local table shell</p>
+					<p className="mt-1 text-xs text-muted">widget local table panel</p>
 				</div>
 				<Button size="sm" variant="flat">
 					필터

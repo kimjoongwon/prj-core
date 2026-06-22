@@ -31,7 +31,7 @@ export class LogoutWithCookieUseCase {
 			const clientId = resolveClientIdFromSessionId(command.sessionId);
 			const client = await resolveOidcClient(this.oidcClientService, clientId, {
 				requireActive: false,
-				requireAuthShell: false,
+				requireLoginPage: false,
 			});
 			await this.oidcClient.revokeToken(
 				accessToken,

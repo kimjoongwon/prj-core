@@ -21,7 +21,7 @@
 
 ### 목표
 
-`/auth/login`은 OIDC redirect 진입점이 아니라 관리자 first-party native email/password login form을 렌더링한다. 이 route/page spec은 thin route page, root `app/layout.tsx` shell 소비, `useAuthLogin` shared hook, generated native auth API 소비, PersistStore session write, route-local E2E를 소유한다.
+`/auth/login`은 OIDC redirect 진입점이 아니라 관리자 first-party native email/password login form을 렌더링한다. 이 route/page spec은 thin route page, root `app/layout.tsx` 공통 레이아웃 소비, `useAuthLogin` shared hook, generated native auth API 소비, PersistStore session write, route-local E2E를 소유한다.
 
 | row id | 항목 | 내용 |
 |--------|------|------|
@@ -35,25 +35,25 @@
 | row id | 참조 대상 | planning spec | section/row id | 소유 계약 | route 소비 방식 | 비고 |
 |--------|-----------|---------------|----------------|-----------|----------------|------|
 | LOGIN-ROUTE-SCREEN-LOGIN | `LoginScreen` Screen | `packages/fe-ui/src/screen/LoginScreen/LoginScreen.spec.md` | `LOGIN-SCREEN-GOAL`, `LOGIN-SCREEN-PROPS-*`, `LOGIN-SCREEN-STATE-*`, `LOGIN-SCREEN-COMP-*` | 화면 러프, props/event, rhythm/rendering, 상태별 렌더링, 하위 `LoginForm` 조합, story/unit 계약 | `page.tsx`가 state/event/loading/title/caption을 주입 | route spec은 screen 내부 wireframe과 props 상세를 복제하지 않음 |
-| LOGIN-ROUTE-FEATURE-AUTH-FRAME | reusable Feature | `packages/fe-ui/src/feature/LoginFrame/LoginFrame.tsx`, `packages/fe-ui/src/feature/UtilityActions/UtilityActions.tsx` | auth frame/action wiring | root `app/layout.tsx` shell 기준으로 소비 | route page는 직접 import하지 않음 | package feature가 shell/action UI를 소유 |
+| LOGIN-ROUTE-FEATURE-AUTH-FRAME | reusable Feature | `packages/fe-ui/src/feature/LoginFrame/LoginFrame.tsx`, `packages/fe-ui/src/feature/UtilityActions/UtilityActions.tsx` | auth frame/action wiring | root `app/layout.tsx` 공통 레이아웃 기준으로 소비 | route page는 직접 import하지 않음 | package feature가 레이아웃/action UI를 소유 |
 | LOGIN-ROUTE-FORM-NO-SPEC | `LoginForm` form | `none-created` | `LoginScreen.spec.md#LOGIN-SCREEN-COMP-FORM`, `LoginScreen.spec.md#LOGIN-SCREEN-NO-FORM-SPEC` | `LoginScreen` 하위 component 조합 안에서 충분히 소유 | route가 직접 `LoginForm`에 props를 전달하지 않음 | `packages/fe-ui/src/form/LoginForm/LoginForm.spec.md`는 생성하지 않음 |
 
 ### 디자인 정렬
 
 | row id | 항목 | route 기준 | 상세 owner |
 |--------|------|------------|------------|
-| LOGIN-ROUTE-DESIGN-SHELL | auth shell | `DESIGN.md`의 상태 우선/다음 행동 우선 원칙을 `LoginFrame`의 auth large section으로 드러낸다. | `LoginFrame`, `LoginScreen.spec.md#화면-러프` |
+| LOGIN-ROUTE-DESIGN-LAYOUT | auth layout | `DESIGN.md`의 상태 우선/다음 행동 우선 원칙을 `LoginFrame`의 auth large section으로 드러낸다. | `LoginFrame`, `LoginScreen.spec.md#화면-러프` |
 | LOGIN-ROUTE-DESIGN-ACTION | top-right actions | language/theme action은 package feature `UtilityActions`가 소유한다. | `UtilityActions.tsx` |
 | LOGIN-ROUTE-DESIGN-SURFACE | form surface | form surface 내부 구조와 상태별 feedback은 `LoginScreen` planning spec을 따른다. | `LoginScreen.spec.md#LOGIN-SCREEN-STATE-*` |
-| LOGIN-ROUTE-DESIGN-COLOR | 색상 역할 | route shell은 `canvas`, `surface`, `muted`, `border` 역할만 설명한다. | service spec `AUTH-DESIGN-COLOR`, screen spec |
+| LOGIN-ROUTE-DESIGN-COLOR | 색상 역할 | route layout은 `canvas`, `surface`, `muted`, `border` 역할만 설명한다. | service spec `AUTH-DESIGN-COLOR`, screen spec |
 | LOGIN-ROUTE-DESIGN-RHYTHM | rhythm | `LoginFrame`은 auth intro와 child slot 배치만 소유하고, form 내부 rhythm은 screen spec이 소유한다. | `LoginFrame`, `LoginScreen.spec.md#리듬-/-레이아웃-계약` |
 
-### Route Shell / 조합 러프
+### Route Layout / 조합 러프
 
-이 러프는 route shell과 screen 조합만 표현한다. `LoginScreen` 내부 필드, CTA, error feedback의 상세 출력물은 `packages/fe-ui/src/screen/LoginScreen/LoginScreen.spec.md#화면-러프`를 참조한다.
+이 러프는 route layout과 screen 조합만 표현한다. `LoginScreen` 내부 필드, CTA, error feedback의 상세 출력물은 `packages/fe-ui/src/screen/LoginScreen/LoginScreen.spec.md#화면-러프`를 참조한다.
 
 ```text
-LOGIN-ROUTE-SHELL
+LOGIN-ROUTE-LAYOUT
 
 ┌─ `/auth/login` route viewport ───────────────────────────────┐
 │ UtilityActions                                             │
@@ -70,9 +70,9 @@ LOGIN-ROUTE-SHELL
 
 | row id | route 영역 | owner 파일 | 책임 | 참조 |
 |--------|------------|------------|------|------|
-| LOGIN-ROUTE-SHELL-LAYOUT | auth layout | `packages/fe-ui/src/feature/LoginFrame/LoginFrame.tsx` | viewport shell, desktop intro/status rail, child slot centering | service spec `AUTH-DESIGN-*` |
-| LOGIN-ROUTE-SHELL-ACTIONS | auth actions | `packages/fe-ui/src/feature/UtilityActions/UtilityActions.tsx` | locale/theme action wiring | no Feature planning spec |
-| LOGIN-ROUTE-SHELL-PAGE | page container | `apps/admin/web/src/app/auth/login/page.tsx` | route hook 호출, `LoginScreen` props 주입, `observer` export | `LOGIN-ROUTE-SCREEN-LOGIN` |
+| LOGIN-ROUTE-LAYOUT-FRAME | auth layout | `packages/fe-ui/src/feature/LoginFrame/LoginFrame.tsx` | viewport layout, desktop intro/status rail, child slot centering | service spec `AUTH-DESIGN-*` |
+| LOGIN-ROUTE-LAYOUT-ACTIONS | auth actions | `packages/fe-ui/src/feature/UtilityActions/UtilityActions.tsx` | locale/theme action wiring | no Feature planning spec |
+| LOGIN-ROUTE-LAYOUT-PAGE | page container | `apps/admin/web/src/app/auth/login/page.tsx` | route hook 호출, `LoginScreen` props 주입, `observer` export | `LOGIN-ROUTE-SCREEN-LOGIN` |
 
 ### Route-local 상태 / 이벤트
 
@@ -90,8 +90,8 @@ LOGIN-ROUTE-SHELL
 |--------|------|----------------|------|-------------|------------|------------------------|-------------------------|---------------------------|
 | LOGIN-ROUTE-COMP-PAGE | route page | `AuthLoginPage` / `page.tsx` | Route | reuse/verify | hook 호출 후 `LoginScreen`로 state/event/loading/title/caption 주입 | route wiring은 이 spec, screen prop 상세는 `LoginScreen.spec.md` | `fe-route-agent` | `fe-route-agent` |
 | LOGIN-ROUTE-COMP-HOOK | shared hook | `useAuthLogin` | Hook | reuse/verify | native login mutation, error message, safe return path, session store write | this spec `LOGIN-ROUTE-STATE-*` | `fe-hook-agent` | `fe-route-agent` |
-| LOGIN-ROUTE-COMP-LAYOUT | auth frame | `LoginFrame` | Feature | reuse/verify | auth shell and child slot | this spec `LOGIN-ROUTE-SHELL-LAYOUT` | `fe-feature-agent` | `fe-route-layout-agent` |
-| LOGIN-ROUTE-COMP-ACTIONS | utility actions | `UtilityActions` | Feature | reuse/verify | locale/theme button wiring | this spec `LOGIN-ROUTE-SHELL-ACTIONS` | `fe-feature-agent` | `fe-route-layout-agent` |
+| LOGIN-ROUTE-COMP-LAYOUT | auth frame | `LoginFrame` | Feature | reuse/verify | 인증 레이아웃과 child slot | this spec `LOGIN-ROUTE-LAYOUT-FRAME` | `fe-feature-agent` | `fe-route-layout-agent` |
+| LOGIN-ROUTE-COMP-ACTIONS | utility actions | `UtilityActions` | Feature | reuse/verify | locale/theme button wiring | this spec `LOGIN-ROUTE-LAYOUT-ACTIONS` | `fe-feature-agent` | `fe-route-layout-agent` |
 | LOGIN-ROUTE-COMP-SCREEN | screen | `LoginScreen` | Screen | reuse/modify planning | screen을 소비만 함 | `packages/fe-ui/src/screen/LoginScreen/LoginScreen.spec.md` | `fe-screen-agent` | `fe-route-agent` |
 | LOGIN-ROUTE-COMP-FORM | form | `LoginForm` | Form | reuse | route가 직접 소비하지 않음 | `LoginScreen.spec.md#LOGIN-SCREEN-COMP-FORM` | `fe-screen-agent` | `fe-screen-agent` |
 | LOGIN-ROUTE-COMP-PROVIDER | app auth bridge | `apps/admin/web/src/app/providers.tsx` | Provider Wiring | reuse/verify | native refresh handler and verify-token bootstrap 소비 계약 | service spec `AUTH-FE-STATE` | `fe-route-agent` | `fe-route-agent` |
@@ -219,7 +219,7 @@ flowchart TD
 |-----------|------------|------|
 | `apps/admin/web/src/app/auth/login/page.spec.md` | `LOGIN-S0-SPEC` | route/page delivery spec owner; 하위 UI 상세 복제 금지 |
 | `apps/admin/web/src/app/auth/login/page.tsx` | `LOGIN-W1-ROUTE` | thin route container only; private JSX section component 추가 금지 |
-| `packages/fe-ui/src/feature/LoginFrame/LoginFrame.tsx` | `LOGIN-W1-ROUTE` | auth shell/child slot only; `LoginScreen` 내부 UI 소유 금지 |
+| `packages/fe-ui/src/feature/LoginFrame/LoginFrame.tsx` | `LOGIN-W1-ROUTE` | auth layout/child slot only; `LoginScreen` 내부 UI 소유 금지 |
 | `packages/fe-ui/src/feature/UtilityActions/UtilityActions.tsx` | `LOGIN-W1-ROUTE` | locale/theme package feature action wiring only |
 | `packages/fe-hook/src/` | `LOGIN-W1-ROUTE` | shared hook/helper/state owner |
 | `apps/admin/web/src/app/auth/login/page.e2e.ts` | `LOGIN-Q2-E2E` | route-local E2E scenarios only |
@@ -244,7 +244,7 @@ flowchart TD
 | row id | 시나리오 | 검증 흐름 | 테스트 파일 | mock/stub | 작성 agent_type | 검증 agent_type | 통과 기준 |
 |--------|----------|-----------|-------------|-----------|------------------|------------------|-----------|
 | LOGIN-E2E-VISIBLE | native login form visible | `/auth/login` 진입 -> heading/field/button 표시 | `apps/admin/web/src/app/auth/login/page.e2e.ts` | none | `qa-fe-e2e-testing` | `qa-fe-e2e-testing` | native form visible |
-| LOGIN-E2E-SUCCESS | local dev native login success | default credentials 확인 -> submit -> native login request/response -> session 저장 -> `/dashboard` | `apps/admin/web/src/app/auth/login/page.e2e.ts` | shell API route mock or seeded service | `qa-fe-e2e-testing` | `qa-fe-e2e-testing` | request payload/session/localStorage/redirect 통과 |
+| LOGIN-E2E-SUCCESS | local dev native login success | default credentials 확인 -> submit -> native login request/response -> session 저장 -> `/dashboard` | `apps/admin/web/src/app/auth/login/page.e2e.ts` | API route mock or seeded service | `qa-fe-e2e-testing` | `qa-fe-e2e-testing` | request payload/session/localStorage/redirect 통과 |
 | LOGIN-E2E-FAILURE | native login failure | invalid submit -> server error 표시 -> route 유지 | `apps/admin/web/src/app/auth/login/page.e2e.ts` | native login 401/400 mock | `qa-fe-e2e-testing` | `qa-fe-e2e-testing` | error feedback visible and retry possible |
 | LOGIN-E2E-RETURNTO | unsafe returnTo blocked | external origin returnTo + success -> fallback route 이동 | `apps/admin/web/src/app/auth/login/page.e2e.ts` | native login success mock | `qa-fe-e2e-testing` | `qa-fe-e2e-testing` | external navigation not used |
 

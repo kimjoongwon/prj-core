@@ -8,9 +8,9 @@ export class GetInquiryMessagesUseCase {
 	constructor(private readonly inquiryService: InquiryAggregate) {}
 
 	async execute(query: GetInquiryMessagesQuery): Promise<unknown> {
-		const skip = query.params.skip ?? 0;
-		const take = query.params.take ?? 50;
-		const messageResult = await this.inquiryService.listMessages(query.params);
+		const skip = query.skip ?? 0;
+		const take = query.take ?? 50;
+		const messageResult = await this.inquiryService.listMessages(query);
 		return buildOffsetPaginatedResponse(
 			messageResult.items,
 			messageResult.totalCount,

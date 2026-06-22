@@ -1,4 +1,9 @@
-import type { CreateCommunityPostCommandInput } from "./create-community-post.input";
-export class CreateCommunityPostCommand {
-	constructor(readonly input: CreateCommunityPostCommandInput) {}
+import type { CreateCommunityPostCommandInput } from "@cocrepo/input";
+export class CreateCommunityPostCommand implements CreateCommunityPostCommandInput {
+	readonly title?: CreateCommunityPostCommandInput["title"];
+	readonly text!: CreateCommunityPostCommandInput["text"];
+
+	constructor(input: CreateCommunityPostCommandInput) {
+		Object.assign(this, input);
+	}
 }

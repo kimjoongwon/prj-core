@@ -7,6 +7,6 @@ export class FillInquiryFormWithAiUseCase {
 	constructor(private readonly inquiryService: InquiryAggregate) {}
 
 	async execute(query: FillInquiryFormWithAiQuery): Promise<unknown> {
-		return this.inquiryService.fillFormWithAi(query.input);
+		return this.inquiryService.fillFormWithAi(query);
 	}
 }

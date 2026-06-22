@@ -1,9 +1,9 @@
 import { ROUTINE_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/context";
-import { SpaceScope } from "@cocrepo/dto";
 import { Routine } from "@cocrepo/entity";
 import type { LanguageCode } from "@cocrepo/prisma";
 import { RoutinesRepository, TasksRepository } from "@cocrepo/repository";
+import { SpaceScope } from "@cocrepo/type";
 import {
 	BadRequestException,
 	ConflictException,

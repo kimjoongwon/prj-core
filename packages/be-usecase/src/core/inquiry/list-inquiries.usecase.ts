@@ -12,10 +12,10 @@ export class ListInquiriesUseCase {
 	) {}
 
 	async execute(query: ListInquiriesQuery): Promise<unknown> {
-		const skip = query.params.skip ?? 0;
-		const take = query.params.take ?? 10;
+		const skip = query.skip ?? 0;
+		const take = query.take ?? 10;
 		const inquiryResult = await this.inquiryService.list({
-			...query.params,
+			...query,
 			spaceIds: this.spaceContext.spaceIds,
 		});
 		return buildOffsetPaginatedResponse(

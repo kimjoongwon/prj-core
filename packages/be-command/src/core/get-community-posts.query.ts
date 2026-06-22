@@ -1,5 +1,10 @@
-import type { QueryCommunityPostsDto } from "@cocrepo/dto";
+import type { GetCommunityPostsQueryInput } from "@cocrepo/input";
 
-export class GetCommunityPostsQuery {
-	constructor(readonly query: QueryCommunityPostsDto) {}
+export class GetCommunityPostsQuery implements GetCommunityPostsQueryInput {
+	readonly skip?: GetCommunityPostsQueryInput["skip"];
+	readonly take?: GetCommunityPostsQueryInput["take"];
+
+	constructor(input: GetCommunityPostsQueryInput) {
+		Object.assign(this, input);
+	}
 }

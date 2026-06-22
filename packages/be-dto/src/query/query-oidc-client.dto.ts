@@ -14,18 +14,4 @@ export class QueryOidcClientDto extends PrismaQueryDto<Prisma.OidcClientWhereInp
 		return ["search"];
 	}
 
-	toPrismaWhere(
-		baseWhere?: Partial<Prisma.OidcClientWhereInput>,
-	): Prisma.OidcClientWhereInput {
-		const autoWhere = super.toPrismaWhere(baseWhere);
-
-		if (this.search) {
-			autoWhere.OR = [
-				{ clientId: { contains: this.search, mode: "insensitive" } },
-				{ name: { contains: this.search, mode: "insensitive" } },
-			];
-		}
-
-		return autoWhere;
-	}
 }

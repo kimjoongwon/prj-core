@@ -1,14 +1,13 @@
 import { EXERCISE_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/context";
 import type {
-	CreateExerciseDto,
-	SpaceScope,
-	UpdateExerciseDto,
-} from "@cocrepo/dto";
-import { SpaceScope as SpaceScopeEnum } from "@cocrepo/dto";
+	CreateTaskCommandInput,
+	UpdateTaskExerciseCommandInput,
+} from "@cocrepo/input";
 import { Exercise, Routine, Task } from "@cocrepo/entity";
 import type { LanguageCode } from "@cocrepo/prisma";
 import { TasksRepository } from "@cocrepo/repository";
+import { SpaceScope } from "@cocrepo/type";
 import {
 	ConflictException,
 	ForbiddenException,
@@ -54,7 +53,7 @@ export class TaskAggregate {
 	async findTaskById(
 		taskId: string,
 		spaceId: string,
-		spaceScope: SpaceScope = SpaceScopeEnum.INCLUDE_ANCESTORS,
+		spaceScope: SpaceScope = SpaceScope.INCLUDE_ANCESTORS,
 	): Promise<Task> {
 		const spaceIds = this.resolveReadableSpaceIds(spaceScope, spaceId);
 
@@ -69,7 +68,7 @@ export class TaskAggregate {
 	async getExerciseByTaskId(
 		taskId: string,
 		spaceId: string,
-		spaceScope: SpaceScope = SpaceScopeEnum.INCLUDE_ANCESTORS,
+		spaceScope: SpaceScope = SpaceScope.INCLUDE_ANCESTORS,
 	): Promise<Exercise> {
 		const task = await this.findTaskById(taskId, spaceId, spaceScope);
 		if (!task.exercise) {
@@ -80,13 +79,13 @@ export class TaskAggregate {
 	}
 
 	async findTaskRoutines(taskId: string, spaceId: string): Promise<Routine[]> {
-		await this.findTaskById(taskId, spaceId, SpaceScopeEnum.INCLUDE_ANCESTORS);
+		await this.findTaskById(taskId, spaceId, SpaceScope.INCLUDE_ANCESTORS);
 		return this.tasksRepository.findTaskRoutines(taskId);
 	}
 
 	@Transactional()
 	async createTaskWithExercise(
-		dto: CreateExerciseDto,
+		dto: CreateTaskCommandInput,
 		spaceId: string,
 		creatorId: string,
 	): Promise<Task> {
@@ -110,13 +109,13 @@ export class TaskAggregate {
 
 	async updateTaskExercise(
 		taskId: string,
-		dto: UpdateExerciseDto,
+		dto: UpdateTaskExerciseCommandInput,
 		spaceId: string,
 	): Promise<Task> {
 		const task = await this.findTaskById(
 			taskId,
 			spaceId,
-			SpaceScopeEnum.INCLUDE_ANCESTORS,
+			SpaceScope.INCLUDE_ANCESTORS,
 		);
 
 		if (task.tenant?.spaceId !== spaceId) {
@@ -138,7 +137,7 @@ export class TaskAggregate {
 		const task = await this.findTaskById(
 			taskId,
 			spaceId,
-			SpaceScopeEnum.INCLUDE_ANCESTORS,
+			SpaceScope.INCLUDE_ANCESTORS,
 		);
 
 		if (task.tenant?.spaceId !== spaceId) {
@@ -163,7 +162,7 @@ export class TaskAggregate {
 			return undefined;
 		}
 
-		return spaceScope === SpaceScopeEnum.INCLUDE_ANCESTORS
+		return spaceScope === SpaceScope.INCLUDE_ANCESTORS
 			? this.spaceContext.spaceIds
 			: [spaceId];
 	}

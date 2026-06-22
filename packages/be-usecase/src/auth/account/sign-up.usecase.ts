@@ -15,7 +15,7 @@ export class SignUpUseCase {
 	) {}
 
 	async execute(command: SignUpCommand) {
-		const input = command.input;
+		const input = command;
 		const email = Email.create(input.email);
 		const phone = Phone.create(input.phone ?? "");
 		const existingUser = await this.usersService.findUserForAuth(email.value);

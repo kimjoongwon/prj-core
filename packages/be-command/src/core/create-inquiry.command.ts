@@ -1,8 +1,19 @@
-import type { CreateInquiryCommandInput } from "./create-inquiry.input";
-export class CreateInquiryCommand {
+import type { CreateInquiryCommandInput } from "@cocrepo/input";
+export class CreateInquiryCommand implements CreateInquiryCommandInput {
+	readonly title!: CreateInquiryCommandInput["title"];
+	readonly category!: CreateInquiryCommandInput["category"];
+	readonly channel!: CreateInquiryCommandInput["channel"];
+	readonly source?: CreateInquiryCommandInput["source"];
+	readonly priority?: CreateInquiryCommandInput["priority"];
+	readonly customerId?: CreateInquiryCommandInput["customerId"];
+	readonly assigneeId?: CreateInquiryCommandInput["assigneeId"];
+	readonly content?: CreateInquiryCommandInput["content"];
+
 	constructor(
-		readonly input: CreateInquiryCommandInput,
+		input: CreateInquiryCommandInput,
 		readonly spaceId: string,
 		readonly actorUserId: string,
-	) {}
+	) {
+		Object.assign(this, input);
+	}
 }

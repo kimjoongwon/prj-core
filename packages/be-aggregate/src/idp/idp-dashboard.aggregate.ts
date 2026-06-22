@@ -4,9 +4,7 @@ import { RedisService } from "@cocrepo/service";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import type { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import type { DashboardStats } from "./dashboard-stats";
 import { INDEX_SEGMENTS } from "./index-segments";
-import type { LoginTrendItem } from "./login-trend.item";
 import { OIDC_KEY_PREFIX } from "./oidc-key-prefix";
 
 @Injectable()
@@ -20,7 +18,7 @@ export class IdpDashboardAggregate {
 		private readonly redisService: RedisService,
 	) {}
 
-	async getStats(): Promise<DashboardStats> {
+	async getStats() {
 		this.logger.debug("대시보드 통계 조회");
 
 		const today = new Date();
@@ -72,10 +70,10 @@ export class IdpDashboardAggregate {
 		};
 	}
 
-	async getLoginTrend(days = 7): Promise<LoginTrendItem[]> {
+	async getLoginTrend(days = 7) {
 		this.logger.debug(`로그인 추이 조회: 최근 ${days}일`);
 
-		const result: LoginTrendItem[] = [];
+		const result = [];
 		const now = new Date();
 
 		for (let i = days - 1; i >= 0; i--) {

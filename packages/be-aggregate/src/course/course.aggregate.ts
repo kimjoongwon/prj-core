@@ -27,11 +27,11 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
-import type { CourseListInput } from "./course-list.input";
-import type { CourseOfferingListInput } from "./course-offering-list.input";
-import type { CoursePassListInput } from "./course-pass-list.input";
-import type { CreateEnrollmentInput } from "./create-enrollment.input";
-import type { EnrollmentListInput } from "./enrollment-list.input";
+import type { CourseListInput } from "@cocrepo/input";
+import type { CourseOfferingListInput } from "@cocrepo/input";
+import type { CoursePassListInput } from "@cocrepo/input";
+import type { CreateEnrollmentInput } from "@cocrepo/input";
+import type { EnrollmentListInput } from "@cocrepo/input";
 
 @Injectable()
 export class CourseAggregate {

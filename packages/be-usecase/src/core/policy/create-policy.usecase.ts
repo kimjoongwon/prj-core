@@ -7,6 +7,6 @@ export class CreatePolicyUseCase {
 	constructor(private readonly policyService: PolicyAggregate) {}
 
 	execute(command: CreatePolicyCommand): Promise<unknown> {
-		return this.policyService.createPolicy(command.input);
+		return this.policyService.createPolicy(command);
 	}
 }

@@ -1,9 +1,14 @@
 import type { Request } from "express";
-import type { NativeLoginCommandInput } from "./native-login.input";
+import type { NativeLoginCommandInput } from "@cocrepo/input";
 
-export class NativeLoginCommand {
+export class NativeLoginCommand implements NativeLoginCommandInput {
+	readonly email!: NativeLoginCommandInput["email"];
+	readonly password!: NativeLoginCommandInput["password"];
+
 	constructor(
-		readonly input: NativeLoginCommandInput,
+		input: NativeLoginCommandInput,
 		readonly req: Request,
-	) {}
+	) {
+		Object.assign(this, input);
+	}
 }
