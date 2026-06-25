@@ -1,6 +1,9 @@
 import type { GetServiceDocumentsQueryInput } from "@cocrepo/input";
 import type { Prisma } from "@cocrepo/prisma";
-import { containsFilter, toPrismaOrderBy } from "./query-input.mapper";
+import {
+	containsFilter,
+	createQueryOrderByBuilder,
+} from "./query-input.mapper";
 
 export function buildServiceDocumentQueryWhere(
 	input: GetServiceDocumentsQueryInput,
@@ -12,9 +15,7 @@ export function buildServiceDocumentQueryWhere(
 		...(input.platform ? { platform: input.platform } : {}),
 		...(input.status ? { status: input.status } : {}),
 		...(input.locale ? { locale: input.locale } : {}),
-		...(input.isRequired !== undefined
-			? { isRequired: input.isRequired }
-			: {}),
+		...(input.isRequired !== undefined ? { isRequired: input.isRequired } : {}),
 	};
 
 	if (input.search) {
@@ -25,8 +26,7 @@ export function buildServiceDocumentQueryWhere(
 	return where;
 }
 
-export function buildServiceDocumentQueryOrderBy(
-	input: GetServiceDocumentsQueryInput,
-) {
-	return toPrismaOrderBy(input.sort) as Prisma.ServiceDocumentOrderByWithRelationInput[];
-}
+export const buildServiceDocumentQueryOrderBy = createQueryOrderByBuilder<
+	GetServiceDocumentsQueryInput,
+	Prisma.ServiceDocumentOrderByWithRelationInput
+>();

@@ -1,8 +1,7 @@
 import { UUIDFieldOptional } from "@cocrepo/decorator";
-import type { Prisma } from "@cocrepo/prisma";
-import { PrismaQueryDto } from "./prisma-query.dto";
+import { QueryDto } from "./query.dto";
 
-export class QueryUserAssociationDto extends PrismaQueryDto<Prisma.UserAssociationWhereInput> {
+export class QueryUserAssociationDto extends QueryDto {
 	@UUIDFieldOptional()
 	userId?: string;
 

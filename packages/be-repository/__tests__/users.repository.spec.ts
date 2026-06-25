@@ -9,8 +9,10 @@ describe("UsersRepository", () => {
 		tx: {
 			user: {
 				findUnique: jest.Mock;
+				findFirst: jest.Mock;
 				findMany: jest.Mock;
 				count: jest.Mock;
+				update: jest.Mock;
 			};
 		};
 	};
@@ -54,8 +56,10 @@ describe("UsersRepository", () => {
 			tx: {
 				user: {
 					findUnique: jest.fn(),
+					findFirst: jest.fn(),
 					findMany: jest.fn(),
 					count: jest.fn(),
+					update: jest.fn(),
 				},
 			},
 		};
@@ -279,6 +283,107 @@ describe("UsersRepository", () => {
 			expect(mockTxHost.tx.user.count).toHaveBeenCalledWith({
 				where: expectedWhere,
 			});
+		});
+	});
+
+	describe("findManyIdpAccounts", () => {
+		it("IDP 계정 목록 조회에서 query mapper, scope, projection select를 적용한다", async () => {
+			mockTxHost.tx.user.findMany.mockResolvedValue([]);
+			mockTxHost.tx.user.count.mockResolvedValue(0);
+
+			await repository.findManyIdpAccounts({
+				input: {
+					search: "kim",
+					isActive: true,
+					sort: ["-email"],
+					skip: 10,
+					take: 5,
+				},
+				spaceIds: ["space-001"],
+			});
+
+			expect(mockTxHost.tx.user.findMany).toHaveBeenCalledWith(
+				expect.objectContaining({
+					where: {
+						removedAt: null,
+						isActive: true,
+						AND: [
+							{
+								OR: [
+									{ name: { contains: "kim", mode: "insensitive" } },
+									{ email: { contains: "kim", mode: "insensitive" } },
+								],
+							},
+						],
+						tenants: {
+							some: {
+								spaceId: { in: ["space-001"] },
+								removedAt: null,
+							},
+						},
+					},
+					orderBy: [{ email: "desc" }],
+					skip: 10,
+					take: 5,
+					select: expect.objectContaining({
+						id: true,
+						email: true,
+						isActive: true,
+					}),
+				}),
+			);
+		});
+	});
+
+	describe("updateIdpAccountById", () => {
+		it("scope 안의 IDP 계정만 projection으로 수정한다", async () => {
+			const account = {
+				id: "user-test-id",
+				name: "Test User",
+				email: "test@example.com",
+				isActive: true,
+				failedLoginAttempts: 0,
+				isPermanentlyLocked: false,
+				lockedUntil: null,
+				mustChangePassword: false,
+				lastLoginAt: null,
+				lastLoginIp: null,
+				createdAt: new Date("2024-01-01"),
+			};
+			mockTxHost.tx.user.findFirst.mockResolvedValue(account);
+			mockTxHost.tx.user.update.mockResolvedValue({ ...account, isActive: false });
+
+			const result = await repository.updateIdpAccountById({
+				userId: "user-test-id",
+				data: { isActive: false },
+				spaceIds: ["space-001"],
+			});
+
+			expect(mockTxHost.tx.user.findFirst).toHaveBeenCalledWith(
+				expect.objectContaining({
+					where: {
+						id: "user-test-id",
+						removedAt: null,
+						tenants: {
+							some: {
+								spaceId: { in: ["space-001"] },
+								removedAt: null,
+							},
+						},
+					},
+				}),
+			);
+			expect(mockTxHost.tx.user.update).toHaveBeenCalledWith(
+				expect.objectContaining({
+					where: { id: "user-test-id" },
+					data: { isActive: false },
+					select: expect.objectContaining({
+						id: true,
+						isActive: true,
+					}),
+				}),
+			);
+			expect(result?.isActive).toBe(false);
 		});
 	});
 });

@@ -1,6 +1,9 @@
 import type { GetOidcClientsQueryInput } from "@cocrepo/input";
 import type { Prisma } from "@cocrepo/prisma";
-import { containsFilter, toPrismaOrderBy } from "./query-input.mapper";
+import {
+	containsFilter,
+	createQueryOrderByBuilder,
+} from "./query-input.mapper";
 
 export function buildOidcClientQueryWhere(
 	input: GetOidcClientsQueryInput,
@@ -19,6 +22,9 @@ export function buildOidcClientQueryWhere(
 	return where;
 }
 
-export function buildOidcClientQueryOrderBy(input: GetOidcClientsQueryInput) {
-	return toPrismaOrderBy(input.sort) as Prisma.OidcClientOrderByWithRelationInput[];
-}
+export const buildOidcClientQueryOrderBy = createQueryOrderByBuilder<
+	GetOidcClientsQueryInput,
+	Prisma.OidcClientOrderByWithRelationInput
+>({
+	allowedFields: ["createdAt", "clientId", "name"],
+});

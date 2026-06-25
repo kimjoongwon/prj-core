@@ -3,17 +3,17 @@ import {
 	StringFieldOptional,
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
-import { CourseStatus, type Prisma } from "@cocrepo/prisma";
+import { CourseStatus } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
-import { PrismaQueryDto } from "./prisma-query.dto";
+import { QueryDto } from "./query.dto";
 
 /**
  * Course 목록 조회용 Query DTO
  *
- * 자동 매핑: status(enum), tenantId(*Id)
+ * 필터 계약: status(enum), tenantId(*Id)
  * 커스텀 처리: search(name OR description)
  */
-export class QueryCourseDto extends PrismaQueryDto<Prisma.CourseWhereInput> {
+export class QueryCourseDto extends QueryDto {
 	@StringFieldOptional({ description: "코스명 또는 설명 통합 검색" })
 	search?: string;
 
@@ -34,9 +34,5 @@ export class QueryCourseDto extends PrismaQueryDto<Prisma.CourseWhereInput> {
 		Array.isArray(value) ? value : value ? [value] : [],
 	)
 	sort?: string[];
-
-	protected excludeFromAutoMap(): string[] {
-		return ["search"];
-	}
 
 }

@@ -118,9 +118,9 @@ export class CreateUserDto {
 
 **Query DTO(목록 조회용)는 `be-query-dto-builder` 에이전트가 전담합니다.**
 
-- PrismaQueryDto 상속, 자동 매핑, toPrismaWhere/toPrismaOrderBy
-- DeleteFilter enum, JSON:API sort 컨벤션
-- 릴레이션 필터, 커스텀 매핑 패턴
+- API edge query parameter shape, validation, Swagger metadata
+- DeleteFilter enum, JSON:API sort wire shape
+- Prisma 변환 없이 `@cocrepo/input`의 `*QueryInput`과 같은 wire shape 유지
 
 Query DTO가 필요하면 `be-query-dto-builder`를 호출하세요.
 

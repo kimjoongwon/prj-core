@@ -3,19 +3,18 @@ import {
 	EnumFieldOptional,
 	StringFieldOptional,
 } from "@cocrepo/decorator";
-import type { Prisma } from "@cocrepo/prisma";
 import {
 	ServiceDocumentKind,
 	ServiceDocumentPlatform,
 	ServiceDocumentStatus,
 } from "@cocrepo/prisma";
 
-import { PrismaQueryDto } from "../query/prisma-query.dto";
+import { QueryDto } from "../query/query.dto";
 
 /**
  * ServiceDocument 목록 조회용 Query DTO
  */
-export class QueryServiceDocumentDto extends PrismaQueryDto<Prisma.ServiceDocumentWhereInput> {
+export class QueryServiceDocumentDto extends QueryDto {
 	@StringFieldOptional({ description: "제목, 요약, 버전 통합 검색" })
 	readonly search?: string;
 
@@ -35,9 +34,5 @@ export class QueryServiceDocumentDto extends PrismaQueryDto<Prisma.ServiceDocume
 
 	@BooleanFieldOptional({ description: "필수 동의 여부" })
 	readonly isRequired?: boolean;
-
-	protected excludeFromAutoMap(): string[] {
-		return ["search", "locale"];
-	}
 
 }

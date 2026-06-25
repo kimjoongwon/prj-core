@@ -4,17 +4,17 @@ import {
 	StringFieldOptional,
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
-import { CoursePassKind, CoursePassStatus, type Prisma } from "@cocrepo/prisma";
+import { CoursePassKind, CoursePassStatus } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
-import { PrismaQueryDto } from "./prisma-query.dto";
+import { QueryDto } from "./query.dto";
 
 /**
  * CoursePass 목록 조회용 Query DTO
  *
- * 자동 매핑: courseId, courseOfferingId, enrollmentId, userId, timelineId, status, kind
+ * 필터 계약: courseId, courseOfferingId, enrollmentId, userId, timelineId, status, kind
  * 커스텀 처리: validOn, expiresBefore, search
  */
-export class QueryCoursePassDto extends PrismaQueryDto<Prisma.CoursePassWhereInput> {
+export class QueryCoursePassDto extends QueryDto {
 	@StringFieldOptional({
 		description: "보유자명/이메일, 코스명, 개설 과정명, 타임라인명 통합 검색",
 	})
@@ -64,9 +64,5 @@ export class QueryCoursePassDto extends PrismaQueryDto<Prisma.CoursePassWhereInp
 		Array.isArray(value) ? value : value ? [value] : [],
 	)
 	sort?: string[];
-
-	protected excludeFromAutoMap(): string[] {
-		return ["search", "validOn", "expiresBefore"];
-	}
 
 }

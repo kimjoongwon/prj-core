@@ -4,17 +4,17 @@ import {
 	StringFieldOptional,
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
-import { EnrollmentStatus, PaymentStatus, type Prisma } from "@cocrepo/prisma";
+import { EnrollmentStatus, PaymentStatus } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
-import { PrismaQueryDto } from "./prisma-query.dto";
+import { QueryDto } from "./query.dto";
 
 /**
  * Enrollment 목록 조회용 Query DTO
  *
- * 자동 매핑: courseId, courseOfferingId, userId, paymentStatus, status
+ * 필터 계약: courseId, courseOfferingId, userId, paymentStatus, status
  * 커스텀 처리: timelineId(assignedTimelineId), validOn, search
  */
-export class QueryEnrollmentDto extends PrismaQueryDto<Prisma.EnrollmentWhereInput> {
+export class QueryEnrollmentDto extends QueryDto {
 	@StringFieldOptional({
 		description: "수강자명/이메일, 코스명, 개설 과정명, 결제 참조 통합 검색",
 	})
@@ -57,9 +57,5 @@ export class QueryEnrollmentDto extends PrismaQueryDto<Prisma.EnrollmentWhereInp
 		Array.isArray(value) ? value : value ? [value] : [],
 	)
 	sort?: string[];
-
-	protected excludeFromAutoMap(): string[] {
-		return ["search", "timelineId", "validOn"];
-	}
 
 }

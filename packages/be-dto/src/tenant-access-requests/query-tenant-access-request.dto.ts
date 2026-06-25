@@ -4,11 +4,11 @@ import {
 	StringFieldOptional,
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
-import { type Prisma, TenantAccessRequestStatus } from "@cocrepo/prisma";
+import { TenantAccessRequestStatus } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
-import { PrismaQueryDto } from "../query/prisma-query.dto";
+import { QueryDto } from "../query/query.dto";
 
-export class QueryTenantAccessRequestDto extends PrismaQueryDto<Prisma.TenantAccessRequestWhereInput> {
+export class QueryTenantAccessRequestDto extends QueryDto {
 	@StringFieldOptional({
 		description: "검색어 (신청자 이름/이메일, 시설명)",
 	})
@@ -48,9 +48,5 @@ export class QueryTenantAccessRequestDto extends PrismaQueryDto<Prisma.TenantAcc
 		Array.isArray(value) ? value : value ? [value] : [],
 	)
 	sort?: string[];
-
-	protected excludeFromAutoMap(): string[] {
-		return ["search"];
-	}
 
 }

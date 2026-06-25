@@ -1,10 +1,19 @@
 import { User } from "@cocrepo/entity";
+import type { IdpAccountListInput } from "@cocrepo/input";
 import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import type { UserStats } from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import { plainToInstance } from "class-transformer";
+import {
+	buildIdpAccountQueryOrderBy,
+	buildIdpAccountQueryWhere,
+} from "./idp-account-query.mapper";
+import {
+	IDP_ACCOUNT_SELECT,
+	type IdpAccountRecord,
+} from "./idp-account.select";
 
 @Injectable()
 export class UsersRepository {
@@ -209,6 +218,82 @@ export class UsersRepository {
 	}
 
 	/**
+	 * IDP 계정 목록 projection 조회.
+	 */
+	async findManyIdpAccounts(params: {
+		input: IdpAccountListInput;
+		spaceIds?: string[];
+	}): Promise<{ data: IdpAccountRecord[]; totalCount: number }> {
+		this.logger.debug(
+			`IDP 계정 목록 조회: spaceIds=${params.spaceIds?.length ?? "all"}개`,
+		);
+
+		const where = this.applySpaceScopeToUserWhere(
+			buildIdpAccountQueryWhere(params.input, { removedAt: null }),
+			params.spaceIds,
+		);
+		const orderBy = buildIdpAccountQueryOrderBy(params.input);
+		const skip = params.input.skip ?? 0;
+		const take = params.input.take ?? 20;
+
+		const [data, totalCount] = await Promise.all([
+			this.txHost.tx.user.findMany({
+				where,
+				orderBy,
+				skip,
+				take,
+				select: IDP_ACCOUNT_SELECT,
+			}),
+			this.txHost.tx.user.count({ where }),
+		]);
+
+		return { data, totalCount };
+	}
+
+	/**
+	 * IDP 계정 상세 projection 조회.
+	 */
+	async findIdpAccountById(params: {
+		userId: string;
+		spaceIds?: string[];
+	}): Promise<IdpAccountRecord | null> {
+		this.logger.debug(`IDP 계정 조회: ${params.userId.slice(-8)}`);
+
+		return this.txHost.tx.user.findFirst({
+			where: this.applySpaceScopeToUserWhere(
+				{ id: params.userId, removedAt: null },
+				params.spaceIds,
+			),
+			select: IDP_ACCOUNT_SELECT,
+		});
+	}
+
+	/**
+	 * IDP 계정 projection 수정.
+	 */
+	async updateIdpAccountById(params: {
+		userId: string;
+		data: Prisma.UserUncheckedUpdateInput;
+		spaceIds?: string[];
+	}): Promise<IdpAccountRecord | null> {
+		this.logger.debug(`IDP 계정 수정: ${params.userId.slice(-8)}`);
+
+		const account = await this.findIdpAccountById({
+			userId: params.userId,
+			spaceIds: params.spaceIds,
+		});
+		if (!account) {
+			return null;
+		}
+
+		return this.txHost.tx.user.update({
+			where: { id: params.userId },
+			data: params.data,
+			select: IDP_ACCOUNT_SELECT,
+		});
+	}
+
+	/**
 	 * 접근 가능한 Space ID 목록으로 회원 목록 조회 (필터링, 페이지네이션 지원)
 	 * Prisma 네이티브 타입만 수신합니다.
 	 */
@@ -357,6 +442,13 @@ export class UsersRepository {
 			inactive,
 			newThisMonth,
 		};
+	}
+
+	/**
+	 * 조건별 사용자 수 조회.
+	 */
+	async count(where: Prisma.UserWhereInput): Promise<number> {
+		return this.txHost.tx.user.count({ where });
 	}
 
 	/**

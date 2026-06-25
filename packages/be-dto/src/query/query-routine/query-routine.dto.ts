@@ -1,4 +1,3 @@
-import { type Prisma } from "@cocrepo/prisma";
-import { PrismaQueryDto } from "../prisma-query.dto";
+import { QueryDto } from "../query.dto";
 
-export class QueryRoutineDto extends PrismaQueryDto<Prisma.RoutineWhereInput> {}
+export class QueryRoutineDto extends QueryDto {}

@@ -50,8 +50,9 @@ Nest CQRS Command/Query message 계약을 `@cocrepo/command`에 생성하는 역
 - Command/Query는 request intent와 routing context만 담는 immutable input입니다.
 - Command/Query는 Service, Repository, Client, ConfigService 같은 dependency를 갖지 않습니다.
 - write Command는 DTO class, Prisma create/update input, repository params, persistence DTO를 import하지 않습니다. Controller의 body DTO와 구조적으로 호환되는 `*CommandInput` 타입을 `@cocrepo/input`에 선언합니다.
-- read Query는 현재 프로젝트의 behaviorful Query DTO를 import할 수 있습니다. `toPrismaWhere()`, `toPrismaOrderBy()`, `toPageMetaDto()` 같은 read filter 메서드는 Query DTO owner가 소유합니다.
-- read Query는 behaviorful Query DTO를 그대로 받는 흐름을 기본으로 합니다. 별도 query params 파일은 DTO를 쓸 수 없는 read 전용 보조 계약이 필요할 때만 만듭니다.
+- read Query는 DTO class를 import하지 않습니다. Controller query DTO와 구조적으로 호환되는 `*QueryInput` 타입을 `@cocrepo/input`에 선언합니다.
+- read Query는 해당 `*QueryInput`을 `implements`하고 입력 필드를 class 최상위 readonly 속성으로 노출합니다.
+- Query DTO의 Prisma 변환 메서드는 만들지 않습니다. `sort`, `skip`, `take`, 검색/필터 wire shape만 Query DTO와 QueryInput에 공유하고, Prisma 변환은 repository 인접 mapper가 소유합니다.
 - write Command payload 파일은 `packages/be-input/src/command/{domain}/{name}.input.ts`, 타입명은 `{Verb}{Domain}CommandInput`을 사용합니다.
 - Command/Query class는 해당 `*CommandInput` 또는 `*QueryInput`을 `implements`하고, 입력 필드를 class 최상위 readonly 속성으로 노출합니다.
 - Command/Query 생성자는 `constructor(input: XxxInput) { Object.assign(this, input); }` 형태를 기본으로 하며, `readonly input`으로 중첩하지 않습니다.
@@ -91,7 +92,7 @@ export class GetReservationQuery {
 - [ ] Command 입력/Query/interface/type 계약이 `@cocrepo/input`로 분리됐는지 확인
 - [ ] Command/Query class에 `readonly input` 중첩이 남지 않았는지 확인
 - [ ] write Command가 DTO class, Prisma input, Repository params를 import하지 않는지 확인
-- [ ] read Query가 DTO를 import한다면 Query DTO owner의 behaviorful Query DTO인지 확인
+- [ ] read Query가 DTO를 import하지 않고 `@cocrepo/input`의 QueryInput만 사용하는지 확인
 - [ ] `packages/be-command/src/{domain}/index.ts`와 `src/index.ts` export 추가
 - [ ] app/package dependency에 `@cocrepo/command`가 필요한지 확인
 - [ ] `@cocrepo/usecase` handler가 command/query를 import할 수 있도록 `@cocrepo/command` build/type 계약 확인

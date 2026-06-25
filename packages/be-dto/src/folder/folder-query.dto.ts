@@ -4,21 +4,20 @@ import {
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
 import { DeleteFilter } from "@cocrepo/enum";
-import type { Prisma } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
-import { PrismaQueryDto } from "../query/prisma-query.dto";
+import { QueryDto } from "../query/query.dto";
 
 /**
  * 폴더 목록 조회용 Query DTO
  *
- * 자동 매핑:
+ * 필터 계약:
  * - name -> containsFilter (일반 string)
  * - parentFolderId, tenantId -> 정확 매칭 (*Id)
  *
  * 커스텀 처리:
  * - statusFilter -> removedAt 필터
  */
-export class FolderQueryDto extends PrismaQueryDto<Prisma.FolderWhereInput> {
+export class FolderQueryDto extends QueryDto {
 	@UUIDFieldOptional({ description: "상위 폴더 ID 필터 (null이면 루트)" })
 	parentFolderId?: string;
 
@@ -43,11 +42,4 @@ export class FolderQueryDto extends PrismaQueryDto<Prisma.FolderWhereInput> {
 	)
 	sort?: string[];
 
-	/**
-	 * 자동 매핑에서 제외할 필드
-	 */
-	protected excludeFromAutoMap(): string[] {
-		return ["statusFilter"];
-	}
-
-	}
+}

@@ -1,6 +1,9 @@
 import type { GetTemplatesInput } from "@cocrepo/input";
 import type { Prisma } from "@cocrepo/prisma";
-import { containsFilter, toPrismaOrderBy } from "./query-input.mapper";
+import {
+	containsFilter,
+	createQueryOrderByBuilder,
+} from "./query-input.mapper";
 
 export function buildTemplateQueryWhere(
 	input: GetTemplatesInput,
@@ -20,6 +23,7 @@ export function buildTemplateQueryWhere(
 	return where;
 }
 
-export function buildTemplateQueryOrderBy(input: GetTemplatesInput) {
-	return toPrismaOrderBy(input.sort) as Prisma.TemplateOrderByWithRelationInput[];
-}
+export const buildTemplateQueryOrderBy = createQueryOrderByBuilder<
+	GetTemplatesInput,
+	Prisma.TemplateOrderByWithRelationInput
+>();

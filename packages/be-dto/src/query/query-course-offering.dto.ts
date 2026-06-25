@@ -6,19 +6,18 @@ import {
 } from "@cocrepo/decorator";
 import {
 	CourseOfferingStatus,
-	type Prisma,
 	TimelineProvisioningMode,
 } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
-import { PrismaQueryDto } from "./prisma-query.dto";
+import { QueryDto } from "./query.dto";
 
 /**
  * CourseOffering 목록 조회용 Query DTO
  *
- * 자동 매핑: courseId, tenantId, timelineId, status, timelineProvisioningMode
+ * 필터 계약: courseId, tenantId, timelineId, status, timelineProvisioningMode
  * 커스텀 처리: search(name OR course.name OR timeline.name), recruitingOnly
  */
-export class QueryCourseOfferingDto extends PrismaQueryDto<Prisma.CourseOfferingWhereInput> {
+export class QueryCourseOfferingDto extends QueryDto {
 	@StringFieldOptional({
 		description: "개설 과정명, 코스명, 타임라인명 통합 검색",
 	})
@@ -57,9 +56,5 @@ export class QueryCourseOfferingDto extends PrismaQueryDto<Prisma.CourseOffering
 		Array.isArray(value) ? value : value ? [value] : [],
 	)
 	sort?: string[];
-
-	protected excludeFromAutoMap(): string[] {
-		return ["search", "recruitingOnly"];
-	}
 
 }

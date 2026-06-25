@@ -58,6 +58,8 @@ Prisma 기반 Repository 레이어를 생성하는 전문가입니다. 이 에�
 - persistence mapping과 query input 조립 시 `input.xxx`, `entity.id`, `row.field`처럼 값의 원천을 보존합니다. 여러 source가 섞이면 deep destructuring으로 bare variable을 남기지 않습니다.
 - Repository class는 class당 하나의 파일을 가집니다.
 - Repository class 파일에는 top-level helper/mapper/type/interface를 함께 두지 않습니다. query input/result/mapper/helper가 필요하면 가까운 별도 파일로 분리합니다.
+- Repository는 Prisma `where/orderBy/select/include`와 `TransactionHost.tx`를 소유하는 유일한 persistence 경계입니다.
+- Controller/Command/UseCase/Aggregate에서 넘어온 `Input`은 Repository 인접 mapper에서 Prisma shape로 변환합니다.
 
 예시:
 

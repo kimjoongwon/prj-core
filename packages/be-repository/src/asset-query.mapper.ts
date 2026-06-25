@@ -2,8 +2,8 @@ import type { GetAssetsQueryInput } from "@cocrepo/input";
 import type { Prisma } from "@cocrepo/prisma";
 import {
 	containsFilter,
+	createQueryOrderByBuilder,
 	removedAtFilter,
-	toPrismaOrderBy,
 } from "./query-input.mapper";
 
 export function buildAssetQueryWhere(
@@ -21,8 +21,9 @@ export function buildAssetQueryWhere(
 	};
 }
 
-export function buildAssetQueryOrderBy(input: GetAssetsQueryInput) {
-	return toPrismaOrderBy(input.sort, {
-		allowedFields: ["createdAt", "originalName", "sizeBytes"],
-	}) as Prisma.AssetOrderByWithRelationInput[];
-}
+export const buildAssetQueryOrderBy = createQueryOrderByBuilder<
+	GetAssetsQueryInput,
+	Prisma.AssetOrderByWithRelationInput
+>({
+	allowedFields: ["createdAt", "originalName", "sizeBytes"],
+});

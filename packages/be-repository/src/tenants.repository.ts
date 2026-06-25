@@ -4,6 +4,10 @@ import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import { plainToInstance } from "class-transformer";
+import {
+	IDP_ACCOUNT_ACCESS_GRANT_INCLUDE,
+	type IdpAccountAccessGrantRecord,
+} from "./idp-account-access-grant.include";
 
 @Injectable()
 export class TenantsRepository {
@@ -115,6 +119,22 @@ export class TenantsRepository {
 			tenants: tenants.map((item) => plainToInstance(Tenant, item)),
 			totalCount,
 		};
+	}
+
+	/**
+	 * Space와 Role을 포함한 테넌트 목록 projection 조회.
+	 */
+	async findManyWithSpaceAndRole(params: {
+		where?: Prisma.TenantWhereInput;
+		orderBy?: Prisma.TenantOrderByWithRelationInput[];
+	}): Promise<IdpAccountAccessGrantRecord[]> {
+		this.logger.debug("Space/Role 포함 테넌트 목록 조회");
+
+		return this.txHost.tx.tenant.findMany({
+			where: params.where,
+			include: IDP_ACCOUNT_ACCESS_GRANT_INCLUDE,
+			orderBy: params.orderBy ?? [{ createdAt: "desc" }],
+		});
 	}
 
 	async create(data: Prisma.TenantUncheckedCreateInput): Promise<Tenant> {

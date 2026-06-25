@@ -1,8 +1,8 @@
 import { BooleanFieldOptional, StringFieldOptional } from "@cocrepo/decorator";
-import type { Prisma } from "@cocrepo/prisma";
-import { PrismaQueryDto } from "./prisma-query.dto";
+import { Transform } from "class-transformer";
+import { QueryDto } from "./query.dto";
 
-export class QueryIdpAccountDto extends PrismaQueryDto<Prisma.UserWhereInput> {
+export class QueryIdpAccountDto extends QueryDto {
 	@StringFieldOptional({ description: "이름 또는 이메일 검색" })
 	readonly search?: string;
 
@@ -12,8 +12,13 @@ export class QueryIdpAccountDto extends PrismaQueryDto<Prisma.UserWhereInput> {
 	@BooleanFieldOptional({ description: "잠금 상태 필터" })
 	readonly isLocked?: boolean;
 
-	protected excludeFromAutoMap(): string[] {
-		return ["search", "isLocked"];
-	}
-
+	@StringFieldOptional({
+		each: true,
+		description:
+			"복합 정렬 (JSON:API 컨벤션). 허용 필드: createdAt, name, email, lastLoginAt. 예: ?sort=name&sort=-createdAt",
+	})
+	@Transform(({ value }) =>
+		Array.isArray(value) ? value : value ? [value] : [],
+	)
+	readonly sort?: string[];
 }

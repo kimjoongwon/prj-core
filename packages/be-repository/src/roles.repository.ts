@@ -58,6 +58,23 @@ export class RolesRepository {
 	}
 
 	/**
+	 * 조건별 역할 목록 조회.
+	 */
+	async findMany(params?: {
+		where?: Prisma.RoleWhereInput;
+		orderBy?: Prisma.RoleOrderByWithRelationInput[];
+	}): Promise<Role[]> {
+		this.logger.debug("조건별 역할 목록 조회");
+
+		const results = await this.txHost.tx.role.findMany({
+			where: params?.where,
+			orderBy: params?.orderBy ?? [{ createdAt: "asc" }],
+		});
+
+		return results.map((result) => plainToInstance(Role, result));
+	}
+
+	/**
 	 * 역할 생성
 	 */
 	async create(data: Prisma.RoleUncheckedCreateInput): Promise<Role> {

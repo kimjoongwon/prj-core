@@ -68,6 +68,13 @@ export class OidcClientsRepository {
 		};
 	}
 
+	/**
+	 * 조건별 OIDC client 수 조회.
+	 */
+	async count(where: Prisma.OidcClientWhereInput): Promise<number> {
+		return this.txHost.tx.oidcClient.count({ where });
+	}
+
 	async create(
 		data: Prisma.OidcClientUncheckedCreateInput,
 	): Promise<OidcClient> {

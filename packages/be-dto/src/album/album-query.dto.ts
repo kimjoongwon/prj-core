@@ -4,21 +4,20 @@ import {
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
 import { DeleteFilter } from "@cocrepo/enum";
-import type { Prisma } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
-import { PrismaQueryDto } from "../query/prisma-query.dto";
+import { QueryDto } from "../query/query.dto";
 
 /**
  * 앨범 목록 조회용 Query DTO
  *
- * 자동 매핑:
+ * 필터 계약:
  * - name -> containsFilter (일반 string)
  * - tenantId -> 정확 매핑 (*Id)
  *
  * 커스텀 처리:
  * - statusFilter -> removedAt 필터
  */
-export class AlbumQueryDto extends PrismaQueryDto<Prisma.AlbumWhereInput> {
+export class AlbumQueryDto extends QueryDto {
 	@UUIDFieldOptional({ description: "테넌트 ID 필터" })
 	tenantId?: string;
 
@@ -40,11 +39,4 @@ export class AlbumQueryDto extends PrismaQueryDto<Prisma.AlbumWhereInput> {
 	)
 	sort?: string[];
 
-	/**
-	 * 자동 매핑에서 제외할 필드
-	 */
-	protected excludeFromAutoMap(): string[] {
-		return ["statusFilter"];
-	}
-
-	}
+}

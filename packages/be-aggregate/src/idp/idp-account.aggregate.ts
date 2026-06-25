@@ -1,53 +1,38 @@
 import { SpaceContext } from "@cocrepo/context";
 import type {
-	GetIdpAccountsQueryInput,
-	GrantIdpAccountAccessCommandInput,
+	GrantIdpAccountAccessInput,
+	IdpAccountListInput,
 } from "@cocrepo/input";
-import type { Prisma, PrismaClient } from "@cocrepo/prisma";
 import {
 	AuthAuditLogsRepository,
-	buildIdpAccountQueryOrderBy,
-	buildIdpAccountQueryWhere,
+	RolesRepository,
+	SpacesRepository,
+	TenantsRepository,
+	UsersRepository,
 } from "@cocrepo/repository";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
-import { TransactionHost } from "@nestjs-cls/transactional";
-import type { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { ACCOUNT_SELECT } from "./account-select";
+import { Transactional } from "@nestjs-cls/transactional";
 
 @Injectable()
 export class IdpAccountAggregate {
 	private readonly logger = new Logger(IdpAccountAggregate.name);
 
 	constructor(
-		private readonly txHost: TransactionHost<
-			TransactionalAdapterPrisma<PrismaClient>
-		>,
 		private readonly spaceContext: SpaceContext,
+		private readonly usersRepository: UsersRepository,
+		private readonly spacesRepository: SpacesRepository,
+		private readonly rolesRepository: RolesRepository,
+		private readonly tenantsRepository: TenantsRepository,
 		private readonly auditLogsRepository: AuthAuditLogsRepository,
 	) {}
 
-	async getMany(query: GetIdpAccountsQueryInput) {
+	async getMany(input: IdpAccountListInput) {
 		this.logger.debug("IDP 계정 목록 조회");
 
-		const where = this.applySpaceScope(
-			buildIdpAccountQueryWhere(query, { removedAt: null }),
-		);
-		const orderBy = buildIdpAccountQueryOrderBy(query);
-		const skip = query.skip ?? 0;
-		const take = query.take ?? 20;
-
-		const [users, totalCount] = await Promise.all([
-			this.txHost.tx.user.findMany({
-				where,
-				orderBy,
-				skip,
-				take,
-				select: ACCOUNT_SELECT,
-			}),
-			this.txHost.tx.user.count({ where }),
-		]);
-
-		return { data: users, totalCount };
+		return this.usersRepository.findManyIdpAccounts({
+			input,
+			spaceIds: this.spaceContext.spaceIds,
+		});
 	}
 
 	async getById(userId: string) {
@@ -68,29 +53,19 @@ export class IdpAccountAggregate {
 
 		await this.findAccountInScope(userId);
 
-		const [spaces, roles] = await Promise.all([
-			this.txHost.tx.space.findMany({
-				where: this.applySpaceFilter({ removedAt: null }),
-				include: {
-					company: {
-						include: {
-							grounds: {
-								where: { removedAt: null },
-								orderBy: { createdAt: "asc" },
-							},
-						},
-					},
-				},
-				orderBy: { createdAt: "desc" },
+		const [spaceResult, roles] = await Promise.all([
+			this.spacesRepository.findManyWithGround({
+				spaceIds: this.spaceContext.spaceIds,
 			}),
-			this.txHost.tx.role.findMany({
+			this.rolesRepository.findMany({
 				where: { removedAt: null },
-				orderBy: { createdAt: "asc" },
+				orderBy: [{ createdAt: "asc" }],
 			}),
 		]);
+		const [spaces] = spaceResult;
 
 		const spaceOptions = spaces.map((space) => {
-			const [primaryGround] = space.company?.grounds ?? [];
+			const [primaryGround] = space.company?.grounds ?? space.grounds ?? [];
 			return {
 				value: space.id,
 				label: primaryGround?.name ?? space.id,
@@ -126,105 +101,85 @@ export class IdpAccountAggregate {
 		};
 	}
 
-	async grantAccess(
-		userId: string,
-		dto: GrantIdpAccountAccessCommandInput,
-	) {
+	@Transactional()
+	async grantAccess(userId: string, input: GrantIdpAccountAccessInput) {
 		this.logger.debug(
-			`계정 접근 권한 부여: user=${userId.slice(-8)}, space=${dto.spaceId.slice(-8)}, role=${dto.roleId.slice(-8)}`,
+			`계정 접근 권한 부여: user=${userId.slice(-8)}, space=${input.spaceId.slice(-8)}, role=${input.roleId.slice(-8)}`,
 		);
 
 		await this.findAccountInScope(userId);
 
-		const [space, role] = await Promise.all([
-			this.txHost.tx.space.findFirst({
-				where: this.applySpaceFilter({
-					id: dto.spaceId,
-					removedAt: null,
-				}),
-			}),
-			this.txHost.tx.role.findFirst({
-				where: {
-					id: dto.roleId,
-					removedAt: null,
-				},
+		const [space, roles] = await Promise.all([
+			this.spacesRepository.findById(input.spaceId),
+			this.rolesRepository.findMany({
+				where: { id: input.roleId, removedAt: null },
+				orderBy: [{ createdAt: "asc" }],
 			}),
 		]);
 
-		if (!space) {
+		if (
+			!space ||
+			space.removedAt !== null ||
+			this.isSpaceOutOfScope(input.spaceId)
+		) {
 			throw new NotFoundException("권한을 부여할 Space를 찾을 수 없습니다");
 		}
 
+		const [role] = roles;
 		if (!role) {
 			throw new NotFoundException("권한을 부여할 Role을 찾을 수 없습니다");
 		}
 
-		await this.txHost.tx.tenant.upsert({
-			where: {
-				userId_spaceId: {
-					userId,
-					spaceId: dto.spaceId,
-				},
-			},
-			create: {
-				userId,
-				spaceId: dto.spaceId,
-				roleId: dto.roleId,
-			},
-			update: {
-				roleId: dto.roleId,
-				removedAt: null,
-			},
+		await this.tenantsRepository.upsertByUserIdAndSpaceId({
+			userId,
+			spaceId: input.spaceId,
+			roleId: input.roleId,
 		});
 
 		return this.getById(userId);
 	}
 
+	@Transactional()
 	async toggleActive(userId: string) {
 		this.logger.debug(`계정 활성/비활성 토글: ${userId.slice(-8)}`);
 
-		const user = await this.txHost.tx.user.findFirst({
-			where: this.applySpaceScope({ id: userId, removedAt: null }),
+		const user = await this.findAccountInScope(userId);
+		const updated = await this.usersRepository.updateIdpAccountById({
+			userId,
+			data: { isActive: !user.isActive },
+			spaceIds: this.spaceContext.spaceIds,
 		});
 
-		if (!user) {
+		if (!updated) {
 			throw new NotFoundException("계정을 찾을 수 없습니다");
 		}
-
-		const updated = await this.txHost.tx.user.update({
-			where: { id: userId },
-			data: { isActive: !user.isActive },
-			select: ACCOUNT_SELECT,
-		});
 
 		return updated;
 	}
 
+	@Transactional()
 	async resetFailedAttempts(userId: string): Promise<void> {
 		this.logger.debug(`실패 횟수 초기화: ${userId.slice(-8)}`);
 
-		const user = await this.txHost.tx.user.findFirst({
-			where: this.applySpaceScope({ id: userId, removedAt: null }),
-		});
-
-		if (!user) {
-			throw new NotFoundException("계정을 찾을 수 없습니다");
-		}
-
-		await this.txHost.tx.user.update({
-			where: { id: userId },
+		const updated = await this.usersRepository.updateIdpAccountById({
+			userId,
 			data: {
 				failedLoginAttempts: 0,
 				lockedUntil: null,
 				isPermanentlyLocked: false,
 			},
+			spaceIds: this.spaceContext.spaceIds,
 		});
+
+		if (!updated) {
+			throw new NotFoundException("계정을 찾을 수 없습니다");
+		}
 	}
 
 	private async findAccountInScope(userId: string) {
-		const user = await this.txHost.tx.user.findFirst({
-			where: this.applySpaceScope({ id: userId, removedAt: null }),
-			select: ACCOUNT_SELECT,
+		const user = await this.usersRepository.findIdpAccountById({
+			userId,
+			spaceIds: this.spaceContext.spaceIds,
 		});
 
 		if (!user) {
@@ -235,25 +190,13 @@ export class IdpAccountAggregate {
 	}
 
 	private async getAccessGrants(userId: string) {
-		const tenants = await this.txHost.tx.tenant.findMany({
-			where: this.applyTenantSpaceScope({
+		const tenants = await this.tenantsRepository.findManyWithSpaceAndRole({
+			where: {
 				userId,
 				removedAt: null,
-			}),
-			include: {
-				space: {
-					include: {
-						company: {
-							include: {
-								grounds: {
-									where: { removedAt: null },
-									orderBy: { createdAt: "asc" },
-								},
-							},
-						},
-					},
-				},
-				role: true,
+				...(this.spaceContext.spaceIds
+					? { spaceId: { in: this.spaceContext.spaceIds } }
+					: {}),
 			},
 			orderBy: [{ createdAt: "desc" }],
 		});
@@ -274,60 +217,8 @@ export class IdpAccountAggregate {
 		});
 	}
 
-	private applySpaceScope(where: Prisma.UserWhereInput): Prisma.UserWhereInput {
+	private isSpaceOutOfScope(spaceId: string): boolean {
 		const spaceIds = this.spaceContext.spaceIds;
-		if (spaceIds === undefined) {
-			return where;
-		}
-
-		return {
-			AND: [
-				where,
-				{
-					tenants: {
-						some: {
-							spaceId: { in: spaceIds },
-							removedAt: null,
-						},
-					},
-				},
-			],
-		};
-	}
-
-	private applyTenantSpaceScope(
-		where: Prisma.TenantWhereInput,
-	): Prisma.TenantWhereInput {
-		const spaceIds = this.spaceContext.spaceIds;
-		if (spaceIds === undefined) {
-			return where;
-		}
-
-		return {
-			AND: [
-				where,
-				{
-					spaceId: { in: spaceIds },
-				},
-			],
-		};
-	}
-
-	private applySpaceFilter(
-		where: Prisma.SpaceWhereInput,
-	): Prisma.SpaceWhereInput {
-		const spaceIds = this.spaceContext.spaceIds;
-		if (spaceIds === undefined) {
-			return where;
-		}
-
-		return {
-			AND: [
-				where,
-				{
-					id: { in: spaceIds },
-				},
-			],
-		};
+		return spaceIds !== undefined && !spaceIds.includes(spaceId);
 	}
 }

@@ -2,9 +2,9 @@ import type { GetUsersInput } from "@cocrepo/input";
 import type { Prisma } from "@cocrepo/prisma";
 import {
 	containsFilter,
+	createQueryOrderByBuilder,
 	dateRangeFilter,
 	removedAtFilter,
-	toPrismaOrderBy,
 } from "./query-input.mapper";
 
 export function buildUserQueryWhere(
@@ -63,8 +63,9 @@ export function buildUserQueryWhere(
 	return where;
 }
 
-export function buildUserQueryOrderBy(input: GetUsersInput) {
-	return toPrismaOrderBy(input.sort, {
-		allowedFields: ["createdAt", "name", "email"],
-	}) as Prisma.UserOrderByWithRelationInput[];
-}
+export const buildUserQueryOrderBy = createQueryOrderByBuilder<
+	GetUsersInput,
+	Prisma.UserOrderByWithRelationInput
+>({
+	allowedFields: ["createdAt", "name", "email"],
+});

@@ -13,17 +13,16 @@ import {
 	type InquiryPriority,
 	InquiryPriority as InquiryPriorityEnum,
 	InquiryStatus,
-	type Prisma,
 } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
-import { PrismaQueryDto } from "../query/prisma-query.dto";
+import { QueryDto } from "../query/query.dto";
 
 /**
  * 문의 목록 조회용 Query DTO
  *
  * 페이지네이션(skip/take)은 부모 QueryDto에서 상속합니다.
  *
- * 자동 매핑:
+ * 필터 계약:
  * - category, channel, priority (enum -> 직접 매핑)
  * - assigneeId, customerId (*Id -> 정확 매칭)
  *
@@ -33,7 +32,7 @@ import { PrismaQueryDto } from "../query/prisma-query.dto";
  * - inquiryStatus (문의 진행 상태)
  * - startDate/endDate -> createdAt (dateRangeFilter)
  */
-export class QueryInquiryDto extends PrismaQueryDto<Prisma.InquiryWhereInput> {
+export class QueryInquiryDto extends QueryDto {
 	// -------------------------------------------------------------------------
 	// 검색
 	// -------------------------------------------------------------------------
@@ -114,18 +113,4 @@ export class QueryInquiryDto extends PrismaQueryDto<Prisma.InquiryWhereInput> {
 	)
 	sort?: string[];
 
-	// -------------------------------------------------------------------------
-	// 자동 매핑 제외 필드
-	// -------------------------------------------------------------------------
-	/**
-	 * 검색어(OR 조건), 삭제 상태(removedAt 변환), inquiryStatus(status 필드명 충돌),
-	 * 날짜 범위(startDate/endDate -> createdAt)를 자동 매핑에서 제외
-	 */
-	protected excludeFromAutoMap(): string[] {
-		return ["search", "status", "inquiryStatus", "startDate", "endDate"];
-	}
-
-	// -------------------------------------------------------------------------
-	// Prisma 변환
-	// -------------------------------------------------------------------------
-	}
+}

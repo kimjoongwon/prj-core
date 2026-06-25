@@ -70,7 +70,7 @@ Nest CQRS 기반 UseCase handler를 생성하는 역할입니다. Command/Query 
 - Saga는 Event → Command 변환만 담당하고 도메인 service를 직접 조합하지 않습니다.
 - Handler에서 Prisma/Repository를 직접 호출하지 않습니다. 예외가 필요한 read projection은 담당 스펙에 명시하고 repository query method를 통해 호출합니다.
 - Handler에서 DTO를 import하거나 domain service로 넘기지 않습니다. write Command 자체를 application/usecase 입력으로 취급하고, `command.input` 중첩 접근을 만들지 않습니다.
-- Query handler는 behaviorful Query DTO나 Query params를 read filter 입력으로 취급할 수 있습니다. Query DTO 자체의 필터 메서드는 `be-query-dto-builder`가 소유합니다.
+- Query handler는 Query message를 read filter input으로 취급합니다. DTO class를 import하거나 Aggregate/Service/Client로 넘기지 않습니다.
 - Command/Query가 Aggregate/Service/Client input과 구조적으로 호환되면 메시지 객체를 그대로 위임할 수 있습니다. 여러 출처 조합, field rename, policy 보정이 필요할 때만 별도 mapper/input 파일에서 target input으로 변환합니다.
 - Handler에서 Prisma create/update input을 만들지 않습니다. persistence 입력 변환은 Aggregate/Repository owner가 수행합니다.
 - `@Inject(TOKEN)`로 Service/Client/Aggregate provider를 주입하더라도 생성자 파라미터 타입은 `@cocrepo/service`, `@cocrepo/client`, `@cocrepo/aggregate`가 export하는 실제 class 타입을 사용합니다.

@@ -3,18 +3,17 @@ import {
 	EnumFieldOptional,
 	StringFieldOptional,
 } from "@cocrepo/decorator";
-import type { Prisma } from "@cocrepo/prisma";
 import { TemplateType } from "@cocrepo/prisma";
 
-import { PrismaQueryDto } from "./prisma-query.dto";
+import { QueryDto } from "./query.dto";
 
 /**
  * Template 목록 조회용 Query DTO
  *
- * 자동 매핑: type(enum→직접), isActive(boolean→직접)
+ * 필터 계약: type(enum→직접), isActive(boolean→직접)
  * 커스텀 처리: search(code OR name 통합 검색)
  */
-export class QueryTemplateDto extends PrismaQueryDto<Prisma.TemplateWhereInput> {
+export class QueryTemplateDto extends QueryDto {
 	@StringFieldOptional({ description: "코드 또는 이름 통합 검색" })
 	readonly search?: string;
 
@@ -23,9 +22,5 @@ export class QueryTemplateDto extends PrismaQueryDto<Prisma.TemplateWhereInput> 
 
 	@BooleanFieldOptional({ description: "활성 상태 필터" })
 	readonly isActive?: boolean;
-
-	protected excludeFromAutoMap(): string[] {
-		return ["search"];
-	}
 
 }

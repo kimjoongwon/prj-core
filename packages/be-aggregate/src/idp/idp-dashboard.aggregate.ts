@@ -1,9 +1,10 @@
-// Prisma 타입 import (raw query용)
-import type { PrismaClient } from "@cocrepo/prisma";
+import {
+	AuthAuditLogsRepository,
+	OidcClientsRepository,
+	UsersRepository,
+} from "@cocrepo/repository";
 import { RedisService } from "@cocrepo/service";
 import { Injectable, Logger } from "@nestjs/common";
-import { TransactionHost } from "@nestjs-cls/transactional";
-import type { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import { INDEX_SEGMENTS } from "./index-segments";
 import { OIDC_KEY_PREFIX } from "./oidc-key-prefix";
 
@@ -12,9 +13,9 @@ export class IdpDashboardAggregate {
 	private readonly logger = new Logger(IdpDashboardAggregate.name);
 
 	constructor(
-		private readonly txHost: TransactionHost<
-			TransactionalAdapterPrisma<PrismaClient>
-		>,
+		private readonly authAuditLogsRepository: AuthAuditLogsRepository,
+		private readonly usersRepository: UsersRepository,
+		private readonly oidcClientsRepository: OidcClientsRepository,
 		private readonly redisService: RedisService,
 	) {}
 
@@ -24,7 +25,6 @@ export class IdpDashboardAggregate {
 		const today = new Date();
 		today.setHours(0, 0, 0, 0);
 
-		// 오늘 감사 로그 건수 조회
 		const [
 			todaySuccessCount,
 			todayFailureCount,
@@ -32,24 +32,28 @@ export class IdpDashboardAggregate {
 			lockedAccountCount,
 			activeClientCount,
 		] = await Promise.all([
-			this.txHost.tx.authAuditLog.count({
-				where: { result: "SUCCESS", createdAt: { gte: today } },
+			this.authAuditLogsRepository.count({
+				result: "SUCCESS",
+				createdAt: { gte: today },
 			}),
-			this.txHost.tx.authAuditLog.count({
-				where: { result: "FAILURE", createdAt: { gte: today } },
+			this.authAuditLogsRepository.count({
+				result: "FAILURE",
+				createdAt: { gte: today },
 			}),
-			this.txHost.tx.authAuditLog.count({
-				where: { result: "LOCKED", createdAt: { gte: today } },
+			this.authAuditLogsRepository.count({
+				result: "LOCKED",
+				createdAt: { gte: today },
 			}),
-			this.txHost.tx.user.count({
-				where: { isPermanentlyLocked: true, removedAt: null },
+			this.usersRepository.count({
+				isPermanentlyLocked: true,
+				removedAt: null,
 			}),
-			this.txHost.tx.oidcClient.count({
-				where: { isActive: true, removedAt: null },
+			this.oidcClientsRepository.count({
+				isActive: true,
+				removedAt: null,
 			}),
 		]);
 
-		// Redis에서 활성 OIDC 세션 수 조회
 		let activeSessionCount = 0;
 		for (const modelType of ["Session", "AccessToken"]) {
 			const pattern = `${OIDC_KEY_PREFIX}:${modelType}:*`;
@@ -85,17 +89,13 @@ export class IdpDashboardAggregate {
 			dayEnd.setDate(dayStart.getDate() + 1);
 
 			const [successCount, failureCount] = await Promise.all([
-				this.txHost.tx.authAuditLog.count({
-					where: {
-						result: "SUCCESS",
-						createdAt: { gte: dayStart, lt: dayEnd },
-					},
+				this.authAuditLogsRepository.count({
+					result: "SUCCESS",
+					createdAt: { gte: dayStart, lt: dayEnd },
 				}),
-				this.txHost.tx.authAuditLog.count({
-					where: {
-						result: { in: ["FAILURE", "LOCKED"] },
-						createdAt: { gte: dayStart, lt: dayEnd },
-					},
+				this.authAuditLogsRepository.count({
+					result: { in: ["FAILURE", "LOCKED"] },
+					createdAt: { gte: dayStart, lt: dayEnd },
 				}),
 			]);
 

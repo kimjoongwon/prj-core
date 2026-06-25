@@ -1,9 +1,9 @@
 import { EnumFieldOptional, StringFieldOptional } from "@cocrepo/decorator";
-import { LanguageCode, type Prisma } from "@cocrepo/prisma";
+import { LanguageCode } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
-import { PrismaQueryDto } from "./prisma-query.dto";
+import { QueryDto } from "./query.dto";
 
-export class QueryTimelineDto extends PrismaQueryDto<Prisma.TimelineWhereInput> {
+export class QueryTimelineDto extends QueryDto {
 	@StringFieldOptional({ nullable: true, default: null })
 	@Transform(({ value }) => (value === "null" ? null : value))
 	timelineId?: string | null;

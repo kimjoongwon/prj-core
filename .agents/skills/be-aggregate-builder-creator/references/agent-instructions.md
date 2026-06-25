@@ -56,6 +56,8 @@ export class ReservationAggregate
 - public method는 `{Domain}Input`, `{Domain}Payload` 같은 aggregate-owned application/domain 입력 타입을 받습니다.
 - public method 인자명은 기본적으로 `input`을 사용합니다. Command input과 구조적으로 같아도 Aggregate-owned `CreateXInput`, `UpdateXInput` 타입을 signature로 유지합니다.
 - Prisma create/update input을 public method signature로 노출하지 않습니다. Repository 호출을 위해 persistence shape가 필요하면 같은 domain 폴더의 별도 mapper/helper 파일에서 변환합니다.
+- Aggregate는 `TransactionHost`, `PrismaClient`, Prisma `where/orderBy/select/include`를 직접 소유하지 않습니다. DB 접근과 Prisma 변환은 Repository 또는 Repository 인접 mapper가 담당합니다.
+- 여러 Repository 호출이 하나의 업무 단위를 이뤄야 하면 Aggregate public method에 `@Transactional()`을 붙이고, Repository는 CLS `TransactionHost.tx`로 같은 transaction을 사용합니다.
 - Controller에서 직접 주입하지 않습니다. UseCase handler가 호출합니다.
 - Repository를 통해 aggregate root entity를 로드하고, entity method를 호출한 뒤 저장합니다.
 - 여러 aggregate/service/client를 조합하는 작업 흐름 조율은 UseCase에 둡니다.

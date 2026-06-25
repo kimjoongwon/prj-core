@@ -1,4 +1,4 @@
-export interface GrantIdpAccountAccessCommandInput {
-	spaceId: string;
-	roleId: string;
-}
+import type { GrantIdpAccountAccessInput } from "../../aggregate/idp";
+
+export interface GrantIdpAccountAccessCommandInput
+	extends GrantIdpAccountAccessInput {}

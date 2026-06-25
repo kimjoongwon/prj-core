@@ -2,8 +2,8 @@ import type { ListTenantAccessRequestsForReviewQueryInput } from "@cocrepo/input
 import type { Prisma } from "@cocrepo/prisma";
 import {
 	containsFilter,
+	createQueryOrderByBuilder,
 	dateRangeFilter,
-	toPrismaOrderBy,
 } from "./query-input.mapper";
 
 export function buildTenantAccessRequestQueryWhere(
@@ -35,10 +35,9 @@ export function buildTenantAccessRequestQueryWhere(
 	return where;
 }
 
-export function buildTenantAccessRequestQueryOrderBy(
-	input: ListTenantAccessRequestsForReviewQueryInput,
-) {
-	return toPrismaOrderBy(input.sort, {
-		allowedFields: ["createdAt", "updatedAt", "status"],
-	}) as Prisma.TenantAccessRequestOrderByWithRelationInput[];
-}
+export const buildTenantAccessRequestQueryOrderBy = createQueryOrderByBuilder<
+	ListTenantAccessRequestsForReviewQueryInput,
+	Prisma.TenantAccessRequestOrderByWithRelationInput
+>({
+	allowedFields: ["createdAt", "updatedAt", "status"],
+});

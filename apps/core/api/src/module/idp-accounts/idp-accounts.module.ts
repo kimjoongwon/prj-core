@@ -1,7 +1,13 @@
 import { IdpAccountAggregate } from "@cocrepo/aggregate";
 import { SpaceContext } from "@cocrepo/context";
 import { IdpAccountsController } from "@cocrepo/controller";
-import { AuthAuditLogsRepository } from "@cocrepo/repository";
+import {
+	AuthAuditLogsRepository,
+	RolesRepository,
+	SpacesRepository,
+	TenantsRepository,
+	UsersRepository,
+} from "@cocrepo/repository";
 import { IdpAccountUseCaseProviders } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
@@ -14,6 +20,10 @@ import { CqrsModule } from "@nestjs/cqrs";
 		IdpAccountAggregate,
 		SpaceContext,
 		AuthAuditLogsRepository,
+		UsersRepository,
+		SpacesRepository,
+		RolesRepository,
+		TenantsRepository,
 	],
 })
 export class IdpAccountsModule {}

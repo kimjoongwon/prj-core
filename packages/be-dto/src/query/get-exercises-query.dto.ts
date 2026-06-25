@@ -1,10 +1,10 @@
 import { EnumFieldOptional, StringFieldOptional } from "@cocrepo/decorator";
-import { LanguageCode, type Prisma } from "@cocrepo/prisma";
-import { PrismaQueryDto } from "./prisma-query.dto";
+import { LanguageCode } from "@cocrepo/prisma";
+import { QueryDto } from "./query.dto";
 
 import { SpaceScope } from "./space-scope";
 
-export class GetExercisesQueryDto extends PrismaQueryDto<Prisma.ExerciseWhereInput> {
+export class GetExercisesQueryDto extends QueryDto {
 	@StringFieldOptional()
 	search?: string;
 

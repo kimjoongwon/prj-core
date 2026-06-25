@@ -2,9 +2,9 @@ import type { ListInquiriesQueryInput } from "@cocrepo/input";
 import type { Prisma } from "@cocrepo/prisma";
 import {
 	containsFilter,
+	createQueryOrderByBuilder,
 	dateRangeFilter,
 	removedAtFilter,
-	toPrismaOrderBy,
 } from "./query-input.mapper";
 
 export function buildInquiryQueryWhere(
@@ -42,14 +42,15 @@ export function buildInquiryQueryWhere(
 	return where;
 }
 
-export function buildInquiryQueryOrderBy(input: ListInquiriesQueryInput) {
-	return toPrismaOrderBy(input.sort, {
-		allowedFields: [
-			"createdAt",
-			"updatedAt",
-			"priority",
-			"status",
-			"lastMessageAt",
-		],
-	}) as Prisma.InquiryOrderByWithRelationInput[];
-}
+export const buildInquiryQueryOrderBy = createQueryOrderByBuilder<
+	ListInquiriesQueryInput,
+	Prisma.InquiryOrderByWithRelationInput
+>({
+	allowedFields: [
+		"createdAt",
+		"updatedAt",
+		"priority",
+		"status",
+		"lastMessageAt",
+	],
+});

@@ -2,11 +2,13 @@ import { AssetKind, AssetStatus } from "@cocrepo/prisma";
 import {
 	buildAssetQueryOrderBy,
 	buildAssetQueryWhere,
+	buildEmailVerificationQueryOrderBy,
 	buildEmailVerificationQueryWhere,
 	buildFolderQueryOrderBy,
 	buildFolderQueryWhere,
 	buildInquiryQueryOrderBy,
 	buildInquiryQueryWhere,
+	buildOidcClientQueryOrderBy,
 	buildOidcClientQueryWhere,
 	buildTenantAccessRequestQueryWhere,
 	buildUserQueryOrderBy,
@@ -144,5 +146,19 @@ describe("QueryInput mapper", () => {
 				sort: ["-lastMessageAt", "priority", "customerId"],
 			}),
 		).toEqual([{ lastMessageAt: "desc" }, { priority: "asc" }]);
+	});
+
+	it("OIDC client와 이메일 인증 sort 변환은 허용 필드만 사용한다", () => {
+		expect(
+			buildOidcClientQueryOrderBy({
+				sort: ["clientId", "-name", "unsupported"],
+			}),
+		).toEqual([{ clientId: "asc" }, { name: "desc" }]);
+
+		expect(
+			buildEmailVerificationQueryOrderBy({
+				sort: ["email", "-status", "unsupported"],
+			}),
+		).toEqual([{ email: "asc" }, { status: "desc" }]);
 	});
 });

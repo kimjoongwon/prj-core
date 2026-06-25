@@ -9,12 +9,11 @@ import {
 	PaymentReferenceType,
 	PaymentStatus,
 	PaymentSubjectType,
-	type Prisma,
 } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
-import { PrismaQueryDto } from "./prisma-query.dto";
+import { QueryDto } from "./query.dto";
 
-export class QueryPaymentDto extends PrismaQueryDto<Prisma.PaymentWhereInput> {
+export class QueryPaymentDto extends QueryDto {
 	@StringFieldOptional({ description: "결제명/제공자/대상 통합 검색" })
 	search?: string;
 
@@ -67,17 +66,4 @@ export class QueryPaymentDto extends PrismaQueryDto<Prisma.PaymentWhereInput> {
 		Array.isArray(value) ? value : value ? [value] : [],
 	)
 	sort?: string[];
-
-	protected excludeFromAutoMap(): string[] {
-		return [
-			"search",
-			"subjectType",
-			"subjectId",
-			"referenceType",
-			"referenceId",
-			"approvedFrom",
-			"approvedUntil",
-			"sort",
-		];
-	}
 }

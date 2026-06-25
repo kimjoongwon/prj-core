@@ -5,7 +5,8 @@ import { PageMetaDto } from "./page-meta.dto";
  * 페이지네이션 기본 Query DTO
  *
  * skip/take와 PageMeta 변환만 제공합니다.
- * 필터/정렬 기능은 PrismaQueryDto에서 제공합니다.
+ * 필터/정렬 wire field는 하위 Query DTO가 선언하고,
+ * Prisma 변환은 repository 인접 mapper가 담당합니다.
  */
 export class QueryDto {
 	@NumberFieldOptional({

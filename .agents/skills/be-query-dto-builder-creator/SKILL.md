@@ -1,6 +1,6 @@
 ---
 name: "be-query-dto-builder-creator"
-description: "이 skill은 `be-query-dto-builder` 역할로 일할 때 사용합니다. 목록 조회 Query DTO를 만드는 방법을 쉽게 안내합니다."
+description: "이 skill은 `be-query-dto-builder` 역할로 일할 때 사용합니다. API edge 목록 조회 Query DTO를 만드는 방법을 쉽게 안내합니다."
 ---
 
 # be-query-dto-builder-creator

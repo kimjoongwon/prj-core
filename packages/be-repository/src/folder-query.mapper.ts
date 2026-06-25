@@ -2,8 +2,8 @@ import type { GetFoldersQueryInput } from "@cocrepo/input";
 import type { Prisma } from "@cocrepo/prisma";
 import {
 	containsFilter,
+	createQueryOrderByBuilder,
 	removedAtFilter,
-	toPrismaOrderBy,
 } from "./query-input.mapper";
 
 export function buildFolderQueryWhere(
@@ -21,9 +21,10 @@ export function buildFolderQueryWhere(
 	};
 }
 
-export function buildFolderQueryOrderBy(input: GetFoldersQueryInput) {
-	return toPrismaOrderBy(input.sort, {
-		allowedFields: ["createdAt", "name", "sortOrder"],
-		defaultOrderBy: [{ path: "asc" }],
-	}) as Prisma.FolderOrderByWithRelationInput[];
-}
+export const buildFolderQueryOrderBy = createQueryOrderByBuilder<
+	GetFoldersQueryInput,
+	Prisma.FolderOrderByWithRelationInput
+>({
+	allowedFields: ["createdAt", "name", "sortOrder"],
+	defaultOrderBy: [{ path: "asc" }],
+});

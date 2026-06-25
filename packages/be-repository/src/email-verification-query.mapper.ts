@@ -2,8 +2,8 @@ import type { GetEmailVerificationsQueryInput } from "@cocrepo/input";
 import type { Prisma } from "@cocrepo/prisma";
 import {
 	containsFilter,
+	createQueryOrderByBuilder,
 	dateRangeFilter,
-	toPrismaOrderBy,
 } from "./query-input.mapper";
 
 export function buildEmailVerificationQueryWhere(
@@ -24,8 +24,9 @@ export function buildEmailVerificationQueryWhere(
 	return where;
 }
 
-export function buildEmailVerificationQueryOrderBy(
-	input: GetEmailVerificationsQueryInput,
-) {
-	return toPrismaOrderBy(input.sort) as Prisma.EmailVerificationOrderByWithRelationInput[];
-}
+export const buildEmailVerificationQueryOrderBy = createQueryOrderByBuilder<
+	GetEmailVerificationsQueryInput,
+	Prisma.EmailVerificationOrderByWithRelationInput
+>({
+	allowedFields: ["createdAt", "email", "status"],
+});
