@@ -28,4 +28,8 @@ modelType?: string;
  * 계정 ID (accountId) 검색
  */
 accountId?: string;
+/**
+ * 복합 정렬 (JSON:API 컨벤션). 허용 필드: createdAt, updatedAt, modelType, accountId. 예: ?sort=modelType&sort=-createdAt
+ */
+sort?: string[];
 };

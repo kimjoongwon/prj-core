@@ -6,7 +6,6 @@ import {
 	PoliciesRepository,
 	PolicyAbilitiesRepository,
 	RolePoliciesRepository,
-	UserPoliciesRepository,
 } from "@cocrepo/repository";
 import { PolicyCommandHandlers, PolicyQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
@@ -21,7 +20,6 @@ import { CqrsModule } from "@nestjs/cqrs";
 		PolicyAbilitiesRepository,
 		AbilitiesRepository,
 		RolePoliciesRepository,
-		UserPoliciesRepository,
 		SpaceContext,
 		...PolicyCommandHandlers,
 		...PolicyQueryHandlers,

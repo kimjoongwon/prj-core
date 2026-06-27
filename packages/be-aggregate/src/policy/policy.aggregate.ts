@@ -1,16 +1,15 @@
 import { USER_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/context";
+import { Policy, PolicyAbility } from "@cocrepo/entity";
 import type {
 	CreatePolicyCommandInput,
 	UpdatePolicyCommandInput,
 } from "@cocrepo/input";
-import { Policy, PolicyAbility } from "@cocrepo/entity";
 import {
 	AbilitiesRepository,
 	PoliciesRepository,
 	PolicyAbilitiesRepository,
 	RolePoliciesRepository,
-	UserPoliciesRepository,
 } from "@cocrepo/repository";
 import {
 	BadRequestException,
@@ -32,7 +31,6 @@ export class PolicyAggregate {
 		private readonly policyAbilitiesRepository: PolicyAbilitiesRepository,
 		private readonly abilitiesRepository: AbilitiesRepository,
 		private readonly rolePoliciesRepository: RolePoliciesRepository,
-		private readonly userPoliciesRepository: UserPoliciesRepository,
 		private readonly spaceContext: SpaceContext,
 	) {}
 
@@ -114,7 +112,6 @@ export class PolicyAggregate {
 		}
 
 		await this.rolePoliciesRepository.removeByPolicyId(policyId);
-		await this.userPoliciesRepository.removeByPolicyId(policyId);
 
 		return this.policiesRepository.removeById(policyId);
 	}

@@ -1,9 +1,7 @@
 import { RolesGuard } from "@cocrepo/be-common";
 import {
 	GetRolePoliciesQuery,
-	GetUserPoliciesQuery,
 	SyncRolePoliciesCommand,
-	SyncUserPoliciesCommand,
 } from "@cocrepo/command";
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
@@ -13,11 +11,7 @@ import {
 	ResponseMessage,
 	Roles,
 } from "@cocrepo/decorator";
-import {
-	PolicyAssignmentResponseDto,
-	SyncRolePoliciesDto,
-	SyncUserPoliciesDto,
-} from "@cocrepo/dto";
+import { PolicyAssignmentResponseDto, SyncRolePoliciesDto } from "@cocrepo/dto";
 import {
 	Body,
 	Controller,
@@ -93,61 +87,6 @@ export class PolicyAssignmentsController {
 	) {
 		return this.commandBus.execute(
 			new SyncRolePoliciesCommand(roleId, { rolePolicies: dto.rolePolicies }),
-		);
-	}
-
-	@Get("users/:userId")
-	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
-	@ApiOperation({
-		operationId: "getUserPolicies",
-		summary: "User Policy 목록 조회",
-		description: "특정 User에 직접 할당된 예외 Policy 목록을 조회합니다.",
-	})
-	@ApiAuth()
-	@ApiParam({
-		name: "userId",
-		description: "User ID (UUID)",
-		type: String,
-	})
-	@ApiErrors(401, 403, 404, 500)
-	@ApiResponseEntity(PolicyAssignmentResponseDto, HttpStatus.OK, {
-		isArray: true,
-	})
-	@ResponseMessage("사용자 정책 할당 목록 조회 성공")
-	async getUserPolicies(@Param("userId", ParseUUIDPipe) userId: string) {
-		return this.queryBus.execute(new GetUserPoliciesQuery(userId));
-	}
-
-	@Put("users/:userId")
-	@HttpCode(HttpStatus.OK)
-	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
-	@ApiOperation({
-		operationId: "syncUserPolicies",
-		summary: "User Policy 동기화",
-		description:
-			"특정 User에 직접 할당할 예외 Policy 목록을 전체 동기화 방식으로 반영합니다.",
-	})
-	@ApiAuth()
-	@ApiParam({
-		name: "userId",
-		description: "User ID (UUID)",
-		type: String,
-	})
-	@ApiBody({
-		type: SyncUserPoliciesDto,
-		description: "User에 연결할 Policy 목록",
-	})
-	@ApiErrors(400, 401, 403, 404, 500)
-	@ApiResponseEntity(PolicyAssignmentResponseDto, HttpStatus.OK, {
-		isArray: true,
-	})
-	@ResponseMessage("사용자 정책 할당 동기화 성공")
-	async syncUserPolicies(
-		@Param("userId", ParseUUIDPipe) userId: string,
-		@Body() dto: SyncUserPoliciesDto,
-	) {
-		return this.commandBus.execute(
-			new SyncUserPoliciesCommand(userId, { userPolicies: dto.userPolicies }),
 		);
 	}
 }

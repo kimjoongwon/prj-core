@@ -4,7 +4,7 @@
 //
 // User는 시스템의 핵심 사용자 엔티티입니다.
 // Profile을 통해 추가 정보가 확장되고, Tenant를 통해 Space와 Role에 연결됩니다.
-// UserPolicy를 통해 사용자별 예외 정책을 부여받을 수 있습니다.
+// 권한은 Tenant의 Role에 연결된 Policy를 통해 부여됩니다.
 //
 // 관계 구조:
 //   User (ROOT)
@@ -12,7 +12,6 @@
 //     ├─── Profile (CHILD: nickname, avatar 등)
 //     ├─── UserClassification ─── Category (분류)
 //     ├─── UserAssociation ─── Group (그룹핑)
-//     ├─── UserPolicy ─── Policy (사용자별 예외 정책)
 //     ├─── Tenant (JOIN: User + Space + Role)
 //     ├─── PasswordHistory (비밀번호 재사용 방지)
 //     └─── AuthAuditLog (인증 감사 로그)
@@ -66,7 +65,6 @@ model User {
   reviewedTenantAccessRequests TenantAccessRequest[] @relation("TenantAccessRequestReviewer")
   classification               UserClassification?
   associations                 UserAssociation[]
-  userPolicies                 UserPolicy[]
   passwordHistory              PasswordHistory[]
   authAuditLogs                AuthAuditLog[]
   emailVerifications           EmailVerification[]

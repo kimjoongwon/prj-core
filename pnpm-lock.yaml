@@ -1891,6 +1891,9 @@ importers:
 
   packages/common-schema:
     dependencies:
+      '@cocrepo/constant':
+        specifier: workspace:*
+        version: link:../common-constant
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1

@@ -1,3 +1,4 @@
+import { Prisma } from "../../generated/client/client";
 import { syncReferenceData } from "../sync-reference-data";
 import type { ReferenceDataDbClient, ReferenceDataMigration } from "./types";
 
@@ -21,8 +22,7 @@ const CANONICAL_ROLE_DATA = [
 	{
 		name: "MEMBER",
 		displayName: "회원",
-		description:
-			"자신의 정보와 예약을 관리하고 시설/콘텐츠를 조회하는 역할",
+		description: "자신의 정보와 예약을 관리하고 시설/콘텐츠를 조회하는 역할",
 		isSystem: true,
 		removedAt: null,
 	},
@@ -57,15 +57,34 @@ async function removeLegacySystemPolicies(
 	await db.rolePolicy.deleteMany({
 		where: { policyId: { in: legacyPolicyIds } },
 	});
-	await db.userPolicy.deleteMany({
-		where: { policyId: { in: legacyPolicyIds } },
-	});
+	await removeLegacyPersonalPolicyRowsByPolicyIds(db, legacyPolicyIds);
 	await db.policyAbility.deleteMany({
 		where: { policyId: { in: legacyPolicyIds } },
 	});
 	await db.policy.deleteMany({
 		where: { id: { in: legacyPolicyIds } },
 	});
+}
+
+async function removeLegacyPersonalPolicyRowsByPolicyIds(
+	db: ReferenceDataDbClient,
+	policyIds: string[],
+): Promise<void> {
+	if (policyIds.length === 0) {
+		return;
+	}
+
+	const [legacyPersonalPolicyTable] = await db.$queryRaw<{ exists: boolean }[]>`
+		SELECT to_regclass('public.user_policies') IS NOT NULL AS "exists"
+	`;
+	if (!legacyPersonalPolicyTable?.exists) {
+		return;
+	}
+
+	await db.$executeRaw`
+		DELETE FROM "user_policies"
+		WHERE "policy_id" IN (${Prisma.join(policyIds)})
+	`;
 }
 
 async function transferLegacyRolePolicies(
@@ -158,11 +177,7 @@ export const systemRoleDomainNamesMigration: ReferenceDataMigration = {
 				continue;
 			}
 
-			await mergeLegacyRoleIntoCanonical(
-				db,
-				legacyRole.id,
-				canonicalRole.id,
-			);
+			await mergeLegacyRoleIntoCanonical(db, legacyRole.id, canonicalRole.id);
 		}
 
 		await syncReferenceData(db);

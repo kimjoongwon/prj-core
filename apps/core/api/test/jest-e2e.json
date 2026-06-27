@@ -36,7 +36,7 @@
     "^@cocrepo/enum$": "<rootDir>/../../../packages/common-enum/dist",
     "^@cocrepo/toolkit$": "<rootDir>/../../../packages/common-toolkit/dist",
     "^@cocrepo/constant$": "<rootDir>/../../../packages/common-constant/dist",
-    "^@cocrepo/type$": "<rootDir>/../../../packages/common-type/dist",
+    "^@cocrepo/type$": "<rootDir>/../../../packages/common-type",
     "^@cocrepo/decorator$": "<rootDir>/../../../packages/be-decorator/dist",
     "^@shared$": "<rootDir>/src/shared/index",
     "^@shared/(.*)$": "<rootDir>/src/shared/$1"

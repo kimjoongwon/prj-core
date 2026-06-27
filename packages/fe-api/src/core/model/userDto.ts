@@ -30,7 +30,8 @@ export interface UserDto {
   phone: string;
   /**
    * 응답 제외 필드
-   * @minLength 6
+   * @minLength 10
+   * @maxLength 72
    */
   password: string;
   /** 로그인 실패 횟수 */

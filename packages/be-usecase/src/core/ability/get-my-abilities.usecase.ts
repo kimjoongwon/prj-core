@@ -42,6 +42,6 @@ export class GetMyAbilitiesUseCase {
 			`현재 사용자 권한 조회: userId=${user.id.slice(-8)}, tenantId=${tenant.id.slice(-8)}, roleIds=${roleIds.length}`,
 		);
 
-		return this.abilitiesService.getMergedAbilities(roleIds, user.id, tenant.id);
+		return this.abilitiesService.getMergedAbilities(roleIds, tenant.id);
 	}
 }

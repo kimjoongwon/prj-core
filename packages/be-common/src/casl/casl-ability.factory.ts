@@ -8,17 +8,14 @@
 
 import { Ability, AbilityBuilder } from "@casl/ability";
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import type { ContextTenantSnapshot, ContextUserSnapshot } from "@cocrepo/type";
-import type { RolePolicy, UserPolicy } from "@cocrepo/entity";
+import type { RolePolicy } from "@cocrepo/entity";
 import type {
 	Ability as PrismaAbility,
 	Action as PrismaAction,
 	Subject as PrismaSubject,
 } from "@cocrepo/prisma";
-import {
-	RolePoliciesRepository,
-	UserPoliciesRepository,
-} from "@cocrepo/repository";
+import { RolePoliciesRepository } from "@cocrepo/repository";
+import type { ContextTenantSnapshot, ContextUserSnapshot } from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
 import {
@@ -28,18 +25,17 @@ import {
 import type { Actions, AppAbility, AppAbilityClass, Subjects } from "./types";
 
 /**
- * RolePolicy/UserPolicy에서 추출한 Ability 데이터와 priority를 결합한 타입
+ * RolePolicy에서 추출한 Ability 데이터와 priority를 결합한 타입
  *
  * @description
- * Prisma에서 조회한 Ability 데이터를 spread하고 RolePolicy/UserPolicy.priority를 추가하면
+ * Prisma에서 조회한 Ability 데이터를 spread하고 RolePolicy.priority를 추가하면
  * AbilityEntity 클래스의 메서드(isAllowed, isDenied 등)를 잃게 됩니다.
  * mergeAbilities/applyAbilityRule에서는 메서드가 필요 없으므로
- * Prisma의 데이터 타입에 관계 필드와 required priority/sourceRank를 추가한
+ * Prisma의 데이터 타입에 관계 필드와 required priority를 추가한
  * 구조적 타입을 사용합니다.
  */
 type AbilityWithPriority = PrismaAbility & {
 	priority: number;
-	sourceRank: number;
 	assignmentCreatedAt?: Date;
 	subject?: PrismaSubject;
 	action?: PrismaAction;
@@ -79,7 +75,6 @@ export class CaslAbilityFactory {
 
 	constructor(
 		private readonly rolePoliciesRepository: RolePoliciesRepository,
-		private readonly userPoliciesRepository: UserPoliciesRepository,
 		private readonly cls: ClsService,
 	) {}
 
@@ -92,11 +87,10 @@ export class CaslAbilityFactory {
 	 * @description
 	 * 1. x-tenant-id 헤더에서 현재 tenant를 가져와 spaceId 파생
 	 * 2. RolePolicy로 Role 기반 정책 조회 (RolePolicy → Policy → Ability)
-	 * 3. UserPolicy로 User 예외 정책 조회 (UserPolicy → Policy → Ability)
-	 * 4. 권한 병합 (User 권한이 Role 권한보다 우선 - priority 기반)
-	 * 5. AbilityBuilder로 권한 생성
-	 * 6. conditions 파싱 (템플릿 변수 치환)
-	 * 7. CAN/CAN_NOT에 따라 can/cannot 호출
+	 * 3. 권한 병합 (priority 기반)
+	 * 4. AbilityBuilder로 권한 생성
+	 * 5. conditions 파싱 (템플릿 변수 치환)
+	 * 6. CAN/CAN_NOT에 따라 can/cannot 호출
 	 */
 	async createForUser(user: ContextUserSnapshot): Promise<AppAbility> {
 		const abilityBuilder = new AbilityBuilder<AppAbility>(
@@ -134,18 +128,7 @@ export class CaslAbilityFactory {
 			`Role 기반 Ability 조회: ${roleAbilities.length}개, roleId=${roleId}`,
 		);
 
-		const userPolicies =
-			await this.userPoliciesRepository.findActiveByUserIdInTenant(
-				user.id,
-				currentTenant.id,
-			);
-		const userAbilities = this.expandUserPolicyAbilities(userPolicies);
-		this.logger.debug(
-			`User 예외 Ability 조회: ${userAbilities.length}개, userId=${user.id}`,
-		);
-
-		// 3. 권한 병합 (User 권한이 Role 권한보다 우선)
-		const mergedAbilities = this.mergeAbilities(roleAbilities, userAbilities);
+		const mergedAbilities = this.mergeAbilities(roleAbilities);
 		this.logger.debug(`병합된 Ability 개수: ${mergedAbilities.length}`);
 
 		// 사용자 컨텍스트 구성 (템플릿 변수 치환용)
@@ -165,25 +148,22 @@ export class CaslAbilityFactory {
 	}
 
 	/**
-	 * Role 권한과 User 예외 권한을 병합합니다.
+	 * Role 권한을 병합합니다.
 	 *
 	 * @param roleAbilities - Role 기반 권한 목록
-	 * @param userAbilities - User 예외 권한 목록
 	 * @returns 병합된 권한 목록 (priority 기준 정렬)
 	 *
 	 * @description
 	 * 동일한 subject + action 조합이 있을 경우 priority가 높은 것이 우선합니다.
-	 * 동률이면 UserPolicy가 RolePolicy보다 우선합니다.
 	 * 병합 후 priority 내림차순으로 정렬하여 반환합니다.
 	 */
 	private mergeAbilities(
 		roleAbilities: AbilityWithPriority[],
-		userAbilities: AbilityWithPriority[],
 	): AbilityWithPriority[] {
 		// subject + action 조합을 키로 사용하여 Map 구성
 		const abilityMap = new Map<string, AbilityWithPriority>();
 
-		for (const ability of [...roleAbilities, ...userAbilities]) {
+		for (const ability of roleAbilities) {
 			const key = this.getAbilityKey(ability);
 			if (!key) continue;
 
@@ -208,22 +188,11 @@ export class CaslAbilityFactory {
 		rolePolicies: RolePolicy[],
 	): AbilityWithPriority[] {
 		return rolePolicies.flatMap((rolePolicy) =>
-			this.expandPolicyAbilities(rolePolicy, 0),
+			this.expandPolicyAbilities(rolePolicy),
 		);
 	}
 
-	private expandUserPolicyAbilities(
-		userPolicies: UserPolicy[],
-	): AbilityWithPriority[] {
-		return userPolicies.flatMap((userPolicy) =>
-			this.expandPolicyAbilities(userPolicy, 1),
-		);
-	}
-
-	private expandPolicyAbilities(
-		assignment: RolePolicy | UserPolicy,
-		sourceRank: number,
-	): AbilityWithPriority[] {
+	private expandPolicyAbilities(assignment: RolePolicy): AbilityWithPriority[] {
 		const policyAbilities = assignment.policy?.policyAbilities ?? [];
 
 		return policyAbilities
@@ -233,7 +202,6 @@ export class CaslAbilityFactory {
 				subject: policyAbility.ability!.subject as PrismaSubject | undefined,
 				action: policyAbility.ability!.action as PrismaAction | undefined,
 				priority: assignment.priority,
-				sourceRank,
 				assignmentCreatedAt: assignment.createdAt,
 			}));
 	}
@@ -244,10 +212,6 @@ export class CaslAbilityFactory {
 	): number {
 		if (a.priority !== b.priority) {
 			return a.priority - b.priority;
-		}
-
-		if (a.sourceRank !== b.sourceRank) {
-			return a.sourceRank - b.sourceRank;
 		}
 
 		const aCreatedAt = a.assignmentCreatedAt?.getTime() ?? 0;

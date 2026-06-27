@@ -1,16 +1,11 @@
 import { USER_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/context";
-import { RolePolicy, UserPolicy } from "@cocrepo/entity";
-import type {
-	SyncRolePolicyInputItem,
-	SyncUserPolicyInputItem,
-} from "@cocrepo/input";
+import { RolePolicy } from "@cocrepo/entity";
+import type { SyncRolePolicyInputItem } from "@cocrepo/input";
 import {
 	PoliciesRepository,
 	RolePoliciesRepository,
 	RolesRepository,
-	UserPoliciesRepository,
-	UsersRepository,
 } from "@cocrepo/repository";
 import {
 	BadRequestException,
@@ -28,9 +23,7 @@ export class PolicyAssignmentAggregate {
 	constructor(
 		private readonly policiesRepository: PoliciesRepository,
 		private readonly rolePoliciesRepository: RolePoliciesRepository,
-		private readonly userPoliciesRepository: UserPoliciesRepository,
 		private readonly rolesRepository: RolesRepository,
-		private readonly usersRepository: UsersRepository,
 		private readonly spaceContext: SpaceContext,
 	) {}
 
@@ -63,46 +56,10 @@ export class PolicyAssignmentAggregate {
 		);
 	}
 
-	async getUserPolicies(userId: string): Promise<UserPolicy[]> {
-		const tenantId = this.requireTenantId();
-		await this.assertUserExists(userId);
-		return this.userPoliciesRepository.findByUserIdInTenant(userId, tenantId);
-	}
-
-	@Transactional()
-	async syncUserPolicies(
-		userId: string,
-		userPolicies: SyncUserPolicyInputItem[],
-	): Promise<UserPolicy[]> {
-		const tenantId = this.requireTenantId();
-		await this.assertUserExists(userId);
-		await this.assertPoliciesBelongToTenant(
-			userPolicies.map((policy) => policy.policyId),
-			tenantId,
-		);
-
-		this.logger.debug(
-			`UserPolicy 동기화: userId=${userId.slice(-8)}, tenantId=${tenantId.slice(-8)}`,
-		);
-
-		return this.userPoliciesRepository.syncByUserId(
-			userId,
-			userPolicies,
-			tenantId,
-		);
-	}
-
 	private async assertRoleExists(roleId: string): Promise<void> {
 		const role = await this.rolesRepository.findById(roleId);
 		if (!role) {
 			throw new NotFoundException("역할을 찾을 수 없습니다");
-		}
-	}
-
-	private async assertUserExists(userId: string): Promise<void> {
-		const user = await this.usersRepository.findById(userId);
-		if (!user) {
-			throw new NotFoundException("사용자를 찾을 수 없습니다");
 		}
 	}
 

@@ -11,7 +11,7 @@ import type { PolicyAbility } from "./policy-ability.entity";
  * Ability 엔티티 (CASL ABAC 기반)
  *
  * 재사용 가능한 권한 정의를 담당합니다.
- * - 권한 정의만 담당, 실제 부여는 Policy/PolicyAbility/RolePolicy/UserPolicy에서 관리
+ * - 권한 정의만 담당, 실제 부여는 Policy/PolicyAbility/RolePolicy에서 관리
  * - PolicyAbility를 통해 공간별 Policy에 포함됩니다
  *
  * DDD 원칙에 따라 Ability는 Subject + Action + fields + conditions 조합으로 권한을 정의합니다.
@@ -40,7 +40,7 @@ export class Ability extends AbstractEntity implements AbilityEntity {
 	/** Action ID (행위 정의) */
 	actionId!: string;
 
-	// RolePolicy/UserPolicy에서 조회할 때 설정되는 필드 (optional)
+	// RolePolicy에서 조회할 때 설정되는 필드 (optional)
 	/** 우선순위 (Policy assignment priority 값) */
 	priority?: number;
 

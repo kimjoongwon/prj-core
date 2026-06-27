@@ -11,7 +11,8 @@ import type { PlainPasswordProps } from "./plain-password.props";
 export class PlainPassword extends ValueObject<PlainPasswordProps> {
 	private static readonly MIN_LENGTH = 8;
 	private static readonly MAX_LENGTH = 72;
-	private static readonly PASSWORD_REGEX = /^[\d!#$%&*@A-Z^a-z]*$/;
+	private static readonly PASSWORD_REGEX =
+		/^[A-Za-z0-9!@#$%^&*()_+\-=[\]{}|;:,.<>?/~`"']*$/;
 
 	protected validate(props: PlainPasswordProps): void {
 		if (!props.value) {

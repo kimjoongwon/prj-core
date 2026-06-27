@@ -1,3 +1,4 @@
+import { Prisma } from "../../generated/client/client";
 import { syncReferenceData } from "../sync-reference-data";
 import type { ReferenceDataDbClient, ReferenceDataMigration } from "./types";
 
@@ -96,15 +97,34 @@ async function removeSpaceManagerSystemPolicy(
 	await db.rolePolicy.deleteMany({
 		where: { policyId: { in: legacyPolicyIds } },
 	});
-	await db.userPolicy.deleteMany({
-		where: { policyId: { in: legacyPolicyIds } },
-	});
+	await removeLegacyPersonalPolicyRowsByPolicyIds(db, legacyPolicyIds);
 	await db.policyAbility.deleteMany({
 		where: { policyId: { in: legacyPolicyIds } },
 	});
 	await db.policy.deleteMany({
 		where: { id: { in: legacyPolicyIds } },
 	});
+}
+
+async function removeLegacyPersonalPolicyRowsByPolicyIds(
+	db: ReferenceDataDbClient,
+	policyIds: string[],
+): Promise<void> {
+	if (policyIds.length === 0) {
+		return;
+	}
+
+	const [legacyPersonalPolicyTable] = await db.$queryRaw<{ exists: boolean }[]>`
+		SELECT to_regclass('public.user_policies') IS NOT NULL AS "exists"
+	`;
+	if (!legacyPersonalPolicyTable?.exists) {
+		return;
+	}
+
+	await db.$executeRaw`
+		DELETE FROM "user_policies"
+		WHERE "policy_id" IN (${Prisma.join(policyIds)})
+	`;
 }
 
 /**

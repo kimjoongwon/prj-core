@@ -14,7 +14,7 @@ import { SubjectSummaryDto } from "../subject.dto";
 /**
  * Ability 응답 DTO (Policy 기반)
  * 재사용 가능한 권한 정의
- * - Role/User 연결은 Policy/RolePolicy/UserPolicy 테이블에서 관리
+ * - Role 연결은 Policy/RolePolicy 테이블에서 관리
  */
 export class AbilityDto extends AbstractDto implements Ability {
 	// CASL 필수 필드

@@ -21,4 +21,10 @@ export class PasswordPolicyDto {
 
 	@BooleanField({ description: "특수문자 필수 여부" })
 	requireSpecial!: boolean;
+
+	@BooleanField({ description: "흔한 비밀번호 차단 여부" })
+	blockCommonPasswords!: boolean;
+
+	@NumberField({ description: "최근 비밀번호 재사용 제한 개수" })
+	reuseLimit!: number;
 }

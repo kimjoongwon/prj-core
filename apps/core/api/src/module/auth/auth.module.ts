@@ -18,7 +18,6 @@ import {
 	RolesRepository,
 	SpacesRepository,
 	TemplatesRepository,
-	UserPoliciesRepository,
 	UsersRepository,
 } from "@cocrepo/repository";
 import {
@@ -47,7 +46,6 @@ import { OidcClientsModule } from "../oidc-client/oidc-clients.module";
 		AbilitiesRepository,
 		PolicyAbilitiesRepository,
 		RolePoliciesRepository,
-		UserPoliciesRepository,
 		TokenService,
 		TokenStorageService,
 		RedisService,

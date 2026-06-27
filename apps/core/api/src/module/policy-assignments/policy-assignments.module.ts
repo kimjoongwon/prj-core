@@ -5,8 +5,6 @@ import {
 	PoliciesRepository,
 	RolePoliciesRepository,
 	RolesRepository,
-	UserPoliciesRepository,
-	UsersRepository,
 } from "@cocrepo/repository";
 import {
 	PolicyAssignmentCommandHandlers,
@@ -22,9 +20,7 @@ import { CqrsModule } from "@nestjs/cqrs";
 		PolicyAssignmentAggregate,
 		PoliciesRepository,
 		RolePoliciesRepository,
-		UserPoliciesRepository,
 		RolesRepository,
-		UsersRepository,
 		SpaceContext,
 		...PolicyAssignmentCommandHandlers,
 		...PolicyAssignmentQueryHandlers,

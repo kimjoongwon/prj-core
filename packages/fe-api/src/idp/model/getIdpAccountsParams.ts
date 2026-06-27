@@ -32,4 +32,8 @@ isActive?: boolean;
  * 잠금 상태 필터
  */
 isLocked?: boolean;
+/**
+ * 복합 정렬 (JSON:API 컨벤션). 허용 필드: createdAt, name, email, lastLoginAt. 예: ?sort=name&sort=-createdAt
+ */
+sort?: string[];
 };

@@ -234,7 +234,6 @@ export class RolesGuard implements CanActivate {
 export class CaslAbilityFactory {
   constructor(
     private readonly rolePoliciesRepository: RolePoliciesRepository,
-    private readonly userPoliciesRepository: UserPoliciesRepository,
     private readonly cls: ClsService,
   ) {}
 
@@ -262,19 +261,8 @@ export class CaslAbilityFactory {
         })),
     );
 
-    // 3. UserPolicy로 User 예외 PolicyAbility 조회 (Policy → Ability 추출)
-    const userPolicies = await this.userPoliciesRepository.findActiveByUserIdInSpace(user.id, spaceId);
-    const userAbilities = userPolicies.flatMap(userPolicy =>
-      (userPolicy.policy?.policyAbilities ?? [])
-        .filter(policyAbility => policyAbility.ability)
-        .map(policyAbility => ({
-          ...policyAbility.ability!,   // Ability 데이터 spread
-          priority: userPolicy.priority,
-        })),
-    );
-
-    // 4. Ability 병합 (subject+action 키 기준, priority 높은 것 우선)
-    const mergedAbilities = this.mergeAbilities(roleAbilities, userAbilities);
+    // 3. Ability 병합 (subject+action 키 기준, priority 높은 것 우선)
+    const mergedAbilities = this.mergeAbilities(roleAbilities);
 
     // 5. 사용자 컨텍스트 구성 (템플릿 변수 치환용)
     const userContext = this.buildUserContext(user, currentTenant);
@@ -301,17 +289,10 @@ export class CaslAbilityFactory {
 
 ```typescript
 // subject + action 조합을 키로 사용
-private mergeAbilities(roleAbilities, userAbilities): AbilityWithPriority[] {
+private mergeAbilities(roleAbilities): AbilityWithPriority[] {
   const abilityMap = new Map<string, AbilityWithPriority>();
 
-  // 1. Role Ability를 먼저 추가 (priority 0-9)
   for (const ability of roleAbilities) {
-    const key = `${ability.subject.name}:${ability.action.name}`;
-    abilityMap.set(key, ability);
-  }
-
-  // 2. User 예외 Ability로 덮어쓰기 (priority 10+ → 높으므로 우선)
-  for (const ability of userAbilities) {
     const key = `${ability.subject.name}:${ability.action.name}`;
     const existing = abilityMap.get(key);
     if (!existing || ability.priority > existing.priority) {
@@ -319,7 +300,6 @@ private mergeAbilities(roleAbilities, userAbilities): AbilityWithPriority[] {
     }
   }
 
-  // 3. priority 내림차순 정렬
   return Array.from(abilityMap.values()).sort((a, b) => b.priority - a.priority);
 }
 ```
@@ -346,8 +326,8 @@ private mergeAbilities(roleAbilities, userAbilities): AbilityWithPriority[] {
 | L9-LOG-017 | 역할 이름 중복 체크 | 역할 이름(name)은 고유해야 함 | roles.service.ts |
 | L9-LOG-018 | Ability 이름 고유 | Ability name은 고유해야 함 | abilities.service.ts |
 | L9-LOG-019 | PolicyAbility 중복 방지 | 동일 (policyId, abilityId) 조합 불가 | policy.service.ts |
-| L9-LOG-020 | Policy assignment 우선순위 | priority가 높을수록 우선 적용, 동률이면 UserPolicy 우선 | casl-ability.factory.ts |
-| L9-LOG-021 | Policy에서 Ability 추출 | RolePolicy/UserPolicy가 PolicyAbility + Ability join 반환 | casl-ability.factory.ts |
+| L9-LOG-020 | Policy assignment 우선순위 | priority가 높을수록 우선 적용 | casl-ability.factory.ts |
+| L9-LOG-021 | Policy에서 Ability 추출 | RolePolicy가 PolicyAbility + Ability join 반환 | casl-ability.factory.ts |
 
 ---
 

@@ -499,8 +499,6 @@ export type {
 export type { TimelineSessionProgramEditScreenProps } from "./TimelineSessionProgramEditScreen/TimelineSessionProgramEditScreen";
 
 export type {
-	UserDetailScreenPolicy,
-	UserDetailScreenPolicyAssignment,
 	UserDetailScreenProps,
 	UserDetailScreenUser,
 } from "./UserDetailScreen/UserDetailScreen";

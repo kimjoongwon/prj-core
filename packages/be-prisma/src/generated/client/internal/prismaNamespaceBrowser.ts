@@ -56,7 +56,6 @@ export const ModelName = {
   Policy: 'Policy',
   PolicyAbility: 'PolicyAbility',
   RolePolicy: 'RolePolicy',
-  UserPolicy: 'UserPolicy',
   Role: 'Role',
   RoleAssociation: 'RoleAssociation',
   RoleClassification: 'RoleClassification',
@@ -215,20 +214,6 @@ export const RolePolicyScalarFieldEnum = {
 } as const
 
 export type RolePolicyScalarFieldEnum = (typeof RolePolicyScalarFieldEnum)[keyof typeof RolePolicyScalarFieldEnum]
-
-
-export const UserPolicyScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  userId: 'userId',
-  policyId: 'policyId',
-  isActive: 'isActive',
-  priority: 'priority'
-} as const
-
-export type UserPolicyScalarFieldEnum = (typeof UserPolicyScalarFieldEnum)[keyof typeof UserPolicyScalarFieldEnum]
 
 
 export const RoleScalarFieldEnum = {

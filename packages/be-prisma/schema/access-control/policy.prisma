@@ -5,7 +5,7 @@
 // @schema-type: ROOT
 // @schema-owner: true
 // @aggregate-root: true
-// @description: 여러 Ability를 묶어 Role/User에 할당하는 공간별 권한 정책
+// @description: 여러 Ability를 묶어 Role에 할당되는 공간별 권한 정책 묶음
 // @ownership: independent
 // @scope: space
 /// @displayName 정책
@@ -29,7 +29,6 @@ model Policy {
   tenant          Tenant          @relation(fields: [tenantId], references: [id])
   policyAbilities PolicyAbility[]
   rolePolicies    RolePolicy[]
-  userPolicies    UserPolicy[]
 
   @@unique([tenantId, name])
   @@index([tenantId])
@@ -96,37 +95,4 @@ model RolePolicy {
   @@index([policyId])
   @@index([isActive])
   @@map("role_policies")
-}
-
-// @schema-type: JOIN
-// @description: User와 Policy를 연결하는 사용자 예외 정책 할당
-// @relation-pattern: one-to-many
-// @ownership: independent
-// @scope: space
-// @join-role: policy-link
-// @connects: User ─── Policy
-/// @displayName 사용자 정책
-model UserPolicy {
-  id        String    @id @default(uuid())
-  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
-
-  /// @displayName 사용자 ID
-  userId   String  @map("user_id")
-  /// @displayName 정책 ID
-  policyId String  @map("policy_id")
-  /// @displayName 활성화 여부
-  isActive Boolean @default(true) @map("is_active")
-  /// @displayName 우선순위
-  priority Int     @default(10)
-
-  user   User   @relation(fields: [userId], references: [id])
-  policy Policy @relation(fields: [policyId], references: [id])
-
-  @@unique([userId, policyId])
-  @@index([userId])
-  @@index([policyId])
-  @@index([isActive])
-  @@map("user_policies")
 }

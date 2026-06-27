@@ -7,7 +7,11 @@ import {
 	useGetPasswordPolicy,
 	useValidateResetToken,
 } from "@cocrepo/api/idp/password-reset";
-import { PASSWORD_RULES, type PasswordRule } from "@cocrepo/constant";
+import {
+	isCommonPassword,
+	PASSWORD_RULES,
+	type PasswordRule,
+} from "@cocrepo/constant";
 import { ResetPasswordScreen } from "@cocrepo/ui";
 import type { AxiosError } from "axios";
 import {
@@ -24,7 +28,11 @@ type ResetPasswordScreenParams = {
 	token: string;
 };
 
-function buildPasswordRules(policy: PasswordPolicyDto): PasswordRule[] {
+type RuntimePasswordPolicyDto = PasswordPolicyDto & {
+	blockCommonPasswords?: boolean;
+};
+
+function buildPasswordRules(policy: RuntimePasswordPolicyDto): PasswordRule[] {
 	const rules: PasswordRule[] = [
 		{
 			rule: "minLength",
@@ -64,6 +72,13 @@ function buildPasswordRules(policy: PasswordPolicyDto): PasswordRule[] {
 			rule: "special",
 			label: "특수문자 포함",
 			test: (pw: string) => /[!@#$%^&*()_+\-=[\]{}|;:,.<>?/~`"']/.test(pw),
+		});
+	}
+	if (policy.blockCommonPasswords) {
+		rules.push({
+			rule: "notCommon",
+			label: "흔한 비밀번호 사용 금지",
+			test: (pw: string) => !isCommonPassword(pw),
 		});
 	}
 
@@ -241,12 +256,10 @@ const ResetPasswordRoutePage = observer(function ResetPasswordRoutePage() {
 	};
 
 	return (
-		<>
-			<ResetPasswordScreen
-				state={resetPasswordPage}
-				onSubmitResetPasswordForm={onSubmitResetPasswordForm}
-			/>
-		</>
+		<ResetPasswordScreen
+			state={resetPasswordPage}
+			onSubmitResetPasswordForm={onSubmitResetPasswordForm}
+		/>
 	);
 });
 

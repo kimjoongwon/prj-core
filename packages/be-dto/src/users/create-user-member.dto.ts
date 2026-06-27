@@ -32,7 +32,7 @@ export class CreateUserMemberDto {
 	phone: string;
 
 	@PasswordField({
-		description: "비밀번호 (8자 이상, 영문+숫자+특수문자)",
+		description: "비밀번호 (10자 이상, 72자 이하, 영문+숫자+특수문자)",
 	})
 	password: string;
 

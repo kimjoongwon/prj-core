@@ -17,9 +17,9 @@ model SecurityPolicy {
   key       String    @unique
 
   /// @displayName 최소 비밀번호 길이
-  passwordMinLength        Int     @default(8) @map("password_min_length")
+  passwordMinLength        Int     @default(10) @map("password_min_length")
   /// @displayName 대문자 필수
-  passwordRequireUppercase Boolean @default(true) @map("password_require_uppercase")
+  passwordRequireUppercase Boolean @default(false) @map("password_require_uppercase")
   /// @displayName 소문자 필수
   passwordRequireLowercase Boolean @default(true) @map("password_require_lowercase")
   /// @displayName 숫자 필수

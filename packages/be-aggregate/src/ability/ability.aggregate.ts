@@ -1,10 +1,10 @@
 import { ABILITY_ERRORS } from "@cocrepo/constant";
-import { Ability, RolePolicy, UserPolicy } from "@cocrepo/entity";
+import { Ability, RolePolicy } from "@cocrepo/entity";
+import type { CreateAbilityInput, UpdateAbilityInput } from "@cocrepo/input";
 import {
 	AbilitiesRepository,
 	PolicyAbilitiesRepository,
 	RolePoliciesRepository,
-	UserPoliciesRepository,
 } from "@cocrepo/repository";
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
@@ -13,8 +13,6 @@ import {
 	toAbilityUpdateData,
 } from "./ability-persistence.mapper";
 import type { AbilityWithAssignment } from "./ability-with-assignment";
-import type { CreateAbilityInput } from "@cocrepo/input";
-import type { UpdateAbilityInput } from "@cocrepo/input";
 
 /**
  * Ability 서비스 (CASL ABAC 기반)
@@ -22,7 +20,7 @@ import type { UpdateAbilityInput } from "@cocrepo/input";
  * 재사용 가능한 권한 정의(Ability)와 Policy 기반 할당을 관리합니다.
  *
  * ✅ Ability: 권한 정의만 관리 (subject + action + fields + conditions)
- * ✅ Policy: 여러 Ability를 묶고 RolePolicy/UserPolicy가 우선순위를 관리
+ * ✅ Policy: 여러 Ability를 묶고 RolePolicy가 우선순위를 관리
  */
 @Injectable()
 export class AbilityAggregate {
@@ -32,7 +30,6 @@ export class AbilityAggregate {
 		private readonly abilitiesRepository: AbilitiesRepository,
 		private readonly policyAbilitiesRepository: PolicyAbilitiesRepository,
 		private readonly rolePoliciesRepository: RolePoliciesRepository,
-		private readonly userPoliciesRepository: UserPoliciesRepository,
 	) {}
 
 	/**
@@ -57,21 +54,19 @@ export class AbilityAggregate {
 	}
 
 	/**
-	 * Role + User 권한 병합 조회
+	 * Role 권한 병합 조회
 	 * 현재 Tenant의 Policy만 펼쳐서 Ability를 계산합니다.
 	 *
 	 * @param roleIds - Role ID 배열
-	 * @param userId - User ID (선택)
 	 * @param tenantId - 현재 Tenant ID
 	 * @returns 병합된 Ability 배열
 	 */
 	async getMergedAbilities(
 		roleIds: string[],
-		userId: string | undefined,
 		tenantId: string,
 	): Promise<Ability[]> {
 		this.logger.debug(
-			`Policy 기반 권한 병합 조회: roleIds=${roleIds.length}, userId=${userId?.slice(-8) ?? "없음"}, tenantId=${tenantId.slice(-8)}`,
+			`RolePolicy 기반 권한 병합 조회: roleIds=${roleIds.length}, tenantId=${tenantId.slice(-8)}`,
 		);
 
 		const rolePolicies =
@@ -79,17 +74,8 @@ export class AbilityAggregate {
 				roleIds,
 				tenantId,
 			);
-		const userPolicies = userId
-			? await this.userPoliciesRepository.findActiveByUserIdInTenant(
-					userId,
-					tenantId,
-				)
-			: [];
 
-		return this.mergeAbilities(
-			this.expandRolePolicyAbilities(rolePolicies),
-			this.expandUserPolicyAbilities(userPolicies),
-		);
+		return this.mergeAbilities(this.expandRolePolicyAbilities(rolePolicies));
 	}
 
 	/**
@@ -97,7 +83,7 @@ export class AbilityAggregate {
 	 *
 	 * @param input - Ability 생성 데이터 (재사용 가능한 권한 정의)
 	 * @returns 생성된 Ability
-	 * @description 권한 정의만 생성합니다. Role/User에 할당하려면 Policy에 포함한 뒤 Policy를 할당하세요.
+	 * @description 권한 정의만 생성합니다. Role에 할당하려면 Policy에 포함한 뒤 RolePolicy를 할당하세요.
 	 */
 	async createAbility(input: CreateAbilityInput): Promise<Ability> {
 		this.logger.debug(
@@ -116,7 +102,7 @@ export class AbilityAggregate {
 	 * @param id - Ability ID
 	 * @param input - 수정 데이터
 	 * @returns 수정된 Ability
-	 * @description Ability 정의만 수정합니다. RolePolicy/UserPolicy 메타데이터(isActive, priority)는 변경되지 않습니다.
+	 * @description Ability 정의만 수정합니다. RolePolicy 메타데이터(isActive, priority)는 변경되지 않습니다.
 	 */
 	async updateAbility(id: string, input: UpdateAbilityInput): Promise<Ability> {
 		this.logger.debug(`권한 정의 수정: id=${id.slice(-8)}`);
@@ -162,21 +148,12 @@ export class AbilityAggregate {
 		rolePolicies: RolePolicy[],
 	): AbilityWithAssignment[] {
 		return rolePolicies.flatMap((rolePolicy) =>
-			this.expandPolicyAbilities(rolePolicy, 0),
-		);
-	}
-
-	private expandUserPolicyAbilities(
-		userPolicies: UserPolicy[],
-	): AbilityWithAssignment[] {
-		return userPolicies.flatMap((userPolicy) =>
-			this.expandPolicyAbilities(userPolicy, 1),
+			this.expandPolicyAbilities(rolePolicy),
 		);
 	}
 
 	private expandPolicyAbilities(
-		assignment: RolePolicy | UserPolicy,
-		sourceRank: number,
+		assignment: RolePolicy,
 	): AbilityWithAssignment[] {
 		const policyAbilities = assignment.policy?.policyAbilities ?? [];
 
@@ -185,19 +162,15 @@ export class AbilityAggregate {
 			.map((policyAbility) => {
 				const ability = policyAbility.ability as AbilityWithAssignment;
 				ability.priority = assignment.priority;
-				ability.sourceRank = sourceRank;
 				ability.assignmentCreatedAt = assignment.createdAt;
 				return ability;
 			});
 	}
 
-	private mergeAbilities(
-		roleAbilities: AbilityWithAssignment[],
-		userAbilities: AbilityWithAssignment[],
-	): Ability[] {
+	private mergeAbilities(abilities: AbilityWithAssignment[]): Ability[] {
 		const abilityMap = new Map<string, AbilityWithAssignment>();
 
-		for (const ability of [...roleAbilities, ...userAbilities]) {
+		for (const ability of abilities) {
 			const key = this.getAbilityKey(ability);
 			if (!key) continue;
 
@@ -218,10 +191,6 @@ export class AbilityAggregate {
 	): number {
 		if (a.priority !== b.priority) {
 			return a.priority - b.priority;
-		}
-
-		if (a.sourceRank !== b.sourceRank) {
-			return a.sourceRank - b.sourceRank;
 		}
 
 		const aCreatedAt = a.assignmentCreatedAt?.getTime() ?? 0;

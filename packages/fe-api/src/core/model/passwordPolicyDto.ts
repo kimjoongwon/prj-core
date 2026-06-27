@@ -23,4 +23,8 @@ export interface PasswordPolicyDto {
   requireNumber: boolean;
   /** 특수문자 필수 여부 */
   requireSpecial: boolean;
+  /** 흔한 비밀번호 차단 여부 */
+  blockCommonPasswords: boolean;
+  /** 최근 비밀번호 재사용 제한 개수 */
+  reuseLimit: number;
 }

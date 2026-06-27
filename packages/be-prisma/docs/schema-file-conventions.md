@@ -118,7 +118,7 @@
 |------|----------------|
 | `access-control/ability.prisma` | `Ability` |
 | `access-control/action.prisma` | `Action` |
-| `access-control/policy.prisma` | `Policy`, `PolicyAbility`, `RolePolicy`, `UserPolicy` |
+| `access-control/policy.prisma` | `Policy`, `PolicyAbility`, `RolePolicy` |
 | `access-control/role.prisma` | `Role`, `RoleAssociation`, `RoleClassification` |
 | `access-control/subject.prisma` | `Subject` |
 | `asset/album.prisma` | `Album`, `AlbumEntry` |

@@ -1,4 +1,14 @@
 import {
+	DEFAULT_PASSWORD_MAX_LENGTH,
+	DEFAULT_PASSWORD_MIN_LENGTH,
+	DEFAULT_PASSWORD_REQUIRE_LOWERCASE,
+	DEFAULT_PASSWORD_REQUIRE_NUMBER,
+	DEFAULT_PASSWORD_REQUIRE_SPECIAL,
+	DEFAULT_PASSWORD_REQUIRE_UPPERCASE,
+	DEFAULT_PASSWORD_REUSE_LIMIT,
+	isCommonPassword,
+} from "@cocrepo/constant";
+import {
 	OidcDirectPrismaProvider,
 	OidcDirectUsersRepository,
 } from "@cocrepo/repository";
@@ -13,7 +23,6 @@ import { ConfigService } from "@nestjs/config";
 import { EmailService } from "../email/email.service";
 import { RedisService } from "../redis/redis.service";
 import {
-	MAX_PASSWORD_HISTORY,
 	RESET_TOKEN_PREFIX,
 	TOKEN_TTL_SECONDS,
 } from "./password-reset.constants";
@@ -53,6 +62,8 @@ export class PasswordResetService {
 		requireLowercase: boolean;
 		requireNumber: boolean;
 		requireSpecial: boolean;
+		blockCommonPasswords: boolean;
+		reuseLimit: number;
 	}> {
 		const prisma = await this.directPrismaProvider.getClient();
 		const policy = await prisma.securityPolicy.findUnique({
@@ -60,12 +71,18 @@ export class PasswordResetService {
 		});
 
 		return {
-			minLength: policy?.passwordMinLength ?? 8,
-			maxLength: 128,
-			requireUppercase: policy?.passwordRequireUppercase ?? true,
-			requireLowercase: policy?.passwordRequireLowercase ?? true,
-			requireNumber: policy?.passwordRequireNumber ?? true,
-			requireSpecial: policy?.passwordRequireSpecial ?? true,
+			minLength: policy?.passwordMinLength ?? DEFAULT_PASSWORD_MIN_LENGTH,
+			maxLength: DEFAULT_PASSWORD_MAX_LENGTH,
+			requireUppercase:
+				policy?.passwordRequireUppercase ?? DEFAULT_PASSWORD_REQUIRE_UPPERCASE,
+			requireLowercase:
+				policy?.passwordRequireLowercase ?? DEFAULT_PASSWORD_REQUIRE_LOWERCASE,
+			requireNumber:
+				policy?.passwordRequireNumber ?? DEFAULT_PASSWORD_REQUIRE_NUMBER,
+			requireSpecial:
+				policy?.passwordRequireSpecial ?? DEFAULT_PASSWORD_REQUIRE_SPECIAL,
+			blockCommonPasswords: true,
+			reuseLimit: policy?.passwordReuseLimit ?? DEFAULT_PASSWORD_REUSE_LIMIT,
 		};
 	}
 
@@ -177,6 +194,9 @@ export class PasswordResetService {
 		) {
 			policyErrors.push("특수문자 포함");
 		}
+		if (passwordPolicy.blockCommonPasswords && isCommonPassword(newPassword)) {
+			policyErrors.push("흔한 비밀번호 사용 금지");
+		}
 
 		if (policyErrors.length > 0) {
 			throw new BadRequestException(
@@ -187,12 +207,15 @@ export class PasswordResetService {
 		const prisma = await this.directPrismaProvider.getClient();
 
 		// 3. 이전 비밀번호 재사용 확인
-		const recentPasswords = await prisma.passwordHistory.findMany({
-			where: { userId: tokenData.userId },
-			orderBy: { createdAt: "desc" },
-			take: MAX_PASSWORD_HISTORY,
-			select: { passwordHash: true },
-		});
+		const recentPasswords =
+			passwordPolicy.reuseLimit > 0
+				? await prisma.passwordHistory.findMany({
+						where: { userId: tokenData.userId },
+						orderBy: { createdAt: "desc" },
+						take: passwordPolicy.reuseLimit,
+						select: { passwordHash: true },
+					})
+				: [];
 
 		const plainPassword = PlainPassword.create(newPassword);
 
@@ -238,14 +261,19 @@ export class PasswordResetService {
 			},
 		});
 
-		// 오래된 히스토리 정리 (MAX_PASSWORD_HISTORY 초과분 삭제)
+		// 오래된 히스토리 정리 (현재 포함 최근 reuseLimit개만 유지)
 		const allHistory = await prisma.passwordHistory.findMany({
 			where: { userId: tokenData.userId },
 			orderBy: { createdAt: "desc" },
 			select: { id: true },
 		});
-		if (allHistory.length > MAX_PASSWORD_HISTORY) {
-			const toDelete = allHistory.slice(MAX_PASSWORD_HISTORY).map((h) => h.id);
+		if (
+			passwordPolicy.reuseLimit > 0 &&
+			allHistory.length > passwordPolicy.reuseLimit
+		) {
+			const toDelete = allHistory
+				.slice(passwordPolicy.reuseLimit)
+				.map((h) => h.id);
 			await prisma.passwordHistory.deleteMany({
 				where: { id: { in: toDelete } },
 			});

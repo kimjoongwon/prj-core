@@ -63,11 +63,6 @@ export type PolicyAbility = Prisma.PolicyAbilityModel
  */
 export type RolePolicy = Prisma.RolePolicyModel
 /**
- * Model UserPolicy
- * @displayName 사용자 정책
- */
-export type UserPolicy = Prisma.UserPolicyModel
-/**
  * Model Role
  * @displayName 역할
  */

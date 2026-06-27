@@ -1,3 +1,7 @@
+import {
+	DEFAULT_PASSWORD_MAX_LENGTH,
+	DEFAULT_PASSWORD_MIN_LENGTH,
+} from "@cocrepo/constant";
 import { applyDecorators } from "@nestjs/common";
 import type { ApiPropertyOptions } from "@nestjs/swagger";
 import { IsPassword } from "../../validator.decorators";
@@ -8,7 +12,7 @@ import { StringField } from "../primitives/string.field";
 /**
  * 비밀번호 필드 데코레이터
  *
- * 최소 6자 이상, 영문/숫자/특수문자 포함 검증
+ * 기본 비밀번호 정책 길이와 영문/숫자/특수문자 문자셋을 검증
  *
  * @example
  * ```typescript
@@ -26,7 +30,11 @@ export function PasswordField(
 		StringFieldOptions = {},
 ): PropertyDecorator {
 	const decorators: PropertyDecorator[] = [
-		StringField({ ...options, minLength: 6 }),
+		StringField({
+			...options,
+			minLength: options.minLength ?? DEFAULT_PASSWORD_MIN_LENGTH,
+			maxLength: options.maxLength ?? DEFAULT_PASSWORD_MAX_LENGTH,
+		}),
 		IsPassword(),
 	];
 

@@ -1,9 +1,6 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
+import { RolePoliciesRepository } from "@cocrepo/repository";
 import type { ContextUserSnapshot } from "@cocrepo/type";
-import {
-	RolePoliciesRepository,
-	UserPoliciesRepository,
-} from "@cocrepo/repository";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { ClsService } from "nestjs-cls";
 import { CaslAbilityFactory } from "../casl-ability.factory";
@@ -11,17 +8,12 @@ import { CaslAbilityFactory } from "../casl-ability.factory";
 describe("CaslAbilityFactory", () => {
 	let factory: CaslAbilityFactory;
 	let mockRolePoliciesRepository: jest.Mocked<RolePoliciesRepository>;
-	let mockUserPoliciesRepository: jest.Mocked<UserPoliciesRepository>;
 	let mockClsService: jest.Mocked<ClsService>;
 
 	beforeEach(async () => {
 		mockRolePoliciesRepository = {
 			findActiveByRoleIdsInTenant: jest.fn(),
 		} as unknown as jest.Mocked<RolePoliciesRepository>;
-
-		mockUserPoliciesRepository = {
-			findActiveByUserIdInTenant: jest.fn(),
-		} as unknown as jest.Mocked<UserPoliciesRepository>;
 
 		mockClsService = {
 			get: jest.fn(),
@@ -33,10 +25,6 @@ describe("CaslAbilityFactory", () => {
 				{
 					provide: RolePoliciesRepository,
 					useValue: mockRolePoliciesRepository,
-				},
-				{
-					provide: UserPoliciesRepository,
-					useValue: mockUserPoliciesRepository,
 				},
 				{ provide: ClsService, useValue: mockClsService },
 			],
@@ -65,7 +53,9 @@ describe("CaslAbilityFactory", () => {
 			],
 		} as unknown as ContextUserSnapshot;
 
-		mockClsService.get.mockReturnValueOnce("space-1");
+		mockClsService.get.mockImplementation((key) =>
+			key === CONTEXT_KEYS.TENANT_ID ? "tenant-1" : undefined,
+		);
 		mockRolePoliciesRepository.findActiveByRoleIdsInTenant.mockResolvedValue([
 			{
 				priority: 1,
@@ -85,15 +75,11 @@ describe("CaslAbilityFactory", () => {
 				},
 			},
 		] as never);
-		mockUserPoliciesRepository.findActiveByUserIdInTenant.mockResolvedValue(
-			[] as never,
-		);
-
 		const ability = await factory.createForUser(user);
 		expect(ability.can("READ", "entity:User")).toBe(true);
 	});
 
-	it("User 예외 Policy가 더 높은 priority면 우선해야 한다", async () => {
+	it("같은 권한 조합에서는 RolePolicy priority가 높은 정책이 우선해야 한다", async () => {
 		const user = {
 			id: "user-1",
 			spaceId: "space-1",
@@ -109,7 +95,9 @@ describe("CaslAbilityFactory", () => {
 			],
 		} as unknown as ContextUserSnapshot;
 
-		mockClsService.get.mockReturnValueOnce("space-1");
+		mockClsService.get.mockImplementation((key) =>
+			key === CONTEXT_KEYS.TENANT_ID ? "tenant-1" : undefined,
+		);
 		mockRolePoliciesRepository.findActiveByRoleIdsInTenant.mockResolvedValue([
 			{
 				priority: 1,
@@ -128,11 +116,9 @@ describe("CaslAbilityFactory", () => {
 					],
 				},
 			},
-		] as never);
-		mockUserPoliciesRepository.findActiveByUserIdInTenant.mockResolvedValue([
 			{
 				priority: 10,
-				createdAt: new Date("2026-01-01T00:00:00.000Z"),
+				createdAt: new Date("2026-01-02T00:00:00.000Z"),
 				policy: {
 					policyAbilities: [
 						{
@@ -202,11 +188,10 @@ describe("CaslAbilityFactory", () => {
 			],
 		} as unknown as ContextUserSnapshot;
 
-		mockClsService.get.mockReturnValueOnce("space-1");
-		mockRolePoliciesRepository.findActiveByRoleIdsInTenant.mockResolvedValue(
-			[] as never,
+		mockClsService.get.mockImplementation((key) =>
+			key === CONTEXT_KEYS.TENANT_ID ? "tenant-full-access" : undefined,
 		);
-		mockUserPoliciesRepository.findActiveByUserIdInTenant.mockResolvedValue(
+		mockRolePoliciesRepository.findActiveByRoleIdsInTenant.mockResolvedValue(
 			[] as never,
 		);
 
@@ -214,6 +199,6 @@ describe("CaslAbilityFactory", () => {
 
 		expect(
 			mockRolePoliciesRepository.findActiveByRoleIdsInTenant,
-		).toHaveBeenCalledWith(["role-full-access"], "space-1");
+		).toHaveBeenCalledWith(["role-full-access"], "tenant-full-access");
 	});
 });

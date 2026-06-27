@@ -126,7 +126,6 @@ const expectedOwner: Record<string, string> = {
 	Policy: "access-control/policy.prisma",
 	PolicyAbility: "access-control/policy.prisma",
 	RolePolicy: "access-control/policy.prisma",
-	UserPolicy: "access-control/policy.prisma",
 
 	Inquiry: "inquiry/inquiry.prisma",
 	InquiryTag: "inquiry/inquiry.prisma",

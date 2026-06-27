@@ -1,11 +1,23 @@
-import { IsNotEmpty, IsString, Matches, MinLength } from "class-validator";
+import {
+	DEFAULT_PASSWORD_MAX_LENGTH,
+	DEFAULT_PASSWORD_MIN_LENGTH,
+} from "@cocrepo/constant";
+import {
+	IsNotEmpty,
+	IsString,
+	Matches,
+	MaxLength,
+	MinLength,
+} from "class-validator";
 import { VALIDATION_MESSAGES } from "../constants/validation-messages";
 import { applyDecorators } from "./apply";
 
 export interface PasswordDecoratorOptions {
-	/** 최소 길이 (기본값: 8) */
+	/** 최소 길이 */
 	minLength?: number;
-	/** 강력한 비밀번호 규칙 적용 (기본값: true) */
+	/** 최대 길이 */
+	maxLength?: number;
+	/** 강력한 비밀번호 규칙 적용 */
 	strong?: boolean;
 }
 
@@ -33,13 +45,20 @@ const STRONG_PASSWORD_REGEX =
 export function Password(
 	options: PasswordDecoratorOptions = {},
 ): PropertyDecorator {
-	const { minLength = 8, strong = false } = options;
+	const {
+		minLength = DEFAULT_PASSWORD_MIN_LENGTH,
+		maxLength = DEFAULT_PASSWORD_MAX_LENGTH,
+		strong = false,
+	} = options;
 
 	const decorators: PropertyDecorator[] = [
 		IsNotEmpty({ message: VALIDATION_MESSAGES.REQUIRED }),
 		IsString({ message: VALIDATION_MESSAGES.STRING_TYPE }),
 		MinLength(minLength, {
 			message: VALIDATION_MESSAGES.PASSWORD_MIN_LENGTH,
+		}),
+		MaxLength(maxLength, {
+			message: VALIDATION_MESSAGES.MAX_LENGTH,
 		}),
 	];
 

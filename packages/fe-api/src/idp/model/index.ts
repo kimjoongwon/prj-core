@@ -281,8 +281,6 @@ export * from './subjectResponseDto';
 export * from './syncPolicyAbilitiesDto';
 export * from './syncRolePoliciesDto';
 export * from './syncRolePolicyItemDto';
-export * from './syncUserPoliciesDto';
-export * from './syncUserPolicyItemDto';
 export * from './taskDto';
 export * from './templateDto';
 export * from './templateType';

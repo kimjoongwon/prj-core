@@ -389,7 +389,6 @@ export const ModelName = {
   Policy: 'Policy',
   PolicyAbility: 'PolicyAbility',
   RolePolicy: 'RolePolicy',
-  UserPolicy: 'UserPolicy',
   Role: 'Role',
   RoleAssociation: 'RoleAssociation',
   RoleClassification: 'RoleClassification',
@@ -471,7 +470,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "ability" | "action" | "policy" | "policyAbility" | "rolePolicy" | "userPolicy" | "role" | "roleAssociation" | "roleClassification" | "subject" | "album" | "albumEntry" | "asset" | "image" | "video" | "document" | "derivative" | "folder" | "authAuditLog" | "emailVerification" | "passwordHistory" | "securityPolicy" | "whitelistEntry" | "payment" | "paymentSubject" | "paymentReference" | "post" | "content" | "serviceDocument" | "template" | "templateVariable" | "translation" | "space" | "company" | "spaceClassification" | "spaceAssociation" | "ground" | "tenantAccessRequest" | "tenant" | "user" | "userClassification" | "userAssociation" | "profile" | "aIAgentLog" | "inquiryThread" | "inquiryMessage" | "inquiryParticipant" | "inquiryAttachment" | "inquiry" | "inquiryTag" | "sentimentAnalysis" | "oidcClient" | "oidcModel" | "referenceDataMigrationHistory" | "course" | "courseOffering" | "enrollment" | "coursePass" | "reservation" | "routine" | "activity" | "task" | "exercise" | "timeline" | "session" | "program" | "programActivity" | "category" | "group" | "safeWallet" | "safeTransaction" | "safeConfirmation"
+    modelProps: "ability" | "action" | "policy" | "policyAbility" | "rolePolicy" | "role" | "roleAssociation" | "roleClassification" | "subject" | "album" | "albumEntry" | "asset" | "image" | "video" | "document" | "derivative" | "folder" | "authAuditLog" | "emailVerification" | "passwordHistory" | "securityPolicy" | "whitelistEntry" | "payment" | "paymentSubject" | "paymentReference" | "post" | "content" | "serviceDocument" | "template" | "templateVariable" | "translation" | "space" | "company" | "spaceClassification" | "spaceAssociation" | "ground" | "tenantAccessRequest" | "tenant" | "user" | "userClassification" | "userAssociation" | "profile" | "aIAgentLog" | "inquiryThread" | "inquiryMessage" | "inquiryParticipant" | "inquiryAttachment" | "inquiry" | "inquiryTag" | "sentimentAnalysis" | "oidcClient" | "oidcModel" | "referenceDataMigrationHistory" | "course" | "courseOffering" | "enrollment" | "coursePass" | "reservation" | "routine" | "activity" | "task" | "exercise" | "timeline" | "session" | "program" | "programActivity" | "category" | "group" | "safeWallet" | "safeTransaction" | "safeConfirmation"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -842,80 +841,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.RolePolicyCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.RolePolicyCountAggregateOutputType> | number
-        }
-      }
-    }
-    UserPolicy: {
-      payload: Prisma.$UserPolicyPayload<ExtArgs>
-      fields: Prisma.UserPolicyFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.UserPolicyFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPolicyPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.UserPolicyFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPolicyPayload>
-        }
-        findFirst: {
-          args: Prisma.UserPolicyFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPolicyPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.UserPolicyFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPolicyPayload>
-        }
-        findMany: {
-          args: Prisma.UserPolicyFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPolicyPayload>[]
-        }
-        create: {
-          args: Prisma.UserPolicyCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPolicyPayload>
-        }
-        createMany: {
-          args: Prisma.UserPolicyCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.UserPolicyCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPolicyPayload>[]
-        }
-        delete: {
-          args: Prisma.UserPolicyDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPolicyPayload>
-        }
-        update: {
-          args: Prisma.UserPolicyUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPolicyPayload>
-        }
-        deleteMany: {
-          args: Prisma.UserPolicyDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.UserPolicyUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.UserPolicyUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPolicyPayload>[]
-        }
-        upsert: {
-          args: Prisma.UserPolicyUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPolicyPayload>
-        }
-        aggregate: {
-          args: Prisma.UserPolicyAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateUserPolicy>
-        }
-        groupBy: {
-          args: Prisma.UserPolicyGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.UserPolicyGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.UserPolicyCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.UserPolicyCountAggregateOutputType> | number
         }
       }
     }
@@ -5918,20 +5843,6 @@ export const RolePolicyScalarFieldEnum = {
 export type RolePolicyScalarFieldEnum = (typeof RolePolicyScalarFieldEnum)[keyof typeof RolePolicyScalarFieldEnum]
 
 
-export const UserPolicyScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  userId: 'userId',
-  policyId: 'policyId',
-  isActive: 'isActive',
-  priority: 'priority'
-} as const
-
-export type UserPolicyScalarFieldEnum = (typeof UserPolicyScalarFieldEnum)[keyof typeof UserPolicyScalarFieldEnum]
-
-
 export const RoleScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
@@ -7912,7 +7823,6 @@ export type GlobalOmitConfig = {
   policy?: Prisma.PolicyOmit
   policyAbility?: Prisma.PolicyAbilityOmit
   rolePolicy?: Prisma.RolePolicyOmit
-  userPolicy?: Prisma.UserPolicyOmit
   role?: Prisma.RoleOmit
   roleAssociation?: Prisma.RoleAssociationOmit
   roleClassification?: Prisma.RoleClassificationOmit

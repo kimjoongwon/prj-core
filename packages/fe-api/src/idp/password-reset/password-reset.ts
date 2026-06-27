@@ -54,7 +54,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * 비밀번호 정책(최소 길이, 대소문자/숫자/특수문자 필수 여부)을 반환합니다. 인증 불요.
+ * 비밀번호 정책(길이, 문자 규칙, 흔한 비밀번호 차단, 재사용 제한)을 반환합니다. 인증 불요.
  * @summary 비밀번호 정책 조회
  */
 export const getPasswordPolicy = (

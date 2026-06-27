@@ -46,7 +46,7 @@ export class SignUpPayloadDto extends SignUpSchema {
 
 	@ApiProperty({
 		example: "Password123!",
-		description: "비밀번호 (8자 이상)",
+		description: "비밀번호 (10자 이상, 72자 이하)",
 	})
 	password: string;
 }

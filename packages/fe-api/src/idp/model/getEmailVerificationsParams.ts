@@ -37,4 +37,8 @@ startDate?: string;
  * 종료일 (createdAt <= endDate)
  */
 endDate?: string;
+/**
+ * 복합 정렬 (JSON:API 컨벤션). 허용 필드: createdAt, email, status. 예: ?sort=email&sort=-createdAt
+ */
+sort?: string[];
 };

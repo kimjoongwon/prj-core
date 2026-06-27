@@ -8,7 +8,6 @@ import type {
 import { AbstractEntity } from "./abstract.entity";
 import type { AuthAuditLog } from "./auth-audit-log.entity";
 import type { PasswordHistory } from "./password-history.entity";
-import type { UserPolicy } from "./user-policy.entity";
 
 /**
  * Tenant with Space relations for User entity
@@ -65,7 +64,6 @@ export class User extends AbstractEntity implements UserEntityType {
 	associations?: UserAssociation[];
 	passwordHistory?: PasswordHistory[];
 	authAuditLogs?: AuthAuditLog[];
-	userPolicies?: UserPolicy[];
 
 	// ============================================================================
 	// 도메인 메서드

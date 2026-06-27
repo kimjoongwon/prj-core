@@ -1,3 +1,4 @@
+import { DEFAULT_PASSWORD_MIN_LENGTH } from "@cocrepo/constant";
 import { Email, Password, Phone, String, UUID } from "../../decorators";
 
 /**
@@ -34,6 +35,6 @@ export class SignUpSchema {
 	@String({ minLength: 2, maxLength: 255 })
 	address: string;
 
-	@Password({ minLength: 8 })
+	@Password({ minLength: DEFAULT_PASSWORD_MIN_LENGTH })
 	password: string;
 }

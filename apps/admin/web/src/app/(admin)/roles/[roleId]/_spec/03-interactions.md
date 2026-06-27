@@ -171,7 +171,7 @@
 | **Method** | GET |
 | **Endpoint** | `/api/v1/abilities/my` |
 | **Operation ID** | `getMyAbilities` |
-| **설명** | 현재 Space의 RolePolicy + UserPolicy를 PolicyAbility로 펼친 뒤 병합하여 조회합니다. |
+| **설명** | 현재 Space의 RolePolicy를 PolicyAbility로 펼친 뒤 병합하여 조회합니다. |
 | **인증** | Bearer Token |
 | **권한** | 인증된 모든 사용자 |
 | **Response** | `AbilityResponseDto[]` |
