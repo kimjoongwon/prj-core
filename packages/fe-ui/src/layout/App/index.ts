@@ -1,10 +1,7 @@
 export type { AppProps } from "./App";
 export {
 	App,
-	AppBody,
-	AppFooter,
-	AppHeader,
-	AppLeftAside,
-	AppMain,
-	AppRightAside,
+	AppContent,
+	AppGlobalLayer,
+	AppPortalHost,
 } from "./App";

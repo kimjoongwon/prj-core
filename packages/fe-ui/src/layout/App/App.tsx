@@ -4,23 +4,7 @@ export interface AppProps extends ComponentPropsWithoutRef<"div"> {
 	children?: ReactNode;
 }
 
-type AppDivSlotProps = ComponentPropsWithoutRef<"div"> & {
-	children?: ReactNode;
-};
-
-type AppHeaderProps = ComponentPropsWithoutRef<"header"> & {
-	children?: ReactNode;
-};
-
-type AppAsideProps = ComponentPropsWithoutRef<"aside"> & {
-	children?: ReactNode;
-};
-
-type AppMainProps = ComponentPropsWithoutRef<"main"> & {
-	children?: ReactNode;
-};
-
-type AppFooterProps = ComponentPropsWithoutRef<"footer"> & {
+type AppSlotProps = ComponentPropsWithoutRef<"div"> & {
 	children?: ReactNode;
 };
 
@@ -28,16 +12,15 @@ const joinClassNames = (...classNames: Array<string | false | undefined>) =>
 	classNames.filter(Boolean).join(" ");
 
 /**
- * App 컴포넌트
- * Next.js 최상위 layout.tsx에서 사용하는 root app structure입니다.
- * Header, Body, Aside, Main, Footer 슬롯을 compound API로 조합합니다.
+ * App
+ * 앱 전역 content boundary와 global layer를 소유하는 root primitive입니다.
  */
 const AppRoot = ({ children, className, ...props }: AppProps) => {
 	return (
 		<div
 			{...props}
 			className={joinClassNames(
-				"flex h-screen w-full flex-col overflow-hidden bg-background text-foreground",
+				"relative min-h-screen w-full bg-background text-foreground",
 				className,
 			)}
 		>
@@ -47,30 +30,18 @@ const AppRoot = ({ children, className, ...props }: AppProps) => {
 };
 
 /**
- * AppHeader
- * root app header landmark slot입니다.
+ * AppContent
+ * route branch layout이 마운트되는 전역 content boundary입니다.
  */
-export const AppHeader = ({
+export const AppContent = ({
 	children,
 	className,
 	...props
-}: AppHeaderProps) => {
-	return (
-		<header {...props} className={joinClassNames("shrink-0", className)}>
-			{children}
-		</header>
-	);
-};
-
-/**
- * AppBody
- * root app header 아래의 좌우 aside/main 구조를 담는 body slot입니다.
- */
-export const AppBody = ({ children, className, ...props }: AppDivSlotProps) => {
+}: AppSlotProps) => {
 	return (
 		<div
 			{...props}
-			className={joinClassNames("flex min-h-0 w-full flex-1", className)}
+			className={joinClassNames("relative z-0 min-h-screen w-full", className)}
 		>
 			{children}
 		</div>
@@ -78,95 +49,51 @@ export const AppBody = ({ children, className, ...props }: AppDivSlotProps) => {
 };
 
 /**
- * AppLeftAside
- * desktop left navigation slot입니다.
+ * AppGlobalLayer
+ * toast, dialog manager 같은 전역 overlay host가 들어가는 layer입니다.
  */
-export const AppLeftAside = ({
+export const AppGlobalLayer = ({
 	children,
 	className,
 	...props
-}: AppAsideProps) => {
+}: AppSlotProps) => {
 	return (
-		<aside
+		<div
 			{...props}
-			className={joinClassNames(
-				"hidden h-full w-64 flex-none md:block",
-				className,
-			)}
+			className={joinClassNames("pointer-events-none fixed inset-0 z-50", className)}
 		>
 			{children}
-		</aside>
+		</div>
 	);
 };
 
 /**
- * AppRightAside
- * desktop right supplementary panel slot입니다.
+ * AppPortalHost
+ * portal target으로 사용할 수 있는 전역 host입니다.
  */
-export const AppRightAside = ({
+export const AppPortalHost = ({
 	children,
 	className,
+	id = "app-portal-host",
 	...props
-}: AppAsideProps) => {
+}: AppSlotProps) => {
 	return (
-		<aside
+		<div
 			{...props}
-			className={joinClassNames(
-				"hidden h-full w-80 flex-none xl:block",
-				className,
-			)}
+			id={id}
+			className={joinClassNames("relative z-50", className)}
 		>
 			{children}
-		</aside>
-	);
-};
-
-/**
- * AppMain
- * route children이 렌더링되는 root app main landmark slot입니다.
- */
-export const AppMain = ({ children, className, ...props }: AppMainProps) => {
-	return (
-		<main
-			{...props}
-			className={joinClassNames(
-				"min-h-0 min-w-0 flex-1 overflow-y-auto bg-surface-secondary p-4 pb-20 md:p-6 md:pb-6",
-				className,
-			)}
-		>
-			{children}
-		</main>
-	);
-};
-
-/**
- * AppFooter
- * 모바일 navigation/action 요소를 담는 root app footer slot입니다.
- */
-export const AppFooter = ({
-	children,
-	className,
-	...props
-}: AppFooterProps) => {
-	return (
-		<footer {...props} className={joinClassNames("shrink-0", className)}>
-			{children}
-		</footer>
+		</div>
 	);
 };
 
 export const App = Object.assign(AppRoot, {
-	Header: AppHeader,
-	Body: AppBody,
-	LeftAside: AppLeftAside,
-	Main: AppMain,
-	RightAside: AppRightAside,
-	Footer: AppFooter,
+	Content: AppContent,
+	GlobalLayer: AppGlobalLayer,
+	PortalHost: AppPortalHost,
 });
 
-AppHeader.displayName = "App.Header";
-AppBody.displayName = "App.Body";
-AppLeftAside.displayName = "App.LeftAside";
-AppMain.displayName = "App.Main";
-AppRightAside.displayName = "App.RightAside";
-AppFooter.displayName = "App.Footer";
+AppContent.displayName = "App.Content";
+AppGlobalLayer.displayName = "App.GlobalLayer";
+AppPortalHost.displayName = "App.PortalHost";

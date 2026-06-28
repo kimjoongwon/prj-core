@@ -11,7 +11,7 @@ const meta = {
 		docs: {
 			description: {
 				component:
-					"App.Main 안에서 screen-level max-width와 vertical rhythm을 제공하는 compound boundary입니다.",
+					"Admin.Main 안에서 screen-level max-width와 vertical rhythm을 제공하는 compound boundary입니다.",
 			},
 		},
 	},

@@ -1,17 +1,4 @@
-import {
-	AccessGate,
-	App,
-	AppBody,
-	AppFooter,
-	AppHeader,
-	AppLeftAside,
-	AppMain,
-	FloatingAction,
-	MobileBottomNavigation,
-	MobileMenu,
-	SideNavigation,
-	TopBar,
-} from "@cocrepo/ui";
+import { App } from "@cocrepo/ui";
 import type { Metadata } from "next";
 import { Providers } from "./providers";
 import "./globals.css";
@@ -25,11 +12,8 @@ export const dynamic = "force-dynamic";
 
 /**
  * 루트 레이아웃
- * App은 root의 header/footer/aside/main 구조 슬롯을 소유합니다.
- *
- * 계층 구조:
- * - App (app/layout.tsx) - body wrapper
- *     - app/layout.tsx - route layout 직접 조립
+ * App은 전역 content boundary와 portal host를 소유합니다.
+ * 인증 전/후 shell은 하위 route layout이 각각 Auth/Admin으로 조립합니다.
  */
 export default function ({
 	children,
@@ -47,22 +31,8 @@ export default function ({
 			<body className="bg-background text-foreground">
 				<Providers>
 					<App>
-						<AppHeader>
-							<TopBar />
-						</AppHeader>
-						<AppBody>
-							<AppLeftAside>
-								<SideNavigation />
-							</AppLeftAside>
-							<AppMain>
-								<AccessGate contents={children} />
-							</AppMain>
-						</AppBody>
-						<AppFooter>
-							<MobileMenu />
-							<FloatingAction />
-							<MobileBottomNavigation />
-						</AppFooter>
+						<App.Content>{children}</App.Content>
+						<App.PortalHost />
 					</App>
 				</Providers>
 			</body>

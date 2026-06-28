@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { Admin } from "../Admin";
+import { Auth } from "../Auth";
 import { App } from "./App";
 
 const meta = {
@@ -9,7 +11,7 @@ const meta = {
 		docs: {
 			description: {
 				component:
-					"Root app layout primitive입니다. Header, Body, Aside, Main, Footer compound 슬롯을 소유합니다.",
+					"전역 content boundary와 global layer를 소유하는 root app primitive입니다.",
 			},
 		},
 	},
@@ -19,50 +21,66 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Basic: Story = {
+export const GlobalBoundary: Story = {
 	render: () => (
 		<App>
-			<App.Body>
-				<App.Main>
-					<div className="rounded-lg border border-border bg-surface p-6">
-						App main
-					</div>
-				</App.Main>
-			</App.Body>
+			<App.Content>
+				<div className="min-h-screen bg-surface-secondary p-6 text-foreground">
+					App content
+				</div>
+			</App.Content>
+			<App.GlobalLayer>
+				<div className="pointer-events-auto fixed right-4 bottom-4 rounded-lg border border-border bg-surface px-4 py-2 text-sm shadow-sm">
+					Global layer
+				</div>
+			</App.GlobalLayer>
+			<App.PortalHost />
 		</App>
 	),
 };
 
-export const WithSlots: Story = {
+export const WithAdminShell: Story = {
 	render: () => (
 		<App>
-			<App.Header>
-				<div className="border-border border-b bg-surface px-4 py-3">
-					Header slot
-				</div>
-			</App.Header>
-			<App.Body>
-				<App.LeftAside>
-					<div className="h-full border-border border-r bg-surface p-4">
-						Left aside
-					</div>
-				</App.LeftAside>
-				<App.Main>
-					<div className="min-h-48 rounded-lg border border-border bg-surface p-6">
-						App main
-					</div>
-				</App.Main>
-				<App.RightAside>
-					<div className="h-full border-border border-l bg-surface p-4">
-						Right aside
-					</div>
-				</App.RightAside>
-			</App.Body>
-			<App.Footer>
-				<div className="border-border border-t bg-surface px-4 py-3">
-					Footer slot
-				</div>
-			</App.Footer>
+			<App.Content>
+				<Admin>
+					<Admin.Header>
+						<div className="border-border border-b bg-surface px-4 py-3">
+							Admin header
+						</div>
+					</Admin.Header>
+					<Admin.Body>
+						<Admin.LeftAside>
+							<div className="h-full border-border border-r bg-surface p-4">
+								Admin navigation
+							</div>
+						</Admin.LeftAside>
+						<Admin.Main>
+							<div className="rounded-lg border border-border bg-surface p-6">
+								Admin main
+							</div>
+						</Admin.Main>
+					</Admin.Body>
+				</Admin>
+			</App.Content>
+		</App>
+	),
+};
+
+export const WithAuth: Story = {
+	render: () => (
+		<App>
+			<App.Content>
+				<Auth>
+					<Auth.Body>
+						<Auth.Main>
+							<div className="rounded-2xl border border-border bg-surface p-6">
+								Auth main
+							</div>
+						</Auth.Main>
+					</Auth.Body>
+				</Auth>
+			</App.Content>
 		</App>
 	),
 };

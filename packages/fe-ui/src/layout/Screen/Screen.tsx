@@ -13,7 +13,7 @@ const joinClassNames = (...classNames: Array<string | false | undefined>) =>
 
 /**
  * Screen 컴포넌트
- * App.Main 안에서 screen-level max-width와 vertical rhythm을 제공하는 boundary입니다.
+ * Admin.Main 안에서 screen-level max-width와 vertical rhythm을 제공하는 boundary입니다.
  */
 const ScreenRoot = ({ children, className, ...props }: ScreenProps) => {
 	return (
