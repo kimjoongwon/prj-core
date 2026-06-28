@@ -254,7 +254,7 @@ export const ServiceDocumentListScreen = observer(
 		return (
 			<Screen>
 				<ScreenSurface>
-					<VStack gap="section" fullWidth>
+					<VStack fullWidth>
 						<PageTitleBar
 							title="약관 관리"
 							description="모바일과 web 서비스에 노출되는 약관, 개인정보, 동의 문서를 버전별로 관리합니다."
@@ -270,11 +270,11 @@ export const ServiceDocumentListScreen = observer(
 						/>
 
 						<div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_420px]">
-							<VStack key="document-list-column" gap="block" fullWidth>
+							<VStack key="document-list-column" fullWidth>
 								<SectionSurface key="filters">
 									<Section>
 										<Section.Body>
-											<VStack gap="block" fullWidth>
+											<VStack fullWidth>
 												<div
 													key="filter-controls"
 													className="grid grid-cols-1 gap-3 md:grid-cols-5"
@@ -366,7 +366,7 @@ export const ServiceDocumentListScreen = observer(
 								<SectionSurface key="documents">
 									<Section overflow="hidden">
 										<Section.Body>
-											<VStack gap="block" fullWidth>
+											<VStack fullWidth>
 												<HStack
 													key="documents-header"
 													justifyContent="between"
@@ -420,8 +420,8 @@ export const ServiceDocumentListScreen = observer(
 																return (
 																	<Table.Row key={document.id}>
 																		<Table.Cell>
-																			<VStack gap="dense">
-																				<HStack gap="dense" alignItems="center">
+																			<VStack>
+																				<HStack alignItems="center">
 																					<FileText
 																						key="document-icon"
 																						className="h-4 w-4 text-accent"
@@ -456,7 +456,7 @@ export const ServiceDocumentListScreen = observer(
 																			{formatDate(document.publishedAt)}
 																		</Table.Cell>
 																		<Table.Cell>
-																			<HStack gap="dense" justifyContent="end">
+																			<HStack justifyContent="end">
 																				<Button
 																					key="edit"
 																					isIconOnly
@@ -526,7 +526,7 @@ export const ServiceDocumentListScreen = observer(
 							<SectionSurface key="document-form-column">
 								<Section>
 									<Section.Body>
-										<VStack gap="block" fullWidth>
+										<VStack fullWidth>
 											<HStack
 												key="form-header"
 												justifyContent="between"
@@ -725,7 +725,6 @@ export const ServiceDocumentListScreen = observer(
 											<HStack
 												key="form-actions"
 												justifyContent="end"
-												gap="inline"
 											>
 												<Button
 													key="cancel"

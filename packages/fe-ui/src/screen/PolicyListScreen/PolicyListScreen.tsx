@@ -45,9 +45,9 @@ export const PolicyListScreen = observer(
 						</Button>
 					}
 				/>
-				<VStack gap="section">
+				<VStack>
 					<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
-						<Section overflow="hidden" inset="none">
+						<Section overflow="hidden">
 							<Section.Body>
 								{isLoading ? (
 									<div className="flex items-center justify-center gap-2 p-8">

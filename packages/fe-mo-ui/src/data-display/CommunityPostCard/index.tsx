@@ -35,9 +35,9 @@ export const CommunityPostCard = observer((props: CommunityPostCardProps) => {
 			className={classNames.root()}
 			style={style}
 		>
-			<VStack gap="block">
-				<HStack alignItems="center" justifyContent="between" gap="inline">
-					<HStack alignItems="center" className="flex-1" gap="dense">
+			<VStack>
+				<HStack alignItems="center" justifyContent="between">
+					<HStack alignItems="center" className="flex-1">
 						<Icon name="users" size="xs" tone="accent" />
 						<Text className={classNames.author()} numberOfLines={1}>
 							{authorName}
@@ -47,7 +47,7 @@ export const CommunityPostCard = observer((props: CommunityPostCardProps) => {
 							{createdAtLabel}
 						</Text>
 					</HStack>
-					<HStack alignItems="center" gap="dense">
+					<HStack alignItems="center">
 						{isPinned ? (
 							<Chip color="warning" size="sm" variant="soft">
 								공지

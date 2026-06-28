@@ -58,7 +58,7 @@ export const ActionDetailScreen = observer(
 		const deleteModal = useOverlayState();
 		if (isLoading) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar title="Action 상세" description="로딩 중..." />
 					<SectionSurface>
 						<Section>
@@ -74,7 +74,7 @@ export const ActionDetailScreen = observer(
 		}
 		if (!action) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="Action 상세"
 						description="Action을 찾을 수 없습니다."
@@ -95,7 +95,7 @@ export const ActionDetailScreen = observer(
 			);
 		}
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="Action 상세"
 					description={`${action.displayName || action.name} Action의 상세 정보입니다.`}
@@ -134,7 +134,7 @@ export const ActionDetailScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								{action.isSystem && (
 									<div className="rounded-xl bg-warning-50 p-4 dark:bg-warning-900/20">
 										<p className="text-sm text-warning-700 dark:text-warning-400">

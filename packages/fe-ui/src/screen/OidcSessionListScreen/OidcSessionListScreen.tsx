@@ -124,7 +124,7 @@ export const OidcSessionListScreen = observer(
 			onClickRevokeSession,
 		});
 		return (
-			<VStack gap={5}>
+			<VStack>
 				<PageTitleBar
 					title="OIDC 세션/토큰"
 					description="OIDC 세션 및 토큰을 조회하고 관리합니다."
@@ -162,7 +162,7 @@ export const OidcSessionListScreen = observer(
 					</div>
 				)}
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
-					<Section overflow="hidden" inset="none">
+					<Section overflow="hidden">
 						<Section.Body>
 							<DataGrid
 								config={{

@@ -80,7 +80,7 @@ export const TimelineSessionProgramDetailScreen = observer(
 		});
 		if (isLoading) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar title="프로그램 상세" description="로딩 중..." />
 					<SectionSurface>
 						<Section>
@@ -96,7 +96,7 @@ export const TimelineSessionProgramDetailScreen = observer(
 		}
 		if (isNotFound || !program) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="프로그램 상세"
 						description="프로그램을 찾을 수 없습니다."
@@ -114,7 +114,7 @@ export const TimelineSessionProgramDetailScreen = observer(
 			);
 		}
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title={program.name ?? "프로그램 상세"}
 					description={program.descriptionText || undefined}

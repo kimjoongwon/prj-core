@@ -48,7 +48,7 @@ export const AbilityDetailScreen = observer(
 	(props: AbilityDetailScreenProps) => {
 		if (props.mode === "loading") {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar title="권한 상세" description="로딩 중..." />
 					<SectionSurface>
 						<Section>
@@ -65,7 +65,7 @@ export const AbilityDetailScreen = observer(
 		}
 		if (props.mode === "not_found") {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="권한 상세"
 						description="권한을 찾을 수 없습니다."
@@ -95,7 +95,7 @@ export const AbilityDetailScreen = observer(
 			},
 		});
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="권한 상세"
 					description="권한 정보를 확인하고 수정하거나 삭제할 수 있습니다."
@@ -128,7 +128,7 @@ export const AbilityDetailScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap="section">
+							<VStack>
 								<Section>
 									<Section.Body>
 										<h3 className="mb-4 text-lg font-semibold">기본 정보</h3>

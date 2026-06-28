@@ -77,7 +77,7 @@ export const TimelineSessionProgramEditScreen = observer(
 			? level
 			: undefined;
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="프로그램 수정"
 					description={descriptionText}
@@ -93,7 +93,7 @@ export const TimelineSessionProgramEditScreen = observer(
 							<PageTitleBar level={2} title="기본 정보" />
 						</Section.Header>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<ContentLanguageNotice
 									contentLanguageCode={contentLanguageCode}
 								/>

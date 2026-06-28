@@ -38,7 +38,7 @@ export interface PolicyCreateScreenProps {
 export const PolicyCreateScreen = observer((props: PolicyCreateScreenProps) => {
 	const selectedAbilityIds = new Set(props.form.abilityIds);
 	return (
-		<VStack gap="section" fullWidth>
+		<VStack fullWidth>
 			<PageTitleBar
 				title="정책 등록"
 				description="역할과 사용자에게 할당할 정책을 생성합니다."
@@ -88,7 +88,7 @@ export const PolicyFormBody = observer(
 			<SectionSurface>
 				<Section>
 					<Section.Body>
-						<VStack gap="section">
+						<VStack>
 							<Section>
 								<Section.Header>
 									<PageTitleBar level={2} title="기본 정보" />

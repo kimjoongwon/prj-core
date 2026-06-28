@@ -61,7 +61,7 @@ export const OidcClientDetailScreen = observer(
 		const deleteModal = useOverlayState();
 		if (isLoading) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar title="OIDC 클라이언트 상세" description="로딩 중..." />
 					<SectionSurface>
 						<Section>
@@ -77,7 +77,7 @@ export const OidcClientDetailScreen = observer(
 		}
 		if (!client) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="OIDC 클라이언트 상세"
 						description="클라이언트를 찾을 수 없습니다."
@@ -98,7 +98,7 @@ export const OidcClientDetailScreen = observer(
 			);
 		}
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title={client.clientId || "OIDC 클라이언트 상세"}
 					description={
@@ -150,7 +150,7 @@ export const OidcClientDetailScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<Section>
 									<Section.Header>
 										<PageTitleBar level={2} title="기본 정보" />

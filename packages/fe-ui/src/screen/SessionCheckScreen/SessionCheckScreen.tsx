@@ -20,7 +20,7 @@ export const SessionCheckScreen = observer(
 	}: SessionCheckScreenProps) => {
 		const t = useT();
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar title={title} description={description} />
 				<SectionSurface>
 					<Section>

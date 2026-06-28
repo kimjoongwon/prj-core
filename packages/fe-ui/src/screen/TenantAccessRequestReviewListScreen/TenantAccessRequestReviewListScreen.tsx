@@ -54,7 +54,7 @@ export const TenantAccessRequestReviewListScreen = observer(
 		const t = useT();
 		const requestRows = requests ?? [];
 		return (
-			<VStack gap={5}>
+			<VStack>
 				<PageTitleBar
 					title="접근 승인"
 					description="Space/Role 접근 신청을 검토하고 승인 또는 반려합니다."
@@ -62,11 +62,11 @@ export const TenantAccessRequestReviewListScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<div className="grid gap-3 md:grid-cols-2">
 									<Section>
 										<Section.Body>
-											<VStack gap={1}>
+											<VStack>
 												<span className="text-sm text-muted">전체 신청</span>
 												<span className="text-2xl font-semibold text-foreground">
 													{totalCount.toLocaleString("ko-KR")}
@@ -76,9 +76,9 @@ export const TenantAccessRequestReviewListScreen = observer(
 									</Section>
 									<Section>
 										<Section.Body>
-											<VStack gap={1}>
+											<VStack>
 												<span className="text-sm text-muted">승인 대기</span>
-												<HStack gap={2} alignItems="center">
+												<HStack alignItems="center">
 													<span className="text-2xl font-semibold text-foreground">
 														{pendingCount.toLocaleString("ko-KR")}
 													</span>
@@ -92,7 +92,7 @@ export const TenantAccessRequestReviewListScreen = observer(
 								</div>
 								<Section>
 									<Section.Body>
-										<VStack gap={4}>
+										<VStack>
 											<PageTitleBar level={2} title="검토 목록" />
 											{isLoading ? (
 												<Skeleton className="h-56 rounded-lg" />

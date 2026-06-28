@@ -2,24 +2,17 @@ import { forwardRef, type ReactNode } from "react";
 import { View, type ViewProps } from "react-native";
 import { tv } from "tailwind-variants";
 import { joinClassNames } from "../class-name";
-import {
-	type RhythmValue,
-	resolveRhythmValue,
-	rhythmDefaults,
-} from "../presets";
-import { getRhythmTailwindGapClass } from "../tokens";
 
 export interface VStackProps extends Omit<ViewProps, "children"> {
 	alignItems?: "start" | "center" | "end" | "stretch" | "baseline";
 	children?: ReactNode;
 	fullWidth?: boolean;
-	gap?: RhythmValue;
 	justifyContent?: "start" | "center" | "end" | "between" | "around" | "evenly";
 }
 
 const vStackClassNames = tv({
 	slots: {
-		root: "flex-col",
+		root: "flex-col gap-4",
 	},
 	variants: {
 		alignItems: {
@@ -75,15 +68,11 @@ export const VStack = forwardRef<View, VStackProps>(
 			children,
 			className,
 			fullWidth = false,
-			gap,
 			justifyContent,
 			...rest
 		},
 		ref,
 	) => {
-		const gapClassName = getRhythmTailwindGapClass(
-			resolveRhythmValue(gap, rhythmDefaults.vStack),
-		);
 		const classNames = vStackClassNames({
 			alignItems,
 			fullWidth,
@@ -93,7 +82,7 @@ export const VStack = forwardRef<View, VStackProps>(
 		return (
 			<View
 				{...rest}
-				className={joinClassNames(classNames.root(), gapClassName, className)}
+				className={joinClassNames(classNames.root(), className)}
 				ref={ref}
 			>
 				{children}

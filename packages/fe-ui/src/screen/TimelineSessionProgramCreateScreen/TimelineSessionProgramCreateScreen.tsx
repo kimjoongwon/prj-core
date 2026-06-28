@@ -119,7 +119,7 @@ export const TimelineSessionProgramCreateScreen = observer(
 			? level
 			: undefined;
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="프로그램 등록"
 					description={descriptionText}
@@ -135,7 +135,7 @@ export const TimelineSessionProgramCreateScreen = observer(
 							<PageTitleBar level={2} title="기본 정보" />
 						</Section.Header>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<ContentLanguageNotice
 									contentLanguageCode={contentLanguageCode}
 								/>

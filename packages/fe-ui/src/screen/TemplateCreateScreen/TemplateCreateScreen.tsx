@@ -32,7 +32,7 @@ export const TemplateCreateScreen = observer(
 		onClickCancelButton,
 	}: TemplateCreateScreenProps) => {
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="템플릿 등록"
 					description="새로운 메시지 템플릿을 등록합니다."

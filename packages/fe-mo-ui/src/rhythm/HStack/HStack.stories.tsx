@@ -9,25 +9,12 @@ const meta = {
 	args: {
 		alignItems: "center",
 		fullWidth: true,
-		gap: "inline",
 		justifyContent: "between",
 	},
 	argTypes: {
 		alignItems: {
 			control: "select",
 			options: ["start", "center", "end", "stretch", "baseline"],
-		},
-		gap: {
-			control: "select",
-			options: [
-				"flush",
-				"dense",
-				"inline",
-				"block",
-				"section",
-				"page",
-				"roomy",
-			],
 		},
 		justifyContent: {
 			control: "select",

@@ -207,7 +207,7 @@ export const AccountDetailScreen = observer(
 		// 로딩 상태
 		if (isLoading) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar title="계정 상세" description="로딩 중..." />
 					<SectionSurface>
 						<Section>
@@ -225,7 +225,7 @@ export const AccountDetailScreen = observer(
 		// 데이터 없음
 		if (!account) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="계정 상세"
 						description="계정을 찾을 수 없습니다."
@@ -246,7 +246,7 @@ export const AccountDetailScreen = observer(
 			);
 		}
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="계정 상세"
 					description={`${account.name} (${account.email})`}
@@ -263,7 +263,7 @@ export const AccountDetailScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<Section>
 									<Section.Header>
 										<PageTitleBar level={2} title="보안 정보" />

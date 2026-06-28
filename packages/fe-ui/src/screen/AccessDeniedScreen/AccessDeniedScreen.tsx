@@ -32,7 +32,7 @@ export const AccessDeniedScreen = observer(
 		const t = useT();
 		if (mode === "checking") {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar title={title} description={description} />
 					<SectionSurface>
 						<Section>
@@ -47,7 +47,7 @@ export const AccessDeniedScreen = observer(
 			);
 		}
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar title={title} description={description} />
 				<SectionSurface>
 					<Section>

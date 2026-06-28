@@ -13,7 +13,7 @@ describe("VStack", () => {
 			}
 		).render(props, null) as ReactElement<VStackProps>;
 
-	it("기본 세로 리듬과 section gap을 적용해야 한다", () => {
+	it("기본 세로 리듬과 gap을 적용해야 한다", () => {
 		const stack = renderVStack({
 			accessibilityLabel: "vertical-stack",
 			children: "content",
@@ -23,20 +23,19 @@ describe("VStack", () => {
 		expect(stack.props.className).toContain("gap-4");
 	});
 
-	it("정렬, 너비, semantic gap을 className으로 조합해야 한다", () => {
+	it("정렬과 너비를 기본 gap className과 조합해야 한다", () => {
 		const stack = renderVStack({
 			alignItems: "center",
 			children: "content",
 			className: "px-4",
 			fullWidth: true,
-			gap: "roomy",
 			justifyContent: "between",
 		});
 
 		expect(stack.props.className).toContain("items-center");
 		expect(stack.props.className).toContain("justify-between");
 		expect(stack.props.className).toContain("w-full");
-		expect(stack.props.className).toContain("gap-6");
+		expect(stack.props.className).toContain("gap-4");
 		expect(stack.props.className).toContain("px-4");
 	});
 });

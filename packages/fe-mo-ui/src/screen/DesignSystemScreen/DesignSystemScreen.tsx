@@ -224,7 +224,7 @@ export const DesignSystemScreen = observer(
 					) : null}
 
 					{currentTab === "components" ? (
-						<VStack gap="section" fullWidth>
+						<VStack fullWidth>
 							<Surface className="gap-4 rounded-xl border border-border p-4">
 								<Text className="text-base font-extrabold text-foreground">
 									Actions And Inputs

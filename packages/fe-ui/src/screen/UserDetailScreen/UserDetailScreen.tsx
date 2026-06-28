@@ -38,7 +38,7 @@ export const UserDetailScreen = observer(
 		const titleName = user?.name || user?.email || userId;
 		if (isLoading) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="회원 상세"
 						description="회원 정보를 불러오는 중입니다."
@@ -57,7 +57,7 @@ export const UserDetailScreen = observer(
 			);
 		}
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title={`회원 상세: ${titleName}`}
 					description="회원 기본 정보를 확인합니다."

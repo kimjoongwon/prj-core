@@ -85,19 +85,17 @@ export const LoginScreen = observer(
 				onSubmit={onSubmitLoginScreen}
 			>
 				<SectionSurface className="rounded-2xl border border-border bg-surface shadow-lg shadow-default-100/10">
-					<Section overflow="hidden" inset="none">
+					<Section overflow="hidden">
 						<Section.Body>
-							<VStack fullWidth gap="section" className="p-6 sm:p-7">
+							<VStack fullWidth className="p-6 sm:p-7">
 								<VStack
 									key="header"
 									fullWidth
-									gap="block"
 									className="text-left"
 								>
 									<HStack
 										key="badge"
 										alignItems="center"
-										gap="inline"
 										className="w-fit rounded-full border border-border bg-surface-secondary px-3 py-1 text-muted"
 									>
 										<ShieldCheck
@@ -134,7 +132,6 @@ export const LoginScreen = observer(
 								<HStack
 									key="session-hint"
 									alignItems="center"
-									gap="block"
 									className="rounded-2xl border border-border bg-surface-secondary/60 p-3 text-left"
 								>
 									<span
@@ -160,7 +157,7 @@ export const LoginScreen = observer(
 											className="rounded-xl border border-danger/30 bg-danger/10 px-3 py-2 text-danger"
 											role="alert"
 										>
-											<HStack alignItems="center" gap="inline">
+											<HStack alignItems="center">
 												<TriangleAlert
 													key="icon"
 													aria-hidden

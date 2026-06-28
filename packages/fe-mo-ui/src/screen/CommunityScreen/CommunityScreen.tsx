@@ -137,9 +137,9 @@ export const CommunityScreen = observer((props: CommunityScreenProps) => {
 					contentContainerClassName={classNames.contentContainer()}
 					showsVerticalScrollIndicator={false}
 				>
-					<VStack gap="section">
+					<VStack>
 						<View className={classNames.intro()}>
-							<VStack gap="block">
+							<VStack>
 								<Text className={classNames.eyebrow()}>COMMUNITY</Text>
 								<Text className={classNames.title()}>지점 커뮤니티</Text>
 								<Text className={classNames.description()}>
@@ -148,7 +148,7 @@ export const CommunityScreen = observer((props: CommunityScreenProps) => {
 								</Text>
 							</VStack>
 						</View>
-						<VStack gap="block">{content}</VStack>
+						<VStack>{content}</VStack>
 					</VStack>
 				</ScrollView>
 			</ScreenFrame>
@@ -162,8 +162,8 @@ export const CommunityScreen = observer((props: CommunityScreenProps) => {
 					behavior={Platform.OS === "ios" ? "padding" : undefined}
 					className={classNames.composer()}
 				>
-					<VStack gap="block">
-						<VStack gap="dense">
+					<VStack>
+						<VStack>
 							<Text className={classNames.label()}>제목</Text>
 							<TextInput
 								accessibilityLabel="커뮤니티 글 제목"
@@ -181,7 +181,7 @@ export const CommunityScreen = observer((props: CommunityScreenProps) => {
 								</Text>
 							) : null}
 						</VStack>
-						<VStack gap="dense">
+						<VStack>
 							<Text className={classNames.label()}>내용</Text>
 							<TextInput
 								accessibilityLabel="커뮤니티 글 내용"
@@ -203,7 +203,7 @@ export const CommunityScreen = observer((props: CommunityScreenProps) => {
 								</Text>
 							) : null}
 						</VStack>
-						<HStack gap="inline">
+						<HStack>
 							<Button
 								accessibilityLabel="글쓰기 취소"
 								className={classNames.sheetAction()}

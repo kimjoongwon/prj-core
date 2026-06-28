@@ -101,7 +101,7 @@ export const TemplateDetailScreen = observer(
 		});
 		if (isLoading) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar title="템플릿 상세" description="로딩 중..." />
 					<SectionSurface>
 						<Section>
@@ -117,7 +117,7 @@ export const TemplateDetailScreen = observer(
 		}
 		if (isNotFound || !template) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="템플릿 상세"
 						description="템플릿을 찾을 수 없습니다."
@@ -142,7 +142,7 @@ export const TemplateDetailScreen = observer(
 			);
 		}
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="템플릿 상세"
 					description={`${template.name} 템플릿의 상세 정보입니다.`}
@@ -161,7 +161,7 @@ export const TemplateDetailScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<Section>
 									<Section.Header>
 										<PageTitleBar level={2} title="기본 정보" />

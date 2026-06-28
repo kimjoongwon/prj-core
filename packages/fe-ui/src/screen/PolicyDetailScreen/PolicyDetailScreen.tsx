@@ -69,7 +69,7 @@ export const PolicyDetailScreen = observer((props: PolicyDetailScreenProps) => {
 	const selectedSet = new Set(props.selectedAbilityIds);
 	if (props.isLoading) {
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="정책 상세"
 					description="정책을 불러오는 중입니다."
@@ -89,7 +89,7 @@ export const PolicyDetailScreen = observer((props: PolicyDetailScreenProps) => {
 	}
 	if (!props.policy) {
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="정책 상세"
 					description="정책을 찾을 수 없습니다."
@@ -110,7 +110,7 @@ export const PolicyDetailScreen = observer((props: PolicyDetailScreenProps) => {
 		);
 	}
 	return (
-		<VStack gap="section" fullWidth>
+		<VStack fullWidth>
 			<PageTitleBar
 				title={`정책 상세: ${props.policy.displayName || props.policy.name}`}
 				description={
@@ -147,7 +147,7 @@ export const PolicyDetailScreen = observer((props: PolicyDetailScreenProps) => {
 			<SectionSurface>
 				<Section>
 					<Section.Body>
-						<VStack gap="section">
+						<VStack>
 							<Section>
 								<Section.Header>
 									<PageTitleBar level={2} title="기본 정보" />

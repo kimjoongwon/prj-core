@@ -227,7 +227,7 @@ export const SubjectDetailScreen = observer(
 	}: SubjectDetailScreenProps) => {
 		if (isLoading) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar title="Subject 상세" description="로딩 중..." />
 					<SectionSurface>
 						<Section>
@@ -249,7 +249,7 @@ export const SubjectDetailScreen = observer(
 				/>
 			);
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					{pageHeader}
 					<SectionSurface>
 						<Section>
@@ -286,12 +286,12 @@ export const SubjectDetailScreen = observer(
 			/>
 		);
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				{pageHeader}
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<SubjectInfoSection subject={subject} />
 								<SubjectFieldsSection
 									group={subject.group}

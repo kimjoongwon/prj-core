@@ -1,12 +1,12 @@
 import {
 	AccessGate,
-	Admin,
 	FloatingAction,
 	MobileBottomNavigation,
 	MobileMenu,
 	SideNavigation,
 	TopBar,
 } from "@cocrepo/ui";
+import { Admin } from "@cocrepo/ui/layout";
 
 /**
  * 인증 이후 관리자 route shell입니다.

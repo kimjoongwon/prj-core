@@ -237,12 +237,12 @@ export const InquiryDetailScreen = observer(
 				sendMessage={onSendInquiryMessage}
 				sendTypingStatus={onSendTypingStatus}
 			>
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="문의 상세"
 						description="문의 상세 정보를 확인하고 답변을 작성합니다."
 						actions={
-							<HStack gap={2}>
+							<HStack>
 								<Button
 									variant="light"
 									startContent={<ArrowLeft className="h-4 w-4" />}
@@ -273,10 +273,10 @@ export const InquiryDetailScreen = observer(
 					<SectionSurface>
 						<Section>
 							<Section.Body>
-								<VStack gap={4}>
+								<VStack>
 									<Section>
 										<Section.Body>
-											<HStack gap={4} className="flex-col lg:flex-row">
+											<HStack className="flex-col lg:flex-row">
 												<div className="w-full lg:w-2/3">
 													<InquiryInfoCard
 														inquiryNumber={inquiry?.inquiryNumber ?? inquiryId}
@@ -318,7 +318,7 @@ export const InquiryDetailScreen = observer(
 									</Section>
 									<Section>
 										<Section.Body>
-											<HStack gap={4} className="flex-col lg:flex-row">
+											<HStack className="flex-col lg:flex-row">
 												<div className="w-full lg:w-1/2">
 													<CustomerInfoCard
 														name={inquiry?.customerId ?? "고객"}
@@ -340,7 +340,7 @@ export const InquiryDetailScreen = observer(
 										<>
 											<Section>
 												<Section.Body>
-													<VStack gap={4}>
+													<VStack>
 														<PageTitleBar level={2} title="AI 메타 추천" />
 														<AiForm
 															formState={{
@@ -361,7 +361,7 @@ export const InquiryDetailScreen = observer(
 											</Section>
 											<Section>
 												<Section.Body>
-													<VStack gap={4}>
+													<VStack>
 														<PageTitleBar level={2} title="메타 수정" />
 														<Input
 															label="문의 제목"
@@ -371,7 +371,7 @@ export const InquiryDetailScreen = observer(
 															isInvalid={Boolean(metaFormState.error)}
 															errorMessage={metaFormState.error}
 														/>
-														<HStack gap={4} className="flex-col md:flex-row">
+														<HStack className="flex-col md:flex-row">
 															<Select
 																label="카테고리"
 																placeholder="카테고리 선택"

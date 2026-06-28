@@ -127,7 +127,7 @@ export const AssetDetailScreen = observer(
 		const folderIds = new Set(folders.map((folder) => folder.id));
 		if (isLoading) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar title="에셋 상세" description="로딩 중..." />
 					<SectionSurface>
 						<Section>
@@ -143,7 +143,7 @@ export const AssetDetailScreen = observer(
 		}
 		if (!asset) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="에셋 상세"
 						description="에셋을 찾을 수 없습니다."
@@ -165,7 +165,7 @@ export const AssetDetailScreen = observer(
 		}
 		const previewUrl = getAssetPreviewUrl(asset);
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title={asset.originalName ?? "에셋 상세"}
 					description="에셋 상세 정보"
@@ -206,7 +206,7 @@ export const AssetDetailScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<Section>
 									<Section.Body>
 										<div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.4fr)_340px]">

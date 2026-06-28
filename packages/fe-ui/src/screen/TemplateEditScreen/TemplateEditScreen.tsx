@@ -41,7 +41,7 @@ export const TemplateEditScreen = observer(
 	}: TemplateEditScreenProps) => {
 		if (isLoading) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar title="템플릿 수정" description="로딩 중..." />
 					<SectionSurface>
 						<Section>
@@ -58,7 +58,7 @@ export const TemplateEditScreen = observer(
 		}
 		if (isNotFound) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="템플릿 수정"
 						description="템플릿을 찾을 수 없습니다."
@@ -79,7 +79,7 @@ export const TemplateEditScreen = observer(
 			);
 		}
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="템플릿 수정"
 					description={

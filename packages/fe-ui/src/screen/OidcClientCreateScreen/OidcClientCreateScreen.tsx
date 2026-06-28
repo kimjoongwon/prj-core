@@ -120,7 +120,7 @@ export const OidcClientCreateScreen = observer(
 			});
 		};
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="OIDC 클라이언트 등록"
 					description="새 OIDC 클라이언트를 등록합니다."
@@ -129,7 +129,7 @@ export const OidcClientCreateScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<Section>
 									<Section.Header>
 										<PageTitleBar

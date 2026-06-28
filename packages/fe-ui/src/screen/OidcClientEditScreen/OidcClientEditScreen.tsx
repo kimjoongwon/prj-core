@@ -167,7 +167,7 @@ export const OidcClientEditScreen = observer(
 		};
 		if (isLoading) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="OIDC 클라이언트 수정"
 						description="클라이언트 정보를 불러오는 중입니다."
@@ -189,7 +189,7 @@ export const OidcClientEditScreen = observer(
 		}
 		if (!client) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="OIDC 클라이언트 수정"
 						description="클라이언트를 찾을 수 없습니다."
@@ -213,7 +213,7 @@ export const OidcClientEditScreen = observer(
 			);
 		}
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="OIDC 클라이언트 수정"
 					description={`${client.clientId} 클라이언트를 수정합니다.`}
@@ -224,7 +224,7 @@ export const OidcClientEditScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<Section>
 									<Section.Header>
 										<PageTitleBar

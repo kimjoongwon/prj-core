@@ -20,7 +20,7 @@ export interface PaymentScreenProps extends PaymentConsoleProps {
 export const PaymentScreen = observer(
 	({ onClickRefresh, ...consoleProps }: PaymentScreenProps) => {
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="결제 관리"
 					description="Space별 결제 원장을 Course와 앞으로 추가될 Product까지 같은 구조로 추적합니다."

@@ -24,7 +24,7 @@ type Story = StoryObj;
 export const Default: Story = {
 	render: () => (
 		<ScrollView contentContainerClassName="gap-3 px-4 py-5">
-			<VStack gap="dense">
+			<VStack>
 				<Text variant="heading">Input</Text>
 				<Text tone="muted">
 					MobX form state와 연결되는 기본 텍스트 입력입니다.

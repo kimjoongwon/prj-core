@@ -89,7 +89,7 @@ export const RoutineEditScreen = observer(
 		});
 		if (isLoading) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar title="루틴 수정" description="로딩 중..." />
 					<SectionSurface>
 						<Section>
@@ -106,7 +106,7 @@ export const RoutineEditScreen = observer(
 		}
 		if (isNotFound) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="루틴 수정"
 						description="루틴을 찾을 수 없습니다."
@@ -145,7 +145,7 @@ export const RoutineEditScreen = observer(
 			</div>
 		);
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="루틴 수정"
 					description={

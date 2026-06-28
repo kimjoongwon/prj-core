@@ -133,7 +133,7 @@ export const TimelineSessionEditScreen = observer(
 	}: TimelineSessionEditScreenProps) => {
 		const t = useT();
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="세션 수정"
 					description={descriptionText}
@@ -146,13 +146,13 @@ export const TimelineSessionEditScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<Section>
 									<Section.Header>
 										<PageTitleBar level={2} title="기본 정보" />
 									</Section.Header>
 									<Section.Body>
-										<VStack gap={4}>
+										<VStack>
 											<ContentLanguageNotice
 												contentLanguageCode={contentLanguageCode}
 											/>
@@ -195,7 +195,7 @@ export const TimelineSessionEditScreen = observer(
 										<PageTitleBar level={2} title="일정 설정" />
 									</Section.Header>
 									<Section.Body>
-										<VStack gap={4}>
+										<VStack>
 											{type === "ONE_TIME" ? (
 												<Input
 													label="일시"

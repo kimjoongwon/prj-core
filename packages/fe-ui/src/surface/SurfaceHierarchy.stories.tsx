@@ -21,7 +21,7 @@ export const AdminScreenHierarchy: Story = {
 		<div className="min-h-screen bg-background p-6 text-foreground">
 			<Screen>
 				<ScreenSurface>
-					<VStack gap="section" fullWidth>
+					<VStack fullWidth>
 						<PageTitleBar
 							key="title"
 							title="강좌 관리"

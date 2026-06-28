@@ -1,4 +1,4 @@
-import { Auth } from "@cocrepo/ui";
+import { Auth } from "@cocrepo/ui/layout";
 
 /**
  * 인증 전 route shell입니다.

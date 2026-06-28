@@ -14,6 +14,11 @@
       "import": "./index.ts",
       "default": "./index.ts"
     },
+    "./layout": {
+      "types": "./src/layout/index.ts",
+      "import": "./src/layout/index.ts",
+      "default": "./src/layout/index.ts"
+    },
     "./widget": {
       "types": "./src/widget/index.ts",
       "import": "./src/widget/index.ts",

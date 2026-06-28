@@ -59,7 +59,7 @@ function DetailItem({
 	value?: string | null;
 }) {
 	return (
-		<VStack gap={1}>
+		<VStack>
 			<span className="text-xs font-medium uppercase text-muted">{label}</span>
 			<span className="text-sm text-foreground">{value || "-"}</span>
 		</VStack>
@@ -78,7 +78,7 @@ export const TenantAccessRequestReviewDetailScreen = observer(
 		onClickApproveButton,
 		onClickRejectButton,
 	}: TenantAccessRequestReviewDetailScreenProps) => (
-		<VStack gap={5}>
+		<VStack>
 			<PageTitleBar
 				title="접근 신청 상세"
 				description="신청 내용을 확인하고 승인 또는 반려합니다."
@@ -98,10 +98,10 @@ export const TenantAccessRequestReviewDetailScreen = observer(
 						{isLoading || !request ? (
 							<Skeleton className="h-96 rounded-lg" />
 						) : (
-							<VStack gap={4}>
+							<VStack>
 								<Section>
 									<Section.Body>
-										<VStack gap={4}>
+										<VStack>
 											<HStack
 												justifyContent="between"
 												alignItems="start"
@@ -138,7 +138,7 @@ export const TenantAccessRequestReviewDetailScreen = observer(
 								</Section>
 								<Section>
 									<Section.Body>
-										<VStack gap={4}>
+										<VStack>
 											<PageTitleBar level={2} title="검토" />
 											<TextArea
 												label="검토 코멘트"

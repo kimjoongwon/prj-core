@@ -71,7 +71,7 @@ export type AbilityFormScreenProps =
 export const AbilityFormScreen = observer((props: AbilityFormScreenProps) => {
 	if (props.status === "loading") {
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar title={props.title} description="로딩 중..." />
 				<SectionSurface>
 					<Section>
@@ -88,7 +88,7 @@ export const AbilityFormScreen = observer((props: AbilityFormScreenProps) => {
 	}
 	if (props.status === "not_found") {
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title={props.title}
 					description="권한을 찾을 수 없습니다."
@@ -113,7 +113,7 @@ export const AbilityFormScreen = observer((props: AbilityFormScreenProps) => {
 	}
 	const isEditMode = props.mode === "edit";
 	return (
-		<VStack gap="section" fullWidth>
+		<VStack fullWidth>
 			<PageTitleBar
 				title={props.title}
 				description={props.description}
@@ -140,7 +140,7 @@ export const AbilityFormScreen = observer((props: AbilityFormScreenProps) => {
 			<SectionSurface>
 				<Section>
 					<Section.Body>
-						<VStack gap="section">
+						<VStack>
 							<Section>
 								<Section.Header>
 									<PageTitleBar level={2} title="기본 정보" />

@@ -408,7 +408,7 @@ export const RoutineCreateScreen = observer(
 			</div>
 		);
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="루틴 등록"
 					description="새로운 운동 루틴을 등록합니다."

@@ -29,7 +29,7 @@ export const ScreenOwnedHierarchy: Story = {
 	render: () => (
 		<Screen>
 			<ScreenSurface>
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						key="title"
 						title="에셋 관리"
@@ -75,7 +75,7 @@ export const ScreenOwnedHierarchy: Story = {
 export const MultipleScreenSections: Story = {
 	render: () => (
 		<ScreenSurface>
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					key="title"
 					title="문의 생성"

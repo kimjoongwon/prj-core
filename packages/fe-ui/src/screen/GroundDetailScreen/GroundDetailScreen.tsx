@@ -38,7 +38,7 @@ export const GroundDetailScreen = observer(
 	}: GroundDetailScreenProps) => {
 		if (isNotFound || !ground) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="시설 정보"
 						description="시설 detail을 찾을 수 없습니다."
@@ -63,7 +63,7 @@ export const GroundDetailScreen = observer(
 			);
 		}
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title={ground.name ?? "시설 정보"}
 					description="시설 기본 정보를 확인합니다."

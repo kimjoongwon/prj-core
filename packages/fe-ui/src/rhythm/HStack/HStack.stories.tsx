@@ -1,12 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { rhythmPresets } from "../presets";
-import { rhythmScaleValues } from "../tokens";
 import { HStack } from "./HStack";
-
-const rhythmOptions = [
-	...Object.keys(rhythmPresets),
-	...rhythmScaleValues,
-] as const;
 
 const meta = {
 	title: "Rhythm/HStack",
@@ -16,7 +9,7 @@ const meta = {
 		docs: {
 			description: {
 				component:
-					"자식 요소들을 가로 줄로 배치하는 수평 스택 컴포넌트로, 정렬, 간격, 레이아웃 옵션을 커스터마이징할 수 있습니다.",
+					"자식 요소들을 기본 간격으로 가로 배치하는 수평 스택 컴포넌트입니다.",
 			},
 		},
 	},
@@ -31,13 +24,6 @@ const meta = {
 			control: "select",
 			options: ["start", "center", "end", "between", "around", "evenly"],
 			description: "아이템들의 가로 배치",
-		},
-		gap: {
-			control: "select",
-			options: rhythmOptions,
-			description:
-				'권장값은 "inline" 같은 semantic rhythm preset이고, numeric 값은 legacy gap 호환입니다.',
-			defaultValue: "inline",
 		},
 		fullWidth: {
 			control: "boolean",
@@ -68,7 +54,6 @@ const 샘플아이템 = ({
 
 export const 기본: Story = {
 	args: {
-		gap: "inline",
 		children: (
 			<>
 				<샘플아이템>아이템 1</샘플아이템>
@@ -80,7 +65,7 @@ export const 기본: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story: "semantic inline rhythm을 사용한 기본 수평 스택입니다.",
+				story: "기본 수평 스택입니다.",
 			},
 		},
 	},
@@ -129,28 +114,6 @@ export const 콘텐츠_배치: Story = {
 	},
 };
 
-export const 간격_크기들: Story = {
-	args: {
-		gap: 4,
-		children: (
-			<>
-				<샘플아이템>아이템 1</샘플아이템>
-				<샘플아이템>아이템 2</샘플아이템>
-				<샘플아이템>아이템 3</샘플아이템>
-			</>
-		),
-		className: "border border-gray-300 p-2",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"아이템 간의 다양한 간격 크기 (테일위드 스페이싱 단위 사용)입니다.",
-			},
-		},
-	},
-};
-
 export const 내비게이션_예시: Story = {
 	args: {
 		justifyContent: "between",
@@ -177,7 +140,6 @@ export const 내비게이션_예시: Story = {
 export const 카드_액션_예시: Story = {
 	args: {
 		justifyContent: "end",
-		gap: 2,
 		children: (
 			<>
 				<div className="rounded border border-gray-300 px-4 py-2">취소</div>
@@ -198,7 +160,6 @@ export const 카드_액션_예시: Story = {
 
 export const 플레이그라운드: Story = {
 	args: {
-		gap: 4,
 		alignItems: "center",
 		justifyContent: "start",
 		fullWidth: false,

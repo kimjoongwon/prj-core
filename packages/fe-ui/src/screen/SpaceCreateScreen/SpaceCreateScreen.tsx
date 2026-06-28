@@ -53,7 +53,7 @@ export const SpaceCreateScreen = observer(
 		onClickSaveButton,
 	}: SpaceCreateScreenProps) => {
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="공간 등록"
 					description="새로운 공간과 시설 detail을 등록합니다."
@@ -61,13 +61,13 @@ export const SpaceCreateScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<Section>
 									<Section.Header>
 										<PageTitleBar level={2} title="기본 정보" />
 									</Section.Header>
 									<Section.Body>
-										<VStack gap={4}>
+										<VStack>
 											<Input
 												label="시설명"
 												placeholder="시설명을 입력하세요"

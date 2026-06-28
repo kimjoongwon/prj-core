@@ -39,7 +39,7 @@ export const TimelineCreateScreen = observer(
 		onClickSubmitButton,
 	}: TimelineCreateScreenProps) => {
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="타임라인 등록"
 					description="새 타임라인을 등록합니다."
@@ -52,7 +52,7 @@ export const TimelineCreateScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<ContentLanguageNotice
 									contentLanguageCode={contentLanguageCode}
 								/>

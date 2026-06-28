@@ -2,24 +2,17 @@ import { forwardRef, type ReactNode } from "react";
 import { View, type ViewProps } from "react-native";
 import { tv } from "tailwind-variants";
 import { joinClassNames } from "../class-name";
-import {
-	type RhythmValue,
-	resolveRhythmValue,
-	rhythmDefaults,
-} from "../presets";
-import { getRhythmTailwindGapClass } from "../tokens";
 
 export interface HStackProps extends Omit<ViewProps, "children"> {
 	alignItems?: "start" | "center" | "end" | "stretch" | "baseline";
 	children?: ReactNode;
 	fullWidth?: boolean;
-	gap?: RhythmValue;
 	justifyContent?: "start" | "center" | "end" | "between" | "around" | "evenly";
 }
 
 const hStackClassNames = tv({
 	slots: {
-		root: "flex-row",
+		root: "flex-row gap-2",
 	},
 	variants: {
 		alignItems: {
@@ -75,15 +68,11 @@ export const HStack = forwardRef<View, HStackProps>(
 			children,
 			className,
 			fullWidth = false,
-			gap,
 			justifyContent,
 			...rest
 		},
 		ref,
 	) => {
-		const gapClassName = getRhythmTailwindGapClass(
-			resolveRhythmValue(gap, rhythmDefaults.hStack),
-		);
 		const classNames = hStackClassNames({
 			alignItems,
 			fullWidth,
@@ -93,7 +82,7 @@ export const HStack = forwardRef<View, HStackProps>(
 		return (
 			<View
 				{...rest}
-				className={joinClassNames(classNames.root(), gapClassName, className)}
+				className={joinClassNames(classNames.root(), className)}
 				ref={ref}
 			>
 				{children}

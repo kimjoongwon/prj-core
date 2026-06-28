@@ -24,7 +24,7 @@ type Story = StoryObj;
 export const Default: Story = {
 	render: () => (
 		<ScrollView contentContainerClassName="gap-3 px-4 py-5">
-			<VStack gap="dense">
+			<VStack>
 				<Text variant="heading">InputOTP</Text>
 				<Text tone="muted">
 					휴대폰 인증, 초대 코드 같은 짧은 보안 입력을 확인합니다.

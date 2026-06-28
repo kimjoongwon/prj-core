@@ -140,7 +140,7 @@ const SubjectGroupFilterTabs = observer(
 			onChangeGroup(getSubjectGroupQueryValue(key));
 		};
 		return (
-			<VStack gap="block">
+			<VStack>
 				<Tabs
 					aria-label={t("대상 유형 필터")}
 					selectedKey={selectedKey}
@@ -210,7 +210,7 @@ export const SubjectListScreen = observer(
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
 					<Section overflow="hidden">
 						<Section.Body>
-							<VStack gap="section">
+							<VStack>
 								<SubjectGroupFilterTabs
 									selectedGroup={queryStates.group}
 									onChangeGroup={handleSubjectGroupFilterChange}

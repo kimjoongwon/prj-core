@@ -47,7 +47,7 @@ export const TimelineEditScreen = observer(
 			</Button>
 		);
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="타임라인 수정"
 					description={timelineName}
@@ -56,7 +56,7 @@ export const TimelineEditScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<ContentLanguageNotice
 									contentLanguageCode={contentLanguageCode}
 								/>

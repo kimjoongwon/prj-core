@@ -67,7 +67,7 @@ export const OidcClientListScreen = observer(
 		}, [gridState, queryStates, setQueryStates]);
 		const oidcClientRows = oidcClients ?? [];
 		return (
-			<VStack gap={5}>
+			<VStack>
 				<PageTitleBar
 					title="OIDC 클라이언트"
 					description="시스템에 등록된 OIDC 클라이언트를 관리합니다."
@@ -82,7 +82,7 @@ export const OidcClientListScreen = observer(
 					}
 				/>
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
-					<Section overflow="hidden" inset="none">
+					<Section overflow="hidden">
 						<Section.Body>
 							<DataGrid
 								config={{

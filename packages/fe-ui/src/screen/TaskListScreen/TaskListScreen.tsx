@@ -136,7 +136,7 @@ export const TaskListScreen = observer(
 					}
 				/>
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
-					<Section overflow="hidden" inset="none">
+					<Section overflow="hidden">
 						<Section.Body>
 							<DataGrid
 								config={{

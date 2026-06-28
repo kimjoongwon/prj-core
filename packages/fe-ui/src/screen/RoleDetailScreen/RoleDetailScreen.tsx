@@ -137,7 +137,7 @@ export const RoleDetailScreen = observer(
 		).length;
 		if (isLoading) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="역할 상세"
 						description="역할 정보를 불러오는 중입니다."
@@ -157,7 +157,7 @@ export const RoleDetailScreen = observer(
 		}
 		if (!role) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="역할 상세"
 						description="역할을 찾을 수 없습니다."
@@ -178,7 +178,7 @@ export const RoleDetailScreen = observer(
 			);
 		}
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title={`역할 상세: ${role.displayName || role.name}`}
 					description={
@@ -218,7 +218,7 @@ export const RoleDetailScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap="section">
+							<VStack>
 								<Section>
 									<Section.Header>
 										<PageTitleBar level={2} title="기본 정보" />

@@ -61,7 +61,7 @@ export const GroundEditScreen = observer(
 		const t = useT();
 		if (isLoading) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar title="시설 정보 수정" description="로딩 중..." />
 					<SectionSurface>
 						<Section>
@@ -78,7 +78,7 @@ export const GroundEditScreen = observer(
 		}
 		if (isNotFound) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="시설 정보 수정"
 						description="시설 detail을 찾을 수 없습니다."
@@ -101,7 +101,7 @@ export const GroundEditScreen = observer(
 			);
 		}
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="시설 정보 수정"
 					description={
@@ -120,7 +120,7 @@ export const GroundEditScreen = observer(
 							<PageTitleBar level={2} title="기본 정보" />
 						</Section.Header>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<Input
 									label="시설명"
 									placeholder="시설명을 입력하세요"

@@ -123,7 +123,7 @@ export const InquiryListScreen = observer(
 						</Button>
 					}
 				/>
-				<VStack gap={4}>
+				<VStack>
 					<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
 						<Section>
 							<Section.Body>

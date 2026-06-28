@@ -119,7 +119,7 @@ export const UserListScreen = observer(
 			},
 		];
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="이용자 목록"
 					description="시스템에 등록된 이용자를 조회합니다."

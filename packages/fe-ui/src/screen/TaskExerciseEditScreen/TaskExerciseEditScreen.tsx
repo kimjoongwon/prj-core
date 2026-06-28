@@ -168,7 +168,7 @@ export const TaskExerciseEditScreen = observer(
 		const t = useT();
 		if (isLoading) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar title="운동 정보 수정" description="로딩 중..." />
 					<SectionSurface>
 						<Section>
@@ -185,7 +185,7 @@ export const TaskExerciseEditScreen = observer(
 		}
 		if (isNotFound) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="운동 정보 수정"
 						description="운동 detail을 찾을 수 없습니다."
@@ -208,7 +208,7 @@ export const TaskExerciseEditScreen = observer(
 			);
 		}
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="운동 정보 수정"
 					description={

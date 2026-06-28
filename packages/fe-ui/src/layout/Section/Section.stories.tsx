@@ -55,7 +55,7 @@ export const DataArea: Story = {
 	render: () => (
 		<div className="w-[720px]">
 			<SectionSurface className="overflow-hidden">
-				<Section inset="none" overflow="hidden">
+				<Section overflow="hidden">
 					<Section.Body>
 						<div className="grid grid-cols-3 bg-surface-secondary px-4 py-3 text-muted text-xs">
 							<span>Name</span>
@@ -65,7 +65,7 @@ export const DataArea: Story = {
 						<div className="grid grid-cols-3 border-border border-t px-4 py-3 text-sm">
 							<span>DataGrid wrapper</span>
 							<span>layout/Section</span>
-							<span>inset none</span>
+							<span>기본 inset</span>
 						</div>
 					</Section.Body>
 				</Section>

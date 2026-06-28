@@ -76,7 +76,7 @@ export const AuthAuditLogListScreen = observer(
 		}, [gridState, queryStates, setQueryStates]);
 		const logRows = logs ?? [];
 		return (
-			<VStack gap={5}>
+			<VStack>
 				<PageTitleBar
 					title="로그인 감사 로그"
 					description="로그인 시도에 대한 감사 로그를 조회합니다."
@@ -110,7 +110,7 @@ export const AuthAuditLogListScreen = observer(
 					</div>
 				)}
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
-					<Section overflow="hidden" inset="none">
+					<Section overflow="hidden">
 						<Section.Body>
 							<DataGrid
 								config={{

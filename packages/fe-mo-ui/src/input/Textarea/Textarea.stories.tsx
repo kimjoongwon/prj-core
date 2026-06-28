@@ -24,7 +24,7 @@ type Story = StoryObj;
 export const Default: Story = {
 	render: () => (
 		<ScrollView contentContainerClassName="gap-3 px-4 py-5">
-			<VStack gap="dense">
+			<VStack>
 				<Text variant="heading">Textarea</Text>
 				<Text tone="muted">
 					예약 메모처럼 여러 줄 입력이 필요한 필드입니다.

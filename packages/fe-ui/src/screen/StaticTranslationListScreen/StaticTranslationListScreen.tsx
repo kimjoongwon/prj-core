@@ -301,12 +301,12 @@ export const StaticTranslationListScreen = observer(
 			await onInvalidateTranslationCache(selectedLanguageCode);
 		}
 		return (
-			<VStack gap={5}>
+			<VStack>
 				<PageTitleBar
 					title="정적 번역"
 					description="admin과 idp에서 사용하는 정적 다국어 key-value를 관리합니다."
 					actions={
-						<HStack gap="inline" className="flex-wrap justify-end">
+						<HStack className="flex-wrap justify-end">
 							<Button
 								variant="flat"
 								startContent={<RefreshCcw className="h-4 w-4" />}
@@ -333,7 +333,7 @@ export const StaticTranslationListScreen = observer(
 					}
 				/>
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
-					<Section overflow="hidden" inset="none">
+					<Section overflow="hidden">
 						<Section.Body>
 							<DataGrid
 								config={{
@@ -359,7 +359,7 @@ export const StaticTranslationListScreen = observer(
 										{t(isEditMode ? "번역 수정" : "번역 등록")}
 									</Modal.Header>
 									<Modal.Body>
-										<VStack gap="block">
+										<VStack>
 											<Select
 												label="언어"
 												value={form.languageCode}

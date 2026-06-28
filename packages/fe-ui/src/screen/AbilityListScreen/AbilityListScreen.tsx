@@ -101,7 +101,7 @@ const AbilityListScreenFallback = observer(() => {
 	return (
 		<div className="space-y-5">
 			<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
-				<Section inset="none" className="p-6">
+				<Section>
 					<Section.Body>
 						<div className="flex items-center justify-center gap-2">
 							<Spinner size="sm" />
@@ -111,7 +111,7 @@ const AbilityListScreenFallback = observer(() => {
 				</Section>
 			</SectionSurface>
 			<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
-				<Section inset="none" className="p-6">
+				<Section>
 					<Section.Body>
 						<div className="flex items-center justify-center gap-2">
 							<Spinner size="sm" />
@@ -198,7 +198,7 @@ export const AbilityListScreen = observer(
 						</Button>
 					}
 				/>
-				<VStack gap="section">
+				<VStack>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
 						<StatsCard
 							className="h-full border border-accent/10 bg-accent/5"

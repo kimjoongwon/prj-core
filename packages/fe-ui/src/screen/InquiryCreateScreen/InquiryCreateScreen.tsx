@@ -118,7 +118,7 @@ export const InquiryCreateScreen = observer(
 			priorityOptions.map((option) => option.value),
 		);
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="문의 접수"
 					description="문의 생성 bootstrap과 AiForm을 이용해 문의를 등록합니다."
@@ -136,7 +136,7 @@ export const InquiryCreateScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								{bootstrap && (
 									<Section>
 										<Section.Header>
@@ -169,7 +169,7 @@ export const InquiryCreateScreen = observer(
 										<PageTitleBar level={2} title="문의 입력" />
 									</Section.Header>
 									<Section.Body>
-										<VStack gap={4}>
+										<VStack>
 											{!isHidden("customerId") && (
 												<div className="space-y-2">
 													<Input

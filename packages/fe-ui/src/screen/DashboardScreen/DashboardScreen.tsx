@@ -31,7 +31,7 @@ const dashboardCards = [
 function DashboardScreenContent() {
 	const t = useT();
 	return (
-		<VStack gap="section" fullWidth>
+		<VStack fullWidth>
 			<PageTitleBar
 				title="대시보드"
 				description="관리자 대시보드에 오신 것을 환영합니다."

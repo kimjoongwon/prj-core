@@ -31,7 +31,7 @@ export interface PolicyEditScreenProps {
 export const PolicyEditScreen = observer((props: PolicyEditScreenProps) => {
 	if (props.status === "loading") {
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="정책 수정"
 					description="정책을 불러오는 중입니다."
@@ -46,7 +46,7 @@ export const PolicyEditScreen = observer((props: PolicyEditScreenProps) => {
 	}
 	if (props.status === "not_found") {
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="정책 수정"
 					description="정책을 찾을 수 없습니다."
@@ -63,7 +63,7 @@ export const PolicyEditScreen = observer((props: PolicyEditScreenProps) => {
 	}
 	const selectedAbilityIds = new Set(props.form.abilityIds);
 	return (
-		<VStack gap="section" fullWidth>
+		<VStack fullWidth>
 			<PageTitleBar
 				title="정책 수정"
 				description="정책 기본 정보와 연결 Ability를 수정합니다."

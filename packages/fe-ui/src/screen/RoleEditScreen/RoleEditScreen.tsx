@@ -41,7 +41,7 @@ export const RoleEditScreen = observer(
 	}: RoleEditScreenProps) => {
 		if (isLoading) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar title="역할 수정" description="로딩 중..." />
 					<SectionSurface>
 						<Section>
@@ -57,7 +57,7 @@ export const RoleEditScreen = observer(
 		}
 		if (isNotFound) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="역할 수정"
 						description="역할을 찾을 수 없습니다."
@@ -79,7 +79,7 @@ export const RoleEditScreen = observer(
 		}
 		if (isSystemRole) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="역할 수정"
 						description="시스템 역할은 수정할 수 없습니다."
@@ -102,7 +102,7 @@ export const RoleEditScreen = observer(
 			);
 		}
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="역할 수정"
 					description={`${roleDisplayName || roleName || ""} 역할을 수정합니다.`}
@@ -119,7 +119,7 @@ export const RoleEditScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<Section>
 									<Section.Body>
 										<div className="space-y-6">

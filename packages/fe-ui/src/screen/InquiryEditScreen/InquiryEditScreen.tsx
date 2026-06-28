@@ -82,7 +82,7 @@ export const InquiryEditScreen = observer(
 			priorityOptions.map((option) => option.value),
 		);
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="문의 수정"
 					description="문의 메타 정보를 수정하고 AiForm으로 추천 값을 반영합니다."
@@ -100,7 +100,7 @@ export const InquiryEditScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								{bootstrap && (
 									<Section>
 										<Section.Header>
@@ -129,7 +129,7 @@ export const InquiryEditScreen = observer(
 										<PageTitleBar level={2} title="문의 입력" />
 									</Section.Header>
 									<Section.Body>
-										<VStack gap={4}>
+										<VStack>
 											<Input
 												label="문의 제목"
 												labelPlacement="outside"

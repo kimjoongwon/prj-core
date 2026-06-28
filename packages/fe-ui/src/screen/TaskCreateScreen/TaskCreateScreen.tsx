@@ -160,7 +160,7 @@ export const TaskCreateScreen = observer(
 	}: TaskCreateScreenProps) => {
 		const t = useT();
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="태스크 등록"
 					description="새로운 태스크와 운동 detail을 등록합니다."

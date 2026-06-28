@@ -34,7 +34,7 @@ export const RoleCreateScreen = observer(
 		onClickSubmitButton,
 	}: RoleCreateScreenProps) => {
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="역할 등록"
 					description="새로운 역할을 등록합니다."
@@ -51,7 +51,7 @@ export const RoleCreateScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<div className="rounded-xl bg-accent-soft p-4 dark:bg-accent/20">
 									<p className="text-sm text-accent dark:text-accent">
 										<strong>참고:</strong> 역할 식별자는 대문자로 시작하고,

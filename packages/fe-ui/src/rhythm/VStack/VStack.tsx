@@ -1,12 +1,6 @@
 import { cn } from "@heroui/react";
 import { cva } from "class-variance-authority";
 import { Children, type ReactNode } from "react";
-import {
-	type RhythmValue,
-	resolveRhythmValue,
-	rhythmDefaults,
-} from "../presets";
-import { getRhythmTailwindGapClass } from "../tokens";
 
 export type VStackProps = {
 	/** 자식 요소들 */
@@ -19,11 +13,9 @@ export type VStackProps = {
 	justifyContent?: "start" | "center" | "end" | "between" | "around" | "evenly";
 	/** 전체 너비 사용 여부 */
 	fullWidth?: boolean;
-	/** 요소 간 간격. semantic preset 사용을 권장하고, numeric 값은 legacy 호환용입니다. */
-	gap?: RhythmValue;
 };
 
-const vStackVariants = cva("flex flex-col", {
+const vStackVariants = cva("flex flex-col gap-4", {
 	variants: {
 		alignItems: {
 			start: "items-start",
@@ -57,25 +49,21 @@ const vStackVariants = cva("flex flex-col", {
  * @example
  * ```tsx
  * // 기본 사용
- * <VStack gap="section">
+ * <VStack>
  *   <Input label="이름" />
  *   <Input label="이메일" />
  *   <Button>제출</Button>
  * </VStack>
  *
  * // 넉넉한 빈 상태 리듬
- * <VStack gap="roomy" alignItems="center" justifyContent="center" fullWidth>
+ * <VStack alignItems="center" justifyContent="center" fullWidth>
  *   <Logo />
  *   <Typography.Paragraph>환영합니다</Typography.Paragraph>
  * </VStack>
  * ```
  */
 export const VStack = (props: VStackProps) => {
-	const { children, className, alignItems, justifyContent, fullWidth, gap } =
-		props;
-	const gapClassName = getRhythmTailwindGapClass(
-		resolveRhythmValue(gap, rhythmDefaults.vStack),
-	);
+	const { children, className, alignItems, justifyContent, fullWidth } = props;
 
 	return (
 		<div
@@ -85,7 +73,6 @@ export const VStack = (props: VStackProps) => {
 					justifyContent,
 					fullWidth,
 				}),
-				gapClassName,
 				className,
 			)}
 		>

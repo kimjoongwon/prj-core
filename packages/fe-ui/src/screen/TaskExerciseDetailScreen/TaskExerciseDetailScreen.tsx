@@ -80,7 +80,7 @@ export const TaskExerciseDetailScreen = observer(
 		});
 		if (isLoading) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar title="운동 정보" description="로딩 중..." />
 					<SectionSurface>
 						<Section>
@@ -96,7 +96,7 @@ export const TaskExerciseDetailScreen = observer(
 		}
 		if (isNotFound || !exercise) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="운동 정보"
 						description="운동 detail을 찾을 수 없습니다."
@@ -121,7 +121,7 @@ export const TaskExerciseDetailScreen = observer(
 			);
 		}
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title={exercise.name ?? "운동 정보"}
 					description="태스크에 연결된 운동 detail입니다."
@@ -149,7 +149,7 @@ export const TaskExerciseDetailScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<Section>
 									<Section.Header>
 										<PageTitleBar level={2} title="기본 정보" />

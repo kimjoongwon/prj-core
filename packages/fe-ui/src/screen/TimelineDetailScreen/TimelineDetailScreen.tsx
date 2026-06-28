@@ -91,7 +91,7 @@ export const TimelineDetailScreen = observer(
 			},
 		});
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title={title}
 					actions={
@@ -117,7 +117,7 @@ export const TimelineDetailScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<Section>
 									<Section.Header>
 										<PageTitleBar level={2} title="기본 정보" />

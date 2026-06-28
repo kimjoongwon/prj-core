@@ -25,7 +25,7 @@ export const CourseScreen = observer(
 			onClickTimeline("/timelines");
 		};
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="수강 관리"
 					description="Course, CourseOffering, Enrollment, CoursePass의 책임을 분리해 결제 후 생기는 수강 권리를 운영 일정으로 연결합니다."

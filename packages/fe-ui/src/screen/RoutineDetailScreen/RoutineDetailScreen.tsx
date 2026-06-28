@@ -77,7 +77,7 @@ export const RoutineDetailScreen = observer(
 		});
 		if (isLoading) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar title="루틴 상세" description="로딩 중..." />
 					<SectionSurface>
 						<Section>
@@ -93,7 +93,7 @@ export const RoutineDetailScreen = observer(
 		}
 		if (errorTitle) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="루틴 상세"
 						description={errorDescription || "잠시 후 다시 시도해주세요."}
@@ -126,7 +126,7 @@ export const RoutineDetailScreen = observer(
 		}
 		if (!routine) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar
 						title="루틴 상세"
 						description="루틴을 찾을 수 없습니다."
@@ -183,7 +183,7 @@ export const RoutineDetailScreen = observer(
 			</div>
 		);
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title={routine.name || "루틴 상세"}
 					description="루틴의 상세 정보입니다."
@@ -192,7 +192,7 @@ export const RoutineDetailScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<Section>
 									<Section.Header>
 										<PageTitleBar level={2} title="기본 정보" />

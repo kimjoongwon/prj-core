@@ -66,7 +66,7 @@ export const SecurityPolicyFormScreen = observer(
 		onSubmit,
 	}: SecurityPolicyFormScreenProps) => {
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="보안 정책"
 					description="인증 보안 정책을 관리합니다."
@@ -84,7 +84,7 @@ export const SecurityPolicyFormScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<Section>
 									<Section.Header>
 										<PageTitleBar
@@ -94,7 +94,7 @@ export const SecurityPolicyFormScreen = observer(
 										/>
 									</Section.Header>
 									<Section.Body>
-										<VStack gap={5}>
+										<VStack>
 											<Input
 												type="number"
 												label="최소 길이"
@@ -107,7 +107,7 @@ export const SecurityPolicyFormScreen = observer(
 												}
 												className="max-w-xs"
 											/>
-											<VStack gap={4}>
+											<VStack>
 												<Switch
 													isSelected={formState.passwordRequireUppercase}
 													onValueChange={(value) => {
@@ -207,7 +207,7 @@ export const SecurityPolicyFormScreen = observer(
 										/>
 									</Section.Header>
 									<Section.Body>
-										<VStack gap={5}>
+										<VStack>
 											<Input
 												type="number"
 												label="일시 잠금 임계값 (회)"
@@ -253,7 +253,7 @@ export const SecurityPolicyFormScreen = observer(
 										/>
 									</Section.Header>
 									<Section.Body>
-										<VStack gap={5}>
+										<VStack>
 											<Input
 												type="number"
 												label="Access Token TTL (초)"

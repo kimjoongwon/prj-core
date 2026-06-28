@@ -1,12 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { rhythmPresets } from "../presets";
-import { rhythmScaleValues } from "../tokens";
 import { VStack } from "./VStack";
-
-const rhythmOptions = [
-	...Object.keys(rhythmPresets),
-	...rhythmScaleValues,
-] as const;
 
 const meta = {
 	title: "Rhythm/VStack",
@@ -16,7 +9,7 @@ const meta = {
 		docs: {
 			description: {
 				component:
-					"A vertical stack component that arranges children in a column with customizable alignment, spacing, and layout options.",
+					"A vertical stack component that arranges children in a column with a default gap.",
 			},
 		},
 	},
@@ -31,13 +24,6 @@ const meta = {
 			control: "select",
 			options: ["start", "center", "end", "between", "around", "evenly"],
 			description: "Vertical distribution of items",
-		},
-		gap: {
-			control: "select",
-			options: rhythmOptions,
-			description:
-				'Preferred: semantic rhythm presets like "section" or "page". Numeric values remain for legacy compatibility.',
-			defaultValue: "section",
 		},
 		fullWidth: {
 			control: "boolean",
@@ -68,7 +54,6 @@ const SampleItem = ({
 
 export const Default: Story = {
 	args: {
-		gap: "section",
 		children: (
 			<>
 				<SampleItem>Item 1</SampleItem>
@@ -80,8 +65,7 @@ export const Default: Story = {
 	parameters: {
 		docs: {
 			description: {
-				story:
-					"Default vertical stack using the recommended semantic section rhythm.",
+				story: "Default vertical stack using the built-in gap.",
 			},
 		},
 	},
@@ -208,68 +192,16 @@ export const JustifyContent: Story = {
 	},
 };
 
-export const GapSizes: Story = {
-	args: {},
-	render: () => (
-		<div className="space-y-4">
-			<div>
-				<h4 className="mb-2 font-semibold text-sm">No Gap (0px)</h4>
-				<VStack gap={0} className="border border-gray-300 p-2">
-					<SampleItem>Item 1</SampleItem>
-					<SampleItem>Item 2</SampleItem>
-					<SampleItem>Item 3</SampleItem>
-				</VStack>
-			</div>
-
-			<div>
-				<h4 className="mb-2 font-semibold text-sm">Small Gap (8px)</h4>
-				<VStack gap={2} className="border border-gray-300 p-2">
-					<SampleItem>Item 1</SampleItem>
-					<SampleItem>Item 2</SampleItem>
-					<SampleItem>Item 3</SampleItem>
-				</VStack>
-			</div>
-
-			<div>
-				<h4 className="mb-2 font-semibold text-sm">Medium Gap (16px)</h4>
-				<VStack gap={4} className="border border-gray-300 p-2">
-					<SampleItem>Item 1</SampleItem>
-					<SampleItem>Item 2</SampleItem>
-					<SampleItem>Item 3</SampleItem>
-				</VStack>
-			</div>
-
-			<div>
-				<h4 className="mb-2 font-semibold text-sm">Large Gap (32px)</h4>
-				<VStack gap={8} className="border border-gray-300 p-2">
-					<SampleItem>Item 1</SampleItem>
-					<SampleItem>Item 2</SampleItem>
-					<SampleItem>Item 3</SampleItem>
-				</VStack>
-			</div>
-		</div>
-	),
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"Different gap sizes between items in pixels (using Tailwind spacing units).",
-			},
-		},
-	},
-};
-
 export const FormLayoutExample: Story = {
 	args: {},
 	render: () => (
 		<VStack
-			gap={4}
 			alignItems="stretch"
 			className="mx-auto max-w-sm rounded-lg border bg-white p-6 shadow"
 		>
 			<h3 className="text-center font-semibold text-lg">Contact Form</h3>
 
-			<VStack gap={2} alignItems="stretch">
+			<VStack alignItems="stretch">
 				<label
 					htmlFor="contact-name"
 					className="font-medium text-gray-700 text-sm"
@@ -284,7 +216,7 @@ export const FormLayoutExample: Story = {
 				/>
 			</VStack>
 
-			<VStack gap={2} alignItems="stretch">
+			<VStack alignItems="stretch">
 				<label
 					htmlFor="contact-email"
 					className="font-medium text-gray-700 text-sm"
@@ -299,7 +231,7 @@ export const FormLayoutExample: Story = {
 				/>
 			</VStack>
 
-			<VStack gap={2} alignItems="stretch">
+			<VStack alignItems="stretch">
 				<label
 					htmlFor="contact-message"
 					className="font-medium text-gray-700 text-sm"
@@ -336,13 +268,12 @@ export const CardExample: Story = {
 	args: {},
 	render: () => (
 		<VStack
-			gap={4}
 			className="max-w-sm overflow-hidden rounded-lg border bg-white shadow"
 		>
 			<div className="h-32 w-full bg-gradient-to-r from-blue-400 to-purple-500"></div>
 
-			<VStack gap={3} className="px-6 pb-6">
-				<VStack gap={1} alignItems="center">
+			<VStack className="px-6 pb-6">
+				<VStack alignItems="center">
 					<h3 className="font-bold text-gray-900 text-xl">Product Title</h3>
 					<p className="font-bold text-2xl text-blue-600">$99.99</p>
 				</VStack>
@@ -352,7 +283,7 @@ export const CardExample: Story = {
 					be used for card layouts.
 				</p>
 
-				<VStack gap={2} alignItems="stretch">
+				<VStack alignItems="stretch">
 					<button
 						type="button"
 						className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
@@ -383,7 +314,6 @@ export const NavigationSidebarExample: Story = {
 	args: {},
 	render: () => (
 		<VStack
-			gap={2}
 			alignItems="stretch"
 			className="h-64 w-48 border-r bg-gray-50 p-4"
 		>
@@ -430,7 +360,6 @@ export const Playground: Story = {
 				<SampleItem>Item 3</SampleItem>
 			</>
 		),
-		gap: 4,
 		alignItems: "stretch",
 		justifyContent: "start",
 		fullWidth: false,

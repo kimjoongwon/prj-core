@@ -155,7 +155,7 @@ export const ActionListScreen = observer(
 			return <ActionsScreenFallback />;
 		}
 		return (
-			<VStack gap="section">
+			<VStack>
 				<PageTitleBar
 					title="권한 액션 목록"
 					description="역할과 정책에서 허용할 동작 단위를 관리하는 권한 액션 카탈로그입니다."
@@ -173,7 +173,7 @@ export const ActionListScreen = observer(
 				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
 					<Section overflow="hidden">
 						<Section.Body>
-							<VStack gap="section">
+							<VStack>
 								<ActionGroupFilterTabs
 									selectedGroup={queryStates.group}
 									onChangeGroup={handleActionGroupFilterChange}
@@ -203,7 +203,7 @@ const ActionContextPanel = observer(() => {
 		<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
 			<Section>
 				<Section.Body>
-					<VStack gap="block">
+					<VStack>
 						<PageTitleBar
 							level={2}
 							title="권한 액션 카탈로그"
@@ -242,12 +242,11 @@ const ActionContextItem = observer(
 		const t = useT();
 		return (
 			<HStack
-				gap="block"
 				alignItems="start"
 				className="border-border/80 p-4 md:border-b-0"
 			>
 				<span className="rounded-lg bg-accent/10 p-2 text-accent">{icon}</span>
-				<VStack gap="dense">
+				<VStack>
 					<span className="text-sm font-semibold text-foreground">
 						{t(title)}
 					</span>
@@ -270,7 +269,7 @@ const ActionGroupFilterTabs = observer(
 			onChangeGroup(getActionGroupQueryValue(key));
 		};
 		return (
-			<VStack gap="block">
+			<VStack>
 				<Tabs
 					aria-label={t("권한 액션 그룹 필터")}
 					selectedKey={selectedKey}
@@ -299,7 +298,7 @@ const ActionGroupFilterTabs = observer(
 );
 const ActionsScreenFallback = observer(() => {
 	return (
-		<VStack gap="section">
+		<VStack>
 			<PageTitleBar
 				title="권한 액션 목록"
 				description="역할과 정책에서 허용할 동작 단위를 관리하는 권한 액션 카탈로그입니다."

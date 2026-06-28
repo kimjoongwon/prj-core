@@ -1,17 +1,6 @@
 import { cn } from "@heroui/react";
 import { cva } from "class-variance-authority";
 import { Children, type ReactNode } from "react";
-import {
-	isRhythmPreset,
-	type RhythmValue,
-	resolveRhythmValue,
-	rhythmDefaults,
-} from "../presets";
-import {
-	getRhythmLegacyPixelGapClass,
-	getRhythmTailwindGapClass,
-	type RhythmScaleValue,
-} from "../tokens";
 
 export interface HStackProps {
 	/** 자식 요소들 */
@@ -24,11 +13,9 @@ export interface HStackProps {
 	justifyContent?: "start" | "center" | "end" | "between" | "around" | "evenly";
 	/** 전체 너비 사용 여부 */
 	fullWidth?: boolean;
-	/** 요소 간 간격. semantic preset 사용을 권장하고, numeric 값은 legacy px 의미를 유지합니다. */
-	gap?: RhythmValue;
 }
 
-const hStackVariants = cva("flex", {
+const hStackVariants = cva("flex gap-2", {
 	variants: {
 		alignItems: {
 			start: "items-start",
@@ -55,8 +42,6 @@ const hStackVariants = cva("flex", {
 	},
 });
 
-const HSTACK_DEFAULT_LEGACY_GAP = 4 satisfies RhythmScaleValue;
-
 /**
  * HStack 컴포넌트
  * 자식 요소들을 가로(수평) 방향으로 배치하는 Flex 컨테이너입니다.
@@ -64,7 +49,7 @@ const HSTACK_DEFAULT_LEGACY_GAP = 4 satisfies RhythmScaleValue;
  * @example
  * ```tsx
  * // 기본 사용
- * <HStack gap="inline">
+ * <HStack>
  *   <Button>취소</Button>
  *   <Button color="primary">확인</Button>
  * </HStack>
@@ -83,17 +68,8 @@ export const HStack = (props: HStackProps) => {
 		alignItems,
 		justifyContent,
 		fullWidth,
-		gap,
 		...rest
 	} = props;
-	const gapClassName =
-		gap === undefined
-			? getRhythmLegacyPixelGapClass(HSTACK_DEFAULT_LEGACY_GAP)
-			: isRhythmPreset(gap)
-				? getRhythmTailwindGapClass(
-						resolveRhythmValue(gap, rhythmDefaults.hStackPreset),
-					)
-				: getRhythmLegacyPixelGapClass(gap);
 
 	return (
 		<div
@@ -103,7 +79,6 @@ export const HStack = (props: HStackProps) => {
 					justifyContent,
 					fullWidth,
 				}),
-				gapClassName,
 				className,
 			)}
 			{...rest}

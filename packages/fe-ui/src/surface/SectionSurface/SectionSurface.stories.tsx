@@ -66,7 +66,7 @@ export const TitledSection: Story = {
 
 export const ScreenSections: Story = {
 	render: () => (
-		<VStack gap="section" fullWidth>
+		<VStack fullWidth>
 			<PageTitleBar
 				title="결제 관리"
 				description="PageTitleBar는 screen rhythm에 두고, 각 주요 구획은 SectionSurface로 감쌉니다."
@@ -104,7 +104,7 @@ export const ScreenSections: Story = {
 				</Section>
 			</SectionSurface>
 			<SectionSurface className="overflow-hidden">
-				<Section inset="none" overflow="hidden">
+				<Section overflow="hidden">
 					<Section.Body>
 						<div className="divide-y divide-border">
 							<div className="grid grid-cols-4 gap-4 bg-neutral-50 px-4 py-3 text-xs text-muted dark:bg-neutral-600">

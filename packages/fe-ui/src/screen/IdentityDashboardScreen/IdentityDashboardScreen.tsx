@@ -113,7 +113,7 @@ export const IdentityDashboardScreen = observer(
 			return Math.max(max, item.successCount, item.failureCount);
 		}, 0);
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="대시보드"
 					description="IDP 인증 시스템 현황을 한눈에 확인합니다."
@@ -121,7 +121,7 @@ export const IdentityDashboardScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<Section>
 									<Section.Header>
 										<PageTitleBar

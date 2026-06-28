@@ -34,10 +34,10 @@ export const MyPageScreen = observer(function MyPageScreen({
 				contentContainerClassName={classNames.contentContainer()}
 				showsVerticalScrollIndicator={false}
 			>
-				<VStack gap="section">
+				<VStack>
 					<Card className={classNames.card()}>
-						<VStack gap="block">
-							<HStack alignItems="center" gap="inline">
+						<VStack>
+							<HStack alignItems="center">
 								<Icon name="userRound" size="lg" tone="accent" />
 								<View className={classNames.accountTitleBlock()}>
 									<Text className={classNames.accountName()} numberOfLines={1}>
@@ -57,7 +57,7 @@ export const MyPageScreen = observer(function MyPageScreen({
 						</VStack>
 					</Card>
 					<Card className={classNames.card()}>
-						<HStack alignItems="center" gap="inline">
+						<HStack alignItems="center">
 							<Icon name="mapPin" size="md" tone="accent" />
 							<View className={classNames.accountTitleBlock()}>
 								<Text className={classNames.spaceLabel()}>현재 지점</Text>
@@ -67,7 +67,7 @@ export const MyPageScreen = observer(function MyPageScreen({
 							</View>
 						</HStack>
 					</Card>
-					<VStack gap="dense">
+					<VStack>
 						<Text className={classNames.sectionLabel()}>빠른 이동</Text>
 						<QuickActionList items={quickActions} />
 					</VStack>

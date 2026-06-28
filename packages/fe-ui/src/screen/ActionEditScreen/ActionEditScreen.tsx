@@ -81,7 +81,7 @@ export const ActionEditScreen = observer(
 	}: ActionEditScreenProps) => {
 		if (isLoading) {
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					<PageTitleBar title="Action 수정" description="로딩 중..." />
 					<SectionSurface>
 						<Section>
@@ -103,7 +103,7 @@ export const ActionEditScreen = observer(
 				/>
 			);
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					{pageHeader}
 					<SectionSurface>
 						<Section>
@@ -128,7 +128,7 @@ export const ActionEditScreen = observer(
 				/>
 			);
 			return (
-				<VStack gap="section" fullWidth>
+				<VStack fullWidth>
 					{pageHeader}
 					<SectionSurface>
 						<Section>
@@ -171,12 +171,12 @@ export const ActionEditScreen = observer(
 			/>
 		);
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				{pageHeader}
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<Section>
 									<Section.Body>
 										<div className="space-y-6">

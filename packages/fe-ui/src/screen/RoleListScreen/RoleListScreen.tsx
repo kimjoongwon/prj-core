@@ -85,7 +85,7 @@ export const RoleListScreen = observer(
 						</Button>
 					}
 				/>
-				<VStack gap={4}>
+				<VStack>
 					<div className="rounded-xl bg-warning-50 p-4 dark:bg-warning-900/20">
 						<p className="text-sm text-warning-700 dark:text-warning-400">
 							<strong>참고:</strong> 시스템 역할(PLATFORM_ADMIN,
@@ -96,7 +96,7 @@ export const RoleListScreen = observer(
 					<div className="space-y-3">
 						<PageTitleBar level={2} title="역할 목록 데이터" />
 						<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
-							<Section overflow="hidden" inset="none">
+							<Section overflow="hidden">
 								<Section.Body>
 									<DataGrid
 										config={{

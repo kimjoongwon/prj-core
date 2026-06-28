@@ -81,7 +81,7 @@ export const ActionCreateScreen = observer(
 			});
 		};
 		return (
-			<VStack gap="section" fullWidth>
+			<VStack fullWidth>
 				<PageTitleBar
 					title="Action 등록"
 					description="새로운 Action을 등록합니다."
@@ -98,7 +98,7 @@ export const ActionCreateScreen = observer(
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<VStack gap={4}>
+							<VStack>
 								<div className="rounded-xl bg-accent-soft p-4 dark:bg-accent/20">
 									<p className="text-sm text-accent dark:text-accent">
 										<strong>참고:</strong> 행위 식별자는 소문자로 시작하고,
