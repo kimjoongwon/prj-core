@@ -14,5 +14,5 @@ export class Company extends AbstractEntity implements CompanyEntity {
 	logoImageFileId!: string | null;
 
 	space?: Space;
-	grounds?: Ground[];
+	ground?: Ground | null;
 }

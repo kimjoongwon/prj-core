@@ -41,6 +41,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/RoutineListScreen",
 	component: RoutineListScreen,
 	parameters: {
 		layout: "fullscreen",

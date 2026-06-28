@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Skeleton } from "./Skeleton";
 
 const meta = {
-	title: "Ui/feedback/Skeleton",
+	title: "feedback/Skeleton",
 	component: Skeleton,
 	parameters: {
 		layout: "centered",

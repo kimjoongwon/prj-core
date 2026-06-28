@@ -38,6 +38,7 @@ const busyArgs = {
 };
 
 const meta = {
+	title: "screen/ActionEditScreen",
 	component: ActionEditScreen,
 	parameters: {
 		layout: "fullscreen",

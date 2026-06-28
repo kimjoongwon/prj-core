@@ -72,6 +72,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/TaskListScreen",
 	component: TaskListScreen,
 	parameters: {
 		layout: "fullscreen",

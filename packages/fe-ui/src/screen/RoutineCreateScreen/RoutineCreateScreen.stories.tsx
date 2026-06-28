@@ -83,6 +83,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/RoutineCreateScreen",
 	component: RoutineCreateScreen,
 	parameters: {
 		layout: "fullscreen",

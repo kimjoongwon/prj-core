@@ -142,10 +142,7 @@ export class OidcDirectUsersRepository {
 							include: {
 								company: {
 									include: {
-										grounds: {
-											where: { removedAt: null },
-											orderBy: { createdAt: "asc" },
-										},
+										ground: true,
 									},
 								},
 							},

@@ -1,7 +1,11 @@
+"use client";
+
 import type { ReactElement } from "react";
 import { PlanningAcceptanceList } from "./PlanningAcceptanceList";
 import { PlanningApiRequestList } from "./PlanningApiRequestList";
+import { PlanningNotesList } from "./PlanningNotesList";
 import { PlanningPreviewField } from "./PlanningPreviewField";
+import { PlanningSessionBar } from "./PlanningSessionBar";
 import {
 	formatPlanningList,
 	formatPlanningStatus,
@@ -17,6 +21,7 @@ type PlanningPreviewFrameComponent = {
 
 export const PlanningPreviewFrame = (<THandler = unknown,>({
 	children,
+	onSpaceChange,
 	scenario,
 }: PlanningPreviewFrameProps<THandler>) => {
 	const { api, context } = scenario;
@@ -24,6 +29,11 @@ export const PlanningPreviewFrame = (<THandler = unknown,>({
 	return (
 		<div className="min-h-screen bg-background text-foreground">
 			<div className="mx-auto grid max-w-[1440px] gap-4 p-4 xl:grid-cols-[minmax(0,1fr)_360px]">
+				<PlanningSessionBar
+					context={context}
+					onSpaceChange={onSpaceChange}
+				/>
+
 				<header className="rounded-lg border border-border bg-surface p-4 xl:col-span-2">
 					<div className="flex flex-wrap items-start justify-between gap-3">
 						<div className="grid min-w-0 gap-1">
@@ -67,6 +77,10 @@ export const PlanningPreviewFrame = (<THandler = unknown,>({
 						<h2 className="text-sm font-semibold">Context</h2>
 						<div className="grid gap-2">
 							<PlanningPreviewField label="realm" value={context.realm} />
+							<PlanningPreviewField
+								label="auth"
+								value={context.authState ?? "authenticated"}
+							/>
 							<PlanningPreviewField label="role" value={context.role} />
 							<PlanningPreviewField label="tenant" value={context.tenantId} />
 							<PlanningPreviewField label="space" value={context.spaceId} />
@@ -89,6 +103,11 @@ export const PlanningPreviewFrame = (<THandler = unknown,>({
 					<section className="grid gap-3 rounded-lg border border-border bg-surface p-4">
 						<h2 className="text-sm font-semibold">Acceptance</h2>
 						<PlanningAcceptanceList items={scenario.acceptance} />
+					</section>
+
+					<section className="grid gap-3 rounded-lg border border-border bg-surface p-4">
+						<h2 className="text-sm font-semibold">Notes</h2>
+						<PlanningNotesList items={scenario.notes} />
 					</section>
 				</aside>
 			</div>

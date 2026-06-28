@@ -4,7 +4,7 @@ import { useLocalObservable } from "mobx-react-lite";
 import { LoginForm, type LoginFormState } from "../LoginForm/LoginForm";
 
 const meta = {
-	title: "Form/LoginForm",
+	title: "form/LoginForm",
 	component: LoginForm,
 	parameters: {
 		layout: "centered",

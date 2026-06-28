@@ -34,6 +34,7 @@ const busyArgs = {
 };
 
 const meta = {
+	title: "screen/RoleEditScreen",
 	component: RoleEditScreen,
 	parameters: {
 		layout: "fullscreen",

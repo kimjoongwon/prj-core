@@ -73,6 +73,7 @@ const notFoundArgs = {
 };
 
 const meta = {
+	title: "screen/TemplateDetailScreen",
 	component: TemplateDetailScreen,
 	parameters: {
 		layout: "fullscreen",

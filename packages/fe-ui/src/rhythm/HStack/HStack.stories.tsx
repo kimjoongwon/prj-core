@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { HStack } from "./HStack";
 
 const meta = {
-	title: "Rhythm/HStack",
+	title: "rhythm/HStack",
 	component: HStack,
 	parameters: {
 		layout: "centered",

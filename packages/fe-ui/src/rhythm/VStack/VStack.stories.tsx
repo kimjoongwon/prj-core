@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { VStack } from "./VStack";
 
 const meta = {
-	title: "Rhythm/VStack",
+	title: "rhythm/VStack",
 	component: VStack,
 	parameters: {
 		layout: "centered",

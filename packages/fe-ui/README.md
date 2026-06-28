@@ -12,7 +12,7 @@ Entry points are organized under `src/`:
 - `input`: `Input`, `TextField`, `TextArea`, `NumberField`, `DateField`, `TimeInput`, `FileUploader`, `StringListInput` 같은 자유 형식/타입 값 입력
 - `selection`: `Select`, `ComboBox`, `Checkbox`, `RadioGroup`, `Switch`, `Slider`, `DatePicker`, `Calendar` 같은 제한된 값/범위 선택
 - `navigation`: `Tabs`, `Pagination`, `Breadcrumbs`, `Link` 같은 화면 이동/전환 control
-- `data-display`: `Avatar`, `Badge`, `Card`, `Chip`, `Table`, `Text`, `Typography` 같은 데이터 표시 primitive
+- `data-display`: `Avatar`, `Card`, `Chip`, `Table`, `Text`, `Typography` 같은 데이터 표시 primitive
 - `feedback`: `Alert`, `EmptyState`, `Skeleton`, `Spinner`, `Toast` 같은 상태와 피드백 표시
 - `overlay`: `Modal`, `Drawer`, `Popover`, `Tooltip`, `AlertDialog` 같은 modal layer UI
 - `feature`: feature-level composites
@@ -59,7 +59,7 @@ export function Example() {
 - Input: `Input`, `TextField`, `TextArea`, `NumberField`, `DateField`
 - Selection: `Select`, `Checkbox`, `RadioGroup`, `Switch`, `Slider`, `DatePicker`
 - Navigation: `Tabs`, `Pagination`, `Breadcrumbs`, `Link`
-- Data display: `Avatar`, `Badge`, `Card`, `Chip`, `Table`, `Text`
+- Data display: `Avatar`, `Card`, `Chip`, `Table`, `Text`
 - Feedback: `EmptyState`, `Message`, `NotFound`, `Skeleton`, `Spinner`
 - Overlay: `Modal`, `Drawer`, `Popover`, `Tooltip`, `AlertDialog`
 - Layout: `App`, `Page`, `Container`, `Toolbar`

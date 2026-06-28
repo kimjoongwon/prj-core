@@ -3,7 +3,7 @@ import { Button } from "../../action/Button/Button";
 import { Surface } from "./Surface";
 
 const meta = {
-	title: "Surface/Surface",
+	title: "surface/Surface",
 	component: Surface,
 	parameters: {
 		layout: "padded",

@@ -3,7 +3,7 @@ import { Button } from "../../action/Button/Button";
 import { PageTitleBar } from "./PageTitleBar";
 
 const meta: Meta<typeof PageTitleBar> = {
-	title: "Widget/PageTitleBar",
+	title: "widget/PageTitleBar",
 	component: PageTitleBar,
 	parameters: {
 		layout: "padded",

@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { SessionCheckScreen } from "./SessionCheckScreen";
 
 const meta = {
+	title: "screen/SessionCheckScreen",
 	component: SessionCheckScreen,
 	parameters: {
 		layout: "fullscreen",

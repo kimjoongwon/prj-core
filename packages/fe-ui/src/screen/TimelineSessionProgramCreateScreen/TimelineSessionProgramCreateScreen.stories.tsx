@@ -83,6 +83,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/TimelineSessionProgramCreateScreen",
 	component: TimelineSessionProgramCreateScreen,
 	parameters: {
 		layout: "fullscreen",

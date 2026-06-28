@@ -38,6 +38,6 @@ export class CompanyDto extends AbstractDto implements CompanyEntity {
 	@ClassField(() => SpaceDto, { required: false, nullable: true })
 	space?: SpaceDto | null;
 
-	@ClassField(() => GroundDto, { required: false, isArray: true })
-	grounds?: GroundDto[];
+	@ClassField(() => GroundDto, { required: false, nullable: true })
+	ground?: GroundDto | null;
 }

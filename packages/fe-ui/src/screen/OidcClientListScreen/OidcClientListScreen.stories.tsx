@@ -39,6 +39,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/OidcClientListScreen",
 	component: OidcClientListScreen,
 	parameters: {
 		layout: "fullscreen",

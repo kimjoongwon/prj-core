@@ -62,6 +62,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/UserListScreen",
 	component: UserListScreen,
 	parameters: {
 		layout: "fullscreen",

@@ -118,13 +118,14 @@ export async function ensureSystemBootstrap(
 	const systemGroundData = groundSeedData.find((ground) => ground.isSystem);
 	if (systemGroundData) {
 		const systemCompany = await prisma.company.upsert({
-			where: { businessNo: systemGroundData.businessNo },
+			where: { spaceId: SYSTEM_SPACE_ID },
 			update: {
 				name: systemGroundData.name,
 				label: systemGroundData.label,
 				address: systemGroundData.address,
 				phone: systemGroundData.phone,
 				email: systemGroundData.email,
+				businessNo: systemGroundData.businessNo,
 			},
 			create: {
 				name: systemGroundData.name,
@@ -136,10 +137,9 @@ export async function ensureSystemBootstrap(
 				spaceId: SYSTEM_SPACE_ID,
 			},
 		});
-		const systemGround = await prisma.ground.findFirst({
+		const systemGround = await prisma.ground.findUnique({
 			where: {
 				companyId: systemCompany.id,
-				name: systemGroundData.name,
 			},
 		});
 
@@ -209,7 +209,7 @@ export async function createRegularUsersAndGrounds(
 
 		try {
 			const existingGround = await prisma.ground.findFirst({
-				where: { company: { businessNo: groundData.businessNo } },
+				where: { name: groundData.name, removedAt: null },
 				include: { company: true },
 			});
 
@@ -217,8 +217,8 @@ export async function createRegularUsersAndGrounds(
 				let space = await prisma.space.findFirst({
 					where: {
 						company: {
-							grounds: {
-								some: {
+							ground: {
+								is: {
 									removedAt: null,
 									name: groundData.name,
 								},

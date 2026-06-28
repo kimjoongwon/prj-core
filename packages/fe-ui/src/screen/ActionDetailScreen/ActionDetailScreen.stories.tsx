@@ -32,6 +32,7 @@ const busyArgs = {
 };
 
 const meta = {
+	title: "screen/ActionDetailScreen",
 	component: ActionDetailScreen,
 	parameters: {
 		layout: "fullscreen",

@@ -107,6 +107,7 @@ const busyArgs = {
 };
 
 const meta = {
+	title: "screen/TaskCreateScreen",
 	component: TaskCreateScreen,
 	parameters: {
 		layout: "fullscreen",

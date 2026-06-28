@@ -77,6 +77,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/InquiryListScreen",
 	component: InquiryListScreen,
 	parameters: {
 		layout: "fullscreen",

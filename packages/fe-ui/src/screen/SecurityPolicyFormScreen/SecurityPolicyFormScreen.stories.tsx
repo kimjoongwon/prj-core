@@ -30,6 +30,7 @@ const busyArgs = {
 };
 
 const meta = {
+	title: "screen/SecurityPolicyFormScreen",
 	component: SecurityPolicyFormScreen,
 	parameters: {
 		layout: "fullscreen",

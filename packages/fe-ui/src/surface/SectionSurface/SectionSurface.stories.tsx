@@ -6,7 +6,7 @@ import { PageTitleBar } from "../../widget/PageTitleBar";
 import { SectionSurface } from "./SectionSurface";
 
 const meta: Meta<typeof SectionSurface> = {
-	title: "Surface/SectionSurface",
+	title: "surface/SectionSurface",
 	component: SectionSurface,
 	parameters: {
 		layout: "padded",

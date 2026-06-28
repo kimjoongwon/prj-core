@@ -90,6 +90,7 @@ const busyArgs = {
 };
 
 const meta = {
+	title: "screen/RoutineEditScreen",
 	component: RoutineEditScreen,
 	parameters: {
 		layout: "fullscreen",

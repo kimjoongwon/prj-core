@@ -47,6 +47,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/AuthAuditLogListScreen",
 	component: AuthAuditLogListScreen,
 	parameters: {
 		layout: "fullscreen",

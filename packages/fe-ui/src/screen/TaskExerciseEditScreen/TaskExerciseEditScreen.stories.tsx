@@ -120,6 +120,7 @@ const busyArgs = {
 };
 
 const meta = {
+	title: "screen/TaskExerciseEditScreen",
 	component: TaskExerciseEditScreen,
 	parameters: {
 		layout: "fullscreen",

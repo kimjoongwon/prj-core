@@ -6,6 +6,7 @@ const defaultArgs = {
 };
 
 const meta = {
+	title: "screen/AbilityDetailScreen",
 	component: AbilityDetailScreen,
 	parameters: {
 		layout: "fullscreen",

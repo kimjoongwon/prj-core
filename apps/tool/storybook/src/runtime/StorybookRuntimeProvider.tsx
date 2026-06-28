@@ -11,7 +11,6 @@ import {
 	RootStore,
 	RootStoreContext,
 	TokenStore,
-	usePersistStore,
 } from "@cocrepo/store";
 import { DesignSystemProvider, useDesignSystemTheme } from "@cocrepo/ui";
 import {
@@ -41,8 +40,6 @@ import {
 	setIdpLoginRedirectUrl,
 	setIdpPersistStore,
 } from "../../../../../packages/fe-api/src/idp/client";
-import { StorybookCanvasSurface } from "./StorybookCanvasSurface";
-import type { StorybookCanvasSurfaceProps } from "./StorybookCanvasSurface.props";
 
 type StorybookRealm = "none" | "admin" | "idp";
 type StorybookRealmGlobal = StorybookRealm | "auto";
@@ -51,30 +48,24 @@ type StoryRender = () => ReactNode;
 
 interface StorybookRuntimeParameter {
 	realm?: StorybookRealm;
-	requiresSpace?: boolean;
 	currentPath?: string;
-	spaceId?: string;
 }
 
 interface StorybookContextLike {
 	id: string;
 	title?: string;
-	viewMode?: StorybookCanvasSurfaceProps["viewMode"];
 	globals?: {
 		storybookRealm?: StorybookRealmGlobal;
 		storybookTheme?: StorybookTheme;
 	};
 	parameters?: {
-		layout?: StorybookCanvasSurfaceProps["layout"];
 		storybookRuntime?: StorybookRuntimeParameter;
 	};
 }
 
 interface StorybookRuntimeConfig {
 	realm: StorybookRealm;
-	requiresSpace: boolean;
 	currentPath: string;
-	spaceId?: string;
 }
 
 interface SpaceOption {
@@ -92,41 +83,11 @@ const DISABLED_AUTH_REDIRECT_URL = "#storybook-auth-disabled";
 const FALLBACK_ABILITY_RULES: AbilityRule[] = [
 	{ action: "manage", subject: "all" },
 ];
-const STATIC_ADMIN_SPACES: SpaceOption[] = [
-	{
-		spaceId: "storybook-space",
-		tenantId: "storybook-tenant",
-		groundName: "Storybook Space",
-	},
-	{
-		spaceId: "storybook-ops-space",
-		tenantId: "storybook-ops-tenant",
-		groundName: "Storybook Ops",
-	},
-	{
-		spaceId: "storybook-growth-space",
-		tenantId: "storybook-growth-tenant",
-		groundName: "Storybook Growth",
-	},
-];
-
-function createStorybookAuthStore(rootStore: RootStore): AuthStore {
-	const authStore = new AuthStore(rootStore);
-
-	authStore.logout = async (logoutApi?: () => Promise<unknown>) => {
-		try {
-			authStore.isLoggingOut = true;
-			if (logoutApi) {
-				await logoutApi();
-			}
-		} finally {
-			rootStore.persistStore?.clearNativeAuthSession();
-			authStore.isLoggingOut = false;
-		}
-	};
-
-	return authStore;
-}
+const STORYBOOK_ADMIN_SPACE: SpaceOption = {
+	spaceId: "storybook-space",
+	tenantId: "storybook-tenant",
+	groundName: "Storybook Space",
+};
 
 function makeQueryClient() {
 	return new QueryClient({
@@ -164,12 +125,7 @@ function resolveRuntimeConfig(
 
 	return {
 		realm,
-		requiresSpace:
-			runtime?.requiresSpace !== undefined
-				? runtime.requiresSpace
-				: realm === "admin",
 		currentPath: runtime?.currentPath ?? getDefaultCurrentPath(realm),
-		spaceId: runtime?.spaceId,
 	};
 }
 
@@ -230,7 +186,7 @@ function createStorybookRootStore(runtime: StorybookRuntimeConfig): RootStore {
 	rootStore.name = `STORYBOOK_${runtime.realm.toUpperCase()}`;
 	rootStore.tokenStore = new TokenStore(rootStore);
 	rootStore.cookieStore = new CookieStore();
-	rootStore.authStore = createStorybookAuthStore(rootStore);
+	rootStore.authStore = new AuthStore(rootStore);
 	rootStore.abilityStore = abilityStore;
 	rootStore.navigationStore = navigationStore;
 	rootStore.persistStore = persistStore;
@@ -287,63 +243,6 @@ function StorybookThemeSync({ theme }: StorybookThemeSyncProps) {
 	return null;
 }
 
-const AdminSpaceBar = observer(function AdminSpaceBar() {
-	const persistStore = usePersistStore();
-
-	if (
-		!persistStore.isHydrated ||
-		!persistStore.spaceId ||
-		persistStore.spaces.length === 0
-	) {
-		return null;
-	}
-
-	if (persistStore.spaces.length === 1) {
-		return (
-			<div className="mb-4 flex items-center gap-3 rounded-2xl border border-border bg-surface/90 px-4 py-3 shadow-sm backdrop-blur">
-				<span className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
-					Admin Realm
-				</span>
-				<span className="text-sm font-medium text-foreground">
-					{persistStore.groundName}
-				</span>
-			</div>
-		);
-	}
-
-	return (
-		<div className="mb-4 flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-surface/90 px-4 py-3 shadow-sm backdrop-blur">
-			<span className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
-				Admin Realm
-			</span>
-			<label className="text-sm text-muted" htmlFor="storybook-space-select">
-				Space
-			</label>
-			<select
-				id="storybook-space-select"
-				className="min-w-[220px] rounded-xl border border-border bg-surface-secondary px-3 py-2 text-sm text-foreground"
-				value={persistStore.spaceId}
-				onChange={(event) => {
-					const nextSpace = persistStore.spaces.find(
-						(space) => space.spaceId === event.target.value,
-					);
-					if (!nextSpace) {
-						return;
-					}
-
-					persistStore.setSpace(nextSpace.spaceId, nextSpace.groundName);
-				}}
-			>
-				{persistStore.spaces.map((space) => (
-					<option key={space.spaceId} value={space.spaceId}>
-						{space.groundName}
-					</option>
-				))}
-			</select>
-		</div>
-	);
-});
-
 const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 	children,
 	runtime,
@@ -386,50 +285,31 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 		}
 
 		if (runtime.realm === "admin") {
-			const persistedSpace = persistStore.spaceId
-				? STATIC_ADMIN_SPACES.find(
-						(space) => space.spaceId === persistStore.spaceId,
-					)
-				: undefined;
-			const requestedSpace = runtime.spaceId
-				? STATIC_ADMIN_SPACES.find((space) => space.spaceId === runtime.spaceId)
-				: undefined;
-			const nextSpace =
-				requestedSpace ?? persistedSpace ?? STATIC_ADMIN_SPACES[0];
-
-			persistStore.setSpaces(STATIC_ADMIN_SPACES);
-			persistStore.setSpace(nextSpace.spaceId, nextSpace.groundName);
+			persistStore.setSpaces([STORYBOOK_ADMIN_SPACE]);
+			persistStore.setSpace(
+				STORYBOOK_ADMIN_SPACE.tenantId,
+				STORYBOOK_ADMIN_SPACE.groundName,
+				null,
+				STORYBOOK_ADMIN_SPACE.spaceId,
+			);
 		}
 
 		persistStore.setSpaceSelectionResolved(true);
 		abilityStore.updateRules([...FALLBACK_ABILITY_RULES]);
-	}, [abilityStore, persistStore, runtime.realm, runtime.spaceId]);
-
-	if (runtime.realm === "admin") {
-		return (
-			<div className="p-4">
-				<AdminSpaceBar />
-				{children}
-			</div>
-		);
-	}
+	}, [abilityStore, persistStore, runtime.realm]);
 
 	return children;
 });
 
 export function StorybookRuntimeProvider({
 	children,
-	layout,
 	runtime,
 	storyId,
 	theme = "system",
-	viewMode = "story",
 }: PropsWithChildren<{
-	layout?: StorybookCanvasSurfaceProps["layout"];
 	runtime: StorybookRuntimeConfig;
 	storyId: string;
 	theme?: StorybookTheme;
-	viewMode?: StorybookCanvasSurfaceProps["viewMode"];
 }>) {
 	const queryClient = getQueryClient();
 	const storeRef = useRef<RootStore | null>(null);
@@ -472,11 +352,9 @@ export function StorybookRuntimeProvider({
 				<RootStoreContext.Provider value={storeRef.current}>
 					<DesignSystemProvider themeConfig={{ defaultTheme: theme }}>
 						<StorybookThemeSync theme={theme} />
-						<StorybookCanvasSurface layout={layout} viewMode={viewMode}>
-							<StorybookRuntimeBootstrap runtime={runtime} storyId={storyId}>
-								{children}
-							</StorybookRuntimeBootstrap>
-						</StorybookCanvasSurface>
+						<StorybookRuntimeBootstrap runtime={runtime} storyId={storyId}>
+							{children}
+						</StorybookRuntimeBootstrap>
 					</DesignSystemProvider>
 				</RootStoreContext.Provider>
 			</NuqsReactAdapter>
@@ -490,17 +368,14 @@ export function withStorybookRuntime(
 ) {
 	const runtime = resolveRuntimeConfig(context);
 	const theme = getStorybookTheme(context);
-	const viewMode = context.viewMode === "docs" ? "docs" : "story";
-	const providerKey = `${context.id}:${runtime.realm}:${runtime.currentPath}:${runtime.requiresSpace}:${runtime.spaceId ?? "default"}:${theme}:${viewMode}`;
+	const providerKey = `${context.id}:${runtime.realm}:${runtime.currentPath}:${theme}`;
 
 	return (
 		<StorybookRuntimeProvider
 			key={providerKey}
-			layout={context.parameters?.layout}
 			runtime={runtime}
 			storyId={context.id}
 			theme={theme}
-			viewMode={viewMode}
 		>
 			<Story />
 		</StorybookRuntimeProvider>

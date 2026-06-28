@@ -99,6 +99,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/InquiryCreateScreen",
 	component: InquiryCreateScreen,
 	parameters: {
 		layout: "fullscreen",

@@ -42,6 +42,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/SpaceListScreen",
 	component: SpaceListScreen,
 	parameters: {
 		layout: "fullscreen",

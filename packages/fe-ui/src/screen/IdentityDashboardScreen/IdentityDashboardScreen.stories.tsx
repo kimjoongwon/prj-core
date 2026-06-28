@@ -31,6 +31,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/IdentityDashboardScreen",
 	component: IdentityDashboardScreen,
 	parameters: {
 		layout: "fullscreen",

@@ -15,7 +15,6 @@ export class Space extends AbstractEntity implements SpaceEntity {
 	spaceAssociations?: SpaceAssociation[];
 	policies?: Policy[];
 
-	// Flattened API relations derived from company.grounds for current Space screens.
+	// Flattened API relation derived from company.ground for current Space screens.
 	ground?: Ground;
-	grounds?: Ground[];
 }

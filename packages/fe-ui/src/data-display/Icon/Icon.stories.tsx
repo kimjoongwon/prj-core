@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { DogPawIcon, InfoIcon, StarIcon, WarningIcon } from "./index";
 
 const meta = {
-	title: "Ui/data-display/Icon",
+	title: "data-display/Icon",
 	parameters: {
 		layout: "centered",
 	},

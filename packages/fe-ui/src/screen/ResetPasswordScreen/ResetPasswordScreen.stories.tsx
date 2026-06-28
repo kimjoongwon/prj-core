@@ -14,6 +14,7 @@ const centeredCardStyle = {
 };
 
 const meta = {
+	title: "screen/ResetPasswordScreen",
 	component: ResetPasswordScreen,
 	parameters: {
 		layout: "fullscreen",

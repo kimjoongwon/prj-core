@@ -72,6 +72,7 @@ const defaultArgs: RoleDetailScreenProps = {
 };
 
 const meta = {
+	title: "screen/RoleDetailScreen",
 	component: RoleDetailScreen,
 	parameters: {
 		layout: "fullscreen",

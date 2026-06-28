@@ -115,7 +115,7 @@ export class AccountService {
 				isSystemRole: t.role?.isSystem,
 			})),
 			spaces: tenants?.map((t) => {
-				const [primaryGround] = t.space?.company?.grounds ?? [];
+				const primaryGround = t.space?.company?.ground;
 				return {
 					spaceId: t.spaceId,
 					groundName: primaryGround?.name,

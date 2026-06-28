@@ -69,6 +69,7 @@ const notFoundArgs = {
 };
 
 const meta = {
+	title: "screen/TimelineSessionProgramDetailScreen",
 	component: TimelineSessionProgramDetailScreen,
 	parameters: {
 		layout: "fullscreen",

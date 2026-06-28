@@ -51,7 +51,7 @@ export const SpaceSelectorDropdown = observer(function SpaceSelectorDropdown({
 }: SpaceSelectorDropdownProps) {
 	const buttonLabel = currentSpaceName ?? "Space 확인 중";
 	const buttonClasses =
-		"h-11 gap-2 rounded-2xl border border-border bg-surface/80 px-3 text-foreground shadow-sm backdrop-blur-md hover:bg-surface-secondary";
+		"inline-flex h-11 w-40 shrink-0 flex-nowrap items-center justify-start gap-2 rounded-2xl border border-border bg-surface/80 px-3 text-foreground shadow-sm backdrop-blur-md hover:bg-surface-secondary sm:w-52 lg:w-60";
 
 	if (spaces.length === 0) {
 		return (
@@ -59,9 +59,11 @@ export const SpaceSelectorDropdown = observer(function SpaceSelectorDropdown({
 				variant="light"
 				isDisabled
 				className={buttonClasses}
-				startContent={<Building2 className="h-4 w-4 text-muted" size={16} />}
+				startContent={
+					<Building2 className="h-4 w-4 shrink-0 text-muted" size={16} />
+				}
 			>
-				<span className="max-w-32 truncate text-sm text-muted">
+				<span className="min-w-0 flex-1 truncate text-left text-sm text-muted">
 					{buttonLabel}
 				</span>
 			</Button>
@@ -71,11 +73,11 @@ export const SpaceSelectorDropdown = observer(function SpaceSelectorDropdown({
 	return (
 		<Dropdown>
 			<Dropdown.Trigger className={buttonClasses}>
-				<Building2 className="h-4 w-4 text-muted" size={16} />
-				<span className="max-w-32 truncate text-sm text-foreground">
+				<Building2 className="h-4 w-4 shrink-0 text-muted" size={16} />
+				<span className="min-w-0 flex-1 truncate text-left text-sm text-foreground">
 					{buttonLabel}
 				</span>
-				<ChevronDown className="h-4 w-4 text-muted" size={16} />
+				<ChevronDown className="h-4 w-4 shrink-0 text-muted" size={16} />
 			</Dropdown.Trigger>
 			<Dropdown.Popover placement="bottom end">
 				<Dropdown.Menu

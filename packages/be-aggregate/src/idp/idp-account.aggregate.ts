@@ -65,7 +65,7 @@ export class IdpAccountAggregate {
 		const [spaces] = spaceResult;
 
 		const spaceOptions = spaces.map((space) => {
-			const [primaryGround] = space.company?.grounds ?? space.grounds ?? [];
+			const primaryGround = space.company?.ground ?? space.ground;
 			return {
 				value: space.id,
 				label: primaryGround?.name ?? space.id,
@@ -202,7 +202,7 @@ export class IdpAccountAggregate {
 		});
 
 		return tenants.map((tenant) => {
-			const [primaryGround] = tenant.space.company?.grounds ?? [];
+			const primaryGround = tenant.space.company?.ground;
 			return {
 				tenantId: tenant.id,
 				spaceId: tenant.spaceId,

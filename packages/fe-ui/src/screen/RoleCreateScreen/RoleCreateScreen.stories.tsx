@@ -20,6 +20,7 @@ const busyArgs = {
 };
 
 const meta = {
+	title: "screen/RoleCreateScreen",
 	component: RoleCreateScreen,
 	parameters: {
 		layout: "fullscreen",

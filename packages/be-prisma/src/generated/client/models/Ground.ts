@@ -250,6 +250,7 @@ export type GroundOrderByWithRelationInput = {
 
 export type GroundWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  companyId?: string
   AND?: Prisma.GroundWhereInput | Prisma.GroundWhereInput[]
   OR?: Prisma.GroundWhereInput[]
   NOT?: Prisma.GroundWhereInput | Prisma.GroundWhereInput[]
@@ -261,10 +262,9 @@ export type GroundWhereUniqueInput = Prisma.AtLeast<{
   address?: Prisma.StringFilter<"Ground"> | string
   phone?: Prisma.StringFilter<"Ground"> | string
   email?: Prisma.StringFilter<"Ground"> | string
-  companyId?: Prisma.StringFilter<"Ground"> | string
   imageFileId?: Prisma.StringNullableFilter<"Ground"> | string | null
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
-}, "id">
+}, "id" | "companyId">
 
 export type GroundOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -311,7 +311,7 @@ export type GroundCreateInput = {
   phone: string
   email: string
   imageFileId?: string | null
-  company: Prisma.CompanyCreateNestedOneWithoutGroundsInput
+  company: Prisma.CompanyCreateNestedOneWithoutGroundInput
 }
 
 export type GroundUncheckedCreateInput = {
@@ -339,7 +339,7 @@ export type GroundUpdateInput = {
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   imageFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  company?: Prisma.CompanyUpdateOneRequiredWithoutGroundsNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutGroundNestedInput
 }
 
 export type GroundUncheckedUpdateInput = {
@@ -397,14 +397,9 @@ export type GroundUncheckedUpdateManyInput = {
   imageFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type GroundListRelationFilter = {
-  every?: Prisma.GroundWhereInput
-  some?: Prisma.GroundWhereInput
-  none?: Prisma.GroundWhereInput
-}
-
-export type GroundOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
+export type GroundNullableScalarRelationFilter = {
+  is?: Prisma.GroundWhereInput | null
+  isNot?: Prisma.GroundWhereInput | null
 }
 
 export type GroundCountOrderByAggregateInput = {
@@ -449,46 +444,36 @@ export type GroundMinOrderByAggregateInput = {
   imageFileId?: Prisma.SortOrder
 }
 
-export type GroundCreateNestedManyWithoutCompanyInput = {
-  create?: Prisma.XOR<Prisma.GroundCreateWithoutCompanyInput, Prisma.GroundUncheckedCreateWithoutCompanyInput> | Prisma.GroundCreateWithoutCompanyInput[] | Prisma.GroundUncheckedCreateWithoutCompanyInput[]
-  connectOrCreate?: Prisma.GroundCreateOrConnectWithoutCompanyInput | Prisma.GroundCreateOrConnectWithoutCompanyInput[]
-  createMany?: Prisma.GroundCreateManyCompanyInputEnvelope
-  connect?: Prisma.GroundWhereUniqueInput | Prisma.GroundWhereUniqueInput[]
+export type GroundCreateNestedOneWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.GroundCreateWithoutCompanyInput, Prisma.GroundUncheckedCreateWithoutCompanyInput>
+  connectOrCreate?: Prisma.GroundCreateOrConnectWithoutCompanyInput
+  connect?: Prisma.GroundWhereUniqueInput
 }
 
-export type GroundUncheckedCreateNestedManyWithoutCompanyInput = {
-  create?: Prisma.XOR<Prisma.GroundCreateWithoutCompanyInput, Prisma.GroundUncheckedCreateWithoutCompanyInput> | Prisma.GroundCreateWithoutCompanyInput[] | Prisma.GroundUncheckedCreateWithoutCompanyInput[]
-  connectOrCreate?: Prisma.GroundCreateOrConnectWithoutCompanyInput | Prisma.GroundCreateOrConnectWithoutCompanyInput[]
-  createMany?: Prisma.GroundCreateManyCompanyInputEnvelope
-  connect?: Prisma.GroundWhereUniqueInput | Prisma.GroundWhereUniqueInput[]
+export type GroundUncheckedCreateNestedOneWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.GroundCreateWithoutCompanyInput, Prisma.GroundUncheckedCreateWithoutCompanyInput>
+  connectOrCreate?: Prisma.GroundCreateOrConnectWithoutCompanyInput
+  connect?: Prisma.GroundWhereUniqueInput
 }
 
-export type GroundUpdateManyWithoutCompanyNestedInput = {
-  create?: Prisma.XOR<Prisma.GroundCreateWithoutCompanyInput, Prisma.GroundUncheckedCreateWithoutCompanyInput> | Prisma.GroundCreateWithoutCompanyInput[] | Prisma.GroundUncheckedCreateWithoutCompanyInput[]
-  connectOrCreate?: Prisma.GroundCreateOrConnectWithoutCompanyInput | Prisma.GroundCreateOrConnectWithoutCompanyInput[]
-  upsert?: Prisma.GroundUpsertWithWhereUniqueWithoutCompanyInput | Prisma.GroundUpsertWithWhereUniqueWithoutCompanyInput[]
-  createMany?: Prisma.GroundCreateManyCompanyInputEnvelope
-  set?: Prisma.GroundWhereUniqueInput | Prisma.GroundWhereUniqueInput[]
-  disconnect?: Prisma.GroundWhereUniqueInput | Prisma.GroundWhereUniqueInput[]
-  delete?: Prisma.GroundWhereUniqueInput | Prisma.GroundWhereUniqueInput[]
-  connect?: Prisma.GroundWhereUniqueInput | Prisma.GroundWhereUniqueInput[]
-  update?: Prisma.GroundUpdateWithWhereUniqueWithoutCompanyInput | Prisma.GroundUpdateWithWhereUniqueWithoutCompanyInput[]
-  updateMany?: Prisma.GroundUpdateManyWithWhereWithoutCompanyInput | Prisma.GroundUpdateManyWithWhereWithoutCompanyInput[]
-  deleteMany?: Prisma.GroundScalarWhereInput | Prisma.GroundScalarWhereInput[]
+export type GroundUpdateOneWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.GroundCreateWithoutCompanyInput, Prisma.GroundUncheckedCreateWithoutCompanyInput>
+  connectOrCreate?: Prisma.GroundCreateOrConnectWithoutCompanyInput
+  upsert?: Prisma.GroundUpsertWithoutCompanyInput
+  disconnect?: Prisma.GroundWhereInput | boolean
+  delete?: Prisma.GroundWhereInput | boolean
+  connect?: Prisma.GroundWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GroundUpdateToOneWithWhereWithoutCompanyInput, Prisma.GroundUpdateWithoutCompanyInput>, Prisma.GroundUncheckedUpdateWithoutCompanyInput>
 }
 
-export type GroundUncheckedUpdateManyWithoutCompanyNestedInput = {
-  create?: Prisma.XOR<Prisma.GroundCreateWithoutCompanyInput, Prisma.GroundUncheckedCreateWithoutCompanyInput> | Prisma.GroundCreateWithoutCompanyInput[] | Prisma.GroundUncheckedCreateWithoutCompanyInput[]
-  connectOrCreate?: Prisma.GroundCreateOrConnectWithoutCompanyInput | Prisma.GroundCreateOrConnectWithoutCompanyInput[]
-  upsert?: Prisma.GroundUpsertWithWhereUniqueWithoutCompanyInput | Prisma.GroundUpsertWithWhereUniqueWithoutCompanyInput[]
-  createMany?: Prisma.GroundCreateManyCompanyInputEnvelope
-  set?: Prisma.GroundWhereUniqueInput | Prisma.GroundWhereUniqueInput[]
-  disconnect?: Prisma.GroundWhereUniqueInput | Prisma.GroundWhereUniqueInput[]
-  delete?: Prisma.GroundWhereUniqueInput | Prisma.GroundWhereUniqueInput[]
-  connect?: Prisma.GroundWhereUniqueInput | Prisma.GroundWhereUniqueInput[]
-  update?: Prisma.GroundUpdateWithWhereUniqueWithoutCompanyInput | Prisma.GroundUpdateWithWhereUniqueWithoutCompanyInput[]
-  updateMany?: Prisma.GroundUpdateManyWithWhereWithoutCompanyInput | Prisma.GroundUpdateManyWithWhereWithoutCompanyInput[]
-  deleteMany?: Prisma.GroundScalarWhereInput | Prisma.GroundScalarWhereInput[]
+export type GroundUncheckedUpdateOneWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.GroundCreateWithoutCompanyInput, Prisma.GroundUncheckedCreateWithoutCompanyInput>
+  connectOrCreate?: Prisma.GroundCreateOrConnectWithoutCompanyInput
+  upsert?: Prisma.GroundUpsertWithoutCompanyInput
+  disconnect?: Prisma.GroundWhereInput | boolean
+  delete?: Prisma.GroundWhereInput | boolean
+  connect?: Prisma.GroundWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GroundUpdateToOneWithWhereWithoutCompanyInput, Prisma.GroundUpdateWithoutCompanyInput>, Prisma.GroundUncheckedUpdateWithoutCompanyInput>
 }
 
 export type GroundCreateWithoutCompanyInput = {
@@ -522,55 +507,15 @@ export type GroundCreateOrConnectWithoutCompanyInput = {
   create: Prisma.XOR<Prisma.GroundCreateWithoutCompanyInput, Prisma.GroundUncheckedCreateWithoutCompanyInput>
 }
 
-export type GroundCreateManyCompanyInputEnvelope = {
-  data: Prisma.GroundCreateManyCompanyInput | Prisma.GroundCreateManyCompanyInput[]
-  skipDuplicates?: boolean
-}
-
-export type GroundUpsertWithWhereUniqueWithoutCompanyInput = {
-  where: Prisma.GroundWhereUniqueInput
+export type GroundUpsertWithoutCompanyInput = {
   update: Prisma.XOR<Prisma.GroundUpdateWithoutCompanyInput, Prisma.GroundUncheckedUpdateWithoutCompanyInput>
   create: Prisma.XOR<Prisma.GroundCreateWithoutCompanyInput, Prisma.GroundUncheckedCreateWithoutCompanyInput>
+  where?: Prisma.GroundWhereInput
 }
 
-export type GroundUpdateWithWhereUniqueWithoutCompanyInput = {
-  where: Prisma.GroundWhereUniqueInput
+export type GroundUpdateToOneWithWhereWithoutCompanyInput = {
+  where?: Prisma.GroundWhereInput
   data: Prisma.XOR<Prisma.GroundUpdateWithoutCompanyInput, Prisma.GroundUncheckedUpdateWithoutCompanyInput>
-}
-
-export type GroundUpdateManyWithWhereWithoutCompanyInput = {
-  where: Prisma.GroundScalarWhereInput
-  data: Prisma.XOR<Prisma.GroundUpdateManyMutationInput, Prisma.GroundUncheckedUpdateManyWithoutCompanyInput>
-}
-
-export type GroundScalarWhereInput = {
-  AND?: Prisma.GroundScalarWhereInput | Prisma.GroundScalarWhereInput[]
-  OR?: Prisma.GroundScalarWhereInput[]
-  NOT?: Prisma.GroundScalarWhereInput | Prisma.GroundScalarWhereInput[]
-  id?: Prisma.StringFilter<"Ground"> | string
-  createdAt?: Prisma.DateTimeFilter<"Ground"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"Ground"> | Date | string | null
-  removedAt?: Prisma.DateTimeNullableFilter<"Ground"> | Date | string | null
-  name?: Prisma.StringFilter<"Ground"> | string
-  label?: Prisma.StringNullableFilter<"Ground"> | string | null
-  address?: Prisma.StringFilter<"Ground"> | string
-  phone?: Prisma.StringFilter<"Ground"> | string
-  email?: Prisma.StringFilter<"Ground"> | string
-  companyId?: Prisma.StringFilter<"Ground"> | string
-  imageFileId?: Prisma.StringNullableFilter<"Ground"> | string | null
-}
-
-export type GroundCreateManyCompanyInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  name: string
-  label?: string | null
-  address: string
-  phone: string
-  email: string
-  imageFileId?: string | null
 }
 
 export type GroundUpdateWithoutCompanyInput = {
@@ -587,19 +532,6 @@ export type GroundUpdateWithoutCompanyInput = {
 }
 
 export type GroundUncheckedUpdateWithoutCompanyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  imageFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type GroundUncheckedUpdateManyWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null

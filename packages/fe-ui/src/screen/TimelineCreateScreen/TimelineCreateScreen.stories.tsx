@@ -19,6 +19,7 @@ const busyArgs = {
 };
 
 const meta = {
+	title: "screen/TimelineCreateScreen",
 	component: TimelineCreateScreen,
 	parameters: {
 		layout: "fullscreen",

@@ -57,6 +57,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/InquiryEditScreen",
 	component: InquiryEditScreen,
 	parameters: {
 		layout: "fullscreen",

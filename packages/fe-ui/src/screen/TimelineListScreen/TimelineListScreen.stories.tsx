@@ -144,6 +144,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/TimelineListScreen",
 	component: TimelineListScreen,
 	parameters: {
 		layout: "fullscreen",

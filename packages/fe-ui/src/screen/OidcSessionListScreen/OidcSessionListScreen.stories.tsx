@@ -57,6 +57,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/OidcSessionListScreen",
 	component: OidcSessionListScreen,
 	parameters: {
 		layout: "fullscreen",

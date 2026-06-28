@@ -81,6 +81,7 @@ const busyArgs = {
 };
 
 const meta = {
+	title: "screen/OidcClientEditScreen",
 	component: OidcClientEditScreen,
 	parameters: {
 		layout: "fullscreen",

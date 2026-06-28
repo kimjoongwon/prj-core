@@ -60,6 +60,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/TimelineDetailScreen",
 	component: TimelineDetailScreen,
 	parameters: {
 		layout: "fullscreen",

@@ -197,6 +197,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/AbilityListScreen",
 	component: AbilityListScreen,
 	parameters: {
 		layout: "fullscreen",

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Chip } from "./Chip";
 
 const meta = {
-	title: "Ui/data-display/Chip",
+	title: "data-display/Chip",
 	component: Chip,
 	parameters: {
 		layout: "centered",

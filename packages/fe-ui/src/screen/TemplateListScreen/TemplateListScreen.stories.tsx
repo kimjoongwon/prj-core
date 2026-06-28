@@ -38,6 +38,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/TemplateListScreen",
 	component: TemplateListScreen,
 	parameters: {
 		layout: "fullscreen",

@@ -56,6 +56,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/EmailVerificationListScreen",
 	component: EmailVerificationListScreen,
 	parameters: {
 		layout: "fullscreen",

@@ -37,6 +37,7 @@ const busyArgs = {
 };
 
 const meta = {
+	title: "screen/GroundEditScreen",
 	component: GroundEditScreen,
 	parameters: {
 		layout: "fullscreen",

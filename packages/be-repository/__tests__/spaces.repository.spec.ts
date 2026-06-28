@@ -62,18 +62,17 @@ describe("SpacesRepository", () => {
 			businessNo: "123-45-67890",
 			spaceId: mockSpaceData.id,
 			logoImageFileId: null,
-			grounds: [
-				{
-					id: "ground-test-id",
-					name: "Test Ground",
-					label: "Test Label",
-					address: "Seoul",
-					phone: "02-0000-0000",
-					email: "ground@example.com",
-					companyId: "company-test-id",
-					imageFileId: null,
-				},
-			],
+			ground: {
+				id: "ground-test-id",
+				name: "Test Ground",
+				label: "Test Label",
+				address: "Seoul",
+				phone: "02-0000-0000",
+				email: "ground@example.com",
+				companyId: "company-test-id",
+				imageFileId: null,
+				removedAt: null,
+			},
 		},
 	};
 
@@ -179,17 +178,13 @@ describe("SpacesRepository", () => {
 				include: {
 					company: {
 						include: {
-							grounds: {
-								where: { removedAt: null },
-								orderBy: { createdAt: "asc" },
-							},
+							ground: true,
 						},
 					},
 				},
 			});
 			expect(result).toBeInstanceOf(Space);
 			expect(result?.ground).toBeDefined();
-			expect(result?.grounds).toHaveLength(1);
 			expect(result?.ground?.businessNo).toBe("123-45-67890");
 		});
 

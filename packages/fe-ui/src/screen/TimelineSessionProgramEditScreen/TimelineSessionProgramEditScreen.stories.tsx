@@ -83,6 +83,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/TimelineSessionProgramEditScreen",
 	component: TimelineSessionProgramEditScreen,
 	parameters: {
 		layout: "fullscreen",

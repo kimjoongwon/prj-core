@@ -20,6 +20,7 @@ const notFoundArgs = {
 };
 
 const meta = {
+	title: "screen/GroundDetailScreen",
 	component: GroundDetailScreen,
 	parameters: {
 		layout: "fullscreen",

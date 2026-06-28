@@ -66,6 +66,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/ActionListScreen",
 	component: ActionListScreen,
 	parameters: {
 		layout: "fullscreen",

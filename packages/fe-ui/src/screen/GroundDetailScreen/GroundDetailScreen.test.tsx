@@ -9,7 +9,7 @@ vi.mock("@cocrepo/ui", () => {
 	);
 
 	return {
-		Badge: ({ children }: { children?: ReactNode }) => <span>{children}</span>,
+		Chip: ({ children }: { children?: ReactNode }) => <span>{children}</span>,
 		PageTitleBar: ({
 			actions,
 			description,

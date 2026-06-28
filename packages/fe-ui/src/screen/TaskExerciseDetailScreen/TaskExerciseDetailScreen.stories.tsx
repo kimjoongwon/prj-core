@@ -157,6 +157,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/TaskExerciseDetailScreen",
 	component: TaskExerciseDetailScreen,
 	parameters: {
 		layout: "fullscreen",

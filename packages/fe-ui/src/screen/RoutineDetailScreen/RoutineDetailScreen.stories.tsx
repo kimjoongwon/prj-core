@@ -64,6 +64,7 @@ const busyArgs = {
 };
 
 const meta = {
+	title: "screen/RoutineDetailScreen",
 	component: RoutineDetailScreen,
 	parameters: {
 		layout: "fullscreen",

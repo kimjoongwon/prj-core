@@ -42,6 +42,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/AccountListScreen",
 	component: AccountListScreen,
 	parameters: {
 		layout: "fullscreen",

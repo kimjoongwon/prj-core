@@ -47,6 +47,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/AssetDetailScreen",
 	component: AssetDetailScreen,
 	parameters: {
 		layout: "fullscreen",

@@ -21,6 +21,11 @@ export type PlanningStatus =
 	| "needs-update";
 
 /**
+ * Mock authentication state displayed inside planning Storybook frames.
+ */
+export type PlanningAuthState = "authenticated" | "anonymous";
+
+/**
  * Transport mode used by a Storybook planning API scenario.
  */
 export type PlanningApiMode = "msw" | "native-mock" | "none";
@@ -52,13 +57,39 @@ export interface PlanningApiScenario<THandler = unknown> {
 }
 
 /**
+ * Mock account shown in a planning review session.
+ */
+export interface PlanningAccount {
+	id?: string;
+	name: string;
+	email?: string;
+	role?: string;
+}
+
+/**
+ * Selectable tenant and space shown in a planning review session.
+ */
+export interface PlanningSpaceOption {
+	tenantId: string;
+	spaceId: string;
+	groundName: string;
+	tenantName?: string;
+	contentLanguageCode?: string | null;
+}
+
+/**
  * Runtime context that explains who is viewing the story and under what scope.
  */
 export interface PlanningContext {
 	realm: PlanningRealm;
+	authState?: PlanningAuthState;
+	account?: PlanningAccount;
 	role?: string;
 	tenantId?: string;
+	tenantName?: string;
 	spaceId?: string;
+	groundName?: string;
+	spaces?: readonly PlanningSpaceOption[];
 	abilities?: readonly string[];
 	locale?: string;
 	viewport?: "desktop" | "tablet" | "mobile";

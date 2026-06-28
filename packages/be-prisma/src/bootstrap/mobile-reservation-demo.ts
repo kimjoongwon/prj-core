@@ -357,10 +357,7 @@ export async function createMobileReservationDemoData(
 							include: {
 								company: {
 									include: {
-										grounds: {
-											where: { removedAt: null },
-											orderBy: { createdAt: "asc" },
-										},
+										ground: true,
 									},
 								},
 							},
@@ -406,7 +403,7 @@ export async function createMobileReservationDemoData(
 			continue;
 		}
 
-		const [primaryGround] = timeline.tenant.space.company?.grounds ?? [];
+		const primaryGround = timeline.tenant.space.company?.ground;
 		const groundName = primaryGround?.name ?? timelineSeed.groundName;
 		const courseId = stableUuid(`mobile-demo-course:${groundName}`);
 		const offeringId = stableUuid(`mobile-demo-offering:${timeline.id}`);

@@ -52,6 +52,7 @@ const busyArgs = {
 };
 
 const meta = {
+	title: "screen/TemplateEditScreen",
 	component: TemplateEditScreen,
 	parameters: {
 		layout: "fullscreen",

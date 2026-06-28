@@ -8,7 +8,7 @@ import { SectionSurface } from "./SectionSurface";
 import { Surface } from "./Surface";
 
 const meta = {
-	title: "Surface/OwnershipHierarchy",
+	title: "surface/SurfaceHierarchy",
 	parameters: {
 		layout: "fullscreen",
 	},

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import type { PropsWithChildren } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -34,6 +34,18 @@ vi.mock("../../../../../packages/fe-api/src/idp/client", () => ({
 async function loadProvider() {
 	vi.resetModules();
 	return import("./StorybookRuntimeProvider");
+}
+
+async function createPersistSnapshot() {
+	const { usePersistStore } = await import("@cocrepo/store");
+	const { observer } = await import("mobx-react-lite");
+
+	return observer(function PersistSnapshot() {
+		const persistStore = usePersistStore();
+		const value = `${persistStore.tenantId ?? "none"}:${persistStore.spaceId ?? "none"}:${persistStore.isSpaceSelectionResolved ? "resolved" : "pending"}`;
+
+		return <output aria-label="storybook-admin-space">{value}</output>;
+	});
 }
 
 function createStorageMock() {
@@ -82,7 +94,6 @@ describe("StorybookRuntimeProvider", () => {
 			<StorybookRuntimeProvider
 				runtime={{
 					realm: "none",
-					requiresSpace: false,
 					currentPath: "/dashboard",
 				}}
 				storyId="features-button--primary"
@@ -104,42 +115,30 @@ describe("StorybookRuntimeProvider", () => {
 		expect(screen.getByText("Story content")).toBeTruthy();
 	}, 15000);
 
-	it("renders the static admin space fallback when live auth is disabled", async () => {
+	it("sets the static admin space fallback when live auth is disabled", async () => {
 		window.history.replaceState({}, "", "/iframe.html?id=admin-card--default");
 
 		const { StorybookRuntimeProvider } = await loadProvider();
+		const PersistSnapshot = await createPersistSnapshot();
 
 		render(
 			<StorybookRuntimeProvider
 				runtime={{
 					realm: "admin",
-					requiresSpace: true,
 					currentPath: "/dashboard",
 				}}
 				storyId="admin-card--default"
 			>
 				<div>Admin story content</div>
+				<PersistSnapshot />
 			</StorybookRuntimeProvider>,
 		);
 
 		await waitFor(() => {
-			expect(screen.getByText("Admin Realm")).toBeTruthy();
+			expect(screen.getByLabelText("storybook-admin-space").textContent).toBe(
+				"storybook-tenant:storybook-space:resolved",
+			);
 		});
-		const spaceSelect = screen.getByLabelText("Space") as HTMLSelectElement;
-		expect(spaceSelect.value).toBe("storybook-space");
-		expect(
-			screen.getByRole("option", { name: "Storybook Space" }),
-		).toBeTruthy();
-		expect(screen.getByRole("option", { name: "Storybook Ops" })).toBeTruthy();
-		expect(
-			screen.getByRole("option", { name: "Storybook Growth" }),
-		).toBeTruthy();
-
-		fireEvent.change(spaceSelect, {
-			target: { value: "storybook-growth-space" },
-		});
-
-		expect(spaceSelect.value).toBe("storybook-growth-space");
 		expect(screen.getByText("Admin story content")).toBeTruthy();
 	}, 15000);
 
@@ -151,26 +150,36 @@ describe("StorybookRuntimeProvider", () => {
 		);
 
 		const { withStorybookRuntime } = await loadProvider();
+		const PersistSnapshot = await createPersistSnapshot();
 
 		render(
-			withStorybookRuntime(() => <div>Toolbar realm story</div>, {
-				id: "screen-spacelistscreen--default",
-				title: "screen/SpaceListScreen",
-				globals: {
-					storybookRealm: "admin",
+			withStorybookRuntime(
+				() => (
+					<>
+						<div>Toolbar realm story</div>
+						<PersistSnapshot />
+					</>
+				),
+				{
+					id: "screen-spacelistscreen--default",
+					title: "screen/SpaceListScreen",
+					globals: {
+						storybookRealm: "admin",
+					},
+					parameters: {},
 				},
-				parameters: {},
-			}),
+			),
 		);
 
 		await waitFor(() => {
-			expect(screen.getByText("Admin Realm")).toBeTruthy();
+			expect(screen.getByLabelText("storybook-admin-space").textContent).toBe(
+				"storybook-tenant:storybook-space:resolved",
+			);
 		});
-		expect(screen.getByLabelText("Space")).toBeTruthy();
 		expect(screen.getByText("Toolbar realm story")).toBeTruthy();
 	}, 15000);
 
-	it("wraps stories in the theme-aware canvas surface", async () => {
+	it("renders stories without injecting a styled canvas surface", async () => {
 		window.history.replaceState(
 			{},
 			"",
@@ -183,47 +192,13 @@ describe("StorybookRuntimeProvider", () => {
 			withStorybookRuntime(() => <div>Themed story content</div>, {
 				id: "features-button--primary",
 				title: "features/Button",
-				parameters: {
-					layout: "fullscreen",
-				},
+				parameters: {},
 			}),
 		);
 
 		const surface = container.querySelector("[data-storybook-canvas-surface]");
 
-		expect(surface).toBeTruthy();
-		expect(surface?.getAttribute("class")).toContain("bg-background");
-		expect(surface?.getAttribute("class")).toContain("text-foreground");
-		expect(surface?.getAttribute("data-storybook-layout")).toBe("fullscreen");
+		expect(surface).toBeNull();
 		expect(screen.getByText("Themed story content")).toBeTruthy();
-	}, 15000);
-
-	it("keeps docs preview surfaces content-sized", async () => {
-		window.history.replaceState(
-			{},
-			"",
-			"/iframe.html?id=control-button--docs&viewMode=docs",
-		);
-
-		const { withStorybookRuntime } = await loadProvider();
-
-		const { container } = render(
-			withStorybookRuntime(() => <div>Docs story content</div>, {
-				id: "control-button--docs",
-				title: "action/Button",
-				viewMode: "docs",
-				parameters: {
-					layout: "centered",
-				},
-			}),
-		);
-
-		const surface = container.querySelector("[data-storybook-canvas-surface]");
-
-		expect(surface).toBeTruthy();
-		expect(surface?.getAttribute("class")).toContain("inline-flex");
-		expect(surface?.getAttribute("class")).not.toContain("min-h-screen");
-		expect(surface?.getAttribute("data-storybook-view-mode")).toBe("docs");
-		expect(screen.getByText("Docs story content")).toBeTruthy();
 	}, 15000);
 });

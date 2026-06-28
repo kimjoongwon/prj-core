@@ -4,6 +4,7 @@ import { useLocalObservable } from "mobx-react-lite";
 import { LoginScreen, type LoginScreenState } from "./LoginScreen";
 
 const meta = {
+	title: "screen/LoginScreen",
 	component: LoginScreen,
 	parameters: {
 		layout: "fullscreen",

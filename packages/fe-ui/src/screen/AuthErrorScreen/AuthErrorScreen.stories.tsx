@@ -8,6 +8,7 @@ const centeredCardStyle = {
 };
 
 const meta = {
+	title: "screen/AuthErrorScreen",
 	component: AuthErrorScreen,
 	parameters: {
 		layout: "fullscreen",

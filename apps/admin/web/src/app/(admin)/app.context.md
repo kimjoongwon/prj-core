@@ -134,22 +134,22 @@ Space
 
 ## Company/Ground 도메인 맥락
 
-Company는 Space를 구체화하는 사업자/운영사 상세입니다. Space 자체는 접근 제어와 테넌트 소속의 기준이고, Company가 사업자번호 같은 회사 정체성을 부여합니다. Ground는 Company 아래의 서비스 시설이며 시설명, 현장 연락처, 이미지처럼 서비스 운영에 가까운 의미를 가집니다. 하나의 Company는 여러 Ground를 보유할 수 있습니다.
+Company는 Space를 구체화하는 사업자/운영사 상세입니다. Space 자체는 접근 제어와 테넌트 소속의 기준이고, Company가 사업자번호 같은 회사 정보를 부여합니다. Ground는 Company 아래의 1:1 서비스 시설이며 시설명, 현장 연락처, 이미지처럼 서비스 운영에 가까운 의미를 가집니다.
 
 ```
 Space (접근/테넌트 기준) ◄─── Company (사업자: businessNo, contact)
-                           └─── Ground[] (서비스 시설: name, address, image)
+                           └─── Ground (서비스 시설: name, address, image)
   │
   ├─── Timeline (학기/시즌)
   ├─── Routine (커리큘럼)
   └─── Task/Exercise (운동)
 ```
 
-- Company와 Space는 1:1 관계이고, Company와 Ground는 1:N 관계입니다
-- 현재 Admin의 `/spaces/[spaceId]/ground` 단수 화면은 Company의 대표 Ground를 조회/수정합니다
-- Company/Ground 등록 시 새 Space와 첫 Ground가 자동으로 함께 생성됩니다 (서버에서 처리)
+- Space와 Company는 1:1 관계이고, Company와 Ground도 1:1 관계입니다
+- 현재 Admin의 `/spaces/[spaceId]/ground` 단수 화면은 Company의 Ground를 조회/수정합니다
+- Company/Ground 등록 시 새 Space와 Ground가 자동으로 함께 생성됩니다 (서버에서 처리)
 - PLATFORM_ADMIN 역할만 시설 등록/수정이 가능합니다 (플랫폼 관리자 전용)
-- `businessNo`(회사 사업자등록번호)는 Company의 유니크 식별자이며 한 번 등록 후 변경 불가합니다
+- `businessNo`(회사 사업자등록번호)는 Company의 식별자가 아니며 중복을 허용합니다
 
 ## Program 도메인 맥락
 

@@ -30,5 +30,6 @@ export interface CompanyDto {
   logoImageFileId?: string | null;
   /** @nullable */
   space?: CompanyDtoSpace;
-  grounds?: GroundDto[];
+  /** @nullable */
+  ground?: GroundDto | null;
 }

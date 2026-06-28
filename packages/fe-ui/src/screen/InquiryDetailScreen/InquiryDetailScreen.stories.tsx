@@ -174,6 +174,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/InquiryDetailScreen",
 	component: InquiryDetailScreen,
 	parameters: {
 		layout: "fullscreen",

@@ -22,6 +22,7 @@ const defaultArgs: UserDetailScreenProps = {
 };
 
 const meta = {
+	title: "screen/UserDetailScreen",
 	component: UserDetailScreen,
 	parameters: {
 		layout: "fullscreen",

@@ -20,6 +20,7 @@ const busyArgs = {
 };
 
 const meta = {
+	title: "screen/TimelineEditScreen",
 	component: TimelineEditScreen,
 	parameters: {
 		layout: "fullscreen",

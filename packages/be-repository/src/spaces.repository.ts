@@ -37,7 +37,7 @@ export class SpacesRepository {
 
 	private toSpaceWithCompanyGround(
 		result: Prisma.SpaceGetPayload<{
-			include: { company: { include: { grounds: true } } };
+			include: { company: { include: { ground: true } } };
 		}>,
 	): Space {
 		const space = plainToInstance(Space, result);
@@ -48,18 +48,15 @@ export class SpacesRepository {
 		const company = plainToInstance(Company, result.company);
 		space.company = company;
 
-		if (result.company.grounds.length > 0) {
-			const grounds = result.company.grounds.map((companyGround) => {
-				const ground = this.toGroundWithCompany({
-					...companyGround,
-					company: result.company,
-				});
-				ground.space = space;
-				return ground;
+		const companyGround = result.company.ground;
+		if (companyGround && companyGround.removedAt === null) {
+			const ground = this.toGroundWithCompany({
+				...companyGround,
+				company: result.company,
 			});
-			company.grounds = grounds;
-			space.grounds = grounds;
-			space.ground = grounds[0];
+			ground.space = space;
+			company.ground = ground;
+			space.ground = ground;
 		}
 
 		return space;
@@ -89,10 +86,7 @@ export class SpacesRepository {
 			include: {
 				company: {
 					include: {
-						grounds: {
-							where: { removedAt: null },
-							orderBy: { createdAt: "asc" },
-						},
+						ground: true,
 					},
 				},
 			},
@@ -125,8 +119,8 @@ export class SpacesRepository {
 			company: {
 				is: {
 					removedAt: null,
-					grounds: {
-						some: {
+					ground: {
+						is: {
 							removedAt: null,
 						},
 					},
@@ -146,8 +140,8 @@ export class SpacesRepository {
 										},
 									},
 									{
-										grounds: {
-											some: {
+										ground: {
+											is: {
 												removedAt: null,
 												name: {
 													contains: queryParams.search,
@@ -169,10 +163,7 @@ export class SpacesRepository {
 				include: {
 					company: {
 						include: {
-							grounds: {
-								where: { removedAt: null },
-								orderBy: { createdAt: "asc" },
-							},
+							ground: true,
 						},
 					},
 				},
@@ -214,29 +205,6 @@ export class SpacesRepository {
 				removedAt: null,
 				company: {
 					spaceId,
-					removedAt: null,
-				},
-			},
-			include: {
-				company: true,
-			},
-			orderBy: { createdAt: "asc" },
-		});
-
-		return result ? this.toGroundWithCompany(result) : null;
-	}
-
-	/**
-	 * 사업자등록번호로 Company의 Ground 조회
-	 */
-	async findGroundByBusinessNo(businessNo: string): Promise<Ground | null> {
-		this.logger.debug(`사업자등록번호로 Ground 조회: ${businessNo}`);
-
-		const result = await this.txHost.tx.ground.findFirst({
-			where: {
-				removedAt: null,
-				company: {
-					businessNo,
 					removedAt: null,
 				},
 			},
@@ -490,10 +458,7 @@ export class SpacesRepository {
 			include: {
 				company: {
 					include: {
-						grounds: {
-							where: { removedAt: null },
-							orderBy: { createdAt: "asc" },
-						},
+						ground: true,
 					},
 				},
 			},

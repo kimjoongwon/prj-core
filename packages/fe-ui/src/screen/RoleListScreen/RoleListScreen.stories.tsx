@@ -39,6 +39,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/RoleListScreen",
 	component: RoleListScreen,
 	parameters: {
 		layout: "fullscreen",

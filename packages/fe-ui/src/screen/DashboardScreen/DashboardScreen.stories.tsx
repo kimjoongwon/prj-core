@@ -4,6 +4,7 @@ import { DashboardScreen } from "./DashboardScreen";
 const defaultArgs = {};
 
 const meta = {
+	title: "screen/DashboardScreen",
 	component: DashboardScreen,
 	parameters: {
 		layout: "fullscreen",

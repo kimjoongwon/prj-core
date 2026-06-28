@@ -127,7 +127,7 @@ type StoryDataGridProps = Pick<
 >;
 
 const meta = {
-	title: "DataGrid/DataGrid",
+	title: "data-grid/DataGrid",
 	component: DataGrid as ComponentType<StoryDataGridProps>,
 	args: {
 		rows,

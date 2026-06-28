@@ -25,6 +25,7 @@ const busyArgs = {
 };
 
 const meta = {
+	title: "screen/ActionCreateScreen",
 	component: ActionCreateScreen,
 	parameters: {
 		layout: "fullscreen",

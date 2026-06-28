@@ -5,10 +5,7 @@ export const IDP_ACCOUNT_ACCESS_GRANT_INCLUDE = {
 		include: {
 			company: {
 				include: {
-					grounds: {
-						where: { removedAt: null },
-						orderBy: { createdAt: "asc" },
-					},
+					ground: true,
 				},
 			},
 		},

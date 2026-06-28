@@ -13,6 +13,7 @@ const centeredCardStyle = {
 };
 
 const meta = {
+	title: "screen/ForgotPasswordScreen",
 	component: ForgotPasswordScreen,
 	parameters: {
 		layout: "fullscreen",

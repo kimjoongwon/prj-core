@@ -5,12 +5,7 @@ import type {
 } from "@cocrepo/input";
 import type { LanguageCode, Prisma } from "@cocrepo/prisma";
 import { SpacesRepository } from "@cocrepo/repository";
-import {
-	ConflictException,
-	Injectable,
-	Logger,
-	NotFoundException,
-} from "@nestjs/common";
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
 
 @Injectable()
@@ -74,15 +69,6 @@ export class SpaceAggregate {
 	@Transactional()
 	async createSpaceWithGround(dto: CreateSpaceCommandInput): Promise<Space> {
 		this.logger.debug(`공간 생성: businessNo=${dto.businessNo}`);
-
-		const existing = await this.repository.findGroundByBusinessNo(
-			dto.businessNo,
-		);
-		if (existing) {
-			throw new ConflictException(
-				`이미 등록된 사업자등록번호입니다: ${dto.businessNo}`,
-			);
-		}
 
 		const space = await this.repository.create({
 			contentLanguageCode: dto.contentLanguageCode,

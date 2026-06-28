@@ -8,9 +8,9 @@ export interface TenantWithRelations {
 	};
 	space?: {
 		company?: {
-			grounds?: Array<{
+			ground?: {
 				name: string;
-			}>;
+			} | null;
 		};
 	};
 }

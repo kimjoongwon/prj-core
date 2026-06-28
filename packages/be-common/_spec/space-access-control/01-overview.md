@@ -127,7 +127,7 @@ SpaceCategory (ROOT, BRANCH 등)
     ↓ SpaceClassification
 Space (접근/테넌트 컨테이너)
     ├── Company (구체화: 사업자등록번호, 법인/운영사 연락처 등) [1:1]
-    │   └── Ground[] (서비스 시설: 시설명, 현장 연락처, 이미지 등) [1:N]
+    │   └── Ground (서비스 시설: 시설명, 현장 연락처, 이미지 등) [1:1]
     ├── SpaceClassification → Category (분류 체계)
     ├── SpaceAssociation → Group (그룹핑)
     └── Tenant (Bridge) ←── User + Role 연결

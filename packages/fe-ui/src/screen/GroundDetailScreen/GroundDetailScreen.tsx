@@ -1,7 +1,7 @@
 "use client";
 
 import {
-	Badge,
+	Chip,
 	PageTitleBar,
 	Section,
 	SectionSurface,
@@ -93,9 +93,9 @@ export const GroundDetailScreen = observer(
 									<label className="text-sm text-muted">라벨</label>
 									<div className="mt-1">
 										{ground.label ? (
-											<Badge color="accent" variant="soft">
+											<Chip color="primary" variant="soft">
 												{ground.label}
-											</Badge>
+											</Chip>
 										) : (
 											<span className="text-muted">-</span>
 										)}

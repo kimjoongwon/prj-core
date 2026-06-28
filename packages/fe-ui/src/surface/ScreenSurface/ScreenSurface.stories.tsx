@@ -7,7 +7,7 @@ import { SectionSurface } from "../SectionSurface";
 import { ScreenSurface } from "./ScreenSurface";
 
 const meta: Meta<typeof ScreenSurface> = {
-	title: "Surface/ScreenSurface",
+	title: "surface/ScreenSurface",
 	component: ScreenSurface,
 	parameters: {
 		layout: "padded",

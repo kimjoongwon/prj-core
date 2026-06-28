@@ -4,7 +4,7 @@ import { Button } from "../../action/Button/Button";
 import { CollapsibleSidebar } from "./CollapsibleSidebarLayout";
 
 const meta: Meta<typeof CollapsibleSidebar> = {
-	title: "Features/CollapsibleSidebar/CollapsibleSidebarLayout",
+	title: "feature/CollapsibleSidebar",
 	component: CollapsibleSidebar,
 	parameters: {
 		layout: "fullscreen",

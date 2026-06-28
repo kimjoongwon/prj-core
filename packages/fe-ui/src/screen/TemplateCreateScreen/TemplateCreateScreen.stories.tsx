@@ -44,6 +44,7 @@ const emptyStateArgs = {
 };
 
 const meta = {
+	title: "screen/TemplateCreateScreen",
 	component: TemplateCreateScreen,
 	parameters: {
 		layout: "fullscreen",

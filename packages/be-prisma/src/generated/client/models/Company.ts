@@ -239,7 +239,7 @@ export type CompanyWhereInput = {
   spaceId?: Prisma.StringFilter<"Company"> | string
   logoImageFileId?: Prisma.StringNullableFilter<"Company"> | string | null
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
-  grounds?: Prisma.GroundListRelationFilter
+  ground?: Prisma.XOR<Prisma.GroundNullableScalarRelationFilter, Prisma.GroundWhereInput> | null
 }
 
 export type CompanyOrderByWithRelationInput = {
@@ -256,12 +256,11 @@ export type CompanyOrderByWithRelationInput = {
   spaceId?: Prisma.SortOrder
   logoImageFileId?: Prisma.SortOrderInput | Prisma.SortOrder
   space?: Prisma.SpaceOrderByWithRelationInput
-  grounds?: Prisma.GroundOrderByRelationAggregateInput
+  ground?: Prisma.GroundOrderByWithRelationInput
 }
 
 export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  businessNo?: string
   spaceId?: string
   AND?: Prisma.CompanyWhereInput | Prisma.CompanyWhereInput[]
   OR?: Prisma.CompanyWhereInput[]
@@ -274,10 +273,11 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   address?: Prisma.StringFilter<"Company"> | string
   phone?: Prisma.StringFilter<"Company"> | string
   email?: Prisma.StringFilter<"Company"> | string
+  businessNo?: Prisma.StringFilter<"Company"> | string
   logoImageFileId?: Prisma.StringNullableFilter<"Company"> | string | null
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
-  grounds?: Prisma.GroundListRelationFilter
-}, "id" | "businessNo" | "spaceId">
+  ground?: Prisma.XOR<Prisma.GroundNullableScalarRelationFilter, Prisma.GroundWhereInput> | null
+}, "id" | "spaceId">
 
 export type CompanyOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -328,7 +328,7 @@ export type CompanyCreateInput = {
   businessNo: string
   logoImageFileId?: string | null
   space: Prisma.SpaceCreateNestedOneWithoutCompanyInput
-  grounds?: Prisma.GroundCreateNestedManyWithoutCompanyInput
+  ground?: Prisma.GroundCreateNestedOneWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateInput = {
@@ -344,7 +344,7 @@ export type CompanyUncheckedCreateInput = {
   businessNo: string
   spaceId: string
   logoImageFileId?: string | null
-  grounds?: Prisma.GroundUncheckedCreateNestedManyWithoutCompanyInput
+  ground?: Prisma.GroundUncheckedCreateNestedOneWithoutCompanyInput
 }
 
 export type CompanyUpdateInput = {
@@ -360,7 +360,7 @@ export type CompanyUpdateInput = {
   businessNo?: Prisma.StringFieldUpdateOperationsInput | string
   logoImageFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   space?: Prisma.SpaceUpdateOneRequiredWithoutCompanyNestedInput
-  grounds?: Prisma.GroundUpdateManyWithoutCompanyNestedInput
+  ground?: Prisma.GroundUpdateOneWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateInput = {
@@ -376,7 +376,7 @@ export type CompanyUncheckedUpdateInput = {
   businessNo?: Prisma.StringFieldUpdateOperationsInput | string
   spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   logoImageFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  grounds?: Prisma.GroundUncheckedUpdateManyWithoutCompanyNestedInput
+  ground?: Prisma.GroundUncheckedUpdateOneWithoutCompanyNestedInput
 }
 
 export type CompanyCreateManyInput = {
@@ -510,18 +510,18 @@ export type CompanyUncheckedUpdateOneWithoutSpaceNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutSpaceInput, Prisma.CompanyUpdateWithoutSpaceInput>, Prisma.CompanyUncheckedUpdateWithoutSpaceInput>
 }
 
-export type CompanyCreateNestedOneWithoutGroundsInput = {
-  create?: Prisma.XOR<Prisma.CompanyCreateWithoutGroundsInput, Prisma.CompanyUncheckedCreateWithoutGroundsInput>
-  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutGroundsInput
+export type CompanyCreateNestedOneWithoutGroundInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutGroundInput, Prisma.CompanyUncheckedCreateWithoutGroundInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutGroundInput
   connect?: Prisma.CompanyWhereUniqueInput
 }
 
-export type CompanyUpdateOneRequiredWithoutGroundsNestedInput = {
-  create?: Prisma.XOR<Prisma.CompanyCreateWithoutGroundsInput, Prisma.CompanyUncheckedCreateWithoutGroundsInput>
-  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutGroundsInput
-  upsert?: Prisma.CompanyUpsertWithoutGroundsInput
+export type CompanyUpdateOneRequiredWithoutGroundNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutGroundInput, Prisma.CompanyUncheckedCreateWithoutGroundInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutGroundInput
+  upsert?: Prisma.CompanyUpsertWithoutGroundInput
   connect?: Prisma.CompanyWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutGroundsInput, Prisma.CompanyUpdateWithoutGroundsInput>, Prisma.CompanyUncheckedUpdateWithoutGroundsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutGroundInput, Prisma.CompanyUpdateWithoutGroundInput>, Prisma.CompanyUncheckedUpdateWithoutGroundInput>
 }
 
 export type CompanyCreateWithoutSpaceInput = {
@@ -536,7 +536,7 @@ export type CompanyCreateWithoutSpaceInput = {
   email: string
   businessNo: string
   logoImageFileId?: string | null
-  grounds?: Prisma.GroundCreateNestedManyWithoutCompanyInput
+  ground?: Prisma.GroundCreateNestedOneWithoutCompanyInput
 }
 
 export type CompanyUncheckedCreateWithoutSpaceInput = {
@@ -551,7 +551,7 @@ export type CompanyUncheckedCreateWithoutSpaceInput = {
   email: string
   businessNo: string
   logoImageFileId?: string | null
-  grounds?: Prisma.GroundUncheckedCreateNestedManyWithoutCompanyInput
+  ground?: Prisma.GroundUncheckedCreateNestedOneWithoutCompanyInput
 }
 
 export type CompanyCreateOrConnectWithoutSpaceInput = {
@@ -582,7 +582,7 @@ export type CompanyUpdateWithoutSpaceInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   businessNo?: Prisma.StringFieldUpdateOperationsInput | string
   logoImageFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  grounds?: Prisma.GroundUpdateManyWithoutCompanyNestedInput
+  ground?: Prisma.GroundUpdateOneWithoutCompanyNestedInput
 }
 
 export type CompanyUncheckedUpdateWithoutSpaceInput = {
@@ -597,10 +597,10 @@ export type CompanyUncheckedUpdateWithoutSpaceInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   businessNo?: Prisma.StringFieldUpdateOperationsInput | string
   logoImageFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  grounds?: Prisma.GroundUncheckedUpdateManyWithoutCompanyNestedInput
+  ground?: Prisma.GroundUncheckedUpdateOneWithoutCompanyNestedInput
 }
 
-export type CompanyCreateWithoutGroundsInput = {
+export type CompanyCreateWithoutGroundInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -615,7 +615,7 @@ export type CompanyCreateWithoutGroundsInput = {
   space: Prisma.SpaceCreateNestedOneWithoutCompanyInput
 }
 
-export type CompanyUncheckedCreateWithoutGroundsInput = {
+export type CompanyUncheckedCreateWithoutGroundInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -630,23 +630,23 @@ export type CompanyUncheckedCreateWithoutGroundsInput = {
   logoImageFileId?: string | null
 }
 
-export type CompanyCreateOrConnectWithoutGroundsInput = {
+export type CompanyCreateOrConnectWithoutGroundInput = {
   where: Prisma.CompanyWhereUniqueInput
-  create: Prisma.XOR<Prisma.CompanyCreateWithoutGroundsInput, Prisma.CompanyUncheckedCreateWithoutGroundsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutGroundInput, Prisma.CompanyUncheckedCreateWithoutGroundInput>
 }
 
-export type CompanyUpsertWithoutGroundsInput = {
-  update: Prisma.XOR<Prisma.CompanyUpdateWithoutGroundsInput, Prisma.CompanyUncheckedUpdateWithoutGroundsInput>
-  create: Prisma.XOR<Prisma.CompanyCreateWithoutGroundsInput, Prisma.CompanyUncheckedCreateWithoutGroundsInput>
+export type CompanyUpsertWithoutGroundInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutGroundInput, Prisma.CompanyUncheckedUpdateWithoutGroundInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutGroundInput, Prisma.CompanyUncheckedCreateWithoutGroundInput>
   where?: Prisma.CompanyWhereInput
 }
 
-export type CompanyUpdateToOneWithWhereWithoutGroundsInput = {
+export type CompanyUpdateToOneWithWhereWithoutGroundInput = {
   where?: Prisma.CompanyWhereInput
-  data: Prisma.XOR<Prisma.CompanyUpdateWithoutGroundsInput, Prisma.CompanyUncheckedUpdateWithoutGroundsInput>
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutGroundInput, Prisma.CompanyUncheckedUpdateWithoutGroundInput>
 }
 
-export type CompanyUpdateWithoutGroundsInput = {
+export type CompanyUpdateWithoutGroundInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -661,7 +661,7 @@ export type CompanyUpdateWithoutGroundsInput = {
   space?: Prisma.SpaceUpdateOneRequiredWithoutCompanyNestedInput
 }
 
-export type CompanyUncheckedUpdateWithoutGroundsInput = {
+export type CompanyUncheckedUpdateWithoutGroundInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -676,35 +676,6 @@ export type CompanyUncheckedUpdateWithoutGroundsInput = {
   logoImageFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-
-/**
- * Count Type CompanyCountOutputType
- */
-
-export type CompanyCountOutputType = {
-  grounds: number
-}
-
-export type CompanyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  grounds?: boolean | CompanyCountOutputTypeCountGroundsArgs
-}
-
-/**
- * CompanyCountOutputType without action
- */
-export type CompanyCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the CompanyCountOutputType
-   */
-  select?: Prisma.CompanyCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * CompanyCountOutputType without action
- */
-export type CompanyCountOutputTypeCountGroundsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.GroundWhereInput
-}
 
 
 export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -721,8 +692,7 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   spaceId?: boolean
   logoImageFileId?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
-  grounds?: boolean | Prisma.Company$groundsArgs<ExtArgs>
-  _count?: boolean | Prisma.CompanyCountOutputTypeDefaultArgs<ExtArgs>
+  ground?: boolean | Prisma.Company$groundArgs<ExtArgs>
 }, ExtArgs["result"]["company"]>
 
 export type CompanySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -775,8 +745,7 @@ export type CompanySelectScalar = {
 export type CompanyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "name" | "label" | "address" | "phone" | "email" | "businessNo" | "spaceId" | "logoImageFileId", ExtArgs["result"]["company"]>
 export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
-  grounds?: boolean | Prisma.Company$groundsArgs<ExtArgs>
-  _count?: boolean | Prisma.CompanyCountOutputTypeDefaultArgs<ExtArgs>
+  ground?: boolean | Prisma.Company$groundArgs<ExtArgs>
 }
 export type CompanyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
@@ -789,7 +758,7 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   name: "Company"
   objects: {
     space: Prisma.$SpacePayload<ExtArgs>
-    grounds: Prisma.$GroundPayload<ExtArgs>[]
+    ground: Prisma.$GroundPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1217,7 +1186,7 @@ readonly fields: CompanyFieldRefs;
 export interface Prisma__CompanyClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   space<T extends Prisma.SpaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceDefaultArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  grounds<T extends Prisma.Company$groundsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$groundsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroundPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ground<T extends Prisma.Company$groundArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$groundArgs<ExtArgs>>): Prisma.Prisma__GroundClient<runtime.Types.Result.GetResult<Prisma.$GroundPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1655,9 +1624,9 @@ export type CompanyDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Company.grounds
+ * Company.ground
  */
-export type Company$groundsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Company$groundArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Ground
    */
@@ -1671,11 +1640,6 @@ export type Company$groundsArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   include?: Prisma.GroundInclude<ExtArgs> | null
   where?: Prisma.GroundWhereInput
-  orderBy?: Prisma.GroundOrderByWithRelationInput | Prisma.GroundOrderByWithRelationInput[]
-  cursor?: Prisma.GroundWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.GroundScalarFieldEnum | Prisma.GroundScalarFieldEnum[]
 }
 
 /**

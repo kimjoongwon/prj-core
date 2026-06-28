@@ -9,6 +9,7 @@ const defaultArgs = {
 };
 
 const meta = {
+	title: "screen/AbilityFormScreen",
 	component: AbilityFormScreen,
 	parameters: {
 		layout: "fullscreen",

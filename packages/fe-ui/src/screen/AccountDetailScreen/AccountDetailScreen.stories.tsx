@@ -74,6 +74,7 @@ const loadingArgs = {
 };
 
 const meta = {
+	title: "screen/AccountDetailScreen",
 	component: AccountDetailScreen,
 	parameters: {
 		layout: "fullscreen",

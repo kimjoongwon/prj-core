@@ -13,6 +13,7 @@ const centeredCardStyle = {
 };
 
 const meta = {
+	title: "screen/OidcInteractionScreen",
 	component: OidcInteractionScreen,
 	parameters: {
 		layout: "fullscreen",

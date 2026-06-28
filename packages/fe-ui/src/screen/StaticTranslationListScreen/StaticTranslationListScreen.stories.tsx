@@ -54,6 +54,7 @@ const defaultArgs = {
 };
 
 const meta = {
+	title: "screen/StaticTranslationListScreen",
 	component: StaticTranslationListScreen,
 	parameters: {
 		layout: "fullscreen",

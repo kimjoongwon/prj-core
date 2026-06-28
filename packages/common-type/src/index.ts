@@ -265,14 +265,17 @@ export type {
 // Storybook 기획 시나리오 타입
 // ============================================
 export type {
+	PlanningAccount,
 	PlanningAcceptance,
 	PlanningApiMode,
 	PlanningApiRequest,
 	PlanningApiScenario,
+	PlanningAuthState,
 	PlanningContext,
 	PlanningRealm,
 	PlanningRuntime,
 	PlanningScenario,
+	PlanningSpaceOption,
 	PlanningStatus,
 } from "./storybook-planning";
 // ============================================

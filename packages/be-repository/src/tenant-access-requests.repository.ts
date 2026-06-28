@@ -12,10 +12,7 @@ const tenantAccessRequestInclude = {
 		include: {
 			company: {
 				include: {
-					grounds: {
-						where: { removedAt: null },
-						orderBy: { createdAt: "asc" },
-					},
+					ground: true,
 				},
 			},
 		},
@@ -46,7 +43,7 @@ export class TenantAccessRequestsRepository {
 			include: typeof tenantAccessRequestInclude;
 		}>,
 	): TenantAccessRequest {
-		const [primaryGround] = result.space?.company?.grounds ?? [];
+		const primaryGround = result.space?.company?.ground;
 		if (primaryGround) {
 			(result.space as unknown as { ground?: unknown }).ground =
 				primaryGround;
