@@ -4,7 +4,7 @@ import { Avatar, cn, Dropdown } from "@heroui/react";
 import { ChevronDown, LogOut } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";
-import type { HeaderBarProps } from "../../layout/Layout/type";
+import type { HeaderBarProps } from "./type";
 
 /**
  * HeaderBar - 관리자 레이아웃 헤더 (v7.0)

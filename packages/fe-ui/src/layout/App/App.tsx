@@ -46,7 +46,15 @@ const AppRoot = ({ children, className, ...props }: AppProps) => {
 	);
 };
 
-const AppHeader = ({ children, className, ...props }: AppHeaderProps) => {
+/**
+ * AppHeader
+ * root app header landmark slot입니다.
+ */
+export const AppHeader = ({
+	children,
+	className,
+	...props
+}: AppHeaderProps) => {
 	return (
 		<header {...props} className={joinClassNames("shrink-0", className)}>
 			{children}
@@ -54,7 +62,11 @@ const AppHeader = ({ children, className, ...props }: AppHeaderProps) => {
 	);
 };
 
-const AppBody = ({ children, className, ...props }: AppDivSlotProps) => {
+/**
+ * AppBody
+ * root app header 아래의 좌우 aside/main 구조를 담는 body slot입니다.
+ */
+export const AppBody = ({ children, className, ...props }: AppDivSlotProps) => {
 	return (
 		<div
 			{...props}
@@ -65,7 +77,15 @@ const AppBody = ({ children, className, ...props }: AppDivSlotProps) => {
 	);
 };
 
-const AppLeftAside = ({ children, className, ...props }: AppAsideProps) => {
+/**
+ * AppLeftAside
+ * desktop left navigation slot입니다.
+ */
+export const AppLeftAside = ({
+	children,
+	className,
+	...props
+}: AppAsideProps) => {
 	return (
 		<aside
 			{...props}
@@ -79,7 +99,15 @@ const AppLeftAside = ({ children, className, ...props }: AppAsideProps) => {
 	);
 };
 
-const AppRightAside = ({ children, className, ...props }: AppAsideProps) => {
+/**
+ * AppRightAside
+ * desktop right supplementary panel slot입니다.
+ */
+export const AppRightAside = ({
+	children,
+	className,
+	...props
+}: AppAsideProps) => {
 	return (
 		<aside
 			{...props}
@@ -93,7 +121,11 @@ const AppRightAside = ({ children, className, ...props }: AppAsideProps) => {
 	);
 };
 
-const AppMain = ({ children, className, ...props }: AppMainProps) => {
+/**
+ * AppMain
+ * route children이 렌더링되는 root app main landmark slot입니다.
+ */
+export const AppMain = ({ children, className, ...props }: AppMainProps) => {
 	return (
 		<main
 			{...props}
@@ -107,7 +139,15 @@ const AppMain = ({ children, className, ...props }: AppMainProps) => {
 	);
 };
 
-const AppFooter = ({ children, className, ...props }: AppFooterProps) => {
+/**
+ * AppFooter
+ * 모바일 navigation/action 요소를 담는 root app footer slot입니다.
+ */
+export const AppFooter = ({
+	children,
+	className,
+	...props
+}: AppFooterProps) => {
 	return (
 		<footer {...props} className={joinClassNames("shrink-0", className)}>
 			{children}

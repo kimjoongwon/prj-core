@@ -3,7 +3,7 @@
 import { observer } from "mobx-react-lite";
 import { AppIcon } from "../../design-system/icon/AppIcon";
 import { useT } from "../../i18n";
-import type { BottomNavProps } from "../../layout/Layout/type";
+import type { BottomNavProps } from "./type";
 
 export const BottomNav = observer(function BottomNav({
 	items,

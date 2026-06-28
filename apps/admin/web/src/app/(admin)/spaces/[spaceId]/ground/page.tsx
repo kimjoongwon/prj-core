@@ -12,7 +12,7 @@ type GroundDetailScreenParams = {
 export default function AdminSpacesSpaceIdGroundRoute() {
 	const { spaceId } = useParams<GroundDetailScreenParams>();
 	const router = useRouter();
-	const { data: response, isLoading } = useGetSpaceGround(spaceId);
+	const { data: response } = useGetSpaceGround(spaceId);
 	const ground = response?.data as GroundDto | undefined;
 
 	const onClickBackButton = () => {
@@ -24,28 +24,21 @@ export default function AdminSpacesSpaceIdGroundRoute() {
 	};
 
 	return (
-		<>
-			<GroundDetailScreen
-				spaceId={spaceId}
-				ground={
-					ground
-						? {
-								name: ground.name,
-								label: ground.label,
-								address: ground.address,
-								phone: ground.phone,
-								email: ground.email,
-								businessNo: ground.businessNo,
-								createdAt: ground.createdAt,
-								updatedAt: ground.updatedAt,
-							}
-						: undefined
-				}
-				isLoading={isLoading}
-				isNotFound={!isLoading && !ground}
-				onClickBackButton={onClickBackButton}
-				onClickEditButton={onClickEditButton}
-			/>
-		</>
+		<GroundDetailScreen
+			ground={
+				ground
+					? {
+							name: ground.name,
+							label: ground.label,
+							address: ground.address,
+							phone: ground.phone,
+							email: ground.email,
+						}
+					: undefined
+			}
+			isNotFound={!ground}
+			onClickBackButton={onClickBackButton}
+			onClickEditButton={onClickEditButton}
+		/>
 	);
 }

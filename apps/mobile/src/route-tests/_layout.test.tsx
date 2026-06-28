@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react-native";
-import RootLayout from "@/app/_layout";
+import AppLayout from "@/app/_layout";
 import type { ComponentType, ReactNode } from "react";
 
 type ChildrenProps = {
@@ -180,7 +180,7 @@ describe("mobile root layout", () => {
 	});
 
 	it("gesture root 안에서 design system provider, AuthSessionGate, custom header stack 을 렌더링해야 한다", () => {
-		render(<RootLayout />);
+		render(<AppLayout />);
 
 		expect(mockSetUniwindTheme).toHaveBeenCalledWith("system");
 		expect(mockSetLoginRedirectUrl).toHaveBeenCalledWith("/auth/login");

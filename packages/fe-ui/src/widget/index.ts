@@ -1,5 +1,4 @@
 export * from "./AbilityMatrixView";
-export * from "./AbilityRuleList";
 export * from "./ActionConfigEditor";
 export * from "./ActionFab";
 export * from "./AIClassificationSuggestion";
@@ -67,6 +66,4 @@ export * from "./TenantAccessRequestStatusBadge";
 export * from "./TenantAccessRequestSummary";
 export * from "./TimelineChart";
 export * from "./UnsavedChangesIndicator";
-export * from "./UserSearchWidget";
-export * from "./UserTableWidget";
 export * from "./VariableReadTable";

@@ -1,59 +1,41 @@
 "use client";
 
 import {
-	DateTimeCell,
+	Badge,
 	PageTitleBar,
 	Section,
 	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
-import { Badge, Spinner } from "@heroui/react";
 import { ArrowLeft, Pencil } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
+
+/** 시설 상세 화면에서 실제로 표시하는 시설 정보입니다. */
 export interface GroundDetailScreenGround {
 	name: string;
 	label?: string | null;
 	address: string;
 	phone: string;
 	email: string;
-	businessNo: string;
-	createdAt: string;
-	updatedAt?: string | null;
 }
+
+/** 시설 상세 화면의 순수 표시 계약입니다. */
 export interface GroundDetailScreenProps {
-	spaceId: string;
 	ground?: GroundDetailScreenGround;
-	isLoading: boolean;
 	isNotFound: boolean;
 	onClickBackButton: () => void;
 	onClickEditButton: () => void;
 }
+
+/** 시설의 핵심 식별/연락 정보만 보여주는 상세 화면입니다. */
 export const GroundDetailScreen = observer(
 	({
-		spaceId,
 		ground,
-		isLoading,
 		isNotFound,
 		onClickBackButton,
 		onClickEditButton,
 	}: GroundDetailScreenProps) => {
-		if (isLoading) {
-			return (
-				<VStack gap="section" fullWidth>
-					<PageTitleBar title="시설 정보" description="로딩 중..." />
-					<SectionSurface>
-						<Section>
-							<Section.Body>
-								<div className="flex items-center justify-center p-8">
-									<Spinner size="lg" />
-								</div>
-							</Section.Body>
-						</Section>
-					</SectionSurface>
-				</VStack>
-			);
-		}
 		if (isNotFound || !ground) {
 			return (
 				<VStack gap="section" fullWidth>
@@ -84,7 +66,7 @@ export const GroundDetailScreen = observer(
 			<VStack gap="section" fullWidth>
 				<PageTitleBar
 					title={ground.name ?? "시설 정보"}
-					description="공간에 연결된 시설 detail입니다."
+					description="시설 기본 정보를 확인합니다."
 					actions={
 						<Button
 							color="primary"
@@ -138,35 +120,6 @@ export const GroundDetailScreen = observer(
 										</a>
 									</div>
 								</div>
-								<div>
-									<label className="text-sm text-muted">사업자등록번호</label>
-									<p className="mt-1 font-mono">{ground.businessNo}</p>
-								</div>
-								<div>
-									<label className="text-sm text-muted">등록일</label>
-									<div className="mt-1">
-										<DateTimeCell value={ground.createdAt} />
-									</div>
-								</div>
-								<div>
-									<label className="text-sm text-muted">수정일</label>
-									<div className="mt-1">
-										<DateTimeCell value={ground.updatedAt ?? "-"} />
-									</div>
-								</div>
-							</div>
-						</Section.Body>
-					</Section>
-				</SectionSurface>
-				<SectionSurface>
-					<Section>
-						<Section.Header>
-							<PageTitleBar level={2} title="연결된 Space" />
-						</Section.Header>
-						<Section.Body>
-							<div>
-								<label className="text-sm text-muted">Space ID</label>
-								<p className="mt-1 font-mono text-sm">{spaceId}</p>
 							</div>
 						</Section.Body>
 					</Section>

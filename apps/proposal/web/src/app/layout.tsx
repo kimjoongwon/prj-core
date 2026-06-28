@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 		"온짓다는 AI 주도로 기획, UI 시스템, 도메인 설계를 연결해 더 적은 handoff와 더 빠른 실행으로 제품을 만드는 개발 스튜디오입니다.",
 };
 
-export default function RootLayout({
+export default function ({
 	children,
 }: Readonly<{
 	children: React.ReactNode;

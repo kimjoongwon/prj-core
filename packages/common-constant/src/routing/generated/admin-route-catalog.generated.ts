@@ -27,8 +27,6 @@ export const GENERATED_ADMIN_ROUTE_META_SOURCES: string[] = [
 	"apps/admin/web/src/app/(admin)/policies/[policyId]/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/policies/new/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/policies/route.meta.ts",
-	"apps/admin/web/src/app/(admin)/roles/[roleId]/abilities/[abilityId]/actions/route.meta.ts",
-	"apps/admin/web/src/app/(admin)/roles/[roleId]/abilities/[abilityId]/subjects/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/roles/[roleId]/edit/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/roles/[roleId]/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/roles/new/route.meta.ts",
@@ -75,9 +73,7 @@ export const GENERATED_ADMIN_ROUTE_META_SOURCES: string[] = [
 	"apps/admin/web/src/app/(admin)/timelines/new/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/timelines/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/translations/route.meta.ts",
-	"apps/admin/web/src/app/(admin)/users/[userId]/edit/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/users/[userId]/route.meta.ts",
-	"apps/admin/web/src/app/(admin)/users/new/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/users/route.meta.ts"
 ];
 
@@ -399,29 +395,11 @@ export const GENERATED_ADMIN_PAGE_ACCESS_ITEMS: GeneratedAdminPageAccessItem[] =
 	{
 		"groupId": "users",
 		"groupLabel": "회원",
-		"pageId": "users:new",
-		"pageLabel": "회원 등록",
-		"pathPattern": "/users/new",
-		"subject": "page:users:new",
-		"description": "새 회원 정보를 등록합니다."
-	},
-	{
-		"groupId": "users",
-		"groupLabel": "회원",
 		"pageId": "users:detail",
 		"pageLabel": "회원 상세",
 		"pathPattern": "/users/[userId]",
 		"subject": "page:users:detail",
 		"description": "회원 상세 정보를 확인합니다."
-	},
-	{
-		"groupId": "users",
-		"groupLabel": "회원",
-		"pageId": "users:edit",
-		"pageLabel": "회원 수정",
-		"pathPattern": "/users/[userId]/edit",
-		"subject": "page:users:edit",
-		"description": "회원 정보를 수정합니다."
 	},
 	{
 		"groupId": "spaces",
@@ -847,24 +825,6 @@ export const GENERATED_ADMIN_PAGE_ACCESS_ITEMS: GeneratedAdminPageAccessItem[] =
 		"pathPattern": "/subjects/[subjectId]",
 		"subject": "page:subjects:detail",
 		"description": "대상 상세 정보를 확인합니다."
-	},
-	{
-		"groupId": "roles",
-		"groupLabel": "권한 관리",
-		"pageId": "roles:ability-actions",
-		"pageLabel": "역할별 권한 액션 연결",
-		"pathPattern": "/roles/[roleId]/abilities/[abilityId]/actions",
-		"subject": "page:roles:ability-actions",
-		"description": "역할에 연결된 액션 구성을 확인합니다."
-	},
-	{
-		"groupId": "roles",
-		"groupLabel": "권한 관리",
-		"pageId": "roles:ability-subjects",
-		"pageLabel": "역할별 권한 대상 연결",
-		"pathPattern": "/roles/[roleId]/abilities/[abilityId]/subjects",
-		"subject": "page:roles:ability-subjects",
-		"description": "역할에 연결된 대상 구성을 확인합니다."
 	},
 	{
 		"groupId": "tenant-access-requests",

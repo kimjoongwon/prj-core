@@ -1,6 +1,11 @@
 import {
 	AccessGate,
 	App,
+	AppBody,
+	AppFooter,
+	AppHeader,
+	AppLeftAside,
+	AppMain,
 	FloatingAction,
 	MobileBottomNavigation,
 	MobileMenu,
@@ -26,7 +31,7 @@ export const dynamic = "force-dynamic";
  * - App (app/layout.tsx) - body wrapper
  *     - app/layout.tsx - route layout 직접 조립
  */
-export default function RootLayout({
+export default function ({
 	children,
 }: {
 	children: React.ReactNode;
@@ -42,22 +47,22 @@ export default function RootLayout({
 			<body className="bg-background text-foreground">
 				<Providers>
 					<App>
-						<App.Header>
+						<AppHeader>
 							<TopBar />
-						</App.Header>
-						<App.Body>
-							<App.LeftAside>
+						</AppHeader>
+						<AppBody>
+							<AppLeftAside>
 								<SideNavigation />
-							</App.LeftAside>
-							<App.Main>
+							</AppLeftAside>
+							<AppMain>
 								<AccessGate contents={children} />
-							</App.Main>
-						</App.Body>
-						<App.Footer>
+							</AppMain>
+						</AppBody>
+						<AppFooter>
 							<MobileMenu />
 							<FloatingAction />
 							<MobileBottomNavigation />
-						</App.Footer>
+						</AppFooter>
 					</App>
 				</Providers>
 			</body>
