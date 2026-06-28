@@ -13,6 +13,7 @@ import {
 	DataGrid,
 	DataGridStateModel,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	StatsCard,
 	VStack,
@@ -43,9 +44,7 @@ const leftInputs: InputConfig[] = [
 		placeholder: "Account ID 검색...",
 	},
 ];
-
 export const idpConsoleOidcSessionsPageQueryInputs = [...leftInputs];
-
 export interface OidcSessionListScreenQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
@@ -53,12 +52,10 @@ export interface OidcSessionListScreenQueryStates extends DataGridQueryStates {
 	accountId: string;
 }
 export type OidcSessionListScreenSetQueryStates = DataGridSetQueryStates;
-
 export interface OidcSessionListScreenStats {
 	totalCount: number;
 	byModelType: Record<string, number>;
 }
-
 export interface OidcSessionListScreenProps {
 	sessions?: OidcSessionDto[];
 	totalCount: number;
@@ -105,28 +102,27 @@ export const OidcSessionListScreen = observer(
 		onConfirmRevokeAll,
 	}: OidcSessionListScreenProps) => {
 		const gridState = useLocalObservable(
-			() => new DataGridStateModel({ queryStates, setQueryStates }),
+			() =>
+				new DataGridStateModel({
+					queryStates,
+					setQueryStates,
+				}),
 		);
-
 		useEffect(() => {
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
 		const sessionRows = sessions ?? [];
 		const byModelType = (stats?.byModelType ?? {}) as Record<string, number>;
-
 		const onClickRevokeSession = (key: string) => {
 			onRevokeSession(key);
 		};
-
 		const onClickGrantId = (grantId: string) => {
 			onOpenGrantRevokeModal(grantId);
 		};
-
 		const columns = buildOidcSessionTableColumns<OidcSessionDto>({
 			onClickGrantId,
 			onClickRevokeSession,
 		});
-
 		return (
 			<VStack gap={5}>
 				<PageTitleBar
@@ -165,19 +161,23 @@ export const OidcSessionListScreen = observer(
 						))}
 					</div>
 				)}
-				<SectionSurface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
-					<DataGrid
-						config={{
-							entity: "OidcSession",
-							columns,
-							leftInputs,
-							emptyMessage: "등록된 OIDC 세션/토큰이 없습니다.",
-						}}
-						rows={sessionRows}
-						totalCount={totalCount}
-						state={gridState}
-						isLoading={isLoading}
-					/>
+				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+					<Section overflow="hidden" inset="none">
+						<Section.Body>
+							<DataGrid
+								config={{
+									entity: "OidcSession",
+									columns,
+									leftInputs,
+									emptyMessage: "등록된 OIDC 세션/토큰이 없습니다.",
+								}}
+								rows={sessionRows}
+								totalCount={totalCount}
+								state={gridState}
+								isLoading={isLoading}
+							/>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 				<ConfirmModal
 					isOpen={isGrantRevokeModalOpen}

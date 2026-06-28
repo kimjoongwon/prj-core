@@ -41,18 +41,24 @@ export default function RootLayout({
 			</head>
 			<body className="bg-background text-foreground">
 				<Providers>
-					<App
-						header={<TopBar />}
-						leftAside={<SideNavigation />}
-						main={<AccessGate contents={children} />}
-						footer={
-							<>
-								<MobileMenu />
-								<FloatingAction />
-								<MobileBottomNavigation />
-							</>
-						}
-					/>
+					<App>
+						<App.Header>
+							<TopBar />
+						</App.Header>
+						<App.Body>
+							<App.LeftAside>
+								<SideNavigation />
+							</App.LeftAside>
+							<App.Main>
+								<AccessGate contents={children} />
+							</App.Main>
+						</App.Body>
+						<App.Footer>
+							<MobileMenu />
+							<FloatingAction />
+							<MobileBottomNavigation />
+						</App.Footer>
+					</App>
 				</Providers>
 			</body>
 		</html>

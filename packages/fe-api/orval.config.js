@@ -167,6 +167,9 @@ async function createConfig() {
 			input: {
 				target: apiUrl,
 				validation: false, // Swagger 스키마 검증 비활성화
+				override: {
+					transformer: "./remove-tenant-header.transformer.cjs",
+				},
 				filters: {
 					mode: "include",
 					tags: coreTags,
@@ -207,6 +210,9 @@ async function createConfig() {
 			input: {
 				target: idpApiUrl,
 				validation: false,
+				override: {
+					transformer: "./remove-tenant-header.transformer.cjs",
+				},
 				filters: {
 					mode: "include",
 					tags: idpTags,

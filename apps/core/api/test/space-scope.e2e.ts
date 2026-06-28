@@ -1,7 +1,13 @@
 import { TaskAggregate } from "@cocrepo/aggregate";
-import { JwtStrategy } from "@cocrepo/be-common";
+import {
+	JwtStrategy,
+	SPACE_RESOURCE_SCOPE_SWAGGER_EXTENSION,
+	WithAncestorSpaces,
+	WithSpaceTree,
+} from "@cocrepo/be-common";
 import { PRISMA_SERVICE_TOKEN, SYSTEM_ROLES } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/context";
+import { ApiAuth } from "@cocrepo/decorator";
 import { SpaceScope } from "@cocrepo/dto";
 import { SpaceCategoryName } from "@cocrepo/enum";
 import {
@@ -14,6 +20,7 @@ import {
 	TokenStorageService,
 	UserService,
 } from "@cocrepo/service";
+import { SpaceResourceScope } from "@cocrepo/type";
 import {
 	Controller,
 	Get,
@@ -25,6 +32,7 @@ import {
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { PassportStrategy } from "@nestjs/passport";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { Test, TestingModule } from "@nestjs/testing";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import request from "supertest";
@@ -37,6 +45,8 @@ const TENANT_A_ID = "10000000-0000-4000-8000-000000000001";
 const TENANT_B_ID = "20000000-0000-4000-8000-000000000001";
 const SPACE_A_ID = "11111111-1111-4111-8111-111111111111";
 const SPACE_B_ID = "22222222-2222-4222-8222-222222222222";
+const ROOT_SCOPED_SPACE_IDS = [SPACE_B_ID, SPACE_A_ID];
+const BRANCH_SCOPED_SPACE_IDS = [SPACE_A_ID];
 const UNKNOWN_TENANT_ID = "44444444-4444-4444-8444-444444444444";
 
 function createTestUser() {
@@ -96,7 +106,30 @@ class SpaceScopeTestController {
 	) {}
 
 	@Get("context")
+	@ApiAuth()
 	getContext() {
+		return {
+			spaceId: this.spaceContext.spaceId ?? null,
+			spaceIds: this.spaceContext.spaceIds ?? null,
+			tenantRole: this.spaceContext.tenant?.role?.name ?? null,
+		};
+	}
+
+	@Get("context/ancestors")
+	@ApiAuth()
+	@WithAncestorSpaces()
+	getAncestorContext() {
+		return {
+			spaceId: this.spaceContext.spaceId ?? null,
+			spaceIds: this.spaceContext.spaceIds ?? null,
+			tenantRole: this.spaceContext.tenant?.role?.name ?? null,
+		};
+	}
+
+	@Get("context/tree")
+	@ApiAuth()
+	@WithSpaceTree()
+	getTreeContext() {
 		return {
 			spaceId: this.spaceContext.spaceId ?? null,
 			spaceIds: this.spaceContext.spaceIds ?? null,
@@ -133,6 +166,7 @@ class SpaceScopeTestController {
 describe("Space Scope API (E2E)", () => {
 	let app: INestApplication;
 	let jwtToken: string;
+	let swaggerDocument: ReturnType<typeof SwaggerModule.createDocument>;
 
 	const usersRepoCalls: Array<Record<string, unknown>> = [];
 	const tasksRepoCalls: Array<Record<string, unknown>> = [];
@@ -162,6 +196,27 @@ describe("Space Scope API (E2E)", () => {
 	};
 
 	const spacesRepositoryMock = {
+		findSpaceIdsByCategoryHierarchy: async (
+			spaceId: string,
+			scope: SpaceResourceScope = SpaceResourceScope.WITH_DESCENDANTS,
+		) => {
+			spacesRepoCalls.push({
+				type: "findSpaceIdsByCategoryHierarchy",
+				spaceId,
+				scope,
+			});
+
+			if (spaceId === SPACE_B_ID) {
+				return ROOT_SCOPED_SPACE_IDS;
+			}
+			if (scope === SpaceResourceScope.WITH_ANCESTORS) {
+				return [SPACE_A_ID, SPACE_B_ID];
+			}
+			if (scope === SpaceResourceScope.WITH_TREE) {
+				return [SPACE_A_ID, SPACE_B_ID];
+			}
+			return BRANCH_SCOPED_SPACE_IDS;
+		},
 		findManyWithGround: async (params?: Record<string, unknown>) => {
 			spacesRepoCalls.push({ type: "findManyWithGround", ...(params ?? {}) });
 			return [[], 0];
@@ -241,6 +296,13 @@ describe("Space Scope API (E2E)", () => {
 		app = moduleFixture.createNestApplication();
 		setNestApp(app);
 		await app.init();
+		swaggerDocument = SwaggerModule.createDocument(
+			app,
+			new DocumentBuilder()
+				.setTitle("Space Scope Test")
+				.setVersion("1.0.0")
+				.build(),
+		);
 	}, 60000);
 
 	beforeEach(() => {
@@ -255,7 +317,84 @@ describe("Space Scope API (E2E)", () => {
 		}
 	}, 30000);
 
-	it("비 PLATFORM_ADMIN tenant면 현재 x-tenant-id 한 개만 EFFECTIVE_SPACE_IDS로 사용한다", async () => {
+	const getSwaggerOperation = (path: string, method: "get" | "post") => {
+		const operation = (
+			swaggerDocument.paths[path] as
+				| Record<string, Record<string, unknown>>
+				| undefined
+		)?.[method];
+		expect(operation).toBeDefined();
+		return operation as Record<string, unknown>;
+	};
+
+	const findTenantHeader = (operation: Record<string, unknown>) => {
+		const parameters = operation.parameters;
+		if (!Array.isArray(parameters)) {
+			return undefined;
+		}
+
+		return parameters.find(
+			(parameter): parameter is Record<string, unknown> =>
+				typeof parameter === "object" &&
+				parameter !== null &&
+				"in" in parameter &&
+				"name" in parameter &&
+				parameter.in === "header" &&
+				typeof parameter.name === "string" &&
+				parameter.name.toLowerCase() === "x-tenant-id",
+		);
+	};
+
+	describe("Swagger 문서", () => {
+		it("Given tenant scoped 보호 API When OpenAPI 문서를 만들면 Then x-tenant-id header가 필수로 노출된다", () => {
+			const operation = getSwaggerOperation(
+				"/api/v1/test-space-scope/context",
+				"get",
+			);
+
+			expect(findTenantHeader(operation)).toMatchObject({
+				name: "x-tenant-id",
+				in: "header",
+				required: true,
+			});
+		});
+
+		it("Given Space 선택 전 API When OpenAPI 문서를 만들면 Then required x-tenant-id header를 노출하지 않는다", () => {
+			const operation = getSwaggerOperation("/api/v1/auth/my-spaces", "get");
+
+			expect(findTenantHeader(operation)).toBeUndefined();
+		});
+
+		it("Given current-space 조회 API When OpenAPI 문서를 만들면 Then x-tenant-id header가 선택값으로 노출된다", () => {
+			const operation = getSwaggerOperation("/api/v1/auth/current-space", "get");
+
+			expect(findTenantHeader(operation)).toMatchObject({
+				name: "x-tenant-id",
+				in: "header",
+				required: false,
+			});
+		});
+
+		it("Given Space scope 데코레이터 When OpenAPI 문서를 만들면 Then scope vendor extension을 노출한다", () => {
+			const ancestorOperation = getSwaggerOperation(
+				"/api/v1/test-space-scope/context/ancestors",
+				"get",
+			);
+			const treeOperation = getSwaggerOperation(
+				"/api/v1/test-space-scope/context/tree",
+				"get",
+			);
+
+			expect(ancestorOperation[SPACE_RESOURCE_SCOPE_SWAGGER_EXTENSION]).toBe(
+				SpaceResourceScope.WITH_ANCESTORS,
+			);
+			expect(treeOperation[SPACE_RESOURCE_SCOPE_SWAGGER_EXTENSION]).toBe(
+				SpaceResourceScope.WITH_TREE,
+			);
+		});
+	});
+
+	it("BRANCH tenant의 기본 scope는 현재 space만 EFFECTIVE_SPACE_IDS로 사용한다", async () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context")
 			.set("Authorization", `Bearer ${jwtToken}`)
@@ -264,12 +403,17 @@ describe("Space Scope API (E2E)", () => {
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(response.body.data).toEqual({
 			spaceId: SPACE_A_ID,
-			spaceIds: [SPACE_A_ID],
+			spaceIds: BRANCH_SCOPED_SPACE_IDS,
 			tenantRole: SYSTEM_ROLES.COMPANY_MANAGER,
+		});
+		expect(spacesRepoCalls[0]).toEqual({
+			type: "findSpaceIdsByCategoryHierarchy",
+			spaceId: SPACE_A_ID,
+			scope: SpaceResourceScope.WITH_DESCENDANTS,
 		});
 	});
 
-	it("현재 tenant role이 PLATFORM_ADMIN이면 EFFECTIVE_SPACE_IDS를 전체 조회로 연다", async () => {
+	it("ROOT tenant의 기본 scope는 자기 자신과 하위 space를 EFFECTIVE_SPACE_IDS로 사용한다", async () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context")
 			.set("Authorization", `Bearer ${jwtToken}`)
@@ -278,8 +422,51 @@ describe("Space Scope API (E2E)", () => {
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(response.body.data).toEqual({
 			spaceId: SPACE_B_ID,
-			spaceIds: null,
+			spaceIds: ROOT_SCOPED_SPACE_IDS,
 			tenantRole: SYSTEM_ROLES.PLATFORM_ADMIN,
+		});
+		expect(spacesRepoCalls[0]).toEqual({
+			type: "findSpaceIdsByCategoryHierarchy",
+			spaceId: SPACE_B_ID,
+			scope: SpaceResourceScope.WITH_DESCENDANTS,
+		});
+	});
+
+	it("ancestor decorator는 현재 space와 상위 space를 EFFECTIVE_SPACE_IDS로 사용한다", async () => {
+		const response = await request(app.getHttpServer())
+			.get("/api/v1/test-space-scope/context/ancestors")
+			.set("Authorization", `Bearer ${jwtToken}`)
+			.set("x-tenant-id", TENANT_A_ID);
+
+		expect(response.status).toBe(HttpStatus.OK);
+		expect(response.body.data).toEqual({
+			spaceId: SPACE_A_ID,
+			spaceIds: [SPACE_A_ID, SPACE_B_ID],
+			tenantRole: SYSTEM_ROLES.COMPANY_MANAGER,
+		});
+		expect(spacesRepoCalls[0]).toEqual({
+			type: "findSpaceIdsByCategoryHierarchy",
+			spaceId: SPACE_A_ID,
+			scope: SpaceResourceScope.WITH_ANCESTORS,
+		});
+	});
+
+	it("tree decorator는 현재 space와 상위/하위 space를 EFFECTIVE_SPACE_IDS로 사용한다", async () => {
+		const response = await request(app.getHttpServer())
+			.get("/api/v1/test-space-scope/context/tree")
+			.set("Authorization", `Bearer ${jwtToken}`)
+			.set("x-tenant-id", TENANT_A_ID);
+
+		expect(response.status).toBe(HttpStatus.OK);
+		expect(response.body.data).toEqual({
+			spaceId: SPACE_A_ID,
+			spaceIds: [SPACE_A_ID, SPACE_B_ID],
+			tenantRole: SYSTEM_ROLES.COMPANY_MANAGER,
+		});
+		expect(spacesRepoCalls[0]).toEqual({
+			type: "findSpaceIdsByCategoryHierarchy",
+			spaceId: SPACE_A_ID,
+			scope: SpaceResourceScope.WITH_TREE,
 		});
 	});
 
@@ -292,11 +479,11 @@ describe("Space Scope API (E2E)", () => {
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(usersRepoCalls[0]).toMatchObject({
 			type: "findManyBySpaceIds",
-			spaceIds: [SPACE_A_ID],
+			spaceIds: BRANCH_SCOPED_SPACE_IDS,
 			where: {
 				tenants: {
 					some: {
-						spaceId: { in: [SPACE_A_ID] },
+						spaceId: { in: BRANCH_SCOPED_SPACE_IDS },
 						removedAt: null,
 					},
 				},
@@ -304,11 +491,11 @@ describe("Space Scope API (E2E)", () => {
 		});
 		expect(usersRepoCalls[1]).toEqual({
 			type: "countStatsBySpaceIds",
-			spaceIds: [SPACE_A_ID],
+			spaceIds: BRANCH_SCOPED_SPACE_IDS,
 		});
 	});
 
-	it("PLATFORM_ADMIN 사용자의 users 조회는 전체 scope로 repository를 호출한다", async () => {
+	it("PLATFORM_ADMIN 사용자의 users 조회도 category scope로 repository를 호출한다", async () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/users")
 			.set("Authorization", `Bearer ${jwtToken}`)
@@ -317,12 +504,19 @@ describe("Space Scope API (E2E)", () => {
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(usersRepoCalls[0]).toMatchObject({
 			type: "findManyBySpaceIds",
-			spaceIds: undefined,
-			where: {},
+			spaceIds: ROOT_SCOPED_SPACE_IDS,
+			where: {
+				tenants: {
+					some: {
+						spaceId: { in: ROOT_SCOPED_SPACE_IDS },
+						removedAt: null,
+					},
+				},
+			},
 		});
 		expect(usersRepoCalls[1]).toEqual({
 			type: "countStatsBySpaceIds",
-			spaceIds: undefined,
+			spaceIds: ROOT_SCOPED_SPACE_IDS,
 		});
 	});
 
@@ -336,11 +530,11 @@ describe("Space Scope API (E2E)", () => {
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(tasksRepoCalls[0]).toMatchObject({
 			type: "findManyTasks",
-			spaceIds: [SPACE_A_ID],
+			spaceIds: BRANCH_SCOPED_SPACE_IDS,
 		});
 	});
 
-	it("PLATFORM_ADMIN 사용자의 tasks 조회는 INCLUDE_ANCESTORS에서 전체 조회를 사용한다", async () => {
+	it("PLATFORM_ADMIN 사용자의 tasks 조회도 INCLUDE_ANCESTORS에서 category scope를 사용한다", async () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/tasks")
 			.query({ spaceScope: SpaceScope.INCLUDE_ANCESTORS })
@@ -350,8 +544,8 @@ describe("Space Scope API (E2E)", () => {
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(tasksRepoCalls[0]).toMatchObject({
 			type: "findManyTasks",
+			spaceIds: ROOT_SCOPED_SPACE_IDS,
 		});
-		expect(tasksRepoCalls[0]?.spaceIds).toBeUndefined();
 	});
 
 	it("spaces 목록도 현재 scope 기준으로 spaceIds를 전달한다", async () => {
@@ -362,8 +556,13 @@ describe("Space Scope API (E2E)", () => {
 
 		expect(limitedResponse.status).toBe(HttpStatus.OK);
 		expect(spacesRepoCalls[0]).toEqual({
+			type: "findSpaceIdsByCategoryHierarchy",
+			spaceId: SPACE_A_ID,
+			scope: SpaceResourceScope.WITH_DESCENDANTS,
+		});
+		expect(spacesRepoCalls[1]).toEqual({
 			type: "findManyWithGround",
-			spaceIds: [SPACE_A_ID],
+			spaceIds: BRANCH_SCOPED_SPACE_IDS,
 		});
 
 		spacesRepoCalls.length = 0;
@@ -375,7 +574,13 @@ describe("Space Scope API (E2E)", () => {
 
 		expect(fullResponse.status).toBe(HttpStatus.OK);
 		expect(spacesRepoCalls[0]).toEqual({
+			type: "findSpaceIdsByCategoryHierarchy",
+			spaceId: SPACE_B_ID,
+			scope: SpaceResourceScope.WITH_DESCENDANTS,
+		});
+		expect(spacesRepoCalls[1]).toEqual({
 			type: "findManyWithGround",
+			spaceIds: ROOT_SCOPED_SPACE_IDS,
 		});
 	});
 
@@ -399,6 +604,11 @@ describe("Space Scope API (E2E)", () => {
 
 		expect(allowedResponse.status).toBe(HttpStatus.OK);
 		expect(spacesRepoCalls[0]).toEqual({
+			type: "findSpaceIdsByCategoryHierarchy",
+			spaceId: SPACE_B_ID,
+			scope: SpaceResourceScope.WITH_DESCENDANTS,
+		});
+		expect(spacesRepoCalls[1]).toEqual({
 			type: "findGroundBySpaceId",
 			spaceId: SPACE_A_ID,
 		});

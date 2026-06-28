@@ -6,6 +6,7 @@ import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
 import { Input } from "../../input/Input/Input";
 import { TextArea } from "../../input/TextArea/TextArea";
+import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
 import { Select } from "../../selection/Select/Select";
 import { Switch } from "../../selection/Switch/Switch";
@@ -72,12 +73,15 @@ export const AbilityFormScreen = observer((props: AbilityFormScreenProps) => {
 		return (
 			<VStack gap="section" fullWidth>
 				<PageTitleBar title={props.title} description="로딩 중..." />
-
 				<SectionSurface>
-					<div className="flex items-center justify-center gap-2 p-8">
-						<Spinner size="sm" />
-						<span className="text-muted">로딩 중...</span>
-					</div>
+					<Section>
+						<Section.Body>
+							<div className="flex items-center justify-center gap-2 p-8">
+								<Spinner size="sm" />
+								<span className="text-muted">로딩 중...</span>
+							</div>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</VStack>
 		);
@@ -89,14 +93,20 @@ export const AbilityFormScreen = observer((props: AbilityFormScreenProps) => {
 					title={props.title}
 					description="권한을 찾을 수 없습니다."
 				/>
-
 				<SectionSurface>
-					<div className="flex flex-col items-center justify-center gap-4 p-8">
-						<p className="text-muted">권한을 찾을 수 없습니다.</p>
-						<Button variant="flat" onPress={props.onClickNotFoundBackButton}>
-							목록으로
-						</Button>
-					</div>
+					<Section>
+						<Section.Body>
+							<div className="flex flex-col items-center justify-center gap-4 p-8">
+								<p className="text-muted">권한을 찾을 수 없습니다.</p>
+								<Button
+									variant="flat"
+									onPress={props.onClickNotFoundBackButton}
+								>
+									목록으로
+								</Button>
+							</div>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</VStack>
 		);
@@ -127,111 +137,126 @@ export const AbilityFormScreen = observer((props: AbilityFormScreenProps) => {
 					</div>
 				}
 			/>
-
 			<SectionSurface>
-				<VStack gap="section">
-					<SectionSurface top={<PageTitleBar level={2} title="기본 정보" />}>
-						<div className="grid grid-cols-1 gap-4">
-							<Input
-								label="권한 이름"
-								placeholder="예: manage_users"
-								value={props.form.name}
-								onValueChange={props.onChange.onChangeName}
-								isRequired={!isEditMode}
-								isReadOnly={isEditMode}
-								description={
-									isEditMode ? "권한 이름은 수정할 수 없습니다." : undefined
-								}
-							/>
-							<TextArea
-								label="설명"
-								placeholder="권한에 대한 설명을 입력하세요"
-								value={props.form.description}
-								onValueChange={props.onChange.onChangeDescription}
-								minRows={2}
-							/>
-						</div>
-					</SectionSurface>
-					<SectionSurface top={<PageTitleBar level={2} title="CASL 정보" />}>
-						<div className="grid grid-cols-1 gap-4">
-							<Select
-								label="Subject"
-								placeholder="Subject를 선택하세요"
-								value={props.form.subjectId || null}
-								onChange={(value) => {
-									props.onChange.onChangeSubjectId(String(value ?? ""));
-								}}
-								isRequired={!isEditMode}
-							>
-								{props.subjects.map((subject) => (
-									<ListBox.Item
-										key={subject.id}
-										id={subject.id}
-										textValue={subject.label}
-									>
-										{subject.label}
-									</ListBox.Item>
-								))}
-							</Select>
-							<Select
-								label="Action"
-								placeholder="Action을 선택하세요"
-								value={props.form.actionId || null}
-								onChange={(value) => {
-									props.onChange.onChangeActionId(String(value ?? ""));
-								}}
-								isRequired={!isEditMode}
-							>
-								{props.actions.map((action) => (
-									<ListBox.Item
-										key={action.id}
-										id={action.id}
-										textValue={action.label}
-									>
-										{action.label}
-									</ListBox.Item>
-								))}
-							</Select>
-							<TextArea
-								label="Fields"
-								placeholder="쉼표로 구분하여 필드를 입력하세요. 예: name, email, phone (빈 값 = 전체 필드)"
-								value={props.form.fields}
-								onValueChange={props.onChange.onChangeFields}
-								minRows={2}
-								description="빈 값이면 전체 필드에 대한 권한입니다."
-							/>
-							<TextArea
-								label="Conditions (JSON)"
-								placeholder='{"userId": "{{ user.id }}"}'
-								value={props.form.conditions}
-								onValueChange={props.onChange.onChangeConditions}
-								minRows={4}
-								description="ABAC 조건을 JSON 형식으로 입력하세요."
-							/>
-							<div className="flex items-center justify-between rounded-lg border border-border p-4">
-								<div>
-									<p className="font-medium">거부 권한 (cannot)</p>
-									<p className="text-sm text-muted">
-										활성화 시 권한을 거부합니다.
-									</p>
-								</div>
-								<Switch
-									isSelected={props.form.inverted}
-									onValueChange={props.onChange.onChangeInverted}
-								/>
-							</div>
-							{props.form.inverted ? (
-								<TextArea
-									label="거부 사유"
-									placeholder="권한을 거부하는 이유를 입력하세요"
-									value={props.form.reason}
-									onValueChange={props.onChange.onChangeReason}
-									minRows={2}
-								/>
-							) : null}
-						</div>
-					</SectionSurface>
-				</VStack>
+				<Section>
+					<Section.Body>
+						<VStack gap="section">
+							<Section>
+								<Section.Header>
+									<PageTitleBar level={2} title="기본 정보" />
+								</Section.Header>
+								<Section.Body>
+									<div className="grid grid-cols-1 gap-4">
+										<Input
+											label="권한 이름"
+											placeholder="예: manage_users"
+											value={props.form.name}
+											onValueChange={props.onChange.onChangeName}
+											isRequired={!isEditMode}
+											isReadOnly={isEditMode}
+											description={
+												isEditMode
+													? "권한 이름은 수정할 수 없습니다."
+													: undefined
+											}
+										/>
+										<TextArea
+											label="설명"
+											placeholder="권한에 대한 설명을 입력하세요"
+											value={props.form.description}
+											onValueChange={props.onChange.onChangeDescription}
+											minRows={2}
+										/>
+									</div>
+								</Section.Body>
+							</Section>
+							<Section>
+								<Section.Header>
+									<PageTitleBar level={2} title="CASL 정보" />
+								</Section.Header>
+								<Section.Body>
+									<div className="grid grid-cols-1 gap-4">
+										<Select
+											label="Subject"
+											placeholder="Subject를 선택하세요"
+											value={props.form.subjectId || null}
+											onChange={(value) => {
+												props.onChange.onChangeSubjectId(String(value ?? ""));
+											}}
+											isRequired={!isEditMode}
+										>
+											{props.subjects.map((subject) => (
+												<ListBox.Item
+													key={subject.id}
+													id={subject.id}
+													textValue={subject.label}
+												>
+													{subject.label}
+												</ListBox.Item>
+											))}
+										</Select>
+										<Select
+											label="Action"
+											placeholder="Action을 선택하세요"
+											value={props.form.actionId || null}
+											onChange={(value) => {
+												props.onChange.onChangeActionId(String(value ?? ""));
+											}}
+											isRequired={!isEditMode}
+										>
+											{props.actions.map((action) => (
+												<ListBox.Item
+													key={action.id}
+													id={action.id}
+													textValue={action.label}
+												>
+													{action.label}
+												</ListBox.Item>
+											))}
+										</Select>
+										<TextArea
+											label="Fields"
+											placeholder="쉼표로 구분하여 필드를 입력하세요. 예: name, email, phone (빈 값 = 전체 필드)"
+											value={props.form.fields}
+											onValueChange={props.onChange.onChangeFields}
+											minRows={2}
+											description="빈 값이면 전체 필드에 대한 권한입니다."
+										/>
+										<TextArea
+											label="Conditions (JSON)"
+											placeholder='{"userId": "{{ user.id }}"}'
+											value={props.form.conditions}
+											onValueChange={props.onChange.onChangeConditions}
+											minRows={4}
+											description="ABAC 조건을 JSON 형식으로 입력하세요."
+										/>
+										<div className="flex items-center justify-between rounded-lg border border-border p-4">
+											<div>
+												<p className="font-medium">거부 권한 (cannot)</p>
+												<p className="text-sm text-muted">
+													활성화 시 권한을 거부합니다.
+												</p>
+											</div>
+											<Switch
+												isSelected={props.form.inverted}
+												onValueChange={props.onChange.onChangeInverted}
+											/>
+										</div>
+										{props.form.inverted ? (
+											<TextArea
+												label="거부 사유"
+												placeholder="권한을 거부하는 이유를 입력하세요"
+												value={props.form.reason}
+												onValueChange={props.onChange.onChangeReason}
+												minRows={2}
+											/>
+										) : null}
+									</div>
+								</Section.Body>
+							</Section>
+						</VStack>
+					</Section.Body>
+				</Section>
 			</SectionSurface>
 		</VStack>
 	);

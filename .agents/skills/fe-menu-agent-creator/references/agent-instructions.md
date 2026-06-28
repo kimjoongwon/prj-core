@@ -507,7 +507,14 @@ import { App, PageTabs } from "@cocrepo/ui";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <App header={<PageTabs tabs={userTabs} />} main={children} />
+    <App>
+      <App.Header>
+        <PageTabs tabs={userTabs} />
+      </App.Header>
+      <App.Body>
+        <App.Main>{children}</App.Main>
+      </App.Body>
+    </App>
   );
 }
 ```

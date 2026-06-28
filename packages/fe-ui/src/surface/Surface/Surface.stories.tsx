@@ -33,15 +33,15 @@ export const FeaturePanel: Story = {
 					</Button>
 				</div>
 				<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-					<div className="rounded-lg border border-border bg-background/60 p-4">
+					<div className="rounded-lg border border-border/70 bg-white p-4 dark:border-white/10 dark:bg-neutral-600">
 						<p className="text-xs text-muted">결제</p>
 						<p className="mt-2 text-xl font-semibold">128건</p>
 					</div>
-					<div className="rounded-lg border border-border bg-background/60 p-4">
+					<div className="rounded-lg border border-border/70 bg-white p-4 dark:border-white/10 dark:bg-neutral-600">
 						<p className="text-xs text-muted">매출</p>
 						<p className="mt-2 text-xl font-semibold">₩8,240,000</p>
 					</div>
-					<div className="rounded-lg border border-border bg-background/60 p-4">
+					<div className="rounded-lg border border-border/70 bg-white p-4 dark:border-white/10 dark:bg-neutral-600">
 						<p className="text-xs text-muted">환불</p>
 						<p className="mt-2 text-xl font-semibold">3건</p>
 					</div>
@@ -60,11 +60,13 @@ export const Variants: Story = {
 			</Surface>
 			<Surface variant="secondary">
 				<p className="text-sm font-semibold">secondary</p>
-				<p className="mt-1 text-sm text-muted">SectionSurface의 기본 variant</p>
+				<p className="mt-1 text-sm text-muted">
+					SectionSurface와 local Surface의 기본 variant
+				</p>
 			</Surface>
 			<Surface variant="tertiary">
 				<p className="text-sm font-semibold">tertiary</p>
-				<p className="mt-1 text-sm text-muted">Surface의 기본 variant</p>
+				<p className="mt-1 text-sm text-muted">더 낮은 보조 표면</p>
 			</Surface>
 			<Surface variant="transparent">
 				<p className="text-sm font-semibold">transparent</p>
@@ -76,7 +78,7 @@ export const Variants: Story = {
 
 export const TablePanel: Story = {
 	render: () => (
-		<Surface className="overflow-hidden p-0">
+		<Surface className="overflow-hidden">
 			<div className="flex items-center justify-between border-border border-b px-5 py-4">
 				<div>
 					<p className="text-sm font-semibold">최근 결제</p>

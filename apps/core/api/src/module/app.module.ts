@@ -12,6 +12,7 @@ import {
 } from "@cocrepo/be-common";
 // be-common imports
 import { AuthContext, SpaceContext } from "@cocrepo/context";
+import { SpacesRepository } from "@cocrepo/repository";
 import {
 	AuthCacheService,
 	I18nModule,
@@ -267,6 +268,7 @@ const devtoolsImports = enableNestDevtools
 		// Guards (setNestApp에서 순서대로 등록됨)
 		SpaceAccessGuard,
 		// Interceptors (setNestApp에서 순서대로 등록됨)
+		SpacesRepository,
 		SpaceScopeInterceptor,
 		DtoTransformInterceptor,
 		ResponseEntityInterceptor,

@@ -1,6 +1,6 @@
 "use client";
 
-import { PageTitleBar, SectionSurface, VStack } from "@cocrepo/ui";
+import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import { ArrowLeft, Edit, Save, ShieldCheck, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -142,12 +142,15 @@ export const RoleDetailScreen = observer(
 						title="역할 상세"
 						description="역할 정보를 불러오는 중입니다."
 					/>
-
 					<SectionSurface>
-						<div className="flex items-center justify-center gap-2 p-8">
-							<Spinner size="sm" />
-							<span className="text-muted">로딩 중...</span>
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex items-center justify-center gap-2 p-8">
+									<Spinner size="sm" />
+									<span className="text-muted">로딩 중...</span>
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -159,14 +162,17 @@ export const RoleDetailScreen = observer(
 						title="역할 상세"
 						description="역할을 찾을 수 없습니다."
 					/>
-
 					<SectionSurface>
-						<div className="flex flex-col items-center justify-center gap-4 p-8">
-							<p className="text-muted">역할을 찾을 수 없습니다.</p>
-							<Button variant="flat" onPress={onClickBackButton}>
-								목록으로
-							</Button>
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex flex-col items-center justify-center gap-4 p-8">
+									<p className="text-muted">역할을 찾을 수 없습니다.</p>
+									<Button variant="flat" onPress={onClickBackButton}>
+										목록으로
+									</Button>
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -209,186 +215,202 @@ export const RoleDetailScreen = observer(
 						</div>
 					}
 				/>
-
 				<SectionSurface>
-					<VStack gap="section">
-						<SectionSurface top={<PageTitleBar level={2} title="기본 정보" />}>
-							<div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-								<Info label="역할 ID" value={role.id} />
-								<Info label="역할 이름" value={role.name} />
-								<Info label="표시명" value={role.displayName || "-"} />
-								<Info
-									label="상태"
-									value={role.removedAt ? "삭제됨" : "사용 중"}
-								/>
-								<Info
-									label="시스템 역할"
-									value={role.isSystem ? "예" : "아니오"}
-								/>
-								<Info label="수정일" value={formatDate(role.updatedAt)} />
-							</div>
-						</SectionSurface>
+					<Section>
+						<Section.Body>
+							<VStack gap="section">
+								<Section>
+									<Section.Header>
+										<PageTitleBar level={2} title="기본 정보" />
+									</Section.Header>
+									<Section.Body>
+										<div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+											<Info label="역할 ID" value={role.id} />
+											<Info label="역할 이름" value={role.name} />
+											<Info label="표시명" value={role.displayName || "-"} />
+											<Info
+												label="상태"
+												value={role.removedAt ? "삭제됨" : "사용 중"}
+											/>
+											<Info
+												label="시스템 역할"
+												value={role.isSystem ? "예" : "아니오"}
+											/>
+											<Info label="수정일" value={formatDate(role.updatedAt)} />
+										</div>
+									</Section.Body>
+								</Section>
 
-						<SectionSurface
-							top={
-								<PageTitleBar
-									level={2}
-									title="정책 할당"
-									description="현재 Space의 RolePolicy를 관리합니다."
-									actions={
-										isEditingPolicies ? (
-											<div className="flex gap-2">
-												<Button
-													variant="flat"
-													onPress={onClickCancelEditPoliciesButton}
-												>
-													취소
-												</Button>
-												<Button
-													color="primary"
-													startContent={<Save className="h-4 w-4" />}
-													isDisabled={!hasChanges}
-													isLoading={isSavingPolicies}
-													onPress={onClickOpenSavePoliciesModal}
-												>
-													저장
-												</Button>
+								<Section>
+									<Section.Header>
+										<PageTitleBar
+											level={2}
+											title="정책 할당"
+											description="현재 Space의 RolePolicy를 관리합니다."
+											actions={
+												isEditingPolicies ? (
+													<div className="flex gap-2">
+														<Button
+															variant="flat"
+															onPress={onClickCancelEditPoliciesButton}
+														>
+															취소
+														</Button>
+														<Button
+															color="primary"
+															startContent={<Save className="h-4 w-4" />}
+															isDisabled={!hasChanges}
+															isLoading={isSavingPolicies}
+															onPress={onClickOpenSavePoliciesModal}
+														>
+															저장
+														</Button>
+													</div>
+												) : (
+													<Button
+														color="primary"
+														variant="flat"
+														startContent={<ShieldCheck className="h-4 w-4" />}
+														onPress={onClickEditPoliciesButton}
+													>
+														정책 편집
+													</Button>
+												)
+											}
+										/>
+									</Section.Header>
+									<Section.Body>
+										{isLoadingPolicies ? (
+											<div className="flex items-center justify-center gap-2 p-8">
+												<Spinner size="sm" />
+												<span className="text-muted">
+													정책을 불러오는 중...
+												</span>
 											</div>
 										) : (
-											<Button
-												color="primary"
-												variant="flat"
-												startContent={<ShieldCheck className="h-4 w-4" />}
-												onPress={onClickEditPoliciesButton}
-											>
-												정책 편집
-											</Button>
-										)
-									}
-								/>
-							}
-						>
-							{isLoadingPolicies ? (
-								<div className="flex items-center justify-center gap-2 p-8">
-									<Spinner size="sm" />
-									<span className="text-muted">정책을 불러오는 중...</span>
-								</div>
-							) : (
-								<div className="grid gap-3">
-									<div className="flex flex-wrap gap-2">
-										<Chip color="primary" variant="flat">
-											할당 {selectedPolicyIds.length}
-										</Chip>
-										{isEditingPolicies ? (
-											<Chip color="success" variant="flat">
-												추가 {addedCount}
-											</Chip>
-										) : null}
-										{isEditingPolicies ? (
-											<Chip color="warning" variant="flat">
-												해제 {removedCount}
-											</Chip>
-										) : null}
-									</div>
-									{policies.length > 0 ? (
-										policies.map((policy) => {
-											const isSelected = selectedSet.has(policy.id);
-											const assignment = selectedAssignmentMap.get(policy.id);
-											return (
-												<div
-													key={policy.id}
-													className="rounded-xl border border-border bg-background/60 p-4"
-												>
-													<div className="flex items-start justify-between gap-4">
-														<div className="min-w-0">
-															<div className="flex flex-wrap items-center gap-2">
-																<p className="font-semibold">
-																	{getPolicyLabel(policy)}
-																</p>
-																<Chip
-																	size="sm"
-																	color={isSelected ? "success" : "default"}
-																	variant="flat"
-																>
-																	{isSelected ? "할당됨" : "미할당"}
-																</Chip>
-																{assignment ? (
-																	<Chip
-																		size="sm"
-																		color={
-																			assignment.isActive
-																				? "primary"
-																				: "default"
-																		}
-																		variant="flat"
-																	>
-																		{assignment.isActive ? "활성" : "비활성"}
-																	</Chip>
-																) : null}
-																<Chip size="sm" variant="flat">
-																	{policy.isSystem ? "시스템" : "공간"}
-																</Chip>
-															</div>
-															<p className="mt-1 text-sm text-muted">
-																{policy.description || policy.name}
-															</p>
-															<p className="mt-2 text-xs text-muted">
-																우선순위 {assignment?.priority ?? 0} · Ability{" "}
-																{policy.abilityCount ?? 0}개
-															</p>
-															{isEditingPolicies && assignment ? (
-																<div className="mt-3 flex flex-wrap items-center gap-3">
-																	<Input
-																		className="w-32"
-																		label="우선순위"
-																		type="number"
-																		size="sm"
-																		value={`${assignment.priority}`}
-																		onValueChange={(value) =>
-																			onChangePolicyAssignmentPriority?.(
-																				policy.id,
-																				value,
-																			)
-																		}
-																	/>
-																	<Switch
-																		size="sm"
-																		isSelected={assignment.isActive}
-																		onValueChange={(value) =>
-																			onChangePolicyAssignmentActive?.(
-																				policy.id,
-																				value,
-																			)
-																		}
-																	>
-																		활성
-																	</Switch>
-																</div>
-															) : null}
-														</div>
-														{isEditingPolicies ? (
-															<Checkbox
-																isSelected={isSelected}
-																onValueChange={() =>
-																	onTogglePolicy?.(policy.id)
-																}
-															/>
-														) : null}
-													</div>
+											<div className="grid gap-3">
+												<div className="flex flex-wrap gap-2">
+													<Chip color="primary" variant="flat">
+														할당 {selectedPolicyIds.length}
+													</Chip>
+													{isEditingPolicies ? (
+														<Chip color="success" variant="flat">
+															추가 {addedCount}
+														</Chip>
+													) : null}
+													{isEditingPolicies ? (
+														<Chip color="warning" variant="flat">
+															해제 {removedCount}
+														</Chip>
+													) : null}
 												</div>
-											);
-										})
-									) : (
-										<div className="rounded-xl border border-border bg-background/60 p-6 text-center text-sm text-muted">
-											사용 가능한 정책이 없습니다.
-										</div>
-									)}
-								</div>
-							)}
-						</SectionSurface>
-					</VStack>
+												{policies.length > 0 ? (
+													policies.map((policy) => {
+														const isSelected = selectedSet.has(policy.id);
+														const assignment = selectedAssignmentMap.get(
+															policy.id,
+														);
+														return (
+															<div
+																key={policy.id}
+																className="rounded-xl border border-border bg-background/60 p-4"
+															>
+																<div className="flex items-start justify-between gap-4">
+																	<div className="min-w-0">
+																		<div className="flex flex-wrap items-center gap-2">
+																			<p className="font-semibold">
+																				{getPolicyLabel(policy)}
+																			</p>
+																			<Chip
+																				size="sm"
+																				color={
+																					isSelected ? "success" : "default"
+																				}
+																				variant="flat"
+																			>
+																				{isSelected ? "할당됨" : "미할당"}
+																			</Chip>
+																			{assignment ? (
+																				<Chip
+																					size="sm"
+																					color={
+																						assignment.isActive
+																							? "primary"
+																							: "default"
+																					}
+																					variant="flat"
+																				>
+																					{assignment.isActive
+																						? "활성"
+																						: "비활성"}
+																				</Chip>
+																			) : null}
+																			<Chip size="sm" variant="flat">
+																				{policy.isSystem ? "시스템" : "공간"}
+																			</Chip>
+																		</div>
+																		<p className="mt-1 text-sm text-muted">
+																			{policy.description || policy.name}
+																		</p>
+																		<p className="mt-2 text-xs text-muted">
+																			우선순위 {assignment?.priority ?? 0} ·
+																			Ability {policy.abilityCount ?? 0}개
+																		</p>
+																		{isEditingPolicies && assignment ? (
+																			<div className="mt-3 flex flex-wrap items-center gap-3">
+																				<Input
+																					className="w-32"
+																					label="우선순위"
+																					type="number"
+																					size="sm"
+																					value={`${assignment.priority}`}
+																					onValueChange={(value) =>
+																						onChangePolicyAssignmentPriority?.(
+																							policy.id,
+																							value,
+																						)
+																					}
+																				/>
+																				<Switch
+																					size="sm"
+																					isSelected={assignment.isActive}
+																					onValueChange={(value) =>
+																						onChangePolicyAssignmentActive?.(
+																							policy.id,
+																							value,
+																						)
+																					}
+																				>
+																					활성
+																				</Switch>
+																			</div>
+																		) : null}
+																	</div>
+																	{isEditingPolicies ? (
+																		<Checkbox
+																			isSelected={isSelected}
+																			onValueChange={() =>
+																				onTogglePolicy?.(policy.id)
+																			}
+																		/>
+																	) : null}
+																</div>
+															</div>
+														);
+													})
+												) : (
+													<div className="rounded-xl border border-border bg-background/60 p-6 text-center text-sm text-muted">
+														사용 가능한 정책이 없습니다.
+													</div>
+												)}
+											</div>
+										)}
+									</Section.Body>
+								</Section>
+							</VStack>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
-
 				<Modal state={deleteModalState}>
 					<Modal.Backdrop>
 						<Modal.Container>
@@ -411,7 +433,6 @@ export const RoleDetailScreen = observer(
 						</Modal.Container>
 					</Modal.Backdrop>
 				</Modal>
-
 				<Modal state={savePoliciesModalState}>
 					<Modal.Backdrop>
 						<Modal.Container>

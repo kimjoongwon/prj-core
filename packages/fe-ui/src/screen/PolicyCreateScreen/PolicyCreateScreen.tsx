@@ -1,6 +1,6 @@
 "use client";
 
-import { PageTitleBar, SectionSurface, VStack } from "@cocrepo/ui";
+import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
@@ -86,78 +86,88 @@ export const PolicyFormBody = observer(
 	}) => {
 		return (
 			<SectionSurface>
-				<VStack gap="section">
-					<SectionSurface top={<PageTitleBar level={2} title="기본 정보" />}>
-						<div className="grid gap-4 md:grid-cols-2">
-							<Input
-								label="정책 이름"
-								placeholder="예: USER_READ_POLICY"
-								value={form.name}
-								onValueChange={onChange.onChangeName}
-								isRequired
-							/>
-							<Input
-								label="표시명"
-								placeholder="예: 사용자 조회 정책"
-								value={form.displayName}
-								onValueChange={onChange.onChangeDisplayName}
-							/>
-							<TextArea
-								className="md:col-span-2"
-								label="설명"
-								placeholder="정책 설명을 입력하세요"
-								value={form.description}
-								onValueChange={onChange.onChangeDescription}
-								minRows={2}
-							/>
-							<Switch
-								isSelected={form.isSystem}
-								onValueChange={onChange.onChangeIsSystem}
-							>
-								시스템 정책
-							</Switch>
-						</div>
-					</SectionSurface>
-					<SectionSurface
-						top={
-							<PageTitleBar
-								level={2}
-								title="Ability 선택"
-								description="정책에 포함할 Ability를 선택합니다."
-							/>
-						}
-					>
-						<div className="grid gap-3">
-							{abilities.length > 0 ? (
-								abilities.map((ability) => (
-									<div
-										key={ability.id}
-										className="rounded-xl border border-border bg-background/60 p-4"
-									>
-										<div className="flex items-start justify-between gap-4">
-											<div>
-												<p className="font-semibold">{ability.label}</p>
-												<p className="mt-1 text-sm text-muted">
-													{ability.description || "설명 없음"}
-												</p>
-											</div>
-											<Checkbox
-												isSelected={selectedAbilityIds.has(ability.id)}
-												onValueChange={() =>
-													onChange.onToggleAbility(ability.id)
-												}
-											/>
-										</div>
+				<Section>
+					<Section.Body>
+						<VStack gap="section">
+							<Section>
+								<Section.Header>
+									<PageTitleBar level={2} title="기본 정보" />
+								</Section.Header>
+								<Section.Body>
+									<div className="grid gap-4 md:grid-cols-2">
+										<Input
+											label="정책 이름"
+											placeholder="예: USER_READ_POLICY"
+											value={form.name}
+											onValueChange={onChange.onChangeName}
+											isRequired
+										/>
+										<Input
+											label="표시명"
+											placeholder="예: 사용자 조회 정책"
+											value={form.displayName}
+											onValueChange={onChange.onChangeDisplayName}
+										/>
+										<TextArea
+											className="md:col-span-2"
+											label="설명"
+											placeholder="정책 설명을 입력하세요"
+											value={form.description}
+											onValueChange={onChange.onChangeDescription}
+											minRows={2}
+										/>
+										<Switch
+											isSelected={form.isSystem}
+											onValueChange={onChange.onChangeIsSystem}
+										>
+											시스템 정책
+										</Switch>
 									</div>
-								))
-							) : (
-								<div className="rounded-xl border border-border bg-background/60 p-6 text-center text-sm text-muted">
-									선택 가능한 Ability가 없습니다.
-								</div>
-							)}
-						</div>
-					</SectionSurface>
-				</VStack>
+								</Section.Body>
+							</Section>
+							<Section>
+								<Section.Header>
+									<PageTitleBar
+										level={2}
+										title="Ability 선택"
+										description="정책에 포함할 Ability를 선택합니다."
+									/>
+								</Section.Header>
+								<Section.Body>
+									<div className="grid gap-3">
+										{abilities.length > 0 ? (
+											abilities.map((ability) => (
+												<div
+													key={ability.id}
+													className="rounded-xl border border-border bg-background/60 p-4"
+												>
+													<div className="flex items-start justify-between gap-4">
+														<div>
+															<p className="font-semibold">{ability.label}</p>
+															<p className="mt-1 text-sm text-muted">
+																{ability.description || "설명 없음"}
+															</p>
+														</div>
+														<Checkbox
+															isSelected={selectedAbilityIds.has(ability.id)}
+															onValueChange={() =>
+																onChange.onToggleAbility(ability.id)
+															}
+														/>
+													</div>
+												</div>
+											))
+										) : (
+											<div className="rounded-xl border border-border bg-background/60 p-6 text-center text-sm text-muted">
+												선택 가능한 Ability가 없습니다.
+											</div>
+										)}
+									</div>
+								</Section.Body>
+							</Section>
+						</VStack>
+					</Section.Body>
+				</Section>
 			</SectionSurface>
 		);
 	},

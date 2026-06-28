@@ -11,6 +11,7 @@ import {
 	DataGrid,
 	DataGridStateModel,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 } from "@cocrepo/ui";
 import { Modal, useOverlayState } from "@heroui/react";
@@ -31,15 +32,19 @@ const leftInputs: InputConfig[] = [
 		placeholder: "Space 범위",
 		props: {
 			options: [
-				{ label: "현재 Space만", value: "CURRENT" },
-				{ label: "상위 Space 포함", value: "INCLUDE_ANCESTORS" },
+				{
+					label: "현재 Space만",
+					value: "CURRENT",
+				},
+				{
+					label: "상위 Space 포함",
+					value: "INCLUDE_ANCESTORS",
+				},
 			],
 		},
 	},
 ];
-
 export const adminRoutinesPageQueryInputs = [...leftInputs];
-
 export interface RoutineListScreenQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
@@ -47,7 +52,6 @@ export interface RoutineListScreenQueryStates extends DataGridQueryStates {
 	spaceScope: string;
 }
 export type RoutineListScreenSetQueryStates = DataGridSetQueryStates;
-
 export interface RoutineListScreenProps {
 	routines?: RoutineDto[];
 	totalCount: number;
@@ -59,7 +63,6 @@ export interface RoutineListScreenProps {
 	onClickRoutineName: (routineId: string) => void;
 	onDeleteRoutine: (routineId: string) => Promise<void>;
 }
-
 function RoutinesScreenFallback() {
 	return (
 		<div className="space-y-5">
@@ -68,12 +71,13 @@ function RoutinesScreenFallback() {
 				description="운동 루틴(커리큘럼)을 관리합니다."
 			/>
 			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface/70">
-				{null}
+				<Section>
+					<Section.Body>{null}</Section.Body>
+				</Section>
 			</SectionSurface>
 		</div>
 	);
 }
-
 export const RoutineListScreen = observer(
 	({
 		routines,
@@ -87,9 +91,12 @@ export const RoutineListScreen = observer(
 		onDeleteRoutine,
 	}: RoutineListScreenProps) => {
 		const gridState = useLocalObservable(
-			() => new DataGridStateModel({ queryStates, setQueryStates }),
+			() =>
+				new DataGridStateModel({
+					queryStates,
+					setQueryStates,
+				}),
 		);
-
 		useEffect(() => {
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
@@ -110,11 +117,9 @@ export const RoutineListScreen = observer(
 			onClickRoutineName,
 			onClickDeleteButton,
 		});
-
 		if (isLoading) {
 			return <RoutinesScreenFallback />;
 		}
-
 		return (
 			<div className="space-y-5">
 				<PageTitleBar
@@ -130,18 +135,22 @@ export const RoutineListScreen = observer(
 						</Button>
 					}
 				/>
-				<SectionSurface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
-					<DataGrid
-						config={{
-							entity: "Routine",
-							columns,
-							leftInputs,
-							emptyMessage: "등록된 루틴이 없습니다.",
-						}}
-						rows={routineRows}
-						totalCount={totalCount}
-						state={gridState}
-					/>
+				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+					<Section overflow="hidden" inset="none">
+						<Section.Body>
+							<DataGrid
+								config={{
+									entity: "Routine",
+									columns,
+									leftInputs,
+									emptyMessage: "등록된 루틴이 없습니다.",
+								}}
+								rows={routineRows}
+								totalCount={totalCount}
+								state={gridState}
+							/>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 				<Modal state={deleteModal}>
 					<Modal.Backdrop>

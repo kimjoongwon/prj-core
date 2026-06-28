@@ -2,8 +2,8 @@
 
 import { observer } from "mobx-react-lite";
 import { Chip } from "../../data-display/Chip/Chip";
-import { CourseTablePanel } from "../CourseTablePanel";
 import type { CoursePassRow } from "../Course.types";
+import { CourseTablePanel } from "../CourseTablePanel";
 
 export interface CoursePassTableProps {
 	passes: CoursePassRow[];

@@ -244,6 +244,7 @@ export type {
 	PagePaginatedResponse,
 	PagePaginationMeta,
 } from "./pagination";
+export { SpaceResourceScope } from "./space-resource-scope";
 export { SpaceScope } from "./space-scope";
 // ============================================
 // Store 계약 타입
@@ -260,6 +261,20 @@ export type {
 	NavigationStoreOptions,
 	NavigatorLike,
 } from "./store-contracts";
+// ============================================
+// Storybook 기획 시나리오 타입
+// ============================================
+export type {
+	PlanningAcceptance,
+	PlanningApiMode,
+	PlanningApiRequest,
+	PlanningApiScenario,
+	PlanningContext,
+	PlanningRealm,
+	PlanningRuntime,
+	PlanningScenario,
+	PlanningStatus,
+} from "./storybook-planning";
 // ============================================
 // 테이블 관련 타입
 // ============================================

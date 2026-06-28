@@ -9,78 +9,60 @@ const meta = {
 		docs: {
 			description: {
 				component:
-					"Root app layout primitive입니다. header/footer/leftAside/rightAside/main 구조 슬롯을 소유합니다.",
+					"Root app layout primitive입니다. Header, Body, Aside, Main, Footer compound 슬롯을 소유합니다.",
 			},
 		},
 	},
 	tags: ["autodocs"],
-	argTypes: {
-		main: {
-			table: {
-				disable: true,
-			},
-			control: false,
-		},
-		header: {
-			table: {
-				disable: true,
-			},
-			control: false,
-		},
-		leftAside: {
-			table: {
-				disable: true,
-			},
-			control: false,
-		},
-		rightAside: {
-			table: {
-				disable: true,
-			},
-			control: false,
-		},
-	},
 } satisfies Meta<typeof App>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Basic: Story = {
-	args: {
-		main: (
-			<div className="rounded-md border border-divider bg-content1 p-6">
-				App main
-			</div>
-		),
-	},
+	render: () => (
+		<App>
+			<App.Body>
+				<App.Main>
+					<div className="rounded-lg border border-border bg-surface p-6">
+						App main
+					</div>
+				</App.Main>
+			</App.Body>
+		</App>
+	),
 };
 
 export const WithSlots: Story = {
-	args: {
-		header: (
-			<div className="rounded-md border border-divider bg-content1 p-4">
-				Header slot
-			</div>
-		),
-		leftAside: (
-			<div className="w-40 rounded-md border border-divider bg-content1 p-4">
-				Left aside
-			</div>
-		),
-		rightAside: (
-			<div className="w-40 rounded-md border border-divider bg-content1 p-4">
-				Right aside
-			</div>
-		),
-		main: (
-			<div className="min-h-48 rounded-md border border-divider bg-content1 p-6">
-				App main
-			</div>
-		),
-		footer: (
-			<div className="rounded-md border border-divider bg-content1 p-4">
-				Footer slot
-			</div>
-		),
-	},
+	render: () => (
+		<App>
+			<App.Header>
+				<div className="border-border border-b bg-surface px-4 py-3">
+					Header slot
+				</div>
+			</App.Header>
+			<App.Body>
+				<App.LeftAside>
+					<div className="h-full border-border border-r bg-surface p-4">
+						Left aside
+					</div>
+				</App.LeftAside>
+				<App.Main>
+					<div className="min-h-48 rounded-lg border border-border bg-surface p-6">
+						App main
+					</div>
+				</App.Main>
+				<App.RightAside>
+					<div className="h-full border-border border-l bg-surface p-4">
+						Right aside
+					</div>
+				</App.RightAside>
+			</App.Body>
+			<App.Footer>
+				<div className="border-border border-t bg-surface px-4 py-3">
+					Footer slot
+				</div>
+			</App.Footer>
+		</App>
+	),
 };

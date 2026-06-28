@@ -11,6 +11,7 @@ import {
 	DataGrid,
 	DataGridStateModel,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	useT,
 } from "@cocrepo/ui";
@@ -32,15 +33,19 @@ const leftInputs: InputConfig[] = [
 		placeholder: "Space 범위",
 		props: {
 			options: [
-				{ label: "현재 Space만", value: "CURRENT" },
-				{ label: "상위 Space 포함", value: "INCLUDE_ANCESTORS" },
+				{
+					label: "현재 Space만",
+					value: "CURRENT",
+				},
+				{
+					label: "상위 Space 포함",
+					value: "INCLUDE_ANCESTORS",
+				},
 			],
 		},
 	},
 ];
-
 export const adminTasksPageQueryInputs = [...leftInputs];
-
 export interface TaskListScreenQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
@@ -48,7 +53,6 @@ export interface TaskListScreenQueryStates extends DataGridQueryStates {
 	spaceScope: string;
 }
 export type TaskListScreenSetQueryStates = DataGridSetQueryStates;
-
 export interface TaskListScreenProps {
 	tasks?: TaskDto[];
 	totalCount: number;
@@ -60,7 +64,6 @@ export interface TaskListScreenProps {
 	onClickTaskName: (taskId: string) => void;
 	onDeleteTask: (taskId: string) => Promise<void>;
 }
-
 function TasksScreenFallback() {
 	return (
 		<div className="space-y-5">
@@ -69,12 +72,13 @@ function TasksScreenFallback() {
 				description="시스템에 등록된 태스크와 운동 detail을 관리합니다."
 			/>
 			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface/70">
-				{null}
+				<Section>
+					<Section.Body>{null}</Section.Body>
+				</Section>
 			</SectionSurface>
 		</div>
 	);
 }
-
 export const TaskListScreen = observer(
 	({
 		tasks,
@@ -89,9 +93,12 @@ export const TaskListScreen = observer(
 	}: TaskListScreenProps) => {
 		const t = useT();
 		const gridState = useLocalObservable(
-			() => new DataGridStateModel({ queryStates, setQueryStates }),
+			() =>
+				new DataGridStateModel({
+					queryStates,
+					setQueryStates,
+				}),
 		);
-
 		useEffect(() => {
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
@@ -110,11 +117,9 @@ export const TaskListScreen = observer(
 			onClickTaskName,
 			onClickDeleteButton,
 		});
-
 		if (isLoading) {
 			return <TasksScreenFallback />;
 		}
-
 		return (
 			<div className="space-y-5">
 				<PageTitleBar
@@ -130,18 +135,22 @@ export const TaskListScreen = observer(
 						</Button>
 					}
 				/>
-				<SectionSurface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
-					<DataGrid
-						config={{
-							entity: "Task",
-							columns,
-							leftInputs,
-							emptyMessage: "등록된 태스크가 없습니다.",
-						}}
-						rows={taskRows}
-						totalCount={totalCount}
-						state={gridState}
-					/>
+				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+					<Section overflow="hidden" inset="none">
+						<Section.Body>
+							<DataGrid
+								config={{
+									entity: "Task",
+									columns,
+									leftInputs,
+									emptyMessage: "등록된 태스크가 없습니다.",
+								}}
+								rows={taskRows}
+								totalCount={totalCount}
+								state={gridState}
+							/>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 				<Modal state={deleteModal}>
 					<Modal.Backdrop>

@@ -1,6 +1,6 @@
 "use client";
 
-import { PageTitleBar, SectionSurface, VStack } from "@cocrepo/ui";
+import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { Spinner } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -43,12 +43,15 @@ export const UserDetailScreen = observer(
 						title="회원 상세"
 						description="회원 정보를 불러오는 중입니다."
 					/>
-
 					<SectionSurface>
-						<div className="flex items-center justify-center gap-2 p-8">
-							<Spinner size="sm" />
-							<span className="text-muted">로딩 중...</span>
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex items-center justify-center gap-2 p-8">
+									<Spinner size="sm" />
+									<span className="text-muted">로딩 중...</span>
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -68,25 +71,34 @@ export const UserDetailScreen = observer(
 						</Button>
 					}
 				/>
-
-				<SectionSurface top={<PageTitleBar level={2} title="기본 정보" />}>
-					<div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-						<Info label="회원 ID" value={user?.id || userId} />
-						<Info label="이름" value={user?.name || "-"} />
-						<Info label="이메일" value={user?.email || "-"} />
-						<Info label="연락처" value={user?.phone || "-"} />
-						<Info
-							label="상태"
-							value={
-								user?.removedAt
-									? "삭제됨"
-									: user?.isActive === false
-										? "비활성"
-										: "사용 중"
-							}
-						/>
-						<Info label="마지막 로그인" value={formatDate(user?.lastLoginAt)} />
-					</div>
+				<SectionSurface>
+					<Section>
+						<Section.Header>
+							<PageTitleBar level={2} title="기본 정보" />
+						</Section.Header>
+						<Section.Body>
+							<div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+								<Info label="회원 ID" value={user?.id || userId} />
+								<Info label="이름" value={user?.name || "-"} />
+								<Info label="이메일" value={user?.email || "-"} />
+								<Info label="연락처" value={user?.phone || "-"} />
+								<Info
+									label="상태"
+									value={
+										user?.removedAt
+											? "삭제됨"
+											: user?.isActive === false
+												? "비활성"
+												: "사용 중"
+									}
+								/>
+								<Info
+									label="마지막 로그인"
+									value={formatDate(user?.lastLoginAt)}
+								/>
+							</div>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</VStack>
 		);

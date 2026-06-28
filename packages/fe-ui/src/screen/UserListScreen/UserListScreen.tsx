@@ -11,6 +11,7 @@ import {
 	DataGrid,
 	DataGridStateModel,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	StatsCard,
 	VStack,
@@ -21,19 +22,16 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import { type ComponentType, useEffect } from "react";
 import { Chip } from "../../data-display/Chip/Chip";
 import { Input } from "../../input/Input/Input";
-
 export interface UserListScreenStats {
 	total: number;
 	active: number;
 	inactive: number;
 }
-
 export interface UserListScreenQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
 }
 export type UserListScreenSetQueryStates = DataGridSetQueryStates;
-
 export interface UserListScreenProps {
 	users?: UserDto[];
 	totalCount: number;
@@ -45,10 +43,8 @@ export interface UserListScreenProps {
 	queryStates: UserListScreenQueryStates;
 	setQueryStates: UserListScreenSetQueryStates;
 }
-
 const SEARCH_PLACEHOLDER = "이름, 이메일, 전화번호로 검색...";
 const userListTableColumns = buildUserListTableColumns<UserDto>();
-
 function UsersDirectoryHeader({ totalCount }: { totalCount: number }) {
 	return (
 		<div className="mb-5 flex flex-col gap-3 border-b border-border/80 pb-4 md:flex-row md:items-end md:justify-between">
@@ -70,7 +66,6 @@ function UsersDirectoryHeader({ totalCount }: { totalCount: number }) {
 		</div>
 	);
 }
-
 const UsersScreenFallback = observer(() => {
 	return (
 		<div className="flex min-h-80 items-center justify-center">
@@ -78,7 +73,6 @@ const UsersScreenFallback = observer(() => {
 		</div>
 	);
 });
-
 export const UserListScreen = observer(
 	({
 		users,
@@ -92,9 +86,12 @@ export const UserListScreen = observer(
 		setQueryStates,
 	}: UserListScreenProps) => {
 		const gridState = useLocalObservable(
-			() => new DataGridStateModel({ queryStates, setQueryStates }),
+			() =>
+				new DataGridStateModel({
+					queryStates,
+					setQueryStates,
+				}),
 		);
-
 		useEffect(() => {
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
@@ -102,7 +99,6 @@ export const UserListScreen = observer(
 		if (isLoading && totalCount === 0 && userRows.length === 0) {
 			return <UsersScreenFallback />;
 		}
-
 		const leftInputs: InputConfig[] = [
 			{
 				type: "custom",
@@ -122,7 +118,6 @@ export const UserListScreen = observer(
 				},
 			},
 		];
-
 		return (
 			<VStack gap="section" fullWidth>
 				<PageTitleBar
@@ -157,23 +152,26 @@ export const UserListScreen = observer(
 						/>
 					</div>
 				) : null}
-				<SectionSurface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
-					<UsersDirectoryHeader totalCount={totalCount} />
-					<DataGrid
-						config={{
-							entity: "User",
-							columns: userListTableColumns,
-							leftInputs,
-							emptyMessage: "조회된 이용자가 없습니다.",
-						}}
-						rows={userRows}
-						totalCount={totalCount}
-						state={gridState}
-					/>
+				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+					<Section overflow="hidden">
+						<Section.Body>
+							<UsersDirectoryHeader totalCount={totalCount} />
+							<DataGrid
+								config={{
+									entity: "User",
+									columns: userListTableColumns,
+									leftInputs,
+									emptyMessage: "조회된 이용자가 없습니다.",
+								}}
+								rows={userRows}
+								totalCount={totalCount}
+								state={gridState}
+							/>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</VStack>
 		);
 	},
 );
-
 UserListScreen.displayName = "UserListScreen";

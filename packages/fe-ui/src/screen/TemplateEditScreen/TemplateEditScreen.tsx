@@ -2,6 +2,7 @@
 
 import {
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	TemplateForm,
 	type TemplateFormData,
@@ -42,12 +43,15 @@ export const TemplateEditScreen = observer(
 			return (
 				<VStack gap="section" fullWidth>
 					<PageTitleBar title="템플릿 수정" description="로딩 중..." />
-
 					<SectionSurface>
-						<div className="flex items-center justify-center gap-2 p-8">
-							<Spinner size="sm" />
-							<span className="text-muted">로딩 중...</span>
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex items-center justify-center gap-2 p-8">
+									<Spinner size="sm" />
+									<span className="text-muted">로딩 중...</span>
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -59,14 +63,17 @@ export const TemplateEditScreen = observer(
 						title="템플릿 수정"
 						description="템플릿을 찾을 수 없습니다."
 					/>
-
 					<SectionSurface>
-						<div className="flex flex-col items-center justify-center gap-4 p-8">
-							<p className="text-muted">템플릿을 찾을 수 없습니다.</p>
-							<Button variant="flat" onPress={onClickCancelButton}>
-								목록으로
-							</Button>
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex flex-col items-center justify-center gap-4 p-8">
+									<p className="text-muted">템플릿을 찾을 수 없습니다.</p>
+									<Button variant="flat" onPress={onClickCancelButton}>
+										목록으로
+									</Button>
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -81,19 +88,22 @@ export const TemplateEditScreen = observer(
 							: "템플릿을 수정합니다."
 					}
 				/>
-
 				<SectionSurface>
-					<TemplateForm
-						mode="edit"
-						formData={formData}
-						variables={variables}
-						onFormDataChange={onFormDataChange}
-						onVariablesChange={onVariablesChange}
-						onSubmit={onSubmitForm}
-						onCancel={onClickCancelButton}
-						isSubmitting={isSubmitting}
-						errors={errors}
-					/>
+					<Section>
+						<Section.Body>
+							<TemplateForm
+								mode="edit"
+								formData={formData}
+								variables={variables}
+								onFormDataChange={onFormDataChange}
+								onVariablesChange={onVariablesChange}
+								onSubmit={onSubmitForm}
+								onCancel={onClickCancelButton}
+								isSubmitting={isSubmitting}
+								errors={errors}
+							/>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</VStack>
 		);

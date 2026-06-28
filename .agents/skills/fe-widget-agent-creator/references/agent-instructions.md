@@ -345,7 +345,7 @@ SpaceDropdown                 → SpaceSelector (PersistStore 연결)
 - **data-display**: Avatar, Chip, Icon, Text, User 등
 - **inputs**: Button, 입력, Checkbox, Select 등
 - **피드백**: Message, Skeleton, Placeholder 등
-- **structure/rhythm**: Widget 내부는 `div` + Tailwind flex/grid, route 구조는 `Page`, screen surface/rhythm은 `ScreenSurface`/`SectionSurface`/`VStack` 계층이 소유
+- **structure/rhythm**: Widget 내부는 `div` + Tailwind flex/grid, route 구조는 `App`/`Page`, screen surface/rhythm은 `ScreenSurface`/`PageSurface` + `SectionSurface` + `Section` + `VStack` 계층이 소유
 
 ### memo 사용 규칙
 

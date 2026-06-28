@@ -5,6 +5,7 @@ import {
 	ContentLanguageNotice,
 	Input,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	useT,
 	VStack,
@@ -90,12 +91,15 @@ export const RoutineEditScreen = observer(
 			return (
 				<VStack gap="section" fullWidth>
 					<PageTitleBar title="루틴 수정" description="로딩 중..." />
-
 					<SectionSurface>
-						<div className="flex items-center justify-center gap-2 p-8">
-							<Spinner size="sm" />
-							<span className="text-muted">{t("로딩 중...")}</span>
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex items-center justify-center gap-2 p-8">
+									<Spinner size="sm" />
+									<span className="text-muted">{t("로딩 중...")}</span>
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -107,14 +111,17 @@ export const RoutineEditScreen = observer(
 						title="루틴 수정"
 						description="루틴을 찾을 수 없습니다."
 					/>
-
 					<SectionSurface>
-						<div className="flex flex-col items-center justify-center gap-4 p-8">
-							<p className="text-muted">{t("루틴을 찾을 수 없습니다.")}</p>
-							<Button variant="flat" onPress={onClickCancelButton}>
-								목록으로
-							</Button>
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex flex-col items-center justify-center gap-4 p-8">
+									<p className="text-muted">{t("루틴을 찾을 수 없습니다.")}</p>
+									<Button variant="flat" onPress={onClickCancelButton}>
+										목록으로
+									</Button>
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -152,47 +159,55 @@ export const RoutineEditScreen = observer(
 					}
 					actions={pageActions}
 				/>
-
 				<SectionSurface>
-					<SectionSurface top={<PageTitleBar level={2} title="기본 정보" />}>
-						<div className="flex flex-col gap-4">
-							<ContentLanguageNotice
-								contentLanguageCode={contentLanguageCode}
+					<Section>
+						<Section.Body>
+							<Section>
+								<Section.Header>
+									<PageTitleBar level={2} title="기본 정보" />
+								</Section.Header>
+								<Section.Body>
+									<div className="flex flex-col gap-4">
+										<ContentLanguageNotice
+											contentLanguageCode={contentLanguageCode}
+										/>
+										<Input
+											label="루틴 이름"
+											placeholder="예: 풀바디 루틴 A"
+											value={name}
+											onValueChange={onChangeNameInput}
+											isRequired
+											isInvalid={Boolean(nameError)}
+											errorMessage={nameError}
+											maxLength={100}
+										/>
+										<Input
+											label="단축 라벨"
+											placeholder="예: FULL-A"
+											value={label}
+											onValueChange={onChangeLabelInput}
+											isRequired
+											isInvalid={Boolean(labelError)}
+											errorMessage={labelError}
+											maxLength={50}
+										/>
+									</div>
+								</Section.Body>
+							</Section>
+							<RoutineActivitySection
+								exerciseQuery={exerciseQuery}
+								candidateTasks={candidateTasks}
+								activities={activities}
+								activitiesError={activitiesError}
+								isTasksLoading={isTasksLoading}
+								onChangeExerciseQueryInput={onChangeExerciseQueryInput}
+								onClickAddActivityButton={onClickAddActivityButton}
+								onChangeActivityInput={onChangeActivityInput}
+								onClickRemoveActivityButton={onClickRemoveActivityButton}
+								onReorderActivities={onReorderActivities}
 							/>
-							<Input
-								label="루틴 이름"
-								placeholder="예: 풀바디 루틴 A"
-								value={name}
-								onValueChange={onChangeNameInput}
-								isRequired
-								isInvalid={Boolean(nameError)}
-								errorMessage={nameError}
-								maxLength={100}
-							/>
-							<Input
-								label="단축 라벨"
-								placeholder="예: FULL-A"
-								value={label}
-								onValueChange={onChangeLabelInput}
-								isRequired
-								isInvalid={Boolean(labelError)}
-								errorMessage={labelError}
-								maxLength={50}
-							/>
-						</div>
-					</SectionSurface>
-					<RoutineActivitySection
-						exerciseQuery={exerciseQuery}
-						candidateTasks={candidateTasks}
-						activities={activities}
-						activitiesError={activitiesError}
-						isTasksLoading={isTasksLoading}
-						onChangeExerciseQueryInput={onChangeExerciseQueryInput}
-						onClickAddActivityButton={onClickAddActivityButton}
-						onChangeActivityInput={onChangeActivityInput}
-						onClickRemoveActivityButton={onClickRemoveActivityButton}
-						onReorderActivities={onReorderActivities}
-					/>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 				<Modal state={emptyActivitiesWarningState}>
 					<Modal.Backdrop>

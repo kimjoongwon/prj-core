@@ -3,6 +3,7 @@
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";
+import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
 import { PageTitleBar } from "../../widget";
@@ -21,12 +22,15 @@ export const SessionCheckScreen = observer(
 		return (
 			<VStack gap="section" fullWidth>
 				<PageTitleBar title={title} description={description} />
-
 				<SectionSurface>
-					<div className="flex min-h-[320px] flex-col items-center justify-center gap-4 text-center">
-						<Spinner size="lg" />
-						<p className="text-sm text-muted">{t(message)}</p>
-					</div>
+					<Section>
+						<Section.Body>
+							<div className="flex min-h-[320px] flex-col items-center justify-center gap-4 text-center">
+								<Spinner size="lg" />
+								<p className="text-sm text-muted">{t(message)}</p>
+							</div>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</VStack>
 		);

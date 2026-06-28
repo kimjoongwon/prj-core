@@ -1,6 +1,7 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { PUBLIC_ROUTE_KEY, SKIP_SPACE_CHECK_KEY } from "@cocrepo/decorator";
-import type { ContextTenantSnapshot } from "@cocrepo/type";
+import { SpacesRepository } from "@cocrepo/repository";
+import { type ContextTenantSnapshot, SpaceResourceScope } from "@cocrepo/type";
 import {
 	BadRequestException,
 	type CallHandler,
@@ -12,29 +13,32 @@ import {
 import { Reflector } from "@nestjs/core";
 import { ClsService } from "nestjs-cls";
 import type { Observable } from "rxjs";
-import {
-	canAccessAllSpaces,
-	resolveTenantSpaceId,
-} from "../util/permission.util";
+import { resolveTenantSpaceId } from "../util/permission.util";
+import { SPACE_SCOPE_KEY } from "./space-scope.decorator";
 
 /**
  * Space 스코프 인터셉터
  *
  * RequestContextMiddleware 이후에 실행되며,
- * 현재 선택된 Tenant 역할과 x-tenant-id 헤더를 기반으로
+ * 현재 선택된 Tenant의 Space와 Controller 데코레이터를 기반으로
  * EFFECTIVE_SPACE_IDS를 CLS에 저장합니다.
  *
- * - 현재 tenant role이 PLATFORM_ADMIN → undefined (전체 조회)
- * - 그 외 → 현재 tenant의 Space 1개만
+ * - 기본값 → 현재 Space + 하위 Space
+ * - @WithAncestorSpaces → 현재 Space + 상위 Space
+ * - @WithSpaceTree → 현재 Space + 상위/하위 Space
  */
 @Injectable()
 export class SpaceScopeInterceptor implements NestInterceptor {
 	constructor(
 		private readonly cls: ClsService,
 		private readonly reflector: Reflector,
+		private readonly spacesRepository: SpacesRepository,
 	) {}
 
-	intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
+	async intercept(
+		context: ExecutionContext,
+		next: CallHandler,
+	): Promise<Observable<unknown>> {
 		const tenant = this.cls.get<ContextTenantSnapshot>(CONTEXT_KEYS.TENANT);
 		const tenantId = this.cls.get<string>(CONTEXT_KEYS.TENANT_ID);
 		const spaceId = this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
@@ -58,20 +62,34 @@ export class SpaceScopeInterceptor implements NestInterceptor {
 			throw new ForbiddenException("해당 Tenant에 대한 접근 권한이 없습니다.");
 		}
 
-		if (tenant && canAccessAllSpaces(tenant)) {
-			this.cls.set(CONTEXT_KEYS.EFFECTIVE_SPACE_IDS, undefined);
-			return next.handle();
-		}
-
-		// 현재 tenant role이 PLATFORM_ADMIN이 아니면 Tenant에서 파생한 Space만 사용합니다.
 		const effectiveSpaceId = tenant
 			? (resolveTenantSpaceId(tenant) ?? spaceId)
-			: undefined;
+			: spaceId;
+		const resourceScope = this.resolveResourceScope(context);
+		const effectiveSpaceIds = effectiveSpaceId
+			? await this.spacesRepository.findSpaceIdsByCategoryHierarchy(
+					effectiveSpaceId,
+					resourceScope,
+				)
+			: [];
+
 		this.cls.set(
 			CONTEXT_KEYS.EFFECTIVE_SPACE_IDS,
-			effectiveSpaceId ? [effectiveSpaceId] : [],
+			effectiveSpaceIds.length > 0 ? effectiveSpaceIds : [],
 		);
 
 		return next.handle();
+	}
+
+	private resolveResourceScope(context: ExecutionContext): SpaceResourceScope {
+		const configuredScope =
+			this.reflector.getAllAndOverride<SpaceResourceScope>(SPACE_SCOPE_KEY, [
+				context.getHandler(),
+				context.getClass(),
+			]);
+
+		return Object.values(SpaceResourceScope).includes(configuredScope)
+			? configuredScope
+			: SpaceResourceScope.WITH_DESCENDANTS;
 	}
 }

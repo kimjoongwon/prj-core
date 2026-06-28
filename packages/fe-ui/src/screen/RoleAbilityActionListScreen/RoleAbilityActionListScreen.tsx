@@ -1,6 +1,6 @@
 "use client";
 
-import { PageTitleBar, SectionSurface, VStack } from "@cocrepo/ui";
+import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
@@ -29,14 +29,17 @@ export const RoleAbilityActionListScreen = observer(
 						</Button>
 					}
 				/>
-
 				<SectionSurface>
-					<p className="text-muted">
-						권한 ID: <code className="font-mono">{abilityId}</code>
-					</p>
-					<p className="mt-4 text-muted">
-						Action 관리 기능은 추후 구현 예정입니다.
-					</p>
+					<Section>
+						<Section.Body>
+							<p className="text-muted">
+								권한 ID: <code className="font-mono">{abilityId}</code>
+							</p>
+							<p className="mt-4 text-muted">
+								Action 관리 기능은 추후 구현 예정입니다.
+							</p>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</VStack>
 		);

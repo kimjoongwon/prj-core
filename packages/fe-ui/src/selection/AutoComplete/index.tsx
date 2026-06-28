@@ -9,7 +9,9 @@ import {
 	type AutoCompleteProps as BaseAutoCompleteProps,
 } from "./AutoComplete";
 
-type AutoCompleteItem = NonNullable<BaseAutoCompleteProps["defaultItems"]>[number];
+type AutoCompleteItem = NonNullable<
+	BaseAutoCompleteProps["defaultItems"]
+>[number];
 type AutoCompleteFieldValue = AutoCompleteItem | string | number | null;
 
 export interface AutoCompleteProps<T>
@@ -21,8 +23,9 @@ export const AutoComplete = observer(
 		const { defaultItems = [], state, path, ...rest } = props;
 
 		const value: AutoCompleteFieldValue = defaultItems
-			? ([...defaultItems].find((item) => item.key === tools.get(state, path)) ??
-				"")
+			? ([...defaultItems].find(
+					(item) => item.key === tools.get(state, path),
+				) ?? "")
 			: "";
 
 		const formField = useFormField<T, AutoCompleteFieldValue>({

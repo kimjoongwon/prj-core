@@ -1,4 +1,6 @@
 import { Space } from "@cocrepo/entity";
+import { CategoryTypes } from "@cocrepo/prisma";
+import { SpaceResourceScope } from "@cocrepo/type";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { SpacesRepository } from "../src/spaces.repository";
@@ -31,7 +33,11 @@ describe("SpacesRepository", () => {
 				upsert: jest.Mock;
 			};
 			spaceClassification: {
+				findFirst: jest.Mock;
 				findUnique: jest.Mock;
+				findMany: jest.Mock;
+			};
+			category: {
 				findMany: jest.Mock;
 			};
 		};
@@ -98,7 +104,11 @@ describe("SpacesRepository", () => {
 					upsert: jest.fn(),
 				},
 				spaceClassification: {
+					findFirst: jest.fn(),
 					findUnique: jest.fn(),
+					findMany: jest.fn(),
+				},
+				category: {
 					findMany: jest.fn(),
 				},
 			},
@@ -306,6 +316,174 @@ describe("SpacesRepository", () => {
 			});
 			expect(result).toBeInstanceOf(Space);
 			expect(result.removedAt).toBeDefined();
+		});
+	});
+
+	describe("findSpaceIdsByCategoryHierarchy", () => {
+		it("ROOT space는 자신과 모든 하위 category space를 반환해야 한다", async () => {
+			// Given
+			mockTxHost.tx.spaceClassification.findFirst.mockResolvedValue({
+				categoryId: "category-root",
+			});
+			mockTxHost.tx.category.findMany.mockResolvedValue([
+				{ id: "category-root", parentId: null },
+				{ id: "category-branch", parentId: "category-root" },
+				{ id: "category-leaf", parentId: "category-branch" },
+			]);
+			mockTxHost.tx.spaceClassification.findMany.mockResolvedValue([
+				{ spaceId: "space-root" },
+				{ spaceId: "space-branch" },
+				{ spaceId: "space-leaf" },
+				{ spaceId: "space-branch" },
+			]);
+
+			// When
+			const result =
+				await repository.findSpaceIdsByCategoryHierarchy("space-root");
+
+			// Then
+			expect(mockTxHost.tx.spaceClassification.findFirst).toHaveBeenCalledWith({
+				where: {
+					spaceId: "space-root",
+					removedAt: null,
+					space: { removedAt: null },
+					category: {
+						type: CategoryTypes.Space,
+						removedAt: null,
+					},
+				},
+				select: { categoryId: true },
+			});
+			expect(mockTxHost.tx.category.findMany).toHaveBeenCalledWith({
+				where: {
+					type: CategoryTypes.Space,
+					removedAt: null,
+				},
+				select: {
+					id: true,
+					parentId: true,
+				},
+			});
+			expect(mockTxHost.tx.spaceClassification.findMany).toHaveBeenCalledWith({
+				where: {
+					removedAt: null,
+					categoryId: {
+						in: ["category-root", "category-branch", "category-leaf"],
+					},
+					space: { removedAt: null },
+				},
+				select: { spaceId: true },
+			});
+			expect(result).toEqual(["space-root", "space-branch", "space-leaf"]);
+		});
+
+		it("BRANCH space의 기본 하위 scope는 자기 자신만 반환해야 한다", async () => {
+			// Given
+			mockTxHost.tx.spaceClassification.findFirst.mockResolvedValue({
+				categoryId: "category-branch",
+			});
+			mockTxHost.tx.category.findMany.mockResolvedValue([
+				{ id: "category-root", parentId: null },
+				{ id: "category-branch", parentId: "category-root" },
+			]);
+			mockTxHost.tx.spaceClassification.findMany.mockResolvedValue([
+				{ spaceId: "space-branch" },
+			]);
+
+			// When
+			const result =
+				await repository.findSpaceIdsByCategoryHierarchy("space-branch");
+
+			// Then
+			expect(mockTxHost.tx.spaceClassification.findMany).toHaveBeenCalledWith(
+				expect.objectContaining({
+					where: expect.objectContaining({
+						categoryId: { in: ["category-branch"] },
+					}),
+				}),
+			);
+			expect(result).toEqual(["space-branch"]);
+		});
+
+		it("ancestor scope는 현재 space와 상위 category space를 반환해야 한다", async () => {
+			// Given
+			mockTxHost.tx.spaceClassification.findFirst.mockResolvedValue({
+				categoryId: "category-branch",
+			});
+			mockTxHost.tx.category.findMany.mockResolvedValue([
+				{ id: "category-root", parentId: null },
+				{ id: "category-branch", parentId: "category-root" },
+			]);
+			mockTxHost.tx.spaceClassification.findMany.mockResolvedValue([
+				{ spaceId: "space-root" },
+				{ spaceId: "space-branch" },
+			]);
+
+			// When
+			const result = await repository.findSpaceIdsByCategoryHierarchy(
+				"space-branch",
+				SpaceResourceScope.WITH_ANCESTORS,
+			);
+
+			// Then
+			expect(mockTxHost.tx.spaceClassification.findMany).toHaveBeenCalledWith(
+				expect.objectContaining({
+					where: expect.objectContaining({
+						categoryId: { in: ["category-branch", "category-root"] },
+					}),
+				}),
+			);
+			expect(result).toEqual(["space-branch", "space-root"]);
+		});
+
+		it("tree scope는 현재, 상위, 하위 category space를 중복 없이 반환해야 한다", async () => {
+			// Given
+			mockTxHost.tx.spaceClassification.findFirst.mockResolvedValue({
+				categoryId: "category-branch",
+			});
+			mockTxHost.tx.category.findMany.mockResolvedValue([
+				{ id: "category-root", parentId: null },
+				{ id: "category-branch", parentId: "category-root" },
+				{ id: "category-leaf", parentId: "category-branch" },
+			]);
+			mockTxHost.tx.spaceClassification.findMany.mockResolvedValue([
+				{ spaceId: "space-root" },
+				{ spaceId: "space-branch" },
+				{ spaceId: "space-leaf" },
+				{ spaceId: "space-root" },
+			]);
+
+			// When
+			const result = await repository.findSpaceIdsByCategoryHierarchy(
+				"space-branch",
+				SpaceResourceScope.WITH_TREE,
+			);
+
+			// Then
+			expect(mockTxHost.tx.spaceClassification.findMany).toHaveBeenCalledWith(
+				expect.objectContaining({
+					where: expect.objectContaining({
+						categoryId: {
+							in: ["category-branch", "category-root", "category-leaf"],
+						},
+					}),
+				}),
+			);
+			expect(result).toEqual(["space-branch", "space-root", "space-leaf"]);
+		});
+
+		it("SpaceClassification이 없으면 현재 space만 반환해야 한다", async () => {
+			// Given
+			mockTxHost.tx.spaceClassification.findFirst.mockResolvedValue(null);
+
+			// When
+			const result =
+				await repository.findSpaceIdsByCategoryHierarchy("space-branch");
+
+			// Then
+			expect(result).toEqual(["space-branch"]);
+			expect(mockTxHost.tx.category.findMany).not.toHaveBeenCalled();
+			expect(mockTxHost.tx.spaceClassification.findMany).not.toHaveBeenCalled();
 		});
 	});
 });

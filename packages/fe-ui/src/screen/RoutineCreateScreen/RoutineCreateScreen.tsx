@@ -8,6 +8,7 @@ import {
 	Input,
 	MediaThumbnail,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	useT,
 	VStack,
@@ -259,88 +260,97 @@ export const RoutineActivitySection = observer(function RoutineActivitySection({
 >) {
 	const t = useT();
 	return (
-		<SectionSurface top={<PageTitleBar level={2} title="활동 구성" />}>
-			<div className="flex flex-col gap-4">
-				<Input
-					label="운동 검색"
-					placeholder="운동 이름으로 검색하세요."
-					value={exerciseQuery}
-					onValueChange={onChangeExerciseQueryInput}
-					description="현재 Space + 상위 Space 운동 중 비디오가 연결된 운동만 후보로 표시합니다."
-				/>
-				<div className="rounded-2xl border border-border p-4">
-					<div className="mb-3 flex items-center justify-between gap-3">
-						<div>
-							<p className="font-medium">{t("후보 운동")}</p>
-							<p className="text-sm text-muted">
-								{t(
-									"이미지는 썸네일, 비디오는 편성 가능 여부 기준으로 사용합니다.",
-								)}
-							</p>
+		<SectionSurface>
+			<Section>
+				<Section.Header>
+					<PageTitleBar level={2} title="활동 구성" />
+				</Section.Header>
+				<Section.Body>
+					<div className="flex flex-col gap-4">
+						<Input
+							label="운동 검색"
+							placeholder="운동 이름으로 검색하세요."
+							value={exerciseQuery}
+							onValueChange={onChangeExerciseQueryInput}
+							description="현재 Space + 상위 Space 운동 중 비디오가 연결된 운동만 후보로 표시합니다."
+						/>
+						<div className="rounded-2xl border border-border p-4">
+							<div className="mb-3 flex items-center justify-between gap-3">
+								<div>
+									<p className="font-medium">{t("후보 운동")}</p>
+									<p className="text-sm text-muted">
+										{t(
+											"이미지는 썸네일, 비디오는 편성 가능 여부 기준으로 사용합니다.",
+										)}
+									</p>
+								</div>
+							</div>
+							{isTasksLoading ? (
+								<div className="flex items-center gap-2 text-sm text-muted">
+									<Spinner size="sm" />
+									<span>{t("운동 목록을 불러오는 중...")}</span>
+								</div>
+							) : candidateTasks.length === 0 ? (
+								<p className="text-sm text-muted">
+									{t("조건에 맞는 스케줄 가능 운동이 없습니다.")}
+								</p>
+							) : (
+								<div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
+									{candidateTasks.map((task, index) => (
+										<CandidateTaskCard
+											key={`${task.id}:${index}`}
+											task={task}
+											onClickAdd={onClickAddActivityButton}
+										/>
+									))}
+								</div>
+							)}
 						</div>
-					</div>
-					{isTasksLoading ? (
-						<div className="flex items-center gap-2 text-sm text-muted">
-							<Spinner size="sm" />
-							<span>{t("운동 목록을 불러오는 중...")}</span>
-						</div>
-					) : candidateTasks.length === 0 ? (
-						<p className="text-sm text-muted">
-							{t("조건에 맞는 스케줄 가능 운동이 없습니다.")}
-						</p>
-					) : (
-						<div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
-							{candidateTasks.map((task, index) => (
-								<CandidateTaskCard
-									key={`${task.id}:${index}`}
-									task={task}
-									onClickAdd={onClickAddActivityButton}
-								/>
-							))}
-						</div>
-					)}
-				</div>
-				<div className="rounded-2xl border border-border p-4">
-					<div className="mb-3 flex items-center justify-between gap-3">
-						<div>
-							<p className="font-medium">{t("추가된 활동")}</p>
-							<p className="text-sm text-muted">
-								{t("드래그로 순서를 바꾸면 저장 순서에도 그대로 반영됩니다.")}
-							</p>
-						</div>
-						<Chip size="sm" variant="flat" color="primary">
-							{activities.length}
-							{t("개")}
-						</Chip>
-					</div>
-					{activitiesError ? (
-						<p className="mb-3 text-sm text-danger">{activitiesError}</p>
-					) : null}
-					{activities.length === 0 ? (
-						<p className="text-sm text-muted">
-							{t("아직 추가된 활동이 없습니다.")}
-						</p>
-					) : (
-						<DraggableSortableList
-							items={activities.map((activity, index) => ({
-								...activity,
-								id: `${activity.taskId}:${index}`,
-							}))}
-							onReorder={onReorderActivities}
-							renderItem={(activity, index, dragHandleProps) => (
-								<ActivityCard
-									activity={activity}
-									index={index}
-									onChangeActivityInput={onChangeActivityInput}
-									onClickRemoveActivityButton={onClickRemoveActivityButton}
-									dragHandle={dragHandleProps}
+						<div className="rounded-2xl border border-border p-4">
+							<div className="mb-3 flex items-center justify-between gap-3">
+								<div>
+									<p className="font-medium">{t("추가된 활동")}</p>
+									<p className="text-sm text-muted">
+										{t(
+											"드래그로 순서를 바꾸면 저장 순서에도 그대로 반영됩니다.",
+										)}
+									</p>
+								</div>
+								<Chip size="sm" variant="flat" color="primary">
+									{activities.length}
+									{t("개")}
+								</Chip>
+							</div>
+							{activitiesError ? (
+								<p className="mb-3 text-sm text-danger">{activitiesError}</p>
+							) : null}
+							{activities.length === 0 ? (
+								<p className="text-sm text-muted">
+									{t("아직 추가된 활동이 없습니다.")}
+								</p>
+							) : (
+								<DraggableSortableList
+									items={activities.map((activity, index) => ({
+										...activity,
+										id: `${activity.taskId}:${index}`,
+									}))}
+									onReorder={onReorderActivities}
+									renderItem={(activity, index, dragHandleProps) => (
+										<ActivityCard
+											activity={activity}
+											index={index}
+											onChangeActivityInput={onChangeActivityInput}
+											onClickRemoveActivityButton={onClickRemoveActivityButton}
+											dragHandle={dragHandleProps}
+										/>
+									)}
+									className="gap-3"
 								/>
 							)}
-							className="gap-3"
-						/>
-					)}
-				</div>
-			</div>
+						</div>
+					</div>
+				</Section.Body>
+			</Section>
 		</SectionSurface>
 	);
 });
@@ -404,47 +414,55 @@ export const RoutineCreateScreen = observer(
 					description="새로운 운동 루틴을 등록합니다."
 					actions={pageActions}
 				/>
-
 				<SectionSurface>
-					<SectionSurface top={<PageTitleBar level={2} title="기본 정보" />}>
-						<div className="flex flex-col gap-4">
-							<ContentLanguageNotice
-								contentLanguageCode={contentLanguageCode}
+					<Section>
+						<Section.Body>
+							<Section>
+								<Section.Header>
+									<PageTitleBar level={2} title="기본 정보" />
+								</Section.Header>
+								<Section.Body>
+									<div className="flex flex-col gap-4">
+										<ContentLanguageNotice
+											contentLanguageCode={contentLanguageCode}
+										/>
+										<Input
+											label="루틴 이름"
+											placeholder="예: 풀바디 루틴 A"
+											value={name}
+											onValueChange={onChangeNameInput}
+											isRequired
+											isInvalid={Boolean(nameError)}
+											errorMessage={nameError}
+											maxLength={100}
+										/>
+										<Input
+											label="단축 라벨"
+											placeholder="예: FULL-A"
+											value={label}
+											onValueChange={onChangeLabelInput}
+											isRequired
+											isInvalid={Boolean(labelError)}
+											errorMessage={labelError}
+											maxLength={50}
+										/>
+									</div>
+								</Section.Body>
+							</Section>
+							<RoutineActivitySection
+								exerciseQuery={exerciseQuery}
+								candidateTasks={candidateTasks}
+								activities={activities}
+								activitiesError={activitiesError}
+								isTasksLoading={isTasksLoading}
+								onChangeExerciseQueryInput={onChangeExerciseQueryInput}
+								onClickAddActivityButton={onClickAddActivityButton}
+								onChangeActivityInput={onChangeActivityInput}
+								onClickRemoveActivityButton={onClickRemoveActivityButton}
+								onReorderActivities={onReorderActivities}
 							/>
-							<Input
-								label="루틴 이름"
-								placeholder="예: 풀바디 루틴 A"
-								value={name}
-								onValueChange={onChangeNameInput}
-								isRequired
-								isInvalid={Boolean(nameError)}
-								errorMessage={nameError}
-								maxLength={100}
-							/>
-							<Input
-								label="단축 라벨"
-								placeholder="예: FULL-A"
-								value={label}
-								onValueChange={onChangeLabelInput}
-								isRequired
-								isInvalid={Boolean(labelError)}
-								errorMessage={labelError}
-								maxLength={50}
-							/>
-						</div>
-					</SectionSurface>
-					<RoutineActivitySection
-						exerciseQuery={exerciseQuery}
-						candidateTasks={candidateTasks}
-						activities={activities}
-						activitiesError={activitiesError}
-						isTasksLoading={isTasksLoading}
-						onChangeExerciseQueryInput={onChangeExerciseQueryInput}
-						onClickAddActivityButton={onClickAddActivityButton}
-						onChangeActivityInput={onChangeActivityInput}
-						onClickRemoveActivityButton={onClickRemoveActivityButton}
-						onReorderActivities={onReorderActivities}
-					/>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 				<Modal state={emptyActivitiesWarningState}>
 					<Modal.Backdrop>

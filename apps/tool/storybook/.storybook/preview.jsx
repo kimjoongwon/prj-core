@@ -1,4 +1,5 @@
 import "../tailwind.css";
+import { withStorybookMswLoader } from "../src/runtime/StorybookMswRuntime";
 import { withStorybookRuntime } from "../src/runtime/StorybookRuntimeProvider";
 
 /** @type { import('@storybook/nextjs-vite').Preview } */
@@ -37,6 +38,7 @@ const preview = {
 		storybookRealm: "auto",
 		storybookTheme: "system",
 	},
+	loaders: [withStorybookMswLoader],
 	decorators: [withStorybookRuntime],
 	parameters: {
 		nextjs: {
@@ -47,6 +49,8 @@ const preview = {
 				method: "alphabetical",
 				includeNames: true,
 				order: [
+					"DesignSystem",
+					"design-system",
 					"Surface",
 					"surface",
 					"screen",

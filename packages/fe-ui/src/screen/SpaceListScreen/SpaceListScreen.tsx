@@ -12,6 +12,7 @@ import {
 	DataGrid,
 	DataGridStateModel,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 } from "@cocrepo/ui";
 import { Building2 } from "lucide-react";
@@ -39,9 +40,7 @@ const leftInputs: InputConfig[] = [
 		},
 	},
 ];
-
 export const adminSpacesPageQueryInputs = [...leftInputs];
-
 export interface SpaceListScreenQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
@@ -49,7 +48,6 @@ export interface SpaceListScreenQueryStates extends DataGridQueryStates {
 	contentLanguageCode: string;
 }
 export type SpaceListScreenSetQueryStates = DataGridSetQueryStates;
-
 export interface SpaceListScreenProps {
 	spaces?: SpaceDto[];
 	totalCount: number;
@@ -59,7 +57,6 @@ export interface SpaceListScreenProps {
 	onClickCreateButton: () => void;
 	onClickSpaceGroundName: (spaceId: string) => void;
 }
-
 function filterRows(
 	rows: SpaceDto[],
 	search?: string,
@@ -76,7 +73,6 @@ function filterRows(
 					.some((value) => value!.toLowerCase().includes(searchKeyword))),
 	);
 }
-
 function SpacesScreenFallback() {
 	return (
 		<div className="space-y-5">
@@ -85,12 +81,13 @@ function SpacesScreenFallback() {
 				description="시스템에 등록된 공간과 시설 detail을 관리합니다."
 			/>
 			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface/70">
-				{null}
+				<Section>
+					<Section.Body>{null}</Section.Body>
+				</Section>
 			</SectionSurface>
 		</div>
 	);
 }
-
 export const SpaceListScreen = observer(
 	({
 		spaces,
@@ -102,9 +99,12 @@ export const SpaceListScreen = observer(
 		onClickSpaceGroundName,
 	}: SpaceListScreenProps) => {
 		const gridState = useLocalObservable(
-			() => new DataGridStateModel({ queryStates, setQueryStates }),
+			() =>
+				new DataGridStateModel({
+					queryStates,
+					setQueryStates,
+				}),
 		);
-
 		useEffect(() => {
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
@@ -120,11 +120,9 @@ export const SpaceListScreen = observer(
 		const columns = buildSpaceTableColumns<SpaceDto>({
 			onClickSpaceGroundName,
 		});
-
 		if (isLoading) {
 			return <SpacesScreenFallback />;
 		}
-
 		return (
 			<div className="space-y-5">
 				<PageTitleBar
@@ -140,18 +138,22 @@ export const SpaceListScreen = observer(
 						</Button>
 					}
 				/>
-				<SectionSurface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
-					<DataGrid
-						config={{
-							entity: "Space",
-							columns,
-							leftInputs,
-							emptyMessage: "등록된 공간이 없습니다.",
-						}}
-						rows={filteredRows}
-						totalCount={totalCount}
-						state={gridState}
-					/>
+				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+					<Section overflow="hidden" inset="none">
+						<Section.Body>
+							<DataGrid
+								config={{
+									entity: "Space",
+									columns,
+									leftInputs,
+									emptyMessage: "등록된 공간이 없습니다.",
+								}}
+								rows={filteredRows}
+								totalCount={totalCount}
+								state={gridState}
+							/>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</div>
 		);

@@ -10,13 +10,12 @@ import {
 	type CheckboxGroupProps as BaseCheckboxGroupProps,
 } from "./CheckboxGroup";
 
-export interface CheckboxGroupProps<TState extends object = Record<string, unknown>>
-	extends MobxProps<TState>,
+export interface CheckboxGroupProps<
+	TState extends object = Record<string, unknown>,
+> extends MobxProps<TState>,
 		Omit<BaseCheckboxGroupProps, "onChange" | "value"> {}
 
-type CheckboxGroupComponent = <
-	TState extends object = Record<string, unknown>,
->(
+type CheckboxGroupComponent = <TState extends object = Record<string, unknown>>(
 	props: CheckboxGroupProps<TState>,
 ) => ReactElement | null;
 

@@ -12,13 +12,12 @@ import {
 
 type ColorSliderValue = BaseColorSliderProps["value"];
 
-export interface ColorSliderProps<TState extends object = Record<string, unknown>>
-	extends MobxProps<TState>,
+export interface ColorSliderProps<
+	TState extends object = Record<string, unknown>,
+> extends MobxProps<TState>,
 		Omit<BaseColorSliderProps, "onChange" | "value"> {}
 
-type ColorSliderComponent = <
-	TState extends object = Record<string, unknown>,
->(
+type ColorSliderComponent = <TState extends object = Record<string, unknown>>(
 	props: ColorSliderProps<TState>,
 ) => ReactElement | null;
 

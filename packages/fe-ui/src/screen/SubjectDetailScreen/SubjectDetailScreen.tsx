@@ -5,6 +5,7 @@ import {
 	DateTimeCell,
 	DefaultCell,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
@@ -68,63 +69,70 @@ function SubjectInfoSection({
 	subject: SubjectDetailScreenSubject;
 }) {
 	return (
-		<SectionSurface top={<PageTitleBar level={2} title="기본 정보" />}>
-			<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-				<div>
-					<div className="mb-1 text-sm text-muted">식별자</div>
-					<div className="font-medium">{subject.name}</div>
-				</div>
-				<div>
-					<div className="mb-1 text-sm text-muted">표시명</div>
-					<div className="font-medium">
-						<DefaultCell value={subject.displayName || "-"} />
+		<SectionSurface>
+			<Section>
+				<Section.Header>
+					<PageTitleBar level={2} title="기본 정보" />
+				</Section.Header>
+				<Section.Body>
+					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+						<div>
+							<div className="mb-1 text-sm text-muted">식별자</div>
+							<div className="font-medium">{subject.name}</div>
+						</div>
+						<div>
+							<div className="mb-1 text-sm text-muted">표시명</div>
+							<div className="font-medium">
+								<DefaultCell value={subject.displayName || "-"} />
+							</div>
+						</div>
+						<div>
+							<div className="mb-1 text-sm text-muted">아이콘</div>
+							<div className="font-medium">
+								<DefaultCell value={subject.icon || "-"} />
+							</div>
+						</div>
+						<div>
+							<div className="mb-1 text-sm text-muted">분류</div>
+							<div>
+								{subject.group ? (
+									<Chip
+										color={getGroupColor(subject.group)}
+										size="sm"
+										variant="flat"
+									>
+										{subject.group}
+									</Chip>
+								) : (
+									<DefaultCell value="-" />
+								)}
+							</div>
+						</div>
+						<div>
+							<div className="mb-1 text-sm text-muted">정렬 순서</div>
+							<div className="font-medium">{subject.order}</div>
+						</div>
+						<div>
+							<div className="mb-1 text-sm text-muted">시스템</div>
+							<div>
+								<BooleanCell value={subject.isSystem} />
+							</div>
+						</div>
+						<div>
+							<div className="mb-1 text-sm text-muted">생성일</div>
+							<div className="font-medium">
+								<DateTimeCell value={subject.createdAt} />
+							</div>
+						</div>
+						<div>
+							<div className="mb-1 text-sm text-muted">수정일</div>
+							<div className="font-medium">
+								<DateTimeCell value={subject.updatedAt || "-"} />
+							</div>
+						</div>
 					</div>
-				</div>
-				<div>
-					<div className="mb-1 text-sm text-muted">아이콘</div>
-					<div className="font-medium">
-						<DefaultCell value={subject.icon || "-"} />
-					</div>
-				</div>
-				<div>
-					<div className="mb-1 text-sm text-muted">분류</div>
-					<div>
-						{subject.group ? (
-							<Chip
-								color={getGroupColor(subject.group)}
-								size="sm"
-								variant="flat"
-							>
-								{subject.group}
-							</Chip>
-						) : (
-							<DefaultCell value="-" />
-						)}
-					</div>
-				</div>
-				<div>
-					<div className="mb-1 text-sm text-muted">정렬 순서</div>
-					<div className="font-medium">{subject.order}</div>
-				</div>
-				<div>
-					<div className="mb-1 text-sm text-muted">시스템</div>
-					<div>
-						<BooleanCell value={subject.isSystem} />
-					</div>
-				</div>
-				<div>
-					<div className="mb-1 text-sm text-muted">생성일</div>
-					<div className="font-medium">
-						<DateTimeCell value={subject.createdAt} />
-					</div>
-				</div>
-				<div>
-					<div className="mb-1 text-sm text-muted">수정일</div>
-					<div className="font-medium">
-						<DateTimeCell value={subject.updatedAt || "-"} />
-					</div>
-				</div>
-			</div>
+				</Section.Body>
+			</Section>
 		</SectionSurface>
 	);
 }
@@ -199,8 +207,13 @@ function SubjectFieldsSection({
 		);
 	}
 	return (
-		<SectionSurface top={<PageTitleBar level={2} title="필드 목록" />}>
-			{content}
+		<SectionSurface>
+			<Section>
+				<Section.Header>
+					<PageTitleBar level={2} title="필드 목록" />
+				</Section.Header>
+				<Section.Body>{content}</Section.Body>
+			</Section>
 		</SectionSurface>
 	);
 }
@@ -216,11 +229,14 @@ export const SubjectDetailScreen = observer(
 			return (
 				<VStack gap="section" fullWidth>
 					<PageTitleBar title="Subject 상세" description="로딩 중..." />
-
 					<SectionSurface>
-						<div className="flex items-center justify-center p-8">
-							<Spinner size="lg" />
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex items-center justify-center p-8">
+									<Spinner size="lg" />
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -235,18 +251,21 @@ export const SubjectDetailScreen = observer(
 			return (
 				<VStack gap="section" fullWidth>
 					{pageHeader}
-
 					<SectionSurface>
-						<div className="flex flex-col items-center justify-center gap-4 p-8">
-							<p className="text-muted">Subject를 찾을 수 없습니다.</p>
-							<Button
-								variant="flat"
-								startContent={<ArrowLeft className="size-4" />}
-								onPress={onClickBackButton}
-							>
-								목록으로
-							</Button>
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex flex-col items-center justify-center gap-4 p-8">
+									<p className="text-muted">Subject를 찾을 수 없습니다.</p>
+									<Button
+										variant="flat"
+										startContent={<ArrowLeft className="size-4" />}
+										onPress={onClickBackButton}
+									>
+										목록으로
+									</Button>
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -269,16 +288,19 @@ export const SubjectDetailScreen = observer(
 		return (
 			<VStack gap="section" fullWidth>
 				{pageHeader}
-
 				<SectionSurface>
-					<VStack gap={4}>
-						<SubjectInfoSection subject={subject} />
-						<SubjectFieldsSection
-							group={subject.group}
-							subjectFields={subjectFields}
-							isLoading={isFieldsLoading}
-						/>
-					</VStack>
+					<Section>
+						<Section.Body>
+							<VStack gap={4}>
+								<SubjectInfoSection subject={subject} />
+								<SubjectFieldsSection
+									group={subject.group}
+									subjectFields={subjectFields}
+									isLoading={isFieldsLoading}
+								/>
+							</VStack>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</VStack>
 		);

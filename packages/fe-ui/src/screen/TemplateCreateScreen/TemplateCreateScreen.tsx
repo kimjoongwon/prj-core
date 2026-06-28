@@ -2,6 +2,7 @@
 
 import {
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	TemplateForm,
 	type TemplateFormData,
@@ -36,19 +37,22 @@ export const TemplateCreateScreen = observer(
 					title="템플릿 등록"
 					description="새로운 메시지 템플릿을 등록합니다."
 				/>
-
 				<SectionSurface>
-					<TemplateForm
-						mode="create"
-						formData={formData}
-						variables={variables}
-						onFormDataChange={onFormDataChange}
-						onVariablesChange={onVariablesChange}
-						onSubmit={onSubmitForm}
-						onCancel={onClickCancelButton}
-						isSubmitting={isSubmitting}
-						errors={errors}
-					/>
+					<Section>
+						<Section.Body>
+							<TemplateForm
+								mode="create"
+								formData={formData}
+								variables={variables}
+								onFormDataChange={onFormDataChange}
+								onVariablesChange={onVariablesChange}
+								onSubmit={onSubmitForm}
+								onCancel={onClickCancelButton}
+								isSubmitting={isSubmitting}
+								errors={errors}
+							/>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</VStack>
 		);

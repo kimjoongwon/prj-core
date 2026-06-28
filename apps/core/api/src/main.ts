@@ -44,21 +44,67 @@ import { UsersModule } from "./module/users";
 import { setNestApp } from "./setNestApp";
 
 /**
- * Swagger UI Space 선택 플러그인
- * - topbar에 Space 드롭다운 추가
+ * Swagger UI Tenant/Space 선택 플러그인
+ * - topbar에 Tenant/Space 드롭다운 추가
  * - 인증 후 Load 버튼으로 접근 가능한 Space 목록 로드
- * - 선택된 Space는 auth/current-space API를 통해 HttpOnly 쿠키로 설정
+ * - 선택된 tenantId를 localStorage에 저장하고 x-tenant-id header로 주입
  */
-const SWAGGER_SPACE_SELECTOR_JS = `
+const SWAGGER_TENANT_SELECTOR_JS = `
 (function() {
   'use strict';
+  var TENANT_ID_STORAGE_KEY = 'swagger:x-tenant-id';
   var origFetch = window.fetch;
   var isReauthorizing = false;
-  var spacesCache = [];
+
+  function readTenantId() {
+    try {
+      return window.localStorage.getItem(TENANT_ID_STORAGE_KEY) || '';
+    } catch (e) { /* ignore */ }
+    return '';
+  }
+
+  function writeTenantId(tenantId) {
+    try {
+      if (tenantId) {
+        window.localStorage.setItem(TENANT_ID_STORAGE_KEY, tenantId);
+      } else {
+        window.localStorage.removeItem(TENANT_ID_STORAGE_KEY);
+      }
+    } catch (e) { /* ignore */ }
+  }
+
+  function buildAuthHeaders(token, includeTenant) {
+    var headers = { 'Authorization': 'Bearer ' + token };
+    var tenantId = includeTenant ? readTenantId() : '';
+    if (tenantId) {
+      headers['x-tenant-id'] = tenantId;
+    }
+    return headers;
+  }
+
+  function spaceLabel(space) {
+    var groundName = space && space.ground && space.ground.name;
+    var companyName = space && space.company && space.company.name;
+    var fallback = space && space.id ? space.id : 'Unknown Space';
+    return groundName || companyName || fallback;
+  }
 
   window.fetch = function(url, init) {
-    return origFetch.apply(this, arguments).then(function(response) {
-      if (response.status === 401 && !isReauthorizing && typeof url === 'string' && url.indexOf('/api/v1/') !== -1) {
+    var nextInit = init;
+    var isApiRequest = typeof url === 'string' && url.indexOf('/api/v1/') !== -1;
+    var tenantId = readTenantId();
+
+    if (tenantId && isApiRequest) {
+      nextInit = Object.assign({}, init || {});
+      var headers = new Headers(nextInit.headers || {});
+      if (!headers.has('x-tenant-id')) {
+        headers.set('x-tenant-id', tenantId);
+      }
+      nextInit.headers = headers;
+    }
+
+    return origFetch.call(this, url, nextInit).then(function(response) {
+      if (response.status === 401 && !isReauthorizing && isApiRequest) {
         isReauthorizing = true;
         try {
           if (window.ui) {
@@ -87,27 +133,27 @@ const SWAGGER_SPACE_SELECTOR_JS = `
     return '';
   }
 
-  function createSpaceSelector() {
+  function createTenantSelector() {
     var topbar = document.querySelector('.topbar-wrapper');
-    if (!topbar || document.getElementById('space-selector')) return;
+    if (!topbar || document.getElementById('tenant-space-selector')) return;
 
     var container = document.createElement('div');
-    container.id = 'space-selector';
+    container.id = 'tenant-space-selector';
     container.style.cssText = 'display:flex;align-items:center;gap:8px;margin-left:auto;padding-right:12px;';
 
     var label = document.createElement('span');
-    label.textContent = 'Space:';
+    label.textContent = 'Tenant/Space:';
     label.style.cssText = 'color:#fff;font-size:13px;font-weight:600;white-space:nowrap;';
 
     var select = document.createElement('select');
-    select.id = 'space-select';
+    select.id = 'tenant-space-select';
     select.style.cssText = 'padding:5px 10px;border-radius:4px;background:#2b3137;color:#fff;border:1px solid #555;font-size:13px;min-width:220px;cursor:pointer;';
     select.innerHTML = '<option value="">-- Authorize 후 Load 클릭 --</option>';
 
     var loadBtn = document.createElement('button');
     loadBtn.textContent = 'Load';
     loadBtn.style.cssText = 'padding:5px 14px;border-radius:4px;background:#4990e2;color:#fff;border:none;cursor:pointer;font-size:13px;font-weight:600;white-space:nowrap;';
-    loadBtn.title = 'Authorize 인증 후 클릭하면 Space 목록을 불러옵니다';
+    loadBtn.title = 'Authorize 인증 후 클릭하면 접근 가능한 Tenant/Space 목록을 불러옵니다';
 
     loadBtn.addEventListener('click', function() {
       var token = getAuthToken();
@@ -121,11 +167,11 @@ const SWAGGER_SPACE_SELECTOR_JS = `
       Promise.all([
         origFetch((window.__IDP_SERVER_URL || 'http://localhost:3000') + '/api/v1/auth/my-spaces', {
           credentials: 'include',
-          headers: { 'Authorization': 'Bearer ' + token }
+          headers: buildAuthHeaders(token, false)
         }).then(function(r) { return r.json(); }),
         origFetch((window.__IDP_SERVER_URL || 'http://localhost:3000') + '/api/v1/auth/current-space', {
           credentials: 'include',
-          headers: { 'Authorization': 'Bearer ' + token }
+          headers: buildAuthHeaders(token, true)
         }).then(function(r) { return r.json(); })
       ])
       .then(function(results) {
@@ -134,22 +180,31 @@ const SWAGGER_SPACE_SELECTOR_JS = `
         var raw = spacesResponse && spacesResponse.data;
         var currentSpace = currentSpaceResponse && currentSpaceResponse.data;
         var spaces = Array.isArray(raw) ? raw : [];
-        spacesCache = spaces;
-        select.innerHTML = '<option value="">-- Space 선택 --</option>';
+        var selectedTenantId = (currentSpace && currentSpace.tenantId) || readTenantId();
+
+        if (selectedTenantId) {
+          writeTenantId(selectedTenantId);
+        }
+
+        select.innerHTML = '<option value="">-- Tenant/Space 선택 --</option>';
         spaces.forEach(function(s) {
+          if (!s || !s.tenantId) {
+            return;
+          }
+
           var opt = document.createElement('option');
-          opt.value = s.id;
-          var text = (s.ground && s.ground.name) ? s.ground.name : s.id;
-          opt.textContent = text;
-          if (currentSpace && s.id === currentSpace.id) opt.selected = true;
+          opt.value = s.tenantId;
+          opt.textContent = spaceLabel(s);
+          opt.title = 'tenantId: ' + s.tenantId;
+          if (selectedTenantId && s.tenantId === selectedTenantId) opt.selected = true;
           select.appendChild(opt);
         });
         if (spaces.length === 0) {
-          select.innerHTML = '<option value="">접근 가능한 Space가 없습니다</option>';
+          select.innerHTML = '<option value="">접근 가능한 Tenant/Space가 없습니다</option>';
         }
       })
       .catch(function(err) {
-        alert('Space 로드 실패: ' + err.message);
+        alert('Tenant/Space 로드 실패: ' + err.message);
       })
       .finally(function() {
         loadBtn.textContent = 'Load';
@@ -161,6 +216,7 @@ const SWAGGER_SPACE_SELECTOR_JS = `
       var value = select.value;
       var token = getAuthToken();
       if (!value || !token) {
+        writeTenantId('');
         return;
       }
 
@@ -172,11 +228,11 @@ const SWAGGER_SPACE_SELECTOR_JS = `
           'Authorization': 'Bearer ' + token,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ spaceId: value })
+        body: JSON.stringify({ tenantId: value })
       })
       .then(function(response) {
         if (!response.ok) {
-          throw new Error('Space 선택 변경에 실패했습니다.');
+          throw new Error('Tenant/Space 선택 변경에 실패했습니다.');
         }
         return response.json();
       })
@@ -185,12 +241,13 @@ const SWAGGER_SPACE_SELECTOR_JS = `
         if (!currentSpace) {
           return;
         }
+        writeTenantId(currentSpace.tenantId || value);
         for (var i = 0; i < select.options.length; i += 1) {
-          select.options[i].selected = select.options[i].value === currentSpace.id;
+          select.options[i].selected = select.options[i].value === (currentSpace.tenantId || value);
         }
       })
       .catch(function(err) {
-        alert('Space 변경 실패: ' + err.message);
+        alert('Tenant/Space 변경 실패: ' + err.message);
       })
       .finally(function() {
         select.disabled = false;
@@ -205,7 +262,7 @@ const SWAGGER_SPACE_SELECTOR_JS = `
 
   function waitForSwagger() {
     if (document.querySelector('.topbar-wrapper')) {
-      createSpaceSelector();
+      createTenantSelector();
     } else {
       setTimeout(waitForSwagger, 500);
     }
@@ -313,7 +370,11 @@ async function bootstrap() {
 			"API 문서입니다. Core API와 IDP 관리 API를 함께 제공합니다. 대부분의 엔드포인트는 인증이 필요합니다.\n\n" +
 				"**인증 방법:**\n" +
 				"1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인\n" +
-				"2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송",
+				"2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송\n\n" +
+				"**Tenant Scope:**\n" +
+				"- 보호 API는 `x-tenant-id` header로 현재 Tenant를 선택합니다.\n" +
+				"- 서버는 Tenant에서 Space를 파생하고, 기본적으로 현재 Space와 모든 하위 Space category 리소스를 조회합니다.\n" +
+				"- `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.",
 		)
 		.addCookieAuth(Token.ACCESS, {
 			type: "apiKey",
@@ -332,7 +393,7 @@ async function bootstrap() {
 						openid: "OpenID Connect 기본 인증",
 						profile: "프로필 정보 (이름)",
 						email: "이메일 주소",
-						roles: "역할 및 Space 정보",
+						roles: "역할 및 Tenant/Space 정보",
 					},
 				},
 			},
@@ -360,8 +421,30 @@ async function bootstrap() {
 				scopes: ["openid", "profile", "email", "roles"],
 				usePkceWithAuthorizationCodeGrant: true,
 			},
+			requestInterceptor: (request: {
+				url?: string;
+				headers?: Record<string, string>;
+			}) => {
+				const browserGlobal = globalThis as {
+					localStorage?: { getItem(key: string): string | null };
+				};
+				const tenantId = browserGlobal.localStorage?.getItem("swagger:x-tenant-id");
+
+				if (tenantId && request.url?.includes("/api/v1/")) {
+					request.headers = request.headers ?? {};
+
+					const hasTenantHeader = Object.keys(request.headers).some(
+						(headerName) => headerName.toLowerCase() === "x-tenant-id",
+					);
+					if (!hasTenantHeader) {
+						request.headers["x-tenant-id"] = tenantId;
+					}
+				}
+
+				return request;
+			},
 		},
-		customJsStr: `window.__IDP_SERVER_URL = '${oidcIssuer}';\n${SWAGGER_SPACE_SELECTOR_JS}`,
+		customJsStr: `window.__IDP_SERVER_URL = '${oidcIssuer}';\n${SWAGGER_TENANT_SELECTOR_JS}`,
 	});
 
 	// =================================================================

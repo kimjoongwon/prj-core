@@ -15,6 +15,7 @@ import {
 	HStack,
 	Input,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	TextArea,
 	useT,
@@ -27,13 +28,11 @@ import { type FormEvent, useEffect, useState } from "react";
 import { Select } from "../../selection/Select/Select";
 import { Switch } from "../../selection/Switch/Switch";
 import { ConfirmModal } from "../../widget/ConfirmModal";
-
 export type StaticTranslationLanguageCode =
 	| "ko_KR"
 	| "en_US"
 	| "zh_CN"
 	| "ja_JP";
-
 export interface StaticTranslationForm {
 	languageCode: StaticTranslationLanguageCode;
 	key: string;
@@ -41,7 +40,6 @@ export interface StaticTranslationForm {
 	category: string;
 	isTranslated: boolean;
 }
-
 export interface StaticTranslationListScreenQueryStates
 	extends DataGridQueryStates {
 	take: number;
@@ -51,9 +49,7 @@ export interface StaticTranslationListScreenQueryStates
 	languageCode: string;
 	isTranslated: string;
 }
-
 export type StaticTranslationListScreenSetQueryStates = DataGridSetQueryStates;
-
 export interface StaticTranslationListScreenProps {
 	translations?: TranslationResponseDto[];
 	totalCount: number;
@@ -72,22 +68,37 @@ export interface StaticTranslationListScreenProps {
 		languageCode: StaticTranslationLanguageCode,
 	) => Promise<void>;
 }
-
 const STATIC_TRANSLATION_LANGUAGE_OPTIONS: Array<{
 	value: StaticTranslationLanguageCode;
 	label: string;
 }> = [
-	{ value: "ko_KR", label: "한국어" },
-	{ value: "en_US", label: "English" },
-	{ value: "zh_CN", label: "中文" },
-	{ value: "ja_JP", label: "日本語" },
+	{
+		value: "ko_KR",
+		label: "한국어",
+	},
+	{
+		value: "en_US",
+		label: "English",
+	},
+	{
+		value: "zh_CN",
+		label: "中文",
+	},
+	{
+		value: "ja_JP",
+		label: "日本語",
+	},
 ];
-
 const STATIC_TRANSLATION_STATUS_OPTIONS = [
-	{ value: "true", label: "완료" },
-	{ value: "false", label: "대기" },
+	{
+		value: "true",
+		label: "완료",
+	},
+	{
+		value: "false",
+		label: "대기",
+	},
 ];
-
 const leftInputs: InputConfig[] = [
 	{
 		type: "search",
@@ -118,9 +129,7 @@ const leftInputs: InputConfig[] = [
 		},
 	},
 ];
-
 export const adminStaticTranslationsPageQueryInputs = [...leftInputs];
-
 function createEmptyForm(): StaticTranslationForm {
 	return {
 		languageCode: "ko_KR",
@@ -130,7 +139,6 @@ function createEmptyForm(): StaticTranslationForm {
 		isTranslated: false,
 	};
 }
-
 function createFormFromTranslation(
 	translation: TranslationResponseDto,
 ): StaticTranslationForm {
@@ -142,7 +150,6 @@ function createFormFromTranslation(
 		isTranslated: translation.isTranslated,
 	};
 }
-
 function toStaticTranslationLanguageCode(
 	value: string,
 ): StaticTranslationLanguageCode | null {
@@ -154,10 +161,8 @@ function toStaticTranslationLanguageCode(
 	) {
 		return value;
 	}
-
 	return null;
 }
-
 export const StaticTranslationListScreen = observer(
 	({
 		translations,
@@ -174,7 +179,11 @@ export const StaticTranslationListScreen = observer(
 	}: StaticTranslationListScreenProps) => {
 		const t = useT();
 		const gridState = useLocalObservable(
-			() => new DataGridStateModel({ queryStates, setQueryStates }),
+			() =>
+				new DataGridStateModel({
+					queryStates,
+					setQueryStates,
+				}),
 		);
 		const formModal = useOverlayState();
 		const deleteModal = useOverlayState();
@@ -197,70 +206,71 @@ export const StaticTranslationListScreen = observer(
 			onClickEditButton: handleOpenEditModal,
 			onClickDeleteButton: handleOpenDeleteModal,
 		});
-
 		useEffect(() => {
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
-
 		function handleOpenCreateModal() {
 			setEditingTranslation(null);
 			setForm(createEmptyForm());
 			formModal.open();
 		}
-
 		function handleOpenEditModal(translation: TranslationResponseDto) {
 			setEditingTranslation(translation);
 			setForm(createFormFromTranslation(translation));
 			formModal.open();
 		}
-
 		function handleCloseFormModal() {
 			formModal.close();
 			setEditingTranslation(null);
 			setForm(createEmptyForm());
 		}
-
 		function handleOpenDeleteModal(translation: TranslationResponseDto) {
 			setTranslationToDelete(translation);
 			deleteModal.open();
 		}
-
 		function handleCloseDeleteModal() {
 			deleteModal.close();
 			setTranslationToDelete(null);
 		}
-
 		function handleLanguageChange(value: string) {
 			const selected = toStaticTranslationLanguageCode(value);
 			if (!selected) {
 				return;
 			}
-
-			setForm((current) => ({ ...current, languageCode: selected }));
+			setForm((current) => ({
+				...current,
+				languageCode: selected,
+			}));
 		}
-
 		function handleIsTranslatedChange(isSelected: boolean) {
-			setForm((current) => ({ ...current, isTranslated: isSelected }));
+			setForm((current) => ({
+				...current,
+				isTranslated: isSelected,
+			}));
 		}
-
 		function handleKeyChange(key: string) {
-			setForm((current) => ({ ...current, key }));
+			setForm((current) => ({
+				...current,
+				key,
+			}));
 		}
-
 		function handleCategoryChange(category: string) {
-			setForm((current) => ({ ...current, category }));
+			setForm((current) => ({
+				...current,
+				category,
+			}));
 		}
-
 		function handleTextChange(text: string) {
-			setForm((current) => ({ ...current, text }));
+			setForm((current) => ({
+				...current,
+				text,
+			}));
 		}
-
 		async function handleSubmitForm(event: FormEvent<HTMLFormElement>) {
 			event.preventDefault();
 			if (isFormInvalid) {
 				return;
 			}
-
 			if (editingTranslation) {
 				await onUpdateTranslation(editingTranslation.id, {
 					text: form.text,
@@ -275,27 +285,21 @@ export const StaticTranslationListScreen = observer(
 					category: form.category.trim(),
 				});
 			}
-
 			handleCloseFormModal();
 		}
-
 		async function handleConfirmDelete() {
 			if (!translationToDelete) {
 				return;
 			}
-
 			await onDeleteTranslation(translationToDelete.id);
 			handleCloseDeleteModal();
 		}
-
 		async function handleInvalidateLanguageCache() {
 			if (!selectedLanguageCode) {
 				return;
 			}
-
 			await onInvalidateTranslationCache(selectedLanguageCode);
 		}
-
 		return (
 			<VStack gap={5}>
 				<PageTitleBar
@@ -328,21 +332,24 @@ export const StaticTranslationListScreen = observer(
 						</HStack>
 					}
 				/>
-				<SectionSurface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
-					<DataGrid
-						config={{
-							entity: "Translation",
-							columns,
-							leftInputs,
-							emptyMessage: "등록된 정적 번역이 없습니다.",
-						}}
-						rows={rows}
-						totalCount={totalCount}
-						state={gridState}
-						isLoading={isLoading}
-					/>
+				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+					<Section overflow="hidden" inset="none">
+						<Section.Body>
+							<DataGrid
+								config={{
+									entity: "Translation",
+									columns,
+									leftInputs,
+									emptyMessage: "등록된 정적 번역이 없습니다.",
+								}}
+								rows={rows}
+								totalCount={totalCount}
+								state={gridState}
+								isLoading={isLoading}
+							/>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
-
 				<Modal state={formModal}>
 					<Modal.Backdrop>
 						<Modal.Container size="lg">
@@ -404,7 +411,6 @@ export const StaticTranslationListScreen = observer(
 						</Modal.Container>
 					</Modal.Backdrop>
 				</Modal>
-
 				<ConfirmModal
 					isOpen={deleteModal.isOpen}
 					onClose={handleCloseDeleteModal}

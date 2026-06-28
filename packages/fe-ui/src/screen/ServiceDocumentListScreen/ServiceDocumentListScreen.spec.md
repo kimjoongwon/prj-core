@@ -19,10 +19,35 @@
 
 ## Composition
 
-- `Page`의 `top`에는 `PageTitleBar`를 배치한다.
+- `Screen`의 상단 흐름에는 `PageTitleBar`를 배치한다.
 - 본문은 `ScreenSurface`로 감싸고, 목록/폼 영역은 각각 `SectionSurface`를 소유한다.
 - 좌측에는 검색/필터와 테이블을 배치하고, 우측에는 초안 작성/수정 패널을 배치한다.
 - 우측 폼의 본문 입력은 `format=HTML`일 때 CKEditor 기반 `HtmlEditor`를 사용하고, 그 외 형식은 일반 `TextArea`를 사용한다.
+
+## 화면 러프
+
+### Desktop
+
+```text
+Screen
+└─ ScreenSurface
+   └─ VStack
+      ├─ PageTitleBar [약관 관리] [문서 등록]
+      └─ 2-column grid
+         ├─ SectionSurface: 검색/필터 + 문서 테이블 + 상태 액션
+         └─ SectionSurface: 문서 초안 작성/수정 폼
+```
+
+### Mobile
+
+```text
+Screen
+└─ ScreenSurface
+   └─ VStack
+      ├─ PageTitleBar
+      ├─ SectionSurface: 검색/필터 + 문서 테이블
+      └─ SectionSurface: 문서 초안 작성/수정 폼
+```
 
 ## 상태
 

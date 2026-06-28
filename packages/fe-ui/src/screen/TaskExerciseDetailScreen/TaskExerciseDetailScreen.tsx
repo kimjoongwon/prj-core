@@ -3,6 +3,7 @@
 import {
 	DateTimeCell,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
@@ -81,11 +82,14 @@ export const TaskExerciseDetailScreen = observer(
 			return (
 				<VStack gap="section" fullWidth>
 					<PageTitleBar title="운동 정보" description="로딩 중..." />
-
 					<SectionSurface>
-						<div className="flex items-center justify-center p-8">
-							<Spinner size="lg" />
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex items-center justify-center p-8">
+									<Spinner size="lg" />
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -97,18 +101,21 @@ export const TaskExerciseDetailScreen = observer(
 						title="운동 정보"
 						description="운동 detail을 찾을 수 없습니다."
 					/>
-
 					<SectionSurface>
-						<div className="flex flex-col items-center justify-center gap-4 p-8">
-							<p className="text-muted">운동 detail을 찾을 수 없습니다.</p>
-							<Button
-								variant="flat"
-								startContent={<ArrowLeft className="size-4" />}
-								onPress={onClickBackButton}
-							>
-								목록으로
-							</Button>
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex flex-col items-center justify-center gap-4 p-8">
+									<p className="text-muted">운동 detail을 찾을 수 없습니다.</p>
+									<Button
+										variant="flat"
+										startContent={<ArrowLeft className="size-4" />}
+										onPress={onClickBackButton}
+									>
+										목록으로
+									</Button>
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -139,123 +146,143 @@ export const TaskExerciseDetailScreen = observer(
 						</div>
 					}
 				/>
-
 				<SectionSurface>
-					<VStack gap={4}>
-						<SectionSurface top={<PageTitleBar level={2} title="기본 정보" />}>
-							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-								<div>
-									<label className="text-sm text-muted">운동명</label>
-									<p className="mt-1 font-medium">{exercise.name}</p>
-								</div>
-								<div>
-									<label className="text-sm text-muted">지속시간</label>
-									<p className="mt-1">{formatDuration(exercise.duration)}</p>
-								</div>
-								<div>
-									<label className="text-sm text-muted">반복횟수</label>
-									<p className="mt-1">{exercise.count}회</p>
-								</div>
-								<div>
-									<label className="text-sm text-muted">스케줄 가능</label>
-									<div className="mt-1">
-										<Chip
-											color={isSchedulable ? "success" : "warning"}
-											size="sm"
-										>
-											{isSchedulable ? "가능" : "불가"}
-										</Chip>
-									</div>
-								</div>
-								<div>
-									<label className="text-sm text-muted">설명</label>
-									<p className="mt-1">{exercise.description || "-"}</p>
-								</div>
-								<div>
-									<label className="text-sm text-muted">이미지 파일</label>
-									<div className="mt-1">
-										{exercise.imageFileId && exercise.imageAssetHref ? (
-											<Link
-												href={exercise.imageAssetHref}
-												className="font-mono text-accent text-sm hover:underline"
-											>
-												{exercise.imageFileId}
-											</Link>
-										) : (
-											"-"
-										)}
-									</div>
-								</div>
-								<div>
-									<label className="text-sm text-muted">영상 파일</label>
-									<div className="mt-1">
-										{exercise.videoFileId && exercise.videoAssetHref ? (
-											<Link
-												href={exercise.videoAssetHref}
-												className="font-mono text-accent text-sm hover:underline"
-											>
-												{exercise.videoFileId}
-											</Link>
-										) : (
-											"-"
-										)}
-									</div>
-								</div>
-								<div>
-									<label className="text-sm text-muted">등록일</label>
-									<div className="mt-1">
-										<DateTimeCell value={exercise.createdAt} />
-									</div>
-								</div>
-								<div>
-									<label className="text-sm text-muted">수정일</label>
-									<div className="mt-1">
-										<DateTimeCell value={exercise.updatedAt ?? "-"} />
-									</div>
-								</div>
-							</div>
-						</SectionSurface>
-						<SectionSurface
-							top={<PageTitleBar level={2} title="태스크 정보" />}
-						>
-							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-								<div>
-									<label className="text-sm text-muted">Task ID</label>
-									<p className="mt-1 font-mono text-sm">{taskId}</p>
-								</div>
-								<div>
-									<label className="text-sm text-muted">Space ID</label>
-									<p className="mt-1 font-mono text-sm">
-										{exercise.tenantId ?? "-"}
-									</p>
-								</div>
-							</div>
-						</SectionSurface>
-						{routines.length > 0 ? (
-							<SectionSurface
-								top={<PageTitleBar level={2} title="연관 루틴" />}
-							>
-								<div className="flex flex-col gap-2">
-									{routines.map((routine, index) => (
-										<div
-											key={`${routine.id}:${index}`}
-											className="flex items-center justify-between rounded-lg bg-surface-secondary p-3"
-										>
+					<Section>
+						<Section.Body>
+							<VStack gap={4}>
+								<Section>
+									<Section.Header>
+										<PageTitleBar level={2} title="기본 정보" />
+									</Section.Header>
+									<Section.Body>
+										<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 											<div>
-												<p className="font-medium">{routine.name}</p>
-												<p className="text-sm text-muted">
-													{routine.label || "-"}
+												<label className="text-sm text-muted">운동명</label>
+												<p className="mt-1 font-medium">{exercise.name}</p>
+											</div>
+											<div>
+												<label className="text-sm text-muted">지속시간</label>
+												<p className="mt-1">
+													{formatDuration(exercise.duration)}
 												</p>
 											</div>
-											<div className="text-sm text-muted">
-												<DateTimeCell value={routine.createdAt} />
+											<div>
+												<label className="text-sm text-muted">반복횟수</label>
+												<p className="mt-1">{exercise.count}회</p>
+											</div>
+											<div>
+												<label className="text-sm text-muted">
+													스케줄 가능
+												</label>
+												<div className="mt-1">
+													<Chip
+														color={isSchedulable ? "success" : "warning"}
+														size="sm"
+													>
+														{isSchedulable ? "가능" : "불가"}
+													</Chip>
+												</div>
+											</div>
+											<div>
+												<label className="text-sm text-muted">설명</label>
+												<p className="mt-1">{exercise.description || "-"}</p>
+											</div>
+											<div>
+												<label className="text-sm text-muted">
+													이미지 파일
+												</label>
+												<div className="mt-1">
+													{exercise.imageFileId && exercise.imageAssetHref ? (
+														<Link
+															href={exercise.imageAssetHref}
+															className="font-mono text-accent text-sm hover:underline"
+														>
+															{exercise.imageFileId}
+														</Link>
+													) : (
+														"-"
+													)}
+												</div>
+											</div>
+											<div>
+												<label className="text-sm text-muted">영상 파일</label>
+												<div className="mt-1">
+													{exercise.videoFileId && exercise.videoAssetHref ? (
+														<Link
+															href={exercise.videoAssetHref}
+															className="font-mono text-accent text-sm hover:underline"
+														>
+															{exercise.videoFileId}
+														</Link>
+													) : (
+														"-"
+													)}
+												</div>
+											</div>
+											<div>
+												<label className="text-sm text-muted">등록일</label>
+												<div className="mt-1">
+													<DateTimeCell value={exercise.createdAt} />
+												</div>
+											</div>
+											<div>
+												<label className="text-sm text-muted">수정일</label>
+												<div className="mt-1">
+													<DateTimeCell value={exercise.updatedAt ?? "-"} />
+												</div>
 											</div>
 										</div>
-									))}
-								</div>
-							</SectionSurface>
-						) : null}
-					</VStack>
+									</Section.Body>
+								</Section>
+								<Section>
+									<Section.Header>
+										<PageTitleBar level={2} title="태스크 정보" />
+									</Section.Header>
+									<Section.Body>
+										<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+											<div>
+												<label className="text-sm text-muted">Task ID</label>
+												<p className="mt-1 font-mono text-sm">{taskId}</p>
+											</div>
+											<div>
+												<label className="text-sm text-muted">Space ID</label>
+												<p className="mt-1 font-mono text-sm">
+													{exercise.tenantId ?? "-"}
+												</p>
+											</div>
+										</div>
+									</Section.Body>
+								</Section>
+								{routines.length > 0 ? (
+									<Section>
+										<Section.Header>
+											<PageTitleBar level={2} title="연관 루틴" />
+										</Section.Header>
+										<Section.Body>
+											<div className="flex flex-col gap-2">
+												{routines.map((routine, index) => (
+													<div
+														key={`${routine.id}:${index}`}
+														className="flex items-center justify-between rounded-lg bg-surface-secondary p-3"
+													>
+														<div>
+															<p className="font-medium">{routine.name}</p>
+															<p className="text-sm text-muted">
+																{routine.label || "-"}
+															</p>
+														</div>
+														<div className="text-sm text-muted">
+															<DateTimeCell value={routine.createdAt} />
+														</div>
+													</div>
+												))}
+											</div>
+										</Section.Body>
+									</Section>
+								) : null}
+							</VStack>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 				<Modal state={deleteModalState}>
 					<Modal.Backdrop>

@@ -11,6 +11,7 @@ import {
 	DataGrid,
 	DataGridStateModel,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	useT,
 	VStack,
@@ -26,9 +27,7 @@ const leftInputs: InputConfig[] = [
 		placeholder: "대상명으로 검색...",
 	},
 ];
-
 const SUBJECT_GROUP_FILTER_ALL_KEY = "__all_subjects";
-
 const subjectGroupFilters = [
 	{
 		key: SUBJECT_GROUP_FILTER_ALL_KEY,
@@ -70,9 +69,7 @@ const subjectGroupFilters = [
 			"버튼, 탭, 배너처럼 화면 일부를 보거나 사용할 수 있는 대상입니다.",
 	},
 ] as const;
-
 export const adminSubjectsPageQueryInputs: InputConfig[] = [...leftInputs];
-
 export interface SubjectListScreenQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
@@ -80,7 +77,6 @@ export interface SubjectListScreenQueryStates extends DataGridQueryStates {
 	group: string;
 }
 export type SubjectListScreenSetQueryStates = DataGridSetQueryStates;
-
 export interface SubjectListScreenProps {
 	subjects?: SubjectDto[];
 	isLoading: boolean;
@@ -88,32 +84,26 @@ export interface SubjectListScreenProps {
 	setQueryStates: SubjectListScreenSetQueryStates;
 	onClickSubject: (subjectId: string) => void;
 }
-
 const subjectTableColumns = buildSubjectTableColumns<SubjectDto>();
-
 function getSubjectGroupFilterKey(group: string) {
 	return group || SUBJECT_GROUP_FILTER_ALL_KEY;
 }
-
 function findSubjectGroupFilter(key: string) {
 	return (
 		subjectGroupFilters.find((filter) => filter.key === key) ??
 		subjectGroupFilters[0]
 	);
 }
-
 function getSubjectGroupQueryValue(key: Key) {
 	const selectedKey = String(key);
 	return selectedKey === SUBJECT_GROUP_FILTER_ALL_KEY ? null : selectedKey;
 }
-
 function filterSubjects(
 	subjects: SubjectDto[],
 	queryStates: SubjectListScreenQueryStates,
 ) {
 	const searchKeyword = queryStates.search?.trim().toLowerCase() ?? "";
 	const groupFilter = queryStates.group?.trim().toLowerCase() ?? "";
-
 	return subjects.filter((subject) => {
 		if (
 			searchKeyword &&
@@ -123,30 +113,24 @@ function filterSubjects(
 		) {
 			return false;
 		}
-
 		if (groupFilter && (subject.group ?? "").toLowerCase() !== groupFilter) {
 			return false;
 		}
-
 		return true;
 	});
 }
-
 function paginateSubjects(
 	subjects: SubjectDto[],
 	queryStates: SubjectListScreenQueryStates,
 ) {
 	const start = Math.max(queryStates.skip, 0);
 	const end = start + Math.max(queryStates.take, 1);
-
 	return subjects.slice(start, end);
 }
-
 interface SubjectGroupFilterTabsProps {
 	selectedGroup: string;
 	onChangeGroup: (group: string | null) => void;
 }
-
 const SubjectGroupFilterTabs = observer(
 	({ selectedGroup, onChangeGroup }: SubjectGroupFilterTabsProps) => {
 		const t = useT();
@@ -155,7 +139,6 @@ const SubjectGroupFilterTabs = observer(
 		const handleSelectionChange = (key: Key) => {
 			onChangeGroup(getSubjectGroupQueryValue(key));
 		};
-
 		return (
 			<VStack gap="block">
 				<Tabs
@@ -184,7 +167,6 @@ const SubjectGroupFilterTabs = observer(
 		);
 	},
 );
-
 export const SubjectListScreen = observer(
 	({
 		subjects,
@@ -194,9 +176,12 @@ export const SubjectListScreen = observer(
 		onClickSubject,
 	}: SubjectListScreenProps) => {
 		const gridState = useLocalObservable(
-			() => new DataGridStateModel({ queryStates, setQueryStates }),
+			() =>
+				new DataGridStateModel({
+					queryStates,
+					setQueryStates,
+				}),
 		);
-
 		useEffect(() => {
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
@@ -208,44 +193,48 @@ export const SubjectListScreen = observer(
 			onClickSubject(subject.id);
 		};
 		const handleSubjectGroupFilterChange = (group: string | null) => {
-			void setQueryStates({ group, skip: 0 });
+			void setQueryStates({
+				group,
+				skip: 0,
+			});
 		};
-
 		if (isLoading) {
 			return <SubjectsScreenFallback />;
 		}
-
 		return (
 			<div className="space-y-5">
 				<PageTitleBar
 					title="권한 대상 목록"
 					description="역할이나 정책에서 무엇을 허용할지 선택할 때 사용하는 관리 대상입니다."
 				/>
-				<SectionSurface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
-					<VStack gap="section">
-						<SubjectGroupFilterTabs
-							selectedGroup={queryStates.group}
-							onChangeGroup={handleSubjectGroupFilterChange}
-						/>
-						<DataGrid
-							config={{
-								entity: "Subject",
-								columns: subjectTableColumns,
-								leftInputs,
-								onRowClick: handleRowClick,
-								emptyMessage: "조회된 대상이 없습니다.",
-							}}
-							rows={visibleSubjects}
-							totalCount={totalCount}
-							state={gridState}
-						/>
-					</VStack>
+				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+					<Section overflow="hidden">
+						<Section.Body>
+							<VStack gap="section">
+								<SubjectGroupFilterTabs
+									selectedGroup={queryStates.group}
+									onChangeGroup={handleSubjectGroupFilterChange}
+								/>
+								<DataGrid
+									config={{
+										entity: "Subject",
+										columns: subjectTableColumns,
+										leftInputs,
+										onRowClick: handleRowClick,
+										emptyMessage: "조회된 대상이 없습니다.",
+									}}
+									rows={visibleSubjects}
+									totalCount={totalCount}
+									state={gridState}
+								/>
+							</VStack>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</div>
 		);
 	},
 );
-
 const SubjectsScreenFallback = observer(function SubjectsScreenFallback() {
 	return (
 		<div className="space-y-5">
@@ -254,7 +243,9 @@ const SubjectsScreenFallback = observer(function SubjectsScreenFallback() {
 				description="역할이나 정책에서 무엇을 허용할지 선택할 때 사용하는 관리 대상입니다."
 			/>
 			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface/70">
-				{null}
+				<Section>
+					<Section.Body>{null}</Section.Body>
+				</Section>
 			</SectionSurface>
 		</div>
 	);

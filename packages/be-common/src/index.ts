@@ -26,11 +26,13 @@ export {
 	ManageEntityPolicy,
 } from "./casl";
 export {
-	AccessibleSpaces,
-	OnlyMySpace,
+	SPACE_RESOURCE_SCOPE_SWAGGER_EXTENSION,
 	SPACE_SCOPE_KEY,
-	SpaceScope,
+	SpaceResourceScope,
 	SpaceScopeInterceptor,
+	WithAncestorSpaces,
+	WithDescendantSpaces,
+	WithSpaceTree,
 } from "./context";
 // Filters
 export { AllExceptionsFilter } from "./filter";

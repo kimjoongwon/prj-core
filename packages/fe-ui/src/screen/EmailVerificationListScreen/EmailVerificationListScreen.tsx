@@ -12,6 +12,7 @@ import {
 	DataGrid,
 	DataGridStateModel,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
@@ -20,11 +21,19 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 
 const EMAIL_VERIFICATION_STATUS_OPTIONS = [
-	{ value: "PENDING", label: "대기" },
-	{ value: "VERIFIED", label: "인증 완료" },
-	{ value: "EXPIRED", label: "만료" },
+	{
+		value: "PENDING",
+		label: "대기",
+	},
+	{
+		value: "VERIFIED",
+		label: "인증 완료",
+	},
+	{
+		value: "EXPIRED",
+		label: "만료",
+	},
 ];
-
 const leftInputs: InputConfig[] = [
 	{
 		type: "search",
@@ -41,9 +50,7 @@ const leftInputs: InputConfig[] = [
 		},
 	},
 ];
-
 export const adminEmailVerificationsPageQueryInputs = [...leftInputs];
-
 export interface EmailVerificationListScreenQueryStates
 	extends DataGridQueryStates {
 	take: number;
@@ -52,7 +59,6 @@ export interface EmailVerificationListScreenQueryStates
 	status: string;
 }
 export type EmailVerificationListScreenSetQueryStates = DataGridSetQueryStates;
-
 export interface EmailVerificationListScreenProps {
 	verifications?: EmailVerificationDto[];
 	totalCount: number;
@@ -77,62 +83,62 @@ export const EmailVerificationListScreen = observer(
 		onConfirmResendEmailVerification,
 	}: EmailVerificationListScreenProps) => {
 		const gridState = useLocalObservable(
-			() => new DataGridStateModel({ queryStates, setQueryStates }),
+			() =>
+				new DataGridStateModel({
+					queryStates,
+					setQueryStates,
+				}),
 		);
-
 		useEffect(() => {
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
-
 		const resendModal = useOverlayState();
 		const [verificationToResend, setVerificationToResend] =
 			useState<EmailVerificationDto | null>(null);
 		const rows = verifications ?? [];
-
 		const onClickOpenResendModal = (
 			verification: EmailVerificationDto,
 		): void => {
 			setVerificationToResend(verification);
 			resendModal.open();
 		};
-
 		const onCloseResendModal = (): void => {
 			setVerificationToResend(null);
 			resendModal.close();
 		};
-
 		const onClickConfirmResend = (): void => {
 			if (!verificationToResend) {
 				return;
 			}
-
 			onConfirmResendEmailVerification(verificationToResend.id);
 			onCloseResendModal();
 		};
-
 		const columns = buildEmailVerificationTableColumns<EmailVerificationDto>({
 			onClickOpenResendModal,
 		});
-
 		return (
 			<VStack gap={5}>
 				<PageTitleBar
 					title="이메일 인증"
 					description="회원가입 전 이메일 인증 요청과 발송 상태를 관리합니다."
 				/>
-				<SectionSurface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
-					<DataGrid
-						config={{
-							entity: "EmailVerification",
-							columns,
-							leftInputs,
-							emptyMessage: "조회된 이메일 인증 요청이 없습니다.",
-						}}
-						rows={rows}
-						totalCount={totalCount}
-						state={gridState}
-						isLoading={isLoading}
-					/>
+				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+					<Section overflow="hidden" inset="none">
+						<Section.Body>
+							<DataGrid
+								config={{
+									entity: "EmailVerification",
+									columns,
+									leftInputs,
+									emptyMessage: "조회된 이메일 인증 요청이 없습니다.",
+								}}
+								rows={rows}
+								totalCount={totalCount}
+								state={gridState}
+								isLoading={isLoading}
+							/>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 				<ConfirmModal
 					isOpen={resendModal.isOpen}

@@ -5,6 +5,7 @@ import { ArrowLeft, Edit, Key, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display";
+import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
 import { PageTitleBar } from "../../widget";
@@ -49,12 +50,15 @@ export const AbilityDetailScreen = observer(
 			return (
 				<VStack gap="section" fullWidth>
 					<PageTitleBar title="권한 상세" description="로딩 중..." />
-
 					<SectionSurface>
-						<div className="flex items-center justify-center gap-2 p-8">
-							<Spinner size="sm" />
-							<span className="text-muted">로딩 중...</span>
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex items-center justify-center gap-2 p-8">
+									<Spinner size="sm" />
+									<span className="text-muted">로딩 중...</span>
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -66,14 +70,17 @@ export const AbilityDetailScreen = observer(
 						title="권한 상세"
 						description="권한을 찾을 수 없습니다."
 					/>
-
 					<SectionSurface>
-						<div className="flex flex-col items-center justify-center gap-4 p-8">
-							<p className="text-muted">권한을 찾을 수 없습니다.</p>
-							<Button variant="flat" onPress={props.onClickBackButton}>
-								목록으로
-							</Button>
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex flex-col items-center justify-center gap-4 p-8">
+									<p className="text-muted">권한을 찾을 수 없습니다.</p>
+									<Button variant="flat" onPress={props.onClickBackButton}>
+										목록으로
+									</Button>
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -118,109 +125,121 @@ export const AbilityDetailScreen = observer(
 						</div>
 					}
 				/>
-
 				<SectionSurface>
-					<VStack gap="section">
-						<SectionSurface>
-							<h3 className="mb-4 text-lg font-semibold">기본 정보</h3>
-							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-								<div>
-									<label className="text-sm text-muted">권한 이름</label>
-									<p className="mt-1 font-mono">{ability.name}</p>
-								</div>
-								<div>
-									<label className="text-sm text-muted">유형</label>
-									<div className="mt-1">
-										<Chip
-											size="sm"
-											color={ability.inverted ? "danger" : "success"}
-											variant="flat"
-										>
-											{ability.inverted ? "거부(cannot)" : "허용(can)"}
-										</Chip>
-									</div>
-								</div>
-								{ability.description ? (
-									<div className="md:col-span-2">
-										<label className="text-sm text-muted">설명</label>
-										<p className="mt-1">{ability.description}</p>
-									</div>
-								) : null}
-								{ability.inverted && ability.reason ? (
-									<div className="md:col-span-2">
-										<label className="text-sm text-muted">거부 사유</label>
-										<p className="mt-1 text-danger">{ability.reason}</p>
-									</div>
-								) : null}
-							</div>
-						</SectionSurface>
-						<SectionSurface>
-							<h3 className="mb-4 text-lg font-semibold">CASL 정보</h3>
-							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-								<div>
-									<label className="text-sm text-muted">Subject</label>
-									<p className="mt-1">{ability.subjectLabel || "-"}</p>
-								</div>
-								<div>
-									<label className="text-sm text-muted">Action</label>
-									<p className="mt-1">{ability.actionLabel || "-"}</p>
-								</div>
-								<div className="md:col-span-2">
-									<label className="text-sm text-muted">Fields</label>
-									<div className="mt-1">
-										{ability.fields.length === 0 ? (
-											<Chip size="sm" variant="flat">
-												전체 필드
-											</Chip>
-										) : (
-											<div className="flex flex-wrap gap-2">
-												{ability.fields.map((field) => (
+					<Section>
+						<Section.Body>
+							<VStack gap="section">
+								<Section>
+									<Section.Body>
+										<h3 className="mb-4 text-lg font-semibold">기본 정보</h3>
+										<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+											<div>
+												<label className="text-sm text-muted">권한 이름</label>
+												<p className="mt-1 font-mono">{ability.name}</p>
+											</div>
+											<div>
+												<label className="text-sm text-muted">유형</label>
+												<div className="mt-1">
 													<Chip
-														key={`${ability.id}-${field}`}
 														size="sm"
+														color={ability.inverted ? "danger" : "success"}
 														variant="flat"
 													>
-														{field}
+														{ability.inverted ? "거부(cannot)" : "허용(can)"}
 													</Chip>
-												))}
+												</div>
 											</div>
-										)}
-									</div>
-								</div>
-								{ability.conditions ? (
-									<div className="md:col-span-2">
-										<label className="text-sm text-muted">
-											Conditions (JSON)
-										</label>
-										<pre className="mt-1 overflow-x-auto rounded-lg bg-surface-secondary p-4 text-xs">
-											{JSON.stringify(ability.conditions, null, 2)}
-										</pre>
-									</div>
-								) : null}
-							</div>
-						</SectionSurface>
-						<SectionSurface>
-							<h3 className="mb-4 text-lg font-semibold">메타 정보</h3>
-							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-								<div>
-									<label className="text-sm text-muted">생성일</label>
-									<p className="mt-1">
-										{new Date(ability.createdAt).toLocaleString("ko-KR")}
-									</p>
-								</div>
-								{ability.updatedAt ? (
-									<div>
-										<label className="text-sm text-muted">수정일</label>
-										<p className="mt-1">
-											{new Date(ability.updatedAt).toLocaleString("ko-KR")}
-										</p>
-									</div>
-								) : null}
-							</div>
-						</SectionSurface>
-					</VStack>
+											{ability.description ? (
+												<div className="md:col-span-2">
+													<label className="text-sm text-muted">설명</label>
+													<p className="mt-1">{ability.description}</p>
+												</div>
+											) : null}
+											{ability.inverted && ability.reason ? (
+												<div className="md:col-span-2">
+													<label className="text-sm text-muted">
+														거부 사유
+													</label>
+													<p className="mt-1 text-danger">{ability.reason}</p>
+												</div>
+											) : null}
+										</div>
+									</Section.Body>
+								</Section>
+								<Section>
+									<Section.Body>
+										<h3 className="mb-4 text-lg font-semibold">CASL 정보</h3>
+										<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+											<div>
+												<label className="text-sm text-muted">Subject</label>
+												<p className="mt-1">{ability.subjectLabel || "-"}</p>
+											</div>
+											<div>
+												<label className="text-sm text-muted">Action</label>
+												<p className="mt-1">{ability.actionLabel || "-"}</p>
+											</div>
+											<div className="md:col-span-2">
+												<label className="text-sm text-muted">Fields</label>
+												<div className="mt-1">
+													{ability.fields.length === 0 ? (
+														<Chip size="sm" variant="flat">
+															전체 필드
+														</Chip>
+													) : (
+														<div className="flex flex-wrap gap-2">
+															{ability.fields.map((field) => (
+																<Chip
+																	key={`${ability.id}-${field}`}
+																	size="sm"
+																	variant="flat"
+																>
+																	{field}
+																</Chip>
+															))}
+														</div>
+													)}
+												</div>
+											</div>
+											{ability.conditions ? (
+												<div className="md:col-span-2">
+													<label className="text-sm text-muted">
+														Conditions (JSON)
+													</label>
+													<pre className="mt-1 overflow-x-auto rounded-lg bg-surface-secondary p-4 text-xs">
+														{JSON.stringify(ability.conditions, null, 2)}
+													</pre>
+												</div>
+											) : null}
+										</div>
+									</Section.Body>
+								</Section>
+								<Section>
+									<Section.Body>
+										<h3 className="mb-4 text-lg font-semibold">메타 정보</h3>
+										<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+											<div>
+												<label className="text-sm text-muted">생성일</label>
+												<p className="mt-1">
+													{new Date(ability.createdAt).toLocaleString("ko-KR")}
+												</p>
+											</div>
+											{ability.updatedAt ? (
+												<div>
+													<label className="text-sm text-muted">수정일</label>
+													<p className="mt-1">
+														{new Date(ability.updatedAt).toLocaleString(
+															"ko-KR",
+														)}
+													</p>
+												</div>
+											) : null}
+										</div>
+									</Section.Body>
+								</Section>
+							</VStack>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
-
 				<Modal state={deleteModalState}>
 					<Modal.Backdrop>
 						<Modal.Container>

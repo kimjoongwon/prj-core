@@ -7,6 +7,7 @@ import type { Route } from "next";
 import Link from "next/link";
 import { Button } from "../../action/Button/Button";
 import { DateTimeCell } from "../../cell";
+import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
 import { PageTitleBar } from "../../widget";
@@ -81,11 +82,14 @@ export const TimelineSessionProgramDetailScreen = observer(
 			return (
 				<VStack gap="section" fullWidth>
 					<PageTitleBar title="프로그램 상세" description="로딩 중..." />
-
 					<SectionSurface>
-						<div className="flex items-center justify-center p-8">
-							<Spinner size="lg" />
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex items-center justify-center p-8">
+									<Spinner size="lg" />
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -97,11 +101,14 @@ export const TimelineSessionProgramDetailScreen = observer(
 						title="프로그램 상세"
 						description="프로그램을 찾을 수 없습니다."
 					/>
-
 					<SectionSurface>
-						<div className="flex items-center justify-center p-8 text-muted">
-							프로그램을 찾을 수 없습니다.
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex items-center justify-center p-8 text-muted">
+									프로그램을 찾을 수 없습니다.
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -131,161 +138,184 @@ export const TimelineSessionProgramDetailScreen = observer(
 						</div>
 					}
 				/>
-
 				<SectionSurface>
-					<SectionSurface top={<PageTitleBar level={2} title="기본 정보" />}>
-						<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-							<div>
-								<label className="text-sm text-muted">프로그램 이름</label>
-								<p className="mt-1">{program.name ?? "-"}</p>
-							</div>
-							<div>
-								<label className="text-sm text-muted">루틴</label>
-								<div className="mt-1">
-									{program.routineHref && program.routineName ? (
-										<Link
-											href={program.routineHref}
-											className="text-accent hover:underline"
-										>
-											{program.routineName}
-										</Link>
-									) : (
-										(program.routineName ?? "-")
-									)}
-								</div>
-							</div>
-							<div>
-								<label className="text-sm text-muted">강사</label>
-								<p className="mt-1">{program.instructorLabel ?? "-"}</p>
-							</div>
-							<div>
-								<label className="text-sm text-muted">정원</label>
-								<p className="mt-1">{program.capacityLabel ?? "-"}</p>
-							</div>
-							<div>
-								<label className="text-sm text-muted">난이도</label>
-								<p className="mt-1">{program.levelLabel ?? "-"}</p>
-							</div>
-							<div>
-								<label className="text-sm text-muted">운동 수</label>
-								<p className="mt-1">
-									{program.activityCountLabel ??
-										`${program.executionPlan.length}개`}
-								</p>
-							</div>
-							<div>
-								<label className="text-sm text-muted">세션</label>
-								<div className="mt-1">
-									{program.sessionHref && program.sessionName ? (
-										<Link
-											href={program.sessionHref}
-											className="text-accent hover:underline"
-										>
-											{program.sessionName}
-										</Link>
-									) : (
-										(program.sessionName ?? "-")
-									)}
-								</div>
-							</div>
-							<div>
-								<label className="text-sm text-muted">등록일</label>
-								<div className="mt-1">
-									{program.createdAt ? (
-										<DateTimeCell value={program.createdAt} />
-									) : (
-										"-"
-									)}
-								</div>
-							</div>
-						</div>
-					</SectionSurface>
-					<SectionSurface top={<PageTitleBar level={2} title="실행 운동" />}>
-						{program.executionPlan.length === 0 ? (
-							<p className="text-muted text-sm">
-								저장된 실행 운동 계획이 없습니다.
-							</p>
-						) : (
-							<div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-								{program.executionPlan.map((activity) => (
-									<div
-										key={activity.id}
-										className="rounded-lg bg-surface-secondary p-4"
-									>
-										<div className="flex items-start justify-between gap-3">
-											<div>
-												<p className="text-sm text-muted">
-													{activity.order}번 운동
-												</p>
-												<p className="font-semibold">{activity.exerciseName}</p>
-											</div>
-											<p className="text-muted text-sm">
-												Task {activity.taskId.slice(-6)}
-											</p>
+					<Section>
+						<Section.Body>
+							<Section>
+								<Section.Header>
+									<PageTitleBar level={2} title="기본 정보" />
+								</Section.Header>
+								<Section.Body>
+									<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+										<div>
+											<label className="text-sm text-muted">
+												프로그램 이름
+											</label>
+											<p className="mt-1">{program.name ?? "-"}</p>
 										</div>
-										<div className="mt-3 grid grid-cols-2 gap-3 text-sm">
-											<div>
-												<label className="text-muted">반복</label>
-												<p className="mt-1">{activity.repetitions}회</p>
-											</div>
-											<div>
-												<label className="text-muted">휴식</label>
-												<p className="mt-1">{activity.restTime}초</p>
-											</div>
-											<div>
-												<label className="text-muted">기본 시간</label>
-												<p className="mt-1">
-													{formatExerciseDuration(activity.exerciseDuration)}
-												</p>
-											</div>
-											<div>
-												<label className="text-muted">기본 횟수</label>
-												<p className="mt-1">{activity.exerciseCount}회</p>
+										<div>
+											<label className="text-sm text-muted">루틴</label>
+											<div className="mt-1">
+												{program.routineHref && program.routineName ? (
+													<Link
+														href={program.routineHref}
+														className="text-accent hover:underline"
+													>
+														{program.routineName}
+													</Link>
+												) : (
+													(program.routineName ?? "-")
+												)}
 											</div>
 										</div>
-										<div className="mt-3 text-sm">
-											<label className="text-muted">설명</label>
+										<div>
+											<label className="text-sm text-muted">강사</label>
+											<p className="mt-1">{program.instructorLabel ?? "-"}</p>
+										</div>
+										<div>
+											<label className="text-sm text-muted">정원</label>
+											<p className="mt-1">{program.capacityLabel ?? "-"}</p>
+										</div>
+										<div>
+											<label className="text-sm text-muted">난이도</label>
+											<p className="mt-1">{program.levelLabel ?? "-"}</p>
+										</div>
+										<div>
+											<label className="text-sm text-muted">운동 수</label>
 											<p className="mt-1">
-												{activity.exerciseDescription || activity.notes || "-"}
+												{program.activityCountLabel ??
+													`${program.executionPlan.length}개`}
 											</p>
 										</div>
-										<div className="mt-3 grid grid-cols-1 gap-2 text-sm">
-											<div>
-												<label className="text-muted">이미지 자산</label>
-												<div className="mt-1">
-													{activity.imageFileId && activity.imageAssetHref ? (
-														<Link
-															href={activity.imageAssetHref}
-															className="font-mono text-accent text-sm hover:underline"
-														>
-															{activity.imageFileId}
-														</Link>
-													) : (
-														"-"
-													)}
-												</div>
+										<div>
+											<label className="text-sm text-muted">세션</label>
+											<div className="mt-1">
+												{program.sessionHref && program.sessionName ? (
+													<Link
+														href={program.sessionHref}
+														className="text-accent hover:underline"
+													>
+														{program.sessionName}
+													</Link>
+												) : (
+													(program.sessionName ?? "-")
+												)}
 											</div>
-											<div>
-												<label className="text-muted">영상 자산</label>
-												<div className="mt-1">
-													{activity.videoFileId && activity.videoAssetHref ? (
-														<Link
-															href={activity.videoAssetHref}
-															className="font-mono text-accent text-sm hover:underline"
-														>
-															{activity.videoFileId}
-														</Link>
-													) : (
-														"-"
-													)}
-												</div>
+										</div>
+										<div>
+											<label className="text-sm text-muted">등록일</label>
+											<div className="mt-1">
+												{program.createdAt ? (
+													<DateTimeCell value={program.createdAt} />
+												) : (
+													"-"
+												)}
 											</div>
 										</div>
 									</div>
-								))}
-							</div>
-						)}
-					</SectionSurface>
+								</Section.Body>
+							</Section>
+							<Section>
+								<Section.Header>
+									<PageTitleBar level={2} title="실행 운동" />
+								</Section.Header>
+								<Section.Body>
+									{program.executionPlan.length === 0 ? (
+										<p className="text-muted text-sm">
+											저장된 실행 운동 계획이 없습니다.
+										</p>
+									) : (
+										<div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+											{program.executionPlan.map((activity) => (
+												<div
+													key={activity.id}
+													className="rounded-lg bg-surface-secondary p-4"
+												>
+													<div className="flex items-start justify-between gap-3">
+														<div>
+															<p className="text-sm text-muted">
+																{activity.order}번 운동
+															</p>
+															<p className="font-semibold">
+																{activity.exerciseName}
+															</p>
+														</div>
+														<p className="text-muted text-sm">
+															Task {activity.taskId.slice(-6)}
+														</p>
+													</div>
+													<div className="mt-3 grid grid-cols-2 gap-3 text-sm">
+														<div>
+															<label className="text-muted">반복</label>
+															<p className="mt-1">{activity.repetitions}회</p>
+														</div>
+														<div>
+															<label className="text-muted">휴식</label>
+															<p className="mt-1">{activity.restTime}초</p>
+														</div>
+														<div>
+															<label className="text-muted">기본 시간</label>
+															<p className="mt-1">
+																{formatExerciseDuration(
+																	activity.exerciseDuration,
+																)}
+															</p>
+														</div>
+														<div>
+															<label className="text-muted">기본 횟수</label>
+															<p className="mt-1">{activity.exerciseCount}회</p>
+														</div>
+													</div>
+													<div className="mt-3 text-sm">
+														<label className="text-muted">설명</label>
+														<p className="mt-1">
+															{activity.exerciseDescription ||
+																activity.notes ||
+																"-"}
+														</p>
+													</div>
+													<div className="mt-3 grid grid-cols-1 gap-2 text-sm">
+														<div>
+															<label className="text-muted">이미지 자산</label>
+															<div className="mt-1">
+																{activity.imageFileId &&
+																activity.imageAssetHref ? (
+																	<Link
+																		href={activity.imageAssetHref}
+																		className="font-mono text-accent text-sm hover:underline"
+																	>
+																		{activity.imageFileId}
+																	</Link>
+																) : (
+																	"-"
+																)}
+															</div>
+														</div>
+														<div>
+															<label className="text-muted">영상 자산</label>
+															<div className="mt-1">
+																{activity.videoFileId &&
+																activity.videoAssetHref ? (
+																	<Link
+																		href={activity.videoAssetHref}
+																		className="font-mono text-accent text-sm hover:underline"
+																	>
+																		{activity.videoFileId}
+																	</Link>
+																) : (
+																	"-"
+																)}
+															</div>
+														</div>
+													</div>
+												</div>
+											))}
+										</div>
+									)}
+								</Section.Body>
+							</Section>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 				<Modal state={deleteModalState}>
 					<Modal.Backdrop>

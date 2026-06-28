@@ -14,6 +14,7 @@ import {
 	type InquiryStats,
 	InquiryStatsCards,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
@@ -27,7 +28,6 @@ const searchInput: InputConfig = {
 	id: "search",
 	placeholder: "제목 또는 고객 ID로 검색",
 };
-
 const statusInput: InputConfig = {
 	type: "select",
 	id: "inquiryStatus",
@@ -37,9 +37,7 @@ const statusInput: InputConfig = {
 		options: [],
 	},
 };
-
 export const adminInquiriesPageQueryInputs = [searchInput, statusInput];
-
 export interface InquiryListScreenQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
@@ -47,7 +45,6 @@ export interface InquiryListScreenQueryStates extends DataGridQueryStates {
 	inquiryStatus: string;
 }
 export type InquiryListScreenSetQueryStates = DataGridSetQueryStates;
-
 export interface InquiryListScreenProps {
 	inquiries?: InquiryDto[];
 	totalCount: number;
@@ -61,17 +58,17 @@ export interface InquiryListScreenProps {
 	onClickInquiryRow: (inquiryId: string) => void;
 	onClickStatusFilter: (status: string | undefined) => void;
 }
-
 function InquiriesScreenFallback() {
 	return (
 		<div className="space-y-5">
 			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface/70">
-				{null}
+				<Section>
+					<Section.Body>{null}</Section.Body>
+				</Section>
 			</SectionSurface>
 		</div>
 	);
 }
-
 export const InquiryListScreen = observer(
 	({
 		inquiries,
@@ -87,9 +84,12 @@ export const InquiryListScreen = observer(
 		onClickStatusFilter,
 	}: InquiryListScreenProps) => {
 		const gridState = useLocalObservable(
-			() => new DataGridStateModel({ queryStates, setQueryStates }),
+			() =>
+				new DataGridStateModel({
+					queryStates,
+					setQueryStates,
+				}),
 		);
-
 		useEffect(() => {
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
@@ -105,11 +105,9 @@ export const InquiryListScreen = observer(
 				},
 			},
 		];
-
 		if (isLoading) {
 			return <InquiriesScreenFallback />;
 		}
-
 		return (
 			<div className="space-y-5">
 				<PageTitleBar
@@ -127,33 +125,41 @@ export const InquiryListScreen = observer(
 				/>
 				<VStack gap={4}>
 					<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
-						<div className="mb-4 border-b border-border/80 pb-4">
-							<PageTitleBar level={2} title="문의 현황" />
-						</div>
-						<InquiryStatsCards
-							stats={stats}
-							activeStatus={activeStatus}
-							onStatusClick={onClickStatusFilter}
-						/>
+						<Section>
+							<Section.Body>
+								<div className="mb-4 border-b border-border/80 pb-4">
+									<PageTitleBar level={2} title="문의 현황" />
+								</div>
+								<InquiryStatsCards
+									stats={stats}
+									activeStatus={activeStatus}
+									onStatusClick={onClickStatusFilter}
+								/>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 					<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
-						<div className="mb-4 border-b border-border/80 pb-4">
-							<PageTitleBar level={2} title="문의 목록" />
-						</div>
-						<DataGrid
-							config={{
-								entity: "Inquiry",
-								columns,
-								leftInputs,
-								onRowClick: (inquiry) => {
-									onClickInquiryRow(inquiry.id);
-								},
-								emptyMessage: "표시할 문의가 없습니다.",
-							}}
-							rows={inquiryRows}
-							totalCount={totalCount}
-							state={gridState}
-						/>
+						<Section>
+							<Section.Body>
+								<div className="mb-4 border-b border-border/80 pb-4">
+									<PageTitleBar level={2} title="문의 목록" />
+								</div>
+								<DataGrid
+									config={{
+										entity: "Inquiry",
+										columns,
+										leftInputs,
+										onRowClick: (inquiry) => {
+											onClickInquiryRow(inquiry.id);
+										},
+										emptyMessage: "표시할 문의가 없습니다.",
+									}}
+									rows={inquiryRows}
+									totalCount={totalCount}
+									state={gridState}
+								/>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			</div>

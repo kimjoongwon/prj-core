@@ -10,13 +10,12 @@ import {
 	type ToggleButtonProps as BaseToggleButtonProps,
 } from "./ToggleButton";
 
-export interface ToggleButtonProps<TState extends object = Record<string, unknown>>
-	extends MobxProps<TState>,
+export interface ToggleButtonProps<
+	TState extends object = Record<string, unknown>,
+> extends MobxProps<TState>,
 		Omit<BaseToggleButtonProps, "isSelected" | "onChange"> {}
 
-type ToggleButtonComponent = <
-	TState extends object = Record<string, unknown>,
->(
+type ToggleButtonComponent = <TState extends object = Record<string, unknown>>(
 	props: ToggleButtonProps<TState>,
 ) => ReactElement | null;
 

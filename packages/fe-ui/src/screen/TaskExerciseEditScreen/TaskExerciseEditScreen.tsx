@@ -7,6 +7,7 @@ import {
 	ContentLanguageNotice,
 	MediaThumbnail,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	useT,
 	VStack,
@@ -169,12 +170,15 @@ export const TaskExerciseEditScreen = observer(
 			return (
 				<VStack gap="section" fullWidth>
 					<PageTitleBar title="운동 정보 수정" description="로딩 중..." />
-
 					<SectionSurface>
-						<div className="flex items-center justify-center gap-2 p-8">
-							<Spinner size="sm" />
-							<span className="text-muted">{t("로딩 중...")}</span>
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex items-center justify-center gap-2 p-8">
+									<Spinner size="sm" />
+									<span className="text-muted">{t("로딩 중...")}</span>
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -186,16 +190,19 @@ export const TaskExerciseEditScreen = observer(
 						title="운동 정보 수정"
 						description="운동 detail을 찾을 수 없습니다."
 					/>
-
 					<SectionSurface>
-						<div className="flex flex-col items-center justify-center gap-4 p-8">
-							<p className="text-muted">
-								{t("운동 detail을 찾을 수 없습니다.")}
-							</p>
-							<Button variant="flat" onPress={onClickCancelButton}>
-								{t("목록으로")}
-							</Button>
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex flex-col items-center justify-center gap-4 p-8">
+									<p className="text-muted">
+										{t("운동 detail을 찾을 수 없습니다.")}
+									</p>
+									<Button variant="flat" onPress={onClickCancelButton}>
+										{t("목록으로")}
+									</Button>
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -228,110 +235,125 @@ export const TaskExerciseEditScreen = observer(
 						</div>
 					}
 				/>
-
-				<SectionSurface top={<PageTitleBar level={2} title="기본 정보" />}>
-					<div className="flex flex-col gap-4">
-						<ContentLanguageNotice contentLanguageCode={contentLanguageCode} />
-						<Input
-							label={t("운동명")}
-							placeholder={t("운동 이름을 입력하세요")}
-							value={name}
-							onValueChange={onChangeNameInput}
-							isRequired
-							isInvalid={Boolean(errors.name)}
-							errorMessage={errors.name ? t(errors.name) : undefined}
-						/>
-						<div>
-							<label className="mb-1 block text-sm font-medium text-foreground">
-								{t("지속시간")} <span className="text-danger">*</span>
-							</label>
-							<div className="flex items-center gap-2">
-								<Input
-									type="number"
-									placeholder={t("분")}
-									value={String(durationMin)}
-									onValueChange={onChangeDurationMinInput}
-									min={0}
-									endContent={
-										<span className="text-sm text-muted">{t("분")}</span>
-									}
-									className="max-w-32"
+				<SectionSurface>
+					<Section>
+						<Section.Header>
+							<PageTitleBar level={2} title="기본 정보" />
+						</Section.Header>
+						<Section.Body>
+							<div className="flex flex-col gap-4">
+								<ContentLanguageNotice
+									contentLanguageCode={contentLanguageCode}
 								/>
 								<Input
-									type="number"
-									placeholder={t("초")}
-									value={String(durationSec)}
-									onValueChange={onChangeDurationSecInput}
-									min={0}
-									max={59}
-									endContent={
-										<span className="text-sm text-muted">{t("초")}</span>
-									}
-									className="max-w-32"
+									label={t("운동명")}
+									placeholder={t("운동 이름을 입력하세요")}
+									value={name}
+									onValueChange={onChangeNameInput}
+									isRequired
+									isInvalid={Boolean(errors.name)}
+									errorMessage={errors.name ? t(errors.name) : undefined}
 								/>
+								<div>
+									<label className="mb-1 block text-sm font-medium text-foreground">
+										{t("지속시간")} <span className="text-danger">*</span>
+									</label>
+									<div className="flex items-center gap-2">
+										<Input
+											type="number"
+											placeholder={t("분")}
+											value={String(durationMin)}
+											onValueChange={onChangeDurationMinInput}
+											min={0}
+											endContent={
+												<span className="text-sm text-muted">{t("분")}</span>
+											}
+											className="max-w-32"
+										/>
+										<Input
+											type="number"
+											placeholder={t("초")}
+											value={String(durationSec)}
+											onValueChange={onChangeDurationSecInput}
+											min={0}
+											max={59}
+											endContent={
+												<span className="text-sm text-muted">{t("초")}</span>
+											}
+											className="max-w-32"
+										/>
+									</div>
+									{errors.duration ? (
+										<p className="mt-1 text-sm text-danger">
+											{t(errors.duration)}
+										</p>
+									) : null}
+								</div>
+								<Input
+									label={t("반복횟수")}
+									type="number"
+									placeholder={t("반복 횟수")}
+									value={String(count)}
+									onValueChange={onChangeCountInput}
+									isRequired
+									min={1}
+									isInvalid={Boolean(errors.count)}
+									errorMessage={errors.count ? t(errors.count) : undefined}
+									endContent={
+										<span className="text-sm text-muted">{t("회")}</span>
+									}
+								/>
+								<TextArea
+									label={t("설명")}
+									placeholder={t("운동 설명, 수행 방법 등을 입력하세요 (선택)")}
+									value={description}
+									onValueChange={onChangeDescriptionTextArea}
+									maxLength={500}
+									minRows={3}
+								/>
+								<ExerciseMediaField
+									label="대표 이미지"
+									description="운동 카드와 상세 화면에서 먼저 보일 이미지를 선택합니다."
+									selectedAsset={selectedImageAsset}
+									placeholder="이미지 에셋을 선택하면 여기서 바로 미리보기를 확인할 수 있습니다."
+									onOpenPicker={onOpenImagePicker}
+									onClear={() => {
+										onChangeImageFileIdInput("");
+										onClickClearImageAssetButton();
+									}}
+								/>
+								<ExerciseMediaField
+									label="운동 영상"
+									description="루틴 편성과 프로그램 생성에는 영상이 연결된 운동이 필요합니다."
+									selectedAsset={selectedVideoAsset}
+									placeholder="영상 에셋을 선택하면 루틴 카드에서 영상 썸네일로 활용됩니다."
+									onOpenPicker={onOpenVideoPicker}
+									onClear={() => {
+										onChangeVideoFileIdInput("");
+										onClickClearVideoAssetButton();
+									}}
+								/>
+								<div className="rounded-lg bg-surface-secondary p-3 text-sm text-muted">
+									<div className="flex items-center gap-2">
+										<span className="font-medium text-foreground">
+											{t("스케줄 가능 상태")}
+										</span>
+										<Chip
+											color={isSchedulable ? "success" : "warning"}
+											size="sm"
+										>
+											{isSchedulable ? t("가능") : t("불가")}
+										</Chip>
+									</div>
+									<p className="mt-2">
+										{t(
+											"영상 파일 ID가 입력된 Exercise만 루틴 편성 및 Program 생성에 사용할 수 있습니다.",
+										)}
+									</p>
+								</div>
 							</div>
-							{errors.duration ? (
-								<p className="mt-1 text-sm text-danger">{t(errors.duration)}</p>
-							) : null}
-						</div>
-						<Input
-							label={t("반복횟수")}
-							type="number"
-							placeholder={t("반복 횟수")}
-							value={String(count)}
-							onValueChange={onChangeCountInput}
-							isRequired
-							min={1}
-							isInvalid={Boolean(errors.count)}
-							errorMessage={errors.count ? t(errors.count) : undefined}
-							endContent={<span className="text-sm text-muted">{t("회")}</span>}
-						/>
-						<TextArea
-							label={t("설명")}
-							placeholder={t("운동 설명, 수행 방법 등을 입력하세요 (선택)")}
-							value={description}
-							onValueChange={onChangeDescriptionTextArea}
-							maxLength={500}
-							minRows={3}
-						/>
-						<ExerciseMediaField
-							label="대표 이미지"
-							description="운동 카드와 상세 화면에서 먼저 보일 이미지를 선택합니다."
-							selectedAsset={selectedImageAsset}
-							placeholder="이미지 에셋을 선택하면 여기서 바로 미리보기를 확인할 수 있습니다."
-							onOpenPicker={onOpenImagePicker}
-							onClear={() => {
-								onChangeImageFileIdInput("");
-								onClickClearImageAssetButton();
-							}}
-						/>
-						<ExerciseMediaField
-							label="운동 영상"
-							description="루틴 편성과 프로그램 생성에는 영상이 연결된 운동이 필요합니다."
-							selectedAsset={selectedVideoAsset}
-							placeholder="영상 에셋을 선택하면 루틴 카드에서 영상 썸네일로 활용됩니다."
-							onOpenPicker={onOpenVideoPicker}
-							onClear={() => {
-								onChangeVideoFileIdInput("");
-								onClickClearVideoAssetButton();
-							}}
-						/>
-						<div className="rounded-lg bg-surface-secondary p-3 text-sm text-muted">
-							<div className="flex items-center gap-2">
-								<span className="font-medium text-foreground">
-									{t("스케줄 가능 상태")}
-								</span>
-								<Chip color={isSchedulable ? "success" : "warning"} size="sm">
-									{isSchedulable ? t("가능") : t("불가")}
-								</Chip>
-							</div>
-							<p className="mt-2">
-								{t(
-									"영상 파일 ID가 입력된 Exercise만 루틴 편성 및 Program 생성에 사용할 수 있습니다.",
-								)}
-							</p>
-						</div>
-					</div>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 				<AssetBrowser
 					{...assetBrowserProps}

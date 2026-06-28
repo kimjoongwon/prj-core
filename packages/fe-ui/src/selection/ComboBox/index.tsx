@@ -27,7 +27,9 @@ export const ComboBox = Object.assign(
 			path,
 			state,
 			value:
-				currentValue === undefined || currentValue === null || currentValue === ""
+				currentValue === undefined ||
+				currentValue === null ||
+				currentValue === ""
 					? null
 					: (String(currentValue) as Key),
 		});

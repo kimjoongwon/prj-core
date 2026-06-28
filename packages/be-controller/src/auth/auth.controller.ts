@@ -29,6 +29,7 @@ import {
 	ApiAuth,
 	ApiErrors,
 	ApiResponseEntity,
+	ApiTenantHeader,
 	Public,
 	ResponseMessage,
 	Roles,
@@ -309,7 +310,7 @@ export class AuthController {
 		summary: "토큰 유효성 검증",
 		description: "현재 요청의 액세스 토큰이 유효한지 검증합니다.",
 	})
-	@ApiAuth()
+	@ApiAuth({ tenantHeader: false })
 	@SkipSpaceCheck()
 	@ApiErrors({ status: 401, message: AUTH_ERRORS.TOKEN_INVALID })
 	@ApiResponseEntity(VerifyTokenResponseDto, HttpStatus.OK)
@@ -347,6 +348,11 @@ export class AuthController {
 	})
 	@ApiCookieAuth(Token.ACCESS)
 	@ApiSecurity("oauth2", ["openid", "profile", "email", "roles"])
+	@ApiTenantHeader({
+		required: false,
+		description:
+			"현재 Space를 해석할 Tenant ID입니다. 없으면 접근 가능한 기본 Space를 반환합니다.",
+	})
 	@ApiErrors(401, 500)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	@ResponseMessage("현재 Space 조회 성공")

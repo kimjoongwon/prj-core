@@ -11,6 +11,7 @@ import {
 	DataGrid,
 	DataGridStateModel,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 } from "@cocrepo/ui";
 import { Modal, useOverlayState } from "@heroui/react";
@@ -26,16 +27,13 @@ const leftInputs: InputConfig[] = [
 		placeholder: "타임라인 이름으로 검색...",
 	},
 ];
-
 export const adminTimelinesPageQueryInputs = [...leftInputs];
-
 export interface TimelineListScreenQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
 	search: string;
 }
 export type TimelineListScreenSetQueryStates = DataGridSetQueryStates;
-
 export interface TimelineListScreenProps {
 	timelines?: TimelineDto[];
 	totalCount: number;
@@ -46,7 +44,6 @@ export interface TimelineListScreenProps {
 	onClickCreateButton: () => void;
 	onDeleteTimeline: (timelineId: string) => Promise<void>;
 }
-
 function TimelinesScreenFallback() {
 	return (
 		<div className="space-y-5">
@@ -55,12 +52,13 @@ function TimelinesScreenFallback() {
 				description="학기/시즌 단위 타임라인을 관리합니다."
 			/>
 			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface/70">
-				{null}
+				<Section>
+					<Section.Body>{null}</Section.Body>
+				</Section>
 			</SectionSurface>
 		</div>
 	);
 }
-
 export const TimelineListScreen = observer(
 	({
 		timelines,
@@ -73,9 +71,12 @@ export const TimelineListScreen = observer(
 		onDeleteTimeline,
 	}: TimelineListScreenProps) => {
 		const gridState = useLocalObservable(
-			() => new DataGridStateModel({ queryStates, setQueryStates }),
+			() =>
+				new DataGridStateModel({
+					queryStates,
+					setQueryStates,
+				}),
 		);
-
 		useEffect(() => {
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
@@ -95,11 +96,9 @@ export const TimelineListScreen = observer(
 		const columns = buildTimelineTableColumns<TimelineDto>({
 			onClickDeleteButton: onClickDeleteIcon,
 		});
-
 		if (isLoading) {
 			return <TimelinesScreenFallback />;
 		}
-
 		return (
 			<div className="space-y-5">
 				<PageTitleBar
@@ -115,18 +114,22 @@ export const TimelineListScreen = observer(
 						</Button>
 					}
 				/>
-				<SectionSurface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
-					<DataGrid
-						config={{
-							entity: "Timeline",
-							columns,
-							leftInputs,
-							emptyMessage: "등록된 타임라인이 없습니다.",
-						}}
-						rows={timelineRows}
-						totalCount={totalCount}
-						state={gridState}
-					/>
+				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+					<Section overflow="hidden" inset="none">
+						<Section.Body>
+							<DataGrid
+								config={{
+									entity: "Timeline",
+									columns,
+									leftInputs,
+									emptyMessage: "등록된 타임라인이 없습니다.",
+								}}
+								rows={timelineRows}
+								totalCount={totalCount}
+								state={gridState}
+							/>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 				<Modal state={deleteModal}>
 					<Modal.Backdrop>

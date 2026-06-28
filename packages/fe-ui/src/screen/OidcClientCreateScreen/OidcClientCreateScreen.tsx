@@ -8,6 +8,7 @@ import {
 	OidcClientForm,
 	type OidcClientFormState,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
@@ -125,27 +126,31 @@ export const OidcClientCreateScreen = observer(
 					description="새 OIDC 클라이언트를 등록합니다."
 					actions={<BackButton onClick={onClickBackButton} label="목록으로" />}
 				/>
-
 				<SectionSurface>
-					<VStack gap={4}>
-						<SectionSurface
-							top={
-								<PageTitleBar
-									level={2}
-									title="클라이언트 설정"
-									description="기본 정보, 인증 방식, Redirect URI를 입력합니다."
-								/>
-							}
-						>
-							<OidcClientForm
-								mode="create"
-								state={formState}
-								onSubmit={onClickSubmitButton}
-								onCancel={onClickBackButton}
-								isSubmitting={isSubmitting}
-							/>
-						</SectionSurface>
-					</VStack>
+					<Section>
+						<Section.Body>
+							<VStack gap={4}>
+								<Section>
+									<Section.Header>
+										<PageTitleBar
+											level={2}
+											title="클라이언트 설정"
+											description="기본 정보, 인증 방식, Redirect URI를 입력합니다."
+										/>
+									</Section.Header>
+									<Section.Body>
+										<OidcClientForm
+											mode="create"
+											state={formState}
+											onSubmit={onClickSubmitButton}
+											onCancel={onClickBackButton}
+											isSubmitting={isSubmitting}
+										/>
+									</Section.Body>
+								</Section>
+							</VStack>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</VStack>
 		);

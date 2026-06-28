@@ -6,6 +6,7 @@ import {
 	Input,
 	PageTitleBar,
 	ProgramPickerModal,
+	Section,
 	SectionSurface,
 	useT,
 	VStack,
@@ -128,150 +129,167 @@ export const TimelineSessionProgramCreateScreen = observer(
 						</Button>
 					}
 				/>
-
-				<SectionSurface top={<PageTitleBar level={2} title="기본 정보" />}>
-					<VStack gap={4}>
-						<ContentLanguageNotice contentLanguageCode={contentLanguageCode} />
-						<Input
-							label="프로그램 이름"
-							labelPlacement="outside"
-							placeholder="프로그램 이름을 입력하세요."
-							value={name}
-							onValueChange={onChangeNameInput}
-							isRequired
-							isInvalid={!!errors.name}
-							errorMessage={errors.name}
-						/>
-						<div className="grid grid-cols-1 gap-2 md:grid-cols-[1fr_auto] md:items-end">
-							<Input
-								label="루틴"
-								labelPlacement="outside"
-								value={routineName}
-								placeholder="루틴을 선택하세요"
-								isReadOnly
-								isRequired
-								isInvalid={!!errors.routineId}
-								errorMessage={errors.routineId}
-								description="모달에서 루틴을 선택하세요."
-							/>
-							<Button variant="flat" onPress={onClickOpenRoutinePickerButton}>
-								루틴 선택
-							</Button>
-						</div>
-						<div className="grid grid-cols-1 gap-2 md:grid-cols-[1fr_auto] md:items-end">
-							<Input
-								label="강사"
-								labelPlacement="outside"
-								value={instructorName}
-								placeholder="강사를 선택하세요"
-								isReadOnly
-								isRequired
-								isInvalid={!!errors.instructorId}
-								errorMessage={errors.instructorId}
-								description="모달에서 강사를 선택하세요."
-							/>
-							<Button
-								variant="flat"
-								onPress={onClickOpenInstructorPickerButton}
-							>
-								강사 선택
-							</Button>
-						</div>
-						<div className="rounded-lg bg-surface-secondary p-3 text-sm text-muted">
-							<p className="font-medium text-foreground">{t("연결 요약")}</p>
-							<p className="mt-1">
-								{t("루틴")}: {routineName || "-"}
-							</p>
-							<p>
-								{t("강사")}: {instructorName || "-"}
-							</p>
-						</div>
-						<div className="rounded-lg border border-border p-3">
-							<div className="flex items-center justify-between gap-3">
-								<p className="font-medium text-foreground">
-									{t("실행 운동 preview")}
-								</p>
-								<Chip
-									color={hasUnschedulableRoutine ? "warning" : "success"}
-									size="sm"
-								>
-									{hasUnschedulableRoutine ? t("저장 불가") : t("저장 가능")}
-								</Chip>
-							</div>
-							{routinePreview.length === 0 ? (
-								<p className="mt-2 text-sm text-muted">
-									{t("선택한 루틴에 등록된 운동이 없습니다.")}
-								</p>
-							) : (
-								<div className="mt-3 flex flex-col gap-2">
-									{routinePreview.map((activity, index) => (
-										<div
-											key={`${activity.id}:${index}`}
-											className="rounded-md bg-surface-secondary px-3 py-2"
-										>
-											<div className="flex items-center justify-between gap-3">
-												<p className="font-medium">
-													{activity.order}. {activity.exerciseName}
-												</p>
-												<Chip
-													color={activity.isSchedulable ? "success" : "warning"}
-													size="sm"
-													variant="flat"
-												>
-													{activity.isSchedulable ? t("가능") : t("불가")}
-												</Chip>
-											</div>
-											<p className="mt-1 text-muted text-sm">
-												{t("반복")} {activity.repetitions}
-												{t("회")} · {t("휴식")} {activity.restTime}
-												{t("초")}
-											</p>
-											{activity.notes ? (
-												<p className="mt-1 text-muted text-xs">
-													{activity.notes}
-												</p>
-											) : null}
-										</div>
-									))}
+				<SectionSurface>
+					<Section>
+						<Section.Header>
+							<PageTitleBar level={2} title="기본 정보" />
+						</Section.Header>
+						<Section.Body>
+							<VStack gap={4}>
+								<ContentLanguageNotice
+									contentLanguageCode={contentLanguageCode}
+								/>
+								<Input
+									label="프로그램 이름"
+									labelPlacement="outside"
+									placeholder="프로그램 이름을 입력하세요."
+									value={name}
+									onValueChange={onChangeNameInput}
+									isRequired
+									isInvalid={!!errors.name}
+									errorMessage={errors.name}
+								/>
+								<div className="grid grid-cols-1 gap-2 md:grid-cols-[1fr_auto] md:items-end">
+									<Input
+										label="루틴"
+										labelPlacement="outside"
+										value={routineName}
+										placeholder="루틴을 선택하세요"
+										isReadOnly
+										isRequired
+										isInvalid={!!errors.routineId}
+										errorMessage={errors.routineId}
+										description="모달에서 루틴을 선택하세요."
+									/>
+									<Button
+										variant="flat"
+										onPress={onClickOpenRoutinePickerButton}
+									>
+										루틴 선택
+									</Button>
 								</div>
-							)}
-							{hasUnschedulableRoutine ? (
-								<p className="mt-3 text-sm text-warning">
-									{t(
-										"영상이 없는 운동이 포함되어 있어 저장 버튼이 비활성화됩니다.",
+								<div className="grid grid-cols-1 gap-2 md:grid-cols-[1fr_auto] md:items-end">
+									<Input
+										label="강사"
+										labelPlacement="outside"
+										value={instructorName}
+										placeholder="강사를 선택하세요"
+										isReadOnly
+										isRequired
+										isInvalid={!!errors.instructorId}
+										errorMessage={errors.instructorId}
+										description="모달에서 강사를 선택하세요."
+									/>
+									<Button
+										variant="flat"
+										onPress={onClickOpenInstructorPickerButton}
+									>
+										강사 선택
+									</Button>
+								</div>
+								<div className="rounded-lg bg-surface-secondary p-3 text-sm text-muted">
+									<p className="font-medium text-foreground">
+										{t("연결 요약")}
+									</p>
+									<p className="mt-1">
+										{t("루틴")}: {routineName || "-"}
+									</p>
+									<p>
+										{t("강사")}: {instructorName || "-"}
+									</p>
+								</div>
+								<div className="rounded-lg border border-border p-3">
+									<div className="flex items-center justify-between gap-3">
+										<p className="font-medium text-foreground">
+											{t("실행 운동 preview")}
+										</p>
+										<Chip
+											color={hasUnschedulableRoutine ? "warning" : "success"}
+											size="sm"
+										>
+											{hasUnschedulableRoutine
+												? t("저장 불가")
+												: t("저장 가능")}
+										</Chip>
+									</div>
+									{routinePreview.length === 0 ? (
+										<p className="mt-2 text-sm text-muted">
+											{t("선택한 루틴에 등록된 운동이 없습니다.")}
+										</p>
+									) : (
+										<div className="mt-3 flex flex-col gap-2">
+											{routinePreview.map((activity, index) => (
+												<div
+													key={`${activity.id}:${index}`}
+													className="rounded-md bg-surface-secondary px-3 py-2"
+												>
+													<div className="flex items-center justify-between gap-3">
+														<p className="font-medium">
+															{activity.order}. {activity.exerciseName}
+														</p>
+														<Chip
+															color={
+																activity.isSchedulable ? "success" : "warning"
+															}
+															size="sm"
+															variant="flat"
+														>
+															{activity.isSchedulable ? t("가능") : t("불가")}
+														</Chip>
+													</div>
+													<p className="mt-1 text-muted text-sm">
+														{t("반복")} {activity.repetitions}
+														{t("회")} · {t("휴식")} {activity.restTime}
+														{t("초")}
+													</p>
+													{activity.notes ? (
+														<p className="mt-1 text-muted text-xs">
+															{activity.notes}
+														</p>
+													) : null}
+												</div>
+											))}
+										</div>
 									)}
-								</p>
-							) : null}
-						</div>
-						<Input
-							label="정원"
-							labelPlacement="outside"
-							type="number"
-							placeholder="정원을 입력하세요."
-							value={capacity}
-							onValueChange={onChangeCapacityInput}
-							isRequired
-							isInvalid={!!errors.capacity}
-							errorMessage={errors.capacity}
-							min={1}
-						/>
-						<Select
-							label="난이도"
-							value={selectedLevel}
-							onChange={(value) => onChangeLevelSelect(String(value ?? ""))}
-							options={LEVEL_OPTIONS}
-						/>
-						<div className="flex justify-end">
-							<Button
-								color="primary"
-								onPress={onClickSubmitButton}
-								isLoading={isSubmitPending}
-								isDisabled={isSubmitDisabled}
-							>
-								등록
-							</Button>
-						</div>
-					</VStack>
+									{hasUnschedulableRoutine ? (
+										<p className="mt-3 text-sm text-warning">
+											{t(
+												"영상이 없는 운동이 포함되어 있어 저장 버튼이 비활성화됩니다.",
+											)}
+										</p>
+									) : null}
+								</div>
+								<Input
+									label="정원"
+									labelPlacement="outside"
+									type="number"
+									placeholder="정원을 입력하세요."
+									value={capacity}
+									onValueChange={onChangeCapacityInput}
+									isRequired
+									isInvalid={!!errors.capacity}
+									errorMessage={errors.capacity}
+									min={1}
+								/>
+								<Select
+									label="난이도"
+									value={selectedLevel}
+									onChange={(value) => onChangeLevelSelect(String(value ?? ""))}
+									options={LEVEL_OPTIONS}
+								/>
+								<div className="flex justify-end">
+									<Button
+										color="primary"
+										onPress={onClickSubmitButton}
+										isLoading={isSubmitPending}
+										isDisabled={isSubmitDisabled}
+									>
+										등록
+									</Button>
+								</div>
+							</VStack>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 				<ProgramPickerModal
 					isOpen={isRoutinePickerOpen}

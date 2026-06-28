@@ -79,6 +79,7 @@ interface StorybookRuntimeConfig {
 
 interface SpaceOption {
 	spaceId: string;
+	tenantId: string;
 	groundName: string;
 }
 
@@ -94,14 +95,17 @@ const FALLBACK_ABILITY_RULES: AbilityRule[] = [
 const STATIC_ADMIN_SPACES: SpaceOption[] = [
 	{
 		spaceId: "storybook-space",
+		tenantId: "storybook-tenant",
 		groundName: "Storybook Space",
 	},
 	{
 		spaceId: "storybook-ops-space",
+		tenantId: "storybook-ops-tenant",
 		groundName: "Storybook Ops",
 	},
 	{
 		spaceId: "storybook-growth-space",
+		tenantId: "storybook-growth-tenant",
 		groundName: "Storybook Growth",
 	},
 ];

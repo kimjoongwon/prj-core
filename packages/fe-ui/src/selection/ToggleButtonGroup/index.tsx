@@ -58,9 +58,7 @@ export const ToggleButtonGroup = Object.assign(
 		const field = useFormField<TState, ToggleButtonGroupValue>({
 			path,
 			state,
-			value: toKeyArray(
-				tools.get(state, path) ?? rest.defaultSelectedKeys,
-			),
+			value: toKeyArray(tools.get(state, path) ?? rest.defaultSelectedKeys),
 		});
 
 		const handleSelectionChange = (keys: unknown) => {

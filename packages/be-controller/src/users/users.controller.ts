@@ -42,7 +42,7 @@ export class UsersController {
 		operationId: "getUsers",
 		summary: "사용자 목록 조회",
 		description:
-			"현재 x-tenant-id로 선택된 Tenant의 role이 PLATFORM_ADMIN이면 전체 사용자 목록을, 그 외에는 현재 Space 기준 사용자 목록을 조회합니다. 검색/필터링/페이지네이션과 통계 정보를 함께 반환합니다.",
+			"현재 x-tenant-id로 선택된 Tenant의 Space category scope 기준 사용자 목록을 조회합니다. 기본 scope는 현재 Space와 하위 Space입니다. 검색/필터링/페이지네이션과 통계 정보를 함께 반환합니다.",
 	})
 	@ApiAuth()
 	@ApiErrors(

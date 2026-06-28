@@ -5,6 +5,7 @@ export * from "./Dialog";
 export * from "./ListGroup";
 export * from "./Menu";
 export * from "./Popover";
+export * from "./ResponsiveFrame";
 export * from "./ScreenActionBar";
 export * from "./ScreenFrame";
 export * from "./ScrollShadow";

@@ -5,8 +5,8 @@ import { ExternalLink } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
-import { CourseTablePanel } from "../CourseTablePanel";
 import type { CourseOfferingRow } from "../Course.types";
+import { CourseTablePanel } from "../CourseTablePanel";
 
 export interface CourseOfferingTableProps {
 	offerings: CourseOfferingRow[];

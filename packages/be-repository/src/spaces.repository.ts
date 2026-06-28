@@ -1,5 +1,11 @@
 import { Company, Ground, Space } from "@cocrepo/entity";
-import { LanguageCode, Prisma, PrismaClient } from "@cocrepo/prisma";
+import {
+	CategoryTypes,
+	LanguageCode,
+	Prisma,
+	PrismaClient,
+} from "@cocrepo/prisma";
+import { SpaceResourceScope } from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
@@ -367,48 +373,108 @@ export class SpacesRepository {
 	}
 
 	/**
-	 * SpaceCategory 위계 기반 접근 가능한 Space ID 배열 조회
-	 *
-	 * 1. 해당 Space의 SpaceClassification → Category (children 포함) 조회
-	 * 2. 현재 Category + 하위 Category에 속한 모든 Space ID 수집
-	 *
-	 * ROOT Category → 자신 + 모든 BRANCH Space
-	 * BRANCH Category → 자신만
+	 * Space Category 위계 기반 Space ID 배열을 조회합니다.
 	 */
-	async findSpaceIdsByCategoryHierarchy(spaceId: string): Promise<string[]> {
+	async findSpaceIdsByCategoryHierarchy(
+		spaceId: string,
+		scope: SpaceResourceScope = SpaceResourceScope.WITH_DESCENDANTS,
+	): Promise<string[]> {
 		this.logger.debug(
-			`카테고리 위계 기반 Space ID 조회: spaceId=${spaceId.slice(-8)}`,
+			`카테고리 위계 기반 Space ID 조회: spaceId=${spaceId.slice(-8)}, scope=${scope}`,
 		);
 
 		const spaceClassification =
-			await this.txHost.tx.spaceClassification.findUnique({
-				where: { spaceId },
-				include: {
+			await this.txHost.tx.spaceClassification.findFirst({
+				where: {
+					spaceId,
+					removedAt: null,
+					space: { removedAt: null },
 					category: {
-						include: {
-							children: true,
-						},
+						type: CategoryTypes.Space,
+						removedAt: null,
 					},
 				},
+				select: { categoryId: true },
 			});
 
 		if (!spaceClassification) {
 			return [spaceId];
 		}
 
-		const categoryIds = [spaceClassification.categoryId];
-		for (const child of spaceClassification.category.children) {
-			categoryIds.push(child.id);
+		const categories = await this.txHost.tx.category.findMany({
+			where: {
+				type: CategoryTypes.Space,
+				removedAt: null,
+			},
+			select: {
+				id: true,
+				parentId: true,
+			},
+		});
+		const categoryById = new Map(
+			categories.map((category) => [category.id, category]),
+		);
+		const childCategoryIdsByParentId = new Map<string, string[]>();
+		for (const category of categories) {
+			if (!category.parentId) {
+				continue;
+			}
+
+			const childCategoryIds =
+				childCategoryIdsByParentId.get(category.parentId) ?? [];
+			childCategoryIds.push(category.id);
+			childCategoryIdsByParentId.set(category.parentId, childCategoryIds);
+		}
+
+		const categoryIds = new Set<string>([spaceClassification.categoryId]);
+
+		if (
+			scope === SpaceResourceScope.WITH_ANCESTORS ||
+			scope === SpaceResourceScope.WITH_TREE
+		) {
+			let cursor = categoryById.get(spaceClassification.categoryId)?.parentId;
+			while (cursor) {
+				categoryIds.add(cursor);
+				cursor = categoryById.get(cursor)?.parentId;
+			}
+		}
+
+		if (
+			scope === SpaceResourceScope.WITH_DESCENDANTS ||
+			scope === SpaceResourceScope.WITH_TREE
+		) {
+			const pendingCategoryIds = [
+				...(childCategoryIdsByParentId.get(spaceClassification.categoryId) ??
+					[]),
+			];
+			while (pendingCategoryIds.length > 0) {
+				const categoryId = pendingCategoryIds.shift();
+				if (!categoryId || categoryIds.has(categoryId)) {
+					continue;
+				}
+
+				categoryIds.add(categoryId);
+				pendingCategoryIds.push(
+					...(childCategoryIdsByParentId.get(categoryId) ?? []),
+				);
+			}
 		}
 
 		const classifications = await this.txHost.tx.spaceClassification.findMany({
 			where: {
-				categoryId: { in: categoryIds },
+				removedAt: null,
+				categoryId: { in: [...categoryIds] },
+				space: { removedAt: null },
 			},
 			select: { spaceId: true },
 		});
 
-		return classifications.map((c) => c.spaceId);
+		return [
+			...new Set([
+				spaceId,
+				...classifications.map((classification) => classification.spaceId),
+			]),
+		];
 	}
 
 	/**

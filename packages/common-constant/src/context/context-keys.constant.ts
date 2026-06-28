@@ -16,7 +16,7 @@ export const CONTEXT_KEYS = {
 	/** 현재 Tenant에서 파생된 Space ID - undefined이면 선택되지 않은 상태 */
 	SPACE_ID: "request.space_id",
 	/** SpaceScopeInterceptor가 계산한 최종 Space IDs (데코레이터 기반)
-	 * - undefined: 슈퍼매니저 (전체 조회)
+	 * - undefined: 필터 미적용이 명시적으로 허용된 내부 경로
 	 * - [id1, id2, ...]: Tenant 기반 필터링
 	 */
 	EFFECTIVE_SPACE_IDS: "request.effective_space_ids",

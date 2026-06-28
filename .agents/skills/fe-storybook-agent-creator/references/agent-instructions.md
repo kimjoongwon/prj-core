@@ -37,6 +37,8 @@
 - form 스토리는 create/update, disabled/readOnly/hidden, validation error, AI fillable 상태 중 spec에 있는 상태를 포함합니다.
 - DataGrid/Table/Cell 스토리는 기본값, empty/null, 긴 문장, status/variant, selection/sort/filter/pagination 중 해당 컴포넌트가 지원하는 상태를 포함합니다.
 - screen 스토리는 ready, loading, empty, error, 긴 문장, narrow/모바일 상태 중 spec에 적힌 상태를 포함합니다.
+- web layout/surface 스토리는 현재 surface ownership을 그대로 보여야 합니다. page/screen outer 표면은 `PageSurface` 또는 public export boundary의 `ScreenSurface`, 주요 구획은 `SectionSurface`가 감싼 `Section` compound, widget/local panel은 `Surface`로 구성합니다.
+- `SectionSurface` 스토리에서 예전 `top`/`bottom`/`left`/`right` 슬롯 API를 다시 만들지 않습니다. 제목/본문/푸터/좌우 보조영역은 `Section.Header`/`Section.Body`/`Section.Footer`/`Section.LeftAside`/`Section.RightAside`로 보여줍니다.
 - 모바일 스토리는 `packages/fe-mo-ui`의 Text/Provider/Portal 규칙을 따르고, raw string children이 HeroUI Native에 직접 새지 않게 fixture를 구성합니다.
 
 ## Fixture / Mock 기준

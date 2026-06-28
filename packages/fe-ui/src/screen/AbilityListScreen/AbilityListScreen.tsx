@@ -9,6 +9,7 @@ import {
 	buildAbilityListTableColumns,
 	DataGrid,
 	DataGridStateModel,
+	SectionSurface,
 } from "@cocrepo/ui";
 import { ListBox, Spinner } from "@heroui/react";
 import {
@@ -25,23 +26,20 @@ import { useEffect } from "react";
 import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
 import { Input } from "../../input/Input/Input";
+import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
 import { Select } from "../../selection/Select/Select";
-import { SectionSurface } from "../../surface";
 import { PageTitleBar, StatsCard } from "../../widget";
-
 export interface AbilityListScreenOption {
 	id: string;
 	label: string;
 }
-
 export interface AbilityListScreenFilters {
 	searchTerm: string;
 	selectedSubjectId: string;
 	selectedActionId: string;
 	selectedInverted: string;
 }
-
 export interface AbilityListScreenQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
@@ -51,7 +49,6 @@ export interface AbilityListScreenQueryStates extends DataGridQueryStates {
 	inverted: string;
 }
 export type AbilityListScreenSetQueryStates = DataGridSetQueryStates;
-
 export interface AbilityListScreenSummary {
 	total: number;
 	filtered: number;
@@ -60,7 +57,6 @@ export interface AbilityListScreenSummary {
 	conditional: number;
 	fieldScoped: number;
 }
-
 export interface AbilityListScreenProps {
 	abilities?: AbilityResponseDto[];
 	totalCount: number;
@@ -79,14 +75,11 @@ export interface AbilityListScreenProps {
 	onClickAbilityRow: (abilityId: string) => void;
 	onClickCreateButton: () => void;
 }
-
 const abilityListTableColumns =
 	buildAbilityListTableColumns<AbilityResponseDto>();
-
 function getOptionLabel(options: AbilityListScreenOption[], optionId: string) {
 	return options.find((option) => option.id === optionId)?.label ?? "";
 }
-
 function getRuleTypeLabel(value: string) {
 	if (value === "false") {
 		return "허용";
@@ -96,7 +89,6 @@ function getRuleTypeLabel(value: string) {
 	}
 	return "";
 }
-
 function hasActiveFilters(filters: AbilityListScreenFilters) {
 	return Boolean(
 		filters.searchTerm ||
@@ -105,26 +97,32 @@ function hasActiveFilters(filters: AbilityListScreenFilters) {
 			filters.selectedInverted,
 	);
 }
-
 const AbilityListScreenFallback = observer(() => {
 	return (
 		<div className="space-y-5">
-			<SectionSurface className="rounded-2xl border-border/80 bg-surface/70 p-6">
-				<div className="flex items-center justify-center gap-2">
-					<Spinner size="sm" />
-					<span className="text-muted">로딩 중...</span>
-				</div>
+			<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+				<Section inset="none" className="p-6">
+					<Section.Body>
+						<div className="flex items-center justify-center gap-2">
+							<Spinner size="sm" />
+							<span className="text-muted">로딩 중...</span>
+						</div>
+					</Section.Body>
+				</Section>
 			</SectionSurface>
-			<SectionSurface className="rounded-2xl border-border/80 bg-surface/70 p-6">
-				<div className="flex items-center justify-center gap-2">
-					<Spinner size="sm" />
-					<span className="text-muted">로딩 중...</span>
-				</div>
+			<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+				<Section inset="none" className="p-6">
+					<Section.Body>
+						<div className="flex items-center justify-center gap-2">
+							<Spinner size="sm" />
+							<span className="text-muted">로딩 중...</span>
+						</div>
+					</Section.Body>
+				</Section>
 			</SectionSurface>
 		</div>
 	);
 });
-
 export const AbilityListScreen = observer(
 	({
 		abilities,
@@ -145,9 +143,12 @@ export const AbilityListScreen = observer(
 		onClickCreateButton,
 	}: AbilityListScreenProps) => {
 		const gridState = useLocalObservable(
-			() => new DataGridStateModel({ queryStates, setQueryStates }),
+			() =>
+				new DataGridStateModel({
+					queryStates,
+					setQueryStates,
+				}),
 		);
-
 		useEffect(() => {
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
@@ -179,11 +180,9 @@ export const AbilityListScreen = observer(
 		const handleInvertedSelectionChange = (value: string | number | null) => {
 			onChangeInverted(typeof value === "string" ? value : "");
 		};
-
 		if (isLoading) {
 			return <AbilityListScreenFallback />;
 		}
-
 		return (
 			<div className="space-y-5">
 				<PageTitleBar
@@ -235,152 +234,162 @@ export const AbilityListScreen = observer(
 						/>
 					</div>
 					<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
-						<div className="mb-5 border-b border-border/80 pb-4">
-							<PageTitleBar
-								level={2}
-								title="찾기와 좁히기"
-								description="권한 이름뿐 아니라 설명, 대상, 행동으로도 검색할 수 있습니다."
-							/>
-						</div>
-						<div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-							<Input
-								aria-label="권한 이름 검색"
-								placeholder="권한, 대상, 행동 검색"
-								value={filters.searchTerm}
-								onValueChange={onChangeSearchTerm}
-								startContent={<Search className="h-4 w-4 text-muted" />}
-								isClearable
-								onClear={handleSearchClear}
-							/>
-							<Select
-								aria-label="대상 선택"
-								placeholder="대상(Subject)"
-								value={
-									filters.selectedSubjectId &&
-									subjectOptionIds.has(filters.selectedSubjectId)
-										? filters.selectedSubjectId
-										: null
-								}
-								onChange={handleSubjectSelectionChange}
-							>
-								{subjects.map((subject) => (
-									<ListBox.Item
-										key={subject.id}
-										id={subject.id}
-										textValue={subject.label}
+						<Section>
+							<Section.Body>
+								<div className="mb-5 border-b border-border/80 pb-4">
+									<PageTitleBar
+										level={2}
+										title="찾기와 좁히기"
+										description="권한 이름뿐 아니라 설명, 대상, 행동으로도 검색할 수 있습니다."
+									/>
+								</div>
+								<div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+									<Input
+										aria-label="권한 이름 검색"
+										placeholder="권한, 대상, 행동 검색"
+										value={filters.searchTerm}
+										onValueChange={onChangeSearchTerm}
+										startContent={<Search className="h-4 w-4 text-muted" />}
+										isClearable
+										onClear={handleSearchClear}
+									/>
+									<Select
+										aria-label="대상 선택"
+										placeholder="대상(Subject)"
+										value={
+											filters.selectedSubjectId &&
+											subjectOptionIds.has(filters.selectedSubjectId)
+												? filters.selectedSubjectId
+												: null
+										}
+										onChange={handleSubjectSelectionChange}
 									>
-										{subject.label}
-									</ListBox.Item>
-								))}
-							</Select>
-							<Select
-								aria-label="행동 선택"
-								placeholder="행동(Action)"
-								value={
-									filters.selectedActionId &&
-									actionOptionIds.has(filters.selectedActionId)
-										? filters.selectedActionId
-										: null
-								}
-								onChange={handleActionSelectionChange}
-							>
-								{actions.map((action) => (
-									<ListBox.Item
-										key={action.id}
-										id={action.id}
-										textValue={action.label}
+										{subjects.map((subject) => (
+											<ListBox.Item
+												key={subject.id}
+												id={subject.id}
+												textValue={subject.label}
+											>
+												{subject.label}
+											</ListBox.Item>
+										))}
+									</Select>
+									<Select
+										aria-label="행동 선택"
+										placeholder="행동(Action)"
+										value={
+											filters.selectedActionId &&
+											actionOptionIds.has(filters.selectedActionId)
+												? filters.selectedActionId
+												: null
+										}
+										onChange={handleActionSelectionChange}
 									>
-										{action.label}
-									</ListBox.Item>
-								))}
-							</Select>
-							<Select
-								aria-label="규칙 유형 선택"
-								placeholder="규칙 유형"
-								value={
-									filters.selectedInverted === "true" ||
-									filters.selectedInverted === "false"
-										? filters.selectedInverted
-										: null
-								}
-								onChange={handleInvertedSelectionChange}
-							>
-								<ListBox.Item key="false" id="false" textValue="허용">
-									허용
-								</ListBox.Item>
-								<ListBox.Item key="true" id="true" textValue="거부">
-									거부
-								</ListBox.Item>
-							</Select>
-						</div>
-						<div className="mt-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-							<div className="flex min-h-8 flex-wrap items-center gap-2">
-								{filters.searchTerm ? (
-									<Chip size="sm" variant="flat" color="primary">
-										검색: {filters.searchTerm}
-									</Chip>
-								) : null}
-								{selectedSubjectLabel ? (
-									<Chip size="sm" variant="flat" color="secondary">
-										대상: {selectedSubjectLabel}
-									</Chip>
-								) : null}
-								{selectedActionLabel ? (
-									<Chip size="sm" variant="flat" color="secondary">
-										행동: {selectedActionLabel}
-									</Chip>
-								) : null}
-								{selectedRuleTypeLabel ? (
-									<Chip
+										{actions.map((action) => (
+											<ListBox.Item
+												key={action.id}
+												id={action.id}
+												textValue={action.label}
+											>
+												{action.label}
+											</ListBox.Item>
+										))}
+									</Select>
+									<Select
+										aria-label="규칙 유형 선택"
+										placeholder="규칙 유형"
+										value={
+											filters.selectedInverted === "true" ||
+											filters.selectedInverted === "false"
+												? filters.selectedInverted
+												: null
+										}
+										onChange={handleInvertedSelectionChange}
+									>
+										<ListBox.Item key="false" id="false" textValue="허용">
+											허용
+										</ListBox.Item>
+										<ListBox.Item key="true" id="true" textValue="거부">
+											거부
+										</ListBox.Item>
+									</Select>
+								</div>
+								<div className="mt-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+									<div className="flex min-h-8 flex-wrap items-center gap-2">
+										{filters.searchTerm ? (
+											<Chip size="sm" variant="flat" color="primary">
+												검색: {filters.searchTerm}
+											</Chip>
+										) : null}
+										{selectedSubjectLabel ? (
+											<Chip size="sm" variant="flat" color="secondary">
+												대상: {selectedSubjectLabel}
+											</Chip>
+										) : null}
+										{selectedActionLabel ? (
+											<Chip size="sm" variant="flat" color="secondary">
+												행동: {selectedActionLabel}
+											</Chip>
+										) : null}
+										{selectedRuleTypeLabel ? (
+											<Chip
+												size="sm"
+												variant="flat"
+												color={
+													filters.selectedInverted === "true"
+														? "danger"
+														: "success"
+												}
+											>
+												유형: {selectedRuleTypeLabel}
+											</Chip>
+										) : null}
+										{!activeFilters ? (
+											<span className="text-sm text-muted">
+												적용된 필터가 없습니다.
+											</span>
+										) : null}
+									</div>
+									<Button
 										size="sm"
 										variant="flat"
-										color={
-											filters.selectedInverted === "true" ? "danger" : "success"
-										}
+										startContent={<FilterX className="h-4 w-4" />}
+										isDisabled={!activeFilters}
+										onPress={onClickResetFiltersButton}
 									>
-										유형: {selectedRuleTypeLabel}
-									</Chip>
-								) : null}
-								{!activeFilters ? (
-									<span className="text-sm text-muted">
-										적용된 필터가 없습니다.
-									</span>
-								) : null}
-							</div>
-							<Button
-								size="sm"
-								variant="flat"
-								startContent={<FilterX className="h-4 w-4" />}
-								isDisabled={!activeFilters}
-								onPress={onClickResetFiltersButton}
-							>
-								필터 초기화
-							</Button>
-						</div>
+										필터 초기화
+									</Button>
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 
-					<SectionSurface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
-						<div className="mb-4 border-b border-border/80 pb-4">
-							<PageTitleBar
-								level={2}
-								title="권한 규칙"
-								description="행을 선택하면 상세 정보와 JSON 조건을 확인할 수 있습니다."
-							/>
-						</div>
-						<DataGrid
-							config={{
-								entity: "Ability",
-								columns: abilityListTableColumns,
-								onRowClick: handleAbilityRowClick,
-								emptyMessage:
-									totalCount === 0
-										? "등록된 권한이 없습니다."
-										: "검색 조건에 맞는 권한이 없습니다.",
-							}}
-							rows={abilityRows}
-							totalCount={totalCount}
-							state={gridState}
-						/>
+					<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+						<Section overflow="hidden">
+							<Section.Body>
+								<div className="mb-4 border-b border-border/80 pb-4">
+									<PageTitleBar
+										level={2}
+										title="권한 규칙"
+										description="행을 선택하면 상세 정보와 JSON 조건을 확인할 수 있습니다."
+									/>
+								</div>
+								<DataGrid
+									config={{
+										entity: "Ability",
+										columns: abilityListTableColumns,
+										onRowClick: handleAbilityRowClick,
+										emptyMessage:
+											totalCount === 0
+												? "등록된 권한이 없습니다."
+												: "검색 조건에 맞는 권한이 없습니다.",
+									}}
+									rows={abilityRows}
+									totalCount={totalCount}
+									state={gridState}
+								/>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			</div>

@@ -43,8 +43,8 @@ export class SpaceContext {
 
 	/**
 	 * 쿼리 필터용 Space IDs
-	 * - undefined: 전체 조회 (PLATFORM_ADMIN)
-	 * - [id]: 현재 선택 Space만 조회
+	 * - undefined: 필터 미적용이 명시적으로 허용된 내부 경로
+	 * - [id1, id2, ...]: 현재 선택 Tenant의 Space category scope
 	 */
 	get spaceIds(): string[] | undefined {
 		return this.cls.get<string[] | undefined>(CONTEXT_KEYS.EFFECTIVE_SPACE_IDS);

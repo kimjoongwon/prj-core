@@ -76,7 +76,7 @@ Next.js App Router의 `apps/**/layout.tsx`와 Expo Router `_layout.tsx`는 `fe-r
 | Layout 타입 | O | `Layout` |
 | 기존 소유 계약 | O | route `page.spec.md` 또는 관련 Screen/Feature 스펙의 Layout 계약 |
 | 사용 시나리오 | O | 어떤 route skeleton에서 어떤 슬롯이 필요한지 |
-| 관련 surface 규칙 | △ | `ScreenSurface`, `SectionSurface`와의 조합 제약 |
+| 관련 surface 규칙 | △ | `PageSurface`/`ScreenSurface`, `SectionSurface`, `Surface`와의 조합 제약 |
 
 ### 출력
 
@@ -94,7 +94,7 @@ Next.js App Router의 `apps/**/layout.tsx`와 Expo Router `_layout.tsx`는 `fe-r
 - `Layout`은 전역/세그먼트 레이아웃의 큰 구조 슬롯을 제공합니다.
 - `Layout`은 flat primitive이며 내부에 `layout/Layout` 같은 중첩 폴더를 만들지 않습니다.
 - `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 widget 계층이며 이 하위 에이전트 범위가 아닙니다.
-- `ScreenSurface`, `SectionSurface`, `Surface`는 별도 surface 계층이며, 이 하위 에이전트는 구조 primitive가 screen/feature/widget surface ownership과 자연스럽게 조합되도록 돕습니다.
+- `PageSurface`/`ScreenSurface`, `SectionSurface`, `Surface`는 별도 surface 계층이며, 이 하위 에이전트는 구조 primitive가 screen/feature/widget surface ownership과 자연스럽게 조합되도록 돕습니다.
 - Layout primitive는 `Surface`나 제거된 detail/form 이전 방식 surface wrapper를 직접 사용하지 않습니다.
 
 ---
@@ -108,7 +108,7 @@ Next.js App Router의 `apps/**/layout.tsx`와 Expo Router `_layout.tsx`는 `fe-r
    - 허용 예: `header`, `sidebar`, `top`, `leftAside`, `right`, `children`
    - 금지 예: `userMenu`, `membersFilter`, `roleTabs`
 5. 경로/도메인/특정 메뉴 라벨 같은 route 지식을 Layout primitive에 하드코딩하지 않습니다.
-6. `App`과 `Page`는 배치를 담당하고, surface/elevation은 자동 생성하지 않습니다.
+6. `App`, `Page`, `Section`은 배치를 담당하고, surface/elevation은 자동 생성하지 않습니다.
 7. `Page`를 대체하는 임시 scaffold 계열을 새로 만들지 않습니다.
 8. `packages/fe-ui/src/layout` 아래에는 layout primitive source/export만 둡니다.
 9. `packages/fe-ui/src/layout` 또는 `packages/fe-mo-ui/src/layout` 아래에 불필요한 중첩 카테고리를 만들지 않습니다.
@@ -119,17 +119,38 @@ Next.js App Router의 `apps/**/layout.tsx`와 Expo Router `_layout.tsx`는 `fe-r
 
 ### 5.1 계층
 
-`App(header/footer/leftAside/rightAside/main) > Page(children) > Screen`
+`App compound > Page compound > Screen > SectionSurface > Section compound`
 
-- `App`: `header`, `footer`, `leftAside`, `rightAside`, `main` 구조 슬롯을 받는 최상위 root app structure owner
+- `App`: `App.Header`, `App.Body`, `App.LeftAside`, `App.Main`, `App.RightAside`, `App.Footer` compound 슬롯을 받는 최상위 root app structure owner
 - `Layout`: 서비스/세그먼트 공통 레이아웃
-- `Page`: `children`만 받는 페이지 콘텐츠 boundary. `App`의 슬롯 props를 위임하거나 재사용하지 않습니다.
+- `Page`: `Page.Header`, `Page.Body`, `Page.Footer` compound 슬롯을 가진 page-level max-width/vertical rhythm boundary. `App`의 root 슬롯을 위임하거나 재사용하지 않습니다.
+- `Section`: `Section.Header`, `Section.Body`, `Section.LeftAside`, `Section.RightAside`, `Section.Footer` compound 슬롯과 `inset`/`overflow`/aside grid를 담당하는 section layout primitive입니다.
 
 ### 5.2 구조와 표면의 분리
 
-- `App`/`Page`는 위치와 슬롯만 정의합니다.
-- `ScreenSurface`, `SectionSurface`는 screen 계층 surface입니다.
-- feature/widget local panel은 `Surface`로 제한합니다.
+- `App`/`Page`/`Section`은 구조와 리듬만 정의합니다. background, border, radius, elevation tone을 기본 책임으로 갖지 않습니다.
+- `PageSurface`는 page/screen outer canvas 표면입니다. 기존 public screen export는 `ScreenSurface`를 쓸 수 있으며, `ScreenSurface`는 `PageSurface` 호환 alias로 취급합니다.
+- `SectionSurface`는 `layout/Section`을 감싸는 section-level 표면입니다. `top`/`bottom`/`left`/`right` 슬롯 API를 만들지 않고 header/body/footer/aside 구조는 항상 `Section` compound 슬롯이 소유합니다.
+- feature/widget local panel은 `Surface`로 제한합니다. `Surface`는 가장 작은 표면 primitive이며 page/section layout을 대신하지 않습니다.
+
+표준 조합:
+
+```tsx
+<PageSurface>
+  <Page>
+    <Page.Header>...</Page.Header>
+    <Page.Body>
+      <SectionSurface>
+        <Section layout="right" rightAsideWidth="md">
+          <Section.Header>...</Section.Header>
+          <Section.Body>...</Section.Body>
+          <Section.RightAside>...</Section.RightAside>
+        </Section>
+      </SectionSurface>
+    </Page.Body>
+  </Page>
+</PageSurface>
+```
 
 ### 5.3 서버 호환
 

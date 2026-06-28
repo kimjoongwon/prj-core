@@ -12,6 +12,7 @@ import {
 	DataGrid,
 	DataGridStateModel,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
@@ -29,16 +30,13 @@ const leftInputs: InputConfig[] = [
 		placeholder: "이메일 또는 이름으로 검색...",
 	},
 ];
-
 export const idpConsoleAccountsPageQueryInputs = [...leftInputs];
-
 export interface AccountListScreenQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
 	search: string;
 }
 export type AccountListScreenSetQueryStates = DataGridSetQueryStates;
-
 export interface AccountListScreenProps {
 	accounts?: IdpAccountDto[];
 	totalCount: number;
@@ -63,9 +61,12 @@ export const AccountListScreen = observer(
 		onConfirmUnlockAccount,
 	}: AccountListScreenProps) => {
 		const gridState = useLocalObservable(
-			() => new DataGridStateModel({ queryStates, setQueryStates }),
+			() =>
+				new DataGridStateModel({
+					queryStates,
+					setQueryStates,
+				}),
 		);
-
 		useEffect(() => {
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
@@ -73,49 +74,47 @@ export const AccountListScreen = observer(
 		const [accountToUnlock, setAccountToUnlock] =
 			useState<IdpAccountDto | null>(null);
 		const accountRows = accounts ?? [];
-
 		const onClickOpenUnlockModal = (account: IdpAccountDto) => {
 			setAccountToUnlock(account);
 			unlockModal.open();
 		};
-
 		const onCloseUnlockModal = () => {
 			setAccountToUnlock(null);
 			unlockModal.close();
 		};
-
 		const onClickConfirmUnlock = () => {
 			if (!accountToUnlock) {
 				return;
 			}
-
 			onConfirmUnlockAccount(accountToUnlock.id);
 			onCloseUnlockModal();
 		};
-
 		const columns = buildIdpAccountTableColumns<IdpAccountDto>({
 			onClickOpenUnlockModal,
 		});
-
 		return (
 			<VStack gap={5}>
 				<PageTitleBar
 					title="계정 관리"
 					description="IDP 계정의 보안 상태를 관리합니다."
 				/>
-				<SectionSurface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
-					<DataGrid
-						config={{
-							entity: "IdpAccount",
-							columns,
-							leftInputs,
-							emptyMessage: "등록된 계정이 없습니다.",
-						}}
-						rows={accountRows}
-						totalCount={totalCount}
-						state={gridState}
-						isLoading={isLoading}
-					/>
+				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+					<Section overflow="hidden" inset="none">
+						<Section.Body>
+							<DataGrid
+								config={{
+									entity: "IdpAccount",
+									columns,
+									leftInputs,
+									emptyMessage: "등록된 계정이 없습니다.",
+								}}
+								rows={accountRows}
+								totalCount={totalCount}
+								state={gridState}
+								isLoading={isLoading}
+							/>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 				<ConfirmModal
 					isOpen={unlockModal.isOpen}

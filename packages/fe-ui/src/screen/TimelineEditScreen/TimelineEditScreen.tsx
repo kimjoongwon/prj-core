@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
 import { Input } from "../../input/Input";
 import { TextArea } from "../../input/TextArea";
+import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
 import { ContentLanguageNotice, PageTitleBar } from "../../widget";
@@ -52,42 +53,47 @@ export const TimelineEditScreen = observer(
 					description={timelineName}
 					actions={pageActions}
 				/>
-
 				<SectionSurface>
-					<VStack gap={4}>
-						<ContentLanguageNotice contentLanguageCode={contentLanguageCode} />
-						<Input
-							label="타임라인명"
-							labelPlacement="outside"
-							placeholder="타임라인명을 입력하세요."
-							value={name}
-							onValueChange={onChangeNameInput}
-							isRequired
-							isInvalid={Boolean(nameError)}
-							errorMessage={nameError}
-						/>
-						<TextArea
-							label="설명"
-							labelPlacement="outside"
-							placeholder="타임라인에 대한 부가 설명을 입력하세요."
-							value={description}
-							onValueChange={onChangeDescriptionTextArea}
-							maxLength={500}
-							description={`${description.length} / 500`}
-							isInvalid={Boolean(descriptionError)}
-							errorMessage={descriptionError}
-						/>
-						<div className="flex justify-end">
-							<Button
-								color="primary"
-								onPress={onClickSubmitButton}
-								isLoading={isSubmitPending}
-								isDisabled={isSubmitDisabled}
-							>
-								수정
-							</Button>
-						</div>
-					</VStack>
+					<Section>
+						<Section.Body>
+							<VStack gap={4}>
+								<ContentLanguageNotice
+									contentLanguageCode={contentLanguageCode}
+								/>
+								<Input
+									label="타임라인명"
+									labelPlacement="outside"
+									placeholder="타임라인명을 입력하세요."
+									value={name}
+									onValueChange={onChangeNameInput}
+									isRequired
+									isInvalid={Boolean(nameError)}
+									errorMessage={nameError}
+								/>
+								<TextArea
+									label="설명"
+									labelPlacement="outside"
+									placeholder="타임라인에 대한 부가 설명을 입력하세요."
+									value={description}
+									onValueChange={onChangeDescriptionTextArea}
+									maxLength={500}
+									description={`${description.length} / 500`}
+									isInvalid={Boolean(descriptionError)}
+									errorMessage={descriptionError}
+								/>
+								<div className="flex justify-end">
+									<Button
+										color="primary"
+										onPress={onClickSubmitButton}
+										isLoading={isSubmitPending}
+										isDisabled={isSubmitDisabled}
+									>
+										수정
+									</Button>
+								</div>
+							</VStack>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</VStack>
 		);

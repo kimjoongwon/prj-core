@@ -3,6 +3,7 @@
 import {
 	DateTimeCell,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
@@ -41,11 +42,14 @@ export const GroundDetailScreen = observer(
 			return (
 				<VStack gap="section" fullWidth>
 					<PageTitleBar title="시설 정보" description="로딩 중..." />
-
 					<SectionSurface>
-						<div className="flex items-center justify-center p-8">
-							<Spinner size="lg" />
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex items-center justify-center p-8">
+									<Spinner size="lg" />
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -57,18 +61,21 @@ export const GroundDetailScreen = observer(
 						title="시설 정보"
 						description="시설 detail을 찾을 수 없습니다."
 					/>
-
 					<SectionSurface>
-						<div className="flex flex-col items-center justify-center gap-4 p-8">
-							<p className="text-muted">시설 detail을 찾을 수 없습니다.</p>
-							<Button
-								variant="flat"
-								startContent={<ArrowLeft className="size-4" />}
-								onPress={onClickBackButton}
-							>
-								목록으로
-							</Button>
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex flex-col items-center justify-center gap-4 p-8">
+									<p className="text-muted">시설 detail을 찾을 수 없습니다.</p>
+									<Button
+										variant="flat"
+										startContent={<ArrowLeft className="size-4" />}
+										onPress={onClickBackButton}
+									>
+										목록으로
+									</Button>
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -89,67 +96,80 @@ export const GroundDetailScreen = observer(
 						</Button>
 					}
 				/>
-
-				<SectionSurface top={<PageTitleBar level={2} title="기본 정보" />}>
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<div>
-							<label className="text-sm text-muted">시설명</label>
-							<p className="mt-1 font-medium">{ground.name}</p>
-						</div>
-						<div>
-							<label className="text-sm text-muted">라벨</label>
-							<div className="mt-1">
-								{ground.label ? (
-									<Badge color="accent" variant="soft">
-										{ground.label}
-									</Badge>
-								) : (
-									<span className="text-muted">-</span>
-								)}
+				<SectionSurface>
+					<Section>
+						<Section.Header>
+							<PageTitleBar level={2} title="기본 정보" />
+						</Section.Header>
+						<Section.Body>
+							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+								<div>
+									<label className="text-sm text-muted">시설명</label>
+									<p className="mt-1 font-medium">{ground.name}</p>
+								</div>
+								<div>
+									<label className="text-sm text-muted">라벨</label>
+									<div className="mt-1">
+										{ground.label ? (
+											<Badge color="accent" variant="soft">
+												{ground.label}
+											</Badge>
+										) : (
+											<span className="text-muted">-</span>
+										)}
+									</div>
+								</div>
+								<div>
+									<label className="text-sm text-muted">주소</label>
+									<p className="mt-1">{ground.address}</p>
+								</div>
+								<div>
+									<label className="text-sm text-muted">전화번호</label>
+									<p className="mt-1">{ground.phone}</p>
+								</div>
+								<div>
+									<label className="text-sm text-muted">이메일</label>
+									<div className="mt-1">
+										<a
+											href={`mailto:${ground.email}`}
+											className="text-accent hover:underline"
+										>
+											{ground.email}
+										</a>
+									</div>
+								</div>
+								<div>
+									<label className="text-sm text-muted">사업자등록번호</label>
+									<p className="mt-1 font-mono">{ground.businessNo}</p>
+								</div>
+								<div>
+									<label className="text-sm text-muted">등록일</label>
+									<div className="mt-1">
+										<DateTimeCell value={ground.createdAt} />
+									</div>
+								</div>
+								<div>
+									<label className="text-sm text-muted">수정일</label>
+									<div className="mt-1">
+										<DateTimeCell value={ground.updatedAt ?? "-"} />
+									</div>
+								</div>
 							</div>
-						</div>
-						<div>
-							<label className="text-sm text-muted">주소</label>
-							<p className="mt-1">{ground.address}</p>
-						</div>
-						<div>
-							<label className="text-sm text-muted">전화번호</label>
-							<p className="mt-1">{ground.phone}</p>
-						</div>
-						<div>
-							<label className="text-sm text-muted">이메일</label>
-							<div className="mt-1">
-								<a
-									href={`mailto:${ground.email}`}
-									className="text-accent hover:underline"
-								>
-									{ground.email}
-								</a>
-							</div>
-						</div>
-						<div>
-							<label className="text-sm text-muted">사업자등록번호</label>
-							<p className="mt-1 font-mono">{ground.businessNo}</p>
-						</div>
-						<div>
-							<label className="text-sm text-muted">등록일</label>
-							<div className="mt-1">
-								<DateTimeCell value={ground.createdAt} />
-							</div>
-						</div>
-						<div>
-							<label className="text-sm text-muted">수정일</label>
-							<div className="mt-1">
-								<DateTimeCell value={ground.updatedAt ?? "-"} />
-							</div>
-						</div>
-					</div>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
-				<SectionSurface top={<PageTitleBar level={2} title="연결된 Space" />}>
-					<div>
-						<label className="text-sm text-muted">Space ID</label>
-						<p className="mt-1 font-mono text-sm">{spaceId}</p>
-					</div>
+				<SectionSurface>
+					<Section>
+						<Section.Header>
+							<PageTitleBar level={2} title="연결된 Space" />
+						</Section.Header>
+						<Section.Body>
+							<div>
+								<label className="text-sm text-muted">Space ID</label>
+								<p className="mt-1 font-mono text-sm">{spaceId}</p>
+							</div>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</VStack>
 		);

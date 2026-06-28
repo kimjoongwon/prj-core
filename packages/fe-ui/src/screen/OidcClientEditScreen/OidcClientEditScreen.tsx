@@ -10,6 +10,7 @@ import {
 	isValidOidcLoginUiBrandColor,
 	OidcClientForm,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
@@ -174,11 +175,14 @@ export const OidcClientEditScreen = observer(
 							<BackButton onClick={onClickListButton} label="목록으로" />
 						}
 					/>
-
 					<SectionSurface>
-						<div className="flex items-center justify-center p-8">
-							<span className="text-muted">로딩 중...</span>
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex items-center justify-center p-8">
+									<span className="text-muted">로딩 중...</span>
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -193,14 +197,17 @@ export const OidcClientEditScreen = observer(
 							<BackButton onClick={onClickListButton} label="목록으로" />
 						}
 					/>
-
 					<SectionSurface>
-						<div className="flex flex-col items-center justify-center gap-4 p-8">
-							<p className="text-muted">클라이언트를 찾을 수 없습니다.</p>
-							<Button variant="flat" onPress={onClickListButton}>
-								목록으로
-							</Button>
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex flex-col items-center justify-center gap-4 p-8">
+									<p className="text-muted">클라이언트를 찾을 수 없습니다.</p>
+									<Button variant="flat" onPress={onClickListButton}>
+										목록으로
+									</Button>
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -214,28 +221,32 @@ export const OidcClientEditScreen = observer(
 						<BackButton onClick={onClickBackButton} label="상세로 돌아가기" />
 					}
 				/>
-
 				<SectionSurface>
-					<VStack gap={4}>
-						<SectionSurface
-							top={
-								<PageTitleBar
-									level={2}
-									title="클라이언트 설정"
-									description="기본 정보와 인증 설정을 수정합니다."
-								/>
-							}
-						>
-							<OidcClientForm
-								mode="edit"
-								state={formState}
-								onSubmit={onClickSubmitButton}
-								onCancel={onClickBackButton}
-								isSubmitting={isSubmitting}
-								readonlyClientId={client.clientId}
-							/>
-						</SectionSurface>
-					</VStack>
+					<Section>
+						<Section.Body>
+							<VStack gap={4}>
+								<Section>
+									<Section.Header>
+										<PageTitleBar
+											level={2}
+											title="클라이언트 설정"
+											description="기본 정보와 인증 설정을 수정합니다."
+										/>
+									</Section.Header>
+									<Section.Body>
+										<OidcClientForm
+											mode="edit"
+											state={formState}
+											onSubmit={onClickSubmitButton}
+											onCancel={onClickBackButton}
+											isSubmitting={isSubmitting}
+											readonlyClientId={client.clientId}
+										/>
+									</Section.Body>
+								</Section>
+							</VStack>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</VStack>
 		);

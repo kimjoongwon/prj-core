@@ -5,6 +5,7 @@ import {
 	ContentLanguageNotice,
 	Input,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	TextArea,
 	useT,
@@ -142,140 +143,155 @@ export const TimelineSessionEditScreen = observer(
 						</Button>
 					}
 				/>
-
 				<SectionSurface>
-					<VStack gap={4}>
-						<SectionSurface top={<PageTitleBar level={2} title="기본 정보" />}>
+					<Section>
+						<Section.Body>
 							<VStack gap={4}>
-								<ContentLanguageNotice
-									contentLanguageCode={contentLanguageCode}
-								/>
-								<Input
-									label="세션명"
-									labelPlacement="outside"
-									placeholder="세션명을 입력하세요."
-									value={name}
-									onValueChange={onChangeNameInput}
-									isRequired
-									isInvalid={!!errors.name}
-									errorMessage={errors.name}
-								/>
-								<Select
-									label="세션 유형"
-									value={type}
-									onChange={(value) => onChangeTypeSelect(String(value ?? ""))}
-									options={SESSION_TYPE_OPTIONS}
-									isRequired
-								/>
-								<p className="text-sm text-muted">
-									{t(SESSION_TYPE_DESCRIPTIONS[type])}
-								</p>
-								<TextArea
-									label="설명"
-									labelPlacement="outside"
-									placeholder="세션에 대한 부가 설명을 입력하세요."
-									value={description}
-									onValueChange={onChangeDescriptionTextArea}
-									maxLength={500}
-									description={`${description.length} / 500`}
-								/>
-							</VStack>
-						</SectionSurface>
-						<SectionSurface top={<PageTitleBar level={2} title="일정 설정" />}>
-							<VStack gap={4}>
-								{type === "ONE_TIME" ? (
-									<Input
-										label="일시"
-										labelPlacement="outside"
-										type="datetime-local"
-										value={startDateTime}
-										onValueChange={onChangeStartDateTimeInput}
-										isRequired
-										isInvalid={!!errors.startDateTime}
-										errorMessage={errors.startDateTime}
-									/>
-								) : null}
-								{type === "ONE_TIME_RANGE" ? (
-									<>
-										<Input
-											label="시작 일시"
-											labelPlacement="outside"
-											type="datetime-local"
-											value={startDateTime}
-											onValueChange={onChangeStartDateTimeInput}
-											isRequired
-											isInvalid={!!errors.startDateTime}
-											errorMessage={errors.startDateTime}
-										/>
-										<Input
-											label="종료 일시"
-											labelPlacement="outside"
-											type="datetime-local"
-											value={endDateTime}
-											onValueChange={onChangeEndDateTimeInput}
-											isRequired
-											isInvalid={!!errors.endDateTime}
-											errorMessage={errors.endDateTime}
-										/>
-									</>
-								) : null}
-								{type === "RECURRING" ? (
-									<>
-										<div className="flex gap-4">
-											<Select
-												label="반복 요일"
-												value={recurringDayOfWeek ?? undefined}
-												onChange={(value) =>
-													onChangeDayOfWeekSelect(String(value ?? ""))
-												}
-												options={DAY_OF_WEEK_OPTIONS}
+								<Section>
+									<Section.Header>
+										<PageTitleBar level={2} title="기본 정보" />
+									</Section.Header>
+									<Section.Body>
+										<VStack gap={4}>
+											<ContentLanguageNotice
+												contentLanguageCode={contentLanguageCode}
+											/>
+											<Input
+												label="세션명"
+												labelPlacement="outside"
+												placeholder="세션명을 입력하세요."
+												value={name}
+												onValueChange={onChangeNameInput}
 												isRequired
-												isInvalid={!!errors.recurringDayOfWeek}
-												errorMessage={errors.recurringDayOfWeek}
-												className="flex-1"
+												isInvalid={!!errors.name}
+												errorMessage={errors.name}
 											/>
 											<Select
-												label="반복 주기"
-												value={repeatCycleType || undefined}
+												label="세션 유형"
+												value={type}
 												onChange={(value) =>
-													onChangeCycleTypeSelect(String(value ?? ""))
+													onChangeTypeSelect(String(value ?? ""))
 												}
-												options={CYCLE_TYPE_OPTIONS}
+												options={SESSION_TYPE_OPTIONS}
 												isRequired
-												isInvalid={!!errors.repeatCycleType}
-												errorMessage={errors.repeatCycleType}
-												className="flex-1"
 											/>
-										</div>
-										<Input
-											label="시작 일시 (선택)"
-											labelPlacement="outside"
-											type="datetime-local"
-											value={startDateTime}
-											onValueChange={onChangeStartDateTimeInput}
-										/>
-										<Input
-											label="종료 일시 (선택)"
-											labelPlacement="outside"
-											type="datetime-local"
-											value={endDateTime}
-											onValueChange={onChangeEndDateTimeInput}
-										/>
-									</>
-								) : null}
+											<p className="text-sm text-muted">
+												{t(SESSION_TYPE_DESCRIPTIONS[type])}
+											</p>
+											<TextArea
+												label="설명"
+												labelPlacement="outside"
+												placeholder="세션에 대한 부가 설명을 입력하세요."
+												value={description}
+												onValueChange={onChangeDescriptionTextArea}
+												maxLength={500}
+												description={`${description.length} / 500`}
+											/>
+										</VStack>
+									</Section.Body>
+								</Section>
+								<Section>
+									<Section.Header>
+										<PageTitleBar level={2} title="일정 설정" />
+									</Section.Header>
+									<Section.Body>
+										<VStack gap={4}>
+											{type === "ONE_TIME" ? (
+												<Input
+													label="일시"
+													labelPlacement="outside"
+													type="datetime-local"
+													value={startDateTime}
+													onValueChange={onChangeStartDateTimeInput}
+													isRequired
+													isInvalid={!!errors.startDateTime}
+													errorMessage={errors.startDateTime}
+												/>
+											) : null}
+											{type === "ONE_TIME_RANGE" ? (
+												<>
+													<Input
+														label="시작 일시"
+														labelPlacement="outside"
+														type="datetime-local"
+														value={startDateTime}
+														onValueChange={onChangeStartDateTimeInput}
+														isRequired
+														isInvalid={!!errors.startDateTime}
+														errorMessage={errors.startDateTime}
+													/>
+													<Input
+														label="종료 일시"
+														labelPlacement="outside"
+														type="datetime-local"
+														value={endDateTime}
+														onValueChange={onChangeEndDateTimeInput}
+														isRequired
+														isInvalid={!!errors.endDateTime}
+														errorMessage={errors.endDateTime}
+													/>
+												</>
+											) : null}
+											{type === "RECURRING" ? (
+												<>
+													<div className="flex gap-4">
+														<Select
+															label="반복 요일"
+															value={recurringDayOfWeek ?? undefined}
+															onChange={(value) =>
+																onChangeDayOfWeekSelect(String(value ?? ""))
+															}
+															options={DAY_OF_WEEK_OPTIONS}
+															isRequired
+															isInvalid={!!errors.recurringDayOfWeek}
+															errorMessage={errors.recurringDayOfWeek}
+															className="flex-1"
+														/>
+														<Select
+															label="반복 주기"
+															value={repeatCycleType || undefined}
+															onChange={(value) =>
+																onChangeCycleTypeSelect(String(value ?? ""))
+															}
+															options={CYCLE_TYPE_OPTIONS}
+															isRequired
+															isInvalid={!!errors.repeatCycleType}
+															errorMessage={errors.repeatCycleType}
+															className="flex-1"
+														/>
+													</div>
+													<Input
+														label="시작 일시 (선택)"
+														labelPlacement="outside"
+														type="datetime-local"
+														value={startDateTime}
+														onValueChange={onChangeStartDateTimeInput}
+													/>
+													<Input
+														label="종료 일시 (선택)"
+														labelPlacement="outside"
+														type="datetime-local"
+														value={endDateTime}
+														onValueChange={onChangeEndDateTimeInput}
+													/>
+												</>
+											) : null}
+										</VStack>
+									</Section.Body>
+								</Section>
+								<div className="flex justify-end">
+									<Button
+										color="primary"
+										onPress={onClickSubmitButton}
+										isLoading={isSubmitPending}
+										isDisabled={isSubmitDisabled}
+									>
+										수정
+									</Button>
+								</div>
 							</VStack>
-						</SectionSurface>
-						<div className="flex justify-end">
-							<Button
-								color="primary"
-								onPress={onClickSubmitButton}
-								isLoading={isSubmitPending}
-								isDisabled={isSubmitDisabled}
-							>
-								수정
-							</Button>
-						</div>
-					</VStack>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</VStack>
 		);

@@ -3,6 +3,7 @@
 import {
 	DateTimeCell,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
@@ -128,202 +129,245 @@ export const TimelineSessionDetailScreen = observer(
 						</div>
 					}
 				/>
-
 				<SectionSurface>
-					<VStack gap={4}>
-						<SectionSurface top={<PageTitleBar level={2} title="기본 정보" />}>
-							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-								<div>
-									<label className="text-sm text-muted">세션명</label>
-									<p className="mt-1">{session?.name ?? "-"}</p>
-								</div>
-								<div>
-									<label className="text-sm text-muted">유형</label>
-									<div className="mt-1">
-										{session?.typeLabel && session.typeColor ? (
-											<Chip color={session.typeColor} variant="flat" size="sm">
-												{session.typeLabel}
-											</Chip>
-										) : (
-											"-"
-										)}
-									</div>
-								</div>
-								{session?.type === "RECURRING" ? (
-									<>
-										<div>
-											<label className="text-sm text-muted">반복 요일</label>
-											<p className="mt-1">{session.recurringDayLabel ?? "-"}</p>
-										</div>
-										<div>
-											<label className="text-sm text-muted">반복 주기</label>
-											<p className="mt-1">{session.repeatCycleLabel ?? "-"}</p>
-										</div>
-									</>
-								) : null}
-								{session?.startDateTime ? (
-									<div>
-										<label className="text-sm text-muted">시작 일시</label>
-										<div className="mt-1">
-											<DateTimeCell value={session.startDateTime} />
-										</div>
-									</div>
-								) : null}
-								{session?.endDateTime ? (
-									<div>
-										<label className="text-sm text-muted">종료 일시</label>
-										<div className="mt-1">
-											<DateTimeCell value={session.endDateTime} />
-										</div>
-									</div>
-								) : null}
-								<div>
-									<label className="text-sm text-muted">설명</label>
-									<p className="mt-1">{session?.description || "-"}</p>
-								</div>
-								<div>
-									<label className="text-sm text-muted">타임라인</label>
-									<div className="mt-1">
-										{session?.timelineHref && session.timelineName ? (
-											<Link
-												href={session.timelineHref}
-												className="text-accent hover:underline"
-											>
-												{session.timelineName}
-											</Link>
-										) : (
-											(session?.timelineName ?? "-")
-										)}
-									</div>
-								</div>
-								<div>
-									<label className="text-sm text-muted">등록일</label>
-									<div className="mt-1">
-										{session?.createdAt ? (
-											<DateTimeCell value={session.createdAt} />
-										) : (
-											"-"
-										)}
-									</div>
-								</div>
-							</div>
-						</SectionSurface>
-						<SectionSurface
-							top={
-								<PageTitleBar
-									level={2}
-									title="프로그램 연결 허브"
-									actions={
-										<Button
-											color="primary"
-											size="sm"
-											startContent={<Plus className="h-4 w-4" />}
-											onPress={onClickCreateProgramButton}
-										>
-											프로그램 등록
-										</Button>
-									}
-								/>
-							}
-						>
-							<div className="grid grid-cols-1 gap-2 px-4 py-3 md:grid-cols-3">
-								<div className="rounded-lg bg-surface-secondary p-3">
-									<p className="text-xs text-muted">전체 프로그램</p>
-									<p className="mt-1 text-lg font-semibold">
-										{totalPrograms}개
-									</p>
-								</div>
-								<div className="rounded-lg bg-surface-secondary p-3">
-									<p className="text-xs text-muted">강사 연결 정상</p>
-									<p className="mt-1 text-lg font-semibold text-success">
-										{resolvedPrograms}개
-									</p>
-								</div>
-								<div className="rounded-lg bg-surface-secondary p-3">
-									<p className="text-xs text-muted">확인 필요</p>
-									<p className="mt-1 text-lg font-semibold text-warning">
-										{unresolvedPrograms}개
-									</p>
-								</div>
-							</div>
-							<Table aria-label="프로그램 목록">
-								<Table.Content>
-									<Table.Header>
-										<Table.Column>프로그램명</Table.Column>
-										<Table.Column>루틴명</Table.Column>
-										<Table.Column className="text-center">운동 수</Table.Column>
-										<Table.Column>대표 운동</Table.Column>
-										<Table.Column>강사</Table.Column>
-										<Table.Column className="text-center">
-											연결 상태
-										</Table.Column>
-										<Table.Column className="text-center">정원</Table.Column>
-										<Table.Column>난이도</Table.Column>
-										<Table.Column className="text-center">액션</Table.Column>
-									</Table.Header>
-									<Table.Body items={programs}>
-										{(program) => (
-											<Table.Row key={program.id}>
-												<Table.Cell>
-													<Link
-														href={program.href}
-														className="text-left text-accent hover:underline"
-														onClick={(event: MouseEvent<HTMLAnchorElement>) => {
-															event.stopPropagation();
-														}}
-													>
-														{program.name}
-													</Link>
-												</Table.Cell>
-												<Table.Cell>{program.routineName}</Table.Cell>
-												<Table.Cell>{program.activityCountLabel}</Table.Cell>
-												<Table.Cell>{program.previewText}</Table.Cell>
-												<Table.Cell>{program.instructorName}</Table.Cell>
-												<Table.Cell>
-													{program.isConnectionResolved ? (
-														<Chip color="success" variant="flat" size="sm">
-															정상
+					<Section>
+						<Section.Body>
+							<VStack gap={4}>
+								<Section>
+									<Section.Header>
+										<PageTitleBar level={2} title="기본 정보" />
+									</Section.Header>
+									<Section.Body>
+										<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+											<div>
+												<label className="text-sm text-muted">세션명</label>
+												<p className="mt-1">{session?.name ?? "-"}</p>
+											</div>
+											<div>
+												<label className="text-sm text-muted">유형</label>
+												<div className="mt-1">
+													{session?.typeLabel && session.typeColor ? (
+														<Chip
+															color={session.typeColor}
+															variant="flat"
+															size="sm"
+														>
+															{session.typeLabel}
 														</Chip>
 													) : (
-														<Chip color="warning" variant="flat" size="sm">
-															확인필요
-														</Chip>
+														"-"
 													)}
-												</Table.Cell>
-												<Table.Cell>{program.capacityLabel}</Table.Cell>
-												<Table.Cell>{program.levelLabel}</Table.Cell>
-												<Table.Cell>
-													<div className="flex justify-center gap-1">
-														<Button
-															size="sm"
-															variant="light"
-															isIconOnly
-															onPress={() =>
-																onClickEditProgramButton(program.id)
-															}
-														>
-															<Pencil className="h-4 w-4" />
-														</Button>
-														<Button
-															size="sm"
-															color="danger"
-															variant="light"
-															isIconOnly
-															onPress={() =>
-																onClickDeleteProgramButton(program.id)
-															}
-														>
-															<Trash2 className="h-4 w-4" />
-														</Button>
+												</div>
+											</div>
+											{session?.type === "RECURRING" ? (
+												<>
+													<div>
+														<label className="text-sm text-muted">
+															반복 요일
+														</label>
+														<p className="mt-1">
+															{session.recurringDayLabel ?? "-"}
+														</p>
 													</div>
-												</Table.Cell>
-											</Table.Row>
-										)}
-									</Table.Body>
-								</Table.Content>
-							</Table>
-						</SectionSurface>
-					</VStack>
+													<div>
+														<label className="text-sm text-muted">
+															반복 주기
+														</label>
+														<p className="mt-1">
+															{session.repeatCycleLabel ?? "-"}
+														</p>
+													</div>
+												</>
+											) : null}
+											{session?.startDateTime ? (
+												<div>
+													<label className="text-sm text-muted">
+														시작 일시
+													</label>
+													<div className="mt-1">
+														<DateTimeCell value={session.startDateTime} />
+													</div>
+												</div>
+											) : null}
+											{session?.endDateTime ? (
+												<div>
+													<label className="text-sm text-muted">
+														종료 일시
+													</label>
+													<div className="mt-1">
+														<DateTimeCell value={session.endDateTime} />
+													</div>
+												</div>
+											) : null}
+											<div>
+												<label className="text-sm text-muted">설명</label>
+												<p className="mt-1">{session?.description || "-"}</p>
+											</div>
+											<div>
+												<label className="text-sm text-muted">타임라인</label>
+												<div className="mt-1">
+													{session?.timelineHref && session.timelineName ? (
+														<Link
+															href={session.timelineHref}
+															className="text-accent hover:underline"
+														>
+															{session.timelineName}
+														</Link>
+													) : (
+														(session?.timelineName ?? "-")
+													)}
+												</div>
+											</div>
+											<div>
+												<label className="text-sm text-muted">등록일</label>
+												<div className="mt-1">
+													{session?.createdAt ? (
+														<DateTimeCell value={session.createdAt} />
+													) : (
+														"-"
+													)}
+												</div>
+											</div>
+										</div>
+									</Section.Body>
+								</Section>
+								<Section>
+									<Section.Header>
+										<PageTitleBar
+											level={2}
+											title="프로그램 연결 허브"
+											actions={
+												<Button
+													color="primary"
+													size="sm"
+													startContent={<Plus className="h-4 w-4" />}
+													onPress={onClickCreateProgramButton}
+												>
+													프로그램 등록
+												</Button>
+											}
+										/>
+									</Section.Header>
+									<Section.Body>
+										<div className="grid grid-cols-1 gap-2 px-4 py-3 md:grid-cols-3">
+											<div className="rounded-lg bg-surface-secondary p-3">
+												<p className="text-xs text-muted">전체 프로그램</p>
+												<p className="mt-1 text-lg font-semibold">
+													{totalPrograms}개
+												</p>
+											</div>
+											<div className="rounded-lg bg-surface-secondary p-3">
+												<p className="text-xs text-muted">강사 연결 정상</p>
+												<p className="mt-1 text-lg font-semibold text-success">
+													{resolvedPrograms}개
+												</p>
+											</div>
+											<div className="rounded-lg bg-surface-secondary p-3">
+												<p className="text-xs text-muted">확인 필요</p>
+												<p className="mt-1 text-lg font-semibold text-warning">
+													{unresolvedPrograms}개
+												</p>
+											</div>
+										</div>
+										<Table aria-label="프로그램 목록">
+											<Table.Content>
+												<Table.Header>
+													<Table.Column>프로그램명</Table.Column>
+													<Table.Column>루틴명</Table.Column>
+													<Table.Column className="text-center">
+														운동 수
+													</Table.Column>
+													<Table.Column>대표 운동</Table.Column>
+													<Table.Column>강사</Table.Column>
+													<Table.Column className="text-center">
+														연결 상태
+													</Table.Column>
+													<Table.Column className="text-center">
+														정원
+													</Table.Column>
+													<Table.Column>난이도</Table.Column>
+													<Table.Column className="text-center">
+														액션
+													</Table.Column>
+												</Table.Header>
+												<Table.Body items={programs}>
+													{(program) => (
+														<Table.Row key={program.id}>
+															<Table.Cell>
+																<Link
+																	href={program.href}
+																	className="text-left text-accent hover:underline"
+																	onClick={(
+																		event: MouseEvent<HTMLAnchorElement>,
+																	) => {
+																		event.stopPropagation();
+																	}}
+																>
+																	{program.name}
+																</Link>
+															</Table.Cell>
+															<Table.Cell>{program.routineName}</Table.Cell>
+															<Table.Cell>
+																{program.activityCountLabel}
+															</Table.Cell>
+															<Table.Cell>{program.previewText}</Table.Cell>
+															<Table.Cell>{program.instructorName}</Table.Cell>
+															<Table.Cell>
+																{program.isConnectionResolved ? (
+																	<Chip
+																		color="success"
+																		variant="flat"
+																		size="sm"
+																	>
+																		정상
+																	</Chip>
+																) : (
+																	<Chip
+																		color="warning"
+																		variant="flat"
+																		size="sm"
+																	>
+																		확인필요
+																	</Chip>
+																)}
+															</Table.Cell>
+															<Table.Cell>{program.capacityLabel}</Table.Cell>
+															<Table.Cell>{program.levelLabel}</Table.Cell>
+															<Table.Cell>
+																<div className="flex justify-center gap-1">
+																	<Button
+																		size="sm"
+																		variant="light"
+																		isIconOnly
+																		onPress={() =>
+																			onClickEditProgramButton(program.id)
+																		}
+																	>
+																		<Pencil className="h-4 w-4" />
+																	</Button>
+																	<Button
+																		size="sm"
+																		color="danger"
+																		variant="light"
+																		isIconOnly
+																		onPress={() =>
+																			onClickDeleteProgramButton(program.id)
+																		}
+																	>
+																		<Trash2 className="h-4 w-4" />
+																	</Button>
+																</div>
+															</Table.Cell>
+														</Table.Row>
+													)}
+												</Table.Body>
+											</Table.Content>
+										</Table>
+									</Section.Body>
+								</Section>
+							</VStack>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 				<Modal state={deleteSessionModalState}>
 					<Modal.Backdrop>

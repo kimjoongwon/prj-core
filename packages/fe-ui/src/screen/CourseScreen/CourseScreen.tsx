@@ -14,18 +14,16 @@ import type {
 	CourseSectionId,
 } from "../../feature/CourseConsole";
 import { CourseConsole } from "../../feature/CourseConsole";
+import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
 import { PageTitleBar } from "../../widget";
-
 export type CourseScreenProps = CourseConsoleProps;
-
 export const CourseScreen = observer(
 	({ onClickTimeline, ...consoleProps }: CourseScreenProps) => {
 		const onClickTimelineButton = () => {
 			onClickTimeline("/timelines");
 		};
-
 		return (
 			<VStack gap="section" fullWidth>
 				<PageTitleBar
@@ -43,15 +41,20 @@ export const CourseScreen = observer(
 					}
 				/>
 				<SectionSurface>
-					<CourseConsole {...consoleProps} onClickTimeline={onClickTimeline} />
+					<Section>
+						<Section.Body>
+							<CourseConsole
+								{...consoleProps}
+								onClickTimeline={onClickTimeline}
+							/>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</VStack>
 		);
 	},
 );
-
 CourseScreen.displayName = "CourseScreen";
-
 export type {
 	CourseRow,
 	CourseEnrollmentRow,

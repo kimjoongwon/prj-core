@@ -7,16 +7,15 @@ import { Button } from "../../action/Button/Button";
 import { Typography } from "../../data-display/Typography";
 import { LoginForm, type LoginFormState } from "../../form/LoginForm/LoginForm";
 import { useT } from "../../i18n";
+import { Section } from "../../layout";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
 import { SectionSurface } from "../../surface";
-
 export interface LoginScreenState {
 	loginForm: LoginFormState;
 	/** 페이지 레벨 에러 메시지 */
 	errorMessage: string;
 }
-
 export interface LoginScreenProps {
 	/** 페이지가 소비하는 state slice */
 	state: LoginScreenState;
@@ -78,7 +77,6 @@ export const LoginScreen = observer(
 			}
 			void onSubmitLoginForm();
 		};
-
 		return (
 			<form
 				aria-busy={isLoading}
@@ -86,115 +84,124 @@ export const LoginScreen = observer(
 				className="w-full"
 				onSubmit={onSubmitLoginScreen}
 			>
-				<SectionSurface className="overflow-hidden rounded-2xl border border-border bg-surface shadow-lg shadow-default-100/10">
-					<VStack fullWidth gap="section" className="p-6 sm:p-7">
-						<VStack key="header" fullWidth gap="block" className="text-left">
-							<HStack
-								key="badge"
-								alignItems="center"
-								gap="inline"
-								className="w-fit rounded-full border border-border bg-surface-secondary px-3 py-1 text-muted"
-							>
-								<ShieldCheck
-									key="icon"
-									aria-hidden
-									className="size-4 text-accent"
-								/>
-								<Typography
-									key="text"
-									type="body-xs"
-									weight="medium"
-									className="font-medium !text-foreground opacity-70"
+				<SectionSurface className="rounded-2xl border border-border bg-surface shadow-lg shadow-default-100/10">
+					<Section overflow="hidden" inset="none">
+						<Section.Body>
+							<VStack fullWidth gap="section" className="p-6 sm:p-7">
+								<VStack
+									key="header"
+									fullWidth
+									gap="block"
+									className="text-left"
 								>
-									안전한 운영 세션
-								</Typography>
-							</HStack>
-							<Typography.Heading
-								key="title"
-								level={3}
-								className="leading-tight"
-							>
-								{t(title)}
-							</Typography.Heading>
-							<Typography.Paragraph
-								key="caption"
-								color="muted"
-								size="sm"
-								className="leading-6 !text-foreground opacity-70"
-							>
-								{t(caption)}
-							</Typography.Paragraph>
-						</VStack>
-
-						<HStack
-							key="session-hint"
-							alignItems="center"
-							gap="block"
-							className="rounded-2xl border border-border bg-surface-secondary/60 p-3 text-left"
-						>
-							<span
-								key="indicator"
-								className="size-2 shrink-0 rounded-full bg-success"
-							/>
-							<Typography.Paragraph
-								key="text"
-								color="muted"
-								size="xs"
-								className="leading-5 !text-foreground opacity-75"
-							>
-								로그인 후 선택된 지점 scope로 관리자 API를 호출합니다.
-							</Typography.Paragraph>
-						</HStack>
-
-						<LoginForm key="form" state={state.loginForm} />
-
-						<div key="feedback" className="min-h-10">
-							{state.errorMessage ? (
-								<div
-									aria-live="polite"
-									className="rounded-xl border border-danger/30 bg-danger/10 px-3 py-2 text-danger"
-									role="alert"
-								>
-									<HStack alignItems="center" gap="inline">
-										<TriangleAlert
+									<HStack
+										key="badge"
+										alignItems="center"
+										gap="inline"
+										className="w-fit rounded-full border border-border bg-surface-secondary px-3 py-1 text-muted"
+									>
+										<ShieldCheck
 											key="icon"
 											aria-hidden
-											className="size-4 shrink-0"
+											className="size-4 text-accent"
 										/>
 										<Typography
 											key="text"
-											type="body-sm"
-											className="text-danger font-medium leading-5"
+											type="body-xs"
+											weight="medium"
+											className="font-medium !text-foreground opacity-70"
 										>
-											{t(state.errorMessage)}
+											안전한 운영 세션
 										</Typography>
 									</HStack>
-								</div>
-							) : (
-								<Typography.Paragraph
-									color="muted"
-									size="xs"
-									className="leading-5 !text-foreground opacity-70"
-								>
-									입력한 계정으로 운영 콘솔 접근 권한을 확인합니다.
-								</Typography.Paragraph>
-							)}
-						</div>
+									<Typography.Heading
+										key="title"
+										level={3}
+										className="leading-tight"
+									>
+										{t(title)}
+									</Typography.Heading>
+									<Typography.Paragraph
+										key="caption"
+										color="muted"
+										size="sm"
+										className="leading-6 !text-foreground opacity-70"
+									>
+										{t(caption)}
+									</Typography.Paragraph>
+								</VStack>
 
-						<Button
-							key="submit"
-							type="submit"
-							color="primary"
-							className="h-12 w-full rounded-full shadow-md shadow-primary/15"
-							endContent={<ArrowRight aria-hidden className="size-4" />}
-							fullWidth
-							isDisabled={isLoading}
-							isLoading={isLoading}
-							size="lg"
-						>
-							{t("로그인")}
-						</Button>
-					</VStack>
+								<HStack
+									key="session-hint"
+									alignItems="center"
+									gap="block"
+									className="rounded-2xl border border-border bg-surface-secondary/60 p-3 text-left"
+								>
+									<span
+										key="indicator"
+										className="size-2 shrink-0 rounded-full bg-success"
+									/>
+									<Typography.Paragraph
+										key="text"
+										color="muted"
+										size="xs"
+										className="leading-5 !text-foreground opacity-75"
+									>
+										로그인 후 선택된 지점 scope로 관리자 API를 호출합니다.
+									</Typography.Paragraph>
+								</HStack>
+
+								<LoginForm key="form" state={state.loginForm} />
+
+								<div key="feedback" className="min-h-10">
+									{state.errorMessage ? (
+										<div
+											aria-live="polite"
+											className="rounded-xl border border-danger/30 bg-danger/10 px-3 py-2 text-danger"
+											role="alert"
+										>
+											<HStack alignItems="center" gap="inline">
+												<TriangleAlert
+													key="icon"
+													aria-hidden
+													className="size-4 shrink-0"
+												/>
+												<Typography
+													key="text"
+													type="body-sm"
+													className="text-danger font-medium leading-5"
+												>
+													{t(state.errorMessage)}
+												</Typography>
+											</HStack>
+										</div>
+									) : (
+										<Typography.Paragraph
+											color="muted"
+											size="xs"
+											className="leading-5 !text-foreground opacity-70"
+										>
+											입력한 계정으로 운영 콘솔 접근 권한을 확인합니다.
+										</Typography.Paragraph>
+									)}
+								</div>
+
+								<Button
+									key="submit"
+									type="submit"
+									color="primary"
+									className="h-12 w-full rounded-full shadow-md shadow-primary/15"
+									endContent={<ArrowRight aria-hidden className="size-4" />}
+									fullWidth
+									isDisabled={isLoading}
+									isLoading={isLoading}
+									size="lg"
+								>
+									{t("로그인")}
+								</Button>
+							</VStack>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</form>
 		);

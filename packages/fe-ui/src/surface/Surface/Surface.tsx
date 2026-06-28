@@ -10,12 +10,24 @@ import { translateNode, useT } from "../../i18n";
 
 export type SurfaceProps = HeroSurfaceProps;
 
+type SurfaceVariant = NonNullable<SurfaceProps["variant"]>;
+
 const DEFAULT_SURFACE_VARIANT: NonNullable<SurfaceProps["variant"]> =
-	"tertiary";
+	"secondary";
+
+const SURFACE_VARIANT_CLASS_NAMES: Partial<Record<SurfaceVariant, string>> = {
+	default:
+		"border border-border/75 bg-white text-foreground shadow-sm dark:border-white/10 dark:bg-neutral-700 dark:text-foreground dark:shadow-none",
+	secondary:
+		"border border-border/70 bg-white text-foreground shadow-sm dark:border-white/10 dark:bg-neutral-700/95 dark:text-foreground dark:shadow-none",
+	tertiary:
+		"border border-border/60 bg-neutral-50 text-foreground shadow-none dark:border-white/10 dark:bg-neutral-600/90 dark:text-foreground",
+	transparent: "bg-transparent text-foreground shadow-none",
+};
 
 /**
  * feature/widget 내부의 국소 패널 표면을 제공합니다.
- * page-level 표면은 route가 `ScreenSurface`, screen이 `SectionSurface`로 나누어 구성합니다.
+ * ScreenSurface/SectionSurface보다 작은 local panel 표면입니다.
  */
 export const Surface = observer(function Surface({
 	children,
@@ -27,7 +39,11 @@ export const Surface = observer(function Surface({
 
 	return (
 		<HeroSurface
-			className={cn("w-full rounded-xl", className)}
+			className={cn(
+				"w-full rounded-xl",
+				SURFACE_VARIANT_CLASS_NAMES[variant],
+				className,
+			)}
 			variant={variant}
 			{...props}
 		>

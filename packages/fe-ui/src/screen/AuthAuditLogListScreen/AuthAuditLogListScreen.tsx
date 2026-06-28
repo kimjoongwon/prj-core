@@ -11,6 +11,7 @@ import {
 	DataGrid,
 	DataGridStateModel,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	StatsCard,
 	VStack,
@@ -27,23 +28,19 @@ const leftInputs: InputConfig[] = [
 		placeholder: "이메일로 검색...",
 	},
 ];
-
 export const idpConsoleAuthAuditLogsPageQueryInputs = [...leftInputs];
-
 export interface AuthAuditLogListScreenQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
 	email: string;
 }
 export type AuthAuditLogListScreenSetQueryStates = DataGridSetQueryStates;
-
 export interface AuthAuditLogListScreenStats {
 	todaySuccessCount: number;
 	todayFailureCount: number;
 	todayLockedCount: number;
 	totalCount: number;
 }
-
 export interface AuthAuditLogListScreenProps {
 	logs?: AuthAuditLogDto[];
 	totalCount: number;
@@ -52,7 +49,6 @@ export interface AuthAuditLogListScreenProps {
 	setQueryStates: AuthAuditLogListScreenSetQueryStates;
 	stats?: AuthAuditLogListScreenStats;
 }
-
 const authAuditLogTableColumns =
 	buildAuthAuditLogTableColumns<AuthAuditLogDto>();
 
@@ -69,9 +65,12 @@ export const AuthAuditLogListScreen = observer(
 		stats,
 	}: AuthAuditLogListScreenProps) => {
 		const gridState = useLocalObservable(
-			() => new DataGridStateModel({ queryStates, setQueryStates }),
+			() =>
+				new DataGridStateModel({
+					queryStates,
+					setQueryStates,
+				}),
 		);
-
 		useEffect(() => {
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
@@ -110,19 +109,23 @@ export const AuthAuditLogListScreen = observer(
 						/>
 					</div>
 				)}
-				<SectionSurface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
-					<DataGrid
-						config={{
-							entity: "AuthAuditLog",
-							columns: authAuditLogTableColumns,
-							leftInputs,
-							emptyMessage: "조회된 감사 로그가 없습니다.",
-						}}
-						rows={logRows}
-						totalCount={totalCount}
-						state={gridState}
-						isLoading={isLoading}
-					/>
+				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+					<Section overflow="hidden" inset="none">
+						<Section.Body>
+							<DataGrid
+								config={{
+									entity: "AuthAuditLog",
+									columns: authAuditLogTableColumns,
+									leftInputs,
+									emptyMessage: "조회된 감사 로그가 없습니다.",
+								}}
+								rows={logRows}
+								totalCount={totalCount}
+								state={gridState}
+								isLoading={isLoading}
+							/>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</VStack>
 		);

@@ -52,7 +52,7 @@ export class TenantAccessRequestsController {
 		description:
 			"PLATFORM_ADMIN은 전체 신청을, COMPANY_MANAGER는 본인이 관리하는 Space의 신청만 조회합니다.",
 	})
-	@ApiAuth()
+	@ApiAuth({ tenantHeader: false })
 	@ApiErrors({ status: 401, message: USER_ERRORS.USER_NOT_FOUND }, 500)
 	@ApiResponseEntity(TenantAccessRequestDto, HttpStatus.OK, {
 		isArray: true,
@@ -76,7 +76,7 @@ export class TenantAccessRequestsController {
 		description:
 			"PLATFORM_ADMIN은 전체 신청을, COMPANY_MANAGER는 본인이 관리하는 Space의 신청만 상세 조회합니다.",
 	})
-	@ApiAuth()
+	@ApiAuth({ tenantHeader: false })
 	@ApiParam({
 		name: "tenantAccessRequestId",
 		description: "테넌트 접근 신청 ID (UUID)",
@@ -111,7 +111,7 @@ export class TenantAccessRequestsController {
 		description:
 			"승인 시 requester의 user+space Tenant를 생성하거나 roleId를 갱신합니다. COMPANY_MANAGER는 본인 Space의 non-PLATFORM_ADMIN 신청만 승인할 수 있습니다.",
 	})
-	@ApiAuth()
+	@ApiAuth({ tenantHeader: false })
 	@ApiParam({
 		name: "tenantAccessRequestId",
 		description: "테넌트 접근 신청 ID (UUID)",
@@ -156,7 +156,7 @@ export class TenantAccessRequestsController {
 		description:
 			"PLATFORM_ADMIN은 전체 신청을, COMPANY_MANAGER는 본인이 관리하는 Space의 신청만 반려합니다. PLATFORM_ADMIN 역할 신청도 반려할 수 있습니다.",
 	})
-	@ApiAuth()
+	@ApiAuth({ tenantHeader: false })
 	@ApiParam({
 		name: "tenantAccessRequestId",
 		description: "테넌트 접근 신청 ID (UUID)",

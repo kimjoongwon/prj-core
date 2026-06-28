@@ -12,13 +12,12 @@ import {
 
 type ColorPickerValue = BaseColorPickerProps["value"];
 
-export interface ColorPickerProps<TState extends object = Record<string, unknown>>
-	extends MobxProps<TState>,
+export interface ColorPickerProps<
+	TState extends object = Record<string, unknown>,
+> extends MobxProps<TState>,
 		Omit<BaseColorPickerProps, "onChange" | "value"> {}
 
-type ColorPickerComponent = <
-	TState extends object = Record<string, unknown>,
->(
+type ColorPickerComponent = <TState extends object = Record<string, unknown>>(
 	props: ColorPickerProps<TState>,
 ) => ReactElement | null;
 

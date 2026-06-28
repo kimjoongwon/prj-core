@@ -5,6 +5,7 @@ import {
 	DateTimeCell,
 	PageTitleBar,
 	PreviewModal,
+	Section,
 	SectionSurface,
 	SendTestModal,
 	TemplateActions,
@@ -102,11 +103,14 @@ export const TemplateDetailScreen = observer(
 			return (
 				<VStack gap="section" fullWidth>
 					<PageTitleBar title="템플릿 상세" description="로딩 중..." />
-
 					<SectionSurface>
-						<div className="flex items-center justify-center p-8">
-							<Spinner size="lg" />
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex items-center justify-center p-8">
+									<Spinner size="lg" />
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -118,18 +122,21 @@ export const TemplateDetailScreen = observer(
 						title="템플릿 상세"
 						description="템플릿을 찾을 수 없습니다."
 					/>
-
 					<SectionSurface>
-						<div className="flex flex-col items-center justify-center gap-4 p-8">
-							<p className="text-muted">템플릿을 찾을 수 없습니다.</p>
-							<Button
-								variant="flat"
-								startContent={<ArrowLeft className="size-4" />}
-								onPress={onClickBackButton}
-							>
-								목록으로
-							</Button>
-						</div>
+						<Section>
+							<Section.Body>
+								<div className="flex flex-col items-center justify-center gap-4 p-8">
+									<p className="text-muted">템플릿을 찾을 수 없습니다.</p>
+									<Button
+										variant="flat"
+										startContent={<ArrowLeft className="size-4" />}
+										onPress={onClickBackButton}
+									>
+										목록으로
+									</Button>
+								</div>
+							</Section.Body>
+						</Section>
 					</SectionSurface>
 				</VStack>
 			);
@@ -151,73 +158,91 @@ export const TemplateDetailScreen = observer(
 						/>
 					}
 				/>
-
 				<SectionSurface>
-					<VStack gap={4}>
-						<SectionSurface top={<PageTitleBar level={2} title="기본 정보" />}>
-							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-								<div>
-									<label className="text-sm text-muted">코드</label>
-									<p className="mt-1 font-mono">{template.code}</p>
-								</div>
-								<div>
-									<label className="text-sm text-muted">이름</label>
-									<p className="mt-1">{template.name}</p>
-								</div>
-								<div>
-									<label className="text-sm text-muted">유형</label>
-									<div className="mt-1">
-										<TemplateTypeBadge type={template.type} />
-									</div>
-								</div>
-								<div>
-									<label className="text-sm text-muted">설명</label>
-									<p className="mt-1">{template.description || "-"}</p>
-								</div>
-								<div>
-									<label className="text-sm text-muted">활성 상태</label>
-									<div className="mt-1">
-										<Switch
-											isSelected={template.isActive}
-											onValueChange={onClickToggleButton}
-											isDisabled={isTogglePending}
-											size="sm"
-										>
-											{template.isActive ? "활성" : "비활성"}
-										</Switch>
-									</div>
-								</div>
-								<div>
-									<label className="text-sm text-muted">생성일</label>
-									<div className="mt-1">
-										<DateTimeCell value={template.createdAt} />
-									</div>
-								</div>
-								<div>
-									<label className="text-sm text-muted">수정일</label>
-									<div className="mt-1">
-										<DateTimeCell value={template.updatedAt || "-"} />
-									</div>
-								</div>
-							</div>
-						</SectionSurface>
-						<SectionSurface top={<PageTitleBar level={2} title="콘텐츠" />}>
-							<TemplateContentViewer
-								type={template.type}
-								subject={template.subject ?? null}
-								content={template.content}
-							/>
-						</SectionSurface>
-						<SectionSurface top={<PageTitleBar level={2} title="변수 목록" />}>
-							{template.variables.length > 0 ? (
-								<VariableReadTable variables={template.variables} />
-							) : (
-								<div className="p-6 text-center">
-									<p className="text-muted">등록된 변수가 없습니다.</p>
-								</div>
-							)}
-						</SectionSurface>
-					</VStack>
+					<Section>
+						<Section.Body>
+							<VStack gap={4}>
+								<Section>
+									<Section.Header>
+										<PageTitleBar level={2} title="기본 정보" />
+									</Section.Header>
+									<Section.Body>
+										<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+											<div>
+												<label className="text-sm text-muted">코드</label>
+												<p className="mt-1 font-mono">{template.code}</p>
+											</div>
+											<div>
+												<label className="text-sm text-muted">이름</label>
+												<p className="mt-1">{template.name}</p>
+											</div>
+											<div>
+												<label className="text-sm text-muted">유형</label>
+												<div className="mt-1">
+													<TemplateTypeBadge type={template.type} />
+												</div>
+											</div>
+											<div>
+												<label className="text-sm text-muted">설명</label>
+												<p className="mt-1">{template.description || "-"}</p>
+											</div>
+											<div>
+												<label className="text-sm text-muted">활성 상태</label>
+												<div className="mt-1">
+													<Switch
+														isSelected={template.isActive}
+														onValueChange={onClickToggleButton}
+														isDisabled={isTogglePending}
+														size="sm"
+													>
+														{template.isActive ? "활성" : "비활성"}
+													</Switch>
+												</div>
+											</div>
+											<div>
+												<label className="text-sm text-muted">생성일</label>
+												<div className="mt-1">
+													<DateTimeCell value={template.createdAt} />
+												</div>
+											</div>
+											<div>
+												<label className="text-sm text-muted">수정일</label>
+												<div className="mt-1">
+													<DateTimeCell value={template.updatedAt || "-"} />
+												</div>
+											</div>
+										</div>
+									</Section.Body>
+								</Section>
+								<Section>
+									<Section.Header>
+										<PageTitleBar level={2} title="콘텐츠" />
+									</Section.Header>
+									<Section.Body>
+										<TemplateContentViewer
+											type={template.type}
+											subject={template.subject ?? null}
+											content={template.content}
+										/>
+									</Section.Body>
+								</Section>
+								<Section>
+									<Section.Header>
+										<PageTitleBar level={2} title="변수 목록" />
+									</Section.Header>
+									<Section.Body>
+										{template.variables.length > 0 ? (
+											<VariableReadTable variables={template.variables} />
+										) : (
+											<div className="p-6 text-center">
+												<p className="text-muted">등록된 변수가 없습니다.</p>
+											</div>
+										)}
+									</Section.Body>
+								</Section>
+							</VStack>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 				<Modal state={deleteModalState}>
 					<Modal.Backdrop>

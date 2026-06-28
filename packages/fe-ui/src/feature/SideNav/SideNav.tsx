@@ -23,7 +23,12 @@ export interface SideNavProps {
  *
  * @example
  * ```tsx
- * <App leftAside={<SideNav />} main={children} />
+ * <App>
+ *   <App.Body>
+ *     <App.LeftAside><SideNav /></App.LeftAside>
+ *     <App.Main>{children}</App.Main>
+ *   </App.Body>
+ * </App>
  * ```
  */
 export const SideNav = observer(({ width = 240, className }: SideNavProps) => {

@@ -30,6 +30,7 @@
 		"next": "^16.1.0",
 		"nuqs": "catalog:",
 		"mobx-react-lite": "catalog:",
+		"msw": "^2.10.4",
 		"react": "catalog:",
 		"react-dom": "catalog:",
 		"react-router": "^7.7.1",

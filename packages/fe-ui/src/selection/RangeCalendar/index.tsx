@@ -17,9 +17,7 @@ export interface RangeCalendarProps<
 > extends MobxProps<TState>,
 		Omit<BaseRangeCalendarProps, "onChange" | "value"> {}
 
-type RangeCalendarComponent = <
-	TState extends object = Record<string, unknown>,
->(
+type RangeCalendarComponent = <TState extends object = Record<string, unknown>>(
 	props: RangeCalendarProps<TState>,
 ) => ReactElement | null;
 

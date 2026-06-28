@@ -42,9 +42,7 @@ export const TopBar = observer(function TopBar() {
 						(space) => space.tenantId === variables.tenantId,
 					);
 					const nextGroundName =
-						currentSpace?.ground?.name ??
-						selectedSpace?.groundName ??
-						"";
+						currentSpace?.ground?.name ?? selectedSpace?.groundName ?? "";
 					const nextContentLanguageCode =
 						selectedSpace?.contentLanguageCode ?? null;
 					persistStore.setSpace(

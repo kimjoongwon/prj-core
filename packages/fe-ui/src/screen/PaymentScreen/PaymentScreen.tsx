@@ -10,14 +10,13 @@ import type {
 	PaymentSummary,
 } from "../../feature/PaymentConsole";
 import { PaymentConsole } from "../../feature/PaymentConsole";
+import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
 import { PageTitleBar } from "../../widget";
-
 export interface PaymentScreenProps extends PaymentConsoleProps {
 	onClickRefresh?: () => void;
 }
-
 export const PaymentScreen = observer(
 	({ onClickRefresh, ...consoleProps }: PaymentScreenProps) => {
 		return (
@@ -39,13 +38,15 @@ export const PaymentScreen = observer(
 					}
 				/>
 				<SectionSurface>
-					<PaymentConsole {...consoleProps} />
+					<Section>
+						<Section.Body>
+							<PaymentConsole {...consoleProps} />
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</VStack>
 		);
 	},
 );
-
 PaymentScreen.displayName = "PaymentScreen";
-
 export type { PaymentRow, PaymentQueryState, PaymentSummary };

@@ -5,16 +5,16 @@ import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
 import { Skeleton } from "../../feedback/Skeleton/Skeleton";
 import { TextArea } from "../../input/TextArea/TextArea";
+import { Section } from "../../layout";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
 import { SectionSurface } from "../../surface";
-import { PageTitleBar } from "../../widget/PageTitleBar";
 import {
 	type TenantAccessRequestStatus,
 	TenantAccessRequestStatusBadge,
 	TenantAccessRequestSummary,
 } from "../../widget";
-
+import { PageTitleBar } from "../../widget/PageTitleBar";
 export interface TenantAccessRequestReviewDetail {
 	id: string;
 	status: TenantAccessRequestStatus;
@@ -29,7 +29,6 @@ export interface TenantAccessRequestReviewDetail {
 	createdAt: string;
 	reviewedAt?: string | null;
 }
-
 export interface TenantAccessRequestReviewDetailScreenProps {
 	request?: TenantAccessRequestReviewDetail;
 	reviewComment: string;
@@ -42,7 +41,6 @@ export interface TenantAccessRequestReviewDetailScreenProps {
 	onClickApproveButton: () => void;
 	onClickRejectButton: () => void;
 }
-
 function formatDateTime(value?: string | null) {
 	if (!value) return "-";
 	return new Date(value).toLocaleString("ko-KR", {
@@ -53,7 +51,6 @@ function formatDateTime(value?: string | null) {
 		minute: "2-digit",
 	});
 }
-
 function DetailItem({
 	label,
 	value,
@@ -68,7 +65,6 @@ function DetailItem({
 		</VStack>
 	);
 }
-
 export const TenantAccessRequestReviewDetailScreen = observer(
 	({
 		request,
@@ -97,97 +93,114 @@ export const TenantAccessRequestReviewDetailScreen = observer(
 				}
 			/>
 			<SectionSurface>
-				{isLoading || !request ? (
-					<Skeleton className="h-96 rounded-lg" />
-				) : (
-					<VStack gap={4}>
-						<SectionSurface>
+				<Section>
+					<Section.Body>
+						{isLoading || !request ? (
+							<Skeleton className="h-96 rounded-lg" />
+						) : (
 							<VStack gap={4}>
-								<HStack
-									justifyContent="between"
-									alignItems="start"
-									fullWidth
-									className="flex-wrap"
-								>
-									<TenantAccessRequestSummary
-										spaceName={request.spaceName}
-										roleName={request.roleName}
-										requesterName={request.requesterName}
-										requesterEmail={request.requesterEmail}
-									/>
-									<TenantAccessRequestStatusBadge status={request.status} />
-								</HStack>
-								<div className="grid gap-4 md:grid-cols-3">
-									<DetailItem
-										label="기존 역할"
-										value={request.previousRoleName}
-									/>
-									<DetailItem
-										label="신청일"
-										value={formatDateTime(request.createdAt)}
-									/>
-									<DetailItem
-										label="처리일"
-										value={formatDateTime(request.reviewedAt)}
-									/>
-								</div>
-								<DetailItem label="신청 사유" value={request.reason} />
-							</VStack>
-						</SectionSurface>
-						<SectionSurface>
-							<VStack gap={4}>
-								<PageTitleBar level={2} title="검토" />
-								<TextArea
-									label="검토 코멘트"
-									labelPlacement="outside"
-									placeholder="승인 또는 반려 사유를 입력하세요."
-									value={reviewComment}
-									onValueChange={onChangeReviewCommentTextArea}
-									maxLength={1000}
-									isDisabled={request.status !== "PENDING"}
-									description={`${reviewComment.length} / 1000`}
-								/>
-								{request.status !== "PENDING" ? (
-									<div className="rounded-lg border border-border bg-surface-secondary/40 p-4">
-										<DetailItem label="처리자" value={request.reviewerName} />
-										<div className="mt-3">
-											<DetailItem
-												label="처리 코멘트"
-												value={request.reviewComment}
+								<Section>
+									<Section.Body>
+										<VStack gap={4}>
+											<HStack
+												justifyContent="between"
+												alignItems="start"
+												fullWidth
+												className="flex-wrap"
+											>
+												<TenantAccessRequestSummary
+													spaceName={request.spaceName}
+													roleName={request.roleName}
+													requesterName={request.requesterName}
+													requesterEmail={request.requesterEmail}
+												/>
+												<TenantAccessRequestStatusBadge
+													status={request.status}
+												/>
+											</HStack>
+											<div className="grid gap-4 md:grid-cols-3">
+												<DetailItem
+													label="기존 역할"
+													value={request.previousRoleName}
+												/>
+												<DetailItem
+													label="신청일"
+													value={formatDateTime(request.createdAt)}
+												/>
+												<DetailItem
+													label="처리일"
+													value={formatDateTime(request.reviewedAt)}
+												/>
+											</div>
+											<DetailItem label="신청 사유" value={request.reason} />
+										</VStack>
+									</Section.Body>
+								</Section>
+								<Section>
+									<Section.Body>
+										<VStack gap={4}>
+											<PageTitleBar level={2} title="검토" />
+											<TextArea
+												label="검토 코멘트"
+												labelPlacement="outside"
+												placeholder="승인 또는 반려 사유를 입력하세요."
+												value={reviewComment}
+												onValueChange={onChangeReviewCommentTextArea}
+												maxLength={1000}
+												isDisabled={request.status !== "PENDING"}
+												description={`${reviewComment.length} / 1000`}
 											/>
-										</div>
-									</div>
-								) : null}
-								<HStack justifyContent="end" fullWidth>
-									<Button variant="flat" onPress={onClickBackButton}>
-										닫기
-									</Button>
-									<Button
-										color="danger"
-										variant="flat"
-										startContent={<X className="size-4" />}
-										isLoading={isRejecting}
-										isDisabled={request.status !== "PENDING" || isApproving}
-										onPress={onClickRejectButton}
-									>
-										반려
-									</Button>
-									<Button
-										color="primary"
-										startContent={<Check className="size-4" />}
-										isLoading={isApproving}
-										isDisabled={
-											request.status !== "PENDING" || !canApprove || isRejecting
-										}
-										onPress={onClickApproveButton}
-									>
-										승인
-									</Button>
-								</HStack>
+											{request.status !== "PENDING" ? (
+												<div className="rounded-lg border border-border bg-surface-secondary/40 p-4">
+													<DetailItem
+														label="처리자"
+														value={request.reviewerName}
+													/>
+													<div className="mt-3">
+														<DetailItem
+															label="처리 코멘트"
+															value={request.reviewComment}
+														/>
+													</div>
+												</div>
+											) : null}
+											<HStack justifyContent="end" fullWidth>
+												<Button variant="flat" onPress={onClickBackButton}>
+													닫기
+												</Button>
+												<Button
+													color="danger"
+													variant="flat"
+													startContent={<X className="size-4" />}
+													isLoading={isRejecting}
+													isDisabled={
+														request.status !== "PENDING" || isApproving
+													}
+													onPress={onClickRejectButton}
+												>
+													반려
+												</Button>
+												<Button
+													color="primary"
+													startContent={<Check className="size-4" />}
+													isLoading={isApproving}
+													isDisabled={
+														request.status !== "PENDING" ||
+														!canApprove ||
+														isRejecting
+													}
+													onPress={onClickApproveButton}
+												>
+													승인
+												</Button>
+											</HStack>
+										</VStack>
+									</Section.Body>
+								</Section>
 							</VStack>
-						</SectionSurface>
-					</VStack>
-				)}
+						)}
+					</Section.Body>
+				</Section>
 			</SectionSurface>
 		</VStack>
 	),

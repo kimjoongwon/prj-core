@@ -2,8 +2,8 @@
 
 import { observer } from "mobx-react-lite";
 import { Chip } from "../../data-display/Chip/Chip";
-import { PaymentTablePanel } from "../PaymentTablePanel";
 import type { PaymentRow } from "../Payment.types";
+import { PaymentTablePanel } from "../PaymentTablePanel";
 
 export interface PaymentTableProps {
 	payments: PaymentRow[];

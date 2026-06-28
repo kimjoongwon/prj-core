@@ -1,6 +1,6 @@
 "use client";
 
-import { PageTitleBar, SectionSurface, VStack } from "@cocrepo/ui";
+import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import {
 	Activity,
 	CheckCircle,
@@ -118,127 +118,140 @@ export const IdentityDashboardScreen = observer(
 					title="대시보드"
 					description="IDP 인증 시스템 현황을 한눈에 확인합니다."
 				/>
-
 				<SectionSurface>
-					<VStack gap={4}>
-						<SectionSurface
-							top={
-								<PageTitleBar
-									level={2}
-									title="주요 지표"
-									description="세션, 성공/실패 로그인, 잠금 상태를 요약합니다."
-								/>
-							}
-						>
-							<div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
-								{statCards.map((card) => (
-									<div
-										key={card.key}
-										className="rounded-xl bg-surface-secondary p-4"
-									>
-										<div
-											className={`flex h-10 w-10 items-center justify-center rounded-lg ${card.bgColor} ${card.color}`}
-										>
-											{card.icon}
-										</div>
-										<div>
-											<p className="text-sm text-muted">{t(card.label)}</p>
-											<p className={`text-2xl font-bold ${card.color}`}>
-												{stats?.[card.key] ?? 0}
-											</p>
-										</div>
-									</div>
-								))}
-							</div>
-						</SectionSurface>
-						<SectionSurface
-							top={<PageTitleBar level={2} title="최근 7일 로그인 추이" />}
-						>
-							{trendItems.length === 0 ? (
-								<p className="py-8 text-center text-muted">
-									{t("로그인 추이 데이터가 없습니다.")}
-								</p>
-							) : (
-								<div className="flex flex-col gap-4">
-									<div className="flex items-center gap-4">
-										<div className="flex items-center gap-1.5">
-											<div className="h-3 w-3 rounded-sm bg-success" />
-											<span className="text-sm text-muted">{t("성공")}</span>
-										</div>
-										<div className="flex items-center gap-1.5">
-											<div className="h-3 w-3 rounded-sm bg-danger" />
-											<span className="text-sm text-muted">{t("실패")}</span>
-										</div>
-									</div>
-									<div
-										className="flex items-end gap-3"
-										style={{
-											height: 200,
-										}}
-									>
-										{trendItems.map((item, index) => (
-											<div
-												key={`${item.date}:${index}`}
-												className="flex flex-1 flex-col items-center gap-1"
-												style={{
-													height: "100%",
-												}}
-											>
+					<Section>
+						<Section.Body>
+							<VStack gap={4}>
+								<Section>
+									<Section.Header>
+										<PageTitleBar
+											level={2}
+											title="주요 지표"
+											description="세션, 성공/실패 로그인, 잠금 상태를 요약합니다."
+										/>
+									</Section.Header>
+									<Section.Body>
+										<div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+											{statCards.map((card) => (
 												<div
-													className="flex flex-1 items-end gap-1 w-full justify-center"
-													style={{
-														height: "100%",
-													}}
+													key={card.key}
+													className="rounded-xl bg-surface-secondary p-4"
 												>
 													<div
-														className="flex flex-col items-center justify-end"
-														style={{
-															height: "100%",
-														}}
+														className={`flex h-10 w-10 items-center justify-center rounded-lg ${card.bgColor} ${card.color}`}
 													>
-														<span className="mb-1 text-xs text-muted">
-															{item.successCount}
-														</span>
-														<div
-															className="w-6 rounded-t-md bg-success transition-all md:w-8"
-															style={{
-																height: getBarHeight(
-																	item.successCount,
-																	maxTrendValue,
-																),
-															}}
-														/>
+														{card.icon}
 													</div>
-													<div
-														className="flex flex-col items-center justify-end"
-														style={{
-															height: "100%",
-														}}
-													>
-														<span className="mb-1 text-xs text-muted">
-															{item.failureCount}
-														</span>
-														<div
-															className="w-6 rounded-t-md bg-danger transition-all md:w-8"
-															style={{
-																height: getBarHeight(
-																	item.failureCount,
-																	maxTrendValue,
-																),
-															}}
-														/>
+													<div>
+														<p className="text-sm text-muted">
+															{t(card.label)}
+														</p>
+														<p className={`text-2xl font-bold ${card.color}`}>
+															{stats?.[card.key] ?? 0}
+														</p>
 													</div>
 												</div>
-												<span className="mt-1 text-xs text-muted">
-													{formatShortDate(item.date)}
-												</span>
+											))}
+										</div>
+									</Section.Body>
+								</Section>
+								<Section>
+									<Section.Header>
+										<PageTitleBar level={2} title="최근 7일 로그인 추이" />
+									</Section.Header>
+									<Section.Body>
+										{trendItems.length === 0 ? (
+											<p className="py-8 text-center text-muted">
+												{t("로그인 추이 데이터가 없습니다.")}
+											</p>
+										) : (
+											<div className="flex flex-col gap-4">
+												<div className="flex items-center gap-4">
+													<div className="flex items-center gap-1.5">
+														<div className="h-3 w-3 rounded-sm bg-success" />
+														<span className="text-sm text-muted">
+															{t("성공")}
+														</span>
+													</div>
+													<div className="flex items-center gap-1.5">
+														<div className="h-3 w-3 rounded-sm bg-danger" />
+														<span className="text-sm text-muted">
+															{t("실패")}
+														</span>
+													</div>
+												</div>
+												<div
+													className="flex items-end gap-3"
+													style={{
+														height: 200,
+													}}
+												>
+													{trendItems.map((item, index) => (
+														<div
+															key={`${item.date}:${index}`}
+															className="flex flex-1 flex-col items-center gap-1"
+															style={{
+																height: "100%",
+															}}
+														>
+															<div
+																className="flex flex-1 items-end gap-1 w-full justify-center"
+																style={{
+																	height: "100%",
+																}}
+															>
+																<div
+																	className="flex flex-col items-center justify-end"
+																	style={{
+																		height: "100%",
+																	}}
+																>
+																	<span className="mb-1 text-xs text-muted">
+																		{item.successCount}
+																	</span>
+																	<div
+																		className="w-6 rounded-t-md bg-success transition-all md:w-8"
+																		style={{
+																			height: getBarHeight(
+																				item.successCount,
+																				maxTrendValue,
+																			),
+																		}}
+																	/>
+																</div>
+																<div
+																	className="flex flex-col items-center justify-end"
+																	style={{
+																		height: "100%",
+																	}}
+																>
+																	<span className="mb-1 text-xs text-muted">
+																		{item.failureCount}
+																	</span>
+																	<div
+																		className="w-6 rounded-t-md bg-danger transition-all md:w-8"
+																		style={{
+																			height: getBarHeight(
+																				item.failureCount,
+																				maxTrendValue,
+																			),
+																		}}
+																	/>
+																</div>
+															</div>
+															<span className="mt-1 text-xs text-muted">
+																{formatShortDate(item.date)}
+															</span>
+														</div>
+													))}
+												</div>
 											</div>
-										))}
-									</div>
-								</div>
-							)}
-						</SectionSurface>
-					</VStack>
+										)}
+									</Section.Body>
+								</Section>
+							</VStack>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</VStack>
 		);

@@ -6,6 +6,7 @@ import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
 import { DateTimeCell } from "../../cell";
 import { Chip } from "../../data-display/Chip/Chip";
+import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
 import { PageTitleBar } from "../../widget";
@@ -113,166 +114,193 @@ export const TimelineDetailScreen = observer(
 						</div>
 					}
 				/>
-
 				<SectionSurface>
-					<VStack gap={4}>
-						<SectionSurface top={<PageTitleBar level={2} title="기본 정보" />}>
-							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-								<div>
-									<label className="text-sm text-muted">타임라인명</label>
-									<p className="mt-1">{timeline?.name ?? "-"}</p>
-								</div>
-								<div>
-									<label className="text-sm text-muted">설명</label>
-									<p className="mt-1">{timeline?.description || "-"}</p>
-								</div>
-								<div>
-									<label className="text-sm text-muted">등록일</label>
-									<div className="mt-1">
-										{timeline?.createdAt ? (
-											<DateTimeCell value={timeline.createdAt} />
-										) : (
-											"-"
-										)}
-									</div>
-								</div>
-							</div>
-						</SectionSurface>
-						<SectionSurface
-							top={
-								<PageTitleBar
-									level={2}
-									title="세션 목록"
-									actions={
-										<Button
-											color="primary"
-											size="sm"
-											startContent={<Plus className="h-4 w-4" />}
-											onPress={onClickCreateSessionButton}
-										>
-											세션 등록
-										</Button>
-									}
-								/>
-							}
-						>
-							<div className="grid grid-cols-1 gap-2 px-4 py-3 md:grid-cols-3">
-								<div className="rounded-lg bg-surface-secondary p-3">
-									<p className="text-xs text-muted">전체 세션</p>
-									<p className="mt-1 text-lg font-semibold">
-										{totalSessions}개
-									</p>
-								</div>
-								<div className="rounded-lg bg-surface-secondary p-3">
-									<p className="text-xs text-muted">연결된 세션</p>
-									<p className="mt-1 text-lg font-semibold text-success">
-										{connectedSessions}개
-									</p>
-								</div>
-								<div className="rounded-lg bg-surface-secondary p-3">
-									<p className="text-xs text-muted">미연결 세션</p>
-									<p className="mt-1 text-lg font-semibold text-warning">
-										{unconnectedSessions}개
-									</p>
-								</div>
-							</div>
-							<Table aria-label="세션 목록">
-								<Table.Content>
-									<Table.Header>
-										<Table.Column>세션명</Table.Column>
-										<Table.Column className="text-center">유형</Table.Column>
-										<Table.Column className="text-center">
-											프로그램
-										</Table.Column>
-										<Table.Column className="text-center">
-											연결 상태
-										</Table.Column>
-										<Table.Column>시작 일시</Table.Column>
-										<Table.Column className="text-center">
-											반복 요일
-										</Table.Column>
-										<Table.Column className="text-center">
-											반복 주기
-										</Table.Column>
-										<Table.Column>등록일</Table.Column>
-										<Table.Column className="text-center">액션</Table.Column>
-									</Table.Header>
-									<Table.Body items={sessions}>
-										{(session) => (
-											<Table.Row key={session.id}>
-												<Table.Cell>
-													<button
-														type="button"
-														className="text-left text-accent hover:underline"
-														onClick={() => onClickSessionNameButton(session.id)}
-													>
-														{session.name}
-													</button>
-												</Table.Cell>
-												<Table.Cell>
-													<Chip
-														color={session.typeColor}
-														variant="flat"
-														size="sm"
-													>
-														{session.typeLabel}
-													</Chip>
-												</Table.Cell>
-												<Table.Cell>{session.programCount}개</Table.Cell>
-												<Table.Cell>
-													{session.isConnected ? (
-														<Chip color="success" variant="flat" size="sm">
-															연결됨
-														</Chip>
-													) : (
-														<Chip color="warning" variant="flat" size="sm">
-															미연결
-														</Chip>
-													)}
-												</Table.Cell>
-												<Table.Cell>
-													{session.startDateTime ? (
-														<DateTimeCell value={session.startDateTime} />
+					<Section>
+						<Section.Body>
+							<VStack gap={4}>
+								<Section>
+									<Section.Header>
+										<PageTitleBar level={2} title="기본 정보" />
+									</Section.Header>
+									<Section.Body>
+										<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+											<div>
+												<label className="text-sm text-muted">타임라인명</label>
+												<p className="mt-1">{timeline?.name ?? "-"}</p>
+											</div>
+											<div>
+												<label className="text-sm text-muted">설명</label>
+												<p className="mt-1">{timeline?.description || "-"}</p>
+											</div>
+											<div>
+												<label className="text-sm text-muted">등록일</label>
+												<div className="mt-1">
+													{timeline?.createdAt ? (
+														<DateTimeCell value={timeline.createdAt} />
 													) : (
 														"-"
 													)}
-												</Table.Cell>
-												<Table.Cell>{session.recurringDayLabel}</Table.Cell>
-												<Table.Cell>{session.repeatCycleLabel}</Table.Cell>
-												<Table.Cell>
-													<DateTimeCell value={session.createdAt} />
-												</Table.Cell>
-												<Table.Cell>
-													<div className="flex justify-center gap-1">
-														<Button
-															size="sm"
-															variant="light"
-															onPress={() =>
-																onClickCreateProgramButton(session.id)
-															}
-														>
-															프로그램 등록
-														</Button>
-														<Button
-															size="sm"
-															color="danger"
-															variant="light"
-															isIconOnly
-															onPress={() =>
-																onClickDeleteSessionButton(session.id)
-															}
-														>
-															<Trash2 className="h-4 w-4" />
-														</Button>
-													</div>
-												</Table.Cell>
-											</Table.Row>
-										)}
-									</Table.Body>
-								</Table.Content>
-							</Table>
-						</SectionSurface>
-					</VStack>
+												</div>
+											</div>
+										</div>
+									</Section.Body>
+								</Section>
+								<Section>
+									<Section.Header>
+										<PageTitleBar
+											level={2}
+											title="세션 목록"
+											actions={
+												<Button
+													color="primary"
+													size="sm"
+													startContent={<Plus className="h-4 w-4" />}
+													onPress={onClickCreateSessionButton}
+												>
+													세션 등록
+												</Button>
+											}
+										/>
+									</Section.Header>
+									<Section.Body>
+										<div className="grid grid-cols-1 gap-2 px-4 py-3 md:grid-cols-3">
+											<div className="rounded-lg bg-surface-secondary p-3">
+												<p className="text-xs text-muted">전체 세션</p>
+												<p className="mt-1 text-lg font-semibold">
+													{totalSessions}개
+												</p>
+											</div>
+											<div className="rounded-lg bg-surface-secondary p-3">
+												<p className="text-xs text-muted">연결된 세션</p>
+												<p className="mt-1 text-lg font-semibold text-success">
+													{connectedSessions}개
+												</p>
+											</div>
+											<div className="rounded-lg bg-surface-secondary p-3">
+												<p className="text-xs text-muted">미연결 세션</p>
+												<p className="mt-1 text-lg font-semibold text-warning">
+													{unconnectedSessions}개
+												</p>
+											</div>
+										</div>
+										<Table aria-label="세션 목록">
+											<Table.Content>
+												<Table.Header>
+													<Table.Column>세션명</Table.Column>
+													<Table.Column className="text-center">
+														유형
+													</Table.Column>
+													<Table.Column className="text-center">
+														프로그램
+													</Table.Column>
+													<Table.Column className="text-center">
+														연결 상태
+													</Table.Column>
+													<Table.Column>시작 일시</Table.Column>
+													<Table.Column className="text-center">
+														반복 요일
+													</Table.Column>
+													<Table.Column className="text-center">
+														반복 주기
+													</Table.Column>
+													<Table.Column>등록일</Table.Column>
+													<Table.Column className="text-center">
+														액션
+													</Table.Column>
+												</Table.Header>
+												<Table.Body items={sessions}>
+													{(session) => (
+														<Table.Row key={session.id}>
+															<Table.Cell>
+																<button
+																	type="button"
+																	className="text-left text-accent hover:underline"
+																	onClick={() =>
+																		onClickSessionNameButton(session.id)
+																	}
+																>
+																	{session.name}
+																</button>
+															</Table.Cell>
+															<Table.Cell>
+																<Chip
+																	color={session.typeColor}
+																	variant="flat"
+																	size="sm"
+																>
+																	{session.typeLabel}
+																</Chip>
+															</Table.Cell>
+															<Table.Cell>{session.programCount}개</Table.Cell>
+															<Table.Cell>
+																{session.isConnected ? (
+																	<Chip
+																		color="success"
+																		variant="flat"
+																		size="sm"
+																	>
+																		연결됨
+																	</Chip>
+																) : (
+																	<Chip
+																		color="warning"
+																		variant="flat"
+																		size="sm"
+																	>
+																		미연결
+																	</Chip>
+																)}
+															</Table.Cell>
+															<Table.Cell>
+																{session.startDateTime ? (
+																	<DateTimeCell value={session.startDateTime} />
+																) : (
+																	"-"
+																)}
+															</Table.Cell>
+															<Table.Cell>
+																{session.recurringDayLabel}
+															</Table.Cell>
+															<Table.Cell>
+																{session.repeatCycleLabel}
+															</Table.Cell>
+															<Table.Cell>
+																<DateTimeCell value={session.createdAt} />
+															</Table.Cell>
+															<Table.Cell>
+																<div className="flex justify-center gap-1">
+																	<Button
+																		size="sm"
+																		variant="light"
+																		onPress={() =>
+																			onClickCreateProgramButton(session.id)
+																		}
+																	>
+																		프로그램 등록
+																	</Button>
+																	<Button
+																		size="sm"
+																		color="danger"
+																		variant="light"
+																		isIconOnly
+																		onPress={() =>
+																			onClickDeleteSessionButton(session.id)
+																		}
+																	>
+																		<Trash2 className="h-4 w-4" />
+																	</Button>
+																</div>
+															</Table.Cell>
+														</Table.Row>
+													)}
+												</Table.Body>
+											</Table.Content>
+										</Table>
+									</Section.Body>
+								</Section>
+							</VStack>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 				<Modal state={deleteTimelineModalState}>
 					<Modal.Backdrop>

@@ -60,9 +60,9 @@ Next.js App Router의 root `apps/**/layout.tsx`와 필요한 named slot topology
    - route group/domain/auth `layout.tsx`: 기본 생성 금지
    - `RouteFrame`처럼 pathname으로 layout을 고르는 package feature 생성 금지
 4. route layout은 surface/rhythm을 소유하지 않고 구조/slot topology만 소유합니다.
-   - route layout에서 `ScreenSurface`/`SectionSurface`/`Surface` 사용 금지
+   - route layout에서 `ScreenSurface`/`PageSurface`/`SectionSurface`/`Surface` 사용 금지
    - route layout에서 `VStack`/`HStack`/`Spacer` 사용 금지
-   - screen 계층이 `ScreenSurface`와 `SectionSurface`를 소유합니다.
+   - screen 계층이 `ScreenSurface`/`PageSurface`와 `SectionSurface`를 소유합니다.
 5. `page.tsx`는 root layout block 안에서 콘텐츠 wiring만 담당합니다. route-level `App`/`Page`/`Layout`/surface/rhythm은 다시 만들게 두지 않습니다.
 6. `layout.tsx`는 page 데이터 fetch와 페이지 이벤트 바인딩을 직접 수행하지 않습니다. 필요한 client 로직은 feature/widget을 slot에 배치해 해결합니다.
 7. route skeleton을 구현하기 위해 로컬 ad-hoc layout primitive를 만들지 않습니다. 부족한 primitive가 있으면 `fe-layout-agent`가 먼저 보강해야 합니다.
@@ -129,26 +129,38 @@ Next.js App Router의 root `apps/**/layout.tsx`와 필요한 named slot topology
 예시 개념:
 
 ```tsx
-<App header={<TopBar />} leftAside={<SideNavigation />} main={<AccessGate contents={children} />} />
+<App>
+  <App.Header>
+    <TopBar />
+  </App.Header>
+  <App.Body>
+    <App.LeftAside>
+      <SideNavigation />
+    </App.LeftAside>
+    <App.Main>
+      <AccessGate contents={children} />
+    </App.Main>
+  </App.Body>
+</App>
 ```
 
-- `App`은 root 구조 슬롯 owner이며 `header`, `footer`, `leftAside`, `rightAside`, `main` props를 받습니다.
+- `App`은 root 구조 슬롯 owner이며 `App.Header`, `App.Body`, `App.LeftAside`, `App.Main`, `App.RightAside`, `App.Footer` compound 슬롯으로 조립합니다. 예전 `header`/`main`/`leftAside` prop-slot API를 사용하지 않습니다.
 - `App`은 root layout의 기본 배치, aside visibility/width, main scroll/background/padding을 소유합니다. root `app/layout.tsx`에서 slot을 Tailwind wrapper로 감싸지 않습니다.
 - `Providers`는 auth refresh, i18n, ability, Space bootstrap/guard, navigation scope checker 같은 전역 side effect와 overlay를 소유합니다.
-- `Page`는 `children`만 받는 콘텐츠 boundary이며 root App 슬롯을 재사용하지 않습니다.
+- `Page`는 `Page.Header`, `Page.Body`, `Page.Footer` compound 슬롯을 가진 콘텐츠 boundary이며 root App 슬롯을 재사용하지 않습니다.
 - route group/domain/auth layout은 만들지 않고, root `app/layout.tsx`가 package UI/feature로 layout을 직접 조립합니다.
 - `RouteFrame`처럼 pathname으로 route layout을 선택하는 중간 feature를 만들지 않습니다.
 - route layout은 surface/elevation/rhythm을 결정하지 않습니다.
-- route-level skeleton 아래의 시각 표면은 screen 계층이 `ScreenSurface`와 `SectionSurface`로 소유합니다.
+- route-level skeleton 아래의 시각 표면은 screen 계층이 `ScreenSurface`/`PageSurface`와 `SectionSurface`로 소유합니다.
 
 ### 3.2 `page.tsx`와의 경계
 
-- root `app/layout.tsx`는 `Providers > App(header/leftAside/main/footer)` owner입니다.
+- root `app/layout.tsx`는 `Providers > App compound(App.Header/App.Body/App.LeftAside/App.Main/App.RightAside/App.Footer)` owner입니다.
 - `page.tsx`는 root layout block의 `children`으로 들어갑니다.
 - route 전체 layout/header/aside/모바일 action 구조는 root `app/layout.tsx`가 package UI/feature를 직접 조립해 소유합니다.
 - screen/page surface topology는 screen 계층에서 소유합니다.
 - `page.tsx`는 목록, 폼, 상세, 액션, API 연동 같은 콘텐츠 로직만 구현합니다.
-- `page.tsx`가 콘텐츠-level raw bordered container를 직접 만들지 않도록 child 계약에서 screen `ScreenSurface`/`SectionSurface` 사용 원칙을 명시합니다.
+- `page.tsx`가 콘텐츠-level raw bordered container를 직접 만들지 않도록 child 계약에서 screen `ScreenSurface`/`PageSurface`와 `SectionSurface + Section` 사용 원칙을 명시합니다.
 
 ### 3.3 서버/클라이언트 경계
 
@@ -207,7 +219,7 @@ slot에 aside/header/footer 같은 구조가 필요하면 route layout에서 `Pa
 각 섹션에는 최소 아래가 기록되어야 합니다.
 
 - 어떤 수준에서 `App`, `Layout`, `Page`를 사용하는지
-- screen 계층이 `ScreenSurface`, `SectionSurface`를 소유하는지
+- screen 계층이 `ScreenSurface`/`PageSurface`, `SectionSurface + Section`을 소유하는지
 - `children`과 named slot이 어디에 마운트되는지
 - 각 slot의 key, 담당 파일, 대체 처리 파일, URL 매핑
 - soft/hard navigation에서 slot이 어떻게 유지/복구되는지
@@ -239,14 +251,14 @@ rg -n '^## 서버 Skeleton$|^## Page 조합$|^## Surface 소유권$|^## Slot 구
 rg -n '^"use client";$' [Route경로]/layout.tsx
 
 # 3) route skeleton primitive 사용 여부 확인
-rg -n '\bScreenSurface\b|\bSectionSurface\b|\bSurface\b|\bVStack\b|\bHStack\b|\bSpacer\b' [Route경로]/layout.tsx
+rg -n '\bScreenSurface\b|\bPageSurface\b|\bSectionSurface\b|\bSurface\b|\bVStack\b|\bHStack\b|\bSpacer\b' [Route경로]/layout.tsx
 find apps/*/web/src/app -type d -name _layout -print
 
 # 4) named slot fallback 누락 확인
 find [Route경로] -maxdepth 1 -type d -name '@*' | while read slot; do test -f "$slot/default.tsx" || echo "MISSING $slot/default.tsx"; done
 
 # 5) page.tsx / @slot page가 route-level skeleton을 다시 만들지 않는지 확인
-find [Route경로] -type f \( -name 'page.tsx' -o -name '_client.tsx' \) -print | xargs rg -n 'from\s+"@cocrepo/ui".*\b(App|Layout|Page|ScreenSurface|SectionSurface|Surface|VStack|HStack|Spacer)\b'
+find [Route경로] -type f \( -name 'page.tsx' -o -name '_client.tsx' \) -print | xargs rg -n 'from\s+"@cocrepo/ui".*\b(App|Layout|Page|ScreenSurface|PageSurface|SectionSurface|Surface|VStack|HStack|Spacer)\b'
 ```
 
 - `#1`은 모든 섹션이 보여야 통과입니다.
@@ -264,7 +276,7 @@ find [Route경로] -type f \( -name 'page.tsx' -o -name '_client.tsx' \) -print 
 1. 읽은 route `page.spec.md` 목록
 2. 상위 layout에서 상속받은 layout과 현재 route가 추가한 skeleton
 3. slot topology와 각 `default.tsx` 대체 처리 반영 내역
-4. `Page` / screen `ScreenSurface` / `SectionSurface` ownership 반영 내역
+4. `Page` / screen `ScreenSurface`·`PageSurface` / `SectionSurface + Section` ownership 반영 내역
 5. `page.tsx` / `@slot/**/page.tsx`와의 경계 정리 결과
 6. 실행한 검증 명령과 결과
 

@@ -11,6 +11,7 @@ import {
 	DataGrid,
 	DataGridStateModel,
 	PageTitleBar,
+	Section,
 	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
@@ -29,16 +30,13 @@ const leftInputs: InputConfig[] = [
 		placeholder: "Client ID 또는 이름으로 검색...",
 	},
 ];
-
 export const idpConsoleOidcClientsPageQueryInputs = [...leftInputs];
-
 export interface OidcClientListScreenQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
 	search: string;
 }
 export type OidcClientListScreenSetQueryStates = DataGridSetQueryStates;
-
 export interface OidcClientListScreenProps {
 	oidcClients?: OidcClientDto[];
 	totalCount: number;
@@ -47,9 +45,7 @@ export interface OidcClientListScreenProps {
 	setQueryStates: OidcClientListScreenSetQueryStates;
 	onClickCreateButton: () => void;
 }
-
 const oidcClientTableColumns = buildOidcClientTableColumns<OidcClientDto>();
-
 export const OidcClientListScreen = observer(
 	({
 		oidcClients,
@@ -60,9 +56,12 @@ export const OidcClientListScreen = observer(
 		onClickCreateButton,
 	}: OidcClientListScreenProps) => {
 		const gridState = useLocalObservable(
-			() => new DataGridStateModel({ queryStates, setQueryStates }),
+			() =>
+				new DataGridStateModel({
+					queryStates,
+					setQueryStates,
+				}),
 		);
-
 		useEffect(() => {
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
@@ -82,19 +81,23 @@ export const OidcClientListScreen = observer(
 						</Button>
 					}
 				/>
-				<SectionSurface className="overflow-hidden rounded-2xl border-border/80 bg-surface/70">
-					<DataGrid
-						config={{
-							entity: "OidcClient",
-							columns: oidcClientTableColumns,
-							leftInputs,
-							emptyMessage: "등록된 OIDC 클라이언트가 없습니다.",
-						}}
-						rows={oidcClientRows}
-						totalCount={totalCount}
-						state={gridState}
-						isLoading={isLoading}
-					/>
+				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+					<Section overflow="hidden" inset="none">
+						<Section.Body>
+							<DataGrid
+								config={{
+									entity: "OidcClient",
+									columns: oidcClientTableColumns,
+									leftInputs,
+									emptyMessage: "등록된 OIDC 클라이언트가 없습니다.",
+								}}
+								rows={oidcClientRows}
+								totalCount={totalCount}
+								state={gridState}
+								isLoading={isLoading}
+							/>
+						</Section.Body>
+					</Section>
 				</SectionSurface>
 			</VStack>
 		);

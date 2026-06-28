@@ -1,18 +1,26 @@
-import { SetMetadata } from "@nestjs/common";
-
-export enum SpaceScope {
-	/** @OnlyMySpace: x-tenant-id 1개만 */
-	CURRENT = "current",
-	/** @AccessibleSpaces: 카테고리 계층 기반 하위 Space 포함 (기본값) */
-	DESCENDANTS = "descendants",
-}
+import { SpaceResourceScope } from "@cocrepo/type";
+import { applyDecorators, SetMetadata } from "@nestjs/common";
+import { ApiExtension } from "@nestjs/swagger";
 
 export const SPACE_SCOPE_KEY = "space_scope";
+export const SPACE_RESOURCE_SCOPE_SWAGGER_EXTENSION = "x-space-resource-scope";
 
-/** 현재 Space만 사용 (x-tenant-id 1개) */
-export const OnlyMySpace = () =>
-	SetMetadata(SPACE_SCOPE_KEY, SpaceScope.CURRENT);
+export { SpaceResourceScope };
 
-/** 하위 Space 포함 (카테고리 계층 기반, 기본값과 동일) */
-export const AccessibleSpaces = () =>
-	SetMetadata(SPACE_SCOPE_KEY, SpaceScope.DESCENDANTS);
+const SpaceScopeMetadata = (scope: SpaceResourceScope) =>
+	applyDecorators(
+		SetMetadata(SPACE_SCOPE_KEY, scope),
+		ApiExtension(SPACE_RESOURCE_SCOPE_SWAGGER_EXTENSION, scope),
+	);
+
+/** 현재 Space와 하위 Space 리소스를 사용합니다. */
+export const WithDescendantSpaces = () =>
+	SpaceScopeMetadata(SpaceResourceScope.WITH_DESCENDANTS);
+
+/** 현재 Space와 상위 Space 리소스를 사용합니다. */
+export const WithAncestorSpaces = () =>
+	SpaceScopeMetadata(SpaceResourceScope.WITH_ANCESTORS);
+
+/** 현재 Space와 상위/하위 Space 리소스를 모두 사용합니다. */
+export const WithSpaceTree = () =>
+	SpaceScopeMetadata(SpaceResourceScope.WITH_TREE);

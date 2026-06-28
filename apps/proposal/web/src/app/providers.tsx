@@ -13,7 +13,11 @@ export const Providers = observer(function Providers({
 }: ProvidersProps) {
 	return (
 		<DesignSystemProvider>
-			<App main={children} />
+			<App>
+				<App.Body>
+					<App.Main>{children}</App.Main>
+				</App.Body>
+			</App>
 		</DesignSystemProvider>
 	);
 });

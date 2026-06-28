@@ -42,7 +42,10 @@ export interface GanttTask {
 	custom_class?: string;
 }
 
-type FrappeGanttCallbackTask = Omit<GanttTask, "start" | "end" | "progress" | "dependencies"> & {
+type FrappeGanttCallbackTask = Omit<
+	GanttTask,
+	"start" | "end" | "progress" | "dependencies"
+> & {
 	start: string | Date;
 	end: string | Date;
 	progress?: number;

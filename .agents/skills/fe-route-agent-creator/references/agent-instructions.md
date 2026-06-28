@@ -68,8 +68,8 @@
    - `fe-route-agent`가 pure screen owner를 직접 생성/수정하는 흐름은 금지
 4. 작업 시작 전에 반드시 sibling `page.spec.md`를 읽고 route/page 계약을 확인
 5. route-level `App`, `Layout`, `Page` 구조와 surface/rhythm은 app route page에서 새로 만들지 않음
-   - `ScreenSurface`와 `SectionSurface`는 screen 계층 owner입니다.
-   - `ScreenSurface`, `SectionSurface`, `Surface`, `VStack`, `HStack`, `Spacer`, 제거된 detail/form 이전 방식 surface wrapper는 app route page에서 직접 import/use 금지
+   - `ScreenSurface`/`PageSurface`와 `SectionSurface + Section`은 screen 계층 owner입니다.
+   - `ScreenSurface`, `PageSurface`, `SectionSurface`, `Surface`, `VStack`, `HStack`, `Spacer`, 제거된 detail/form 이전 방식 surface wrapper는 app route page에서 직접 import/use 금지
 6. 앱 라우트에서 로컬 시각 컴포넌트 import 금지
    - 금지 예: `./_components/*`, `../components/*`
    - hook은 `@cocrepo/hook`, component는 `@cocrepo/ui`에서 import
@@ -92,7 +92,7 @@
 - `packages/fe-ui/src/data-display`, `src/action`, `src/input`, `src/selection`, `src/navigation`, `src/layout`, `src/widget`, `src/feature`는 재사용 UI 레이어
 - `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx`는 screen-level pure composition 레이어의 기준 경로
 - `apps/*/src/app/**/page.tsx`는 thin app route container 레이어
-- root `app/layout.tsx`의 `App`은 `header`, `footer`, `leftAside`, `rightAside`, `main` root 구조 슬롯 owner이고, package UI/feature를 직접 조립해 route 공통 화면 틀을 소유합니다.
+- root `app/layout.tsx`의 `App`은 `App.Header`, `App.Body`, `App.LeftAside`, `App.Main`, `App.RightAside`, `App.Footer` compound 슬롯 owner이고, package UI/feature를 직접 조립해 route 공통 화면 틀을 소유합니다.
 
 ### 1.2 소유권 경계
 
@@ -109,7 +109,7 @@
 - 웹 공통 화면 틀은 root `app/layout.tsx`가 직접 소유합니다.
 - route group/domain/auth `layout.tsx`는 기본 생성하지 않고, pathname selector feature도 만들지 않습니다.
 - app route page 또는 route-local client boundary는 screen component에 props만 전달합니다.
-- `ScreenSurface`, `SectionSurface`, `Surface`, rhythm primitive, 제거된 detail/form 이전 방식 surface wrapper는 route page/container에서 직접 사용하지 않습니다.
+- `ScreenSurface`, `PageSurface`, `SectionSurface`, `Surface`, rhythm primitive, 제거된 detail/form 이전 방식 surface wrapper는 route page/container에서 직접 사용하지 않습니다.
 - `page.tsx`는 해당 skeleton의 `children` 또는 slot 위치에 마운트되는 thin container입니다.
 - screen 시각 tree는 `@cocrepo/ui` screen component가 소유합니다.
 - route page가 route-level layout primitive를 다시 만들면 실패입니다.
@@ -222,7 +222,7 @@ route-local `hooks/`, `_components/`, `components` 폴더는 만들지 않습니
 - 라우트 내부 로컬 시각 컴포넌트 의존 (`_components`, `components`)
 - 라우트 내부 로컬 hooks 폴더 생성 (`hooks`)
 - page 파일에서 route-level layout primitive 직접 import
-  - 금지 예: `App`, `Layout`, `Page`, `ScreenSurface`, `SectionSurface`, `Surface`, `VStack`, `HStack`, `Spacer`, 제거된 detail/form 이전 방식 surface wrapper
+  - 금지 예: `App`, `Layout`, `Page`, `ScreenSurface`, `PageSurface`, `SectionSurface`, `Surface`, `VStack`, `HStack`, `Spacer`, 제거된 detail/form 이전 방식 surface wrapper
 - route page에서 화면용 raw wrapper를 ad-hoc하게 새로 만드는 행위
 
 ---
@@ -287,7 +287,7 @@ echo "$TARGET_FILES" | xargs rg -n '(^|\\s)const\\s+handle[A-Z][A-Za-z0-9_]*\\s*
 echo "$TARGET_FILES" | xargs rg -n 'from\\s+"\\.{1,2}/|from\\s+"\\.{2,}/' | rg '/_components/|/components/'
 
 # 6) route skeleton primitive 재도입 금지
-echo "$TARGET_FILES" | xargs rg -n 'from\\s+"@cocrepo/ui".*\\b(App|Layout|Page|ScreenSurface|SectionSurface|Surface|VStack|HStack|Spacer)\\b'
+echo "$TARGET_FILES" | xargs rg -n 'from\\s+"@cocrepo/ui".*\\b(App|Layout|Page|ScreenSurface|PageSurface|SectionSurface|Surface|VStack|HStack|Spacer)\\b'
 ```
 
 ---

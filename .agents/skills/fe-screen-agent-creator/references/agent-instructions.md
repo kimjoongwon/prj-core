@@ -62,8 +62,8 @@ widget/feature/form/collection/detail 등 하위 재사용 계층을 조합해 s
 3. screen component 내부에서 직접 API/라우팅/스토어/런타임 context를 읽지 않음
    - 금지 예: Orval hooks, React Query hooks, `useRouter`, `useSearchParams`, `redirect`, `cookies`, `headers`, MobX store 직접 참조
 4. screen component는 `widget`, `feature`, `collection`, `detail`, `form`, `layout`, `rhythm`, `display`, `control` 등 하위 재사용 계층만 조합
-   - screen 구현은 `SectionSurface`와 `VStack`/`HStack`/`Spacer` rhythm을 소유합니다.
-   - screen public export boundary는 `ScreenSurface`를 소유합니다.
+   - screen 구현은 `SectionSurface` + `layout/Section` compound와 `VStack`/`HStack`/`Spacer` rhythm을 소유합니다.
+   - screen public export boundary는 `ScreenSurface`를 소유합니다. `ScreenSurface`는 `PageSurface` 호환 alias입니다.
    - page 파일 안에 flow rail, metric grid, tab group, table, form 섹션 같은 lower-layer JSX 컴포넌트를 직접 정의하면 실패 처리
    - 새 lower-layer 책임이 필요하면 해당 `feature`/`widget`/`form` 계층 파일로 먼저 분리하고 page는 import해서 조합
    - page 파일의 top-level JSX component 선언은 exported Screen component 1개만 허용
@@ -80,7 +80,7 @@ widget/feature/form/collection/detail 등 하위 재사용 계층을 조합해 s
    - 금지 예: `src/screen/AddressEmailVerifyScreen.spec.md`
 7. screen component props의 이벤트 이름은 `on[Event][UI]` 패턴 강제
 8. screen component가 route layout primitive를 직접 소유하지 않음
-   - 금지 예: route `Page`, `Surface` 책임 침범
+   - 금지 예: route `Page`, local `Surface` 책임 침범
    - 신규 screen implementation에서 `Surface`, 제거된 detail/form 이전 방식 surface wrapper 사용 금지
    - `ScreenSurface`는 `packages/fe-ui/src/screen/index.ts`의 public screen export boundary에서만 적용
 9. screen component export는 named export만 허용
@@ -124,7 +124,8 @@ widget/feature/form/collection/detail 등 하위 재사용 계층을 조합해 s
 - 여러 feature/widget/form/collection/detail 조합
 - props 기반 분기 렌더링
 - 사용자 상호작용 이벤트를 props handler에 위임
-- public screen export boundary는 `ScreenSurface`로 screen outer 표면을 제공하고, screen implementation은 주요 섹션 표면을 `SectionSurface`로 선택
+- public screen export boundary는 `ScreenSurface`로 screen outer 표면을 제공합니다. `ScreenSurface`는 `PageSurface`에 위임하는 기존 export boundary입니다.
+- screen implementation은 주요 구획을 항상 `SectionSurface`가 감싼 `Section` compound로 표현합니다. `SectionSurface`는 visual surface만 담당하고, `Section.Header`/`Section.Body`/`Section.Footer`/`Section.LeftAside`/`Section.RightAside`가 구조를 담당합니다.
 - 내부 반복 item, 정보 행, 상태 박스는 추가 elevation 없이 border/divider/background/spacing으로 구분
 
 ### 1.3 screen component의 비책임
@@ -320,9 +321,13 @@ export const MembersListScreen = observer(({
         actions={<Button onPress={onClickCreateButton}>생성</Button>}
       />
       <SectionSurface>
-        <MembersSummaryWidget count={members.length} />
-        <MembersTableFeature members={members} />
-        {isEmpty ? <EmptyState /> : null}
+        <Section>
+          <Section.Body>
+            <MembersSummaryWidget count={members.length} />
+            <MembersTableFeature members={members} />
+            {isEmpty ? <EmptyState /> : null}
+          </Section.Body>
+        </Section>
       </SectionSurface>
     </VStack>
   );

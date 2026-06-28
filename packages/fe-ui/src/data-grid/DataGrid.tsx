@@ -5,7 +5,6 @@ import type {
 	DataGridConfig,
 	DataGridState as DataGridControllerState,
 } from "@cocrepo/type";
-import { Table as HeroTable, Table } from "@heroui/react";
 import {
 	type ColumnDef,
 	type ExpandedState,
@@ -13,12 +12,12 @@ import {
 	getCoreRowModel,
 	getExpandedRowModel,
 	type Header,
+	type Row,
 	useReactTable,
 } from "@tanstack/react-table";
 import { FileX } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import type { Selection } from "react-aria-components";
 import { Skeleton } from "../feedback/Skeleton/Skeleton";
 import { translateNode, useT } from "../i18n";
 import { Pagination } from "../navigation/Pagination/Pagination";
@@ -37,6 +36,12 @@ export interface DataGridProps<T extends { id: Key }> {
 const DATA_GRID_DEFAULT_PAGE_SIZE = 20;
 const DATA_GRID_EMPTY_MESSAGE = "데이터가 없습니다.";
 const DATA_GRID_SKELETON_ROWS = [0, 1, 2, 3, 4];
+const DATA_GRID_SELECTION_COLUMN_LABEL = "행 선택";
+const DATA_GRID_SELECT_ALL_LABEL = "현재 페이지 행 전체 선택";
+
+function joinClassNames(...classNames: Array<string | false | undefined>) {
+	return classNames.filter(Boolean).join(" ");
+}
 
 function getColumnAlignClassName<T extends object>(
 	column: ColumnDef<T, unknown>,
@@ -123,26 +128,6 @@ function createIdCounts<T extends { id: Key }>(rows: T[]) {
 	}, new Map<string, number>());
 }
 
-function createRowMap<T extends { id: Key }>(
-	rows: T[],
-	idCounts: Map<string, number>,
-) {
-	return new Map(
-		rows.map((row, index) => [getDataGridRowKey(row, index, idCounts), row]),
-	);
-}
-
-function selectionToKeySet<T extends { id: Key }>(
-	selection: Selection,
-	rows: T[],
-) {
-	if (selection === "all") {
-		return new Set(rows.map((row) => String(row.id)));
-	}
-
-	return new Set(Array.from(selection as Set<Key>).map(String));
-}
-
 function getControlledSelectedKeys<T extends { id: Key }>(
 	state: DataGridControllerState,
 	config: DataGridConfig<T>,
@@ -150,6 +135,48 @@ function getControlledSelectedKeys<T extends { id: Key }>(
 	return state.selection?.selectedKeys ?? config.selection?.selectedKeys;
 }
 
+function getVisibleRowKeys<T extends { id: Key }>(tableRows: Row<T>[]) {
+	return tableRows.map((row) => row.id);
+}
+
+function getNextRowSelectedKeys(
+	currentKeys: Set<string>,
+	rowKey: string,
+	selectionMode: "single" | "multiple",
+	isSelected: boolean,
+) {
+	if (selectionMode === "single") {
+		return isSelected ? new Set<string>([rowKey]) : new Set<string>();
+	}
+
+	const nextKeys = new Set(currentKeys);
+	if (isSelected) {
+		nextKeys.add(rowKey);
+	} else {
+		nextKeys.delete(rowKey);
+	}
+	return nextKeys;
+}
+
+function getNextVisibleRowSelectedKeys(
+	currentKeys: Set<string>,
+	visibleRowKeys: string[],
+	isSelected: boolean,
+) {
+	const nextKeys = new Set(currentKeys);
+
+	for (const rowKey of visibleRowKeys) {
+		if (isSelected) {
+			nextKeys.add(rowKey);
+		} else {
+			nextKeys.delete(rowKey);
+		}
+	}
+
+	return nextKeys;
+}
+
+/** 중복 id가 있는 행도 안전하게 식별할 수 있는 DataGrid row key를 만듭니다. */
 export function getDataGridRowKey<T extends { id: Key }>(
 	row: T,
 	index: number,
@@ -164,6 +191,7 @@ export function getDataGridRowKey<T extends { id: Key }>(
 	return `${parentId ?? "row"}:${baseId}:${index}`;
 }
 
+/** TanStack Table model을 native table 태그로 렌더링하는 DataGrid입니다. */
 export const DataGrid = observer(
 	<T extends { id: Key }>({
 		config,
@@ -174,19 +202,14 @@ export const DataGrid = observer(
 	}: DataGridProps<T>) => {
 		const t = useT();
 		const [expanded, setExpanded] = useState<ExpandedState>({});
-		const [localSelection, setLocalSelection] = useState<Selection>(
-			new Set<Key>(),
+		const [localSelectedKeys, setLocalSelectedKeys] = useState<Set<string>>(
+			() => new Set<string>(),
 		);
 		const columns = toColumnDefs(config.columns) as ColumnDef<T, unknown>[];
 		const idCounts = createIdCounts(rows);
-		const rowMap = createRowMap(rows, idCounts);
 		const controlledSelectedKeys = getControlledSelectedKeys(state, config);
-		const localSelectedKeys = selectionToKeySet(localSelection, rows);
 		const selectedKeySet = controlledSelectedKeys ?? localSelectedKeys;
 		const selectionMode = getSelectionMode(config);
-		const selectedTableKeys = selectionMode
-			? (controlledSelectedKeys ?? localSelection)
-			: undefined;
 		const leftInputs = config.leftInputs ?? [];
 		const rightInputs = config.rightInputs ?? [];
 		const shouldRenderToolbar = leftInputs.length > 0 || rightInputs.length > 0;
@@ -209,27 +232,50 @@ export const DataGrid = observer(
 		});
 		const headers = table.getHeaderGroups()[0]?.headers ?? [];
 		const tableRows = table.getRowModel().rows;
+		const visibleRowKeys = getVisibleRowKeys(tableRows);
+		const isAllVisibleRowsSelected =
+			selectionMode === "multiple" &&
+			visibleRowKeys.length > 0 &&
+			visibleRowKeys.every((rowKey) => selectedKeySet.has(rowKey));
+		const isSomeVisibleRowsSelected =
+			selectionMode === "multiple" &&
+			visibleRowKeys.some((rowKey) => selectedKeySet.has(rowKey));
 
-		const handleRowAction = (key: string | number | bigint) => {
-			if (!config.onRowClick) {
-				return;
-			}
-
-			const selectedRow = rowMap.get(String(key));
-			if (selectedRow) {
-				config.onRowClick(selectedRow);
-			}
-		};
-		const handleSelectionChange = (selection: Selection) => {
+		const handleSelectionChange = (nextKeys: Set<string>) => {
 			if (!selectionMode) {
 				return;
 			}
 
-			setLocalSelection(selection);
-			const nextKeys = selectionToKeySet(selection, rows);
-
+			setLocalSelectedKeys(nextKeys);
 			state.selection?.setSelectedKeys?.(nextKeys);
 			config.selection?.onSelectionChange?.(nextKeys);
+		};
+		const handleVisibleSelectionChange = (isSelected: boolean) => {
+			if (selectionMode !== "multiple") {
+				return;
+			}
+
+			handleSelectionChange(
+				getNextVisibleRowSelectedKeys(
+					selectedKeySet,
+					visibleRowKeys,
+					isSelected,
+				),
+			);
+		};
+		const handleRowSelectionChange = (rowKey: string, isSelected: boolean) => {
+			if (!selectionMode) {
+				return;
+			}
+
+			handleSelectionChange(
+				getNextRowSelectedKeys(
+					selectedKeySet,
+					rowKey,
+					selectionMode,
+					isSelected,
+				),
+			);
 		};
 		const handlePageChange = (page: number) => {
 			const newSkip = (page - 1) * take;
@@ -281,54 +327,158 @@ export const DataGrid = observer(
 					</div>
 				) : (
 					<div className="relative">
-						<HeroTable aria-label={t("데이터 테이블")}>
-							<Table.Content
-								onRowAction={config.onRowClick ? handleRowAction : undefined}
-								onSelectionChange={handleSelectionChange}
-								selectedKeys={selectedTableKeys}
-								selectionMode={selectionMode}
-							>
-								<Table.Header>
-									{headers.map((header) => {
-										const alignClassName = getColumnAlignClassName(
-											header.column.columnDef,
-										);
-
-										return (
-											<Table.Column key={header.id} className={alignClassName}>
-												{header.isPlaceholder
-													? null
-													: translateNode(getHeaderLabel(header), t)}
-											</Table.Column>
-										);
-									})}
-								</Table.Header>
-								<Table.Body>
-									{tableRows.map((row) => (
-										<Table.Row
-											key={row.id}
-											className={
-												config.onRowClick ? "cursor-pointer" : undefined
-											}
-											onClick={
-												config.onRowClick
-													? () => handleRowAction(row.id)
-													: undefined
-											}
-										>
-											{row.getVisibleCells().map((cell) => (
-												<Table.Cell key={cell.id}>
-													{flexRender(
-														cell.column.columnDef.cell,
-														cell.getContext(),
+						<div className="overflow-hidden rounded-lg border border-border bg-surface">
+							<div className="overflow-x-auto">
+								<table
+									aria-label={t("데이터 테이블")}
+									className="min-w-full border-collapse text-left"
+								>
+									<thead className="bg-surface-secondary">
+										<tr>
+											{selectionMode ? (
+												<th
+													scope="col"
+													className="w-12 px-4 py-3 text-left align-middle"
+												>
+													{selectionMode === "multiple" ? (
+														<input
+															aria-checked={
+																isAllVisibleRowsSelected
+																	? true
+																	: isSomeVisibleRowsSelected
+																		? "mixed"
+																		: false
+															}
+															aria-label={t(DATA_GRID_SELECT_ALL_LABEL)}
+															checked={isAllVisibleRowsSelected}
+															className="size-4 rounded border-border text-accent accent-current"
+															onChange={(event) =>
+																handleVisibleSelectionChange(
+																	event.currentTarget.checked,
+																)
+															}
+															ref={(input) => {
+																if (input) {
+																	input.indeterminate =
+																		!isAllVisibleRowsSelected &&
+																		isSomeVisibleRowsSelected;
+																}
+															}}
+															type="checkbox"
+														/>
+													) : (
+														<span className="sr-only">
+															{t(DATA_GRID_SELECTION_COLUMN_LABEL)}
+														</span>
 													)}
-												</Table.Cell>
-											))}
-										</Table.Row>
-									))}
-								</Table.Body>
-							</Table.Content>
-						</HeroTable>
+												</th>
+											) : null}
+											{headers.map((header) => {
+												const alignClassName = getColumnAlignClassName(
+													header.column.columnDef,
+												);
+
+												return (
+													<th
+														key={header.id}
+														scope="col"
+														className={joinClassNames(
+															"whitespace-nowrap px-4 py-3 text-xs font-semibold text-muted",
+															alignClassName,
+														)}
+													>
+														{header.isPlaceholder
+															? null
+															: translateNode(getHeaderLabel(header), t)}
+													</th>
+												);
+											})}
+										</tr>
+									</thead>
+									<tbody>
+										{tableRows.map((row) => {
+											const isSelected = selectedKeySet.has(row.id);
+
+											return (
+												<tr
+													key={row.id}
+													aria-selected={selectionMode ? isSelected : undefined}
+													className={joinClassNames(
+														"border-t border-border transition-colors",
+														isSelected && "bg-accent/5",
+														config.onRowClick
+															? "cursor-pointer hover:bg-surface-secondary/80 focus-within:bg-surface-secondary/80"
+															: "hover:bg-surface-secondary/60",
+													)}
+													onClick={
+														config.onRowClick
+															? () => config.onRowClick?.(row.original)
+															: undefined
+													}
+													onKeyDown={
+														config.onRowClick
+															? (event) => {
+																	if (
+																		event.key === "Enter" ||
+																		event.key === " "
+																	) {
+																		event.preventDefault();
+																		config.onRowClick?.(row.original);
+																	}
+																}
+															: undefined
+													}
+													tabIndex={config.onRowClick ? 0 : undefined}
+												>
+													{selectionMode ? (
+														<td className="w-12 px-4 py-3 align-middle">
+															<input
+																aria-label={t(DATA_GRID_SELECTION_COLUMN_LABEL)}
+																checked={isSelected}
+																className="size-4 border-border text-accent accent-current"
+																name={`data-grid-${config.entity}-selection`}
+																onChange={(event) =>
+																	handleRowSelectionChange(
+																		row.id,
+																		event.currentTarget.checked,
+																	)
+																}
+																onClick={(event) => event.stopPropagation()}
+																type={
+																	selectionMode === "single"
+																		? "radio"
+																		: "checkbox"
+																}
+															/>
+														</td>
+													) : null}
+													{row.getVisibleCells().map((cell) => {
+														const alignClassName = getColumnAlignClassName(
+															cell.column.columnDef,
+														);
+
+														return (
+															<td
+																key={cell.id}
+																className={joinClassNames(
+																	"px-4 py-3 align-middle text-sm text-foreground",
+																	alignClassName,
+																)}
+															>
+																{flexRender(
+																	cell.column.columnDef.cell,
+																	cell.getContext(),
+																)}
+															</td>
+														);
+													})}
+												</tr>
+											);
+										})}
+									</tbody>
+								</table>
+							</div>
+						</div>
 					</div>
 				)}
 
