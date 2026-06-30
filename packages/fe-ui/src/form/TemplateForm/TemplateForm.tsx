@@ -4,8 +4,8 @@ import { Button } from "../../action/Button/Button";
 import { Input } from "../../input/Input/Input";
 import { TextArea } from "../../input/TextArea/TextArea";
 import { RadioGroup } from "../../selection/RadioGroup/RadioGroup";
-import { TemplateContentEditor } from "../../widget/TemplateContentEditor/TemplateContentEditor";
 import { TemplateTypeBadge } from "../../widget/TemplateTypeBadge/TemplateTypeBadge";
+import { TemplateContentEditor } from "../../widget/TemplateContentEditor/TemplateContentEditor";
 import {
 	type VariableEditItem,
 	VariableEditTable,

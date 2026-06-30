@@ -3,15 +3,12 @@
 export * from "./AccessGate";
 export * from "./AiForm";
 export * from "./AssetBrowser";
-export { CollapsibleSidebar } from "./CollapsibleSidebar/CollapsibleSidebarLayout";
-export * from "./CourseConsole";
 export * from "./FloatingAction";
 export * from "./HeaderSpaceSelector";
 export * from "./InquiryWebSocketProvider";
 export * from "./LanguageSelectButton";
 export * from "./MobileBottomNavigation";
 export * from "./MobileMenu";
-export * from "./PaymentConsole";
 export * from "./PlanningPreviewFrame";
 export * from "./ProgramPickerModal";
 export * from "./RealtimeChatPanel";

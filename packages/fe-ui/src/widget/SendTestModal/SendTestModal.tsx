@@ -7,7 +7,7 @@ import { useState } from "react";
 import { Button } from "../../action/Button/Button";
 import { VariableInputForm } from "../../form/VariableInputForm/VariableInputForm";
 import { Input } from "../../input/Input/Input";
-import type { TemplateVariable } from "../VariableReadTable/VariableReadTable";
+import type { TemplateVariable } from "../../form/VariableInputForm";
 
 /** 발송 테스트 유형 */
 type SendTestType = "EMAIL" | "SMS" | "PUSH";

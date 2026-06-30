@@ -5,24 +5,19 @@ import type { EmailVerificationDto } from "@cocrepo/api/idp/email-verifications"
 import type { IdpAccountDto } from "@cocrepo/api/idp/idp-accounts";
 import type { OidcClientDto } from "@cocrepo/api/idp/oidc-clients";
 import type { OidcSessionDto } from "@cocrepo/api/idp/oidc-sessions";
-import { Send } from "lucide-react";
+import { Ban, Send } from "lucide-react";
+import { Button } from "../../action/Button/Button";
 import {
 	ActionButtonCell,
-	ActiveStatusCell,
-	AuditResultBadge,
-	AuthMethodCell,
 	ChipCell,
+	ConfirmActionCell,
 	DateTimeCell,
 	DefaultCell,
 	ExpiryCell,
-	FailedAttemptsCell,
-	GrantTypeCell,
-	IdpAccountActionsCell,
-	LockStatusCell,
-	ModelTypeCell,
-	RevokeButtonCell,
 	RowActionsCell,
 } from "../../cell";
+import { Chip } from "../../data-display/Chip/Chip";
+import { Link as HeroLink } from "../../navigation/Link/Link";
 import {
 	buildColumns,
 	buildColumnsWithDefaultCreatedAt,
@@ -47,6 +42,77 @@ const EMAIL_SEND_STATUS_CONFIG = {
 	FAILURE: { label: "실패", color: "danger" },
 } as const;
 
+const AUTH_METHOD_CONFIG = {
+	client_secret_basic: { label: "Basic", color: "primary" },
+	client_secret_post: { label: "Post", color: "secondary" },
+	none: { label: "None (Public)", color: "warning" },
+} as const;
+
+const GRANT_TYPE_LABEL: Record<string, string> = {
+	authorization_code: "Auth Code",
+	client_credentials: "Client Cred",
+	refresh_token: "Refresh",
+};
+
+const AUDIT_RESULT_CONFIG = {
+	SUCCESS: { label: "성공", color: "success" },
+	FAILURE: { label: "실패", color: "danger" },
+	LOCKED: { label: "잠금", color: "warning" },
+} as const;
+
+const MODEL_TYPE_CONFIG = {
+	AccessToken: { label: "Access Token", color: "primary" },
+	RefreshToken: { label: "Refresh Token", color: "secondary" },
+	AuthorizationCode: { label: "Auth Code", color: "warning" },
+	Session: { label: "Session", color: "success" },
+	Grant: { label: "Grant", color: "default" },
+	ClientCredentials: { label: "Client Cred", color: "primary" },
+	DeviceCode: { label: "Device Code", color: "warning" },
+	Interaction: { label: "Interaction", color: "success" },
+} as const;
+
+function getAuthMethodConfig(method: string) {
+	return (
+		AUTH_METHOD_CONFIG[method as keyof typeof AUTH_METHOD_CONFIG] ?? {
+			label: method,
+			color: "default" as const,
+		}
+	);
+}
+
+function getAuditResultConfig(result: string) {
+	return (
+		AUDIT_RESULT_CONFIG[result as keyof typeof AUDIT_RESULT_CONFIG] ?? {
+			label: result,
+			color: "danger" as const,
+		}
+	);
+}
+
+function getModelTypeConfig(modelType: string) {
+	return (
+		MODEL_TYPE_CONFIG[modelType as keyof typeof MODEL_TYPE_CONFIG] ?? {
+			label: modelType,
+			color: "default" as const,
+		}
+	);
+}
+
+function getLockStatusConfig(account: {
+	isPermanentlyLocked: boolean;
+	lockedUntil?: string | null;
+}) {
+	if (account.isPermanentlyLocked) {
+		return { label: "영구잠금", color: "danger" as const };
+	}
+
+	if (account.lockedUntil) {
+		return { label: "일시잠금", color: "warning" as const };
+	}
+
+	return { label: "정상", color: "success" as const };
+}
+
 /** OIDC Client 목록에서 사용하는 clientId 컬럼입니다. */
 export const oidcClientIdColumn = createPresetColumn<OidcClientDto>(
 	"clientId",
@@ -61,12 +127,15 @@ export const oidcClientNameColumn = createPresetColumn<OidcClientDto>("name", {
 	size: 200,
 });
 
-/** OIDC Client 인증 방식을 AuthMethodCell로 표시하는 컬럼입니다. */
+/** OIDC Client 인증 방식을 Chip으로 표시하는 컬럼입니다. */
 export const oidcClientAuthMethodColumn = createPresetColumn<OidcClientDto>(
 	"tokenEndpointAuthMethod",
 	{
 		size: 150,
-		cell: ({ getValue }) => <AuthMethodCell method={getValue() as string} />,
+		cell: ({ getValue }) => {
+			const config = getAuthMethodConfig(getValue() as string);
+			return <ChipCell label={config.label} color={config.color} />;
+		},
 	},
 );
 
@@ -74,14 +143,38 @@ export const oidcClientGrantTypesColumn = createPresetColumn<OidcClientDto>(
 	"grantTypes",
 	{
 		size: 200,
-		cell: ({ getValue }) => <GrantTypeCell types={getValue() as string[]} />,
+		cell: ({ getValue }) => {
+			const types = getValue() as string[];
+
+			if (!types?.length) {
+				return <DefaultCell value={null} />;
+			}
+
+			return (
+				<div className="flex flex-wrap gap-1">
+					{types.map((type) => (
+						<Chip key={type} size="sm" variant="flat">
+							{GRANT_TYPE_LABEL[type] ?? type}
+						</Chip>
+					))}
+				</div>
+			);
+		},
 	},
 );
 
 /** OIDC Client 활성 상태를 표시하는 컬럼입니다. */
 export const oidcClientIsActiveColumn = createIsActiveColumn<OidcClientDto>({
 	size: 80,
-	cell: ({ getValue }) => <ActiveStatusCell isActive={getValue() as boolean} />,
+	cell: ({ getValue }) => {
+		const isActive = Boolean(getValue());
+		return (
+			<ChipCell
+				label={isActive ? "활성" : "비활성"}
+				color={isActive ? "success" : "default"}
+			/>
+		);
+	},
 });
 
 export const oidcClientCreatedAtColumn = createCreatedAtColumn<OidcClientDto>();
@@ -125,11 +218,30 @@ export function buildOidcClientTableColumns<
 		}),
 		createPresetColumn<TRow>("tokenEndpointAuthMethod", {
 			size: 150,
-			cell: ({ getValue }) => <AuthMethodCell method={getValue() as string} />,
+			cell: ({ getValue }) => {
+				const config = getAuthMethodConfig(getValue() as string);
+				return <ChipCell label={config.label} color={config.color} />;
+			},
 		}),
 		createPresetColumn<TRow>("grantTypes", {
 			size: 200,
-			cell: ({ getValue }) => <GrantTypeCell types={getValue() as string[]} />,
+			cell: ({ getValue }) => {
+				const types = getValue() as string[];
+
+				if (!types?.length) {
+					return <DefaultCell value={null} />;
+				}
+
+				return (
+					<div className="flex flex-wrap gap-1">
+						{types.map((type) => (
+							<Chip key={type} size="sm" variant="flat">
+								{GRANT_TYPE_LABEL[type] ?? type}
+							</Chip>
+						))}
+					</div>
+				);
+			},
 		}),
 		createPresetColumn<TRow>("isFirstParty", {
 			size: 130,
@@ -157,9 +269,15 @@ export function buildOidcClientTableColumns<
 		}),
 		createIsActiveColumn<TRow>({
 			size: 80,
-			cell: ({ getValue }) => (
-				<ActiveStatusCell isActive={getValue() as boolean} />
-			),
+			cell: ({ getValue }) => {
+				const isActive = Boolean(getValue());
+				return (
+					<ChipCell
+						label={isActive ? "활성" : "비활성"}
+						color={isActive ? "success" : "default"}
+					/>
+				);
+			},
 		}),
 		createCreatedAtColumn<TRow>(),
 		createActionsColumn<TRow>({
@@ -202,26 +320,38 @@ export function buildIdpAccountTableColumns<
 		createEmailColumn<TRow>(),
 		createIsActiveColumn<TRow>({
 			size: 80,
-			cell: ({ getValue }) => (
-				<ActiveStatusCell isActive={getValue() as boolean} />
-			),
+			cell: ({ getValue }) => {
+				const isActive = Boolean(getValue());
+				return (
+					<ChipCell
+						label={isActive ? "활성" : "비활성"}
+						color={isActive ? "success" : "default"}
+					/>
+				);
+			},
 		}),
 		createPresetColumn<TRow>("isPermanentlyLocked", {
 			size: 100,
 			align: "center",
-			cell: ({ row }) => (
-				<LockStatusCell
-					isPermanentlyLocked={row.original.isPermanentlyLocked}
-					lockedUntil={row.original.lockedUntil}
-				/>
-			),
+			cell: ({ row }) => {
+				const config = getLockStatusConfig(row.original);
+				return <ChipCell label={config.label} color={config.color} />;
+			},
 		}),
 		createPresetColumn<TRow>("failedLoginAttempts", {
 			size: 80,
 			align: "center",
-			cell: ({ getValue }) => (
-				<FailedAttemptsCell count={getValue() as number} />
-			),
+			cell: ({ getValue }) => {
+				const count = getValue() as number;
+				return (
+					<DefaultCell
+						value={count}
+						tabular
+						weight={count >= 5 ? "semibold" : "normal"}
+						className={count >= 5 ? "text-danger" : undefined}
+					/>
+				);
+			},
 		}),
 		createPresetColumn<TRow>("lastLoginAt", {
 			size: 170,
@@ -237,11 +367,26 @@ export function buildIdpAccountTableColumns<
 					account.isPermanentlyLocked || Boolean(account.lockedUntil);
 
 				return (
-					<IdpAccountActionsCell
-						accountId={account.id}
-						isLocked={isLocked}
-						onUnlock={() => onClickOpenUnlockModal(account)}
-					/>
+					<div className="flex items-center justify-center gap-1">
+						{isLocked ? (
+							<Button
+								size="sm"
+								variant="flat"
+								color="primary"
+								onPress={() => onClickOpenUnlockModal(account)}
+							>
+								잠금 해제
+							</Button>
+						) : null}
+						<Button
+							as={HeroLink}
+							href={`/settings/auth/accounts/${account.id}`}
+							size="sm"
+							variant="light"
+						>
+							상세
+						</Button>
+					</div>
 				);
 			},
 		}),
@@ -369,15 +514,16 @@ export const authAuditLogCreatedAtColumn =
 
 export const authAuditLogEmailColumn = createEmailColumn<AuthAuditLogDto>();
 
-/** 인증 감사 로그 결과를 AuditResultBadge로 보여주는 컬럼입니다. */
+/** 인증 감사 로그 결과를 Chip으로 보여주는 컬럼입니다. */
 export const authAuditLogResultColumn = createPresetColumn<AuthAuditLogDto>(
 	"result",
 	{
 		size: 100,
 		align: "center",
-		cell: ({ getValue }) => (
-			<AuditResultBadge result={getValue() as AuthAuditResult} />
-		),
+		cell: ({ getValue }) => {
+			const config = getAuditResultConfig(getValue() as AuthAuditResult);
+			return <ChipCell label={config.label} color={config.color} />;
+		},
 	},
 );
 
@@ -430,9 +576,10 @@ export function buildAuthAuditLogTableColumns<
 		createPresetColumn<TRow>("result", {
 			size: 100,
 			align: "center",
-			cell: ({ getValue }) => (
-				<AuditResultBadge result={getValue() as AuthAuditResult} />
-			),
+			cell: ({ getValue }) => {
+				const config = getAuditResultConfig(getValue() as AuthAuditResult);
+				return <ChipCell label={config.label} color={config.color} />;
+			},
 		}),
 		createPresetColumn<TRow>("failureReason", {
 			size: 200,
@@ -478,7 +625,10 @@ export function buildOidcSessionTableColumns<
 			}),
 			createPresetColumn<TRow>("modelType", {
 				size: 140,
-				cell: ({ getValue }) => <ModelTypeCell type={getValue() as string} />,
+				cell: ({ getValue }) => {
+					const config = getModelTypeConfig(getValue() as string);
+					return <ChipCell label={config.label} color={config.color} />;
+				},
 			}),
 			createPresetColumn<TRow>("accountId", {
 				size: 140,
@@ -527,9 +677,15 @@ export function buildOidcSessionTableColumns<
 			createActionsColumn<TRow>({
 				size: 100,
 				cell: ({ row }) => (
-					<RevokeButtonCell
-						onRevoke={() => onClickRevokeSession(row.original.key)}
-					/>
+					<ConfirmActionCell
+						color="danger"
+						variant="flat"
+						startContent={<Ban className="h-3 w-3" />}
+						confirmMessage="이 세션/토큰을 폐기하시겠습니까?"
+						onConfirm={() => onClickRevokeSession(row.original.key)}
+					>
+						폐기
+					</ConfirmActionCell>
 				),
 			}),
 		],

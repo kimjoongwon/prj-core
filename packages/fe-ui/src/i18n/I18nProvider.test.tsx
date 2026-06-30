@@ -1,5 +1,6 @@
 import { LanguageCode } from "@cocrepo/constant";
 import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 import { I18nProvider, useT } from "./I18nProvider";
 
 function Probe() {

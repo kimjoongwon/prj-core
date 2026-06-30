@@ -8,7 +8,7 @@ import { Chip } from "../../data-display";
 import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
-import { PageTitleBar } from "../../widget";
+import { PageTitleBar } from "../../widget/PageTitleBar";
 export interface AbilityDetailScreenAbility {
 	id: string;
 	name: string;

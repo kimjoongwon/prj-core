@@ -2,7 +2,15 @@
 
 import { observer } from "mobx-react-lite";
 import { Input } from "../../input/Input/Input";
-import type { TemplateVariable } from "../../widget/VariableReadTable/VariableReadTable";
+
+/** 템플릿 변수 정보입니다. */
+export interface TemplateVariable {
+	id: string;
+	name: string;
+	description: string | null;
+	defaultValue: string | null;
+	isRequired: boolean;
+}
 
 export interface VariableInputFormProps {
 	/** 변수 목록 (정의 정보) */

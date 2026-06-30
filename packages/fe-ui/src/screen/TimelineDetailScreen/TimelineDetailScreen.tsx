@@ -9,7 +9,7 @@ import { Chip } from "../../data-display/Chip/Chip";
 import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
-import { PageTitleBar } from "../../widget";
+import { PageTitleBar } from "../../widget/PageTitleBar";
 export interface TimelineDetailScreenTimeline {
 	name?: string | null;
 	description?: string | null;

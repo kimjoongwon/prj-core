@@ -252,7 +252,7 @@
    └─ DataGrid
       ├─ 시간 (DateTimeCell)
       ├─ 이메일
-      ├─ 결과 (AuditResultBadge: ✅/❌/🔒)
+      ├─ 결과 (ChipCell: 성공/실패/잠금)
       ├─ 실패 사유
       ├─ IP 주소
       └─ User Agent (UserAgentCell: 브라우저/OS 아이콘)

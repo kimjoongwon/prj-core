@@ -20,22 +20,14 @@ import {
 	ChipCell,
 	DateTimeCell,
 	DefaultCell,
-	InquiryAssigneeCell,
-	InquiryCategoryCell,
-	InquiryChannelCell,
-	InquiryPriorityCell,
-	InquirySentimentCell,
-	InquirySLACell,
-	InquiryStatusCell,
-	InquiryUnreadCell,
-	LinkCell,
+	NameCell,
 	PhoneCell,
 	ProfileAvatarCell,
-	RoleNameCell,
-	StatusChipCell,
-	TemplateActiveToggleCell,
-	UserRoleCell,
+	SwitchCell,
+	TimeRemainingCell,
+	type TimeRemainingStatus,
 } from "../../cell";
+import { Chip } from "../../data-display/Chip/Chip";
 import {
 	buildColumns,
 	buildColumnsWithDefaultCreatedAt,
@@ -62,6 +54,92 @@ import {
 	getAssetStatusLabel,
 } from "../internal/dataGridFactory";
 import { COLUMN_FIELDS } from "../internal/fieldPresets";
+
+type RoleLike = {
+	name?: string;
+	displayName?: string;
+};
+
+type TenantWithRole = {
+	role?: RoleLike | null;
+};
+
+function renderRoleName(value?: string | null, isSystem = false) {
+	return (
+		<div className="flex items-center gap-2">
+			<NameCell value={value} variant="identifier" />
+			{isSystem ? (
+				<Chip size="sm" color="warning" variant="flat">
+					시스템
+				</Chip>
+			) : null}
+		</div>
+	);
+}
+
+const INQUIRY_STATUS_CONFIG = {
+	NEW: { label: "신규", color: "primary" },
+	OPEN: { label: "열림", color: "secondary" },
+	IN_PROGRESS: { label: "처리 중", color: "warning" },
+	WAITING_CUSTOMER: { label: "고객 대기", color: "default" },
+	RESOLVED: { label: "해결됨", color: "success" },
+	CLOSED: { label: "종료됨", color: "default" },
+	ESCALATED: { label: "에스컬레이션", color: "danger" },
+} as const;
+
+const INQUIRY_CATEGORY_LABEL: Record<string, string> = {
+	GENERAL: "일반",
+	DELIVERY: "배송",
+	PAYMENT: "결제",
+	REFUND: "환불/취소",
+	PRODUCT: "상품",
+	ACCOUNT: "계정",
+	TECHNICAL: "기술 지원",
+	COMPLAINT: "불만/불편",
+	OTHER: "기타",
+};
+
+const INQUIRY_CHANNEL_LABEL: Record<string, string> = {
+	WEB: "웹 폼",
+	EMAIL: "이메일",
+	CHAT: "채팅",
+	SMS: "SMS",
+	PHONE: "전화",
+	WALK_IN: "방문",
+};
+
+const INQUIRY_PRIORITY_CONFIG = {
+	LOW: { label: "낮음", color: "success" },
+	NORMAL: { label: "보통", color: "primary" },
+	HIGH: { label: "높음", color: "warning" },
+	URGENT: { label: "긴급", color: "danger" },
+} as const;
+
+const INQUIRY_SENTIMENT_CONFIG = {
+	POSITIVE: { label: "긍정", color: "success" },
+	NEUTRAL: { label: "중립", color: "default" },
+	NEGATIVE: { label: "부정", color: "danger" },
+} as const;
+
+function getRoleLabel(role?: RoleLike | string | null) {
+	if (typeof role === "string") {
+		return role;
+	}
+
+	return role?.displayName || role?.name || null;
+}
+
+function getRoleColor(roleName?: string) {
+	switch (roleName?.toUpperCase()) {
+		case "PLATFORM_ADMIN":
+		case "COMPANY_MANAGER":
+			return "primary";
+		case "PROJECT":
+			return "secondary";
+		default:
+			return "default";
+	}
+}
 
 /** 관리자 Action 목록에서 사용하는 기본 이름 컬럼입니다. */
 export const actionNameColumn = createNameColumn<ActionDto>({
@@ -211,7 +289,7 @@ export function buildUserListTableColumns<
 		phone?: string | null;
 		removedAt?: string | null;
 		createdAt: string;
-		tenants?: Parameters<typeof UserRoleCell>[0]["tenants"];
+		tenants?: TenantWithRole[] | null;
 	},
 >() {
 	/** 사용자 목록 페이지용 컬럼 조합을 생성합니다. */
@@ -232,11 +310,26 @@ export function buildUserListTableColumns<
 		createPresetColumn<TRow>("role", {
 			size: 120,
 			align: "center",
-			cell: ({ row }) => <UserRoleCell tenants={row.original.tenants} />,
+			cell: ({ row }) => {
+				const firstRole = row.original.tenants?.[0]?.role;
+				const roleLabel = getRoleLabel(firstRole);
+
+				return (
+					<ChipCell
+						label={roleLabel}
+						color={getRoleColor(firstRole?.name)}
+					/>
+				);
+			},
 		}),
 		createStatusColumn<TRow>({
 			size: 100,
-			cell: ({ row }) => <StatusChipCell removedAt={row.original.removedAt} />,
+			cell: ({ row }) => (
+				<ChipCell
+					label={row.original.removedAt ? "탈퇴대기" : "활성"}
+					color={row.original.removedAt ? "danger" : "success"}
+				/>
+			),
 		}),
 		createCreatedAtColumn<TRow>({
 			fieldKey: "signedUpAt",
@@ -407,9 +500,8 @@ export const adminRoleNameColumn = createNameColumn<RoleDto>({
 	size: 180,
 	isRequired: true,
 	nameVariant: "identifier",
-	cell: ({ row }) => (
-		<RoleNameCell value={row.original.name} isSystem={row.original.isSystem} />
-	),
+	cell: ({ row }) =>
+		renderRoleName(row.original.name, row.original.isSystem),
 });
 
 export const adminRoleDisplayNameColumn = createDisplayNameColumn<RoleDto>();
@@ -453,12 +545,8 @@ export function buildAdminRoleTableColumns<
 				size: 180,
 				isRequired: true,
 				nameVariant: "identifier",
-				cell: ({ row }) => (
-					<RoleNameCell
-						value={row.original.name}
-						isSystem={row.original.isSystem}
-					/>
-				),
+				cell: ({ row }) =>
+					renderRoleName(row.original.name, row.original.isSystem),
 			}),
 			createDisplayNameColumn<TRow>(),
 			createDescriptionColumn<TRow>(),
@@ -738,10 +826,9 @@ export function buildTemplateTableColumns<
 		}),
 		createIsActiveColumn<TRow>({
 			cell: ({ row }) => (
-				<TemplateActiveToggleCell
-					isActive={row.original.isActive}
-					templateId={row.original.id}
-					onToggle={onToggleTemplateStatusSwitch}
+				<SwitchCell
+					isSelected={row.original.isActive}
+					onToggle={() => onToggleTemplateStatusSwitch(row.original.id)}
 				/>
 			),
 		}),
@@ -884,11 +971,12 @@ export function buildAssetTableColumns<
 					mode === "picker" ? (
 						<DefaultCell value={row.original.originalName} />
 					) : (
-						<LinkCell
+						<Link
 							href={`/assets/${row.original.id}`}
 							className="text-accent hover:underline"
-							value={row.original.originalName}
-						/>
+						>
+							{row.original.originalName}
+						</Link>
 					),
 			}),
 			createPresetColumn<TRow>("kind", {
@@ -1014,77 +1102,104 @@ export function buildInquiryTableColumns<
 		}),
 		createStatusColumn<TRow>({
 			size: 130,
-			cell: ({ getValue }) => (
-				<InquiryStatusCell
-					value={getValue() as Parameters<typeof InquiryStatusCell>[0]["value"]}
-				/>
-			),
+			cell: ({ getValue }) => {
+				const status = String(getValue() ?? "");
+				const config = INQUIRY_STATUS_CONFIG[
+					status as keyof typeof INQUIRY_STATUS_CONFIG
+				] ?? {
+					label: status,
+					color: "default" as const,
+				};
+
+				return <ChipCell label={config.label} color={config.color} />;
+			},
 		}),
 		createPresetColumn<TRow>("category", {
 			size: 140,
 			align: "center",
-			cell: ({ getValue }) => (
-				<InquiryCategoryCell
-					value={
-						getValue() as Parameters<typeof InquiryCategoryCell>[0]["value"]
-					}
-				/>
-			),
+			cell: ({ getValue }) => {
+				const category = String(getValue() ?? "");
+				return (
+					<ChipCell
+						label={INQUIRY_CATEGORY_LABEL[category] ?? category}
+						color="default"
+					/>
+				);
+			},
 		}),
 		createPresetColumn<TRow>("channel", {
 			size: 120,
 			align: "center",
-			cell: ({ getValue }) => (
-				<InquiryChannelCell
-					value={
-						getValue() as Parameters<typeof InquiryChannelCell>[0]["value"]
-					}
-				/>
-			),
+			cell: ({ getValue }) => {
+				const channel = String(getValue() ?? "");
+				return (
+					<ChipCell
+						label={INQUIRY_CHANNEL_LABEL[channel] ?? channel}
+						color="default"
+					/>
+				);
+			},
 		}),
 		createPresetColumn<TRow>("priority", {
 			size: 130,
 			align: "center",
-			cell: ({ getValue }) => (
-				<InquiryPriorityCell
-					value={
-						getValue() as Parameters<typeof InquiryPriorityCell>[0]["value"]
-					}
-				/>
-			),
+			cell: ({ getValue }) => {
+				const priority = String(getValue() ?? "");
+				const config = INQUIRY_PRIORITY_CONFIG[
+					priority as keyof typeof INQUIRY_PRIORITY_CONFIG
+				] ?? {
+					label: priority,
+					color: "default" as const,
+				};
+
+				return <ChipCell label={config.label} color={config.color} />;
+			},
 		}),
 		createPresetColumn<TRow>("assigneeName", {
 			size: 150,
 			align: "center",
-			cell: ({ row }) => <InquiryAssigneeCell name={row.original.assigneeId} />,
+			cell: ({ row }) => (
+				<DefaultCell value={row.original.assigneeId} placeholder="미배정" />
+			),
 		}),
 		createPresetColumn<TRow>("sentiment", {
 			size: 100,
 			align: "center",
-			cell: ({ getValue }) => (
-				<InquirySentimentCell
-					value={
-						getValue() as Parameters<typeof InquirySentimentCell>[0]["value"]
-					}
-				/>
-			),
+			cell: ({ getValue }) => {
+				const sentiment = String(getValue() ?? "");
+				const config = INQUIRY_SENTIMENT_CONFIG[
+					sentiment as keyof typeof INQUIRY_SENTIMENT_CONFIG
+				] ?? {
+					label: sentiment,
+					color: "default" as const,
+				};
+
+				return <ChipCell label={config.label} color={config.color} />;
+			},
 		}),
 		createPresetColumn<TRow>("slaStatus", {
 			size: 120,
 			align: "center",
 			cell: ({ row }) => (
-				<InquirySLACell
+				<TimeRemainingCell
 					status={getInquirySlaStatus(row.original)}
 					remainingMinutes={getInquirySlaRemainingMinutes(row.original)}
+					breachLabel="SLA 위반"
 				/>
 			),
 		}),
 		createPresetColumn<TRow>("unreadCount", {
 			size: 100,
 			align: "center",
-			cell: ({ getValue }) => (
-				<InquiryUnreadCell count={getValue() as number} />
-			),
+			cell: ({ getValue }) => {
+				const unreadCount = Number(getValue() ?? 0);
+
+				return unreadCount > 0 ? (
+					<ChipCell label={unreadCount} color="primary" variant="solid" />
+				) : (
+					<DefaultCell value={null} />
+				);
+			},
 		}),
 		createCreatedAtColumn<TRow>({
 			fieldKey: "receivedAt",
@@ -1108,7 +1223,7 @@ function getInquirySlaRemainingMinutes(
 
 function getInquirySlaStatus(
 	inquiry: InquiryDto,
-): Parameters<typeof InquirySLACell>[0]["status"] | undefined {
+): TimeRemainingStatus | undefined {
 	if (inquiry.isSlaResponseBreached || inquiry.isSlaResolveBreached) {
 		return "breach";
 	}

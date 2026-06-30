@@ -2,8 +2,6 @@
 
 import type { OidcClientLoginUi } from "@cocrepo/type";
 import {
-	ActiveStatusCell,
-	AuthMethodCell,
 	ConfirmModal,
 	DateTimeCell,
 	PageTitleBar,
@@ -17,6 +15,22 @@ import { ArrowLeft, Edit, Power, PowerOff, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
+
+const AUTH_METHOD_CONFIG = {
+	client_secret_basic: { label: "Basic", color: "primary" },
+	client_secret_post: { label: "Post", color: "secondary" },
+	none: { label: "None (Public)", color: "warning" },
+} as const;
+
+function getAuthMethodConfig(method: string) {
+	return (
+		AUTH_METHOD_CONFIG[method as keyof typeof AUTH_METHOD_CONFIG] ?? {
+			label: method,
+			color: "default" as const,
+		}
+	);
+}
+
 export interface OidcClientDetailScreenClient {
 	clientId: string;
 	clientSecret?: string | null;
@@ -97,6 +111,11 @@ export const OidcClientDetailScreen = observer(
 				</VStack>
 			);
 		}
+
+		const authMethodConfig = getAuthMethodConfig(
+			client.tokenEndpointAuthMethod,
+		);
+
 		return (
 			<VStack fullWidth>
 				<PageTitleBar
@@ -176,7 +195,13 @@ export const OidcClientDetailScreen = observer(
 											<div>
 												<dt className="text-sm text-muted mb-1">활성 상태</dt>
 												<dd>
-													<ActiveStatusCell isActive={client.isActive} />
+													<Chip
+														color={client.isActive ? "success" : "default"}
+														size="sm"
+														variant="flat"
+													>
+														{client.isActive ? "활성" : "비활성"}
+													</Chip>
 												</dd>
 											</div>
 											<div>
@@ -243,9 +268,13 @@ export const OidcClientDetailScreen = observer(
 											<div>
 												<dt className="text-sm text-muted mb-1">인증 방식</dt>
 												<dd>
-													<AuthMethodCell
-														method={client.tokenEndpointAuthMethod}
-													/>
+													<Chip
+														color={authMethodConfig.color}
+														size="sm"
+														variant="flat"
+													>
+														{authMethodConfig.label}
+													</Chip>
 												</dd>
 											</div>
 											<div>

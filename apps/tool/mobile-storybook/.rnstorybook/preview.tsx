@@ -1,7 +1,13 @@
 import { setLoginRedirectUrl } from "@cocrepo/api/core/client";
 import { setIdpLoginRedirectUrl } from "@cocrepo/api/idp/client";
 import type { HeroUINativeConfig } from "@cocrepo/mo-ui";
-import { DesignSystemProvider, PortalHost, ScreenFrame } from "@cocrepo/mo-ui";
+import {
+	DesignSystemProvider,
+	PlanningPreviewFrame,
+	PortalHost,
+	ScreenFrame,
+} from "@cocrepo/mo-ui";
+import type { PlanningPreviewFrameProps } from "@cocrepo/mo-ui";
 import type { Decorator, Preview } from "@storybook/react-native";
 import type { ReactNode } from "react";
 import { Dimensions, View } from "react-native";
@@ -20,6 +26,14 @@ const STORYBOOK_THEME_BACKGROUNDS = {
 } as const;
 
 type StorybookTheme = keyof typeof STORYBOOK_THEME_BACKGROUNDS;
+type PlanningScenario = PlanningPreviewFrameProps["scenario"];
+
+interface MobilePlanningParameters {
+	planning?: PlanningScenario | false;
+	planningPreview?: {
+		disabled?: boolean;
+	};
+}
 
 setLoginRedirectUrl(DISABLED_AUTH_REDIRECT_URL);
 setIdpLoginRedirectUrl(DISABLED_AUTH_REDIRECT_URL);
@@ -44,6 +58,67 @@ const getStoryLayoutClassName = (layout: unknown) =>
 const getStorybookTheme = (theme: unknown): StorybookTheme =>
 	theme === "light" ? "light" : "dark";
 
+const isPlanningScenario = (value: unknown): value is PlanningScenario => {
+	if (!value || typeof value !== "object") {
+		return false;
+	}
+
+	const candidate = value as Partial<PlanningScenario>;
+	return (
+		typeof candidate.id === "string" &&
+		typeof candidate.title === "string" &&
+		!!candidate.context &&
+		typeof candidate.context === "object"
+	);
+};
+
+const isPlanningPreviewSelfManaged = (title: string | undefined) =>
+	title === "feature/PlanningPreviewFrame" ||
+	title === "mo-ui/feature/PlanningPreviewFrame";
+
+const createDefaultPlanningScenario = (
+	id: string,
+	title: string | undefined,
+	name: string | undefined,
+): PlanningScenario => ({
+	id: `mobile-storybook.${id}`,
+	title: `${title ?? "Mobile Storybook"} / ${name ?? id}`,
+	description: "모바일 Storybook 컴포넌트 기획 검수용 기본 시나리오입니다.",
+	owner: "fe-storybook-agent",
+	status: "draft",
+	context: {
+		realm: "mobile",
+		authState: "authenticated",
+		locale: "ko-KR",
+		viewport: "mobile",
+	},
+	api: {
+		name: "none",
+		mode: "none",
+	},
+	acceptance: [],
+});
+
+const resolvePlanningScenario = (
+	id: string,
+	title: string | undefined,
+	name: string | undefined,
+	parameters: MobilePlanningParameters | undefined,
+): PlanningScenario | null => {
+	if (
+		parameters?.planningPreview?.disabled === true ||
+		isPlanningPreviewSelfManaged(title)
+	) {
+		return null;
+	}
+
+	if (isPlanningScenario(parameters?.planning)) {
+		return parameters.planning;
+	}
+
+	return createDefaultPlanningScenario(id, title, name);
+};
+
 const renderStorybookToastContent = (children: ReactNode) => (
 	<View className={STORYBOOK_TOAST_CONTENT_CLASS_NAME}>{children}</View>
 );
@@ -61,7 +136,19 @@ const DESIGN_SYSTEM_CONFIG: HeroUINativeConfig = {
 const withMobileRuntime: Decorator = (Story, context) => {
 	const storybookTheme = getStorybookTheme(context.globals?.storybookTheme);
 	const canvasBackground = STORYBOOK_THEME_BACKGROUNDS[storybookTheme];
+	const planningScenario = resolvePlanningScenario(
+		context.id,
+		context.title,
+		context.name,
+		context.parameters as MobilePlanningParameters | undefined,
+	);
 	Uniwind.setTheme(storybookTheme);
+
+	const storyContent = (
+		<View className={getStoryLayoutClassName(context.parameters.layout)}>
+			<Story />
+		</View>
+	);
 
 	return (
 		<GestureHandlerRootView
@@ -74,11 +161,13 @@ const withMobileRuntime: Decorator = (Story, context) => {
 							backgroundColor={canvasBackground}
 							edges={["left", "right"]}
 						>
-							<View
-								className={getStoryLayoutClassName(context.parameters.layout)}
-							>
-								<Story />
-							</View>
+							{planningScenario ? (
+								<PlanningPreviewFrame scenario={planningScenario}>
+									{storyContent}
+								</PlanningPreviewFrame>
+							) : (
+								storyContent
+							)}
 						</ScreenFrame>
 					</ScopedTheme>
 					<PortalHost />

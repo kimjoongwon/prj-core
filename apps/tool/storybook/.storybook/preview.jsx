@@ -1,45 +1,12 @@
 import "../tailwind.css";
 import { withStorybookMswLoader } from "../src/runtime/StorybookMswRuntime";
+import { withStorybookPlanningPreview } from "../src/runtime/StorybookPlanningPreview";
 import { withStorybookRuntime } from "../src/runtime/StorybookRuntimeProvider";
 
 /** @type { import('@storybook/nextjs-vite').Preview } */
 const preview = {
-	globalTypes: {
-		storybookRealm: {
-			name: "Runtime",
-			description:
-				"Override the Storybook runtime realm for stories without a storybookRuntime realm.",
-			toolbar: {
-				icon: "globe",
-				dynamicTitle: true,
-				items: [
-					{ value: "auto", title: "Runtime: Auto" },
-					{ value: "admin", title: "Runtime: Admin" },
-					{ value: "idp", title: "Runtime: IDP" },
-					{ value: "none", title: "Runtime: None" },
-				],
-			},
-		},
-		storybookTheme: {
-			name: "Theme",
-			description: "Preview stories with the app light or dark theme.",
-			toolbar: {
-				icon: "circlehollow",
-				dynamicTitle: true,
-				items: [
-					{ value: "system", title: "Theme: System" },
-					{ value: "dark", title: "Theme: Dark" },
-					{ value: "light", title: "Theme: Light" },
-				],
-			},
-		},
-	},
-	initialGlobals: {
-		storybookRealm: "auto",
-		storybookTheme: "system",
-	},
 	loaders: [withStorybookMswLoader],
-	decorators: [withStorybookRuntime],
+	decorators: [withStorybookPlanningPreview, withStorybookRuntime],
 	parameters: {
 		nextjs: {
 			appDirectory: true,

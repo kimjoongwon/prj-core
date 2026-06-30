@@ -12,7 +12,7 @@ import {
 	RootStoreContext,
 	TokenStore,
 } from "@cocrepo/store";
-import { DesignSystemProvider, useDesignSystemTheme } from "@cocrepo/ui";
+import { DesignSystemProvider } from "@cocrepo/ui";
 import {
 	isServer,
 	QueryClient,
@@ -42,8 +42,6 @@ import {
 } from "../../../../../packages/fe-api/src/idp/client";
 
 type StorybookRealm = "none" | "admin" | "idp";
-type StorybookRealmGlobal = StorybookRealm | "auto";
-type StorybookTheme = "light" | "dark" | "system";
 type StoryRender = () => ReactNode;
 
 interface StorybookRuntimeParameter {
@@ -54,10 +52,6 @@ interface StorybookRuntimeParameter {
 interface StorybookContextLike {
 	id: string;
 	title?: string;
-	globals?: {
-		storybookRealm?: StorybookRealmGlobal;
-		storybookTheme?: StorybookTheme;
-	};
 	parameters?: {
 		storybookRuntime?: StorybookRuntimeParameter;
 	};
@@ -72,10 +66,6 @@ interface SpaceOption {
 	spaceId: string;
 	tenantId: string;
 	groundName: string;
-}
-
-interface StorybookThemeSyncProps {
-	theme: StorybookTheme;
 }
 
 const DEFAULT_STALE_TIME_MS = 60 * 1000;
@@ -118,10 +108,7 @@ function resolveRuntimeConfig(
 	context: StorybookContextLike,
 ): StorybookRuntimeConfig {
 	const runtime = context.parameters?.storybookRuntime;
-	const globalRealm = context.globals?.storybookRealm;
-	const realm =
-		runtime?.realm ??
-		(globalRealm && globalRealm !== "auto" ? globalRealm : "none");
+	const realm = runtime?.realm ?? "none";
 
 	return {
 		realm,
@@ -209,38 +196,12 @@ function createStorybookRootStore(runtime: StorybookRuntimeConfig): RootStore {
 	return rootStore;
 }
 
-function isStorybookTheme(theme: unknown): theme is StorybookTheme {
-	return theme === "light" || theme === "dark" || theme === "system";
-}
-
-function getStorybookTheme(context: StorybookContextLike): StorybookTheme {
-	return isStorybookTheme(context.globals?.storybookTheme)
-		? context.globals.storybookTheme
-		: "system";
-}
-
 function useRootStore(): RootStore {
 	const store = useContext(RootStoreContext);
 	if (!store) {
 		throw new Error("StorybookRuntimeProvider requires RootStoreContext.");
 	}
 	return store;
-}
-
-function StorybookThemeSync({ theme }: StorybookThemeSyncProps) {
-	const { setTheme } = useDesignSystemTheme();
-	const appliedThemeRef = useRef<StorybookTheme | null>(null);
-
-	useEffect(() => {
-		if (appliedThemeRef.current === theme) {
-			return;
-		}
-
-		appliedThemeRef.current = theme;
-		setTheme(theme);
-	}, [setTheme, theme]);
-
-	return null;
 }
 
 const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
@@ -305,11 +266,9 @@ export function StorybookRuntimeProvider({
 	children,
 	runtime,
 	storyId,
-	theme = "system",
 }: PropsWithChildren<{
 	runtime: StorybookRuntimeConfig;
 	storyId: string;
-	theme?: StorybookTheme;
 }>) {
 	const queryClient = getQueryClient();
 	const storeRef = useRef<RootStore | null>(null);
@@ -350,8 +309,7 @@ export function StorybookRuntimeProvider({
 		<QueryClientProvider client={queryClient}>
 			<NuqsReactAdapter>
 				<RootStoreContext.Provider value={storeRef.current}>
-					<DesignSystemProvider themeConfig={{ defaultTheme: theme }}>
-						<StorybookThemeSync theme={theme} />
+					<DesignSystemProvider>
 						<StorybookRuntimeBootstrap runtime={runtime} storyId={storyId}>
 							{children}
 						</StorybookRuntimeBootstrap>
@@ -367,15 +325,13 @@ export function withStorybookRuntime(
 	context: StorybookContextLike,
 ) {
 	const runtime = resolveRuntimeConfig(context);
-	const theme = getStorybookTheme(context);
-	const providerKey = `${context.id}:${runtime.realm}:${runtime.currentPath}:${theme}`;
+	const providerKey = `${context.id}:${runtime.realm}:${runtime.currentPath}`;
 
 	return (
 		<StorybookRuntimeProvider
 			key={providerKey}
 			runtime={runtime}
 			storyId={context.id}
-			theme={theme}
 		>
 			<Story />
 		</StorybookRuntimeProvider>

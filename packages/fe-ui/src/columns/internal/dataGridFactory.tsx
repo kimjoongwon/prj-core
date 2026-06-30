@@ -3,11 +3,11 @@
 import type { AssetKind, AssetStatus } from "@cocrepo/api/assets";
 import type { DataGridColumnConfig } from "@cocrepo/type";
 import {
+	ChipCell,
 	DateTimeCell,
 	DefaultCell,
 	NameCell,
 	PhoneCell,
-	StatusChipCell,
 } from "../../cell";
 import { COLUMN_FIELDS, COLUMN_LABELS } from "./fieldPresets";
 
@@ -274,7 +274,12 @@ export function createRemovedAtStatusColumn<
 		label = COLUMN_LABELS.status,
 		size = 120,
 		align = "center",
-		cell = ({ row }) => <StatusChipCell removedAt={row.original.removedAt} />,
+		cell = ({ row }) => (
+			<ChipCell
+				label={row.original.removedAt ? "탈퇴대기" : "활성"}
+				color={row.original.removedAt ? "danger" : "success"}
+			/>
+		),
 		...rest
 	} = overrides;
 	return defineColumn<TData>({

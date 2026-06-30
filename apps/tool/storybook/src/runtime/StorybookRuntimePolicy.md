@@ -10,10 +10,14 @@
 - Expo Web Storybook도 같은 `PlanningScenario` 계약을 MSW로 실행한다.
 - Native Mobile Storybook은 같은 `PlanningScenario` 계약을 native mock transport로 실행한다.
 - 순수 UI component story는 props 중심으로 작성할 수 있다.
+- 기획 프레임 UI는 전역 decorator로 자동 주입하지 않고, story `render`에서 `PlanningPreviewFrame`으로 수동 래핑한다.
+- Screen story는 같은 `PlanningScenario` 객체를 `parameters.planning`과 `PlanningPreviewFrame scenario`에 함께 전달한다.
+- `PlanningPreviewFrame`의 mock 로그인과 tenant/space 선택은 실제 인증, 라우터, API, runtime store를 변경하지 않는다.
 
 ## 역할 분리
 
 - `PlanningScenario`: Story가 검증하는 기획 속성이다.
+- `PlanningPreviewFrame`: Story가 선언한 기획 속성과 화면 preview를 함께 보여주는 수동 래퍼이다.
 - `*.msw.ts`: Storybook에서 사용할 API 응답 시나리오이다.
 - `plate_e2e` DB: E2E 전용 실제 시스템 검증 환경이다.
 

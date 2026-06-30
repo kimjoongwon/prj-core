@@ -14,7 +14,7 @@ import {
 	type OidcLoginFormState,
 } from "../../form";
 import { useT } from "../../i18n";
-import { AuthCard, AuthCardHeader } from "../../widget";
+import { AuthCard, AuthCardHeader } from "../../widget/AuthCard";
 
 export interface IdpInteractionClientInfo {
 	clientId: string;

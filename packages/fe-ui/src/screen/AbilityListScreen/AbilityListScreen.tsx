@@ -24,12 +24,13 @@ import {
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
 import { Button } from "../../action/Button/Button";
-import { Chip } from "../../data-display/Chip/Chip";
+import { Chip } from "../../data-display";
 import { Input } from "../../input/Input/Input";
 import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
 import { Select } from "../../selection/Select/Select";
-import { PageTitleBar, StatsCard } from "../../widget";
+import { PageTitleBar } from "../../widget/PageTitleBar";
+import { StatsCard } from "../../widget/StatsCard";
 export interface AbilityListScreenOption {
 	id: string;
 	label: string;

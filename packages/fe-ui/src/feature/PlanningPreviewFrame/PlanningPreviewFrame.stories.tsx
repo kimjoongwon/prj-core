@@ -143,44 +143,56 @@ function PreviewCard({ title = "Preview" }: { title?: string }) {
 }
 
 export const Ready: Story = {
+	args: {
+		scenario: readyScenario,
+	},
 	parameters: {
 		planning: readyScenario,
 	},
-	render: () => (
-		<PlanningPreviewFrame scenario={readyScenario}>
+	render: (args) => (
+		<PlanningPreviewFrame {...args}>
 			<PreviewCard title="사용자 상세 화면" />
 		</PlanningPreviewFrame>
 	),
 };
 
 export const LoggedOut: Story = {
+	args: {
+		scenario: loggedOutScenario,
+	},
 	parameters: {
 		planning: loggedOutScenario,
 	},
-	render: () => (
-		<PlanningPreviewFrame scenario={loggedOutScenario}>
+	render: (args) => (
+		<PlanningPreviewFrame {...args}>
 			<PreviewCard title="로그아웃 상태 Preview" />
 		</PlanningPreviewFrame>
 	),
 };
 
 export const MultipleSpaces: Story = {
+	args: {
+		scenario: multipleSpacesScenario,
+	},
 	parameters: {
 		planning: multipleSpacesScenario,
 	},
-	render: () => (
-		<PlanningPreviewFrame scenario={multipleSpacesScenario}>
+	render: (args) => (
+		<PlanningPreviewFrame {...args}>
 			<PreviewCard title="여러 Space 선택 Preview" />
 		</PlanningPreviewFrame>
 	),
 };
 
 export const Minimal: Story = {
+	args: {
+		scenario: minimalScenario,
+	},
 	parameters: {
 		planning: minimalScenario,
 	},
-	render: () => (
-		<PlanningPreviewFrame scenario={minimalScenario}>
+	render: (args) => (
+		<PlanningPreviewFrame {...args}>
 			<PreviewCard title="최소 입력 Preview" />
 		</PlanningPreviewFrame>
 	),

@@ -503,7 +503,7 @@ describe("SessionCard", () => {
 18. 세션 종료 API (main server)
 19. SessionCard 위젯 + /my-sessions 페이지 (admin)
 20. 감사 로그 조회 API (main server, PLATFORM_ADMIN)
-21. AuditResultBadge + UserAgentCell (packages/fe-ui)
+21. 감사 결과 ChipCell 매핑 + UserAgentCell (packages/fe-ui)
 22. /auth-audit-logs 페이지 (admin)
 23. 계정 잠금 해제 API (main server)
 24. 비밀번호 강제 재설정 API (main server)
@@ -557,7 +557,7 @@ describe("SessionCard", () => {
 | `packages/be-controller/src/auth/auth.controller.ts` | 세션/감사로그/관리 API 추가 |
 | `packages/fe-ui/src/widget/SessionCard/` | 신규 |
 | `packages/fe-ui/src/widget/SecurityInfoPanel/` | 신규 |
-| `packages/fe-ui/src/cell/AuditResultBadge/` | 신규 |
+| `packages/fe-ui/src/columns/data-grid/idpColumns.tsx` | 감사 결과 ChipCell 매핑 |
 | `packages/fe-ui/src/cell/UserAgentCell/` | 신규 |
 | `apps/admin/web/src/app/(admin)/my-sessions/` | 신규 페이지 |
 | `apps/admin/web/src/app/(admin)/auth-audit-logs/` | 신규 페이지 |

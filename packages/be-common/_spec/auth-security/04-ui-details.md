@@ -175,12 +175,12 @@ interface SessionCardProps {
 
 ### Cell 컴포넌트 (packages/fe-ui)
 
-#### AuditResultBadge (Cell)
+#### 감사 결과 ChipCell 표시
 
 | 항목 | 내용 |
 |------|------|
-| **위치** | `packages/fe-ui/src/cell/AuditResultBadge/` |
-| **용도** | 감사 로그 결과 뱃지 |
+| **위치** | `packages/fe-ui/src/columns/data-grid/idpColumns.tsx` |
+| **용도** | 감사 로그 결과를 `ChipCell` label/color 매핑으로 표시 |
 
 ```tsx
 // SUCCESS → Chip color="success" "성공"
@@ -292,5 +292,5 @@ interface UserSecurityActionsProps {
 | 3 | Widget | SessionCard | fe-ui | 세션 정보 카드 |
 | 3 | Widget | SecurityInfoPanel | fe-ui | 보안 정보 패널 |
 | 3 | Feature | UserSecurityActions | fe-ui | 관리자 보안 액션 |
-| 3 | Cell | AuditResultBadge | fe-ui | 감사 결과 뱃지 |
+| 3 | Cell | ChipCell | fe-ui | 감사 결과 뱃지 |
 | 3 | Cell | UserAgentCell | fe-ui | UA 파싱 셀 |

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "../../action";
-import { PageTitleBar } from "../../widget";
+import { PageTitleBar } from "../../widget/PageTitleBar";
 import { Screen } from "./Screen";
 
 const meta = {

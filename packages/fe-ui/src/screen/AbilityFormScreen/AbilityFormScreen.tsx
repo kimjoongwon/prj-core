@@ -11,7 +11,7 @@ import { VStack } from "../../rhythm";
 import { Select } from "../../selection/Select/Select";
 import { Switch } from "../../selection/Switch/Switch";
 import { SectionSurface } from "../../surface";
-import { PageTitleBar } from "../../widget";
+import { PageTitleBar } from "../../widget/PageTitleBar";
 export interface AbilityFormScreenOption {
 	id: string;
 	label: string;

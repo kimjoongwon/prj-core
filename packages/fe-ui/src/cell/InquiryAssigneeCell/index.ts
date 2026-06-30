@@ -1,1 +1,0 @@
-export { InquiryAssigneeCell } from "./InquiryAssigneeCell";

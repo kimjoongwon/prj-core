@@ -11,9 +11,6 @@ const setIdpLoginRedirectUrlMock = vi.fn();
 
 vi.mock("@cocrepo/ui", () => ({
 	DesignSystemProvider: ({ children }: PropsWithChildren) => children,
-	useDesignSystemTheme: () => ({
-		setTheme: vi.fn(),
-	}),
 }));
 
 vi.mock("nuqs/adapters/react", () => ({
@@ -142,7 +139,7 @@ describe("StorybookRuntimeProvider", () => {
 		expect(screen.getByText("Admin story content")).toBeTruthy();
 	}, 15000);
 
-	it("uses the Storybook toolbar realm override when the story does not provide a runtime realm", async () => {
+	it("uses the story runtime parameter realm without a toolbar override", async () => {
 		window.history.replaceState(
 			{},
 			"",
@@ -163,10 +160,11 @@ describe("StorybookRuntimeProvider", () => {
 				{
 					id: "screen-spacelistscreen--default",
 					title: "screen/SpaceListScreen",
-					globals: {
-						storybookRealm: "admin",
+					parameters: {
+						storybookRuntime: {
+							realm: "admin",
+						},
 					},
-					parameters: {},
 				},
 			),
 		);

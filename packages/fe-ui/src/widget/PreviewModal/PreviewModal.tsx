@@ -8,7 +8,7 @@ import { Chip } from "../../data-display/Chip/Chip";
 import { VariableInputForm } from "../../form/VariableInputForm";
 import { ByteCounter } from "../ByteCounter";
 import { HtmlContentRenderer } from "../HtmlContentRenderer";
-import type { TemplateVariable } from "../VariableReadTable";
+import type { TemplateVariable } from "../../form/VariableInputForm";
 
 /** 템플릿 유형 */
 type TemplateType = "EMAIL" | "SMS" | "PUSH";

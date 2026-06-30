@@ -1,6 +1,6 @@
 import { LanguageCode } from "@cocrepo/constant";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { I18nProvider } from "../../i18n";
 import { LanguageSelectButton } from "./LanguageSelectButton";
 

@@ -1,8 +1,11 @@
 "use client";
 
+import type { DataGridColumnConfig, DataGridState } from "@cocrepo/type";
 import type { PreviewResult, TemplateVariable } from "@cocrepo/ui";
 import {
+	Chip,
 	DateTimeCell,
+	DataGrid,
 	PageTitleBar,
 	PreviewModal,
 	Section,
@@ -11,7 +14,6 @@ import {
 	TemplateActions,
 	TemplateContentViewer,
 	TemplateTypeBadge,
-	VariableReadTable,
 	VStack,
 } from "@cocrepo/ui";
 import { Modal, Spinner, useOverlayState } from "@heroui/react";
@@ -19,6 +21,44 @@ import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../action/Button/Button";
 import { Switch } from "../../selection/Switch/Switch";
+
+const readonlyGridState: DataGridState = {
+	query: {
+		values: { skip: 0, take: 100 },
+		setValues: async () => new URLSearchParams(),
+	},
+};
+
+const variableColumns: DataGridColumnConfig<TemplateVariable>[] = [
+	{
+		field: "name",
+		label: "변수명",
+		isRequired: true,
+		cell: ({ row }) => (
+			<span className="font-mono text-sm">{`{{${row.original.name}}}`}</span>
+		),
+	},
+	{
+		field: "description",
+		label: "설명",
+		cell: ({ row }) => row.original.description ?? "-",
+	},
+	{
+		field: "defaultValue",
+		label: "기본값",
+		cell: ({ row }) => row.original.defaultValue ?? "-",
+	},
+	{
+		field: "isRequired",
+		label: "필수",
+		cell: ({ row }) => (
+			<Chip size="sm" color={row.original.isRequired ? "primary" : "default"}>
+				{row.original.isRequired ? "필수" : "선택"}
+			</Chip>
+		),
+	},
+];
+
 export interface TemplateDetailScreenTemplate {
 	id: string;
 	code: string;
@@ -231,13 +271,16 @@ export const TemplateDetailScreen = observer(
 										<PageTitleBar level={2} title="변수 목록" />
 									</Section.Header>
 									<Section.Body>
-										{template.variables.length > 0 ? (
-											<VariableReadTable variables={template.variables} />
-										) : (
-											<div className="p-6 text-center">
-												<p className="text-muted">등록된 변수가 없습니다.</p>
-											</div>
-										)}
+										<DataGrid
+											config={{
+												entity: "TemplateVariable",
+												columns: variableColumns,
+												emptyMessage: "등록된 변수가 없습니다.",
+											}}
+											rows={template.variables}
+											totalCount={template.variables.length}
+											state={readonlyGridState}
+										/>
 									</Section.Body>
 								</Section>
 							</VStack>

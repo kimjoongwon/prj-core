@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "../../action";
 import { SectionSurface } from "../../surface";
-import { PageTitleBar } from "../../widget";
+import { PageTitleBar } from "../../widget/PageTitleBar";
 import { Section } from "./Section";
 
 const meta = {

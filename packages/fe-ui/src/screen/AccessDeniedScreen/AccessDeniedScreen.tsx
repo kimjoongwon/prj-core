@@ -7,7 +7,7 @@ import { useT } from "../../i18n";
 import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
-import { PageTitleBar } from "../../widget";
+import { PageTitleBar } from "../../widget/PageTitleBar";
 export interface AccessDeniedScreenProps {
 	mode: "checking" | "forbidden";
 	title: string;

@@ -7,7 +7,8 @@ import { TextArea } from "../../input/TextArea";
 import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
-import { ContentLanguageNotice, PageTitleBar } from "../../widget";
+import { ContentLanguageNotice } from "../../widget/ContentLanguageNotice";
+import { PageTitleBar } from "../../widget/PageTitleBar";
 export interface TimelineEditScreenProps {
 	timelineName?: string;
 	name: string;

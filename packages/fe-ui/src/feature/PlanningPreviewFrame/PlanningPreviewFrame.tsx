@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactElement } from "react";
+import { ThemeToggleButton } from "../ThemeToggleButton";
 import { PlanningAcceptanceList } from "./PlanningAcceptanceList";
 import { PlanningApiRequestList } from "./PlanningApiRequestList";
 import { PlanningNotesList } from "./PlanningNotesList";
@@ -49,9 +50,12 @@ export const PlanningPreviewFrame = (<THandler = unknown,>({
 								</p>
 							) : null}
 						</div>
-						<span className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-muted">
-							{formatPlanningStatus(scenario.status)}
-						</span>
+						<div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
+							<span className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-muted">
+								{formatPlanningStatus(scenario.status)}
+							</span>
+							<ThemeToggleButton />
+						</div>
 					</div>
 				</header>
 

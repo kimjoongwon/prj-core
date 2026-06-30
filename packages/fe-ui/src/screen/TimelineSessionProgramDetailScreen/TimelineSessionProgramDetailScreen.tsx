@@ -10,7 +10,7 @@ import { DateTimeCell } from "../../cell";
 import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
-import { PageTitleBar } from "../../widget";
+import { PageTitleBar } from "../../widget/PageTitleBar";
 
 const formatExerciseDuration = (seconds: number) => {
 	const minutes = Math.floor(seconds / 60);

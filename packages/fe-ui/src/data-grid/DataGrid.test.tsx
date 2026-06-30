@@ -1,6 +1,6 @@
 import type { DataGridConfig, DataGridState } from "@cocrepo/type";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { DataGrid, getDataGridRowKey, type Key } from "./DataGrid";
 
 vi.mock("../feedback/Skeleton/Skeleton", () => ({
