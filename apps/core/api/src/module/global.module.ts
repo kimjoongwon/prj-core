@@ -20,5 +20,5 @@ export const globalModules = createGlobalModules({
 		objectStorageConfig,
 		redisConfig,
 	],
-	developmentLoggerMessageFormat: "🕒 {time} {level} - {msg}",
+	developmentLoggerMessageFormat: "{msg}",
 });
