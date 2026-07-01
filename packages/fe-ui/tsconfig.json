@@ -28,21 +28,21 @@
     "noFallthroughCasesInSwitch": false,
     "noUncheckedIndexedAccess": false,
 
-    // 경로 매핑
-    "types": ["vitest/globals", "node"],
+    // 개발/IDE 타입
+    "types": ["vitest/globals", "@testing-library/jest-dom", "node"],
     "plugins": [
       {
         "name": "next"
       }
     ]
   },
-  "include": ["index.ts", "hero.tsx", "src/**/*.ts", "src/**/*.tsx"],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "**/*.test.ts",
-    "**/*.test.tsx",
-    "**/*.spec.ts",
-    "**/*.spec.tsx"
-  ]
+  "include": [
+    "index.ts",
+    "hero.tsx",
+    "react-env.d.ts",
+    "vitest.config.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "exclude": ["node_modules", "dist"]
 }

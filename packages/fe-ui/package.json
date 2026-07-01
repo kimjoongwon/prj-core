@@ -40,7 +40,7 @@
     "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
     "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
     "format": "biome check --write .",
-    "type-check": "tsc --noEmit -p tsconfig.typecheck.json",
+    "type-check": "tsc --noEmit -p tsconfig.json",
     "type-check:prod": "tsc --noEmit -p tsconfig.prod.json",
     "test": "vitest",
     "test:watch": "vitest --watch",
