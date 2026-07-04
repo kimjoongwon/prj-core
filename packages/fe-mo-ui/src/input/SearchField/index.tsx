@@ -1,103 +1,22 @@
+"use client";
+
 import { useFormField } from "@cocrepo/hook/useFormField";
 import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
-import {
-	Description as HeroDescription,
-	FieldError as HeroFieldError,
-	Label as HeroLabel,
-	SearchField as HeroSearchField,
-	searchFieldClassNames,
-	useSearchField,
-} from "heroui-native";
 import { observer } from "mobx-react-lite";
 import {
-	type ComponentPropsWithoutRef,
-	type ComponentRef,
-	forwardRef,
-	type ReactNode,
-} from "react";
+	PureSearchField,
+	type PureSearchFieldProps,
+	searchFieldClassNames,
+	useSearchField,
+} from "./SearchField";
 
-type HeroSearchFieldProps = ComponentPropsWithoutRef<typeof HeroSearchField>;
-type SearchFieldClearButtonProps = ComponentPropsWithoutRef<
-	typeof HeroSearchField.ClearButton
->;
-type SearchFieldInputProps = ComponentPropsWithoutRef<
-	typeof HeroSearchField.Input
->;
-type SearchFieldSearchIconProps = ComponentPropsWithoutRef<
-	typeof HeroSearchField.SearchIcon
->;
-interface SearchFieldCompositionProps {
-	description?: ReactNode;
-	errorMessage?: ReactNode;
-	helperText?: ReactNode;
-	label?: ReactNode;
-}
-export interface PureSearchFieldProps
-	extends Omit<
-			HeroSearchFieldProps,
-			"children" | keyof SearchFieldCompositionProps
-		>,
-		SearchFieldCompositionProps {
-	children?: ReactNode;
-	clearButtonProps?: SearchFieldClearButtonProps;
-	inputProps?: SearchFieldInputProps;
-	searchIconProps?: SearchFieldSearchIconProps;
-}
-const PureSearchFieldComponent = forwardRef<
-	ComponentRef<typeof HeroSearchField>,
-	PureSearchFieldProps
->(
-	(
-		{
-			children,
-			clearButtonProps,
-			description,
-			errorMessage,
-			helperText,
-			inputProps,
-			isInvalid,
-			label,
-			searchIconProps,
-			...rest
-		},
-		ref,
-	) => {
-		const resolvedInvalid = Boolean(isInvalid || errorMessage);
-
-		return (
-			<HeroSearchField {...rest} isInvalid={resolvedInvalid} ref={ref}>
-				{children ?? (
-					<>
-						{label && <HeroLabel>{label}</HeroLabel>}
-						<HeroSearchField.Group>
-							<HeroSearchField.SearchIcon {...searchIconProps} />
-							<HeroSearchField.Input {...inputProps} />
-							<HeroSearchField.ClearButton {...clearButtonProps} />
-						</HeroSearchField.Group>
-						{description && (
-							<HeroDescription hideOnInvalid={Boolean(errorMessage)}>
-								{description}
-							</HeroDescription>
-						)}
-						{helperText && (
-							<HeroDescription hideOnInvalid={Boolean(errorMessage)}>
-								{helperText}
-							</HeroDescription>
-						)}
-						{errorMessage && <HeroFieldError>{errorMessage}</HeroFieldError>}
-					</>
-				)}
-			</HeroSearchField>
-		);
-	},
-);
-PureSearchFieldComponent.displayName = "PureSearchField";
 export interface SearchFieldProps<
 	TState extends object = Record<string, unknown>,
 > extends MobxProps<TState>,
 		Omit<PureSearchFieldProps, "onChange" | "value"> {}
-const SearchFieldComponent = observer(
+
+const SearchField = observer(
 	<TState extends object>(props: SearchFieldProps<TState>) => {
 		const { path, state, ...rest } = props;
 		const field = useFormField<TState, string>({
@@ -105,8 +24,9 @@ const SearchFieldComponent = observer(
 			state,
 			value: (tools.get(state, path) ?? "") as string,
 		});
+
 		return (
-			<PureSearchFieldComponent
+			<PureSearchField
 				{...rest}
 				onChange={field.setValue}
 				value={field.state.value}
@@ -114,24 +34,27 @@ const SearchFieldComponent = observer(
 		);
 	},
 );
-SearchFieldComponent.displayName = "SearchField";
-export const SearchField = Object.assign(SearchFieldComponent, {
-	ClearButton: HeroSearchField.ClearButton,
-	Description: HeroDescription,
-	Error: HeroFieldError,
-	FieldError: HeroFieldError,
-	Group: HeroSearchField.Group,
-	Input: HeroSearchField.Input,
-	Label: HeroLabel,
-	SearchIcon: HeroSearchField.SearchIcon,
-}) as typeof SearchFieldComponent &
+SearchField.displayName = "SearchField";
+
+const SearchFieldWithStatics = Object.assign(SearchField, {
+	ClearButton: PureSearchField.ClearButton,
+	Description: PureSearchField.Description,
+	Error: PureSearchField.Error,
+	FieldError: PureSearchField.FieldError,
+	Group: PureSearchField.Group,
+	Input: PureSearchField.Input,
+	Label: PureSearchField.Label,
+	SearchIcon: PureSearchField.SearchIcon,
+}) as typeof SearchField &
 	Pick<
-		typeof HeroSearchField,
+		typeof PureSearchField,
 		"ClearButton" | "Group" | "Input" | "SearchIcon"
 	> & {
-		Description: typeof HeroDescription;
-		Error: typeof HeroFieldError;
-		FieldError: typeof HeroFieldError;
-		Label: typeof HeroLabel;
+		Description: typeof PureSearchField.Description;
+		Error: typeof PureSearchField.Error;
+		FieldError: typeof PureSearchField.FieldError;
+		Label: typeof PureSearchField.Label;
 	};
+export { SearchFieldWithStatics as SearchField };
 export { searchFieldClassNames, useSearchField };
+export type { PureSearchFieldProps };

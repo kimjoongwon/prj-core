@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Button } from "../../action";
+import { Button } from "../../input";
 import { PageTitleBar } from "../../widget/PageTitleBar";
 import { Screen } from "./Screen";
 

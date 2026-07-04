@@ -51,7 +51,6 @@ const baseScenario = {
 			},
 		],
 	},
-	acceptance: [{ label: "사용자 기본 정보가 보인다" }],
 	notes: ["개인 Policy 할당 제거 이후 정보 구조를 검토합니다."],
 } satisfies PlanningScenario;
 
@@ -93,18 +92,20 @@ describe("PlanningPreviewFrame", () => {
 		expect(screen.getByRole("button", { name: /홍대 스페이스/ })).toBeTruthy();
 	});
 
-	it("renders notes, acceptance, and API request summaries", () => {
+	it("renders notes and API request summaries without planning metadata panels", () => {
 		render(
 			<PlanningPreviewFrame scenario={baseScenario}>
 				<div>Rendered screen</div>
 			</PlanningPreviewFrame>,
 		);
 
-		expect(screen.getByText("사용자 기본 정보가 보인다")).toBeTruthy();
 		expect(
 			screen.getByText("개인 Policy 할당 제거 이후 정보 구조를 검토합니다."),
 		).toBeTruthy();
 		expect(screen.getByText("GET /admin/users/storybook-user")).toBeTruthy();
 		expect(screen.getByText("status 200")).toBeTruthy();
+		expect(screen.queryByRole("heading", { name: "Planning" })).toBeNull();
+		expect(screen.queryByRole("heading", { name: "Context" })).toBeNull();
+		expect(screen.queryByRole("heading", { name: "Acceptance" })).toBeNull();
 	});
 });

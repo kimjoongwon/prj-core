@@ -9,7 +9,7 @@ import type {
 import {
 	buildSubjectTableColumns,
 	DataGrid,
-	DataGridStateModel,
+	DataGridState,
 	PageTitleBar,
 	Section,
 	SectionSurface,
@@ -177,7 +177,7 @@ export const SubjectListScreen = observer(
 	}: SubjectListScreenProps) => {
 		const gridState = useLocalObservable(
 			() =>
-				new DataGridStateModel({
+				new DataGridState({
 					queryStates,
 					setQueryStates,
 				}),

@@ -5,11 +5,11 @@ import {
 	ContentLanguageNotice,
 	DraggableSortableList,
 	DragHandle,
-	Input,
 	MediaThumbnail,
 	PageTitleBar,
 	Section,
 	SectionSurface,
+	TextField,
 	useT,
 	VStack,
 } from "@cocrepo/ui";
@@ -202,7 +202,7 @@ const ActivityCard = observer(function ActivityCard({
 						</p>
 					) : null}
 					<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-						<Input
+						<TextField
 							type="number"
 							label="반복 횟수"
 							value={activity.repetitions}
@@ -211,7 +211,7 @@ const ActivityCard = observer(function ActivityCard({
 							}
 							min={1}
 						/>
-						<Input
+						<TextField
 							type="number"
 							label="휴식 시간(초)"
 							value={activity.restTime}
@@ -220,7 +220,7 @@ const ActivityCard = observer(function ActivityCard({
 							}
 							min={0}
 						/>
-						<Input
+						<TextField
 							label="메모"
 							value={activity.notes}
 							onValueChange={(value: string) =>
@@ -267,7 +267,7 @@ export const RoutineActivitySection = observer(function RoutineActivitySection({
 				</Section.Header>
 				<Section.Body>
 					<div className="flex flex-col gap-4">
-						<Input
+						<TextField
 							label="운동 검색"
 							placeholder="운동 이름으로 검색하세요."
 							value={exerciseQuery}
@@ -426,7 +426,7 @@ export const RoutineCreateScreen = observer(
 										<ContentLanguageNotice
 											contentLanguageCode={contentLanguageCode}
 										/>
-										<Input
+										<TextField
 											label="루틴 이름"
 											placeholder="예: 풀바디 루틴 A"
 											value={name}
@@ -436,7 +436,7 @@ export const RoutineCreateScreen = observer(
 											errorMessage={nameError}
 											maxLength={100}
 										/>
-										<Input
+										<TextField
 											label="단축 라벨"
 											placeholder="예: FULL-A"
 											value={label}

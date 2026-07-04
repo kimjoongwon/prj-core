@@ -1,12 +1,10 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action";
 import { AlertBanner } from "../../feedback/AlertBanner/AlertBanner";
 import { useT } from "../../i18n";
-import { Input, TextArea } from "../../input";
-import { Link } from "../../navigation";
-import { Select } from "../../selection/Select/Select";
+import { Button, Link, TextArea, TextField } from "../../input";
+import { Select } from "../../input/Select/Select";
 import { AuthCard } from "../../widget/AuthCard/AuthCard";
 import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
 
@@ -190,7 +188,7 @@ export const SignUpForm = observer(
 							errorMessage={state.fieldErrors.spaceId}
 							description={selectDescription}
 						/>
-						<Input
+						<TextField
 							label="이름"
 							placeholder="이름을 입력하세요"
 							value={state.name}
@@ -201,7 +199,7 @@ export const SignUpForm = observer(
 							isInvalid={Boolean(state.fieldErrors.name)}
 							errorMessage={state.fieldErrors.name}
 						/>
-						<Input
+						<TextField
 							label="이메일"
 							placeholder="이메일을 입력하세요"
 							value={state.email}
@@ -213,7 +211,7 @@ export const SignUpForm = observer(
 							isInvalid={Boolean(state.fieldErrors.email)}
 							errorMessage={state.fieldErrors.email}
 						/>
-						<Input
+						<TextField
 							label="전화번호"
 							placeholder="전화번호를 입력하세요"
 							value={state.phone}
@@ -235,7 +233,7 @@ export const SignUpForm = observer(
 							isInvalid={Boolean(state.fieldErrors.address)}
 							errorMessage={state.fieldErrors.address}
 						/>
-						<Input
+						<TextField
 							label="비밀번호"
 							placeholder="비밀번호를 입력하세요"
 							value={state.password}
@@ -247,7 +245,7 @@ export const SignUpForm = observer(
 							isInvalid={Boolean(state.fieldErrors.password)}
 							errorMessage={state.fieldErrors.password}
 						/>
-						<Input
+						<TextField
 							label="비밀번호 확인"
 							placeholder="비밀번호를 다시 입력하세요"
 							value={state.confirmPassword}

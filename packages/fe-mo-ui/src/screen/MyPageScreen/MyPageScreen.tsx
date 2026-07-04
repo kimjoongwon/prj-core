@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { ScrollView, View } from "react-native";
-import { Button } from "../../action/Button";
+import { Button } from "../../input/Button";
 import { Chip } from "../../data-display/Chip";
 import { Text } from "../../data-display/Text";
 import { Icon } from "../../icon";

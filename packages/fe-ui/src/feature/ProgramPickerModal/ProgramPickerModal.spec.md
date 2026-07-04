@@ -22,7 +22,7 @@
 | 모듈 | 용도 |
 |------|------|
 | @heroui/react | 기능 구현 의존성 |
-| @cocrepo/ui i18n/action/input | 검색 입력, 버튼, 빈 상태 문구 런타임 번역 |
+| @cocrepo/ui i18n/input | 검색 입력, 버튼, 빈 상태 문구 런타임 번역 |
 | mobx-react-lite | 기능 구현 의존성 |
 
 ## 동작 흐름

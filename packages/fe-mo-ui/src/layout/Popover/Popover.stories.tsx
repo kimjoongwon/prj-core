@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { View } from "react-native";
-import { Button } from "../../action/Button";
+import { Button } from "../../input/Button";
 import { Text } from "../../data-display/Text";
 import { Popover } from "./index";
 

@@ -3,9 +3,9 @@
 import { Moon, Sun } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { Button } from "../../action/Button/Button";
 import { useDesignSystemTheme } from "../../design-system/provider";
 import { useT } from "../../i18n";
+import { Button } from "../../input/Button/Button";
 
 export interface ThemeToggleButtonProps {
 	className?: string;

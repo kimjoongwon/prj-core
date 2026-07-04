@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import { type ReactNode } from "react";
 import { View, type ViewProps } from "react-native";
 import { tv } from "tailwind-variants";
-import { Button } from "../../action/Button";
+import { Button } from "../../input/Button";
 import { Text } from "../../data-display/Text";
 import { Icon, type IconTone, type MobileIconName } from "../../icon";
 import { Card } from "../../layout/Card";

@@ -1,18 +1,139 @@
 import type {
+	DataGridColumnsState as DataGridColumnsStateContract,
+	DataGridColumnsStateSnapshot,
+	DataGridQueryState as DataGridQueryStateContract,
 	DataGridQueryStates,
-	DataGridSelectionState,
+	DataGridSelectionState as DataGridSelectionStateContract,
 	DataGridSetQueryStates,
-	DataGridState,
+	DataGridState as DataGridStateContract,
 } from "@cocrepo/type";
 import { makeAutoObservable } from "mobx";
 
-export interface DataGridStateModelOptions {
+const objectPrototype = Object.prototype;
+
+export interface DataGridStateOptions {
 	queryStates: DataGridQueryStates;
 	setQueryStates: DataGridSetQueryStates;
-	selection?: DataGridSelectionState;
+	columns?: Partial<DataGridColumnsStateSnapshot>;
+	selection?: DataGridSelectionStateContract;
 }
 
-export class DataGridSelectionStateModel implements DataGridSelectionState {
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function hasOwnRecordKey(value: Record<string, unknown>, key: string) {
+	return objectPrototype.hasOwnProperty.call(value, key);
+}
+
+function toStringArray(value: unknown) {
+	return Array.isArray(value)
+		? value.filter((item): item is string => typeof item === "string")
+		: [];
+}
+
+function toUniqueStringArray(value: string[]) {
+	return Array.from(new Set(value));
+}
+
+function isBoolean(value: unknown): value is boolean {
+	return typeof value === "boolean";
+}
+
+function isFiniteNumber(value: unknown): value is number {
+	return typeof value === "number" && Number.isFinite(value);
+}
+
+function toRecord<T>(
+	value: unknown,
+	isEntryValue: (entryValue: unknown) => entryValue is T,
+) {
+	if (!isRecord(value)) {
+		return {};
+	}
+
+	return Object.fromEntries(
+		Object.entries(value).filter((entry): entry is [string, T] =>
+			isEntryValue(entry[1]),
+		),
+	);
+}
+
+export class DataGridColumnsState implements DataGridColumnsStateContract {
+	order: string[] = [];
+	visibility: Record<string, boolean> = {};
+	sizing: Record<string, number> = {};
+	grouping: string[] = [];
+	isGroupingCustomized = false;
+
+	constructor(snapshot?: Partial<DataGridColumnsStateSnapshot>) {
+		makeAutoObservable(this, {}, { autoBind: true });
+		this.restore(snapshot);
+	}
+
+	setOrder(order: string[]) {
+		this.order = [...order];
+	}
+
+	setVisibility(visibility: Record<string, boolean>) {
+		this.visibility = { ...visibility };
+	}
+
+	setColumnVisibility(columnId: string, isVisible: boolean) {
+		this.visibility = {
+			...this.visibility,
+			[columnId]: isVisible,
+		};
+	}
+
+	setSizing(sizing: Record<string, number>) {
+		this.sizing = { ...sizing };
+	}
+
+	setColumnSizing(columnId: string, size: number | null) {
+		const nextSizing = { ...this.sizing };
+		if (size == null) {
+			delete nextSizing[columnId];
+		} else {
+			nextSizing[columnId] = size;
+		}
+		this.sizing = nextSizing;
+	}
+
+	setGrouping(grouping: string[]) {
+		this.grouping = toUniqueStringArray(grouping);
+		this.isGroupingCustomized = true;
+	}
+
+	setColumnGrouping(columnId: string, isGrouped: boolean) {
+		const nextGrouping = this.grouping.filter((id) => id !== columnId);
+		this.grouping = isGrouped ? [...nextGrouping, columnId] : nextGrouping;
+		this.isGroupingCustomized = true;
+	}
+
+	restore(snapshot?: unknown) {
+		if (!isRecord(snapshot)) {
+			return;
+		}
+
+		this.order = toStringArray(snapshot.order);
+		this.visibility = toRecord(snapshot.visibility, isBoolean);
+		this.sizing = toRecord(snapshot.sizing, isFiniteNumber);
+		this.grouping = toUniqueStringArray(toStringArray(snapshot.grouping));
+		this.isGroupingCustomized = hasOwnRecordKey(snapshot, "grouping");
+	}
+
+	toJSON(): DataGridColumnsStateSnapshot {
+		return {
+			order: [...this.order],
+			visibility: { ...this.visibility },
+			sizing: { ...this.sizing },
+			grouping: [...this.grouping],
+		};
+	}
+}
+
+export class DataGridSelectionState implements DataGridSelectionStateContract {
 	selectedKeys = new Set<string>();
 
 	constructor(selectedKeys?: Set<string>) {
@@ -30,7 +151,7 @@ export class DataGridSelectionStateModel implements DataGridSelectionState {
 	}
 }
 
-export class DataGridQueryStateModel {
+export class DataGridQueryState implements DataGridQueryStateContract {
 	values: DataGridQueryStates;
 	private setValuesDelegate: DataGridSetQueryStates;
 
@@ -60,16 +181,19 @@ export class DataGridQueryStateModel {
 	}
 }
 
-export class DataGridStateModel implements DataGridState {
-	query: DataGridQueryStateModel;
-	selection?: DataGridSelectionState;
+export class DataGridState implements DataGridStateContract {
+	columns: DataGridColumnsState;
+	query: DataGridQueryState;
+	selection?: DataGridSelectionStateContract;
 
 	constructor({
+		columns,
 		queryStates,
 		setQueryStates,
 		selection,
-	}: DataGridStateModelOptions) {
-		this.query = new DataGridQueryStateModel(queryStates, setQueryStates);
+	}: DataGridStateOptions) {
+		this.columns = new DataGridColumnsState(columns);
+		this.query = new DataGridQueryState(queryStates, setQueryStates);
 		this.selection = selection;
 
 		makeAutoObservable(this, {}, { autoBind: true });
@@ -82,7 +206,7 @@ export class DataGridStateModel implements DataGridState {
 		this.query.sync(queryStates, setQueryStates);
 	}
 
-	syncSelection(selection?: DataGridSelectionState) {
+	syncSelection(selection?: DataGridSelectionStateContract) {
 		this.selection = selection;
 	}
 }

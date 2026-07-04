@@ -52,11 +52,6 @@ const defaultPlanningScenario = {
 		viewport: "desktop",
 	},
 	api: userDetailApiScenarios.default,
-	acceptance: [
-		{ label: "사용자 기본 정보가 보인다" },
-		{ label: "개인 Policy 할당 UI는 보이지 않는다" },
-		{ label: "user policy API를 호출하지 않는다" },
-	],
 } satisfies PlanningScenario;
 
 export const Default: Story = {

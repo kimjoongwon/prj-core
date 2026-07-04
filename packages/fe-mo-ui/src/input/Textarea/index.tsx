@@ -1,114 +1,20 @@
+"use client";
+
 import { useFormField } from "@cocrepo/hook/useFormField";
 import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
-import { Description as HeroDescription } from "heroui-native/description";
-import { FieldError as HeroFieldError } from "heroui-native/field-error";
-import { Label as HeroLabel } from "heroui-native/label";
-import {
-	TextArea as HeroTextArea,
-	textAreaClassNames,
-} from "heroui-native/text-area";
-import { TextField as HeroTextField } from "heroui-native/text-field";
 import { observer } from "mobx-react-lite";
 import {
-	type ComponentPropsWithoutRef,
-	type ComponentRef,
-	forwardRef,
-	type ReactNode,
-} from "react";
+	PureTextarea,
+	type PureTextareaProps,
+	textAreaClassNames,
+} from "./Textarea";
 
-type HeroTextAreaProps = ComponentPropsWithoutRef<typeof HeroTextArea>;
-interface TextareaFieldProps {
-	description?: ReactNode;
-	errorMessage?: ReactNode;
-	helperText?: ReactNode;
-	isRequired?: boolean;
-	label?: ReactNode;
-}
-export interface PureTextareaProps
-	extends Omit<
-			HeroTextAreaProps,
-			| "onBlur"
-			| "onChange"
-			| "onChangeText"
-			| "value"
-			| keyof TextareaFieldProps
-		>,
-		TextareaFieldProps {
-	onBlur?: (value: string) => void;
-	onChange?: (value: string) => void;
-	value?: string;
-}
-const PureTextareaComponent = forwardRef<
-	ComponentRef<typeof HeroTextArea>,
-	PureTextareaProps
->(
-	(
-		{
-			description,
-			errorMessage,
-			helperText,
-			isDisabled,
-			isInvalid,
-			isRequired,
-			label,
-			onBlur,
-			onChange,
-			value = "",
-			...rest
-		},
-		ref,
-	) => {
-		const resolvedInvalid = Boolean(isInvalid || errorMessage);
-		const hasTextField = Boolean(
-			label || description || helperText || errorMessage || isRequired,
-		);
-		const textarea = (
-			<HeroTextArea
-				{...rest}
-				isDisabled={isDisabled}
-				isInvalid={resolvedInvalid}
-				onBlur={() => {
-					onBlur?.(value);
-				}}
-				onChangeText={onChange}
-				ref={ref}
-				value={value}
-			/>
-		);
-
-		if (!hasTextField) {
-			return textarea;
-		}
-
-		return (
-			<HeroTextField
-				isDisabled={isDisabled}
-				isInvalid={resolvedInvalid}
-				isRequired={isRequired}
-			>
-				{label && <HeroLabel>{label}</HeroLabel>}
-				{textarea}
-				{description && (
-					<HeroDescription hideOnInvalid={Boolean(errorMessage)}>
-						{description}
-					</HeroDescription>
-				)}
-				{helperText && (
-					<HeroDescription hideOnInvalid={Boolean(errorMessage)}>
-						{helperText}
-					</HeroDescription>
-				)}
-				{errorMessage && <HeroFieldError>{errorMessage}</HeroFieldError>}
-			</HeroTextField>
-		);
-	},
-);
-PureTextareaComponent.displayName = "PureTextarea";
 export interface TextareaProps<TState extends object = Record<string, unknown>>
 	extends MobxProps<TState>,
 		Omit<PureTextareaProps, "onBlur" | "onChange" | "value"> {}
-const TextareaComponent = observer(
+
+const Textarea = observer(
 	<TState extends object>(props: TextareaProps<TState>) => {
 		const { path, state, ...rest } = props;
 		const field = useFormField<TState, string>({
@@ -116,8 +22,9 @@ const TextareaComponent = observer(
 			state,
 			value: (tools.get(state, path) ?? "") as string,
 		});
+
 		return (
-			<PureTextareaComponent
+			<PureTextarea
 				{...rest}
 				onBlur={field.setValue}
 				onChange={field.setValue}
@@ -126,17 +33,21 @@ const TextareaComponent = observer(
 		);
 	},
 );
-TextareaComponent.displayName = "Textarea";
-export const Textarea = Object.assign(TextareaComponent, {
-	Description: HeroDescription,
-	Error: HeroFieldError,
-	FieldError: HeroFieldError,
-	Label: HeroLabel,
-}) as typeof TextareaComponent & {
-	Description: typeof HeroDescription;
-	Error: typeof HeroFieldError;
-	FieldError: typeof HeroFieldError;
-	Label: typeof HeroLabel;
+Textarea.displayName = "Textarea";
+
+const TextareaWithStatics = Object.assign(Textarea, {
+	Description: PureTextarea.Description,
+	Error: PureTextarea.Error,
+	FieldError: PureTextarea.FieldError,
+	Label: PureTextarea.Label,
+}) as typeof Textarea & {
+	Description: typeof PureTextarea.Description;
+	Error: typeof PureTextarea.Error;
+	FieldError: typeof PureTextarea.FieldError;
+	Label: typeof PureTextarea.Label;
 };
-export const TextArea = Textarea;
+const TextArea = TextareaWithStatics;
+
+export { TextareaWithStatics as Textarea, TextArea };
 export { textAreaClassNames };
+export type { PureTextareaProps };

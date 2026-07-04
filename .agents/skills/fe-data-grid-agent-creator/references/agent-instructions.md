@@ -40,15 +40,18 @@
 
 ### FE DataGrid 역할
 
-`packages/fe-ui/src/data-grid` 전용 역할입니다.
+`packages/fe-ui/src/data-grid`, DataGrid/Table용 `packages/fe-ui/src/data-grid/columns`, `packages/fe-ui/src/data-grid/cell` 전용 역할입니다.
 
 ### 책임
 
 - `DataGrid`, `InputRenderer`, `data-grid/input/**`, `DataGridState` 계열을 data-grid 축 안에서 정리합니다.
+- `data-grid/columns/**`의 DataGrid/Table Column builder와 preset/helper를 data-grid 축 안에서 정리합니다.
+- `data-grid/cell/**`의 DataGrid/Table Cell 컴포넌트를 Pure UI, Widget, Feature 계층에 맞게 정리합니다.
 - table 렌더링 계층이 중첩되지 않도록 `DataGrid.tsx` 단일 렌더러를 유지합니다.
 - TanStack Table 행 model, HeroUI Table 렌더링, 정렬 헤더, loading/empty 상태, selection/action bar, pagination 연결은 `DataGrid.tsx`가 직접 소유합니다.
 - query/selection 상태는 `DataGridStateModel`, `DataGridQueryStateModel`, `DataGridSelectionStateModel` 계약을 기준으로 다룹니다.
 - 검색/필터/버튼/드롭다운 입력은 `InputRenderer.tsx`와 `data-grid/input/**` 하위 컴포넌트로 확장합니다.
+- column builder는 Cell을 조합만 하며, 실제 셀 UI는 `data-grid/cell/**`이 소유합니다.
 - `display/data-display`는 일반 display primitive만 담당하고, DataGrid/Table 구현을 다시 만들지 않습니다.
 - screen은 `DataGrid`를 감싸는 `SectionSurface` owner를 직접 결정합니다. DataGrid가 page-level surface를 암묵적으로 만들지 않습니다.
 - feature/widget table panel에서 local panel이 필요하면 `Surface`만 사용합니다.
@@ -60,6 +63,8 @@
 - `packages/fe-ui/src/data-grid/DataGridState.ts`
 - `packages/fe-ui/src/data-grid/InputRenderer.tsx`
 - `packages/fe-ui/src/data-grid/input/**`
+- `packages/fe-ui/src/data-grid/columns/**`
+- `packages/fe-ui/src/data-grid/cell/**`
 - `packages/fe-ui/src/data-grid/index.ts`
 - 필요 시 공통 계약은 `packages/common-type/src/table.ts`와 `packages/common-type/src/index.ts`에 함께 반영합니다.
 
@@ -69,8 +74,13 @@
 - DataGrid 전용 Table wrapper를 새로 만들지 않습니다.
 - 행 key helper는 duplicate-safe 해야 하며 `DataGrid.tsx`와 외부 호출부에서 재사용할 수 있도록 공개합니다.
 - DataGrid 공개 컴포넌트, 상태 model, helper, 타입은 `data-grid/index.ts`에서 노출합니다.
+- DataGrid column builder는 `data-grid/columns/index.ts`에서 노출하고, public export는 `data-grid/index.ts`를 거칩니다.
 - 삭제된 이전 방식 grid composition 계층, 이전 방식 display 하위 DataGrid/Table 경로, 별도 Table wrapper를 되살리지 않습니다.
 - `useMemo`/`useCallback`을 새로 추가하지 않고, client 컴포넌트는 `observer` 기준을 유지합니다.
+- `data-grid/cell/**`은 DataGrid/Table에서 재사용 가능한 Cell만 둡니다. 특정 도메인 전용 이름이나 도메인 API/store 연결은 만들지 않습니다.
+- `data-grid/columns/**`은 field, label, accessor, align, cell 조합 선언만 담당합니다.
+- 새 Cell이 필요하면 먼저 기존 Cell 조합 가능성을 확인하고, 불가할 때만 최소 범위로 추가합니다.
+- Cell 소스 변경 시 같은 위치 단위 테스트 작성/갱신을 검토합니다.
 
 ### 검증
 

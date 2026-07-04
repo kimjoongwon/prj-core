@@ -37,7 +37,7 @@
 - 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
 - PC/Web UI 후보는 `@cocrepo/ui` export만 보지 말고 원본 라이브러리 `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
 - 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
-- 기존 widget/form/detail/action/input/selection/navigation/data-display 또는 `@heroui/react` component로 표현 가능한 UI를 Feature 안에서 raw `div`/`button`/`input`/`table` + className 조합으로 재구현하지 않습니다.
+- 기존 widget/form/detail/input/data-display 또는 `@heroui/react` component로 표현 가능한 UI를 Feature 안에서 raw `div`/`button`/`input`/`table` + className 조합으로 재구현하지 않습니다.
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 구현을 금지합니다.
 
@@ -118,7 +118,7 @@
 |----------|------|
 | **apps/*/src에 feature 폴더 생성** | **Feature는 반드시 packages/fe-ui에만 존재** |
 | **Context API 사용 (createContext, useContext)** | **packages/fe-ui에서 Context 사용 금지 - props drilling 사용** |
-| **컴포넌트 폴더 내 hooks/, utils/, inputs/ 하위 폴더 생성** | **패키지 레벨에서 관리 (hooks → `packages/fe-hook/src`, utils → `src/utils`, inputs → `src/{action,input,selection,navigation}`)** |
+| **컴포넌트 폴더 내 hooks/, utils/, inputs/ 하위 폴더 생성** | **패키지 레벨에서 관리 (hooks → `packages/fe-hook/src`, utils → `src/utils`, inputs → `src/input`)** |
 | reusable UI/Hook에 `Admin`, `Management` 접두/접미 사용 | 공용 패키지 이름은 역할명만 사용하고, admin 전용 의미가 확실한 경우에만 Feature 이름에서 `Admin` 허용 |
 | 기존 Feature와 유사한 컴포넌트 신규 생성 | 중복 자산 증가 및 유지보수 비용 상승 |
 | 커스텀 className 직접 사용 | UI/입력에서만 허용 |

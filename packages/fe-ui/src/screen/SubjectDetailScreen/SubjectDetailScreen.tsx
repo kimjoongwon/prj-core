@@ -13,8 +13,8 @@ import { Spinner, Table } from "@heroui/react";
 import { ArrowLeft, Box } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
+import { Button } from "../../input/Button/Button";
 export interface SubjectDetailScreenSubject {
 	name: string;
 	displayName?: string | null;

@@ -1,4 +1,3 @@
-export * from "./action";
 export * from "./data-display";
 export * from "./design-system";
 export * from "./feature";
@@ -6,9 +5,7 @@ export * from "./feedback";
 export * from "./icon";
 export * from "./input";
 export * from "./layout";
-export * from "./navigation";
 export * from "./rhythm";
 export * from "./screen";
-export * from "./selection";
 export * from "./surface";
 export * from "./widget";

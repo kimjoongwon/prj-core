@@ -4,7 +4,7 @@ import { PageTitleBar, VStack } from "@cocrepo/ui";
 import { Spinner } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
+import { Button } from "../../input/Button/Button";
 import {
 	type PolicyCreateScreenAbilityOption,
 	type PolicyCreateScreenChangeHandlers,

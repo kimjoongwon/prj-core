@@ -9,7 +9,7 @@ import type {
 import {
 	buildUserListTableColumns,
 	DataGrid,
-	DataGridStateModel,
+	DataGridState,
 	PageTitleBar,
 	Section,
 	SectionSurface,
@@ -21,7 +21,7 @@ import { Search, UserCheck, UserMinus, Users } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type ComponentType, useEffect } from "react";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Input } from "../../input/Input/Input";
+import { TextField } from "../../input/TextField/TextField";
 export interface UserListScreenStats {
 	total: number;
 	active: number;
@@ -87,7 +87,7 @@ export const UserListScreen = observer(
 	}: UserListScreenProps) => {
 		const gridState = useLocalObservable(
 			() =>
-				new DataGridStateModel({
+				new DataGridState({
 					queryStates,
 					setQueryStates,
 				}),
@@ -105,7 +105,7 @@ export const UserListScreen = observer(
 				id: "search",
 				props: {
 					component: (() => (
-						<Input
+						<TextField
 							aria-label={SEARCH_PLACEHOLDER}
 							isClearable
 							onClear={onClearSearch}

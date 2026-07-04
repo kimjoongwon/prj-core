@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Button } from "../../action/Button/Button";
+import { Button } from "../../input/Button/Button";
 import { Surface } from "./Surface";
 
 const meta = {

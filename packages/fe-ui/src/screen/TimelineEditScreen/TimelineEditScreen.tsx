@@ -1,9 +1,9 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
-import { Input } from "../../input/Input";
+import { Button } from "../../input/Button/Button";
 import { TextArea } from "../../input/TextArea";
+import { TextField } from "../../input/TextField";
 import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
@@ -61,7 +61,7 @@ export const TimelineEditScreen = observer(
 								<ContentLanguageNotice
 									contentLanguageCode={contentLanguageCode}
 								/>
-								<Input
+								<TextField
 									label="타임라인명"
 									labelPlacement="outside"
 									placeholder="타임라인명을 입력하세요."

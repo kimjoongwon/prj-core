@@ -1,7 +1,7 @@
 import { forwardRef, type ReactNode } from "react";
 import { View, type ViewProps } from "react-native";
 import { tv } from "tailwind-variants";
-import { Button } from "../../action/Button";
+import { Button } from "../../input/Button";
 import { Text } from "../../data-display/Text";
 
 export type ScreenActionBarOrientation = "horizontal" | "vertical";

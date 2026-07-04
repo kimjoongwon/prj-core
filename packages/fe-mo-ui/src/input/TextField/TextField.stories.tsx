@@ -3,7 +3,6 @@ import { observable } from "mobx";
 import { ScrollView } from "react-native";
 import { Text } from "../../data-display/Text";
 import { VStack } from "../../rhythm";
-import { Input } from "../Input";
 import { TextField } from "./index";
 
 const state = observable({
@@ -28,24 +27,25 @@ export const Default: Story = {
 			<VStack>
 				<Text variant="heading">TextField</Text>
 				<Text tone="muted">
-					HeroUI Native의 TextField, Label, Input, Description, FieldError
-					조합을 그대로 노출합니다.
+					MobX form state와 연결되는 기본 텍스트 입력입니다.
 				</Text>
 			</VStack>
-			<TextField isRequired>
-				<TextField.Label>이메일</TextField.Label>
-				<Input path="email" placeholder="hello@example.com" state={state} />
-				<TextField.Description>
-					예약 알림과 영수증을 받을 이메일입니다.
-				</TextField.Description>
-			</TextField>
-			<TextField isInvalid>
-				<TextField.Label>이메일</TextField.Label>
-				<Input path="email" placeholder="hello@example.com" state={state} />
-				<TextField.FieldError>
-					이메일 형식이 올바르지 않습니다.
-				</TextField.FieldError>
-			</TextField>
+			<TextField
+				description="예약 알림과 영수증을 받을 이메일입니다."
+				isRequired
+				label="이메일"
+				path="email"
+				placeholder="hello@example.com"
+				state={state}
+			/>
+			<TextField
+				errorMessage="이메일 형식이 올바르지 않습니다."
+				isInvalid
+				label="이메일"
+				path="email"
+				placeholder="hello@example.com"
+				state={state}
+			/>
 		</ScrollView>
 	),
 };

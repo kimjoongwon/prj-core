@@ -50,8 +50,8 @@ const vStackVariants = cva("flex flex-col gap-4", {
  * ```tsx
  * // 기본 사용
  * <VStack>
- *   <Input label="이름" />
- *   <Input label="이메일" />
+ *   <TextField label="이름" />
+ *   <TextField label="이메일" />
  *   <Button>제출</Button>
  * </VStack>
  *

@@ -3,8 +3,8 @@
 import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import { ArrowLeft, Edit, Key, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display";
+import { Button } from "../../input/Button/Button";
 import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";

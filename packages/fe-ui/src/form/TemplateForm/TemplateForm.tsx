@@ -1,11 +1,11 @@
 "use client";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
-import { Input } from "../../input/Input/Input";
+import { Button } from "../../input/Button/Button";
+import { RadioGroup } from "../../input/RadioGroup/RadioGroup";
 import { TextArea } from "../../input/TextArea/TextArea";
-import { RadioGroup } from "../../selection/RadioGroup/RadioGroup";
-import { TemplateTypeBadge } from "../../widget/TemplateTypeBadge/TemplateTypeBadge";
+import { TextField } from "../../input/TextField/TextField";
 import { TemplateContentEditor } from "../../widget/TemplateContentEditor/TemplateContentEditor";
+import { TemplateTypeBadge } from "../../widget/TemplateTypeBadge/TemplateTypeBadge";
 import {
 	type VariableEditItem,
 	VariableEditTable,
@@ -147,7 +147,7 @@ export const TemplateForm = observer(
 								<p className="text-foreground">{formData.code}</p>
 							</div>
 						) : (
-							<Input
+							<TextField
 								label="코드"
 								placeholder="WELCOME_EMAIL"
 								value={formData.code}
@@ -163,7 +163,7 @@ export const TemplateForm = observer(
 								description="영문 대문자와 언더스코어(_)만 사용 가능합니다. 예: WELCOME_EMAIL"
 							/>
 						)}
-						<Input
+						<TextField
 							label="이름"
 							placeholder="템플릿 이름을 입력하세요"
 							value={formData.name}

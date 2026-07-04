@@ -7,8 +7,8 @@ import type {
 } from "@cocrepo/type";
 import { LogIn, LogOut, ShieldCheck, UserRound } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
+import { Button } from "../../input/Button/Button";
 import { SpaceSelectorDropdown } from "../../widget/SpaceSelectorDropdown";
 
 export interface PlanningSessionBarProps {
@@ -16,7 +16,9 @@ export interface PlanningSessionBarProps {
 	onSpaceChange?: (space: PlanningSpaceOption) => void;
 }
 
-function getFallbackSpace(context: PlanningContext): PlanningSpaceOption | null {
+function getFallbackSpace(
+	context: PlanningContext,
+): PlanningSpaceOption | null {
 	if (!context.tenantId && !context.spaceId && !context.groundName) {
 		return null;
 	}
@@ -45,7 +47,9 @@ function getInitialTenantId(
 	const selectedByTenant = spaces.find(
 		(space) => space.tenantId === context.tenantId,
 	);
-	const selectedBySpace = spaces.find((space) => space.spaceId === context.spaceId);
+	const selectedBySpace = spaces.find(
+		(space) => space.spaceId === context.spaceId,
+	);
 
 	return (
 		selectedByTenant?.tenantId ??

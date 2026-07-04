@@ -19,10 +19,10 @@ import {
 	ShieldCheck,
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Select } from "../../selection/Select/Select";
-import { Switch } from "../../selection/Switch/Switch";
+import { Button } from "../../input/Button/Button";
+import { Select } from "../../input/Select/Select";
+import { Switch } from "../../input/Switch/Switch";
 
 /** 모달 액션 타입 */
 export type AccountDetailScreenModalAction =

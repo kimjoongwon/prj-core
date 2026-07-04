@@ -35,8 +35,8 @@ import {
 import { ListBox } from "@heroui/react";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Input } from "../../input/Input/Input";
-import { Select } from "../../selection/Select/Select";
+import { Select } from "../../input/Select/Select";
+import { TextField } from "../../input/TextField/TextField";
 
 const toMinutes = (start: string, end: string) => {
 	return Math.max(
@@ -363,7 +363,7 @@ export const InquiryDetailScreen = observer(
 												<Section.Body>
 													<VStack>
 														<PageTitleBar level={2} title="메타 수정" />
-														<Input
+														<TextField
 															label="문의 제목"
 															labelPlacement="outside"
 															value={metaFormState.title}

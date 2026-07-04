@@ -3,7 +3,7 @@
 import { Copy, Eye, EyeOff } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { Button } from "../../action/Button/Button";
+import { Button } from "../../input/Button/Button";
 
 export interface SecretFieldProps {
 	/** 비밀 값 */

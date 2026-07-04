@@ -4,7 +4,7 @@ import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { Spinner } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
+import { Button } from "../../input/Button/Button";
 export interface UserDetailScreenUser {
 	id: string;
 	email?: string | null;

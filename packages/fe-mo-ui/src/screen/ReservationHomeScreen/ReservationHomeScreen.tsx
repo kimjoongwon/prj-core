@@ -16,7 +16,7 @@ import { ScreenFrame } from "../../layout/ScreenFrame";
 import {
 	PureDateStrip as DateStrip,
 	type DateStripOption,
-} from "../../selection/DateStrip";
+} from "../../input/DateStrip";
 import {
 	BookingClassCard,
 	type BookingClassFeedItem,

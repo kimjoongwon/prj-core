@@ -1,7 +1,7 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Input } from "../../input/Input/Input";
+import { TextField } from "../../input/TextField/TextField";
 
 /** 템플릿 변수 정보입니다. */
 export interface TemplateVariable {
@@ -65,7 +65,7 @@ export const VariableInputForm = observer(
 						: undefined;
 
 					return (
-						<Input
+						<TextField
 							key={variable.id}
 							label={displayLabel}
 							placeholder={placeholder}

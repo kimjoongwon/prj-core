@@ -9,7 +9,7 @@ import {
 	type ViewProps,
 } from "react-native";
 import { tv } from "tailwind-variants";
-import { Button } from "../../action/Button";
+import { Button } from "../../input/Button";
 import { CommunityPostCard } from "../../data-display/CommunityPostCard";
 import { Text } from "../../data-display/Text";
 import { StatusFeedback } from "../../feedback/StatusFeedback";

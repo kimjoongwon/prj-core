@@ -5,10 +5,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, ChevronUp, Sparkles } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Input } from "../../input/Input/Input";
-import { Select } from "../../selection/Select/Select";
+import { Button } from "../../input/Button/Button";
+import { Select } from "../../input/Select/Select";
+import { TextField } from "../../input/TextField/TextField";
 import type {
 	AiFormFieldMeta,
 	AiFormPatch,
@@ -367,7 +367,7 @@ const AiFormComponent = <TForm extends Record<string, unknown>>({
 							className="overflow-hidden"
 						>
 							<div className="rounded-md border border-border p-2">
-								<Input
+								<TextField
 									aria-label="추가 요청사항"
 									size="sm"
 									placeholder="추가 요청사항 (선택)"

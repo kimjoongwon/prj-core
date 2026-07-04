@@ -1,12 +1,9 @@
-"use client";
-
 import { Plus, Trash2 } from "lucide-react";
-import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
-import { Input } from "../Input/Input";
+import { Button } from "../Button/Button";
+import { TextField } from "../TextField/TextField";
 import type { StringListInputProps } from "./StringListInput.props";
 
-export const StringListInput = observer(function StringListInput({
+export function StringListInput({
 	value,
 	onChange,
 	errors,
@@ -36,7 +33,7 @@ export const StringListInput = observer(function StringListInput({
 		<div className={className}>
 			{value.map((item, index) => (
 				<div key={index} className="flex items-start gap-2">
-					<Input
+					<TextField
 						size="sm"
 						placeholder={placeholder}
 						value={item}
@@ -72,4 +69,4 @@ export const StringListInput = observer(function StringListInput({
 			)}
 		</div>
 	);
-});
+}

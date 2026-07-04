@@ -3,10 +3,10 @@
 import {
 	Button,
 	ContentLanguageNotice,
-	Input,
 	PageTitleBar,
 	Section,
 	SectionSurface,
+	TextField,
 	useT,
 	VStack,
 } from "@cocrepo/ui";
@@ -171,7 +171,7 @@ export const RoutineEditScreen = observer(
 										<ContentLanguageNotice
 											contentLanguageCode={contentLanguageCode}
 										/>
-										<Input
+										<TextField
 											label="루틴 이름"
 											placeholder="예: 풀바디 루틴 A"
 											value={name}
@@ -181,7 +181,7 @@ export const RoutineEditScreen = observer(
 											errorMessage={nameError}
 											maxLength={100}
 										/>
-										<Input
+										<TextField
 											label="단축 라벨"
 											placeholder="예: FULL-A"
 											value={label}

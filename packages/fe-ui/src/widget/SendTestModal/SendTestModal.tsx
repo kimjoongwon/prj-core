@@ -4,10 +4,10 @@ import { Modal, useOverlayState } from "@heroui/react";
 import { AlertCircle, CheckCircle, Send } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { Button } from "../../action/Button/Button";
-import { VariableInputForm } from "../../form/VariableInputForm/VariableInputForm";
-import { Input } from "../../input/Input/Input";
 import type { TemplateVariable } from "../../form/VariableInputForm";
+import { VariableInputForm } from "../../form/VariableInputForm/VariableInputForm";
+import { Button } from "../../input/Button/Button";
+import { TextField } from "../../input/TextField/TextField";
 
 /** 발송 테스트 유형 */
 type SendTestType = "EMAIL" | "SMS" | "PUSH";
@@ -162,7 +162,7 @@ export const SendTestModal = observer(
 							<Modal.Body>
 								<div className="flex flex-col gap-4">
 									{/* 수신자 입력 */}
-									<Input
+									<TextField
 										label={config.label}
 										placeholder={config.placeholder}
 										value={recipient}

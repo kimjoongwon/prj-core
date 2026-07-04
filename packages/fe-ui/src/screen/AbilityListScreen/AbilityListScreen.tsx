@@ -8,7 +8,7 @@ import type {
 import {
 	buildAbilityListTableColumns,
 	DataGrid,
-	DataGridStateModel,
+	DataGridState,
 	SectionSurface,
 } from "@cocrepo/ui";
 import { ListBox, Spinner } from "@heroui/react";
@@ -23,12 +23,12 @@ import {
 } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
-import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display";
-import { Input } from "../../input/Input/Input";
+import { Button } from "../../input/Button/Button";
+import { Select } from "../../input/Select/Select";
+import { TextField } from "../../input/TextField/TextField";
 import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
-import { Select } from "../../selection/Select/Select";
 import { PageTitleBar } from "../../widget/PageTitleBar";
 import { StatsCard } from "../../widget/StatsCard";
 export interface AbilityListScreenOption {
@@ -145,7 +145,7 @@ export const AbilityListScreen = observer(
 	}: AbilityListScreenProps) => {
 		const gridState = useLocalObservable(
 			() =>
-				new DataGridStateModel({
+				new DataGridState({
 					queryStates,
 					setQueryStates,
 				}),
@@ -245,7 +245,7 @@ export const AbilityListScreen = observer(
 									/>
 								</div>
 								<div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-									<Input
+									<TextField
 										aria-label="권한 이름 검색"
 										placeholder="권한, 대상, 행동 검색"
 										value={filters.searchTerm}

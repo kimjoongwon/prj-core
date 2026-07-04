@@ -37,7 +37,7 @@
 - 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
 - PC/Web UI 후보는 `@cocrepo/ui` export만 보지 말고 원본 라이브러리 `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
 - 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
-- 기존 data-display/action/input/selection/navigation/layout/cell/data-grid 또는 `@heroui/react` component로 표현 가능한 UI를 Widget 안에서 raw `div`/`button`/`input`/`table` + className 조합으로 재구현하지 않습니다.
+- 기존 data-display/input/layout/cell/data-grid 또는 `@heroui/react` component로 표현 가능한 UI를 Widget 안에서 raw `div`/`button`/`input`/`table` + className 조합으로 재구현하지 않습니다.
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 구현을 금지합니다.
 
@@ -57,7 +57,7 @@
 | Page/Feature가 table, metric grid, flow rail, 섹션 tabs, summary panel을 직접 품으려는 경우 | ✅ | CourseTable, CourseMetricGrid, CourseFlowRail |
 | Store/API 연결이 필요한 경우 | ❌ | fe-feature-agent 사용 |
 | 단일 기본 UI 요소 | ❌ | `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, 또는 관련 leaf 에이전트 사용 |
-| 폼 입력 컴포넌트 | ❌ | `fe-input-agent` 또는 `fe-selection-agent` 사용 |
+| 폼 입력 컴포넌트 | ❌ | `fe-input-agent` 사용 |
 
 ---
 
@@ -293,7 +293,7 @@ Pure UI → Widget → Feature → Page
 |----------|------|
 | orch-delivery | 담당 스펙 또는 관련 fe-ui Screen/Feature 스펙의 Widget 계약 섹션 기반 구현 |
 | **fe-data-display-agent / fe-feedback-agent / fe-overlay-agent** | Widget이 사용할 표시, 상태, overlay UI 컴포넌트 생성 |
-| fe-action-agent / fe-input-agent / fe-selection-agent / fe-navigation-agent | Widget에서 사용할 leaf primitive 생성 |
+| fe-input-agent | Widget에서 사용할 leaf primitive 생성 |
 
 ### 후행 에이전트
 
@@ -387,12 +387,12 @@ SpaceDropdown                 → SpaceSelector (PersistStore 연결)
 
 ### 재사용 우선 점검 (필수)
 
-- 작업 시작 전에 `packages/fe-mo-ui/src/widget`, `packages/fe-mo-ui/src/{action,input,selection,navigation,data-display,feedback,layout,surface,design-system}`, 관련 screen spec을 먼저 검색합니다.
+- 작업 시작 전에 `packages/fe-mo-ui/src/widget`, `packages/fe-mo-ui/src/{input,data-display,feedback,layout,surface,design-system}`, 관련 screen spec을 먼저 검색합니다.
 - 하위 leaf가 없다고 판단하기 전에 원본 라이브러리 `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source를 확인합니다.
 - 신규 생성 전에 기존 widget/screen 조합을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
 - 동일 책임의 중복 widget 생성을 금지합니다.
 - Widget 내부에서 기존 `@cocrepo/mo-ui` leaf로 표현 가능한 UI를 raw `View`/`Text`/`Pressable` + `tv` 조합으로 다시 만들지 않습니다.
-- 필요한 leaf가 없으면 widget 안에 즉석 구현하지 말고 해당 소유 역할(action/input/selection/navigation/data-display/피드백/layout/surface)의 선행 작업 필요성을 최종 보고에 남깁니다.
+- 필요한 leaf가 없으면 widget 안에 즉석 구현하지 말고 해당 소유 역할(input/data-display/피드백/layout/surface)의 선행 작업 필요성을 최종 보고에 남깁니다.
 
 ### 모바일 fe-widget-agent
 
@@ -409,7 +409,7 @@ React Native / Expo Native 기준의 재사용 가능한 순수 UI 조합 Widget
 ### 핵심 원칙
 
 - Widget은 비즈니스 로직 없이 RN UI 조합만 담당합니다.
-- Widget은 `@cocrepo/mo-ui` leaf(action/input/selection/navigation/data-display/피드백/layout/surface/design-system)를 조합합니다.
+- Widget은 `@cocrepo/mo-ui` leaf(input/data-display/피드백/layout/surface/design-system)를 조합합니다.
 - 기존 widget/leaf가 80% 이상 맞으면 새 widget을 만들지 말고 기존 조합을 확장하고 호출부를 함께 맞춥니다.
 - Store/API/router/native bridge는 직접 읽지 않고 props로 전달받은 값과 handler만 소비합니다.
 - One Component Per File 규칙을 따라 Widget 파일은 exported Widget component 하나만 소유하고, private JSX subcomponent는 별도 Widget/leaf 파일로 분리합니다.

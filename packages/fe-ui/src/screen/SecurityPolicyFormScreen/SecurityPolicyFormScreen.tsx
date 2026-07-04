@@ -3,9 +3,9 @@
 import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
-import { Input } from "../../input/Input/Input";
-import { Switch } from "../../selection/Switch/Switch";
+import { Button } from "../../input/Button/Button";
+import { Switch } from "../../input/Switch/Switch";
+import { TextField } from "../../input/TextField/TextField";
 
 /** 숫자 필드 키 타입 */
 type NumberField =
@@ -95,7 +95,7 @@ export const SecurityPolicyFormScreen = observer(
 									</Section.Header>
 									<Section.Body>
 										<VStack>
-											<Input
+											<TextField
 												type="number"
 												label="최소 길이"
 												description="비밀번호의 최소 문자 수 (4~32)"
@@ -173,7 +173,7 @@ export const SecurityPolicyFormScreen = observer(
 													</div>
 												</Switch>
 											</VStack>
-											<Input
+											<TextField
 												type="number"
 												label="비밀번호 만료일 (일)"
 												description="0으로 설정하면 비밀번호가 만료되지 않습니다"
@@ -184,7 +184,7 @@ export const SecurityPolicyFormScreen = observer(
 												}
 												className="max-w-xs"
 											/>
-											<Input
+											<TextField
 												type="number"
 												label="재사용 제한 횟수"
 												description="최근 N개의 비밀번호를 재사용할 수 없습니다 (0=제한 없음)"
@@ -208,7 +208,7 @@ export const SecurityPolicyFormScreen = observer(
 									</Section.Header>
 									<Section.Body>
 										<VStack>
-											<Input
+											<TextField
 												type="number"
 												label="일시 잠금 임계값 (회)"
 												description="연속 로그인 실패 시 일시 잠금되는 횟수"
@@ -219,7 +219,7 @@ export const SecurityPolicyFormScreen = observer(
 												}
 												className="max-w-xs"
 											/>
-											<Input
+											<TextField
 												type="number"
 												label="일시 잠금 지속시간 (분)"
 												description="일시 잠금 후 자동 해제까지의 시간"
@@ -230,7 +230,7 @@ export const SecurityPolicyFormScreen = observer(
 												}
 												className="max-w-xs"
 											/>
-											<Input
+											<TextField
 												type="number"
 												label="영구 잠금 임계값 (회)"
 												description="연속 로그인 실패 시 영구 잠금되는 횟수 (관리자만 해제 가능)"
@@ -254,7 +254,7 @@ export const SecurityPolicyFormScreen = observer(
 									</Section.Header>
 									<Section.Body>
 										<VStack>
-											<Input
+											<TextField
 												type="number"
 												label="Access Token TTL (초)"
 												description="Access Token의 유효 시간 (초 단위)"
@@ -265,7 +265,7 @@ export const SecurityPolicyFormScreen = observer(
 												}
 												className="max-w-xs"
 											/>
-											<Input
+											<TextField
 												type="number"
 												label="Refresh Token TTL (초)"
 												description="Refresh Token의 유효 시간 (초 단위)"
@@ -276,7 +276,7 @@ export const SecurityPolicyFormScreen = observer(
 												}
 												className="max-w-xs"
 											/>
-											<Input
+											<TextField
 												type="number"
 												label="세션 TTL (초)"
 												description="사용자 세션의 유효 시간 (초 단위)"

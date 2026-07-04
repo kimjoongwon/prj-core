@@ -47,4 +47,23 @@ describe("TextField", () => {
 			expect(state.email).toBe("ops@plate.com");
 		});
 	});
+
+	it("keeps number value resolution working", () => {
+		const handleChange = vi.fn();
+
+		render(
+			<TextField
+				label="Display order"
+				type="number"
+				value={1}
+				onChange={handleChange}
+			/>,
+		);
+
+		fireEvent.change(screen.getByLabelText("Display order"), {
+			target: { value: "2" },
+		});
+
+		expect(handleChange).toHaveBeenCalledWith(2);
+	});
 });

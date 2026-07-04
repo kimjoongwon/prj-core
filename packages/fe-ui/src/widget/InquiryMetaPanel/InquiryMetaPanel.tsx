@@ -5,10 +5,10 @@ import { Card } from "@heroui/react";
 import { Plus, Tag } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Input } from "../../input/Input/Input";
-import { Select } from "../../selection/Select/Select";
+import { Button } from "../../input/Button/Button";
+import { Select } from "../../input/Select/Select";
+import { TextField } from "../../input/TextField/TextField";
 
 export interface InquiryMetaPanelProps {
 	/** 문의 상태 */
@@ -249,7 +249,7 @@ export const InquiryMetaPanel = observer(
 							)}
 						</div>
 						{isEditable && isAddingTag && (
-							<Input
+							<TextField
 								size="sm"
 								placeholder="태그 입력..."
 								value={newTag}

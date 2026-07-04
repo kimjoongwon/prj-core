@@ -3,9 +3,9 @@
 import { Table, Tooltip } from "@heroui/react";
 import { Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
-import { Input } from "../../input/Input/Input";
-import { Switch } from "../../selection/Switch/Switch";
+import { Button } from "../../input/Button/Button";
+import { Switch } from "../../input/Switch/Switch";
+import { TextField } from "../../input/TextField/TextField";
 
 /** 변수 편집 항목 */
 export interface VariableEditItem {
@@ -170,7 +170,7 @@ export const VariableEditTable = observer(
 								return (
 									<Table.Row key={variable.id ?? `new-${index}`}>
 										<Table.Cell>
-											<Input
+											<TextField
 												size="sm"
 												placeholder="변수명"
 												value={variable.name}
@@ -183,7 +183,7 @@ export const VariableEditTable = observer(
 											/>
 										</Table.Cell>
 										<Table.Cell>
-											<Input
+											<TextField
 												size="sm"
 												placeholder="설명"
 												value={variable.description}
@@ -195,7 +195,7 @@ export const VariableEditTable = observer(
 											/>
 										</Table.Cell>
 										<Table.Cell>
-											<Input
+											<TextField
 												size="sm"
 												placeholder="기본값"
 												value={variable.defaultValue}

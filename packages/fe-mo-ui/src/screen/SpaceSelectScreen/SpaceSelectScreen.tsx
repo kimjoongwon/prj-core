@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { ScrollView, View } from "react-native";
 import { tv } from "tailwind-variants";
-import { Button } from "../../action/Button";
+import { Button } from "../../input/Button";
 import { Text } from "../../data-display/Text";
 import { StatusFeedback } from "../../feedback/StatusFeedback";
 import { Icon } from "../../icon";

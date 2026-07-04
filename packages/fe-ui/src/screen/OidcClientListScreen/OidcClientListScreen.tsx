@@ -9,7 +9,7 @@ import type {
 import {
 	buildOidcClientTableColumns,
 	DataGrid,
-	DataGridStateModel,
+	DataGridState,
 	PageTitleBar,
 	Section,
 	SectionSurface,
@@ -18,7 +18,7 @@ import {
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
-import { Button } from "../../action/Button/Button";
+import { Button } from "../../input/Button/Button";
 
 /**
  * 좌측 입력 정의 (검색)
@@ -57,7 +57,7 @@ export const OidcClientListScreen = observer(
 	}: OidcClientListScreenProps) => {
 		const gridState = useLocalObservable(
 			() =>
-				new DataGridStateModel({
+				new DataGridState({
 					queryStates,
 					setQueryStates,
 				}),

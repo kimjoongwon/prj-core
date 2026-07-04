@@ -2,8 +2,8 @@
 
 import { ArrowLeft, Check, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
 import { Skeleton } from "../../feedback/Skeleton/Skeleton";
+import { Button } from "../../input/Button/Button";
 import { TextArea } from "../../input/TextArea/TextArea";
 import { Section } from "../../layout";
 import { HStack } from "../../rhythm/HStack/HStack";

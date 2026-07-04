@@ -4,8 +4,8 @@ import type { InputConfig } from "@cocrepo/type";
 import { Dropdown } from "@heroui/react";
 import { ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
 import { useT } from "../../i18n";
+import { Button } from "../../input/Button/Button";
 
 interface DropdownInputProps {
 	config: InputConfig;

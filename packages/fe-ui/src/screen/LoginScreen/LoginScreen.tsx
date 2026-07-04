@@ -3,10 +3,10 @@
 import { ArrowRight, ShieldCheck, TriangleAlert } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { FormEvent } from "react";
-import { Button } from "../../action/Button/Button";
 import { Typography } from "../../data-display/Typography";
 import { LoginForm, type LoginFormState } from "../../form/LoginForm/LoginForm";
 import { useT } from "../../i18n";
+import { Button } from "../../input/Button/Button";
 import { Section } from "../../layout";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
@@ -88,11 +88,7 @@ export const LoginScreen = observer(
 					<Section overflow="hidden">
 						<Section.Body>
 							<VStack fullWidth className="p-6 sm:p-7">
-								<VStack
-									key="header"
-									fullWidth
-									className="text-left"
-								>
+								<VStack key="header" fullWidth className="text-left">
 									<HStack
 										key="badge"
 										alignItems="center"

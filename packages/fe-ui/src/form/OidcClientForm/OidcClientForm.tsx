@@ -11,11 +11,11 @@ import type {
 import { CheckboxGroup, FieldError, Label, ListBox } from "@heroui/react";
 import { RefreshCw, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
-import { Input } from "../../input/Input/Input";
+import { Button } from "../../input/Button/Button";
+import { Checkbox } from "../../input/Checkbox/Checkbox";
+import { Select } from "../../input/Select/Select";
 import { StringListInput } from "../../input/StringListInput/StringListInput";
-import { Checkbox } from "../../selection/Checkbox/Checkbox";
-import { Select } from "../../selection/Select/Select";
+import { TextField } from "../../input/TextField/TextField";
 
 export const OIDC_CLIENT_LOGIN_UI_VARIANT_OPTIONS: Array<{
 	label: string;
@@ -189,7 +189,7 @@ export const OidcClientForm = observer(
 					<div className="space-y-6 p-6">
 						<h3 className="text-lg font-semibold">기본 정보</h3>
 						{isEdit ? (
-							<Input
+							<TextField
 								label="Client ID"
 								value={readonlyClientId ?? ""}
 								isReadOnly
@@ -197,7 +197,7 @@ export const OidcClientForm = observer(
 								description="Client ID는 수정할 수 없습니다."
 							/>
 						) : (
-							<Input
+							<TextField
 								label="Client ID"
 								placeholder="my-app-client"
 								value={state.clientId}
@@ -210,7 +210,7 @@ export const OidcClientForm = observer(
 								description="영문 소문자, 숫자, 하이픈만 사용 가능합니다."
 							/>
 						)}
-						<Input
+						<TextField
 							label="이름"
 							placeholder="My Application"
 							value={state.name}
@@ -222,7 +222,7 @@ export const OidcClientForm = observer(
 							isRequired
 						/>
 						<div className="space-y-2">
-							<Input
+							<TextField
 								label="Client Secret"
 								placeholder={
 									isPublic
@@ -335,7 +335,7 @@ export const OidcClientForm = observer(
 								<FieldError>{state.errors.responseTypes}</FieldError>
 							) : null}
 						</CheckboxGroup>
-						<Input
+						<TextField
 							label="스코프"
 							placeholder="openid profile email"
 							value={state.scope}
@@ -395,7 +395,7 @@ export const OidcClientForm = observer(
 				<section>
 					<div className="space-y-6 p-6">
 						<h3 className="text-lg font-semibold">앱 복귀 설정 (선택)</h3>
-						<Input
+						<TextField
 							label="로그인 화면 URL"
 							placeholder="/admin/auth/login 또는 https://app.example.com/auth/login"
 							value={state.loginUrl}
@@ -404,7 +404,7 @@ export const OidcClientForm = observer(
 							}}
 							description="`/api/v1/auth/oidc/login?clientId=...` 흐름에서 인증 실패 시 복귀할 로그인 화면입니다."
 						/>
-						<Input
+						<TextField
 							label="기본 복귀 URL"
 							placeholder="/admin/dashboard 또는 https://app.example.com/dashboard"
 							value={state.defaultReturnTo}
@@ -454,7 +454,7 @@ export const OidcClientForm = observer(
 										</ListBox.Item>
 									))}
 								</Select>
-								<Input
+								<TextField
 									label="브랜드 라벨"
 									placeholder="Onora Mobile"
 									value={state.loginUiBrandLabel}
@@ -462,7 +462,7 @@ export const OidcClientForm = observer(
 										state.loginUiBrandLabel = v;
 									}}
 								/>
-								<Input
+								<TextField
 									label="헤드라인"
 									placeholder="오노라 로그인"
 									value={state.loginUiHeadline}
@@ -470,7 +470,7 @@ export const OidcClientForm = observer(
 										state.loginUiHeadline = v;
 									}}
 								/>
-								<Input
+								<TextField
 									label="브랜드 컬러"
 									placeholder="#2563eb"
 									value={state.loginUiBrandColor}
@@ -482,7 +482,7 @@ export const OidcClientForm = observer(
 									description="HEX 색상만 입력합니다. 예: #2563eb"
 								/>
 								<div className="md:col-span-2">
-									<Input
+									<TextField
 										label="설명 문구"
 										placeholder="예약과 방문 일정을 계속 확인하려면 계정으로 로그인하세요."
 										value={state.loginUiDescription}
@@ -511,7 +511,7 @@ export const OidcClientForm = observer(
 				<section>
 					<div className="space-y-6 p-6">
 						<h3 className="text-lg font-semibold">추가 정보 (선택)</h3>
-						<Input
+						<TextField
 							label="로고 URI"
 							placeholder="https://example.com/logo.png"
 							value={state.logoUri}
@@ -519,7 +519,7 @@ export const OidcClientForm = observer(
 								state.logoUri = v;
 							}}
 						/>
-						<Input
+						<TextField
 							label="정책 URI"
 							placeholder="https://example.com/privacy"
 							value={state.policyUri}
@@ -527,7 +527,7 @@ export const OidcClientForm = observer(
 								state.policyUri = v;
 							}}
 						/>
-						<Input
+						<TextField
 							label="약관 URI"
 							placeholder="https://example.com/terms"
 							value={state.tosUri}

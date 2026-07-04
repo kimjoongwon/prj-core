@@ -2,9 +2,9 @@
 
 import { Modal, useOverlayState } from "@heroui/react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
 import { useT } from "../../i18n";
-import { Input } from "../../input/Input";
+import { Button } from "../../input/Button/Button";
+import { TextField } from "../../input/TextField";
 
 export interface ProgramPickerOption {
 	id: string;
@@ -54,7 +54,7 @@ export const ProgramPickerModal = observer(function ProgramPickerModal({
 					<Modal.Dialog>
 						<Modal.Header>{t(title)}</Modal.Header>
 						<Modal.Body>
-							<Input
+							<TextField
 								label={searchLabel}
 								labelPlacement="outside"
 								placeholder={searchPlaceholder}

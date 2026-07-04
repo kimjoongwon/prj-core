@@ -10,7 +10,7 @@ import {
 	buildIdpAccountTableColumns,
 	ConfirmModal,
 	DataGrid,
-	DataGridStateModel,
+	DataGridState,
 	PageTitleBar,
 	Section,
 	SectionSurface,
@@ -62,7 +62,7 @@ export const AccountListScreen = observer(
 	}: AccountListScreenProps) => {
 		const gridState = useLocalObservable(
 			() =>
-				new DataGridStateModel({
+				new DataGridState({
 					queryStates,
 					setQueryStates,
 				}),

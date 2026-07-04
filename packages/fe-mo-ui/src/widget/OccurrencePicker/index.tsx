@@ -6,7 +6,7 @@ import { Text } from "../../data-display/Text";
 import {
 	type SelectableCardItem,
 	PureSelectableCardList as SelectableCardList,
-} from "../../selection/SelectableCardList";
+} from "../../input/SelectableCardList";
 export type OccurrencePickerSessionType =
 	| "ONE_TIME"
 	| "ONE_TIME_RANGE"

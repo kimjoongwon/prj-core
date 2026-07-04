@@ -13,10 +13,10 @@ import {
 	VStack,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Input } from "../../input/Input/Input";
+import { Button } from "../../input/Button/Button";
 import { TextArea } from "../../input/TextArea/TextArea";
+import { TextField } from "../../input/TextField/TextField";
 export interface ExerciseMediaAsset extends AssetBrowserAsset {}
 export interface TaskCreateScreenProps {
 	name: string;
@@ -193,7 +193,7 @@ export const TaskCreateScreen = observer(
 								<ContentLanguageNotice
 									contentLanguageCode={contentLanguageCode}
 								/>
-								<Input
+								<TextField
 									label={t("운동명")}
 									placeholder={t("운동 이름을 입력하세요")}
 									value={name}
@@ -207,7 +207,7 @@ export const TaskCreateScreen = observer(
 										{t("지속시간")} <span className="text-danger">*</span>
 									</label>
 									<div className="flex items-center gap-2">
-										<Input
+										<TextField
 											type="number"
 											placeholder={t("분")}
 											value={String(durationMin)}
@@ -218,7 +218,7 @@ export const TaskCreateScreen = observer(
 											}
 											className="max-w-32"
 										/>
-										<Input
+										<TextField
 											type="number"
 											placeholder={t("초")}
 											value={String(durationSec)}
@@ -237,7 +237,7 @@ export const TaskCreateScreen = observer(
 										</p>
 									) : null}
 								</div>
-								<Input
+								<TextField
 									label={t("반복횟수")}
 									type="number"
 									placeholder={t("반복 횟수")}

@@ -12,8 +12,8 @@ import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import Link from "next/link";
-import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
+import { Button } from "../../input/Button/Button";
 
 const formatDuration = (seconds: number) => {
 	const minutes = Math.floor(seconds / 60);

@@ -4,9 +4,9 @@ import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { Modal, Spinner } from "@heroui/react";
 import { ArrowLeft, Edit, Save, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Checkbox } from "../../selection/Checkbox/Checkbox";
+import { Button } from "../../input/Button/Button";
+import { Checkbox } from "../../input/Checkbox/Checkbox";
 export interface PolicyDetailScreenPolicy {
 	id: string;
 	tenantId?: string | null;

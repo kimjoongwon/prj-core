@@ -24,8 +24,8 @@ import {
 import { ListBox } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Input } from "../../input/Input/Input";
-import { Select } from "../../selection/Select/Select";
+import { Select } from "../../input/Select/Select";
+import { TextField } from "../../input/TextField/TextField";
 export interface InquiryEditScreenBootstrap {
 	fieldMeta: Record<string, AiFormFieldMeta>;
 	aiSchemas: AiFormSchema[];
@@ -130,7 +130,7 @@ export const InquiryEditScreen = observer(
 									</Section.Header>
 									<Section.Body>
 										<VStack>
-											<Input
+											<TextField
 												label="문의 제목"
 												labelPlacement="outside"
 												value={formState.title}

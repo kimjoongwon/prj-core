@@ -2,7 +2,7 @@
 
 import { Eye, Pencil, Send, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
+import { Button } from "../../input/Button/Button";
 
 export interface TemplateActionsProps {
 	/** 템플릿 ID */

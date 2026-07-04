@@ -5,16 +5,16 @@ import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import {
-	TextArea as BaseTextArea,
-	type TextAreaProps as BaseTextAreaProps,
+	TextArea as PureTextArea,
+	type TextAreaProps as PureTextAreaProps,
 } from "./TextArea";
 
 type BoundTextAreaProps<T> = MobxProps<T> &
-	Omit<BaseTextAreaProps, "value" | "onChange">;
+	Omit<PureTextAreaProps, "value" | "onChange">;
 
 export type TextAreaProps<T = object> =
 	| BoundTextAreaProps<T>
-	| BaseTextAreaProps;
+	| PureTextAreaProps;
 
 function isBoundTextAreaProps<T>(
 	props: TextAreaProps<T>,
@@ -22,31 +22,29 @@ function isBoundTextAreaProps<T>(
 	return "state" in props && "path" in props;
 }
 
-export const TextArea = observer(
-	<T extends object>(props: TextAreaProps<T>) => {
-		if (!isBoundTextAreaProps(props)) {
-			return <BaseTextArea {...props} />;
-		}
+const TextArea = observer(<T extends object>(props: TextAreaProps<T>) => {
+	if (!isBoundTextAreaProps(props)) {
+		return <PureTextArea {...props} />;
+	}
 
-		const { state, path, ...rest } = props;
+	const { state, path, ...rest } = props;
 
-		const initialValue = tools.get(state, path, "") as string;
+	const initialValue = tools.get(state, path, "") as string;
 
-		const formField = useFormField({ value: initialValue, state, path });
+	const formField = useFormField({ value: initialValue, state, path });
 
-		const handleChange = (value: string) => {
-			formField.setValue(value);
-		};
+	const handleChange = (value: string) => {
+		formField.setValue(value);
+	};
 
-		return (
-			<BaseTextArea
-				{...rest}
-				value={formField.state.value as string}
-				onChange={handleChange}
-			/>
-		);
-	},
-);
+	return (
+		<PureTextArea
+			{...rest}
+			value={formField.state.value as string}
+			onChange={handleChange}
+		/>
+	);
+});
 
-// Re-export types for backwards compatibility
-export type { BaseTextAreaProps as PureTextAreaProps };
+export { TextArea };
+export type { PureTextAreaProps };

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
-import type { DateStripOption } from "../../selection/DateStrip";
+import type { DateStripOption } from "../../input/DateStrip";
 import type { BookingClassFeedItem } from "../../widget/BookingClassCard";
 import { ReservationHomeScreen } from "./ReservationHomeScreen";
 

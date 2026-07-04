@@ -1,123 +1,24 @@
+"use client";
+
 import { useFormField } from "@cocrepo/hook/useFormField";
 import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
+import { observer } from "mobx-react-lite";
 import {
-	Description as HeroDescription,
-	FieldError as HeroFieldError,
-	InputOTP as HeroInputOTP,
-	Label as HeroLabel,
-	TextField as HeroTextField,
 	inputOTPClassNames,
+	PureInputOTP,
+	type PureInputOTPProps,
 	REGEXP_ONLY_CHARS,
 	REGEXP_ONLY_DIGITS,
 	REGEXP_ONLY_DIGITS_AND_CHARS,
 	useInputOTP,
-} from "heroui-native";
-import { observer } from "mobx-react-lite";
-import {
-	type ComponentPropsWithoutRef,
-	type ComponentRef,
-	forwardRef,
-	type ReactNode,
-} from "react";
+} from "./InputOTP";
 
-type HeroInputOTPProps = ComponentPropsWithoutRef<typeof HeroInputOTP>;
-interface InputOTPFieldProps {
-	description?: ReactNode;
-	errorMessage?: ReactNode;
-	helperText?: ReactNode;
-	isInvalid?: boolean;
-	isRequired?: boolean;
-	label?: ReactNode;
-}
-export interface PureInputOTPProps
-	extends Omit<
-			HeroInputOTPProps,
-			"maxLength" | "onChange" | "value" | keyof InputOTPFieldProps
-		>,
-		InputOTPFieldProps {
-	maxLength?: number;
-	onChange?: (value: string) => void;
-	value?: string;
-}
-const PureInputOTPComponent = forwardRef<
-	ComponentRef<typeof HeroInputOTP>,
-	PureInputOTPProps
->(
-	(
-		{
-			children,
-			description,
-			errorMessage,
-			helperText,
-			isInvalid,
-			isRequired,
-			label,
-			maxLength = 6,
-			onChange,
-			value,
-			...rest
-		},
-		ref,
-	) => {
-		const resolvedInvalid = Boolean(isInvalid || errorMessage);
-		const hasTextField = Boolean(
-			label || description || helperText || errorMessage || isRequired,
-		);
-		const inputOTP = (
-			<HeroInputOTP
-				{...rest}
-				isInvalid={resolvedInvalid}
-				maxLength={maxLength}
-				onChange={onChange}
-				ref={ref}
-				value={value}
-			>
-				{children ?? (
-					<HeroInputOTP.Group>
-						{Array.from(
-							{
-								length: maxLength,
-							},
-							(_, index) => {
-								// OTP slots are positional controls, so their slot index is their identity.
-								const slotKey = `otp-slot-${index}`;
-								return <HeroInputOTP.Slot index={index} key={slotKey} />;
-							},
-						)}
-					</HeroInputOTP.Group>
-				)}
-			</HeroInputOTP>
-		);
-
-		if (!hasTextField) {
-			return inputOTP;
-		}
-
-		return (
-			<HeroTextField isInvalid={resolvedInvalid} isRequired={isRequired}>
-				{label && <HeroLabel>{label}</HeroLabel>}
-				{inputOTP}
-				{description && (
-					<HeroDescription hideOnInvalid={Boolean(errorMessage)}>
-						{description}
-					</HeroDescription>
-				)}
-				{helperText && (
-					<HeroDescription hideOnInvalid={Boolean(errorMessage)}>
-						{helperText}
-					</HeroDescription>
-				)}
-				{errorMessage && <HeroFieldError>{errorMessage}</HeroFieldError>}
-			</HeroTextField>
-		);
-	},
-);
-PureInputOTPComponent.displayName = "PureInputOTP";
 export interface InputOTPProps<TState extends object = Record<string, unknown>>
 	extends MobxProps<TState>,
 		Omit<PureInputOTPProps, "onChange" | "value"> {}
-const InputOTPComponent = observer(
+
+const InputOTP = observer(
 	<TState extends object>(props: InputOTPProps<TState>) => {
 		const { path, state, ...rest } = props;
 		const field = useFormField<TState, string>({
@@ -125,8 +26,9 @@ const InputOTPComponent = observer(
 			state,
 			value: (tools.get(state, path) ?? "") as string,
 		});
+
 		return (
-			<PureInputOTPComponent
+			<PureInputOTP
 				{...rest}
 				onChange={field.setValue}
 				value={field.state.value}
@@ -134,21 +36,22 @@ const InputOTPComponent = observer(
 		);
 	},
 );
-InputOTPComponent.displayName = "InputOTP";
-export const InputOTP = Object.assign(InputOTPComponent, {
-	Description: HeroDescription,
-	Error: HeroFieldError,
-	FieldError: HeroFieldError,
-	Group: HeroInputOTP.Group,
-	Label: HeroLabel,
-	Separator: HeroInputOTP.Separator,
-	Slot: HeroInputOTP.Slot,
-	SlotCaret: HeroInputOTP.SlotCaret,
-	SlotPlaceholder: HeroInputOTP.SlotPlaceholder,
-	SlotValue: HeroInputOTP.SlotValue,
-}) as typeof InputOTPComponent &
+InputOTP.displayName = "InputOTP";
+
+const InputOTPWithStatics = Object.assign(InputOTP, {
+	Description: PureInputOTP.Description,
+	Error: PureInputOTP.Error,
+	FieldError: PureInputOTP.FieldError,
+	Group: PureInputOTP.Group,
+	Label: PureInputOTP.Label,
+	Separator: PureInputOTP.Separator,
+	Slot: PureInputOTP.Slot,
+	SlotCaret: PureInputOTP.SlotCaret,
+	SlotPlaceholder: PureInputOTP.SlotPlaceholder,
+	SlotValue: PureInputOTP.SlotValue,
+}) as typeof InputOTP &
 	Pick<
-		typeof HeroInputOTP,
+		typeof PureInputOTP,
 		| "Group"
 		| "Separator"
 		| "Slot"
@@ -156,11 +59,12 @@ export const InputOTP = Object.assign(InputOTPComponent, {
 		| "SlotPlaceholder"
 		| "SlotValue"
 	> & {
-		Description: typeof HeroDescription;
-		Error: typeof HeroFieldError;
-		FieldError: typeof HeroFieldError;
-		Label: typeof HeroLabel;
+		Description: typeof PureInputOTP.Description;
+		Error: typeof PureInputOTP.Error;
+		FieldError: typeof PureInputOTP.FieldError;
+		Label: typeof PureInputOTP.Label;
 	};
+export { InputOTPWithStatics as InputOTP };
 export {
 	REGEXP_ONLY_CHARS,
 	REGEXP_ONLY_DIGITS,
@@ -168,3 +72,4 @@ export {
 	inputOTPClassNames,
 	useInputOTP,
 };
+export type { PureInputOTPProps };

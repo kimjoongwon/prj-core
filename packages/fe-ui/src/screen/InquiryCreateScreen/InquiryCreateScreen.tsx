@@ -25,9 +25,9 @@ import {
 import { ListBox } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Input } from "../../input/Input/Input";
+import { Select } from "../../input/Select/Select";
 import { TextArea } from "../../input/TextArea/TextArea";
-import { Select } from "../../selection/Select/Select";
+import { TextField } from "../../input/TextField/TextField";
 export interface InquiryCreateScreenCustomerSearchResult {
 	id: string;
 	name: string;
@@ -172,7 +172,7 @@ export const InquiryCreateScreen = observer(
 										<VStack>
 											{!isHidden("customerId") && (
 												<div className="space-y-2">
-													<Input
+													<TextField
 														label="고객"
 														labelPlacement="outside"
 														placeholder="고객명/이메일/전화번호 검색"
@@ -214,7 +214,7 @@ export const InquiryCreateScreen = observer(
 												</div>
 											)}
 											{!isHidden("title") && (
-												<Input
+												<TextField
 													label="문의 제목"
 													labelPlacement="outside"
 													placeholder="문의 제목을 입력하세요"

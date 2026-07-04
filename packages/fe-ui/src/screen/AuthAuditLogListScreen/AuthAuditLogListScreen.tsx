@@ -9,7 +9,7 @@ import type {
 import {
 	buildAuthAuditLogTableColumns,
 	DataGrid,
-	DataGridStateModel,
+	DataGridState,
 	PageTitleBar,
 	Section,
 	SectionSurface,
@@ -66,7 +66,7 @@ export const AuthAuditLogListScreen = observer(
 	}: AuthAuditLogListScreenProps) => {
 		const gridState = useLocalObservable(
 			() =>
-				new DataGridStateModel({
+				new DataGridState({
 					queryStates,
 					setQueryStates,
 				}),

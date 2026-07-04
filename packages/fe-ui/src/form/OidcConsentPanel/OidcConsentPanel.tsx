@@ -7,9 +7,9 @@ import {
 } from "@cocrepo/constant";
 import type { OidcClientLoginUi } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action";
 import { AlertBanner } from "../../feedback/AlertBanner/AlertBanner";
 import { useT } from "../../i18n";
+import { Button } from "../../input";
 import { AuthCard } from "../../widget/AuthCard/AuthCard";
 import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
 

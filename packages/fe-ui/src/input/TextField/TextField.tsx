@@ -1,5 +1,3 @@
-"use client";
-
 import {
 	cn,
 	Description,
@@ -9,13 +7,12 @@ import {
 	InputGroup,
 	Label,
 } from "@heroui/react";
-import { observer } from "mobx-react-lite";
-import type { ChangeEventHandler } from "react";
+import type { ChangeEventHandler, ComponentProps } from "react";
 import { translateNode, useT } from "../../i18n";
 import type { TextFieldProps } from "./TextField.props";
 import { resolveTextFieldValue } from "./text-field-value.resolver";
 
-export const TextField = observer((props: TextFieldProps) => {
+export const TextField = (props: TextFieldProps) => {
 	const t = useT();
 	const {
 		className,
@@ -27,24 +24,30 @@ export const TextField = observer((props: TextFieldProps) => {
 		helperText,
 		inputGroupProps,
 		inputProps,
+		isClearable: _isClearable,
 		isDisabled,
 		isInvalid,
 		isReadOnly,
 		isRequired,
 		label,
+		labelPlacement: _labelPlacement,
 		onBlur,
 		onChange,
+		onClear: _onClear,
 		onValueChange,
 		placeholder,
+		size: _size,
 		startContent,
 		type,
 		value,
 		variant,
+		"aria-label": ariaLabelProp,
 		...rest
 	} = props;
 	const {
 		className: inputClassName,
 		placeholder: inputPlaceholder,
+		size: _inputSize,
 		type: inputType,
 		...restInputProps
 	} = inputProps ?? {};
@@ -52,13 +55,24 @@ export const TextField = observer((props: TextFieldProps) => {
 	const hasInputGroup = Boolean(startContent || endContent);
 	const fieldType = type ?? inputType;
 	const fieldPlaceholder = placeholder ?? inputPlaceholder;
+	const fieldVariant =
+		variant === "primary" || variant === "secondary" ? variant : undefined;
 	const translatedPlaceholder =
 		typeof fieldPlaceholder === "string"
 			? t(fieldPlaceholder)
 			: fieldPlaceholder;
+	const ariaLabel =
+		typeof ariaLabelProp === "string"
+			? t(ariaLabelProp)
+			: typeof label === "string"
+				? t(label)
+				: typeof fieldPlaceholder === "string"
+					? t(fieldPlaceholder)
+					: ariaLabelProp;
 	const inputValue = value === undefined ? undefined : String(value);
 	const inputDefaultValue =
 		defaultValue === undefined ? undefined : String(defaultValue);
+	const textFieldProps = rest as ComponentProps<typeof HeroTextField>;
 
 	const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
 		const nextValue = event.target.value;
@@ -73,13 +87,14 @@ export const TextField = observer((props: TextFieldProps) => {
 
 	return (
 		<HeroTextField
-			{...rest}
+			{...textFieldProps}
+			aria-label={ariaLabel}
 			className={cn(className, classNames?.base)}
 			isDisabled={isDisabled}
 			isInvalid={isInvalid}
 			isReadOnly={isReadOnly}
 			isRequired={isRequired}
-			variant={variant}
+			variant={fieldVariant}
 		>
 			{label ? (
 				<Label className={classNames?.label}>{translateNode(label, t)}</Label>
@@ -87,8 +102,12 @@ export const TextField = observer((props: TextFieldProps) => {
 			{hasInputGroup ? (
 				<InputGroup
 					{...inputGroupProps}
-					className={cn(inputGroupProps?.className, classNames?.inputGroup)}
-					variant={variant}
+					className={cn(
+						inputGroupProps?.className,
+						classNames?.inputGroup,
+						classNames?.inputWrapper,
+					)}
+					variant={fieldVariant}
 				>
 					{startContent ? (
 						<InputGroup.Prefix className={classNames?.prefix}>
@@ -97,6 +116,7 @@ export const TextField = observer((props: TextFieldProps) => {
 					) : null}
 					<InputGroup.Input
 						{...restInputProps}
+						aria-label={ariaLabel}
 						className={cn(inputClassName, classNames?.input)}
 						defaultValue={inputDefaultValue}
 						placeholder={translatedPlaceholder}
@@ -114,12 +134,13 @@ export const TextField = observer((props: TextFieldProps) => {
 			) : (
 				<HeroInput
 					{...restInputProps}
+					aria-label={ariaLabel}
 					className={cn(inputClassName, classNames?.input)}
 					defaultValue={inputDefaultValue}
 					placeholder={translatedPlaceholder}
 					type={fieldType}
 					value={inputValue}
-					variant={variant}
+					variant={fieldVariant}
 					onBlur={handleBlur}
 					onChange={handleChange}
 				/>
@@ -136,4 +157,4 @@ export const TextField = observer((props: TextFieldProps) => {
 			) : null}
 		</HeroTextField>
 	);
-});
+};

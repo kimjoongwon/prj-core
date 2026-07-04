@@ -9,7 +9,7 @@ import {
 } from "@cocrepo/ui";
 import { ArrowLeft, Pencil } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
+import { Button } from "../../input/Button/Button";
 
 /** 시설 상세 화면에서 실제로 표시하는 시설 정보입니다. */
 export interface GroundDetailScreenGround {

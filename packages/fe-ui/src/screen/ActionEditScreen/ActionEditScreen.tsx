@@ -4,10 +4,10 @@ import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { ListBox } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
-import { Input } from "../../input/Input/Input";
+import { Button } from "../../input/Button/Button";
+import { Select } from "../../input/Select/Select";
 import { TextArea } from "../../input/TextArea/TextArea";
-import { Select } from "../../selection/Select/Select";
+import { TextField } from "../../input/TextField/TextField";
 export interface ActionEditScreenFormState {
 	displayName: string;
 	description: string;
@@ -180,14 +180,14 @@ export const ActionEditScreen = observer(
 								<Section>
 									<Section.Body>
 										<div className="space-y-6">
-											<Input
+											<TextField
 												label="행위 식별자"
 												value={action.name}
 												isReadOnly
 												isDisabled
 												description="행위 식별자는 수정할 수 없습니다."
 											/>
-											<Input
+											<TextField
 												label="표시명"
 												placeholder="이메일 마스킹 읽기"
 												value={formState.displayName}
@@ -226,7 +226,7 @@ export const ActionEditScreen = observer(
 													</ListBox.Item>
 												))}
 											</Select>
-											<Input
+											<TextField
 												label="정렬 순서"
 												type="number"
 												value={String(formState.order)}

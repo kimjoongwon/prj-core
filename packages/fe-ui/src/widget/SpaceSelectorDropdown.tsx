@@ -3,7 +3,7 @@
 import { Dropdown } from "@heroui/react";
 import { Building2, Check, ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../action/Button/Button";
+import { Button } from "../input/Button/Button";
 
 /**
  * Space 정보 인터페이스

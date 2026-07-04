@@ -47,10 +47,6 @@ const readyScenario = {
 			},
 		],
 	},
-	acceptance: [
-		{ label: "사용자 기본 정보가 보인다" },
-		{ label: "권한이 없는 액션은 노출하지 않는다" },
-	],
 	notes: ["개인 Policy 할당 제거 이후 정보 구조를 검토합니다."],
 } satisfies PlanningScenario;
 
@@ -70,9 +66,6 @@ const loggedOutScenario = {
 		name: "none",
 		mode: "none",
 	},
-	acceptance: [
-		{ label: "로그아웃 상태를 mock session bar에서 확인할 수 있다" },
-	],
 	notes: ["실제 로그인으로 이동하지 않고 Storybook 안에서만 상태를 바꿉니다."],
 } satisfies PlanningScenario;
 
@@ -113,7 +106,6 @@ const minimalScenario = {
 		name: "none",
 		mode: "none",
 	},
-	acceptance: [],
 	notes: [],
 } satisfies PlanningScenario;
 
@@ -135,8 +127,8 @@ function PreviewCard({ title = "Preview" }: { title?: string }) {
 			<p className="text-xs font-semibold uppercase text-primary">Screen</p>
 			<h3 className="text-xl font-semibold text-foreground">{title}</h3>
 			<p className="max-w-2xl text-sm text-muted">
-				실제 screen story가 이 영역에 렌더링됩니다. 상단 mock session과
-				오른쪽 기획 패널을 함께 보며 검수합니다.
+				실제 screen story가 이 영역에 렌더링됩니다. 상단 mock session과 오른쪽
+				기획 패널을 함께 보며 검수합니다.
 			</p>
 		</div>
 	);

@@ -2,8 +2,8 @@
 
 ## 역할
 
-- Storybook에서 기획 시나리오 메타데이터와 실제 화면 preview를 함께 보여주는 Feature입니다.
-- `PlanningScenario`를 받아 mock session, 경로, owner, 실행 context, API scenario, acceptance, notes를 읽기 전용으로 표시합니다.
+- Storybook에서 기획 시나리오의 mock session, API scenario, notes와 실제 화면 preview를 함께 보여주는 Feature입니다.
+- `PlanningScenario`를 받아 mock session과 기획 보조 정보만 읽기 전용으로 표시합니다.
 - 실제 화면은 `children`으로 받아 중앙 preview 영역에 렌더링합니다.
 
 ## 공개 Props
@@ -16,14 +16,13 @@
 
 - 상단: 실제 인증/API 없이 동작하는 mock 로그인 상태와 tenant/space selector
 - 중앙 왼쪽: story가 렌더링한 화면 preview
-- 오른쪽: Planning, Context, API Scenario, Acceptance, Notes 패널
+- 오른쪽: API Scenario, Notes 패널
 
 ## 조합 컴포넌트
 
 - `PlanningSessionBar`: mock 로그인 상태와 tenant/space 선택 UI
 - `PlanningPreviewField`: label/value 표시
 - `PlanningApiRequestList`: API request 요약 표시
-- `PlanningAcceptanceList`: acceptance 체크 항목 표시
 - `PlanningNotesList`: 기획 메모 표시
 
 ## 경계

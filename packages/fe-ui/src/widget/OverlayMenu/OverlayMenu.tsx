@@ -2,8 +2,8 @@
 
 import { Check, ChevronRight, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
 import { AppIcon } from "../../design-system/icon/AppIcon";
+import { Button } from "../../input/Button/Button";
 import type { OverlayMenuProps } from "./type";
 
 export const OverlayMenu = observer(function OverlayMenu({

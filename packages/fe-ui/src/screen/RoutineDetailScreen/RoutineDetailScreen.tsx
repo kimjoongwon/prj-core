@@ -11,8 +11,8 @@ import {
 import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
+import { Button } from "../../input/Button/Button";
 export interface RoutineDetailScreenActivity {
 	id: string;
 	order: number;

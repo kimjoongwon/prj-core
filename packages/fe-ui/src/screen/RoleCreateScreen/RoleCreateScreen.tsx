@@ -3,9 +3,9 @@
 import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
-import { Input } from "../../input/Input/Input";
+import { Button } from "../../input/Button/Button";
 import { TextArea } from "../../input/TextArea/TextArea";
+import { TextField } from "../../input/TextField/TextField";
 export interface RoleCreateScreenProps {
 	name: string;
 	displayName: string;
@@ -62,7 +62,7 @@ export const RoleCreateScreen = observer(
 								<Section>
 									<Section.Body>
 										<div className="space-y-6">
-											<Input
+											<TextField
 												label="역할 식별자"
 												placeholder="CUSTOM_ROLE"
 												value={name}
@@ -73,7 +73,7 @@ export const RoleCreateScreen = observer(
 												maxLength={50}
 												description="대문자로 시작하고, 대문자/숫자/밑줄만 사용 가능합니다."
 											/>
-											<Input
+											<TextField
 												label="표시명"
 												placeholder="사용자 정의 역할"
 												value={displayName}

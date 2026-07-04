@@ -265,8 +265,8 @@ export type {
 // Storybook 기획 시나리오 타입
 // ============================================
 export type {
-	PlanningAccount,
 	PlanningAcceptance,
+	PlanningAccount,
 	PlanningApiMode,
 	PlanningApiRequest,
 	PlanningApiScenario,
@@ -283,9 +283,12 @@ export type {
 // ============================================
 export type {
 	DataGridColumnConfig,
+	DataGridColumnsState,
+	DataGridColumnsStateSnapshot,
 	DataGridConfig,
 	DataGridQueryState,
 	DataGridQueryStates,
+	DataGridRowKey,
 	DataGridSelectionState,
 	DataGridSetQueryStates,
 	DataGridState,

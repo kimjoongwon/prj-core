@@ -13,8 +13,8 @@ import {
 import { useOverlayState } from "@heroui/react";
 import { ArrowLeft, Edit, Power, PowerOff, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
+import { Button } from "../../input/Button/Button";
 
 const AUTH_METHOD_CONFIG = {
 	client_secret_basic: { label: "Basic", color: "primary" },

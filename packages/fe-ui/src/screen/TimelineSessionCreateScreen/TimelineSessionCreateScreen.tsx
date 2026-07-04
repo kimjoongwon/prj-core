@@ -3,16 +3,16 @@
 import {
 	Button,
 	ContentLanguageNotice,
-	Input,
 	PageTitleBar,
 	Section,
 	SectionSurface,
 	TextArea,
+	TextField,
 	useT,
 	VStack,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
-import { Select } from "../../selection/Select/Select";
+import { Select } from "../../input/Select/Select";
 export type TimelineSessionScreenSessionType =
 	| "ONE_TIME"
 	| "ONE_TIME_RANGE"
@@ -163,7 +163,7 @@ export const TimelineSessionCreateScreen = observer(
 											<ContentLanguageNotice
 												contentLanguageCode={contentLanguageCode}
 											/>
-											<Input
+											<TextField
 												label="세션명"
 												labelPlacement="outside"
 												placeholder="예: 월요일 오전 요가 클래스"
@@ -204,7 +204,7 @@ export const TimelineSessionCreateScreen = observer(
 									<Section.Body>
 										<VStack>
 											{type === "ONE_TIME" ? (
-												<Input
+												<TextField
 													label="일시"
 													labelPlacement="outside"
 													type="datetime-local"
@@ -217,7 +217,7 @@ export const TimelineSessionCreateScreen = observer(
 											) : null}
 											{type === "ONE_TIME_RANGE" ? (
 												<>
-													<Input
+													<TextField
 														label="시작 일시"
 														labelPlacement="outside"
 														type="datetime-local"
@@ -227,7 +227,7 @@ export const TimelineSessionCreateScreen = observer(
 														isInvalid={!!errors.startDateTime}
 														errorMessage={errors.startDateTime}
 													/>
-													<Input
+													<TextField
 														label="종료 일시"
 														labelPlacement="outside"
 														type="datetime-local"
@@ -267,14 +267,14 @@ export const TimelineSessionCreateScreen = observer(
 															className="flex-1"
 														/>
 													</div>
-													<Input
+													<TextField
 														label="시작 일시 (선택)"
 														labelPlacement="outside"
 														type="datetime-local"
 														value={startDateTime}
 														onValueChange={onChangeStartDateTimeInput}
 													/>
-													<Input
+													<TextField
 														label="종료 일시 (선택)"
 														labelPlacement="outside"
 														type="datetime-local"

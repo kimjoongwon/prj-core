@@ -11,12 +11,15 @@ import { Modal, useOverlayState } from "@heroui/react";
 import { Upload } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
-import { Button } from "../../action/Button/Button";
-import { buildAssetTableColumns } from "../../columns";
-import { DataGrid, DataGridStateModel } from "../../data-grid";
+import {
+	buildAssetTableColumns,
+	DataGrid,
+	DataGridState,
+} from "../../data-grid";
 import { EmptyState } from "../../feedback";
 import { useT } from "../../i18n";
-import { Input } from "../../input/Input/Input";
+import { Button } from "../../input/Button/Button";
+import { TextField } from "../../input/TextField/TextField";
 import { Surface } from "../../surface";
 import { AssetPreviewDialog } from "../../widget/AssetPreview";
 import { FolderTree, type FolderTreeItem } from "../../widget/FolderTree";
@@ -185,7 +188,7 @@ function AssetsGridFallback({
 	leftInputs: InputConfig[];
 }) {
 	const gridState = useLocalObservable(
-		() => new DataGridStateModel({ queryStates, setQueryStates }),
+		() => new DataGridState({ queryStates, setQueryStates }),
 	);
 
 	useEffect(() => {
@@ -256,7 +259,7 @@ export const AssetBrowser = observer(
 	}: AssetBrowserProps) => {
 		const t = useT();
 		const gridState = useLocalObservable(
-			() => new DataGridStateModel({ queryStates, setQueryStates }),
+			() => new DataGridState({ queryStates, setQueryStates }),
 		);
 
 		useEffect(() => {
@@ -548,7 +551,7 @@ export const AssetBrowser = observer(
 												? t("현재 선택한 폴더 아래에 새 폴더를 생성합니다.")
 												: t("루트 폴더에 새 폴더를 생성합니다.")}
 										</p>
-										<Input
+										<TextField
 											label="폴더명"
 											placeholder="새 폴더명을 입력하세요"
 											value={newFolderName}
@@ -590,7 +593,7 @@ export const AssetBrowser = observer(
 							<Modal.Dialog>
 								<Modal.Header>{t("폴더 이름 변경")}</Modal.Header>
 								<Modal.Body>
-									<Input
+									<TextField
 										label="폴더명"
 										placeholder="변경할 폴더명을 입력하세요"
 										value={renameFolderName}

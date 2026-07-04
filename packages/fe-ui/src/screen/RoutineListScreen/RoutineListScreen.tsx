@@ -9,7 +9,7 @@ import type {
 import {
 	buildRoutineTableColumns,
 	DataGrid,
-	DataGridStateModel,
+	DataGridState,
 	PageTitleBar,
 	Section,
 	SectionSurface,
@@ -18,7 +18,7 @@ import { Modal, useOverlayState } from "@heroui/react";
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { Button } from "../../action/Button/Button";
+import { Button } from "../../input/Button/Button";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -92,7 +92,7 @@ export const RoutineListScreen = observer(
 	}: RoutineListScreenProps) => {
 		const gridState = useLocalObservable(
 			() =>
-				new DataGridStateModel({
+				new DataGridState({
 					queryStates,
 					setQueryStates,
 				}),

@@ -1,11 +1,12 @@
 import type { ColumnDef, RowData } from "@tanstack/react-table";
-import type { ReactNode } from "react";
+import type { ComponentType, ReactNode } from "react";
 
 // ============================================
 // DataGrid 메인 인터페이스
 // ============================================
 
 export type DataGridQueryStates = Record<string, unknown>;
+export type DataGridRowKey = string | number;
 
 export type DataGridSetQueryStates = (
 	values: Record<string, unknown | null>,
@@ -20,6 +21,48 @@ export interface DataGridQueryState {
 	setValues: DataGridSetQueryStates;
 }
 
+export interface DataGridColumnsStateSnapshot {
+	order: string[];
+	visibility: Record<string, boolean>;
+	sizing: Record<string, number>;
+	grouping?: string[];
+}
+
+export interface DataGridColumnsState extends DataGridColumnsStateSnapshot {
+	/** row grouping 컬럼 id 목록 */
+	grouping: string[];
+
+	/** grouping 상태가 config 기본값을 덮어썼는지 여부 */
+	isGroupingCustomized?: boolean;
+
+	/** 컬럼 표시 순서 변경 */
+	setOrder?: (order: string[]) => void;
+
+	/** 컬럼 표시 여부 변경 */
+	setVisibility?: (visibility: Record<string, boolean>) => void;
+
+	/** 단일 컬럼 표시 여부 변경 */
+	setColumnVisibility?: (columnId: string, isVisible: boolean) => void;
+
+	/** 컬럼 너비 변경 */
+	setSizing?: (sizing: Record<string, number>) => void;
+
+	/** 단일 컬럼 너비 변경 */
+	setColumnSizing?: (columnId: string, size: number | null) => void;
+
+	/** row grouping 컬럼 변경 */
+	setGrouping?: (grouping: string[]) => void;
+
+	/** 단일 컬럼 row grouping 여부 변경 */
+	setColumnGrouping?: (columnId: string, isGrouped: boolean) => void;
+
+	/** 저장 snapshot 복원 */
+	restore?: (snapshot?: unknown) => void;
+
+	/** 저장 가능한 snapshot 반환 */
+	toJSON?: () => DataGridColumnsStateSnapshot;
+}
+
 export interface DataGridSelectionState {
 	/** 선택된 키 목록 */
 	selectedKeys?: Set<string>;
@@ -32,6 +75,9 @@ export interface DataGridSelectionState {
 }
 
 export interface DataGridState {
+	/** 컬럼 표시, 순서, 크기 상태 */
+	columns: DataGridColumnsState;
+
 	/** 검색/필터/페이지네이션 query 상태 */
 	query: DataGridQueryState;
 
@@ -55,6 +101,9 @@ export interface DataGridConfig<T> {
 
 	/** 상단 우측 영역 (버튼, 액션 등) */
 	rightInputs?: InputConfig[];
+
+	/** AG Grid row group panel과 같은 grouping 컨트롤 표시 방식 */
+	rowGroupPanelShow?: "never" | "always" | "onlyWhenGrouping";
 
 	/** 선택 설정 */
 	selection?: SelectionConfig;
@@ -90,6 +139,21 @@ export interface DataGridColumnConfig<TData, TValue = unknown>
 
 	/** 정렬 방향 */
 	align?: "left" | "center" | "right";
+
+	/** 정렬 가능 여부 */
+	isSortable?: boolean;
+
+	/** AG Grid `rowGroup`처럼 해당 컬럼을 기본 row grouping 기준으로 사용 */
+	rowGroup?: boolean;
+
+	/** AG Grid `enableRowGroup`처럼 panel에서 grouping 기준으로 선택 가능 */
+	enableRowGroup?: boolean;
+
+	/** 컬럼 header 아래에 표시할 필터 입력 */
+	headerInput?: InputConfig;
+
+	/** header 아래 floating filter row에 `headerInput`을 노출할지 여부 */
+	floatingFilter?: boolean;
 }
 
 // ============================================
@@ -172,7 +236,7 @@ export interface InputTypeProps {
 	items?: DropdownItem[];
 
 	// Custom
-	component?: React.ComponentType<unknown>;
+	component?: ComponentType<unknown>;
 	componentProps?: Record<string, unknown>;
 }
 
@@ -256,5 +320,15 @@ declare module "@tanstack/react-table" {
 		align?: "left" | "center" | "right";
 		/** 표시 라벨 */
 		label?: string;
+		/** 정렬 가능 여부 */
+		isSortable?: boolean;
+		/** 기본 row grouping 컬럼 여부 */
+		rowGroup?: boolean;
+		/** row group panel에서 선택 가능한 컬럼 여부 */
+		enableRowGroup?: boolean;
+		/** 컬럼 header filter 입력 */
+		headerInput?: InputConfig;
+		/** header 아래 floating filter row 표시 여부 */
+		floatingFilter?: boolean;
 	}
 }

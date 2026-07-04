@@ -4,10 +4,10 @@ import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { ListBox } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
-import { Input } from "../../input/Input/Input";
+import { Button } from "../../input/Button/Button";
+import { Select } from "../../input/Select/Select";
 import { TextArea } from "../../input/TextArea/TextArea";
-import { Select } from "../../selection/Select/Select";
+import { TextField } from "../../input/TextField/TextField";
 export interface ActionCreateScreenFormState {
 	name: string;
 	displayName: string;
@@ -109,7 +109,7 @@ export const ActionCreateScreen = observer(
 								<Section>
 									<Section.Body>
 										<div className="space-y-6">
-											<Input
+											<TextField
 												label="행위 식별자"
 												placeholder="read:masked:email"
 												value={formState.name}
@@ -119,7 +119,7 @@ export const ActionCreateScreen = observer(
 												isRequired
 												description="소문자로 시작하고, 소문자/숫자/콜론/밑줄만 사용 가능합니다."
 											/>
-											<Input
+											<TextField
 												label="표시명"
 												placeholder="이메일 마스킹 읽기"
 												value={formState.displayName}
@@ -158,7 +158,7 @@ export const ActionCreateScreen = observer(
 													</ListBox.Item>
 												))}
 											</Select>
-											<Input
+											<TextField
 												label="정렬 순서"
 												type="number"
 												value={String(formState.order)}

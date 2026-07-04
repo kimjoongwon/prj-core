@@ -2,15 +2,15 @@
 
 import {
 	Button,
-	CONTENT_LANGUAGE_OPTIONS,
-	Input,
 	PageTitleBar,
 	Section,
 	SectionSurface,
+	TextField,
 	VStack,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
-import { Select } from "../../selection/Select/Select";
+import { Select } from "../../input/Select/Select";
+import { CONTENT_LANGUAGE_OPTIONS } from "../../widget/ContentLanguageNotice";
 export interface SpaceCreateScreenProps {
 	name: string;
 	label: string;
@@ -68,7 +68,7 @@ export const SpaceCreateScreen = observer(
 									</Section.Header>
 									<Section.Body>
 										<VStack>
-											<Input
+											<TextField
 												label="시설명"
 												placeholder="시설명을 입력하세요"
 												value={name}
@@ -77,13 +77,13 @@ export const SpaceCreateScreen = observer(
 												isInvalid={Boolean(errors.name)}
 												errorMessage={errors.name}
 											/>
-											<Input
+											<TextField
 												label="라벨"
 												placeholder="단축 라벨을 입력하세요 (선택)"
 												value={label}
 												onValueChange={onChangeLabelInput}
 											/>
-											<Input
+											<TextField
 												label="주소"
 												placeholder="주소를 입력하세요"
 												value={address}
@@ -92,7 +92,7 @@ export const SpaceCreateScreen = observer(
 												isInvalid={Boolean(errors.address)}
 												errorMessage={errors.address}
 											/>
-											<Input
+											<TextField
 												label="전화번호"
 												placeholder="전화번호를 입력하세요"
 												type="tel"
@@ -102,7 +102,7 @@ export const SpaceCreateScreen = observer(
 												isInvalid={Boolean(errors.phone)}
 												errorMessage={errors.phone}
 											/>
-											<Input
+											<TextField
 												label="이메일"
 												placeholder="이메일을 입력하세요"
 												type="email"
@@ -112,7 +112,7 @@ export const SpaceCreateScreen = observer(
 												isInvalid={Boolean(errors.email)}
 												errorMessage={errors.email}
 											/>
-											<Input
+											<TextField
 												label="사업자등록번호"
 												placeholder="000-00-00000"
 												value={businessNo}

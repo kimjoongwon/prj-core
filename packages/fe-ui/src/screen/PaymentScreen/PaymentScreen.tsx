@@ -3,9 +3,9 @@
 import type { DataGridColumnConfig, DataGridState } from "@cocrepo/type";
 import { RefreshCw } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
 import { Chip, type ChipProps } from "../../data-display/Chip/Chip";
-import { DataGrid } from "../../data-grid";
+import { DataGrid, DataGridColumnsState } from "../../data-grid";
+import { Button } from "../../input/Button/Button";
 import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
@@ -56,6 +56,7 @@ interface PaymentMetricRow {
 }
 
 const readonlyGridState: DataGridState = {
+	columns: new DataGridColumnsState(),
 	query: {
 		values: { skip: 0, take: 100 },
 		setValues: async () => new URLSearchParams(),

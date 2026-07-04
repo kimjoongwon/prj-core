@@ -2,7 +2,15 @@
 
 import type { DataGridState, InputConfig } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
-import { ButtonInput, DropdownInput, SearchInput, SelectInput } from "./input";
+import {
+	ButtonInput,
+	ChipGroupInput,
+	DateRangeInput,
+	DropdownInput,
+	MultiSelectInput,
+	SearchInput,
+	SelectInput,
+} from "./input";
 
 interface InputRendererProps {
 	config: InputConfig;
@@ -24,14 +32,11 @@ export const InputRenderer = observer(
 			case "dropdown":
 				return <DropdownInput config={config} />;
 			case "multi-select":
-				// TODO: 구현 예정
-				return null;
+				return <MultiSelectInput config={config} state={state} />;
 			case "date-range":
-				// TODO: 구현 예정
-				return null;
+				return <DateRangeInput config={config} state={state} />;
 			case "chip-group":
-				// TODO: 구현 예정
-				return null;
+				return <ChipGroupInput config={config} state={state} />;
 			case "custom":
 				if (config.props?.component) {
 					const CustomComponent = config.props.component;

@@ -10,14 +10,14 @@ import {
 	Button,
 	buildStaticTranslationTableColumns,
 	DataGrid,
-	DataGridStateModel,
+	DataGridState,
 	getStaticTranslationLanguageLabel,
 	HStack,
-	Input,
 	PageTitleBar,
 	Section,
 	SectionSurface,
 	TextArea,
+	TextField,
 	useT,
 	VStack,
 } from "@cocrepo/ui";
@@ -25,8 +25,8 @@ import { Modal, useOverlayState } from "@heroui/react";
 import { Languages, Plus, RefreshCcw } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type FormEvent, useEffect, useState } from "react";
-import { Select } from "../../selection/Select/Select";
-import { Switch } from "../../selection/Switch/Switch";
+import { Select } from "../../input/Select/Select";
+import { Switch } from "../../input/Switch/Switch";
 import { ConfirmModal } from "../../widget/ConfirmModal";
 export type StaticTranslationLanguageCode =
 	| "ko_KR"
@@ -180,7 +180,7 @@ export const StaticTranslationListScreen = observer(
 		const t = useT();
 		const gridState = useLocalObservable(
 			() =>
-				new DataGridStateModel({
+				new DataGridState({
 					queryStates,
 					setQueryStates,
 				}),
@@ -369,13 +369,13 @@ export const StaticTranslationListScreen = observer(
 												}
 												options={STATIC_TRANSLATION_LANGUAGE_OPTIONS}
 											/>
-											<Input
+											<TextField
 												label="번역 키"
 												value={form.key}
 												isDisabled={isEditMode}
 												onValueChange={handleKeyChange}
 											/>
-											<Input
+											<TextField
 												label="카테고리"
 												value={form.category}
 												onValueChange={handleCategoryChange}

@@ -14,10 +14,10 @@ import { ListBox, Spinner } from "@heroui/react";
 import { ArrowLeft, FolderInput, Maximize2, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Input } from "../../input/Input/Input";
-import { Select } from "../../selection/Select/Select";
+import { Button } from "../../input/Button/Button";
+import { Select } from "../../input/Select/Select";
+import { TextField } from "../../input/TextField/TextField";
 export interface AssetDetailScreenFolder {
 	id: string;
 	name: string;
@@ -408,12 +408,12 @@ export const AssetDetailScreen = observer(
 									</Section.Header>
 									<Section.Body>
 										<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-											<Input
+											<TextField
 												label="Storage Key"
 												value={asset.storageKey}
 												isReadOnly
 											/>
-											<Input
+											<TextField
 												label="Checksum"
 												value={asset.checksum ?? "-"}
 												isReadOnly

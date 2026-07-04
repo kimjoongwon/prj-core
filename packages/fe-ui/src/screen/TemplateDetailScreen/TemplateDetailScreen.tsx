@@ -4,8 +4,9 @@ import type { DataGridColumnConfig, DataGridState } from "@cocrepo/type";
 import type { PreviewResult, TemplateVariable } from "@cocrepo/ui";
 import {
 	Chip,
-	DateTimeCell,
 	DataGrid,
+	DataGridColumnsState,
+	DateTimeCell,
 	PageTitleBar,
 	PreviewModal,
 	Section,
@@ -19,10 +20,11 @@ import {
 import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
-import { Switch } from "../../selection/Switch/Switch";
+import { Button } from "../../input/Button/Button";
+import { Switch } from "../../input/Switch/Switch";
 
 const readonlyGridState: DataGridState = {
+	columns: new DataGridColumnsState(),
 	query: {
 		values: { skip: 0, take: 100 },
 		setValues: async () => new URLSearchParams(),

@@ -2,8 +2,8 @@
 
 import type { InputConfig } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
 import { useT } from "../../i18n";
+import { Button } from "../../input/Button/Button";
 
 interface ButtonInputProps {
 	config: InputConfig;

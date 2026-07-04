@@ -4,10 +4,10 @@ import type { TenantAccessRequestDto } from "@cocrepo/api/core/tenant-access-req
 import { Table } from "@heroui/react";
 import { Eye } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
 import { Skeleton } from "../../feedback/Skeleton/Skeleton";
 import { useT } from "../../i18n";
+import { Button } from "../../input/Button/Button";
 import { Section } from "../../layout";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";

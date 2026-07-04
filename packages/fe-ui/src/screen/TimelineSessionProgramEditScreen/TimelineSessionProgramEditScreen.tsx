@@ -3,17 +3,17 @@
 import {
 	Button,
 	ContentLanguageNotice,
-	Input,
 	PageTitleBar,
 	ProgramPickerModal,
 	Section,
 	SectionSurface,
+	TextField,
 	useT,
 	VStack,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Select } from "../../selection/Select/Select";
+import { Select } from "../../input/Select/Select";
 import type { TimelineSessionProgramCreateScreenProps } from "../TimelineSessionProgramCreateScreen/TimelineSessionProgramCreateScreen";
 
 const LEVEL_OPTIONS = [
@@ -97,7 +97,7 @@ export const TimelineSessionProgramEditScreen = observer(
 								<ContentLanguageNotice
 									contentLanguageCode={contentLanguageCode}
 								/>
-								<Input
+								<TextField
 									label="프로그램 이름"
 									labelPlacement="outside"
 									placeholder="프로그램 이름을 입력하세요."
@@ -108,7 +108,7 @@ export const TimelineSessionProgramEditScreen = observer(
 									errorMessage={errors.name}
 								/>
 								<div className="grid grid-cols-1 gap-2 md:grid-cols-[1fr_auto] md:items-end">
-									<Input
+									<TextField
 										label="루틴"
 										labelPlacement="outside"
 										value={routineName}
@@ -127,7 +127,7 @@ export const TimelineSessionProgramEditScreen = observer(
 									</Button>
 								</div>
 								<div className="grid grid-cols-1 gap-2 md:grid-cols-[1fr_auto] md:items-end">
-									<Input
+									<TextField
 										label="강사"
 										labelPlacement="outside"
 										value={instructorName}
@@ -217,7 +217,7 @@ export const TimelineSessionProgramEditScreen = observer(
 										</p>
 									) : null}
 								</div>
-								<Input
+								<TextField
 									label="정원"
 									labelPlacement="outside"
 									type="number"

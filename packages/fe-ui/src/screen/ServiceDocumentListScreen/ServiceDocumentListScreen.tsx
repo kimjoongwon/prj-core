@@ -17,14 +17,14 @@ import {
 	X,
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Input } from "../../input/Input/Input";
+import { Button } from "../../input/Button/Button";
+import { Checkbox } from "../../input/Checkbox/Checkbox";
+import { Select } from "../../input/Select/Select";
 import { TextArea } from "../../input/TextArea/TextArea";
+import { TextField } from "../../input/TextField/TextField";
 import { Screen, Section } from "../../layout";
 import { HStack, VStack } from "../../rhythm";
-import { Checkbox } from "../../selection/Checkbox/Checkbox";
-import { Select } from "../../selection/Select/Select";
 import { ScreenSurface, SectionSurface } from "../../surface";
 import { HtmlEditor } from "../../widget/HtmlEditor";
 import { PageTitleBar } from "../../widget/PageTitleBar/PageTitleBar";
@@ -279,7 +279,7 @@ export const ServiceDocumentListScreen = observer(
 													key="filter-controls"
 													className="grid grid-cols-1 gap-3 md:grid-cols-5"
 												>
-													<Input
+													<TextField
 														key="search-filter"
 														className="md:col-span-2"
 														label="검색"
@@ -351,7 +351,7 @@ export const ServiceDocumentListScreen = observer(
 														)}
 													</Select>
 												</div>
-												<Input
+												<TextField
 													key="locale-filter"
 													label="로케일"
 													placeholder="ko-KR"
@@ -614,7 +614,7 @@ export const ServiceDocumentListScreen = observer(
 														</ListBox.Item>
 													))}
 												</Select>
-												<Input
+												<TextField
 													key="draft-locale"
 													label="로케일"
 													isDisabled={isEditing}
@@ -623,7 +623,7 @@ export const ServiceDocumentListScreen = observer(
 														onChangeDraftField("locale", value)
 													}
 												/>
-												<Input
+												<TextField
 													key="draft-version"
 													label="버전"
 													isDisabled={isEditing}
@@ -633,7 +633,7 @@ export const ServiceDocumentListScreen = observer(
 														onChangeDraftField("version", value)
 													}
 												/>
-												<Input
+												<TextField
 													key="draft-title"
 													className="md:col-span-2 xl:col-span-1"
 													label="제목"
@@ -642,7 +642,7 @@ export const ServiceDocumentListScreen = observer(
 														onChangeDraftField("title", value)
 													}
 												/>
-												<Input
+												<TextField
 													key="draft-summary"
 													className="md:col-span-2 xl:col-span-1"
 													label="요약"
@@ -674,7 +674,7 @@ export const ServiceDocumentListScreen = observer(
 														</ListBox.Item>
 													))}
 												</Select>
-												<Input
+												<TextField
 													key="draft-display-order"
 													label="정렬 순서"
 													type="number"
@@ -696,7 +696,7 @@ export const ServiceDocumentListScreen = observer(
 											>
 												필수 동의 문서
 											</Checkbox>
-											<Input
+											<TextField
 												key="effective-at-input"
 												label="효력 시작 시각"
 												type="datetime-local"
@@ -722,10 +722,7 @@ export const ServiceDocumentListScreen = observer(
 													onValueChange={onChangeContentEditor}
 												/>
 											)}
-											<HStack
-												key="form-actions"
-												justifyContent="end"
-											>
+											<HStack key="form-actions" justifyContent="end">
 												<Button
 													key="cancel"
 													variant="flat"

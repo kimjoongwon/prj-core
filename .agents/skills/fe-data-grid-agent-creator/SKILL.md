@@ -1,11 +1,13 @@
 ---
 name: "fe-data-grid-agent-creator"
-description: "이 skill은 `fe-data-grid-agent` 역할로 일할 때 사용합니다. DataGrid 렌더링과 상태 계약을 정리하는 방법을 쉽게 안내합니다."
+description: "이 skill은 `fe-data-grid-agent` 역할로 일할 때 사용합니다. DataGrid 렌더링, 상태 계약, Column/Cell 통합 계약을 정리하는 방법을 쉽게 안내합니다."
 ---
 
 # fe-data-grid-agent-creator
 
 `fe-data-grid-agent`로 작업할 때 이 skill을 읽습니다.
+DataGrid/Table Column builder를 만들거나 고치면 `fe-columns-agent-creator` 지시도 보조 규칙으로 함께 적용합니다.
+DataGrid/Table Cell 컴포넌트를 만들거나 고치면 `fe-cell-agent-creator` 지시도 보조 규칙으로 함께 적용합니다.
 
 ## 작업 흐름
 

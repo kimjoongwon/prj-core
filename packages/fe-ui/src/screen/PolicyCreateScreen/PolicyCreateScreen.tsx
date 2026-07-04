@@ -3,11 +3,11 @@
 import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
-import { Input } from "../../input/Input/Input";
+import { Button } from "../../input/Button/Button";
+import { Checkbox } from "../../input/Checkbox/Checkbox";
+import { Switch } from "../../input/Switch/Switch";
 import { TextArea } from "../../input/TextArea/TextArea";
-import { Checkbox } from "../../selection/Checkbox/Checkbox";
-import { Switch } from "../../selection/Switch/Switch";
+import { TextField } from "../../input/TextField/TextField";
 export interface PolicyCreateScreenAbilityOption {
 	id: string;
 	label: string;
@@ -95,14 +95,14 @@ export const PolicyFormBody = observer(
 								</Section.Header>
 								<Section.Body>
 									<div className="grid gap-4 md:grid-cols-2">
-										<Input
+										<TextField
 											label="정책 이름"
 											placeholder="예: USER_READ_POLICY"
 											value={form.name}
 											onValueChange={onChange.onChangeName}
 											isRequired
 										/>
-										<Input
+										<TextField
 											label="표시명"
 											placeholder="예: 사용자 조회 정책"
 											value={form.displayName}

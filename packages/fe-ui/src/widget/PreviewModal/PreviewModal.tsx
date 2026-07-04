@@ -3,12 +3,12 @@
 import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
+import type { TemplateVariable } from "../../form/VariableInputForm";
 import { VariableInputForm } from "../../form/VariableInputForm";
+import { Button } from "../../input/Button/Button";
 import { ByteCounter } from "../ByteCounter";
 import { HtmlContentRenderer } from "../HtmlContentRenderer";
-import type { TemplateVariable } from "../../form/VariableInputForm";
 
 /** 템플릿 유형 */
 type TemplateType = "EMAIL" | "SMS" | "PUSH";

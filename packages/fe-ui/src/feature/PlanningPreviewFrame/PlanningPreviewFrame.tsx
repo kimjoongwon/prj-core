@@ -2,15 +2,11 @@
 
 import type { ReactElement } from "react";
 import { ThemeToggleButton } from "../ThemeToggleButton";
-import { PlanningAcceptanceList } from "./PlanningAcceptanceList";
 import { PlanningApiRequestList } from "./PlanningApiRequestList";
 import { PlanningNotesList } from "./PlanningNotesList";
 import { PlanningPreviewField } from "./PlanningPreviewField";
 import { PlanningSessionBar } from "./PlanningSessionBar";
-import {
-	formatPlanningList,
-	formatPlanningStatus,
-} from "./planningPreviewFormat";
+import { formatPlanningStatus } from "./planningPreviewFormat";
 import type { PlanningPreviewFrameProps } from "./types";
 
 type PlanningPreviewFrameComponent = {
@@ -20,7 +16,7 @@ type PlanningPreviewFrameComponent = {
 	displayName?: string;
 };
 
-export const PlanningPreviewFrame = (<THandler = unknown,>({
+export const PlanningPreviewFrame = (<THandler = unknown>({
 	children,
 	onSpaceChange,
 	scenario,
@@ -30,10 +26,7 @@ export const PlanningPreviewFrame = (<THandler = unknown,>({
 	return (
 		<div className="min-h-screen bg-background text-foreground">
 			<div className="mx-auto grid max-w-[1440px] gap-4 p-4 xl:grid-cols-[minmax(0,1fr)_360px]">
-				<PlanningSessionBar
-					context={context}
-					onSpaceChange={onSpaceChange}
-				/>
+				<PlanningSessionBar context={context} onSpaceChange={onSpaceChange} />
 
 				<header className="rounded-lg border border-border bg-surface p-4 xl:col-span-2">
 					<div className="flex flex-wrap items-start justify-between gap-3">
@@ -67,46 +60,10 @@ export const PlanningPreviewFrame = (<THandler = unknown,>({
 
 				<aside className="grid content-start gap-4">
 					<section className="grid gap-3 rounded-lg border border-border bg-surface p-4">
-						<h2 className="text-sm font-semibold">Planning</h2>
-						<PlanningPreviewField label="id" value={scenario.id} />
-						<PlanningPreviewField label="route" value={scenario.routePath} />
-						<PlanningPreviewField label="owner" value={scenario.owner} />
-						<PlanningPreviewField
-							label="status"
-							value={formatPlanningStatus(scenario.status)}
-						/>
-					</section>
-
-					<section className="grid gap-3 rounded-lg border border-border bg-surface p-4">
-						<h2 className="text-sm font-semibold">Context</h2>
-						<div className="grid gap-2">
-							<PlanningPreviewField label="realm" value={context.realm} />
-							<PlanningPreviewField
-								label="auth"
-								value={context.authState ?? "authenticated"}
-							/>
-							<PlanningPreviewField label="role" value={context.role} />
-							<PlanningPreviewField label="tenant" value={context.tenantId} />
-							<PlanningPreviewField label="space" value={context.spaceId} />
-							<PlanningPreviewField
-								label="abilities"
-								value={formatPlanningList(context.abilities)}
-							/>
-							<PlanningPreviewField label="viewport" value={context.viewport} />
-							<PlanningPreviewField label="locale" value={context.locale} />
-						</div>
-					</section>
-
-					<section className="grid gap-3 rounded-lg border border-border bg-surface p-4">
 						<h2 className="text-sm font-semibold">API Scenario</h2>
 						<PlanningPreviewField label="mode" value={api?.mode ?? "none"} />
 						<PlanningPreviewField label="name" value={api?.name} />
 						<PlanningApiRequestList requests={api?.requests} />
-					</section>
-
-					<section className="grid gap-3 rounded-lg border border-border bg-surface p-4">
-						<h2 className="text-sm font-semibold">Acceptance</h2>
-						<PlanningAcceptanceList items={scenario.acceptance} />
 					</section>
 
 					<section className="grid gap-3 rounded-lg border border-border bg-surface p-4">

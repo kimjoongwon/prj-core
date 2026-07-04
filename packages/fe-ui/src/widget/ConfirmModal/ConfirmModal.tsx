@@ -4,8 +4,8 @@ import { Modal, useOverlayState } from "@heroui/react";
 import { AlertTriangle, Info, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { Button } from "../../action/Button/Button";
 import { translateNode, useT } from "../../i18n";
+import { Button } from "../../input/Button/Button";
 
 /**
  * ConfirmModal Props

@@ -39,8 +39,8 @@ subagent TOML은 얇은 실행 계약만 소유합니다. 상세 작업 지시�
 |-------|--------|------|------|
 | `gpt-5.5` | `xhigh` | `orch-delivery`, `be-prisma-builder`, `be-database-expert`, `be-usecase-builder`, `common-schema-builder` | 서비스 설계, 데이터 모델, workflow 조율, 공통 검증 계약 |
 | `gpt-5.4` | `high` | `be-aggregate-builder`, `be-bootstrap-integrator`, `be-client-builder`, `be-controller-builder`, `be-module-builder`, `be-repository-builder`, `be-service-builder`, `common-toolkit-builder`, `common-type-builder`, `fe-data-grid-agent`, `fe-feature-agent`, `fe-form-agent`, `fe-menu-agent`, `fe-route-layout-agent`, `fe-screen-agent`, `fe-store-agent` | 교차 레이어 구현, 상태/화면 설계, 되돌림 비용이 있는 작업 |
-| `gpt-5.3-codex-spark` | `medium` | `be-command-builder`, `be-dmmf-parser-builder`, `be-dto-builder`, `be-entity-builder`, `be-event-builder`, `be-query-dto-builder`, `be-vo-builder`, `etc-jenkinsfile-builder`, `fe-action-agent`, `fe-data-display-agent`, `fe-feedback-agent`, `fe-hook-agent`, `fe-input-agent`, `fe-layout-agent`, `fe-navigation-agent`, `fe-overlay-agent`, `fe-route-agent`, `fe-selection-agent`, `fe-storybook-agent`, `fe-widget-agent` | 계약/컴포넌트/Storybook처럼 범위가 비교적 명확한 일반 구현 |
-| `gpt-5.3-codex-spark` | `low` | `be-prisma-annotator`, `be-seed-maker`, `dev-service-starter`, `fe-cell-agent`, `fe-columns-agent` | 주석, 시드, 서비스 시작, 셀/컬럼 같은 기계적이고 반복적인 작업 |
+| `gpt-5.3-codex-spark` | `medium` | `be-command-builder`, `be-dmmf-parser-builder`, `be-dto-builder`, `be-entity-builder`, `be-event-builder`, `be-query-dto-builder`, `be-vo-builder`, `etc-jenkinsfile-builder`, `fe-data-display-agent`, `fe-feedback-agent`, `fe-hook-agent`, `fe-input-agent`, `fe-layout-agent`, `fe-overlay-agent`, `fe-route-agent`, `fe-storybook-agent`, `fe-widget-agent` | 계약/컴포넌트/Storybook처럼 범위가 비교적 명확한 일반 구현 |
+| `gpt-5.3-codex-spark` | `low` | `be-prisma-annotator`, `be-seed-maker`, `dev-service-starter` | 주석, 시드, 서비스 시작 같은 기계적이고 반복적인 작업 |
 
 ## 계약 담당
 
@@ -86,16 +86,12 @@ subagent TOML은 얇은 실행 계약만 소유합니다. 상세 작업 지시�
 - [26-fe-data-display-agent.toml](./26-fe-data-display-agent.toml): 텍스트, 값, 상태처럼 데이터를 보여주는 UI primitive를 만듭니다.
 - [27-fe-feedback-agent.toml](./27-fe-feedback-agent.toml): 알림, 에러, 빈 상태처럼 사용자 피드백 UI를 만듭니다.
 - [28-fe-overlay-agent.toml](./28-fe-overlay-agent.toml): 모달, 팝오버, 툴팁 같은 떠 있는 UI를 만듭니다.
-- [29-fe-action-agent.toml](./29-fe-action-agent.toml): 버튼과 액션 영역처럼 사용자가 실행하는 UI를 만듭니다.
-- [30-fe-input-agent.toml](./30-fe-input-agent.toml): 입력 필드와 입력 조합 UI를 만듭니다.
-- [31-fe-selection-agent.toml](./31-fe-selection-agent.toml): 체크박스, 라디오, 선택 목록 같은 선택 UI를 만듭니다.
-- [32-fe-navigation-agent.toml](./32-fe-navigation-agent.toml): 탭, 링크, 이동 메뉴 같은 navigation UI를 만듭니다.
-- [33-fe-cell-agent.toml](./33-fe-cell-agent.toml): DataGrid와 Table에서 쓰는 Cell 컴포넌트를 만듭니다.
-- [34-fe-columns-agent.toml](./34-fe-columns-agent.toml): DataGrid column 정의와 cell 연결을 정리합니다.
+- [30-fe-input-agent.toml](./30-fe-input-agent.toml): 입력 필드, 버튼/액션, 체크박스, 라디오, 선택 목록, 탭, 링크, 페이지네이션 같은 leaf UI를 만듭니다.
+- [34-fe-columns-agent.toml](./34-fe-columns-agent.toml): 기존 Column 라우팅 호환용입니다. 신규 Column 작업은 `fe-data-grid-agent`가 맡습니다.
 - [35-fe-layout-agent.toml](./35-fe-layout-agent.toml): 화면 배치를 돕는 재사용 layout primitive를 만듭니다.
 - [36-fe-widget-agent.toml](./36-fe-widget-agent.toml): 비즈니스 로직 없이 재사용 가능한 UI 조합인 Widget을 만듭니다.
 - [37-fe-feature-agent.toml](./37-fe-feature-agent.toml): Widget에 store나 API를 연결한 Feature를 만듭니다.
-- [38-fe-data-grid-agent.toml](./38-fe-data-grid-agent.toml): DataGrid 렌더링과 입력 상태 계약을 정리합니다.
+- [38-fe-data-grid-agent.toml](./38-fe-data-grid-agent.toml): DataGrid 렌더링, 입력 상태, Column/Cell 컴포넌트 계약을 정리합니다.
 - [39-fe-form-agent.toml](./39-fe-form-agent.toml): 생성/수정 화면에서 쓰는 form 조합을 만듭니다.
 - [40-fe-menu-agent.toml](./40-fe-menu-agent.toml): 메뉴, 탭, navigation 조합을 실제 서비스 흐름에 맞게 만듭니다.
 - [41-fe-screen-agent.toml](./41-fe-screen-agent.toml): page가 보여줄 실제 화면 Screen을 만듭니다.

@@ -179,7 +179,7 @@ interface SessionCardProps {
 
 | 항목 | 내용 |
 |------|------|
-| **위치** | `packages/fe-ui/src/columns/data-grid/idpColumns.tsx` |
+| **위치** | `packages/fe-ui/src/data-grid/columns/data-grid/idpColumns.tsx` |
 | **용도** | 감사 로그 결과를 `ChipCell` label/color 매핑으로 표시 |
 
 ```tsx

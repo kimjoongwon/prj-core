@@ -3,13 +3,13 @@
 import { ListBox, Spinner } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
-import { Input } from "../../input/Input/Input";
+import { Button } from "../../input/Button/Button";
+import { Select } from "../../input/Select/Select";
+import { Switch } from "../../input/Switch/Switch";
 import { TextArea } from "../../input/TextArea/TextArea";
+import { TextField } from "../../input/TextField/TextField";
 import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
-import { Select } from "../../selection/Select/Select";
-import { Switch } from "../../selection/Switch/Switch";
 import { SectionSurface } from "../../surface";
 import { PageTitleBar } from "../../widget/PageTitleBar";
 export interface AbilityFormScreenOption {
@@ -147,7 +147,7 @@ export const AbilityFormScreen = observer((props: AbilityFormScreenProps) => {
 								</Section.Header>
 								<Section.Body>
 									<div className="grid grid-cols-1 gap-4">
-										<Input
+										<TextField
 											label="권한 이름"
 											placeholder="예: manage_users"
 											value={props.form.name}

@@ -10,6 +10,7 @@ type TextFieldClassNames = Partial<
 		| "base"
 		| "label"
 		| "input"
+		| "inputWrapper"
 		| "inputGroup"
 		| "prefix"
 		| "suffix"
@@ -23,11 +24,47 @@ type HeroInputProps = ComponentProps<typeof HeroInput>;
 type HeroInputGroupProps = ComponentProps<typeof HeroInputGroup>;
 type HeroTextFieldProps = ComponentProps<typeof HeroTextField>;
 
+type TextFieldVariant =
+	| "flat"
+	| "bordered"
+	| "underlined"
+	| "faded"
+	| "primary"
+	| "secondary";
+
+type DirectInputProps = Omit<
+	HeroInputProps,
+	| "children"
+	| "className"
+	| "classNames"
+	| "defaultValue"
+	| "isDisabled"
+	| "isInvalid"
+	| "isReadOnly"
+	| "isRequired"
+	| "onBlur"
+	| "onChange"
+	| "placeholder"
+	| "size"
+	| "type"
+	| "value"
+	| "variant"
+>;
+
 export interface TextFieldProps
 	extends Omit<
-		HeroTextFieldProps,
-		"children" | "defaultValue" | "onBlur" | "onChange" | "value" | "variant"
-	> {
+			HeroTextFieldProps,
+			| "children"
+			| "defaultValue"
+			| "onBlur"
+			| "onChange"
+			| "placeholder"
+			| "type"
+			| "value"
+			| "variant"
+			| keyof DirectInputProps
+		>,
+		DirectInputProps {
 	classNames?: TextFieldClassNames;
 	defaultValue?: string | number;
 	description?: ReactNode;
@@ -39,12 +76,17 @@ export interface TextFieldProps
 		HeroInputProps,
 		"children" | "defaultValue" | "onBlur" | "onChange" | "value" | "variant"
 	>;
+	isClearable?: boolean;
+	labelPlacement?: string;
 	label?: ReactNode;
 	onBlur?: (value: string | number) => void;
 	onChange?: (value: string | number) => void;
+	onClear?: () => void;
 	onValueChange?: (value: string) => void;
 	placeholder?: HeroInputProps["placeholder"];
+	size?: "sm" | "md" | "lg";
 	startContent?: ReactNode;
+	type?: HeroInputProps["type"];
 	value?: string | number;
-	variant?: "primary" | "secondary";
+	variant?: TextFieldVariant;
 }

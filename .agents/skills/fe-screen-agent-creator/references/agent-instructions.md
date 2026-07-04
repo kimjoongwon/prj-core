@@ -368,7 +368,7 @@ BLOCKED: pure screen 계약 위반 가능성
 ### 재사용 우선 점검 (필수)
 
 - 작업 시작 전에 `packages/fe-mo-ui/src/screen`, 기존 route screen, 동급 화면 컴포넌트를 먼저 검색합니다.
-- screen 내부에서 필요한 action/surface/selection/feedback/data-display는 `packages/fe-mo-ui/src/{action,input,selection,navigation,data-display,feedback,layout,surface,design-system}`와 원본 라이브러리 `heroui-native/*` 후보를 먼저 검색합니다.
+- screen 내부에서 필요한 input/surface/feedback/data-display는 `packages/fe-mo-ui/src/{input,data-display,feedback,layout,surface,design-system}`와 원본 라이브러리 `heroui-native/*` 후보를 먼저 검색합니다.
 - 원본 라이브러리 후보는 `@cocrepo/mo-ui` export만 보지 말고 `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source까지 확인합니다.
 - `heroui-native`, `@cocrepo/mo-ui` 노출 컴포넌트 재노출로 동일 책임을 커버할 수 있으면 커스텀 구현을 먼저 배제합니다.
 - 동일 책임의 중복 구현을 금지합니다.
@@ -399,7 +399,7 @@ screen component는 page-level 시각 구성과 사용자 이벤트 위임만 �
 2. screen component는 pure presentational 계약을 유지합니다.
    - 데이터, 파생 상태, CTA 상태, 사용자 이벤트 handler는 props로 받습니다.
 3. screen component 내부에서 API hook, router, route params, native 런타임 context를 직접 읽지 않습니다.
-4. screen component는 RN 기본 컴포넌트와 `@cocrepo/mo-ui` 하위 primitive/action/input/selection/navigation/menu/widget/feature만 조합합니다.
+4. screen component는 RN 기본 컴포넌트와 `@cocrepo/mo-ui` 하위 primitive/input/menu/widget/feature만 조합합니다.
 5. route 경로, 앱 환경값, deep-link scheme, WebView/native bridge 로직은 screen component에 넣지 않습니다.
 6. screen 이름은 semantic app-facing 이름을 사용합니다.
    - 허용 예: `ReservationHomeScreen`, `AuthLoginScreen`, `BookingDetailScreen`

@@ -10,7 +10,7 @@ import {
 	Button,
 	buildActionTableColumns,
 	DataGrid,
-	DataGridStateModel,
+	DataGridState,
 	HStack,
 	PageTitleBar,
 	Section,
@@ -127,7 +127,7 @@ export const ActionListScreen = observer(
 	}: ActionListScreenProps) => {
 		const gridState = useLocalObservable(
 			() =>
-				new DataGridStateModel({
+				new DataGridState({
 					queryStates,
 					setQueryStates,
 				}),
@@ -241,10 +241,7 @@ const ActionContextItem = observer(
 	({ icon, title, description }: ActionContextItemProps) => {
 		const t = useT();
 		return (
-			<HStack
-				alignItems="start"
-				className="border-border/80 p-4 md:border-b-0"
-			>
+			<HStack alignItems="start" className="border-border/80 p-4 md:border-b-0">
 				<span className="rounded-lg bg-accent/10 p-2 text-accent">{icon}</span>
 				<VStack>
 					<span className="text-sm font-semibold text-foreground">

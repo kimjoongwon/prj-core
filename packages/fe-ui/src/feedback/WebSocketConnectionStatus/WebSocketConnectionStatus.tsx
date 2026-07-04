@@ -2,8 +2,8 @@
 
 import { cva, type VariantProps } from "class-variance-authority";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
 import { useT } from "../../i18n";
+import { Button } from "../../input/Button/Button";
 
 const connectionStatusVariants = cva(
 	"inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium",

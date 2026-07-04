@@ -4,11 +4,11 @@ import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import { ArrowLeft, Edit, Save, ShieldCheck, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
 import { Chip } from "../../data-display/Chip/Chip";
-import { Input } from "../../input/Input/Input";
-import { Checkbox } from "../../selection/Checkbox/Checkbox";
-import { Switch } from "../../selection/Switch/Switch";
+import { Button } from "../../input/Button/Button";
+import { Checkbox } from "../../input/Checkbox/Checkbox";
+import { Switch } from "../../input/Switch/Switch";
+import { TextField } from "../../input/TextField/TextField";
 export interface RoleDetailScreenRole {
 	id: string;
 	name: string;
@@ -358,7 +358,7 @@ export const RoleDetailScreen = observer(
 																		</p>
 																		{isEditingPolicies && assignment ? (
 																			<div className="mt-3 flex flex-wrap items-center gap-3">
-																				<Input
+																				<TextField
 																					className="w-32"
 																					label="우선순위"
 																					type="number"

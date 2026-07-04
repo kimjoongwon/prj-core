@@ -3,11 +3,11 @@
 import {
 	Button,
 	ContentLanguageNotice,
-	Input,
 	PageTitleBar,
 	Section,
 	SectionSurface,
 	TextArea,
+	TextField,
 	VStack,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
@@ -56,7 +56,7 @@ export const TimelineCreateScreen = observer(
 								<ContentLanguageNotice
 									contentLanguageCode={contentLanguageCode}
 								/>
-								<Input
+								<TextField
 									label="타임라인명"
 									labelPlacement="outside"
 									placeholder="예: 2025년 가을 시즌, 10월 1주차"

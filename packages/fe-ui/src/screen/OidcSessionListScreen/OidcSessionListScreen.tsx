@@ -11,7 +11,7 @@ import {
 	buildOidcSessionTableColumns,
 	ConfirmModal,
 	DataGrid,
-	DataGridStateModel,
+	DataGridState,
 	PageTitleBar,
 	Section,
 	SectionSurface,
@@ -21,7 +21,7 @@ import {
 import { Activity, Trash2 } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
-import { Button } from "../../action/Button/Button";
+import { Button } from "../../input/Button/Button";
 
 /**
  * 좌측 입력 정의 (모델 타입 필터 + accountId 검색)
@@ -103,7 +103,7 @@ export const OidcSessionListScreen = observer(
 	}: OidcSessionListScreenProps) => {
 		const gridState = useLocalObservable(
 			() =>
-				new DataGridStateModel({
+				new DataGridState({
 					queryStates,
 					setQueryStates,
 				}),

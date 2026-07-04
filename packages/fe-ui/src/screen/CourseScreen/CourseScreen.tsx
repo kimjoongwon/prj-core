@@ -4,9 +4,9 @@ import type { DataGridColumnConfig, DataGridState } from "@cocrepo/type";
 import { Tooltip } from "@heroui/react";
 import { CalendarDays } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
 import { Chip, type ChipProps } from "../../data-display/Chip/Chip";
-import { DataGrid } from "../../data-grid";
+import { DataGrid, DataGridColumnsState } from "../../data-grid";
+import { Button } from "../../input/Button/Button";
 import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
@@ -102,13 +102,16 @@ interface CourseMetricRow {
 }
 
 const readonlyGridState: DataGridState = {
+	columns: new DataGridColumnsState(),
 	query: {
 		values: { skip: 0, take: 100 },
 		setValues: async () => new URLSearchParams(),
 	},
 };
 
-const statusCell = <T extends { statusLabel: string; statusTone: ChipProps["color"] }>(
+const statusCell = <
+	T extends { statusLabel: string; statusTone: ChipProps["color"] },
+>(
 	row: T,
 ) => (
 	<Chip size="sm" variant="flat" color={row.statusTone}>

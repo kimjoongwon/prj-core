@@ -11,8 +11,8 @@ import {
 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { Button } from "../../action/Button/Button";
 import { useT } from "../../i18n";
+import { Button } from "../../input/Button/Button";
 
 export interface FolderTreeItem {
 	id: string;

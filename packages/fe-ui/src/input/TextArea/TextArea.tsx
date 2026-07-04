@@ -1,5 +1,3 @@
-"use client";
-
 import {
 	cn,
 	Description,
@@ -8,7 +6,6 @@ import {
 	Label,
 	TextField,
 } from "@heroui/react";
-import { observer } from "mobx-react-lite";
 import type React from "react";
 import type { ComponentProps, ReactNode } from "react";
 import { useT } from "../../i18n";
@@ -48,7 +45,7 @@ export interface TextAreaProps
  * TextArea 컴포넌트
  * 여러 줄 텍스트 입력 컴포넌트입니다.
  */
-export const TextArea = observer((props: TextAreaProps) => {
+export const TextArea = (props: TextAreaProps) => {
 	const t = useT();
 	const {
 		classNames,
@@ -114,4 +111,4 @@ export const TextArea = observer((props: TextAreaProps) => {
 			) : null}
 		</TextField>
 	);
-});
+};

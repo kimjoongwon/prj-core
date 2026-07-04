@@ -3,9 +3,9 @@
 import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
-import { Input } from "../../input/Input/Input";
+import { Button } from "../../input/Button/Button";
 import { TextArea } from "../../input/TextArea/TextArea";
+import { TextField } from "../../input/TextField/TextField";
 export interface RoleEditScreenProps {
 	roleName?: string;
 	roleDisplayName?: string;
@@ -123,14 +123,14 @@ export const RoleEditScreen = observer(
 								<Section>
 									<Section.Body>
 										<div className="space-y-6">
-											<Input
+											<TextField
 												label="역할 식별자"
 												value={roleName}
 												isReadOnly
 												isDisabled
 												description="역할 식별자는 수정할 수 없습니다."
 											/>
-											<Input
+											<TextField
 												label="표시명"
 												placeholder="사용자 정의 역할"
 												value={displayName}

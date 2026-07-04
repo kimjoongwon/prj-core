@@ -1,8 +1,9 @@
-# fe-cell-agent 상세 지시
+# DataGrid Cell 상세 지시
 
-원본 에이전트 파일: `.codex/agents/33-fe-cell-agent.toml`
+원본 에이전트 파일: `.codex/agents/38-fe-data-grid-agent.toml`
 
-이 참고 문서는 예전에 에이전트 TOML에 있던 상세 구현 지시를 담고 있습니다. 얇은 에이전트 계약과 이 skill의 `SKILL.md`를 읽은 뒤 따릅니다.
+이 참고 문서는 예전에 `fe-cell-agent` TOML에 있던 상세 구현 지시를 담고 있습니다.
+Cell 작업은 `fe-data-grid-agent`에 통합되었으며, DataGrid agent의 보조 규칙으로 따릅니다.
 
 ---
 
@@ -34,13 +35,14 @@
 - 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
 - Cell 후보는 `@cocrepo/ui` export만 보지 말고 원본 라이브러리 `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
 - 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
-- 기존 cell/data-display/action/input/selection/navigation 또는 `@heroui/react` component로 표현 가능한 cell UI를 raw `div`/`span`/`button` + className 조합으로 재구현하지 않습니다.
+- 기존 cell/data-display/input 또는 `@heroui/react` component로 표현 가능한 cell UI를 raw `div`/`span`/`button` + className 조합으로 재구현하지 않습니다.
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 구현을 금지합니다.
 
-### cell agent
+### DataGrid Cell 규칙
 
-당신은 **DataGrid/Table용 Cell 컴포넌트**를 계층별로 생성하는 전문가입니다. 재활용성을 극대화하는 방향으로 Pure UI → Widget → Feature 계층에 맞게 Cell을 설계합니다.
+DataGrid agent는 **DataGrid/Table용 Cell 컴포넌트**를 계층별로 생성합니다.
+재활용성을 극대화하는 방향으로 Pure UI → Widget → Feature 계층에 맞게 Cell을 설계합니다.
 
 ---
 
@@ -53,7 +55,7 @@
 | 값을 포맷팅/표시만 하는 단순 Cell | ✅ | Pure UI Cell |
 | 비즈니스 로직이 포함된 Cell | ✅ | Feature Cell |
 | Cell이 아닌 일반 UI 컴포넌트 | ❌ | `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, 또는 관련 leaf 에이전트 사용 |
-| 폼 입력 컴포넌트 | ❌ | `fe-input-agent` 또는 `fe-selection-agent` 사용 |
+| 폼 입력 컴포넌트 | ❌ | `fe-input-agent` 사용 |
 
 ---
 
@@ -143,9 +145,9 @@ Pure UI Cell → Widget Cell → Feature Cell
 
 | 항목 | 경로 |
 |------|------|
-| Cell 컴포넌트 | `packages/fe-ui/src/cell/[CellName]/[CellName].tsx` |
-| barrel export | `packages/fe-ui/src/cell/[CellName]/index.ts` |
-| cells index | `packages/fe-ui/src/cell/index.ts` (추가) |
+| Cell 컴포넌트 | `packages/fe-ui/src/data-grid/cell/[CellName]/[CellName].tsx` |
+| barrel export | `packages/fe-ui/src/data-grid/cell/[CellName]/index.ts` |
+| cells index | `packages/fe-ui/src/data-grid/cell/index.ts` (추가) |
 
 ---
 
@@ -180,7 +182,7 @@ Pure UI Cell → Widget Cell → Feature Cell
 ### 5.1 Pure UI Cell
 
 ```tsx
-// packages/fe-ui/src/cell/PhoneCell/PhoneCell.tsx
+// packages/fe-ui/src/data-grid/cell/PhoneCell/PhoneCell.tsx
 
 interface PhoneCellProps {
   /** 전화번호 */
@@ -203,7 +205,7 @@ export const PhoneCell = ({ value }: PhoneCellProps) => {
 ### 5.2 Widget Cell
 
 ```tsx
-// packages/fe-ui/src/cell/TagsCell/TagsCell.tsx
+// packages/fe-ui/src/data-grid/cell/TagsCell/TagsCell.tsx
 import { Chip } from "@heroui/react";
 
 interface TagsCellProps {
@@ -242,7 +244,7 @@ export const TagsCell = ({ tags, maxDisplay = 3 }: TagsCellProps) => {
 ### 5.3 Feature Cell
 
 ```tsx
-// packages/fe-ui/src/cell/ActionButtonsCell/ActionButtonsCell.tsx
+// packages/fe-ui/src/data-grid/cell/ActionButtonsCell/ActionButtonsCell.tsx
 import { Button, Tooltip } from "@heroui/react";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import type { Route } from "next";
@@ -380,7 +382,7 @@ export type { PhoneCellProps } from "./PhoneCell";
 
 ```bash
 # 기존 Cell 목록 확인
-ls packages/fe-ui/src/cell/
+ls packages/fe-ui/src/data-grid/cell/
 ```
 
 기존 Cell로 해결 가능하면 새로 만들지 않음.
@@ -391,7 +393,7 @@ ls packages/fe-ui/src/cell/
 
 ### 단계 5: Export 추가
 
-`packages/fe-ui/src/cell/index.ts`에 export 추가.
+`packages/fe-ui/src/data-grid/cell/index.ts`에 export 추가.
 
 ---
 
@@ -409,12 +411,12 @@ ls packages/fe-ui/src/cell/
 
 ### 생성 후
 
-- [ ] `packages/fe-ui/src/cell/[CellName]/` 폴더에 생성됨
+- [ ] `packages/fe-ui/src/data-grid/cell/[CellName]/` 폴더에 생성됨
 - [ ] 네이밍이 계층별 규칙에 맞음
 - [ ] Props는 단순 값 타입
 - [ ] null/undefined 처리됨
 - [ ] HeroUI 컴포넌트 활용
-- [ ] `packages/fe-ui/src/cell/index.ts`에 export 추가
+- [ ] `packages/fe-ui/src/data-grid/cell/index.ts`에 export 추가
 - [ ] `@cocrepo/ui`에서 import 가능
 
 ---
@@ -425,6 +427,7 @@ ls packages/fe-ui/src/cell/
 |------|---------|------|
 | **선행** | orch-delivery | Cell 계약은 담당 스펙 또는 관련 Screen/Feature 스펙에 정의 |
 | **관련** | fe-data-display-agent / fe-feedback-agent / fe-overlay-agent | 일반 표시, 상태, overlay UI 컴포넌트 (Cell 외) |
+| **상위 owner** | fe-data-grid-agent | DataGrid/Table Cell 구현과 계약 소유 |
 | **후행** | fe-route-agent | 목록 페이지에서 Cell 사용 |
 
 ---
@@ -435,28 +438,28 @@ ls packages/fe-ui/src/cell/
 
 | Cell | 경로 | 용도 |
 |------|------|------|
-| `DefaultCell` | `packages/fe-ui/src/cell/DefaultCell/` | 기본 텍스트 |
-| `NumberCell` | `packages/fe-ui/src/cell/NumberCell/` | 숫자 포맷팅 |
-| `DateCell` | `packages/fe-ui/src/cell/DateCell/` | 날짜 (YYYY-MM-DD) |
-| `DateTimeCell` | `packages/fe-ui/src/cell/DateTimeCell/` | 날짜+시간 |
-| `BooleanCell` | `packages/fe-ui/src/cell/BooleanCell/` | O/X 표시 |
-| `LinkCell` | `packages/fe-ui/src/cell/LinkCell/` | 링크 |
-| `ExpandableCell` | `packages/fe-ui/src/cell/ExpandableCell/` | 펼침/접힘 |
-| `PhoneCell` | `packages/fe-ui/src/cell/PhoneCell/` | 전화번호 포맷 |
+| `DefaultCell` | `packages/fe-ui/src/data-grid/cell/DefaultCell/` | 기본 텍스트 |
+| `NumberCell` | `packages/fe-ui/src/data-grid/cell/NumberCell/` | 숫자 포맷팅 |
+| `DateCell` | `packages/fe-ui/src/data-grid/cell/DateCell/` | 날짜 (YYYY-MM-DD) |
+| `DateTimeCell` | `packages/fe-ui/src/data-grid/cell/DateTimeCell/` | 날짜+시간 |
+| `BooleanCell` | `packages/fe-ui/src/data-grid/cell/BooleanCell/` | O/X 표시 |
+| `LinkCell` | `packages/fe-ui/src/data-grid/cell/LinkCell/` | 링크 |
+| `ExpandableCell` | `packages/fe-ui/src/data-grid/cell/ExpandableCell/` | 펼침/접힘 |
+| `PhoneCell` | `packages/fe-ui/src/data-grid/cell/PhoneCell/` | 전화번호 포맷 |
 
 ### Widget Cells (`[기능][UI형태]Cell`)
 
 | Cell | 경로 | 용도 |
 |------|------|------|
-| `ProfileAvatarCell` | `packages/fe-ui/src/cell/ProfileAvatarCell/` | 아바타+이름+부제목 |
-| `StatusChipCell` | `packages/fe-ui/src/cell/StatusChipCell/` | 상태 Chip |
-| `RoleChipCell` | `packages/fe-ui/src/cell/RoleChipCell/` | 역할 Chip |
+| `ProfileAvatarCell` | `packages/fe-ui/src/data-grid/cell/ProfileAvatarCell/` | 아바타+이름+부제목 |
+| `StatusChipCell` | `packages/fe-ui/src/data-grid/cell/StatusChipCell/` | 상태 Chip |
+| `RoleChipCell` | `packages/fe-ui/src/data-grid/cell/RoleChipCell/` | 역할 Chip |
 
 ### Feature Cells (`[위치/역할][기능]Cell`)
 
 | Cell | 경로 | 용도 |
 |------|------|------|
-| `RowActionsCell` | `packages/fe-ui/src/cell/RowActionsCell/` | 행 액션 버튼 (상세/수정/삭제) |
+| `RowActionsCell` | `packages/fe-ui/src/data-grid/cell/RowActionsCell/` | 행 액션 버튼 (상세/수정/삭제) |
 
 ---
 
@@ -468,9 +471,9 @@ ls packages/fe-ui/src/cell/
 ### [CellName] (계층: Pure UI / Widget / Feature)
 
 **생성된 파일:**
-- `packages/fe-ui/src/cell/[CellName]/[CellName].tsx`
-- `packages/fe-ui/src/cell/[CellName]/index.ts`
-- `packages/fe-ui/src/cell/index.ts` (export 추가)
+- `packages/fe-ui/src/data-grid/cell/[CellName]/[CellName].tsx`
+- `packages/fe-ui/src/data-grid/cell/[CellName]/index.ts`
+- `packages/fe-ui/src/data-grid/cell/index.ts` (export 추가)
 
 **Props:**
 | 이름 | 타입 | 필수 | 설명 |

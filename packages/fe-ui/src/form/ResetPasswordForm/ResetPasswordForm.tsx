@@ -2,12 +2,10 @@
 
 import type { PasswordRule } from "@cocrepo/constant";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action";
 import { AlertBanner } from "../../feedback/AlertBanner/AlertBanner";
 import { PasswordStrengthIndicator } from "../../feedback/PasswordStrengthIndicator/PasswordStrengthIndicator";
 import { useT } from "../../i18n";
-import { Input } from "../../input";
-import { Link } from "../../navigation";
+import { Button, Link, TextField } from "../../input";
 import { AuthCard } from "../../widget/AuthCard/AuthCard";
 import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
 
@@ -158,7 +156,7 @@ export const ResetPasswordForm = observer(
 
 						<form className="space-y-5">
 							<div>
-								<Input
+								<TextField
 									path="password"
 									state={state}
 									label="새 비밀번호"
@@ -174,7 +172,7 @@ export const ResetPasswordForm = observer(
 								/>
 							</div>
 
-							<Input
+							<TextField
 								path="confirmPassword"
 								state={state}
 								label="비밀번호 확인"

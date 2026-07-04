@@ -11,7 +11,7 @@ import {
 } from "@cocrepo/ui";
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../action/Button/Button";
+import { Button } from "../../input/Button/Button";
 export interface TemplateEditScreenProps {
 	templateName?: string;
 	formData: TemplateFormData;

@@ -89,7 +89,7 @@
 
 `Display/Control/Layout → Widget → Feature → Page → App Route Container`
 
-- `packages/fe-ui/src/data-display`, `src/action`, `src/input`, `src/selection`, `src/navigation`, `src/layout`, `src/widget`, `src/feature`는 재사용 UI 레이어
+- `packages/fe-ui/src/data-display`, `src/input`, `src/layout`, `src/widget`, `src/feature`는 재사용 UI 레이어
 - `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx`는 screen-level pure composition 레이어의 기준 경로
 - `apps/*/src/app/**/page.tsx`는 thin app route container 레이어
 - root `app/layout.tsx`의 `App`은 `App.Header`, `App.Body`, `App.LeftAside`, `App.Main`, `App.RightAside`, `App.Footer` compound 슬롯 owner이고, package UI/feature를 직접 조립해 route 공통 화면 틀을 소유합니다.
@@ -401,7 +401,7 @@ BLOCKED: thin route container 구현 전 page ownership 정리 필요
 - 대상 route의 `index.spec.md`, 인접 `app.context.md`, 연결할 shared screen spec을 먼저 읽습니다.
 - shared screen/leaf 후보가 없다고 판단하기 전에 원본 라이브러리 `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source를 확인합니다.
 - 동일 책임의 중복 구현을 금지합니다.
-- route file에서 기존 shared screen, `CustomHeader`, `ScreenFrame`, action/selection/feedback leaf로 표현 가능한 UI를 raw `View`/`Text`/`Pressable` 조합으로 다시 만들지 않습니다.
+- route file에서 기존 shared screen, `CustomHeader`, `ScreenFrame`, input/feedback leaf로 표현 가능한 UI를 raw `View`/`Text`/`Pressable` 조합으로 다시 만들지 않습니다.
 
 ### 모바일 route agent
 

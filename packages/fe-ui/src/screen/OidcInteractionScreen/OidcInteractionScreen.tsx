@@ -5,7 +5,6 @@ import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { FormEvent, MouseEvent } from "react";
 import { useEffect, useState } from "react";
-import { Button } from "../../action";
 import { AlertBanner } from "../../feedback";
 import {
 	OidcConsentPanel,
@@ -14,6 +13,7 @@ import {
 	type OidcLoginFormState,
 } from "../../form";
 import { useT } from "../../i18n";
+import { Button } from "../../input";
 import { AuthCard, AuthCardHeader } from "../../widget/AuthCard";
 
 export interface IdpInteractionClientInfo {

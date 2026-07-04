@@ -1,13 +1,17 @@
 // Components
+
+export * from "./cell";
+export * from "./columns";
 export {
 	DataGrid,
 	type DataGridProps,
 	getDataGridRowKey,
 	type Key,
 } from "./DataGrid";
-export type { DataGridStateModelOptions } from "./DataGridState";
+export type { DataGridStateOptions } from "./DataGridState";
 export {
-	DataGridQueryStateModel,
-	DataGridSelectionStateModel,
-	DataGridStateModel,
+	DataGridColumnsState,
+	DataGridQueryState,
+	DataGridSelectionState,
+	DataGridState,
 } from "./DataGridState";

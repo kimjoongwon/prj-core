@@ -8,7 +8,7 @@ import type {
 import {
 	buildAdminRoleTableColumns,
 	DataGrid,
-	DataGridStateModel,
+	DataGridState,
 	PageTitleBar,
 	Section,
 	SectionSurface,
@@ -17,7 +17,7 @@ import {
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
-import { Button } from "../../action/Button/Button";
+import { Button } from "../../input/Button/Button";
 export interface RoleListScreenQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
@@ -57,7 +57,7 @@ export const RoleListScreen = observer(
 	}: RoleListScreenProps) => {
 		const gridState = useLocalObservable(
 			() =>
-				new DataGridStateModel({
+				new DataGridState({
 					queryStates,
 					setQueryStates,
 				}),
