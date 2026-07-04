@@ -64,7 +64,7 @@ export interface CourseDataPass {
 }
 
 export interface CourseDataSection {
-	id: "courses" | "course-offerings" | "enrollments" | "course-passes";
+	id: "courses" | "offerings" | "enrollments" | "passes";
 	label: string;
 	description: string;
 	href: string;
@@ -282,10 +282,10 @@ function toSections({
 			tone: "success",
 		},
 		{
-			id: "course-offerings",
+			id: "offerings",
 			label: "CourseOffering",
 			description: "실제 개설 반, 기수, 모집 정원을 관리합니다.",
-			href: "/course-offerings",
+			href: "/courses?section=offerings",
 			count: offerings.length,
 			tone: "primary",
 		},
@@ -293,15 +293,15 @@ function toSections({
 			id: "enrollments",
 			label: "Enrollment",
 			description: "결제 후 생긴 수강 신청 상태를 관리합니다.",
-			href: "/enrollments",
+			href: "/courses?section=enrollments",
 			count: enrollments.length,
 			tone: "secondary",
 		},
 		{
-			id: "course-passes",
+			id: "passes",
 			label: "CoursePass",
 			description: "수강권의 유효기간과 잔여 권리를 관리합니다.",
-			href: "/course-passes",
+			href: "/courses?section=passes",
 			count: passes.length,
 			tone: "warning",
 		},

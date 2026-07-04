@@ -2,12 +2,12 @@
 
 import {
 	type InquiryCategory,
+	type InquiryChannel,
 	type InquiryMessageDto,
 	type InquiryParticipantDto,
 	type InquiryPriority,
 	useAssignInquiry,
 	useDeleteInquiry,
-	useFillInquiryFormWithAi,
 	useGetInquiryById,
 	useGetInquiryMessages,
 	useGetInquiryParticipants,
@@ -19,14 +19,13 @@ import {
 import { ADMIN_PATHS } from "@cocrepo/constant";
 import { useInquiryDetailWebSocket } from "@cocrepo/hook";
 import type {
-	AiFormOptionItem,
-	AiFormPatch,
+	FormOptionItem,
 	InquiryMessage,
 	InquiryParticipant,
 } from "@cocrepo/type";
 import {
-	InquiryDetailScreen,
-	type InquiryDetailScreenMetaFormState,
+	InquiryEditScreen,
+	type InquiryEditScreenMetaFormState,
 } from "@cocrepo/ui";
 import { observable } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -34,9 +33,9 @@ import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-const normalizeAiFormOptionValue = (
+const normalizeFormOptionValue = (
 	value: unknown,
-): AiFormOptionItem["value"] => {
+): FormOptionItem["value"] => {
 	if (
 		typeof value === "string" ||
 		typeof value === "number" ||
@@ -48,14 +47,14 @@ const normalizeAiFormOptionValue = (
 	return null;
 };
 
-const normalizeAiFormOptions = (
+const normalizeFormOptions = (
 	options?: Record<string, Array<{ value: unknown; label: string }>>,
-): Record<string, AiFormOptionItem[]> => {
+): Record<string, FormOptionItem[]> => {
 	return Object.fromEntries(
 		Object.entries(options ?? {}).map(([path, items]) => [
 			path,
 			items.map((item) => ({
-				value: normalizeAiFormOptionValue(item.value),
+				value: normalizeFormOptionValue(item.value),
 				label: item.label,
 			})),
 		]),
@@ -104,7 +103,7 @@ const mapParticipantToStore = (
 	};
 };
 
-export default observer(function InquiryDetailScreenRoute() {
+export default observer(function InquiryReadOnlyRoute() {
 	const inquiryId = useParams<{ inquiryId: string }>().inquiryId;
 	const router = useRouter();
 	const deleteModalState = useStateLike(false);
@@ -112,7 +111,6 @@ export default observer(function InquiryDetailScreenRoute() {
 		currentInquiryId: null as string | null,
 		currentThreadId: null as string | null,
 		replyContent: "",
-		isGeneratingDraft: false,
 		isKnowledgeBaseModalOpen: false,
 		isMetaEditModalOpen: false,
 		messages: [] as InquiryMessage[],
@@ -183,9 +181,6 @@ export default observer(function InquiryDetailScreenRoute() {
 		setReplyContent(content: string) {
 			this.replyContent = content;
 		},
-		setGeneratingDraft(isGenerating: boolean) {
-			this.isGeneratingDraft = isGenerating;
-		},
 		openKnowledgeBaseModal() {
 			this.isKnowledgeBaseModalOpen = true;
 		},
@@ -196,7 +191,6 @@ export default observer(function InquiryDetailScreenRoute() {
 			this.currentInquiryId = null;
 			this.currentThreadId = null;
 			this.replyContent = "";
-			this.isGeneratingDraft = false;
 			this.isKnowledgeBaseModalOpen = false;
 			this.isMetaEditModalOpen = false;
 			this.messages = [];
@@ -207,16 +201,21 @@ export default observer(function InquiryDetailScreenRoute() {
 		},
 	}));
 	const metaState = useLocalObservable<
-		InquiryDetailScreenMetaFormState & {
+		InquiryEditScreenMetaFormState & {
 			initialized: boolean;
 			setFromBootstrap: () => void;
 		}
 	>(() => ({
 		initialized: false,
+		customerId: "",
+		customerKeyword: "",
 		title: "",
+		content: "",
 		category: "GENERAL" as InquiryCategory,
+		channel: "WEB" as InquiryChannel,
 		priority: "NORMAL" as InquiryPriority,
-		error: "",
+		searchResults: [],
+		errors: {},
 		setFromBootstrap() {
 			if (!updateFormBootstrap || this.initialized) {
 				return;
@@ -248,14 +247,10 @@ export default observer(function InquiryDetailScreenRoute() {
 	const updatePriorityMutation = useUpdateInquiryPriority();
 	const assignMutation = useAssignInquiry();
 	const updateInquiryMutation = useUpdateInquiry();
-	const fillMetaMutation = useFillInquiryFormWithAi();
-	const fillDraftMutation = useFillInquiryFormWithAi();
 
 	const inquiry = inquiryResponse?.data;
 	const updateFormBootstrap = updateFormBootstrapResponse?.data;
-	const updateFormOptions = normalizeAiFormOptions(
-		updateFormBootstrap?.options,
-	);
+	const updateFormOptions = normalizeFormOptions(updateFormBootstrap?.options);
 	const messages = (messagesResponse?.data ?? []).map(mapMessageToStore);
 	const participantRows =
 		(participantsResponse?.data as
@@ -313,31 +308,10 @@ export default observer(function InquiryDetailScreenRoute() {
 			text: participant.userId,
 		}));
 
-	const onApplyMetaAiPatch = (patches: AiFormPatch[]) => {
-		for (const patch of patches) {
-			switch (patch.path) {
-				case "title":
-					if (typeof patch.value === "string") metaState.title = patch.value;
-					break;
-				case "category":
-					if (typeof patch.value === "string") {
-						metaState.category = patch.value as InquiryCategory;
-					}
-					break;
-				case "priority":
-					if (typeof patch.value === "string") {
-						metaState.priority = patch.value as InquiryPriority;
-					}
-					break;
-				default:
-					break;
-			}
-		}
-	};
-
 	return (
 		<>
-			<InquiryDetailScreen
+			<InquiryEditScreen
+				readOnly
 				inquiryId={inquiryId}
 				inquiry={
 					inquiry
@@ -371,18 +345,17 @@ export default observer(function InquiryDetailScreenRoute() {
 					updateFormBootstrap
 						? {
 								fieldMeta: updateFormBootstrap.fieldMeta,
-								aiSchemas: updateFormBootstrap.aiSchemas,
 								ui: updateFormBootstrap.ui,
 								options: updateFormOptions,
 							}
 						: undefined
 				}
 				metaFormState={metaState}
-				editCategoryOptions={(updateFormOptions.category ?? []).map((item) => ({
+				categoryOptions={(updateFormOptions.category ?? []).map((item) => ({
 					value: String(item.value ?? ""),
 					label: item.label,
 				}))}
-				editPriorityOptions={(updateFormOptions.priority ?? []).map((item) => ({
+				priorityOptions={(updateFormOptions.priority ?? []).map((item) => ({
 					value: String(item.value ?? ""),
 					label: item.label,
 				}))}
@@ -392,7 +365,6 @@ export default observer(function InquiryDetailScreenRoute() {
 					typingUserNames: Array.from(inquiryState.typingUsers.keys()),
 					isWebSocketConnected: inquiryState.isWebSocketConnected,
 					isTyping: inquiryState.isTyping,
-					isGeneratingDraft: inquiryState.isGeneratingDraft,
 				}}
 				participantListItems={participantListItems}
 				onlineParticipantNames={inquiryState.participants
@@ -402,7 +374,6 @@ export default observer(function InquiryDetailScreenRoute() {
 				deleteModalOpen={deleteModalState.value}
 				isDeleting={deleteInquiryMutation.isPending}
 				isUpdatingMeta={updateInquiryMutation.isPending}
-				isFillingMeta={fillMetaMutation.isPending}
 				webSocketStatus={ws.status}
 				onClickBackButton={() => {
 					router.push(ADMIN_PATHS.INQUIRIES as Route);
@@ -476,46 +447,6 @@ export default observer(function InquiryDetailScreenRoute() {
 				}}
 				onTagAdd={(_tag) => {}}
 				onTagRemove={(_tag) => {}}
-				onFillMetaAiForm={async (input) => {
-					const result = await fillMetaMutation.mutateAsync({
-						data: {
-							mode: "UPDATE",
-							schemaKey: input.schemaKey,
-							selectedPaths: input.selectedPaths,
-							currentObject: input.currentObject,
-							userPrompt: input.userPrompt,
-						},
-					});
-					return result?.data ?? { patches: [] };
-				}}
-				onApplyMetaAiPatch={onApplyMetaAiPatch}
-				onChangeMetaTitleInput={(value) => {
-					metaState.title = value;
-					metaState.error = "";
-				}}
-				onChangeMetaCategorySelection={(value) => {
-					metaState.category = value;
-				}}
-				onChangeMetaPrioritySelection={(value) => {
-					metaState.priority = value;
-				}}
-				onClickSaveMetaButton={() => {
-					void (async () => {
-						if (!metaState.title.trim()) {
-							metaState.error = "문의 제목을 입력해주세요.";
-							return;
-						}
-						metaState.error = "";
-						await updateInquiryMutation.mutateAsync({
-							inquiryId,
-							data: {
-								title: metaState.title.trim(),
-								category: metaState.category,
-								priority: metaState.priority,
-							},
-						});
-					})();
-				}}
 				onClickReconnectButton={() => {
 					ws.reconnect();
 				}}
@@ -532,35 +463,6 @@ export default observer(function InquiryDetailScreenRoute() {
 				onTypingStop={() => {
 					inquiryState.stopTyping();
 					ws.sendTypingStatus(false);
-				}}
-				onClickGenerateDraftButton={() => {
-					void (async () => {
-						inquiryState.setGeneratingDraft(true);
-						try {
-							const result = await fillDraftMutation.mutateAsync({
-								data: {
-									mode: "CREATE",
-									schemaKey: "inquiry-intake-basic",
-									selectedPaths: ["content"],
-									currentObject: {
-										title: `문의 ${inquiryId}`,
-										content: inquiryState.replyContent,
-										category: "GENERAL",
-										priority: "NORMAL",
-									},
-								},
-							});
-							const patches = result?.data?.patches ?? [];
-							const contentPatch = patches.find(
-								(patch) => patch.path === "content",
-							);
-							if (typeof contentPatch?.value === "string") {
-								inquiryState.setReplyContent(contentPatch.value);
-							}
-						} finally {
-							inquiryState.setGeneratingDraft(false);
-						}
-					})();
 				}}
 				onClickSearchKnowledgeButton={() => {
 					inquiryState.openKnowledgeBaseModal();

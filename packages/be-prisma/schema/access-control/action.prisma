@@ -5,6 +5,7 @@
 // @schema-type: CATALOG
 // @schema-owner: true
 // @aggregate-root: true
+// @usecase-anchor: true
 // @description: 권한 규칙이 참조하는 전역 액션 카탈로그
 // @ownership: independent
 // @scope: global

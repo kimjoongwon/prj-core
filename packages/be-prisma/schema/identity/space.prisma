@@ -19,6 +19,7 @@
 // @schema-type: BASE
 // @schema-owner: true
 // @aggregate-root: true
+// @usecase-anchor: true
 // @description: Company 등 1:1 상세 모델의 공통 identity와 소속 관계를 제공하는 공간 기반 모델
 // @ownership: independent
 // @scope: space

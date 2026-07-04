@@ -9,11 +9,12 @@
 // `_base.prisma`는 Prisma 설명서의 "맨 앞장" 같은 파일입니다.
 // 여기 적힌 규칙을 보고 각 모델 위에 이름표를 붙입니다.
 //
-// 모델을 볼 때는 아래 3가지를 따로 생각하면 헷갈리지 않습니다.
+// 모델을 볼 때는 아래 4가지를 따로 생각하면 헷갈리지 않습니다.
 //
 // - `@schema-type`: 이 모델은 무슨 역할을 하나?
 // - `@schema-owner`: 이 파일의 주인공은 누구인가?
 // - `@aggregate-root`: 이 모델은 혼자서도 만들고, 고치고, 지울 수 있는 큰 단위인가?
+// - `@usecase-anchor`: 이 모델은 여러 aggregate를 조합하는 usecase의 기준점인가?
 //
 // schema 파일은 도메인 폴더(`access-control/`, `identity/`, `asset/` 등) 아래에 둡니다.
 // `_base.prisma`를 제외한 각 `.prisma` 파일에는 `@schema-owner: true`가 정확히 1개만 있어야 합니다.
@@ -66,6 +67,9 @@
 // - @aggregate-root: true
 //   혼자서도 관리되는 큰 단위라는 표시입니다.
 //   보통 `@ownership: independent`와 함께 쓰고, dependent DETAIL/CHILD에는 붙이지 않습니다.
+// - @usecase-anchor: true
+//   application/usecase 계층에서 여러 aggregate나 catalog를 조합할 때 기준점이 되는 owner 표시입니다.
+//   화면 경계나 도메인 소유 경계를 뜻하지 않으며, `@schema-owner: true`와 `@aggregate-root: true`가 붙은 모델에만 둡니다.
 // - @relation-pattern: one-to-one | one-to-many | many-to-many | polymorphic
 //   관계 모양을 적습니다. 역할 이름표(`@schema-type`)를 대신하지는 않습니다.
 // - @ownership: independent | dependent
@@ -93,7 +97,9 @@
 //    owner는 파일의 주인공이지, 무조건 제일 큰 모델이라는 뜻은 아닙니다.
 // 3. 독립 lifecycle이 있으면 `@aggregate-root: true`를 검토합니다.
 //    혼자 관리되지 못하면 owner여도 aggregate root가 아닙니다.
-// 4. 종속 모델이면 `@extends`와 `@materializes` 중 무엇이 맞는지 구분합니다.
+// 4. 여러 aggregate를 조합하는 usecase의 기준점이면 `@usecase-anchor: true`를 검토합니다.
+//    이 태그는 소유권을 넓히지 않고 application 흐름의 기준점만 나타냅니다.
+// 5. 종속 모델이면 `@extends`와 `@materializes` 중 무엇이 맞는지 구분합니다.
 //    - 부모 밑에 달린 일반 상세/자식이면 `@extends`
 //    - BASE 뼈대를 1:1 상세 타입으로 만드는 모델이면 `@materializes`
 //
@@ -159,6 +165,7 @@
 // - CATALOG는 지금은 한 종류로 두고, 필요하면 나중에 더 잘게 나눌 수 있습니다.
 // - 각 schema 파일은 `_base.prisma`를 제외하고 `@schema-owner: true`를 정확히 1개만 가집니다.
 // - `@aggregate-root: true`는 `@ownership: independent`인 owner에만 붙입니다.
+// - `@usecase-anchor: true`는 `@schema-owner: true`와 `@aggregate-root: true`가 붙은 owner에만 붙입니다.
 //
 // ### Example
 //

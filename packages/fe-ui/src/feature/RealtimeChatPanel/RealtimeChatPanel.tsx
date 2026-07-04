@@ -32,14 +32,10 @@ export interface RealtimeChatPanelProps {
 	onTypingStop?: () => void;
 	/** 재연결 핸들러 */
 	onReconnect?: () => void;
-	/** AI 초안 생성 핸들러 */
-	onGenerateDraft?: () => void;
 	/** 지식베이스 검색 핸들러 */
 	onSearchKnowledge?: () => void;
 	/** 메시지 전송 중 여부 */
 	isSending?: boolean;
-	/** AI 초안 생성 중 여부 */
-	isGeneratingDraft?: boolean;
 	/** 추가 CSS 클래스 */
 	className?: string;
 }
@@ -52,7 +48,6 @@ interface MessageBubbleProps {
 const MessageBubble = observer(
 	({ message, currentUserId }: MessageBubbleProps) => {
 		const isCurrentUser = message.senderId === currentUserId;
-		const isAI = message.senderType === "AI";
 		const isSystem = message.senderType === "SYSTEM";
 
 		// 시스템 메시지는 중앙 정렬
@@ -74,24 +69,15 @@ const MessageBubble = observer(
 					className={`max-w-[70%] rounded-2xl px-4 py-2 ${
 						isCurrentUser
 							? "bg-accent text-accent-foreground"
-							: isAI
-								? "bg-default text-accent"
-								: "bg-surface-secondary text-foreground"
+							: "bg-surface-secondary text-foreground"
 					}`}
 				>
 					{/* 발신자 표시 (다른 사용자 메시지) */}
-					{!isCurrentUser && !isAI && (
+					{!isCurrentUser && message.senderId ? (
 						<span className="mb-1 block text-xs font-medium text-muted">
 							{message.senderId}
 						</span>
-					)}
-
-					{/* AI 표시 */}
-					{isAI && (
-						<span className="mb-1 block text-xs font-medium text-accent">
-							🤖 AI 어시스턴트
-						</span>
-					)}
+					) : null}
 
 					{/* 메시지 내용 */}
 					<p className="text-sm whitespace-pre-wrap">{message.content}</p>
@@ -143,10 +129,8 @@ export const RealtimeChatPanel = observer(
 		onTypingStart,
 		onTypingStop,
 		onReconnect,
-		onGenerateDraft,
 		onSearchKnowledge,
 		isSending = false,
-		isGeneratingDraft = false,
 		className = "",
 	}: RealtimeChatPanelProps) => {
 		const scrollRef = useRef<HTMLDivElement>(null);
@@ -214,10 +198,8 @@ export const RealtimeChatPanel = observer(
 						onSubmit={handleSendMessage}
 						onTypingStart={handleTypingStart}
 						onTypingStop={handleTypingStop}
-						onGenerateDraft={onGenerateDraft}
 						onSearchKnowledge={onSearchKnowledge}
 						isSending={isSending}
-						isGeneratingDraft={isGeneratingDraft}
 						placeholder="메시지를 입력하세요..."
 					/>
 				</div>

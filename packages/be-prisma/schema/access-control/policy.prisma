@@ -5,6 +5,7 @@
 // @schema-type: ROOT
 // @schema-owner: true
 // @aggregate-root: true
+// @usecase-anchor: true
 // @description: 여러 Ability를 묶어 Role에 할당되는 공간별 권한 정책 묶음
 // @ownership: independent
 // @scope: space

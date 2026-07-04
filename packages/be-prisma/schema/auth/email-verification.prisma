@@ -5,6 +5,7 @@
 // @schema-type: LOG
 // @schema-owner: true
 // @aggregate-root: true
+// @usecase-anchor: true
 // @description: 회원가입 전 이메일 인증 요청과 발송/완료 상태를 기록하는 전역 인증 로그
 // @ownership: independent
 // @scope: global

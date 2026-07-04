@@ -5,7 +5,7 @@ import {
 	useGetSpaceGround,
 	useUpdateSpaceGround,
 } from "@cocrepo/api/core/spaces";
-import { GroundEditScreen } from "@cocrepo/ui";
+import { GroundEditScreen, GroundFormState } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -19,15 +19,8 @@ type GroundEditScreenParams = {
 const AdminSpacesSpaceIdGroundEditRoute = observer(() => {
 	const { spaceId } = useParams<GroundEditScreenParams>();
 	const router = useRouter();
-	const state = useLocalObservable(() => ({
-		name: "",
-		label: "",
-		address: "",
-		phone: "",
-		email: "",
-		businessNo: "",
-		contentLanguageCode: "ko_KR",
-		errors: {} as Record<string, string>,
+	const state = useLocalObservable(() => new GroundFormState());
+	const routeState = useLocalObservable(() => ({
 		isInitialized: false,
 	}));
 
@@ -35,17 +28,11 @@ const AdminSpacesSpaceIdGroundEditRoute = observer(() => {
 	const ground = response?.data as GroundDto | undefined;
 
 	useEffect(() => {
-		if (ground && !state.isInitialized) {
-			state.name = ground.name;
-			state.label = ground.label ?? "";
-			state.address = ground.address;
-			state.phone = ground.phone;
-			state.email = ground.email;
-			state.businessNo = ground.businessNo;
-			state.contentLanguageCode = ground.space?.contentLanguageCode ?? "ko_KR";
-			state.isInitialized = true;
+		if (ground && !routeState.isInitialized) {
+			state.setFromDto(ground);
+			routeState.isInitialized = true;
 		}
-	}, [ground, state]);
+	}, [ground, routeState, state]);
 
 	const { mutate: updateSpaceGround, isPending } = useUpdateSpaceGround({
 		mutation: {
@@ -68,99 +55,30 @@ const AdminSpacesSpaceIdGroundEditRoute = observer(() => {
 		router.push(`/spaces/${spaceId}/ground` as Route);
 	};
 
-	const onChangeNameInput = (value: string) => {
-		state.name = value;
-		delete state.errors.name;
-	};
-
-	const onChangeLabelInput = (value: string) => {
-		state.label = value;
-	};
-
-	const onChangeAddressInput = (value: string) => {
-		state.address = value;
-		delete state.errors.address;
-	};
-
-	const onChangePhoneInput = (value: string) => {
-		state.phone = value;
-		delete state.errors.phone;
-	};
-
-	const onChangeEmailInput = (value: string) => {
-		state.email = value;
-		delete state.errors.email;
-	};
-
-	const onChangeContentLanguageSelect = (value: string) => {
-		state.contentLanguageCode = value;
-		delete state.errors.contentLanguageCode;
-	};
-
 	const onClickSaveButton = () => {
-		const errors: Record<string, string> = {};
-
-		if (!state.name.trim()) {
-			errors.name = "시설명을 입력해주세요.";
-		}
-		if (!state.address.trim()) {
-			errors.address = "주소를 입력해주세요.";
-		}
-		if (!state.phone.trim()) {
-			errors.phone = "전화번호를 입력해주세요.";
-		}
-		if (!state.email.trim()) {
-			errors.email = "이메일을 입력해주세요.";
-		} else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(state.email)) {
-			errors.email = "올바른 이메일 형식을 입력해주세요.";
-		}
-		if (!state.contentLanguageCode) {
-			errors.contentLanguageCode = "콘텐츠 언어를 선택해주세요.";
-		}
-
-		if (Object.keys(errors).length > 0) {
-			state.errors = errors;
+		if (!state.validate()) {
 			return;
 		}
 
 		updateSpaceGround({
 			spaceId,
-			data: {
-				name: state.name.trim(),
-				label: state.label.trim() || null,
-				address: state.address.trim(),
-				phone: state.phone.trim(),
-				email: state.email.trim(),
-				contentLanguageCode: state.contentLanguageCode as
-					| "ko_KR"
-					| "en_US"
-					| "zh_CN"
-					| "ja_JP",
-			},
+			data: state.toUpdateDto(),
 		});
 	};
 
 	return (
 		<>
 			<GroundEditScreen
-				groundName={ground?.name}
-				name={state.name}
-				label={state.label}
-				address={state.address}
-				phone={state.phone}
-				email={state.email}
-				businessNo={state.businessNo}
-				contentLanguageCode={state.contentLanguageCode}
-				errors={state.errors}
+				title="시설 정보 수정"
+				description={
+					ground?.name
+						? `${ground.name} 시설 detail을 수정합니다.`
+						: "시설 detail을 수정합니다."
+				}
+				state={state}
 				isLoading={isLoading}
 				isNotFound={!isLoading && !ground}
 				isSubmitPending={isPending}
-				onChangeNameInput={onChangeNameInput}
-				onChangeLabelInput={onChangeLabelInput}
-				onChangeAddressInput={onChangeAddressInput}
-				onChangePhoneInput={onChangePhoneInput}
-				onChangeEmailInput={onChangeEmailInput}
-				onChangeContentLanguageSelect={onChangeContentLanguageSelect}
 				onClickCancelButton={onClickCancelButton}
 				onClickSaveButton={onClickSaveButton}
 			/>

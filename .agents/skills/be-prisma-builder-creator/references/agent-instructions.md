@@ -49,10 +49,12 @@ Prisma multi-file schema를 설계하고 수정하는 전문가입니다. 스키
 - `access-control/`
 - `asset/`
 - `auth/`
+- `billing/`
 - `content/`
 - `identity/`
 - `inquiry/`
 - `oidc/`
+- `platform/`
 - `scheduling/`
 - `taxonomy/`
 - `wallet/`
@@ -82,7 +84,9 @@ Prisma multi-file schema를 설계하고 수정하는 전문가입니다. 스키
 - `_base.prisma`를 제외한 각 `.prisma` 파일은 대표 모델 1개에 `@schema-owner: true`를 가집니다.
 - `@schema-owner: true`는 해당 파일의 대표 소유 모델(anchor model)을 뜻합니다.
 - `@aggregate-root: true`는 `@schema-owner: true` 모델 중 독립적으로 관리되는 실제 aggregate root에만 사용합니다.
-- 파일 내 보조 모델(CHILD/DETAIL/JOIN 등)에는 두 태그를 붙이지 않습니다.
+- `@usecase-anchor: true`는 `@schema-owner: true`와 `@aggregate-root: true`가 붙은 모델 중 application/usecase 흐름의 기준점에만 사용합니다.
+- `@usecase-anchor: true`는 UI 화면 경계나 도메인 소유 경계를 뜻하지 않으며, 여러 aggregate/JOIN/catalog를 조합하는 usecase 기준점을 표시합니다.
+- 파일 내 보조 모델(CHILD/DETAIL/JOIN 등)에는 `@schema-owner: true`, `@aggregate-root: true`, `@usecase-anchor: true`를 붙이지 않습니다.
 - 파일 대표 모델이 이미 정해진 파일에 하위 모델을 추가할 때는 기존 대표 모델을 유지합니다.
 
 ### 3. 선언 소유권 규칙
@@ -98,6 +102,7 @@ Prisma multi-file schema를 설계하고 수정하는 전문가입니다. 스키
 - 주 역할: `@schema-type: ROOT | BASE | DETAIL | CHILD | JOIN | CATALOG | LOG`
 - 파일 대표 모델일 때: `@schema-owner: true`
 - 독립적으로 관리되는 실제 aggregate root일 때만: `@aggregate-root: true`
+- usecase 조합 기준점일 때만: `@usecase-anchor: true`
 - 필요 시: `@relation-pattern`, `@ownership`, `@scope`, `@join-role`
 - 관계 설명: `@extends`, `@extended-by`, `@materializes`, `@materialized-by`, `@connects`
 - 노출명: `/// @displayName`
@@ -135,6 +140,7 @@ Prisma multi-file schema를 설계하고 수정하는 전문가입니다. 스키
 
 - 이 모델이 파일의 대표 소유 모델이면 `@schema-owner: true`
 - 그리고 그 대표 모델이 독립적으로 관리되는 경우에만 `@aggregate-root: true`
+- 그 대표 모델이 application/usecase 계층에서 여러 aggregate를 조합하는 기준점이면 `@usecase-anchor: true`
 - 아니면 기존 대표 모델 아래의 CHILD/DETAIL/JOIN/CATALOG/LOG 등으로 추가
 
 ### 3단계: 메타데이터 작성
@@ -143,6 +149,7 @@ Prisma multi-file schema를 설계하고 수정하는 전문가입니다. 스키
 // @schema-type: ROOT
 // @schema-owner: true
 // @aggregate-root: true
+// @usecase-anchor: true
 // @description: 독립적으로 관리되는 핵심 사용자 모델
 // @ownership: independent
 // @scope: tenant
@@ -188,6 +195,7 @@ pnpm --filter=@cocrepo/prisma exec prisma validate
 - 대상 파일이 올바른 도메인 폴더 아래에 있는가?
 - 파일 대표 모델 1개에만 `@schema-owner: true`가 있는가?
 - 독립 aggregate root에만 `@aggregate-root: true`가 있는가?
+- `@usecase-anchor: true`가 필요한 owner에만 있고, `@schema-owner: true`/`@aggregate-root: true`와 같은 모델에 붙어 있는가?
 - `@schema-type`와 보조 태그가 `_base.prisma` 기준과 일치하는가?
 - `validate-schema-conventions.ts`의 ownership 규칙과 충돌하지 않는가?
 - schema 계약가 함께 갱신되었는가?

@@ -2,13 +2,13 @@
 
 import {
 	type InquiryCategory,
+	type InquiryChannel,
 	type InquiryPriority,
-	useFillInquiryFormWithAi,
 	useGetUpdateInquiryForm,
 	useUpdateInquiry,
 } from "@cocrepo/api/core/inquiries";
 import { ADMIN_PATHS } from "@cocrepo/constant";
-import type { AiFormOptionItem, AiFormPatch } from "@cocrepo/type";
+import type { FormOptionItem } from "@cocrepo/type";
 import {
 	InquiryEditScreen,
 	type InquiryEditScreenFormState,
@@ -18,9 +18,9 @@ import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-const normalizeAiFormOptionValue = (
+const normalizeFormOptionValue = (
 	value: unknown,
-): AiFormOptionItem["value"] => {
+): FormOptionItem["value"] => {
 	if (
 		typeof value === "string" ||
 		typeof value === "number" ||
@@ -32,14 +32,14 @@ const normalizeAiFormOptionValue = (
 	return null;
 };
 
-const normalizeAiFormOptions = (
+const normalizeFormOptions = (
 	options?: Record<string, Array<{ value: unknown; label: string }>>,
-): Record<string, AiFormOptionItem[]> => {
+): Record<string, FormOptionItem[]> => {
 	return Object.fromEntries(
 		Object.entries(options ?? {}).map(([path, items]) => [
 			path,
 			items.map((item) => ({
-				value: normalizeAiFormOptionValue(item.value),
+				value: normalizeFormOptionValue(item.value),
 				label: item.label,
 			})),
 		]),
@@ -51,9 +51,8 @@ export default observer(function InquiryEditScreenRoute() {
 	const router = useRouter();
 	const { data: bootstrapResponse } = useGetUpdateInquiryForm(inquiryId);
 	const updateMutation = useUpdateInquiry();
-	const fillMutation = useFillInquiryFormWithAi();
 	const bootstrap = bootstrapResponse?.data;
-	const bootstrapOptions = normalizeAiFormOptions(bootstrap?.options);
+	const bootstrapOptions = normalizeFormOptions(bootstrap?.options);
 	const categoryOptions = (bootstrapOptions.category ?? []).map((item) => ({
 		value: String(item.value ?? ""),
 		label: item.label,
@@ -70,10 +69,15 @@ export default observer(function InquiryEditScreenRoute() {
 		}
 	>(() => ({
 		initialized: false,
+		customerId: "",
+		customerKeyword: "",
 		title: "",
+		content: "",
 		category: "GENERAL" as InquiryCategory,
+		channel: "WEB" as InquiryChannel,
 		priority: "NORMAL" as InquiryPriority,
-		error: "",
+		searchResults: [],
+		errors: {},
 		initFromBootstrap() {
 			if (!bootstrap || this.initialized) {
 				return;
@@ -99,35 +103,13 @@ export default observer(function InquiryEditScreenRoute() {
 		state.initFromBootstrap();
 	}, [bootstrap, state]);
 
-	const onApplyAiPatch = (patches: AiFormPatch[]) => {
-		for (const patch of patches) {
-			switch (patch.path) {
-				case "title":
-					if (typeof patch.value === "string") state.title = patch.value;
-					break;
-				case "category":
-					if (typeof patch.value === "string") {
-						state.category = patch.value as InquiryCategory;
-					}
-					break;
-				case "priority":
-					if (typeof patch.value === "string") {
-						state.priority = patch.value as InquiryPriority;
-					}
-					break;
-				default:
-					break;
-			}
-		}
-	};
-
 	const onClickSubmitButton = async () => {
 		if (!state.title.trim()) {
-			state.error = "문의 제목을 입력해주세요.";
+			state.errors.title = "문의 제목을 입력해주세요.";
 			return;
 		}
 
-		state.error = "";
+		state.errors = {};
 		await updateMutation.mutateAsync({
 			inquiryId,
 			data: {
@@ -144,12 +126,13 @@ export default observer(function InquiryEditScreenRoute() {
 	return (
 		<>
 			<InquiryEditScreen
+				title="문의 수정"
+				description="문의 메타 정보를 수정합니다."
 				formState={state}
 				bootstrap={
 					bootstrap
 						? {
 								fieldMeta: bootstrap.fieldMeta,
-								aiSchemas: bootstrap.aiSchemas,
 								ui: bootstrap.ui,
 								options: bootstrapOptions,
 							}
@@ -158,6 +141,7 @@ export default observer(function InquiryEditScreenRoute() {
 				categoryOptions={categoryOptions}
 				priorityOptions={priorityOptions}
 				isSubmitting={updateMutation.isPending}
+				submitLabel="저장"
 				onClickBackButton={() => {
 					router.push(
 						ADMIN_PATHS.INQUIRIES_DETAIL.replace(
@@ -165,29 +149,6 @@ export default observer(function InquiryEditScreenRoute() {
 							inquiryId,
 						) as Route,
 					);
-				}}
-				onFillAiForm={async (input) => {
-					const result = await fillMutation.mutateAsync({
-						data: {
-							mode: "UPDATE",
-							schemaKey: input.schemaKey,
-							selectedPaths: input.selectedPaths,
-							currentObject: input.currentObject,
-							userPrompt: input.userPrompt,
-						},
-					});
-					return result?.data ?? { patches: [] };
-				}}
-				onApplyAiPatch={onApplyAiPatch}
-				onChangeTitleInput={(value) => {
-					state.title = value;
-					state.error = "";
-				}}
-				onChangeCategorySelection={(value) => {
-					state.category = value;
-				}}
-				onChangePrioritySelection={(value) => {
-					state.priority = value;
 				}}
 				onClickCancelButton={() => {
 					router.push(

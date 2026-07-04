@@ -1,111 +1,111 @@
 "use client";
 
-import {
-	PageTitleBar,
-	Section,
-	SectionSurface,
-	TemplateForm,
-	type TemplateFormData,
-	type VariableEditItem,
-	VStack,
-} from "@cocrepo/ui";
+import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
+import type { ReactNode } from "react";
+import {
+	TemplateForm,
+	type TemplateFormState,
+} from "../../form/TemplateForm";
 import { Button } from "../../input/Button/Button";
+
+export type {
+	TemplateFormData,
+	TemplateFormField,
+	TemplateFormState,
+} from "../../form/TemplateForm";
+export type { VariableEditItem } from "../../form/VariableEditTable";
+
 export interface TemplateEditScreenProps {
-	templateName?: string;
-	formData: TemplateFormData;
-	variables: VariableEditItem[];
-	errors: Record<string, string>;
-	isLoading: boolean;
-	isNotFound: boolean;
-	isSubmitting: boolean;
-	onFormDataChange: (data: Partial<TemplateFormData>) => void;
-	onVariablesChange: (variables: VariableEditItem[]) => void;
-	onSubmitForm: () => void;
-	onClickCancelButton: () => void;
+	title: ReactNode;
+	description?: ReactNode;
+	state?: TemplateFormState;
+	readOnly?: boolean;
+	isLoading?: boolean;
+	notFound?: boolean;
+	loadingMessage?: ReactNode;
+	notFoundMessage?: ReactNode;
+	notFoundAction?: ReactNode;
+	actions?: ReactNode;
+	children?: ReactNode;
 }
-export const TemplateEditScreen = observer(
-	({
-		templateName,
-		formData,
-		variables,
-		errors,
-		isLoading,
-		isNotFound,
-		isSubmitting,
-		onFormDataChange,
-		onVariablesChange,
-		onSubmitForm,
-		onClickCancelButton,
-	}: TemplateEditScreenProps) => {
-		if (isLoading) {
-			return (
-				<VStack fullWidth>
-					<PageTitleBar title="템플릿 수정" description="로딩 중..." />
-					<SectionSurface>
-						<Section>
-							<Section.Body>
-								<div className="flex items-center justify-center gap-2 p-8">
-									<Spinner size="sm" />
-									<span className="text-muted">로딩 중...</span>
-								</div>
-							</Section.Body>
-						</Section>
-					</SectionSurface>
-				</VStack>
-			);
-		}
-		if (isNotFound) {
-			return (
-				<VStack fullWidth>
-					<PageTitleBar
-						title="템플릿 수정"
-						description="템플릿을 찾을 수 없습니다."
-					/>
-					<SectionSurface>
-						<Section>
-							<Section.Body>
-								<div className="flex flex-col items-center justify-center gap-4 p-8">
-									<p className="text-muted">템플릿을 찾을 수 없습니다.</p>
-									<Button variant="flat" onPress={onClickCancelButton}>
-										목록으로
-									</Button>
-								</div>
-							</Section.Body>
-						</Section>
-					</SectionSurface>
-				</VStack>
-			);
-		}
+
+/**
+ * Template create/detail/edit route가 공유하는 screen입니다.
+ * route가 title, actions, readOnly을 결정합니다.
+ */
+export const TemplateEditScreen = observer((props: TemplateEditScreenProps) => {
+	const {
+		title,
+		description,
+		state,
+		readOnly = false,
+		isLoading = false,
+		notFound = false,
+		loadingMessage = "로딩 중...",
+		notFoundMessage = "템플릿을 찾을 수 없습니다.",
+		notFoundAction,
+		actions,
+		children,
+	} = props;
+
+	if (isLoading) {
 		return (
 			<VStack fullWidth>
-				<PageTitleBar
-					title="템플릿 수정"
-					description={
-						templateName
-							? `${templateName} 템플릿을 수정합니다.`
-							: "템플릿을 수정합니다."
-					}
-				/>
+				<PageTitleBar title={title} description={loadingMessage} />
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<TemplateForm
-								mode="edit"
-								formData={formData}
-								variables={variables}
-								onFormDataChange={onFormDataChange}
-								onVariablesChange={onVariablesChange}
-								onSubmit={onSubmitForm}
-								onCancel={onClickCancelButton}
-								isSubmitting={isSubmitting}
-								errors={errors}
-							/>
+							<div className="flex items-center justify-center gap-2 p-8">
+								<Spinner size="sm" />
+								<span className="text-muted">{loadingMessage}</span>
+							</div>
 						</Section.Body>
 					</Section>
 				</SectionSurface>
 			</VStack>
 		);
-	},
-);
+	}
+
+	if (notFound || !state) {
+		return (
+			<VStack fullWidth>
+				<PageTitleBar title={title} description={notFoundMessage} />
+				<SectionSurface>
+					<Section>
+						<Section.Body>
+							<div className="flex flex-col items-center justify-center gap-4 p-8">
+								<p className="text-muted">{notFoundMessage}</p>
+								{notFoundAction ?? <Button variant="flat">목록으로</Button>}
+							</div>
+						</Section.Body>
+					</Section>
+				</SectionSurface>
+			</VStack>
+		);
+	}
+
+	return (
+		<VStack fullWidth>
+			<PageTitleBar title={title} description={description} actions={actions} />
+			<SectionSurface>
+				<Section>
+					<Section.Body>
+						<VStack>
+							<Section>
+								<Section.Body>
+									<TemplateForm
+										state={state}
+										readOnly={readOnly}
+									/>
+								</Section.Body>
+							</Section>
+							{children}
+						</VStack>
+					</Section.Body>
+				</Section>
+			</SectionSurface>
+		</VStack>
+	);
+});

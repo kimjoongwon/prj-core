@@ -1,7 +1,7 @@
 "use client";
 
 import { Separator, Tooltip } from "@heroui/react";
-import { BookOpen, FileText, Paperclip, Send, Sparkles, X } from "lucide-react";
+import { BookOpen, FileText, Paperclip, Send, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useRef, useState } from "react";
 import { Button } from "../../input/Button/Button";
@@ -23,8 +23,6 @@ export interface Attachment {
 export interface InquiryReplyFormProps {
 	/** 폼 제출 핸들러 */
 	onSubmit: (content: string, attachments?: File[]) => void;
-	/** AI 초안 생성 핸들러 */
-	onGenerateDraft?: () => void;
 	/** 지식베이스 검색 핸들러 */
 	onSearchKnowledge?: () => void;
 	/** 파일 첨부 핸들러 */
@@ -35,8 +33,6 @@ export interface InquiryReplyFormProps {
 	onTypingStop?: () => void;
 	/** 전송 중 여부 */
 	isSending?: boolean;
-	/** AI 초안 생성 중 여부 */
-	isGeneratingDraft?: boolean;
 	/** 플레이스홀더 */
 	placeholder?: string;
 	/** 초안 내용 (외부에서 설정) */
@@ -53,29 +49,25 @@ const TYPING_DELAY = 500; // 타이핑 간주 지연 시간 (ms)
 
 /**
  * InquiryReplyForm 컴포넌트
- * 답변 작성 폼으로 텍스트 영역, AI 초안 생성, 지식베이스 참조, 파일 첨부, 전송 버튼을 포함합니다.
+ * 답변 작성 폼으로 텍스트 영역, 지식베이스 참조, 파일 첨부, 전송 버튼을 포함합니다.
  *
  * @example
  * ```tsx
  * <InquiryReplyForm
  *   onSubmit={handleSubmit}
- *   onGenerateDraft={handleGenerateDraft}
  *   onSearchKnowledge={handleSearchKnowledge}
  *   isSending={isSending}
- *   isGeneratingDraft={isGeneratingDraft}
  * />
  * ```
  */
 export const InquiryReplyForm = observer(
 	({
 		onSubmit,
-		onGenerateDraft,
 		onSearchKnowledge,
 		onAttachFile,
 		onTypingStart,
 		onTypingStop,
 		isSending = false,
-		isGeneratingDraft = false,
 		placeholder = "답변을 입력하세요...",
 		draftContent,
 		attachments,
@@ -158,7 +150,7 @@ export const InquiryReplyForm = observer(
 
 		const canSubmit =
 			currentContent.trim().length > 0 || selectedFiles.length > 0;
-		const isLoading = isSending || isGeneratingDraft;
+		const isLoading = isSending;
 
 		return (
 			<div className={`flex flex-col gap-3 ${className}`}>
@@ -260,25 +252,6 @@ export const InquiryReplyForm = observer(
 							</Tooltip.Trigger>
 							<Tooltip.Content>파일 첨부</Tooltip.Content>
 						</Tooltip>
-
-						{/* AI 초안 생성 */}
-						{onGenerateDraft && (
-							<Tooltip>
-								<Tooltip.Trigger>
-									<Button
-										size="sm"
-										variant="flat"
-										color="secondary"
-										startContent={<Sparkles className="size-4" />}
-										onClick={onGenerateDraft}
-										isLoading={isGeneratingDraft}
-									>
-										AI 초안
-									</Button>
-								</Tooltip.Trigger>
-								<Tooltip.Content>AI 초안 생성</Tooltip.Content>
-							</Tooltip>
-						)}
 
 						{/* 지식베이스 검색 */}
 						{onSearchKnowledge && (

@@ -1,17 +1,16 @@
 "use client";
 
+import { useCreateSession, useGetTimelineById } from "@cocrepo/api/core/timelines";
 import {
-	CreateSessionDtoRecurringDayOfWeek,
-	useCreateSession,
-	useGetTimelineById,
-} from "@cocrepo/api/core/timelines";
-import {
-	TimelineSessionCreateScreen,
+	Button,
+	TimelineSessionEditScreen,
+	type TimelineSessionFormState,
 	type TimelineSessionScreenCycleType,
 	type TimelineSessionScreenDayOfWeek,
 	type TimelineSessionScreenSessionType,
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
+import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -25,7 +24,7 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 	const { timelineId } = useParams<SessionNewPageParams>();
 	const router = useRouter();
 	const persistStore = usePersistStore();
-	const state = useLocalObservable(() => ({
+	const state = useLocalObservable<TimelineSessionFormState>(() => ({
 		name: "",
 		type: "ONE_TIME" as TimelineSessionScreenSessionType,
 		description: "",
@@ -33,57 +32,15 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 		endDateTime: "",
 		recurringDayOfWeek: null as TimelineSessionScreenDayOfWeek | null,
 		repeatCycleType: "" as TimelineSessionScreenCycleType | "",
-		errors: {} as Record<string, string>,
+		errors: {},
 	}));
 
 	const { data: timelineResponse } = useGetTimelineById(timelineId);
 	const timeline = timelineResponse?.data;
 	const { mutate: createSession, isPending } = useCreateSession();
 
-	const onClickCancelButton = () => {
-		router.push(`/timelines/${timelineId}` as Route);
-	};
-
-	const onChangeNameInput = (value: string) => {
-		state.name = value;
-		delete state.errors.name;
-	};
-
-	const onChangeTypeSelect = (value: string) => {
-		state.type = value as TimelineSessionScreenSessionType;
-		state.startDateTime = "";
-		state.endDateTime = "";
-		state.recurringDayOfWeek = null;
-		state.repeatCycleType = "";
-		state.errors = {};
-	};
-
-	const onChangeDescriptionTextArea = (value: string) => {
-		state.description = value;
-	};
-
-	const onChangeStartDateTimeInput = (value: string) => {
-		state.startDateTime = value;
-		delete state.errors.startDateTime;
-	};
-
-	const onChangeEndDateTimeInput = (value: string) => {
-		state.endDateTime = value;
-		delete state.errors.endDateTime;
-	};
-
-	const onChangeDayOfWeekSelect = (value: string) => {
-		state.recurringDayOfWeek = value as CreateSessionDtoRecurringDayOfWeek;
-		delete state.errors.recurringDayOfWeek;
-	};
-
-	const onChangeCycleTypeSelect = (value: string) => {
-		state.repeatCycleType = value as TimelineSessionScreenCycleType;
-		delete state.errors.repeatCycleType;
-	};
-
 	const onClickSubmitButton = () => {
-		const errors: Record<string, string> = {};
+		const errors: TimelineSessionFormState["errors"] = {};
 
 		if (!state.name.trim()) {
 			errors.name = "세션명을 입력해주세요.";
@@ -156,33 +113,36 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 	};
 
 	return (
-		<>
-			<TimelineSessionCreateScreen
-				descriptionText={
-					timeline?.name ? `${timeline.name}에 세션을 등록합니다.` : undefined
-				}
-				contentLanguageCode={persistStore.contentLanguageCode}
-				name={state.name}
-				type={state.type}
-				description={state.description}
-				startDateTime={state.startDateTime}
-				endDateTime={state.endDateTime}
-				recurringDayOfWeek={state.recurringDayOfWeek}
-				repeatCycleType={state.repeatCycleType}
-				errors={state.errors}
-				isSubmitPending={isPending}
-				isSubmitDisabled={!state.name.trim()}
-				onChangeNameInput={onChangeNameInput}
-				onChangeTypeSelect={onChangeTypeSelect}
-				onChangeDescriptionTextArea={onChangeDescriptionTextArea}
-				onChangeStartDateTimeInput={onChangeStartDateTimeInput}
-				onChangeEndDateTimeInput={onChangeEndDateTimeInput}
-				onChangeDayOfWeekSelect={onChangeDayOfWeekSelect}
-				onChangeCycleTypeSelect={onChangeCycleTypeSelect}
-				onClickCancelButton={onClickCancelButton}
-				onClickSubmitButton={onClickSubmitButton}
-			/>
-		</>
+		<TimelineSessionEditScreen
+			title="세션 등록"
+			description={
+				timeline?.name ? `${timeline.name}에 세션을 등록합니다.` : undefined
+			}
+			state={state}
+			contentLanguageCode={persistStore.contentLanguageCode}
+			actions={
+				<div className="flex gap-2">
+					<Button
+						variant="flat"
+						startContent={<ArrowLeft className="h-4 w-4" />}
+						onPress={() => {
+							router.push(`/timelines/${timelineId}` as Route);
+						}}
+					>
+						타임라인으로
+					</Button>
+					<Button
+						color="primary"
+						startContent={<Save className="h-4 w-4" />}
+						isLoading={isPending}
+						isDisabled={!state.name.trim()}
+						onPress={onClickSubmitButton}
+					>
+						등록
+					</Button>
+				</div>
+			}
+		/>
 	);
 });
 

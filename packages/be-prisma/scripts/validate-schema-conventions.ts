@@ -78,6 +78,33 @@ const aggregateRootByFile: Record<string, string> = {
 	"wallet/safe.prisma": "SafeWallet",
 };
 
+const usecaseAnchorByFile: Record<string, string> = {
+	"access-control/ability.prisma": "Ability",
+	"access-control/action.prisma": "Action",
+	"access-control/policy.prisma": "Policy",
+	"access-control/role.prisma": "Role",
+	"access-control/subject.prisma": "Subject",
+	"asset/asset.prisma": "Asset",
+	"asset/folder.prisma": "Folder",
+	"auth/email-verification.prisma": "EmailVerification",
+	"auth/security-policy.prisma": "SecurityPolicy",
+	"billing/payment.prisma": "Payment",
+	"content/content.prisma": "Content",
+	"content/service-document.prisma": "ServiceDocument",
+	"content/template.prisma": "Template",
+	"content/translation.prisma": "Translation",
+	"identity/space.prisma": "Space",
+	"identity/tenant-access-request.prisma": "TenantAccessRequest",
+	"identity/user.prisma": "User",
+	"inquiry/inquiry.prisma": "Inquiry",
+	"oidc/oidc-client.prisma": "OidcClient",
+	"scheduling/course.prisma": "Course",
+	"scheduling/reservation.prisma": "Reservation",
+	"scheduling/routine.prisma": "Routine",
+	"scheduling/task.prisma": "Task",
+	"scheduling/timeline.prisma": "Timeline",
+};
+
 const expectedOwner: Record<string, string> = {
 	Category: "taxonomy/category.prisma",
 	CategoryTypes: "taxonomy/category.prisma",
@@ -271,7 +298,7 @@ function getNames(text: string, kind: "model" | "enum"): string[] {
 
 function getMarkedModels(
 	text: string,
-	marker: "schema-owner" | "aggregate-root",
+	marker: "schema-owner" | "aggregate-root" | "usecase-anchor",
 ): string[] {
 	const pattern =
 		/((?:^\s*\/\/[^\n]*\n)+)\s*model\s+([A-Za-z_][A-Za-z0-9_]*)\s*\{/gm;
@@ -330,8 +357,10 @@ function main(): void {
 		);
 		const schemaOwnerModels = getMarkedModels(text, "schema-owner");
 		const aggregateRootModels = getMarkedModels(text, "aggregate-root");
+		const usecaseAnchorModels = getMarkedModels(text, "usecase-anchor");
 		const expectedSchemaOwner = schemaOwnerByFile[file];
 		const expectedAggregate = aggregateRootByFile[file];
+		const expectedUsecaseAnchor = usecaseAnchorByFile[file];
 
 		if (file !== baseFile && (generatorCount > 0 || datasourceCount > 0)) {
 			errors.push(
@@ -350,10 +379,12 @@ function main(): void {
 		}
 		if (
 			file === baseFile &&
-			(schemaOwnerModels.length > 0 || aggregateRootModels.length > 0)
+			(schemaOwnerModels.length > 0 ||
+				aggregateRootModels.length > 0 ||
+				usecaseAnchorModels.length > 0)
 		) {
 			errors.push(
-				`[${file}] must not declare @schema-owner: true or @aggregate-root: true`,
+				`[${file}] must not declare @schema-owner: true, @aggregate-root: true, or @usecase-anchor: true`,
 			);
 		}
 		if (file !== baseFile && schemaOwnerModels.length !== 1) {
@@ -410,6 +441,57 @@ function main(): void {
 		) {
 			errors.push(
 				`[${file}] @aggregate-root: true must also be the @schema-owner: true model`,
+			);
+		}
+		if (file !== baseFile && usecaseAnchorModels.length > 1) {
+			errors.push(
+				`[${file}] must contain at most 1 @usecase-anchor: true model, found ${usecaseAnchorModels.length}`,
+			);
+		}
+		if (
+			file !== baseFile &&
+			!expectedUsecaseAnchor &&
+			usecaseAnchorModels.length > 0
+		) {
+			errors.push(`[${file}] must not declare @usecase-anchor: true`);
+		}
+		if (
+			file !== baseFile &&
+			expectedUsecaseAnchor &&
+			usecaseAnchorModels.length !== 1
+		) {
+			errors.push(
+				`[${file}] must contain exactly 1 @usecase-anchor: true model, found ${usecaseAnchorModels.length}`,
+			);
+		}
+		if (
+			file !== baseFile &&
+			expectedUsecaseAnchor &&
+			usecaseAnchorModels.length === 1 &&
+			usecaseAnchorModels[0] !== expectedUsecaseAnchor
+		) {
+			errors.push(
+				`[${file}] usecase-anchor marker must be on ${expectedUsecaseAnchor} but found ${usecaseAnchorModels[0]}`,
+			);
+		}
+		if (
+			file !== baseFile &&
+			usecaseAnchorModels.length === 1 &&
+			schemaOwnerModels.length === 1 &&
+			usecaseAnchorModels[0] !== schemaOwnerModels[0]
+		) {
+			errors.push(
+				`[${file}] @usecase-anchor: true must also be the @schema-owner: true model`,
+			);
+		}
+		if (
+			file !== baseFile &&
+			usecaseAnchorModels.length === 1 &&
+			aggregateRootModels.length === 1 &&
+			usecaseAnchorModels[0] !== aggregateRootModels[0]
+		) {
+			errors.push(
+				`[${file}] @usecase-anchor: true must also be the @aggregate-root: true model`,
 			);
 		}
 
@@ -495,7 +577,7 @@ function main(): void {
 	}
 
 	console.log(
-		`[schema:check] OK (${files.length} files, ${declarations.size} declarations, schema-owner + aggregate-root semantics enforced)`,
+		`[schema:check] OK (${files.length} files, ${declarations.size} declarations, schema-owner + aggregate-root + usecase-anchor semantics enforced)`,
 	);
 }
 

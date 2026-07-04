@@ -14,7 +14,6 @@ import type { IdpAccountAccessGrantFormBootstrapDtoDefaultObject } from './idpAc
 import type { IdpAccountAccessGrantFormBootstrapDtoOptions } from './idpAccountAccessGrantFormBootstrapDtoOptions';
 import type { IdpAccountAccessGrantFormUiPathsDto } from './idpAccountAccessGrantFormUiPathsDto';
 import type { IdpAccountAccessGrantFormBootstrapDtoFieldMeta } from './idpAccountAccessGrantFormBootstrapDtoFieldMeta';
-import type { IdpAccountAccessGrantFormSchemaDto } from './idpAccountAccessGrantFormSchemaDto';
 
 export interface IdpAccountAccessGrantFormBootstrapDto {
   /** 폼 모드 */
@@ -27,6 +26,4 @@ export interface IdpAccountAccessGrantFormBootstrapDto {
   ui: IdpAccountAccessGrantFormUiPathsDto;
   /** 경로별 필드 메타 */
   fieldMeta: IdpAccountAccessGrantFormBootstrapDtoFieldMeta;
-  /** AI 스키마 목록 */
-  aiSchemas: IdpAccountAccessGrantFormSchemaDto[];
 }

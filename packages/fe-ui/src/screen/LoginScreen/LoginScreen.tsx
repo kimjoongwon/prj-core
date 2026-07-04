@@ -41,6 +41,8 @@ export interface LoginScreenProps {
  *     loginForm: {
  *       email: "",
  *       password: "",
+ *       fieldErrors: {},
+ *       errorMessage: null,
  *     },
  *     errorMessage: "",
  *   };
@@ -70,7 +72,7 @@ export const LoginScreen = observer(
 		caption,
 	}: LoginScreenProps) => {
 		const t = useT();
-		const onSubmitLoginScreen = (event: FormEvent<HTMLFormElement>) => {
+		const onSubmitLoginScreen = (event: FormEvent<HTMLElement>) => {
 			event.preventDefault();
 			if (isLoading) {
 				return;
@@ -78,7 +80,7 @@ export const LoginScreen = observer(
 			void onSubmitLoginForm();
 		};
 		return (
-			<form
+			<div
 				aria-busy={isLoading}
 				aria-label={t(title)}
 				className="w-full"
@@ -144,59 +146,63 @@ export const LoginScreen = observer(
 									</Typography.Paragraph>
 								</HStack>
 
-								<LoginForm key="form" state={state.loginForm} />
-
-								<div key="feedback" className="min-h-10">
-									{state.errorMessage ? (
-										<div
-											aria-live="polite"
-											className="rounded-xl border border-danger/30 bg-danger/10 px-3 py-2 text-danger"
-											role="alert"
-										>
-											<HStack alignItems="center">
-												<TriangleAlert
-													key="icon"
-													aria-hidden
-													className="size-4 shrink-0"
-												/>
-												<Typography
-													key="text"
-													type="body-sm"
-													className="text-danger font-medium leading-5"
-												>
-													{t(state.errorMessage)}
-												</Typography>
-											</HStack>
-										</div>
-									) : (
-										<Typography.Paragraph
-											color="muted"
-											size="xs"
-											className="leading-5 !text-foreground opacity-70"
-										>
-											입력한 계정으로 운영 콘솔 접근 권한을 확인합니다.
-										</Typography.Paragraph>
-									)}
-								</div>
-
-								<Button
-									key="submit"
-									type="submit"
-									color="primary"
-									className="h-12 w-full rounded-full shadow-md shadow-primary/15"
-									endContent={<ArrowRight aria-hidden className="size-4" />}
-									fullWidth
-									isDisabled={isLoading}
-									isLoading={isLoading}
-									size="lg"
+								<LoginForm
+									key="form"
+									aria-label={t(title)}
+									state={state.loginForm}
 								>
-									{t("로그인")}
-								</Button>
+									<div key="feedback" className="min-h-10">
+										{state.errorMessage ? (
+											<div
+												aria-live="polite"
+												className="rounded-xl border border-danger/30 bg-danger/10 px-3 py-2 text-danger"
+												role="alert"
+											>
+												<HStack alignItems="center">
+													<TriangleAlert
+														key="icon"
+														aria-hidden
+														className="size-4 shrink-0"
+													/>
+													<Typography
+														key="text"
+														type="body-sm"
+														className="text-danger font-medium leading-5"
+													>
+														{t(state.errorMessage)}
+													</Typography>
+												</HStack>
+											</div>
+										) : (
+											<Typography.Paragraph
+												color="muted"
+												size="xs"
+												className="leading-5 !text-foreground opacity-70"
+											>
+												입력한 계정으로 운영 콘솔 접근 권한을 확인합니다.
+											</Typography.Paragraph>
+										)}
+									</div>
+
+									<Button
+										key="submit"
+										type="submit"
+										color="primary"
+										className="h-12 w-full rounded-full shadow-md shadow-primary/15"
+										endContent={<ArrowRight aria-hidden className="size-4" />}
+										fullWidth
+										isDisabled={isLoading}
+										isLoading={isLoading}
+										size="lg"
+									>
+										{t("로그인")}
+									</Button>
+								</LoginForm>
 							</VStack>
 						</Section.Body>
 					</Section>
 				</SectionSurface>
-			</form>
+			</div>
 		);
 	},
 );

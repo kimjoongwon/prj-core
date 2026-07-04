@@ -1,40 +1,88 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { Button } from "../../input/Button/Button";
 import { TimelineEditScreen } from "./TimelineEditScreen";
 
-const defaultArgs = {
-	description: "스토리북에서 확인할 description 예시입니다.",
-	descriptionError: "스토리북에서 확인할 description error 예시입니다.",
-	isSubmitDisabled: false,
-	isSubmitPending: false,
-	nameError: "샘플 name error 1",
-	onChangeDescriptionTextArea: (..._args: never[]) => undefined,
-	onChangeNameInput: (..._args: never[]) => undefined,
-	onClickCancelButton: (..._args: never[]) => undefined,
-	onClickSubmitButton: (..._args: never[]) => undefined,
-	timelineName: "2026-04-14T09:00:00.000Z",
+const defaultState = {
+	name: "2026 봄 시즌",
+	description: "봄 시즌 운영 타임라인입니다.",
+	errors: {},
 };
 
-const busyArgs = {
-	...defaultArgs,
-	isSubmitPending: true,
-};
+const sessions = [
+	{
+		id: "session-1",
+		name: "오전 세션",
+		typeLabel: "일회성",
+		typeColor: "primary" as const,
+		programCount: 2,
+		isConnected: true,
+		startDateTime: "2026-04-14T09:00:00.000Z",
+		recurringDayLabel: "-",
+		repeatCycleLabel: "-",
+		createdAt: "2026-04-01T09:00:00.000Z",
+	},
+	{
+		id: "session-2",
+		name: "오후 세션",
+		typeLabel: "정기반복",
+		typeColor: "success" as const,
+		programCount: 0,
+		isConnected: false,
+		startDateTime: null,
+		recurringDayLabel: "월",
+		repeatCycleLabel: "주간",
+		createdAt: "2026-04-02T09:00:00.000Z",
+	},
+];
 
 const meta = {
 	title: "screen/TimelineEditScreen",
 	component: TimelineEditScreen,
-	parameters: {
-		layout: "fullscreen",
-	},
+	parameters: { layout: "fullscreen" },
 	tags: ["autodocs"],
-	args: defaultArgs as never,
+	args: {
+		title: "타임라인 수정",
+		description: "route가 전달한 상태로 타임라인을 편집합니다.",
+		state: defaultState,
+		actions: <Button color="primary">저장</Button>,
+	},
 } satisfies Meta<typeof TimelineEditScreen>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Edit: Story = {};
 
-export const Busy: Story = {
-	args: busyArgs as never,
+export const Create: Story = {
+	args: {
+		title: "타임라인 등록",
+		description: "새 타임라인을 등록합니다.",
+		state: {
+			name: "",
+			description: "",
+			errors: {},
+		},
+	},
+};
+
+export const Detail: Story = {
+	args: {
+		title: "타임라인 상세",
+		description: "세션 연결 상태를 함께 확인합니다.",
+		state: defaultState,
+		readOnly: true,
+		metadata: { createdAt: "2026-04-01T09:00:00.000Z" },
+		sessions,
+		totalSessions: 2,
+		connectedSessions: 1,
+		unconnectedSessions: 1,
+		actions: <Button variant="flat">수정</Button>,
+	},
+};
+
+export const Loading: Story = {
+	args: {
+		isLoading: true,
+	},
 };

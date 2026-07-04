@@ -2235,6 +2235,9 @@ importers:
       '@cocrepo/constant':
         specifier: workspace:*
         version: link:../common-constant
+      '@cocrepo/schema':
+        specifier: workspace:*
+        version: link:../common-schema
       '@cocrepo/toolkit':
         specifier: workspace:*
         version: link:../common-toolkit

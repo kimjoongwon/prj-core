@@ -24,14 +24,11 @@ const meta = {
 	parameters: { layout: "centered" },
 	tags: ["autodocs"],
 	args: {
-		mode: "create",
-		formData,
-		variables,
-		onFormDataChange: () => undefined,
-		onVariablesChange: () => undefined,
-		onSubmit: () => undefined,
-		onCancel: () => undefined,
-		isSubmitting: false,
+		state: {
+			formData,
+			variables,
+			errors: {},
+		},
 	},
 } satisfies Meta<typeof TemplateForm>;
 export default meta;
@@ -45,8 +42,24 @@ export const Create: Story = {
 };
 export const WithErrors: Story = {
 	args: {
-		errors: { name: "이름을 입력하세요.", content: "본문을 입력하세요." },
-		variableErrors: { 0: { name: "변수명을 확인하세요." } },
+		state: {
+			formData,
+			variables,
+			errors: { name: "이름을 입력하세요.", content: "본문을 입력하세요." },
+			variableErrors: { 0: { name: "변수명을 확인하세요." } },
+		},
+	},
+	render: Create.render,
+};
+
+export const ReadOnly: Story = {
+	args: {
+		state: {
+			formData,
+			variables,
+			errors: {},
+		},
+		readOnly: true,
 	},
 	render: Create.render,
 };

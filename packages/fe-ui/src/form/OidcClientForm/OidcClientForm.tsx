@@ -9,7 +9,7 @@ import type {
 	OidcClientLoginUiVariant,
 } from "@cocrepo/type";
 import { CheckboxGroup, FieldError, Label, ListBox } from "@heroui/react";
-import { RefreshCw, Save } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../input/Button/Button";
 import { Checkbox } from "../../input/Checkbox/Checkbox";
@@ -63,6 +63,8 @@ export interface OidcClientFormState {
 	redirectUriErrors: Record<number, string>;
 }
 
+export type OidcClientFormField = keyof OidcClientFormState;
+
 export const buildOidcClientLoginUi = (
 	state: OidcClientFormState,
 ): OidcClientLoginUi | null => {
@@ -100,18 +102,9 @@ export const buildOidcClientLoginUi = (
 };
 
 export interface OidcClientFormProps {
-	/** 생성/수정 모드 */
-	mode: "create" | "edit";
 	/** MobX observable 폼 상태 */
 	state: OidcClientFormState;
-	/** 제출 핸들러 */
-	onSubmit: () => void;
-	/** 취소/뒤로가기 핸들러 */
-	onCancel: () => void;
-	/** 제출 중 여부 */
-	isSubmitting?: boolean;
-	/** 수정 모드일 때 읽기 전용 Client ID */
-	readonlyClientId?: string;
+	readOnly?: boolean;
 }
 
 /** 랜덤 시크릿 생성 */
@@ -126,24 +119,14 @@ const generateSecret = (): string => {
 };
 
 /**
- * OIDC 클라이언트 등록/수정 폼 Widget
+ * OIDC 클라이언트 등록/수정 폼
  *
  * 기본정보 + 인증설정 + Redirect URIs + 추가정보 4개 섹션 블록으로 구성됩니다.
- * mode prop으로 create/edit를 분기합니다.
+ * create/edit/detail 판단은 route가 readOnly로 결정합니다.
  */
 export const OidcClientForm = observer(
-	({
-		mode,
-		state,
-		onSubmit,
-		onCancel,
-		isSubmitting = false,
-		readonlyClientId,
-	}: OidcClientFormProps) => {
-		const isEdit = mode === "edit";
-		const isPublic = isEdit
-			? state.tokenEndpointAuthMethod === "none"
-			: state.isPublic;
+	({ state, readOnly = false }: OidcClientFormProps) => {
+		const isPublic = state.tokenEndpointAuthMethod === "none" || state.isPublic;
 
 		const handleGenerateSecret = () => {
 			state.clientSecret = generateSecret();
@@ -188,38 +171,42 @@ export const OidcClientForm = observer(
 				<section>
 					<div className="space-y-6 p-6">
 						<h3 className="text-lg font-semibold">기본 정보</h3>
-						{isEdit ? (
-							<TextField
-								label="Client ID"
-								value={readonlyClientId ?? ""}
-								isReadOnly
-								isDisabled
-								description="Client ID는 수정할 수 없습니다."
-							/>
-						) : (
-							<TextField
-								label="Client ID"
-								placeholder="my-app-client"
-								value={state.clientId}
-								onValueChange={(v) => {
-									state.clientId = v;
-								}}
-								isInvalid={!!state.errors.clientId}
-								errorMessage={state.errors.clientId}
-								isRequired
-								description="영문 소문자, 숫자, 하이픈만 사용 가능합니다."
-							/>
-						)}
+						<TextField
+							label="Client ID"
+							placeholder="my-app-client"
+							value={state.clientId}
+							onValueChange={(v) => {
+								if (readOnly) {
+									return;
+								}
+								state.clientId = v;
+							}}
+							isInvalid={!!state.errors.clientId}
+							errorMessage={state.errors.clientId}
+							isRequired
+							isReadOnly={readOnly}
+							isDisabled={readOnly}
+							description={
+								!readOnly
+									? "영문 소문자, 숫자, 하이픈만 사용 가능합니다."
+									: "Client ID는 수정할 수 없습니다."
+							}
+						/>
 						<TextField
 							label="이름"
 							placeholder="My Application"
 							value={state.name}
 							onValueChange={(v) => {
+								if (readOnly) {
+									return;
+								}
 								state.name = v;
 							}}
 							isInvalid={!!state.errors.name}
 							errorMessage={state.errors.name}
 							isRequired
+							isReadOnly={readOnly}
+							isDisabled={readOnly}
 						/>
 						<div className="space-y-2">
 							<TextField
@@ -227,25 +214,22 @@ export const OidcClientForm = observer(
 								placeholder={
 									isPublic
 										? "Public 클라이언트는 Secret이 필요 없습니다"
-										: isEdit
-											? "변경하지 않으려면 비워두세요"
-											: "직접 입력하거나 자동 생성하세요"
+										: "직접 입력하거나 자동 생성하세요"
 								}
 								value={state.clientSecret}
 								onValueChange={(v) => {
+									if (readOnly) {
+										return;
+									}
 									state.clientSecret = v;
 								}}
 								isInvalid={!!state.errors.clientSecret}
 								errorMessage={state.errors.clientSecret}
-								isDisabled={isPublic}
-								description={
-									isEdit && !isPublic
-										? "비워두면 기존 Secret이 유지됩니다."
-										: undefined
-								}
+								isDisabled={isPublic || readOnly}
+								isReadOnly={readOnly}
 								endContent={
 									!isPublic &&
-									!isEdit && (
+									!readOnly && (
 										<Button
 											size="sm"
 											variant="flat"
@@ -257,14 +241,13 @@ export const OidcClientForm = observer(
 									)
 								}
 							/>
-							{!isEdit && (
-								<Checkbox
-									isSelected={state.isPublic}
-									onValueChange={handleTogglePublic}
-								>
-									Public 클라이언트 (Secret 없음)
-								</Checkbox>
-							)}
+							<Checkbox
+								isSelected={isPublic}
+								isDisabled={readOnly}
+								onValueChange={handleTogglePublic}
+							>
+								Public 클라이언트 (Secret 없음)
+							</Checkbox>
 						</div>
 					</div>
 				</section>
@@ -282,11 +265,14 @@ export const OidcClientForm = observer(
 									: null
 							}
 							onChange={(value) => {
+								if (readOnly) {
+									return;
+								}
 								if (value != null) {
 									state.tokenEndpointAuthMethod = String(value);
 								}
 							}}
-							isDisabled={!isEdit && isPublic}
+							isDisabled={isPublic || readOnly}
 							isRequired
 						>
 							{AUTH_METHOD_OPTIONS.map((opt) => (
@@ -302,10 +288,14 @@ export const OidcClientForm = observer(
 						<CheckboxGroup
 							value={state.grantTypes}
 							onChange={(v: string[]) => {
+								if (readOnly) {
+									return;
+								}
 								state.grantTypes = v;
 							}}
 							isInvalid={!!state.errors.grantTypes}
 							isRequired
+							isDisabled={readOnly}
 						>
 							<Label>Grant Types</Label>
 							{GRANT_TYPE_OPTIONS.map((opt) => (
@@ -320,10 +310,14 @@ export const OidcClientForm = observer(
 						<CheckboxGroup
 							value={state.responseTypes}
 							onChange={(v: string[]) => {
+								if (readOnly) {
+									return;
+								}
 								state.responseTypes = v;
 							}}
 							isInvalid={!!state.errors.responseTypes}
 							isRequired
+							isDisabled={readOnly}
 						>
 							<Label>Response Types</Label>
 							{RESPONSE_TYPE_OPTIONS.map((opt) => (
@@ -340,15 +334,21 @@ export const OidcClientForm = observer(
 							placeholder="openid profile email"
 							value={state.scope}
 							onValueChange={(v) => {
+								if (readOnly) {
+									return;
+								}
 								state.scope = v;
 							}}
 							isRequired
+							isReadOnly={readOnly}
+							isDisabled={readOnly}
 							description="공백으로 구분하여 입력합니다."
 						/>
 						<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 							<div className="rounded-xl border border-border p-4">
 								<Checkbox
 									isSelected={state.isFirstParty}
+									isDisabled={readOnly}
 									onValueChange={handleToggleFirstParty}
 								>
 									First-party 클라이언트
@@ -359,7 +359,7 @@ export const OidcClientForm = observer(
 							</div>
 							<div className="rounded-xl border border-border p-4">
 								<Checkbox
-									isDisabled={!state.isFirstParty}
+									isDisabled={!state.isFirstParty || readOnly}
 									isSelected={state.isFirstParty && state.skipConsent}
 									onValueChange={handleToggleSkipConsent}
 								>
@@ -383,9 +383,13 @@ export const OidcClientForm = observer(
 						<StringListInput
 							value={state.redirectUris}
 							onChange={(uris) => {
+								if (readOnly) {
+									return;
+								}
 								state.redirectUris = uris;
 							}}
 							errors={state.redirectUriErrors}
+							isReadOnly={readOnly}
 							placeholder="https://example.com/callback"
 							addLabel="URI 추가"
 							removeLabel="URI 삭제"
@@ -400,8 +404,13 @@ export const OidcClientForm = observer(
 							placeholder="/admin/auth/login 또는 https://app.example.com/auth/login"
 							value={state.loginUrl}
 							onValueChange={(v) => {
+								if (readOnly) {
+									return;
+								}
 								state.loginUrl = v;
 							}}
+							isReadOnly={readOnly}
+							isDisabled={readOnly}
 							description="`/api/v1/auth/oidc/login?clientId=...` 흐름에서 인증 실패 시 복귀할 로그인 화면입니다."
 						/>
 						<TextField
@@ -409,8 +418,13 @@ export const OidcClientForm = observer(
 							placeholder="/admin/dashboard 또는 https://app.example.com/dashboard"
 							value={state.defaultReturnTo}
 							onValueChange={(v) => {
+								if (readOnly) {
+									return;
+								}
 								state.defaultReturnTo = v;
 							}}
+							isReadOnly={readOnly}
+							isDisabled={readOnly}
 							description="callback에 returnTo가 없을 때 사용할 기본 복귀 경로입니다."
 						/>
 					</div>
@@ -426,6 +440,7 @@ export const OidcClientForm = observer(
 						</div>
 						<Checkbox
 							isSelected={!state.useCustomLoginUi}
+							isDisabled={readOnly}
 							onValueChange={handleToggleCommonLoginUi}
 						>
 							공통 로그인 사용
@@ -437,12 +452,16 @@ export const OidcClientForm = observer(
 									label="화면 Variant"
 									value={state.loginUiVariant}
 									onChange={(value) => {
+										if (readOnly) {
+											return;
+										}
 										if (value != null) {
 											state.loginUiVariant = String(
 												value,
 											) as OidcClientLoginUiVariant;
 										}
 									}}
+									isDisabled={readOnly}
 								>
 									{OIDC_CLIENT_LOGIN_UI_VARIANT_OPTIONS.map((opt) => (
 										<ListBox.Item
@@ -459,26 +478,41 @@ export const OidcClientForm = observer(
 									placeholder="Onora Mobile"
 									value={state.loginUiBrandLabel}
 									onValueChange={(v) => {
+										if (readOnly) {
+											return;
+										}
 										state.loginUiBrandLabel = v;
 									}}
+									isReadOnly={readOnly}
+									isDisabled={readOnly}
 								/>
 								<TextField
 									label="헤드라인"
 									placeholder="오노라 로그인"
 									value={state.loginUiHeadline}
 									onValueChange={(v) => {
+										if (readOnly) {
+											return;
+										}
 										state.loginUiHeadline = v;
 									}}
+									isReadOnly={readOnly}
+									isDisabled={readOnly}
 								/>
 								<TextField
 									label="브랜드 컬러"
 									placeholder="#2563eb"
 									value={state.loginUiBrandColor}
 									onValueChange={(v) => {
+										if (readOnly) {
+											return;
+										}
 										state.loginUiBrandColor = v;
 									}}
 									isInvalid={!!state.errors.loginUiBrandColor}
 									errorMessage={state.errors.loginUiBrandColor}
+									isReadOnly={readOnly}
+									isDisabled={readOnly}
 									description="HEX 색상만 입력합니다. 예: #2563eb"
 								/>
 								<div className="md:col-span-2">
@@ -487,18 +521,25 @@ export const OidcClientForm = observer(
 										placeholder="예약과 방문 일정을 계속 확인하려면 계정으로 로그인하세요."
 										value={state.loginUiDescription}
 										onValueChange={(v) => {
+											if (readOnly) {
+												return;
+											}
 											state.loginUiDescription = v;
 										}}
+										isReadOnly={readOnly}
+										isDisabled={readOnly}
 									/>
 								</div>
 								<Checkbox
 									isSelected={state.loginUiShowIntroPanel}
+									isDisabled={readOnly}
 									onValueChange={handleToggleLoginUiIntroPanel}
 								>
 									데스크톱 소개 영역 표시
 								</Checkbox>
 								<Checkbox
 									isSelected={state.loginUiMobileFullScreen}
+									isDisabled={readOnly}
 									onValueChange={handleToggleLoginUiMobileFullScreen}
 								>
 									모바일에서 로그인 카드 우선 표시
@@ -516,41 +557,42 @@ export const OidcClientForm = observer(
 							placeholder="https://example.com/logo.png"
 							value={state.logoUri}
 							onValueChange={(v) => {
+								if (readOnly) {
+									return;
+								}
 								state.logoUri = v;
 							}}
+							isReadOnly={readOnly}
+							isDisabled={readOnly}
 						/>
 						<TextField
 							label="정책 URI"
 							placeholder="https://example.com/privacy"
 							value={state.policyUri}
 							onValueChange={(v) => {
+								if (readOnly) {
+									return;
+								}
 								state.policyUri = v;
 							}}
+							isReadOnly={readOnly}
+							isDisabled={readOnly}
 						/>
 						<TextField
 							label="약관 URI"
 							placeholder="https://example.com/terms"
 							value={state.tosUri}
 							onValueChange={(v) => {
+								if (readOnly) {
+									return;
+								}
 								state.tosUri = v;
 							}}
+							isReadOnly={readOnly}
+							isDisabled={readOnly}
 						/>
 					</div>
 				</section>
-				{/* 버튼 영역 */}
-				<div className="flex justify-end gap-2">
-					<Button variant="flat" onPress={onCancel}>
-						취소
-					</Button>
-					<Button
-						color="primary"
-						startContent={<Save className="h-4 w-4" />}
-						onPress={onSubmit}
-						isLoading={isSubmitting}
-					>
-						{isEdit ? "저장" : "등록"}
-					</Button>
-				</div>
 			</div>
 		);
 	},

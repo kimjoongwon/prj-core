@@ -97,7 +97,6 @@ export class IdpAccountAggregate {
 				spaceId: { label: "Space" },
 				roleId: { label: "Role" },
 			},
-			aiSchemas: [],
 		};
 	}
 

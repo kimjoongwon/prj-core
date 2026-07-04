@@ -6,15 +6,16 @@ import {
 } from "@cocrepo/api/core/abilities";
 import { useGetActions } from "@cocrepo/api/core/actions";
 import { useGetSubjects } from "@cocrepo/api/core/subjects";
-import { AbilityFormScreen } from "@cocrepo/ui";
+import { AbilityEditScreen, type AbilityFormState, Button } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
+import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
 
 export default observer(function AbilityNewPage() {
 	const router = useRouter();
-	const state = useLocalObservable(() => ({
+	const state = useLocalObservable<AbilityFormState>(() => ({
 		name: "",
 		description: "",
 		subjectId: "",
@@ -49,7 +50,7 @@ export default observer(function AbilityNewPage() {
 		},
 	});
 
-	const onClickCreateButton = () => {
+	const onSubmit = () => {
 		if (!state.name.trim()) {
 			toast.danger("입력 오류", { description: "권한 이름을 입력해주세요." });
 			return;
@@ -65,96 +66,79 @@ export default observer(function AbilityNewPage() {
 			return;
 		}
 
-		const fieldsArray = state.fields
-			.split(",")
-			.map((field) => field.trim())
-			.filter((field) => field.length > 0);
-
-		let conditionsObject: Record<string, string | number | boolean> | undefined;
-		if (state.conditions.trim()) {
-			try {
-				conditionsObject = JSON.parse(state.conditions);
-			} catch {
-				toast.danger("입력 오류", {
-					description: "Conditions는 유효한 JSON 형식이어야 합니다.",
-				});
-				return;
-			}
+		const dto = toCreateAbilityDto(state);
+		if (!dto) {
+			return;
 		}
-
-		const dto: CreateAbilityDto = {
-			name: state.name.trim(),
-			description: state.description.trim() || undefined,
-			subjectId: state.subjectId,
-			actionId: state.actionId,
-			fields: fieldsArray,
-			conditions: conditionsObject,
-			inverted: state.inverted,
-			reason: state.inverted ? state.reason.trim() || undefined : undefined,
-		};
 
 		createAbility({ data: dto });
 	};
 
 	return (
-		<>
-			<AbilityFormScreen
-				status={isSubjectsLoading || isActionsLoading ? "loading" : "ready"}
-				mode="create"
-				title="권한 등록"
-				description="새로운 CASL 권한을 등록합니다."
-				backButtonLabel="목록으로"
-				submitButtonLabel="등록"
-				isSubmitting={isPending}
-				form={{
-					name: state.name,
-					description: state.description,
-					subjectId: state.subjectId,
-					actionId: state.actionId,
-					fields: state.fields,
-					conditions: state.conditions,
-					inverted: state.inverted,
-					reason: state.reason,
-				}}
-				subjects={(subjectsResponse?.data ?? []).map((subject) => ({
-					id: subject.id,
-					label: `${subject.displayName || subject.name}${subject.group ? ` (${subject.group})` : ""}`,
-				}))}
-				actions={(actionsResponse?.data ?? []).map((action) => ({
-					id: action.id,
-					label: `${action.displayName || action.name}${action.group ? ` (${action.group})` : ""}`,
-				}))}
-				onClickBackButton={() => {
-					router.push("/abilities" as Route);
-				}}
-				onClickSubmitButton={onClickCreateButton}
-				onChange={{
-					onChangeName: (value) => {
-						state.name = value;
-					},
-					onChangeDescription: (value) => {
-						state.description = value;
-					},
-					onChangeSubjectId: (value) => {
-						state.subjectId = value;
-					},
-					onChangeActionId: (value) => {
-						state.actionId = value;
-					},
-					onChangeFields: (value) => {
-						state.fields = value;
-					},
-					onChangeConditions: (value) => {
-						state.conditions = value;
-					},
-					onChangeInverted: (value) => {
-						state.inverted = value;
-					},
-					onChangeReason: (value) => {
-						state.reason = value;
-					},
-				}}
-			/>
-		</>
+		<AbilityEditScreen
+			title="Ability 등록"
+			description="새로운 CASL Ability를 등록합니다."
+			state={state}
+			subjects={(subjectsResponse?.data ?? []).map((subject) => ({
+				id: subject.id,
+				label: `${subject.displayName || subject.name}${subject.group ? ` (${subject.group})` : ""}`,
+			}))}
+			actions={(actionsResponse?.data ?? []).map((action) => ({
+				id: action.id,
+				label: `${action.displayName || action.name}${action.group ? ` (${action.group})` : ""}`,
+			}))}
+			isLoading={isSubjectsLoading || isActionsLoading}
+			pageActions={
+				<div className="flex gap-2">
+					<Button
+						variant="flat"
+						startContent={<ArrowLeft className="h-4 w-4" />}
+						onPress={() => {
+							router.push("/abilities" as Route);
+						}}
+					>
+						목록으로
+					</Button>
+					<Button
+						color="primary"
+						startContent={<Save className="h-4 w-4" />}
+						onPress={onSubmit}
+						isLoading={isPending}
+					>
+						등록
+					</Button>
+				</div>
+			}
+		/>
 	);
 });
+
+function toCreateAbilityDto(state: AbilityFormState): CreateAbilityDto | null {
+	const fieldsArray = state.fields
+		.split(",")
+		.map((field) => field.trim())
+		.filter((field) => field.length > 0);
+
+	let conditionsObject: Record<string, string | number | boolean> | undefined;
+	if (state.conditions.trim()) {
+		try {
+			conditionsObject = JSON.parse(state.conditions);
+		} catch {
+			toast.danger("입력 오류", {
+				description: "Conditions는 유효한 JSON 형식이어야 합니다.",
+			});
+			return null;
+		}
+	}
+
+	return {
+		name: state.name.trim(),
+		description: state.description.trim() || undefined,
+		subjectId: state.subjectId,
+		actionId: state.actionId,
+		fields: fieldsArray,
+		conditions: conditionsObject,
+		inverted: state.inverted,
+		reason: state.inverted ? state.reason.trim() || undefined : undefined,
+	};
+}

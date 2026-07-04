@@ -4,6 +4,7 @@ import { useFormField } from "@cocrepo/hook";
 import { tools } from "@cocrepo/toolkit";
 import type { MobxProps } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
+import { useFormValidationField } from "../../form/Form";
 import { TextField as PureTextField } from "./TextField";
 import type { TextFieldProps as PureTextFieldProps } from "./TextField.props";
 
@@ -32,15 +33,22 @@ const TextField = observer(<T extends object>(props: TextFieldProps<T>) => {
 		state,
 		path,
 		defaultValue,
+		errorMessage,
+		isDisabled,
+		isInvalid,
+		isReadOnly,
 		onBlur,
 		onChange,
+		onFocus,
 		onValueChange,
 		...rest
 	} = props;
+	const fieldPath = String(path);
 
 	const initialValue = tools.get(state, path);
 	const stateValue = initialValue === undefined ? defaultValue : initialValue;
 	const fallbackValue = stateValue === undefined ? "" : stateValue;
+	const validation = useFormValidationField(fieldPath);
 
 	const formField = useFormField({
 		value: fallbackValue as string | number,
@@ -50,11 +58,18 @@ const TextField = observer(<T extends object>(props: TextFieldProps<T>) => {
 
 	const handleChange = (nextValue: string | number) => {
 		formField.setValue(nextValue);
+		validation.validate("onChange", nextValue);
 		onChange?.(nextValue);
 	};
 
 	const handleBlur = (nextValue: string | number) => {
+		validation.validate("onBlur", nextValue);
 		onBlur?.(nextValue);
+	};
+
+	const handleFocus = (nextValue: string | number) => {
+		validation.validate("onFocus", nextValue);
+		onFocus?.(nextValue);
 	};
 
 	const handleValueChange = (nextValue: string) => {
@@ -64,9 +79,14 @@ const TextField = observer(<T extends object>(props: TextFieldProps<T>) => {
 	return (
 		<PureTextField
 			{...rest}
+			errorMessage={errorMessage ?? validation.errorMessage}
+			isDisabled={isDisabled ?? validation.readOnly}
+			isInvalid={isInvalid ?? validation.isInvalid}
+			isReadOnly={isReadOnly ?? validation.readOnly}
 			value={formField.state.value as string | number}
 			onBlur={handleBlur}
 			onChange={handleChange}
+			onFocus={handleFocus}
 			onValueChange={handleValueChange}
 		/>
 	);

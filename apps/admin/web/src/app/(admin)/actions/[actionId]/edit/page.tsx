@@ -5,7 +5,8 @@ import {
 	useGetActionById,
 	useUpdateAction,
 } from "@cocrepo/api/core/actions";
-import { ActionEditScreen, type ActionEditScreenFormState } from "@cocrepo/ui";
+import { ActionEditScreen, type ActionFormState, Button } from "@cocrepo/ui";
+import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -14,11 +15,13 @@ import { useEffect } from "react";
 export default observer(function ActionEditScreenRoute() {
 	const actionId = useParams<{ actionId: string }>().actionId;
 	const router = useRouter();
-	const state = useLocalObservable<ActionEditScreenFormState>(() => ({
+	const state = useLocalObservable<ActionFormState>(() => ({
+		name: "",
 		displayName: "",
 		description: "",
 		group: "",
 		order: 0,
+		errors: {},
 	}));
 	const { data: response, isLoading } = useGetActionById(actionId);
 	const { mutate: updateAction, isPending } = useUpdateAction({
@@ -33,6 +36,7 @@ export default observer(function ActionEditScreenRoute() {
 		if (!response?.data) {
 			return;
 		}
+		state.name = response.data.name;
 		state.displayName = response.data.displayName || "";
 		state.description = response.data.description || "";
 		state.group = response.data.group || "";
@@ -40,52 +44,60 @@ export default observer(function ActionEditScreenRoute() {
 	}, [response?.data, state]);
 
 	return (
-		<>
-			<ActionEditScreen
-				action={
-					response?.data
-						? {
-								actionId: response.data.id,
-								name: response.data.name,
-								displayName: response.data.displayName,
-								description: response.data.description,
-								group: response.data.group,
-								order: response.data.order,
-								isSystem: response.data.isSystem,
-							}
-						: undefined
-				}
-				formState={state}
-				isLoading={isLoading}
-				isSubmitting={isPending}
-				onClickBackButton={() => {
-					router.push(`/actions/${actionId}` as Route);
-				}}
-				onClickListButton={() => {
-					router.push("/actions" as Route);
-				}}
-				onChangeDisplayNameInput={(value) => {
-					state.displayName = value;
-				}}
-				onChangeDescriptionTextArea={(value) => {
-					state.description = value;
-				}}
-				onChangeGroupSelection={(value) => {
-					state.group = value;
-				}}
-				onChangeOrderInput={(value) => {
-					state.order = Number(value) || 0;
-				}}
-				onSubmit={() => {
-					const data: UpdateActionDto = {
-						displayName: state.displayName || undefined,
-						description: state.description || undefined,
-						group: state.group || undefined,
-						order: state.order,
-					};
-					updateAction({ id: actionId, data });
-				}}
-			/>
-		</>
+		<ActionEditScreen
+			title="Action 수정"
+			description={
+				response?.data?.isSystem
+					? "시스템 Action은 수정할 수 없습니다."
+					: response?.data
+						? `${response.data.displayName || response.data.name} Action을 수정합니다.`
+						: "Action을 찾을 수 없습니다."
+			}
+			state={response?.data ? state : undefined}
+			isLoading={isLoading}
+			readOnly={Boolean(response?.data?.isSystem)}
+			notFound={!isLoading && !response?.data}
+			notFoundAction={
+				<Button
+					variant="flat"
+					onPress={() => {
+						router.push("/actions" as Route);
+					}}
+				>
+					목록으로
+				</Button>
+			}
+			actions={
+				<div className="flex gap-2">
+					<Button
+						variant="light"
+						startContent={<ArrowLeft className="h-4 w-4" />}
+						onPress={() => {
+							router.push(`/actions/${actionId}` as Route);
+						}}
+					>
+						상세로 돌아가기
+					</Button>
+					{response?.data?.isSystem ? null : (
+						<Button
+							color="primary"
+							startContent={<Save className="h-4 w-4" />}
+							onPress={() => {
+								const data: UpdateActionDto = {
+									displayName: state.displayName || undefined,
+									description: state.description || undefined,
+									group: state.group || undefined,
+									order: state.order,
+								};
+								updateAction({ id: actionId, data });
+							}}
+							isLoading={isPending}
+						>
+							저장
+						</Button>
+					)}
+				</div>
+			}
+		/>
 	);
 });

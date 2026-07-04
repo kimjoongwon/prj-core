@@ -43,6 +43,7 @@ enum ServiceDocumentFormat {
 // @schema-type: ROOT
 // @schema-owner: true
 // @aggregate-root: true
+// @usecase-anchor: true
 // @description: 서비스에서 사용자에게 노출하는 약관/동의 문서의 버전 단위 관리 객체
 // @ownership: independent
 // @scope: global

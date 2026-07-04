@@ -79,10 +79,7 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | 타임라인 (Timelines) | `/timelines` | 학기/시즌 타임라인 관리 | 기획 중 |
 | 세션 (Sessions) | `/timelines/[timelineId]/sessions` | 세션 일정 관리 (타임라인 하위) | 기획 중 |
 | 프로그램 (Programs) | `/timelines/[timelineId]/sessions/[sessionId]/programs` | 수업 프로그램 관리 (세션 하위) - 강사·루틴·정원 연결 | 기획 중 |
-| Course | `/courses` | 무엇을 배우는지와 기본 수강 상품 정책 관리 | backend/API/Orval/admin route 구현 완료 |
-| CourseOffering | `/course-offerings` | 실제 개설된 과정/반/기수와 Timeline 연결 관리 | nested Course API + admin route 구현 완료 |
-| Enrollment | `/enrollments` | 결제 후 활성화되는 수강 신청 상태 관리 | nested Course API + admin route 구현 완료 |
-| CoursePass | `/course-passes` | 수강권의 유효기간과 잔여 예약 권리 관리 | nested Course API + admin route 구현 완료 |
+| Course aggregate | `/courses` | Course, CourseOffering, Enrollment, CoursePass를 Course aggregate root 화면에서 섹션으로 통합 관리 | backend/API/Orval/admin route 구현 완료 |
 | Payment | `/payments` | Course와 Product 등 여러 서비스 결제를 공통 원장으로 조회하고 subject/reference를 추적 | backend/API/Orval/admin route 구현 완료 |
 | 문의 (Inquiries) | `/inquiries` | 옴니채널 고객 문의 관리 (웹, 이메일, 채팅, SMS). AI 기반 자동 해결/응답 초안/감정 분석 지원 | 기획 완료 |
 | 문의 상세 | `/inquiries/[inquiryId]` | 문의 스레드 뷰, 메시지 작성, AI 응답 초안, 지식베이스 연동 | 기획 완료 |
@@ -228,17 +225,17 @@ Course 계열 Prisma/DTO/Entity/Repository/Service/UseCase/Controller/Module과 
 | Course | `POST /api/v1/courses` | `createCourse` | Course 등록 |
 | Course | `PATCH /api/v1/courses/:courseId` | `updateCourse` | Course 수정 |
 | Course | `DELETE /api/v1/courses/:courseId` | `deleteCourse` | soft delete, active offering 있으면 차단 |
-| CourseOffering | `GET /api/v1/courses/offerings` | `getCourseOfferings` | `/course-offerings` 목록, Course/Timeline/모집 상태 필터 |
+| CourseOffering | `GET /api/v1/courses/offerings` | `getCourseOfferings` | `/courses?section=offerings` 섹션, Course/Timeline/모집 상태 필터 |
 | CourseOffering | `GET /api/v1/courses/offerings/:courseOfferingId` | `getCourseOfferingById` | 개설 반 상세와 Timeline 연결 확인 |
 | CourseOffering | `POST /api/v1/courses/offerings` | `createCourseOffering` | Course + Timeline 연결로 개설 반 생성 |
 | CourseOffering | `PATCH /api/v1/courses/offerings/:courseOfferingId` | `updateCourseOffering` | 정원/모집 기간/상태 수정 |
 | CourseOffering | `DELETE /api/v1/courses/offerings/:courseOfferingId` | `deleteCourseOffering` | active enrollment 있으면 차단 |
-| Enrollment | `GET /api/v1/courses/enrollments` | `getEnrollments` | `/enrollments` 목록, 결제/수강 상태 필터 |
+| Enrollment | `GET /api/v1/courses/enrollments` | `getEnrollments` | `/courses?section=enrollments` 섹션, 결제/수강 상태 필터 |
 | Enrollment | `GET /api/v1/courses/enrollments/:enrollmentId` | `getEnrollmentById` | Enrollment와 CoursePass/Payment link 상세 |
 | Enrollment | `POST /api/v1/courses/enrollments` | `createEnrollment` | 결제 성공 또는 관리자 수동 등록으로 Enrollment 생성 |
 | Enrollment | `PATCH /api/v1/courses/enrollments/:enrollmentId` | `updateEnrollment` | 상태/결제 참조/유효기간 보정 |
 | Enrollment | `DELETE /api/v1/courses/enrollments/:enrollmentId` | `deleteEnrollment` | active CoursePass 사용권이 있으면 차단 |
-| CoursePass | `GET /api/v1/courses/passes` | `getCoursePasses` | `/course-passes` 목록, 만료/잔여 예약권 필터 |
+| CoursePass | `GET /api/v1/courses/passes` | `getCoursePasses` | `/courses?section=passes` 섹션, 만료/잔여 예약권 필터 |
 | CoursePass | `GET /api/v1/courses/passes/:coursePassId` | `getCoursePassById` | 수강권 상세와 Reservation 소비 내역 확인 |
 | CoursePass | `PATCH /api/v1/courses/passes/:coursePassId` | `updateCoursePass` | 만료/정지/잔여권 보정 |
 
@@ -257,11 +254,11 @@ Course 계열 Prisma/DTO/Entity/Repository/Service/UseCase/Controller/Module과 
 | Admin route | API endpoint | Orval hook |
 |-------------|--------------|------------|
 | `/courses` | `GET /api/v1/courses` | `useGetCourses` |
-| `/course-offerings` | `GET /api/v1/courses/offerings` | `useGetCourseOfferings` |
-| `/enrollments` | `GET /api/v1/courses/enrollments` | `useGetEnrollments` |
-| `/course-passes` | `GET /api/v1/courses/passes` | `useGetCoursePasses` |
+| `/courses?section=offerings` | `GET /api/v1/courses/offerings` | `useGetCourseOfferings` |
+| `/courses?section=enrollments` | `GET /api/v1/courses/enrollments` | `useGetEnrollments` |
+| `/courses?section=passes` | `GET /api/v1/courses/passes` | `useGetCoursePasses` |
 
-Admin route는 `_course-data.ts` mock을 사용하지 않습니다. `useCourseData`가 Orval 응답과 `isLoading`/`isFetching`/`isError` 상태를 `CourseScreen`의 row/query state 계약으로 변환하고, `CourseConsole`이 loading/refreshing/error/empty 상태를 렌더링합니다.
+Admin route는 `_course-data.ts` mock을 사용하지 않습니다. `useCourseData`가 Orval 응답과 `isLoading`/`isFetching`/`isError` 상태를 `CourseScreen`의 row/query state 계약으로 변환하고, `CourseScreen`이 loading/refreshing/error/empty 상태를 렌더링합니다.
 
 ## Payment 도메인 맥락
 
@@ -316,7 +313,7 @@ Tenant
 | 2 | COURSE-S2-BE-004 | `be-controller-builder`, `be-module-builder`, `be-bootstrap-integrator` | `/api/v1/courses`, `/api/v1/courses/offerings`, `/api/v1/courses/enrollments`, `/api/v1/courses/passes` controller/module and `apps/core/api/src/module/app.module.ts` wiring |
 | 2 | COURSE-S2-BE-005 | `be-service-builder`, `be-repository-builder`, `be-dto-builder` | Reservation create/list contract update for `coursePassId` and CoursePass entitlement validation |
 | 3 | COURSE-S3-API-001 | `fe-api-integrator` | `pnpm --filter=@cocrepo/api codegen:server`, generated `packages/fe-api/src/core/courses` and model exports |
-| 3 | COURSE-S3-FE-001 | `fe-api-integrator`, `fe-route-agent` | `apps/admin/web/src/app/(admin)/{courses,course-offerings,enrollments,course-passes}/page.tsx`, `useCourseData`, query state rendering |
+| 3 | COURSE-S3-FE-001 | `fe-api-integrator`, `fe-route-agent` | `apps/admin/web/src/app/(admin)/courses/page.tsx`, `useCourseData`, query state rendering |
 | 3 | COURSE-S3-QA-001 | `qa-fe-e2e-testing` | Course route sidecar E2E assertions for API-backed data and empty states |
 | 2 | PAYMENT-S2-BE-001 | `be-prisma-builder`, `be-entity-builder`, `be-dto-builder`, `be-repository-builder`, `be-service-builder`, `be-usecase-builder`, `be-controller-builder` | `packages/be-prisma/schema/billing/payment.prisma`, `packages/be-service/src/payment/payment.service.ts`, `apps/core/api/src/module/payments` |
 | 3 | PAYMENT-S3-API-001 | `fe-api-integrator` | `pnpm --filter=@cocrepo/api codegen:server`, generated `packages/fe-api/src/core/payments` |

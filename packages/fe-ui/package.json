@@ -110,6 +110,7 @@
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^11.1.2",
     "@cocrepo/constant": "workspace:*",
+    "@cocrepo/schema": "workspace:*",
     "@cocrepo/toolkit": "workspace:*",
     "@react-aria/ssr": "^3.9.10",
     "ckeditor5": "^48.0.1",

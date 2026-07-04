@@ -7,7 +7,7 @@ import {
 	InputGroup,
 	Label,
 } from "@heroui/react";
-import type { ChangeEventHandler, ComponentProps } from "react";
+import type { ChangeEventHandler, ComponentProps, FocusEventHandler } from "react";
 import { translateNode, useT } from "../../i18n";
 import type { TextFieldProps } from "./TextField.props";
 import { resolveTextFieldValue } from "./text-field-value.resolver";
@@ -34,6 +34,7 @@ export const TextField = (props: TextFieldProps) => {
 		onBlur,
 		onChange,
 		onClear: _onClear,
+		onFocus,
 		onValueChange,
 		placeholder,
 		size: _size,
@@ -85,6 +86,10 @@ export const TextField = (props: TextFieldProps) => {
 		onBlur?.(resolveTextFieldValue(event.target.value, fieldType));
 	};
 
+	const handleFocus: FocusEventHandler<HTMLInputElement> = (event) => {
+		onFocus?.(resolveTextFieldValue(event.target.value, fieldType));
+	};
+
 	return (
 		<HeroTextField
 			{...textFieldProps}
@@ -124,6 +129,7 @@ export const TextField = (props: TextFieldProps) => {
 						value={inputValue}
 						onBlur={handleBlur}
 						onChange={handleChange}
+						onFocus={handleFocus}
 					/>
 					{endContent ? (
 						<InputGroup.Suffix className={classNames?.suffix}>
@@ -143,6 +149,7 @@ export const TextField = (props: TextFieldProps) => {
 					variant={fieldVariant}
 					onBlur={handleBlur}
 					onChange={handleChange}
+					onFocus={handleFocus}
 				/>
 			)}
 			{translatedDescription ? (

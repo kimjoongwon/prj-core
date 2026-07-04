@@ -1,19 +1,14 @@
+import { UUIDField } from "@cocrepo/decorator";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 import { PolicyAbilityResponseDto } from "./policy-ability-response.dto";
 
 export class PolicyResponseDto {
-	@ApiProperty({
-		description: "Policy ID (UUID)",
-		example: "550e8400-e29b-41d4-a716-446655440000",
-	})
+	@UUIDField({ description: "Policy ID" })
 	@Expose()
 	id!: string;
 
-	@ApiProperty({
-		description: "Tenant ID",
-		example: "550e8400-e29b-41d4-a716-446655440099",
-	})
+	@UUIDField({ description: "Tenant ID" })
 	@Expose()
 	tenantId!: string;
 

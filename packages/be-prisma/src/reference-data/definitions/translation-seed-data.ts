@@ -3466,6 +3466,12 @@ const translationDefinitions = [
 		zh_CN: "必须是布尔值",
 		ja_JP: "真偽値である必要があります",
 	}),
+	defineTranslation("날짜 형식이 아닙니다", "검증", {
+		ko_KR: "날짜 형식이 아닙니다",
+		en_US: "Must be a date",
+		zh_CN: "必须是日期",
+		ja_JP: "日付である必要があります",
+	}),
 	defineTranslation("배열 형식이 아닙니다", "검증", {
 		ko_KR: "배열 형식이 아닙니다",
 		en_US: "Must be an array",
@@ -3490,17 +3496,59 @@ const translationDefinitions = [
 		zh_CN: "最多允许{{max}}个字符",
 		ja_JP: "最大{{max}}文字まで入力可能です",
 	}),
+	defineTranslation("최소 {{min}} 이상이어야 합니다", "검증", {
+		ko_KR: "최소 {{min}} 이상이어야 합니다",
+		en_US: "Must be at least {{min}}",
+		zh_CN: "必须至少为{{min}}",
+		ja_JP: "{{min}}以上である必要があります",
+	}),
+	defineTranslation("최대 {{max}} 이하여야 합니다", "검증", {
+		ko_KR: "최대 {{max}} 이하여야 합니다",
+		en_US: "Must be at most {{max}}",
+		zh_CN: "必须不超过{{max}}",
+		ja_JP: "{{max}}以下である必要があります",
+	}),
+	defineTranslation("최소 날짜 이후로 입력해주세요", "검증", {
+		ko_KR: "최소 날짜 이후로 입력해주세요",
+		en_US: "Please enter a date after the minimum date",
+		zh_CN: "请输入不早于最小日期的日期",
+		ja_JP: "最小日付以降の日付を入力してください",
+	}),
+	defineTranslation("최대 날짜 이전으로 입력해주세요", "검증", {
+		ko_KR: "최대 날짜 이전으로 입력해주세요",
+		en_US: "Please enter a date before the maximum date",
+		zh_CN: "请输入不晚于最大日期的日期",
+		ja_JP: "最大日付以前の日付を入力してください",
+	}),
 	defineTranslation("올바른 형식이 아닙니다", "검증", {
 		ko_KR: "올바른 형식이 아닙니다",
 		en_US: "Invalid format",
 		zh_CN: "格式不正确",
 		ja_JP: "正しい形式ではありません",
 	}),
+	defineTranslation("유효한 URL을 입력해주세요", "검증", {
+		ko_KR: "유효한 URL을 입력해주세요",
+		en_US: "Please enter a valid URL",
+		zh_CN: "请输入有效的网址",
+		ja_JP: "有効なURLを入力してください",
+	}),
+	defineTranslation("유효한 UUID를 입력해주세요", "검증", {
+		ko_KR: "유효한 UUID를 입력해주세요",
+		en_US: "Please enter a valid UUID",
+		zh_CN: "请输入有效的 UUID",
+		ja_JP: "有効なUUIDを入力してください",
+	}),
 	defineTranslation("허용된 값이 아닙니다", "검증", {
 		ko_KR: "허용된 값이 아닙니다",
 		en_US: "Invalid value",
 		zh_CN: "无效的值",
 		ja_JP: "許可されていない値です",
+	}),
+	defineTranslation("중복 없이 입력해주세요", "검증", {
+		ko_KR: "중복 없이 입력해주세요",
+		en_US: "Please enter unique values",
+		zh_CN: "请输入不重复的值",
+		ja_JP: "重複しない値を入力してください",
 	}),
 ] satisfies TranslationDefinition[];
 

@@ -52,12 +52,16 @@ export function DateField(
 
 	if (minDate) {
 		const date = typeof minDate === "function" ? minDate() : minDate;
-		decorators.push(MinDate(date));
+		decorators.push(
+			MinDate(date, { message: VALIDATION_MESSAGES.MIN_DATE }),
+		);
 	}
 
 	if (maxDate) {
 		const date = typeof maxDate === "function" ? maxDate() : maxDate;
-		decorators.push(MaxDate(date));
+		decorators.push(
+			MaxDate(date, { message: VALIDATION_MESSAGES.MAX_DATE }),
+		);
 	}
 
 	return applyDecorators(...decorators);

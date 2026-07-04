@@ -7,6 +7,7 @@
 // @schema-type: CATALOG
 // @schema-owner: true
 // @aggregate-root: true
+// @usecase-anchor: true
 // @description: 다국어 리소스를 제공하는 전역 번역 카탈로그
 // @ownership: independent
 // @scope: global

@@ -6,10 +6,10 @@ import { describe, expect, it } from "vitest";
 import { platformAdminAbilitySeedData } from "./abilities";
 import { subjectSeedData } from "./actions-subjects";
 import {
-	adminPlatformAdminAbilitySeedData,
 	adminCompanyManagerMenuAccessAbilitySeedData,
 	adminMenuSubjectSeedData,
 	adminPageSubjectSeedData,
+	adminPlatformAdminAbilitySeedData,
 	legacyAdminMenuSubjectNames,
 	legacyAdminPageSubjectNames,
 } from "./admin-permissions";

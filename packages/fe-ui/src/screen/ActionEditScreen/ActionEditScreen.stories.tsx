@@ -1,62 +1,52 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { Button } from "../../input/Button/Button";
 import { ActionEditScreen } from "./ActionEditScreen";
 
-const defaultArgs = {
-	action: {
-		actionId: "action-1",
-		description: "스토리북에서 확인할 description 예시입니다.",
-		displayName: "샘플 display name 1",
-		group: "샘플 group 1",
-		isSystem: false,
-		order: 1,
-	},
-	formState: {
-		description: "스토리북에서 확인할 description 예시입니다.",
-		displayName: "샘플 display name 1",
-		group: "샘플 group 1",
-		order: 1,
-	},
-	isLoading: false,
-	isSubmitting: false,
-	onChangeDescriptionTextArea: (..._args: never[]) => undefined,
-	onChangeDisplayNameInput: (..._args: never[]) => undefined,
-	onChangeGroupSelection: (..._args: never[]) => undefined,
-	onChangeOrderInput: (..._args: never[]) => undefined,
-	onClickBackButton: (..._args: never[]) => undefined,
-	onClickListButton: (..._args: never[]) => undefined,
-	onSubmit: (..._args: never[]) => undefined,
-};
-
-const loadingArgs = {
-	...defaultArgs,
-	isLoading: true,
-};
-
-const busyArgs = {
-	...defaultArgs,
-	isSubmitting: true,
+const defaultState = {
+	name: "read:masked:email",
+	description: "이메일 마스킹 값을 조회할 수 있습니다.",
+	displayName: "이메일 마스킹 읽기",
+	group: "visibility",
+	order: 10,
+	errors: {},
 };
 
 const meta = {
 	title: "screen/ActionEditScreen",
 	component: ActionEditScreen,
-	parameters: {
-		layout: "fullscreen",
-	},
+	parameters: { layout: "fullscreen" },
 	tags: ["autodocs"],
-	args: defaultArgs as never,
+	args: {
+		title: "Action 수정",
+		description: "route가 전달한 액션과 상태로 Action을 편집합니다.",
+		state: defaultState,
+		actions: <Button color="primary">저장</Button>,
+	},
 } satisfies Meta<typeof ActionEditScreen>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Edit: Story = {};
 
-export const Loading: Story = {
-	args: loadingArgs as never,
+export const Create: Story = {
+	args: {
+		title: "Action 등록",
+		description: "새로운 Action을 등록합니다.",
+		state: { ...defaultState, name: "", displayName: "", description: "" },
+	},
 };
 
-export const Busy: Story = {
-	args: busyArgs as never,
+export const Detail: Story = {
+	args: {
+		title: "Action 상세",
+		description: "Action 정보를 읽기 전용으로 확인합니다.",
+		readOnly: true,
+		actions: <Button variant="flat">수정</Button>,
+	},
+};
+
+export const Loading: Story = {
+	args: { isLoading: true },
 };

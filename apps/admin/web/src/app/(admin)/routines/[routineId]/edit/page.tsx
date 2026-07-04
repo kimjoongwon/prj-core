@@ -14,12 +14,15 @@ import {
 } from "@cocrepo/api/core/routines";
 import { type TaskDto, useGetTasks } from "@cocrepo/api/core/tasks";
 import {
+	Button,
 	type RoutineActivityFormItem,
 	RoutineEditScreen,
+	type RoutineFormState,
 	type RoutineTaskCandidate,
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
+import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -49,14 +52,16 @@ const AdminRoutinesEditRoute = observer(() => {
 	const queryClient = useQueryClient();
 	const [isEmptyActivitiesWarningOpen, setIsEmptyActivitiesWarningOpen] =
 		useState(false);
-	const state = useLocalObservable(() => ({
-		name: "",
-		label: "",
-		exerciseQuery: "",
-		activities: [] as RoutineActivityFormItem[],
-		errors: {} as Record<string, string>,
-		isInitialized: false,
-	}));
+	const state = useLocalObservable<RoutineFormState & { isInitialized: boolean }>(
+		() => ({
+			name: "",
+			label: "",
+			exerciseQuery: "",
+			activities: [],
+			errors: {},
+			isInitialized: false,
+		}),
+	);
 
 	const { data: response, isLoading } = useGetRoutine(routineId);
 	const routine = response?.data as RoutineDto | undefined;
@@ -161,7 +166,7 @@ const AdminRoutinesEditRoute = observer(() => {
 	};
 
 	const onClickSaveButton = () => {
-		const errors: Record<string, string> = {};
+		const errors: RoutineFormState["errors"] = {};
 		if (!state.name.trim()) {
 			errors.name = "루틴 이름을 입력해주세요.";
 		}
@@ -185,99 +190,49 @@ const AdminRoutinesEditRoute = observer(() => {
 	};
 
 	return (
-		<>
-			<RoutineEditScreen
-				routineName={routine?.name}
-				name={state.name}
-				label={state.label}
-				contentLanguageCode={persistStore.contentLanguageCode}
-				exerciseQuery={state.exerciseQuery}
-				activities={activities}
-				candidateTasks={candidateTasks}
-				nameError={state.errors.name}
-				labelError={state.errors.label}
-				activitiesError={state.errors.activities}
-				isLoading={isLoading}
-				isNotFound={!isLoading && !routine}
-				isTasksLoading={isTasksLoading}
-				isSubmitting={isPending}
-				isEmptyActivitiesWarningOpen={isEmptyActivitiesWarningOpen}
-				onChangeNameInput={(value) => {
-					state.name = value;
-					delete state.errors.name;
-				}}
-				onChangeLabelInput={(value) => {
-					state.label = value;
-					delete state.errors.label;
-				}}
-				onChangeExerciseQueryInput={(value) => {
-					state.exerciseQuery = value;
-				}}
-				onClickAddActivityButton={(taskId) => {
-					const task = tasks.find((item) => item.id === taskId);
-					if (!task?.exercise?.videoFileId) {
-						toast.warning("편성 불가 운동", {
-							description: "영상이 등록된 운동만 루틴에 추가할 수 있습니다.",
-						});
-						return;
-					}
-					if (
-						state.activities.some((activity) => activity.taskId === task.id)
-					) {
-						toast.warning("중복 운동", {
-							description: "이미 추가된 운동입니다.",
-						});
-						return;
-					}
-					state.activities.push({
-						taskId: task.id,
-						exerciseName: task.exercise.name,
-						isSchedulable: true,
-						imageFileId: task.exercise.imageFileId,
-						videoFileId: task.exercise.videoFileId,
-						repetitions: String(task.exercise.count || 1),
-						restTime: "0",
-						notes: "",
-					});
-					delete state.errors.activities;
-				}}
-				onChangeActivityInput={(taskId, field, value) => {
-					const activity = state.activities.find(
-						(item) => item.taskId === taskId,
-					);
-					if (!activity) {
-						return;
-					}
-					activity[field] = value;
-				}}
-				onClickRemoveActivityButton={(taskId) => {
-					state.activities = state.activities.filter(
-						(activity) => activity.taskId !== taskId,
-					);
-					delete state.errors.activities;
-				}}
-				onReorderActivities={(fromIndex, toIndex) => {
-					const nextActivities = state.activities.slice();
-					const [movedActivity] = nextActivities.splice(fromIndex, 1);
-					if (!movedActivity) {
-						return;
-					}
-					nextActivities.splice(toIndex, 0, movedActivity);
-					state.activities = nextActivities;
-				}}
-				onClickCancelButton={() => {
-					router.push(`/routines/${routineId}` as Route);
-				}}
-				onClickSaveButton={onClickSaveButton}
-				onCloseEmptyActivitiesWarningModal={() => {
-					setIsEmptyActivitiesWarningOpen(false);
-				}}
-				onClickConfirmEmptyActivitiesWarningButton={() => {
-					setIsEmptyActivitiesWarningOpen(false);
-					submitRoutine();
-				}}
-			/>
-		</>
+		<RoutineEditScreen
+			title="루틴 수정"
+			description={
+				routine?.name ? `${routine.name} 루틴을 수정합니다.` : "루틴을 수정합니다."
+			}
+			state={state}
+			contentLanguageCode={persistStore.contentLanguageCode}
+			activities={activities}
+			candidateTasks={candidateTasks}
+			isLoading={isLoading}
+			notFound={!isLoading && !routine}
+			isTasksLoading={isTasksLoading}
+			isSubmitting={isPending}
+			isEmptyActivitiesWarningOpen={isEmptyActivitiesWarningOpen}
+			actions={
+				<div className="flex gap-2">
+					<Button
+						variant="flat"
+						startContent={<ArrowLeft className="h-4 w-4" />}
+						onPress={() => {
+							router.push(`/routines/${routineId}` as Route);
+						}}
+					>
+						상세로
+					</Button>
+					<Button
+						color="primary"
+						startContent={<Save className="h-4 w-4" />}
+						isLoading={isPending}
+						onPress={onClickSaveButton}
+					>
+						저장
+					</Button>
+				</div>
+			}
+			onCloseEmptyActivitiesWarningModal={() => {
+				setIsEmptyActivitiesWarningOpen(false);
+			}}
+			onClickConfirmEmptyActivitiesWarningButton={() => {
+				setIsEmptyActivitiesWarningOpen(false);
+				submitRoutine();
+			}}
+		/>
 	);
 });
 

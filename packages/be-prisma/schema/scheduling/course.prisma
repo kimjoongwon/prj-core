@@ -51,6 +51,7 @@ enum TimelineProvisioningMode {
 // @schema-type: ROOT
 // @schema-owner: true
 // @aggregate-root: true
+// @usecase-anchor: true
 // @description: Space 범위에서 학습 상품의 기본 정책과 운영 집계를 관리하는 코스 루트
 // @ownership: independent
 // @scope: space

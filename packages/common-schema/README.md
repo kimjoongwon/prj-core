@@ -130,7 +130,7 @@ import { VALIDATION_MESSAGES } from '@cocrepo/schema';
 
 console.log(VALIDATION_MESSAGES.REQUIRED);        // '필수 입력 항목입니다.'
 console.log(VALIDATION_MESSAGES.EMAIL_FORMAT);    // '유효한 이메일 주소를 입력해주세요.'
-console.log(VALIDATION_MESSAGES.MIN_LENGTH(8));   // '최소 8자 이상 입력해주세요.'
+console.log(VALIDATION_MESSAGES.MIN_LENGTH);      // '최소 {{min}}자 이상 입력해주세요'
 ```
 
 ## 아키텍처

@@ -2,7 +2,6 @@ import { ApiProperty } from "@nestjs/swagger";
 
 import { IdpAccountAccessGrantFormFieldMetaDto } from "./idp-account-access-grant-form-field-meta.dto";
 import { IdpAccountAccessGrantFormOptionItemDto } from "./idp-account-access-grant-form-option-item.dto";
-import { IdpAccountAccessGrantFormSchemaDto } from "./idp-account-access-grant-form-schema.dto";
 import { IdpAccountAccessGrantFormUiPathsDto } from "./idp-account-access-grant-form-ui-paths.dto";
 
 export class IdpAccountAccessGrantFormBootstrapDto {
@@ -46,10 +45,4 @@ export class IdpAccountAccessGrantFormBootstrapDto {
 		},
 	})
 	fieldMeta!: Record<string, IdpAccountAccessGrantFormFieldMetaDto>;
-
-	@ApiProperty({
-		description: "AI 스키마 목록",
-		type: [IdpAccountAccessGrantFormSchemaDto],
-	})
-	aiSchemas!: IdpAccountAccessGrantFormSchemaDto[];
 }

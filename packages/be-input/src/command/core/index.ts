@@ -15,7 +15,6 @@ export * from "./create-task.input";
 export * from "./create-template.input";
 export * from "./create-timeline.input";
 export * from "./create-translation.input";
-export * from "./fill-inquiry-form.input";
 export * from "./find-tasks-query.input";
 export * from "./get-assets-query.input";
 export * from "./get-community-posts-query.input";

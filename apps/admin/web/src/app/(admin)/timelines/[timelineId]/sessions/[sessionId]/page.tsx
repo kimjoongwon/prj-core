@@ -11,9 +11,17 @@ import {
 	useGetSessionById,
 } from "@cocrepo/api/core/timelines";
 import { type UserDto, useGetUsers } from "@cocrepo/api/core/users";
-import { TimelineSessionDetailScreen } from "@cocrepo/ui";
-import { toast, useOverlayState } from "@heroui/react";
+import {
+	Button,
+	TimelineSessionEditScreen,
+	type TimelineSessionFormState,
+	type TimelineSessionScreenCycleType,
+	type TimelineSessionScreenDayOfWeek,
+	type TimelineSessionScreenSessionType,
+} from "@cocrepo/ui";
+import { Modal, toast, useOverlayState } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
+import { Edit, Trash2 } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -87,7 +95,8 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 	}));
 	const deleteSessionModal = useOverlayState();
 	const deleteProgramModal = useOverlayState();
-	const { data: sessionResponse } = useGetSessionById(timelineId, sessionId);
+	const { data: sessionResponse, isLoading: isSessionLoading } =
+		useGetSessionById(timelineId, sessionId);
 	const session = sessionResponse?.data as SessionDto | undefined;
 	const { data: programsResponse, refetch: refetchPrograms } = useGetPrograms(
 		timelineId,
@@ -188,34 +197,42 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 		program.previewExerciseNames && program.previewExerciseNames.length > 0
 			? program.previewExerciseNames.join(", ")
 			: "-";
+	const sessionState: TimelineSessionFormState | undefined = session
+		? {
+				name: session.name,
+				type: session.type as TimelineSessionScreenSessionType,
+				description: session.description ?? "",
+				startDateTime: session.startDateTime ?? "",
+				endDateTime: session.endDateTime ?? "",
+				recurringDayOfWeek:
+					(session.recurringDayOfWeek as TimelineSessionScreenDayOfWeek) ??
+					null,
+				repeatCycleType:
+					(session.repeatCycleType as TimelineSessionScreenCycleType) ?? "",
+				errors: {},
+			}
+		: undefined;
 
 	return (
 		<>
-			<TimelineSessionDetailScreen
+			<TimelineSessionEditScreen
 				title={session?.name ?? "세션 상세"}
-				descriptionText={session?.timeline?.name}
-				session={
-					session
-						? {
-								name: session.name,
-								type: session.type,
-								typeLabel: getSessionTypeLabel(session.type),
-								typeColor: getSessionTypeColor(session.type),
-								recurringDayLabel: getDayLabel(
-									session.recurringDayOfWeek ?? null,
-								),
-								repeatCycleLabel: getCycleLabel(
-									session.repeatCycleType ?? null,
-								),
-								startDateTime: session.startDateTime,
-								endDateTime: session.endDateTime,
-								description: session.description,
-								timelineName: session.timeline?.name,
-								timelineHref: `/timelines/${timelineId}` as Route,
-								createdAt: session.createdAt,
-							}
-						: undefined
-				}
+				description={session?.timeline?.name}
+				state={sessionState}
+				readOnly
+				isLoading={isSessionLoading}
+				notFound={!isSessionLoading && !session}
+				metadata={{
+					typeLabel: session ? getSessionTypeLabel(session.type) : undefined,
+					typeColor: session ? getSessionTypeColor(session.type) : undefined,
+					recurringDayLabel: getDayLabel(
+						session?.recurringDayOfWeek ?? null,
+					),
+					repeatCycleLabel: getCycleLabel(session?.repeatCycleType ?? null),
+					timelineName: session?.timeline?.name,
+					timelineHref: `/timelines/${timelineId}` as Route,
+					createdAt: session?.createdAt,
+				}}
 				programs={programs.map((program) => ({
 					id: program.id,
 					href: `/timelines/${timelineId}/sessions/${sessionId}/programs/${program.id}` as Route,
@@ -232,21 +249,93 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 				totalPrograms={totalPrograms}
 				resolvedPrograms={resolvedPrograms}
 				unresolvedPrograms={unresolvedPrograms}
-				isDeleteSessionModalOpen={deleteSessionModal.isOpen}
-				isDeleteProgramModalOpen={deleteProgramModal.isOpen}
-				deleteProgramTargetName={state.deleteProgramTargetName}
-				isDeleteSessionPending={isDeletingSession}
-				isDeleteProgramPending={isDeletingProgram}
-				onClickEditButton={onClickEditButton}
-				onClickDeleteSessionButton={onClickDeleteSessionButton}
-				onClickDeleteSessionConfirmButton={onClickDeleteSessionConfirmButton}
-				onClickDeleteSessionCancelButton={deleteSessionModal.close}
+				actions={
+					<div className="flex gap-2">
+						<Button
+							variant="flat"
+							startContent={<Edit className="h-4 w-4" />}
+							onPress={onClickEditButton}
+						>
+							수정
+						</Button>
+						<Button
+							color="danger"
+							variant="flat"
+							startContent={<Trash2 className="h-4 w-4" />}
+							onPress={onClickDeleteSessionButton}
+						>
+							삭제
+						</Button>
+					</div>
+				}
 				onClickCreateProgramButton={onClickCreateProgramButton}
 				onClickEditProgramButton={onClickEditProgramButton}
 				onClickDeleteProgramButton={onClickDeleteProgramButton}
-				onClickDeleteProgramConfirmButton={onClickDeleteProgramConfirmButton}
-				onClickDeleteProgramCancelButton={deleteProgramModal.close}
 			/>
+			<Modal state={deleteSessionModal}>
+				<Modal.Backdrop>
+					<Modal.Container>
+						<Modal.Dialog>
+							<Modal.Header>세션 삭제</Modal.Header>
+							<Modal.Body>
+								<p>
+									<strong>{session?.name}</strong> 세션을 삭제하시겠습니까?
+								</p>
+								<p className="mt-2 text-sm text-danger">
+									프로그램이 연결된 세션은 삭제할 수 없습니다.
+								</p>
+							</Modal.Body>
+							<Modal.Footer>
+								<Button
+									variant="flat"
+									onPress={deleteSessionModal.close}
+									isDisabled={isDeletingSession}
+								>
+									취소
+								</Button>
+								<Button
+									color="danger"
+									onPress={onClickDeleteSessionConfirmButton}
+									isLoading={isDeletingSession}
+								>
+									삭제
+								</Button>
+							</Modal.Footer>
+						</Modal.Dialog>
+					</Modal.Container>
+				</Modal.Backdrop>
+			</Modal>
+			<Modal state={deleteProgramModal}>
+				<Modal.Backdrop>
+					<Modal.Container>
+						<Modal.Dialog>
+							<Modal.Header>프로그램 삭제</Modal.Header>
+							<Modal.Body>
+								<p>
+									<strong>{state.deleteProgramTargetName}</strong> 프로그램을
+									삭제하시겠습니까?
+								</p>
+							</Modal.Body>
+							<Modal.Footer>
+								<Button
+									variant="flat"
+									onPress={deleteProgramModal.close}
+									isDisabled={isDeletingProgram}
+								>
+									취소
+								</Button>
+								<Button
+									color="danger"
+									onPress={onClickDeleteProgramConfirmButton}
+									isLoading={isDeletingProgram}
+								>
+									삭제
+								</Button>
+							</Modal.Footer>
+						</Modal.Dialog>
+					</Modal.Container>
+				</Modal.Backdrop>
+			</Modal>
 		</>
 	);
 });

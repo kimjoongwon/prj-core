@@ -6,18 +6,19 @@ import {
 	useGetTaskExercise,
 	useGetTaskRoutines,
 } from "@cocrepo/api/core/tasks";
-import { TaskExerciseDetailScreen } from "@cocrepo/ui";
-import { toast, useOverlayState } from "@heroui/react";
+import { Button, TaskExerciseEditScreen } from "@cocrepo/ui";
+import { Modal, toast, useOverlayState } from "@heroui/react";
+import { Pencil, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 
-type TaskExerciseDetailScreenParams = {
+type TaskExerciseRouteParams = {
 	taskId: string;
 };
 
 const AdminTasksTaskIdExerciseRoute = observer(() => {
-	const { taskId } = useParams<TaskExerciseDetailScreenParams>();
+	const { taskId } = useParams<TaskExerciseRouteParams>();
 	const router = useRouter();
 	const deleteModal = useOverlayState();
 
@@ -59,41 +60,86 @@ const AdminTasksTaskIdExerciseRoute = observer(() => {
 
 	return (
 		<>
-			<TaskExerciseDetailScreen
-				taskId={taskId}
-				exercise={
-					exercise
-						? {
-								name: exercise.name,
-								duration: exercise.duration,
-								count: exercise.count,
-								description: exercise.description,
-								imageFileId: exercise.imageFileId,
-								imageAssetHref: exercise.imageFileId
-									? (`/assets/${exercise.imageFileId}` as Route)
-									: undefined,
-								videoFileId: exercise.videoFileId,
-								videoAssetHref: exercise.videoFileId
-									? (`/assets/${exercise.videoFileId}` as Route)
-									: undefined,
-								createdAt: exercise.createdAt,
-								updatedAt: exercise.updatedAt,
-								tenantId: exercise.task?.tenantId,
-							}
-						: undefined
-				}
-				routines={routines}
-				isSchedulable={Boolean(exercise?.videoFileId)}
+			<TaskExerciseEditScreen
+				title={exercise?.name ?? "운동 정보"}
+				description="태스크에 연결된 운동 detail입니다."
+				state={{
+					name: exercise?.name ?? "",
+					durationMin: Math.floor((exercise?.duration ?? 0) / 60),
+					durationSec: (exercise?.duration ?? 0) % 60,
+					count: exercise?.count ?? 1,
+					description: exercise?.description ?? "",
+					imageFileId: exercise?.imageFileId ?? "",
+					videoFileId: exercise?.videoFileId ?? "",
+					errors: {},
+				}}
+				readOnly
+				metadata={{
+					taskId,
+					tenantId: exercise?.task?.tenantId,
+					createdAt: exercise?.createdAt,
+					updatedAt: exercise?.updatedAt,
+					routines,
+				}}
 				isLoading={isLoading}
 				isNotFound={!isLoading && !exercise}
-				isDeleteModalOpen={deleteModal.isOpen}
-				isDeletePending={isDeleting}
-				onClickBackButton={onClickBackButton}
-				onClickEditButton={onClickEditButton}
-				onClickDeleteButton={deleteModal.open}
-				onClickDeleteConfirmButton={onClickDeleteConfirmButton}
-				onClickDeleteCancelButton={deleteModal.close}
+				isSubmitPending={false}
+				actions={
+					<div className="flex gap-2">
+						<Button
+							variant="flat"
+							startContent={<Pencil className="size-4" />}
+							onPress={onClickEditButton}
+						>
+							수정
+						</Button>
+						<Button
+							color="danger"
+							variant="flat"
+							startContent={<Trash2 className="size-4" />}
+							onPress={deleteModal.open}
+							isDisabled={routines.length > 0}
+						>
+							삭제
+						</Button>
+					</div>
+				}
+				onClickCancelButton={onClickBackButton}
 			/>
+			<Modal state={deleteModal}>
+				<Modal.Backdrop>
+					<Modal.Container>
+						<Modal.Dialog>
+							<Modal.Header>태스크 삭제</Modal.Header>
+							<Modal.Body>
+								<p>
+									<strong>{exercise?.name ?? "운동"}</strong> 운동 detail이
+									포함된 태스크를 삭제하시겠습니까?
+								</p>
+								<p className="mt-2 text-sm text-danger">
+									이 작업은 되돌릴 수 없습니다.
+								</p>
+							</Modal.Body>
+							<Modal.Footer>
+								<Button
+									variant="flat"
+									onPress={deleteModal.close}
+									isDisabled={isDeleting}
+								>
+									취소
+								</Button>
+								<Button
+									color="danger"
+									onPress={onClickDeleteConfirmButton}
+									isLoading={isDeleting}
+								>
+									삭제
+								</Button>
+							</Modal.Footer>
+						</Modal.Dialog>
+					</Modal.Container>
+				</Modal.Backdrop>
+			</Modal>
 		</>
 	);
 });

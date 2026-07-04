@@ -2,7 +2,6 @@ import {
 	AssignInquiryCommand,
 	CreateInquiryCommand,
 	DeleteInquiryCommand,
-	FillInquiryFormWithAiQuery,
 	GetInquiryByIdQuery,
 	GetInquiryCreateFormBootstrapQuery,
 	GetInquiryMessagesQuery,
@@ -24,16 +23,11 @@ import {
 } from "@cocrepo/decorator";
 import {
 	CreateInquiryDto,
-	FillInquiryFormRequestDto,
-	FillInquiryFormResponseDto,
-	InquiryAiFormPatchDto,
 	InquiryCreateUpdateFormBootstrapDto,
 	InquiryDetailDto,
 	InquiryDto,
-	InquiryFormFieldAiMetaDto,
 	InquiryFormFieldMetaDto,
 	InquiryFormOptionItemDto,
-	InquiryFormSchemaDto,
 	InquiryFormUiPathsDto,
 	InquiryMessageDto,
 	InquiryMessagePaginationMetaDto,
@@ -71,10 +65,7 @@ import {
 @ApiExtraModels(
 	InquiryFormOptionItemDto,
 	InquiryFormUiPathsDto,
-	InquiryFormFieldAiMetaDto,
 	InquiryFormFieldMetaDto,
-	InquiryFormSchemaDto,
-	InquiryAiFormPatchDto,
 )
 @Controller()
 export class InquiriesController {
@@ -144,7 +135,7 @@ export class InquiriesController {
 		operationId: "getCreateInquiryForm",
 		summary: "문의 생성 폼 bootstrap 조회",
 		description:
-			"문의 생성 화면의 초기 렌더링에 필요한 defaultObject/options/ui/fieldMeta/aiSchemas를 반환합니다.",
+			"문의 생성 화면의 초기 렌더링에 필요한 defaultObject/options/ui/fieldMeta를 반환합니다.",
 	})
 	@ApiAuth()
 	@ApiErrors(
@@ -163,7 +154,7 @@ export class InquiriesController {
 		operationId: "getUpdateInquiryForm",
 		summary: "문의 수정 폼 bootstrap 조회",
 		description:
-			"문의 수정 화면의 초기 렌더링에 필요한 defaultObject/options/ui/fieldMeta/aiSchemas를 반환합니다.",
+			"문의 수정 화면의 초기 렌더링에 필요한 defaultObject/options/ui/fieldMeta를 반환합니다.",
 	})
 	@ApiAuth()
 	@ApiParam({
@@ -185,37 +176,6 @@ export class InquiriesController {
 		return this.queryBus.execute(
 			new GetInquiryUpdateFormBootstrapQuery(inquiryId),
 		);
-	}
-
-	@Post("form/ai-fill")
-	@HttpCode(HttpStatus.OK)
-	@ApiOperation({
-		operationId: "fillInquiryFormWithAi",
-		summary: "문의 폼 AI 채움",
-		description:
-			"선택한 aiSchemas/path와 현재 폼 상태를 기반으로 서버에서 patch를 생성하여 반환합니다.",
-	})
-	@ApiAuth()
-	@ApiBody({
-		type: FillInquiryFormRequestDto,
-		description: "문의 폼 AI 채움 요청",
-	})
-	@ApiErrors(
-		{ status: 400, message: "유효하지 않은 AI 스키마 키입니다" },
-		{
-			status: 400,
-			message: "AI 채움이 허용되지 않은 path가 포함되어 있습니다",
-		},
-		{ status: 401, message: USER_ERRORS.USER_NOT_FOUND },
-		{ status: 401, message: USER_ERRORS.SPACE_NOT_SELECTED },
-		500,
-	)
-	@ApiResponseEntity(FillInquiryFormResponseDto, HttpStatus.OK)
-	@ResponseMessage("문의 폼 AI 채움 성공")
-	async fillInquiryFormWithAi(
-		@Body() dto: FillInquiryFormRequestDto,
-	): Promise<FillInquiryFormResponseDto> {
-		return this.queryBus.execute(new FillInquiryFormWithAiQuery(dto));
 	}
 
 	@Get(":inquiryId")

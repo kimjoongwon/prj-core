@@ -74,6 +74,7 @@ export {
 	CustomValidationPipe,
 	FileSizeValidationPipe,
 	ParseContentPipe,
+	RouteKeyToUuidPipe,
 } from "./pipe";
 // Providers
 export { GeneratorProvider } from "./provider";

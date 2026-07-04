@@ -15,6 +15,8 @@ const meta = {
 			loginForm: {
 				email: "",
 				password: "",
+				fieldErrors: {},
+				errorMessage: null,
 			},
 			errorMessage: "",
 		},
@@ -34,7 +36,10 @@ class LoginScreenStoryState implements LoginScreenState {
 	errorMessage: string;
 
 	constructor(state: LoginScreenState) {
-		this.loginForm = { ...state.loginForm };
+		this.loginForm = {
+			...state.loginForm,
+			fieldErrors: { ...state.loginForm.fieldErrors },
+		};
 		this.errorMessage = state.errorMessage;
 		makeAutoObservable(this, {}, { autoBind: true });
 	}
@@ -66,6 +71,8 @@ export const ServerError: Story = {
 			loginForm: {
 				email: "ops@example.com",
 				password: "",
+				fieldErrors: {},
+				errorMessage: null,
 			},
 			errorMessage: "이메일 또는 비밀번호를 다시 확인해주세요.",
 		},
@@ -79,6 +86,8 @@ export const Loading: Story = {
 			loginForm: {
 				email: "ops@example.com",
 				password: "password123!",
+				fieldErrors: {},
+				errorMessage: null,
 			},
 			errorMessage: "",
 		},
@@ -95,6 +104,8 @@ export const LongContent: Story = {
 			loginForm: {
 				email: "operations.manager.with.long.name@example-reservations.com",
 				password: "password123!",
+				fieldErrors: {},
+				errorMessage: null,
 			},
 			errorMessage:
 				"로그인 요청을 처리하지 못했습니다. 네트워크 상태를 확인한 뒤 다시 시도해주세요.",
@@ -109,6 +120,8 @@ export const NarrowViewport: Story = {
 			loginForm: {
 				email: "ops@example.com",
 				password: "",
+				fieldErrors: {},
+				errorMessage: null,
 			},
 			errorMessage: "",
 		},

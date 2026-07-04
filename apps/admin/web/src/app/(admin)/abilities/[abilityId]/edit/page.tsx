@@ -7,8 +7,9 @@ import {
 } from "@cocrepo/api/core/abilities";
 import { useGetActions } from "@cocrepo/api/core/actions";
 import { useGetSubjects } from "@cocrepo/api/core/subjects";
-import { AbilityFormScreen } from "@cocrepo/ui";
+import { AbilityEditScreen, type AbilityFormState, Button } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
+import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -17,7 +18,7 @@ import { useEffect } from "react";
 export default observer(function AbilityEditPage() {
 	const abilityId = useParams().abilityId as string;
 	const router = useRouter();
-	const state = useLocalObservable(() => ({
+	const state = useLocalObservable<AbilityFormState>(() => ({
 		name: "",
 		description: "",
 		subjectId: "",
@@ -26,7 +27,6 @@ export default observer(function AbilityEditPage() {
 		conditions: "",
 		inverted: false,
 		reason: "",
-		isInitialized: false,
 	}));
 
 	const { data: response, isLoading } = useGetAbilityById(abilityId);
@@ -53,22 +53,22 @@ export default observer(function AbilityEditPage() {
 	});
 
 	useEffect(() => {
-		if (ability && !state.isInitialized) {
-			state.name = ability.name;
-			state.description = ability.description || "";
-			state.subjectId = ability.subjectId;
-			state.actionId = ability.actionId;
-			state.fields = ability.fields.join(", ");
-			state.conditions = ability.conditions
-				? JSON.stringify(ability.conditions, null, 2)
-				: "";
-			state.inverted = ability.inverted;
-			state.reason = ability.reason || "";
-			state.isInitialized = true;
+		if (!ability) {
+			return;
 		}
+		state.name = ability.name;
+		state.description = ability.description || "";
+		state.subjectId = ability.subjectId;
+		state.actionId = ability.actionId;
+		state.fields = ability.fields.join(", ");
+		state.conditions = ability.conditions
+			? JSON.stringify(ability.conditions, null, 2)
+			: "";
+		state.inverted = ability.inverted;
+		state.reason = ability.reason || "";
 	}, [ability, state]);
 
-	const onClickSaveButton = () => {
+	const onSubmit = () => {
 		if (!state.description.trim() && !state.subjectId && !state.actionId) {
 			toast.danger("입력 오류", {
 				description: "최소 하나 이상의 필드를 수정해주세요.",
@@ -76,124 +76,93 @@ export default observer(function AbilityEditPage() {
 			return;
 		}
 
-		const fieldsArray = state.fields
-			.split(",")
-			.map((field) => field.trim())
-			.filter((field) => field.length > 0);
-
-		let conditionsObject: Record<string, string | number | boolean> | undefined;
-		if (state.conditions.trim()) {
-			try {
-				conditionsObject = JSON.parse(state.conditions);
-			} catch {
-				toast.danger("입력 오류", {
-					description: "Conditions는 유효한 JSON 형식이어야 합니다.",
-				});
-				return;
-			}
+		const dto = toUpdateAbilityDto(state);
+		if (!dto) {
+			return;
 		}
-
-		const dto: UpdateAbilityDto = {
-			description: state.description.trim() || undefined,
-			subjectId: state.subjectId || undefined,
-			actionId: state.actionId || undefined,
-			fields: fieldsArray,
-			conditions: conditionsObject,
-			inverted: state.inverted,
-			reason: state.inverted ? state.reason.trim() || undefined : undefined,
-		};
 
 		updateAbility({ id: abilityId, data: dto });
 	};
 
-	if (isLoading || isSubjectsLoading || isActionsLoading) {
-		return (
-			<>
-				<AbilityFormScreen
-					status="loading"
-					mode="edit"
-					title="권한 수정"
-					description="권한 정보를 수정합니다."
-				/>
-			</>
-		);
-	}
-
-	if (!ability) {
-		return (
-			<>
-				<AbilityFormScreen
-					status="not_found"
-					mode="edit"
-					title="권한 수정"
-					description="권한 정보를 수정합니다."
-					onClickNotFoundBackButton={() => {
+	return (
+		<AbilityEditScreen
+			title="Ability 수정"
+			description={
+				ability
+					? `${ability.name} Ability를 수정합니다.`
+					: "Ability를 찾을 수 없습니다."
+			}
+			state={ability ? state : undefined}
+			subjects={(subjectsResponse?.data ?? []).map((subject) => ({
+				id: subject.id,
+				label: `${subject.displayName || subject.name}${subject.group ? ` (${subject.group})` : ""}`,
+			}))}
+			actions={(actionsResponse?.data ?? []).map((action) => ({
+				id: action.id,
+				label: `${action.displayName || action.name}${action.group ? ` (${action.group})` : ""}`,
+			}))}
+			isLoading={isLoading || isSubjectsLoading || isActionsLoading}
+			notFound={!isLoading && !ability}
+			notFoundAction={
+				<Button
+					variant="flat"
+					onPress={() => {
 						router.push("/abilities" as Route);
 					}}
-				/>
-			</>
-		);
-	}
-
-	return (
-		<>
-			<AbilityFormScreen
-				status="ready"
-				mode="edit"
-				title="권한 수정"
-				description="권한 정보를 수정합니다."
-				backButtonLabel="취소"
-				submitButtonLabel="저장"
-				isSubmitting={isPending}
-				form={{
-					name: state.name,
-					description: state.description,
-					subjectId: state.subjectId,
-					actionId: state.actionId,
-					fields: state.fields,
-					conditions: state.conditions,
-					inverted: state.inverted,
-					reason: state.reason,
-				}}
-				subjects={(subjectsResponse?.data ?? []).map((subject) => ({
-					id: subject.id,
-					label: `${subject.displayName || subject.name}${subject.group ? ` (${subject.group})` : ""}`,
-				}))}
-				actions={(actionsResponse?.data ?? []).map((action) => ({
-					id: action.id,
-					label: `${action.displayName || action.name}${action.group ? ` (${action.group})` : ""}`,
-				}))}
-				onClickBackButton={() => {
-					router.push(`/abilities/${abilityId}` as Route);
-				}}
-				onClickSubmitButton={onClickSaveButton}
-				onChange={{
-					onChangeName: (value) => {
-						state.name = value;
-					},
-					onChangeDescription: (value) => {
-						state.description = value;
-					},
-					onChangeSubjectId: (value) => {
-						state.subjectId = value;
-					},
-					onChangeActionId: (value) => {
-						state.actionId = value;
-					},
-					onChangeFields: (value) => {
-						state.fields = value;
-					},
-					onChangeConditions: (value) => {
-						state.conditions = value;
-					},
-					onChangeInverted: (value) => {
-						state.inverted = value;
-					},
-					onChangeReason: (value) => {
-						state.reason = value;
-					},
-				}}
-			/>
-		</>
+				>
+					목록으로
+				</Button>
+			}
+			pageActions={
+				<div className="flex gap-2">
+					<Button
+						variant="flat"
+						startContent={<ArrowLeft className="h-4 w-4" />}
+						onPress={() => {
+							router.push(`/abilities/${abilityId}` as Route);
+						}}
+					>
+						취소
+					</Button>
+					<Button
+						color="primary"
+						startContent={<Save className="h-4 w-4" />}
+						onPress={onSubmit}
+						isLoading={isPending}
+					>
+						저장
+					</Button>
+				</div>
+			}
+		/>
 	);
 });
+
+function toUpdateAbilityDto(state: AbilityFormState): UpdateAbilityDto | null {
+	const fieldsArray = state.fields
+		.split(",")
+		.map((field) => field.trim())
+		.filter((field) => field.length > 0);
+
+	let conditionsObject: Record<string, string | number | boolean> | undefined;
+	if (state.conditions.trim()) {
+		try {
+			conditionsObject = JSON.parse(state.conditions);
+		} catch {
+			toast.danger("입력 오류", {
+				description: "Conditions는 유효한 JSON 형식이어야 합니다.",
+			});
+			return null;
+		}
+	}
+
+	return {
+		description: state.description.trim() || undefined,
+		subjectId: state.subjectId || undefined,
+		actionId: state.actionId || undefined,
+		fields: fieldsArray,
+		conditions: conditionsObject,
+		inverted: state.inverted,
+		reason: state.inverted ? state.reason.trim() || undefined : undefined,
+	};
+}

@@ -2,18 +2,20 @@
 
 import {
 	getGetSessionByIdQueryKey,
-	UpdateSessionDtoRecurringDayOfWeek,
 	useGetSessionById,
 	useUpdateSession,
 } from "@cocrepo/api/core/timelines";
 import {
+	Button,
 	TimelineSessionEditScreen,
+	type TimelineSessionFormState,
 	type TimelineSessionScreenCycleType,
 	type TimelineSessionScreenDayOfWeek,
 	type TimelineSessionScreenSessionType,
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
+import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -30,7 +32,9 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 	const router = useRouter();
 	const persistStore = usePersistStore();
 	const queryClient = useQueryClient();
-	const state = useLocalObservable(() => ({
+	const state = useLocalObservable<
+		TimelineSessionFormState & { isInitialized: boolean }
+	>(() => ({
 		name: "",
 		type: "ONE_TIME" as TimelineSessionScreenSessionType,
 		originalType: "ONE_TIME" as TimelineSessionScreenSessionType,
@@ -39,11 +43,15 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 		endDateTime: "",
 		recurringDayOfWeek: null as TimelineSessionScreenDayOfWeek | null,
 		repeatCycleType: "" as TimelineSessionScreenCycleType | "",
-		errors: {} as Record<string, string>,
+		originalStartDateTime: "",
+		originalEndDateTime: "",
+		originalRecurringDayOfWeek: null,
+		originalRepeatCycleType: "",
+		errors: {},
 		isInitialized: false,
 	}));
 
-	const { data: response } = useGetSessionById(timelineId, sessionId);
+	const { data: response, isLoading } = useGetSessionById(timelineId, sessionId);
 	const session = response?.data;
 
 	useEffect(() => {
@@ -58,68 +66,18 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 				(session.recurringDayOfWeek as TimelineSessionScreenDayOfWeek) ?? null;
 			state.repeatCycleType =
 				(session.repeatCycleType as TimelineSessionScreenCycleType) ?? "";
+			state.originalStartDateTime = state.startDateTime;
+			state.originalEndDateTime = state.endDateTime;
+			state.originalRecurringDayOfWeek = state.recurringDayOfWeek;
+			state.originalRepeatCycleType = state.repeatCycleType;
 			state.isInitialized = true;
 		}
 	}, [session, state]);
 
 	const { mutate: updateSession, isPending } = useUpdateSession();
 
-	const onClickCancelButton = () => {
-		router.push(`/timelines/${timelineId}/sessions/${sessionId}` as Route);
-	};
-
-	const onChangeNameInput = (value: string) => {
-		state.name = value;
-		delete state.errors.name;
-	};
-
-	const onChangeTypeSelect = (value: string) => {
-		const newType = value as TimelineSessionScreenSessionType;
-		const previousType = state.type;
-		state.type = newType;
-		if (newType !== previousType) {
-			state.startDateTime = "";
-			state.endDateTime = "";
-			state.recurringDayOfWeek = null;
-			state.repeatCycleType = "";
-		} else if (newType === state.originalType) {
-			state.startDateTime = session?.startDateTime ?? "";
-			state.endDateTime = session?.endDateTime ?? "";
-			state.recurringDayOfWeek =
-				(session?.recurringDayOfWeek as UpdateSessionDtoRecurringDayOfWeek) ??
-				null;
-			state.repeatCycleType =
-				(session?.repeatCycleType as TimelineSessionScreenCycleType) ?? "";
-		}
-		state.errors = {};
-	};
-
-	const onChangeDescriptionTextArea = (value: string) => {
-		state.description = value;
-	};
-
-	const onChangeStartDateTimeInput = (value: string) => {
-		state.startDateTime = value;
-		delete state.errors.startDateTime;
-	};
-
-	const onChangeEndDateTimeInput = (value: string) => {
-		state.endDateTime = value;
-		delete state.errors.endDateTime;
-	};
-
-	const onChangeDayOfWeekSelect = (value: string) => {
-		state.recurringDayOfWeek = value as UpdateSessionDtoRecurringDayOfWeek;
-		delete state.errors.recurringDayOfWeek;
-	};
-
-	const onChangeCycleTypeSelect = (value: string) => {
-		state.repeatCycleType = value as TimelineSessionScreenCycleType;
-		delete state.errors.repeatCycleType;
-	};
-
 	const onClickSubmitButton = () => {
-		const errors: Record<string, string> = {};
+		const errors: TimelineSessionFormState["errors"] = {};
 
 		if (!state.name.trim()) {
 			errors.name = "세션명을 입력해주세요.";
@@ -199,31 +157,38 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 			state.repeatCycleType !== (session?.repeatCycleType ?? ""));
 
 	return (
-		<>
-			<TimelineSessionEditScreen
-				descriptionText={session?.name}
-				contentLanguageCode={persistStore.contentLanguageCode}
-				name={state.name}
-				type={state.type}
-				description={state.description}
-				startDateTime={state.startDateTime}
-				endDateTime={state.endDateTime}
-				recurringDayOfWeek={state.recurringDayOfWeek}
-				repeatCycleType={state.repeatCycleType}
-				errors={state.errors}
-				isSubmitPending={isPending}
-				isSubmitDisabled={!hasChanged || !state.name.trim()}
-				onChangeNameInput={onChangeNameInput}
-				onChangeTypeSelect={onChangeTypeSelect}
-				onChangeDescriptionTextArea={onChangeDescriptionTextArea}
-				onChangeStartDateTimeInput={onChangeStartDateTimeInput}
-				onChangeEndDateTimeInput={onChangeEndDateTimeInput}
-				onChangeDayOfWeekSelect={onChangeDayOfWeekSelect}
-				onChangeCycleTypeSelect={onChangeCycleTypeSelect}
-				onClickCancelButton={onClickCancelButton}
-				onClickSubmitButton={onClickSubmitButton}
-			/>
-		</>
+		<TimelineSessionEditScreen
+			title="세션 수정"
+			description={session?.name}
+			state={state}
+			contentLanguageCode={persistStore.contentLanguageCode}
+			isLoading={isLoading && !state.isInitialized}
+			notFound={!isLoading && !session}
+			actions={
+				<div className="flex gap-2">
+					<Button
+						variant="flat"
+						startContent={<ArrowLeft className="h-4 w-4" />}
+						onPress={() => {
+							router.push(
+								`/timelines/${timelineId}/sessions/${sessionId}` as Route,
+							);
+						}}
+					>
+						상세로
+					</Button>
+					<Button
+						color="primary"
+						startContent={<Save className="h-4 w-4" />}
+						isLoading={isPending}
+						isDisabled={!hasChanged || !state.name.trim()}
+						onPress={onClickSubmitButton}
+					>
+						저장
+					</Button>
+				</div>
+			}
+		/>
 	);
 });
 

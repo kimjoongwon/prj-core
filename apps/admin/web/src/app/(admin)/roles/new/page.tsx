@@ -1,20 +1,11 @@
 "use client";
 
 import { type CreateRoleDto, useCreateRole } from "@cocrepo/api/core/roles";
-import { RoleCreateScreen } from "@cocrepo/ui";
+import { Button, RoleEditScreen, type RoleFormState } from "@cocrepo/ui";
+import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
-
-interface RoleFormState {
-	name: string;
-	displayName: string;
-	description: string;
-	errors: {
-		name: string;
-		displayName: string;
-	};
-}
 
 const AdminRolesNewRoute = observer(() => {
 	const router = useRouter();
@@ -22,6 +13,7 @@ const AdminRolesNewRoute = observer(() => {
 		name: "",
 		displayName: "",
 		description: "",
+		isSystem: false,
 		errors: {
 			name: "",
 			displayName: "",
@@ -63,25 +55,7 @@ const AdminRolesNewRoute = observer(() => {
 		return isValid;
 	};
 
-	const onChangeNameInput = (value: string) => {
-		state.name = value.toUpperCase();
-		state.errors.name = "";
-	};
-
-	const onChangeDisplayNameInput = (value: string) => {
-		state.displayName = value;
-		state.errors.displayName = "";
-	};
-
-	const onChangeDescriptionTextArea = (value: string) => {
-		state.description = value;
-	};
-
-	const onClickBackButton = () => {
-		router.push("/roles" as Route);
-	};
-
-	const onClickSubmitButton = () => {
+	const onSubmit = () => {
 		if (!validate()) {
 			return;
 		}
@@ -96,21 +70,32 @@ const AdminRolesNewRoute = observer(() => {
 	};
 
 	return (
-		<>
-			<RoleCreateScreen
-				name={state.name}
-				displayName={state.displayName}
-				description={state.description}
-				nameError={state.errors.name}
-				displayNameError={state.errors.displayName}
-				isSubmitPending={isPending}
-				onChangeNameInput={onChangeNameInput}
-				onChangeDisplayNameInput={onChangeDisplayNameInput}
-				onChangeDescriptionTextArea={onChangeDescriptionTextArea}
-				onClickBackButton={onClickBackButton}
-				onClickSubmitButton={onClickSubmitButton}
-			/>
-		</>
+		<RoleEditScreen
+			title="Role 등록"
+			description="새로운 Role을 등록합니다."
+			state={state}
+			actions={
+				<div className="flex gap-2">
+					<Button
+						variant="light"
+						startContent={<ArrowLeft className="h-4 w-4" />}
+						onPress={() => {
+							router.push("/roles" as Route);
+						}}
+					>
+						목록으로
+					</Button>
+					<Button
+						color="primary"
+						startContent={<Save className="h-4 w-4" />}
+						onPress={onSubmit}
+						isLoading={isPending}
+					>
+						Role 등록
+					</Button>
+				</div>
+			}
+		/>
 	);
 });
 

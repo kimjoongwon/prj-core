@@ -129,19 +129,22 @@ export type {
 	ActionTransformConfig,
 } from "./action-config";
 // ============================================
-// Create/Update AiForm 관련 타입
+// Create/Update Form Bootstrap 관련 타입
 // ============================================
 export type {
-	AiFormFieldAiMeta,
-	AiFormFieldMeta,
-	AiFormFillRequest,
-	AiFormFillResponse,
-	AiFormOptionItem,
-	AiFormPatch,
-	AiFormSchema,
-	AiFormUiPaths,
 	CreateUpdateFormBootstrap,
-} from "./ai-form";
+	FormFieldMeta,
+	FormOptionItem,
+	FormUiPaths,
+} from "./form-bootstrap";
+export type {
+	FormFeedbackActions,
+	FormFeedbackState,
+	FormFieldErrors,
+	FormSchemaField,
+	FormSchemaStateContract,
+	FormStateContract,
+} from "./form-state";
 // ============================================
 // Config 관련 타입
 // ============================================

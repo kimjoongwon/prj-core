@@ -27,6 +27,7 @@ enum TenantAccessRequestStatus {
 // @schema-type: ROOT
 // @schema-owner: true
 // @aggregate-root: true
+// @usecase-anchor: true
 // @description: 사용자의 Space/Role 접근 신청과 승인/반려 이력을 관리하는 aggregate
 // @ownership: independent
 // @scope: tenant

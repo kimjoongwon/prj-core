@@ -29,6 +29,7 @@ enum RecurringDayOfWeek {
 // @schema-type: ROOT
 // @schema-owner: true
 // @aggregate-root: true
+// @usecase-anchor: true
 // @description: 세션들을 논리적으로 그룹화하는 시간 단위 컨테이너
 // @ownership: independent
 // @scope: space

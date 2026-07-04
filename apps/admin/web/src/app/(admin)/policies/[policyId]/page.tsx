@@ -5,40 +5,30 @@ import {
 	useGetAbilities,
 } from "@cocrepo/api/core/abilities";
 import {
-	getGetPolicyByIdQueryKey,
 	type PolicyResponseDto,
 	useDeletePolicy,
 	useGetPolicyById,
-	useSyncPolicyAbilities,
 } from "@cocrepo/api/core/policies";
 import {
-	PolicyDetailScreen,
-	type PolicyDetailScreenAbility,
-	type PolicyDetailScreenPolicy,
+	Button,
+	type PolicyAbilityOption,
+	PolicyEditScreen,
+	type PolicyFormState,
 } from "@cocrepo/ui";
-import { toast } from "@heroui/react";
-import { useQueryClient } from "@tanstack/react-query";
+import { Modal, toast, useOverlayState } from "@heroui/react";
+import { ArrowLeft, Edit, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
 
-export default observer(function PolicyDetailScreenRoute() {
+export default observer(function PolicyDetailRoute() {
 	const { policyId } = useParams<{ policyId: string }>();
 	const router = useRouter();
-	const queryClient = useQueryClient();
-	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-	const [isEditingAbilities, setIsEditingAbilities] = useState(false);
-	const [selectedAbilityIds, setSelectedAbilityIds] = useState<string[]>([]);
-	const [hasChanges, setHasChanges] = useState(false);
+	const deleteModal = useOverlayState();
 	const { data: response, isLoading } = useGetPolicyById(policyId);
 	const policy = response?.data;
-	const { data: abilitiesResponse, isLoading: isLoadingAbilities } =
-		useGetAbilities();
-	const abilities = (abilitiesResponse?.data ?? []).map(mapAbility);
-	const activeSelectedAbilityIds = isEditingAbilities
-		? selectedAbilityIds
-		: getPolicyAbilityIds(policy);
+	const { data: abilitiesResponse } = useGetAbilities();
+	const abilities = (abilitiesResponse?.data ?? []).map(mapAbilityOption);
 	const { mutate: deletePolicy, isPending: isDeleting } = useDeletePolicy({
 		mutation: {
 			onSuccess: () => {
@@ -49,111 +39,119 @@ export default observer(function PolicyDetailScreenRoute() {
 			},
 		},
 	});
-	const { mutate: syncPolicyAbilities, isPending: isSavingAbilities } =
-		useSyncPolicyAbilities({
-			mutation: {
-				onSuccess: () => {
-					toast.success("Ability 저장 성공", {
-						description: "정책 Ability 할당이 저장되었습니다.",
-					});
-					setIsEditingAbilities(false);
-					setHasChanges(false);
-					queryClient.invalidateQueries({
-						queryKey: getGetPolicyByIdQueryKey(policyId),
-					});
-				},
-			},
-		});
-
-	const onClickBackButton = () => {
-		router.push("/policies" as Route);
-	};
-
-	const onClickEditButton = () => {
-		router.push(`/policies/${policyId}/edit` as Route);
-	};
-
-	const onClickEditAbilitiesButton = () => {
-		setSelectedAbilityIds(getPolicyAbilityIds(policy));
-		setIsEditingAbilities(true);
-		setHasChanges(false);
-	};
-
-	const onClickCancelEditAbilitiesButton = () => {
-		setIsEditingAbilities(false);
-		setHasChanges(false);
-	};
-
-	const onToggleAbility = (abilityId: string) => {
-		setSelectedAbilityIds((current) =>
-			current.includes(abilityId)
-				? current.filter((id) => id !== abilityId)
-				: [...current, abilityId],
-		);
-		setHasChanges(true);
-	};
-
-	const onClickSaveAbilitiesButton = () => {
-		syncPolicyAbilities({
-			policyId,
-			data: { abilityIds: selectedAbilityIds },
-		});
-	};
+	const state = policy ? mapPolicyFormState(policy) : undefined;
 
 	return (
 		<>
-			<PolicyDetailScreen
-				policy={policy ? mapPolicy(policy) : undefined}
+			<PolicyEditScreen
+				title={
+					policy
+						? `정책 상세: ${policy.displayName || policy.name}`
+						: "정책 상세"
+				}
+				description={
+					policy?.description ||
+					"정책에 연결된 Ability와 공간 범위를 확인합니다."
+				}
+				state={state}
 				abilities={abilities}
-				selectedAbilityIds={activeSelectedAbilityIds}
+				readOnly
 				isLoading={isLoading}
-				isLoadingAbilities={isLoadingAbilities}
-				isEditingAbilities={isEditingAbilities}
-				hasChanges={hasChanges}
-				isDeleteModalOpen={isDeleteModalOpen}
-				isDeleting={isDeleting}
-				isSavingAbilities={isSavingAbilities}
-				onClickBackButton={onClickBackButton}
-				onClickEditButton={onClickEditButton}
-				onClickOpenDeleteModal={() => {
-					setIsDeleteModalOpen(true);
-				}}
-				onCloseDeleteModal={() => {
-					setIsDeleteModalOpen(false);
-				}}
-				onClickDeleteConfirm={() => {
-					deletePolicy({ policyId });
-				}}
-				onClickEditAbilitiesButton={onClickEditAbilitiesButton}
-				onClickCancelEditAbilitiesButton={onClickCancelEditAbilitiesButton}
-				onToggleAbility={onToggleAbility}
-				onClickSaveAbilitiesButton={onClickSaveAbilitiesButton}
+				notFound={!isLoading && !policy}
+				notFoundAction={
+					<Button
+						variant="flat"
+						onPress={() => {
+							router.push("/policies" as Route);
+						}}
+					>
+						목록으로
+					</Button>
+				}
+				actions={
+					<div className="flex flex-wrap gap-2">
+						<Button
+							variant="light"
+							startContent={<ArrowLeft className="h-4 w-4" />}
+							onPress={() => {
+								router.push("/policies" as Route);
+							}}
+						>
+							목록으로
+						</Button>
+						<Button
+							variant="flat"
+							startContent={<Edit className="h-4 w-4" />}
+							onPress={() => {
+								router.push(`/policies/${policyId}/edit` as Route);
+							}}
+						>
+							수정
+						</Button>
+						<Button
+							color="danger"
+							variant="flat"
+							startContent={<Trash2 className="h-4 w-4" />}
+							onPress={deleteModal.open}
+						>
+							삭제
+						</Button>
+					</div>
+				}
 			/>
+			{policy ? (
+				<Modal state={deleteModal}>
+					<Modal.Backdrop>
+						<Modal.Container>
+							<Modal.Dialog>
+								<Modal.Header>정책 삭제</Modal.Header>
+								<Modal.Body>이 정책을 삭제하시겠습니까?</Modal.Body>
+								<Modal.Footer>
+									<Button
+										variant="flat"
+										onPress={deleteModal.close}
+										isDisabled={isDeleting}
+									>
+										취소
+									</Button>
+									<Button
+										color="danger"
+										isLoading={isDeleting}
+										onPress={() => {
+											deletePolicy({ policyId });
+										}}
+									>
+										삭제
+									</Button>
+								</Modal.Footer>
+							</Modal.Dialog>
+						</Modal.Container>
+					</Modal.Backdrop>
+				</Modal>
+			) : null}
 		</>
 	);
 });
 
-function mapAbility(ability: AbilityResponseDto): PolicyDetailScreenAbility {
+function mapAbilityOption(ability: AbilityResponseDto): PolicyAbilityOption {
+	const subject =
+		ability.subject?.displayName || ability.subject?.name || "Subject";
+	const action =
+		ability.action?.displayName || ability.action?.name || "Action";
 	return {
 		id: ability.id,
-		name: ability.name,
+		label: `${subject} / ${action}`,
 		description: ability.description,
-		subject: ability.subject,
-		action: ability.action,
 	};
 }
 
-function mapPolicy(policy: PolicyResponseDto): PolicyDetailScreenPolicy {
+function mapPolicyFormState(policy: PolicyResponseDto): PolicyFormState {
 	return {
-		id: policy.id,
-		tenantId: policy.tenantId,
 		name: policy.name,
-		displayName: policy.displayName,
-		description: policy.description,
+		displayName: policy.displayName ?? "",
+		description: policy.description ?? "",
 		isSystem: policy.isSystem,
 		abilityIds: getPolicyAbilityIds(policy),
-		createdAt: policy.createdAt,
-		updatedAt: policy.updatedAt,
 	};
 }
 

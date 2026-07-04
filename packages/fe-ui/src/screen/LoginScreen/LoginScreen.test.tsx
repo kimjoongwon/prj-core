@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import { LoginScreen, type LoginScreenState } from "./LoginScreen";
 
 function createLoginScreenState(
-	state: Partial<LoginScreenState> & {
+	state: Omit<Partial<LoginScreenState>, "loginForm"> & {
 		loginForm?: Partial<LoginScreenState["loginForm"]>;
 	} = {},
 ): LoginScreenState {
@@ -12,6 +12,8 @@ function createLoginScreenState(
 		loginForm: {
 			email: "",
 			password: "",
+			fieldErrors: {},
+			errorMessage: null,
 			...state.loginForm,
 		},
 		errorMessage: state.errorMessage ?? "",
@@ -43,7 +45,12 @@ describe("LoginScreen", () => {
 	});
 
 	it("delegates form submit to the page event prop", () => {
-		const state = createLoginScreenState();
+		const state = createLoginScreenState({
+			loginForm: {
+				email: "admin@example.com",
+				password: "password123",
+			},
+		});
 		const onSubmitLoginForm = vi.fn();
 
 		render(

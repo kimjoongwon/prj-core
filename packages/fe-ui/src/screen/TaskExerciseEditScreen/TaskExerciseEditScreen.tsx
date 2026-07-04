@@ -1,35 +1,53 @@
 "use client";
 
-import {
-	AssetBrowser,
-	type AssetBrowserAsset,
-	type AssetBrowserProps,
-	ContentLanguageNotice,
-	MediaThumbnail,
-	PageTitleBar,
-	Section,
-	SectionSurface,
-	useT,
-	VStack,
-} from "@cocrepo/ui";
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
+import type { ReactNode } from "react";
 import { Chip } from "../../data-display/Chip/Chip";
+import { DateTimeCell } from "../../data-grid/cell";
+import {
+	AssetBrowser,
+	type AssetBrowserProps,
+} from "../../feature/AssetBrowser";
+import {
+	TaskExerciseForm,
+	type TaskExerciseFormState,
+	type TaskExerciseMediaAsset,
+} from "../../form/TaskExerciseForm";
 import { Button } from "../../input/Button/Button";
-import { TextArea } from "../../input/TextArea/TextArea";
-import { TextField } from "../../input/TextField/TextField";
-export interface ExerciseMediaAsset extends AssetBrowserAsset {}
-export interface TaskExerciseEditScreenProps {
-	exerciseName?: string;
+import { Section } from "../../layout/Section/Section";
+import { SectionSurface } from "../../surface";
+import { VStack } from "../../rhythm";
+import { PageTitleBar } from "../../widget/PageTitleBar";
+
+export interface ExerciseMediaAsset extends TaskExerciseMediaAsset {}
+
+export interface TaskExerciseEditScreenRoutine {
+	id: string;
 	name: string;
-	durationMin: number;
-	durationSec: number;
-	count: number;
-	description: string;
+	label?: string | null;
+	createdAt: string;
+}
+
+export interface TaskExerciseEditScreenMetadata {
+	taskId: string;
+	tenantId?: string | null;
+	createdAt?: string | null;
+	updatedAt?: string | null;
+	routines?: TaskExerciseEditScreenRoutine[];
+}
+
+export interface TaskExerciseEditScreenProps {
+	title?: ReactNode;
+	description?: ReactNode;
+	actions?: ReactNode;
+	state: TaskExerciseFormState;
 	contentLanguageCode?: string | null;
 	selectedImageAsset?: ExerciseMediaAsset;
 	selectedVideoAsset?: ExerciseMediaAsset;
-	assetBrowserProps: Omit<
+	readOnly?: boolean;
+	metadata?: TaskExerciseEditScreenMetadata;
+	assetBrowserProps?: Omit<
 		AssetBrowserProps,
 		| "mode"
 		| "presentation"
@@ -40,122 +58,46 @@ export interface TaskExerciseEditScreenProps {
 		| "selectedAssetId"
 		| "onSelectAsset"
 	>;
-	assetBrowserTitle: string;
-	assetBrowserDescription: string;
+	assetBrowserTitle?: string;
+	assetBrowserDescription?: string;
 	assetBrowserSelectedAssetId?: string;
-	isAssetBrowserOpen: boolean;
-	errors: Record<string, string>;
-	isSchedulable: boolean;
+	isAssetBrowserOpen?: boolean;
 	isLoading: boolean;
 	isNotFound: boolean;
 	isSubmitPending: boolean;
-	onChangeNameInput: (value: string) => void;
-	onChangeDurationMinInput: (value: string) => void;
-	onChangeDurationSecInput: (value: string) => void;
-	onChangeCountInput: (value: string) => void;
-	onChangeDescriptionTextArea: (value: string) => void;
-	onChangeImageFileIdInput: (value: string) => void;
-	onChangeVideoFileIdInput: (value: string) => void;
-	onOpenImagePicker: () => void;
-	onOpenVideoPicker: () => void;
-	onCloseAssetBrowser: () => void;
-	onSelectAssetFromBrowser: (asset: ExerciseMediaAsset) => void;
-	onClickClearImageAssetButton: () => void;
-	onClickClearVideoAssetButton: () => void;
+	onOpenImagePicker?: () => void;
+	onOpenVideoPicker?: () => void;
+	onCloseAssetBrowser?: () => void;
+	onSelectAssetFromBrowser?: (asset: ExerciseMediaAsset) => void;
+	onClickClearImageAssetButton?: () => void;
+	onClickClearVideoAssetButton?: () => void;
 	onClickCancelButton: () => void;
-	onClickSaveButton: () => void;
+	onClickSaveButton?: () => void;
 }
-const ExerciseMediaField = observer(function ExerciseMediaField({
-	label,
-	description,
-	selectedAsset,
-	placeholder,
-	onOpenPicker,
-	onClear,
-}: {
-	label: string;
-	description: string;
-	selectedAsset?: ExerciseMediaAsset;
-	placeholder: string;
-	onOpenPicker: () => void;
-	onClear: () => void;
-}) {
-	const t = useT();
-	const isImage = selectedAsset?.mimeType?.startsWith("image/");
-	return (
-		<div className="rounded-2xl border border-border bg-surface p-4">
-			<div className="mb-3 flex items-start justify-between gap-3">
-				<div>
-					<p className="font-medium">{t(label)}</p>
-					<p className="mt-1 text-sm text-muted">{t(description)}</p>
-				</div>
-				<div className="flex gap-2">
-					<Button size="sm" variant="flat" onPress={onOpenPicker}>
-						{selectedAsset ? t("다시 선택") : t("에셋에서 선택")}
-					</Button>
-					<Button
-						size="sm"
-						variant="flat"
-						color="danger"
-						onPress={onClear}
-						isDisabled={!selectedAsset}
-					>
-						{t("해제")}
-					</Button>
-				</div>
-			</div>
-			{selectedAsset ? (
-				<div className="flex flex-col gap-3 md:flex-row">
-					<MediaThumbnail
-						imageUrl={isImage ? selectedAsset.publicUrl : undefined}
-						videoUrl={!isImage ? selectedAsset.publicUrl : undefined}
-						title={selectedAsset.originalName}
-						className="aspect-video w-full max-w-xs"
-					/>
-					<div className="space-y-1 text-sm">
-						<p className="font-medium">{selectedAsset.originalName}</p>
-						<p className="text-muted">{selectedAsset.mimeType}</p>
-						<p className="break-all font-mono text-xs text-muted">
-							{selectedAsset.id}
-						</p>
-					</div>
-				</div>
-			) : (
-				<div className="rounded-xl border border-dashed border-border px-4 py-6 text-sm text-muted">
-					{t(placeholder)}
-				</div>
-			)}
-		</div>
-	);
-});
+
+const formatDuration = (durationMin: number, durationSec: number) =>
+	durationMin > 0 ? `${durationMin}분 ${durationSec}초` : `${durationSec}초`;
+
+/** Task Exercise aggregate의 상세/수정 route가 공유하는 화면입니다. */
 export const TaskExerciseEditScreen = observer(
 	({
-		exerciseName,
-		name,
-		durationMin,
-		durationSec,
-		count,
+		title,
 		description,
+		actions,
+		state,
 		contentLanguageCode,
 		selectedImageAsset,
 		selectedVideoAsset,
+		readOnly = false,
+		metadata,
 		assetBrowserProps,
-		assetBrowserTitle,
-		assetBrowserDescription,
+		assetBrowserTitle = "에셋 선택",
+		assetBrowserDescription = "운동에 연결할 에셋을 선택합니다.",
 		assetBrowserSelectedAssetId,
-		isAssetBrowserOpen,
-		errors,
-		isSchedulable,
+		isAssetBrowserOpen = false,
 		isLoading,
 		isNotFound,
 		isSubmitPending,
-		onChangeNameInput,
-		onChangeDurationMinInput,
-		onChangeDurationSecInput,
-		onChangeCountInput,
-		onChangeDescriptionTextArea,
-		onChangeImageFileIdInput,
-		onChangeVideoFileIdInput,
 		onOpenImagePicker,
 		onOpenVideoPicker,
 		onCloseAssetBrowser,
@@ -165,17 +107,43 @@ export const TaskExerciseEditScreen = observer(
 		onClickCancelButton,
 		onClickSaveButton,
 	}: TaskExerciseEditScreenProps) => {
-		const t = useT();
+		const resolvedTitle = title ?? (readOnly ? "운동 정보" : "운동 정보 수정");
+		const resolvedDescription =
+			description ??
+			(readOnly
+				? "태스크에 연결된 운동 detail입니다."
+				: "운동 detail을 수정합니다.");
+		const resolvedActions =
+			actions ??
+			(readOnly ? undefined : (
+				<div className="flex gap-2">
+					<Button
+						variant="flat"
+						onPress={onClickCancelButton}
+						isDisabled={isSubmitPending}
+					>
+						취소
+					</Button>
+					<Button
+						color="primary"
+						onPress={onClickSaveButton}
+						isLoading={isSubmitPending}
+					>
+						저장
+					</Button>
+				</div>
+			));
+
 		if (isLoading) {
 			return (
 				<VStack fullWidth>
-					<PageTitleBar title="운동 정보 수정" description="로딩 중..." />
+					<PageTitleBar title={resolvedTitle} description="로딩 중..." />
 					<SectionSurface>
 						<Section>
 							<Section.Body>
 								<div className="flex items-center justify-center gap-2 p-8">
 									<Spinner size="sm" />
-									<span className="text-muted">{t("로딩 중...")}</span>
+									<span className="text-muted">로딩 중...</span>
 								</div>
 							</Section.Body>
 						</Section>
@@ -183,11 +151,12 @@ export const TaskExerciseEditScreen = observer(
 				</VStack>
 			);
 		}
+
 		if (isNotFound) {
 			return (
 				<VStack fullWidth>
 					<PageTitleBar
-						title="운동 정보 수정"
+						title={resolvedTitle}
 						description="운동 detail을 찾을 수 없습니다."
 					/>
 					<SectionSurface>
@@ -195,10 +164,10 @@ export const TaskExerciseEditScreen = observer(
 							<Section.Body>
 								<div className="flex flex-col items-center justify-center gap-4 p-8">
 									<p className="text-muted">
-										{t("운동 detail을 찾을 수 없습니다.")}
+										운동 detail을 찾을 수 없습니다.
 									</p>
 									<Button variant="flat" onPress={onClickCancelButton}>
-										{t("목록으로")}
+										목록으로
 									</Button>
 								</div>
 							</Section.Body>
@@ -207,33 +176,13 @@ export const TaskExerciseEditScreen = observer(
 				</VStack>
 			);
 		}
+
 		return (
 			<VStack fullWidth>
 				<PageTitleBar
-					title="운동 정보 수정"
-					description={
-						exerciseName
-							? `${exerciseName} 운동 detail을 수정합니다.`
-							: "운동 detail을 수정합니다."
-					}
-					actions={
-						<div className="flex gap-2">
-							<Button
-								variant="flat"
-								onPress={onClickCancelButton}
-								isDisabled={isSubmitPending}
-							>
-								{t("취소")}
-							</Button>
-							<Button
-								color="primary"
-								onPress={onClickSaveButton}
-								isLoading={isSubmitPending}
-							>
-								{t("저장")}
-							</Button>
-						</div>
-					}
+					title={resolvedTitle}
+					description={resolvedDescription}
+					actions={resolvedActions}
 				/>
 				<SectionSurface>
 					<Section>
@@ -241,131 +190,118 @@ export const TaskExerciseEditScreen = observer(
 							<PageTitleBar level={2} title="기본 정보" />
 						</Section.Header>
 						<Section.Body>
-							<div className="flex flex-col gap-4">
-								<ContentLanguageNotice
-									contentLanguageCode={contentLanguageCode}
-								/>
-								<TextField
-									label={t("운동명")}
-									placeholder={t("운동 이름을 입력하세요")}
-									value={name}
-									onValueChange={onChangeNameInput}
-									isRequired
-									isInvalid={Boolean(errors.name)}
-									errorMessage={errors.name ? t(errors.name) : undefined}
-								/>
-								<div>
-									<label className="mb-1 block text-sm font-medium text-foreground">
-										{t("지속시간")} <span className="text-danger">*</span>
-									</label>
-									<div className="flex items-center gap-2">
-										<TextField
-											type="number"
-											placeholder={t("분")}
-											value={String(durationMin)}
-											onValueChange={onChangeDurationMinInput}
-											min={0}
-											endContent={
-												<span className="text-sm text-muted">{t("분")}</span>
-											}
-											className="max-w-32"
-										/>
-										<TextField
-											type="number"
-											placeholder={t("초")}
-											value={String(durationSec)}
-											onValueChange={onChangeDurationSecInput}
-											min={0}
-											max={59}
-											endContent={
-												<span className="text-sm text-muted">{t("초")}</span>
-											}
-											className="max-w-32"
-										/>
-									</div>
-									{errors.duration ? (
-										<p className="mt-1 text-sm text-danger">
-											{t(errors.duration)}
-										</p>
-									) : null}
-								</div>
-								<TextField
-									label={t("반복횟수")}
-									type="number"
-									placeholder={t("반복 횟수")}
-									value={String(count)}
-									onValueChange={onChangeCountInput}
-									isRequired
-									min={1}
-									isInvalid={Boolean(errors.count)}
-									errorMessage={errors.count ? t(errors.count) : undefined}
-									endContent={
-										<span className="text-sm text-muted">{t("회")}</span>
-									}
-								/>
-								<TextArea
-									label={t("설명")}
-									placeholder={t("운동 설명, 수행 방법 등을 입력하세요 (선택)")}
-									value={description}
-									onValueChange={onChangeDescriptionTextArea}
-									maxLength={500}
-									minRows={3}
-								/>
-								<ExerciseMediaField
-									label="대표 이미지"
-									description="운동 카드와 상세 화면에서 먼저 보일 이미지를 선택합니다."
-									selectedAsset={selectedImageAsset}
-									placeholder="이미지 에셋을 선택하면 여기서 바로 미리보기를 확인할 수 있습니다."
-									onOpenPicker={onOpenImagePicker}
-									onClear={() => {
-										onChangeImageFileIdInput("");
-										onClickClearImageAssetButton();
-									}}
-								/>
-								<ExerciseMediaField
-									label="운동 영상"
-									description="루틴 편성과 프로그램 생성에는 영상이 연결된 운동이 필요합니다."
-									selectedAsset={selectedVideoAsset}
-									placeholder="영상 에셋을 선택하면 루틴 카드에서 영상 썸네일로 활용됩니다."
-									onOpenPicker={onOpenVideoPicker}
-									onClear={() => {
-										onChangeVideoFileIdInput("");
-										onClickClearVideoAssetButton();
-									}}
-								/>
-								<div className="rounded-lg bg-surface-secondary p-3 text-sm text-muted">
-									<div className="flex items-center gap-2">
-										<span className="font-medium text-foreground">
-											{t("스케줄 가능 상태")}
-										</span>
-										<Chip
-											color={isSchedulable ? "success" : "warning"}
-											size="sm"
-										>
-											{isSchedulable ? t("가능") : t("불가")}
-										</Chip>
-									</div>
-									<p className="mt-2">
-										{t(
-											"영상 파일 ID가 입력된 Exercise만 루틴 편성 및 Program 생성에 사용할 수 있습니다.",
-										)}
-									</p>
-								</div>
-							</div>
+							<TaskExerciseForm
+								state={state}
+								contentLanguageCode={contentLanguageCode}
+								selectedImageAsset={selectedImageAsset}
+								selectedVideoAsset={selectedVideoAsset}
+								readOnly={readOnly}
+								onOpenImagePicker={onOpenImagePicker}
+								onOpenVideoPicker={onOpenVideoPicker}
+								onClickClearImageAssetButton={onClickClearImageAssetButton}
+								onClickClearVideoAssetButton={onClickClearVideoAssetButton}
+							/>
 						</Section.Body>
 					</Section>
+					{metadata ? (
+						<Section>
+							<Section.Header>
+								<PageTitleBar level={2} title="태스크 정보" />
+							</Section.Header>
+							<Section.Body>
+								<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+									<div>
+										<label className="text-sm text-muted">Task ID</label>
+										<p className="mt-1 font-mono text-sm">
+											{metadata.taskId}
+										</p>
+									</div>
+									<div>
+										<label className="text-sm text-muted">Space ID</label>
+										<p className="mt-1 font-mono text-sm">
+											{metadata.tenantId ?? "-"}
+										</p>
+									</div>
+									<div>
+										<label className="text-sm text-muted">지속시간</label>
+										<p className="mt-1">
+											{formatDuration(state.durationMin, state.durationSec)}
+										</p>
+									</div>
+									<div>
+										<label className="text-sm text-muted">스케줄 가능</label>
+										<div className="mt-1">
+											<Chip
+												color={
+													state.videoFileId.trim().length > 0
+														? "success"
+														: "warning"
+												}
+												size="sm"
+											>
+												{state.videoFileId.trim().length > 0
+													? "가능"
+													: "불가"}
+											</Chip>
+										</div>
+									</div>
+									<div>
+										<label className="text-sm text-muted">등록일</label>
+										<div className="mt-1">
+											<DateTimeCell value={metadata.createdAt ?? "-"} />
+										</div>
+									</div>
+									<div>
+										<label className="text-sm text-muted">수정일</label>
+										<div className="mt-1">
+											<DateTimeCell value={metadata.updatedAt ?? "-"} />
+										</div>
+									</div>
+								</div>
+							</Section.Body>
+						</Section>
+					) : null}
+					{metadata?.routines?.length ? (
+						<Section>
+							<Section.Header>
+								<PageTitleBar level={2} title="연관 루틴" />
+							</Section.Header>
+							<Section.Body>
+								<div className="flex flex-col gap-2">
+									{metadata.routines.map((routine, index) => (
+										<div
+											key={`${routine.id}:${index}`}
+											className="flex items-center justify-between rounded-lg bg-surface-secondary p-3"
+										>
+											<div>
+												<p className="font-medium">{routine.name}</p>
+												<p className="text-sm text-muted">
+													{routine.label || "-"}
+												</p>
+											</div>
+											<div className="text-sm text-muted">
+												<DateTimeCell value={routine.createdAt} />
+											</div>
+										</div>
+									))}
+								</div>
+							</Section.Body>
+						</Section>
+					) : null}
 				</SectionSurface>
-				<AssetBrowser
-					{...assetBrowserProps}
-					mode="picker"
-					presentation="modal"
-					title={t(assetBrowserTitle)}
-					description={t(assetBrowserDescription)}
-					isOpen={isAssetBrowserOpen}
-					onClose={onCloseAssetBrowser}
-					selectedAssetId={assetBrowserSelectedAssetId}
-					onSelectAsset={onSelectAssetFromBrowser}
-				/>
+				{assetBrowserProps ? (
+					<AssetBrowser
+						{...assetBrowserProps}
+						mode="picker"
+						presentation="modal"
+						title={assetBrowserTitle}
+						description={assetBrowserDescription}
+						isOpen={isAssetBrowserOpen}
+						onClose={onCloseAssetBrowser}
+						selectedAssetId={assetBrowserSelectedAssetId}
+						onSelectAsset={onSelectAssetFromBrowser}
+					/>
+				) : null}
 			</VStack>
 		);
 	},

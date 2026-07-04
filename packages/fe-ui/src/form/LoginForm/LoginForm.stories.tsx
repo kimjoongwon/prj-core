@@ -29,10 +29,14 @@ type Story = StoryObj<typeof meta>;
 class LoginFormStoryState implements LoginFormState {
 	email: string;
 	password: string;
+	fieldErrors: LoginFormState["fieldErrors"];
+	errorMessage: string | null;
 
 	constructor(state: LoginFormState) {
 		this.email = state.email;
 		this.password = state.password;
+		this.fieldErrors = { ...state.fieldErrors };
+		this.errorMessage = state.errorMessage;
 		makeAutoObservable(this, {}, { autoBind: true });
 	}
 }
@@ -52,6 +56,8 @@ export const Default: Story = {
 		state: {
 			email: "",
 			password: "",
+			fieldErrors: {},
+			errorMessage: null,
 		},
 	},
 	render: renderLoginForm,
@@ -69,6 +75,8 @@ export const WithValues: Story = {
 		state: {
 			email: "user@example.com",
 			password: "password123",
+			fieldErrors: {},
+			errorMessage: null,
 		},
 	},
 	render: renderLoginForm,
@@ -86,6 +94,8 @@ export const WithEmail: Story = {
 		state: {
 			email: "user@example.com",
 			password: "",
+			fieldErrors: {},
+			errorMessage: null,
 		},
 	},
 	render: renderLoginForm,
@@ -103,6 +113,8 @@ export const LongValues: Story = {
 		state: {
 			email: "operations.manager.with.long.name@example-reservations.com",
 			password: "very-long-password-value",
+			fieldErrors: {},
+			errorMessage: null,
 		},
 	},
 	render: renderLoginForm,

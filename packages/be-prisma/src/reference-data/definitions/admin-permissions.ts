@@ -173,22 +173,23 @@ export const legacyAdminPageSubjectNames: string[] = [
 	"page:role-categories:edit",
 ];
 
-export const adminPlatformAdminAbilitySeedData: AdminDerivedAbilitySeedData[] = [
-	...adminMenuSubjectSeedData.map((subject) => ({
-		roleName: "PLATFORM_ADMIN" as const,
-		subject: subject.name,
-		actionName: "manage" as const,
-		inverted: false as const,
-		description: `${subject.displayName} 메뉴 전체 권한`,
-	})),
-	...adminPageSubjectSeedData.map((subject) => ({
-		roleName: "PLATFORM_ADMIN" as const,
-		subject: subject.name,
-		actionName: "access" as const,
-		inverted: false as const,
-		description: `${subject.displayName} 화면 접근 권한`,
-	})),
-];
+export const adminPlatformAdminAbilitySeedData: AdminDerivedAbilitySeedData[] =
+	[
+		...adminMenuSubjectSeedData.map((subject) => ({
+			roleName: "PLATFORM_ADMIN" as const,
+			subject: subject.name,
+			actionName: "manage" as const,
+			inverted: false as const,
+			description: `${subject.displayName} 메뉴 전체 권한`,
+		})),
+		...adminPageSubjectSeedData.map((subject) => ({
+			roleName: "PLATFORM_ADMIN" as const,
+			subject: subject.name,
+			actionName: "access" as const,
+			inverted: false as const,
+			description: `${subject.displayName} 화면 접근 권한`,
+		})),
+	];
 
 // 기존 reference-data migration은 checksum 검증 대상이므로 당시 export 이름을 유지합니다.
 export const adminFullAccessAbilitySeedData = adminPlatformAdminAbilitySeedData;
@@ -196,7 +197,8 @@ export const adminFullAccessAbilitySeedData = adminPlatformAdminAbilitySeedData;
 export const adminCompanyManagerMenuAccessAbilitySeedData: AdminDerivedAbilitySeedData[] =
 	adminMenuSubjectSeedData
 		.filter(
-			(subject) => !COMPANY_MANAGER_EXCLUDED_ADMIN_MENU_SUBJECTS.has(subject.name),
+			(subject) =>
+				!COMPANY_MANAGER_EXCLUDED_ADMIN_MENU_SUBJECTS.has(subject.name),
 		)
 		.map((subject) => ({
 			roleName: "COMPANY_MANAGER" as const,

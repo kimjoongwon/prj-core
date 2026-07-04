@@ -1,7 +1,6 @@
 "use client";
 import {
 	useAssignInquiry,
-	useFillInquiryFormWithAi,
 	useUpdateInquiry,
 	useUpdateInquiryPriority,
 	useUpdateInquiryStatus,
@@ -32,7 +31,6 @@ export interface UseInquiryDetailHandlersOptions {
 		setReplyContent: (content: string) => void;
 		startTyping: () => void;
 		stopTyping: () => void;
-		setGeneratingDraft: (isGenerating: boolean) => void;
 		openKnowledgeBaseModal: () => void;
 		closeKnowledgeBaseModal: () => void;
 		openMetaEditModal: () => void;
@@ -68,8 +66,6 @@ export interface UseInquiryDetailHandlersReturn {
 	onTypingStart: () => void;
 	/** 타이핑 중지 */
 	onTypingStop: () => void;
-	/** AI 초안 생성 */
-	onClickGenerateDraft: () => Promise<void>;
 	/** 지식베이스 검색 */
 	onClickSearchKnowledge: () => void;
 	/** 파일 첨부 */
@@ -110,7 +106,6 @@ export function useInquiryDetailHandlers(
 	const updatePriorityMutation = useUpdateInquiryPriority();
 	const assignMutation = useAssignInquiry();
 	const updateInquiryMutation = useUpdateInquiry();
-	const fillInquiryFormMutation = useFillInquiryFormWithAi();
 
 	// 목록으로 이동
 	const onClickBack = () => {
@@ -270,42 +265,6 @@ export function useInquiryDetailHandlers(
 		ws.sendTypingStatus(false);
 	};
 
-	/**
-	 * AI 내용 생성
-	 *
-	 * 문의 폼 ai-fill endpoint를 활용하여 content patch를 생성합니다.
-	 */
-	const onClickGenerateDraft = async () => {
-		logger.info("AI 내용 생성 요청");
-		inquiryState.setGeneratingDraft(true);
-
-		try {
-			const result = await fillInquiryFormMutation.mutateAsync({
-				data: {
-					mode: "CREATE",
-					schemaKey: "inquiry-intake-basic",
-					selectedPaths: ["content"],
-					currentObject: {
-						title: `문의 ${inquiryId}`,
-						content: inquiryState.replyContent,
-						category: "GENERAL",
-						priority: "NORMAL",
-					},
-				},
-			});
-
-			const patches = result?.data?.patches ?? [];
-			const contentPatch = patches.find((patch) => patch.path === "content");
-			if (typeof contentPatch?.value === "string") {
-				inquiryState.setReplyContent(contentPatch.value);
-			}
-		} catch (error) {
-			logger.error("AI 내용 생성 실패:", String(error));
-		} finally {
-			inquiryState.setGeneratingDraft(false);
-		}
-	};
-
 	// 지식베이스 검색 모달 열기
 	const onClickSearchKnowledge = () => {
 		inquiryState.openKnowledgeBaseModal();
@@ -366,7 +325,6 @@ export function useInquiryDetailHandlers(
 		onSubmitReply,
 		onTypingStart,
 		onTypingStop,
-		onClickGenerateDraft,
 		onClickSearchKnowledge,
 		onAttachFile,
 		onClickEdit,

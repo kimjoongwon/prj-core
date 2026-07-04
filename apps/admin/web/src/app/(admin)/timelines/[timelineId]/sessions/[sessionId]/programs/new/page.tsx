@@ -6,8 +6,13 @@ import {
 	useGetSessionById,
 } from "@cocrepo/api/core/timelines";
 import { type UserDto, useGetUsers } from "@cocrepo/api/core/users";
-import { TimelineSessionProgramCreateScreen } from "@cocrepo/ui";
-import { toast, useOverlayState } from "@heroui/react";
+import {
+	Button,
+	TimelineSessionProgramEditScreen,
+	type TimelineSessionProgramFormState,
+} from "@cocrepo/ui";
+import { toast } from "@heroui/react";
+import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -37,17 +42,19 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 		const { timelineId, sessionId } = useParams<ProgramNewPageParams>();
 		const router = useRouter();
 		const persistStore = usePersistStore();
-		const routinePickerModal = useOverlayState();
-		const instructorPickerModal = useOverlayState();
-		const state = useLocalObservable(() => ({
+		const state = useLocalObservable<TimelineSessionProgramFormState>(() => ({
 			name: "",
 			routineId: "",
+			routineName: "",
 			routineQuery: "",
 			instructorId: "",
+			instructorName: "",
 			instructorQuery: "",
 			capacity: "",
 			level: "",
-			errors: {} as Record<string, string>,
+			isRoutinePickerOpen: false,
+			isInstructorPickerOpen: false,
+			errors: {},
 		}));
 
 		const { data: sessionResponse } = useGetSessionById(timelineId, sessionId);
@@ -66,36 +73,6 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 		});
 		const instructors = (instructorsResponse?.data ?? []) as UserDto[];
 		const { mutate: createProgram, isPending } = useCreateProgram();
-
-		const onClickCancelButton = () => {
-			router.push(`/timelines/${timelineId}/sessions/${sessionId}` as Route);
-		};
-
-		const onChangeNameInput = (value: string) => {
-			state.name = value;
-			delete state.errors.name;
-		};
-		const onSelectRoutineOption = (value: string) => {
-			state.routineId = value;
-			delete state.errors.routineId;
-		};
-		const onSelectInstructorOption = (value: string) => {
-			state.instructorId = value;
-			delete state.errors.instructorId;
-		};
-		const onChangeCapacityInput = (value: string) => {
-			state.capacity = value;
-			delete state.errors.capacity;
-		};
-		const onChangeRoutineQueryInput = (value: string) => {
-			state.routineQuery = value;
-		};
-		const onChangeInstructorQueryInput = (value: string) => {
-			state.instructorQuery = value;
-		};
-		const onChangeLevelSelect = (value: string) => {
-			state.level = value;
-		};
 
 		const selectedRoutine = routines.find(
 			(routine) => routine.id === state.routineId,
@@ -133,7 +110,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 		);
 
 		const onClickSubmitButton = () => {
-			const errors: Record<string, string> = {};
+			const errors: TimelineSessionProgramFormState["errors"] = {};
 
 			if (!state.name.trim()) {
 				errors.name = "프로그램 이름을 입력해주세요.";
@@ -196,21 +173,14 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 		};
 
 		return (
-			<>
-				<TimelineSessionProgramCreateScreen
-					descriptionText={[session?.name, session?.timeline?.name]
+			<TimelineSessionProgramEditScreen
+				title="프로그램 등록"
+				description={[session?.name, session?.timeline?.name]
 						.filter(Boolean)
 						.join(" · ")}
-					contentLanguageCode={persistStore.contentLanguageCode}
-					name={state.name}
-					routineName={selectedRoutine?.name ?? ""}
-					instructorName={selectedInstructor?.name ?? ""}
-					capacity={state.capacity}
-					level={state.level}
-					errors={state.errors}
-					routineQuery={state.routineQuery}
-					instructorQuery={state.instructorQuery}
-					routineOptions={routineOptions.map((routine) => ({
+				state={state}
+				contentLanguageCode={persistStore.contentLanguageCode}
+				routineOptions={routineOptions.map((routine) => ({
 						id: routine.id,
 						name: routine.name,
 						subtitle: `라벨: ${routine.label ?? "-"} · 활동 ${
@@ -220,41 +190,47 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 								(activity) => !activity.task?.exercise?.videoFileId,
 							)
 								? "영상 누락"
-								: "스케줄 가능"
+							: "스케줄 가능"
 						}`,
-					}))}
-					instructorOptions={instructorOptions.map((instructor) => ({
+				}))}
+				instructorOptions={instructorOptions.map((instructor) => ({
 						id: instructor.id,
 						name: instructor.name,
 						subtitle: `이메일: ${instructor.email ?? "-"}`,
-					}))}
-					routinePreview={routinePreview}
-					hasUnschedulableRoutine={hasUnschedulableRoutine}
-					isRoutinePickerOpen={routinePickerModal.isOpen}
-					isInstructorPickerOpen={instructorPickerModal.isOpen}
-					isSubmitPending={isPending}
-					isSubmitDisabled={
+				}))}
+				routinePreview={routinePreview}
+				hasUnschedulableRoutine={hasUnschedulableRoutine}
+				actions={
+					<div className="flex gap-2">
+						<Button
+							variant="flat"
+							startContent={<ArrowLeft className="h-4 w-4" />}
+							onPress={() => {
+								router.push(
+									`/timelines/${timelineId}/sessions/${sessionId}` as Route,
+								);
+							}}
+						>
+							세션으로
+						</Button>
+						<Button
+							color="primary"
+							startContent={<Save className="h-4 w-4" />}
+							isLoading={isPending}
+							isDisabled={
 						!state.name.trim() ||
 						!state.routineId.trim() ||
 						!state.instructorId.trim() ||
 						!state.capacity ||
 						hasUnschedulableRoutine
 					}
-					onChangeNameInput={onChangeNameInput}
-					onChangeCapacityInput={onChangeCapacityInput}
-					onChangeLevelSelect={onChangeLevelSelect}
-					onChangeRoutineQueryInput={onChangeRoutineQueryInput}
-					onChangeInstructorQueryInput={onChangeInstructorQueryInput}
-					onSelectRoutineOption={onSelectRoutineOption}
-					onSelectInstructorOption={onSelectInstructorOption}
-					onClickOpenRoutinePickerButton={routinePickerModal.open}
-					onClickCloseRoutinePickerButton={routinePickerModal.close}
-					onClickOpenInstructorPickerButton={instructorPickerModal.open}
-					onClickCloseInstructorPickerButton={instructorPickerModal.close}
-					onClickCancelButton={onClickCancelButton}
-					onClickSubmitButton={onClickSubmitButton}
-				/>
-			</>
+							onPress={onClickSubmitButton}
+						>
+							등록
+						</Button>
+					</div>
+				}
+			/>
 		);
 	},
 );

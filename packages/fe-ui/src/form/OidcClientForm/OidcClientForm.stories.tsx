@@ -46,25 +46,25 @@ const render: Story["render"] = (args) => (
 );
 export const Create: Story = {
 	args: {
-		mode: "create",
 		state: baseState as never,
-		onSubmit: () => undefined,
-		onCancel: () => undefined,
-		isSubmitting: false,
 	},
 	render,
 };
 export const EditWithErrors: Story = {
 	args: {
-		mode: "edit",
 		state: {
 			...baseState,
 			errors: { name: "이름을 입력하세요." },
 			redirectUriErrors: { 0: "HTTPS URI를 입력하세요." },
 		} as never,
-		readonlyClientId: "reservation-admin",
-		onSubmit: () => undefined,
-		onCancel: () => undefined,
+	},
+	render,
+};
+
+export const ReadOnly: Story = {
+	args: {
+		state: baseState as never,
+		readOnly: true,
 	},
 	render,
 };

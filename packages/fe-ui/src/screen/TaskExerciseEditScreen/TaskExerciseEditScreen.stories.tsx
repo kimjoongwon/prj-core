@@ -56,24 +56,13 @@ const defaultArgs = {
 	},
 	assetBrowserSelectedAssetId: "asset-browser-selected-asset-1",
 	assetBrowserTitle: "샘플 asset browser title",
-	count: 12,
+	contentLanguageCode: "ko_KR",
 	description: "스토리북에서 확인할 description 예시입니다.",
-	durationMin: 15,
-	durationSec: 15,
-	errors: {},
-	exerciseName: "샘플 exercise name 1",
 	isAssetBrowserOpen: false,
 	isLoading: false,
 	isNotFound: false,
-	isSchedulable: false,
 	isSubmitPending: false,
-	onChangeCountInput: (..._args: never[]) => undefined,
-	onChangeDescriptionTextArea: (..._args: never[]) => undefined,
-	onChangeDurationMinInput: (..._args: never[]) => undefined,
-	onChangeDurationSecInput: (..._args: never[]) => undefined,
-	onChangeImageFileIdInput: (..._args: never[]) => undefined,
-	onChangeNameInput: (..._args: never[]) => undefined,
-	onChangeVideoFileIdInput: (..._args: never[]) => undefined,
+	readOnly: false,
 	onClickCancelButton: (..._args: never[]) => undefined,
 	onClickClearImageAssetButton: (..._args: never[]) => undefined,
 	onClickClearVideoAssetButton: (..._args: never[]) => undefined,
@@ -82,6 +71,16 @@ const defaultArgs = {
 	onOpenImagePicker: (..._args: never[]) => undefined,
 	onOpenVideoPicker: (..._args: never[]) => undefined,
 	onSelectAssetFromBrowser: (..._args: never[]) => undefined,
+	state: {
+		count: 12,
+		description: "스토리북에서 확인할 description 예시입니다.",
+		durationMin: 15,
+		durationSec: 15,
+		errors: {},
+		imageFileId: "image-file-1",
+		name: "샘플 exercise name 1",
+		videoFileId: "video-file-1",
+	},
 	selectedImageAsset: {
 		createdAt: "2026-04-14T09:00:00.000Z",
 		id: "item-1",
@@ -102,6 +101,7 @@ const defaultArgs = {
 		sizeBytes: 1024,
 		status: "UPLOADING",
 	},
+	title: "운동 정보 수정",
 };
 
 const loadingArgs = {
@@ -117,6 +117,28 @@ const notFoundArgs = {
 const busyArgs = {
 	...defaultArgs,
 	isSubmitPending: true,
+};
+
+const readOnlyArgs = {
+	...defaultArgs,
+	actions: null,
+	description: "태스크에 연결된 운동 detail입니다.",
+	metadata: {
+		createdAt: "2026-04-14T09:00:00.000Z",
+		routines: [
+			{
+				createdAt: "2026-04-14T09:00:00.000Z",
+				id: "routine-1",
+				label: "입문",
+				name: "기초 루틴",
+			},
+		],
+		taskId: "task-1",
+		tenantId: "space-1",
+		updatedAt: "2026-04-15T09:00:00.000Z",
+	},
+	readOnly: true,
+	title: "샘플 exercise name 1",
 };
 
 const meta = {
@@ -145,4 +167,8 @@ export const NotFound: Story = {
 
 export const Busy: Story = {
 	args: busyArgs as never,
+};
+
+export const ReadOnly: Story = {
+	args: readOnlyArgs as never,
 };

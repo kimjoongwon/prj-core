@@ -32,6 +32,13 @@ describe("Index exports", () => {
 		expect(utils.getUrlWithParamsAndQueryString).toBeDefined();
 		expect(utils.convertFromPathParamsToQueryParams).toBeDefined();
 
+		// Route key utilities
+		expect(utils.toRouteKey).toBeDefined();
+		expect(utils.fromRouteKey).toBeDefined();
+		expect(utils.tryFromRouteKey).toBeDefined();
+		expect(utils.isUuid).toBeDefined();
+		expect(utils.isRouteKey).toBeDefined();
+
 		// Tool utilities
 		expect(utils.getProperty).toBeDefined();
 		expect(utils.setProperty).toBeDefined();
@@ -47,6 +54,7 @@ describe("Index exports", () => {
 		expect(utils.form).toBeDefined();
 		expect(utils.logger).toBeDefined();
 		expect(utils.path).toBeDefined();
+		expect(utils.routeKey).toBeDefined();
 		expect(utils.tool).toBeDefined();
 
 		// Check that namespace objects contain expected functions
@@ -56,6 +64,7 @@ describe("Index exports", () => {
 		expect(utils.form.validateSingleField).toBeDefined();
 		expect(utils.logger.create).toBeDefined();
 		expect(utils.path.getUrlWithParamsAndQueryString).toBeDefined();
+		expect(utils.routeKey.toRouteKey).toBeDefined();
 		expect(utils.tool.deepClone).toBeDefined();
 	});
 });

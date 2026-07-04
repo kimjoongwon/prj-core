@@ -12,15 +12,16 @@
 4. 각 파일은 `_base.prisma`를 제외하고 `@schema-owner: true` 모델을 정확히 1개만 가집니다.
 5. `@schema-owner: true`는 해당 파일의 대표 소유 모델(anchor model)입니다.
 6. `@aggregate-root: true`는 `@schema-owner: true` 모델 중 독립적으로 관리되는 실제 aggregate root에만 선택적으로 부여합니다.
-7. 선언 소유권은 아래 매트릭스를 따릅니다.
-8. enum은 실제 사용처가 있어야 합니다(미사용 enum 금지).
-9. 주석 표준은 `@displayName`만 허용합니다(`@DisplayName`, `@displayname` 금지).
+7. `@usecase-anchor: true`는 `@schema-owner: true`와 `@aggregate-root: true`가 붙은 모델 중 application/usecase 흐름의 기준점에만 선택적으로 부여합니다.
+8. 선언 소유권은 아래 매트릭스를 따릅니다.
+9. enum은 실제 사용처가 있어야 합니다(미사용 enum 금지).
+10. 주석 표준은 `@displayName`만 허용합니다(`@DisplayName`, `@displayname` 금지).
 
 ## 도메인 폴더 구조
 
 | 도메인 폴더 | 설명 |
 |-------------|------|
-| `access-control/` | Subject/Action/Ability/Grant/Role |
+| `access-control/` | Subject/Action/Ability/Policy/Role |
 | `asset/` | Asset/Folder/Album |
 | `auth/` | 감사 로그, 비밀번호 이력, 정책, 화이트리스트 |
 | `billing/` | 결제/정산 공통 장부 |
@@ -46,15 +47,18 @@
 | `asset/asset.prisma` | `Asset` |
 | `asset/folder.prisma` | `Folder` |
 | `auth/auth-audit.prisma` | `AuthAuditLog` |
+| `auth/email-verification.prisma` | `EmailVerification` |
 | `auth/password-history.prisma` | `PasswordHistory` |
 | `auth/security-policy.prisma` | `SecurityPolicy` |
 | `auth/whitelist-entry.prisma` | `WhitelistEntry` |
 | `billing/payment.prisma` | `Payment` |
 | `content/content.prisma` | `Content` |
+| `content/service-document.prisma` | `ServiceDocument` |
 | `content/template.prisma` | `Template` |
 | `content/translation.prisma` | `Translation` |
 | `identity/space.prisma` | `Space` |
 | `identity/tenant.prisma` | `Tenant` |
+| `identity/tenant-access-request.prisma` | `TenantAccessRequest` |
 | `identity/user.prisma` | `User` |
 | `inquiry/inquiry-ai.prisma` | `AIAgentLog` |
 | `inquiry/inquiry-thread.prisma` | `InquiryThread` |
@@ -83,14 +87,17 @@
 | `asset/album.prisma` | `Album` |
 | `asset/asset.prisma` | `Asset` |
 | `asset/folder.prisma` | `Folder` |
+| `auth/email-verification.prisma` | `EmailVerification` |
 | `auth/security-policy.prisma` | `SecurityPolicy` |
 | `auth/whitelist-entry.prisma` | `WhitelistEntry` |
 | `billing/payment.prisma` | `Payment` |
 | `content/content.prisma` | `Content` |
+| `content/service-document.prisma` | `ServiceDocument` |
 | `content/template.prisma` | `Template` |
 | `content/translation.prisma` | `Translation` |
 | `identity/space.prisma` | `Space` |
 | `identity/tenant.prisma` | `Tenant` |
+| `identity/tenant-access-request.prisma` | `TenantAccessRequest` |
 | `identity/user.prisma` | `User` |
 | `inquiry/inquiry.prisma` | `Inquiry` |
 | `oidc/oidc-client.prisma` | `OidcClient` |
@@ -112,6 +119,48 @@
 - `inquiry/inquiry-ai.prisma`
 - `inquiry/inquiry-thread.prisma`
 
+## 파일별 UseCase Anchor Marker
+
+`@usecase-anchor: true`는 도메인 소유 범위를 넓히는 태그가 아닙니다. application/usecase 계층에서 여러 aggregate, JOIN, catalog를 조합할 때 기준점이 되는 schema owner를 표시합니다. 실제 폴더 구조는 도메인 폴더를 유지하고, usecase-anchor 기준 정돈은 아래 매트릭스와 검증 스크립트로 관리합니다.
+
+| 파일 | `@usecase-anchor: true` 모델 |
+|------|------------------------------|
+| `access-control/ability.prisma` | `Ability` |
+| `access-control/action.prisma` | `Action` |
+| `access-control/policy.prisma` | `Policy` |
+| `access-control/role.prisma` | `Role` |
+| `access-control/subject.prisma` | `Subject` |
+| `asset/asset.prisma` | `Asset` |
+| `asset/folder.prisma` | `Folder` |
+| `auth/email-verification.prisma` | `EmailVerification` |
+| `auth/security-policy.prisma` | `SecurityPolicy` |
+| `billing/payment.prisma` | `Payment` |
+| `content/content.prisma` | `Content` |
+| `content/service-document.prisma` | `ServiceDocument` |
+| `content/template.prisma` | `Template` |
+| `content/translation.prisma` | `Translation` |
+| `identity/space.prisma` | `Space` |
+| `identity/tenant-access-request.prisma` | `TenantAccessRequest` |
+| `identity/user.prisma` | `User` |
+| `inquiry/inquiry.prisma` | `Inquiry` |
+| `oidc/oidc-client.prisma` | `OidcClient` |
+| `scheduling/course.prisma` | `Course` |
+| `scheduling/reservation.prisma` | `Reservation` |
+| `scheduling/routine.prisma` | `Routine` |
+| `scheduling/task.prisma` | `Task` |
+| `scheduling/timeline.prisma` | `Timeline` |
+
+다음 aggregate root는 현재 usecase-anchor로 표시하지 않습니다. 기준 데이터, 내부 장부, taxonomy, wallet처럼 직접 application flow의 기준점으로 쓰이지 않는 모델입니다.
+
+- `asset/album.prisma`
+- `auth/whitelist-entry.prisma`
+- `identity/tenant.prisma`
+- `oidc/oidc-model.prisma`
+- `platform/reference-data-migration.prisma`
+- `taxonomy/category.prisma`
+- `taxonomy/group.prisma`
+- `wallet/safe.prisma`
+
 ## 선언 소유권 매트릭스
 
 | 파일 | 소유 모델/enum |
@@ -125,14 +174,17 @@
 | `asset/asset.prisma` | `Asset`, `Image`, `Video`, `Document`, `Derivative`, `AssetKind`, `AssetStatus`, `DerivativeKind` |
 | `asset/folder.prisma` | `Folder` |
 | `auth/auth-audit.prisma` | `AuthAuditLog`, `AuthAuditResult` |
+| `auth/email-verification.prisma` | `EmailVerification`, `EmailVerificationStatus` |
 | `auth/password-history.prisma` | `PasswordHistory` |
 | `auth/security-policy.prisma` | `SecurityPolicy` |
 | `auth/whitelist-entry.prisma` | `WhitelistType`, `WhitelistEntry` |
 | `content/content.prisma` | `Post`, `Content`, `TextTypes` |
+| `content/service-document.prisma` | `ServiceDocument`, `ServiceDocumentKind`, `ServiceDocumentPlatform`, `ServiceDocumentStatus`, `ServiceDocumentFormat` |
 | `content/template.prisma` | `Template`, `TemplateVariable`, `TemplateType` |
 | `content/translation.prisma` | `Translation`, `LanguageCode` |
 | `identity/space.prisma` | `Space`, `Company`, `SpaceClassification`, `SpaceAssociation`, `Ground` |
 | `identity/tenant.prisma` | `Tenant` |
+| `identity/tenant-access-request.prisma` | `TenantAccessRequest`, `TenantAccessRequestStatus` |
 | `identity/user.prisma` | `User`, `UserClassification`, `UserAssociation`, `Profile` |
 | `inquiry/inquiry-ai.prisma` | `AIAgentLog`, `AIAgentAction` |
 | `inquiry/inquiry-thread.prisma` | `InquiryThread`, `InquiryMessage`, `InquiryParticipant`, `InquiryAttachment`, `InquiryParticipantRole`, `SenderType`, `ThreadStatus`, `MessageContentType`, `AttachmentFileType` |

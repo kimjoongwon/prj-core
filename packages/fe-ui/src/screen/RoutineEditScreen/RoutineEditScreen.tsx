@@ -1,223 +1,250 @@
 "use client";
 
-import {
-	Button,
-	ContentLanguageNotice,
-	PageTitleBar,
-	Section,
-	SectionSurface,
-	TextField,
-	useT,
-	VStack,
-} from "@cocrepo/ui";
 import { Modal, Spinner, useOverlayState } from "@heroui/react";
 import { observer } from "mobx-react-lite";
-import type {
+import type { ReactNode } from "react";
+import { DateTimeCell } from "../../data-grid/cell";
+import { Chip } from "../../data-display/Chip/Chip";
+import {
+	RoutineForm,
+	type RoutineFormState,
+	type RoutineActivityFormItem,
+	type RoutineTaskCandidate,
+} from "../../form/RoutineForm";
+import { Button } from "../../input/Button/Button";
+import { Section } from "../../layout";
+import { VStack } from "../../rhythm";
+import { SectionSurface } from "../../surface";
+import { PageTitleBar } from "../../widget/PageTitleBar";
+
+export type {
 	RoutineActivityFormItem,
+	RoutineFormField,
+	RoutineFormState,
 	RoutineTaskCandidate,
-} from "../RoutineCreateScreen/RoutineCreateScreen";
-import { RoutineActivitySection } from "../RoutineCreateScreen/RoutineCreateScreen";
-export interface RoutineEditScreenProps {
-	routineName?: string;
+} from "../../form/RoutineForm";
+
+export interface RoutineEditScreenProgram {
+	id: string;
 	name: string;
-	label: string;
-	contentLanguageCode?: string | null;
-	exerciseQuery: string;
-	activities: RoutineActivityFormItem[];
-	candidateTasks: RoutineTaskCandidate[];
-	nameError?: string;
-	labelError?: string;
-	activitiesError?: string;
-	isLoading: boolean;
-	isNotFound: boolean;
-	isTasksLoading: boolean;
-	isSubmitting: boolean;
-	isEmptyActivitiesWarningOpen: boolean;
-	onChangeNameInput: (value: string) => void;
-	onChangeLabelInput: (value: string) => void;
-	onChangeExerciseQueryInput: (value: string) => void;
-	onClickAddActivityButton: (taskId: string) => void;
-	onChangeActivityInput: (
-		taskId: string,
-		field: "repetitions" | "restTime" | "notes",
-		value: string,
-	) => void;
-	onClickRemoveActivityButton: (taskId: string) => void;
-	onReorderActivities: (fromIndex: number, toIndex: number) => void;
-	onClickCancelButton: () => void;
-	onClickSaveButton: () => void;
-	onCloseEmptyActivitiesWarningModal: () => void;
-	onClickConfirmEmptyActivitiesWarningButton: () => void;
 }
-export const RoutineEditScreen = observer(
-	({
-		routineName,
-		name,
-		label,
+
+export interface RoutineEditScreenMetadata {
+	createdAt?: string | null;
+	updatedAt?: string | null;
+}
+
+export interface RoutineEditScreenProps {
+	title: ReactNode;
+	description?: ReactNode;
+	state?: RoutineFormState;
+	contentLanguageCode?: string | null;
+	candidateTasks?: RoutineTaskCandidate[];
+	activities?: RoutineActivityFormItem[];
+	programs?: RoutineEditScreenProgram[];
+	metadata?: RoutineEditScreenMetadata;
+	readOnly?: boolean;
+	isLoading?: boolean;
+	notFound?: boolean;
+	loadingMessage?: ReactNode;
+	notFoundMessage?: ReactNode;
+	notFoundAction?: ReactNode;
+	isTasksLoading?: boolean;
+	isSubmitting?: boolean;
+	isEmptyActivitiesWarningOpen?: boolean;
+	actions?: ReactNode;
+	onCloseEmptyActivitiesWarningModal?: () => void;
+	onClickConfirmEmptyActivitiesWarningButton?: () => void;
+}
+
+/**
+ * Routine create/detail/edit route가 공유하는 screen입니다.
+ * route가 title, actions, readOnly을 결정합니다.
+ */
+export const RoutineEditScreen = observer((props: RoutineEditScreenProps) => {
+	const {
+		title,
+		description,
+		state,
 		contentLanguageCode,
-		exerciseQuery,
+		candidateTasks = [],
 		activities,
-		candidateTasks,
-		nameError,
-		labelError,
-		activitiesError,
-		isLoading,
-		isNotFound,
-		isTasksLoading,
-		isSubmitting,
-		isEmptyActivitiesWarningOpen,
-		onChangeNameInput,
-		onChangeLabelInput,
-		onChangeExerciseQueryInput,
-		onClickAddActivityButton,
-		onChangeActivityInput,
-		onClickRemoveActivityButton,
-		onReorderActivities,
-		onClickCancelButton,
-		onClickSaveButton,
+		programs = [],
+		metadata,
+		readOnly = false,
+		isLoading = false,
+		notFound = false,
+		loadingMessage = "로딩 중...",
+		notFoundMessage = "루틴을 찾을 수 없습니다.",
+		notFoundAction,
+		isTasksLoading = false,
+		isSubmitting = false,
+		isEmptyActivitiesWarningOpen = false,
+		actions,
 		onCloseEmptyActivitiesWarningModal,
 		onClickConfirmEmptyActivitiesWarningButton,
-	}: RoutineEditScreenProps) => {
-		const t = useT();
-		const emptyActivitiesWarningState = useOverlayState({
-			isOpen: isEmptyActivitiesWarningOpen,
-			onOpenChange: (open) => {
-				if (!open) {
-					onCloseEmptyActivitiesWarningModal();
-				}
-			},
-		});
-		if (isLoading) {
-			return (
-				<VStack fullWidth>
-					<PageTitleBar title="루틴 수정" description="로딩 중..." />
-					<SectionSurface>
-						<Section>
-							<Section.Body>
-								<div className="flex items-center justify-center gap-2 p-8">
-									<Spinner size="sm" />
-									<span className="text-muted">{t("로딩 중...")}</span>
-								</div>
-							</Section.Body>
-						</Section>
-					</SectionSurface>
-				</VStack>
-			);
-		}
-		if (isNotFound) {
-			return (
-				<VStack fullWidth>
-					<PageTitleBar
-						title="루틴 수정"
-						description="루틴을 찾을 수 없습니다."
-					/>
-					<SectionSurface>
-						<Section>
-							<Section.Body>
-								<div className="flex flex-col items-center justify-center gap-4 p-8">
-									<p className="text-muted">{t("루틴을 찾을 수 없습니다.")}</p>
-									<Button variant="flat" onPress={onClickCancelButton}>
-										목록으로
-									</Button>
-								</div>
-							</Section.Body>
-						</Section>
-					</SectionSurface>
-				</VStack>
-			);
-		}
-		const pageActions = (
-			<div className="flex gap-2">
-				<Button
-					variant="flat"
-					onPress={onClickCancelButton}
-					isDisabled={isSubmitting}
-				>
-					취소
-				</Button>
-				<Button
-					color="primary"
-					onPress={onClickSaveButton}
-					isLoading={isSubmitting}
-				>
-					저장
-				</Button>
-			</div>
-		);
+	} = props;
+	const emptyActivitiesWarningState = useOverlayState({
+		isOpen: isEmptyActivitiesWarningOpen,
+		onOpenChange: (open) => {
+			if (!open) {
+				onCloseEmptyActivitiesWarningModal?.();
+			}
+		},
+	});
+
+	if (isLoading) {
 		return (
 			<VStack fullWidth>
-				<PageTitleBar
-					title="루틴 수정"
-					description={
-						routineName ? (
-							<>
-								{routineName} {t("루틴을 수정합니다.")}
-							</>
-						) : (
-							"루틴을 수정합니다."
-						)
-					}
-					actions={pageActions}
-				/>
+				<PageTitleBar title={title} description={loadingMessage} />
 				<SectionSurface>
 					<Section>
 						<Section.Body>
-							<Section>
-								<Section.Header>
-									<PageTitleBar level={2} title="기본 정보" />
-								</Section.Header>
-								<Section.Body>
-									<div className="flex flex-col gap-4">
-										<ContentLanguageNotice
-											contentLanguageCode={contentLanguageCode}
-										/>
-										<TextField
-											label="루틴 이름"
-											placeholder="예: 풀바디 루틴 A"
-											value={name}
-											onValueChange={onChangeNameInput}
-											isRequired
-											isInvalid={Boolean(nameError)}
-											errorMessage={nameError}
-											maxLength={100}
-										/>
-										<TextField
-											label="단축 라벨"
-											placeholder="예: FULL-A"
-											value={label}
-											onValueChange={onChangeLabelInput}
-											isRequired
-											isInvalid={Boolean(labelError)}
-											errorMessage={labelError}
-											maxLength={50}
-										/>
-									</div>
-								</Section.Body>
-							</Section>
-							<RoutineActivitySection
-								exerciseQuery={exerciseQuery}
-								candidateTasks={candidateTasks}
-								activities={activities}
-								activitiesError={activitiesError}
-								isTasksLoading={isTasksLoading}
-								onChangeExerciseQueryInput={onChangeExerciseQueryInput}
-								onClickAddActivityButton={onClickAddActivityButton}
-								onChangeActivityInput={onChangeActivityInput}
-								onClickRemoveActivityButton={onClickRemoveActivityButton}
-								onReorderActivities={onReorderActivities}
-							/>
+							<div className="flex items-center justify-center gap-2 p-8">
+								<Spinner size="sm" />
+								<span className="text-muted">{loadingMessage}</span>
+							</div>
 						</Section.Body>
 					</Section>
 				</SectionSurface>
+			</VStack>
+		);
+	}
+
+	if (notFound || !state) {
+		return (
+			<VStack fullWidth>
+				<PageTitleBar title={title} description={notFoundMessage} />
+				<SectionSurface>
+					<Section>
+						<Section.Body>
+							<div className="flex flex-col items-center justify-center gap-4 p-8">
+								<p className="text-muted">{notFoundMessage}</p>
+								{notFoundAction ?? <Button variant="flat">목록으로</Button>}
+							</div>
+						</Section.Body>
+					</Section>
+				</SectionSurface>
+			</VStack>
+		);
+	}
+
+	const visibleActivities = activities ?? state.activities;
+	const resolvedActivities = visibleActivities.filter((activity) =>
+		Boolean(activity.exerciseName),
+	).length;
+	const unresolvedActivities = visibleActivities.length - resolvedActivities;
+
+	return (
+		<VStack fullWidth>
+			<PageTitleBar title={title} description={description} actions={actions} />
+			<SectionSurface>
+				<Section>
+					<Section.Body>
+						<VStack>
+							<RoutineForm
+								state={state}
+								contentLanguageCode={contentLanguageCode}
+								candidateTasks={candidateTasks}
+								activities={activities}
+								isTasksLoading={isTasksLoading}
+								readOnly={readOnly}
+							/>
+							{readOnly ? (
+								<Section>
+									<Section.Header>
+										<PageTitleBar level={2} title="연결 요약" />
+									</Section.Header>
+									<Section.Body>
+										<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+											<div className="rounded-lg bg-surface-secondary p-3">
+												<p className="text-xs text-muted">전체 활동</p>
+												<p className="mt-1 text-lg font-semibold">
+													{visibleActivities.length}개
+												</p>
+											</div>
+											<div className="rounded-lg bg-surface-secondary p-3">
+												<p className="text-xs text-muted">연결 정상</p>
+												<p className="mt-1 text-lg font-semibold text-success">
+													{resolvedActivities}개
+												</p>
+											</div>
+											<div className="rounded-lg bg-surface-secondary p-3">
+												<p className="text-xs text-muted">사용 중 프로그램</p>
+												<p className="mt-1 text-lg font-semibold">
+													{programs.length}개
+												</p>
+											</div>
+										</div>
+										{unresolvedActivities > 0 ? (
+											<div className="mt-3">
+												<Chip size="sm" variant="flat" color="warning">
+													확인 필요 {unresolvedActivities}개
+												</Chip>
+											</div>
+										) : null}
+									</Section.Body>
+								</Section>
+							) : null}
+							{readOnly && programs.length > 0 ? (
+								<Section>
+									<Section.Header>
+										<PageTitleBar level={2} title="사용 중인 프로그램" />
+									</Section.Header>
+									<Section.Body>
+										<div className="flex flex-col gap-2">
+											{programs.map((program) => (
+												<div
+													key={program.id}
+													className="flex items-center justify-between rounded-lg bg-surface-secondary p-3"
+												>
+													<p className="font-medium">{program.name}</p>
+												</div>
+											))}
+										</div>
+									</Section.Body>
+								</Section>
+							) : null}
+							{metadata?.createdAt || metadata?.updatedAt ? (
+								<Section>
+									<Section.Header>
+										<PageTitleBar level={2} title="관리 정보" />
+									</Section.Header>
+									<Section.Body>
+										<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+											{metadata.createdAt ? (
+												<div>
+													<label className="text-sm text-muted">등록일</label>
+													<div className="mt-1">
+														<DateTimeCell value={metadata.createdAt} />
+													</div>
+												</div>
+											) : null}
+											{metadata.updatedAt ? (
+												<div>
+													<label className="text-sm text-muted">수정일</label>
+													<div className="mt-1">
+														<DateTimeCell value={metadata.updatedAt} />
+													</div>
+												</div>
+											) : null}
+										</div>
+									</Section.Body>
+								</Section>
+							) : null}
+						</VStack>
+					</Section.Body>
+				</Section>
+			</SectionSurface>
+			{onCloseEmptyActivitiesWarningModal &&
+			onClickConfirmEmptyActivitiesWarningButton ? (
 				<Modal state={emptyActivitiesWarningState}>
 					<Modal.Backdrop>
 						<Modal.Container>
 							<Modal.Dialog>
-								<Modal.Header>{t("활동 없이 저장")}</Modal.Header>
+								<Modal.Header>활동 없이 저장</Modal.Header>
 								<Modal.Body>
-									<p>
-										{t("활동이 0개인 루틴입니다. 이대로 저장하시겠습니까?")}
-									</p>
+									<p>활동이 0개인 루틴입니다. 이대로 저장하시겠습니까?</p>
 								</Modal.Body>
 								<Modal.Footer>
 									<Button
@@ -232,14 +259,14 @@ export const RoutineEditScreen = observer(
 										onPress={onClickConfirmEmptyActivitiesWarningButton}
 										isLoading={isSubmitting}
 									>
-										{t("저장 진행")}
+										저장 진행
 									</Button>
 								</Modal.Footer>
 							</Modal.Dialog>
 						</Modal.Container>
 					</Modal.Backdrop>
 				</Modal>
-			</VStack>
-		);
-	},
-);
+			) : null}
+		</VStack>
+	);
+});

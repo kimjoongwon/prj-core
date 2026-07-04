@@ -1,74 +1,60 @@
 "use client";
 
-import {
-	Button,
-	PageTitleBar,
-	Section,
-	SectionSurface,
-	TextField,
-	useT,
-	VStack,
-} from "@cocrepo/ui";
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
-import { Select } from "../../input/Select/Select";
-import { CONTENT_LANGUAGE_OPTIONS } from "../../widget/ContentLanguageNotice";
+import type { ReactNode } from "react";
+import {
+	GroundForm,
+	type GroundFormState,
+} from "../../form/GroundForm";
+import { Button } from "../../input/Button/Button";
+import { Section } from "../../layout/Section/Section";
+import { SectionSurface } from "../../surface";
+import { VStack } from "../../rhythm";
+import { PageTitleBar } from "../../widget/PageTitleBar";
+
 export interface GroundEditScreenProps {
-	groundName?: string;
-	name: string;
-	label: string;
-	address: string;
-	phone: string;
-	email: string;
-	businessNo: string;
-	contentLanguageCode: string;
-	errors: Record<string, string>;
+	title?: ReactNode;
+	description?: ReactNode;
+	state: GroundFormState;
+	readOnly?: boolean;
+	actions?: ReactNode;
 	isLoading: boolean;
 	isNotFound: boolean;
 	isSubmitPending: boolean;
-	onChangeNameInput: (value: string) => void;
-	onChangeLabelInput: (value: string) => void;
-	onChangeAddressInput: (value: string) => void;
-	onChangePhoneInput: (value: string) => void;
-	onChangeEmailInput: (value: string) => void;
-	onChangeContentLanguageSelect: (value: string) => void;
 	onClickCancelButton: () => void;
-	onClickSaveButton: () => void;
+	onClickSaveButton?: () => void;
 }
+
+/** Ground aggregate의 생성/상세/수정 route가 공유하는 편집 화면입니다. */
 export const GroundEditScreen = observer(
 	({
-		groundName,
-		name,
-		label,
-		address,
-		phone,
-		email,
-		businessNo,
-		contentLanguageCode,
-		errors,
+		title,
+		description,
+		state,
+		readOnly = false,
+		actions,
 		isLoading,
 		isNotFound,
 		isSubmitPending,
-		onChangeNameInput,
-		onChangeLabelInput,
-		onChangeAddressInput,
-		onChangePhoneInput,
-		onChangeEmailInput,
-		onChangeContentLanguageSelect,
 		onClickCancelButton,
 		onClickSaveButton,
 	}: GroundEditScreenProps) => {
-		const t = useT();
+		const resolvedTitle = title ?? (readOnly ? "시설 정보" : "시설 정보 수정");
+		const resolvedDescription =
+			description ??
+			(readOnly ? "시설 기본 정보를 확인합니다." : "시설 detail을 수정합니다.");
+
 		if (isLoading) {
 			return (
 				<VStack fullWidth>
-					<PageTitleBar title="시설 정보 수정" description="로딩 중..." />
+					<PageTitleBar title={resolvedTitle} description="로딩 중..." />
 					<SectionSurface>
 						<Section>
 							<Section.Body>
 								<div className="flex items-center justify-center gap-2 p-8">
 									<Spinner size="sm" />
-									<span className="text-muted">{t("로딩 중...")}</span>
+									<span className="text-muted">로딩 중...</span>
 								</div>
 							</Section.Body>
 						</Section>
@@ -80,7 +66,7 @@ export const GroundEditScreen = observer(
 			return (
 				<VStack fullWidth>
 					<PageTitleBar
-						title="시설 정보 수정"
+						title={resolvedTitle}
 						description="시설 detail을 찾을 수 없습니다."
 					/>
 					<SectionSurface>
@@ -88,7 +74,7 @@ export const GroundEditScreen = observer(
 							<Section.Body>
 								<div className="flex flex-col items-center justify-center gap-4 p-8">
 									<p className="text-muted">
-										{t("시설 detail을 찾을 수 없습니다.")}
+										시설 detail을 찾을 수 없습니다.
 									</p>
 									<Button variant="flat" onPress={onClickCancelButton}>
 										목록으로
@@ -103,16 +89,9 @@ export const GroundEditScreen = observer(
 		return (
 			<VStack fullWidth>
 				<PageTitleBar
-					title="시설 정보 수정"
-					description={
-						groundName ? (
-							<>
-								{groundName} {t("시설 detail을 수정합니다.")}
-							</>
-						) : (
-							"시설 detail을 수정합니다."
-						)
-					}
+					title={resolvedTitle}
+					description={resolvedDescription}
+					actions={actions}
 				/>
 				<SectionSurface>
 					<Section>
@@ -121,83 +100,24 @@ export const GroundEditScreen = observer(
 						</Section.Header>
 						<Section.Body>
 							<VStack>
-								<TextField
-									label="시설명"
-									placeholder="시설명을 입력하세요"
-									value={name}
-									onValueChange={onChangeNameInput}
-									isRequired
-									isInvalid={Boolean(errors.name)}
-									errorMessage={errors.name}
+								<GroundForm
+									state={state}
+									readOnly={readOnly}
 								/>
-								<TextField
-									label="라벨"
-									placeholder="단축 라벨을 입력하세요 (선택)"
-									value={label}
-									onValueChange={onChangeLabelInput}
-								/>
-								<TextField
-									label="주소"
-									placeholder="주소를 입력하세요"
-									value={address}
-									onValueChange={onChangeAddressInput}
-									isRequired
-									isInvalid={Boolean(errors.address)}
-									errorMessage={errors.address}
-								/>
-								<TextField
-									label="전화번호"
-									placeholder="전화번호를 입력하세요"
-									type="tel"
-									value={phone}
-									onValueChange={onChangePhoneInput}
-									isRequired
-									isInvalid={Boolean(errors.phone)}
-									errorMessage={errors.phone}
-								/>
-								<TextField
-									label="이메일"
-									placeholder="이메일을 입력하세요"
-									type="email"
-									value={email}
-									onValueChange={onChangeEmailInput}
-									isRequired
-									isInvalid={Boolean(errors.email)}
-									errorMessage={errors.email}
-								/>
-								<TextField
-									label="사업자등록번호"
-									value={businessNo}
-									isDisabled
-									description="사업자등록번호는 수정할 수 없습니다."
-								/>
-								<Select
-									label="콘텐츠 언어"
-									placeholder="운영 리소스 작성 언어를 선택하세요"
-									value={contentLanguageCode}
-									onChange={(value) =>
-										onChangeContentLanguageSelect(String(value ?? ""))
-									}
-									options={CONTENT_LANGUAGE_OPTIONS.map((language) => ({
-										value: language.code,
-										label: language.label,
-									}))}
-									isRequired
-									isInvalid={Boolean(errors.contentLanguageCode)}
-									errorMessage={errors.contentLanguageCode}
-								/>
-								<div className="flex justify-end gap-2 pt-4">
-									<Button variant="flat" onPress={onClickCancelButton}>
-										취소
-									</Button>
-									<Button
-										color="primary"
-										onPress={onClickSaveButton}
-										isLoading={isSubmitPending}
-									>
-										저장
-									</Button>
-								</div>
+								{readOnly ? null : (
+									<div className="flex justify-end gap-2 pt-4">
+										<Button variant="flat" onPress={onClickCancelButton}>
+											취소
+										</Button>
+										<Button
+											color="primary"
+											onPress={onClickSaveButton}
+											isLoading={isSubmitPending}
+										>
+											저장
+										</Button>
+									</div>
+								)}
 							</VStack>
 						</Section.Body>
 					</Section>

@@ -195,6 +195,7 @@ route/page에서 reusable Screen/Feature를 새로 만들거나 수정하면 해
 
 서비스 전체 도메인 모델, aggregate, 주요 상태, 상태 전이, validation, 정책을 정리합니다.
 Prisma model, Entity, VO, Command/Query, Event, UseCase가 필요한 경우 여기에서 서비스 수준 계약을 먼저 확정합니다.
+Prisma schema에 `@usecase-anchor: true`가 있는 모델은 여러 aggregate/JOIN/catalog를 조합하는 application 흐름의 기준점으로 기록하되, 도메인 소유 경계가 넓어진 것으로 쓰지 않습니다.
 
 | 도메인 객체 | 책임 | 주요 필드/값 | 상태/lifecycle | 정책/검증 | 소유 패키지 | 비고 |
 |-------------|------|--------------|----------------|-----------|-------------|------|
@@ -246,6 +247,7 @@ Prisma model, Entity, VO, Command/Query, Event, UseCase가 필요한 경우 여�
 
 각 인벤토리 행은 재사용/수정/신규 여부, 대상 파일, 소스 담당 `agent_type`, 소비/Wiring `agent_type`, 검증 `agent_type`, 관련 route/page 스펙을 드러내야 합니다.
 route-local hook/util/type/상태는 웹/모바일 모두 route/page 스펙의 `fe-route-agent` 범위로 기록하고 별도 spec을 만들지 않습니다.
+Prisma 행에서 cross-aggregate application 흐름이 있으면 관련 schema owner의 `@usecase-anchor: true` 여부와 소비할 usecase folder를 함께 명시합니다.
 
 ### DESIGN.md 기반 디자인 방향
 

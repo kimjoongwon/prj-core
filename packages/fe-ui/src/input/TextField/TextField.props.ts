@@ -44,6 +44,7 @@ type DirectInputProps = Omit<
 	| "isRequired"
 	| "onBlur"
 	| "onChange"
+	| "onFocus"
 	| "placeholder"
 	| "size"
 	| "type"
@@ -58,6 +59,7 @@ export interface TextFieldProps
 			| "defaultValue"
 			| "onBlur"
 			| "onChange"
+			| "onFocus"
 			| "placeholder"
 			| "type"
 			| "value"
@@ -74,7 +76,13 @@ export interface TextFieldProps
 	inputGroupProps?: Omit<HeroInputGroupProps, "children" | "variant">;
 	inputProps?: Omit<
 		HeroInputProps,
-		"children" | "defaultValue" | "onBlur" | "onChange" | "value" | "variant"
+		| "children"
+		| "defaultValue"
+		| "onBlur"
+		| "onChange"
+		| "onFocus"
+		| "value"
+		| "variant"
 	>;
 	isClearable?: boolean;
 	labelPlacement?: string;
@@ -82,6 +90,7 @@ export interface TextFieldProps
 	onBlur?: (value: string | number) => void;
 	onChange?: (value: string | number) => void;
 	onClear?: () => void;
+	onFocus?: (value: string | number) => void;
 	onValueChange?: (value: string) => void;
 	placeholder?: HeroInputProps["placeholder"];
 	size?: "sm" | "md" | "lg";

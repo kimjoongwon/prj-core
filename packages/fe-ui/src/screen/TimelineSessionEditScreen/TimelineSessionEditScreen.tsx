@@ -1,294 +1,379 @@
 "use client";
 
-import {
-	Button,
-	ContentLanguageNotice,
-	PageTitleBar,
-	Section,
-	SectionSurface,
-	TextArea,
-	TextField,
-	useT,
-	VStack,
-} from "@cocrepo/ui";
+import { Table } from "@heroui/react";
+import { Pencil, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Select } from "../../input/Select/Select";
-import type {
-	TimelineSessionScreenCycleType,
-	TimelineSessionScreenDayOfWeek,
-	TimelineSessionScreenSessionType,
-} from "../TimelineSessionCreateScreen/TimelineSessionCreateScreen";
+import type { Route } from "next";
+import Link from "next/link";
+import type { MouseEvent, ReactNode } from "react";
+import { DateTimeCell } from "../../data-grid/cell";
+import { Chip } from "../../data-display/Chip/Chip";
+import {
+	TimelineSessionForm,
+	type TimelineSessionFormCycleType,
+	type TimelineSessionFormDayOfWeek,
+	type TimelineSessionFormSessionType,
+	type TimelineSessionFormState,
+} from "../../form/TimelineSessionForm";
+import { Button } from "../../input/Button/Button";
+import { Section } from "../../layout";
+import { VStack } from "../../rhythm";
+import { SectionSurface } from "../../surface";
+import { PageTitleBar } from "../../widget/PageTitleBar";
 
-const SESSION_TYPE_OPTIONS = [
-	{
-		value: "ONE_TIME",
-		label: "일회성 특강",
-	},
-	{
-		value: "ONE_TIME_RANGE",
-		label: "기간형 집중 프로그램",
-	},
-	{
-		value: "RECURRING",
-		label: "정기 반복 클래스",
-	},
-];
-const SESSION_TYPE_DESCRIPTIONS: Record<
-	TimelineSessionScreenSessionType,
-	string
-> = {
-	ONE_TIME: "특정 일시에 한 번만 진행되는 수업입니다.",
-	ONE_TIME_RANGE: "특정 기간 동안 집중적으로 진행되는 프로그램입니다.",
-	RECURRING: "매주 또는 매월 반복되는 정기 수업입니다.",
-};
-const DAY_OF_WEEK_OPTIONS: {
-	value: TimelineSessionScreenDayOfWeek;
-	label: string;
-}[] = [
-	{
-		value: "MONDAY",
-		label: "월요일",
-	},
-	{
-		value: "TUESDAY",
-		label: "화요일",
-	},
-	{
-		value: "WEDNESDAY",
-		label: "수요일",
-	},
-	{
-		value: "THURSDAY",
-		label: "목요일",
-	},
-	{
-		value: "FRIDAY",
-		label: "금요일",
-	},
-	{
-		value: "SATURDAY",
-		label: "토요일",
-	},
-	{
-		value: "SUNDAY",
-		label: "일요일",
-	},
-];
-const CYCLE_TYPE_OPTIONS = [
-	{
-		value: "WEEKLY",
-		label: "주간",
-	},
-	{
-		value: "MONTHLY",
-		label: "월간",
-	},
-];
-export interface TimelineSessionEditScreenProps {
-	descriptionText?: string;
-	contentLanguageCode?: string | null;
-	name: string;
-	type: TimelineSessionScreenSessionType;
-	description: string;
-	startDateTime: string;
-	endDateTime: string;
-	recurringDayOfWeek: TimelineSessionScreenDayOfWeek | null;
-	repeatCycleType: TimelineSessionScreenCycleType | "";
-	errors: Record<string, string>;
-	isSubmitPending: boolean;
-	isSubmitDisabled: boolean;
-	onChangeNameInput: (value: string) => void;
-	onChangeTypeSelect: (value: string) => void;
-	onChangeDescriptionTextArea: (value: string) => void;
-	onChangeStartDateTimeInput: (value: string) => void;
-	onChangeEndDateTimeInput: (value: string) => void;
-	onChangeDayOfWeekSelect: (value: string) => void;
-	onChangeCycleTypeSelect: (value: string) => void;
-	onClickCancelButton: () => void;
-	onClickSubmitButton: () => void;
+export type {
+	TimelineSessionFormCycleType,
+	TimelineSessionFormDayOfWeek,
+	TimelineSessionFormField,
+	TimelineSessionFormSessionType,
+	TimelineSessionFormState,
+} from "../../form/TimelineSessionForm";
+
+export type TimelineSessionScreenSessionType = TimelineSessionFormSessionType;
+export type TimelineSessionScreenCycleType = TimelineSessionFormCycleType;
+export type TimelineSessionScreenDayOfWeek = TimelineSessionFormDayOfWeek;
+
+export interface TimelineSessionEditScreenMetadata {
+	typeLabel?: string;
+	typeColor?: "primary" | "secondary" | "success";
+	recurringDayLabel?: string;
+	repeatCycleLabel?: string;
+	timelineName?: string | null;
+	timelineHref?: Route;
+	createdAt?: string | null;
 }
+
+export interface TimelineSessionProgramRow {
+	id: string;
+	href: Route;
+	name: string;
+	routineName: string;
+	activityCountLabel: string;
+	previewText: string;
+	instructorName: string;
+	isConnectionResolved: boolean;
+	capacityLabel: string;
+	levelLabel: string;
+}
+
+export interface TimelineSessionEditScreenProps {
+	title: ReactNode;
+	description?: ReactNode;
+	state?: TimelineSessionFormState;
+	contentLanguageCode?: string | null;
+	readOnly?: boolean;
+	isLoading?: boolean;
+	notFound?: boolean;
+	loadingMessage?: ReactNode;
+	notFoundMessage?: ReactNode;
+	notFoundAction?: ReactNode;
+	actions?: ReactNode;
+	metadata?: TimelineSessionEditScreenMetadata;
+	programs?: TimelineSessionProgramRow[];
+	totalPrograms?: number;
+	resolvedPrograms?: number;
+	unresolvedPrograms?: number;
+	onClickCreateProgramButton?: () => void;
+	onClickEditProgramButton?: (programId: string) => void;
+	onClickDeleteProgramButton?: (programId: string) => void;
+}
+
+/**
+ * Timeline Session create/detail/edit route가 공유하는 screen입니다.
+ * route가 title, actions, readOnly을 결정합니다.
+ */
 export const TimelineSessionEditScreen = observer(
-	({
-		descriptionText,
-		contentLanguageCode,
-		name,
-		type,
-		description,
-		startDateTime,
-		endDateTime,
-		recurringDayOfWeek,
-		repeatCycleType,
-		errors,
-		isSubmitPending,
-		isSubmitDisabled,
-		onChangeNameInput,
-		onChangeTypeSelect,
-		onChangeDescriptionTextArea,
-		onChangeStartDateTimeInput,
-		onChangeEndDateTimeInput,
-		onChangeDayOfWeekSelect,
-		onChangeCycleTypeSelect,
-		onClickCancelButton,
-		onClickSubmitButton,
-	}: TimelineSessionEditScreenProps) => {
-		const t = useT();
+	(props: TimelineSessionEditScreenProps) => {
+		const {
+			title,
+			description,
+			state,
+			contentLanguageCode,
+			readOnly = false,
+			isLoading = false,
+			notFound = false,
+			loadingMessage = "로딩 중...",
+			notFoundMessage = "세션을 찾을 수 없습니다.",
+			notFoundAction,
+			actions,
+			metadata,
+			programs,
+			totalPrograms = programs?.length ?? 0,
+			resolvedPrograms = 0,
+			unresolvedPrograms = 0,
+			onClickCreateProgramButton,
+			onClickEditProgramButton,
+			onClickDeleteProgramButton,
+		} = props;
+
+		if (isLoading) {
+			return (
+				<VStack fullWidth>
+					<PageTitleBar title={title} description={loadingMessage} />
+					<SectionSurface>
+						<Section>
+							<Section.Body>
+								<div className="flex items-center justify-center gap-2 p-8">
+									<span className="text-muted">{loadingMessage}</span>
+								</div>
+							</Section.Body>
+						</Section>
+					</SectionSurface>
+				</VStack>
+			);
+		}
+
+		if (notFound || !state) {
+			return (
+				<VStack fullWidth>
+					<PageTitleBar title={title} description={notFoundMessage} />
+					<SectionSurface>
+						<Section>
+							<Section.Body>
+								<div className="flex flex-col items-center justify-center gap-4 p-8">
+									<p className="text-muted">{notFoundMessage}</p>
+									{notFoundAction ?? <Button variant="flat">목록으로</Button>}
+								</div>
+							</Section.Body>
+						</Section>
+					</SectionSurface>
+				</VStack>
+			);
+		}
+
 		return (
 			<VStack fullWidth>
-				<PageTitleBar
-					title="세션 수정"
-					description={descriptionText}
-					actions={
-						<Button variant="flat" onPress={onClickCancelButton}>
-							취소
-						</Button>
-					}
-				/>
+				<PageTitleBar title={title} description={description} actions={actions} />
 				<SectionSurface>
 					<Section>
 						<Section.Body>
 							<VStack>
-								<Section>
-									<Section.Header>
-										<PageTitleBar level={2} title="기본 정보" />
-									</Section.Header>
-									<Section.Body>
-										<VStack>
-											<ContentLanguageNotice
-												contentLanguageCode={contentLanguageCode}
-											/>
-											<TextField
-												label="세션명"
-												labelPlacement="outside"
-												placeholder="세션명을 입력하세요."
-												value={name}
-												onValueChange={onChangeNameInput}
-												isRequired
-												isInvalid={!!errors.name}
-												errorMessage={errors.name}
-											/>
-											<Select
-												label="세션 유형"
-												value={type}
-												onChange={(value) =>
-													onChangeTypeSelect(String(value ?? ""))
-												}
-												options={SESSION_TYPE_OPTIONS}
-												isRequired
-											/>
-											<p className="text-sm text-muted">
-												{t(SESSION_TYPE_DESCRIPTIONS[type])}
-											</p>
-											<TextArea
-												label="설명"
-												labelPlacement="outside"
-												placeholder="세션에 대한 부가 설명을 입력하세요."
-												value={description}
-												onValueChange={onChangeDescriptionTextArea}
-												maxLength={500}
-												description={`${description.length} / 500`}
-											/>
-										</VStack>
-									</Section.Body>
-								</Section>
-								<Section>
-									<Section.Header>
-										<PageTitleBar level={2} title="일정 설정" />
-									</Section.Header>
-									<Section.Body>
-										<VStack>
-											{type === "ONE_TIME" ? (
-												<TextField
-													label="일시"
-													labelPlacement="outside"
-													type="datetime-local"
-													value={startDateTime}
-													onValueChange={onChangeStartDateTimeInput}
-													isRequired
-													isInvalid={!!errors.startDateTime}
-													errorMessage={errors.startDateTime}
-												/>
-											) : null}
-											{type === "ONE_TIME_RANGE" ? (
-												<>
-													<TextField
-														label="시작 일시"
-														labelPlacement="outside"
-														type="datetime-local"
-														value={startDateTime}
-														onValueChange={onChangeStartDateTimeInput}
-														isRequired
-														isInvalid={!!errors.startDateTime}
-														errorMessage={errors.startDateTime}
-													/>
-													<TextField
-														label="종료 일시"
-														labelPlacement="outside"
-														type="datetime-local"
-														value={endDateTime}
-														onValueChange={onChangeEndDateTimeInput}
-														isRequired
-														isInvalid={!!errors.endDateTime}
-														errorMessage={errors.endDateTime}
-													/>
-												</>
-											) : null}
-											{type === "RECURRING" ? (
-												<>
-													<div className="flex gap-4">
-														<Select
-															label="반복 요일"
-															value={recurringDayOfWeek ?? undefined}
-															onChange={(value) =>
-																onChangeDayOfWeekSelect(String(value ?? ""))
-															}
-															options={DAY_OF_WEEK_OPTIONS}
-															isRequired
-															isInvalid={!!errors.recurringDayOfWeek}
-															errorMessage={errors.recurringDayOfWeek}
-															className="flex-1"
-														/>
-														<Select
-															label="반복 주기"
-															value={repeatCycleType || undefined}
-															onChange={(value) =>
-																onChangeCycleTypeSelect(String(value ?? ""))
-															}
-															options={CYCLE_TYPE_OPTIONS}
-															isRequired
-															isInvalid={!!errors.repeatCycleType}
-															errorMessage={errors.repeatCycleType}
-															className="flex-1"
-														/>
+								<TimelineSessionForm
+									state={state}
+									contentLanguageCode={contentLanguageCode}
+									readOnly={readOnly}
+								/>
+								{metadata ? (
+									<Section>
+										<Section.Header>
+											<PageTitleBar level={2} title="관리 정보" />
+										</Section.Header>
+										<Section.Body>
+											<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+												{metadata.typeLabel && metadata.typeColor ? (
+													<div>
+														<label className="text-sm text-muted">
+															유형
+														</label>
+														<div className="mt-1">
+															<Chip
+																color={metadata.typeColor}
+																variant="flat"
+																size="sm"
+															>
+																{metadata.typeLabel}
+															</Chip>
+														</div>
 													</div>
-													<TextField
-														label="시작 일시 (선택)"
-														labelPlacement="outside"
-														type="datetime-local"
-														value={startDateTime}
-														onValueChange={onChangeStartDateTimeInput}
-													/>
-													<TextField
-														label="종료 일시 (선택)"
-														labelPlacement="outside"
-														type="datetime-local"
-														value={endDateTime}
-														onValueChange={onChangeEndDateTimeInput}
-													/>
-												</>
-											) : null}
-										</VStack>
-									</Section.Body>
-								</Section>
-								<div className="flex justify-end">
-									<Button
-										color="primary"
-										onPress={onClickSubmitButton}
-										isLoading={isSubmitPending}
-										isDisabled={isSubmitDisabled}
-									>
-										수정
-									</Button>
-								</div>
+												) : null}
+												{state.type === "RECURRING" ? (
+													<>
+														<div>
+															<label className="text-sm text-muted">
+																반복 요일
+															</label>
+															<p className="mt-1">
+																{metadata.recurringDayLabel ?? "-"}
+															</p>
+														</div>
+														<div>
+															<label className="text-sm text-muted">
+																반복 주기
+															</label>
+															<p className="mt-1">
+																{metadata.repeatCycleLabel ?? "-"}
+															</p>
+														</div>
+													</>
+												) : null}
+												<div>
+													<label className="text-sm text-muted">
+														타임라인
+													</label>
+													<div className="mt-1">
+														{metadata.timelineHref &&
+														metadata.timelineName ? (
+															<Link
+																href={metadata.timelineHref}
+																className="text-accent hover:underline"
+															>
+																{metadata.timelineName}
+															</Link>
+														) : (
+															(metadata.timelineName ?? "-")
+														)}
+													</div>
+												</div>
+												{metadata.createdAt ? (
+													<div>
+														<label className="text-sm text-muted">
+															등록일
+														</label>
+														<div className="mt-1">
+															<DateTimeCell value={metadata.createdAt} />
+														</div>
+													</div>
+												) : null}
+											</div>
+										</Section.Body>
+									</Section>
+								) : null}
+								{programs ? (
+									<Section>
+										<Section.Header>
+											<PageTitleBar
+												level={2}
+												title="프로그램 연결 허브"
+												actions={
+													onClickCreateProgramButton ? (
+														<Button
+															color="primary"
+															size="sm"
+															startContent={<Plus className="h-4 w-4" />}
+															onPress={onClickCreateProgramButton}
+														>
+															프로그램 등록
+														</Button>
+													) : undefined
+												}
+											/>
+										</Section.Header>
+										<Section.Body>
+											<div className="grid grid-cols-1 gap-2 px-4 py-3 md:grid-cols-3">
+												<div className="rounded-lg bg-surface-secondary p-3">
+													<p className="text-xs text-muted">전체 프로그램</p>
+													<p className="mt-1 text-lg font-semibold">
+														{totalPrograms}개
+													</p>
+												</div>
+												<div className="rounded-lg bg-surface-secondary p-3">
+													<p className="text-xs text-muted">
+														강사 연결 정상
+													</p>
+													<p className="mt-1 text-lg font-semibold text-success">
+														{resolvedPrograms}개
+													</p>
+												</div>
+												<div className="rounded-lg bg-surface-secondary p-3">
+													<p className="text-xs text-muted">확인 필요</p>
+													<p className="mt-1 text-lg font-semibold text-warning">
+														{unresolvedPrograms}개
+													</p>
+												</div>
+											</div>
+											<Table aria-label="프로그램 목록">
+												<Table.Content>
+													<Table.Header>
+														<Table.Column>프로그램명</Table.Column>
+														<Table.Column>루틴명</Table.Column>
+														<Table.Column className="text-center">
+															운동 수
+														</Table.Column>
+														<Table.Column>대표 운동</Table.Column>
+														<Table.Column>강사</Table.Column>
+														<Table.Column className="text-center">
+															연결 상태
+														</Table.Column>
+														<Table.Column className="text-center">
+															정원
+														</Table.Column>
+														<Table.Column>난이도</Table.Column>
+														<Table.Column className="text-center">
+															액션
+														</Table.Column>
+													</Table.Header>
+													<Table.Body items={programs}>
+														{(program) => (
+															<Table.Row key={program.id}>
+																<Table.Cell>
+																	<Link
+																		href={program.href}
+																		className="text-left text-accent hover:underline"
+																		onClick={(
+																			event: MouseEvent<HTMLAnchorElement>,
+																		) => {
+																			event.stopPropagation();
+																		}}
+																	>
+																		{program.name}
+																	</Link>
+																</Table.Cell>
+																<Table.Cell>{program.routineName}</Table.Cell>
+																<Table.Cell>
+																	{program.activityCountLabel}
+																</Table.Cell>
+																<Table.Cell>{program.previewText}</Table.Cell>
+																<Table.Cell>{program.instructorName}</Table.Cell>
+																<Table.Cell>
+																	{program.isConnectionResolved ? (
+																		<Chip
+																			color="success"
+																			variant="flat"
+																			size="sm"
+																		>
+																			정상
+																		</Chip>
+																	) : (
+																		<Chip
+																			color="warning"
+																			variant="flat"
+																			size="sm"
+																		>
+																			확인필요
+																		</Chip>
+																	)}
+																</Table.Cell>
+																<Table.Cell>{program.capacityLabel}</Table.Cell>
+																<Table.Cell>{program.levelLabel}</Table.Cell>
+																<Table.Cell>
+																	<div className="flex justify-center gap-1">
+																		{onClickEditProgramButton ? (
+																			<Button
+																				size="sm"
+																				variant="light"
+																				isIconOnly
+																				onPress={() =>
+																					onClickEditProgramButton(program.id)
+																				}
+																			>
+																				<Pencil className="h-4 w-4" />
+																			</Button>
+																		) : null}
+																		{onClickDeleteProgramButton ? (
+																			<Button
+																				size="sm"
+																				color="danger"
+																				variant="light"
+																				isIconOnly
+																				onPress={() =>
+																					onClickDeleteProgramButton(
+																						program.id,
+																					)
+																				}
+																			>
+																				<Trash2 className="h-4 w-4" />
+																			</Button>
+																		) : null}
+																	</div>
+																</Table.Cell>
+															</Table.Row>
+														)}
+													</Table.Body>
+												</Table.Content>
+											</Table>
+										</Section.Body>
+									</Section>
+								) : null}
 							</VStack>
 						</Section.Body>
 					</Section>

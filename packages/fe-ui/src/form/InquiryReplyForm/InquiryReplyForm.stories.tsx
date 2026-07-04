@@ -8,7 +8,6 @@ const meta = {
 	tags: ["autodocs"],
 	args: {
 		onSubmit: () => undefined,
-		onGenerateDraft: () => undefined,
 		onSearchKnowledge: () => undefined,
 		draftContent: "확인 후 다시 안내드리겠습니다.",
 	},

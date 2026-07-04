@@ -6,9 +6,15 @@ import {
 	useDeleteProgram,
 	useGetProgramById,
 } from "@cocrepo/api/core/timelines";
-import { TimelineSessionProgramDetailScreen } from "@cocrepo/ui";
-import { toast, useOverlayState } from "@heroui/react";
+import {
+	Button,
+	TimelineSessionProgramEditScreen,
+	type TimelineSessionProgramFormState,
+	type TimelineSessionProgramRoutinePreviewItem,
+} from "@cocrepo/ui";
+import { Modal, toast, useOverlayState } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
+import { Edit, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import dynamic from "next/dynamic";
@@ -74,67 +80,111 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
 		]
 			.filter(Boolean)
 			.join(" · ");
+		const routinePreview: TimelineSessionProgramRoutinePreviewItem[] = (
+			program?.executionPlan ?? []
+		).map((activity) => ({
+			id: activity.id,
+			order: activity.order,
+			exerciseName: activity.exerciseName,
+			repetitions: activity.repetitions,
+			restTime: activity.restTime,
+			notes: activity.notes,
+			isSchedulable: Boolean(activity.videoFileId),
+		}));
+		const programState: TimelineSessionProgramFormState | undefined = program
+			? {
+					name: program.name,
+					routineId: program.routineId,
+					routineName:
+						program.routineNameSnapshot ?? program.routine?.name ?? "",
+					routineQuery: "",
+					instructorId: program.instructorId,
+					instructorName: program.instructorId,
+					instructorQuery: "",
+					capacity: String(program.capacity ?? ""),
+					level: program.level ?? "",
+					isRoutinePickerOpen: false,
+					isInstructorPickerOpen: false,
+					errors: {},
+				}
+			: undefined;
 
 		return (
 			<>
-				<TimelineSessionProgramDetailScreen
-					program={
-						program
-							? {
-									name: program.name,
-									descriptionText,
-									routineName:
-										program.routineNameSnapshot ??
-										program.routine?.name ??
-										null,
-									routineHref: program.routine?.id
-										? (`/routines/${program.routine.id}` as Route)
-										: undefined,
-									instructorLabel: program.instructorId ?? null,
-									capacityLabel:
-										program.capacity != null ? `${program.capacity}명` : "-",
-									levelLabel: program.level ?? null,
-									activityCountLabel: `${
-										program.activityCount ?? program.executionPlan?.length ?? 0
-									}개`,
-									sessionName: program.session?.name ?? null,
-									sessionHref:
-										`/timelines/${timelineId}/sessions/${sessionId}` as Route,
-									createdAt: program.createdAt,
-									executionPlan: (program.executionPlan ?? []).map(
-										(activity) => ({
-											id: activity.id,
-											taskId: activity.taskId,
-											order: activity.order,
-											repetitions: activity.repetitions,
-											restTime: activity.restTime,
-											exerciseName: activity.exerciseName,
-											exerciseDescription: activity.exerciseDescription,
-											exerciseDuration: activity.exerciseDuration,
-											exerciseCount: activity.exerciseCount,
-											notes: activity.notes,
-											imageFileId: activity.imageFileId,
-											imageAssetHref: activity.imageFileId
-												? (`/assets/${activity.imageFileId}` as Route)
-												: undefined,
-											videoFileId: activity.videoFileId,
-											videoAssetHref: activity.videoFileId
-												? (`/assets/${activity.videoFileId}` as Route)
-												: undefined,
-										}),
-									),
-								}
-							: undefined
-					}
+				<TimelineSessionProgramEditScreen
+					title={program?.name ?? "프로그램 상세"}
+					description={descriptionText || undefined}
+					state={programState}
+					readOnly
+					routinePreview={routinePreview}
+					metadata={{
+						routineHref: program?.routine?.id
+							? (`/routines/${program.routine.id}` as Route)
+							: undefined,
+						instructorLabel: program?.instructorId ?? null,
+						activityCountLabel: `${
+							program?.activityCount ?? program?.executionPlan?.length ?? 0
+						}개`,
+						sessionName: program?.session?.name ?? null,
+						sessionHref:
+							`/timelines/${timelineId}/sessions/${sessionId}` as Route,
+						createdAt: program?.createdAt,
+					}}
 					isLoading={isLoading}
-					isNotFound={!isLoading && !program}
-					isDeleteModalOpen={deleteModal.isOpen}
-					isDeletePending={isDeleting}
-					onClickEditButton={onClickEditButton}
-					onClickDeleteButton={deleteModal.open}
-					onClickDeleteConfirmButton={onClickDeleteConfirmButton}
-					onClickDeleteCancelButton={deleteModal.close}
+					notFound={!isLoading && !program}
+					actions={
+						<div className="flex gap-2">
+							<Button
+								variant="flat"
+								startContent={<Edit className="h-4 w-4" />}
+								onPress={onClickEditButton}
+							>
+								수정
+							</Button>
+							<Button
+								color="danger"
+								variant="flat"
+								startContent={<Trash2 className="h-4 w-4" />}
+								onPress={deleteModal.open}
+							>
+								삭제
+							</Button>
+						</div>
+					}
 				/>
+				{program ? (
+					<Modal state={deleteModal}>
+						<Modal.Backdrop>
+							<Modal.Container>
+								<Modal.Dialog>
+									<Modal.Header>프로그램 삭제</Modal.Header>
+									<Modal.Body>
+										<p>
+											<strong>{program.name}</strong> 프로그램을
+											삭제하시겠습니까?
+										</p>
+									</Modal.Body>
+									<Modal.Footer>
+										<Button
+											variant="flat"
+											onPress={deleteModal.close}
+											isDisabled={isDeleting}
+										>
+											취소
+										</Button>
+										<Button
+											color="danger"
+											onPress={onClickDeleteConfirmButton}
+											isLoading={isDeleting}
+										>
+											삭제
+										</Button>
+									</Modal.Footer>
+								</Modal.Dialog>
+							</Modal.Container>
+						</Modal.Backdrop>
+					</Modal>
+				) : null}
 			</>
 		);
 	});

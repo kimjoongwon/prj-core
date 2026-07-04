@@ -9,12 +9,22 @@ import {
 	useSendTestTemplate,
 	useToggleTemplateStatus,
 } from "@cocrepo/api/core/templates";
-import { type PreviewResult, TemplateDetailScreen } from "@cocrepo/ui";
-import { toast, useOverlayState } from "@heroui/react";
+import {
+	Button,
+	PreviewModal,
+	type PreviewResult,
+	SendTestModal,
+	TemplateActions,
+	TemplateEditScreen,
+	type TemplateFormState,
+} from "@cocrepo/ui";
+import { Modal, toast, useOverlayState } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
+import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
+import type { ReactNode } from "react";
 
 type TemplateVariableLike = {
 	id: string;
@@ -28,34 +38,35 @@ type TemplateWithVariables = TemplateDto & {
 	variables?: TemplateVariableLike[];
 };
 
-type TemplateDetailScreenParams = {
+type TemplateDetailRouteParams = {
 	templateId: string;
 };
 
 const AdminTemplatesTemplateIdRoute = observer(() => {
-	const { templateId } = useParams<TemplateDetailScreenParams>();
+	const { templateId } = useParams<TemplateDetailRouteParams>();
 	const router = useRouter();
 	const queryClient = useQueryClient();
 	const deleteModal = useOverlayState();
 	const previewModal = useOverlayState();
 	const sendTestModal = useOverlayState();
-
 	const { data: response, isLoading } = useGetTemplate(templateId);
 	const template = response?.data as TemplateWithVariables | undefined;
+	const state = template ? mapTemplateFormState(template) : undefined;
+	const variablesForModal = state
+		? state.variables.map((variable) => ({
+				id: variable.id ?? variable.name,
+				name: variable.name,
+				description: variable.description || null,
+				defaultValue: variable.defaultValue || null,
+				isRequired: variable.isRequired,
+			}))
+		: [];
 
 	const { mutate: deleteTemplate, isPending: isDeleting } = useDeleteTemplate();
 	const { mutate: toggleStatus, isPending: isToggling } =
 		useToggleTemplateStatus();
 	const { mutateAsync: previewTemplate } = usePreviewTemplate();
 	const { mutateAsync: sendTestTemplate } = useSendTestTemplate();
-
-	const onClickBackButton = () => {
-		router.push("/templates" as Route);
-	};
-
-	const onClickEditButton = () => {
-		router.push(`/templates/${templateId}/edit` as Route);
-	};
 
 	const onClickDeleteConfirmButton = () => {
 		deleteTemplate(
@@ -127,53 +138,193 @@ const AdminTemplatesTemplateIdRoute = observer(() => {
 
 	return (
 		<>
-			<TemplateDetailScreen
-				templateId={templateId}
-				template={
+			<TemplateEditScreen
+				title="Template 상세"
+				description={
 					template
-						? {
-								id: template.id,
-								code: template.code,
-								name: template.name,
-								type: template.type,
-								description: template.description,
-								isActive: template.isActive,
-								subject: template.subject,
-								content: template.content,
-								variables: (template.variables ?? []).map((variable) => ({
-									id: variable.id,
-									name: variable.name,
-									description: variable.description ?? null,
-									defaultValue: variable.defaultValue ?? null,
-									isRequired: variable.isRequired ?? false,
-								})),
-								createdAt: template.createdAt,
-								updatedAt: template.updatedAt,
-							}
-						: undefined
+						? `${template.name} Template의 상세 정보입니다.`
+						: "Template을 찾을 수 없습니다."
 				}
+				state={state}
+				readOnly
 				isLoading={isLoading}
-				isNotFound={!isLoading && !template}
-				isDeleteModalOpen={deleteModal.isOpen}
-				isPreviewModalOpen={previewModal.isOpen}
-				isSendTestModalOpen={sendTestModal.isOpen}
-				isDeletePending={isDeleting}
-				isTogglePending={isToggling}
-				onClickBackButton={onClickBackButton}
-				onClickEditButton={onClickEditButton}
-				onClickDeleteButton={deleteModal.open}
-				onClickDeleteConfirmButton={onClickDeleteConfirmButton}
-				onClickDeleteCancelButton={deleteModal.close}
-				onClickToggleButton={onClickToggleButton}
-				onClickPreviewButton={previewModal.open}
-				onClickPreviewCloseButton={previewModal.close}
-				onClickSendTestButton={sendTestModal.open}
-				onClickSendTestCloseButton={sendTestModal.close}
-				onSubmitPreviewTemplate={onSubmitPreviewTemplate}
-				onSubmitSendTestTemplate={onSubmitSendTestTemplate}
-			/>
+				notFound={!isLoading && !template}
+				notFoundAction={
+					<Button
+						variant="flat"
+						startContent={<ArrowLeft className="h-4 w-4" />}
+						onPress={() => {
+							router.push("/templates" as Route);
+						}}
+					>
+						목록으로
+					</Button>
+				}
+				actions={
+					template ? (
+						<div className="flex flex-wrap gap-2">
+							<Button
+								variant="light"
+								startContent={<ArrowLeft className="h-4 w-4" />}
+								onPress={() => {
+									router.push("/templates" as Route);
+								}}
+							>
+								목록으로
+							</Button>
+							<TemplateActions
+								templateId={templateId}
+								isActive={template.isActive}
+								onEdit={() => {
+									router.push(`/templates/${templateId}/edit` as Route);
+								}}
+								onDelete={deleteModal.open}
+								onToggle={onClickToggleButton}
+								onPreview={previewModal.open}
+								onSendTest={sendTestModal.open}
+							/>
+						</div>
+					) : null
+				}
+			>
+				{template ? (
+					<SectionLike title="상태 정보">
+						<dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
+							<div className="rounded-lg border border-border bg-background/60 p-3">
+								<dt className="text-xs text-muted">활성 상태</dt>
+								<dd className="mt-2">
+									<Button
+										size="sm"
+										variant="flat"
+										color={template.isActive ? "success" : "default"}
+										isDisabled={isToggling}
+										onPress={onClickToggleButton}
+									>
+										{template.isActive ? "활성" : "비활성"}
+									</Button>
+								</dd>
+							</div>
+							<Info
+								label="생성일"
+								value={new Date(template.createdAt).toLocaleString("ko-KR")}
+							/>
+							<Info
+								label="수정일"
+								value={
+									template.updatedAt
+										? new Date(template.updatedAt).toLocaleString("ko-KR")
+										: "-"
+								}
+							/>
+						</dl>
+					</SectionLike>
+				) : null}
+			</TemplateEditScreen>
+			{template ? (
+				<Modal state={deleteModal}>
+					<Modal.Backdrop>
+						<Modal.Container>
+							<Modal.Dialog>
+								<Modal.Header>Template 삭제</Modal.Header>
+								<Modal.Body>
+									<p>
+										<strong>{template.name}</strong> Template을
+										삭제하시겠습니까?
+									</p>
+									<p className="mt-2 text-sm text-danger">
+										이 작업은 되돌릴 수 없습니다.
+									</p>
+								</Modal.Body>
+								<Modal.Footer>
+									<Button
+										variant="flat"
+										onPress={deleteModal.close}
+										isDisabled={isDeleting}
+									>
+										취소
+									</Button>
+									<Button
+										color="danger"
+										onPress={onClickDeleteConfirmButton}
+										isLoading={isDeleting}
+									>
+										삭제
+									</Button>
+								</Modal.Footer>
+							</Modal.Dialog>
+						</Modal.Container>
+					</Modal.Backdrop>
+				</Modal>
+			) : null}
+			{template ? (
+				<>
+					<PreviewModal
+						isOpen={previewModal.isOpen}
+						onClose={previewModal.close}
+						templateId={templateId}
+						type={template.type}
+						variables={variablesForModal}
+						onPreview={onSubmitPreviewTemplate}
+					/>
+					<SendTestModal
+						isOpen={sendTestModal.isOpen}
+						onClose={sendTestModal.close}
+						templateId={templateId}
+						type={template.type}
+						variables={variablesForModal}
+						onSendTest={onSubmitSendTestTemplate}
+					/>
+				</>
+			) : null}
 		</>
 	);
 });
+
+function mapTemplateFormState(
+	template: TemplateWithVariables,
+): TemplateFormState {
+	return {
+		formData: {
+			type: template.type,
+			code: template.code,
+			name: template.name,
+			description: template.description || "",
+			subject: template.subject || "",
+			content: template.content,
+		},
+		variables: (template.variables ?? []).map((variable) => ({
+			id: variable.id,
+			name: variable.name,
+			description: variable.description || "",
+			defaultValue: variable.defaultValue || "",
+			isRequired: variable.isRequired ?? false,
+		})),
+		errors: {},
+	};
+}
+
+function SectionLike({
+	title,
+	children,
+}: {
+	title: string;
+	children: ReactNode;
+}) {
+	return (
+		<section>
+			<h3 className="mb-4 text-lg font-semibold">{title}</h3>
+			{children}
+		</section>
+	);
+}
+
+function Info({ label, value }: { label: string; value: string }) {
+	return (
+		<div className="rounded-lg border border-border bg-background/60 p-3">
+			<dt className="text-xs text-muted">{label}</dt>
+			<dd className="mt-1 break-all text-sm font-medium">{value}</dd>
+		</div>
+	);
+}
 
 export default AdminTemplatesTemplateIdRoute;

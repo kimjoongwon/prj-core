@@ -12,12 +12,9 @@ export const GENERATED_ADMIN_ROUTE_META_SOURCES: string[] = [
 	"apps/admin/web/src/app/(admin)/actions/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/assets/[assetId]/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/assets/route.meta.ts",
-	"apps/admin/web/src/app/(admin)/course-offerings/route.meta.ts",
-	"apps/admin/web/src/app/(admin)/course-passes/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/courses/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/dashboard/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/email-verifications/route.meta.ts",
-	"apps/admin/web/src/app/(admin)/enrollments/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/inquiries/[inquiryId]/edit/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/inquiries/[inquiryId]/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/inquiries/new/route.meta.ts",
@@ -290,24 +287,6 @@ export const GENERATED_ADMIN_NAV_ITEMS: NavItemConfig[] = [
 				"label": "Course",
 				"path": "/courses",
 				"subject": "menu:courses:list"
-			},
-			{
-				"id": "course-offerings-list",
-				"label": "CourseOffering",
-				"path": "/course-offerings",
-				"subject": "menu:course-offerings:list"
-			},
-			{
-				"id": "enrollments-list",
-				"label": "Enrollment",
-				"path": "/enrollments",
-				"subject": "menu:enrollments:list"
-			},
-			{
-				"id": "course-passes-list",
-				"label": "CoursePass",
-				"path": "/course-passes",
-				"subject": "menu:course-passes:list"
 			}
 		]
 	},
@@ -921,36 +900,6 @@ export const GENERATED_ADMIN_PAGE_ACCESS_ITEMS: GeneratedAdminPageAccessItem[] =
 		"subject": "page:courses:list",
 		"description": "무엇을 배우는지와 기본 수강 상품 정책을 관리합니다.",
 		"menuLeafId": "courses-list"
-	},
-	{
-		"groupId": "courses",
-		"groupLabel": "수강 관리",
-		"pageId": "course-offerings:list",
-		"pageLabel": "CourseOffering",
-		"pathPattern": "/course-offerings",
-		"subject": "page:course-offerings:list",
-		"description": "실제 개설된 과정/반/기수와 Timeline 연결을 관리합니다.",
-		"menuLeafId": "course-offerings-list"
-	},
-	{
-		"groupId": "courses",
-		"groupLabel": "수강 관리",
-		"pageId": "enrollments:list",
-		"pageLabel": "Enrollment",
-		"pathPattern": "/enrollments",
-		"subject": "page:enrollments:list",
-		"description": "결제 후 활성화되는 수강 신청 상태를 관리합니다.",
-		"menuLeafId": "enrollments-list"
-	},
-	{
-		"groupId": "courses",
-		"groupLabel": "수강 관리",
-		"pageId": "course-passes:list",
-		"pageLabel": "CoursePass",
-		"pathPattern": "/course-passes",
-		"subject": "page:course-passes:list",
-		"description": "수강권의 유효기간과 잔여 예약 권리를 관리합니다.",
-		"menuLeafId": "course-passes-list"
 	},
 	{
 		"groupId": "payments",

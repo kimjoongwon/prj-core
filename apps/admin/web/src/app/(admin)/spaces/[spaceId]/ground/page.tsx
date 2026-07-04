@@ -1,19 +1,33 @@
 "use client";
 
 import { type GroundDto, useGetSpaceGround } from "@cocrepo/api/core/spaces";
-import { GroundDetailScreen } from "@cocrepo/ui";
+import { Button, GroundEditScreen, GroundFormState } from "@cocrepo/ui";
+import { Pencil } from "lucide-react";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-type GroundDetailScreenParams = {
+type GroundRouteParams = {
 	spaceId: string;
 };
 
-export default function AdminSpacesSpaceIdGroundRoute() {
-	const { spaceId } = useParams<GroundDetailScreenParams>();
+const AdminSpacesSpaceIdGroundRoute = observer(() => {
+	const { spaceId } = useParams<GroundRouteParams>();
 	const router = useRouter();
-	const { data: response } = useGetSpaceGround(spaceId);
+	const state = useLocalObservable(() => new GroundFormState());
+	const routeState = useLocalObservable(() => ({
+		isInitialized: false,
+	}));
+	const { data: response, isLoading } = useGetSpaceGround(spaceId);
 	const ground = response?.data as GroundDto | undefined;
+
+	useEffect(() => {
+		if (ground && !routeState.isInitialized) {
+			state.setFromDto(ground);
+			routeState.isInitialized = true;
+		}
+	}, [ground, routeState, state]);
 
 	const onClickBackButton = () => {
 		router.push("/spaces" as Route);
@@ -24,21 +38,27 @@ export default function AdminSpacesSpaceIdGroundRoute() {
 	};
 
 	return (
-		<GroundDetailScreen
-			ground={
-				ground
-					? {
-							name: ground.name,
-							label: ground.label,
-							address: ground.address,
-							phone: ground.phone,
-							email: ground.email,
-						}
-					: undefined
+		<GroundEditScreen
+			title={ground?.name ?? "시설 정보"}
+			description="시설 기본 정보를 확인합니다."
+			state={state}
+			readOnly
+			isLoading={isLoading}
+			isNotFound={!isLoading && !ground}
+			isSubmitPending={false}
+			actions={
+				<Button
+					color="primary"
+					variant="flat"
+					startContent={<Pencil className="h-4 w-4" />}
+					onPress={onClickEditButton}
+				>
+					수정
+				</Button>
 			}
-			isNotFound={!ground}
-			onClickBackButton={onClickBackButton}
-			onClickEditButton={onClickEditButton}
+			onClickCancelButton={onClickBackButton}
 		/>
 	);
-}
+});
+
+export default AdminSpacesSpaceIdGroundRoute;

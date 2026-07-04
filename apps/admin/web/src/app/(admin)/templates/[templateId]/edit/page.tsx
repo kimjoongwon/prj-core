@@ -7,11 +7,12 @@ import {
 	useUpdateTemplate,
 } from "@cocrepo/api/core/templates";
 import {
+	Button,
 	TemplateEditScreen,
-	type TemplateFormData,
-	type VariableEditItem,
+	type TemplateFormState,
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
+import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -33,20 +34,24 @@ type TemplateEditScreenParams = {
 	templateId: string;
 };
 
+type TemplateRouteFormState = TemplateFormState & {
+	isInitialized: boolean;
+};
+
 const AdminTemplatesTemplateIdEditRoute = observer(() => {
 	const { templateId } = useParams<TemplateEditScreenParams>();
 	const router = useRouter();
-	const state = useLocalObservable(() => ({
+	const state = useLocalObservable<TemplateRouteFormState>(() => ({
 		formData: {
-			type: "EMAIL" as "EMAIL" | "SMS" | "PUSH",
+			type: "EMAIL",
 			code: "",
 			name: "",
 			description: "",
 			subject: "",
 			content: "",
-		} as TemplateFormData,
-		variables: [] as VariableEditItem[],
-		errors: {} as Record<string, string>,
+		},
+		variables: [],
+		errors: {},
 		isInitialized: false,
 	}));
 
@@ -54,24 +59,25 @@ const AdminTemplatesTemplateIdEditRoute = observer(() => {
 	const template = response?.data as TemplateWithVariables | undefined;
 
 	useEffect(() => {
-		if (template && !state.isInitialized) {
-			state.formData = {
-				type: template.type,
-				code: template.code,
-				name: template.name,
-				description: template.description || "",
-				subject: template.subject || "",
-				content: template.content,
-			};
-			state.variables = (template.variables ?? []).map((variable) => ({
-				id: variable.id,
-				name: variable.name,
-				description: variable.description || "",
-				defaultValue: variable.defaultValue || "",
-				isRequired: variable.isRequired ?? false,
-			}));
-			state.isInitialized = true;
+		if (!template || state.isInitialized) {
+			return;
 		}
+		state.formData = {
+			type: template.type,
+			code: template.code,
+			name: template.name,
+			description: template.description || "",
+			subject: template.subject || "",
+			content: template.content,
+		};
+		state.variables = (template.variables ?? []).map((variable) => ({
+			id: variable.id,
+			name: variable.name,
+			description: variable.description || "",
+			defaultValue: variable.defaultValue || "",
+			isRequired: variable.isRequired ?? false,
+		}));
+		state.isInitialized = true;
 	}, [state, template]);
 
 	const { mutate: updateTemplate, isPending } = useUpdateTemplate({
@@ -90,50 +96,11 @@ const AdminTemplatesTemplateIdEditRoute = observer(() => {
 		},
 	});
 
-	const onClickCancelButton = () => {
-		router.push(`/templates/${templateId}` as Route);
-	};
-
-	const onFormDataChange = (data: Partial<TemplateFormData>) => {
-		Object.assign(state.formData, data);
-		for (const key of Object.keys(data)) {
-			delete state.errors[key];
-		}
-	};
-
-	const onVariablesChange = (variables: VariableEditItem[]) => {
-		state.variables = variables;
-	};
-
-	const onSubmitForm = () => {
-		const errors: Record<string, string> = {};
-		const { formData } = state;
-
-		if (!formData.name.trim()) {
-			errors.name = "이름을 입력해주세요.";
-		}
-		if (!formData.content.trim()) {
-			errors.content = "본문을 입력해주세요.";
-		}
-		if (
-			(formData.type === "EMAIL" || formData.type === "PUSH") &&
-			!formData.subject.trim()
-		) {
-			errors.subject = "제목을 입력해주세요.";
-		}
-		if (formData.type === "PUSH") {
-			if (formData.subject.length > 50) {
-				errors.subject = "제목은 50자 이하로 입력해주세요.";
-			}
-			if (formData.content.length > 200) {
-				errors.content = "본문은 200자 이하로 입력해주세요.";
-			}
-		}
-
-		if (Object.keys(errors).length > 0) {
-			state.errors = errors;
+	const onSubmit = () => {
+		if (!validateUpdateTemplate(state)) {
 			return;
 		}
+		const { formData } = state;
 
 		updateTemplate({
 			templateId,
@@ -153,22 +120,78 @@ const AdminTemplatesTemplateIdEditRoute = observer(() => {
 	};
 
 	return (
-		<>
-			<TemplateEditScreen
-				templateName={template?.name}
-				formData={state.formData}
-				variables={state.variables}
-				errors={state.errors}
-				isLoading={isLoading}
-				isNotFound={!isLoading && !template}
-				isSubmitting={isPending}
-				onFormDataChange={onFormDataChange}
-				onVariablesChange={onVariablesChange}
-				onSubmitForm={onSubmitForm}
-				onClickCancelButton={onClickCancelButton}
-			/>
-		</>
+		<TemplateEditScreen
+			title="Template 수정"
+			description={
+				template
+					? `${template.name} Template을 수정합니다.`
+					: "Template을 찾을 수 없습니다."
+			}
+			state={template ? state : undefined}
+			isLoading={isLoading}
+			notFound={!isLoading && !template}
+			notFoundAction={
+				<Button
+					variant="flat"
+					onPress={() => {
+						router.push("/templates" as Route);
+					}}
+				>
+					목록으로
+				</Button>
+			}
+			actions={
+				<div className="flex gap-2">
+					<Button
+						variant="flat"
+						startContent={<ArrowLeft className="h-4 w-4" />}
+						onPress={() => {
+							router.push(`/templates/${templateId}` as Route);
+						}}
+					>
+						상세로 돌아가기
+					</Button>
+					<Button
+						color="primary"
+						startContent={<Save className="h-4 w-4" />}
+						onPress={onSubmit}
+						isLoading={isPending}
+					>
+						저장
+					</Button>
+				</div>
+			}
+		/>
 	);
 });
+
+function validateUpdateTemplate(state: TemplateFormState) {
+	const errors: Record<string, string> = {};
+	const { formData } = state;
+
+	if (!formData.name.trim()) {
+		errors.name = "이름을 입력해주세요.";
+	}
+	if (!formData.content.trim()) {
+		errors.content = "본문을 입력해주세요.";
+	}
+	if (
+		(formData.type === "EMAIL" || formData.type === "PUSH") &&
+		!formData.subject.trim()
+	) {
+		errors.subject = "제목을 입력해주세요.";
+	}
+	if (formData.type === "PUSH") {
+		if (formData.subject.length > 50) {
+			errors.subject = "제목은 50자 이하로 입력해주세요.";
+		}
+		if (formData.content.length > 200) {
+			errors.content = "본문은 200자 이하로 입력해주세요.";
+		}
+	}
+
+	state.errors = errors;
+	return Object.keys(errors).length === 0;
+}
 
 export default AdminTemplatesTemplateIdEditRoute;

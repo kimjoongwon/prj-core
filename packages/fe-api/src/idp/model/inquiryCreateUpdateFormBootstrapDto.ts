@@ -14,7 +14,6 @@ import type { InquiryCreateUpdateFormBootstrapDtoDefaultObject } from './inquiry
 import type { InquiryCreateUpdateFormBootstrapDtoOptions } from './inquiryCreateUpdateFormBootstrapDtoOptions';
 import type { InquiryFormUiPathsDto } from './inquiryFormUiPathsDto';
 import type { InquiryCreateUpdateFormBootstrapDtoFieldMeta } from './inquiryCreateUpdateFormBootstrapDtoFieldMeta';
-import type { InquiryFormSchemaDto } from './inquiryFormSchemaDto';
 
 export interface InquiryCreateUpdateFormBootstrapDto {
   /** 폼 모드 */
@@ -27,6 +26,4 @@ export interface InquiryCreateUpdateFormBootstrapDto {
   ui: InquiryFormUiPathsDto;
   /** 경로별 필드 메타 */
   fieldMeta: InquiryCreateUpdateFormBootstrapDtoFieldMeta;
-  /** AI 스키마 목록 */
-  aiSchemas: InquiryFormSchemaDto[];
 }

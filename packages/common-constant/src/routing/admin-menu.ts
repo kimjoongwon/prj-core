@@ -59,9 +59,6 @@ export const ADMIN_PATHS = {
 
 	// 수강 관리 (Course 계열)
 	COURSES: "/courses",
-	COURSE_OFFERINGS: "/course-offerings",
-	ENROLLMENTS: "/enrollments",
-	COURSE_PASSES: "/course-passes",
 
 	// 결제 관리 (Payment 공통 원장)
 	PAYMENTS: "/payments",
@@ -171,9 +168,6 @@ export const ADMIN_SUBJECTS = {
 
 	// 2depth - 수강 관리
 	MENU_COURSES_LIST: "menu:courses:list",
-	MENU_COURSE_OFFERINGS_LIST: "menu:course-offerings:list",
-	MENU_ENROLLMENTS_LIST: "menu:enrollments:list",
-	MENU_COURSE_PASSES_LIST: "menu:course-passes:list",
 
 	// 2depth - 결제 관리
 	MENU_PAYMENTS_LIST: "menu:payments:list",
@@ -229,9 +223,6 @@ const ADMIN_NAV_SCOPE_KIND_BY_ID: Partial<Record<string, ScreenScopeKind>> = {
 	"timelines-list": "space",
 	courses: "space",
 	"courses-list": "space",
-	"course-offerings-list": "space",
-	"enrollments-list": "space",
-	"course-passes-list": "space",
 	payments: "space",
 	"payments-list": "space",
 	tasks: "space",

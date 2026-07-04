@@ -1,7 +1,6 @@
 import { AssignInquiryUseCase } from "./assign-inquiry.usecase";
 import { CreateInquiryUseCase } from "./create-inquiry.usecase";
 import { DeleteInquiryUseCase } from "./delete-inquiry.usecase";
-import { FillInquiryFormWithAiUseCase } from "./fill-inquiry-form-with-ai.usecase";
 import { GetInquiryByIdUseCase } from "./get-inquiry-by-id.usecase";
 import { GetInquiryCreateFormBootstrapUseCase } from "./get-inquiry-create-form-bootstrap.usecase";
 import { GetInquiryMessagesUseCase } from "./get-inquiry-messages.usecase";
@@ -18,7 +17,6 @@ export const InquiryQueryHandlers = [
 	GetInquiryStatsUseCase,
 	GetInquiryCreateFormBootstrapUseCase,
 	GetInquiryUpdateFormBootstrapUseCase,
-	FillInquiryFormWithAiUseCase,
 	GetInquiryByIdUseCase,
 	GetInquiryMessagesUseCase,
 	GetInquiryParticipantsUseCase,
@@ -36,7 +34,6 @@ export const InquiryCommandHandlers = [
 export * from "./assign-inquiry.usecase";
 export * from "./create-inquiry.usecase";
 export * from "./delete-inquiry.usecase";
-export * from "./fill-inquiry-form-with-ai.usecase";
 export * from "./get-inquiry-by-id.usecase";
 export * from "./get-inquiry-create-form-bootstrap.usecase";
 export * from "./get-inquiry-messages.usecase";

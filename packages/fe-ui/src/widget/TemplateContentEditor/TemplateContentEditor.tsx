@@ -24,6 +24,8 @@ export interface TemplateContentEditorProps {
 		subject?: string;
 		content?: string;
 	};
+	/** 읽기 전용 여부 */
+	readOnly?: boolean;
 }
 
 /** PUSH 제목 최대 글자 수 */
@@ -60,6 +62,7 @@ export const TemplateContentEditor = observer(
 		onSubjectChange,
 		onContentChange,
 		errors,
+		readOnly = false,
 	}: TemplateContentEditorProps) => {
 		if (type === "EMAIL") {
 			return (
@@ -69,6 +72,7 @@ export const TemplateContentEditor = observer(
 					onSubjectChange={onSubjectChange}
 					onContentChange={onContentChange}
 					errors={errors}
+					readOnly={readOnly}
 				/>
 			);
 		}
@@ -79,6 +83,7 @@ export const TemplateContentEditor = observer(
 					content={content}
 					onContentChange={onContentChange}
 					errors={errors}
+					readOnly={readOnly}
 				/>
 			);
 		}
@@ -90,6 +95,7 @@ export const TemplateContentEditor = observer(
 				onSubjectChange={onSubjectChange}
 				onContentChange={onContentChange}
 				errors={errors}
+				readOnly={readOnly}
 			/>
 		);
 	},
@@ -104,6 +110,7 @@ interface EmailEditorProps {
 	onSubjectChange: (value: string) => void;
 	onContentChange: (value: string) => void;
 	errors?: TemplateContentEditorProps["errors"];
+	readOnly?: boolean;
 }
 
 const EmailEditor = observer(
@@ -113,6 +120,7 @@ const EmailEditor = observer(
 		onSubjectChange,
 		onContentChange,
 		errors,
+		readOnly = false,
 	}: EmailEditorProps) => {
 		return (
 			<div className="flex flex-col gap-4">
@@ -123,8 +131,14 @@ const EmailEditor = observer(
 					onValueChange={onSubjectChange}
 					isInvalid={!!errors?.subject}
 					errorMessage={errors?.subject}
+					isReadOnly={readOnly}
+					isDisabled={readOnly}
 				/>
-				<HtmlEditor value={content} onChange={onContentChange} />
+				<HtmlEditor
+					value={content}
+					onChange={onContentChange}
+					isDisabled={readOnly}
+				/>
 			</div>
 		);
 	},
@@ -137,10 +151,11 @@ interface SmsEditorProps {
 	content: string;
 	onContentChange: (value: string) => void;
 	errors?: TemplateContentEditorProps["errors"];
+	readOnly?: boolean;
 }
 
 const SmsEditor = observer(
-	({ content, onContentChange, errors }: SmsEditorProps) => {
+	({ content, onContentChange, errors, readOnly = false }: SmsEditorProps) => {
 		return (
 			<div className="flex flex-col gap-4">
 				<TextArea
@@ -151,6 +166,8 @@ const SmsEditor = observer(
 					minRows={5}
 					isInvalid={!!errors?.content}
 					errorMessage={errors?.content}
+					isReadOnly={readOnly}
+					isDisabled={readOnly}
 				/>
 				<ByteCounter text={content} />
 			</div>
@@ -167,6 +184,7 @@ interface PushEditorProps {
 	onSubjectChange: (value: string) => void;
 	onContentChange: (value: string) => void;
 	errors?: TemplateContentEditorProps["errors"];
+	readOnly?: boolean;
 }
 
 const PushEditor = observer(
@@ -176,6 +194,7 @@ const PushEditor = observer(
 		onSubjectChange,
 		onContentChange,
 		errors,
+		readOnly = false,
 	}: PushEditorProps) => {
 		const isSubjectExceeded = subject.length > PUSH_SUBJECT_MAX_LENGTH;
 		const isContentExceeded = content.length > PUSH_CONTENT_MAX_LENGTH;
@@ -190,6 +209,8 @@ const PushEditor = observer(
 					onValueChange={onSubjectChange}
 					isInvalid={!!errors?.subject}
 					errorMessage={errors?.subject}
+					isReadOnly={readOnly}
+					isDisabled={readOnly}
 					description={
 						<span className={isSubjectExceeded ? "text-danger" : ""}>
 							{subject.length}/{PUSH_SUBJECT_MAX_LENGTH}자
@@ -205,6 +226,8 @@ const PushEditor = observer(
 					minRows={3}
 					isInvalid={!!errors?.content}
 					errorMessage={errors?.content}
+					isReadOnly={readOnly}
+					isDisabled={readOnly}
 					description={
 						<span className={isContentExceeded ? "text-danger" : ""}>
 							{content.length}/{PUSH_CONTENT_MAX_LENGTH}자

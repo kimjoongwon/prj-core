@@ -11,9 +11,14 @@ import {
 	useGetUserById,
 	useGetUsers,
 } from "@cocrepo/api/core/users";
-import { TimelineSessionProgramEditScreen } from "@cocrepo/ui";
-import { toast, useOverlayState } from "@heroui/react";
+import {
+	Button,
+	TimelineSessionProgramEditScreen,
+	type TimelineSessionProgramFormState,
+} from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
+import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -47,21 +52,25 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 		const router = useRouter();
 		const persistStore = usePersistStore();
 		const queryClient = useQueryClient();
-		const routinePickerModal = useOverlayState();
-		const instructorPickerModal = useOverlayState();
-		const state = useLocalObservable(() => ({
+		const state = useLocalObservable<
+			TimelineSessionProgramFormState & { isInitialized: boolean }
+		>(() => ({
 			name: "",
 			routineId: "",
+			routineName: "",
 			routineQuery: "",
 			instructorId: "",
+			instructorName: "",
 			instructorQuery: "",
 			capacity: "",
 			level: "",
-			errors: {} as Record<string, string>,
+			isRoutinePickerOpen: false,
+			isInstructorPickerOpen: false,
+			errors: {},
 			isInitialized: false,
 		}));
 
-		const { data: response } = useGetProgramById(
+		const { data: response, isLoading } = useGetProgramById(
 			timelineId,
 			sessionId,
 			programId,
@@ -107,45 +116,23 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 				state.name = program.name;
 				state.routineId = program.routineId;
 				state.instructorId = program.instructorId;
+				state.routineName =
+					program.routineNameSnapshot ?? program.routine?.name ?? "";
+				state.instructorName = currentInstructor?.name ?? program.instructorId;
 				state.capacity = String(program.capacity);
 				state.level = program.level ?? "";
 				state.isInitialized = true;
 			}
-		}, [program, state]);
+			if (
+				state.isInitialized &&
+				currentInstructor &&
+				state.instructorId === currentInstructor.id
+			) {
+				state.instructorName = currentInstructor.name;
+			}
+		}, [currentInstructor, program, state]);
 
 		const { mutate: updateProgram, isPending } = useUpdateProgram();
-
-		const onClickCancelButton = () => {
-			router.push(
-				`/timelines/${timelineId}/sessions/${sessionId}/programs/${programId}` as Route,
-			);
-		};
-
-		const onChangeNameInput = (value: string) => {
-			state.name = value;
-			delete state.errors.name;
-		};
-		const onSelectRoutineOption = (value: string) => {
-			state.routineId = value;
-			delete state.errors.routineId;
-		};
-		const onSelectInstructorOption = (value: string) => {
-			state.instructorId = value;
-			delete state.errors.instructorId;
-		};
-		const onChangeCapacityInput = (value: string) => {
-			state.capacity = value;
-			delete state.errors.capacity;
-		};
-		const onChangeRoutineQueryInput = (value: string) => {
-			state.routineQuery = value;
-		};
-		const onChangeInstructorQueryInput = (value: string) => {
-			state.instructorQuery = value;
-		};
-		const onChangeLevelSelect = (value: string) => {
-			state.level = value;
-		};
 
 		const selectedRoutine = routines.find(
 			(routine) => routine.id === state.routineId,
@@ -190,7 +177,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 				state.level !== (program?.level ?? ""));
 
 		const onClickSubmitButton = () => {
-			const errors: Record<string, string> = {};
+			const errors: TimelineSessionProgramFormState["errors"] = {};
 
 			if (!state.name.trim()) {
 				errors.name = "프로그램 이름을 입력해주세요.";
@@ -259,23 +246,14 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 		};
 
 		return (
-			<>
-				<TimelineSessionProgramEditScreen
-					descriptionText={[program?.name, program?.session?.name]
+			<TimelineSessionProgramEditScreen
+				title="프로그램 수정"
+				description={[program?.name, program?.session?.name]
 						.filter(Boolean)
 						.join(" · ")}
-					contentLanguageCode={persistStore.contentLanguageCode}
-					name={state.name}
-					routineName={selectedRoutine?.name ?? ""}
-					instructorName={
-						selectedInstructor?.name ?? program?.instructorId ?? ""
-					}
-					capacity={state.capacity}
-					level={state.level}
-					errors={state.errors}
-					routineQuery={state.routineQuery}
-					instructorQuery={state.instructorQuery}
-					routineOptions={routineOptions.map((routine) => ({
+				state={state}
+				contentLanguageCode={persistStore.contentLanguageCode}
+				routineOptions={routineOptions.map((routine) => ({
 						id: routine.id,
 						name: routine.name,
 						subtitle: `라벨: ${routine.label ?? "-"} · 활동 ${
@@ -285,20 +263,36 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 								(activity) => !activity.task?.exercise?.videoFileId,
 							)
 								? "영상 누락"
-								: "스케줄 가능"
+							: "스케줄 가능"
 						}`,
-					}))}
-					instructorOptions={instructorOptions.map((instructor) => ({
+				}))}
+				instructorOptions={instructorOptions.map((instructor) => ({
 						id: instructor.id,
 						name: instructor.name,
 						subtitle: `이메일: ${instructor.email ?? "-"}`,
-					}))}
-					routinePreview={routinePreview}
-					hasUnschedulableRoutine={hasUnschedulableRoutine}
-					isRoutinePickerOpen={routinePickerModal.isOpen}
-					isInstructorPickerOpen={instructorPickerModal.isOpen}
-					isSubmitPending={isPending}
-					isSubmitDisabled={
+				}))}
+				routinePreview={routinePreview}
+				hasUnschedulableRoutine={hasUnschedulableRoutine}
+				isLoading={isLoading && !state.isInitialized}
+				notFound={!isLoading && !program}
+				actions={
+					<div className="flex gap-2">
+						<Button
+							variant="flat"
+							startContent={<ArrowLeft className="h-4 w-4" />}
+							onPress={() => {
+								router.push(
+									`/timelines/${timelineId}/sessions/${sessionId}/programs/${programId}` as Route,
+								);
+							}}
+						>
+							상세로
+						</Button>
+						<Button
+							color="primary"
+							startContent={<Save className="h-4 w-4" />}
+							isLoading={isPending}
+							isDisabled={
 						!hasChanged ||
 						!state.name.trim() ||
 						!state.routineId.trim() ||
@@ -306,21 +300,13 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 						!state.capacity ||
 						hasUnschedulableRoutine
 					}
-					onChangeNameInput={onChangeNameInput}
-					onChangeCapacityInput={onChangeCapacityInput}
-					onChangeLevelSelect={onChangeLevelSelect}
-					onChangeRoutineQueryInput={onChangeRoutineQueryInput}
-					onChangeInstructorQueryInput={onChangeInstructorQueryInput}
-					onSelectRoutineOption={onSelectRoutineOption}
-					onSelectInstructorOption={onSelectInstructorOption}
-					onClickOpenRoutinePickerButton={routinePickerModal.open}
-					onClickCloseRoutinePickerButton={routinePickerModal.close}
-					onClickOpenInstructorPickerButton={instructorPickerModal.open}
-					onClickCloseInstructorPickerButton={instructorPickerModal.close}
-					onClickCancelButton={onClickCancelButton}
-					onClickSubmitButton={onClickSubmitButton}
-				/>
-			</>
+							onPress={onClickSubmitButton}
+						>
+							저장
+						</Button>
+					</div>
+				}
+			/>
 		);
 	});
 

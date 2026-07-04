@@ -25,6 +25,8 @@ export function useAuthLogin({ router }: UseAuthLoginOptions) {
 		loginForm: {
 			email: defaultLoginCredentials.email,
 			password: defaultLoginCredentials.password,
+			fieldErrors: {},
+			errorMessage: null,
 		},
 		errorMessage: "",
 	}));

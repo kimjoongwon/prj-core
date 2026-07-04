@@ -5,9 +5,4 @@
 
 export interface InquiryFormFieldMetaDto {
 	label?: string;
-	ai?: {
-		fillable: boolean;
-		defaultChecked?: boolean;
-		reason?: string;
-	};
 }

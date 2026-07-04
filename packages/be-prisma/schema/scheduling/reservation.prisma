@@ -12,6 +12,7 @@ enum ReservationStatus {
 // @schema-type: ROOT
 // @schema-owner: true
 // @aggregate-root: true
+// @usecase-anchor: true
 // @description: 사용자의 프로그램 발생 회차 예약 상태를 관리하는 예약 루트
 // @ownership: independent
 // @scope: mixed

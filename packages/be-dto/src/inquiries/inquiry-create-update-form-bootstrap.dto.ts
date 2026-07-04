@@ -2,7 +2,6 @@ import { ApiProperty } from "@nestjs/swagger";
 
 import { InquiryFormFieldMetaDto } from "./inquiry-form-field-meta.dto";
 import { InquiryFormOptionItemDto } from "./inquiry-form-option-item.dto";
-import { InquiryFormSchemaDto } from "./inquiry-form-schema.dto";
 import { InquiryFormUiPathsDto } from "./inquiry-form-ui-paths.dto";
 
 export class InquiryCreateUpdateFormBootstrapDto {
@@ -44,10 +43,4 @@ export class InquiryCreateUpdateFormBootstrapDto {
 		},
 	})
 	fieldMeta!: Record<string, InquiryFormFieldMetaDto>;
-
-	@ApiProperty({
-		description: "AI 스키마 목록",
-		type: [InquiryFormSchemaDto],
-	})
-	aiSchemas!: InquiryFormSchemaDto[];
 }

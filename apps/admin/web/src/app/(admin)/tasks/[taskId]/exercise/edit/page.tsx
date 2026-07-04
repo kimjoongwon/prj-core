@@ -6,7 +6,11 @@ import {
 	useUpdateTaskExercise,
 } from "@cocrepo/api/core/tasks";
 import { useTaskExerciseAssetBrowser } from "@cocrepo/hook";
-import { TaskExerciseEditScreen, useT } from "@cocrepo/ui";
+import {
+	TaskExerciseEditScreen,
+	type TaskExerciseFormState,
+	useT,
+} from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -23,7 +27,7 @@ const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 	const { taskId } = useParams<TaskExerciseEditScreenParams>();
 	const router = useRouter();
 	const persistStore = usePersistStore();
-	const state = useLocalObservable(() => ({
+	const state = useLocalObservable<TaskExerciseFormState>(() => ({
 		name: "",
 		durationMin: 0,
 		durationSec: 0,
@@ -31,7 +35,9 @@ const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 		description: "",
 		imageFileId: "",
 		videoFileId: "",
-		errors: {} as Record<string, string>,
+		errors: {},
+	}));
+	const routeState = useLocalObservable(() => ({
 		isInitialized: false,
 	}));
 
@@ -63,7 +69,7 @@ const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 	});
 
 	useEffect(() => {
-		if (exercise && !state.isInitialized) {
+		if (exercise && !routeState.isInitialized) {
 			state.name = exercise.name;
 			state.durationMin = Math.floor(exercise.duration / 60);
 			state.durationSec = exercise.duration % 60;
@@ -71,9 +77,9 @@ const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 			state.description = exercise.description || "";
 			state.imageFileId = exercise.imageFileId || "";
 			state.videoFileId = exercise.videoFileId || "";
-			state.isInitialized = true;
+			routeState.isInitialized = true;
 		}
-	}, [exercise, state]);
+	}, [exercise, routeState, state]);
 
 	const { mutate: updateTaskExercise, isPending } = useUpdateTaskExercise({
 		mutation: {
@@ -94,38 +100,6 @@ const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 
 	const onClickCancelButton = () => {
 		router.push(`/tasks/${taskId}/exercise` as Route);
-	};
-
-	const onChangeNameInput = (value: string) => {
-		state.name = value;
-		delete state.errors.name;
-	};
-
-	const onChangeDurationMinInput = (value: string) => {
-		state.durationMin = Number(value) || 0;
-		delete state.errors.duration;
-	};
-
-	const onChangeDurationSecInput = (value: string) => {
-		state.durationSec = Number(value) || 0;
-		delete state.errors.duration;
-	};
-
-	const onChangeCountInput = (value: string) => {
-		state.count = Number(value) || 1;
-		delete state.errors.count;
-	};
-
-	const onChangeDescriptionTextArea = (value: string) => {
-		state.description = value;
-	};
-
-	const onChangeImageFileIdInput = (value: string) => {
-		state.imageFileId = value;
-	};
-
-	const onChangeVideoFileIdInput = (value: string) => {
-		state.videoFileId = value;
 	};
 
 	const onClickSaveButton = () => {
@@ -165,12 +139,13 @@ const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 	return (
 		<>
 			<TaskExerciseEditScreen
-				exerciseName={exercise?.name}
-				name={state.name}
-				durationMin={state.durationMin}
-				durationSec={state.durationSec}
-				count={state.count}
-				description={state.description}
+				title="운동 정보 수정"
+				description={
+					exercise?.name
+						? `${exercise.name} 운동 detail을 수정합니다.`
+						: "운동 detail을 수정합니다."
+				}
+				state={state}
 				contentLanguageCode={persistStore.contentLanguageCode}
 				selectedImageAsset={selectedImageAsset}
 				selectedVideoAsset={selectedVideoAsset}
@@ -179,18 +154,9 @@ const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 				assetBrowserDescription={assetBrowserDescription}
 				assetBrowserSelectedAssetId={selectedAssetId}
 				isAssetBrowserOpen={activeAssetSlot !== null}
-				errors={state.errors}
-				isSchedulable={state.videoFileId.trim().length > 0}
 				isLoading={isLoading}
 				isNotFound={!isLoading && !exercise}
 				isSubmitPending={isPending}
-				onChangeNameInput={onChangeNameInput}
-				onChangeDurationMinInput={onChangeDurationMinInput}
-				onChangeDurationSecInput={onChangeDurationSecInput}
-				onChangeCountInput={onChangeCountInput}
-				onChangeDescriptionTextArea={onChangeDescriptionTextArea}
-				onChangeImageFileIdInput={onChangeImageFileIdInput}
-				onChangeVideoFileIdInput={onChangeVideoFileIdInput}
 				onOpenImagePicker={() => {
 					onOpenAssetBrowser("image");
 				}}

@@ -32,7 +32,6 @@ export * from "./delete-task.command";
 export * from "./delete-template.command";
 export * from "./delete-timeline.command";
 export * from "./delete-translation.command";
-export * from "./fill-inquiry-form-with-ai.query";
 export * from "./find-tasks.query";
 export * from "./get-ability-by-id.query";
 export * from "./get-action-by-id.query";

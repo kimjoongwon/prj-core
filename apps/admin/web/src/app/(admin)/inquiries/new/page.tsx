@@ -5,17 +5,16 @@ import {
 	type InquiryChannel,
 	type InquiryPriority,
 	useCreateInquiry,
-	useFillInquiryFormWithAi,
 	useGetCreateInquiryForm,
 } from "@cocrepo/api/core/inquiries";
 import { getUsers } from "@cocrepo/api/core/users";
 import { ADMIN_PATHS } from "@cocrepo/constant";
-import type { AiFormOptionItem, AiFormPatch } from "@cocrepo/type";
+import type { FormOptionItem } from "@cocrepo/type";
 import {
-	InquiryCreateScreen,
-	type InquiryCreateScreenCustomerSearchResult,
-	type InquiryCreateScreenFormState,
-	type InquiryCreateScreenOption,
+	InquiryEditScreen,
+	type InquiryEditScreenCustomerSearchResult,
+	type InquiryEditScreenFormState,
+	type InquiryEditScreenOption,
 } from "@cocrepo/ui";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -24,9 +23,9 @@ import { useEffect } from "react";
 
 const REQUIRED_MESSAGE = "필수 항목입니다.";
 
-const normalizeAiFormOptionValue = (
+const normalizeFormOptionValue = (
 	value: unknown,
-): AiFormOptionItem["value"] => {
+): FormOptionItem["value"] => {
 	if (
 		typeof value === "string" ||
 		typeof value === "number" ||
@@ -38,14 +37,14 @@ const normalizeAiFormOptionValue = (
 	return null;
 };
 
-const normalizeAiFormOptions = (
+const normalizeFormOptions = (
 	options?: Record<string, Array<{ value: unknown; label: string }>>,
-): Record<string, AiFormOptionItem[]> => {
+): Record<string, FormOptionItem[]> => {
 	return Object.fromEntries(
 		Object.entries(options ?? {}).map(([path, items]) => [
 			path,
 			items.map((item) => ({
-				value: normalizeAiFormOptionValue(item.value),
+				value: normalizeFormOptionValue(item.value),
 				label: item.label,
 			})),
 		]),
@@ -53,8 +52,8 @@ const normalizeAiFormOptions = (
 };
 
 const mapSelectOptions = (
-	items?: AiFormOptionItem[],
-): InquiryCreateScreenOption[] =>
+	items?: FormOptionItem[],
+): InquiryEditScreenOption[] =>
 	(items ?? []).map((item) => ({
 		value: String(item.value ?? ""),
 		text: item.label,
@@ -64,12 +63,11 @@ export default observer(function InquiriesNewPageRoute() {
 	const router = useRouter();
 	const { data: bootstrapResponse, isLoading } = useGetCreateInquiryForm();
 	const createInquiryMutation = useCreateInquiry();
-	const fillMutation = useFillInquiryFormWithAi();
 	const bootstrap = bootstrapResponse?.data;
-	const bootstrapOptions = normalizeAiFormOptions(bootstrap?.options);
+	const bootstrapOptions = normalizeFormOptions(bootstrap?.options);
 
 	const state = useLocalObservable<
-		InquiryCreateScreenFormState & {
+		InquiryEditScreenFormState & {
 			initialized: boolean;
 			isSubmitting: boolean;
 			initFromBootstrap: () => void;
@@ -85,7 +83,7 @@ export default observer(function InquiriesNewPageRoute() {
 		category: "GENERAL" as InquiryCategory,
 		channel: "WEB" as InquiryChannel,
 		priority: "NORMAL" as InquiryPriority,
-		searchResults: [] as InquiryCreateScreenCustomerSearchResult[],
+		searchResults: [] as InquiryEditScreenCustomerSearchResult[],
 		errors: {} as Record<string, string>,
 		initFromBootstrap() {
 			if (!bootstrap || this.initialized) {
@@ -150,31 +148,6 @@ export default observer(function InquiriesNewPageRoute() {
 		}));
 	};
 
-	const onApplyAiPatch = (patches: AiFormPatch[]) => {
-		for (const patch of patches) {
-			switch (patch.path) {
-				case "title":
-					if (typeof patch.value === "string") state.title = patch.value;
-					break;
-				case "content":
-					if (typeof patch.value === "string") state.content = patch.value;
-					break;
-				case "category":
-					if (typeof patch.value === "string") {
-						state.category = patch.value as InquiryCategory;
-					}
-					break;
-				case "priority":
-					if (typeof patch.value === "string") {
-						state.priority = patch.value as InquiryPriority;
-					}
-					break;
-				default:
-					break;
-			}
-		}
-	};
-
 	const onClickSubmitButton = async () => {
 		if (!state.validate()) {
 			return;
@@ -212,13 +185,14 @@ export default observer(function InquiriesNewPageRoute() {
 
 	return (
 		<>
-			<InquiryCreateScreen
+			<InquiryEditScreen
+				title="문의 접수"
+				description="문의 생성 bootstrap을 이용해 문의를 등록합니다."
 				formState={state}
 				bootstrap={
 					bootstrap
 						? {
 								fieldMeta: bootstrap.fieldMeta,
-								aiSchemas: bootstrap.aiSchemas,
 								ui: bootstrap.ui,
 								options: bootstrapOptions,
 							}
@@ -229,11 +203,12 @@ export default observer(function InquiriesNewPageRoute() {
 				priorityOptions={mapSelectOptions(bootstrapOptions.priority)}
 				isLoading={isLoading}
 				isSubmitting={state.isSubmitting || createInquiryMutation.isPending}
+				showCustomerField
+				showContentField
+				showChannelField
+				submitLabel="등록"
 				onClickBackButton={() => {
 					router.push(ADMIN_PATHS.INQUIRIES as Route);
-				}}
-				onChangeCustomerKeyword={(value) => {
-					state.customerKeyword = value;
 				}}
 				onSearchCustomer={(keyword) => {
 					void onSearchCustomer(keyword);
@@ -242,37 +217,6 @@ export default observer(function InquiriesNewPageRoute() {
 					state.customerId = customer.id;
 					state.customerKeyword = customer.label;
 					state.searchResults = [];
-				}}
-				onChangeTitleInput={(value) => {
-					state.title = value;
-				}}
-				onChangeContentTextArea={(value) => {
-					state.content = value;
-				}}
-				onChangeCategorySelection={(value) => {
-					state.category = value;
-				}}
-				onChangeChannelSelection={(value) => {
-					state.channel = value;
-				}}
-				onChangePrioritySelection={(value) => {
-					state.priority = value;
-				}}
-				onFillAiForm={async (input) => {
-					const result = await fillMutation.mutateAsync({
-						data: {
-							mode: "CREATE",
-							schemaKey: input.schemaKey,
-							selectedPaths: input.selectedPaths,
-							currentObject: input.currentObject,
-							userPrompt: input.userPrompt,
-						},
-					});
-					return result?.data ?? { patches: [] };
-				}}
-				onApplyAiPatch={onApplyAiPatch}
-				onRevalidateAiForm={() => {
-					state.validate();
 				}}
 				onClickCancelButton={() => {
 					router.push(ADMIN_PATHS.INQUIRIES as Route);

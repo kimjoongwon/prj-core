@@ -10,20 +10,25 @@ import {
 	useDeleteRoutine,
 	useGetRoutine,
 } from "@cocrepo/api/core/routines";
-import { RoutineDetailScreen } from "@cocrepo/ui";
-import { toast } from "@heroui/react";
+import {
+	Button,
+	type RoutineActivityFormItem,
+	RoutineEditScreen,
+	type RoutineFormState,
+} from "@cocrepo/ui";
+import { Modal, toast, useOverlayState } from "@heroui/react";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
+import { ArrowLeft, Edit, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
 
 const AdminRoutinesDetailRoute = observer(() => {
 	const { routineId } = useParams<{ routineId: string }>();
 	const router = useRouter();
 	const queryClient = useQueryClient();
-	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+	const deleteModal = useOverlayState();
 
 	const {
 		data: response,
@@ -57,27 +62,35 @@ const AdminRoutinesDetailRoute = observer(() => {
 			assetMap.set(assetId, asset);
 		}
 	});
-	const mappedRoutine = routine
+	const routineActivities: RoutineActivityFormItem[] = [
+		...(routine?.activities ?? []),
+	]
+		.sort((left, right) => left.order - right.order)
+		.map((activity) => ({
+			taskId: activity.taskId,
+			exerciseName: activity.task?.exercise?.name ?? activity.taskId.slice(-6),
+			isSchedulable: Boolean(activity.task?.exercise?.videoFileId),
+			imageFileId: activity.task?.exercise?.imageFileId,
+			videoFileId: activity.task?.exercise?.videoFileId,
+			imageAssetUrl: activity.task?.exercise?.imageFileId
+				? (assetMap.get(activity.task.exercise.imageFileId)?.publicUrl ??
+					undefined)
+				: undefined,
+			videoAssetUrl: activity.task?.exercise?.videoFileId
+				? (assetMap.get(activity.task.exercise.videoFileId)?.publicUrl ??
+					undefined)
+				: undefined,
+			repetitions: String(activity.repetitions ?? 1),
+			restTime: String(activity.restTime ?? 0),
+			notes: activity.notes ?? "",
+		}));
+	const routineState: RoutineFormState | undefined = routine
 		? {
-				...routine,
-				activities: [...(routine.activities ?? [])]
-					.sort((left, right) => left.order - right.order)
-					.map((activity) => ({
-						id: activity.id,
-						order: activity.order,
-						repetitions: activity.repetitions,
-						restTime: activity.restTime,
-						notes: activity.notes,
-						exerciseName: activity.task?.exercise?.name,
-						imageAssetUrl: activity.task?.exercise?.imageFileId
-							? (assetMap.get(activity.task.exercise.imageFileId)?.publicUrl ??
-								undefined)
-							: undefined,
-						videoAssetUrl: activity.task?.exercise?.videoFileId
-							? (assetMap.get(activity.task.exercise.videoFileId)?.publicUrl ??
-								undefined)
-							: undefined,
-					})),
+				name: routine.name,
+				label: routine.label,
+				exerciseQuery: "",
+				activities: routineActivities,
+				errors: {},
 			}
 		: undefined;
 	const responseStatus = (error as AxiosError | null)?.response?.status;
@@ -97,54 +110,138 @@ const AdminRoutinesDetailRoute = observer(() => {
 
 	return (
 		<>
-			<RoutineDetailScreen
-				routine={mappedRoutine}
+			<RoutineEditScreen
+				title={routine?.name || "루틴 상세"}
+				description={errorDescription || "루틴의 상세 정보입니다."}
+				state={routineState}
+				activities={routineActivities}
+				programs={routine?.programs ?? []}
+				metadata={{
+					createdAt: routine?.createdAt,
+					updatedAt: routine?.updatedAt,
+				}}
+				readOnly
 				isLoading={isLoading}
-				errorTitle={errorTitle}
-				errorDescription={errorDescription}
-				showRetryButton={Boolean(error && !isNotFound)}
-				isDeleteModalOpen={isDeleteModalOpen}
-				isDeleting={isDeleting}
-				onClickBackButton={() => {
-					router.push("/routines" as Route);
-				}}
-				onClickEditButton={() => {
-					router.push(`/routines/${routineId}/edit` as Route);
-				}}
-				onClickRetryButton={() => {
-					void refetch();
-				}}
-				onClickOpenDeleteModal={() => {
-					setIsDeleteModalOpen(true);
-				}}
-				onCloseDeleteModal={() => {
-					setIsDeleteModalOpen(false);
-				}}
-				onClickDeleteConfirm={() => {
-					deleteRoutine(
-						{ routineId },
-						{
-							onSuccess: () => {
-								toast.success("삭제 성공", {
-									description: "루틴이 삭제되었습니다.",
-								});
-								setIsDeleteModalOpen(false);
-								queryClient.invalidateQueries({
-									queryKey: getGetRoutinesQueryKey(),
-								});
+				notFound={Boolean(errorTitle) || (!isLoading && !routine)}
+				notFoundMessage={errorTitle ?? "루틴을 찾을 수 없습니다."}
+				notFoundAction={
+					<div className="flex gap-2">
+						{error && !isNotFound ? (
+							<Button
+								variant="flat"
+								onPress={() => {
+									void refetch();
+								}}
+							>
+								다시 시도
+							</Button>
+						) : null}
+						<Button
+							variant="flat"
+							startContent={<ArrowLeft className="h-4 w-4" />}
+							onPress={() => {
 								router.push("/routines" as Route);
-							},
-							onError: (mutationError) => {
-								toast.danger("삭제 실패", {
-									description:
-										mutationError.message ||
-										"삭제 중 오류가 발생했습니다. 프로그램에서 사용 중인 루틴은 삭제할 수 없습니다.",
-								});
-							},
-						},
-					);
-				}}
+							}}
+						>
+							목록으로
+						</Button>
+					</div>
+				}
+				actions={
+					<div className="flex flex-wrap gap-2">
+						<Button
+							variant="flat"
+							startContent={<ArrowLeft className="h-4 w-4" />}
+							onPress={() => {
+								router.push("/routines" as Route);
+							}}
+						>
+							목록으로
+						</Button>
+						<Button
+							variant="flat"
+							startContent={<Edit className="h-4 w-4" />}
+							onPress={() => {
+								router.push(`/routines/${routineId}/edit` as Route);
+							}}
+						>
+							수정
+						</Button>
+						<Button
+							color="danger"
+							variant="flat"
+							startContent={<Trash2 className="h-4 w-4" />}
+							onPress={deleteModal.open}
+						>
+							삭제
+						</Button>
+					</div>
+				}
 			/>
+			{routine ? (
+				<Modal state={deleteModal}>
+					<Modal.Backdrop>
+						<Modal.Container>
+							<Modal.Dialog>
+								<Modal.Header>루틴 삭제</Modal.Header>
+								<Modal.Body>
+									<p>
+										<strong>{routine.name}</strong> 루틴을 삭제하시겠습니까?
+									</p>
+									{(routine.programs ?? []).length > 0 ? (
+										<p className="mt-2 text-sm text-warning">
+											현재 {(routine.programs ?? []).length}개의 프로그램에서
+											사용 중입니다.
+										</p>
+									) : null}
+									<p className="mt-2 text-sm text-danger">
+										이 작업은 되돌릴 수 없습니다.
+									</p>
+								</Modal.Body>
+								<Modal.Footer>
+									<Button
+										variant="flat"
+										onPress={deleteModal.close}
+										isDisabled={isDeleting}
+									>
+										취소
+									</Button>
+									<Button
+										color="danger"
+										isLoading={isDeleting}
+										onPress={() => {
+											deleteRoutine(
+												{ routineId },
+												{
+													onSuccess: () => {
+														toast.success("삭제 성공", {
+															description: "루틴이 삭제되었습니다.",
+														});
+														deleteModal.close();
+														queryClient.invalidateQueries({
+															queryKey: getGetRoutinesQueryKey(),
+														});
+														router.push("/routines" as Route);
+													},
+													onError: (mutationError) => {
+														toast.danger("삭제 실패", {
+															description:
+																mutationError.message ||
+																"삭제 중 오류가 발생했습니다. 프로그램에서 사용 중인 루틴은 삭제할 수 없습니다.",
+														});
+													},
+												},
+											);
+										}}
+									>
+										삭제
+									</Button>
+								</Modal.Footer>
+							</Modal.Dialog>
+						</Modal.Container>
+					</Modal.Backdrop>
+				</Modal>
+			) : null}
 		</>
 	);
 });

@@ -18,6 +18,7 @@
 // @schema-type: ROOT
 // @schema-owner: true
 // @aggregate-root: true
+// @usecase-anchor: true
 // @description: 권한 체계를 정의하는 핵심 역할 도메인 객체
 // @ownership: independent
 // @scope: tenant

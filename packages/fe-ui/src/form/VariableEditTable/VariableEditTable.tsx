@@ -30,6 +30,8 @@ export interface VariableEditTableProps {
 	contentText?: string;
 	/** 행별 필드별 에러 (선택적) */
 	errors?: Record<number, Record<string, string>>;
+	/** 읽기 전용 여부 */
+	readOnly?: boolean;
 }
 
 /** 변수명 유효성 검증 정규식 */
@@ -73,11 +75,20 @@ const isVariableUsedInContent = (
  * ```
  */
 export const VariableEditTable = observer(
-	({ variables, onChange, contentText, errors }: VariableEditTableProps) => {
+	({
+		variables,
+		onChange,
+		contentText,
+		errors,
+		readOnly = false,
+	}: VariableEditTableProps) => {
 		/**
 		 * 행 추가 핸들러
 		 */
 		const handleAddRow = () => {
+			if (readOnly) {
+				return;
+			}
 			onChange([
 				...variables,
 				{
@@ -97,6 +108,9 @@ export const VariableEditTable = observer(
 			field: keyof Omit<VariableEditItem, "id">,
 			value: string | number | boolean,
 		) => {
+			if (readOnly) {
+				return;
+			}
 			const updated = variables.map((item, i) => {
 				if (i !== index) return item;
 				return { ...item, [field]: value };
@@ -108,6 +122,9 @@ export const VariableEditTable = observer(
 		 * 행 삭제 핸들러
 		 */
 		const handleDeleteRow = (index: number) => {
+			if (readOnly) {
+				return;
+			}
 			onChange(variables.filter((_, i) => i !== index));
 		};
 
@@ -130,6 +147,7 @@ export const VariableEditTable = observer(
 					variant="light"
 					color="danger"
 					size="sm"
+					isDisabled={readOnly}
 					onPress={() => handleDeleteRow(index)}
 				>
 					<Trash2 className="h-4 w-4" />
@@ -180,6 +198,8 @@ export const VariableEditTable = observer(
 												isInvalid={!!nameError}
 												errorMessage={nameError}
 												pattern={VARIABLE_NAME_PATTERN.source}
+												isReadOnly={readOnly}
+												isDisabled={readOnly}
 											/>
 										</Table.Cell>
 										<Table.Cell>
@@ -192,6 +212,8 @@ export const VariableEditTable = observer(
 												}
 												isInvalid={!!descriptionError}
 												errorMessage={descriptionError}
+												isReadOnly={readOnly}
+												isDisabled={readOnly}
 											/>
 										</Table.Cell>
 										<Table.Cell>
@@ -204,19 +226,22 @@ export const VariableEditTable = observer(
 												}
 												isInvalid={!!defaultValueError}
 												errorMessage={defaultValueError}
+												isReadOnly={readOnly}
+												isDisabled={readOnly}
 											/>
 										</Table.Cell>
 										<Table.Cell>
 											<Switch
 												size="sm"
 												value={variable.isRequired}
+												isDisabled={readOnly}
 												onValueChange={(isSelected) =>
 													handleFieldChange(index, "isRequired", isSelected)
 												}
 											/>
 										</Table.Cell>
 										<Table.Cell>
-											{renderDeleteButton(variable, index)}
+											{readOnly ? null : renderDeleteButton(variable, index)}
 										</Table.Cell>
 									</Table.Row>
 								);
@@ -225,14 +250,16 @@ export const VariableEditTable = observer(
 					</Table.Content>
 				</Table>
 
-				<Button
-					variant="light"
-					startContent={<Plus className="h-4 w-4" />}
-					onPress={handleAddRow}
-					size="sm"
-				>
-					변수 추가
-				</Button>
+				{readOnly ? null : (
+					<Button
+						variant="light"
+						startContent={<Plus className="h-4 w-4" />}
+						onPress={handleAddRow}
+						size="sm"
+					>
+						변수 추가
+					</Button>
+				)}
 			</div>
 		);
 	},

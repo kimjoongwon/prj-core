@@ -1,118 +1,102 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { Button } from "../../input/Button/Button";
 import { RoutineEditScreen } from "./RoutineEditScreen";
 
-const defaultArgs = {
-	activities: [
-		{
-			exerciseName: "샘플 exercise name 1",
-			imageAssetUrl: "https://example.com/image-asset-url-1",
-			imageFileId: "image-file-1",
-			isSchedulable: false,
-			notes: "스토리북에서 확인할 notes 예시입니다.",
-			repetitions: "repetitions-1",
-			restTime: "2026-04-14T09:00:00.000Z",
-			taskId: "task-1",
-			videoAssetUrl: "https://example.com/video-asset-url-1",
-			videoFileId: "video-file-1",
-		},
-		{
-			exerciseName: "샘플 exercise name 1",
-			imageAssetUrl: "https://example.com/image-asset-url-1",
-			imageFileId: "image-file-1",
-			isSchedulable: false,
-			notes: "스토리북에서 확인할 notes 예시입니다.",
-			repetitions: "repetitions-1",
-			restTime: "2026-04-14T09:00:00.000Z",
-			taskId: "task-1",
-			videoAssetUrl: "https://example.com/video-asset-url-1",
-			videoFileId: "video-file-1",
-		},
-	],
-	activitiesError: "activities-error-1",
-	candidateTasks: [
-		{
-			exerciseCount: 12,
-			exerciseName: "샘플 exercise name 1",
-			id: "item-1",
-			imageAssetUrl: "https://example.com/image-asset-url-1",
-			imageFileId: "image-file-1",
-			isSchedulable: false,
-			videoAssetUrl: "https://example.com/video-asset-url-1",
-			videoFileId: "video-file-1",
-		},
-		{
-			exerciseCount: 12,
-			exerciseName: "샘플 exercise name 1",
-			id: "item-1",
-			imageAssetUrl: "https://example.com/image-asset-url-1",
-			imageFileId: "image-file-1",
-			isSchedulable: false,
-			videoAssetUrl: "https://example.com/video-asset-url-1",
-			videoFileId: "video-file-1",
-		},
-	],
-	exerciseQuery: "샘플",
-	isEmptyActivitiesWarningOpen: false,
-	isLoading: false,
-	isNotFound: false,
-	isSubmitting: false,
-	isTasksLoading: false,
-	label: "샘플 label 1",
-	labelError: "샘플 label error 1",
-	nameError: "샘플 name error 1",
-	onChangeActivityInput: (..._args: never[]) => undefined,
-	onChangeExerciseQueryInput: (..._args: never[]) => undefined,
-	onChangeLabelInput: (..._args: never[]) => undefined,
-	onChangeNameInput: (..._args: never[]) => undefined,
-	onClickAddActivityButton: (..._args: never[]) => undefined,
-	onClickCancelButton: (..._args: never[]) => undefined,
-	onClickConfirmEmptyActivitiesWarningButton: (..._args: never[]) => undefined,
-	onClickRemoveActivityButton: (..._args: never[]) => undefined,
-	onClickSaveButton: (..._args: never[]) => undefined,
-	onCloseEmptyActivitiesWarningModal: (..._args: never[]) => undefined,
-	onReorderActivities: (..._args: never[]) => undefined,
-	routineName: "샘플 routine name 1",
-};
+const activities = [
+	{
+		taskId: "task-push-up",
+		exerciseName: "푸시업",
+		isSchedulable: true,
+		repetitions: "12",
+		restTime: "30",
+		notes: "상체 워밍업",
+	},
+	{
+		taskId: "task-squat",
+		exerciseName: "스쿼트",
+		isSchedulable: true,
+		repetitions: "15",
+		restTime: "45",
+		notes: "",
+	},
+];
 
-const loadingArgs = {
-	...defaultArgs,
-	isLoading: true,
-};
+const candidateTasks = [
+	{
+		id: "task-lunge",
+		exerciseName: "런지",
+		exerciseCount: 10,
+		isSchedulable: true,
+	},
+	{
+		id: "task-plank",
+		exerciseName: "플랭크",
+		exerciseCount: 1,
+		isSchedulable: true,
+	},
+];
 
-const notFoundArgs = {
-	...defaultArgs,
-	isNotFound: true,
-};
-
-const busyArgs = {
-	...defaultArgs,
-	isSubmitting: true,
+const defaultState = {
+	name: "풀바디 루틴 A",
+	label: "FULL-A",
+	exerciseQuery: "",
+	activities,
+	errors: {},
 };
 
 const meta = {
 	title: "screen/RoutineEditScreen",
 	component: RoutineEditScreen,
-	parameters: {
-		layout: "fullscreen",
-	},
+	parameters: { layout: "fullscreen" },
 	tags: ["autodocs"],
-	args: defaultArgs as never,
+	args: {
+		title: "루틴 수정",
+		description: "route가 전달한 루틴 상태를 편집합니다.",
+		state: defaultState,
+		candidateTasks,
+		activities,
+		actions: <Button color="primary">저장</Button>,
+	},
 } satisfies Meta<typeof RoutineEditScreen>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Edit: Story = {};
+
+export const Create: Story = {
+	args: {
+		title: "루틴 등록",
+		description: "새로운 운동 루틴을 등록합니다.",
+		state: {
+			name: "",
+			label: "",
+			exerciseQuery: "",
+			activities: [],
+			errors: {},
+		},
+	},
+};
+
+export const Detail: Story = {
+	args: {
+		title: "루틴 상세",
+		description: "루틴의 상세 정보입니다.",
+		state: defaultState,
+		activities,
+		readOnly: true,
+		programs: [{ id: "program-1", name: "월요일 프로그램" }],
+		metadata: {
+			createdAt: "2026-04-01T09:00:00.000Z",
+			updatedAt: "2026-04-03T09:00:00.000Z",
+		},
+		actions: <Button variant="flat">수정</Button>,
+	},
+};
 
 export const Loading: Story = {
-	args: loadingArgs as never,
-};
-
-export const NotFound: Story = {
-	args: notFoundArgs as never,
-};
-
-export const Busy: Story = {
-	args: busyArgs as never,
+	args: {
+		isLoading: true,
+	},
 };

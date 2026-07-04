@@ -5,9 +5,10 @@ import {
 	useGetTimelineById,
 	useUpdateTimeline,
 } from "@cocrepo/api/core/timelines";
-import { TimelineEditScreen } from "@cocrepo/ui";
+import { Button, TimelineEditScreen, type TimelineFormState } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
+import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import dynamic from "next/dynamic";
@@ -25,14 +26,16 @@ const AdminTimelinesTimelineIdEditRoute = observer(() => {
 	const persistStore = usePersistStore();
 	const queryClient = useQueryClient();
 
-	const state = useLocalObservable(() => ({
-		name: "",
-		description: "",
-		errors: {} as Record<string, string>,
-		isInitialized: false,
-	}));
+	const state = useLocalObservable<TimelineFormState & { isInitialized: boolean }>(
+		() => ({
+			name: "",
+			description: "",
+			errors: {},
+			isInitialized: false,
+		}),
+	);
 
-	const { data: response } = useGetTimelineById(timelineId);
+	const { data: response, isLoading } = useGetTimelineById(timelineId);
 	const timeline = response?.data;
 
 	useEffect(() => {
@@ -45,22 +48,8 @@ const AdminTimelinesTimelineIdEditRoute = observer(() => {
 
 	const { mutate: updateTimeline, isPending } = useUpdateTimeline();
 
-	const onClickCancelButton = () => {
-		router.push(`/timelines/${timelineId}` as Route);
-	};
-
-	const onChangeNameInput = (value: string) => {
-		state.name = value;
-		delete state.errors.name;
-	};
-
-	const onChangeDescriptionTextArea = (value: string) => {
-		state.description = value;
-		delete state.errors.description;
-	};
-
 	const onClickSubmitButton = () => {
-		const errors: Record<string, string> = {};
+		const errors: TimelineFormState["errors"] = {};
 
 		if (!state.name.trim()) {
 			errors.name = "타임라인명을 입력해주세요.";
@@ -111,22 +100,38 @@ const AdminTimelinesTimelineIdEditRoute = observer(() => {
 			state.description === (timeline?.description ?? ""));
 
 	return (
-		<>
-			<TimelineEditScreen
-				timelineName={timeline?.name}
-				name={state.name}
-				description={state.description}
-				contentLanguageCode={persistStore.contentLanguageCode}
-				nameError={state.errors.name}
-				descriptionError={state.errors.description}
-				isSubmitPending={isPending}
-				isSubmitDisabled={isSubmitDisabled}
-				onChangeNameInput={onChangeNameInput}
-				onChangeDescriptionTextArea={onChangeDescriptionTextArea}
-				onClickCancelButton={onClickCancelButton}
-				onClickSubmitButton={onClickSubmitButton}
-			/>
-		</>
+		<TimelineEditScreen
+			title="타임라인 수정"
+			description={
+				timeline?.name ? `${timeline.name} 타임라인을 수정합니다.` : undefined
+			}
+			state={state}
+			contentLanguageCode={persistStore.contentLanguageCode}
+			isLoading={isLoading && !state.isInitialized}
+			notFound={!isLoading && !timeline}
+			actions={
+				<div className="flex gap-2">
+					<Button
+						variant="flat"
+						startContent={<ArrowLeft className="h-4 w-4" />}
+						onPress={() => {
+							router.push(`/timelines/${timelineId}` as Route);
+						}}
+					>
+						상세로
+					</Button>
+					<Button
+						color="primary"
+						startContent={<Save className="h-4 w-4" />}
+						isLoading={isPending}
+						isDisabled={isSubmitDisabled}
+						onPress={onClickSubmitButton}
+					>
+						저장
+					</Button>
+				</div>
+			}
+		/>
 	);
 });
 

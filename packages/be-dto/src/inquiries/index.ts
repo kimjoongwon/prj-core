@@ -1,7 +1,3 @@
-// Query DTOs
-
-export * from "./ai-draft-response.dto";
-
 // Request DTOs
 export * from "./create-inquiry.dto";
 export * from "./create-inquiry-message.dto";

@@ -1,10 +1,7 @@
 import {
 	type QueryClient,
-	type UseMutationOptions,
-	type UseMutationResult,
 	type UseQueryOptions,
 	type UseQueryResult,
-	useMutation,
 	useQuery,
 } from "@tanstack/react-query";
 import { customInstance } from "./libs/customAxios";
@@ -22,22 +19,8 @@ export interface InquiryFormUiPaths {
 	disabledPaths: string[];
 }
 
-export interface InquiryFormFieldAiMeta {
-	fillable: boolean;
-	defaultChecked?: boolean;
-	reason?: string;
-}
-
 export interface InquiryFormFieldMeta {
 	label?: string;
-	ai?: InquiryFormFieldAiMeta;
-}
-
-export interface InquiryFormSchema {
-	key: string;
-	label: string;
-	paths: string[];
-	description?: string;
 }
 
 export interface InquiryCreateUpdateFormBootstrap {
@@ -46,24 +29,6 @@ export interface InquiryCreateUpdateFormBootstrap {
 	options: Record<string, InquiryFormOptionItem[]>;
 	ui: InquiryFormUiPaths;
 	fieldMeta: Record<string, InquiryFormFieldMeta>;
-	aiSchemas: InquiryFormSchema[];
-}
-
-export interface InquiryFormPatch {
-	path: string;
-	value: unknown;
-}
-
-export interface FillInquiryFormRequest {
-	mode: "CREATE" | "UPDATE";
-	schemaKey: string;
-	selectedPaths: string[];
-	currentObject: Record<string, unknown>;
-	userPrompt?: string;
-}
-
-export interface FillInquiryFormResponse {
-	patches: InquiryFormPatch[];
 }
 
 export interface ApiResponseEntity<TData> {
@@ -195,51 +160,4 @@ export const prefetchGetInquiryUpdateFormQuery = async (
 	});
 
 	return queryClient;
-};
-
-export const fillInquiryFormWithAi = (
-	fillInquiryFormRequest: FillInquiryFormRequest,
-	options?: RequestOptions,
-	signal?: AbortSignal,
-) => {
-	return customInstance<ApiResponseEntity<FillInquiryFormResponse>>(
-		{
-			url: "/api/v1/inquiries/form/ai-fill",
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			data: fillInquiryFormRequest,
-			signal,
-		},
-		options,
-	);
-};
-
-export const useFillInquiryFormWithAi = <TError = Error, TContext = unknown>(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof fillInquiryFormWithAi>>,
-			TError,
-			{ data: FillInquiryFormRequest },
-			TContext
-		>;
-		request?: RequestOptions;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof fillInquiryFormWithAi>>,
-	TError,
-	{ data: FillInquiryFormRequest },
-	TContext
-> => {
-	const mutationOptions = options?.mutation;
-
-	return useMutation(
-		{
-			...(mutationOptions ?? {}),
-			mutationFn: async (props) => {
-				return fillInquiryFormWithAi(props.data, options?.request);
-			},
-		},
-		queryClient,
-	);
 };

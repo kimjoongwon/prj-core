@@ -40,8 +40,6 @@ import type {
   AssignInquiryBody,
   CreateInquiry201AllOf,
   CreateInquiryDto,
-  FillInquiryFormRequestDto,
-  FillInquiryFormWithAi200AllOf,
   GetCreateInquiryForm200AllOf,
   GetInquiries200AllOf,
   GetInquiriesParams,
@@ -607,7 +605,7 @@ export const prefetchGetInquiryStatsInfiniteQuery = async <TData = Awaited<Retur
 
 
 /**
- * 문의 생성 화면의 초기 렌더링에 필요한 defaultObject/options/ui/fieldMeta/aiSchemas를 반환합니다.
+ * 문의 생성 화면의 초기 렌더링에 필요한 defaultObject/options/ui/fieldMeta를 반환합니다.
  * @summary 문의 생성 폼 bootstrap 조회
  */
 export const getCreateInquiryForm = (
@@ -844,7 +842,7 @@ export const prefetchGetCreateInquiryFormInfiniteQuery = async <TData = Awaited<
 
 
 /**
- * 문의 수정 화면의 초기 렌더링에 필요한 defaultObject/options/ui/fieldMeta/aiSchemas를 반환합니다.
+ * 문의 수정 화면의 초기 렌더링에 필요한 defaultObject/options/ui/fieldMeta를 반환합니다.
  * @summary 문의 수정 폼 bootstrap 조회
  */
 export const getUpdateInquiryForm = (
@@ -1081,71 +1079,6 @@ export const prefetchGetUpdateInquiryFormInfiniteQuery = async <TData = Awaited<
 
 
 /**
- * 선택한 aiSchemas/path와 현재 폼 상태를 기반으로 서버에서 patch를 생성하여 반환합니다.
- * @summary 문의 폼 AI 채움
- */
-export const fillInquiryFormWithAi = (
-    fillInquiryFormRequestDto: BodyType<FillInquiryFormRequestDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<FillInquiryFormWithAi200AllOf>(
-      {url: `/api/v1/inquiries/form/ai-fill`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: fillInquiryFormRequestDto, signal
-    },
-      options);
-    }
-  
-
-
-export const getFillInquiryFormWithAiMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof fillInquiryFormWithAi>>, TError,{data: BodyType<FillInquiryFormRequestDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof fillInquiryFormWithAi>>, TError,{data: BodyType<FillInquiryFormRequestDto>}, TContext> => {
-
-const mutationKey = ['fillInquiryFormWithAi'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof fillInquiryFormWithAi>>, {data: BodyType<FillInquiryFormRequestDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  fillInquiryFormWithAi(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type FillInquiryFormWithAiMutationResult = NonNullable<Awaited<ReturnType<typeof fillInquiryFormWithAi>>>
-    export type FillInquiryFormWithAiMutationBody = BodyType<FillInquiryFormRequestDto>
-    export type FillInquiryFormWithAiMutationError = ErrorType<void>
-
-    /**
- * @summary 문의 폼 AI 채움
- */
-export const useFillInquiryFormWithAi = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof fillInquiryFormWithAi>>, TError,{data: BodyType<FillInquiryFormRequestDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof fillInquiryFormWithAi>>,
-        TError,
-        {data: BodyType<FillInquiryFormRequestDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getFillInquiryFormWithAiMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
  * 특정 문의의 상세 정보를 조회합니다. 스레드, 메시지, 참여자 정보를 포함합니다.
  * @summary 문의 상세 조회
  */

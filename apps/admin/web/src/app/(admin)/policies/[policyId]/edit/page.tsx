@@ -12,11 +12,13 @@ import {
 	useUpdatePolicy,
 } from "@cocrepo/api/core/policies";
 import {
-	type PolicyCreateScreenAbilityOption,
+	Button,
+	type PolicyAbilityOption,
 	PolicyEditScreen,
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
+import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
@@ -79,10 +81,6 @@ export default observer(function PolicyEditScreenRoute() {
 		state.isHydrated = true;
 	}, [policy, state]);
 
-	const onClickBackButton = () => {
-		router.push(`/policies/${policyId}` as Route);
-	};
-
 	const onClickSubmitButton = () => {
 		updatePolicy({
 			policyId,
@@ -95,44 +93,50 @@ export default observer(function PolicyEditScreenRoute() {
 		});
 	};
 
-	const onToggleAbility = (abilityId: string) => {
-		state.abilityIds = state.abilityIds.includes(abilityId)
-			? state.abilityIds.filter((id) => id !== abilityId)
-			: [...state.abilityIds, abilityId];
-	};
-
 	return (
-		<>
-			<PolicyEditScreen
-				status={isLoading ? "loading" : policy ? "ready" : "not_found"}
-				form={state}
-				abilities={abilities}
-				isSubmitting={isPending || isSyncingAbilities}
-				onClickBackButton={onClickBackButton}
-				onClickSubmitButton={onClickSubmitButton}
-				onChange={{
-					onChangeName: (value) => {
-						state.name = value;
-					},
-					onChangeDisplayName: (value) => {
-						state.displayName = value;
-					},
-					onChangeDescription: (value) => {
-						state.description = value;
-					},
-					onChangeIsSystem: (value) => {
-						state.isSystem = value;
-					},
-					onToggleAbility,
-				}}
-			/>
-		</>
+		<PolicyEditScreen
+			title="정책 수정"
+			description="정책 기본 정보와 연결 Ability를 수정합니다."
+			state={policy ? state : undefined}
+			abilities={abilities}
+			isLoading={isLoading}
+			notFound={!isLoading && !policy}
+			notFoundAction={
+				<Button
+					variant="flat"
+					onPress={() => {
+						router.push("/policies" as Route);
+					}}
+				>
+					목록으로
+				</Button>
+			}
+			actions={
+				<div className="flex gap-2">
+					<Button
+						variant="flat"
+						startContent={<ArrowLeft className="h-4 w-4" />}
+						onPress={() => {
+							router.push(`/policies/${policyId}` as Route);
+						}}
+					>
+						상세로 돌아가기
+					</Button>
+					<Button
+						color="primary"
+						startContent={<Save className="h-4 w-4" />}
+						isLoading={isPending || isSyncingAbilities}
+						onPress={onClickSubmitButton}
+					>
+						저장
+					</Button>
+				</div>
+			}
+		/>
 	);
 });
 
-function mapAbilityOption(
-	ability: AbilityResponseDto,
-): PolicyCreateScreenAbilityOption {
+function mapAbilityOption(ability: AbilityResponseDto): PolicyAbilityOption {
 	const subject =
 		ability.subject?.displayName || ability.subject?.name || "Subject";
 	const action =

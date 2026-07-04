@@ -5,28 +5,29 @@ import {
 	useCreateTemplate,
 } from "@cocrepo/api/core/templates";
 import {
-	TemplateCreateScreen,
-	type TemplateFormData,
-	type VariableEditItem,
+	Button,
+	TemplateEditScreen,
+	type TemplateFormState,
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
+import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
 
 const AdminTemplatesNewRoute = observer(() => {
 	const router = useRouter();
-	const state = useLocalObservable(() => ({
+	const state = useLocalObservable<TemplateFormState>(() => ({
 		formData: {
-			type: "EMAIL" as "EMAIL" | "SMS" | "PUSH",
+			type: "EMAIL",
 			code: "",
 			name: "",
 			description: "",
 			subject: "",
 			content: "",
-		} as TemplateFormData,
-		variables: [] as VariableEditItem[],
-		errors: {} as Record<string, string>,
+		},
+		variables: [],
+		errors: {},
 	}));
 
 	const { mutate: createTemplate, isPending } = useCreateTemplate({
@@ -48,59 +49,11 @@ const AdminTemplatesNewRoute = observer(() => {
 		},
 	});
 
-	const onClickCancelButton = () => {
-		router.push("/templates" as Route);
-	};
-
-	const onFormDataChange = (data: Partial<TemplateFormData>) => {
-		Object.assign(state.formData, data);
-		for (const key of Object.keys(data)) {
-			delete state.errors[key];
-		}
-	};
-
-	const onVariablesChange = (variables: VariableEditItem[]) => {
-		state.variables = variables;
-	};
-
-	const onSubmitForm = () => {
-		const errors: Record<string, string> = {};
-		const { formData } = state;
-
-		if (!formData.code.trim()) {
-			errors.code = "코드를 입력해주세요.";
-		} else if (!/^[A-Z][A-Z0-9_]*$/.test(formData.code)) {
-			errors.code = "영문 대문자와 언더스코어(_)만 사용 가능합니다.";
-		}
-
-		if (!formData.name.trim()) {
-			errors.name = "이름을 입력해주세요.";
-		}
-
-		if (!formData.content.trim()) {
-			errors.content = "본문을 입력해주세요.";
-		}
-
-		if (
-			(formData.type === "EMAIL" || formData.type === "PUSH") &&
-			!formData.subject.trim()
-		) {
-			errors.subject = "제목을 입력해주세요.";
-		}
-
-		if (formData.type === "PUSH") {
-			if (formData.subject.length > 50) {
-				errors.subject = "제목은 50자 이하로 입력해주세요.";
-			}
-			if (formData.content.length > 200) {
-				errors.content = "본문은 200자 이하로 입력해주세요.";
-			}
-		}
-
-		if (Object.keys(errors).length > 0) {
-			state.errors = errors;
+	const onSubmit = () => {
+		if (!validateCreateTemplate(state)) {
 			return;
 		}
+		const { formData } = state;
 
 		createTemplate({
 			data: {
@@ -121,19 +74,71 @@ const AdminTemplatesNewRoute = observer(() => {
 	};
 
 	return (
-		<>
-			<TemplateCreateScreen
-				formData={state.formData}
-				variables={state.variables}
-				errors={state.errors}
-				isSubmitting={isPending}
-				onFormDataChange={onFormDataChange}
-				onVariablesChange={onVariablesChange}
-				onSubmitForm={onSubmitForm}
-				onClickCancelButton={onClickCancelButton}
-			/>
-		</>
+		<TemplateEditScreen
+			title="Template 등록"
+			description="새로운 메시지 Template을 등록합니다."
+			state={state}
+			actions={
+				<div className="flex gap-2">
+					<Button
+						variant="flat"
+						startContent={<ArrowLeft className="h-4 w-4" />}
+						onPress={() => {
+							router.push("/templates" as Route);
+						}}
+					>
+						목록으로
+					</Button>
+					<Button
+						color="primary"
+						startContent={<Save className="h-4 w-4" />}
+						onPress={onSubmit}
+						isLoading={isPending}
+					>
+						등록
+					</Button>
+				</div>
+			}
+		/>
 	);
 });
+
+function validateCreateTemplate(state: TemplateFormState) {
+	const errors: Record<string, string> = {};
+	const { formData } = state;
+
+	if (!formData.code.trim()) {
+		errors.code = "코드를 입력해주세요.";
+	} else if (!/^[A-Z][A-Z0-9_]*$/.test(formData.code)) {
+		errors.code = "영문 대문자와 언더스코어(_)만 사용 가능합니다.";
+	}
+
+	if (!formData.name.trim()) {
+		errors.name = "이름을 입력해주세요.";
+	}
+
+	if (!formData.content.trim()) {
+		errors.content = "본문을 입력해주세요.";
+	}
+
+	if (
+		(formData.type === "EMAIL" || formData.type === "PUSH") &&
+		!formData.subject.trim()
+	) {
+		errors.subject = "제목을 입력해주세요.";
+	}
+
+	if (formData.type === "PUSH") {
+		if (formData.subject.length > 50) {
+			errors.subject = "제목은 50자 이하로 입력해주세요.";
+		}
+		if (formData.content.length > 200) {
+			errors.content = "본문은 200자 이하로 입력해주세요.";
+		}
+	}
+
+	state.errors = errors;
+	return Object.keys(errors).length === 0;
+}
 
 export default AdminTemplatesNewRoute;

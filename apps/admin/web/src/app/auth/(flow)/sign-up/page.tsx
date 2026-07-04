@@ -288,23 +288,21 @@ const SignUpRoutePage = observer(() => {
 	};
 
 	return (
-		<>
-			<SignUpScreen
-				state={signUpRoutePage}
-				spaceOptions={spaceOptions}
-				isSpacesLoading={spacesQuery.isLoading}
-				isSpacesError={spacesQuery.isError}
-				onSubmitSignUpForm={onSubmitSignUpForm}
-				onChangeSpaceId={onChangeSpaceId}
-				onChangeEmail={onChangeEmail}
-				onChangePassword={onChangePassword}
-				onChangeConfirmPassword={onChangeConfirmPassword}
-				onChangeName={onChangeName}
-				onChangePhone={onChangePhone}
-				onChangeAddress={onChangeAddress}
-				onClickUseAnotherEmailButton={onClickUseAnotherEmailButton}
-			/>
-		</>
+		<SignUpScreen
+			state={signUpRoutePage}
+			spaceOptions={spaceOptions}
+			isSpacesLoading={spacesQuery.isLoading}
+			isSpacesError={spacesQuery.isError}
+			onSubmitSignUpForm={onSubmitSignUpForm}
+			onChangeSpaceId={onChangeSpaceId}
+			onChangeEmail={onChangeEmail}
+			onChangePassword={onChangePassword}
+			onChangeConfirmPassword={onChangeConfirmPassword}
+			onChangeName={onChangeName}
+			onChangePhone={onChangePhone}
+			onChangeAddress={onChangeAddress}
+			onClickUseAnotherEmailButton={onClickUseAnotherEmailButton}
+		/>
 	);
 });
 

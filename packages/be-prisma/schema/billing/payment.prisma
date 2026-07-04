@@ -44,6 +44,7 @@ enum PaymentReferenceType {
 // @schema-type: ROOT
 // @schema-owner: true
 // @aggregate-root: true
+// @usecase-anchor: true
 // @description: Space 범위에서 다양한 서비스의 결제 승인/실패/환불 기록을 공통 장부로 관리하는 결제 루트
 // @ownership: independent
 // @scope: space

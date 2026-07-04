@@ -60,11 +60,14 @@ export function ApiBooleanPropertyOptional(
 export function ApiUUIDProperty(
 	options: ApiPropertyOptions & Partial<{ each: boolean }> = {},
 ): PropertyDecorator {
+	const { each, ...propertyOptions } = options;
+
 	return ApiProperty({
-		type: options.each ? [String] : "string",
-		format: "uuid",
-		isArray: options.each,
-		...options,
+		type: each ? [String] : "string",
+		pattern:
+			"^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$",
+		isArray: each,
+		...propertyOptions,
 	});
 }
 

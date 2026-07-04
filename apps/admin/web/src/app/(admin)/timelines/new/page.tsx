@@ -1,8 +1,9 @@
 "use client";
 
 import { useCreateTimeline } from "@cocrepo/api/core/timelines";
-import { TimelineCreateScreen } from "@cocrepo/ui";
+import { Button, TimelineEditScreen, type TimelineFormState } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
+import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -11,30 +12,16 @@ import { usePersistStore } from "@/stores/AppStoreProvider";
 const AdminTimelinesNewRoute = observer(() => {
 	const router = useRouter();
 	const persistStore = usePersistStore();
-	const state = useLocalObservable(() => ({
+	const state = useLocalObservable<TimelineFormState>(() => ({
 		name: "",
 		description: "",
-		errors: {} as Record<string, string>,
+		errors: {},
 	}));
 
 	const { mutate: createTimeline, isPending } = useCreateTimeline();
 
-	const onClickCancelButton = () => {
-		router.push("/timelines" as Route);
-	};
-
-	const onChangeNameInput = (value: string) => {
-		state.name = value;
-		delete state.errors.name;
-	};
-
-	const onChangeDescriptionTextArea = (value: string) => {
-		state.description = value;
-		delete state.errors.description;
-	};
-
 	const onClickSubmitButton = () => {
-		const errors: Record<string, string> = {};
+		const errors: TimelineFormState["errors"] = {};
 
 		if (!state.name.trim()) {
 			errors.name = "타임라인명을 입력해주세요.";
@@ -81,21 +68,34 @@ const AdminTimelinesNewRoute = observer(() => {
 	};
 
 	return (
-		<>
-			<TimelineCreateScreen
-				name={state.name}
-				description={state.description}
-				contentLanguageCode={persistStore.contentLanguageCode}
-				nameError={state.errors.name}
-				descriptionError={state.errors.description}
-				isSubmitPending={isPending}
-				isSubmitDisabled={!state.name.trim()}
-				onChangeNameInput={onChangeNameInput}
-				onChangeDescriptionTextArea={onChangeDescriptionTextArea}
-				onClickCancelButton={onClickCancelButton}
-				onClickSubmitButton={onClickSubmitButton}
-			/>
-		</>
+		<TimelineEditScreen
+			title="타임라인 등록"
+			description="새 타임라인을 등록합니다."
+			state={state}
+			contentLanguageCode={persistStore.contentLanguageCode}
+			actions={
+				<div className="flex gap-2">
+					<Button
+						variant="flat"
+						startContent={<ArrowLeft className="h-4 w-4" />}
+						onPress={() => {
+							router.push("/timelines" as Route);
+						}}
+					>
+						목록으로
+					</Button>
+					<Button
+						color="primary"
+						startContent={<Save className="h-4 w-4" />}
+						isLoading={isPending}
+						isDisabled={!state.name.trim()}
+						onPress={onClickSubmitButton}
+					>
+						등록
+					</Button>
+				</div>
+			}
+		/>
 	);
 });
 

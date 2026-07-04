@@ -5,7 +5,6 @@ export * from "./course";
 export * from "./email";
 export * from "./folder";
 export * from "./idp";
-export * from "./inquiry";
 export * from "./payment";
 export * from "./reservation";
 export * from "./timeline";

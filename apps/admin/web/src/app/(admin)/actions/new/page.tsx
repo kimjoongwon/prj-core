@@ -1,17 +1,15 @@
 "use client";
 
 import { useCreateAction } from "@cocrepo/api/core/actions";
-import {
-	ActionCreateScreen,
-	type ActionCreateScreenFormState,
-} from "@cocrepo/ui";
+import { ActionEditScreen, type ActionFormState, Button } from "@cocrepo/ui";
+import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
 
 export default observer(function ActionNewPageRoute() {
 	const router = useRouter();
-	const state = useLocalObservable<ActionCreateScreenFormState>(() => ({
+	const state = useLocalObservable<ActionFormState>(() => ({
 		name: "",
 		displayName: "",
 		description: "",
@@ -64,33 +62,31 @@ export default observer(function ActionNewPageRoute() {
 	};
 
 	return (
-		<>
-			<ActionCreateScreen
-				formState={state}
-				isSubmitting={isPending}
-				onClickBackButton={() => {
-					router.push("/actions" as Route);
-				}}
-				onChangeNameInput={(value) => {
-					state.name = value.toLowerCase();
-					state.errors.name = "";
-				}}
-				onChangeDisplayNameInput={(value) => {
-					state.displayName = value;
-				}}
-				onChangeDescriptionTextArea={(value) => {
-					state.description = value;
-				}}
-				onChangeGroupSelection={(value) => {
-					state.group = value;
-				}}
-				onChangeOrderInput={(value) => {
-					state.order = Number(value) || 0;
-				}}
-				onSubmit={() => {
-					onSubmit();
-				}}
-			/>
-		</>
+		<ActionEditScreen
+			title="Action 등록"
+			description="새로운 Action을 등록합니다."
+			state={state}
+			actions={
+				<div className="flex gap-2">
+					<Button
+						variant="light"
+						startContent={<ArrowLeft className="h-4 w-4" />}
+						onPress={() => {
+							router.push("/actions" as Route);
+						}}
+					>
+						목록으로
+					</Button>
+					<Button
+						color="primary"
+						startContent={<Save className="h-4 w-4" />}
+						onPress={onSubmit}
+						isLoading={isPending}
+					>
+						Action 등록
+					</Button>
+				</div>
+			}
+		/>
 	);
 });

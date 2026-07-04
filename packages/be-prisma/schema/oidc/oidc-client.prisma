@@ -5,6 +5,7 @@
 // @schema-type: ROOT
 // @schema-owner: true
 // @aggregate-root: true
+// @usecase-anchor: true
 // @description: OIDC 클라이언트 애플리케이션을 독립 관리하는 루트
 // @ownership: independent
 // @scope: global

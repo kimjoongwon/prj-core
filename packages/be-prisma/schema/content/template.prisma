@@ -21,6 +21,7 @@ enum TemplateType {
 // @schema-type: ROOT
 // @schema-owner: true
 // @aggregate-root: true
+// @usecase-anchor: true
 // @description: 독립적으로 존재하는 메시지 템플릿 핵심 도메인 객체
 // @ownership: independent
 // @scope: global
