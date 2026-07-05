@@ -108,9 +108,6 @@ export function useAssetBrowser({
 	const queryClient = useQueryClient();
 	const app = useApp();
 	const space = app.space;
-	if (!space) {
-		throw new Error("space가 초기화되지 않았습니다.");
-	}
 	const [queryStates, setQueryStates] = useQueryStates({
 		take: parseAsInteger.withDefault(20),
 		skip: parseAsInteger.withDefault(0),

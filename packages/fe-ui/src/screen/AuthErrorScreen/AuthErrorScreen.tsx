@@ -1,9 +1,10 @@
 "use client";
 
+import { AlertTriangle } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";
 import { Button } from "../../input";
-import { AuthCard, AuthCardHeader } from "../../widget/AuthCard";
+import { Auth } from "../../layout/Auth";
 
 export interface AuthErrorScreenProps {
 	error: string;
@@ -16,10 +17,9 @@ export const AuthErrorScreen = observer(
 		const t = useT();
 
 		return (
-			<AuthCard variant="danger">
-				<AuthCardHeader
-					iconPath="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
-					iconGradient="from-danger to-danger-400"
+			<Auth.Panel variant="danger">
+				<Auth.PanelHeader
+					icon={<AlertTriangle className="h-6 w-6 text-danger" />}
 					title="오류 발생"
 					titleClassName="text-danger"
 				/>
@@ -38,7 +38,7 @@ export const AuthErrorScreen = observer(
 						{t("돌아가기")}
 					</Button>
 				</div>
-			</AuthCard>
+			</Auth.Panel>
 		);
 	},
 );

@@ -10,15 +10,15 @@ import {
 	buildSpaceTableColumns,
 	DataGrid,
 	DataGridState,
-	PageTitleBar,
+	Screen,
 	Section,
 	SectionSurface,
 } from "@cocrepo/ui";
 import { Building2 } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useEffect } from "react";
+import { CONTENT_LANGUAGE_OPTIONS } from "../../data-display/content-language";
 import { Button } from "../../input/Button/Button";
-import { CONTENT_LANGUAGE_OPTIONS } from "../../widget/ContentLanguageNotice";
 
 const leftInputs: InputConfig[] = [
 	{
@@ -76,7 +76,7 @@ function filterRows(
 function SpacesScreenFallback() {
 	return (
 		<div className="space-y-5">
-			<PageTitleBar
+			<Screen.Header
 				title="공간 목록"
 				description="시스템에 등록된 공간과 시설 detail을 관리합니다."
 			/>
@@ -125,7 +125,7 @@ export const SpaceListScreen = observer(
 		}
 		return (
 			<div className="space-y-5">
-				<PageTitleBar
+				<Screen.Header
 					title="공간 목록"
 					description="시스템에 등록된 공간과 시설 detail을 관리합니다."
 					actions={

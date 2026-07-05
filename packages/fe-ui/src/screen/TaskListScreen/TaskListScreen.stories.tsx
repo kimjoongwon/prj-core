@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { TaskListScreen } from "./TaskListScreen";
 
 const defaultArgs = {
-	isDeleting: false,
 	isLoading: false,
 	onClickCreateButton: (..._args: never[]) => undefined,
 	onClickTaskName: (..._args: never[]) => undefined,
@@ -60,11 +59,6 @@ const loadingArgs = {
 	isLoading: true,
 };
 
-const busyArgs = {
-	...defaultArgs,
-	isDeleting: true,
-};
-
 const emptyStateArgs = {
 	...defaultArgs,
 	tasks: [],
@@ -89,10 +83,6 @@ export const Default: Story = {};
 
 export const Loading: Story = {
 	args: loadingArgs as never,
-};
-
-export const Busy: Story = {
-	args: busyArgs as never,
 };
 
 export const EmptyState: Story = {

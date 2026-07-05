@@ -6,8 +6,8 @@ import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import Link from "next/link";
 import type { MouseEvent, ReactNode } from "react";
-import { DateTimeCell } from "../../data-grid/cell";
 import { Chip } from "../../data-display/Chip/Chip";
+import { DateTimeCell } from "../../data-grid/cell";
 import {
 	TimelineSessionForm,
 	type TimelineSessionFormCycleType,
@@ -17,9 +17,9 @@ import {
 } from "../../form/TimelineSessionForm";
 import { Button } from "../../input/Button/Button";
 import { Section } from "../../layout";
+import { Screen } from "../../layout/Screen";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
-import { PageTitleBar } from "../../widget/PageTitleBar";
 
 export type {
 	TimelineSessionFormCycleType,
@@ -28,11 +28,9 @@ export type {
 	TimelineSessionFormSessionType,
 	TimelineSessionFormState,
 } from "../../form/TimelineSessionForm";
-
 export type TimelineSessionScreenSessionType = TimelineSessionFormSessionType;
 export type TimelineSessionScreenCycleType = TimelineSessionFormCycleType;
 export type TimelineSessionScreenDayOfWeek = TimelineSessionFormDayOfWeek;
-
 export interface TimelineSessionEditScreenMetadata {
 	typeLabel?: string;
 	typeColor?: "primary" | "secondary" | "success";
@@ -42,7 +40,6 @@ export interface TimelineSessionEditScreenMetadata {
 	timelineHref?: Route;
 	createdAt?: string | null;
 }
-
 export interface TimelineSessionProgramRow {
 	id: string;
 	href: Route;
@@ -55,7 +52,6 @@ export interface TimelineSessionProgramRow {
 	capacityLabel: string;
 	levelLabel: string;
 }
-
 export interface TimelineSessionEditScreenProps {
 	title: ReactNode;
 	description?: ReactNode;
@@ -105,11 +101,10 @@ export const TimelineSessionEditScreen = observer(
 			onClickEditProgramButton,
 			onClickDeleteProgramButton,
 		} = props;
-
 		if (isLoading) {
 			return (
 				<VStack fullWidth>
-					<PageTitleBar title={title} description={loadingMessage} />
+					<Screen.Header title={title} description={loadingMessage} />
 					<SectionSurface>
 						<Section>
 							<Section.Body>
@@ -122,11 +117,10 @@ export const TimelineSessionEditScreen = observer(
 				</VStack>
 			);
 		}
-
 		if (notFound || !state) {
 			return (
 				<VStack fullWidth>
-					<PageTitleBar title={title} description={notFoundMessage} />
+					<Screen.Header title={title} description={notFoundMessage} />
 					<SectionSurface>
 						<Section>
 							<Section.Body>
@@ -140,10 +134,13 @@ export const TimelineSessionEditScreen = observer(
 				</VStack>
 			);
 		}
-
 		return (
 			<VStack fullWidth>
-				<PageTitleBar title={title} description={description} actions={actions} />
+				<Screen.Header
+					title={title}
+					description={description}
+					actions={actions}
+				/>
 				<SectionSurface>
 					<Section>
 						<Section.Body>
@@ -155,16 +152,12 @@ export const TimelineSessionEditScreen = observer(
 								/>
 								{metadata ? (
 									<Section>
-										<Section.Header>
-											<PageTitleBar level={2} title="관리 정보" />
-										</Section.Header>
+										<Section.Header title="관리 정보" />
 										<Section.Body>
 											<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 												{metadata.typeLabel && metadata.typeColor ? (
 													<div>
-														<label className="text-sm text-muted">
-															유형
-														</label>
+														<label className="text-sm text-muted">유형</label>
 														<div className="mt-1">
 															<Chip
 																color={metadata.typeColor}
@@ -197,12 +190,9 @@ export const TimelineSessionEditScreen = observer(
 													</>
 												) : null}
 												<div>
-													<label className="text-sm text-muted">
-														타임라인
-													</label>
+													<label className="text-sm text-muted">타임라인</label>
 													<div className="mt-1">
-														{metadata.timelineHref &&
-														metadata.timelineName ? (
+														{metadata.timelineHref && metadata.timelineName ? (
 															<Link
 																href={metadata.timelineHref}
 																className="text-accent hover:underline"
@@ -216,9 +206,7 @@ export const TimelineSessionEditScreen = observer(
 												</div>
 												{metadata.createdAt ? (
 													<div>
-														<label className="text-sm text-muted">
-															등록일
-														</label>
+														<label className="text-sm text-muted">등록일</label>
 														<div className="mt-1">
 															<DateTimeCell value={metadata.createdAt} />
 														</div>
@@ -230,24 +218,21 @@ export const TimelineSessionEditScreen = observer(
 								) : null}
 								{programs ? (
 									<Section>
-										<Section.Header>
-											<PageTitleBar
-												level={2}
-												title="프로그램 연결 허브"
-												actions={
-													onClickCreateProgramButton ? (
-														<Button
-															color="primary"
-															size="sm"
-															startContent={<Plus className="h-4 w-4" />}
-															onPress={onClickCreateProgramButton}
-														>
-															프로그램 등록
-														</Button>
-													) : undefined
-												}
-											/>
-										</Section.Header>
+										<Section.Header
+											title="프로그램 연결 허브"
+											actions={
+												onClickCreateProgramButton ? (
+													<Button
+														color="primary"
+														size="sm"
+														startContent={<Plus className="h-4 w-4" />}
+														onPress={onClickCreateProgramButton}
+													>
+														프로그램 등록
+													</Button>
+												) : undefined
+											}
+										/>
 										<Section.Body>
 											<div className="grid grid-cols-1 gap-2 px-4 py-3 md:grid-cols-3">
 												<div className="rounded-lg bg-surface-secondary p-3">
@@ -257,9 +242,7 @@ export const TimelineSessionEditScreen = observer(
 													</p>
 												</div>
 												<div className="rounded-lg bg-surface-secondary p-3">
-													<p className="text-xs text-muted">
-														강사 연결 정상
-													</p>
+													<p className="text-xs text-muted">강사 연결 정상</p>
 													<p className="mt-1 text-lg font-semibold text-success">
 														{resolvedPrograms}개
 													</p>
@@ -313,7 +296,9 @@ export const TimelineSessionEditScreen = observer(
 																	{program.activityCountLabel}
 																</Table.Cell>
 																<Table.Cell>{program.previewText}</Table.Cell>
-																<Table.Cell>{program.instructorName}</Table.Cell>
+																<Table.Cell>
+																	{program.instructorName}
+																</Table.Cell>
 																<Table.Cell>
 																	{program.isConnectionResolved ? (
 																		<Chip
@@ -356,9 +341,7 @@ export const TimelineSessionEditScreen = observer(
 																				variant="light"
 																				isIconOnly
 																				onPress={() =>
-																					onClickDeleteProgramButton(
-																						program.id,
-																					)
+																					onClickDeleteProgramButton(program.id)
 																				}
 																			>
 																				<Trash2 className="h-4 w-4" />

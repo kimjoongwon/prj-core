@@ -1,25 +1,18 @@
 "use client";
 
-import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
+import { Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import {
-	RoleForm,
-	type RoleFormState,
-} from "../../form/RoleForm";
+import { RoleForm, type RoleFormState } from "../../form/RoleForm";
 import { Button } from "../../input/Button/Button";
 
-export type {
-	RoleFormField,
-	RoleFormState,
-} from "../../form/RoleForm";
+export type { RoleFormField, RoleFormState } from "../../form/RoleForm";
 export type {
 	RolePolicyAssignment,
 	RolePolicyAssignmentFormState,
 	RolePolicyOption,
 } from "../../form/RolePolicyAssignmentForm";
-
 export interface RoleEditScreenProps {
 	title: ReactNode;
 	description?: ReactNode;
@@ -52,11 +45,10 @@ export const RoleEditScreen = observer((props: RoleEditScreenProps) => {
 		actions,
 		children,
 	} = props;
-
 	if (isLoading) {
 		return (
 			<VStack fullWidth>
-				<PageTitleBar title={title} description={loadingMessage} />
+				<Screen.Header title={title} description={loadingMessage} />
 				<SectionSurface>
 					<Section>
 						<Section.Body>
@@ -70,11 +62,10 @@ export const RoleEditScreen = observer((props: RoleEditScreenProps) => {
 			</VStack>
 		);
 	}
-
 	if (notFound || !state) {
 		return (
 			<VStack fullWidth>
-				<PageTitleBar title={title} description={notFoundMessage} />
+				<Screen.Header title={title} description={notFoundMessage} />
 				<SectionSurface>
 					<Section>
 						<Section.Body>
@@ -88,20 +79,20 @@ export const RoleEditScreen = observer((props: RoleEditScreenProps) => {
 			</VStack>
 		);
 	}
-
 	return (
 		<VStack fullWidth>
-			<PageTitleBar title={title} description={description} actions={actions} />
+			<Screen.Header
+				title={title}
+				description={description}
+				actions={actions}
+			/>
 			<SectionSurface>
 				<Section>
 					<Section.Body>
 						<VStack>
 							<Section>
 								<Section.Body>
-									<RoleForm
-										state={state}
-										readOnly={readOnly}
-									/>
+									<RoleForm state={state} readOnly={readOnly} />
 								</Section.Body>
 							</Section>
 							{children}

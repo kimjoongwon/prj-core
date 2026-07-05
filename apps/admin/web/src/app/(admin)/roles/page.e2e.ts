@@ -44,7 +44,9 @@ test.describe("역할 목록 페이지", () => {
 			await expect(
 				page.getByText("PLATFORM_ADMIN", { exact: true }),
 			).toBeVisible();
-			await expect(page.getByText("COMPANY_MANAGER", { exact: true })).toBeVisible();
+			await expect(
+				page.getByText("COMPANY_MANAGER", { exact: true }),
+			).toBeVisible();
 			await expect(page.getByText("MEMBER", { exact: true })).toBeVisible();
 		});
 
@@ -160,12 +162,6 @@ test.describe("역할 목록 페이지", () => {
 			// When: 삭제 버튼 클릭
 			await page.getByRole("button", { name: "삭제" }).click();
 
-			// When: 삭제 확인 모달에서 확인 클릭
-			await page.waitForTimeout(500);
-			await page
-				.getByRole("button", { name: /확인|삭제/ })
-				.last()
-				.click();
 			await page.waitForURL(/\/roles\/?$/, { timeout: 15000 });
 			await page.waitForLoadState("networkidle");
 

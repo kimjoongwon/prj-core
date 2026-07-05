@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "@heroui/react";
 import {
 	type AbilityResponseDto,
 	useGetAbilities,
@@ -15,7 +16,6 @@ import {
 	PolicyEditScreen,
 	type PolicyFormState,
 } from "@cocrepo/ui";
-import { Modal, toast, useOverlayState } from "@heroui/react";
 import { ArrowLeft, Edit, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -24,7 +24,6 @@ import { useParams, useRouter } from "next/navigation";
 export default observer(function PolicyDetailRoute() {
 	const { policyId } = useParams<{ policyId: string }>();
 	const router = useRouter();
-	const deleteModal = useOverlayState();
 	const { data: response, isLoading } = useGetPolicyById(policyId);
 	const policy = response?.data;
 	const { data: abilitiesResponse } = useGetAbilities();
@@ -32,9 +31,7 @@ export default observer(function PolicyDetailRoute() {
 	const { mutate: deletePolicy, isPending: isDeleting } = useDeletePolicy({
 		mutation: {
 			onSuccess: () => {
-				toast.success("정책 삭제 성공", {
-					description: "정책이 삭제되었습니다.",
-				});
+				toast.success("정책 삭제 성공", { description: "정책이 삭제되었습니다." });
 				router.push("/policies" as Route);
 			},
 		},
@@ -92,43 +89,17 @@ export default observer(function PolicyDetailRoute() {
 							color="danger"
 							variant="flat"
 							startContent={<Trash2 className="h-4 w-4" />}
-							onPress={deleteModal.open}
+							isDisabled={!policy || isDeleting}
+							isLoading={isDeleting}
+							onPress={() => {
+								deletePolicy({ policyId });
+							}}
 						>
 							삭제
 						</Button>
 					</div>
 				}
 			/>
-			{policy ? (
-				<Modal state={deleteModal}>
-					<Modal.Backdrop>
-						<Modal.Container>
-							<Modal.Dialog>
-								<Modal.Header>정책 삭제</Modal.Header>
-								<Modal.Body>이 정책을 삭제하시겠습니까?</Modal.Body>
-								<Modal.Footer>
-									<Button
-										variant="flat"
-										onPress={deleteModal.close}
-										isDisabled={isDeleting}
-									>
-										취소
-									</Button>
-									<Button
-										color="danger"
-										isLoading={isDeleting}
-										onPress={() => {
-											deletePolicy({ policyId });
-										}}
-									>
-										삭제
-									</Button>
-								</Modal.Footer>
-							</Modal.Dialog>
-						</Modal.Container>
-					</Modal.Backdrop>
-				</Modal>
-			) : null}
 		</>
 	);
 });

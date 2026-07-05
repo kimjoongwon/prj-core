@@ -1,6 +1,6 @@
 "use client";
 
-import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
+import { Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { Save } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../input/Button/Button";
@@ -67,7 +67,7 @@ export const SecurityPolicyFormScreen = observer(
 	}: SecurityPolicyFormScreenProps) => {
 		return (
 			<VStack fullWidth>
-				<PageTitleBar
+				<Screen.Header
 					title="보안 정책"
 					description="인증 보안 정책을 관리합니다."
 					actions={
@@ -86,13 +86,10 @@ export const SecurityPolicyFormScreen = observer(
 						<Section.Body>
 							<VStack>
 								<Section>
-									<Section.Header>
-										<PageTitleBar
-											level={2}
-											title="비밀번호 정책"
-											description="비밀번호 생성 규칙 및 만료 정책을 설정합니다."
-										/>
-									</Section.Header>
+									<Section.Header
+										title="비밀번호 정책"
+										description="비밀번호 생성 규칙 및 만료 정책을 설정합니다."
+									/>
 									<Section.Body>
 										<VStack>
 											<TextField
@@ -199,13 +196,10 @@ export const SecurityPolicyFormScreen = observer(
 									</Section.Body>
 								</Section>
 								<Section>
-									<Section.Header>
-										<PageTitleBar
-											level={2}
-											title="잠금 정책"
-											description="로그인 실패 시 계정 잠금 조건을 설정합니다."
-										/>
-									</Section.Header>
+									<Section.Header
+										title="잠금 정책"
+										description="로그인 실패 시 계정 잠금 조건을 설정합니다."
+									/>
 									<Section.Body>
 										<VStack>
 											<TextField
@@ -245,13 +239,10 @@ export const SecurityPolicyFormScreen = observer(
 									</Section.Body>
 								</Section>
 								<Section>
-									<Section.Header>
-										<PageTitleBar
-											level={2}
-											title="세션 정책"
-											description="토큰 및 세션의 유효 기간을 설정합니다."
-										/>
-									</Section.Header>
+									<Section.Header
+										title="세션 정책"
+										description="토큰 및 세션의 유효 기간을 설정합니다."
+									/>
 									<Section.Body>
 										<VStack>
 											<TextField

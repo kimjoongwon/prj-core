@@ -10,7 +10,7 @@ import {
 	buildSubjectTableColumns,
 	DataGrid,
 	DataGridState,
-	PageTitleBar,
+	Screen,
 	Section,
 	SectionSurface,
 	useT,
@@ -203,7 +203,7 @@ export const SubjectListScreen = observer(
 		}
 		return (
 			<div className="space-y-5">
-				<PageTitleBar
+				<Screen.Header
 					title="권한 대상 목록"
 					description="역할이나 정책에서 무엇을 허용할지 선택할 때 사용하는 관리 대상입니다."
 				/>
@@ -238,7 +238,7 @@ export const SubjectListScreen = observer(
 const SubjectsScreenFallback = observer(function SubjectsScreenFallback() {
 	return (
 		<div className="space-y-5">
-			<PageTitleBar
+			<Screen.Header
 				title="권한 대상 목록"
 				description="역할이나 정책에서 무엇을 허용할지 선택할 때 사용하는 관리 대상입니다."
 			/>

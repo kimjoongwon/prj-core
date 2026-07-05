@@ -13,15 +13,15 @@ import { Tokens } from "./tokens";
 export class TopBarUi {
 	constructor(private readonly app: AppStore) {}
 
-	get navigation(): Navigation | undefined {
+	get navigation(): Navigation {
 		return this.app.navigation;
 	}
 
-	get space(): Space | undefined {
+	get space(): Space {
 		return this.app.space;
 	}
 
-	get locale(): Locale | undefined {
+	get locale(): Locale {
 		return this.app.locale;
 	}
 }
@@ -38,11 +38,7 @@ export class SideNavigationUi {
 	constructor(private readonly app: AppStore) {}
 
 	private get navigation(): Navigation {
-		const navigation = this.app.navigation;
-		if (!navigation) {
-			throw new Error("navigation이 초기화되지 않았습니다.");
-		}
-		return navigation;
+		return this.app.navigation;
 	}
 
 	get items(): Navigation["items"] {
@@ -97,11 +93,7 @@ export class MobileBottomNavigationUi {
 	constructor(private readonly app: AppStore) {}
 
 	private get bottomTab(): MobileNavigation {
-		const bottomTab = this.app.mobileNavigation;
-		if (!bottomTab) {
-			throw new Error("mobileBottomNavigation이 초기화되지 않았습니다.");
-		}
-		return bottomTab;
+		return this.app.mobileNavigation;
 	}
 
 	get items(): MobileNavigation["tabItems"] {
@@ -125,11 +117,7 @@ export class MobileMenuUi {
 	constructor(private readonly app: AppStore) {}
 
 	private get bottomTab(): MobileNavigation {
-		const bottomTab = this.app.mobileNavigation;
-		if (!bottomTab) {
-			throw new Error("mobileMenu가 초기화되지 않았습니다.");
-		}
-		return bottomTab;
+		return this.app.mobileNavigation;
 	}
 
 	get isOpen(): boolean {
@@ -153,11 +141,7 @@ export class FloatingActionUi {
 	constructor(private readonly app: AppStore) {}
 
 	private get floatingAction(): FloatingActions {
-		const floatingAction = this.app.floatingActions;
-		if (!floatingAction) {
-			throw new Error("floatingAction이 초기화되지 않았습니다.");
-		}
-		return floatingAction;
+		return this.app.floatingActions;
 	}
 
 	get isOpen(): boolean {
@@ -232,17 +216,24 @@ export class AppStore {
 	name: string = "PROTOTYPE";
 	readonly ui: AppUi;
 
-	// 각 상태 객체는 외부에서 주입됨
+	// 각 상태 객체는 Provider/runtime bootstrap에서 주입됨
 	navigator?: Navigator;
-	navigation?: Navigation;
-	tokens?: Tokens;
-	session?: Session;
-	cookies?: Cookies;
-	space?: Space;
-	locale?: Locale;
-	ability?: Ability;
-	floatingActions?: FloatingActions;
-	mobileNavigation?: MobileNavigation;
+	navigation!: Navigation;
+	tokens!: Tokens;
+	session!: Session;
+	cookies!: Cookies;
+	space!: Space;
+	locale!: Locale;
+	ability!: Ability;
+	floatingActions!: FloatingActions;
+	mobileNavigation!: MobileNavigation;
+
+	/**
+	 * 현재 선택 Space의 콘텐츠 언어 코드입니다.
+	 */
+	get contentLanguageCode(): Space["contentLanguageCode"] {
+		return this.space.contentLanguageCode;
+	}
 
 	constructor() {
 		this.ui = new AppUi(this);

@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "@heroui/react";
 import {
 	type AssetDto,
 	type FolderDto,
@@ -15,7 +16,6 @@ import {
 	type AssetDetailScreenAsset,
 	type AssetDetailScreenFolder,
 } from "@cocrepo/ui";
-import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -51,9 +51,7 @@ export default observer(function AssetDetailScreenRoute() {
 					await queryClient.invalidateQueries({
 						queryKey: ["/api/v1/assets"],
 					});
-					toast.success("삭제 완료", {
-						description: "에셋이 삭제되었습니다.",
-					});
+					toast.success("삭제 완료", { description: "에셋이 삭제되었습니다." });
 					router.push("/assets" as Route);
 				}}
 				onChangeTargetFolderSelection={(nextTargetFolderId) => {
@@ -79,9 +77,7 @@ export default observer(function AssetDetailScreenRoute() {
 					await queryClient.invalidateQueries({
 						queryKey: getGetFoldersQueryKey(),
 					});
-					toast.success("이동 완료", {
-						description: "에셋 폴더가 변경되었습니다.",
-					});
+					toast.success("이동 완료", { description: "에셋 폴더가 변경되었습니다." });
 					setTargetFolderError(undefined);
 				}}
 			/>

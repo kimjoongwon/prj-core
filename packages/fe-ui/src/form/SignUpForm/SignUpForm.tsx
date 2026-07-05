@@ -1,12 +1,12 @@
 "use client";
 
+import { CheckCircle, UserPlus } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { AlertBanner } from "../../feedback/AlertBanner/AlertBanner";
+import { Alert } from "../../feedback/Alert/Alert";
 import { useT } from "../../i18n";
 import { Button, Link, TextArea, TextField } from "../../input";
 import { Select } from "../../input/Select/Select";
-import { AuthCard } from "../../widget/AuthCard/AuthCard";
-import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
+import { Auth } from "../../layout/Auth";
 
 export type SignUpFormField =
 	| "spaceId"
@@ -94,9 +94,9 @@ export const SignUpForm = observer(
 			!state.address;
 
 		return (
-			<AuthCard>
-				<AuthCardHeader
-					iconPath="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+			<Auth.Panel>
+				<Auth.PanelHeader
+					icon={<UserPlus className="h-6 w-6 text-accent" />}
 					title="회원가입"
 					subtitle="가입할 Space와 계정 정보를 입력하면 이메일 인증 링크를 보내드립니다."
 				/>
@@ -105,19 +105,7 @@ export const SignUpForm = observer(
 					<div className="space-y-5">
 						<div className="text-center">
 							<div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-success/20">
-								<svg
-									className="h-8 w-8 text-success"
-									fill="none"
-									stroke="currentColor"
-									viewBox="0 0 24 24"
-								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										strokeWidth={2}
-										d="M5 13l4 4L19 7"
-									/>
-								</svg>
+								<CheckCircle className="h-8 w-8 text-success" />
 							</div>
 							<h2 className="mb-2 text-lg font-semibold">
 								{t("인증 메일을 확인하세요")}
@@ -131,10 +119,10 @@ export const SignUpForm = observer(
 								{t("메일의 인증 링크를 열면 가입이 완료됩니다.")}
 							</p>
 							{state.submittedSpaceName && (
-								<AlertBanner
-									type="success"
+								<Alert
+									status="success"
 									title="가입 요청 완료"
-									message={
+									description={
 										<span>
 											{t("선택한 Space")}: {state.submittedSpaceName}
 										</span>
@@ -155,20 +143,20 @@ export const SignUpForm = observer(
 				) : (
 					<div className="space-y-5">
 						{state.errorMessage && (
-							<AlertBanner type="danger" message={t(state.errorMessage)} />
+							<Alert status="danger" description={t(state.errorMessage)} />
 						)}
 						{isSpacesError && (
-							<AlertBanner
-								type="danger"
-								message={t("가입 가능한 Space를 불러오지 못했습니다.")}
+							<Alert
+								status="danger"
+								description={t("가입 가능한 Space를 불러오지 못했습니다.")}
 							/>
 						)}
 						{!isSpacesLoading &&
 							!isSpacesError &&
 							spaceOptions.length === 0 && (
-								<AlertBanner
-									type="warning"
-									message={t("가입 가능한 Space가 없습니다.")}
+								<Alert
+									status="warning"
+									description={t("가입 가능한 Space가 없습니다.")}
 								/>
 							)}
 
@@ -277,7 +265,7 @@ export const SignUpForm = observer(
 						{t("로그인으로 돌아가기")}
 					</Link>
 				</div>
-			</AuthCard>
+			</Auth.Panel>
 		);
 	},
 );

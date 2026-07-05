@@ -9,9 +9,10 @@ import {
 	buildAbilityListTableColumns,
 	DataGrid,
 	DataGridState,
+	Screen,
 	SectionSurface,
 } from "@cocrepo/ui";
-import { ListBox, Spinner } from "@heroui/react";
+import { Card, ListBox, Spinner } from "@heroui/react";
 import {
 	Ban,
 	FilterX,
@@ -22,15 +23,13 @@ import {
 	SlidersHorizontal,
 } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
+import { type ReactNode, useEffect } from "react";
 import { Chip } from "../../data-display";
 import { Button } from "../../input/Button/Button";
 import { Select } from "../../input/Select/Select";
 import { TextField } from "../../input/TextField/TextField";
 import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
-import { PageTitleBar } from "../../widget/PageTitleBar";
-import { StatsCard } from "../../widget/StatsCard";
 export interface AbilityListScreenOption {
 	id: string;
 	label: string;
@@ -78,6 +77,63 @@ export interface AbilityListScreenProps {
 }
 const abilityListTableColumns =
 	buildAbilityListTableColumns<AbilityResponseDto>();
+const metricCardColorStyles = {
+	primary: {
+		icon: "text-primary",
+		value: "text-primary",
+	},
+	success: {
+		icon: "text-success",
+		value: "text-success",
+	},
+	danger: {
+		icon: "text-danger",
+		value: "text-danger",
+	},
+	warning: {
+		icon: "text-warning",
+		value: "text-warning",
+	},
+};
+function MetricCard({
+	title,
+	value,
+	description,
+	icon,
+	color,
+	className = "",
+}: {
+	title: string;
+	value: number | string;
+	description?: string;
+	icon?: ReactNode;
+	color: keyof typeof metricCardColorStyles;
+	className?: string;
+}) {
+	const styles = metricCardColorStyles[color];
+	return (
+		<Card className={`bg-surface ${className}`}>
+			<Card.Content className="flex flex-row items-center gap-4 p-4">
+				{icon ? (
+					<div
+						className={`flex size-10 items-center justify-center rounded-lg bg-surface-secondary ${styles.icon}`}
+					>
+						{icon}
+					</div>
+				) : null}
+				<div className="flex flex-1 flex-col">
+					<span className="text-sm text-muted">{title}</span>
+					<span className={`text-2xl font-bold ${styles.value}`}>
+						{typeof value === "number" ? value.toLocaleString() : value}
+					</span>
+					{description ? (
+						<span className="text-xs text-muted">{description}</span>
+					) : null}
+				</div>
+			</Card.Content>
+		</Card>
+	);
+}
 function getOptionLabel(options: AbilityListScreenOption[], optionId: string) {
 	return options.find((option) => option.id === optionId)?.label ?? "";
 }
@@ -186,7 +242,7 @@ export const AbilityListScreen = observer(
 		}
 		return (
 			<div className="space-y-5">
-				<PageTitleBar
+				<Screen.Header
 					title="권한 정의"
 					description="대상과 행동을 조합해 운영 권한 규칙을 확인합니다."
 					actions={
@@ -201,7 +257,7 @@ export const AbilityListScreen = observer(
 				/>
 				<VStack>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-						<StatsCard
+						<MetricCard
 							className="h-full border border-accent/10 bg-accent/5"
 							color="primary"
 							description={`허용 ${summary.allow.toLocaleString()}건`}
@@ -209,7 +265,7 @@ export const AbilityListScreen = observer(
 							title="전체"
 							value={summary.total}
 						/>
-						<StatsCard
+						<MetricCard
 							className="h-full border border-success/10 bg-success/5"
 							color="success"
 							description="현재 검색/필터 결과"
@@ -217,7 +273,7 @@ export const AbilityListScreen = observer(
 							title="표시 중"
 							value={summary.filtered}
 						/>
-						<StatsCard
+						<MetricCard
 							className="h-full border border-danger/10 bg-danger/5"
 							color="danger"
 							description="cannot 규칙"
@@ -225,7 +281,7 @@ export const AbilityListScreen = observer(
 							title="거부 규칙"
 							value={summary.deny}
 						/>
-						<StatsCard
+						<MetricCard
 							className="h-full border border-warning/10 bg-warning/5"
 							color="warning"
 							description={`조건 ${summary.conditional.toLocaleString()}건 · 필드 ${summary.fieldScoped.toLocaleString()}건`}
@@ -238,8 +294,7 @@ export const AbilityListScreen = observer(
 						<Section>
 							<Section.Body>
 								<div className="mb-5 border-b border-border/80 pb-4">
-									<PageTitleBar
-										level={2}
+									<Section.Header
 										title="찾기와 좁히기"
 										description="권한 이름뿐 아니라 설명, 대상, 행동으로도 검색할 수 있습니다."
 									/>
@@ -369,8 +424,7 @@ export const AbilityListScreen = observer(
 						<Section overflow="hidden">
 							<Section.Body>
 								<div className="mb-4 border-b border-border/80 pb-4">
-									<PageTitleBar
-										level={2}
+									<Section.Header
 										title="권한 규칙"
 										description="행을 선택하면 상세 정보와 JSON 조건을 확인할 수 있습니다."
 									/>

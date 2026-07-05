@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "@heroui/react";
 import {
 	type AbilityResponseDto,
 	useGetAbilities,
@@ -16,7 +17,6 @@ import {
 	type PolicyAbilityOption,
 	PolicyEditScreen,
 } from "@cocrepo/ui";
-import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -55,9 +55,7 @@ export default observer(function PolicyEditScreenRoute() {
 							queryClient.invalidateQueries({
 								queryKey: getGetPolicyByIdQueryKey(policyId),
 							});
-							toast.success("정책 수정 성공", {
-								description: "정책이 수정되었습니다.",
-							});
+							toast.success("정책 수정 성공", { description: "정책이 수정되었습니다." });
 							router.push(`/policies/${policyId}` as Route);
 						},
 					},

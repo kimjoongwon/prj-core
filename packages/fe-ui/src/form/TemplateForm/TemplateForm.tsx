@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import { RadioGroup } from "../../input/RadioGroup/RadioGroup";
 import { TextArea } from "../../input/TextArea/TextArea";
 import { TextField } from "../../input/TextField/TextField";
-import { TemplateContentEditor } from "../../widget/TemplateContentEditor/TemplateContentEditor";
+import { TemplateContentEditor } from "../TemplateContentEditor/TemplateContentEditor";
 import {
 	type VariableEditItem,
 	VariableEditTable,
@@ -56,7 +56,7 @@ const CODE_PATTERN = /^[A-Z][A-Z0-9_]*$/;
  *
  * 4개 섹션으로 구성됩니다:
  * 1. 기본 정보 - 유형, 코드, 이름, 설명
- * 2. 콘텐츠 - TemplateContentEditor (유형별 동적 렌더링)
+ * 2. 콘텐츠 - TemplateContentEditor(유형별 동적 렌더링)
  * 3. 변수 관리 - VariableEditTable (인라인 편집)
  * 4. route가 전달한 readOnly 기준으로 필드 잠금
  *

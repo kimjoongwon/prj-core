@@ -7,6 +7,7 @@ import {
 	useResendEmailVerification,
 } from "@cocrepo/api/idp/email-verifications";
 import { EmailVerificationListScreen } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
@@ -32,16 +33,24 @@ export default observer(function EmailVerificationsPageRoute() {
 		isLoading,
 		isFetching,
 	} = useGetEmailVerifications(queryParams);
-	const { mutate: resendEmailVerification, isPending: isResending } =
-		useResendEmailVerification({
-			mutation: {
-				onSuccess: () => {
-					queryClient.invalidateQueries({
-						queryKey: getGetEmailVerificationsQueryKey(),
-					});
-				},
+	const { mutateAsync: resendEmailVerification } = useResendEmailVerification({
+		mutation: {
+			onSuccess: () => {
+				queryClient.invalidateQueries({
+					queryKey: getGetEmailVerificationsQueryKey(),
+				});
+				toast.success("인증 메일 재발송", {
+					description: "인증 메일을 다시 발송했습니다.",
+				});
 			},
-		});
+			onError: (error) => {
+				toast.danger("인증 메일 재발송 실패", {
+					description:
+						error.message || "인증 메일 재발송 중 오류가 발생했습니다.",
+				});
+			},
+		},
+	});
 
 	return (
 		<>
@@ -49,11 +58,10 @@ export default observer(function EmailVerificationsPageRoute() {
 				verifications={response?.data}
 				totalCount={response?.meta?.totalCount ?? 0}
 				isLoading={isLoading || isFetching}
-				isResending={isResending}
 				queryStates={queryStates}
 				setQueryStates={setQueryStates}
-				onConfirmResendEmailVerification={(emailVerificationId) => {
-					resendEmailVerification({ emailVerificationId });
+				onClickResendEmailVerificationButton={(emailVerificationId) => {
+					void resendEmailVerification({ emailVerificationId });
 				}}
 			/>
 		</>

@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "../../input";
 import { SectionSurface } from "../../surface";
-import { PageTitleBar } from "../../widget/PageTitleBar";
 import { Section } from "./Section";
 
 const meta = {
@@ -18,23 +17,18 @@ const meta = {
 	},
 	tags: ["autodocs"],
 } satisfies Meta<typeof Section>;
-
 export default meta;
 type Story = StoryObj<typeof meta>;
-
 export const Basic: Story = {
 	render: () => (
 		<div className="w-[720px]">
 			<SectionSurface>
 				<Section>
-					<Section.Header>
-						<PageTitleBar
-							level={2}
-							title="기본 정보"
-							description="section inset과 header/body gap을 Section이 책임집니다."
-							actions={<Button size="sm">편집</Button>}
-						/>
-					</Section.Header>
+					<Section.Header
+						title="기본 정보"
+						description="section inset과 header/body gap을 Section이 책임집니다."
+						actions={<Button size="sm">편집</Button>}
+					/>
 					<Section.Body>
 						<div className="grid grid-cols-2 gap-3">
 							<div className="rounded-lg border border-border bg-background px-3 py-2">
@@ -50,7 +44,6 @@ export const Basic: Story = {
 		</div>
 	),
 };
-
 export const DataArea: Story = {
 	render: () => (
 		<div className="w-[720px]">
@@ -73,19 +66,15 @@ export const DataArea: Story = {
 		</div>
 	),
 };
-
 export const LeftAside: Story = {
 	render: () => (
 		<div className="w-full max-w-[920px]">
 			<SectionSurface>
 				<Section layout="left" leftAsideWidth="sm">
-					<Section.Header>
-						<PageTitleBar
-							level={2}
-							title="좌측 보조 영역"
-							description="좌측 navigation/filter와 본문을 하나의 section boundary 안에서 배치합니다."
-						/>
-					</Section.Header>
+					<Section.Header
+						title="좌측 보조 영역"
+						description="좌측 navigation/filter와 본문을 하나의 section boundary 안에서 배치합니다."
+					/>
 					<Section.LeftAside>
 						<div className="rounded-lg border border-border bg-background p-3 text-sm">
 							<p className="font-semibold">Filter rail</p>
@@ -104,19 +93,15 @@ export const LeftAside: Story = {
 		</div>
 	),
 };
-
 export const RightAside: Story = {
 	render: () => (
 		<div className="w-full max-w-[920px]">
 			<SectionSurface>
 				<Section layout="right" rightAsideWidth="md">
-					<Section.Header>
-						<PageTitleBar
-							level={2}
-							title="우측 보조 영역"
-							description="본문 오른쪽에 요약, 도움말, 액션 패널을 배치합니다."
-						/>
-					</Section.Header>
+					<Section.Header
+						title="우측 보조 영역"
+						description="본문 오른쪽에 요약, 도움말, 액션 패널을 배치합니다."
+					/>
 					<Section.Body>
 						<div className="min-h-32 rounded-lg border border-border bg-background p-4">
 							Main body
@@ -133,19 +118,15 @@ export const RightAside: Story = {
 		</div>
 	),
 };
-
 export const BothAsides: Story = {
 	render: () => (
 		<div className="w-full max-w-[1080px]">
 			<SectionSurface>
 				<Section layout="both" leftAsideWidth="sm" rightAsideWidth="sm">
-					<Section.Header>
-						<PageTitleBar
-							level={2}
-							title="양쪽 보조 영역"
-							description="좌측 탐색, 본문, 우측 요약을 같은 section 안에서 정렬합니다."
-						/>
-					</Section.Header>
+					<Section.Header
+						title="양쪽 보조 영역"
+						description="좌측 탐색, 본문, 우측 요약을 같은 section 안에서 정렬합니다."
+					/>
 					<Section.LeftAside>
 						<div className="rounded-lg border border-border bg-background p-3 text-sm">
 							Left aside

@@ -1,6 +1,6 @@
 "use client";
 
-import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
+import { Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
@@ -14,7 +14,6 @@ export type {
 	OidcClientFormField,
 	OidcClientFormState,
 } from "../../form/OidcClientForm";
-
 export interface OidcClientEditScreenProps {
 	title: ReactNode;
 	description?: ReactNode;
@@ -48,11 +47,10 @@ export const OidcClientEditScreen = observer(
 			actions,
 			children,
 		} = props;
-
 		if (isLoading) {
 			return (
 				<VStack fullWidth>
-					<PageTitleBar title={title} description={loadingMessage} />
+					<Screen.Header title={title} description={loadingMessage} />
 					<SectionSurface>
 						<Section>
 							<Section.Body>
@@ -66,11 +64,10 @@ export const OidcClientEditScreen = observer(
 				</VStack>
 			);
 		}
-
 		if (notFound || !state) {
 			return (
 				<VStack fullWidth>
-					<PageTitleBar title={title} description={notFoundMessage} />
+					<Screen.Header title={title} description={notFoundMessage} />
 					<SectionSurface>
 						<Section>
 							<Section.Body>
@@ -84,10 +81,9 @@ export const OidcClientEditScreen = observer(
 				</VStack>
 			);
 		}
-
 		return (
 			<VStack fullWidth>
-				<PageTitleBar
+				<Screen.Header
 					title={title}
 					description={description}
 					actions={actions}
@@ -98,10 +94,7 @@ export const OidcClientEditScreen = observer(
 							<VStack>
 								<Section>
 									<Section.Body>
-										<OidcClientForm
-											state={state}
-											readOnly={readOnly}
-										/>
+										<OidcClientForm state={state} readOnly={readOnly} />
 									</Section.Body>
 								</Section>
 								{children}

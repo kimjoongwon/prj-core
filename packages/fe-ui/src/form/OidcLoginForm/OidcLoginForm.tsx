@@ -1,12 +1,12 @@
 "use client";
 
 import type { OidcClientLoginUi } from "@cocrepo/type";
+import { LockKeyhole } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { AlertBanner } from "../../feedback/AlertBanner/AlertBanner";
+import { Alert } from "../../feedback/Alert/Alert";
 import { useT } from "../../i18n";
 import { Button, Checkbox, Link, TextField } from "../../input";
-import { AuthCard } from "../../widget/AuthCard/AuthCard";
-import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
+import { Auth } from "../../layout/Auth";
 
 export interface LoginRecoveryAction {
 	type: string;
@@ -161,7 +161,7 @@ export const OidcLoginForm = observer(
 		const brandColor = getSafeBrandColor(client?.loginUi?.brandColor);
 
 		return (
-			<AuthCard>
+			<Auth.Panel>
 				{brandLabel && (
 					<div className="mb-4 flex justify-center">
 						<span
@@ -176,8 +176,8 @@ export const OidcLoginForm = observer(
 						</span>
 					</div>
 				)}
-				<AuthCardHeader
-					iconPath="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+				<Auth.PanelHeader
+					icon={<LockKeyhole className="h-6 w-6 text-accent" />}
 					title={t(resolveLoginHeadline(client))}
 					subtitle={t(resolveLoginDescription(client))}
 					logoUri={client?.logoUri}
@@ -185,18 +185,18 @@ export const OidcLoginForm = observer(
 				/>
 
 				{isDev && (
-					<AlertBanner
-						type="warning"
-						message={t("DEV MODE - Super Admin 계정이 자동 입력되었습니다")}
+					<Alert
+						status="warning"
+						description={t("DEV MODE - Super Admin 계정이 자동 입력되었습니다")}
 						className="text-center text-sm"
 					/>
 				)}
 
 				{state.error && (
-					<AlertBanner
-						type={getErrorTone(state.error)}
+					<Alert
+						status={getErrorTone(state.error)}
 						title={getErrorTitle(state.error)}
-						message={
+						description={
 							<>
 								{state.error.displayMessage
 									? t(state.error.displayMessage)
@@ -296,7 +296,7 @@ export const OidcLoginForm = observer(
 						{t("취소하고 돌아가기")}
 					</button>
 				</div>
-			</AuthCard>
+			</Auth.Panel>
 		);
 	},
 );

@@ -9,7 +9,7 @@ import { LogIn, LogOut, ShieldCheck, UserRound } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Chip } from "../../data-display/Chip/Chip";
 import { Button } from "../../input/Button/Button";
-import { SpaceSelectorDropdown } from "../../widget/SpaceSelectorDropdown";
+import { HeaderSpaceSelector } from "../HeaderSpaceSelector";
 
 export interface PlanningSessionBarProps {
 	context: PlanningContext;
@@ -156,7 +156,7 @@ export function PlanningSessionBar({
 						<p className="mb-1 text-[11px] font-semibold uppercase text-muted">
 							Tenant / Space
 						</p>
-						<SpaceSelectorDropdown
+						<HeaderSpaceSelector
 							spaces={spaces}
 							currentTenantId={selectedTenantId}
 							currentSpaceName={selectedSpace?.groundName ?? null}

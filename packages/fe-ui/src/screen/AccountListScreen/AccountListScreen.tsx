@@ -8,17 +8,15 @@ import type {
 } from "@cocrepo/type";
 import {
 	buildIdpAccountTableColumns,
-	ConfirmModal,
 	DataGrid,
 	DataGridState,
-	PageTitleBar,
+	Screen,
 	Section,
 	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
-import { useOverlayState } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 /**
  * 좌측 입력 정의 (검색)
@@ -41,10 +39,9 @@ export interface AccountListScreenProps {
 	accounts?: IdpAccountDto[];
 	totalCount: number;
 	isLoading: boolean;
-	isUnlocking: boolean;
 	queryStates: AccountListScreenQueryStates;
 	setQueryStates: AccountListScreenSetQueryStates;
-	onConfirmUnlockAccount: (userId: string) => void;
+	onClickUnlockAccountButton: (userId: string) => void;
 }
 
 /**
@@ -55,10 +52,9 @@ export const AccountListScreen = observer(
 		accounts,
 		totalCount,
 		isLoading,
-		isUnlocking,
 		queryStates,
 		setQueryStates,
-		onConfirmUnlockAccount,
+		onClickUnlockAccountButton,
 	}: AccountListScreenProps) => {
 		const gridState = useLocalObservable(
 			() =>
@@ -70,31 +66,16 @@ export const AccountListScreen = observer(
 		useEffect(() => {
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
-		const unlockModal = useOverlayState();
-		const [accountToUnlock, setAccountToUnlock] =
-			useState<IdpAccountDto | null>(null);
 		const accountRows = accounts ?? [];
-		const onClickOpenUnlockModal = (account: IdpAccountDto) => {
-			setAccountToUnlock(account);
-			unlockModal.open();
-		};
-		const onCloseUnlockModal = () => {
-			setAccountToUnlock(null);
-			unlockModal.close();
-		};
-		const onClickConfirmUnlock = () => {
-			if (!accountToUnlock) {
-				return;
-			}
-			onConfirmUnlockAccount(accountToUnlock.id);
-			onCloseUnlockModal();
+		const onClickUnlockAccount = (account: IdpAccountDto) => {
+			onClickUnlockAccountButton(account.id);
 		};
 		const columns = buildIdpAccountTableColumns<IdpAccountDto>({
-			onClickOpenUnlockModal,
+			onClickUnlockAccount,
 		});
 		return (
 			<VStack>
-				<PageTitleBar
+				<Screen.Header
 					title="계정 관리"
 					description="IDP 계정의 보안 상태를 관리합니다."
 				/>
@@ -116,30 +97,6 @@ export const AccountListScreen = observer(
 						</Section.Body>
 					</Section>
 				</SectionSurface>
-				<ConfirmModal
-					isOpen={unlockModal.isOpen}
-					onClose={onCloseUnlockModal}
-					onConfirm={onClickConfirmUnlock}
-					title="잠금 해제"
-					message={
-						<>
-							<p>
-								<strong>
-									{accountToUnlock?.name ?? accountToUnlock?.email}
-								</strong>
-								&nbsp;계정의 잠금을 해제하시겠습니까?
-							</p>
-							<p className="mt-2 text-sm text-muted">
-								연속 로그인 실패로 누적된 잠금 상태와 실패 횟수가 함께
-								초기화됩니다.
-							</p>
-						</>
-					}
-					confirmText="잠금 해제"
-					confirmColor="primary"
-					iconType="warning"
-					loading={isUnlocking}
-				/>
 			</VStack>
 		);
 	},

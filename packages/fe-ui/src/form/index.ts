@@ -16,6 +16,7 @@ export * from "./RolePolicyAssignmentForm";
 export * from "./RoutineForm";
 export * from "./SignUpForm";
 export * from "./TaskExerciseForm";
+export * from "./TemplateContentEditor";
 export * from "./TemplateForm";
 export * from "./TimelineForm";
 export * from "./TimelineSessionForm";

@@ -94,7 +94,9 @@ test.describe("이메일 인증 관리 페이지", () => {
 		await expect(page).toHaveURL(/status=PENDING/);
 	});
 
-	test("재발송 가능 row는 확인 modal을 열 수 있어야 한다", async ({ page }) => {
+	test("재발송 가능 row는 재발송 요청을 보낼 수 있어야 한다", async ({
+		page,
+	}) => {
 		const resendButton = page.getByRole("button", { name: "재발송" }).first();
 		const isVisible = await resendButton.isVisible().catch(() => false);
 
@@ -103,10 +105,12 @@ test.describe("이메일 인증 관리 페이지", () => {
 			return;
 		}
 
+		const resendResponse = page.waitForResponse(
+			(resp) =>
+				resp.url().includes("/api/v1/idp/email-verifications/") &&
+				resp.request().method() === "POST",
+		);
 		await resendButton.click();
-
-		await expect(
-			page.getByRole("heading", { name: "인증 메일 재발송" }),
-		).toBeVisible();
+		await expect((await resendResponse).ok()).toBe(true);
 	});
 });

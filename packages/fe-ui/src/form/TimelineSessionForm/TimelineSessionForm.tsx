@@ -1,14 +1,17 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
+import { Chip } from "../../data-display/Chip/Chip";
+import {
+	getContentLanguageLabel,
+	toContentLanguageCode,
+} from "../../data-display/content-language";
+import { Alert } from "../../feedback/Alert/Alert";
 import { Select } from "../../input/Select";
 import { TextArea } from "../../input/TextArea";
 import { TextField } from "../../input/TextField";
 import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
-import { ContentLanguageNotice } from "../../widget/ContentLanguageNotice";
-import { PageTitleBar } from "../../widget/PageTitleBar";
-
 export type TimelineSessionFormSessionType =
 	| "ONE_TIME"
 	| "ONE_TIME_RANGE"
@@ -22,7 +25,6 @@ export type TimelineSessionFormDayOfWeek =
 	| "FRIDAY"
 	| "SATURDAY"
 	| "SUNDAY";
-
 export type TimelineSessionFormField =
 	| "name"
 	| "type"
@@ -31,7 +33,6 @@ export type TimelineSessionFormField =
 	| "endDateTime"
 	| "recurringDayOfWeek"
 	| "repeatCycleType";
-
 export interface TimelineSessionFormState {
 	name: string;
 	type: TimelineSessionFormSessionType;
@@ -47,42 +48,73 @@ export interface TimelineSessionFormState {
 	originalRepeatCycleType?: TimelineSessionFormCycleType | "";
 	errors: Partial<Record<TimelineSessionFormField, string>>;
 }
-
 export interface TimelineSessionFormProps {
 	state: TimelineSessionFormState;
 	contentLanguageCode?: string | null;
 	readOnly?: boolean;
 }
-
 const sessionTypeOptions = [
-	{ value: "ONE_TIME", label: "일회성 특강" },
-	{ value: "ONE_TIME_RANGE", label: "기간형 집중 프로그램" },
-	{ value: "RECURRING", label: "정기 반복 클래스" },
+	{
+		value: "ONE_TIME",
+		label: "일회성 특강",
+	},
+	{
+		value: "ONE_TIME_RANGE",
+		label: "기간형 집중 프로그램",
+	},
+	{
+		value: "RECURRING",
+		label: "정기 반복 클래스",
+	},
 ];
-
 const sessionTypeDescriptions: Record<TimelineSessionFormSessionType, string> =
 	{
 		ONE_TIME: "특정 일시에 한 번만 진행되는 수업입니다.",
 		ONE_TIME_RANGE: "특정 기간 동안 집중적으로 진행되는 프로그램입니다.",
 		RECURRING: "매주 또는 매월 반복되는 정기 수업입니다.",
 	};
-
 const dayOfWeekOptions: {
 	value: TimelineSessionFormDayOfWeek;
 	label: string;
 }[] = [
-	{ value: "MONDAY", label: "월요일" },
-	{ value: "TUESDAY", label: "화요일" },
-	{ value: "WEDNESDAY", label: "수요일" },
-	{ value: "THURSDAY", label: "목요일" },
-	{ value: "FRIDAY", label: "금요일" },
-	{ value: "SATURDAY", label: "토요일" },
-	{ value: "SUNDAY", label: "일요일" },
+	{
+		value: "MONDAY",
+		label: "월요일",
+	},
+	{
+		value: "TUESDAY",
+		label: "화요일",
+	},
+	{
+		value: "WEDNESDAY",
+		label: "수요일",
+	},
+	{
+		value: "THURSDAY",
+		label: "목요일",
+	},
+	{
+		value: "FRIDAY",
+		label: "금요일",
+	},
+	{
+		value: "SATURDAY",
+		label: "토요일",
+	},
+	{
+		value: "SUNDAY",
+		label: "일요일",
+	},
 ];
-
 const cycleTypeOptions = [
-	{ value: "WEEKLY", label: "주간" },
-	{ value: "MONTHLY", label: "월간" },
+	{
+		value: "WEEKLY",
+		label: "주간",
+	},
+	{
+		value: "MONTHLY",
+		label: "월간",
+	},
 ];
 
 /**
@@ -95,6 +127,8 @@ export const TimelineSessionForm = observer(
 		contentLanguageCode,
 		readOnly = false,
 	}: TimelineSessionFormProps) => {
+		const languageCode = toContentLanguageCode(contentLanguageCode);
+		const languageLabel = getContentLanguageLabel(contentLanguageCode);
 		const changeType = (value: string) => {
 			if (readOnly) {
 				return;
@@ -116,17 +150,24 @@ export const TimelineSessionForm = observer(
 			}
 			state.errors = {};
 		};
-
 		return (
 			<VStack>
 				<Section>
-					<Section.Header>
-						<PageTitleBar level={2} title="기본 정보" />
-					</Section.Header>
+					<Section.Header title="기본 정보" />
 					<Section.Body>
 						<VStack>
-							<ContentLanguageNotice
-								contentLanguageCode={contentLanguageCode}
+							<Alert
+								status={languageCode ? "accent" : "warning"}
+								title="현재 Space 콘텐츠 언어"
+								actions={
+									<Chip
+										size="sm"
+										variant="flat"
+										color={languageCode ? "primary" : "warning"}
+									>
+										{languageLabel}
+									</Chip>
+								}
 							/>
 							<TextField
 								label="세션명"
@@ -170,9 +211,7 @@ export const TimelineSessionForm = observer(
 					</Section.Body>
 				</Section>
 				<Section>
-					<Section.Header>
-						<PageTitleBar level={2} title="일정 설정" />
-					</Section.Header>
+					<Section.Header title="일정 설정" />
 					<Section.Body>
 						<VStack>
 							{state.type === "ONE_TIME" ? (

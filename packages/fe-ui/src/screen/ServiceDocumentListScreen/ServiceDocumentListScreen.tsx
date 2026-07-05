@@ -20,14 +20,13 @@ import { observer } from "mobx-react-lite";
 import { Chip } from "../../data-display/Chip/Chip";
 import { Button } from "../../input/Button/Button";
 import { Checkbox } from "../../input/Checkbox/Checkbox";
+import { HtmlEditor } from "../../input/HtmlEditor";
 import { Select } from "../../input/Select/Select";
 import { TextArea } from "../../input/TextArea/TextArea";
 import { TextField } from "../../input/TextField/TextField";
 import { Screen, Section } from "../../layout";
 import { HStack, VStack } from "../../rhythm";
 import { ScreenSurface, SectionSurface } from "../../surface";
-import { HtmlEditor } from "../../widget/HtmlEditor";
-import { PageTitleBar } from "../../widget/PageTitleBar/PageTitleBar";
 
 type ServiceDocumentKindValue = ServiceDocumentDto["kind"];
 type ServiceDocumentPlatformValue = ServiceDocumentDto["platform"];
@@ -255,7 +254,7 @@ export const ServiceDocumentListScreen = observer(
 			<Screen>
 				<ScreenSurface>
 					<VStack fullWidth>
-						<PageTitleBar
+						<Screen.Header
 							title="약관 관리"
 							description="모바일과 web 서비스에 노출되는 약관, 개인정보, 동의 문서를 버전별로 관리합니다."
 							actions={

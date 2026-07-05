@@ -1,13 +1,18 @@
 "use client";
 
+import { Card } from "@heroui/react";
+import { ImageIcon, PlayCircle } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Chip } from "../../data-display/Chip/Chip";
+import {
+	getContentLanguageLabel,
+	toContentLanguageCode,
+} from "../../data-display/content-language";
+import { Alert } from "../../feedback/Alert/Alert";
 import type { AssetBrowserAsset } from "../../feature/AssetBrowser";
 import { Button } from "../../input/Button/Button";
 import { TextArea } from "../../input/TextArea";
 import { TextField } from "../../input/TextField";
-import { ContentLanguageNotice } from "../../widget/ContentLanguageNotice";
-import { MediaThumbnail } from "../../widget/MediaThumbnail";
 
 export interface TaskExerciseMediaAsset extends AssetBrowserAsset {}
 
@@ -51,6 +56,62 @@ function clearFieldError(
 	if (state.errors[field]) {
 		delete state.errors[field];
 	}
+}
+
+function MediaPreview({
+	imageUrl,
+	videoUrl,
+	title,
+	className,
+}: {
+	imageUrl?: string | null;
+	videoUrl?: string | null;
+	title: string;
+	className?: string;
+}) {
+	const mediaClassName = `relative overflow-hidden rounded-xl bg-surface-secondary ${className ?? ""}`;
+
+	if (imageUrl) {
+		return (
+			<Card className={mediaClassName}>
+				<img
+					src={imageUrl}
+					alt={title}
+					className="h-full w-full object-cover"
+					loading="lazy"
+				/>
+			</Card>
+		);
+	}
+
+	if (videoUrl) {
+		return (
+			<Card className={mediaClassName}>
+				<video
+					src={videoUrl}
+					className="h-full w-full object-cover"
+					muted
+					playsInline
+					preload="metadata"
+				/>
+				<div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+				<div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+					<PlayCircle className="h-8 w-8 text-white/90" />
+				</div>
+			</Card>
+		);
+	}
+
+	return (
+		<Card
+			className={`flex items-center justify-center rounded-xl border border-dashed border-border bg-surface-secondary text-muted ${className ?? ""}`}
+		>
+			<div className="flex flex-col items-center gap-2">
+				<ImageIcon className="h-7 w-7" />
+				<span className="text-xs">미리보기 없음</span>
+			</div>
+		</Card>
+	);
 }
 
 const ExerciseMediaField = observer(
@@ -101,7 +162,7 @@ const ExerciseMediaField = observer(
 				</div>
 				{selectedAsset ? (
 					<div className="flex flex-col gap-3 md:flex-row">
-						<MediaThumbnail
+						<MediaPreview
 							imageUrl={isImage ? selectedAsset.publicUrl : undefined}
 							videoUrl={!isImage ? selectedAsset.publicUrl : undefined}
 							title={selectedAsset.originalName}
@@ -145,11 +206,25 @@ export const TaskExerciseForm = observer(
 		onClickClearImageAssetButton,
 		onClickClearVideoAssetButton,
 	}: TaskExerciseFormProps) => {
+		const languageCode = toContentLanguageCode(contentLanguageCode);
+		const languageLabel = getContentLanguageLabel(contentLanguageCode);
 		const isSchedulable = state.videoFileId.trim().length > 0;
 
 		return (
 			<div className="flex flex-col gap-4">
-				<ContentLanguageNotice contentLanguageCode={contentLanguageCode} />
+				<Alert
+					status={languageCode ? "accent" : "warning"}
+					title="현재 Space 콘텐츠 언어"
+					actions={
+						<Chip
+							size="sm"
+							variant="flat"
+							color={languageCode ? "primary" : "warning"}
+						>
+							{languageLabel}
+						</Chip>
+					}
+				/>
 				<TextField
 					label="운동명"
 					placeholder="운동 이름을 입력하세요"

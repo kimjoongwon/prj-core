@@ -15,20 +15,17 @@ import {
 	type TaskExerciseMediaAsset,
 } from "../../form/TaskExerciseForm";
 import { Button } from "../../input/Button/Button";
+import { Screen } from "../../layout/Screen";
 import { Section } from "../../layout/Section/Section";
-import { SectionSurface } from "../../surface";
 import { VStack } from "../../rhythm";
-import { PageTitleBar } from "../../widget/PageTitleBar";
-
+import { SectionSurface } from "../../surface";
 export interface ExerciseMediaAsset extends TaskExerciseMediaAsset {}
-
 export interface TaskExerciseEditScreenRoutine {
 	id: string;
 	name: string;
 	label?: string | null;
 	createdAt: string;
 }
-
 export interface TaskExerciseEditScreenMetadata {
 	taskId: string;
 	tenantId?: string | null;
@@ -36,7 +33,6 @@ export interface TaskExerciseEditScreenMetadata {
 	updatedAt?: string | null;
 	routines?: TaskExerciseEditScreenRoutine[];
 }
-
 export interface TaskExerciseEditScreenProps {
 	title?: ReactNode;
 	description?: ReactNode;
@@ -74,7 +70,6 @@ export interface TaskExerciseEditScreenProps {
 	onClickCancelButton: () => void;
 	onClickSaveButton?: () => void;
 }
-
 const formatDuration = (durationMin: number, durationSec: number) =>
 	durationMin > 0 ? `${durationMin}분 ${durationSec}초` : `${durationSec}초`;
 
@@ -133,11 +128,10 @@ export const TaskExerciseEditScreen = observer(
 					</Button>
 				</div>
 			));
-
 		if (isLoading) {
 			return (
 				<VStack fullWidth>
-					<PageTitleBar title={resolvedTitle} description="로딩 중..." />
+					<Screen.Header title={resolvedTitle} description="로딩 중..." />
 					<SectionSurface>
 						<Section>
 							<Section.Body>
@@ -151,11 +145,10 @@ export const TaskExerciseEditScreen = observer(
 				</VStack>
 			);
 		}
-
 		if (isNotFound) {
 			return (
 				<VStack fullWidth>
-					<PageTitleBar
+					<Screen.Header
 						title={resolvedTitle}
 						description="운동 detail을 찾을 수 없습니다."
 					/>
@@ -163,9 +156,7 @@ export const TaskExerciseEditScreen = observer(
 						<Section>
 							<Section.Body>
 								<div className="flex flex-col items-center justify-center gap-4 p-8">
-									<p className="text-muted">
-										운동 detail을 찾을 수 없습니다.
-									</p>
+									<p className="text-muted">운동 detail을 찾을 수 없습니다.</p>
 									<Button variant="flat" onPress={onClickCancelButton}>
 										목록으로
 									</Button>
@@ -176,19 +167,16 @@ export const TaskExerciseEditScreen = observer(
 				</VStack>
 			);
 		}
-
 		return (
 			<VStack fullWidth>
-				<PageTitleBar
+				<Screen.Header
 					title={resolvedTitle}
 					description={resolvedDescription}
 					actions={resolvedActions}
 				/>
 				<SectionSurface>
 					<Section>
-						<Section.Header>
-							<PageTitleBar level={2} title="기본 정보" />
-						</Section.Header>
+						<Section.Header title="기본 정보" />
 						<Section.Body>
 							<TaskExerciseForm
 								state={state}
@@ -205,16 +193,12 @@ export const TaskExerciseEditScreen = observer(
 					</Section>
 					{metadata ? (
 						<Section>
-							<Section.Header>
-								<PageTitleBar level={2} title="태스크 정보" />
-							</Section.Header>
+							<Section.Header title="태스크 정보" />
 							<Section.Body>
 								<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 									<div>
 										<label className="text-sm text-muted">Task ID</label>
-										<p className="mt-1 font-mono text-sm">
-											{metadata.taskId}
-										</p>
+										<p className="mt-1 font-mono text-sm">{metadata.taskId}</p>
 									</div>
 									<div>
 										<label className="text-sm text-muted">Space ID</label>
@@ -239,9 +223,7 @@ export const TaskExerciseEditScreen = observer(
 												}
 												size="sm"
 											>
-												{state.videoFileId.trim().length > 0
-													? "가능"
-													: "불가"}
+												{state.videoFileId.trim().length > 0 ? "가능" : "불가"}
 											</Chip>
 										</div>
 									</div>
@@ -263,9 +245,7 @@ export const TaskExerciseEditScreen = observer(
 					) : null}
 					{metadata?.routines?.length ? (
 						<Section>
-							<Section.Header>
-								<PageTitleBar level={2} title="연관 루틴" />
-							</Section.Header>
+							<Section.Header title="연관 루틴" />
 							<Section.Body>
 								<div className="flex flex-col gap-2">
 									{metadata.routines.map((routine, index) => (

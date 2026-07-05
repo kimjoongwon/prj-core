@@ -2,10 +2,11 @@
 
 import type { OidcClientLoginUi } from "@cocrepo/type";
 import { Spinner } from "@heroui/react";
+import { AlertTriangle } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { FormEvent, MouseEvent } from "react";
 import { useEffect, useState } from "react";
-import { AlertBanner } from "../../feedback";
+import { Alert } from "../../feedback";
 import {
 	OidcConsentPanel,
 	type OidcConsentPanelState,
@@ -14,7 +15,7 @@ import {
 } from "../../form";
 import { useT } from "../../i18n";
 import { Button } from "../../input";
-import { AuthCard, AuthCardHeader } from "../../widget/AuthCard";
+import { Auth } from "../../layout/Auth";
 
 export interface IdpInteractionClientInfo {
 	clientId: string;
@@ -115,7 +116,7 @@ export const OidcInteractionScreen = observer(
 
 		if (props.state.mode === "loading") {
 			return (
-				<AuthCard>
+				<Auth.Panel>
 					<div className="flex flex-col items-center gap-5 py-10 text-center">
 						<Spinner size="lg" />
 						<div className="space-y-1">
@@ -136,22 +137,21 @@ export const OidcInteractionScreen = observer(
 							</Button>
 						) : null}
 					</div>
-				</AuthCard>
+				</Auth.Panel>
 			);
 		}
 
 		if (props.state.mode === "error") {
 			return (
-				<AuthCard variant="danger">
-					<AuthCardHeader
-						iconPath="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
-						iconGradient="from-danger to-danger-400"
+				<Auth.Panel variant="danger">
+					<Auth.PanelHeader
+						icon={<AlertTriangle className="h-6 w-6 text-danger" />}
 						title="인증을 이어갈 수 없습니다"
 						titleClassName="text-danger"
 						subtitle="세션이 만료되었거나 요청이 올바르지 않습니다."
 					/>
 
-					<AlertBanner type="danger" message={props.state.errorMessage || ""} />
+					<Alert status="danger" description={props.state.errorMessage || ""} />
 
 					<div className="flex gap-3">
 						<Button
@@ -161,10 +161,10 @@ export const OidcInteractionScreen = observer(
 						>
 							{props.state.isExpiredInteraction
 								? t("다시 로그인")
-								: t("돌아가기")}
+							: t("돌아가기")}
 						</Button>
 					</div>
-				</AuthCard>
+				</Auth.Panel>
 			);
 		}
 

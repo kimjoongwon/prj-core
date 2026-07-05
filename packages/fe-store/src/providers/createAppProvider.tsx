@@ -89,17 +89,11 @@ export function createAppProvider(
 
 		app.floatingActions = new FloatingActions({ actions: config.fabActions });
 
-		const space = app.space;
-		const locale = app.locale;
-		if (!space || !locale) {
-			throw new Error("App 초기 상태가 올바르게 구성되지 않았습니다.");
-		}
-
 		// Core/IDP API 인터셉터가 모두 동일한 현재 Space를 읽도록 연결합니다.
-		setApiSpace(space);
-		setIdpSpace(space);
-		setApiLocale(locale);
-		setIdpLocale(locale);
+		setApiSpace(app.space);
+		setIdpSpace(app.space);
+		setApiLocale(app.locale);
+		setIdpLocale(app.locale);
 
 		return app;
 	}
@@ -134,39 +128,30 @@ export function createAppProvider(
 		const space = app.space;
 		const locale = app.locale;
 
-		// navigation이 없으면 초기화 중이므로 렌더링하지 않음
-		if (!navigation) {
-			return null;
-		}
-
 		// Space hydrate는 첫 클라이언트 렌더 이후에만 수행하여
 		// SSR/CSR 첫 렌더 트리를 동일하게 유지합니다.
 		useEffect(() => {
-			space?.hydrateFromStorage();
+			space.hydrateFromStorage();
 		}, [space]);
 
 		useEffect(() => {
-			locale?.hydrateFromStorage();
+			locale.hydrateFromStorage();
 		}, [locale]);
 
 		useEffect(() => {
-			if (!locale || typeof document === "undefined") {
+			if (typeof document === "undefined") {
 				return;
 			}
 
-			document.documentElement.lang = locale.languageCode.replace("_", "-");
-		}, [locale, locale?.languageCode]);
+			document.documentElement.lang = locale.htmlLang;
+		}, [locale, locale.htmlLang]);
 
 		// ability 변경 시 체커 업데이트
 		useEffect(() => {
-			if (!ability) {
-				return;
-			}
-
 			navigation.setAbilityChecker((action, subject) =>
 				ability.can(action, subject),
 			);
-			floatingActions?.setAbilityChecker((action, subject) =>
+			floatingActions.setAbilityChecker((action, subject) =>
 				ability.can(action, subject),
 			);
 		}, [ability, navigation, floatingActions]);
@@ -175,13 +160,13 @@ export function createAppProvider(
 		useEffect(() => {
 			const navigator = new Navigator({ router });
 			navigation.setNavigator(navigator);
-			floatingActions?.setNavigator(navigator);
+			floatingActions.setNavigator(navigator);
 		}, [router, navigation, floatingActions]);
 
 		// URL 경로 변경 시 메뉴 활성화 상태 업데이트
 		useEffect(() => {
 			navigation.setCurrentPath(pathname);
-			mobileNavigation?.updateActiveTabFromPath(pathname);
+			mobileNavigation.updateActiveTabFromPath(pathname);
 		}, [pathname, navigation, mobileNavigation]);
 
 		return children;

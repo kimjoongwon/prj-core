@@ -13,4 +13,3 @@ export * from "./layout";
 export * from "./rhythm";
 export * from "./screen";
 export * from "./surface";
-export * from "./widget";

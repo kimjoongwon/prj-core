@@ -39,7 +39,6 @@ export default observer(function RoutinesPageRoute() {
 				routines={response?.data}
 				totalCount={response?.meta?.total ?? 0}
 				isLoading={isLoading}
-				isDeleting={deleteMutation.isPending}
 				queryStates={queryStates}
 				setQueryStates={setQueryStates}
 				onClickCreateButton={() => {

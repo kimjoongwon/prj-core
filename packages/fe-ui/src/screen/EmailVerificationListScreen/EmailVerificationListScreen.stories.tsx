@@ -3,8 +3,7 @@ import { EmailVerificationListScreen } from "./EmailVerificationListScreen";
 
 const defaultArgs = {
 	isLoading: false,
-	isResending: false,
-	onConfirmResendEmailVerification: (..._args: never[]) => undefined,
+	onClickResendEmailVerificationButton: (..._args: never[]) => undefined,
 	queryStates: { take: 20, skip: 0, email: "", status: "" },
 	setQueryStates: (..._args: never[]) => undefined,
 	totalCount: 3,

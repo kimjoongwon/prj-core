@@ -1,20 +1,13 @@
 "use client";
 
-import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
+import { Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import {
-	ActionForm,
-	type ActionFormState,
-} from "../../form/ActionForm";
+import { ActionForm, type ActionFormState } from "../../form/ActionForm";
 import { Button } from "../../input/Button/Button";
 
-export type {
-	ActionFormField,
-	ActionFormState,
-} from "../../form/ActionForm";
-
+export type { ActionFormField, ActionFormState } from "../../form/ActionForm";
 export interface ActionEditScreenProps {
 	title: ReactNode;
 	description?: ReactNode;
@@ -47,11 +40,10 @@ export const ActionEditScreen = observer((props: ActionEditScreenProps) => {
 		actions,
 		children,
 	} = props;
-
 	if (isLoading) {
 		return (
 			<VStack fullWidth>
-				<PageTitleBar title={title} description={loadingMessage} />
+				<Screen.Header title={title} description={loadingMessage} />
 				<SectionSurface>
 					<Section>
 						<Section.Body>
@@ -65,11 +57,10 @@ export const ActionEditScreen = observer((props: ActionEditScreenProps) => {
 			</VStack>
 		);
 	}
-
 	if (notFound || !state) {
 		return (
 			<VStack fullWidth>
-				<PageTitleBar title={title} description={notFoundMessage} />
+				<Screen.Header title={title} description={notFoundMessage} />
 				<SectionSurface>
 					<Section>
 						<Section.Body>
@@ -83,20 +74,20 @@ export const ActionEditScreen = observer((props: ActionEditScreenProps) => {
 			</VStack>
 		);
 	}
-
 	return (
 		<VStack fullWidth>
-			<PageTitleBar title={title} description={description} actions={actions} />
+			<Screen.Header
+				title={title}
+				description={description}
+				actions={actions}
+			/>
 			<SectionSurface>
 				<Section>
 					<Section.Body>
 						<VStack>
 							<Section>
 								<Section.Body>
-									<ActionForm
-										state={state}
-										readOnly={readOnly}
-									/>
+									<ActionForm state={state} readOnly={readOnly} />
 								</Section.Body>
 							</Section>
 							{children}

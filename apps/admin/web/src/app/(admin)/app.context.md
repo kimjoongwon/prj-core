@@ -248,6 +248,6 @@ AdminLayout
 
 1. JWT 토큰으로 인증 (Authorization 헤더)
 2. X-Tenant-ID 헤더로 현재 Tenant 지정 (필수)
-3. Tenant 미선택 시 `/select-space`로 리다이렉트 (useSpaceGuard)
+3. Space bootstrap 이후 선택된 Tenant ID를 API 요청 scope에 반영
 4. Space에 선택된 Tenant ID와 파생 Space ID/이름 저장
 5. 로그아웃 시 Space 초기화 후 `/admin/auth/login`으로 이동

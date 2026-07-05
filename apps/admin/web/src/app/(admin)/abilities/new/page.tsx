@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "@heroui/react";
 import {
 	type CreateAbilityDto,
 	useCreateAbility,
@@ -7,7 +8,6 @@ import {
 import { useGetActions } from "@cocrepo/api/core/actions";
 import { useGetSubjects } from "@cocrepo/api/core/subjects";
 import { AbilityEditScreen, type AbilityFormState, Button } from "@cocrepo/ui";
-import { toast } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -34,18 +34,14 @@ export default observer(function AbilityNewPage() {
 	const { mutate: createAbility, isPending } = useCreateAbility({
 		mutation: {
 			onSuccess: (response) => {
-				toast.success("권한 등록 성공", {
-					description: "권한이 성공적으로 등록되었습니다.",
-				});
+				toast.success("권한 등록 성공", { description: "권한이 성공적으로 등록되었습니다." });
 				const abilityId = response?.data?.id;
 				if (abilityId) {
 					router.push(`/abilities/${abilityId}` as Route);
 				}
 			},
 			onError: (error) => {
-				toast.danger("권한 등록 실패", {
-					description: error.message || "권한 등록 중 오류가 발생했습니다.",
-				});
+				toast.danger("권한 등록 실패", { description: error.message || "권한 등록 중 오류가 발생했습니다." });
 			},
 		},
 	});
@@ -66,7 +62,9 @@ export default observer(function AbilityNewPage() {
 			return;
 		}
 
-		const dto = toCreateAbilityDto(state);
+		const dto = toCreateAbilityDto(state, () => {
+			toast.danger("입력 오류", { description: "Conditions는 유효한 JSON 형식이어야 합니다." });
+		});
 		if (!dto) {
 			return;
 		}
@@ -113,7 +111,10 @@ export default observer(function AbilityNewPage() {
 	);
 });
 
-function toCreateAbilityDto(state: AbilityFormState): CreateAbilityDto | null {
+function toCreateAbilityDto(
+	state: AbilityFormState,
+	onInvalidConditions: () => void,
+): CreateAbilityDto | null {
 	const fieldsArray = state.fields
 		.split(",")
 		.map((field) => field.trim())
@@ -124,9 +125,7 @@ function toCreateAbilityDto(state: AbilityFormState): CreateAbilityDto | null {
 		try {
 			conditionsObject = JSON.parse(state.conditions);
 		} catch {
-			toast.danger("입력 오류", {
-				description: "Conditions는 유효한 JSON 형식이어야 합니다.",
-			});
+			onInvalidConditions();
 			return null;
 		}
 	}

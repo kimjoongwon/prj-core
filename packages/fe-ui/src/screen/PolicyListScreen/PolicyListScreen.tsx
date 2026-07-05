@@ -1,7 +1,7 @@
 "use client";
 
 import type { PolicyResponseDto } from "@cocrepo/api/core/policies";
-import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
+import { Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { Spinner, Table } from "@heroui/react";
 import { Edit, Eye, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -32,7 +32,7 @@ export const PolicyListScreen = observer(
 		const policyRows = policies ?? [];
 		return (
 			<div className="space-y-5">
-				<PageTitleBar
+				<Screen.Header
 					title="정책 목록"
 					description="역할과 사용자에 할당할 정책 기반 인가 규칙을 관리합니다."
 					actions={

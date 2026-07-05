@@ -14,9 +14,9 @@ import {
 } from "../../form/TimelineSessionProgramForm";
 import { Button } from "../../input/Button/Button";
 import { Section } from "../../layout";
+import { Screen } from "../../layout/Screen";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
-import { PageTitleBar } from "../../widget/PageTitleBar";
 
 export type {
 	TimelineSessionProgramFormField,
@@ -24,7 +24,6 @@ export type {
 	TimelineSessionProgramPickerOption,
 	TimelineSessionProgramRoutinePreviewItem,
 } from "../../form/TimelineSessionProgramForm";
-
 export interface TimelineSessionProgramEditScreenMetadata {
 	routineHref?: Route;
 	instructorLabel?: string | null;
@@ -33,7 +32,6 @@ export interface TimelineSessionProgramEditScreenMetadata {
 	sessionHref?: Route;
 	createdAt?: string | null;
 }
-
 export interface TimelineSessionProgramEditScreenProps {
 	title: ReactNode;
 	description?: ReactNode;
@@ -77,11 +75,10 @@ export const TimelineSessionProgramEditScreen = observer(
 			actions,
 			metadata,
 		} = props;
-
 		if (isLoading) {
 			return (
 				<VStack fullWidth>
-					<PageTitleBar title={title} description={loadingMessage} />
+					<Screen.Header title={title} description={loadingMessage} />
 					<SectionSurface>
 						<Section>
 							<Section.Body>
@@ -95,11 +92,10 @@ export const TimelineSessionProgramEditScreen = observer(
 				</VStack>
 			);
 		}
-
 		if (notFound || !state) {
 			return (
 				<VStack fullWidth>
-					<PageTitleBar title={title} description={notFoundMessage} />
+					<Screen.Header title={title} description={notFoundMessage} />
 					<SectionSurface>
 						<Section>
 							<Section.Body>
@@ -113,10 +109,13 @@ export const TimelineSessionProgramEditScreen = observer(
 				</VStack>
 			);
 		}
-
 		return (
 			<VStack fullWidth>
-				<PageTitleBar title={title} description={description} actions={actions} />
+				<Screen.Header
+					title={title}
+					description={description}
+					actions={actions}
+				/>
 				<SectionSurface>
 					<Section>
 						<Section.Body>
@@ -132,15 +131,11 @@ export const TimelineSessionProgramEditScreen = observer(
 								/>
 								{metadata ? (
 									<Section>
-										<Section.Header>
-											<PageTitleBar level={2} title="관리 정보" />
-										</Section.Header>
+										<Section.Header title="관리 정보" />
 										<Section.Body>
 											<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 												<div>
-													<label className="text-sm text-muted">
-														루틴
-													</label>
+													<label className="text-sm text-muted">루틴</label>
 													<div className="mt-1">
 														{metadata.routineHref && state.routineName ? (
 															<Link
@@ -150,31 +145,25 @@ export const TimelineSessionProgramEditScreen = observer(
 																{state.routineName}
 															</Link>
 														) : (
-															(state.routineName || "-")
+															state.routineName || "-"
 														)}
 													</div>
 												</div>
 												<div>
-													<label className="text-sm text-muted">
-														강사
-													</label>
+													<label className="text-sm text-muted">강사</label>
 													<p className="mt-1">
 														{metadata.instructorLabel ?? state.instructorName}
 													</p>
 												</div>
 												<div>
-													<label className="text-sm text-muted">
-														운동 수
-													</label>
+													<label className="text-sm text-muted">운동 수</label>
 													<p className="mt-1">
 														{metadata.activityCountLabel ??
 															`${routinePreview.length}개`}
 													</p>
 												</div>
 												<div>
-													<label className="text-sm text-muted">
-														세션
-													</label>
+													<label className="text-sm text-muted">세션</label>
 													<div className="mt-1">
 														{metadata.sessionHref && metadata.sessionName ? (
 															<Link
@@ -190,9 +179,7 @@ export const TimelineSessionProgramEditScreen = observer(
 												</div>
 												{metadata.createdAt ? (
 													<div>
-														<label className="text-sm text-muted">
-															등록일
-														</label>
+														<label className="text-sm text-muted">등록일</label>
 														<div className="mt-1">
 															<DateTimeCell value={metadata.createdAt} />
 														</div>

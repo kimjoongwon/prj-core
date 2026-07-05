@@ -10,14 +10,13 @@ import {
 	buildRoutineTableColumns,
 	DataGrid,
 	DataGridState,
-	PageTitleBar,
+	Screen,
 	Section,
 	SectionSurface,
 } from "@cocrepo/ui";
-import { Modal, useOverlayState } from "@heroui/react";
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Button } from "../../input/Button/Button";
 
 const leftInputs: InputConfig[] = [
@@ -56,7 +55,6 @@ export interface RoutineListScreenProps {
 	routines?: RoutineDto[];
 	totalCount: number;
 	isLoading: boolean;
-	isDeleting: boolean;
 	queryStates: RoutineListScreenQueryStates;
 	setQueryStates: RoutineListScreenSetQueryStates;
 	onClickCreateButton: () => void;
@@ -66,7 +64,7 @@ export interface RoutineListScreenProps {
 function RoutinesScreenFallback() {
 	return (
 		<div className="space-y-5">
-			<PageTitleBar
+			<Screen.Header
 				title="루틴"
 				description="운동 루틴(커리큘럼)을 관리합니다."
 			/>
@@ -83,7 +81,6 @@ export const RoutineListScreen = observer(
 		routines,
 		totalCount,
 		isLoading,
-		isDeleting,
 		queryStates,
 		setQueryStates,
 		onClickCreateButton,
@@ -101,17 +98,8 @@ export const RoutineListScreen = observer(
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
 		const routineRows = routines ?? [];
-		const [deleteTarget, setDeleteTarget] = useState<RoutineDto | null>(null);
-		const deleteModal = useOverlayState();
 		const onClickDeleteButton = (routineId: string) => {
-			const targetRoutine = routineRows.find(
-				(routine) => routine.id === routineId,
-			);
-			if (!targetRoutine) {
-				return;
-			}
-			setDeleteTarget(targetRoutine);
-			deleteModal.open();
+			void onDeleteRoutine(routineId);
 		};
 		const columns = buildRoutineTableColumns<RoutineDto>({
 			onClickRoutineName,
@@ -122,7 +110,7 @@ export const RoutineListScreen = observer(
 		}
 		return (
 			<div className="space-y-5">
-				<PageTitleBar
+				<Screen.Header
 					title="루틴"
 					description="운동 루틴(커리큘럼)을 관리합니다."
 					actions={
@@ -152,47 +140,6 @@ export const RoutineListScreen = observer(
 						</Section.Body>
 					</Section>
 				</SectionSurface>
-				<Modal state={deleteModal}>
-					<Modal.Backdrop>
-						<Modal.Container>
-							<Modal.Dialog>
-								<Modal.Header>루틴 삭제</Modal.Header>
-								<Modal.Body>
-									<p>
-										<strong>{deleteTarget?.name}</strong> 루틴을
-										삭제하시겠습니까?
-									</p>
-									<p className="mt-2 text-sm text-danger">
-										프로그램에서 사용 중인 루틴은 삭제할 수 없습니다.
-									</p>
-								</Modal.Body>
-								<Modal.Footer>
-									<Button
-										variant="flat"
-										onPress={deleteModal.close}
-										isDisabled={isDeleting}
-									>
-										취소
-									</Button>
-									<Button
-										color="danger"
-										onPress={() => {
-											if (!deleteTarget) {
-												return;
-											}
-											void onDeleteRoutine(deleteTarget.id).then(() => {
-												deleteModal.close();
-												setDeleteTarget(null);
-											});
-										}}
-									>
-										삭제
-									</Button>
-								</Modal.Footer>
-							</Modal.Dialog>
-						</Modal.Container>
-					</Modal.Backdrop>
-				</Modal>
 			</div>
 		);
 	},

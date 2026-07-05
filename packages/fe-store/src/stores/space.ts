@@ -62,9 +62,9 @@ export interface NativeAuthSession {
  * });
  *
  * // 사용
- * app.space?.setSpace("tenant-123", "Ground Name", null, "space-123");
- * app.space?.setTokenExpiries(accessExpiresAt, refreshExpiresAt);
- * app.space?.clear();
+ * app.space.setSpace("tenant-123", "Ground Name", null, "space-123");
+ * app.space.setTokenExpiries(accessExpiresAt, refreshExpiresAt);
+ * app.space.clear();
  * ```
  */
 export class Space {

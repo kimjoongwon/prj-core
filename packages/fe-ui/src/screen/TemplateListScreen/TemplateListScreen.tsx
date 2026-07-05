@@ -10,7 +10,7 @@ import {
 	buildTemplateTableColumns,
 	DataGrid,
 	DataGridState,
-	PageTitleBar,
+	Screen,
 	Section,
 	SectionSurface,
 } from "@cocrepo/ui";
@@ -48,7 +48,7 @@ export interface TemplateListScreenProps {
 function TemplatesScreenFallback() {
 	return (
 		<div className="space-y-5">
-			<PageTitleBar
+			<Screen.Header
 				title="메시지 템플릿"
 				description="시스템에 등록된 메시지 템플릿을 관리합니다."
 			/>
@@ -91,7 +91,7 @@ export const TemplateListScreen = observer(
 		}
 		return (
 			<div className="space-y-5">
-				<PageTitleBar
+				<Screen.Header
 					title="메시지 템플릿"
 					description="시스템에 등록된 메시지 템플릿을 관리합니다."
 					actions={

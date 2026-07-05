@@ -5,11 +5,7 @@ import type {
 	InquiryChannel,
 	InquiryPriority,
 } from "@cocrepo/api/core/inquiries";
-import type {
-	FormFieldMeta,
-	FormOptionItem,
-	FormUiPaths,
-} from "@cocrepo/type";
+import type { FormFieldMeta, FormOptionItem, FormUiPaths } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { Button } from "../../input/Button/Button";
 import { Select } from "../../input/Select";
@@ -17,8 +13,6 @@ import { TextArea } from "../../input/TextArea";
 import { TextField } from "../../input/TextField";
 import { Section } from "../../layout/Section/Section";
 import { VStack } from "../../rhythm";
-import { PageTitleBar } from "../../widget/PageTitleBar";
-
 export interface InquiryFormCustomerSearchResult {
 	id: string;
 	name: string;
@@ -27,19 +21,16 @@ export interface InquiryFormCustomerSearchResult {
 	label: string;
 	description: string;
 }
-
 export interface InquiryFormOption {
 	value: string;
 	label?: string;
 	text?: string;
 }
-
 export interface InquiryFormBootstrap {
 	fieldMeta: Record<string, FormFieldMeta>;
 	ui: FormUiPaths;
 	options: Record<string, FormOptionItem[]>;
 }
-
 export interface InquiryFormState {
 	customerId: string;
 	customerKeyword: string;
@@ -51,7 +42,6 @@ export interface InquiryFormState {
 	searchResults: InquiryFormCustomerSearchResult[];
 	errors: Record<string, string>;
 }
-
 export interface InquiryFormProps {
 	state: InquiryFormState;
 	bootstrap?: InquiryFormBootstrap;
@@ -70,10 +60,8 @@ export interface InquiryFormProps {
 	onClickCancelButton: () => void;
 	onClickSubmitButton: () => void;
 }
-
 const optionLabel = (option: InquiryFormOption) =>
 	option.label ?? option.text ?? option.value;
-
 function clearFieldError(state: InquiryFormState, field: string) {
 	if (state.errors[field]) {
 		delete state.errors[field];
@@ -106,13 +94,10 @@ export const InquiryForm = observer(
 		const hiddenPaths = bootstrap?.ui.hiddenPaths ?? [];
 		const isHidden = (path: string) => hiddenPaths.includes(path);
 		const isEditable = !readOnly && !isSubmitting;
-
 		return (
 			<VStack>
 				<Section>
-					<Section.Header>
-						<PageTitleBar level={2} title="문의 입력" />
-					</Section.Header>
+					<Section.Header title="문의 입력" />
 					<Section.Body>
 						<VStack>
 							{showCustomerField && !isHidden("customerId") ? (

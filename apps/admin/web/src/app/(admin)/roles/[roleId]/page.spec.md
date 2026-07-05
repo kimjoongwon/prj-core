@@ -78,12 +78,12 @@
 
 | 컴포넌트 | 상태 | 경로 | 사용 위치 | route 계약 | 비고 |
 |----------|------|------|-----------|-------------|------|
-| `PageTitleBar` | 재사용 | `packages/fe-ui/src/widget/PageTitleBar/PageTitleBar.tsx` | 상단 title/actions, 정책 할당 section header | title, description, actions 전달 | `RoleEditScreen` 내부와 정책 section에서 함께 사용 가능 |
+| `Screen.Header` / `Section.Header` | 재사용 | `packages/fe-ui/src/layout/Screen/Screen.tsx`, `packages/fe-ui/src/layout/Section/Section.tsx` | 상단 title/actions, 정책 할당 section header | title, description, actions 전달 | 별도 title bar 컴포넌트 없이 각 layout slot에서 처리 |
 | `Section` | 재사용 | `packages/fe-ui/src/layout/Section/Section.tsx` | Role 기본 정보, 추가 정보, 정책 할당 section | `Section.Header`, `Section.Body`, 필요 시 `Section.Footer` | page section 구조만 담당 |
 | `SectionSurface` | 재사용 | `packages/fe-ui/src/surface/SectionSurface/SectionSurface.tsx` | page-level surface | 기존 screen shell surface 유지 | 중첩 card처럼 보이지 않게 section-level만 사용 |
 | `Button` | 재사용 | `packages/fe-ui/src/input/Button/Button.tsx` | 목록/수정/삭제/정책 편집/취소/저장 | lucide icon을 `startContent`로 전달 | icon 없는 긴 설명 버튼 금지 |
-| `ConfirmModal` | 우선 재사용 | `packages/fe-ui/src/widget/ConfirmModal/ConfirmModal.tsx` | Role 삭제, 정책 저장 확인 | `title`, `message`, `confirmText`, `confirmColor`, `loading` | 변경 summary가 복잡해 기본 위젯이 부족하면 route-local HeroUI Modal 사용 |
-| `Modal` | 조건부 재사용 | `@heroui/react` | 복잡한 저장 summary modal | ConfirmModal로 표현이 어려운 경우만 사용 | route-local modal state는 `useOverlayState` |
+| `AlertDialog` | 우선 재사용 | `packages/fe-ui/src/feedback/AlertDialog/AlertDialog.tsx` | Role 삭제, 정책 저장 확인 | `Heading`, `Body`, `Footer`, confirm button 조합 | 변경 summary가 복잡해도 custom widget을 만들지 않고 AlertDialog slot으로 표현 |
+| `Modal` | 조건부 재사용 | `@heroui/react` | 복잡한 저장 summary modal | AlertDialog로 표현이 어려운 경우만 사용 | route-local modal state는 `useOverlayState` |
 | `Chip` | 재사용 | `packages/fe-ui/src/data-display/Chip/Chip.tsx` | Role/system/status, assigned/active/dirty count | 색상 역할: primary/success/warning/default | summary와 row 상태 표시 |
 | `TextField` | 재사용 | `packages/fe-ui/src/input/TextField/TextField.tsx` | 검색 입력, priority number input | 검색은 route-local state, priority는 assignment state 수정 | priority input width 고정 |
 | `Checkbox` | 재사용 | `packages/fe-ui/src/input/Checkbox/Checkbox.tsx` | Policy row 선택/해제 | readOnly에서는 숨김 | row 전체 layout이 흔들리지 않게 고정 영역 유지 |

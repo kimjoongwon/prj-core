@@ -6,6 +6,7 @@ import {
 	AppStoreContext,
 	Cookies,
 	FloatingActions,
+	Locale,
 	MobileNavigation,
 	Navigation,
 	Session,
@@ -34,10 +35,12 @@ import type {
 	NavigatorLike,
 } from "../../../../../packages/common-type/src";
 import {
+	setApiLocale,
 	setApiSpace,
 	setLoginRedirectUrl,
 } from "../../../../../packages/fe-api/src/core/client";
 import {
+	setIdpLocale,
 	setIdpLoginRedirectUrl,
 	setIdpSpace,
 } from "../../../../../packages/fe-api/src/idp/client";
@@ -167,6 +170,9 @@ function createStorybookAppStore(runtime: StorybookRuntimeConfig): AppStore {
 	const space = new Space({
 		storageKey: getStorageKey(runtime.realm),
 	});
+	const locale = new Locale({
+		storageKey: `${getStorageKey(runtime.realm)}:locale`,
+	});
 	const ability = new Ability(app);
 
 	app.name = `STORYBOOK_${runtime.realm.toUpperCase()}`;
@@ -176,6 +182,7 @@ function createStorybookAppStore(runtime: StorybookRuntimeConfig): AppStore {
 	app.ability = ability;
 	app.navigation = navigation;
 	app.space = space;
+	app.locale = locale;
 	app.mobileNavigation = new MobileNavigation(
 		{
 			tabIds: getBottomTabIds(runtime.realm),
@@ -191,6 +198,8 @@ function createStorybookAppStore(runtime: StorybookRuntimeConfig): AppStore {
 	ability.updateRules([...FALLBACK_ABILITY_RULES]);
 	setApiSpace(space);
 	setIdpSpace(space);
+	setApiLocale(locale);
+	setIdpLocale(locale);
 
 	return app;
 }
@@ -207,24 +216,20 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 	const space = app.space;
 	const ability = app.ability;
 	const navigation = app.navigation;
+	const locale = app.locale;
 
 	useEffect(() => {
-		if (!space) {
-			return;
-		}
-
 		space.hydrateFromStorage();
+		locale.hydrateFromStorage();
 		setApiSpace(space);
 		setIdpSpace(space);
+		setApiLocale(locale);
+		setIdpLocale(locale);
 		setLoginRedirectUrl(DISABLED_AUTH_REDIRECT_URL);
 		setIdpLoginRedirectUrl(DISABLED_AUTH_REDIRECT_URL);
-	}, [space, storyId]);
+	}, [locale, space, storyId]);
 
 	useEffect(() => {
-		if (!navigation || !ability) {
-			return;
-		}
-
 		navigation.setAbilityChecker((action, subject) =>
 			ability.can(action, subject),
 		);
@@ -232,10 +237,6 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 	}, [ability, navigation, runtime.currentPath]);
 
 	useEffect(() => {
-		if (!space || !ability) {
-			return;
-		}
-
 		if (runtime.realm === "admin") {
 			space.setSpaces([STORYBOOK_ADMIN_SPACE]);
 			space.setSpace(
@@ -283,8 +284,8 @@ export function StorybookRuntimeProvider({
 	}, [runtime.currentPath]);
 
 	useEffect(() => {
-		appRef.current?.navigation?.setCurrentPath(currentPath);
-		appRef.current?.mobileNavigation?.updateActiveTabFromPath(currentPath);
+		appRef.current!.navigation.setCurrentPath(currentPath);
+		appRef.current!.mobileNavigation.updateActiveTabFromPath(currentPath);
 	}, [currentPath]);
 
 	useEffect(() => {
@@ -292,8 +293,8 @@ export function StorybookRuntimeProvider({
 			return;
 		}
 
-		appRef.current?.navigation?.setNavigator(navigatorRef.current);
-		appRef.current?.floatingActions?.setNavigator(navigatorRef.current);
+		appRef.current!.navigation.setNavigator(navigatorRef.current);
+		appRef.current!.floatingActions.setNavigator(navigatorRef.current);
 	}, []);
 
 	return (

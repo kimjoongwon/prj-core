@@ -1,13 +1,12 @@
 "use client";
 
 import type { PasswordRule } from "@cocrepo/constant";
+import { AlertTriangle, Check, CheckCircle, KeyRound, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { AlertBanner } from "../../feedback/AlertBanner/AlertBanner";
-import { PasswordStrengthIndicator } from "../../feedback/PasswordStrengthIndicator/PasswordStrengthIndicator";
+import { Alert } from "../../feedback/Alert/Alert";
 import { useT } from "../../i18n";
 import { Button, Link, TextField } from "../../input";
-import { AuthCard } from "../../widget/AuthCard/AuthCard";
-import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
+import { Auth } from "../../layout/Auth";
 
 export type ResetPasswordStep = "validating" | "invalid" | "form" | "complete";
 
@@ -51,12 +50,16 @@ export const ResetPasswordForm = observer(
 	}: ResetPasswordFormProps) => {
 		const t = useT();
 		const isPasswordValid = passwordRules.every((r) => r.test(state.password));
+		const passwordRuleResults = passwordRules.map((rule) => ({
+			...rule,
+			passed: state.password.length > 0 ? rule.test(state.password) : false,
+		}));
 		const isPasswordMatch =
 			state.password === state.confirmPassword &&
 			state.confirmPassword.length > 0;
 
 		return (
-			<AuthCard>
+			<Auth.Panel>
 				{/* 로딩 중 */}
 				{step === "validating" && (
 					<div className="text-center py-8">
@@ -67,22 +70,10 @@ export const ResetPasswordForm = observer(
 
 				{/* 토큰 만료/무효 */}
 				{step === "invalid" && (
-					<div className="text-center">
-						<div className="w-16 h-16 bg-danger/20 rounded-full mx-auto mb-4 flex items-center justify-center">
-							<svg
-								className="w-8 h-8 text-danger"
-								fill="none"
-								stroke="currentColor"
-								viewBox="0 0 24 24"
-							>
-								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									strokeWidth={2}
-									d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-								/>
-							</svg>
-						</div>
+						<div className="text-center">
+							<div className="w-16 h-16 bg-danger/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+								<AlertTriangle className="h-8 w-8 text-danger" />
+							</div>
 						<h2 className="text-lg font-semibold mb-2">
 							{tokenError ? t(tokenError) : t("링크가 만료되었습니다")}
 						</h2>
@@ -105,22 +96,10 @@ export const ResetPasswordForm = observer(
 
 				{/* 재설정 완료 */}
 				{step === "form" && state.isComplete && (
-					<div className="text-center">
-						<div className="w-16 h-16 bg-success/20 rounded-full mx-auto mb-4 flex items-center justify-center">
-							<svg
-								className="w-8 h-8 text-success"
-								fill="none"
-								stroke="currentColor"
-								viewBox="0 0 24 24"
-							>
-								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									strokeWidth={2}
-									d="M5 13l4 4L19 7"
-								/>
-							</svg>
-						</div>
+						<div className="text-center">
+							<div className="w-16 h-16 bg-success/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+								<CheckCircle className="h-8 w-8 text-success" />
+							</div>
 						<h2 className="text-lg font-semibold mb-2">
 							{t("비밀번호가 변경되었습니다")}
 						</h2>
@@ -144,14 +123,14 @@ export const ResetPasswordForm = observer(
 				{/* 비밀번호 입력 폼 */}
 				{step === "form" && !state.isComplete && (
 					<>
-						<AuthCardHeader
-							iconPath="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+						<Auth.PanelHeader
+							icon={<KeyRound className="h-6 w-6 text-accent" />}
 							title="새 비밀번호 설정"
 							subtitle={tokenEmail || undefined}
 						/>
 
 						{state.submitError && (
-							<AlertBanner type="danger" message={t(state.submitError)} />
+							<Alert status="danger" description={t(state.submitError)} />
 						)}
 
 						<form className="space-y-5">
@@ -166,10 +145,35 @@ export const ResetPasswordForm = observer(
 									variant="bordered"
 									autoFocus
 								/>
-								<PasswordStrengthIndicator
-									password={state.password}
-									rules={passwordRules}
-								/>
+								{state.password ? (
+									<div className="mt-2 space-y-1.5">
+										{passwordRuleResults.map((rule) => (
+											<div
+												key={rule.rule}
+												className="flex items-center gap-2 text-sm"
+											>
+												{rule.passed ? (
+													<Check
+														className="size-4 shrink-0 text-success"
+														aria-hidden
+													/>
+												) : (
+													<X
+														className="size-4 shrink-0 text-muted"
+														aria-hidden
+													/>
+												)}
+												<span
+													className={
+														rule.passed ? "text-success" : "text-muted"
+													}
+												>
+													{t(rule.label)}
+												</span>
+											</div>
+										))}
+									</div>
+								) : null}
 							</div>
 
 							<TextField
@@ -213,7 +217,7 @@ export const ResetPasswordForm = observer(
 						</Link>
 					</div>
 				)}
-			</AuthCard>
+			</Auth.Panel>
 		);
 	},
 );

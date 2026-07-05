@@ -1,6 +1,6 @@
 "use client";
 
-import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
+import { Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";
 
@@ -32,7 +32,7 @@ function DashboardScreenContent() {
 	const t = useT();
 	return (
 		<VStack fullWidth>
-			<PageTitleBar
+			<Screen.Header
 				title="대시보드"
 				description="관리자 대시보드에 오신 것을 환영합니다."
 			/>

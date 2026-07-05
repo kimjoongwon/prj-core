@@ -14,5 +14,4 @@ export * from "./useInquiryDetailHandlers";
 export * from "./useInquiryDetailWebSocket";
 export * from "./useLayout";
 export * from "./useSpaceBootstrap";
-export * from "./useSpaceGuard";
 export * from "./useTaskExerciseAssetBrowser";

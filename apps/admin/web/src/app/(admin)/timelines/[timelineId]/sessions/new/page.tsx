@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "@heroui/react";
 import {
 	useCreateSession,
 	useGetTimelineById,
@@ -12,7 +13,6 @@ import {
 	type TimelineSessionScreenDayOfWeek,
 	type TimelineSessionScreenSessionType,
 } from "@cocrepo/ui";
-import { toast } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -107,9 +107,7 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 					);
 				},
 				onError: () => {
-					toast.danger("등록 실패", {
-						description: "세션 등록 중 오류가 발생했습니다.",
-					});
+					toast.danger("등록 실패", { description: "세션 등록 중 오류가 발생했습니다." });
 				},
 			},
 		);
@@ -122,7 +120,7 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 				timeline?.name ? `${timeline.name}에 세션을 등록합니다.` : undefined
 			}
 			state={state}
-			contentLanguageCode={app.space?.contentLanguageCode}
+			contentLanguageCode={app.contentLanguageCode}
 			actions={
 				<div className="flex gap-2">
 					<Button

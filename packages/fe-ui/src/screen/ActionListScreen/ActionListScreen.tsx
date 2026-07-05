@@ -12,7 +12,7 @@ import {
 	DataGrid,
 	DataGridState,
 	HStack,
-	PageTitleBar,
+	Screen,
 	Section,
 	SectionSurface,
 	useT,
@@ -156,7 +156,7 @@ export const ActionListScreen = observer(
 		}
 		return (
 			<VStack>
-				<PageTitleBar
+				<Screen.Header
 					title="권한 액션 목록"
 					description="역할과 정책에서 허용할 동작 단위를 관리하는 권한 액션 카탈로그입니다."
 					actions={
@@ -204,8 +204,7 @@ const ActionContextPanel = observer(() => {
 			<Section>
 				<Section.Body>
 					<VStack>
-						<PageTitleBar
-							level={2}
+						<Section.Header
 							title="권한 액션 카탈로그"
 							description="액션은 권한 규칙이 사용자의 동작을 판단할 때 참조하는 기준입니다."
 						/>
@@ -296,7 +295,7 @@ const ActionGroupFilterTabs = observer(
 const ActionsScreenFallback = observer(() => {
 	return (
 		<VStack>
-			<PageTitleBar
+			<Screen.Header
 				title="권한 액션 목록"
 				description="역할과 정책에서 허용할 동작 단위를 관리하는 권한 액션 카탈로그입니다."
 			/>

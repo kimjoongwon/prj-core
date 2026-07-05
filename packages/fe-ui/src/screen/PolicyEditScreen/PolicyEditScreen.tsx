@@ -1,6 +1,6 @@
 "use client";
 
-import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
+import { Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
@@ -16,7 +16,6 @@ export type {
 	PolicyFormField,
 	PolicyFormState,
 } from "../../form/PolicyForm";
-
 export interface PolicyEditScreenProps {
 	title: ReactNode;
 	description?: ReactNode;
@@ -51,11 +50,10 @@ export const PolicyEditScreen = observer((props: PolicyEditScreenProps) => {
 		actions,
 		children,
 	} = props;
-
 	if (isLoading) {
 		return (
 			<VStack fullWidth>
-				<PageTitleBar title={title} description={loadingMessage} />
+				<Screen.Header title={title} description={loadingMessage} />
 				<SectionSurface>
 					<Section>
 						<Section.Body>
@@ -69,11 +67,10 @@ export const PolicyEditScreen = observer((props: PolicyEditScreenProps) => {
 			</VStack>
 		);
 	}
-
 	if (notFound || !state) {
 		return (
 			<VStack fullWidth>
-				<PageTitleBar title={title} description={notFoundMessage} />
+				<Screen.Header title={title} description={notFoundMessage} />
 				<SectionSurface>
 					<Section>
 						<Section.Body>
@@ -87,10 +84,13 @@ export const PolicyEditScreen = observer((props: PolicyEditScreenProps) => {
 			</VStack>
 		);
 	}
-
 	return (
 		<VStack fullWidth>
-			<PageTitleBar title={title} description={description} actions={actions} />
+			<Screen.Header
+				title={title}
+				description={description}
+				actions={actions}
+			/>
 			<SectionSurface>
 				<Section>
 					<Section.Body>

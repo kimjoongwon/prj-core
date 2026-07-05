@@ -1,7 +1,6 @@
 export * from "./ActionButtonCell";
 export * from "./BooleanCell/BooleanCell";
 export * from "./ChipCell";
-export * from "./ConfirmActionCell";
 export * from "./DateTimeCell/DateTimeCell";
 export * from "./DefaultCell/DefaultCell";
 export * from "./ExpiryCell/ExpiryCell";

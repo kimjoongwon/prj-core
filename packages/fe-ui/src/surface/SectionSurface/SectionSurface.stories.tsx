@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "../../input/Button/Button";
 import { Section } from "../../layout";
+import { Screen } from "../../layout/Screen";
 import { VStack } from "../../rhythm";
-import { PageTitleBar } from "../../widget/PageTitleBar";
 import { SectionSurface } from "./SectionSurface";
 
 const meta: Meta<typeof SectionSurface> = {
@@ -13,10 +13,8 @@ const meta: Meta<typeof SectionSurface> = {
 	},
 	tags: ["autodocs"],
 };
-
 export default meta;
 type Story = StoryObj<typeof meta>;
-
 export const Default: Story = {
 	args: {
 		children: (
@@ -30,23 +28,19 @@ export const Default: Story = {
 		),
 	},
 };
-
 export const TitledSection: Story = {
 	render: () => (
 		<SectionSurface>
 			<Section>
-				<Section.Header>
-					<PageTitleBar
-						level={2}
-						title="기본 정보"
-						description="제목과 본문 구조는 Section이, 시각 표면은 SectionSurface가 담당합니다."
-						actions={
-							<Button size="sm" variant="flat">
-								편집
-							</Button>
-						}
-					/>
-				</Section.Header>
+				<Section.Header
+					title="기본 정보"
+					description="제목과 본문 구조는 Section이, 시각 표면은 SectionSurface가 담당합니다."
+					actions={
+						<Button size="sm" variant="flat">
+							편집
+						</Button>
+					}
+				/>
 				<Section.Body>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<div>
@@ -63,13 +57,12 @@ export const TitledSection: Story = {
 		</SectionSurface>
 	),
 };
-
 export const ScreenSections: Story = {
 	render: () => (
 		<VStack fullWidth>
-			<PageTitleBar
+			<Screen.Header
 				title="예약 관리"
-				description="PageTitleBar는 screen rhythm에 두고, 각 주요 구획은 SectionSurface로 감쌉니다."
+				description="Screen.Header는 screen rhythm에 두고, 각 주요 구획은 SectionSurface로 감쌉니다."
 				actions={
 					<Button color="primary" size="sm" variant="flat">
 						새로고침
@@ -78,9 +71,7 @@ export const ScreenSections: Story = {
 			/>
 			<SectionSurface>
 				<Section>
-					<Section.Header>
-						<PageTitleBar level={2} title="검색 조건" />
-					</Section.Header>
+					<Section.Header title="검색 조건" />
 					<Section.Body>
 						<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
 							<div className="rounded-lg border border-border/70 bg-white px-3 py-2 text-sm dark:border-white/10 dark:bg-neutral-600">

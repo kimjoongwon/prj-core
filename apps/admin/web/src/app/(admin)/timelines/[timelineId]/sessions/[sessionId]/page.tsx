@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "@heroui/react";
 import {
 	getGetProgramsQueryKey,
 	getGetSessionsQueryKey,
@@ -19,10 +20,9 @@ import {
 	type TimelineSessionScreenDayOfWeek,
 	type TimelineSessionScreenSessionType,
 } from "@cocrepo/ui";
-import { Modal, toast, useOverlayState } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Edit, Trash2 } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
+import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 
@@ -89,12 +89,6 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 	const { timelineId, sessionId } = useParams<SessionDetailPageParams>();
 	const router = useRouter();
 	const queryClient = useQueryClient();
-	const state = useLocalObservable(() => ({
-		deleteProgramTargetId: "",
-		deleteProgramTargetName: "",
-	}));
-	const deleteSessionModal = useOverlayState();
-	const deleteProgramModal = useOverlayState();
 	const { data: sessionResponse, isLoading: isSessionLoading } =
 		useGetSessionById(timelineId, sessionId);
 	const session = sessionResponse?.data as SessionDto | undefined;
@@ -121,30 +115,24 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 	const unresolvedPrograms = totalPrograms - resolvedPrograms;
 	const { mutate: deleteSession, isPending: isDeletingSession } =
 		useDeleteSession();
-	const { mutate: deleteProgram, isPending: isDeletingProgram } =
-		useDeleteProgram();
+	const { mutate: deleteProgram } = useDeleteProgram();
 
 	const onClickEditButton = () => {
 		router.push(`/timelines/${timelineId}/sessions/${sessionId}/edit` as Route);
 	};
-	const onClickDeleteSessionButton = () => deleteSessionModal.open();
-	const onClickDeleteSessionConfirmButton = () => {
+	const onClickDeleteSessionButton = () => {
 		deleteSession(
 			{ timelineId, sessionId },
 			{
 				onSuccess: () => {
 					toast.success("삭제 성공", { description: "세션이 삭제되었습니다." });
-					deleteSessionModal.close();
 					queryClient.invalidateQueries({
 						queryKey: getGetSessionsQueryKey(timelineId),
 					});
 					router.push(`/timelines/${timelineId}` as Route);
 				},
 				onError: () => {
-					toast.danger("삭제 실패", {
-						description:
-							"세션 삭제 중 오류가 발생했습니다. 프로그램이 연결된 세션은 삭제할 수 없습니다.",
-					});
+					toast.danger("삭제 실패", { description: "세션 삭제 중 오류가 발생했습니다. 프로그램이 연결된 세션은 삭제할 수 없습니다." });
 				},
 			},
 		);
@@ -160,32 +148,18 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 		);
 	};
 	const onClickDeleteProgramButton = (programId: string) => {
-		const program = programs.find((item) => item.id === programId);
-		state.deleteProgramTargetId = programId;
-		state.deleteProgramTargetName = program?.name ?? "";
-		deleteProgramModal.open();
-	};
-	const onClickDeleteProgramConfirmButton = () => {
-		if (!state.deleteProgramTargetId) return;
 		deleteProgram(
-			{ timelineId, sessionId, programId: state.deleteProgramTargetId },
+			{ timelineId, sessionId, programId },
 			{
 				onSuccess: () => {
-					toast.success("삭제 성공", {
-						description: "프로그램이 삭제되었습니다.",
-					});
-					deleteProgramModal.close();
-					state.deleteProgramTargetId = "";
-					state.deleteProgramTargetName = "";
+					toast.success("삭제 성공", { description: "프로그램이 삭제되었습니다." });
 					queryClient.invalidateQueries({
 						queryKey: getGetProgramsQueryKey(timelineId, sessionId),
 					});
 					refetchPrograms();
 				},
 				onError: () => {
-					toast.danger("삭제 실패", {
-						description: "프로그램 삭제 중 오류가 발생했습니다.",
-					});
+					toast.danger("삭제 실패", { description: "프로그램 삭제 중 오류가 발생했습니다." });
 				},
 			},
 		);
@@ -225,9 +199,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 				metadata={{
 					typeLabel: session ? getSessionTypeLabel(session.type) : undefined,
 					typeColor: session ? getSessionTypeColor(session.type) : undefined,
-					recurringDayLabel: getDayLabel(
-						session?.recurringDayOfWeek ?? null,
-					),
+					recurringDayLabel: getDayLabel(session?.recurringDayOfWeek ?? null),
 					repeatCycleLabel: getCycleLabel(session?.repeatCycleType ?? null),
 					timelineName: session?.timeline?.name,
 					timelineHref: `/timelines/${timelineId}` as Route,
@@ -262,6 +234,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 							color="danger"
 							variant="flat"
 							startContent={<Trash2 className="h-4 w-4" />}
+							isLoading={isDeletingSession}
 							onPress={onClickDeleteSessionButton}
 						>
 							삭제
@@ -272,70 +245,6 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 				onClickEditProgramButton={onClickEditProgramButton}
 				onClickDeleteProgramButton={onClickDeleteProgramButton}
 			/>
-			<Modal state={deleteSessionModal}>
-				<Modal.Backdrop>
-					<Modal.Container>
-						<Modal.Dialog>
-							<Modal.Header>세션 삭제</Modal.Header>
-							<Modal.Body>
-								<p>
-									<strong>{session?.name}</strong> 세션을 삭제하시겠습니까?
-								</p>
-								<p className="mt-2 text-sm text-danger">
-									프로그램이 연결된 세션은 삭제할 수 없습니다.
-								</p>
-							</Modal.Body>
-							<Modal.Footer>
-								<Button
-									variant="flat"
-									onPress={deleteSessionModal.close}
-									isDisabled={isDeletingSession}
-								>
-									취소
-								</Button>
-								<Button
-									color="danger"
-									onPress={onClickDeleteSessionConfirmButton}
-									isLoading={isDeletingSession}
-								>
-									삭제
-								</Button>
-							</Modal.Footer>
-						</Modal.Dialog>
-					</Modal.Container>
-				</Modal.Backdrop>
-			</Modal>
-			<Modal state={deleteProgramModal}>
-				<Modal.Backdrop>
-					<Modal.Container>
-						<Modal.Dialog>
-							<Modal.Header>프로그램 삭제</Modal.Header>
-							<Modal.Body>
-								<p>
-									<strong>{state.deleteProgramTargetName}</strong> 프로그램을
-									삭제하시겠습니까?
-								</p>
-							</Modal.Body>
-							<Modal.Footer>
-								<Button
-									variant="flat"
-									onPress={deleteProgramModal.close}
-									isDisabled={isDeletingProgram}
-								>
-									취소
-								</Button>
-								<Button
-									color="danger"
-									onPress={onClickDeleteProgramConfirmButton}
-									isLoading={isDeletingProgram}
-								>
-									삭제
-								</Button>
-							</Modal.Footer>
-						</Modal.Dialog>
-					</Modal.Container>
-				</Modal.Backdrop>
-			</Modal>
 		</>
 	);
 });

@@ -1,4 +1,8 @@
+"use client";
+
+import { Card } from "@heroui/react";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import { translateNode, useT } from "../../i18n";
 
 export interface AuthProps extends ComponentPropsWithoutRef<"div"> {
 	children?: ReactNode;
@@ -23,6 +27,21 @@ type AuthMainProps = ComponentPropsWithoutRef<"main"> & {
 type AuthFooterProps = ComponentPropsWithoutRef<"footer"> & {
 	children?: ReactNode;
 };
+
+export interface AuthPanelProps {
+	children: ReactNode;
+	className?: string;
+	variant?: "primary" | "danger";
+}
+
+export interface AuthPanelHeaderProps {
+	icon?: ReactNode;
+	title: ReactNode;
+	titleClassName?: string;
+	subtitle?: ReactNode;
+	logoUri?: string;
+	logoAlt?: string;
+}
 
 const joinClassNames = (...classNames: Array<string | false | undefined>) =>
 	classNames.filter(Boolean).join(" ");
@@ -139,12 +158,87 @@ export const AuthFooter = ({
 	);
 };
 
+/**
+ * AuthPanel
+ * 인증 전 화면의 입력/상태 콘텐츠를 담는 패널입니다.
+ */
+export const AuthPanel = ({
+	children,
+	className,
+	variant = "primary",
+}: AuthPanelProps) => {
+	const toneClass =
+		variant === "danger"
+			? "border-danger/35 bg-white/92 text-slate-950 ring-1 ring-danger/10 shadow-[0_20px_60px_-32px_rgba(220,38,38,0.20)] dark:border-danger/40 dark:bg-slate-950/92 dark:text-slate-50 dark:ring-danger/15 dark:shadow-[0_24px_72px_-36px_rgba(248,113,113,0.22)]"
+			: "border-slate-200/80 bg-white/92 text-slate-950 shadow-[0_24px_80px_-36px_rgba(15,23,42,0.18)] dark:border-white/10 dark:bg-slate-950/92 dark:text-slate-50 dark:shadow-[0_24px_72px_-40px_rgba(0,0,0,0.72)]";
+
+	return (
+		<Card
+			className={joinClassNames(
+				"w-full rounded-[28px] border p-6 backdrop-blur-xl sm:p-8",
+				toneClass,
+				className,
+			)}
+		>
+			{children}
+		</Card>
+	);
+};
+
+/**
+ * AuthPanelHeader
+ * 인증 패널 상단의 아이콘/로고, 제목, 설명 영역입니다.
+ */
+export const AuthPanelHeader = ({
+	icon,
+	title,
+	titleClassName,
+	subtitle,
+	logoUri,
+	logoAlt,
+}: AuthPanelHeaderProps) => {
+	const t = useT();
+	const translatedTitle = translateNode(title, t);
+	const translatedSubtitle = subtitle ? translateNode(subtitle, t) : null;
+	const titleToneClass =
+		titleClassName ?? "text-slate-950 dark:text-slate-50";
+	const visual = logoUri ? (
+		<img
+			src={logoUri}
+			alt={logoAlt ?? String(translatedTitle)}
+			className="h-12 w-12 rounded-2xl border border-slate-200/80 bg-white/70 object-cover shadow-sm dark:border-white/10 dark:bg-white/[0.04]"
+		/>
+	) : icon ? (
+		<div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200/80 bg-white/70 shadow-sm dark:border-white/10 dark:bg-white/[0.04]">
+			{icon}
+		</div>
+	) : null;
+
+	return (
+		<div className="mb-8 flex items-start gap-4">
+			{visual ? <div className="shrink-0">{visual}</div> : null}
+			<div className="min-w-0">
+				<h1 className={`text-2xl font-semibold tracking-tight ${titleToneClass}`}>
+					{translatedTitle}
+				</h1>
+				{translatedSubtitle ? (
+					<p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+						{translatedSubtitle}
+					</p>
+				) : null}
+			</div>
+		</div>
+	);
+};
+
 export const Auth = Object.assign(AuthRoot, {
 	Header: AuthHeader,
 	Body: AuthBody,
 	Aside: AuthAside,
 	Main: AuthMain,
 	Footer: AuthFooter,
+	Panel: AuthPanel,
+	PanelHeader: AuthPanelHeader,
 });
 
 AuthHeader.displayName = "Auth.Header";
@@ -152,3 +246,5 @@ AuthBody.displayName = "Auth.Body";
 AuthAside.displayName = "Auth.Aside";
 AuthMain.displayName = "Auth.Main";
 AuthFooter.displayName = "Auth.Footer";
+AuthPanel.displayName = "Auth.Panel";
+AuthPanelHeader.displayName = "Auth.PanelHeader";

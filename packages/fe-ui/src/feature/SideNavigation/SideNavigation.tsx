@@ -3,7 +3,7 @@
 import { useLayout } from "@cocrepo/hook";
 import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";
-import { SidePanel } from "../../widget/SidePanel";
+import { SidePanel } from "./SidePanel";
 
 const NAV_ITEM_COPY: Record<string, string> = {
 	dashboard: "운영 상태와 최근 지표를 빠르게 확인합니다.",

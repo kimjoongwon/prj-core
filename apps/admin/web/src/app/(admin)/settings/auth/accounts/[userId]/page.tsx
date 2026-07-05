@@ -21,7 +21,6 @@ import {
 	AccountDetailScreen,
 	type AccountDetailScreenAccessGrantForm,
 	type AccountDetailScreenAccount,
-	type AccountDetailScreenModalAction,
 	type AccountDetailScreenOption,
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
@@ -34,8 +33,6 @@ export default observer(function AccountDetailScreenRoute() {
 	const userId = useParams<{ userId: string }>().userId;
 	const router = useRouter();
 	const queryClient = useQueryClient();
-	const [modalAction, setModalAction] =
-		useState<AccountDetailScreenModalAction>(null);
 	const [accessGrantForm, setAccessGrantForm] =
 		useState<AccountDetailScreenAccessGrantForm>({
 			spaceId: "",
@@ -120,7 +117,6 @@ export default observer(function AccountDetailScreenRoute() {
 				isUnlocking={isUnlocking}
 				isForceResetting={isForceResetting}
 				isInvalidating={isInvalidating}
-				modalAction={modalAction}
 				onClickBackButton={() => {
 					router.push("/settings/auth/accounts" as Route);
 				}}
@@ -142,31 +138,14 @@ export default observer(function AccountDetailScreenRoute() {
 						data: accessGrantForm,
 					});
 				}}
-				onClickOpenUnlockModal={() => {
-					setModalAction("unlock");
+				onClickUnlockAccountButton={() => {
+					unlockAccount({ userId });
 				}}
-				onClickOpenForceResetPasswordModal={() => {
-					setModalAction("forceResetPassword");
+				onClickForceResetPasswordButton={() => {
+					forceResetPassword({ userId });
 				}}
-				onClickOpenInvalidateSessionsModal={() => {
-					setModalAction("invalidateSessions");
-				}}
-				onCloseModal={() => {
-					setModalAction(null);
-				}}
-				onClickConfirmModal={() => {
-					switch (modalAction) {
-						case "unlock":
-							unlockAccount({ userId });
-							break;
-						case "forceResetPassword":
-							forceResetPassword({ userId });
-							break;
-						case "invalidateSessions":
-							invalidateSessions({ userId });
-							break;
-					}
-					setModalAction(null);
+				onClickInvalidateSessionsButton={() => {
+					invalidateSessions({ userId });
 				}}
 			/>
 		</>

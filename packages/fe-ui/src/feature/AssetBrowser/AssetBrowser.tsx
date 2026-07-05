@@ -11,6 +11,7 @@ import { Modal, useOverlayState } from "@heroui/react";
 import { Upload } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
+import { AssetPreviewDialog } from "../../data-display/AssetPreview";
 import {
 	buildAssetTableColumns,
 	DataGrid,
@@ -20,53 +21,71 @@ import { EmptyState } from "../../feedback";
 import { useT } from "../../i18n";
 import { Button } from "../../input/Button/Button";
 import { TextField } from "../../input/TextField/TextField";
+import { Screen } from "../../layout/Screen";
 import { Surface } from "../../surface";
-import { AssetPreviewDialog } from "../../widget/AssetPreview";
-import { FolderTree, type FolderTreeItem } from "../../widget/FolderTree";
-import { PageTitleBar } from "../../widget/PageTitleBar";
+import { FolderTree, type FolderTreeItem } from "./FolderTree";
 
 const searchInputConfig: InputConfig = {
 	type: "search",
 	id: "search",
 	placeholder: "파일명 검색...",
 };
-
 const kindInputConfig: InputConfig = {
 	type: "select",
 	id: "kind",
 	placeholder: "타입",
 	props: {
 		options: [
-			{ label: "전체", value: "" },
-			{ label: "이미지", value: "IMAGE" },
-			{ label: "비디오", value: "VIDEO" },
-			{ label: "문서", value: "DOCUMENT" },
+			{
+				label: "전체",
+				value: "",
+			},
+			{
+				label: "이미지",
+				value: "IMAGE",
+			},
+			{
+				label: "비디오",
+				value: "VIDEO",
+			},
+			{
+				label: "문서",
+				value: "DOCUMENT",
+			},
 		],
 	},
 };
-
 const statusInputConfig: InputConfig = {
 	type: "select",
 	id: "status",
 	placeholder: "상태",
 	props: {
 		options: [
-			{ label: "전체", value: "" },
-			{ label: "업로드 중", value: "UPLOADING" },
-			{ label: "완료", value: "READY" },
-			{ label: "실패", value: "FAILED" },
+			{
+				label: "전체",
+				value: "",
+			},
+			{
+				label: "업로드 중",
+				value: "UPLOADING",
+			},
+			{
+				label: "완료",
+				value: "READY",
+			},
+			{
+				label: "실패",
+				value: "FAILED",
+			},
 		],
 	},
 };
-
 const manageLeftInputs: InputConfig[] = [
 	searchInputConfig,
 	kindInputConfig,
 	statusInputConfig,
 ];
-
 const pickerLeftInputs: InputConfig[] = [searchInputConfig];
-
 export const assetBrowserQueryInputs: InputConfig[] = [
 	...manageLeftInputs,
 	{
@@ -75,7 +94,6 @@ export const assetBrowserQueryInputs: InputConfig[] = [
 		placeholder: "폴더",
 	},
 ];
-
 export interface AssetBrowserQueryStates extends DataGridQueryStates {
 	take: number;
 	skip: number;
@@ -84,14 +102,10 @@ export interface AssetBrowserQueryStates extends DataGridQueryStates {
 	status: string;
 	folderId: string;
 }
-
 export type AssetBrowserSetQueryStates = DataGridSetQueryStates;
-
 export type AssetBrowserMode = "manage" | "picker";
 export type AssetBrowserPresentation = "inline" | "modal";
-
 export type AssetBrowserAsset = AssetDto;
-
 export interface AssetBrowserProps {
 	mode: AssetBrowserMode;
 	presentation?: AssetBrowserPresentation;
@@ -123,16 +137,12 @@ export interface AssetBrowserProps {
 	onRenameFolder: (input: { folderId: string; name: string }) => Promise<void>;
 	onDeleteFolder: (folderId: string) => Promise<void>;
 }
-
 const assetsLayoutClassName =
 	"grid min-h-[520px] grid-cols-1 gap-5 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-6";
-
 const assetsSidebarPanelClassName =
 	"overflow-hidden rounded-[1.25rem] border border-border/70 bg-default/70 shadow-sm";
-
 const assetsGridPanelClassName =
 	"min-w-0 rounded-[1.25rem] border border-border/70 bg-surface/85 px-4 py-4 shadow-sm sm:px-5 sm:py-5";
-
 const getAssetEmptyMessage = (
 	folders: FolderTreeItem[],
 	selectedFolderId: string | null,
@@ -141,17 +151,14 @@ const getAssetEmptyMessage = (
 	if (!selectedFolderId) {
 		return t("등록된 에셋이 없습니다.");
 	}
-
 	const selectedFolder = folders.find(
 		(folder) => folder.id === selectedFolderId,
 	);
 	if (!selectedFolder) {
 		return t("선택한 폴더에 등록된 에셋이 없습니다.");
 	}
-
 	return `${selectedFolder.name} ${t("폴더에 등록된 에셋이 없습니다.")}`;
 };
-
 export function isUploadActionDisabled({
 	isSpaceReady,
 	hasSelectedSpace,
@@ -162,7 +169,6 @@ export function isUploadActionDisabled({
 >) {
 	return !isSpaceReady || !hasSelectedSpace || isUploadingAsset;
 }
-
 export function getUploadRequirementMessage(
 	selectedFolderId: string | null,
 	folderCount: number,
@@ -170,12 +176,10 @@ export function getUploadRequirementMessage(
 	if (selectedFolderId) {
 		return null;
 	}
-
 	return folderCount > 0
 		? "업로드할 폴더를 먼저 선택해주세요."
 		: "업로드하려면 먼저 폴더를 생성해주세요.";
 }
-
 function AssetsGridFallback({
 	queryStates,
 	setQueryStates,
@@ -188,9 +192,12 @@ function AssetsGridFallback({
 	leftInputs: InputConfig[];
 }) {
 	const gridState = useLocalObservable(
-		() => new DataGridState({ queryStates, setQueryStates }),
+		() =>
+			new DataGridState({
+				queryStates,
+				setQueryStates,
+			}),
 	);
-
 	useEffect(() => {
 		gridState.syncQuery(queryStates, setQueryStates);
 	}, [gridState, queryStates, setQueryStates]);
@@ -215,7 +222,6 @@ function AssetsGridFallback({
 		</div>
 	);
 }
-
 function AssetsSpaceEmptyState() {
 	return (
 		<div className="rounded-[1.25rem] border border-dashed border-border/70 bg-default/60 p-8 md:p-10">
@@ -227,7 +233,6 @@ function AssetsSpaceEmptyState() {
 		</div>
 	);
 }
-
 export const AssetBrowser = observer(
 	({
 		mode,
@@ -259,16 +264,18 @@ export const AssetBrowser = observer(
 	}: AssetBrowserProps) => {
 		const t = useT();
 		const gridState = useLocalObservable(
-			() => new DataGridState({ queryStates, setQueryStates }),
+			() =>
+				new DataGridState({
+					queryStates,
+					setQueryStates,
+				}),
 		);
-
 		useEffect(() => {
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
 		const fileInputRef = useRef<HTMLInputElement | null>(null);
 		const createFolderModal = useOverlayState();
 		const renameFolderModal = useOverlayState();
-		const deleteFolderModal = useOverlayState();
 		const browserModalState = useOverlayState({
 			isOpen,
 			onOpenChange: (open) => {
@@ -297,77 +304,70 @@ export const AssetBrowser = observer(
 		>(null);
 		const [previewingAsset, setPreviewingAsset] =
 			useState<AssetBrowserAsset | null>(null);
-
 		const visibleLeftInputs =
 			mode === "picker" ? pickerLeftInputs : manageLeftInputs;
-
 		const onResetCreateFolderForm = () => {
 			setNewFolderName("");
 			setNewFolderNameError(null);
 		};
-
 		const onResetRenameFolderForm = () => {
 			setRenameFolderName("");
 			setRenameFolderNameError(null);
 			setActiveFolder(null);
 		};
-
 		const onCloseCreateFolderModal = () => {
 			if (isCreatingFolder) {
 				return;
 			}
-
 			createFolderModal.close();
 			onResetCreateFolderForm();
 		};
-
 		const onCloseRenameFolderModal = () => {
 			if (isUpdatingFolder) {
 				return;
 			}
-
 			renameFolderModal.close();
 			onResetRenameFolderForm();
 		};
-
-		const onCloseDeleteFolderModal = () => {
-			if (isRemovingFolder) {
-				return;
-			}
-
-			deleteFolderModal.close();
-			setActiveFolder(null);
-		};
-
 		const onClickCreateFolderButton = () => {
 			setUploadRequirementMessage(null);
 			onResetCreateFolderForm();
 			createFolderModal.open();
 		};
-
 		const onClickRenameFolderButton = (folder: FolderTreeItem) => {
 			setActiveFolder(folder);
 			setRenameFolderName(folder.name);
 			setRenameFolderNameError(null);
 			renameFolderModal.open();
 		};
-
-		const onClickDeleteFolderButton = (folder: FolderTreeItem) => {
-			setActiveFolder(folder);
-			deleteFolderModal.open();
+		const onClickDeleteFolderButton = async (folder: FolderTreeItem) => {
+			if (isRemovingFolder) {
+				return;
+			}
+			try {
+				await onDeleteFolder(folder.id);
+				void setQueryStates({
+					folderId: folder.parentFolderId ?? "",
+					skip: 0,
+				});
+			} catch {
+				return;
+			}
 		};
-
 		const onClickCreateFolderSubmitButton = async () => {
 			const trimmedFolderName = newFolderName.trim();
 			if (!trimmedFolderName) {
 				setNewFolderNameError("폴더명을 입력해주세요.");
 				return;
 			}
-
 			try {
 				await onCreateFolder({
 					name: trimmedFolderName,
-					...(selectedFolderId ? { parentFolderId: selectedFolderId } : {}),
+					...(selectedFolderId
+						? {
+								parentFolderId: selectedFolderId,
+							}
+						: {}),
 				});
 				createFolderModal.close();
 				onResetCreateFolderForm();
@@ -375,18 +375,15 @@ export const AssetBrowser = observer(
 				return;
 			}
 		};
-
 		const onClickRenameFolderSubmitButton = async () => {
 			const trimmedFolderName = renameFolderName.trim();
 			if (!trimmedFolderName) {
 				setRenameFolderNameError("폴더명을 입력해주세요.");
 				return;
 			}
-
 			if (!activeFolder) {
 				return;
 			}
-
 			try {
 				await onRenameFolder({
 					folderId: activeFolder.id,
@@ -398,25 +395,6 @@ export const AssetBrowser = observer(
 				return;
 			}
 		};
-
-		const onClickDeleteFolderConfirmButton = async () => {
-			if (!activeFolder) {
-				return;
-			}
-
-			try {
-				await onDeleteFolder(activeFolder.id);
-				deleteFolderModal.close();
-				setActiveFolder(null);
-				void setQueryStates({
-					folderId: activeFolder.parentFolderId ?? "",
-					skip: 0,
-				});
-			} catch {
-				return;
-			}
-		};
-
 		const onClickUploadButton = () => {
 			if (!selectedFolderId) {
 				setUploadRequirementMessage(
@@ -424,38 +402,30 @@ export const AssetBrowser = observer(
 				);
 				return;
 			}
-
 			setUploadRequirementMessage(null);
 			fileInputRef.current?.click();
 		};
-
 		const onChangeAssetFileInput = (event: ChangeEvent<HTMLInputElement>) => {
 			const selectedFile = event.target.files?.[0];
 			event.target.value = "";
 			if (!selectedFile || !selectedFolderId) {
 				return;
 			}
-
 			setUploadRequirementMessage(null);
 			void onUploadAsset(selectedFile, selectedFolderId);
 		};
-
 		const onClickDeleteAssetButton = (assetId: string) => {
 			if (previewingAsset?.id === assetId) {
 				setPreviewingAsset(null);
 			}
-
 			void onDeleteAsset(assetId);
 		};
-
 		const onClickPreviewAssetButton = (asset: AssetBrowserAsset) => {
 			setPreviewingAsset(asset);
 		};
-
 		const onClickSelectAssetButton = (asset: AssetBrowserAsset) => {
 			void onSelectAsset?.(asset);
 		};
-
 		const onSelectFolder = (folder: FolderTreeItem | null) => {
 			setUploadRequirementMessage(null);
 			void setQueryStates({
@@ -463,7 +433,6 @@ export const AssetBrowser = observer(
 				skip: 0,
 			});
 		};
-
 		const columns = buildAssetTableColumns<AssetBrowserAsset>({
 			isRemoving,
 			onClickDeleteAssetButton,
@@ -474,7 +443,6 @@ export const AssetBrowser = observer(
 			onClickSelectAssetButton,
 		});
 		const emptyMessage = getAssetEmptyMessage(folders, selectedFolderId, t);
-
 		const browserContent = (
 			<>
 				<Surface className="overflow-hidden rounded-[1.75rem] border-border/80 bg-surface/75">
@@ -536,7 +504,6 @@ export const AssetBrowser = observer(
 				/>
 			</>
 		);
-
 		const overlayModals = (
 			<>
 				<Modal state={createFolderModal}>
@@ -627,51 +594,8 @@ export const AssetBrowser = observer(
 						</Modal.Container>
 					</Modal.Backdrop>
 				</Modal>
-
-				<Modal state={deleteFolderModal}>
-					<Modal.Backdrop>
-						<Modal.Container size="md">
-							<Modal.Dialog>
-								<Modal.Header>{t("폴더 삭제")}</Modal.Header>
-								<Modal.Body>
-									<div className="space-y-2">
-										<p className="text-sm text-foreground">
-											{t("선택한 폴더를 삭제하시겠습니까?")}
-										</p>
-										<p className="text-sm text-muted">
-											{t(
-												"하위 폴더와 에셋이 있는 경우 서버 정책에 따라 삭제가 거부될 수 있습니다.",
-											)}
-										</p>
-										{activeFolder ? (
-											<div className="rounded-lg bg-default px-3 py-2 text-sm font-medium">
-												{activeFolder.name}
-											</div>
-										) : null}
-									</div>
-								</Modal.Body>
-								<Modal.Footer>
-									<Button
-										variant="flat"
-										onPress={onCloseDeleteFolderModal}
-										isDisabled={isRemovingFolder}
-									>
-										취소
-									</Button>
-									<Button
-										color="danger"
-										onPress={onClickDeleteFolderConfirmButton}
-									>
-										삭제
-									</Button>
-								</Modal.Footer>
-							</Modal.Dialog>
-						</Modal.Container>
-					</Modal.Backdrop>
-				</Modal>
 			</>
 		);
-
 		const uploadAction = (
 			<div className="flex flex-col items-end gap-1">
 				<Button
@@ -694,7 +618,6 @@ export const AssetBrowser = observer(
 				) : null}
 			</div>
 		);
-
 		if (presentation === "modal") {
 			return (
 				<>
@@ -703,7 +626,7 @@ export const AssetBrowser = observer(
 							<Modal.Container size="full" scroll="inside">
 								<Modal.Dialog>
 									<Modal.Header className="flex-col items-stretch gap-0">
-										<PageTitleBar
+										<Screen.Header
 											title={title}
 											description={description}
 											actions={uploadAction}
@@ -720,11 +643,10 @@ export const AssetBrowser = observer(
 				</>
 			);
 		}
-
 		return (
 			<>
 				<div className="space-y-6 md:space-y-7">
-					<PageTitleBar
+					<Screen.Header
 						title={title}
 						description={description}
 						actions={uploadAction}

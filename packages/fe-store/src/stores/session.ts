@@ -15,7 +15,7 @@ export class Session {
 	}
 
 	get isAuthenticated(): boolean {
-		return !this.app.space?.isAccessTokenExpired;
+		return !this.app.space.isAccessTokenExpired;
 	}
 
 	async handleAuthError(error: unknown) {

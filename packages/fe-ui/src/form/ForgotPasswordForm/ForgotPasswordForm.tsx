@@ -1,11 +1,11 @@
 "use client";
 
+import { CheckCircle, Mail } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { AlertBanner } from "../../feedback/AlertBanner/AlertBanner";
+import { Alert } from "../../feedback/Alert/Alert";
 import { useT } from "../../i18n";
 import { Button, Link, TextField } from "../../input";
-import { AuthCard } from "../../widget/AuthCard/AuthCard";
-import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
+import { Auth } from "../../layout/Auth";
 
 export interface ForgotPasswordFormState {
 	email: string;
@@ -30,9 +30,9 @@ export const ForgotPasswordForm = observer(
 		const t = useT();
 
 		return (
-			<AuthCard>
-				<AuthCardHeader
-					iconPath="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+			<Auth.Panel>
+				<Auth.PanelHeader
+					icon={<Mail className="h-6 w-6 text-accent" />}
 					title="비밀번호 찾기"
 					subtitle="예약 계정에 등록한 이메일 주소를 입력하세요"
 				/>
@@ -42,19 +42,7 @@ export const ForgotPasswordForm = observer(
 					<form className="space-y-5">
 						<div className="text-center">
 							<div className="w-16 h-16 bg-success/20 rounded-full mx-auto mb-4 flex items-center justify-center">
-								<svg
-									className="w-8 h-8 text-success"
-									fill="none"
-									stroke="currentColor"
-									viewBox="0 0 24 24"
-								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										strokeWidth={2}
-										d="M5 13l4 4L19 7"
-									/>
-								</svg>
+								<CheckCircle className="h-8 w-8 text-success" />
 							</div>
 							<h2 className="text-lg font-semibold mb-2">
 								{t("이메일을 확인하세요")}
@@ -82,7 +70,7 @@ export const ForgotPasswordForm = observer(
 					/* 이메일 입력 폼 */
 					<>
 						{state.errorMessage && (
-							<AlertBanner type="danger" message={t(state.errorMessage)} />
+							<Alert status="danger" description={t(state.errorMessage)} />
 						)}
 
 						<form className="space-y-5">
@@ -120,7 +108,7 @@ export const ForgotPasswordForm = observer(
 						{t("로그인으로 돌아가기")}
 					</Link>
 				</div>
-			</AuthCard>
+			</Auth.Panel>
 		);
 	},
 );

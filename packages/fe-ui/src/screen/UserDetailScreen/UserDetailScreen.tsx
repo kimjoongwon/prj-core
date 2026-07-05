@@ -1,6 +1,6 @@
 "use client";
 
-import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
+import { Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { Spinner } from "@heroui/react";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -39,7 +39,7 @@ export const UserDetailScreen = observer(
 		if (isLoading) {
 			return (
 				<VStack fullWidth>
-					<PageTitleBar
+					<Screen.Header
 						title="회원 상세"
 						description="회원 정보를 불러오는 중입니다."
 					/>
@@ -58,7 +58,7 @@ export const UserDetailScreen = observer(
 		}
 		return (
 			<VStack fullWidth>
-				<PageTitleBar
+				<Screen.Header
 					title={`회원 상세: ${titleName}`}
 					description="회원 기본 정보를 확인합니다."
 					actions={
@@ -73,9 +73,7 @@ export const UserDetailScreen = observer(
 				/>
 				<SectionSurface>
 					<Section>
-						<Section.Header>
-							<PageTitleBar level={2} title="기본 정보" />
-						</Section.Header>
+						<Section.Header title="기본 정보" />
 						<Section.Body>
 							<div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
 								<Info label="회원 ID" value={user?.id || userId} />

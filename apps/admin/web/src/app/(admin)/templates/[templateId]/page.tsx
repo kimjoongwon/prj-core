@@ -11,14 +11,14 @@ import {
 } from "@cocrepo/api/core/templates";
 import {
 	Button,
-	PreviewModal,
-	type PreviewResult,
-	SendTestModal,
 	TemplateActions,
 	TemplateEditScreen,
 	type TemplateFormState,
+	TemplatePreviewModal,
+	type TemplatePreviewResult,
+	TemplateSendTestModal,
 } from "@cocrepo/ui";
-import { Modal, toast, useOverlayState } from "@heroui/react";
+import { useOverlayState, toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -46,7 +46,6 @@ const AdminTemplatesTemplateIdRoute = observer(() => {
 	const { templateId } = useParams<TemplateDetailRouteParams>();
 	const router = useRouter();
 	const queryClient = useQueryClient();
-	const deleteModal = useOverlayState();
 	const previewModal = useOverlayState();
 	const sendTestModal = useOverlayState();
 	const { data: response, isLoading } = useGetTemplate(templateId);
@@ -62,27 +61,22 @@ const AdminTemplatesTemplateIdRoute = observer(() => {
 			}))
 		: [];
 
-	const { mutate: deleteTemplate, isPending: isDeleting } = useDeleteTemplate();
+	const { mutate: deleteTemplate } = useDeleteTemplate();
 	const { mutate: toggleStatus, isPending: isToggling } =
 		useToggleTemplateStatus();
 	const { mutateAsync: previewTemplate } = usePreviewTemplate();
 	const { mutateAsync: sendTestTemplate } = useSendTestTemplate();
 
-	const onClickDeleteConfirmButton = () => {
+	const onClickDeleteButton = () => {
 		deleteTemplate(
 			{ templateId },
 			{
 				onSuccess: () => {
-					toast.success("삭제 성공", {
-						description: "템플릿이 삭제되었습니다.",
-					});
-					deleteModal.close();
+					toast.success("삭제 성공", { description: "템플릿이 삭제되었습니다." });
 					router.push("/templates" as Route);
 				},
 				onError: (error) => {
-					toast.danger("삭제 실패", {
-						description: error.message || "삭제 중 오류가 발생했습니다.",
-					});
+					toast.danger("삭제 실패", { description: error.message || "삭제 중 오류가 발생했습니다." });
 				},
 			},
 		);
@@ -93,17 +87,13 @@ const AdminTemplatesTemplateIdRoute = observer(() => {
 			{ templateId },
 			{
 				onSuccess: () => {
-					toast.success("상태 변경 성공", {
-						description: "템플릿 상태가 변경되었습니다.",
-					});
+					toast.success("상태 변경 성공", { description: "템플릿 상태가 변경되었습니다." });
 					queryClient.invalidateQueries({
 						queryKey: getGetTemplateQueryKey(templateId),
 					});
 				},
 				onError: (error) => {
-					toast.danger("상태 변경 실패", {
-						description: error.message || "상태 변경 중 오류가 발생했습니다.",
-					});
+					toast.danger("상태 변경 실패", { description: error.message || "상태 변경 중 오류가 발생했습니다." });
 				},
 			},
 		);
@@ -112,12 +102,12 @@ const AdminTemplatesTemplateIdRoute = observer(() => {
 	const onSubmitPreviewTemplate = async (
 		tplId: string,
 		variables: Record<string, string>,
-	): Promise<PreviewResult> => {
+	): Promise<TemplatePreviewResult> => {
 		const result = await previewTemplate({
 			templateId: tplId,
 			data: { variables },
 		});
-		return (result as { data: PreviewResult }).data;
+		return (result as { data: TemplatePreviewResult }).data;
 	};
 
 	const onSubmitSendTestTemplate = async (
@@ -178,7 +168,7 @@ const AdminTemplatesTemplateIdRoute = observer(() => {
 								onEdit={() => {
 									router.push(`/templates/${templateId}/edit` as Route);
 								}}
-								onDelete={deleteModal.open}
+								onDelete={onClickDeleteButton}
 								onToggle={onClickToggleButton}
 								onPreview={previewModal.open}
 								onSendTest={sendTestModal.open}
@@ -221,44 +211,8 @@ const AdminTemplatesTemplateIdRoute = observer(() => {
 				) : null}
 			</TemplateEditScreen>
 			{template ? (
-				<Modal state={deleteModal}>
-					<Modal.Backdrop>
-						<Modal.Container>
-							<Modal.Dialog>
-								<Modal.Header>Template 삭제</Modal.Header>
-								<Modal.Body>
-									<p>
-										<strong>{template.name}</strong> Template을
-										삭제하시겠습니까?
-									</p>
-									<p className="mt-2 text-sm text-danger">
-										이 작업은 되돌릴 수 없습니다.
-									</p>
-								</Modal.Body>
-								<Modal.Footer>
-									<Button
-										variant="flat"
-										onPress={deleteModal.close}
-										isDisabled={isDeleting}
-									>
-										취소
-									</Button>
-									<Button
-										color="danger"
-										onPress={onClickDeleteConfirmButton}
-										isLoading={isDeleting}
-									>
-										삭제
-									</Button>
-								</Modal.Footer>
-							</Modal.Dialog>
-						</Modal.Container>
-					</Modal.Backdrop>
-				</Modal>
-			) : null}
-			{template ? (
 				<>
-					<PreviewModal
+					<TemplatePreviewModal
 						isOpen={previewModal.isOpen}
 						onClose={previewModal.close}
 						templateId={templateId}
@@ -266,7 +220,7 @@ const AdminTemplatesTemplateIdRoute = observer(() => {
 						variables={variablesForModal}
 						onPreview={onSubmitPreviewTemplate}
 					/>
-					<SendTestModal
+					<TemplateSendTestModal
 						isOpen={sendTestModal.isOpen}
 						onClose={sendTestModal.close}
 						templateId={templateId}

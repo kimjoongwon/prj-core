@@ -5,7 +5,7 @@
 ### 비밀번호 정책
 
 **위치**: `packages/be-common/src/utils/password-policy.ts`
-**공유**: 백엔드 검증 + 프론트엔드 PasswordStrengthIndicator 표시용
+**공유**: 백엔드 검증 + 프론트엔드 비밀번호 폼 표시용
 
 ```typescript
 interface PasswordPolicyResult {
@@ -432,7 +432,7 @@ describe("전체 세션 무효화", () => {
 ### 프론트엔드 테스트
 
 ```
-describe("PasswordStrengthIndicator", () => {
+describe("비밀번호 정책 표시", () => {
   it("빈 비밀번호에서 모든 규칙이 미달 표시되어야 한다")
   it("모든 규칙 충족 시 모든 항목이 통과 표시되어야 한다")
   it("각 규칙이 독립적으로 통과/미달 표시되어야 한다")
@@ -440,7 +440,7 @@ describe("PasswordStrengthIndicator", () => {
 
 describe("LoginForm 강화", () => {
   it("실패 시 남은 시도 횟수가 표시되어야 한다")
-  it("일시 잠금 시 AlertBanner와 잠금 해제 시간이 표시되어야 한다")
+  it("일시 잠금 시 Alert와 잠금 해제 시간이 표시되어야 한다")
   it("영구 잠금 시 비밀번호 재설정/관리자 문의 링크가 표시되어야 한다")
   it("비밀번호를 잊으셨나요 링크가 /forgot-password로 이동해야 한다")
 })
@@ -454,7 +454,7 @@ describe("ForgotPasswordForm", () => {
 describe("ResetPasswordForm", () => {
   it("유효한 토큰이면 비밀번호 입력 폼이 표시되어야 한다")
   it("만료된 토큰이면 만료 메시지와 다시 요청 링크가 표시되어야 한다")
-  it("비밀번호 입력 중 PasswordStrengthIndicator가 업데이트되어야 한다")
+  it("비밀번호 입력 중 비밀번호 정책 표시가 업데이트되어야 한다")
   it("비밀번호 불일치 시 에러 메시지가 표시되어야 한다")
 })
 
@@ -489,7 +489,7 @@ describe("SessionCard", () => {
 9. PasswordHistory 모델 + Prisma migrate
 10. 이메일 서비스 (packages/be-service, Nodemailer + SMTP)
 11. PasswordResetModule (idp-server: 요청/검증/실행)
-12. PasswordStrengthIndicator 위젯 (packages/fe-ui)
+12. 비밀번호 정책 표시 (packages/fe-ui)
 13. /forgot-password 페이지 (idp-client)
 14. /reset-password/[token] 페이지 (idp-client)
 15. 비밀번호 변경 API (main server)
@@ -547,7 +547,7 @@ describe("SessionCard", () => {
 | `apps/core/api/src/module/password-reset/` | 신규 모듈 |
 | `apps/admin/web/src/app/auth/(flow)/forgot-password/` | 신규 페이지 |
 | `apps/admin/web/src/app/auth/(flow)/reset-password/[token]/` | 신규 페이지 |
-| `packages/fe-ui/src/widget/PasswordStrengthIndicator/` | 신규 |
+| 각 비밀번호 입력 Form 내부 | 비밀번호 정책 표시 |
 | `apps/admin/web/src/app/(admin)/my-account/change-password/` | 신규 페이지 |
 
 ### Phase 3

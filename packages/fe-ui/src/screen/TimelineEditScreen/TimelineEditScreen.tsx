@@ -4,27 +4,22 @@ import { Table } from "@heroui/react";
 import { Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { DateTimeCell } from "../../data-grid/cell";
 import { Chip } from "../../data-display/Chip/Chip";
-import {
-	TimelineForm,
-	type TimelineFormState,
-} from "../../form/TimelineForm";
+import { DateTimeCell } from "../../data-grid/cell";
+import { TimelineForm, type TimelineFormState } from "../../form/TimelineForm";
 import { Button } from "../../input/Button/Button";
 import { Section } from "../../layout";
+import { Screen } from "../../layout/Screen";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
-import { PageTitleBar } from "../../widget/PageTitleBar";
 
 export type {
 	TimelineFormField,
 	TimelineFormState,
 } from "../../form/TimelineForm";
-
 export interface TimelineEditScreenMetadata {
 	createdAt?: string | null;
 }
-
 export interface TimelineEditScreenSessionRow {
 	id: string;
 	name: string;
@@ -37,7 +32,6 @@ export interface TimelineEditScreenSessionRow {
 	repeatCycleLabel: string;
 	createdAt: string;
 }
-
 export interface TimelineEditScreenProps {
 	title: ReactNode;
 	description?: ReactNode;
@@ -88,11 +82,10 @@ export const TimelineEditScreen = observer((props: TimelineEditScreenProps) => {
 		onClickCreateProgramButton,
 		onClickDeleteSessionButton,
 	} = props;
-
 	if (isLoading) {
 		return (
 			<VStack fullWidth>
-				<PageTitleBar title={title} description={loadingMessage} />
+				<Screen.Header title={title} description={loadingMessage} />
 				<SectionSurface>
 					<Section>
 						<Section.Body>
@@ -105,11 +98,10 @@ export const TimelineEditScreen = observer((props: TimelineEditScreenProps) => {
 			</VStack>
 		);
 	}
-
 	if (notFound || !state) {
 		return (
 			<VStack fullWidth>
-				<PageTitleBar title={title} description={notFoundMessage} />
+				<Screen.Header title={title} description={notFoundMessage} />
 				<SectionSurface>
 					<Section>
 						<Section.Body>
@@ -123,18 +115,19 @@ export const TimelineEditScreen = observer((props: TimelineEditScreenProps) => {
 			</VStack>
 		);
 	}
-
 	return (
 		<VStack fullWidth>
-			<PageTitleBar title={title} description={description} actions={actions} />
+			<Screen.Header
+				title={title}
+				description={description}
+				actions={actions}
+			/>
 			<SectionSurface>
 				<Section>
 					<Section.Body>
 						<VStack>
 							<Section>
-								<Section.Header>
-									<PageTitleBar level={2} title="기본 정보" />
-								</Section.Header>
+								<Section.Header title="기본 정보" />
 								<Section.Body>
 									<TimelineForm
 										state={state}
@@ -145,9 +138,7 @@ export const TimelineEditScreen = observer((props: TimelineEditScreenProps) => {
 							</Section>
 							{metadata?.createdAt ? (
 								<Section>
-									<Section.Header>
-										<PageTitleBar level={2} title="관리 정보" />
-									</Section.Header>
+									<Section.Header title="관리 정보" />
 									<Section.Body>
 										<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 											<div>
@@ -162,24 +153,21 @@ export const TimelineEditScreen = observer((props: TimelineEditScreenProps) => {
 							) : null}
 							{sessions ? (
 								<Section>
-									<Section.Header>
-										<PageTitleBar
-											level={2}
-											title="세션 목록"
-											actions={
-												onClickCreateSessionButton ? (
-													<Button
-														color="primary"
-														size="sm"
-														startContent={<Plus className="h-4 w-4" />}
-														onPress={onClickCreateSessionButton}
-													>
-														세션 등록
-													</Button>
-												) : undefined
-											}
-										/>
-									</Section.Header>
+									<Section.Header
+										title="세션 목록"
+										actions={
+											onClickCreateSessionButton ? (
+												<Button
+													color="primary"
+													size="sm"
+													startContent={<Plus className="h-4 w-4" />}
+													onPress={onClickCreateSessionButton}
+												>
+													세션 등록
+												</Button>
+											) : undefined
+										}
+									/>
 									<Section.Body>
 										<div className="grid grid-cols-1 gap-2 px-4 py-3 md:grid-cols-3">
 											<div className="rounded-lg bg-surface-secondary p-3">

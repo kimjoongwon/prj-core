@@ -5,14 +5,10 @@ import {
 } from "@cocrepo/api/core/client";
 import { nativeRefreshToken, useVerifyToken } from "@cocrepo/api/idp/auth";
 import { setIdpNativeRefreshHandler } from "@cocrepo/api/idp/client";
-import { DEFAULT_LANGUAGE, isScopeKindAccessible } from "@cocrepo/constant";
-import {
-	useAbilityBootstrap,
-	useSpaceBootstrapFromApi,
-	useSpaceGuard,
-} from "@cocrepo/hook";
+import { isScopeKindAccessible } from "@cocrepo/constant";
+import { useAbilityBootstrap, useSpaceBootstrapFromApi } from "@cocrepo/hook";
 
-import { DesignSystemProvider, I18nProvider, SpaceAlert } from "@cocrepo/ui";
+import { DesignSystemProvider, I18nProvider } from "@cocrepo/ui";
 import {
 	isServer,
 	QueryClient,
@@ -87,7 +83,7 @@ export const Providers = observer(function Providers({
 								<DesignSystemProvider>
 									<SpaceBootstrapper>
 										<NavigationScopeBootstrapper>
-											<SpaceGuardOverlay>{children}</SpaceGuardOverlay>
+											{children}
 										</NavigationScopeBootstrapper>
 									</SpaceBootstrapper>
 								</DesignSystemProvider>
@@ -107,9 +103,6 @@ const NativeAuthBridge = observer(function NativeAuthBridge({
 }) {
 	const app = useApp();
 	const space = app.space;
-	if (!space) {
-		throw new Error("space가 초기화되지 않았습니다.");
-	}
 
 	useEffect(() => {
 		const refreshNativeSession = async () => {
@@ -148,7 +141,7 @@ const I18nCatalogBootstrapper = observer(function I18nCatalogBootstrapper({
 }) {
 	const app = useApp();
 	const locale = app.locale;
-	const languageCode = locale?.languageCode ?? DEFAULT_LANGUAGE;
+	const languageCode = locale.languageCode;
 	const { data } = useQuery({
 		queryKey: ["core-i18n-catalog", languageCode],
 		queryFn: () =>
@@ -162,8 +155,8 @@ const I18nCatalogBootstrapper = observer(function I18nCatalogBootstrapper({
 	const messages = data?.data?.messages ?? {};
 
 	useEffect(() => {
-		document.documentElement.lang = languageCode.replace("_", "-");
-	}, [languageCode]);
+		document.documentElement.lang = locale.htmlLang;
+	}, [locale.htmlLang]);
 
 	return (
 		<I18nProvider languageCode={languageCode} messages={messages}>
@@ -190,9 +183,6 @@ const AbilityBootstrapper = observer(function AbilityBootstrapper({
 	const app = useApp();
 	const space = app.space;
 	const ability = app.ability;
-	if (!space) {
-		throw new Error("space가 초기화되지 않았습니다.");
-	}
 	const shouldVerifyCurrentTenant =
 		!isAbilitiesDisabled && space.isHydrated && space.isSpaceSelectionResolved;
 	const { data: verifyTokenResponse, isPending: isVerifyingToken } =
@@ -207,10 +197,6 @@ const AbilityBootstrapper = observer(function AbilityBootstrapper({
 	const hasFullAccess = verifyTokenResponse?.data?.hasFullAccess === true;
 
 	useEffect(() => {
-		if (!ability) {
-			return;
-		}
-
 		const rules = resolveAbilityBootstrapRules({
 			abilities,
 			hasFullAccess,
@@ -258,11 +244,6 @@ const NavigationScopeBootstrapper = observer(
 		const app = useApp();
 		const space = app.space;
 		const navigation = app.navigation;
-		if (!space || !navigation) {
-			throw new Error(
-				"Navigation scope에 필요한 app 상태가 초기화되지 않았습니다.",
-			);
-		}
 		const shouldVerifyCurrentTenant =
 			space.isHydrated && space.isSpaceSelectionResolved;
 		const { data: verifyTokenResponse } = useVerifyToken({
@@ -289,23 +270,3 @@ const NavigationScopeBootstrapper = observer(
 		return children;
 	},
 );
-
-/**
- * Space 선택이 필요한 전역 상태를 감지해 overlay alert를 렌더링합니다.
- */
-const SpaceGuardOverlay = observer(function SpaceGuardOverlay({
-	children,
-}: {
-	children: ReactNode;
-}) {
-	const { showAlert, handleConfirm, handleDismiss } = useSpaceGuard();
-
-	return (
-		<>
-			{children}
-			{showAlert ? (
-				<SpaceAlert onConfirm={handleConfirm} onDismiss={handleDismiss} />
-			) : null}
-		</>
-	);
-});

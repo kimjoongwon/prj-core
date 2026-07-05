@@ -29,9 +29,6 @@ export const AccessGate = observer(function AccessGate({
 	const space = app.space;
 	const ability = app.ability;
 	const t = useT();
-	if (!space || !ability) {
-		throw new Error("AccessGate에 필요한 app 상태가 초기화되지 않았습니다.");
-	}
 
 	const shouldVerifyCurrentTenant =
 		space.isHydrated && space.isSpaceSelectionResolved;

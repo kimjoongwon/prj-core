@@ -11,9 +11,8 @@ import {
 	buildStaticTranslationTableColumns,
 	DataGrid,
 	DataGridState,
-	getStaticTranslationLanguageLabel,
 	HStack,
-	PageTitleBar,
+	Screen,
 	Section,
 	SectionSurface,
 	TextArea,
@@ -27,7 +26,6 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import { type FormEvent, useEffect, useState } from "react";
 import { Select } from "../../input/Select/Select";
 import { Switch } from "../../input/Switch/Switch";
-import { ConfirmModal } from "../../widget/ConfirmModal";
 export type StaticTranslationLanguageCode =
 	| "ko_KR"
 	| "en_US"
@@ -54,7 +52,6 @@ export interface StaticTranslationListScreenProps {
 	translations?: TranslationResponseDto[];
 	totalCount: number;
 	isLoading: boolean;
-	isMutating: boolean;
 	queryStates: StaticTranslationListScreenQueryStates;
 	setQueryStates: StaticTranslationListScreenSetQueryStates;
 	onCreateTranslation: (form: StaticTranslationForm) => Promise<void>;
@@ -168,7 +165,6 @@ export const StaticTranslationListScreen = observer(
 		translations,
 		totalCount,
 		isLoading,
-		isMutating,
 		queryStates,
 		setQueryStates,
 		onCreateTranslation,
@@ -186,10 +182,7 @@ export const StaticTranslationListScreen = observer(
 				}),
 		);
 		const formModal = useOverlayState();
-		const deleteModal = useOverlayState();
 		const [editingTranslation, setEditingTranslation] =
-			useState<TranslationResponseDto | null>(null);
-		const [translationToDelete, setTranslationToDelete] =
 			useState<TranslationResponseDto | null>(null);
 		const [form, setForm] = useState<StaticTranslationForm>(createEmptyForm);
 		const rows = translations ?? [];
@@ -204,7 +197,7 @@ export const StaticTranslationListScreen = observer(
 			!form.category.trim();
 		const columns = buildStaticTranslationTableColumns<TranslationResponseDto>({
 			onClickEditButton: handleOpenEditModal,
-			onClickDeleteButton: handleOpenDeleteModal,
+			onClickDeleteButton: handleDeleteTranslation,
 		});
 		useEffect(() => {
 			gridState.syncQuery(queryStates, setQueryStates);
@@ -223,14 +216,6 @@ export const StaticTranslationListScreen = observer(
 			formModal.close();
 			setEditingTranslation(null);
 			setForm(createEmptyForm());
-		}
-		function handleOpenDeleteModal(translation: TranslationResponseDto) {
-			setTranslationToDelete(translation);
-			deleteModal.open();
-		}
-		function handleCloseDeleteModal() {
-			deleteModal.close();
-			setTranslationToDelete(null);
 		}
 		function handleLanguageChange(value: string) {
 			const selected = toStaticTranslationLanguageCode(value);
@@ -287,12 +272,10 @@ export const StaticTranslationListScreen = observer(
 			}
 			handleCloseFormModal();
 		}
-		async function handleConfirmDelete() {
-			if (!translationToDelete) {
-				return;
-			}
-			await onDeleteTranslation(translationToDelete.id);
-			handleCloseDeleteModal();
+		async function handleDeleteTranslation(
+			translation: TranslationResponseDto,
+		) {
+			await onDeleteTranslation(translation.id);
 		}
 		async function handleInvalidateLanguageCache() {
 			if (!selectedLanguageCode) {
@@ -302,7 +285,7 @@ export const StaticTranslationListScreen = observer(
 		}
 		return (
 			<VStack>
-				<PageTitleBar
+				<Screen.Header
 					title="정적 번역"
 					description="admin과 idp에서 사용하는 정적 다국어 key-value를 관리합니다."
 					actions={
@@ -411,32 +394,6 @@ export const StaticTranslationListScreen = observer(
 						</Modal.Container>
 					</Modal.Backdrop>
 				</Modal>
-				<ConfirmModal
-					isOpen={deleteModal.isOpen}
-					onClose={handleCloseDeleteModal}
-					onConfirm={handleConfirmDelete}
-					title="번역 삭제"
-					message={
-						<>
-							<p>
-								<strong>{translationToDelete?.key}</strong>{" "}
-								{t("번역을 삭제하시겠습니까?")}
-							</p>
-							<p className="mt-2 text-sm text-muted">
-								{translationToDelete
-									? getStaticTranslationLanguageLabel(
-											translationToDelete.languageCode,
-										)
-									: ""}{" "}
-								{t("항목이 즉시 삭제됩니다.")}
-							</p>
-						</>
-					}
-					confirmText="삭제"
-					confirmColor="danger"
-					iconType="delete"
-					loading={isMutating}
-				/>
 			</VStack>
 		);
 	},

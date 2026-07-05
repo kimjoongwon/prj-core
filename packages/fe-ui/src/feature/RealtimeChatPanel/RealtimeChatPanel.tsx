@@ -2,12 +2,12 @@
 
 import type { InquiryMessage, InquiryParticipant } from "@cocrepo/type";
 import { Card, ScrollShadow } from "@heroui/react";
+import { Check, CheckCheck, Wifi, WifiOff } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef } from "react";
-import { MessageStatus } from "../../feedback/MessageStatus/MessageStatus";
-import { TypingIndicator } from "../../feedback/TypingIndicator/TypingIndicator";
-import { WebSocketConnectionStatus } from "../../feedback/WebSocketConnectionStatus/WebSocketConnectionStatus";
+import { Chip } from "../../data-display/Chip/Chip";
 import { InquiryReplyForm } from "../../form/InquiryReplyForm";
+import { Button } from "../../input/Button/Button";
 
 export interface RealtimeChatPanelProps {
 	/** 문의 ID */
@@ -44,6 +44,55 @@ interface MessageBubbleProps {
 	message: InquiryMessage;
 	currentUserId?: string;
 }
+
+const formatStatusTime = (value?: Date | string | null) =>
+	value ? new Date(value).toLocaleTimeString() : "";
+
+const renderMessageStatus = (
+	deliveredAt?: Date | string | null,
+	readAt?: Date | string | null,
+) => {
+	if (readAt) {
+		return (
+			<span
+				className="inline-flex items-center text-[10px] text-accent"
+				title={`읽음: ${formatStatusTime(readAt)}`}
+			>
+				<CheckCheck className="size-3" aria-label="읽음" />
+			</span>
+		);
+	}
+
+	if (deliveredAt) {
+		return (
+			<span
+				className="inline-flex items-center text-[10px] text-muted"
+				title={`전달됨: ${formatStatusTime(deliveredAt)}`}
+			>
+				<Check className="size-3" aria-label="전달됨" />
+			</span>
+		);
+	}
+
+	return (
+		<span
+			className="inline-flex items-center text-[10px] text-muted"
+			title="전송 중..."
+		>
+			<Check className="size-3" aria-label="전송 중" />
+		</span>
+	);
+};
+
+const getTypingText = (userNames: string[]) => {
+	if (userNames.length === 1) {
+		return `${userNames[0]}님이 타이핑 중입니다...`;
+	}
+	if (userNames.length === 2) {
+		return `${userNames[0]}님과 ${userNames[1]}님이 타이핑 중입니다...`;
+	}
+	return `${userNames[0]}님 외 ${userNames.length - 1}명이 타이핑 중입니다...`;
+};
 
 const MessageBubble = observer(
 	({ message, currentUserId }: MessageBubbleProps) => {
@@ -90,12 +139,9 @@ const MessageBubble = observer(
 								minute: "2-digit",
 							})}
 						</span>
-						{isCurrentUser && (
-							<MessageStatus
-								deliveredAt={message.deliveredAt}
-								readAt={message.readAt}
-							/>
-						)}
+						{isCurrentUser
+							? renderMessageStatus(message.deliveredAt, message.readAt)
+							: null}
 					</div>
 				</div>
 			</div>
@@ -166,10 +212,34 @@ export const RealtimeChatPanel = observer(
 				{/* 헤더: 연결 상태 */}
 				<Card.Header className="flex items-center justify-between px-4 py-2">
 					<span className="text-sm font-medium text-muted">실시간 채팅</span>
-					<WebSocketConnectionStatus
-						status={isWebSocketConnected ? "connected" : "disconnected"}
-						onReconnect={onReconnect}
-					/>
+					<div className="flex items-center gap-2">
+						<Chip
+							color={isWebSocketConnected ? "success" : "danger"}
+							variant="flat"
+							size="sm"
+							startContent={
+								isWebSocketConnected ? (
+									<Wifi className="size-3" />
+								) : (
+									<WifiOff className="size-3" />
+								)
+							}
+						>
+							{isWebSocketConnected ? "연결됨" : "연결 끊김"}
+						</Chip>
+						{!isWebSocketConnected && onReconnect ? (
+							<Button
+								size="sm"
+								variant="flat"
+								color="danger"
+								onPress={onReconnect}
+								className="h-7 px-2 text-xs"
+								startContent={<Wifi className="size-3" />}
+							>
+								재연결
+							</Button>
+						) : null}
+					</div>
 				</Card.Header>
 
 				{/* 메시지 목록 */}
@@ -185,7 +255,14 @@ export const RealtimeChatPanel = observer(
 					{/* 타이핑 표시 */}
 					{currentTypingUserNames.length > 0 && (
 						<div className="px-4 pb-2">
-							<TypingIndicator userNames={currentTypingUserNames} />
+							<div className="inline-flex items-center gap-1 text-xs text-muted">
+								<span className="inline-flex gap-0.5" aria-hidden>
+									<span className="animate-bounce delay-0">.</span>
+									<span className="animate-bounce delay-100">.</span>
+									<span className="animate-bounce delay-200">.</span>
+								</span>
+								<span>{getTypingText(currentTypingUserNames)}</span>
+							</div>
 						</div>
 					)}
 				</Card.Content>

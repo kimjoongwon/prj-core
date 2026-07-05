@@ -6,4 +6,7 @@ export {
 	AuthFooter,
 	AuthHeader,
 	AuthMain,
+	AuthPanel,
+	AuthPanelHeader,
 } from "./Auth";
+export type { AuthPanelHeaderProps, AuthPanelProps } from "./Auth";

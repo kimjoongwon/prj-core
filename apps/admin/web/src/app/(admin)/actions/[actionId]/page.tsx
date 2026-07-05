@@ -6,7 +6,6 @@ import {
 	useGetActionById,
 } from "@cocrepo/api/core/actions";
 import { ActionEditScreen, type ActionFormState, Button } from "@cocrepo/ui";
-import { Modal, useOverlayState } from "@heroui/react";
 import { ArrowLeft, Edit, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -16,7 +15,6 @@ import type { ReactNode } from "react";
 export default observer(function ActionDetailRoute() {
 	const actionId = useParams<{ actionId: string }>().actionId;
 	const router = useRouter();
-	const deleteModal = useOverlayState();
 	const { data: response, isLoading } = useGetActionById(actionId);
 	const action = response?.data as ActionResponseDto | undefined;
 	const { mutate: deleteAction, isPending: isDeleting } = useDeleteAction({
@@ -87,7 +85,10 @@ export default observer(function ActionDetailRoute() {
 									variant="flat"
 									color="danger"
 									startContent={<Trash2 className="h-4 w-4" />}
-									onPress={deleteModal.open}
+									isLoading={isDeleting}
+									onPress={() => {
+										deleteAction({ id: actionId });
+									}}
 								>
 									삭제
 								</Button>
@@ -120,44 +121,6 @@ export default observer(function ActionDetailRoute() {
 					</SectionLike>
 				) : null}
 			</ActionEditScreen>
-			{action ? (
-				<Modal state={deleteModal}>
-					<Modal.Backdrop>
-						<Modal.Container>
-							<Modal.Dialog>
-								<Modal.Header>Action 삭제</Modal.Header>
-								<Modal.Body>
-									<p>
-										<strong>{action.displayName || action.name}</strong>{" "}
-										Action을 삭제하시겠습니까?
-									</p>
-									<p className="mt-2 text-sm text-danger">
-										이 작업은 되돌릴 수 없습니다.
-									</p>
-								</Modal.Body>
-								<Modal.Footer>
-									<Button
-										variant="flat"
-										onPress={deleteModal.close}
-										isDisabled={isDeleting}
-									>
-										취소
-									</Button>
-									<Button
-										color="danger"
-										onPress={() => {
-											deleteAction({ id: actionId });
-										}}
-										isLoading={isDeleting}
-									>
-										삭제
-									</Button>
-								</Modal.Footer>
-							</Modal.Dialog>
-						</Modal.Container>
-					</Modal.Backdrop>
-				</Modal>
-			) : null}
 		</>
 	);
 });

@@ -9,14 +9,10 @@ import { Skeleton } from "../../feedback/Skeleton/Skeleton";
 import { useT } from "../../i18n";
 import { Button } from "../../input/Button/Button";
 import { Section } from "../../layout";
+import { Screen } from "../../layout/Screen";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
 import { SectionSurface } from "../../surface";
-import {
-	TenantAccessRequestStatusBadge,
-	TenantAccessRequestSummary,
-} from "../../widget";
-import { PageTitleBar } from "../../widget/PageTitleBar";
 export interface TenantAccessRequestReviewListScreenProps {
 	requests?: TenantAccessRequestDto[];
 	totalCount: number;
@@ -43,6 +39,61 @@ function getRoleName(request: TenantAccessRequestDto) {
 		request.requestedRoleId
 	);
 }
+type TenantAccessRequestStatus = TenantAccessRequestDto["status"];
+const STATUS_LABELS: Record<TenantAccessRequestStatus, string> = {
+	PENDING: "대기",
+	APPROVED: "승인",
+	REJECTED: "반려",
+	CANCELED: "취소",
+};
+const STATUS_COLORS: Record<
+	TenantAccessRequestStatus,
+	"warning" | "success" | "danger" | "default"
+> = {
+	PENDING: "warning",
+	APPROVED: "success",
+	REJECTED: "danger",
+	CANCELED: "default",
+};
+function TenantAccessRequestStatusChip({
+	status,
+}: {
+	status: TenantAccessRequestStatus;
+}) {
+	return (
+		<Chip color={STATUS_COLORS[status]} size="sm" variant="flat">
+			{STATUS_LABELS[status]}
+		</Chip>
+	);
+}
+function RequestSummaryCell({
+	spaceName,
+	roleName,
+	requesterName,
+	requesterEmail,
+}: {
+	spaceName: string;
+	roleName: string;
+	requesterName?: string;
+	requesterEmail?: string;
+}) {
+	return (
+		<div className="flex flex-col gap-1">
+			<div className="flex flex-wrap items-center gap-2">
+				<span className="font-medium text-foreground">{spaceName}</span>
+				<Chip size="sm" variant="flat">
+					{roleName}
+				</Chip>
+			</div>
+			{requesterName || requesterEmail ? (
+				<span className="text-sm text-muted">
+					{requesterName ?? requesterEmail}
+					{requesterName && requesterEmail ? ` · ${requesterEmail}` : ""}
+				</span>
+			) : null}
+		</div>
+	);
+}
 export const TenantAccessRequestReviewListScreen = observer(
 	({
 		requests,
@@ -55,7 +106,7 @@ export const TenantAccessRequestReviewListScreen = observer(
 		const requestRows = requests ?? [];
 		return (
 			<VStack>
-				<PageTitleBar
+				<Screen.Header
 					title="접근 승인"
 					description="Space/Role 접근 신청을 검토하고 승인 또는 반려합니다."
 				/>
@@ -93,7 +144,7 @@ export const TenantAccessRequestReviewListScreen = observer(
 								<Section>
 									<Section.Body>
 										<VStack>
-											<PageTitleBar level={2} title="검토 목록" />
+											<Section.Header title="검토 목록" />
 											{isLoading ? (
 												<Skeleton className="h-56 rounded-lg" />
 											) : (
@@ -111,7 +162,7 @@ export const TenantAccessRequestReviewListScreen = observer(
 															{requestRows.map((request) => (
 																<Table.Row key={request.id}>
 																	<Table.Cell>
-																		<TenantAccessRequestSummary
+																		<RequestSummaryCell
 																			spaceName={getSpaceName(request)}
 																			roleName={getRoleName(request)}
 																			requesterName={request.requester?.name}
@@ -119,7 +170,7 @@ export const TenantAccessRequestReviewListScreen = observer(
 																		/>
 																	</Table.Cell>
 																	<Table.Cell>
-																		<TenantAccessRequestStatusBadge
+																		<TenantAccessRequestStatusChip
 																			status={request.status}
 																		/>
 																	</Table.Cell>

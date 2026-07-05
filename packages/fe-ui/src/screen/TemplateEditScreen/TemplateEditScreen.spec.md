@@ -3,7 +3,7 @@
 ## 화면 러프
 
 ```text
-[PageTitleBar: route title / description / actions]
+[Screen.Header: route title / description / actions]
 
 [SectionSurface]
   [TemplateForm]

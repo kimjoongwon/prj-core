@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "@heroui/react";
 import {
 	type AssetDto,
 	getAssetById,
@@ -17,13 +18,11 @@ import {
 	type RoutineFormState,
 	type RoutineTaskCandidate,
 } from "@cocrepo/ui";
-import { toast } from "@heroui/react";
 import { useQueries } from "@tanstack/react-query";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { useApp } from "@/stores/AppProvider";
 
 const toPositiveNumberOr = (value: string, defaultValue: number) => {
@@ -45,8 +44,6 @@ const toNonNegativeNumberOr = (value: string, defaultValue: number) => {
 const AdminRoutinesNewRoute = observer(() => {
 	const router = useRouter();
 	const app = useApp();
-	const [isEmptyActivitiesWarningOpen, setIsEmptyActivitiesWarningOpen] =
-		useState(false);
 	const state = useLocalObservable<RoutineFormState>(() => ({
 		name: "",
 		label: "",
@@ -96,18 +93,14 @@ const AdminRoutinesNewRoute = observer(() => {
 	const { mutate: createRoutine, isPending } = useCreateRoutine({
 		mutation: {
 			onSuccess: (response) => {
-				toast.success("루틴 등록 성공", {
-					description: "루틴이 성공적으로 등록되었습니다.",
-				});
+				toast.success("루틴 등록 성공", { description: "루틴이 성공적으로 등록되었습니다." });
 				const routineId = response?.data?.id;
 				if (routineId) {
 					router.push(`/routines/${routineId}` as Route);
 				}
 			},
 			onError: (error) => {
-				toast.danger("루틴 등록 실패", {
-					description: error.message || "루틴 등록 중 오류가 발생했습니다.",
-				});
+				toast.danger("루틴 등록 실패", { description: error.message || "루틴 등록 중 오류가 발생했습니다." });
 			},
 		},
 	});
@@ -145,10 +138,6 @@ const AdminRoutinesNewRoute = observer(() => {
 				"영상이 없는 운동이 포함되어 있어 루틴을 저장할 수 없습니다.";
 			return;
 		}
-		if (state.activities.length === 0) {
-			setIsEmptyActivitiesWarningOpen(true);
-			return;
-		}
 		submitRoutine();
 	};
 
@@ -157,12 +146,10 @@ const AdminRoutinesNewRoute = observer(() => {
 			title="루틴 등록"
 			description="새로운 운동 루틴을 등록합니다."
 			state={state}
-			contentLanguageCode={app.space?.contentLanguageCode}
+			contentLanguageCode={app.contentLanguageCode}
 			activities={activities}
 			candidateTasks={candidateTasks}
 			isTasksLoading={isTasksLoading}
-			isSubmitting={isPending}
-			isEmptyActivitiesWarningOpen={isEmptyActivitiesWarningOpen}
 			actions={
 				<div className="flex gap-2">
 					<Button
@@ -184,13 +171,6 @@ const AdminRoutinesNewRoute = observer(() => {
 					</Button>
 				</div>
 			}
-			onCloseEmptyActivitiesWarningModal={() => {
-				setIsEmptyActivitiesWarningOpen(false);
-			}}
-			onClickConfirmEmptyActivitiesWarningButton={() => {
-				setIsEmptyActivitiesWarningOpen(false);
-				submitRoutine();
-			}}
 		/>
 	);
 });

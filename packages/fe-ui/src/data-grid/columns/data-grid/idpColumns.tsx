@@ -5,19 +5,20 @@ import type { EmailVerificationDto } from "@cocrepo/api/idp/email-verifications"
 import type { IdpAccountDto } from "@cocrepo/api/idp/idp-accounts";
 import type { OidcClientDto } from "@cocrepo/api/idp/oidc-clients";
 import type { OidcSessionDto } from "@cocrepo/api/idp/oidc-sessions";
+import { AlertDialog } from "@heroui/react";
 import { Ban, Send } from "lucide-react";
+import type { ReactNode } from "react";
+import { Chip } from "../../../data-display/Chip/Chip";
 import { Button } from "../../../input/Button/Button";
+import { Link as HeroLink } from "../../../input/Link/Link";
 import {
 	ActionButtonCell,
 	ChipCell,
-	ConfirmActionCell,
 	DateTimeCell,
 	DefaultCell,
 	ExpiryCell,
 	RowActionsCell,
 } from "../../cell";
-import { Chip } from "../../../data-display/Chip/Chip";
-import { Link as HeroLink } from "../../../input/Link/Link";
 import {
 	buildColumns,
 	buildColumnsWithDefaultCreatedAt,
@@ -70,6 +71,85 @@ const MODEL_TYPE_CONFIG = {
 	DeviceCode: { label: "Device Code", color: "warning" },
 	Interaction: { label: "Interaction", color: "success" },
 } as const;
+
+function AlertDialogActionCell({
+	title,
+	description,
+	confirmLabel,
+	triggerLabel,
+	status = "danger",
+	triggerColor = "danger",
+	triggerVariant = "flat",
+	startContent,
+	isDisabled,
+	className,
+	tooltip,
+	onConfirm,
+}: {
+	title: string;
+	description: string;
+	confirmLabel: string;
+	triggerLabel: ReactNode;
+	status?: "accent" | "success" | "warning" | "danger";
+	triggerColor?: "default" | "primary" | "success" | "warning" | "danger";
+	triggerVariant?: "flat" | "light" | "bordered" | "solid";
+	startContent?: ReactNode;
+	isDisabled?: boolean;
+	className?: string;
+	tooltip?: string;
+	onConfirm: () => void | Promise<void>;
+}) {
+	if (isDisabled) {
+		return (
+			<ActionButtonCell
+				variant={triggerVariant}
+				color={triggerColor}
+				startContent={startContent}
+				isDisabled
+				className={className}
+				title={tooltip}
+			>
+				{triggerLabel}
+			</ActionButtonCell>
+		);
+	}
+
+	return (
+		<AlertDialog>
+			<AlertDialog.Trigger>
+				<ActionButtonCell
+					variant={triggerVariant}
+					color={triggerColor}
+					startContent={startContent}
+					isDisabled={isDisabled}
+					className={className}
+					title={tooltip}
+				>
+					{triggerLabel}
+				</ActionButtonCell>
+			</AlertDialog.Trigger>
+			<AlertDialog.Backdrop>
+				<AlertDialog.Container size="sm">
+					<AlertDialog.Dialog>
+						<AlertDialog.Header>
+							<AlertDialog.Icon status={status} />
+							<AlertDialog.Heading>{title}</AlertDialog.Heading>
+						</AlertDialog.Header>
+						<AlertDialog.Body>{description}</AlertDialog.Body>
+						<AlertDialog.Footer>
+							<Button variant="flat" slot="close">
+								취소
+							</Button>
+							<Button color={triggerColor} slot="close" onPress={onConfirm}>
+								{confirmLabel}
+							</Button>
+						</AlertDialog.Footer>
+					</AlertDialog.Dialog>
+				</AlertDialog.Container>
+			</AlertDialog.Backdrop>
+		</AlertDialog>
+	);
+}
 
 function getAuthMethodConfig(method: string) {
 	return (
@@ -309,11 +389,7 @@ export function buildIdpAccountTableColumns<
 		failedLoginAttempts: number;
 		lastLoginAt?: string | null;
 	},
->({
-	onClickOpenUnlockModal,
-}: {
-	onClickOpenUnlockModal: (account: TRow) => void;
-}) {
+>({ onClickUnlockAccount }: { onClickUnlockAccount: (account: TRow) => void }) {
 	/** IDP Account 목록 페이지용 컬럼 조합을 생성합니다. */
 	return buildColumns<TRow>(
 		createNameColumn<TRow>(),
@@ -369,14 +445,15 @@ export function buildIdpAccountTableColumns<
 				return (
 					<div className="flex items-center justify-center gap-1">
 						{isLocked ? (
-							<Button
-								size="sm"
-								variant="flat"
-								color="primary"
-								onPress={() => onClickOpenUnlockModal(account)}
-							>
-								잠금 해제
-							</Button>
+							<AlertDialogActionCell
+								title="계정 잠금 해제"
+								description="선택한 계정의 로그인 잠금을 해제합니다."
+								confirmLabel="잠금 해제"
+								triggerLabel="잠금 해제"
+								status="accent"
+								triggerColor="primary"
+								onConfirm={() => onClickUnlockAccount(account)}
+							/>
 						) : null}
 						<Button
 							as={HeroLink}
@@ -395,7 +472,7 @@ export function buildIdpAccountTableColumns<
 
 export const idpAccountTableColumns =
 	buildIdpAccountTableColumns<IdpAccountDto>({
-		onClickOpenUnlockModal: () => undefined,
+		onClickUnlockAccount: () => undefined,
 	});
 
 export function buildEmailVerificationTableColumns<
@@ -412,9 +489,9 @@ export function buildEmailVerificationTableColumns<
 		resendAvailableAt?: string | Date | null;
 	},
 >({
-	onClickOpenResendModal,
+	onClickResendEmailVerification,
 }: {
-	onClickOpenResendModal: (verification: TRow) => void;
+	onClickResendEmailVerification: (verification: TRow) => void;
 }) {
 	return buildColumns<TRow>(
 		createEmailColumn<TRow>({
@@ -484,15 +561,17 @@ export function buildEmailVerificationTableColumns<
 				const verification = row.original;
 
 				return (
-					<ActionButtonCell
-						variant="flat"
-						color="primary"
+					<AlertDialogActionCell
+						title="인증 메일 재발송"
+						description="선택한 이메일 인증 요청의 메일을 다시 발송합니다."
+						confirmLabel="재발송"
+						triggerLabel="재발송"
+						status="accent"
+						triggerColor="primary"
 						startContent={<Send className="size-4" />}
 						isDisabled={!verification.canResend}
-						onPress={() => onClickOpenResendModal(verification)}
-					>
-						재발송
-					</ActionButtonCell>
+						onConfirm={() => onClickResendEmailVerification(verification)}
+					/>
 				);
 			},
 		}),
@@ -501,7 +580,7 @@ export function buildEmailVerificationTableColumns<
 
 export const emailVerificationTableColumns =
 	buildEmailVerificationTableColumns<EmailVerificationDto>({
-		onClickOpenResendModal: () => undefined,
+		onClickResendEmailVerification: () => undefined,
 	});
 
 export const authAuditLogCreatedAtColumn =
@@ -655,14 +734,17 @@ export function buildOidcSessionTableColumns<
 					}
 
 					return (
-						<ActionButtonCell
-							variant="light"
+						<AlertDialogActionCell
+							title="Grant 세션/토큰 폐기"
+							description="선택한 Grant의 모든 세션/토큰을 폐기합니다."
+							confirmLabel="폐기"
+							triggerLabel={`${grantId.slice(0, 8)}...`}
+							triggerVariant="light"
+							triggerColor="default"
 							className="font-mono text-sm"
-							title={`${grantId}\n클릭하면 이 Grant의 모든 세션/토큰을 일괄 폐기합니다.`}
-							onPress={() => onClickGrantId(grantId)}
-						>
-							{grantId.slice(0, 8)}...
-						</ActionButtonCell>
+							tooltip={`${grantId}\n클릭하면 이 Grant의 모든 세션/토큰을 일괄 폐기합니다.`}
+							onConfirm={() => onClickGrantId(grantId)}
+						/>
 					);
 				},
 			}),
@@ -677,15 +759,15 @@ export function buildOidcSessionTableColumns<
 			createActionsColumn<TRow>({
 				size: 100,
 				cell: ({ row }) => (
-					<ConfirmActionCell
-						color="danger"
-						variant="flat"
+					<AlertDialogActionCell
+						title="세션/토큰 폐기"
+						description="선택한 OIDC 세션/토큰을 폐기합니다."
+						confirmLabel="폐기"
+						triggerLabel="폐기"
+						triggerColor="danger"
 						startContent={<Ban className="h-3 w-3" />}
-						confirmMessage="이 세션/토큰을 폐기하시겠습니까?"
 						onConfirm={() => onClickRevokeSession(row.original.key)}
-					>
-						폐기
-					</ConfirmActionCell>
+					/>
 				),
 			}),
 		],

@@ -4,7 +4,7 @@ import {
 	BooleanCell,
 	DateTimeCell,
 	DefaultCell,
-	PageTitleBar,
+	Screen,
 	Section,
 	SectionSurface,
 	VStack,
@@ -71,9 +71,7 @@ function SubjectInfoSection({
 	return (
 		<SectionSurface>
 			<Section>
-				<Section.Header>
-					<PageTitleBar level={2} title="기본 정보" />
-				</Section.Header>
+				<Section.Header title="기본 정보" />
 				<Section.Body>
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<div>
@@ -209,9 +207,7 @@ function SubjectFieldsSection({
 	return (
 		<SectionSurface>
 			<Section>
-				<Section.Header>
-					<PageTitleBar level={2} title="필드 목록" />
-				</Section.Header>
+				<Section.Header title="필드 목록" />
 				<Section.Body>{content}</Section.Body>
 			</Section>
 		</SectionSurface>
@@ -228,7 +224,7 @@ export const SubjectDetailScreen = observer(
 		if (isLoading) {
 			return (
 				<VStack fullWidth>
-					<PageTitleBar title="Subject 상세" description="로딩 중..." />
+					<Screen.Header title="Subject 상세" description="로딩 중..." />
 					<SectionSurface>
 						<Section>
 							<Section.Body>
@@ -243,7 +239,7 @@ export const SubjectDetailScreen = observer(
 		}
 		if (!subject) {
 			const pageHeader = (
-				<PageTitleBar
+				<Screen.Header
 					title="Subject 상세"
 					description="Subject를 찾을 수 없습니다."
 				/>
@@ -271,7 +267,7 @@ export const SubjectDetailScreen = observer(
 			);
 		}
 		const pageHeader = (
-			<PageTitleBar
+			<Screen.Header
 				title="Subject 상세"
 				description="Subject의 상세 정보를 조회합니다."
 				actions={

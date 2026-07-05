@@ -8,17 +8,15 @@ import type {
 } from "@cocrepo/type";
 import {
 	buildEmailVerificationTableColumns,
-	ConfirmModal,
 	DataGrid,
 	DataGridState,
-	PageTitleBar,
+	Screen,
 	Section,
 	SectionSurface,
 	VStack,
 } from "@cocrepo/ui";
-import { useOverlayState } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const EMAIL_VERIFICATION_STATUS_OPTIONS = [
 	{
@@ -63,10 +61,9 @@ export interface EmailVerificationListScreenProps {
 	verifications?: EmailVerificationDto[];
 	totalCount: number;
 	isLoading: boolean;
-	isResending: boolean;
 	queryStates: EmailVerificationListScreenQueryStates;
 	setQueryStates: EmailVerificationListScreenSetQueryStates;
-	onConfirmResendEmailVerification: (emailVerificationId: string) => void;
+	onClickResendEmailVerificationButton: (emailVerificationId: string) => void;
 }
 
 /**
@@ -77,10 +74,9 @@ export const EmailVerificationListScreen = observer(
 		verifications,
 		totalCount,
 		isLoading,
-		isResending,
 		queryStates,
 		setQueryStates,
-		onConfirmResendEmailVerification,
+		onClickResendEmailVerificationButton,
 	}: EmailVerificationListScreenProps) => {
 		const gridState = useLocalObservable(
 			() =>
@@ -92,33 +88,18 @@ export const EmailVerificationListScreen = observer(
 		useEffect(() => {
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
-		const resendModal = useOverlayState();
-		const [verificationToResend, setVerificationToResend] =
-			useState<EmailVerificationDto | null>(null);
 		const rows = verifications ?? [];
-		const onClickOpenResendModal = (
+		const onClickResendEmailVerification = (
 			verification: EmailVerificationDto,
 		): void => {
-			setVerificationToResend(verification);
-			resendModal.open();
-		};
-		const onCloseResendModal = (): void => {
-			setVerificationToResend(null);
-			resendModal.close();
-		};
-		const onClickConfirmResend = (): void => {
-			if (!verificationToResend) {
-				return;
-			}
-			onConfirmResendEmailVerification(verificationToResend.id);
-			onCloseResendModal();
+			onClickResendEmailVerificationButton(verification.id);
 		};
 		const columns = buildEmailVerificationTableColumns<EmailVerificationDto>({
-			onClickOpenResendModal,
+			onClickResendEmailVerification,
 		});
 		return (
 			<VStack>
-				<PageTitleBar
+				<Screen.Header
 					title="이메일 인증"
 					description="회원가입 전 이메일 인증 요청과 발송 상태를 관리합니다."
 				/>
@@ -140,27 +121,6 @@ export const EmailVerificationListScreen = observer(
 						</Section.Body>
 					</Section>
 				</SectionSurface>
-				<ConfirmModal
-					isOpen={resendModal.isOpen}
-					onClose={onCloseResendModal}
-					onConfirm={onClickConfirmResend}
-					title="인증 메일 재발송"
-					message={
-						<>
-							<p>
-								<strong>{verificationToResend?.email}</strong> 주소로 인증
-								메일을 다시 발송하시겠습니까?
-							</p>
-							<p className="mt-2 text-sm text-muted">
-								재발송하면 기존 인증 링크는 새 링크로 교체됩니다.
-							</p>
-						</>
-					}
-					confirmText="재발송"
-					confirmColor="primary"
-					iconType="info"
-					loading={isResending}
-				/>
 			</VStack>
 		);
 	},

@@ -24,26 +24,26 @@
   "scripts": {
     "build": "echo 'Build not needed - using source files directly'",
     "start:dev": "echo 'Development mode - no build needed'",
-    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-space.mjs",
-    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-space.mjs --fix",
+    "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
+    "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
     "format": "biome check --write .",
     "type-check": "tsc --noEmit -p tsconfig.typecheck.json",
     "type-check:prod": "tsc --noEmit",
     "test": "vitest",
     "test:watch": "vitest --watch",
     "clean": "rm -rf .turbo && rm -rf node_modules",
-    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-space.mjs --prod"
+    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
   },
   "author": "kimjoongwon",
   "license": "ISC",
   "peerDependencies": {
-    "@cocrepo/api": "space:*"
+    "@cocrepo/api": "workspace:*"
   },
   "dependencies": {
     "@casl/ability": "^6.7.3",
-    "@cocrepo/constant": "space:*",
-    "@cocrepo/toolkit": "space:*",
-    "@cocrepo/type": "space:*"
+    "@cocrepo/constant": "workspace:*",
+    "@cocrepo/toolkit": "workspace:*",
+    "@cocrepo/type": "workspace:*"
   },
   "devDependencies": {
     "@casl/ability": "^6.7.1",

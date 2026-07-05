@@ -5,7 +5,7 @@
 ### Desktop / Tablet / Mobile
 
 ```text
-[PageTitleBar: route가 전달한 title, description, actions]
+[Screen.Header: route가 전달한 title, description, actions]
 
 [SectionSurface]
   [ActionForm]

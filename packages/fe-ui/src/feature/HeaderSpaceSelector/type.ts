@@ -1,4 +1,4 @@
-import type { SpaceInfo } from "../../widget/SpaceSelectorDropdown";
+import type { SpaceInfo } from "@cocrepo/store";
 
 /**
  * HeaderSpaceSelector에서 사용하는 Space 데이터 인터페이스

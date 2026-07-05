@@ -72,16 +72,6 @@ describe("Session", () => {
 			expect(expiredSession.isAuthenticated).toBe(false);
 		});
 
-		it("space가 없으면 true를 반환해야 함", () => {
-			// Given - space 없이 새 인스턴스 생성
-			const noSpaceApp = {
-				space: undefined,
-			} as unknown as AppStore;
-			const noSpaceSession = new Session(noSpaceApp);
-
-			// Then
-			expect(noSpaceSession.isAuthenticated).toBe(true);
-		});
 	});
 
 	describe("handleAuthError 메서드", () => {

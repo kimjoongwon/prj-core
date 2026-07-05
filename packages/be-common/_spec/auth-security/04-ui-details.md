@@ -108,17 +108,17 @@ model PasswordHistory {
 
 ### 공통 위젯 (packages/fe-ui)
 
-#### PasswordStrengthIndicator
+#### 비밀번호 정책 표시
 
 | 항목 | 내용 |
 |------|------|
-| **유형** | Widget |
-| **위치** | `packages/fe-ui/src/widget/PasswordStrengthIndicator/` |
+| **유형** | Form inline UI |
+| **위치** | 각 비밀번호 입력 Form 내부 |
 | **용도** | 비밀번호 정책 실시간 검증 표시 |
 | **사용 위치** | 비밀번호 재설정, 비밀번호 변경, 첫 로그인 변경 |
 
 ```tsx
-interface PasswordStrengthIndicatorProps {
+interface PasswordPolicyDisplayProps {
   password: string;
 }
 
@@ -225,7 +225,7 @@ interface SessionCardProps {
 
 **상태**:
 - `validating` → 토큰 검증 중 (로딩)
-- `valid` → 비밀번호 입력 폼 + PasswordStrengthIndicator
+- `valid` → 비밀번호 입력 폼 + 비밀번호 정책 표시
 - `expired` → 만료 메시지 + 다시 요청 링크
 - `used` → 이미 사용된 토큰 메시지
 
@@ -284,8 +284,8 @@ interface UserSecurityActionsProps {
 
 | Phase | 유형 | 이름 | 위치 | 설명 |
 |-------|------|------|------|------|
-| 1 | Widget | AuthAlertBanner | fe-ui | 잠금/에러 경고 배너 |
-| 2 | Widget | PasswordStrengthIndicator | fe-ui | 비밀번호 정책 실시간 검증 |
+| 1 | Feedback | Alert | fe-ui | 잠금/에러 경고 |
+| 2 | Form inline UI | 비밀번호 정책 표시 | fe-ui | 비밀번호 정책 실시간 검증 |
 | 2 | Feature | ForgotPasswordForm | idp-client | 비밀번호 찾기 폼 |
 | 2 | Feature | ResetPasswordForm | idp-client | 비밀번호 재설정 폼 |
 | 2 | Feature | ChangePasswordForm | fe-ui | 비밀번호 변경 폼 |

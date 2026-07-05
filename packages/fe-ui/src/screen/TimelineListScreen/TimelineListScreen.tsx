@@ -10,14 +10,13 @@ import {
 	buildTimelineTableColumns,
 	DataGrid,
 	DataGridState,
-	PageTitleBar,
+	Screen,
 	Section,
 	SectionSurface,
 } from "@cocrepo/ui";
-import { Modal, useOverlayState } from "@heroui/react";
 import { Plus } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Button } from "../../input/Button/Button";
 
 const leftInputs: InputConfig[] = [
@@ -38,7 +37,6 @@ export interface TimelineListScreenProps {
 	timelines?: TimelineDto[];
 	totalCount: number;
 	isLoading: boolean;
-	isDeleting: boolean;
 	queryStates: TimelineListScreenQueryStates;
 	setQueryStates: TimelineListScreenSetQueryStates;
 	onClickCreateButton: () => void;
@@ -47,7 +45,7 @@ export interface TimelineListScreenProps {
 function TimelinesScreenFallback() {
 	return (
 		<div className="space-y-5">
-			<PageTitleBar
+			<Screen.Header
 				title="타임라인"
 				description="학기/시즌 단위 타임라인을 관리합니다."
 			/>
@@ -64,7 +62,6 @@ export const TimelineListScreen = observer(
 		timelines,
 		totalCount,
 		isLoading,
-		isDeleting,
 		queryStates,
 		setQueryStates,
 		onClickCreateButton,
@@ -81,17 +78,8 @@ export const TimelineListScreen = observer(
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
 		const timelineRows = timelines ?? [];
-		const [deleteTarget, setDeleteTarget] = useState<TimelineDto | null>(null);
-		const deleteModal = useOverlayState();
 		const onClickDeleteIcon = (timelineId: string) => {
-			const targetTimeline = timelineRows.find(
-				(timeline) => timeline.id === timelineId,
-			);
-			if (!targetTimeline) {
-				return;
-			}
-			setDeleteTarget(targetTimeline);
-			deleteModal.open();
+			void onDeleteTimeline(timelineId);
 		};
 		const columns = buildTimelineTableColumns<TimelineDto>({
 			onClickDeleteButton: onClickDeleteIcon,
@@ -101,7 +89,7 @@ export const TimelineListScreen = observer(
 		}
 		return (
 			<div className="space-y-5">
-				<PageTitleBar
+				<Screen.Header
 					title="타임라인"
 					description="학기/시즌 단위 타임라인을 관리합니다."
 					actions={
@@ -131,47 +119,6 @@ export const TimelineListScreen = observer(
 						</Section.Body>
 					</Section>
 				</SectionSurface>
-				<Modal state={deleteModal}>
-					<Modal.Backdrop>
-						<Modal.Container>
-							<Modal.Dialog>
-								<Modal.Header>타임라인 삭제</Modal.Header>
-								<Modal.Body>
-									<p>
-										<strong>{deleteTarget?.name}</strong> 타임라인을
-										삭제하시겠습니까?
-									</p>
-									<p className="mt-2 text-sm text-danger">
-										세션이 있는 타임라인은 삭제할 수 없습니다.
-									</p>
-								</Modal.Body>
-								<Modal.Footer>
-									<Button
-										variant="flat"
-										onPress={deleteModal.close}
-										isDisabled={isDeleting}
-									>
-										취소
-									</Button>
-									<Button
-										color="danger"
-										onPress={() => {
-											if (!deleteTarget) {
-												return;
-											}
-											void onDeleteTimeline(deleteTarget.id).then(() => {
-												deleteModal.close();
-												setDeleteTarget(null);
-											});
-										}}
-									>
-										삭제
-									</Button>
-								</Modal.Footer>
-							</Modal.Dialog>
-						</Modal.Container>
-					</Modal.Backdrop>
-				</Modal>
 			</div>
 		);
 	},

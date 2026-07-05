@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { RoutineListScreen } from "./RoutineListScreen";
 
 const defaultArgs = {
-	isDeleting: false,
 	isLoading: false,
 	onClickCreateButton: (..._args: never[]) => undefined,
 	onClickRoutineName: (..._args: never[]) => undefined,
@@ -29,11 +28,6 @@ const loadingArgs = {
 	isLoading: true,
 };
 
-const busyArgs = {
-	...defaultArgs,
-	isDeleting: true,
-};
-
 const emptyStateArgs = {
 	...defaultArgs,
 	routines: [],
@@ -58,10 +52,6 @@ export const Default: Story = {};
 
 export const Loading: Story = {
 	args: loadingArgs as never,
-};
-
-export const Busy: Story = {
-	args: busyArgs as never,
 };
 
 export const EmptyState: Story = {

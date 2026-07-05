@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "../../input/Button/Button";
 import { Screen, Section } from "../../layout";
 import { VStack } from "../../rhythm";
-import { PageTitleBar } from "../../widget/PageTitleBar";
 import { SectionSurface } from "../SectionSurface";
 import { ScreenSurface } from "./ScreenSurface";
 
@@ -30,7 +29,7 @@ export const ScreenOwnedHierarchy: Story = {
 		<Screen>
 			<ScreenSurface>
 				<VStack fullWidth>
-					<PageTitleBar
+					<Screen.Header
 						key="title"
 						title="에셋 관리"
 						description="screen rhythm 안에서 타이틀과 SectionSurface를 배치합니다."
@@ -42,13 +41,10 @@ export const ScreenOwnedHierarchy: Story = {
 					/>
 					<SectionSurface key="queue">
 						<Section>
-							<Section.Header>
-								<PageTitleBar
-									level={2}
-									title="업로드 대기열"
-									description="section의 시각 표면은 SectionSurface가 담당합니다."
-								/>
-							</Section.Header>
+							<Section.Header
+								title="업로드 대기열"
+								description="section의 시각 표면은 SectionSurface가 담당합니다."
+							/>
 							<Section.Body>
 								<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
 									<div className="rounded-lg border border-border/70 bg-white p-4 dark:border-white/10 dark:bg-neutral-600">
@@ -76,7 +72,7 @@ export const MultipleScreenSections: Story = {
 	render: () => (
 		<ScreenSurface>
 			<VStack fullWidth>
-				<PageTitleBar
+				<Screen.Header
 					key="title"
 					title="문의 생성"
 					description="하나의 screen은 여러 SectionSurface를 가질 수 있습니다."
@@ -88,9 +84,7 @@ export const MultipleScreenSections: Story = {
 				/>
 				<SectionSurface key="basic">
 					<Section>
-						<Section.Header>
-							<PageTitleBar level={2} title="기본 정보" />
-						</Section.Header>
+						<Section.Header title="기본 정보" />
 						<Section.Body>
 							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 								<label className="flex flex-col gap-2 text-sm">
@@ -111,14 +105,12 @@ export const MultipleScreenSections: Story = {
 				</SectionSurface>
 				<SectionSurface key="body">
 					<Section>
-						<Section.Header>
-							<PageTitleBar level={2} title="본문" />
-							</Section.Header>
-							<Section.Body>
-								<div className="min-h-28 rounded-lg border border-border/70 bg-white p-4 text-sm text-muted dark:border-white/10 dark:bg-neutral-600">
+						<Section.Header title="본문" />
+						<Section.Body>
+							<div className="min-h-28 rounded-lg border border-border/70 bg-white p-4 text-sm text-muted dark:border-white/10 dark:bg-neutral-600">
 								예약 취소 가능 시간을 확인하고 싶습니다.
-								</div>
-							</Section.Body>
+							</div>
+						</Section.Body>
 					</Section>
 				</SectionSurface>
 			</VStack>

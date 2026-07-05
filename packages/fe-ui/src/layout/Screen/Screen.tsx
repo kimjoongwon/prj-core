@@ -1,4 +1,5 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import { Typography } from "../../data-display/Typography";
 
 export interface ScreenProps extends ComponentPropsWithoutRef<"div"> {
 	children?: ReactNode;
@@ -6,6 +7,16 @@ export interface ScreenProps extends ComponentPropsWithoutRef<"div"> {
 
 type ScreenSlotProps = ComponentPropsWithoutRef<"div"> & {
 	children?: ReactNode;
+};
+
+export type ScreenHeaderProps = Omit<
+	ComponentPropsWithoutRef<"div">,
+	"title"
+> & {
+	children?: ReactNode;
+	title?: ReactNode;
+	description?: ReactNode;
+	actions?: ReactNode;
 };
 
 const joinClassNames = (...classNames: Array<string | false | undefined>) =>
@@ -29,9 +40,33 @@ const ScreenRoot = ({ children, className, ...props }: ScreenProps) => {
 	);
 };
 
-const ScreenHeader = ({ children, className, ...props }: ScreenSlotProps) => {
+const ScreenHeader = ({
+	children,
+	className,
+	title,
+	description,
+	actions,
+	...props
+}: ScreenHeaderProps) => {
+	const hasHeaderContent = Boolean(title || description || actions);
+
 	return (
 		<div {...props} className={joinClassNames("min-w-0", className)}>
+			{hasHeaderContent && (
+				<div className="flex items-start justify-between gap-4">
+					<div className="min-w-0 flex-1">
+						{title && (
+							<Typography.Heading level={1}>{title}</Typography.Heading>
+						)}
+						{description && (
+							<Typography.Paragraph className="mt-1" color="muted" size="base">
+								{description}
+							</Typography.Paragraph>
+						)}
+					</div>
+					{actions && <div className="shrink-0">{actions}</div>}
+				</div>
+			)}
 			{children}
 		</div>
 	);

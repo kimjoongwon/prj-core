@@ -2,19 +2,36 @@
 
 import { ArrowLeft, Check, X } from "lucide-react";
 import { observer } from "mobx-react-lite";
+import { Chip } from "../../data-display/Chip/Chip";
 import { Skeleton } from "../../feedback/Skeleton/Skeleton";
 import { Button } from "../../input/Button/Button";
 import { TextArea } from "../../input/TextArea/TextArea";
 import { Section } from "../../layout";
+import { Screen } from "../../layout/Screen";
 import { HStack } from "../../rhythm/HStack/HStack";
 import { VStack } from "../../rhythm/VStack/VStack";
 import { SectionSurface } from "../../surface";
-import {
-	type TenantAccessRequestStatus,
-	TenantAccessRequestStatusBadge,
-	TenantAccessRequestSummary,
-} from "../../widget";
-import { PageTitleBar } from "../../widget/PageTitleBar";
+
+type TenantAccessRequestStatus =
+	| "PENDING"
+	| "APPROVED"
+	| "REJECTED"
+	| "CANCELED";
+const STATUS_LABELS: Record<TenantAccessRequestStatus, string> = {
+	PENDING: "대기",
+	APPROVED: "승인",
+	REJECTED: "반려",
+	CANCELED: "취소",
+};
+const STATUS_COLORS: Record<
+	TenantAccessRequestStatus,
+	"warning" | "success" | "danger" | "default"
+> = {
+	PENDING: "warning",
+	APPROVED: "success",
+	REJECTED: "danger",
+	CANCELED: "default",
+};
 export interface TenantAccessRequestReviewDetail {
 	id: string;
 	status: TenantAccessRequestStatus;
@@ -65,6 +82,44 @@ function DetailItem({
 		</VStack>
 	);
 }
+function TenantAccessRequestStatusChip({
+	status,
+}: {
+	status: TenantAccessRequestStatus;
+}) {
+	return (
+		<Chip color={STATUS_COLORS[status]} size="sm" variant="flat">
+			{STATUS_LABELS[status]}
+		</Chip>
+	);
+}
+function RequestSummaryBlock({
+	spaceName,
+	roleName,
+	requesterName,
+	requesterEmail,
+}: {
+	spaceName: string;
+	roleName: string;
+	requesterName?: string;
+	requesterEmail?: string;
+}) {
+	return (
+		<div className="flex flex-col gap-1">
+			<div className="flex flex-wrap items-center gap-2">
+				<span className="font-medium text-foreground">{spaceName}</span>
+				<Chip size="sm" variant="flat">
+					{roleName}
+				</Chip>
+			</div>
+			<span className="text-sm text-muted">
+				{requesterName || requesterEmail
+					? `${requesterName ?? requesterEmail}${requesterName && requesterEmail ? ` · ${requesterEmail}` : ""}`
+					: "-"}
+			</span>
+		</div>
+	);
+}
 export const TenantAccessRequestReviewDetailScreen = observer(
 	({
 		request,
@@ -79,7 +134,7 @@ export const TenantAccessRequestReviewDetailScreen = observer(
 		onClickRejectButton,
 	}: TenantAccessRequestReviewDetailScreenProps) => (
 		<VStack>
-			<PageTitleBar
+			<Screen.Header
 				title="접근 신청 상세"
 				description="신청 내용을 확인하고 승인 또는 반려합니다."
 				actions={
@@ -108,13 +163,13 @@ export const TenantAccessRequestReviewDetailScreen = observer(
 												fullWidth
 												className="flex-wrap"
 											>
-												<TenantAccessRequestSummary
+												<RequestSummaryBlock
 													spaceName={request.spaceName}
 													roleName={request.roleName}
 													requesterName={request.requesterName}
 													requesterEmail={request.requesterEmail}
 												/>
-												<TenantAccessRequestStatusBadge
+												<TenantAccessRequestStatusChip
 													status={request.status}
 												/>
 											</HStack>
@@ -139,7 +194,7 @@ export const TenantAccessRequestReviewDetailScreen = observer(
 								<Section>
 									<Section.Body>
 										<VStack>
-											<PageTitleBar level={2} title="검토" />
+											<Section.Header title="검토" />
 											<TextArea
 												label="검토 코멘트"
 												labelPlacement="outside"

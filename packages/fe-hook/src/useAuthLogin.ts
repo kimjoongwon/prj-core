@@ -21,9 +21,6 @@ export interface UseAuthLoginOptions {
 export function useAuthLogin({ router }: UseAuthLoginOptions) {
 	const app = useApp();
 	const space = app.space;
-	if (!space) {
-		throw new Error("space가 초기화되지 않았습니다.");
-	}
 	const defaultLoginCredentials = getDefaultLoginCredentials();
 	const state = useLocalObservable(() => ({
 		loginForm: {

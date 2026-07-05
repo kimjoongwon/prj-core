@@ -1,4 +1,5 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import { Typography } from "../../data-display/Typography";
 
 export type SectionInset = "section" | "compact" | "none";
 export type SectionOverflow = "visible" | "hidden";
@@ -16,6 +17,16 @@ export interface SectionProps extends ComponentPropsWithoutRef<"section"> {
 
 type SectionSlotProps = ComponentPropsWithoutRef<"div"> & {
 	children?: ReactNode;
+};
+
+export type SectionHeaderProps = Omit<
+	ComponentPropsWithoutRef<"div">,
+	"title"
+> & {
+	children?: ReactNode;
+	title?: ReactNode;
+	description?: ReactNode;
+	actions?: ReactNode;
 };
 
 const sectionInsetClassNames: Record<SectionInset, string> = {
@@ -114,13 +125,39 @@ const SectionRoot = ({
 	);
 };
 
-const SectionHeader = ({ children, className, ...props }: SectionSlotProps) => {
+const SectionHeader = ({
+	children,
+	className,
+	title,
+	description,
+	actions,
+	...props
+}: SectionHeaderProps) => {
+	const hasHeaderContent = Boolean(title || description || actions);
+
 	return (
 		<div
 			{...props}
 			data-section-slot="header"
 			className={joinClassNames("min-w-0 md:col-span-full", className)}
 		>
+			{hasHeaderContent && (
+				<div className="flex items-start justify-between gap-4">
+					<div className="min-w-0 flex-1">
+						{title && (
+							<Typography.Heading className="font-semibold" level={2}>
+								{title}
+							</Typography.Heading>
+						)}
+						{description && (
+							<Typography.Paragraph className="mt-1" color="muted" size="sm">
+								{description}
+							</Typography.Paragraph>
+						)}
+					</div>
+					{actions && <div className="shrink-0">{actions}</div>}
+				</div>
+			)}
 			{children}
 		</div>
 	);

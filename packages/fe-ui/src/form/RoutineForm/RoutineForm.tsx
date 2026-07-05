@@ -1,23 +1,24 @@
 "use client";
 
-import { Spinner } from "@heroui/react";
+import { Card, Spinner } from "@heroui/react";
+import { ImageIcon, PlayCircle } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { ComponentProps } from "react";
 import { DraggableSortableList, DragHandle } from "../../data-display";
 import { Chip } from "../../data-display/Chip/Chip";
+import {
+	getContentLanguageLabel,
+	toContentLanguageCode,
+} from "../../data-display/content-language";
+import { Alert } from "../../feedback/Alert/Alert";
 import { Button } from "../../input/Button/Button";
 import { TextField } from "../../input/TextField";
 import { Section } from "../../layout";
-import { ContentLanguageNotice } from "../../widget/ContentLanguageNotice";
-import { MediaThumbnail } from "../../widget/MediaThumbnail";
-import { PageTitleBar } from "../../widget/PageTitleBar";
-
 export type RoutineFormField =
 	| "name"
 	| "label"
 	| "exerciseQuery"
 	| "activities";
-
 export interface RoutineActivityFormItem {
 	taskId: string;
 	exerciseName: string;
@@ -30,7 +31,6 @@ export interface RoutineActivityFormItem {
 	restTime: string;
 	notes: string;
 }
-
 export interface RoutineTaskCandidate {
 	id: string;
 	exerciseName: string;
@@ -41,7 +41,6 @@ export interface RoutineTaskCandidate {
 	imageAssetUrl?: string;
 	videoAssetUrl?: string;
 }
-
 export interface RoutineFormState {
 	name: string;
 	label: string;
@@ -49,7 +48,6 @@ export interface RoutineFormState {
 	activities: RoutineActivityFormItem[];
 	errors: Partial<Record<RoutineFormField, string>>;
 }
-
 export interface RoutineFormProps {
 	state: RoutineFormState;
 	contentLanguageCode?: string | null;
@@ -58,7 +56,6 @@ export interface RoutineFormProps {
 	isTasksLoading?: boolean;
 	readOnly?: boolean;
 }
-
 const RoutineMediaThumbnail = ({
 	title,
 	imageAssetUrl,
@@ -70,16 +67,47 @@ const RoutineMediaThumbnail = ({
 	videoAssetUrl?: string;
 	className?: string;
 }) => {
+	const mediaClassName = `relative overflow-hidden rounded-xl bg-surface-secondary ${className ?? ""}`;
+	if (imageAssetUrl) {
+		return (
+			<Card className={mediaClassName}>
+				<img
+					src={imageAssetUrl}
+					alt={title}
+					className="h-full w-full object-cover"
+					loading="lazy"
+				/>
+			</Card>
+		);
+	}
+	if (videoAssetUrl) {
+		return (
+			<Card className={mediaClassName}>
+				<video
+					src={videoAssetUrl}
+					className="h-full w-full object-cover"
+					muted
+					playsInline
+					preload="metadata"
+				/>
+				<div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+				<div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+					<PlayCircle className="h-8 w-8 text-white/90" />
+				</div>
+			</Card>
+		);
+	}
 	return (
-		<MediaThumbnail
-			imageUrl={imageAssetUrl}
-			videoUrl={!imageAssetUrl ? videoAssetUrl : undefined}
-			title={title}
-			className={className}
-		/>
+		<Card
+			className={`flex items-center justify-center rounded-xl border border-dashed border-border bg-surface-secondary text-muted ${className ?? ""}`}
+		>
+			<div className="flex flex-col items-center gap-2">
+				<ImageIcon className="h-7 w-7" />
+				<span className="text-xs">미리보기 없음</span>
+			</div>
+		</Card>
 	);
 };
-
 const CandidateTaskCard = observer(
 	({
 		task,
@@ -129,7 +157,6 @@ const CandidateTaskCard = observer(
 		);
 	},
 );
-
 const ActivityCard = observer(
 	({
 		activity,
@@ -256,8 +283,9 @@ export const RoutineForm = observer(
 		isTasksLoading = false,
 		readOnly = false,
 	}: RoutineFormProps) => {
+		const languageCode = toContentLanguageCode(contentLanguageCode);
+		const languageLabel = getContentLanguageLabel(contentLanguageCode);
 		const visibleActivities = activities ?? state.activities;
-
 		const addActivity = (taskId: string) => {
 			if (readOnly) {
 				return;
@@ -286,7 +314,6 @@ export const RoutineForm = observer(
 			});
 			delete state.errors.activities;
 		};
-
 		const changeActivityInput = (
 			taskId: string,
 			field: "repetitions" | "restTime" | "notes",
@@ -301,7 +328,6 @@ export const RoutineForm = observer(
 			}
 			activity[field] = value;
 		};
-
 		const removeActivity = (taskId: string) => {
 			if (readOnly) {
 				return;
@@ -311,7 +337,6 @@ export const RoutineForm = observer(
 			);
 			delete state.errors.activities;
 		};
-
 		const reorderActivities = (fromIndex: number, toIndex: number) => {
 			if (readOnly) {
 				return;
@@ -324,17 +349,24 @@ export const RoutineForm = observer(
 			nextActivities.splice(toIndex, 0, movedActivity);
 			state.activities = nextActivities;
 		};
-
 		return (
 			<div className="flex flex-col gap-6">
 				<Section>
-					<Section.Header>
-						<PageTitleBar level={2} title="기본 정보" />
-					</Section.Header>
+					<Section.Header title="기본 정보" />
 					<Section.Body>
 						<div className="flex flex-col gap-4">
-							<ContentLanguageNotice
-								contentLanguageCode={contentLanguageCode}
+							<Alert
+								status={languageCode ? "accent" : "warning"}
+								title="현재 Space 콘텐츠 언어"
+								actions={
+									<Chip
+										size="sm"
+										variant="flat"
+										color={languageCode ? "primary" : "warning"}
+									>
+										{languageLabel}
+									</Chip>
+								}
 							/>
 							<TextField
 								label="루틴 이름"
@@ -374,9 +406,7 @@ export const RoutineForm = observer(
 					</Section.Body>
 				</Section>
 				<Section>
-					<Section.Header>
-						<PageTitleBar level={2} title="활동 구성" />
-					</Section.Header>
+					<Section.Header title="활동 구성" />
 					<Section.Body>
 						<div className="flex flex-col gap-4">
 							{!readOnly ? (

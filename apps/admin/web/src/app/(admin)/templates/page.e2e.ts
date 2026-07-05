@@ -167,17 +167,12 @@ test.describe("메시지 템플릿 목록 페이지", () => {
 			// ── 삭제 플로우 ──
 
 			// When: 삭제 버튼 클릭
-			await page.getByRole("button", { name: "삭제" }).click();
-
-			// When: 삭제 확인 모달에서 삭제 버튼 클릭
-			await page.waitForTimeout(500);
-
 			const deleteResponse = page.waitForResponse(
 				(resp) =>
 					resp.url().includes("/api/v1/templates/") &&
 					resp.request().method() === "DELETE",
 			);
-			await page.getByRole("button", { name: "삭제" }).last().click();
+			await page.getByRole("button", { name: "삭제" }).click();
 			const deleteResp = await deleteResponse;
 
 			// Then: 204 No Content 응답 확인

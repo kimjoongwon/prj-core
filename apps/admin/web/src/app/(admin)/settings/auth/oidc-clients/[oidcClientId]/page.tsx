@@ -11,7 +11,6 @@ import {
 	OidcClientEditScreen,
 	type OidcClientFormState,
 } from "@cocrepo/ui";
-import { Modal, useOverlayState } from "@heroui/react";
 import { ArrowLeft, Edit, Power, PowerOff, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -21,14 +20,12 @@ import type { ReactNode } from "react";
 export default observer(function OidcClientDetailRoute() {
 	const oidcClientId = useParams<{ oidcClientId: string }>().oidcClientId;
 	const router = useRouter();
-	const deleteModal = useOverlayState();
 	const { data: response, isLoading } = useGetOidcClient(oidcClientId);
 	const client = response?.data;
 	const state = client ? mapOidcClientFormState(client) : undefined;
 	const { mutate: deleteClient, isPending: isDeleting } = useDeleteOidcClient({
 		mutation: {
 			onSuccess: () => {
-				deleteModal.close();
 				router.push("/settings/auth/oidc-clients" as Route);
 			},
 		},
@@ -105,7 +102,10 @@ export default observer(function OidcClientDetailRoute() {
 									variant="flat"
 									color="danger"
 									startContent={<Trash2 className="h-4 w-4" />}
-									onPress={deleteModal.open}
+									isLoading={isDeleting}
+									onPress={() => {
+										deleteClient({ oidcClientId });
+									}}
 								>
 									삭제
 								</Button>
@@ -129,44 +129,6 @@ export default observer(function OidcClientDetailRoute() {
 					</SectionLike>
 				) : null}
 			</OidcClientEditScreen>
-			{client ? (
-				<Modal state={deleteModal}>
-					<Modal.Backdrop>
-						<Modal.Container>
-							<Modal.Dialog>
-								<Modal.Header>OIDC Client 삭제</Modal.Header>
-								<Modal.Body>
-									<p>
-										<strong>{client.clientId}</strong> Client를
-										삭제하시겠습니까?
-									</p>
-									<p className="mt-2 text-sm text-danger">
-										이 작업은 되돌릴 수 없습니다.
-									</p>
-								</Modal.Body>
-								<Modal.Footer>
-									<Button
-										variant="flat"
-										onPress={deleteModal.close}
-										isDisabled={isDeleting}
-									>
-										취소
-									</Button>
-									<Button
-										color="danger"
-										onPress={() => {
-											deleteClient({ oidcClientId });
-										}}
-										isLoading={isDeleting}
-									>
-										삭제
-									</Button>
-								</Modal.Footer>
-							</Modal.Dialog>
-						</Modal.Container>
-					</Modal.Backdrop>
-				</Modal>
-			) : null}
 		</>
 	);
 });

@@ -1,6 +1,6 @@
 "use client";
 
-import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
+import { Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
@@ -16,7 +16,6 @@ export type {
 	AbilityFormOption,
 	AbilityFormState,
 } from "../../form/AbilityForm";
-
 export interface AbilityEditScreenProps {
 	title: ReactNode;
 	description?: ReactNode;
@@ -53,11 +52,10 @@ export const AbilityEditScreen = observer((props: AbilityEditScreenProps) => {
 		pageActions,
 		children,
 	} = props;
-
 	if (isLoading) {
 		return (
 			<VStack fullWidth>
-				<PageTitleBar title={title} description={loadingMessage} />
+				<Screen.Header title={title} description={loadingMessage} />
 				<SectionSurface>
 					<Section>
 						<Section.Body>
@@ -71,11 +69,10 @@ export const AbilityEditScreen = observer((props: AbilityEditScreenProps) => {
 			</VStack>
 		);
 	}
-
 	if (notFound || !state) {
 		return (
 			<VStack fullWidth>
-				<PageTitleBar title={title} description={notFoundMessage} />
+				<Screen.Header title={title} description={notFoundMessage} />
 				<SectionSurface>
 					<Section>
 						<Section.Body>
@@ -89,10 +86,9 @@ export const AbilityEditScreen = observer((props: AbilityEditScreenProps) => {
 			</VStack>
 		);
 	}
-
 	return (
 		<VStack fullWidth>
-			<PageTitleBar
+			<Screen.Header
 				title={title}
 				description={description}
 				actions={pageActions}

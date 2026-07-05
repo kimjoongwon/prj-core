@@ -12,7 +12,7 @@ import {
 	type TimelineSessionProgramFormState,
 	type TimelineSessionProgramRoutinePreviewItem,
 } from "@cocrepo/ui";
-import { Modal, toast, useOverlayState } from "@heroui/react";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Edit, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -32,7 +32,6 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
 			useParams<ProgramDetailPageParams>();
 		const router = useRouter();
 		const queryClient = useQueryClient();
-		const deleteModal = useOverlayState();
 
 		const { data: response, isLoading } = useGetProgramById(
 			timelineId,
@@ -49,7 +48,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
 			);
 		};
 
-		const onClickDeleteConfirmButton = () => {
+		const onClickDeleteButton = () => {
 			deleteProgram(
 				{ timelineId, sessionId, programId },
 				{
@@ -57,7 +56,6 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
 						toast.success("삭제 성공", {
 							description: "프로그램이 삭제되었습니다.",
 						});
-						deleteModal.close();
 						queryClient.invalidateQueries({
 							queryKey: getGetProgramsQueryKey(timelineId, sessionId),
 						});
@@ -145,46 +143,14 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
 								color="danger"
 								variant="flat"
 								startContent={<Trash2 className="h-4 w-4" />}
-								onPress={deleteModal.open}
+								isLoading={isDeleting}
+								onPress={onClickDeleteButton}
 							>
 								삭제
 							</Button>
 						</div>
 					}
 				/>
-				{program ? (
-					<Modal state={deleteModal}>
-						<Modal.Backdrop>
-							<Modal.Container>
-								<Modal.Dialog>
-									<Modal.Header>프로그램 삭제</Modal.Header>
-									<Modal.Body>
-										<p>
-											<strong>{program.name}</strong> 프로그램을
-											삭제하시겠습니까?
-										</p>
-									</Modal.Body>
-									<Modal.Footer>
-										<Button
-											variant="flat"
-											onPress={deleteModal.close}
-											isDisabled={isDeleting}
-										>
-											취소
-										</Button>
-										<Button
-											color="danger"
-											onPress={onClickDeleteConfirmButton}
-											isLoading={isDeleting}
-										>
-											삭제
-										</Button>
-									</Modal.Footer>
-								</Modal.Dialog>
-							</Modal.Container>
-						</Modal.Backdrop>
-					</Modal>
-				) : null}
 			</>
 		);
 	});

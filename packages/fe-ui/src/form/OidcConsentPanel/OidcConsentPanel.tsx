@@ -6,12 +6,12 @@ import {
 	SCOPE_LABELS,
 } from "@cocrepo/constant";
 import type { OidcClientLoginUi } from "@cocrepo/type";
+import { ShieldCheck } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { AlertBanner } from "../../feedback/AlertBanner/AlertBanner";
+import { Alert } from "../../feedback/Alert/Alert";
 import { useT } from "../../i18n";
 import { Button } from "../../input";
-import { AuthCard } from "../../widget/AuthCard/AuthCard";
-import { AuthCardHeader } from "../../widget/AuthCard/AuthCardHeader";
+import { Auth } from "../../layout/Auth";
 
 export interface OidcConsentPanelState {
 	errorMessage: string | null;
@@ -42,10 +42,9 @@ export const OidcConsentPanel = observer(
 		const brandLabel = client?.loginUi?.brandLabel?.trim() || client?.name;
 
 		return (
-			<AuthCard>
-				<AuthCardHeader
-					iconPath="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-					iconGradient="from-success to-default"
+			<Auth.Panel>
+				<Auth.PanelHeader
+					icon={<ShieldCheck className="h-6 w-6 text-success" />}
 					title={brandLabel || "애플리케이션"}
 					subtitle="요청한 서비스 이용에 필요한 접근 권한을 확인해 주세요"
 					logoUri={client?.logoUri}
@@ -54,7 +53,7 @@ export const OidcConsentPanel = observer(
 
 				{/* 에러 메시지 */}
 				{state.errorMessage && (
-					<AlertBanner type="danger" message={state.errorMessage} />
+					<Alert status="danger" description={state.errorMessage} />
 				)}
 
 				{/* 요청된 권한 목록 */}
@@ -117,7 +116,7 @@ export const OidcConsentPanel = observer(
 					{client?.name || t("애플리케이션")}
 					{t("과(와) 공유됩니다.")}
 				</p>
-			</AuthCard>
+			</Auth.Panel>
 		);
 	},
 );

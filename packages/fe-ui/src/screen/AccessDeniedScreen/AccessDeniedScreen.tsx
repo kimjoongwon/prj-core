@@ -5,9 +5,9 @@ import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";
 import { Button } from "../../input/Button/Button";
 import { Section } from "../../layout";
+import { Screen } from "../../layout/Screen";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
-import { PageTitleBar } from "../../widget/PageTitleBar";
 export interface AccessDeniedScreenProps {
 	mode: "checking" | "forbidden";
 	title: string;
@@ -33,7 +33,7 @@ export const AccessDeniedScreen = observer(
 		if (mode === "checking") {
 			return (
 				<VStack fullWidth>
-					<PageTitleBar title={title} description={description} />
+					<Screen.Header title={title} description={description} />
 					<SectionSurface>
 						<Section>
 							<Section.Body>
@@ -48,7 +48,7 @@ export const AccessDeniedScreen = observer(
 		}
 		return (
 			<VStack fullWidth>
-				<PageTitleBar title={title} description={description} />
+				<Screen.Header title={title} description={description} />
 				<SectionSurface>
 					<Section>
 						<Section.Body>

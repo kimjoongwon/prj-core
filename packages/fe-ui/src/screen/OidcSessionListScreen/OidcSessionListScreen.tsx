@@ -9,18 +9,17 @@ import type {
 } from "@cocrepo/type";
 import {
 	buildOidcSessionTableColumns,
-	ConfirmModal,
 	DataGrid,
 	DataGridState,
-	PageTitleBar,
+	Screen,
 	Section,
 	SectionSurface,
-	StatsCard,
 	VStack,
 } from "@cocrepo/ui";
+import { AlertDialog, Card } from "@heroui/react";
 import { Activity, Trash2 } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { useEffect } from "react";
+import { type ReactNode, useEffect } from "react";
 import { Button } from "../../input/Button/Button";
 
 /**
@@ -63,18 +62,50 @@ export interface OidcSessionListScreenProps {
 	queryStates: OidcSessionListScreenQueryStates;
 	setQueryStates: OidcSessionListScreenSetQueryStates;
 	stats?: OidcSessionListScreenStats;
-	revokeGrantId: string | null;
-	isGrantRevokeModalOpen: boolean;
-	isRevokeAllModalOpen: boolean;
-	isRevokingByGrant: boolean;
 	isRevokingAll: boolean;
 	onRevokeSession: (key: string) => void;
-	onOpenGrantRevokeModal: (grantId: string) => void;
-	onCloseGrantRevokeModal: () => void;
-	onConfirmRevokeByGrant: (grantId: string) => void;
-	onOpenRevokeAllModal: () => void;
-	onCloseRevokeAllModal: () => void;
-	onConfirmRevokeAll: () => void;
+	onClickRevokeByGrantButton: (grantId: string) => void;
+	onClickRevokeAllButton: () => void;
+}
+function MetricCard({
+	title,
+	value,
+	description,
+	icon,
+	color = "default",
+	className = "",
+}: {
+	title: string;
+	value: number | string;
+	description?: string;
+	icon?: ReactNode;
+	color?: "default" | "primary";
+	className?: string;
+}) {
+	const valueColor = color === "primary" ? "text-accent" : "text-foreground";
+	const iconColor = color === "primary" ? "text-accent" : "text-muted";
+	return (
+		<Card className={`bg-surface ${className}`}>
+			<Card.Content className="flex flex-row items-center gap-4 p-4">
+				{icon ? (
+					<div
+						className={`flex size-10 items-center justify-center rounded-lg bg-surface-secondary ${iconColor}`}
+					>
+						{icon}
+					</div>
+				) : null}
+				<div className="flex flex-1 flex-col">
+					<span className="text-sm text-muted">{title}</span>
+					<span className={`text-2xl font-bold ${valueColor}`}>
+						{typeof value === "number" ? value.toLocaleString() : value}
+					</span>
+					{description ? (
+						<span className="text-xs text-muted">{description}</span>
+					) : null}
+				</div>
+			</Card.Content>
+		</Card>
+	);
 }
 
 /**
@@ -88,18 +119,10 @@ export const OidcSessionListScreen = observer(
 		queryStates,
 		setQueryStates,
 		stats,
-		revokeGrantId,
-		isGrantRevokeModalOpen,
-		isRevokeAllModalOpen,
-		isRevokingByGrant,
 		isRevokingAll,
 		onRevokeSession,
-		onOpenGrantRevokeModal,
-		onCloseGrantRevokeModal,
-		onConfirmRevokeByGrant,
-		onOpenRevokeAllModal,
-		onCloseRevokeAllModal,
-		onConfirmRevokeAll,
+		onClickRevokeByGrantButton,
+		onClickRevokeAllButton,
 	}: OidcSessionListScreenProps) => {
 		const gridState = useLocalObservable(
 			() =>
@@ -117,32 +140,75 @@ export const OidcSessionListScreen = observer(
 			onRevokeSession(key);
 		};
 		const onClickGrantId = (grantId: string) => {
-			onOpenGrantRevokeModal(grantId);
+			onClickRevokeByGrantButton(grantId);
 		};
+		const isRevokeAllDisabled = totalCount === 0 || isRevokingAll;
 		const columns = buildOidcSessionTableColumns<OidcSessionDto>({
 			onClickGrantId,
 			onClickRevokeSession,
 		});
 		return (
 			<VStack>
-				<PageTitleBar
+				<Screen.Header
 					title="OIDC 세션/토큰"
 					description="OIDC 세션 및 토큰을 조회하고 관리합니다."
 					actions={
-						<Button
-							color="danger"
-							variant="flat"
-							startContent={<Trash2 className="h-4 w-4" />}
-							onPress={onOpenRevokeAllModal}
-							isDisabled={totalCount === 0}
-						>
-							전체 폐기
-						</Button>
+						isRevokeAllDisabled ? (
+							<Button
+								color="danger"
+								variant="flat"
+								startContent={<Trash2 className="h-4 w-4" />}
+								isDisabled
+								isLoading={isRevokingAll}
+							>
+								전체 폐기
+							</Button>
+						) : (
+							<AlertDialog>
+								<AlertDialog.Trigger>
+									<Button
+										color="danger"
+										variant="flat"
+										startContent={<Trash2 className="h-4 w-4" />}
+										isLoading={isRevokingAll}
+									>
+										전체 폐기
+									</Button>
+								</AlertDialog.Trigger>
+								<AlertDialog.Backdrop>
+									<AlertDialog.Container size="sm">
+										<AlertDialog.Dialog>
+											<AlertDialog.Header>
+												<AlertDialog.Icon status="danger" />
+												<AlertDialog.Heading>
+													전체 세션/토큰 폐기
+												</AlertDialog.Heading>
+											</AlertDialog.Header>
+											<AlertDialog.Body>
+												조회 가능한 모든 OIDC 세션/토큰을 폐기합니다.
+											</AlertDialog.Body>
+											<AlertDialog.Footer>
+												<Button variant="flat" slot="close">
+													취소
+												</Button>
+												<Button
+													color="danger"
+													slot="close"
+													onPress={onClickRevokeAllButton}
+												>
+													전체 폐기
+												</Button>
+											</AlertDialog.Footer>
+										</AlertDialog.Dialog>
+									</AlertDialog.Container>
+								</AlertDialog.Backdrop>
+							</AlertDialog>
+						)
 					}
 				/>
 				{stats && (
 					<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-						<StatsCard
+						<MetricCard
 							className="h-full border border-accent/10 bg-accent/5"
 							icon={<Activity className="size-5" />}
 							title="전체"
@@ -151,7 +217,7 @@ export const OidcSessionListScreen = observer(
 							description="현재 저장된 세션/토큰 수"
 						/>
 						{Object.entries(byModelType).map(([type, count]) => (
-							<StatsCard
+							<MetricCard
 								key={type}
 								className="h-full border border-border bg-surface/80"
 								title={type}
@@ -179,48 +245,6 @@ export const OidcSessionListScreen = observer(
 						</Section.Body>
 					</Section>
 				</SectionSurface>
-				<ConfirmModal
-					isOpen={isGrantRevokeModalOpen}
-					onClose={onCloseGrantRevokeModal}
-					onConfirm={() => {
-						if (revokeGrantId) {
-							onConfirmRevokeByGrant(revokeGrantId);
-						}
-					}}
-					title="Grant 일괄 폐기"
-					message={
-						<>
-							<p>
-								이 Grant에 연결된 모든 세션 및 토큰을 일괄 폐기하시겠습니까?
-							</p>
-							{revokeGrantId && (
-								<p className="mt-2 rounded-lg bg-default p-2 font-mono text-sm">
-									Grant ID: {revokeGrantId}
-								</p>
-							)}
-						</>
-					}
-					confirmText="일괄 폐기"
-					confirmColor="danger"
-					iconType="warning"
-					loading={isRevokingByGrant}
-				/>
-				<ConfirmModal
-					isOpen={isRevokeAllModalOpen}
-					onClose={onCloseRevokeAllModal}
-					onConfirm={onConfirmRevokeAll}
-					title="전체 세션/토큰 폐기"
-					message={
-						<p>
-							모든 OIDC 세션 및 토큰({stats?.totalCount ?? 0}건)을 일괄
-							폐기하시겠습니까? 이 작업은 되돌릴 수 없습니다.
-						</p>
-					}
-					confirmText="전체 폐기"
-					confirmColor="danger"
-					iconType="warning"
-					loading={isRevokingAll}
-				/>
 			</VStack>
 		);
 	},

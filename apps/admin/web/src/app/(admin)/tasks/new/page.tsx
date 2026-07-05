@@ -144,7 +144,7 @@ const AdminTasksNewRoute = observer(() => {
 			durationSec={state.durationSec}
 			count={state.count}
 			description={state.description}
-			contentLanguageCode={app.space?.contentLanguageCode}
+			contentLanguageCode={app.contentLanguageCode}
 			selectedImageAsset={selectedImageAsset}
 			selectedVideoAsset={selectedVideoAsset}
 			assetBrowserProps={assetBrowser}

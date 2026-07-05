@@ -19,7 +19,6 @@ export type {
 	AccountDetailScreenAccessGrant,
 	AccountDetailScreenAccessGrantForm,
 	AccountDetailScreenAccount,
-	AccountDetailScreenModalAction,
 	AccountDetailScreenOption,
 	AccountDetailScreenProps,
 } from "./AccountDetailScreen/AccountDetailScreen";

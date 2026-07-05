@@ -19,11 +19,6 @@
       "import": "./src/layout/index.ts",
       "default": "./src/layout/index.ts"
     },
-    "./widget": {
-      "types": "./src/widget/index.ts",
-      "import": "./src/widget/index.ts",
-      "default": "./src/widget/index.ts"
-    },
     "./package.json": "./package.json"
   },
   "main": "./index.ts",

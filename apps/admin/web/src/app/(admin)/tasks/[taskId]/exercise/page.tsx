@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "@heroui/react";
 import {
 	type ExerciseDto,
 	useDeleteTask,
@@ -7,7 +8,6 @@ import {
 	useGetTaskRoutines,
 } from "@cocrepo/api/core/tasks";
 import { Button, TaskExerciseEditScreen } from "@cocrepo/ui";
-import { Modal, toast, useOverlayState } from "@heroui/react";
 import { Pencil, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -20,7 +20,6 @@ type TaskExerciseRouteParams = {
 const AdminTasksTaskIdExerciseRoute = observer(() => {
 	const { taskId } = useParams<TaskExerciseRouteParams>();
 	const router = useRouter();
-	const deleteModal = useOverlayState();
 
 	const { data: response, isLoading } = useGetTaskExercise(taskId);
 	const exercise = response?.data as ExerciseDto | undefined;
@@ -36,23 +35,17 @@ const AdminTasksTaskIdExerciseRoute = observer(() => {
 		router.push(`/tasks/${taskId}/exercise/edit` as Route);
 	};
 
-	const onClickDeleteConfirmButton = () => {
+	const onClickDeleteButton = () => {
 		deleteTask(
 			{ taskId },
 			{
 				onSuccess: () => {
-					toast.success("태스크 삭제 성공", {
-						description: "태스크와 운동 detail이 삭제되었습니다.",
-					});
-					deleteModal.close();
+					toast.success("태스크 삭제 성공", { description: "태스크와 운동 detail이 삭제되었습니다." });
 					router.push("/tasks" as Route);
 				},
 				onError: (error) => {
-					toast.danger("태스크 삭제 실패", {
-						description:
-							error.message ||
-							"삭제 중 오류가 발생했습니다. 루틴에서 사용 중인 태스크는 삭제할 수 없습니다.",
-					});
+					toast.danger("태스크 삭제 실패", { description: error.message ||
+							"삭제 중 오류가 발생했습니다. 루틴에서 사용 중인 태스크는 삭제할 수 없습니다." });
 				},
 			},
 		);
@@ -97,8 +90,9 @@ const AdminTasksTaskIdExerciseRoute = observer(() => {
 							color="danger"
 							variant="flat"
 							startContent={<Trash2 className="size-4" />}
-							onPress={deleteModal.open}
-							isDisabled={routines.length > 0}
+							onPress={onClickDeleteButton}
+							isDisabled={routines.length > 0 || isDeleting}
+							isLoading={isDeleting}
 						>
 							삭제
 						</Button>
@@ -106,40 +100,6 @@ const AdminTasksTaskIdExerciseRoute = observer(() => {
 				}
 				onClickCancelButton={onClickBackButton}
 			/>
-			<Modal state={deleteModal}>
-				<Modal.Backdrop>
-					<Modal.Container>
-						<Modal.Dialog>
-							<Modal.Header>태스크 삭제</Modal.Header>
-							<Modal.Body>
-								<p>
-									<strong>{exercise?.name ?? "운동"}</strong> 운동 detail이
-									포함된 태스크를 삭제하시겠습니까?
-								</p>
-								<p className="mt-2 text-sm text-danger">
-									이 작업은 되돌릴 수 없습니다.
-								</p>
-							</Modal.Body>
-							<Modal.Footer>
-								<Button
-									variant="flat"
-									onPress={deleteModal.close}
-									isDisabled={isDeleting}
-								>
-									취소
-								</Button>
-								<Button
-									color="danger"
-									onPress={onClickDeleteConfirmButton}
-									isLoading={isDeleting}
-								>
-									삭제
-								</Button>
-							</Modal.Footer>
-						</Modal.Dialog>
-					</Modal.Container>
-				</Modal.Backdrop>
-			</Modal>
 		</>
 	);
 });

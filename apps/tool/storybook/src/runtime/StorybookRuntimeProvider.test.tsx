@@ -5,7 +5,9 @@ import type { PropsWithChildren } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const setApiSpaceMock = vi.fn();
+const setApiLocaleMock = vi.fn();
 const setIdpSpaceMock = vi.fn();
+const setIdpLocaleMock = vi.fn();
 const setLoginRedirectUrlMock = vi.fn();
 const setIdpLoginRedirectUrlMock = vi.fn();
 
@@ -18,11 +20,13 @@ vi.mock("nuqs/adapters/react", () => ({
 }));
 
 vi.mock("../../../../../packages/fe-api/src/core/client", () => ({
+	setApiLocale: (...args: unknown[]) => setApiLocaleMock(...args),
 	setApiSpace: (...args: unknown[]) => setApiSpaceMock(...args),
 	setLoginRedirectUrl: (...args: unknown[]) => setLoginRedirectUrlMock(...args),
 }));
 
 vi.mock("../../../../../packages/fe-api/src/idp/client", () => ({
+	setIdpLocale: (...args: unknown[]) => setIdpLocaleMock(...args),
 	setIdpLoginRedirectUrl: (...args: unknown[]) =>
 		setIdpLoginRedirectUrlMock(...args),
 	setIdpSpace: (...args: unknown[]) => setIdpSpaceMock(...args),
@@ -39,9 +43,6 @@ async function createSpaceSnapshot() {
 
 	return observer(function SpaceSnapshot() {
 		const space = useApp().space;
-		if (!space) {
-			throw new Error("space가 초기화되지 않았습니다.");
-		}
 		const value = `${space.tenantId ?? "none"}:${space.spaceId ?? "none"}:${space.isSpaceSelectionResolved ? "resolved" : "pending"}`;
 
 		return <output aria-label="storybook-admin-space">{value}</output>;
@@ -69,7 +70,9 @@ beforeEach(() => {
 	vi.stubGlobal("localStorage", createStorageMock());
 	vi.stubGlobal("sessionStorage", createStorageMock());
 	setApiSpaceMock.mockReset();
+	setApiLocaleMock.mockReset();
 	setIdpSpaceMock.mockReset();
+	setIdpLocaleMock.mockReset();
 	setLoginRedirectUrlMock.mockReset();
 	setIdpLoginRedirectUrlMock.mockReset();
 	localStorage.clear();

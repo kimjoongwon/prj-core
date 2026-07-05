@@ -3,7 +3,7 @@
 ## 화면 러프
 
 ```text
-[PageTitleBar: route title / description / pageActions]
+[Screen.Header: route title / description / pageActions]
 
 [SectionSurface]
   [AbilityForm]

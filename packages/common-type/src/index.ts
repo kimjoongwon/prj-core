@@ -196,8 +196,6 @@ export type {
 	SpaceBootstrapScopeLike,
 	SpaceBootstrapSelection,
 	SpaceBootstrapSpaceLike,
-	SpaceGuardAppLike,
-	SpaceGuardScopeLike,
 	UseAbilitiesOptions,
 	UseAbilitiesReturn,
 	UseFormFieldMultiOptions,
@@ -212,8 +210,6 @@ export type {
 	UseLayoutSideNavigationLike,
 	UseSpaceBootstrapOptions,
 	UseSpaceBootstrapReturn,
-	UseSpaceGuardOptions,
-	UseSpaceGuardReturn,
 } from "./hook-contracts";
 // ============================================
 // HTTP request-like 계약 타입

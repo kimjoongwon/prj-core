@@ -21,12 +21,6 @@ export function useAbility() {
 	const app = useApp();
 	const ability = app.ability;
 
-	if (!ability) {
-		throw new Error(
-			"ability가 초기화되지 않았습니다. app에 ability를 주입해주세요.",
-		);
-	}
-
 	const can = (action: AppAction, subject: AppSubject, field?: string) => {
 		return ability.can(action, subject, field);
 	};

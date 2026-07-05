@@ -3,16 +3,12 @@
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import {
-	GroundForm,
-	type GroundFormState,
-} from "../../form/GroundForm";
+import { GroundForm, type GroundFormState } from "../../form/GroundForm";
 import { Button } from "../../input/Button/Button";
+import { Screen } from "../../layout/Screen";
 import { Section } from "../../layout/Section/Section";
-import { SectionSurface } from "../../surface";
 import { VStack } from "../../rhythm";
-import { PageTitleBar } from "../../widget/PageTitleBar";
-
+import { SectionSurface } from "../../surface";
 export interface GroundEditScreenProps {
 	title?: ReactNode;
 	description?: ReactNode;
@@ -44,11 +40,10 @@ export const GroundEditScreen = observer(
 		const resolvedDescription =
 			description ??
 			(readOnly ? "시설 기본 정보를 확인합니다." : "시설 detail을 수정합니다.");
-
 		if (isLoading) {
 			return (
 				<VStack fullWidth>
-					<PageTitleBar title={resolvedTitle} description="로딩 중..." />
+					<Screen.Header title={resolvedTitle} description="로딩 중..." />
 					<SectionSurface>
 						<Section>
 							<Section.Body>
@@ -65,7 +60,7 @@ export const GroundEditScreen = observer(
 		if (isNotFound) {
 			return (
 				<VStack fullWidth>
-					<PageTitleBar
+					<Screen.Header
 						title={resolvedTitle}
 						description="시설 detail을 찾을 수 없습니다."
 					/>
@@ -73,9 +68,7 @@ export const GroundEditScreen = observer(
 						<Section>
 							<Section.Body>
 								<div className="flex flex-col items-center justify-center gap-4 p-8">
-									<p className="text-muted">
-										시설 detail을 찾을 수 없습니다.
-									</p>
+									<p className="text-muted">시설 detail을 찾을 수 없습니다.</p>
 									<Button variant="flat" onPress={onClickCancelButton}>
 										목록으로
 									</Button>
@@ -88,22 +81,17 @@ export const GroundEditScreen = observer(
 		}
 		return (
 			<VStack fullWidth>
-				<PageTitleBar
+				<Screen.Header
 					title={resolvedTitle}
 					description={resolvedDescription}
 					actions={actions}
 				/>
 				<SectionSurface>
 					<Section>
-						<Section.Header>
-							<PageTitleBar level={2} title="기본 정보" />
-						</Section.Header>
+						<Section.Header title="기본 정보" />
 						<Section.Body>
 							<VStack>
-								<GroundForm
-									state={state}
-									readOnly={readOnly}
-								/>
+								<GroundForm state={state} readOnly={readOnly} />
 								{readOnly ? null : (
 									<div className="flex justify-end gap-2 pt-4">
 										<Button variant="flat" onPress={onClickCancelButton}>

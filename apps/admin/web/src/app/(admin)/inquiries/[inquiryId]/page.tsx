@@ -33,9 +33,7 @@ import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-const normalizeFormOptionValue = (
-	value: unknown,
-): FormOptionItem["value"] => {
+const normalizeFormOptionValue = (value: unknown): FormOptionItem["value"] => {
 	if (
 		typeof value === "string" ||
 		typeof value === "number" ||
@@ -106,7 +104,6 @@ const mapParticipantToStore = (
 export default observer(function InquiryReadOnlyRoute() {
 	const inquiryId = useParams<{ inquiryId: string }>().inquiryId;
 	const router = useRouter();
-	const deleteModalState = useStateLike(false);
 	const inquiryState = useLocalObservable(() => ({
 		currentInquiryId: null as string | null,
 		currentThreadId: null as string | null,
@@ -371,7 +368,6 @@ export default observer(function InquiryReadOnlyRoute() {
 					.filter((participant) => participant.isOnline)
 					.map((participant) => participant.userId)}
 				assigneeOptions={assigneeOptions}
-				deleteModalOpen={deleteModalState.value}
 				isDeleting={deleteInquiryMutation.isPending}
 				isUpdatingMeta={updateInquiryMutation.isPending}
 				webSocketStatus={ws.status}
@@ -386,16 +382,9 @@ export default observer(function InquiryReadOnlyRoute() {
 						) as Route,
 					);
 				}}
-				onOpenDeleteModal={() => {
-					deleteModalState.value = true;
-				}}
-				onCloseDeleteModal={() => {
-					deleteModalState.value = false;
-				}}
-				onConfirmDelete={() => {
+				onClickDeleteButton={() => {
 					void (async () => {
 						await deleteInquiryMutation.mutateAsync({ inquiryId });
-						deleteModalState.value = false;
 						router.push(ADMIN_PATHS.INQUIRIES as Route);
 					})();
 				}}
@@ -470,9 +459,3 @@ export default observer(function InquiryReadOnlyRoute() {
 		</>
 	);
 });
-
-function useStateLike<T>(initialValue: T) {
-	return useLocalObservable(() => ({
-		value: initialValue,
-	}));
-}

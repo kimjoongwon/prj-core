@@ -9,7 +9,7 @@ import {
 	buildAdminRoleTableColumns,
 	DataGrid,
 	DataGridState,
-	PageTitleBar,
+	Screen,
 	Section,
 	SectionSurface,
 	VStack,
@@ -34,7 +34,7 @@ export interface RoleListScreenProps {
 const RolesScreenFallback = observer(() => {
 	return (
 		<div className="space-y-5">
-			<PageTitleBar
+			<Screen.Header
 				title="역할 목록"
 				description="시스템에 등록된 역할을 관리합니다."
 			/>
@@ -72,7 +72,7 @@ export const RoleListScreen = observer(
 		}
 		return (
 			<div className="space-y-5">
-				<PageTitleBar
+				<Screen.Header
 					title="역할 목록"
 					description="시스템에 등록된 역할을 관리합니다."
 					actions={
@@ -94,7 +94,7 @@ export const RoleListScreen = observer(
 						</p>
 					</div>
 					<div className="space-y-3">
-						<PageTitleBar level={2} title="역할 목록 데이터" />
+						<Section.Header title="역할 목록 데이터" />
 						<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
 							<Section overflow="hidden">
 								<Section.Body>

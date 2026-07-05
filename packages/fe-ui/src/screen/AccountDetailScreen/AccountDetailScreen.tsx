@@ -1,9 +1,8 @@
 "use client";
 
 import {
-	ConfirmModal,
 	DateTimeCell,
-	PageTitleBar,
+	Screen,
 	Section,
 	SectionSurface,
 	VStack,
@@ -23,13 +22,6 @@ import { Chip } from "../../data-display/Chip/Chip";
 import { Button } from "../../input/Button/Button";
 import { Select } from "../../input/Select/Select";
 import { Switch } from "../../input/Switch/Switch";
-
-/** 모달 액션 타입 */
-export type AccountDetailScreenModalAction =
-	| "unlock"
-	| "forceResetPassword"
-	| "invalidateSessions"
-	| null;
 export interface AccountDetailScreenAccessGrant {
 	tenantId: string;
 	spaceId: string;
@@ -77,18 +69,15 @@ export interface AccountDetailScreenProps {
 	isUnlocking: boolean;
 	isForceResetting: boolean;
 	isInvalidating: boolean;
-	modalAction: AccountDetailScreenModalAction;
 	onClickBackButton: () => void;
 	onClickToggleActiveButton: () => void;
 	onClickResetFailedAttemptsButton: () => void;
 	onChangeAccessGrantSpace: (spaceId: string) => void;
 	onChangeAccessGrantRole: (roleId: string) => void;
 	onClickGrantAccessButton: () => void;
-	onClickOpenUnlockModal: () => void;
-	onClickOpenForceResetPasswordModal: () => void;
-	onClickOpenInvalidateSessionsModal: () => void;
-	onCloseModal: () => void;
-	onClickConfirmModal: () => void;
+	onClickUnlockAccountButton: () => void;
+	onClickForceResetPasswordButton: () => void;
+	onClickInvalidateSessionsButton: () => void;
 }
 
 /**
@@ -108,18 +97,15 @@ export const AccountDetailScreen = observer(
 		isUnlocking,
 		isForceResetting,
 		isInvalidating,
-		modalAction,
 		onClickBackButton,
 		onClickToggleActiveButton,
 		onClickResetFailedAttemptsButton,
 		onChangeAccessGrantSpace,
 		onChangeAccessGrantRole,
 		onClickGrantAccessButton,
-		onClickOpenUnlockModal,
-		onClickOpenForceResetPasswordModal,
-		onClickOpenInvalidateSessionsModal,
-		onCloseModal,
-		onClickConfirmModal,
+		onClickUnlockAccountButton,
+		onClickForceResetPasswordButton,
+		onClickInvalidateSessionsButton,
 	}: AccountDetailScreenProps) => {
 		// 잠금 상태 판단
 		const isLocked = account
@@ -136,79 +122,11 @@ export const AccountDetailScreen = observer(
 			onChangeAccessGrantRole(String(value ?? ""));
 		};
 
-		// 모달 설정
-		const modalConfig: Record<
-			Exclude<AccountDetailScreenModalAction, null>,
-			{
-				title: string;
-				message: React.ReactNode;
-				confirmText: string;
-				confirmColor: "primary" | "danger" | "warning" | "success";
-				iconType: "delete" | "warning" | "info" | "none";
-				loading: boolean;
-			}
-		> = {
-			unlock: {
-				title: "잠금 해제",
-				message: (
-					<>
-						<p>
-							<strong>{account?.name}</strong> 계정의 잠금을 해제하시겠습니까?
-						</p>
-						<p className="text-sm text-muted mt-2">
-							잠금이 해제되면 다시 로그인할 수 있습니다.
-						</p>
-					</>
-				),
-				confirmText: "잠금 해제",
-				confirmColor: "primary",
-				iconType: "warning",
-				loading: isUnlocking,
-			},
-			forceResetPassword: {
-				title: "비밀번호 강제 변경",
-				message: (
-					<>
-						<p>
-							<strong>{account?.name}</strong> 계정의 비밀번호를 강제로
-							변경하시겠습니까?
-						</p>
-						<p className="text-sm text-danger mt-2">
-							사용자는 다음 로그인 시 비밀번호를 변경해야 합니다.
-						</p>
-					</>
-				),
-				confirmText: "비밀번호 강제 변경",
-				confirmColor: "warning",
-				iconType: "warning",
-				loading: isForceResetting,
-			},
-			invalidateSessions: {
-				title: "세션 무효화",
-				message: (
-					<>
-						<p>
-							<strong>{account?.name}</strong> 계정의 모든 세션을
-							무효화하시겠습니까?
-						</p>
-						<p className="text-sm text-danger mt-2">
-							모든 기기에서 로그아웃되며, 다시 로그인해야 합니다.
-						</p>
-					</>
-				),
-				confirmText: "세션 무효화",
-				confirmColor: "danger",
-				iconType: "warning",
-				loading: isInvalidating,
-			},
-		};
-		const currentModalConfig = modalAction ? modalConfig[modalAction] : null;
-
 		// 로딩 상태
 		if (isLoading) {
 			return (
 				<VStack fullWidth>
-					<PageTitleBar title="계정 상세" description="로딩 중..." />
+					<Screen.Header title="계정 상세" description="로딩 중..." />
 					<SectionSurface>
 						<Section>
 							<Section.Body>
@@ -226,7 +144,7 @@ export const AccountDetailScreen = observer(
 		if (!account) {
 			return (
 				<VStack fullWidth>
-					<PageTitleBar
+					<Screen.Header
 						title="계정 상세"
 						description="계정을 찾을 수 없습니다."
 					/>
@@ -247,7 +165,7 @@ export const AccountDetailScreen = observer(
 		}
 		return (
 			<VStack fullWidth>
-				<PageTitleBar
+				<Screen.Header
 					title="계정 상세"
 					description={`${account.name} (${account.email})`}
 					actions={
@@ -265,9 +183,7 @@ export const AccountDetailScreen = observer(
 						<Section.Body>
 							<VStack>
 								<Section>
-									<Section.Header>
-										<PageTitleBar level={2} title="보안 정보" />
-									</Section.Header>
+									<Section.Header title="보안 정보" />
 									<Section.Body>
 										<dl className="grid grid-cols-1 gap-6 md:grid-cols-2">
 											<div>
@@ -326,7 +242,7 @@ export const AccountDetailScreen = observer(
 																variant="flat"
 																color="primary"
 																isLoading={isUnlocking}
-																onPress={onClickOpenUnlockModal}
+																onPress={onClickUnlockAccountButton}
 															>
 																잠금 해제
 															</Button>
@@ -414,9 +330,7 @@ export const AccountDetailScreen = observer(
 									</Section.Body>
 								</Section>
 								<Section>
-									<Section.Header>
-										<PageTitleBar level={2} title="관리 액션" />
-									</Section.Header>
+									<Section.Header title="관리 액션" />
 									<Section.Body>
 										<Separator className="mb-4" />
 										<div className="flex flex-wrap gap-3">
@@ -424,8 +338,9 @@ export const AccountDetailScreen = observer(
 												variant="flat"
 												color="primary"
 												startContent={<LockOpen className="h-4 w-4" />}
-												isDisabled={!isLocked}
-												onPress={onClickOpenUnlockModal}
+												isDisabled={!isLocked || isUnlocking}
+												isLoading={isUnlocking}
+												onPress={onClickUnlockAccountButton}
 											>
 												잠금 해제
 											</Button>
@@ -433,7 +348,8 @@ export const AccountDetailScreen = observer(
 												variant="flat"
 												color="warning"
 												startContent={<KeyRound className="h-4 w-4" />}
-												onPress={onClickOpenForceResetPasswordModal}
+												isLoading={isForceResetting}
+												onPress={onClickForceResetPasswordButton}
 											>
 												비밀번호 강제 변경
 											</Button>
@@ -441,7 +357,8 @@ export const AccountDetailScreen = observer(
 												variant="flat"
 												color="danger"
 												startContent={<LogOut className="h-4 w-4" />}
-												onPress={onClickOpenInvalidateSessionsModal}
+												isLoading={isInvalidating}
+												onPress={onClickInvalidateSessionsButton}
 											>
 												세션 무효화
 											</Button>
@@ -449,13 +366,10 @@ export const AccountDetailScreen = observer(
 									</Section.Body>
 								</Section>
 								<Section>
-									<Section.Header>
-										<PageTitleBar
-											level={2}
-											title="접근 권한"
-											description="계정에 부여된 Space와 Role을 관리합니다."
-										/>
-									</Section.Header>
+									<Section.Header
+										title="접근 권한"
+										description="계정에 부여된 Space와 Role을 관리합니다."
+									/>
 									<Section.Body>
 										<Separator className="mb-4" />
 										{account.accessGrants.length > 0 ? (
@@ -562,19 +476,6 @@ export const AccountDetailScreen = observer(
 						</Section.Body>
 					</Section>
 				</SectionSurface>
-				{currentModalConfig && (
-					<ConfirmModal
-						isOpen={modalAction !== null}
-						onClose={onCloseModal}
-						onConfirm={onClickConfirmModal}
-						title={currentModalConfig.title}
-						message={currentModalConfig.message}
-						confirmText={currentModalConfig.confirmText}
-						confirmColor={currentModalConfig.confirmColor}
-						iconType={currentModalConfig.iconType}
-						loading={currentModalConfig.loading}
-					/>
-				)}
 			</VStack>
 		);
 	},

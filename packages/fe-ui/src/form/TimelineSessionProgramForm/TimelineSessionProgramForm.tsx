@@ -2,22 +2,23 @@
 
 import { observer } from "mobx-react-lite";
 import { Chip } from "../../data-display/Chip/Chip";
+import {
+	getContentLanguageLabel,
+	toContentLanguageCode,
+} from "../../data-display/content-language";
 import { ProgramPickerModal } from "../../feature/ProgramPickerModal/ProgramPickerModal";
+import { Alert } from "../../feedback/Alert/Alert";
 import { Button } from "../../input/Button/Button";
 import { Select } from "../../input/Select";
 import { TextField } from "../../input/TextField";
 import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
-import { ContentLanguageNotice } from "../../widget/ContentLanguageNotice";
-import { PageTitleBar } from "../../widget/PageTitleBar";
-
 export type TimelineSessionProgramFormField =
 	| "name"
 	| "routineId"
 	| "instructorId"
 	| "capacity"
 	| "level";
-
 export interface TimelineSessionProgramRoutinePreviewItem {
 	id: string;
 	order: number;
@@ -27,13 +28,11 @@ export interface TimelineSessionProgramRoutinePreviewItem {
 	notes?: string | null;
 	isSchedulable: boolean;
 }
-
 export interface TimelineSessionProgramPickerOption {
 	id: string;
 	name: string;
 	subtitle: string;
 }
-
 export interface TimelineSessionProgramFormState {
 	name: string;
 	routineId: string;
@@ -48,7 +47,6 @@ export interface TimelineSessionProgramFormState {
 	isInstructorPickerOpen: boolean;
 	errors: Partial<Record<TimelineSessionProgramFormField, string>>;
 }
-
 export interface TimelineSessionProgramFormProps {
 	state: TimelineSessionProgramFormState;
 	contentLanguageCode?: string | null;
@@ -58,12 +56,23 @@ export interface TimelineSessionProgramFormProps {
 	hasUnschedulableRoutine: boolean;
 	readOnly?: boolean;
 }
-
 const levelOptions = [
-	{ value: "", label: "없음" },
-	{ value: "초급", label: "초급" },
-	{ value: "중급", label: "중급" },
-	{ value: "고급", label: "고급" },
+	{
+		value: "",
+		label: "없음",
+	},
+	{
+		value: "초급",
+		label: "초급",
+	},
+	{
+		value: "중급",
+		label: "중급",
+	},
+	{
+		value: "고급",
+		label: "고급",
+	},
 ];
 
 /**
@@ -80,6 +89,8 @@ export const TimelineSessionProgramForm = observer(
 		hasUnschedulableRoutine,
 		readOnly = false,
 	}: TimelineSessionProgramFormProps) => {
+		const languageCode = toContentLanguageCode(contentLanguageCode);
+		const languageLabel = getContentLanguageLabel(contentLanguageCode);
 		const selectRoutineOption = (value: string) => {
 			if (readOnly) {
 				return;
@@ -90,7 +101,6 @@ export const TimelineSessionProgramForm = observer(
 			state.isRoutinePickerOpen = false;
 			delete state.errors.routineId;
 		};
-
 		const selectInstructorOption = (value: string) => {
 			if (readOnly) {
 				return;
@@ -101,17 +111,24 @@ export const TimelineSessionProgramForm = observer(
 			state.isInstructorPickerOpen = false;
 			delete state.errors.instructorId;
 		};
-
 		return (
 			<>
 				<Section>
-					<Section.Header>
-						<PageTitleBar level={2} title="기본 정보" />
-					</Section.Header>
+					<Section.Header title="기본 정보" />
 					<Section.Body>
 						<VStack>
-							<ContentLanguageNotice
-								contentLanguageCode={contentLanguageCode}
+							<Alert
+								status={languageCode ? "accent" : "warning"}
+								title="현재 Space 콘텐츠 언어"
+								actions={
+									<Chip
+										size="sm"
+										variant="flat"
+										color={languageCode ? "primary" : "warning"}
+									>
+										{languageLabel}
+									</Chip>
+								}
 							/>
 							<TextField
 								label="프로그램 이름"

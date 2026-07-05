@@ -154,50 +154,6 @@ export interface UseLayoutReturn<
 }
 
 /**
- * useSpaceGuard가 의존하는 space 최소 계약
- */
-export interface SpaceGuardScopeLike {
-	tenantId?: string | null;
-	spaceId?: string | null;
-	groundName?: string | null;
-	isHydrated?: boolean;
-	isSpaceSelectionResolved?: boolean;
-}
-
-export interface SpaceGuardAppLike<
-	TSpaceScope extends SpaceGuardScopeLike = SpaceGuardScopeLike,
-> {
-	space?: TSpaceScope;
-}
-
-/**
- * useSpaceGuard 옵션 인터페이스
- */
-export interface UseSpaceGuardOptions<
-	TSpaceScope extends SpaceGuardScopeLike = SpaceGuardScopeLike,
-> {
-	useApp: () => SpaceGuardAppLike<TSpaceScope>;
-	/** Space 선택 페이지 경로 (기본값: "/select-space") */
-	selectSpacePath?: string;
-}
-
-/**
- * useSpaceGuard 반환 타입
- */
-export interface UseSpaceGuardReturn {
-	/** Alert 표시 여부 */
-	showAlert: boolean;
-	/** Alert 확인 버튼 핸들러 */
-	handleConfirm: () => void;
-	/** Alert 닫기 핸들러 */
-	handleDismiss: () => void;
-	/** Space가 선택되어 있는지 여부 */
-	hasSpace: boolean;
-	/** 현재 선택된 Ground 이름 */
-	groundName: string | null;
-}
-
-/**
  * Space bootstrap이 참조하는 Space 최소 계약
  */
 export interface SpaceBootstrapSpaceLike {

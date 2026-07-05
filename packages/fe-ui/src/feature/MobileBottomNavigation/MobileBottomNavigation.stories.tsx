@@ -15,7 +15,7 @@ export const Connected: Story = {
 		<PageStoryScaffold
 			componentName="MobileBottomNavigation"
 			componentPath="feature/MobileBottomNavigation"
-			description="layout의 Navigation에 직접 연결되는 feature입니다. 독립 UI는 widget/BottomNav story에서 확인합니다."
+			description="layout의 Navigation에 직접 연결되는 feature입니다."
 		/>
 	),
 };

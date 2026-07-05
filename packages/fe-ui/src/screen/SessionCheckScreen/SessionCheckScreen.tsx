@@ -4,9 +4,9 @@ import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";
 import { Section } from "../../layout";
+import { Screen } from "../../layout/Screen";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
-import { PageTitleBar } from "../../widget/PageTitleBar";
 export interface SessionCheckScreenProps {
 	title: string;
 	description: string;
@@ -21,7 +21,7 @@ export const SessionCheckScreen = observer(
 		const t = useT();
 		return (
 			<VStack fullWidth>
-				<PageTitleBar title={title} description={description} />
+				<Screen.Header title={title} description={description} />
 				<SectionSurface>
 					<Section>
 						<Section.Body>

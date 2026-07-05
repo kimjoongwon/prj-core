@@ -2,15 +2,15 @@
 
 import {
 	Button,
-	PageTitleBar,
+	Screen,
 	Section,
 	SectionSurface,
 	TextField,
 	VStack,
 } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
+import { CONTENT_LANGUAGE_OPTIONS } from "../../data-display/content-language";
 import { Select } from "../../input/Select/Select";
-import { CONTENT_LANGUAGE_OPTIONS } from "../../widget/ContentLanguageNotice";
 export interface SpaceCreateScreenProps {
 	name: string;
 	label: string;
@@ -54,7 +54,7 @@ export const SpaceCreateScreen = observer(
 	}: SpaceCreateScreenProps) => {
 		return (
 			<VStack fullWidth>
-				<PageTitleBar
+				<Screen.Header
 					title="공간 등록"
 					description="새로운 공간과 시설 detail을 등록합니다."
 				/>
@@ -63,9 +63,7 @@ export const SpaceCreateScreen = observer(
 						<Section.Body>
 							<VStack>
 								<Section>
-									<Section.Header>
-										<PageTitleBar level={2} title="기본 정보" />
-									</Section.Header>
+									<Section.Header title="기본 정보" />
 									<Section.Body>
 										<VStack>
 											<TextField

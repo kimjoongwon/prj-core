@@ -1,21 +1,21 @@
 "use client";
 
-import { Modal, Spinner, useOverlayState } from "@heroui/react";
+import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import { DateTimeCell } from "../../data-grid/cell";
 import { Chip } from "../../data-display/Chip/Chip";
+import { DateTimeCell } from "../../data-grid/cell";
 import {
+	type RoutineActivityFormItem,
 	RoutineForm,
 	type RoutineFormState,
-	type RoutineActivityFormItem,
 	type RoutineTaskCandidate,
 } from "../../form/RoutineForm";
 import { Button } from "../../input/Button/Button";
 import { Section } from "../../layout";
+import { Screen } from "../../layout/Screen";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
-import { PageTitleBar } from "../../widget/PageTitleBar";
 
 export type {
 	RoutineActivityFormItem,
@@ -23,17 +23,14 @@ export type {
 	RoutineFormState,
 	RoutineTaskCandidate,
 } from "../../form/RoutineForm";
-
 export interface RoutineEditScreenProgram {
 	id: string;
 	name: string;
 }
-
 export interface RoutineEditScreenMetadata {
 	createdAt?: string | null;
 	updatedAt?: string | null;
 }
-
 export interface RoutineEditScreenProps {
 	title: ReactNode;
 	description?: ReactNode;
@@ -50,11 +47,7 @@ export interface RoutineEditScreenProps {
 	notFoundMessage?: ReactNode;
 	notFoundAction?: ReactNode;
 	isTasksLoading?: boolean;
-	isSubmitting?: boolean;
-	isEmptyActivitiesWarningOpen?: boolean;
 	actions?: ReactNode;
-	onCloseEmptyActivitiesWarningModal?: () => void;
-	onClickConfirmEmptyActivitiesWarningButton?: () => void;
 }
 
 /**
@@ -78,25 +71,12 @@ export const RoutineEditScreen = observer((props: RoutineEditScreenProps) => {
 		notFoundMessage = "루틴을 찾을 수 없습니다.",
 		notFoundAction,
 		isTasksLoading = false,
-		isSubmitting = false,
-		isEmptyActivitiesWarningOpen = false,
 		actions,
-		onCloseEmptyActivitiesWarningModal,
-		onClickConfirmEmptyActivitiesWarningButton,
 	} = props;
-	const emptyActivitiesWarningState = useOverlayState({
-		isOpen: isEmptyActivitiesWarningOpen,
-		onOpenChange: (open) => {
-			if (!open) {
-				onCloseEmptyActivitiesWarningModal?.();
-			}
-		},
-	});
-
 	if (isLoading) {
 		return (
 			<VStack fullWidth>
-				<PageTitleBar title={title} description={loadingMessage} />
+				<Screen.Header title={title} description={loadingMessage} />
 				<SectionSurface>
 					<Section>
 						<Section.Body>
@@ -110,11 +90,10 @@ export const RoutineEditScreen = observer((props: RoutineEditScreenProps) => {
 			</VStack>
 		);
 	}
-
 	if (notFound || !state) {
 		return (
 			<VStack fullWidth>
-				<PageTitleBar title={title} description={notFoundMessage} />
+				<Screen.Header title={title} description={notFoundMessage} />
 				<SectionSurface>
 					<Section>
 						<Section.Body>
@@ -128,16 +107,18 @@ export const RoutineEditScreen = observer((props: RoutineEditScreenProps) => {
 			</VStack>
 		);
 	}
-
 	const visibleActivities = activities ?? state.activities;
 	const resolvedActivities = visibleActivities.filter((activity) =>
 		Boolean(activity.exerciseName),
 	).length;
 	const unresolvedActivities = visibleActivities.length - resolvedActivities;
-
 	return (
 		<VStack fullWidth>
-			<PageTitleBar title={title} description={description} actions={actions} />
+			<Screen.Header
+				title={title}
+				description={description}
+				actions={actions}
+			/>
 			<SectionSurface>
 				<Section>
 					<Section.Body>
@@ -152,9 +133,7 @@ export const RoutineEditScreen = observer((props: RoutineEditScreenProps) => {
 							/>
 							{readOnly ? (
 								<Section>
-									<Section.Header>
-										<PageTitleBar level={2} title="연결 요약" />
-									</Section.Header>
+									<Section.Header title="연결 요약" />
 									<Section.Body>
 										<div className="grid grid-cols-1 gap-3 md:grid-cols-3">
 											<div className="rounded-lg bg-surface-secondary p-3">
@@ -188,9 +167,7 @@ export const RoutineEditScreen = observer((props: RoutineEditScreenProps) => {
 							) : null}
 							{readOnly && programs.length > 0 ? (
 								<Section>
-									<Section.Header>
-										<PageTitleBar level={2} title="사용 중인 프로그램" />
-									</Section.Header>
+									<Section.Header title="사용 중인 프로그램" />
 									<Section.Body>
 										<div className="flex flex-col gap-2">
 											{programs.map((program) => (
@@ -207,9 +184,7 @@ export const RoutineEditScreen = observer((props: RoutineEditScreenProps) => {
 							) : null}
 							{metadata?.createdAt || metadata?.updatedAt ? (
 								<Section>
-									<Section.Header>
-										<PageTitleBar level={2} title="관리 정보" />
-									</Section.Header>
+									<Section.Header title="관리 정보" />
 									<Section.Body>
 										<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 											{metadata.createdAt ? (
@@ -236,37 +211,6 @@ export const RoutineEditScreen = observer((props: RoutineEditScreenProps) => {
 					</Section.Body>
 				</Section>
 			</SectionSurface>
-			{onCloseEmptyActivitiesWarningModal &&
-			onClickConfirmEmptyActivitiesWarningButton ? (
-				<Modal state={emptyActivitiesWarningState}>
-					<Modal.Backdrop>
-						<Modal.Container>
-							<Modal.Dialog>
-								<Modal.Header>활동 없이 저장</Modal.Header>
-								<Modal.Body>
-									<p>활동이 0개인 루틴입니다. 이대로 저장하시겠습니까?</p>
-								</Modal.Body>
-								<Modal.Footer>
-									<Button
-										variant="flat"
-										onPress={onCloseEmptyActivitiesWarningModal}
-										isDisabled={isSubmitting}
-									>
-										취소
-									</Button>
-									<Button
-										color="warning"
-										onPress={onClickConfirmEmptyActivitiesWarningButton}
-										isLoading={isSubmitting}
-									>
-										저장 진행
-									</Button>
-								</Modal.Footer>
-							</Modal.Dialog>
-						</Modal.Container>
-					</Modal.Backdrop>
-				</Modal>
-			) : null}
 		</VStack>
 	);
 });

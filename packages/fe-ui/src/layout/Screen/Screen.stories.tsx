@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "../../input";
-import { PageTitleBar } from "../../widget/PageTitleBar";
 import { Screen } from "./Screen";
 
 const meta = {
@@ -17,21 +16,17 @@ const meta = {
 	},
 	tags: ["autodocs"],
 } satisfies Meta<typeof Screen>;
-
 export default meta;
 type Story = StoryObj<typeof meta>;
-
 export const Basic: Story = {
 	render: () => (
 		<div className="min-h-screen bg-surface-secondary p-6 text-foreground">
 			<Screen>
-				<Screen.Header>
-					<PageTitleBar
-						title="Screen"
-						description="Screen.Header, Screen.Body, Screen.Footer 슬롯을 조합합니다."
-						actions={<Button size="sm">Action</Button>}
-					/>
-				</Screen.Header>
+				<Screen.Header
+					title="Screen"
+					description="Screen.Header, Screen.Body, Screen.Footer 슬롯을 조합합니다."
+					actions={<Button size="sm">Action</Button>}
+				/>
 				<Screen.Body>
 					<div className="rounded-lg border border-border bg-surface p-5">
 						Screen body

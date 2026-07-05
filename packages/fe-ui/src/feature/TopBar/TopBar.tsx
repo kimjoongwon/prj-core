@@ -5,7 +5,7 @@ import { type SpaceInfo, useApp } from "@cocrepo/store";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
 import { useT } from "../../i18n";
-import { HeaderBar } from "../../widget/HeaderBar";
+import { HeaderBar } from "./HeaderBar";
 import { HeaderSpaceSelector } from "../HeaderSpaceSelector";
 import { LanguageSelectButton } from "../LanguageSelectButton";
 import { ThemeToggleButton } from "../ThemeToggleButton";
@@ -29,9 +29,6 @@ export const TopBar = observer(function TopBar() {
 	const space = topBar.space;
 	const navigation = topBar.navigation;
 	const locale = topBar.locale;
-	if (!space || !navigation) {
-		throw new Error("TopBar에 필요한 app 상태가 초기화되지 않았습니다.");
-	}
 	const { mutate: setCurrentSpaceMutate, isPending: isSettingCurrentSpace } =
 		useSetCurrentSpace({
 			mutation: {
@@ -87,9 +84,9 @@ export const TopBar = observer(function TopBar() {
 	};
 
 	const onChangeLanguage = (
-		languageCode: Parameters<NonNullable<typeof locale>["setLanguageCode"]>[0],
+		languageCode: Parameters<typeof locale.setLanguageCode>[0],
 	) => {
-		locale?.setLanguageCode(languageCode);
+		locale.setLanguageCode(languageCode);
 	};
 
 	const selectedNavItem = navigation.selectedNavItem;
@@ -115,14 +112,12 @@ export const TopBar = observer(function TopBar() {
 			}
 			actions={
 				<>
-					{locale && (
-						<LanguageSelectButton
-							value={locale.languageCode}
-							onChange={onChangeLanguage}
-							compact
-							className={utilityButtonClassName}
-						/>
-					)}
+					<LanguageSelectButton
+						value={locale.languageCode}
+						onChange={onChangeLanguage}
+						compact
+						className={utilityButtonClassName}
+					/>
 					<ThemeToggleButton compact className={utilityButtonClassName} />
 					<HeaderSpaceSelector
 						spaces={space.spaces}

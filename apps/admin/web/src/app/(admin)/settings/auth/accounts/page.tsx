@@ -7,6 +7,7 @@ import {
 	useGetIdpAccounts,
 } from "@cocrepo/api/idp/idp-accounts";
 import { AccountListScreen } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
@@ -24,7 +25,7 @@ export default observer(function AccountsPageRoute() {
 		search: queryStates.search || undefined,
 	};
 	const { data: response, isLoading } = useGetIdpAccounts(queryParams);
-	const { mutate: unlockAccount, isPending: isUnlocking } = useUnlockAccount({
+	const { mutateAsync: unlockAccount } = useUnlockAccount({
 		mutation: {
 			onSuccess: (_data, variables) => {
 				queryClient.invalidateQueries({
@@ -32,6 +33,15 @@ export default observer(function AccountsPageRoute() {
 				});
 				queryClient.invalidateQueries({
 					queryKey: getGetIdpAccountQueryKey(variables.userId),
+				});
+				toast.success("계정 잠금 해제", {
+					description: "계정 잠금을 해제했습니다.",
+				});
+			},
+			onError: (error) => {
+				toast.danger("계정 잠금 해제 실패", {
+					description:
+						error.message || "계정 잠금 해제 중 오류가 발생했습니다.",
 				});
 			},
 		},
@@ -43,11 +53,10 @@ export default observer(function AccountsPageRoute() {
 				accounts={response?.data}
 				totalCount={response?.meta?.totalCount ?? 0}
 				isLoading={isLoading}
-				isUnlocking={isUnlocking}
 				queryStates={queryStates}
 				setQueryStates={setQueryStates}
-				onConfirmUnlockAccount={(userId) => {
-					unlockAccount({ userId });
+				onClickUnlockAccountButton={(userId) => {
+					void unlockAccount({ userId });
 				}}
 			/>
 		</>

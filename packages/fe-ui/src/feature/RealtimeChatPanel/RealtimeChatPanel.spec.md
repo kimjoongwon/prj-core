@@ -21,13 +21,13 @@
 | 모듈 | 용도 |
 |------|------|
 | @heroui/react | 기능 구현 의존성 |
+| lucide-react | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
 | react | 기능 구현 의존성 |
 | @cocrepo/type | 기능 구현 의존성 |
-| ../../display/feedback/TypingIndicator/TypingIndicator | 기능 구현 의존성 |
-| ../../display/feedback/WebSocketConnectionStatus/WebSocketConnectionStatus | 기능 구현 의존성 |
-| ../../display/feedback/MessageStatus/MessageStatus | 기능 구현 의존성 |
+| ../../data-display/Chip/Chip | 연결 상태 표시 |
 | ../../form/InquiryReplyForm | 기능 구현 의존성 |
+| ../../input/Button/Button | 재연결 액션 |
 
 ## 동작 흐름
 

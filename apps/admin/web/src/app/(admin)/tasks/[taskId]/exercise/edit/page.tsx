@@ -145,7 +145,7 @@ const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 					: "운동 detail을 수정합니다."
 			}
 			state={state}
-			contentLanguageCode={app.space?.contentLanguageCode}
+			contentLanguageCode={app.contentLanguageCode}
 			selectedImageAsset={selectedImageAsset}
 			selectedVideoAsset={selectedVideoAsset}
 			assetBrowserProps={assetBrowser}

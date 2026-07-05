@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "@heroui/react";
 import {
 	type AbilityResponseDto,
 	useGetAbilities,
@@ -13,7 +14,6 @@ import {
 	type PolicyAbilityOption,
 	PolicyEditScreen,
 } from "@cocrepo/ui";
-import { toast } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -30,6 +30,9 @@ export default observer(function PolicyCreateRoute() {
 	}));
 	const { data: abilitiesResponse } = useGetAbilities();
 	const abilities = (abilitiesResponse?.data ?? []).map(mapAbilityOption);
+	const showCreateSuccessToast = () => {
+		toast.success("정책 등록 성공", { description: "정책이 생성되었습니다." });
+	};
 	const { mutate: syncPolicyAbilities, isPending: isSyncingAbilities } =
 		useSyncPolicyAbilities();
 	const { mutate: createPolicy, isPending } = useCreatePolicy({
@@ -37,9 +40,7 @@ export default observer(function PolicyCreateRoute() {
 			onSuccess: (response) => {
 				const createdPolicy = response.data;
 				if (!createdPolicy) {
-					toast.danger("정책 등록 실패", {
-						description: "생성된 정책 정보를 확인할 수 없습니다.",
-					});
+					toast.danger("정책 등록 실패", { description: "생성된 정책 정보를 확인할 수 없습니다." });
 					return;
 				}
 				if (state.abilityIds.length === 0) {
@@ -122,8 +123,4 @@ function mapAbilityOption(ability: AbilityResponseDto): PolicyAbilityOption {
 		label: `${subject} / ${action}`,
 		description: ability.description,
 	};
-}
-
-function showCreateSuccessToast() {
-	toast.success("정책 등록 성공", { description: "정책이 생성되었습니다." });
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "@heroui/react";
 import { type RoutineDto, useGetRoutines } from "@cocrepo/api/core/routines";
 import {
 	getGetProgramByIdQueryKey,
@@ -16,7 +17,6 @@ import {
 	TimelineSessionProgramEditScreen,
 	type TimelineSessionProgramFormState,
 } from "@cocrepo/ui";
-import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -222,9 +222,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 				},
 				{
 					onSuccess: () => {
-						toast.success("수정 성공", {
-							description: "프로그램이 수정되었습니다.",
-						});
+						toast.success("수정 성공", { description: "프로그램이 수정되었습니다." });
 						queryClient.invalidateQueries({
 							queryKey: getGetProgramByIdQueryKey(
 								timelineId,
@@ -237,9 +235,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 						);
 					},
 					onError: () => {
-						toast.danger("수정 실패", {
-							description: "프로그램 수정 중 오류가 발생했습니다.",
-						});
+						toast.danger("수정 실패", { description: "프로그램 수정 중 오류가 발생했습니다." });
 					},
 				},
 			);
@@ -252,7 +248,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 					.filter(Boolean)
 					.join(" · ")}
 				state={state}
-				contentLanguageCode={app.space?.contentLanguageCode}
+				contentLanguageCode={app.contentLanguageCode}
 				routineOptions={routineOptions.map((routine) => ({
 					id: routine.id,
 					name: routine.name,

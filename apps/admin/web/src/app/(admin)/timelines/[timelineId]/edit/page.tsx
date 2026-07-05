@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "@heroui/react";
 import {
 	getGetTimelineByIdQueryKey,
 	useGetTimelineById,
@@ -10,7 +11,6 @@ import {
 	TimelineEditScreen,
 	type TimelineFormState,
 } from "@cocrepo/ui";
-import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -80,18 +80,14 @@ const AdminTimelinesTimelineIdEditRoute = observer(() => {
 			},
 			{
 				onSuccess: () => {
-					toast.success("수정 성공", {
-						description: "타임라인이 수정되었습니다.",
-					});
+					toast.success("수정 성공", { description: "타임라인이 수정되었습니다." });
 					queryClient.invalidateQueries({
 						queryKey: getGetTimelineByIdQueryKey(timelineId),
 					});
 					router.push(`/timelines/${timelineId}` as Route);
 				},
 				onError: () => {
-					toast.danger("수정 실패", {
-						description: "타임라인 수정 중 오류가 발생했습니다.",
-					});
+					toast.danger("수정 실패", { description: "타임라인 수정 중 오류가 발생했습니다." });
 				},
 			},
 		);
@@ -110,7 +106,7 @@ const AdminTimelinesTimelineIdEditRoute = observer(() => {
 				timeline?.name ? `${timeline.name} 타임라인을 수정합니다.` : undefined
 			}
 			state={state}
-			contentLanguageCode={app.space?.contentLanguageCode}
+			contentLanguageCode={app.contentLanguageCode}
 			isLoading={isLoading && !state.isInitialized}
 			notFound={!isLoading && !timeline}
 			actions={

@@ -33,9 +33,6 @@ export interface UseInquiryDetailHandlersOptions {
 		stopTyping: () => void;
 		openKnowledgeBaseModal: () => void;
 		closeKnowledgeBaseModal: () => void;
-		openMetaEditModal: () => void;
-		closeMetaEditModal: () => void;
-		isMetaEditModalOpen: boolean;
 		isKnowledgeBaseModalOpen: boolean;
 	};
 	/** WebSocket 훅 반환값 */
@@ -72,17 +69,10 @@ export interface UseInquiryDetailHandlersReturn {
 	onAttachFile: (files: File[]) => void;
 	/** 수정 페이지 이동 */
 	onClickEdit: () => void;
-	/** 삭제 확인 */
+	/** 삭제 요청 */
 	onClickDelete: () => void;
 	/** WebSocket 재연결 */
 	onClickReconnect: () => void;
-	/** 삭제 확인 모달 상태 */
-	deleteModal: {
-		isOpen: boolean;
-		open: () => void;
-		close: () => void;
-		confirm: () => Promise<void>;
-	};
 	/** 지식베이스 모달 상태 */
 	knowledgeBaseModal: {
 		isOpen: boolean;
@@ -283,34 +273,14 @@ export function useInquiryDetailHandlers(
 		);
 	};
 
-	// 삭제 확인 모달 열기
 	const onClickDelete = () => {
-		inquiryState.openMetaEditModal(); // TODO: 삭제 모달로 변경 필요
+		logger.info("문의 삭제 요청:", inquiryId);
 	};
 
 	// WebSocket 재연결
 	const onClickReconnect = () => {
 		logger.info("WebSocket 재연결 요청");
 		// 재연결은 _client.tsx에서 처리
-	};
-
-	/**
-	 * 삭제 확인
-	 *
-	 * @requires Orval 훅 생성 후 아래와 같이 변경:
-	 * await deleteInquiryMutation.mutateAsync({ inquiryId });
-	 * router.push("/inquiries");
-	 */
-	const onConfirmDelete = async () => {
-		logger.info("문의 삭제:", inquiryId);
-		// TODO: Orval 훅 생성 후 아래 주석 해제
-		// try {
-		// 	await deleteInquiryMutation.mutateAsync({ inquiryId });
-		// 	router.push("/inquiries");
-		// } catch (error) {
-		// 	logger.error("문의 삭제 실패:", error);
-		// 	throw error;
-		// }
 	};
 
 	return {
@@ -329,12 +299,6 @@ export function useInquiryDetailHandlers(
 		onClickEdit,
 		onClickDelete,
 		onClickReconnect,
-		deleteModal: {
-			isOpen: inquiryState.isMetaEditModalOpen, // TODO: 삭제 모달 상태로 변경
-			open: () => inquiryState.openMetaEditModal(),
-			close: () => inquiryState.closeMetaEditModal(),
-			confirm: onConfirmDelete,
-		},
 		knowledgeBaseModal: {
 			isOpen: inquiryState.isKnowledgeBaseModalOpen,
 			open: () => inquiryState.openKnowledgeBaseModal(),

@@ -5,7 +5,7 @@ import {
 	AssetPreviewDialog,
 	DateTimeCell,
 	getAssetPreviewUrl,
-	PageTitleBar,
+	Screen,
 	Section,
 	SectionSurface,
 	VStack,
@@ -128,7 +128,7 @@ export const AssetDetailScreen = observer(
 		if (isLoading) {
 			return (
 				<VStack fullWidth>
-					<PageTitleBar title="에셋 상세" description="로딩 중..." />
+					<Screen.Header title="에셋 상세" description="로딩 중..." />
 					<SectionSurface>
 						<Section>
 							<Section.Body>
@@ -144,7 +144,7 @@ export const AssetDetailScreen = observer(
 		if (!asset) {
 			return (
 				<VStack fullWidth>
-					<PageTitleBar
+					<Screen.Header
 						title="에셋 상세"
 						description="에셋을 찾을 수 없습니다."
 					/>
@@ -166,7 +166,7 @@ export const AssetDetailScreen = observer(
 		const previewUrl = getAssetPreviewUrl(asset);
 		return (
 			<VStack fullWidth>
-				<PageTitleBar
+				<Screen.Header
 					title={asset.originalName ?? "에셋 상세"}
 					description="에셋 상세 정보"
 					actions={
@@ -211,8 +211,7 @@ export const AssetDetailScreen = observer(
 									<Section.Body>
 										<div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.4fr)_340px]">
 											<div className="space-y-4">
-												<PageTitleBar
-													level={2}
+												<Section.Header
 													title="미리보기"
 													description={
 														previewUrl
@@ -310,9 +309,7 @@ export const AssetDetailScreen = observer(
 									</Section.Body>
 								</Section>
 								<Section>
-									<Section.Header>
-										<PageTitleBar level={2} title="기본 정보" />
-									</Section.Header>
+									<Section.Header title="기본 정보" />
 									<Section.Body>
 										<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 											<div>
@@ -357,9 +354,7 @@ export const AssetDetailScreen = observer(
 									</Section.Body>
 								</Section>
 								<Section>
-									<Section.Header>
-										<PageTitleBar level={2} title="폴더 이동" />
-									</Section.Header>
+									<Section.Header title="폴더 이동" />
 									<Section.Body>
 										<div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto]">
 											<Select
@@ -403,9 +398,7 @@ export const AssetDetailScreen = observer(
 									</Section.Body>
 								</Section>
 								<Section>
-									<Section.Header>
-										<PageTitleBar level={2} title="스토리지 정보" />
-									</Section.Header>
+									<Section.Header title="스토리지 정보" />
 									<Section.Body>
 										<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 											<TextField

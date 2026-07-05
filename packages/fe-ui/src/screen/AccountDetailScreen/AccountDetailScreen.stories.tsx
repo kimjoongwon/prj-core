@@ -40,7 +40,6 @@ const defaultArgs = {
 	isResetting: false,
 	isToggling: false,
 	isUnlocking: false,
-	modalAction: "unlock",
 	roleOptions: [
 		{
 			description: "전체 관리 권한",
@@ -58,14 +57,12 @@ const defaultArgs = {
 	onChangeAccessGrantRole: (..._args: never[]) => undefined,
 	onChangeAccessGrantSpace: (..._args: never[]) => undefined,
 	onClickBackButton: (..._args: never[]) => undefined,
-	onClickConfirmModal: (..._args: never[]) => undefined,
+	onClickForceResetPasswordButton: (..._args: never[]) => undefined,
 	onClickGrantAccessButton: (..._args: never[]) => undefined,
-	onClickOpenForceResetPasswordModal: (..._args: never[]) => undefined,
-	onClickOpenInvalidateSessionsModal: (..._args: never[]) => undefined,
-	onClickOpenUnlockModal: (..._args: never[]) => undefined,
+	onClickInvalidateSessionsButton: (..._args: never[]) => undefined,
 	onClickResetFailedAttemptsButton: (..._args: never[]) => undefined,
 	onClickToggleActiveButton: (..._args: never[]) => undefined,
-	onCloseModal: (..._args: never[]) => undefined,
+	onClickUnlockAccountButton: (..._args: never[]) => undefined,
 };
 
 const loadingArgs = {

@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "@heroui/react";
 import {
 	getGetSessionsQueryKey,
 	getGetTimelinesQueryKey,
@@ -15,10 +16,9 @@ import {
 	TimelineEditScreen,
 	type TimelineFormState,
 } from "@cocrepo/ui";
-import { Modal, toast, useOverlayState } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Edit, Trash2 } from "lucide-react";
-import { observer, useLocalObservable } from "mobx-react-lite";
+import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import dynamic from "next/dynamic";
 import { useParams, useRouter } from "next/navigation";
@@ -99,12 +99,6 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 	const { timelineId } = useParams<TimelineEditScreenParams>();
 	const router = useRouter();
 	const queryClient = useQueryClient();
-	const state = useLocalObservable(() => ({
-		deleteSessionTargetId: "",
-		deleteSessionTargetName: "",
-	}));
-	const deleteTimelineModal = useOverlayState();
-	const deleteSessionModal = useOverlayState();
 	const { data: timelineResponse, isLoading: isTimelineLoading } =
 		useGetTimelineById(timelineId);
 	const timeline = timelineResponse?.data as TimelineDto | undefined;
@@ -127,32 +121,24 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 		: undefined;
 	const { mutate: deleteTimeline, isPending: isDeletingTimeline } =
 		useDeleteTimeline();
-	const { mutate: deleteSession, isPending: isDeletingSession } =
-		useDeleteSession();
+	const { mutate: deleteSession } = useDeleteSession();
 
 	const onClickEditButton = () => {
 		router.push(`/timelines/${timelineId}/edit` as Route);
 	};
-	const onClickDeleteTimelineButton = () => deleteTimelineModal.open();
-	const onClickDeleteTimelineConfirmButton = () => {
+	const onClickDeleteTimelineButton = () => {
 		deleteTimeline(
 			{ timelineId },
 			{
 				onSuccess: () => {
-					toast.success("삭제 성공", {
-						description: "타임라인이 삭제되었습니다.",
-					});
-					deleteTimelineModal.close();
+					toast.success("삭제 성공", { description: "타임라인이 삭제되었습니다." });
 					queryClient.invalidateQueries({
 						queryKey: getGetTimelinesQueryKey(),
 					});
 					router.push("/timelines" as Route);
 				},
 				onError: () => {
-					toast.danger("삭제 실패", {
-						description:
-							"타임라인 삭제 중 오류가 발생했습니다. 세션이 있는 타임라인은 삭제할 수 없습니다.",
-					});
+					toast.danger("삭제 실패", { description: "타임라인 삭제 중 오류가 발생했습니다. 세션이 있는 타임라인은 삭제할 수 없습니다." });
 				},
 			},
 		);
@@ -169,31 +155,18 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 		);
 	};
 	const onClickDeleteSessionButton = (sessionId: string) => {
-		const session = sessions.find((item) => item.id === sessionId);
-		state.deleteSessionTargetId = sessionId;
-		state.deleteSessionTargetName = session?.name ?? "";
-		deleteSessionModal.open();
-	};
-	const onClickDeleteSessionConfirmButton = () => {
-		if (!state.deleteSessionTargetId) return;
 		deleteSession(
-			{ timelineId, sessionId: state.deleteSessionTargetId },
+			{ timelineId, sessionId },
 			{
 				onSuccess: () => {
 					toast.success("삭제 성공", { description: "세션이 삭제되었습니다." });
-					deleteSessionModal.close();
-					state.deleteSessionTargetId = "";
-					state.deleteSessionTargetName = "";
 					queryClient.invalidateQueries({
 						queryKey: getGetSessionsQueryKey(timelineId),
 					});
 					refetchSessions();
 				},
 				onError: () => {
-					toast.danger("삭제 실패", {
-						description:
-							"세션 삭제 중 오류가 발생했습니다. 프로그램이 연결된 세션은 삭제할 수 없습니다.",
-					});
+					toast.danger("삭제 실패", { description: "세션 삭제 중 오류가 발생했습니다. 프로그램이 연결된 세션은 삭제할 수 없습니다." });
 				},
 			},
 		);
@@ -248,6 +221,7 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 							color="danger"
 							variant="flat"
 							startContent={<Trash2 className="h-4 w-4" />}
+							isLoading={isDeletingTimeline}
 							onPress={onClickDeleteTimelineButton}
 						>
 							삭제
@@ -259,76 +233,6 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 				onClickCreateProgramButton={onClickCreateProgramButton}
 				onClickDeleteSessionButton={onClickDeleteSessionButton}
 			/>
-			{timeline ? (
-				<Modal state={deleteTimelineModal}>
-					<Modal.Backdrop>
-						<Modal.Container>
-							<Modal.Dialog>
-								<Modal.Header>타임라인 삭제</Modal.Header>
-								<Modal.Body>
-									<p>
-										<strong>{timeline.name}</strong> 타임라인을
-										삭제하시겠습니까?
-									</p>
-									<p className="mt-2 text-sm text-danger">
-										세션이 있는 타임라인은 삭제할 수 없습니다.
-									</p>
-								</Modal.Body>
-								<Modal.Footer>
-									<Button
-										variant="flat"
-										onPress={deleteTimelineModal.close}
-										isDisabled={isDeletingTimeline}
-									>
-										취소
-									</Button>
-									<Button
-										color="danger"
-										onPress={onClickDeleteTimelineConfirmButton}
-										isLoading={isDeletingTimeline}
-									>
-										삭제
-									</Button>
-								</Modal.Footer>
-							</Modal.Dialog>
-						</Modal.Container>
-					</Modal.Backdrop>
-				</Modal>
-			) : null}
-			<Modal state={deleteSessionModal}>
-				<Modal.Backdrop>
-					<Modal.Container>
-						<Modal.Dialog>
-							<Modal.Header>세션 삭제</Modal.Header>
-							<Modal.Body>
-								<p>
-									<strong>{state.deleteSessionTargetName}</strong> 세션을
-									삭제하시겠습니까?
-								</p>
-								<p className="mt-2 text-sm text-danger">
-									프로그램이 연결된 세션은 삭제할 수 없습니다.
-								</p>
-							</Modal.Body>
-							<Modal.Footer>
-								<Button
-									variant="flat"
-									onPress={deleteSessionModal.close}
-									isDisabled={isDeletingSession}
-								>
-									취소
-								</Button>
-								<Button
-									color="danger"
-									onPress={onClickDeleteSessionConfirmButton}
-									isLoading={isDeletingSession}
-								>
-									삭제
-								</Button>
-							</Modal.Footer>
-						</Modal.Dialog>
-					</Modal.Container>
-				</Modal.Backdrop>
-			</Modal>
 		</>
 	);
 });

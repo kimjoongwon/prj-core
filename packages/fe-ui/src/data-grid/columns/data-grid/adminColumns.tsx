@@ -9,10 +9,12 @@ import type { SpaceDto } from "@cocrepo/api/core/spaces";
 import type { SubjectDto } from "@cocrepo/api/core/subjects";
 import type { TaskDto } from "@cocrepo/api/core/tasks";
 import type { TimelineDto } from "@cocrepo/api/core/timelines";
+import { AlertDialog } from "@heroui/react";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
 import type { MouseEvent } from "react";
+import { Chip } from "../../../data-display/Chip/Chip";
 import { Button } from "../../../input/Button/Button";
 import {
 	ActionButtonCell,
@@ -27,7 +29,6 @@ import {
 	TimeRemainingCell,
 	type TimeRemainingStatus,
 } from "../../cell";
-import { Chip } from "../../../data-display/Chip/Chip";
 import {
 	buildColumns,
 	buildColumnsWithDefaultCreatedAt,
@@ -59,6 +60,45 @@ type RoleLike = {
 	name?: string;
 	displayName?: string;
 };
+
+function DeleteAlertActionCell({
+	title,
+	description,
+	onConfirm,
+}: {
+	title: string;
+	description: string;
+	onConfirm: () => void | Promise<void>;
+}) {
+	return (
+		<AlertDialog>
+			<AlertDialog.Trigger>
+				<ActionButtonCell color="danger" variant="light">
+					삭제
+				</ActionButtonCell>
+			</AlertDialog.Trigger>
+			<AlertDialog.Backdrop>
+				<AlertDialog.Container size="sm">
+					<AlertDialog.Dialog>
+						<AlertDialog.Header>
+							<AlertDialog.Icon status="danger" />
+							<AlertDialog.Heading>{title}</AlertDialog.Heading>
+						</AlertDialog.Header>
+						<AlertDialog.Body>{description}</AlertDialog.Body>
+						<AlertDialog.Footer>
+							<Button variant="flat" slot="close">
+								취소
+							</Button>
+							<Button color="danger" slot="close" onPress={onConfirm}>
+								삭제
+							</Button>
+						</AlertDialog.Footer>
+					</AlertDialog.Dialog>
+				</AlertDialog.Container>
+			</AlertDialog.Backdrop>
+		</AlertDialog>
+	);
+}
 
 type TenantWithRole = {
 	role?: RoleLike | null;
@@ -314,10 +354,7 @@ export function buildUserListTableColumns<
 				const roleLabel = getRoleLabel(firstRole);
 
 				return (
-					<ChipCell
-						label={roleLabel}
-						color={getRoleColor(firstRole?.name)}
-					/>
+					<ChipCell label={roleLabel} color={getRoleColor(firstRole?.name)} />
 				);
 			},
 		}),
@@ -499,8 +536,7 @@ export const adminRoleNameColumn = createNameColumn<RoleDto>({
 	size: 180,
 	isRequired: true,
 	nameVariant: "identifier",
-	cell: ({ row }) =>
-		renderRoleName(row.original.name, row.original.isSystem),
+	cell: ({ row }) => renderRoleName(row.original.name, row.original.isSystem),
 });
 
 export const adminRoleDisplayNameColumn = createDisplayNameColumn<RoleDto>();
@@ -725,13 +761,11 @@ export function buildTaskTableColumns<TRow extends TaskDto = TaskDto>({
 		[
 			createActionsColumn<TRow>({
 				cell: ({ row }) => (
-					<ActionButtonCell
-						color="danger"
-						variant="light"
-						onPress={() => onClickDeleteButton(row.original.id)}
-					>
-						삭제
-					</ActionButtonCell>
+					<DeleteAlertActionCell
+						title="태스크 삭제"
+						description="태스크와 연결된 운동 detail을 삭제합니다."
+						onConfirm={() => onClickDeleteButton(row.original.id)}
+					/>
 				),
 			}),
 		],
@@ -776,13 +810,11 @@ export function buildTimelineTableColumns<
 		[
 			createActionsColumn<TRow>({
 				cell: ({ row }) => (
-					<ActionButtonCell
-						color="danger"
-						variant="light"
-						onPress={() => onClickDeleteButton(row.original.id)}
-					>
-						삭제
-					</ActionButtonCell>
+					<DeleteAlertActionCell
+						title="타임라인 삭제"
+						description="선택한 타임라인을 삭제합니다."
+						onConfirm={() => onClickDeleteButton(row.original.id)}
+					/>
 				),
 			}),
 		],
@@ -922,13 +954,11 @@ export function buildRoutineTableColumns<
 		[
 			createActionsColumn<TRow>({
 				cell: ({ row }) => (
-					<ActionButtonCell
-						color="danger"
-						variant="light"
-						onPress={() => onClickDeleteButton(row.original.id)}
-					>
-						삭제
-					</ActionButtonCell>
+					<DeleteAlertActionCell
+						title="루틴 삭제"
+						description="선택한 루틴을 삭제합니다."
+						onConfirm={() => onClickDeleteButton(row.original.id)}
+					/>
 				),
 			}),
 		],

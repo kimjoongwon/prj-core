@@ -3,7 +3,7 @@ import { PASSWORD_RULES } from "@cocrepo/constant";
 /**
  * 비밀번호 정책 검증 유틸리티
  *
- * 프론트엔드(PasswordStrengthIndicator)와 백엔드(PasswordResetService, Auth use cases)에서 공용으로 사용합니다.
+ * 프론트엔드 비밀번호 폼과 백엔드(PasswordResetService, Auth use cases)에서 공용으로 사용합니다.
  */
 
 /** 개별 규칙 검증 결과 */

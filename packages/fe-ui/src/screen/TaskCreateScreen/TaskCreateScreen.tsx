@@ -1,17 +1,20 @@
 "use client";
 
 import {
+	Alert,
 	AssetBrowser,
 	type AssetBrowserAsset,
 	type AssetBrowserProps,
-	ContentLanguageNotice,
-	MediaThumbnail,
-	PageTitleBar,
+	getContentLanguageLabel,
+	Screen,
 	Section,
 	SectionSurface,
+	toContentLanguageCode,
 	useT,
 	VStack,
 } from "@cocrepo/ui";
+import { Card } from "@heroui/react";
+import { ImageIcon, PlayCircle } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Chip } from "../../data-display/Chip/Chip";
 import { Button } from "../../input/Button/Button";
@@ -61,6 +64,58 @@ export interface TaskCreateScreenProps {
 	onClickCancelButton: () => void;
 	onClickSaveButton: () => void;
 }
+function MediaPreview({
+	imageUrl,
+	videoUrl,
+	title,
+	className,
+}: {
+	imageUrl?: string | null;
+	videoUrl?: string | null;
+	title: string;
+	className?: string;
+}) {
+	const mediaClassName = `relative overflow-hidden rounded-xl bg-surface-secondary ${className ?? ""}`;
+	if (imageUrl) {
+		return (
+			<Card className={mediaClassName}>
+				<img
+					src={imageUrl}
+					alt={title}
+					className="h-full w-full object-cover"
+					loading="lazy"
+				/>
+			</Card>
+		);
+	}
+	if (videoUrl) {
+		return (
+			<Card className={mediaClassName}>
+				<video
+					src={videoUrl}
+					className="h-full w-full object-cover"
+					muted
+					playsInline
+					preload="metadata"
+				/>
+				<div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+				<div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+					<PlayCircle className="h-8 w-8 text-white/90" />
+				</div>
+			</Card>
+		);
+	}
+	return (
+		<Card
+			className={`flex items-center justify-center rounded-xl border border-dashed border-border bg-surface-secondary text-muted ${className ?? ""}`}
+		>
+			<div className="flex flex-col items-center gap-2">
+				<ImageIcon className="h-7 w-7" />
+				<span className="text-xs">미리보기 없음</span>
+			</div>
+		</Card>
+	);
+}
 const ExerciseMediaField = observer(function ExerciseMediaField({
 	label,
 	description,
@@ -102,7 +157,7 @@ const ExerciseMediaField = observer(function ExerciseMediaField({
 			</div>
 			{selectedAsset ? (
 				<div className="flex flex-col gap-3 md:flex-row">
-					<MediaThumbnail
+					<MediaPreview
 						imageUrl={isImage ? selectedAsset.publicUrl : undefined}
 						videoUrl={!isImage ? selectedAsset.publicUrl : undefined}
 						title={selectedAsset.originalName}
@@ -159,9 +214,11 @@ export const TaskCreateScreen = observer(
 		onClickSaveButton,
 	}: TaskCreateScreenProps) => {
 		const t = useT();
+		const languageCode = toContentLanguageCode(contentLanguageCode);
+		const languageLabel = getContentLanguageLabel(contentLanguageCode);
 		return (
 			<VStack fullWidth>
-				<PageTitleBar
+				<Screen.Header
 					title="태스크 등록"
 					description="새로운 태스크와 운동 detail을 등록합니다."
 					actions={
@@ -185,13 +242,21 @@ export const TaskCreateScreen = observer(
 				/>
 				<SectionSurface>
 					<Section>
-						<Section.Header>
-							<PageTitleBar level={2} title="기본 정보" />
-						</Section.Header>
+						<Section.Header title="기본 정보" />
 						<Section.Body>
 							<div className="flex flex-col gap-4">
-								<ContentLanguageNotice
-									contentLanguageCode={contentLanguageCode}
+								<Alert
+									status={languageCode ? "accent" : "warning"}
+									title="현재 Space 콘텐츠 언어"
+									actions={
+										<Chip
+											size="sm"
+											variant="flat"
+											color={languageCode ? "primary" : "warning"}
+										>
+											{languageLabel}
+										</Chip>
+									}
 								/>
 								<TextField
 									label={t("운동명")}

@@ -2,20 +2,12 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { OidcSessionListScreen } from "./OidcSessionListScreen";
 
 const defaultArgs = {
-	isGrantRevokeModalOpen: false,
 	isLoading: false,
-	isRevokeAllModalOpen: false,
 	isRevokingAll: false,
-	isRevokingByGrant: false,
-	onCloseGrantRevokeModal: (..._args: never[]) => undefined,
-	onCloseRevokeAllModal: (..._args: never[]) => undefined,
-	onConfirmRevokeAll: (..._args: never[]) => undefined,
-	onConfirmRevokeByGrant: (..._args: never[]) => undefined,
-	onOpenGrantRevokeModal: (..._args: never[]) => undefined,
-	onOpenRevokeAllModal: (..._args: never[]) => undefined,
+	onClickRevokeAllButton: (..._args: never[]) => undefined,
+	onClickRevokeByGrantButton: (..._args: never[]) => undefined,
 	onRevokeSession: (..._args: never[]) => undefined,
 	queryStates: { page: 1, take: 10, skip: 0, search: "" },
-	revokeGrantId: "revoke-grant-1",
 	sessions: [
 		{
 			accountId: "account-1",

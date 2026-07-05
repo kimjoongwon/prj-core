@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "@heroui/react";
 import {
 	getGetTenantAccessRequestQueryKey,
 	getGetTenantAccessRequestsQueryKey,
@@ -13,7 +14,6 @@ import {
 	type TenantAccessRequestReviewDetail,
 	TenantAccessRequestReviewDetailScreen,
 } from "@cocrepo/ui";
-import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";

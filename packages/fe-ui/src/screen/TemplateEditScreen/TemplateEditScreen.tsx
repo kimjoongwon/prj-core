@@ -1,13 +1,10 @@
 "use client";
 
-import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
+import { Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
-import {
-	TemplateForm,
-	type TemplateFormState,
-} from "../../form/TemplateForm";
+import { TemplateForm, type TemplateFormState } from "../../form/TemplateForm";
 import { Button } from "../../input/Button/Button";
 
 export type {
@@ -16,7 +13,6 @@ export type {
 	TemplateFormState,
 } from "../../form/TemplateForm";
 export type { VariableEditItem } from "../../form/VariableEditTable";
-
 export interface TemplateEditScreenProps {
 	title: ReactNode;
 	description?: ReactNode;
@@ -49,11 +45,10 @@ export const TemplateEditScreen = observer((props: TemplateEditScreenProps) => {
 		actions,
 		children,
 	} = props;
-
 	if (isLoading) {
 		return (
 			<VStack fullWidth>
-				<PageTitleBar title={title} description={loadingMessage} />
+				<Screen.Header title={title} description={loadingMessage} />
 				<SectionSurface>
 					<Section>
 						<Section.Body>
@@ -67,11 +62,10 @@ export const TemplateEditScreen = observer((props: TemplateEditScreenProps) => {
 			</VStack>
 		);
 	}
-
 	if (notFound || !state) {
 		return (
 			<VStack fullWidth>
-				<PageTitleBar title={title} description={notFoundMessage} />
+				<Screen.Header title={title} description={notFoundMessage} />
 				<SectionSurface>
 					<Section>
 						<Section.Body>
@@ -85,20 +79,20 @@ export const TemplateEditScreen = observer((props: TemplateEditScreenProps) => {
 			</VStack>
 		);
 	}
-
 	return (
 		<VStack fullWidth>
-			<PageTitleBar title={title} description={description} actions={actions} />
+			<Screen.Header
+				title={title}
+				description={description}
+				actions={actions}
+			/>
 			<SectionSurface>
 				<Section>
 					<Section.Body>
 						<VStack>
 							<Section>
 								<Section.Body>
-									<TemplateForm
-										state={state}
-										readOnly={readOnly}
-									/>
+									<TemplateForm state={state} readOnly={readOnly} />
 								</Section.Body>
 							</Section>
 							{children}

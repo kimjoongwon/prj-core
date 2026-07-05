@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "@heroui/react";
 import {
 	type CreateTemplateVariableItemDto,
 	useCreateTemplate,
@@ -9,7 +10,6 @@ import {
 	TemplateEditScreen,
 	type TemplateFormState,
 } from "@cocrepo/ui";
-import { toast } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -33,18 +33,14 @@ const AdminTemplatesNewRoute = observer(() => {
 	const { mutate: createTemplate, isPending } = useCreateTemplate({
 		mutation: {
 			onSuccess: (response) => {
-				toast.success("템플릿 등록 성공", {
-					description: "템플릿이 성공적으로 등록되었습니다.",
-				});
+				toast.success("템플릿 등록 성공", { description: "템플릿이 성공적으로 등록되었습니다." });
 				const templateId = response?.data?.id;
 				if (templateId) {
 					router.push(`/templates/${templateId}` as Route);
 				}
 			},
 			onError: (error) => {
-				toast.danger("템플릿 등록 실패", {
-					description: error.message || "템플릿 등록 중 오류가 발생했습니다.",
-				});
+				toast.danger("템플릿 등록 실패", { description: error.message || "템플릿 등록 중 오류가 발생했습니다." });
 			},
 		},
 	});

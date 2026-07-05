@@ -61,15 +61,8 @@ test.describe("루틴 목록 페이지", () => {
 			const TEST_TASK_NAME = `E2E 루틴 운동 ${uniqueSuffix}`;
 			let createdTaskId: string | undefined;
 
-			const clickSaveWithOptionalEmptyActivitiesConfirm = async () => {
+			const clickSaveButton = async () => {
 				await page.getByRole("button", { name: "저장" }).click();
-
-				const confirmSaveButton = page.getByRole("button", {
-					name: "저장 진행",
-				});
-				if (await confirmSaveButton.isVisible().catch(() => false)) {
-					await confirmSaveButton.click();
-				}
 			};
 
 			// Cleanup: 기존 E2E 테스트 루틴 삭제
@@ -144,7 +137,7 @@ test.describe("루틴 목록 페이지", () => {
 					resp.url().includes("/api/v1/routines") &&
 					resp.request().method() === "POST",
 			);
-			await clickSaveWithOptionalEmptyActivitiesConfirm();
+			await clickSaveButton();
 			const response = await createResponse;
 
 			// Then: 201 Created 응답 확인
@@ -201,7 +194,7 @@ test.describe("루틴 목록 페이지", () => {
 					resp.url().includes("/api/v1/routines/") &&
 					resp.request().method() === "PATCH",
 			);
-			await clickSaveWithOptionalEmptyActivitiesConfirm();
+			await clickSaveButton();
 			const patchResp = await updateResponse;
 
 			// Then: 200 OK 응답 확인
@@ -228,17 +221,12 @@ test.describe("루틴 목록 페이지", () => {
 			// ── 삭제 플로우 ──
 
 			// When: 삭제 버튼 클릭
-			await page.getByRole("button", { name: "삭제" }).click();
-
-			// When: 삭제 확인 모달에서 삭제 버튼 클릭
-			await page.waitForTimeout(500);
-
 			const deleteResponse = page.waitForResponse(
 				(resp) =>
 					resp.url().includes("/api/v1/routines/") &&
 					resp.request().method() === "DELETE",
 			);
-			await page.getByRole("button", { name: "삭제" }).last().click();
+			await page.getByRole("button", { name: "삭제" }).click();
 			const deleteResp = await deleteResponse;
 
 			// Then: 204 No Content 응답 확인

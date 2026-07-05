@@ -1,6 +1,6 @@
 "use client";
 
-import { PageTitleBar, Section, SectionSurface, VStack } from "@cocrepo/ui";
+import { Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import {
 	Activity,
 	CheckCircle,
@@ -114,7 +114,7 @@ export const IdentityDashboardScreen = observer(
 		}, 0);
 		return (
 			<VStack fullWidth>
-				<PageTitleBar
+				<Screen.Header
 					title="대시보드"
 					description="IDP 인증 시스템 현황을 한눈에 확인합니다."
 				/>
@@ -123,13 +123,10 @@ export const IdentityDashboardScreen = observer(
 						<Section.Body>
 							<VStack>
 								<Section>
-									<Section.Header>
-										<PageTitleBar
-											level={2}
-											title="주요 지표"
-											description="세션, 성공/실패 로그인, 잠금 상태를 요약합니다."
-										/>
-									</Section.Header>
+									<Section.Header
+										title="주요 지표"
+										description="세션, 성공/실패 로그인, 잠금 상태를 요약합니다."
+									/>
 									<Section.Body>
 										<div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
 											{statCards.map((card) => (
@@ -156,9 +153,7 @@ export const IdentityDashboardScreen = observer(
 									</Section.Body>
 								</Section>
 								<Section>
-									<Section.Header>
-										<PageTitleBar level={2} title="최근 7일 로그인 추이" />
-									</Section.Header>
+									<Section.Header title="최근 7일 로그인 추이" />
 									<Section.Body>
 										{trendItems.length === 0 ? (
 											<p className="py-8 text-center text-muted">

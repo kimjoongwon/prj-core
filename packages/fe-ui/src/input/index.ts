@@ -1,5 +1,6 @@
 export * from "./Button";
 export { Checkbox } from "./Checkbox";
+export * from "./HtmlEditor";
 export * from "./Link";
 export * from "./Pagination";
 export { RadioGroup } from "./RadioGroup";

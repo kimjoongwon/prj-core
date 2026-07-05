@@ -10,7 +10,7 @@ import {
 	buildOidcClientTableColumns,
 	DataGrid,
 	DataGridState,
-	PageTitleBar,
+	Screen,
 	Section,
 	SectionSurface,
 	VStack,
@@ -68,7 +68,7 @@ export const OidcClientListScreen = observer(
 		const oidcClientRows = oidcClients ?? [];
 		return (
 			<VStack>
-				<PageTitleBar
+				<Screen.Header
 					title="OIDC 클라이언트"
 					description="시스템에 등록된 OIDC 클라이언트를 관리합니다."
 					actions={

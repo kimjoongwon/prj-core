@@ -3,7 +3,7 @@
 import { observer } from "mobx-react-lite";
 import { Select } from "../../input/Select";
 import { TextField } from "../../input/TextField";
-import { CONTENT_LANGUAGE_OPTIONS } from "../../widget/ContentLanguageNotice";
+import { CONTENT_LANGUAGE_OPTIONS } from "../../data-display/content-language";
 import type { GroundFormField, GroundFormState } from "./GroundForm.state";
 
 export interface GroundFormProps {

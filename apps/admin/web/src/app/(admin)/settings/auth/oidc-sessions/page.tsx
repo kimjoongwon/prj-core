@@ -13,16 +13,13 @@ import {
 	OidcSessionListScreen,
 	type OidcSessionListScreenStats,
 } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
-import { useState } from "react";
 
 export default observer(function OidcSessionsPageRoute() {
 	const queryClient = useQueryClient();
-	const [revokeGrantId, setRevokeGrantId] = useState<string | null>(null);
-	const [isGrantRevokeModalOpen, setIsGrantRevokeModalOpen] = useState(false);
-	const [isRevokeAllModalOpen, setIsRevokeAllModalOpen] = useState(false);
 	const [queryStates, setQueryStates] = useQueryStates({
 		take: parseAsInteger.withDefault(20),
 		skip: parseAsInteger.withDefault(0),
@@ -47,21 +44,54 @@ export default observer(function OidcSessionsPageRoute() {
 		});
 	};
 
-	const { mutate: revokeSession } = useRevokeOidcSession({
+	const { mutateAsync: revokeSession } = useRevokeOidcSession({
 		mutation: {
-			onSuccess: invalidateSessionQueries,
+			onSuccess: () => {
+				invalidateSessionQueries();
+				toast.success("세션 폐기", {
+					description: "선택한 세션/토큰을 폐기했습니다.",
+				});
+			},
+			onError: (error) => {
+				toast.danger("세션 폐기 실패", {
+					description:
+						error.message || "세션/토큰 폐기 중 오류가 발생했습니다.",
+				});
+			},
 		},
 	});
-	const { mutate: revokeByGrant, isPending: isRevokingByGrant } =
-		useRevokeOidcSessionsByGrant({
-			mutation: {
-				onSuccess: invalidateSessionQueries,
+	const { mutateAsync: revokeByGrant } = useRevokeOidcSessionsByGrant({
+		mutation: {
+			onSuccess: () => {
+				invalidateSessionQueries();
+				toast.success("Grant 세션 폐기", {
+					description: "선택한 Grant의 세션/토큰을 폐기했습니다.",
+				});
 			},
-		});
-	const { mutate: revokeAll, isPending: isRevokingAll } =
+			onError: (error) => {
+				toast.danger("Grant 세션 폐기 실패", {
+					description:
+						error.message || "Grant 세션/토큰 폐기 중 오류가 발생했습니다.",
+				});
+			},
+		},
+	});
+	const { mutateAsync: revokeAll, isPending: isRevokingAll } =
 		useRevokeAllOidcSessions({
 			mutation: {
-				onSuccess: invalidateSessionQueries,
+				onSuccess: () => {
+					invalidateSessionQueries();
+					toast.success("전체 세션 폐기", {
+						description: "전체 OIDC 세션/토큰을 폐기했습니다.",
+					});
+				},
+				onError: (error) => {
+					toast.danger("전체 세션 폐기 실패", {
+						description:
+							error.message ||
+							"전체 OIDC 세션/토큰 폐기 중 오류가 발생했습니다.",
+					});
+				},
 			},
 		});
 
@@ -78,36 +108,15 @@ export default observer(function OidcSessionsPageRoute() {
 						? mapOidcSessionStats(statsResponse.data)
 						: undefined
 				}
-				revokeGrantId={revokeGrantId}
-				isGrantRevokeModalOpen={isGrantRevokeModalOpen}
-				isRevokeAllModalOpen={isRevokeAllModalOpen}
-				isRevokingByGrant={isRevokingByGrant}
 				isRevokingAll={isRevokingAll}
 				onRevokeSession={(key) => {
-					revokeSession({ key });
+					void revokeSession({ key });
 				}}
-				onOpenGrantRevokeModal={(grantId) => {
-					setRevokeGrantId(grantId);
-					setIsGrantRevokeModalOpen(true);
+				onClickRevokeByGrantButton={(grantId) => {
+					void revokeByGrant({ grantId });
 				}}
-				onCloseGrantRevokeModal={() => {
-					setIsGrantRevokeModalOpen(false);
-					setRevokeGrantId(null);
-				}}
-				onConfirmRevokeByGrant={(grantId) => {
-					revokeByGrant({ grantId });
-					setIsGrantRevokeModalOpen(false);
-					setRevokeGrantId(null);
-				}}
-				onOpenRevokeAllModal={() => {
-					setIsRevokeAllModalOpen(true);
-				}}
-				onCloseRevokeAllModal={() => {
-					setIsRevokeAllModalOpen(false);
-				}}
-				onConfirmRevokeAll={() => {
-					revokeAll();
-					setIsRevokeAllModalOpen(false);
+				onClickRevokeAllButton={() => {
+					void revokeAll();
 				}}
 			/>
 		</>
