@@ -1,24 +1,6 @@
+import { RESERVATION_ERRORS } from "@cocrepo/constant";
+import type { Reservation } from "@cocrepo/entity";
 import {
-	COURSE_ERRORS,
-	PAYMENT_ERRORS,
-	RESERVATION_ERRORS,
-} from "@cocrepo/constant";
-import type {
-	CourseOffering,
-	CoursePass,
-	Enrollment,
-	Payment,
-	Reservation,
-} from "@cocrepo/entity";
-import {
-	CourseOfferingStatus,
-	CoursePassStatus,
-	CourseStatus,
-	EnrollmentStatus,
-	PaymentMethod,
-	PaymentReferenceType,
-	PaymentStatus,
-	PaymentSubjectType,
 	type RecurringDayOfWeek,
 	RepeatCycleTypes,
 	ReservationStatus,
@@ -26,11 +8,9 @@ import {
 } from "@cocrepo/prisma";
 import {
 	type BookingProgramRecord,
-	CoursesRepository,
 	ReservationsRepository,
 	TenantsRepository,
 } from "@cocrepo/repository";
-import { CurrencyCode, Money } from "@cocrepo/vo";
 import {
 	BadRequestException,
 	ConflictException,
@@ -40,23 +20,13 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
-import { CourseAggregate } from "../course/course.aggregate";
-import { PaymentAggregate } from "../payment/payment.aggregate";
 import { ACTIVE_RESERVATION_STATUSES } from "./active-reservation-statuses";
-import type {
-	BookingFeedInput,
-	CreateReservationInput,
-	ReservationCheckoutBootstrapInput,
-	ReservationCheckoutInput,
-} from "@cocrepo/input";
-import { CHECKOUT_PAYMENT_METHODS } from "./checkout-payment-methods";
-import { CHECKOUT_PAYMENT_PROVIDER } from "./checkout-payment-provider";
+import type { BookingFeedInput, CreateReservationInput } from "@cocrepo/input";
 import { CONFIRMED_CANCEL_CUTOFF_HOURS } from "./confirmed-cancel-cutoff-hours";
 import { DEFAULT_FEED_WINDOW_DAYS } from "./default-feed-window-days";
 import { DEFAULT_SESSION_DURATION_MINUTES } from "./default-session-duration-minutes";
 import { FEW_LEFT_THRESHOLD } from "./few-left-threshold";
 import { RESERVATION_AVAILABILITY } from "./reservation-availability";
-import { ReservationCheckoutProgressStatus } from "./reservation-checkout-progress-status";
 
 @Injectable()
 export class ReservationAggregate {
@@ -65,9 +35,6 @@ export class ReservationAggregate {
 	constructor(
 		private readonly repository: ReservationsRepository,
 		private readonly tenantsRepository: TenantsRepository,
-		private readonly coursesRepository?: CoursesRepository,
-		private readonly paymentService?: PaymentAggregate,
-		private readonly courseService?: CourseAggregate,
 	) {}
 
 	async getBookingFeed(input: BookingFeedInput) {
@@ -88,32 +55,18 @@ export class ReservationAggregate {
 		const programIds = Array.from(
 			new Set(occurrences.map((item) => item.program.id)),
 		);
-		const timelineIds = Array.from(
-			new Set(occurrences.map((item) => item.program.session.timeline.id)),
-		);
-		const [reservations, coachNames, coursePasses, checkoutOptionsByTimeline] =
-			await Promise.all([
-				this.repository.findReservationsForFeed({
-					spaceId: input.spaceId,
-					userId: input.userId,
-					from: feedWindow.from,
-					to: feedWindow.to,
-					programIds,
-				}),
-				this.repository.findCoachNames(
-					programs.map((program) => program.instructorId),
-				),
-				this.findReservableCoursePasses({
-					from: feedWindow.from,
-					spaceId: input.spaceId,
-					to: feedWindow.to,
-					userId: input.userId,
-				}),
-				this.findCheckoutOptionsByTimelineIds({
-					spaceId: input.spaceId,
-					timelineIds,
-				}),
-			]);
+		const [reservations, coachNames] = await Promise.all([
+			this.repository.findReservationsForFeed({
+				spaceId: input.spaceId,
+				userId: input.userId,
+				from: feedWindow.from,
+				to: feedWindow.to,
+				programIds,
+			}),
+			this.repository.findCoachNames(
+				programs.map((program) => program.instructorId),
+			),
+		]);
 
 		const reservationsByOccurrence =
 			this.groupReservationsByOccurrence(reservations);
@@ -134,11 +87,6 @@ export class ReservationAggregate {
 						) ?? [],
 					userId: input.userId,
 					coachName: coachNames.get(occurrence.program.instructorId) ?? null,
-					coursePasses,
-					checkoutOptions:
-						checkoutOptionsByTimeline.get(
-							occurrence.program.session.timeline.id,
-						) ?? [],
 				}),
 			);
 
@@ -160,104 +108,6 @@ export class ReservationAggregate {
 		return this.repository.findMine(params);
 	}
 
-	async getCheckoutBootstrap(input: ReservationCheckoutBootstrapInput) {
-		await this.assertUserCanBookSpace(input.userId, input.spaceId);
-
-		const checkoutOccurrence =
-			await this.resolveCheckoutProgramOccurrence(input);
-		const options = await this.findCheckoutOptionsForTimeline({
-			spaceId: input.spaceId,
-			timelineId: input.timelineId,
-		});
-
-		if (options.length === 0) {
-			throw new NotFoundException(RESERVATION_ERRORS.CHECKOUT_OPTION_NOT_FOUND);
-		}
-
-		return {
-			context: this.toCheckoutContext({
-				coachName: null,
-				endsAt: checkoutOccurrence.endsAt,
-				program: checkoutOccurrence.program,
-				startsAt: checkoutOccurrence.startsAt,
-			}),
-			options,
-			paymentMethods: [...CHECKOUT_PAYMENT_METHODS],
-		};
-	}
-
-	@Transactional()
-	async checkout(params: ReservationCheckoutInput) {
-		this.assertCheckoutPaymentMethod(params.paymentMethod);
-		const tenantId = await this.assertUserCanBookSpace(
-			params.userId,
-			params.spaceId,
-		);
-
-		const existingByKey = await this.repository.findByUserAndIdempotencyKey(
-			params.userId,
-			params.idempotencyKey,
-		);
-		if (existingByKey) {
-			return this.toExistingCheckoutResult(existingByKey);
-		}
-
-		const checkoutOccurrence =
-			await this.resolveCheckoutProgramOccurrence(params);
-		const courseOffering = await this.resolveCheckoutCourseOffering({
-			courseOfferingId: params.courseOfferingId,
-			spaceId: params.spaceId,
-			timelineId: params.timelineId,
-		});
-		const now = new Date();
-		const payment = await this.createCheckoutPayment({
-			courseOffering,
-			idempotencyKey: params.idempotencyKey,
-			method: params.paymentMethod,
-			occurrenceStartAt: params.occurrenceStartAt,
-			programName: checkoutOccurrence.program.name,
-			spaceId: params.spaceId,
-			userId: params.userId,
-		});
-		const enrollment = await this.getCourseService().createEnrollment({
-			assignedTimelineId: params.timelineId,
-			courseId: courseOffering.courseId,
-			courseOfferingId: courseOffering.id,
-			currency: this.resolveCourseCurrency(courseOffering),
-			paidAmount: this.resolveCoursePriceAmount(courseOffering),
-			paidAt: now,
-			paymentExternalId: payment.providerPaymentId,
-			paymentId: payment.id,
-			paymentProvider: payment.provider,
-			paymentStatus: PaymentStatus.PAID,
-			status: EnrollmentStatus.ACTIVE,
-			userId: params.userId,
-			validFrom: now,
-		});
-		const coursePass = this.requireIssuedCoursePass(enrollment);
-		const reservation = await this.create({
-			spaceId: params.spaceId,
-			userId: params.userId,
-			input: {
-				coursePassId: coursePass.id,
-				idempotencyKey: params.idempotencyKey,
-				memo: params.memo ?? null,
-				occurrenceStartAt: params.occurrenceStartAt,
-				programId: params.programId,
-				sessionId: params.sessionId,
-				timelineId: params.timelineId,
-			},
-		});
-
-		return {
-			coursePass,
-			enrollment,
-			payment,
-			progressSteps: this.createCompletedCheckoutProgressSteps(reservation),
-			reservation,
-			status: payment.status,
-		};
-	}
 
 	@Transactional()
 	async create(params: {
@@ -310,14 +160,6 @@ export class ReservationAggregate {
 			params.input.occurrenceStartAt,
 		);
 
-		const coursePassId = await this.assertCoursePassCanReserve({
-			coursePassId: params.input.coursePassId,
-			userId: params.userId,
-			spaceId: params.spaceId,
-			timelineId: params.input.timelineId,
-			occurrenceStartAt: params.input.occurrenceStartAt,
-		});
-
 		const duplicate = await this.repository.findActiveDuplicate({
 			userId: params.userId,
 			programId: params.input.programId,
@@ -340,14 +182,10 @@ export class ReservationAggregate {
 					occurrenceStartAt: params.input.occurrenceStartAt,
 				})) + 1;
 		const now = new Date();
-		if (shouldConfirm) {
-			await this.consumeCoursePassReservation(coursePassId);
-		}
 
 		const reservation = await this.repository.create({
 			tenantId,
 			userId: params.userId,
-			coursePassId,
 			timelineId: params.input.timelineId,
 			sessionId: params.input.sessionId,
 			programId: params.input.programId,
@@ -403,7 +241,6 @@ export class ReservationAggregate {
 		const canceled = await this.repository.save(reservation);
 
 		if (wasConfirmed) {
-			await this.releaseCoursePassReservation(reservation.coursePassId);
 			await this.promoteWaitlistIfPossible({
 				programId: reservation.programId,
 				occurrenceStartAt: reservation.occurrenceStartAt,
@@ -414,318 +251,6 @@ export class ReservationAggregate {
 		return canceled;
 	}
 
-	private async toExistingCheckoutResult(reservation: Reservation) {
-		const coursePass =
-			reservation.coursePass ??
-			(await this.getCoursesRepository().findCoursePassById(
-				reservation.coursePassId,
-			));
-		if (!coursePass) {
-			throw new NotFoundException(COURSE_ERRORS.COURSE_PASS_NOT_FOUND);
-		}
-
-		const enrollment = await this.getCourseService().findEnrollmentDetails(
-			coursePass.enrollmentId,
-		);
-		if (!enrollment.payment) {
-			throw new NotFoundException(PAYMENT_ERRORS.PAYMENT_NOT_FOUND);
-		}
-
-		return {
-			coursePass: enrollment.coursePass ?? coursePass,
-			enrollment,
-			payment: enrollment.payment,
-			progressSteps: this.createCompletedCheckoutProgressSteps(reservation),
-			reservation,
-			status: enrollment.payment.status,
-		};
-	}
-
-	private createCompletedCheckoutProgressSteps(reservation: Reservation) {
-		return [
-			{
-				id: "reservation-context",
-				label: "예약 정보 확인",
-				status: ReservationCheckoutProgressStatus.COMPLETED,
-			},
-			{
-				id: "payment-ledger",
-				label: "결제 요청 생성",
-				status: ReservationCheckoutProgressStatus.COMPLETED,
-			},
-			{
-				id: "payment-approval",
-				label: "결제 승인 처리",
-				status: ReservationCheckoutProgressStatus.COMPLETED,
-			},
-			{
-				id: "course-pass",
-				label: "수강권 활성화",
-				status: ReservationCheckoutProgressStatus.COMPLETED,
-			},
-			{
-				id: "reservation",
-				label:
-					reservation.status === ReservationStatus.WAITLISTED
-						? "대기 예약 확정"
-						: "예약 확정",
-				status: ReservationCheckoutProgressStatus.COMPLETED,
-			},
-		];
-	}
-
-	private async resolveCheckoutProgramOccurrence(
-		input: ReservationCheckoutBootstrapInput,
-	): Promise<{
-		program: BookingProgramRecord;
-		startsAt: Date;
-		endsAt: Date;
-	}> {
-		const program = await this.repository.findBookingProgram({
-			spaceId: input.spaceId,
-			timelineId: input.timelineId,
-			sessionId: input.sessionId,
-			programId: input.programId,
-		});
-		if (!program) {
-			throw new NotFoundException(RESERVATION_ERRORS.PROGRAM_NOT_FOUND);
-		}
-
-		this.assertOccurrenceBelongsToSession(program, input.occurrenceStartAt);
-
-		return {
-			endsAt: this.resolveEndsAt(
-				input.occurrenceStartAt,
-				program.session.endDateTime,
-			),
-			program,
-			startsAt: input.occurrenceStartAt,
-		};
-	}
-
-	private async findCheckoutOptionsByTimelineIds(params: {
-		spaceId: string;
-		timelineIds: readonly string[];
-	}) {
-		if (!this.coursesRepository || params.timelineIds.length === 0) {
-			return new Map();
-		}
-
-		const result = await this.coursesRepository.findManyOfferings({
-			where: {
-				course: { is: { status: CourseStatus.ACTIVE } },
-				tenant: { spaceId: params.spaceId },
-				status: {
-					in: [CourseOfferingStatus.ENROLLING, CourseOfferingStatus.ACTIVE],
-				},
-				timelineId: { in: [...params.timelineIds] },
-			},
-			orderBy: [{ startsAt: "asc" }, { createdAt: "asc" }],
-			take: 200,
-		});
-		const optionsByTimeline = new Map<
-			string,
-			Array<ReturnType<typeof this.toCheckoutOption>>
-		>();
-
-		for (const offering of result.items) {
-			if (!offering.timelineId) {
-				continue;
-			}
-			const option = this.toCheckoutOption(offering);
-			const current = optionsByTimeline.get(offering.timelineId) ?? [];
-			current.push(option);
-			optionsByTimeline.set(offering.timelineId, current);
-		}
-
-		return optionsByTimeline;
-	}
-
-	private async findCheckoutOptionsForTimeline(params: {
-		spaceId: string;
-		timelineId: string;
-	}) {
-		const optionsByTimeline = await this.findCheckoutOptionsByTimelineIds({
-			spaceId: params.spaceId,
-			timelineIds: [params.timelineId],
-		});
-
-		return optionsByTimeline.get(params.timelineId) ?? [];
-	}
-
-	private async resolveCheckoutCourseOffering(params: {
-		courseOfferingId: string;
-		spaceId: string;
-		timelineId: string;
-	}): Promise<CourseOffering> {
-		const courseOffering = await this.getCoursesRepository().findOfferingById(
-			params.courseOfferingId,
-		);
-		if (!courseOffering) {
-			throw new NotFoundException(COURSE_ERRORS.COURSE_OFFERING_NOT_FOUND);
-		}
-		if (
-			courseOffering.tenant?.spaceId !== params.spaceId ||
-			courseOffering.timelineId !== params.timelineId
-		) {
-			throw new BadRequestException(
-				COURSE_ERRORS.COURSE_OFFERING_SCOPE_INVALID,
-			);
-		}
-		if (
-			courseOffering.status !== CourseOfferingStatus.ENROLLING &&
-			courseOffering.status !== CourseOfferingStatus.ACTIVE
-		) {
-			throw new BadRequestException(
-				RESERVATION_ERRORS.CHECKOUT_OPTION_NOT_FOUND,
-			);
-		}
-
-		return courseOffering;
-	}
-
-	private async createCheckoutPayment(params: {
-		courseOffering: CourseOffering;
-		idempotencyKey: string;
-		method: PaymentMethod;
-		occurrenceStartAt: Date;
-		programName: string;
-		spaceId: string;
-		userId: string;
-	}): Promise<Payment> {
-		const priceAmount = this.resolveCoursePriceAmount(params.courseOffering);
-		const currency = this.resolveCourseCurrency(params.courseOffering);
-		const providerPaymentId = `mobile-placeholder-${params.idempotencyKey}`;
-
-		return this.getPaymentService().createPayment({
-			approvedAt: new Date(),
-			currency,
-			method: params.method,
-			metadata: {
-				checkoutType: "reservation",
-				occurrenceStartAt: params.occurrenceStartAt.toISOString(),
-				programName: params.programName,
-			},
-			payerUserId: params.userId,
-			provider: CHECKOUT_PAYMENT_PROVIDER,
-			providerOrderId: `reservation-checkout-${params.idempotencyKey}`,
-			providerPaymentId,
-			references: [
-				{
-					label: params.programName,
-					referenceId: params.idempotencyKey,
-					referenceType: PaymentReferenceType.SERVICE_USAGE,
-					role: "reservation-intent",
-					serviceCode: "reservation",
-				},
-			],
-			requestedAt: new Date(),
-			status: PaymentStatus.PAID,
-			subjects: [
-				{
-					currency,
-					metadata: {
-						courseId: params.courseOffering.courseId,
-						durationMonths: params.courseOffering.course?.durationMonths,
-						timelineId: params.courseOffering.timelineId,
-					},
-					quantity: 1,
-					serviceCode: "course",
-					subjectId: params.courseOffering.id,
-					subjectLabel: this.resolveCheckoutOptionLabel(params.courseOffering),
-					subjectType: PaymentSubjectType.COURSE_OFFERING,
-					totalAmount: priceAmount,
-					unitAmount: priceAmount,
-				},
-			],
-			title: `${this.resolveCheckoutOptionLabel(params.courseOffering)} 결제`,
-			totalAmount: priceAmount,
-		});
-	}
-
-	private requireIssuedCoursePass(enrollment: Enrollment): CoursePass {
-		if (!enrollment.coursePass) {
-			throw new BadRequestException(
-				COURSE_ERRORS.ENROLLMENT_PASS_TIMELINE_REQUIRED,
-			);
-		}
-
-		return enrollment.coursePass;
-	}
-
-	private assertCheckoutPaymentMethod(method: PaymentMethod): void {
-		if (!CHECKOUT_PAYMENT_METHODS.includes(method)) {
-			throw new BadRequestException(
-				RESERVATION_ERRORS.CHECKOUT_PAYMENT_METHOD_INVALID,
-			);
-		}
-	}
-
-	private toCheckoutContext(params: {
-		coachName: string | null;
-		endsAt: Date;
-		program: BookingProgramRecord;
-		startsAt: Date;
-	}) {
-		return {
-			coachName: params.coachName,
-			feedItemId: `${params.program.id}:${params.startsAt.toISOString()}`,
-			occurrenceEndsAt: params.endsAt,
-			occurrenceStartAt: params.startsAt,
-			programId: params.program.id,
-			programName: params.program.name,
-			sessionId: params.program.session.id,
-			sessionName: params.program.session.name,
-			timelineId: params.program.session.timeline.id,
-			timelineName: params.program.session.timeline.name,
-		};
-	}
-
-	private toCheckoutOption(courseOffering: CourseOffering) {
-		return {
-			courseId: courseOffering.courseId,
-			courseName: courseOffering.course?.name ?? courseOffering.name,
-			courseOfferingId: courseOffering.id,
-			courseOfferingName: courseOffering.name,
-			currency: this.resolveCourseCurrency(courseOffering),
-			durationMonths: Math.max(courseOffering.course?.durationMonths ?? 1, 1),
-			priceAmount: this.resolveCoursePriceAmount(courseOffering),
-			reservationLimit:
-				Math.max(courseOffering.course?.durationMonths ?? 1, 1) * 4,
-			timelineId: courseOffering.timelineId ?? "",
-		};
-	}
-
-	private resolveCheckoutOptionLabel(courseOffering: CourseOffering): string {
-		const courseName = courseOffering.course?.name ?? "코스";
-		return `${courseName} · ${courseOffering.name}`;
-	}
-
-	private resolveCoursePriceAmount(courseOffering: CourseOffering): number {
-		const currency = CurrencyCode.create(
-			courseOffering.course?.currency ?? "KRW",
-		);
-		return Money.of(courseOffering.course?.basePriceAmount ?? 0, currency)
-			.amount;
-	}
-
-	private resolveCourseCurrency(courseOffering: CourseOffering): string {
-		return CurrencyCode.create(courseOffering.course?.currency ?? "KRW").value;
-	}
-
-	private getPaymentService(): PaymentAggregate {
-		if (!this.paymentService) {
-			throw new Error("PaymentAggregate provider is required");
-		}
-		return this.paymentService;
-	}
-
-	private getCourseService(): CourseAggregate {
-		if (!this.courseService) {
-			throw new Error("CourseAggregate provider is required");
-		}
-		return this.courseService;
-	}
 
 	private async assertUserCanBookSpace(
 		userId: string,
@@ -739,51 +264,6 @@ export class ReservationAggregate {
 			throw new ForbiddenException(RESERVATION_ERRORS.SPACE_ACCESS_REQUIRED);
 		}
 		return tenant.id;
-	}
-
-	private async assertCoursePassCanReserve(params: {
-		coursePassId?: string;
-		userId: string;
-		spaceId: string;
-		timelineId: string;
-		occurrenceStartAt: Date;
-	}): Promise<string> {
-		if (!params.coursePassId) {
-			throw new BadRequestException(COURSE_ERRORS.COURSE_PASS_REQUIRED);
-		}
-
-		const coursePass = await this.getCoursesRepository().findCoursePassById(
-			params.coursePassId,
-		);
-		if (!coursePass) {
-			throw new NotFoundException(COURSE_ERRORS.COURSE_PASS_NOT_FOUND);
-		}
-		if (coursePass.userId !== params.userId) {
-			throw new ForbiddenException(COURSE_ERRORS.COURSE_PASS_USER_MISMATCH);
-		}
-		if (coursePass.timelineId !== params.timelineId) {
-			throw new BadRequestException(
-				COURSE_ERRORS.COURSE_PASS_TIMELINE_MISMATCH,
-			);
-		}
-
-		const passSpaceId = coursePass.courseOffering?.tenant?.spaceId;
-		if (!passSpaceId || passSpaceId !== params.spaceId) {
-			throw new ForbiddenException(COURSE_ERRORS.COURSE_PASS_SPACE_MISMATCH);
-		}
-		if (coursePass.status !== CoursePassStatus.ACTIVE || coursePass.removedAt) {
-			throw new BadRequestException(COURSE_ERRORS.COURSE_PASS_INACTIVE);
-		}
-		if (params.occurrenceStartAt < coursePass.validFrom) {
-			throw new BadRequestException(COURSE_ERRORS.COURSE_PASS_NOT_YET_VALID);
-		}
-		if (params.occurrenceStartAt > coursePass.expiresAt) {
-			throw new BadRequestException(COURSE_ERRORS.COURSE_PASS_EXPIRED);
-		}
-		if (coursePass.reservationRemainingCount <= 0) {
-			throw new BadRequestException(COURSE_ERRORS.COURSE_PASS_NO_REMAINING);
-		}
-		return params.coursePassId;
 	}
 
 	private async promoteWaitlistIfPossible(params: {
@@ -801,42 +281,8 @@ export class ReservationAggregate {
 			throw new BadRequestException(RESERVATION_ERRORS.INVALID_DATA);
 		}
 
-		const coursePassId = await this.assertCoursePassCanReserve({
-			coursePassId: nextWaitlisted.coursePassId,
-			userId: nextWaitlisted.userId,
-			spaceId: nextWaitlistedSpaceId,
-			timelineId: nextWaitlisted.timelineId,
-			occurrenceStartAt: nextWaitlisted.occurrenceStartAt,
-		});
-		await this.consumeCoursePassReservation(coursePassId);
-
 		nextWaitlisted.confirmFromWaitlist(params.now);
 		await this.repository.save(nextWaitlisted);
-	}
-
-	private getCoursesRepository(): CoursesRepository {
-		if (!this.coursesRepository) {
-			throw new Error("CoursesRepository provider is required");
-		}
-		return this.coursesRepository;
-	}
-
-	private async consumeCoursePassReservation(
-		coursePassId: string,
-	): Promise<void> {
-		await this.getCoursesRepository().updateCoursePassUsageById(coursePassId, {
-			reservationUsedCount: { increment: 1 },
-			reservationRemainingCount: { decrement: 1 },
-		});
-	}
-
-	private async releaseCoursePassReservation(
-		coursePassId: string,
-	): Promise<void> {
-		await this.getCoursesRepository().updateCoursePassUsageById(coursePassId, {
-			reservationUsedCount: { decrement: 1 },
-			reservationRemainingCount: { increment: 1 },
-		});
 	}
 
 	private resolveFeedWindow(from?: Date, to?: Date): { from: Date; to: Date } {
@@ -1001,8 +447,6 @@ export class ReservationAggregate {
 		reservations: Reservation[];
 		userId: string;
 		coachName: string | null;
-		coursePasses: CoursePass[];
-		checkoutOptions: Array<ReturnType<typeof this.toCheckoutOption>>;
 	}) {
 		const confirmedCount = params.reservations.filter(
 			(reservation) => reservation.status === ReservationStatus.CONFIRMED,
@@ -1019,12 +463,6 @@ export class ReservationAggregate {
 			params.reservations.find(
 				(reservation) => reservation.userId === params.userId,
 			);
-		const coursePassId = this.resolveCoursePassIdForFeed({
-			coursePasses: params.coursePasses,
-			myReservation,
-			program: params.program,
-			startsAt: params.startsAt,
-		});
 		const availableSeatCount = Math.max(
 			params.program.capacity - confirmedCount,
 			0,
@@ -1035,12 +473,6 @@ export class ReservationAggregate {
 			availableSeatCount,
 			myReservationStatus,
 		});
-		const paymentRequired =
-			!coursePassId &&
-			(availabilityStatus === RESERVATION_AVAILABILITY.AVAILABLE ||
-				availabilityStatus === RESERVATION_AVAILABILITY.FEW_LEFT ||
-				availabilityStatus === RESERVATION_AVAILABILITY.WAITLIST_OPEN);
-		const checkoutPreview = params.checkoutOptions[0] ?? null;
 
 		return {
 			feedItemId: `${params.program.id}:${params.startsAt.toISOString()}`,
@@ -1050,13 +482,6 @@ export class ReservationAggregate {
 			timelineId: params.program.session.timeline.id,
 			sessionId: params.program.session.id,
 			programId: params.program.id,
-			coursePassId,
-			paymentRequired,
-			paymentRequiredReason: paymentRequired
-				? "예약하려면 수강권 결제가 필요합니다"
-				: null,
-			checkoutPreviewPriceAmount: checkoutPreview?.priceAmount ?? null,
-			checkoutPreviewCurrency: checkoutPreview?.currency ?? null,
 			timelineName: params.program.session.timeline.name,
 			sessionName: params.program.session.name,
 			programName: params.program.name,
@@ -1070,7 +495,6 @@ export class ReservationAggregate {
 			ctaLabel: this.resolveCtaLabel({
 				availabilityStatus,
 				myReservationStatus,
-				paymentRequired,
 			}),
 			cancelableUntilAt: this.resolveConfirmedCancelableUntilAt(
 				params.startsAt,
@@ -1083,55 +507,9 @@ export class ReservationAggregate {
 		};
 	}
 
-	private async findReservableCoursePasses(params: {
-		spaceId: string;
-		userId: string;
-		from: Date;
-		to: Date;
-	}): Promise<CoursePass[]> {
-		if (!this.coursesRepository) {
-			return [];
-		}
-
-		const coursePassResult = await this.coursesRepository.findManyCoursePasses({
-			where: {
-				userId: params.userId,
-				status: CoursePassStatus.ACTIVE,
-				validFrom: { lte: params.to },
-				expiresAt: { gte: params.from },
-				reservationRemainingCount: { gt: 0 },
-				courseOffering: { tenant: { spaceId: params.spaceId } },
-			},
-			orderBy: [{ expiresAt: "asc" }],
-			take: 200,
-		});
-
-		return coursePassResult.items;
-	}
-
-	private resolveCoursePassIdForFeed(params: {
-		coursePasses: CoursePass[];
-		myReservation?: Reservation;
-		program: BookingProgramRecord;
-		startsAt: Date;
-	}): string | null {
-		if (params.myReservation?.coursePassId) {
-			return params.myReservation.coursePassId;
-		}
-
-		const matchingPass = params.coursePasses.find(
-			(coursePass) =>
-				coursePass.timelineId === params.program.session.timeline.id &&
-				coursePass.canReserveAt(params.startsAt),
-		);
-
-		return matchingPass?.id ?? null;
-	}
-
 	private resolveCtaLabel(params: {
 		availabilityStatus: (typeof RESERVATION_AVAILABILITY)[keyof typeof RESERVATION_AVAILABILITY];
 		myReservationStatus: ReservationStatus | null;
-		paymentRequired?: boolean;
 	}): string {
 		if (params.availabilityStatus === RESERVATION_AVAILABILITY.RESERVED) {
 			return "예약됨";
@@ -1143,13 +521,7 @@ export class ReservationAggregate {
 			return "마감";
 		}
 		if (params.availabilityStatus === RESERVATION_AVAILABILITY.WAITLIST_OPEN) {
-			if (params.paymentRequired) {
-				return "결제 후 대기";
-			}
 			return "대기";
-		}
-		if (params.paymentRequired) {
-			return "결제 후 예약";
 		}
 		return "예약";
 	}

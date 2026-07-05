@@ -18,13 +18,13 @@ import {
 	type RoutineTaskCandidate,
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
-import { ArrowLeft, Save } from "lucide-react";
 import { useQueries } from "@tanstack/react-query";
+import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { usePersistStore } from "@/stores/AppStoreProvider";
+import { useApp } from "@/stores/AppProvider";
 
 const toPositiveNumberOr = (value: string, defaultValue: number) => {
 	const parsed = Number(value);
@@ -44,7 +44,7 @@ const toNonNegativeNumberOr = (value: string, defaultValue: number) => {
 
 const AdminRoutinesNewRoute = observer(() => {
 	const router = useRouter();
-	const persistStore = usePersistStore();
+	const app = useApp();
 	const [isEmptyActivitiesWarningOpen, setIsEmptyActivitiesWarningOpen] =
 		useState(false);
 	const state = useLocalObservable<RoutineFormState>(() => ({
@@ -157,7 +157,7 @@ const AdminRoutinesNewRoute = observer(() => {
 			title="루틴 등록"
 			description="새로운 운동 루틴을 등록합니다."
 			state={state}
-			contentLanguageCode={persistStore.contentLanguageCode}
+			contentLanguageCode={app.space?.contentLanguageCode}
 			activities={activities}
 			candidateTasks={candidateTasks}
 			isTasksLoading={isTasksLoading}

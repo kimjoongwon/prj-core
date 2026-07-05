@@ -18,12 +18,10 @@ import type {
   GetReservationBookingFeedParams,
 } from "@cocrepo/api/core/model";
 import { useQueryClient } from "@tanstack/react-query";
-import type { Href } from "expo-router";
-import { useRouter } from "expo-router";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { getCoreApiBaseUrl } from "@/auth/auth-config";
-import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
+import { mobileApiScope } from "@/auth/mobile-api-scope";
 
 const BOOKING_WINDOW_DAYS = 14;
 const DEFAULT_TAKE = 200;
@@ -198,17 +196,6 @@ const toBookingClassCardItem = (
   };
 };
 
-const createCheckoutParams = (item: BookingFeedItemDto) => ({
-  occurrenceStartAt: item.startsAt,
-  programId: item.programId,
-  programName: item.programName,
-  sessionId: item.sessionId,
-  sessionName: item.sessionName,
-  timeLabel: formatTimeRange(item.startsAt, item.endsAt),
-  timelineId: item.timelineId,
-  timelineName: item.timelineName,
-});
-
 const getFeedItemsForDate = (
   items: readonly BookingFeedItemDto[],
   selectedDate: string,
@@ -287,7 +274,6 @@ const getFeedStatus = (params: {
 };
 
 const HomeTabRoute = observer(() => {
-  const router = useRouter();
   const queryClient = useQueryClient();
   const bookingDates = createBookingDates();
   const firstBookingDate = bookingDates[0] ?? startOfLocalDay(new Date());
@@ -303,10 +289,10 @@ const HomeTabRoute = observer(() => {
     useState<BookingFeedFilter>("all");
   const [lastSubmittedFeedItem, setLastSubmittedFeedItem] =
     useState<BookingFeedItemDto | null>(null);
-  const isSpaceSelectionPending = !mobileApiScopeStore.isSpaceSelectionResolved;
-  const hasSelectedSpace = Boolean(mobileApiScopeStore.spaceId);
+  const isSpaceSelectionPending = !mobileApiScope.isSpaceSelectionResolved;
+  const hasSelectedSpace = Boolean(mobileApiScope.spaceId);
   const isSpaceUnavailable =
-    mobileApiScopeStore.isSpaceSelectionResolved && !hasSelectedSpace;
+    mobileApiScope.isSpaceSelectionResolved && !hasSelectedSpace;
 
   const bookingFeedQuery = useGetReservationBookingFeed(feedParams, {
     query: { enabled: hasSelectedSpace },
@@ -380,18 +366,6 @@ const HomeTabRoute = observer(() => {
       return;
     }
 
-    if (
-      nextFeedItem.paymentRequired ??
-      (!nextFeedItem.coursePassId &&
-        isBookableStatus(toBookingStatus(nextFeedItem)))
-    ) {
-      router.push({
-        pathname: "/payments/checkout",
-        params: createCheckoutParams(nextFeedItem),
-      } as unknown as Href);
-      return;
-    }
-
     setSelectedFeedItem(nextFeedItem);
     setIsPolicySheetOpen(true);
     setMemo("");
@@ -414,13 +388,12 @@ const HomeTabRoute = observer(() => {
     _item: BookingClassFeedItem,
     nextMemo: string,
   ) {
-    if (!selectedFeedItem?.coursePassId) {
+    if (!selectedFeedItem) {
       return;
     }
 
     createReservationMutation.mutate({
       data: {
-        coursePassId: selectedFeedItem.coursePassId,
         idempotencyKey,
         memo: nextMemo.trim() || undefined,
         occurrenceStartAt: selectedFeedItem.startsAt,

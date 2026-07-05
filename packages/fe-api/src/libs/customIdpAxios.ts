@@ -25,8 +25,8 @@ export const IDP_AXIOS_INSTANCE = Axios.create({
 	withCredentials: true,
 });
 
-// PersistStore 참조 (앱 초기화 시 설정)
-interface PersistStoreRef {
+// Space 참조 (앱 초기화 시 설정)
+interface SpaceRef {
 	accessToken?: string | null;
 	accessTokenExpiresAt?: number | null;
 	refreshToken?: string | null;
@@ -34,15 +34,15 @@ interface PersistStoreRef {
 	sessionId?: string | null;
 	tenantId?: string | null;
 }
-let persistStoreRef: PersistStoreRef | null = null;
+let spaceRef: SpaceRef | null = null;
 
 type NativeRefreshHandler = () => Promise<void>;
 let nativeRefreshHandler: NativeRefreshHandler | null = null;
 
-interface LocaleStoreRef {
+interface LocaleRef {
 	languageCode?: string | null;
 }
-let localeStoreRef: LocaleStoreRef | null = null;
+let localeRef: LocaleRef | null = null;
 
 // 401 발생 시 리다이렉트할 로그인 URL
 let loginRedirectUrl = "/admin/auth/login";
@@ -53,11 +53,11 @@ export function setIdpBaseUrl(baseUrl: string) {
 }
 
 /**
- * IDP Axios에 PersistStore 참조 설정
+ * IDP Axios에 Space 참조 설정
  * 토큰 갱신 시 만료 시간 업데이트에 사용
  */
-export function setIdpPersistStore(store: PersistStoreRef) {
-	persistStoreRef = store;
+export function setIdpSpace(store: SpaceRef) {
+	spaceRef = store;
 }
 
 export function setIdpNativeRefreshHandler(
@@ -66,8 +66,8 @@ export function setIdpNativeRefreshHandler(
 	nativeRefreshHandler = handler;
 }
 
-export function setIdpLocaleStore(store: LocaleStoreRef) {
-	localeStoreRef = store;
+export function setIdpLocale(store: LocaleRef) {
+	localeRef = store;
 }
 
 /**
@@ -102,28 +102,27 @@ const applyTokenRefreshData = (responseData?: {
 	refreshTokenExpiresAt?: number;
 	sessionId?: string;
 }) => {
-	if (!responseData || !persistStoreRef) {
+	if (!responseData || !spaceRef) {
 		return;
 	}
 
-	persistStoreRef.accessToken =
-		responseData.accessToken ?? persistStoreRef.accessToken ?? null;
-	persistStoreRef.refreshToken =
-		responseData.refreshToken ?? persistStoreRef.refreshToken ?? null;
-	persistStoreRef.sessionId =
-		responseData.sessionId ?? persistStoreRef.sessionId ?? null;
+	spaceRef.accessToken =
+		responseData.accessToken ?? spaceRef.accessToken ?? null;
+	spaceRef.refreshToken =
+		responseData.refreshToken ?? spaceRef.refreshToken ?? null;
+	spaceRef.sessionId = responseData.sessionId ?? spaceRef.sessionId ?? null;
 	if (responseData.accessTokenExpiresAt) {
-		persistStoreRef.accessTokenExpiresAt = responseData.accessTokenExpiresAt;
-		persistStoreRef.refreshTokenExpiresAt = responseData.refreshTokenExpiresAt;
+		spaceRef.accessTokenExpiresAt = responseData.accessTokenExpiresAt;
+		spaceRef.refreshTokenExpiresAt = responseData.refreshTokenExpiresAt;
 	}
 };
 
 const syncSessionHeaders = (config: InternalAxiosRequestConfig) => {
 	const headers = AxiosHeaders.from(config.headers);
-	const accessToken = persistStoreRef?.accessToken;
-	const refreshToken = persistStoreRef?.refreshToken;
-	const tenantId = persistStoreRef?.tenantId;
-	const languageCode = localeStoreRef?.languageCode;
+	const accessToken = spaceRef?.accessToken;
+	const refreshToken = spaceRef?.refreshToken;
+	const tenantId = spaceRef?.tenantId;
+	const languageCode = localeRef?.languageCode;
 
 	if (accessToken) {
 		headers.set("Authorization", `Bearer ${accessToken}`);
@@ -147,9 +146,9 @@ const syncSessionHeaders = (config: InternalAxiosRequestConfig) => {
 
 IDP_AXIOS_INSTANCE.interceptors.request.use((config) => {
 	const headers = AxiosHeaders.from(config.headers);
-	const accessToken = persistStoreRef?.accessToken;
-	const refreshToken = persistStoreRef?.refreshToken;
-	const tenantId = persistStoreRef?.tenantId;
+	const accessToken = spaceRef?.accessToken;
+	const refreshToken = spaceRef?.refreshToken;
+	const tenantId = spaceRef?.tenantId;
 
 	if (accessToken && !headers.has("Authorization")) {
 		headers.set("Authorization", `Bearer ${accessToken}`);
@@ -163,7 +162,7 @@ IDP_AXIOS_INSTANCE.interceptors.request.use((config) => {
 		headers.set(REQUEST_HEADER_KEYS.TENANT_ID, tenantId);
 	}
 
-	const languageCode = localeStoreRef?.languageCode;
+	const languageCode = localeRef?.languageCode;
 	if (languageCode && !headers.has(REQUEST_HEADER_KEYS.LANGUAGE)) {
 		headers.set(REQUEST_HEADER_KEYS.LANGUAGE, languageCode);
 	}

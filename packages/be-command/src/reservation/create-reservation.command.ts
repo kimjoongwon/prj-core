@@ -1,7 +1,6 @@
 import type { CreateReservationCommandInput } from "@cocrepo/input";
 
 export class CreateReservationCommand implements CreateReservationCommandInput {
-	readonly coursePassId?: CreateReservationCommandInput["coursePassId"];
 	readonly timelineId!: CreateReservationCommandInput["timelineId"];
 	readonly sessionId!: CreateReservationCommandInput["sessionId"];
 	readonly programId!: CreateReservationCommandInput["programId"];

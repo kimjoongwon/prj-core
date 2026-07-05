@@ -52,10 +52,6 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | GOAL-023 | ACT-001, ACT-002 | AI 기능(LLM 자동 해결, 응답 초안, 감정 분석)을 활용하여 상담 효율을 높인다 | 높음 |
 | GOAL-024 | ACT-001 | 회원가입 전 이메일 인증 요청과 발송 상태를 조회하고 필요한 경우 인증 메일을 재발송한다 | 높음 |
 | GOAL-025 | ACT-001 | 모바일과 web 서비스에 노출할 약관/동의 문서를 버전별로 등록, 게시, 보관한다 | 높음 |
-| GOAL-026 | ACT-001, ACT-002 | Course를 정의하여 무엇을 배우는지와 기본 수강 상품 정책을 관리한다 | 높음 |
-| GOAL-027 | ACT-001, ACT-002 | CourseOffering을 통해 실제 개설된 반/기수와 Timeline 연결을 관리한다 | 높음 |
-| GOAL-028 | ACT-001, ACT-002 | Enrollment와 CoursePass로 결제 후 생기는 수강 권리와 유효기간을 관리한다 | 높음 |
-| GOAL-029 | ACT-001, ACT-002 | Payment 공통 원장에서 Course와 Product 등 여러 서비스의 결제 기록을 Space별로 조회한다 | 높음 |
 
 ## 도메인 목록
 
@@ -79,8 +75,6 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | 타임라인 (Timelines) | `/timelines` | 학기/시즌 타임라인 관리 | 기획 중 |
 | 세션 (Sessions) | `/timelines/[timelineId]/sessions` | 세션 일정 관리 (타임라인 하위) | 기획 중 |
 | 프로그램 (Programs) | `/timelines/[timelineId]/sessions/[sessionId]/programs` | 수업 프로그램 관리 (세션 하위) - 강사·루틴·정원 연결 | 기획 중 |
-| Course aggregate | `/courses` | Course, CourseOffering, Enrollment, CoursePass를 Course aggregate root 화면에서 섹션으로 통합 관리 | backend/API/Orval/admin route 구현 완료 |
-| Payment | `/payments` | Course와 Product 등 여러 서비스 결제를 공통 원장으로 조회하고 subject/reference를 추적 | backend/API/Orval/admin route 구현 완료 |
 | 문의 (Inquiries) | `/inquiries` | 옴니채널 고객 문의 관리 (웹, 이메일, 채팅, SMS). AI 기반 자동 해결/응답 초안/감정 분석 지원 | 기획 완료 |
 | 문의 상세 | `/inquiries/[inquiryId]` | 문의 스레드 뷰, 메시지 작성, AI 응답 초안, 지식베이스 연동 | 기획 완료 |
 | 문의 등록 | `/inquiries/new` | 새 문의 수동 접수 (전화/현장 문의 등) | 기획 완료 |
@@ -167,157 +161,6 @@ Timeline (학기/시즌)
 - 한 세션에 같은 루틴을 중복 배치할 수 없습니다 (`@@unique([sessionId, routineId])`)
 - Program은 독립 메뉴 없이 세션 상세 페이지 내에서 관리됩니다
 
-## Course 도메인 맥락
-
-Course 계열은 결제 후 생기는 수강 권리를 만들고, Timeline 계열은 그 권리를 실제 운영 일정과 회차 예약으로 실행합니다.
-
-```
-Course
-  └─── CourseOffering
-          ├─── Timeline
-          │       └─── Session
-          │               └─── Program
-          └─── Enrollment / CoursePass
-                  ├─── Payment linkage
-                  └─── Reservation
-```
-
-- Course는 "무엇을 배우는가"를 정의합니다.
-- CourseOffering은 특정 Space/기간에 실제 개설된 과정, 반, 기수입니다.
-- Enrollment 또는 CoursePass는 결제 성공 후 활성화되는 수강 권리입니다.
-- Timeline은 먼저 개설된 운영 시간표이며, 사용자는 수강 권리 안에서 Timeline의 회차를 예약합니다.
-- 1:1 코칭처럼 개인 맞춤 운영이 필요한 경우에만 결제 후 개인 전용 Timeline을 생성할 수 있습니다.
-
-### 책임 경계
-
-| 대상 | 책임 | 소유/연결 |
-|------|------|----------|
-| Course | 무엇을 배우는지, 기본 수강 기간/가격/정책을 정의 | Tenant-owned root |
-| CourseOffering | 개설된 반/기수/코호트, 모집 기간, 정원, Timeline 연결을 관리 | Course + Tenant + Timeline |
-| Enrollment | 회원이 CourseOffering에 결제/등록된 상태와 유효기간을 관리 | User + CourseOffering + Payment linkage |
-| CoursePass | 결제 성공 후 발급되는 6개월 기본 수강 권리와 잔여 예약 권리를 관리 | Enrollment 1:1 기본, Reservation이 소비 |
-| Timeline/Session/Program | 수강 권리가 실제 실행되는 일정/회차/프로그램 | CourseOffering 또는 Enrollment에 연결 |
-| Reservation | CoursePass가 허용하는 범위 안에서 특정 Program occurrence 좌석을 점유 | CoursePass + Timeline + Session + Program |
-
-### Backend/API Contract
-
-Course 계열 Prisma/DTO/Entity/Repository/Service/UseCase/Controller/Module과 Orval 산출물은 구현되어 있습니다. Backend API는 Course aggregate root 아래에서 CourseOffering, Enrollment, CoursePass collection을 함께 노출하고, admin route는 `packages/fe-hook/src/useCourseData.ts`에서 Orval hook 결과를 pure screen 입력 계약으로 변환합니다.
-
-#### Entity / Enum
-
-| 타입 | 필수 필드/규칙 |
-|------|---------------|
-| Course | `id`, `tenantId`, `name`, `description`, `durationMonths` 기본 6, `basePriceAmount`, `currency`, `status`, `activeOfferingCount`, `activeEnrollmentCount`, soft delete |
-| CourseOffering | `id`, `courseId`, `tenantId`, `timelineId` 또는 `timelineProvisioningMode`, `name`, `startsAt`, `endsAt`, `enrollmentStartsAt`, `enrollmentEndsAt`, `capacity`, `enrolledCount`, `status`; Course/Tenant/Timeline의 `Tenant.spaceId` 파생 scope 검증 |
-| Enrollment | `id`, `userId`, `courseId`, `courseOfferingId`, `coursePassId`, `assignedTimelineId`, `paymentStatus`, `paymentProvider`, `paymentExternalId`, `paidAt`, `validFrom`, `validUntil`, `status`; 결제 성공 시 CoursePass 발급 |
-| CoursePass | `id`, `enrollmentId`, `userId`, `courseId`, `courseOfferingId`, `timelineId`, `kind`, `issuedAt`, `validFrom`, `expiresAt`, `reservationLimit`, `reservationUsedCount`, `reservationRemainingCount`, `status` |
-| Reservation linkage | 기존 Reservation에 `coursePassId`를 추가해 좌석 점유가 어떤 수강 권리를 소비했는지 추적; 예약 생성 시 pass 유효기간, Timeline 범위, 잔여 예약권을 검증 |
-| Payment linkage | 독립 Payment root가 결제 원장을 소유하고 Enrollment는 `paymentId`로 연결합니다. 기존 최소 결제 참조(`paymentProvider`, `paymentExternalId`, `paymentStatus`, `paidAt`, `paidAmount`, `currency`)는 Course 화면 요약/마이그레이션 보조 필드로만 유지합니다. |
-
-필수 enum: `CourseStatus`, `CourseOfferingStatus`, `EnrollmentStatus`, `CoursePassStatus`, `CoursePassKind`, `PaymentStatus`, `TimelineProvisioningMode`.
-
-#### API Surface
-
-| Resource | Endpoint | OperationId | 용도 |
-|----------|----------|-------------|------|
-| Course | `GET /api/v1/courses` | `getCourses` | `/courses` 목록, 검색, 상태 필터, summary count |
-| Course | `GET /api/v1/courses/:courseId` | `getCourseById` | 상세/수정 진입용 |
-| Course | `POST /api/v1/courses` | `createCourse` | Course 등록 |
-| Course | `PATCH /api/v1/courses/:courseId` | `updateCourse` | Course 수정 |
-| Course | `DELETE /api/v1/courses/:courseId` | `deleteCourse` | soft delete, active offering 있으면 차단 |
-| CourseOffering | `GET /api/v1/courses/offerings` | `getCourseOfferings` | `/courses?section=offerings` 섹션, Course/Timeline/모집 상태 필터 |
-| CourseOffering | `GET /api/v1/courses/offerings/:courseOfferingId` | `getCourseOfferingById` | 개설 반 상세와 Timeline 연결 확인 |
-| CourseOffering | `POST /api/v1/courses/offerings` | `createCourseOffering` | Course + Timeline 연결로 개설 반 생성 |
-| CourseOffering | `PATCH /api/v1/courses/offerings/:courseOfferingId` | `updateCourseOffering` | 정원/모집 기간/상태 수정 |
-| CourseOffering | `DELETE /api/v1/courses/offerings/:courseOfferingId` | `deleteCourseOffering` | active enrollment 있으면 차단 |
-| Enrollment | `GET /api/v1/courses/enrollments` | `getEnrollments` | `/courses?section=enrollments` 섹션, 결제/수강 상태 필터 |
-| Enrollment | `GET /api/v1/courses/enrollments/:enrollmentId` | `getEnrollmentById` | Enrollment와 CoursePass/Payment link 상세 |
-| Enrollment | `POST /api/v1/courses/enrollments` | `createEnrollment` | 결제 성공 또는 관리자 수동 등록으로 Enrollment 생성 |
-| Enrollment | `PATCH /api/v1/courses/enrollments/:enrollmentId` | `updateEnrollment` | 상태/결제 참조/유효기간 보정 |
-| Enrollment | `DELETE /api/v1/courses/enrollments/:enrollmentId` | `deleteEnrollment` | active CoursePass 사용권이 있으면 차단 |
-| CoursePass | `GET /api/v1/courses/passes` | `getCoursePasses` | `/courses?section=passes` 섹션, 만료/잔여 예약권 필터 |
-| CoursePass | `GET /api/v1/courses/passes/:coursePassId` | `getCoursePassById` | 수강권 상세와 Reservation 소비 내역 확인 |
-| CoursePass | `PATCH /api/v1/courses/passes/:coursePassId` | `updateCoursePass` | 만료/정지/잔여권 보정 |
-
-#### Service / Repository / Controller Rules
-
-- CourseOffering 생성/수정은 `courseId`, `tenantId`, `timelineId`의 scope 일치를 검증하되, 실제 Space 범위는 `tenantId -> Tenant.spaceId`로 파생합니다.
-- Enrollment 활성화는 `paymentStatus=PAID` 또는 관리자 수동 grant 사유가 있을 때만 CoursePass를 발급합니다.
-- CoursePass 기본 유효기간은 결제/발급 기준 6개월이며 Course별 정책으로 override 가능합니다.
-- Reservation 생성은 `coursePassId`를 필수 입력으로 받고, 해당 pass가 같은 사용자, 같은 `Tenant.spaceId` 파생 범위, 연결된 Timeline/Session/Program 범위에 속하며 잔여 예약권이 있을 때만 성공합니다.
-- 목록 API는 `ApiResponseEntity(..., { isArray: true })` 형태와 Orval 생성 React Query hook을 유지하기 위해 기존 Timeline/Reservation controller 패턴을 따릅니다.
-
-### Orval / Frontend Handoff
-
-`pnpm --filter=@cocrepo/api codegen:server`로 Course API hook이 `packages/fe-api/src/core/courses`에 생성되어 있습니다.
-
-| Admin route | API endpoint | Orval hook |
-|-------------|--------------|------------|
-| `/courses` | `GET /api/v1/courses` | `useGetCourses` |
-| `/courses?section=offerings` | `GET /api/v1/courses/offerings` | `useGetCourseOfferings` |
-| `/courses?section=enrollments` | `GET /api/v1/courses/enrollments` | `useGetEnrollments` |
-| `/courses?section=passes` | `GET /api/v1/courses/passes` | `useGetCoursePasses` |
-
-Admin route는 `_course-data.ts` mock을 사용하지 않습니다. `useCourseData`가 Orval 응답과 `isLoading`/`isFetching`/`isError` 상태를 `CourseScreen`의 row/query state 계약으로 변환하고, `CourseScreen`이 loading/refreshing/error/empty 상태를 렌더링합니다.
-
-## Payment 도메인 맥락
-
-Payment는 특정 서비스에 종속되지 않는 tenant-owned 결제 원장입니다. Course 결제는 `serviceCode=course`와 `subjectType=COURSE_OFFERING|ENROLLMENT|COURSE_PASS`로 기록하고, 앞으로 Product나 Subscription이 추가되어도 같은 Payment root에 `PaymentSubject`를 추가해 확장합니다.
-
-```
-Tenant
-  ├─── Space (scope는 Tenant.spaceId에서 파생)
-  └─── Payment
-          ├─── PaymentSubject
-          │       ├─── serviceCode (course, product, subscription ...)
-          │       ├─── subjectType
-          │       └─── subjectId / subjectLabel
-          └─── PaymentReference
-                  ├─── Enrollment / CoursePass
-                  ├─── Order / Invoice
-                  └─── External Payment ID
-```
-
-### 핵심 원칙
-
-1. **공통 원장**: Payment는 Course, Product, Subscription 같은 여러 서비스가 공유합니다.
-2. **Tenant-derived scope**: 요청은 `x-tenant-id`로 받고, 목록과 상세 조회는 `Tenant.spaceId`에서 파생한 `SpaceContext.spaceIds` 기준으로 제한합니다. PLATFORM_ADMIN이 아닌 관리자는 다른 Space 결제를 볼 수 없습니다.
-3. **대상/참조 분리**: `PaymentSubject`는 무엇을 결제했는지, `PaymentReference`는 어떤 운영 리소스나 외부 ID와 연결되는지 추적합니다.
-4. **Course 연결**: Enrollment는 `paymentId`로 Payment를 참조하고, Payment reference는 Enrollment/CoursePass 역추적을 보조합니다.
-
-### API Surface
-
-| Resource | Endpoint | OperationId | 용도 |
-|----------|----------|-------------|------|
-| Payment | `GET /api/v1/payments` | `getPayments` | `/payments` 목록, Tenant/상태/수단/대상/참조 필터 |
-| Payment | `GET /api/v1/payments/:paymentId` | `getPaymentById` | Payment 상세와 subject/reference 확인 |
-| Payment | `POST /api/v1/payments` | `createPayment` | 서비스별 결제 성공/수동 기록 생성 |
-| Payment | `PATCH /api/v1/payments/:paymentId` | `updatePayment` | 결제 상태/제공자/영수증/메모 보정 |
-| Payment | `DELETE /api/v1/payments/:paymentId` | `deletePayment` | soft delete |
-
-### Orval / Frontend Handoff
-
-`pnpm --filter=@cocrepo/api codegen:server`로 Payment API hook이 `packages/fe-api/src/core/payments`에 생성되어 있습니다.
-
-| Admin route | API endpoint | Orval hook |
-|-------------|--------------|------------|
-| `/payments` | `GET /api/v1/payments` | `useGetPayments` |
-
-## 구현 대상
-
-| Stage | Item ID | Owner role | 정확한 대상 |
-|-------|---------|------------|-------------|
-| 2 | COURSE-S2-BE-001 | `be-prisma-builder` | `packages/be-prisma/schema/scheduling/course.prisma`, `packages/be-prisma/schema/identity/space.prisma`, `packages/be-prisma/schema/identity/user.prisma`, `packages/be-prisma/schema/scheduling/timeline.prisma`, `packages/be-prisma/schema/scheduling/reservation.prisma`, `packages/be-prisma/scripts/validate-schema-conventions.ts` |
-| 2 | COURSE-S2-BE-002 | `be-entity-builder`, `be-dto-builder`, `be-query-dto-builder` | Course/CourseOffering/Enrollment/CoursePass entity, DTO, create/update/query DTO, package exports |
-| 2 | COURSE-S2-BE-003 | `be-repository-builder`, `be-service-builder`, `be-usecase-builder` | `CoursesRepository`, `CourseService`, Course usecase handlers, enrollment activation/CoursePass issuance use case |
-| 2 | COURSE-S2-BE-004 | `be-controller-builder`, `be-module-builder`, `be-bootstrap-integrator` | `/api/v1/courses`, `/api/v1/courses/offerings`, `/api/v1/courses/enrollments`, `/api/v1/courses/passes` controller/module and `apps/core/api/src/module/app.module.ts` wiring |
-| 2 | COURSE-S2-BE-005 | `be-service-builder`, `be-repository-builder`, `be-dto-builder` | Reservation create/list contract update for `coursePassId` and CoursePass entitlement validation |
-| 3 | COURSE-S3-API-001 | `fe-api-integrator` | `pnpm --filter=@cocrepo/api codegen:server`, generated `packages/fe-api/src/core/courses` and model exports |
-| 3 | COURSE-S3-FE-001 | `fe-api-integrator`, `fe-route-agent` | `apps/admin/web/src/app/(admin)/courses/page.tsx`, `useCourseData`, query state rendering |
-| 3 | COURSE-S3-QA-001 | `qa-fe-e2e-testing` | Course route sidecar E2E assertions for API-backed data and empty states |
-| 2 | PAYMENT-S2-BE-001 | `be-prisma-builder`, `be-entity-builder`, `be-dto-builder`, `be-repository-builder`, `be-service-builder`, `be-usecase-builder`, `be-controller-builder` | `packages/be-prisma/schema/billing/payment.prisma`, `packages/be-service/src/payment/payment.service.ts`, `apps/core/api/src/module/payments` |
-| 3 | PAYMENT-S3-API-001 | `fe-api-integrator` | `pnpm --filter=@cocrepo/api codegen:server`, generated `packages/fe-api/src/core/payments` |
-| 3 | PAYMENT-S3-FE-001 | `fe-api-integrator`, `fe-route-agent` | `apps/admin/web/src/app/(admin)/payments/page.tsx`, `usePaymentData`, `packages/fe-ui/src/screen/PaymentScreen` |
 
 ## Inquiry 도메인 맥락
 
@@ -406,5 +249,5 @@ AdminLayout
 1. JWT 토큰으로 인증 (Authorization 헤더)
 2. X-Tenant-ID 헤더로 현재 Tenant 지정 (필수)
 3. Tenant 미선택 시 `/select-space`로 리다이렉트 (useSpaceGuard)
-4. PersistStore에 선택된 Tenant ID와 파생 Space ID/이름 저장
-5. 로그아웃 시 PersistStore 초기화 후 `/admin/auth/login`으로 이동
+4. Space에 선택된 Tenant ID와 파생 Space ID/이름 저장
+5. 로그아웃 시 Space 초기화 후 `/admin/auth/login`으로 이동

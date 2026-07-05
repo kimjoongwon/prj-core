@@ -10,7 +10,7 @@ import type {
 } from "@cocrepo/api/core/model";
 import { observer } from "mobx-react-lite";
 import { getCoreApiBaseUrl } from "@/auth/auth-config";
-import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
+import { mobileApiScope } from "@/auth/mobile-api-scope";
 
 const RESERVATION_QUERY_PARAMS = {
   skip: 0,
@@ -106,10 +106,10 @@ const getReservationsStatus = (params: {
 
 const ReservationsTabRoute = observer(() => {
   const requestOptions = { baseURL: getCoreApiBaseUrl() };
-  const isSpaceSelectionPending = !mobileApiScopeStore.isSpaceSelectionResolved;
-  const hasSelectedSpace = Boolean(mobileApiScopeStore.spaceId);
+  const isSpaceSelectionPending = !mobileApiScope.isSpaceSelectionResolved;
+  const hasSelectedSpace = Boolean(mobileApiScope.spaceId);
   const isSpaceUnavailable =
-    mobileApiScopeStore.isSpaceSelectionResolved && !hasSelectedSpace;
+    mobileApiScope.isSpaceSelectionResolved && !hasSelectedSpace;
   const reservationsQuery = useGetMyReservations(RESERVATION_QUERY_PARAMS, {
     query: { enabled: hasSelectedSpace },
     request: requestOptions,

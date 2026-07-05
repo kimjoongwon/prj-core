@@ -1,14 +1,11 @@
 import {
-	BooleanField,
 	DateField,
 	EnumField,
 	EnumFieldOptional,
 	NumberField,
-	NumberFieldOptional,
 	StringField,
 	StringFieldOptional,
 	UUIDField,
-	UUIDFieldOptional,
 } from "@cocrepo/decorator";
 import { ReservationStatus } from "@cocrepo/prisma";
 
@@ -35,35 +32,6 @@ export class BookingFeedItemDto {
 
 	@UUIDField({ description: "프로그램 ID" })
 	programId!: string;
-
-	@UUIDFieldOptional({
-		description: "예약 생성에 사용할 수강권 ID",
-		nullable: true,
-	})
-	coursePassId!: string | null;
-
-	@BooleanField({ description: "예약 전 결제 필요 여부" })
-	paymentRequired!: boolean;
-
-	@StringFieldOptional({ description: "결제 필요 사유", nullable: true })
-	paymentRequiredReason!: string | null;
-
-	@NumberFieldOptional({
-		description: "결제 화면 진입 전 표시할 대표 가격",
-		int: true,
-		minimum: 0,
-		nullable: true,
-	})
-	checkoutPreviewPriceAmount!: number | null;
-
-	@StringFieldOptional({
-		description: "대표 가격 통화 코드",
-		minLength: 3,
-		maxLength: 3,
-		toUpperCase: true,
-		nullable: true,
-	})
-	checkoutPreviewCurrency!: string | null;
 
 	@StringField({ description: "타임라인 이름" })
 	timelineName!: string;

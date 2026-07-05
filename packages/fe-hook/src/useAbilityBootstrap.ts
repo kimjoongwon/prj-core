@@ -1,7 +1,7 @@
 "use client";
 
 import { useGetMyAbilities } from "@cocrepo/api/core/abilities";
-import { usePersistStore } from "@cocrepo/store";
+import { useApp } from "@cocrepo/store";
 import { usePathname } from "next/navigation";
 import { useAbilities } from "./useAbilities";
 
@@ -19,17 +19,21 @@ export interface UseAbilityBootstrapOptions {
 export function useAbilityBootstrap(options: UseAbilityBootstrapOptions = {}) {
 	const { skipPathPrefix = "/auth" } = options;
 	const pathname = usePathname();
-	const persistStore = usePersistStore();
+	const app = useApp();
+	const space = app.space;
+	if (!space) {
+		throw new Error("space가 초기화되지 않았습니다.");
+	}
 	const isDisabled = pathname?.startsWith(skipPathPrefix) === true;
 	const canLoadAbilities =
 		!isDisabled &&
-		persistStore.isHydrated &&
-		persistStore.isSpaceSelectionResolved &&
-		Boolean(persistStore.tenantId);
+		space.isHydrated &&
+		space.isSpaceSelectionResolved &&
+		Boolean(space.tenantId);
 	const query = useGetMyAbilities({
 		query: {
 			enabled: canLoadAbilities,
-			queryKey: ["/api/v1/abilities/my", persistStore.tenantId],
+			queryKey: ["/api/v1/abilities/my", space.tenantId],
 			staleTime: 1000 * 60 * 5,
 			gcTime: 1000 * 60 * 10,
 		},

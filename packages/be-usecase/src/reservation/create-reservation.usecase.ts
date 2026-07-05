@@ -20,7 +20,6 @@ export class CreateReservationUseCase {
 			spaceId: context.spaceId,
 			userId: context.userId,
 			input: {
-				coursePassId: input.coursePassId,
 				idempotencyKey: input.idempotencyKey,
 				memo: input.memo ?? null,
 				occurrenceStartAt: input.occurrenceStartAt,

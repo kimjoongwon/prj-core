@@ -163,7 +163,7 @@ API 호출 → 401 응답 → Axios 인터셉터가 토큰 갱신 시도
 → Access Token 블랙리스트 등록
 → Refresh Token 삭제
 → 쿠키 삭제 (accessToken, refreshToken, tenantId, workspaceId)
-→ 로컬스토리지 정리 (PersistStore)
+→ 로컬스토리지 정리 (workspace)
 → 로그인 페이지
 ```
 

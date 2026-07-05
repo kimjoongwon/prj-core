@@ -1,96 +1,79 @@
 "use client";
 
-import type {
-	UseLayoutBottomTabStoreLike,
-	UseLayoutFABStoreLike,
-	UseLayoutNavigationStoreLike,
-	UseLayoutOptions,
-	UseLayoutReturn,
-} from "@cocrepo/type";
+import { type AppStore, useApp } from "@cocrepo/store";
+import type { UseLayoutOptions, UseLayoutReturn } from "@cocrepo/type";
 
 export type { UseLayoutOptions, UseLayoutReturn } from "@cocrepo/type";
 
 /**
  * useLayout
  *
- * 앱별 Store selector hooks를 주입받아
- * 레이아웃 바인딩 데이터를 조합해 반환합니다.
+ * 앱 전역 상태 컨테이너에서 레이아웃 바인딩 데이터를 조합해 반환합니다.
  *
  * @example
  * ```tsx
- * import { useLayout } from "@cocrepo/hook";
- * import { useBottomTabStore, useFABStore, useNavigationStore } from "@/stores/AppStoreProvider";
- *
- * const layoutProps = useLayout({
- *   useNavigationStore,
- *   useBottomTabStore,
- *   useFABStore,
- * });
+ * const layoutProps = useLayout();
  * ```
  */
-export function useLayout<
-	TNavigationStore extends UseLayoutNavigationStoreLike,
-	TBottomTabStore extends UseLayoutBottomTabStoreLike,
-	TFABStore extends UseLayoutFABStoreLike,
->(
-	options: UseLayoutOptions<TNavigationStore, TBottomTabStore, TFABStore>,
-): UseLayoutReturn<TNavigationStore, TBottomTabStore, TFABStore> {
-	const { useNavigationStore, useBottomTabStore, useFABStore } = options;
-
-	const navigationStore = useNavigationStore();
-	const bottomTabStore = useBottomTabStore();
-	const fabStore = useFABStore();
+export function useLayout(
+	_options?: UseLayoutOptions,
+): UseLayoutReturn<AppStore> {
+	const app = useApp();
+	const sideNavigation = app.ui.body.leftAside.sideNavigation;
+	const mobileBottomNavigation = app.ui.footer.mobileBottomNavigation;
+	const mobileMenu = app.ui.footer.mobileMenu;
+	const floatingAction = app.ui.footer.floatingAction;
 
 	// 핸들러
 	const handleNavItemClick = (navItemId: string) => {
-		navigationStore.selectNavItem(navItemId);
+		sideNavigation.selectItem(navItemId);
 	};
 
 	const handleSubNavItemClick = (subNavItemId: string) => {
-		navigationStore.selectSubNavItem(subNavItemId);
+		sideNavigation.selectSubItem(subNavItemId);
 		// OverlayMenu에서 선택 시 닫기
-		bottomTabStore.closeSubMenu();
+		mobileMenu.close();
 	};
 
 	const handleNavItemToggle = (navItemId: string) => {
-		navigationStore.toggleNavItem(navItemId);
+		sideNavigation.toggleItem(navItemId);
 	};
 
 	const handleBottomTabClick = (tabId: string) => {
-		bottomTabStore.selectTab(tabId);
+		mobileBottomNavigation.selectItem(tabId);
 	};
 
 	const handleSubMenuClose = () => {
-		bottomTabStore.closeSubMenu();
+		mobileMenu.close();
 	};
 
 	const handleFABToggle = () => {
-		fabStore.toggle();
+		floatingAction.toggle();
 	};
 
 	const handleFABActionClick = (actionId: string) => {
-		fabStore.executeAction(actionId);
+		floatingAction.execute(actionId);
 	};
 
 	return {
 		// 네비게이션 데이터
-		navItems: navigationStore.items,
-		selectedNavItem: navigationStore.selectedNavItem,
-		selectedSubNavItem: navigationStore.selectedSubNavItem,
-		expandedNavItemIds: navigationStore.expandedNavItemIds,
+		navItems: sideNavigation.items,
+		selectedNavItem: sideNavigation.selectedItem,
+		selectedSubNavItem: sideNavigation.selectedSubItem,
+		expandedNavItemIds: sideNavigation.expandedItemIds,
 
 		// 모바일 - BottomTab
-		bottomTabItems: bottomTabStore.tabItems,
-		activeBottomTabId: bottomTabStore.activeTabId,
+		bottomTabItems: mobileBottomNavigation.items,
+		activeBottomTabId: mobileBottomNavigation.activeItemId,
 
 		// 모바일 - SubMenuList
-		isSubMenuOpen: bottomTabStore.isSubMenuOpen,
-		subMenuTitle: bottomTabStore.subMenuTitle,
-		subMenuItems: bottomTabStore.subMenuItems,
+		isSubMenuOpen: mobileMenu.isOpen,
+		subMenuTitle: mobileMenu.title,
+		subMenuItems: mobileMenu.items,
 
 		// 모바일 - FAB
-		isFABOpen: fabStore.isOpen,
-		fabActions: fabStore.visibleActions,
+		isFABOpen: floatingAction.isOpen,
+		fabActions: floatingAction.actions,
 
 		// 핸들러
 		onNavItemClick: handleNavItemClick,

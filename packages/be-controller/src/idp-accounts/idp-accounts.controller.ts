@@ -17,7 +17,6 @@ import {
 	IdpAccountAccessGrantFormBootstrapDto,
 	IdpAccountAccessGrantFormFieldMetaDto,
 	IdpAccountAccessGrantFormOptionItemDto,
-	IdpAccountAccessGrantFormSchemaDto,
 	IdpAccountAccessGrantFormUiPathsDto,
 	IdpAccountDetailDto,
 	IdpAccountDto,
@@ -50,7 +49,6 @@ import {
 	IdpAccountAccessGrantFormOptionItemDto,
 	IdpAccountAccessGrantFormUiPathsDto,
 	IdpAccountAccessGrantFormFieldMetaDto,
-	IdpAccountAccessGrantFormSchemaDto,
 )
 @Controller()
 export class IdpAccountsController {

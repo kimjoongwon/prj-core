@@ -25,7 +25,7 @@ const baseArgs = {
 	queryStates,
 	setQueryStates: async () => new URLSearchParams(),
 	isLoading: false,
-	isStoreReady: true,
+	isSpaceReady: true,
 	hasSelectedSpace: true,
 	isRemoving: false,
 	isUploadingAsset: false,

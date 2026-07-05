@@ -41,7 +41,7 @@ export const Open: Story = {
 									예약 옵션
 								</BottomSheet.Title>
 								<BottomSheet.Description className="text-sm leading-5 text-muted">
-									수강권과 요청 사항을 확인해 주세요.
+									예약 시간과 요청 사항을 확인해 주세요.
 								</BottomSheet.Description>
 							</View>
 							<BottomSheet.Close accessibilityLabel="예약 옵션 닫기" />

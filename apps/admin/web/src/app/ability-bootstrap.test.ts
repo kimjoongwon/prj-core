@@ -31,7 +31,7 @@ describe("resolveAbilityBootstrapRules", () => {
 		expect(rules).toEqual([{ action: "manage", subject: "all" }]);
 	});
 
-	it("토큰 검증 중에는 기존 AbilityStore rules를 덮어쓰지 않도록 null을 반환해야 한다", () => {
+	it("토큰 검증 중에는 기존 Ability rules를 덮어쓰지 않도록 null을 반환해야 한다", () => {
 		const rules = resolveAbilityBootstrapRules({
 			abilities: [],
 			hasFullAccess: false,
@@ -55,7 +55,7 @@ describe("resolveAbilityBootstrapRules", () => {
 		expect(rules).toEqual([]);
 	});
 
-	it("일반 권한 사용자는 API abilities를 AbilityStore rules로 변환해야 한다", () => {
+	it("일반 권한 사용자는 API abilities를 Ability rules로 변환해야 한다", () => {
 		const rules = resolveAbilityBootstrapRules({
 			abilities: [createAbility()],
 			hasFullAccess: false,

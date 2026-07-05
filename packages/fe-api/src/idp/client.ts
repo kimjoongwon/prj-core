@@ -2,8 +2,8 @@ export {
 	customIdpInstance,
 	IDP_AXIOS_INSTANCE,
 	setIdpBaseUrl,
-	setIdpLocaleStore,
+	setIdpLocale,
 	setIdpLoginRedirectUrl,
 	setIdpNativeRefreshHandler,
-	setIdpPersistStore,
+	setIdpSpace,
 } from "../libs/customIdpAxios";

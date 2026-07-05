@@ -4,7 +4,7 @@ import type { ImageSourcePropType } from "react-native";
 import { getCoreApiBaseUrl } from "./auth-config";
 import {
   isSelectableMobileSpace,
-  mobileApiScopeStore,
+  mobileApiScope,
   toMobileSpaceInfo,
   type MobileSpaceInfo,
 } from "./mobile-api-scope";
@@ -25,8 +25,8 @@ const createSpaceImageSource = (
   const headers: Record<string, string> = {
     [SPACE_HEADER_NAME]: space.tenantId,
   };
-  if (mobileApiScopeStore.accessToken) {
-    headers.Authorization = `Bearer ${mobileApiScopeStore.accessToken}`;
+  if (mobileApiScope.accessToken) {
+    headers.Authorization = `Bearer ${mobileApiScope.accessToken}`;
   }
 
   return {

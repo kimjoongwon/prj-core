@@ -1,11 +1,6 @@
 "use client";
 
 import { useLayout } from "@cocrepo/hook";
-import {
-	useBottomTabStore,
-	useFABStore,
-	useNavigationStore,
-} from "@cocrepo/store";
 import { observer } from "mobx-react-lite";
 import { BottomNav } from "../../widget/BottomNav";
 
@@ -14,11 +9,7 @@ import { BottomNav } from "../../widget/BottomNav";
  */
 export const MobileBottomNavigation = observer(
 	function MobileBottomNavigation() {
-		const layoutProps = useLayout({
-			useNavigationStore,
-			useBottomTabStore,
-			useFABStore,
-		});
+		const layoutProps = useLayout();
 
 		return (
 			<BottomNav

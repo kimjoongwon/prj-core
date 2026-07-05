@@ -429,7 +429,6 @@ export default observer(function InquiryReadOnlyRoute() {
 							category: category as
 								| "GENERAL"
 								| "DELIVERY"
-								| "PAYMENT"
 								| "REFUND"
 								| "PRODUCT"
 								| "ACCOUNT"

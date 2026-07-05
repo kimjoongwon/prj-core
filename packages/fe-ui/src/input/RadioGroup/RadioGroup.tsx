@@ -14,16 +14,16 @@ import type { RadioGroupProps } from "./RadioGroup.props";
  * @example
  * ```tsx
  * const options = [
- *   { value: "card", text: "신용카드" },
- *   { value: "bank", text: "계좌이체" },
- *   { value: "phone", text: "휴대폰결제" },
+ *   { value: "email", text: "이메일" },
+ *   { value: "sms", text: "문자" },
+ *   { value: "push", text: "푸시 알림" },
  * ];
  *
  * <RadioGroup
- *   label="결제 방법"
+ *   label="알림 방법"
  *   options={options}
- *   value={paymentMethod}
- *   onValueChange={setPaymentMethod}
+ *   value={notificationMethod}
+ *   onValueChange={setNotificationMethod}
  * />
  * ```
  */

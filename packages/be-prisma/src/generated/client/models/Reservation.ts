@@ -41,7 +41,6 @@ export type ReservationMinAggregateOutputType = {
   removedAt: Date | null
   tenantId: string | null
   userId: string | null
-  coursePassId: string | null
   timelineId: string | null
   sessionId: string | null
   programId: string | null
@@ -62,7 +61,6 @@ export type ReservationMaxAggregateOutputType = {
   removedAt: Date | null
   tenantId: string | null
   userId: string | null
-  coursePassId: string | null
   timelineId: string | null
   sessionId: string | null
   programId: string | null
@@ -83,7 +81,6 @@ export type ReservationCountAggregateOutputType = {
   removedAt: number
   tenantId: number
   userId: number
-  coursePassId: number
   timelineId: number
   sessionId: number
   programId: number
@@ -114,7 +111,6 @@ export type ReservationMinAggregateInputType = {
   removedAt?: true
   tenantId?: true
   userId?: true
-  coursePassId?: true
   timelineId?: true
   sessionId?: true
   programId?: true
@@ -135,7 +131,6 @@ export type ReservationMaxAggregateInputType = {
   removedAt?: true
   tenantId?: true
   userId?: true
-  coursePassId?: true
   timelineId?: true
   sessionId?: true
   programId?: true
@@ -156,7 +151,6 @@ export type ReservationCountAggregateInputType = {
   removedAt?: true
   tenantId?: true
   userId?: true
-  coursePassId?: true
   timelineId?: true
   sessionId?: true
   programId?: true
@@ -264,7 +258,6 @@ export type ReservationGroupByOutputType = {
   removedAt: Date | null
   tenantId: string
   userId: string
-  coursePassId: string
   timelineId: string
   sessionId: string
   programId: string
@@ -308,7 +301,6 @@ export type ReservationWhereInput = {
   removedAt?: Prisma.DateTimeNullableFilter<"Reservation"> | Date | string | null
   tenantId?: Prisma.StringFilter<"Reservation"> | string
   userId?: Prisma.StringFilter<"Reservation"> | string
-  coursePassId?: Prisma.StringFilter<"Reservation"> | string
   timelineId?: Prisma.StringFilter<"Reservation"> | string
   sessionId?: Prisma.StringFilter<"Reservation"> | string
   programId?: Prisma.StringFilter<"Reservation"> | string
@@ -322,7 +314,6 @@ export type ReservationWhereInput = {
   cancelReason?: Prisma.StringNullableFilter<"Reservation"> | string | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  coursePass?: Prisma.XOR<Prisma.CoursePassScalarRelationFilter, Prisma.CoursePassWhereInput>
   timeline?: Prisma.XOR<Prisma.TimelineScalarRelationFilter, Prisma.TimelineWhereInput>
   session?: Prisma.XOR<Prisma.SessionScalarRelationFilter, Prisma.SessionWhereInput>
   program?: Prisma.XOR<Prisma.ProgramScalarRelationFilter, Prisma.ProgramWhereInput>
@@ -335,7 +326,6 @@ export type ReservationOrderByWithRelationInput = {
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  coursePassId?: Prisma.SortOrder
   timelineId?: Prisma.SortOrder
   sessionId?: Prisma.SortOrder
   programId?: Prisma.SortOrder
@@ -349,7 +339,6 @@ export type ReservationOrderByWithRelationInput = {
   cancelReason?: Prisma.SortOrderInput | Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
-  coursePass?: Prisma.CoursePassOrderByWithRelationInput
   timeline?: Prisma.TimelineOrderByWithRelationInput
   session?: Prisma.SessionOrderByWithRelationInput
   program?: Prisma.ProgramOrderByWithRelationInput
@@ -366,7 +355,6 @@ export type ReservationWhereUniqueInput = Prisma.AtLeast<{
   removedAt?: Prisma.DateTimeNullableFilter<"Reservation"> | Date | string | null
   tenantId?: Prisma.StringFilter<"Reservation"> | string
   userId?: Prisma.StringFilter<"Reservation"> | string
-  coursePassId?: Prisma.StringFilter<"Reservation"> | string
   timelineId?: Prisma.StringFilter<"Reservation"> | string
   sessionId?: Prisma.StringFilter<"Reservation"> | string
   programId?: Prisma.StringFilter<"Reservation"> | string
@@ -380,7 +368,6 @@ export type ReservationWhereUniqueInput = Prisma.AtLeast<{
   cancelReason?: Prisma.StringNullableFilter<"Reservation"> | string | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  coursePass?: Prisma.XOR<Prisma.CoursePassScalarRelationFilter, Prisma.CoursePassWhereInput>
   timeline?: Prisma.XOR<Prisma.TimelineScalarRelationFilter, Prisma.TimelineWhereInput>
   session?: Prisma.XOR<Prisma.SessionScalarRelationFilter, Prisma.SessionWhereInput>
   program?: Prisma.XOR<Prisma.ProgramScalarRelationFilter, Prisma.ProgramWhereInput>
@@ -393,7 +380,6 @@ export type ReservationOrderByWithAggregationInput = {
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  coursePassId?: Prisma.SortOrder
   timelineId?: Prisma.SortOrder
   sessionId?: Prisma.SortOrder
   programId?: Prisma.SortOrder
@@ -422,7 +408,6 @@ export type ReservationScalarWhereWithAggregatesInput = {
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Reservation"> | Date | string | null
   tenantId?: Prisma.StringWithAggregatesFilter<"Reservation"> | string
   userId?: Prisma.StringWithAggregatesFilter<"Reservation"> | string
-  coursePassId?: Prisma.StringWithAggregatesFilter<"Reservation"> | string
   timelineId?: Prisma.StringWithAggregatesFilter<"Reservation"> | string
   sessionId?: Prisma.StringWithAggregatesFilter<"Reservation"> | string
   programId?: Prisma.StringWithAggregatesFilter<"Reservation"> | string
@@ -451,7 +436,6 @@ export type ReservationCreateInput = {
   cancelReason?: string | null
   tenant: Prisma.TenantCreateNestedOneWithoutReservationsInput
   user: Prisma.UserCreateNestedOneWithoutReservationsInput
-  coursePass: Prisma.CoursePassCreateNestedOneWithoutReservationsInput
   timeline: Prisma.TimelineCreateNestedOneWithoutReservationsInput
   session: Prisma.SessionCreateNestedOneWithoutReservationsInput
   program: Prisma.ProgramCreateNestedOneWithoutReservationsInput
@@ -464,7 +448,6 @@ export type ReservationUncheckedCreateInput = {
   removedAt?: Date | string | null
   tenantId: string
   userId: string
-  coursePassId: string
   timelineId: string
   sessionId: string
   programId: string
@@ -493,7 +476,6 @@ export type ReservationUpdateInput = {
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutReservationsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput
-  coursePass?: Prisma.CoursePassUpdateOneRequiredWithoutReservationsNestedInput
   timeline?: Prisma.TimelineUpdateOneRequiredWithoutReservationsNestedInput
   session?: Prisma.SessionUpdateOneRequiredWithoutReservationsNestedInput
   program?: Prisma.ProgramUpdateOneRequiredWithoutReservationsNestedInput
@@ -506,7 +488,6 @@ export type ReservationUncheckedUpdateInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  coursePassId?: Prisma.StringFieldUpdateOperationsInput | string
   timelineId?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
   programId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -527,7 +508,6 @@ export type ReservationCreateManyInput = {
   removedAt?: Date | string | null
   tenantId: string
   userId: string
-  coursePassId: string
   timelineId: string
   sessionId: string
   programId: string
@@ -563,7 +543,6 @@ export type ReservationUncheckedUpdateManyInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  coursePassId?: Prisma.StringFieldUpdateOperationsInput | string
   timelineId?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
   programId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -599,7 +578,6 @@ export type ReservationCountOrderByAggregateInput = {
   removedAt?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  coursePassId?: Prisma.SortOrder
   timelineId?: Prisma.SortOrder
   sessionId?: Prisma.SortOrder
   programId?: Prisma.SortOrder
@@ -624,7 +602,6 @@ export type ReservationMaxOrderByAggregateInput = {
   removedAt?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  coursePassId?: Prisma.SortOrder
   timelineId?: Prisma.SortOrder
   sessionId?: Prisma.SortOrder
   programId?: Prisma.SortOrder
@@ -645,7 +622,6 @@ export type ReservationMinOrderByAggregateInput = {
   removedAt?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  coursePassId?: Prisma.SortOrder
   timelineId?: Prisma.SortOrder
   sessionId?: Prisma.SortOrder
   programId?: Prisma.SortOrder
@@ -744,48 +720,6 @@ export type ReservationUncheckedUpdateManyWithoutUserNestedInput = {
   connect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
   update?: Prisma.ReservationUpdateWithWhereUniqueWithoutUserInput | Prisma.ReservationUpdateWithWhereUniqueWithoutUserInput[]
   updateMany?: Prisma.ReservationUpdateManyWithWhereWithoutUserInput | Prisma.ReservationUpdateManyWithWhereWithoutUserInput[]
-  deleteMany?: Prisma.ReservationScalarWhereInput | Prisma.ReservationScalarWhereInput[]
-}
-
-export type ReservationCreateNestedManyWithoutCoursePassInput = {
-  create?: Prisma.XOR<Prisma.ReservationCreateWithoutCoursePassInput, Prisma.ReservationUncheckedCreateWithoutCoursePassInput> | Prisma.ReservationCreateWithoutCoursePassInput[] | Prisma.ReservationUncheckedCreateWithoutCoursePassInput[]
-  connectOrCreate?: Prisma.ReservationCreateOrConnectWithoutCoursePassInput | Prisma.ReservationCreateOrConnectWithoutCoursePassInput[]
-  createMany?: Prisma.ReservationCreateManyCoursePassInputEnvelope
-  connect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
-}
-
-export type ReservationUncheckedCreateNestedManyWithoutCoursePassInput = {
-  create?: Prisma.XOR<Prisma.ReservationCreateWithoutCoursePassInput, Prisma.ReservationUncheckedCreateWithoutCoursePassInput> | Prisma.ReservationCreateWithoutCoursePassInput[] | Prisma.ReservationUncheckedCreateWithoutCoursePassInput[]
-  connectOrCreate?: Prisma.ReservationCreateOrConnectWithoutCoursePassInput | Prisma.ReservationCreateOrConnectWithoutCoursePassInput[]
-  createMany?: Prisma.ReservationCreateManyCoursePassInputEnvelope
-  connect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
-}
-
-export type ReservationUpdateManyWithoutCoursePassNestedInput = {
-  create?: Prisma.XOR<Prisma.ReservationCreateWithoutCoursePassInput, Prisma.ReservationUncheckedCreateWithoutCoursePassInput> | Prisma.ReservationCreateWithoutCoursePassInput[] | Prisma.ReservationUncheckedCreateWithoutCoursePassInput[]
-  connectOrCreate?: Prisma.ReservationCreateOrConnectWithoutCoursePassInput | Prisma.ReservationCreateOrConnectWithoutCoursePassInput[]
-  upsert?: Prisma.ReservationUpsertWithWhereUniqueWithoutCoursePassInput | Prisma.ReservationUpsertWithWhereUniqueWithoutCoursePassInput[]
-  createMany?: Prisma.ReservationCreateManyCoursePassInputEnvelope
-  set?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
-  disconnect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
-  delete?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
-  connect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
-  update?: Prisma.ReservationUpdateWithWhereUniqueWithoutCoursePassInput | Prisma.ReservationUpdateWithWhereUniqueWithoutCoursePassInput[]
-  updateMany?: Prisma.ReservationUpdateManyWithWhereWithoutCoursePassInput | Prisma.ReservationUpdateManyWithWhereWithoutCoursePassInput[]
-  deleteMany?: Prisma.ReservationScalarWhereInput | Prisma.ReservationScalarWhereInput[]
-}
-
-export type ReservationUncheckedUpdateManyWithoutCoursePassNestedInput = {
-  create?: Prisma.XOR<Prisma.ReservationCreateWithoutCoursePassInput, Prisma.ReservationUncheckedCreateWithoutCoursePassInput> | Prisma.ReservationCreateWithoutCoursePassInput[] | Prisma.ReservationUncheckedCreateWithoutCoursePassInput[]
-  connectOrCreate?: Prisma.ReservationCreateOrConnectWithoutCoursePassInput | Prisma.ReservationCreateOrConnectWithoutCoursePassInput[]
-  upsert?: Prisma.ReservationUpsertWithWhereUniqueWithoutCoursePassInput | Prisma.ReservationUpsertWithWhereUniqueWithoutCoursePassInput[]
-  createMany?: Prisma.ReservationCreateManyCoursePassInputEnvelope
-  set?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
-  disconnect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
-  delete?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
-  connect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
-  update?: Prisma.ReservationUpdateWithWhereUniqueWithoutCoursePassInput | Prisma.ReservationUpdateWithWhereUniqueWithoutCoursePassInput[]
-  updateMany?: Prisma.ReservationUpdateManyWithWhereWithoutCoursePassInput | Prisma.ReservationUpdateManyWithWhereWithoutCoursePassInput[]
   deleteMany?: Prisma.ReservationScalarWhereInput | Prisma.ReservationScalarWhereInput[]
 }
 
@@ -933,7 +867,6 @@ export type ReservationCreateWithoutTenantInput = {
   canceledAt?: Date | string | null
   cancelReason?: string | null
   user: Prisma.UserCreateNestedOneWithoutReservationsInput
-  coursePass: Prisma.CoursePassCreateNestedOneWithoutReservationsInput
   timeline: Prisma.TimelineCreateNestedOneWithoutReservationsInput
   session: Prisma.SessionCreateNestedOneWithoutReservationsInput
   program: Prisma.ProgramCreateNestedOneWithoutReservationsInput
@@ -945,7 +878,6 @@ export type ReservationUncheckedCreateWithoutTenantInput = {
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
   userId: string
-  coursePassId: string
   timelineId: string
   sessionId: string
   programId: string
@@ -995,7 +927,6 @@ export type ReservationScalarWhereInput = {
   removedAt?: Prisma.DateTimeNullableFilter<"Reservation"> | Date | string | null
   tenantId?: Prisma.StringFilter<"Reservation"> | string
   userId?: Prisma.StringFilter<"Reservation"> | string
-  coursePassId?: Prisma.StringFilter<"Reservation"> | string
   timelineId?: Prisma.StringFilter<"Reservation"> | string
   sessionId?: Prisma.StringFilter<"Reservation"> | string
   programId?: Prisma.StringFilter<"Reservation"> | string
@@ -1023,7 +954,6 @@ export type ReservationCreateWithoutUserInput = {
   canceledAt?: Date | string | null
   cancelReason?: string | null
   tenant: Prisma.TenantCreateNestedOneWithoutReservationsInput
-  coursePass: Prisma.CoursePassCreateNestedOneWithoutReservationsInput
   timeline: Prisma.TimelineCreateNestedOneWithoutReservationsInput
   session: Prisma.SessionCreateNestedOneWithoutReservationsInput
   program: Prisma.ProgramCreateNestedOneWithoutReservationsInput
@@ -1035,7 +965,6 @@ export type ReservationUncheckedCreateWithoutUserInput = {
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
   tenantId: string
-  coursePassId: string
   timelineId: string
   sessionId: string
   programId: string
@@ -1075,72 +1004,6 @@ export type ReservationUpdateManyWithWhereWithoutUserInput = {
   data: Prisma.XOR<Prisma.ReservationUpdateManyMutationInput, Prisma.ReservationUncheckedUpdateManyWithoutUserInput>
 }
 
-export type ReservationCreateWithoutCoursePassInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  occurrenceStartAt: Date | string
-  status?: $Enums.ReservationStatus
-  memo?: string | null
-  idempotencyKey: string
-  waitlistPosition?: number | null
-  confirmedAt?: Date | string | null
-  canceledAt?: Date | string | null
-  cancelReason?: string | null
-  tenant: Prisma.TenantCreateNestedOneWithoutReservationsInput
-  user: Prisma.UserCreateNestedOneWithoutReservationsInput
-  timeline: Prisma.TimelineCreateNestedOneWithoutReservationsInput
-  session: Prisma.SessionCreateNestedOneWithoutReservationsInput
-  program: Prisma.ProgramCreateNestedOneWithoutReservationsInput
-}
-
-export type ReservationUncheckedCreateWithoutCoursePassInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  tenantId: string
-  userId: string
-  timelineId: string
-  sessionId: string
-  programId: string
-  occurrenceStartAt: Date | string
-  status?: $Enums.ReservationStatus
-  memo?: string | null
-  idempotencyKey: string
-  waitlistPosition?: number | null
-  confirmedAt?: Date | string | null
-  canceledAt?: Date | string | null
-  cancelReason?: string | null
-}
-
-export type ReservationCreateOrConnectWithoutCoursePassInput = {
-  where: Prisma.ReservationWhereUniqueInput
-  create: Prisma.XOR<Prisma.ReservationCreateWithoutCoursePassInput, Prisma.ReservationUncheckedCreateWithoutCoursePassInput>
-}
-
-export type ReservationCreateManyCoursePassInputEnvelope = {
-  data: Prisma.ReservationCreateManyCoursePassInput | Prisma.ReservationCreateManyCoursePassInput[]
-  skipDuplicates?: boolean
-}
-
-export type ReservationUpsertWithWhereUniqueWithoutCoursePassInput = {
-  where: Prisma.ReservationWhereUniqueInput
-  update: Prisma.XOR<Prisma.ReservationUpdateWithoutCoursePassInput, Prisma.ReservationUncheckedUpdateWithoutCoursePassInput>
-  create: Prisma.XOR<Prisma.ReservationCreateWithoutCoursePassInput, Prisma.ReservationUncheckedCreateWithoutCoursePassInput>
-}
-
-export type ReservationUpdateWithWhereUniqueWithoutCoursePassInput = {
-  where: Prisma.ReservationWhereUniqueInput
-  data: Prisma.XOR<Prisma.ReservationUpdateWithoutCoursePassInput, Prisma.ReservationUncheckedUpdateWithoutCoursePassInput>
-}
-
-export type ReservationUpdateManyWithWhereWithoutCoursePassInput = {
-  where: Prisma.ReservationScalarWhereInput
-  data: Prisma.XOR<Prisma.ReservationUpdateManyMutationInput, Prisma.ReservationUncheckedUpdateManyWithoutCoursePassInput>
-}
-
 export type ReservationCreateWithoutTimelineInput = {
   id?: string
   createdAt?: Date | string
@@ -1156,7 +1019,6 @@ export type ReservationCreateWithoutTimelineInput = {
   cancelReason?: string | null
   tenant: Prisma.TenantCreateNestedOneWithoutReservationsInput
   user: Prisma.UserCreateNestedOneWithoutReservationsInput
-  coursePass: Prisma.CoursePassCreateNestedOneWithoutReservationsInput
   session: Prisma.SessionCreateNestedOneWithoutReservationsInput
   program: Prisma.ProgramCreateNestedOneWithoutReservationsInput
 }
@@ -1168,7 +1030,6 @@ export type ReservationUncheckedCreateWithoutTimelineInput = {
   removedAt?: Date | string | null
   tenantId: string
   userId: string
-  coursePassId: string
   sessionId: string
   programId: string
   occurrenceStartAt: Date | string
@@ -1222,7 +1083,6 @@ export type ReservationCreateWithoutSessionInput = {
   cancelReason?: string | null
   tenant: Prisma.TenantCreateNestedOneWithoutReservationsInput
   user: Prisma.UserCreateNestedOneWithoutReservationsInput
-  coursePass: Prisma.CoursePassCreateNestedOneWithoutReservationsInput
   timeline: Prisma.TimelineCreateNestedOneWithoutReservationsInput
   program: Prisma.ProgramCreateNestedOneWithoutReservationsInput
 }
@@ -1234,7 +1094,6 @@ export type ReservationUncheckedCreateWithoutSessionInput = {
   removedAt?: Date | string | null
   tenantId: string
   userId: string
-  coursePassId: string
   timelineId: string
   programId: string
   occurrenceStartAt: Date | string
@@ -1288,7 +1147,6 @@ export type ReservationCreateWithoutProgramInput = {
   cancelReason?: string | null
   tenant: Prisma.TenantCreateNestedOneWithoutReservationsInput
   user: Prisma.UserCreateNestedOneWithoutReservationsInput
-  coursePass: Prisma.CoursePassCreateNestedOneWithoutReservationsInput
   timeline: Prisma.TimelineCreateNestedOneWithoutReservationsInput
   session: Prisma.SessionCreateNestedOneWithoutReservationsInput
 }
@@ -1300,7 +1158,6 @@ export type ReservationUncheckedCreateWithoutProgramInput = {
   removedAt?: Date | string | null
   tenantId: string
   userId: string
-  coursePassId: string
   timelineId: string
   sessionId: string
   occurrenceStartAt: Date | string
@@ -1345,7 +1202,6 @@ export type ReservationCreateManyTenantInput = {
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
   userId: string
-  coursePassId: string
   timelineId: string
   sessionId: string
   programId: string
@@ -1373,7 +1229,6 @@ export type ReservationUpdateWithoutTenantInput = {
   canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput
-  coursePass?: Prisma.CoursePassUpdateOneRequiredWithoutReservationsNestedInput
   timeline?: Prisma.TimelineUpdateOneRequiredWithoutReservationsNestedInput
   session?: Prisma.SessionUpdateOneRequiredWithoutReservationsNestedInput
   program?: Prisma.ProgramUpdateOneRequiredWithoutReservationsNestedInput
@@ -1385,7 +1240,6 @@ export type ReservationUncheckedUpdateWithoutTenantInput = {
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  coursePassId?: Prisma.StringFieldUpdateOperationsInput | string
   timelineId?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
   programId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1405,7 +1259,6 @@ export type ReservationUncheckedUpdateManyWithoutTenantInput = {
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  coursePassId?: Prisma.StringFieldUpdateOperationsInput | string
   timelineId?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
   programId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1425,7 +1278,6 @@ export type ReservationCreateManyUserInput = {
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
   tenantId: string
-  coursePassId: string
   timelineId: string
   sessionId: string
   programId: string
@@ -1453,7 +1305,6 @@ export type ReservationUpdateWithoutUserInput = {
   canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutReservationsNestedInput
-  coursePass?: Prisma.CoursePassUpdateOneRequiredWithoutReservationsNestedInput
   timeline?: Prisma.TimelineUpdateOneRequiredWithoutReservationsNestedInput
   session?: Prisma.SessionUpdateOneRequiredWithoutReservationsNestedInput
   program?: Prisma.ProgramUpdateOneRequiredWithoutReservationsNestedInput
@@ -1465,7 +1316,6 @@ export type ReservationUncheckedUpdateWithoutUserInput = {
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  coursePassId?: Prisma.StringFieldUpdateOperationsInput | string
   timelineId?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
   programId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1485,87 +1335,6 @@ export type ReservationUncheckedUpdateManyWithoutUserInput = {
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  coursePassId?: Prisma.StringFieldUpdateOperationsInput | string
-  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
-  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  programId?: Prisma.StringFieldUpdateOperationsInput | string
-  occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?: Prisma.EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
-  memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
-  waitlistPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type ReservationCreateManyCoursePassInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  tenantId: string
-  userId: string
-  timelineId: string
-  sessionId: string
-  programId: string
-  occurrenceStartAt: Date | string
-  status?: $Enums.ReservationStatus
-  memo?: string | null
-  idempotencyKey: string
-  waitlistPosition?: number | null
-  confirmedAt?: Date | string | null
-  canceledAt?: Date | string | null
-  cancelReason?: string | null
-}
-
-export type ReservationUpdateWithoutCoursePassInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?: Prisma.EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
-  memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
-  waitlistPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutReservationsNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput
-  timeline?: Prisma.TimelineUpdateOneRequiredWithoutReservationsNestedInput
-  session?: Prisma.SessionUpdateOneRequiredWithoutReservationsNestedInput
-  program?: Prisma.ProgramUpdateOneRequiredWithoutReservationsNestedInput
-}
-
-export type ReservationUncheckedUpdateWithoutCoursePassInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
-  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  programId?: Prisma.StringFieldUpdateOperationsInput | string
-  occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?: Prisma.EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
-  memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
-  waitlistPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type ReservationUncheckedUpdateManyWithoutCoursePassInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
   timelineId?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
   programId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1586,7 +1355,6 @@ export type ReservationCreateManyTimelineInput = {
   removedAt?: Date | string | null
   tenantId: string
   userId: string
-  coursePassId: string
   sessionId: string
   programId: string
   occurrenceStartAt: Date | string
@@ -1614,7 +1382,6 @@ export type ReservationUpdateWithoutTimelineInput = {
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutReservationsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput
-  coursePass?: Prisma.CoursePassUpdateOneRequiredWithoutReservationsNestedInput
   session?: Prisma.SessionUpdateOneRequiredWithoutReservationsNestedInput
   program?: Prisma.ProgramUpdateOneRequiredWithoutReservationsNestedInput
 }
@@ -1626,7 +1393,6 @@ export type ReservationUncheckedUpdateWithoutTimelineInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  coursePassId?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
   programId?: Prisma.StringFieldUpdateOperationsInput | string
   occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1646,7 +1412,6 @@ export type ReservationUncheckedUpdateManyWithoutTimelineInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  coursePassId?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
   programId?: Prisma.StringFieldUpdateOperationsInput | string
   occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1666,7 +1431,6 @@ export type ReservationCreateManySessionInput = {
   removedAt?: Date | string | null
   tenantId: string
   userId: string
-  coursePassId: string
   timelineId: string
   programId: string
   occurrenceStartAt: Date | string
@@ -1694,7 +1458,6 @@ export type ReservationUpdateWithoutSessionInput = {
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutReservationsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput
-  coursePass?: Prisma.CoursePassUpdateOneRequiredWithoutReservationsNestedInput
   timeline?: Prisma.TimelineUpdateOneRequiredWithoutReservationsNestedInput
   program?: Prisma.ProgramUpdateOneRequiredWithoutReservationsNestedInput
 }
@@ -1706,7 +1469,6 @@ export type ReservationUncheckedUpdateWithoutSessionInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  coursePassId?: Prisma.StringFieldUpdateOperationsInput | string
   timelineId?: Prisma.StringFieldUpdateOperationsInput | string
   programId?: Prisma.StringFieldUpdateOperationsInput | string
   occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1726,7 +1488,6 @@ export type ReservationUncheckedUpdateManyWithoutSessionInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  coursePassId?: Prisma.StringFieldUpdateOperationsInput | string
   timelineId?: Prisma.StringFieldUpdateOperationsInput | string
   programId?: Prisma.StringFieldUpdateOperationsInput | string
   occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1746,7 +1507,6 @@ export type ReservationCreateManyProgramInput = {
   removedAt?: Date | string | null
   tenantId: string
   userId: string
-  coursePassId: string
   timelineId: string
   sessionId: string
   occurrenceStartAt: Date | string
@@ -1774,7 +1534,6 @@ export type ReservationUpdateWithoutProgramInput = {
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutReservationsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput
-  coursePass?: Prisma.CoursePassUpdateOneRequiredWithoutReservationsNestedInput
   timeline?: Prisma.TimelineUpdateOneRequiredWithoutReservationsNestedInput
   session?: Prisma.SessionUpdateOneRequiredWithoutReservationsNestedInput
 }
@@ -1786,7 +1545,6 @@ export type ReservationUncheckedUpdateWithoutProgramInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  coursePassId?: Prisma.StringFieldUpdateOperationsInput | string
   timelineId?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
   occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1806,7 +1564,6 @@ export type ReservationUncheckedUpdateManyWithoutProgramInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  coursePassId?: Prisma.StringFieldUpdateOperationsInput | string
   timelineId?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
   occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1828,7 +1585,6 @@ export type ReservationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   removedAt?: boolean
   tenantId?: boolean
   userId?: boolean
-  coursePassId?: boolean
   timelineId?: boolean
   sessionId?: boolean
   programId?: boolean
@@ -1842,7 +1598,6 @@ export type ReservationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   cancelReason?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  coursePass?: boolean | Prisma.CoursePassDefaultArgs<ExtArgs>
   timeline?: boolean | Prisma.TimelineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
@@ -1855,7 +1610,6 @@ export type ReservationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   removedAt?: boolean
   tenantId?: boolean
   userId?: boolean
-  coursePassId?: boolean
   timelineId?: boolean
   sessionId?: boolean
   programId?: boolean
@@ -1869,7 +1623,6 @@ export type ReservationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   cancelReason?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  coursePass?: boolean | Prisma.CoursePassDefaultArgs<ExtArgs>
   timeline?: boolean | Prisma.TimelineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
@@ -1882,7 +1635,6 @@ export type ReservationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   removedAt?: boolean
   tenantId?: boolean
   userId?: boolean
-  coursePassId?: boolean
   timelineId?: boolean
   sessionId?: boolean
   programId?: boolean
@@ -1896,7 +1648,6 @@ export type ReservationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   cancelReason?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  coursePass?: boolean | Prisma.CoursePassDefaultArgs<ExtArgs>
   timeline?: boolean | Prisma.TimelineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
@@ -1909,7 +1660,6 @@ export type ReservationSelectScalar = {
   removedAt?: boolean
   tenantId?: boolean
   userId?: boolean
-  coursePassId?: boolean
   timelineId?: boolean
   sessionId?: boolean
   programId?: boolean
@@ -1923,11 +1673,10 @@ export type ReservationSelectScalar = {
   cancelReason?: boolean
 }
 
-export type ReservationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "tenantId" | "userId" | "coursePassId" | "timelineId" | "sessionId" | "programId" | "occurrenceStartAt" | "status" | "memo" | "idempotencyKey" | "waitlistPosition" | "confirmedAt" | "canceledAt" | "cancelReason", ExtArgs["result"]["reservation"]>
+export type ReservationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "tenantId" | "userId" | "timelineId" | "sessionId" | "programId" | "occurrenceStartAt" | "status" | "memo" | "idempotencyKey" | "waitlistPosition" | "confirmedAt" | "canceledAt" | "cancelReason", ExtArgs["result"]["reservation"]>
 export type ReservationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  coursePass?: boolean | Prisma.CoursePassDefaultArgs<ExtArgs>
   timeline?: boolean | Prisma.TimelineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
@@ -1935,7 +1684,6 @@ export type ReservationInclude<ExtArgs extends runtime.Types.Extensions.Internal
 export type ReservationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  coursePass?: boolean | Prisma.CoursePassDefaultArgs<ExtArgs>
   timeline?: boolean | Prisma.TimelineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
@@ -1943,7 +1691,6 @@ export type ReservationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.
 export type ReservationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  coursePass?: boolean | Prisma.CoursePassDefaultArgs<ExtArgs>
   timeline?: boolean | Prisma.TimelineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
@@ -1954,7 +1701,6 @@ export type $ReservationPayload<ExtArgs extends runtime.Types.Extensions.Interna
   objects: {
     tenant: Prisma.$TenantPayload<ExtArgs>
     user: Prisma.$UserPayload<ExtArgs>
-    coursePass: Prisma.$CoursePassPayload<ExtArgs>
     timeline: Prisma.$TimelinePayload<ExtArgs>
     session: Prisma.$SessionPayload<ExtArgs>
     program: Prisma.$ProgramPayload<ExtArgs>
@@ -1966,7 +1712,6 @@ export type $ReservationPayload<ExtArgs extends runtime.Types.Extensions.Interna
     removedAt: Date | null
     tenantId: string
     userId: string
-    coursePassId: string
     timelineId: string
     sessionId: string
     programId: string
@@ -2374,7 +2119,6 @@ export interface Prisma__ReservationClient<T, Null = never, ExtArgs extends runt
   readonly [Symbol.toStringTag]: "PrismaPromise"
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  coursePass<T extends Prisma.CoursePassDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CoursePassDefaultArgs<ExtArgs>>): Prisma.Prisma__CoursePassClient<runtime.Types.Result.GetResult<Prisma.$CoursePassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   timeline<T extends Prisma.TimelineDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TimelineDefaultArgs<ExtArgs>>): Prisma.Prisma__TimelineClient<runtime.Types.Result.GetResult<Prisma.$TimelinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   session<T extends Prisma.SessionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SessionDefaultArgs<ExtArgs>>): Prisma.Prisma__SessionClient<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   program<T extends Prisma.ProgramDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProgramDefaultArgs<ExtArgs>>): Prisma.Prisma__ProgramClient<runtime.Types.Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -2413,7 +2157,6 @@ export interface ReservationFieldRefs {
   readonly removedAt: Prisma.FieldRef<"Reservation", 'DateTime'>
   readonly tenantId: Prisma.FieldRef<"Reservation", 'String'>
   readonly userId: Prisma.FieldRef<"Reservation", 'String'>
-  readonly coursePassId: Prisma.FieldRef<"Reservation", 'String'>
   readonly timelineId: Prisma.FieldRef<"Reservation", 'String'>
   readonly sessionId: Prisma.FieldRef<"Reservation", 'String'>
   readonly programId: Prisma.FieldRef<"Reservation", 'String'>

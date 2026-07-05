@@ -65,85 +65,83 @@ export interface UseAbilitiesReturn<TAbility = unknown> {
 	isDisabled: boolean;
 }
 
-/**
- * useLayout가 의존하는 NavigationStore 최소 계약
- */
-export interface UseLayoutNavigationStoreLike {
+export interface UseLayoutSideNavigationLike {
 	items: unknown;
-	selectedNavItem: unknown;
-	selectedSubNavItem: unknown;
-	expandedNavItemIds: unknown;
-	selectNavItem: (navItemId: string) => void;
-	selectSubNavItem: (subNavItemId: string) => void;
-	toggleNavItem: (navItemId: string) => void;
+	selectedItem: unknown;
+	selectedSubItem: unknown;
+	expandedItemIds: unknown;
+	selectItem: (itemId: string) => void;
+	selectSubItem: (subItemId: string) => void;
+	toggleItem: (itemId: string) => void;
 }
 
-/**
- * useLayout가 의존하는 BottomTabStore 최소 계약
- */
-export interface UseLayoutBottomTabStoreLike {
-	tabItems: unknown;
-	activeTabId: unknown;
-	isSubMenuOpen: boolean;
-	subMenuTitle: string;
-	subMenuItems: unknown;
-	selectTab: (tabId: string) => void;
-	closeSubMenu: () => void;
+export interface UseLayoutMobileBottomNavigationLike {
+	items: unknown;
+	activeItemId: unknown;
+	selectItem: (itemId: string) => void;
 }
 
-/**
- * useLayout가 의존하는 FABStore 최소 계약
- */
-export interface UseLayoutFABStoreLike {
+export interface UseLayoutMobileMenuLike {
 	isOpen: boolean;
-	visibleActions: unknown;
+	title: string;
+	items: unknown;
+	close: () => void;
+}
+
+export interface UseLayoutFloatingActionLike {
+	isOpen: boolean;
+	actions: unknown;
 	toggle: () => void;
-	executeAction: (actionId: string) => void;
+	execute: (actionId: string) => void;
+}
+
+/**
+ * useLayout가 의존하는 App UI 최소 계약
+ */
+export interface UseLayoutAppLike {
+	ui: {
+		body: {
+			leftAside: {
+				sideNavigation: UseLayoutSideNavigationLike;
+			};
+		};
+		footer: {
+			mobileBottomNavigation: UseLayoutMobileBottomNavigationLike;
+			mobileMenu: UseLayoutMobileMenuLike;
+			floatingAction: UseLayoutFloatingActionLike;
+		};
+	};
 }
 
 /**
  * useLayout 옵션 인터페이스
  */
-export interface UseLayoutOptions<
-	TNavigationStore extends
-		UseLayoutNavigationStoreLike = UseLayoutNavigationStoreLike,
-	TBottomTabStore extends
-		UseLayoutBottomTabStoreLike = UseLayoutBottomTabStoreLike,
-	TFABStore extends UseLayoutFABStoreLike = UseLayoutFABStoreLike,
-> {
-	useNavigationStore: () => TNavigationStore;
-	useBottomTabStore: () => TBottomTabStore;
-	useFABStore: () => TFABStore;
-}
+export type UseLayoutOptions = Record<string, never>;
 
 /**
  * useLayout 반환 타입
  */
 export interface UseLayoutReturn<
-	TNavigationStore extends
-		UseLayoutNavigationStoreLike = UseLayoutNavigationStoreLike,
-	TBottomTabStore extends
-		UseLayoutBottomTabStoreLike = UseLayoutBottomTabStoreLike,
-	TFABStore extends UseLayoutFABStoreLike = UseLayoutFABStoreLike,
+	TApp extends UseLayoutAppLike = UseLayoutAppLike,
 > {
 	// 네비게이션 데이터
-	navItems: TNavigationStore["items"];
-	selectedNavItem: TNavigationStore["selectedNavItem"];
-	selectedSubNavItem: TNavigationStore["selectedSubNavItem"];
-	expandedNavItemIds: TNavigationStore["expandedNavItemIds"];
+	navItems: TApp["ui"]["body"]["leftAside"]["sideNavigation"]["items"];
+	selectedNavItem: TApp["ui"]["body"]["leftAside"]["sideNavigation"]["selectedItem"];
+	selectedSubNavItem: TApp["ui"]["body"]["leftAside"]["sideNavigation"]["selectedSubItem"];
+	expandedNavItemIds: TApp["ui"]["body"]["leftAside"]["sideNavigation"]["expandedItemIds"];
 
 	// 모바일 - BottomTab
-	bottomTabItems: TBottomTabStore["tabItems"];
-	activeBottomTabId: TBottomTabStore["activeTabId"];
+	bottomTabItems: TApp["ui"]["footer"]["mobileBottomNavigation"]["items"];
+	activeBottomTabId: TApp["ui"]["footer"]["mobileBottomNavigation"]["activeItemId"];
 
 	// 모바일 - SubMenuList
-	isSubMenuOpen: TBottomTabStore["isSubMenuOpen"];
-	subMenuTitle: TBottomTabStore["subMenuTitle"];
-	subMenuItems: TBottomTabStore["subMenuItems"];
+	isSubMenuOpen: TApp["ui"]["footer"]["mobileMenu"]["isOpen"];
+	subMenuTitle: TApp["ui"]["footer"]["mobileMenu"]["title"];
+	subMenuItems: TApp["ui"]["footer"]["mobileMenu"]["items"];
 
 	// 모바일 - FAB
-	isFABOpen: TFABStore["isOpen"];
-	fabActions: TFABStore["visibleActions"];
+	isFABOpen: TApp["ui"]["footer"]["floatingAction"]["isOpen"];
+	fabActions: TApp["ui"]["footer"]["floatingAction"]["actions"];
 
 	// 핸들러
 	onNavItemClick: (navItemId: string) => void;
@@ -156,9 +154,9 @@ export interface UseLayoutReturn<
 }
 
 /**
- * useSpaceGuard가 의존하는 PersistStore 최소 계약
+ * useSpaceGuard가 의존하는 space 최소 계약
  */
-export interface SpaceGuardPersistStoreLike {
+export interface SpaceGuardScopeLike {
 	tenantId?: string | null;
 	spaceId?: string | null;
 	groundName?: string | null;
@@ -166,13 +164,19 @@ export interface SpaceGuardPersistStoreLike {
 	isSpaceSelectionResolved?: boolean;
 }
 
+export interface SpaceGuardAppLike<
+	TSpaceScope extends SpaceGuardScopeLike = SpaceGuardScopeLike,
+> {
+	space?: TSpaceScope;
+}
+
 /**
  * useSpaceGuard 옵션 인터페이스
  */
 export interface UseSpaceGuardOptions<
-	TPersistStore extends SpaceGuardPersistStoreLike = SpaceGuardPersistStoreLike,
+	TSpaceScope extends SpaceGuardScopeLike = SpaceGuardScopeLike,
 > {
-	usePersistStore: () => TPersistStore;
+	useApp: () => SpaceGuardAppLike<TSpaceScope>;
 	/** Space 선택 페이지 경로 (기본값: "/select-space") */
 	selectSpacePath?: string;
 }
@@ -216,9 +220,9 @@ export interface SpaceBootstrapSelection {
 }
 
 /**
- * useSpaceBootstrap이 값을 반영할 Store 최소 계약
+ * useSpaceBootstrap이 값을 반영할 space 최소 계약
  */
-export interface SpaceBootstrapStoreLike {
+export interface SpaceBootstrapScopeLike {
 	isSpaceSelectionResolved?: boolean;
 	setSpaces: (spaces: SpaceBootstrapSelection[]) => void;
 	setSpace: (
@@ -237,7 +241,7 @@ export interface SpaceBootstrapStoreLike {
 export interface UseSpaceBootstrapOptions<
 	TSpace extends SpaceBootstrapSpaceLike = SpaceBootstrapSpaceLike,
 > {
-	spaceStore: SpaceBootstrapStoreLike;
+	space: SpaceBootstrapScopeLike;
 	isHydrated: boolean;
 	spaces?: TSpace[] | null;
 	currentSpace?: TSpace | null;

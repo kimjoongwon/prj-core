@@ -12,13 +12,13 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const StoreBound: Story = {
+export const Connected: Story = {
 	args: { contents: <div /> },
 	render: () => (
 		<PageStoryScaffold
 			componentName="AccessGate"
 			componentPath="feature/AccessGate"
-			description="router, auth store, ability store, token verification에 직접 연결되는 gate라 Storybook에서는 계약 등록용 scaffold로 표시합니다."
+			description="router, session, ability, token verification에 직접 연결되는 gate라 Storybook에서는 계약 등록용 scaffold로 표시합니다."
 		/>
 	),
 };

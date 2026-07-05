@@ -1,5 +1,4 @@
 export interface CreateReservationInput {
-	coursePassId?: string;
 	timelineId: string;
 	sessionId: string;
 	programId: string;

@@ -4,13 +4,13 @@ MobX-based application state library for the Cocrepo monorepo.
 
 ## Overview
 
-`@cocrepo/store` provides the shared root store, app store provider factories, and selector hooks used by the Next.js apps in this repository.
+`@cocrepo/store` provides shared application state, app provider factories, and the single `useApp` entry point used by the Next.js apps in this repository.
 
 ## Public API
 
-- Stores: `RootStore`, `AuthStore`, `NavigationStore`, `PersistStore`, `TokenStore`, `AbilityStore`, `BottomTabStore`, `FABStore`
-- Hooks: `useStore`, `useRootStore`, `useAuthStore`, `useNavigationStore`, `usePersistStore`
-- Providers: `createAppStoreProvider`, `consoleAppStoreProvider`, `ConsoleAppStoreProvider`
+- App state: `AppStore`, `Navigation`, `app.session`, `app.space`, `app.locale`, `app.ability`, `app.ui`
+- Hooks: `useApp`
+- Providers: `createAppProvider`, `consoleAppProvider`, `ConsoleAppProvider`
 
 ## Installation
 
@@ -21,36 +21,39 @@ pnpm add @cocrepo/store
 ## Provider Example
 
 ```tsx
-import { ConsoleAppStoreProvider, useAuthStore } from "@cocrepo/store";
+import { ConsoleAppProvider, useApp } from "@cocrepo/store";
 import { observer } from "mobx-react-lite";
 
 const SessionState = observer(() => {
-  const authStore = useAuthStore();
-  return <div>{authStore.isAuthenticated ? "Active" : "Expired"}</div>;
+  const app = useApp();
+  return <div>{app.session?.isAuthenticated ? "Active" : "Expired"}</div>;
 });
 
 export function App() {
   return (
-    <ConsoleAppStoreProvider>
+    <ConsoleAppProvider>
       <SessionState />
-    </ConsoleAppStoreProvider>
+    </ConsoleAppProvider>
   );
 }
 ```
 
-## Root Store Example
+## App State Tree Example
 
 ```ts
-import { AuthStore, PersistStore, RootStore, TokenStore } from "@cocrepo/store";
+import { useApp } from "@cocrepo/store";
 
-const rootStore = new RootStore();
-rootStore.tokenStore = new TokenStore(rootStore);
-rootStore.persistStore = new PersistStore({ storageKey: "example-persist" });
-rootStore.authStore = new AuthStore(rootStore);
+const app = useApp();
+
+app.session?.isAuthenticated;
+app.space?.tenantId;
+app.locale?.languageCode;
+app.ability?.can("view", "menu:dashboard");
+app.ui.footer.mobileBottomNavigation.items;
 ```
 
 ## Notes
 
-- The root class is `RootStore`, not `OnoraStore`.
-- The auth selector hook is `useAuthStore`, not `useAuth`.
-- App-wide providers are created via `createAppStoreProvider`; there is no `AppProviders` export in the current package surface.
+- The root class is `AppStore`, not app-specific brand names.
+- Components start from `useApp`; selector hooks such as `useNavigation` or `useSpace` are not part of the current package surface.
+- App-wide providers are created via `createAppProvider`; there is no `AppProviders` export in the current package surface.

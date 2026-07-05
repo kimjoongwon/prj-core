@@ -207,15 +207,10 @@ export type TenantWhereInput = {
   groups?: Prisma.GroupListRelationFilter
   contents?: Prisma.ContentListRelationFilter
   timelines?: Prisma.TimelineListRelationFilter
-  courses?: Prisma.CourseListRelationFilter
-  courseOfferings?: Prisma.CourseOfferingListRelationFilter
   tasks?: Prisma.TaskListRelationFilter
   safeWallets?: Prisma.SafeWalletListRelationFilter
   routines?: Prisma.RoutineListRelationFilter
   reservations?: Prisma.ReservationListRelationFilter
-  payments?: Prisma.PaymentListRelationFilter
-  paymentSubjects?: Prisma.PaymentSubjectListRelationFilter
-  paymentReferences?: Prisma.PaymentReferenceListRelationFilter
   folders?: Prisma.FolderListRelationFilter
   assets?: Prisma.AssetListRelationFilter
   albums?: Prisma.AlbumListRelationFilter
@@ -241,15 +236,10 @@ export type TenantOrderByWithRelationInput = {
   groups?: Prisma.GroupOrderByRelationAggregateInput
   contents?: Prisma.ContentOrderByRelationAggregateInput
   timelines?: Prisma.TimelineOrderByRelationAggregateInput
-  courses?: Prisma.CourseOrderByRelationAggregateInput
-  courseOfferings?: Prisma.CourseOfferingOrderByRelationAggregateInput
   tasks?: Prisma.TaskOrderByRelationAggregateInput
   safeWallets?: Prisma.SafeWalletOrderByRelationAggregateInput
   routines?: Prisma.RoutineOrderByRelationAggregateInput
   reservations?: Prisma.ReservationOrderByRelationAggregateInput
-  payments?: Prisma.PaymentOrderByRelationAggregateInput
-  paymentSubjects?: Prisma.PaymentSubjectOrderByRelationAggregateInput
-  paymentReferences?: Prisma.PaymentReferenceOrderByRelationAggregateInput
   folders?: Prisma.FolderOrderByRelationAggregateInput
   assets?: Prisma.AssetOrderByRelationAggregateInput
   albums?: Prisma.AlbumOrderByRelationAggregateInput
@@ -279,15 +269,10 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   groups?: Prisma.GroupListRelationFilter
   contents?: Prisma.ContentListRelationFilter
   timelines?: Prisma.TimelineListRelationFilter
-  courses?: Prisma.CourseListRelationFilter
-  courseOfferings?: Prisma.CourseOfferingListRelationFilter
   tasks?: Prisma.TaskListRelationFilter
   safeWallets?: Prisma.SafeWalletListRelationFilter
   routines?: Prisma.RoutineListRelationFilter
   reservations?: Prisma.ReservationListRelationFilter
-  payments?: Prisma.PaymentListRelationFilter
-  paymentSubjects?: Prisma.PaymentSubjectListRelationFilter
-  paymentReferences?: Prisma.PaymentReferenceListRelationFilter
   folders?: Prisma.FolderListRelationFilter
   assets?: Prisma.AssetListRelationFilter
   albums?: Prisma.AlbumListRelationFilter
@@ -336,15 +321,10 @@ export type TenantCreateInput = {
   groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
@@ -367,15 +347,10 @@ export type TenantUncheckedCreateInput = {
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
@@ -398,15 +373,10 @@ export type TenantUpdateInput = {
   groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
@@ -429,15 +399,10 @@ export type TenantUncheckedUpdateInput = {
   groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
@@ -654,48 +619,6 @@ export type TenantUpdateOneRequiredWithoutFoldersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutFoldersInput, Prisma.TenantUpdateWithoutFoldersInput>, Prisma.TenantUncheckedUpdateWithoutFoldersInput>
 }
 
-export type TenantCreateNestedOneWithoutPaymentsInput = {
-  create?: Prisma.XOR<Prisma.TenantCreateWithoutPaymentsInput, Prisma.TenantUncheckedCreateWithoutPaymentsInput>
-  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutPaymentsInput
-  connect?: Prisma.TenantWhereUniqueInput
-}
-
-export type TenantUpdateOneRequiredWithoutPaymentsNestedInput = {
-  create?: Prisma.XOR<Prisma.TenantCreateWithoutPaymentsInput, Prisma.TenantUncheckedCreateWithoutPaymentsInput>
-  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutPaymentsInput
-  upsert?: Prisma.TenantUpsertWithoutPaymentsInput
-  connect?: Prisma.TenantWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutPaymentsInput, Prisma.TenantUpdateWithoutPaymentsInput>, Prisma.TenantUncheckedUpdateWithoutPaymentsInput>
-}
-
-export type TenantCreateNestedOneWithoutPaymentSubjectsInput = {
-  create?: Prisma.XOR<Prisma.TenantCreateWithoutPaymentSubjectsInput, Prisma.TenantUncheckedCreateWithoutPaymentSubjectsInput>
-  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutPaymentSubjectsInput
-  connect?: Prisma.TenantWhereUniqueInput
-}
-
-export type TenantUpdateOneRequiredWithoutPaymentSubjectsNestedInput = {
-  create?: Prisma.XOR<Prisma.TenantCreateWithoutPaymentSubjectsInput, Prisma.TenantUncheckedCreateWithoutPaymentSubjectsInput>
-  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutPaymentSubjectsInput
-  upsert?: Prisma.TenantUpsertWithoutPaymentSubjectsInput
-  connect?: Prisma.TenantWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutPaymentSubjectsInput, Prisma.TenantUpdateWithoutPaymentSubjectsInput>, Prisma.TenantUncheckedUpdateWithoutPaymentSubjectsInput>
-}
-
-export type TenantCreateNestedOneWithoutPaymentReferencesInput = {
-  create?: Prisma.XOR<Prisma.TenantCreateWithoutPaymentReferencesInput, Prisma.TenantUncheckedCreateWithoutPaymentReferencesInput>
-  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutPaymentReferencesInput
-  connect?: Prisma.TenantWhereUniqueInput
-}
-
-export type TenantUpdateOneRequiredWithoutPaymentReferencesNestedInput = {
-  create?: Prisma.XOR<Prisma.TenantCreateWithoutPaymentReferencesInput, Prisma.TenantUncheckedCreateWithoutPaymentReferencesInput>
-  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutPaymentReferencesInput
-  upsert?: Prisma.TenantUpsertWithoutPaymentReferencesInput
-  connect?: Prisma.TenantWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutPaymentReferencesInput, Prisma.TenantUpdateWithoutPaymentReferencesInput>, Prisma.TenantUncheckedUpdateWithoutPaymentReferencesInput>
-}
-
 export type TenantCreateNestedOneWithoutContentsInput = {
   create?: Prisma.XOR<Prisma.TenantCreateWithoutContentsInput, Prisma.TenantUncheckedCreateWithoutContentsInput>
   connectOrCreate?: Prisma.TenantCreateOrConnectWithoutContentsInput
@@ -824,34 +747,6 @@ export type TenantUpdateOneRequiredWithoutInquiriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutInquiriesInput, Prisma.TenantUpdateWithoutInquiriesInput>, Prisma.TenantUncheckedUpdateWithoutInquiriesInput>
 }
 
-export type TenantCreateNestedOneWithoutCoursesInput = {
-  create?: Prisma.XOR<Prisma.TenantCreateWithoutCoursesInput, Prisma.TenantUncheckedCreateWithoutCoursesInput>
-  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCoursesInput
-  connect?: Prisma.TenantWhereUniqueInput
-}
-
-export type TenantUpdateOneRequiredWithoutCoursesNestedInput = {
-  create?: Prisma.XOR<Prisma.TenantCreateWithoutCoursesInput, Prisma.TenantUncheckedCreateWithoutCoursesInput>
-  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCoursesInput
-  upsert?: Prisma.TenantUpsertWithoutCoursesInput
-  connect?: Prisma.TenantWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutCoursesInput, Prisma.TenantUpdateWithoutCoursesInput>, Prisma.TenantUncheckedUpdateWithoutCoursesInput>
-}
-
-export type TenantCreateNestedOneWithoutCourseOfferingsInput = {
-  create?: Prisma.XOR<Prisma.TenantCreateWithoutCourseOfferingsInput, Prisma.TenantUncheckedCreateWithoutCourseOfferingsInput>
-  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCourseOfferingsInput
-  connect?: Prisma.TenantWhereUniqueInput
-}
-
-export type TenantUpdateOneRequiredWithoutCourseOfferingsNestedInput = {
-  create?: Prisma.XOR<Prisma.TenantCreateWithoutCourseOfferingsInput, Prisma.TenantUncheckedCreateWithoutCourseOfferingsInput>
-  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCourseOfferingsInput
-  upsert?: Prisma.TenantUpsertWithoutCourseOfferingsInput
-  connect?: Prisma.TenantWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutCourseOfferingsInput, Prisma.TenantUpdateWithoutCourseOfferingsInput>, Prisma.TenantUncheckedUpdateWithoutCourseOfferingsInput>
-}
-
 export type TenantCreateNestedOneWithoutReservationsInput = {
   create?: Prisma.XOR<Prisma.TenantCreateWithoutReservationsInput, Prisma.TenantUncheckedCreateWithoutReservationsInput>
   connectOrCreate?: Prisma.TenantCreateOrConnectWithoutReservationsInput
@@ -963,15 +858,10 @@ export type TenantCreateWithoutPoliciesInput = {
   groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
@@ -993,15 +883,10 @@ export type TenantUncheckedCreateWithoutPoliciesInput = {
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
@@ -1039,15 +924,10 @@ export type TenantUpdateWithoutPoliciesInput = {
   groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
@@ -1069,15 +949,10 @@ export type TenantUncheckedUpdateWithoutPoliciesInput = {
   groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
@@ -1099,15 +974,10 @@ export type TenantCreateWithoutRoleInput = {
   groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
@@ -1129,15 +999,10 @@ export type TenantUncheckedCreateWithoutRoleInput = {
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
@@ -1199,15 +1064,10 @@ export type TenantCreateWithoutAlbumsInput = {
   groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutTenantInput
@@ -1229,15 +1089,10 @@ export type TenantUncheckedCreateWithoutAlbumsInput = {
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutTenantInput
@@ -1275,15 +1130,10 @@ export type TenantUpdateWithoutAlbumsInput = {
   groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutTenantNestedInput
@@ -1305,15 +1155,10 @@ export type TenantUncheckedUpdateWithoutAlbumsInput = {
   groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutTenantNestedInput
@@ -1335,15 +1180,10 @@ export type TenantCreateWithoutAlbumEntriesInput = {
   groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
@@ -1365,15 +1205,10 @@ export type TenantUncheckedCreateWithoutAlbumEntriesInput = {
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
@@ -1411,15 +1246,10 @@ export type TenantUpdateWithoutAlbumEntriesInput = {
   groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
@@ -1441,15 +1271,10 @@ export type TenantUncheckedUpdateWithoutAlbumEntriesInput = {
   groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
@@ -1471,15 +1296,10 @@ export type TenantCreateWithoutAssetsInput = {
   groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutTenantInput
@@ -1501,15 +1321,10 @@ export type TenantUncheckedCreateWithoutAssetsInput = {
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutTenantInput
@@ -1547,15 +1362,10 @@ export type TenantUpdateWithoutAssetsInput = {
   groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutTenantNestedInput
@@ -1577,15 +1387,10 @@ export type TenantUncheckedUpdateWithoutAssetsInput = {
   groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutTenantNestedInput
@@ -1607,15 +1412,10 @@ export type TenantCreateWithoutDerivativesInput = {
   groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
@@ -1637,15 +1437,10 @@ export type TenantUncheckedCreateWithoutDerivativesInput = {
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
@@ -1683,15 +1478,10 @@ export type TenantUpdateWithoutDerivativesInput = {
   groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
@@ -1713,15 +1503,10 @@ export type TenantUncheckedUpdateWithoutDerivativesInput = {
   groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
@@ -1743,15 +1528,10 @@ export type TenantCreateWithoutFoldersInput = {
   groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
   albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutTenantInput
@@ -1773,15 +1553,10 @@ export type TenantUncheckedCreateWithoutFoldersInput = {
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
   albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutTenantInput
@@ -1819,15 +1594,10 @@ export type TenantUpdateWithoutFoldersInput = {
   groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
   albumEntries?: Prisma.AlbumEntryUpdateManyWithoutTenantNestedInput
@@ -1849,423 +1619,10 @@ export type TenantUncheckedUpdateWithoutFoldersInput = {
   groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
-  albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
-  albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutTenantNestedInput
-  derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutTenantNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutTenantNestedInput
-}
-
-export type TenantCreateWithoutPaymentsInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  role: Prisma.RoleCreateNestedOneWithoutTenantsInput
-  space: Prisma.SpaceCreateNestedOneWithoutTenantsInput
-  user: Prisma.UserCreateNestedOneWithoutTenantsInput
-  accessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutAppliedTenantInput
-  policies?: Prisma.PolicyCreateNestedManyWithoutTenantInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
-  groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
-  contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
-  timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
-  tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
-  safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
-  routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
-  reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
-  folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
-  assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
-  albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
-  albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutTenantInput
-  derivatives?: Prisma.DerivativeCreateNestedManyWithoutTenantInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutTenantInput
-}
-
-export type TenantUncheckedCreateWithoutPaymentsInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  userId: string
-  spaceId: string
-  roleId: string
-  accessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutAppliedTenantInput
-  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutTenantInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
-  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
-  contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
-  timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
-  safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
-  routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
-  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
-  folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
-  albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
-  albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutTenantInput
-  derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutTenantInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutTenantInput
-}
-
-export type TenantCreateOrConnectWithoutPaymentsInput = {
-  where: Prisma.TenantWhereUniqueInput
-  create: Prisma.XOR<Prisma.TenantCreateWithoutPaymentsInput, Prisma.TenantUncheckedCreateWithoutPaymentsInput>
-}
-
-export type TenantUpsertWithoutPaymentsInput = {
-  update: Prisma.XOR<Prisma.TenantUpdateWithoutPaymentsInput, Prisma.TenantUncheckedUpdateWithoutPaymentsInput>
-  create: Prisma.XOR<Prisma.TenantCreateWithoutPaymentsInput, Prisma.TenantUncheckedCreateWithoutPaymentsInput>
-  where?: Prisma.TenantWhereInput
-}
-
-export type TenantUpdateToOneWithWhereWithoutPaymentsInput = {
-  where?: Prisma.TenantWhereInput
-  data: Prisma.XOR<Prisma.TenantUpdateWithoutPaymentsInput, Prisma.TenantUncheckedUpdateWithoutPaymentsInput>
-}
-
-export type TenantUpdateWithoutPaymentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.RoleUpdateOneRequiredWithoutTenantsNestedInput
-  space?: Prisma.SpaceUpdateOneRequiredWithoutTenantsNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutTenantsNestedInput
-  accessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutAppliedTenantNestedInput
-  policies?: Prisma.PolicyUpdateManyWithoutTenantNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
-  groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
-  contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
-  timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
-  tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
-  safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
-  routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
-  reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
-  folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
-  albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
-  albumEntries?: Prisma.AlbumEntryUpdateManyWithoutTenantNestedInput
-  derivatives?: Prisma.DerivativeUpdateManyWithoutTenantNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutTenantNestedInput
-}
-
-export type TenantUncheckedUpdateWithoutPaymentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  roleId?: Prisma.StringFieldUpdateOperationsInput | string
-  accessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutAppliedTenantNestedInput
-  policies?: Prisma.PolicyUncheckedUpdateManyWithoutTenantNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
-  groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
-  contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
-  timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
-  safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
-  routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
-  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
-  folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
-  albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
-  albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutTenantNestedInput
-  derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutTenantNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutTenantNestedInput
-}
-
-export type TenantCreateWithoutPaymentSubjectsInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  role: Prisma.RoleCreateNestedOneWithoutTenantsInput
-  space: Prisma.SpaceCreateNestedOneWithoutTenantsInput
-  user: Prisma.UserCreateNestedOneWithoutTenantsInput
-  accessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutAppliedTenantInput
-  policies?: Prisma.PolicyCreateNestedManyWithoutTenantInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
-  groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
-  contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
-  timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
-  tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
-  safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
-  routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
-  reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
-  folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
-  assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
-  albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
-  albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutTenantInput
-  derivatives?: Prisma.DerivativeCreateNestedManyWithoutTenantInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutTenantInput
-}
-
-export type TenantUncheckedCreateWithoutPaymentSubjectsInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  userId: string
-  spaceId: string
-  roleId: string
-  accessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutAppliedTenantInput
-  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutTenantInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
-  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
-  contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
-  timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
-  safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
-  routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
-  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
-  folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
-  albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
-  albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutTenantInput
-  derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutTenantInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutTenantInput
-}
-
-export type TenantCreateOrConnectWithoutPaymentSubjectsInput = {
-  where: Prisma.TenantWhereUniqueInput
-  create: Prisma.XOR<Prisma.TenantCreateWithoutPaymentSubjectsInput, Prisma.TenantUncheckedCreateWithoutPaymentSubjectsInput>
-}
-
-export type TenantUpsertWithoutPaymentSubjectsInput = {
-  update: Prisma.XOR<Prisma.TenantUpdateWithoutPaymentSubjectsInput, Prisma.TenantUncheckedUpdateWithoutPaymentSubjectsInput>
-  create: Prisma.XOR<Prisma.TenantCreateWithoutPaymentSubjectsInput, Prisma.TenantUncheckedCreateWithoutPaymentSubjectsInput>
-  where?: Prisma.TenantWhereInput
-}
-
-export type TenantUpdateToOneWithWhereWithoutPaymentSubjectsInput = {
-  where?: Prisma.TenantWhereInput
-  data: Prisma.XOR<Prisma.TenantUpdateWithoutPaymentSubjectsInput, Prisma.TenantUncheckedUpdateWithoutPaymentSubjectsInput>
-}
-
-export type TenantUpdateWithoutPaymentSubjectsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.RoleUpdateOneRequiredWithoutTenantsNestedInput
-  space?: Prisma.SpaceUpdateOneRequiredWithoutTenantsNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutTenantsNestedInput
-  accessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutAppliedTenantNestedInput
-  policies?: Prisma.PolicyUpdateManyWithoutTenantNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
-  groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
-  contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
-  timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
-  tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
-  safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
-  routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
-  reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
-  folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
-  albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
-  albumEntries?: Prisma.AlbumEntryUpdateManyWithoutTenantNestedInput
-  derivatives?: Prisma.DerivativeUpdateManyWithoutTenantNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutTenantNestedInput
-}
-
-export type TenantUncheckedUpdateWithoutPaymentSubjectsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  roleId?: Prisma.StringFieldUpdateOperationsInput | string
-  accessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutAppliedTenantNestedInput
-  policies?: Prisma.PolicyUncheckedUpdateManyWithoutTenantNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
-  groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
-  contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
-  timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
-  safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
-  routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
-  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
-  folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
-  albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
-  albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutTenantNestedInput
-  derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutTenantNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutTenantNestedInput
-}
-
-export type TenantCreateWithoutPaymentReferencesInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  role: Prisma.RoleCreateNestedOneWithoutTenantsInput
-  space: Prisma.SpaceCreateNestedOneWithoutTenantsInput
-  user: Prisma.UserCreateNestedOneWithoutTenantsInput
-  accessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutAppliedTenantInput
-  policies?: Prisma.PolicyCreateNestedManyWithoutTenantInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
-  groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
-  contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
-  timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
-  tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
-  safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
-  routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
-  reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
-  assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
-  albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
-  albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutTenantInput
-  derivatives?: Prisma.DerivativeCreateNestedManyWithoutTenantInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutTenantInput
-}
-
-export type TenantUncheckedCreateWithoutPaymentReferencesInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  userId: string
-  spaceId: string
-  roleId: string
-  accessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutAppliedTenantInput
-  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutTenantInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
-  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
-  contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
-  timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
-  safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
-  routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
-  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
-  albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
-  albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutTenantInput
-  derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutTenantInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutTenantInput
-}
-
-export type TenantCreateOrConnectWithoutPaymentReferencesInput = {
-  where: Prisma.TenantWhereUniqueInput
-  create: Prisma.XOR<Prisma.TenantCreateWithoutPaymentReferencesInput, Prisma.TenantUncheckedCreateWithoutPaymentReferencesInput>
-}
-
-export type TenantUpsertWithoutPaymentReferencesInput = {
-  update: Prisma.XOR<Prisma.TenantUpdateWithoutPaymentReferencesInput, Prisma.TenantUncheckedUpdateWithoutPaymentReferencesInput>
-  create: Prisma.XOR<Prisma.TenantCreateWithoutPaymentReferencesInput, Prisma.TenantUncheckedCreateWithoutPaymentReferencesInput>
-  where?: Prisma.TenantWhereInput
-}
-
-export type TenantUpdateToOneWithWhereWithoutPaymentReferencesInput = {
-  where?: Prisma.TenantWhereInput
-  data: Prisma.XOR<Prisma.TenantUpdateWithoutPaymentReferencesInput, Prisma.TenantUncheckedUpdateWithoutPaymentReferencesInput>
-}
-
-export type TenantUpdateWithoutPaymentReferencesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.RoleUpdateOneRequiredWithoutTenantsNestedInput
-  space?: Prisma.SpaceUpdateOneRequiredWithoutTenantsNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutTenantsNestedInput
-  accessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutAppliedTenantNestedInput
-  policies?: Prisma.PolicyUpdateManyWithoutTenantNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
-  groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
-  contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
-  timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
-  tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
-  safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
-  routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
-  reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
-  albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
-  albumEntries?: Prisma.AlbumEntryUpdateManyWithoutTenantNestedInput
-  derivatives?: Prisma.DerivativeUpdateManyWithoutTenantNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutTenantNestedInput
-}
-
-export type TenantUncheckedUpdateWithoutPaymentReferencesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  roleId?: Prisma.StringFieldUpdateOperationsInput | string
-  accessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutAppliedTenantNestedInput
-  policies?: Prisma.PolicyUncheckedUpdateManyWithoutTenantNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
-  groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
-  contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
-  timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
-  safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
-  routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
-  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutTenantNestedInput
@@ -2286,15 +1643,10 @@ export type TenantCreateWithoutContentsInput = {
   categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
   groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
@@ -2316,15 +1668,10 @@ export type TenantUncheckedCreateWithoutContentsInput = {
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
@@ -2362,15 +1709,10 @@ export type TenantUpdateWithoutContentsInput = {
   categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
   groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
@@ -2392,15 +1734,10 @@ export type TenantUncheckedUpdateWithoutContentsInput = {
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
@@ -2422,15 +1759,10 @@ export type TenantCreateWithoutSpaceInput = {
   groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
@@ -2452,15 +1784,10 @@ export type TenantUncheckedCreateWithoutSpaceInput = {
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
@@ -2508,15 +1835,10 @@ export type TenantCreateWithoutAccessRequestsInput = {
   groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
@@ -2538,15 +1860,10 @@ export type TenantUncheckedCreateWithoutAccessRequestsInput = {
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
@@ -2584,15 +1901,10 @@ export type TenantUpdateWithoutAccessRequestsInput = {
   groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
@@ -2614,15 +1926,10 @@ export type TenantUncheckedUpdateWithoutAccessRequestsInput = {
   groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
@@ -2644,15 +1951,10 @@ export type TenantCreateWithoutUserInput = {
   groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
@@ -2674,15 +1976,10 @@ export type TenantUncheckedCreateWithoutUserInput = {
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
@@ -2731,15 +2028,10 @@ export type TenantCreateWithoutInquiriesInput = {
   groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
@@ -2761,15 +2053,10 @@ export type TenantUncheckedCreateWithoutInquiriesInput = {
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
@@ -2807,15 +2094,10 @@ export type TenantUpdateWithoutInquiriesInput = {
   groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
@@ -2837,292 +2119,15 @@ export type TenantUncheckedUpdateWithoutInquiriesInput = {
   groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
   albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutTenantNestedInput
   derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutTenantNestedInput
-}
-
-export type TenantCreateWithoutCoursesInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  role: Prisma.RoleCreateNestedOneWithoutTenantsInput
-  space: Prisma.SpaceCreateNestedOneWithoutTenantsInput
-  user: Prisma.UserCreateNestedOneWithoutTenantsInput
-  accessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutAppliedTenantInput
-  policies?: Prisma.PolicyCreateNestedManyWithoutTenantInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
-  groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
-  contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
-  timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
-  tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
-  safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
-  routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
-  reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
-  folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
-  assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
-  albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
-  albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutTenantInput
-  derivatives?: Prisma.DerivativeCreateNestedManyWithoutTenantInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutTenantInput
-}
-
-export type TenantUncheckedCreateWithoutCoursesInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  userId: string
-  spaceId: string
-  roleId: string
-  accessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutAppliedTenantInput
-  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutTenantInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
-  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
-  contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
-  timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
-  safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
-  routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
-  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
-  folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
-  albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
-  albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutTenantInput
-  derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutTenantInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutTenantInput
-}
-
-export type TenantCreateOrConnectWithoutCoursesInput = {
-  where: Prisma.TenantWhereUniqueInput
-  create: Prisma.XOR<Prisma.TenantCreateWithoutCoursesInput, Prisma.TenantUncheckedCreateWithoutCoursesInput>
-}
-
-export type TenantUpsertWithoutCoursesInput = {
-  update: Prisma.XOR<Prisma.TenantUpdateWithoutCoursesInput, Prisma.TenantUncheckedUpdateWithoutCoursesInput>
-  create: Prisma.XOR<Prisma.TenantCreateWithoutCoursesInput, Prisma.TenantUncheckedCreateWithoutCoursesInput>
-  where?: Prisma.TenantWhereInput
-}
-
-export type TenantUpdateToOneWithWhereWithoutCoursesInput = {
-  where?: Prisma.TenantWhereInput
-  data: Prisma.XOR<Prisma.TenantUpdateWithoutCoursesInput, Prisma.TenantUncheckedUpdateWithoutCoursesInput>
-}
-
-export type TenantUpdateWithoutCoursesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.RoleUpdateOneRequiredWithoutTenantsNestedInput
-  space?: Prisma.SpaceUpdateOneRequiredWithoutTenantsNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutTenantsNestedInput
-  accessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutAppliedTenantNestedInput
-  policies?: Prisma.PolicyUpdateManyWithoutTenantNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
-  groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
-  contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
-  timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
-  tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
-  safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
-  routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
-  reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
-  folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
-  albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
-  albumEntries?: Prisma.AlbumEntryUpdateManyWithoutTenantNestedInput
-  derivatives?: Prisma.DerivativeUpdateManyWithoutTenantNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutTenantNestedInput
-}
-
-export type TenantUncheckedUpdateWithoutCoursesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  roleId?: Prisma.StringFieldUpdateOperationsInput | string
-  accessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutAppliedTenantNestedInput
-  policies?: Prisma.PolicyUncheckedUpdateManyWithoutTenantNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
-  groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
-  contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
-  timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
-  safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
-  routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
-  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
-  folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
-  albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
-  albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutTenantNestedInput
-  derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutTenantNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutTenantNestedInput
-}
-
-export type TenantCreateWithoutCourseOfferingsInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  role: Prisma.RoleCreateNestedOneWithoutTenantsInput
-  space: Prisma.SpaceCreateNestedOneWithoutTenantsInput
-  user: Prisma.UserCreateNestedOneWithoutTenantsInput
-  accessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutAppliedTenantInput
-  policies?: Prisma.PolicyCreateNestedManyWithoutTenantInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
-  groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
-  contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
-  timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
-  safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
-  routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
-  reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
-  folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
-  assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
-  albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
-  albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutTenantInput
-  derivatives?: Prisma.DerivativeCreateNestedManyWithoutTenantInput
-  inquiries?: Prisma.InquiryCreateNestedManyWithoutTenantInput
-}
-
-export type TenantUncheckedCreateWithoutCourseOfferingsInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  userId: string
-  spaceId: string
-  roleId: string
-  accessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutAppliedTenantInput
-  policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutTenantInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
-  groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
-  contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
-  timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
-  safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
-  routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
-  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
-  folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
-  albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
-  albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutTenantInput
-  derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutTenantInput
-  inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutTenantInput
-}
-
-export type TenantCreateOrConnectWithoutCourseOfferingsInput = {
-  where: Prisma.TenantWhereUniqueInput
-  create: Prisma.XOR<Prisma.TenantCreateWithoutCourseOfferingsInput, Prisma.TenantUncheckedCreateWithoutCourseOfferingsInput>
-}
-
-export type TenantUpsertWithoutCourseOfferingsInput = {
-  update: Prisma.XOR<Prisma.TenantUpdateWithoutCourseOfferingsInput, Prisma.TenantUncheckedUpdateWithoutCourseOfferingsInput>
-  create: Prisma.XOR<Prisma.TenantCreateWithoutCourseOfferingsInput, Prisma.TenantUncheckedCreateWithoutCourseOfferingsInput>
-  where?: Prisma.TenantWhereInput
-}
-
-export type TenantUpdateToOneWithWhereWithoutCourseOfferingsInput = {
-  where?: Prisma.TenantWhereInput
-  data: Prisma.XOR<Prisma.TenantUpdateWithoutCourseOfferingsInput, Prisma.TenantUncheckedUpdateWithoutCourseOfferingsInput>
-}
-
-export type TenantUpdateWithoutCourseOfferingsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.RoleUpdateOneRequiredWithoutTenantsNestedInput
-  space?: Prisma.SpaceUpdateOneRequiredWithoutTenantsNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutTenantsNestedInput
-  accessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutAppliedTenantNestedInput
-  policies?: Prisma.PolicyUpdateManyWithoutTenantNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
-  groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
-  contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
-  timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
-  safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
-  routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
-  reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
-  folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
-  albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
-  albumEntries?: Prisma.AlbumEntryUpdateManyWithoutTenantNestedInput
-  derivatives?: Prisma.DerivativeUpdateManyWithoutTenantNestedInput
-  inquiries?: Prisma.InquiryUpdateManyWithoutTenantNestedInput
-}
-
-export type TenantUncheckedUpdateWithoutCourseOfferingsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  roleId?: Prisma.StringFieldUpdateOperationsInput | string
-  accessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutAppliedTenantNestedInput
-  policies?: Prisma.PolicyUncheckedUpdateManyWithoutTenantNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
-  groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
-  contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
-  timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
-  safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
-  routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
-  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
-  folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
-  albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
-  albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutTenantNestedInput
-  derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutTenantNestedInput
-  inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutReservationsInput = {
@@ -3139,14 +2144,9 @@ export type TenantCreateWithoutReservationsInput = {
   groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
@@ -3169,14 +2169,9 @@ export type TenantUncheckedCreateWithoutReservationsInput = {
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
@@ -3215,14 +2210,9 @@ export type TenantUpdateWithoutReservationsInput = {
   groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
@@ -3245,14 +2235,9 @@ export type TenantUncheckedUpdateWithoutReservationsInput = {
   groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
@@ -3275,14 +2260,9 @@ export type TenantCreateWithoutRoutinesInput = {
   groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
@@ -3305,14 +2285,9 @@ export type TenantUncheckedCreateWithoutRoutinesInput = {
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
@@ -3351,14 +2326,9 @@ export type TenantUpdateWithoutRoutinesInput = {
   groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
@@ -3381,14 +2351,9 @@ export type TenantUncheckedUpdateWithoutRoutinesInput = {
   groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
@@ -3411,14 +2376,9 @@ export type TenantCreateWithoutTasksInput = {
   groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
@@ -3441,14 +2401,9 @@ export type TenantUncheckedCreateWithoutTasksInput = {
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
@@ -3487,14 +2442,9 @@ export type TenantUpdateWithoutTasksInput = {
   groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
@@ -3517,14 +2467,9 @@ export type TenantUncheckedUpdateWithoutTasksInput = {
   groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
@@ -3546,15 +2491,10 @@ export type TenantCreateWithoutTimelinesInput = {
   categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
   groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
@@ -3576,15 +2516,10 @@ export type TenantUncheckedCreateWithoutTimelinesInput = {
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
@@ -3622,15 +2557,10 @@ export type TenantUpdateWithoutTimelinesInput = {
   categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
   groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
@@ -3652,15 +2582,10 @@ export type TenantUncheckedUpdateWithoutTimelinesInput = {
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
   groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
@@ -3682,15 +2607,10 @@ export type TenantCreateWithoutCategoriesInput = {
   groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
@@ -3712,15 +2632,10 @@ export type TenantUncheckedCreateWithoutCategoriesInput = {
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
@@ -3758,15 +2673,10 @@ export type TenantUpdateWithoutCategoriesInput = {
   groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
@@ -3788,15 +2698,10 @@ export type TenantUncheckedUpdateWithoutCategoriesInput = {
   groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
@@ -3818,15 +2723,10 @@ export type TenantCreateWithoutGroupsInput = {
   categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
@@ -3848,15 +2748,10 @@ export type TenantUncheckedCreateWithoutGroupsInput = {
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
   safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
@@ -3894,15 +2789,10 @@ export type TenantUpdateWithoutGroupsInput = {
   categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
@@ -3924,15 +2814,10 @@ export type TenantUncheckedUpdateWithoutGroupsInput = {
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
@@ -3955,14 +2840,9 @@ export type TenantCreateWithoutSafeWalletsInput = {
   groups?: Prisma.GroupCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumCreateNestedManyWithoutTenantInput
@@ -3985,14 +2865,9 @@ export type TenantUncheckedCreateWithoutSafeWalletsInput = {
   groups?: Prisma.GroupUncheckedCreateNestedManyWithoutTenantInput
   contents?: Prisma.ContentUncheckedCreateNestedManyWithoutTenantInput
   timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutTenantInput
-  courses?: Prisma.CourseUncheckedCreateNestedManyWithoutTenantInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTenantInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutTenantInput
   routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutTenantInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTenantInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedCreateNestedManyWithoutTenantInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedCreateNestedManyWithoutTenantInput
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutTenantInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutTenantInput
   albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutTenantInput
@@ -4031,14 +2906,9 @@ export type TenantUpdateWithoutSafeWalletsInput = {
   groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
@@ -4061,14 +2931,9 @@ export type TenantUncheckedUpdateWithoutSafeWalletsInput = {
   groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
@@ -4099,15 +2964,10 @@ export type TenantUpdateWithoutRoleInput = {
   groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
@@ -4129,15 +2989,10 @@ export type TenantUncheckedUpdateWithoutRoleInput = {
   groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
@@ -4177,15 +3032,10 @@ export type TenantUpdateWithoutSpaceInput = {
   groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
@@ -4207,15 +3057,10 @@ export type TenantUncheckedUpdateWithoutSpaceInput = {
   groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
@@ -4255,15 +3100,10 @@ export type TenantUpdateWithoutUserInput = {
   groups?: Prisma.GroupUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUpdateManyWithoutTenantNestedInput
@@ -4285,15 +3125,10 @@ export type TenantUncheckedUpdateWithoutUserInput = {
   groups?: Prisma.GroupUncheckedUpdateManyWithoutTenantNestedInput
   contents?: Prisma.ContentUncheckedUpdateManyWithoutTenantNestedInput
   timelines?: Prisma.TimelineUncheckedUpdateManyWithoutTenantNestedInput
-  courses?: Prisma.CourseUncheckedUpdateManyWithoutTenantNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTenantNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutTenantNestedInput
   safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutTenantNestedInput
   routines?: Prisma.RoutineUncheckedUpdateManyWithoutTenantNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTenantNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
-  paymentSubjects?: Prisma.PaymentSubjectUncheckedUpdateManyWithoutTenantNestedInput
-  paymentReferences?: Prisma.PaymentReferenceUncheckedUpdateManyWithoutTenantNestedInput
   folders?: Prisma.FolderUncheckedUpdateManyWithoutTenantNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutTenantNestedInput
   albums?: Prisma.AlbumUncheckedUpdateManyWithoutTenantNestedInput
@@ -4323,15 +3158,10 @@ export type TenantCountOutputType = {
   groups: number
   contents: number
   timelines: number
-  courses: number
-  courseOfferings: number
   tasks: number
   safeWallets: number
   routines: number
   reservations: number
-  payments: number
-  paymentSubjects: number
-  paymentReferences: number
   folders: number
   assets: number
   albums: number
@@ -4347,15 +3177,10 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   groups?: boolean | TenantCountOutputTypeCountGroupsArgs
   contents?: boolean | TenantCountOutputTypeCountContentsArgs
   timelines?: boolean | TenantCountOutputTypeCountTimelinesArgs
-  courses?: boolean | TenantCountOutputTypeCountCoursesArgs
-  courseOfferings?: boolean | TenantCountOutputTypeCountCourseOfferingsArgs
   tasks?: boolean | TenantCountOutputTypeCountTasksArgs
   safeWallets?: boolean | TenantCountOutputTypeCountSafeWalletsArgs
   routines?: boolean | TenantCountOutputTypeCountRoutinesArgs
   reservations?: boolean | TenantCountOutputTypeCountReservationsArgs
-  payments?: boolean | TenantCountOutputTypeCountPaymentsArgs
-  paymentSubjects?: boolean | TenantCountOutputTypeCountPaymentSubjectsArgs
-  paymentReferences?: boolean | TenantCountOutputTypeCountPaymentReferencesArgs
   folders?: boolean | TenantCountOutputTypeCountFoldersArgs
   assets?: boolean | TenantCountOutputTypeCountAssetsArgs
   albums?: boolean | TenantCountOutputTypeCountAlbumsArgs
@@ -4419,20 +3244,6 @@ export type TenantCountOutputTypeCountTimelinesArgs<ExtArgs extends runtime.Type
 /**
  * TenantCountOutputType without action
  */
-export type TenantCountOutputTypeCountCoursesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.CourseWhereInput
-}
-
-/**
- * TenantCountOutputType without action
- */
-export type TenantCountOutputTypeCountCourseOfferingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.CourseOfferingWhereInput
-}
-
-/**
- * TenantCountOutputType without action
- */
 export type TenantCountOutputTypeCountTasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.TaskWhereInput
 }
@@ -4456,27 +3267,6 @@ export type TenantCountOutputTypeCountRoutinesArgs<ExtArgs extends runtime.Types
  */
 export type TenantCountOutputTypeCountReservationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ReservationWhereInput
-}
-
-/**
- * TenantCountOutputType without action
- */
-export type TenantCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PaymentWhereInput
-}
-
-/**
- * TenantCountOutputType without action
- */
-export type TenantCountOutputTypeCountPaymentSubjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PaymentSubjectWhereInput
-}
-
-/**
- * TenantCountOutputType without action
- */
-export type TenantCountOutputTypeCountPaymentReferencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PaymentReferenceWhereInput
 }
 
 /**
@@ -4539,15 +3329,10 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   groups?: boolean | Prisma.Tenant$groupsArgs<ExtArgs>
   contents?: boolean | Prisma.Tenant$contentsArgs<ExtArgs>
   timelines?: boolean | Prisma.Tenant$timelinesArgs<ExtArgs>
-  courses?: boolean | Prisma.Tenant$coursesArgs<ExtArgs>
-  courseOfferings?: boolean | Prisma.Tenant$courseOfferingsArgs<ExtArgs>
   tasks?: boolean | Prisma.Tenant$tasksArgs<ExtArgs>
   safeWallets?: boolean | Prisma.Tenant$safeWalletsArgs<ExtArgs>
   routines?: boolean | Prisma.Tenant$routinesArgs<ExtArgs>
   reservations?: boolean | Prisma.Tenant$reservationsArgs<ExtArgs>
-  payments?: boolean | Prisma.Tenant$paymentsArgs<ExtArgs>
-  paymentSubjects?: boolean | Prisma.Tenant$paymentSubjectsArgs<ExtArgs>
-  paymentReferences?: boolean | Prisma.Tenant$paymentReferencesArgs<ExtArgs>
   folders?: boolean | Prisma.Tenant$foldersArgs<ExtArgs>
   assets?: boolean | Prisma.Tenant$assetsArgs<ExtArgs>
   albums?: boolean | Prisma.Tenant$albumsArgs<ExtArgs>
@@ -4604,15 +3389,10 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   groups?: boolean | Prisma.Tenant$groupsArgs<ExtArgs>
   contents?: boolean | Prisma.Tenant$contentsArgs<ExtArgs>
   timelines?: boolean | Prisma.Tenant$timelinesArgs<ExtArgs>
-  courses?: boolean | Prisma.Tenant$coursesArgs<ExtArgs>
-  courseOfferings?: boolean | Prisma.Tenant$courseOfferingsArgs<ExtArgs>
   tasks?: boolean | Prisma.Tenant$tasksArgs<ExtArgs>
   safeWallets?: boolean | Prisma.Tenant$safeWalletsArgs<ExtArgs>
   routines?: boolean | Prisma.Tenant$routinesArgs<ExtArgs>
   reservations?: boolean | Prisma.Tenant$reservationsArgs<ExtArgs>
-  payments?: boolean | Prisma.Tenant$paymentsArgs<ExtArgs>
-  paymentSubjects?: boolean | Prisma.Tenant$paymentSubjectsArgs<ExtArgs>
-  paymentReferences?: boolean | Prisma.Tenant$paymentReferencesArgs<ExtArgs>
   folders?: boolean | Prisma.Tenant$foldersArgs<ExtArgs>
   assets?: boolean | Prisma.Tenant$assetsArgs<ExtArgs>
   albums?: boolean | Prisma.Tenant$albumsArgs<ExtArgs>
@@ -4644,15 +3424,10 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     groups: Prisma.$GroupPayload<ExtArgs>[]
     contents: Prisma.$ContentPayload<ExtArgs>[]
     timelines: Prisma.$TimelinePayload<ExtArgs>[]
-    courses: Prisma.$CoursePayload<ExtArgs>[]
-    courseOfferings: Prisma.$CourseOfferingPayload<ExtArgs>[]
     tasks: Prisma.$TaskPayload<ExtArgs>[]
     safeWallets: Prisma.$SafeWalletPayload<ExtArgs>[]
     routines: Prisma.$RoutinePayload<ExtArgs>[]
     reservations: Prisma.$ReservationPayload<ExtArgs>[]
-    payments: Prisma.$PaymentPayload<ExtArgs>[]
-    paymentSubjects: Prisma.$PaymentSubjectPayload<ExtArgs>[]
-    paymentReferences: Prisma.$PaymentReferencePayload<ExtArgs>[]
     folders: Prisma.$FolderPayload<ExtArgs>[]
     assets: Prisma.$AssetPayload<ExtArgs>[]
     albums: Prisma.$AlbumPayload<ExtArgs>[]
@@ -5071,15 +3846,10 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   groups<T extends Prisma.Tenant$groupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$groupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   contents<T extends Prisma.Tenant$contentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$contentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   timelines<T extends Prisma.Tenant$timelinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$timelinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TimelinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  courses<T extends Prisma.Tenant$coursesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$coursesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  courseOfferings<T extends Prisma.Tenant$courseOfferingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$courseOfferingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseOfferingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tasks<T extends Prisma.Tenant$tasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   safeWallets<T extends Prisma.Tenant$safeWalletsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$safeWalletsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SafeWalletPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   routines<T extends Prisma.Tenant$routinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$routinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoutinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reservations<T extends Prisma.Tenant$reservationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$reservationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReservationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  payments<T extends Prisma.Tenant$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  paymentSubjects<T extends Prisma.Tenant$paymentSubjectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$paymentSubjectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentSubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  paymentReferences<T extends Prisma.Tenant$paymentReferencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$paymentReferencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentReferencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   folders<T extends Prisma.Tenant$foldersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$foldersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   assets<T extends Prisma.Tenant$assetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   albums<T extends Prisma.Tenant$albumsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$albumsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -5662,54 +4432,6 @@ export type Tenant$timelinesArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * Tenant.courses
- */
-export type Tenant$coursesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Course
-   */
-  select?: Prisma.CourseSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Course
-   */
-  omit?: Prisma.CourseOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.CourseInclude<ExtArgs> | null
-  where?: Prisma.CourseWhereInput
-  orderBy?: Prisma.CourseOrderByWithRelationInput | Prisma.CourseOrderByWithRelationInput[]
-  cursor?: Prisma.CourseWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.CourseScalarFieldEnum | Prisma.CourseScalarFieldEnum[]
-}
-
-/**
- * Tenant.courseOfferings
- */
-export type Tenant$courseOfferingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the CourseOffering
-   */
-  select?: Prisma.CourseOfferingSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the CourseOffering
-   */
-  omit?: Prisma.CourseOfferingOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.CourseOfferingInclude<ExtArgs> | null
-  where?: Prisma.CourseOfferingWhereInput
-  orderBy?: Prisma.CourseOfferingOrderByWithRelationInput | Prisma.CourseOfferingOrderByWithRelationInput[]
-  cursor?: Prisma.CourseOfferingWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.CourseOfferingScalarFieldEnum | Prisma.CourseOfferingScalarFieldEnum[]
-}
-
-/**
  * Tenant.tasks
  */
 export type Tenant$tasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -5803,78 +4525,6 @@ export type Tenant$reservationsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.ReservationScalarFieldEnum | Prisma.ReservationScalarFieldEnum[]
-}
-
-/**
- * Tenant.payments
- */
-export type Tenant$paymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Payment
-   */
-  select?: Prisma.PaymentSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Payment
-   */
-  omit?: Prisma.PaymentOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PaymentInclude<ExtArgs> | null
-  where?: Prisma.PaymentWhereInput
-  orderBy?: Prisma.PaymentOrderByWithRelationInput | Prisma.PaymentOrderByWithRelationInput[]
-  cursor?: Prisma.PaymentWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.PaymentScalarFieldEnum | Prisma.PaymentScalarFieldEnum[]
-}
-
-/**
- * Tenant.paymentSubjects
- */
-export type Tenant$paymentSubjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the PaymentSubject
-   */
-  select?: Prisma.PaymentSubjectSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the PaymentSubject
-   */
-  omit?: Prisma.PaymentSubjectOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PaymentSubjectInclude<ExtArgs> | null
-  where?: Prisma.PaymentSubjectWhereInput
-  orderBy?: Prisma.PaymentSubjectOrderByWithRelationInput | Prisma.PaymentSubjectOrderByWithRelationInput[]
-  cursor?: Prisma.PaymentSubjectWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.PaymentSubjectScalarFieldEnum | Prisma.PaymentSubjectScalarFieldEnum[]
-}
-
-/**
- * Tenant.paymentReferences
- */
-export type Tenant$paymentReferencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the PaymentReference
-   */
-  select?: Prisma.PaymentReferenceSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the PaymentReference
-   */
-  omit?: Prisma.PaymentReferenceOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PaymentReferenceInclude<ExtArgs> | null
-  where?: Prisma.PaymentReferenceWhereInput
-  orderBy?: Prisma.PaymentReferenceOrderByWithRelationInput | Prisma.PaymentReferenceOrderByWithRelationInput[]
-  cursor?: Prisma.PaymentReferenceWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.PaymentReferenceScalarFieldEnum | Prisma.PaymentReferenceScalarFieldEnum[]
 }
 
 /**

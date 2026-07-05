@@ -1,5 +1,5 @@
 import type { AbilityRule, AppAction, AppSubject } from "@cocrepo/type";
-import { useStore } from "./useStore";
+import { useApp } from "./useApp";
 
 /**
  * useAbility - CASL 권한 확인 훅
@@ -18,48 +18,48 @@ import { useStore } from "./useStore";
  * ```
  */
 export function useAbility() {
-	const store = useStore();
-	const abilityStore = store.abilityStore;
+	const app = useApp();
+	const ability = app.ability;
 
-	if (!abilityStore) {
+	if (!ability) {
 		throw new Error(
-			"AbilityStore가 초기화되지 않았습니다. RootStore에 abilityStore를 주입해주세요.",
+			"ability가 초기화되지 않았습니다. app에 ability를 주입해주세요.",
 		);
 	}
 
 	const can = (action: AppAction, subject: AppSubject, field?: string) => {
-		return abilityStore.can(action, subject, field);
+		return ability.can(action, subject, field);
 	};
 
 	const cannot = (action: AppAction, subject: AppSubject, field?: string) => {
-		return abilityStore.cannot(action, subject, field);
+		return ability.cannot(action, subject, field);
 	};
 
 	const updateRules = (rules: AbilityRule[]) => {
-		abilityStore.updateRules(rules);
+		ability.updateRules(rules);
 	};
 
 	const clearRules = () => {
-		abilityStore.clearRules();
+		ability.clearRules();
 	};
 
 	const getAllowedActions = (subject: AppSubject) => {
-		return abilityStore.getAllowedActions(subject);
+		return ability.getAllowedActions(subject);
 	};
 
 	const getAllowedSubjects = (action: AppAction) => {
-		return abilityStore.getAllowedSubjects(action);
+		return ability.getAllowedSubjects(action);
 	};
 
 	const getAllowedMenus = () => {
-		return abilityStore.getAllowedMenus();
+		return ability.getAllowedMenus();
 	};
 
 	return {
-		ability: abilityStore.ability,
-		rules: abilityStore.rules,
-		isLoaded: abilityStore.isLoaded,
-		hasGlobalAccess: abilityStore.hasGlobalAccess,
+		ability: ability.ability,
+		rules: ability.rules,
+		isLoaded: ability.isLoaded,
+		hasGlobalAccess: ability.hasGlobalAccess,
 		can,
 		cannot,
 		updateRules,

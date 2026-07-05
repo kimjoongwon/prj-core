@@ -18,15 +18,16 @@ const nextConfig: NextConfig = {
 		"@cocrepo/api",
 		"@cocrepo/constant",
 		"@cocrepo/hook",
+		"@cocrepo/schema",
 		"@cocrepo/store",
 		"@cocrepo/toolkit",
 		"@cocrepo/type",
 		"@cocrepo/ui",
 	],
 	typedRoutes: true,
-	// cacheComponents: false - 동적 라우트(/users/[id])에서 AppStoreProvider의
+	// cacheComponents: false - 동적 라우트(/users/[id])에서 AppProvider의
 	// useRouter/usePathname 사용으로 인해 비활성화
-	// TODO: 추후 Store Provider 아키텍처 개선 후 재활성화 검토
+	// TODO: 추후 AppProvider 아키텍처 개선 후 재활성화 검토
 	cacheComponents: false,
 	async redirects() {
 		return [

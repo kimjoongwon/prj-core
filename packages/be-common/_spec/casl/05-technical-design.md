@@ -486,4 +486,4 @@ const ALLOWED_TEMPLATE_VARIABLES = [
 1. `/roles` 페이지 구현 (역할 목록/상세/등록/수정)
 2. `/roles/:roleId/abilities` 권한 매트릭스 UI (Role에 Ability를 Grant로 부여)
 3. `/users/:userId/abilities` 사용자별 예외 Grant UI
-4. AbilityStore 연동
+4. Ability 연동

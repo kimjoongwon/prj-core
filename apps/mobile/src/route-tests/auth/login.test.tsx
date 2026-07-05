@@ -1,8 +1,8 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
 import LoginScreen from "@/app/auth/login";
 import * as authUtils from "@/auth/_utils/auth";
-import { mobileAuthStore } from "@/auth/auth-store";
-import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
+import { mobileSession } from "@/auth/mobile-session";
+import { mobileApiScope } from "@/auth/mobile-api-scope";
 import type { ReactNode } from "react";
 import type { PressableProps } from "react-native";
 
@@ -71,12 +71,12 @@ describe("mobile auth login route", () => {
 		mockReplace.mockReset();
 		mockUseLocalSearchParams.mockReset();
 		mockUseLocalSearchParams.mockReturnValue({ returnTo: "/" });
-		mobileApiScopeStore.clear();
+		mobileApiScope.clear();
 		jest
-			.spyOn(mobileAuthStore, "setNextPathAfterLogin")
+			.spyOn(mobileSession, "setNextPathAfterLogin")
 			.mockImplementation(() => undefined);
 		jest
-			.spyOn(mobileAuthStore, "loginWithCredentials")
+			.spyOn(mobileSession, "loginWithCredentials")
 			.mockResolvedValue(true);
 	});
 
@@ -101,17 +101,17 @@ describe("mobile auth login route", () => {
 		fireEvent.press(screen.getByLabelText("login-submit"));
 
 		await waitFor(() => {
-			expect(mobileAuthStore.loginWithCredentials).toHaveBeenCalledWith(
+			expect(mobileSession.loginWithCredentials).toHaveBeenCalledWith(
 				"user@example.com",
 				"password123",
 			);
 		});
-		expect(mobileAuthStore.setNextPathAfterLogin).toHaveBeenCalledWith("/");
+		expect(mobileSession.setNextPathAfterLogin).toHaveBeenCalledWith("/");
 		expect(mockReplace).toHaveBeenCalledWith("/");
 	});
 
 	it("로그인 후 지점 선택이 미확정이면 지점 선택 라우트로 이동해야 한다", async () => {
-		mobileApiScopeStore.markSpaceSelectionPending();
+		mobileApiScope.markSpaceSelectionPending();
 		render(<LoginScreen />);
 
 		fireEvent.changeText(screen.getByLabelText("이메일"), "user@example.com");
@@ -135,7 +135,7 @@ describe("mobile auth login route", () => {
 		fireEvent.press(screen.getByLabelText("login-submit"));
 
 		await waitFor(() => {
-			expect(mobileAuthStore.setNextPathAfterLogin).toHaveBeenCalledWith("/");
+			expect(mobileSession.setNextPathAfterLogin).toHaveBeenCalledWith("/");
 		});
 		expect(mockReplace).toHaveBeenCalledWith("/");
 	});
@@ -148,12 +148,12 @@ describe("mobile auth login route", () => {
 		await waitFor(() => {
 			expect(screen.getByText("이메일과 비밀번호를 입력해 주세요.")).toBeTruthy();
 		});
-		expect(mobileAuthStore.loginWithCredentials).not.toHaveBeenCalled();
+		expect(mobileSession.loginWithCredentials).not.toHaveBeenCalled();
 	});
 
 	it("native 로그인 실패 메시지를 화면에 표시해야 한다", async () => {
 		jest
-			.spyOn(mobileAuthStore, "loginWithCredentials")
+			.spyOn(mobileSession, "loginWithCredentials")
 			.mockRejectedValue(new Error("이메일 또는 비밀번호가 올바르지 않습니다."));
 		render(<LoginScreen />);
 

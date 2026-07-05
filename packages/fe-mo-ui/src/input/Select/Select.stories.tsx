@@ -5,7 +5,7 @@ import { Text } from "../../data-display/Text";
 import { Select } from "./index";
 
 const state = observable({
-	course: "reformer-8",
+	reservationType: "group",
 });
 
 const meta = {
@@ -30,14 +30,14 @@ export const Default: Story = {
 				</Text>
 			</View>
 			<Select
-				listLabel="수강권"
+				listLabel="예약 유형"
 				options={[
-					{ label: "리포머 8회권", value: "reformer-8" },
-					{ label: "매트 필라테스 4회권", value: "mat-4" },
-					{ label: "체험권", value: "trial" },
+					{ label: "그룹 클래스", value: "group" },
+					{ label: "개인 레슨", value: "private" },
+					{ label: "상담 예약", value: "consulting" },
 				]}
-				path="course"
-				placeholder="수강권 선택"
+				path="reservationType"
+				placeholder="예약 유형 선택"
 				state={state}
 			/>
 		</ScrollView>

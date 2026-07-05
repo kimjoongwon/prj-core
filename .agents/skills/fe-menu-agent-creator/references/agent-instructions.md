@@ -540,36 +540,37 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 | Widget | Feature | 연결 |
 |--------|---------|------|
-| HeaderBar | UserMenu / HeaderSpaceSelector | AuthStore / PersistStore |
-| SidePanel | SideNav | NavigationStore |
-| BottomNav | BottomTab | NavigationStore |
-| OverlayMenu | SubMenuList | NavigationStore |
-| ActionFab | QuickActionFAB | NavigationStore + AbilityStore |
-| NavTreePanel | SideNav | NavigationStore |
-| TabBar | BottomTab | NavigationStore |
-| MenuList | SubMenuList | NavigationStore |
-| FABPanel | QuickActionFAB | NavigationStore + AbilityStore |
-| TabBar | PageTabs | NavigationStore + usePathname |
+| HeaderBar | UserMenu / HeaderSpaceSelector | app.session / app.space |
+| SidePanel | SideNav | app.ui.body.leftAside.sideNavigation |
+| BottomNav | BottomTab | app.ui.footer.mobileBottomNavigation |
+| OverlayMenu | SubMenuList | app.ui.footer.mobileMenu |
+| ActionFab | QuickActionFAB | app.ui.footer.floatingAction + app.ability |
+| NavTreePanel | SideNav | app.ui.body.leftAside.sideNavigation |
+| TabBar | BottomTab | app.ui.footer.mobileBottomNavigation |
+| MenuList | SubMenuList | app.ui.footer.mobileMenu |
+| FABPanel | QuickActionFAB | app.ui.footer.floatingAction + app.ability |
+| TabBar | PageTabs | app.navigation + usePathname |
 
 ### 분류 원칙
 
-| 분류 | 역할 | Store 사용 |
+| 분류 | 역할 | app 상태 사용 |
 |------|------|------------|
 | **Widget** | 순수 UI 조합, props로만 동작 | ❌ |
-| **Feature** | Widget + Store 연결, 비즈니스 로직 | ✅ |
+| **Feature** | Widget + app 상태 연결, 비즈니스 로직 | ✅ |
 
 ```typescript
 // Widget - 순수 UI
 const NavTreePanel = ({ items, activeId, onSelect }) => { ... };
 
-// Feature - Store 연결
+// Feature - app 상태 연결
 const SideNav = observer(() => {
-  const store = useNavigationStore();
+  const app = useApp();
+  const navigation = app.ui.body.leftAside.sideNavigation;
   return (
     <NavTreePanel
-      items={store.menuItems}
-      activeId={store.activeMenuId}
-      onSelect={store.selectMenu}
+      items={navigation.items}
+      activeId={navigation.selectedItem?.id}
+      onSelect={navigation.selectItem}
     />
   );
 });

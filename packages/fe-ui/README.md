@@ -21,7 +21,7 @@ Entry points are organized under `src/`:
 - `surface`: surface and elevation primitives
 - `widget`: reusable domain widgets
 
-`feature`와 `widget` 바로 아래에는 컴포넌트 폴더 또는 단일 컴포넌트 엔트리만 둡니다. `idp`, `ability`, `course`, `payment`, `common` 같은 단순 분류용 중간 폴더는 만들지 않습니다.
+`feature`와 `widget` 바로 아래에는 컴포넌트 폴더 또는 단일 컴포넌트 엔트리만 둡니다. `idp`, `ability`, `admin`, `shared`, `common` 같은 단순 분류용 중간 폴더는 만들지 않습니다.
 
 `src/screen` uses folder-based sidecars. Keep each screen in `src/screen/[ScreenName]/`.
 Prefer semantic screen names such as `AssetListScreen`, `RoleEditScreen`, `SecurityPolicyFormScreen`.

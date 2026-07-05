@@ -99,7 +99,7 @@ export const Loading: Story = {
 export const LongContent: Story = {
 	args: {
 		caption:
-			"운영 계정으로 로그인하면 예약, 결제, 권한, 이용자 상태를 같은 자리에서 이어서 확인할 수 있습니다.",
+			"운영 계정으로 로그인하면 예약, 회원, 권한, 이용자 상태를 같은 자리에서 이어서 확인할 수 있습니다.",
 		state: {
 			loginForm: {
 				email: "operations.manager.with.long.name@example-reservations.com",

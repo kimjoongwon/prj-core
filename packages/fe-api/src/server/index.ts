@@ -15,8 +15,8 @@ import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension
  * import { getUsers } from "@cocrepo/api";
  *
  * export default async function Page() {
- *   const cookieStore = await cookies();
- *   const data = await getUsers(withServerCookies(cookieStore));
+ *   const cookies = await cookies();
+ *   const data = await getUsers(withServerCookies(cookies));
  *   // ...
  * }
  * ```

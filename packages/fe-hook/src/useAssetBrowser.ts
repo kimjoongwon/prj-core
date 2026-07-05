@@ -14,7 +14,7 @@ import {
 	useUpdateFolder,
 	useUploadAsset,
 } from "@cocrepo/api/assets";
-import { usePersistStore } from "@cocrepo/store";
+import { useApp } from "@cocrepo/store";
 import type {
 	DataGridQueryStates,
 	DataGridSetQueryStates,
@@ -70,7 +70,7 @@ export interface AssetBrowserBindings {
 	queryStates: AssetBrowserQueryStates;
 	setQueryStates: DataGridSetQueryStates;
 	isLoading: boolean;
-	isStoreReady: boolean;
+	isSpaceReady: boolean;
 	hasSelectedSpace: boolean;
 	isRemoving: boolean;
 	isUploadingAsset: boolean;
@@ -106,7 +106,11 @@ export function useAssetBrowser({
 	onNotify,
 }: UseAssetBrowserOptions = {}): AssetBrowserBindings {
 	const queryClient = useQueryClient();
-	const persistStore = usePersistStore();
+	const app = useApp();
+	const space = app.space;
+	if (!space) {
+		throw new Error("space가 초기화되지 않았습니다.");
+	}
 	const [queryStates, setQueryStates] = useQueryStates({
 		take: parseAsInteger.withDefault(20),
 		skip: parseAsInteger.withDefault(0),
@@ -141,10 +145,9 @@ export function useAssetBrowser({
 		status: resolvedStatus,
 		folderId: selectedFolderId,
 	};
-	const isStoreReady =
-		persistStore.isHydrated && persistStore.isSpaceSelectionResolved;
-	const hasSelectedSpace = Boolean(persistStore.tenantId);
-	const isQueryEnabled = isStoreReady && hasSelectedSpace && enabled;
+	const isSpaceReady = space.isHydrated && space.isSpaceSelectionResolved;
+	const hasSelectedSpace = Boolean(space.tenantId);
+	const isQueryEnabled = isSpaceReady && hasSelectedSpace && enabled;
 
 	const { data: assetsResponse, isLoading: isLoadingAssets } = useGetAssets(
 		assetParams,
@@ -172,7 +175,7 @@ export function useAssetBrowser({
 		queryStates,
 		setQueryStates,
 		isLoading: isLoadingAssets || isLoadingFolders,
-		isStoreReady,
+		isSpaceReady,
 		hasSelectedSpace,
 		isRemoving: removeAssetMutation.isPending,
 		isUploadingAsset: uploadAssetMutation.isPending,

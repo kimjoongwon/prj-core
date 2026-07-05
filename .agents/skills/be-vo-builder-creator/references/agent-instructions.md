@@ -70,7 +70,7 @@ Value Object 클래스를 생성하는 전문가입니다.
    // ✅ 좋음 - 개념 자체를 표현
    export class Cookie extends ValueObject<CookieProps> {}
    export class Email extends ValueObject<EmailProps> {}
-   export class Money extends ValueObject<MoneyProps> {}
+   export class Score extends ValueObject<ScoreProps> {}
    export class Password extends ValueObject<PasswordProps> {}
    ```
 
@@ -116,12 +116,12 @@ Value Object 클래스를 생성하는 전문가입니다.
    // ❌ 나쁨
    CookieOptionsVo
    EmailValueObject
-   MoneyVO
+   ScoreVO
 
    // ✅ 좋음
    Cookie
    Email
-   Money
+   Score
    ```
 
 2. **과도한 상속/분리 금지**
@@ -248,46 +248,43 @@ export class Email extends ValueObject<EmailProps> {
 ### 복합 값 (여러 속성)
 
 ```typescript
-import type { MoneyProps } from "./money.props";
+import type { ScoreProps } from "./score.props";
 
-export class Money extends ValueObject<MoneyProps> {
-  protected validate(props: MoneyProps): void {
-    if (props.amount < 0) {
-      throw new VoValidationError("금액은 0 이상이어야 합니다.");
+export class Score extends ValueObject<ScoreProps> {
+  protected validate(props: ScoreProps): void {
+    if (!Number.isInteger(props.value)) {
+      throw new VoValidationError("점수는 정수여야 합니다.");
     }
-    if (!["KRW", "USD", "EUR"].includes(props.currency)) {
-      throw new VoValidationError("지원하지 않는 통화입니다.");
+    if (props.value < 0 || props.value > 100) {
+      throw new VoValidationError("점수는 0 이상 100 이하여야 합니다.");
     }
   }
 
-  public static create(amount: number, currency: string): Money {
-    return new Money({ amount, currency });
+  public static create(value: number, label: string): Score {
+    return new Score({ value, label });
   }
 
-  public static krw(amount: number): Money {
-    return Money.create(amount, "KRW");
+  public static perfect(label = "기본"): Score {
+    return Score.create(100, label);
   }
 
-  public get amount(): number {
-    return this.props.amount;
+  public get value(): number {
+    return this.props.value;
   }
 
-  public get currency(): string {
-    return this.props.currency;
+  public get label(): string {
+    return this.props.label;
   }
 
-  public add(other: Money): Money {
-    if (this.currency !== other.currency) {
-      throw new VoValidationError("통화가 다릅니다.");
+  public average(other: Score): Score {
+    if (this.label !== other.label) {
+      throw new VoValidationError("라벨이 다릅니다.");
     }
-    return Money.create(this.amount + other.amount, this.currency);
+    return Score.create(Math.round((this.value + other.value) / 2), this.label);
   }
 
-  public format(): string {
-    return new Intl.NumberFormat("ko-KR", {
-      style: "currency",
-      currency: this.currency,
-    }).format(this.amount);
+  public toLabel(): string {
+    return `${this.label}: ${this.value}`;
   }
 }
 ```
@@ -380,7 +377,7 @@ packages/be-vo/src/{도메인}/{name}.vo.ts
 - `packages/be-vo/src/auth/cookie.vo.ts`
 - `packages/be-vo/src/auth/password.vo.ts`
 - `packages/be-vo/src/common/email.vo.ts`
-- `packages/be-vo/src/common/money.vo.ts`
+- `packages/be-vo/src/common/score.vo.ts`
 
 ### 도메인 메서드 네이밍 가이드
 

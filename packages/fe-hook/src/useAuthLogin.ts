@@ -1,7 +1,7 @@
 "use client";
 
 import { useNativeLogin } from "@cocrepo/api/idp/auth";
-import { usePersistStore } from "@cocrepo/store";
+import { useApp } from "@cocrepo/store";
 import { useLocalObservable } from "mobx-react-lite";
 import { getDefaultLoginCredentials } from "./getDefaultLoginCredentials";
 import { resolveLoginErrorMessage } from "./resolveLoginErrorMessage";
@@ -19,7 +19,11 @@ export interface UseAuthLoginOptions {
  * native email/password login 화면의 상태와 submit handler를 제공합니다.
  */
 export function useAuthLogin({ router }: UseAuthLoginOptions) {
-	const persistStore = usePersistStore();
+	const app = useApp();
+	const space = app.space;
+	if (!space) {
+		throw new Error("space가 초기화되지 않았습니다.");
+	}
 	const defaultLoginCredentials = getDefaultLoginCredentials();
 	const state = useLocalObservable(() => ({
 		loginForm: {
@@ -51,8 +55,8 @@ export function useAuthLogin({ router }: UseAuthLoginOptions) {
 				return;
 			}
 
-			persistStore.setNativeAuthSession(session);
-			persistStore.setSpaceSelectionResolved(false);
+			space.setNativeAuthSession(session);
+			space.setSpaceSelectionResolved(false);
 			router.replace(resolveReturnPath());
 		} catch (error) {
 			state.errorMessage = resolveLoginErrorMessage(error);

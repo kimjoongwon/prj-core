@@ -10,12 +10,12 @@ const meta = {
 } satisfies Meta<typeof MobileBottomNavigation>;
 export default meta;
 type Story = StoryObj<typeof meta>;
-export const StoreBound: Story = {
+export const Connected: Story = {
 	render: () => (
 		<PageStoryScaffold
 			componentName="MobileBottomNavigation"
 			componentPath="feature/MobileBottomNavigation"
-			description="layout navigation store에 직접 연결되는 feature입니다. 독립 UI는 widget/BottomNav story에서 확인합니다."
+			description="layout의 Navigation에 직접 연결되는 feature입니다. 독립 UI는 widget/BottomNav story에서 확인합니다."
 		/>
 	),
 };

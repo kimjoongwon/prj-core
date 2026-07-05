@@ -51,11 +51,11 @@
 
 | 상황 | 사용 여부 | 설명 |
 |------|:--------:|------|
-| Store 연결이 필요한 UI | ✅ | SideNav, UserMenu, SpaceSelector |
+| app 상태 연결이 필요한 UI | ✅ | SideNav, UserMenu, SpaceSelector |
 | API 호출이 필요한 컴포넌트 | ✅ | CommentList, NotificationBell |
 | 라우터 이동이 필요한 경우 | ✅ | SearchBar (검색 결과 페이지 이동) |
 | 복잡한 이벤트 핸들링 | ✅ | LoginForm (폼 제출, 유효성 검사) |
-| Page가 여러 Widget/섹션/table을 업무 단위로 조합해야 하는 경우 | ✅ | CourseConsole, InquiryConsole |
+| Page가 여러 Widget/섹션/table을 업무 단위로 조합해야 하는 경우 | ✅ | AssetConsole, InquiryConsole |
 | 순수 UI 조합만 필요 | ❌ | fe-widget-agent 사용 |
 | 기본 UI 요소 | ❌ | `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, 또는 관련 leaf 에이전트 사용 |
 | 전체 페이지 구성 | ❌ | fe-route-agent 사용 |
@@ -69,7 +69,7 @@
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
 | 컴포넌트명 | ✅ | `[위치/역할][기능]` 패턴 |
-| 사용할 Store | ⚪ | NavigationStore, AuthStore 등 |
+| 사용할 app 상태 | ⚪ | app.navigation, app.session, app.space 등 |
 | 사용할 API | ⚪ | @cocrepo/api에서 import할 함수 |
 | 기반 Widget | ⚪ | 조합할 Widget 컴포넌트 |
 
@@ -207,7 +207,7 @@ Feature가 page에서 분리된 업무 콘솔/관리 패널이면 다음 순서�
 | `[기능]Form` | 폼 기능 | LoginForm, SearchForm |
 
 > `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 feature가 아니라 widget입니다. feature는 해당 widget에 store/API/router를 연결하는 래퍼만 담당합니다.
-> reusable layout/slot/hook 이름에는 `Admin`, `Management` 같은 앱/도메인 접두사를 붙이지 않습니다. 예: `TopBar`, `SideNavigation`, `useCourseData`.
+> reusable layout/slot/hook 이름에는 `Admin`, `Management` 같은 앱/도메인 접두사를 붙이지 않습니다. 예: `TopBar`, `SideNavigation`, `useAssetData`.
 
 ### 4.3 파일 구조 생성
 
@@ -344,20 +344,21 @@ export interface NavTreePanelProps {
 }
 
 export const NavTreePanel = ({ items, expandedKeys, onToggle, ... }: NavTreePanelProps) => {
-  // 순수 렌더링만 - Store 접근 없음
+  // 순수 렌더링만 - app 상태 접근 없음
 };
 
 // Feature (feature/SideNav.tsx) - 비즈니스 로직
 export const SideNav = observer(({ width, className }: SideNavProps) => {
-  const store = useNavigationStore();
+  const app = useApp();
+  const navigation = app.ui.body.leftAside.sideNavigation;
 
-  // Store → Widget props 변환
-  const handleToggle = (id: string) => store.toggleNavItem(id);
+  // app 상태 → Widget props 변환
+  const handleToggle = (id: string) => navigation.toggleItem(id);
 
   return (
     <NavTreePanel
-      items={store.items}
-      expandedKeys={store.expandedKeys}
+      items={navigation.items}
+      expandedKeys={navigation.expandedItemIds}
       onToggle={handleToggle}
       width={width}
     />
@@ -376,7 +377,7 @@ export interface UserMenuProps extends Omit<DropdownProps, "children"> {
 }
 
 export const UserMenu = observer(({ onLogout, onProfileClick, ...rest }: UserMenuProps) => {
-  const authStore = useAuthStore();
+  const app = useApp();
 
   return (
     <Dropdown {...rest}>
@@ -436,7 +437,7 @@ Pure UI → Widget → Feature → Page
 | orch-delivery | 담당 스펙과 Feature 담당 스펙 기반 구현 |
 | fe-data-display-agent / fe-feedback-agent / fe-overlay-agent | Feature가 사용할 표시, 상태, overlay UI 컴포넌트 생성 |
 | **fe-widget-agent** | Feature가 사용할 Widget 컴포넌트 생성 |
-| **fe-store-agent** | Feature가 연결할 Store 생성 |
+| **fe-store-agent** | Feature가 연결할 app 상태 생성 |
 
 ### 후행 에이전트
 
@@ -500,11 +501,11 @@ const validateForm = (email: string, password: string): string | null => {
 ### Widget → Feature 분리의 장점
 
 - Feature 없이 Widget만 다른 곳에서 재사용 가능
-- Store 교체 시 Feature만 수정
+- app 상태 경로 교체 시 Feature만 수정
 
 
 - Feature를 신규 생성하거나 수정하면 단위 테스트를 작성/갱신하고, Storybook 스토리는 `fe-storybook-agent`에 인계합니다.
-- 단위 테스트는 Store/API/router를 mock하고 렌더링, 이벤트 위임, 상태 분기, 접근성 query를 검증합니다.
+- 단위 테스트는 app/API/router를 mock하고 렌더링, 이벤트 위임, 상태 분기, 접근성 query를 검증합니다.
 - 누락/실패/계약 drift는 이 agent의 완료 전 자체 검증 대상이며, 범위 밖 실패만 필요한 owner에게 인계합니다.
 
 ---

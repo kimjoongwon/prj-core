@@ -21,8 +21,8 @@ import {
 	type PressableProps,
 } from "react-native";
 import { getIdpApiBaseUrl } from "@/auth/auth-config";
-import { mobileAuthStore } from "@/auth/auth-store";
-import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
+import { mobileSession } from "@/auth/mobile-session";
+import { mobileApiScope } from "@/auth/mobile-api-scope";
 import {
 	toSelectableMobileSpaceInfos,
 	toSpaceListItemInfos,
@@ -66,13 +66,13 @@ const findSpaceByItem = (
 ) => spaces.find((space) => space.tenantId === item.id);
 
 const getHeaderSubtitle = () =>
-	mobileApiScopeStore.groundName || "지점 선택";
+	mobileApiScope.groundName || "지점 선택";
 
 const MobileTabHeader = observer((props: BottomTabHeaderProps) => {
 	const queryClient = useQueryClient();
 	const [isSpaceSheetOpen, setIsSpaceSheetOpen] = useState(false);
 	const [selectedSpaceId, setSelectedSpaceId] = useState<string | null>(
-		mobileApiScopeStore.tenantId,
+		mobileApiScope.tenantId,
 	);
 	const [selectionErrorDescription, setSelectionErrorDescription] =
 		useState("");
@@ -92,11 +92,11 @@ const MobileTabHeader = observer((props: BottomTabHeaderProps) => {
 	const spaceInfos =
 		rawSpaces.length > 0
 			? toSelectableMobileSpaceInfos(rawSpaces)
-			: mobileApiScopeStore.spaces;
+			: mobileApiScope.spaces;
 	const spaceItems = toSpaceListItemInfos(spaceInfos);
 
 	const onPressSubtitle = () => {
-		setSelectedSpaceId(mobileApiScopeStore.tenantId);
+		setSelectedSpaceId(mobileApiScope.tenantId);
 		setSelectionErrorDescription("");
 		setIsSpaceSheetOpen(true);
 	};
@@ -117,11 +117,11 @@ const MobileTabHeader = observer((props: BottomTabHeaderProps) => {
 			});
 			const selectedSpace = response.data ?? findSpaceByItem(rawSpaces, item);
 			if (selectedSpace) {
-				await mobileAuthStore.selectSpace(selectedSpace);
+				await mobileSession.selectSpace(selectedSpace);
 			} else {
 				const selectedInfo = spaceInfos.find((space) => space.tenantId === item.id);
 				if (selectedInfo) {
-					await mobileAuthStore.selectSpaceInfo(selectedInfo);
+					await mobileSession.selectSpaceInfo(selectedInfo);
 				}
 			}
 			setIsSpaceSheetOpen(false);

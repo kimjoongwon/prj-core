@@ -8,18 +8,6 @@ import { plainToInstance } from "class-transformer";
 const reservationInclude = {
 	tenant: true,
 	user: true,
-	coursePass: {
-		include: {
-			course: true,
-			courseOffering: {
-				include: {
-					tenant: true,
-					timeline: true,
-				},
-			},
-			timeline: true,
-		},
-	},
 	timeline: true,
 	session: true,
 	program: true,

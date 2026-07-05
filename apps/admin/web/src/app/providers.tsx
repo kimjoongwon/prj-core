@@ -12,7 +12,6 @@ import {
 	useSpaceGuard,
 } from "@cocrepo/hook";
 
-import { useNavigationStore, useStore } from "@cocrepo/store";
 import { DesignSystemProvider, I18nProvider, SpaceAlert } from "@cocrepo/ui";
 import {
 	isServer,
@@ -23,7 +22,7 @@ import {
 import { observer } from "mobx-react-lite";
 import { NuqsAdapter as NuqsNextAdapter } from "nuqs/adapters/next/app";
 import { type ReactNode, useEffect } from "react";
-import { AppStoreProvider, usePersistStore } from "@/stores";
+import { AppProvider, useApp } from "@/stores";
 import { resolveAbilityBootstrapRules } from "./ability-bootstrap";
 
 interface ProvidersProps {
@@ -69,8 +68,8 @@ function getQueryClient() {
  *
  * Provider 계층 구조:
  * QueryClientProvider
- * └── AppStoreProvider (RootStore + 주입된 Store들 통합 관리)
- *     └── AbilityStoreBootstrapper (서버 권한 -> AbilityStore 반영)
+ * └── AppProvider (AppStore 통합 관리)
+ *     └── AbilityBootstrapper (서버 권한 -> ability 반영)
  *         └── DesignSystemProvider (UI 시스템)
  */
 export const Providers = observer(function Providers({
@@ -81,10 +80,10 @@ export const Providers = observer(function Providers({
 	return (
 		<QueryClientProvider client={queryClient}>
 			<NuqsNextAdapter>
-				<AppStoreProvider>
+				<AppProvider>
 					<NativeAuthBridge>
 						<I18nCatalogBootstrapper>
-							<AbilityStoreBootstrapper>
+							<AbilityBootstrapper>
 								<DesignSystemProvider>
 									<SpaceBootstrapper>
 										<NavigationScopeBootstrapper>
@@ -92,10 +91,10 @@ export const Providers = observer(function Providers({
 										</NavigationScopeBootstrapper>
 									</SpaceBootstrapper>
 								</DesignSystemProvider>
-							</AbilityStoreBootstrapper>
+							</AbilityBootstrapper>
 						</I18nCatalogBootstrapper>
 					</NativeAuthBridge>
-				</AppStoreProvider>
+				</AppProvider>
 			</NuqsNextAdapter>
 		</QueryClientProvider>
 	);
@@ -106,24 +105,28 @@ const NativeAuthBridge = observer(function NativeAuthBridge({
 }: {
 	children: ReactNode;
 }) {
-	const persistStore = usePersistStore();
+	const app = useApp();
+	const space = app.space;
+	if (!space) {
+		throw new Error("space가 초기화되지 않았습니다.");
+	}
 
 	useEffect(() => {
 		const refreshNativeSession = async () => {
-			if (!persistStore.sessionId || !persistStore.refreshToken) {
+			if (!space.sessionId || !space.refreshToken) {
 				throw new Error("Native auth session is missing.");
 			}
 
 			const response = await nativeRefreshToken({
-				sessionId: persistStore.sessionId,
-				refreshToken: persistStore.refreshToken,
+				sessionId: space.sessionId,
+				refreshToken: space.refreshToken,
 			});
 			const session = response.data;
 			if (!session) {
 				throw new Error("Native auth refresh response is empty.");
 			}
 
-			persistStore.setNativeAuthSession(session);
+			space.setNativeAuthSession(session);
 		};
 
 		setApiNativeRefreshHandler(refreshNativeSession);
@@ -133,7 +136,7 @@ const NativeAuthBridge = observer(function NativeAuthBridge({
 			setApiNativeRefreshHandler(null);
 			setIdpNativeRefreshHandler(null);
 		};
-	}, [persistStore]);
+	}, [space]);
 
 	return children;
 });
@@ -143,9 +146,9 @@ const I18nCatalogBootstrapper = observer(function I18nCatalogBootstrapper({
 }: {
 	children: ReactNode;
 }) {
-	const store = useStore();
-	const localeStore = store.localeStore;
-	const languageCode = localeStore?.languageCode ?? DEFAULT_LANGUAGE;
+	const app = useApp();
+	const locale = app.locale;
+	const languageCode = locale?.languageCode ?? DEFAULT_LANGUAGE;
 	const { data } = useQuery({
 		queryKey: ["core-i18n-catalog", languageCode],
 		queryFn: () =>
@@ -170,10 +173,10 @@ const I18nCatalogBootstrapper = observer(function I18nCatalogBootstrapper({
 });
 
 /**
- * AbilityStoreBootstrapper
- * 서버에서 권한을 로드하여 AbilityStore 규칙으로 반영합니다.
+ * AbilityBootstrapper
+ * 서버에서 권한을 로드하여 ability 규칙으로 반영합니다.
  */
-const AbilityStoreBootstrapper = observer(function AbilityStoreBootstrapper({
+const AbilityBootstrapper = observer(function AbilityBootstrapper({
 	children,
 }: {
 	children: ReactNode;
@@ -184,18 +187,19 @@ const AbilityStoreBootstrapper = observer(function AbilityStoreBootstrapper({
 		isError,
 		isDisabled: isAbilitiesDisabled,
 	} = useAbilityBootstrap();
-	const persistStore = usePersistStore();
-	const store = useStore();
-	const abilityStore = store.abilityStore;
+	const app = useApp();
+	const space = app.space;
+	const ability = app.ability;
+	if (!space) {
+		throw new Error("space가 초기화되지 않았습니다.");
+	}
 	const shouldVerifyCurrentTenant =
-		!isAbilitiesDisabled &&
-		persistStore.isHydrated &&
-		persistStore.isSpaceSelectionResolved;
+		!isAbilitiesDisabled && space.isHydrated && space.isSpaceSelectionResolved;
 	const { data: verifyTokenResponse, isPending: isVerifyingToken } =
 		useVerifyToken({
 			query: {
 				enabled: shouldVerifyCurrentTenant,
-				queryKey: ["/api/v1/auth/verify-token", persistStore.tenantId],
+				queryKey: ["/api/v1/auth/verify-token", space.tenantId],
 				retry: false,
 				refetchOnWindowFocus: false,
 			},
@@ -203,7 +207,7 @@ const AbilityStoreBootstrapper = observer(function AbilityStoreBootstrapper({
 	const hasFullAccess = verifyTokenResponse?.data?.hasFullAccess === true;
 
 	useEffect(() => {
-		if (!abilityStore) {
+		if (!ability) {
 			return;
 		}
 
@@ -219,9 +223,9 @@ const AbilityStoreBootstrapper = observer(function AbilityStoreBootstrapper({
 			return;
 		}
 
-		abilityStore.updateRules(rules);
+		ability.updateRules(rules);
 	}, [
-		abilityStore,
+		ability,
 		abilities,
 		hasFullAccess,
 		isLoading,
@@ -247,18 +251,24 @@ const SpaceBootstrapper = observer(function SpaceBootstrapper({
 });
 
 /**
- * 현재 tenant 권한 기준을 navigation store의 scope checker에 연결합니다.
+ * 현재 tenant 권한 기준을 Navigation의 scope checker에 연결합니다.
  */
 const NavigationScopeBootstrapper = observer(
 	function NavigationScopeBootstrapper({ children }: { children: ReactNode }) {
-		const persistStore = usePersistStore();
-		const navigationStore = useNavigationStore();
+		const app = useApp();
+		const space = app.space;
+		const navigation = app.navigation;
+		if (!space || !navigation) {
+			throw new Error(
+				"Navigation scope에 필요한 app 상태가 초기화되지 않았습니다.",
+			);
+		}
 		const shouldVerifyCurrentTenant =
-			persistStore.isHydrated && persistStore.isSpaceSelectionResolved;
+			space.isHydrated && space.isSpaceSelectionResolved;
 		const { data: verifyTokenResponse } = useVerifyToken({
 			query: {
 				enabled: shouldVerifyCurrentTenant,
-				queryKey: ["/api/v1/auth/verify-token", persistStore.tenantId],
+				queryKey: ["/api/v1/auth/verify-token", space.tenantId],
 				retry: false,
 				refetchOnWindowFocus: false,
 			},
@@ -267,14 +277,14 @@ const NavigationScopeBootstrapper = observer(
 			verifyTokenResponse?.data?.hasFullAccess === true;
 
 		useEffect(() => {
-			navigationStore.setScopeChecker((scopeKind) =>
+			navigation.setScopeChecker((scopeKind) =>
 				isScopeKindAccessible(scopeKind, hasFullAccessInCurrentTenant),
 			);
 
 			return () => {
-				navigationStore.setScopeChecker(null);
+				navigation.setScopeChecker(null);
 			};
-		}, [hasFullAccessInCurrentTenant, navigationStore]);
+		}, [hasFullAccessInCurrentTenant, navigation]);
 
 		return children;
 	},

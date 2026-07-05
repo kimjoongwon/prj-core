@@ -22,7 +22,7 @@
 | 상황 | 사용 여부 | 설명 |
 |------|----------|------|
 | OIDC/OAuth provider wrapper | ✅ 사용 | `OidcClient` |
-| 결제 provider wrapper | ✅ 사용 | `PaymentClient` |
+| 메시징 provider wrapper | ✅ 사용 | `SmsClient` |
 | 스토리지/검색/메일 provider wrapper | ✅ 사용 | `StorageClient`, `SearchClient`, `EmailClient` |
 | Naver/Kakao 같은 provider별 API 호출 | ✅ 사용 | `NaverMapClient`, `KakaoMapClient` |
 | 여러 내부 Service 조합 | ❌ 미사용 | `be-usecase-builder` 또는 `be-service-builder` 사용 |

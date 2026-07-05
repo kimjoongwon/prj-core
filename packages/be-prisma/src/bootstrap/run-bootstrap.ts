@@ -4,7 +4,6 @@ import { syncReferenceData } from "../reference-data/sync-reference-data";
 import { createAssetDomainData } from "./asset";
 import { ensureSecurityPolicyDefaults } from "./defaults";
 import { createInquiryDomainData } from "./inquiry";
-import { createMobileReservationDemoData } from "./mobile-reservation-demo";
 import {
 	classifyGroundSpacesAsBranch,
 	createHierarchicalTenants,
@@ -32,7 +31,6 @@ export async function runBootstrap(prisma: PrismaClient): Promise<void> {
 	await createHierarchicalTenants(prisma, SYSTEM_SPACE_ID);
 	await syncReferenceData(prisma);
 	await createTimelineSessionExerciseDomainData(prisma);
-	await createMobileReservationDemoData(prisma);
 	await ensureSecurityPolicyDefaults(prisma);
 	await createAssetDomainData(prisma);
 	await ensureBootstrapTemplates(prisma);

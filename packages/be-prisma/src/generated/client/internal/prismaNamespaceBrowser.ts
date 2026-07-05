@@ -73,9 +73,6 @@ export const ModelName = {
   PasswordHistory: 'PasswordHistory',
   SecurityPolicy: 'SecurityPolicy',
   WhitelistEntry: 'WhitelistEntry',
-  Payment: 'Payment',
-  PaymentSubject: 'PaymentSubject',
-  PaymentReference: 'PaymentReference',
   Post: 'Post',
   Content: 'Content',
   ServiceDocument: 'ServiceDocument',
@@ -104,10 +101,6 @@ export const ModelName = {
   OidcClient: 'OidcClient',
   OidcModel: 'OidcModel',
   ReferenceDataMigrationHistory: 'ReferenceDataMigrationHistory',
-  Course: 'Course',
-  CourseOffering: 'CourseOffering',
-  Enrollment: 'Enrollment',
-  CoursePass: 'CoursePass',
   Reservation: 'Reservation',
   Routine: 'Routine',
   Activity: 'Activity',
@@ -498,71 +491,6 @@ export const WhitelistEntryScalarFieldEnum = {
 } as const
 
 export type WhitelistEntryScalarFieldEnum = (typeof WhitelistEntryScalarFieldEnum)[keyof typeof WhitelistEntryScalarFieldEnum]
-
-
-export const PaymentScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  tenantId: 'tenantId',
-  payerUserId: 'payerUserId',
-  title: 'title',
-  status: 'status',
-  method: 'method',
-  provider: 'provider',
-  providerPaymentId: 'providerPaymentId',
-  providerOrderId: 'providerOrderId',
-  totalAmount: 'totalAmount',
-  currency: 'currency',
-  requestedAt: 'requestedAt',
-  approvedAt: 'approvedAt',
-  canceledAt: 'canceledAt',
-  receiptUrl: 'receiptUrl',
-  memo: 'memo',
-  metadata: 'metadata'
-} as const
-
-export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
-
-
-export const PaymentSubjectScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  paymentId: 'paymentId',
-  tenantId: 'tenantId',
-  serviceCode: 'serviceCode',
-  subjectType: 'subjectType',
-  subjectId: 'subjectId',
-  subjectLabel: 'subjectLabel',
-  quantity: 'quantity',
-  unitAmount: 'unitAmount',
-  totalAmount: 'totalAmount',
-  currency: 'currency',
-  metadata: 'metadata'
-} as const
-
-export type PaymentSubjectScalarFieldEnum = (typeof PaymentSubjectScalarFieldEnum)[keyof typeof PaymentSubjectScalarFieldEnum]
-
-
-export const PaymentReferenceScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  paymentId: 'paymentId',
-  tenantId: 'tenantId',
-  serviceCode: 'serviceCode',
-  referenceType: 'referenceType',
-  referenceId: 'referenceId',
-  role: 'role',
-  label: 'label',
-  metadata: 'metadata'
-} as const
-
-export type PaymentReferenceScalarFieldEnum = (typeof PaymentReferenceScalarFieldEnum)[keyof typeof PaymentReferenceScalarFieldEnum]
 
 
 export const PostScalarFieldEnum = {
@@ -1039,94 +967,6 @@ export const ReferenceDataMigrationHistoryScalarFieldEnum = {
 export type ReferenceDataMigrationHistoryScalarFieldEnum = (typeof ReferenceDataMigrationHistoryScalarFieldEnum)[keyof typeof ReferenceDataMigrationHistoryScalarFieldEnum]
 
 
-export const CourseScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  tenantId: 'tenantId',
-  name: 'name',
-  description: 'description',
-  durationMonths: 'durationMonths',
-  basePriceAmount: 'basePriceAmount',
-  currency: 'currency',
-  status: 'status',
-  activeOfferingCount: 'activeOfferingCount',
-  activeEnrollmentCount: 'activeEnrollmentCount'
-} as const
-
-export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof CourseScalarFieldEnum]
-
-
-export const CourseOfferingScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  courseId: 'courseId',
-  tenantId: 'tenantId',
-  timelineId: 'timelineId',
-  timelineProvisioningMode: 'timelineProvisioningMode',
-  name: 'name',
-  startsAt: 'startsAt',
-  endsAt: 'endsAt',
-  enrollmentStartsAt: 'enrollmentStartsAt',
-  enrollmentEndsAt: 'enrollmentEndsAt',
-  capacity: 'capacity',
-  enrolledCount: 'enrolledCount',
-  status: 'status'
-} as const
-
-export type CourseOfferingScalarFieldEnum = (typeof CourseOfferingScalarFieldEnum)[keyof typeof CourseOfferingScalarFieldEnum]
-
-
-export const EnrollmentScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  userId: 'userId',
-  courseId: 'courseId',
-  courseOfferingId: 'courseOfferingId',
-  assignedTimelineId: 'assignedTimelineId',
-  paymentId: 'paymentId',
-  paymentStatus: 'paymentStatus',
-  paymentProvider: 'paymentProvider',
-  paymentExternalId: 'paymentExternalId',
-  paidAt: 'paidAt',
-  paidAmount: 'paidAmount',
-  currency: 'currency',
-  validFrom: 'validFrom',
-  validUntil: 'validUntil',
-  status: 'status'
-} as const
-
-export type EnrollmentScalarFieldEnum = (typeof EnrollmentScalarFieldEnum)[keyof typeof EnrollmentScalarFieldEnum]
-
-
-export const CoursePassScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  enrollmentId: 'enrollmentId',
-  userId: 'userId',
-  courseId: 'courseId',
-  courseOfferingId: 'courseOfferingId',
-  timelineId: 'timelineId',
-  kind: 'kind',
-  issuedAt: 'issuedAt',
-  validFrom: 'validFrom',
-  expiresAt: 'expiresAt',
-  reservationLimit: 'reservationLimit',
-  reservationUsedCount: 'reservationUsedCount',
-  reservationRemainingCount: 'reservationRemainingCount',
-  status: 'status'
-} as const
-
-export type CoursePassScalarFieldEnum = (typeof CoursePassScalarFieldEnum)[keyof typeof CoursePassScalarFieldEnum]
-
-
 export const ReservationScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
@@ -1134,7 +974,6 @@ export const ReservationScalarFieldEnum = {
   removedAt: 'removedAt',
   tenantId: 'tenantId',
   userId: 'userId',
-  coursePassId: 'coursePassId',
   timelineId: 'timelineId',
   sessionId: 'sessionId',
   programId: 'programId',

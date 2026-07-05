@@ -53,19 +53,19 @@ function SearchComponent() {
 }
 ```
 
-### MobX Store Hooks
+### MobX App Hooks
 
 ```tsx
-import { useStore, useObserver } from '@cocrepo/hook';
+import { useApp } from '@cocrepo/store';
 import { observer } from 'mobx-react-lite';
 
 const MyComponent = observer(() => {
-  const store = useStore();
+  const app = useApp();
 
   return (
     <div>
-      {store.users.map(user => (
-        <div key={user.id}>{user.name}</div>
+      {app.navigation?.items.map(item => (
+        <div key={item.id}>{item.label}</div>
       ))}
     </div>
   );
@@ -145,7 +145,7 @@ function UserProfile({ userId }) {
 - `useUnmount` - Cleanup on unmount
 
 ### MobX Integration
-- `useStore` - Access MobX root store
+- `useApp` - Access MobX app state from `@cocrepo/store`
 - `useObserver` - Observe MobX observables
 - `useComputed` - Computed values from stores
 

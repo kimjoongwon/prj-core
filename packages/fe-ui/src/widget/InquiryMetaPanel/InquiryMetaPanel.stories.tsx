@@ -13,7 +13,7 @@ const priorityOptions = [
 ];
 const categoryOptions = [
 	{ value: "BOOKING", text: "예약" },
-	{ value: "PAYMENT", text: "결제" },
+	{ value: "TECHNICAL", text: "기술 지원" },
 ];
 const assigneeOptions = [
 	{ value: "agent-1", text: "이상담" },

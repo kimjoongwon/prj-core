@@ -24,13 +24,12 @@
 | `access-control/` | Subject/Action/Ability/Policy/Role |
 | `asset/` | Asset/Folder/Album |
 | `auth/` | 감사 로그, 비밀번호 이력, 정책, 화이트리스트 |
-| `billing/` | 결제/정산 공통 장부 |
 | `content/` | Content/Template/Translation |
 | `identity/` | User/Space/Tenant |
 | `inquiry/` | Inquiry/Thread/AI 로그 |
 | `oidc/` | OIDC client/model |
 | `platform/` | 운영 메타데이터 및 배포 이력 |
-| `scheduling/` | Course/Reservation/Timeline/Routine/Task |
+| `scheduling/` | Reservation/Timeline/Routine/Task |
 | `taxonomy/` | Category/Group |
 | `wallet/` | SafeWallet |
 
@@ -51,7 +50,6 @@
 | `auth/password-history.prisma` | `PasswordHistory` |
 | `auth/security-policy.prisma` | `SecurityPolicy` |
 | `auth/whitelist-entry.prisma` | `WhitelistEntry` |
-| `billing/payment.prisma` | `Payment` |
 | `content/content.prisma` | `Content` |
 | `content/service-document.prisma` | `ServiceDocument` |
 | `content/template.prisma` | `Template` |
@@ -66,7 +64,6 @@
 | `oidc/oidc-client.prisma` | `OidcClient` |
 | `oidc/oidc-model.prisma` | `OidcModel` |
 | `platform/reference-data-migration.prisma` | `ReferenceDataMigrationHistory` |
-| `scheduling/course.prisma` | `Course` |
 | `scheduling/reservation.prisma` | `Reservation` |
 | `scheduling/routine.prisma` | `Routine` |
 | `scheduling/task.prisma` | `Task` |
@@ -90,7 +87,6 @@
 | `auth/email-verification.prisma` | `EmailVerification` |
 | `auth/security-policy.prisma` | `SecurityPolicy` |
 | `auth/whitelist-entry.prisma` | `WhitelistEntry` |
-| `billing/payment.prisma` | `Payment` |
 | `content/content.prisma` | `Content` |
 | `content/service-document.prisma` | `ServiceDocument` |
 | `content/template.prisma` | `Template` |
@@ -103,7 +99,6 @@
 | `oidc/oidc-client.prisma` | `OidcClient` |
 | `oidc/oidc-model.prisma` | `OidcModel` |
 | `platform/reference-data-migration.prisma` | `ReferenceDataMigrationHistory` |
-| `scheduling/course.prisma` | `Course` |
 | `scheduling/reservation.prisma` | `Reservation` |
 | `scheduling/routine.prisma` | `Routine` |
 | `scheduling/task.prisma` | `Task` |
@@ -134,7 +129,6 @@
 | `asset/folder.prisma` | `Folder` |
 | `auth/email-verification.prisma` | `EmailVerification` |
 | `auth/security-policy.prisma` | `SecurityPolicy` |
-| `billing/payment.prisma` | `Payment` |
 | `content/content.prisma` | `Content` |
 | `content/service-document.prisma` | `ServiceDocument` |
 | `content/template.prisma` | `Template` |
@@ -144,7 +138,6 @@
 | `identity/user.prisma` | `User` |
 | `inquiry/inquiry.prisma` | `Inquiry` |
 | `oidc/oidc-client.prisma` | `OidcClient` |
-| `scheduling/course.prisma` | `Course` |
 | `scheduling/reservation.prisma` | `Reservation` |
 | `scheduling/routine.prisma` | `Routine` |
 | `scheduling/task.prisma` | `Task` |
@@ -192,8 +185,6 @@
 | `oidc/oidc-client.prisma` | `OidcClient` |
 | `oidc/oidc-model.prisma` | `OidcModel` |
 | `platform/reference-data-migration.prisma` | `ReferenceDataMigrationHistory` |
-| `billing/payment.prisma` | `Payment`, `PaymentSubject`, `PaymentReference`, `PaymentStatus`, `PaymentMethod`, `PaymentSubjectType`, `PaymentReferenceType` |
-| `scheduling/course.prisma` | `Course`, `CourseOffering`, `Enrollment`, `CoursePass`, `CourseStatus`, `CourseOfferingStatus`, `EnrollmentStatus`, `CoursePassStatus`, `CoursePassKind`, `TimelineProvisioningMode` |
 | `scheduling/reservation.prisma` | `Reservation`, `ReservationStatus` |
 | `scheduling/routine.prisma` | `Routine`, `Activity` |
 | `scheduling/task.prisma` | `Task`, `Exercise` |

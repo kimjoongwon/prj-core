@@ -82,7 +82,9 @@ function createDefaultScenario(
 	};
 }
 
-function shouldSkipPlanningPreview(context: StorybookPlanningContextLike): boolean {
+function shouldSkipPlanningPreview(
+	context: StorybookPlanningContextLike,
+): boolean {
 	return (
 		context.parameters?.planningPreview?.disabled === true ||
 		(context.title ? SELF_MANAGED_PLANNING_TITLES.has(context.title) : false)

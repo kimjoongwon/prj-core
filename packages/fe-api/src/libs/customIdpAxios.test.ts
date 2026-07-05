@@ -6,7 +6,7 @@ import {
 } from "axios";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-interface PersistStoreStub {
+interface SpaceStub {
 	accessToken: string;
 	refreshToken: string;
 	sessionId: string;
@@ -38,11 +38,11 @@ describe("customIdpAxios", () => {
 	it("native refresh 이후 재시도 요청에 새 세션 헤더를 사용한다", async () => {
 		const {
 			customIdpInstance,
-			setIdpLocaleStore,
+			setIdpLocale,
 			setIdpNativeRefreshHandler,
-			setIdpPersistStore,
+			setIdpSpace,
 		} = await import("./customIdpAxios");
-		const store: PersistStoreStub = {
+		const store: SpaceStub = {
 			accessToken: "old-access-token",
 			refreshToken: "old-refresh-token",
 			sessionId: "session-id",
@@ -72,8 +72,8 @@ describe("customIdpAxios", () => {
 			};
 		};
 
-		setIdpPersistStore(store);
-		setIdpLocaleStore({ languageCode: "ko_KR" });
+		setIdpSpace(store);
+		setIdpLocale({ languageCode: "ko_KR" });
 		setIdpNativeRefreshHandler(async () => {
 			store.accessToken = "new-access-token";
 			store.refreshToken = "new-refresh-token";

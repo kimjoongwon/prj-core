@@ -20,7 +20,7 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { usePersistStore } from "@/stores/AppStoreProvider";
+import { useApp } from "@/stores/AppProvider";
 
 type SessionEditPageParams = {
 	timelineId: string;
@@ -30,7 +30,7 @@ type SessionEditPageParams = {
 const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 	const { timelineId, sessionId } = useParams<SessionEditPageParams>();
 	const router = useRouter();
-	const persistStore = usePersistStore();
+	const app = useApp();
 	const queryClient = useQueryClient();
 	const state = useLocalObservable<
 		TimelineSessionFormState & { isInitialized: boolean }
@@ -51,7 +51,10 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 		isInitialized: false,
 	}));
 
-	const { data: response, isLoading } = useGetSessionById(timelineId, sessionId);
+	const { data: response, isLoading } = useGetSessionById(
+		timelineId,
+		sessionId,
+	);
 	const session = response?.data;
 
 	useEffect(() => {
@@ -161,7 +164,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 			title="세션 수정"
 			description={session?.name}
 			state={state}
-			contentLanguageCode={persistStore.contentLanguageCode}
+			contentLanguageCode={app.space?.contentLanguageCode}
 			isLoading={isLoading && !state.isInitialized}
 			notFound={!isLoading && !session}
 			actions={

@@ -5,7 +5,11 @@ import {
 	useGetTimelineById,
 	useUpdateTimeline,
 } from "@cocrepo/api/core/timelines";
-import { Button, TimelineEditScreen, type TimelineFormState } from "@cocrepo/ui";
+import {
+	Button,
+	TimelineEditScreen,
+	type TimelineFormState,
+} from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Save } from "lucide-react";
@@ -14,7 +18,7 @@ import type { Route } from "next";
 import dynamic from "next/dynamic";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { usePersistStore } from "@/stores/AppStoreProvider";
+import { useApp } from "@/stores/AppProvider";
 
 type TimelineEditScreenParams = {
 	timelineId: string;
@@ -23,17 +27,17 @@ type TimelineEditScreenParams = {
 const AdminTimelinesTimelineIdEditRoute = observer(() => {
 	const { timelineId } = useParams<TimelineEditScreenParams>();
 	const router = useRouter();
-	const persistStore = usePersistStore();
+	const app = useApp();
 	const queryClient = useQueryClient();
 
-	const state = useLocalObservable<TimelineFormState & { isInitialized: boolean }>(
-		() => ({
-			name: "",
-			description: "",
-			errors: {},
-			isInitialized: false,
-		}),
-	);
+	const state = useLocalObservable<
+		TimelineFormState & { isInitialized: boolean }
+	>(() => ({
+		name: "",
+		description: "",
+		errors: {},
+		isInitialized: false,
+	}));
 
 	const { data: response, isLoading } = useGetTimelineById(timelineId);
 	const timeline = response?.data;
@@ -106,7 +110,7 @@ const AdminTimelinesTimelineIdEditRoute = observer(() => {
 				timeline?.name ? `${timeline.name} 타임라인을 수정합니다.` : undefined
 			}
 			state={state}
-			contentLanguageCode={persistStore.contentLanguageCode}
+			contentLanguageCode={app.space?.contentLanguageCode}
 			isLoading={isLoading && !state.isInitialized}
 			notFound={!isLoading && !timeline}
 			actions={

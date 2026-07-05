@@ -3,17 +3,17 @@ import { act, render, screen, waitFor } from "@testing-library/react-native";
 import * as SplashScreen from "expo-splash-screen";
 import * as SecureStore from "expo-secure-store";
 import { AuthSessionGate } from "@/auth/AuthSessionGate";
-import { mobileAuthStore } from "@/auth/auth-store";
-import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
+import { mobileSession } from "@/auth/mobile-session";
+import { mobileApiScope } from "@/auth/mobile-api-scope";
 
 const mockReplace = jest.fn();
 let mockPathname = "/";
 const mockGetCurrentSpace = jest.fn();
 const mockGetMySpaces = jest.fn();
 const mockSetApiNativeRefreshHandler = jest.fn();
-const mockSetApiPersistStore = jest.fn();
+const mockSetApiSpace = jest.fn();
 const mockSetIdpNativeRefreshHandler = jest.fn();
-const mockSetIdpPersistStore = jest.fn();
+const mockSetIdpSpace = jest.fn();
 const mockVerifyToken = jest.fn();
 
 jest.mock("expo-router", () => ({
@@ -37,7 +37,7 @@ jest.mock("@cocrepo/api/idp/auth", () => ({
 jest.mock("@cocrepo/api/core/client", () => ({
 	setApiNativeRefreshHandler: (...args: unknown[]) =>
 		mockSetApiNativeRefreshHandler(...args),
-	setApiPersistStore: (...args: unknown[]) => mockSetApiPersistStore(...args),
+	setApiSpace: (...args: unknown[]) => mockSetApiSpace(...args),
 }));
 
 jest.mock("@cocrepo/api/idp/client", () => ({
@@ -45,7 +45,7 @@ jest.mock("@cocrepo/api/idp/client", () => ({
 	setIdpLoginRedirectUrl: jest.fn(),
 	setIdpNativeRefreshHandler: (...args: unknown[]) =>
 		mockSetIdpNativeRefreshHandler(...args),
-	setIdpPersistStore: (...args: unknown[]) => mockSetIdpPersistStore(...args),
+	setIdpSpace: (...args: unknown[]) => mockSetIdpSpace(...args),
 }));
 
 jest.mock("expo-secure-store", () => ({
@@ -54,13 +54,13 @@ jest.mock("expo-secure-store", () => ({
 	setItemAsync: jest.fn(async () => undefined),
 }));
 
-const resetAuthStore = () => {
-	mobileAuthStore.authStatus = "unknown";
-	mobileAuthStore.isAuthenticated = false;
-	mobileAuthStore.isVerifying = false;
-	mobileAuthStore.lastFailure = "";
-	mobileAuthStore.nextPathAfterLogin = "/";
-	mobileApiScopeStore.clear();
+const resetMobileSession = () => {
+	mobileSession.authStatus = "unknown";
+	mobileSession.isAuthenticated = false;
+	mobileSession.isVerifying = false;
+	mobileSession.lastFailure = "";
+	mobileSession.nextPathAfterLogin = "/";
+	mobileApiScope.clear();
 };
 
 describe("AuthSessionGate", () => {
@@ -70,14 +70,14 @@ describe("AuthSessionGate", () => {
 		mockGetCurrentSpace.mockReset();
 		mockGetMySpaces.mockReset();
 		mockSetApiNativeRefreshHandler.mockReset();
-		mockSetApiPersistStore.mockReset();
+		mockSetApiSpace.mockReset();
 		mockSetIdpNativeRefreshHandler.mockReset();
-		mockSetIdpPersistStore.mockReset();
+		mockSetIdpSpace.mockReset();
 		mockVerifyToken.mockReset();
 		(SecureStore.getItemAsync as jest.Mock).mockImplementation(async () => null);
 		(SecureStore.setItemAsync as jest.Mock).mockClear();
 		(SecureStore.deleteItemAsync as jest.Mock).mockClear();
-		resetAuthStore();
+		resetMobileSession();
 		(SplashScreen.hideAsync as jest.Mock).mockClear();
 	});
 
@@ -87,7 +87,7 @@ describe("AuthSessionGate", () => {
 
 	it("인증 상태가 unknown이면 세션 확인 전까지 화면과 splash hide를 보류한다", async () => {
 		const verifySessionSpy = jest
-			.spyOn(mobileAuthStore, "verifySession")
+			.spyOn(mobileSession, "verifySession")
 			.mockResolvedValue(false);
 
 		render(
@@ -132,30 +132,30 @@ describe("AuthSessionGate", () => {
 		});
 		mockGetMySpaces.mockResolvedValue({ data: [currentSpace] });
 		mockGetCurrentSpace.mockResolvedValue({ data: currentSpace });
-		mobileApiScopeStore.setSessionTokens({
+		mobileApiScope.setSessionTokens({
 			accessToken: "mobile-access-token",
 			refreshToken: "mobile-refresh-token",
 			sessionId: "user-mobile.session-1",
 		});
 
-		const verified = await mobileAuthStore.verifySession();
+		const verified = await mobileSession.verifySession();
 
 		expect(verified).toBe(true);
-		expect(mobileAuthStore.authStatus).toBe("authenticated");
-		expect(mobileApiScopeStore.tenantId).toBe("tenant-branch");
-		expect(mobileApiScopeStore.spaceId).toBe("space-branch");
-		expect(mobileApiScopeStore.groundName).toBe("강남점");
-		expect(mobileApiScopeStore.isSpaceSelectionResolved).toBe(true);
+		expect(mobileSession.authStatus).toBe("authenticated");
+		expect(mobileApiScope.tenantId).toBe("tenant-branch");
+		expect(mobileApiScope.spaceId).toBe("space-branch");
+		expect(mobileApiScope.groundName).toBe("강남점");
+		expect(mobileApiScope.isSpaceSelectionResolved).toBe(true);
 		expect(mockGetCurrentSpace).toHaveBeenCalled();
-		expect(mockSetApiPersistStore).toHaveBeenCalledWith(mobileApiScopeStore);
-		expect(mockSetIdpPersistStore).toHaveBeenCalledWith(mobileApiScopeStore);
+		expect(mockSetApiSpace).toHaveBeenCalledWith(mobileApiScope);
+		expect(mockSetIdpSpace).toHaveBeenCalledWith(mobileApiScope);
 		expect(mockSetApiNativeRefreshHandler).toHaveBeenCalled();
 		expect(mockSetIdpNativeRefreshHandler).toHaveBeenCalled();
 	});
 
 	it("인증됐지만 지점 선택이 미확정이면 지점 선택 라우트로 보낸다", async () => {
-		mobileAuthStore.authStatus = "authenticated";
-		mobileApiScopeStore.markSpaceSelectionPending();
+		mobileSession.authStatus = "authenticated";
+		mobileApiScope.markSpaceSelectionPending();
 
 		render(
 			<AuthSessionGate>
@@ -173,7 +173,7 @@ describe("AuthSessionGate", () => {
 	});
 
 	it("비인증 상태면 로그인 라우트를 먼저 보낸 뒤 layout 이후 splash를 끈다", async () => {
-		mobileAuthStore.authStatus = "unauthenticated";
+		mobileSession.authStatus = "unauthenticated";
 		const view = render(
 			<AuthSessionGate>
 				<Text>login-screen</Text>
@@ -208,7 +208,7 @@ describe("AuthSessionGate", () => {
 
 	it("인증 상태에서 로그인 라우트에 있으면 홈 라우트를 먼저 보낸다", async () => {
 		mockPathname = "/auth/login";
-		mobileAuthStore.authStatus = "authenticated";
+		mobileSession.authStatus = "authenticated";
 
 		render(
 			<AuthSessionGate>
@@ -224,7 +224,7 @@ describe("AuthSessionGate", () => {
 
 	it("인증 상태에서 모바일 탭이 아닌 웹 경로에 있으면 홈으로 보낸다", async () => {
 		mockPathname = "/dashboard";
-		mobileAuthStore.authStatus = "authenticated";
+		mobileSession.authStatus = "authenticated";
 
 		render(
 			<AuthSessionGate>
@@ -238,23 +238,9 @@ describe("AuthSessionGate", () => {
 		expect(screen.queryByText("idp-dashboard-screen")).toBeNull();
 	});
 
-	it("인증 상태에서 결제 checkout route는 보호된 모바일 route로 허용한다", () => {
-		mockPathname = "/payments/checkout";
-		mobileAuthStore.authStatus = "authenticated";
-
-		render(
-			<AuthSessionGate>
-				<Text>checkout-screen</Text>
-			</AuthSessionGate>,
-		);
-
-		expect(mockReplace).not.toHaveBeenCalled();
-		expect(screen.getByText("checkout-screen")).toBeTruthy();
-	});
-
 	it("비인증 상태에서 모바일 탭이 아닌 웹 경로에 있으면 returnTo를 홈으로 보정한다", async () => {
 		mockPathname = "/dashboard";
-		mobileAuthStore.authStatus = "unauthenticated";
+		mobileSession.authStatus = "unauthenticated";
 
 		render(
 			<AuthSessionGate>

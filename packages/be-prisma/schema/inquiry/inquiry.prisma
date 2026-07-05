@@ -6,7 +6,6 @@
 enum InquiryCategory {
   GENERAL
   DELIVERY
-  PAYMENT
   REFUND
   PRODUCT
   ACCOUNT

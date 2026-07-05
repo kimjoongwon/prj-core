@@ -27,7 +27,7 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { usePersistStore } from "@/stores/AppStoreProvider";
+import { useApp } from "@/stores/AppProvider";
 
 const toPositiveNumberOr = (value: string, defaultValue: number) => {
 	const parsed = Number(value);
@@ -48,20 +48,20 @@ const toNonNegativeNumberOr = (value: string, defaultValue: number) => {
 const AdminRoutinesEditRoute = observer(() => {
 	const { routineId } = useParams<{ routineId: string }>();
 	const router = useRouter();
-	const persistStore = usePersistStore();
+	const app = useApp();
 	const queryClient = useQueryClient();
 	const [isEmptyActivitiesWarningOpen, setIsEmptyActivitiesWarningOpen] =
 		useState(false);
-	const state = useLocalObservable<RoutineFormState & { isInitialized: boolean }>(
-		() => ({
-			name: "",
-			label: "",
-			exerciseQuery: "",
-			activities: [],
-			errors: {},
-			isInitialized: false,
-		}),
-	);
+	const state = useLocalObservable<
+		RoutineFormState & { isInitialized: boolean }
+	>(() => ({
+		name: "",
+		label: "",
+		exerciseQuery: "",
+		activities: [],
+		errors: {},
+		isInitialized: false,
+	}));
 
 	const { data: response, isLoading } = useGetRoutine(routineId);
 	const routine = response?.data as RoutineDto | undefined;
@@ -193,10 +193,12 @@ const AdminRoutinesEditRoute = observer(() => {
 		<RoutineEditScreen
 			title="루틴 수정"
 			description={
-				routine?.name ? `${routine.name} 루틴을 수정합니다.` : "루틴을 수정합니다."
+				routine?.name
+					? `${routine.name} 루틴을 수정합니다.`
+					: "루틴을 수정합니다."
 			}
 			state={state}
-			contentLanguageCode={persistStore.contentLanguageCode}
+			contentLanguageCode={app.space?.contentLanguageCode}
 			activities={activities}
 			candidateTasks={candidateTasks}
 			isLoading={isLoading}

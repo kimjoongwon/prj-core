@@ -16,8 +16,8 @@ import {
 	getSpaceSelectPath,
 	resolveAuthenticatedRoutePath,
 } from "@/auth/auth-config";
-import { mobileAuthStore } from "@/auth/auth-store";
-import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
+import { mobileSession } from "@/auth/mobile-session";
+import { mobileApiScope } from "@/auth/mobile-api-scope";
 import {
 	NativeAuthRequestError,
 	parseAuthLoginParams,
@@ -68,8 +68,8 @@ const AuthLoginRoute = observer(() => {
 		setIsSubmitting(true);
 		setErrorMessage("");
 		try {
-			mobileAuthStore.setNextPathAfterLogin(targetReturnTo);
-			const loggedIn = await mobileAuthStore.loginWithCredentials(
+			mobileSession.setNextPathAfterLogin(targetReturnTo);
+			const loggedIn = await mobileSession.loginWithCredentials(
 				normalizedEmail,
 				password,
 			);
@@ -78,7 +78,7 @@ const AuthLoginRoute = observer(() => {
 				return;
 			}
 
-			if (!mobileApiScopeStore.isSpaceSelectionResolved) {
+			if (!mobileApiScope.isSpaceSelectionResolved) {
 				router.replace({
 					pathname: getSpaceSelectPath(),
 					params: { returnTo: targetReturnTo },

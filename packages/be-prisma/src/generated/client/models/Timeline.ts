@@ -209,9 +209,6 @@ export type TimelineWhereInput = {
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   sessions?: Prisma.SessionListRelationFilter
-  courseOfferings?: Prisma.CourseOfferingListRelationFilter
-  assignedEnrollments?: Prisma.EnrollmentListRelationFilter
-  coursePasses?: Prisma.CoursePassListRelationFilter
   reservations?: Prisma.ReservationListRelationFilter
 }
 
@@ -227,9 +224,6 @@ export type TimelineOrderByWithRelationInput = {
   tenant?: Prisma.TenantOrderByWithRelationInput
   creator?: Prisma.UserOrderByWithRelationInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
-  courseOfferings?: Prisma.CourseOfferingOrderByRelationAggregateInput
-  assignedEnrollments?: Prisma.EnrollmentOrderByRelationAggregateInput
-  coursePasses?: Prisma.CoursePassOrderByRelationAggregateInput
   reservations?: Prisma.ReservationOrderByRelationAggregateInput
 }
 
@@ -248,9 +242,6 @@ export type TimelineWhereUniqueInput = Prisma.AtLeast<{
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   sessions?: Prisma.SessionListRelationFilter
-  courseOfferings?: Prisma.CourseOfferingListRelationFilter
-  assignedEnrollments?: Prisma.EnrollmentListRelationFilter
-  coursePasses?: Prisma.CoursePassListRelationFilter
   reservations?: Prisma.ReservationListRelationFilter
 }, "id">
 
@@ -292,9 +283,6 @@ export type TimelineCreateInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutTimelinesInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedTimelinesInput
   sessions?: Prisma.SessionCreateNestedManyWithoutTimelineInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTimelineInput
-  assignedEnrollments?: Prisma.EnrollmentCreateNestedManyWithoutAssignedTimelineInput
-  coursePasses?: Prisma.CoursePassCreateNestedManyWithoutTimelineInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTimelineInput
 }
 
@@ -308,9 +296,6 @@ export type TimelineUncheckedCreateInput = {
   name: string
   description?: string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutTimelineInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTimelineInput
-  assignedEnrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutAssignedTimelineInput
-  coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutTimelineInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTimelineInput
 }
 
@@ -324,9 +309,6 @@ export type TimelineUpdateInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutTimelinesNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedTimelinesNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutTimelineNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTimelineNestedInput
-  assignedEnrollments?: Prisma.EnrollmentUpdateManyWithoutAssignedTimelineNestedInput
-  coursePasses?: Prisma.CoursePassUpdateManyWithoutTimelineNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTimelineNestedInput
 }
 
@@ -340,9 +322,6 @@ export type TimelineUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutTimelineNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTimelineNestedInput
-  assignedEnrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutAssignedTimelineNestedInput
-  coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutTimelineNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTimelineNestedInput
 }
 
@@ -385,11 +364,6 @@ export type TimelineListRelationFilter = {
 
 export type TimelineOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type TimelineNullableScalarRelationFilter = {
-  is?: Prisma.TimelineWhereInput | null
-  isNot?: Prisma.TimelineWhereInput | null
 }
 
 export type TimelineScalarRelationFilter = {
@@ -514,52 +488,6 @@ export type TimelineUncheckedUpdateManyWithoutCreatorNestedInput = {
   deleteMany?: Prisma.TimelineScalarWhereInput | Prisma.TimelineScalarWhereInput[]
 }
 
-export type TimelineCreateNestedOneWithoutCourseOfferingsInput = {
-  create?: Prisma.XOR<Prisma.TimelineCreateWithoutCourseOfferingsInput, Prisma.TimelineUncheckedCreateWithoutCourseOfferingsInput>
-  connectOrCreate?: Prisma.TimelineCreateOrConnectWithoutCourseOfferingsInput
-  connect?: Prisma.TimelineWhereUniqueInput
-}
-
-export type TimelineUpdateOneWithoutCourseOfferingsNestedInput = {
-  create?: Prisma.XOR<Prisma.TimelineCreateWithoutCourseOfferingsInput, Prisma.TimelineUncheckedCreateWithoutCourseOfferingsInput>
-  connectOrCreate?: Prisma.TimelineCreateOrConnectWithoutCourseOfferingsInput
-  upsert?: Prisma.TimelineUpsertWithoutCourseOfferingsInput
-  disconnect?: Prisma.TimelineWhereInput | boolean
-  delete?: Prisma.TimelineWhereInput | boolean
-  connect?: Prisma.TimelineWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.TimelineUpdateToOneWithWhereWithoutCourseOfferingsInput, Prisma.TimelineUpdateWithoutCourseOfferingsInput>, Prisma.TimelineUncheckedUpdateWithoutCourseOfferingsInput>
-}
-
-export type TimelineCreateNestedOneWithoutAssignedEnrollmentsInput = {
-  create?: Prisma.XOR<Prisma.TimelineCreateWithoutAssignedEnrollmentsInput, Prisma.TimelineUncheckedCreateWithoutAssignedEnrollmentsInput>
-  connectOrCreate?: Prisma.TimelineCreateOrConnectWithoutAssignedEnrollmentsInput
-  connect?: Prisma.TimelineWhereUniqueInput
-}
-
-export type TimelineUpdateOneWithoutAssignedEnrollmentsNestedInput = {
-  create?: Prisma.XOR<Prisma.TimelineCreateWithoutAssignedEnrollmentsInput, Prisma.TimelineUncheckedCreateWithoutAssignedEnrollmentsInput>
-  connectOrCreate?: Prisma.TimelineCreateOrConnectWithoutAssignedEnrollmentsInput
-  upsert?: Prisma.TimelineUpsertWithoutAssignedEnrollmentsInput
-  disconnect?: Prisma.TimelineWhereInput | boolean
-  delete?: Prisma.TimelineWhereInput | boolean
-  connect?: Prisma.TimelineWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.TimelineUpdateToOneWithWhereWithoutAssignedEnrollmentsInput, Prisma.TimelineUpdateWithoutAssignedEnrollmentsInput>, Prisma.TimelineUncheckedUpdateWithoutAssignedEnrollmentsInput>
-}
-
-export type TimelineCreateNestedOneWithoutCoursePassesInput = {
-  create?: Prisma.XOR<Prisma.TimelineCreateWithoutCoursePassesInput, Prisma.TimelineUncheckedCreateWithoutCoursePassesInput>
-  connectOrCreate?: Prisma.TimelineCreateOrConnectWithoutCoursePassesInput
-  connect?: Prisma.TimelineWhereUniqueInput
-}
-
-export type TimelineUpdateOneRequiredWithoutCoursePassesNestedInput = {
-  create?: Prisma.XOR<Prisma.TimelineCreateWithoutCoursePassesInput, Prisma.TimelineUncheckedCreateWithoutCoursePassesInput>
-  connectOrCreate?: Prisma.TimelineCreateOrConnectWithoutCoursePassesInput
-  upsert?: Prisma.TimelineUpsertWithoutCoursePassesInput
-  connect?: Prisma.TimelineWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.TimelineUpdateToOneWithWhereWithoutCoursePassesInput, Prisma.TimelineUpdateWithoutCoursePassesInput>, Prisma.TimelineUncheckedUpdateWithoutCoursePassesInput>
-}
-
 export type TimelineCreateNestedOneWithoutReservationsInput = {
   create?: Prisma.XOR<Prisma.TimelineCreateWithoutReservationsInput, Prisma.TimelineUncheckedCreateWithoutReservationsInput>
   connectOrCreate?: Prisma.TimelineCreateOrConnectWithoutReservationsInput
@@ -597,9 +525,6 @@ export type TimelineCreateWithoutTenantInput = {
   description?: string | null
   creator?: Prisma.UserCreateNestedOneWithoutCreatedTimelinesInput
   sessions?: Prisma.SessionCreateNestedManyWithoutTimelineInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTimelineInput
-  assignedEnrollments?: Prisma.EnrollmentCreateNestedManyWithoutAssignedTimelineInput
-  coursePasses?: Prisma.CoursePassCreateNestedManyWithoutTimelineInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTimelineInput
 }
 
@@ -612,9 +537,6 @@ export type TimelineUncheckedCreateWithoutTenantInput = {
   name: string
   description?: string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutTimelineInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTimelineInput
-  assignedEnrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutAssignedTimelineInput
-  coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutTimelineInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTimelineInput
 }
 
@@ -667,9 +589,6 @@ export type TimelineCreateWithoutCreatorInput = {
   description?: string | null
   tenant: Prisma.TenantCreateNestedOneWithoutTimelinesInput
   sessions?: Prisma.SessionCreateNestedManyWithoutTimelineInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTimelineInput
-  assignedEnrollments?: Prisma.EnrollmentCreateNestedManyWithoutAssignedTimelineInput
-  coursePasses?: Prisma.CoursePassCreateNestedManyWithoutTimelineInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTimelineInput
 }
 
@@ -682,9 +601,6 @@ export type TimelineUncheckedCreateWithoutCreatorInput = {
   name: string
   description?: string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutTimelineInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTimelineInput
-  assignedEnrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutAssignedTimelineInput
-  coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutTimelineInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTimelineInput
 }
 
@@ -714,234 +630,6 @@ export type TimelineUpdateManyWithWhereWithoutCreatorInput = {
   data: Prisma.XOR<Prisma.TimelineUpdateManyMutationInput, Prisma.TimelineUncheckedUpdateManyWithoutCreatorInput>
 }
 
-export type TimelineCreateWithoutCourseOfferingsInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  name: string
-  description?: string | null
-  tenant: Prisma.TenantCreateNestedOneWithoutTimelinesInput
-  creator?: Prisma.UserCreateNestedOneWithoutCreatedTimelinesInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutTimelineInput
-  assignedEnrollments?: Prisma.EnrollmentCreateNestedManyWithoutAssignedTimelineInput
-  coursePasses?: Prisma.CoursePassCreateNestedManyWithoutTimelineInput
-  reservations?: Prisma.ReservationCreateNestedManyWithoutTimelineInput
-}
-
-export type TimelineUncheckedCreateWithoutCourseOfferingsInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  tenantId: string
-  creatorId?: string | null
-  name: string
-  description?: string | null
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutTimelineInput
-  assignedEnrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutAssignedTimelineInput
-  coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutTimelineInput
-  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTimelineInput
-}
-
-export type TimelineCreateOrConnectWithoutCourseOfferingsInput = {
-  where: Prisma.TimelineWhereUniqueInput
-  create: Prisma.XOR<Prisma.TimelineCreateWithoutCourseOfferingsInput, Prisma.TimelineUncheckedCreateWithoutCourseOfferingsInput>
-}
-
-export type TimelineUpsertWithoutCourseOfferingsInput = {
-  update: Prisma.XOR<Prisma.TimelineUpdateWithoutCourseOfferingsInput, Prisma.TimelineUncheckedUpdateWithoutCourseOfferingsInput>
-  create: Prisma.XOR<Prisma.TimelineCreateWithoutCourseOfferingsInput, Prisma.TimelineUncheckedCreateWithoutCourseOfferingsInput>
-  where?: Prisma.TimelineWhereInput
-}
-
-export type TimelineUpdateToOneWithWhereWithoutCourseOfferingsInput = {
-  where?: Prisma.TimelineWhereInput
-  data: Prisma.XOR<Prisma.TimelineUpdateWithoutCourseOfferingsInput, Prisma.TimelineUncheckedUpdateWithoutCourseOfferingsInput>
-}
-
-export type TimelineUpdateWithoutCourseOfferingsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutTimelinesNestedInput
-  creator?: Prisma.UserUpdateOneWithoutCreatedTimelinesNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutTimelineNestedInput
-  assignedEnrollments?: Prisma.EnrollmentUpdateManyWithoutAssignedTimelineNestedInput
-  coursePasses?: Prisma.CoursePassUpdateManyWithoutTimelineNestedInput
-  reservations?: Prisma.ReservationUpdateManyWithoutTimelineNestedInput
-}
-
-export type TimelineUncheckedUpdateWithoutCourseOfferingsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutTimelineNestedInput
-  assignedEnrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutAssignedTimelineNestedInput
-  coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutTimelineNestedInput
-  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTimelineNestedInput
-}
-
-export type TimelineCreateWithoutAssignedEnrollmentsInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  name: string
-  description?: string | null
-  tenant: Prisma.TenantCreateNestedOneWithoutTimelinesInput
-  creator?: Prisma.UserCreateNestedOneWithoutCreatedTimelinesInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutTimelineInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTimelineInput
-  coursePasses?: Prisma.CoursePassCreateNestedManyWithoutTimelineInput
-  reservations?: Prisma.ReservationCreateNestedManyWithoutTimelineInput
-}
-
-export type TimelineUncheckedCreateWithoutAssignedEnrollmentsInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  tenantId: string
-  creatorId?: string | null
-  name: string
-  description?: string | null
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutTimelineInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTimelineInput
-  coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutTimelineInput
-  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTimelineInput
-}
-
-export type TimelineCreateOrConnectWithoutAssignedEnrollmentsInput = {
-  where: Prisma.TimelineWhereUniqueInput
-  create: Prisma.XOR<Prisma.TimelineCreateWithoutAssignedEnrollmentsInput, Prisma.TimelineUncheckedCreateWithoutAssignedEnrollmentsInput>
-}
-
-export type TimelineUpsertWithoutAssignedEnrollmentsInput = {
-  update: Prisma.XOR<Prisma.TimelineUpdateWithoutAssignedEnrollmentsInput, Prisma.TimelineUncheckedUpdateWithoutAssignedEnrollmentsInput>
-  create: Prisma.XOR<Prisma.TimelineCreateWithoutAssignedEnrollmentsInput, Prisma.TimelineUncheckedCreateWithoutAssignedEnrollmentsInput>
-  where?: Prisma.TimelineWhereInput
-}
-
-export type TimelineUpdateToOneWithWhereWithoutAssignedEnrollmentsInput = {
-  where?: Prisma.TimelineWhereInput
-  data: Prisma.XOR<Prisma.TimelineUpdateWithoutAssignedEnrollmentsInput, Prisma.TimelineUncheckedUpdateWithoutAssignedEnrollmentsInput>
-}
-
-export type TimelineUpdateWithoutAssignedEnrollmentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutTimelinesNestedInput
-  creator?: Prisma.UserUpdateOneWithoutCreatedTimelinesNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutTimelineNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTimelineNestedInput
-  coursePasses?: Prisma.CoursePassUpdateManyWithoutTimelineNestedInput
-  reservations?: Prisma.ReservationUpdateManyWithoutTimelineNestedInput
-}
-
-export type TimelineUncheckedUpdateWithoutAssignedEnrollmentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutTimelineNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTimelineNestedInput
-  coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutTimelineNestedInput
-  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTimelineNestedInput
-}
-
-export type TimelineCreateWithoutCoursePassesInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  name: string
-  description?: string | null
-  tenant: Prisma.TenantCreateNestedOneWithoutTimelinesInput
-  creator?: Prisma.UserCreateNestedOneWithoutCreatedTimelinesInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutTimelineInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTimelineInput
-  assignedEnrollments?: Prisma.EnrollmentCreateNestedManyWithoutAssignedTimelineInput
-  reservations?: Prisma.ReservationCreateNestedManyWithoutTimelineInput
-}
-
-export type TimelineUncheckedCreateWithoutCoursePassesInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  tenantId: string
-  creatorId?: string | null
-  name: string
-  description?: string | null
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutTimelineInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTimelineInput
-  assignedEnrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutAssignedTimelineInput
-  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTimelineInput
-}
-
-export type TimelineCreateOrConnectWithoutCoursePassesInput = {
-  where: Prisma.TimelineWhereUniqueInput
-  create: Prisma.XOR<Prisma.TimelineCreateWithoutCoursePassesInput, Prisma.TimelineUncheckedCreateWithoutCoursePassesInput>
-}
-
-export type TimelineUpsertWithoutCoursePassesInput = {
-  update: Prisma.XOR<Prisma.TimelineUpdateWithoutCoursePassesInput, Prisma.TimelineUncheckedUpdateWithoutCoursePassesInput>
-  create: Prisma.XOR<Prisma.TimelineCreateWithoutCoursePassesInput, Prisma.TimelineUncheckedCreateWithoutCoursePassesInput>
-  where?: Prisma.TimelineWhereInput
-}
-
-export type TimelineUpdateToOneWithWhereWithoutCoursePassesInput = {
-  where?: Prisma.TimelineWhereInput
-  data: Prisma.XOR<Prisma.TimelineUpdateWithoutCoursePassesInput, Prisma.TimelineUncheckedUpdateWithoutCoursePassesInput>
-}
-
-export type TimelineUpdateWithoutCoursePassesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutTimelinesNestedInput
-  creator?: Prisma.UserUpdateOneWithoutCreatedTimelinesNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutTimelineNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTimelineNestedInput
-  assignedEnrollments?: Prisma.EnrollmentUpdateManyWithoutAssignedTimelineNestedInput
-  reservations?: Prisma.ReservationUpdateManyWithoutTimelineNestedInput
-}
-
-export type TimelineUncheckedUpdateWithoutCoursePassesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutTimelineNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTimelineNestedInput
-  assignedEnrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutAssignedTimelineNestedInput
-  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTimelineNestedInput
-}
-
 export type TimelineCreateWithoutReservationsInput = {
   id?: string
   createdAt?: Date | string
@@ -952,9 +640,6 @@ export type TimelineCreateWithoutReservationsInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutTimelinesInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedTimelinesInput
   sessions?: Prisma.SessionCreateNestedManyWithoutTimelineInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTimelineInput
-  assignedEnrollments?: Prisma.EnrollmentCreateNestedManyWithoutAssignedTimelineInput
-  coursePasses?: Prisma.CoursePassCreateNestedManyWithoutTimelineInput
 }
 
 export type TimelineUncheckedCreateWithoutReservationsInput = {
@@ -967,9 +652,6 @@ export type TimelineUncheckedCreateWithoutReservationsInput = {
   name: string
   description?: string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutTimelineInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTimelineInput
-  assignedEnrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutAssignedTimelineInput
-  coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutTimelineInput
 }
 
 export type TimelineCreateOrConnectWithoutReservationsInput = {
@@ -998,9 +680,6 @@ export type TimelineUpdateWithoutReservationsInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutTimelinesNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedTimelinesNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutTimelineNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTimelineNestedInput
-  assignedEnrollments?: Prisma.EnrollmentUpdateManyWithoutAssignedTimelineNestedInput
-  coursePasses?: Prisma.CoursePassUpdateManyWithoutTimelineNestedInput
 }
 
 export type TimelineUncheckedUpdateWithoutReservationsInput = {
@@ -1013,9 +692,6 @@ export type TimelineUncheckedUpdateWithoutReservationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutTimelineNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTimelineNestedInput
-  assignedEnrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutAssignedTimelineNestedInput
-  coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutTimelineNestedInput
 }
 
 export type TimelineCreateWithoutSessionsInput = {
@@ -1027,9 +703,6 @@ export type TimelineCreateWithoutSessionsInput = {
   description?: string | null
   tenant: Prisma.TenantCreateNestedOneWithoutTimelinesInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedTimelinesInput
-  courseOfferings?: Prisma.CourseOfferingCreateNestedManyWithoutTimelineInput
-  assignedEnrollments?: Prisma.EnrollmentCreateNestedManyWithoutAssignedTimelineInput
-  coursePasses?: Prisma.CoursePassCreateNestedManyWithoutTimelineInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTimelineInput
 }
 
@@ -1042,9 +715,6 @@ export type TimelineUncheckedCreateWithoutSessionsInput = {
   creatorId?: string | null
   name: string
   description?: string | null
-  courseOfferings?: Prisma.CourseOfferingUncheckedCreateNestedManyWithoutTimelineInput
-  assignedEnrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutAssignedTimelineInput
-  coursePasses?: Prisma.CoursePassUncheckedCreateNestedManyWithoutTimelineInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTimelineInput
 }
 
@@ -1073,9 +743,6 @@ export type TimelineUpdateWithoutSessionsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutTimelinesNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedTimelinesNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTimelineNestedInput
-  assignedEnrollments?: Prisma.EnrollmentUpdateManyWithoutAssignedTimelineNestedInput
-  coursePasses?: Prisma.CoursePassUpdateManyWithoutTimelineNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTimelineNestedInput
 }
 
@@ -1088,9 +755,6 @@ export type TimelineUncheckedUpdateWithoutSessionsInput = {
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTimelineNestedInput
-  assignedEnrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutAssignedTimelineNestedInput
-  coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutTimelineNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTimelineNestedInput
 }
 
@@ -1113,9 +777,6 @@ export type TimelineUpdateWithoutTenantInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creator?: Prisma.UserUpdateOneWithoutCreatedTimelinesNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutTimelineNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTimelineNestedInput
-  assignedEnrollments?: Prisma.EnrollmentUpdateManyWithoutAssignedTimelineNestedInput
-  coursePasses?: Prisma.CoursePassUpdateManyWithoutTimelineNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTimelineNestedInput
 }
 
@@ -1128,9 +789,6 @@ export type TimelineUncheckedUpdateWithoutTenantInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutTimelineNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTimelineNestedInput
-  assignedEnrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutAssignedTimelineNestedInput
-  coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutTimelineNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTimelineNestedInput
 }
 
@@ -1163,9 +821,6 @@ export type TimelineUpdateWithoutCreatorInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutTimelinesNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutTimelineNestedInput
-  courseOfferings?: Prisma.CourseOfferingUpdateManyWithoutTimelineNestedInput
-  assignedEnrollments?: Prisma.EnrollmentUpdateManyWithoutAssignedTimelineNestedInput
-  coursePasses?: Prisma.CoursePassUpdateManyWithoutTimelineNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTimelineNestedInput
 }
 
@@ -1178,9 +833,6 @@ export type TimelineUncheckedUpdateWithoutCreatorInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutTimelineNestedInput
-  courseOfferings?: Prisma.CourseOfferingUncheckedUpdateManyWithoutTimelineNestedInput
-  assignedEnrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutAssignedTimelineNestedInput
-  coursePasses?: Prisma.CoursePassUncheckedUpdateManyWithoutTimelineNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTimelineNestedInput
 }
 
@@ -1201,17 +853,11 @@ export type TimelineUncheckedUpdateManyWithoutCreatorInput = {
 
 export type TimelineCountOutputType = {
   sessions: number
-  courseOfferings: number
-  assignedEnrollments: number
-  coursePasses: number
   reservations: number
 }
 
 export type TimelineCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | TimelineCountOutputTypeCountSessionsArgs
-  courseOfferings?: boolean | TimelineCountOutputTypeCountCourseOfferingsArgs
-  assignedEnrollments?: boolean | TimelineCountOutputTypeCountAssignedEnrollmentsArgs
-  coursePasses?: boolean | TimelineCountOutputTypeCountCoursePassesArgs
   reservations?: boolean | TimelineCountOutputTypeCountReservationsArgs
 }
 
@@ -1235,27 +881,6 @@ export type TimelineCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Typ
 /**
  * TimelineCountOutputType without action
  */
-export type TimelineCountOutputTypeCountCourseOfferingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.CourseOfferingWhereInput
-}
-
-/**
- * TimelineCountOutputType without action
- */
-export type TimelineCountOutputTypeCountAssignedEnrollmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.EnrollmentWhereInput
-}
-
-/**
- * TimelineCountOutputType without action
- */
-export type TimelineCountOutputTypeCountCoursePassesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.CoursePassWhereInput
-}
-
-/**
- * TimelineCountOutputType without action
- */
 export type TimelineCountOutputTypeCountReservationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ReservationWhereInput
 }
@@ -1273,9 +898,6 @@ export type TimelineSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Timeline$creatorArgs<ExtArgs>
   sessions?: boolean | Prisma.Timeline$sessionsArgs<ExtArgs>
-  courseOfferings?: boolean | Prisma.Timeline$courseOfferingsArgs<ExtArgs>
-  assignedEnrollments?: boolean | Prisma.Timeline$assignedEnrollmentsArgs<ExtArgs>
-  coursePasses?: boolean | Prisma.Timeline$coursePassesArgs<ExtArgs>
   reservations?: boolean | Prisma.Timeline$reservationsArgs<ExtArgs>
   _count?: boolean | Prisma.TimelineCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["timeline"]>
@@ -1322,9 +944,6 @@ export type TimelineInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Timeline$creatorArgs<ExtArgs>
   sessions?: boolean | Prisma.Timeline$sessionsArgs<ExtArgs>
-  courseOfferings?: boolean | Prisma.Timeline$courseOfferingsArgs<ExtArgs>
-  assignedEnrollments?: boolean | Prisma.Timeline$assignedEnrollmentsArgs<ExtArgs>
-  coursePasses?: boolean | Prisma.Timeline$coursePassesArgs<ExtArgs>
   reservations?: boolean | Prisma.Timeline$reservationsArgs<ExtArgs>
   _count?: boolean | Prisma.TimelineCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1343,9 +962,6 @@ export type $TimelinePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     tenant: Prisma.$TenantPayload<ExtArgs>
     creator: Prisma.$UserPayload<ExtArgs> | null
     sessions: Prisma.$SessionPayload<ExtArgs>[]
-    courseOfferings: Prisma.$CourseOfferingPayload<ExtArgs>[]
-    assignedEnrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
-    coursePasses: Prisma.$CoursePassPayload<ExtArgs>[]
     reservations: Prisma.$ReservationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1754,9 +1370,6 @@ export interface Prisma__TimelineClient<T, Null = never, ExtArgs extends runtime
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   creator<T extends Prisma.Timeline$creatorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Timeline$creatorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   sessions<T extends Prisma.Timeline$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Timeline$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  courseOfferings<T extends Prisma.Timeline$courseOfferingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Timeline$courseOfferingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseOfferingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  assignedEnrollments<T extends Prisma.Timeline$assignedEnrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Timeline$assignedEnrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  coursePasses<T extends Prisma.Timeline$coursePassesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Timeline$coursePassesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CoursePassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reservations<T extends Prisma.Timeline$reservationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Timeline$reservationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReservationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2231,78 +1844,6 @@ export type Timeline$sessionsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.SessionScalarFieldEnum | Prisma.SessionScalarFieldEnum[]
-}
-
-/**
- * Timeline.courseOfferings
- */
-export type Timeline$courseOfferingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the CourseOffering
-   */
-  select?: Prisma.CourseOfferingSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the CourseOffering
-   */
-  omit?: Prisma.CourseOfferingOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.CourseOfferingInclude<ExtArgs> | null
-  where?: Prisma.CourseOfferingWhereInput
-  orderBy?: Prisma.CourseOfferingOrderByWithRelationInput | Prisma.CourseOfferingOrderByWithRelationInput[]
-  cursor?: Prisma.CourseOfferingWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.CourseOfferingScalarFieldEnum | Prisma.CourseOfferingScalarFieldEnum[]
-}
-
-/**
- * Timeline.assignedEnrollments
- */
-export type Timeline$assignedEnrollmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Enrollment
-   */
-  select?: Prisma.EnrollmentSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Enrollment
-   */
-  omit?: Prisma.EnrollmentOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.EnrollmentInclude<ExtArgs> | null
-  where?: Prisma.EnrollmentWhereInput
-  orderBy?: Prisma.EnrollmentOrderByWithRelationInput | Prisma.EnrollmentOrderByWithRelationInput[]
-  cursor?: Prisma.EnrollmentWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.EnrollmentScalarFieldEnum | Prisma.EnrollmentScalarFieldEnum[]
-}
-
-/**
- * Timeline.coursePasses
- */
-export type Timeline$coursePassesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the CoursePass
-   */
-  select?: Prisma.CoursePassSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the CoursePass
-   */
-  omit?: Prisma.CoursePassOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.CoursePassInclude<ExtArgs> | null
-  where?: Prisma.CoursePassWhereInput
-  orderBy?: Prisma.CoursePassOrderByWithRelationInput | Prisma.CoursePassOrderByWithRelationInput[]
-  cursor?: Prisma.CoursePassWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.CoursePassScalarFieldEnum | Prisma.CoursePassScalarFieldEnum[]
 }
 
 /**

@@ -83,7 +83,6 @@ export function useInquiryCreateHandlers({
 					category: data.category as
 						| "GENERAL"
 						| "DELIVERY"
-						| "PAYMENT"
 						| "REFUND"
 						| "PRODUCT"
 						| "ACCOUNT"

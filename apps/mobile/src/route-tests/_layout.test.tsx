@@ -26,8 +26,8 @@ type StackScreenProps = {
 const mockSetIdpBaseUrl = jest.fn();
 const mockSetIdpLoginRedirectUrl = jest.fn();
 const mockSetLoginRedirectUrl = jest.fn();
-const mockSetApiPersistStore = jest.fn();
-const mockSetIdpPersistStore = jest.fn();
+const mockSetApiSpace = jest.fn();
+const mockSetIdpSpace = jest.fn();
 const mockSetUniwindTheme = jest.fn();
 
 jest.mock("@cocrepo/mo-ui", () => {
@@ -82,11 +82,11 @@ jest.mock("@cocrepo/api/idp/client", () => ({
 	setIdpBaseUrl: (...args: string[]) => mockSetIdpBaseUrl(...args),
 	setIdpLoginRedirectUrl: (...args: string[]) =>
 		mockSetIdpLoginRedirectUrl(...args),
-	setIdpPersistStore: (...args: unknown[]) => mockSetIdpPersistStore(...args),
+	setIdpSpace: (...args: unknown[]) => mockSetIdpSpace(...args),
 }));
 
 jest.mock("@cocrepo/api/core/client", () => ({
-	setApiPersistStore: (...args: unknown[]) => mockSetApiPersistStore(...args),
+	setApiSpace: (...args: unknown[]) => mockSetApiSpace(...args),
 	setLoginRedirectUrl: (...args: string[]) => mockSetLoginRedirectUrl(...args),
 }));
 
@@ -174,8 +174,8 @@ describe("mobile root layout", () => {
 		mockSetIdpBaseUrl.mockReset();
 		mockSetIdpLoginRedirectUrl.mockReset();
 		mockSetLoginRedirectUrl.mockReset();
-		mockSetApiPersistStore.mockReset();
-		mockSetIdpPersistStore.mockReset();
+		mockSetApiSpace.mockReset();
+		mockSetIdpSpace.mockReset();
 		mockSetUniwindTheme.mockReset();
 	});
 
@@ -196,6 +196,5 @@ describe("mobile root layout", () => {
 		expect(screen.getByText("(tabs):header-hidden")).toBeTruthy();
 		expect(screen.getByText("auth/login:header-hidden")).toBeTruthy();
 		expect(screen.getByText("select-space:header-hidden")).toBeTruthy();
-		expect(screen.getByText("payments/checkout")).toBeTruthy();
 	});
 });

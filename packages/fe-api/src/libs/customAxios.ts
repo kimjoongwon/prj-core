@@ -26,8 +26,8 @@ export const AXIOS_INSTANCE = Axios.create({
 	withCredentials: true, // 쿠키/인증 정보 포함
 });
 
-// PersistStore 참조 (앱 초기화 시 설정)
-interface PersistStoreRef {
+// Space 참조 (앱 초기화 시 설정)
+interface SpaceRef {
 	accessToken?: string | null;
 	accessTokenExpiresAt?: number | null;
 	refreshToken?: string | null;
@@ -35,15 +35,15 @@ interface PersistStoreRef {
 	sessionId?: string | null;
 	tenantId?: string | null;
 }
-let persistStoreRef: PersistStoreRef | null = null;
+let spaceRef: SpaceRef | null = null;
 
 type NativeRefreshHandler = () => Promise<void>;
 let nativeRefreshHandler: NativeRefreshHandler | null = null;
 
-interface LocaleStoreRef {
+interface LocaleRef {
 	languageCode?: string | null;
 }
-let localeStoreRef: LocaleStoreRef | null = null;
+let localeRef: LocaleRef | null = null;
 
 // 401 발생 시 리다이렉트할 로그인 URL (앱별 설정 가능)
 let loginRedirectUrl = "/admin/auth/login";
@@ -57,11 +57,11 @@ export function setLoginRedirectUrl(url: string) {
 }
 
 /**
- * 토큰 갱신 응답의 만료 시간을 PersistStore에 반영하기 위한 Store 참조 설정
- * 앱 초기화 시 호출하여 Store 참조를 주입합니다.
+ * 토큰 갱신 응답의 만료 시간을 Space에 반영하기 위한 참조 설정
+ * 앱 초기화 시 호출하여 space 참조를 주입합니다.
  */
-export function setApiPersistStore(store: PersistStoreRef) {
-	persistStoreRef = store;
+export function setApiSpace(store: SpaceRef) {
+	spaceRef = store;
 }
 
 export function setApiNativeRefreshHandler(
@@ -70,8 +70,8 @@ export function setApiNativeRefreshHandler(
 	nativeRefreshHandler = handler;
 }
 
-export function setApiLocaleStore(store: LocaleStoreRef) {
-	localeStoreRef = store;
+export function setApiLocale(store: LocaleRef) {
+	localeRef = store;
 }
 
 // 토큰 갱신 상태 관리
@@ -99,28 +99,27 @@ const applyTokenRefreshData = (responseData?: {
 	refreshTokenExpiresAt?: number;
 	sessionId?: string;
 }) => {
-	if (!responseData || !persistStoreRef) {
+	if (!responseData || !spaceRef) {
 		return;
 	}
 
-	persistStoreRef.accessToken =
-		responseData.accessToken ?? persistStoreRef.accessToken ?? null;
-	persistStoreRef.refreshToken =
-		responseData.refreshToken ?? persistStoreRef.refreshToken ?? null;
-	persistStoreRef.sessionId =
-		responseData.sessionId ?? persistStoreRef.sessionId ?? null;
+	spaceRef.accessToken =
+		responseData.accessToken ?? spaceRef.accessToken ?? null;
+	spaceRef.refreshToken =
+		responseData.refreshToken ?? spaceRef.refreshToken ?? null;
+	spaceRef.sessionId = responseData.sessionId ?? spaceRef.sessionId ?? null;
 	if (responseData.accessTokenExpiresAt) {
-		persistStoreRef.accessTokenExpiresAt = responseData.accessTokenExpiresAt;
-		persistStoreRef.refreshTokenExpiresAt = responseData.refreshTokenExpiresAt;
+		spaceRef.accessTokenExpiresAt = responseData.accessTokenExpiresAt;
+		spaceRef.refreshTokenExpiresAt = responseData.refreshTokenExpiresAt;
 	}
 };
 
 const syncSessionHeaders = (config: InternalAxiosRequestConfig) => {
 	const headers = AxiosHeaders.from(config.headers);
-	const accessToken = persistStoreRef?.accessToken;
-	const refreshToken = persistStoreRef?.refreshToken;
-	const tenantId = persistStoreRef?.tenantId;
-	const languageCode = localeStoreRef?.languageCode;
+	const accessToken = spaceRef?.accessToken;
+	const refreshToken = spaceRef?.refreshToken;
+	const tenantId = spaceRef?.tenantId;
+	const languageCode = localeRef?.languageCode;
 
 	if (accessToken) {
 		headers.set("Authorization", `Bearer ${accessToken}`);
@@ -144,9 +143,9 @@ const syncSessionHeaders = (config: InternalAxiosRequestConfig) => {
 
 AXIOS_INSTANCE.interceptors.request.use((config) => {
 	const headers = AxiosHeaders.from(config.headers);
-	const accessToken = persistStoreRef?.accessToken;
-	const refreshToken = persistStoreRef?.refreshToken;
-	const tenantId = persistStoreRef?.tenantId;
+	const accessToken = spaceRef?.accessToken;
+	const refreshToken = spaceRef?.refreshToken;
+	const tenantId = spaceRef?.tenantId;
 
 	if (accessToken && !headers.has("Authorization")) {
 		headers.set("Authorization", `Bearer ${accessToken}`);
@@ -160,7 +159,7 @@ AXIOS_INSTANCE.interceptors.request.use((config) => {
 		headers.set(REQUEST_HEADER_KEYS.TENANT_ID, tenantId);
 	}
 
-	const languageCode = localeStoreRef?.languageCode;
+	const languageCode = localeRef?.languageCode;
 	if (languageCode) {
 		headers.set(REQUEST_HEADER_KEYS.LANGUAGE, languageCode);
 	}

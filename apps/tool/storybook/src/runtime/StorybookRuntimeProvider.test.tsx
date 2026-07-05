@@ -4,8 +4,8 @@ import { render, screen, waitFor } from "@testing-library/react";
 import type { PropsWithChildren } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const setApiPersistStoreMock = vi.fn();
-const setIdpPersistStoreMock = vi.fn();
+const setApiSpaceMock = vi.fn();
+const setIdpSpaceMock = vi.fn();
 const setLoginRedirectUrlMock = vi.fn();
 const setIdpLoginRedirectUrlMock = vi.fn();
 
@@ -18,14 +18,14 @@ vi.mock("nuqs/adapters/react", () => ({
 }));
 
 vi.mock("../../../../../packages/fe-api/src/core/client", () => ({
-	setApiPersistStore: (...args: unknown[]) => setApiPersistStoreMock(...args),
+	setApiSpace: (...args: unknown[]) => setApiSpaceMock(...args),
 	setLoginRedirectUrl: (...args: unknown[]) => setLoginRedirectUrlMock(...args),
 }));
 
 vi.mock("../../../../../packages/fe-api/src/idp/client", () => ({
 	setIdpLoginRedirectUrl: (...args: unknown[]) =>
 		setIdpLoginRedirectUrlMock(...args),
-	setIdpPersistStore: (...args: unknown[]) => setIdpPersistStoreMock(...args),
+	setIdpSpace: (...args: unknown[]) => setIdpSpaceMock(...args),
 }));
 
 async function loadProvider() {
@@ -33,13 +33,16 @@ async function loadProvider() {
 	return import("./StorybookRuntimeProvider");
 }
 
-async function createPersistSnapshot() {
-	const { usePersistStore } = await import("@cocrepo/store");
+async function createSpaceSnapshot() {
+	const { useApp } = await import("@cocrepo/store");
 	const { observer } = await import("mobx-react-lite");
 
-	return observer(function PersistSnapshot() {
-		const persistStore = usePersistStore();
-		const value = `${persistStore.tenantId ?? "none"}:${persistStore.spaceId ?? "none"}:${persistStore.isSpaceSelectionResolved ? "resolved" : "pending"}`;
+	return observer(function SpaceSnapshot() {
+		const space = useApp().space;
+		if (!space) {
+			throw new Error("space가 초기화되지 않았습니다.");
+		}
+		const value = `${space.tenantId ?? "none"}:${space.spaceId ?? "none"}:${space.isSpaceSelectionResolved ? "resolved" : "pending"}`;
 
 		return <output aria-label="storybook-admin-space">{value}</output>;
 	});
@@ -65,8 +68,8 @@ function createStorageMock() {
 beforeEach(() => {
 	vi.stubGlobal("localStorage", createStorageMock());
 	vi.stubGlobal("sessionStorage", createStorageMock());
-	setApiPersistStoreMock.mockReset();
-	setIdpPersistStoreMock.mockReset();
+	setApiSpaceMock.mockReset();
+	setIdpSpaceMock.mockReset();
 	setLoginRedirectUrlMock.mockReset();
 	setIdpLoginRedirectUrlMock.mockReset();
 	localStorage.clear();
@@ -100,9 +103,9 @@ describe("StorybookRuntimeProvider", () => {
 		);
 
 		await waitFor(() => {
-			expect(setApiPersistStoreMock).toHaveBeenCalled();
+			expect(setApiSpaceMock).toHaveBeenCalled();
 		});
-		expect(setIdpPersistStoreMock).toHaveBeenCalled();
+		expect(setIdpSpaceMock).toHaveBeenCalled();
 		expect(setLoginRedirectUrlMock).toHaveBeenCalledWith(
 			"#storybook-auth-disabled",
 		);
@@ -116,7 +119,7 @@ describe("StorybookRuntimeProvider", () => {
 		window.history.replaceState({}, "", "/iframe.html?id=admin-card--default");
 
 		const { StorybookRuntimeProvider } = await loadProvider();
-		const PersistSnapshot = await createPersistSnapshot();
+		const SpaceSnapshot = await createSpaceSnapshot();
 
 		render(
 			<StorybookRuntimeProvider
@@ -127,7 +130,7 @@ describe("StorybookRuntimeProvider", () => {
 				storyId="admin-card--default"
 			>
 				<div>Admin story content</div>
-				<PersistSnapshot />
+				<SpaceSnapshot />
 			</StorybookRuntimeProvider>,
 		);
 
@@ -147,14 +150,14 @@ describe("StorybookRuntimeProvider", () => {
 		);
 
 		const { withStorybookRuntime } = await loadProvider();
-		const PersistSnapshot = await createPersistSnapshot();
+		const SpaceSnapshot = await createSpaceSnapshot();
 
 		render(
 			withStorybookRuntime(
 				() => (
 					<>
 						<div>Toolbar realm story</div>
-						<PersistSnapshot />
+						<SpaceSnapshot />
 					</>
 				),
 				{

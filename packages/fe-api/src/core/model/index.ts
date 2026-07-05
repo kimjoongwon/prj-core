@@ -7,6 +7,11 @@
 **인증 방법:**
 1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
+
+**Tenant Scope:**
+- 보호 API는 `x-tenant-id` header로 현재 Tenant를 선택합니다.
+- 서버는 Tenant에서 Space를 파생하고, 기본적으로 현재 Space와 모든 하위 Space category 리소스를 조회합니다.
+- `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
 
@@ -30,13 +35,6 @@ export * from "./bookingFeedItemDtoMyReservationStatus";
 export * from "./categoryDto";
 export * from "./categoryTypes";
 export * from "./communityPostDto";
-export * from "./courseDto";
-export * from "./courseOfferingDto";
-export * from "./courseOfferingStatus";
-export * from "./coursePassDto";
-export * from "./coursePassKind";
-export * from "./coursePassStatus";
-export * from "./courseStatus";
 export * from "./createAbility201AllOf";
 export * from "./createAbilityDto";
 export * from "./createAbilityDtoConditions";
@@ -55,8 +53,6 @@ export * from "./createPolicyDto";
 export * from "./createProgram201AllOf";
 export * from "./createProgramDto";
 export * from "./createReservation201AllOf";
-export * from "./createReservationCheckout201AllOf";
-export * from "./createReservationCheckoutDto";
 export * from "./createReservationDto";
 export * from "./createRole201AllOf";
 export * from "./createRoleDto";
@@ -86,8 +82,6 @@ export * from "./deletePolicy200AllOf";
 export * from "./deleteRole200AllOf";
 export * from "./derivativeDto";
 export * from "./derivativeKind";
-export * from "./enrollmentDto";
-export * from "./enrollmentStatus";
 export * from "./exerciseDto";
 export * from "./folderDto";
 export * from "./getAbilities200AllOf";
@@ -106,19 +100,7 @@ export * from "./getAssetsParams";
 export * from "./getCommunityPosts200AllOf";
 export * from "./getCommunityPosts200AllOfMeta";
 export * from "./getCommunityPostsParams";
-export * from "./getCourseOfferings200AllOf";
-export * from "./getCourseOfferings200AllOfMeta";
-export * from "./getCourseOfferingsParams";
-export * from "./getCoursePasses200AllOf";
-export * from "./getCoursePasses200AllOfMeta";
-export * from "./getCoursePassesParams";
-export * from "./getCourses200AllOf";
-export * from "./getCourses200AllOfMeta";
-export * from "./getCoursesParams";
 export * from "./getCreateInquiryForm200AllOf";
-export * from "./getEnrollments200AllOf";
-export * from "./getEnrollments200AllOfMeta";
-export * from "./getEnrollmentsParams";
 export * from "./getFolders200AllOf";
 export * from "./getFolders200AllOfMeta";
 export * from "./getFoldersParams";
@@ -135,9 +117,6 @@ export * from "./getMyAbilities200AllOfMeta";
 export * from "./getMyReservations200AllOf";
 export * from "./getMyReservations200AllOfMeta";
 export * from "./getMyReservationsParams";
-export * from "./getPayments200AllOf";
-export * from "./getPayments200AllOfMeta";
-export * from "./getPaymentsParams";
 export * from "./getPolicies200AllOf";
 export * from "./getPolicies200AllOfMeta";
 export * from "./getPolicyById200AllOf";
@@ -148,8 +127,6 @@ export * from "./getProgramsParams";
 export * from "./getReservationBookingFeed200AllOf";
 export * from "./getReservationBookingFeed200AllOfMeta";
 export * from "./getReservationBookingFeedParams";
-export * from "./getReservationCheckoutBootstrap200AllOf";
-export * from "./getReservationCheckoutBootstrapParams";
 export * from "./getRoleById200AllOf";
 export * from "./getRolePolicies200AllOf";
 export * from "./getRolePolicies200AllOfMeta";
@@ -237,14 +214,6 @@ export * from "./languageCode";
 export * from "./messageContentType";
 export * from "./moveAsset200AllOf";
 export * from "./moveAssetDto";
-export * from "./paymentDto";
-export * from "./paymentDtoMethod";
-export * from "./paymentMethod";
-export * from "./paymentReferenceDto";
-export * from "./paymentReferenceType";
-export * from "./paymentStatus";
-export * from "./paymentSubjectDto";
-export * from "./paymentSubjectType";
 export * from "./policyAbilityResponseDto";
 export * from "./policyAssignmentResponseDto";
 export * from "./policyResponseDto";
@@ -258,12 +227,6 @@ export * from "./recurringDayOfWeek";
 export * from "./rejectTenantAccessRequest200AllOf";
 export * from "./repeatCycleTypes";
 export * from "./reservationAvailabilityStatus";
-export * from "./reservationCheckoutBootstrapDto";
-export * from "./reservationCheckoutContextDto";
-export * from "./reservationCheckoutOptionDto";
-export * from "./reservationCheckoutProgressStatus";
-export * from "./reservationCheckoutProgressStepDto";
-export * from "./reservationCheckoutResultDto";
 export * from "./reservationDto";
 export * from "./reservationStatus";
 export * from "./reviewTenantAccessRequestDto";
@@ -312,7 +275,6 @@ export * from "./tenantAccessRequestStatus";
 export * from "./tenantDto";
 export * from "./threadStatus";
 export * from "./timelineDto";
-export * from "./timelineProvisioningMode";
 export * from "./toggleTemplateStatus200AllOf";
 export * from "./translationCatalogResponseDto";
 export * from "./translationCatalogResponseDtoLanguageCode";
@@ -372,6 +334,7 @@ export * from './auditLogStatsDto';
 export * from './authAuditLogDto';
 export * from './authAuditResult';
 export * from './companyDto';
+export * from './companyDtoGround';
 export * from './companyDtoSpace';
 export * from './consentResultDto';
 export * from './createOidcClientDto';

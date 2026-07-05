@@ -40,7 +40,7 @@ const defaultArgs = {
 	isOpen: false,
 	isRemoving: false,
 	isRemovingFolder: false,
-	isStoreReady: false,
+	isSpaceReady: false,
 	isUpdatingFolder: false,
 	isUploadingAsset: false,
 	onClose: (..._args: never[]) => undefined,

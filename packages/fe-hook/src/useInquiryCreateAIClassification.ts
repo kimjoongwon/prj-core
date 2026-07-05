@@ -32,7 +32,6 @@ interface UseInquiryCreateAIClassificationReturn {
 type InquiryCategory =
 	| "GENERAL"
 	| "DELIVERY"
-	| "PAYMENT"
 	| "REFUND"
 	| "PRODUCT"
 	| "ACCOUNT"
@@ -61,11 +60,6 @@ const generateMockAIClassification = (
 		category = "DELIVERY";
 		categoryName = "배송";
 		suggestedTags.push("배송");
-	}
-	if (lowerContent.includes("결제") || lowerContent.includes("결재")) {
-		category = "PAYMENT";
-		categoryName = "결제";
-		suggestedTags.push("결제");
 	}
 	if (lowerContent.includes("환불") || lowerContent.includes("취소")) {
 		category = "REFUND";

@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import HomeTabRoute from "@/app/(tabs)/index";
 import ReservationsTabRoute from "@/app/(tabs)/reservations";
-import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
+import { mobileApiScope } from "@/auth/mobile-api-scope";
 
 const mockUseGetReservationBookingFeed = jest.fn();
 const mockUseCreateReservation = jest.fn();
@@ -9,7 +9,6 @@ const mockUseGetMyReservations = jest.fn();
 const mockGetGetReservationBookingFeedQueryKey = jest.fn();
 const mockGetGetMyReservationsQueryKey = jest.fn();
 const mockInvalidateQueries = jest.fn();
-const mockPush = jest.fn();
 
 interface ReservationListItem {
   id: string;
@@ -81,12 +80,6 @@ interface MutationLifecycleOptions {
 jest.mock("@tanstack/react-query", () => ({
   useQueryClient: () => ({
     invalidateQueries: mockInvalidateQueries,
-  }),
-}));
-
-jest.mock("expo-router", () => ({
-  useRouter: () => ({
-    push: mockPush,
   }),
 }));
 
@@ -349,7 +342,6 @@ const createFeedItem = (overrides: Record<string, unknown> = {}) => ({
   capacity: 18,
   coachName: "Coach Kim",
   confirmedCount: 12,
-  coursePassId: "course-pass-1",
   ctaLabel: "예약",
   date: todayKey,
   endsAt: `${todayKey}T11:00:00.000Z`,
@@ -401,8 +393,8 @@ let createReservationOptions: MutationLifecycleOptions | undefined;
 
 describe("mobile reservation booking routes", () => {
   beforeEach(() => {
-    mobileApiScopeStore.clear();
-    mobileApiScopeStore.setSpaceInfo({
+    mobileApiScope.clear();
+    mobileApiScope.setSpaceInfo({
       tenantId: "tenant-1",
       spaceId: "space-1",
       groundName: "강남점",
@@ -535,7 +527,6 @@ describe("mobile reservation booking routes", () => {
 
     expect(createMutationState.mutate).toHaveBeenCalledWith({
       data: expect.objectContaining({
-        coursePassId: "course-pass-1",
         idempotencyKey: expect.stringMatching(/^mobile-booking-/),
         memo: "front desk note",
         occurrenceStartAt: `${todayKey}T10:00:00.000Z`,
@@ -551,37 +542,6 @@ describe("mobile reservation booking routes", () => {
       queryKey: ["/api/v1/reservations/me"],
     });
     expect(screen.getByText("예약 요청 완료")).toBeTruthy();
-  });
-
-  it("활성 수강권이 없는 예약 CTA는 결제 checkout route로 이동한다", () => {
-    bookingFeedQuery = createQuery([
-      createFeedItem({
-        coursePassId: null,
-        ctaLabel: "결제 후 예약",
-        feedItemId: "program-checkout:today",
-        paymentRequired: true,
-        programName: "Checkout Required",
-      }),
-    ]);
-
-    render(<HomeTabRoute />);
-
-    expect(screen.getByText("Checkout Required")).toBeTruthy();
-    expect(screen.getAllByText("결제 후 예약").length).toBeGreaterThan(0);
-
-    fireEvent.press(screen.getByLabelText("cta-program-checkout:today"));
-
-    expect(mockPush).toHaveBeenCalledWith({
-      pathname: "/payments/checkout",
-      params: expect.objectContaining({
-        occurrenceStartAt: `${todayKey}T10:00:00.000Z`,
-        programId: "program-1",
-        programName: "Checkout Required",
-        sessionId: "session-1",
-        timelineId: "timeline-1",
-      }),
-    });
-    expect(createMutationState.mutate).not.toHaveBeenCalled();
   });
 
   it("내 예약 탭은 getMyReservations API 결과를 렌더링하고 더미 예약을 노출하지 않는다", () => {

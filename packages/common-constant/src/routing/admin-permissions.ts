@@ -84,15 +84,6 @@ export const ADMIN_CRUD_BUNDLES: AdminCrudBundle[] = [
 		actions: CRUD_ACTIONS,
 	},
 	{
-		bundleId: "course",
-		groupLabel: "수강 관리",
-		bundleLabel: "Course aggregate 데이터",
-		subject: "entity:Course",
-		description:
-			"Course와 하위 CourseOffering, Enrollment, CoursePass 운영 데이터를 하나의 aggregate 권한으로 관리합니다.",
-		actions: CRUD_ACTIONS,
-	},
-	{
 		bundleId: "content",
 		groupLabel: "콘텐츠",
 		bundleLabel: "콘텐츠 데이터",

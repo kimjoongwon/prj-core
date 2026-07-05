@@ -28,7 +28,7 @@ describe("LoginScreen", () => {
 			<LoginScreen
 				state={state}
 				title="관리자 로그인"
-				caption="예약, 결제, 권한 상태를 이어서 확인하세요."
+				caption="예약, 회원, 권한 상태를 이어서 확인하세요."
 				onSubmitLoginForm={vi.fn()}
 			/>,
 		);
@@ -37,7 +37,7 @@ describe("LoginScreen", () => {
 			screen.getByRole("heading", { name: "관리자 로그인" }),
 		).toBeInTheDocument();
 		expect(
-			screen.getByText("예약, 결제, 권한 상태를 이어서 확인하세요."),
+			screen.getByText("예약, 회원, 권한 상태를 이어서 확인하세요."),
 		).toBeInTheDocument();
 		expect(screen.getByLabelText("이메일")).toBeInTheDocument();
 		expect(screen.getByLabelText("비밀번호")).toBeInTheDocument();
@@ -57,7 +57,7 @@ describe("LoginScreen", () => {
 			<LoginScreen
 				state={state}
 				title="관리자 로그인"
-				caption="예약, 결제, 권한 상태를 이어서 확인하세요."
+				caption="예약, 회원, 권한 상태를 이어서 확인하세요."
 				onSubmitLoginForm={onSubmitLoginForm}
 			/>,
 		);
@@ -75,7 +75,7 @@ describe("LoginScreen", () => {
 			<LoginScreen
 				state={state}
 				title="관리자 로그인"
-				caption="예약, 결제, 권한 상태를 이어서 확인하세요."
+				caption="예약, 회원, 권한 상태를 이어서 확인하세요."
 				isLoading
 				onSubmitLoginForm={onSubmitLoginForm}
 			/>,
@@ -96,7 +96,7 @@ describe("LoginScreen", () => {
 			<LoginScreen
 				state={state}
 				title="관리자 로그인"
-				caption="예약, 결제, 권한 상태를 이어서 확인하세요."
+				caption="예약, 회원, 권한 상태를 이어서 확인하세요."
 				onSubmitLoginForm={vi.fn()}
 			/>,
 		);

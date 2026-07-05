@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react-native";
 import CommunityTabRoute from "@/app/(tabs)/community";
-import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
+import { mobileApiScope } from "@/auth/mobile-api-scope";
 
 const mockInvalidateQueries = jest.fn();
 const mockUseGetCommunityPosts = jest.fn();
@@ -151,8 +151,8 @@ jest.mock("@cocrepo/mo-ui", () => {
 describe("mobile community tab route", () => {
 	beforeEach(() => {
 		mockInvalidateQueries.mockReset();
-		mobileApiScopeStore.clear();
-		mobileApiScopeStore.setSpaceInfo({
+		mobileApiScope.clear();
+		mobileApiScope.setSpaceInfo({
 			tenantId: "tenant-1",
       spaceId: "space-1",
 			groundName: "강남점",
@@ -190,7 +190,7 @@ describe("mobile community tab route", () => {
 	afterEach(() => {
 		jest.clearAllMocks();
 		act(() => {
-			mobileApiScopeStore.clear();
+			mobileApiScope.clear();
 		});
 	});
 

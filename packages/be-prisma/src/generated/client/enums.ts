@@ -64,53 +64,6 @@ export const WhitelistType = {
 export type WhitelistType = (typeof WhitelistType)[keyof typeof WhitelistType]
 
 
-export const PaymentStatus = {
-  PENDING: 'PENDING',
-  PAID: 'PAID',
-  FAILED: 'FAILED',
-  CANCELED: 'CANCELED',
-  REFUNDED: 'REFUNDED'
-} as const
-
-export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
-
-
-export const PaymentMethod = {
-  CARD: 'CARD',
-  VIRTUAL_ACCOUNT: 'VIRTUAL_ACCOUNT',
-  BANK_TRANSFER: 'BANK_TRANSFER',
-  CASH: 'CASH',
-  FREE: 'FREE',
-  EXTERNAL: 'EXTERNAL'
-} as const
-
-export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
-
-
-export const PaymentSubjectType = {
-  COURSE: 'COURSE',
-  COURSE_OFFERING: 'COURSE_OFFERING',
-  ENROLLMENT: 'ENROLLMENT',
-  COURSE_PASS: 'COURSE_PASS',
-  PRODUCT: 'PRODUCT',
-  CUSTOM: 'CUSTOM'
-} as const
-
-export type PaymentSubjectType = (typeof PaymentSubjectType)[keyof typeof PaymentSubjectType]
-
-
-export const PaymentReferenceType = {
-  ENROLLMENT: 'ENROLLMENT',
-  COURSE_PASS: 'COURSE_PASS',
-  PRODUCT_ENTITLEMENT: 'PRODUCT_ENTITLEMENT',
-  SERVICE_USAGE: 'SERVICE_USAGE',
-  REFUND: 'REFUND',
-  CUSTOM: 'CUSTOM'
-} as const
-
-export type PaymentReferenceType = (typeof PaymentReferenceType)[keyof typeof PaymentReferenceType]
-
-
 export const TextTypes = {
   Editor: 'Editor',
   Input: 'Input',
@@ -255,7 +208,6 @@ export type AttachmentFileType = (typeof AttachmentFileType)[keyof typeof Attach
 export const InquiryCategory = {
   GENERAL: 'GENERAL',
   DELIVERY: 'DELIVERY',
-  PAYMENT: 'PAYMENT',
   REFUND: 'REFUND',
   PRODUCT: 'PRODUCT',
   ACCOUNT: 'ACCOUNT',
@@ -317,64 +269,6 @@ export const SentimentType = {
 } as const
 
 export type SentimentType = (typeof SentimentType)[keyof typeof SentimentType]
-
-
-export const CourseStatus = {
-  DRAFT: 'DRAFT',
-  ACTIVE: 'ACTIVE',
-  ARCHIVED: 'ARCHIVED'
-} as const
-
-export type CourseStatus = (typeof CourseStatus)[keyof typeof CourseStatus]
-
-
-export const CourseOfferingStatus = {
-  DRAFT: 'DRAFT',
-  ENROLLING: 'ENROLLING',
-  ACTIVE: 'ACTIVE',
-  CLOSED: 'CLOSED',
-  CANCELED: 'CANCELED'
-} as const
-
-export type CourseOfferingStatus = (typeof CourseOfferingStatus)[keyof typeof CourseOfferingStatus]
-
-
-export const EnrollmentStatus = {
-  PENDING: 'PENDING',
-  ACTIVE: 'ACTIVE',
-  CANCELED: 'CANCELED',
-  COMPLETED: 'COMPLETED',
-  EXPIRED: 'EXPIRED'
-} as const
-
-export type EnrollmentStatus = (typeof EnrollmentStatus)[keyof typeof EnrollmentStatus]
-
-
-export const CoursePassStatus = {
-  ACTIVE: 'ACTIVE',
-  SUSPENDED: 'SUSPENDED',
-  EXPIRED: 'EXPIRED',
-  CANCELED: 'CANCELED'
-} as const
-
-export type CoursePassStatus = (typeof CoursePassStatus)[keyof typeof CoursePassStatus]
-
-
-export const CoursePassKind = {
-  STANDARD: 'STANDARD',
-  MANUAL_GRANT: 'MANUAL_GRANT',
-  MAKEUP: 'MAKEUP'
-} as const
-
-export type CoursePassKind = (typeof CoursePassKind)[keyof typeof CoursePassKind]
-
-
-export const TimelineProvisioningMode = {
-  SHARED: 'SHARED',
-  DEDICATED_ON_ENROLLMENT: 'DEDICATED_ON_ENROLLMENT'
-} as const
-
-export type TimelineProvisioningMode = (typeof TimelineProvisioningMode)[keyof typeof TimelineProvisioningMode]
 
 
 export const ReservationStatus = {

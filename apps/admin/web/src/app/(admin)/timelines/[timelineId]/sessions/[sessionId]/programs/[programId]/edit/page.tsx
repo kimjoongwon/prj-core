@@ -23,7 +23,7 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { usePersistStore } from "@/stores/AppStoreProvider";
+import { useApp } from "@/stores/AppProvider";
 
 type ProgramEditPageParams = {
 	timelineId: string;
@@ -50,7 +50,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 		const { timelineId, sessionId, programId } =
 			useParams<ProgramEditPageParams>();
 		const router = useRouter();
-		const persistStore = usePersistStore();
+		const app = useApp();
 		const queryClient = useQueryClient();
 		const state = useLocalObservable<
 			TimelineSessionProgramFormState & { isInitialized: boolean }
@@ -249,27 +249,27 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 			<TimelineSessionProgramEditScreen
 				title="프로그램 수정"
 				description={[program?.name, program?.session?.name]
-						.filter(Boolean)
-						.join(" · ")}
+					.filter(Boolean)
+					.join(" · ")}
 				state={state}
-				contentLanguageCode={persistStore.contentLanguageCode}
+				contentLanguageCode={app.space?.contentLanguageCode}
 				routineOptions={routineOptions.map((routine) => ({
-						id: routine.id,
-						name: routine.name,
-						subtitle: `라벨: ${routine.label ?? "-"} · 활동 ${
-							routine.activities?.length ?? 0
-						}개 · ${
-							routine.activities?.some(
-								(activity) => !activity.task?.exercise?.videoFileId,
-							)
-								? "영상 누락"
+					id: routine.id,
+					name: routine.name,
+					subtitle: `라벨: ${routine.label ?? "-"} · 활동 ${
+						routine.activities?.length ?? 0
+					}개 · ${
+						routine.activities?.some(
+							(activity) => !activity.task?.exercise?.videoFileId,
+						)
+							? "영상 누락"
 							: "스케줄 가능"
-						}`,
+					}`,
 				}))}
 				instructorOptions={instructorOptions.map((instructor) => ({
-						id: instructor.id,
-						name: instructor.name,
-						subtitle: `이메일: ${instructor.email ?? "-"}`,
+					id: instructor.id,
+					name: instructor.name,
+					subtitle: `이메일: ${instructor.email ?? "-"}`,
 				}))}
 				routinePreview={routinePreview}
 				hasUnschedulableRoutine={hasUnschedulableRoutine}
@@ -293,13 +293,13 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 							startContent={<Save className="h-4 w-4" />}
 							isLoading={isPending}
 							isDisabled={
-						!hasChanged ||
-						!state.name.trim() ||
-						!state.routineId.trim() ||
-						!state.instructorId.trim() ||
-						!state.capacity ||
-						hasUnschedulableRoutine
-					}
+								!hasChanged ||
+								!state.name.trim() ||
+								!state.routineId.trim() ||
+								!state.instructorId.trim() ||
+								!state.capacity ||
+								hasUnschedulableRoutine
+							}
 							onPress={onClickSubmitButton}
 						>
 							저장

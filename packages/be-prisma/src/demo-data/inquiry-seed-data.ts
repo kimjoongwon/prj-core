@@ -113,7 +113,7 @@ export const inquiryTagMasterData: InquiryTagMasterSeedData[] = [
 	{ name: "환불요청", color: "#9932CC" },
 	{ name: "기술문의", color: "#4169E1" },
 	{ name: "계정문제", color: "#32CD32" },
-	{ name: "결제오류", color: "#DC143C" },
+	{ name: "예약오류", color: "#DC143C" },
 	{ name: "상품불량", color: "#8B0000" },
 	{ name: "재문의", color: "#00CED1" },
 	{ name: "AI해결", color: "#9370DB" },
@@ -143,8 +143,8 @@ export const inquirySeedData: InquirySeedData[] = [
 	// 2. OPEN 상태 - 배정됨
 	{
 		inquiryNumber: "INQ-2026-0002",
-		title: "결제가 두 번 됐어요",
-		category: "PAYMENT",
+		title: "예약이 두 번 생성됐어요",
+		category: "TECHNICAL",
 		channel: "CHAT",
 		source: "ONLINE",
 		status: "OPEN",
@@ -155,7 +155,7 @@ export const inquirySeedData: InquirySeedData[] = [
 		sentiment: "NEGATIVE",
 		sentimentScore: -0.6,
 		isRealtimeChat: true,
-		tags: ["결제오류", "긴급"],
+		tags: ["예약오류", "긴급"],
 	},
 
 	// 3. IN_PROGRESS 상태 - 처리 중
@@ -312,7 +312,7 @@ export const inquiryThreadSeedData: InquiryThreadSeedData[] = [
 	// INQ-2026-0002 스레드
 	{
 		inquiryNumber: "INQ-2026-0002",
-		title: "중복 결제 환불 요청",
+		title: "중복 예약 취소 요청",
 		status: "ACTIVE",
 		creatorEmail: "seoyeon_lee@naver.com",
 	},
@@ -421,14 +421,14 @@ export const inquiryMessageSeedData: InquiryMessageSeedData[] = [
 		contentType: "SYSTEM",
 	},
 
-	// INQ-2026-0002: 결제 오류 (5개 메시지)
+	// INQ-2026-0002: 예약 오류 (5개 메시지)
 	{
 		inquiryNumber: "INQ-2026-0002",
 		threadIndex: 0,
 		senderEmail: "seoyeon_lee@naver.com",
 		senderType: "USER",
 		content:
-			"결제가 두 번 됐어요! 당장 환불해주세요. 이런 일이 어떻게 생길 수 있죠?",
+			"예약이 두 번 생성됐어요! 하나는 바로 취소해주세요. 이런 일이 어떻게 생길 수 있죠?",
 		contentType: "TEXT",
 	},
 	{
@@ -444,7 +444,7 @@ export const inquiryMessageSeedData: InquiryMessageSeedData[] = [
 		senderEmail: "manager.gangnam@f45.kr",
 		senderType: "USER",
 		content:
-			"서연님, 불편을 드려 죄송합니다. 결제 내역을 확인 중입니다. 카드사명과 결제 시간을 알려주시겠어요?",
+			"서연님, 불편을 드려 죄송합니다. 예약 내역을 확인 중입니다. 예약 시간을 알려주시겠어요?",
 		contentType: "TEXT",
 	},
 	{
@@ -453,7 +453,7 @@ export const inquiryMessageSeedData: InquiryMessageSeedData[] = [
 		senderEmail: "seoyeon_lee@naver.com",
 		senderType: "USER",
 		content:
-			"신한카드로 오늘 오후 2시 30분경 결제했습니다. 두 번 다 15만 원씩 빠졌어요.",
+			"오늘 오후 2시 30분경 예약했습니다. 같은 시간이 두 번 잡혔어요.",
 		contentType: "TEXT",
 	},
 	{
@@ -462,7 +462,7 @@ export const inquiryMessageSeedData: InquiryMessageSeedData[] = [
 		senderEmail: "manager.gangnam@f45.kr",
 		senderType: "USER",
 		content:
-			"확인했습니다. 시스템 오류로 중복 결제가 발생했습니다. 1건은 오늘 중으로 환불 처리해드리겠습니다. 정말 죄송합니다.",
+			"확인했습니다. 시스템 오류로 중복 예약이 발생했습니다. 1건은 오늘 중으로 취소 처리해드리겠습니다. 정말 죄송합니다.",
 		contentType: "TEXT",
 	},
 
@@ -500,7 +500,7 @@ export const inquiryMessageSeedData: InquiryMessageSeedData[] = [
 		senderEmail: "manager.itaewon@crossfit.kr",
 		senderType: "USER",
 		content:
-			"총 결제금액 30만 원 중, 1개월 사용료 10만 원 + 수수료 2만 원을 제외한 18만 원을 3영업일 내에 입금해드리겠습니다.",
+			"전체 이용 기간 중, 1개월 사용분과 수수료를 제외한 금액을 3영업일 내에 안내해드리겠습니다.",
 		contentType: "TEXT",
 	},
 
@@ -742,7 +742,7 @@ export const inquiryParticipantSeedData: InquiryParticipantSeedData[] = [
 		isOnline: true,
 	},
 
-	// INQ-2026-0002: 결제 오류
+	// INQ-2026-0002: 예약 오류
 	{
 		inquiryNumber: "INQ-2026-0002",
 		threadIndex: 0,
@@ -891,7 +891,7 @@ export const inquiryParticipantSeedData: InquiryParticipantSeedData[] = [
 // ============================================================================
 
 export const sentimentAnalysisSeedData: SentimentAnalysisSeedData[] = [
-	// INQ-2026-0002: 결제 오류 (부정)
+	// INQ-2026-0002: 예약 오류 (부정)
 	{
 		inquiryNumber: "INQ-2026-0002",
 		sentiment: "NEGATIVE",

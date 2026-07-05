@@ -76,7 +76,6 @@ export async function createInquiryDomainData(
 					category: inquiryData.category as
 						| "GENERAL"
 						| "DELIVERY"
-						| "PAYMENT"
 						| "REFUND"
 						| "PRODUCT"
 						| "ACCOUNT"

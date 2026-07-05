@@ -1,8 +1,6 @@
 import {
-	CurrencyCode,
 	EmailDomain,
 	EmailVerificationToken,
-	Money,
 	NativeRefreshToken,
 	OidcClientId,
 	PasswordResetToken,
@@ -27,15 +25,6 @@ describe("domain value objects", () => {
 
 		expect(emailToken.toHash()).toHaveLength(64);
 		expect(resetToken.toHash()).toHaveLength(64);
-	});
-
-	it("normalizes money and currency values", () => {
-		const currency = CurrencyCode.create("krw");
-		const total = Money.of(1000, currency).multiply(2);
-
-		expect(currency.value).toBe("KRW");
-		expect(total.amount).toBe(2000);
-		expect(total.currencyValue).toBe("KRW");
 	});
 
 	it("normalizes whitelist values by type", () => {

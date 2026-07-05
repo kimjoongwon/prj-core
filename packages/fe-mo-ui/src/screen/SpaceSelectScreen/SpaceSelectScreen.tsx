@@ -103,7 +103,7 @@ export const SpaceSelectScreen = observer(function SpaceSelectScreen({
 						이용할 지점을 선택해 주세요
 					</Text>
 					<Text className={classNames.description()}>
-						선택한 지점으로 예약 목록과 내 수강권이 연결됩니다.
+						선택한 지점으로 예약 목록과 알림 설정이 연결됩니다.
 					</Text>
 				</View>
 				{selectionErrorDescription ? (

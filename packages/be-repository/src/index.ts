@@ -17,7 +17,6 @@ export {
 	type CommunityPostRecord,
 	ContentsRepository,
 } from "./contents.repository";
-export { CoursesRepository } from "./courses.repository";
 export {
 	buildEmailVerificationQueryOrderBy,
 	buildEmailVerificationQueryWhere,
@@ -50,11 +49,6 @@ export { OidcModelsRepository } from "./oidc-models.repository";
 export type { OidcRuntimeClientData } from "./oidc-runtime-client.data";
 export { OidcRuntimeClientsRepository } from "./oidc-runtime-clients.repository";
 export { PasswordHistoriesRepository } from "./password-histories.repository";
-export {
-	type CreatePaymentReferenceInput,
-	type CreatePaymentSubjectInput,
-	PaymentsRepository,
-} from "./payments.repository";
 export { PoliciesRepository } from "./policies.repository";
 export { PolicyAbilitiesRepository } from "./policy-abilities.repository";
 export {

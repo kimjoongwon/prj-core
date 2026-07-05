@@ -1,2 +1,2 @@
-export * from "./consoleAppStoreProvider";
-export * from "./createAppStoreProvider";
+export * from "./consoleAppProvider";
+export * from "./createAppProvider";

@@ -7,6 +7,11 @@
 **인증 방법:**
 1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
+
+**Tenant Scope:**
+- 보호 API는 `x-tenant-id` header로 현재 Tenant를 선택합니다.
+- 서버는 Tenant에서 Space를 파생하고, 기본적으로 현재 Space와 모든 하위 Space category 리소스를 조회합니다.
+- `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
 import {
@@ -37,15 +42,11 @@ import type {
 
 import type {
   CreateReservation201AllOf,
-  CreateReservationCheckout201AllOf,
-  CreateReservationCheckoutDto,
   CreateReservationDto,
   GetMyReservations200AllOf,
   GetMyReservationsParams,
   GetReservationBookingFeed200AllOf,
-  GetReservationBookingFeedParams,
-  GetReservationCheckoutBootstrap200AllOf,
-  GetReservationCheckoutBootstrapParams
+  GetReservationBookingFeedParams
 } from '.././model';
 
 import { customInstance } from '../../libs/customAxios';
@@ -295,309 +296,6 @@ export const prefetchGetReservationBookingFeedInfiniteQuery = async <TData = Awa
 
 
 /**
- * 예약하려는 회차 기준으로 결제 가능한 과정과 placeholder 결제 수단을 조회합니다.
- * @summary 예약 결제 Bootstrap 조회
- */
-export const getReservationCheckoutBootstrap = (
-    params: GetReservationCheckoutBootstrapParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<GetReservationCheckoutBootstrap200AllOf>(
-      {url: `/api/v1/reservations/checkout/bootstrap`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-  
-
-
-
-export const getGetReservationCheckoutBootstrapQueryKey = (params?: GetReservationCheckoutBootstrapParams,) => {
-    return [
-    `/api/v1/reservations/checkout/bootstrap`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-export const getGetReservationCheckoutBootstrapInfiniteQueryKey = (params?: GetReservationCheckoutBootstrapParams,) => {
-    return [
-    'infinite', `/api/v1/reservations/checkout/bootstrap`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getGetReservationCheckoutBootstrapQueryOptions = <TData = Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError = ErrorType<void>>(params: GetReservationCheckoutBootstrapParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetReservationCheckoutBootstrapQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>> = ({ signal }) => getReservationCheckoutBootstrap(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetReservationCheckoutBootstrapQueryResult = NonNullable<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>>
-export type GetReservationCheckoutBootstrapQueryError = ErrorType<void>
-
-
-export function useGetReservationCheckoutBootstrap<TData = Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError = ErrorType<void>>(
- params: GetReservationCheckoutBootstrapParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>,
-          TError,
-          Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetReservationCheckoutBootstrap<TData = Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError = ErrorType<void>>(
- params: GetReservationCheckoutBootstrapParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>,
-          TError,
-          Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetReservationCheckoutBootstrap<TData = Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError = ErrorType<void>>(
- params: GetReservationCheckoutBootstrapParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 예약 결제 Bootstrap 조회
- */
-
-export function useGetReservationCheckoutBootstrap<TData = Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError = ErrorType<void>>(
- params: GetReservationCheckoutBootstrapParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetReservationCheckoutBootstrapQueryOptions(params,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-/**
- * @summary 예약 결제 Bootstrap 조회
- */
-export const prefetchGetReservationCheckoutBootstrapQuery = async <TData = Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params: GetReservationCheckoutBootstrapParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetReservationCheckoutBootstrapQueryOptions(params,options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-export const getGetReservationCheckoutBootstrapSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError = ErrorType<void>>(params: GetReservationCheckoutBootstrapParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetReservationCheckoutBootstrapQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>> = ({ signal }) => getReservationCheckoutBootstrap(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetReservationCheckoutBootstrapSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>>
-export type GetReservationCheckoutBootstrapSuspenseQueryError = ErrorType<void>
-
-
-export function useGetReservationCheckoutBootstrapSuspense<TData = Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError = ErrorType<void>>(
- params: GetReservationCheckoutBootstrapParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetReservationCheckoutBootstrapSuspense<TData = Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError = ErrorType<void>>(
- params: GetReservationCheckoutBootstrapParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetReservationCheckoutBootstrapSuspense<TData = Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError = ErrorType<void>>(
- params: GetReservationCheckoutBootstrapParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 예약 결제 Bootstrap 조회
- */
-
-export function useGetReservationCheckoutBootstrapSuspense<TData = Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError = ErrorType<void>>(
- params: GetReservationCheckoutBootstrapParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetReservationCheckoutBootstrapSuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const getGetReservationCheckoutBootstrapSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>>, TError = ErrorType<void>>(params: GetReservationCheckoutBootstrapParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetReservationCheckoutBootstrapInfiniteQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>> = ({ signal }) => getReservationCheckoutBootstrap(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetReservationCheckoutBootstrapSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>>
-export type GetReservationCheckoutBootstrapSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetReservationCheckoutBootstrapSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>>, TError = ErrorType<void>>(
- params: GetReservationCheckoutBootstrapParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetReservationCheckoutBootstrapSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>>, TError = ErrorType<void>>(
- params: GetReservationCheckoutBootstrapParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetReservationCheckoutBootstrapSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>>, TError = ErrorType<void>>(
- params: GetReservationCheckoutBootstrapParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 예약 결제 Bootstrap 조회
- */
-
-export function useGetReservationCheckoutBootstrapSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>>, TError = ErrorType<void>>(
- params: GetReservationCheckoutBootstrapParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetReservationCheckoutBootstrapSuspenseInfiniteQueryOptions(params,options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-/**
- * @summary 예약 결제 Bootstrap 조회
- */
-export const prefetchGetReservationCheckoutBootstrapInfiniteQuery = async <TData = Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params: GetReservationCheckoutBootstrapParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getReservationCheckoutBootstrap>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetReservationCheckoutBootstrapSuspenseInfiniteQueryOptions(params,options)
-
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-/**
- * provider-neutral placeholder 결제로 Payment, Enrollment, CoursePass, Reservation을 생성합니다.
- * @summary 예약 결제 생성
- */
-export const createReservationCheckout = (
-    createReservationCheckoutDto: BodyType<CreateReservationCheckoutDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<CreateReservationCheckout201AllOf>(
-      {url: `/api/v1/reservations/checkout`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createReservationCheckoutDto, signal
-    },
-      options);
-    }
-  
-
-
-export const getCreateReservationCheckoutMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createReservationCheckout>>, TError,{data: BodyType<CreateReservationCheckoutDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createReservationCheckout>>, TError,{data: BodyType<CreateReservationCheckoutDto>}, TContext> => {
-
-const mutationKey = ['createReservationCheckout'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createReservationCheckout>>, {data: BodyType<CreateReservationCheckoutDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  createReservationCheckout(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateReservationCheckoutMutationResult = NonNullable<Awaited<ReturnType<typeof createReservationCheckout>>>
-    export type CreateReservationCheckoutMutationBody = BodyType<CreateReservationCheckoutDto>
-    export type CreateReservationCheckoutMutationError = ErrorType<void>
-
-    /**
- * @summary 예약 결제 생성
- */
-export const useCreateReservationCheckout = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createReservationCheckout>>, TError,{data: BodyType<CreateReservationCheckoutDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof createReservationCheckout>>,
-        TError,
-        {data: BodyType<CreateReservationCheckoutDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateReservationCheckoutMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
  * 현재 Space와 로그인 사용자를 기준으로 프로그램 회차 예약을 생성합니다.
  * @summary 예약 생성
  */
@@ -897,6 +595,5 @@ export const prefetchGetMyReservationsInfiniteQuery = async <TData = Awaited<Ret
 
   return queryClient;
 }
-
 
 

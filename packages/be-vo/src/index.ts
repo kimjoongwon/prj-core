@@ -4,5 +4,4 @@ export * from "./common";
 export * from "./contact";
 export * from "./errors";
 export * from "./oidc";
-export * from "./payment";
 export * from "./security";

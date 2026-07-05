@@ -133,7 +133,7 @@
 
 - page-local 상태와 API wiring의 상위 기준은 `orch-delivery`가 만든 서비스 딜리버리 스펙이며, 세부 실행 계약은 생성된 라우트 딜리버리 스펙입니다.
 - `fe-route-agent`는 얇은 route container에서 API hook, route/search param, mutation, invalidation, local 상태, handler wiring을 함께 담당합니다.
-- shared Store 생성이 필요한 경우에만 라우트 딜리버리 스펙의 `기반 계약`와 `에이전트 배정 매트릭스`에 `fe-store-agent` 단계를 별도로 기록합니다.
+- shared app 상태 생성이 필요한 경우에만 라우트 딜리버리 스펙의 `기반 계약`와 `에이전트 배정 매트릭스`에 `fe-store-agent` 단계를 별도로 기록합니다.
 - route page는 pure screen에 page 범위만 전달합니다.
   - 예: `<LoginScreen state={state.loginPage} />`
 - server data는 MobX state로 복제하지 않고 별도 props로 전달합니다.

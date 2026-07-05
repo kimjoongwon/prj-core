@@ -101,7 +101,7 @@ export interface UseInquiryWebSocketReturn {
 /**
  * 문의 WebSocket 연결 관리 훅
  *
- * WebSocket 연결, 이벤트 처리, Store 동기화를 담당합니다.
+ * WebSocket 연결, 이벤트 처리, 상태 동기화를 담당합니다.
  * 실제 Socket.IO 연결은 이 훅에서 관리합니다.
  *
  * @example

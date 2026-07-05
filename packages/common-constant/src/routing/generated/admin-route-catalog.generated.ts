@@ -12,14 +12,12 @@ export const GENERATED_ADMIN_ROUTE_META_SOURCES: string[] = [
 	"apps/admin/web/src/app/(admin)/actions/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/assets/[assetId]/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/assets/route.meta.ts",
-	"apps/admin/web/src/app/(admin)/courses/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/dashboard/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/email-verifications/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/inquiries/[inquiryId]/edit/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/inquiries/[inquiryId]/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/inquiries/new/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/inquiries/route.meta.ts",
-	"apps/admin/web/src/app/(admin)/payments/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/policies/[policyId]/edit/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/policies/[policyId]/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/policies/new/route.meta.ts",
@@ -273,34 +271,6 @@ export const GENERATED_ADMIN_NAV_ITEMS: NavItemConfig[] = [
 				"label": "약관 관리",
 				"path": "/terms",
 				"subject": "menu:terms:list"
-			}
-		]
-	},
-	{
-		"id": "courses",
-		"label": "수강 관리",
-		"icon": "Ticket",
-		"subject": "menu:courses",
-		"children": [
-			{
-				"id": "courses-list",
-				"label": "Course",
-				"path": "/courses",
-				"subject": "menu:courses:list"
-			}
-		]
-	},
-	{
-		"id": "payments",
-		"label": "결제 관리",
-		"icon": "CreditCard",
-		"subject": "menu:payments",
-		"children": [
-			{
-				"id": "payments-list",
-				"label": "Payment",
-				"path": "/payments",
-				"subject": "menu:payments:list"
 			}
 		]
 	},
@@ -890,26 +860,6 @@ export const GENERATED_ADMIN_PAGE_ACCESS_ITEMS: GeneratedAdminPageAccessItem[] =
 		"subject": "page:terms:list",
 		"description": "모바일과 web 서비스에 노출할 약관/동의 문서를 관리합니다.",
 		"menuLeafId": "terms-list"
-	},
-	{
-		"groupId": "courses",
-		"groupLabel": "수강 관리",
-		"pageId": "courses:list",
-		"pageLabel": "Course",
-		"pathPattern": "/courses",
-		"subject": "page:courses:list",
-		"description": "무엇을 배우는지와 기본 수강 상품 정책을 관리합니다.",
-		"menuLeafId": "courses-list"
-	},
-	{
-		"groupId": "payments",
-		"groupLabel": "결제 관리",
-		"pageId": "payments:list",
-		"pageLabel": "Payment",
-		"pathPattern": "/payments",
-		"subject": "page:payments:list",
-		"description": "Course와 Product 등 여러 서비스의 Space-scoped 결제 원장을 관리합니다.",
-		"menuLeafId": "payments-list"
 	},
 	{
 		"groupId": "settings-auth",

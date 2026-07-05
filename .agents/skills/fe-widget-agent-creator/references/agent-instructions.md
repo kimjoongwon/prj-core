@@ -54,8 +54,8 @@
 | 여러 UI 컴포넌트를 조합할 때 | ✅ | StatusBadge, AvatarGroup, PriceTag |
 | 비즈니스 로직 없이 순수 UI 조합 | ✅ | NavTreePanel, TabBar, MenuList |
 | 여러 Feature/Page에서 재사용할 UI | ✅ | UserCard, StatCard, FilterPanel |
-| Page/Feature가 table, metric grid, flow rail, 섹션 tabs, summary panel을 직접 품으려는 경우 | ✅ | CourseTable, CourseMetricGrid, CourseFlowRail |
-| Store/API 연결이 필요한 경우 | ❌ | fe-feature-agent 사용 |
+| Page/Feature가 table, metric grid, flow rail, 섹션 tabs, summary panel을 직접 품으려는 경우 | ✅ | AssetTable, AssetMetricGrid, AssetFlowRail |
+| app 상태/API 연결이 필요한 경우 | ❌ | fe-feature-agent 사용 |
 | 단일 기본 UI 요소 | ❌ | `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, 또는 관련 leaf 에이전트 사용 |
 | 폼 입력 컴포넌트 | ❌ | `fe-input-agent` 사용 |
 
@@ -112,7 +112,7 @@
 | **Context API 사용 (createContext, useContext)** | **packages/fe-ui에서 Context 사용 금지 - props drilling 사용** |
 | **컴포넌트 폴더 내 hooks/, utils/ 하위 폴더 생성** | **패키지 레벨에서 관리 (hooks → `packages/fe-hook/src`, utils → `src/utils`)** |
 | 기존 Widget과 유사한 컴포넌트 신규 생성 | 중복 자산 증가 및 재사용성 저하 |
-| Store 접근 | Feature 계층의 역할 |
+| app 상태 접근 | Feature 계층의 역할 |
 | API 호출 | Feature 계층의 역할 |
 | Text를 Button/Chip children으로 | 테마 깨짐 발생 |
 | observer와 memo 함께 사용 | observer가 내부적으로 memo 처리 |
@@ -299,14 +299,14 @@ Pure UI → Widget → Feature → Page
 
 | 에이전트 | 관계 |
 |----------|------|
-| **fe-feature-agent** | Widget에 Store/API 연결하여 Feature 생성 |
+| **fe-feature-agent** | Widget에 app 상태/API 연결하여 Feature 생성 |
 | fe-route-agent | Feature와 함께 Page에서 활용 |
 
 ### 관련 에이전트
 
 | 에이전트 | 관계 |
 |----------|------|
-| fe-store-agent | Feature에서 Widget에 주입할 Store 생성 |
+| fe-store-agent | Feature에서 Widget에 주입할 app 상태 생성 |
 
 ---
 
@@ -317,20 +317,20 @@ Pure UI → Widget → Feature → Page
 ```
 Widget (순수 UI)              Feature (비즈니스 로직)
 ─────────────────────────────────────────────────────
-NavTreePanel                  → SideNav (NavigationStore 연결)
-TabBar                        → BottomTab (NavigationStore 연결)
-MenuList                      → SubMenuList (NavigationStore 연결)
-UserCard                      → UserMenu (AuthStore 연결)
-SpaceDropdown                 → SpaceSelector (PersistStore 연결)
+NavTreePanel                  → SideNav (app.ui.body.leftAside.sideNavigation 연결)
+TabBar                        → BottomTab (app.ui.footer.mobileBottomNavigation 연결)
+MenuList                      → SubMenuList (app.ui.footer.mobileMenu 연결)
+UserCard                      → UserMenu (app.session 연결)
+SpaceDropdown                 → SpaceSelector (app.space 연결)
 ```
 
 **분리 기준:**
 - Widget: props로 `items`, `onSelect`, `expandedKeys` 등을 받아 렌더링만
-- Feature: Store에서 데이터를 가져와 Widget에 주입
+- Feature: app 상태에서 데이터를 가져와 Widget에 주입
 
 **분리의 장점:**
 - Feature 없이 Widget만 다른 곳에서 재사용 가능
-- Store 교체 시 Feature만 수정
+- app 상태 경로 교체 시 Feature만 수정
 
 ### Layout block widget 규칙
 
@@ -411,7 +411,7 @@ React Native / Expo Native 기준의 재사용 가능한 순수 UI 조합 Widget
 - Widget은 비즈니스 로직 없이 RN UI 조합만 담당합니다.
 - Widget은 `@cocrepo/mo-ui` leaf(input/data-display/피드백/layout/surface/design-system)를 조합합니다.
 - 기존 widget/leaf가 80% 이상 맞으면 새 widget을 만들지 말고 기존 조합을 확장하고 호출부를 함께 맞춥니다.
-- Store/API/router/native bridge는 직접 읽지 않고 props로 전달받은 값과 handler만 소비합니다.
+- app 상태/API/router/native bridge는 직접 읽지 않고 props로 전달받은 값과 handler만 소비합니다.
 - One Component Per File 규칙을 따라 Widget 파일은 exported Widget component 하나만 소유하고, private JSX subcomponent는 별도 Widget/leaf 파일로 분리합니다.
 - 외부 observable 범위를 렌더링하면 exported component를 `observer`로 감쌉니다.
 - 스타일은 uniwind `className` 계열 prop과 `tailwind-variants` slot/variant를 우선 사용하고 `StyleSheet`/`StyleSheet.create`는 만들지 않습니다.
@@ -431,7 +431,7 @@ React Native / Expo Native 기준의 재사용 가능한 순수 UI 조합 Widget
 - `apps/mobile/src` 아래에 공용 Widget을 만들지 않습니다.
 - private JSX subcomponent를 같은 Widget 파일에 선언하지 않습니다.
 - API hook, Expo Router hook, native module, storage hydrate를 Widget에 넣지 않습니다.
-- Store/API 연결 wrapper나 전체 screen 시각 소유 역할을 Widget으로 분류하지 않습니다.
+- app 상태/API 연결 wrapper나 전체 screen 시각 소유 역할을 Widget으로 분류하지 않습니다.
 
 ### 보고 포맷
 

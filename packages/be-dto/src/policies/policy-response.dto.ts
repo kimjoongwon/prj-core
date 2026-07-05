@@ -14,7 +14,7 @@ export class PolicyResponseDto {
 
 	@ApiProperty({
 		description: "정책 식별자",
-		example: "workspace-admin",
+		example: "space-admin",
 	})
 	@Expose()
 	name!: string;

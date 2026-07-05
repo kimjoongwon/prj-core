@@ -28,13 +28,6 @@ export const Default: Story = {
 				onPress: () => undefined,
 			},
 			{
-				description: "결제 내역과 수강권 관리는 곧 연결됩니다.",
-				disabled: true,
-				iconName: "ticketCheck",
-				id: "payments",
-				label: "결제/수강권",
-			},
-			{
 				description: "예약 알림과 앱 설정 관리는 다음 단계에서 제공합니다.",
 				disabled: true,
 				iconName: "info",

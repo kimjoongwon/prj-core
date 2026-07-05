@@ -10,12 +10,12 @@ const meta = {
 } satisfies Meta<typeof MobileMenu>;
 export default meta;
 type Story = StoryObj<typeof meta>;
-export const StoreBound: Story = {
+export const Connected: Story = {
 	render: () => (
 		<PageStoryScaffold
 			componentName="MobileMenu"
 			componentPath="feature/MobileMenu"
-			description="layout submenu store에 직접 연결되는 feature입니다. 독립 UI는 widget/OverlayMenu story에서 확인합니다."
+			description="app.ui.footer.mobileMenu에 직접 연결되는 feature입니다. 독립 UI는 widget/OverlayMenu story에서 확인합니다."
 		/>
 	),
 };

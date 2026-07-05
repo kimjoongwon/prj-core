@@ -1,10 +1,10 @@
 import {
   setApiNativeRefreshHandler,
-  setApiPersistStore,
+  setApiSpace,
 } from "@cocrepo/api/core/client";
 import {
   setIdpNativeRefreshHandler,
-  setIdpPersistStore,
+  setIdpSpace,
 } from "@cocrepo/api/idp/client";
 import type { SpaceDto } from "@cocrepo/api/idp/model";
 import { makeAutoObservable } from "mobx";
@@ -49,7 +49,7 @@ export const toMobileSpaceInfo = (space: SpaceDto): MobileSpaceInfo => ({
   tenantId: space.tenantId ?? "",
 });
 
-class MobileApiScopeStore {
+class MobileApiScope {
   tenantId: string | null = null;
   spaceId: string | null = null;
   groundName: string | null = null;
@@ -152,13 +152,13 @@ class MobileApiScopeStore {
   }
 }
 
-export const mobileApiScopeStore = new MobileApiScopeStore();
+export const mobileApiScope = new MobileApiScope();
 
 export const configureMobileApiScope = (
   nativeRefreshHandler?: (() => Promise<void>) | null,
 ) => {
-  setApiPersistStore(mobileApiScopeStore);
-  setIdpPersistStore(mobileApiScopeStore);
+  setApiSpace(mobileApiScope);
+  setIdpSpace(mobileApiScope);
   if (nativeRefreshHandler !== undefined) {
     setApiNativeRefreshHandler(nativeRefreshHandler);
     setIdpNativeRefreshHandler(nativeRefreshHandler);

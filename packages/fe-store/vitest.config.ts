@@ -8,7 +8,7 @@ export default defineConfig({
 	plugins,
 	resolve: {
 		alias: {
-			// @cocrepo/toolkit package.json points to dist/*, but workspace uses root build artifacts.
+			// @cocrepo/toolkit package.json points to dist/*, but space uses root build artifacts.
 			"@cocrepo/toolkit": path.resolve(__dirname, "../common-toolkit/index.js"),
 		},
 	},

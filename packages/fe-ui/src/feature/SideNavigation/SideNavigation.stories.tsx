@@ -10,12 +10,12 @@ const meta = {
 } satisfies Meta<typeof SideNavigation>;
 export default meta;
 type Story = StoryObj<typeof meta>;
-export const StoreBound: Story = {
+export const Connected: Story = {
 	render: () => (
 		<PageStoryScaffold
 			componentName="SideNavigation"
 			componentPath="feature/SideNavigation"
-			description="navigation store와 ability copy에 직접 연결되는 feature입니다. 독립 UI는 widget/SidePanel story에서 확인합니다."
+			description="Navigation과 ability copy에 직접 연결되는 feature입니다. 독립 UI는 widget/SidePanel story에서 확인합니다."
 		/>
 	),
 };

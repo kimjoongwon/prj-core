@@ -102,7 +102,7 @@ export const MultipleScreenSections: Story = {
 								<label className="flex flex-col gap-2 text-sm">
 									<span className="text-muted">분류</span>
 									<span className="rounded-lg border border-border/70 bg-white px-3 py-2 dark:border-white/10 dark:bg-neutral-600">
-										결제
+										예약
 									</span>
 								</label>
 							</div>
@@ -113,12 +113,12 @@ export const MultipleScreenSections: Story = {
 					<Section>
 						<Section.Header>
 							<PageTitleBar level={2} title="본문" />
-						</Section.Header>
-						<Section.Body>
-							<div className="min-h-28 rounded-lg border border-border/70 bg-white p-4 text-sm text-muted dark:border-white/10 dark:bg-neutral-600">
-								결제 취소 후 환불 상태를 확인하고 싶습니다.
-							</div>
-						</Section.Body>
+							</Section.Header>
+							<Section.Body>
+								<div className="min-h-28 rounded-lg border border-border/70 bg-white p-4 text-sm text-muted dark:border-white/10 dark:bg-neutral-600">
+								예약 취소 가능 시간을 확인하고 싶습니다.
+								</div>
+							</Section.Body>
 					</Section>
 				</SectionSurface>
 			</VStack>

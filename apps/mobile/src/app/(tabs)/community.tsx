@@ -13,7 +13,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { getCoreApiBaseUrl } from "@/auth/auth-config";
-import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
+import { mobileApiScope } from "@/auth/mobile-api-scope";
 
 const COMMUNITY_QUERY_PARAMS = {
 	skip: 0,
@@ -99,10 +99,10 @@ const CommunityTabRoute = observer(() => {
 	const [composerTitle, setComposerTitle] = useState("");
 	const [composerText, setComposerText] = useState("");
 	const [composerTextError, setComposerTextError] = useState("");
-	const isSpaceSelectionPending = !mobileApiScopeStore.isSpaceSelectionResolved;
-	const hasSelectedSpace = Boolean(mobileApiScopeStore.spaceId);
+	const isSpaceSelectionPending = !mobileApiScope.isSpaceSelectionResolved;
+	const hasSelectedSpace = Boolean(mobileApiScope.spaceId);
 	const isSpaceUnavailable =
-		mobileApiScopeStore.isSpaceSelectionResolved && !hasSelectedSpace;
+		mobileApiScope.isSpaceSelectionResolved && !hasSelectedSpace;
 	const communityQuery = useGetCommunityPosts(COMMUNITY_QUERY_PARAMS, {
 		query: { enabled: hasSelectedSpace },
 		request: requestOptions,

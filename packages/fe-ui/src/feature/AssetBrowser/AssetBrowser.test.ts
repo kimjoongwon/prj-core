@@ -9,7 +9,7 @@ describe("AssetBrowser upload action helpers", () => {
 	it("store와 space가 준비되면 폴더 미선택 상태에서도 업로드 버튼은 눌릴 수 있어야 한다", () => {
 		expect(
 			isUploadActionDisabled({
-				isStoreReady: true,
+				isSpaceReady: true,
 				hasSelectedSpace: true,
 				isUploadingAsset: false,
 			}),

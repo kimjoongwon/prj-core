@@ -51,16 +51,16 @@ describe("QuickActionList", () => {
 					{
 						description: "곧 연결됩니다.",
 						disabled: true,
-						iconName: "ticketCheck",
-						id: "payments",
-						label: "결제/수강권",
+						iconName: "info",
+						id: "settings",
+						label: "알림/설정",
 						onPress,
 					},
 				]}
 			/>,
 		);
 
-		fireEvent.press(screen.getByText("결제/수강권"));
+		fireEvent.press(screen.getByText("알림/설정"));
 
 		expect(onPress).not.toHaveBeenCalled();
 		expect(screen.getByText("곧 연결됩니다.")).toBeTruthy();

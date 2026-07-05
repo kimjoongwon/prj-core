@@ -47,9 +47,6 @@ model Timeline {
   tenant              Tenant           @relation(fields: [tenantId], references: [id])
   creator             User?            @relation(fields: [creatorId], references: [id])
   sessions            Session[]
-  courseOfferings     CourseOffering[]
-  assignedEnrollments Enrollment[]
-  coursePasses        CoursePass[]
   reservations        Reservation[]
 
   @@index([tenantId])

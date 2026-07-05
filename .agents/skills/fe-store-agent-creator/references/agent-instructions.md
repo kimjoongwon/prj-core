@@ -33,9 +33,9 @@
 - 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
 - 동일 책임의 중복 구현을 금지합니다.
 
-# Store Agent (MobX)
+# App State Agent (MobX)
 
-MobX 기반의 Store를 생성하는 전문가입니다.
+MobX 기반의 앱 상태 객체를 생성하는 전문가입니다.
 
 ---
 
@@ -43,8 +43,8 @@ MobX 기반의 Store를 생성하는 전문가입니다.
 
 | 상황 | 사용 여부 | 설명 |
 |------|:--------:|------|
-| 여러 페이지에서 공유되는 전역 상태 | ✅ | AuthStore, NavigationStore |
-| 앱 전체에서 접근해야 하는 설정 | ✅ | TokenStore, PersistStore |
+| 여러 페이지에서 공유되는 전역 상태 | ✅ | session, navigation |
+| 앱 전체에서 접근해야 하는 설정 | ✅ | tokens, space, locale |
 | 복잡한 상태 머신 | ✅ | 멀티스텝 프로세스 |
 | 도메인 모델 (데이터 구조) | ✅ | NavItem, User, Company |
 | 페이지 레벨 상태 | ❌ | 페이지 로컬 상태(`useState`/`useLocalObservable`) 사용 |
@@ -59,8 +59,8 @@ MobX 기반의 Store를 생성하는 전문가입니다.
 
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
-| Store명 | ✅ | `[Name]Store` 패턴 |
-| Store 유형 | ✅ | RootStore 주입형 / 독립형 / 설정 주입형 |
+| 상태명 | ✅ | 의미 기반 이름. `Store` 접미사 금지 |
+| 상태 유형 | ✅ | AppStore 주입형 / 독립형 / 설정 주입형 |
 | 상태 목록 | ✅ | observable 필드 정의 |
 | 액션 목록 | ⚪ | 상태 변경 메서드 |
 | computed 목록 | ⚪ | 파생 상태 getter |
@@ -69,10 +69,10 @@ MobX 기반의 Store를 생성하는 전문가입니다.
 
 | 항목 | 경로 |
 |------|------|
-| Store 클래스 | `packages/fe-store/src/stores/[name]Store.ts` |
+| 상태 클래스 | `packages/fe-store/src/stores/[meaning].ts` |
 | Domain Model | `packages/fe-store/src/stores/[name].ts` (필요시) |
-| useStore hook | `packages/fe-store/src/stores/useStore.ts` (추가) |
-| RootStore 등록 | `packages/fe-store/src/stores/rootStore.ts` (수정) |
+| App hook/facade | `packages/fe-store/src/stores/useApp.ts`의 `useApp` 단일 진입점과 `AppStore` 하위 경로 |
+| AppStore 등록 | `packages/fe-store/src/stores/appStore.ts` (수정) |
 | barrel export | `packages/fe-store/src/stores/index.ts` (추가) |
 | 페이지 전용 상태 | `apps/*/src/app/**/_client.tsx`, `apps/*/src/app/**/hooks/` (로컬 상태로 구현) |
 
@@ -86,8 +86,8 @@ MobX 기반의 Store를 생성하는 전문가입니다.
 |------|------|
 | **makeAutoObservable 사용** | 생성자 마지막에 호출 |
 | **범용적 이름 사용** | 앱 종속 이름 금지 |
-| **재사용성 검증 선행** | 2개 이상 페이지/도메인 재사용이 없으면 Store 생성 금지 |
-| **rootStore 참조 패턴** | 다른 Store 접근 시 rootStore 통해 참조 |
+| **재사용성 검증 선행** | 2개 이상 페이지/도메인 재사용이 없으면 공용 상태 생성 금지 |
+| **app 참조 패턴** | 다른 상태 접근 시 AppStore의 의미 경로를 통해 참조 |
 | **상태 변경만 담당** | API 호출은 외부에서 수행 후 결과 전달 |
 | **computed는 동기적** | getter는 순수 함수로 작성 |
 
@@ -95,11 +95,11 @@ MobX 기반의 Store를 생성하는 전문가입니다.
 
 | 금지 사항 | 이유 |
 |----------|------|
-| 페이지 레벨 Store 생성 | 페이지 로컬 상태가 원칙 |
-| Store에서 직접 API 호출 | 상태 관리와 데이터 페칭 분리 |
+| 페이지 레벨 공용 상태 생성 | 페이지 로컬 상태가 원칙 |
+| 상태 객체에서 직접 API 호출 | 상태 관리와 데이터 페칭 분리 |
 | 앱 종속적 하드코딩 | 공용 패키지 재사용성 |
 | 비동기 computed | computed는 동기적이어야 함 |
-| AdminStore, CoinStore 등 네이밍 | 범용적 이름 사용 |
+| Admin, Coin 같은 앱 종속 네이밍 | 범용적 이름 사용 |
 
 ---
 
@@ -107,75 +107,84 @@ MobX 기반의 Store를 생성하는 전문가입니다.
 
 ### 4.1 아키텍처 이해
 
-| 프론트엔드 (Store) | 백엔드 | 설명 |
+| 프론트엔드 상태 | 백엔드 | 설명 |
 |-------------------|--------|------|
-| `*Store` (접미사 있음) | Service Layer | 비즈니스 로직, 상태 관리 |
-| 접미사 없는 클래스 | Domain Model / Entity | 데이터 구조, 도메인 모델 |
+| 의미 기반 상태명 | Service Layer | 비즈니스 로직, 상태 관리 |
+| 도메인 명사 클래스 | Domain Model / Entity | 데이터 구조, 도메인 모델 |
 
-### 4.2 Store 유형 결정
+> 새 상태 객체, app 프로퍼티, provider, hook 이름에는 `Store` 접미사를 붙이지 않습니다.
+
+### 4.2 상태 유형 결정
 
 | 유형 | 사용 시점 |
 |------|----------|
-| RootStore 주입형 | 다른 Store와 상호작용 필요 |
-| 독립형 Store | 다른 Store와 상호작용 불필요 |
-| 설정 주입형 Store | 앱별 설정이 필요한 경우 |
+| AppStore 주입형 | 다른 상태와 상호작용 필요 |
+| 독립형 상태 | 다른 상태와 상호작용 불필요 |
+| 설정 주입형 상태 | 앱별 설정이 필요한 경우 |
 
-> 생성 전 게이트: 단일 페이지에서만 쓰이는 상태라면 Store를 만들지 않고 페이지 로컬 상태로 구현합니다.
+> 생성 전 게이트: 단일 페이지에서만 쓰이는 상태라면 공용 상태를 만들지 않고 페이지 로컬 상태로 구현합니다.
 
 ### 4.3 파일 구조
 
 ```
 packages/fe-store/src/stores/
-├── Store.ts              # RootStore
-├── useStore.ts           # useStore hooks
+├── appStore.ts          # AppStore
+├── useApp.ts             # useApp 단일 진입점
 ├── index.ts              # barrel export
-├── navigationStore.ts    # NavigationStore (Service Layer)
+├── navigation.ts         # Navigation (Service Layer)
 ├── navItem.ts           # NavItem (Domain Model)
-├── authStore.ts         # AuthStore (Service Layer)
-├── persistStore.ts      # PersistStore (Service Layer)
-└── tokenStore.ts        # TokenStore (Service Layer)
+├── session.ts           # 인증 상태
+├── space.ts         # space/session 저장 상태
+└── tokens.ts            # 토큰 상태
 ```
 
 ### 4.4 등록 절차
 
-1. Store 클래스 생성
-2. RootStore에 타입 추가
-3. useStore hook 추가
+1. 상태 클래스 생성
+2. AppStore에 의미 경로 추가
+3. `useApp()`에서 시작하는 접근 경로 확인
 4. index.ts에 export 추가
+
+### 4.5 App 진입점 원칙
+
+- 컴포넌트와 공용 hook은 `useApp()` 하나로 앱 상태 컨테이너를 가져옵니다.
+- `useNavigation`, `useSpace`, `useMobileNavigation`, `useFloatingActions`처럼 하위 상태를 직접 반환하는 selector hook을 새로 만들거나 사용하지 않습니다.
+- UI 생존 위치를 표현해야 하는 상태는 `app.ui.<layout-slot>.<feature-component>` 경로로 노출합니다. 예: `app.ui.footer.mobileBottomNavigation`, `app.ui.footer.mobileMenu`, `app.ui.body.leftAside.sideNavigation`.
+- 앱 의미 상태는 `app.navigation`, `app.ability`, `app.space`, `app.session`, `app.locale`처럼 app에서 직접 시작합니다.
 
 ---
 
 ## 5. 템플릿
 
-### 5.1 RootStore 주입형 (권장)
+### 5.1 AppStore 주입형 (권장)
 
 ```typescript
 import { makeAutoObservable } from "mobx";
-import { RootStore } from "./Store";
+import type { AppStore } from "./appStore";
 
 /**
- * AuthStore - 인증 비즈니스 로직
+ * SessionState - 인증 비즈니스 로직
  *
  * @example
  * ```typescript
- * const rootStore = new RootStore();
- * rootStore.authStore = new AuthStore(rootStore);
+ * const app = new AppStore();
+ * app.session = new SessionState(app);
  *
- * authStore.logout();
+ * app.session.logout();
  * ```
  */
-export class AuthStore {
-  readonly rootStore: RootStore;
+export class SessionState {
+  readonly app: AppStore;
   isLoggingOut = false;
 
-  constructor(rootStore: RootStore) {
-    this.rootStore = rootStore;
+  constructor(app: AppStore) {
+    this.app = app;
     makeAutoObservable(this);
   }
 
   // Computed
   get isAuthenticated(): boolean {
-    return !this.rootStore.tokenStore?.isAccessTokenExpired();
+    return !this.app.space?.isAccessTokenExpired;
   }
 
   // Actions
@@ -185,8 +194,7 @@ export class AuthStore {
       if (logoutApi) {
         await logoutApi();
       }
-      this.rootStore.tokenStore?.clearTokens();
-      this.rootStore.persistStore?.clear();
+      this.app.space?.clear();
     } finally {
       this.isLoggingOut = false;
     }
@@ -194,20 +202,20 @@ export class AuthStore {
 }
 ```
 
-### 5.2 독립형 Store
+### 5.2 독립형 상태
 
 ```typescript
 import { makeAutoObservable } from "mobx";
 
-export interface ModalStoreConfig {
+export interface ModalConfig {
   defaultOpen?: boolean;
 }
 
-export class ModalStore {
+export class Modal {
   isOpen = false;
   data: unknown = null;
 
-  constructor(config?: ModalStoreConfig) {
+  constructor(config?: ModalConfig) {
     this.isOpen = config?.defaultOpen ?? false;
     makeAutoObservable(this);
   }
@@ -224,12 +232,12 @@ export class ModalStore {
 }
 ```
 
-### 5.3 설정 주입형 Store
+### 5.3 설정 주입형 상태
 
 ```typescript
 import { makeAutoObservable, reaction } from "mobx";
 
-export interface PersistStoreConfig {
+export interface SpaceConfig {
   storageKey: string;
 }
 
@@ -238,12 +246,12 @@ interface PersistedData {
   accessTokenExpiresAt: number | null;
 }
 
-export class PersistStore {
+export class SpaceState {
   spaceId: string | null = null;
   accessTokenExpiresAt: number | null = null;
   isHydrated = false;
 
-  constructor(private config: PersistStoreConfig) {
+  constructor(private config: SpaceConfig) {
     // config는 observable에서 제외
     makeAutoObservable<this, "config">(this, {
       config: false,
@@ -296,7 +304,7 @@ export class PersistStore {
 
 ### 5.3.1 SSR / Hydration 하드 규칙
 
-- Store constructor는 순수해야 하며 `localStorage`, `sessionStorage`, `window`, `document`를 읽지 않습니다.
+- 상태 constructor는 순수해야 하며 `localStorage`, `sessionStorage`, `window`, `document`를 읽지 않습니다.
 - 브라우저 저장소 hydrate는 Provider 또는 Hook의 `useEffect`에서 명시적으로 호출합니다.
 - `isHydrated` 같은 플래그로 guard가 hydration 완료 후에만 동작하도록 설계합니다.
 - 첫 렌더 구조를 바꾸는 상태는 서버가 아는 snapshot이 아니면 render 단계에서 사용하지 않습니다.
@@ -315,16 +323,16 @@ class NavItem {
 }
 ```
 
-### 5.5 RootStore 등록
+### 5.5 AppStore 등록
 
 ```typescript
-// packages/fe-store/src/stores/Store.ts
+// packages/fe-store/src/stores/appStore.ts
 import { makeAutoObservable } from "mobx";
-import { NewStore } from "./newStore";
+import { NewState } from "./newState";
 
-export class RootStore {
-  // 기존 Store들...
-  newStore?: NewStore;
+export class AppStore {
+  // 기존 상태들...
+  newState?: NewState;
 
   constructor() {
     makeAutoObservable(this);
@@ -332,20 +340,20 @@ export class RootStore {
 }
 ```
 
-### 5.6 useStore Hook 추가
+### 5.6 useApp 경로 확인
 
 ```typescript
-// packages/fe-store/src/stores/useStore.ts
+// packages/fe-store/src/stores/useApp.ts
 
 /**
- * NewStore를 가져오는 selector hook
+ * 앱 전역 상태 컨테이너를 가져오는 단일 hook
  */
-export const useNewStore = () => {
-  const store = useStore();
-  if (!store.newStore) {
-    throw new Error("newStore가 초기화되지 않았습니다.");
+export const useApp = () => {
+  const app = useContext(AppContext);
+  if (!app) {
+    throw new Error("useApp must be used within AppProvider");
   }
-  return store.newStore;
+  return app;
 };
 ```
 
@@ -353,8 +361,7 @@ export const useNewStore = () => {
 
 ```typescript
 // packages/fe-store/src/stores/index.ts
-export { NewStore } from "./newStore";
-export { useNewStore } from "./useStore";
+export { NewState } from "./newState";
 ```
 
 ---
@@ -363,12 +370,12 @@ export { useNewStore } from "./useStore";
 
 - [ ] `makeAutoObservable(this)` 호출 확인
 - [ ] 앱 종속적 이름 없음 확인 (Admin, Coin 등)
-- [ ] RootStore 주입 필요시 `readonly rootStore: RootStore` 선언
+- [ ] AppStore 주입 필요시 `readonly app: AppStore` 선언
 - [ ] computed getter는 순수 함수로 작성
 - [ ] action 메서드는 상태 변경만 담당
 - [ ] API 직접 호출 없음 확인
-- [ ] RootStore에 Store 타입 추가
-- [ ] useStore hook 추가
+- [ ] AppStore에 의미 기반 상태 경로 추가
+- [ ] selector hook을 만들지 않고 `useApp()`에서 시작하는 접근 경로 확인
 - [ ] index.ts에 export 추가
 - [ ] JSDoc 주석 및 @example 작성
 
@@ -387,31 +394,31 @@ Pure UI → Widget → Feature → Page
 
 | 에이전트 | 관계 |
 |----------|------|
-| technical-designer | Store 설계 정의 |
+| technical-designer | 상태 설계 정의 |
 | be-entity-builder | Domain Model 기반이 되는 Entity 정의 |
 
 ### 후행 에이전트
 
 | 에이전트 | 관계 |
 |----------|------|
-| **fe-feature-agent** | Store를 연결하여 Feature 컴포넌트 생성 |
-| fe-route-agent | 통합 훅에서 Store 사용 |
+| **fe-feature-agent** | app 상태를 연결하여 Feature 컴포넌트 생성 |
+| fe-route-agent | 통합 훅에서 app 상태 사용 |
 
 ### 관련 에이전트
 
 | 에이전트 | 관계 |
 |----------|------|
-| fe-widget-agent | Widget이 Store 타입을 참조하여 Props 정의 |
+| fe-widget-agent | Widget이 상태 타입을 참조하여 Props 정의 |
 
 ---
 
 ## 8. 프로젝트별 참고사항
 
-### Store 설계 원칙
+### 상태 설계 원칙
 
-1. **Store는 여러 Domain Model을 조합하여 비즈니스 로직 수행**
+1. **상태 객체는 여러 Domain Model을 조합하여 비즈니스 로직 수행**
    ```typescript
-   class NavigationStore {
+   class Navigation {
      private _items: NavItem[];  // Domain Model 컬렉션
      selectNavItem(id: string): void { /* NavItem들을 조작하는 비즈니스 로직 */ }
    }
@@ -424,29 +431,28 @@ Pure UI → Widget → Feature → Page
    }
    ```
 
-3. **Store 간 상호작용은 RootStore를 통해**
+3. **상태 간 상호작용은 AppStore를 통해**
    ```typescript
-   class AuthStore {
+   class SessionState {
      logout(): void {
-       this.rootStore.tokenStore?.clearTokens();
-       this.rootStore.persistStore?.clear();
+       this.app.space?.clear();
      }
    }
    ```
 
-### 페이지 레벨 Store 금지 (Critical)
+### 페이지 레벨 공용 상태 금지 (Critical)
 
 ```
 ❌ 안티패턴
 apps/admin/web/src/app/(admin)/users/
 ├── _stores/
-│   └── UserListStore.ts   ← 금지!
+│   └── UserListState.ts   ← 금지!
 └── page.tsx
 
-✅ Store는 packages/fe-store에만
+✅ 공용 상태는 packages/fe-store에만
 packages/fe-store/src/stores/
-├── navigationStore.ts     ← 전역 Store
-├── authStore.ts           ← 전역 Store
+├── navigation.ts          ← 전역 상태
+├── session.ts             ← 전역 상태
 └── ...
 ```
 
@@ -458,11 +464,11 @@ packages/fe-store/src/stores/
 | 리소스 식별 | `pathParams` | `/users/123` |
 | 임시 전달 데이터 | `router.push({ state })` | 이전 페이지에서 전달 |
 
-### Store에서 API 호출 금지
+### 상태 객체에서 API 호출 금지
 
 ```typescript
 // ❌ 금지
-export class UserStore {
+export class UserState {
   async fetchUsers() {
     const users = await getUsers();  // 직접 API 호출
     this.users = users;
@@ -470,7 +476,7 @@ export class UserStore {
 }
 
 // ✅ 권장 - 외부에서 API 호출 후 결과 전달
-export class UserStore {
+export class UserState {
   setUsers(users: User[]): void {
     this.users = users;
   }
@@ -479,17 +485,17 @@ export class UserStore {
 // 컴포넌트에서
 const { data } = useGetUsers();
 useEffect(() => {
-  if (data) userStore.setUsers(data);
+  if (data) userState.setUsers(data);
 }, [data]);
 ```
 
 ### 관련 파일
 
-- RootStore: `packages/fe-store/src/stores/Store.ts`
-- useStore hooks: `packages/fe-store/src/stores/useStore.ts`
+- AppStore: `packages/fe-store/src/stores/appStore.ts`
+- useApp hook: `packages/fe-store/src/stores/useApp.ts`
 - Export: `packages/fe-store/src/stores/index.ts`
 
 
-- shared Store를 신규 생성하거나 수정하면 같은 작업에서 store 단위 테스트를 작성/갱신합니다.
-- Store가 UI 상태 분기를 새로 만들면 담당 스펙의 `단위 테스트 인벤토리`에 store test 행을 기록하고, consuming component 단위 테스트 행은 해당 component 소스 담당 agent가 담당하도록 분리합니다.
+- shared 상태를 신규 생성하거나 수정하면 같은 작업에서 단위 테스트를 작성/갱신합니다.
+- 상태 객체가 UI 상태 분기를 새로 만들면 담당 스펙의 `단위 테스트 인벤토리`에 state test 행을 기록하고, consuming component 단위 테스트 행은 해당 component 소스 담당 agent가 담당하도록 분리합니다.
 - route-local 상태는 `fe-store-agent`가 아니라 `fe-route-agent`의 route-local implementation 또는 해당 route test로 검증합니다.

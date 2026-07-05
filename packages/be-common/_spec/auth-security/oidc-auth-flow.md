@@ -170,7 +170,7 @@ sequenceDiagram
             I-->>S: { access_token, refresh_token (optional) }
             S->>S: 새 토큰으로 쿠키 업데이트
             S-->>AX: 200 OK + TokenRefreshResponseDto
-            AX->>AX: PersistStore 만료 시간 업데이트
+            AX->>AX: workspace 만료 시간 업데이트
             AX->>AX: processQueue(null) - 대기 중 요청 해제
             AX->>S: 원래 요청 재시도 (새 쿠키 자동 적용)
             S-->>AX: 200 OK
@@ -193,7 +193,7 @@ sequenceDiagram
 요청 B → 401 → 큐에 대기
 요청 C → 401 → 큐에 대기
          ↓
-     갱신 완료 → PersistStore 업데이트 → 큐 해제
+     갱신 완료 → workspace 업데이트 → 큐 해제
          ↓
 요청 A → 재시도 → 성공
 요청 B → 재시도 → 성공
@@ -204,7 +204,7 @@ sequenceDiagram
 
 | 구성 요소 | 파일 | 핵심 로직 |
 |-----------|------|----------|
-| 401 인터셉터 | `packages/fe-api/src/libs/customAxios.ts:63-124` | 토큰 갱신 + 큐 패턴 + PersistStore 업데이트 |
+| 401 인터셉터 | `packages/fe-api/src/libs/customAxios.ts:63-124` | 토큰 갱신 + 큐 패턴 + workspace 업데이트 |
 | Refresh 엔드포인트 | `packages/be-controller/src/auth/auth.controller.ts` | 쿠키에서 refreshToken 추출 |
 | IDP 토큰 갱신 | `packages/be-client/src/oidc.client.ts` | `refreshTokens()` |
 
@@ -220,7 +220,7 @@ sequenceDiagram
     participant I as IDP (oidc-provider)
 
     U->>A: 로그아웃 버튼 클릭
-    A->>A: AuthStore.logout(logoutApi) 호출
+    A->>A: session.logout(logoutApi) 호출
 
     A->>S: POST /api/v1/auth/logout (Cookie: accessToken)
 
@@ -375,7 +375,7 @@ graph TB
         LP[Login Page<br/>useAuthLoginPage]
         RW[Rewrite Proxy<br/>/api/v1/* → Server]
         AX[Axios Interceptor<br/>customAxios.ts]
-        AS[AuthStore<br/>authStore.ts]
+        AS[Session<br/>session.ts]
     end
 
     subgraph "API Server (NestJS)"
@@ -512,5 +512,5 @@ packages/be-service/src/idp/
 |------|------|
 | `apps/admin/web/src/app/auth/login/page.tsx` | 로그인 페이지 (OIDC 리다이렉트) |
 | `apps/admin/web/next.config.ts` | API 프록시 설정 (rewrite: `/api/v1/*` → Core API) |
-| `packages/fe-api/src/libs/customAxios.ts` | Axios 인터셉터 (401 토큰 갱신, x-space-id 헤더, PersistStore 업데이트) |
-| `packages/fe-store/src/stores/authStore.ts` | 인증 상태 관리 Store (로그아웃 처리) |
+| `packages/fe-api/src/libs/customAxios.ts` | Axios 인터셉터 (401 토큰 갱신, x-space-id 헤더, workspace 업데이트) |
+| `packages/fe-store/src/stores/session.ts` | 인증 상태 관리 (로그아웃 처리) |

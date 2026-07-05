@@ -2,10 +2,8 @@ import { AbilityCommandHandlers, AbilityQueryHandlers } from "./ability";
 import { ActionCommandHandlers, ActionQueryHandlers } from "./action";
 import { AssetCommandHandlers, AssetQueryHandlers } from "./asset";
 import { CommunityCommandHandlers, CommunityQueryHandlers } from "./community";
-import { CourseCommandHandlers, CourseQueryHandlers } from "./course";
 import { FolderCommandHandlers, FolderQueryHandlers } from "./folder";
 import { InquiryCommandHandlers, InquiryQueryHandlers } from "./inquiry";
-import { PaymentCommandHandlers, PaymentQueryHandlers } from "./payment";
 import { PolicyCommandHandlers, PolicyQueryHandlers } from "./policy";
 import {
 	PolicyAssignmentCommandHandlers,
@@ -37,10 +35,8 @@ export const CoreQueryHandlers = [
 	...ActionQueryHandlers,
 	...AssetQueryHandlers,
 	...CommunityQueryHandlers,
-	...CourseQueryHandlers,
 	...FolderQueryHandlers,
 	...InquiryQueryHandlers,
-	...PaymentQueryHandlers,
 	...PolicyQueryHandlers,
 	...PolicyAssignmentQueryHandlers,
 	...RoleQueryHandlers,
@@ -61,10 +57,8 @@ export const CoreCommandHandlers = [
 	...ActionCommandHandlers,
 	...AssetCommandHandlers,
 	...CommunityCommandHandlers,
-	...CourseCommandHandlers,
 	...FolderCommandHandlers,
 	...InquiryCommandHandlers,
-	...PaymentCommandHandlers,
 	...PolicyCommandHandlers,
 	...PolicyAssignmentCommandHandlers,
 	...RoleCommandHandlers,
@@ -89,10 +83,8 @@ export * from "./ability";
 export * from "./action";
 export * from "./asset";
 export * from "./community";
-export * from "./course";
 export * from "./folder";
 export * from "./inquiry";
-export * from "./payment";
 export * from "./policy";
 export * from "./policy-assignment";
 export * from "./role";

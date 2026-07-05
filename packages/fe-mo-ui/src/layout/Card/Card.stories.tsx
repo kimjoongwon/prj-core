@@ -23,7 +23,7 @@ export const Default: Story = {
 			<View className="gap-2">
 				<Text className="text-lg font-extrabold text-foreground">Card</Text>
 				<Text className="text-sm leading-5 text-muted">
-					반복 목록, 결제 요약, 상태 패널처럼 독립적인 묶음에 사용합니다.
+					반복 목록, 예약 요약, 상태 패널처럼 독립적인 묶음에 사용합니다.
 				</Text>
 			</View>
 			<Card className="gap-3 border border-border">

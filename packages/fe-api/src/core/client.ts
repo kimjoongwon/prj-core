@@ -1,8 +1,8 @@
 export {
 	AXIOS_INSTANCE,
 	customInstance,
-	setApiLocaleStore,
+	setApiLocale,
 	setApiNativeRefreshHandler,
-	setApiPersistStore,
+	setApiSpace,
 	setLoginRedirectUrl,
 } from "../libs/customAxios";

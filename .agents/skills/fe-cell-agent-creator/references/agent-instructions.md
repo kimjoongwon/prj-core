@@ -127,7 +127,7 @@ Pure UI Cell → Widget Cell → Feature Cell
 **특징:**
 - Props에 핸들러 함수 포함
 - 라우팅 로직 포함 가능
-- Store 연결은 Page에서
+- app 상태 연결은 Page에서
 
 ---
 

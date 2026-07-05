@@ -274,7 +274,7 @@ export async function readAdminPersist(page: Page) {
  * 2. native access/refresh token을 admin-persist에 저장
  * 3. current-space API로 System Space 선택 가능 여부를 확인
  * 4. Admin 대시보드로 리다이렉트
- * 5. PersistStore의 Space 정보를 보정하되 native token은 유지
+ * 5. space의 Space 정보를 보정하되 native token은 유지
  */
 export async function loginToAdmin(page: Page) {
 	await page.goto(ADMIN_LOGIN_PATH, { waitUntil: "domcontentloaded" });

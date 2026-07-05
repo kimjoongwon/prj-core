@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
 import ProfileTabRoute from "@/app/(tabs)/profile";
-import { mobileAuthStore } from "@/auth/auth-store";
-import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
+import { mobileSession } from "@/auth/mobile-session";
+import { mobileApiScope } from "@/auth/mobile-api-scope";
 import { runInAction } from "mobx";
 
 const mockPush = jest.fn();
@@ -74,16 +74,16 @@ describe("mobile profile tab route", () => {
 		mockPush.mockReset();
 		mockReplace.mockReset();
 		runInAction(() => {
-			mobileAuthStore.authStatus = "authenticated";
-			mobileAuthStore.isAuthenticated = true;
-			mobileAuthStore.isVerifying = false;
-			mobileApiScopeStore.setSpaceInfo({
+			mobileSession.authStatus = "authenticated";
+			mobileSession.isAuthenticated = true;
+			mobileSession.isVerifying = false;
+			mobileApiScope.setSpaceInfo({
 				groundName: "광화문 스튜디오",
 				spaceId: "space-1",
 				tenantId: "tenant-1",
 			});
 		});
-		jest.spyOn(mobileAuthStore, "logout").mockResolvedValue(undefined);
+		jest.spyOn(mobileSession, "logout").mockResolvedValue(undefined);
 	});
 
 	afterEach(() => {
@@ -96,7 +96,6 @@ describe("mobile profile tab route", () => {
 		expect(screen.getByText("로그인됨")).toBeTruthy();
 		expect(screen.getByText("광화문 스튜디오")).toBeTruthy();
 		expect(screen.getByText("내 예약")).toBeTruthy();
-		expect(screen.getByText("결제/수강권")).toBeTruthy();
 		expect(screen.getByText("알림/설정")).toBeTruthy();
 		expect(screen.getByText("로그아웃")).toBeTruthy();
 	});
@@ -117,6 +116,6 @@ describe("mobile profile tab route", () => {
 		await waitFor(() => {
 			expect(mockReplace).toHaveBeenCalledWith("/auth/login");
 		});
-		expect(mobileAuthStore.logout).toHaveBeenCalled();
+		expect(mobileSession.logout).toHaveBeenCalled();
 	});
 });

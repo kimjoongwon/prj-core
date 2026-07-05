@@ -68,7 +68,7 @@ export const ScreenSections: Story = {
 	render: () => (
 		<VStack fullWidth>
 			<PageTitleBar
-				title="결제 관리"
+				title="예약 관리"
 				description="PageTitleBar는 screen rhythm에 두고, 각 주요 구획은 SectionSurface로 감쌉니다."
 				actions={
 					<Button color="primary" size="sm" variant="flat">
@@ -90,7 +90,7 @@ export const ScreenSections: Story = {
 								최근 30일
 							</div>
 							<div className="rounded-lg border border-border/70 bg-white px-3 py-2 text-sm dark:border-white/10 dark:bg-neutral-600">
-								결제자 검색
+								예약자 검색
 							</div>
 						</div>
 					</Section.Body>
@@ -108,22 +108,22 @@ export const ScreenSections: Story = {
 					<Section.Body>
 						<div className="divide-y divide-border">
 							<div className="grid grid-cols-4 gap-4 bg-neutral-50 px-4 py-3 text-xs text-muted dark:bg-neutral-600">
-								<span>결제자</span>
+								<span>예약자</span>
 								<span>상태</span>
-								<span>수단</span>
-								<span className="text-right">금액</span>
+								<span>수업</span>
+								<span className="text-right">일시</span>
 							</div>
 							<div className="grid grid-cols-4 gap-4 px-4 py-3 text-sm">
 								<span>김하나</span>
 								<span>완료</span>
-								<span className="text-muted">카드</span>
-								<span className="text-right font-medium">₩120,000</span>
+								<span className="text-muted">모닝 플로우</span>
+								<span className="text-right font-medium">10:00</span>
 							</div>
 							<div className="grid grid-cols-4 gap-4 px-4 py-3 text-sm">
 								<span>박도윤</span>
 								<span>대기</span>
-								<span className="text-muted">계좌 이체</span>
-								<span className="text-right font-medium">₩86,000</span>
+								<span className="text-muted">스트렝스</span>
+								<span className="text-right font-medium">14:00</span>
 							</div>
 						</div>
 					</Section.Body>

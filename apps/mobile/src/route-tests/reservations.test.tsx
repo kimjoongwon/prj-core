@@ -1,6 +1,6 @@
 import { act, render, screen } from "@testing-library/react-native";
 import ReservationsTabRoute from "@/app/(tabs)/reservations";
-import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
+import { mobileApiScope } from "@/auth/mobile-api-scope";
 
 const mockUseGetMyReservations = jest.fn();
 
@@ -115,8 +115,8 @@ jest.mock("@cocrepo/mo-ui", () => {
 
 describe("mobile reservations tab route", () => {
   beforeEach(() => {
-    mobileApiScopeStore.clear();
-    mobileApiScopeStore.setSpaceInfo({
+    mobileApiScope.clear();
+    mobileApiScope.setSpaceInfo({
       tenantId: "tenant-1",
       spaceId: "space-1",
       groundName: "강남점",
@@ -159,7 +159,7 @@ describe("mobile reservations tab route", () => {
   afterEach(() => {
     jest.clearAllMocks();
     act(() => {
-      mobileApiScopeStore.clear();
+      mobileApiScope.clear();
     });
   });
 

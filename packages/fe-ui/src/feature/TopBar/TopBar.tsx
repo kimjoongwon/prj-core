@@ -1,12 +1,7 @@
 "use client";
 
 import { useNativeLogout, useSetCurrentSpace } from "@cocrepo/api/idp/auth";
-import {
-	type SpaceInfo,
-	useNavigationStore,
-	usePersistStore,
-	useStore,
-} from "@cocrepo/store";
+import { type SpaceInfo, useApp } from "@cocrepo/store";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
 import { useT } from "../../i18n";
@@ -29,23 +24,27 @@ const utilityButtonClassName =
 export const TopBar = observer(function TopBar() {
 	const router = useRouter();
 	const t = useT();
-	const store = useStore();
-	const persistStore = usePersistStore();
-	const navigationStore = useNavigationStore();
-	const localeStore = store.localeStore;
+	const app = useApp();
+	const topBar = app.ui.header.topBar;
+	const space = topBar.space;
+	const navigation = topBar.navigation;
+	const locale = topBar.locale;
+	if (!space || !navigation) {
+		throw new Error("TopBar에 필요한 app 상태가 초기화되지 않았습니다.");
+	}
 	const { mutate: setCurrentSpaceMutate, isPending: isSettingCurrentSpace } =
 		useSetCurrentSpace({
 			mutation: {
 				onSuccess: (response, variables) => {
 					const currentSpace = response.data;
-					const selectedSpace = persistStore.spaces.find(
+					const selectedSpace = space.spaces.find(
 						(space) => space.tenantId === variables.tenantId,
 					);
 					const nextGroundName =
 						currentSpace?.ground?.name ?? selectedSpace?.groundName ?? "";
 					const nextContentLanguageCode =
 						selectedSpace?.contentLanguageCode ?? null;
-					persistStore.setSpace(
+					space.setSpace(
 						variables.tenantId,
 						nextGroundName,
 						nextContentLanguageCode,
@@ -58,23 +57,23 @@ export const TopBar = observer(function TopBar() {
 	const { mutate: nativeLogoutMutate } = useNativeLogout({
 		mutation: {
 			onSettled: () => {
-				persistStore.clear();
+				space.clear();
 				router.replace("/auth/login");
 			},
 		},
 	});
 
 	const onClickLogoutButton = () => {
-		if (!persistStore.sessionId) {
-			persistStore.clear();
+		if (!space.sessionId) {
+			space.clear();
 			router.replace("/auth/login");
 			return;
 		}
 
 		nativeLogoutMutate({
 			data: {
-				sessionId: persistStore.sessionId,
-				refreshToken: persistStore.refreshToken ?? undefined,
+				sessionId: space.sessionId,
+				refreshToken: space.refreshToken ?? undefined,
 			},
 		});
 	};
@@ -88,15 +87,13 @@ export const TopBar = observer(function TopBar() {
 	};
 
 	const onChangeLanguage = (
-		languageCode: Parameters<
-			NonNullable<typeof localeStore>["setLanguageCode"]
-		>[0],
+		languageCode: Parameters<NonNullable<typeof locale>["setLanguageCode"]>[0],
 	) => {
-		localeStore?.setLanguageCode(languageCode);
+		locale?.setLanguageCode(languageCode);
 	};
 
-	const selectedNavItem = navigationStore.selectedNavItem;
-	const selectedSubNavItem = navigationStore.selectedSubNavItem;
+	const selectedNavItem = navigation.selectedNavItem;
+	const selectedSubNavItem = navigation.selectedSubNavItem;
 	const currentSectionLabel =
 		selectedSubNavItem?.label ?? selectedNavItem?.label ?? "대시보드";
 	const currentSectionCaption =
@@ -118,9 +115,9 @@ export const TopBar = observer(function TopBar() {
 			}
 			actions={
 				<>
-					{localeStore && (
+					{locale && (
 						<LanguageSelectButton
-							value={localeStore.languageCode}
+							value={locale.languageCode}
 							onChange={onChangeLanguage}
 							compact
 							className={utilityButtonClassName}
@@ -128,9 +125,9 @@ export const TopBar = observer(function TopBar() {
 					)}
 					<ThemeToggleButton compact className={utilityButtonClassName} />
 					<HeaderSpaceSelector
-						spaces={persistStore.spaces}
-						currentTenantId={persistStore.tenantId}
-						currentSpaceName={persistStore.groundName}
+						spaces={space.spaces}
+						currentTenantId={space.tenantId}
+						currentSpaceName={space.groundName}
 						onSpaceSelect={onSelectSpace}
 					/>
 				</>

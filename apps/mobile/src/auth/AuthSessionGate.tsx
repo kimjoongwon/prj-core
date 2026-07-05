@@ -11,8 +11,8 @@ import {
 	getSpaceSelectPath,
 	resolveAuthenticatedRoutePath,
 } from "./auth-config";
-import { mobileAuthStore } from "./auth-store";
-import { mobileApiScopeStore } from "./mobile-api-scope";
+import { mobileSession } from "./mobile-session";
+import { mobileApiScope } from "./mobile-api-scope";
 
 const HOME_ROUTE = "/" as const;
 const LOGIN_ROUTE = "/auth/login" as const;
@@ -92,10 +92,10 @@ export const AuthSessionGate = observer(({
 	const rawPathname = usePathname();
 	const router = useRouter();
 	const pathname = normalizePathname(rawPathname);
-	const { authStatus } = mobileAuthStore;
-	const isVerifying = mobileAuthStore.isVerifying;
+	const { authStatus } = mobileSession;
+	const isVerifying = mobileSession.isVerifying;
 	const isSpaceSelectionResolved =
-		mobileApiScopeStore.isSpaceSelectionResolved;
+		mobileApiScope.isSpaceSelectionResolved;
 	const [isInitialRouteReady, setIsInitialRouteReady] = useState(false);
 	const isSplashHiddenRef = useRef(false);
 
@@ -104,7 +104,7 @@ export const AuthSessionGate = observer(({
 			return;
 		}
 
-		void mobileAuthStore.verifySession();
+		void mobileSession.verifySession();
 	}, [authStatus, isVerifying]);
 
 	useEffect(() => {
@@ -120,7 +120,7 @@ export const AuthSessionGate = observer(({
 		);
 		if (redirect) {
 			if (redirect.targetPathname === LOGIN_ROUTE) {
-				mobileAuthStore.setNextPathAfterLogin(pathname);
+				mobileSession.setNextPathAfterLogin(pathname);
 			}
 
 			setIsInitialRouteReady(false);

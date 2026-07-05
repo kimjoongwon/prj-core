@@ -72,22 +72,22 @@ export const AdminScreenHierarchy: Story = {
 									<div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_320px]">
 										<div className="divide-y divide-border overflow-hidden rounded-lg border border-border">
 											<div className="grid grid-cols-4 gap-4 bg-neutral-50 px-4 py-3 text-muted text-xs dark:bg-neutral-600">
-												<span>강좌</span>
+												<span>프로그램</span>
 												<span>상태</span>
-												<span>수강생</span>
-												<span className="text-right">매출</span>
+												<span>참여자</span>
+												<span className="text-right">활동</span>
 											</div>
 											<div className="grid grid-cols-4 gap-4 px-4 py-3 text-sm">
 												<span>입문자를 위한 데이터 분석</span>
 												<span>운영중</span>
 												<span className="text-muted">84명</span>
-												<span className="text-right font-medium">₩4.2M</span>
+												<span className="text-right font-medium">128회</span>
 											</div>
 											<div className="grid grid-cols-4 gap-4 px-4 py-3 text-sm">
 												<span>UX 리서치 실무</span>
 												<span>모집중</span>
 												<span className="text-muted">31명</span>
-												<span className="text-right font-medium">₩2.1M</span>
+												<span className="text-right font-medium">42회</span>
 											</div>
 											<div className="grid grid-cols-4 gap-4 px-4 py-3 text-sm">
 												<span>프로덕트 전략 워크숍</span>

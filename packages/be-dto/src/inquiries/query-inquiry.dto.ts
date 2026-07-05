@@ -46,7 +46,7 @@ export class QueryInquiryDto extends QueryDto {
 	// -------------------------------------------------------------------------
 	@EnumFieldOptional(() => InquiryCategoryEnum, {
 		description:
-			"카테고리 필터 (GENERAL, DELIVERY, PAYMENT, REFUND, PRODUCT, ACCOUNT, TECHNICAL, COMPLAINT, OTHER)",
+			"카테고리 필터 (GENERAL, DELIVERY, REFUND, PRODUCT, ACCOUNT, TECHNICAL, COMPLAINT, OTHER)",
 	})
 	category?: InquiryCategory;
 

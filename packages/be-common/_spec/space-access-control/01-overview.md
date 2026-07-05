@@ -18,7 +18,7 @@
 ```
 [프론트엔드]                      [백엔드]
 
-PersistStore.tenantId             Guard Layer (요청 차단)
+space.tenantId                    Guard Layer (요청 차단)
     ↓                             ┌─ JwtAuthGuard ─→ JWT 검증, request.user 설정
 Axios Interceptor                 ├─ SpaceAccessGuard ─→ x-tenant-id + Tenant 검증
   x-tenant-id 헤더 자동 추가      └─ RolesGuard/RoleCategoryGuard/RoleGroupGuard (선택적)
@@ -150,18 +150,18 @@ User A:
 ## 프론트엔드 연동
 
 ### Tenant 선택 저장
-- **PersistStore** (MobX): `tenantId`를 메모리 + localStorage에 보관
+- **space** (MobX): `tenantId`를 메모리 + localStorage에 보관
 - Tenant 전환 시 선택된 `tenantId`를 갱신하고 이후 요청 header에 반영
 
 ### Axios Interceptor
 ```typescript
-// 앱 초기화 시 PersistStore 참조 주입
-setApiPersistStore(persistStoreRef);
+// 앱 초기화 시 space 참조 주입
+setApiSpace(spaceRef);
 
 // 모든 API 요청에 x-tenant-id 자동 추가
 AXIOS_INSTANCE.interceptors.request.use((config) => {
-  if (persistStoreRef?.tenantId) {
-    config.headers["x-tenant-id"] = persistStoreRef.tenantId;
+  if (spaceRef?.tenantId) {
+    config.headers["x-tenant-id"] = spaceRef.tenantId;
   }
   return config;
 });

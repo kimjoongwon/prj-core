@@ -75,17 +75,6 @@ export {
 } from "./AuthAuditLogListScreen/AuthAuditLogListScreen";
 export type { AuthErrorScreenProps } from "./AuthErrorScreen/AuthErrorScreen";
 export { AuthErrorScreen } from "./AuthErrorScreen/AuthErrorScreen";
-export type {
-	CourseEnrollmentRow,
-	CourseOfferingRow,
-	CoursePassRow,
-	CourseQueryState,
-	CourseRow,
-	CourseScreenProps,
-	CourseSection,
-	CourseSectionId,
-} from "./CourseScreen/CourseScreen";
-export { CourseScreen } from "./CourseScreen/CourseScreen";
 export { DashboardScreen } from "./DashboardScreen/DashboardScreen";
 export type {
 	EmailVerificationListScreenProps,
@@ -160,13 +149,6 @@ export {
 	idpConsoleOidcSessionsPageQueryInputs,
 	OidcSessionListScreen,
 } from "./OidcSessionListScreen/OidcSessionListScreen";
-export type {
-	PaymentQueryState,
-	PaymentRow,
-	PaymentScreenProps,
-	PaymentSummary,
-} from "./PaymentScreen/PaymentScreen";
-export { PaymentScreen } from "./PaymentScreen/PaymentScreen";
 export type {
 	PolicyAbilityOption,
 	PolicyEditScreenProps,

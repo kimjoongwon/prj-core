@@ -5,7 +5,6 @@
 export const InquiryCategory = {
 	GENERAL: "GENERAL",
 	DELIVERY: "DELIVERY",
-	PAYMENT: "PAYMENT",
 	REFUND: "REFUND",
 	PRODUCT: "PRODUCT",
 	ACCOUNT: "ACCOUNT",
@@ -23,7 +22,6 @@ export type InquiryCategory =
 export const InquiryCategoryLabel: Record<InquiryCategory, string> = {
 	GENERAL: "일반",
 	DELIVERY: "배송",
-	PAYMENT: "결제",
 	REFUND: "환불/취소",
 	PRODUCT: "상품",
 	ACCOUNT: "계정",

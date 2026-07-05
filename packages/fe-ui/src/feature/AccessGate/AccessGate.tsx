@@ -6,7 +6,7 @@ import {
 	isScopeKindAccessible,
 	matchAdminPageAccessItem,
 } from "@cocrepo/constant";
-import { useAbility, usePersistStore } from "@cocrepo/store";
+import { useApp } from "@cocrepo/store";
 import { observer } from "mobx-react-lite";
 import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
@@ -25,16 +25,21 @@ export const AccessGate = observer(function AccessGate({
 }: AccessGateProps) {
 	const pathname = usePathname();
 	const router = useRouter();
-	const persistStore = usePersistStore();
+	const app = useApp();
+	const space = app.space;
+	const ability = app.ability;
 	const t = useT();
-	const { can, isLoaded } = useAbility();
+	if (!space || !ability) {
+		throw new Error("AccessGate에 필요한 app 상태가 초기화되지 않았습니다.");
+	}
+
 	const shouldVerifyCurrentTenant =
-		persistStore.isHydrated && persistStore.isSpaceSelectionResolved;
+		space.isHydrated && space.isSpaceSelectionResolved;
 	const { data: verifyTokenResponse, isPending: isVerifyingToken } =
 		useVerifyToken({
 			query: {
 				enabled: shouldVerifyCurrentTenant,
-				queryKey: ["/api/v1/auth/verify-token", persistStore.tenantId],
+				queryKey: ["/api/v1/auth/verify-token", space.tenantId],
 				retry: false,
 				refetchOnWindowFocus: false,
 			},
@@ -53,7 +58,7 @@ export const AccessGate = observer(function AccessGate({
 	if (
 		!shouldVerifyCurrentTenant ||
 		isVerifyingToken ||
-		(!isLoaded && !hasFullAccessRole)
+		(!ability.isLoaded && !hasFullAccessRole)
 	) {
 		return (
 			<AccessDeniedScreen
@@ -71,7 +76,7 @@ export const AccessGate = observer(function AccessGate({
 
 	if (
 		isScopeAccessible &&
-		(hasFullAccessRole || can("view", pageAccessItem.subject))
+		(hasFullAccessRole || ability.can("view", pageAccessItem.subject))
 	) {
 		return contents;
 	}

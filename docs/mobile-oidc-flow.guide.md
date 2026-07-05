@@ -18,8 +18,8 @@ flowchart TD
   Interaction --> NativeCallback["Native callback scheme"]
   NativeCallback --> CallbackRoute["/auth/callback"]
   CallbackRoute --> Exchange["mobile-json callback exchange"]
-  Exchange --> Store["token 저장"]
-  Store --> Verify["verify-token / my-spaces / current-space"]
+  Exchange --> Scope["token 저장"]
+  Scope --> Verify["verify-token / my-spaces / current-space"]
   Verify --> Home
 ```
 
@@ -35,7 +35,7 @@ Mermaid가 렌더되지 않는 viewer에서는 아래 텍스트 흐름을 기준
       -> kr.co.cocdev.onoramobile://auth/callback
       -> Expo Router /auth/callback
       -> Core auth /api/v1/auth/callback?responseMode=mobile-json
-      -> mobileApiScopeStore token 저장
+      -> mobileApiScope token 저장
       -> verify-token + my-spaces + current-space
       -> /(tabs) 홈
 ```
@@ -51,7 +51,7 @@ Mermaid가 렌더되지 않는 viewer에서는 아래 텍스트 흐름을 기준
 | callback route | `apps/mobile/src/app/auth/callback.tsx` | code/state 교환, token 저장, native session 검증 후 redirect |
 | auth utility | `apps/mobile/src/auth/_utils/auth.ts` | login URL 생성, callback URL 판별, `mobile-json` callback exchange |
 | mobile API scope | `apps/mobile/src/auth/mobile-api-scope.ts` | access/refresh token, token expiry, Space 목록/current Space 보관 |
-| mobile auth store | `apps/mobile/src/auth/auth-store.ts` | `verifySession()`, `logout()`, 인증 상태 관리 |
+| mobile session | `apps/mobile/src/auth/mobile-session.ts` | `verifySession()`, `logout()`, 인증 상태 관리 |
 | Auth controller | `packages/be-controller/src/auth/auth.controller.ts` | `/api/v1/auth/oidc/login`, `/api/v1/auth/callback`, token/space/logout endpoint |
 | Auth module wiring | `apps/core/api/src/module/auth/auth.module.ts` | `@cocrepo/controller`의 `AuthController`를 core-api module에 연결 |
 | auth use cases | `packages/be-usecase/src/auth/*.usecase.ts` | OIDC state/PKCE, token exchange, cookie/session 생성, verify/refresh/logout |
@@ -102,7 +102,7 @@ sequenceDiagram
   participant Gate as AuthSessionGate
   participant WV as WebView
   participant IDP as IDP API
-  participant Scope as mobileApiScopeStore
+  participant Scope as mobileApiScope
   participant Core as Core API
 
   App->>Gate: 앱 route 렌더 시작
@@ -136,7 +136,7 @@ sequenceDiagram
 | 8 | WebView 컨테이너 | custom scheme navigation을 가로채고 Expo Router `/auth/callback`으로 변환합니다. |
 | 9 | `/auth/callback` | `GET /api/v1/auth/callback?clientId=user-mobile&code=...&state=...&responseMode=mobile-json`을 호출합니다. |
 | 10 | IDP API | `{ data: accessToken, refreshToken, expiresAt, user }`를 반환합니다. |
-| 11 | Mobile App | `mobileApiScopeStore`에 token을 저장합니다. |
+| 11 | Mobile App | `mobileApiScope`에 token을 저장합니다. |
 | 12 | Mobile App | `verify-token`, `my-spaces`, `current-space`를 다시 호출합니다. |
 | 13 | Mobile App | `spaceId`, `groundName`을 저장하고 홈으로 이동합니다. |
 | 14 | Core API 요청 | 이후 요청에 `Authorization`, `x-refresh-token`, `x-space-id` header가 붙습니다. |
@@ -152,7 +152,7 @@ Mobile App
         -> native callback scheme
       -> /auth/callback
         -> IDP API: /api/v1/auth/callback?responseMode=mobile-json
-        -> mobileApiScopeStore: token 저장
+        -> mobileApiScope: token 저장
         -> IDP API: verify-token + my-spaces + current-space
       -> /(tabs) 홈
 ```
@@ -161,14 +161,14 @@ Mobile App
 
 `apps/mobile/src/app/_layout.tsx`는 앱 시작 시 다음을 수행합니다.
 
-- `configureMobileApiScope()`로 Core/IDP Orval Axios client가 같은 `mobileApiScopeStore`를 보도록 설정합니다.
+- `configureMobileApiScope()`로 Core/IDP Orval Axios client가 같은 `mobileApiScope`를 보도록 설정합니다.
 - `setLoginRedirectUrl("/auth/login")`, `setIdpLoginRedirectUrl("/auth/login")`을 설정합니다.
 - `setIdpBaseUrl(getIdpApiBaseUrl())`로 IDP API base URL을 설정합니다.
 - `AuthSessionGate`로 전체 route tree를 감쌉니다.
 
 ### 2. 초기 session gate
 
-`AuthSessionGate`는 callback route가 아닌 경우 `mobileAuthStore.verifySession()`을 먼저 호출합니다.
+`AuthSessionGate`는 callback route가 아닌 경우 `mobileSession.verifySession()`을 먼저 호출합니다.
 
 | 상태 | 동작 |
 |------|------|
@@ -179,7 +179,7 @@ Mobile App
 | 비인증 + `/auth/*`가 아님 | `/auth/login?returnTo=...`로 이동 |
 | `/auth/callback` | gate 검증을 건너뛰고 callback route가 직접 처리 |
 
-보호 route는 현재 `/`, `/payments/checkout`, `/profile`, `/reservations`입니다.
+보호 route는 현재 `/`, `/profile`, `/reservations`, `/select-space`입니다.
 
 ### 3. WebView login route
 
@@ -263,23 +263,23 @@ mobileSession
 
 ### 7. Token 저장과 session 재검증
 
-callback route는 성공 응답의 token을 `mobileApiScopeStore.setSessionTokens()`로 저장한 뒤, 반드시 `mobileAuthStore.verifySession()`을 다시 실행합니다.
+callback route는 성공 응답의 token을 `mobileApiScope.setSessionTokens()`로 저장한 뒤, 반드시 `mobileSession.verifySession()`을 다시 실행합니다.
 
 로그인 성공 판별은 2단계입니다.
 
 | 단계 | 성공 조건 | 실패 처리 |
 |------|-----------|-----------|
 | callback 처리 성공 | `resolveAuthCallbackResult()`가 IDP `error` 파라미터를 받지 않고, `code/state` callback exchange가 `error`가 아닌 결과를 반환해 `nextState.status === "success"`가 됩니다. | `nextState.status !== "success"`이면 기존 native session을 한 번 더 검증하고, 그것도 실패하면 에러 UI를 표시합니다. |
-| native session 최종 성공 | callback 응답의 `session` token을 저장한 뒤 `mobileAuthStore.verifySession()`이 `true`를 반환합니다. | `verifySession()`이 `false`이면 홈으로 보내지 않고 "로그인은 완료됐지만 앱에서 세션을 확인하지 못했습니다" 에러 UI를 표시합니다. |
+| native session 최종 성공 | callback 응답의 `session` token을 저장한 뒤 `mobileSession.verifySession()`이 `true`를 반환합니다. | `verifySession()`이 `false`이면 홈으로 보내지 않고 "로그인은 완료됐지만 앱에서 세션을 확인하지 못했습니다" 에러 UI를 표시합니다. |
 
 따라서 최종 로그인 성공은 아래 조건을 모두 만족해야 합니다.
 
 ```ts
 nextState.status === "success" &&
-mobileAuthStore.verifySession() === true
+mobileSession.verifySession() === true
 ```
 
-`nextState.status === "success"`는 "callback을 처리할 수 있었다"는 뜻에 가깝고, 앱에서 실제 로그인 완료로 보는 최종 기준은 `mobileAuthStore.verifySession()` 통과입니다.
+`nextState.status === "success"`는 "callback을 처리할 수 있었다"는 뜻에 가깝고, 앱에서 실제 로그인 완료로 보는 최종 기준은 `mobileSession.verifySession()` 통과입니다.
 
 `verifySession()`은 다음 API를 순서대로 호출합니다.
 
@@ -293,18 +293,18 @@ mobileAuthStore.verifySession() === true
 
 ### 8. Core API 요청 scope
 
-`configureMobileApiScope()`는 같은 `mobileApiScopeStore`를 Core API와 IDP API Axios client에 주입합니다.
+`configureMobileApiScope()`는 같은 `mobileApiScope`를 Core API와 IDP API Axios client에 주입합니다.
 
 이후 Orval client 요청은 자동으로 다음 header를 붙입니다.
 
 | Header | 값 출처 | 용도 |
 |--------|---------|------|
-| `Authorization` | `mobileApiScopeStore.accessToken` | Bearer access token |
-| `x-refresh-token` | `mobileApiScopeStore.refreshToken` | token refresh |
-| `x-space-id` | `mobileApiScopeStore.spaceId` | Space scope |
-| `x-language` | locale store가 설정된 경우 | 응답 언어 |
+| `Authorization` | `mobileApiScope.accessToken` | Bearer access token |
+| `x-refresh-token` | `mobileApiScope.refreshToken` | token refresh |
+| `x-space-id` | `mobileApiScope.spaceId` | Space scope |
+| `x-language` | locale가 설정된 경우 | 응답 언어 |
 
-홈/예약/결제 route는 `mobileApiScopeStore.isSpaceSelectionResolved`와 `spaceId`를 보고 query 실행 여부를 결정합니다. Space가 확정되기 전에는 Core API 예약 query를 시작하지 않습니다.
+홈/예약 route는 `mobileApiScope.isSpaceSelectionResolved`와 `spaceId`를 보고 query 실행 여부를 결정합니다. Space가 확정되기 전에는 Core API 예약 query를 시작하지 않습니다.
 
 ## 서버 측 OIDC 처리
 
@@ -363,7 +363,7 @@ GET /api/v1/auth/oidc/login
 | callback exchange 실패 | 기존 native session이 유효하면 홈으로 복귀, 아니면 실패 상태 표시 |
 | callback 성공 후 `verify-token` 실패 | 홈으로 이동하지 않고 "앱에서 세션을 확인하지 못했습니다" 메시지 표시 |
 | Admin Web returnTo(`/admin/dashboard` 등)가 섞임 | 모바일 route whitelist 기준으로 `/`로 정규화 |
-| 로그아웃 | IDP logout 호출 후 `mobileApiScopeStore.clear()`, `/auth/login`으로 이동 |
+| 로그아웃 | IDP logout 호출 후 `mobileApiScope.clear()`, `/auth/login`으로 이동 |
 
 ## 로그아웃 흐름
 
@@ -372,26 +372,26 @@ sequenceDiagram
   autonumber
   participant User as 사용자
   participant Profile as /profile
-  participant Store as mobileAuthStore
+  participant Session as mobileSession
   participant IDP as IDP API
-  participant Scope as mobileApiScopeStore
+  participant Scope as mobileApiScope
 
   User->>Profile: 로그아웃 버튼
-  Profile->>Store: logout 호출
-  Store->>IDP: POST /api/v1/auth/logout
-  IDP-->>Store: token revoke + cookie clear
-  Store->>Scope: clear
-  Store-->>Profile: authStatus unauthenticated
+  Profile->>Session: logout 호출
+  Session->>IDP: POST /api/v1/auth/logout
+  IDP-->>Session: token revoke + cookie clear
+  Session->>Scope: clear
+  Session-->>Profile: authStatus unauthenticated
   Profile->>Profile: router.replace /auth/login
 ```
 
 | 순서 | 주체 | 동작 |
 |------|------|------|
 | 1 | 사용자 | `/profile`에서 로그아웃 버튼을 누릅니다. |
-| 2 | `/profile` | `mobileAuthStore.logout()`을 호출합니다. |
-| 3 | `mobileAuthStore` | `POST /api/v1/auth/logout`을 호출합니다. |
+| 2 | `/profile` | `mobileSession.logout()`을 호출합니다. |
+| 3 | `mobileSession` | `POST /api/v1/auth/logout`을 호출합니다. |
 | 4 | IDP API | token revoke, cookie clear를 수행합니다. |
-| 5 | `mobileAuthStore` | `mobileApiScopeStore.clear()`로 token/space scope를 비웁니다. |
+| 5 | `mobileSession` | `mobileApiScope.clear()`로 token/space scope를 비웁니다. |
 | 6 | `/profile` | `router.replace("/auth/login")`으로 로그인 route로 이동합니다. |
 
 ## 테스트 기준

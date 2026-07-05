@@ -20,7 +20,6 @@ export type InquiryCategory =
 export const InquiryCategory = {
 	GENERAL: "GENERAL",
 	DELIVERY: "DELIVERY",
-	PAYMENT: "PAYMENT",
 	REFUND: "REFUND",
 	PRODUCT: "PRODUCT",
 	ACCOUNT: "ACCOUNT",

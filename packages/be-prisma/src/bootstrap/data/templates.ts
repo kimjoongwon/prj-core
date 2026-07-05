@@ -186,22 +186,6 @@ export const templateSeedData: TemplateSeedData[] = [
 			{ name: "programName", description: "프로그램 이름", isRequired: true },
 		],
 	},
-	{
-		code: "SMS_PAYMENT_COMPLETE",
-		name: "결제 완료",
-		type: "SMS",
-		content:
-			"[{{groundName}}] {{userName}}님, {{amount}}원 결제가 완료되었습니다. 이용권: {{membershipName}} ({{expiryDate}}까지)",
-		description: "결제 완료 알림 SMS",
-		isActive: true,
-		variables: [
-			{ name: "userName", description: "회원 이름", isRequired: true },
-			{ name: "groundName", description: "시설 이름", isRequired: true },
-			{ name: "amount", description: "결제 금액", isRequired: true },
-			{ name: "membershipName", description: "이용권 이름", isRequired: true },
-			{ name: "expiryDate", description: "만료일", isRequired: true },
-		],
-	},
 	// ---- PUSH 템플릿 ----
 	{
 		code: "PUSH_CLASS_START",

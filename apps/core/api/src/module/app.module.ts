@@ -32,7 +32,6 @@ import { ActionsModule } from "./actions";
 import { AssetsModule } from "./assets";
 import { AuthModule } from "./auth";
 import { CommunityModule } from "./community";
-import { CoursesModule } from "./courses";
 import { EmailVerificationsModule } from "./email-verification";
 // Global modules
 import { FoldersModule } from "./folders";
@@ -46,7 +45,6 @@ import { OidcModule } from "./oidc";
 import { OidcClientsModule } from "./oidc-client";
 import { OidcSessionsModule } from "./oidc-session";
 import { PasswordResetModule } from "./password-reset";
-import { PaymentsModule } from "./payments";
 import { PoliciesModule } from "./policies";
 import { PolicyAssignmentsModule } from "./policy-assignments";
 import { PrismaModule } from "./prisma.module";
@@ -99,14 +97,12 @@ const devtoolsImports = enableNestDevtools
 		RolesModule,
 		I18nCatalogModule,
 		CommunityModule,
-		PaymentsModule,
 		PoliciesModule,
 		PolicyAssignmentsModule,
 		FoldersModule,
 		TemplatesModule,
 		ServiceDocumentsModule,
 		TranslationsModule,
-		CoursesModule,
 		TimelinesModule,
 		TasksModule,
 		RoutinesModule,
@@ -169,10 +165,6 @@ const devtoolsImports = enableNestDevtools
 								module: CommunityModule,
 							},
 							{
-								path: "payments",
-								module: PaymentsModule,
-							},
-							{
 								path: "policies",
 								module: PoliciesModule,
 							},
@@ -195,10 +187,6 @@ const devtoolsImports = enableNestDevtools
 							{
 								path: "translations",
 								module: TranslationsModule,
-							},
-							{
-								path: "courses",
-								module: CoursesModule,
 							},
 							{
 								path: "timelines",

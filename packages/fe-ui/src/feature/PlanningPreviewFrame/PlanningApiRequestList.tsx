@@ -4,7 +4,9 @@ export interface PlanningApiRequestListProps {
 	requests?: readonly PlanningApiRequest[];
 }
 
-export function PlanningApiRequestList({ requests }: PlanningApiRequestListProps) {
+export function PlanningApiRequestList({
+	requests,
+}: PlanningApiRequestListProps) {
 	return (
 		<>
 			{requests?.map((request) => (

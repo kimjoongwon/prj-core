@@ -34,7 +34,7 @@ export type AppAction = (typeof APP_ACTIONS)[number];
 export type AppSubject = string | "all";
 
 /**
- * Store에 저장되는 표준 권한 규칙
+ * 앱 상태에 저장되는 표준 권한 규칙
  */
 export interface AbilityRule {
 	action: AppAction | AppAction[];
@@ -46,7 +46,7 @@ export interface AbilityRule {
 }
 
 /**
- * API 응답 권한 데이터를 Store 규칙으로 변환하기 위한 입력 타입
+ * API 응답 권한 데이터를 앱 권한 규칙으로 변환하기 위한 입력 타입
  * - action/subject는 문자열 또는 객체(name 필드) 모두 허용
  */
 export interface AbilityApiResponse {

@@ -19,7 +19,7 @@ export const Default: Story = {
 	render: () => (
 		<View className="flex-1 justify-end bg-background">
 			<ScreenActionBar
-				description="선택한 일정과 결제 정보를 확인한 뒤 다음 단계로 이동합니다."
+				description="선택한 일정과 요청 사항을 확인한 뒤 다음 단계로 이동합니다."
 				onPressPrimaryAction={() => undefined}
 				onPressSecondaryAction={() => undefined}
 				primaryActionLabel="예약 계속하기"

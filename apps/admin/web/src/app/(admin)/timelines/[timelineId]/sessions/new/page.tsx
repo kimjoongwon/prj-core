@@ -1,6 +1,9 @@
 "use client";
 
-import { useCreateSession, useGetTimelineById } from "@cocrepo/api/core/timelines";
+import {
+	useCreateSession,
+	useGetTimelineById,
+} from "@cocrepo/api/core/timelines";
 import {
 	Button,
 	TimelineSessionEditScreen,
@@ -14,7 +17,7 @@ import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
-import { usePersistStore } from "@/stores/AppStoreProvider";
+import { useApp } from "@/stores/AppProvider";
 
 type SessionNewPageParams = {
 	timelineId: string;
@@ -23,7 +26,7 @@ type SessionNewPageParams = {
 const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 	const { timelineId } = useParams<SessionNewPageParams>();
 	const router = useRouter();
-	const persistStore = usePersistStore();
+	const app = useApp();
 	const state = useLocalObservable<TimelineSessionFormState>(() => ({
 		name: "",
 		type: "ONE_TIME" as TimelineSessionScreenSessionType,
@@ -119,7 +122,7 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 				timeline?.name ? `${timeline.name}에 세션을 등록합니다.` : undefined
 			}
 			state={state}
-			contentLanguageCode={persistStore.contentLanguageCode}
+			contentLanguageCode={app.space?.contentLanguageCode}
 			actions={
 				<div className="flex gap-2">
 					<Button

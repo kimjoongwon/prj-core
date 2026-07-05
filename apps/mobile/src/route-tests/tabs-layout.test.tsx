@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import MainTabsLayout from "@/app/(tabs)/_layout";
-import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
+import { mobileApiScope } from "@/auth/mobile-api-scope";
 import type { ReactElement, ReactNode } from "react";
 
 interface CustomHeaderProps {
@@ -177,8 +177,8 @@ jest.mock("expo-router", () => {
 
 describe("mobile expo tabs layout", () => {
   beforeEach(() => {
-    mobileApiScopeStore.clear();
-    mobileApiScopeStore.setSpaceInfo({
+    mobileApiScope.clear();
+    mobileApiScope.setSpaceInfo({
       address: "서울 강남구",
       groundName: "강남점",
       spaceId: "space-branch",

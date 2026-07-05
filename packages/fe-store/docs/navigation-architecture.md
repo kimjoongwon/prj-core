@@ -67,12 +67,12 @@ class NavItem {
 
 ---
 
-### 3. NavigationStore (네비게이션 관리자)
+### 3. Navigation (네비게이션 관리자)
 
 **역할**: 네비게이션 아이템 컬렉션의 **상태 관리 및 네비게이션 로직**
 
 ```typescript
-class NavigationStore {
+class Navigation {
   // 의존성
   private navigator: Navigator;
 
@@ -103,9 +103,9 @@ class NavigationStore {
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                         RootStore                                │
+│                         AppStore                                 │
 │  ┌─────────────┐  ┌──────────────────┐  ┌───────────────────┐   │
-│  │  Navigator  │  │  NavigationStore │  │  기타 Store...     │   │
+│  │  Navigator  │  │  Navigation      │  │  기타 상태...      │   │
 │  │             │  │                  │  │                    │   │
 │  │ - router    │◄─│ - navigator      │  │                    │   │
 │  │             │  │ - items[]        │  │                    │   │
@@ -135,23 +135,23 @@ class NavigationStore {
 
 ```typescript
 // stores/index.ts
-import { Navigator, NavigationStore } from '@cocrepo/store';
+import { Navigator, Navigation } from '@cocrepo/store';
 import { useRouter } from 'next/navigation';
 import { ADMIN_NAV_CONFIG } from '@cocrepo/constant';
 
-export function initializeStores() {
+export function initializeAppNavigation() {
   const router = useRouter();
 
   // Navigator 생성 - router 주입
   const navigator = new Navigator({ router });
 
-  // NavigationStore 생성 - Navigator 주입
-  const navigationStore = new NavigationStore(ADMIN_NAV_CONFIG, {
+  // Navigation 생성 - Navigator 주입
+  const navigation = new Navigation(ADMIN_NAV_CONFIG, {
     navigator,
     abilityChecker: (action, subject) => ability.can(action, subject),
   });
 
-  return { navigator, navigationStore };
+  return { navigator, navigation };
 }
 ```
 
@@ -159,8 +159,8 @@ export function initializeStores() {
 
 ```typescript
 // 사용자가 네비게이션 아이템 클릭
-navigationStore.selectNavItem('members');
-// → NavigationStore가 활성 상태 업데이트
+navigation.selectNavItem('members');
+// → Navigation이 활성 상태 업데이트
 // → Navigator.push('/members/list') 호출
 // → 실제 페이지 이동
 ```
@@ -170,32 +170,19 @@ navigationStore.selectNavItem('members');
 ```typescript
 // 라우터 변경 시 (useEffect)
 useEffect(() => {
-  navigationStore.setCurrentPath(pathname);
+  navigation.setCurrentPath(pathname);
 }, [pathname]);
 ```
 
 ---
 
-## 하위 호환성
+## 공개 API
 
-기존 `MenuStore`를 사용하는 코드는 계속 동작합니다:
-
-```typescript
-// 기존 코드 (deprecated)
-import { MenuStore } from '@cocrepo/store';
-
-// 새 코드 (권장)
-import { NavigationStore } from '@cocrepo/store';
-```
-
-기존 메서드명도 호환됩니다:
+Navigation은 네비게이션을 총괄하는 단일 상태 객체입니다:
 
 ```typescript
-// 기존 (deprecated)
-navigationStore.selectMenu('members');
-navigationStore.selectedMenu;
+import { Navigation } from '@cocrepo/store';
 
-// 새 API (권장)
-navigationStore.selectNavItem('members');
-navigationStore.selectedNavItem;
+navigation.selectNavItem('members');
+navigation.selectedNavItem;
 ```

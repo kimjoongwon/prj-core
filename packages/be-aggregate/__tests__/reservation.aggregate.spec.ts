@@ -5,15 +5,10 @@ jest.mock("@nestjs-cls/transactional", () => ({
 			descriptor,
 }));
 
-import { type CoursePass, Reservation } from "@cocrepo/entity";
-import {
-	CoursePassStatus,
-	ReservationStatus,
-	SessionTypes,
-} from "@cocrepo/prisma";
+import { Reservation } from "@cocrepo/entity";
+import { ReservationStatus, SessionTypes } from "@cocrepo/prisma";
 import {
 	type BookingProgramRecord,
-	CoursesRepository,
 	ReservationsRepository,
 	TenantsRepository,
 } from "@cocrepo/repository";
@@ -26,14 +21,12 @@ const userId = "22222222-2222-4222-8222-222222222222";
 const timelineId = "33333333-3333-4333-8333-333333333333";
 const sessionId = "44444444-4444-4444-8444-444444444444";
 const programId = "55555555-5555-4555-8555-555555555555";
-const coursePassId = "12121212-1212-4121-8121-121212121212";
 const occurrenceStartAt = new Date("2026-06-01T10:00:00.000Z");
 
 describe("ReservationAggregate", () => {
 	let service: ReservationAggregate;
 	let repository: jest.Mocked<ReservationsRepository>;
 	let tenantsRepository: jest.Mocked<TenantsRepository>;
-	let coursesRepository: jest.Mocked<CoursesRepository>;
 
 	beforeEach(() => {
 		repository = {
@@ -51,16 +44,8 @@ describe("ReservationAggregate", () => {
 		tenantsRepository = {
 			findActiveByUserIdAndSpaceId: jest.fn(),
 		} as unknown as jest.Mocked<TenantsRepository>;
-		coursesRepository = {
-			findCoursePassById: jest.fn(),
-			updateCoursePassUsageById: jest.fn(),
-		} as unknown as jest.Mocked<CoursesRepository>;
 
-		service = new ReservationAggregate(
-			repository,
-			tenantsRepository,
-			coursesRepository,
-		);
+		service = new ReservationAggregate(repository, tenantsRepository);
 		tenantsRepository.findActiveByUserIdAndSpaceId.mockResolvedValue({
 			id: tenantId,
 		} as Awaited<
@@ -72,10 +57,6 @@ describe("ReservationAggregate", () => {
 		);
 		repository.findActiveDuplicate.mockResolvedValue(null);
 		repository.countByProgramOccurrence.mockResolvedValue(1);
-		coursesRepository.findCoursePassById.mockResolvedValue(buildCoursePass());
-		coursesRepository.updateCoursePassUsageById.mockResolvedValue(
-			buildCoursePass(),
-		);
 	});
 
 	it("정원이 남아 있으면 CONFIRMED 예약을 생성한다", async () => {
@@ -95,7 +76,7 @@ describe("ReservationAggregate", () => {
 		expect(result.status).toBe(ReservationStatus.CONFIRMED);
 		expect(repository.create).toHaveBeenCalledWith(
 			expect.objectContaining({
-				spaceId,
+				tenantId,
 				userId,
 				timelineId,
 				sessionId,
@@ -103,14 +84,6 @@ describe("ReservationAggregate", () => {
 				status: ReservationStatus.CONFIRMED,
 				waitlistPosition: null,
 				idempotencyKey: "idem-confirmed",
-				coursePassId,
-			}),
-		);
-		expect(coursesRepository.updateCoursePassUsageById).toHaveBeenCalledWith(
-			coursePassId,
-			expect.objectContaining({
-				reservationUsedCount: { increment: 1 },
-				reservationRemainingCount: { decrement: 1 },
 			}),
 		);
 	});
@@ -137,10 +110,8 @@ describe("ReservationAggregate", () => {
 			expect.objectContaining({
 				status: ReservationStatus.WAITLISTED,
 				waitlistPosition: 4,
-				coursePassId,
 			}),
 		);
-		expect(coursesRepository.updateCoursePassUsageById).not.toHaveBeenCalled();
 	});
 
 	it("동일 idempotencyKey 요청은 기존 예약을 반환한다", async () => {
@@ -222,22 +193,6 @@ describe("ReservationAggregate", () => {
 				confirmedAt: now,
 			}),
 		);
-		expect(coursesRepository.updateCoursePassUsageById).toHaveBeenNthCalledWith(
-			1,
-			coursePassId,
-			expect.objectContaining({
-				reservationUsedCount: { decrement: 1 },
-				reservationRemainingCount: { increment: 1 },
-			}),
-		);
-		expect(coursesRepository.updateCoursePassUsageById).toHaveBeenNthCalledWith(
-			2,
-			coursePassId,
-			expect.objectContaining({
-				reservationUsedCount: { increment: 1 },
-				reservationRemainingCount: { decrement: 1 },
-			}),
-		);
 	});
 
 	it("CONFIRMED 예약의 2시간 취소 cutoff 이후 취소는 400을 반환한다", async () => {
@@ -263,40 +218,9 @@ function buildCreateInput(idempotencyKey: string) {
 		sessionId,
 		programId,
 		occurrenceStartAt,
-		coursePassId,
 		idempotencyKey,
 		memo: null,
 	};
-}
-
-function buildCoursePass(): CoursePass {
-	return {
-		id: coursePassId,
-		createdAt: new Date("2026-01-01T00:00:00.000Z"),
-		updatedAt: null,
-		removedAt: null,
-		enrollmentId: "13131313-1313-4131-8131-131313131313",
-		userId,
-		courseId: "14141414-1414-4141-8141-141414141414",
-		courseOfferingId: "15151515-1515-4151-8151-151515151515",
-		timelineId,
-		kind: "STANDARD",
-		issuedAt: new Date("2026-05-01T00:00:00.000Z"),
-		validFrom: new Date("2026-05-01T00:00:00.000Z"),
-		expiresAt: new Date("2026-10-31T00:00:00.000Z"),
-		reservationLimit: 48,
-		reservationUsedCount: 0,
-		reservationRemainingCount: 48,
-		status: CoursePassStatus.ACTIVE,
-		courseOffering: {
-			tenantId,
-			tenant: { id: tenantId, spaceId },
-		},
-		course: {
-			tenantId,
-			tenant: { id: tenantId, spaceId },
-		},
-	} as unknown as CoursePass;
 }
 
 function buildProgram(input: { capacity: number }): BookingProgramRecord {
@@ -350,7 +274,6 @@ function buildReservation(input: Partial<Reservation> = {}): Reservation {
 		tenantId,
 		tenant: { id: tenantId, spaceId },
 		userId,
-		coursePassId,
 		timelineId,
 		sessionId,
 		programId,

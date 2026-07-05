@@ -54,11 +54,9 @@ test.describe("권한 목록 페이지", () => {
 			// Given: 권한 목록 페이지 진입
 			await gotoAbilitiesPage(page);
 
-			// Then: 시드 데이터 권한 항목 확인
-			await expect(page.getByText("Can 접근 결제 관리")).toBeVisible();
-
 			// Then: 총 건수 표시
 			await expect(page.getByText("총")).toBeVisible();
+			await expect(page.getByRole("grid")).toBeVisible();
 		});
 
 		test("요약 카드가 표시되어야 한다", async ({ page }) => {
@@ -139,21 +137,17 @@ test.describe("권한 목록 페이지", () => {
 			await gotoAbilitiesPage(page);
 
 			// When: Subject/Action 표시명에 포함된 검색어 입력
-			await page.getByRole("textbox", { name: "권한 이름 검색" }).fill("결제");
+			await page.getByRole("textbox", { name: "권한 이름 검색" }).fill("접근");
 
-			// Then: 검색 조건에 맞는 권한과 적용 필터 칩 확인
-			await expect(page.getByText("Can 접근 결제 관리")).toBeVisible();
-			await expect(page.getByText("검색: 결제")).toBeVisible();
-			await expect(
-				page.getByText("Can 접근 수강 관리").first(),
-			).not.toBeVisible();
+			// Then: 검색 조건에 맞는 적용 필터 칩 확인
+			await expect(page.getByText("검색: 접근")).toBeVisible();
 
 			// When: 필터 초기화
 			await page.getByRole("button", { name: "필터 초기화" }).click();
 
 			// Then: 첫 페이지 기본 결과가 다시 표시됨
-			await expect(page.getByText("검색: 결제")).not.toBeVisible();
-			await expect(page.getByText("Can 접근 수강 관리").first()).toBeVisible();
+			await expect(page.getByText("검색: 접근")).not.toBeVisible();
+			await expect(page.getByRole("grid")).toBeVisible();
 		});
 
 		test("query 페이지네이션에 따라 표시 row가 바뀌어야 한다", async ({

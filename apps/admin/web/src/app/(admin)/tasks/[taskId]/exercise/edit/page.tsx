@@ -16,7 +16,7 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { usePersistStore } from "@/stores/AppStoreProvider";
+import { useApp } from "@/stores/AppProvider";
 
 type TaskExerciseEditScreenParams = {
 	taskId: string;
@@ -26,7 +26,7 @@ const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 	const t = useT();
 	const { taskId } = useParams<TaskExerciseEditScreenParams>();
 	const router = useRouter();
-	const persistStore = usePersistStore();
+	const app = useApp();
 	const state = useLocalObservable<TaskExerciseFormState>(() => ({
 		name: "",
 		durationMin: 0,
@@ -137,44 +137,42 @@ const AdminTasksTaskIdExerciseEditRoute = observer(() => {
 	};
 
 	return (
-		<>
-			<TaskExerciseEditScreen
-				title="운동 정보 수정"
-				description={
-					exercise?.name
-						? `${exercise.name} 운동 detail을 수정합니다.`
-						: "운동 detail을 수정합니다."
-				}
-				state={state}
-				contentLanguageCode={persistStore.contentLanguageCode}
-				selectedImageAsset={selectedImageAsset}
-				selectedVideoAsset={selectedVideoAsset}
-				assetBrowserProps={assetBrowser}
-				assetBrowserTitle={assetBrowserTitle}
-				assetBrowserDescription={assetBrowserDescription}
-				assetBrowserSelectedAssetId={selectedAssetId}
-				isAssetBrowserOpen={activeAssetSlot !== null}
-				isLoading={isLoading}
-				isNotFound={!isLoading && !exercise}
-				isSubmitPending={isPending}
-				onOpenImagePicker={() => {
-					onOpenAssetBrowser("image");
-				}}
-				onOpenVideoPicker={() => {
-					onOpenAssetBrowser("video");
-				}}
-				onCloseAssetBrowser={onCloseAssetBrowser}
-				onSelectAssetFromBrowser={onSelectAsset}
-				onClickClearImageAssetButton={() => {
-					state.imageFileId = "";
-				}}
-				onClickClearVideoAssetButton={() => {
-					state.videoFileId = "";
-				}}
-				onClickCancelButton={onClickCancelButton}
-				onClickSaveButton={onClickSaveButton}
-			/>
-		</>
+		<TaskExerciseEditScreen
+			title="운동 정보 수정"
+			description={
+				exercise?.name
+					? `${exercise.name} 운동 detail을 수정합니다.`
+					: "운동 detail을 수정합니다."
+			}
+			state={state}
+			contentLanguageCode={app.space?.contentLanguageCode}
+			selectedImageAsset={selectedImageAsset}
+			selectedVideoAsset={selectedVideoAsset}
+			assetBrowserProps={assetBrowser}
+			assetBrowserTitle={assetBrowserTitle}
+			assetBrowserDescription={assetBrowserDescription}
+			assetBrowserSelectedAssetId={selectedAssetId}
+			isAssetBrowserOpen={activeAssetSlot !== null}
+			isLoading={isLoading}
+			isNotFound={!isLoading && !exercise}
+			isSubmitPending={isPending}
+			onOpenImagePicker={() => {
+				onOpenAssetBrowser("image");
+			}}
+			onOpenVideoPicker={() => {
+				onOpenAssetBrowser("video");
+			}}
+			onCloseAssetBrowser={onCloseAssetBrowser}
+			onSelectAssetFromBrowser={onSelectAsset}
+			onClickClearImageAssetButton={() => {
+				state.imageFileId = "";
+			}}
+			onClickClearVideoAssetButton={() => {
+				state.videoFileId = "";
+			}}
+			onClickCancelButton={onClickCancelButton}
+			onClickSaveButton={onClickSaveButton}
+		/>
 	);
 });
 

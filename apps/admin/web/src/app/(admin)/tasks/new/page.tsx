@@ -7,12 +7,12 @@ import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
-import { usePersistStore } from "@/stores/AppStoreProvider";
+import { useApp } from "@/stores/AppProvider";
 
 const AdminTasksNewRoute = observer(() => {
 	const t = useT();
 	const router = useRouter();
-	const persistStore = usePersistStore();
+	const app = useApp();
 	const state = useLocalObservable(() => ({
 		name: "",
 		durationMin: 0,
@@ -138,49 +138,47 @@ const AdminTasksNewRoute = observer(() => {
 	};
 
 	return (
-		<>
-			<TaskCreateScreen
-				name={state.name}
-				durationMin={state.durationMin}
-				durationSec={state.durationSec}
-				count={state.count}
-				description={state.description}
-				contentLanguageCode={persistStore.contentLanguageCode}
-				selectedImageAsset={selectedImageAsset}
-				selectedVideoAsset={selectedVideoAsset}
-				assetBrowserProps={assetBrowser}
-				assetBrowserTitle={assetBrowserTitle}
-				assetBrowserDescription={assetBrowserDescription}
-				assetBrowserSelectedAssetId={selectedAssetId}
-				isAssetBrowserOpen={activeAssetSlot !== null}
-				errors={state.errors}
-				isSchedulable={state.videoFileId.trim().length > 0}
-				isSubmitPending={isPending}
-				onChangeNameInput={onChangeNameInput}
-				onChangeDurationMinInput={onChangeDurationMinInput}
-				onChangeDurationSecInput={onChangeDurationSecInput}
-				onChangeCountInput={onChangeCountInput}
-				onChangeDescriptionTextArea={onChangeDescriptionTextArea}
-				onChangeImageFileIdInput={onChangeImageFileIdInput}
-				onChangeVideoFileIdInput={onChangeVideoFileIdInput}
-				onOpenImagePicker={() => {
-					onOpenAssetBrowser("image");
-				}}
-				onOpenVideoPicker={() => {
-					onOpenAssetBrowser("video");
-				}}
-				onCloseAssetBrowser={onCloseAssetBrowser}
-				onSelectAssetFromBrowser={onSelectAsset}
-				onClickClearImageAssetButton={() => {
-					state.imageFileId = "";
-				}}
-				onClickClearVideoAssetButton={() => {
-					state.videoFileId = "";
-				}}
-				onClickCancelButton={onClickCancelButton}
-				onClickSaveButton={onClickSaveButton}
-			/>
-		</>
+		<TaskCreateScreen
+			name={state.name}
+			durationMin={state.durationMin}
+			durationSec={state.durationSec}
+			count={state.count}
+			description={state.description}
+			contentLanguageCode={app.space?.contentLanguageCode}
+			selectedImageAsset={selectedImageAsset}
+			selectedVideoAsset={selectedVideoAsset}
+			assetBrowserProps={assetBrowser}
+			assetBrowserTitle={assetBrowserTitle}
+			assetBrowserDescription={assetBrowserDescription}
+			assetBrowserSelectedAssetId={selectedAssetId}
+			isAssetBrowserOpen={activeAssetSlot !== null}
+			errors={state.errors}
+			isSchedulable={state.videoFileId.trim().length > 0}
+			isSubmitPending={isPending}
+			onChangeNameInput={onChangeNameInput}
+			onChangeDurationMinInput={onChangeDurationMinInput}
+			onChangeDurationSecInput={onChangeDurationSecInput}
+			onChangeCountInput={onChangeCountInput}
+			onChangeDescriptionTextArea={onChangeDescriptionTextArea}
+			onChangeImageFileIdInput={onChangeImageFileIdInput}
+			onChangeVideoFileIdInput={onChangeVideoFileIdInput}
+			onOpenImagePicker={() => {
+				onOpenAssetBrowser("image");
+			}}
+			onOpenVideoPicker={() => {
+				onOpenAssetBrowser("video");
+			}}
+			onCloseAssetBrowser={onCloseAssetBrowser}
+			onSelectAssetFromBrowser={onSelectAsset}
+			onClickClearImageAssetButton={() => {
+				state.imageFileId = "";
+			}}
+			onClickClearVideoAssetButton={() => {
+				state.videoFileId = "";
+			}}
+			onClickCancelButton={onClickCancelButton}
+			onClickSaveButton={onClickSaveButton}
+		/>
 	);
 });
 

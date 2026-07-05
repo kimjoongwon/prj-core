@@ -7,6 +7,11 @@
 **인증 방법:**
 1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
+
+**Tenant Scope:**
+- 보호 API는 `x-tenant-id` header로 현재 Tenant를 선택합니다.
+- 서버는 Tenant에서 Space를 파생하고, 기본적으로 현재 Space와 모든 하위 Space category 리소스를 조회합니다.
+- `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
 
@@ -154,14 +159,8 @@ export * from './bookingFeedItemDto';
 export * from './bookingFeedItemDtoMyReservationStatus';
 export * from './communityPostDto';
 export * from './companyDto';
+export * from './companyDtoGround';
 export * from './companyDtoSpace';
-export * from './courseDto';
-export * from './courseOfferingDto';
-export * from './courseOfferingStatus';
-export * from './coursePassDto';
-export * from './coursePassKind';
-export * from './coursePassStatus';
-export * from './courseStatus';
 export * from './createAbilityDto';
 export * from './createAbilityDtoConditions';
 export * from './createActionDto';
@@ -172,7 +171,6 @@ export * from './createGroundDto';
 export * from './createInquiryDto';
 export * from './createPolicyDto';
 export * from './createProgramDto';
-export * from './createReservationCheckoutDto';
 export * from './createReservationDto';
 export * from './createRoleDto';
 export * from './createRoutineActivityItemDto';
@@ -189,8 +187,6 @@ export * from './createTranslationDtoLanguageCode';
 export * from './deleteFilter';
 export * from './derivativeDto';
 export * from './derivativeKind';
-export * from './enrollmentDto';
-export * from './enrollmentStatus';
 export * from './exerciseDto';
 export * from './folderDto';
 export * from './groundDtoCompany';
@@ -223,14 +219,6 @@ export * from './inquiryStatus';
 export * from './inquiryThreadDto';
 export * from './messageContentType';
 export * from './moveAssetDto';
-export * from './paymentDto';
-export * from './paymentDtoMethod';
-export * from './paymentMethod';
-export * from './paymentReferenceDto';
-export * from './paymentReferenceType';
-export * from './paymentStatus';
-export * from './paymentSubjectDto';
-export * from './paymentSubjectType';
 export * from './policyAbilityResponseDto';
 export * from './policyAssignmentResponseDto';
 export * from './policyResponseDto';
@@ -241,12 +229,6 @@ export * from './programDto';
 export * from './recurringDayOfWeek';
 export * from './repeatCycleTypes';
 export * from './reservationAvailabilityStatus';
-export * from './reservationCheckoutBootstrapDto';
-export * from './reservationCheckoutContextDto';
-export * from './reservationCheckoutOptionDto';
-export * from './reservationCheckoutProgressStatus';
-export * from './reservationCheckoutProgressStepDto';
-export * from './reservationCheckoutResultDto';
 export * from './reservationDto';
 export * from './reservationStatus';
 export * from './reviewTenantAccessRequestDto';
@@ -283,7 +265,6 @@ export * from './tenantAccessRequestPaginationMetaDto';
 export * from './tenantAccessRequestStatus';
 export * from './threadStatus';
 export * from './timelineDto';
-export * from './timelineProvisioningMode';
 export * from './translationResponseDto';
 export * from './translationResponseDtoLanguageCode';
 export * from './updateAbilityDto';

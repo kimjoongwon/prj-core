@@ -16,7 +16,7 @@ import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
-import { usePersistStore } from "@/stores/AppStoreProvider";
+import { useApp } from "@/stores/AppProvider";
 
 type ProgramNewPageParams = {
 	timelineId: string;
@@ -41,7 +41,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 	() => {
 		const { timelineId, sessionId } = useParams<ProgramNewPageParams>();
 		const router = useRouter();
-		const persistStore = usePersistStore();
+		const app = useApp();
 		const state = useLocalObservable<TimelineSessionProgramFormState>(() => ({
 			name: "",
 			routineId: "",
@@ -176,27 +176,27 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 			<TimelineSessionProgramEditScreen
 				title="프로그램 등록"
 				description={[session?.name, session?.timeline?.name]
-						.filter(Boolean)
-						.join(" · ")}
+					.filter(Boolean)
+					.join(" · ")}
 				state={state}
-				contentLanguageCode={persistStore.contentLanguageCode}
+				contentLanguageCode={app.space?.contentLanguageCode}
 				routineOptions={routineOptions.map((routine) => ({
-						id: routine.id,
-						name: routine.name,
-						subtitle: `라벨: ${routine.label ?? "-"} · 활동 ${
-							routine.activities?.length ?? 0
-						}개 · ${
-							routine.activities?.some(
-								(activity) => !activity.task?.exercise?.videoFileId,
-							)
-								? "영상 누락"
+					id: routine.id,
+					name: routine.name,
+					subtitle: `라벨: ${routine.label ?? "-"} · 활동 ${
+						routine.activities?.length ?? 0
+					}개 · ${
+						routine.activities?.some(
+							(activity) => !activity.task?.exercise?.videoFileId,
+						)
+							? "영상 누락"
 							: "스케줄 가능"
-						}`,
+					}`,
 				}))}
 				instructorOptions={instructorOptions.map((instructor) => ({
-						id: instructor.id,
-						name: instructor.name,
-						subtitle: `이메일: ${instructor.email ?? "-"}`,
+					id: instructor.id,
+					name: instructor.name,
+					subtitle: `이메일: ${instructor.email ?? "-"}`,
 				}))}
 				routinePreview={routinePreview}
 				hasUnschedulableRoutine={hasUnschedulableRoutine}
@@ -218,12 +218,12 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 							startContent={<Save className="h-4 w-4" />}
 							isLoading={isPending}
 							isDisabled={
-						!state.name.trim() ||
-						!state.routineId.trim() ||
-						!state.instructorId.trim() ||
-						!state.capacity ||
-						hasUnschedulableRoutine
-					}
+								!state.name.trim() ||
+								!state.routineId.trim() ||
+								!state.instructorId.trim() ||
+								!state.capacity ||
+								hasUnschedulableRoutine
+							}
 							onPress={onClickSubmitButton}
 						>
 							등록

@@ -3,7 +3,6 @@ import {
 	ReservationStatus,
 } from "@cocrepo/prisma";
 import { AbstractAggregateEntity } from "./abstract-aggregate.entity";
-import type { CoursePass } from "./course-pass.entity";
 import type { Program } from "./program.entity";
 import type { Session } from "./session.entity";
 import type { Tenant } from "./tenant.entity";
@@ -16,7 +15,6 @@ export class Reservation
 {
 	tenantId!: string;
 	userId!: string;
-	coursePassId!: string;
 	timelineId!: string;
 	sessionId!: string;
 	programId!: string;
@@ -31,7 +29,6 @@ export class Reservation
 
 	tenant?: Tenant;
 	user?: User;
-	coursePass?: CoursePass;
 	timeline?: Timeline;
 	session?: Session;
 	program?: Program;

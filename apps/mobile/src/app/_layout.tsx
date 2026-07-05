@@ -75,10 +75,6 @@ export default function () {
 									name="select-space"
 									options={{ headerShown: false }}
 								/>
-								<Stack.Screen
-									name="payments/checkout"
-									options={{ title: "예약 결제" }}
-								/>
 							</Stack>
 						</AuthSessionGate>
 					</DesignSystemProvider>

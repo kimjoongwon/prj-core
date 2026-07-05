@@ -6,9 +6,6 @@ import {
 } from "@cocrepo/decorator";
 
 export class CreateReservationDto {
-	@UUIDField({ description: "예약 권리를 소비하는 수강권 ID" })
-	coursePassId!: string;
-
 	@UUIDField({ description: "타임라인 ID" })
 	timelineId!: string;
 

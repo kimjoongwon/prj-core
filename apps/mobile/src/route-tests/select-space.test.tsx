@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
 import SpaceSelectRoute from "@/app/select-space";
-import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
+import { mobileApiScope } from "@/auth/mobile-api-scope";
 
 const mockInvalidateQueries = jest.fn();
 const mockMutateAsync = jest.fn();
@@ -128,7 +128,7 @@ describe("mobile select space route", () => {
     mockUseGetMySpaces.mockReset();
     mockUseLocalSearchParams.mockReset();
     mockUseLocalSearchParams.mockReturnValue({ returnTo: "/" });
-    mobileApiScopeStore.clear();
+    mobileApiScope.clear();
   });
 
   it("플랫폼 운영본부를 제외한 지점 목록을 보여주고 선택 지점을 x-tenant-id scope로 저장한다", async () => {
@@ -151,9 +151,9 @@ describe("mobile select space route", () => {
     await waitFor(() => {
       expect(mockMutateAsync).toHaveBeenCalledWith({ tenantId: "tenant-branch" });
     });
-    expect(mobileApiScopeStore.tenantId).toBe("tenant-branch");
-    expect(mobileApiScopeStore.spaceId).toBe("space-branch");
-    expect(mobileApiScopeStore.groundName).toBe("강남점");
+    expect(mobileApiScope.tenantId).toBe("tenant-branch");
+    expect(mobileApiScope.spaceId).toBe("space-branch");
+    expect(mobileApiScope.groundName).toBe("강남점");
     expect(mockInvalidateQueries).toHaveBeenCalled();
     expect(mockReplace).toHaveBeenCalledWith("/");
   });

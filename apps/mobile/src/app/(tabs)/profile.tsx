@@ -2,8 +2,8 @@ import { MyPageScreen, type QuickActionListItem } from "@cocrepo/mo-ui";
 import type { Href } from "expo-router";
 import { useRouter } from "expo-router";
 import { observer } from "mobx-react-lite";
-import { mobileAuthStore } from "@/auth/auth-store";
-import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
+import { mobileSession } from "@/auth/mobile-session";
+import { mobileApiScope } from "@/auth/mobile-api-scope";
 
 const ProfileTabRoute = observer(() => {
 	const router = useRouter();
@@ -26,13 +26,6 @@ const ProfileTabRoute = observer(() => {
 			onPress: onPressMyReservationsAction,
 		},
 		{
-			description: "결제 내역과 수강권 관리는 곧 연결됩니다.",
-			disabled: true,
-			iconName: "ticketCheck",
-			id: "payments",
-			label: "결제/수강권",
-		},
-		{
 			description: "예약 알림과 앱 설정 관리는 다음 단계에서 제공합니다.",
 			disabled: true,
 			iconName: "info",
@@ -47,17 +40,17 @@ const ProfileTabRoute = observer(() => {
 	 * @returns 로그아웃 후 login route 이동 side effect
 	 */
 	const onPressLogoutButton = async () => {
-		await mobileAuthStore.logout();
+		await mobileSession.logout();
 		router.replace("/auth/login" as Href);
 	};
 
 	return (
 		<MyPageScreen
 			accountDescription="오노라 예약 알림과 계정 상태를 관리합니다."
-			currentSpaceName={mobileApiScopeStore.groundName ?? "지점 선택 필요"}
+			currentSpaceName={mobileApiScope.groundName ?? "지점 선택 필요"}
 			displayName="회원"
-			isAuthenticated={mobileAuthStore.isAuthenticated}
-			isLogoutPending={mobileAuthStore.isVerifying}
+			isAuthenticated={mobileSession.isAuthenticated}
+			isLogoutPending={mobileSession.isVerifying}
 			onPressLogout={onPressLogoutButton}
 			quickActions={quickActions}
 		/>

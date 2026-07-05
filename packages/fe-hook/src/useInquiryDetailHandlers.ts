@@ -176,7 +176,6 @@ export function useInquiryDetailHandlers(
 					category: category as
 						| "GENERAL"
 						| "DELIVERY"
-						| "PAYMENT"
 						| "REFUND"
 						| "PRODUCT"
 						| "ACCOUNT"

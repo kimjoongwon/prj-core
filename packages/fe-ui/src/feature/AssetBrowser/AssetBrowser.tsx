@@ -103,7 +103,7 @@ export interface AssetBrowserProps {
 	queryStates: AssetBrowserQueryStates;
 	setQueryStates: AssetBrowserSetQueryStates;
 	isLoading: boolean;
-	isStoreReady: boolean;
+	isSpaceReady: boolean;
 	hasSelectedSpace: boolean;
 	isRemoving: boolean;
 	isUploadingAsset: boolean;
@@ -153,14 +153,14 @@ const getAssetEmptyMessage = (
 };
 
 export function isUploadActionDisabled({
-	isStoreReady,
+	isSpaceReady,
 	hasSelectedSpace,
 	isUploadingAsset,
 }: Pick<
 	AssetBrowserProps,
-	"isStoreReady" | "hasSelectedSpace" | "isUploadingAsset"
+	"isSpaceReady" | "hasSelectedSpace" | "isUploadingAsset"
 >) {
-	return !isStoreReady || !hasSelectedSpace || isUploadingAsset;
+	return !isSpaceReady || !hasSelectedSpace || isUploadingAsset;
 }
 
 export function getUploadRequirementMessage(
@@ -240,7 +240,7 @@ export const AssetBrowser = observer(
 		queryStates,
 		setQueryStates,
 		isLoading,
-		isStoreReady,
+		isSpaceReady,
 		hasSelectedSpace,
 		isRemoving,
 		isUploadingAsset,
@@ -478,7 +478,7 @@ export const AssetBrowser = observer(
 		const browserContent = (
 			<>
 				<Surface className="overflow-hidden rounded-[1.75rem] border-border/80 bg-surface/75">
-					{!isStoreReady ? (
+					{!isSpaceReady ? (
 						<AssetsGridFallback
 							queryStates={queryStates}
 							setQueryStates={setQueryStates}
@@ -680,7 +680,7 @@ export const AssetBrowser = observer(
 					startContent={<Upload className="h-4 w-4" />}
 					onPress={onClickUploadButton}
 					isDisabled={isUploadActionDisabled({
-						isStoreReady,
+						isSpaceReady,
 						hasSelectedSpace,
 						isUploadingAsset,
 					})}

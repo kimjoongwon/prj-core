@@ -5,16 +5,16 @@ describe("resolveReturnPath", () => {
 	it("same-origin returnTo에서 admin basePath를 제거합니다.", () => {
 		expect(
 			resolveReturnPath(
-				"?returnTo=https%3A%2F%2Fconsole.test%2Fadmin%2Fcourses%3Fpage%3D2%23list",
+				"?returnTo=https%3A%2F%2Fconsole.test%2Fadmin%2Fusers%3Fpage%3D2%23list",
 				"https://console.test",
 			),
-		).toBe("/courses?page=2#list");
+		).toBe("/users?page=2#list");
 	});
 
 	it("외부 origin returnTo는 dashboard로 보냅니다.", () => {
 		expect(
 			resolveReturnPath(
-				"?returnTo=https%3A%2F%2Fevil.test%2Fadmin%2Fcourses",
+				"?returnTo=https%3A%2F%2Fevil.test%2Fadmin%2Fusers",
 				"https://console.test",
 			),
 		).toBe("/dashboard");

@@ -423,9 +423,9 @@ screen component는 page-level 시각 구성과 사용자 이벤트 위임만 �
    - private JSX subcomponent는 같은 screen 파일에 선언하지 않고 `widget`/`feature`/leaf 계층의 별도 파일로 분리합니다.
 16. JSX를 반환하는 `render*` helper 함수를 만들지 않습니다.
    - screen-local 상태별/반복별 JSX는 returned JSX 안에서 조건식과 반복으로 직접 조합합니다.
-   - JSX 노드를 `checkoutStatusFeedback`, `progressStepNodes` 같은 return 밖 변수에 미리 담지 않습니다.
-   - 재사용 목적이 없는 작은 JSX 조각을 `CheckoutStatusFeedback`, `ProgressSection` 같은 별도 컴포넌트로 빼지 않습니다.
-   - `toCourseCardItems`, `getStatusLabel`처럼 JSX를 반환하지 않는 data mapper/helper만 lowercase 함수로 둡니다.
+   - JSX 노드를 `statusFeedbackNode`, `progressStepNodes` 같은 return 밖 변수에 미리 담지 않습니다.
+   - 재사용 목적이 없는 작은 JSX 조각을 `StatusFeedback`, `ProgressSection` 같은 별도 컴포넌트로 빼지 않습니다.
+   - `toProgramListItems`, `getStatusLabel`처럼 JSX를 반환하지 않는 data mapper/helper만 lowercase 함수로 둡니다.
 17. screen component 수정 시 대응 `[ScreenName].spec.md` 기획 스펙 업데이트가 필수입니다.
 18. `packages/fe-mo-ui/src/screen/index.ts` export 동기화가 필수입니다.
 19. screen spec은 `## 화면 스케치` 섹션과 fenced `text` wireframe을 반드시 포함합니다.

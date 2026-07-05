@@ -129,22 +129,20 @@ export type {
 	ActionTransformConfig,
 } from "./action-config";
 // ============================================
-// Create/Update Form Bootstrap 관련 타입
+// App 상태 계약 타입
 // ============================================
 export type {
-	CreateUpdateFormBootstrap,
-	FormFieldMeta,
-	FormOptionItem,
-	FormUiPaths,
-} from "./form-bootstrap";
-export type {
-	FormFeedbackActions,
-	FormFeedbackState,
-	FormFieldErrors,
-	FormSchemaField,
-	FormSchemaStateContract,
-	FormStateContract,
-} from "./form-state";
+	AbilityChecker,
+	AppProviderConfig,
+	AppProviderResult,
+	FABAbilityChecker,
+	FABConfig,
+	FloatingActionsOptions,
+	ModalOpenHandler,
+	NavItemScopeChecker,
+	NavigationOptions,
+	NavigatorLike,
+} from "./app-contracts";
 // ============================================
 // Config 관련 타입
 // ============================================
@@ -175,23 +173,43 @@ export type {
 	ContextUserSnapshot,
 } from "./context-snapshot";
 // ============================================
+// Create/Update Form Bootstrap 관련 타입
+// ============================================
+export type {
+	CreateUpdateFormBootstrap,
+	FormFieldMeta,
+	FormOptionItem,
+	FormUiPaths,
+} from "./form-bootstrap";
+export type {
+	FormFeedbackActions,
+	FormFeedbackState,
+	FormFieldErrors,
+	FormSchemaField,
+	FormSchemaStateContract,
+	FormStateContract,
+} from "./form-state";
+// ============================================
 // Hook 계약 타입
 // ============================================
 export type {
+	SpaceBootstrapScopeLike,
 	SpaceBootstrapSelection,
 	SpaceBootstrapSpaceLike,
-	SpaceBootstrapStoreLike,
-	SpaceGuardPersistStoreLike,
+	SpaceGuardAppLike,
+	SpaceGuardScopeLike,
 	UseAbilitiesOptions,
 	UseAbilitiesReturn,
 	UseFormFieldMultiOptions,
 	UseFormFieldReturn,
 	UseFormFieldSingleOptions,
-	UseLayoutBottomTabStoreLike,
-	UseLayoutFABStoreLike,
-	UseLayoutNavigationStoreLike,
+	UseLayoutAppLike,
+	UseLayoutFloatingActionLike,
+	UseLayoutMobileBottomNavigationLike,
+	UseLayoutMobileMenuLike,
 	UseLayoutOptions,
 	UseLayoutReturn,
+	UseLayoutSideNavigationLike,
 	UseSpaceBootstrapOptions,
 	UseSpaceBootstrapReturn,
 	UseSpaceGuardOptions,
@@ -249,21 +267,6 @@ export type {
 } from "./pagination";
 export { SpaceResourceScope } from "./space-resource-scope";
 export { SpaceScope } from "./space-scope";
-// ============================================
-// Store 계약 타입
-// ============================================
-export type {
-	AbilityChecker,
-	AppStoreConfig,
-	AppStoreProviderResult,
-	FABAbilityChecker,
-	FABConfig,
-	FABStoreOptions,
-	ModalOpenHandler,
-	NavItemScopeChecker,
-	NavigationStoreOptions,
-	NavigatorLike,
-} from "./store-contracts";
 // ============================================
 // Storybook 기획 시나리오 타입
 // ============================================

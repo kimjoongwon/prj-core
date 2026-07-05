@@ -87,7 +87,7 @@ router.push(`/templates/${template.id}`)
 
 즉 body/query DTO 안의 UUID 필드는 short key로 들어와도 controller/service에서는 UUID로 받는다.
 
-단, 모든 `*Id` 문자열을 자동 변환하지 않는다. `clientId`, `providerPaymentId`, token 같은 외부 시스템 ID가 섞여 있기 때문이다.
+단, 모든 `*Id` 문자열을 자동 변환하지 않는다. `clientId`, `providerTransactionId`, token 같은 외부 시스템 ID가 섞여 있기 때문이다.
 
 변환 대상은 기본적으로 `@UUIDField()`가 붙은 필드다.
 
@@ -347,7 +347,7 @@ const query = useGetTemplate(templateId);
 - Service/UseCase 내부 로직
 - `customAxios`
 - admin route page의 개별 encode/decode 유틸
-- `navigationStore.router` 기반 대규모 라우팅 리팩터링
+- `Navigation` 기반 대규모 라우팅 리팩터링
 
 ## 검증
 

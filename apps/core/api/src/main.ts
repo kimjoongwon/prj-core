@@ -13,7 +13,6 @@ import { AppModule } from "./module/app.module";
 import { AssetsModule } from "./module/assets";
 import { AuthModule } from "./module/auth";
 import { CommunityModule } from "./module/community";
-import { CoursesModule } from "./module/courses";
 import { EmailVerificationsModule } from "./module/email-verification";
 import { FoldersModule } from "./module/folders";
 import { I18nCatalogModule } from "./module/i18n";
@@ -25,7 +24,6 @@ import { OidcModule } from "./module/oidc";
 import { OidcClientsModule } from "./module/oidc-client";
 import { OidcSessionsModule } from "./module/oidc-session";
 import { PasswordResetModule } from "./module/password-reset";
-import { PaymentsModule } from "./module/payments";
 import { PoliciesModule } from "./module/policies";
 import { PolicyAssignmentsModule } from "./module/policy-assignments";
 import { ReservationsModule } from "./module/reservations";
@@ -286,14 +284,12 @@ const SWAGGER_MODULES = [
 	RolesModule,
 	I18nCatalogModule,
 	CommunityModule,
-	PaymentsModule,
 	PoliciesModule,
 	PolicyAssignmentsModule,
 	FoldersModule,
 	TemplatesModule,
 	ServiceDocumentsModule,
 	TranslationsModule,
-	CoursesModule,
 	TimelinesModule,
 	TasksModule,
 	RoutinesModule,

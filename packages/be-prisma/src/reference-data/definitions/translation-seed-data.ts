@@ -863,12 +863,6 @@ const translationDefinitions = [
 		zh_CN: "配送",
 		ja_JP: "配送",
 	}),
-	defineTranslation("결제", "프론트 UI", {
-		ko_KR: "결제",
-		en_US: "Payment",
-		zh_CN: "支付",
-		ja_JP: "決済",
-	}),
 	defineTranslation("환불/취소", "프론트 UI", {
 		ko_KR: "환불/취소",
 		en_US: "Refund/cancel",

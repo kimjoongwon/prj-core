@@ -250,7 +250,6 @@ packages/be-prisma/schema/*.prisma
 | Ground | Space 하위 시설 |
 | Exercise | Task 하위 운동 |
 | Session | 세션 |
-| Payment | 결제 |
 | Invoice | 청구서 |
 | Notification | 알림 |
 | Announcement | 공지사항 |

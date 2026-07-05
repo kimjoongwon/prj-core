@@ -148,21 +148,6 @@ export type SecurityPolicy = Prisma.SecurityPolicyModel
  */
 export type WhitelistEntry = Prisma.WhitelistEntryModel
 /**
- * Model Payment
- * @displayName 결제
- */
-export type Payment = Prisma.PaymentModel
-/**
- * Model PaymentSubject
- * @displayName 결제 대상
- */
-export type PaymentSubject = Prisma.PaymentSubjectModel
-/**
- * Model PaymentReference
- * @displayName 결제 참조
- */
-export type PaymentReference = Prisma.PaymentReferenceModel
-/**
  * Model Post
  * @displayName 게시물
  */
@@ -302,26 +287,6 @@ export type OidcModel = Prisma.OidcModelModel
  * @displayName 기준 데이터 migration 이력
  */
 export type ReferenceDataMigrationHistory = Prisma.ReferenceDataMigrationHistoryModel
-/**
- * Model Course
- * @displayName 코스
- */
-export type Course = Prisma.CourseModel
-/**
- * Model CourseOffering
- * @displayName 코스 개설
- */
-export type CourseOffering = Prisma.CourseOfferingModel
-/**
- * Model Enrollment
- * @displayName 수강 등록
- */
-export type Enrollment = Prisma.EnrollmentModel
-/**
- * Model CoursePass
- * @displayName 수강권
- */
-export type CoursePass = Prisma.CoursePassModel
 /**
  * Model Reservation
  * @displayName 예약

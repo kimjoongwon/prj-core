@@ -7,6 +7,11 @@
 **인증 방법:**
 1. OAuth2 (권장) - Authorize 버튼 클릭 후 OIDC 로그인
 2. Cookie - 브라우저에서 로그인 후 쿠키 자동 전송
+
+**Tenant Scope:**
+- 보호 API는 `x-tenant-id` header로 현재 Tenant를 선택합니다.
+- 서버는 Tenant에서 Space를 파생하고, 기본적으로 현재 Space와 모든 하위 Space category 리소스를 조회합니다.
+- `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
 import type { AssetKind } from './assetKind';
@@ -16,14 +21,21 @@ import type { FolderDto } from './folderDto';
 import type { DerivativeDto } from './derivativeDto';
 
 export interface AssetDto {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
   id: string;
   createdAt: string;
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
-  /** 소속 Tenant ID */
+  /**
+   * 소속 Tenant ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
   tenantId: string;
-  /** 소속 폴더 ID */
+  /**
+   * 소속 폴더 ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
   folderId: string;
   /** 에셋 종류 (IMAGE, VIDEO, DOCUMENT) */
   kind: AssetKind;
@@ -52,6 +64,7 @@ export interface AssetDto {
   /**
    * 생성자 ID
    * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
    */
   creatorId?: string | null;
   /**

@@ -61,7 +61,6 @@ export const MOBILE_AUTH = {
 
 const AUTHENTICATED_ROUTE_PATHS = [
 	"/",
-	"/payments/checkout",
 	"/profile",
 	"/reservations",
 	"/select-space",

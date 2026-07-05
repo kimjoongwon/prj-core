@@ -11,8 +11,8 @@ import {
   getIdpApiBaseUrl,
   resolveAuthenticatedRoutePath,
 } from "@/auth/auth-config";
-import { mobileAuthStore } from "@/auth/auth-store";
-import { mobileApiScopeStore } from "@/auth/mobile-api-scope";
+import { mobileSession } from "@/auth/mobile-session";
+import { mobileApiScope } from "@/auth/mobile-api-scope";
 import {
   toSelectableMobileSpaceInfos,
   toSpaceListItemInfos,
@@ -53,7 +53,7 @@ const SpaceSelectRoute = observer(() => {
   >;
   const returnTo = resolveReturnTo(rawParams);
   const [selectedSpaceId, setSelectedSpaceId] = useState<string | null>(
-    mobileApiScopeStore.tenantId,
+    mobileApiScope.tenantId,
   );
   const [selectionErrorDescription, setSelectionErrorDescription] = useState("");
   const requestOptions = { baseURL: getIdpApiBaseUrl() };
@@ -98,7 +98,7 @@ const SpaceSelectRoute = observer(() => {
       const response = await setCurrentSpaceMutation.mutateAsync({
         tenantId: item.id,
       });
-      await mobileAuthStore.selectSpace(response.data ?? selectedSpace);
+      await mobileSession.selectSpace(response.data ?? selectedSpace);
       await queryClient.invalidateQueries();
       router.replace(returnTo as Href);
     } catch (error) {

@@ -90,7 +90,6 @@ const INQUIRY_STATUS_CONFIG = {
 const INQUIRY_CATEGORY_LABEL: Record<string, string> = {
 	GENERAL: "일반",
 	DELIVERY: "배송",
-	PAYMENT: "결제",
 	REFUND: "환불/취소",
 	PRODUCT: "상품",
 	ACCOUNT: "계정",

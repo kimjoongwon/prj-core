@@ -1,7 +1,7 @@
 "use client";
 
 import { useGetCurrentSpace, useGetMySpaces } from "@cocrepo/api/idp/auth";
-import { usePersistStore } from "@cocrepo/store";
+import { useApp } from "@cocrepo/store";
 import type {
 	SpaceBootstrapSpaceLike,
 	UseSpaceBootstrapOptions,
@@ -10,9 +10,9 @@ import type {
 import { useEffect } from "react";
 
 export type {
+	SpaceBootstrapScopeLike,
 	SpaceBootstrapSelection,
 	SpaceBootstrapSpaceLike,
-	SpaceBootstrapStoreLike,
 	UseSpaceBootstrapOptions,
 	UseSpaceBootstrapReturn,
 } from "@cocrepo/type";
@@ -36,7 +36,7 @@ export function useSpaceBootstrap<
 	TSpace extends SpaceBootstrapSpaceLike = SpaceBootstrapSpaceLike,
 >(options: UseSpaceBootstrapOptions<TSpace>): UseSpaceBootstrapReturn<TSpace> {
 	const {
-		spaceStore,
+		space,
 		isHydrated,
 		spaces: injectedSpaces,
 		currentSpace = null,
@@ -49,7 +49,7 @@ export function useSpaceBootstrap<
 			return;
 		}
 
-		spaceStore.setSpaces(
+		space.setSpaces(
 			spaces
 				.filter((space) => space.id && space.tenantId && space.ground)
 				.map((space) => ({
@@ -59,7 +59,7 @@ export function useSpaceBootstrap<
 					contentLanguageCode: space.contentLanguageCode ?? null,
 				})),
 		);
-	}, [spaceStore, spaces]);
+	}, [space, spaces]);
 
 	useEffect(() => {
 		if (!isHydrated || !isCurrentSpaceFetched) {
@@ -67,7 +67,7 @@ export function useSpaceBootstrap<
 		}
 
 		if (currentSpace?.id && currentSpace.tenantId) {
-			spaceStore.setSpace(
+			space.setSpace(
 				currentSpace.tenantId,
 				resolveCurrentSpaceGroundName(currentSpace, spaces),
 				currentSpace.contentLanguageCode ??
@@ -77,27 +77,31 @@ export function useSpaceBootstrap<
 				currentSpace.id,
 			);
 		} else {
-			spaceStore.clearSpace();
+			space.clearSpace();
 		}
 
-		spaceStore.setSpaceSelectionResolved(true);
-	}, [currentSpace, isCurrentSpaceFetched, isHydrated, spaceStore, spaces]);
+		space.setSpaceSelectionResolved(true);
+	}, [currentSpace, isCurrentSpaceFetched, isHydrated, space, spaces]);
 
 	return {
 		spaces,
 		currentSpace,
 		isCurrentSpaceFetched,
 		isSpaceBootstrapReady:
-			isHydrated && spaceStore.isSpaceSelectionResolved === true,
+			isHydrated && space.isSpaceSelectionResolved === true,
 	};
 }
 
 /**
- * 현재 앱 Store와 Space API를 연결해 Space 선택 상태를 bootstrap합니다.
+ * 현재 앱 space와 Space API를 연결해 Space 선택 상태를 bootstrap합니다.
  */
 export function useSpaceBootstrapFromApi() {
-	const persistStore = usePersistStore();
-	const isHydrated = persistStore.isHydrated === true;
+	const app = useApp();
+	const space = app.space;
+	if (!space) {
+		throw new Error("space가 초기화되지 않았습니다.");
+	}
+	const isHydrated = space.isHydrated === true;
 	const { data: mySpacesResponse } = useGetMySpaces({
 		query: {
 			enabled: isHydrated,
@@ -111,7 +115,7 @@ export function useSpaceBootstrapFromApi() {
 		});
 
 	return useSpaceBootstrap({
-		spaceStore: persistStore,
+		space: space,
 		isHydrated,
 		spaces: mySpacesResponse?.data,
 		currentSpace: currentSpaceResponse?.data ?? null,

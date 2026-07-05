@@ -1,17 +1,21 @@
 "use client";
 
 import { useCreateTimeline } from "@cocrepo/api/core/timelines";
-import { Button, TimelineEditScreen, type TimelineFormState } from "@cocrepo/ui";
+import {
+	Button,
+	TimelineEditScreen,
+	type TimelineFormState,
+} from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
-import { usePersistStore } from "@/stores/AppStoreProvider";
+import { useApp } from "@/stores/AppProvider";
 
 const AdminTimelinesNewRoute = observer(() => {
 	const router = useRouter();
-	const persistStore = usePersistStore();
+	const app = useApp();
 	const state = useLocalObservable<TimelineFormState>(() => ({
 		name: "",
 		description: "",
@@ -72,7 +76,7 @@ const AdminTimelinesNewRoute = observer(() => {
 			title="타임라인 등록"
 			description="새 타임라인을 등록합니다."
 			state={state}
-			contentLanguageCode={persistStore.contentLanguageCode}
+			contentLanguageCode={app.space?.contentLanguageCode}
 			actions={
 				<div className="flex gap-2">
 					<Button

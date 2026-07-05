@@ -12,7 +12,12 @@ const nextConfig: NextConfig = {
 	turbopack: {
 		root: path.join(__dirname, "../../.."),
 	},
-	transpilePackages: ["@cocrepo/ui", "@cocrepo/toolkit", "@cocrepo/type"],
+	transpilePackages: [
+		"@cocrepo/schema",
+		"@cocrepo/toolkit",
+		"@cocrepo/type",
+		"@cocrepo/ui",
+	],
 	async redirects() {
 		return [
 			{
