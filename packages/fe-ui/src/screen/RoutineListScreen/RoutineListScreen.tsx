@@ -68,7 +68,7 @@ function RoutinesScreenFallback() {
 				title="루틴"
 				description="운동 루틴(커리큘럼)을 관리합니다."
 			/>
-			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface/70">
+			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface">
 				<Section>
 					<Section.Body>{null}</Section.Body>
 				</Section>
@@ -123,7 +123,7 @@ export const RoutineListScreen = observer(
 						</Button>
 					}
 				/>
-				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
 							<DataGrid

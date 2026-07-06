@@ -103,7 +103,7 @@ export const EmailVerificationListScreen = observer(
 					title="이메일 인증"
 					description="회원가입 전 이메일 인증 요청과 발송 상태를 관리합니다."
 				/>
-				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
 							<DataGrid

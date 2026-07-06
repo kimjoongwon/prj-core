@@ -48,7 +48,7 @@ export const HeaderBar = observer(function HeaderBar({
 			<Dropdown>
 				<Dropdown.Trigger
 					aria-label={t("사용자 메뉴")}
-					className="inline-flex h-11 items-center gap-2 rounded-2xl border border-border bg-surface/80 px-2 pr-3 text-foreground shadow-sm backdrop-blur-md hover:bg-surface-secondary"
+					className="inline-flex h-10 items-center gap-2 rounded-lg border border-[#d7e4f2] bg-white px-2 pr-3 text-foreground hover:bg-[#eef6ff] dark:border-white/10 dark:bg-neutral-900 dark:hover:bg-neutral-800"
 				>
 					<Avatar size="sm" className="h-8 w-8 bg-foreground text-background">
 						{userInfo.avatarUrl ? (
@@ -102,11 +102,10 @@ export const HeaderBar = observer(function HeaderBar({
 	return (
 		<header
 			className={cn(
-				"relative z-30 border-b border-border bg-background/82 backdrop-blur-2xl",
+				"relative z-30 border-b border-[#d7e4f2] bg-white dark:border-white/10 dark:bg-neutral-950",
 				className,
 			)}
 		>
-			<div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
 			<div className="flex h-16 items-center justify-between gap-4 px-4 md:h-[72px] md:px-6">
 				<div className="flex min-w-0 items-center gap-3 md:gap-4">
 					{leadingContent}

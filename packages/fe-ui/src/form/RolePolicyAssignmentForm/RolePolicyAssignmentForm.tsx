@@ -147,7 +147,7 @@ export const RolePolicyAssignmentForm = observer(
 						return (
 							<div
 								key={policy.id}
-								className="rounded-xl border border-border bg-background/60 p-4"
+								className="rounded-xl border border-border bg-background p-4"
 							>
 								<div className="flex items-start justify-between gap-4">
 									<div className="min-w-0">
@@ -221,7 +221,7 @@ export const RolePolicyAssignmentForm = observer(
 						);
 					})
 				) : (
-					<div className="rounded-xl border border-border bg-background/60 p-6 text-center text-sm text-muted">
+					<div className="rounded-xl border border-border bg-background p-6 text-center text-sm text-muted">
 						{emptyMessage}
 					</div>
 				)}

@@ -219,7 +219,7 @@ export const OidcSessionListScreen = observer(
 						{Object.entries(byModelType).map(([type, count]) => (
 							<MetricCard
 								key={type}
-								className="h-full border border-border bg-surface/80"
+								className="h-full border border-border bg-surface"
 								title={type}
 								value={count}
 								description="모델 타입별 활성 건수"
@@ -227,7 +227,7 @@ export const OidcSessionListScreen = observer(
 						))}
 					</div>
 				)}
-				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
 							<DataGrid

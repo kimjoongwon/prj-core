@@ -157,7 +157,7 @@ function hasActiveFilters(filters: AbilityListScreenFilters) {
 const AbilityListScreenFallback = observer(() => {
 	return (
 		<div className="space-y-5">
-			<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+			<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 				<Section>
 					<Section.Body>
 						<div className="flex items-center justify-center gap-2">
@@ -167,7 +167,7 @@ const AbilityListScreenFallback = observer(() => {
 					</Section.Body>
 				</Section>
 			</SectionSurface>
-			<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+			<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 				<Section>
 					<Section.Body>
 						<div className="flex items-center justify-center gap-2">
@@ -290,7 +290,7 @@ export const AbilityListScreen = observer(
 							value={summary.conditional + summary.fieldScoped}
 						/>
 					</div>
-					<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+					<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 						<Section>
 							<Section.Body>
 								<div className="mb-5 border-b border-border/80 pb-4">
@@ -420,7 +420,7 @@ export const AbilityListScreen = observer(
 						</Section>
 					</SectionSurface>
 
-					<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+					<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 						<Section overflow="hidden">
 							<Section.Body>
 								<div className="mb-4 border-b border-border/80 pb-4">

@@ -31,7 +31,7 @@ const ScreenRoot = ({ children, className, ...props }: ScreenProps) => {
 		<div
 			{...props}
 			className={joinClassNames(
-				"mx-auto flex w-full max-w-[1440px] flex-col gap-6",
+				"mx-auto flex w-full max-w-[1440px] flex-col gap-4",
 				className,
 			)}
 		>
@@ -51,15 +51,26 @@ const ScreenHeader = ({
 	const hasHeaderContent = Boolean(title || description || actions);
 
 	return (
-		<div {...props} className={joinClassNames("min-w-0", className)}>
+		<div
+			{...props}
+			className={joinClassNames(
+				"min-w-0 border-b border-[#d7e4f2] pb-4 dark:border-white/10",
+				className,
+			)}
+		>
 			{hasHeaderContent && (
 				<div className="flex items-start justify-between gap-4">
 					<div className="min-w-0 flex-1">
 						{title && (
-							<Typography.Heading level={1}>{title}</Typography.Heading>
+							<Typography.Heading
+								className="text-2xl font-semibold leading-8"
+								level={1}
+							>
+								{title}
+							</Typography.Heading>
 						)}
 						{description && (
-							<Typography.Paragraph className="mt-1" color="muted" size="base">
+							<Typography.Paragraph className="mt-1" color="muted" size="sm">
 								{description}
 							</Typography.Paragraph>
 						)}
@@ -76,7 +87,7 @@ const ScreenBody = ({ children, className, ...props }: ScreenSlotProps) => {
 	return (
 		<div
 			{...props}
-			className={joinClassNames("flex min-w-0 flex-col gap-6", className)}
+			className={joinClassNames("flex min-w-0 flex-col gap-4", className)}
 		>
 			{children}
 		</div>

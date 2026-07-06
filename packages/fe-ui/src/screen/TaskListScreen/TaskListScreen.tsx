@@ -69,7 +69,7 @@ function TasksScreenFallback() {
 				title="태스크 목록"
 				description="시스템에 등록된 태스크와 운동 detail을 관리합니다."
 			/>
-			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface/70">
+			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface">
 				<Section>
 					<Section.Body>{null}</Section.Body>
 				</Section>
@@ -125,7 +125,7 @@ export const TaskListScreen = observer(
 						</Button>
 					}
 				/>
-				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
 							<DataGrid

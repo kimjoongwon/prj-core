@@ -101,7 +101,7 @@ export const PolicyForm = observer(
 								return (
 									<div
 										key={ability.id}
-										className="rounded-xl border border-border bg-background/60 p-4"
+										className="rounded-xl border border-border bg-background p-4"
 									>
 										<div className="flex items-start justify-between gap-4">
 											<div>
@@ -122,7 +122,7 @@ export const PolicyForm = observer(
 								);
 							})
 						) : (
-							<div className="rounded-xl border border-border bg-background/60 p-6 text-center text-sm text-muted">
+							<div className="rounded-xl border border-border bg-background p-6 text-center text-sm text-muted">
 								선택 가능한 Ability가 없습니다.
 							</div>
 						)}

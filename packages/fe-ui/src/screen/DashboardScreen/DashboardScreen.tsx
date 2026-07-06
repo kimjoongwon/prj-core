@@ -43,7 +43,7 @@ function DashboardScreenContent() {
 							{dashboardCards.map((card) => (
 								<div
 									key={card.label}
-									className="rounded-xl border border-divider bg-background/60"
+									className="rounded-xl border border-divider bg-background"
 								>
 									<div className="p-6">
 										<h2 className="text-sm font-medium text-muted">

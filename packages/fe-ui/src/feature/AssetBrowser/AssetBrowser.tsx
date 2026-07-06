@@ -142,7 +142,7 @@ const assetsLayoutClassName =
 const assetsSidebarPanelClassName =
 	"overflow-hidden rounded-[1.25rem] border border-border/70 bg-default/70 shadow-sm";
 const assetsGridPanelClassName =
-	"min-w-0 rounded-[1.25rem] border border-border/70 bg-surface/85 px-4 py-4 shadow-sm sm:px-5 sm:py-5";
+	"min-w-0 rounded-[1.25rem] border border-border/70 bg-surface px-4 py-4 shadow-sm sm:px-5 sm:py-5";
 const getAssetEmptyMessage = (
 	folders: FolderTreeItem[],
 	selectedFolderId: string | null,
@@ -445,7 +445,7 @@ export const AssetBrowser = observer(
 		const emptyMessage = getAssetEmptyMessage(folders, selectedFolderId, t);
 		const browserContent = (
 			<>
-				<Surface className="overflow-hidden rounded-[1.75rem] border-border/80 bg-surface/75">
+				<Surface className="overflow-hidden rounded-[1.75rem] border-border/80 bg-surface">
 					{!isSpaceReady ? (
 						<AssetsGridFallback
 							queryStates={queryStates}

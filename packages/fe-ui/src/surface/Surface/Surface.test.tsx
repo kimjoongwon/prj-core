@@ -9,8 +9,8 @@ describe("Surface", () => {
 		const surface = screen.getByText("panel").closest("[data-slot='surface']");
 
 		expect(surface).toHaveClass("bg-white");
-		expect(surface).toHaveClass("border-border/70");
-		expect(surface).toHaveClass("dark:bg-neutral-700/95");
+		expect(surface).toHaveClass("border-[#d7e4f2]");
+		expect(surface).toHaveClass("shadow-none");
 	});
 
 	it("keeps caller className overrides after the default surface palette", () => {

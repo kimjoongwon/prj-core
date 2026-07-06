@@ -236,7 +236,7 @@ AdminLayout
 ├── Header
 │   ├── AppLogo ("오노라", LayoutGrid 아이콘)
 │   ├── IDP 관리 버튼 (KeyRound 아이콘, 새 탭으로 IDP Client 열기)
-│   └── HeaderSpaceSelector (Space 전환)
+│   └── Select (Space 전환)
 ├── Sidebar (데스크톱) / BottomTab (모바일)
 │   └── ADMIN_NAV_ITEMS 기반 메뉴 트리
 ├── Main Content

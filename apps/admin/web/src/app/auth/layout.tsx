@@ -1,4 +1,4 @@
-import { Auth } from "@cocrepo/ui/layout";
+import { Auth, AuthBody, AuthMain } from "@cocrepo/ui/layout";
 
 /**
  * 인증 전 route shell입니다.
@@ -11,9 +11,9 @@ export default function AuthLayout({
 }) {
 	return (
 		<Auth>
-			<Auth.Body>
-				<Auth.Main>{children}</Auth.Main>
-			</Auth.Body>
+			<AuthBody>
+				<AuthMain>{children}</AuthMain>
+			</AuthBody>
 		</Auth>
 	);
 }

@@ -5,7 +5,6 @@ import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";
 import { Section } from "../../layout";
 import { Screen } from "../../layout/Screen";
-import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
 export interface SessionCheckScreenProps {
 	title: string;
@@ -20,19 +19,21 @@ export const SessionCheckScreen = observer(
 	}: SessionCheckScreenProps) => {
 		const t = useT();
 		return (
-			<VStack fullWidth>
+			<Screen>
 				<Screen.Header title={title} description={description} />
-				<SectionSurface>
-					<Section>
-						<Section.Body>
-							<div className="flex min-h-[320px] flex-col items-center justify-center gap-4 text-center">
-								<Spinner size="lg" />
-								<p className="text-sm text-muted">{t(message)}</p>
-							</div>
-						</Section.Body>
-					</Section>
-				</SectionSurface>
-			</VStack>
+				<Screen.Body>
+					<SectionSurface>
+						<Section>
+							<Section.Body>
+								<div className="flex min-h-[320px] flex-col items-center justify-center gap-4 text-center">
+									<Spinner size="lg" />
+									<p className="text-sm text-muted">{t(message)}</p>
+								</div>
+							</Section.Body>
+						</Section>
+					</SectionSurface>
+				</Screen.Body>
+			</Screen>
 		);
 	},
 );

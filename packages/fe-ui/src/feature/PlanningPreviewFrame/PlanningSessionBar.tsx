@@ -9,12 +9,21 @@ import { LogIn, LogOut, ShieldCheck, UserRound } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Chip } from "../../data-display/Chip/Chip";
 import { Button } from "../../input/Button/Button";
-import { HeaderSpaceSelector } from "../HeaderSpaceSelector";
+import { Select } from "../../input/Select/Select";
 
 export interface PlanningSessionBarProps {
 	context: PlanningContext;
 	onSpaceChange?: (space: PlanningSpaceOption) => void;
 }
+
+const spaceSelectClassNames = {
+	trigger:
+		"inline-flex h-11 w-40 shrink-0 flex-nowrap items-center justify-start gap-2 rounded-2xl border border-border bg-surface px-3 text-foreground shadow-sm backdrop-blur-md hover:bg-surface-secondary sm:w-52 lg:w-60",
+	value: "min-w-0 flex-1 truncate text-left text-sm text-foreground",
+	indicator: "h-4 w-4 shrink-0 text-muted",
+	popover: "min-w-40 sm:min-w-52 lg:min-w-60",
+	listbox: "min-w-40 sm:min-w-52 lg:min-w-60",
+};
 
 function getFallbackSpace(
 	context: PlanningContext,
@@ -83,6 +92,15 @@ export function PlanningSessionBar({
 		spaces.find((space) => space.spaceId === context.spaceId) ??
 		spaces[0] ??
 		null;
+	const spaceSelectValue = spaces.some(
+		(space) => space.tenantId === selectedTenantId,
+	)
+		? selectedTenantId
+		: null;
+	const spaceOptions = spaces.map((space) => ({
+		value: space.tenantId,
+		label: space.groundName,
+	}));
 	const isAuthenticated = authState === "authenticated";
 	const accountName = isAuthenticated
 		? (context.account?.name ?? "Storybook 사용자")
@@ -156,11 +174,28 @@ export function PlanningSessionBar({
 						<p className="mb-1 text-[11px] font-semibold uppercase text-muted">
 							Tenant / Space
 						</p>
-						<HeaderSpaceSelector
-							spaces={spaces}
-							currentTenantId={selectedTenantId}
-							currentSpaceName={selectedSpace?.groundName ?? null}
-							onSpaceSelect={handleSpaceSelect}
+						<Select
+							aria-label="Space 선택"
+							value={spaceSelectValue}
+							placeholder={selectedSpace?.groundName ?? "Space 확인 중"}
+							options={spaceOptions}
+							isDisabled={spaces.length === 0}
+							classNames={spaceSelectClassNames}
+							onChange={(tenantId) => {
+								if (tenantId == null) {
+									return;
+								}
+
+								const selectedSpace = spaces.find(
+									(space) => space.tenantId === String(tenantId),
+								);
+								if (
+									selectedSpace &&
+									selectedSpace.tenantId !== selectedTenantId
+								) {
+									handleSpaceSelect(selectedSpace);
+								}
+							}}
 						/>
 					</div>
 					<Button

@@ -80,7 +80,7 @@ function SpacesScreenFallback() {
 				title="공간 목록"
 				description="시스템에 등록된 공간과 시설 detail을 관리합니다."
 			/>
-			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface/70">
+			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface">
 				<Section>
 					<Section.Body>{null}</Section.Body>
 				</Section>
@@ -138,7 +138,7 @@ export const SpaceListScreen = observer(
 						</Button>
 					}
 				/>
-				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
 							<DataGrid

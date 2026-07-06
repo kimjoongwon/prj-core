@@ -170,7 +170,7 @@ export const ActionListScreen = observer(
 					}
 				/>
 				<ActionContextPanel />
-				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
 							<VStack>
@@ -200,7 +200,7 @@ export const ActionListScreen = observer(
 );
 const ActionContextPanel = observer(() => {
 	return (
-		<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+		<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 			<Section>
 				<Section.Body>
 					<VStack>
@@ -208,7 +208,7 @@ const ActionContextPanel = observer(() => {
 							title="권한 액션 카탈로그"
 							description="액션은 권한 규칙이 사용자의 동작을 판단할 때 참조하는 기준입니다."
 						/>
-						<div className="grid divide-y divide-border/80 overflow-hidden rounded-xl border border-border/80 bg-surface-secondary/30 md:grid-cols-3 md:divide-x md:divide-y-0 md:divide-border/80">
+						<div className="grid divide-y divide-border/80 overflow-hidden rounded-xl border border-border/80 bg-surface-secondary md:grid-cols-3 md:divide-x md:divide-y-0 md:divide-border/80">
 							<ActionContextItem
 								icon={<KeyRound className="h-5 w-5" />}
 								title="동작 단위"
@@ -280,7 +280,7 @@ const ActionGroupFilterTabs = observer(
 						))}
 					</Tabs.List>
 				</Tabs>
-				<div className="rounded-lg border border-border bg-surface-secondary/40 p-4">
+				<div className="rounded-lg border border-border bg-surface-secondary p-4">
 					<div className="text-sm font-semibold text-foreground">
 						{t(selectedFilter.label)} {t("액션")}
 					</div>
@@ -299,7 +299,7 @@ const ActionsScreenFallback = observer(() => {
 				title="권한 액션 목록"
 				description="역할과 정책에서 허용할 동작 단위를 관리하는 권한 액션 카탈로그입니다."
 			/>
-			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface/70">
+			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface">
 				<Section>
 					<Section.Body>{null}</Section.Body>
 				</Section>

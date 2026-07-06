@@ -49,7 +49,7 @@ function TimelinesScreenFallback() {
 				title="타임라인"
 				description="학기/시즌 단위 타임라인을 관리합니다."
 			/>
-			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface/70">
+			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface">
 				<Section>
 					<Section.Body>{null}</Section.Body>
 				</Section>
@@ -102,7 +102,7 @@ export const TimelineListScreen = observer(
 						</Button>
 					}
 				/>
-				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
 							<DataGrid

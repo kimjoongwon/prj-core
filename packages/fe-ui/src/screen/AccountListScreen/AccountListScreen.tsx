@@ -79,7 +79,7 @@ export const AccountListScreen = observer(
 					title="계정 관리"
 					description="IDP 계정의 보안 상태를 관리합니다."
 				/>
-				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+				<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 					<Section overflow="hidden">
 						<Section.Body>
 							<DataGrid

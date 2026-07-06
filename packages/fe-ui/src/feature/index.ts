@@ -3,7 +3,6 @@
 export * from "./AccessGate";
 export * from "./AssetBrowser";
 export * from "./FloatingAction";
-export * from "./HeaderSpaceSelector";
 export * from "./InquiryWebSocketProvider";
 export * from "./LanguageSelectButton";
 export * from "./MobileBottomNavigation";

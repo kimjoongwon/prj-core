@@ -197,7 +197,7 @@ function InquiryStatsGrid({
 function InquiriesScreenFallback() {
 	return (
 		<div className="space-y-5">
-			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface/70">
+			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface">
 				<Section>
 					<Section.Body>{null}</Section.Body>
 				</Section>
@@ -260,7 +260,7 @@ export const InquiryListScreen = observer(
 					}
 				/>
 				<VStack>
-					<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+					<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 						<Section>
 							<Section.Body>
 								<div className="mb-4 border-b border-border/80 pb-4">
@@ -274,7 +274,7 @@ export const InquiryListScreen = observer(
 							</Section.Body>
 						</Section>
 					</SectionSurface>
-					<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+					<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 						<Section>
 							<Section.Body>
 								<div className="mb-4 border-b border-border/80 pb-4">

@@ -206,7 +206,7 @@ export const TenantAccessRequestReviewDetailScreen = observer(
 												description={`${reviewComment.length} / 1000`}
 											/>
 											{request.status !== "PENDING" ? (
-												<div className="rounded-lg border border-border bg-surface-secondary/40 p-4">
+												<div className="rounded-lg border border-border bg-surface-secondary p-4">
 													<DetailItem
 														label="처리자"
 														value={request.reviewerName}

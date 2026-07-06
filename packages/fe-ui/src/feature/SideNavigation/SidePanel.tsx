@@ -34,7 +34,7 @@ const SubMenuItem = observer(function SubMenuItem({
 					: "rounded-2xl px-3 py-2.5 text-sm",
 				isSelected
 					? "bg-accent/10 font-semibold text-accent"
-					: "text-muted hover:bg-surface-secondary hover:text-foreground",
+					: "text-muted hover:bg-white hover:text-foreground dark:hover:bg-neutral-900",
 			)}
 			onClick={handleClick}
 		>
@@ -100,14 +100,14 @@ const NavItemComponent = observer(function NavItemComponent({
 						: "gap-3 rounded-[22px] px-3 py-3",
 					isSelected
 						? cn(
-								"bg-foreground text-background",
+								"bg-accent text-accent-foreground",
 								density === "compact"
-									? "shadow-[0_12px_28px_-24px_rgba(15,23,42,0.72)]"
-									: "shadow-[0_22px_46px_-28px_rgba(15,23,42,0.7)]",
+									? "shadow-[0_14px_28px_-22px_rgba(4,133,247,0.78)]"
+									: "shadow-[0_22px_46px_-28px_rgba(4,133,247,0.7)]",
 							)
 						: isActiveBranch
-							? "bg-surface-secondary text-foreground"
-							: "bg-transparent text-muted hover:bg-surface-secondary hover:text-foreground",
+							? "bg-[#e8f2ff] text-foreground dark:bg-neutral-900"
+							: "bg-transparent text-muted hover:bg-white hover:text-foreground dark:hover:bg-neutral-900",
 				)}
 				onClick={handleClick}
 			>
@@ -119,10 +119,10 @@ const NavItemComponent = observer(function NavItemComponent({
 								? "h-8 w-8 rounded-lg"
 								: "mt-0.5 h-11 w-11 rounded-2xl",
 							isSelected
-								? "border-background/15 bg-background/10 text-background"
+								? "border-white/20 bg-white/15 text-accent-foreground"
 								: isActiveBranch
 									? "border-accent/20 bg-accent/10 text-accent"
-									: "border-border bg-surface/80 text-muted group-hover:text-foreground",
+									: "border-[#d7e4f2] bg-white text-muted group-hover:text-foreground dark:border-white/10 dark:bg-neutral-900",
 						)}
 					>
 						{renderItemIcon ? (
@@ -155,7 +155,7 @@ const NavItemComponent = observer(function NavItemComponent({
 									? "mt-0.5 text-[11px] leading-4"
 									: "mt-1 text-xs leading-5",
 								isSelected
-									? "text-background/70"
+									? "text-accent-foreground/80"
 									: isActiveBranch
 										? "text-muted"
 										: "text-muted",
@@ -172,7 +172,7 @@ const NavItemComponent = observer(function NavItemComponent({
 							"shrink-0 transition-transform",
 							density === "compact" ? "mt-0.5 h-3.5 w-3.5" : "mt-1 h-4 w-4",
 							isSelected
-								? "text-background/70"
+								? "text-accent-foreground/80"
 								: isActiveBranch
 									? "text-muted"
 									: "text-muted",
@@ -234,7 +234,7 @@ export const SidePanel = observer(function SidePanel({
 			>
 				<div
 					className={cn(
-						"border border-border bg-surface-secondary/82",
+						"border border-[#d7e4f2] bg-white dark:border-white/10 dark:bg-neutral-900",
 						density === "compact" ? "rounded-2xl p-3" : "rounded-[24px] p-4",
 					)}
 				>
@@ -256,19 +256,10 @@ export const SidePanel = observer(function SidePanel({
 		) : null;
 
 	return (
-		<aside
-			className={cn(
-				"flex h-full flex-col",
-				density === "compact" ? "px-2.5 pb-3 pt-3" : "px-4 pb-5 pt-5",
-				className,
-			)}
-		>
+		<aside className={cn("flex h-full flex-col", className)}>
 			<div
 				className={cn(
-					"flex min-h-0 flex-1 flex-col overflow-hidden border border-border bg-surface/84 backdrop-blur-xl",
-					density === "compact"
-						? "rounded-[20px] shadow-[0_18px_52px_-44px_rgba(15,23,42,0.58)]"
-						: "rounded-[30px] shadow-[0_28px_80px_-56px_rgba(15,23,42,0.55)]",
+					"flex min-h-0 flex-1 flex-col overflow-hidden border-r border-[#d7e4f2] bg-[#f0f6ff] dark:border-white/10 dark:bg-neutral-950",
 				)}
 			>
 				{header ?? defaultHeaderContent}

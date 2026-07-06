@@ -38,7 +38,7 @@ const RolesScreenFallback = observer(() => {
 				title="역할 목록"
 				description="시스템에 등록된 역할을 관리합니다."
 			/>
-			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface/70">
+			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface">
 				<Section>
 					<Section.Body>{null}</Section.Body>
 				</Section>
@@ -95,7 +95,7 @@ export const RoleListScreen = observer(
 					</div>
 					<div className="space-y-3">
 						<Section.Header title="역할 목록 데이터" />
-						<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+						<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 							<Section overflow="hidden">
 								<Section.Body>
 									<DataGrid

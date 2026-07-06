@@ -13,7 +13,6 @@ import {
 	Screen,
 	Section,
 	SectionSurface,
-	VStack,
 } from "@cocrepo/ui";
 import { Card, Spinner } from "@heroui/react";
 import { Search, UserCheck, UserMinus, Users } from "lucide-react";
@@ -171,58 +170,60 @@ export const UserListScreen = observer(
 			},
 		];
 		return (
-			<VStack fullWidth>
+			<Screen>
 				<Screen.Header
 					title="이용자 목록"
 					description="시스템에 등록된 이용자를 조회합니다."
 				/>
-				{stats ? (
-					<div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
-						<MetricCard
-							className="h-full border border-accent/10 bg-accent/5 lg:col-span-6"
-							description={`활성 ${stats.active.toLocaleString()}명 · 비활성 ${stats.inactive.toLocaleString()}명`}
-							icon={<Users className="size-5" />}
-							title="전체 이용자"
-							value={stats.total}
-							color="primary"
-						/>
-						<MetricCard
-							className="h-full border border-success/10 bg-success/5 lg:col-span-3"
-							description="현재 운영 중인 계정"
-							icon={<UserCheck className="size-5" />}
-							title="활성 이용자"
-							value={stats.active}
-							color="success"
-						/>
-						<MetricCard
-							className="h-full border border-border bg-surface-secondary/70 lg:col-span-3"
-							description="접속이 중지되었거나 비활성화된 계정"
-							icon={<UserMinus className="size-5" />}
-							title="비활성 이용자"
-							value={stats.inactive}
-							color="default"
-						/>
-					</div>
-				) : null}
-				<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
-					<Section overflow="hidden">
-						<Section.Body>
-							<UsersDirectoryHeader totalCount={totalCount} />
-							<DataGrid
-								config={{
-									entity: "User",
-									columns: userListTableColumns,
-									leftInputs,
-									emptyMessage: "조회된 이용자가 없습니다.",
-								}}
-								rows={userRows}
-								totalCount={totalCount}
-								state={gridState}
+				<Screen.Body>
+					{stats ? (
+						<div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+							<MetricCard
+								className="h-full border border-accent/10 bg-accent/5 lg:col-span-6"
+								description={`활성 ${stats.active.toLocaleString()}명 · 비활성 ${stats.inactive.toLocaleString()}명`}
+								icon={<Users className="size-5" />}
+								title="전체 이용자"
+								value={stats.total}
+								color="primary"
 							/>
-						</Section.Body>
-					</Section>
-				</SectionSurface>
-			</VStack>
+							<MetricCard
+								className="h-full border border-success/10 bg-success/5 lg:col-span-3"
+								description="현재 운영 중인 계정"
+								icon={<UserCheck className="size-5" />}
+								title="활성 이용자"
+								value={stats.active}
+								color="success"
+							/>
+							<MetricCard
+								className="h-full border border-border bg-surface-secondary lg:col-span-3"
+								description="접속이 중지되었거나 비활성화된 계정"
+								icon={<UserMinus className="size-5" />}
+								title="비활성 이용자"
+								value={stats.inactive}
+								color="default"
+							/>
+						</div>
+					) : null}
+					<SectionSurface className="rounded-2xl border-border/80 bg-surface">
+						<Section overflow="hidden">
+							<Section.Body>
+								<UsersDirectoryHeader totalCount={totalCount} />
+								<DataGrid
+									config={{
+										entity: "User",
+										columns: userListTableColumns,
+										leftInputs,
+										emptyMessage: "조회된 이용자가 없습니다.",
+									}}
+									rows={userRows}
+									totalCount={totalCount}
+									state={gridState}
+								/>
+							</Section.Body>
+						</Section>
+					</SectionSurface>
+				</Screen.Body>
+			</Screen>
 		);
 	},
 );

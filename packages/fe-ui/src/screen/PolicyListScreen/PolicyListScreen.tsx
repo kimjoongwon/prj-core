@@ -46,7 +46,7 @@ export const PolicyListScreen = observer(
 					}
 				/>
 				<VStack>
-					<SectionSurface className="rounded-2xl border-border/80 bg-surface/70">
+					<SectionSurface className="rounded-2xl border-border/80 bg-surface">
 						<Section overflow="hidden">
 							<Section.Body>
 								{isLoading ? (
