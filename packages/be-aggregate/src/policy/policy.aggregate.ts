@@ -1,5 +1,5 @@
 import { USER_ERRORS } from "@cocrepo/constant";
-import { SpaceContext } from "@cocrepo/context";
+import { AuthContext, SpaceContext } from "@cocrepo/context";
 import { Policy, PolicyAbility } from "@cocrepo/entity";
 import type {
 	CreatePolicyCommandInput,
@@ -32,18 +32,19 @@ export class PolicyAggregate {
 		private readonly abilitiesRepository: AbilitiesRepository,
 		private readonly rolePoliciesRepository: RolePoliciesRepository,
 		private readonly spaceContext: SpaceContext,
+		private readonly authContext: AuthContext,
 	) {}
 
 	async listPolicies(): Promise<Policy[]> {
-		const tenantId = this.requireTenantId();
-		return this.policiesRepository.findManyByTenantId(tenantId);
+		const spaceId = this.requireSpaceId();
+		return this.policiesRepository.findManyBySpaceId(spaceId);
 	}
 
 	async getPolicyById(policyId: string): Promise<Policy> {
-		const tenantId = this.requireTenantId();
-		const policy = await this.policiesRepository.findByIdInTenant(
+		const spaceId = this.requireSpaceId();
+		const policy = await this.policiesRepository.findByIdInSpace(
 			policyId,
-			tenantId,
+			spaceId,
 		);
 
 		if (!policy) {
@@ -54,11 +55,12 @@ export class PolicyAggregate {
 	}
 
 	async createPolicy(dto: CreatePolicyCommandInput): Promise<Policy> {
-		const tenantId = this.requireTenantId();
-		this.logger.debug(`Policy 생성: name=${dto.name}, tenantId=${tenantId}`);
+		const spaceId = this.requireSpaceId();
+		const creatorId = this.requireUserId();
+		this.logger.debug(`Policy 생성: name=${dto.name}, spaceId=${spaceId}`);
 
-		const existing = await this.policiesRepository.findByNameInTenant(
-			tenantId,
+		const existing = await this.policiesRepository.findByNameInSpace(
+			spaceId,
 			dto.name,
 		);
 		if (existing) {
@@ -66,7 +68,8 @@ export class PolicyAggregate {
 		}
 
 		return this.policiesRepository.create({
-			tenantId,
+			spaceId,
+			creatorId,
 			name: dto.name,
 			displayName: dto.displayName ?? null,
 			description: dto.description ?? null,
@@ -81,8 +84,8 @@ export class PolicyAggregate {
 		const policy = await this.getPolicyById(policyId);
 
 		if (dto.name && dto.name !== policy.name) {
-			const existing = await this.policiesRepository.findByNameInTenant(
-				policy.tenantId,
+			const existing = await this.policiesRepository.findByNameInSpace(
+				policy.spaceId,
 				dto.name,
 			);
 			if (existing) {
@@ -142,11 +145,19 @@ export class PolicyAggregate {
 		}
 	}
 
-	private requireTenantId(): string {
-		const tenantId = this.spaceContext.tenantId;
-		if (!tenantId) {
+	private requireSpaceId(): string {
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
-		return tenantId;
+		return spaceId;
+	}
+
+	private requireUserId(): string {
+		const userId = this.authContext.user?.id;
+		if (!userId) {
+			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
+		}
+		return userId;
 	}
 }

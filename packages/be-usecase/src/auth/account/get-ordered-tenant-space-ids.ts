@@ -5,6 +5,9 @@ export function getOrderedTenantSpaceIds(user: UserWithTenantsLike): string[] {
 	const orderedSpaceIds: string[] = [];
 
 	for (const tenant of user.tenants ?? []) {
+		if (tenant.removedAt != null) {
+			continue;
+		}
 		if (!seen.has(tenant.spaceId)) {
 			seen.add(tenant.spaceId);
 			orderedSpaceIds.push(tenant.spaceId);

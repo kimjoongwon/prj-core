@@ -35,7 +35,7 @@ export class SafeWalletsRepository {
 					orderBy: [{ createdAt: "desc" }],
 					include: { confirmations: true },
 				},
-				tenant: true,
+				space: true,
 				creator: true,
 			},
 		});
@@ -57,7 +57,7 @@ export class SafeWalletsRepository {
 		this.logger.debug(`Space별 지갑 조회: ${spaceId.slice(-8)}`);
 
 		return this.txHost.tx.safeWallet.findMany({
-			where: { tenant: { spaceId }, removedAt: null },
+			where: { spaceId, removedAt: null },
 			orderBy: [{ createdAt: "desc" }],
 		});
 	}

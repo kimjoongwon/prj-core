@@ -28,6 +28,17 @@ export interface InquiryDto {
   updatedAt: string;
   /** @nullable */
   removedAt: string | null;
+  /**
+   * 소속 Space ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  spaceId: string;
+  /**
+   * 생성자 ID
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  creatorId?: string | null;
   /** 문의 번호 */
   inquiryNumber: string;
   /** 문의 제목 */

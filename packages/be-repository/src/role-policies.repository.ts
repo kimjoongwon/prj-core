@@ -21,12 +21,12 @@ export class RolePoliciesRepository {
 		>,
 	) {}
 
-	async findByRoleIdInTenant(
+	async findByRoleIdInSpace(
 		roleId: string,
-		tenantId: string,
+		spaceId: string,
 	): Promise<RolePolicy[]> {
 		const results = await this.txHost.tx.rolePolicy.findMany({
-			where: this.buildRolePolicyWhere([roleId], tenantId),
+			where: this.buildRolePolicyWhere([roleId], spaceId),
 			include: this.includePolicyAbilities(),
 			orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
 		});
@@ -34,15 +34,15 @@ export class RolePoliciesRepository {
 		return results.map((result) => plainToInstance(RolePolicy, result));
 	}
 
-	async findActiveByRoleIdsInTenant(
+	async findActiveByRoleIdsInSpace(
 		roleIds: string[],
-		tenantId: string,
+		spaceId: string,
 	): Promise<RolePolicy[]> {
 		if (roleIds.length === 0) return [];
 
 		const results = await this.txHost.tx.rolePolicy.findMany({
 			where: {
-				...this.buildRolePolicyWhere(roleIds, tenantId),
+				...this.buildRolePolicyWhere(roleIds, spaceId),
 				isActive: true,
 			},
 			include: this.includePolicyAbilities(),
@@ -55,7 +55,7 @@ export class RolePoliciesRepository {
 	async syncByRoleId(
 		roleId: string,
 		items: PolicyAssignmentInput[],
-		tenantId: string,
+		spaceId: string,
 	): Promise<RolePolicy[]> {
 		this.logger.debug(
 			`RolePolicy 동기화: roleId=${roleId.slice(-8)}, count=${items.length}`,
@@ -64,7 +64,7 @@ export class RolePoliciesRepository {
 		const uniqueItems = this.dedupeByPolicyId(items);
 		const policyIds = uniqueItems.map((item) => item.policyId);
 
-		await this.softRemoveMissing(roleId, policyIds, tenantId);
+		await this.softRemoveMissing(roleId, policyIds, spaceId);
 
 		await Promise.all(
 			uniqueItems.map((item) =>
@@ -96,7 +96,7 @@ export class RolePoliciesRepository {
 				policyId: { in: policyIds },
 				removedAt: null,
 				policy: {
-					tenantId,
+					spaceId,
 					removedAt: null,
 				},
 			},
@@ -121,12 +121,12 @@ export class RolePoliciesRepository {
 		return result.count;
 	}
 
-	private buildRolePolicyWhere(roleIds: string[], tenantId: string) {
+	private buildRolePolicyWhere(roleIds: string[], spaceId: string) {
 		return {
 			roleId: { in: roleIds },
 			removedAt: null,
 			policy: {
-				tenantId,
+				spaceId,
 				removedAt: null,
 			},
 		} satisfies Prisma.RolePolicyWhereInput;
@@ -135,14 +135,14 @@ export class RolePoliciesRepository {
 	private async softRemoveMissing(
 		roleId: string,
 		policyIds: string[],
-		tenantId: string,
+		spaceId: string,
 	): Promise<void> {
 		await this.txHost.tx.rolePolicy.updateMany({
 			where: {
 				roleId,
 				removedAt: null,
 				policy: {
-					tenantId,
+					spaceId,
 					removedAt: null,
 				},
 				...(policyIds.length > 0 ? { policyId: { notIn: policyIds } } : {}),

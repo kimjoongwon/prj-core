@@ -28,9 +28,9 @@ export class PolicyAssignmentAggregate {
 	) {}
 
 	async getRolePolicies(roleId: string): Promise<RolePolicy[]> {
-		const tenantId = this.requireTenantId();
+		const spaceId = this.requireSpaceId();
 		await this.assertRoleExists(roleId);
-		return this.rolePoliciesRepository.findByRoleIdInTenant(roleId, tenantId);
+		return this.rolePoliciesRepository.findByRoleIdInSpace(roleId, spaceId);
 	}
 
 	@Transactional()
@@ -38,21 +38,21 @@ export class PolicyAssignmentAggregate {
 		roleId: string,
 		rolePolicies: SyncRolePolicyInputItem[],
 	): Promise<RolePolicy[]> {
-		const tenantId = this.requireTenantId();
+		const spaceId = this.requireSpaceId();
 		await this.assertRoleExists(roleId);
-		await this.assertPoliciesBelongToTenant(
+		await this.assertPoliciesBelongToSpace(
 			rolePolicies.map((policy) => policy.policyId),
-			tenantId,
+			spaceId,
 		);
 
 		this.logger.debug(
-			`RolePolicy 동기화: roleId=${roleId.slice(-8)}, tenantId=${tenantId.slice(-8)}`,
+			`RolePolicy 동기화: roleId=${roleId.slice(-8)}, spaceId=${spaceId.slice(-8)}`,
 		);
 
 		return this.rolePoliciesRepository.syncByRoleId(
 			roleId,
 			rolePolicies,
-			tenantId,
+			spaceId,
 		);
 	}
 
@@ -63,17 +63,17 @@ export class PolicyAssignmentAggregate {
 		}
 	}
 
-	private async assertPoliciesBelongToTenant(
+	private async assertPoliciesBelongToSpace(
 		policyIds: string[],
-		tenantId: string,
+		spaceId: string,
 	): Promise<void> {
 		const uniquePolicyIds = Array.from(new Set(policyIds));
 		if (uniquePolicyIds.length === 0) return;
 
 		const scopedPolicyIds =
-			await this.policiesRepository.findActivePolicyIdsInTenant(
+			await this.policiesRepository.findActivePolicyIdsInSpace(
 				uniquePolicyIds,
-				tenantId,
+				spaceId,
 			);
 		const scopedSet = new Set(scopedPolicyIds);
 		const invalidIds = uniquePolicyIds.filter((id) => !scopedSet.has(id));
@@ -85,11 +85,11 @@ export class PolicyAssignmentAggregate {
 		}
 	}
 
-	private requireTenantId(): string {
-		const tenantId = this.spaceContext.tenantId;
-		if (!tenantId) {
+	private requireSpaceId(): string {
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
-		return tenantId;
+		return spaceId;
 	}
 }

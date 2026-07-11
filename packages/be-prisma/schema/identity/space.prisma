@@ -38,6 +38,21 @@ model Space {
   tenants              Tenant[]
   emailVerifications   EmailVerification[]
   tenantAccessRequests TenantAccessRequest[]
+  policies             Policy[]
+  safeWallets          SafeWallet[]
+  folders              Folder[]
+  categories           Category[]
+  contents             Content[]
+  tasks                Task[]
+  inquiries            Inquiry[]
+  albums               Album[]
+  albumEntries          AlbumEntry[]
+  groups                Group[]
+  reservations          Reservation[]
+  routines              Routine[]
+  assets                Asset[]
+  derivatives           Derivative[]
+  timelines             Timeline[]
 
   @@index([contentLanguageCode])
   @@map("spaces")

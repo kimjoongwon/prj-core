@@ -1,5 +1,4 @@
 import {
-	ClassField,
 	EnumField,
 	StringField,
 	StringFieldOptional,
@@ -9,11 +8,10 @@ import {
 import type { Group } from "@cocrepo/prisma";
 import { GroupTypes } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
-import { TenantDto } from "./tenant.dto";
 
 export class GroupDto extends AbstractDto implements Group {
 	@UUIDField()
-	tenantId!: string;
+	spaceId!: string;
 
 	@StringField()
 	name!: string;
@@ -24,9 +22,6 @@ export class GroupDto extends AbstractDto implements Group {
 	@EnumField(() => GroupTypes, { required: true })
 	type!: GroupTypes;
 
-	@UUIDFieldOptional()
+	@UUIDFieldOptional({ nullable: true })
 	creatorId!: string | null;
-
-	@ClassField(() => TenantDto, { required: false })
-	tenant?: TenantDto;
 }

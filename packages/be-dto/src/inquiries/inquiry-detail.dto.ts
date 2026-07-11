@@ -5,6 +5,7 @@ import {
 	EnumField,
 	NumberField,
 	StringField,
+	UUIDField,
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
 import {
@@ -24,6 +25,12 @@ import { SentimentResultDto } from "./sentiment-result.dto";
  * 문의 상세 응답 DTO
  */
 export class InquiryDetailDto extends AbstractDto {
+	@UUIDField({ description: "소속 Space ID" })
+	spaceId!: string;
+
+	@UUIDFieldOptional({ nullable: true, description: "생성자 ID" })
+	creatorId!: string | null;
+
 	@StringField({ description: "문의 번호" })
 	inquiryNumber!: string;
 

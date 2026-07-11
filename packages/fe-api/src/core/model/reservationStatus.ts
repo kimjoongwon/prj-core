@@ -16,7 +16,7 @@
  */
 
 /**
- * 예약 상태
+ * 내 예약 상태
  */
 export type ReservationStatus = typeof ReservationStatus[keyof typeof ReservationStatus];
 

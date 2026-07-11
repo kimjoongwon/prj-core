@@ -2,7 +2,7 @@ import type { AssetKind, AssetStatus } from "@cocrepo/prisma";
 
 export interface GetAssetsQueryInput {
 	folderId?: string;
-	tenantId?: string;
+	spaceId?: string;
 	kind?: AssetKind;
 	status?: AssetStatus;
 	search?: string;

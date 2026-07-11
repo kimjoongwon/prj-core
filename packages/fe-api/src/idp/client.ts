@@ -5,5 +5,5 @@ export {
 	setIdpLocale,
 	setIdpLoginRedirectUrl,
 	setIdpNativeRefreshHandler,
-	setIdpSpace,
+	setIdpSessionScope,
 } from "../libs/customIdpAxios";

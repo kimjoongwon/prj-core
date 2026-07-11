@@ -13,7 +13,7 @@ export function buildAssetQueryWhere(
 	return {
 		...(baseWhere ?? {}),
 		...(input.folderId ? { folderId: input.folderId } : {}),
-		...(input.tenantId ? { tenantId: input.tenantId } : {}),
+		...(input.spaceId ? { spaceId: input.spaceId } : {}),
 		...(input.kind ? { kind: input.kind } : {}),
 		...(input.status ? { status: input.status } : {}),
 		...(input.search ? { originalName: containsFilter(input.search) } : {}),

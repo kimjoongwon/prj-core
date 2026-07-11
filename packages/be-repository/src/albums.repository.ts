@@ -45,7 +45,7 @@ export class AlbumsRepository {
 		this.logger.debug(`Space별 앨범 조회: ${spaceId.slice(-8)}`);
 
 		const result = await this.txHost.tx.album.findMany({
-			where: { tenant: { spaceId } },
+			where: { spaceId },
 			orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
 		});
 
@@ -106,7 +106,7 @@ export class AlbumsRepository {
 
 	async countBySpaceId(spaceId: string): Promise<number> {
 		return this.txHost.tx.album.count({
-			where: { tenant: { spaceId } },
+			where: { spaceId },
 		});
 	}
 }

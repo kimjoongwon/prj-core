@@ -5,8 +5,10 @@ import {
 } from "@cocrepo/api/core/client";
 import { nativeRefreshToken, useVerifyToken } from "@cocrepo/api/idp/auth";
 import { setIdpNativeRefreshHandler } from "@cocrepo/api/idp/client";
-import { isScopeKindAccessible } from "@cocrepo/constant";
-import { useAbilityBootstrap, useSpaceBootstrapFromApi } from "@cocrepo/hook";
+import { ADMIN_NAV_ITEMS, isScopeKindAccessible } from "@cocrepo/constant";
+import { useAbilityBootstrap, useTenantBootstrapFromApi } from "@cocrepo/hook";
+import { AppProvider, useApp } from "@cocrepo/store";
+import type { AppProviderConfig } from "@cocrepo/type";
 
 import { DesignSystemProvider, I18nProvider } from "@cocrepo/ui";
 import {
@@ -16,9 +18,9 @@ import {
 	useQuery,
 } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
+import { usePathname, useRouter } from "next/navigation";
 import { NuqsAdapter as NuqsNextAdapter } from "nuqs/adapters/next/app";
 import { type ReactNode, useEffect } from "react";
-import { AppProvider, useApp } from "@/stores";
 import { resolveAbilityBootstrapRules } from "./ability-bootstrap";
 
 interface ProvidersProps {
@@ -33,6 +35,12 @@ interface I18nCatalogData {
 interface ApiResponse<T> {
 	data?: T;
 }
+
+const ADMIN_APP_CONFIG = {
+	appName: "ADMIN",
+	navItems: ADMIN_NAV_ITEMS,
+	persistStorageKey: "admin-persist",
+} satisfies AppProviderConfig;
 
 function makeQueryClient() {
 	return new QueryClient({
@@ -64,8 +72,8 @@ function getQueryClient() {
  *
  * Provider 계층 구조:
  * QueryClientProvider
- * └── AppProvider (AppStore 통합 관리)
- *     └── AbilityBootstrapper (서버 권한 -> ability 반영)
+ * └── AppProvider (ADMIN 앱 상태와 런타임 연결)
+ *     └── AbilityBootstrapper (서버 권한 -> accessControl 반영)
  *         └── DesignSystemProvider (UI 시스템)
  */
 export const Providers = observer(function Providers({
@@ -76,16 +84,16 @@ export const Providers = observer(function Providers({
 	return (
 		<QueryClientProvider client={queryClient}>
 			<NuqsNextAdapter>
-				<AppProvider>
+				<AppProvider config={ADMIN_APP_CONFIG}>
 					<NativeAuthBridge>
 						<I18nCatalogBootstrapper>
 							<AbilityBootstrapper>
 								<DesignSystemProvider>
-									<SpaceBootstrapper>
+									<AccountBootstrapper>
 										<NavigationScopeBootstrapper>
 											{children}
 										</NavigationScopeBootstrapper>
-									</SpaceBootstrapper>
+									</AccountBootstrapper>
 								</DesignSystemProvider>
 							</AbilityBootstrapper>
 						</I18nCatalogBootstrapper>
@@ -102,24 +110,24 @@ const NativeAuthBridge = observer(function NativeAuthBridge({
 	children: ReactNode;
 }) {
 	const app = useApp();
-	const space = app.space;
+	const { authSession } = app.account;
 
 	useEffect(() => {
 		const refreshNativeSession = async () => {
-			if (!space.sessionId || !space.refreshToken) {
+			if (!authSession.sessionId || !authSession.refreshToken) {
 				throw new Error("Native auth session is missing.");
 			}
 
 			const response = await nativeRefreshToken({
-				sessionId: space.sessionId,
-				refreshToken: space.refreshToken,
+				sessionId: authSession.sessionId,
+				refreshToken: authSession.refreshToken,
 			});
-			const session = response.data;
-			if (!session) {
+			const nativeAuthSession = response.data;
+			if (!nativeAuthSession) {
 				throw new Error("Native auth refresh response is empty.");
 			}
 
-			space.setNativeAuthSession(session);
+			authSession.setNativeAuthSession(nativeAuthSession);
 		};
 
 		setApiNativeRefreshHandler(refreshNativeSession);
@@ -129,7 +137,7 @@ const NativeAuthBridge = observer(function NativeAuthBridge({
 			setApiNativeRefreshHandler(null);
 			setIdpNativeRefreshHandler(null);
 		};
-	}, [space]);
+	}, [authSession]);
 
 	return children;
 });
@@ -140,8 +148,8 @@ const I18nCatalogBootstrapper = observer(function I18nCatalogBootstrapper({
 	children: ReactNode;
 }) {
 	const app = useApp();
-	const locale = app.locale;
-	const languageCode = locale.languageCode;
+	const language = app.language;
+	const languageCode = language.languageCode;
 	const { data } = useQuery({
 		queryKey: ["core-i18n-catalog", languageCode],
 		queryFn: () =>
@@ -154,10 +162,6 @@ const I18nCatalogBootstrapper = observer(function I18nCatalogBootstrapper({
 	});
 	const messages = data?.data?.messages ?? {};
 
-	useEffect(() => {
-		document.documentElement.lang = locale.htmlLang;
-	}, [locale.htmlLang]);
-
 	return (
 		<I18nProvider languageCode={languageCode} messages={messages}>
 			{children}
@@ -167,7 +171,7 @@ const I18nCatalogBootstrapper = observer(function I18nCatalogBootstrapper({
 
 /**
  * AbilityBootstrapper
- * 서버에서 권한을 로드하여 ability 규칙으로 반영합니다.
+ * 서버에서 권한을 로드하여 accessControl 규칙으로 반영합니다.
  */
 const AbilityBootstrapper = observer(function AbilityBootstrapper({
 	children,
@@ -181,15 +185,19 @@ const AbilityBootstrapper = observer(function AbilityBootstrapper({
 		isDisabled: isAbilitiesDisabled,
 	} = useAbilityBootstrap();
 	const app = useApp();
-	const space = app.space;
-	const ability = app.ability;
+	const account = app.account;
+	const { authSession } = account;
+	const accessControl = app.accessControl;
 	const shouldVerifyCurrentTenant =
-		!isAbilitiesDisabled && space.isHydrated && space.isSpaceSelectionResolved;
+		!isAbilitiesDisabled &&
+		authSession.isHydrated &&
+		account.isHydrated &&
+		account.isSelectionResolved;
 	const { data: verifyTokenResponse, isPending: isVerifyingToken } =
 		useVerifyToken({
 			query: {
 				enabled: shouldVerifyCurrentTenant,
-				queryKey: ["/api/v1/auth/verify-token", space.tenantId],
+				queryKey: ["/api/v1/auth/verify-token", account.currentTenantId],
 				retry: false,
 				refetchOnWindowFocus: false,
 			},
@@ -209,9 +217,9 @@ const AbilityBootstrapper = observer(function AbilityBootstrapper({
 			return;
 		}
 
-		ability.updateRules(rules);
+		accessControl.updateRules(rules);
 	}, [
-		ability,
+		accessControl,
 		abilities,
 		hasFullAccess,
 		isLoading,
@@ -224,32 +232,58 @@ const AbilityBootstrapper = observer(function AbilityBootstrapper({
 });
 
 /**
- * API에서 Space 목록과 현재 Space 정보를 부트스트랩합니다.
+ * API에서 Space 목록과 현재 account tenant 선택 정보를 부트스트랩합니다.
  */
-const SpaceBootstrapper = observer(function SpaceBootstrapper({
+const AccountBootstrapper = observer(function AccountBootstrapper({
 	children,
 }: {
 	children: ReactNode;
 }) {
-	useSpaceBootstrapFromApi();
+	useTenantBootstrapFromApi();
+	const app = useApp();
+	const account = app.account;
+	const pathname = usePathname();
+	const router = useRouter();
+
+	useEffect(() => {
+		if (
+			!account.authSession.isAuthenticated ||
+			!account.isSelectionResolved ||
+			pathname.startsWith("/auth/")
+		) {
+			return;
+		}
+
+		if (!account.currentTenantId && pathname !== "/select-space") {
+			router.replace("/select-space");
+			return;
+		}
+
+		if (account.currentTenantId && pathname === "/select-space") {
+			router.replace("/dashboard");
+		}
+	}, [account, account.currentTenantId, account.isSelectionResolved, pathname, router]);
 
 	return children;
 });
 
 /**
- * 현재 tenant 권한 기준을 Navigation의 scope checker에 연결합니다.
+ * 현재 account tenant 권한 기준을 Navigation의 scope checker에 연결합니다.
  */
 const NavigationScopeBootstrapper = observer(
 	function NavigationScopeBootstrapper({ children }: { children: ReactNode }) {
 		const app = useApp();
-		const space = app.space;
+		const account = app.account;
+		const { authSession } = account;
 		const navigation = app.navigation;
 		const shouldVerifyCurrentTenant =
-			space.isHydrated && space.isSpaceSelectionResolved;
+			authSession.isHydrated &&
+			account.isHydrated &&
+			account.isSelectionResolved;
 		const { data: verifyTokenResponse } = useVerifyToken({
 			query: {
 				enabled: shouldVerifyCurrentTenant,
-				queryKey: ["/api/v1/auth/verify-token", space.tenantId],
+				queryKey: ["/api/v1/auth/verify-token", account.currentTenantId],
 				retry: false,
 				refetchOnWindowFocus: false,
 			},

@@ -236,19 +236,15 @@ class MobileSession {
     const spaces = mySpacesResponse.data ?? [];
     mobileApiScope.setSpaces(spaces);
 
-    if (!storedSpaceSelection) {
-      return;
-    }
-
-    const currentSpaceResponse = await getCurrentSpace({
-      baseURL: getIdpApiBaseUrl(),
-    });
-    const currentSpace = currentSpaceResponse.data;
-    if (
-      currentSpace?.tenantId === storedSpaceSelection.tenantId &&
-      currentSpace?.id === storedSpaceSelection.spaceId &&
-      isSelectableMobileSpace(currentSpace)
-    ) {
+	const currentSpaceResponse = await getCurrentSpace({
+		baseURL: getIdpApiBaseUrl(),
+	});
+	const currentSpace = currentSpaceResponse.data;
+	if (
+		currentSpace?.tenantId &&
+		currentSpace?.id &&
+		isSelectableMobileSpace(currentSpace)
+	) {
       mobileApiScope.setSpace(currentSpace);
       await saveNativeSpaceSelection(toMobileSpaceInfo(currentSpace));
       return;

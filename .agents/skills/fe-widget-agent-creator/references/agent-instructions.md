@@ -317,11 +317,11 @@ Pure UI → Widget → Feature → Page
 ```
 Widget (순수 UI)              Feature (비즈니스 로직)
 ─────────────────────────────────────────────────────
-NavTreePanel                  → SideNav (app.ui.body.leftAside.sideNavigation 연결)
-TabBar                        → BottomTab (app.ui.footer.mobileBottomNavigation 연결)
-MenuList                      → SubMenuList (app.ui.footer.mobileMenu 연결)
-UserCard                      → UserMenu (app.session 연결)
-SpaceDropdown                 → SpaceSelector (app.space 연결)
+NavTreePanel                  → SideNav (app.navigation 연결)
+TabBar                        → BottomTab (app.navigation 연결)
+MenuList                      → SubMenuList (app.navigation 연결)
+UserCard                      → UserMenu (app.account.authSession 연결)
+SpaceDropdown                 → SpaceSelector (app.account 연결)
 ```
 
 **분리 기준:**

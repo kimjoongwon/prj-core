@@ -29,6 +29,12 @@ export class UserService {
 		return this.repository.findByIdWithTenantsAndProfiles(id);
 	}
 
+	/** 현재 Tenant를 영구 저장하고 인증 사용자 캐시를 무효화합니다. */
+	async setCurrentTenant(userId: string, tenantId: string): Promise<void> {
+		await this.repository.updateCurrentTenantId(userId, tenantId);
+		await this.authCacheService.invalidate(userId);
+	}
+
 	/**
 	 * 인증용 경량 유저 조회 (이메일 기반, id/email/password만)
 	 */

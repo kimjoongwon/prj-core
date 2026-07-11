@@ -1,6 +1,5 @@
 import type {
 	AppIconName,
-	FABAction,
 	NavItemConfig,
 	ScreenScopeKind,
 } from "@cocrepo/type";
@@ -310,23 +309,3 @@ export const ADMIN_MENU_PERMISSION_LEAFS: AdminMenuPermissionLeaf[] =
 export const ADMIN_MENU_PERMISSION_SUBJECTS = Array.from(
 	new Set(ADMIN_MENU_PERMISSION_LEAFS.flatMap((leaf) => leaf.requiredSubjects)),
 );
-
-/**
- * 어드민 FAB 액션 설정
- */
-export const ADMIN_FAB_ACTIONS: FABAction[] = [];
-
-/**
- * BottomTab에 표시할 메뉴 ID 목록
- *
- * 순서대로 하단 탭에 표시됩니다.
- * 마지막 "more"는 특수 처리되어 나머지 메뉴를 표시합니다.
- */
-export const BOTTOM_TAB_IDS = [
-	"dashboard",
-	"users",
-	"inquiries",
-	"more",
-] as const;
-
-export type BottomTabId = (typeof BOTTOM_TAB_IDS)[number];

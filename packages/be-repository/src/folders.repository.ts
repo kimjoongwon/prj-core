@@ -22,7 +22,7 @@ export class FoldersRepository {
 
 		const result = await this.txHost.tx.folder.findUnique({
 			where: { id },
-			include: { tenant: true },
+			include: { space: true },
 		});
 
 		return result ? plainToInstance(Folder, result) : null;
@@ -34,7 +34,7 @@ export class FoldersRepository {
 		const result = await this.txHost.tx.folder.findUnique({
 			where: { id },
 			include: {
-				tenant: true,
+				space: true,
 				children: {
 					orderBy: { sortOrder: "asc" },
 				},
@@ -57,8 +57,8 @@ export class FoldersRepository {
 		this.logger.debug(`Space별 폴더 조회: ${spaceId.slice(-8)}`);
 
 		const result = await this.txHost.tx.folder.findMany({
-			where: { tenant: { spaceId } },
-			include: { tenant: true },
+			where: { spaceId },
+			include: { space: true },
 			orderBy: [{ path: "asc" }],
 		});
 
@@ -72,7 +72,7 @@ export class FoldersRepository {
 
 		const result = await this.txHost.tx.folder.findMany({
 			where: { parentFolderId },
-			include: { tenant: true },
+			include: { space: true },
 			orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
 		});
 

@@ -99,14 +99,14 @@ pnpm preview
 MobX를 사용한 상태 관리:
 
 ```typescript
-import { useApp } from '@/stores';
+import { useApp } from '@cocrepo/store';
 
 function MyComponent() {
   const app = useApp();
 
   return (
     <div>
-      {app.session?.isAuthenticated && <Dashboard />}
+      {app.account.authSession?.isAuthenticated && <Dashboard />}
     </div>
   );
 }

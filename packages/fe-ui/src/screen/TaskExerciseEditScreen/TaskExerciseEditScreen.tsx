@@ -8,7 +8,7 @@ import { DateTimeCell } from "../../data-grid/cell";
 import {
 	AssetBrowser,
 	type AssetBrowserProps,
-} from "../../feature/AssetBrowser";
+} from "../../domain/asset/AssetBrowser";
 import {
 	TaskExerciseForm,
 	type TaskExerciseFormState,
@@ -28,7 +28,7 @@ export interface TaskExerciseEditScreenRoutine {
 }
 export interface TaskExerciseEditScreenMetadata {
 	taskId: string;
-	tenantId?: string | null;
+	spaceId?: string | null;
 	createdAt?: string | null;
 	updatedAt?: string | null;
 	routines?: TaskExerciseEditScreenRoutine[];
@@ -203,7 +203,7 @@ export const TaskExerciseEditScreen = observer(
 									<div>
 										<label className="text-sm text-muted">Space ID</label>
 										<p className="mt-1 font-mono text-sm">
-											{metadata.tenantId ?? "-"}
+											{metadata.spaceId ?? "-"}
 										</p>
 									</div>
 									<div>

@@ -82,7 +82,6 @@ export const LoginScreen = observer(
 		return (
 			<div
 				aria-busy={isLoading}
-				aria-label={t(title)}
 				className="w-full"
 				onSubmit={onSubmitLoginScreen}
 			>

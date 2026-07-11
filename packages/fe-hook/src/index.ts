@@ -12,6 +12,5 @@ export * from "./useInquiryCreateAIClassification";
 export * from "./useInquiryCreateHandlers";
 export * from "./useInquiryDetailHandlers";
 export * from "./useInquiryDetailWebSocket";
-export * from "./useLayout";
-export * from "./useSpaceBootstrap";
 export * from "./useTaskExerciseAssetBrowser";
+export * from "./useTenantBootstrap";

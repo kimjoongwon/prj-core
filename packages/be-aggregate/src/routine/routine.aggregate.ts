@@ -99,9 +99,9 @@ export class RoutineAggregate {
 	): Promise<Routine> {
 		this.logger.debug(`루틴 등록: name=${dto.name}`);
 
-		const tenantId = this.spaceContext.tenantId;
-		if (!tenantId) {
-			throw new Error("Tenant 컨텍스트가 설정되지 않았습니다");
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
+			throw new Error("Space 컨텍스트가 설정되지 않았습니다");
 		}
 
 		await this.validateRoutineActivityTasks(dto.activities);
@@ -109,7 +109,7 @@ export class RoutineAggregate {
 		return this.routinesRepository.createRoutine({
 			name: dto.name,
 			label: dto.label,
-			tenantId,
+			spaceId,
 			creatorId: userId,
 			activities: this.normalizeRoutineActivities(dto.activities),
 		});
@@ -144,7 +144,7 @@ export class RoutineAggregate {
 		await this.validateRoutineActivityTasks(dto.activities);
 
 		// 현재 Space 소유 여부 확인
-		if (routine.tenant?.spaceId !== spaceId) {
+		if (routine.spaceId !== spaceId) {
 			throw new ForbiddenException(ROUTINE_ERRORS.ROUTINE_NOT_OWNED);
 		}
 
@@ -252,7 +252,7 @@ export class RoutineAggregate {
 		);
 
 		// 현재 Space 소유 여부 확인
-		if (routine.tenant?.spaceId !== spaceId) {
+		if (routine.spaceId !== spaceId) {
 			throw new ForbiddenException(ROUTINE_ERRORS.ROUTINE_NOT_OWNED);
 		}
 

@@ -2,7 +2,7 @@ import type { GetFoldersQueryInput } from "@cocrepo/input";
 
 export class GetFoldersQuery implements GetFoldersQueryInput {
 	readonly parentFolderId?: GetFoldersQueryInput["parentFolderId"];
-	readonly tenantId?: GetFoldersQueryInput["tenantId"];
+	readonly spaceId?: GetFoldersQueryInput["spaceId"];
 	readonly name?: GetFoldersQueryInput["name"];
 	readonly statusFilter?: GetFoldersQueryInput["statusFilter"];
 	readonly sort?: GetFoldersQueryInput["sort"];

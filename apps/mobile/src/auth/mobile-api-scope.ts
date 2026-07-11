@@ -1,10 +1,10 @@
 import {
   setApiNativeRefreshHandler,
-  setApiSpace,
+  setApiSessionScope,
 } from "@cocrepo/api/core/client";
 import {
   setIdpNativeRefreshHandler,
-  setIdpSpace,
+  setIdpSessionScope,
 } from "@cocrepo/api/idp/client";
 import type { SpaceDto } from "@cocrepo/api/idp/model";
 import { makeAutoObservable } from "mobx";
@@ -157,8 +157,8 @@ export const mobileApiScope = new MobileApiScope();
 export const configureMobileApiScope = (
   nativeRefreshHandler?: (() => Promise<void>) | null,
 ) => {
-  setApiSpace(mobileApiScope);
-  setIdpSpace(mobileApiScope);
+  setApiSessionScope(mobileApiScope);
+  setIdpSessionScope(mobileApiScope);
   if (nativeRefreshHandler !== undefined) {
     setApiNativeRefreshHandler(nativeRefreshHandler);
     setIdpNativeRefreshHandler(nativeRefreshHandler);

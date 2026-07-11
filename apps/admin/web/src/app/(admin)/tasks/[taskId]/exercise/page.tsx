@@ -69,7 +69,7 @@ const AdminTasksTaskIdExerciseRoute = observer(() => {
 				readOnly
 				metadata={{
 					taskId,
-					tenantId: exercise?.task?.tenantId,
+					spaceId: exercise?.task?.spaceId,
 					createdAt: exercise?.createdAt,
 					updatedAt: exercise?.updatedAt,
 					routines,

@@ -22,7 +22,9 @@ interface StorybookPlanningContextLike {
 	};
 }
 
-const SELF_MANAGED_PLANNING_TITLES = new Set(["feature/PlanningPreviewFrame"]);
+const SELF_MANAGED_PLANNING_TITLES = new Set([
+	"domain/planning/PlanningPreviewFrame",
+]);
 
 function isPlanningScenario(value: unknown): value is PlanningScenario {
 	if (!value || typeof value !== "object") {

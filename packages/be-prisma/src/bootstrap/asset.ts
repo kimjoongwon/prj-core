@@ -10,7 +10,6 @@ import {
 } from "../demo-data";
 import type { PrismaClient } from "../generated/client/client";
 import { Prisma } from "../generated/client/client";
-import { requireTenantIdForSpace } from "./tenant-scope";
 
 /**
  * asset 도메인 데모 데이터를 계층 순서대로 적재합니다.
@@ -41,11 +40,6 @@ export async function createAssetDomainData(
 	const adminUser = await prisma.user.findFirst({
 		where: { email: "admin@plate.com" },
 	});
-	const systemTenantId = await requireTenantIdForSpace(
-		prisma,
-		systemSpace.id,
-		adminUser?.id,
-	);
 	const creatorEmails = [
 		...new Set(
 			[
@@ -83,7 +77,7 @@ export async function createAssetDomainData(
 
 			const folder = await prisma.folder.create({
 				data: {
-					tenantId: systemTenantId,
+					spaceId: systemSpace.id,
 					name: folderData.name,
 					path: folderData.path,
 					parentFolderId,
@@ -124,7 +118,7 @@ export async function createAssetDomainData(
 
 			const asset = await prisma.asset.create({
 				data: {
-					tenantId: systemTenantId,
+					spaceId: systemSpace.id,
 					folderId: folder.id,
 					kind: assetData.kind as "IMAGE" | "VIDEO" | "DOCUMENT",
 					status: "READY",
@@ -282,7 +276,8 @@ export async function createAssetDomainData(
 		if (!existing) {
 			await prisma.derivative.create({
 				data: {
-					tenantId: systemTenantId,
+					spaceId: systemSpace.id,
+					creatorId: adminUser?.id,
 					assetId: sourceAsset.id,
 					kind: derivativeData.kind as
 						| "THUMBNAIL"
@@ -328,14 +323,14 @@ export async function createAssetDomainData(
 		const existing = await prisma.album.findFirst({
 			where: {
 				name: albumData.name,
-				tenantId: systemTenantId,
+				spaceId: systemSpace.id,
 			},
 		});
 
 		if (!existing) {
 			const album = await prisma.album.create({
 				data: {
-					tenantId: systemTenantId,
+					spaceId: systemSpace.id,
 					name: albumData.name,
 					description: albumData.description,
 					coverAssetId,
@@ -380,7 +375,8 @@ export async function createAssetDomainData(
 		if (!existing) {
 			await prisma.albumEntry.create({
 				data: {
-					tenantId: systemTenantId,
+					spaceId: systemSpace.id,
+					creatorId: adminUser?.id,
 					albumId: album.id,
 					assetId: asset.id,
 					position: entryData.position,

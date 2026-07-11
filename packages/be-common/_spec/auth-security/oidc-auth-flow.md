@@ -513,4 +513,4 @@ packages/be-service/src/idp/
 | `apps/admin/web/src/app/auth/login/page.tsx` | 로그인 페이지 (OIDC 리다이렉트) |
 | `apps/admin/web/next.config.ts` | API 프록시 설정 (rewrite: `/api/v1/*` → Core API) |
 | `packages/fe-api/src/libs/customAxios.ts` | Axios 인터셉터 (401 토큰 갱신, x-space-id 헤더, workspace 업데이트) |
-| `packages/fe-store/src/stores/session.ts` | 인증 상태 관리 (로그아웃 처리) |
+| `packages/fe-store/src/stores/account/authSession.ts` | 인증 상태 관리 (로그아웃 처리) |

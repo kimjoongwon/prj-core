@@ -1,2 +1,1 @@
-export * from "./consoleAppProvider";
-export * from "./createAppProvider";
+export * from "./AppProvider";

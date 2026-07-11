@@ -71,6 +71,12 @@ export interface UserDto {
   lastLoginIp?: string | null;
   /** 활성 상태 */
   isActive: boolean;
+  /**
+   * 현재 선택된 Tenant membership ID
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  currentTenantId?: string | null;
   /** 프로필 목록 */
   profiles?: ProfileDto[];
   /** 테넌트 목록 */

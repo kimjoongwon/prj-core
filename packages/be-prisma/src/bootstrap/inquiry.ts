@@ -8,7 +8,6 @@ import {
 } from "../demo-data";
 import type { PrismaClient } from "../generated/client/client";
 import { Prisma } from "../generated/client/client";
-import { requireTenantIdForSpace } from "./tenant-scope";
 
 /**
  * inquiry 도메인 데모 데이터를 단계적으로 적재합니다.
@@ -58,11 +57,7 @@ export async function createInquiryDomainData(
 			const assignee = inquiryData.assigneeEmail
 				? userByEmail.get(inquiryData.assigneeEmail)
 				: null;
-			const tenantId = await requireTenantIdForSpace(
-				prisma,
-				ground.company.spaceId,
-				assignee?.id ?? customer?.id,
-			);
+			const creatorId = assignee?.id ?? customer?.id;
 
 			const now = new Date();
 			const slaResponseDue = new Date(now.getTime() + 24 * 60 * 60 * 1000);
@@ -70,7 +65,8 @@ export async function createInquiryDomainData(
 
 			const inquiry = await prisma.inquiry.create({
 				data: {
-					tenantId,
+					spaceId: ground.company.spaceId,
+					creatorId,
 					inquiryNumber: inquiryData.inquiryNumber,
 					title: inquiryData.title,
 					category: inquiryData.category as

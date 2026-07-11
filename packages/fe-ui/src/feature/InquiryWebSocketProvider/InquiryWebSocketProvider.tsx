@@ -98,7 +98,7 @@ export const useInquiryWebSocket = () => {
  *   onReconnect={handleReconnect}
  *   sendMessage={handleSendMessage}
  * >
- *   <RealtimeChatPanel />
+ *   <div>문의 실시간 화면</div>
  * </InquiryWebSocketProvider>
  * ```
  *

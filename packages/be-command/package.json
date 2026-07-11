@@ -12,8 +12,8 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "type-check": "tsc --noEmit",
-    "type-check:prod": "tsc --noEmit",
+    "type-check": "tsc --noEmit --incremental false --composite false",
+    "type-check:prod": "tsc --noEmit --incremental false --composite false",
     "build": "rm -rf dist && tsc --build",
     "start:dev": "tsc --build --watch",
     "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",

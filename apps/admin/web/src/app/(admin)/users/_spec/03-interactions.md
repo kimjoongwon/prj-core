@@ -45,8 +45,6 @@
     ├─[3] 응답 처리
     │      ├─ 성공 → 목록 렌더링
     │      └─ 실패 → 에러 메시지 표시
-    │
-    └─[4] 통계 표시: stats 데이터 렌더링
 ```
 
 #### USR-L5-ACT-003: 검색 실행
@@ -161,11 +159,6 @@ interface Response {
     page: number;
     limit: number;
     totalPages: number;
-  };
-  stats: {
-    total: number;
-    active: number;
-    inactive: number;
   };
 }
 ```

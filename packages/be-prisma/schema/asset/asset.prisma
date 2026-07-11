@@ -39,7 +39,7 @@ model Asset {
   updatedAt     DateTime?    @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt     DateTime?    @map("removed_at") @db.Timestamptz(6)
   /// @displayName 소속 Space
-  tenantId      String       @map("tenant_id")
+  spaceId       String       @map("space_id")
   /// @displayName 소속 폴더
   folderId      String       @map("folder_id")
   /// @displayName 에셋 타입
@@ -62,9 +62,9 @@ model Asset {
   metadata      Json?
   /// @displayName 생성자
   creatorId     String?      @map("creator_id")
-  tenant        Tenant       @relation(fields: [tenantId], references: [id])
+  space         Space        @relation(fields: [spaceId], references: [id], onDelete: Restrict)
   folder        Folder       @relation(fields: [folderId], references: [id])
-  creator       User?        @relation(fields: [creatorId], references: [id])
+  creator       User?        @relation(fields: [creatorId], references: [id], onDelete: SetNull)
   image         Image?
   video         Video?
   document      Document?
@@ -72,7 +72,7 @@ model Asset {
   albumEntries  AlbumEntry[]
   coverOfAlbums Album[]      @relation("AlbumCover")
 
-  @@index([tenantId])
+  @@index([spaceId])
   @@index([folderId])
   @@index([kind])
   @@index([status])
@@ -185,7 +185,8 @@ model Derivative {
   updatedAt  DateTime?      @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt  DateTime?      @map("removed_at") @db.Timestamptz(6)
   /// @displayName 소속 Space
-  tenantId   String         @map("tenant_id")
+  spaceId    String         @map("space_id")
+  creatorId  String?        @map("creator_id")
   /// @displayName 원본 Asset ID
   assetId    String         @map("asset_id")
   /// @displayName 파생 리소스 종류
@@ -204,11 +205,12 @@ model Derivative {
   height     Int?
   /// @displayName 재생 시간 (비디오 트랜스코딩)
   durationMs Int?           @map("duration_ms")
-  tenant     Tenant         @relation(fields: [tenantId], references: [id])
+  space      Space          @relation(fields: [spaceId], references: [id], onDelete: Restrict)
+  creator    User?          @relation(fields: [creatorId], references: [id], onDelete: SetNull)
   asset      Asset          @relation(fields: [assetId], references: [id], onDelete: Cascade)
 
   @@unique([assetId, kind, profile])
-  @@index([tenantId])
+  @@index([spaceId])
   @@index([assetId])
   @@index([kind])
   @@map("derivatives")

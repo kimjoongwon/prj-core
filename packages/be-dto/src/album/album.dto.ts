@@ -14,8 +14,8 @@ import { AssetDto } from "../asset/asset.dto";
  * 앨범 DTO
  */
 export class AlbumDto extends AbstractDto implements Album {
-	@UUIDField({ description: "소속 Tenant ID" })
-	tenantId!: string;
+	@UUIDField({ description: "소속 Space ID" })
+	spaceId!: string;
 
 	@StringField({ description: "앨범명" })
 	name!: string;

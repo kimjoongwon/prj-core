@@ -25,6 +25,7 @@ describe("Admin", () => {
 		);
 
 		expect(screen.getByRole("banner")).toHaveTextContent("header");
+		expect(screen.getByRole("banner")).toHaveClass("border-b", "bg-white");
 		expect(screen.getByRole("main")).toHaveTextContent("main content");
 		expect(screen.getByRole("contentinfo")).toHaveTextContent("footer");
 		expect(screen.getByText("left aside").tagName).toBe("ASIDE");

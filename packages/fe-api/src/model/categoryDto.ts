@@ -19,8 +19,8 @@ export interface CategoryDto {
 	updatedAt: string;
 	/** @nullable */
 	removedAt: string | null;
-	tenantId: string;
-	creatorId?: string;
+	spaceId: string;
+	creatorId?: string | null;
 	name: string;
 	type: CategoryTypes;
 	/** @nullable */

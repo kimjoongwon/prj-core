@@ -13,14 +13,15 @@ export class CreateInquiryUseCase {
 	) {}
 
 	execute(command: CreateInquiryCommand): Promise<unknown> {
-		const tenantId = this.spaceContext.tenantId;
-		if (!tenantId) {
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
 			throw new UnauthorizedException(COMMON_ERRORS.SPACE_NOT_SELECTED);
 		}
 
 		return this.inquiryService.create(
 			{
-				tenantId,
+				spaceId,
+				creatorId: command.actorUserId,
 				title: command.title,
 				category: command.category,
 				channel: command.channel,

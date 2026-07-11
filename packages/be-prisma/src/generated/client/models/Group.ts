@@ -32,7 +32,7 @@ export type GroupMinAggregateOutputType = {
   name: string | null
   type: $Enums.GroupTypes | null
   label: string | null
-  tenantId: string | null
+  spaceId: string | null
   creatorId: string | null
 }
 
@@ -44,7 +44,7 @@ export type GroupMaxAggregateOutputType = {
   name: string | null
   type: $Enums.GroupTypes | null
   label: string | null
-  tenantId: string | null
+  spaceId: string | null
   creatorId: string | null
 }
 
@@ -56,7 +56,7 @@ export type GroupCountAggregateOutputType = {
   name: number
   type: number
   label: number
-  tenantId: number
+  spaceId: number
   creatorId: number
   _all: number
 }
@@ -70,7 +70,7 @@ export type GroupMinAggregateInputType = {
   name?: true
   type?: true
   label?: true
-  tenantId?: true
+  spaceId?: true
   creatorId?: true
 }
 
@@ -82,7 +82,7 @@ export type GroupMaxAggregateInputType = {
   name?: true
   type?: true
   label?: true
-  tenantId?: true
+  spaceId?: true
   creatorId?: true
 }
 
@@ -94,7 +94,7 @@ export type GroupCountAggregateInputType = {
   name?: true
   type?: true
   label?: true
-  tenantId?: true
+  spaceId?: true
   creatorId?: true
   _all?: true
 }
@@ -179,7 +179,7 @@ export type GroupGroupByOutputType = {
   name: string
   type: $Enums.GroupTypes
   label: string | null
-  tenantId: string
+  spaceId: string
   creatorId: string | null
   _count: GroupCountAggregateOutputType | null
   _min: GroupMinAggregateOutputType | null
@@ -212,9 +212,9 @@ export type GroupWhereInput = {
   name?: Prisma.StringFilter<"Group"> | string
   type?: Prisma.EnumGroupTypesFilter<"Group"> | $Enums.GroupTypes
   label?: Prisma.StringNullableFilter<"Group"> | string | null
-  tenantId?: Prisma.StringFilter<"Group"> | string
+  spaceId?: Prisma.StringFilter<"Group"> | string
   creatorId?: Prisma.StringNullableFilter<"Group"> | string | null
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   roleAssociations?: Prisma.RoleAssociationListRelationFilter
   spaceAssociations?: Prisma.SpaceAssociationListRelationFilter
@@ -229,9 +229,9 @@ export type GroupOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   label?: Prisma.SortOrderInput | Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
-  tenant?: Prisma.TenantOrderByWithRelationInput
+  space?: Prisma.SpaceOrderByWithRelationInput
   creator?: Prisma.UserOrderByWithRelationInput
   roleAssociations?: Prisma.RoleAssociationOrderByRelationAggregateInput
   spaceAssociations?: Prisma.SpaceAssociationOrderByRelationAggregateInput
@@ -249,9 +249,9 @@ export type GroupWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Group"> | string
   type?: Prisma.EnumGroupTypesFilter<"Group"> | $Enums.GroupTypes
   label?: Prisma.StringNullableFilter<"Group"> | string | null
-  tenantId?: Prisma.StringFilter<"Group"> | string
+  spaceId?: Prisma.StringFilter<"Group"> | string
   creatorId?: Prisma.StringNullableFilter<"Group"> | string | null
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   roleAssociations?: Prisma.RoleAssociationListRelationFilter
   spaceAssociations?: Prisma.SpaceAssociationListRelationFilter
@@ -266,7 +266,7 @@ export type GroupOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   label?: Prisma.SortOrderInput | Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.GroupCountOrderByAggregateInput
   _max?: Prisma.GroupMaxOrderByAggregateInput
@@ -284,7 +284,7 @@ export type GroupScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Group"> | string
   type?: Prisma.EnumGroupTypesWithAggregatesFilter<"Group"> | $Enums.GroupTypes
   label?: Prisma.StringNullableWithAggregatesFilter<"Group"> | string | null
-  tenantId?: Prisma.StringWithAggregatesFilter<"Group"> | string
+  spaceId?: Prisma.StringWithAggregatesFilter<"Group"> | string
   creatorId?: Prisma.StringNullableWithAggregatesFilter<"Group"> | string | null
 }
 
@@ -296,7 +296,7 @@ export type GroupCreateInput = {
   name: string
   type?: $Enums.GroupTypes
   label?: string | null
-  tenant: Prisma.TenantCreateNestedOneWithoutGroupsInput
+  space: Prisma.SpaceCreateNestedOneWithoutGroupsInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedGroupsInput
   roleAssociations?: Prisma.RoleAssociationCreateNestedManyWithoutGroupInput
   spaceAssociations?: Prisma.SpaceAssociationCreateNestedManyWithoutGroupInput
@@ -311,7 +311,7 @@ export type GroupUncheckedCreateInput = {
   name: string
   type?: $Enums.GroupTypes
   label?: string | null
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
   roleAssociations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutGroupInput
   spaceAssociations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutGroupInput
@@ -326,7 +326,7 @@ export type GroupUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutGroupsNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutGroupsNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedGroupsNestedInput
   roleAssociations?: Prisma.RoleAssociationUpdateManyWithoutGroupNestedInput
   spaceAssociations?: Prisma.SpaceAssociationUpdateManyWithoutGroupNestedInput
@@ -341,7 +341,7 @@ export type GroupUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleAssociations?: Prisma.RoleAssociationUncheckedUpdateManyWithoutGroupNestedInput
   spaceAssociations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutGroupNestedInput
@@ -356,7 +356,7 @@ export type GroupCreateManyInput = {
   name: string
   type?: $Enums.GroupTypes
   label?: string | null
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
 }
 
@@ -378,7 +378,7 @@ export type GroupUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -405,7 +405,7 @@ export type GroupCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   label?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
 }
 
@@ -417,7 +417,7 @@ export type GroupMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   label?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
 }
 
@@ -429,7 +429,7 @@ export type GroupMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   label?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
 }
 
@@ -447,6 +447,48 @@ export type GroupUpdateOneRequiredWithoutRoleAssociationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.GroupUpdateToOneWithWhereWithoutRoleAssociationsInput, Prisma.GroupUpdateWithoutRoleAssociationsInput>, Prisma.GroupUncheckedUpdateWithoutRoleAssociationsInput>
 }
 
+export type GroupCreateNestedManyWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.GroupCreateWithoutSpaceInput, Prisma.GroupUncheckedCreateWithoutSpaceInput> | Prisma.GroupCreateWithoutSpaceInput[] | Prisma.GroupUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.GroupCreateOrConnectWithoutSpaceInput | Prisma.GroupCreateOrConnectWithoutSpaceInput[]
+  createMany?: Prisma.GroupCreateManySpaceInputEnvelope
+  connect?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[]
+}
+
+export type GroupUncheckedCreateNestedManyWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.GroupCreateWithoutSpaceInput, Prisma.GroupUncheckedCreateWithoutSpaceInput> | Prisma.GroupCreateWithoutSpaceInput[] | Prisma.GroupUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.GroupCreateOrConnectWithoutSpaceInput | Prisma.GroupCreateOrConnectWithoutSpaceInput[]
+  createMany?: Prisma.GroupCreateManySpaceInputEnvelope
+  connect?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[]
+}
+
+export type GroupUpdateManyWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.GroupCreateWithoutSpaceInput, Prisma.GroupUncheckedCreateWithoutSpaceInput> | Prisma.GroupCreateWithoutSpaceInput[] | Prisma.GroupUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.GroupCreateOrConnectWithoutSpaceInput | Prisma.GroupCreateOrConnectWithoutSpaceInput[]
+  upsert?: Prisma.GroupUpsertWithWhereUniqueWithoutSpaceInput | Prisma.GroupUpsertWithWhereUniqueWithoutSpaceInput[]
+  createMany?: Prisma.GroupCreateManySpaceInputEnvelope
+  set?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[]
+  disconnect?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[]
+  delete?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[]
+  connect?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[]
+  update?: Prisma.GroupUpdateWithWhereUniqueWithoutSpaceInput | Prisma.GroupUpdateWithWhereUniqueWithoutSpaceInput[]
+  updateMany?: Prisma.GroupUpdateManyWithWhereWithoutSpaceInput | Prisma.GroupUpdateManyWithWhereWithoutSpaceInput[]
+  deleteMany?: Prisma.GroupScalarWhereInput | Prisma.GroupScalarWhereInput[]
+}
+
+export type GroupUncheckedUpdateManyWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.GroupCreateWithoutSpaceInput, Prisma.GroupUncheckedCreateWithoutSpaceInput> | Prisma.GroupCreateWithoutSpaceInput[] | Prisma.GroupUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.GroupCreateOrConnectWithoutSpaceInput | Prisma.GroupCreateOrConnectWithoutSpaceInput[]
+  upsert?: Prisma.GroupUpsertWithWhereUniqueWithoutSpaceInput | Prisma.GroupUpsertWithWhereUniqueWithoutSpaceInput[]
+  createMany?: Prisma.GroupCreateManySpaceInputEnvelope
+  set?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[]
+  disconnect?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[]
+  delete?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[]
+  connect?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[]
+  update?: Prisma.GroupUpdateWithWhereUniqueWithoutSpaceInput | Prisma.GroupUpdateWithWhereUniqueWithoutSpaceInput[]
+  updateMany?: Prisma.GroupUpdateManyWithWhereWithoutSpaceInput | Prisma.GroupUpdateManyWithWhereWithoutSpaceInput[]
+  deleteMany?: Prisma.GroupScalarWhereInput | Prisma.GroupScalarWhereInput[]
+}
+
 export type GroupCreateNestedOneWithoutSpaceAssociationsInput = {
   create?: Prisma.XOR<Prisma.GroupCreateWithoutSpaceAssociationsInput, Prisma.GroupUncheckedCreateWithoutSpaceAssociationsInput>
   connectOrCreate?: Prisma.GroupCreateOrConnectWithoutSpaceAssociationsInput
@@ -459,48 +501,6 @@ export type GroupUpdateOneRequiredWithoutSpaceAssociationsNestedInput = {
   upsert?: Prisma.GroupUpsertWithoutSpaceAssociationsInput
   connect?: Prisma.GroupWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.GroupUpdateToOneWithWhereWithoutSpaceAssociationsInput, Prisma.GroupUpdateWithoutSpaceAssociationsInput>, Prisma.GroupUncheckedUpdateWithoutSpaceAssociationsInput>
-}
-
-export type GroupCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.GroupCreateWithoutTenantInput, Prisma.GroupUncheckedCreateWithoutTenantInput> | Prisma.GroupCreateWithoutTenantInput[] | Prisma.GroupUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.GroupCreateOrConnectWithoutTenantInput | Prisma.GroupCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.GroupCreateManyTenantInputEnvelope
-  connect?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[]
-}
-
-export type GroupUncheckedCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.GroupCreateWithoutTenantInput, Prisma.GroupUncheckedCreateWithoutTenantInput> | Prisma.GroupCreateWithoutTenantInput[] | Prisma.GroupUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.GroupCreateOrConnectWithoutTenantInput | Prisma.GroupCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.GroupCreateManyTenantInputEnvelope
-  connect?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[]
-}
-
-export type GroupUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.GroupCreateWithoutTenantInput, Prisma.GroupUncheckedCreateWithoutTenantInput> | Prisma.GroupCreateWithoutTenantInput[] | Prisma.GroupUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.GroupCreateOrConnectWithoutTenantInput | Prisma.GroupCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.GroupUpsertWithWhereUniqueWithoutTenantInput | Prisma.GroupUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.GroupCreateManyTenantInputEnvelope
-  set?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[]
-  disconnect?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[]
-  delete?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[]
-  connect?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[]
-  update?: Prisma.GroupUpdateWithWhereUniqueWithoutTenantInput | Prisma.GroupUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.GroupUpdateManyWithWhereWithoutTenantInput | Prisma.GroupUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.GroupScalarWhereInput | Prisma.GroupScalarWhereInput[]
-}
-
-export type GroupUncheckedUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.GroupCreateWithoutTenantInput, Prisma.GroupUncheckedCreateWithoutTenantInput> | Prisma.GroupCreateWithoutTenantInput[] | Prisma.GroupUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.GroupCreateOrConnectWithoutTenantInput | Prisma.GroupCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.GroupUpsertWithWhereUniqueWithoutTenantInput | Prisma.GroupUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.GroupCreateManyTenantInputEnvelope
-  set?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[]
-  disconnect?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[]
-  delete?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[]
-  connect?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[]
-  update?: Prisma.GroupUpdateWithWhereUniqueWithoutTenantInput | Prisma.GroupUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.GroupUpdateManyWithWhereWithoutTenantInput | Prisma.GroupUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.GroupScalarWhereInput | Prisma.GroupScalarWhereInput[]
 }
 
 export type GroupCreateNestedManyWithoutCreatorInput = {
@@ -571,7 +571,7 @@ export type GroupCreateWithoutRoleAssociationsInput = {
   name: string
   type?: $Enums.GroupTypes
   label?: string | null
-  tenant: Prisma.TenantCreateNestedOneWithoutGroupsInput
+  space: Prisma.SpaceCreateNestedOneWithoutGroupsInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedGroupsInput
   spaceAssociations?: Prisma.SpaceAssociationCreateNestedManyWithoutGroupInput
   userAssociations?: Prisma.UserAssociationCreateNestedManyWithoutGroupInput
@@ -585,7 +585,7 @@ export type GroupUncheckedCreateWithoutRoleAssociationsInput = {
   name: string
   type?: $Enums.GroupTypes
   label?: string | null
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
   spaceAssociations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutGroupInput
   userAssociations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutGroupInput
@@ -615,7 +615,7 @@ export type GroupUpdateWithoutRoleAssociationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutGroupsNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutGroupsNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedGroupsNestedInput
   spaceAssociations?: Prisma.SpaceAssociationUpdateManyWithoutGroupNestedInput
   userAssociations?: Prisma.UserAssociationUpdateManyWithoutGroupNestedInput
@@ -629,10 +629,79 @@ export type GroupUncheckedUpdateWithoutRoleAssociationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   spaceAssociations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutGroupNestedInput
   userAssociations?: Prisma.UserAssociationUncheckedUpdateManyWithoutGroupNestedInput
+}
+
+export type GroupCreateWithoutSpaceInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  name: string
+  type?: $Enums.GroupTypes
+  label?: string | null
+  creator?: Prisma.UserCreateNestedOneWithoutCreatedGroupsInput
+  roleAssociations?: Prisma.RoleAssociationCreateNestedManyWithoutGroupInput
+  spaceAssociations?: Prisma.SpaceAssociationCreateNestedManyWithoutGroupInput
+  userAssociations?: Prisma.UserAssociationCreateNestedManyWithoutGroupInput
+}
+
+export type GroupUncheckedCreateWithoutSpaceInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  name: string
+  type?: $Enums.GroupTypes
+  label?: string | null
+  creatorId?: string | null
+  roleAssociations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutGroupInput
+  spaceAssociations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutGroupInput
+  userAssociations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutGroupInput
+}
+
+export type GroupCreateOrConnectWithoutSpaceInput = {
+  where: Prisma.GroupWhereUniqueInput
+  create: Prisma.XOR<Prisma.GroupCreateWithoutSpaceInput, Prisma.GroupUncheckedCreateWithoutSpaceInput>
+}
+
+export type GroupCreateManySpaceInputEnvelope = {
+  data: Prisma.GroupCreateManySpaceInput | Prisma.GroupCreateManySpaceInput[]
+  skipDuplicates?: boolean
+}
+
+export type GroupUpsertWithWhereUniqueWithoutSpaceInput = {
+  where: Prisma.GroupWhereUniqueInput
+  update: Prisma.XOR<Prisma.GroupUpdateWithoutSpaceInput, Prisma.GroupUncheckedUpdateWithoutSpaceInput>
+  create: Prisma.XOR<Prisma.GroupCreateWithoutSpaceInput, Prisma.GroupUncheckedCreateWithoutSpaceInput>
+}
+
+export type GroupUpdateWithWhereUniqueWithoutSpaceInput = {
+  where: Prisma.GroupWhereUniqueInput
+  data: Prisma.XOR<Prisma.GroupUpdateWithoutSpaceInput, Prisma.GroupUncheckedUpdateWithoutSpaceInput>
+}
+
+export type GroupUpdateManyWithWhereWithoutSpaceInput = {
+  where: Prisma.GroupScalarWhereInput
+  data: Prisma.XOR<Prisma.GroupUpdateManyMutationInput, Prisma.GroupUncheckedUpdateManyWithoutSpaceInput>
+}
+
+export type GroupScalarWhereInput = {
+  AND?: Prisma.GroupScalarWhereInput | Prisma.GroupScalarWhereInput[]
+  OR?: Prisma.GroupScalarWhereInput[]
+  NOT?: Prisma.GroupScalarWhereInput | Prisma.GroupScalarWhereInput[]
+  id?: Prisma.StringFilter<"Group"> | string
+  createdAt?: Prisma.DateTimeFilter<"Group"> | Date | string
+  updatedAt?: Prisma.DateTimeNullableFilter<"Group"> | Date | string | null
+  removedAt?: Prisma.DateTimeNullableFilter<"Group"> | Date | string | null
+  name?: Prisma.StringFilter<"Group"> | string
+  type?: Prisma.EnumGroupTypesFilter<"Group"> | $Enums.GroupTypes
+  label?: Prisma.StringNullableFilter<"Group"> | string | null
+  spaceId?: Prisma.StringFilter<"Group"> | string
+  creatorId?: Prisma.StringNullableFilter<"Group"> | string | null
 }
 
 export type GroupCreateWithoutSpaceAssociationsInput = {
@@ -643,7 +712,7 @@ export type GroupCreateWithoutSpaceAssociationsInput = {
   name: string
   type?: $Enums.GroupTypes
   label?: string | null
-  tenant: Prisma.TenantCreateNestedOneWithoutGroupsInput
+  space: Prisma.SpaceCreateNestedOneWithoutGroupsInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedGroupsInput
   roleAssociations?: Prisma.RoleAssociationCreateNestedManyWithoutGroupInput
   userAssociations?: Prisma.UserAssociationCreateNestedManyWithoutGroupInput
@@ -657,7 +726,7 @@ export type GroupUncheckedCreateWithoutSpaceAssociationsInput = {
   name: string
   type?: $Enums.GroupTypes
   label?: string | null
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
   roleAssociations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutGroupInput
   userAssociations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutGroupInput
@@ -687,7 +756,7 @@ export type GroupUpdateWithoutSpaceAssociationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutGroupsNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutGroupsNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedGroupsNestedInput
   roleAssociations?: Prisma.RoleAssociationUpdateManyWithoutGroupNestedInput
   userAssociations?: Prisma.UserAssociationUpdateManyWithoutGroupNestedInput
@@ -701,79 +770,10 @@ export type GroupUncheckedUpdateWithoutSpaceAssociationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleAssociations?: Prisma.RoleAssociationUncheckedUpdateManyWithoutGroupNestedInput
   userAssociations?: Prisma.UserAssociationUncheckedUpdateManyWithoutGroupNestedInput
-}
-
-export type GroupCreateWithoutTenantInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  name: string
-  type?: $Enums.GroupTypes
-  label?: string | null
-  creator?: Prisma.UserCreateNestedOneWithoutCreatedGroupsInput
-  roleAssociations?: Prisma.RoleAssociationCreateNestedManyWithoutGroupInput
-  spaceAssociations?: Prisma.SpaceAssociationCreateNestedManyWithoutGroupInput
-  userAssociations?: Prisma.UserAssociationCreateNestedManyWithoutGroupInput
-}
-
-export type GroupUncheckedCreateWithoutTenantInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  name: string
-  type?: $Enums.GroupTypes
-  label?: string | null
-  creatorId?: string | null
-  roleAssociations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutGroupInput
-  spaceAssociations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutGroupInput
-  userAssociations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutGroupInput
-}
-
-export type GroupCreateOrConnectWithoutTenantInput = {
-  where: Prisma.GroupWhereUniqueInput
-  create: Prisma.XOR<Prisma.GroupCreateWithoutTenantInput, Prisma.GroupUncheckedCreateWithoutTenantInput>
-}
-
-export type GroupCreateManyTenantInputEnvelope = {
-  data: Prisma.GroupCreateManyTenantInput | Prisma.GroupCreateManyTenantInput[]
-  skipDuplicates?: boolean
-}
-
-export type GroupUpsertWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.GroupWhereUniqueInput
-  update: Prisma.XOR<Prisma.GroupUpdateWithoutTenantInput, Prisma.GroupUncheckedUpdateWithoutTenantInput>
-  create: Prisma.XOR<Prisma.GroupCreateWithoutTenantInput, Prisma.GroupUncheckedCreateWithoutTenantInput>
-}
-
-export type GroupUpdateWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.GroupWhereUniqueInput
-  data: Prisma.XOR<Prisma.GroupUpdateWithoutTenantInput, Prisma.GroupUncheckedUpdateWithoutTenantInput>
-}
-
-export type GroupUpdateManyWithWhereWithoutTenantInput = {
-  where: Prisma.GroupScalarWhereInput
-  data: Prisma.XOR<Prisma.GroupUpdateManyMutationInput, Prisma.GroupUncheckedUpdateManyWithoutTenantInput>
-}
-
-export type GroupScalarWhereInput = {
-  AND?: Prisma.GroupScalarWhereInput | Prisma.GroupScalarWhereInput[]
-  OR?: Prisma.GroupScalarWhereInput[]
-  NOT?: Prisma.GroupScalarWhereInput | Prisma.GroupScalarWhereInput[]
-  id?: Prisma.StringFilter<"Group"> | string
-  createdAt?: Prisma.DateTimeFilter<"Group"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"Group"> | Date | string | null
-  removedAt?: Prisma.DateTimeNullableFilter<"Group"> | Date | string | null
-  name?: Prisma.StringFilter<"Group"> | string
-  type?: Prisma.EnumGroupTypesFilter<"Group"> | $Enums.GroupTypes
-  label?: Prisma.StringNullableFilter<"Group"> | string | null
-  tenantId?: Prisma.StringFilter<"Group"> | string
-  creatorId?: Prisma.StringNullableFilter<"Group"> | string | null
 }
 
 export type GroupCreateWithoutCreatorInput = {
@@ -784,7 +784,7 @@ export type GroupCreateWithoutCreatorInput = {
   name: string
   type?: $Enums.GroupTypes
   label?: string | null
-  tenant: Prisma.TenantCreateNestedOneWithoutGroupsInput
+  space: Prisma.SpaceCreateNestedOneWithoutGroupsInput
   roleAssociations?: Prisma.RoleAssociationCreateNestedManyWithoutGroupInput
   spaceAssociations?: Prisma.SpaceAssociationCreateNestedManyWithoutGroupInput
   userAssociations?: Prisma.UserAssociationCreateNestedManyWithoutGroupInput
@@ -798,7 +798,7 @@ export type GroupUncheckedCreateWithoutCreatorInput = {
   name: string
   type?: $Enums.GroupTypes
   label?: string | null
-  tenantId: string
+  spaceId: string
   roleAssociations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutGroupInput
   spaceAssociations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutGroupInput
   userAssociations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutGroupInput
@@ -838,7 +838,7 @@ export type GroupCreateWithoutUserAssociationsInput = {
   name: string
   type?: $Enums.GroupTypes
   label?: string | null
-  tenant: Prisma.TenantCreateNestedOneWithoutGroupsInput
+  space: Prisma.SpaceCreateNestedOneWithoutGroupsInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedGroupsInput
   roleAssociations?: Prisma.RoleAssociationCreateNestedManyWithoutGroupInput
   spaceAssociations?: Prisma.SpaceAssociationCreateNestedManyWithoutGroupInput
@@ -852,7 +852,7 @@ export type GroupUncheckedCreateWithoutUserAssociationsInput = {
   name: string
   type?: $Enums.GroupTypes
   label?: string | null
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
   roleAssociations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutGroupInput
   spaceAssociations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutGroupInput
@@ -882,7 +882,7 @@ export type GroupUpdateWithoutUserAssociationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutGroupsNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutGroupsNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedGroupsNestedInput
   roleAssociations?: Prisma.RoleAssociationUpdateManyWithoutGroupNestedInput
   spaceAssociations?: Prisma.SpaceAssociationUpdateManyWithoutGroupNestedInput
@@ -896,13 +896,13 @@ export type GroupUncheckedUpdateWithoutUserAssociationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleAssociations?: Prisma.RoleAssociationUncheckedUpdateManyWithoutGroupNestedInput
   spaceAssociations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutGroupNestedInput
 }
 
-export type GroupCreateManyTenantInput = {
+export type GroupCreateManySpaceInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -913,7 +913,7 @@ export type GroupCreateManyTenantInput = {
   creatorId?: string | null
 }
 
-export type GroupUpdateWithoutTenantInput = {
+export type GroupUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -927,7 +927,7 @@ export type GroupUpdateWithoutTenantInput = {
   userAssociations?: Prisma.UserAssociationUpdateManyWithoutGroupNestedInput
 }
 
-export type GroupUncheckedUpdateWithoutTenantInput = {
+export type GroupUncheckedUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -941,7 +941,7 @@ export type GroupUncheckedUpdateWithoutTenantInput = {
   userAssociations?: Prisma.UserAssociationUncheckedUpdateManyWithoutGroupNestedInput
 }
 
-export type GroupUncheckedUpdateManyWithoutTenantInput = {
+export type GroupUncheckedUpdateManyWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -960,7 +960,7 @@ export type GroupCreateManyCreatorInput = {
   name: string
   type?: $Enums.GroupTypes
   label?: string | null
-  tenantId: string
+  spaceId: string
 }
 
 export type GroupUpdateWithoutCreatorInput = {
@@ -971,7 +971,7 @@ export type GroupUpdateWithoutCreatorInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutGroupsNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutGroupsNestedInput
   roleAssociations?: Prisma.RoleAssociationUpdateManyWithoutGroupNestedInput
   spaceAssociations?: Prisma.SpaceAssociationUpdateManyWithoutGroupNestedInput
   userAssociations?: Prisma.UserAssociationUpdateManyWithoutGroupNestedInput
@@ -985,7 +985,7 @@ export type GroupUncheckedUpdateWithoutCreatorInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   roleAssociations?: Prisma.RoleAssociationUncheckedUpdateManyWithoutGroupNestedInput
   spaceAssociations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutGroupNestedInput
   userAssociations?: Prisma.UserAssociationUncheckedUpdateManyWithoutGroupNestedInput
@@ -999,7 +999,7 @@ export type GroupUncheckedUpdateManyWithoutCreatorInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes
   label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -1059,9 +1059,9 @@ export type GroupSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   name?: boolean
   type?: boolean
   label?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   creatorId?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Group$creatorArgs<ExtArgs>
   roleAssociations?: boolean | Prisma.Group$roleAssociationsArgs<ExtArgs>
   spaceAssociations?: boolean | Prisma.Group$spaceAssociationsArgs<ExtArgs>
@@ -1077,9 +1077,9 @@ export type GroupSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   name?: boolean
   type?: boolean
   label?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   creatorId?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Group$creatorArgs<ExtArgs>
 }, ExtArgs["result"]["group"]>
 
@@ -1091,9 +1091,9 @@ export type GroupSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   name?: boolean
   type?: boolean
   label?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   creatorId?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Group$creatorArgs<ExtArgs>
 }, ExtArgs["result"]["group"]>
 
@@ -1105,13 +1105,13 @@ export type GroupSelectScalar = {
   name?: boolean
   type?: boolean
   label?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   creatorId?: boolean
 }
 
-export type GroupOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "name" | "type" | "label" | "tenantId" | "creatorId", ExtArgs["result"]["group"]>
+export type GroupOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "name" | "type" | "label" | "spaceId" | "creatorId", ExtArgs["result"]["group"]>
 export type GroupInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Group$creatorArgs<ExtArgs>
   roleAssociations?: boolean | Prisma.Group$roleAssociationsArgs<ExtArgs>
   spaceAssociations?: boolean | Prisma.Group$spaceAssociationsArgs<ExtArgs>
@@ -1119,18 +1119,18 @@ export type GroupInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   _count?: boolean | Prisma.GroupCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type GroupIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Group$creatorArgs<ExtArgs>
 }
 export type GroupIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Group$creatorArgs<ExtArgs>
 }
 
 export type $GroupPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Group"
   objects: {
-    tenant: Prisma.$TenantPayload<ExtArgs>
+    space: Prisma.$SpacePayload<ExtArgs>
     creator: Prisma.$UserPayload<ExtArgs> | null
     roleAssociations: Prisma.$RoleAssociationPayload<ExtArgs>[]
     spaceAssociations: Prisma.$SpaceAssociationPayload<ExtArgs>[]
@@ -1153,7 +1153,7 @@ export type $GroupPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
      * @displayName 라벨
      */
     label: string | null
-    tenantId: string
+    spaceId: string
     creatorId: string | null
   }, ExtArgs["result"]["group"]>
   composites: {}
@@ -1549,7 +1549,7 @@ readonly fields: GroupFieldRefs;
  */
 export interface Prisma__GroupClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  space<T extends Prisma.SpaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceDefaultArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   creator<T extends Prisma.Group$creatorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Group$creatorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   roleAssociations<T extends Prisma.Group$roleAssociationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Group$roleAssociationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoleAssociationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   spaceAssociations<T extends Prisma.Group$spaceAssociationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Group$spaceAssociationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SpaceAssociationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1590,7 +1590,7 @@ export interface GroupFieldRefs {
   readonly name: Prisma.FieldRef<"Group", 'String'>
   readonly type: Prisma.FieldRef<"Group", 'GroupTypes'>
   readonly label: Prisma.FieldRef<"Group", 'String'>
-  readonly tenantId: Prisma.FieldRef<"Group", 'String'>
+  readonly spaceId: Prisma.FieldRef<"Group", 'String'>
   readonly creatorId: Prisma.FieldRef<"Group", 'String'>
 }
     

@@ -29,13 +29,13 @@ model SafeWallet {
   threshold    Int               @default(3)
   nonce        Int               @default(0)
   owners       String[] // 소유자 주소 배열
-  tenantId     String            @map("tenant_id")
+  spaceId      String            @map("space_id")
   creatorId    String?           @map("creator_id")
-  tenant       Tenant            @relation(fields: [tenantId], references: [id])
-  creator      User?             @relation(fields: [creatorId], references: [id])
+  space        Space             @relation(fields: [spaceId], references: [id], onDelete: Restrict)
+  creator      User?             @relation(fields: [creatorId], references: [id], onDelete: SetNull)
   transactions SafeTransaction[]
 
-  @@index([tenantId])
+  @@index([spaceId])
   @@map("safe_wallets")
 }
 

@@ -6,16 +6,13 @@ import type { UserWithTenantsLike } from "./user-with-tenants-like";
 export async function resolveCurrentSpace(
 	spacesService: SpaceAggregate,
 	user: UserWithTenantsLike | undefined,
-	requestedTenantId: string | undefined,
 ): Promise<AuthSpaceResult | null> {
-	const spaces = await getAccessibleSpacesForUser(spacesService, user);
-	if (spaces.length === 0) {
+	if (!user?.currentTenantId) {
 		return null;
 	}
 
-	const requestedSpace = requestedTenantId
-		? spaces.find((space) => space.tenantId === requestedTenantId)
-		: undefined;
-
-	return requestedSpace ?? spaces[0] ?? null;
+	const spaces = await getAccessibleSpacesForUser(spacesService, user);
+	return (
+		spaces.find((space) => space.tenantId === user.currentTenantId) ?? null
+	);
 }

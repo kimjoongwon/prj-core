@@ -91,6 +91,18 @@ describe("UserService", () => {
 		expect(service).toBeDefined();
 	});
 
+	it("현재 Tenant를 저장한 뒤 인증 캐시를 무효화한다", async () => {
+		await service.setCurrentTenant("user-test-id", "tenant-test-id");
+
+		expect(mockRepository.updateCurrentTenantId).toHaveBeenCalledWith(
+			"user-test-id",
+			"tenant-test-id",
+		);
+		expect(mockAuthCacheService.invalidate).toHaveBeenCalledWith(
+			"user-test-id",
+		);
+	});
+
 	describe("getByIdWithTenants", () => {
 		it("ID로 사용자를 조회해야 한다", async () => {
 			// Given

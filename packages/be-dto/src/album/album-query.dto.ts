@@ -19,7 +19,7 @@ import { QueryDto } from "../query/query.dto";
  */
 export class AlbumQueryDto extends QueryDto {
 	@UUIDFieldOptional({ description: "테넌트 ID 필터" })
-	tenantId?: string;
+	spaceId?: string;
 
 	@StringFieldOptional({ description: "앨범명 검색 (부분 일치)" })
 	name?: string;

@@ -7,7 +7,7 @@ import {
 	type AssetBrowserQueryStates,
 	type AssetBrowserSetQueryStates,
 	assetBrowserQueryInputs,
-} from "../../feature/AssetBrowser";
+} from "../../domain/asset/AssetBrowser";
 
 export const adminAssetsPageQueryInputs = assetBrowserQueryInputs;
 

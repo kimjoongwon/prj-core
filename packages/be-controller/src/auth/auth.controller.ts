@@ -29,7 +29,6 @@ import {
 	ApiAuth,
 	ApiErrors,
 	ApiResponseEntity,
-	ApiTenantHeader,
 	Public,
 	ResponseMessage,
 	Roles,
@@ -344,22 +343,15 @@ export class AuthController {
 		operationId: "getCurrentSpace",
 		summary: "현재 선택 Space 조회",
 		description:
-			"요청의 x-tenant-id 헤더를 기준으로 Space를 반환합니다. 헤더가 없거나 유효하지 않으면 접근 가능한 기본 Space를 반환합니다.",
+			"인증 사용자의 저장된 currentTenantId를 기준으로 현재 Space를 반환합니다. 저장값이 없거나 유효하지 않으면 null을 반환합니다.",
 	})
 	@ApiCookieAuth(Token.ACCESS)
 	@ApiSecurity("oauth2", ["openid", "profile", "email", "roles"])
-	@ApiTenantHeader({
-		required: false,
-		description:
-			"현재 Space를 해석할 Tenant ID입니다. 없으면 접근 가능한 기본 Space를 반환합니다.",
-	})
 	@ApiErrors(401, 500)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	@ResponseMessage("현재 Space 조회 성공")
-	async getCurrentSpace(@Req() req: Request) {
-		return this.queryBus.execute(
-			new GetCurrentSpaceQuery(this.readTenantIdHeader(req)),
-		);
+	async getCurrentSpace() {
+		return this.queryBus.execute(new GetCurrentSpaceQuery());
 	}
 
 	@SkipSpaceCheck()
@@ -502,12 +494,4 @@ export class AuthController {
 		return this.commandBus.execute(new InvalidateUserSessionsCommand(userId));
 	}
 
-	private readTenantIdHeader(req: Request): string | undefined {
-		const headerValue = req.headers[REQUEST_HEADER_KEYS.TENANT_ID];
-		if (typeof headerValue === "string") {
-			return headerValue;
-		}
-
-		return Array.isArray(headerValue) ? headerValue[0] : undefined;
-	}
 }

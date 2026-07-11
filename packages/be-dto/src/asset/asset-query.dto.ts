@@ -24,7 +24,7 @@ export class AssetQueryDto extends QueryDto {
 	folderId?: string;
 
 	@UUIDFieldOptional({ description: "테넌트 ID 필터" })
-	tenantId?: string;
+	spaceId?: string;
 
 	@EnumFieldOptional(() => AssetKind, { description: "에셋 타입 필터" })
 	kind?: AssetKind;

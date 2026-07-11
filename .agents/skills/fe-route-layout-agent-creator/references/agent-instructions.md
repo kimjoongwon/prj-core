@@ -56,7 +56,7 @@ Next.js App Router의 root `apps/**/layout.tsx`와 필요한 named slot topology
 2. 작업 시작 전에 반드시 같은 route의 `page.spec.md`, 상위 route 코드, 메뉴/route 계약을 읽습니다.
 3. 웹 route skeleton은 root `app/layout.tsx`의 `App` 슬롯 안에서 직접 조립합니다.
    - `App`: 최상위 root structure owner
-   - root `app/layout.tsx`: `TopBar`, `SideNavigation`, `AccessGate`, 모바일 navigation/action feature를 직접 조립
+   - root `app/layout.tsx`: `TopBar`, `SideNavigation`, `AccessControlGuard`, 모바일 navigation/action feature를 직접 조립
    - route group/domain/auth `layout.tsx`: 기본 생성 금지
    - `RouteFrame`처럼 pathname으로 layout을 고르는 package feature 생성 금지
 4. route layout은 surface/rhythm을 소유하지 않고 구조/slot topology만 소유합니다.
@@ -138,7 +138,7 @@ Next.js App Router의 root `apps/**/layout.tsx`와 필요한 named slot topology
       <SideNavigation />
     </App.LeftAside>
     <App.Main>
-      <AccessGate contents={children} />
+      <AccessControlGuard contents={children} />
     </App.Main>
   </App.Body>
 </App>

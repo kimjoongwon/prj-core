@@ -14,12 +14,8 @@ export class GetCurrentSpaceUseCase {
 		private readonly spacesService: SpaceAggregate,
 	) {}
 
-	execute(query: GetCurrentSpaceQuery): Promise<AuthSpaceResult | null> {
+	execute(_query: GetCurrentSpaceQuery): Promise<AuthSpaceResult | null> {
 		const user = this.cls.get<UserWithTenantsLike>(CONTEXT_KEYS.AUTH_USER);
-		return resolveCurrentSpace(
-			this.spacesService,
-			user,
-			query.requestedTenantId,
-		);
+		return resolveCurrentSpace(this.spacesService, user);
 	}
 }

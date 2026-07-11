@@ -168,9 +168,6 @@ export const prefetchGetReservationBookingFeedQuery = async <TData = Awaited<Ret
 
   return queryClient;
 }
-
-
-
 export const getGetReservationBookingFeedSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getReservationBookingFeed>>, TError = ErrorType<void>>(params?: GetReservationBookingFeedParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getReservationBookingFeed>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 

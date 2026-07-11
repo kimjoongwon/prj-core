@@ -4,9 +4,9 @@ import { render, screen, waitFor } from "@testing-library/react";
 import type { PropsWithChildren } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const setApiSpaceMock = vi.fn();
+const setApiSessionScopeMock = vi.fn();
 const setApiLocaleMock = vi.fn();
-const setIdpSpaceMock = vi.fn();
+const setIdpSessionScopeMock = vi.fn();
 const setIdpLocaleMock = vi.fn();
 const setLoginRedirectUrlMock = vi.fn();
 const setIdpLoginRedirectUrlMock = vi.fn();
@@ -21,7 +21,7 @@ vi.mock("nuqs/adapters/react", () => ({
 
 vi.mock("../../../../../packages/fe-api/src/core/client", () => ({
 	setApiLocale: (...args: unknown[]) => setApiLocaleMock(...args),
-	setApiSpace: (...args: unknown[]) => setApiSpaceMock(...args),
+	setApiSessionScope: (...args: unknown[]) => setApiSessionScopeMock(...args),
 	setLoginRedirectUrl: (...args: unknown[]) => setLoginRedirectUrlMock(...args),
 }));
 
@@ -29,7 +29,8 @@ vi.mock("../../../../../packages/fe-api/src/idp/client", () => ({
 	setIdpLocale: (...args: unknown[]) => setIdpLocaleMock(...args),
 	setIdpLoginRedirectUrl: (...args: unknown[]) =>
 		setIdpLoginRedirectUrlMock(...args),
-	setIdpSpace: (...args: unknown[]) => setIdpSpaceMock(...args),
+	setIdpSessionScope: (...args: unknown[]) =>
+		setIdpSessionScopeMock(...args),
 }));
 
 async function loadProvider() {
@@ -42,8 +43,8 @@ async function createSpaceSnapshot() {
 	const { observer } = await import("mobx-react-lite");
 
 	return observer(function SpaceSnapshot() {
-		const space = useApp().space;
-		const value = `${space.tenantId ?? "none"}:${space.spaceId ?? "none"}:${space.isSpaceSelectionResolved ? "resolved" : "pending"}`;
+		const account = useApp().account;
+		const value = `${account.currentTenantId ?? "none"}:${account.currentSpaceId ?? "none"}:${account.isSelectionResolved ? "resolved" : "pending"}`;
 
 		return <output aria-label="storybook-admin-space">{value}</output>;
 	});
@@ -69,9 +70,9 @@ function createStorageMock() {
 beforeEach(() => {
 	vi.stubGlobal("localStorage", createStorageMock());
 	vi.stubGlobal("sessionStorage", createStorageMock());
-	setApiSpaceMock.mockReset();
+	setApiSessionScopeMock.mockReset();
 	setApiLocaleMock.mockReset();
-	setIdpSpaceMock.mockReset();
+	setIdpSessionScopeMock.mockReset();
 	setIdpLocaleMock.mockReset();
 	setLoginRedirectUrlMock.mockReset();
 	setIdpLoginRedirectUrlMock.mockReset();
@@ -106,9 +107,17 @@ describe("StorybookRuntimeProvider", () => {
 		);
 
 		await waitFor(() => {
-			expect(setApiSpaceMock).toHaveBeenCalled();
+			expect(setApiSessionScopeMock).toHaveBeenCalledTimes(1);
 		});
-		expect(setIdpSpaceMock).toHaveBeenCalled();
+		expect(setIdpSessionScopeMock).toHaveBeenCalledTimes(1);
+		expect(setApiLocaleMock).toHaveBeenCalledTimes(1);
+		expect(setIdpLocaleMock).toHaveBeenCalledTimes(1);
+		expect(setIdpSessionScopeMock).toHaveBeenCalledWith(
+			setApiSessionScopeMock.mock.calls[0]?.[0],
+		);
+		expect(setIdpLocaleMock).toHaveBeenCalledWith(
+			setApiLocaleMock.mock.calls[0]?.[0],
+		);
 		expect(setLoginRedirectUrlMock).toHaveBeenCalledWith(
 			"#storybook-auth-disabled",
 		);

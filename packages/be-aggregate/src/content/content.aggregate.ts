@@ -39,7 +39,7 @@ export class ContentAggregate {
 		}
 
 		return this.repository.createCommunityPost({
-			tenantId: input.tenantId,
+			spaceId: input.spaceId,
 			text,
 			title,
 			userId: input.userId,

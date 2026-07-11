@@ -28,14 +28,14 @@ model Group {
   type              GroupTypes         @default(User)
   /// @displayName 라벨
   label             String?
-  tenantId          String             @map("tenant_id")
+  spaceId           String             @map("space_id")
   creatorId         String?            @map("creator_id")
-  tenant            Tenant             @relation(fields: [tenantId], references: [id])
-  creator           User?              @relation(fields: [creatorId], references: [id])
+  space             Space              @relation(fields: [spaceId], references: [id], onDelete: Restrict)
+  creator           User?              @relation(fields: [creatorId], references: [id], onDelete: SetNull)
   roleAssociations  RoleAssociation[]
   spaceAssociations SpaceAssociation[]
   userAssociations  UserAssociation[]
 
-  @@index([tenantId])
+  @@index([spaceId])
   @@map("groups")
 }

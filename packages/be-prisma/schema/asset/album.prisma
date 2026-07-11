@@ -15,7 +15,7 @@ model Album {
   updatedAt    DateTime?    @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt    DateTime?    @map("removed_at") @db.Timestamptz(6)
   /// @displayName 소속 Space
-  tenantId     String       @map("tenant_id")
+  spaceId      String       @map("space_id")
   /// @displayName 앨범명
   name         String
   /// @displayName 앨범 설명
@@ -26,12 +26,12 @@ model Album {
   sortOrder    Int          @default(0) @map("sort_order")
   /// @displayName 생성자
   creatorId    String?      @map("creator_id")
-  tenant       Tenant       @relation(fields: [tenantId], references: [id])
+  space        Space        @relation(fields: [spaceId], references: [id], onDelete: Restrict)
   coverAsset   Asset?       @relation("AlbumCover", fields: [coverAssetId], references: [id], onDelete: SetNull)
-  creator      User?        @relation(fields: [creatorId], references: [id])
+  creator      User?        @relation(fields: [creatorId], references: [id], onDelete: SetNull)
   entries      AlbumEntry[]
 
-  @@index([tenantId])
+  @@index([spaceId])
   @@index([name])
   @@map("albums")
 }
@@ -50,7 +50,8 @@ model AlbumEntry {
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
   /// @displayName 소속 Space
-  tenantId  String    @map("tenant_id")
+  spaceId   String    @map("space_id")
+  creatorId String?   @map("creator_id")
   /// @displayName 앨범 ID
   albumId   String    @map("album_id")
   /// @displayName 에셋 ID
@@ -59,12 +60,13 @@ model AlbumEntry {
   position  Int
   /// @displayName 캡션
   caption   String?
-  tenant    Tenant    @relation(fields: [tenantId], references: [id])
+  space     Space     @relation(fields: [spaceId], references: [id], onDelete: Restrict)
+  creator   User?     @relation(fields: [creatorId], references: [id], onDelete: SetNull)
   album     Album     @relation(fields: [albumId], references: [id], onDelete: Cascade)
   asset     Asset     @relation(fields: [assetId], references: [id], onDelete: Cascade)
 
   @@unique([albumId, assetId])
-  @@index([tenantId])
+  @@index([spaceId])
   @@index([albumId])
   @@index([assetId])
   @@map("album_entries")

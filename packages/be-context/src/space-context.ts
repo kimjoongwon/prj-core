@@ -51,24 +51,22 @@ export class SpaceContext {
 	}
 
 	/**
-	 * Prisma Where 절용 Tenant 소유 리소스 필터
+	 * Prisma Where 절용 Space 소유 리소스 필터
 	 * undefined면 전체, * 필터 없음)
-	 * { tenant: { spaceId: { in: [...] } } } 형태
+	 * { spaceId: { in: [...] } } 형태
 	 */
-	get spaceFilter():
-		| { tenant: { spaceId: { in: string[] } } }
-		| undefined {
+	get spaceFilter(): { spaceId: { in: string[] } } | undefined {
 		const ids = this.spaceIds;
-		return ids ? { tenant: { spaceId: { in: ids } } } : undefined;
+		return ids ? { spaceId: { in: ids } } : undefined;
 	}
 
 	/**
-	 * Prisma Where 절용 현재 Tenant 필터
-	 * 생성/수정처럼 현재 선택 Tenant 하나에 묶어야 할 때 사용합니다.
+	 * Prisma Where 절용 현재 Space 필터
+	 * 생성/수정처럼 현재 선택 Space 하나에 묶어야 할 때 사용합니다.
 	 */
-	get tenantFilter(): { tenantId: string } | undefined {
-		const tenantId = this.tenantId;
-		return tenantId ? { tenantId } : undefined;
+	get currentSpaceFilter(): { spaceId: string } | undefined {
+		const spaceId = this.spaceId;
+		return spaceId ? { spaceId } : undefined;
 	}
 
 	/**

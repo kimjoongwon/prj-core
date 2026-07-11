@@ -37,11 +37,15 @@ export class GetMyAbilitiesUseCase {
 		}
 
 		const roleIds = tenant.roleId ? [tenant.roleId] : [];
+		const spaceId = this.cls.get<string | undefined>(CONTEXT_KEYS.SPACE_ID);
+		if (!spaceId) {
+			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
+		}
 
 		this.logger.debug(
 			`현재 사용자 권한 조회: userId=${user.id.slice(-8)}, tenantId=${tenant.id.slice(-8)}, roleIds=${roleIds.length}`,
 		);
 
-		return this.abilitiesService.getMergedAbilities(roleIds, tenant.id);
+		return this.abilitiesService.getMergedAbilities(roleIds, spaceId);
 	}
 }

@@ -189,9 +189,13 @@ describe("Auth Login API E2E 테스트", () => {
 
 			// Then
 			expect(response.status).toBe(302);
-			expect(response.headers.location).toEqual(expect.any(String));
+			const location = response.headers.location;
+			expect(location).toEqual(expect.any(String));
+			if (typeof location !== "string") {
+				throw new Error("OIDC login response is missing the Location header.");
+			}
 
-			const authorizationUrl = new URL(response.headers.location);
+			const authorizationUrl = new URL(location);
 			expect(authorizationUrl.pathname).toBe("/oidc/auth");
 			expect(authorizationUrl.searchParams.get("response_type")).toBe("code");
 			expect(authorizationUrl.searchParams.get("client_id")).toBe("admin-web");
@@ -202,9 +206,12 @@ describe("Auth Login API E2E 테스트", () => {
 
 			const state = authorizationUrl.searchParams.get("state");
 			expect(state).toEqual(expect.any(String));
+			if (typeof state !== "string") {
+				throw new Error("OIDC authorization URL is missing the state parameter.");
+			}
 
 			const storedState = await tokenStorageService.validateAndConsumeOidcState(
-				state!,
+				state,
 			);
 			expect(storedState).toEqual(
 				expect.objectContaining({

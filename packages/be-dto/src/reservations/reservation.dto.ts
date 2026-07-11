@@ -6,19 +6,22 @@ import {
 	StringField,
 	StringFieldOptional,
 	UUIDField,
+	UUIDFieldOptional,
 } from "@cocrepo/decorator";
 import type { Reservation as ReservationModel } from "@cocrepo/prisma";
 import { ReservationStatus } from "@cocrepo/prisma";
 import { AbstractDto } from "../abstract.dto";
 import { ProgramDto } from "../program.dto";
 import { SessionDto } from "../session.dto";
-import { TenantDto } from "../tenant.dto";
 import { TimelineDto } from "../timeline.dto";
 import { UserDto } from "../user.dto";
 
 export class ReservationDto extends AbstractDto implements ReservationModel {
-	@UUIDField({ description: "Tenant ID" })
-	tenantId!: string;
+	@UUIDField({ description: "Space ID" })
+	spaceId!: string;
+
+	@UUIDFieldOptional({ nullable: true, description: "생성자 ID" })
+	creatorId!: string | null;
 
 	@UUIDField({ description: "예약 사용자 ID" })
 	userId!: string;
@@ -60,9 +63,6 @@ export class ReservationDto extends AbstractDto implements ReservationModel {
 
 	@StringFieldOptional({ description: "취소 사유", nullable: true })
 	cancelReason!: string | null;
-
-	@ClassField(() => TenantDto, { required: false })
-	tenant?: TenantDto;
 
 	@ClassField(() => UserDto, { required: false })
 	user?: UserDto;

@@ -9,6 +9,7 @@ import {
 	StringField,
 	StringFieldOptional,
 	UUIDField,
+	UUIDFieldOptional,
 } from "@cocrepo/decorator";
 import type { User } from "@cocrepo/prisma";
 import { Exclude } from "class-transformer";
@@ -57,6 +58,12 @@ export class UserDto extends AbstractDto implements User {
 
 	@BooleanField({ description: "활성 상태" })
 	isActive!: boolean;
+
+	@UUIDFieldOptional({
+		nullable: true,
+		description: "현재 선택된 Tenant membership ID",
+	})
+	currentTenantId!: string | null;
 
 	@ClassField(() => ProfileDto, {
 		isArray: true,

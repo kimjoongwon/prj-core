@@ -40,6 +40,7 @@ export interface ContextTenantSnapshot {
 
 export interface ContextUserSnapshot {
 	id: string;
+	currentTenantId?: string | null;
 	spaceId?: string;
 	email?: string;
 	name?: string;

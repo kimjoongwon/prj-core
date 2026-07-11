@@ -20,14 +20,14 @@ describe("QueryInput mapper", () => {
 		expect(
 			buildAssetQueryWhere({
 				folderId: "folder-1",
-				tenantId: "tenant-1",
+				spaceId: "space-1",
 				kind: AssetKind.IMAGE,
 				status: AssetStatus.READY,
 				search: "photo",
 			}),
 		).toEqual({
 			folderId: "folder-1",
-			tenantId: "tenant-1",
+			spaceId: "space-1",
 			kind: AssetKind.IMAGE,
 			status: AssetStatus.READY,
 			originalName: { contains: "photo", mode: "insensitive" },

@@ -14,9 +14,8 @@ export const Providers = observer(function Providers({
 	return (
 		<DesignSystemProvider>
 			<App>
-				<App.Body>
-					<App.Main>{children}</App.Main>
-				</App.Body>
+				<App.Content>{children}</App.Content>
+				<App.PortalHost />
 			</App>
 		</DesignSystemProvider>
 	);

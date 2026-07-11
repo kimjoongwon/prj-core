@@ -65,98 +65,10 @@ export interface UseAbilitiesReturn<TAbility = unknown> {
 	isDisabled: boolean;
 }
 
-export interface UseLayoutSideNavigationLike {
-	items: unknown;
-	selectedItem: unknown;
-	selectedSubItem: unknown;
-	expandedItemIds: unknown;
-	selectItem: (itemId: string) => void;
-	selectSubItem: (subItemId: string) => void;
-	toggleItem: (itemId: string) => void;
-}
-
-export interface UseLayoutMobileBottomNavigationLike {
-	items: unknown;
-	activeItemId: unknown;
-	selectItem: (itemId: string) => void;
-}
-
-export interface UseLayoutMobileMenuLike {
-	isOpen: boolean;
-	title: string;
-	items: unknown;
-	close: () => void;
-}
-
-export interface UseLayoutFloatingActionLike {
-	isOpen: boolean;
-	actions: unknown;
-	toggle: () => void;
-	execute: (actionId: string) => void;
-}
-
 /**
- * useLayout가 의존하는 App UI 최소 계약
+ * Account bootstrap이 참조하는 Space API 응답 최소 계약
  */
-export interface UseLayoutAppLike {
-	ui: {
-		body: {
-			leftAside: {
-				sideNavigation: UseLayoutSideNavigationLike;
-			};
-		};
-		footer: {
-			mobileBottomNavigation: UseLayoutMobileBottomNavigationLike;
-			mobileMenu: UseLayoutMobileMenuLike;
-			floatingAction: UseLayoutFloatingActionLike;
-		};
-	};
-}
-
-/**
- * useLayout 옵션 인터페이스
- */
-export type UseLayoutOptions = Record<string, never>;
-
-/**
- * useLayout 반환 타입
- */
-export interface UseLayoutReturn<
-	TApp extends UseLayoutAppLike = UseLayoutAppLike,
-> {
-	// 네비게이션 데이터
-	navItems: TApp["ui"]["body"]["leftAside"]["sideNavigation"]["items"];
-	selectedNavItem: TApp["ui"]["body"]["leftAside"]["sideNavigation"]["selectedItem"];
-	selectedSubNavItem: TApp["ui"]["body"]["leftAside"]["sideNavigation"]["selectedSubItem"];
-	expandedNavItemIds: TApp["ui"]["body"]["leftAside"]["sideNavigation"]["expandedItemIds"];
-
-	// 모바일 - BottomTab
-	bottomTabItems: TApp["ui"]["footer"]["mobileBottomNavigation"]["items"];
-	activeBottomTabId: TApp["ui"]["footer"]["mobileBottomNavigation"]["activeItemId"];
-
-	// 모바일 - SubMenuList
-	isSubMenuOpen: TApp["ui"]["footer"]["mobileMenu"]["isOpen"];
-	subMenuTitle: TApp["ui"]["footer"]["mobileMenu"]["title"];
-	subMenuItems: TApp["ui"]["footer"]["mobileMenu"]["items"];
-
-	// 모바일 - FAB
-	isFABOpen: TApp["ui"]["footer"]["floatingAction"]["isOpen"];
-	fabActions: TApp["ui"]["footer"]["floatingAction"]["actions"];
-
-	// 핸들러
-	onNavItemClick: (navItemId: string) => void;
-	onSubNavItemClick: (subNavItemId: string) => void;
-	onNavItemToggle: (navItemId: string) => void;
-	onBottomTabClick: (tabId: string) => void;
-	onSubMenuClose: () => void;
-	onFABToggle: () => void;
-	onFABActionClick: (actionId: string) => void;
-}
-
-/**
- * Space bootstrap이 참조하는 Space 최소 계약
- */
-export interface SpaceBootstrapSpaceLike {
+export interface AccountBootstrapSpaceLike {
 	id?: string | null;
 	tenantId?: string | null;
 	contentLanguageCode?: string | null;
@@ -166,9 +78,9 @@ export interface SpaceBootstrapSpaceLike {
 }
 
 /**
- * Persist 계층에 저장할 Space 선택 항목 계약
+ * Persist 계층에 저장할 account tenant 선택 항목 계약
  */
-export interface SpaceBootstrapSelection {
+export interface AccountTenantSelection {
 	tenantId: string;
 	spaceId: string;
 	groundName: string;
@@ -176,28 +88,28 @@ export interface SpaceBootstrapSelection {
 }
 
 /**
- * useSpaceBootstrap이 값을 반영할 space 최소 계약
+ * useTenantBootstrap이 값을 반영할 account 최소 계약
  */
-export interface SpaceBootstrapScopeLike {
-	isSpaceSelectionResolved?: boolean;
-	setSpaces: (spaces: SpaceBootstrapSelection[]) => void;
-	setSpace: (
+export interface AccountBootstrapLike {
+	isSelectionResolved?: boolean;
+	setAvailableSpaces: (spaces: AccountTenantSelection[]) => void;
+	setCurrentTenant: (
 		tenantId: string,
 		groundName: string,
 		contentLanguageCode?: string | null,
 		spaceId?: string | null,
 	) => void;
-	clearSpace: () => void;
-	setSpaceSelectionResolved: (resolved: boolean) => void;
+	clearCurrentTenant: () => void;
+	setSelectionResolved: (resolved: boolean) => void;
 }
 
 /**
- * useSpaceBootstrap 입력 옵션 계약
+ * useTenantBootstrap 입력 옵션 계약
  */
-export interface UseSpaceBootstrapOptions<
-	TSpace extends SpaceBootstrapSpaceLike = SpaceBootstrapSpaceLike,
+export interface UseAccountBootstrapOptions<
+	TSpace extends AccountBootstrapSpaceLike = AccountBootstrapSpaceLike,
 > {
-	space: SpaceBootstrapScopeLike;
+	account: AccountBootstrapLike;
 	isHydrated: boolean;
 	spaces?: TSpace[] | null;
 	currentSpace?: TSpace | null;
@@ -205,13 +117,13 @@ export interface UseSpaceBootstrapOptions<
 }
 
 /**
- * useSpaceBootstrap 반환 계약
+ * useTenantBootstrap 반환 계약
  */
-export interface UseSpaceBootstrapReturn<
-	TSpace extends SpaceBootstrapSpaceLike = SpaceBootstrapSpaceLike,
+export interface UseAccountBootstrapReturn<
+	TSpace extends AccountBootstrapSpaceLike = AccountBootstrapSpaceLike,
 > {
 	spaces: TSpace[];
 	currentSpace: TSpace | null;
 	isCurrentSpaceFetched: boolean;
-	isSpaceBootstrapReady: boolean;
+	isAccountBootstrapReady: boolean;
 }

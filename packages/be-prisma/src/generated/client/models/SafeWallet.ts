@@ -47,7 +47,7 @@ export type SafeWalletMinAggregateOutputType = {
   chainId: number | null
   threshold: number | null
   nonce: number | null
-  tenantId: string | null
+  spaceId: string | null
   creatorId: string | null
 }
 
@@ -60,7 +60,7 @@ export type SafeWalletMaxAggregateOutputType = {
   chainId: number | null
   threshold: number | null
   nonce: number | null
-  tenantId: string | null
+  spaceId: string | null
   creatorId: string | null
 }
 
@@ -74,7 +74,7 @@ export type SafeWalletCountAggregateOutputType = {
   threshold: number
   nonce: number
   owners: number
-  tenantId: number
+  spaceId: number
   creatorId: number
   _all: number
 }
@@ -101,7 +101,7 @@ export type SafeWalletMinAggregateInputType = {
   chainId?: true
   threshold?: true
   nonce?: true
-  tenantId?: true
+  spaceId?: true
   creatorId?: true
 }
 
@@ -114,7 +114,7 @@ export type SafeWalletMaxAggregateInputType = {
   chainId?: true
   threshold?: true
   nonce?: true
-  tenantId?: true
+  spaceId?: true
   creatorId?: true
 }
 
@@ -128,7 +128,7 @@ export type SafeWalletCountAggregateInputType = {
   threshold?: true
   nonce?: true
   owners?: true
-  tenantId?: true
+  spaceId?: true
   creatorId?: true
   _all?: true
 }
@@ -229,7 +229,7 @@ export type SafeWalletGroupByOutputType = {
   threshold: number
   nonce: number
   owners: string[]
-  tenantId: string
+  spaceId: string
   creatorId: string | null
   _count: SafeWalletCountAggregateOutputType | null
   _avg: SafeWalletAvgAggregateOutputType | null
@@ -266,9 +266,9 @@ export type SafeWalletWhereInput = {
   threshold?: Prisma.IntFilter<"SafeWallet"> | number
   nonce?: Prisma.IntFilter<"SafeWallet"> | number
   owners?: Prisma.StringNullableListFilter<"SafeWallet">
-  tenantId?: Prisma.StringFilter<"SafeWallet"> | string
+  spaceId?: Prisma.StringFilter<"SafeWallet"> | string
   creatorId?: Prisma.StringNullableFilter<"SafeWallet"> | string | null
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   transactions?: Prisma.SafeTransactionListRelationFilter
 }
@@ -283,9 +283,9 @@ export type SafeWalletOrderByWithRelationInput = {
   threshold?: Prisma.SortOrder
   nonce?: Prisma.SortOrder
   owners?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
-  tenant?: Prisma.TenantOrderByWithRelationInput
+  space?: Prisma.SpaceOrderByWithRelationInput
   creator?: Prisma.UserOrderByWithRelationInput
   transactions?: Prisma.SafeTransactionOrderByRelationAggregateInput
 }
@@ -303,9 +303,9 @@ export type SafeWalletWhereUniqueInput = Prisma.AtLeast<{
   threshold?: Prisma.IntFilter<"SafeWallet"> | number
   nonce?: Prisma.IntFilter<"SafeWallet"> | number
   owners?: Prisma.StringNullableListFilter<"SafeWallet">
-  tenantId?: Prisma.StringFilter<"SafeWallet"> | string
+  spaceId?: Prisma.StringFilter<"SafeWallet"> | string
   creatorId?: Prisma.StringNullableFilter<"SafeWallet"> | string | null
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   transactions?: Prisma.SafeTransactionListRelationFilter
 }, "id" | "address">
@@ -320,7 +320,7 @@ export type SafeWalletOrderByWithAggregationInput = {
   threshold?: Prisma.SortOrder
   nonce?: Prisma.SortOrder
   owners?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.SafeWalletCountOrderByAggregateInput
   _avg?: Prisma.SafeWalletAvgOrderByAggregateInput
@@ -342,7 +342,7 @@ export type SafeWalletScalarWhereWithAggregatesInput = {
   threshold?: Prisma.IntWithAggregatesFilter<"SafeWallet"> | number
   nonce?: Prisma.IntWithAggregatesFilter<"SafeWallet"> | number
   owners?: Prisma.StringNullableListFilter<"SafeWallet">
-  tenantId?: Prisma.StringWithAggregatesFilter<"SafeWallet"> | string
+  spaceId?: Prisma.StringWithAggregatesFilter<"SafeWallet"> | string
   creatorId?: Prisma.StringNullableWithAggregatesFilter<"SafeWallet"> | string | null
 }
 
@@ -356,7 +356,7 @@ export type SafeWalletCreateInput = {
   threshold?: number
   nonce?: number
   owners?: Prisma.SafeWalletCreateownersInput | string[]
-  tenant: Prisma.TenantCreateNestedOneWithoutSafeWalletsInput
+  space: Prisma.SpaceCreateNestedOneWithoutSafeWalletsInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedSafeWalletsInput
   transactions?: Prisma.SafeTransactionCreateNestedManyWithoutSafeWalletInput
 }
@@ -371,7 +371,7 @@ export type SafeWalletUncheckedCreateInput = {
   threshold?: number
   nonce?: number
   owners?: Prisma.SafeWalletCreateownersInput | string[]
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
   transactions?: Prisma.SafeTransactionUncheckedCreateNestedManyWithoutSafeWalletInput
 }
@@ -386,7 +386,7 @@ export type SafeWalletUpdateInput = {
   threshold?: Prisma.IntFieldUpdateOperationsInput | number
   nonce?: Prisma.IntFieldUpdateOperationsInput | number
   owners?: Prisma.SafeWalletUpdateownersInput | string[]
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutSafeWalletsNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutSafeWalletsNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedSafeWalletsNestedInput
   transactions?: Prisma.SafeTransactionUpdateManyWithoutSafeWalletNestedInput
 }
@@ -401,7 +401,7 @@ export type SafeWalletUncheckedUpdateInput = {
   threshold?: Prisma.IntFieldUpdateOperationsInput | number
   nonce?: Prisma.IntFieldUpdateOperationsInput | number
   owners?: Prisma.SafeWalletUpdateownersInput | string[]
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactions?: Prisma.SafeTransactionUncheckedUpdateManyWithoutSafeWalletNestedInput
 }
@@ -416,7 +416,7 @@ export type SafeWalletCreateManyInput = {
   threshold?: number
   nonce?: number
   owners?: Prisma.SafeWalletCreateownersInput | string[]
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
 }
 
@@ -442,7 +442,7 @@ export type SafeWalletUncheckedUpdateManyInput = {
   threshold?: Prisma.IntFieldUpdateOperationsInput | number
   nonce?: Prisma.IntFieldUpdateOperationsInput | number
   owners?: Prisma.SafeWalletUpdateownersInput | string[]
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -466,7 +466,7 @@ export type SafeWalletCountOrderByAggregateInput = {
   threshold?: Prisma.SortOrder
   nonce?: Prisma.SortOrder
   owners?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
 }
 
@@ -485,7 +485,7 @@ export type SafeWalletMaxOrderByAggregateInput = {
   chainId?: Prisma.SortOrder
   threshold?: Prisma.SortOrder
   nonce?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
 }
 
@@ -498,7 +498,7 @@ export type SafeWalletMinOrderByAggregateInput = {
   chainId?: Prisma.SortOrder
   threshold?: Prisma.SortOrder
   nonce?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
 }
 
@@ -513,45 +513,45 @@ export type SafeWalletScalarRelationFilter = {
   isNot?: Prisma.SafeWalletWhereInput
 }
 
-export type SafeWalletCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.SafeWalletCreateWithoutTenantInput, Prisma.SafeWalletUncheckedCreateWithoutTenantInput> | Prisma.SafeWalletCreateWithoutTenantInput[] | Prisma.SafeWalletUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.SafeWalletCreateOrConnectWithoutTenantInput | Prisma.SafeWalletCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.SafeWalletCreateManyTenantInputEnvelope
+export type SafeWalletCreateNestedManyWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.SafeWalletCreateWithoutSpaceInput, Prisma.SafeWalletUncheckedCreateWithoutSpaceInput> | Prisma.SafeWalletCreateWithoutSpaceInput[] | Prisma.SafeWalletUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.SafeWalletCreateOrConnectWithoutSpaceInput | Prisma.SafeWalletCreateOrConnectWithoutSpaceInput[]
+  createMany?: Prisma.SafeWalletCreateManySpaceInputEnvelope
   connect?: Prisma.SafeWalletWhereUniqueInput | Prisma.SafeWalletWhereUniqueInput[]
 }
 
-export type SafeWalletUncheckedCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.SafeWalletCreateWithoutTenantInput, Prisma.SafeWalletUncheckedCreateWithoutTenantInput> | Prisma.SafeWalletCreateWithoutTenantInput[] | Prisma.SafeWalletUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.SafeWalletCreateOrConnectWithoutTenantInput | Prisma.SafeWalletCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.SafeWalletCreateManyTenantInputEnvelope
+export type SafeWalletUncheckedCreateNestedManyWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.SafeWalletCreateWithoutSpaceInput, Prisma.SafeWalletUncheckedCreateWithoutSpaceInput> | Prisma.SafeWalletCreateWithoutSpaceInput[] | Prisma.SafeWalletUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.SafeWalletCreateOrConnectWithoutSpaceInput | Prisma.SafeWalletCreateOrConnectWithoutSpaceInput[]
+  createMany?: Prisma.SafeWalletCreateManySpaceInputEnvelope
   connect?: Prisma.SafeWalletWhereUniqueInput | Prisma.SafeWalletWhereUniqueInput[]
 }
 
-export type SafeWalletUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.SafeWalletCreateWithoutTenantInput, Prisma.SafeWalletUncheckedCreateWithoutTenantInput> | Prisma.SafeWalletCreateWithoutTenantInput[] | Prisma.SafeWalletUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.SafeWalletCreateOrConnectWithoutTenantInput | Prisma.SafeWalletCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.SafeWalletUpsertWithWhereUniqueWithoutTenantInput | Prisma.SafeWalletUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.SafeWalletCreateManyTenantInputEnvelope
+export type SafeWalletUpdateManyWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.SafeWalletCreateWithoutSpaceInput, Prisma.SafeWalletUncheckedCreateWithoutSpaceInput> | Prisma.SafeWalletCreateWithoutSpaceInput[] | Prisma.SafeWalletUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.SafeWalletCreateOrConnectWithoutSpaceInput | Prisma.SafeWalletCreateOrConnectWithoutSpaceInput[]
+  upsert?: Prisma.SafeWalletUpsertWithWhereUniqueWithoutSpaceInput | Prisma.SafeWalletUpsertWithWhereUniqueWithoutSpaceInput[]
+  createMany?: Prisma.SafeWalletCreateManySpaceInputEnvelope
   set?: Prisma.SafeWalletWhereUniqueInput | Prisma.SafeWalletWhereUniqueInput[]
   disconnect?: Prisma.SafeWalletWhereUniqueInput | Prisma.SafeWalletWhereUniqueInput[]
   delete?: Prisma.SafeWalletWhereUniqueInput | Prisma.SafeWalletWhereUniqueInput[]
   connect?: Prisma.SafeWalletWhereUniqueInput | Prisma.SafeWalletWhereUniqueInput[]
-  update?: Prisma.SafeWalletUpdateWithWhereUniqueWithoutTenantInput | Prisma.SafeWalletUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.SafeWalletUpdateManyWithWhereWithoutTenantInput | Prisma.SafeWalletUpdateManyWithWhereWithoutTenantInput[]
+  update?: Prisma.SafeWalletUpdateWithWhereUniqueWithoutSpaceInput | Prisma.SafeWalletUpdateWithWhereUniqueWithoutSpaceInput[]
+  updateMany?: Prisma.SafeWalletUpdateManyWithWhereWithoutSpaceInput | Prisma.SafeWalletUpdateManyWithWhereWithoutSpaceInput[]
   deleteMany?: Prisma.SafeWalletScalarWhereInput | Prisma.SafeWalletScalarWhereInput[]
 }
 
-export type SafeWalletUncheckedUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.SafeWalletCreateWithoutTenantInput, Prisma.SafeWalletUncheckedCreateWithoutTenantInput> | Prisma.SafeWalletCreateWithoutTenantInput[] | Prisma.SafeWalletUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.SafeWalletCreateOrConnectWithoutTenantInput | Prisma.SafeWalletCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.SafeWalletUpsertWithWhereUniqueWithoutTenantInput | Prisma.SafeWalletUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.SafeWalletCreateManyTenantInputEnvelope
+export type SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.SafeWalletCreateWithoutSpaceInput, Prisma.SafeWalletUncheckedCreateWithoutSpaceInput> | Prisma.SafeWalletCreateWithoutSpaceInput[] | Prisma.SafeWalletUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.SafeWalletCreateOrConnectWithoutSpaceInput | Prisma.SafeWalletCreateOrConnectWithoutSpaceInput[]
+  upsert?: Prisma.SafeWalletUpsertWithWhereUniqueWithoutSpaceInput | Prisma.SafeWalletUpsertWithWhereUniqueWithoutSpaceInput[]
+  createMany?: Prisma.SafeWalletCreateManySpaceInputEnvelope
   set?: Prisma.SafeWalletWhereUniqueInput | Prisma.SafeWalletWhereUniqueInput[]
   disconnect?: Prisma.SafeWalletWhereUniqueInput | Prisma.SafeWalletWhereUniqueInput[]
   delete?: Prisma.SafeWalletWhereUniqueInput | Prisma.SafeWalletWhereUniqueInput[]
   connect?: Prisma.SafeWalletWhereUniqueInput | Prisma.SafeWalletWhereUniqueInput[]
-  update?: Prisma.SafeWalletUpdateWithWhereUniqueWithoutTenantInput | Prisma.SafeWalletUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.SafeWalletUpdateManyWithWhereWithoutTenantInput | Prisma.SafeWalletUpdateManyWithWhereWithoutTenantInput[]
+  update?: Prisma.SafeWalletUpdateWithWhereUniqueWithoutSpaceInput | Prisma.SafeWalletUpdateWithWhereUniqueWithoutSpaceInput[]
+  updateMany?: Prisma.SafeWalletUpdateManyWithWhereWithoutSpaceInput | Prisma.SafeWalletUpdateManyWithWhereWithoutSpaceInput[]
   deleteMany?: Prisma.SafeWalletScalarWhereInput | Prisma.SafeWalletScalarWhereInput[]
 }
 
@@ -620,7 +620,7 @@ export type SafeWalletUpdateOneRequiredWithoutTransactionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SafeWalletUpdateToOneWithWhereWithoutTransactionsInput, Prisma.SafeWalletUpdateWithoutTransactionsInput>, Prisma.SafeWalletUncheckedUpdateWithoutTransactionsInput>
 }
 
-export type SafeWalletCreateWithoutTenantInput = {
+export type SafeWalletCreateWithoutSpaceInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -634,7 +634,7 @@ export type SafeWalletCreateWithoutTenantInput = {
   transactions?: Prisma.SafeTransactionCreateNestedManyWithoutSafeWalletInput
 }
 
-export type SafeWalletUncheckedCreateWithoutTenantInput = {
+export type SafeWalletUncheckedCreateWithoutSpaceInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -648,30 +648,30 @@ export type SafeWalletUncheckedCreateWithoutTenantInput = {
   transactions?: Prisma.SafeTransactionUncheckedCreateNestedManyWithoutSafeWalletInput
 }
 
-export type SafeWalletCreateOrConnectWithoutTenantInput = {
+export type SafeWalletCreateOrConnectWithoutSpaceInput = {
   where: Prisma.SafeWalletWhereUniqueInput
-  create: Prisma.XOR<Prisma.SafeWalletCreateWithoutTenantInput, Prisma.SafeWalletUncheckedCreateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.SafeWalletCreateWithoutSpaceInput, Prisma.SafeWalletUncheckedCreateWithoutSpaceInput>
 }
 
-export type SafeWalletCreateManyTenantInputEnvelope = {
-  data: Prisma.SafeWalletCreateManyTenantInput | Prisma.SafeWalletCreateManyTenantInput[]
+export type SafeWalletCreateManySpaceInputEnvelope = {
+  data: Prisma.SafeWalletCreateManySpaceInput | Prisma.SafeWalletCreateManySpaceInput[]
   skipDuplicates?: boolean
 }
 
-export type SafeWalletUpsertWithWhereUniqueWithoutTenantInput = {
+export type SafeWalletUpsertWithWhereUniqueWithoutSpaceInput = {
   where: Prisma.SafeWalletWhereUniqueInput
-  update: Prisma.XOR<Prisma.SafeWalletUpdateWithoutTenantInput, Prisma.SafeWalletUncheckedUpdateWithoutTenantInput>
-  create: Prisma.XOR<Prisma.SafeWalletCreateWithoutTenantInput, Prisma.SafeWalletUncheckedCreateWithoutTenantInput>
+  update: Prisma.XOR<Prisma.SafeWalletUpdateWithoutSpaceInput, Prisma.SafeWalletUncheckedUpdateWithoutSpaceInput>
+  create: Prisma.XOR<Prisma.SafeWalletCreateWithoutSpaceInput, Prisma.SafeWalletUncheckedCreateWithoutSpaceInput>
 }
 
-export type SafeWalletUpdateWithWhereUniqueWithoutTenantInput = {
+export type SafeWalletUpdateWithWhereUniqueWithoutSpaceInput = {
   where: Prisma.SafeWalletWhereUniqueInput
-  data: Prisma.XOR<Prisma.SafeWalletUpdateWithoutTenantInput, Prisma.SafeWalletUncheckedUpdateWithoutTenantInput>
+  data: Prisma.XOR<Prisma.SafeWalletUpdateWithoutSpaceInput, Prisma.SafeWalletUncheckedUpdateWithoutSpaceInput>
 }
 
-export type SafeWalletUpdateManyWithWhereWithoutTenantInput = {
+export type SafeWalletUpdateManyWithWhereWithoutSpaceInput = {
   where: Prisma.SafeWalletScalarWhereInput
-  data: Prisma.XOR<Prisma.SafeWalletUpdateManyMutationInput, Prisma.SafeWalletUncheckedUpdateManyWithoutTenantInput>
+  data: Prisma.XOR<Prisma.SafeWalletUpdateManyMutationInput, Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceInput>
 }
 
 export type SafeWalletScalarWhereInput = {
@@ -687,7 +687,7 @@ export type SafeWalletScalarWhereInput = {
   threshold?: Prisma.IntFilter<"SafeWallet"> | number
   nonce?: Prisma.IntFilter<"SafeWallet"> | number
   owners?: Prisma.StringNullableListFilter<"SafeWallet">
-  tenantId?: Prisma.StringFilter<"SafeWallet"> | string
+  spaceId?: Prisma.StringFilter<"SafeWallet"> | string
   creatorId?: Prisma.StringNullableFilter<"SafeWallet"> | string | null
 }
 
@@ -701,7 +701,7 @@ export type SafeWalletCreateWithoutCreatorInput = {
   threshold?: number
   nonce?: number
   owners?: Prisma.SafeWalletCreateownersInput | string[]
-  tenant: Prisma.TenantCreateNestedOneWithoutSafeWalletsInput
+  space: Prisma.SpaceCreateNestedOneWithoutSafeWalletsInput
   transactions?: Prisma.SafeTransactionCreateNestedManyWithoutSafeWalletInput
 }
 
@@ -715,7 +715,7 @@ export type SafeWalletUncheckedCreateWithoutCreatorInput = {
   threshold?: number
   nonce?: number
   owners?: Prisma.SafeWalletCreateownersInput | string[]
-  tenantId: string
+  spaceId: string
   transactions?: Prisma.SafeTransactionUncheckedCreateNestedManyWithoutSafeWalletInput
 }
 
@@ -755,7 +755,7 @@ export type SafeWalletCreateWithoutTransactionsInput = {
   threshold?: number
   nonce?: number
   owners?: Prisma.SafeWalletCreateownersInput | string[]
-  tenant: Prisma.TenantCreateNestedOneWithoutSafeWalletsInput
+  space: Prisma.SpaceCreateNestedOneWithoutSafeWalletsInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedSafeWalletsInput
 }
 
@@ -769,7 +769,7 @@ export type SafeWalletUncheckedCreateWithoutTransactionsInput = {
   threshold?: number
   nonce?: number
   owners?: Prisma.SafeWalletCreateownersInput | string[]
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
 }
 
@@ -799,7 +799,7 @@ export type SafeWalletUpdateWithoutTransactionsInput = {
   threshold?: Prisma.IntFieldUpdateOperationsInput | number
   nonce?: Prisma.IntFieldUpdateOperationsInput | number
   owners?: Prisma.SafeWalletUpdateownersInput | string[]
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutSafeWalletsNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutSafeWalletsNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedSafeWalletsNestedInput
 }
 
@@ -813,11 +813,11 @@ export type SafeWalletUncheckedUpdateWithoutTransactionsInput = {
   threshold?: Prisma.IntFieldUpdateOperationsInput | number
   nonce?: Prisma.IntFieldUpdateOperationsInput | number
   owners?: Prisma.SafeWalletUpdateownersInput | string[]
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type SafeWalletCreateManyTenantInput = {
+export type SafeWalletCreateManySpaceInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -830,7 +830,7 @@ export type SafeWalletCreateManyTenantInput = {
   creatorId?: string | null
 }
 
-export type SafeWalletUpdateWithoutTenantInput = {
+export type SafeWalletUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -844,7 +844,7 @@ export type SafeWalletUpdateWithoutTenantInput = {
   transactions?: Prisma.SafeTransactionUpdateManyWithoutSafeWalletNestedInput
 }
 
-export type SafeWalletUncheckedUpdateWithoutTenantInput = {
+export type SafeWalletUncheckedUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -858,7 +858,7 @@ export type SafeWalletUncheckedUpdateWithoutTenantInput = {
   transactions?: Prisma.SafeTransactionUncheckedUpdateManyWithoutSafeWalletNestedInput
 }
 
-export type SafeWalletUncheckedUpdateManyWithoutTenantInput = {
+export type SafeWalletUncheckedUpdateManyWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -881,7 +881,7 @@ export type SafeWalletCreateManyCreatorInput = {
   threshold?: number
   nonce?: number
   owners?: Prisma.SafeWalletCreateownersInput | string[]
-  tenantId: string
+  spaceId: string
 }
 
 export type SafeWalletUpdateWithoutCreatorInput = {
@@ -894,7 +894,7 @@ export type SafeWalletUpdateWithoutCreatorInput = {
   threshold?: Prisma.IntFieldUpdateOperationsInput | number
   nonce?: Prisma.IntFieldUpdateOperationsInput | number
   owners?: Prisma.SafeWalletUpdateownersInput | string[]
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutSafeWalletsNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutSafeWalletsNestedInput
   transactions?: Prisma.SafeTransactionUpdateManyWithoutSafeWalletNestedInput
 }
 
@@ -908,7 +908,7 @@ export type SafeWalletUncheckedUpdateWithoutCreatorInput = {
   threshold?: Prisma.IntFieldUpdateOperationsInput | number
   nonce?: Prisma.IntFieldUpdateOperationsInput | number
   owners?: Prisma.SafeWalletUpdateownersInput | string[]
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   transactions?: Prisma.SafeTransactionUncheckedUpdateManyWithoutSafeWalletNestedInput
 }
 
@@ -922,7 +922,7 @@ export type SafeWalletUncheckedUpdateManyWithoutCreatorInput = {
   threshold?: Prisma.IntFieldUpdateOperationsInput | number
   nonce?: Prisma.IntFieldUpdateOperationsInput | number
   owners?: Prisma.SafeWalletUpdateownersInput | string[]
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -966,9 +966,9 @@ export type SafeWalletSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   threshold?: boolean
   nonce?: boolean
   owners?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   creatorId?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.SafeWallet$creatorArgs<ExtArgs>
   transactions?: boolean | Prisma.SafeWallet$transactionsArgs<ExtArgs>
   _count?: boolean | Prisma.SafeWalletCountOutputTypeDefaultArgs<ExtArgs>
@@ -984,9 +984,9 @@ export type SafeWalletSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   threshold?: boolean
   nonce?: boolean
   owners?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   creatorId?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.SafeWallet$creatorArgs<ExtArgs>
 }, ExtArgs["result"]["safeWallet"]>
 
@@ -1000,9 +1000,9 @@ export type SafeWalletSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   threshold?: boolean
   nonce?: boolean
   owners?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   creatorId?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.SafeWallet$creatorArgs<ExtArgs>
 }, ExtArgs["result"]["safeWallet"]>
 
@@ -1016,30 +1016,30 @@ export type SafeWalletSelectScalar = {
   threshold?: boolean
   nonce?: boolean
   owners?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   creatorId?: boolean
 }
 
-export type SafeWalletOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "address" | "chainId" | "threshold" | "nonce" | "owners" | "tenantId" | "creatorId", ExtArgs["result"]["safeWallet"]>
+export type SafeWalletOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "address" | "chainId" | "threshold" | "nonce" | "owners" | "spaceId" | "creatorId", ExtArgs["result"]["safeWallet"]>
 export type SafeWalletInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.SafeWallet$creatorArgs<ExtArgs>
   transactions?: boolean | Prisma.SafeWallet$transactionsArgs<ExtArgs>
   _count?: boolean | Prisma.SafeWalletCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SafeWalletIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.SafeWallet$creatorArgs<ExtArgs>
 }
 export type SafeWalletIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.SafeWallet$creatorArgs<ExtArgs>
 }
 
 export type $SafeWalletPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "SafeWallet"
   objects: {
-    tenant: Prisma.$TenantPayload<ExtArgs>
+    space: Prisma.$SpacePayload<ExtArgs>
     creator: Prisma.$UserPayload<ExtArgs> | null
     transactions: Prisma.$SafeTransactionPayload<ExtArgs>[]
   }
@@ -1053,7 +1053,7 @@ export type $SafeWalletPayload<ExtArgs extends runtime.Types.Extensions.Internal
     threshold: number
     nonce: number
     owners: string[]
-    tenantId: string
+    spaceId: string
     creatorId: string | null
   }, ExtArgs["result"]["safeWallet"]>
   composites: {}
@@ -1449,7 +1449,7 @@ readonly fields: SafeWalletFieldRefs;
  */
 export interface Prisma__SafeWalletClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  space<T extends Prisma.SpaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceDefaultArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   creator<T extends Prisma.SafeWallet$creatorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SafeWallet$creatorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   transactions<T extends Prisma.SafeWallet$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SafeWallet$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SafeTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1490,7 +1490,7 @@ export interface SafeWalletFieldRefs {
   readonly threshold: Prisma.FieldRef<"SafeWallet", 'Int'>
   readonly nonce: Prisma.FieldRef<"SafeWallet", 'Int'>
   readonly owners: Prisma.FieldRef<"SafeWallet", 'String[]'>
-  readonly tenantId: Prisma.FieldRef<"SafeWallet", 'String'>
+  readonly spaceId: Prisma.FieldRef<"SafeWallet", 'String'>
   readonly creatorId: Prisma.FieldRef<"SafeWallet", 'String'>
 }
     

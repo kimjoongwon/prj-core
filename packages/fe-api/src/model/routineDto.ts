@@ -21,8 +21,8 @@ export interface RoutineDto {
 	removedAt: string | null;
 	name: string;
 	label: string;
-	tenantId: string;
-	creatorId?: string;
+	spaceId: string;
+	creatorId?: string | null;
 	programs: ProgramDto[];
 	activities: ActivityDto[];
 }

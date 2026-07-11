@@ -3,6 +3,6 @@ export {
 	customInstance,
 	setApiLocale,
 	setApiNativeRefreshHandler,
-	setApiSpace,
+	setApiSessionScope,
 	setLoginRedirectUrl,
 } from "../libs/customAxios";

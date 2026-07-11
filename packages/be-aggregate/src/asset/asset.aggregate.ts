@@ -46,7 +46,7 @@ export class AssetAggregate {
 				query,
 				spaceIds === undefined
 					? undefined
-					: { tenant: { spaceId: { in: spaceIds } } },
+					: { spaceId: { in: spaceIds } },
 			),
 			spaceIds,
 		);
@@ -96,7 +96,7 @@ export class AssetAggregate {
 		if (
 			!targetFolder ||
 			targetFolder.removedAt ||
-			targetFolder.tenant?.spaceId !== currentSpaceId
+			targetFolder.spaceId !== currentSpaceId
 		) {
 			throw new NotFoundException("이동할 폴더를 찾을 수 없습니다");
 		}
@@ -117,7 +117,7 @@ export class AssetAggregate {
 
 		if (
 			this.spaceContext.spaceIds !== undefined &&
-			asset.tenant?.spaceId !== this.getCurrentSpaceId()
+			asset.spaceId !== this.getCurrentSpaceId()
 		) {
 			throw new ForbiddenException("현재 Space의 에셋만 삭제할 수 있습니다");
 		}
@@ -137,13 +137,12 @@ export class AssetAggregate {
 
 		const normalizedOriginalName = normalizeUploadedFileName(file.originalname);
 		const spaceId = this.getCurrentSpaceId();
-		const tenantId = this.getCurrentTenantId();
 		const targetFolder = await this.foldersRepository.findById(dto.folderId);
 
 		if (
 			!targetFolder ||
 			targetFolder.removedAt ||
-			targetFolder.tenant?.spaceId !== spaceId
+			targetFolder.spaceId !== spaceId
 		) {
 			throw new NotFoundException("업로드할 폴더를 찾을 수 없습니다");
 		}
@@ -168,7 +167,7 @@ export class AssetAggregate {
 		});
 
 		const asset = await this.assetsRepository.create({
-			tenantId,
+			spaceId,
 			folderId: dto.folderId,
 			kind,
 			status: AssetStatus.READY,
@@ -197,18 +196,6 @@ export class AssetAggregate {
 		return spaceId;
 	}
 
-	private getCurrentTenantId(): string {
-		const tenantId = this.spaceContext.tenantId;
-
-		if (!tenantId) {
-			throw new BadRequestException(
-				"x-tenant-id 헤더가 필요합니다. Tenant를 선택해주세요.",
-			);
-		}
-
-		return tenantId;
-	}
-
 	private async getCurrentSpaceAsset(assetId: string): Promise<Asset> {
 		const asset = await this.assetsRepository.findByIdWithRelations(assetId);
 		this.getCurrentSpaceId();
@@ -216,8 +203,7 @@ export class AssetAggregate {
 		if (
 			!asset ||
 			asset.removedAt ||
-			!asset.tenant?.spaceId ||
-			!this.canReadSpace(asset.tenant.spaceId)
+			!this.canReadSpace(asset.spaceId)
 		) {
 			throw new NotFoundException("에셋을 찾을 수 없습니다");
 		}
@@ -235,7 +221,7 @@ export class AssetAggregate {
 
 		return {
 			...where,
-			tenant: { spaceId: { in: spaceIds } },
+			spaceId: { in: spaceIds },
 		};
 	}
 

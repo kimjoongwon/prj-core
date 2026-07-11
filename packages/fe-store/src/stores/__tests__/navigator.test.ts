@@ -1,7 +1,7 @@
 /// <reference types="vitest/globals" />
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { Navigator, type Router } from "../navigator";
+import { Navigator, type Router } from "../navigation/navigator";
 
 describe("Navigator", () => {
 	let mockRouter: Router;

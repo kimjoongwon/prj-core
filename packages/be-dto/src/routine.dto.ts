@@ -1,7 +1,7 @@
 import {
 	ClassField,
 	StringField,
-	StringFieldOptional,
+	UUIDFieldOptional,
 } from "@cocrepo/decorator";
 import type { Routine } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
@@ -16,9 +16,9 @@ export class RoutineDto extends AbstractDto implements Routine {
 	label: string;
 
 	@StringField()
-	tenantId: string;
+	spaceId: string;
 
-	@StringFieldOptional()
+	@UUIDFieldOptional({ nullable: true })
 	creatorId: string | null;
 
 	@ClassField(() => ProgramDto, { isArray: true })

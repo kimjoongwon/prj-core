@@ -15,7 +15,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { ReservationStatus } from './reservationStatus';
-import type { TenantDto } from './tenantDto';
 import type { UserDto } from './userDto';
 import type { TimelineDto } from './timelineDto';
 import type { SessionDto } from './sessionDto';
@@ -29,14 +28,20 @@ export interface ReservationDto {
   /** @nullable */
   removedAt: string | null;
   /**
-   * Tenant ID
+   * Space ID
    * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
    */
-  tenantId: string;
+  spaceId: string;
+  /**
+   * 생성자 ID
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  creatorId?: string | null;
   /**
    * 예약 사용자 ID
    * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-  */
+   */
   userId: string;
   /**
    * 타임라인 ID
@@ -85,7 +90,6 @@ export interface ReservationDto {
    * @nullable
    */
   cancelReason?: string | null;
-  tenant?: TenantDto;
   user?: UserDto;
   timeline?: TimelineDto;
   session?: SessionDto;

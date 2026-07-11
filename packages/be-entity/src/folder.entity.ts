@@ -1,14 +1,14 @@
 import type { Folder as FolderEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Asset } from "./asset.entity";
-import type { Tenant } from "./tenant.entity";
+import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
 
 export class Folder extends AbstractEntity implements FolderEntity {
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	tenantId!: string;
+	spaceId!: string;
 	parentFolderId!: string | null;
 	name!: string;
 	path!: string;
@@ -18,7 +18,7 @@ export class Folder extends AbstractEntity implements FolderEntity {
 	// ============================================================================
 	// 관계 필드 (선택적)
 	// ============================================================================
-	tenant?: Tenant;
+	space?: Space;
 	parent?: Folder | null;
 	children?: Folder[];
 	creator?: User | null;

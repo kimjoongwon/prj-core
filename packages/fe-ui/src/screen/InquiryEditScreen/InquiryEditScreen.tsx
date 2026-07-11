@@ -1,7 +1,6 @@
 "use client";
 
 import type { WebSocketStatus } from "@cocrepo/hook";
-import type { InquiryMessage } from "@cocrepo/type";
 import { Card, ProgressBar } from "@heroui/react";
 import {
 	AlertTriangle,
@@ -23,7 +22,6 @@ import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { Chip } from "../../data-display/Chip/Chip";
 import { InquiryWebSocketProvider } from "../../feature/InquiryWebSocketProvider";
-import { RealtimeChatPanel } from "../../feature/RealtimeChatPanel";
 import {
 	InquiryForm,
 	type InquiryFormBootstrap,
@@ -94,12 +92,6 @@ export interface InquiryEditScreenAssigneeOption {
 	value: string;
 	text: string;
 }
-export interface InquiryEditScreenRealtimeState {
-	messages: InquiryMessage[];
-	typingUserNames: string[];
-	isWebSocketConnected: boolean;
-	isTyping: boolean;
-}
 export interface InquiryEditScreenProps {
 	title?: string;
 	description?: string;
@@ -123,7 +115,6 @@ export interface InquiryEditScreenProps {
 	inquiryId?: string;
 	inquiry?: InquiryEditScreenInquiry;
 	metaFormState?: InquiryEditScreenMetaFormState;
-	realtimeState?: InquiryEditScreenRealtimeState;
 	participantListItems?: InquiryEditScreenParticipantListItem[];
 	onlineParticipantNames?: string[];
 	assigneeOptions?: InquiryEditScreenAssigneeOption[];
@@ -141,9 +132,6 @@ export interface InquiryEditScreenProps {
 	onClickReconnectButton?: () => void;
 	onSendInquiryMessage?: (content: string, attachments?: File[]) => void;
 	onSendTypingStatus?: (isTyping: boolean) => void;
-	onTypingStart?: () => void;
-	onTypingStop?: () => void;
-	onClickSearchKnowledgeButton?: () => void;
 }
 const inquiryPriorityColors: Record<
 	string,
@@ -635,7 +623,6 @@ export const InquiryEditScreen = observer(
 		inquiryId,
 		inquiry,
 		metaFormState,
-		realtimeState,
 		participantListItems = [],
 		onlineParticipantNames = [],
 		assigneeOptions = [],
@@ -653,9 +640,6 @@ export const InquiryEditScreen = observer(
 		onClickReconnectButton,
 		onSendInquiryMessage,
 		onSendTypingStatus,
-		onTypingStart,
-		onTypingStop,
-		onClickSearchKnowledgeButton,
 	}: InquiryEditScreenProps) => {
 		if (readOnly && inquiryId) {
 			const createdAt = inquiry?.createdAt ?? new Date().toISOString();
@@ -835,30 +819,6 @@ export const InquiryEditScreen = observer(
 												</Section.Body>
 											</Section>
 										) : null}
-										<Section>
-											<Section.Body>
-												<RealtimeChatPanel
-													inquiryId={inquiryId}
-													messages={realtimeState?.messages ?? []}
-													typingUserNames={realtimeState?.typingUserNames ?? []}
-													isWebSocketConnected={Boolean(
-														realtimeState?.isWebSocketConnected,
-													)}
-													isTyping={Boolean(realtimeState?.isTyping)}
-													onSendMessage={
-														onSendInquiryMessage ?? (() => undefined)
-													}
-													onTypingStart={onTypingStart ?? (() => undefined)}
-													onTypingStop={onTypingStop ?? (() => undefined)}
-													onReconnect={
-														onClickReconnectButton ?? (() => undefined)
-													}
-													onSearchKnowledge={
-														onClickSearchKnowledgeButton ?? (() => undefined)
-													}
-												/>
-											</Section.Body>
-										</Section>
 										<Section>
 											<Section.Body>
 												<SlaTrackerPanel

@@ -39,7 +39,6 @@
     "next": "^16.1.0",
     "nuqs": "catalog:",
     "react": "catalog:",
-    "react-cookie": "catalog:",
     "react-dom": "catalog:",
     "recharts": "^2.15.0"
   },

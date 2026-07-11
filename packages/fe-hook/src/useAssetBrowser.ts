@@ -107,7 +107,7 @@ export function useAssetBrowser({
 }: UseAssetBrowserOptions = {}): AssetBrowserBindings {
 	const queryClient = useQueryClient();
 	const app = useApp();
-	const space = app.space;
+	const account = app.account;
 	const [queryStates, setQueryStates] = useQueryStates({
 		take: parseAsInteger.withDefault(20),
 		skip: parseAsInteger.withDefault(0),
@@ -142,8 +142,8 @@ export function useAssetBrowser({
 		status: resolvedStatus,
 		folderId: selectedFolderId,
 	};
-	const isSpaceReady = space.isHydrated && space.isSpaceSelectionResolved;
-	const hasSelectedSpace = Boolean(space.tenantId);
+	const isSpaceReady = account.isHydrated && account.isSelectionResolved;
+	const hasSelectedSpace = Boolean(account.currentTenantId);
 	const isQueryEnabled = isSpaceReady && hasSelectedSpace && enabled;
 
 	const { data: assetsResponse, isLoading: isLoadingAssets } = useGetAssets(

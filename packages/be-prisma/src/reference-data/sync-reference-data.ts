@@ -51,10 +51,10 @@ async function ensureSystemSpace(db: DbClient): Promise<void> {
 	});
 }
 
-async function ensureSystemTenantId(
+async function ensureSystemTenant(
 	db: DbClient,
 	roles: Record<string, Role>,
-): Promise<string> {
+) {
 	const platformAdminRole = roles.PLATFORM_ADMIN;
 	if (!platformAdminRole) {
 		throw new Error("PLATFORM_ADMIN role is required for system tenant.");
@@ -75,12 +75,12 @@ async function ensureSystemTenantId(
 		throw new Error("System tenant was not created.");
 	}
 
-	return systemTenant.id;
+	return systemTenant;
 }
 
 async function syncSpaceCategories(
 	db: DbClient,
-	tenantId: string,
+	creatorId: string,
 ): Promise<void> {
 	const categoryMap = new Map<string, { id: string }>();
 
@@ -96,14 +96,16 @@ async function syncSpaceCategories(
 			where: { name: spaceCategoryEnum.name },
 			update: {
 				type: categoryData.type as CategoryTypes,
-				tenantId,
+				spaceId: SYSTEM_SPACE_ID,
+				creatorId,
 				parentId,
 				removedAt: null,
 			},
 			create: {
 				name: spaceCategoryEnum.name,
 				type: categoryData.type as CategoryTypes,
-				tenantId,
+				spaceId: SYSTEM_SPACE_ID,
+				creatorId,
 				parentId,
 			},
 		});
@@ -129,7 +131,7 @@ async function syncSpaceCategories(
 	});
 }
 
-async function syncSpaceGroups(db: DbClient, tenantId: string): Promise<void> {
+async function syncSpaceGroups(db: DbClient, creatorId: string): Promise<void> {
 	// Group rows do not have a single natural unique key for this lookup shape,
 	// so we restore/create them and then ensure the space association exists.
 	for (const groupData of spaceGroupSeedData) {
@@ -138,7 +140,7 @@ async function syncSpaceGroups(db: DbClient, tenantId: string): Promise<void> {
 			where: {
 				name: spaceGroupEnum.name,
 				type: "Space",
-				tenantId,
+				spaceId: SYSTEM_SPACE_ID,
 			},
 		});
 
@@ -147,7 +149,8 @@ async function syncSpaceGroups(db: DbClient, tenantId: string): Promise<void> {
 				data: {
 					name: spaceGroupEnum.name,
 					type: "Space",
-					tenantId,
+					spaceId: SYSTEM_SPACE_ID,
+					creatorId,
 				},
 			});
 		} else if (group.removedAt) {
@@ -199,7 +202,7 @@ async function syncRoles(db: DbClient): Promise<Record<string, Role>> {
 	return roles;
 }
 
-async function syncRoleCategories(db: DbClient, tenantId: string): Promise<void> {
+async function syncRoleCategories(db: DbClient, creatorId: string): Promise<void> {
 	for (const categoryData of roleCategorySeedData) {
 		const roleCategoryEnum = categoryData.roleCategoryEnum;
 
@@ -207,13 +210,15 @@ async function syncRoleCategories(db: DbClient, tenantId: string): Promise<void>
 			where: { name: roleCategoryEnum.name },
 			update: {
 				type: categoryData.type as CategoryTypes,
-				tenantId,
+				spaceId: SYSTEM_SPACE_ID,
+				creatorId,
 				removedAt: null,
 			},
 			create: {
 				name: roleCategoryEnum.name,
 				type: categoryData.type as CategoryTypes,
-				tenantId,
+				spaceId: SYSTEM_SPACE_ID,
+				creatorId,
 			},
 		});
 	}
@@ -259,7 +264,7 @@ async function syncRoleClassifications(
 
 async function syncRoleGroups(
 	db: DbClient,
-	tenantId: string,
+	creatorId: string,
 ): Promise<Record<string, Group>> {
 	const groups: Record<string, Group> = {};
 
@@ -269,7 +274,7 @@ async function syncRoleGroups(
 			where: {
 				name: roleGroupEnum.name,
 				type: "Role",
-				tenantId,
+				spaceId: SYSTEM_SPACE_ID,
 			},
 		});
 
@@ -278,7 +283,8 @@ async function syncRoleGroups(
 				data: {
 					name: roleGroupEnum.name,
 					type: "Role",
-					tenantId,
+					spaceId: SYSTEM_SPACE_ID,
+					creatorId,
 				},
 			});
 		} else if (group.removedAt) {
@@ -465,8 +471,11 @@ async function syncAbilitiesAndPolicies(
 
 	const activeTenants = await db.tenant.findMany({
 		where: { removedAt: null },
-		select: { id: true },
+		select: { spaceId: true, userId: true },
 	});
+	const policyScopes = Array.from(
+		new Map(activeTenants.map((tenant) => [tenant.spaceId, tenant])).values(),
+	);
 
 	const abilityIdsByRoleName = new Map<string, Set<string>>();
 	const priorityByRoleName = new Map<string, number>();
@@ -514,11 +523,11 @@ async function syncAbilitiesAndPolicies(
 
 		const policyName = getSystemPolicyName(roleName);
 
-		for (const tenant of activeTenants) {
+		for (const scope of policyScopes) {
 			const policy = await db.policy.upsert({
 				where: {
-					tenantId_name: {
-						tenantId: tenant.id,
+					spaceId_name: {
+						spaceId: scope.spaceId,
 						name: policyName,
 					},
 				},
@@ -529,7 +538,8 @@ async function syncAbilitiesAndPolicies(
 					removedAt: null,
 				},
 				create: {
-					tenantId: tenant.id,
+					spaceId: scope.spaceId,
+					creatorId: scope.userId,
 					name: policyName,
 					displayName: `${role.displayName ?? role.name} 기본 정책`,
 					description: `${role.displayName ?? role.name} 역할에 자동 할당되는 시스템 권한 정책입니다.`,
@@ -701,13 +711,13 @@ export async function syncReferenceData(
 	// earlier ones, especially system space -> taxonomy -> roles -> policies.
 	await ensureSystemSpace(db);
 	const roles = await syncRoles(db);
-	const systemTenantId = await ensureSystemTenantId(db, roles);
+	const systemTenant = await ensureSystemTenant(db, roles);
 
-	await syncSpaceCategories(db, systemTenantId);
-	await syncSpaceGroups(db, systemTenantId);
-	await syncRoleCategories(db, systemTenantId);
+	await syncSpaceCategories(db, systemTenant.userId);
+	await syncSpaceGroups(db, systemTenant.userId);
+	await syncRoleCategories(db, systemTenant.userId);
 	await syncRoleClassifications(db, roles);
-	const groups = await syncRoleGroups(db, systemTenantId);
+	const groups = await syncRoleGroups(db, systemTenant.userId);
 	await syncRoleAssociations(db, roles, groups);
 
 	const subjects = await syncSubjects(db);

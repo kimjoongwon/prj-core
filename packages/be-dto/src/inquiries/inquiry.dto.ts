@@ -4,6 +4,7 @@ import {
 	EnumField,
 	NumberField,
 	StringField,
+	UUIDField,
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
 import type { Inquiry } from "@cocrepo/prisma";
@@ -21,6 +22,12 @@ import { AbstractDto } from "../abstract.dto";
  * 문의 응답 DTO
  */
 export class InquiryDto extends AbstractDto implements Partial<Inquiry> {
+	@UUIDField({ description: "소속 Space ID" })
+	spaceId!: string;
+
+	@UUIDFieldOptional({ nullable: true, description: "생성자 ID" })
+	creatorId!: string | null;
+
 	@StringField({ description: "문의 번호" })
 	inquiryNumber!: string;
 

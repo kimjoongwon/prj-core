@@ -11,7 +11,7 @@ import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
-import { useApp } from "@/stores/AppProvider";
+import { useApp } from "@cocrepo/store";
 
 const AdminTimelinesNewRoute = observer(() => {
 	const router = useRouter();

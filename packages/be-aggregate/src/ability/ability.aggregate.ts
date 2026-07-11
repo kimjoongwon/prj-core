@@ -58,21 +58,21 @@ export class AbilityAggregate {
 	 * 현재 Tenant의 Policy만 펼쳐서 Ability를 계산합니다.
 	 *
 	 * @param roleIds - Role ID 배열
-	 * @param tenantId - 현재 Tenant ID
+	 * @param spaceId - 현재 Space ID
 	 * @returns 병합된 Ability 배열
 	 */
 	async getMergedAbilities(
 		roleIds: string[],
-		tenantId: string,
+		spaceId: string,
 	): Promise<Ability[]> {
 		this.logger.debug(
-			`RolePolicy 기반 권한 병합 조회: roleIds=${roleIds.length}, tenantId=${tenantId.slice(-8)}`,
+			`RolePolicy 기반 권한 병합 조회: roleIds=${roleIds.length}, spaceId=${spaceId.slice(-8)}`,
 		);
 
 		const rolePolicies =
-			await this.rolePoliciesRepository.findActiveByRoleIdsInTenant(
+			await this.rolePoliciesRepository.findActiveByRoleIdsInSpace(
 				roleIds,
-				tenantId,
+				spaceId,
 			);
 
 		return this.mergeAbilities(this.expandRolePolicyAbilities(rolePolicies));

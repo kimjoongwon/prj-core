@@ -6,7 +6,7 @@ import { CreateRoutineActivityItemDto } from "../create-routine-activity-item.dt
 
 export class CreateRoutineDto extends OmitType(RoutineDto, [
 	...COMMON_ENTITY_FIELDS,
-	"tenantId",
+	"spaceId",
 	"creatorId",
 	"programs",
 	"activities",

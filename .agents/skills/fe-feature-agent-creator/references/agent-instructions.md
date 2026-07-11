@@ -69,7 +69,7 @@
 | 항목 | 필수 | 설명 |
 |------|:----:|------|
 | 컴포넌트명 | ✅ | `[위치/역할][기능]` 패턴 |
-| 사용할 app 상태 | ⚪ | app.navigation, app.session, app.space 등 |
+| 사용할 app 상태 | ⚪ | app.navigation, app.account, app.account.authSession 등 |
 | 사용할 API | ⚪ | @cocrepo/api에서 import할 함수 |
 | 기반 Widget | ⚪ | 조합할 Widget 컴포넌트 |
 
@@ -350,16 +350,18 @@ export const NavTreePanel = ({ items, expandedKeys, onToggle, ... }: NavTreePane
 // Feature (feature/SideNav.tsx) - 비즈니스 로직
 export const SideNav = observer(({ width, className }: SideNavProps) => {
   const app = useApp();
-  const navigation = app.ui.body.leftAside.sideNavigation;
+  const navigation = app.navigation;
 
   // app 상태 → Widget props 변환
-  const handleToggle = (id: string) => navigation.toggleItem(id);
+  const handleToggle = (id: string) => navigation.toggleNavItem(id);
+  const handleSelectItem = (id: string) => navigation.selectNavItem(id);
 
   return (
     <NavTreePanel
       items={navigation.items}
-      expandedKeys={navigation.expandedItemIds}
+      expandedKeys={navigation.expandedNavItemIds}
       onToggle={handleToggle}
+      onSelectItem={handleSelectItem}
       width={width}
     />
   );

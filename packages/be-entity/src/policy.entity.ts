@@ -3,7 +3,8 @@ import { Type } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
 import { PolicyAbility } from "./policy-ability.entity";
 import { RolePolicy } from "./role-policy.entity";
-import type { Tenant } from "./tenant.entity";
+import type { Space } from "./space.entity";
+import type { User } from "./user.entity";
 
 /**
  * Policy 엔티티
@@ -11,13 +12,15 @@ import type { Tenant } from "./tenant.entity";
  * Space별로 여러 Ability를 묶어 Role에 할당하는 권한 정책입니다.
  */
 export class Policy extends AbstractEntity implements PolicyEntity {
-	tenantId!: string;
+	spaceId!: string;
+	creatorId!: string | null;
 	name!: string;
 	displayName!: string | null;
 	description!: string | null;
 	isSystem!: boolean;
 
-	tenant?: Tenant;
+	space?: Space;
+	creator?: User | null;
 
 	@Type(() => PolicyAbility)
 	policyAbilities?: PolicyAbility[];

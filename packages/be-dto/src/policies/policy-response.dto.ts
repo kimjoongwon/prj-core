@@ -1,4 +1,4 @@
-import { UUIDField } from "@cocrepo/decorator";
+import { UUIDField, UUIDFieldOptional } from "@cocrepo/decorator";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 import { PolicyAbilityResponseDto } from "./policy-ability-response.dto";
@@ -8,9 +8,13 @@ export class PolicyResponseDto {
 	@Expose()
 	id!: string;
 
-	@UUIDField({ description: "Tenant ID" })
+	@UUIDField({ description: "Space ID" })
 	@Expose()
-	tenantId!: string;
+	spaceId!: string;
+
+	@UUIDFieldOptional({ nullable: true, description: "생성자 ID" })
+	@Expose()
+	creatorId!: string | null;
 
 	@ApiProperty({
 		description: "정책 식별자",

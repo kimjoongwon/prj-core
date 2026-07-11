@@ -144,14 +144,17 @@ async function ensureCurrentAdminFullAccessPolicies(
 
 	const activeTenants = await db.tenant.findMany({
 		where: { removedAt: null },
-		select: { id: true },
+		select: { spaceId: true, userId: true },
 	});
+	const policyScopes = Array.from(
+		new Map(activeTenants.map((tenant) => [tenant.spaceId, tenant])).values(),
+	);
 
-	for (const tenant of activeTenants) {
+	for (const scope of policyScopes) {
 		const policy = await db.policy.upsert({
 			where: {
-				tenantId_name: {
-					tenantId: tenant.id,
+				spaceId_name: {
+					spaceId: scope.spaceId,
 					name: buildSystemPolicyName(role.name),
 				},
 			},
@@ -163,7 +166,8 @@ async function ensureCurrentAdminFullAccessPolicies(
 				removedAt: null,
 			},
 			create: {
-				tenantId: tenant.id,
+				spaceId: scope.spaceId,
+				creatorId: scope.userId,
 				name: buildSystemPolicyName(role.name),
 				displayName: `${role.displayName ?? role.name} 기본 정책`,
 				description:

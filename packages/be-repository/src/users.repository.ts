@@ -594,6 +594,19 @@ export class UsersRepository {
 		return plainToInstance(User, result);
 	}
 
+	/** 사용자의 현재 Tenant 선택값을 저장합니다. */
+	async updateCurrentTenantId(
+		userId: string,
+		currentTenantId: string,
+	): Promise<void> {
+		this.logger.debug(`현재 Tenant 저장: userId=${userId.slice(-8)}`);
+
+		await this.txHost.tx.user.update({
+			where: { id: userId },
+			data: { currentTenantId },
+		});
+	}
+
 	/**
 	 * 관계 포함 업데이트 (Classification, Associations)
 	 */

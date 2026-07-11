@@ -10,9 +10,9 @@ import { AbstractDto } from "./abstract.dto";
 
 export class CategoryDto extends AbstractDto implements Category {
 	@UUIDField()
-	tenantId: string;
+	spaceId: string;
 
-	@UUIDFieldOptional()
+	@UUIDFieldOptional({ nullable: true })
 	creatorId: string | null;
 
 	@StringField({ default: "" })

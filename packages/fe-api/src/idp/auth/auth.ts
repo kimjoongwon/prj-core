@@ -1822,7 +1822,7 @@ export const prefetchGetMySpacesInfiniteQuery = async <TData = Awaited<ReturnTyp
 
 
 /**
- * 요청의 x-tenant-id 헤더를 기준으로 Space를 반환합니다. 헤더가 없거나 유효하지 않으면 접근 가능한 기본 Space를 반환합니다.
+ * 인증 사용자의 저장된 currentTenantId를 기준으로 현재 Space를 반환합니다. 저장값이 없거나 유효하지 않으면 null을 반환합니다.
  * @summary 현재 선택 Space 조회
  */
 export const getCurrentSpace = (

@@ -12,8 +12,8 @@ import { AbstractDto } from "../abstract.dto";
  * 폴더 DTO
  */
 export class FolderDto extends AbstractDto implements Folder {
-	@UUIDField({ description: "소속 Tenant ID" })
-	tenantId!: string;
+	@UUIDField({ description: "소속 Space ID" })
+	spaceId!: string;
 
 	@UUIDFieldOptional({
 		nullable: true,

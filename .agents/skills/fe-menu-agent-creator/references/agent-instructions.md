@@ -540,15 +540,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 | Widget | Feature | 연결 |
 |--------|---------|------|
-| HeaderBar | UserMenu / HeaderSpaceSelector | app.session / app.space |
-| SidePanel | SideNav | app.ui.body.leftAside.sideNavigation |
-| BottomNav | BottomTab | app.ui.footer.mobileBottomNavigation |
-| OverlayMenu | SubMenuList | app.ui.footer.mobileMenu |
-| ActionFab | QuickActionFAB | app.ui.footer.floatingAction + app.ability |
-| NavTreePanel | SideNav | app.ui.body.leftAside.sideNavigation |
-| TabBar | BottomTab | app.ui.footer.mobileBottomNavigation |
-| MenuList | SubMenuList | app.ui.footer.mobileMenu |
-| FABPanel | QuickActionFAB | app.ui.footer.floatingAction + app.ability |
+| HeaderBar | UserMenu / AccountTenantSelect | app.account.authSession / app.account |
+| SidePanel | SideNav | app.navigation |
+| BottomNav | BottomTab | app.navigation |
+| OverlayMenu | SubMenuList | app.navigation |
+| ActionFab | QuickActionFAB | app.navigation + app.accessControl |
+| NavTreePanel | SideNav | app.navigation |
+| TabBar | BottomTab | app.navigation |
+| MenuList | SubMenuList | app.navigation |
+| FABPanel | QuickActionFAB | app.navigation + app.accessControl |
 | TabBar | PageTabs | app.navigation + usePathname |
 
 ### 분류 원칙
@@ -565,12 +565,12 @@ const NavTreePanel = ({ items, activeId, onSelect }) => { ... };
 // Feature - app 상태 연결
 const SideNav = observer(() => {
   const app = useApp();
-  const navigation = app.ui.body.leftAside.sideNavigation;
+  const navigation = app.navigation;
   return (
     <NavTreePanel
       items={navigation.items}
-      activeId={navigation.selectedItem?.id}
-      onSelect={navigation.selectItem}
+      activeId={navigation.selectedNavItem?.id}
+      onSelect={(id) => navigation.selectNavItem(id)}
     />
   );
 });

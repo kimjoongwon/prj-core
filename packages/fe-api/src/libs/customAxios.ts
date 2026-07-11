@@ -26,8 +26,8 @@ export const AXIOS_INSTANCE = Axios.create({
 	withCredentials: true, // 쿠키/인증 정보 포함
 });
 
-// Space 참조 (앱 초기화 시 설정)
-interface SpaceRef {
+// 세션/tenant scope 참조 (앱 초기화 시 설정)
+interface SessionScopeRef {
 	accessToken?: string | null;
 	accessTokenExpiresAt?: number | null;
 	refreshToken?: string | null;
@@ -35,7 +35,7 @@ interface SpaceRef {
 	sessionId?: string | null;
 	tenantId?: string | null;
 }
-let spaceRef: SpaceRef | null = null;
+let sessionScopeRef: SessionScopeRef | null = null;
 
 type NativeRefreshHandler = () => Promise<void>;
 let nativeRefreshHandler: NativeRefreshHandler | null = null;
@@ -57,11 +57,10 @@ export function setLoginRedirectUrl(url: string) {
 }
 
 /**
- * 토큰 갱신 응답의 만료 시간을 Space에 반영하기 위한 참조 설정
- * 앱 초기화 시 호출하여 space 참조를 주입합니다.
+ * 토큰 갱신 응답과 tenant header를 반영하기 위한 참조 설정입니다.
  */
-export function setApiSpace(store: SpaceRef) {
-	spaceRef = store;
+export function setApiSessionScope(scope: SessionScopeRef) {
+	sessionScopeRef = scope;
 }
 
 export function setApiNativeRefreshHandler(
@@ -99,26 +98,27 @@ const applyTokenRefreshData = (responseData?: {
 	refreshTokenExpiresAt?: number;
 	sessionId?: string;
 }) => {
-	if (!responseData || !spaceRef) {
+	if (!responseData || !sessionScopeRef) {
 		return;
 	}
 
-	spaceRef.accessToken =
-		responseData.accessToken ?? spaceRef.accessToken ?? null;
-	spaceRef.refreshToken =
-		responseData.refreshToken ?? spaceRef.refreshToken ?? null;
-	spaceRef.sessionId = responseData.sessionId ?? spaceRef.sessionId ?? null;
+	sessionScopeRef.accessToken =
+		responseData.accessToken ?? sessionScopeRef.accessToken ?? null;
+	sessionScopeRef.refreshToken =
+		responseData.refreshToken ?? sessionScopeRef.refreshToken ?? null;
+	sessionScopeRef.sessionId =
+		responseData.sessionId ?? sessionScopeRef.sessionId ?? null;
 	if (responseData.accessTokenExpiresAt) {
-		spaceRef.accessTokenExpiresAt = responseData.accessTokenExpiresAt;
-		spaceRef.refreshTokenExpiresAt = responseData.refreshTokenExpiresAt;
+		sessionScopeRef.accessTokenExpiresAt = responseData.accessTokenExpiresAt;
+		sessionScopeRef.refreshTokenExpiresAt = responseData.refreshTokenExpiresAt;
 	}
 };
 
 const syncSessionHeaders = (config: InternalAxiosRequestConfig) => {
 	const headers = AxiosHeaders.from(config.headers);
-	const accessToken = spaceRef?.accessToken;
-	const refreshToken = spaceRef?.refreshToken;
-	const tenantId = spaceRef?.tenantId;
+	const accessToken = sessionScopeRef?.accessToken;
+	const refreshToken = sessionScopeRef?.refreshToken;
+	const tenantId = sessionScopeRef?.tenantId;
 	const languageCode = localeRef?.languageCode;
 
 	if (accessToken) {
@@ -143,9 +143,9 @@ const syncSessionHeaders = (config: InternalAxiosRequestConfig) => {
 
 AXIOS_INSTANCE.interceptors.request.use((config) => {
 	const headers = AxiosHeaders.from(config.headers);
-	const accessToken = spaceRef?.accessToken;
-	const refreshToken = spaceRef?.refreshToken;
-	const tenantId = spaceRef?.tenantId;
+	const accessToken = sessionScopeRef?.accessToken;
+	const refreshToken = sessionScopeRef?.refreshToken;
+	const tenantId = sessionScopeRef?.tenantId;
 
 	if (accessToken && !headers.has("Authorization")) {
 		headers.set("Authorization", `Bearer ${accessToken}`);

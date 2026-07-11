@@ -90,10 +90,8 @@ export class TaskAggregate {
 		creatorId: string,
 	): Promise<Task> {
 		this.logger.debug(`Task 생성: exercise=${dto.name}`);
-		const tenantId = this.getRequiredTenantId();
-
 		const task = await this.tasksRepository.create({
-			tenantId,
+			spaceId,
 			creatorId,
 		});
 
@@ -118,7 +116,7 @@ export class TaskAggregate {
 			SpaceScope.INCLUDE_ANCESTORS,
 		);
 
-		if (task.tenant?.spaceId !== spaceId) {
+		if (task.spaceId !== spaceId) {
 			throw new ForbiddenException(EXERCISE_ERRORS.EXERCISE_NOT_OWNED);
 		}
 
@@ -140,7 +138,7 @@ export class TaskAggregate {
 			SpaceScope.INCLUDE_ANCESTORS,
 		);
 
-		if (task.tenant?.spaceId !== spaceId) {
+		if (task.spaceId !== spaceId) {
 			throw new ForbiddenException(EXERCISE_ERRORS.EXERCISE_NOT_OWNED);
 		}
 
@@ -167,12 +165,4 @@ export class TaskAggregate {
 			: [spaceId];
 	}
 
-	private getRequiredTenantId(): string {
-		const tenantId = this.spaceContext.tenantId;
-		if (!tenantId) {
-			throw new NotFoundException("Tenant 컨텍스트가 설정되지 않았습니다");
-		}
-
-		return tenantId;
-	}
 }

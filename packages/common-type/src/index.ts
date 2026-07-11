@@ -134,13 +134,7 @@ export type {
 export type {
 	AbilityChecker,
 	AppProviderConfig,
-	AppProviderResult,
-	FABAbilityChecker,
-	FABConfig,
-	FloatingActionsOptions,
-	ModalOpenHandler,
 	NavItemScopeChecker,
-	NavigationOptions,
 	NavigatorLike,
 } from "./app-contracts";
 // ============================================
@@ -193,23 +187,16 @@ export type {
 // Hook 계약 타입
 // ============================================
 export type {
-	SpaceBootstrapScopeLike,
-	SpaceBootstrapSelection,
-	SpaceBootstrapSpaceLike,
+	AccountBootstrapLike,
+	AccountBootstrapSpaceLike,
+	AccountTenantSelection,
 	UseAbilitiesOptions,
 	UseAbilitiesReturn,
 	UseFormFieldMultiOptions,
 	UseFormFieldReturn,
 	UseFormFieldSingleOptions,
-	UseLayoutAppLike,
-	UseLayoutFloatingActionLike,
-	UseLayoutMobileBottomNavigationLike,
-	UseLayoutMobileMenuLike,
-	UseLayoutOptions,
-	UseLayoutReturn,
-	UseLayoutSideNavigationLike,
-	UseSpaceBootstrapOptions,
-	UseSpaceBootstrapReturn,
+	UseAccountBootstrapOptions,
+	UseAccountBootstrapReturn,
 } from "./hook-contracts";
 // ============================================
 // HTTP request-like 계약 타입
@@ -238,7 +225,6 @@ export type { JsonArray, JsonObject, JsonValue } from "./json";
 // 네비게이션 관련 타입
 // ============================================
 export type {
-	FABAction,
 	NavItemConfig,
 	ScreenScopeKind,
 	TabConfig,

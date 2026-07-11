@@ -356,13 +356,6 @@ export default observer(function InquiryReadOnlyRoute() {
 					value: String(item.value ?? ""),
 					label: item.label,
 				}))}
-				realtimeState={{
-					messages:
-						inquiryState.messages.length > 0 ? inquiryState.messages : messages,
-					typingUserNames: Array.from(inquiryState.typingUsers.keys()),
-					isWebSocketConnected: inquiryState.isWebSocketConnected,
-					isTyping: inquiryState.isTyping,
-				}}
 				participantListItems={participantListItems}
 				onlineParticipantNames={inquiryState.participants
 					.filter((participant) => participant.isOnline)
@@ -443,17 +436,6 @@ export default observer(function InquiryReadOnlyRoute() {
 				}}
 				onSendTypingStatus={(isTyping) => {
 					ws.sendTypingStatus(isTyping);
-				}}
-				onTypingStart={() => {
-					inquiryState.startTyping();
-					ws.sendTypingStatus(true);
-				}}
-				onTypingStop={() => {
-					inquiryState.stopTyping();
-					ws.sendTypingStatus(false);
-				}}
-				onClickSearchKnowledgeButton={() => {
-					inquiryState.openKnowledgeBaseModal();
 				}}
 			/>
 		</>

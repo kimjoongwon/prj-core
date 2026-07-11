@@ -60,6 +60,8 @@ model User {
   lastLoginIp                  String?               @map("last_login_ip")
   /// @displayName 활성 상태
   isActive                     Boolean               @default(true) @map("is_active")
+  /// @displayName 현재 테넌트 ID
+  currentTenantId              String?               @map("current_tenant_id")
   profiles                     Profile[]
   tenants                      Tenant[]
   tenantAccessRequests         TenantAccessRequest[] @relation("TenantAccessRequestRequester")
@@ -77,14 +79,19 @@ model User {
   createdTasks                 Task[]
   createdSafeWallets           SafeWallet[]
   createdRoutines              Routine[]
-  reservations                 Reservation[]
+  reservations                 Reservation[]         @relation("ReservationUser")
+  createdPolicies              Policy[]
+  createdReservations          Reservation[]         @relation("ReservationCreator")
   // Asset 도메인 Creator 관계
   createdAssets                Asset[]
   createdFolders               Folder[]
   createdAlbums                Album[]
+  createdAlbumEntries           AlbumEntry[]
+  createdDerivatives            Derivative[]
   // Inquiry 도메인
   customerInquiries            Inquiry[]             @relation("InquiryCustomer")
   assignedInquiries            Inquiry[]             @relation("InquiryAssignee")
+  createdInquiries             Inquiry[]             @relation("InquiryCreator")
   inquiryMessages              InquiryMessage[]
   inquiryParticipants          InquiryParticipant[]
   createdThreads               InquiryThread[]

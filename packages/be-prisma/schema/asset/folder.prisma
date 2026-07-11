@@ -17,7 +17,7 @@ model Folder {
   updatedAt      DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt      DateTime? @map("removed_at") @db.Timestamptz(6)
   /// @displayName 소속 Space
-  tenantId       String    @map("tenant_id")
+  spaceId        String    @map("space_id")
   /// @displayName 상위 폴더 ID
   parentFolderId String?   @map("parent_folder_id")
   /// @displayName 폴더명
@@ -28,13 +28,13 @@ model Folder {
   sortOrder      Int       @default(0) @map("sort_order")
   /// @displayName 생성자
   creatorId      String?   @map("creator_id")
-  tenant         Tenant    @relation(fields: [tenantId], references: [id])
+  space          Space     @relation(fields: [spaceId], references: [id], onDelete: Restrict)
   parent         Folder?   @relation("FolderParent", fields: [parentFolderId], references: [id])
   children       Folder[]  @relation("FolderParent")
-  creator        User?     @relation(fields: [creatorId], references: [id])
+  creator        User?     @relation(fields: [creatorId], references: [id], onDelete: SetNull)
   assets         Asset[]
 
-  @@index([tenantId])
+  @@index([spaceId])
   @@index([parentFolderId])
   @@index([path])
   @@map("folders")

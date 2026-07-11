@@ -2,9 +2,6 @@
 
 import {
 	Alert,
-	AssetBrowser,
-	type AssetBrowserAsset,
-	type AssetBrowserProps,
 	getContentLanguageLabel,
 	Screen,
 	Section,
@@ -17,6 +14,11 @@ import { Card } from "@heroui/react";
 import { ImageIcon, PlayCircle } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { Chip } from "../../data-display/Chip/Chip";
+import {
+	AssetBrowser,
+	type AssetBrowserAsset,
+	type AssetBrowserProps,
+} from "../../domain/asset/AssetBrowser";
 import { Button } from "../../input/Button/Button";
 import { TextArea } from "../../input/TextArea/TextArea";
 import { TextField } from "../../input/TextField/TextField";

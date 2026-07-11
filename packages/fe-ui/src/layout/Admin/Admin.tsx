@@ -55,8 +55,16 @@ export const AdminHeader = ({
 	...props
 }: AdminHeaderProps) => {
 	return (
-		<header {...props} className={joinClassNames("shrink-0", className)}>
-			{children}
+		<header
+			{...props}
+			className={joinClassNames(
+				"relative z-30 shrink-0 border-b border-[#d7e4f2] bg-white dark:border-white/10 dark:bg-neutral-950",
+				className,
+			)}
+		>
+			<div className="flex h-16 items-center justify-end gap-4 px-4 md:h-[72px] md:px-6">
+				{children}
+			</div>
 		</header>
 	);
 };
@@ -148,7 +156,7 @@ export const AdminMain = ({
 
 /**
  * AdminFooter
- * mobile navigation/action 요소를 담는 footer slot입니다.
+ * route shell의 optional footer slot입니다.
  */
 export const AdminFooter = ({
 	children,

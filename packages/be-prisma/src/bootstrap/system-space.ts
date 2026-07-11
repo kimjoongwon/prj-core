@@ -63,14 +63,15 @@ async function ensureSystemSpaceGroups(prisma: PrismaClient): Promise<void> {
 		const existingGroup = await prisma.group.findFirst({
 			where: {
 				name: groupName,
-				tenantId: firstTenant.id,
+				spaceId: SYSTEM_SPACE_ID,
 			},
 		});
 
 		if (!existingGroup) {
 			await prisma.group.create({
 				data: {
-					tenantId: firstTenant.id,
+					spaceId: SYSTEM_SPACE_ID,
+					creatorId: firstTenant.userId,
 					name: groupName,
 					type: "Space",
 				},

@@ -35,3 +35,13 @@ export class HandleOidcCommand {
 		readonly res: unknown,
 	) {}
 }
+
+export class GetCurrentSpaceQuery {}
+
+export class SetCurrentSpaceCommand {
+	readonly tenantId: string;
+
+	constructor(input: { tenantId: string }) {
+		this.tenantId = input.tenantId;
+	}
+}

@@ -1,6 +1,6 @@
 import type { PlanningScenario } from "@cocrepo/type";
 import type { Meta, StoryObj } from "@storybook/react";
-import { PlanningPreviewFrame } from "../../feature/PlanningPreviewFrame";
+import { PlanningPreviewFrame } from "../../domain/planning/PlanningPreviewFrame";
 import type { UserDetailScreenProps } from "./UserDetailScreen";
 import { UserDetailScreen } from "./UserDetailScreen";
 import { userDetailApiScenarios } from "./UserDetailScreen.msw";

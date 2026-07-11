@@ -67,12 +67,12 @@ class NavItem {
 
 ---
 
-### 3. Navigation (네비게이션 관리자)
+### 3. NavigationStore (네비게이션 상태 owner)
 
 **역할**: 네비게이션 아이템 컬렉션의 **상태 관리 및 네비게이션 로직**
 
 ```typescript
-class Navigation {
+class NavigationStore {
   // 의존성
   private navigator: Navigator;
 
@@ -102,30 +102,17 @@ class Navigation {
 ## 클래스 다이어그램
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                         AppStore                                 │
-│  ┌─────────────┐  ┌──────────────────┐  ┌───────────────────┐   │
-│  │  Navigator  │  │  Navigation      │  │  기타 상태...      │   │
-│  │             │  │                  │  │                    │   │
-│  │ - router    │◄─│ - navigator      │  │                    │   │
-│  │             │  │ - items[]        │  │                    │   │
-│  │ push()      │  │ - selectedNavItem│  │                    │   │
-│  │ replace()   │  │                  │  │                    │   │
-│  │ back()      │  │ selectNavItem()  │  │                    │   │
-│  └─────────────┘  └────────┬─────────┘  └───────────────────┘   │
-│                            │                                     │
-│                            ▼                                     │
-│                      ┌──────────┐                                │
-│                      │ NavItem[]│                                │
-│                      │          │                                │
-│                      │ - id     │                                │
-│                      │ - label  │                                │
-│                      │ - path   │                                │
-│                      │ - active │                                │
-│                      │ - children[]                              │
-│                      └──────────┘                                │
-└─────────────────────────────────────────────────────────────────┘
+RootStore
+└── app: AppStore
+    └── navigation: NavigationStore
+        ├── owns NavItem[]
+        └── uses Navigator
+                 └── wraps runtime router
 ```
+
+`RootStore`가 `NavigationStore`를 생성하고 런타임 router로 만든 `Navigator`를
+연결합니다. `NavItem`은 `NavigationStore`만 소유하므로 모두 `stores/navigation/`
+아래에 함께 둡니다.
 
 ---
 
@@ -134,24 +121,30 @@ class Navigation {
 ### 앱 초기화
 
 ```typescript
-// stores/index.ts
-import { Navigator, Navigation } from '@cocrepo/store';
+import { browserPersistStorageAdapter, RootStore } from '@cocrepo/store';
 import { useRouter } from 'next/navigation';
 import { ADMIN_NAV_CONFIG } from '@cocrepo/constant';
 
-export function initializeAppNavigation() {
+const root = new RootStore({
+  appName: 'ADMIN',
+  navItems: ADMIN_NAV_CONFIG,
+  persistStorageKey: 'admin-persist',
+  storageAdapter: browserPersistStorageAdapter,
+});
+root.initialize({
+  sessionScopeBinders: [],
+  languageBinders: [],
+});
+
+export function NavigationInitializer() {
   const router = useRouter();
 
-  // Navigator 생성 - router 주입
-  const navigator = new Navigator({ router });
+  useEffect(() => {
+    root.start();
+    root.setRouter(router);
+  }, [router]);
 
-  // Navigation 생성 - Navigator 주입
-  const navigation = new Navigation(ADMIN_NAV_CONFIG, {
-    navigator,
-    abilityChecker: (action, subject) => ability.can(action, subject),
-  });
-
-  return { navigator, navigation };
+  return null;
 }
 ```
 
@@ -160,7 +153,7 @@ export function initializeAppNavigation() {
 ```typescript
 // 사용자가 네비게이션 아이템 클릭
 navigation.selectNavItem('members');
-// → Navigation이 활성 상태 업데이트
+// → NavigationStore가 활성 상태 업데이트
 // → Navigator.push('/members/list') 호출
 // → 실제 페이지 이동
 ```
@@ -170,7 +163,7 @@ navigation.selectNavItem('members');
 ```typescript
 // 라우터 변경 시 (useEffect)
 useEffect(() => {
-  navigation.setCurrentPath(pathname);
+  root.setCurrentPath(pathname);
 }, [pathname]);
 ```
 
@@ -178,10 +171,10 @@ useEffect(() => {
 
 ## 공개 API
 
-Navigation은 네비게이션을 총괄하는 단일 상태 객체입니다:
+NavigationStore는 `app.navigation` namespace를 총괄하는 상태 객체입니다:
 
 ```typescript
-import { Navigation } from '@cocrepo/store';
+import { NavigationStore } from '@cocrepo/store';
 
 navigation.selectNavItem('members');
 navigation.selectedNavItem;

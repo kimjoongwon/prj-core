@@ -29,7 +29,8 @@ export type PolicyMinAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  tenantId: string | null
+  spaceId: string | null
+  creatorId: string | null
   name: string | null
   displayName: string | null
   description: string | null
@@ -41,7 +42,8 @@ export type PolicyMaxAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  tenantId: string | null
+  spaceId: string | null
+  creatorId: string | null
   name: string | null
   displayName: string | null
   description: string | null
@@ -53,7 +55,8 @@ export type PolicyCountAggregateOutputType = {
   createdAt: number
   updatedAt: number
   removedAt: number
-  tenantId: number
+  spaceId: number
+  creatorId: number
   name: number
   displayName: number
   description: number
@@ -67,7 +70,8 @@ export type PolicyMinAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  tenantId?: true
+  spaceId?: true
+  creatorId?: true
   name?: true
   displayName?: true
   description?: true
@@ -79,7 +83,8 @@ export type PolicyMaxAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  tenantId?: true
+  spaceId?: true
+  creatorId?: true
   name?: true
   displayName?: true
   description?: true
@@ -91,7 +96,8 @@ export type PolicyCountAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  tenantId?: true
+  spaceId?: true
+  creatorId?: true
   name?: true
   displayName?: true
   description?: true
@@ -176,7 +182,8 @@ export type PolicyGroupByOutputType = {
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  tenantId: string
+  spaceId: string
+  creatorId: string | null
   name: string
   displayName: string | null
   description: string | null
@@ -209,12 +216,14 @@ export type PolicyWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Policy"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Policy"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Policy"> | Date | string | null
-  tenantId?: Prisma.StringFilter<"Policy"> | string
+  spaceId?: Prisma.StringFilter<"Policy"> | string
+  creatorId?: Prisma.StringNullableFilter<"Policy"> | string | null
   name?: Prisma.StringFilter<"Policy"> | string
   displayName?: Prisma.StringNullableFilter<"Policy"> | string | null
   description?: Prisma.StringNullableFilter<"Policy"> | string | null
   isSystem?: Prisma.BoolFilter<"Policy"> | boolean
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
+  creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   policyAbilities?: Prisma.PolicyAbilityListRelationFilter
   rolePolicies?: Prisma.RolePolicyListRelationFilter
 }
@@ -224,41 +233,46 @@ export type PolicyOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   displayName?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   isSystem?: Prisma.SortOrder
-  tenant?: Prisma.TenantOrderByWithRelationInput
+  space?: Prisma.SpaceOrderByWithRelationInput
+  creator?: Prisma.UserOrderByWithRelationInput
   policyAbilities?: Prisma.PolicyAbilityOrderByRelationAggregateInput
   rolePolicies?: Prisma.RolePolicyOrderByRelationAggregateInput
 }
 
 export type PolicyWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  tenantId_name?: Prisma.PolicyTenantIdNameCompoundUniqueInput
+  spaceId_name?: Prisma.PolicySpaceIdNameCompoundUniqueInput
   AND?: Prisma.PolicyWhereInput | Prisma.PolicyWhereInput[]
   OR?: Prisma.PolicyWhereInput[]
   NOT?: Prisma.PolicyWhereInput | Prisma.PolicyWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"Policy"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Policy"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Policy"> | Date | string | null
-  tenantId?: Prisma.StringFilter<"Policy"> | string
+  spaceId?: Prisma.StringFilter<"Policy"> | string
+  creatorId?: Prisma.StringNullableFilter<"Policy"> | string | null
   name?: Prisma.StringFilter<"Policy"> | string
   displayName?: Prisma.StringNullableFilter<"Policy"> | string | null
   description?: Prisma.StringNullableFilter<"Policy"> | string | null
   isSystem?: Prisma.BoolFilter<"Policy"> | boolean
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
+  creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   policyAbilities?: Prisma.PolicyAbilityListRelationFilter
   rolePolicies?: Prisma.RolePolicyListRelationFilter
-}, "id" | "tenantId_name">
+}, "id" | "spaceId_name">
 
 export type PolicyOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   displayName?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -276,7 +290,8 @@ export type PolicyScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Policy"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Policy"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Policy"> | Date | string | null
-  tenantId?: Prisma.StringWithAggregatesFilter<"Policy"> | string
+  spaceId?: Prisma.StringWithAggregatesFilter<"Policy"> | string
+  creatorId?: Prisma.StringNullableWithAggregatesFilter<"Policy"> | string | null
   name?: Prisma.StringWithAggregatesFilter<"Policy"> | string
   displayName?: Prisma.StringNullableWithAggregatesFilter<"Policy"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Policy"> | string | null
@@ -292,7 +307,8 @@ export type PolicyCreateInput = {
   displayName?: string | null
   description?: string | null
   isSystem?: boolean
-  tenant: Prisma.TenantCreateNestedOneWithoutPoliciesInput
+  space: Prisma.SpaceCreateNestedOneWithoutPoliciesInput
+  creator?: Prisma.UserCreateNestedOneWithoutCreatedPoliciesInput
   policyAbilities?: Prisma.PolicyAbilityCreateNestedManyWithoutPolicyInput
   rolePolicies?: Prisma.RolePolicyCreateNestedManyWithoutPolicyInput
 }
@@ -302,7 +318,8 @@ export type PolicyUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
+  creatorId?: string | null
   name: string
   displayName?: string | null
   description?: string | null
@@ -320,7 +337,8 @@ export type PolicyUpdateInput = {
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutPoliciesNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutPoliciesNestedInput
+  creator?: Prisma.UserUpdateOneWithoutCreatedPoliciesNestedInput
   policyAbilities?: Prisma.PolicyAbilityUpdateManyWithoutPolicyNestedInput
   rolePolicies?: Prisma.RolePolicyUpdateManyWithoutPolicyNestedInput
 }
@@ -330,7 +348,8 @@ export type PolicyUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -344,7 +363,8 @@ export type PolicyCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
+  creatorId?: string | null
   name: string
   displayName?: string | null
   description?: string | null
@@ -367,15 +387,16 @@ export type PolicyUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
-export type PolicyTenantIdNameCompoundUniqueInput = {
-  tenantId: string
+export type PolicySpaceIdNameCompoundUniqueInput = {
+  spaceId: string
   name: string
 }
 
@@ -384,7 +405,8 @@ export type PolicyCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  creatorId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   displayName?: Prisma.SortOrder
   description?: Prisma.SortOrder
@@ -396,7 +418,8 @@ export type PolicyMaxOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  creatorId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   displayName?: Prisma.SortOrder
   description?: Prisma.SortOrder
@@ -408,7 +431,8 @@ export type PolicyMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  creatorId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   displayName?: Prisma.SortOrder
   description?: Prisma.SortOrder
@@ -458,45 +482,87 @@ export type PolicyUpdateOneRequiredWithoutRolePoliciesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PolicyUpdateToOneWithWhereWithoutRolePoliciesInput, Prisma.PolicyUpdateWithoutRolePoliciesInput>, Prisma.PolicyUncheckedUpdateWithoutRolePoliciesInput>
 }
 
-export type PolicyCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.PolicyCreateWithoutTenantInput, Prisma.PolicyUncheckedCreateWithoutTenantInput> | Prisma.PolicyCreateWithoutTenantInput[] | Prisma.PolicyUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.PolicyCreateOrConnectWithoutTenantInput | Prisma.PolicyCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.PolicyCreateManyTenantInputEnvelope
+export type PolicyCreateNestedManyWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.PolicyCreateWithoutSpaceInput, Prisma.PolicyUncheckedCreateWithoutSpaceInput> | Prisma.PolicyCreateWithoutSpaceInput[] | Prisma.PolicyUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.PolicyCreateOrConnectWithoutSpaceInput | Prisma.PolicyCreateOrConnectWithoutSpaceInput[]
+  createMany?: Prisma.PolicyCreateManySpaceInputEnvelope
   connect?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[]
 }
 
-export type PolicyUncheckedCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.PolicyCreateWithoutTenantInput, Prisma.PolicyUncheckedCreateWithoutTenantInput> | Prisma.PolicyCreateWithoutTenantInput[] | Prisma.PolicyUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.PolicyCreateOrConnectWithoutTenantInput | Prisma.PolicyCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.PolicyCreateManyTenantInputEnvelope
+export type PolicyUncheckedCreateNestedManyWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.PolicyCreateWithoutSpaceInput, Prisma.PolicyUncheckedCreateWithoutSpaceInput> | Prisma.PolicyCreateWithoutSpaceInput[] | Prisma.PolicyUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.PolicyCreateOrConnectWithoutSpaceInput | Prisma.PolicyCreateOrConnectWithoutSpaceInput[]
+  createMany?: Prisma.PolicyCreateManySpaceInputEnvelope
   connect?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[]
 }
 
-export type PolicyUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.PolicyCreateWithoutTenantInput, Prisma.PolicyUncheckedCreateWithoutTenantInput> | Prisma.PolicyCreateWithoutTenantInput[] | Prisma.PolicyUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.PolicyCreateOrConnectWithoutTenantInput | Prisma.PolicyCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.PolicyUpsertWithWhereUniqueWithoutTenantInput | Prisma.PolicyUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.PolicyCreateManyTenantInputEnvelope
+export type PolicyUpdateManyWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.PolicyCreateWithoutSpaceInput, Prisma.PolicyUncheckedCreateWithoutSpaceInput> | Prisma.PolicyCreateWithoutSpaceInput[] | Prisma.PolicyUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.PolicyCreateOrConnectWithoutSpaceInput | Prisma.PolicyCreateOrConnectWithoutSpaceInput[]
+  upsert?: Prisma.PolicyUpsertWithWhereUniqueWithoutSpaceInput | Prisma.PolicyUpsertWithWhereUniqueWithoutSpaceInput[]
+  createMany?: Prisma.PolicyCreateManySpaceInputEnvelope
   set?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[]
   disconnect?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[]
   delete?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[]
   connect?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[]
-  update?: Prisma.PolicyUpdateWithWhereUniqueWithoutTenantInput | Prisma.PolicyUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.PolicyUpdateManyWithWhereWithoutTenantInput | Prisma.PolicyUpdateManyWithWhereWithoutTenantInput[]
+  update?: Prisma.PolicyUpdateWithWhereUniqueWithoutSpaceInput | Prisma.PolicyUpdateWithWhereUniqueWithoutSpaceInput[]
+  updateMany?: Prisma.PolicyUpdateManyWithWhereWithoutSpaceInput | Prisma.PolicyUpdateManyWithWhereWithoutSpaceInput[]
   deleteMany?: Prisma.PolicyScalarWhereInput | Prisma.PolicyScalarWhereInput[]
 }
 
-export type PolicyUncheckedUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.PolicyCreateWithoutTenantInput, Prisma.PolicyUncheckedCreateWithoutTenantInput> | Prisma.PolicyCreateWithoutTenantInput[] | Prisma.PolicyUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.PolicyCreateOrConnectWithoutTenantInput | Prisma.PolicyCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.PolicyUpsertWithWhereUniqueWithoutTenantInput | Prisma.PolicyUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.PolicyCreateManyTenantInputEnvelope
+export type PolicyUncheckedUpdateManyWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.PolicyCreateWithoutSpaceInput, Prisma.PolicyUncheckedCreateWithoutSpaceInput> | Prisma.PolicyCreateWithoutSpaceInput[] | Prisma.PolicyUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.PolicyCreateOrConnectWithoutSpaceInput | Prisma.PolicyCreateOrConnectWithoutSpaceInput[]
+  upsert?: Prisma.PolicyUpsertWithWhereUniqueWithoutSpaceInput | Prisma.PolicyUpsertWithWhereUniqueWithoutSpaceInput[]
+  createMany?: Prisma.PolicyCreateManySpaceInputEnvelope
   set?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[]
   disconnect?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[]
   delete?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[]
   connect?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[]
-  update?: Prisma.PolicyUpdateWithWhereUniqueWithoutTenantInput | Prisma.PolicyUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.PolicyUpdateManyWithWhereWithoutTenantInput | Prisma.PolicyUpdateManyWithWhereWithoutTenantInput[]
+  update?: Prisma.PolicyUpdateWithWhereUniqueWithoutSpaceInput | Prisma.PolicyUpdateWithWhereUniqueWithoutSpaceInput[]
+  updateMany?: Prisma.PolicyUpdateManyWithWhereWithoutSpaceInput | Prisma.PolicyUpdateManyWithWhereWithoutSpaceInput[]
+  deleteMany?: Prisma.PolicyScalarWhereInput | Prisma.PolicyScalarWhereInput[]
+}
+
+export type PolicyCreateNestedManyWithoutCreatorInput = {
+  create?: Prisma.XOR<Prisma.PolicyCreateWithoutCreatorInput, Prisma.PolicyUncheckedCreateWithoutCreatorInput> | Prisma.PolicyCreateWithoutCreatorInput[] | Prisma.PolicyUncheckedCreateWithoutCreatorInput[]
+  connectOrCreate?: Prisma.PolicyCreateOrConnectWithoutCreatorInput | Prisma.PolicyCreateOrConnectWithoutCreatorInput[]
+  createMany?: Prisma.PolicyCreateManyCreatorInputEnvelope
+  connect?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[]
+}
+
+export type PolicyUncheckedCreateNestedManyWithoutCreatorInput = {
+  create?: Prisma.XOR<Prisma.PolicyCreateWithoutCreatorInput, Prisma.PolicyUncheckedCreateWithoutCreatorInput> | Prisma.PolicyCreateWithoutCreatorInput[] | Prisma.PolicyUncheckedCreateWithoutCreatorInput[]
+  connectOrCreate?: Prisma.PolicyCreateOrConnectWithoutCreatorInput | Prisma.PolicyCreateOrConnectWithoutCreatorInput[]
+  createMany?: Prisma.PolicyCreateManyCreatorInputEnvelope
+  connect?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[]
+}
+
+export type PolicyUpdateManyWithoutCreatorNestedInput = {
+  create?: Prisma.XOR<Prisma.PolicyCreateWithoutCreatorInput, Prisma.PolicyUncheckedCreateWithoutCreatorInput> | Prisma.PolicyCreateWithoutCreatorInput[] | Prisma.PolicyUncheckedCreateWithoutCreatorInput[]
+  connectOrCreate?: Prisma.PolicyCreateOrConnectWithoutCreatorInput | Prisma.PolicyCreateOrConnectWithoutCreatorInput[]
+  upsert?: Prisma.PolicyUpsertWithWhereUniqueWithoutCreatorInput | Prisma.PolicyUpsertWithWhereUniqueWithoutCreatorInput[]
+  createMany?: Prisma.PolicyCreateManyCreatorInputEnvelope
+  set?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[]
+  disconnect?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[]
+  delete?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[]
+  connect?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[]
+  update?: Prisma.PolicyUpdateWithWhereUniqueWithoutCreatorInput | Prisma.PolicyUpdateWithWhereUniqueWithoutCreatorInput[]
+  updateMany?: Prisma.PolicyUpdateManyWithWhereWithoutCreatorInput | Prisma.PolicyUpdateManyWithWhereWithoutCreatorInput[]
+  deleteMany?: Prisma.PolicyScalarWhereInput | Prisma.PolicyScalarWhereInput[]
+}
+
+export type PolicyUncheckedUpdateManyWithoutCreatorNestedInput = {
+  create?: Prisma.XOR<Prisma.PolicyCreateWithoutCreatorInput, Prisma.PolicyUncheckedCreateWithoutCreatorInput> | Prisma.PolicyCreateWithoutCreatorInput[] | Prisma.PolicyUncheckedCreateWithoutCreatorInput[]
+  connectOrCreate?: Prisma.PolicyCreateOrConnectWithoutCreatorInput | Prisma.PolicyCreateOrConnectWithoutCreatorInput[]
+  upsert?: Prisma.PolicyUpsertWithWhereUniqueWithoutCreatorInput | Prisma.PolicyUpsertWithWhereUniqueWithoutCreatorInput[]
+  createMany?: Prisma.PolicyCreateManyCreatorInputEnvelope
+  set?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[]
+  disconnect?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[]
+  delete?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[]
+  connect?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[]
+  update?: Prisma.PolicyUpdateWithWhereUniqueWithoutCreatorInput | Prisma.PolicyUpdateWithWhereUniqueWithoutCreatorInput[]
+  updateMany?: Prisma.PolicyUpdateManyWithWhereWithoutCreatorInput | Prisma.PolicyUpdateManyWithWhereWithoutCreatorInput[]
   deleteMany?: Prisma.PolicyScalarWhereInput | Prisma.PolicyScalarWhereInput[]
 }
 
@@ -509,7 +575,8 @@ export type PolicyCreateWithoutPolicyAbilitiesInput = {
   displayName?: string | null
   description?: string | null
   isSystem?: boolean
-  tenant: Prisma.TenantCreateNestedOneWithoutPoliciesInput
+  space: Prisma.SpaceCreateNestedOneWithoutPoliciesInput
+  creator?: Prisma.UserCreateNestedOneWithoutCreatedPoliciesInput
   rolePolicies?: Prisma.RolePolicyCreateNestedManyWithoutPolicyInput
 }
 
@@ -518,7 +585,8 @@ export type PolicyUncheckedCreateWithoutPolicyAbilitiesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
+  creatorId?: string | null
   name: string
   displayName?: string | null
   description?: string | null
@@ -551,7 +619,8 @@ export type PolicyUpdateWithoutPolicyAbilitiesInput = {
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutPoliciesNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutPoliciesNestedInput
+  creator?: Prisma.UserUpdateOneWithoutCreatedPoliciesNestedInput
   rolePolicies?: Prisma.RolePolicyUpdateManyWithoutPolicyNestedInput
 }
 
@@ -560,7 +629,8 @@ export type PolicyUncheckedUpdateWithoutPolicyAbilitiesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -577,7 +647,8 @@ export type PolicyCreateWithoutRolePoliciesInput = {
   displayName?: string | null
   description?: string | null
   isSystem?: boolean
-  tenant: Prisma.TenantCreateNestedOneWithoutPoliciesInput
+  space: Prisma.SpaceCreateNestedOneWithoutPoliciesInput
+  creator?: Prisma.UserCreateNestedOneWithoutCreatedPoliciesInput
   policyAbilities?: Prisma.PolicyAbilityCreateNestedManyWithoutPolicyInput
 }
 
@@ -586,7 +657,8 @@ export type PolicyUncheckedCreateWithoutRolePoliciesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
+  creatorId?: string | null
   name: string
   displayName?: string | null
   description?: string | null
@@ -619,7 +691,8 @@ export type PolicyUpdateWithoutRolePoliciesInput = {
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutPoliciesNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutPoliciesNestedInput
+  creator?: Prisma.UserUpdateOneWithoutCreatedPoliciesNestedInput
   policyAbilities?: Prisma.PolicyAbilityUpdateManyWithoutPolicyNestedInput
 }
 
@@ -628,7 +701,8 @@ export type PolicyUncheckedUpdateWithoutRolePoliciesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -636,7 +710,7 @@ export type PolicyUncheckedUpdateWithoutRolePoliciesInput = {
   policyAbilities?: Prisma.PolicyAbilityUncheckedUpdateManyWithoutPolicyNestedInput
 }
 
-export type PolicyCreateWithoutTenantInput = {
+export type PolicyCreateWithoutSpaceInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -645,15 +719,17 @@ export type PolicyCreateWithoutTenantInput = {
   displayName?: string | null
   description?: string | null
   isSystem?: boolean
+  creator?: Prisma.UserCreateNestedOneWithoutCreatedPoliciesInput
   policyAbilities?: Prisma.PolicyAbilityCreateNestedManyWithoutPolicyInput
   rolePolicies?: Prisma.RolePolicyCreateNestedManyWithoutPolicyInput
 }
 
-export type PolicyUncheckedCreateWithoutTenantInput = {
+export type PolicyUncheckedCreateWithoutSpaceInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  creatorId?: string | null
   name: string
   displayName?: string | null
   description?: string | null
@@ -662,30 +738,30 @@ export type PolicyUncheckedCreateWithoutTenantInput = {
   rolePolicies?: Prisma.RolePolicyUncheckedCreateNestedManyWithoutPolicyInput
 }
 
-export type PolicyCreateOrConnectWithoutTenantInput = {
+export type PolicyCreateOrConnectWithoutSpaceInput = {
   where: Prisma.PolicyWhereUniqueInput
-  create: Prisma.XOR<Prisma.PolicyCreateWithoutTenantInput, Prisma.PolicyUncheckedCreateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.PolicyCreateWithoutSpaceInput, Prisma.PolicyUncheckedCreateWithoutSpaceInput>
 }
 
-export type PolicyCreateManyTenantInputEnvelope = {
-  data: Prisma.PolicyCreateManyTenantInput | Prisma.PolicyCreateManyTenantInput[]
+export type PolicyCreateManySpaceInputEnvelope = {
+  data: Prisma.PolicyCreateManySpaceInput | Prisma.PolicyCreateManySpaceInput[]
   skipDuplicates?: boolean
 }
 
-export type PolicyUpsertWithWhereUniqueWithoutTenantInput = {
+export type PolicyUpsertWithWhereUniqueWithoutSpaceInput = {
   where: Prisma.PolicyWhereUniqueInput
-  update: Prisma.XOR<Prisma.PolicyUpdateWithoutTenantInput, Prisma.PolicyUncheckedUpdateWithoutTenantInput>
-  create: Prisma.XOR<Prisma.PolicyCreateWithoutTenantInput, Prisma.PolicyUncheckedCreateWithoutTenantInput>
+  update: Prisma.XOR<Prisma.PolicyUpdateWithoutSpaceInput, Prisma.PolicyUncheckedUpdateWithoutSpaceInput>
+  create: Prisma.XOR<Prisma.PolicyCreateWithoutSpaceInput, Prisma.PolicyUncheckedCreateWithoutSpaceInput>
 }
 
-export type PolicyUpdateWithWhereUniqueWithoutTenantInput = {
+export type PolicyUpdateWithWhereUniqueWithoutSpaceInput = {
   where: Prisma.PolicyWhereUniqueInput
-  data: Prisma.XOR<Prisma.PolicyUpdateWithoutTenantInput, Prisma.PolicyUncheckedUpdateWithoutTenantInput>
+  data: Prisma.XOR<Prisma.PolicyUpdateWithoutSpaceInput, Prisma.PolicyUncheckedUpdateWithoutSpaceInput>
 }
 
-export type PolicyUpdateManyWithWhereWithoutTenantInput = {
+export type PolicyUpdateManyWithWhereWithoutSpaceInput = {
   where: Prisma.PolicyScalarWhereInput
-  data: Prisma.XOR<Prisma.PolicyUpdateManyMutationInput, Prisma.PolicyUncheckedUpdateManyWithoutTenantInput>
+  data: Prisma.XOR<Prisma.PolicyUpdateManyMutationInput, Prisma.PolicyUncheckedUpdateManyWithoutSpaceInput>
 }
 
 export type PolicyScalarWhereInput = {
@@ -696,14 +772,15 @@ export type PolicyScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Policy"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Policy"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Policy"> | Date | string | null
-  tenantId?: Prisma.StringFilter<"Policy"> | string
+  spaceId?: Prisma.StringFilter<"Policy"> | string
+  creatorId?: Prisma.StringNullableFilter<"Policy"> | string | null
   name?: Prisma.StringFilter<"Policy"> | string
   displayName?: Prisma.StringNullableFilter<"Policy"> | string | null
   description?: Prisma.StringNullableFilter<"Policy"> | string | null
   isSystem?: Prisma.BoolFilter<"Policy"> | boolean
 }
 
-export type PolicyCreateManyTenantInput = {
+export type PolicyCreateWithoutCreatorInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -712,9 +789,64 @@ export type PolicyCreateManyTenantInput = {
   displayName?: string | null
   description?: string | null
   isSystem?: boolean
+  space: Prisma.SpaceCreateNestedOneWithoutPoliciesInput
+  policyAbilities?: Prisma.PolicyAbilityCreateNestedManyWithoutPolicyInput
+  rolePolicies?: Prisma.RolePolicyCreateNestedManyWithoutPolicyInput
 }
 
-export type PolicyUpdateWithoutTenantInput = {
+export type PolicyUncheckedCreateWithoutCreatorInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  spaceId: string
+  name: string
+  displayName?: string | null
+  description?: string | null
+  isSystem?: boolean
+  policyAbilities?: Prisma.PolicyAbilityUncheckedCreateNestedManyWithoutPolicyInput
+  rolePolicies?: Prisma.RolePolicyUncheckedCreateNestedManyWithoutPolicyInput
+}
+
+export type PolicyCreateOrConnectWithoutCreatorInput = {
+  where: Prisma.PolicyWhereUniqueInput
+  create: Prisma.XOR<Prisma.PolicyCreateWithoutCreatorInput, Prisma.PolicyUncheckedCreateWithoutCreatorInput>
+}
+
+export type PolicyCreateManyCreatorInputEnvelope = {
+  data: Prisma.PolicyCreateManyCreatorInput | Prisma.PolicyCreateManyCreatorInput[]
+  skipDuplicates?: boolean
+}
+
+export type PolicyUpsertWithWhereUniqueWithoutCreatorInput = {
+  where: Prisma.PolicyWhereUniqueInput
+  update: Prisma.XOR<Prisma.PolicyUpdateWithoutCreatorInput, Prisma.PolicyUncheckedUpdateWithoutCreatorInput>
+  create: Prisma.XOR<Prisma.PolicyCreateWithoutCreatorInput, Prisma.PolicyUncheckedCreateWithoutCreatorInput>
+}
+
+export type PolicyUpdateWithWhereUniqueWithoutCreatorInput = {
+  where: Prisma.PolicyWhereUniqueInput
+  data: Prisma.XOR<Prisma.PolicyUpdateWithoutCreatorInput, Prisma.PolicyUncheckedUpdateWithoutCreatorInput>
+}
+
+export type PolicyUpdateManyWithWhereWithoutCreatorInput = {
+  where: Prisma.PolicyScalarWhereInput
+  data: Prisma.XOR<Prisma.PolicyUpdateManyMutationInput, Prisma.PolicyUncheckedUpdateManyWithoutCreatorInput>
+}
+
+export type PolicyCreateManySpaceInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  creatorId?: string | null
+  name: string
+  displayName?: string | null
+  description?: string | null
+  isSystem?: boolean
+}
+
+export type PolicyUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -723,15 +855,17 @@ export type PolicyUpdateWithoutTenantInput = {
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  creator?: Prisma.UserUpdateOneWithoutCreatedPoliciesNestedInput
   policyAbilities?: Prisma.PolicyAbilityUpdateManyWithoutPolicyNestedInput
   rolePolicies?: Prisma.RolePolicyUpdateManyWithoutPolicyNestedInput
 }
 
-export type PolicyUncheckedUpdateWithoutTenantInput = {
+export type PolicyUncheckedUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -740,11 +874,64 @@ export type PolicyUncheckedUpdateWithoutTenantInput = {
   rolePolicies?: Prisma.RolePolicyUncheckedUpdateManyWithoutPolicyNestedInput
 }
 
-export type PolicyUncheckedUpdateManyWithoutTenantInput = {
+export type PolicyUncheckedUpdateManyWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
+}
+
+export type PolicyCreateManyCreatorInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  spaceId: string
+  name: string
+  displayName?: string | null
+  description?: string | null
+  isSystem?: boolean
+}
+
+export type PolicyUpdateWithoutCreatorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  space?: Prisma.SpaceUpdateOneRequiredWithoutPoliciesNestedInput
+  policyAbilities?: Prisma.PolicyAbilityUpdateManyWithoutPolicyNestedInput
+  rolePolicies?: Prisma.RolePolicyUpdateManyWithoutPolicyNestedInput
+}
+
+export type PolicyUncheckedUpdateWithoutCreatorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  policyAbilities?: Prisma.PolicyAbilityUncheckedUpdateManyWithoutPolicyNestedInput
+  rolePolicies?: Prisma.RolePolicyUncheckedUpdateManyWithoutPolicyNestedInput
+}
+
+export type PolicyUncheckedUpdateManyWithoutCreatorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -796,12 +983,14 @@ export type PolicySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
+  creatorId?: boolean
   name?: boolean
   displayName?: boolean
   description?: boolean
   isSystem?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.Policy$creatorArgs<ExtArgs>
   policyAbilities?: boolean | Prisma.Policy$policyAbilitiesArgs<ExtArgs>
   rolePolicies?: boolean | Prisma.Policy$rolePoliciesArgs<ExtArgs>
   _count?: boolean | Prisma.PolicyCountOutputTypeDefaultArgs<ExtArgs>
@@ -812,12 +1001,14 @@ export type PolicySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
+  creatorId?: boolean
   name?: boolean
   displayName?: boolean
   description?: boolean
   isSystem?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.Policy$creatorArgs<ExtArgs>
 }, ExtArgs["result"]["policy"]>
 
 export type PolicySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -825,12 +1016,14 @@ export type PolicySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
+  creatorId?: boolean
   name?: boolean
   displayName?: boolean
   description?: boolean
   isSystem?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.Policy$creatorArgs<ExtArgs>
 }, ExtArgs["result"]["policy"]>
 
 export type PolicySelectScalar = {
@@ -838,31 +1031,36 @@ export type PolicySelectScalar = {
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
+  creatorId?: boolean
   name?: boolean
   displayName?: boolean
   description?: boolean
   isSystem?: boolean
 }
 
-export type PolicyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "tenantId" | "name" | "displayName" | "description" | "isSystem", ExtArgs["result"]["policy"]>
+export type PolicyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "spaceId" | "creatorId" | "name" | "displayName" | "description" | "isSystem", ExtArgs["result"]["policy"]>
 export type PolicyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.Policy$creatorArgs<ExtArgs>
   policyAbilities?: boolean | Prisma.Policy$policyAbilitiesArgs<ExtArgs>
   rolePolicies?: boolean | Prisma.Policy$rolePoliciesArgs<ExtArgs>
   _count?: boolean | Prisma.PolicyCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PolicyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.Policy$creatorArgs<ExtArgs>
 }
 export type PolicyIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.Policy$creatorArgs<ExtArgs>
 }
 
 export type $PolicyPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Policy"
   objects: {
-    tenant: Prisma.$TenantPayload<ExtArgs>
+    space: Prisma.$SpacePayload<ExtArgs>
+    creator: Prisma.$UserPayload<ExtArgs> | null
     policyAbilities: Prisma.$PolicyAbilityPayload<ExtArgs>[]
     rolePolicies: Prisma.$RolePolicyPayload<ExtArgs>[]
   }
@@ -874,7 +1072,11 @@ export type $PolicyPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     /**
      * @displayName 공간 ID
      */
-    tenantId: string
+    spaceId: string
+    /**
+     * @displayName 생성자 ID
+     */
+    creatorId: string | null
     /**
      * @displayName 정책 식별자
      */
@@ -1285,7 +1487,8 @@ readonly fields: PolicyFieldRefs;
  */
 export interface Prisma__PolicyClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  space<T extends Prisma.SpaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceDefaultArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  creator<T extends Prisma.Policy$creatorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Policy$creatorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   policyAbilities<T extends Prisma.Policy$policyAbilitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Policy$policyAbilitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PolicyAbilityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   rolePolicies<T extends Prisma.Policy$rolePoliciesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Policy$rolePoliciesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RolePolicyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1321,7 +1524,8 @@ export interface PolicyFieldRefs {
   readonly createdAt: Prisma.FieldRef<"Policy", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Policy", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Policy", 'DateTime'>
-  readonly tenantId: Prisma.FieldRef<"Policy", 'String'>
+  readonly spaceId: Prisma.FieldRef<"Policy", 'String'>
+  readonly creatorId: Prisma.FieldRef<"Policy", 'String'>
   readonly name: Prisma.FieldRef<"Policy", 'String'>
   readonly displayName: Prisma.FieldRef<"Policy", 'String'>
   readonly description: Prisma.FieldRef<"Policy", 'String'>
@@ -1719,6 +1923,25 @@ export type PolicyDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Limit how many Policies to delete.
    */
   limit?: number
+}
+
+/**
+ * Policy.creator
+ */
+export type Policy$creatorArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

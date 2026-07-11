@@ -23,7 +23,7 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useApp } from "@/stores/AppProvider";
+import { useApp } from "@cocrepo/store";
 
 type ProgramEditPageParams = {
 	timelineId: string;

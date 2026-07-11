@@ -10,7 +10,6 @@ import { BadRequestException } from "@nestjs/common";
 import { ContentAggregate } from "../src/content/content.aggregate";
 
 const spaceId = "11111111-1111-4111-8111-111111111111";
-const tenantId = "33333333-3333-4333-8333-333333333333";
 const userId = "22222222-2222-4222-8222-222222222222";
 
 describe("ContentAggregate", () => {
@@ -55,7 +54,7 @@ describe("ContentAggregate", () => {
 		repository.createCommunityPost.mockResolvedValue(createdPost as never);
 
 		const result = await service.createCommunityPost({
-			tenantId,
+			spaceId,
 			text: "  함께 운동해요.  ",
 			title: "  새 글  ",
 			userId,
@@ -63,7 +62,7 @@ describe("ContentAggregate", () => {
 
 		expect(result).toBe(createdPost);
 		expect(repository.createCommunityPost).toHaveBeenCalledWith({
-			tenantId,
+			spaceId,
 			text: "함께 운동해요.",
 			title: "새 글",
 			userId,
@@ -73,7 +72,7 @@ describe("ContentAggregate", () => {
 	it("본문이 비어 있으면 게시글을 생성하지 않는다", async () => {
 		await expect(
 			service.createCommunityPost({
-				tenantId,
+				spaceId,
 				text: "   ",
 				userId,
 			}),

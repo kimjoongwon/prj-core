@@ -26,8 +26,8 @@ type StackScreenProps = {
 const mockSetIdpBaseUrl = jest.fn();
 const mockSetIdpLoginRedirectUrl = jest.fn();
 const mockSetLoginRedirectUrl = jest.fn();
-const mockSetApiSpace = jest.fn();
-const mockSetIdpSpace = jest.fn();
+const mockSetApiSessionScope = jest.fn();
+const mockSetIdpSessionScope = jest.fn();
 const mockSetUniwindTheme = jest.fn();
 
 jest.mock("@cocrepo/mo-ui", () => {
@@ -82,11 +82,13 @@ jest.mock("@cocrepo/api/idp/client", () => ({
 	setIdpBaseUrl: (...args: string[]) => mockSetIdpBaseUrl(...args),
 	setIdpLoginRedirectUrl: (...args: string[]) =>
 		mockSetIdpLoginRedirectUrl(...args),
-	setIdpSpace: (...args: unknown[]) => mockSetIdpSpace(...args),
+	setIdpSessionScope: (...args: unknown[]) =>
+		mockSetIdpSessionScope(...args),
 }));
 
 jest.mock("@cocrepo/api/core/client", () => ({
-	setApiSpace: (...args: unknown[]) => mockSetApiSpace(...args),
+	setApiSessionScope: (...args: unknown[]) =>
+		mockSetApiSessionScope(...args),
 	setLoginRedirectUrl: (...args: string[]) => mockSetLoginRedirectUrl(...args),
 }));
 
@@ -174,8 +176,8 @@ describe("mobile root layout", () => {
 		mockSetIdpBaseUrl.mockReset();
 		mockSetIdpLoginRedirectUrl.mockReset();
 		mockSetLoginRedirectUrl.mockReset();
-		mockSetApiSpace.mockReset();
-		mockSetIdpSpace.mockReset();
+		mockSetApiSessionScope.mockReset();
+		mockSetIdpSessionScope.mockReset();
 		mockSetUniwindTheme.mockReset();
 	});
 

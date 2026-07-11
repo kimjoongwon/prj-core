@@ -39,7 +39,8 @@ export type ReservationMinAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  tenantId: string | null
+  spaceId: string | null
+  creatorId: string | null
   userId: string | null
   timelineId: string | null
   sessionId: string | null
@@ -59,7 +60,8 @@ export type ReservationMaxAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  tenantId: string | null
+  spaceId: string | null
+  creatorId: string | null
   userId: string | null
   timelineId: string | null
   sessionId: string | null
@@ -79,7 +81,8 @@ export type ReservationCountAggregateOutputType = {
   createdAt: number
   updatedAt: number
   removedAt: number
-  tenantId: number
+  spaceId: number
+  creatorId: number
   userId: number
   timelineId: number
   sessionId: number
@@ -109,7 +112,8 @@ export type ReservationMinAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  tenantId?: true
+  spaceId?: true
+  creatorId?: true
   userId?: true
   timelineId?: true
   sessionId?: true
@@ -129,7 +133,8 @@ export type ReservationMaxAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  tenantId?: true
+  spaceId?: true
+  creatorId?: true
   userId?: true
   timelineId?: true
   sessionId?: true
@@ -149,7 +154,8 @@ export type ReservationCountAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  tenantId?: true
+  spaceId?: true
+  creatorId?: true
   userId?: true
   timelineId?: true
   sessionId?: true
@@ -256,7 +262,8 @@ export type ReservationGroupByOutputType = {
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  tenantId: string
+  spaceId: string
+  creatorId: string | null
   userId: string
   timelineId: string
   sessionId: string
@@ -299,7 +306,8 @@ export type ReservationWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Reservation"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Reservation"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Reservation"> | Date | string | null
-  tenantId?: Prisma.StringFilter<"Reservation"> | string
+  spaceId?: Prisma.StringFilter<"Reservation"> | string
+  creatorId?: Prisma.StringNullableFilter<"Reservation"> | string | null
   userId?: Prisma.StringFilter<"Reservation"> | string
   timelineId?: Prisma.StringFilter<"Reservation"> | string
   sessionId?: Prisma.StringFilter<"Reservation"> | string
@@ -312,7 +320,8 @@ export type ReservationWhereInput = {
   confirmedAt?: Prisma.DateTimeNullableFilter<"Reservation"> | Date | string | null
   canceledAt?: Prisma.DateTimeNullableFilter<"Reservation"> | Date | string | null
   cancelReason?: Prisma.StringNullableFilter<"Reservation"> | string | null
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
+  creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   timeline?: Prisma.XOR<Prisma.TimelineScalarRelationFilter, Prisma.TimelineWhereInput>
   session?: Prisma.XOR<Prisma.SessionScalarRelationFilter, Prisma.SessionWhereInput>
@@ -324,7 +333,8 @@ export type ReservationOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
   timelineId?: Prisma.SortOrder
   sessionId?: Prisma.SortOrder
@@ -337,7 +347,8 @@ export type ReservationOrderByWithRelationInput = {
   confirmedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   canceledAt?: Prisma.SortOrderInput | Prisma.SortOrder
   cancelReason?: Prisma.SortOrderInput | Prisma.SortOrder
-  tenant?: Prisma.TenantOrderByWithRelationInput
+  space?: Prisma.SpaceOrderByWithRelationInput
+  creator?: Prisma.UserOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
   timeline?: Prisma.TimelineOrderByWithRelationInput
   session?: Prisma.SessionOrderByWithRelationInput
@@ -353,7 +364,8 @@ export type ReservationWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Reservation"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Reservation"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Reservation"> | Date | string | null
-  tenantId?: Prisma.StringFilter<"Reservation"> | string
+  spaceId?: Prisma.StringFilter<"Reservation"> | string
+  creatorId?: Prisma.StringNullableFilter<"Reservation"> | string | null
   userId?: Prisma.StringFilter<"Reservation"> | string
   timelineId?: Prisma.StringFilter<"Reservation"> | string
   sessionId?: Prisma.StringFilter<"Reservation"> | string
@@ -366,7 +378,8 @@ export type ReservationWhereUniqueInput = Prisma.AtLeast<{
   confirmedAt?: Prisma.DateTimeNullableFilter<"Reservation"> | Date | string | null
   canceledAt?: Prisma.DateTimeNullableFilter<"Reservation"> | Date | string | null
   cancelReason?: Prisma.StringNullableFilter<"Reservation"> | string | null
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
+  creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   timeline?: Prisma.XOR<Prisma.TimelineScalarRelationFilter, Prisma.TimelineWhereInput>
   session?: Prisma.XOR<Prisma.SessionScalarRelationFilter, Prisma.SessionWhereInput>
@@ -378,7 +391,8 @@ export type ReservationOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
   timelineId?: Prisma.SortOrder
   sessionId?: Prisma.SortOrder
@@ -406,7 +420,8 @@ export type ReservationScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Reservation"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Reservation"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Reservation"> | Date | string | null
-  tenantId?: Prisma.StringWithAggregatesFilter<"Reservation"> | string
+  spaceId?: Prisma.StringWithAggregatesFilter<"Reservation"> | string
+  creatorId?: Prisma.StringNullableWithAggregatesFilter<"Reservation"> | string | null
   userId?: Prisma.StringWithAggregatesFilter<"Reservation"> | string
   timelineId?: Prisma.StringWithAggregatesFilter<"Reservation"> | string
   sessionId?: Prisma.StringWithAggregatesFilter<"Reservation"> | string
@@ -434,7 +449,8 @@ export type ReservationCreateInput = {
   confirmedAt?: Date | string | null
   canceledAt?: Date | string | null
   cancelReason?: string | null
-  tenant: Prisma.TenantCreateNestedOneWithoutReservationsInput
+  space: Prisma.SpaceCreateNestedOneWithoutReservationsInput
+  creator?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput
   user: Prisma.UserCreateNestedOneWithoutReservationsInput
   timeline: Prisma.TimelineCreateNestedOneWithoutReservationsInput
   session: Prisma.SessionCreateNestedOneWithoutReservationsInput
@@ -446,7 +462,8 @@ export type ReservationUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
+  creatorId?: string | null
   userId: string
   timelineId: string
   sessionId: string
@@ -474,7 +491,8 @@ export type ReservationUpdateInput = {
   confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutReservationsNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutReservationsNestedInput
+  creator?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput
   timeline?: Prisma.TimelineUpdateOneRequiredWithoutReservationsNestedInput
   session?: Prisma.SessionUpdateOneRequiredWithoutReservationsNestedInput
@@ -486,7 +504,8 @@ export type ReservationUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   timelineId?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -506,7 +525,8 @@ export type ReservationCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
+  creatorId?: string | null
   userId: string
   timelineId: string
   sessionId: string
@@ -541,7 +561,8 @@ export type ReservationUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   timelineId?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -576,7 +597,8 @@ export type ReservationCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  creatorId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   timelineId?: Prisma.SortOrder
   sessionId?: Prisma.SortOrder
@@ -600,7 +622,8 @@ export type ReservationMaxOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  creatorId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   timelineId?: Prisma.SortOrder
   sessionId?: Prisma.SortOrder
@@ -620,7 +643,8 @@ export type ReservationMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  creatorId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   timelineId?: Prisma.SortOrder
   sessionId?: Prisma.SortOrder
@@ -639,45 +663,45 @@ export type ReservationSumOrderByAggregateInput = {
   waitlistPosition?: Prisma.SortOrder
 }
 
-export type ReservationCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.ReservationCreateWithoutTenantInput, Prisma.ReservationUncheckedCreateWithoutTenantInput> | Prisma.ReservationCreateWithoutTenantInput[] | Prisma.ReservationUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.ReservationCreateOrConnectWithoutTenantInput | Prisma.ReservationCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.ReservationCreateManyTenantInputEnvelope
+export type ReservationCreateNestedManyWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.ReservationCreateWithoutSpaceInput, Prisma.ReservationUncheckedCreateWithoutSpaceInput> | Prisma.ReservationCreateWithoutSpaceInput[] | Prisma.ReservationUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.ReservationCreateOrConnectWithoutSpaceInput | Prisma.ReservationCreateOrConnectWithoutSpaceInput[]
+  createMany?: Prisma.ReservationCreateManySpaceInputEnvelope
   connect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
 }
 
-export type ReservationUncheckedCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.ReservationCreateWithoutTenantInput, Prisma.ReservationUncheckedCreateWithoutTenantInput> | Prisma.ReservationCreateWithoutTenantInput[] | Prisma.ReservationUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.ReservationCreateOrConnectWithoutTenantInput | Prisma.ReservationCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.ReservationCreateManyTenantInputEnvelope
+export type ReservationUncheckedCreateNestedManyWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.ReservationCreateWithoutSpaceInput, Prisma.ReservationUncheckedCreateWithoutSpaceInput> | Prisma.ReservationCreateWithoutSpaceInput[] | Prisma.ReservationUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.ReservationCreateOrConnectWithoutSpaceInput | Prisma.ReservationCreateOrConnectWithoutSpaceInput[]
+  createMany?: Prisma.ReservationCreateManySpaceInputEnvelope
   connect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
 }
 
-export type ReservationUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.ReservationCreateWithoutTenantInput, Prisma.ReservationUncheckedCreateWithoutTenantInput> | Prisma.ReservationCreateWithoutTenantInput[] | Prisma.ReservationUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.ReservationCreateOrConnectWithoutTenantInput | Prisma.ReservationCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.ReservationUpsertWithWhereUniqueWithoutTenantInput | Prisma.ReservationUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.ReservationCreateManyTenantInputEnvelope
+export type ReservationUpdateManyWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.ReservationCreateWithoutSpaceInput, Prisma.ReservationUncheckedCreateWithoutSpaceInput> | Prisma.ReservationCreateWithoutSpaceInput[] | Prisma.ReservationUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.ReservationCreateOrConnectWithoutSpaceInput | Prisma.ReservationCreateOrConnectWithoutSpaceInput[]
+  upsert?: Prisma.ReservationUpsertWithWhereUniqueWithoutSpaceInput | Prisma.ReservationUpsertWithWhereUniqueWithoutSpaceInput[]
+  createMany?: Prisma.ReservationCreateManySpaceInputEnvelope
   set?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
   disconnect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
   delete?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
   connect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
-  update?: Prisma.ReservationUpdateWithWhereUniqueWithoutTenantInput | Prisma.ReservationUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.ReservationUpdateManyWithWhereWithoutTenantInput | Prisma.ReservationUpdateManyWithWhereWithoutTenantInput[]
+  update?: Prisma.ReservationUpdateWithWhereUniqueWithoutSpaceInput | Prisma.ReservationUpdateWithWhereUniqueWithoutSpaceInput[]
+  updateMany?: Prisma.ReservationUpdateManyWithWhereWithoutSpaceInput | Prisma.ReservationUpdateManyWithWhereWithoutSpaceInput[]
   deleteMany?: Prisma.ReservationScalarWhereInput | Prisma.ReservationScalarWhereInput[]
 }
 
-export type ReservationUncheckedUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.ReservationCreateWithoutTenantInput, Prisma.ReservationUncheckedCreateWithoutTenantInput> | Prisma.ReservationCreateWithoutTenantInput[] | Prisma.ReservationUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.ReservationCreateOrConnectWithoutTenantInput | Prisma.ReservationCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.ReservationUpsertWithWhereUniqueWithoutTenantInput | Prisma.ReservationUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.ReservationCreateManyTenantInputEnvelope
+export type ReservationUncheckedUpdateManyWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.ReservationCreateWithoutSpaceInput, Prisma.ReservationUncheckedCreateWithoutSpaceInput> | Prisma.ReservationCreateWithoutSpaceInput[] | Prisma.ReservationUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.ReservationCreateOrConnectWithoutSpaceInput | Prisma.ReservationCreateOrConnectWithoutSpaceInput[]
+  upsert?: Prisma.ReservationUpsertWithWhereUniqueWithoutSpaceInput | Prisma.ReservationUpsertWithWhereUniqueWithoutSpaceInput[]
+  createMany?: Prisma.ReservationCreateManySpaceInputEnvelope
   set?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
   disconnect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
   delete?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
   connect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
-  update?: Prisma.ReservationUpdateWithWhereUniqueWithoutTenantInput | Prisma.ReservationUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.ReservationUpdateManyWithWhereWithoutTenantInput | Prisma.ReservationUpdateManyWithWhereWithoutTenantInput[]
+  update?: Prisma.ReservationUpdateWithWhereUniqueWithoutSpaceInput | Prisma.ReservationUpdateWithWhereUniqueWithoutSpaceInput[]
+  updateMany?: Prisma.ReservationUpdateManyWithWhereWithoutSpaceInput | Prisma.ReservationUpdateManyWithWhereWithoutSpaceInput[]
   deleteMany?: Prisma.ReservationScalarWhereInput | Prisma.ReservationScalarWhereInput[]
 }
 
@@ -688,10 +712,24 @@ export type ReservationCreateNestedManyWithoutUserInput = {
   connect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
 }
 
+export type ReservationCreateNestedManyWithoutCreatorInput = {
+  create?: Prisma.XOR<Prisma.ReservationCreateWithoutCreatorInput, Prisma.ReservationUncheckedCreateWithoutCreatorInput> | Prisma.ReservationCreateWithoutCreatorInput[] | Prisma.ReservationUncheckedCreateWithoutCreatorInput[]
+  connectOrCreate?: Prisma.ReservationCreateOrConnectWithoutCreatorInput | Prisma.ReservationCreateOrConnectWithoutCreatorInput[]
+  createMany?: Prisma.ReservationCreateManyCreatorInputEnvelope
+  connect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
+}
+
 export type ReservationUncheckedCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.ReservationCreateWithoutUserInput, Prisma.ReservationUncheckedCreateWithoutUserInput> | Prisma.ReservationCreateWithoutUserInput[] | Prisma.ReservationUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.ReservationCreateOrConnectWithoutUserInput | Prisma.ReservationCreateOrConnectWithoutUserInput[]
   createMany?: Prisma.ReservationCreateManyUserInputEnvelope
+  connect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
+}
+
+export type ReservationUncheckedCreateNestedManyWithoutCreatorInput = {
+  create?: Prisma.XOR<Prisma.ReservationCreateWithoutCreatorInput, Prisma.ReservationUncheckedCreateWithoutCreatorInput> | Prisma.ReservationCreateWithoutCreatorInput[] | Prisma.ReservationUncheckedCreateWithoutCreatorInput[]
+  connectOrCreate?: Prisma.ReservationCreateOrConnectWithoutCreatorInput | Prisma.ReservationCreateOrConnectWithoutCreatorInput[]
+  createMany?: Prisma.ReservationCreateManyCreatorInputEnvelope
   connect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
 }
 
@@ -709,6 +747,20 @@ export type ReservationUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.ReservationScalarWhereInput | Prisma.ReservationScalarWhereInput[]
 }
 
+export type ReservationUpdateManyWithoutCreatorNestedInput = {
+  create?: Prisma.XOR<Prisma.ReservationCreateWithoutCreatorInput, Prisma.ReservationUncheckedCreateWithoutCreatorInput> | Prisma.ReservationCreateWithoutCreatorInput[] | Prisma.ReservationUncheckedCreateWithoutCreatorInput[]
+  connectOrCreate?: Prisma.ReservationCreateOrConnectWithoutCreatorInput | Prisma.ReservationCreateOrConnectWithoutCreatorInput[]
+  upsert?: Prisma.ReservationUpsertWithWhereUniqueWithoutCreatorInput | Prisma.ReservationUpsertWithWhereUniqueWithoutCreatorInput[]
+  createMany?: Prisma.ReservationCreateManyCreatorInputEnvelope
+  set?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
+  disconnect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
+  delete?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
+  connect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
+  update?: Prisma.ReservationUpdateWithWhereUniqueWithoutCreatorInput | Prisma.ReservationUpdateWithWhereUniqueWithoutCreatorInput[]
+  updateMany?: Prisma.ReservationUpdateManyWithWhereWithoutCreatorInput | Prisma.ReservationUpdateManyWithWhereWithoutCreatorInput[]
+  deleteMany?: Prisma.ReservationScalarWhereInput | Prisma.ReservationScalarWhereInput[]
+}
+
 export type ReservationUncheckedUpdateManyWithoutUserNestedInput = {
   create?: Prisma.XOR<Prisma.ReservationCreateWithoutUserInput, Prisma.ReservationUncheckedCreateWithoutUserInput> | Prisma.ReservationCreateWithoutUserInput[] | Prisma.ReservationUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.ReservationCreateOrConnectWithoutUserInput | Prisma.ReservationCreateOrConnectWithoutUserInput[]
@@ -720,6 +772,20 @@ export type ReservationUncheckedUpdateManyWithoutUserNestedInput = {
   connect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
   update?: Prisma.ReservationUpdateWithWhereUniqueWithoutUserInput | Prisma.ReservationUpdateWithWhereUniqueWithoutUserInput[]
   updateMany?: Prisma.ReservationUpdateManyWithWhereWithoutUserInput | Prisma.ReservationUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.ReservationScalarWhereInput | Prisma.ReservationScalarWhereInput[]
+}
+
+export type ReservationUncheckedUpdateManyWithoutCreatorNestedInput = {
+  create?: Prisma.XOR<Prisma.ReservationCreateWithoutCreatorInput, Prisma.ReservationUncheckedCreateWithoutCreatorInput> | Prisma.ReservationCreateWithoutCreatorInput[] | Prisma.ReservationUncheckedCreateWithoutCreatorInput[]
+  connectOrCreate?: Prisma.ReservationCreateOrConnectWithoutCreatorInput | Prisma.ReservationCreateOrConnectWithoutCreatorInput[]
+  upsert?: Prisma.ReservationUpsertWithWhereUniqueWithoutCreatorInput | Prisma.ReservationUpsertWithWhereUniqueWithoutCreatorInput[]
+  createMany?: Prisma.ReservationCreateManyCreatorInputEnvelope
+  set?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
+  disconnect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
+  delete?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
+  connect?: Prisma.ReservationWhereUniqueInput | Prisma.ReservationWhereUniqueInput[]
+  update?: Prisma.ReservationUpdateWithWhereUniqueWithoutCreatorInput | Prisma.ReservationUpdateWithWhereUniqueWithoutCreatorInput[]
+  updateMany?: Prisma.ReservationUpdateManyWithWhereWithoutCreatorInput | Prisma.ReservationUpdateManyWithWhereWithoutCreatorInput[]
   deleteMany?: Prisma.ReservationScalarWhereInput | Prisma.ReservationScalarWhereInput[]
 }
 
@@ -853,7 +919,7 @@ export type ReservationUncheckedUpdateManyWithoutProgramNestedInput = {
   deleteMany?: Prisma.ReservationScalarWhereInput | Prisma.ReservationScalarWhereInput[]
 }
 
-export type ReservationCreateWithoutTenantInput = {
+export type ReservationCreateWithoutSpaceInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -866,17 +932,19 @@ export type ReservationCreateWithoutTenantInput = {
   confirmedAt?: Date | string | null
   canceledAt?: Date | string | null
   cancelReason?: string | null
+  creator?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput
   user: Prisma.UserCreateNestedOneWithoutReservationsInput
   timeline: Prisma.TimelineCreateNestedOneWithoutReservationsInput
   session: Prisma.SessionCreateNestedOneWithoutReservationsInput
   program: Prisma.ProgramCreateNestedOneWithoutReservationsInput
 }
 
-export type ReservationUncheckedCreateWithoutTenantInput = {
+export type ReservationUncheckedCreateWithoutSpaceInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  creatorId?: string | null
   userId: string
   timelineId: string
   sessionId: string
@@ -891,30 +959,30 @@ export type ReservationUncheckedCreateWithoutTenantInput = {
   cancelReason?: string | null
 }
 
-export type ReservationCreateOrConnectWithoutTenantInput = {
+export type ReservationCreateOrConnectWithoutSpaceInput = {
   where: Prisma.ReservationWhereUniqueInput
-  create: Prisma.XOR<Prisma.ReservationCreateWithoutTenantInput, Prisma.ReservationUncheckedCreateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.ReservationCreateWithoutSpaceInput, Prisma.ReservationUncheckedCreateWithoutSpaceInput>
 }
 
-export type ReservationCreateManyTenantInputEnvelope = {
-  data: Prisma.ReservationCreateManyTenantInput | Prisma.ReservationCreateManyTenantInput[]
+export type ReservationCreateManySpaceInputEnvelope = {
+  data: Prisma.ReservationCreateManySpaceInput | Prisma.ReservationCreateManySpaceInput[]
   skipDuplicates?: boolean
 }
 
-export type ReservationUpsertWithWhereUniqueWithoutTenantInput = {
+export type ReservationUpsertWithWhereUniqueWithoutSpaceInput = {
   where: Prisma.ReservationWhereUniqueInput
-  update: Prisma.XOR<Prisma.ReservationUpdateWithoutTenantInput, Prisma.ReservationUncheckedUpdateWithoutTenantInput>
-  create: Prisma.XOR<Prisma.ReservationCreateWithoutTenantInput, Prisma.ReservationUncheckedCreateWithoutTenantInput>
+  update: Prisma.XOR<Prisma.ReservationUpdateWithoutSpaceInput, Prisma.ReservationUncheckedUpdateWithoutSpaceInput>
+  create: Prisma.XOR<Prisma.ReservationCreateWithoutSpaceInput, Prisma.ReservationUncheckedCreateWithoutSpaceInput>
 }
 
-export type ReservationUpdateWithWhereUniqueWithoutTenantInput = {
+export type ReservationUpdateWithWhereUniqueWithoutSpaceInput = {
   where: Prisma.ReservationWhereUniqueInput
-  data: Prisma.XOR<Prisma.ReservationUpdateWithoutTenantInput, Prisma.ReservationUncheckedUpdateWithoutTenantInput>
+  data: Prisma.XOR<Prisma.ReservationUpdateWithoutSpaceInput, Prisma.ReservationUncheckedUpdateWithoutSpaceInput>
 }
 
-export type ReservationUpdateManyWithWhereWithoutTenantInput = {
+export type ReservationUpdateManyWithWhereWithoutSpaceInput = {
   where: Prisma.ReservationScalarWhereInput
-  data: Prisma.XOR<Prisma.ReservationUpdateManyMutationInput, Prisma.ReservationUncheckedUpdateManyWithoutTenantInput>
+  data: Prisma.XOR<Prisma.ReservationUpdateManyMutationInput, Prisma.ReservationUncheckedUpdateManyWithoutSpaceInput>
 }
 
 export type ReservationScalarWhereInput = {
@@ -925,7 +993,8 @@ export type ReservationScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Reservation"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Reservation"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Reservation"> | Date | string | null
-  tenantId?: Prisma.StringFilter<"Reservation"> | string
+  spaceId?: Prisma.StringFilter<"Reservation"> | string
+  creatorId?: Prisma.StringNullableFilter<"Reservation"> | string | null
   userId?: Prisma.StringFilter<"Reservation"> | string
   timelineId?: Prisma.StringFilter<"Reservation"> | string
   sessionId?: Prisma.StringFilter<"Reservation"> | string
@@ -953,7 +1022,8 @@ export type ReservationCreateWithoutUserInput = {
   confirmedAt?: Date | string | null
   canceledAt?: Date | string | null
   cancelReason?: string | null
-  tenant: Prisma.TenantCreateNestedOneWithoutReservationsInput
+  space: Prisma.SpaceCreateNestedOneWithoutReservationsInput
+  creator?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput
   timeline: Prisma.TimelineCreateNestedOneWithoutReservationsInput
   session: Prisma.SessionCreateNestedOneWithoutReservationsInput
   program: Prisma.ProgramCreateNestedOneWithoutReservationsInput
@@ -964,7 +1034,8 @@ export type ReservationUncheckedCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
+  creatorId?: string | null
   timelineId: string
   sessionId: string
   programId: string
@@ -988,6 +1059,56 @@ export type ReservationCreateManyUserInputEnvelope = {
   skipDuplicates?: boolean
 }
 
+export type ReservationCreateWithoutCreatorInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  occurrenceStartAt: Date | string
+  status?: $Enums.ReservationStatus
+  memo?: string | null
+  idempotencyKey: string
+  waitlistPosition?: number | null
+  confirmedAt?: Date | string | null
+  canceledAt?: Date | string | null
+  cancelReason?: string | null
+  space: Prisma.SpaceCreateNestedOneWithoutReservationsInput
+  user: Prisma.UserCreateNestedOneWithoutReservationsInput
+  timeline: Prisma.TimelineCreateNestedOneWithoutReservationsInput
+  session: Prisma.SessionCreateNestedOneWithoutReservationsInput
+  program: Prisma.ProgramCreateNestedOneWithoutReservationsInput
+}
+
+export type ReservationUncheckedCreateWithoutCreatorInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  spaceId: string
+  userId: string
+  timelineId: string
+  sessionId: string
+  programId: string
+  occurrenceStartAt: Date | string
+  status?: $Enums.ReservationStatus
+  memo?: string | null
+  idempotencyKey: string
+  waitlistPosition?: number | null
+  confirmedAt?: Date | string | null
+  canceledAt?: Date | string | null
+  cancelReason?: string | null
+}
+
+export type ReservationCreateOrConnectWithoutCreatorInput = {
+  where: Prisma.ReservationWhereUniqueInput
+  create: Prisma.XOR<Prisma.ReservationCreateWithoutCreatorInput, Prisma.ReservationUncheckedCreateWithoutCreatorInput>
+}
+
+export type ReservationCreateManyCreatorInputEnvelope = {
+  data: Prisma.ReservationCreateManyCreatorInput | Prisma.ReservationCreateManyCreatorInput[]
+  skipDuplicates?: boolean
+}
+
 export type ReservationUpsertWithWhereUniqueWithoutUserInput = {
   where: Prisma.ReservationWhereUniqueInput
   update: Prisma.XOR<Prisma.ReservationUpdateWithoutUserInput, Prisma.ReservationUncheckedUpdateWithoutUserInput>
@@ -1004,6 +1125,22 @@ export type ReservationUpdateManyWithWhereWithoutUserInput = {
   data: Prisma.XOR<Prisma.ReservationUpdateManyMutationInput, Prisma.ReservationUncheckedUpdateManyWithoutUserInput>
 }
 
+export type ReservationUpsertWithWhereUniqueWithoutCreatorInput = {
+  where: Prisma.ReservationWhereUniqueInput
+  update: Prisma.XOR<Prisma.ReservationUpdateWithoutCreatorInput, Prisma.ReservationUncheckedUpdateWithoutCreatorInput>
+  create: Prisma.XOR<Prisma.ReservationCreateWithoutCreatorInput, Prisma.ReservationUncheckedCreateWithoutCreatorInput>
+}
+
+export type ReservationUpdateWithWhereUniqueWithoutCreatorInput = {
+  where: Prisma.ReservationWhereUniqueInput
+  data: Prisma.XOR<Prisma.ReservationUpdateWithoutCreatorInput, Prisma.ReservationUncheckedUpdateWithoutCreatorInput>
+}
+
+export type ReservationUpdateManyWithWhereWithoutCreatorInput = {
+  where: Prisma.ReservationScalarWhereInput
+  data: Prisma.XOR<Prisma.ReservationUpdateManyMutationInput, Prisma.ReservationUncheckedUpdateManyWithoutCreatorInput>
+}
+
 export type ReservationCreateWithoutTimelineInput = {
   id?: string
   createdAt?: Date | string
@@ -1017,7 +1154,8 @@ export type ReservationCreateWithoutTimelineInput = {
   confirmedAt?: Date | string | null
   canceledAt?: Date | string | null
   cancelReason?: string | null
-  tenant: Prisma.TenantCreateNestedOneWithoutReservationsInput
+  space: Prisma.SpaceCreateNestedOneWithoutReservationsInput
+  creator?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput
   user: Prisma.UserCreateNestedOneWithoutReservationsInput
   session: Prisma.SessionCreateNestedOneWithoutReservationsInput
   program: Prisma.ProgramCreateNestedOneWithoutReservationsInput
@@ -1028,7 +1166,8 @@ export type ReservationUncheckedCreateWithoutTimelineInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
+  creatorId?: string | null
   userId: string
   sessionId: string
   programId: string
@@ -1081,7 +1220,8 @@ export type ReservationCreateWithoutSessionInput = {
   confirmedAt?: Date | string | null
   canceledAt?: Date | string | null
   cancelReason?: string | null
-  tenant: Prisma.TenantCreateNestedOneWithoutReservationsInput
+  space: Prisma.SpaceCreateNestedOneWithoutReservationsInput
+  creator?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput
   user: Prisma.UserCreateNestedOneWithoutReservationsInput
   timeline: Prisma.TimelineCreateNestedOneWithoutReservationsInput
   program: Prisma.ProgramCreateNestedOneWithoutReservationsInput
@@ -1092,7 +1232,8 @@ export type ReservationUncheckedCreateWithoutSessionInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
+  creatorId?: string | null
   userId: string
   timelineId: string
   programId: string
@@ -1145,7 +1286,8 @@ export type ReservationCreateWithoutProgramInput = {
   confirmedAt?: Date | string | null
   canceledAt?: Date | string | null
   cancelReason?: string | null
-  tenant: Prisma.TenantCreateNestedOneWithoutReservationsInput
+  space: Prisma.SpaceCreateNestedOneWithoutReservationsInput
+  creator?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput
   user: Prisma.UserCreateNestedOneWithoutReservationsInput
   timeline: Prisma.TimelineCreateNestedOneWithoutReservationsInput
   session: Prisma.SessionCreateNestedOneWithoutReservationsInput
@@ -1156,7 +1298,8 @@ export type ReservationUncheckedCreateWithoutProgramInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
+  creatorId?: string | null
   userId: string
   timelineId: string
   sessionId: string
@@ -1196,11 +1339,12 @@ export type ReservationUpdateManyWithWhereWithoutProgramInput = {
   data: Prisma.XOR<Prisma.ReservationUpdateManyMutationInput, Prisma.ReservationUncheckedUpdateManyWithoutProgramInput>
 }
 
-export type ReservationCreateManyTenantInput = {
+export type ReservationCreateManySpaceInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
+  creatorId?: string | null
   userId: string
   timelineId: string
   sessionId: string
@@ -1215,7 +1359,7 @@ export type ReservationCreateManyTenantInput = {
   cancelReason?: string | null
 }
 
-export type ReservationUpdateWithoutTenantInput = {
+export type ReservationUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1228,17 +1372,19 @@ export type ReservationUpdateWithoutTenantInput = {
   confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  creator?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput
   timeline?: Prisma.TimelineUpdateOneRequiredWithoutReservationsNestedInput
   session?: Prisma.SessionUpdateOneRequiredWithoutReservationsNestedInput
   program?: Prisma.ProgramUpdateOneRequiredWithoutReservationsNestedInput
 }
 
-export type ReservationUncheckedUpdateWithoutTenantInput = {
+export type ReservationUncheckedUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   timelineId?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1253,11 +1399,12 @@ export type ReservationUncheckedUpdateWithoutTenantInput = {
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type ReservationUncheckedUpdateManyWithoutTenantInput = {
+export type ReservationUncheckedUpdateManyWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   timelineId?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1277,7 +1424,28 @@ export type ReservationCreateManyUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
+  creatorId?: string | null
+  timelineId: string
+  sessionId: string
+  programId: string
+  occurrenceStartAt: Date | string
+  status?: $Enums.ReservationStatus
+  memo?: string | null
+  idempotencyKey: string
+  waitlistPosition?: number | null
+  confirmedAt?: Date | string | null
+  canceledAt?: Date | string | null
+  cancelReason?: string | null
+}
+
+export type ReservationCreateManyCreatorInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  spaceId: string
+  userId: string
   timelineId: string
   sessionId: string
   programId: string
@@ -1304,7 +1472,8 @@ export type ReservationUpdateWithoutUserInput = {
   confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutReservationsNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutReservationsNestedInput
+  creator?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput
   timeline?: Prisma.TimelineUpdateOneRequiredWithoutReservationsNestedInput
   session?: Prisma.SessionUpdateOneRequiredWithoutReservationsNestedInput
   program?: Prisma.ProgramUpdateOneRequiredWithoutReservationsNestedInput
@@ -1315,7 +1484,8 @@ export type ReservationUncheckedUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timelineId?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
   programId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1334,7 +1504,68 @@ export type ReservationUncheckedUpdateManyWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  programId?: Prisma.StringFieldUpdateOperationsInput | string
+  occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
+  memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
+  waitlistPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type ReservationUpdateWithoutCreatorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
+  memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
+  waitlistPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  space?: Prisma.SpaceUpdateOneRequiredWithoutReservationsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput
+  timeline?: Prisma.TimelineUpdateOneRequiredWithoutReservationsNestedInput
+  session?: Prisma.SessionUpdateOneRequiredWithoutReservationsNestedInput
+  program?: Prisma.ProgramUpdateOneRequiredWithoutReservationsNestedInput
+}
+
+export type ReservationUncheckedUpdateWithoutCreatorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  programId?: Prisma.StringFieldUpdateOperationsInput | string
+  occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
+  memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
+  waitlistPosition?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type ReservationUncheckedUpdateManyWithoutCreatorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   timelineId?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
   programId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1353,7 +1584,8 @@ export type ReservationCreateManyTimelineInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
+  creatorId?: string | null
   userId: string
   sessionId: string
   programId: string
@@ -1380,7 +1612,8 @@ export type ReservationUpdateWithoutTimelineInput = {
   confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutReservationsNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutReservationsNestedInput
+  creator?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput
   session?: Prisma.SessionUpdateOneRequiredWithoutReservationsNestedInput
   program?: Prisma.ProgramUpdateOneRequiredWithoutReservationsNestedInput
@@ -1391,7 +1624,8 @@ export type ReservationUncheckedUpdateWithoutTimelineInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
   programId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1410,7 +1644,8 @@ export type ReservationUncheckedUpdateManyWithoutTimelineInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
   programId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1429,7 +1664,8 @@ export type ReservationCreateManySessionInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
+  creatorId?: string | null
   userId: string
   timelineId: string
   programId: string
@@ -1456,7 +1692,8 @@ export type ReservationUpdateWithoutSessionInput = {
   confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutReservationsNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutReservationsNestedInput
+  creator?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput
   timeline?: Prisma.TimelineUpdateOneRequiredWithoutReservationsNestedInput
   program?: Prisma.ProgramUpdateOneRequiredWithoutReservationsNestedInput
@@ -1467,7 +1704,8 @@ export type ReservationUncheckedUpdateWithoutSessionInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   timelineId?: Prisma.StringFieldUpdateOperationsInput | string
   programId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1486,7 +1724,8 @@ export type ReservationUncheckedUpdateManyWithoutSessionInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   timelineId?: Prisma.StringFieldUpdateOperationsInput | string
   programId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1505,7 +1744,8 @@ export type ReservationCreateManyProgramInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
+  creatorId?: string | null
   userId: string
   timelineId: string
   sessionId: string
@@ -1532,7 +1772,8 @@ export type ReservationUpdateWithoutProgramInput = {
   confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutReservationsNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutReservationsNestedInput
+  creator?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput
   timeline?: Prisma.TimelineUpdateOneRequiredWithoutReservationsNestedInput
   session?: Prisma.SessionUpdateOneRequiredWithoutReservationsNestedInput
@@ -1543,7 +1784,8 @@ export type ReservationUncheckedUpdateWithoutProgramInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   timelineId?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1562,7 +1804,8 @@ export type ReservationUncheckedUpdateManyWithoutProgramInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   timelineId?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1583,7 +1826,8 @@ export type ReservationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
+  creatorId?: boolean
   userId?: boolean
   timelineId?: boolean
   sessionId?: boolean
@@ -1596,7 +1840,8 @@ export type ReservationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   confirmedAt?: boolean
   canceledAt?: boolean
   cancelReason?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.Reservation$creatorArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   timeline?: boolean | Prisma.TimelineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
@@ -1608,7 +1853,8 @@ export type ReservationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
+  creatorId?: boolean
   userId?: boolean
   timelineId?: boolean
   sessionId?: boolean
@@ -1621,7 +1867,8 @@ export type ReservationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   confirmedAt?: boolean
   canceledAt?: boolean
   cancelReason?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.Reservation$creatorArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   timeline?: boolean | Prisma.TimelineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
@@ -1633,7 +1880,8 @@ export type ReservationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
+  creatorId?: boolean
   userId?: boolean
   timelineId?: boolean
   sessionId?: boolean
@@ -1646,7 +1894,8 @@ export type ReservationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   confirmedAt?: boolean
   canceledAt?: boolean
   cancelReason?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.Reservation$creatorArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   timeline?: boolean | Prisma.TimelineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
@@ -1658,7 +1907,8 @@ export type ReservationSelectScalar = {
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
+  creatorId?: boolean
   userId?: boolean
   timelineId?: boolean
   sessionId?: boolean
@@ -1673,23 +1923,26 @@ export type ReservationSelectScalar = {
   cancelReason?: boolean
 }
 
-export type ReservationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "tenantId" | "userId" | "timelineId" | "sessionId" | "programId" | "occurrenceStartAt" | "status" | "memo" | "idempotencyKey" | "waitlistPosition" | "confirmedAt" | "canceledAt" | "cancelReason", ExtArgs["result"]["reservation"]>
+export type ReservationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "spaceId" | "creatorId" | "userId" | "timelineId" | "sessionId" | "programId" | "occurrenceStartAt" | "status" | "memo" | "idempotencyKey" | "waitlistPosition" | "confirmedAt" | "canceledAt" | "cancelReason", ExtArgs["result"]["reservation"]>
 export type ReservationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.Reservation$creatorArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   timeline?: boolean | Prisma.TimelineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
 }
 export type ReservationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.Reservation$creatorArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   timeline?: boolean | Prisma.TimelineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
   program?: boolean | Prisma.ProgramDefaultArgs<ExtArgs>
 }
 export type ReservationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.Reservation$creatorArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   timeline?: boolean | Prisma.TimelineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
@@ -1699,7 +1952,8 @@ export type ReservationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.
 export type $ReservationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Reservation"
   objects: {
-    tenant: Prisma.$TenantPayload<ExtArgs>
+    space: Prisma.$SpacePayload<ExtArgs>
+    creator: Prisma.$UserPayload<ExtArgs> | null
     user: Prisma.$UserPayload<ExtArgs>
     timeline: Prisma.$TimelinePayload<ExtArgs>
     session: Prisma.$SessionPayload<ExtArgs>
@@ -1710,7 +1964,8 @@ export type $ReservationPayload<ExtArgs extends runtime.Types.Extensions.Interna
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    tenantId: string
+    spaceId: string
+    creatorId: string | null
     userId: string
     timelineId: string
     sessionId: string
@@ -2117,7 +2372,8 @@ readonly fields: ReservationFieldRefs;
  */
 export interface Prisma__ReservationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  space<T extends Prisma.SpaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceDefaultArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  creator<T extends Prisma.Reservation$creatorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Reservation$creatorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   timeline<T extends Prisma.TimelineDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TimelineDefaultArgs<ExtArgs>>): Prisma.Prisma__TimelineClient<runtime.Types.Result.GetResult<Prisma.$TimelinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   session<T extends Prisma.SessionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SessionDefaultArgs<ExtArgs>>): Prisma.Prisma__SessionClient<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -2155,7 +2411,8 @@ export interface ReservationFieldRefs {
   readonly createdAt: Prisma.FieldRef<"Reservation", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Reservation", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Reservation", 'DateTime'>
-  readonly tenantId: Prisma.FieldRef<"Reservation", 'String'>
+  readonly spaceId: Prisma.FieldRef<"Reservation", 'String'>
+  readonly creatorId: Prisma.FieldRef<"Reservation", 'String'>
   readonly userId: Prisma.FieldRef<"Reservation", 'String'>
   readonly timelineId: Prisma.FieldRef<"Reservation", 'String'>
   readonly sessionId: Prisma.FieldRef<"Reservation", 'String'>
@@ -2561,6 +2818,25 @@ export type ReservationDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many Reservations to delete.
    */
   limit?: number
+}
+
+/**
+ * Reservation.creator
+ */
+export type Reservation$creatorArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

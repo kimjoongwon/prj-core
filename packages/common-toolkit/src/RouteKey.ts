@@ -65,7 +65,7 @@ export function tryFromRouteKey(value: string): string | null {
 }
 
 function uuidToBytes(uuid: string): Uint8Array {
-	const hex = uuid.replaceAll("-", "");
+	const hex = uuid.replace(/-/g, "");
 	const bytes = new Uint8Array(16);
 
 	for (let index = 0; index < bytes.length; index += 1) {

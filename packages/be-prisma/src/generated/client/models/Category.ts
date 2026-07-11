@@ -32,7 +32,7 @@ export type CategoryMinAggregateOutputType = {
   name: string | null
   type: $Enums.CategoryTypes | null
   parentId: string | null
-  tenantId: string | null
+  spaceId: string | null
   creatorId: string | null
 }
 
@@ -44,7 +44,7 @@ export type CategoryMaxAggregateOutputType = {
   name: string | null
   type: $Enums.CategoryTypes | null
   parentId: string | null
-  tenantId: string | null
+  spaceId: string | null
   creatorId: string | null
 }
 
@@ -56,7 +56,7 @@ export type CategoryCountAggregateOutputType = {
   name: number
   type: number
   parentId: number
-  tenantId: number
+  spaceId: number
   creatorId: number
   _all: number
 }
@@ -70,7 +70,7 @@ export type CategoryMinAggregateInputType = {
   name?: true
   type?: true
   parentId?: true
-  tenantId?: true
+  spaceId?: true
   creatorId?: true
 }
 
@@ -82,7 +82,7 @@ export type CategoryMaxAggregateInputType = {
   name?: true
   type?: true
   parentId?: true
-  tenantId?: true
+  spaceId?: true
   creatorId?: true
 }
 
@@ -94,7 +94,7 @@ export type CategoryCountAggregateInputType = {
   name?: true
   type?: true
   parentId?: true
-  tenantId?: true
+  spaceId?: true
   creatorId?: true
   _all?: true
 }
@@ -179,7 +179,7 @@ export type CategoryGroupByOutputType = {
   name: string
   type: $Enums.CategoryTypes
   parentId: string | null
-  tenantId: string
+  spaceId: string
   creatorId: string | null
   _count: CategoryCountAggregateOutputType | null
   _min: CategoryMinAggregateOutputType | null
@@ -212,11 +212,11 @@ export type CategoryWhereInput = {
   name?: Prisma.StringFilter<"Category"> | string
   type?: Prisma.EnumCategoryTypesFilter<"Category"> | $Enums.CategoryTypes
   parentId?: Prisma.StringNullableFilter<"Category"> | string | null
-  tenantId?: Prisma.StringFilter<"Category"> | string
+  spaceId?: Prisma.StringFilter<"Category"> | string
   creatorId?: Prisma.StringNullableFilter<"Category"> | string | null
   parent?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
   children?: Prisma.CategoryListRelationFilter
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   roleClassifications?: Prisma.RoleClassificationListRelationFilter
   spaceClassifications?: Prisma.SpaceClassificationListRelationFilter
@@ -231,11 +231,11 @@ export type CategoryOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   parentId?: Prisma.SortOrderInput | Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
   parent?: Prisma.CategoryOrderByWithRelationInput
   children?: Prisma.CategoryOrderByRelationAggregateInput
-  tenant?: Prisma.TenantOrderByWithRelationInput
+  space?: Prisma.SpaceOrderByWithRelationInput
   creator?: Prisma.UserOrderByWithRelationInput
   roleClassifications?: Prisma.RoleClassificationOrderByRelationAggregateInput
   spaceClassifications?: Prisma.SpaceClassificationOrderByRelationAggregateInput
@@ -253,11 +253,11 @@ export type CategoryWhereUniqueInput = Prisma.AtLeast<{
   removedAt?: Prisma.DateTimeNullableFilter<"Category"> | Date | string | null
   type?: Prisma.EnumCategoryTypesFilter<"Category"> | $Enums.CategoryTypes
   parentId?: Prisma.StringNullableFilter<"Category"> | string | null
-  tenantId?: Prisma.StringFilter<"Category"> | string
+  spaceId?: Prisma.StringFilter<"Category"> | string
   creatorId?: Prisma.StringNullableFilter<"Category"> | string | null
   parent?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
   children?: Prisma.CategoryListRelationFilter
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   roleClassifications?: Prisma.RoleClassificationListRelationFilter
   spaceClassifications?: Prisma.SpaceClassificationListRelationFilter
@@ -272,7 +272,7 @@ export type CategoryOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   parentId?: Prisma.SortOrderInput | Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.CategoryCountOrderByAggregateInput
   _max?: Prisma.CategoryMaxOrderByAggregateInput
@@ -290,7 +290,7 @@ export type CategoryScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Category"> | string
   type?: Prisma.EnumCategoryTypesWithAggregatesFilter<"Category"> | $Enums.CategoryTypes
   parentId?: Prisma.StringNullableWithAggregatesFilter<"Category"> | string | null
-  tenantId?: Prisma.StringWithAggregatesFilter<"Category"> | string
+  spaceId?: Prisma.StringWithAggregatesFilter<"Category"> | string
   creatorId?: Prisma.StringNullableWithAggregatesFilter<"Category"> | string | null
 }
 
@@ -303,7 +303,7 @@ export type CategoryCreateInput = {
   type?: $Enums.CategoryTypes
   parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput
   children?: Prisma.CategoryCreateNestedManyWithoutParentInput
-  tenant: Prisma.TenantCreateNestedOneWithoutCategoriesInput
+  space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput
   roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput
   spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput
@@ -318,7 +318,7 @@ export type CategoryUncheckedCreateInput = {
   name: string
   type?: $Enums.CategoryTypes
   parentId?: string | null
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
   children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput
   roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput
@@ -335,7 +335,7 @@ export type CategoryUpdateInput = {
   type?: Prisma.EnumCategoryTypesFieldUpdateOperationsInput | $Enums.CategoryTypes
   parent?: Prisma.CategoryUpdateOneWithoutChildrenNestedInput
   children?: Prisma.CategoryUpdateManyWithoutParentNestedInput
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCategoriesNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput
   roleClassifications?: Prisma.RoleClassificationUpdateManyWithoutCategoryNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUpdateManyWithoutCategoryNestedInput
@@ -350,7 +350,7 @@ export type CategoryUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCategoryTypesFieldUpdateOperationsInput | $Enums.CategoryTypes
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput
   roleClassifications?: Prisma.RoleClassificationUncheckedUpdateManyWithoutCategoryNestedInput
@@ -366,7 +366,7 @@ export type CategoryCreateManyInput = {
   name: string
   type?: $Enums.CategoryTypes
   parentId?: string | null
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
 }
 
@@ -387,7 +387,7 @@ export type CategoryUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCategoryTypesFieldUpdateOperationsInput | $Enums.CategoryTypes
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -419,7 +419,7 @@ export type CategoryCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   parentId?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
 }
 
@@ -431,7 +431,7 @@ export type CategoryMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   parentId?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
 }
 
@@ -443,7 +443,7 @@ export type CategoryMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   parentId?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
 }
 
@@ -461,6 +461,48 @@ export type CategoryUpdateOneRequiredWithoutRoleClassificationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CategoryUpdateToOneWithWhereWithoutRoleClassificationsInput, Prisma.CategoryUpdateWithoutRoleClassificationsInput>, Prisma.CategoryUncheckedUpdateWithoutRoleClassificationsInput>
 }
 
+export type CategoryCreateNestedManyWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutSpaceInput, Prisma.CategoryUncheckedCreateWithoutSpaceInput> | Prisma.CategoryCreateWithoutSpaceInput[] | Prisma.CategoryUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutSpaceInput | Prisma.CategoryCreateOrConnectWithoutSpaceInput[]
+  createMany?: Prisma.CategoryCreateManySpaceInputEnvelope
+  connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+}
+
+export type CategoryUncheckedCreateNestedManyWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutSpaceInput, Prisma.CategoryUncheckedCreateWithoutSpaceInput> | Prisma.CategoryCreateWithoutSpaceInput[] | Prisma.CategoryUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutSpaceInput | Prisma.CategoryCreateOrConnectWithoutSpaceInput[]
+  createMany?: Prisma.CategoryCreateManySpaceInputEnvelope
+  connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+}
+
+export type CategoryUpdateManyWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutSpaceInput, Prisma.CategoryUncheckedCreateWithoutSpaceInput> | Prisma.CategoryCreateWithoutSpaceInput[] | Prisma.CategoryUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutSpaceInput | Prisma.CategoryCreateOrConnectWithoutSpaceInput[]
+  upsert?: Prisma.CategoryUpsertWithWhereUniqueWithoutSpaceInput | Prisma.CategoryUpsertWithWhereUniqueWithoutSpaceInput[]
+  createMany?: Prisma.CategoryCreateManySpaceInputEnvelope
+  set?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  disconnect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  delete?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  update?: Prisma.CategoryUpdateWithWhereUniqueWithoutSpaceInput | Prisma.CategoryUpdateWithWhereUniqueWithoutSpaceInput[]
+  updateMany?: Prisma.CategoryUpdateManyWithWhereWithoutSpaceInput | Prisma.CategoryUpdateManyWithWhereWithoutSpaceInput[]
+  deleteMany?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
+}
+
+export type CategoryUncheckedUpdateManyWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutSpaceInput, Prisma.CategoryUncheckedCreateWithoutSpaceInput> | Prisma.CategoryCreateWithoutSpaceInput[] | Prisma.CategoryUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutSpaceInput | Prisma.CategoryCreateOrConnectWithoutSpaceInput[]
+  upsert?: Prisma.CategoryUpsertWithWhereUniqueWithoutSpaceInput | Prisma.CategoryUpsertWithWhereUniqueWithoutSpaceInput[]
+  createMany?: Prisma.CategoryCreateManySpaceInputEnvelope
+  set?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  disconnect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  delete?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  update?: Prisma.CategoryUpdateWithWhereUniqueWithoutSpaceInput | Prisma.CategoryUpdateWithWhereUniqueWithoutSpaceInput[]
+  updateMany?: Prisma.CategoryUpdateManyWithWhereWithoutSpaceInput | Prisma.CategoryUpdateManyWithWhereWithoutSpaceInput[]
+  deleteMany?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
+}
+
 export type CategoryCreateNestedOneWithoutSpaceClassificationsInput = {
   create?: Prisma.XOR<Prisma.CategoryCreateWithoutSpaceClassificationsInput, Prisma.CategoryUncheckedCreateWithoutSpaceClassificationsInput>
   connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutSpaceClassificationsInput
@@ -473,48 +515,6 @@ export type CategoryUpdateOneRequiredWithoutSpaceClassificationsNestedInput = {
   upsert?: Prisma.CategoryUpsertWithoutSpaceClassificationsInput
   connect?: Prisma.CategoryWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.CategoryUpdateToOneWithWhereWithoutSpaceClassificationsInput, Prisma.CategoryUpdateWithoutSpaceClassificationsInput>, Prisma.CategoryUncheckedUpdateWithoutSpaceClassificationsInput>
-}
-
-export type CategoryCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.CategoryCreateWithoutTenantInput, Prisma.CategoryUncheckedCreateWithoutTenantInput> | Prisma.CategoryCreateWithoutTenantInput[] | Prisma.CategoryUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutTenantInput | Prisma.CategoryCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.CategoryCreateManyTenantInputEnvelope
-  connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
-}
-
-export type CategoryUncheckedCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.CategoryCreateWithoutTenantInput, Prisma.CategoryUncheckedCreateWithoutTenantInput> | Prisma.CategoryCreateWithoutTenantInput[] | Prisma.CategoryUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutTenantInput | Prisma.CategoryCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.CategoryCreateManyTenantInputEnvelope
-  connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
-}
-
-export type CategoryUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.CategoryCreateWithoutTenantInput, Prisma.CategoryUncheckedCreateWithoutTenantInput> | Prisma.CategoryCreateWithoutTenantInput[] | Prisma.CategoryUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutTenantInput | Prisma.CategoryCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.CategoryUpsertWithWhereUniqueWithoutTenantInput | Prisma.CategoryUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.CategoryCreateManyTenantInputEnvelope
-  set?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
-  disconnect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
-  delete?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
-  connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
-  update?: Prisma.CategoryUpdateWithWhereUniqueWithoutTenantInput | Prisma.CategoryUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.CategoryUpdateManyWithWhereWithoutTenantInput | Prisma.CategoryUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
-}
-
-export type CategoryUncheckedUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.CategoryCreateWithoutTenantInput, Prisma.CategoryUncheckedCreateWithoutTenantInput> | Prisma.CategoryCreateWithoutTenantInput[] | Prisma.CategoryUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutTenantInput | Prisma.CategoryCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.CategoryUpsertWithWhereUniqueWithoutTenantInput | Prisma.CategoryUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.CategoryCreateManyTenantInputEnvelope
-  set?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
-  disconnect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
-  delete?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
-  connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
-  update?: Prisma.CategoryUpdateWithWhereUniqueWithoutTenantInput | Prisma.CategoryUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.CategoryUpdateManyWithWhereWithoutTenantInput | Prisma.CategoryUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
 }
 
 export type CategoryCreateNestedManyWithoutCreatorInput = {
@@ -644,7 +644,7 @@ export type CategoryCreateWithoutRoleClassificationsInput = {
   type?: $Enums.CategoryTypes
   parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput
   children?: Prisma.CategoryCreateNestedManyWithoutParentInput
-  tenant: Prisma.TenantCreateNestedOneWithoutCategoriesInput
+  space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput
   spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput
   userClassifications?: Prisma.UserClassificationCreateNestedManyWithoutCategoryInput
@@ -658,7 +658,7 @@ export type CategoryUncheckedCreateWithoutRoleClassificationsInput = {
   name: string
   type?: $Enums.CategoryTypes
   parentId?: string | null
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
   children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput
   spaceClassifications?: Prisma.SpaceClassificationUncheckedCreateNestedManyWithoutCategoryInput
@@ -690,7 +690,7 @@ export type CategoryUpdateWithoutRoleClassificationsInput = {
   type?: Prisma.EnumCategoryTypesFieldUpdateOperationsInput | $Enums.CategoryTypes
   parent?: Prisma.CategoryUpdateOneWithoutChildrenNestedInput
   children?: Prisma.CategoryUpdateManyWithoutParentNestedInput
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCategoriesNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUpdateManyWithoutCategoryNestedInput
   userClassifications?: Prisma.UserClassificationUpdateManyWithoutCategoryNestedInput
@@ -704,11 +704,82 @@ export type CategoryUncheckedUpdateWithoutRoleClassificationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCategoryTypesFieldUpdateOperationsInput | $Enums.CategoryTypes
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   userClassifications?: Prisma.UserClassificationUncheckedUpdateManyWithoutCategoryNestedInput
+}
+
+export type CategoryCreateWithoutSpaceInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  name: string
+  type?: $Enums.CategoryTypes
+  parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput
+  children?: Prisma.CategoryCreateNestedManyWithoutParentInput
+  creator?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput
+  roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput
+  spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput
+  userClassifications?: Prisma.UserClassificationCreateNestedManyWithoutCategoryInput
+}
+
+export type CategoryUncheckedCreateWithoutSpaceInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  name: string
+  type?: $Enums.CategoryTypes
+  parentId?: string | null
+  creatorId?: string | null
+  children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput
+  roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput
+  spaceClassifications?: Prisma.SpaceClassificationUncheckedCreateNestedManyWithoutCategoryInput
+  userClassifications?: Prisma.UserClassificationUncheckedCreateNestedManyWithoutCategoryInput
+}
+
+export type CategoryCreateOrConnectWithoutSpaceInput = {
+  where: Prisma.CategoryWhereUniqueInput
+  create: Prisma.XOR<Prisma.CategoryCreateWithoutSpaceInput, Prisma.CategoryUncheckedCreateWithoutSpaceInput>
+}
+
+export type CategoryCreateManySpaceInputEnvelope = {
+  data: Prisma.CategoryCreateManySpaceInput | Prisma.CategoryCreateManySpaceInput[]
+  skipDuplicates?: boolean
+}
+
+export type CategoryUpsertWithWhereUniqueWithoutSpaceInput = {
+  where: Prisma.CategoryWhereUniqueInput
+  update: Prisma.XOR<Prisma.CategoryUpdateWithoutSpaceInput, Prisma.CategoryUncheckedUpdateWithoutSpaceInput>
+  create: Prisma.XOR<Prisma.CategoryCreateWithoutSpaceInput, Prisma.CategoryUncheckedCreateWithoutSpaceInput>
+}
+
+export type CategoryUpdateWithWhereUniqueWithoutSpaceInput = {
+  where: Prisma.CategoryWhereUniqueInput
+  data: Prisma.XOR<Prisma.CategoryUpdateWithoutSpaceInput, Prisma.CategoryUncheckedUpdateWithoutSpaceInput>
+}
+
+export type CategoryUpdateManyWithWhereWithoutSpaceInput = {
+  where: Prisma.CategoryScalarWhereInput
+  data: Prisma.XOR<Prisma.CategoryUpdateManyMutationInput, Prisma.CategoryUncheckedUpdateManyWithoutSpaceInput>
+}
+
+export type CategoryScalarWhereInput = {
+  AND?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
+  OR?: Prisma.CategoryScalarWhereInput[]
+  NOT?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
+  id?: Prisma.StringFilter<"Category"> | string
+  createdAt?: Prisma.DateTimeFilter<"Category"> | Date | string
+  updatedAt?: Prisma.DateTimeNullableFilter<"Category"> | Date | string | null
+  removedAt?: Prisma.DateTimeNullableFilter<"Category"> | Date | string | null
+  name?: Prisma.StringFilter<"Category"> | string
+  type?: Prisma.EnumCategoryTypesFilter<"Category"> | $Enums.CategoryTypes
+  parentId?: Prisma.StringNullableFilter<"Category"> | string | null
+  spaceId?: Prisma.StringFilter<"Category"> | string
+  creatorId?: Prisma.StringNullableFilter<"Category"> | string | null
 }
 
 export type CategoryCreateWithoutSpaceClassificationsInput = {
@@ -720,7 +791,7 @@ export type CategoryCreateWithoutSpaceClassificationsInput = {
   type?: $Enums.CategoryTypes
   parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput
   children?: Prisma.CategoryCreateNestedManyWithoutParentInput
-  tenant: Prisma.TenantCreateNestedOneWithoutCategoriesInput
+  space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput
   roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput
   userClassifications?: Prisma.UserClassificationCreateNestedManyWithoutCategoryInput
@@ -734,7 +805,7 @@ export type CategoryUncheckedCreateWithoutSpaceClassificationsInput = {
   name: string
   type?: $Enums.CategoryTypes
   parentId?: string | null
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
   children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput
   roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput
@@ -766,7 +837,7 @@ export type CategoryUpdateWithoutSpaceClassificationsInput = {
   type?: Prisma.EnumCategoryTypesFieldUpdateOperationsInput | $Enums.CategoryTypes
   parent?: Prisma.CategoryUpdateOneWithoutChildrenNestedInput
   children?: Prisma.CategoryUpdateManyWithoutParentNestedInput
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCategoriesNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput
   roleClassifications?: Prisma.RoleClassificationUpdateManyWithoutCategoryNestedInput
   userClassifications?: Prisma.UserClassificationUpdateManyWithoutCategoryNestedInput
@@ -780,82 +851,11 @@ export type CategoryUncheckedUpdateWithoutSpaceClassificationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCategoryTypesFieldUpdateOperationsInput | $Enums.CategoryTypes
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput
   roleClassifications?: Prisma.RoleClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   userClassifications?: Prisma.UserClassificationUncheckedUpdateManyWithoutCategoryNestedInput
-}
-
-export type CategoryCreateWithoutTenantInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  name: string
-  type?: $Enums.CategoryTypes
-  parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput
-  children?: Prisma.CategoryCreateNestedManyWithoutParentInput
-  creator?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput
-  roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput
-  spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput
-  userClassifications?: Prisma.UserClassificationCreateNestedManyWithoutCategoryInput
-}
-
-export type CategoryUncheckedCreateWithoutTenantInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string | null
-  removedAt?: Date | string | null
-  name: string
-  type?: $Enums.CategoryTypes
-  parentId?: string | null
-  creatorId?: string | null
-  children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput
-  roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput
-  spaceClassifications?: Prisma.SpaceClassificationUncheckedCreateNestedManyWithoutCategoryInput
-  userClassifications?: Prisma.UserClassificationUncheckedCreateNestedManyWithoutCategoryInput
-}
-
-export type CategoryCreateOrConnectWithoutTenantInput = {
-  where: Prisma.CategoryWhereUniqueInput
-  create: Prisma.XOR<Prisma.CategoryCreateWithoutTenantInput, Prisma.CategoryUncheckedCreateWithoutTenantInput>
-}
-
-export type CategoryCreateManyTenantInputEnvelope = {
-  data: Prisma.CategoryCreateManyTenantInput | Prisma.CategoryCreateManyTenantInput[]
-  skipDuplicates?: boolean
-}
-
-export type CategoryUpsertWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.CategoryWhereUniqueInput
-  update: Prisma.XOR<Prisma.CategoryUpdateWithoutTenantInput, Prisma.CategoryUncheckedUpdateWithoutTenantInput>
-  create: Prisma.XOR<Prisma.CategoryCreateWithoutTenantInput, Prisma.CategoryUncheckedCreateWithoutTenantInput>
-}
-
-export type CategoryUpdateWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.CategoryWhereUniqueInput
-  data: Prisma.XOR<Prisma.CategoryUpdateWithoutTenantInput, Prisma.CategoryUncheckedUpdateWithoutTenantInput>
-}
-
-export type CategoryUpdateManyWithWhereWithoutTenantInput = {
-  where: Prisma.CategoryScalarWhereInput
-  data: Prisma.XOR<Prisma.CategoryUpdateManyMutationInput, Prisma.CategoryUncheckedUpdateManyWithoutTenantInput>
-}
-
-export type CategoryScalarWhereInput = {
-  AND?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
-  OR?: Prisma.CategoryScalarWhereInput[]
-  NOT?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
-  id?: Prisma.StringFilter<"Category"> | string
-  createdAt?: Prisma.DateTimeFilter<"Category"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"Category"> | Date | string | null
-  removedAt?: Prisma.DateTimeNullableFilter<"Category"> | Date | string | null
-  name?: Prisma.StringFilter<"Category"> | string
-  type?: Prisma.EnumCategoryTypesFilter<"Category"> | $Enums.CategoryTypes
-  parentId?: Prisma.StringNullableFilter<"Category"> | string | null
-  tenantId?: Prisma.StringFilter<"Category"> | string
-  creatorId?: Prisma.StringNullableFilter<"Category"> | string | null
 }
 
 export type CategoryCreateWithoutCreatorInput = {
@@ -867,7 +867,7 @@ export type CategoryCreateWithoutCreatorInput = {
   type?: $Enums.CategoryTypes
   parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput
   children?: Prisma.CategoryCreateNestedManyWithoutParentInput
-  tenant: Prisma.TenantCreateNestedOneWithoutCategoriesInput
+  space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput
   roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput
   spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput
   userClassifications?: Prisma.UserClassificationCreateNestedManyWithoutCategoryInput
@@ -881,7 +881,7 @@ export type CategoryUncheckedCreateWithoutCreatorInput = {
   name: string
   type?: $Enums.CategoryTypes
   parentId?: string | null
-  tenantId: string
+  spaceId: string
   children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput
   roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput
   spaceClassifications?: Prisma.SpaceClassificationUncheckedCreateNestedManyWithoutCategoryInput
@@ -923,7 +923,7 @@ export type CategoryCreateWithoutUserClassificationsInput = {
   type?: $Enums.CategoryTypes
   parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput
   children?: Prisma.CategoryCreateNestedManyWithoutParentInput
-  tenant: Prisma.TenantCreateNestedOneWithoutCategoriesInput
+  space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput
   roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput
   spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput
@@ -937,7 +937,7 @@ export type CategoryUncheckedCreateWithoutUserClassificationsInput = {
   name: string
   type?: $Enums.CategoryTypes
   parentId?: string | null
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
   children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput
   roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput
@@ -969,7 +969,7 @@ export type CategoryUpdateWithoutUserClassificationsInput = {
   type?: Prisma.EnumCategoryTypesFieldUpdateOperationsInput | $Enums.CategoryTypes
   parent?: Prisma.CategoryUpdateOneWithoutChildrenNestedInput
   children?: Prisma.CategoryUpdateManyWithoutParentNestedInput
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCategoriesNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput
   roleClassifications?: Prisma.RoleClassificationUpdateManyWithoutCategoryNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUpdateManyWithoutCategoryNestedInput
@@ -983,7 +983,7 @@ export type CategoryUncheckedUpdateWithoutUserClassificationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCategoryTypesFieldUpdateOperationsInput | $Enums.CategoryTypes
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput
   roleClassifications?: Prisma.RoleClassificationUncheckedUpdateManyWithoutCategoryNestedInput
@@ -998,7 +998,7 @@ export type CategoryCreateWithoutChildrenInput = {
   name: string
   type?: $Enums.CategoryTypes
   parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput
-  tenant: Prisma.TenantCreateNestedOneWithoutCategoriesInput
+  space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput
   roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput
   spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput
@@ -1013,7 +1013,7 @@ export type CategoryUncheckedCreateWithoutChildrenInput = {
   name: string
   type?: $Enums.CategoryTypes
   parentId?: string | null
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
   roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput
   spaceClassifications?: Prisma.SpaceClassificationUncheckedCreateNestedManyWithoutCategoryInput
@@ -1033,7 +1033,7 @@ export type CategoryCreateWithoutParentInput = {
   name: string
   type?: $Enums.CategoryTypes
   children?: Prisma.CategoryCreateNestedManyWithoutParentInput
-  tenant: Prisma.TenantCreateNestedOneWithoutCategoriesInput
+  space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput
   roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput
   spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput
@@ -1047,7 +1047,7 @@ export type CategoryUncheckedCreateWithoutParentInput = {
   removedAt?: Date | string | null
   name: string
   type?: $Enums.CategoryTypes
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
   children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput
   roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput
@@ -1084,7 +1084,7 @@ export type CategoryUpdateWithoutChildrenInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCategoryTypesFieldUpdateOperationsInput | $Enums.CategoryTypes
   parent?: Prisma.CategoryUpdateOneWithoutChildrenNestedInput
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCategoriesNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput
   roleClassifications?: Prisma.RoleClassificationUpdateManyWithoutCategoryNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUpdateManyWithoutCategoryNestedInput
@@ -1099,7 +1099,7 @@ export type CategoryUncheckedUpdateWithoutChildrenInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCategoryTypesFieldUpdateOperationsInput | $Enums.CategoryTypes
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleClassifications?: Prisma.RoleClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUncheckedUpdateManyWithoutCategoryNestedInput
@@ -1122,7 +1122,7 @@ export type CategoryUpdateManyWithWhereWithoutParentInput = {
   data: Prisma.XOR<Prisma.CategoryUpdateManyMutationInput, Prisma.CategoryUncheckedUpdateManyWithoutParentInput>
 }
 
-export type CategoryCreateManyTenantInput = {
+export type CategoryCreateManySpaceInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -1133,7 +1133,7 @@ export type CategoryCreateManyTenantInput = {
   creatorId?: string | null
 }
 
-export type CategoryUpdateWithoutTenantInput = {
+export type CategoryUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1148,7 +1148,7 @@ export type CategoryUpdateWithoutTenantInput = {
   userClassifications?: Prisma.UserClassificationUpdateManyWithoutCategoryNestedInput
 }
 
-export type CategoryUncheckedUpdateWithoutTenantInput = {
+export type CategoryUncheckedUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1163,7 +1163,7 @@ export type CategoryUncheckedUpdateWithoutTenantInput = {
   userClassifications?: Prisma.UserClassificationUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
-export type CategoryUncheckedUpdateManyWithoutTenantInput = {
+export type CategoryUncheckedUpdateManyWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1182,7 +1182,7 @@ export type CategoryCreateManyCreatorInput = {
   name: string
   type?: $Enums.CategoryTypes
   parentId?: string | null
-  tenantId: string
+  spaceId: string
 }
 
 export type CategoryUpdateWithoutCreatorInput = {
@@ -1194,7 +1194,7 @@ export type CategoryUpdateWithoutCreatorInput = {
   type?: Prisma.EnumCategoryTypesFieldUpdateOperationsInput | $Enums.CategoryTypes
   parent?: Prisma.CategoryUpdateOneWithoutChildrenNestedInput
   children?: Prisma.CategoryUpdateManyWithoutParentNestedInput
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCategoriesNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput
   roleClassifications?: Prisma.RoleClassificationUpdateManyWithoutCategoryNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUpdateManyWithoutCategoryNestedInput
   userClassifications?: Prisma.UserClassificationUpdateManyWithoutCategoryNestedInput
@@ -1208,7 +1208,7 @@ export type CategoryUncheckedUpdateWithoutCreatorInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCategoryTypesFieldUpdateOperationsInput | $Enums.CategoryTypes
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput
   roleClassifications?: Prisma.RoleClassificationUncheckedUpdateManyWithoutCategoryNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUncheckedUpdateManyWithoutCategoryNestedInput
@@ -1223,7 +1223,7 @@ export type CategoryUncheckedUpdateManyWithoutCreatorInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCategoryTypesFieldUpdateOperationsInput | $Enums.CategoryTypes
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type CategoryCreateManyParentInput = {
@@ -1233,7 +1233,7 @@ export type CategoryCreateManyParentInput = {
   removedAt?: Date | string | null
   name: string
   type?: $Enums.CategoryTypes
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
 }
 
@@ -1245,7 +1245,7 @@ export type CategoryUpdateWithoutParentInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCategoryTypesFieldUpdateOperationsInput | $Enums.CategoryTypes
   children?: Prisma.CategoryUpdateManyWithoutParentNestedInput
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCategoriesNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput
   roleClassifications?: Prisma.RoleClassificationUpdateManyWithoutCategoryNestedInput
   spaceClassifications?: Prisma.SpaceClassificationUpdateManyWithoutCategoryNestedInput
@@ -1259,7 +1259,7 @@ export type CategoryUncheckedUpdateWithoutParentInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCategoryTypesFieldUpdateOperationsInput | $Enums.CategoryTypes
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput
   roleClassifications?: Prisma.RoleClassificationUncheckedUpdateManyWithoutCategoryNestedInput
@@ -1274,7 +1274,7 @@ export type CategoryUncheckedUpdateManyWithoutParentInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCategoryTypesFieldUpdateOperationsInput | $Enums.CategoryTypes
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -1344,11 +1344,11 @@ export type CategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   name?: boolean
   type?: boolean
   parentId?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   creatorId?: boolean
   parent?: boolean | Prisma.Category$parentArgs<ExtArgs>
   children?: boolean | Prisma.Category$childrenArgs<ExtArgs>
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Category$creatorArgs<ExtArgs>
   roleClassifications?: boolean | Prisma.Category$roleClassificationsArgs<ExtArgs>
   spaceClassifications?: boolean | Prisma.Category$spaceClassificationsArgs<ExtArgs>
@@ -1364,10 +1364,10 @@ export type CategorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   name?: boolean
   type?: boolean
   parentId?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   creatorId?: boolean
   parent?: boolean | Prisma.Category$parentArgs<ExtArgs>
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Category$creatorArgs<ExtArgs>
 }, ExtArgs["result"]["category"]>
 
@@ -1379,10 +1379,10 @@ export type CategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   name?: boolean
   type?: boolean
   parentId?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   creatorId?: boolean
   parent?: boolean | Prisma.Category$parentArgs<ExtArgs>
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Category$creatorArgs<ExtArgs>
 }, ExtArgs["result"]["category"]>
 
@@ -1394,15 +1394,15 @@ export type CategorySelectScalar = {
   name?: boolean
   type?: boolean
   parentId?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   creatorId?: boolean
 }
 
-export type CategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "name" | "type" | "parentId" | "tenantId" | "creatorId", ExtArgs["result"]["category"]>
+export type CategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "name" | "type" | "parentId" | "spaceId" | "creatorId", ExtArgs["result"]["category"]>
 export type CategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   parent?: boolean | Prisma.Category$parentArgs<ExtArgs>
   children?: boolean | Prisma.Category$childrenArgs<ExtArgs>
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Category$creatorArgs<ExtArgs>
   roleClassifications?: boolean | Prisma.Category$roleClassificationsArgs<ExtArgs>
   spaceClassifications?: boolean | Prisma.Category$spaceClassificationsArgs<ExtArgs>
@@ -1411,12 +1411,12 @@ export type CategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
 }
 export type CategoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   parent?: boolean | Prisma.Category$parentArgs<ExtArgs>
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Category$creatorArgs<ExtArgs>
 }
 export type CategoryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   parent?: boolean | Prisma.Category$parentArgs<ExtArgs>
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Category$creatorArgs<ExtArgs>
 }
 
@@ -1425,7 +1425,7 @@ export type $CategoryPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   objects: {
     parent: Prisma.$CategoryPayload<ExtArgs> | null
     children: Prisma.$CategoryPayload<ExtArgs>[]
-    tenant: Prisma.$TenantPayload<ExtArgs>
+    space: Prisma.$SpacePayload<ExtArgs>
     creator: Prisma.$UserPayload<ExtArgs> | null
     roleClassifications: Prisma.$RoleClassificationPayload<ExtArgs>[]
     spaceClassifications: Prisma.$SpaceClassificationPayload<ExtArgs>[]
@@ -1445,7 +1445,7 @@ export type $CategoryPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
      */
     type: $Enums.CategoryTypes
     parentId: string | null
-    tenantId: string
+    spaceId: string
     creatorId: string | null
   }, ExtArgs["result"]["category"]>
   composites: {}
@@ -1843,7 +1843,7 @@ export interface Prisma__CategoryClient<T, Null = never, ExtArgs extends runtime
   readonly [Symbol.toStringTag]: "PrismaPromise"
   parent<T extends Prisma.Category$parentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$parentArgs<ExtArgs>>): Prisma.Prisma__CategoryClient<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   children<T extends Prisma.Category$childrenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$childrenArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  space<T extends Prisma.SpaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceDefaultArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   creator<T extends Prisma.Category$creatorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$creatorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   roleClassifications<T extends Prisma.Category$roleClassificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$roleClassificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoleClassificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   spaceClassifications<T extends Prisma.Category$spaceClassificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$spaceClassificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SpaceClassificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1884,7 +1884,7 @@ export interface CategoryFieldRefs {
   readonly name: Prisma.FieldRef<"Category", 'String'>
   readonly type: Prisma.FieldRef<"Category", 'CategoryTypes'>
   readonly parentId: Prisma.FieldRef<"Category", 'String'>
-  readonly tenantId: Prisma.FieldRef<"Category", 'String'>
+  readonly spaceId: Prisma.FieldRef<"Category", 'String'>
   readonly creatorId: Prisma.FieldRef<"Category", 'String'>
 }
     

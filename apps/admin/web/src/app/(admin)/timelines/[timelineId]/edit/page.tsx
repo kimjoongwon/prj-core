@@ -18,7 +18,7 @@ import type { Route } from "next";
 import dynamic from "next/dynamic";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useApp } from "@/stores/AppProvider";
+import { useApp } from "@cocrepo/store";
 
 type TimelineEditScreenParams = {
 	timelineId: string;

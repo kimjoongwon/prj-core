@@ -8,8 +8,8 @@ import {
 	getContentLanguageLabel,
 	toContentLanguageCode,
 } from "../../data-display/content-language";
+import type { AssetBrowserAsset } from "../../domain/asset/AssetBrowser";
 import { Alert } from "../../feedback/Alert/Alert";
-import type { AssetBrowserAsset } from "../../feature/AssetBrowser";
 import { Button } from "../../input/Button/Button";
 import { TextArea } from "../../input/TextArea";
 import { TextField } from "../../input/TextField";

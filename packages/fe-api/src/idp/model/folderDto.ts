@@ -23,10 +23,10 @@ export interface FolderDto {
   /** @nullable */
   removedAt: string | null;
   /**
-   * 소속 Tenant ID
+   * 소속 Space ID
    * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
    */
-  tenantId: string;
+  spaceId: string;
   /**
    * 부모 폴더 ID (루트면 null)
    * @nullable

@@ -30,7 +30,7 @@ export class ContentsRepository {
 			where: { id },
 			include: {
 				post: true,
-				tenant: true,
+				space: true,
 				creator: true,
 			},
 		});
@@ -42,7 +42,7 @@ export class ContentsRepository {
 		this.logger.debug(`Space별 콘텐츠 조회: ${spaceId.slice(-8)}`);
 
 		return this.txHost.tx.content.findMany({
-			where: { tenant: { spaceId } },
+			where: { spaceId },
 			orderBy: [{ createdAt: "desc" }],
 		});
 	}
@@ -53,7 +53,7 @@ export class ContentsRepository {
 		);
 
 		return this.txHost.tx.content.findMany({
-			where: { tenant: { spaceId }, removedAt: null },
+			where: { spaceId, removedAt: null },
 			orderBy: [{ createdAt: "desc" }],
 		});
 	}
@@ -84,7 +84,7 @@ export class ContentsRepository {
 	}): Promise<{ items: CommunityPostRecord[]; totalCount: number }> {
 		const where: Prisma.ContentWhereInput = {
 			removedAt: null,
-			tenant: { spaceId: params.spaceId },
+			spaceId: params.spaceId,
 			post: {
 				is: {
 					removedAt: null,
@@ -106,7 +106,7 @@ export class ContentsRepository {
 	}
 
 	async createCommunityPost(params: {
-		tenantId: string;
+		spaceId: string;
 		text: string;
 		title?: string | null;
 		userId: string;
@@ -123,11 +123,7 @@ export class ContentsRepository {
 				post: {
 					create: {},
 				},
-				tenant: {
-					connect: {
-						id: params.tenantId,
-					},
-				},
+				space: { connect: { id: params.spaceId } },
 				text: params.text,
 				title: params.title ?? null,
 				type: TextTypes.Textarea,

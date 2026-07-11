@@ -116,13 +116,10 @@ const readOnlyArgs = {
 	onClickDeleteButton: (..._args: never[]) => undefined,
 	onClickEditButton: (..._args: never[]) => undefined,
 	onClickReconnectButton: (..._args: never[]) => undefined,
-	onClickSearchKnowledgeButton: (..._args: never[]) => undefined,
 	onSendInquiryMessage: (..._args: never[]) => undefined,
 	onSendTypingStatus: (..._args: never[]) => undefined,
 	onTagAdd: (..._args: never[]) => undefined,
 	onTagRemove: (..._args: never[]) => undefined,
-	onTypingStart: (..._args: never[]) => undefined,
-	onTypingStop: (..._args: never[]) => undefined,
 	onlineParticipantNames: ["agent-1"],
 	participantListItems: [
 		{
@@ -134,12 +131,6 @@ const readOnlyArgs = {
 		},
 	],
 	readOnly: true,
-	realtimeState: {
-		isTyping: false,
-		isWebSocketConnected: true,
-		messages: [],
-		typingUserNames: [],
-	},
 	title: "문의 상세",
 	webSocketStatus: "connected",
 };

@@ -15,7 +15,7 @@ export function buildFolderQueryWhere(
 		...(input.parentFolderId !== undefined
 			? { parentFolderId: input.parentFolderId }
 			: {}),
-		...(input.tenantId ? { tenantId: input.tenantId } : {}),
+		...(input.spaceId ? { spaceId: input.spaceId } : {}),
 		...(input.name ? { name: containsFilter(input.name) } : {}),
 		removedAt: removedAtFilter(input.statusFilter === "deleted"),
 	};

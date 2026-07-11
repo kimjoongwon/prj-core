@@ -388,7 +388,7 @@ export class InquiryAggregate {
 
 		return {
 			...where,
-			tenant: { spaceId: { in: spaceIds } },
+			spaceId: { in: spaceIds },
 		};
 	}
 

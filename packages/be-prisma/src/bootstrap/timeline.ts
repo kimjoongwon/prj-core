@@ -12,7 +12,6 @@ import {
 	RepeatCycleTypes,
 	SessionTypes,
 } from "../generated/client/enums";
-import { requireTenantIdForSpace } from "./tenant-scope";
 
 /**
  * seed key에서 결정론적 UUID를 만듭니다.
@@ -184,11 +183,7 @@ export async function createTimelineSessionExerciseDomainData(
 		}
 
 		const creator = creatorByEmail.get(timelineData.creatorEmail);
-		const tenantId = await requireTenantIdForSpace(
-			prisma,
-			ground.company.spaceId,
-			creator?.id,
-		);
+		const spaceId = ground.company.spaceId;
 		const existingTimeline = await prisma.timeline.findUnique({
 			where: { id: timelineData.id },
 		});
@@ -198,14 +193,14 @@ export async function createTimelineSessionExerciseDomainData(
 			update: {
 				name: timelineData.name,
 				description: timelineData.description,
-				tenantId,
+				spaceId,
 				creatorId: creator?.id ?? null,
 			},
 			create: {
 				id: timelineData.id,
 				name: timelineData.name,
 				description: timelineData.description,
-				tenantId,
+				spaceId,
 				creatorId: creator?.id,
 			},
 		});
@@ -239,11 +234,7 @@ export async function createTimelineSessionExerciseDomainData(
 		const creatorId = timelineCreatorEmail
 			? (creatorByEmail.get(timelineCreatorEmail)?.id ?? fallbackUser.id)
 			: fallbackUser.id;
-		const tenantId = await requireTenantIdForSpace(
-			prisma,
-			ground.company.spaceId,
-			creatorId,
-		);
+		const spaceId = ground.company.spaceId;
 
 		const selectedTaskIds: string[] = [];
 
@@ -267,12 +258,12 @@ export async function createTimelineSessionExerciseDomainData(
 			await prisma.task.upsert({
 				where: { id: taskId },
 				update: {
-					tenantId,
+					spaceId,
 					creatorId: creatorId ?? null,
 				},
 				create: {
 					id: taskId,
-					tenantId,
+					spaceId,
 					creatorId,
 				},
 			});
@@ -353,11 +344,7 @@ export async function createTimelineSessionExerciseDomainData(
 		const creatorId = creatorEmail
 			? (creatorByEmail.get(creatorEmail)?.id ?? fallbackUser.id)
 			: fallbackUser.id;
-		const tenantId = await requireTenantIdForSpace(
-			prisma,
-			ground.company.spaceId,
-			creatorId,
-		);
+		const spaceId = ground.company.spaceId;
 
 		const routineCount = Math.min(
 			4,
@@ -378,14 +365,14 @@ export async function createTimelineSessionExerciseDomainData(
 			await prisma.routine.upsert({
 				where: { id: routineId },
 				update: {
-					tenantId,
+					spaceId,
 					creatorId: creatorId ?? null,
 					name: `${template.name} 루틴 ${idx + 1}`,
 					label: `${groundName} ${template.level}`,
 				},
 				create: {
 					id: routineId,
-					tenantId,
+					spaceId,
 					creatorId,
 					name: `${template.name} 루틴 ${idx + 1}`,
 					label: `${groundName} ${template.level}`,

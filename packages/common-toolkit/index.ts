@@ -58,7 +58,7 @@ export {
 	resolveHttpClientIp,
 	resolveHttpUserAgent,
 } from "./src/HttpRequest";
-export { parseAcceptLanguage } from "./src/Language";
+export { parseAcceptLanguage } from "./src/parseAcceptLanguage";
 export type { LogData, Logger } from "./src/Logger";
 // Logger utilities
 export { createLogger } from "./src/Logger";
@@ -187,7 +187,7 @@ export const tool = {
 	createRange: ToolModule.createRange,
 } as const;
 
-import * as LanguageModule from "./src/Language";
+import * as LanguageModule from "./src/parseAcceptLanguage";
 
 export const language = {
 	parseAcceptLanguage: LanguageModule.parseAcceptLanguage,

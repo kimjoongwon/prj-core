@@ -29,7 +29,7 @@ export type RoutineMinAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  tenantId: string | null
+  spaceId: string | null
   creatorId: string | null
   name: string | null
   label: string | null
@@ -40,7 +40,7 @@ export type RoutineMaxAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  tenantId: string | null
+  spaceId: string | null
   creatorId: string | null
   name: string | null
   label: string | null
@@ -51,7 +51,7 @@ export type RoutineCountAggregateOutputType = {
   createdAt: number
   updatedAt: number
   removedAt: number
-  tenantId: number
+  spaceId: number
   creatorId: number
   name: number
   label: number
@@ -64,7 +64,7 @@ export type RoutineMinAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  tenantId?: true
+  spaceId?: true
   creatorId?: true
   name?: true
   label?: true
@@ -75,7 +75,7 @@ export type RoutineMaxAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  tenantId?: true
+  spaceId?: true
   creatorId?: true
   name?: true
   label?: true
@@ -86,7 +86,7 @@ export type RoutineCountAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  tenantId?: true
+  spaceId?: true
   creatorId?: true
   name?: true
   label?: true
@@ -170,7 +170,7 @@ export type RoutineGroupByOutputType = {
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  tenantId: string
+  spaceId: string
   creatorId: string | null
   name: string
   label: string
@@ -202,11 +202,11 @@ export type RoutineWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Routine"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Routine"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Routine"> | Date | string | null
-  tenantId?: Prisma.StringFilter<"Routine"> | string
+  spaceId?: Prisma.StringFilter<"Routine"> | string
   creatorId?: Prisma.StringNullableFilter<"Routine"> | string | null
   name?: Prisma.StringFilter<"Routine"> | string
   label?: Prisma.StringFilter<"Routine"> | string
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   activities?: Prisma.ActivityListRelationFilter
   programs?: Prisma.ProgramListRelationFilter
@@ -217,11 +217,11 @@ export type RoutineOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   label?: Prisma.SortOrder
-  tenant?: Prisma.TenantOrderByWithRelationInput
+  space?: Prisma.SpaceOrderByWithRelationInput
   creator?: Prisma.UserOrderByWithRelationInput
   activities?: Prisma.ActivityOrderByRelationAggregateInput
   programs?: Prisma.ProgramOrderByRelationAggregateInput
@@ -235,11 +235,11 @@ export type RoutineWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Routine"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Routine"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Routine"> | Date | string | null
-  tenantId?: Prisma.StringFilter<"Routine"> | string
+  spaceId?: Prisma.StringFilter<"Routine"> | string
   creatorId?: Prisma.StringNullableFilter<"Routine"> | string | null
   name?: Prisma.StringFilter<"Routine"> | string
   label?: Prisma.StringFilter<"Routine"> | string
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   activities?: Prisma.ActivityListRelationFilter
   programs?: Prisma.ProgramListRelationFilter
@@ -250,7 +250,7 @@ export type RoutineOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   label?: Prisma.SortOrder
@@ -267,7 +267,7 @@ export type RoutineScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Routine"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Routine"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Routine"> | Date | string | null
-  tenantId?: Prisma.StringWithAggregatesFilter<"Routine"> | string
+  spaceId?: Prisma.StringWithAggregatesFilter<"Routine"> | string
   creatorId?: Prisma.StringNullableWithAggregatesFilter<"Routine"> | string | null
   name?: Prisma.StringWithAggregatesFilter<"Routine"> | string
   label?: Prisma.StringWithAggregatesFilter<"Routine"> | string
@@ -280,7 +280,7 @@ export type RoutineCreateInput = {
   removedAt?: Date | string | null
   name: string
   label: string
-  tenant: Prisma.TenantCreateNestedOneWithoutRoutinesInput
+  space: Prisma.SpaceCreateNestedOneWithoutRoutinesInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedRoutinesInput
   activities?: Prisma.ActivityCreateNestedManyWithoutRoutineInput
   programs?: Prisma.ProgramCreateNestedManyWithoutRoutineInput
@@ -291,7 +291,7 @@ export type RoutineUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
   name: string
   label: string
@@ -306,7 +306,7 @@ export type RoutineUpdateInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutRoutinesNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutRoutinesNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedRoutinesNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutRoutineNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutRoutineNestedInput
@@ -317,7 +317,7 @@ export type RoutineUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
@@ -330,7 +330,7 @@ export type RoutineCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
   name: string
   label: string
@@ -350,7 +350,7 @@ export type RoutineUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
@@ -371,7 +371,7 @@ export type RoutineCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   label?: Prisma.SortOrder
@@ -382,7 +382,7 @@ export type RoutineMaxOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   label?: Prisma.SortOrder
@@ -393,7 +393,7 @@ export type RoutineMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   label?: Prisma.SortOrder
@@ -404,45 +404,45 @@ export type RoutineScalarRelationFilter = {
   isNot?: Prisma.RoutineWhereInput
 }
 
-export type RoutineCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.RoutineCreateWithoutTenantInput, Prisma.RoutineUncheckedCreateWithoutTenantInput> | Prisma.RoutineCreateWithoutTenantInput[] | Prisma.RoutineUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutTenantInput | Prisma.RoutineCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.RoutineCreateManyTenantInputEnvelope
+export type RoutineCreateNestedManyWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.RoutineCreateWithoutSpaceInput, Prisma.RoutineUncheckedCreateWithoutSpaceInput> | Prisma.RoutineCreateWithoutSpaceInput[] | Prisma.RoutineUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutSpaceInput | Prisma.RoutineCreateOrConnectWithoutSpaceInput[]
+  createMany?: Prisma.RoutineCreateManySpaceInputEnvelope
   connect?: Prisma.RoutineWhereUniqueInput | Prisma.RoutineWhereUniqueInput[]
 }
 
-export type RoutineUncheckedCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.RoutineCreateWithoutTenantInput, Prisma.RoutineUncheckedCreateWithoutTenantInput> | Prisma.RoutineCreateWithoutTenantInput[] | Prisma.RoutineUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutTenantInput | Prisma.RoutineCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.RoutineCreateManyTenantInputEnvelope
+export type RoutineUncheckedCreateNestedManyWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.RoutineCreateWithoutSpaceInput, Prisma.RoutineUncheckedCreateWithoutSpaceInput> | Prisma.RoutineCreateWithoutSpaceInput[] | Prisma.RoutineUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutSpaceInput | Prisma.RoutineCreateOrConnectWithoutSpaceInput[]
+  createMany?: Prisma.RoutineCreateManySpaceInputEnvelope
   connect?: Prisma.RoutineWhereUniqueInput | Prisma.RoutineWhereUniqueInput[]
 }
 
-export type RoutineUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.RoutineCreateWithoutTenantInput, Prisma.RoutineUncheckedCreateWithoutTenantInput> | Prisma.RoutineCreateWithoutTenantInput[] | Prisma.RoutineUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutTenantInput | Prisma.RoutineCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.RoutineUpsertWithWhereUniqueWithoutTenantInput | Prisma.RoutineUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.RoutineCreateManyTenantInputEnvelope
+export type RoutineUpdateManyWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.RoutineCreateWithoutSpaceInput, Prisma.RoutineUncheckedCreateWithoutSpaceInput> | Prisma.RoutineCreateWithoutSpaceInput[] | Prisma.RoutineUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutSpaceInput | Prisma.RoutineCreateOrConnectWithoutSpaceInput[]
+  upsert?: Prisma.RoutineUpsertWithWhereUniqueWithoutSpaceInput | Prisma.RoutineUpsertWithWhereUniqueWithoutSpaceInput[]
+  createMany?: Prisma.RoutineCreateManySpaceInputEnvelope
   set?: Prisma.RoutineWhereUniqueInput | Prisma.RoutineWhereUniqueInput[]
   disconnect?: Prisma.RoutineWhereUniqueInput | Prisma.RoutineWhereUniqueInput[]
   delete?: Prisma.RoutineWhereUniqueInput | Prisma.RoutineWhereUniqueInput[]
   connect?: Prisma.RoutineWhereUniqueInput | Prisma.RoutineWhereUniqueInput[]
-  update?: Prisma.RoutineUpdateWithWhereUniqueWithoutTenantInput | Prisma.RoutineUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.RoutineUpdateManyWithWhereWithoutTenantInput | Prisma.RoutineUpdateManyWithWhereWithoutTenantInput[]
+  update?: Prisma.RoutineUpdateWithWhereUniqueWithoutSpaceInput | Prisma.RoutineUpdateWithWhereUniqueWithoutSpaceInput[]
+  updateMany?: Prisma.RoutineUpdateManyWithWhereWithoutSpaceInput | Prisma.RoutineUpdateManyWithWhereWithoutSpaceInput[]
   deleteMany?: Prisma.RoutineScalarWhereInput | Prisma.RoutineScalarWhereInput[]
 }
 
-export type RoutineUncheckedUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.RoutineCreateWithoutTenantInput, Prisma.RoutineUncheckedCreateWithoutTenantInput> | Prisma.RoutineCreateWithoutTenantInput[] | Prisma.RoutineUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutTenantInput | Prisma.RoutineCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.RoutineUpsertWithWhereUniqueWithoutTenantInput | Prisma.RoutineUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.RoutineCreateManyTenantInputEnvelope
+export type RoutineUncheckedUpdateManyWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.RoutineCreateWithoutSpaceInput, Prisma.RoutineUncheckedCreateWithoutSpaceInput> | Prisma.RoutineCreateWithoutSpaceInput[] | Prisma.RoutineUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutSpaceInput | Prisma.RoutineCreateOrConnectWithoutSpaceInput[]
+  upsert?: Prisma.RoutineUpsertWithWhereUniqueWithoutSpaceInput | Prisma.RoutineUpsertWithWhereUniqueWithoutSpaceInput[]
+  createMany?: Prisma.RoutineCreateManySpaceInputEnvelope
   set?: Prisma.RoutineWhereUniqueInput | Prisma.RoutineWhereUniqueInput[]
   disconnect?: Prisma.RoutineWhereUniqueInput | Prisma.RoutineWhereUniqueInput[]
   delete?: Prisma.RoutineWhereUniqueInput | Prisma.RoutineWhereUniqueInput[]
   connect?: Prisma.RoutineWhereUniqueInput | Prisma.RoutineWhereUniqueInput[]
-  update?: Prisma.RoutineUpdateWithWhereUniqueWithoutTenantInput | Prisma.RoutineUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.RoutineUpdateManyWithWhereWithoutTenantInput | Prisma.RoutineUpdateManyWithWhereWithoutTenantInput[]
+  update?: Prisma.RoutineUpdateWithWhereUniqueWithoutSpaceInput | Prisma.RoutineUpdateWithWhereUniqueWithoutSpaceInput[]
+  updateMany?: Prisma.RoutineUpdateManyWithWhereWithoutSpaceInput | Prisma.RoutineUpdateManyWithWhereWithoutSpaceInput[]
   deleteMany?: Prisma.RoutineScalarWhereInput | Prisma.RoutineScalarWhereInput[]
 }
 
@@ -516,7 +516,7 @@ export type RoutineUpdateOneRequiredWithoutProgramsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.RoutineUpdateToOneWithWhereWithoutProgramsInput, Prisma.RoutineUpdateWithoutProgramsInput>, Prisma.RoutineUncheckedUpdateWithoutProgramsInput>
 }
 
-export type RoutineCreateWithoutTenantInput = {
+export type RoutineCreateWithoutSpaceInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -528,7 +528,7 @@ export type RoutineCreateWithoutTenantInput = {
   programs?: Prisma.ProgramCreateNestedManyWithoutRoutineInput
 }
 
-export type RoutineUncheckedCreateWithoutTenantInput = {
+export type RoutineUncheckedCreateWithoutSpaceInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -540,30 +540,30 @@ export type RoutineUncheckedCreateWithoutTenantInput = {
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutRoutineInput
 }
 
-export type RoutineCreateOrConnectWithoutTenantInput = {
+export type RoutineCreateOrConnectWithoutSpaceInput = {
   where: Prisma.RoutineWhereUniqueInput
-  create: Prisma.XOR<Prisma.RoutineCreateWithoutTenantInput, Prisma.RoutineUncheckedCreateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.RoutineCreateWithoutSpaceInput, Prisma.RoutineUncheckedCreateWithoutSpaceInput>
 }
 
-export type RoutineCreateManyTenantInputEnvelope = {
-  data: Prisma.RoutineCreateManyTenantInput | Prisma.RoutineCreateManyTenantInput[]
+export type RoutineCreateManySpaceInputEnvelope = {
+  data: Prisma.RoutineCreateManySpaceInput | Prisma.RoutineCreateManySpaceInput[]
   skipDuplicates?: boolean
 }
 
-export type RoutineUpsertWithWhereUniqueWithoutTenantInput = {
+export type RoutineUpsertWithWhereUniqueWithoutSpaceInput = {
   where: Prisma.RoutineWhereUniqueInput
-  update: Prisma.XOR<Prisma.RoutineUpdateWithoutTenantInput, Prisma.RoutineUncheckedUpdateWithoutTenantInput>
-  create: Prisma.XOR<Prisma.RoutineCreateWithoutTenantInput, Prisma.RoutineUncheckedCreateWithoutTenantInput>
+  update: Prisma.XOR<Prisma.RoutineUpdateWithoutSpaceInput, Prisma.RoutineUncheckedUpdateWithoutSpaceInput>
+  create: Prisma.XOR<Prisma.RoutineCreateWithoutSpaceInput, Prisma.RoutineUncheckedCreateWithoutSpaceInput>
 }
 
-export type RoutineUpdateWithWhereUniqueWithoutTenantInput = {
+export type RoutineUpdateWithWhereUniqueWithoutSpaceInput = {
   where: Prisma.RoutineWhereUniqueInput
-  data: Prisma.XOR<Prisma.RoutineUpdateWithoutTenantInput, Prisma.RoutineUncheckedUpdateWithoutTenantInput>
+  data: Prisma.XOR<Prisma.RoutineUpdateWithoutSpaceInput, Prisma.RoutineUncheckedUpdateWithoutSpaceInput>
 }
 
-export type RoutineUpdateManyWithWhereWithoutTenantInput = {
+export type RoutineUpdateManyWithWhereWithoutSpaceInput = {
   where: Prisma.RoutineScalarWhereInput
-  data: Prisma.XOR<Prisma.RoutineUpdateManyMutationInput, Prisma.RoutineUncheckedUpdateManyWithoutTenantInput>
+  data: Prisma.XOR<Prisma.RoutineUpdateManyMutationInput, Prisma.RoutineUncheckedUpdateManyWithoutSpaceInput>
 }
 
 export type RoutineScalarWhereInput = {
@@ -574,7 +574,7 @@ export type RoutineScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Routine"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Routine"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Routine"> | Date | string | null
-  tenantId?: Prisma.StringFilter<"Routine"> | string
+  spaceId?: Prisma.StringFilter<"Routine"> | string
   creatorId?: Prisma.StringNullableFilter<"Routine"> | string | null
   name?: Prisma.StringFilter<"Routine"> | string
   label?: Prisma.StringFilter<"Routine"> | string
@@ -587,7 +587,7 @@ export type RoutineCreateWithoutCreatorInput = {
   removedAt?: Date | string | null
   name: string
   label: string
-  tenant: Prisma.TenantCreateNestedOneWithoutRoutinesInput
+  space: Prisma.SpaceCreateNestedOneWithoutRoutinesInput
   activities?: Prisma.ActivityCreateNestedManyWithoutRoutineInput
   programs?: Prisma.ProgramCreateNestedManyWithoutRoutineInput
 }
@@ -597,7 +597,7 @@ export type RoutineUncheckedCreateWithoutCreatorInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
   name: string
   label: string
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutRoutineInput
@@ -637,7 +637,7 @@ export type RoutineCreateWithoutActivitiesInput = {
   removedAt?: Date | string | null
   name: string
   label: string
-  tenant: Prisma.TenantCreateNestedOneWithoutRoutinesInput
+  space: Prisma.SpaceCreateNestedOneWithoutRoutinesInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedRoutinesInput
   programs?: Prisma.ProgramCreateNestedManyWithoutRoutineInput
 }
@@ -647,7 +647,7 @@ export type RoutineUncheckedCreateWithoutActivitiesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
   name: string
   label: string
@@ -677,7 +677,7 @@ export type RoutineUpdateWithoutActivitiesInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutRoutinesNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutRoutinesNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedRoutinesNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutRoutineNestedInput
 }
@@ -687,7 +687,7 @@ export type RoutineUncheckedUpdateWithoutActivitiesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
@@ -701,7 +701,7 @@ export type RoutineCreateWithoutProgramsInput = {
   removedAt?: Date | string | null
   name: string
   label: string
-  tenant: Prisma.TenantCreateNestedOneWithoutRoutinesInput
+  space: Prisma.SpaceCreateNestedOneWithoutRoutinesInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedRoutinesInput
   activities?: Prisma.ActivityCreateNestedManyWithoutRoutineInput
 }
@@ -711,7 +711,7 @@ export type RoutineUncheckedCreateWithoutProgramsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
   name: string
   label: string
@@ -741,7 +741,7 @@ export type RoutineUpdateWithoutProgramsInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutRoutinesNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutRoutinesNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedRoutinesNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutRoutineNestedInput
 }
@@ -751,14 +751,14 @@ export type RoutineUncheckedUpdateWithoutProgramsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutRoutineNestedInput
 }
 
-export type RoutineCreateManyTenantInput = {
+export type RoutineCreateManySpaceInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -768,7 +768,7 @@ export type RoutineCreateManyTenantInput = {
   label: string
 }
 
-export type RoutineUpdateWithoutTenantInput = {
+export type RoutineUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -780,7 +780,7 @@ export type RoutineUpdateWithoutTenantInput = {
   programs?: Prisma.ProgramUpdateManyWithoutRoutineNestedInput
 }
 
-export type RoutineUncheckedUpdateWithoutTenantInput = {
+export type RoutineUncheckedUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -792,7 +792,7 @@ export type RoutineUncheckedUpdateWithoutTenantInput = {
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutRoutineNestedInput
 }
 
-export type RoutineUncheckedUpdateManyWithoutTenantInput = {
+export type RoutineUncheckedUpdateManyWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -807,7 +807,7 @@ export type RoutineCreateManyCreatorInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
   name: string
   label: string
 }
@@ -819,7 +819,7 @@ export type RoutineUpdateWithoutCreatorInput = {
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutRoutinesNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutRoutinesNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutRoutineNestedInput
   programs?: Prisma.ProgramUpdateManyWithoutRoutineNestedInput
 }
@@ -829,7 +829,7 @@ export type RoutineUncheckedUpdateWithoutCreatorInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutRoutineNestedInput
@@ -841,7 +841,7 @@ export type RoutineUncheckedUpdateManyWithoutCreatorInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -891,11 +891,11 @@ export type RoutineSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   creatorId?: boolean
   name?: boolean
   label?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Routine$creatorArgs<ExtArgs>
   activities?: boolean | Prisma.Routine$activitiesArgs<ExtArgs>
   programs?: boolean | Prisma.Routine$programsArgs<ExtArgs>
@@ -907,11 +907,11 @@ export type RoutineSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   creatorId?: boolean
   name?: boolean
   label?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Routine$creatorArgs<ExtArgs>
 }, ExtArgs["result"]["routine"]>
 
@@ -920,11 +920,11 @@ export type RoutineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   creatorId?: boolean
   name?: boolean
   label?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Routine$creatorArgs<ExtArgs>
 }, ExtArgs["result"]["routine"]>
 
@@ -933,33 +933,33 @@ export type RoutineSelectScalar = {
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   creatorId?: boolean
   name?: boolean
   label?: boolean
 }
 
-export type RoutineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "tenantId" | "creatorId" | "name" | "label", ExtArgs["result"]["routine"]>
+export type RoutineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "spaceId" | "creatorId" | "name" | "label", ExtArgs["result"]["routine"]>
 export type RoutineInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Routine$creatorArgs<ExtArgs>
   activities?: boolean | Prisma.Routine$activitiesArgs<ExtArgs>
   programs?: boolean | Prisma.Routine$programsArgs<ExtArgs>
   _count?: boolean | Prisma.RoutineCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type RoutineIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Routine$creatorArgs<ExtArgs>
 }
 export type RoutineIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Routine$creatorArgs<ExtArgs>
 }
 
 export type $RoutinePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Routine"
   objects: {
-    tenant: Prisma.$TenantPayload<ExtArgs>
+    space: Prisma.$SpacePayload<ExtArgs>
     creator: Prisma.$UserPayload<ExtArgs> | null
     activities: Prisma.$ActivityPayload<ExtArgs>[]
     programs: Prisma.$ProgramPayload<ExtArgs>[]
@@ -969,7 +969,7 @@ export type $RoutinePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    tenantId: string
+    spaceId: string
     creatorId: string | null
     name: string
     label: string
@@ -1367,7 +1367,7 @@ readonly fields: RoutineFieldRefs;
  */
 export interface Prisma__RoutineClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  space<T extends Prisma.SpaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceDefaultArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   creator<T extends Prisma.Routine$creatorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Routine$creatorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   activities<T extends Prisma.Routine$activitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Routine$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   programs<T extends Prisma.Routine$programsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Routine$programsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1404,7 +1404,7 @@ export interface RoutineFieldRefs {
   readonly createdAt: Prisma.FieldRef<"Routine", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Routine", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Routine", 'DateTime'>
-  readonly tenantId: Prisma.FieldRef<"Routine", 'String'>
+  readonly spaceId: Prisma.FieldRef<"Routine", 'String'>
   readonly creatorId: Prisma.FieldRef<"Routine", 'String'>
   readonly name: Prisma.FieldRef<"Routine", 'String'>
   readonly label: Prisma.FieldRef<"Routine", 'String'>

@@ -11,11 +11,16 @@ export async function getAccessibleSpacesForUser(
 		return [];
 	}
 
+	const activeTenants = user.tenants.filter((tenant) => tenant.removedAt == null);
+	if (activeTenants.length === 0) {
+		return [];
+	}
+
 	const tenantSpaceIds = getOrderedTenantSpaceIds(user);
 	const spaces = await spacesService.findByIdsWithGround(tenantSpaceIds);
 	const spaceById = new Map(spaces.map((space) => [space.id, space]));
 	const tenantBySpaceId = new Map(
-		(user.tenants ?? []).map((tenant) => [tenant.spaceId, tenant]),
+		activeTenants.map((tenant) => [tenant.spaceId, tenant]),
 	);
 
 	const results: AuthSpaceResult[] = [];

@@ -81,7 +81,7 @@ describe("AssetAggregate", () => {
 		const findManyInput = mockAssetsRepository.findMany.mock.calls[0][0];
 		expect(findManyInput.where).toEqual(
 			expect.objectContaining({
-				tenant: { spaceId: { in: ["space-123", "space-parent"] } },
+				spaceId: { in: ["space-123", "space-parent"] },
 			}),
 		);
 	});
@@ -99,8 +99,7 @@ describe("AssetAggregate", () => {
 
 		mockFoldersRepository.findById.mockResolvedValue({
 			id: "folder-123",
-			tenantId: "tenant-123",
-			tenant: { id: "tenant-123", spaceId: "space-123" },
+			spaceId: "space-123",
 			removedAt: null,
 		} as never);
 		mockObjectStorageService.putObject.mockResolvedValue({
@@ -114,7 +113,7 @@ describe("AssetAggregate", () => {
 					createdAt: new Date(),
 					updatedAt: new Date(),
 					removedAt: null,
-					tenantId: data.tenantId,
+					spaceId: data.spaceId,
 					folderId: data.folderId,
 					kind: data.kind,
 					status: data.status,
@@ -126,7 +125,7 @@ describe("AssetAggregate", () => {
 					checksum: data.checksum as string | null,
 					metadata: data.metadata ?? null,
 					creatorId: data.creatorId as string | null,
-					tenant: { id: "tenant-123", spaceId: "space-123" },
+					space: { id: "space-123" },
 				}) as never,
 		);
 
@@ -153,7 +152,7 @@ describe("AssetAggregate", () => {
 		);
 		expect(mockAssetsRepository.create).toHaveBeenCalledWith(
 			expect.objectContaining({
-				tenantId: "tenant-123",
+				spaceId: "space-123",
 				folderId: "folder-123",
 				kind: AssetKind.IMAGE,
 				status: AssetStatus.READY,
@@ -187,8 +186,7 @@ describe("AssetAggregate", () => {
 
 		mockFoldersRepository.findById.mockResolvedValue({
 			id: "folder-123",
-			tenantId: "tenant-123",
-			tenant: { id: "tenant-123", spaceId: "space-123" },
+			spaceId: "space-123",
 			removedAt: null,
 		} as never);
 		mockObjectStorageService.putObject.mockResolvedValue({
@@ -202,7 +200,7 @@ describe("AssetAggregate", () => {
 					createdAt: new Date(),
 					updatedAt: new Date(),
 					removedAt: null,
-					tenantId: data.tenantId,
+					spaceId: data.spaceId,
 					folderId: data.folderId,
 					kind: data.kind,
 					status: data.status,

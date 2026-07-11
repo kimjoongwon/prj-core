@@ -6,9 +6,9 @@ import { ExerciseDto } from "./exercise.dto";
 
 export class TaskDto extends AbstractDto implements TaskEntity {
 	@UUIDField()
-	tenantId: string;
+	spaceId: string;
 
-	@UUIDFieldOptional()
+	@UUIDFieldOptional({ nullable: true })
 	creatorId: string | null;
 
 	@ClassField(() => ExerciseDto)

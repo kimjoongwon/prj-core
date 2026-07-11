@@ -29,7 +29,7 @@ export type TaskMinAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  tenantId: string | null
+  spaceId: string | null
   creatorId: string | null
 }
 
@@ -38,7 +38,7 @@ export type TaskMaxAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  tenantId: string | null
+  spaceId: string | null
   creatorId: string | null
 }
 
@@ -47,7 +47,7 @@ export type TaskCountAggregateOutputType = {
   createdAt: number
   updatedAt: number
   removedAt: number
-  tenantId: number
+  spaceId: number
   creatorId: number
   _all: number
 }
@@ -58,7 +58,7 @@ export type TaskMinAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  tenantId?: true
+  spaceId?: true
   creatorId?: true
 }
 
@@ -67,7 +67,7 @@ export type TaskMaxAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  tenantId?: true
+  spaceId?: true
   creatorId?: true
 }
 
@@ -76,7 +76,7 @@ export type TaskCountAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  tenantId?: true
+  spaceId?: true
   creatorId?: true
   _all?: true
 }
@@ -158,7 +158,7 @@ export type TaskGroupByOutputType = {
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  tenantId: string
+  spaceId: string
   creatorId: string | null
   _count: TaskCountAggregateOutputType | null
   _min: TaskMinAggregateOutputType | null
@@ -188,9 +188,9 @@ export type TaskWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
-  tenantId?: Prisma.StringFilter<"Task"> | string
+  spaceId?: Prisma.StringFilter<"Task"> | string
   creatorId?: Prisma.StringNullableFilter<"Task"> | string | null
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   activities?: Prisma.ActivityListRelationFilter
   exercise?: Prisma.XOR<Prisma.ExerciseNullableScalarRelationFilter, Prisma.ExerciseWhereInput> | null
@@ -201,9 +201,9 @@ export type TaskOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
-  tenant?: Prisma.TenantOrderByWithRelationInput
+  space?: Prisma.SpaceOrderByWithRelationInput
   creator?: Prisma.UserOrderByWithRelationInput
   activities?: Prisma.ActivityOrderByRelationAggregateInput
   exercise?: Prisma.ExerciseOrderByWithRelationInput
@@ -217,9 +217,9 @@ export type TaskWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
-  tenantId?: Prisma.StringFilter<"Task"> | string
+  spaceId?: Prisma.StringFilter<"Task"> | string
   creatorId?: Prisma.StringNullableFilter<"Task"> | string | null
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   activities?: Prisma.ActivityListRelationFilter
   exercise?: Prisma.XOR<Prisma.ExerciseNullableScalarRelationFilter, Prisma.ExerciseWhereInput> | null
@@ -230,7 +230,7 @@ export type TaskOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TaskCountOrderByAggregateInput
   _max?: Prisma.TaskMaxOrderByAggregateInput
@@ -245,7 +245,7 @@ export type TaskScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Task"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Task"> | Date | string | null
-  tenantId?: Prisma.StringWithAggregatesFilter<"Task"> | string
+  spaceId?: Prisma.StringWithAggregatesFilter<"Task"> | string
   creatorId?: Prisma.StringNullableWithAggregatesFilter<"Task"> | string | null
 }
 
@@ -254,7 +254,7 @@ export type TaskCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenant: Prisma.TenantCreateNestedOneWithoutTasksInput
+  space: Prisma.SpaceCreateNestedOneWithoutTasksInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedTasksInput
   activities?: Prisma.ActivityCreateNestedManyWithoutTaskInput
   exercise?: Prisma.ExerciseCreateNestedOneWithoutTaskInput
@@ -265,7 +265,7 @@ export type TaskUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutTaskInput
   exercise?: Prisma.ExerciseUncheckedCreateNestedOneWithoutTaskInput
@@ -276,7 +276,7 @@ export type TaskUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutTasksNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutTasksNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedTasksNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutTaskNestedInput
   exercise?: Prisma.ExerciseUpdateOneWithoutTaskNestedInput
@@ -287,7 +287,7 @@ export type TaskUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutTaskNestedInput
   exercise?: Prisma.ExerciseUncheckedUpdateOneWithoutTaskNestedInput
@@ -298,7 +298,7 @@ export type TaskCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
 }
 
@@ -314,7 +314,7 @@ export type TaskUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -338,7 +338,7 @@ export type TaskCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
 }
 
@@ -347,7 +347,7 @@ export type TaskMaxOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
 }
 
@@ -356,49 +356,49 @@ export type TaskMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
   creatorId?: Prisma.SortOrder
 }
 
-export type TaskCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.TaskCreateWithoutTenantInput, Prisma.TaskUncheckedCreateWithoutTenantInput> | Prisma.TaskCreateWithoutTenantInput[] | Prisma.TaskUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutTenantInput | Prisma.TaskCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.TaskCreateManyTenantInputEnvelope
+export type TaskCreateNestedManyWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.TaskCreateWithoutSpaceInput, Prisma.TaskUncheckedCreateWithoutSpaceInput> | Prisma.TaskCreateWithoutSpaceInput[] | Prisma.TaskUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutSpaceInput | Prisma.TaskCreateOrConnectWithoutSpaceInput[]
+  createMany?: Prisma.TaskCreateManySpaceInputEnvelope
   connect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
 }
 
-export type TaskUncheckedCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.TaskCreateWithoutTenantInput, Prisma.TaskUncheckedCreateWithoutTenantInput> | Prisma.TaskCreateWithoutTenantInput[] | Prisma.TaskUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutTenantInput | Prisma.TaskCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.TaskCreateManyTenantInputEnvelope
+export type TaskUncheckedCreateNestedManyWithoutSpaceInput = {
+  create?: Prisma.XOR<Prisma.TaskCreateWithoutSpaceInput, Prisma.TaskUncheckedCreateWithoutSpaceInput> | Prisma.TaskCreateWithoutSpaceInput[] | Prisma.TaskUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutSpaceInput | Prisma.TaskCreateOrConnectWithoutSpaceInput[]
+  createMany?: Prisma.TaskCreateManySpaceInputEnvelope
   connect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
 }
 
-export type TaskUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.TaskCreateWithoutTenantInput, Prisma.TaskUncheckedCreateWithoutTenantInput> | Prisma.TaskCreateWithoutTenantInput[] | Prisma.TaskUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutTenantInput | Prisma.TaskCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.TaskUpsertWithWhereUniqueWithoutTenantInput | Prisma.TaskUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.TaskCreateManyTenantInputEnvelope
+export type TaskUpdateManyWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.TaskCreateWithoutSpaceInput, Prisma.TaskUncheckedCreateWithoutSpaceInput> | Prisma.TaskCreateWithoutSpaceInput[] | Prisma.TaskUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutSpaceInput | Prisma.TaskCreateOrConnectWithoutSpaceInput[]
+  upsert?: Prisma.TaskUpsertWithWhereUniqueWithoutSpaceInput | Prisma.TaskUpsertWithWhereUniqueWithoutSpaceInput[]
+  createMany?: Prisma.TaskCreateManySpaceInputEnvelope
   set?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
   disconnect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
   delete?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
   connect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
-  update?: Prisma.TaskUpdateWithWhereUniqueWithoutTenantInput | Prisma.TaskUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.TaskUpdateManyWithWhereWithoutTenantInput | Prisma.TaskUpdateManyWithWhereWithoutTenantInput[]
+  update?: Prisma.TaskUpdateWithWhereUniqueWithoutSpaceInput | Prisma.TaskUpdateWithWhereUniqueWithoutSpaceInput[]
+  updateMany?: Prisma.TaskUpdateManyWithWhereWithoutSpaceInput | Prisma.TaskUpdateManyWithWhereWithoutSpaceInput[]
   deleteMany?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
 }
 
-export type TaskUncheckedUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.TaskCreateWithoutTenantInput, Prisma.TaskUncheckedCreateWithoutTenantInput> | Prisma.TaskCreateWithoutTenantInput[] | Prisma.TaskUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutTenantInput | Prisma.TaskCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.TaskUpsertWithWhereUniqueWithoutTenantInput | Prisma.TaskUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.TaskCreateManyTenantInputEnvelope
+export type TaskUncheckedUpdateManyWithoutSpaceNestedInput = {
+  create?: Prisma.XOR<Prisma.TaskCreateWithoutSpaceInput, Prisma.TaskUncheckedCreateWithoutSpaceInput> | Prisma.TaskCreateWithoutSpaceInput[] | Prisma.TaskUncheckedCreateWithoutSpaceInput[]
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutSpaceInput | Prisma.TaskCreateOrConnectWithoutSpaceInput[]
+  upsert?: Prisma.TaskUpsertWithWhereUniqueWithoutSpaceInput | Prisma.TaskUpsertWithWhereUniqueWithoutSpaceInput[]
+  createMany?: Prisma.TaskCreateManySpaceInputEnvelope
   set?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
   disconnect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
   delete?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
   connect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
-  update?: Prisma.TaskUpdateWithWhereUniqueWithoutTenantInput | Prisma.TaskUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.TaskUpdateManyWithWhereWithoutTenantInput | Prisma.TaskUpdateManyWithWhereWithoutTenantInput[]
+  update?: Prisma.TaskUpdateWithWhereUniqueWithoutSpaceInput | Prisma.TaskUpdateWithWhereUniqueWithoutSpaceInput[]
+  updateMany?: Prisma.TaskUpdateManyWithWhereWithoutSpaceInput | Prisma.TaskUpdateManyWithWhereWithoutSpaceInput[]
   deleteMany?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
 }
 
@@ -472,7 +472,7 @@ export type TaskUpdateOneRequiredWithoutExerciseNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TaskUpdateToOneWithWhereWithoutExerciseInput, Prisma.TaskUpdateWithoutExerciseInput>, Prisma.TaskUncheckedUpdateWithoutExerciseInput>
 }
 
-export type TaskCreateWithoutTenantInput = {
+export type TaskCreateWithoutSpaceInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -482,7 +482,7 @@ export type TaskCreateWithoutTenantInput = {
   exercise?: Prisma.ExerciseCreateNestedOneWithoutTaskInput
 }
 
-export type TaskUncheckedCreateWithoutTenantInput = {
+export type TaskUncheckedCreateWithoutSpaceInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -492,30 +492,30 @@ export type TaskUncheckedCreateWithoutTenantInput = {
   exercise?: Prisma.ExerciseUncheckedCreateNestedOneWithoutTaskInput
 }
 
-export type TaskCreateOrConnectWithoutTenantInput = {
+export type TaskCreateOrConnectWithoutSpaceInput = {
   where: Prisma.TaskWhereUniqueInput
-  create: Prisma.XOR<Prisma.TaskCreateWithoutTenantInput, Prisma.TaskUncheckedCreateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.TaskCreateWithoutSpaceInput, Prisma.TaskUncheckedCreateWithoutSpaceInput>
 }
 
-export type TaskCreateManyTenantInputEnvelope = {
-  data: Prisma.TaskCreateManyTenantInput | Prisma.TaskCreateManyTenantInput[]
+export type TaskCreateManySpaceInputEnvelope = {
+  data: Prisma.TaskCreateManySpaceInput | Prisma.TaskCreateManySpaceInput[]
   skipDuplicates?: boolean
 }
 
-export type TaskUpsertWithWhereUniqueWithoutTenantInput = {
+export type TaskUpsertWithWhereUniqueWithoutSpaceInput = {
   where: Prisma.TaskWhereUniqueInput
-  update: Prisma.XOR<Prisma.TaskUpdateWithoutTenantInput, Prisma.TaskUncheckedUpdateWithoutTenantInput>
-  create: Prisma.XOR<Prisma.TaskCreateWithoutTenantInput, Prisma.TaskUncheckedCreateWithoutTenantInput>
+  update: Prisma.XOR<Prisma.TaskUpdateWithoutSpaceInput, Prisma.TaskUncheckedUpdateWithoutSpaceInput>
+  create: Prisma.XOR<Prisma.TaskCreateWithoutSpaceInput, Prisma.TaskUncheckedCreateWithoutSpaceInput>
 }
 
-export type TaskUpdateWithWhereUniqueWithoutTenantInput = {
+export type TaskUpdateWithWhereUniqueWithoutSpaceInput = {
   where: Prisma.TaskWhereUniqueInput
-  data: Prisma.XOR<Prisma.TaskUpdateWithoutTenantInput, Prisma.TaskUncheckedUpdateWithoutTenantInput>
+  data: Prisma.XOR<Prisma.TaskUpdateWithoutSpaceInput, Prisma.TaskUncheckedUpdateWithoutSpaceInput>
 }
 
-export type TaskUpdateManyWithWhereWithoutTenantInput = {
+export type TaskUpdateManyWithWhereWithoutSpaceInput = {
   where: Prisma.TaskScalarWhereInput
-  data: Prisma.XOR<Prisma.TaskUpdateManyMutationInput, Prisma.TaskUncheckedUpdateManyWithoutTenantInput>
+  data: Prisma.XOR<Prisma.TaskUpdateManyMutationInput, Prisma.TaskUncheckedUpdateManyWithoutSpaceInput>
 }
 
 export type TaskScalarWhereInput = {
@@ -526,7 +526,7 @@ export type TaskScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
-  tenantId?: Prisma.StringFilter<"Task"> | string
+  spaceId?: Prisma.StringFilter<"Task"> | string
   creatorId?: Prisma.StringNullableFilter<"Task"> | string | null
 }
 
@@ -535,7 +535,7 @@ export type TaskCreateWithoutCreatorInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenant: Prisma.TenantCreateNestedOneWithoutTasksInput
+  space: Prisma.SpaceCreateNestedOneWithoutTasksInput
   activities?: Prisma.ActivityCreateNestedManyWithoutTaskInput
   exercise?: Prisma.ExerciseCreateNestedOneWithoutTaskInput
 }
@@ -545,7 +545,7 @@ export type TaskUncheckedCreateWithoutCreatorInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutTaskInput
   exercise?: Prisma.ExerciseUncheckedCreateNestedOneWithoutTaskInput
 }
@@ -581,7 +581,7 @@ export type TaskCreateWithoutActivitiesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenant: Prisma.TenantCreateNestedOneWithoutTasksInput
+  space: Prisma.SpaceCreateNestedOneWithoutTasksInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedTasksInput
   exercise?: Prisma.ExerciseCreateNestedOneWithoutTaskInput
 }
@@ -591,7 +591,7 @@ export type TaskUncheckedCreateWithoutActivitiesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
   exercise?: Prisma.ExerciseUncheckedCreateNestedOneWithoutTaskInput
 }
@@ -617,7 +617,7 @@ export type TaskUpdateWithoutActivitiesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutTasksNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutTasksNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedTasksNestedInput
   exercise?: Prisma.ExerciseUpdateOneWithoutTaskNestedInput
 }
@@ -627,7 +627,7 @@ export type TaskUncheckedUpdateWithoutActivitiesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   exercise?: Prisma.ExerciseUncheckedUpdateOneWithoutTaskNestedInput
 }
@@ -637,7 +637,7 @@ export type TaskCreateWithoutExerciseInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenant: Prisma.TenantCreateNestedOneWithoutTasksInput
+  space: Prisma.SpaceCreateNestedOneWithoutTasksInput
   creator?: Prisma.UserCreateNestedOneWithoutCreatedTasksInput
   activities?: Prisma.ActivityCreateNestedManyWithoutTaskInput
 }
@@ -647,7 +647,7 @@ export type TaskUncheckedCreateWithoutExerciseInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
   creatorId?: string | null
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutTaskInput
 }
@@ -673,7 +673,7 @@ export type TaskUpdateWithoutExerciseInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutTasksNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutTasksNestedInput
   creator?: Prisma.UserUpdateOneWithoutCreatedTasksNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutTaskNestedInput
 }
@@ -683,12 +683,12 @@ export type TaskUncheckedUpdateWithoutExerciseInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutTaskNestedInput
 }
 
-export type TaskCreateManyTenantInput = {
+export type TaskCreateManySpaceInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -696,7 +696,7 @@ export type TaskCreateManyTenantInput = {
   creatorId?: string | null
 }
 
-export type TaskUpdateWithoutTenantInput = {
+export type TaskUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -706,7 +706,7 @@ export type TaskUpdateWithoutTenantInput = {
   exercise?: Prisma.ExerciseUpdateOneWithoutTaskNestedInput
 }
 
-export type TaskUncheckedUpdateWithoutTenantInput = {
+export type TaskUncheckedUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -716,7 +716,7 @@ export type TaskUncheckedUpdateWithoutTenantInput = {
   exercise?: Prisma.ExerciseUncheckedUpdateOneWithoutTaskNestedInput
 }
 
-export type TaskUncheckedUpdateManyWithoutTenantInput = {
+export type TaskUncheckedUpdateManyWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -729,7 +729,7 @@ export type TaskCreateManyCreatorInput = {
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  tenantId: string
+  spaceId: string
 }
 
 export type TaskUpdateWithoutCreatorInput = {
@@ -737,7 +737,7 @@ export type TaskUpdateWithoutCreatorInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutTasksNestedInput
+  space?: Prisma.SpaceUpdateOneRequiredWithoutTasksNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutTaskNestedInput
   exercise?: Prisma.ExerciseUpdateOneWithoutTaskNestedInput
 }
@@ -747,7 +747,7 @@ export type TaskUncheckedUpdateWithoutCreatorInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutTaskNestedInput
   exercise?: Prisma.ExerciseUncheckedUpdateOneWithoutTaskNestedInput
 }
@@ -757,7 +757,7 @@ export type TaskUncheckedUpdateManyWithoutCreatorInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -796,9 +796,9 @@ export type TaskSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   creatorId?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Task$creatorArgs<ExtArgs>
   activities?: boolean | Prisma.Task$activitiesArgs<ExtArgs>
   exercise?: boolean | Prisma.Task$exerciseArgs<ExtArgs>
@@ -810,9 +810,9 @@ export type TaskSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   creatorId?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Task$creatorArgs<ExtArgs>
 }, ExtArgs["result"]["task"]>
 
@@ -821,9 +821,9 @@ export type TaskSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   creatorId?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Task$creatorArgs<ExtArgs>
 }, ExtArgs["result"]["task"]>
 
@@ -832,31 +832,31 @@ export type TaskSelectScalar = {
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  tenantId?: boolean
+  spaceId?: boolean
   creatorId?: boolean
 }
 
-export type TaskOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "tenantId" | "creatorId", ExtArgs["result"]["task"]>
+export type TaskOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "spaceId" | "creatorId", ExtArgs["result"]["task"]>
 export type TaskInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Task$creatorArgs<ExtArgs>
   activities?: boolean | Prisma.Task$activitiesArgs<ExtArgs>
   exercise?: boolean | Prisma.Task$exerciseArgs<ExtArgs>
   _count?: boolean | Prisma.TaskCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TaskIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Task$creatorArgs<ExtArgs>
 }
 export type TaskIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   creator?: boolean | Prisma.Task$creatorArgs<ExtArgs>
 }
 
 export type $TaskPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Task"
   objects: {
-    tenant: Prisma.$TenantPayload<ExtArgs>
+    space: Prisma.$SpacePayload<ExtArgs>
     creator: Prisma.$UserPayload<ExtArgs> | null
     activities: Prisma.$ActivityPayload<ExtArgs>[]
     exercise: Prisma.$ExercisePayload<ExtArgs> | null
@@ -866,7 +866,7 @@ export type $TaskPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    tenantId: string
+    spaceId: string
     creatorId: string | null
   }, ExtArgs["result"]["task"]>
   composites: {}
@@ -1262,7 +1262,7 @@ readonly fields: TaskFieldRefs;
  */
 export interface Prisma__TaskClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  space<T extends Prisma.SpaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceDefaultArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   creator<T extends Prisma.Task$creatorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Task$creatorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   activities<T extends Prisma.Task$activitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Task$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   exercise<T extends Prisma.Task$exerciseArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Task$exerciseArgs<ExtArgs>>): Prisma.Prisma__ExerciseClient<runtime.Types.Result.GetResult<Prisma.$ExercisePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -1299,7 +1299,7 @@ export interface TaskFieldRefs {
   readonly createdAt: Prisma.FieldRef<"Task", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Task", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Task", 'DateTime'>
-  readonly tenantId: Prisma.FieldRef<"Task", 'String'>
+  readonly spaceId: Prisma.FieldRef<"Task", 'String'>
   readonly creatorId: Prisma.FieldRef<"Task", 'String'>
 }
     

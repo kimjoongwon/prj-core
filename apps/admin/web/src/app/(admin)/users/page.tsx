@@ -51,15 +51,6 @@ function UsersPageContent() {
 		<UserListScreen
 			users={response?.data}
 			totalCount={response?.meta?.total ?? 0}
-			stats={
-				response?.stats
-					? {
-							total: response.stats.total ?? 0,
-							active: response.stats.active ?? 0,
-							inactive: response.stats.inactive ?? 0,
-						}
-					: undefined
-			}
 			isLoading={isLoading}
 			searchValue={searchValue}
 			onChangeSearchValue={(value) => {

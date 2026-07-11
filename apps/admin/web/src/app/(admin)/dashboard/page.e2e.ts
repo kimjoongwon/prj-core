@@ -32,17 +32,15 @@ test.describe("반응형 레이아웃 테스트", () => {
 		// await expect(sidebar).toBeVisible();
 	});
 
-	test("모바일에서 BottomTab 표시", async ({ page }) => {
+	test("모바일에서 본문 표시", async ({ page }) => {
 		// Given: 모바일 뷰포트 설정
 		await page.setViewportSize({ width: 375, height: 667 });
 
 		// When: 메인 페이지 로드
 		await page.goto("/", { waitUntil: "domcontentloaded" });
 
-		// Then: BottomTab이 표시됨 (768px 미만)
-		// 실제 selector는 구현에 맞게 수정 필요
-		// const bottomTab = page.locator('[data-testid="admin-bottom-tab"]');
-		// await expect(bottomTab).toBeVisible();
+		// Then: 모바일 뷰포트에서도 본문이 표시됨
+		await expect(page.locator("body")).toBeVisible();
 	});
 });
 

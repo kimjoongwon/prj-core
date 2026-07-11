@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayout } from "@cocrepo/hook";
+import { useApp } from "@cocrepo/store";
 import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";
 import { SidePanel } from "./SidePanel";
@@ -24,20 +24,22 @@ const NAV_ITEM_COPY: Record<string, string> = {
  */
 export const SideNavigation = observer(function SideNavigation() {
 	const t = useT();
-	const layoutProps = useLayout();
+	const navigation = useApp().navigation;
 
 	const getItemDescription = (item: { id: string }) =>
 		t(NAV_ITEM_COPY[item.id] ?? "운영 콘솔 메뉴로 이동합니다.");
 
 	return (
 		<SidePanel
-			navItems={layoutProps.navItems}
-			selectedNavItem={layoutProps.selectedNavItem}
-			selectedSubNavItem={layoutProps.selectedSubNavItem}
-			expandedNavItemIds={layoutProps.expandedNavItemIds}
-			onNavItemClick={layoutProps.onNavItemClick}
-			onSubNavItemClick={layoutProps.onSubNavItemClick}
-			onNavItemToggle={layoutProps.onNavItemToggle}
+			navItems={navigation.items}
+			selectedNavItem={navigation.selectedNavItem}
+			selectedSubNavItem={navigation.selectedSubNavItem}
+			expandedNavItemIds={navigation.expandedNavItemIds}
+			onNavItemClick={(navItemId) => navigation.selectNavItem(navItemId)}
+			onSubNavItemClick={(subNavItemId) =>
+				navigation.selectSubNavItem(subNavItemId)
+			}
+			onNavItemToggle={(navItemId) => navigation.toggleNavItem(navItemId)}
 			density="compact"
 			descriptionVisibility="active"
 			getItemDescription={getItemDescription}

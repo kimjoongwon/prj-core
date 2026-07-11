@@ -15,7 +15,7 @@ import type { InquiryParticipant } from "./inquiry-participant.entity";
 import type { InquiryTag } from "./inquiry-tag.entity";
 import type { InquiryThread } from "./inquiry-thread.entity";
 import type { SentimentAnalysis } from "./sentiment-analysis.entity";
-import type { Tenant } from "./tenant.entity";
+import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
 
 /**
@@ -28,7 +28,8 @@ export class Inquiry extends AbstractEntity implements InquiryEntity {
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	tenantId!: string;
+	spaceId!: string;
+	creatorId!: string | null;
 	inquiryNumber!: string;
 	title!: string;
 	category!: InquiryCategory;
@@ -61,7 +62,8 @@ export class Inquiry extends AbstractEntity implements InquiryEntity {
 	// ============================================================================
 	// 관계 필드 (선택적)
 	// ============================================================================
-	tenant?: Tenant;
+	space?: Space;
+	creator?: User | null;
 	customer?: User | null;
 	assignee?: User | null;
 	threads?: InquiryThread[];

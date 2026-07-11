@@ -55,6 +55,7 @@ export class User extends AbstractEntity implements UserEntityType {
 	passwordChangedAt!: Date | null;
 	lastLoginAt!: Date | null;
 	lastLoginIp!: string | null;
+	currentTenantId!: string | null;
 
 	// ============================================================================
 	// 관계 필드 (선택적)

@@ -27,7 +27,7 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useApp } from "@/stores/AppProvider";
+import { useApp } from "@cocrepo/store";
 
 const toPositiveNumberOr = (value: string, defaultValue: number) => {
 	const parsed = Number(value);

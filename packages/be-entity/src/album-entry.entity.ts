@@ -2,13 +2,14 @@ import type { AlbumEntry as AlbumEntryEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Album } from "./album.entity";
 import type { Asset } from "./asset.entity";
-import type { Tenant } from "./tenant.entity";
+import type { Space } from "./space.entity";
+import type { User } from "./user.entity";
 
 export class AlbumEntry extends AbstractEntity implements AlbumEntryEntity {
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	tenantId!: string;
+	spaceId!: string;
 	albumId!: string;
 	assetId!: string;
 	position!: number;
@@ -17,11 +18,13 @@ export class AlbumEntry extends AbstractEntity implements AlbumEntryEntity {
 	// Nullable 필드
 	// ============================================================================
 	caption!: string | null;
+	creatorId!: string | null;
 
 	// ============================================================================
 	// 관계 필드 (선택적)
 	// ============================================================================
-	tenant?: Tenant;
+	space?: Space;
+	creator?: User | null;
 	album?: Album;
 	asset?: Asset;
 

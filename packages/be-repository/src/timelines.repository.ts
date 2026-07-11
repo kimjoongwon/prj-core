@@ -42,9 +42,9 @@ export class TimelinesRepository {
 		);
 
 		const where: Prisma.TimelineWhereInput = {
-			...(params.spaceIds ? { tenant: { spaceId: { in: params.spaceIds } } } : {}),
+			...(params.spaceIds ? { spaceId: { in: params.spaceIds } } : {}),
 			...(params.contentLanguageCode
-				? { tenant: { space: { contentLanguageCode: params.contentLanguageCode } } }
+				? { space: { contentLanguageCode: params.contentLanguageCode } }
 				: {}),
 			removedAt: null,
 			...(params.search
@@ -81,11 +81,11 @@ export class TimelinesRepository {
 			where: {
 				id: timelineId,
 				removedAt: null,
-				...(spaceIds ? { tenant: { spaceId: { in: spaceIds } } } : {}),
+				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
 			},
 			include: {
 				creator: { select: { id: true, name: true } },
-				tenant: { select: { id: true, spaceId: true } },
+				space: { select: { id: true } },
 				_count: {
 					select: { sessions: { where: { removedAt: null } } },
 				},
@@ -99,7 +99,7 @@ export class TimelinesRepository {
 	async createTimeline(data: {
 		name: string;
 		description?: string | null;
-		tenantId: string;
+		spaceId: string;
 		creatorId: string;
 	}) {
 		this.logger.debug("타임라인 생성");
@@ -145,7 +145,7 @@ export class TimelinesRepository {
 		return this.txHost.tx.timeline.count({
 			where: {
 				name,
-				tenant: { spaceId },
+				spaceId,
 				removedAt: null,
 				...(excludeId ? { id: { not: excludeId } } : {}),
 			},

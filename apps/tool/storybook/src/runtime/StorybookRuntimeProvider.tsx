@@ -1,17 +1,9 @@
 /// <reference types="vite/client" />
 
 import {
-	Ability,
-	AppStore,
-	AppStoreContext,
-	Cookies,
-	FloatingActions,
-	Locale,
-	MobileNavigation,
-	Navigation,
-	Session,
-	Space,
-	Tokens,
+	AppContext,
+	browserPersistStorageAdapter,
+	RootStore,
 	useApp,
 } from "@cocrepo/store";
 import { DesignSystemProvider } from "@cocrepo/ui";
@@ -25,9 +17,7 @@ import { NuqsAdapter as NuqsReactAdapter } from "nuqs/adapters/react";
 import type { PropsWithChildren, ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import {
-	ADMIN_FAB_ACTIONS,
 	ADMIN_NAV_ITEMS,
-	BOTTOM_TAB_IDS,
 	IDP_NAV_ITEMS,
 } from "../../../../../packages/common-constant/src";
 import type {
@@ -36,13 +26,13 @@ import type {
 } from "../../../../../packages/common-type/src";
 import {
 	setApiLocale,
-	setApiSpace,
+	setApiSessionScope,
 	setLoginRedirectUrl,
 } from "../../../../../packages/fe-api/src/core/client";
 import {
 	setIdpLocale,
 	setIdpLoginRedirectUrl,
-	setIdpSpace,
+	setIdpSessionScope,
 } from "../../../../../packages/fe-api/src/idp/client";
 
 type StorybookRealm = "none" | "admin" | "idp";
@@ -128,7 +118,7 @@ function getDefaultCurrentPath(realm: StorybookRealm): string {
 	return "/dashboard";
 }
 
-function getStorageKey(realm: StorybookRealm): string {
+function getPersistStorageKey(realm: StorybookRealm): string {
 	if (realm === "idp") {
 		return "storybook-idp-persist";
 	}
@@ -148,98 +138,52 @@ function getNavigationItems(realm: StorybookRealm) {
 	return ADMIN_NAV_ITEMS;
 }
 
-function getBottomTabIds(realm: StorybookRealm) {
-	if (realm === "idp") {
-		return [];
-	}
-
-	return [...BOTTOM_TAB_IDS];
-}
-
-function getFabActions(realm: StorybookRealm) {
-	if (realm === "idp") {
-		return [];
-	}
-
-	return ADMIN_FAB_ACTIONS;
-}
-
-function createStorybookAppStore(runtime: StorybookRuntimeConfig): AppStore {
-	const app = new AppStore();
-	const navigation = new Navigation(getNavigationItems(runtime.realm));
-	const space = new Space({
-		storageKey: getStorageKey(runtime.realm),
-	});
-	const locale = new Locale({
-		storageKey: `${getStorageKey(runtime.realm)}:locale`,
-	});
-	const ability = new Ability(app);
-
-	app.name = `STORYBOOK_${runtime.realm.toUpperCase()}`;
-	app.tokens = new Tokens(app);
-	app.cookies = new Cookies();
-	app.session = new Session(app);
-	app.ability = ability;
-	app.navigation = navigation;
-	app.space = space;
-	app.locale = locale;
-	app.mobileNavigation = new MobileNavigation(
-		{
-			tabIds: getBottomTabIds(runtime.realm),
-			moreTabId: "more",
-		},
-		{ navigation },
-	);
-	app.floatingActions = new FloatingActions({
-		actions: getFabActions(runtime.realm),
+function createStorybookRootStore(runtime: StorybookRuntimeConfig): RootStore {
+	const root = new RootStore({
+		appName: `STORYBOOK_${runtime.realm.toUpperCase()}`,
+		navItems: getNavigationItems(runtime.realm),
+		persistStorageKey: getPersistStorageKey(runtime.realm),
+		storageAdapter: browserPersistStorageAdapter,
 	});
 
-	navigation.setCurrentPath(runtime.currentPath);
-	ability.updateRules([...FALLBACK_ABILITY_RULES]);
-	setApiSpace(space);
-	setIdpSpace(space);
-	setApiLocale(locale);
-	setIdpLocale(locale);
+	root.initialize({
+		sessionScopeBinders: [setApiSessionScope, setIdpSessionScope],
+		languageBinders: [setApiLocale, setIdpLocale],
+	});
+	root.setCurrentPath(runtime.currentPath);
+	root.app.accessControl.updateRules([...FALLBACK_ABILITY_RULES]);
+	setLoginRedirectUrl(DISABLED_AUTH_REDIRECT_URL);
+	setIdpLoginRedirectUrl(DISABLED_AUTH_REDIRECT_URL);
 
-	return app;
+	return root;
 }
 
 const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 	children,
+	root,
 	runtime,
 	storyId,
 }: PropsWithChildren<{
+	root: RootStore;
 	runtime: StorybookRuntimeConfig;
 	storyId: string;
 }>) {
 	const app = useApp();
-	const space = app.space;
-	const ability = app.ability;
-	const navigation = app.navigation;
-	const locale = app.locale;
+	const account = app.account;
+	const accessControl = app.accessControl;
 
 	useEffect(() => {
-		space.hydrateFromStorage();
-		locale.hydrateFromStorage();
-		setApiSpace(space);
-		setIdpSpace(space);
-		setApiLocale(locale);
-		setIdpLocale(locale);
-		setLoginRedirectUrl(DISABLED_AUTH_REDIRECT_URL);
-		setIdpLoginRedirectUrl(DISABLED_AUTH_REDIRECT_URL);
-	}, [locale, space, storyId]);
+		root.start();
+	}, [root, storyId]);
 
 	useEffect(() => {
-		navigation.setAbilityChecker((action, subject) =>
-			ability.can(action, subject),
-		);
-		navigation.setCurrentPath(runtime.currentPath);
-	}, [ability, navigation, runtime.currentPath]);
+		root.setCurrentPath(runtime.currentPath);
+	}, [root, runtime.currentPath]);
 
 	useEffect(() => {
 		if (runtime.realm === "admin") {
-			space.setSpaces([STORYBOOK_ADMIN_SPACE]);
-			space.setSpace(
+			account.setAvailableSpaces([STORYBOOK_ADMIN_SPACE]);
+			account.setCurrentTenant(
 				STORYBOOK_ADMIN_SPACE.tenantId,
 				STORYBOOK_ADMIN_SPACE.groundName,
 				null,
@@ -247,9 +191,9 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 			);
 		}
 
-		space.setSpaceSelectionResolved(true);
-		ability.updateRules([...FALLBACK_ABILITY_RULES]);
-	}, [ability, space, runtime.realm]);
+		account.setSelectionResolved(true);
+		accessControl.updateRules([...FALLBACK_ABILITY_RULES]);
+	}, [accessControl, account, runtime.realm]);
 
 	return children;
 });
@@ -263,13 +207,14 @@ export function StorybookRuntimeProvider({
 	storyId: string;
 }>) {
 	const queryClient = getQueryClient();
-	const appRef = useRef<AppStore | null>(null);
+	const rootRef = useRef<RootStore | null>(null);
 	const [currentPath, setCurrentPath] = useState(runtime.currentPath);
 	const navigatorRef = useRef<NavigatorLike | null>(null);
 
-	if (!appRef.current) {
-		appRef.current = createStorybookAppStore(runtime);
+	if (!rootRef.current) {
+		rootRef.current = createStorybookRootStore(runtime);
 	}
+	const root = rootRef.current;
 
 	if (!navigatorRef.current) {
 		navigatorRef.current = {
@@ -284,29 +229,31 @@ export function StorybookRuntimeProvider({
 	}, [runtime.currentPath]);
 
 	useEffect(() => {
-		appRef.current!.navigation.setCurrentPath(currentPath);
-		appRef.current!.mobileNavigation.updateActiveTabFromPath(currentPath);
-	}, [currentPath]);
+		root.setCurrentPath(currentPath);
+	}, [currentPath, root]);
 
 	useEffect(() => {
 		if (!navigatorRef.current) {
 			return;
 		}
 
-		appRef.current!.navigation.setNavigator(navigatorRef.current);
-		appRef.current!.floatingActions.setNavigator(navigatorRef.current);
-	}, []);
+		root.setNavigator(navigatorRef.current);
+	}, [root]);
 
 	return (
 		<QueryClientProvider client={queryClient}>
 			<NuqsReactAdapter>
-				<AppStoreContext.Provider value={appRef.current}>
+				<AppContext.Provider value={root.app}>
 					<DesignSystemProvider>
-						<StorybookRuntimeBootstrap runtime={runtime} storyId={storyId}>
+						<StorybookRuntimeBootstrap
+							root={root}
+							runtime={runtime}
+							storyId={storyId}
+						>
 							{children}
 						</StorybookRuntimeBootstrap>
 					</DesignSystemProvider>
-				</AppStoreContext.Provider>
+				</AppContext.Provider>
 			</NuqsReactAdapter>
 		</QueryClientProvider>
 	);

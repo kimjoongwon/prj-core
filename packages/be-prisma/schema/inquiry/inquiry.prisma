@@ -74,7 +74,9 @@ model Inquiry {
   /// @displayName 삭제 일시
   removedAt             DateTime?            @map("removed_at") @db.Timestamptz(6)
   /// @displayName 소속 공간 ID
-  tenantId              String               @map("tenant_id")
+  spaceId               String               @map("space_id")
+  /// @displayName 생성자 ID
+  creatorId             String?              @map("creator_id")
   /// @displayName 문의 번호
   inquiryNumber         String               @unique @map("inquiry_number")
   /// @displayName 제목
@@ -123,7 +125,8 @@ model Inquiry {
   unreadCount           Int                  @default(0) @map("unread_count")
   /// @displayName 추가 메타데이터
   metadata              Json?
-  tenant                Tenant               @relation(fields: [tenantId], references: [id])
+  space                 Space                @relation(fields: [spaceId], references: [id], onDelete: Restrict)
+  creator               User?                @relation("InquiryCreator", fields: [creatorId], references: [id], onDelete: SetNull)
   customer              User?                @relation("InquiryCustomer", fields: [customerId], references: [id])
   assignee              User?                @relation("InquiryAssignee", fields: [assigneeId], references: [id])
   threads               InquiryThread[]
@@ -133,11 +136,11 @@ model Inquiry {
   sentimentAnalysis     SentimentAnalysis?
   aiAgentLogs           AIAgentLog[]
 
-  @@index([tenantId])
+  @@index([spaceId])
   @@index([status])
   @@index([assigneeId])
   @@index([customerId])
-  @@index([tenantId, status])
+  @@index([spaceId, status])
   @@map("inquiries")
 }
 

@@ -125,18 +125,16 @@ describe("AuthController", () => {
 		expect(result).toEqual({ authenticated: true });
 	});
 
-	it("getCurrentSpace는 QueryBus로 요청 tenant context를 조회한다", async () => {
+	it("getCurrentSpace는 QueryBus로 저장된 current tenant를 조회한다", async () => {
 		queryBus.execute.mockResolvedValue({ id: "space-test-id" });
 
-		const result = await controller.getCurrentSpace(request as never);
+		const result = await controller.getCurrentSpace();
 
 		expect(queryBus.execute).toHaveBeenCalledWith(
 			expect.any(GetCurrentSpaceQuery),
 		);
 		const query = queryBus.execute.mock.calls[0]?.[0];
 		expect(query).toBeInstanceOf(GetCurrentSpaceQuery);
-		const currentSpaceQuery = query as GetCurrentSpaceQuery;
-		expect(currentSpaceQuery.requestedTenantId).toBe("tenant-test-id");
 		expect(result).toEqual({ id: "space-test-id" });
 	});
 

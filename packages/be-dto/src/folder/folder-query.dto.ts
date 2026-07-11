@@ -22,7 +22,7 @@ export class FolderQueryDto extends QueryDto {
 	parentFolderId?: string;
 
 	@UUIDFieldOptional({ description: "테넌트 ID 필터" })
-	tenantId?: string;
+	spaceId?: string;
 
 	@StringFieldOptional({ description: "폴더명 검색 (부분 일치)" })
 	name?: string;

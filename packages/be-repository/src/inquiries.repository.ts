@@ -58,7 +58,7 @@ export class InquiriesRepository {
 		const result = await this.txHost.tx.inquiry.findFirst({
 			where: {
 				id,
-				...(spaceIds ? { tenant: { spaceId: { in: spaceIds } } } : {}),
+				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
 			},
 			include: {
 				threads: {
@@ -546,7 +546,7 @@ export class InquiriesRepository {
 		};
 
 		if (params?.spaceId) {
-			where.tenant = { spaceId: params.spaceId };
+			where.spaceId = params.spaceId;
 		}
 
 		const [items, totalCount] = await Promise.all([
@@ -593,7 +593,7 @@ export class InquiriesRepository {
 		const results = await this.txHost.tx.inquiry.groupBy({
 			by: ["status"],
 			where: {
-				...(spaceIds ? { tenant: { spaceId: { in: spaceIds } } } : {}),
+				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
 				removedAt: null,
 			},
 			_count: {
@@ -623,7 +623,7 @@ export class InquiriesRepository {
 		const results = await this.txHost.tx.inquiry.groupBy({
 			by: ["category"],
 			where: {
-				...(spaceIds ? { tenant: { spaceId: { in: spaceIds } } } : {}),
+				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
 				removedAt: null,
 			},
 			_count: {
@@ -651,7 +651,7 @@ export class InquiriesRepository {
 
 		const now = new Date();
 		const baseWhere: Prisma.InquiryWhereInput = {
-			...(spaceIds ? { tenant: { spaceId: { in: spaceIds } } } : {}),
+			...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
 			removedAt: null,
 			resolvedAt: null,
 		};

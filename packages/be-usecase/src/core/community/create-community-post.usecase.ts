@@ -14,8 +14,8 @@ export class CreateCommunityPostUseCase {
 	) {}
 
 	async execute(command: CreateCommunityPostCommand): Promise<unknown> {
-		const tenantId = this.spaceContext.tenantId;
-		if (!tenantId) {
+		const spaceId = this.spaceContext.spaceId;
+		if (!spaceId) {
 			throw new UnauthorizedException(COMMON_ERRORS.SPACE_NOT_SELECTED);
 		}
 		const userId = this.authContext.user?.id;
@@ -23,7 +23,7 @@ export class CreateCommunityPostUseCase {
 			throw new UnauthorizedException(COMMON_ERRORS.USER_NOT_FOUND);
 		}
 		const post = await this.contentService.createCommunityPost({
-			tenantId,
+			spaceId,
 			userId,
 			...command,
 		});

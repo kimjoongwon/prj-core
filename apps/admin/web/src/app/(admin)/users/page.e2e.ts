@@ -35,23 +35,13 @@ test.describe("이용자 목록 페이지", () => {
 			).toBeVisible();
 		});
 
-		test("통계 카드 3개가 표시되어야 한다", async ({ page }) => {
-			// Then:
-			// - stats 응답이 있으면 카드 3종이 표시됨
-			// - stats 응답이 없으면 목록 영역은 정상 렌더링됨
-			const totalUsersCard = page.getByText("전체 이용자", { exact: true });
-			const hasStats = await totalUsersCard.isVisible().catch(() => false);
-			if (hasStats) {
-				await expect(totalUsersCard).toBeVisible();
-				await expect(
-					page.getByText("활성 이용자", { exact: true }),
-				).toBeVisible();
-				await expect(
-					page.getByText("비활성 이용자", { exact: true }),
-				).toBeVisible();
-				return;
-			}
-			await expect(page.getByText(/총 \d+건/)).toBeVisible();
+		test("통계 카운터가 표시되지 않아야 한다", async ({ page }) => {
+			// Then: 목록 화면에는 이용자 상태 카운터가 표시되지 않음
+			await expect(page.getByText("전체 이용자", { exact: true })).toBeHidden();
+			await expect(page.getByText("활성 이용자", { exact: true })).toBeHidden();
+			await expect(
+				page.getByText("비활성 이용자", { exact: true }),
+			).toBeHidden();
 		});
 
 		test("DataGrid 컬럼 헤더가 표시되어야 한다", async ({ page }) => {

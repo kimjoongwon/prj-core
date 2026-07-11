@@ -17,7 +17,9 @@ model Policy {
   removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
 
   /// @displayName 공간 ID
-  tenantId    String  @map("tenant_id")
+  spaceId     String  @map("space_id")
+  /// @displayName 생성자 ID
+  creatorId   String? @map("creator_id")
   /// @displayName 정책 식별자
   name        String
   /// @displayName 표시명
@@ -27,12 +29,13 @@ model Policy {
   /// @displayName 시스템 정책 여부
   isSystem    Boolean @default(false) @map("is_system")
 
-  tenant          Tenant          @relation(fields: [tenantId], references: [id])
+  space           Space           @relation(fields: [spaceId], references: [id], onDelete: Restrict)
+  creator         User?           @relation(fields: [creatorId], references: [id], onDelete: SetNull)
   policyAbilities PolicyAbility[]
   rolePolicies    RolePolicy[]
 
-  @@unique([tenantId, name])
-  @@index([tenantId])
+  @@unique([spaceId, name])
+  @@index([spaceId])
   @@index([isSystem])
   @@map("policies")
 }

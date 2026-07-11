@@ -5282,7 +5282,8 @@ export const PolicyScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  tenantId: 'tenantId',
+  spaceId: 'spaceId',
+  creatorId: 'creatorId',
   name: 'name',
   displayName: 'displayName',
   description: 'description',
@@ -5377,7 +5378,7 @@ export const AlbumScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  tenantId: 'tenantId',
+  spaceId: 'spaceId',
   name: 'name',
   description: 'description',
   coverAssetId: 'coverAssetId',
@@ -5393,7 +5394,8 @@ export const AlbumEntryScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  tenantId: 'tenantId',
+  spaceId: 'spaceId',
+  creatorId: 'creatorId',
   albumId: 'albumId',
   assetId: 'assetId',
   position: 'position',
@@ -5408,7 +5410,7 @@ export const AssetScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  tenantId: 'tenantId',
+  spaceId: 'spaceId',
   folderId: 'folderId',
   kind: 'kind',
   status: 'status',
@@ -5481,7 +5483,8 @@ export const DerivativeScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  tenantId: 'tenantId',
+  spaceId: 'spaceId',
+  creatorId: 'creatorId',
   assetId: 'assetId',
   kind: 'kind',
   profile: 'profile',
@@ -5501,7 +5504,7 @@ export const FolderScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  tenantId: 'tenantId',
+  spaceId: 'spaceId',
   parentFolderId: 'parentFolderId',
   name: 'name',
   path: 'path',
@@ -5623,7 +5626,7 @@ export const ContentScalarFieldEnum = {
   type: 'type',
   text: 'text',
   fileId: 'fileId',
-  tenantId: 'tenantId',
+  spaceId: 'spaceId',
   creatorId: 'creatorId'
 } as const
 
@@ -5817,7 +5820,8 @@ export const UserScalarFieldEnum = {
   passwordChangedAt: 'passwordChangedAt',
   lastLoginAt: 'lastLoginAt',
   lastLoginIp: 'lastLoginIp',
-  isActive: 'isActive'
+  isActive: 'isActive',
+  currentTenantId: 'currentTenantId'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -5962,7 +5966,8 @@ export const InquiryScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  tenantId: 'tenantId',
+  spaceId: 'spaceId',
+  creatorId: 'creatorId',
   inquiryNumber: 'inquiryNumber',
   title: 'title',
   category: 'category',
@@ -6081,7 +6086,8 @@ export const ReservationScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  tenantId: 'tenantId',
+  spaceId: 'spaceId',
+  creatorId: 'creatorId',
   userId: 'userId',
   timelineId: 'timelineId',
   sessionId: 'sessionId',
@@ -6104,7 +6110,7 @@ export const RoutineScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  tenantId: 'tenantId',
+  spaceId: 'spaceId',
   creatorId: 'creatorId',
   name: 'name',
   label: 'label'
@@ -6134,7 +6140,7 @@ export const TaskScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  tenantId: 'tenantId',
+  spaceId: 'spaceId',
   creatorId: 'creatorId'
 } as const
 
@@ -6163,7 +6169,7 @@ export const TimelineScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
-  tenantId: 'tenantId',
+  spaceId: 'spaceId',
   creatorId: 'creatorId',
   name: 'name',
   description: 'description'
@@ -6238,7 +6244,7 @@ export const CategoryScalarFieldEnum = {
   name: 'name',
   type: 'type',
   parentId: 'parentId',
-  tenantId: 'tenantId',
+  spaceId: 'spaceId',
   creatorId: 'creatorId'
 } as const
 
@@ -6253,7 +6259,7 @@ export const GroupScalarFieldEnum = {
   name: 'name',
   type: 'type',
   label: 'label',
-  tenantId: 'tenantId',
+  spaceId: 'spaceId',
   creatorId: 'creatorId'
 } as const
 
@@ -6270,7 +6276,7 @@ export const SafeWalletScalarFieldEnum = {
   threshold: 'threshold',
   nonce: 'nonce',
   owners: 'owners',
-  tenantId: 'tenantId',
+  spaceId: 'spaceId',
   creatorId: 'creatorId'
 } as const
 

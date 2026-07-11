@@ -11,9 +11,9 @@ let mockPathname = "/";
 const mockGetCurrentSpace = jest.fn();
 const mockGetMySpaces = jest.fn();
 const mockSetApiNativeRefreshHandler = jest.fn();
-const mockSetApiSpace = jest.fn();
+const mockSetApiSessionScope = jest.fn();
 const mockSetIdpNativeRefreshHandler = jest.fn();
-const mockSetIdpSpace = jest.fn();
+const mockSetIdpSessionScope = jest.fn();
 const mockVerifyToken = jest.fn();
 
 jest.mock("expo-router", () => ({
@@ -37,7 +37,8 @@ jest.mock("@cocrepo/api/idp/auth", () => ({
 jest.mock("@cocrepo/api/core/client", () => ({
 	setApiNativeRefreshHandler: (...args: unknown[]) =>
 		mockSetApiNativeRefreshHandler(...args),
-	setApiSpace: (...args: unknown[]) => mockSetApiSpace(...args),
+	setApiSessionScope: (...args: unknown[]) =>
+		mockSetApiSessionScope(...args),
 }));
 
 jest.mock("@cocrepo/api/idp/client", () => ({
@@ -45,7 +46,8 @@ jest.mock("@cocrepo/api/idp/client", () => ({
 	setIdpLoginRedirectUrl: jest.fn(),
 	setIdpNativeRefreshHandler: (...args: unknown[]) =>
 		mockSetIdpNativeRefreshHandler(...args),
-	setIdpSpace: (...args: unknown[]) => mockSetIdpSpace(...args),
+	setIdpSessionScope: (...args: unknown[]) =>
+		mockSetIdpSessionScope(...args),
 }));
 
 jest.mock("expo-secure-store", () => ({
@@ -70,9 +72,9 @@ describe("AuthSessionGate", () => {
 		mockGetCurrentSpace.mockReset();
 		mockGetMySpaces.mockReset();
 		mockSetApiNativeRefreshHandler.mockReset();
-		mockSetApiSpace.mockReset();
+		mockSetApiSessionScope.mockReset();
 		mockSetIdpNativeRefreshHandler.mockReset();
-		mockSetIdpSpace.mockReset();
+		mockSetIdpSessionScope.mockReset();
 		mockVerifyToken.mockReset();
 		(SecureStore.getItemAsync as jest.Mock).mockImplementation(async () => null);
 		(SecureStore.setItemAsync as jest.Mock).mockClear();
@@ -147,8 +149,8 @@ describe("AuthSessionGate", () => {
 		expect(mobileApiScope.groundName).toBe("강남점");
 		expect(mobileApiScope.isSpaceSelectionResolved).toBe(true);
 		expect(mockGetCurrentSpace).toHaveBeenCalled();
-		expect(mockSetApiSpace).toHaveBeenCalledWith(mobileApiScope);
-		expect(mockSetIdpSpace).toHaveBeenCalledWith(mobileApiScope);
+		expect(mockSetApiSessionScope).toHaveBeenCalledWith(mobileApiScope);
+		expect(mockSetIdpSessionScope).toHaveBeenCalledWith(mobileApiScope);
 		expect(mockSetApiNativeRefreshHandler).toHaveBeenCalled();
 		expect(mockSetIdpNativeRefreshHandler).toHaveBeenCalled();
 	});

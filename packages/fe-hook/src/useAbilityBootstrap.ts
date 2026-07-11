@@ -14,23 +14,23 @@ export interface UseAbilityBootstrapOptions {
 }
 
 /**
- * 현재 route와 선택 Space 상태에 맞춰 권한 API 결과를 bootstrap 형태로 정규화합니다.
+ * 현재 route와 선택 tenant 상태에 맞춰 권한 API 결과를 bootstrap 형태로 정규화합니다.
  */
 export function useAbilityBootstrap(options: UseAbilityBootstrapOptions = {}) {
 	const { skipPathPrefix = "/auth" } = options;
 	const pathname = usePathname();
 	const app = useApp();
-	const space = app.space;
+	const account = app.account;
 	const isDisabled = pathname?.startsWith(skipPathPrefix) === true;
 	const canLoadAbilities =
 		!isDisabled &&
-		space.isHydrated &&
-		space.isSpaceSelectionResolved &&
-		Boolean(space.tenantId);
+		account.isHydrated &&
+		account.isSelectionResolved &&
+		Boolean(account.currentTenantId);
 	const query = useGetMyAbilities({
 		query: {
 			enabled: canLoadAbilities,
-			queryKey: ["/api/v1/abilities/my", space.tenantId],
+			queryKey: ["/api/v1/abilities/my", account.currentTenantId],
 			staleTime: 1000 * 60 * 5,
 			gcTime: 1000 * 60 * 10,
 		},

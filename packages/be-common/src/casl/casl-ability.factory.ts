@@ -119,9 +119,9 @@ export class CaslAbilityFactory {
 		);
 
 		const rolePolicies =
-			await this.rolePoliciesRepository.findActiveByRoleIdsInTenant(
+			await this.rolePoliciesRepository.findActiveByRoleIdsInSpace(
 				[roleId],
-				currentTenant.id,
+				spaceId,
 			);
 		const roleAbilities = this.expandRolePolicyAbilities(rolePolicies);
 		this.logger.debug(

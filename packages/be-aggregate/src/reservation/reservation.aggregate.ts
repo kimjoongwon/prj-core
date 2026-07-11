@@ -129,7 +129,7 @@ export class ReservationAggregate {
 			`예약 생성 요청: user=${params.userId.slice(-8)}, program=${params.input.programId.slice(-8)}`,
 		);
 
-		const tenantId = await this.assertUserCanBookSpace(
+		await this.assertUserCanBookSpace(
 			params.userId,
 			params.spaceId,
 		);
@@ -184,7 +184,8 @@ export class ReservationAggregate {
 		const now = new Date();
 
 		const reservation = await this.repository.create({
-			tenantId,
+			spaceId: params.spaceId,
+			creatorId: params.userId,
 			userId: params.userId,
 			timelineId: params.input.timelineId,
 			sessionId: params.input.sessionId,
@@ -255,7 +256,7 @@ export class ReservationAggregate {
 	private async assertUserCanBookSpace(
 		userId: string,
 		spaceId: string,
-	): Promise<string> {
+	): Promise<void> {
 		const tenant = await this.tenantsRepository.findActiveByUserIdAndSpaceId(
 			userId,
 			spaceId,
@@ -263,7 +264,6 @@ export class ReservationAggregate {
 		if (!tenant) {
 			throw new ForbiddenException(RESERVATION_ERRORS.SPACE_ACCESS_REQUIRED);
 		}
-		return tenant.id;
 	}
 
 	private async promoteWaitlistIfPossible(params: {
@@ -276,7 +276,7 @@ export class ReservationAggregate {
 			return;
 		}
 
-		const nextWaitlistedSpaceId = nextWaitlisted.tenant?.spaceId;
+		const nextWaitlistedSpaceId = nextWaitlisted.spaceId;
 		if (!nextWaitlistedSpaceId) {
 			throw new BadRequestException(RESERVATION_ERRORS.INVALID_DATA);
 		}

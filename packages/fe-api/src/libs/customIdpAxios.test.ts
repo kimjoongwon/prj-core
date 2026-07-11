@@ -6,7 +6,7 @@ import {
 } from "axios";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-interface SpaceStub {
+interface SessionScopeStub {
 	accessToken: string;
 	refreshToken: string;
 	sessionId: string;
@@ -40,9 +40,9 @@ describe("customIdpAxios", () => {
 			customIdpInstance,
 			setIdpLocale,
 			setIdpNativeRefreshHandler,
-			setIdpSpace,
+			setIdpSessionScope,
 		} = await import("./customIdpAxios");
-		const store: SpaceStub = {
+		const store: SessionScopeStub = {
 			accessToken: "old-access-token",
 			refreshToken: "old-refresh-token",
 			sessionId: "session-id",
@@ -72,7 +72,7 @@ describe("customIdpAxios", () => {
 			};
 		};
 
-		setIdpSpace(store);
+		setIdpSessionScope(store);
 		setIdpLocale({ languageCode: "ko_KR" });
 		setIdpNativeRefreshHandler(async () => {
 			store.accessToken = "new-access-token";

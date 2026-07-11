@@ -15,9 +15,7 @@ export const Shell: Story = {
 	render: () => (
 		<Admin>
 			<Admin.Header>
-				<div className="border-border border-b bg-surface px-6 py-4 font-semibold">
-					Admin header
-				</div>
+				<div className="px-6 py-4 font-semibold">Admin header</div>
 			</Admin.Header>
 			<Admin.Body>
 				<Admin.LeftAside>

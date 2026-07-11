@@ -9,11 +9,6 @@ const defaultArgs = {
 	queryStates: { page: 1, take: 10, skip: 0, search: "" },
 	searchValue: "샘플",
 	setQueryStates: (..._args: never[]) => undefined,
-	stats: {
-		active: 1,
-		inactive: 1,
-		total: 12,
-	},
 	totalCount: 12,
 	users: [
 		{
@@ -58,7 +53,6 @@ const emptyStateArgs = {
 	...defaultArgs,
 	users: [],
 	totalCount: 0,
-	stats: { total: 0, active: 0, inactive: 0 },
 };
 
 const meta = {

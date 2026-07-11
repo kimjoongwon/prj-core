@@ -12,7 +12,7 @@ describe("CaslAbilityFactory", () => {
 
 	beforeEach(async () => {
 		mockRolePoliciesRepository = {
-			findActiveByRoleIdsInTenant: jest.fn(),
+			findActiveByRoleIdsInSpace: jest.fn(),
 		} as unknown as jest.Mocked<RolePoliciesRepository>;
 
 		mockClsService = {
@@ -56,7 +56,7 @@ describe("CaslAbilityFactory", () => {
 		mockClsService.get.mockImplementation((key) =>
 			key === CONTEXT_KEYS.TENANT_ID ? "tenant-1" : undefined,
 		);
-		mockRolePoliciesRepository.findActiveByRoleIdsInTenant.mockResolvedValue([
+		mockRolePoliciesRepository.findActiveByRoleIdsInSpace.mockResolvedValue([
 			{
 				priority: 1,
 				createdAt: new Date("2026-01-01T00:00:00.000Z"),
@@ -98,7 +98,7 @@ describe("CaslAbilityFactory", () => {
 		mockClsService.get.mockImplementation((key) =>
 			key === CONTEXT_KEYS.TENANT_ID ? "tenant-1" : undefined,
 		);
-		mockRolePoliciesRepository.findActiveByRoleIdsInTenant.mockResolvedValue([
+		mockRolePoliciesRepository.findActiveByRoleIdsInSpace.mockResolvedValue([
 			{
 				priority: 1,
 				createdAt: new Date("2026-01-01T00:00:00.000Z"),
@@ -162,7 +162,7 @@ describe("CaslAbilityFactory", () => {
 		const ability = await factory.createForUser(user);
 		expect(ability.can("READ", "entity:User")).toBe(false);
 		expect(
-			mockRolePoliciesRepository.findActiveByRoleIdsInTenant,
+			mockRolePoliciesRepository.findActiveByRoleIdsInSpace,
 		).not.toHaveBeenCalled();
 	});
 
@@ -191,14 +191,14 @@ describe("CaslAbilityFactory", () => {
 		mockClsService.get.mockImplementation((key) =>
 			key === CONTEXT_KEYS.TENANT_ID ? "tenant-full-access" : undefined,
 		);
-		mockRolePoliciesRepository.findActiveByRoleIdsInTenant.mockResolvedValue(
+		mockRolePoliciesRepository.findActiveByRoleIdsInSpace.mockResolvedValue(
 			[] as never,
 		);
 
 		await factory.createForUser(user);
 
 		expect(
-			mockRolePoliciesRepository.findActiveByRoleIdsInTenant,
-		).toHaveBeenCalledWith(["role-full-access"], "tenant-full-access");
+			mockRolePoliciesRepository.findActiveByRoleIdsInSpace,
+		).toHaveBeenCalledWith(["role-full-access"], "space-1");
 	});
 });

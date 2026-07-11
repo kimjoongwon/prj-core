@@ -20,7 +20,8 @@ export interface UseAuthLoginOptions {
  */
 export function useAuthLogin({ router }: UseAuthLoginOptions) {
 	const app = useApp();
-	const space = app.space;
+	const account = app.account;
+	const { authSession } = account;
 	const defaultLoginCredentials = getDefaultLoginCredentials();
 	const state = useLocalObservable(() => ({
 		loginForm: {
@@ -46,14 +47,14 @@ export function useAuthLogin({ router }: UseAuthLoginOptions) {
 					password: state.loginForm.password,
 				},
 			});
-			const session = response.data;
-			if (!session) {
+			const nativeAuthSession = response.data;
+			if (!nativeAuthSession) {
 				state.errorMessage = "로그인 응답이 올바르지 않습니다.";
 				return;
 			}
 
-			space.setNativeAuthSession(session);
-			space.setSpaceSelectionResolved(false);
+			authSession.setNativeAuthSession(nativeAuthSession);
+			account.setSelectionResolved(false);
 			router.replace(resolveReturnPath());
 		} catch (error) {
 			state.errorMessage = resolveLoginErrorMessage(error);

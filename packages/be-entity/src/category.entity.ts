@@ -3,19 +3,19 @@ import type {
 	CategoryTypes,
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import type { Tenant } from "./tenant.entity";
+import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
 
 export class Category extends AbstractEntity implements CategoryEntity {
 	name!: string;
 	type!: CategoryTypes;
-	tenantId!: string;
+	spaceId!: string;
 	parentId!: string | null;
 	creatorId!: string | null;
 
 	parent?: Category;
 	children?: Category[];
-	tenant?: Tenant;
+	space?: Space;
 	creator?: User;
 
 	/**

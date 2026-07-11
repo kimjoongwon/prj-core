@@ -15,8 +15,8 @@ import { FolderDto } from "../folder/folder.dto";
  * 에셋 DTO
  */
 export class AssetDto extends AbstractDto {
-	@UUIDField({ description: "소속 Tenant ID" })
-	tenantId!: string;
+	@UUIDField({ description: "소속 Space ID" })
+	spaceId!: string;
 
 	@UUIDField({ description: "소속 폴더 ID" })
 	folderId!: string;

@@ -53,7 +53,7 @@ const renderRootStackHeader = (props: NativeStackHeaderProps) => (
 	/>
 );
 
-export default function () {
+export default function RootLayout() {
 	useEffect(() => {
 		Uniwind.setTheme(MOBILE_DEFAULT_THEME);
 		configureMobileApiScope();
