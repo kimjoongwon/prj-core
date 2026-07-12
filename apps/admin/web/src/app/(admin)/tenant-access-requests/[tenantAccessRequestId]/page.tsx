@@ -1,6 +1,5 @@
 "use client";
 
-import { toast } from "@heroui/react";
 import {
 	getGetTenantAccessRequestQueryKey,
 	getGetTenantAccessRequestsQueryKey,
@@ -14,6 +13,7 @@ import {
 	type TenantAccessRequestReviewDetail,
 	TenantAccessRequestReviewDetailScreen,
 } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -81,34 +81,32 @@ export default observer(function TenantAccessRequestReviewDetailScreenRoute() {
 	}, [request, reviewState]);
 
 	return (
-		<>
-			<TenantAccessRequestReviewDetailScreen
-				request={request ? mapReviewDetail(request) : undefined}
-				reviewComment={reviewState.reviewComment}
-				isLoading={isLoading}
-				isApproving={isApproving}
-				isRejecting={isRejecting}
-				canApprove={true}
-				onClickBackButton={() => {
-					router.push(ADMIN_PATHS.TENANT_ACCESS_REQUESTS as Route);
-				}}
-				onChangeReviewCommentTextArea={(reviewComment) => {
-					reviewState.setReviewComment(reviewComment);
-				}}
-				onClickApproveButton={() => {
-					approveRequest({
-						tenantAccessRequestId,
-						data: { reviewComment: reviewState.reviewComment || null },
-					});
-				}}
-				onClickRejectButton={() => {
-					rejectRequest({
-						tenantAccessRequestId,
-						data: { reviewComment: reviewState.reviewComment || null },
-					});
-				}}
-			/>
-		</>
+		<TenantAccessRequestReviewDetailScreen
+			request={request ? mapReviewDetail(request) : undefined}
+			reviewComment={reviewState.reviewComment}
+			isLoading={isLoading}
+			isApproving={isApproving}
+			isRejecting={isRejecting}
+			canApprove={true}
+			onClickBackButton={() => {
+				router.push(ADMIN_PATHS.TENANT_ACCESS_REQUESTS as Route);
+			}}
+			onChangeReviewCommentTextArea={(reviewComment) => {
+				reviewState.setReviewComment(reviewComment);
+			}}
+			onClickApproveButton={() => {
+				approveRequest({
+					tenantAccessRequestId,
+					data: { reviewComment: reviewState.reviewComment || null },
+				});
+			}}
+			onClickRejectButton={() => {
+				rejectRequest({
+					tenantAccessRequestId,
+					data: { reviewComment: reviewState.reviewComment || null },
+				});
+			}}
+		/>
 	);
 });
 

@@ -3,7 +3,7 @@ import {
 	AccountTenantSelect,
 	AccountUserMenu,
 	LanguageSelectButton,
-	SideNavigation,
+	NavigationPanel,
 	ThemeToggleButton,
 } from "@cocrepo/ui";
 import { Admin } from "@cocrepo/ui/layout";
@@ -32,7 +32,7 @@ export default function AdminLayout({
 			</Admin.Header>
 			<Admin.Body>
 				<Admin.LeftAside>
-					<SideNavigation />
+					<NavigationPanel />
 				</Admin.LeftAside>
 				<Admin.Main>
 					<AccessControlGuard contents={children} />

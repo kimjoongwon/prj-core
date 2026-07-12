@@ -317,7 +317,7 @@ Pure UI → Widget → Feature → Page
 ```
 Widget (순수 UI)              Feature (비즈니스 로직)
 ─────────────────────────────────────────────────────
-NavTreePanel                  → SideNav (app.navigation 연결)
+NavTreePanel                  → NavigationPanel (app.navigation 연결)
 TabBar                        → BottomTab (app.navigation 연결)
 MenuList                      → SubMenuList (app.navigation 연결)
 UserCard                      → UserMenu (app.account.authSession 연결)
@@ -334,7 +334,7 @@ SpaceDropdown                 → SpaceSelector (app.account 연결)
 
 ### Layout block widget 규칙
 
-- `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 완성된 layout block block이므로 widget으로 분류합니다.
+- `HeaderBar`, `BottomNav`, `ActionFab`, `OverlayMenu`는 완성된 layout block block이므로 widget으로 분류합니다. `NavigationPanel`은 domain component입니다.
 - 위치는 `packages/fe-ui/src/widget/[Name]/`이고, `widget` 아래에 layout 전용 하위 카테고리를 만들지 않습니다.
 - 공용 props 계약은 `packages/fe-ui/src/display/layout/type.ts`를 재사용합니다.
 

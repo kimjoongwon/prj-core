@@ -24,5 +24,4 @@ export class QueryAuthAuditLogDto extends QueryDto {
 
 	@DateFieldOptional({ description: "종료일 (createdAt <= endDate)" })
 	readonly endDate?: Date;
-
 }

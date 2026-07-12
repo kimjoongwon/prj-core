@@ -54,7 +54,9 @@ function getE2eDatabaseUrl() {
 
 function toDefaultE2eDatabaseUrl(databaseUrl) {
 	const parsedUrl = new URL(databaseUrl);
-	const databaseName = decodeURIComponent(parsedUrl.pathname.replace(/^\//, ""));
+	const databaseName = decodeURIComponent(
+		parsedUrl.pathname.replace(/^\//, ""),
+	);
 
 	if (!databaseName) {
 		throw new Error("DATABASE_URL must include a database name.");
@@ -93,9 +95,7 @@ const databaseUrl = getE2eDatabaseUrl();
 
 process.env.DATABASE_URL = databaseUrl;
 process.env.DIRECT_URL =
-	process.env.E2E_DIRECT_URL ??
-	process.env.TEST_DIRECT_URL ??
-	databaseUrl;
+	process.env.E2E_DIRECT_URL ?? process.env.TEST_DIRECT_URL ?? databaseUrl;
 process.env.NODE_ENV = "test";
 process.env.ENABLE_NEST_DEVTOOLS = "false";
 process.env.APP_PORT =

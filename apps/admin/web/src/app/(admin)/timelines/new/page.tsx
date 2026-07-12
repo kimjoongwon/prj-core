@@ -1,17 +1,17 @@
 "use client";
 
-import { toast } from "@heroui/react";
 import { useCreateTimeline } from "@cocrepo/api/core/timelines";
+import { useApp } from "@cocrepo/store";
 import {
 	Button,
 	TimelineEditScreen,
 	type TimelineFormState,
 } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
-import { useApp } from "@cocrepo/store";
 
 const AdminTimelinesNewRoute = observer(() => {
 	const router = useRouter();
@@ -51,7 +51,9 @@ const AdminTimelinesNewRoute = observer(() => {
 			},
 			{
 				onSuccess: (response) => {
-					toast.success("등록 성공", { description: "타임라인이 등록되었습니다." });
+					toast.success("등록 성공", {
+						description: "타임라인이 등록되었습니다.",
+					});
 					const newId = response.data?.id;
 					if (newId) {
 						router.push(`/timelines/${newId}` as Route);
@@ -60,7 +62,10 @@ const AdminTimelinesNewRoute = observer(() => {
 					router.push("/timelines" as Route);
 				},
 				onError: () => {
-					toast.danger("등록 실패", { description: "타임라인 등록 중 오류가 발생했습니다. 이름이 중복되지 않았는지 확인해주세요." });
+					toast.danger("등록 실패", {
+						description:
+							"타임라인 등록 중 오류가 발생했습니다. 이름이 중복되지 않았는지 확인해주세요.",
+					});
 				},
 			},
 		);

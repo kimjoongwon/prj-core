@@ -48,17 +48,15 @@ export default observer(function AccountsPageRoute() {
 	});
 
 	return (
-		<>
-			<AccountListScreen
-				accounts={response?.data}
-				totalCount={response?.meta?.totalCount ?? 0}
-				isLoading={isLoading}
-				queryStates={queryStates}
-				setQueryStates={setQueryStates}
-				onClickUnlockAccountButton={(userId) => {
-					void unlockAccount({ userId });
-				}}
-			/>
-		</>
+		<AccountListScreen
+			accounts={response?.data}
+			totalCount={response?.meta?.totalCount ?? 0}
+			isLoading={isLoading}
+			queryStates={queryStates}
+			setQueryStates={setQueryStates}
+			onClickUnlockAccountButton={(userId) => {
+				void unlockAccount({ userId });
+			}}
+		/>
 	);
 });

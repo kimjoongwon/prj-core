@@ -14,11 +14,11 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { InquiryFormOptionItemDtoValue } from './inquiryFormOptionItemDtoValue';
+import type { InquiryFormOptionItemDtoValue } from "./inquiryFormOptionItemDtoValue";
 
 export interface InquiryFormOptionItemDto {
-  /** 옵션 값 */
-  value: InquiryFormOptionItemDtoValue;
-  /** 옵션 라벨 */
-  label: string;
+	/** 옵션 값 */
+	value: InquiryFormOptionItemDtoValue;
+	/** 옵션 라벨 */
+	label: string;
 }

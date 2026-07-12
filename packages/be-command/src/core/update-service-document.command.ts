@@ -1,5 +1,7 @@
 import type { UpdateServiceDocumentCommandInput } from "@cocrepo/input";
-export class UpdateServiceDocumentCommand implements UpdateServiceDocumentCommandInput {
+export class UpdateServiceDocumentCommand
+	implements UpdateServiceDocumentCommandInput
+{
 	readonly title?: UpdateServiceDocumentCommandInput["title"];
 	readonly summary?: UpdateServiceDocumentCommandInput["summary"];
 	readonly content?: UpdateServiceDocumentCommandInput["content"];

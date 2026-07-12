@@ -521,7 +521,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 ### 책임 분리
 
-- `fe-menu-agent`: 메뉴 트리, 탭 계약, `PageTabs`/`BottomTab`/`SideNav`/`QuickActionFAB` 같은 feature와 route layout이 소비할 메뉴 widget 조합 규칙
+- `fe-menu-agent`: 메뉴 트리, 탭 계약, `PageTabs`/`BottomTab`/`NavigationPanel`/`QuickActionFAB` 같은 feature와 route layout이 소비할 메뉴 widget 조합 규칙
 - `fe-route-layout-agent`: 실제 `layout.tsx` 파일에서 skeleton 조립
 - `fe-route-agent`: route skeleton 안의 실제 페이지 콘텐츠 구현
 
@@ -541,11 +541,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 | Widget | Feature | 연결 |
 |--------|---------|------|
 | HeaderBar | UserMenu / AccountTenantSelect | app.account.authSession / app.account |
-| SidePanel | SideNav | app.navigation |
+| NavigationPanel | (없음) | app.navigation |
 | BottomNav | BottomTab | app.navigation |
 | OverlayMenu | SubMenuList | app.navigation |
 | ActionFab | QuickActionFAB | app.navigation + app.accessControl |
-| NavTreePanel | SideNav | app.navigation |
+| NavTreePanel | NavigationPanel | app.navigation |
 | TabBar | BottomTab | app.navigation |
 | MenuList | SubMenuList | app.navigation |
 | FABPanel | QuickActionFAB | app.navigation + app.accessControl |
@@ -563,7 +563,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 const NavTreePanel = ({ items, activeId, onSelect }) => { ... };
 
 // Feature - app 상태 연결
-const SideNav = observer(() => {
+const NavigationPanel = observer(() => {
   const app = useApp();
   const navigation = app.navigation;
   return (

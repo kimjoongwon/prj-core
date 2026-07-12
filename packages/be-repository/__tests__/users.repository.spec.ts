@@ -351,7 +351,10 @@ describe("UsersRepository", () => {
 				createdAt: new Date("2024-01-01"),
 			};
 			mockTxHost.tx.user.findFirst.mockResolvedValue(account);
-			mockTxHost.tx.user.update.mockResolvedValue({ ...account, isActive: false });
+			mockTxHost.tx.user.update.mockResolvedValue({
+				...account,
+				isActive: false,
+			});
 
 			const result = await repository.updateIdpAccountById({
 				userId: "user-test-id",

@@ -1,10 +1,10 @@
 import { observer } from "mobx-react-lite";
 import { ScrollView, View } from "react-native";
 import { tv } from "tailwind-variants";
-import { Button } from "../../input/Button";
 import { Text } from "../../data-display/Text";
 import { StatusFeedback } from "../../feedback/StatusFeedback";
 import { Icon } from "../../icon";
+import { Button } from "../../input/Button";
 import { ScreenFrame } from "../../layout/ScreenFrame";
 import type { SpaceListItemInfo } from "../../widget/SpaceListItem";
 import { SpaceSelectionList } from "../../widget/SpaceSelectionList";

@@ -200,8 +200,7 @@ export const AuthPanelHeader = ({
 	const t = useT();
 	const translatedTitle = translateNode(title, t);
 	const translatedSubtitle = subtitle ? translateNode(subtitle, t) : null;
-	const titleToneClass =
-		titleClassName ?? "text-slate-950 dark:text-slate-50";
+	const titleToneClass = titleClassName ?? "text-slate-950 dark:text-slate-50";
 	const visual = logoUri ? (
 		<img
 			src={logoUri}
@@ -218,7 +217,9 @@ export const AuthPanelHeader = ({
 		<div className="mb-8 flex items-start gap-4">
 			{visual ? <div className="shrink-0">{visual}</div> : null}
 			<div className="min-w-0">
-				<h1 className={`text-2xl font-semibold tracking-tight ${titleToneClass}`}>
+				<h1
+					className={`text-2xl font-semibold tracking-tight ${titleToneClass}`}
+				>
 					{translatedTitle}
 				</h1>
 				{translatedSubtitle ? (

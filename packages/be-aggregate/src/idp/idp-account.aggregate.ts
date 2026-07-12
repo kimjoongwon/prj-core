@@ -69,7 +69,8 @@ export class IdpAccountAggregate {
 			return {
 				value: space.id,
 				label: primaryGround?.name ?? space.id,
-				description: primaryGround?.label ?? primaryGround?.address ?? undefined,
+				description:
+					primaryGround?.label ?? primaryGround?.address ?? undefined,
 			};
 		});
 		const roleOptions = roles.map((role) => ({

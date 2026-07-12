@@ -12,9 +12,5 @@ export default observer(function AssetsPageRoute() {
 		},
 	});
 
-	return (
-		<>
-			<AssetListScreen {...assetBrowser} />
-		</>
-	);
+	return <AssetListScreen {...assetBrowser} />;
 });

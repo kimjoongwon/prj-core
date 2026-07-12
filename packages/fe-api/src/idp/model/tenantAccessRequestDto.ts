@@ -14,78 +14,79 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { TenantAccessRequestStatus } from './tenantAccessRequestStatus';
-import type { UserDto } from './userDto';
-import type { TenantAccessRequestDtoReviewer } from './tenantAccessRequestDtoReviewer';
-import type { SpaceDto } from './spaceDto';
-import type { RoleDto } from './roleDto';
-import type { TenantAccessRequestDtoPreviousRole } from './tenantAccessRequestDtoPreviousRole';
-import type { TenantAccessRequestDtoAppliedTenant } from './tenantAccessRequestDtoAppliedTenant';
+
+import type { RoleDto } from "./roleDto";
+import type { SpaceDto } from "./spaceDto";
+import type { TenantAccessRequestDtoAppliedTenant } from "./tenantAccessRequestDtoAppliedTenant";
+import type { TenantAccessRequestDtoPreviousRole } from "./tenantAccessRequestDtoPreviousRole";
+import type { TenantAccessRequestDtoReviewer } from "./tenantAccessRequestDtoReviewer";
+import type { TenantAccessRequestStatus } from "./tenantAccessRequestStatus";
+import type { UserDto } from "./userDto";
 
 export interface TenantAccessRequestDto {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  /**
-   * 신청자 ID
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  requesterId: string;
-  /**
-   * 신청 대상 Space ID
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  spaceId: string;
-  /**
-   * 희망 Role ID
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  requestedRoleId: string;
-  /**
-   * 신청 시점 기존 Role ID
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  previousRoleId?: string | null;
-  /**
-   * 신청 사유
-   * @nullable
-   */
-  reason?: string | null;
-  /** 신청 상태 */
-  status: TenantAccessRequestStatus;
-  /**
-   * 검토자 ID
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  reviewerId?: string | null;
-  /**
-   * 검토 코멘트
-   * @nullable
-   */
-  reviewComment?: string | null;
-  /**
-   * 검토 시각
-   * @nullable
-   */
-  reviewedAt: string | null;
-  /**
-   * 승인 적용 Tenant ID
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  appliedTenantId?: string | null;
-  requester?: UserDto;
-  /** @nullable */
-  reviewer?: TenantAccessRequestDtoReviewer;
-  space?: SpaceDto;
-  requestedRole?: RoleDto;
-  /** @nullable */
-  previousRole?: TenantAccessRequestDtoPreviousRole;
-  /** @nullable */
-  appliedTenant?: TenantAccessRequestDtoAppliedTenant;
+	/** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	/**
+	 * 신청자 ID
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	requesterId: string;
+	/**
+	 * 신청 대상 Space ID
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	spaceId: string;
+	/**
+	 * 희망 Role ID
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	requestedRoleId: string;
+	/**
+	 * 신청 시점 기존 Role ID
+	 * @nullable
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	previousRoleId?: string | null;
+	/**
+	 * 신청 사유
+	 * @nullable
+	 */
+	reason?: string | null;
+	/** 신청 상태 */
+	status: TenantAccessRequestStatus;
+	/**
+	 * 검토자 ID
+	 * @nullable
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	reviewerId?: string | null;
+	/**
+	 * 검토 코멘트
+	 * @nullable
+	 */
+	reviewComment?: string | null;
+	/**
+	 * 검토 시각
+	 * @nullable
+	 */
+	reviewedAt: string | null;
+	/**
+	 * 승인 적용 Tenant ID
+	 * @nullable
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	appliedTenantId?: string | null;
+	requester?: UserDto;
+	/** @nullable */
+	reviewer?: TenantAccessRequestDtoReviewer;
+	space?: SpaceDto;
+	requestedRole?: RoleDto;
+	/** @nullable */
+	previousRole?: TenantAccessRequestDtoPreviousRole;
+	/** @nullable */
+	appliedTenant?: TenantAccessRequestDtoAppliedTenant;
 }

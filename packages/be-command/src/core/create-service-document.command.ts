@@ -1,5 +1,7 @@
 import type { CreateServiceDocumentCommandInput } from "@cocrepo/input";
-export class CreateServiceDocumentCommand implements CreateServiceDocumentCommandInput {
+export class CreateServiceDocumentCommand
+	implements CreateServiceDocumentCommandInput
+{
 	readonly kind!: CreateServiceDocumentCommandInput["kind"];
 	readonly platform?: CreateServiceDocumentCommandInput["platform"];
 	readonly locale?: CreateServiceDocumentCommandInput["locale"];

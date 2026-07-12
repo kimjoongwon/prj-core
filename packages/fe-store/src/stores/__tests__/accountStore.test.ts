@@ -1,10 +1,7 @@
 /// <reference types="vitest/globals" />
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import {
-	AccountStore,
-	type AccountSpaceInfo,
-} from "../account/accountStore";
+import { type AccountSpaceInfo, AccountStore } from "../account/accountStore";
 import { AuthSession } from "../account/authSession";
 import {
 	browserPersistStorageAdapter,
@@ -188,8 +185,9 @@ describe("AccountStore", () => {
 		]);
 		account.setCurrentTenant("tenant-a", "Ground A", null, "space-a");
 
-		const persisted = JSON.parse(storage.dump().get(STORAGE_KEY) ?? "{}")
-			.account;
+		const persisted = JSON.parse(
+			storage.dump().get(STORAGE_KEY) ?? "{}",
+		).account;
 
 		expect(persisted).toMatchObject({
 			tenantId: "tenant-a",

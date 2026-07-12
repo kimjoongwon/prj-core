@@ -1,6 +1,5 @@
 "use client";
 
-import { toast } from "@heroui/react";
 import type { GetTranslationsParams } from "@cocrepo/api/core/model";
 import {
 	getGetTranslationsQueryKey,
@@ -18,6 +17,7 @@ import {
 	type StaticTranslationListScreenQueryStates,
 	useT,
 } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
@@ -54,9 +54,13 @@ export default observer(function TranslationsPageRoute() {
 		try {
 			await createMutation.mutateAsync({ data: form });
 			await invalidateTranslationsQuery();
-			toast.success(t("번역 등록 완료"), { description: t("정적 번역 key-value가 등록되었습니다.") });
+			toast.success(t("번역 등록 완료"), {
+				description: t("정적 번역 key-value가 등록되었습니다."),
+			});
 		} catch (error) {
-			toast.danger(t("번역 등록 실패"), { description: t("정적 번역 등록 중 오류가 발생했습니다.") });
+			toast.danger(t("번역 등록 실패"), {
+				description: t("정적 번역 등록 중 오류가 발생했습니다."),
+			});
 			throw error;
 		}
 	}
@@ -71,9 +75,13 @@ export default observer(function TranslationsPageRoute() {
 				data: form,
 			});
 			await invalidateTranslationsQuery();
-			toast.success(t("번역 수정 완료"), { description: t("정적 번역 key-value가 수정되었습니다.") });
+			toast.success(t("번역 수정 완료"), {
+				description: t("정적 번역 key-value가 수정되었습니다."),
+			});
 		} catch (error) {
-			toast.danger(t("번역 수정 실패"), { description: t("정적 번역 수정 중 오류가 발생했습니다.") });
+			toast.danger(t("번역 수정 실패"), {
+				description: t("정적 번역 수정 중 오류가 발생했습니다."),
+			});
 			throw error;
 		}
 	}
@@ -82,9 +90,13 @@ export default observer(function TranslationsPageRoute() {
 		try {
 			await deleteMutation.mutateAsync({ translationId });
 			await invalidateTranslationsQuery();
-			toast.success(t("번역 삭제 완료"), { description: t("정적 번역 key-value가 삭제되었습니다.") });
+			toast.success(t("번역 삭제 완료"), {
+				description: t("정적 번역 key-value가 삭제되었습니다."),
+			});
 		} catch (error) {
-			toast.danger(t("번역 삭제 실패"), { description: t("정적 번역 삭제 중 오류가 발생했습니다.") });
+			toast.danger(t("번역 삭제 실패"), {
+				description: t("정적 번역 삭제 중 오류가 발생했습니다."),
+			});
 			throw error;
 		}
 	}
@@ -93,9 +105,13 @@ export default observer(function TranslationsPageRoute() {
 		try {
 			await invalidateAllMutation.mutateAsync();
 			await invalidateTranslationsQuery();
-			toast.success(t("전체 캐시 갱신 완료"), { description: t("전체 번역 캐시가 갱신되었습니다.") });
+			toast.success(t("전체 캐시 갱신 완료"), {
+				description: t("전체 번역 캐시가 갱신되었습니다."),
+			});
 		} catch (error) {
-			toast.danger(t("전체 캐시 갱신 실패"), { description: t("전체 번역 캐시 갱신 중 오류가 발생했습니다.") });
+			toast.danger(t("전체 캐시 갱신 실패"), {
+				description: t("전체 번역 캐시 갱신 중 오류가 발생했습니다."),
+			});
 			throw error;
 		}
 	}
@@ -106,34 +122,36 @@ export default observer(function TranslationsPageRoute() {
 		try {
 			await invalidateLanguageMutation.mutateAsync({ languageCode });
 			await invalidateTranslationsQuery();
-			toast.success(t("언어 캐시 갱신 완료"), { description: t(
+			toast.success(t("언어 캐시 갱신 완료"), {
+				description: t(
 					"{{languageCode}} 번역 캐시가 갱신되었습니다.",
 					undefined,
 					{
 						languageCode,
 					},
-				) });
+				),
+			});
 		} catch (error) {
-			toast.danger(t("언어 캐시 갱신 실패"), { description: t("언어별 번역 캐시 갱신 중 오류가 발생했습니다.") });
+			toast.danger(t("언어 캐시 갱신 실패"), {
+				description: t("언어별 번역 캐시 갱신 중 오류가 발생했습니다."),
+			});
 			throw error;
 		}
 	}
 
 	return (
-		<>
-			<StaticTranslationListScreen
-				translations={response?.data}
-				totalCount={response?.meta?.total ?? 0}
-				isLoading={isLoading || isFetching}
-				queryStates={queryStates}
-				setQueryStates={setQueryStates}
-				onCreateTranslation={onCreateTranslation}
-				onUpdateTranslation={onUpdateTranslation}
-				onDeleteTranslation={onDeleteTranslation}
-				onInvalidateAllTranslationCache={onInvalidateAllTranslationCache}
-				onInvalidateTranslationCache={onInvalidateTranslationCache}
-			/>
-		</>
+		<StaticTranslationListScreen
+			translations={response?.data}
+			totalCount={response?.meta?.total ?? 0}
+			isLoading={isLoading || isFetching}
+			queryStates={queryStates}
+			setQueryStates={setQueryStates}
+			onCreateTranslation={onCreateTranslation}
+			onUpdateTranslation={onUpdateTranslation}
+			onDeleteTranslation={onDeleteTranslation}
+			onInvalidateAllTranslationCache={onInvalidateAllTranslationCache}
+			onInvalidateTranslationCache={onInvalidateTranslationCache}
+		/>
 	);
 });
 

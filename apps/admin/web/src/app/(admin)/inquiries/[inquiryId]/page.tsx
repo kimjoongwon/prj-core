@@ -306,138 +306,133 @@ export default observer(function InquiryReadOnlyRoute() {
 		}));
 
 	return (
-		<>
-			<InquiryEditScreen
-				readOnly
-				inquiryId={inquiryId}
-				inquiry={
-					inquiry
-						? {
-								id: inquiry.id,
-								inquiryNumber: inquiry.inquiryNumber,
-								title: inquiry.title,
-								channel: inquiry.channel,
-								status: inquiry.status,
-								priority: inquiry.priority,
-								category: inquiry.category,
-								assigneeId: inquiry.assigneeId,
-								customerId: inquiry.customerId,
-								createdAt: inquiry.createdAt,
-								firstResponseAt: inquiry.firstResponseAt,
-								resolvedAt: inquiry.resolvedAt,
-								slaResponseDue: inquiry.slaResponseDue,
-								slaResolveDue: inquiry.slaResolveDue,
-								isSlaResponseBreached: inquiry.isSlaResponseBreached,
-								isSlaResolveBreached: inquiry.isSlaResolveBreached,
-								sentiment: inquiry.sentiment
-									? {
-											sentiment: inquiry.sentiment.sentiment,
-											confidence: inquiry.sentiment.confidence,
-										}
-									: null,
-							}
-						: undefined
-				}
-				bootstrap={
-					updateFormBootstrap
-						? {
-								fieldMeta: updateFormBootstrap.fieldMeta,
-								ui: updateFormBootstrap.ui,
-								options: updateFormOptions,
-							}
-						: undefined
-				}
-				metaFormState={metaState}
-				categoryOptions={(updateFormOptions.category ?? []).map((item) => ({
-					value: String(item.value ?? ""),
-					label: item.label,
-				}))}
-				priorityOptions={(updateFormOptions.priority ?? []).map((item) => ({
-					value: String(item.value ?? ""),
-					label: item.label,
-				}))}
-				participantListItems={participantListItems}
-				onlineParticipantNames={inquiryState.participants
-					.filter((participant) => participant.isOnline)
-					.map((participant) => participant.userId)}
-				assigneeOptions={assigneeOptions}
-				isDeleting={deleteInquiryMutation.isPending}
-				isUpdatingMeta={updateInquiryMutation.isPending}
-				webSocketStatus={ws.status}
-				onClickBackButton={() => {
+		<InquiryEditScreen
+			readOnly
+			inquiryId={inquiryId}
+			inquiry={
+				inquiry
+					? {
+							id: inquiry.id,
+							inquiryNumber: inquiry.inquiryNumber,
+							title: inquiry.title,
+							channel: inquiry.channel,
+							status: inquiry.status,
+							priority: inquiry.priority,
+							category: inquiry.category,
+							assigneeId: inquiry.assigneeId,
+							customerId: inquiry.customerId,
+							createdAt: inquiry.createdAt,
+							firstResponseAt: inquiry.firstResponseAt,
+							resolvedAt: inquiry.resolvedAt,
+							slaResponseDue: inquiry.slaResponseDue,
+							slaResolveDue: inquiry.slaResolveDue,
+							isSlaResponseBreached: inquiry.isSlaResponseBreached,
+							isSlaResolveBreached: inquiry.isSlaResolveBreached,
+							sentiment: inquiry.sentiment
+								? {
+										sentiment: inquiry.sentiment.sentiment,
+										confidence: inquiry.sentiment.confidence,
+									}
+								: null,
+						}
+					: undefined
+			}
+			bootstrap={
+				updateFormBootstrap
+					? {
+							fieldMeta: updateFormBootstrap.fieldMeta,
+							ui: updateFormBootstrap.ui,
+							options: updateFormOptions,
+						}
+					: undefined
+			}
+			metaFormState={metaState}
+			categoryOptions={(updateFormOptions.category ?? []).map((item) => ({
+				value: String(item.value ?? ""),
+				label: item.label,
+			}))}
+			priorityOptions={(updateFormOptions.priority ?? []).map((item) => ({
+				value: String(item.value ?? ""),
+				label: item.label,
+			}))}
+			participantListItems={participantListItems}
+			onlineParticipantNames={inquiryState.participants
+				.filter((participant) => participant.isOnline)
+				.map((participant) => participant.userId)}
+			assigneeOptions={assigneeOptions}
+			isDeleting={deleteInquiryMutation.isPending}
+			isUpdatingMeta={updateInquiryMutation.isPending}
+			webSocketStatus={ws.status}
+			onClickBackButton={() => {
+				router.push(ADMIN_PATHS.INQUIRIES as Route);
+			}}
+			onClickEditButton={() => {
+				router.push(
+					ADMIN_PATHS.INQUIRIES_EDIT.replace("[inquiryId]", inquiryId) as Route,
+				);
+			}}
+			onClickDeleteButton={() => {
+				void (async () => {
+					await deleteInquiryMutation.mutateAsync({ inquiryId });
 					router.push(ADMIN_PATHS.INQUIRIES as Route);
-				}}
-				onClickEditButton={() => {
-					router.push(
-						ADMIN_PATHS.INQUIRIES_EDIT.replace(
-							"[inquiryId]",
-							inquiryId,
-						) as Route,
-					);
-				}}
-				onClickDeleteButton={() => {
-					void (async () => {
-						await deleteInquiryMutation.mutateAsync({ inquiryId });
-						router.push(ADMIN_PATHS.INQUIRIES as Route);
-					})();
-				}}
-				onChangeStatus={(status) => {
-					void updateStatusMutation.mutateAsync({
-						inquiryId,
-						data: {
-							status: status as
-								| "NEW"
-								| "OPEN"
-								| "IN_PROGRESS"
-								| "WAITING_CUSTOMER"
-								| "RESOLVED"
-								| "CLOSED"
-								| "ESCALATED",
-						},
-					});
-				}}
-				onChangePriority={(priority) => {
-					void updatePriorityMutation.mutateAsync({
-						inquiryId,
-						data: {
-							priority: priority as "LOW" | "NORMAL" | "HIGH" | "URGENT",
-						},
-					});
-				}}
-				onChangeCategory={(category) => {
-					void updateInquiryMutation.mutateAsync({
-						inquiryId,
-						data: {
-							category: category as
-								| "GENERAL"
-								| "DELIVERY"
-								| "REFUND"
-								| "PRODUCT"
-								| "ACCOUNT"
-								| "TECHNICAL"
-								| "COMPLAINT"
-								| "OTHER",
-						},
-					});
-				}}
-				onChangeAssignee={(assigneeId) => {
-					void assignMutation.mutateAsync({
-						inquiryId,
-						data: { assigneeId },
-					});
-				}}
-				onTagAdd={(_tag) => {}}
-				onTagRemove={(_tag) => {}}
-				onClickReconnectButton={() => {
-					ws.reconnect();
-				}}
-				onSendInquiryMessage={(content, attachments) => {
-					ws.sendMessage(content, attachments);
-				}}
-				onSendTypingStatus={(isTyping) => {
-					ws.sendTypingStatus(isTyping);
-				}}
-			/>
-		</>
+				})();
+			}}
+			onChangeStatus={(status) => {
+				void updateStatusMutation.mutateAsync({
+					inquiryId,
+					data: {
+						status: status as
+							| "NEW"
+							| "OPEN"
+							| "IN_PROGRESS"
+							| "WAITING_CUSTOMER"
+							| "RESOLVED"
+							| "CLOSED"
+							| "ESCALATED",
+					},
+				});
+			}}
+			onChangePriority={(priority) => {
+				void updatePriorityMutation.mutateAsync({
+					inquiryId,
+					data: {
+						priority: priority as "LOW" | "NORMAL" | "HIGH" | "URGENT",
+					},
+				});
+			}}
+			onChangeCategory={(category) => {
+				void updateInquiryMutation.mutateAsync({
+					inquiryId,
+					data: {
+						category: category as
+							| "GENERAL"
+							| "DELIVERY"
+							| "REFUND"
+							| "PRODUCT"
+							| "ACCOUNT"
+							| "TECHNICAL"
+							| "COMPLAINT"
+							| "OTHER",
+					},
+				});
+			}}
+			onChangeAssignee={(assigneeId) => {
+				void assignMutation.mutateAsync({
+					inquiryId,
+					data: { assigneeId },
+				});
+			}}
+			onTagAdd={(_tag) => {}}
+			onTagRemove={(_tag) => {}}
+			onClickReconnectButton={() => {
+				ws.reconnect();
+			}}
+			onSendInquiryMessage={(content, attachments) => {
+				ws.sendMessage(content, attachments);
+			}}
+			onSendTypingStatus={(isTyping) => {
+				ws.sendTypingStatus(isTyping);
+			}}
+		/>
 	);
 });

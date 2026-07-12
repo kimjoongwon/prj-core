@@ -1,5 +1,7 @@
 import type { UpdateSecurityPolicyCommandInput } from "@cocrepo/input";
-export class UpdateSecurityPolicyCommand implements UpdateSecurityPolicyCommandInput {
+export class UpdateSecurityPolicyCommand
+	implements UpdateSecurityPolicyCommandInput
+{
 	readonly passwordMinLength?: UpdateSecurityPolicyCommandInput["passwordMinLength"];
 	readonly passwordRequireUppercase?: UpdateSecurityPolicyCommandInput["passwordRequireUppercase"];
 	readonly passwordRequireLowercase?: UpdateSecurityPolicyCommandInput["passwordRequireLowercase"];

@@ -51,7 +51,11 @@ export class FoldersController {
 	@Get()
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.MEMBER, SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
+	@Roles([
+		SYSTEM_ROLES.MEMBER,
+		SYSTEM_ROLES.COMPANY_MANAGER,
+		SYSTEM_ROLES.PLATFORM_ADMIN,
+	])
 	@ApiOperation({
 		operationId: "getFolders",
 		summary: "폴더 목록 조회",

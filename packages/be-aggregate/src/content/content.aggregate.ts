@@ -1,13 +1,13 @@
+import type {
+	CommunityPostCreateInput,
+	CommunityPostListInput,
+} from "@cocrepo/input";
 import {
 	type CommunityPostRecord,
 	ContentsRepository,
 } from "@cocrepo/repository";
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
-import type {
-	CommunityPostCreateInput,
-	CommunityPostListInput,
-} from "@cocrepo/input";
 
 @Injectable()
 export class ContentAggregate {

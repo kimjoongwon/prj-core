@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { TemplateActions } from "./TemplateActions";
 
 const meta = {
-	title: "feature/TemplateActions",
+	title: "domain/template/TemplateActions",
 	component: TemplateActions,
 	parameters: { layout: "centered" },
 	tags: ["autodocs"],

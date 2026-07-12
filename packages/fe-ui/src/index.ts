@@ -5,7 +5,6 @@ export * from "./data-display";
 export * from "./data-grid";
 export * from "./design-system";
 export * from "./domain";
-export * from "./feature";
 export * from "./feedback";
 export * from "./form";
 export * from "./i18n";

@@ -89,8 +89,7 @@ export function useTenantBootstrap<
 		spaces,
 		currentSpace,
 		isCurrentSpaceFetched,
-		isAccountBootstrapReady:
-			isHydrated && account.isSelectionResolved === true,
+		isAccountBootstrapReady: isHydrated && account.isSelectionResolved === true,
 	};
 }
 

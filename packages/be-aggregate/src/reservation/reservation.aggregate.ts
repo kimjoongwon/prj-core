@@ -1,5 +1,6 @@
 import { RESERVATION_ERRORS } from "@cocrepo/constant";
 import type { Reservation } from "@cocrepo/entity";
+import type { BookingFeedInput, CreateReservationInput } from "@cocrepo/input";
 import {
 	type RecurringDayOfWeek,
 	RepeatCycleTypes,
@@ -21,7 +22,6 @@ import {
 } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
 import { ACTIVE_RESERVATION_STATUSES } from "./active-reservation-statuses";
-import type { BookingFeedInput, CreateReservationInput } from "@cocrepo/input";
 import { CONFIRMED_CANCEL_CUTOFF_HOURS } from "./confirmed-cancel-cutoff-hours";
 import { DEFAULT_FEED_WINDOW_DAYS } from "./default-feed-window-days";
 import { DEFAULT_SESSION_DURATION_MINUTES } from "./default-session-duration-minutes";
@@ -108,7 +108,6 @@ export class ReservationAggregate {
 		return this.repository.findMine(params);
 	}
 
-
 	@Transactional()
 	async create(params: {
 		spaceId: string;
@@ -129,10 +128,7 @@ export class ReservationAggregate {
 			`예약 생성 요청: user=${params.userId.slice(-8)}, program=${params.input.programId.slice(-8)}`,
 		);
 
-		await this.assertUserCanBookSpace(
-			params.userId,
-			params.spaceId,
-		);
+		await this.assertUserCanBookSpace(params.userId, params.spaceId);
 
 		const existingByKey = await this.repository.findByUserAndIdempotencyKey(
 			params.userId,
@@ -251,7 +247,6 @@ export class ReservationAggregate {
 
 		return canceled;
 	}
-
 
 	private async assertUserCanBookSpace(
 		userId: string,

@@ -18,12 +18,12 @@
 /**
  * 결과
  */
-export type AuthAuditResult = typeof AuthAuditResult[keyof typeof AuthAuditResult];
-
+export type AuthAuditResult =
+	(typeof AuthAuditResult)[keyof typeof AuthAuditResult];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AuthAuditResult = {
-  SUCCESS: 'SUCCESS',
-  FAILURE: 'FAILURE',
-  LOCKED: 'LOCKED',
+	SUCCESS: "SUCCESS",
+	FAILURE: "FAILURE",
+	LOCKED: "LOCKED",
 } as const;

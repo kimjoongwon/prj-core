@@ -16,6 +16,6 @@
  */
 
 export interface ResetPasswordResultDto {
-  /** 응답 메시지 */
-  message: string;
+	/** 응답 메시지 */
+	message: string;
 }

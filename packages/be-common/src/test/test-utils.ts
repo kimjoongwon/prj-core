@@ -1,6 +1,6 @@
-import type { ContextUserSnapshot } from "@cocrepo/type";
 import { User } from "@cocrepo/entity";
 import { PrismaService } from "@cocrepo/service";
+import type { ContextUserSnapshot } from "@cocrepo/type";
 import type { Provider, Type } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";

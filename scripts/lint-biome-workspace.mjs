@@ -43,7 +43,7 @@ const command = shouldFix ? "check" : "lint";
 const commandArgs = [command];
 
 if (shouldFix) {
-	commandArgs.push("--write");
+	commandArgs.push("--write", "--unsafe");
 }
 
 /**
@@ -58,7 +58,9 @@ function isProdIgnoredFile(relativePath) {
 		return true;
 	}
 
-	return PROD_IGNORED_FILE_PATTERNS.some((pattern) => pattern.test(relativePath));
+	return PROD_IGNORED_FILE_PATTERNS.some((pattern) =>
+		pattern.test(relativePath),
+	);
 }
 
 /**
@@ -84,7 +86,9 @@ function collectCodeFiles(directory, result = []) {
 		}
 
 		const absolutePath = join(directory, entry.name);
-		const relativePath = relative(process.cwd(), absolutePath).split("\\").join("/");
+		const relativePath = relative(process.cwd(), absolutePath)
+			.split("\\")
+			.join("/");
 		if (shouldUseProdTargets && isProdIgnoredFile(relativePath)) {
 			continue;
 		}

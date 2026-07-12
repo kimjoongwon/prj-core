@@ -22,10 +22,7 @@ export function buildIdpAccountQueryWhere(
 
 	if (input.isLocked === true) {
 		and.push({
-			OR: [
-				{ isPermanentlyLocked: true },
-				{ lockedUntil: { gt: new Date() } },
-			],
+			OR: [{ isPermanentlyLocked: true }, { lockedUntil: { gt: new Date() } }],
 		});
 	}
 

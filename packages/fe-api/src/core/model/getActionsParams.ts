@@ -16,8 +16,8 @@
  */
 
 export type GetActionsParams = {
-/**
- * 그룹별 필터링 (crud, visibility, workflow)
- */
-group?: string;
+	/**
+	 * 그룹별 필터링 (crud, visibility, workflow)
+	 */
+	group?: string;
 };

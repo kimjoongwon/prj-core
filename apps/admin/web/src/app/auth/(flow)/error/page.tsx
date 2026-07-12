@@ -20,13 +20,11 @@ const ErrorPage = observer(function ErrorPage() {
 	}, []);
 
 	return (
-		<>
-			<AuthErrorScreen
-				error={errorState.error}
-				errorDescription={errorState.errorDescription}
-				onClickBack={() => window.history.back()}
-			/>
-		</>
+		<AuthErrorScreen
+			error={errorState.error}
+			errorDescription={errorState.errorDescription}
+			onClickBack={() => window.history.back()}
+		/>
 	);
 });
 

@@ -419,7 +419,6 @@ packages/fe-ui/src/
 │   └── index.ts
 └── widget/
     ├── HeaderBar/
-    ├── SidePanel/
     ├── BottomNav/
     ├── ActionFab/
     ├── OverlayMenu/
@@ -438,7 +437,7 @@ packages/fe-ui/src/
 | `VStack`, `HStack`, `Spacer` | screen 전용 정렬/간격 rhythm primitive |
 
 > **Note**: 새로운 display 컴포넌트는 페이지 래퍼나 헤더 패널을 다시 발명하지 말고 위 컴포넌트와 함께 조합되도록 설계하세요.
-> **Note**: `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 display가 아니라 widget입니다.
+> **Note**: `HeaderBar`, `BottomNav`, `ActionFab`, `OverlayMenu`는 display가 아니라 widget입니다. `NavigationPanel`은 `domain/navigation` component입니다.
 > **Note**: 새로운 stack/spacer 조합은 screen에서만 사용하고, raw numeric gap보다 `page`, `섹션`, `block`, `inline`, `dense` 같은 semantic rhythm preset을 우선 사용합니다.
 
 ### 출력 형식

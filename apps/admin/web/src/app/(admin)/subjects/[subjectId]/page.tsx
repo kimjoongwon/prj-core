@@ -25,37 +25,35 @@ export default observer(function SubjectDetailScreenRoute() {
 		});
 
 	return (
-		<>
-			<SubjectDetailScreen
-				subject={
-					subject
-						? {
-								name: subject.name,
-								displayName: subject.displayName,
-								icon: subject.icon,
-								group: subject.group,
-								order: subject.order,
-								isSystem: subject.isSystem,
-								createdAt: subject.createdAt,
-								updatedAt: subject.updatedAt,
-							}
-						: undefined
-				}
-				subjectFields={(
-					(fieldsResponse?.data as SubjectFieldDto[] | undefined) ?? []
-				).map((field) => ({
-					name: field.name,
-					displayName: field.displayName,
-					type: field.type,
-					isRequired: field.isRequired,
-					isRelation: field.isRelation,
-				}))}
-				isLoading={isLoading}
-				isFieldsLoading={shouldLoadFields ? isFieldsLoading : false}
-				onClickBackButton={() => {
-					router.push("/subjects" as Route);
-				}}
-			/>
-		</>
+		<SubjectDetailScreen
+			subject={
+				subject
+					? {
+							name: subject.name,
+							displayName: subject.displayName,
+							icon: subject.icon,
+							group: subject.group,
+							order: subject.order,
+							isSystem: subject.isSystem,
+							createdAt: subject.createdAt,
+							updatedAt: subject.updatedAt,
+						}
+					: undefined
+			}
+			subjectFields={(
+				(fieldsResponse?.data as SubjectFieldDto[] | undefined) ?? []
+			).map((field) => ({
+				name: field.name,
+				displayName: field.displayName,
+				type: field.type,
+				isRequired: field.isRequired,
+				isRelation: field.isRelation,
+			}))}
+			isLoading={isLoading}
+			isFieldsLoading={shouldLoadFields ? isFieldsLoading : false}
+			onClickBackButton={() => {
+				router.push("/subjects" as Route);
+			}}
+		/>
 	);
 });

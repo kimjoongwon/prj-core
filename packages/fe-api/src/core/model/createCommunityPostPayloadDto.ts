@@ -16,14 +16,14 @@
  */
 
 export interface CreateCommunityPostPayloadDto {
-  /**
-   * 게시글 제목
-   * @maxLength 80
-   */
-  title?: string;
-  /**
-   * 게시글 본문
-   * @maxLength 1000
-   */
-  text: string;
+	/**
+	 * 게시글 제목
+	 * @maxLength 80
+	 */
+	title?: string;
+	/**
+	 * 게시글 본문
+	 * @maxLength 1000
+	 */
+	text: string;
 }

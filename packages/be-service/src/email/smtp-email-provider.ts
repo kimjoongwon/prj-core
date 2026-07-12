@@ -1,10 +1,10 @@
+import type { EmailSendInput } from "@cocrepo/input";
 import type { SMTPConfig } from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import type { Transporter } from "nodemailer";
 import * as nodemailer from "nodemailer";
 import { EmailProvider } from "./email-provider";
-import type { EmailSendInput } from "@cocrepo/input";
 import { normalizeOptionalBooleanString } from "./normalize-optional-boolean-string";
 import { resolveSmtpSecure } from "./resolve-smtp-secure";
 

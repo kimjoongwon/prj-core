@@ -14,9 +14,7 @@ export class OidcSessionAggregate {
 	/**
 	 * Redis에서 모든 OIDC 세션 데이터를 수집합니다 (내부 공통 메서드)
 	 */
-	private async collectAllSessions(
-		targetTypes: string[],
-	) {
+	private async collectAllSessions(targetTypes: string[]) {
 		const allSessions = [];
 
 		for (const modelType of targetTypes) {

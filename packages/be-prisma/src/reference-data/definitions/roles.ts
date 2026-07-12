@@ -65,8 +65,7 @@ export const roleSeedData: RoleSeedData[] = [
 	{
 		name: "MEMBER",
 		displayName: "회원",
-		description:
-			"자신의 정보와 예약을 관리하고 시설/콘텐츠를 조회하는 역할",
+		description: "자신의 정보와 예약을 관리하고 시설/콘텐츠를 조회하는 역할",
 		isSystem: true,
 	},
 ];

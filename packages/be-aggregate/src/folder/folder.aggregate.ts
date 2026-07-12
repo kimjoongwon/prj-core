@@ -36,9 +36,7 @@ export class FolderAggregate {
 		const where = this.applySpaceScope(
 			buildFolderQueryWhere(
 				query,
-				spaceIds === undefined
-					? undefined
-					: { spaceId: { in: spaceIds } },
+				spaceIds === undefined ? undefined : { spaceId: { in: spaceIds } },
 			),
 			spaceIds,
 		);

@@ -24,15 +24,13 @@ export default observer(function ActionsPageRoute() {
 	};
 
 	return (
-		<>
-			<ActionListScreen
-				actions={response?.data}
-				isLoading={isLoading}
-				queryStates={queryStates}
-				setQueryStates={setQueryStates}
-				onClickCreateButton={onClickCreateButton}
-				onClickActionRow={onClickActionRow}
-			/>
-		</>
+		<ActionListScreen
+			actions={response?.data}
+			isLoading={isLoading}
+			queryStates={queryStates}
+			setQueryStates={setQueryStates}
+			onClickCreateButton={onClickCreateButton}
+			onClickActionRow={onClickActionRow}
+		/>
 	);
 });

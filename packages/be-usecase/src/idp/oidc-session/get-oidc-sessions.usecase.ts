@@ -10,9 +10,7 @@ export class GetOidcSessionsUseCase {
 	async execute(query: GetOidcSessionsQuery): Promise<unknown> {
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 20;
-		const oidcSessionResult = await this.oidcSessionService.getMany(
-			query,
-		);
+		const oidcSessionResult = await this.oidcSessionService.getMany(query);
 		return {
 			data: oidcSessionResult.data,
 			meta: buildOffsetPageMeta(skip, take, oidcSessionResult.totalCount),

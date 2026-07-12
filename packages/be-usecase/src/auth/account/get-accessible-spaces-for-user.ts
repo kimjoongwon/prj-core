@@ -11,7 +11,9 @@ export async function getAccessibleSpacesForUser(
 		return [];
 	}
 
-	const activeTenants = user.tenants.filter((tenant) => tenant.removedAt == null);
+	const activeTenants = user.tenants.filter(
+		(tenant) => tenant.removedAt == null,
+	);
 	if (activeTenants.length === 0) {
 		return [];
 	}

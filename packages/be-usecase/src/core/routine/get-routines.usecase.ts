@@ -11,8 +11,7 @@ export class GetRoutinesUseCase {
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 10;
 		const spaceScope =
-			query.spaceScope ??
-			("CURRENT" as NonNullable<typeof query.spaceScope>);
+			query.spaceScope ?? ("CURRENT" as NonNullable<typeof query.spaceScope>);
 		const routineResult = await this.routinesService.findRoutines({
 			spaceScope,
 			skip,

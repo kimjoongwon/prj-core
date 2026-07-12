@@ -2,8 +2,8 @@
 
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 import type { ReactNode } from "react";
-import { Button } from "../../input/Button/Button";
 import { translateNode, useT } from "../../i18n";
+import { Button } from "../../input/Button/Button";
 import type { DataGridSortDirection } from "../internal/sorting";
 
 export interface DataGridSortHeaderProps {

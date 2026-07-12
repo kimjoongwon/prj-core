@@ -16,10 +16,10 @@
  */
 
 export interface LoginTrendItemDto {
-  /** 날짜 (YYYY-MM-DD) */
-  date: string;
-  /** 성공 건수 */
-  successCount: number;
-  /** 실패 건수 */
-  failureCount: number;
+	/** 날짜 (YYYY-MM-DD) */
+	date: string;
+	/** 성공 건수 */
+	successCount: number;
+	/** 실패 건수 */
+	failureCount: number;
 }

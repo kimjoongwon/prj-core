@@ -16,8 +16,8 @@
  */
 
 export interface NativeLoginPayloadDto {
-  /** 사용자 이메일 */
-  email: string;
-  /** 사용자 비밀번호 (8자 이상) */
-  password: string;
+	/** 사용자 이메일 */
+	email: string;
+	/** 사용자 비밀번호 (8자 이상) */
+	password: string;
 }

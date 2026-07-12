@@ -18,10 +18,10 @@
 /**
  * 폼 모드
  */
-export type IdpAccountAccessGrantFormBootstrapDtoMode = typeof IdpAccountAccessGrantFormBootstrapDtoMode[keyof typeof IdpAccountAccessGrantFormBootstrapDtoMode];
-
+export type IdpAccountAccessGrantFormBootstrapDtoMode =
+	(typeof IdpAccountAccessGrantFormBootstrapDtoMode)[keyof typeof IdpAccountAccessGrantFormBootstrapDtoMode];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const IdpAccountAccessGrantFormBootstrapDtoMode = {
-  CREATE: 'CREATE',
+	CREATE: "CREATE",
 } as const;

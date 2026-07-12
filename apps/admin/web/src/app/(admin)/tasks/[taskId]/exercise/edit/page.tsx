@@ -6,6 +6,7 @@ import {
 	useUpdateTaskExercise,
 } from "@cocrepo/api/core/tasks";
 import { useTaskExerciseAssetBrowser } from "@cocrepo/hook";
+import { useApp } from "@cocrepo/store";
 import {
 	TaskExerciseEditScreen,
 	type TaskExerciseFormState,
@@ -16,7 +17,6 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useApp } from "@cocrepo/store";
 
 type TaskExerciseEditScreenParams = {
 	taskId: string;

@@ -169,26 +169,24 @@ export async function seedAdminPersist(
 					tenantId: string;
 					spaceId: string;
 					groundName: string;
-				}> =
-					Array.isArray(parsed?.spaces)
-						? parsed.spaces.filter(
-								(
-									space: unknown,
-								): space is {
-									tenantId: string;
-									spaceId: string;
-									groundName: string;
-								} =>
-									typeof space === "object" &&
-									space !== null &&
-									typeof (space as { tenantId?: unknown }).tenantId ===
-										"string" &&
-									typeof (space as { spaceId?: unknown }).spaceId ===
-										"string" &&
-									typeof (space as { groundName?: unknown }).groundName ===
-										"string",
-							)
-						: [];
+				}> = Array.isArray(parsed?.spaces)
+					? parsed.spaces.filter(
+							(
+								space: unknown,
+							): space is {
+								tenantId: string;
+								spaceId: string;
+								groundName: string;
+							} =>
+								typeof space === "object" &&
+								space !== null &&
+								typeof (space as { tenantId?: unknown }).tenantId ===
+									"string" &&
+								typeof (space as { spaceId?: unknown }).spaceId === "string" &&
+								typeof (space as { groundName?: unknown }).groundName ===
+									"string",
+						)
+					: [];
 				const hasSystemSpace = spaces.some(
 					(space) => space.tenantId === nextSpaceValue.tenantId,
 				);
@@ -241,8 +239,8 @@ export async function readAdminPersist(page: Page) {
 			}
 
 			try {
-		const parsed = JSON.parse(raw) as { spaceId?: string | null };
-		return typeof parsed.spaceId === "string" && parsed.spaceId.length > 0;
+				const parsed = JSON.parse(raw) as { spaceId?: string | null };
+				return typeof parsed.spaceId === "string" && parsed.spaceId.length > 0;
 			} catch {
 				return false;
 			}
@@ -291,13 +289,19 @@ export async function loginToAdmin(page: Page) {
 	}
 
 	const currentSpaceBody = (await currentSpaceResponse.json()) as {
-		data?: { id?: string; tenantId?: string | null; ground?: { name?: string } };
+		data?: {
+			id?: string;
+			tenantId?: string | null;
+			ground?: { name?: string };
+		};
 	};
 	if (currentSpaceBody.data?.id !== SYSTEM_SPACE_ID) {
 		throw new Error("현재 Space 검증 결과가 기대한 Space와 일치하지 않습니다.");
 	}
 	if (currentSpaceBody.data?.tenantId !== SYSTEM_TENANT_ID) {
-		throw new Error("현재 Tenant 검증 결과가 기대한 Tenant와 일치하지 않습니다.");
+		throw new Error(
+			"현재 Tenant 검증 결과가 기대한 Tenant와 일치하지 않습니다.",
+		);
 	}
 
 	const currentSpaceName =

@@ -16,40 +16,40 @@
  */
 
 export interface IdpAccountAccessGrantDto {
-  /**
-   * 테넌트 ID
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  tenantId: string;
-  /**
-   * 접근 대상 Space ID
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  spaceId: string;
-  /** 접근 대상 Space 이름 */
-  spaceName: string;
-  /**
-   * 접근 대상 Space 라벨
-   * @nullable
-   */
-  spaceLabel?: string | null;
-  /**
-   * 부여된 Role ID
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  roleId: string;
-  /** 부여된 Role 식별자 */
-  roleName: string;
-  /**
-   * 부여된 Role 표시명
-   * @nullable
-   */
-  roleDisplayName?: string | null;
-  /** 권한 부여일 */
-  grantedAt: string;
-  /**
-   * 권한 변경일
-   * @nullable
-   */
-  updatedAt?: string | null;
+	/**
+	 * 테넌트 ID
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	tenantId: string;
+	/**
+	 * 접근 대상 Space ID
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	spaceId: string;
+	/** 접근 대상 Space 이름 */
+	spaceName: string;
+	/**
+	 * 접근 대상 Space 라벨
+	 * @nullable
+	 */
+	spaceLabel?: string | null;
+	/**
+	 * 부여된 Role ID
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	roleId: string;
+	/** 부여된 Role 식별자 */
+	roleName: string;
+	/**
+	 * 부여된 Role 표시명
+	 * @nullable
+	 */
+	roleDisplayName?: string | null;
+	/** 권한 부여일 */
+	grantedAt: string;
+	/**
+	 * 권한 변경일
+	 * @nullable
+	 */
+	updatedAt?: string | null;
 }

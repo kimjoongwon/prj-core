@@ -14,84 +14,85 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { ReservationStatus } from './reservationStatus';
-import type { UserDto } from './userDto';
-import type { TimelineDto } from './timelineDto';
-import type { SessionDto } from './sessionDto';
-import type { ProgramDto } from './programDto';
+
+import type { ProgramDto } from "./programDto";
+import type { ReservationStatus } from "./reservationStatus";
+import type { SessionDto } from "./sessionDto";
+import type { TimelineDto } from "./timelineDto";
+import type { UserDto } from "./userDto";
 
 export interface ReservationDto {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  /**
-   * Space ID
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  spaceId: string;
-  /**
-   * 생성자 ID
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  creatorId?: string | null;
-  /**
-   * 예약 사용자 ID
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  userId: string;
-  /**
-   * 타임라인 ID
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  timelineId: string;
-  /**
-   * 세션 ID
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  sessionId: string;
-  /**
-   * 프로그램 ID
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  programId: string;
-  /** 예약 발생 회차 시작 시각 */
-  occurrenceStartAt: string;
-  /** 예약 상태 */
-  status: ReservationStatus;
-  /**
-   * 예약 메모
-   * @nullable
-   */
-  memo?: string | null;
-  /** 멱등성 키 */
-  idempotencyKey: string;
-  /**
-   * 대기 순번
-   * @minimum 1
-   * @nullable
-   */
-  waitlistPosition?: number | null;
-  /**
-   * 확정 시각
-   * @nullable
-   */
-  confirmedAt: string | null;
-  /**
-   * 취소 시각
-   * @nullable
-   */
-  canceledAt: string | null;
-  /**
-   * 취소 사유
-   * @nullable
-   */
-  cancelReason?: string | null;
-  user?: UserDto;
-  timeline?: TimelineDto;
-  session?: SessionDto;
-  program?: ProgramDto;
+	/** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	/**
+	 * Space ID
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	spaceId: string;
+	/**
+	 * 생성자 ID
+	 * @nullable
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	creatorId?: string | null;
+	/**
+	 * 예약 사용자 ID
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	userId: string;
+	/**
+	 * 타임라인 ID
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	timelineId: string;
+	/**
+	 * 세션 ID
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	sessionId: string;
+	/**
+	 * 프로그램 ID
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	programId: string;
+	/** 예약 발생 회차 시작 시각 */
+	occurrenceStartAt: string;
+	/** 예약 상태 */
+	status: ReservationStatus;
+	/**
+	 * 예약 메모
+	 * @nullable
+	 */
+	memo?: string | null;
+	/** 멱등성 키 */
+	idempotencyKey: string;
+	/**
+	 * 대기 순번
+	 * @minimum 1
+	 * @nullable
+	 */
+	waitlistPosition?: number | null;
+	/**
+	 * 확정 시각
+	 * @nullable
+	 */
+	confirmedAt: string | null;
+	/**
+	 * 취소 시각
+	 * @nullable
+	 */
+	canceledAt: string | null;
+	/**
+	 * 취소 사유
+	 * @nullable
+	 */
+	cancelReason?: string | null;
+	user?: UserDto;
+	timeline?: TimelineDto;
+	session?: SessionDto;
+	program?: ProgramDto;
 }

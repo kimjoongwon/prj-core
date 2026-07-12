@@ -4,8 +4,8 @@ import type { DataGridState, InputConfig } from "@cocrepo/type";
 import { Popover } from "@heroui/react";
 import { ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../input/Button/Button";
 import { useT } from "../../i18n";
+import { Button } from "../../input/Button/Button";
 import { Checkbox } from "../../input/Checkbox/Checkbox";
 
 interface MultiSelectInputProps {

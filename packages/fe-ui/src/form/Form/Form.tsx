@@ -1,16 +1,9 @@
 "use client";
 
-import { Form as HeroForm } from "@heroui/react";
-import type {
-	ComponentProps,
-	FormEventHandler,
-	ReactNode,
-} from "react";
 import type { SchemaClass } from "@cocrepo/schema";
-import type {
-	FormSchemaStateContract,
-	FormStateContract,
-} from "@cocrepo/type";
+import type { FormSchemaStateContract, FormStateContract } from "@cocrepo/type";
+import { Form as HeroForm } from "@heroui/react";
+import type { ComponentProps, FormEventHandler, ReactNode } from "react";
 import {
 	FormValidationProvider,
 	type FormValidationTiming,
@@ -34,11 +27,7 @@ interface FormRootProps extends Omit<HeroFormProps, "children"> {
 	onSubmitCapture?: FormEventHandler<HTMLFormElement>;
 }
 
-function FormRoot({
-	children,
-	onSubmitCapture,
-	...props
-}: FormRootProps) {
+function FormRoot({ children, onSubmitCapture, ...props }: FormRootProps) {
 	const validation = useFormValidationContext();
 
 	const handleSubmitCapture: FormEventHandler<HTMLFormElement> = (event) => {

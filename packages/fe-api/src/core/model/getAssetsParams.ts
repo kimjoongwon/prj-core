@@ -14,48 +14,48 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { AssetKind } from './assetKind';
-import type { AssetStatus } from './assetStatus';
-import type { DeleteFilter } from './deleteFilter';
+import type { AssetKind } from "./assetKind";
+import type { AssetStatus } from "./assetStatus";
+import type { DeleteFilter } from "./deleteFilter";
 
 export type GetAssetsParams = {
-/**
- * @minimum 0
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 200
- */
-take?: number;
-/**
- * 폴더 ID 필터
- * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
- */
-folderId?: string;
-/**
- * 테넌트 ID 필터
- * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
- */
-spaceId?: string;
-/**
- * 에셋 타입 필터
- */
-kind?: AssetKind;
-/**
- * 업로드 상태 필터
- */
-status?: AssetStatus;
-/**
- * 파일명 검색 (부분 일치)
- */
-search?: string;
-/**
- * 상태 필터 (active: 활성, deleted: 삭제됨)
- */
-statusFilter?: DeleteFilter;
-/**
- * 복합 정렬 (JSON:API 컨벤션). 부호 없음=ASC, -prefix=DESC. 허용 필드: createdAt, originalName, sizeBytes. 예: ?sort=originalName&sort=-createdAt
- */
-sort?: string[];
+	/**
+	 * @minimum 0
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 200
+	 */
+	take?: number;
+	/**
+	 * 폴더 ID 필터
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	folderId?: string;
+	/**
+	 * 테넌트 ID 필터
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	spaceId?: string;
+	/**
+	 * 에셋 타입 필터
+	 */
+	kind?: AssetKind;
+	/**
+	 * 업로드 상태 필터
+	 */
+	status?: AssetStatus;
+	/**
+	 * 파일명 검색 (부분 일치)
+	 */
+	search?: string;
+	/**
+	 * 상태 필터 (active: 활성, deleted: 삭제됨)
+	 */
+	statusFilter?: DeleteFilter;
+	/**
+	 * 복합 정렬 (JSON:API 컨벤션). 부호 없음=ASC, -prefix=DESC. 허용 필드: createdAt, originalName, sizeBytes. 예: ?sort=originalName&sort=-createdAt
+	 */
+	sort?: string[];
 };

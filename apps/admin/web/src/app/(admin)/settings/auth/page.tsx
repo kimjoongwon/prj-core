@@ -18,16 +18,12 @@ export default observer(function DashboardScreenRoute() {
 	const { data: trendResponse } = useGetIdpLoginTrend();
 
 	return (
-		<>
-			<IdentityDashboardScreen
-				stats={
-					statsResponse?.data
-						? mapDashboardStats(statsResponse.data)
-						: undefined
-				}
-				trendItems={(trendResponse?.data ?? []).map(mapDashboardTrend)}
-			/>
-		</>
+		<IdentityDashboardScreen
+			stats={
+				statsResponse?.data ? mapDashboardStats(statsResponse.data) : undefined
+			}
+			trendItems={(trendResponse?.data ?? []).map(mapDashboardTrend)}
+		/>
 	);
 });
 

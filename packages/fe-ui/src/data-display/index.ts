@@ -4,5 +4,5 @@ export * from "./content-language";
 export * from "./DraggableSortableList";
 export * from "./HtmlContentRenderer";
 export * from "./Icon";
-export * from "./text-byte";
 export * from "./Typography";
+export * from "./text-byte";

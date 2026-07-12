@@ -1,4 +1,5 @@
 import { Inquiry, InquiryMessage, InquiryParticipant } from "@cocrepo/entity";
+import type { ListInquiriesQueryInput } from "@cocrepo/input";
 import {
 	InquiryCategory,
 	InquiryChannel,
@@ -10,7 +11,6 @@ import {
 	type SenderType,
 	type SentimentType,
 } from "@cocrepo/prisma";
-import type { ListInquiriesQueryInput } from "@cocrepo/input";
 import {
 	buildInquiryQueryOrderBy,
 	buildInquiryQueryWhere,
@@ -116,10 +116,7 @@ export class InquiryAggregate {
 		};
 	}
 
-	async getUpdateFormBootstrap(
-		inquiryId: string,
-		spaceIds?: string[],
-	) {
+	async getUpdateFormBootstrap(inquiryId: string, spaceIds?: string[]) {
 		const inquiry = await this.findByIdWithDetails(inquiryId, spaceIds);
 
 		return {

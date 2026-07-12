@@ -2,8 +2,8 @@
 
 import { cn, Modal, useOverlayState } from "@heroui/react";
 import { FileText, ImageIcon, Link2Off, PlayCircle } from "lucide-react";
-import { Chip } from "../Chip/Chip";
 import { Button } from "../../input/Button/Button";
+import { Chip } from "../Chip/Chip";
 
 export interface AssetPreviewAsset {
 	id: string;

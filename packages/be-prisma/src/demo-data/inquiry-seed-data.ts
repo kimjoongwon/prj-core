@@ -452,8 +452,7 @@ export const inquiryMessageSeedData: InquiryMessageSeedData[] = [
 		threadIndex: 0,
 		senderEmail: "seoyeon_lee@naver.com",
 		senderType: "USER",
-		content:
-			"오늘 오후 2시 30분경 예약했습니다. 같은 시간이 두 번 잡혔어요.",
+		content: "오늘 오후 2시 30분경 예약했습니다. 같은 시간이 두 번 잡혔어요.",
 		contentType: "TEXT",
 	},
 	{

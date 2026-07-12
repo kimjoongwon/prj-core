@@ -34,40 +34,38 @@ export default observer(function TasksPageRoute() {
 	const deleteMutation = useDeleteTask();
 
 	return (
-		<>
-			<TaskListScreen
-				tasks={response?.data}
-				totalCount={response?.meta?.total ?? response?.data?.length ?? 0}
-				isLoading={isLoading}
-				queryStates={queryStates}
-				setQueryStates={setQueryStates}
-				onClickCreateButton={() => {
-					router.push("/tasks/new" as Route);
-				}}
-				onClickTaskName={(taskId) => {
-					router.push(`/tasks/${taskId}/exercise` as Route);
-				}}
-				onDeleteTask={async (taskId) => {
-					try {
-						await deleteMutation.mutateAsync({ taskId });
-						await queryClient.invalidateQueries({
-							queryKey: getGetTasksQueryKey(),
-						});
-						toast.success("삭제 성공", {
-							description: "태스크와 운동 detail이 삭제되었습니다.",
-						});
-					} catch (error) {
-						toast.danger("삭제 실패", {
-							description:
-								error instanceof Error
-									? error.message
-									: "삭제 중 오류가 발생했습니다. 루틴에서 사용 중인 태스크는 삭제할 수 없습니다.",
-						});
-						throw error;
-					}
-				}}
-			/>
-		</>
+		<TaskListScreen
+			tasks={response?.data}
+			totalCount={response?.meta?.total ?? response?.data?.length ?? 0}
+			isLoading={isLoading}
+			queryStates={queryStates}
+			setQueryStates={setQueryStates}
+			onClickCreateButton={() => {
+				router.push("/tasks/new" as Route);
+			}}
+			onClickTaskName={(taskId) => {
+				router.push(`/tasks/${taskId}/exercise` as Route);
+			}}
+			onDeleteTask={async (taskId) => {
+				try {
+					await deleteMutation.mutateAsync({ taskId });
+					await queryClient.invalidateQueries({
+						queryKey: getGetTasksQueryKey(),
+					});
+					toast.success("삭제 성공", {
+						description: "태스크와 운동 detail이 삭제되었습니다.",
+					});
+				} catch (error) {
+					toast.danger("삭제 실패", {
+						description:
+							error instanceof Error
+								? error.message
+								: "삭제 중 오류가 발생했습니다. 루틴에서 사용 중인 태스크는 삭제할 수 없습니다.",
+					});
+					throw error;
+				}
+			}}
+		/>
 	);
 });
 

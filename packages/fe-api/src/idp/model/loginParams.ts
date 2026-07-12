@@ -16,7 +16,7 @@
  */
 
 export type LoginParams = {
-clientId: string;
-returnTo: string;
-prompt: string;
+	clientId: string;
+	returnTo: string;
+	prompt: string;
 };

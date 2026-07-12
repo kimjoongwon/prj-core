@@ -26,12 +26,10 @@ const HomePage = observer(function HomePage() {
 	}, [hasSession, isPending, router]);
 
 	return (
-		<>
-			<SessionCheckScreen
-				title="세션 확인 중"
-				description="인증 상태를 확인한 뒤 적절한 페이지로 이동합니다."
-			/>
-		</>
+		<SessionCheckScreen
+			title="세션 확인 중"
+			description="인증 상태를 확인한 뒤 적절한 페이지로 이동합니다."
+		/>
 	);
 });
 

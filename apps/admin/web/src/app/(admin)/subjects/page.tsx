@@ -23,14 +23,12 @@ export default observer(function SubjectsPageRoute() {
 	};
 
 	return (
-		<>
-			<SubjectListScreen
-				subjects={response?.data}
-				isLoading={isLoading}
-				queryStates={queryStates}
-				setQueryStates={setQueryStates}
-				onClickSubject={onClickSubjectRow}
-			/>
-		</>
+		<SubjectListScreen
+			subjects={response?.data}
+			isLoading={isLoading}
+			queryStates={queryStates}
+			setQueryStates={setQueryStates}
+			onClickSubject={onClickSubjectRow}
+		/>
 	);
 });

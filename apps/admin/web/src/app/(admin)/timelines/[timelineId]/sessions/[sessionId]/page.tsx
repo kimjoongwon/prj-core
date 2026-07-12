@@ -1,6 +1,5 @@
 "use client";
 
-import { toast } from "@heroui/react";
 import {
 	getGetProgramsQueryKey,
 	getGetSessionsQueryKey,
@@ -20,6 +19,7 @@ import {
 	type TimelineSessionScreenDayOfWeek,
 	type TimelineSessionScreenSessionType,
 } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Edit, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -132,7 +132,10 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 					router.push(`/timelines/${timelineId}` as Route);
 				},
 				onError: () => {
-					toast.danger("삭제 실패", { description: "세션 삭제 중 오류가 발생했습니다. 프로그램이 연결된 세션은 삭제할 수 없습니다." });
+					toast.danger("삭제 실패", {
+						description:
+							"세션 삭제 중 오류가 발생했습니다. 프로그램이 연결된 세션은 삭제할 수 없습니다.",
+					});
 				},
 			},
 		);
@@ -152,14 +155,18 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 			{ timelineId, sessionId, programId },
 			{
 				onSuccess: () => {
-					toast.success("삭제 성공", { description: "프로그램이 삭제되었습니다." });
+					toast.success("삭제 성공", {
+						description: "프로그램이 삭제되었습니다.",
+					});
 					queryClient.invalidateQueries({
 						queryKey: getGetProgramsQueryKey(timelineId, sessionId),
 					});
 					refetchPrograms();
 				},
 				onError: () => {
-					toast.danger("삭제 실패", { description: "프로그램 삭제 중 오류가 발생했습니다." });
+					toast.danger("삭제 실패", {
+						description: "프로그램 삭제 중 오류가 발생했습니다.",
+					});
 				},
 			},
 		);
@@ -188,64 +195,62 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 		: undefined;
 
 	return (
-		<>
-			<TimelineSessionEditScreen
-				title={session?.name ?? "세션 상세"}
-				description={session?.timeline?.name}
-				state={sessionState}
-				readOnly
-				isLoading={isSessionLoading}
-				notFound={!isSessionLoading && !session}
-				metadata={{
-					typeLabel: session ? getSessionTypeLabel(session.type) : undefined,
-					typeColor: session ? getSessionTypeColor(session.type) : undefined,
-					recurringDayLabel: getDayLabel(session?.recurringDayOfWeek ?? null),
-					repeatCycleLabel: getCycleLabel(session?.repeatCycleType ?? null),
-					timelineName: session?.timeline?.name,
-					timelineHref: `/timelines/${timelineId}` as Route,
-					createdAt: session?.createdAt,
-				}}
-				programs={programs.map((program) => ({
-					id: program.id,
-					href: `/timelines/${timelineId}/sessions/${sessionId}/programs/${program.id}` as Route,
-					name: program.name,
-					routineName:
-						program.routineNameSnapshot ?? program.routine?.name ?? "-",
-					activityCountLabel: `${program.activityCount ?? 0}개`,
-					previewText: getProgramPreviewText(program),
-					instructorName: getInstructorName(program.instructorId),
-					isConnectionResolved: isConnectionResolved(program),
-					capacityLabel: `${program.capacity}명`,
-					levelLabel: program.level ?? "-",
-				}))}
-				totalPrograms={totalPrograms}
-				resolvedPrograms={resolvedPrograms}
-				unresolvedPrograms={unresolvedPrograms}
-				actions={
-					<div className="flex gap-2">
-						<Button
-							variant="flat"
-							startContent={<Edit className="h-4 w-4" />}
-							onPress={onClickEditButton}
-						>
-							수정
-						</Button>
-						<Button
-							color="danger"
-							variant="flat"
-							startContent={<Trash2 className="h-4 w-4" />}
-							isLoading={isDeletingSession}
-							onPress={onClickDeleteSessionButton}
-						>
-							삭제
-						</Button>
-					</div>
-				}
-				onClickCreateProgramButton={onClickCreateProgramButton}
-				onClickEditProgramButton={onClickEditProgramButton}
-				onClickDeleteProgramButton={onClickDeleteProgramButton}
-			/>
-		</>
+		<TimelineSessionEditScreen
+			title={session?.name ?? "세션 상세"}
+			description={session?.timeline?.name}
+			state={sessionState}
+			readOnly
+			isLoading={isSessionLoading}
+			notFound={!isSessionLoading && !session}
+			metadata={{
+				typeLabel: session ? getSessionTypeLabel(session.type) : undefined,
+				typeColor: session ? getSessionTypeColor(session.type) : undefined,
+				recurringDayLabel: getDayLabel(session?.recurringDayOfWeek ?? null),
+				repeatCycleLabel: getCycleLabel(session?.repeatCycleType ?? null),
+				timelineName: session?.timeline?.name,
+				timelineHref: `/timelines/${timelineId}` as Route,
+				createdAt: session?.createdAt,
+			}}
+			programs={programs.map((program) => ({
+				id: program.id,
+				href: `/timelines/${timelineId}/sessions/${sessionId}/programs/${program.id}` as Route,
+				name: program.name,
+				routineName:
+					program.routineNameSnapshot ?? program.routine?.name ?? "-",
+				activityCountLabel: `${program.activityCount ?? 0}개`,
+				previewText: getProgramPreviewText(program),
+				instructorName: getInstructorName(program.instructorId),
+				isConnectionResolved: isConnectionResolved(program),
+				capacityLabel: `${program.capacity}명`,
+				levelLabel: program.level ?? "-",
+			}))}
+			totalPrograms={totalPrograms}
+			resolvedPrograms={resolvedPrograms}
+			unresolvedPrograms={unresolvedPrograms}
+			actions={
+				<div className="flex gap-2">
+					<Button
+						variant="flat"
+						startContent={<Edit className="h-4 w-4" />}
+						onPress={onClickEditButton}
+					>
+						수정
+					</Button>
+					<Button
+						color="danger"
+						variant="flat"
+						startContent={<Trash2 className="h-4 w-4" />}
+						isLoading={isDeletingSession}
+						onPress={onClickDeleteSessionButton}
+					>
+						삭제
+					</Button>
+				</div>
+			}
+			onClickCreateProgramButton={onClickCreateProgramButton}
+			onClickEditProgramButton={onClickEditProgramButton}
+			onClickDeleteProgramButton={onClickDeleteProgramButton}
+		/>
 	);
 });
 

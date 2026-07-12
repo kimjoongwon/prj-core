@@ -18,9 +18,7 @@ import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-const normalizeFormOptionValue = (
-	value: unknown,
-): FormOptionItem["value"] => {
+const normalizeFormOptionValue = (value: unknown): FormOptionItem["value"] => {
 	if (
 		typeof value === "string" ||
 		typeof value === "number" ||
@@ -124,44 +122,42 @@ export default observer(function InquiryEditScreenRoute() {
 	};
 
 	return (
-		<>
-			<InquiryEditScreen
-				title="문의 수정"
-				description="문의 메타 정보를 수정합니다."
-				formState={state}
-				bootstrap={
-					bootstrap
-						? {
-								fieldMeta: bootstrap.fieldMeta,
-								ui: bootstrap.ui,
-								options: bootstrapOptions,
-							}
-						: undefined
-				}
-				categoryOptions={categoryOptions}
-				priorityOptions={priorityOptions}
-				isSubmitting={updateMutation.isPending}
-				submitLabel="저장"
-				onClickBackButton={() => {
-					router.push(
-						ADMIN_PATHS.INQUIRIES_DETAIL.replace(
-							"[inquiryId]",
-							inquiryId,
-						) as Route,
-					);
-				}}
-				onClickCancelButton={() => {
-					router.push(
-						ADMIN_PATHS.INQUIRIES_DETAIL.replace(
-							"[inquiryId]",
-							inquiryId,
-						) as Route,
-					);
-				}}
-				onClickSubmitButton={() => {
-					void onClickSubmitButton();
-				}}
-			/>
-		</>
+		<InquiryEditScreen
+			title="문의 수정"
+			description="문의 메타 정보를 수정합니다."
+			formState={state}
+			bootstrap={
+				bootstrap
+					? {
+							fieldMeta: bootstrap.fieldMeta,
+							ui: bootstrap.ui,
+							options: bootstrapOptions,
+						}
+					: undefined
+			}
+			categoryOptions={categoryOptions}
+			priorityOptions={priorityOptions}
+			isSubmitting={updateMutation.isPending}
+			submitLabel="저장"
+			onClickBackButton={() => {
+				router.push(
+					ADMIN_PATHS.INQUIRIES_DETAIL.replace(
+						"[inquiryId]",
+						inquiryId,
+					) as Route,
+				);
+			}}
+			onClickCancelButton={() => {
+				router.push(
+					ADMIN_PATHS.INQUIRIES_DETAIL.replace(
+						"[inquiryId]",
+						inquiryId,
+					) as Route,
+				);
+			}}
+			onClickSubmitButton={() => {
+				void onClickSubmitButton();
+			}}
+		/>
 	);
 });

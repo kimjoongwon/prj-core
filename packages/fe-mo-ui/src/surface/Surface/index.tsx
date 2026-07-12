@@ -1,9 +1,9 @@
 import {
 	cn,
 	Surface as HeroSurface,
+	type SurfaceVariant,
 	surfaceClassNames,
 	useSurface,
-	type SurfaceVariant,
 } from "heroui-native";
 import {
 	type ComponentPropsWithoutRef,
@@ -32,23 +32,14 @@ const SURFACE_VARIANT_CLASS_NAMES: Partial<Record<SurfaceVariant, string>> = {
 const SurfaceComponent = forwardRef<
 	ComponentRef<typeof HeroSurface>,
 	SurfaceProps
->(
-	(
-		{
-			className,
-			variant = DEFAULT_SURFACE_VARIANT,
-			...props
-		},
-		ref,
-	) => (
-		<HeroSurface
-			{...props}
-			className={cn(SURFACE_VARIANT_CLASS_NAMES[variant], className)}
-			ref={ref}
-			variant={variant}
-		/>
-	),
-);
+>(({ className, variant = DEFAULT_SURFACE_VARIANT, ...props }, ref) => (
+	<HeroSurface
+		{...props}
+		className={cn(SURFACE_VARIANT_CLASS_NAMES[variant], className)}
+		ref={ref}
+		variant={variant}
+	/>
+));
 SurfaceComponent.displayName = "Surface";
 export const Surface = SurfaceComponent as typeof HeroSurface;
 export { surfaceClassNames, useSurface };

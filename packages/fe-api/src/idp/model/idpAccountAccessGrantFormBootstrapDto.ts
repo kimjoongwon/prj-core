@@ -14,21 +14,22 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { IdpAccountAccessGrantFormBootstrapDtoMode } from './idpAccountAccessGrantFormBootstrapDtoMode';
-import type { IdpAccountAccessGrantFormBootstrapDtoDefaultObject } from './idpAccountAccessGrantFormBootstrapDtoDefaultObject';
-import type { IdpAccountAccessGrantFormBootstrapDtoOptions } from './idpAccountAccessGrantFormBootstrapDtoOptions';
-import type { IdpAccountAccessGrantFormUiPathsDto } from './idpAccountAccessGrantFormUiPathsDto';
-import type { IdpAccountAccessGrantFormBootstrapDtoFieldMeta } from './idpAccountAccessGrantFormBootstrapDtoFieldMeta';
+
+import type { IdpAccountAccessGrantFormBootstrapDtoDefaultObject } from "./idpAccountAccessGrantFormBootstrapDtoDefaultObject";
+import type { IdpAccountAccessGrantFormBootstrapDtoFieldMeta } from "./idpAccountAccessGrantFormBootstrapDtoFieldMeta";
+import type { IdpAccountAccessGrantFormBootstrapDtoMode } from "./idpAccountAccessGrantFormBootstrapDtoMode";
+import type { IdpAccountAccessGrantFormBootstrapDtoOptions } from "./idpAccountAccessGrantFormBootstrapDtoOptions";
+import type { IdpAccountAccessGrantFormUiPathsDto } from "./idpAccountAccessGrantFormUiPathsDto";
 
 export interface IdpAccountAccessGrantFormBootstrapDto {
-  /** 폼 모드 */
-  mode: IdpAccountAccessGrantFormBootstrapDtoMode;
-  /** 초기 폼 객체 */
-  defaultObject: IdpAccountAccessGrantFormBootstrapDtoDefaultObject;
-  /** 경로별 선택 옵션 */
-  options: IdpAccountAccessGrantFormBootstrapDtoOptions;
-  /** UI 제어 경로 */
-  ui: IdpAccountAccessGrantFormUiPathsDto;
-  /** 경로별 필드 메타 */
-  fieldMeta: IdpAccountAccessGrantFormBootstrapDtoFieldMeta;
+	/** 폼 모드 */
+	mode: IdpAccountAccessGrantFormBootstrapDtoMode;
+	/** 초기 폼 객체 */
+	defaultObject: IdpAccountAccessGrantFormBootstrapDtoDefaultObject;
+	/** 경로별 선택 옵션 */
+	options: IdpAccountAccessGrantFormBootstrapDtoOptions;
+	/** UI 제어 경로 */
+	ui: IdpAccountAccessGrantFormUiPathsDto;
+	/** 경로별 필드 메타 */
+	fieldMeta: IdpAccountAccessGrantFormBootstrapDtoFieldMeta;
 }

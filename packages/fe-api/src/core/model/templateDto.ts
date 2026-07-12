@@ -14,33 +14,33 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { TemplateType } from './templateType';
+import type { TemplateType } from "./templateType";
 
 export interface TemplateDto {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  /** 고유 코드 */
-  code: string;
-  /** 템플릿 이름 */
-  name: string;
-  /** 템플릿 유형 */
-  type: TemplateType;
-  /**
-   * 제목
-   * @nullable
-   */
-  subject?: string | null;
-  /** 본문 */
-  content: string;
-  /**
-   * 설명
-   * @nullable
-   */
-  description?: string | null;
-  /** 활성 상태 */
-  isActive: boolean;
+	/** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	/** 고유 코드 */
+	code: string;
+	/** 템플릿 이름 */
+	name: string;
+	/** 템플릿 유형 */
+	type: TemplateType;
+	/**
+	 * 제목
+	 * @nullable
+	 */
+	subject?: string | null;
+	/** 본문 */
+	content: string;
+	/**
+	 * 설명
+	 * @nullable
+	 */
+	description?: string | null;
+	/** 활성 상태 */
+	isActive: boolean;
 }

@@ -16,37 +16,37 @@
  */
 
 export interface FolderDto {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  /**
-   * 소속 Space ID
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  spaceId: string;
-  /**
-   * 부모 폴더 ID (루트면 null)
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  parentFolderId?: string | null;
-  /** 폴더명 */
-  name: string;
-  /** 전체 경로 (예: /images/2024) */
-  path: string;
-  /** 정렬 순서 */
-  sortOrder: number;
-  /**
-   * 생성자 ID
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  creatorId?: string | null;
-  /** 부모 폴더 */
-  parent?: FolderDto;
-  /** 하위 폴더 목록 */
-  children?: FolderDto[];
+	/** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	/**
+	 * 소속 Space ID
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	spaceId: string;
+	/**
+	 * 부모 폴더 ID (루트면 null)
+	 * @nullable
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	parentFolderId?: string | null;
+	/** 폴더명 */
+	name: string;
+	/** 전체 경로 (예: /images/2024) */
+	path: string;
+	/** 정렬 순서 */
+	sortOrder: number;
+	/**
+	 * 생성자 ID
+	 * @nullable
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	creatorId?: string | null;
+	/** 부모 폴더 */
+	parent?: FolderDto;
+	/** 하위 폴더 목록 */
+	children?: FolderDto[];
 }

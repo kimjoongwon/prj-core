@@ -30,6 +30,8 @@ export {
 	AccountListScreen,
 	idpConsoleAccountsPageQueryInputs,
 } from "./AccountListScreen/AccountListScreen";
+export type { AccountTenantSelectScreenProps } from "./AccountTenantSelectScreen/AccountTenantSelectScreen";
+export { AccountTenantSelectScreen } from "./AccountTenantSelectScreen/AccountTenantSelectScreen";
 export type {
 	ActionEditScreenProps,
 	ActionFormField,

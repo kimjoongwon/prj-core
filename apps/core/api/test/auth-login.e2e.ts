@@ -207,12 +207,13 @@ describe("Auth Login API E2E 테스트", () => {
 			const state = authorizationUrl.searchParams.get("state");
 			expect(state).toEqual(expect.any(String));
 			if (typeof state !== "string") {
-				throw new Error("OIDC authorization URL is missing the state parameter.");
+				throw new Error(
+					"OIDC authorization URL is missing the state parameter.",
+				);
 			}
 
-			const storedState = await tokenStorageService.validateAndConsumeOidcState(
-				state,
-			);
+			const storedState =
+				await tokenStorageService.validateAndConsumeOidcState(state);
 			expect(storedState).toEqual(
 				expect.objectContaining({
 					clientId: "admin-web",

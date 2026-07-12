@@ -34,5 +34,4 @@ export class QueryServiceDocumentDto extends QueryDto {
 
 	@BooleanFieldOptional({ description: "필수 동의 여부" })
 	readonly isRequired?: boolean;
-
 }

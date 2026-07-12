@@ -52,10 +52,9 @@ describe("current-space use cases", () => {
 		const invalidSelection = createDependencies("tenant-invalid-id");
 
 		await expect(
-			new GetCurrentSpaceUseCase(
-				noSelection.cls,
-				noSelection.spaces,
-			).execute(new GetCurrentSpaceQuery()),
+			new GetCurrentSpaceUseCase(noSelection.cls, noSelection.spaces).execute(
+				new GetCurrentSpaceQuery(),
+			),
 		).resolves.toBeNull();
 		await expect(
 			new GetCurrentSpaceUseCase(
@@ -70,7 +69,9 @@ describe("current-space use cases", () => {
 		const useCase = new SetCurrentSpaceUseCase(cls, spaces, users);
 
 		await expect(
-			useCase.execute(new SetCurrentSpaceCommand({ tenantId: activeTenant.id })),
+			useCase.execute(
+				new SetCurrentSpaceCommand({ tenantId: activeTenant.id }),
+			),
 		).resolves.toEqual({ ...currentSpace, tenantId: activeTenant.id });
 		expect(users.setCurrentTenant).toHaveBeenCalledWith(
 			"user-id",

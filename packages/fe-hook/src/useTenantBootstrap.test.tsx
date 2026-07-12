@@ -10,8 +10,8 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { observer } from "mobx-react-lite";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
-	useTenantBootstrap,
 	type AccountBootstrapSpaceLike,
+	useTenantBootstrap,
 } from "./useTenantBootstrap";
 
 function createStorageMock() {

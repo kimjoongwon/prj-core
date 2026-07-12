@@ -81,5 +81,4 @@ export class QueryUsersDto extends QueryDto {
 		Array.isArray(value) ? value : value ? [value] : [],
 	)
 	sort?: string[];
-
 }

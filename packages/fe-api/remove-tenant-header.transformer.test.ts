@@ -43,9 +43,7 @@ describe("removeTenantHeaderParameters", () => {
 			paths: {
 				"/api/v1/users": {
 					get: {
-						parameters: [
-							{ name: "x-tenant-id", in: "header", required: true },
-						],
+						parameters: [{ name: "x-tenant-id", in: "header", required: true }],
 					},
 				},
 			},

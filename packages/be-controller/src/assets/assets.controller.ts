@@ -64,7 +64,11 @@ export class AssetsController {
 	@Get()
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.MEMBER, SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
+	@Roles([
+		SYSTEM_ROLES.MEMBER,
+		SYSTEM_ROLES.COMPANY_MANAGER,
+		SYSTEM_ROLES.PLATFORM_ADMIN,
+	])
 	@ApiOperation({
 		operationId: "getAssets",
 		summary: "에셋 목록 조회",
@@ -82,7 +86,11 @@ export class AssetsController {
 	@Get(":assetId")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.MEMBER, SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
+	@Roles([
+		SYSTEM_ROLES.MEMBER,
+		SYSTEM_ROLES.COMPANY_MANAGER,
+		SYSTEM_ROLES.PLATFORM_ADMIN,
+	])
 	@ApiOperation({
 		operationId: "getAssetById",
 		summary: "에셋 상세 조회",
@@ -104,7 +112,11 @@ export class AssetsController {
 	@Get(":assetId/content")
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(RolesGuard)
-	@Roles([SYSTEM_ROLES.MEMBER, SYSTEM_ROLES.COMPANY_MANAGER, SYSTEM_ROLES.PLATFORM_ADMIN])
+	@Roles([
+		SYSTEM_ROLES.MEMBER,
+		SYSTEM_ROLES.COMPANY_MANAGER,
+		SYSTEM_ROLES.PLATFORM_ADMIN,
+	])
 	@ApiOperation({
 		operationId: "getAssetContent",
 		summary: "에셋 원본 조회",

@@ -82,12 +82,10 @@ const ForgotPasswordRoutePage = observer(() => {
 	};
 
 	return (
-		<>
-			<ForgotPasswordScreen
-				state={forgotPasswordPage}
-				onSubmitForgotPasswordForm={onSubmitForgotPasswordForm}
-			/>
-		</>
+		<ForgotPasswordScreen
+			state={forgotPasswordPage}
+			onSubmitForgotPasswordForm={onSubmitForgotPasswordForm}
+		/>
 	);
 });
 

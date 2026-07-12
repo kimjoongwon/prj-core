@@ -15,11 +15,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type DeleteFilter = typeof DeleteFilter[keyof typeof DeleteFilter];
-
+export type DeleteFilter = (typeof DeleteFilter)[keyof typeof DeleteFilter];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const DeleteFilter = {
-  active: 'active',
-  deleted: 'deleted',
+	active: "active",
+	deleted: "deleted",
 } as const;

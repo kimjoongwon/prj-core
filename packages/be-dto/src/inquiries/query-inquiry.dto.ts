@@ -112,5 +112,4 @@ export class QueryInquiryDto extends QueryDto {
 		Array.isArray(value) ? value : value ? [value] : [],
 	)
 	sort?: string[];
-
 }

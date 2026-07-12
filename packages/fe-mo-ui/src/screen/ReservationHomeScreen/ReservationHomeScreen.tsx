@@ -12,11 +12,11 @@ import { Text } from "../../data-display/Text";
 import { BookingPolicySheet } from "../../feature/BookingPolicySheet";
 import { StatusFeedback } from "../../feedback/StatusFeedback";
 import { Icon } from "../../icon";
-import { ScreenFrame } from "../../layout/ScreenFrame";
 import {
 	PureDateStrip as DateStrip,
 	type DateStripOption,
 } from "../../input/DateStrip";
+import { ScreenFrame } from "../../layout/ScreenFrame";
 import {
 	BookingClassCard,
 	type BookingClassFeedItem,

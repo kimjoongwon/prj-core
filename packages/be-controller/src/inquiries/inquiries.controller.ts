@@ -100,9 +100,7 @@ export class InquiriesController {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
 
-		return this.queryBus.execute(
-			new ListInquiriesQuery(query),
-		);
+		return this.queryBus.execute(new ListInquiriesQuery(query));
 	}
 
 	@Get("stats")

@@ -44,9 +44,7 @@ export class AssetAggregate {
 		const where = this.applySpaceScope(
 			buildAssetQueryWhere(
 				query,
-				spaceIds === undefined
-					? undefined
-					: { spaceId: { in: spaceIds } },
+				spaceIds === undefined ? undefined : { spaceId: { in: spaceIds } },
 			),
 			spaceIds,
 		);
@@ -83,10 +81,7 @@ export class AssetAggregate {
 		};
 	}
 
-	async moveAsset(
-		assetId: string,
-		dto: MoveAssetCommandInput,
-	) {
+	async moveAsset(assetId: string, dto: MoveAssetCommandInput) {
 		const currentSpaceId = this.getCurrentSpaceId();
 		const asset = await this.getCurrentSpaceAsset(assetId);
 		const targetFolder = await this.foldersRepository.findById(
@@ -200,11 +195,7 @@ export class AssetAggregate {
 		const asset = await this.assetsRepository.findByIdWithRelations(assetId);
 		this.getCurrentSpaceId();
 
-		if (
-			!asset ||
-			asset.removedAt ||
-			!this.canReadSpace(asset.spaceId)
-		) {
+		if (!asset || asset.removedAt || !this.canReadSpace(asset.spaceId)) {
 			throw new NotFoundException("에셋을 찾을 수 없습니다");
 		}
 

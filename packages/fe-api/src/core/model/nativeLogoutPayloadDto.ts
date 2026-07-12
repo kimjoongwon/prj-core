@@ -16,8 +16,8 @@
  */
 
 export interface NativeLogoutPayloadDto {
-  /** first-party native 세션 ID */
-  sessionId: string;
-  /** first-party native refresh token */
-  refreshToken?: string;
+	/** first-party native 세션 ID */
+	sessionId: string;
+	/** first-party native refresh token */
+	refreshToken?: string;
 }

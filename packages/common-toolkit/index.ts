@@ -58,7 +58,6 @@ export {
 	resolveHttpClientIp,
 	resolveHttpUserAgent,
 } from "./src/HttpRequest";
-export { parseAcceptLanguage } from "./src/parseAcceptLanguage";
 export type { LogData, Logger } from "./src/Logger";
 // Logger utilities
 export { createLogger } from "./src/Logger";
@@ -75,6 +74,7 @@ export {
 	convertFromPathParamsToQueryParams,
 	getUrlWithParamsAndQueryString,
 } from "./src/Path";
+export { parseAcceptLanguage } from "./src/parseAcceptLanguage";
 // Route key utilities
 export {
 	fromRouteKey,

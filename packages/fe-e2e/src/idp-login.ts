@@ -145,14 +145,14 @@ async function seedConsolePersist(page: ConsoleLoginPageLike) {
 			const current = raw ? JSON.parse(raw) : {};
 			window.localStorage.setItem(
 				storageKey,
-					JSON.stringify({
-						...current,
-						tenantId,
-						spaceId,
-						groundName: selectedGroundName,
-						spaces: [{ tenantId, spaceId, groundName: selectedGroundName }],
-						accessTokenExpiresAt:
-							typeof current.accessTokenExpiresAt === "number"
+				JSON.stringify({
+					...current,
+					tenantId,
+					spaceId,
+					groundName: selectedGroundName,
+					spaces: [{ tenantId, spaceId, groundName: selectedGroundName }],
+					accessTokenExpiresAt:
+						typeof current.accessTokenExpiresAt === "number"
 							? current.accessTokenExpiresAt
 							: accessTokenExpiresAt,
 					refreshTokenExpiresAt:

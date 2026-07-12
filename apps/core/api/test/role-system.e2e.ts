@@ -119,7 +119,9 @@ describe("Role 시스템 E2E 테스트", () => {
 			const platformAdmin = roles.find(
 				(role) => role.name === "PLATFORM_ADMIN",
 			);
-			const companyManager = roles.find((role) => role.name === "COMPANY_MANAGER");
+			const companyManager = roles.find(
+				(role) => role.name === "COMPANY_MANAGER",
+			);
 			const member = roles.find((role) => role.name === "MEMBER");
 
 			if (platformAdmin?.displayName) {

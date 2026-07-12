@@ -70,10 +70,10 @@ export const ResetPasswordForm = observer(
 
 				{/* 토큰 만료/무효 */}
 				{step === "invalid" && (
-						<div className="text-center">
-							<div className="w-16 h-16 bg-danger/20 rounded-full mx-auto mb-4 flex items-center justify-center">
-								<AlertTriangle className="h-8 w-8 text-danger" />
-							</div>
+					<div className="text-center">
+						<div className="w-16 h-16 bg-danger/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+							<AlertTriangle className="h-8 w-8 text-danger" />
+						</div>
 						<h2 className="text-lg font-semibold mb-2">
 							{tokenError ? t(tokenError) : t("링크가 만료되었습니다")}
 						</h2>
@@ -96,10 +96,10 @@ export const ResetPasswordForm = observer(
 
 				{/* 재설정 완료 */}
 				{step === "form" && state.isComplete && (
-						<div className="text-center">
-							<div className="w-16 h-16 bg-success/20 rounded-full mx-auto mb-4 flex items-center justify-center">
-								<CheckCircle className="h-8 w-8 text-success" />
-							</div>
+					<div className="text-center">
+						<div className="w-16 h-16 bg-success/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+							<CheckCircle className="h-8 w-8 text-success" />
+						</div>
 						<h2 className="text-lg font-semibold mb-2">
 							{t("비밀번호가 변경되었습니다")}
 						</h2>

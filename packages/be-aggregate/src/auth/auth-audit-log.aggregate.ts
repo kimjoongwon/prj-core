@@ -1,8 +1,8 @@
 import { SpaceContext } from "@cocrepo/context";
+import type { GetAuditLogsInput } from "@cocrepo/input";
 import type { Prisma } from "@cocrepo/prisma";
 import { AuthAuditLogsRepository } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
-import type { GetAuditLogsInput } from "@cocrepo/input";
 
 /**
  * 인증 감사 로그 서비스

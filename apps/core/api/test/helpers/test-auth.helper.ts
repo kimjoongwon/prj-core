@@ -103,7 +103,9 @@ export async function getTestAuth(
 		options.userEmail ?? process.env.E2E_API_AUTH_EMAIL ?? "admin@plate.com";
 	const roleName =
 		options.roleName ??
-		(options.roleCategoryName || options.spaceId ? undefined : "PLATFORM_ADMIN");
+		(options.roleCategoryName || options.spaceId
+			? undefined
+			: "PLATFORM_ADMIN");
 	const roleCategoryName =
 		typeof options.roleCategoryName === "string"
 			? options.roleCategoryName

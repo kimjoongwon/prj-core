@@ -267,9 +267,7 @@ export const FormLayoutExample: Story = {
 export const CardExample: Story = {
 	args: {},
 	render: () => (
-		<VStack
-			className="max-w-sm overflow-hidden rounded-lg border bg-white shadow"
-		>
+		<VStack className="max-w-sm overflow-hidden rounded-lg border bg-white shadow">
 			<div className="h-32 w-full bg-gradient-to-r from-blue-400 to-purple-500"></div>
 
 			<VStack className="px-6 pb-6">
@@ -313,10 +311,7 @@ export const CardExample: Story = {
 export const NavigationSidebarExample: Story = {
 	args: {},
 	render: () => (
-		<VStack
-			alignItems="stretch"
-			className="h-64 w-48 border-r bg-gray-50 p-4"
-		>
+		<VStack alignItems="stretch" className="h-64 w-48 border-r bg-gray-50 p-4">
 			<h4 className="mb-2 font-semibold text-gray-900">Navigation</h4>
 
 			<a href="#" className="rounded px-3 py-2 text-gray-700 hover:bg-blue-100">

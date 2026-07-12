@@ -104,50 +104,48 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
 			: undefined;
 
 		return (
-			<>
-				<TimelineSessionProgramEditScreen
-					title={program?.name ?? "프로그램 상세"}
-					description={descriptionText || undefined}
-					state={programState}
-					readOnly
-					routinePreview={routinePreview}
-					metadata={{
-						routineHref: program?.routine?.id
-							? (`/routines/${program.routine.id}` as Route)
-							: undefined,
-						instructorLabel: program?.instructorId ?? null,
-						activityCountLabel: `${
-							program?.activityCount ?? program?.executionPlan?.length ?? 0
-						}개`,
-						sessionName: program?.session?.name ?? null,
-						sessionHref:
-							`/timelines/${timelineId}/sessions/${sessionId}` as Route,
-						createdAt: program?.createdAt,
-					}}
-					isLoading={isLoading}
-					notFound={!isLoading && !program}
-					actions={
-						<div className="flex gap-2">
-							<Button
-								variant="flat"
-								startContent={<Edit className="h-4 w-4" />}
-								onPress={onClickEditButton}
-							>
-								수정
-							</Button>
-							<Button
-								color="danger"
-								variant="flat"
-								startContent={<Trash2 className="h-4 w-4" />}
-								isLoading={isDeleting}
-								onPress={onClickDeleteButton}
-							>
-								삭제
-							</Button>
-						</div>
-					}
-				/>
-			</>
+			<TimelineSessionProgramEditScreen
+				title={program?.name ?? "프로그램 상세"}
+				description={descriptionText || undefined}
+				state={programState}
+				readOnly
+				routinePreview={routinePreview}
+				metadata={{
+					routineHref: program?.routine?.id
+						? (`/routines/${program.routine.id}` as Route)
+						: undefined,
+					instructorLabel: program?.instructorId ?? null,
+					activityCountLabel: `${
+						program?.activityCount ?? program?.executionPlan?.length ?? 0
+					}개`,
+					sessionName: program?.session?.name ?? null,
+					sessionHref:
+						`/timelines/${timelineId}/sessions/${sessionId}` as Route,
+					createdAt: program?.createdAt,
+				}}
+				isLoading={isLoading}
+				notFound={!isLoading && !program}
+				actions={
+					<div className="flex gap-2">
+						<Button
+							variant="flat"
+							startContent={<Edit className="h-4 w-4" />}
+							onPress={onClickEditButton}
+						>
+							수정
+						</Button>
+						<Button
+							color="danger"
+							variant="flat"
+							startContent={<Trash2 className="h-4 w-4" />}
+							isLoading={isDeleting}
+							onPress={onClickDeleteButton}
+						>
+							삭제
+						</Button>
+					</div>
+				}
+			/>
 		);
 	});
 

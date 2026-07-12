@@ -3,8 +3,8 @@
 import type { DataGridColumnConfig, DataGridState } from "@cocrepo/type";
 import { Popover } from "@heroui/react";
 import { Settings2 } from "lucide-react";
-import { Button } from "../../input/Button/Button";
 import { useT } from "../../i18n";
+import { Button } from "../../input/Button/Button";
 import { Checkbox } from "../../input/Checkbox/Checkbox";
 
 export interface DataGridColumnSettingsProps<T> {

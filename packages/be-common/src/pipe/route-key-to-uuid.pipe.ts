@@ -1,7 +1,7 @@
 import { isUuid, tryFromRouteKey } from "@cocrepo/toolkit";
 import {
-	Injectable,
 	type ArgumentMetadata,
+	Injectable,
 	type PipeTransform,
 } from "@nestjs/common";
 

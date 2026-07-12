@@ -36,92 +36,90 @@ export default observer(function ActionDetailRoute() {
 		: undefined;
 
 	return (
-		<>
-			<ActionEditScreen
-				title="Action 상세"
-				description={
-					action
-						? `${action.displayName || action.name} Action의 상세 정보입니다.`
-						: "Action을 찾을 수 없습니다."
-				}
-				state={state}
-				readOnly
-				isLoading={isLoading}
-				notFound={!isLoading && !action}
-				notFoundAction={
+		<ActionEditScreen
+			title="Action 상세"
+			description={
+				action
+					? `${action.displayName || action.name} Action의 상세 정보입니다.`
+					: "Action을 찾을 수 없습니다."
+			}
+			state={state}
+			readOnly
+			isLoading={isLoading}
+			notFound={!isLoading && !action}
+			notFoundAction={
+				<Button
+					variant="flat"
+					onPress={() => {
+						router.push("/actions" as Route);
+					}}
+				>
+					목록으로
+				</Button>
+			}
+			actions={
+				<div className="flex gap-2">
 					<Button
-						variant="flat"
+						variant="light"
+						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push("/actions" as Route);
 						}}
 					>
 						목록으로
 					</Button>
-				}
-				actions={
-					<div className="flex gap-2">
-						<Button
-							variant="light"
-							startContent={<ArrowLeft className="h-4 w-4" />}
-							onPress={() => {
-								router.push("/actions" as Route);
-							}}
-						>
-							목록으로
-						</Button>
-						{action && !action.isSystem ? (
-							<>
-								<Button
-									variant="flat"
-									color="primary"
-									startContent={<Edit className="h-4 w-4" />}
-									onPress={() => {
-										router.push(`/actions/${actionId}/edit` as Route);
-									}}
-								>
-									수정
-								</Button>
-								<Button
-									variant="flat"
-									color="danger"
-									startContent={<Trash2 className="h-4 w-4" />}
-									isLoading={isDeleting}
-									onPress={() => {
-										deleteAction({ id: actionId });
-									}}
-								>
-									삭제
-								</Button>
-							</>
-						) : null}
-					</div>
-				}
-			>
-				{action?.config !== null && action?.config !== undefined ? (
-					<SectionLike title="설정 (Config)">
-						<pre className="overflow-x-auto rounded-lg bg-default p-4 text-sm dark:bg-default/5">
-							{JSON.stringify(action.config, null, 2)}
-						</pre>
-					</SectionLike>
-				) : null}
-				{action ? (
-					<SectionLike title="추가 정보">
-						<dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
+					{action && !action.isSystem ? (
+						<>
+							<Button
+								variant="flat"
+								color="primary"
+								startContent={<Edit className="h-4 w-4" />}
+								onPress={() => {
+									router.push(`/actions/${actionId}/edit` as Route);
+								}}
+							>
+								수정
+							</Button>
+							<Button
+								variant="flat"
+								color="danger"
+								startContent={<Trash2 className="h-4 w-4" />}
+								isLoading={isDeleting}
+								onPress={() => {
+									deleteAction({ id: actionId });
+								}}
+							>
+								삭제
+							</Button>
+						</>
+					) : null}
+				</div>
+			}
+		>
+			{action?.config !== null && action?.config !== undefined ? (
+				<SectionLike title="설정 (Config)">
+					<pre className="overflow-x-auto rounded-lg bg-default p-4 text-sm dark:bg-default/5">
+						{JSON.stringify(action.config, null, 2)}
+					</pre>
+				</SectionLike>
+			) : null}
+			{action ? (
+				<SectionLike title="추가 정보">
+					<dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
+						<div>
+							<dt className="mb-1 text-sm text-muted">생성일</dt>
+							<dd>{new Date(action.createdAt).toLocaleString("ko-KR")}</dd>
+						</div>
+						{action.updatedAt ? (
 							<div>
-								<dt className="mb-1 text-sm text-muted">생성일</dt>
-								<dd>{new Date(action.createdAt).toLocaleString("ko-KR")}</dd>
+								<dt className="mb-1 text-sm text-muted">수정일</dt>
+								<dd>{new Date(action.updatedAt).toLocaleString("ko-KR")}</dd>
 							</div>
-							{action.updatedAt ? (
-								<div>
-									<dt className="mb-1 text-sm text-muted">수정일</dt>
-									<dd>{new Date(action.updatedAt).toLocaleString("ko-KR")}</dd>
-								</div>
-							) : null}
-						</dl>
-					</SectionLike>
-				) : null}
-			</ActionEditScreen>
-		</>
+						) : null}
+					</dl>
+				</SectionLike>
+			) : null}
+		</ActionEditScreen>
 	);
 });
 

@@ -53,17 +53,15 @@ export default observer(function EmailVerificationsPageRoute() {
 	});
 
 	return (
-		<>
-			<EmailVerificationListScreen
-				verifications={response?.data}
-				totalCount={response?.meta?.totalCount ?? 0}
-				isLoading={isLoading || isFetching}
-				queryStates={queryStates}
-				setQueryStates={setQueryStates}
-				onClickResendEmailVerificationButton={(emailVerificationId) => {
-					void resendEmailVerification({ emailVerificationId });
-				}}
-			/>
-		</>
+		<EmailVerificationListScreen
+			verifications={response?.data}
+			totalCount={response?.meta?.totalCount ?? 0}
+			isLoading={isLoading || isFetching}
+			queryStates={queryStates}
+			setQueryStates={setQueryStates}
+			onClickResendEmailVerificationButton={(emailVerificationId) => {
+				void resendEmailVerification({ emailVerificationId });
+			}}
+		/>
 	);
 });

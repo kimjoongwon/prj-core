@@ -262,7 +262,13 @@ const AccountBootstrapper = observer(function AccountBootstrapper({
 		if (account.currentTenantId && pathname === "/select-space") {
 			router.replace("/dashboard");
 		}
-	}, [account, account.currentTenantId, account.isSelectionResolved, pathname, router]);
+	}, [
+		account,
+		account.currentTenantId,
+		account.isSelectionResolved,
+		pathname,
+		router,
+	]);
 
 	return children;
 });

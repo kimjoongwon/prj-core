@@ -1,6 +1,5 @@
 "use client";
 
-import { toast } from "@heroui/react";
 import {
 	type CreateServiceDocumentDto,
 	type GetServiceDocumentsParams,
@@ -20,6 +19,7 @@ import {
 	ServiceDocumentListScreen,
 	type ServiceDocumentListScreenQueryStates,
 } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
@@ -123,7 +123,9 @@ export default observer(function TermsPageRoute() {
 
 	const onClickSubmitButton = async () => {
 		if (!draft.title.trim() || !draft.content.trim() || !draft.version.trim()) {
-			toast.warning("입력 확인", { description: "제목, 본문, 버전을 입력해 주세요." });
+			toast.warning("입력 확인", {
+				description: "제목, 본문, 버전을 입력해 주세요.",
+			});
 			return;
 		}
 
@@ -133,16 +135,22 @@ export default observer(function TermsPageRoute() {
 					serviceDocumentId: editingDocumentId,
 					data: toUpdatePayload(draft),
 				});
-				toast.success("문서 수정 완료", { description: "초안 문서가 수정되었습니다." });
+				toast.success("문서 수정 완료", {
+					description: "초안 문서가 수정되었습니다.",
+				});
 			} else {
 				await createMutation.mutateAsync({ data: toCreatePayload(draft) });
-				toast.success("문서 등록 완료", { description: "새 서비스 문서 초안이 생성되었습니다." });
+				toast.success("문서 등록 완료", {
+					description: "새 서비스 문서 초안이 생성되었습니다.",
+				});
 			}
 
 			await invalidateServiceDocuments(queryClient);
 			onClickCancelFormButton();
 		} catch (error) {
-			toast.danger("저장 실패", { description: "서비스 문서 저장 중 오류가 발생했습니다." });
+			toast.danger("저장 실패", {
+				description: "서비스 문서 저장 중 오류가 발생했습니다.",
+			});
 			throw error;
 		}
 	};
@@ -151,9 +159,13 @@ export default observer(function TermsPageRoute() {
 		try {
 			await publishMutation.mutateAsync({ serviceDocumentId });
 			await invalidateServiceDocuments(queryClient);
-			toast.success("게시 완료", { description: "선택한 서비스 문서가 게시되었습니다." });
+			toast.success("게시 완료", {
+				description: "선택한 서비스 문서가 게시되었습니다.",
+			});
 		} catch (error) {
-			toast.danger("게시 실패", { description: "서비스 문서 게시 중 오류가 발생했습니다." });
+			toast.danger("게시 실패", {
+				description: "서비스 문서 게시 중 오류가 발생했습니다.",
+			});
 			throw error;
 		}
 	};
@@ -162,9 +174,13 @@ export default observer(function TermsPageRoute() {
 		try {
 			await archiveMutation.mutateAsync({ serviceDocumentId });
 			await invalidateServiceDocuments(queryClient);
-			toast.success("보관 완료", { description: "선택한 서비스 문서가 보관되었습니다." });
+			toast.success("보관 완료", {
+				description: "선택한 서비스 문서가 보관되었습니다.",
+			});
 		} catch (error) {
-			toast.danger("보관 실패", { description: "서비스 문서 보관 중 오류가 발생했습니다." });
+			toast.danger("보관 실패", {
+				description: "서비스 문서 보관 중 오류가 발생했습니다.",
+			});
 			throw error;
 		}
 	};
@@ -173,40 +189,42 @@ export default observer(function TermsPageRoute() {
 		try {
 			await deleteMutation.mutateAsync({ serviceDocumentId });
 			await invalidateServiceDocuments(queryClient);
-			toast.success("삭제 완료", { description: "선택한 서비스 문서가 삭제되었습니다." });
+			toast.success("삭제 완료", {
+				description: "선택한 서비스 문서가 삭제되었습니다.",
+			});
 		} catch (error) {
-			toast.danger("삭제 실패", { description: "서비스 문서 삭제 중 오류가 발생했습니다." });
+			toast.danger("삭제 실패", {
+				description: "서비스 문서 삭제 중 오류가 발생했습니다.",
+			});
 			throw error;
 		}
 	};
 
 	return (
-		<>
-			<ServiceDocumentListScreen
-				documents={response?.data}
-				totalCount={response?.meta?.total ?? 0}
-				isLoading={isLoading}
-				isSubmitting={isSubmitting}
-				queryStates={queryStates}
-				setQueryStates={setQueryStates}
-				formMode={formMode}
-				draft={draft}
-				editingDocumentId={editingDocumentId}
-				onChangeSearchInput={onChangeSearchInput}
-				onChangeKindFilter={onChangeKindFilter}
-				onChangePlatformFilter={onChangePlatformFilter}
-				onChangeStatusFilter={onChangeStatusFilter}
-				onChangeLocaleFilter={onChangeLocaleFilter}
-				onChangeDraftField={onChangeDraftField}
-				onClickNewButton={onClickNewButton}
-				onClickCancelFormButton={onClickCancelFormButton}
-				onClickSubmitButton={onClickSubmitButton}
-				onClickEditButton={onClickEditButton}
-				onClickPublishButton={onClickPublishButton}
-				onClickArchiveButton={onClickArchiveButton}
-				onClickDeleteButton={onClickDeleteButton}
-			/>
-		</>
+		<ServiceDocumentListScreen
+			documents={response?.data}
+			totalCount={response?.meta?.total ?? 0}
+			isLoading={isLoading}
+			isSubmitting={isSubmitting}
+			queryStates={queryStates}
+			setQueryStates={setQueryStates}
+			formMode={formMode}
+			draft={draft}
+			editingDocumentId={editingDocumentId}
+			onChangeSearchInput={onChangeSearchInput}
+			onChangeKindFilter={onChangeKindFilter}
+			onChangePlatformFilter={onChangePlatformFilter}
+			onChangeStatusFilter={onChangeStatusFilter}
+			onChangeLocaleFilter={onChangeLocaleFilter}
+			onChangeDraftField={onChangeDraftField}
+			onClickNewButton={onClickNewButton}
+			onClickCancelFormButton={onClickCancelFormButton}
+			onClickSubmitButton={onClickSubmitButton}
+			onClickEditButton={onClickEditButton}
+			onClickPublishButton={onClickPublishButton}
+			onClickArchiveButton={onClickArchiveButton}
+			onClickDeleteButton={onClickDeleteButton}
+		/>
 	);
 });
 

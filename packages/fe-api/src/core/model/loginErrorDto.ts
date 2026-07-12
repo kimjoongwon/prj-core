@@ -14,23 +14,23 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { LoginRecoveryActionDto } from './loginRecoveryActionDto';
+import type { LoginRecoveryActionDto } from "./loginRecoveryActionDto";
 
 export interface LoginErrorDto {
-  /** 에러 코드 */
-  error: string;
-  /** 사용자 표시 메시지 */
-  displayMessage?: string;
-  /** 추가 안내 문구 */
-  hint?: string;
-  /** 남은 시도 횟수 */
-  remainingAttempts?: number;
-  /** 잠금 해제 시간 (ISO 8601) */
-  lockedUntil?: string;
-  /** 임시 잠금 임계값 */
-  temporaryLockThreshold?: number;
-  /** 임시 잠금 시간 (분) */
-  temporaryLockDurationMin?: number;
-  /** 사용 가능한 복구 액션 */
-  recoveryActions?: LoginRecoveryActionDto[];
+	/** 에러 코드 */
+	error: string;
+	/** 사용자 표시 메시지 */
+	displayMessage?: string;
+	/** 추가 안내 문구 */
+	hint?: string;
+	/** 남은 시도 횟수 */
+	remainingAttempts?: number;
+	/** 잠금 해제 시간 (ISO 8601) */
+	lockedUntil?: string;
+	/** 임시 잠금 임계값 */
+	temporaryLockThreshold?: number;
+	/** 임시 잠금 시간 (분) */
+	temporaryLockDurationMin?: number;
+	/** 사용 가능한 복구 액션 */
+	recoveryActions?: LoginRecoveryActionDto[];
 }

@@ -16,10 +16,10 @@
  */
 
 export interface SyncRolePolicyItemDto {
-  /** Policy ID (Role에 할당할 정책) */
-  policyId: string;
-  /** 활성화 여부 */
-  isActive?: boolean;
-  /** 우선순위 (높을수록 우선) */
-  priority?: number;
+	/** Policy ID (Role에 할당할 정책) */
+	policyId: string;
+	/** 활성화 여부 */
+	isActive?: boolean;
+	/** 우선순위 (높을수록 우선) */
+	priority?: number;
 }

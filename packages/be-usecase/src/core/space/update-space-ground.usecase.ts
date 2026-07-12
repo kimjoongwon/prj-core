@@ -7,9 +7,6 @@ export class UpdateSpaceGroundUseCase {
 	constructor(private readonly spaceService: SpaceAggregate) {}
 
 	execute(command: UpdateSpaceGroundCommand): Promise<unknown> {
-		return this.spaceService.updateGroundBySpaceId(
-			command.spaceId,
-			command,
-		);
+		return this.spaceService.updateGroundBySpaceId(command.spaceId, command);
 	}
 }

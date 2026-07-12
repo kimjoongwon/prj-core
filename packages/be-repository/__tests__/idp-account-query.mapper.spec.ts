@@ -1,7 +1,4 @@
-import {
-	buildIdpAccountQueryOrderBy,
-	buildIdpAccountQueryWhere,
-} from "../src";
+import { buildIdpAccountQueryOrderBy, buildIdpAccountQueryWhere } from "../src";
 
 describe("IdpAccount query mapper", () => {
 	beforeEach(() => {

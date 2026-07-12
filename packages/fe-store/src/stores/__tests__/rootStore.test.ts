@@ -34,8 +34,8 @@ function createPersistStorage(
 	return {
 		storageAdapter: {
 			isAvailable: () => isAvailable(),
-			read: <T,>(key: string): T | null => read(key) as T | null,
-			write: <T,>(key: string, value: T): void => write(key, value),
+			read: <T>(key: string): T | null => read(key) as T | null,
+			write: <T>(key: string, value: T): void => write(key, value),
 			remove: (key: string): void => remove(key),
 		},
 		isAvailable,
@@ -172,12 +172,7 @@ describe("RootStore", () => {
 
 		root.initialize(EMPTY_RUNTIME_BINDINGS);
 		root.sessionScope.accessToken = "updated-access-token";
-		root.app.account.setCurrentTenant(
-			"tenant-a",
-			"Ground A",
-			null,
-			"space-a",
-		);
+		root.app.account.setCurrentTenant("tenant-a", "Ground A", null, "space-a");
 		root.setRouter({ push, replace, back });
 		root.app.navigation.selectNavItem("dashboard");
 

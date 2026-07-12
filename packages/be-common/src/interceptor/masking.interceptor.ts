@@ -40,8 +40,8 @@ export const MASKING_SUBJECT_KEY = "maskingSubject";
  */
 export const ApplyMasking = (subject: string): MethodDecorator => {
 	return (
-		target: object,
-		propertyKey: string | symbol,
+		_target: object,
+		_propertyKey: string | symbol,
 		descriptor: PropertyDescriptor,
 	) => {
 		Reflect.defineMetadata(MASKING_SUBJECT_KEY, subject, descriptor.value);

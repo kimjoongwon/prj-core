@@ -16,18 +16,18 @@
  */
 
 export interface SignUpPayloadDto {
-  /** 닉네임 (2-50자) */
-  nickname: string;
-  /** 스페이스 ID (UUID) */
-  spaceId: string;
-  /** 이메일 */
-  email: string;
-  /** 이름 (2-50자) */
-  name: string;
-  /** 전화번호 */
-  phone: string;
-  /** 주소 (2-255자) */
-  address: string;
-  /** 비밀번호 (10자 이상, 72자 이하) */
-  password: string;
+	/** 닉네임 (2-50자) */
+	nickname: string;
+	/** 스페이스 ID (UUID) */
+	spaceId: string;
+	/** 이메일 */
+	email: string;
+	/** 이름 (2-50자) */
+	name: string;
+	/** 전화번호 */
+	phone: string;
+	/** 주소 (2-255자) */
+	address: string;
+	/** 비밀번호 (10자 이상, 72자 이하) */
+	password: string;
 }

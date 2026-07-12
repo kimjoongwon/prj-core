@@ -37,7 +37,9 @@ export class SpaceAccessGuard implements CanActivate {
 		);
 		if (skipSpaceCheck) return true;
 
-		const user = this.cls.get<ContextUserSnapshot | undefined>(CONTEXT_KEYS.AUTH_USER);
+		const user = this.cls.get<ContextUserSnapshot | undefined>(
+			CONTEXT_KEYS.AUTH_USER,
+		);
 
 		// 인증되지 않은 요청은 skip (JwtAuthGuard가 이미 처리)
 		if (!user) return true;

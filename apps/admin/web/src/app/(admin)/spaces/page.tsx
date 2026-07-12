@@ -29,20 +29,18 @@ export default observer(function SpacesPageRoute() {
 	});
 
 	return (
-		<>
-			<SpaceListScreen
-				spaces={response?.data}
-				totalCount={response?.meta?.total ?? response?.data?.length ?? 0}
-				isLoading={isLoading}
-				queryStates={queryStates}
-				setQueryStates={setQueryStates}
-				onClickCreateButton={() => {
-					router.push("/spaces/new" as Route);
-				}}
-				onClickSpaceGroundName={(spaceId) => {
-					router.push(`/spaces/${spaceId}/ground` as Route);
-				}}
-			/>
-		</>
+		<SpaceListScreen
+			spaces={response?.data}
+			totalCount={response?.meta?.total ?? response?.data?.length ?? 0}
+			isLoading={isLoading}
+			queryStates={queryStates}
+			setQueryStates={setQueryStates}
+			onClickCreateButton={() => {
+				router.push("/spaces/new" as Route);
+			}}
+			onClickSpaceGroundName={(spaceId) => {
+				router.push(`/spaces/${spaceId}/ground` as Route);
+			}}
+		/>
 	);
 });

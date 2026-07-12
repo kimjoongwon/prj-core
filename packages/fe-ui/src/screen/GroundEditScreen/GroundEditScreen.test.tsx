@@ -40,9 +40,9 @@ describe("GroundEditScreen", () => {
 		expect(screen.getByDisplayValue("샘플 label 1")).toBeInTheDocument();
 		expect(screen.getByDisplayValue("address-1")).toBeInTheDocument();
 		expect(screen.getByDisplayValue("010-1234-5670")).toBeInTheDocument();
+		expect(screen.getByDisplayValue("member1@example.com")).toBeInTheDocument();
 		expect(
-			screen.getByDisplayValue("member1@example.com"),
-		).toBeInTheDocument();
-		expect(screen.queryByRole("button", { name: "저장" })).not.toBeInTheDocument();
+			screen.queryByRole("button", { name: "저장" }),
+		).not.toBeInTheDocument();
 	});
 });

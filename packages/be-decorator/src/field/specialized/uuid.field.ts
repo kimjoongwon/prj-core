@@ -1,6 +1,6 @@
+import { fromRouteKey, toRouteKey } from "@cocrepo/toolkit";
 import { applyDecorators } from "@nestjs/common";
 import type { ApiPropertyOptions } from "@nestjs/swagger";
-import { fromRouteKey, toRouteKey } from "@cocrepo/toolkit";
 import { Transform, Type } from "class-transformer";
 import { NotEquals } from "class-validator";
 import { ApiUUIDProperty } from "../../property.decorators";

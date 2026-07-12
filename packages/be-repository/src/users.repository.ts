@@ -7,13 +7,13 @@ import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import { plainToInstance } from "class-transformer";
 import {
-	buildIdpAccountQueryOrderBy,
-	buildIdpAccountQueryWhere,
-} from "./idp-account-query.mapper";
-import {
 	IDP_ACCOUNT_SELECT,
 	type IdpAccountRecord,
 } from "./idp-account.select";
+import {
+	buildIdpAccountQueryOrderBy,
+	buildIdpAccountQueryWhere,
+} from "./idp-account-query.mapper";
 
 @Injectable()
 export class UsersRepository {

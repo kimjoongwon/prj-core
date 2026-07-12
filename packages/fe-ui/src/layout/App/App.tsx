@@ -33,11 +33,7 @@ const AppRoot = ({ children, className, ...props }: AppProps) => {
  * AppContent
  * route branch layout이 마운트되는 전역 content boundary입니다.
  */
-export const AppContent = ({
-	children,
-	className,
-	...props
-}: AppSlotProps) => {
+export const AppContent = ({ children, className, ...props }: AppSlotProps) => {
 	return (
 		<div
 			{...props}
@@ -60,7 +56,10 @@ export const AppGlobalLayer = ({
 	return (
 		<div
 			{...props}
-			className={joinClassNames("pointer-events-none fixed inset-0 z-50", className)}
+			className={joinClassNames(
+				"pointer-events-none fixed inset-0 z-50",
+				className,
+			)}
 		>
 			{children}
 		</div>

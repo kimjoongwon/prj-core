@@ -16,6 +16,6 @@
  */
 
 export interface ResetPasswordErrorDto {
-  /** 에러 코드 */
-  error: string;
+	/** 에러 코드 */
+	error: string;
 }

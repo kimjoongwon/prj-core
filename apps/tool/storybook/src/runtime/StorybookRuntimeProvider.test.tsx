@@ -29,8 +29,7 @@ vi.mock("../../../../../packages/fe-api/src/idp/client", () => ({
 	setIdpLocale: (...args: unknown[]) => setIdpLocaleMock(...args),
 	setIdpLoginRedirectUrl: (...args: unknown[]) =>
 		setIdpLoginRedirectUrlMock(...args),
-	setIdpSessionScope: (...args: unknown[]) =>
-		setIdpSessionScopeMock(...args),
+	setIdpSessionScope: (...args: unknown[]) => setIdpSessionScopeMock(...args),
 }));
 
 async function loadProvider() {

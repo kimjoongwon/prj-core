@@ -1,5 +1,14 @@
 import { ROUTINE_ERRORS, TIMELINE_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/context";
+import type {
+	CreateProgramInput,
+	CreateSessionInput,
+	CreateTimelineInput,
+	ProgramActivitySnapshotInput,
+	UpdateProgramInput,
+	UpdateSessionInput,
+	UpdateTimelineInput,
+} from "@cocrepo/input";
 import {
 	type LanguageCode,
 	type RecurringDayOfWeek,
@@ -14,13 +23,6 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
-import type { CreateProgramInput } from "@cocrepo/input";
-import type { CreateSessionInput } from "@cocrepo/input";
-import type { CreateTimelineInput } from "@cocrepo/input";
-import type { ProgramActivitySnapshotInput } from "@cocrepo/input";
-import type { UpdateProgramInput } from "@cocrepo/input";
-import type { UpdateSessionInput } from "@cocrepo/input";
-import type { UpdateTimelineInput } from "@cocrepo/input";
 
 @Injectable()
 export class TimelineAggregate {

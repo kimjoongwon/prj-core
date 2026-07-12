@@ -1,6 +1,8 @@
 import type { ListTenantAccessRequestsForReviewQueryInput } from "@cocrepo/input";
 
-export class ListTenantAccessRequestsForReviewQuery implements ListTenantAccessRequestsForReviewQueryInput {
+export class ListTenantAccessRequestsForReviewQuery
+	implements ListTenantAccessRequestsForReviewQueryInput
+{
 	readonly reviewerId!: ListTenantAccessRequestsForReviewQueryInput["reviewerId"];
 	readonly spaceId?: ListTenantAccessRequestsForReviewQueryInput["spaceId"];
 	readonly requesterId?: ListTenantAccessRequestsForReviewQueryInput["requesterId"];

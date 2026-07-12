@@ -7,9 +7,7 @@ export const I18nCatalogUseCaseProviders = [...I18nCatalogQueryHandlers];
 
 export const IdpI18nCatalogQueryHandlers = [GetIdpI18nCatalogUseCase];
 
-export const IdpI18nCatalogUseCaseProviders = [
-	...IdpI18nCatalogQueryHandlers,
-];
+export const IdpI18nCatalogUseCaseProviders = [...IdpI18nCatalogQueryHandlers];
 
 export * from "./get-i18n-catalog.usecase";
 export * from "./get-idp-i18n-catalog.usecase";

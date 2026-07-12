@@ -1,10 +1,10 @@
 import { EXERCISE_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/context";
+import { Exercise, Routine, Task } from "@cocrepo/entity";
 import type {
 	CreateTaskCommandInput,
 	UpdateTaskExerciseCommandInput,
 } from "@cocrepo/input";
-import { Exercise, Routine, Task } from "@cocrepo/entity";
 import type { LanguageCode } from "@cocrepo/prisma";
 import { TasksRepository } from "@cocrepo/repository";
 import { SpaceScope } from "@cocrepo/type";
@@ -164,5 +164,4 @@ export class TaskAggregate {
 			? this.spaceContext.spaceIds
 			: [spaceId];
 	}
-
 }

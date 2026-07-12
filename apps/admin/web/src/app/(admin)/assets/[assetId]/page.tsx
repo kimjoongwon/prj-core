@@ -1,6 +1,5 @@
 "use client";
 
-import { toast } from "@heroui/react";
 import {
 	type AssetDto,
 	type FolderDto,
@@ -16,6 +15,7 @@ import {
 	type AssetDetailScreenAsset,
 	type AssetDetailScreenFolder,
 } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -34,54 +34,54 @@ export default observer(function AssetDetailScreenRoute() {
 	const moveAssetMutation = useMoveAsset();
 
 	return (
-		<>
-			<AssetDetailScreen
-				asset={response?.data ? mapAssetDetail(response.data) : undefined}
-				folders={(folderResponse?.data ?? []).map(mapFolder)}
-				targetFolderId={targetFolderId}
-				targetFolderError={targetFolderError}
-				isLoading={isLoading}
-				isRemoving={removeAssetMutation.isPending}
-				isMoving={moveAssetMutation.isPending}
-				onClickBackButton={() => {
-					router.push("/assets" as Route);
-				}}
-				onClickDeleteAssetButton={async () => {
-					await removeAssetMutation.mutateAsync({ assetId });
-					await queryClient.invalidateQueries({
-						queryKey: ["/api/v1/assets"],
-					});
-					toast.success("삭제 완료", { description: "에셋이 삭제되었습니다." });
-					router.push("/assets" as Route);
-				}}
-				onChangeTargetFolderSelection={(nextTargetFolderId) => {
-					setTargetFolderId(nextTargetFolderId);
-					setTargetFolderError(undefined);
-				}}
-				onClickMoveAssetButton={async () => {
-					if (!targetFolderId) {
-						setTargetFolderError("이동할 폴더를 선택해주세요.");
-						return;
-					}
+		<AssetDetailScreen
+			asset={response?.data ? mapAssetDetail(response.data) : undefined}
+			folders={(folderResponse?.data ?? []).map(mapFolder)}
+			targetFolderId={targetFolderId}
+			targetFolderError={targetFolderError}
+			isLoading={isLoading}
+			isRemoving={removeAssetMutation.isPending}
+			isMoving={moveAssetMutation.isPending}
+			onClickBackButton={() => {
+				router.push("/assets" as Route);
+			}}
+			onClickDeleteAssetButton={async () => {
+				await removeAssetMutation.mutateAsync({ assetId });
+				await queryClient.invalidateQueries({
+					queryKey: ["/api/v1/assets"],
+				});
+				toast.success("삭제 완료", { description: "에셋이 삭제되었습니다." });
+				router.push("/assets" as Route);
+			}}
+			onChangeTargetFolderSelection={(nextTargetFolderId) => {
+				setTargetFolderId(nextTargetFolderId);
+				setTargetFolderError(undefined);
+			}}
+			onClickMoveAssetButton={async () => {
+				if (!targetFolderId) {
+					setTargetFolderError("이동할 폴더를 선택해주세요.");
+					return;
+				}
 
-					await moveAssetMutation.mutateAsync({
-						assetId,
-						data: { targetFolderId },
-					});
-					await queryClient.invalidateQueries({
-						queryKey: ["/api/v1/assets"],
-					});
-					await queryClient.invalidateQueries({
-						queryKey: getGetAssetByIdQueryKey(assetId),
-					});
-					await queryClient.invalidateQueries({
-						queryKey: getGetFoldersQueryKey(),
-					});
-					toast.success("이동 완료", { description: "에셋 폴더가 변경되었습니다." });
-					setTargetFolderError(undefined);
-				}}
-			/>
-		</>
+				await moveAssetMutation.mutateAsync({
+					assetId,
+					data: { targetFolderId },
+				});
+				await queryClient.invalidateQueries({
+					queryKey: ["/api/v1/assets"],
+				});
+				await queryClient.invalidateQueries({
+					queryKey: getGetAssetByIdQueryKey(assetId),
+				});
+				await queryClient.invalidateQueries({
+					queryKey: getGetFoldersQueryKey(),
+				});
+				toast.success("이동 완료", {
+					description: "에셋 폴더가 변경되었습니다.",
+				});
+				setTargetFolderError(undefined);
+			}}
+		/>
 	);
 });
 

@@ -71,10 +71,10 @@ describe("SpaceScopeInterceptor", () => {
 		expect(
 			mockSpacesRepository.findSpaceIdsByCategoryHierarchy,
 		).toHaveBeenCalledWith("space-1", SpaceResourceScope.WITH_DESCENDANTS);
-		expect(mockCls.set).toHaveBeenCalledWith(
-			CONTEXT_KEYS.EFFECTIVE_SPACE_IDS,
-			["space-1", "space-child"],
-		);
+		expect(mockCls.set).toHaveBeenCalledWith(CONTEXT_KEYS.EFFECTIVE_SPACE_IDS, [
+			"space-1",
+			"space-child",
+		]);
 		expect(next.handle).toHaveBeenCalled();
 	});
 
@@ -149,10 +149,10 @@ describe("SpaceScopeInterceptor", () => {
 		expect(
 			mockSpacesRepository.findSpaceIdsByCategoryHierarchy,
 		).toHaveBeenCalledWith("space-1", SpaceResourceScope.WITH_DESCENDANTS);
-		expect(mockCls.set).toHaveBeenCalledWith(
-			CONTEXT_KEYS.EFFECTIVE_SPACE_IDS,
-			["space-1", "space-child"],
-		);
+		expect(mockCls.set).toHaveBeenCalledWith(CONTEXT_KEYS.EFFECTIVE_SPACE_IDS, [
+			"space-1",
+			"space-child",
+		]);
 	});
 
 	it("tenant.space.id로 파생된 Space를 우선 사용해야 한다", async () => {

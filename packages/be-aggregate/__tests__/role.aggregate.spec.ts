@@ -74,7 +74,9 @@ describe("RoleAggregate", () => {
 			const result = await service.getDefaultUserRole();
 
 			// Then
-			expect(mockRepository.findByName).toHaveBeenCalledWith(SYSTEM_ROLES.MEMBER);
+			expect(mockRepository.findByName).toHaveBeenCalledWith(
+				SYSTEM_ROLES.MEMBER,
+			);
 			expect(result).toEqual(mockRole);
 			expect(result?.name).toBe(SYSTEM_ROLES.MEMBER);
 		});

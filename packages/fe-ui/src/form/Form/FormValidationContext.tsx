@@ -42,8 +42,9 @@ interface FormValidationProviderProps {
 
 const DEFAULT_VALIDATION_TIMINGS: FormValidationTiming[] = ["onBlur"];
 
-const FormValidationContext =
-	createContext<FormValidationContextValue | null>(null);
+const FormValidationContext = createContext<FormValidationContextValue | null>(
+	null,
+);
 
 function hasFieldErrors(state: FormStateContract): boolean {
 	return "fieldErrors" in state && typeof state.fieldErrors === "object";
@@ -172,7 +173,8 @@ export function useFormValidationContext() {
 
 export function useFormValidationField(path?: string) {
 	const context = useFormValidationContext();
-	const errorMessage = path && context ? context.getFieldError(path) : undefined;
+	const errorMessage =
+		path && context ? context.getFieldError(path) : undefined;
 
 	return {
 		readOnly: context?.readOnly ?? false,

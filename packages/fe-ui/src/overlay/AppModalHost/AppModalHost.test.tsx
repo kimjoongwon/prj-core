@@ -1,8 +1,8 @@
-import { AppContext, ModalStore, type ModalState } from "@cocrepo/store";
+import type { AppStore } from "@cocrepo/store";
+import { AppContext, type ModalState, ModalStore } from "@cocrepo/store";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { observer } from "mobx-react-lite";
 import { describe, expect, it, vi } from "vitest";
-import type { AppStore } from "@cocrepo/store";
 import { AppModalHost } from "./AppModalHost";
 
 interface FixtureState {
@@ -43,9 +43,7 @@ describe("AppModalHost", () => {
 			screen.getByText("공통 모달").closest('[data-slot="modal-header"]'),
 		).toBeInTheDocument();
 		expect(
-			screen
-				.getByText("component content")
-				.closest('[data-slot="modal-body"]'),
+			screen.getByText("component content").closest('[data-slot="modal-body"]'),
 		).toBeInTheDocument();
 		fireEvent.click(screen.getByRole("button", { name: "닫기" }));
 		expect(modal.current).toBeNull();

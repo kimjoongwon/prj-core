@@ -1,6 +1,8 @@
 import type { GetEmailVerificationsQueryInput } from "@cocrepo/input";
 
-export class GetEmailVerificationsQuery implements GetEmailVerificationsQueryInput {
+export class GetEmailVerificationsQuery
+	implements GetEmailVerificationsQueryInput
+{
 	readonly email?: GetEmailVerificationsQueryInput["email"];
 	readonly status?: GetEmailVerificationsQueryInput["status"];
 	readonly startDate?: GetEmailVerificationsQueryInput["startDate"];

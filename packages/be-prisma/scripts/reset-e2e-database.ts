@@ -19,7 +19,9 @@ function getDatabaseName(databaseUrl: string): string {
 
 function toDefaultE2eDatabaseUrl(databaseUrl: string): string {
 	const parsedUrl = new URL(databaseUrl);
-	const databaseName = decodeURIComponent(parsedUrl.pathname.replace(/^\//, ""));
+	const databaseName = decodeURIComponent(
+		parsedUrl.pathname.replace(/^\//, ""),
+	);
 
 	if (!databaseName) {
 		throw new Error("DATABASE_URL must include a database name.");

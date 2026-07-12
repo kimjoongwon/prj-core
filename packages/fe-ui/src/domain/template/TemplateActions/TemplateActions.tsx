@@ -2,7 +2,7 @@
 
 import { Eye, Pencil, Send, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../input/Button/Button";
+import { Button } from "../../../input/Button/Button";
 
 export interface TemplateActionsProps {
 	/** 템플릿 ID */
@@ -22,7 +22,7 @@ export interface TemplateActionsProps {
 }
 
 /**
- * TemplateActions Feature 컴포넌트
+ * TemplateActions domain 컴포넌트
  *
  * 메시지 템플릿 상세 화면의 페이지 헤더 actions 영역에 렌더링되는 액션 버튼 그룹입니다.
  * 미리보기, 테스트 발송, 수정, 삭제 기능을 제공합니다.

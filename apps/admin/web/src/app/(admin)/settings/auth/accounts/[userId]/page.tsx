@@ -103,52 +103,50 @@ export default observer(function AccountDetailScreenRoute() {
 		});
 
 	return (
-		<>
-			<AccountDetailScreen
-				account={account ? mapAccountDetail(account) : undefined}
-				isLoading={isLoading}
-				accessGrantForm={accessGrantForm}
-				spaceOptions={spaceOptions}
-				roleOptions={roleOptions}
-				isAccessGrantFormLoading={isAccessGrantFormLoading}
-				isGrantingAccess={isGrantingAccess}
-				isToggling={isToggling}
-				isResetting={isResetting}
-				isUnlocking={isUnlocking}
-				isForceResetting={isForceResetting}
-				isInvalidating={isInvalidating}
-				onClickBackButton={() => {
-					router.push("/settings/auth/accounts" as Route);
-				}}
-				onClickToggleActiveButton={() => {
-					toggleActive({ userId });
-				}}
-				onClickResetFailedAttemptsButton={() => {
-					resetFailedAttempts({ userId });
-				}}
-				onChangeAccessGrantSpace={(spaceId) => {
-					setAccessGrantForm((current) => ({ ...current, spaceId }));
-				}}
-				onChangeAccessGrantRole={(roleId) => {
-					setAccessGrantForm((current) => ({ ...current, roleId }));
-				}}
-				onClickGrantAccessButton={() => {
-					grantAccess({
-						userId,
-						data: accessGrantForm,
-					});
-				}}
-				onClickUnlockAccountButton={() => {
-					unlockAccount({ userId });
-				}}
-				onClickForceResetPasswordButton={() => {
-					forceResetPassword({ userId });
-				}}
-				onClickInvalidateSessionsButton={() => {
-					invalidateSessions({ userId });
-				}}
-			/>
-		</>
+		<AccountDetailScreen
+			account={account ? mapAccountDetail(account) : undefined}
+			isLoading={isLoading}
+			accessGrantForm={accessGrantForm}
+			spaceOptions={spaceOptions}
+			roleOptions={roleOptions}
+			isAccessGrantFormLoading={isAccessGrantFormLoading}
+			isGrantingAccess={isGrantingAccess}
+			isToggling={isToggling}
+			isResetting={isResetting}
+			isUnlocking={isUnlocking}
+			isForceResetting={isForceResetting}
+			isInvalidating={isInvalidating}
+			onClickBackButton={() => {
+				router.push("/settings/auth/accounts" as Route);
+			}}
+			onClickToggleActiveButton={() => {
+				toggleActive({ userId });
+			}}
+			onClickResetFailedAttemptsButton={() => {
+				resetFailedAttempts({ userId });
+			}}
+			onChangeAccessGrantSpace={(spaceId) => {
+				setAccessGrantForm((current) => ({ ...current, spaceId }));
+			}}
+			onChangeAccessGrantRole={(roleId) => {
+				setAccessGrantForm((current) => ({ ...current, roleId }));
+			}}
+			onClickGrantAccessButton={() => {
+				grantAccess({
+					userId,
+					data: accessGrantForm,
+				});
+			}}
+			onClickUnlockAccountButton={() => {
+				unlockAccount({ userId });
+			}}
+			onClickForceResetPasswordButton={() => {
+				forceResetPassword({ userId });
+			}}
+			onClickInvalidateSessionsButton={() => {
+				invalidateSessions({ userId });
+			}}
+		/>
 	);
 });
 

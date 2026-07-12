@@ -18,13 +18,13 @@
 /**
  * 변경할 우선순위
  */
-export type UpdateInquiryPriorityBodyPriority = typeof UpdateInquiryPriorityBodyPriority[keyof typeof UpdateInquiryPriorityBodyPriority];
-
+export type UpdateInquiryPriorityBodyPriority =
+	(typeof UpdateInquiryPriorityBodyPriority)[keyof typeof UpdateInquiryPriorityBodyPriority];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const UpdateInquiryPriorityBodyPriority = {
-  LOW: 'LOW',
-  NORMAL: 'NORMAL',
-  HIGH: 'HIGH',
-  URGENT: 'URGENT',
+	LOW: "LOW",
+	NORMAL: "NORMAL",
+	HIGH: "HIGH",
+	URGENT: "URGENT",
 } as const;

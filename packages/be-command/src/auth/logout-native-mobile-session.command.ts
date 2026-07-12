@@ -1,5 +1,7 @@
 import type { LogoutNativeMobileSessionCommandInput } from "@cocrepo/input";
-export class LogoutNativeMobileSessionCommand implements LogoutNativeMobileSessionCommandInput {
+export class LogoutNativeMobileSessionCommand
+	implements LogoutNativeMobileSessionCommandInput
+{
 	readonly sessionId!: LogoutNativeMobileSessionCommandInput["sessionId"];
 	readonly refreshToken?: LogoutNativeMobileSessionCommandInput["refreshToken"];
 

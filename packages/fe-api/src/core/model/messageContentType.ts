@@ -18,15 +18,15 @@
 /**
  * 콘텐츠 유형
  */
-export type MessageContentType = typeof MessageContentType[keyof typeof MessageContentType];
-
+export type MessageContentType =
+	(typeof MessageContentType)[keyof typeof MessageContentType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const MessageContentType = {
-  TEXT: 'TEXT',
-  HTML: 'HTML',
-  MARKDOWN: 'MARKDOWN',
-  IMAGE: 'IMAGE',
-  FILE: 'FILE',
-  SYSTEM: 'SYSTEM',
+	TEXT: "TEXT",
+	HTML: "HTML",
+	MARKDOWN: "MARKDOWN",
+	IMAGE: "IMAGE",
+	FILE: "FILE",
+	SYSTEM: "SYSTEM",
 } as const;

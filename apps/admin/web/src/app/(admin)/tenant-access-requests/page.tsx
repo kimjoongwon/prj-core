@@ -21,21 +21,19 @@ export default observer(function TenantAccessRequestsReviewPageRoute() {
 		});
 
 	return (
-		<>
-			<TenantAccessRequestReviewListScreen
-				requests={response?.data}
-				totalCount={response?.meta?.total ?? 0}
-				pendingCount={pendingResponse?.meta?.total ?? 0}
-				isLoading={isLoading || isLoadingPending}
-				onClickRequestRow={(tenantAccessRequestId) => {
-					router.push(
-						ADMIN_PATHS.TENANT_ACCESS_REQUESTS_DETAIL.replace(
-							"[tenantAccessRequestId]",
-							tenantAccessRequestId,
-						) as Route,
-					);
-				}}
-			/>
-		</>
+		<TenantAccessRequestReviewListScreen
+			requests={response?.data}
+			totalCount={response?.meta?.total ?? 0}
+			pendingCount={pendingResponse?.meta?.total ?? 0}
+			isLoading={isLoading || isLoadingPending}
+			onClickRequestRow={(tenantAccessRequestId) => {
+				router.push(
+					ADMIN_PATHS.TENANT_ACCESS_REQUESTS_DETAIL.replace(
+						"[tenantAccessRequestId]",
+						tenantAccessRequestId,
+					) as Route,
+				);
+			}}
+		/>
 	);
 });

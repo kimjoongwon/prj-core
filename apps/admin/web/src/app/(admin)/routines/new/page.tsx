@@ -1,6 +1,5 @@
 "use client";
 
-import { toast } from "@heroui/react";
 import {
 	type AssetDto,
 	getAssetById,
@@ -11,6 +10,7 @@ import {
 	useCreateRoutine,
 } from "@cocrepo/api/core/routines";
 import { type TaskDto, useGetTasks } from "@cocrepo/api/core/tasks";
+import { useApp } from "@cocrepo/store";
 import {
 	Button,
 	type RoutineActivityFormItem,
@@ -18,12 +18,12 @@ import {
 	type RoutineFormState,
 	type RoutineTaskCandidate,
 } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueries } from "@tanstack/react-query";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
-import { useApp } from "@cocrepo/store";
 
 const toPositiveNumberOr = (value: string, defaultValue: number) => {
 	const parsed = Number(value);
@@ -93,14 +93,18 @@ const AdminRoutinesNewRoute = observer(() => {
 	const { mutate: createRoutine, isPending } = useCreateRoutine({
 		mutation: {
 			onSuccess: (response) => {
-				toast.success("루틴 등록 성공", { description: "루틴이 성공적으로 등록되었습니다." });
+				toast.success("루틴 등록 성공", {
+					description: "루틴이 성공적으로 등록되었습니다.",
+				});
 				const routineId = response?.data?.id;
 				if (routineId) {
 					router.push(`/routines/${routineId}` as Route);
 				}
 			},
 			onError: (error) => {
-				toast.danger("루틴 등록 실패", { description: error.message || "루틴 등록 중 오류가 발생했습니다." });
+				toast.danger("루틴 등록 실패", {
+					description: error.message || "루틴 등록 중 오류가 발생했습니다.",
+				});
 			},
 		},
 	});

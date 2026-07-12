@@ -1,5 +1,5 @@
-import type { Request } from "express";
 import type { NativeLoginCommandInput } from "@cocrepo/input";
+import type { Request } from "express";
 
 export class NativeLoginCommand implements NativeLoginCommandInput {
 	readonly email!: NativeLoginCommandInput["email"];

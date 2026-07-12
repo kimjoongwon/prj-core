@@ -1,6 +1,5 @@
 "use client";
 
-import { toast } from "@heroui/react";
 import {
 	type UpdateAbilityDto,
 	useGetAbilityById,
@@ -9,6 +8,7 @@ import {
 import { useGetActions } from "@cocrepo/api/core/actions";
 import { useGetSubjects } from "@cocrepo/api/core/subjects";
 import { AbilityEditScreen, type AbilityFormState, Button } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -39,11 +39,15 @@ export default observer(function AbilityEditPage() {
 	const { mutate: updateAbility, isPending } = useUpdateAbility({
 		mutation: {
 			onSuccess: () => {
-				toast.success("권한 수정 성공", { description: "권한이 성공적으로 수정되었습니다." });
+				toast.success("권한 수정 성공", {
+					description: "권한이 성공적으로 수정되었습니다.",
+				});
 				router.push(`/abilities/${abilityId}` as Route);
 			},
 			onError: (error) => {
-				toast.danger("권한 수정 실패", { description: error.message || "권한 수정 중 오류가 발생했습니다." });
+				toast.danger("권한 수정 실패", {
+					description: error.message || "권한 수정 중 오류가 발생했습니다.",
+				});
 			},
 		},
 	});
@@ -66,12 +70,16 @@ export default observer(function AbilityEditPage() {
 
 	const onSubmit = () => {
 		if (!state.description.trim() && !state.subjectId && !state.actionId) {
-			toast.danger("입력 오류", { description: "최소 하나 이상의 필드를 수정해주세요." });
+			toast.danger("입력 오류", {
+				description: "최소 하나 이상의 필드를 수정해주세요.",
+			});
 			return;
 		}
 
 		const dto = toUpdateAbilityDto(state, () => {
-			toast.danger("입력 오류", { description: "Conditions는 유효한 JSON 형식이어야 합니다." });
+			toast.danger("입력 오류", {
+				description: "Conditions는 유효한 JSON 형식이어야 합니다.",
+			});
 		});
 		if (!dto) {
 			return;

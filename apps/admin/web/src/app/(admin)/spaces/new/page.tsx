@@ -1,8 +1,8 @@
 "use client";
 
-import { toast } from "@heroui/react";
 import { useCreateSpace } from "@cocrepo/api/core/spaces";
 import { SpaceCreateScreen } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -23,7 +23,9 @@ const AdminSpacesNewRoute = observer(() => {
 	const { mutate: createSpace, isPending } = useCreateSpace({
 		mutation: {
 			onSuccess: (response) => {
-				toast.success("공간 등록 성공", { description: "공간과 시설 detail이 성공적으로 등록되었습니다." });
+				toast.success("공간 등록 성공", {
+					description: "공간과 시설 detail이 성공적으로 등록되었습니다.",
+				});
 				const spaceId = response?.data?.id;
 				if (spaceId) {
 					router.push(`/spaces/${spaceId}/ground` as Route);
@@ -32,7 +34,9 @@ const AdminSpacesNewRoute = observer(() => {
 				router.push("/spaces" as Route);
 			},
 			onError: (error) => {
-				toast.danger("공간 등록 실패", { description: error.message || "공간 등록 중 오류가 발생했습니다." });
+				toast.danger("공간 등록 실패", {
+					description: error.message || "공간 등록 중 오류가 발생했습니다.",
+				});
 			},
 		},
 	});
@@ -124,28 +128,26 @@ const AdminSpacesNewRoute = observer(() => {
 	};
 
 	return (
-		<>
-			<SpaceCreateScreen
-				name={state.name}
-				label={state.label}
-				address={state.address}
-				phone={state.phone}
-				email={state.email}
-				businessNo={state.businessNo}
-				contentLanguageCode={state.contentLanguageCode}
-				errors={state.errors}
-				isSubmitPending={isPending}
-				onChangeNameInput={onChangeNameInput}
-				onChangeLabelInput={onChangeLabelInput}
-				onChangeAddressInput={onChangeAddressInput}
-				onChangePhoneInput={onChangePhoneInput}
-				onChangeEmailInput={onChangeEmailInput}
-				onChangeBusinessNoInput={onChangeBusinessNoInput}
-				onChangeContentLanguageSelect={onChangeContentLanguageSelect}
-				onClickCancelButton={onClickCancelButton}
-				onClickSaveButton={onClickSaveButton}
-			/>
-		</>
+		<SpaceCreateScreen
+			name={state.name}
+			label={state.label}
+			address={state.address}
+			phone={state.phone}
+			email={state.email}
+			businessNo={state.businessNo}
+			contentLanguageCode={state.contentLanguageCode}
+			errors={state.errors}
+			isSubmitPending={isPending}
+			onChangeNameInput={onChangeNameInput}
+			onChangeLabelInput={onChangeLabelInput}
+			onChangeAddressInput={onChangeAddressInput}
+			onChangePhoneInput={onChangePhoneInput}
+			onChangeEmailInput={onChangeEmailInput}
+			onChangeBusinessNoInput={onChangeBusinessNoInput}
+			onChangeContentLanguageSelect={onChangeContentLanguageSelect}
+			onClickCancelButton={onClickCancelButton}
+			onClickSaveButton={onClickSaveButton}
+		/>
 	);
 });
 

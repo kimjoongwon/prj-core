@@ -51,7 +51,7 @@
 
 | 상황 | 사용 여부 | 설명 |
 |------|:--------:|------|
-| app 상태 연결이 필요한 UI | ✅ | SideNav, UserMenu, SpaceSelector |
+| app 상태 연결이 필요한 UI | ✅ | NavigationPanel, UserMenu, SpaceSelector |
 | API 호출이 필요한 컴포넌트 | ✅ | CommentList, NotificationBell |
 | 라우터 이동이 필요한 경우 | ✅ | SearchBar (검색 결과 페이지 이동) |
 | 복잡한 이벤트 핸들링 | ✅ | LoginForm (폼 제출, 유효성 검사) |
@@ -200,14 +200,14 @@ Feature가 page에서 분리된 업무 콘솔/관리 패널이면 다음 순서�
 
 | 패턴 | 설명 | 예시 |
 |------|------|------|
-| `[위치]Nav` | 특정 위치의 네비게이션 | SideNav, TopNav |
+| `[위치]Nav` | 특정 위치의 네비게이션 | NavigationPanel, TopNav |
 | `[위치]Tab` | 특정 위치의 탭 | BottomTab, HeaderTab |
 | `[기능]Menu` | 메뉴 기능 | UserMenu, ContextMenu |
 | `[기능]Selector` | 선택 기능 | SpaceSelector, ThemeSelector |
 | `[기능]Form` | 폼 기능 | LoginForm, SearchForm |
 
-> `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 feature가 아니라 widget입니다. feature는 해당 widget에 store/API/router를 연결하는 래퍼만 담당합니다.
-> reusable layout/slot/hook 이름에는 `Admin`, `Management` 같은 앱/도메인 접두사를 붙이지 않습니다. 예: `TopBar`, `SideNavigation`, `useAssetData`.
+> `HeaderBar`, `BottomNav`, `ActionFab`, `OverlayMenu`는 feature가 아니라 widget입니다. `NavigationPanel`은 `domain/navigation`이 소유하며, feature 래퍼를 만들지 않습니다.
+> reusable layout/slot/hook 이름에는 `Admin`, `Management` 같은 앱/도메인 접두사를 붙이지 않습니다. 예: `NavigationPanel`, `TopNav`, `useAssetData`.
 
 ### 4.3 파일 구조 생성
 
@@ -347,8 +347,8 @@ export const NavTreePanel = ({ items, expandedKeys, onToggle, ... }: NavTreePane
   // 순수 렌더링만 - app 상태 접근 없음
 };
 
-// Feature (feature/SideNav.tsx) - 비즈니스 로직
-export const SideNav = observer(({ width, className }: SideNavProps) => {
+// Domain (domain/navigation/NavigationPanel.tsx) - store 연결과 렌더링
+export const NavigationPanel = observer(() => {
   const app = useApp();
   const navigation = app.navigation;
 

@@ -1,4 +1,4 @@
-export type { AuthProps } from "./Auth";
+export type { AuthPanelHeaderProps, AuthPanelProps, AuthProps } from "./Auth";
 export {
 	Auth,
 	AuthAside,
@@ -9,4 +9,3 @@ export {
 	AuthPanel,
 	AuthPanelHeader,
 } from "./Auth";
-export type { AuthPanelHeaderProps, AuthPanelProps } from "./Auth";

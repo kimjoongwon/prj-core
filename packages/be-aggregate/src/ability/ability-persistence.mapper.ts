@@ -1,6 +1,5 @@
+import type { CreateAbilityInput, UpdateAbilityInput } from "@cocrepo/input";
 import type { Prisma } from "@cocrepo/prisma";
-import type { CreateAbilityInput } from "@cocrepo/input";
-import type { UpdateAbilityInput } from "@cocrepo/input";
 
 export function toAbilityCreateData(
 	input: CreateAbilityInput,

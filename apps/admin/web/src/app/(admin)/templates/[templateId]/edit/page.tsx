@@ -1,6 +1,5 @@
 "use client";
 
-import { toast } from "@heroui/react";
 import {
 	type CreateTemplateVariableItemDto,
 	type TemplateDto,
@@ -12,6 +11,7 @@ import {
 	TemplateEditScreen,
 	type TemplateFormState,
 } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
@@ -83,11 +83,15 @@ const AdminTemplatesTemplateIdEditRoute = observer(() => {
 	const { mutate: updateTemplate, isPending } = useUpdateTemplate({
 		mutation: {
 			onSuccess: () => {
-				toast.success("템플릿 수정 성공", { description: "템플릿이 성공적으로 수정되었습니다." });
+				toast.success("템플릿 수정 성공", {
+					description: "템플릿이 성공적으로 수정되었습니다.",
+				});
 				router.push(`/templates/${templateId}` as Route);
 			},
 			onError: (error) => {
-				toast.danger("템플릿 수정 실패", { description: error.message || "템플릿 수정 중 오류가 발생했습니다." });
+				toast.danger("템플릿 수정 실패", {
+					description: error.message || "템플릿 수정 중 오류가 발생했습니다.",
+				});
 			},
 		},
 	});

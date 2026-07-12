@@ -1,10 +1,10 @@
 "use client";
 
-import { toast } from "@heroui/react";
 import {
 	useCreateSession,
 	useGetTimelineById,
 } from "@cocrepo/api/core/timelines";
+import { useApp } from "@cocrepo/store";
 import {
 	Button,
 	TimelineSessionEditScreen,
@@ -13,11 +13,11 @@ import {
 	type TimelineSessionScreenDayOfWeek,
 	type TimelineSessionScreenSessionType,
 } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
-import { useApp } from "@cocrepo/store";
 
 type SessionNewPageParams = {
 	timelineId: string;
@@ -107,7 +107,9 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 					);
 				},
 				onError: () => {
-					toast.danger("등록 실패", { description: "세션 등록 중 오류가 발생했습니다." });
+					toast.danger("등록 실패", {
+						description: "세션 등록 중 오류가 발생했습니다.",
+					});
 				},
 			},
 		);

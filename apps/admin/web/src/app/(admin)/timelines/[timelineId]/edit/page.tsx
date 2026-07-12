@@ -1,16 +1,17 @@
 "use client";
 
-import { toast } from "@heroui/react";
 import {
 	getGetTimelineByIdQueryKey,
 	useGetTimelineById,
 	useUpdateTimeline,
 } from "@cocrepo/api/core/timelines";
+import { useApp } from "@cocrepo/store";
 import {
 	Button,
 	TimelineEditScreen,
 	type TimelineFormState,
 } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -18,7 +19,6 @@ import type { Route } from "next";
 import dynamic from "next/dynamic";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useApp } from "@cocrepo/store";
 
 type TimelineEditScreenParams = {
 	timelineId: string;
@@ -80,14 +80,18 @@ const AdminTimelinesTimelineIdEditRoute = observer(() => {
 			},
 			{
 				onSuccess: () => {
-					toast.success("수정 성공", { description: "타임라인이 수정되었습니다." });
+					toast.success("수정 성공", {
+						description: "타임라인이 수정되었습니다.",
+					});
 					queryClient.invalidateQueries({
 						queryKey: getGetTimelineByIdQueryKey(timelineId),
 					});
 					router.push(`/timelines/${timelineId}` as Route);
 				},
 				onError: () => {
-					toast.danger("수정 실패", { description: "타임라인 수정 중 오류가 발생했습니다." });
+					toast.danger("수정 실패", {
+						description: "타임라인 수정 중 오류가 발생했습니다.",
+					});
 				},
 			},
 		);

@@ -1,11 +1,11 @@
 "use client";
 
-import { toast } from "@heroui/react";
 import {
 	getGetSessionByIdQueryKey,
 	useGetSessionById,
 	useUpdateSession,
 } from "@cocrepo/api/core/timelines";
+import { useApp } from "@cocrepo/store";
 import {
 	Button,
 	TimelineSessionEditScreen,
@@ -14,13 +14,13 @@ import {
 	type TimelineSessionScreenDayOfWeek,
 	type TimelineSessionScreenSessionType,
 } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useApp } from "@cocrepo/store";
 
 type SessionEditPageParams = {
 	timelineId: string;
@@ -141,7 +141,9 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 					);
 				},
 				onError: () => {
-					toast.danger("수정 실패", { description: "세션 수정 중 오류가 발생했습니다." });
+					toast.danger("수정 실패", {
+						description: "세션 수정 중 오류가 발생했습니다.",
+					});
 				},
 			},
 		);

@@ -1,7 +1,4 @@
-import {
-	IdpAccountCommandHandlers,
-	IdpAccountQueryHandlers,
-} from "./account";
+import { IdpAccountCommandHandlers, IdpAccountQueryHandlers } from "./account";
 import {
 	IdpDashboardCommandHandlers,
 	IdpDashboardQueryHandlers,

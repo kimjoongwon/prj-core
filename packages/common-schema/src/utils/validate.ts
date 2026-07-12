@@ -1,7 +1,7 @@
 import { plainToInstance } from "class-transformer";
 import {
-	type ValidatorOptions,
 	type ValidationError,
+	type ValidatorOptions,
 	validate,
 	validateSync,
 } from "class-validator";
@@ -85,20 +85,16 @@ function getPathValue(source: unknown, path: string): unknown {
 		return undefined;
 	}
 
-	return path
-		.split(".")
-		.reduce<unknown>((cursor, segment) => {
-			if (!cursor || typeof cursor !== "object") {
-				return undefined;
-			}
+	return path.split(".").reduce<unknown>((cursor, segment) => {
+		if (!cursor || typeof cursor !== "object") {
+			return undefined;
+		}
 
-			return (cursor as Record<string, unknown>)[segment];
-		}, source);
+		return (cursor as Record<string, unknown>)[segment];
+	}, source);
 }
 
-function getConstraintMessages(
-	constraints?: Record<string, string>,
-): string[] {
+function getConstraintMessages(constraints?: Record<string, string>): string[] {
 	const messages = constraints ? Object.values(constraints) : [];
 
 	return messages.sort((left, right) => {
@@ -120,7 +116,9 @@ function toFieldErrors(
 	parentPath?: string,
 ): FieldError[] {
 	return errors.flatMap((error) => {
-		const path = parentPath ? `${parentPath}.${error.property}` : error.property;
+		const path = parentPath
+			? `${parentPath}.${error.property}`
+			: error.property;
 		const messages = getConstraintMessages(error.constraints);
 		const children = error.children?.length
 			? toFieldErrors(error.children, path)
@@ -282,7 +280,9 @@ export function validateFieldSync<T extends object>(
 		...DEFAULT_VALIDATE_OPTIONS,
 		skipMissingProperties: true,
 	}) as ValidationError[];
-	const fieldError = toFieldErrors(errors).find((error) => error.field === path);
+	const fieldError = toFieldErrors(errors).find(
+		(error) => error.field === path,
+	);
 
 	return fieldError ?? null;
 }

@@ -49,9 +49,7 @@ export class ReservationsController {
 	@ApiResponseEntity(BookingFeedItemDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("예약 Booking Feed 조회 성공")
 	getBookingFeed(@Query() query: QueryBookingFeedDto) {
-		return this.queryBus.execute(
-			new GetReservationBookingFeedQuery(query),
-		);
+		return this.queryBus.execute(new GetReservationBookingFeedQuery(query));
 	}
 
 	@Post()
@@ -83,8 +81,6 @@ export class ReservationsController {
 	@ApiResponseEntity(ReservationDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("내 예약 목록 조회 성공")
 	getMine(@Query() query: QueryMyReservationsDto) {
-		return this.queryBus.execute(
-			new GetMyReservationsQuery(query),
-		);
+		return this.queryBus.execute(new GetMyReservationsQuery(query));
 	}
 }

@@ -14,345 +14,638 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
+
+import type {
+	DataTag,
+	DefinedInitialDataOptions,
+	DefinedUseQueryResult,
+	InfiniteData,
+	MutationFunction,
+	QueryClient,
+	QueryFunction,
+	QueryKey,
+	UndefinedInitialDataOptions,
+	UseMutationOptions,
+	UseMutationResult,
+	UseQueryOptions,
+	UseQueryResult,
+	UseSuspenseInfiniteQueryOptions,
+	UseSuspenseInfiniteQueryResult,
+	UseSuspenseQueryOptions,
+	UseSuspenseQueryResult,
+} from "@tanstack/react-query";
 import {
-  useMutation,
-  useQuery,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+	useMutation,
+	useQuery,
+	useSuspenseInfiniteQuery,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
+import type { ErrorType } from "../../libs/customIdpAxios";
+
+import { customIdpInstance } from "../../libs/customIdpAxios";
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
-  InfiniteData,
-  MutationFunction,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
-  UseSuspenseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult
-} from '@tanstack/react-query';
-
-import type {
-  GetEmailVerifications200AllOf,
-  GetEmailVerificationsParams,
-  ResendEmailVerification200AllOf
-} from '.././model';
-
-import { customIdpInstance } from '../../libs/customIdpAxios';
-import type { ErrorType } from '../../libs/customIdpAxios';
-
+	GetEmailVerifications200AllOf,
+	GetEmailVerificationsParams,
+	ResendEmailVerification200AllOf,
+} from ".././model";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
 
 /**
  * 회원가입 이메일 인증 요청을 전역 PLATFORM_ADMIN 기준으로 조회합니다.
  * @summary 이메일 인증 목록 조회
  */
 export const getEmailVerifications = (
-    params?: GetEmailVerificationsParams,
- options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+	params?: GetEmailVerificationsParams,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customIdpInstance<GetEmailVerifications200AllOf>(
-      {url: `/api/v1/idp/email-verifications`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-  
+	return customIdpInstance<GetEmailVerifications200AllOf>(
+		{ url: `/api/v1/idp/email-verifications`, method: "GET", params, signal },
+		options,
+	);
+};
 
-
-
-export const getGetEmailVerificationsQueryKey = (params?: GetEmailVerificationsParams,) => {
-    return [
-    `/api/v1/idp/email-verifications`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-export const getGetEmailVerificationsInfiniteQueryKey = (params?: GetEmailVerificationsParams,) => {
-    return [
-    'infinite', `/api/v1/idp/email-verifications`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getGetEmailVerificationsQueryOptions = <TData = Awaited<ReturnType<typeof getEmailVerifications>>, TError = ErrorType<void>>(params?: GetEmailVerificationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEmailVerifications>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const getGetEmailVerificationsQueryKey = (
+	params?: GetEmailVerificationsParams,
 ) => {
+	return [
+		`/api/v1/idp/email-verifications`,
+		...(params ? [params] : []),
+	] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetEmailVerificationsQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEmailVerifications>>> = ({ signal }) => getEmailVerifications(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEmailVerifications>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetEmailVerificationsQueryResult = NonNullable<Awaited<ReturnType<typeof getEmailVerifications>>>
-export type GetEmailVerificationsQueryError = ErrorType<void>
-
-
-export function useGetEmailVerifications<TData = Awaited<ReturnType<typeof getEmailVerifications>>, TError = ErrorType<void>>(
- params: undefined |  GetEmailVerificationsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEmailVerifications>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getEmailVerifications>>,
-          TError,
-          Awaited<ReturnType<typeof getEmailVerifications>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEmailVerifications<TData = Awaited<ReturnType<typeof getEmailVerifications>>, TError = ErrorType<void>>(
- params?: GetEmailVerificationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEmailVerifications>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getEmailVerifications>>,
-          TError,
-          Awaited<ReturnType<typeof getEmailVerifications>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEmailVerifications<TData = Awaited<ReturnType<typeof getEmailVerifications>>, TError = ErrorType<void>>(
- params?: GetEmailVerificationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEmailVerifications>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 이메일 인증 목록 조회
- */
-
-export function useGetEmailVerifications<TData = Awaited<ReturnType<typeof getEmailVerifications>>, TError = ErrorType<void>>(
- params?: GetEmailVerificationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEmailVerifications>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetEmailVerificationsQueryOptions(params,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-/**
- * @summary 이메일 인증 목록 조회
- */
-export const prefetchGetEmailVerificationsQuery = async <TData = Awaited<ReturnType<typeof getEmailVerifications>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetEmailVerificationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEmailVerifications>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetEmailVerificationsQueryOptions(params,options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-export const getGetEmailVerificationsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getEmailVerifications>>, TError = ErrorType<void>>(params?: GetEmailVerificationsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getEmailVerifications>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const getGetEmailVerificationsInfiniteQueryKey = (
+	params?: GetEmailVerificationsParams,
 ) => {
+	return [
+		"infinite",
+		`/api/v1/idp/email-verifications`,
+		...(params ? [params] : []),
+	] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetEmailVerificationsQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEmailVerifications>>> = ({ signal }) => getEmailVerifications(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getEmailVerifications>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetEmailVerificationsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getEmailVerifications>>>
-export type GetEmailVerificationsSuspenseQueryError = ErrorType<void>
-
-
-export function useGetEmailVerificationsSuspense<TData = Awaited<ReturnType<typeof getEmailVerifications>>, TError = ErrorType<void>>(
- params: undefined |  GetEmailVerificationsParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getEmailVerifications>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEmailVerificationsSuspense<TData = Awaited<ReturnType<typeof getEmailVerifications>>, TError = ErrorType<void>>(
- params?: GetEmailVerificationsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getEmailVerifications>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEmailVerificationsSuspense<TData = Awaited<ReturnType<typeof getEmailVerifications>>, TError = ErrorType<void>>(
- params?: GetEmailVerificationsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getEmailVerifications>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 이메일 인증 목록 조회
- */
-
-export function useGetEmailVerificationsSuspense<TData = Awaited<ReturnType<typeof getEmailVerifications>>, TError = ErrorType<void>>(
- params?: GetEmailVerificationsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getEmailVerifications>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetEmailVerificationsSuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const getGetEmailVerificationsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getEmailVerifications>>>, TError = ErrorType<void>>(params?: GetEmailVerificationsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getEmailVerifications>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const getGetEmailVerificationsQueryOptions = <
+	TData = Awaited<ReturnType<typeof getEmailVerifications>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEmailVerificationsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getEmailVerifications>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetEmailVerificationsQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetEmailVerificationsInfiniteQueryKey(params);
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getEmailVerifications>>
+	> = ({ signal }) => getEmailVerifications(params, requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getEmailVerifications>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEmailVerifications>>> = ({ signal }) => getEmailVerifications(params, requestOptions, signal);
+export type GetEmailVerificationsQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getEmailVerifications>>
+>;
+export type GetEmailVerificationsQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getEmailVerifications>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetEmailVerificationsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getEmailVerifications>>>
-export type GetEmailVerificationsSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetEmailVerificationsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getEmailVerifications>>>, TError = ErrorType<void>>(
- params: undefined |  GetEmailVerificationsParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getEmailVerifications>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEmailVerificationsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getEmailVerifications>>>, TError = ErrorType<void>>(
- params?: GetEmailVerificationsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getEmailVerifications>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEmailVerificationsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getEmailVerifications>>>, TError = ErrorType<void>>(
- params?: GetEmailVerificationsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getEmailVerifications>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEmailVerifications<
+	TData = Awaited<ReturnType<typeof getEmailVerifications>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetEmailVerificationsParams,
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getEmailVerifications>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getEmailVerifications>>,
+					TError,
+					Awaited<ReturnType<typeof getEmailVerifications>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetEmailVerifications<
+	TData = Awaited<ReturnType<typeof getEmailVerifications>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEmailVerificationsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getEmailVerifications>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getEmailVerifications>>,
+					TError,
+					Awaited<ReturnType<typeof getEmailVerifications>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetEmailVerifications<
+	TData = Awaited<ReturnType<typeof getEmailVerifications>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEmailVerificationsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getEmailVerifications>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 이메일 인증 목록 조회
  */
 
-export function useGetEmailVerificationsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getEmailVerifications>>>, TError = ErrorType<void>>(
- params?: GetEmailVerificationsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getEmailVerifications>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetEmailVerifications<
+	TData = Awaited<ReturnType<typeof getEmailVerifications>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEmailVerificationsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getEmailVerifications>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetEmailVerificationsQueryOptions(params, options);
 
-  const queryOptions = getGetEmailVerificationsSuspenseInfiniteQueryOptions(params,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary 이메일 인증 목록 조회
  */
-export const prefetchGetEmailVerificationsInfiniteQuery = async <TData = Awaited<ReturnType<typeof getEmailVerifications>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetEmailVerificationsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getEmailVerifications>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const prefetchGetEmailVerificationsQuery = async <
+	TData = Awaited<ReturnType<typeof getEmailVerifications>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetEmailVerificationsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getEmailVerifications>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetEmailVerificationsQueryOptions(params, options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getGetEmailVerificationsSuspenseInfiniteQueryOptions(params,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
+export const getGetEmailVerificationsSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getEmailVerifications>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEmailVerificationsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getEmailVerifications>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  return queryClient;
+	const queryKey =
+		queryOptions?.queryKey ?? getGetEmailVerificationsQueryKey(params);
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getEmailVerifications>>
+	> = ({ signal }) => getEmailVerifications(params, requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getEmailVerifications>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetEmailVerificationsSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getEmailVerifications>>
+>;
+export type GetEmailVerificationsSuspenseQueryError = ErrorType<void>;
+
+export function useGetEmailVerificationsSuspense<
+	TData = Awaited<ReturnType<typeof getEmailVerifications>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetEmailVerificationsParams,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getEmailVerifications>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetEmailVerificationsSuspense<
+	TData = Awaited<ReturnType<typeof getEmailVerifications>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEmailVerificationsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getEmailVerifications>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetEmailVerificationsSuspense<
+	TData = Awaited<ReturnType<typeof getEmailVerifications>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEmailVerificationsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getEmailVerifications>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 이메일 인증 목록 조회
+ */
+
+export function useGetEmailVerificationsSuspense<
+	TData = Awaited<ReturnType<typeof getEmailVerifications>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEmailVerificationsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getEmailVerifications>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetEmailVerificationsSuspenseQueryOptions(
+		params,
+		options,
+	);
+
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
 }
 
+export const getGetEmailVerificationsSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getEmailVerifications>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEmailVerificationsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getEmailVerifications>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
+	const queryKey =
+		queryOptions?.queryKey ?? getGetEmailVerificationsInfiniteQueryKey(params);
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getEmailVerifications>>
+	> = ({ signal }) => getEmailVerifications(params, requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getEmailVerifications>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetEmailVerificationsSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getEmailVerifications>>
+>;
+export type GetEmailVerificationsSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetEmailVerificationsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getEmailVerifications>>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetEmailVerificationsParams,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getEmailVerifications>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetEmailVerificationsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getEmailVerifications>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEmailVerificationsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getEmailVerifications>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetEmailVerificationsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getEmailVerifications>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEmailVerificationsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getEmailVerifications>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 이메일 인증 목록 조회
+ */
+
+export function useGetEmailVerificationsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getEmailVerifications>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetEmailVerificationsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getEmailVerifications>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetEmailVerificationsSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+/**
+ * @summary 이메일 인증 목록 조회
+ */
+export const prefetchGetEmailVerificationsInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getEmailVerifications>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetEmailVerificationsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getEmailVerifications>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetEmailVerificationsSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
+
+	await queryClient.prefetchInfiniteQuery(queryOptions);
+
+	return queryClient;
+};
 
 /**
  * 아직 완료되지 않은 이메일 인증 요청에 인증 메일을 다시 발송합니다.
  * @summary 이메일 인증 메일 재발송
  */
 export const resendEmailVerification = (
-    emailVerificationId: string,
- options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+	emailVerificationId: string,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customIdpInstance<ResendEmailVerification200AllOf>(
-      {url: `/api/v1/idp/email-verifications/${emailVerificationId}/resend`, method: 'POST', signal
-    },
-      options);
-    }
-  
+	return customIdpInstance<ResendEmailVerification200AllOf>(
+		{
+			url: `/api/v1/idp/email-verifications/${emailVerificationId}/resend`,
+			method: "POST",
+			signal,
+		},
+		options,
+	);
+};
 
+export const getResendEmailVerificationMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof resendEmailVerification>>,
+		TError,
+		{ emailVerificationId: string },
+		TContext
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof resendEmailVerification>>,
+	TError,
+	{ emailVerificationId: string },
+	TContext
+> => {
+	const mutationKey = ["resendEmailVerification"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
-export const getResendEmailVerificationMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof resendEmailVerification>>, TError,{emailVerificationId: string}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof resendEmailVerification>>, TError,{emailVerificationId: string}, TContext> => {
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof resendEmailVerification>>,
+		{ emailVerificationId: string }
+	> = (props) => {
+		const { emailVerificationId } = props ?? {};
 
-const mutationKey = ['resendEmailVerification'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+		return resendEmailVerification(emailVerificationId, requestOptions);
+	};
 
-      
+	return { mutationFn, ...mutationOptions };
+};
 
+export type ResendEmailVerificationMutationResult = NonNullable<
+	Awaited<ReturnType<typeof resendEmailVerification>>
+>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof resendEmailVerification>>, {emailVerificationId: string}> = (props) => {
-          const {emailVerificationId} = props ?? {};
+export type ResendEmailVerificationMutationError = ErrorType<void>;
 
-          return  resendEmailVerification(emailVerificationId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ResendEmailVerificationMutationResult = NonNullable<Awaited<ReturnType<typeof resendEmailVerification>>>
-    
-    export type ResendEmailVerificationMutationError = ErrorType<void>
-
-    /**
+/**
  * @summary 이메일 인증 메일 재발송
  */
-export const useResendEmailVerification = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof resendEmailVerification>>, TError,{emailVerificationId: string}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof resendEmailVerification>>,
-        TError,
-        {emailVerificationId: string},
-        TContext
-      > => {
+export const useResendEmailVerification = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof resendEmailVerification>>,
+			TError,
+			{ emailVerificationId: string },
+			TContext
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof resendEmailVerification>>,
+	TError,
+	{ emailVerificationId: string },
+	TContext
+> => {
+	const mutationOptions = getResendEmailVerificationMutationOptions(options);
 
-      const mutationOptions = getResendEmailVerificationMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    
+	return useMutation(mutationOptions, queryClient);
+};

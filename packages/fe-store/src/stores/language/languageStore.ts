@@ -35,9 +35,9 @@ export class LanguageStore {
 			return;
 		}
 
-		const stored = this.persistStorage.read<
-			PersistedLanguage | LanguageCode
-		>(LANGUAGE_PERSIST_SECTION);
+		const stored = this.persistStorage.read<PersistedLanguage | LanguageCode>(
+			LANGUAGE_PERSIST_SECTION,
+		);
 		if (stored !== null) {
 			this.languageCodeValue = toPersistedLanguageCode(stored);
 		}

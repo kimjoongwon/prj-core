@@ -25,18 +25,16 @@ export default observer(function AuthAuditLogsPageRoute() {
 	const { data: statsResponse } = useGetAuthAuditLogStats();
 
 	return (
-		<>
-			<AuthAuditLogListScreen
-				logs={response?.data}
-				totalCount={response?.meta?.totalCount ?? 0}
-				isLoading={isLoading}
-				queryStates={queryStates}
-				setQueryStates={setQueryStates}
-				stats={
-					statsResponse?.data ? mapAuditLogStats(statsResponse.data) : undefined
-				}
-			/>
-		</>
+		<AuthAuditLogListScreen
+			logs={response?.data}
+			totalCount={response?.meta?.totalCount ?? 0}
+			isLoading={isLoading}
+			queryStates={queryStates}
+			setQueryStates={setQueryStates}
+			stats={
+				statsResponse?.data ? mapAuditLogStats(statsResponse.data) : undefined
+			}
+		/>
 	);
 });
 

@@ -56,7 +56,7 @@ Next.js App Router의 root `apps/**/layout.tsx`와 필요한 named slot topology
 2. 작업 시작 전에 반드시 같은 route의 `page.spec.md`, 상위 route 코드, 메뉴/route 계약을 읽습니다.
 3. 웹 route skeleton은 root `app/layout.tsx`의 `App` 슬롯 안에서 직접 조립합니다.
    - `App`: 최상위 root structure owner
-   - root `app/layout.tsx`: `TopBar`, `SideNavigation`, `AccessControlGuard`, 모바일 navigation/action feature를 직접 조립
+   - root `app/layout.tsx`: `NavigationPanel`, `AccessControlGuard`, 모바일 navigation/action feature를 직접 조립
    - route group/domain/auth `layout.tsx`: 기본 생성 금지
    - `RouteFrame`처럼 pathname으로 layout을 고르는 package feature 생성 금지
 4. route layout은 surface/rhythm을 소유하지 않고 구조/slot topology만 소유합니다.
@@ -67,8 +67,8 @@ Next.js App Router의 root `apps/**/layout.tsx`와 필요한 named slot topology
 6. `layout.tsx`는 page 데이터 fetch와 페이지 이벤트 바인딩을 직접 수행하지 않습니다. 필요한 client 로직은 feature/widget을 slot에 배치해 해결합니다.
 7. route skeleton을 구현하기 위해 로컬 ad-hoc layout primitive를 만들지 않습니다. 부족한 primitive가 있으면 `fe-layout-agent`가 먼저 보강해야 합니다.
 8. 코드 수정 시 대응 `page.spec.md`를 함께 갱신합니다.
-9. route layout primitive는 `packages/fe-ui/src/layout`과 `packages/fe-ui/src/feature`의 명시적 layout/action/navigation feature에서 소비합니다.
-10. route layout의 `HeaderBar`, `SidePanel`, `BottomNav`, `ActionFab`, `OverlayMenu`는 `packages/fe-ui/src/widget/[Name]/`에서 소비하고 store/API wiring은 `packages/fe-ui/src/feature`가 소유합니다.
+9. route layout primitive는 `packages/fe-ui/src/layout`과 `packages/fe-ui/src/domain/navigation`의 명시적 layout/action/navigation component에서 소비합니다.
+10. route layout의 `HeaderBar`, `BottomNav`, `ActionFab`, `OverlayMenu`는 `packages/fe-ui/src/widget/[Name]/`에서 소비하고, `NavigationPanel`은 `packages/fe-ui/src/domain/navigation`에서 직접 소비합니다.
 11. `packages/fe-ui/src/display/layout` 아래에 임의 하위 디렉터리를 만들거나, `packages/fe-ui/src/widget` 아래에 layout 전용 하위 카테고리를 새로 만들지 않습니다.
 12. named slot은 기본값이 아니라 예외 패턴입니다. 아래 경우에만 사용합니다.
    - 목록 유지 + detail/inspector 독립 전환
@@ -135,7 +135,7 @@ Next.js App Router의 root `apps/**/layout.tsx`와 필요한 named slot topology
   </App.Header>
   <App.Body>
     <App.LeftAside>
-      <SideNavigation />
+      <NavigationPanel />
     </App.LeftAside>
     <App.Main>
       <AccessControlGuard contents={children} />

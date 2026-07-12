@@ -78,7 +78,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 				// 쿠키에서 토큰 추출 (RS256 JWT만 허용)
 				(req: Request) => {
 					const token = req.cookies?.accessToken;
-					if (token && token.includes(".")) {
+					if (token?.includes(".")) {
 						const header = parseJwtHeader(token);
 						if (header?.alg !== "RS256") {
 							return null;

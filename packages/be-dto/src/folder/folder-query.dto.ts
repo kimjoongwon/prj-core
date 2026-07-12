@@ -41,5 +41,4 @@ export class FolderQueryDto extends QueryDto {
 		Array.isArray(value) ? value : value ? [value] : [],
 	)
 	sort?: string[];
-
 }

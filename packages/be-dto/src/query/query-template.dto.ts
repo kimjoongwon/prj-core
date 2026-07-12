@@ -22,5 +22,4 @@ export class QueryTemplateDto extends QueryDto {
 
 	@BooleanFieldOptional({ description: "활성 상태 필터" })
 	readonly isActive?: boolean;
-
 }

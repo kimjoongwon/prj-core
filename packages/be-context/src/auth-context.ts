@@ -1,6 +1,6 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import type { ContextTenantSnapshot, ContextUserSnapshot } from "@cocrepo/type";
 import { User } from "@cocrepo/entity";
+import type { ContextTenantSnapshot, ContextUserSnapshot } from "@cocrepo/type";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
 

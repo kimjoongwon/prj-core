@@ -366,7 +366,10 @@ describe("Space Scope API (E2E)", () => {
 		});
 
 		it("Given current-space 조회 API When OpenAPI 문서를 만들면 Then x-tenant-id header가 선택값으로 노출된다", () => {
-			const operation = getSwaggerOperation("/api/v1/auth/current-space", "get");
+			const operation = getSwaggerOperation(
+				"/api/v1/auth/current-space",
+				"get",
+			);
 
 			expect(findTenantHeader(operation)).toMatchObject({
 				name: "x-tenant-id",

@@ -21,17 +21,15 @@ export default observer(function OidcClientsPageRoute() {
 	});
 
 	return (
-		<>
-			<OidcClientListScreen
-				oidcClients={response?.data}
-				totalCount={response?.meta?.totalCount ?? 0}
-				isLoading={isLoading}
-				queryStates={queryStates}
-				setQueryStates={setQueryStates}
-				onClickCreateButton={() => {
-					router.push("/settings/auth/oidc-clients/new" as Route);
-				}}
-			/>
-		</>
+		<OidcClientListScreen
+			oidcClients={response?.data}
+			totalCount={response?.meta?.totalCount ?? 0}
+			isLoading={isLoading}
+			queryStates={queryStates}
+			setQueryStates={setQueryStates}
+			onClickCreateButton={() => {
+				router.push("/settings/auth/oidc-clients/new" as Route);
+			}}
+		/>
 	);
 });

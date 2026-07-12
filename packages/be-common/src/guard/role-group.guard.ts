@@ -29,7 +29,9 @@ export class RoleGroupGuard implements CanActivate {
 			return true;
 		}
 
-		const user = this.cls.get<ContextUserSnapshot | undefined>(CONTEXT_KEYS.AUTH_USER);
+		const user = this.cls.get<ContextUserSnapshot | undefined>(
+			CONTEXT_KEYS.AUTH_USER,
+		);
 
 		if (!user) {
 			throw new UnauthorizedException("인증된 사용자가 필요합니다.");
@@ -40,7 +42,9 @@ export class RoleGroupGuard implements CanActivate {
 		}
 
 		// CLS에서 tenant 읽기 (RequestContextMiddleware가 설정)
-		const tenant = this.cls.get<ContextTenantSnapshot | undefined>(CONTEXT_KEYS.TENANT);
+		const tenant = this.cls.get<ContextTenantSnapshot | undefined>(
+			CONTEXT_KEYS.TENANT,
+		);
 		const spaceId = this.cls.get<string | undefined>(CONTEXT_KEYS.SPACE_ID);
 
 		if (!tenant) {

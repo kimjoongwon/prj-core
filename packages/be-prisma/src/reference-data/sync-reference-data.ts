@@ -1,3 +1,4 @@
+import { ensureSystemAdminUsers } from "../bootstrap/system-admins";
 import type {
 	Action,
 	Group,
@@ -7,7 +8,6 @@ import type {
 } from "../generated/client/client";
 import { Prisma } from "../generated/client/client";
 import { CategoryTypes } from "../generated/client/enums";
-import { ensureSystemAdminUsers } from "../bootstrap/system-admins";
 import { SYSTEM_SPACE_ID } from "./constants";
 import {
 	abilitySeedData,
@@ -51,10 +51,7 @@ async function ensureSystemSpace(db: DbClient): Promise<void> {
 	});
 }
 
-async function ensureSystemTenant(
-	db: DbClient,
-	roles: Record<string, Role>,
-) {
+async function ensureSystemTenant(db: DbClient, roles: Record<string, Role>) {
 	const platformAdminRole = roles.PLATFORM_ADMIN;
 	if (!platformAdminRole) {
 		throw new Error("PLATFORM_ADMIN role is required for system tenant.");
@@ -202,7 +199,10 @@ async function syncRoles(db: DbClient): Promise<Record<string, Role>> {
 	return roles;
 }
 
-async function syncRoleCategories(db: DbClient, creatorId: string): Promise<void> {
+async function syncRoleCategories(
+	db: DbClient,
+	creatorId: string,
+): Promise<void> {
 	for (const categoryData of roleCategorySeedData) {
 		const roleCategoryEnum = categoryData.roleCategoryEnum;
 

@@ -61,87 +61,85 @@ export default observer(function AbilityDetailRoute() {
 	});
 
 	return (
-		<>
-			<AbilityEditScreen
-				title="Ability 상세"
-				description={
-					ability
-						? `${ability.name} Ability의 상세 정보입니다.`
-						: "Ability를 찾을 수 없습니다."
-				}
-				state={state}
-				subjects={subjects}
-				actions={actions}
-				readOnly
-				isLoading={isLoading}
-				notFound={!isLoading && !ability}
-				notFoundAction={
+		<AbilityEditScreen
+			title="Ability 상세"
+			description={
+				ability
+					? `${ability.name} Ability의 상세 정보입니다.`
+					: "Ability를 찾을 수 없습니다."
+			}
+			state={state}
+			subjects={subjects}
+			actions={actions}
+			readOnly
+			isLoading={isLoading}
+			notFound={!isLoading && !ability}
+			notFoundAction={
+				<Button
+					variant="flat"
+					onPress={() => {
+						router.push("/abilities" as Route);
+					}}
+				>
+					목록으로
+				</Button>
+			}
+			pageActions={
+				<div className="flex gap-2">
 					<Button
 						variant="flat"
+						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push("/abilities" as Route);
 						}}
 					>
 						목록으로
 					</Button>
-				}
-				pageActions={
-					<div className="flex gap-2">
-						<Button
-							variant="flat"
-							startContent={<ArrowLeft className="h-4 w-4" />}
-							onPress={() => {
-								router.push("/abilities" as Route);
-							}}
-						>
-							목록으로
-						</Button>
-						{ability ? (
-							<>
-								<Button
-									color="primary"
-									variant="flat"
-									startContent={<Edit className="h-4 w-4" />}
-									onPress={() => {
-										router.push(`/abilities/${abilityId}/edit` as Route);
-									}}
-								>
-									수정
-								</Button>
-								<Button
-									color="danger"
-									variant="flat"
-									startContent={<Trash2 className="h-4 w-4" />}
-									isLoading={isDeleting}
-									onPress={() => {
-										deleteAbility({ id: abilityId });
-									}}
-								>
-									삭제
-								</Button>
-							</>
-						) : null}
-					</div>
-				}
-			>
-				{ability ? (
-					<SectionLike title="메타 정보">
-						<dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
+					{ability ? (
+						<>
+							<Button
+								color="primary"
+								variant="flat"
+								startContent={<Edit className="h-4 w-4" />}
+								onPress={() => {
+									router.push(`/abilities/${abilityId}/edit` as Route);
+								}}
+							>
+								수정
+							</Button>
+							<Button
+								color="danger"
+								variant="flat"
+								startContent={<Trash2 className="h-4 w-4" />}
+								isLoading={isDeleting}
+								onPress={() => {
+									deleteAbility({ id: abilityId });
+								}}
+							>
+								삭제
+							</Button>
+						</>
+					) : null}
+				</div>
+			}
+		>
+			{ability ? (
+				<SectionLike title="메타 정보">
+					<dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
+						<Info
+							label="생성일"
+							value={new Date(ability.createdAt).toLocaleString("ko-KR")}
+						/>
+						{ability.updatedAt ? (
 							<Info
-								label="생성일"
-								value={new Date(ability.createdAt).toLocaleString("ko-KR")}
+								label="수정일"
+								value={new Date(ability.updatedAt).toLocaleString("ko-KR")}
 							/>
-							{ability.updatedAt ? (
-								<Info
-									label="수정일"
-									value={new Date(ability.updatedAt).toLocaleString("ko-KR")}
-								/>
-							) : null}
-						</dl>
-					</SectionLike>
-				) : null}
-			</AbilityEditScreen>
-		</>
+						) : null}
+					</dl>
+				</SectionLike>
+			) : null}
+		</AbilityEditScreen>
 	);
 });
 

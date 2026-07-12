@@ -26,7 +26,10 @@ export async function runBootstrap(prisma: PrismaClient): Promise<void> {
 	// 3) branch classification + domain demo data that depends on those primitives
 	const systemBootstrap = await ensureSystemBootstrap(prisma);
 
-	await createRegularUsersAndGrounds(prisma, systemBootstrap.companyManagerRole);
+	await createRegularUsersAndGrounds(
+		prisma,
+		systemBootstrap.companyManagerRole,
+	);
 	await classifyGroundSpacesAsBranch(prisma, SYSTEM_SPACE_ID);
 	await createHierarchicalTenants(prisma, SYSTEM_SPACE_ID);
 	await syncReferenceData(prisma);

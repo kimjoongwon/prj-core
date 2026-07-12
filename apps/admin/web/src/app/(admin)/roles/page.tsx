@@ -16,17 +16,15 @@ export default observer(function RolesPageRoute() {
 	const { data: response, isLoading } = useGetRoles();
 
 	return (
-		<>
-			<RoleListScreen
-				roles={response?.data}
-				totalCount={response?.meta?.total ?? response?.data?.length ?? 0}
-				isLoading={isLoading}
-				queryStates={queryStates}
-				setQueryStates={setQueryStates}
-				onClickCreateButton={() => {
-					router.push("/roles/new" as Route);
-				}}
-			/>
-		</>
+		<RoleListScreen
+			roles={response?.data}
+			totalCount={response?.meta?.total ?? response?.data?.length ?? 0}
+			isLoading={isLoading}
+			queryStates={queryStates}
+			setQueryStates={setQueryStates}
+			onClickCreateButton={() => {
+				router.push("/roles/new" as Route);
+			}}
+		/>
 	);
 });

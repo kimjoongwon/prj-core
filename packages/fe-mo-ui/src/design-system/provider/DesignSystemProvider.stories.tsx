@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-native";
 import { View } from "react-native";
-import { Button } from "../../input/Button";
 import { Text } from "../../data-display/Text";
+import { Button } from "../../input/Button";
 import { Card } from "../../layout/Card";
 import { DesignSystemProvider } from "./index";
 

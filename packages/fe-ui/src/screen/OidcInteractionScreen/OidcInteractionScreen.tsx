@@ -161,7 +161,7 @@ export const OidcInteractionScreen = observer(
 						>
 							{props.state.isExpiredInteraction
 								? t("다시 로그인")
-							: t("돌아가기")}
+								: t("돌아가기")}
 						</Button>
 					</div>
 				</Auth.Panel>

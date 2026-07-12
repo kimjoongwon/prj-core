@@ -76,9 +76,9 @@ function uuidToBytes(uuid: string): Uint8Array {
 }
 
 function bytesToUuid(bytes: Uint8Array): string {
-	const hex = Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join(
-		"",
-	);
+	const hex = Array.from(bytes, (byte) =>
+		byte.toString(16).padStart(2, "0"),
+	).join("");
 
 	return [
 		hex.slice(0, 8),
@@ -101,8 +101,7 @@ function encodeBase64Url(bytes: Uint8Array): string {
 		output += BASE64URL_ALPHABET[((first & 0b11) << 4) | (second >> 4)];
 
 		if (index + 1 < bytes.length) {
-			output +=
-				BASE64URL_ALPHABET[((second & 0b1111) << 2) | (third >> 6)];
+			output += BASE64URL_ALPHABET[((second & 0b1111) << 2) | (third >> 6)];
 		}
 
 		if (index + 2 < bytes.length) {

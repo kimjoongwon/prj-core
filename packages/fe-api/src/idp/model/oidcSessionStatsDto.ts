@@ -14,11 +14,11 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { OidcSessionStatsDtoByModelType } from './oidcSessionStatsDtoByModelType';
+import type { OidcSessionStatsDtoByModelType } from "./oidcSessionStatsDtoByModelType";
 
 export interface OidcSessionStatsDto {
-  /** 전체 세션/토큰 수 */
-  totalCount: number;
-  /** 모델 타입별 건수 */
-  byModelType: OidcSessionStatsDtoByModelType;
+	/** 전체 세션/토큰 수 */
+	totalCount: number;
+	/** 모델 타입별 건수 */
+	byModelType: OidcSessionStatsDtoByModelType;
 }

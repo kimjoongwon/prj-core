@@ -1,12 +1,12 @@
 "use client";
 
-import { toast } from "@heroui/react";
 import {
 	getGetTemplatesQueryKey,
 	useGetTemplates,
 	useToggleTemplateStatus,
 } from "@cocrepo/api/core/templates";
 import { TemplateListScreen } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
@@ -35,34 +35,36 @@ export default observer(function TemplatesPageRoute() {
 	const toggleMutation = useToggleTemplateStatus();
 
 	return (
-		<>
-			<TemplateListScreen
-				templates={response?.data}
-				totalCount={response?.meta?.total ?? 0}
-				isLoading={isLoading}
-				isToggling={toggleMutation.isPending}
-				queryStates={queryStates}
-				setQueryStates={setQueryStates}
-				onClickCreateButton={() => {
-					router.push("/templates/new" as Route);
-				}}
-				onClickTemplateCode={(templateId) => {
-					router.push(`/templates/${templateId}` as Route);
-				}}
-				onToggleTemplateStatusSwitch={async (templateId) => {
-					try {
-						await toggleMutation.mutateAsync({ templateId });
-						await queryClient.invalidateQueries({
-							queryKey: getGetTemplatesQueryKey(),
-						});
-						toast.success("상태 변경 완료", { description: "템플릿 활성 상태가 변경되었습니다." });
-					} catch (error) {
-						toast.danger("상태 변경 실패", { description: "템플릿 상태 변경 중 오류가 발생했습니다." });
-						throw error;
-					}
-				}}
-			/>
-		</>
+		<TemplateListScreen
+			templates={response?.data}
+			totalCount={response?.meta?.total ?? 0}
+			isLoading={isLoading}
+			isToggling={toggleMutation.isPending}
+			queryStates={queryStates}
+			setQueryStates={setQueryStates}
+			onClickCreateButton={() => {
+				router.push("/templates/new" as Route);
+			}}
+			onClickTemplateCode={(templateId) => {
+				router.push(`/templates/${templateId}` as Route);
+			}}
+			onToggleTemplateStatusSwitch={async (templateId) => {
+				try {
+					await toggleMutation.mutateAsync({ templateId });
+					await queryClient.invalidateQueries({
+						queryKey: getGetTemplatesQueryKey(),
+					});
+					toast.success("상태 변경 완료", {
+						description: "템플릿 활성 상태가 변경되었습니다.",
+					});
+				} catch (error) {
+					toast.danger("상태 변경 실패", {
+						description: "템플릿 상태 변경 중 오류가 발생했습니다.",
+					});
+					throw error;
+				}
+			}}
+		/>
 	);
 });
 

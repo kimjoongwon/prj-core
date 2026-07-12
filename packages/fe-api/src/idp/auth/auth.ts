@@ -14,2840 +14,5122 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
+
+import type {
+	DataTag,
+	DefinedInitialDataOptions,
+	DefinedUseQueryResult,
+	InfiniteData,
+	MutationFunction,
+	QueryClient,
+	QueryFunction,
+	QueryKey,
+	UndefinedInitialDataOptions,
+	UseMutationOptions,
+	UseMutationResult,
+	UseQueryOptions,
+	UseQueryResult,
+	UseSuspenseInfiniteQueryOptions,
+	UseSuspenseInfiniteQueryResult,
+	UseSuspenseQueryOptions,
+	UseSuspenseQueryResult,
+} from "@tanstack/react-query";
 import {
-  useMutation,
-  useQuery,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+	useMutation,
+	useQuery,
+	useSuspenseInfiniteQuery,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
+import type { BodyType, ErrorType } from "../../libs/customIdpAxios";
+
+import { customIdpInstance } from "../../libs/customIdpAxios";
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
-  InfiniteData,
-  MutationFunction,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
-  UseSuspenseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult
-} from '@tanstack/react-query';
-
-import type {
-  ForceResetPassword200AllOf,
-  GetAuthAuditLogStats200AllOf,
-  GetAuthAuditLogs200AllOf,
-  GetAuthAuditLogsParams,
-  GetCurrentSpace200AllOf,
-  GetMySpaces200AllOf,
-  GetSignUpSpaces200AllOf,
-  InvalidateUserSessions200AllOf,
-  LoginParams,
-  NativeLogin200AllOf,
-  NativeLoginPayloadDto,
-  NativeLogout200AllOf,
-  NativeLogoutPayloadDto,
-  NativeRefreshToken200AllOf,
-  NativeTokenRefreshPayloadDto,
-  OidcCallbackParams,
-  RefreshToken200AllOf,
-  SetCurrentSpace200AllOf,
-  SetCurrentSpaceDto,
-  SignUp201AllOf,
-  SignUpPayloadDto,
-  UnlockAccount200AllOf,
-  VerifyToken200AllOf
-} from '.././model';
-
-import { customIdpInstance } from '../../libs/customIdpAxios';
-import type { ErrorType , BodyType } from '../../libs/customIdpAxios';
-
+	ForceResetPassword200AllOf,
+	GetAuthAuditLogStats200AllOf,
+	GetAuthAuditLogs200AllOf,
+	GetAuthAuditLogsParams,
+	GetCurrentSpace200AllOf,
+	GetMySpaces200AllOf,
+	GetSignUpSpaces200AllOf,
+	InvalidateUserSessions200AllOf,
+	LoginParams,
+	NativeLogin200AllOf,
+	NativeLoginPayloadDto,
+	NativeLogout200AllOf,
+	NativeLogoutPayloadDto,
+	NativeRefreshToken200AllOf,
+	NativeTokenRefreshPayloadDto,
+	OidcCallbackParams,
+	RefreshToken200AllOf,
+	SetCurrentSpace200AllOf,
+	SetCurrentSpaceDto,
+	SignUp201AllOf,
+	SignUpPayloadDto,
+	UnlockAccount200AllOf,
+	VerifyToken200AllOf,
+} from ".././model";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
 
 /**
  * 지정한 OIDC clientId 기준으로 IDP Authorization 엔드포인트로 리다이렉트합니다. returnTo 파라미터로 인증 완료 후 복귀 경로를 지정할 수 있습니다.
  * @summary OIDC 로그인 리다이렉트
  */
 export const login = (
-    params: LoginParams,
- options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+	params: LoginParams,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customIdpInstance<void>(
-      {url: `/api/v1/auth/oidc/login`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-  
+	return customIdpInstance<void>(
+		{ url: `/api/v1/auth/oidc/login`, method: "GET", params, signal },
+		options,
+	);
+};
 
+export const getLoginQueryKey = (params?: LoginParams) => {
+	return [`/api/v1/auth/oidc/login`, ...(params ? [params] : [])] as const;
+};
 
+export const getLoginInfiniteQueryKey = (params?: LoginParams) => {
+	return [
+		"infinite",
+		`/api/v1/auth/oidc/login`,
+		...(params ? [params] : []),
+	] as const;
+};
 
-export const getLoginQueryKey = (params?: LoginParams,) => {
-    return [
-    `/api/v1/auth/oidc/login`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-export const getLoginInfiniteQueryKey = (params?: LoginParams,) => {
-    return [
-    'infinite', `/api/v1/auth/oidc/login`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getLoginQueryOptions = <TData = Awaited<ReturnType<typeof login>>, TError = ErrorType<unknown>>(params: LoginParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const getLoginQueryOptions = <
+	TData = Awaited<ReturnType<typeof login>>,
+	TError = ErrorType<unknown>,
+>(
+	params: LoginParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getLoginQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getLoginQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof login>>> = ({
+		signal,
+	}) => login(params, requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof login>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof login>>> = ({ signal }) => login(params, requestOptions, signal);
+export type LoginQueryResult = NonNullable<Awaited<ReturnType<typeof login>>>;
+export type LoginQueryError = ErrorType<unknown>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type LoginQueryResult = NonNullable<Awaited<ReturnType<typeof login>>>
-export type LoginQueryError = ErrorType<unknown>
-
-
-export function useLogin<TData = Awaited<ReturnType<typeof login>>, TError = ErrorType<unknown>>(
- params: LoginParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof login>>,
-          TError,
-          Awaited<ReturnType<typeof login>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useLogin<TData = Awaited<ReturnType<typeof login>>, TError = ErrorType<unknown>>(
- params: LoginParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof login>>,
-          TError,
-          Awaited<ReturnType<typeof login>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useLogin<TData = Awaited<ReturnType<typeof login>>, TError = ErrorType<unknown>>(
- params: LoginParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useLogin<
+	TData = Awaited<ReturnType<typeof login>>,
+	TError = ErrorType<unknown>,
+>(
+	params: LoginParams,
+	options: {
+		query: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof login>>,
+					TError,
+					Awaited<ReturnType<typeof login>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useLogin<
+	TData = Awaited<ReturnType<typeof login>>,
+	TError = ErrorType<unknown>,
+>(
+	params: LoginParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof login>>,
+					TError,
+					Awaited<ReturnType<typeof login>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useLogin<
+	TData = Awaited<ReturnType<typeof login>>,
+	TError = ErrorType<unknown>,
+>(
+	params: LoginParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary OIDC 로그인 리다이렉트
  */
 
-export function useLogin<TData = Awaited<ReturnType<typeof login>>, TError = ErrorType<unknown>>(
- params: LoginParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useLogin<
+	TData = Awaited<ReturnType<typeof login>>,
+	TError = ErrorType<unknown>,
+>(
+	params: LoginParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getLoginQueryOptions(params, options);
 
-  const queryOptions = getLoginQueryOptions(params,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary OIDC 로그인 리다이렉트
  */
-export const prefetchLoginQuery = async <TData = Awaited<ReturnType<typeof login>>, TError = ErrorType<unknown>>(
- queryClient: QueryClient, params: LoginParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const prefetchLoginQuery = async <
+	TData = Awaited<ReturnType<typeof login>>,
+	TError = ErrorType<unknown>,
+>(
+	queryClient: QueryClient,
+	params: LoginParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getLoginQueryOptions(params, options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getLoginQueryOptions(params,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-export const getLoginSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof login>>, TError = ErrorType<unknown>>(params: LoginParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const getLoginSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof login>>,
+	TError = ErrorType<unknown>,
+>(
+	params: LoginParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getLoginQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getLoginQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof login>>> = ({
+		signal,
+	}) => login(params, requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof login>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof login>>> = ({ signal }) => login(params, requestOptions, signal);
+export type LoginSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof login>>
+>;
+export type LoginSuspenseQueryError = ErrorType<unknown>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type LoginSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof login>>>
-export type LoginSuspenseQueryError = ErrorType<unknown>
-
-
-export function useLoginSuspense<TData = Awaited<ReturnType<typeof login>>, TError = ErrorType<unknown>>(
- params: LoginParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useLoginSuspense<TData = Awaited<ReturnType<typeof login>>, TError = ErrorType<unknown>>(
- params: LoginParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useLoginSuspense<TData = Awaited<ReturnType<typeof login>>, TError = ErrorType<unknown>>(
- params: LoginParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useLoginSuspense<
+	TData = Awaited<ReturnType<typeof login>>,
+	TError = ErrorType<unknown>,
+>(
+	params: LoginParams,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useLoginSuspense<
+	TData = Awaited<ReturnType<typeof login>>,
+	TError = ErrorType<unknown>,
+>(
+	params: LoginParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useLoginSuspense<
+	TData = Awaited<ReturnType<typeof login>>,
+	TError = ErrorType<unknown>,
+>(
+	params: LoginParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary OIDC 로그인 리다이렉트
  */
 
-export function useLoginSuspense<TData = Awaited<ReturnType<typeof login>>, TError = ErrorType<unknown>>(
- params: LoginParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useLoginSuspense<
+	TData = Awaited<ReturnType<typeof login>>,
+	TError = ErrorType<unknown>,
+>(
+	params: LoginParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getLoginSuspenseQueryOptions(params, options);
 
-  const queryOptions = getLoginSuspenseQueryOptions(params,options)
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
-
-
-
-export const getLoginSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof login>>>, TError = ErrorType<unknown>>(params: LoginParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const getLoginSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof login>>>,
+	TError = ErrorType<unknown>,
+>(
+	params: LoginParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof login>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getLoginInfiniteQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getLoginInfiniteQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof login>>> = ({
+		signal,
+	}) => login(params, requestOptions, signal);
 
-  
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof login>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof login>>> = ({ signal }) => login(params, requestOptions, signal);
+export type LoginSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof login>>
+>;
+export type LoginSuspenseInfiniteQueryError = ErrorType<unknown>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type LoginSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof login>>>
-export type LoginSuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useLoginSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof login>>>, TError = ErrorType<unknown>>(
- params: LoginParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useLoginSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof login>>>, TError = ErrorType<unknown>>(
- params: LoginParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useLoginSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof login>>>, TError = ErrorType<unknown>>(
- params: LoginParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useLoginSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof login>>>,
+	TError = ErrorType<unknown>,
+>(
+	params: LoginParams,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof login>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useLoginSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof login>>>,
+	TError = ErrorType<unknown>,
+>(
+	params: LoginParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof login>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useLoginSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof login>>>,
+	TError = ErrorType<unknown>,
+>(
+	params: LoginParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof login>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary OIDC 로그인 리다이렉트
  */
 
-export function useLoginSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof login>>>, TError = ErrorType<unknown>>(
- params: LoginParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useLoginSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof login>>>,
+	TError = ErrorType<unknown>,
+>(
+	params: LoginParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof login>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getLoginSuspenseInfiniteQueryOptions(params, options);
 
-  const queryOptions = getLoginSuspenseInfiniteQueryOptions(params,options)
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary OIDC 로그인 리다이렉트
  */
-export const prefetchLoginInfiniteQuery = async <TData = Awaited<ReturnType<typeof login>>, TError = ErrorType<unknown>>(
- queryClient: QueryClient, params: LoginParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const prefetchLoginInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof login>>,
+	TError = ErrorType<unknown>,
+>(
+	queryClient: QueryClient,
+	params: LoginParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof login>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getLoginSuspenseInfiniteQueryOptions(params, options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
-  const queryOptions = getLoginSuspenseInfiniteQueryOptions(params,options)
-
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
+	return queryClient;
+};
 
 /**
  * IDP에서 인증 완료 후 Authorization Code를 수신하여 토큰을 교환하고 등록된 기본 복귀 URL 또는 returnTo로 리다이렉트합니다.
  * @summary OIDC 콜백
  */
 export const oidcCallback = (
-    params: OidcCallbackParams,
- options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+	params: OidcCallbackParams,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customIdpInstance<void>(
-      {url: `/api/v1/auth/callback`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-  
+	return customIdpInstance<void>(
+		{ url: `/api/v1/auth/callback`, method: "GET", params, signal },
+		options,
+	);
+};
 
+export const getOidcCallbackQueryKey = (params?: OidcCallbackParams) => {
+	return [`/api/v1/auth/callback`, ...(params ? [params] : [])] as const;
+};
 
-
-export const getOidcCallbackQueryKey = (params?: OidcCallbackParams,) => {
-    return [
-    `/api/v1/auth/callback`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-export const getOidcCallbackInfiniteQueryKey = (params?: OidcCallbackParams,) => {
-    return [
-    'infinite', `/api/v1/auth/callback`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getOidcCallbackQueryOptions = <TData = Awaited<ReturnType<typeof oidcCallback>>, TError = ErrorType<unknown>>(params: OidcCallbackParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const getOidcCallbackInfiniteQueryKey = (
+	params?: OidcCallbackParams,
 ) => {
+	return [
+		"infinite",
+		`/api/v1/auth/callback`,
+		...(params ? [params] : []),
+	] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getOidcCallbackQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof oidcCallback>>> = ({ signal }) => oidcCallback(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type OidcCallbackQueryResult = NonNullable<Awaited<ReturnType<typeof oidcCallback>>>
-export type OidcCallbackQueryError = ErrorType<unknown>
-
-
-export function useOidcCallback<TData = Awaited<ReturnType<typeof oidcCallback>>, TError = ErrorType<unknown>>(
- params: OidcCallbackParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof oidcCallback>>,
-          TError,
-          Awaited<ReturnType<typeof oidcCallback>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOidcCallback<TData = Awaited<ReturnType<typeof oidcCallback>>, TError = ErrorType<unknown>>(
- params: OidcCallbackParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof oidcCallback>>,
-          TError,
-          Awaited<ReturnType<typeof oidcCallback>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOidcCallback<TData = Awaited<ReturnType<typeof oidcCallback>>, TError = ErrorType<unknown>>(
- params: OidcCallbackParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary OIDC 콜백
- */
-
-export function useOidcCallback<TData = Awaited<ReturnType<typeof oidcCallback>>, TError = ErrorType<unknown>>(
- params: OidcCallbackParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getOidcCallbackQueryOptions(params,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-/**
- * @summary OIDC 콜백
- */
-export const prefetchOidcCallbackQuery = async <TData = Awaited<ReturnType<typeof oidcCallback>>, TError = ErrorType<unknown>>(
- queryClient: QueryClient, params: OidcCallbackParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getOidcCallbackQueryOptions(params,options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-export const getOidcCallbackSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof oidcCallback>>, TError = ErrorType<unknown>>(params: OidcCallbackParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const getOidcCallbackQueryOptions = <
+	TData = Awaited<ReturnType<typeof oidcCallback>>,
+	TError = ErrorType<unknown>,
+>(
+	params: OidcCallbackParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getOidcCallbackQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getOidcCallbackQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof oidcCallback>>> = ({
+		signal,
+	}) => oidcCallback(params, requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof oidcCallback>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof oidcCallback>>> = ({ signal }) => oidcCallback(params, requestOptions, signal);
+export type OidcCallbackQueryResult = NonNullable<
+	Awaited<ReturnType<typeof oidcCallback>>
+>;
+export type OidcCallbackQueryError = ErrorType<unknown>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type OidcCallbackSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof oidcCallback>>>
-export type OidcCallbackSuspenseQueryError = ErrorType<unknown>
-
-
-export function useOidcCallbackSuspense<TData = Awaited<ReturnType<typeof oidcCallback>>, TError = ErrorType<unknown>>(
- params: OidcCallbackParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOidcCallbackSuspense<TData = Awaited<ReturnType<typeof oidcCallback>>, TError = ErrorType<unknown>>(
- params: OidcCallbackParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOidcCallbackSuspense<TData = Awaited<ReturnType<typeof oidcCallback>>, TError = ErrorType<unknown>>(
- params: OidcCallbackParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOidcCallback<
+	TData = Awaited<ReturnType<typeof oidcCallback>>,
+	TError = ErrorType<unknown>,
+>(
+	params: OidcCallbackParams,
+	options: {
+		query: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof oidcCallback>>,
+					TError,
+					Awaited<ReturnType<typeof oidcCallback>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useOidcCallback<
+	TData = Awaited<ReturnType<typeof oidcCallback>>,
+	TError = ErrorType<unknown>,
+>(
+	params: OidcCallbackParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof oidcCallback>>,
+					TError,
+					Awaited<ReturnType<typeof oidcCallback>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useOidcCallback<
+	TData = Awaited<ReturnType<typeof oidcCallback>>,
+	TError = ErrorType<unknown>,
+>(
+	params: OidcCallbackParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary OIDC 콜백
  */
 
-export function useOidcCallbackSuspense<TData = Awaited<ReturnType<typeof oidcCallback>>, TError = ErrorType<unknown>>(
- params: OidcCallbackParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useOidcCallback<
+	TData = Awaited<ReturnType<typeof oidcCallback>>,
+	TError = ErrorType<unknown>,
+>(
+	params: OidcCallbackParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getOidcCallbackQueryOptions(params, options);
 
-  const queryOptions = getOidcCallbackSuspenseQueryOptions(params,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
+/**
+ * @summary OIDC 콜백
+ */
+export const prefetchOidcCallbackQuery = async <
+	TData = Awaited<ReturnType<typeof oidcCallback>>,
+	TError = ErrorType<unknown>,
+>(
+	queryClient: QueryClient,
+	params: OidcCallbackParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getOidcCallbackQueryOptions(params, options);
 
+	await queryClient.prefetchQuery(queryOptions);
 
+	return queryClient;
+};
 
-export const getOidcCallbackSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof oidcCallback>>>, TError = ErrorType<unknown>>(params: OidcCallbackParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const getOidcCallbackSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof oidcCallback>>,
+	TError = ErrorType<unknown>,
+>(
+	params: OidcCallbackParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof oidcCallback>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getOidcCallbackQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getOidcCallbackInfiniteQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof oidcCallback>>> = ({
+		signal,
+	}) => oidcCallback(params, requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof oidcCallback>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof oidcCallback>>> = ({ signal }) => oidcCallback(params, requestOptions, signal);
+export type OidcCallbackSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof oidcCallback>>
+>;
+export type OidcCallbackSuspenseQueryError = ErrorType<unknown>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type OidcCallbackSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof oidcCallback>>>
-export type OidcCallbackSuspenseInfiniteQueryError = ErrorType<unknown>
-
-
-export function useOidcCallbackSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof oidcCallback>>>, TError = ErrorType<unknown>>(
- params: OidcCallbackParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOidcCallbackSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof oidcCallback>>>, TError = ErrorType<unknown>>(
- params: OidcCallbackParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOidcCallbackSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof oidcCallback>>>, TError = ErrorType<unknown>>(
- params: OidcCallbackParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useOidcCallbackSuspense<
+	TData = Awaited<ReturnType<typeof oidcCallback>>,
+	TError = ErrorType<unknown>,
+>(
+	params: OidcCallbackParams,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof oidcCallback>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useOidcCallbackSuspense<
+	TData = Awaited<ReturnType<typeof oidcCallback>>,
+	TError = ErrorType<unknown>,
+>(
+	params: OidcCallbackParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof oidcCallback>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useOidcCallbackSuspense<
+	TData = Awaited<ReturnType<typeof oidcCallback>>,
+	TError = ErrorType<unknown>,
+>(
+	params: OidcCallbackParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof oidcCallback>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary OIDC 콜백
  */
 
-export function useOidcCallbackSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof oidcCallback>>>, TError = ErrorType<unknown>>(
- params: OidcCallbackParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useOidcCallbackSuspense<
+	TData = Awaited<ReturnType<typeof oidcCallback>>,
+	TError = ErrorType<unknown>,
+>(
+	params: OidcCallbackParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof oidcCallback>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getOidcCallbackSuspenseQueryOptions(params, options);
 
-  const queryOptions = getOidcCallbackSuspenseInfiniteQueryOptions(params,options)
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
+	return query;
+}
 
-  return query;
+export const getOidcCallbackSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof oidcCallback>>>,
+	TError = ErrorType<unknown>,
+>(
+	params: OidcCallbackParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof oidcCallback>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey =
+		queryOptions?.queryKey ?? getOidcCallbackInfiniteQueryKey(params);
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof oidcCallback>>> = ({
+		signal,
+	}) => oidcCallback(params, requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof oidcCallback>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type OidcCallbackSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof oidcCallback>>
+>;
+export type OidcCallbackSuspenseInfiniteQueryError = ErrorType<unknown>;
+
+export function useOidcCallbackSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof oidcCallback>>>,
+	TError = ErrorType<unknown>,
+>(
+	params: OidcCallbackParams,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof oidcCallback>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useOidcCallbackSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof oidcCallback>>>,
+	TError = ErrorType<unknown>,
+>(
+	params: OidcCallbackParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof oidcCallback>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useOidcCallbackSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof oidcCallback>>>,
+	TError = ErrorType<unknown>,
+>(
+	params: OidcCallbackParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof oidcCallback>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary OIDC 콜백
+ */
+
+export function useOidcCallbackSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof oidcCallback>>>,
+	TError = ErrorType<unknown>,
+>(
+	params: OidcCallbackParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof oidcCallback>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getOidcCallbackSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
 }
 
 /**
  * @summary OIDC 콜백
  */
-export const prefetchOidcCallbackInfiniteQuery = async <TData = Awaited<ReturnType<typeof oidcCallback>>, TError = ErrorType<unknown>>(
- queryClient: QueryClient, params: OidcCallbackParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const prefetchOidcCallbackInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof oidcCallback>>,
+	TError = ErrorType<unknown>,
+>(
+	queryClient: QueryClient,
+	params: OidcCallbackParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof oidcCallback>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getOidcCallbackSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
-  const queryOptions = getOidcCallbackSuspenseInfiniteQueryOptions(params,options)
-
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
+	return queryClient;
+};
 
 /**
  * first-party 앱에서 이메일/비밀번호로 로그인하고 native access/refresh token을 발급합니다. OIDC authorization redirect를 사용하지 않습니다.
  * @summary first-party native 로그인
  */
 export const nativeLogin = (
-    nativeLoginPayloadDto: BodyType<NativeLoginPayloadDto>,
- options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+	nativeLoginPayloadDto: BodyType<NativeLoginPayloadDto>,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customIdpInstance<NativeLogin200AllOf>(
-      {url: `/api/v1/auth/login`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: nativeLoginPayloadDto, signal
-    },
-      options);
-    }
-  
+	return customIdpInstance<NativeLogin200AllOf>(
+		{
+			url: `/api/v1/auth/login`,
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			data: nativeLoginPayloadDto,
+			signal,
+		},
+		options,
+	);
+};
 
+export const getNativeLoginMutationOptions = <
+	TError = ErrorType<unknown>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof nativeLogin>>,
+		TError,
+		{ data: BodyType<NativeLoginPayloadDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof nativeLogin>>,
+	TError,
+	{ data: BodyType<NativeLoginPayloadDto> },
+	TContext
+> => {
+	const mutationKey = ["nativeLogin"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
-export const getNativeLoginMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof nativeLogin>>, TError,{data: BodyType<NativeLoginPayloadDto>}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof nativeLogin>>, TError,{data: BodyType<NativeLoginPayloadDto>}, TContext> => {
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof nativeLogin>>,
+		{ data: BodyType<NativeLoginPayloadDto> }
+	> = (props) => {
+		const { data } = props ?? {};
 
-const mutationKey = ['nativeLogin'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+		return nativeLogin(data, requestOptions);
+	};
 
-      
+	return { mutationFn, ...mutationOptions };
+};
 
+export type NativeLoginMutationResult = NonNullable<
+	Awaited<ReturnType<typeof nativeLogin>>
+>;
+export type NativeLoginMutationBody = BodyType<NativeLoginPayloadDto>;
+export type NativeLoginMutationError = ErrorType<unknown>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof nativeLogin>>, {data: BodyType<NativeLoginPayloadDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  nativeLogin(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type NativeLoginMutationResult = NonNullable<Awaited<ReturnType<typeof nativeLogin>>>
-    export type NativeLoginMutationBody = BodyType<NativeLoginPayloadDto>
-    export type NativeLoginMutationError = ErrorType<unknown>
-
-    /**
+/**
  * @summary first-party native 로그인
  */
-export const useNativeLogin = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof nativeLogin>>, TError,{data: BodyType<NativeLoginPayloadDto>}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof nativeLogin>>,
-        TError,
-        {data: BodyType<NativeLoginPayloadDto>},
-        TContext
-      > => {
+export const useNativeLogin = <TError = ErrorType<unknown>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof nativeLogin>>,
+			TError,
+			{ data: BodyType<NativeLoginPayloadDto> },
+			TContext
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof nativeLogin>>,
+	TError,
+	{ data: BodyType<NativeLoginPayloadDto> },
+	TContext
+> => {
+	const mutationOptions = getNativeLoginMutationOptions(options);
 
-      const mutationOptions = getNativeLoginMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
+	return useMutation(mutationOptions, queryClient);
+};
+/**
  * first-party 앱이 보관한 sessionId/refreshToken으로 native token을 직접 갱신합니다.
  * @summary first-party native 토큰 재발급
  */
 export const nativeRefreshToken = (
-    nativeTokenRefreshPayloadDto: BodyType<NativeTokenRefreshPayloadDto>,
- options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+	nativeTokenRefreshPayloadDto: BodyType<NativeTokenRefreshPayloadDto>,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customIdpInstance<NativeRefreshToken200AllOf>(
-      {url: `/api/v1/auth/native/token/refresh`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: nativeTokenRefreshPayloadDto, signal
-    },
-      options);
-    }
-  
+	return customIdpInstance<NativeRefreshToken200AllOf>(
+		{
+			url: `/api/v1/auth/native/token/refresh`,
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			data: nativeTokenRefreshPayloadDto,
+			signal,
+		},
+		options,
+	);
+};
 
+export const getNativeRefreshTokenMutationOptions = <
+	TError = ErrorType<unknown>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof nativeRefreshToken>>,
+		TError,
+		{ data: BodyType<NativeTokenRefreshPayloadDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof nativeRefreshToken>>,
+	TError,
+	{ data: BodyType<NativeTokenRefreshPayloadDto> },
+	TContext
+> => {
+	const mutationKey = ["nativeRefreshToken"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
-export const getNativeRefreshTokenMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof nativeRefreshToken>>, TError,{data: BodyType<NativeTokenRefreshPayloadDto>}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof nativeRefreshToken>>, TError,{data: BodyType<NativeTokenRefreshPayloadDto>}, TContext> => {
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof nativeRefreshToken>>,
+		{ data: BodyType<NativeTokenRefreshPayloadDto> }
+	> = (props) => {
+		const { data } = props ?? {};
 
-const mutationKey = ['nativeRefreshToken'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+		return nativeRefreshToken(data, requestOptions);
+	};
 
-      
+	return { mutationFn, ...mutationOptions };
+};
 
+export type NativeRefreshTokenMutationResult = NonNullable<
+	Awaited<ReturnType<typeof nativeRefreshToken>>
+>;
+export type NativeRefreshTokenMutationBody =
+	BodyType<NativeTokenRefreshPayloadDto>;
+export type NativeRefreshTokenMutationError = ErrorType<unknown>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof nativeRefreshToken>>, {data: BodyType<NativeTokenRefreshPayloadDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  nativeRefreshToken(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type NativeRefreshTokenMutationResult = NonNullable<Awaited<ReturnType<typeof nativeRefreshToken>>>
-    export type NativeRefreshTokenMutationBody = BodyType<NativeTokenRefreshPayloadDto>
-    export type NativeRefreshTokenMutationError = ErrorType<unknown>
-
-    /**
+/**
  * @summary first-party native 토큰 재발급
  */
-export const useNativeRefreshToken = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof nativeRefreshToken>>, TError,{data: BodyType<NativeTokenRefreshPayloadDto>}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof nativeRefreshToken>>,
-        TError,
-        {data: BodyType<NativeTokenRefreshPayloadDto>},
-        TContext
-      > => {
+export const useNativeRefreshToken = <
+	TError = ErrorType<unknown>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof nativeRefreshToken>>,
+			TError,
+			{ data: BodyType<NativeTokenRefreshPayloadDto> },
+			TContext
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof nativeRefreshToken>>,
+	TError,
+	{ data: BodyType<NativeTokenRefreshPayloadDto> },
+	TContext
+> => {
+	const mutationOptions = getNativeRefreshTokenMutationOptions(options);
 
-      const mutationOptions = getNativeRefreshTokenMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
+	return useMutation(mutationOptions, queryClient);
+};
+/**
  * first-party native 세션을 삭제하고 전달된 access token을 best-effort로 블랙리스트 처리합니다.
  * @summary first-party native 로그아웃
  */
 export const nativeLogout = (
-    nativeLogoutPayloadDto: BodyType<NativeLogoutPayloadDto>,
- options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+	nativeLogoutPayloadDto: BodyType<NativeLogoutPayloadDto>,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customIdpInstance<NativeLogout200AllOf>(
-      {url: `/api/v1/auth/native/logout`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: nativeLogoutPayloadDto, signal
-    },
-      options);
-    }
-  
+	return customIdpInstance<NativeLogout200AllOf>(
+		{
+			url: `/api/v1/auth/native/logout`,
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			data: nativeLogoutPayloadDto,
+			signal,
+		},
+		options,
+	);
+};
 
+export const getNativeLogoutMutationOptions = <
+	TError = ErrorType<unknown>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof nativeLogout>>,
+		TError,
+		{ data: BodyType<NativeLogoutPayloadDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof nativeLogout>>,
+	TError,
+	{ data: BodyType<NativeLogoutPayloadDto> },
+	TContext
+> => {
+	const mutationKey = ["nativeLogout"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
-export const getNativeLogoutMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof nativeLogout>>, TError,{data: BodyType<NativeLogoutPayloadDto>}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof nativeLogout>>, TError,{data: BodyType<NativeLogoutPayloadDto>}, TContext> => {
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof nativeLogout>>,
+		{ data: BodyType<NativeLogoutPayloadDto> }
+	> = (props) => {
+		const { data } = props ?? {};
 
-const mutationKey = ['nativeLogout'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+		return nativeLogout(data, requestOptions);
+	};
 
-      
+	return { mutationFn, ...mutationOptions };
+};
 
+export type NativeLogoutMutationResult = NonNullable<
+	Awaited<ReturnType<typeof nativeLogout>>
+>;
+export type NativeLogoutMutationBody = BodyType<NativeLogoutPayloadDto>;
+export type NativeLogoutMutationError = ErrorType<unknown>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof nativeLogout>>, {data: BodyType<NativeLogoutPayloadDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  nativeLogout(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type NativeLogoutMutationResult = NonNullable<Awaited<ReturnType<typeof nativeLogout>>>
-    export type NativeLogoutMutationBody = BodyType<NativeLogoutPayloadDto>
-    export type NativeLogoutMutationError = ErrorType<unknown>
-
-    /**
+/**
  * @summary first-party native 로그아웃
  */
-export const useNativeLogout = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof nativeLogout>>, TError,{data: BodyType<NativeLogoutPayloadDto>}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof nativeLogout>>,
-        TError,
-        {data: BodyType<NativeLogoutPayloadDto>},
-        TContext
-      > => {
+export const useNativeLogout = <
+	TError = ErrorType<unknown>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof nativeLogout>>,
+			TError,
+			{ data: BodyType<NativeLogoutPayloadDto> },
+			TContext
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof nativeLogout>>,
+	TError,
+	{ data: BodyType<NativeLogoutPayloadDto> },
+	TContext
+> => {
+	const mutationOptions = getNativeLogoutMutationOptions(options);
 
-      const mutationOptions = getNativeLogoutMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
+	return useMutation(mutationOptions, queryClient);
+};
+/**
  * 리프레시 토큰을 사용하여 IDP에서 새로운 토큰을 발급받습니다.
  * @summary 토큰 재발급
  */
 export const refreshToken = (
-    
- options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customIdpInstance<RefreshToken200AllOf>(
-      {url: `/api/v1/auth/token/refresh`, method: 'POST', signal
-    },
-      options);
-    }
-  
+	return customIdpInstance<RefreshToken200AllOf>(
+		{ url: `/api/v1/auth/token/refresh`, method: "POST", signal },
+		options,
+	);
+};
 
+export const getRefreshTokenMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof refreshToken>>,
+		TError,
+		void,
+		TContext
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof refreshToken>>,
+	TError,
+	void,
+	TContext
+> => {
+	const mutationKey = ["refreshToken"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
-export const getRefreshTokenMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof refreshToken>>, TError,void, TContext>, request?: SecondParameter<typeof customIdpInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof refreshToken>>, TError,void, TContext> => {
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof refreshToken>>,
+		void
+	> = () => {
+		return refreshToken(requestOptions);
+	};
 
-const mutationKey = ['refreshToken'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+	return { mutationFn, ...mutationOptions };
+};
 
-      
+export type RefreshTokenMutationResult = NonNullable<
+	Awaited<ReturnType<typeof refreshToken>>
+>;
 
+export type RefreshTokenMutationError = ErrorType<void>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof refreshToken>>, void> = () => {
-          
-
-          return  refreshToken(requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RefreshTokenMutationResult = NonNullable<Awaited<ReturnType<typeof refreshToken>>>
-    
-    export type RefreshTokenMutationError = ErrorType<void>
-
-    /**
+/**
  * @summary 토큰 재발급
  */
-export const useRefreshToken = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof refreshToken>>, TError,void, TContext>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof refreshToken>>,
-        TError,
-        void,
-        TContext
-      > => {
+export const useRefreshToken = <TError = ErrorType<void>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof refreshToken>>,
+			TError,
+			void,
+			TContext
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof refreshToken>>,
+	TError,
+	void,
+	TContext
+> => {
+	const mutationOptions = getRefreshTokenMutationOptions(options);
 
-      const mutationOptions = getRefreshTokenMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
+	return useMutation(mutationOptions, queryClient);
+};
+/**
  * 회원가입 전 사용자가 선택할 수 있는 Space 목록을 반환합니다. x-tenant-id 헤더 없이 호출할 수 있습니다.
  * @summary 회원가입 Space 목록 조회
  */
 export const getSignUpSpaces = (
-    
- options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customIdpInstance<GetSignUpSpaces200AllOf>(
-      {url: `/api/v1/auth/sign-up/spaces`, method: 'GET', signal
-    },
-      options);
-    }
-  
-
-
+	return customIdpInstance<GetSignUpSpaces200AllOf>(
+		{ url: `/api/v1/auth/sign-up/spaces`, method: "GET", signal },
+		options,
+	);
+};
 
 export const getGetSignUpSpacesQueryKey = () => {
-    return [
-    `/api/v1/auth/sign-up/spaces`
-    ] as const;
-    }
+	return [`/api/v1/auth/sign-up/spaces`] as const;
+};
 
 export const getGetSignUpSpacesInfiniteQueryKey = () => {
-    return [
-    'infinite', `/api/v1/auth/sign-up/spaces`
-    ] as const;
-    }
+	return ["infinite", `/api/v1/auth/sign-up/spaces`] as const;
+};
 
-    
-export const getGetSignUpSpacesQueryOptions = <TData = Awaited<ReturnType<typeof getSignUpSpaces>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-) => {
+export const getGetSignUpSpacesQueryOptions = <
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData>
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getGetSignUpSpacesQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSignUpSpacesQueryKey();
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getSignUpSpaces>>> = ({
+		signal,
+	}) => getSignUpSpaces(requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getSignUpSpaces>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSignUpSpaces>>> = ({ signal }) => getSignUpSpaces(requestOptions, signal);
+export type GetSignUpSpacesQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getSignUpSpaces>>
+>;
+export type GetSignUpSpacesQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetSignUpSpacesQueryResult = NonNullable<Awaited<ReturnType<typeof getSignUpSpaces>>>
-export type GetSignUpSpacesQueryError = ErrorType<void>
-
-
-export function useGetSignUpSpaces<TData = Awaited<ReturnType<typeof getSignUpSpaces>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getSignUpSpaces>>,
-          TError,
-          Awaited<ReturnType<typeof getSignUpSpaces>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSignUpSpaces<TData = Awaited<ReturnType<typeof getSignUpSpaces>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getSignUpSpaces>>,
-          TError,
-          Awaited<ReturnType<typeof getSignUpSpaces>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSignUpSpaces<TData = Awaited<ReturnType<typeof getSignUpSpaces>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSignUpSpaces<
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getSignUpSpaces>>,
+					TError,
+					Awaited<ReturnType<typeof getSignUpSpaces>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSignUpSpaces<
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getSignUpSpaces>>,
+					TError,
+					Awaited<ReturnType<typeof getSignUpSpaces>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSignUpSpaces<
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 회원가입 Space 목록 조회
  */
 
-export function useGetSignUpSpaces<TData = Awaited<ReturnType<typeof getSignUpSpaces>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetSignUpSpaces<
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetSignUpSpacesQueryOptions(options);
 
-  const queryOptions = getGetSignUpSpacesQueryOptions(options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-/**
- * @summary 회원가입 Space 목록 조회
- */
-export const prefetchGetSignUpSpacesQuery = async <TData = Awaited<ReturnType<typeof getSignUpSpaces>>, TError = ErrorType<void>>(
- queryClient: QueryClient,  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetSignUpSpacesQueryOptions(options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-export const getGetSignUpSpacesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSignUpSpaces>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetSignUpSpacesQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSignUpSpaces>>> = ({ signal }) => getSignUpSpaces(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetSignUpSpacesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSignUpSpaces>>>
-export type GetSignUpSpacesSuspenseQueryError = ErrorType<void>
-
-
-export function useGetSignUpSpacesSuspense<TData = Awaited<ReturnType<typeof getSignUpSpaces>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSignUpSpacesSuspense<TData = Awaited<ReturnType<typeof getSignUpSpaces>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSignUpSpacesSuspense<TData = Awaited<ReturnType<typeof getSignUpSpaces>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 회원가입 Space 목록 조회
- */
-
-export function useGetSignUpSpacesSuspense<TData = Awaited<ReturnType<typeof getSignUpSpaces>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetSignUpSpacesSuspenseQueryOptions(options)
-
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const getGetSignUpSpacesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSignUpSpaces>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetSignUpSpacesInfiniteQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSignUpSpaces>>> = ({ signal }) => getSignUpSpaces(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetSignUpSpacesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSignUpSpaces>>>
-export type GetSignUpSpacesSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetSignUpSpacesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSignUpSpaces>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSignUpSpacesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSignUpSpaces>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSignUpSpacesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSignUpSpaces>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 회원가입 Space 목록 조회
- */
-
-export function useGetSignUpSpacesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSignUpSpaces>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetSignUpSpacesSuspenseInfiniteQueryOptions(options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary 회원가입 Space 목록 조회
  */
-export const prefetchGetSignUpSpacesInfiniteQuery = async <TData = Awaited<ReturnType<typeof getSignUpSpaces>>, TError = ErrorType<void>>(
- queryClient: QueryClient,  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const prefetchGetSignUpSpacesQuery = async <
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetSignUpSpacesQueryOptions(options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getGetSignUpSpacesSuspenseInfiniteQueryOptions(options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
+export const getGetSignUpSpacesSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseQueryOptions<
+			Awaited<ReturnType<typeof getSignUpSpaces>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  return queryClient;
+	const queryKey = queryOptions?.queryKey ?? getGetSignUpSpacesQueryKey();
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getSignUpSpaces>>> = ({
+		signal,
+	}) => getSignUpSpaces(requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getSignUpSpaces>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetSignUpSpacesSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getSignUpSpaces>>
+>;
+export type GetSignUpSpacesSuspenseQueryError = ErrorType<void>;
+
+export function useGetSignUpSpacesSuspense<
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSignUpSpacesSuspense<
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSignUpSpacesSuspense<
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 회원가입 Space 목록 조회
+ */
+
+export function useGetSignUpSpacesSuspense<
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetSignUpSpacesSuspenseQueryOptions(options);
+
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
 }
 
+export const getGetSignUpSpacesSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getSignUpSpaces>>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseInfiniteQueryOptions<
+			Awaited<ReturnType<typeof getSignUpSpaces>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
+	const queryKey =
+		queryOptions?.queryKey ?? getGetSignUpSpacesInfiniteQueryKey();
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getSignUpSpaces>>> = ({
+		signal,
+	}) => getSignUpSpaces(requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getSignUpSpaces>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetSignUpSpacesSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getSignUpSpaces>>
+>;
+export type GetSignUpSpacesSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetSignUpSpacesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSignUpSpaces>>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSignUpSpacesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSignUpSpaces>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSignUpSpacesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSignUpSpaces>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 회원가입 Space 목록 조회
+ */
+
+export function useGetSignUpSpacesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSignUpSpaces>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetSignUpSpacesSuspenseInfiniteQueryOptions(options);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+/**
+ * @summary 회원가입 Space 목록 조회
+ */
+export const prefetchGetSignUpSpacesInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getSignUpSpaces>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSignUpSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetSignUpSpacesSuspenseInfiniteQueryOptions(options);
+
+	await queryClient.prefetchInfiniteQuery(queryOptions);
+
+	return queryClient;
+};
 
 /**
  * 이메일 인증 요청을 생성하고 인증 메일을 발송합니다. User는 인증 완료 시 생성됩니다.
  * @summary 회원가입
  */
 export const signUp = (
-    signUpPayloadDto: BodyType<SignUpPayloadDto>,
- options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+	signUpPayloadDto: BodyType<SignUpPayloadDto>,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customIdpInstance<SignUp201AllOf>(
-      {url: `/api/v1/auth/sign-up`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: signUpPayloadDto, signal
-    },
-      options);
-    }
-  
+	return customIdpInstance<SignUp201AllOf>(
+		{
+			url: `/api/v1/auth/sign-up`,
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			data: signUpPayloadDto,
+			signal,
+		},
+		options,
+	);
+};
 
+export const getSignUpMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof signUp>>,
+		TError,
+		{ data: BodyType<SignUpPayloadDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof signUp>>,
+	TError,
+	{ data: BodyType<SignUpPayloadDto> },
+	TContext
+> => {
+	const mutationKey = ["signUp"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
-export const getSignUpMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof signUp>>, TError,{data: BodyType<SignUpPayloadDto>}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof signUp>>, TError,{data: BodyType<SignUpPayloadDto>}, TContext> => {
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof signUp>>,
+		{ data: BodyType<SignUpPayloadDto> }
+	> = (props) => {
+		const { data } = props ?? {};
 
-const mutationKey = ['signUp'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+		return signUp(data, requestOptions);
+	};
 
-      
+	return { mutationFn, ...mutationOptions };
+};
 
+export type SignUpMutationResult = NonNullable<
+	Awaited<ReturnType<typeof signUp>>
+>;
+export type SignUpMutationBody = BodyType<SignUpPayloadDto>;
+export type SignUpMutationError = ErrorType<void>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof signUp>>, {data: BodyType<SignUpPayloadDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  signUp(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SignUpMutationResult = NonNullable<Awaited<ReturnType<typeof signUp>>>
-    export type SignUpMutationBody = BodyType<SignUpPayloadDto>
-    export type SignUpMutationError = ErrorType<void>
-
-    /**
+/**
  * @summary 회원가입
  */
-export const useSignUp = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof signUp>>, TError,{data: BodyType<SignUpPayloadDto>}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof signUp>>,
-        TError,
-        {data: BodyType<SignUpPayloadDto>},
-        TContext
-      > => {
+export const useSignUp = <TError = ErrorType<void>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof signUp>>,
+			TError,
+			{ data: BodyType<SignUpPayloadDto> },
+			TContext
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof signUp>>,
+	TError,
+	{ data: BodyType<SignUpPayloadDto> },
+	TContext
+> => {
+	const mutationOptions = getSignUpMutationOptions(options);
 
-      const mutationOptions = getSignUpMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
+	return useMutation(mutationOptions, queryClient);
+};
+/**
  * 이메일 인증 토큰을 확인하고 회원가입을 완료한 뒤 Admin 로그인 화면으로 리다이렉트합니다.
  * @summary 회원가입 이메일 인증 완료
  */
 export const confirmEmailVerification = (
-    token: string,
- options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+	token: string,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customIdpInstance<unknown>(
-      {url: `/api/v1/auth/email-verifications/${token}/confirm`, method: 'GET', signal
-    },
-      options);
-    }
-  
+	return customIdpInstance<unknown>(
+		{
+			url: `/api/v1/auth/email-verifications/${token}/confirm`,
+			method: "GET",
+			signal,
+		},
+		options,
+	);
+};
 
+export const getConfirmEmailVerificationQueryKey = (token?: string) => {
+	return [`/api/v1/auth/email-verifications/${token}/confirm`] as const;
+};
 
+export const getConfirmEmailVerificationInfiniteQueryKey = (token?: string) => {
+	return [
+		"infinite",
+		`/api/v1/auth/email-verifications/${token}/confirm`,
+	] as const;
+};
 
-export const getConfirmEmailVerificationQueryKey = (token?: string,) => {
-    return [
-    `/api/v1/auth/email-verifications/${token}/confirm`
-    ] as const;
-    }
-
-export const getConfirmEmailVerificationInfiniteQueryKey = (token?: string,) => {
-    return [
-    'infinite', `/api/v1/auth/email-verifications/${token}/confirm`
-    ] as const;
-    }
-
-    
-export const getConfirmEmailVerificationQueryOptions = <TData = Awaited<ReturnType<typeof confirmEmailVerification>>, TError = ErrorType<void>>(token: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof confirmEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const getConfirmEmailVerificationQueryOptions = <
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getConfirmEmailVerificationQueryKey(token);
 
-  const queryKey =  queryOptions?.queryKey ?? getConfirmEmailVerificationQueryKey(token);
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof confirmEmailVerification>>
+	> = ({ signal }) => confirmEmailVerification(token, requestOptions, signal);
 
-  
+	return {
+		queryKey,
+		queryFn,
+		enabled: !!token,
+		...queryOptions,
+	} as UseQueryOptions<
+		Awaited<ReturnType<typeof confirmEmailVerification>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof confirmEmailVerification>>> = ({ signal }) => confirmEmailVerification(token, requestOptions, signal);
+export type ConfirmEmailVerificationQueryResult = NonNullable<
+	Awaited<ReturnType<typeof confirmEmailVerification>>
+>;
+export type ConfirmEmailVerificationQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(token), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof confirmEmailVerification>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ConfirmEmailVerificationQueryResult = NonNullable<Awaited<ReturnType<typeof confirmEmailVerification>>>
-export type ConfirmEmailVerificationQueryError = ErrorType<void>
-
-
-export function useConfirmEmailVerification<TData = Awaited<ReturnType<typeof confirmEmailVerification>>, TError = ErrorType<void>>(
- token: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof confirmEmailVerification>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof confirmEmailVerification>>,
-          TError,
-          Awaited<ReturnType<typeof confirmEmailVerification>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useConfirmEmailVerification<TData = Awaited<ReturnType<typeof confirmEmailVerification>>, TError = ErrorType<void>>(
- token: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof confirmEmailVerification>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof confirmEmailVerification>>,
-          TError,
-          Awaited<ReturnType<typeof confirmEmailVerification>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useConfirmEmailVerification<TData = Awaited<ReturnType<typeof confirmEmailVerification>>, TError = ErrorType<void>>(
- token: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof confirmEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useConfirmEmailVerification<
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof confirmEmailVerification>>,
+					TError,
+					Awaited<ReturnType<typeof confirmEmailVerification>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useConfirmEmailVerification<
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof confirmEmailVerification>>,
+					TError,
+					Awaited<ReturnType<typeof confirmEmailVerification>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useConfirmEmailVerification<
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 회원가입 이메일 인증 완료
  */
 
-export function useConfirmEmailVerification<TData = Awaited<ReturnType<typeof confirmEmailVerification>>, TError = ErrorType<void>>(
- token: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof confirmEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useConfirmEmailVerification<
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getConfirmEmailVerificationQueryOptions(token, options);
 
-  const queryOptions = getConfirmEmailVerificationQueryOptions(token,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary 회원가입 이메일 인증 완료
  */
-export const prefetchConfirmEmailVerificationQuery = async <TData = Awaited<ReturnType<typeof confirmEmailVerification>>, TError = ErrorType<void>>(
- queryClient: QueryClient, token: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof confirmEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const prefetchConfirmEmailVerificationQuery = async <
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	token: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getConfirmEmailVerificationQueryOptions(token, options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getConfirmEmailVerificationQueryOptions(token,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-export const getConfirmEmailVerificationSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof confirmEmailVerification>>, TError = ErrorType<void>>(token: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof confirmEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const getConfirmEmailVerificationSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getConfirmEmailVerificationQueryKey(token);
 
-  const queryKey =  queryOptions?.queryKey ?? getConfirmEmailVerificationQueryKey(token);
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof confirmEmailVerification>>
+	> = ({ signal }) => confirmEmailVerification(token, requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof confirmEmailVerification>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof confirmEmailVerification>>> = ({ signal }) => confirmEmailVerification(token, requestOptions, signal);
+export type ConfirmEmailVerificationSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof confirmEmailVerification>>
+>;
+export type ConfirmEmailVerificationSuspenseQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof confirmEmailVerification>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ConfirmEmailVerificationSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof confirmEmailVerification>>>
-export type ConfirmEmailVerificationSuspenseQueryError = ErrorType<void>
-
-
-export function useConfirmEmailVerificationSuspense<TData = Awaited<ReturnType<typeof confirmEmailVerification>>, TError = ErrorType<void>>(
- token: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof confirmEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useConfirmEmailVerificationSuspense<TData = Awaited<ReturnType<typeof confirmEmailVerification>>, TError = ErrorType<void>>(
- token: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof confirmEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useConfirmEmailVerificationSuspense<TData = Awaited<ReturnType<typeof confirmEmailVerification>>, TError = ErrorType<void>>(
- token: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof confirmEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useConfirmEmailVerificationSuspense<
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useConfirmEmailVerificationSuspense<
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useConfirmEmailVerificationSuspense<
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 회원가입 이메일 인증 완료
  */
 
-export function useConfirmEmailVerificationSuspense<TData = Awaited<ReturnType<typeof confirmEmailVerification>>, TError = ErrorType<void>>(
- token: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof confirmEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useConfirmEmailVerificationSuspense<
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getConfirmEmailVerificationSuspenseQueryOptions(
+		token,
+		options,
+	);
 
-  const queryOptions = getConfirmEmailVerificationSuspenseQueryOptions(token,options)
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
-
-
-
-export const getConfirmEmailVerificationSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof confirmEmailVerification>>>, TError = ErrorType<void>>(token: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof confirmEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const getConfirmEmailVerificationSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof confirmEmailVerification>>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ??
+		getConfirmEmailVerificationInfiniteQueryKey(token);
 
-  const queryKey =  queryOptions?.queryKey ?? getConfirmEmailVerificationInfiniteQueryKey(token);
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof confirmEmailVerification>>
+	> = ({ signal }) => confirmEmailVerification(token, requestOptions, signal);
 
-  
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof confirmEmailVerification>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof confirmEmailVerification>>> = ({ signal }) => confirmEmailVerification(token, requestOptions, signal);
+export type ConfirmEmailVerificationSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof confirmEmailVerification>>
+>;
+export type ConfirmEmailVerificationSuspenseInfiniteQueryError =
+	ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof confirmEmailVerification>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ConfirmEmailVerificationSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof confirmEmailVerification>>>
-export type ConfirmEmailVerificationSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useConfirmEmailVerificationSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof confirmEmailVerification>>>, TError = ErrorType<void>>(
- token: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof confirmEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useConfirmEmailVerificationSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof confirmEmailVerification>>>, TError = ErrorType<void>>(
- token: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof confirmEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useConfirmEmailVerificationSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof confirmEmailVerification>>>, TError = ErrorType<void>>(
- token: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof confirmEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useConfirmEmailVerificationSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof confirmEmailVerification>>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useConfirmEmailVerificationSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof confirmEmailVerification>>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useConfirmEmailVerificationSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof confirmEmailVerification>>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 회원가입 이메일 인증 완료
  */
 
-export function useConfirmEmailVerificationSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof confirmEmailVerification>>>, TError = ErrorType<void>>(
- token: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof confirmEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useConfirmEmailVerificationSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof confirmEmailVerification>>>,
+	TError = ErrorType<void>,
+>(
+	token: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getConfirmEmailVerificationSuspenseInfiniteQueryOptions(
+		token,
+		options,
+	);
 
-  const queryOptions = getConfirmEmailVerificationSuspenseInfiniteQueryOptions(token,options)
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary 회원가입 이메일 인증 완료
  */
-export const prefetchConfirmEmailVerificationInfiniteQuery = async <TData = Awaited<ReturnType<typeof confirmEmailVerification>>, TError = ErrorType<void>>(
- queryClient: QueryClient, token: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof confirmEmailVerification>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const prefetchConfirmEmailVerificationInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof confirmEmailVerification>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	token: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof confirmEmailVerification>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getConfirmEmailVerificationSuspenseInfiniteQueryOptions(
+		token,
+		options,
+	);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
-  const queryOptions = getConfirmEmailVerificationSuspenseInfiniteQueryOptions(token,options)
-
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
+	return queryClient;
+};
 
 /**
  * 현재 요청의 액세스 토큰이 유효한지 검증합니다.
  * @summary 토큰 유효성 검증
  */
 export const verifyToken = (
-    
- options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customIdpInstance<VerifyToken200AllOf>(
-      {url: `/api/v1/auth/verify-token`, method: 'GET', signal
-    },
-      options);
-    }
-  
-
-
+	return customIdpInstance<VerifyToken200AllOf>(
+		{ url: `/api/v1/auth/verify-token`, method: "GET", signal },
+		options,
+	);
+};
 
 export const getVerifyTokenQueryKey = () => {
-    return [
-    `/api/v1/auth/verify-token`
-    ] as const;
-    }
+	return [`/api/v1/auth/verify-token`] as const;
+};
 
 export const getVerifyTokenInfiniteQueryKey = () => {
-    return [
-    'infinite', `/api/v1/auth/verify-token`
-    ] as const;
-    }
+	return ["infinite", `/api/v1/auth/verify-token`] as const;
+};
 
-    
-export const getVerifyTokenQueryOptions = <TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-) => {
+export const getVerifyTokenQueryOptions = <
+	TData = Awaited<ReturnType<typeof verifyToken>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getVerifyTokenQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getVerifyTokenQueryKey();
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof verifyToken>>> = ({
+		signal,
+	}) => verifyToken(requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof verifyToken>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof verifyToken>>> = ({ signal }) => verifyToken(requestOptions, signal);
+export type VerifyTokenQueryResult = NonNullable<
+	Awaited<ReturnType<typeof verifyToken>>
+>;
+export type VerifyTokenQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type VerifyTokenQueryResult = NonNullable<Awaited<ReturnType<typeof verifyToken>>>
-export type VerifyTokenQueryError = ErrorType<void>
-
-
-export function useVerifyToken<TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof verifyToken>>,
-          TError,
-          Awaited<ReturnType<typeof verifyToken>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useVerifyToken<TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof verifyToken>>,
-          TError,
-          Awaited<ReturnType<typeof verifyToken>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useVerifyToken<TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useVerifyToken<
+	TData = Awaited<ReturnType<typeof verifyToken>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof verifyToken>>,
+					TError,
+					Awaited<ReturnType<typeof verifyToken>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useVerifyToken<
+	TData = Awaited<ReturnType<typeof verifyToken>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof verifyToken>>,
+					TError,
+					Awaited<ReturnType<typeof verifyToken>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useVerifyToken<
+	TData = Awaited<ReturnType<typeof verifyToken>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 토큰 유효성 검증
  */
 
-export function useVerifyToken<TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useVerifyToken<
+	TData = Awaited<ReturnType<typeof verifyToken>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getVerifyTokenQueryOptions(options);
 
-  const queryOptions = getVerifyTokenQueryOptions(options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-/**
- * @summary 토큰 유효성 검증
- */
-export const prefetchVerifyTokenQuery = async <TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>(
- queryClient: QueryClient,  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getVerifyTokenQueryOptions(options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-export const getVerifyTokenSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getVerifyTokenQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof verifyToken>>> = ({ signal }) => verifyToken(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type VerifyTokenSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof verifyToken>>>
-export type VerifyTokenSuspenseQueryError = ErrorType<void>
-
-
-export function useVerifyTokenSuspense<TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useVerifyTokenSuspense<TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useVerifyTokenSuspense<TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 토큰 유효성 검증
- */
-
-export function useVerifyTokenSuspense<TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getVerifyTokenSuspenseQueryOptions(options)
-
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const getVerifyTokenSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof verifyToken>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getVerifyTokenInfiniteQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof verifyToken>>> = ({ signal }) => verifyToken(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type VerifyTokenSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof verifyToken>>>
-export type VerifyTokenSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useVerifyTokenSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof verifyToken>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useVerifyTokenSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof verifyToken>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useVerifyTokenSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof verifyToken>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 토큰 유효성 검증
- */
-
-export function useVerifyTokenSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof verifyToken>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getVerifyTokenSuspenseInfiniteQueryOptions(options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary 토큰 유효성 검증
  */
-export const prefetchVerifyTokenInfiniteQuery = async <TData = Awaited<ReturnType<typeof verifyToken>>, TError = ErrorType<void>>(
- queryClient: QueryClient,  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const prefetchVerifyTokenQuery = async <
+	TData = Awaited<ReturnType<typeof verifyToken>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getVerifyTokenQueryOptions(options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getVerifyTokenSuspenseInfiniteQueryOptions(options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
+export const getVerifyTokenSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof verifyToken>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseQueryOptions<
+			Awaited<ReturnType<typeof verifyToken>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  return queryClient;
+	const queryKey = queryOptions?.queryKey ?? getVerifyTokenQueryKey();
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof verifyToken>>> = ({
+		signal,
+	}) => verifyToken(requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof verifyToken>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type VerifyTokenSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof verifyToken>>
+>;
+export type VerifyTokenSuspenseQueryError = ErrorType<void>;
+
+export function useVerifyTokenSuspense<
+	TData = Awaited<ReturnType<typeof verifyToken>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof verifyToken>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useVerifyTokenSuspense<
+	TData = Awaited<ReturnType<typeof verifyToken>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof verifyToken>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useVerifyTokenSuspense<
+	TData = Awaited<ReturnType<typeof verifyToken>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof verifyToken>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 토큰 유효성 검증
+ */
+
+export function useVerifyTokenSuspense<
+	TData = Awaited<ReturnType<typeof verifyToken>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof verifyToken>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getVerifyTokenSuspenseQueryOptions(options);
+
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
 }
 
+export const getVerifyTokenSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof verifyToken>>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseInfiniteQueryOptions<
+			Awaited<ReturnType<typeof verifyToken>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
+	const queryKey = queryOptions?.queryKey ?? getVerifyTokenInfiniteQueryKey();
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof verifyToken>>> = ({
+		signal,
+	}) => verifyToken(requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof verifyToken>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type VerifyTokenSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof verifyToken>>
+>;
+export type VerifyTokenSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useVerifyTokenSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof verifyToken>>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof verifyToken>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useVerifyTokenSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof verifyToken>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof verifyToken>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useVerifyTokenSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof verifyToken>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof verifyToken>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 토큰 유효성 검증
+ */
+
+export function useVerifyTokenSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof verifyToken>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof verifyToken>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getVerifyTokenSuspenseInfiniteQueryOptions(options);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+/**
+ * @summary 토큰 유효성 검증
+ */
+export const prefetchVerifyTokenInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof verifyToken>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof verifyToken>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getVerifyTokenSuspenseInfiniteQueryOptions(options);
+
+	await queryClient.prefetchInfiniteQuery(queryOptions);
+
+	return queryClient;
+};
 
 /**
  * 현재 인증된 사용자가 접근 가능한 Space 목록을 반환합니다. x-tenant-id 헤더 없이도 호출할 수 있습니다.
  * @summary 내 Space 목록 조회
  */
 export const getMySpaces = (
-    
- options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customIdpInstance<GetMySpaces200AllOf>(
-      {url: `/api/v1/auth/my-spaces`, method: 'GET', signal
-    },
-      options);
-    }
-  
-
-
+	return customIdpInstance<GetMySpaces200AllOf>(
+		{ url: `/api/v1/auth/my-spaces`, method: "GET", signal },
+		options,
+	);
+};
 
 export const getGetMySpacesQueryKey = () => {
-    return [
-    `/api/v1/auth/my-spaces`
-    ] as const;
-    }
+	return [`/api/v1/auth/my-spaces`] as const;
+};
 
 export const getGetMySpacesInfiniteQueryKey = () => {
-    return [
-    'infinite', `/api/v1/auth/my-spaces`
-    ] as const;
-    }
+	return ["infinite", `/api/v1/auth/my-spaces`] as const;
+};
 
-    
-export const getGetMySpacesQueryOptions = <TData = Awaited<ReturnType<typeof getMySpaces>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-) => {
+export const getGetMySpacesQueryOptions = <
+	TData = Awaited<ReturnType<typeof getMySpaces>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getGetMySpacesQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getGetMySpacesQueryKey();
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getMySpaces>>> = ({
+		signal,
+	}) => getMySpaces(requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getMySpaces>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMySpaces>>> = ({ signal }) => getMySpaces(requestOptions, signal);
+export type GetMySpacesQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getMySpaces>>
+>;
+export type GetMySpacesQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetMySpacesQueryResult = NonNullable<Awaited<ReturnType<typeof getMySpaces>>>
-export type GetMySpacesQueryError = ErrorType<void>
-
-
-export function useGetMySpaces<TData = Awaited<ReturnType<typeof getMySpaces>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getMySpaces>>,
-          TError,
-          Awaited<ReturnType<typeof getMySpaces>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMySpaces<TData = Awaited<ReturnType<typeof getMySpaces>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getMySpaces>>,
-          TError,
-          Awaited<ReturnType<typeof getMySpaces>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMySpaces<TData = Awaited<ReturnType<typeof getMySpaces>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMySpaces<
+	TData = Awaited<ReturnType<typeof getMySpaces>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getMySpaces>>,
+					TError,
+					Awaited<ReturnType<typeof getMySpaces>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMySpaces<
+	TData = Awaited<ReturnType<typeof getMySpaces>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getMySpaces>>,
+					TError,
+					Awaited<ReturnType<typeof getMySpaces>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMySpaces<
+	TData = Awaited<ReturnType<typeof getMySpaces>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 내 Space 목록 조회
  */
 
-export function useGetMySpaces<TData = Awaited<ReturnType<typeof getMySpaces>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetMySpaces<
+	TData = Awaited<ReturnType<typeof getMySpaces>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetMySpacesQueryOptions(options);
 
-  const queryOptions = getGetMySpacesQueryOptions(options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-/**
- * @summary 내 Space 목록 조회
- */
-export const prefetchGetMySpacesQuery = async <TData = Awaited<ReturnType<typeof getMySpaces>>, TError = ErrorType<void>>(
- queryClient: QueryClient,  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetMySpacesQueryOptions(options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-export const getGetMySpacesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getMySpaces>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetMySpacesQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMySpaces>>> = ({ signal }) => getMySpaces(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetMySpacesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getMySpaces>>>
-export type GetMySpacesSuspenseQueryError = ErrorType<void>
-
-
-export function useGetMySpacesSuspense<TData = Awaited<ReturnType<typeof getMySpaces>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMySpacesSuspense<TData = Awaited<ReturnType<typeof getMySpaces>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMySpacesSuspense<TData = Awaited<ReturnType<typeof getMySpaces>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 내 Space 목록 조회
- */
-
-export function useGetMySpacesSuspense<TData = Awaited<ReturnType<typeof getMySpaces>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetMySpacesSuspenseQueryOptions(options)
-
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const getGetMySpacesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getMySpaces>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetMySpacesInfiniteQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMySpaces>>> = ({ signal }) => getMySpaces(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetMySpacesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getMySpaces>>>
-export type GetMySpacesSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetMySpacesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMySpaces>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMySpacesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMySpaces>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMySpacesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMySpaces>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 내 Space 목록 조회
- */
-
-export function useGetMySpacesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMySpaces>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetMySpacesSuspenseInfiniteQueryOptions(options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary 내 Space 목록 조회
  */
-export const prefetchGetMySpacesInfiniteQuery = async <TData = Awaited<ReturnType<typeof getMySpaces>>, TError = ErrorType<void>>(
- queryClient: QueryClient,  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const prefetchGetMySpacesQuery = async <
+	TData = Awaited<ReturnType<typeof getMySpaces>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetMySpacesQueryOptions(options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getGetMySpacesSuspenseInfiniteQueryOptions(options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
+export const getGetMySpacesSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getMySpaces>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseQueryOptions<
+			Awaited<ReturnType<typeof getMySpaces>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  return queryClient;
+	const queryKey = queryOptions?.queryKey ?? getGetMySpacesQueryKey();
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getMySpaces>>> = ({
+		signal,
+	}) => getMySpaces(requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getMySpaces>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetMySpacesSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getMySpaces>>
+>;
+export type GetMySpacesSuspenseQueryError = ErrorType<void>;
+
+export function useGetMySpacesSuspense<
+	TData = Awaited<ReturnType<typeof getMySpaces>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getMySpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMySpacesSuspense<
+	TData = Awaited<ReturnType<typeof getMySpaces>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getMySpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMySpacesSuspense<
+	TData = Awaited<ReturnType<typeof getMySpaces>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getMySpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 내 Space 목록 조회
+ */
+
+export function useGetMySpacesSuspense<
+	TData = Awaited<ReturnType<typeof getMySpaces>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getMySpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetMySpacesSuspenseQueryOptions(options);
+
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
 }
 
+export const getGetMySpacesSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getMySpaces>>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseInfiniteQueryOptions<
+			Awaited<ReturnType<typeof getMySpaces>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
+	const queryKey = queryOptions?.queryKey ?? getGetMySpacesInfiniteQueryKey();
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getMySpaces>>> = ({
+		signal,
+	}) => getMySpaces(requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getMySpaces>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetMySpacesSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getMySpaces>>
+>;
+export type GetMySpacesSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetMySpacesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getMySpaces>>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getMySpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMySpacesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getMySpaces>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getMySpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMySpacesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getMySpaces>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getMySpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 내 Space 목록 조회
+ */
+
+export function useGetMySpacesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getMySpaces>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getMySpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetMySpacesSuspenseInfiniteQueryOptions(options);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+/**
+ * @summary 내 Space 목록 조회
+ */
+export const prefetchGetMySpacesInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getMySpaces>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getMySpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetMySpacesSuspenseInfiniteQueryOptions(options);
+
+	await queryClient.prefetchInfiniteQuery(queryOptions);
+
+	return queryClient;
+};
 
 /**
  * 인증 사용자의 저장된 currentTenantId를 기준으로 현재 Space를 반환합니다. 저장값이 없거나 유효하지 않으면 null을 반환합니다.
  * @summary 현재 선택 Space 조회
  */
 export const getCurrentSpace = (
-    
- options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customIdpInstance<GetCurrentSpace200AllOf>(
-      {url: `/api/v1/auth/current-space`, method: 'GET', signal
-    },
-      options);
-    }
-  
-
-
+	return customIdpInstance<GetCurrentSpace200AllOf>(
+		{ url: `/api/v1/auth/current-space`, method: "GET", signal },
+		options,
+	);
+};
 
 export const getGetCurrentSpaceQueryKey = () => {
-    return [
-    `/api/v1/auth/current-space`
-    ] as const;
-    }
+	return [`/api/v1/auth/current-space`] as const;
+};
 
 export const getGetCurrentSpaceInfiniteQueryKey = () => {
-    return [
-    'infinite', `/api/v1/auth/current-space`
-    ] as const;
-    }
+	return ["infinite", `/api/v1/auth/current-space`] as const;
+};
 
-    
-export const getGetCurrentSpaceQueryOptions = <TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-) => {
+export const getGetCurrentSpaceQueryOptions = <
+	TData = Awaited<ReturnType<typeof getCurrentSpace>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getGetCurrentSpaceQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getGetCurrentSpaceQueryKey();
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentSpace>>> = ({
+		signal,
+	}) => getCurrentSpace(requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getCurrentSpace>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentSpace>>> = ({ signal }) => getCurrentSpace(requestOptions, signal);
+export type GetCurrentSpaceQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getCurrentSpace>>
+>;
+export type GetCurrentSpaceQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetCurrentSpaceQueryResult = NonNullable<Awaited<ReturnType<typeof getCurrentSpace>>>
-export type GetCurrentSpaceQueryError = ErrorType<void>
-
-
-export function useGetCurrentSpace<TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getCurrentSpace>>,
-          TError,
-          Awaited<ReturnType<typeof getCurrentSpace>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCurrentSpace<TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getCurrentSpace>>,
-          TError,
-          Awaited<ReturnType<typeof getCurrentSpace>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCurrentSpace<TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCurrentSpace<
+	TData = Awaited<ReturnType<typeof getCurrentSpace>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCurrentSpace>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getCurrentSpace>>,
+					TError,
+					Awaited<ReturnType<typeof getCurrentSpace>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCurrentSpace<
+	TData = Awaited<ReturnType<typeof getCurrentSpace>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCurrentSpace>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getCurrentSpace>>,
+					TError,
+					Awaited<ReturnType<typeof getCurrentSpace>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCurrentSpace<
+	TData = Awaited<ReturnType<typeof getCurrentSpace>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCurrentSpace>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 현재 선택 Space 조회
  */
 
-export function useGetCurrentSpace<TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetCurrentSpace<
+	TData = Awaited<ReturnType<typeof getCurrentSpace>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCurrentSpace>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetCurrentSpaceQueryOptions(options);
 
-  const queryOptions = getGetCurrentSpaceQueryOptions(options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-/**
- * @summary 현재 선택 Space 조회
- */
-export const prefetchGetCurrentSpaceQuery = async <TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>(
- queryClient: QueryClient,  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetCurrentSpaceQueryOptions(options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-export const getGetCurrentSpaceSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetCurrentSpaceQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentSpace>>> = ({ signal }) => getCurrentSpace(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetCurrentSpaceSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getCurrentSpace>>>
-export type GetCurrentSpaceSuspenseQueryError = ErrorType<void>
-
-
-export function useGetCurrentSpaceSuspense<TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCurrentSpaceSuspense<TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCurrentSpaceSuspense<TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 현재 선택 Space 조회
- */
-
-export function useGetCurrentSpaceSuspense<TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetCurrentSpaceSuspenseQueryOptions(options)
-
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const getGetCurrentSpaceSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getCurrentSpace>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetCurrentSpaceInfiniteQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentSpace>>> = ({ signal }) => getCurrentSpace(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetCurrentSpaceSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getCurrentSpace>>>
-export type GetCurrentSpaceSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetCurrentSpaceSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCurrentSpace>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCurrentSpaceSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCurrentSpace>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCurrentSpaceSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCurrentSpace>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 현재 선택 Space 조회
- */
-
-export function useGetCurrentSpaceSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getCurrentSpace>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetCurrentSpaceSuspenseInfiniteQueryOptions(options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary 현재 선택 Space 조회
  */
-export const prefetchGetCurrentSpaceInfiniteQuery = async <TData = Awaited<ReturnType<typeof getCurrentSpace>>, TError = ErrorType<void>>(
- queryClient: QueryClient,  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const prefetchGetCurrentSpaceQuery = async <
+	TData = Awaited<ReturnType<typeof getCurrentSpace>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getCurrentSpace>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetCurrentSpaceQueryOptions(options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getGetCurrentSpaceSuspenseInfiniteQueryOptions(options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
+export const getGetCurrentSpaceSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getCurrentSpace>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseQueryOptions<
+			Awaited<ReturnType<typeof getCurrentSpace>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  return queryClient;
+	const queryKey = queryOptions?.queryKey ?? getGetCurrentSpaceQueryKey();
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentSpace>>> = ({
+		signal,
+	}) => getCurrentSpace(requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getCurrentSpace>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetCurrentSpaceSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getCurrentSpace>>
+>;
+export type GetCurrentSpaceSuspenseQueryError = ErrorType<void>;
+
+export function useGetCurrentSpaceSuspense<
+	TData = Awaited<ReturnType<typeof getCurrentSpace>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCurrentSpace>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCurrentSpaceSuspense<
+	TData = Awaited<ReturnType<typeof getCurrentSpace>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCurrentSpace>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCurrentSpaceSuspense<
+	TData = Awaited<ReturnType<typeof getCurrentSpace>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCurrentSpace>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 현재 선택 Space 조회
+ */
+
+export function useGetCurrentSpaceSuspense<
+	TData = Awaited<ReturnType<typeof getCurrentSpace>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getCurrentSpace>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetCurrentSpaceSuspenseQueryOptions(options);
+
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
 }
 
+export const getGetCurrentSpaceSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getCurrentSpace>>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseInfiniteQueryOptions<
+			Awaited<ReturnType<typeof getCurrentSpace>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
+	const queryKey =
+		queryOptions?.queryKey ?? getGetCurrentSpaceInfiniteQueryKey();
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentSpace>>> = ({
+		signal,
+	}) => getCurrentSpace(requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getCurrentSpace>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetCurrentSpaceSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getCurrentSpace>>
+>;
+export type GetCurrentSpaceSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetCurrentSpaceSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getCurrentSpace>>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCurrentSpace>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCurrentSpaceSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getCurrentSpace>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCurrentSpace>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCurrentSpaceSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getCurrentSpace>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCurrentSpace>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 현재 선택 Space 조회
+ */
+
+export function useGetCurrentSpaceSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getCurrentSpace>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCurrentSpace>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetCurrentSpaceSuspenseInfiniteQueryOptions(options);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+/**
+ * @summary 현재 선택 Space 조회
+ */
+export const prefetchGetCurrentSpaceInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getCurrentSpace>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getCurrentSpace>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetCurrentSpaceSuspenseInfiniteQueryOptions(options);
+
+	await queryClient.prefetchInfiniteQuery(queryOptions);
+
+	return queryClient;
+};
 
 /**
  * 사용자가 접근 가능한 Tenant 중 하나를 선택 가능 대상으로 검증하고 Space 정보를 반환합니다.
  * @summary 현재 선택 Tenant 변경
  */
 export const setCurrentSpace = (
-    setCurrentSpaceDto: BodyType<SetCurrentSpaceDto>,
- options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+	setCurrentSpaceDto: BodyType<SetCurrentSpaceDto>,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customIdpInstance<SetCurrentSpace200AllOf>(
-      {url: `/api/v1/auth/current-space`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: setCurrentSpaceDto, signal
-    },
-      options);
-    }
-  
+	return customIdpInstance<SetCurrentSpace200AllOf>(
+		{
+			url: `/api/v1/auth/current-space`,
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			data: setCurrentSpaceDto,
+			signal,
+		},
+		options,
+	);
+};
 
+export const getSetCurrentSpaceMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof setCurrentSpace>>,
+		TError,
+		{ data: BodyType<SetCurrentSpaceDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof setCurrentSpace>>,
+	TError,
+	{ data: BodyType<SetCurrentSpaceDto> },
+	TContext
+> => {
+	const mutationKey = ["setCurrentSpace"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
-export const getSetCurrentSpaceMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof setCurrentSpace>>, TError,{data: BodyType<SetCurrentSpaceDto>}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof setCurrentSpace>>, TError,{data: BodyType<SetCurrentSpaceDto>}, TContext> => {
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof setCurrentSpace>>,
+		{ data: BodyType<SetCurrentSpaceDto> }
+	> = (props) => {
+		const { data } = props ?? {};
 
-const mutationKey = ['setCurrentSpace'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+		return setCurrentSpace(data, requestOptions);
+	};
 
-      
+	return { mutationFn, ...mutationOptions };
+};
 
+export type SetCurrentSpaceMutationResult = NonNullable<
+	Awaited<ReturnType<typeof setCurrentSpace>>
+>;
+export type SetCurrentSpaceMutationBody = BodyType<SetCurrentSpaceDto>;
+export type SetCurrentSpaceMutationError = ErrorType<void>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof setCurrentSpace>>, {data: BodyType<SetCurrentSpaceDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  setCurrentSpace(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SetCurrentSpaceMutationResult = NonNullable<Awaited<ReturnType<typeof setCurrentSpace>>>
-    export type SetCurrentSpaceMutationBody = BodyType<SetCurrentSpaceDto>
-    export type SetCurrentSpaceMutationError = ErrorType<void>
-
-    /**
+/**
  * @summary 현재 선택 Tenant 변경
  */
-export const useSetCurrentSpace = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof setCurrentSpace>>, TError,{data: BodyType<SetCurrentSpaceDto>}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof setCurrentSpace>>,
-        TError,
-        {data: BodyType<SetCurrentSpaceDto>},
-        TContext
-      > => {
+export const useSetCurrentSpace = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof setCurrentSpace>>,
+			TError,
+			{ data: BodyType<SetCurrentSpaceDto> },
+			TContext
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof setCurrentSpace>>,
+	TError,
+	{ data: BodyType<SetCurrentSpaceDto> },
+	TContext
+> => {
+	const mutationOptions = getSetCurrentSpaceMutationOptions(options);
 
-      const mutationOptions = getSetCurrentSpaceMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
+	return useMutation(mutationOptions, queryClient);
+};
+/**
  * 현재 사용자를 로그아웃하고 IDP 토큰을 무효화하며 쿠키를 삭제합니다.
  * @summary 로그아웃
  */
 export const logout = (
-    
- options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customIdpInstance<void>(
-      {url: `/api/v1/auth/logout`, method: 'POST', signal
-    },
-      options);
-    }
-  
+	return customIdpInstance<void>(
+		{ url: `/api/v1/auth/logout`, method: "POST", signal },
+		options,
+	);
+};
 
+export const getLogoutMutationOptions = <
+	TError = ErrorType<unknown>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof logout>>,
+		TError,
+		void,
+		TContext
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof logout>>,
+	TError,
+	void,
+	TContext
+> => {
+	const mutationKey = ["logout"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
-export const getLogoutMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof logout>>, TError,void, TContext>, request?: SecondParameter<typeof customIdpInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof logout>>, TError,void, TContext> => {
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof logout>>,
+		void
+	> = () => {
+		return logout(requestOptions);
+	};
 
-const mutationKey = ['logout'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+	return { mutationFn, ...mutationOptions };
+};
 
-      
+export type LogoutMutationResult = NonNullable<
+	Awaited<ReturnType<typeof logout>>
+>;
 
+export type LogoutMutationError = ErrorType<unknown>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof logout>>, void> = () => {
-          
-
-          return  logout(requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type LogoutMutationResult = NonNullable<Awaited<ReturnType<typeof logout>>>
-    
-    export type LogoutMutationError = ErrorType<unknown>
-
-    /**
+/**
  * @summary 로그아웃
  */
-export const useLogout = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof logout>>, TError,void, TContext>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof logout>>,
-        TError,
-        void,
-        TContext
-      > => {
+export const useLogout = <TError = ErrorType<unknown>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof logout>>,
+			TError,
+			void,
+			TContext
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof logout>>,
+	TError,
+	void,
+	TContext
+> => {
+	const mutationOptions = getLogoutMutationOptions(options);
 
-      const mutationOptions = getLogoutMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
+	return useMutation(mutationOptions, queryClient);
+};
+/**
  * 로그인 시도에 대한 감사 로그를 현재 선택 tenant scope 기준으로 조회합니다.
  * @summary 인증 감사 로그 조회
  */
 export const getAuthAuditLogs = (
-    params?: GetAuthAuditLogsParams,
- options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+	params?: GetAuthAuditLogsParams,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customIdpInstance<GetAuthAuditLogs200AllOf>(
-      {url: `/api/v1/auth/audit-logs`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-  
+	return customIdpInstance<GetAuthAuditLogs200AllOf>(
+		{ url: `/api/v1/auth/audit-logs`, method: "GET", params, signal },
+		options,
+	);
+};
 
-
-
-export const getGetAuthAuditLogsQueryKey = (params?: GetAuthAuditLogsParams,) => {
-    return [
-    `/api/v1/auth/audit-logs`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-export const getGetAuthAuditLogsInfiniteQueryKey = (params?: GetAuthAuditLogsParams,) => {
-    return [
-    'infinite', `/api/v1/auth/audit-logs`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getGetAuthAuditLogsQueryOptions = <TData = Awaited<ReturnType<typeof getAuthAuditLogs>>, TError = ErrorType<void>>(params?: GetAuthAuditLogsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogs>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const getGetAuthAuditLogsQueryKey = (
+	params?: GetAuthAuditLogsParams,
 ) => {
+	return [`/api/v1/auth/audit-logs`, ...(params ? [params] : [])] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAuthAuditLogsQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuthAuditLogs>>> = ({ signal }) => getAuthAuditLogs(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogs>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetAuthAuditLogsQueryResult = NonNullable<Awaited<ReturnType<typeof getAuthAuditLogs>>>
-export type GetAuthAuditLogsQueryError = ErrorType<void>
-
-
-export function useGetAuthAuditLogs<TData = Awaited<ReturnType<typeof getAuthAuditLogs>>, TError = ErrorType<void>>(
- params: undefined |  GetAuthAuditLogsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogs>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAuthAuditLogs>>,
-          TError,
-          Awaited<ReturnType<typeof getAuthAuditLogs>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAuthAuditLogs<TData = Awaited<ReturnType<typeof getAuthAuditLogs>>, TError = ErrorType<void>>(
- params?: GetAuthAuditLogsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogs>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAuthAuditLogs>>,
-          TError,
-          Awaited<ReturnType<typeof getAuthAuditLogs>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAuthAuditLogs<TData = Awaited<ReturnType<typeof getAuthAuditLogs>>, TError = ErrorType<void>>(
- params?: GetAuthAuditLogsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogs>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 인증 감사 로그 조회
- */
-
-export function useGetAuthAuditLogs<TData = Awaited<ReturnType<typeof getAuthAuditLogs>>, TError = ErrorType<void>>(
- params?: GetAuthAuditLogsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogs>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetAuthAuditLogsQueryOptions(params,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-/**
- * @summary 인증 감사 로그 조회
- */
-export const prefetchGetAuthAuditLogsQuery = async <TData = Awaited<ReturnType<typeof getAuthAuditLogs>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetAuthAuditLogsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogs>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetAuthAuditLogsQueryOptions(params,options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-export const getGetAuthAuditLogsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAuthAuditLogs>>, TError = ErrorType<void>>(params?: GetAuthAuditLogsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogs>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const getGetAuthAuditLogsInfiniteQueryKey = (
+	params?: GetAuthAuditLogsParams,
 ) => {
+	return [
+		"infinite",
+		`/api/v1/auth/audit-logs`,
+		...(params ? [params] : []),
+	] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAuthAuditLogsQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuthAuditLogs>>> = ({ signal }) => getAuthAuditLogs(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogs>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetAuthAuditLogsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAuthAuditLogs>>>
-export type GetAuthAuditLogsSuspenseQueryError = ErrorType<void>
-
-
-export function useGetAuthAuditLogsSuspense<TData = Awaited<ReturnType<typeof getAuthAuditLogs>>, TError = ErrorType<void>>(
- params: undefined |  GetAuthAuditLogsParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogs>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAuthAuditLogsSuspense<TData = Awaited<ReturnType<typeof getAuthAuditLogs>>, TError = ErrorType<void>>(
- params?: GetAuthAuditLogsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogs>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAuthAuditLogsSuspense<TData = Awaited<ReturnType<typeof getAuthAuditLogs>>, TError = ErrorType<void>>(
- params?: GetAuthAuditLogsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogs>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 인증 감사 로그 조회
- */
-
-export function useGetAuthAuditLogsSuspense<TData = Awaited<ReturnType<typeof getAuthAuditLogs>>, TError = ErrorType<void>>(
- params?: GetAuthAuditLogsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogs>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetAuthAuditLogsSuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const getGetAuthAuditLogsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAuthAuditLogs>>>, TError = ErrorType<void>>(params?: GetAuthAuditLogsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogs>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const getGetAuthAuditLogsQueryOptions = <
+	TData = Awaited<ReturnType<typeof getAuthAuditLogs>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetAuthAuditLogsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogs>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetAuthAuditLogsQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAuthAuditLogsInfiniteQueryKey(params);
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getAuthAuditLogs>>
+	> = ({ signal }) => getAuthAuditLogs(params, requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getAuthAuditLogs>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuthAuditLogs>>> = ({ signal }) => getAuthAuditLogs(params, requestOptions, signal);
+export type GetAuthAuditLogsQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getAuthAuditLogs>>
+>;
+export type GetAuthAuditLogsQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogs>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetAuthAuditLogsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAuthAuditLogs>>>
-export type GetAuthAuditLogsSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetAuthAuditLogsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAuthAuditLogs>>>, TError = ErrorType<void>>(
- params: undefined |  GetAuthAuditLogsParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogs>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAuthAuditLogsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAuthAuditLogs>>>, TError = ErrorType<void>>(
- params?: GetAuthAuditLogsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogs>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAuthAuditLogsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAuthAuditLogs>>>, TError = ErrorType<void>>(
- params?: GetAuthAuditLogsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogs>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAuthAuditLogs<
+	TData = Awaited<ReturnType<typeof getAuthAuditLogs>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetAuthAuditLogsParams,
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogs>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getAuthAuditLogs>>,
+					TError,
+					Awaited<ReturnType<typeof getAuthAuditLogs>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAuthAuditLogs<
+	TData = Awaited<ReturnType<typeof getAuthAuditLogs>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetAuthAuditLogsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogs>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getAuthAuditLogs>>,
+					TError,
+					Awaited<ReturnType<typeof getAuthAuditLogs>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAuthAuditLogs<
+	TData = Awaited<ReturnType<typeof getAuthAuditLogs>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetAuthAuditLogsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogs>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 인증 감사 로그 조회
  */
 
-export function useGetAuthAuditLogsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAuthAuditLogs>>>, TError = ErrorType<void>>(
- params?: GetAuthAuditLogsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogs>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetAuthAuditLogs<
+	TData = Awaited<ReturnType<typeof getAuthAuditLogs>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetAuthAuditLogsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogs>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetAuthAuditLogsQueryOptions(params, options);
 
-  const queryOptions = getGetAuthAuditLogsSuspenseInfiniteQueryOptions(params,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary 인증 감사 로그 조회
  */
-export const prefetchGetAuthAuditLogsInfiniteQuery = async <TData = Awaited<ReturnType<typeof getAuthAuditLogs>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetAuthAuditLogsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogs>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const prefetchGetAuthAuditLogsQuery = async <
+	TData = Awaited<ReturnType<typeof getAuthAuditLogs>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetAuthAuditLogsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogs>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetAuthAuditLogsQueryOptions(params, options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getGetAuthAuditLogsSuspenseInfiniteQueryOptions(params,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
+export const getGetAuthAuditLogsSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getAuthAuditLogs>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetAuthAuditLogsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogs>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  return queryClient;
+	const queryKey =
+		queryOptions?.queryKey ?? getGetAuthAuditLogsQueryKey(params);
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getAuthAuditLogs>>
+	> = ({ signal }) => getAuthAuditLogs(params, requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getAuthAuditLogs>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetAuthAuditLogsSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getAuthAuditLogs>>
+>;
+export type GetAuthAuditLogsSuspenseQueryError = ErrorType<void>;
+
+export function useGetAuthAuditLogsSuspense<
+	TData = Awaited<ReturnType<typeof getAuthAuditLogs>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetAuthAuditLogsParams,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogs>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAuthAuditLogsSuspense<
+	TData = Awaited<ReturnType<typeof getAuthAuditLogs>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetAuthAuditLogsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogs>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAuthAuditLogsSuspense<
+	TData = Awaited<ReturnType<typeof getAuthAuditLogs>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetAuthAuditLogsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogs>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 인증 감사 로그 조회
+ */
+
+export function useGetAuthAuditLogsSuspense<
+	TData = Awaited<ReturnType<typeof getAuthAuditLogs>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetAuthAuditLogsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogs>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetAuthAuditLogsSuspenseQueryOptions(params, options);
+
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
 }
 
+export const getGetAuthAuditLogsSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getAuthAuditLogs>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetAuthAuditLogsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogs>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
+	const queryKey =
+		queryOptions?.queryKey ?? getGetAuthAuditLogsInfiniteQueryKey(params);
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getAuthAuditLogs>>
+	> = ({ signal }) => getAuthAuditLogs(params, requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getAuthAuditLogs>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetAuthAuditLogsSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getAuthAuditLogs>>
+>;
+export type GetAuthAuditLogsSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetAuthAuditLogsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getAuthAuditLogs>>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetAuthAuditLogsParams,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogs>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAuthAuditLogsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getAuthAuditLogs>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetAuthAuditLogsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogs>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAuthAuditLogsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getAuthAuditLogs>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetAuthAuditLogsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogs>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 인증 감사 로그 조회
+ */
+
+export function useGetAuthAuditLogsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getAuthAuditLogs>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetAuthAuditLogsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogs>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetAuthAuditLogsSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+/**
+ * @summary 인증 감사 로그 조회
+ */
+export const prefetchGetAuthAuditLogsInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getAuthAuditLogs>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetAuthAuditLogsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogs>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetAuthAuditLogsSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
+
+	await queryClient.prefetchInfiniteQuery(queryOptions);
+
+	return queryClient;
+};
 
 /**
  * 오늘의 로그인 성공/실패/잠금 건수와 전체 건수를 조회합니다.
  * @summary 감사 로그 통계 조회
  */
 export const getAuthAuditLogStats = (
-    
- options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customIdpInstance<GetAuthAuditLogStats200AllOf>(
-      {url: `/api/v1/auth/audit-logs/stats`, method: 'GET', signal
-    },
-      options);
-    }
-  
-
-
+	return customIdpInstance<GetAuthAuditLogStats200AllOf>(
+		{ url: `/api/v1/auth/audit-logs/stats`, method: "GET", signal },
+		options,
+	);
+};
 
 export const getGetAuthAuditLogStatsQueryKey = () => {
-    return [
-    `/api/v1/auth/audit-logs/stats`
-    ] as const;
-    }
+	return [`/api/v1/auth/audit-logs/stats`] as const;
+};
 
 export const getGetAuthAuditLogStatsInfiniteQueryKey = () => {
-    return [
-    'infinite', `/api/v1/auth/audit-logs/stats`
-    ] as const;
-    }
+	return ["infinite", `/api/v1/auth/audit-logs/stats`] as const;
+};
 
-    
-export const getGetAuthAuditLogStatsQueryOptions = <TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError = ErrorType<void>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-) => {
+export const getGetAuthAuditLogStatsQueryOptions = <
+	TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseQueryOptions<
+			Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getGetAuthAuditLogStatsQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAuthAuditLogStatsQueryKey();
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getAuthAuditLogStats>>
+	> = ({ signal }) => getAuthAuditLogStats(requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuthAuditLogStats>>> = ({ signal }) => getAuthAuditLogStats(requestOptions, signal);
+export type GetAuthAuditLogStatsQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getAuthAuditLogStats>>
+>;
+export type GetAuthAuditLogStatsQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetAuthAuditLogStatsQueryResult = NonNullable<Awaited<ReturnType<typeof getAuthAuditLogStats>>>
-export type GetAuthAuditLogStatsQueryError = ErrorType<void>
-
-
-export function useGetAuthAuditLogStats<TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAuthAuditLogStats>>,
-          TError,
-          Awaited<ReturnType<typeof getAuthAuditLogStats>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAuthAuditLogStats<TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAuthAuditLogStats>>,
-          TError,
-          Awaited<ReturnType<typeof getAuthAuditLogStats>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAuthAuditLogStats<TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAuthAuditLogStats<
+	TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+					TError,
+					Awaited<ReturnType<typeof getAuthAuditLogStats>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAuthAuditLogStats<
+	TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+					TError,
+					Awaited<ReturnType<typeof getAuthAuditLogStats>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAuthAuditLogStats<
+	TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 감사 로그 통계 조회
  */
 
-export function useGetAuthAuditLogStats<TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetAuthAuditLogStats<
+	TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetAuthAuditLogStatsQueryOptions(options);
 
-  const queryOptions = getGetAuthAuditLogStatsQueryOptions(options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-/**
- * @summary 감사 로그 통계 조회
- */
-export const prefetchGetAuthAuditLogStatsQuery = async <TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError = ErrorType<void>>(
- queryClient: QueryClient,  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetAuthAuditLogStatsQueryOptions(options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-export const getGetAuthAuditLogStatsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAuthAuditLogStatsQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuthAuditLogStats>>> = ({ signal }) => getAuthAuditLogStats(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetAuthAuditLogStatsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getAuthAuditLogStats>>>
-export type GetAuthAuditLogStatsSuspenseQueryError = ErrorType<void>
-
-
-export function useGetAuthAuditLogStatsSuspense<TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAuthAuditLogStatsSuspense<TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAuthAuditLogStatsSuspense<TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 감사 로그 통계 조회
- */
-
-export function useGetAuthAuditLogStatsSuspense<TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetAuthAuditLogStatsSuspenseQueryOptions(options)
-
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const getGetAuthAuditLogStatsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getAuthAuditLogStats>>>, TError = ErrorType<void>>( options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAuthAuditLogStatsInfiniteQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuthAuditLogStats>>> = ({ signal }) => getAuthAuditLogStats(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetAuthAuditLogStatsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getAuthAuditLogStats>>>
-export type GetAuthAuditLogStatsSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetAuthAuditLogStatsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAuthAuditLogStats>>>, TError = ErrorType<void>>(
-  options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAuthAuditLogStatsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAuthAuditLogStats>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAuthAuditLogStatsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAuthAuditLogStats>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 감사 로그 통계 조회
- */
-
-export function useGetAuthAuditLogStatsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getAuthAuditLogStats>>>, TError = ErrorType<void>>(
-  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetAuthAuditLogStatsSuspenseInfiniteQueryOptions(options)
-
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary 감사 로그 통계 조회
  */
-export const prefetchGetAuthAuditLogStatsInfiniteQuery = async <TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError = ErrorType<void>>(
- queryClient: QueryClient,  options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getAuthAuditLogStats>>, TError, TData>>, request?: SecondParameter<typeof customIdpInstance>}
+export const prefetchGetAuthAuditLogStatsQuery = async <
+	TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetAuthAuditLogStatsQueryOptions(options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getGetAuthAuditLogStatsSuspenseInfiniteQueryOptions(options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
+export const getGetAuthAuditLogStatsSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseQueryOptions<
+			Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  return queryClient;
+	const queryKey = queryOptions?.queryKey ?? getGetAuthAuditLogStatsQueryKey();
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getAuthAuditLogStats>>
+	> = ({ signal }) => getAuthAuditLogStats(requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetAuthAuditLogStatsSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getAuthAuditLogStats>>
+>;
+export type GetAuthAuditLogStatsSuspenseQueryError = ErrorType<void>;
+
+export function useGetAuthAuditLogStatsSuspense<
+	TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAuthAuditLogStatsSuspense<
+	TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAuthAuditLogStatsSuspense<
+	TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 감사 로그 통계 조회
+ */
+
+export function useGetAuthAuditLogStatsSuspense<
+	TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetAuthAuditLogStatsSuspenseQueryOptions(options);
+
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
 }
 
+export const getGetAuthAuditLogStatsSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getAuthAuditLogStats>>>,
+	TError = ErrorType<void>,
+>(options?: {
+	query?: Partial<
+		UseSuspenseInfiniteQueryOptions<
+			Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+			TError,
+			TData
+		>
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
+	const queryKey =
+		queryOptions?.queryKey ?? getGetAuthAuditLogStatsInfiniteQueryKey();
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getAuthAuditLogStats>>
+	> = ({ signal }) => getAuthAuditLogStats(requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetAuthAuditLogStatsSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getAuthAuditLogStats>>
+>;
+export type GetAuthAuditLogStatsSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetAuthAuditLogStatsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getAuthAuditLogStats>>>,
+	TError = ErrorType<void>,
+>(
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAuthAuditLogStatsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getAuthAuditLogStats>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAuthAuditLogStatsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getAuthAuditLogStats>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 감사 로그 통계 조회
+ */
+
+export function useGetAuthAuditLogStatsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getAuthAuditLogStats>>>,
+	TError = ErrorType<void>,
+>(
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions =
+		getGetAuthAuditLogStatsSuspenseInfiniteQueryOptions(options);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+/**
+ * @summary 감사 로그 통계 조회
+ */
+export const prefetchGetAuthAuditLogStatsInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getAuthAuditLogStats>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions =
+		getGetAuthAuditLogStatsSuspenseInfiniteQueryOptions(options);
+
+	await queryClient.prefetchInfiniteQuery(queryOptions);
+
+	return queryClient;
+};
 
 /**
  * 잠긴 계정을 해제합니다. PLATFORM_ADMIN 권한이 필요합니다.
  * @summary 계정 잠금 해제
  */
 export const unlockAccount = (
-    userId: string,
- options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+	userId: string,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customIdpInstance<UnlockAccount200AllOf>(
-      {url: `/api/v1/auth/users/${userId}/unlock`, method: 'POST', signal
-    },
-      options);
-    }
-  
+	return customIdpInstance<UnlockAccount200AllOf>(
+		{ url: `/api/v1/auth/users/${userId}/unlock`, method: "POST", signal },
+		options,
+	);
+};
 
+export const getUnlockAccountMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof unlockAccount>>,
+		TError,
+		{ userId: string },
+		TContext
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof unlockAccount>>,
+	TError,
+	{ userId: string },
+	TContext
+> => {
+	const mutationKey = ["unlockAccount"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
-export const getUnlockAccountMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unlockAccount>>, TError,{userId: string}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof unlockAccount>>, TError,{userId: string}, TContext> => {
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof unlockAccount>>,
+		{ userId: string }
+	> = (props) => {
+		const { userId } = props ?? {};
 
-const mutationKey = ['unlockAccount'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+		return unlockAccount(userId, requestOptions);
+	};
 
-      
+	return { mutationFn, ...mutationOptions };
+};
 
+export type UnlockAccountMutationResult = NonNullable<
+	Awaited<ReturnType<typeof unlockAccount>>
+>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof unlockAccount>>, {userId: string}> = (props) => {
-          const {userId} = props ?? {};
+export type UnlockAccountMutationError = ErrorType<void>;
 
-          return  unlockAccount(userId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UnlockAccountMutationResult = NonNullable<Awaited<ReturnType<typeof unlockAccount>>>
-    
-    export type UnlockAccountMutationError = ErrorType<void>
-
-    /**
+/**
  * @summary 계정 잠금 해제
  */
-export const useUnlockAccount = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unlockAccount>>, TError,{userId: string}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof unlockAccount>>,
-        TError,
-        {userId: string},
-        TContext
-      > => {
+export const useUnlockAccount = <TError = ErrorType<void>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof unlockAccount>>,
+			TError,
+			{ userId: string },
+			TContext
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof unlockAccount>>,
+	TError,
+	{ userId: string },
+	TContext
+> => {
+	const mutationOptions = getUnlockAccountMutationOptions(options);
 
-      const mutationOptions = getUnlockAccountMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
+	return useMutation(mutationOptions, queryClient);
+};
+/**
  * 임시 비밀번호를 생성하여 이메일로 발송합니다. PLATFORM_ADMIN 권한이 필요합니다.
  * @summary 비밀번호 강제 재설정
  */
 export const forceResetPassword = (
-    userId: string,
- options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+	userId: string,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customIdpInstance<ForceResetPassword200AllOf>(
-      {url: `/api/v1/auth/users/${userId}/force-reset-password`, method: 'POST', signal
-    },
-      options);
-    }
-  
+	return customIdpInstance<ForceResetPassword200AllOf>(
+		{
+			url: `/api/v1/auth/users/${userId}/force-reset-password`,
+			method: "POST",
+			signal,
+		},
+		options,
+	);
+};
 
+export const getForceResetPasswordMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof forceResetPassword>>,
+		TError,
+		{ userId: string },
+		TContext
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof forceResetPassword>>,
+	TError,
+	{ userId: string },
+	TContext
+> => {
+	const mutationKey = ["forceResetPassword"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
-export const getForceResetPasswordMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof forceResetPassword>>, TError,{userId: string}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof forceResetPassword>>, TError,{userId: string}, TContext> => {
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof forceResetPassword>>,
+		{ userId: string }
+	> = (props) => {
+		const { userId } = props ?? {};
 
-const mutationKey = ['forceResetPassword'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+		return forceResetPassword(userId, requestOptions);
+	};
 
-      
+	return { mutationFn, ...mutationOptions };
+};
 
+export type ForceResetPasswordMutationResult = NonNullable<
+	Awaited<ReturnType<typeof forceResetPassword>>
+>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof forceResetPassword>>, {userId: string}> = (props) => {
-          const {userId} = props ?? {};
+export type ForceResetPasswordMutationError = ErrorType<void>;
 
-          return  forceResetPassword(userId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type ForceResetPasswordMutationResult = NonNullable<Awaited<ReturnType<typeof forceResetPassword>>>
-    
-    export type ForceResetPasswordMutationError = ErrorType<void>
-
-    /**
+/**
  * @summary 비밀번호 강제 재설정
  */
-export const useForceResetPassword = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof forceResetPassword>>, TError,{userId: string}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof forceResetPassword>>,
-        TError,
-        {userId: string},
-        TContext
-      > => {
+export const useForceResetPassword = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof forceResetPassword>>,
+			TError,
+			{ userId: string },
+			TContext
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof forceResetPassword>>,
+	TError,
+	{ userId: string },
+	TContext
+> => {
+	const mutationOptions = getForceResetPasswordMutationOptions(options);
 
-      const mutationOptions = getForceResetPasswordMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
+	return useMutation(mutationOptions, queryClient);
+};
+/**
  * 특정 사용자의 모든 세션을 강제 종료합니다. PLATFORM_ADMIN 권한이 필요합니다.
  * @summary 사용자 전체 세션 무효화
  */
 export const invalidateUserSessions = (
-    userId: string,
- options?: SecondParameter<typeof customIdpInstance>,signal?: AbortSignal
+	userId: string,
+	options?: SecondParameter<typeof customIdpInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customIdpInstance<InvalidateUserSessions200AllOf>(
-      {url: `/api/v1/auth/users/${userId}/invalidate-sessions`, method: 'POST', signal
-    },
-      options);
-    }
-  
+	return customIdpInstance<InvalidateUserSessions200AllOf>(
+		{
+			url: `/api/v1/auth/users/${userId}/invalidate-sessions`,
+			method: "POST",
+			signal,
+		},
+		options,
+	);
+};
 
+export const getInvalidateUserSessionsMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof invalidateUserSessions>>,
+		TError,
+		{ userId: string },
+		TContext
+	>;
+	request?: SecondParameter<typeof customIdpInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof invalidateUserSessions>>,
+	TError,
+	{ userId: string },
+	TContext
+> => {
+	const mutationKey = ["invalidateUserSessions"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
-export const getInvalidateUserSessionsMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof invalidateUserSessions>>, TError,{userId: string}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof invalidateUserSessions>>, TError,{userId: string}, TContext> => {
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof invalidateUserSessions>>,
+		{ userId: string }
+	> = (props) => {
+		const { userId } = props ?? {};
 
-const mutationKey = ['invalidateUserSessions'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+		return invalidateUserSessions(userId, requestOptions);
+	};
 
-      
+	return { mutationFn, ...mutationOptions };
+};
 
+export type InvalidateUserSessionsMutationResult = NonNullable<
+	Awaited<ReturnType<typeof invalidateUserSessions>>
+>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof invalidateUserSessions>>, {userId: string}> = (props) => {
-          const {userId} = props ?? {};
+export type InvalidateUserSessionsMutationError = ErrorType<void>;
 
-          return  invalidateUserSessions(userId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type InvalidateUserSessionsMutationResult = NonNullable<Awaited<ReturnType<typeof invalidateUserSessions>>>
-    
-    export type InvalidateUserSessionsMutationError = ErrorType<void>
-
-    /**
+/**
  * @summary 사용자 전체 세션 무효화
  */
-export const useInvalidateUserSessions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof invalidateUserSessions>>, TError,{userId: string}, TContext>, request?: SecondParameter<typeof customIdpInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof invalidateUserSessions>>,
-        TError,
-        {userId: string},
-        TContext
-      > => {
+export const useInvalidateUserSessions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof invalidateUserSessions>>,
+			TError,
+			{ userId: string },
+			TContext
+		>;
+		request?: SecondParameter<typeof customIdpInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof invalidateUserSessions>>,
+	TError,
+	{ userId: string },
+	TContext
+> => {
+	const mutationOptions = getInvalidateUserSessionsMutationOptions(options);
 
-      const mutationOptions = getInvalidateUserSessionsMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    
+	return useMutation(mutationOptions, queryClient);
+};

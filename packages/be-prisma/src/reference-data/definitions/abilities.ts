@@ -1,6 +1,6 @@
 import {
-	adminPlatformAdminAbilitySeedData,
 	adminCompanyManagerMenuAccessAbilitySeedData,
+	adminPlatformAdminAbilitySeedData,
 } from "./admin-permissions";
 
 /**

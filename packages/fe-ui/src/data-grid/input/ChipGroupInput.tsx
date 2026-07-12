@@ -2,8 +2,8 @@
 
 import type { DataGridState, InputConfig } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
-import { Button } from "../../input/Button/Button";
 import { useT } from "../../i18n";
+import { Button } from "../../input/Button/Button";
 
 interface ChipGroupInputProps {
 	config: InputConfig;

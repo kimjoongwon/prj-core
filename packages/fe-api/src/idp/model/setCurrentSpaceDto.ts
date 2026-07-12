@@ -16,9 +16,9 @@
  */
 
 export interface SetCurrentSpaceDto {
-  /**
-   * 현재 선택할 Tenant ID
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  tenantId: string;
+	/**
+	 * 현재 선택할 Tenant ID
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	tenantId: string;
 }

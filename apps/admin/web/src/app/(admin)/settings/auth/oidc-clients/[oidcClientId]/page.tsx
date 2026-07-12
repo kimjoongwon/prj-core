@@ -34,102 +34,100 @@ export default observer(function OidcClientDetailRoute() {
 		useToggleActiveOidcClient();
 
 	return (
-		<>
-			<OidcClientEditScreen
-				title="OIDC Client 상세"
-				description={
-					client
-						? `${client.clientId} Client 설정을 확인합니다.`
-						: "OIDC Client를 찾을 수 없습니다."
-				}
-				state={state}
-				readOnly
-				isLoading={isLoading}
-				notFound={!isLoading && !client}
-				notFoundAction={
+		<OidcClientEditScreen
+			title="OIDC Client 상세"
+			description={
+				client
+					? `${client.clientId} Client 설정을 확인합니다.`
+					: "OIDC Client를 찾을 수 없습니다."
+			}
+			state={state}
+			readOnly
+			isLoading={isLoading}
+			notFound={!isLoading && !client}
+			notFoundAction={
+				<Button
+					variant="flat"
+					onPress={() => {
+						router.push("/settings/auth/oidc-clients" as Route);
+					}}
+				>
+					목록으로
+				</Button>
+			}
+			actions={
+				<div className="flex flex-wrap gap-2">
 					<Button
-						variant="flat"
+						variant="light"
+						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push("/settings/auth/oidc-clients" as Route);
 						}}
 					>
 						목록으로
 					</Button>
-				}
-				actions={
-					<div className="flex flex-wrap gap-2">
-						<Button
-							variant="light"
-							startContent={<ArrowLeft className="h-4 w-4" />}
-							onPress={() => {
-								router.push("/settings/auth/oidc-clients" as Route);
-							}}
-						>
-							목록으로
-						</Button>
-						{client ? (
-							<>
-								<Button
-									variant="flat"
-									color="primary"
-									startContent={<Edit className="h-4 w-4" />}
-									onPress={() => {
-										router.push(
-											`/settings/auth/oidc-clients/${oidcClientId}/edit` as Route,
-										);
-									}}
-								>
-									수정
-								</Button>
-								<Button
-									variant="flat"
-									color={client.isActive ? "warning" : "success"}
-									startContent={
-										client.isActive ? (
-											<PowerOff className="h-4 w-4" />
-										) : (
-											<Power className="h-4 w-4" />
-										)
-									}
-									isLoading={isToggling}
-									onPress={() => {
-										toggleActive({ oidcClientId });
-									}}
-								>
-									{client.isActive ? "비활성화" : "활성화"}
-								</Button>
-								<Button
-									variant="flat"
-									color="danger"
-									startContent={<Trash2 className="h-4 w-4" />}
-									isLoading={isDeleting}
-									onPress={() => {
-										deleteClient({ oidcClientId });
-									}}
-								>
-									삭제
-								</Button>
-							</>
-						) : null}
-					</div>
-				}
-			>
-				{client ? (
-					<SectionLike title="상태 정보">
-						<dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
-							<Info
-								label="활성 상태"
-								value={client.isActive ? "활성" : "비활성"}
-							/>
-							<Info
-								label="등록일"
-								value={new Date(client.createdAt).toLocaleString("ko-KR")}
-							/>
-						</dl>
-					</SectionLike>
-				) : null}
-			</OidcClientEditScreen>
-		</>
+					{client ? (
+						<>
+							<Button
+								variant="flat"
+								color="primary"
+								startContent={<Edit className="h-4 w-4" />}
+								onPress={() => {
+									router.push(
+										`/settings/auth/oidc-clients/${oidcClientId}/edit` as Route,
+									);
+								}}
+							>
+								수정
+							</Button>
+							<Button
+								variant="flat"
+								color={client.isActive ? "warning" : "success"}
+								startContent={
+									client.isActive ? (
+										<PowerOff className="h-4 w-4" />
+									) : (
+										<Power className="h-4 w-4" />
+									)
+								}
+								isLoading={isToggling}
+								onPress={() => {
+									toggleActive({ oidcClientId });
+								}}
+							>
+								{client.isActive ? "비활성화" : "활성화"}
+							</Button>
+							<Button
+								variant="flat"
+								color="danger"
+								startContent={<Trash2 className="h-4 w-4" />}
+								isLoading={isDeleting}
+								onPress={() => {
+									deleteClient({ oidcClientId });
+								}}
+							>
+								삭제
+							</Button>
+						</>
+					) : null}
+				</div>
+			}
+		>
+			{client ? (
+				<SectionLike title="상태 정보">
+					<dl className="grid grid-cols-1 gap-4 md:grid-cols-2">
+						<Info
+							label="활성 상태"
+							value={client.isActive ? "활성" : "비활성"}
+						/>
+						<Info
+							label="등록일"
+							value={new Date(client.createdAt).toLocaleString("ko-KR")}
+						/>
+					</dl>
+				</SectionLike>
+			) : null}
+		</OidcClientEditScreen>
 	);
 });
 

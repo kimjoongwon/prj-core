@@ -38,5 +38,4 @@ export class AlbumQueryDto extends QueryDto {
 		Array.isArray(value) ? value : value ? [value] : [],
 	)
 	sort?: string[];
-
 }

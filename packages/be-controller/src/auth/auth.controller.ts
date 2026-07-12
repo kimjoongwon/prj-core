@@ -493,5 +493,4 @@ export class AuthController {
 	async invalidateUserSessions(@Param("userId", ParseUUIDPipe) userId: string) {
 		return this.commandBus.execute(new InvalidateUserSessionsCommand(userId));
 	}
-
 }

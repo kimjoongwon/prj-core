@@ -18,16 +18,16 @@
 /**
  * 변경할 상태
  */
-export type UpdateInquiryStatusBodyStatus = typeof UpdateInquiryStatusBodyStatus[keyof typeof UpdateInquiryStatusBodyStatus];
-
+export type UpdateInquiryStatusBodyStatus =
+	(typeof UpdateInquiryStatusBodyStatus)[keyof typeof UpdateInquiryStatusBodyStatus];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const UpdateInquiryStatusBodyStatus = {
-  NEW: 'NEW',
-  OPEN: 'OPEN',
-  IN_PROGRESS: 'IN_PROGRESS',
-  WAITING_CUSTOMER: 'WAITING_CUSTOMER',
-  RESOLVED: 'RESOLVED',
-  CLOSED: 'CLOSED',
-  ESCALATED: 'ESCALATED',
+	NEW: "NEW",
+	OPEN: "OPEN",
+	IN_PROGRESS: "IN_PROGRESS",
+	WAITING_CUSTOMER: "WAITING_CUSTOMER",
+	RESOLVED: "RESOLVED",
+	CLOSED: "CLOSED",
+	ESCALATED: "ESCALATED",
 } as const;

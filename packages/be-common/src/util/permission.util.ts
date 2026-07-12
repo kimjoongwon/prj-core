@@ -1,6 +1,6 @@
 import { SYSTEM_ROLES } from "@cocrepo/constant";
-import type { ContextTenantSnapshot } from "@cocrepo/type";
 import { SpaceCategoryName } from "@cocrepo/enum";
+import type { ContextTenantSnapshot } from "@cocrepo/type";
 
 type TenantWithSpaceCategory = ContextTenantSnapshot & {
 	space?: {
@@ -22,7 +22,9 @@ type TenantWithSpaceCategory = ContextTenantSnapshot & {
 	} | null;
 };
 
-function resolveTenantSpaceCategoryName(tenant: ContextTenantSnapshot): string | undefined {
+function resolveTenantSpaceCategoryName(
+	tenant: ContextTenantSnapshot,
+): string | undefined {
 	const tenantWithSpaceCategory = tenant as TenantWithSpaceCategory;
 	return (
 		tenantWithSpaceCategory.space?.classification?.category?.name ??
@@ -32,7 +34,9 @@ function resolveTenantSpaceCategoryName(tenant: ContextTenantSnapshot): string |
 	);
 }
 
-export function resolveTenantSpaceId(tenant: ContextTenantSnapshot): string | undefined {
+export function resolveTenantSpaceId(
+	tenant: ContextTenantSnapshot,
+): string | undefined {
 	return tenant.space?.id ?? tenant.spaceId ?? undefined;
 }
 

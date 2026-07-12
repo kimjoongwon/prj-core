@@ -14,36 +14,36 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { InquiryCategory } from './inquiryCategory';
-import type { InquiryChannel } from './inquiryChannel';
-import type { InquirySource } from './inquirySource';
-import type { InquiryPriority } from './inquiryPriority';
+import type { InquiryCategory } from "./inquiryCategory";
+import type { InquiryChannel } from "./inquiryChannel";
+import type { InquiryPriority } from "./inquiryPriority";
+import type { InquirySource } from "./inquirySource";
 
 export interface CreateInquiryDto {
-  /**
-   * 문의 제목
-   * @minLength 2
-   * @maxLength 200
-   */
-  title: string;
-  /** 문의 카테고리 */
-  category: InquiryCategory;
-  /** 문의 채널 */
-  channel: InquiryChannel;
-  /** 문의 접수 유형 (기본값: ONLINE) */
-  source?: InquirySource;
-  /** 문의 우선순위 (기본값: NORMAL) */
-  priority?: InquiryPriority;
-  /**
-   * 고객 ID
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  customerId?: string;
-  /**
-   * 담당자 ID
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  assigneeId?: string;
-  /** 문의 내용 (첫 메시지) */
-  content?: string;
+	/**
+	 * 문의 제목
+	 * @minLength 2
+	 * @maxLength 200
+	 */
+	title: string;
+	/** 문의 카테고리 */
+	category: InquiryCategory;
+	/** 문의 채널 */
+	channel: InquiryChannel;
+	/** 문의 접수 유형 (기본값: ONLINE) */
+	source?: InquirySource;
+	/** 문의 우선순위 (기본값: NORMAL) */
+	priority?: InquiryPriority;
+	/**
+	 * 고객 ID
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	customerId?: string;
+	/**
+	 * 담당자 ID
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	assigneeId?: string;
+	/** 문의 내용 (첫 메시지) */
+	content?: string;
 }

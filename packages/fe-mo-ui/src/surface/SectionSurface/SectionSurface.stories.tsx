@@ -29,9 +29,7 @@ export const Default: Story = {
 					</Text>
 				</View>
 				<Surface className="gap-1 rounded-xl p-3" variant="tertiary">
-					<Text className="text-sm font-bold text-foreground">
-						다음 예약
-					</Text>
+					<Text className="text-sm font-bold text-foreground">다음 예약</Text>
 					<Text className="text-sm leading-5 text-muted">
 						오전 10:30, 강남 리포머 센터
 					</Text>

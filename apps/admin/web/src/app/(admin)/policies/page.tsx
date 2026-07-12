@@ -1,8 +1,8 @@
 "use client";
 
-import { toast } from "@heroui/react";
 import { useDeletePolicy, useGetPolicies } from "@cocrepo/api/core/policies";
 import { PolicyListScreen } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
@@ -13,7 +13,9 @@ export default observer(function PoliciesPageRoute() {
 	const { mutate: deletePolicy } = useDeletePolicy({
 		mutation: {
 			onSuccess: () => {
-				toast.success("정책 삭제", { description: "정책 삭제 요청이 처리되었습니다." });
+				toast.success("정책 삭제", {
+					description: "정책 삭제 요청이 처리되었습니다.",
+				});
 			},
 		},
 	});
@@ -35,16 +37,14 @@ export default observer(function PoliciesPageRoute() {
 	};
 
 	return (
-		<>
-			<PolicyListScreen
-				policies={response?.data}
-				totalCount={response?.meta?.total ?? response?.data?.length ?? 0}
-				isLoading={isLoading}
-				onClickCreateButton={onClickCreateButton}
-				onClickPolicyRow={onClickPolicyRow}
-				onClickEditPolicyButton={onClickEditPolicyButton}
-				onClickDeletePolicyButton={onClickDeletePolicyButton}
-			/>
-		</>
+		<PolicyListScreen
+			policies={response?.data}
+			totalCount={response?.meta?.total ?? response?.data?.length ?? 0}
+			isLoading={isLoading}
+			onClickCreateButton={onClickCreateButton}
+			onClickPolicyRow={onClickPolicyRow}
+			onClickEditPolicyButton={onClickEditPolicyButton}
+			onClickDeletePolicyButton={onClickDeletePolicyButton}
+		/>
 	);
 });

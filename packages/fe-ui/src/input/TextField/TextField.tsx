@@ -7,7 +7,11 @@ import {
 	InputGroup,
 	Label,
 } from "@heroui/react";
-import type { ChangeEventHandler, ComponentProps, FocusEventHandler } from "react";
+import type {
+	ChangeEventHandler,
+	ComponentProps,
+	FocusEventHandler,
+} from "react";
 import { translateNode, useT } from "../../i18n";
 import type { TextFieldProps } from "./TextField.props";
 import { resolveTextFieldValue } from "./text-field-value.resolver";

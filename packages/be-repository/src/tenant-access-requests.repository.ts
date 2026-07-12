@@ -45,8 +45,7 @@ export class TenantAccessRequestsRepository {
 	): TenantAccessRequest {
 		const primaryGround = result.space?.company?.ground;
 		if (primaryGround) {
-			(result.space as unknown as { ground?: unknown }).ground =
-				primaryGround;
+			(result.space as unknown as { ground?: unknown }).ground = primaryGround;
 		}
 
 		return plainToInstance(TenantAccessRequest, result);

@@ -14,8 +14,8 @@ import {
 	X,
 } from "lucide-react";
 import type { DragEvent } from "react";
-import { Button } from "../../input/Button/Button";
 import { useT } from "../../i18n";
+import { Button } from "../../input/Button/Button";
 import {
 	getColumnConfigId,
 	getRowGroupableColumnConfigs,

@@ -1,7 +1,9 @@
-import type { Request, Response } from "express";
 import type { SubmitInteractionLoginCommandInput } from "@cocrepo/input";
+import type { Request, Response } from "express";
 
-export class SubmitInteractionLoginCommand implements SubmitInteractionLoginCommandInput {
+export class SubmitInteractionLoginCommand
+	implements SubmitInteractionLoginCommandInput
+{
 	readonly email!: SubmitInteractionLoginCommandInput["email"];
 	readonly password!: SubmitInteractionLoginCommandInput["password"];
 	readonly remember?: SubmitInteractionLoginCommandInput["remember"];

@@ -325,7 +325,11 @@ describe("Role 시스템 통합 테스트", () => {
 				// Given
 				mockReflector.get.mockReturnValue(["일반"]);
 				const associations = [{ group: { name: "일반" } }];
-				const user = createMockUser(SYSTEM_ROLES.MEMBER, undefined, associations);
+				const user = createMockUser(
+					SYSTEM_ROLES.MEMBER,
+					undefined,
+					associations,
+				);
 				const tenant = createMockTenant(
 					SYSTEM_ROLES.MEMBER,
 					undefined,
@@ -345,7 +349,11 @@ describe("Role 시스템 통합 테스트", () => {
 				// Given
 				mockReflector.get.mockReturnValue(["프리미엄"]);
 				const associations = [{ group: { name: "일반" } }];
-				const user = createMockUser(SYSTEM_ROLES.MEMBER, undefined, associations);
+				const user = createMockUser(
+					SYSTEM_ROLES.MEMBER,
+					undefined,
+					associations,
+				);
 				const tenant = createMockTenant(
 					SYSTEM_ROLES.MEMBER,
 					undefined,
@@ -416,7 +424,11 @@ describe("Role 시스템 통합 테스트", () => {
 				// Given
 				mockReflector.get.mockReturnValue(["프리미엄"]);
 				const associations = [{ group: { name: "일반" } }];
-				const user = createMockUser(SYSTEM_ROLES.MEMBER, undefined, associations);
+				const user = createMockUser(
+					SYSTEM_ROLES.MEMBER,
+					undefined,
+					associations,
+				);
 				const tenant = createMockTenant(
 					SYSTEM_ROLES.MEMBER,
 					undefined,

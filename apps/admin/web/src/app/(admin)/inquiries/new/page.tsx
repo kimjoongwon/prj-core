@@ -23,9 +23,7 @@ import { useEffect } from "react";
 
 const REQUIRED_MESSAGE = "필수 항목입니다.";
 
-const normalizeFormOptionValue = (
-	value: unknown,
-): FormOptionItem["value"] => {
+const normalizeFormOptionValue = (value: unknown): FormOptionItem["value"] => {
 	if (
 		typeof value === "string" ||
 		typeof value === "number" ||
@@ -184,47 +182,45 @@ export default observer(function InquiriesNewPageRoute() {
 	};
 
 	return (
-		<>
-			<InquiryEditScreen
-				title="문의 접수"
-				description="문의 생성 bootstrap을 이용해 문의를 등록합니다."
-				formState={state}
-				bootstrap={
-					bootstrap
-						? {
-								fieldMeta: bootstrap.fieldMeta,
-								ui: bootstrap.ui,
-								options: bootstrapOptions,
-							}
-						: undefined
-				}
-				categoryOptions={mapSelectOptions(bootstrapOptions.category)}
-				channelOptions={mapSelectOptions(bootstrapOptions.channel)}
-				priorityOptions={mapSelectOptions(bootstrapOptions.priority)}
-				isLoading={isLoading}
-				isSubmitting={state.isSubmitting || createInquiryMutation.isPending}
-				showCustomerField
-				showContentField
-				showChannelField
-				submitLabel="등록"
-				onClickBackButton={() => {
-					router.push(ADMIN_PATHS.INQUIRIES as Route);
-				}}
-				onSearchCustomer={(keyword) => {
-					void onSearchCustomer(keyword);
-				}}
-				onSelectCustomer={(customer) => {
-					state.customerId = customer.id;
-					state.customerKeyword = customer.label;
-					state.searchResults = [];
-				}}
-				onClickCancelButton={() => {
-					router.push(ADMIN_PATHS.INQUIRIES as Route);
-				}}
-				onClickSubmitButton={() => {
-					void onClickSubmitButton();
-				}}
-			/>
-		</>
+		<InquiryEditScreen
+			title="문의 접수"
+			description="문의 생성 bootstrap을 이용해 문의를 등록합니다."
+			formState={state}
+			bootstrap={
+				bootstrap
+					? {
+							fieldMeta: bootstrap.fieldMeta,
+							ui: bootstrap.ui,
+							options: bootstrapOptions,
+						}
+					: undefined
+			}
+			categoryOptions={mapSelectOptions(bootstrapOptions.category)}
+			channelOptions={mapSelectOptions(bootstrapOptions.channel)}
+			priorityOptions={mapSelectOptions(bootstrapOptions.priority)}
+			isLoading={isLoading}
+			isSubmitting={state.isSubmitting || createInquiryMutation.isPending}
+			showCustomerField
+			showContentField
+			showChannelField
+			submitLabel="등록"
+			onClickBackButton={() => {
+				router.push(ADMIN_PATHS.INQUIRIES as Route);
+			}}
+			onSearchCustomer={(keyword) => {
+				void onSearchCustomer(keyword);
+			}}
+			onSelectCustomer={(customer) => {
+				state.customerId = customer.id;
+				state.customerKeyword = customer.label;
+				state.searchResults = [];
+			}}
+			onClickCancelButton={() => {
+				router.push(ADMIN_PATHS.INQUIRIES as Route);
+			}}
+			onClickSubmitButton={() => {
+				void onClickSubmitButton();
+			}}
+		/>
 	);
 });

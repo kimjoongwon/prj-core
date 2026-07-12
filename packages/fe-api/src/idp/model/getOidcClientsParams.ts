@@ -16,25 +16,25 @@
  */
 
 export type GetOidcClientsParams = {
-/**
- * @minimum 0
- */
-skip?: number;
-/**
- * @minimum 1
- * @maximum 200
- */
-take?: number;
-/**
- * Client ID 또는 이름 통합 검색
- */
-search?: string;
-/**
- * 활성 상태 필터
- */
-isActive?: boolean;
-/**
- * 복합 정렬 (JSON:API 컨벤션). 허용 필드: createdAt, clientId, name. 예: ?sort=clientId&sort=-createdAt
- */
-sort?: string[];
+	/**
+	 * @minimum 0
+	 */
+	skip?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 200
+	 */
+	take?: number;
+	/**
+	 * Client ID 또는 이름 통합 검색
+	 */
+	search?: string;
+	/**
+	 * 활성 상태 필터
+	 */
+	isActive?: boolean;
+	/**
+	 * 복합 정렬 (JSON:API 컨벤션). 허용 필드: createdAt, clientId, name. 예: ?sort=clientId&sort=-createdAt
+	 */
+	sort?: string[];
 };

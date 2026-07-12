@@ -16,10 +16,10 @@
  */
 
 export interface CreateRoutineActivityItemDto {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
-  taskId: string;
-  order?: number;
-  repetitions?: number;
-  restTime?: number;
-  notes?: string;
+	/** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
+	taskId: string;
+	order?: number;
+	repetitions?: number;
+	restTime?: number;
+	notes?: string;
 }

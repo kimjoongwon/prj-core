@@ -14,32 +14,33 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { RoutineDto } from './routineDto';
-import type { SessionDto } from './sessionDto';
-import type { ProgramActivityDto } from './programActivityDto';
+
+import type { ProgramActivityDto } from "./programActivityDto";
+import type { RoutineDto } from "./routineDto";
+import type { SessionDto } from "./sessionDto";
 
 export interface ProgramDto {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
-  routineId: string;
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
-  sessionId: string;
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
-  instructorId: string;
-  capacity: number;
-  name: string;
-  level?: string;
-  routineNameSnapshot?: string;
-  routineLabelSnapshot?: string;
-  /** @minimum 0 */
-  activityCount?: number;
-  previewExerciseNames?: string[];
-  routine: RoutineDto;
-  session: SessionDto;
-  executionPlan?: ProgramActivityDto[];
+	/** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	/** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
+	routineId: string;
+	/** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
+	sessionId: string;
+	/** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
+	instructorId: string;
+	capacity: number;
+	name: string;
+	level?: string;
+	routineNameSnapshot?: string;
+	routineLabelSnapshot?: string;
+	/** @minimum 0 */
+	activityCount?: number;
+	previewExerciseNames?: string[];
+	routine: RoutineDto;
+	session: SessionDto;
+	executionPlan?: ProgramActivityDto[];
 }

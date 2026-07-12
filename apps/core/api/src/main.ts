@@ -424,7 +424,9 @@ async function bootstrap() {
 				const browserGlobal = globalThis as {
 					localStorage?: { getItem(key: string): string | null };
 				};
-				const tenantId = browserGlobal.localStorage?.getItem("swagger:x-tenant-id");
+				const tenantId = browserGlobal.localStorage?.getItem(
+					"swagger:x-tenant-id",
+				);
 
 				if (tenantId && request.url?.includes("/api/v1/")) {
 					request.headers = request.headers ?? {};

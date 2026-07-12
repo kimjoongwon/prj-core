@@ -4,13 +4,13 @@ import {
 	PutObjectCommand,
 	S3Client,
 } from "@aws-sdk/client-s3";
+import type { PutObjectInput } from "@cocrepo/input";
 import type { ObjectStorageConfig } from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import type { GetObjectResult } from "./get-object.result";
 import { normalizeMetadataValue } from "./normalize-metadata-value";
 import { ObjectStorageService } from "./object-storage.service";
-import type { PutObjectInput } from "@cocrepo/input";
 import type { PutObjectResult } from "./put-object.result";
 import { resolveRegion } from "./resolve-region";
 

@@ -20,8 +20,7 @@ export class SetCurrentSpaceUseCase {
 	async execute(command: SetCurrentSpaceCommand): Promise<AuthSpaceResult> {
 		const user = this.cls.get<UserWithTenantsLike>(CONTEXT_KEYS.AUTH_USER);
 		const tenant = user?.tenants?.find(
-			(tenant) =>
-				tenant.id === command.tenantId && tenant.removedAt == null,
+			(tenant) => tenant.id === command.tenantId && tenant.removedAt == null,
 		);
 		if (!tenant) {
 			throw new ForbiddenException("해당 Tenant를 선택할 권한이 없습니다");

@@ -1,7 +1,4 @@
-import type {
-	DataGridColumnConfig,
-	DataGridQueryStates,
-} from "@cocrepo/type";
+import type { DataGridColumnConfig, DataGridQueryStates } from "@cocrepo/type";
 import type { Row } from "@tanstack/react-table";
 import type { Key } from "./rowKeys";
 

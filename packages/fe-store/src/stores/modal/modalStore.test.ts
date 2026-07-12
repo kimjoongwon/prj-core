@@ -1,7 +1,7 @@
 import type { ComponentType } from "react";
 import { describe, expect, it, vi } from "vitest";
-import type { ModalContentProps } from "./types";
 import { ModalStore } from "./modalStore";
+import type { ModalContentProps } from "./types";
 
 interface FixtureState {
 	value: string;

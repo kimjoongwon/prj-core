@@ -34,40 +34,38 @@ export default observer(function RoutinesPageRoute() {
 	const deleteMutation = useDeleteRoutine();
 
 	return (
-		<>
-			<RoutineListScreen
-				routines={response?.data}
-				totalCount={response?.meta?.total ?? 0}
-				isLoading={isLoading}
-				queryStates={queryStates}
-				setQueryStates={setQueryStates}
-				onClickCreateButton={() => {
-					router.push("/routines/new" as Route);
-				}}
-				onClickRoutineName={(routineId) => {
-					router.push(`/routines/${routineId}` as Route);
-				}}
-				onDeleteRoutine={async (routineId) => {
-					try {
-						await deleteMutation.mutateAsync({ routineId });
-						await queryClient.invalidateQueries({
-							queryKey: getGetRoutinesQueryKey(),
-						});
-						toast.success("삭제 성공", {
-							description: "루틴이 삭제되었습니다.",
-						});
-					} catch (error) {
-						toast.danger("삭제 실패", {
-							description:
-								error instanceof Error
-									? error.message
-									: "삭제 중 오류가 발생했습니다. 프로그램에서 사용 중인 루틴은 삭제할 수 없습니다.",
-						});
-						throw error;
-					}
-				}}
-			/>
-		</>
+		<RoutineListScreen
+			routines={response?.data}
+			totalCount={response?.meta?.total ?? 0}
+			isLoading={isLoading}
+			queryStates={queryStates}
+			setQueryStates={setQueryStates}
+			onClickCreateButton={() => {
+				router.push("/routines/new" as Route);
+			}}
+			onClickRoutineName={(routineId) => {
+				router.push(`/routines/${routineId}` as Route);
+			}}
+			onDeleteRoutine={async (routineId) => {
+				try {
+					await deleteMutation.mutateAsync({ routineId });
+					await queryClient.invalidateQueries({
+						queryKey: getGetRoutinesQueryKey(),
+					});
+					toast.success("삭제 성공", {
+						description: "루틴이 삭제되었습니다.",
+					});
+				} catch (error) {
+					toast.danger("삭제 실패", {
+						description:
+							error instanceof Error
+								? error.message
+								: "삭제 중 오류가 발생했습니다. 프로그램에서 사용 중인 루틴은 삭제할 수 없습니다.",
+					});
+					throw error;
+				}
+			}}
+		/>
 	);
 });
 

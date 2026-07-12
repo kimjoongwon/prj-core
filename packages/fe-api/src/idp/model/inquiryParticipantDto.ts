@@ -14,60 +14,60 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { InquiryParticipantRole } from './inquiryParticipantRole';
+import type { InquiryParticipantRole } from "./inquiryParticipantRole";
 
 export interface InquiryParticipantDto {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  /**
-   * 소속 문의 ID
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  inquiryId: string;
-  /**
-   * 소속 스레드 ID
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  threadId?: string;
-  /**
-   * 참여자 ID
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  userId: string;
-  /** 참여자 이름 */
-  userName: string;
-  /**
-   * 참여자 아바타
-   * @nullable
-   */
-  userAvatar: string | null;
-  /** 참여자 역할 */
-  role: InquiryParticipantRole;
-  /** 온라인 여부 */
-  isOnline: boolean;
-  /** 타이핑 중 여부 */
-  isTyping: boolean;
-  /**
-   * 마지막 접속 시간
-   * @nullable
-   */
-  lastSeenAt: string | null;
-  /**
-   * 마지막 읽은 시간
-   * @nullable
-   */
-  lastReadAt: string | null;
-  /** 읽지 않은 메시지 수 */
-  unreadCount: number;
-  /** 참여 일시 */
-  joinedAt: string;
-  /**
-   * 나간 일시
-   * @nullable
-   */
-  leftAt: string | null;
+	/** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	/** @nullable */
+	removedAt: string | null;
+	/**
+	 * 소속 문의 ID
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	inquiryId: string;
+	/**
+	 * 소속 스레드 ID
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	threadId?: string;
+	/**
+	 * 참여자 ID
+	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+	 */
+	userId: string;
+	/** 참여자 이름 */
+	userName: string;
+	/**
+	 * 참여자 아바타
+	 * @nullable
+	 */
+	userAvatar: string | null;
+	/** 참여자 역할 */
+	role: InquiryParticipantRole;
+	/** 온라인 여부 */
+	isOnline: boolean;
+	/** 타이핑 중 여부 */
+	isTyping: boolean;
+	/**
+	 * 마지막 접속 시간
+	 * @nullable
+	 */
+	lastSeenAt: string | null;
+	/**
+	 * 마지막 읽은 시간
+	 * @nullable
+	 */
+	lastReadAt: string | null;
+	/** 읽지 않은 메시지 수 */
+	unreadCount: number;
+	/** 참여 일시 */
+	joinedAt: string;
+	/**
+	 * 나간 일시
+	 * @nullable
+	 */
+	leftAt: string | null;
 }

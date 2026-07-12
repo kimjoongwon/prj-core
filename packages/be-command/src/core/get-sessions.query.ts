@@ -7,10 +7,7 @@ export class GetSessionsQuery implements GetSessionsQueryInput {
 	readonly take?: GetSessionsQueryInput["take"];
 	readonly sort?: GetSessionsQueryInput["sort"];
 
-	constructor(
-		timelineId: string,
-		input: GetSessionsQueryInput,
-	) {
+	constructor(timelineId: string, input: GetSessionsQueryInput) {
 		Object.assign(this, input);
 		this.timelineId = timelineId;
 	}

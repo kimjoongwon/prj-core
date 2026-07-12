@@ -122,10 +122,14 @@ export class GuardTestController {
 	@UseGuards(RolesGuard)
 	@Roles([SYSTEM_ROLES.COMPANY_MANAGER])
 	async testRolesCompanyManager() {
-		return new ResponseEntity(HttpStatus.OK, "COMPANY_MANAGER 역할 권한 테스트 성공", {
-			message: "COMPANY_MANAGER 역할로 접근 성공",
-			roleRequired: ["COMPANY_MANAGER"],
-		});
+		return new ResponseEntity(
+			HttpStatus.OK,
+			"COMPANY_MANAGER 역할 권한 테스트 성공",
+			{
+				message: "COMPANY_MANAGER 역할로 접근 성공",
+				roleRequired: ["COMPANY_MANAGER"],
+			},
+		);
 	}
 
 	@Get("roles/platform-admin")
@@ -150,7 +154,8 @@ export class GuardTestController {
 	@Roles([SYSTEM_ROLES.COMPANY_MANAGER])
 	async testCombinedWorkspaceCategoryAndRole() {
 		return new ResponseEntity(HttpStatus.OK, "복합 권한 테스트 성공", {
-			message: "워크스페이스 카테고리 + COMPANY_MANAGER 역할 권한으로 접근 성공",
+			message:
+				"워크스페이스 카테고리 + COMPANY_MANAGER 역할 권한으로 접근 성공",
 			categoryRequired: ["워크스페이스"],
 			roleRequired: ["COMPANY_MANAGER"],
 		});

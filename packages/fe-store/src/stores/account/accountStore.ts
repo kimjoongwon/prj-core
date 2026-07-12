@@ -1,6 +1,6 @@
 import { makeAutoObservable, reaction } from "mobx";
-import type { AuthSession } from "./authSession";
 import type { PersistStorage } from "../persistence/persistStorage";
+import type { AuthSession } from "./authSession";
 
 const ACCOUNT_PERSIST_SECTION = "account";
 
@@ -129,8 +129,7 @@ export class AccountStore {
 		return {
 			tenantId: typeof data.tenantId === "string" ? data.tenantId : null,
 			spaceId: typeof data.spaceId === "string" ? data.spaceId : null,
-			groundName:
-				typeof data.groundName === "string" ? data.groundName : null,
+			groundName: typeof data.groundName === "string" ? data.groundName : null,
 			contentLanguageCode:
 				typeof data.contentLanguageCode === "string"
 					? data.contentLanguageCode

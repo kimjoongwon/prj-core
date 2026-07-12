@@ -29,9 +29,7 @@ export const Default: Story = {
 					</Text>
 				</View>
 				<SectionSurface className="gap-2 rounded-xl p-3">
-					<Text className="text-sm font-bold text-foreground">
-						예약 요약
-					</Text>
+					<Text className="text-sm font-bold text-foreground">예약 요약</Text>
 					<Text className="text-sm leading-5 text-muted">
 						오늘의 예약과 다음 액션을 screen 표면 안에서 구분합니다.
 					</Text>
@@ -52,8 +50,8 @@ export const LongContent: Story = {
 					<SectionSurface className="gap-1 rounded-xl p-3" key={title}>
 						<Text className="text-sm font-bold text-foreground">{title}</Text>
 						<Text className="text-sm leading-5 text-muted">
-							긴 설명과 여러 구획이 이어질 때 screen-level surface의 간격과
-							배경 단계를 확인합니다.
+							긴 설명과 여러 구획이 이어질 때 screen-level surface의 간격과 배경
+							단계를 확인합니다.
 						</Text>
 					</SectionSurface>
 				))}

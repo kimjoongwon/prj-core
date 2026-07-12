@@ -12,9 +12,8 @@ export class GetEmailVerificationsUseCase {
 	async execute(query: GetEmailVerificationsQuery): Promise<unknown> {
 		const skip = query.skip ?? 0;
 		const take = query.take ?? 20;
-		const emailVerificationResult = await this.emailVerificationService.getMany(
-			query,
-		);
+		const emailVerificationResult =
+			await this.emailVerificationService.getMany(query);
 		return {
 			data: emailVerificationResult.data,
 			meta: buildOffsetPageMeta(skip, take, emailVerificationResult.totalCount),

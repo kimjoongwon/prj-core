@@ -16,6 +16,6 @@
  */
 
 export interface CreateTimelineDto {
-  name: string;
-  description?: string;
+	name: string;
+	description?: string;
 }

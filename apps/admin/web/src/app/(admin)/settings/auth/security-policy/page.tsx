@@ -78,27 +78,25 @@ export default observer(function SecurityPolicyPageRoute() {
 	}, [isSaveSuccess]);
 
 	return (
-		<>
-			<SecurityPolicyFormScreen
-				formState={state}
-				isSaving={isPending}
-				isSaveSuccess={isSaveSuccess}
-				onChangeNumberField={(field, value) => {
-					const num = Number(value);
-					if (!Number.isNaN(num)) {
-						state[field] = num;
-					}
-				}}
-				onChangeBooleanField={(field, value) => {
-					state[field] = value;
-				}}
-				onSubmit={() => {
-					updatePolicy({
-						data: mapUpdateSecurityPolicyInput(state),
-					});
-				}}
-			/>
-		</>
+		<SecurityPolicyFormScreen
+			formState={state}
+			isSaving={isPending}
+			isSaveSuccess={isSaveSuccess}
+			onChangeNumberField={(field, value) => {
+				const num = Number(value);
+				if (!Number.isNaN(num)) {
+					state[field] = num;
+				}
+			}}
+			onChangeBooleanField={(field, value) => {
+				state[field] = value;
+			}}
+			onSubmit={() => {
+				updatePolicy({
+					data: mapUpdateSecurityPolicyInput(state),
+				});
+			}}
+		/>
 	);
 });
 

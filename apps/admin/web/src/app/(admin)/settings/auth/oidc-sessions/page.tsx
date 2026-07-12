@@ -96,30 +96,28 @@ export default observer(function OidcSessionsPageRoute() {
 		});
 
 	return (
-		<>
-			<OidcSessionListScreen
-				sessions={response?.data}
-				totalCount={response?.meta?.totalCount ?? 0}
-				isLoading={isLoading}
-				queryStates={queryStates}
-				setQueryStates={setQueryStates}
-				stats={
-					statsResponse?.data
-						? mapOidcSessionStats(statsResponse.data)
-						: undefined
-				}
-				isRevokingAll={isRevokingAll}
-				onRevokeSession={(key) => {
-					void revokeSession({ key });
-				}}
-				onClickRevokeByGrantButton={(grantId) => {
-					void revokeByGrant({ grantId });
-				}}
-				onClickRevokeAllButton={() => {
-					void revokeAll();
-				}}
-			/>
-		</>
+		<OidcSessionListScreen
+			sessions={response?.data}
+			totalCount={response?.meta?.totalCount ?? 0}
+			isLoading={isLoading}
+			queryStates={queryStates}
+			setQueryStates={setQueryStates}
+			stats={
+				statsResponse?.data
+					? mapOidcSessionStats(statsResponse.data)
+					: undefined
+			}
+			isRevokingAll={isRevokingAll}
+			onRevokeSession={(key) => {
+				void revokeSession({ key });
+			}}
+			onClickRevokeByGrantButton={(grantId) => {
+				void revokeByGrant({ grantId });
+			}}
+			onClickRevokeAllButton={() => {
+				void revokeAll();
+			}}
+		/>
 	);
 });
 

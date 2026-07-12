@@ -126,7 +126,8 @@ export class TenantAccessRequestsController {
 		{ status: 403, message: "해당 Space 신청을 처리할 권한이 없습니다" },
 		{
 			status: 403,
-			message: "COMPANY_MANAGER 권한자는 PLATFORM_ADMIN 역할 신청을 승인할 수 없습니다",
+			message:
+				"COMPANY_MANAGER 권한자는 PLATFORM_ADMIN 역할 신청을 승인할 수 없습니다",
 		},
 		{ status: 404, message: "테넌트 접근 신청을 찾을 수 없습니다" },
 		500,

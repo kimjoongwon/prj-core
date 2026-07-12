@@ -1,5 +1,7 @@
 import type { UpdateTaskExerciseCommandInput } from "@cocrepo/input";
-export class UpdateTaskExerciseCommand implements UpdateTaskExerciseCommandInput {
+export class UpdateTaskExerciseCommand
+	implements UpdateTaskExerciseCommandInput
+{
 	readonly name?: UpdateTaskExerciseCommandInput["name"];
 	readonly description?: UpdateTaskExerciseCommandInput["description"];
 	readonly imageFileId?: UpdateTaskExerciseCommandInput["imageFileId"];
