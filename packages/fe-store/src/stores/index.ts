@@ -4,6 +4,7 @@ export * from "./account/accountStore";
 export * from "./account/authSession";
 export * from "./accessControl/accessControlStore";
 export * from "./language/languageStore";
+export * from "./modal";
 export * from "./navigation/navItem";
 export * from "./navigation/navigationStore";
 export * from "./navigation/navigator";

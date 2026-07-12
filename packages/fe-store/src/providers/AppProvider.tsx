@@ -46,6 +46,7 @@ export const AppProvider = observer(function AppProvider({
 	const root = rootRef.current;
 	const router = useRouter();
 	const pathname = usePathname();
+	const previousPathnameRef = useRef(pathname);
 	const language = root.app.language;
 
 	// Persisted state hydrate는 첫 클라이언트 렌더 이후에만 수행하여
@@ -67,6 +68,10 @@ export const AppProvider = observer(function AppProvider({
 	}, [root, router]);
 
 	useEffect(() => {
+		if (previousPathnameRef.current !== pathname) {
+			root.app.modal.dismiss();
+		}
+		previousPathnameRef.current = pathname;
 		root.setCurrentPath(pathname);
 	}, [pathname, root]);
 

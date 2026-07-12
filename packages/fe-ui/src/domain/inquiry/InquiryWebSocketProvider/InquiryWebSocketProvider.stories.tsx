@@ -14,7 +14,7 @@ function ConsumerFixture() {
 }
 
 const meta = {
-	title: "feature/InquiryWebSocketProvider",
+	title: "domain/inquiry/InquiryWebSocketProvider",
 	component: InquiryWebSocketProvider,
 	parameters: { layout: "centered" },
 	tags: ["autodocs"],

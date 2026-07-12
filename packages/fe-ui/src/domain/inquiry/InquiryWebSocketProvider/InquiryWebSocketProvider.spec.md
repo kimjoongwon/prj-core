@@ -1,29 +1,31 @@
-# ProgramPickerModal feature 기획서
+# InquiryWebSocketProvider domain 기획서
 
 > 생성일: 2026-03-03
-> 타입: feature
-> 위치: packages/fe-ui/src/feature/ProgramPickerModal/ProgramPickerModal.tsx
+> 타입: domain/inquiry
+> 위치: packages/fe-ui/src/domain/inquiry/InquiryWebSocketProvider/InquiryWebSocketProvider.tsx
 
 ## 역할
 
-이 파일은 feature 계층의 핵심 동작을 담당합니다.
+이 파일은 inquiry domain의 WebSocket 컨텍스트 동작을 담당합니다.
 상위 레이어와 하위 레이어를 연결하며, 런타임에서 실제 사용자 흐름/비즈니스 흐름에 직접 관여합니다.
 
 ## 공개 계약
 
 | 항목 | 설명 |
 |------|------|
-| ProgramPickerOption | 공개 계약 요소 |
-| ProgramPickerModalProps | 공개 계약 요소 |
-| ProgramPickerModal | 공개 계약 요소 |
+| WebSocketStatus | 공개 계약 요소 |
+| WebSocketEventHandlers | 공개 계약 요소 |
+| InquiryWebSocketProviderProps | 공개 계약 요소 |
+| useInquiryWebSocket | 공개 계약 요소 |
+| InquiryWebSocketProvider | 공개 계약 요소 |
 
 ## 의존성
 
 | 모듈 | 용도 |
 |------|------|
-| @heroui/react | 기능 구현 의존성 |
-| @cocrepo/ui i18n/input | 검색 입력, 버튼, 빈 상태 문구 런타임 번역 |
+| @cocrepo/type | 기능 구현 의존성 |
 | mobx-react-lite | 기능 구현 의존성 |
+| react | 기능 구현 의존성 |
 
 ## 동작 흐름
 

@@ -1,13 +1,11 @@
-import type {
-	NavItemConfig,
-	NavigatorLike,
-} from "@cocrepo/type";
+import type { NavItemConfig, NavigatorLike } from "@cocrepo/type";
 import { makeAutoObservable, runInAction } from "mobx";
 import { AccessControlStore } from "./accessControl/accessControlStore";
 import { AccountStore } from "./account/accountStore";
 import { AuthSession } from "./account/authSession";
 import { AppStore } from "./appStore";
 import { LanguageStore } from "./language/languageStore";
+import { ModalStore } from "./modal/modalStore";
 import { NavigationStore } from "./navigation/navigationStore";
 import { Navigator, type Router } from "./navigation/navigator";
 import {
@@ -66,12 +64,14 @@ export class RootStore {
 		});
 		const accessControl = new AccessControlStore();
 		const language = new LanguageStore(persistStorage);
+		const modal = new ModalStore();
 		const navigation = new NavigationStore(config.navItems);
 
 		this.app = new AppStore({
 			account,
 			accessControl,
 			language,
+			modal,
 			navigation,
 			name: config.appName,
 		});

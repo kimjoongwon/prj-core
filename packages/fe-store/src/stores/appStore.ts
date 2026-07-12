@@ -2,12 +2,14 @@ import { makeAutoObservable } from "mobx";
 import type { AccessControlStore } from "./accessControl/accessControlStore";
 import type { AccountStore } from "./account/accountStore";
 import type { LanguageStore } from "./language/languageStore";
+import type { ModalStore } from "./modal/modalStore";
 import type { NavigationStore } from "./navigation/navigationStore";
 
 export interface AppStoreState {
 	account: AccountStore;
 	accessControl: AccessControlStore;
 	language: LanguageStore;
+	modal: ModalStore;
 	navigation: NavigationStore;
 	name: string;
 }
@@ -23,6 +25,7 @@ export class AppStore {
 	readonly account: AccountStore;
 	readonly accessControl: AccessControlStore;
 	readonly language: LanguageStore;
+	readonly modal: ModalStore;
 	readonly navigation: NavigationStore;
 
 	constructor(state: AppStoreState) {
@@ -30,12 +33,14 @@ export class AppStore {
 		this.account = state.account;
 		this.accessControl = state.accessControl;
 		this.language = state.language;
+		this.modal = state.modal;
 		this.navigation = state.navigation;
 
 		makeAutoObservable(this, {
 			account: false,
 			accessControl: false,
 			language: false,
+			modal: false,
 			navigation: false,
 		});
 	}

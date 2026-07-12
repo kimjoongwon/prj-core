@@ -75,6 +75,7 @@ describe("RootStore", () => {
 		expect(root.app.account.authSession).toBeDefined();
 		expect(root.app.accessControl).toBeDefined();
 		expect(root.app.language).toBeDefined();
+		expect(root.app.modal).toBeDefined();
 		expect(root.app.navigation).toBeDefined();
 	});
 

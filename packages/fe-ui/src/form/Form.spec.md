@@ -330,9 +330,9 @@ Form migration은 화면 컴포넌트 단위가 아니라 aggregate root와 API 
 | field 유형 | 예시 | 처리 |
 | --- | --- | --- |
 | 확인용 field | `confirmPassword` | `FormSchema` 또는 승인된 cross-field validator에서 검증합니다. |
-| 검색어 field | `exerciseQuery`, `routineQuery`, `instructorQuery`, `customerKeyword` | UI state로만 유지하고 payload mapper에서 제외합니다. |
+| 검색어 field | `exerciseQuery`, `customerKeyword` | UI state로만 유지하고 payload mapper에서 제외합니다. Modal content 검색어는 해당 domain state가 소유합니다. |
 | 표시명 snapshot | `routineName`, `instructorName` | 응답 hydrate와 화면 표시용으로만 둡니다. |
-| picker open state | `isRoutinePickerOpen`, `isInstructorPickerOpen` | schema 검증 대상이 아닙니다. |
+| picker open state | `app.modal.current` | form state에 복제하지 않고 전역 `ModalStore`가 소유합니다. |
 | payload 파생 field | `durationMin`, `durationSec` | `FormSchema`에서 검증 후 mapper가 `duration`으로 변환합니다. |
 | indexed child error | `redirectUriErrors`, `variableErrors` | 배열 path error로 통합하거나 별도 child schema migration slice에서 처리합니다. |
 

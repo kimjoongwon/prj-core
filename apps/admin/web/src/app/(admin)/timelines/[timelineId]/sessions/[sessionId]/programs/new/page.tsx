@@ -46,14 +46,10 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 			name: "",
 			routineId: "",
 			routineName: "",
-			routineQuery: "",
 			instructorId: "",
 			instructorName: "",
-			instructorQuery: "",
 			capacity: "",
 			level: "",
-			isRoutinePickerOpen: false,
-			isInstructorPickerOpen: false,
 			errors: {},
 		}));
 
@@ -77,33 +73,6 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 		const selectedRoutine = routines.find(
 			(routine) => routine.id === state.routineId,
 		);
-		const selectedInstructor = instructors.find(
-			(instructor) => instructor.id === state.instructorId,
-		);
-		const routineQuery = state.routineQuery.trim().toLowerCase();
-		const instructorQuery = state.instructorQuery.trim().toLowerCase();
-		const filteredRoutines = routineQuery
-			? routines.filter((routine) =>
-					routine.name.toLowerCase().includes(routineQuery),
-				)
-			: routines;
-		const filteredInstructors = instructorQuery
-			? instructors.filter((instructor) =>
-					instructor.name.toLowerCase().includes(instructorQuery),
-				)
-			: instructors;
-		const routineOptions =
-			selectedRoutine &&
-			!filteredRoutines.some((routine) => routine.id === selectedRoutine.id)
-				? [selectedRoutine, ...filteredRoutines]
-				: filteredRoutines;
-		const instructorOptions =
-			selectedInstructor &&
-			!filteredInstructors.some(
-				(instructor) => instructor.id === selectedInstructor.id,
-			)
-				? [selectedInstructor, ...filteredInstructors]
-				: filteredInstructors;
 		const routinePreview = buildRoutinePreview(selectedRoutine);
 		const hasUnschedulableRoutine = routinePreview.some(
 			(activity) => !activity.isSchedulable,
@@ -155,13 +124,18 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 				},
 				{
 					onSuccess: () => {
-						toast.success("등록 성공", { description: "프로그램이 등록되었습니다." });
+						toast.success("등록 성공", {
+							description: "프로그램이 등록되었습니다.",
+						});
 						router.push(
 							`/timelines/${timelineId}/sessions/${sessionId}` as Route,
 						);
 					},
 					onError: () => {
-						toast.danger("등록 실패", { description: "프로그램 등록 중 오류가 발생했습니다. 같은 루틴이 이미 등록되어 있지 않은지 확인해주세요." });
+						toast.danger("등록 실패", {
+							description:
+								"프로그램 등록 중 오류가 발생했습니다. 같은 루틴이 이미 등록되어 있지 않은지 확인해주세요.",
+						});
 					},
 				},
 			);
@@ -175,7 +149,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 					.join(" · ")}
 				state={state}
 				contentLanguageCode={app.contentLanguageCode}
-				routineOptions={routineOptions.map((routine) => ({
+				routineOptions={routines.map((routine) => ({
 					id: routine.id,
 					name: routine.name,
 					subtitle: `라벨: ${routine.label ?? "-"} · 활동 ${
@@ -188,7 +162,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 							: "스케줄 가능"
 					}`,
 				}))}
-				instructorOptions={instructorOptions.map((instructor) => ({
+				instructorOptions={instructors.map((instructor) => ({
 					id: instructor.id,
 					name: instructor.name,
 					subtitle: `이메일: ${instructor.email ?? "-"}`,

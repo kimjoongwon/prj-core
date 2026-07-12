@@ -4,7 +4,7 @@
 
 - `TimelineSessionProgramEditScreen`은 Timeline Session Program aggregate의 create/detail/edit route가 공유하는 pure screen이다.
 - 생성/상세/수정 여부는 route가 `title`, `actions`, `readOnly`, `editable`로 결정한다.
-- 프로그램 입력 필드와 picker는 `TimelineSessionProgramForm`이 소유한다.
+- 프로그램 입력 필드는 `TimelineSessionProgramForm`이 소유하고 picker content는 `domain/program/ProgramPicker`가 소유한다.
 
 ## Props 계약
 
@@ -22,6 +22,8 @@
 | layer | component |
 | --- | --- |
 | form | `TimelineSessionProgramForm` |
+| domain | `ProgramPicker`, `ProgramPickerState` |
+| overlay | `AppModalHost` |
 | data-grid cell | `DateTimeCell` |
 | input | `Button` |
 

@@ -37,6 +37,7 @@ export interface WebSocketEventHandlers {
 	onTypingStop?: (data: { userId: string }) => void;
 }
 
+/** Inquiry WebSocket 컨텍스트를 제공하기 위한 공개 속성입니다. */
 export interface InquiryWebSocketProviderProps {
 	/** 문의 ID */
 	inquiryId: string;

@@ -21,7 +21,7 @@ import {
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { Chip } from "../../data-display/Chip/Chip";
-import { InquiryWebSocketProvider } from "../../feature/InquiryWebSocketProvider";
+import { InquiryWebSocketProvider } from "../../domain/inquiry";
 import {
 	InquiryForm,
 	type InquiryFormBootstrap,

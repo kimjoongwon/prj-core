@@ -95,14 +95,10 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
 					routineId: program.routineId,
 					routineName:
 						program.routineNameSnapshot ?? program.routine?.name ?? "",
-					routineQuery: "",
 					instructorId: program.instructorId,
 					instructorName: program.instructorId,
-					instructorQuery: "",
 					capacity: String(program.capacity ?? ""),
 					level: program.level ?? "",
-					isRoutinePickerOpen: false,
-					isInstructorPickerOpen: false,
 					errors: {},
 				}
 			: undefined;
