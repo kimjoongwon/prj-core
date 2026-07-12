@@ -10,5 +10,5 @@
 ## 상태 / Modal 계약
 
 - route는 Program payload form state와 API wiring만 소유합니다.
-- 루틴/강사 전체 후보를 screen에 전달하며 검색/open 상태를 route에 복제하지 않습니다.
+- Picker 후보 조회와 검색 상태는 `domain/program/ProgramPicker`가 자체 API로 소유합니다.
 - `TimelineSessionProgramForm`이 `ProgramPickerState`를 만들고 `app.modal.open()`을 호출합니다.

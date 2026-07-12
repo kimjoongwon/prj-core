@@ -46,7 +46,6 @@
   "author": "kimjoongwon",
   "license": "ISC",
   "devDependencies": {
-    "@cocrepo/api": "workspace:*",
     "@cocrepo/enum": "workspace:*",
     "@cocrepo/hook": "workspace:*",
     "@cocrepo/store": "workspace:*",
@@ -102,6 +101,7 @@
     "vitest": "catalog:"
   },
   "dependencies": {
+    "@cocrepo/api": "workspace:*",
     "@ckeditor/ckeditor5-react": "^11.1.2",
     "@cocrepo/constant": "workspace:*",
     "@cocrepo/schema": "workspace:*",

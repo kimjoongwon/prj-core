@@ -10,5 +10,5 @@
 ## 상태 / Modal 계약
 
 - route는 기존 Program hydrate, update API, dirty/validation 상태를 소유합니다.
-- 현재 선택된 루틴과 강사를 포함한 전체 후보를 전달하고 검색/open 상태는 갖지 않습니다.
+- Picker 후보 조회와 검색 상태는 `domain/program/ProgramPicker`가 자체 API로 소유합니다.
 - 선택 결과는 ProgramPicker callback이 route-local form state에 반영합니다.

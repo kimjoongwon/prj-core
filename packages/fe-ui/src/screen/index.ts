@@ -326,7 +326,6 @@ export type {
 	TimelineSessionProgramEditScreenProps,
 	TimelineSessionProgramFormField,
 	TimelineSessionProgramFormState,
-	TimelineSessionProgramPickerOption,
 	TimelineSessionProgramRoutinePreviewItem,
 } from "./TimelineSessionProgramEditScreen/TimelineSessionProgramEditScreen";
 export { TimelineSessionProgramEditScreen } from "./TimelineSessionProgramEditScreen/TimelineSessionProgramEditScreen";

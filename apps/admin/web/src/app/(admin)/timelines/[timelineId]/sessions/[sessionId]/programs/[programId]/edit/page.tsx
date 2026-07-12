@@ -1,29 +1,25 @@
 "use client";
 
-import { toast } from "@heroui/react";
 import { type RoutineDto, useGetRoutines } from "@cocrepo/api/core/routines";
 import {
 	getGetProgramByIdQueryKey,
 	useGetProgramById,
 	useUpdateProgram,
 } from "@cocrepo/api/core/timelines";
-import {
-	type UserDto,
-	useGetUserById,
-	useGetUsers,
-} from "@cocrepo/api/core/users";
+import { type UserDto, useGetUserById } from "@cocrepo/api/core/users";
+import { useApp } from "@cocrepo/store";
 import {
 	Button,
 	TimelineSessionProgramEditScreen,
 	type TimelineSessionProgramFormState,
 } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useApp } from "@cocrepo/store";
 
 type ProgramEditPageParams = {
 	timelineId: string;
@@ -77,12 +73,6 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 			skip: 0,
 			spaceScope: "INCLUDE_ANCESTORS",
 		});
-		const { data: instructorsResponse } = useGetUsers({
-			take: 50,
-			skip: 0,
-			roles: ["COMPANY_MANAGER", "PLATFORM_ADMIN"],
-			status: "active",
-		});
 		const { data: currentInstructorResponse } = useGetUserById(
 			program?.instructorId ?? "",
 			{ query: { enabled: !!program?.instructorId } },
@@ -96,16 +86,9 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 			routines = [program.routine as RoutineDto, ...routines];
 		}
 
-		let instructors = (instructorsResponse?.data ?? []) as UserDto[];
 		const currentInstructor = currentInstructorResponse?.data as
 			| UserDto
 			| undefined;
-		if (
-			currentInstructor &&
-			!instructors.some((item) => item.id === currentInstructor.id)
-		) {
-			instructors = [currentInstructor, ...instructors];
-		}
 
 		useEffect(() => {
 			if (program && !state.isInitialized) {
@@ -222,24 +205,6 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 					.join(" · ")}
 				state={state}
 				contentLanguageCode={app.contentLanguageCode}
-				routineOptions={routines.map((routine) => ({
-					id: routine.id,
-					name: routine.name,
-					subtitle: `라벨: ${routine.label ?? "-"} · 활동 ${
-						routine.activities?.length ?? 0
-					}개 · ${
-						routine.activities?.some(
-							(activity) => !activity.task?.exercise?.videoFileId,
-						)
-							? "영상 누락"
-							: "스케줄 가능"
-					}`,
-				}))}
-				instructorOptions={instructors.map((instructor) => ({
-					id: instructor.id,
-					name: instructor.name,
-					subtitle: `이메일: ${instructor.email ?? "-"}`,
-				}))}
 				routinePreview={routinePreview}
 				hasUnschedulableRoutine={hasUnschedulableRoutine}
 				isLoading={isLoading && !state.isInitialized}

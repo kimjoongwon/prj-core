@@ -11,7 +11,6 @@
 | prop | 설명 |
 | --- | --- |
 | `state` | `TimelineSessionProgramFormState`; route-local observable form state |
-| `routineOptions`, `instructorOptions` | picker 후보 |
 | `routinePreview` | 선택한 루틴 또는 저장된 실행 계획 preview |
 | `readOnly` | detail route에서 `true`로 전달 |
 | `metadata` | 루틴/세션 링크, 강사, 등록일 등 관리 정보 |

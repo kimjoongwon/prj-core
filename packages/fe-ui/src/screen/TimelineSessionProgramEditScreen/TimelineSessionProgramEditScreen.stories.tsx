@@ -41,12 +41,6 @@ const meta = {
 		title: "프로그램 수정",
 		description: "route가 전달한 프로그램 상태를 편집합니다.",
 		state: defaultState,
-		routineOptions: [
-			{ id: "routine-1", name: "요가 루틴 A", subtitle: "활동 2개" },
-		],
-		instructorOptions: [
-			{ id: "user-1", name: "김코치", subtitle: "이메일: coach@example.com" },
-		],
 		routinePreview,
 		actions: <Button color="primary">저장</Button>,
 	},

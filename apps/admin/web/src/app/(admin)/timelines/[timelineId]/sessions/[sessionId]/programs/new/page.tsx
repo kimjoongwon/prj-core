@@ -1,22 +1,21 @@
 "use client";
 
-import { toast } from "@heroui/react";
 import { type RoutineDto, useGetRoutines } from "@cocrepo/api/core/routines";
 import {
 	useCreateProgram,
 	useGetSessionById,
 } from "@cocrepo/api/core/timelines";
-import { type UserDto, useGetUsers } from "@cocrepo/api/core/users";
+import { useApp } from "@cocrepo/store";
 import {
 	Button,
 	TimelineSessionProgramEditScreen,
 	type TimelineSessionProgramFormState,
 } from "@cocrepo/ui";
+import { toast } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
-import { useApp } from "@cocrepo/store";
 
 type ProgramNewPageParams = {
 	timelineId: string;
@@ -61,13 +60,6 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 			spaceScope: "INCLUDE_ANCESTORS",
 		});
 		const routines = (routinesResponse?.data ?? []) as RoutineDto[];
-		const { data: instructorsResponse } = useGetUsers({
-			take: 50,
-			skip: 0,
-			roles: ["COMPANY_MANAGER", "PLATFORM_ADMIN"],
-			status: "active",
-		});
-		const instructors = (instructorsResponse?.data ?? []) as UserDto[];
 		const { mutate: createProgram, isPending } = useCreateProgram();
 
 		const selectedRoutine = routines.find(
@@ -149,24 +141,6 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 					.join(" · ")}
 				state={state}
 				contentLanguageCode={app.contentLanguageCode}
-				routineOptions={routines.map((routine) => ({
-					id: routine.id,
-					name: routine.name,
-					subtitle: `라벨: ${routine.label ?? "-"} · 활동 ${
-						routine.activities?.length ?? 0
-					}개 · ${
-						routine.activities?.some(
-							(activity) => !activity.task?.exercise?.videoFileId,
-						)
-							? "영상 누락"
-							: "스케줄 가능"
-					}`,
-				}))}
-				instructorOptions={instructors.map((instructor) => ({
-					id: instructor.id,
-					name: instructor.name,
-					subtitle: `이메일: ${instructor.email ?? "-"}`,
-				}))}
 				routinePreview={routinePreview}
 				hasUnschedulableRoutine={hasUnschedulableRoutine}
 				actions={

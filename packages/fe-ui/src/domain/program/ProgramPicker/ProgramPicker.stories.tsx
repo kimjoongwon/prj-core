@@ -1,14 +1,14 @@
 import { ModalState } from "@cocrepo/store";
+import type { PlanningScenario } from "@cocrepo/type";
 import type { Meta, StoryObj } from "@storybook/react";
+import { PlanningPreviewFrame } from "../../planning/PlanningPreviewFrame";
 import { ProgramPicker } from "./ProgramPicker";
+import { programPickerApiScenarios } from "./ProgramPicker.msw";
 import { ProgramPickerState } from "./ProgramPickerState";
 
-function createModalState(options = defaultOptions) {
+function createModalState(kind: "routine" | "instructor" = "routine") {
 	const programPickerState = new ProgramPickerState({
-		searchLabel: "검색",
-		searchPlaceholder: "프로그램명",
-		options,
-		selectedId: options[0]?.id,
+		kind,
 		onSelect: () => undefined,
 	});
 
@@ -21,15 +21,6 @@ function createModalState(options = defaultOptions) {
 		(state) => state.deactivate(),
 	);
 }
-
-const defaultOptions = [
-	{ id: "program-yoga", name: "모닝 요가", subtitle: "초급 / 60분" },
-	{
-		id: "program-pilates",
-		name: "리포머 필라테스",
-		subtitle: "중급 / 50분",
-	},
-];
 
 const meta = {
 	title: "domain/program/ProgramPicker",
@@ -44,8 +35,40 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+const defaultScenario = {
+	id: "program-picker.default",
+	title: "Program 후보 선택",
+	description: "Picker가 API에서 후보를 조회합니다.",
+	routePath: "/timelines/programs",
+	owner: "fe-ui / domain/program",
+	status: "ready-for-review",
+	context: {
+		realm: "admin",
+		authState: "authenticated",
+		role: "SPACE_MANAGER",
+		tenantId: "storybook-tenant",
+		spaceId: "storybook-space",
+		locale: "ko-KR",
+		viewport: "desktop",
+	},
+	api: programPickerApiScenarios.default,
+} satisfies PlanningScenario;
 
-export const Empty: Story = {
-	args: { state: createModalState([]) },
+export const Default: Story = {
+	parameters: { planning: defaultScenario },
+	render: (args) => (
+		<PlanningPreviewFrame scenario={defaultScenario}>
+			<ProgramPicker {...args} />
+		</PlanningPreviewFrame>
+	),
+};
+
+export const Instructor: Story = {
+	args: { state: createModalState("instructor") },
+	parameters: { planning: defaultScenario },
+	render: (args) => (
+		<PlanningPreviewFrame scenario={defaultScenario}>
+			<ProgramPicker {...args} />
+		</PlanningPreviewFrame>
+	),
 };

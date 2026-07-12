@@ -1,6 +1,6 @@
+import type { AppStore } from "@cocrepo/store";
 import { AppContext, ModalStore } from "@cocrepo/store";
 import { fireEvent, render, screen } from "@testing-library/react";
-import type { AppStore } from "@cocrepo/store";
 import { describe, expect, it } from "vitest";
 import { ProgramPickerState } from "../../domain/program/ProgramPicker";
 import {
@@ -29,14 +29,6 @@ function renderForm(state: TimelineSessionProgramFormState, modal: ModalStore) {
 		<AppContext.Provider value={{ modal } as AppStore}>
 			<TimelineSessionProgramForm
 				state={state}
-				routineOptions={[
-					{ id: "routine-a", name: "루틴 A", subtitle: "활동 2개" },
-					{ id: "routine-b", name: "루틴 B", subtitle: "활동 3개" },
-				]}
-				instructorOptions={[
-					{ id: "instructor-a", name: "강사 A", subtitle: "a@test.com" },
-					{ id: "instructor-b", name: "강사 B", subtitle: "b@test.com" },
-				]}
 				routinePreview={[]}
 				hasUnschedulableRoutine={false}
 			/>
@@ -61,7 +53,7 @@ describe("TimelineSessionProgramForm", () => {
 		}
 		expect(pickerState.selectedId).toBe("routine-a");
 
-		pickerState.select("routine-b");
+		pickerState.select({ id: "routine-b", name: "루틴 B" });
 
 		expect(state.routineId).toBe("routine-b");
 		expect(state.routineName).toBe("루틴 B");
@@ -79,7 +71,7 @@ describe("TimelineSessionProgramForm", () => {
 		if (!(pickerState instanceof ProgramPickerState)) {
 			throw new Error("ProgramPickerState가 필요합니다.");
 		}
-		pickerState.select("instructor-b");
+		pickerState.select({ id: "instructor-b", name: "강사 B" });
 
 		expect(state.instructorId).toBe("instructor-b");
 		expect(state.instructorName).toBe("강사 B");

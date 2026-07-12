@@ -32,11 +32,6 @@ export interface TimelineSessionProgramRoutinePreviewItem {
 	notes?: string | null;
 	isSchedulable: boolean;
 }
-export interface TimelineSessionProgramPickerOption {
-	id: string;
-	name: string;
-	subtitle: string;
-}
 export interface TimelineSessionProgramFormState {
 	name: string;
 	routineId: string;
@@ -50,8 +45,6 @@ export interface TimelineSessionProgramFormState {
 export interface TimelineSessionProgramFormProps {
 	state: TimelineSessionProgramFormState;
 	contentLanguageCode?: string | null;
-	routineOptions: TimelineSessionProgramPickerOption[];
-	instructorOptions: TimelineSessionProgramPickerOption[];
 	routinePreview: TimelineSessionProgramRoutinePreviewItem[];
 	hasUnschedulableRoutine: boolean;
 	readOnly?: boolean;
@@ -77,14 +70,12 @@ const levelOptions = [
 
 /**
  * Timeline Session Program aggregate의 편집 가능한 필드 조합입니다.
- * picker는 ProgramPickerState로 app.modal에 요청하고, route는 옵션과 submit만 소유합니다.
+ * picker는 API 조회와 후보 변환을 스스로 소유하고, form은 선택 결과와 submit만 소유합니다.
  */
 export const TimelineSessionProgramForm = observer(
 	({
 		state,
 		contentLanguageCode,
-		routineOptions,
-		instructorOptions,
 		routinePreview,
 		hasUnschedulableRoutine,
 		readOnly = false,
@@ -92,29 +83,28 @@ export const TimelineSessionProgramForm = observer(
 		const app = useApp();
 		const languageCode = toContentLanguageCode(contentLanguageCode);
 		const languageLabel = getContentLanguageLabel(contentLanguageCode);
-		const selectRoutineOption = (value: string) => {
+		const selectRoutineOption = (value: string, option: { name: string }) => {
 			if (readOnly) {
 				return;
 			}
-			const option = routineOptions.find((item) => item.id === value);
 			state.routineId = value;
-			state.routineName = option?.name ?? state.routineName;
+			state.routineName = option.name;
 			delete state.errors.routineId;
 		};
-		const selectInstructorOption = (value: string) => {
+		const selectInstructorOption = (
+			value: string,
+			option: { name: string },
+		) => {
 			if (readOnly) {
 				return;
 			}
-			const option = instructorOptions.find((item) => item.id === value);
 			state.instructorId = value;
-			state.instructorName = option?.name ?? state.instructorName;
+			state.instructorName = option.name;
 			delete state.errors.instructorId;
 		};
 		const openRoutinePicker = () => {
 			const programPickerState = new ProgramPickerState({
-				searchLabel: "루틴 검색",
-				searchPlaceholder: "루틴 이름으로 검색하세요.",
-				options: routineOptions,
+				kind: "routine",
 				selectedId: state.routineId || undefined,
 				onSelect: selectRoutineOption,
 			});
@@ -127,9 +117,7 @@ export const TimelineSessionProgramForm = observer(
 		};
 		const openInstructorPicker = () => {
 			const programPickerState = new ProgramPickerState({
-				searchLabel: "강사 검색",
-				searchPlaceholder: "강사 이름으로 검색하세요.",
-				options: instructorOptions,
+				kind: "instructor",
 				selectedId: state.instructorId || undefined,
 				onSelect: selectInstructorOption,
 			});

@@ -9,7 +9,6 @@ import { DateTimeCell } from "../../data-grid/cell";
 import {
 	TimelineSessionProgramForm,
 	type TimelineSessionProgramFormState,
-	type TimelineSessionProgramPickerOption,
 	type TimelineSessionProgramRoutinePreviewItem,
 } from "../../form/TimelineSessionProgramForm";
 import { Button } from "../../input/Button/Button";
@@ -21,7 +20,6 @@ import { SectionSurface } from "../../surface";
 export type {
 	TimelineSessionProgramFormField,
 	TimelineSessionProgramFormState,
-	TimelineSessionProgramPickerOption,
 	TimelineSessionProgramRoutinePreviewItem,
 } from "../../form/TimelineSessionProgramForm";
 export interface TimelineSessionProgramEditScreenMetadata {
@@ -37,8 +35,6 @@ export interface TimelineSessionProgramEditScreenProps {
 	description?: ReactNode;
 	state?: TimelineSessionProgramFormState;
 	contentLanguageCode?: string | null;
-	routineOptions?: TimelineSessionProgramPickerOption[];
-	instructorOptions?: TimelineSessionProgramPickerOption[];
 	routinePreview?: TimelineSessionProgramRoutinePreviewItem[];
 	hasUnschedulableRoutine?: boolean;
 	readOnly?: boolean;
@@ -62,8 +58,6 @@ export const TimelineSessionProgramEditScreen = observer(
 			description,
 			state,
 			contentLanguageCode,
-			routineOptions = [],
-			instructorOptions = [],
 			routinePreview = [],
 			hasUnschedulableRoutine = false,
 			readOnly = false,
@@ -123,8 +117,6 @@ export const TimelineSessionProgramEditScreen = observer(
 								<TimelineSessionProgramForm
 									state={state}
 									contentLanguageCode={contentLanguageCode}
-									routineOptions={routineOptions}
-									instructorOptions={instructorOptions}
 									routinePreview={routinePreview}
 									hasUnschedulableRoutine={hasUnschedulableRoutine}
 									readOnly={readOnly}
