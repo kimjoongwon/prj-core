@@ -17,11 +17,11 @@ const DEFAULT_SURFACE_VARIANT: NonNullable<SurfaceProps["variant"]> =
 
 const SURFACE_VARIANT_CLASS_NAMES: Partial<Record<SurfaceVariant, string>> = {
 	default:
-		"border border-[#d7e4f2] bg-white text-foreground shadow-none dark:border-white/10 dark:bg-neutral-900 dark:text-foreground",
+		"border border-border bg-surface text-surface-foreground shadow-none",
 	secondary:
-		"border border-[#d7e4f2] bg-white text-foreground shadow-none dark:border-white/10 dark:bg-neutral-900 dark:text-foreground",
+		"border border-border bg-surface text-surface-foreground shadow-none",
 	tertiary:
-		"border border-[#d7e4f2] bg-[#f6f9fd] text-foreground shadow-none dark:border-white/10 dark:bg-neutral-800 dark:text-foreground",
+		"border border-border bg-surface-secondary text-surface-secondary-foreground shadow-none",
 	transparent: "bg-transparent text-foreground shadow-none",
 };
 

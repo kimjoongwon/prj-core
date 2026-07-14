@@ -8,9 +8,21 @@ describe("Surface", () => {
 
 		const surface = screen.getByText("panel").closest("[data-slot='surface']");
 
-		expect(surface).toHaveClass("bg-white");
-		expect(surface).toHaveClass("border-[#d7e4f2]");
+		expect(surface).toHaveClass("bg-surface");
+		expect(surface).toHaveClass("border-border");
+		expect(surface).toHaveClass("text-surface-foreground");
 		expect(surface).toHaveClass("shadow-none");
+	});
+
+	it("renders tertiary panels with the secondary surface palette", () => {
+		render(<Surface variant="tertiary">tertiary panel</Surface>);
+
+		const surface = screen
+			.getByText("tertiary panel")
+			.closest("[data-slot='surface']");
+
+		expect(surface).toHaveClass("bg-surface-secondary");
+		expect(surface).toHaveClass("text-surface-secondary-foreground");
 	});
 
 	it("keeps caller className overrides after the default surface palette", () => {

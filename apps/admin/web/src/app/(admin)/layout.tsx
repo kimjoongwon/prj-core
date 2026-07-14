@@ -7,9 +7,11 @@ import {
 	ThemeToggleButton,
 } from "@cocrepo/ui";
 import { Admin } from "@cocrepo/ui/layout";
+import { AdminCopyrightFooter } from "./AdminCopyrightFooter";
+import { PlateBrand } from "./PlateBrand";
 
 const utilityButtonClassName =
-	"h-10 w-10 rounded-lg border border-[#d7e4f2] bg-white text-foreground hover:bg-[#eef6ff] dark:border-white/10 dark:bg-neutral-900 dark:hover:bg-neutral-800";
+	"h-10 w-10 rounded-xl border border-border bg-surface text-foreground shadow-none hover:bg-default/70";
 
 /**
  * 인증 이후 관리자 route shell입니다.
@@ -23,6 +25,7 @@ export default function AdminLayout({
 	return (
 		<Admin>
 			<Admin.Header>
+				<PlateBrand />
 				<div className="flex items-center gap-2">
 					<LanguageSelectButton />
 					<ThemeToggleButton compact className={utilityButtonClassName} />
@@ -38,6 +41,9 @@ export default function AdminLayout({
 					<AccessControlGuard contents={children} />
 				</Admin.Main>
 			</Admin.Body>
+			<Admin.Footer className="border-separator border-t bg-surface">
+				<AdminCopyrightFooter />
+			</Admin.Footer>
 		</Admin>
 	);
 }

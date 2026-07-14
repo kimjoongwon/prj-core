@@ -5,8 +5,8 @@ import { Providers } from "./providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
-	title: "Admin",
-	description: "Admin Dashboard",
+	title: "Plate Admin",
+	description: "Plate 관리자 대시보드",
 };
 
 export const dynamic = "force-dynamic";

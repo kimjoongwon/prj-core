@@ -54,7 +54,7 @@ const ScreenHeader = ({
 		<div
 			{...props}
 			className={joinClassNames(
-				"min-w-0 border-b border-[#d7e4f2] pb-4 dark:border-white/10",
+				"min-w-0 border-separator border-b pb-4",
 				className,
 			)}
 		>

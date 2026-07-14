@@ -36,7 +36,7 @@ const AdminRoot = ({ children, className, ...props }: AdminProps) => {
 		<div
 			{...props}
 			className={joinClassNames(
-				"flex h-screen w-full flex-col overflow-hidden bg-[#f6f9fd] text-foreground dark:bg-neutral-950",
+				"flex h-screen w-full flex-col overflow-hidden bg-background text-foreground",
 				className,
 			)}
 		>
@@ -58,7 +58,7 @@ export const AdminHeader = ({
 		<header
 			{...props}
 			className={joinClassNames(
-				"relative z-30 shrink-0 border-b border-[#d7e4f2] bg-white dark:border-white/10 dark:bg-neutral-950",
+				"relative z-30 shrink-0 border-separator border-b bg-surface",
 				className,
 			)}
 		>
@@ -145,7 +145,7 @@ export const AdminMain = ({
 		<main
 			{...props}
 			className={joinClassNames(
-				"min-h-0 min-w-0 flex-1 overflow-y-auto bg-[#f6f9fd] p-4 pb-20 md:p-6 md:pb-6 dark:bg-neutral-950",
+				"min-h-0 min-w-0 flex-1 overflow-y-auto bg-background p-4 pb-20 md:p-6 md:pb-6",
 				className,
 			)}
 		>

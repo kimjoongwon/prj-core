@@ -43,20 +43,15 @@ export const NavigationPanelItem = observer(function NavigationPanelItem({
 				type="button"
 				aria-current={isSelected ? "page" : undefined}
 				className={cn(
-					"group flex w-full items-start text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40",
+					"group flex w-full items-start text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus/40",
 					density === "compact"
 						? "gap-2 rounded-xl px-2.5 py-2"
 						: "gap-3 rounded-[22px] px-3 py-3",
 					isSelected
-						? cn(
-								"bg-accent text-accent-foreground",
-								density === "compact"
-									? "shadow-[0_14px_28px_-22px_rgba(4,133,247,0.78)]"
-									: "shadow-[0_22px_46px_-28px_rgba(4,133,247,0.7)]",
-							)
+						? "bg-accent-soft text-accent-soft-foreground shadow-none"
 						: isActiveBranch
-							? "bg-[#e8f2ff] text-foreground dark:bg-neutral-900"
-							: "bg-transparent text-muted hover:bg-white hover:text-foreground dark:hover:bg-neutral-900",
+							? "bg-default/70 text-foreground"
+							: "bg-transparent text-muted hover:bg-default/70 hover:text-foreground",
 				)}
 				onClick={handleClick}
 			>
@@ -68,10 +63,10 @@ export const NavigationPanelItem = observer(function NavigationPanelItem({
 								? "h-8 w-8 rounded-lg"
 								: "mt-0.5 h-11 w-11 rounded-2xl",
 							isSelected
-								? "border-white/20 bg-white/15 text-accent-foreground"
+								? "border-accent/20 bg-surface text-accent"
 								: isActiveBranch
-									? "border-accent/20 bg-accent/10 text-accent"
-									: "border-[#d7e4f2] bg-white text-muted group-hover:text-foreground dark:border-white/10 dark:bg-neutral-900",
+									? "border-accent/20 bg-accent-soft text-accent-soft-foreground"
+									: "border-border bg-background text-muted group-hover:text-foreground",
 						)}
 					>
 						{renderItemIcon ? (
@@ -104,7 +99,7 @@ export const NavigationPanelItem = observer(function NavigationPanelItem({
 									? "mt-0.5 text-[11px] leading-4"
 									: "mt-1 text-xs leading-5",
 								isSelected
-									? "text-accent-foreground/80"
+									? "text-accent-soft-foreground/70"
 									: isActiveBranch
 										? "text-muted"
 										: "text-muted",
@@ -121,7 +116,7 @@ export const NavigationPanelItem = observer(function NavigationPanelItem({
 							"shrink-0 transition-transform",
 							density === "compact" ? "mt-0.5 h-3.5 w-3.5" : "mt-1 h-4 w-4",
 							isSelected
-								? "text-accent-foreground/80"
+								? "text-accent-soft-foreground/70"
 								: isActiveBranch
 									? "text-muted"
 									: "text-muted",

@@ -14,7 +14,16 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 - **API**: Orval 자동 생성 React Query 훅
 - **레이아웃**: AdminLayout (Header + Sidebar + Main)
 - **인증**: JWT + X-Tenant-ID 헤더 기반 Multi-Tenancy (`Tenant.spaceId` 파생 scope)
-- **브랜드**: "오노라(Onora)" (AppLogo)
+- **브랜드**: "Plate" (선명한 blue Plate mark + 장식 없는 wordmark)
+
+## Admin 시각 톤
+
+- 장시간 사용하는 운영 화면이므로 canvas는 중립 `background`, header·navigation·section은 `surface`를 사용합니다.
+- 경계는 `border`와 `separator` semantic token으로 구분하고 특정 색상값을 layout에 직접 넣지 않습니다.
+- 파란색 accent는 현재 navigation, 주요 액션, focus처럼 상호작용 의미가 있는 곳에만 제한합니다.
+- 선택된 navigation은 넓은 고채도 면 대신 `accent-soft` 배경과 accent icon으로 상태를 구분합니다.
+- 브랜드는 `#3182F6` 계열 mark와 foreground wordmark만 사용하고 badge나 보조 문구를 덧붙이지 않습니다.
+- footer는 sidebar 폭의 저작권 영역과 main 폭의 사업자 정보 영역을 나누어 작은 문구가 한 줄에 뭉치지 않게 합니다.
 
 ## L1: 사용자 (행위자)
 
@@ -234,13 +243,17 @@ NEW → OPEN → IN_PROGRESS → WAITING_CUSTOMER → RESOLVED → CLOSED
 ```
 AdminLayout
 ├── Header
-│   ├── AppLogo ("오노라", LayoutGrid 아이콘)
-│   ├── IDP 관리 버튼 (KeyRound 아이콘, 새 탭으로 IDP Client 열기)
-│   └── Select (Space 전환)
+│   ├── PlateBrand (blue Plate mark + wordmark, dashboard home link)
+│   ├── LanguageSelectButton
+│   ├── ThemeToggleButton
+│   ├── AccountTenantSelect
+│   └── AccountUserMenu
 ├── Sidebar
-│   └── ADMIN_NAV_ITEMS 기반 메뉴 트리
-└── Main Content
-    └── {children} (각 페이지)
+│   └── NavigationPanel
+├── Main Content
+│   └── AccessControlGuard > {children}
+└── Footer
+    └── Plate Labs 저작권 영역 + 사업자·주소·고객지원 정보
 ```
 
 ## 인증/인가 흐름

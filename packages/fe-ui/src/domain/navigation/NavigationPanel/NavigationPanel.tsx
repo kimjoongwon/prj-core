@@ -48,7 +48,7 @@ export const NavigationPanel = observer(function NavigationPanel() {
 		<aside className="flex h-full flex-col">
 			<div
 				className={cn(
-					"flex min-h-0 flex-1 flex-col overflow-hidden border-r border-[#d7e4f2] bg-[#f0f6ff] dark:border-white/10 dark:bg-neutral-950",
+					"flex min-h-0 flex-1 flex-col overflow-hidden border-separator border-r bg-surface",
 				)}
 			>
 				<nav
