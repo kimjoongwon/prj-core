@@ -14,7 +14,7 @@ export class Reservation
 	implements ReservationEntity
 {
 	spaceId!: string;
-	creatorId!: string | null;
+	createdById!: string | null;
 	userId!: string;
 	timelineId!: string;
 	sessionId!: string;
@@ -29,7 +29,7 @@ export class Reservation
 	cancelReason!: string | null;
 
 	space?: Space;
-	creator?: User | null;
+	createdBy?: User | null;
 	user?: User;
 	timeline?: Timeline;
 	session?: Session;

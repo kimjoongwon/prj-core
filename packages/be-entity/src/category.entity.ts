@@ -11,12 +11,12 @@ export class Category extends AbstractEntity implements CategoryEntity {
 	type!: CategoryTypes;
 	spaceId!: string;
 	parentId!: string | null;
-	creatorId!: string | null;
+	createdById!: string | null;
 
 	parent?: Category;
 	children?: Category[];
 	space?: Space;
-	creator?: User;
+	createdBy?: User;
 
 	/**
 	 * 현재 카테고리부터 루트까지 모든 상위 카테고리 이름을 추출합니다

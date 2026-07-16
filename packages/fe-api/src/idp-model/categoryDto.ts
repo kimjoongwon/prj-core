@@ -22,7 +22,7 @@ export interface CategoryDto {
 	/** @nullable */
 	removedAt: string | null;
 	tenantId: string;
-	creatorId?: string;
+	createdById?: string;
 	name: string;
 	type: CategoryTypes;
 	/** @nullable */

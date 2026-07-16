@@ -54,7 +54,7 @@ export interface InquiryThreadSeedData {
 	inquiryNumber: string;
 	title?: string;
 	status: ThreadStatus;
-	creatorEmail: string;
+	createdByEmail: string;
 }
 
 /**
@@ -306,7 +306,7 @@ export const inquiryThreadSeedData: InquiryThreadSeedData[] = [
 		inquiryNumber: "INQ-2026-0001",
 		title: "배송 관련 문의",
 		status: "ACTIVE",
-		creatorEmail: "minsu.kim92@gmail.com",
+		createdByEmail: "minsu.kim92@gmail.com",
 	},
 
 	// INQ-2026-0002 스레드
@@ -314,7 +314,7 @@ export const inquiryThreadSeedData: InquiryThreadSeedData[] = [
 		inquiryNumber: "INQ-2026-0002",
 		title: "중복 예약 취소 요청",
 		status: "ACTIVE",
-		creatorEmail: "seoyeon_lee@naver.com",
+		createdByEmail: "seoyeon_lee@naver.com",
 	},
 
 	// INQ-2026-0003 스레드
@@ -322,7 +322,7 @@ export const inquiryThreadSeedData: InquiryThreadSeedData[] = [
 		inquiryNumber: "INQ-2026-0003",
 		title: "회원권 환불 처리",
 		status: "ACTIVE",
-		creatorEmail: "yejun.park@kakao.com",
+		createdByEmail: "yejun.park@kakao.com",
 	},
 
 	// INQ-2026-0004 스레드
@@ -330,7 +330,7 @@ export const inquiryThreadSeedData: InquiryThreadSeedData[] = [
 		inquiryNumber: "INQ-2026-0004",
 		title: "PT 프로그램 변경 상담",
 		status: "ACTIVE",
-		creatorEmail: "jiwoo0315@gmail.com",
+		createdByEmail: "jiwoo0315@gmail.com",
 	},
 
 	// INQ-2026-0005 스레드
@@ -338,7 +338,7 @@ export const inquiryThreadSeedData: InquiryThreadSeedData[] = [
 		inquiryNumber: "INQ-2026-0005",
 		title: "로그인 오류 해결",
 		status: "ACTIVE",
-		creatorEmail: "hayoon.jung@naver.com",
+		createdByEmail: "hayoon.jung@naver.com",
 	},
 
 	// INQ-2026-0006 스레드
@@ -346,7 +346,7 @@ export const inquiryThreadSeedData: InquiryThreadSeedData[] = [
 		inquiryNumber: "INQ-2026-0006",
 		title: "회원 정보 수정 요청",
 		status: "ACTIVE",
-		creatorEmail: "doyoon.kang@gmail.com",
+		createdByEmail: "doyoon.kang@gmail.com",
 	},
 
 	// INQ-2026-0007 스레드
@@ -354,7 +354,7 @@ export const inquiryThreadSeedData: InquiryThreadSeedData[] = [
 		inquiryNumber: "INQ-2026-0007",
 		title: "영업시간 안내",
 		status: "RESOLVED",
-		creatorEmail: "minsu.kim92@gmail.com",
+		createdByEmail: "minsu.kim92@gmail.com",
 	},
 
 	// INQ-2026-0008 스레드
@@ -362,7 +362,7 @@ export const inquiryThreadSeedData: InquiryThreadSeedData[] = [
 		inquiryNumber: "INQ-2026-0008",
 		title: "운동복 교환/반품",
 		status: "RESOLVED",
-		creatorEmail: "seoyeon_lee@naver.com",
+		createdByEmail: "seoyeon_lee@naver.com",
 	},
 
 	// INQ-2026-0009 스레드
@@ -370,7 +370,7 @@ export const inquiryThreadSeedData: InquiryThreadSeedData[] = [
 		inquiryNumber: "INQ-2026-0009",
 		title: "PT 강사 변경 요청",
 		status: "CLOSED",
-		creatorEmail: "yejun.park@kakao.com",
+		createdByEmail: "yejun.park@kakao.com",
 	},
 
 	// INQ-2026-0010 스레드
@@ -378,7 +378,7 @@ export const inquiryThreadSeedData: InquiryThreadSeedData[] = [
 		inquiryNumber: "INQ-2026-0010",
 		title: "시설 이용 중 부상 관련",
 		status: "CLOSED",
-		creatorEmail: "jiwoo0315@gmail.com",
+		createdByEmail: "jiwoo0315@gmail.com",
 	},
 ];
 

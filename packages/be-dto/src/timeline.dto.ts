@@ -14,7 +14,7 @@ export class TimelineDto extends AbstractDto implements Timeline {
 	spaceId: string;
 
 	@UUIDFieldOptional({ nullable: true })
-	creatorId: string | null;
+	createdById: string | null;
 
 	@StringField()
 	name: string;

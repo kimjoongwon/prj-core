@@ -48,10 +48,10 @@ export class GetCommunityPostsUseCase {
 		>["items"][number],
 	): CommunityPostResult {
 		return {
-			authorName: record.creator?.name ?? "회원",
+			authorName: record.createdBy?.name ?? "회원",
 			createdAt: record.createdAt,
 			id: record.id,
-			isMine: record.creator?.id === this.authContext.user?.id,
+			isMine: record.createdBy?.id === this.authContext.user?.id,
 			isPinned: false,
 			text: record.text ?? "",
 			title: record.title ?? null,

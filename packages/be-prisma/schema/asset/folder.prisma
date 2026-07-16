@@ -27,11 +27,11 @@ model Folder {
   /// @displayName 정렬 순서
   sortOrder      Int       @default(0) @map("sort_order")
   /// @displayName 생성자
-  creatorId      String?   @map("creator_id")
+  createdById    String?   @map("created_by_id")
   space          Space     @relation(fields: [spaceId], references: [id], onDelete: Restrict)
   parent         Folder?   @relation("FolderParent", fields: [parentFolderId], references: [id])
   children       Folder[]  @relation("FolderParent")
-  creator        User?     @relation(fields: [creatorId], references: [id], onDelete: SetNull)
+  createdBy      User?     @relation(fields: [createdById], references: [id], onDelete: SetNull)
   assets         Asset[]
 
   @@index([spaceId])

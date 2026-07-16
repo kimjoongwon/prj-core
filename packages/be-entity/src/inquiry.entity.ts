@@ -29,7 +29,7 @@ export class Inquiry extends AbstractEntity implements InquiryEntity {
 	// 필수 필드
 	// ============================================================================
 	spaceId!: string;
-	creatorId!: string | null;
+	createdById!: string | null;
 	inquiryNumber!: string;
 	title!: string;
 	category!: InquiryCategory;
@@ -63,7 +63,7 @@ export class Inquiry extends AbstractEntity implements InquiryEntity {
 	// 관계 필드 (선택적)
 	// ============================================================================
 	space?: Space;
-	creator?: User | null;
+	createdBy?: User | null;
 	customer?: User | null;
 	assignee?: User | null;
 	threads?: InquiryThread[];

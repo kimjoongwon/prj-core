@@ -46,13 +46,13 @@ model Space {
   tasks                Task[]
   inquiries            Inquiry[]
   albums               Album[]
-  albumEntries          AlbumEntry[]
-  groups                Group[]
-  reservations          Reservation[]
-  routines              Routine[]
-  assets                Asset[]
-  derivatives           Derivative[]
-  timelines             Timeline[]
+  albumEntries         AlbumEntry[]
+  groups               Group[]
+  reservations         Reservation[]
+  routines             Routine[]
+  assets               Asset[]
+  derivatives          Derivative[]
+  timelines            Timeline[]
 
   @@index([contentLanguageCode])
   @@map("spaces")

@@ -17,7 +17,7 @@ export class DerivativeDto extends AbstractDto {
 	spaceId!: string;
 
 	@UUIDFieldOptional({ nullable: true, description: "생성자 ID" })
-	creatorId!: string | null;
+	createdById!: string | null;
 
 	@UUIDField({ description: "원본 에셋 ID" })
 	assetId!: string;

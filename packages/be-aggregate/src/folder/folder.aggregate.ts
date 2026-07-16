@@ -58,7 +58,7 @@ export class FolderAggregate {
 
 	async createFolder(
 		input: CreateFolderInput,
-		creatorId: string,
+		createdById: string,
 	): Promise<Folder> {
 		const spaceId = this.getRequiredSpaceId();
 		const folder = new Folder();
@@ -113,7 +113,7 @@ export class FolderAggregate {
 			name: folder.name,
 			path,
 			sortOrder: nextSortOrder,
-			creatorId,
+			createdById,
 		});
 	}
 

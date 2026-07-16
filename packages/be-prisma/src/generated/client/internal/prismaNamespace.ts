@@ -5513,7 +5513,7 @@ export const PolicyScalarFieldEnum = {
 	updatedAt: "updatedAt",
 	removedAt: "removedAt",
 	spaceId: "spaceId",
-	creatorId: "creatorId",
+	createdById: "createdById",
 	name: "name",
 	displayName: "displayName",
 	description: "description",
@@ -5613,7 +5613,7 @@ export const AlbumScalarFieldEnum = {
 	description: "description",
 	coverAssetId: "coverAssetId",
 	sortOrder: "sortOrder",
-	creatorId: "creatorId",
+	createdById: "createdById",
 } as const;
 
 export type AlbumScalarFieldEnum =
@@ -5625,7 +5625,7 @@ export const AlbumEntryScalarFieldEnum = {
 	updatedAt: "updatedAt",
 	removedAt: "removedAt",
 	spaceId: "spaceId",
-	creatorId: "creatorId",
+	createdById: "createdById",
 	albumId: "albumId",
 	assetId: "assetId",
 	position: "position",
@@ -5651,7 +5651,7 @@ export const AssetScalarFieldEnum = {
 	sizeBytes: "sizeBytes",
 	checksum: "checksum",
 	metadata: "metadata",
-	creatorId: "creatorId",
+	createdById: "createdById",
 } as const;
 
 export type AssetScalarFieldEnum =
@@ -5714,7 +5714,7 @@ export const DerivativeScalarFieldEnum = {
 	updatedAt: "updatedAt",
 	removedAt: "removedAt",
 	spaceId: "spaceId",
-	creatorId: "creatorId",
+	createdById: "createdById",
 	assetId: "assetId",
 	kind: "kind",
 	profile: "profile",
@@ -5739,7 +5739,7 @@ export const FolderScalarFieldEnum = {
 	name: "name",
 	path: "path",
 	sortOrder: "sortOrder",
-	creatorId: "creatorId",
+	createdById: "createdById",
 } as const;
 
 export type FolderScalarFieldEnum =
@@ -5857,7 +5857,7 @@ export const ContentScalarFieldEnum = {
 	text: "text",
 	fileId: "fileId",
 	spaceId: "spaceId",
-	creatorId: "creatorId",
+	createdById: "createdById",
 } as const;
 
 export type ContentScalarFieldEnum =
@@ -6124,7 +6124,7 @@ export const InquiryThreadScalarFieldEnum = {
 	inquiryId: "inquiryId",
 	title: "title",
 	status: "status",
-	createdBy: "createdBy",
+	createdById: "createdById",
 	lastMessageAt: "lastMessageAt",
 	lastMessagePreview: "lastMessagePreview",
 	messageCount: "messageCount",
@@ -6197,7 +6197,7 @@ export const InquiryScalarFieldEnum = {
 	updatedAt: "updatedAt",
 	removedAt: "removedAt",
 	spaceId: "spaceId",
-	creatorId: "creatorId",
+	createdById: "createdById",
 	inquiryNumber: "inquiryNumber",
 	title: "title",
 	category: "category",
@@ -6317,7 +6317,7 @@ export const ReservationScalarFieldEnum = {
 	updatedAt: "updatedAt",
 	removedAt: "removedAt",
 	spaceId: "spaceId",
-	creatorId: "creatorId",
+	createdById: "createdById",
 	userId: "userId",
 	timelineId: "timelineId",
 	sessionId: "sessionId",
@@ -6341,7 +6341,7 @@ export const RoutineScalarFieldEnum = {
 	updatedAt: "updatedAt",
 	removedAt: "removedAt",
 	spaceId: "spaceId",
-	creatorId: "creatorId",
+	createdById: "createdById",
 	name: "name",
 	label: "label",
 } as const;
@@ -6371,7 +6371,7 @@ export const TaskScalarFieldEnum = {
 	updatedAt: "updatedAt",
 	removedAt: "removedAt",
 	spaceId: "spaceId",
-	creatorId: "creatorId",
+	createdById: "createdById",
 } as const;
 
 export type TaskScalarFieldEnum =
@@ -6400,7 +6400,7 @@ export const TimelineScalarFieldEnum = {
 	updatedAt: "updatedAt",
 	removedAt: "removedAt",
 	spaceId: "spaceId",
-	creatorId: "creatorId",
+	createdById: "createdById",
 	name: "name",
 	description: "description",
 } as const;
@@ -6475,7 +6475,7 @@ export const CategoryScalarFieldEnum = {
 	type: "type",
 	parentId: "parentId",
 	spaceId: "spaceId",
-	creatorId: "creatorId",
+	createdById: "createdById",
 } as const;
 
 export type CategoryScalarFieldEnum =
@@ -6490,7 +6490,7 @@ export const GroupScalarFieldEnum = {
 	type: "type",
 	label: "label",
 	spaceId: "spaceId",
-	creatorId: "creatorId",
+	createdById: "createdById",
 } as const;
 
 export type GroupScalarFieldEnum =
@@ -6507,7 +6507,7 @@ export const SafeWalletScalarFieldEnum = {
 	nonce: "nonce",
 	owners: "owners",
 	spaceId: "spaceId",
-	creatorId: "creatorId",
+	createdById: "createdById",
 } as const;
 
 export type SafeWalletScalarFieldEnum =

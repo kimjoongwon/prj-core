@@ -35,7 +35,7 @@ export type ContentMinAggregateOutputType = {
 	text: string | null;
 	fileId: string | null;
 	spaceId: string | null;
-	creatorId: string | null;
+	createdById: string | null;
 };
 
 export type ContentMaxAggregateOutputType = {
@@ -49,7 +49,7 @@ export type ContentMaxAggregateOutputType = {
 	text: string | null;
 	fileId: string | null;
 	spaceId: string | null;
-	creatorId: string | null;
+	createdById: string | null;
 };
 
 export type ContentCountAggregateOutputType = {
@@ -63,7 +63,7 @@ export type ContentCountAggregateOutputType = {
 	text: number;
 	fileId: number;
 	spaceId: number;
-	creatorId: number;
+	createdById: number;
 	_all: number;
 };
 
@@ -78,7 +78,7 @@ export type ContentMinAggregateInputType = {
 	text?: true;
 	fileId?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 };
 
 export type ContentMaxAggregateInputType = {
@@ -92,7 +92,7 @@ export type ContentMaxAggregateInputType = {
 	text?: true;
 	fileId?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 };
 
 export type ContentCountAggregateInputType = {
@@ -106,7 +106,7 @@ export type ContentCountAggregateInputType = {
 	text?: true;
 	fileId?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 	_all?: true;
 };
 
@@ -200,7 +200,7 @@ export type ContentGroupByOutputType = {
 	text: string | null;
 	fileId: string | null;
 	spaceId: string;
-	creatorId: string | null;
+	createdById: string | null;
 	_count: ContentCountAggregateOutputType | null;
 	_min: ContentMinAggregateOutputType | null;
 	_max: ContentMaxAggregateOutputType | null;
@@ -233,9 +233,9 @@ export type ContentWhereInput = {
 	text?: Prisma.StringNullableFilter<"Content"> | string | null;
 	fileId?: Prisma.StringNullableFilter<"Content"> | string | null;
 	spaceId?: Prisma.StringFilter<"Content"> | string;
-	creatorId?: Prisma.StringNullableFilter<"Content"> | string | null;
+	createdById?: Prisma.StringNullableFilter<"Content"> | string | null;
 	space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>;
-	creator?: Prisma.XOR<
+	createdBy?: Prisma.XOR<
 		Prisma.UserNullableScalarRelationFilter,
 		Prisma.UserWhereInput
 	> | null;
@@ -256,9 +256,9 @@ export type ContentOrderByWithRelationInput = {
 	text?: Prisma.SortOrderInput | Prisma.SortOrder;
 	fileId?: Prisma.SortOrderInput | Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrderInput | Prisma.SortOrder;
+	createdById?: Prisma.SortOrderInput | Prisma.SortOrder;
 	space?: Prisma.SpaceOrderByWithRelationInput;
-	creator?: Prisma.UserOrderByWithRelationInput;
+	createdBy?: Prisma.UserOrderByWithRelationInput;
 	post?: Prisma.PostOrderByWithRelationInput;
 };
 
@@ -277,12 +277,12 @@ export type ContentWhereUniqueInput = Prisma.AtLeast<
 		text?: Prisma.StringNullableFilter<"Content"> | string | null;
 		fileId?: Prisma.StringNullableFilter<"Content"> | string | null;
 		spaceId?: Prisma.StringFilter<"Content"> | string;
-		creatorId?: Prisma.StringNullableFilter<"Content"> | string | null;
+		createdById?: Prisma.StringNullableFilter<"Content"> | string | null;
 		space?: Prisma.XOR<
 			Prisma.SpaceScalarRelationFilter,
 			Prisma.SpaceWhereInput
 		>;
-		creator?: Prisma.XOR<
+		createdBy?: Prisma.XOR<
 			Prisma.UserNullableScalarRelationFilter,
 			Prisma.UserWhereInput
 		> | null;
@@ -305,7 +305,7 @@ export type ContentOrderByWithAggregationInput = {
 	text?: Prisma.SortOrderInput | Prisma.SortOrder;
 	fileId?: Prisma.SortOrderInput | Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrderInput | Prisma.SortOrder;
+	createdById?: Prisma.SortOrderInput | Prisma.SortOrder;
 	_count?: Prisma.ContentCountOrderByAggregateInput;
 	_max?: Prisma.ContentMaxOrderByAggregateInput;
 	_min?: Prisma.ContentMinOrderByAggregateInput;
@@ -340,7 +340,7 @@ export type ContentScalarWhereWithAggregatesInput = {
 	text?: Prisma.StringNullableWithAggregatesFilter<"Content"> | string | null;
 	fileId?: Prisma.StringNullableWithAggregatesFilter<"Content"> | string | null;
 	spaceId?: Prisma.StringWithAggregatesFilter<"Content"> | string;
-	creatorId?:
+	createdById?:
 		| Prisma.StringNullableWithAggregatesFilter<"Content">
 		| string
 		| null;
@@ -357,7 +357,7 @@ export type ContentCreateInput = {
 	text?: string | null;
 	fileId?: string | null;
 	space: Prisma.SpaceCreateNestedOneWithoutContentsInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedContentsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedContentsInput;
 	post?: Prisma.PostCreateNestedOneWithoutContentInput;
 };
 
@@ -372,7 +372,7 @@ export type ContentUncheckedCreateInput = {
 	text?: string | null;
 	fileId?: string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	post?: Prisma.PostUncheckedCreateNestedOneWithoutContentInput;
 };
 
@@ -395,7 +395,7 @@ export type ContentUpdateInput = {
 	text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutContentsNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedContentsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedContentsNestedInput;
 	post?: Prisma.PostUpdateOneWithoutContentNestedInput;
 };
 
@@ -418,7 +418,7 @@ export type ContentUncheckedUpdateInput = {
 	text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	post?: Prisma.PostUncheckedUpdateOneWithoutContentNestedInput;
 };
 
@@ -433,7 +433,7 @@ export type ContentCreateManyInput = {
 	text?: string | null;
 	fileId?: string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 };
 
 export type ContentUpdateManyMutationInput = {
@@ -475,7 +475,7 @@ export type ContentUncheckedUpdateManyInput = {
 	text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
 export type ContentScalarRelationFilter = {
@@ -494,7 +494,7 @@ export type ContentCountOrderByAggregateInput = {
 	text?: Prisma.SortOrder;
 	fileId?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 };
 
 export type ContentMaxOrderByAggregateInput = {
@@ -508,7 +508,7 @@ export type ContentMaxOrderByAggregateInput = {
 	text?: Prisma.SortOrder;
 	fileId?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 };
 
 export type ContentMinOrderByAggregateInput = {
@@ -522,7 +522,7 @@ export type ContentMinOrderByAggregateInput = {
 	text?: Prisma.SortOrder;
 	fileId?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 };
 
 export type ContentListRelationFilter = {
@@ -659,51 +659,51 @@ export type ContentUncheckedUpdateManyWithoutSpaceNestedInput = {
 		| Prisma.ContentScalarWhereInput[];
 };
 
-export type ContentCreateNestedManyWithoutCreatorInput = {
+export type ContentCreateNestedManyWithoutCreatedByInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.ContentCreateWithoutCreatorInput,
-				Prisma.ContentUncheckedCreateWithoutCreatorInput
+				Prisma.ContentCreateWithoutCreatedByInput,
+				Prisma.ContentUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.ContentCreateWithoutCreatorInput[]
-		| Prisma.ContentUncheckedCreateWithoutCreatorInput[];
+		| Prisma.ContentCreateWithoutCreatedByInput[]
+		| Prisma.ContentUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.ContentCreateOrConnectWithoutCreatorInput
-		| Prisma.ContentCreateOrConnectWithoutCreatorInput[];
-	createMany?: Prisma.ContentCreateManyCreatorInputEnvelope;
+		| Prisma.ContentCreateOrConnectWithoutCreatedByInput
+		| Prisma.ContentCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.ContentCreateManyCreatedByInputEnvelope;
 	connect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[];
 };
 
-export type ContentUncheckedCreateNestedManyWithoutCreatorInput = {
+export type ContentUncheckedCreateNestedManyWithoutCreatedByInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.ContentCreateWithoutCreatorInput,
-				Prisma.ContentUncheckedCreateWithoutCreatorInput
+				Prisma.ContentCreateWithoutCreatedByInput,
+				Prisma.ContentUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.ContentCreateWithoutCreatorInput[]
-		| Prisma.ContentUncheckedCreateWithoutCreatorInput[];
+		| Prisma.ContentCreateWithoutCreatedByInput[]
+		| Prisma.ContentUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.ContentCreateOrConnectWithoutCreatorInput
-		| Prisma.ContentCreateOrConnectWithoutCreatorInput[];
-	createMany?: Prisma.ContentCreateManyCreatorInputEnvelope;
+		| Prisma.ContentCreateOrConnectWithoutCreatedByInput
+		| Prisma.ContentCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.ContentCreateManyCreatedByInputEnvelope;
 	connect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[];
 };
 
-export type ContentUpdateManyWithoutCreatorNestedInput = {
+export type ContentUpdateManyWithoutCreatedByNestedInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.ContentCreateWithoutCreatorInput,
-				Prisma.ContentUncheckedCreateWithoutCreatorInput
+				Prisma.ContentCreateWithoutCreatedByInput,
+				Prisma.ContentUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.ContentCreateWithoutCreatorInput[]
-		| Prisma.ContentUncheckedCreateWithoutCreatorInput[];
+		| Prisma.ContentCreateWithoutCreatedByInput[]
+		| Prisma.ContentUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.ContentCreateOrConnectWithoutCreatorInput
-		| Prisma.ContentCreateOrConnectWithoutCreatorInput[];
+		| Prisma.ContentCreateOrConnectWithoutCreatedByInput
+		| Prisma.ContentCreateOrConnectWithoutCreatedByInput[];
 	upsert?:
-		| Prisma.ContentUpsertWithWhereUniqueWithoutCreatorInput
-		| Prisma.ContentUpsertWithWhereUniqueWithoutCreatorInput[];
-	createMany?: Prisma.ContentCreateManyCreatorInputEnvelope;
+		| Prisma.ContentUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.ContentUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.ContentCreateManyCreatedByInputEnvelope;
 	set?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[];
 	disconnect?:
 		| Prisma.ContentWhereUniqueInput
@@ -711,31 +711,31 @@ export type ContentUpdateManyWithoutCreatorNestedInput = {
 	delete?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[];
 	connect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[];
 	update?:
-		| Prisma.ContentUpdateWithWhereUniqueWithoutCreatorInput
-		| Prisma.ContentUpdateWithWhereUniqueWithoutCreatorInput[];
+		| Prisma.ContentUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.ContentUpdateWithWhereUniqueWithoutCreatedByInput[];
 	updateMany?:
-		| Prisma.ContentUpdateManyWithWhereWithoutCreatorInput
-		| Prisma.ContentUpdateManyWithWhereWithoutCreatorInput[];
+		| Prisma.ContentUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.ContentUpdateManyWithWhereWithoutCreatedByInput[];
 	deleteMany?:
 		| Prisma.ContentScalarWhereInput
 		| Prisma.ContentScalarWhereInput[];
 };
 
-export type ContentUncheckedUpdateManyWithoutCreatorNestedInput = {
+export type ContentUncheckedUpdateManyWithoutCreatedByNestedInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.ContentCreateWithoutCreatorInput,
-				Prisma.ContentUncheckedCreateWithoutCreatorInput
+				Prisma.ContentCreateWithoutCreatedByInput,
+				Prisma.ContentUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.ContentCreateWithoutCreatorInput[]
-		| Prisma.ContentUncheckedCreateWithoutCreatorInput[];
+		| Prisma.ContentCreateWithoutCreatedByInput[]
+		| Prisma.ContentUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.ContentCreateOrConnectWithoutCreatorInput
-		| Prisma.ContentCreateOrConnectWithoutCreatorInput[];
+		| Prisma.ContentCreateOrConnectWithoutCreatedByInput
+		| Prisma.ContentCreateOrConnectWithoutCreatedByInput[];
 	upsert?:
-		| Prisma.ContentUpsertWithWhereUniqueWithoutCreatorInput
-		| Prisma.ContentUpsertWithWhereUniqueWithoutCreatorInput[];
-	createMany?: Prisma.ContentCreateManyCreatorInputEnvelope;
+		| Prisma.ContentUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.ContentUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.ContentCreateManyCreatedByInputEnvelope;
 	set?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[];
 	disconnect?:
 		| Prisma.ContentWhereUniqueInput
@@ -743,11 +743,11 @@ export type ContentUncheckedUpdateManyWithoutCreatorNestedInput = {
 	delete?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[];
 	connect?: Prisma.ContentWhereUniqueInput | Prisma.ContentWhereUniqueInput[];
 	update?:
-		| Prisma.ContentUpdateWithWhereUniqueWithoutCreatorInput
-		| Prisma.ContentUpdateWithWhereUniqueWithoutCreatorInput[];
+		| Prisma.ContentUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.ContentUpdateWithWhereUniqueWithoutCreatedByInput[];
 	updateMany?:
-		| Prisma.ContentUpdateManyWithWhereWithoutCreatorInput
-		| Prisma.ContentUpdateManyWithWhereWithoutCreatorInput[];
+		| Prisma.ContentUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.ContentUpdateManyWithWhereWithoutCreatedByInput[];
 	deleteMany?:
 		| Prisma.ContentScalarWhereInput
 		| Prisma.ContentScalarWhereInput[];
@@ -764,7 +764,7 @@ export type ContentCreateWithoutPostInput = {
 	text?: string | null;
 	fileId?: string | null;
 	space: Prisma.SpaceCreateNestedOneWithoutContentsInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedContentsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedContentsInput;
 };
 
 export type ContentUncheckedCreateWithoutPostInput = {
@@ -778,7 +778,7 @@ export type ContentUncheckedCreateWithoutPostInput = {
 	text?: string | null;
 	fileId?: string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 };
 
 export type ContentCreateOrConnectWithoutPostInput = {
@@ -828,7 +828,7 @@ export type ContentUpdateWithoutPostInput = {
 	text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutContentsNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedContentsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedContentsNestedInput;
 };
 
 export type ContentUncheckedUpdateWithoutPostInput = {
@@ -850,7 +850,7 @@ export type ContentUncheckedUpdateWithoutPostInput = {
 	text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
 export type ContentCreateWithoutSpaceInput = {
@@ -863,7 +863,7 @@ export type ContentCreateWithoutSpaceInput = {
 	type?: $Enums.TextTypes;
 	text?: string | null;
 	fileId?: string | null;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedContentsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedContentsInput;
 	post?: Prisma.PostCreateNestedOneWithoutContentInput;
 };
 
@@ -877,7 +877,7 @@ export type ContentUncheckedCreateWithoutSpaceInput = {
 	type?: $Enums.TextTypes;
 	text?: string | null;
 	fileId?: string | null;
-	creatorId?: string | null;
+	createdById?: string | null;
 	post?: Prisma.PostUncheckedCreateNestedOneWithoutContentInput;
 };
 
@@ -938,10 +938,10 @@ export type ContentScalarWhereInput = {
 	text?: Prisma.StringNullableFilter<"Content"> | string | null;
 	fileId?: Prisma.StringNullableFilter<"Content"> | string | null;
 	spaceId?: Prisma.StringFilter<"Content"> | string;
-	creatorId?: Prisma.StringNullableFilter<"Content"> | string | null;
+	createdById?: Prisma.StringNullableFilter<"Content"> | string | null;
 };
 
-export type ContentCreateWithoutCreatorInput = {
+export type ContentCreateWithoutCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -955,7 +955,7 @@ export type ContentCreateWithoutCreatorInput = {
 	post?: Prisma.PostCreateNestedOneWithoutContentInput;
 };
 
-export type ContentUncheckedCreateWithoutCreatorInput = {
+export type ContentUncheckedCreateWithoutCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -969,46 +969,46 @@ export type ContentUncheckedCreateWithoutCreatorInput = {
 	post?: Prisma.PostUncheckedCreateNestedOneWithoutContentInput;
 };
 
-export type ContentCreateOrConnectWithoutCreatorInput = {
+export type ContentCreateOrConnectWithoutCreatedByInput = {
 	where: Prisma.ContentWhereUniqueInput;
 	create: Prisma.XOR<
-		Prisma.ContentCreateWithoutCreatorInput,
-		Prisma.ContentUncheckedCreateWithoutCreatorInput
+		Prisma.ContentCreateWithoutCreatedByInput,
+		Prisma.ContentUncheckedCreateWithoutCreatedByInput
 	>;
 };
 
-export type ContentCreateManyCreatorInputEnvelope = {
+export type ContentCreateManyCreatedByInputEnvelope = {
 	data:
-		| Prisma.ContentCreateManyCreatorInput
-		| Prisma.ContentCreateManyCreatorInput[];
+		| Prisma.ContentCreateManyCreatedByInput
+		| Prisma.ContentCreateManyCreatedByInput[];
 	skipDuplicates?: boolean;
 };
 
-export type ContentUpsertWithWhereUniqueWithoutCreatorInput = {
+export type ContentUpsertWithWhereUniqueWithoutCreatedByInput = {
 	where: Prisma.ContentWhereUniqueInput;
 	update: Prisma.XOR<
-		Prisma.ContentUpdateWithoutCreatorInput,
-		Prisma.ContentUncheckedUpdateWithoutCreatorInput
+		Prisma.ContentUpdateWithoutCreatedByInput,
+		Prisma.ContentUncheckedUpdateWithoutCreatedByInput
 	>;
 	create: Prisma.XOR<
-		Prisma.ContentCreateWithoutCreatorInput,
-		Prisma.ContentUncheckedCreateWithoutCreatorInput
+		Prisma.ContentCreateWithoutCreatedByInput,
+		Prisma.ContentUncheckedCreateWithoutCreatedByInput
 	>;
 };
 
-export type ContentUpdateWithWhereUniqueWithoutCreatorInput = {
+export type ContentUpdateWithWhereUniqueWithoutCreatedByInput = {
 	where: Prisma.ContentWhereUniqueInput;
 	data: Prisma.XOR<
-		Prisma.ContentUpdateWithoutCreatorInput,
-		Prisma.ContentUncheckedUpdateWithoutCreatorInput
+		Prisma.ContentUpdateWithoutCreatedByInput,
+		Prisma.ContentUncheckedUpdateWithoutCreatedByInput
 	>;
 };
 
-export type ContentUpdateManyWithWhereWithoutCreatorInput = {
+export type ContentUpdateManyWithWhereWithoutCreatedByInput = {
 	where: Prisma.ContentScalarWhereInput;
 	data: Prisma.XOR<
 		Prisma.ContentUpdateManyMutationInput,
-		Prisma.ContentUncheckedUpdateManyWithoutCreatorInput
+		Prisma.ContentUncheckedUpdateManyWithoutCreatedByInput
 	>;
 };
 
@@ -1022,7 +1022,7 @@ export type ContentCreateManySpaceInput = {
 	type?: $Enums.TextTypes;
 	text?: string | null;
 	fileId?: string | null;
-	creatorId?: string | null;
+	createdById?: string | null;
 };
 
 export type ContentUpdateWithoutSpaceInput = {
@@ -1043,7 +1043,7 @@ export type ContentUpdateWithoutSpaceInput = {
 	type?: Prisma.EnumTextTypesFieldUpdateOperationsInput | $Enums.TextTypes;
 	text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	creator?: Prisma.UserUpdateOneWithoutCreatedContentsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedContentsNestedInput;
 	post?: Prisma.PostUpdateOneWithoutContentNestedInput;
 };
 
@@ -1065,7 +1065,7 @@ export type ContentUncheckedUpdateWithoutSpaceInput = {
 	type?: Prisma.EnumTextTypesFieldUpdateOperationsInput | $Enums.TextTypes;
 	text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	post?: Prisma.PostUncheckedUpdateOneWithoutContentNestedInput;
 };
 
@@ -1087,10 +1087,10 @@ export type ContentUncheckedUpdateManyWithoutSpaceInput = {
 	type?: Prisma.EnumTextTypesFieldUpdateOperationsInput | $Enums.TextTypes;
 	text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	fileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
-export type ContentCreateManyCreatorInput = {
+export type ContentCreateManyCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1103,7 +1103,7 @@ export type ContentCreateManyCreatorInput = {
 	spaceId: string;
 };
 
-export type ContentUpdateWithoutCreatorInput = {
+export type ContentUpdateWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1125,7 +1125,7 @@ export type ContentUpdateWithoutCreatorInput = {
 	post?: Prisma.PostUpdateOneWithoutContentNestedInput;
 };
 
-export type ContentUncheckedUpdateWithoutCreatorInput = {
+export type ContentUncheckedUpdateWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1147,7 +1147,7 @@ export type ContentUncheckedUpdateWithoutCreatorInput = {
 	post?: Prisma.PostUncheckedUpdateOneWithoutContentNestedInput;
 };
 
-export type ContentUncheckedUpdateManyWithoutCreatorInput = {
+export type ContentUncheckedUpdateManyWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1183,9 +1183,9 @@ export type ContentSelect<
 		text?: boolean;
 		fileId?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Content$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Content$createdByArgs<ExtArgs>;
 		post?: boolean | Prisma.Content$postArgs<ExtArgs>;
 	},
 	ExtArgs["result"]["content"]
@@ -1206,9 +1206,9 @@ export type ContentSelectCreateManyAndReturn<
 		text?: boolean;
 		fileId?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Content$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Content$createdByArgs<ExtArgs>;
 	},
 	ExtArgs["result"]["content"]
 >;
@@ -1228,9 +1228,9 @@ export type ContentSelectUpdateManyAndReturn<
 		text?: boolean;
 		fileId?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Content$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Content$createdByArgs<ExtArgs>;
 	},
 	ExtArgs["result"]["content"]
 >;
@@ -1246,7 +1246,7 @@ export type ContentSelectScalar = {
 	text?: boolean;
 	fileId?: boolean;
 	spaceId?: boolean;
-	creatorId?: boolean;
+	createdById?: boolean;
 };
 
 export type ContentOmit<
@@ -1263,7 +1263,7 @@ export type ContentOmit<
 	| "text"
 	| "fileId"
 	| "spaceId"
-	| "creatorId",
+	| "createdById",
 	ExtArgs["result"]["content"]
 >;
 export type ContentInclude<
@@ -1271,7 +1271,7 @@ export type ContentInclude<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Content$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Content$createdByArgs<ExtArgs>;
 	post?: boolean | Prisma.Content$postArgs<ExtArgs>;
 };
 export type ContentIncludeCreateManyAndReturn<
@@ -1279,14 +1279,14 @@ export type ContentIncludeCreateManyAndReturn<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Content$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Content$createdByArgs<ExtArgs>;
 };
 export type ContentIncludeUpdateManyAndReturn<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Content$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Content$createdByArgs<ExtArgs>;
 };
 
 export type $ContentPayload<
@@ -1296,7 +1296,7 @@ export type $ContentPayload<
 	name: "Content";
 	objects: {
 		space: Prisma.$SpacePayload<ExtArgs>;
-		creator: Prisma.$UserPayload<ExtArgs> | null;
+		createdBy: Prisma.$UserPayload<ExtArgs> | null;
 		post: Prisma.$PostPayload<ExtArgs> | null;
 	};
 	scalars: runtime.Types.Extensions.GetPayloadResult<
@@ -1323,7 +1323,7 @@ export type $ContentPayload<
 			text: string | null;
 			fileId: string | null;
 			spaceId: string;
-			creatorId: string | null;
+			createdById: string | null;
 		},
 		ExtArgs["result"]["content"]
 	>;
@@ -1888,8 +1888,8 @@ export interface Prisma__ContentClient<
 		ExtArgs,
 		GlobalOmitOptions
 	>;
-	creator<T extends Prisma.Content$creatorArgs<ExtArgs> = {}>(
-		args?: Prisma.Subset<T, Prisma.Content$creatorArgs<ExtArgs>>,
+	createdBy<T extends Prisma.Content$createdByArgs<ExtArgs> = {}>(
+		args?: Prisma.Subset<T, Prisma.Content$createdByArgs<ExtArgs>>,
 	): Prisma.Prisma__UserClient<
 		runtime.Types.Result.GetResult<
 			Prisma.$UserPayload<ExtArgs>,
@@ -1966,7 +1966,7 @@ export interface ContentFieldRefs {
 	readonly text: Prisma.FieldRef<"Content", "String">;
 	readonly fileId: Prisma.FieldRef<"Content", "String">;
 	readonly spaceId: Prisma.FieldRef<"Content", "String">;
-	readonly creatorId: Prisma.FieldRef<"Content", "String">;
+	readonly createdById: Prisma.FieldRef<"Content", "String">;
 }
 
 // Custom InputTypes
@@ -2428,9 +2428,9 @@ export type ContentDeleteManyArgs<
 };
 
 /**
- * Content.creator
+ * Content.createdBy
  */
-export type Content$creatorArgs<
+export type Content$createdByArgs<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {

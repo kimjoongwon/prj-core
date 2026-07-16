@@ -22,7 +22,7 @@ export interface RoutineDto {
 	name: string;
 	label: string;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	programs: ProgramDto[];
 	activities: ActivityDto[];
 }

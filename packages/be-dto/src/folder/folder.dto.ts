@@ -31,7 +31,7 @@ export class FolderDto extends AbstractDto implements Folder {
 	sortOrder!: number;
 
 	@UUIDFieldOptional({ nullable: true, description: "생성자 ID" })
-	creatorId!: string | null;
+	createdById!: string | null;
 
 	// 관계 필드
 	@ClassField(() => FolderDto, { required: false, description: "부모 폴더" })

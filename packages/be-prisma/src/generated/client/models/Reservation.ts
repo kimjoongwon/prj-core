@@ -40,7 +40,7 @@ export type ReservationMinAggregateOutputType = {
 	updatedAt: Date | null;
 	removedAt: Date | null;
 	spaceId: string | null;
-	creatorId: string | null;
+	createdById: string | null;
 	userId: string | null;
 	timelineId: string | null;
 	sessionId: string | null;
@@ -61,7 +61,7 @@ export type ReservationMaxAggregateOutputType = {
 	updatedAt: Date | null;
 	removedAt: Date | null;
 	spaceId: string | null;
-	creatorId: string | null;
+	createdById: string | null;
 	userId: string | null;
 	timelineId: string | null;
 	sessionId: string | null;
@@ -82,7 +82,7 @@ export type ReservationCountAggregateOutputType = {
 	updatedAt: number;
 	removedAt: number;
 	spaceId: number;
-	creatorId: number;
+	createdById: number;
 	userId: number;
 	timelineId: number;
 	sessionId: number;
@@ -112,7 +112,7 @@ export type ReservationMinAggregateInputType = {
 	updatedAt?: true;
 	removedAt?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 	userId?: true;
 	timelineId?: true;
 	sessionId?: true;
@@ -133,7 +133,7 @@ export type ReservationMaxAggregateInputType = {
 	updatedAt?: true;
 	removedAt?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 	userId?: true;
 	timelineId?: true;
 	sessionId?: true;
@@ -154,7 +154,7 @@ export type ReservationCountAggregateInputType = {
 	updatedAt?: true;
 	removedAt?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 	userId?: true;
 	timelineId?: true;
 	sessionId?: true;
@@ -269,7 +269,7 @@ export type ReservationGroupByOutputType = {
 	updatedAt: Date | null;
 	removedAt: Date | null;
 	spaceId: string;
-	creatorId: string | null;
+	createdById: string | null;
 	userId: string;
 	timelineId: string;
 	sessionId: string;
@@ -319,7 +319,7 @@ export type ReservationWhereInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFilter<"Reservation"> | string;
-	creatorId?: Prisma.StringNullableFilter<"Reservation"> | string | null;
+	createdById?: Prisma.StringNullableFilter<"Reservation"> | string | null;
 	userId?: Prisma.StringFilter<"Reservation"> | string;
 	timelineId?: Prisma.StringFilter<"Reservation"> | string;
 	sessionId?: Prisma.StringFilter<"Reservation"> | string;
@@ -343,7 +343,7 @@ export type ReservationWhereInput = {
 		| null;
 	cancelReason?: Prisma.StringNullableFilter<"Reservation"> | string | null;
 	space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>;
-	creator?: Prisma.XOR<
+	createdBy?: Prisma.XOR<
 		Prisma.UserNullableScalarRelationFilter,
 		Prisma.UserWhereInput
 	> | null;
@@ -368,7 +368,7 @@ export type ReservationOrderByWithRelationInput = {
 	updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	removedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrderInput | Prisma.SortOrder;
+	createdById?: Prisma.SortOrderInput | Prisma.SortOrder;
 	userId?: Prisma.SortOrder;
 	timelineId?: Prisma.SortOrder;
 	sessionId?: Prisma.SortOrder;
@@ -382,7 +382,7 @@ export type ReservationOrderByWithRelationInput = {
 	canceledAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	cancelReason?: Prisma.SortOrderInput | Prisma.SortOrder;
 	space?: Prisma.SpaceOrderByWithRelationInput;
-	creator?: Prisma.UserOrderByWithRelationInput;
+	createdBy?: Prisma.UserOrderByWithRelationInput;
 	user?: Prisma.UserOrderByWithRelationInput;
 	timeline?: Prisma.TimelineOrderByWithRelationInput;
 	session?: Prisma.SessionOrderByWithRelationInput;
@@ -408,7 +408,7 @@ export type ReservationWhereUniqueInput = Prisma.AtLeast<
 			| string
 			| null;
 		spaceId?: Prisma.StringFilter<"Reservation"> | string;
-		creatorId?: Prisma.StringNullableFilter<"Reservation"> | string | null;
+		createdById?: Prisma.StringNullableFilter<"Reservation"> | string | null;
 		userId?: Prisma.StringFilter<"Reservation"> | string;
 		timelineId?: Prisma.StringFilter<"Reservation"> | string;
 		sessionId?: Prisma.StringFilter<"Reservation"> | string;
@@ -435,7 +435,7 @@ export type ReservationWhereUniqueInput = Prisma.AtLeast<
 			Prisma.SpaceScalarRelationFilter,
 			Prisma.SpaceWhereInput
 		>;
-		creator?: Prisma.XOR<
+		createdBy?: Prisma.XOR<
 			Prisma.UserNullableScalarRelationFilter,
 			Prisma.UserWhereInput
 		> | null;
@@ -462,7 +462,7 @@ export type ReservationOrderByWithAggregationInput = {
 	updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	removedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrderInput | Prisma.SortOrder;
+	createdById?: Prisma.SortOrderInput | Prisma.SortOrder;
 	userId?: Prisma.SortOrder;
 	timelineId?: Prisma.SortOrder;
 	sessionId?: Prisma.SortOrder;
@@ -506,7 +506,7 @@ export type ReservationScalarWhereWithAggregatesInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringWithAggregatesFilter<"Reservation"> | string;
-	creatorId?:
+	createdById?:
 		| Prisma.StringNullableWithAggregatesFilter<"Reservation">
 		| string
 		| null;
@@ -560,7 +560,7 @@ export type ReservationCreateInput = {
 	canceledAt?: Date | string | null;
 	cancelReason?: string | null;
 	space: Prisma.SpaceCreateNestedOneWithoutReservationsInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput;
 	user: Prisma.UserCreateNestedOneWithoutReservationsInput;
 	timeline: Prisma.TimelineCreateNestedOneWithoutReservationsInput;
 	session: Prisma.SessionCreateNestedOneWithoutReservationsInput;
@@ -573,7 +573,7 @@ export type ReservationUncheckedCreateInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	userId: string;
 	timelineId: string;
 	sessionId: string;
@@ -626,7 +626,7 @@ export type ReservationUpdateInput = {
 		| string
 		| null;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutReservationsNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput;
 	user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput;
 	timeline?: Prisma.TimelineUpdateOneRequiredWithoutReservationsNestedInput;
 	session?: Prisma.SessionUpdateOneRequiredWithoutReservationsNestedInput;
@@ -647,7 +647,7 @@ export type ReservationUncheckedUpdateInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	userId?: Prisma.StringFieldUpdateOperationsInput | string;
 	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
 	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -684,7 +684,7 @@ export type ReservationCreateManyInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	userId: string;
 	timelineId: string;
 	sessionId: string;
@@ -752,7 +752,7 @@ export type ReservationUncheckedUpdateManyInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	userId?: Prisma.StringFieldUpdateOperationsInput | string;
 	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
 	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -804,7 +804,7 @@ export type ReservationCountOrderByAggregateInput = {
 	updatedAt?: Prisma.SortOrder;
 	removedAt?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 	userId?: Prisma.SortOrder;
 	timelineId?: Prisma.SortOrder;
 	sessionId?: Prisma.SortOrder;
@@ -829,7 +829,7 @@ export type ReservationMaxOrderByAggregateInput = {
 	updatedAt?: Prisma.SortOrder;
 	removedAt?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 	userId?: Prisma.SortOrder;
 	timelineId?: Prisma.SortOrder;
 	sessionId?: Prisma.SortOrder;
@@ -850,7 +850,7 @@ export type ReservationMinOrderByAggregateInput = {
 	updatedAt?: Prisma.SortOrder;
 	removedAt?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 	userId?: Prisma.SortOrder;
 	timelineId?: Prisma.SortOrder;
 	sessionId?: Prisma.SortOrder;
@@ -996,18 +996,18 @@ export type ReservationCreateNestedManyWithoutUserInput = {
 		| Prisma.ReservationWhereUniqueInput[];
 };
 
-export type ReservationCreateNestedManyWithoutCreatorInput = {
+export type ReservationCreateNestedManyWithoutCreatedByInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.ReservationCreateWithoutCreatorInput,
-				Prisma.ReservationUncheckedCreateWithoutCreatorInput
+				Prisma.ReservationCreateWithoutCreatedByInput,
+				Prisma.ReservationUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.ReservationCreateWithoutCreatorInput[]
-		| Prisma.ReservationUncheckedCreateWithoutCreatorInput[];
+		| Prisma.ReservationCreateWithoutCreatedByInput[]
+		| Prisma.ReservationUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.ReservationCreateOrConnectWithoutCreatorInput
-		| Prisma.ReservationCreateOrConnectWithoutCreatorInput[];
-	createMany?: Prisma.ReservationCreateManyCreatorInputEnvelope;
+		| Prisma.ReservationCreateOrConnectWithoutCreatedByInput
+		| Prisma.ReservationCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.ReservationCreateManyCreatedByInputEnvelope;
 	connect?:
 		| Prisma.ReservationWhereUniqueInput
 		| Prisma.ReservationWhereUniqueInput[];
@@ -1030,18 +1030,18 @@ export type ReservationUncheckedCreateNestedManyWithoutUserInput = {
 		| Prisma.ReservationWhereUniqueInput[];
 };
 
-export type ReservationUncheckedCreateNestedManyWithoutCreatorInput = {
+export type ReservationUncheckedCreateNestedManyWithoutCreatedByInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.ReservationCreateWithoutCreatorInput,
-				Prisma.ReservationUncheckedCreateWithoutCreatorInput
+				Prisma.ReservationCreateWithoutCreatedByInput,
+				Prisma.ReservationUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.ReservationCreateWithoutCreatorInput[]
-		| Prisma.ReservationUncheckedCreateWithoutCreatorInput[];
+		| Prisma.ReservationCreateWithoutCreatedByInput[]
+		| Prisma.ReservationUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.ReservationCreateOrConnectWithoutCreatorInput
-		| Prisma.ReservationCreateOrConnectWithoutCreatorInput[];
-	createMany?: Prisma.ReservationCreateManyCreatorInputEnvelope;
+		| Prisma.ReservationCreateOrConnectWithoutCreatedByInput
+		| Prisma.ReservationCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.ReservationCreateManyCreatedByInputEnvelope;
 	connect?:
 		| Prisma.ReservationWhereUniqueInput
 		| Prisma.ReservationWhereUniqueInput[];
@@ -1085,21 +1085,21 @@ export type ReservationUpdateManyWithoutUserNestedInput = {
 		| Prisma.ReservationScalarWhereInput[];
 };
 
-export type ReservationUpdateManyWithoutCreatorNestedInput = {
+export type ReservationUpdateManyWithoutCreatedByNestedInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.ReservationCreateWithoutCreatorInput,
-				Prisma.ReservationUncheckedCreateWithoutCreatorInput
+				Prisma.ReservationCreateWithoutCreatedByInput,
+				Prisma.ReservationUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.ReservationCreateWithoutCreatorInput[]
-		| Prisma.ReservationUncheckedCreateWithoutCreatorInput[];
+		| Prisma.ReservationCreateWithoutCreatedByInput[]
+		| Prisma.ReservationUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.ReservationCreateOrConnectWithoutCreatorInput
-		| Prisma.ReservationCreateOrConnectWithoutCreatorInput[];
+		| Prisma.ReservationCreateOrConnectWithoutCreatedByInput
+		| Prisma.ReservationCreateOrConnectWithoutCreatedByInput[];
 	upsert?:
-		| Prisma.ReservationUpsertWithWhereUniqueWithoutCreatorInput
-		| Prisma.ReservationUpsertWithWhereUniqueWithoutCreatorInput[];
-	createMany?: Prisma.ReservationCreateManyCreatorInputEnvelope;
+		| Prisma.ReservationUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.ReservationUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.ReservationCreateManyCreatedByInputEnvelope;
 	set?:
 		| Prisma.ReservationWhereUniqueInput
 		| Prisma.ReservationWhereUniqueInput[];
@@ -1113,11 +1113,11 @@ export type ReservationUpdateManyWithoutCreatorNestedInput = {
 		| Prisma.ReservationWhereUniqueInput
 		| Prisma.ReservationWhereUniqueInput[];
 	update?:
-		| Prisma.ReservationUpdateWithWhereUniqueWithoutCreatorInput
-		| Prisma.ReservationUpdateWithWhereUniqueWithoutCreatorInput[];
+		| Prisma.ReservationUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.ReservationUpdateWithWhereUniqueWithoutCreatedByInput[];
 	updateMany?:
-		| Prisma.ReservationUpdateManyWithWhereWithoutCreatorInput
-		| Prisma.ReservationUpdateManyWithWhereWithoutCreatorInput[];
+		| Prisma.ReservationUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.ReservationUpdateManyWithWhereWithoutCreatedByInput[];
 	deleteMany?:
 		| Prisma.ReservationScalarWhereInput
 		| Prisma.ReservationScalarWhereInput[];
@@ -1161,21 +1161,21 @@ export type ReservationUncheckedUpdateManyWithoutUserNestedInput = {
 		| Prisma.ReservationScalarWhereInput[];
 };
 
-export type ReservationUncheckedUpdateManyWithoutCreatorNestedInput = {
+export type ReservationUncheckedUpdateManyWithoutCreatedByNestedInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.ReservationCreateWithoutCreatorInput,
-				Prisma.ReservationUncheckedCreateWithoutCreatorInput
+				Prisma.ReservationCreateWithoutCreatedByInput,
+				Prisma.ReservationUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.ReservationCreateWithoutCreatorInput[]
-		| Prisma.ReservationUncheckedCreateWithoutCreatorInput[];
+		| Prisma.ReservationCreateWithoutCreatedByInput[]
+		| Prisma.ReservationUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.ReservationCreateOrConnectWithoutCreatorInput
-		| Prisma.ReservationCreateOrConnectWithoutCreatorInput[];
+		| Prisma.ReservationCreateOrConnectWithoutCreatedByInput
+		| Prisma.ReservationCreateOrConnectWithoutCreatedByInput[];
 	upsert?:
-		| Prisma.ReservationUpsertWithWhereUniqueWithoutCreatorInput
-		| Prisma.ReservationUpsertWithWhereUniqueWithoutCreatorInput[];
-	createMany?: Prisma.ReservationCreateManyCreatorInputEnvelope;
+		| Prisma.ReservationUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.ReservationUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.ReservationCreateManyCreatedByInputEnvelope;
 	set?:
 		| Prisma.ReservationWhereUniqueInput
 		| Prisma.ReservationWhereUniqueInput[];
@@ -1189,11 +1189,11 @@ export type ReservationUncheckedUpdateManyWithoutCreatorNestedInput = {
 		| Prisma.ReservationWhereUniqueInput
 		| Prisma.ReservationWhereUniqueInput[];
 	update?:
-		| Prisma.ReservationUpdateWithWhereUniqueWithoutCreatorInput
-		| Prisma.ReservationUpdateWithWhereUniqueWithoutCreatorInput[];
+		| Prisma.ReservationUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.ReservationUpdateWithWhereUniqueWithoutCreatedByInput[];
 	updateMany?:
-		| Prisma.ReservationUpdateManyWithWhereWithoutCreatorInput
-		| Prisma.ReservationUpdateManyWithWhereWithoutCreatorInput[];
+		| Prisma.ReservationUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.ReservationUpdateManyWithWhereWithoutCreatedByInput[];
 	deleteMany?:
 		| Prisma.ReservationScalarWhereInput
 		| Prisma.ReservationScalarWhereInput[];
@@ -1546,7 +1546,7 @@ export type ReservationCreateWithoutSpaceInput = {
 	confirmedAt?: Date | string | null;
 	canceledAt?: Date | string | null;
 	cancelReason?: string | null;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput;
 	user: Prisma.UserCreateNestedOneWithoutReservationsInput;
 	timeline: Prisma.TimelineCreateNestedOneWithoutReservationsInput;
 	session: Prisma.SessionCreateNestedOneWithoutReservationsInput;
@@ -1558,7 +1558,7 @@ export type ReservationUncheckedCreateWithoutSpaceInput = {
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
-	creatorId?: string | null;
+	createdById?: string | null;
 	userId: string;
 	timelineId: string;
 	sessionId: string;
@@ -1637,7 +1637,7 @@ export type ReservationScalarWhereInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFilter<"Reservation"> | string;
-	creatorId?: Prisma.StringNullableFilter<"Reservation"> | string | null;
+	createdById?: Prisma.StringNullableFilter<"Reservation"> | string | null;
 	userId?: Prisma.StringFilter<"Reservation"> | string;
 	timelineId?: Prisma.StringFilter<"Reservation"> | string;
 	sessionId?: Prisma.StringFilter<"Reservation"> | string;
@@ -1676,7 +1676,7 @@ export type ReservationCreateWithoutUserInput = {
 	canceledAt?: Date | string | null;
 	cancelReason?: string | null;
 	space: Prisma.SpaceCreateNestedOneWithoutReservationsInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput;
 	timeline: Prisma.TimelineCreateNestedOneWithoutReservationsInput;
 	session: Prisma.SessionCreateNestedOneWithoutReservationsInput;
 	program: Prisma.ProgramCreateNestedOneWithoutReservationsInput;
@@ -1688,7 +1688,7 @@ export type ReservationUncheckedCreateWithoutUserInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	timelineId: string;
 	sessionId: string;
 	programId: string;
@@ -1717,7 +1717,7 @@ export type ReservationCreateManyUserInputEnvelope = {
 	skipDuplicates?: boolean;
 };
 
-export type ReservationCreateWithoutCreatorInput = {
+export type ReservationCreateWithoutCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1737,7 +1737,7 @@ export type ReservationCreateWithoutCreatorInput = {
 	program: Prisma.ProgramCreateNestedOneWithoutReservationsInput;
 };
 
-export type ReservationUncheckedCreateWithoutCreatorInput = {
+export type ReservationUncheckedCreateWithoutCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1757,18 +1757,18 @@ export type ReservationUncheckedCreateWithoutCreatorInput = {
 	cancelReason?: string | null;
 };
 
-export type ReservationCreateOrConnectWithoutCreatorInput = {
+export type ReservationCreateOrConnectWithoutCreatedByInput = {
 	where: Prisma.ReservationWhereUniqueInput;
 	create: Prisma.XOR<
-		Prisma.ReservationCreateWithoutCreatorInput,
-		Prisma.ReservationUncheckedCreateWithoutCreatorInput
+		Prisma.ReservationCreateWithoutCreatedByInput,
+		Prisma.ReservationUncheckedCreateWithoutCreatedByInput
 	>;
 };
 
-export type ReservationCreateManyCreatorInputEnvelope = {
+export type ReservationCreateManyCreatedByInputEnvelope = {
 	data:
-		| Prisma.ReservationCreateManyCreatorInput
-		| Prisma.ReservationCreateManyCreatorInput[];
+		| Prisma.ReservationCreateManyCreatedByInput
+		| Prisma.ReservationCreateManyCreatedByInput[];
 	skipDuplicates?: boolean;
 };
 
@@ -1800,31 +1800,31 @@ export type ReservationUpdateManyWithWhereWithoutUserInput = {
 	>;
 };
 
-export type ReservationUpsertWithWhereUniqueWithoutCreatorInput = {
+export type ReservationUpsertWithWhereUniqueWithoutCreatedByInput = {
 	where: Prisma.ReservationWhereUniqueInput;
 	update: Prisma.XOR<
-		Prisma.ReservationUpdateWithoutCreatorInput,
-		Prisma.ReservationUncheckedUpdateWithoutCreatorInput
+		Prisma.ReservationUpdateWithoutCreatedByInput,
+		Prisma.ReservationUncheckedUpdateWithoutCreatedByInput
 	>;
 	create: Prisma.XOR<
-		Prisma.ReservationCreateWithoutCreatorInput,
-		Prisma.ReservationUncheckedCreateWithoutCreatorInput
+		Prisma.ReservationCreateWithoutCreatedByInput,
+		Prisma.ReservationUncheckedCreateWithoutCreatedByInput
 	>;
 };
 
-export type ReservationUpdateWithWhereUniqueWithoutCreatorInput = {
+export type ReservationUpdateWithWhereUniqueWithoutCreatedByInput = {
 	where: Prisma.ReservationWhereUniqueInput;
 	data: Prisma.XOR<
-		Prisma.ReservationUpdateWithoutCreatorInput,
-		Prisma.ReservationUncheckedUpdateWithoutCreatorInput
+		Prisma.ReservationUpdateWithoutCreatedByInput,
+		Prisma.ReservationUncheckedUpdateWithoutCreatedByInput
 	>;
 };
 
-export type ReservationUpdateManyWithWhereWithoutCreatorInput = {
+export type ReservationUpdateManyWithWhereWithoutCreatedByInput = {
 	where: Prisma.ReservationScalarWhereInput;
 	data: Prisma.XOR<
 		Prisma.ReservationUpdateManyMutationInput,
-		Prisma.ReservationUncheckedUpdateManyWithoutCreatorInput
+		Prisma.ReservationUncheckedUpdateManyWithoutCreatedByInput
 	>;
 };
 
@@ -1842,7 +1842,7 @@ export type ReservationCreateWithoutTimelineInput = {
 	canceledAt?: Date | string | null;
 	cancelReason?: string | null;
 	space: Prisma.SpaceCreateNestedOneWithoutReservationsInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput;
 	user: Prisma.UserCreateNestedOneWithoutReservationsInput;
 	session: Prisma.SessionCreateNestedOneWithoutReservationsInput;
 	program: Prisma.ProgramCreateNestedOneWithoutReservationsInput;
@@ -1854,7 +1854,7 @@ export type ReservationUncheckedCreateWithoutTimelineInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	userId: string;
 	sessionId: string;
 	programId: string;
@@ -1925,7 +1925,7 @@ export type ReservationCreateWithoutSessionInput = {
 	canceledAt?: Date | string | null;
 	cancelReason?: string | null;
 	space: Prisma.SpaceCreateNestedOneWithoutReservationsInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput;
 	user: Prisma.UserCreateNestedOneWithoutReservationsInput;
 	timeline: Prisma.TimelineCreateNestedOneWithoutReservationsInput;
 	program: Prisma.ProgramCreateNestedOneWithoutReservationsInput;
@@ -1937,7 +1937,7 @@ export type ReservationUncheckedCreateWithoutSessionInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	userId: string;
 	timelineId: string;
 	programId: string;
@@ -2008,7 +2008,7 @@ export type ReservationCreateWithoutProgramInput = {
 	canceledAt?: Date | string | null;
 	cancelReason?: string | null;
 	space: Prisma.SpaceCreateNestedOneWithoutReservationsInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput;
 	user: Prisma.UserCreateNestedOneWithoutReservationsInput;
 	timeline: Prisma.TimelineCreateNestedOneWithoutReservationsInput;
 	session: Prisma.SessionCreateNestedOneWithoutReservationsInput;
@@ -2020,7 +2020,7 @@ export type ReservationUncheckedCreateWithoutProgramInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	userId: string;
 	timelineId: string;
 	sessionId: string;
@@ -2082,7 +2082,7 @@ export type ReservationCreateManySpaceInput = {
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
-	creatorId?: string | null;
+	createdById?: string | null;
 	userId: string;
 	timelineId: string;
 	sessionId: string;
@@ -2134,7 +2134,7 @@ export type ReservationUpdateWithoutSpaceInput = {
 		| Prisma.NullableStringFieldUpdateOperationsInput
 		| string
 		| null;
-	creator?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput;
 	user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput;
 	timeline?: Prisma.TimelineUpdateOneRequiredWithoutReservationsNestedInput;
 	session?: Prisma.SessionUpdateOneRequiredWithoutReservationsNestedInput;
@@ -2154,7 +2154,7 @@ export type ReservationUncheckedUpdateWithoutSpaceInput = {
 		| Date
 		| string
 		| null;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	userId?: Prisma.StringFieldUpdateOperationsInput | string;
 	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
 	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2198,7 +2198,7 @@ export type ReservationUncheckedUpdateManyWithoutSpaceInput = {
 		| Date
 		| string
 		| null;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	userId?: Prisma.StringFieldUpdateOperationsInput | string;
 	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
 	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2235,7 +2235,7 @@ export type ReservationCreateManyUserInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	timelineId: string;
 	sessionId: string;
 	programId: string;
@@ -2249,7 +2249,7 @@ export type ReservationCreateManyUserInput = {
 	cancelReason?: string | null;
 };
 
-export type ReservationCreateManyCreatorInput = {
+export type ReservationCreateManyCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -2307,7 +2307,7 @@ export type ReservationUpdateWithoutUserInput = {
 		| string
 		| null;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutReservationsNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput;
 	timeline?: Prisma.TimelineUpdateOneRequiredWithoutReservationsNestedInput;
 	session?: Prisma.SessionUpdateOneRequiredWithoutReservationsNestedInput;
 	program?: Prisma.ProgramUpdateOneRequiredWithoutReservationsNestedInput;
@@ -2327,7 +2327,7 @@ export type ReservationUncheckedUpdateWithoutUserInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
 	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
 	programId?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2371,7 +2371,7 @@ export type ReservationUncheckedUpdateManyWithoutUserInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
 	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
 	programId?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2401,7 +2401,7 @@ export type ReservationUncheckedUpdateManyWithoutUserInput = {
 		| null;
 };
 
-export type ReservationUpdateWithoutCreatorInput = {
+export type ReservationUpdateWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -2445,7 +2445,7 @@ export type ReservationUpdateWithoutCreatorInput = {
 	program?: Prisma.ProgramUpdateOneRequiredWithoutReservationsNestedInput;
 };
 
-export type ReservationUncheckedUpdateWithoutCreatorInput = {
+export type ReservationUncheckedUpdateWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -2489,7 +2489,7 @@ export type ReservationUncheckedUpdateWithoutCreatorInput = {
 		| null;
 };
 
-export type ReservationUncheckedUpdateManyWithoutCreatorInput = {
+export type ReservationUncheckedUpdateManyWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -2539,7 +2539,7 @@ export type ReservationCreateManyTimelineInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	userId: string;
 	sessionId: string;
 	programId: string;
@@ -2591,7 +2591,7 @@ export type ReservationUpdateWithoutTimelineInput = {
 		| string
 		| null;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutReservationsNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput;
 	user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput;
 	session?: Prisma.SessionUpdateOneRequiredWithoutReservationsNestedInput;
 	program?: Prisma.ProgramUpdateOneRequiredWithoutReservationsNestedInput;
@@ -2611,7 +2611,7 @@ export type ReservationUncheckedUpdateWithoutTimelineInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	userId?: Prisma.StringFieldUpdateOperationsInput | string;
 	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
 	programId?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2655,7 +2655,7 @@ export type ReservationUncheckedUpdateManyWithoutTimelineInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	userId?: Prisma.StringFieldUpdateOperationsInput | string;
 	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
 	programId?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2691,7 +2691,7 @@ export type ReservationCreateManySessionInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	userId: string;
 	timelineId: string;
 	programId: string;
@@ -2743,7 +2743,7 @@ export type ReservationUpdateWithoutSessionInput = {
 		| string
 		| null;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutReservationsNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput;
 	user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput;
 	timeline?: Prisma.TimelineUpdateOneRequiredWithoutReservationsNestedInput;
 	program?: Prisma.ProgramUpdateOneRequiredWithoutReservationsNestedInput;
@@ -2763,7 +2763,7 @@ export type ReservationUncheckedUpdateWithoutSessionInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	userId?: Prisma.StringFieldUpdateOperationsInput | string;
 	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
 	programId?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2807,7 +2807,7 @@ export type ReservationUncheckedUpdateManyWithoutSessionInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	userId?: Prisma.StringFieldUpdateOperationsInput | string;
 	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
 	programId?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2843,7 +2843,7 @@ export type ReservationCreateManyProgramInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	userId: string;
 	timelineId: string;
 	sessionId: string;
@@ -2895,7 +2895,7 @@ export type ReservationUpdateWithoutProgramInput = {
 		| string
 		| null;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutReservationsNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput;
 	user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput;
 	timeline?: Prisma.TimelineUpdateOneRequiredWithoutReservationsNestedInput;
 	session?: Prisma.SessionUpdateOneRequiredWithoutReservationsNestedInput;
@@ -2915,7 +2915,7 @@ export type ReservationUncheckedUpdateWithoutProgramInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	userId?: Prisma.StringFieldUpdateOperationsInput | string;
 	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
 	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2959,7 +2959,7 @@ export type ReservationUncheckedUpdateManyWithoutProgramInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	userId?: Prisma.StringFieldUpdateOperationsInput | string;
 	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
 	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -2999,7 +2999,7 @@ export type ReservationSelect<
 		updatedAt?: boolean;
 		removedAt?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		userId?: boolean;
 		timelineId?: boolean;
 		sessionId?: boolean;
@@ -3013,7 +3013,7 @@ export type ReservationSelect<
 		canceledAt?: boolean;
 		cancelReason?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Reservation$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Reservation$createdByArgs<ExtArgs>;
 		user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 		timeline?: boolean | Prisma.TimelineDefaultArgs<ExtArgs>;
 		session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>;
@@ -3032,7 +3032,7 @@ export type ReservationSelectCreateManyAndReturn<
 		updatedAt?: boolean;
 		removedAt?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		userId?: boolean;
 		timelineId?: boolean;
 		sessionId?: boolean;
@@ -3046,7 +3046,7 @@ export type ReservationSelectCreateManyAndReturn<
 		canceledAt?: boolean;
 		cancelReason?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Reservation$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Reservation$createdByArgs<ExtArgs>;
 		user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 		timeline?: boolean | Prisma.TimelineDefaultArgs<ExtArgs>;
 		session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>;
@@ -3065,7 +3065,7 @@ export type ReservationSelectUpdateManyAndReturn<
 		updatedAt?: boolean;
 		removedAt?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		userId?: boolean;
 		timelineId?: boolean;
 		sessionId?: boolean;
@@ -3079,7 +3079,7 @@ export type ReservationSelectUpdateManyAndReturn<
 		canceledAt?: boolean;
 		cancelReason?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Reservation$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Reservation$createdByArgs<ExtArgs>;
 		user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 		timeline?: boolean | Prisma.TimelineDefaultArgs<ExtArgs>;
 		session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>;
@@ -3094,7 +3094,7 @@ export type ReservationSelectScalar = {
 	updatedAt?: boolean;
 	removedAt?: boolean;
 	spaceId?: boolean;
-	creatorId?: boolean;
+	createdById?: boolean;
 	userId?: boolean;
 	timelineId?: boolean;
 	sessionId?: boolean;
@@ -3118,7 +3118,7 @@ export type ReservationOmit<
 	| "updatedAt"
 	| "removedAt"
 	| "spaceId"
-	| "creatorId"
+	| "createdById"
 	| "userId"
 	| "timelineId"
 	| "sessionId"
@@ -3138,7 +3138,7 @@ export type ReservationInclude<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Reservation$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Reservation$createdByArgs<ExtArgs>;
 	user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 	timeline?: boolean | Prisma.TimelineDefaultArgs<ExtArgs>;
 	session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>;
@@ -3149,7 +3149,7 @@ export type ReservationIncludeCreateManyAndReturn<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Reservation$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Reservation$createdByArgs<ExtArgs>;
 	user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 	timeline?: boolean | Prisma.TimelineDefaultArgs<ExtArgs>;
 	session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>;
@@ -3160,7 +3160,7 @@ export type ReservationIncludeUpdateManyAndReturn<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Reservation$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Reservation$createdByArgs<ExtArgs>;
 	user?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 	timeline?: boolean | Prisma.TimelineDefaultArgs<ExtArgs>;
 	session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>;
@@ -3174,7 +3174,7 @@ export type $ReservationPayload<
 	name: "Reservation";
 	objects: {
 		space: Prisma.$SpacePayload<ExtArgs>;
-		creator: Prisma.$UserPayload<ExtArgs> | null;
+		createdBy: Prisma.$UserPayload<ExtArgs> | null;
 		user: Prisma.$UserPayload<ExtArgs>;
 		timeline: Prisma.$TimelinePayload<ExtArgs>;
 		session: Prisma.$SessionPayload<ExtArgs>;
@@ -3187,7 +3187,7 @@ export type $ReservationPayload<
 			updatedAt: Date | null;
 			removedAt: Date | null;
 			spaceId: string;
-			creatorId: string | null;
+			createdById: string | null;
 			userId: string;
 			timelineId: string;
 			sessionId: string;
@@ -3767,8 +3767,8 @@ export interface Prisma__ReservationClient<
 		ExtArgs,
 		GlobalOmitOptions
 	>;
-	creator<T extends Prisma.Reservation$creatorArgs<ExtArgs> = {}>(
-		args?: Prisma.Subset<T, Prisma.Reservation$creatorArgs<ExtArgs>>,
+	createdBy<T extends Prisma.Reservation$createdByArgs<ExtArgs> = {}>(
+		args?: Prisma.Subset<T, Prisma.Reservation$createdByArgs<ExtArgs>>,
 	): Prisma.Prisma__UserClient<
 		runtime.Types.Result.GetResult<
 			Prisma.$UserPayload<ExtArgs>,
@@ -3883,7 +3883,7 @@ export interface ReservationFieldRefs {
 	readonly updatedAt: Prisma.FieldRef<"Reservation", "DateTime">;
 	readonly removedAt: Prisma.FieldRef<"Reservation", "DateTime">;
 	readonly spaceId: Prisma.FieldRef<"Reservation", "String">;
-	readonly creatorId: Prisma.FieldRef<"Reservation", "String">;
+	readonly createdById: Prisma.FieldRef<"Reservation", "String">;
 	readonly userId: Prisma.FieldRef<"Reservation", "String">;
 	readonly timelineId: Prisma.FieldRef<"Reservation", "String">;
 	readonly sessionId: Prisma.FieldRef<"Reservation", "String">;
@@ -4363,9 +4363,9 @@ export type ReservationDeleteManyArgs<
 };
 
 /**
- * Reservation.creator
+ * Reservation.createdBy
  */
-export type Reservation$creatorArgs<
+export type Reservation$createdByArgs<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {

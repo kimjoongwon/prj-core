@@ -20,7 +20,7 @@ export interface TaskDto {
 	/** @nullable */
 	removedAt: string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	exercise: ExerciseDto;
 	activities: ActivityDto[];
 }

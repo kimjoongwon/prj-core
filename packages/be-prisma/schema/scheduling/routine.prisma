@@ -12,18 +12,18 @@
 // @extended-by: Activity, Program
 /// @displayName 루틴
 model Routine {
-  id         String     @id @default(uuid())
-  createdAt  DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt  DateTime?  @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt  DateTime?  @map("removed_at") @db.Timestamptz(6)
-  spaceId    String     @map("space_id")
-  creatorId  String?    @map("creator_id")
-  name       String
-  label      String
-  space      Space      @relation(fields: [spaceId], references: [id], onDelete: Restrict)
-  creator    User?      @relation(fields: [creatorId], references: [id], onDelete: SetNull)
-  activities Activity[]
-  programs   Program[]
+  id          String     @id @default(uuid())
+  createdAt   DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime?  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime?  @map("removed_at") @db.Timestamptz(6)
+  spaceId     String     @map("space_id")
+  createdById String?    @map("created_by_id")
+  name        String
+  label       String
+  space       Space      @relation(fields: [spaceId], references: [id], onDelete: Restrict)
+  createdBy   User?      @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  activities  Activity[]
+  programs    Program[]
 
   @@index([spaceId])
   @@index([spaceId, name])

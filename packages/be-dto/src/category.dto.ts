@@ -13,7 +13,7 @@ export class CategoryDto extends AbstractDto implements Category {
 	spaceId: string;
 
 	@UUIDFieldOptional({ nullable: true })
-	creatorId: string | null;
+	createdById: string | null;
 
 	@StringField({ default: "" })
 	name: string;

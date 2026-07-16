@@ -30,7 +30,7 @@ export type PolicyMinAggregateOutputType = {
 	updatedAt: Date | null;
 	removedAt: Date | null;
 	spaceId: string | null;
-	creatorId: string | null;
+	createdById: string | null;
 	name: string | null;
 	displayName: string | null;
 	description: string | null;
@@ -43,7 +43,7 @@ export type PolicyMaxAggregateOutputType = {
 	updatedAt: Date | null;
 	removedAt: Date | null;
 	spaceId: string | null;
-	creatorId: string | null;
+	createdById: string | null;
 	name: string | null;
 	displayName: string | null;
 	description: string | null;
@@ -56,7 +56,7 @@ export type PolicyCountAggregateOutputType = {
 	updatedAt: number;
 	removedAt: number;
 	spaceId: number;
-	creatorId: number;
+	createdById: number;
 	name: number;
 	displayName: number;
 	description: number;
@@ -70,7 +70,7 @@ export type PolicyMinAggregateInputType = {
 	updatedAt?: true;
 	removedAt?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 	name?: true;
 	displayName?: true;
 	description?: true;
@@ -83,7 +83,7 @@ export type PolicyMaxAggregateInputType = {
 	updatedAt?: true;
 	removedAt?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 	name?: true;
 	displayName?: true;
 	description?: true;
@@ -96,7 +96,7 @@ export type PolicyCountAggregateInputType = {
 	updatedAt?: true;
 	removedAt?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 	name?: true;
 	displayName?: true;
 	description?: true;
@@ -189,7 +189,7 @@ export type PolicyGroupByOutputType = {
 	updatedAt: Date | null;
 	removedAt: Date | null;
 	spaceId: string;
-	creatorId: string | null;
+	createdById: string | null;
 	name: string;
 	displayName: string | null;
 	description: string | null;
@@ -221,13 +221,13 @@ export type PolicyWhereInput = {
 	updatedAt?: Prisma.DateTimeNullableFilter<"Policy"> | Date | string | null;
 	removedAt?: Prisma.DateTimeNullableFilter<"Policy"> | Date | string | null;
 	spaceId?: Prisma.StringFilter<"Policy"> | string;
-	creatorId?: Prisma.StringNullableFilter<"Policy"> | string | null;
+	createdById?: Prisma.StringNullableFilter<"Policy"> | string | null;
 	name?: Prisma.StringFilter<"Policy"> | string;
 	displayName?: Prisma.StringNullableFilter<"Policy"> | string | null;
 	description?: Prisma.StringNullableFilter<"Policy"> | string | null;
 	isSystem?: Prisma.BoolFilter<"Policy"> | boolean;
 	space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>;
-	creator?: Prisma.XOR<
+	createdBy?: Prisma.XOR<
 		Prisma.UserNullableScalarRelationFilter,
 		Prisma.UserWhereInput
 	> | null;
@@ -241,13 +241,13 @@ export type PolicyOrderByWithRelationInput = {
 	updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	removedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrderInput | Prisma.SortOrder;
+	createdById?: Prisma.SortOrderInput | Prisma.SortOrder;
 	name?: Prisma.SortOrder;
 	displayName?: Prisma.SortOrderInput | Prisma.SortOrder;
 	description?: Prisma.SortOrderInput | Prisma.SortOrder;
 	isSystem?: Prisma.SortOrder;
 	space?: Prisma.SpaceOrderByWithRelationInput;
-	creator?: Prisma.UserOrderByWithRelationInput;
+	createdBy?: Prisma.UserOrderByWithRelationInput;
 	policyAbilities?: Prisma.PolicyAbilityOrderByRelationAggregateInput;
 	rolePolicies?: Prisma.RolePolicyOrderByRelationAggregateInput;
 };
@@ -263,7 +263,7 @@ export type PolicyWhereUniqueInput = Prisma.AtLeast<
 		updatedAt?: Prisma.DateTimeNullableFilter<"Policy"> | Date | string | null;
 		removedAt?: Prisma.DateTimeNullableFilter<"Policy"> | Date | string | null;
 		spaceId?: Prisma.StringFilter<"Policy"> | string;
-		creatorId?: Prisma.StringNullableFilter<"Policy"> | string | null;
+		createdById?: Prisma.StringNullableFilter<"Policy"> | string | null;
 		name?: Prisma.StringFilter<"Policy"> | string;
 		displayName?: Prisma.StringNullableFilter<"Policy"> | string | null;
 		description?: Prisma.StringNullableFilter<"Policy"> | string | null;
@@ -272,7 +272,7 @@ export type PolicyWhereUniqueInput = Prisma.AtLeast<
 			Prisma.SpaceScalarRelationFilter,
 			Prisma.SpaceWhereInput
 		>;
-		creator?: Prisma.XOR<
+		createdBy?: Prisma.XOR<
 			Prisma.UserNullableScalarRelationFilter,
 			Prisma.UserWhereInput
 		> | null;
@@ -288,7 +288,7 @@ export type PolicyOrderByWithAggregationInput = {
 	updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	removedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrderInput | Prisma.SortOrder;
+	createdById?: Prisma.SortOrderInput | Prisma.SortOrder;
 	name?: Prisma.SortOrder;
 	displayName?: Prisma.SortOrderInput | Prisma.SortOrder;
 	description?: Prisma.SortOrderInput | Prisma.SortOrder;
@@ -319,7 +319,7 @@ export type PolicyScalarWhereWithAggregatesInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringWithAggregatesFilter<"Policy"> | string;
-	creatorId?:
+	createdById?:
 		| Prisma.StringNullableWithAggregatesFilter<"Policy">
 		| string
 		| null;
@@ -345,7 +345,7 @@ export type PolicyCreateInput = {
 	description?: string | null;
 	isSystem?: boolean;
 	space: Prisma.SpaceCreateNestedOneWithoutPoliciesInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedPoliciesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedPoliciesInput;
 	policyAbilities?: Prisma.PolicyAbilityCreateNestedManyWithoutPolicyInput;
 	rolePolicies?: Prisma.RolePolicyCreateNestedManyWithoutPolicyInput;
 };
@@ -356,7 +356,7 @@ export type PolicyUncheckedCreateInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	name: string;
 	displayName?: string | null;
 	description?: string | null;
@@ -383,7 +383,7 @@ export type PolicyUpdateInput = {
 	description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutPoliciesNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedPoliciesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedPoliciesNestedInput;
 	policyAbilities?: Prisma.PolicyAbilityUpdateManyWithoutPolicyNestedInput;
 	rolePolicies?: Prisma.RolePolicyUpdateManyWithoutPolicyNestedInput;
 };
@@ -402,7 +402,7 @@ export type PolicyUncheckedUpdateInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	name?: Prisma.StringFieldUpdateOperationsInput | string;
 	displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -417,7 +417,7 @@ export type PolicyCreateManyInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	name: string;
 	displayName?: string | null;
 	description?: string | null;
@@ -457,7 +457,7 @@ export type PolicyUncheckedUpdateManyInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	name?: Prisma.StringFieldUpdateOperationsInput | string;
 	displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -475,7 +475,7 @@ export type PolicyCountOrderByAggregateInput = {
 	updatedAt?: Prisma.SortOrder;
 	removedAt?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 	name?: Prisma.SortOrder;
 	displayName?: Prisma.SortOrder;
 	description?: Prisma.SortOrder;
@@ -488,7 +488,7 @@ export type PolicyMaxOrderByAggregateInput = {
 	updatedAt?: Prisma.SortOrder;
 	removedAt?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 	name?: Prisma.SortOrder;
 	displayName?: Prisma.SortOrder;
 	description?: Prisma.SortOrder;
@@ -501,7 +501,7 @@ export type PolicyMinOrderByAggregateInput = {
 	updatedAt?: Prisma.SortOrder;
 	removedAt?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 	name?: Prisma.SortOrder;
 	displayName?: Prisma.SortOrder;
 	description?: Prisma.SortOrder;
@@ -661,89 +661,89 @@ export type PolicyUncheckedUpdateManyWithoutSpaceNestedInput = {
 	deleteMany?: Prisma.PolicyScalarWhereInput | Prisma.PolicyScalarWhereInput[];
 };
 
-export type PolicyCreateNestedManyWithoutCreatorInput = {
+export type PolicyCreateNestedManyWithoutCreatedByInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.PolicyCreateWithoutCreatorInput,
-				Prisma.PolicyUncheckedCreateWithoutCreatorInput
+				Prisma.PolicyCreateWithoutCreatedByInput,
+				Prisma.PolicyUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.PolicyCreateWithoutCreatorInput[]
-		| Prisma.PolicyUncheckedCreateWithoutCreatorInput[];
+		| Prisma.PolicyCreateWithoutCreatedByInput[]
+		| Prisma.PolicyUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.PolicyCreateOrConnectWithoutCreatorInput
-		| Prisma.PolicyCreateOrConnectWithoutCreatorInput[];
-	createMany?: Prisma.PolicyCreateManyCreatorInputEnvelope;
+		| Prisma.PolicyCreateOrConnectWithoutCreatedByInput
+		| Prisma.PolicyCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.PolicyCreateManyCreatedByInputEnvelope;
 	connect?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[];
 };
 
-export type PolicyUncheckedCreateNestedManyWithoutCreatorInput = {
+export type PolicyUncheckedCreateNestedManyWithoutCreatedByInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.PolicyCreateWithoutCreatorInput,
-				Prisma.PolicyUncheckedCreateWithoutCreatorInput
+				Prisma.PolicyCreateWithoutCreatedByInput,
+				Prisma.PolicyUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.PolicyCreateWithoutCreatorInput[]
-		| Prisma.PolicyUncheckedCreateWithoutCreatorInput[];
+		| Prisma.PolicyCreateWithoutCreatedByInput[]
+		| Prisma.PolicyUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.PolicyCreateOrConnectWithoutCreatorInput
-		| Prisma.PolicyCreateOrConnectWithoutCreatorInput[];
-	createMany?: Prisma.PolicyCreateManyCreatorInputEnvelope;
+		| Prisma.PolicyCreateOrConnectWithoutCreatedByInput
+		| Prisma.PolicyCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.PolicyCreateManyCreatedByInputEnvelope;
 	connect?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[];
 };
 
-export type PolicyUpdateManyWithoutCreatorNestedInput = {
+export type PolicyUpdateManyWithoutCreatedByNestedInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.PolicyCreateWithoutCreatorInput,
-				Prisma.PolicyUncheckedCreateWithoutCreatorInput
+				Prisma.PolicyCreateWithoutCreatedByInput,
+				Prisma.PolicyUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.PolicyCreateWithoutCreatorInput[]
-		| Prisma.PolicyUncheckedCreateWithoutCreatorInput[];
+		| Prisma.PolicyCreateWithoutCreatedByInput[]
+		| Prisma.PolicyUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.PolicyCreateOrConnectWithoutCreatorInput
-		| Prisma.PolicyCreateOrConnectWithoutCreatorInput[];
+		| Prisma.PolicyCreateOrConnectWithoutCreatedByInput
+		| Prisma.PolicyCreateOrConnectWithoutCreatedByInput[];
 	upsert?:
-		| Prisma.PolicyUpsertWithWhereUniqueWithoutCreatorInput
-		| Prisma.PolicyUpsertWithWhereUniqueWithoutCreatorInput[];
-	createMany?: Prisma.PolicyCreateManyCreatorInputEnvelope;
+		| Prisma.PolicyUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.PolicyUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.PolicyCreateManyCreatedByInputEnvelope;
 	set?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[];
 	disconnect?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[];
 	delete?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[];
 	connect?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[];
 	update?:
-		| Prisma.PolicyUpdateWithWhereUniqueWithoutCreatorInput
-		| Prisma.PolicyUpdateWithWhereUniqueWithoutCreatorInput[];
+		| Prisma.PolicyUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.PolicyUpdateWithWhereUniqueWithoutCreatedByInput[];
 	updateMany?:
-		| Prisma.PolicyUpdateManyWithWhereWithoutCreatorInput
-		| Prisma.PolicyUpdateManyWithWhereWithoutCreatorInput[];
+		| Prisma.PolicyUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.PolicyUpdateManyWithWhereWithoutCreatedByInput[];
 	deleteMany?: Prisma.PolicyScalarWhereInput | Prisma.PolicyScalarWhereInput[];
 };
 
-export type PolicyUncheckedUpdateManyWithoutCreatorNestedInput = {
+export type PolicyUncheckedUpdateManyWithoutCreatedByNestedInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.PolicyCreateWithoutCreatorInput,
-				Prisma.PolicyUncheckedCreateWithoutCreatorInput
+				Prisma.PolicyCreateWithoutCreatedByInput,
+				Prisma.PolicyUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.PolicyCreateWithoutCreatorInput[]
-		| Prisma.PolicyUncheckedCreateWithoutCreatorInput[];
+		| Prisma.PolicyCreateWithoutCreatedByInput[]
+		| Prisma.PolicyUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.PolicyCreateOrConnectWithoutCreatorInput
-		| Prisma.PolicyCreateOrConnectWithoutCreatorInput[];
+		| Prisma.PolicyCreateOrConnectWithoutCreatedByInput
+		| Prisma.PolicyCreateOrConnectWithoutCreatedByInput[];
 	upsert?:
-		| Prisma.PolicyUpsertWithWhereUniqueWithoutCreatorInput
-		| Prisma.PolicyUpsertWithWhereUniqueWithoutCreatorInput[];
-	createMany?: Prisma.PolicyCreateManyCreatorInputEnvelope;
+		| Prisma.PolicyUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.PolicyUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.PolicyCreateManyCreatedByInputEnvelope;
 	set?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[];
 	disconnect?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[];
 	delete?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[];
 	connect?: Prisma.PolicyWhereUniqueInput | Prisma.PolicyWhereUniqueInput[];
 	update?:
-		| Prisma.PolicyUpdateWithWhereUniqueWithoutCreatorInput
-		| Prisma.PolicyUpdateWithWhereUniqueWithoutCreatorInput[];
+		| Prisma.PolicyUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.PolicyUpdateWithWhereUniqueWithoutCreatedByInput[];
 	updateMany?:
-		| Prisma.PolicyUpdateManyWithWhereWithoutCreatorInput
-		| Prisma.PolicyUpdateManyWithWhereWithoutCreatorInput[];
+		| Prisma.PolicyUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.PolicyUpdateManyWithWhereWithoutCreatedByInput[];
 	deleteMany?: Prisma.PolicyScalarWhereInput | Prisma.PolicyScalarWhereInput[];
 };
 
@@ -757,7 +757,7 @@ export type PolicyCreateWithoutPolicyAbilitiesInput = {
 	description?: string | null;
 	isSystem?: boolean;
 	space: Prisma.SpaceCreateNestedOneWithoutPoliciesInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedPoliciesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedPoliciesInput;
 	rolePolicies?: Prisma.RolePolicyCreateNestedManyWithoutPolicyInput;
 };
 
@@ -767,7 +767,7 @@ export type PolicyUncheckedCreateWithoutPolicyAbilitiesInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	name: string;
 	displayName?: string | null;
 	description?: string | null;
@@ -821,7 +821,7 @@ export type PolicyUpdateWithoutPolicyAbilitiesInput = {
 	description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutPoliciesNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedPoliciesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedPoliciesNestedInput;
 	rolePolicies?: Prisma.RolePolicyUpdateManyWithoutPolicyNestedInput;
 };
 
@@ -839,7 +839,7 @@ export type PolicyUncheckedUpdateWithoutPolicyAbilitiesInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	name?: Prisma.StringFieldUpdateOperationsInput | string;
 	displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -857,7 +857,7 @@ export type PolicyCreateWithoutRolePoliciesInput = {
 	description?: string | null;
 	isSystem?: boolean;
 	space: Prisma.SpaceCreateNestedOneWithoutPoliciesInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedPoliciesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedPoliciesInput;
 	policyAbilities?: Prisma.PolicyAbilityCreateNestedManyWithoutPolicyInput;
 };
 
@@ -867,7 +867,7 @@ export type PolicyUncheckedCreateWithoutRolePoliciesInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	name: string;
 	displayName?: string | null;
 	description?: string | null;
@@ -921,7 +921,7 @@ export type PolicyUpdateWithoutRolePoliciesInput = {
 	description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutPoliciesNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedPoliciesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedPoliciesNestedInput;
 	policyAbilities?: Prisma.PolicyAbilityUpdateManyWithoutPolicyNestedInput;
 };
 
@@ -939,7 +939,7 @@ export type PolicyUncheckedUpdateWithoutRolePoliciesInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	name?: Prisma.StringFieldUpdateOperationsInput | string;
 	displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -956,7 +956,7 @@ export type PolicyCreateWithoutSpaceInput = {
 	displayName?: string | null;
 	description?: string | null;
 	isSystem?: boolean;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedPoliciesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedPoliciesInput;
 	policyAbilities?: Prisma.PolicyAbilityCreateNestedManyWithoutPolicyInput;
 	rolePolicies?: Prisma.RolePolicyCreateNestedManyWithoutPolicyInput;
 };
@@ -966,7 +966,7 @@ export type PolicyUncheckedCreateWithoutSpaceInput = {
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
-	creatorId?: string | null;
+	createdById?: string | null;
 	name: string;
 	displayName?: string | null;
 	description?: string | null;
@@ -1025,14 +1025,14 @@ export type PolicyScalarWhereInput = {
 	updatedAt?: Prisma.DateTimeNullableFilter<"Policy"> | Date | string | null;
 	removedAt?: Prisma.DateTimeNullableFilter<"Policy"> | Date | string | null;
 	spaceId?: Prisma.StringFilter<"Policy"> | string;
-	creatorId?: Prisma.StringNullableFilter<"Policy"> | string | null;
+	createdById?: Prisma.StringNullableFilter<"Policy"> | string | null;
 	name?: Prisma.StringFilter<"Policy"> | string;
 	displayName?: Prisma.StringNullableFilter<"Policy"> | string | null;
 	description?: Prisma.StringNullableFilter<"Policy"> | string | null;
 	isSystem?: Prisma.BoolFilter<"Policy"> | boolean;
 };
 
-export type PolicyCreateWithoutCreatorInput = {
+export type PolicyCreateWithoutCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1046,7 +1046,7 @@ export type PolicyCreateWithoutCreatorInput = {
 	rolePolicies?: Prisma.RolePolicyCreateNestedManyWithoutPolicyInput;
 };
 
-export type PolicyUncheckedCreateWithoutCreatorInput = {
+export type PolicyUncheckedCreateWithoutCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1060,46 +1060,46 @@ export type PolicyUncheckedCreateWithoutCreatorInput = {
 	rolePolicies?: Prisma.RolePolicyUncheckedCreateNestedManyWithoutPolicyInput;
 };
 
-export type PolicyCreateOrConnectWithoutCreatorInput = {
+export type PolicyCreateOrConnectWithoutCreatedByInput = {
 	where: Prisma.PolicyWhereUniqueInput;
 	create: Prisma.XOR<
-		Prisma.PolicyCreateWithoutCreatorInput,
-		Prisma.PolicyUncheckedCreateWithoutCreatorInput
+		Prisma.PolicyCreateWithoutCreatedByInput,
+		Prisma.PolicyUncheckedCreateWithoutCreatedByInput
 	>;
 };
 
-export type PolicyCreateManyCreatorInputEnvelope = {
+export type PolicyCreateManyCreatedByInputEnvelope = {
 	data:
-		| Prisma.PolicyCreateManyCreatorInput
-		| Prisma.PolicyCreateManyCreatorInput[];
+		| Prisma.PolicyCreateManyCreatedByInput
+		| Prisma.PolicyCreateManyCreatedByInput[];
 	skipDuplicates?: boolean;
 };
 
-export type PolicyUpsertWithWhereUniqueWithoutCreatorInput = {
+export type PolicyUpsertWithWhereUniqueWithoutCreatedByInput = {
 	where: Prisma.PolicyWhereUniqueInput;
 	update: Prisma.XOR<
-		Prisma.PolicyUpdateWithoutCreatorInput,
-		Prisma.PolicyUncheckedUpdateWithoutCreatorInput
+		Prisma.PolicyUpdateWithoutCreatedByInput,
+		Prisma.PolicyUncheckedUpdateWithoutCreatedByInput
 	>;
 	create: Prisma.XOR<
-		Prisma.PolicyCreateWithoutCreatorInput,
-		Prisma.PolicyUncheckedCreateWithoutCreatorInput
+		Prisma.PolicyCreateWithoutCreatedByInput,
+		Prisma.PolicyUncheckedCreateWithoutCreatedByInput
 	>;
 };
 
-export type PolicyUpdateWithWhereUniqueWithoutCreatorInput = {
+export type PolicyUpdateWithWhereUniqueWithoutCreatedByInput = {
 	where: Prisma.PolicyWhereUniqueInput;
 	data: Prisma.XOR<
-		Prisma.PolicyUpdateWithoutCreatorInput,
-		Prisma.PolicyUncheckedUpdateWithoutCreatorInput
+		Prisma.PolicyUpdateWithoutCreatedByInput,
+		Prisma.PolicyUncheckedUpdateWithoutCreatedByInput
 	>;
 };
 
-export type PolicyUpdateManyWithWhereWithoutCreatorInput = {
+export type PolicyUpdateManyWithWhereWithoutCreatedByInput = {
 	where: Prisma.PolicyScalarWhereInput;
 	data: Prisma.XOR<
 		Prisma.PolicyUpdateManyMutationInput,
-		Prisma.PolicyUncheckedUpdateManyWithoutCreatorInput
+		Prisma.PolicyUncheckedUpdateManyWithoutCreatedByInput
 	>;
 };
 
@@ -1108,7 +1108,7 @@ export type PolicyCreateManySpaceInput = {
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
-	creatorId?: string | null;
+	createdById?: string | null;
 	name: string;
 	displayName?: string | null;
 	description?: string | null;
@@ -1132,7 +1132,7 @@ export type PolicyUpdateWithoutSpaceInput = {
 	displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	creator?: Prisma.UserUpdateOneWithoutCreatedPoliciesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedPoliciesNestedInput;
 	policyAbilities?: Prisma.PolicyAbilityUpdateManyWithoutPolicyNestedInput;
 	rolePolicies?: Prisma.RolePolicyUpdateManyWithoutPolicyNestedInput;
 };
@@ -1150,7 +1150,7 @@ export type PolicyUncheckedUpdateWithoutSpaceInput = {
 		| Date
 		| string
 		| null;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	name?: Prisma.StringFieldUpdateOperationsInput | string;
 	displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1172,14 +1172,14 @@ export type PolicyUncheckedUpdateManyWithoutSpaceInput = {
 		| Date
 		| string
 		| null;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	name?: Prisma.StringFieldUpdateOperationsInput | string;
 	displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean;
 };
 
-export type PolicyCreateManyCreatorInput = {
+export type PolicyCreateManyCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1191,7 +1191,7 @@ export type PolicyCreateManyCreatorInput = {
 	isSystem?: boolean;
 };
 
-export type PolicyUpdateWithoutCreatorInput = {
+export type PolicyUpdateWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1213,7 +1213,7 @@ export type PolicyUpdateWithoutCreatorInput = {
 	rolePolicies?: Prisma.RolePolicyUpdateManyWithoutPolicyNestedInput;
 };
 
-export type PolicyUncheckedUpdateWithoutCreatorInput = {
+export type PolicyUncheckedUpdateWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1235,7 +1235,7 @@ export type PolicyUncheckedUpdateWithoutCreatorInput = {
 	rolePolicies?: Prisma.RolePolicyUncheckedUpdateManyWithoutPolicyNestedInput;
 };
 
-export type PolicyUncheckedUpdateManyWithoutCreatorInput = {
+export type PolicyUncheckedUpdateManyWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1315,13 +1315,13 @@ export type PolicySelect<
 		updatedAt?: boolean;
 		removedAt?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		name?: boolean;
 		displayName?: boolean;
 		description?: boolean;
 		isSystem?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Policy$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Policy$createdByArgs<ExtArgs>;
 		policyAbilities?: boolean | Prisma.Policy$policyAbilitiesArgs<ExtArgs>;
 		rolePolicies?: boolean | Prisma.Policy$rolePoliciesArgs<ExtArgs>;
 		_count?: boolean | Prisma.PolicyCountOutputTypeDefaultArgs<ExtArgs>;
@@ -1339,13 +1339,13 @@ export type PolicySelectCreateManyAndReturn<
 		updatedAt?: boolean;
 		removedAt?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		name?: boolean;
 		displayName?: boolean;
 		description?: boolean;
 		isSystem?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Policy$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Policy$createdByArgs<ExtArgs>;
 	},
 	ExtArgs["result"]["policy"]
 >;
@@ -1360,13 +1360,13 @@ export type PolicySelectUpdateManyAndReturn<
 		updatedAt?: boolean;
 		removedAt?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		name?: boolean;
 		displayName?: boolean;
 		description?: boolean;
 		isSystem?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Policy$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Policy$createdByArgs<ExtArgs>;
 	},
 	ExtArgs["result"]["policy"]
 >;
@@ -1377,7 +1377,7 @@ export type PolicySelectScalar = {
 	updatedAt?: boolean;
 	removedAt?: boolean;
 	spaceId?: boolean;
-	creatorId?: boolean;
+	createdById?: boolean;
 	name?: boolean;
 	displayName?: boolean;
 	description?: boolean;
@@ -1393,7 +1393,7 @@ export type PolicyOmit<
 	| "updatedAt"
 	| "removedAt"
 	| "spaceId"
-	| "creatorId"
+	| "createdById"
 	| "name"
 	| "displayName"
 	| "description"
@@ -1405,7 +1405,7 @@ export type PolicyInclude<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Policy$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Policy$createdByArgs<ExtArgs>;
 	policyAbilities?: boolean | Prisma.Policy$policyAbilitiesArgs<ExtArgs>;
 	rolePolicies?: boolean | Prisma.Policy$rolePoliciesArgs<ExtArgs>;
 	_count?: boolean | Prisma.PolicyCountOutputTypeDefaultArgs<ExtArgs>;
@@ -1415,14 +1415,14 @@ export type PolicyIncludeCreateManyAndReturn<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Policy$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Policy$createdByArgs<ExtArgs>;
 };
 export type PolicyIncludeUpdateManyAndReturn<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Policy$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Policy$createdByArgs<ExtArgs>;
 };
 
 export type $PolicyPayload<
@@ -1432,7 +1432,7 @@ export type $PolicyPayload<
 	name: "Policy";
 	objects: {
 		space: Prisma.$SpacePayload<ExtArgs>;
-		creator: Prisma.$UserPayload<ExtArgs> | null;
+		createdBy: Prisma.$UserPayload<ExtArgs> | null;
 		policyAbilities: Prisma.$PolicyAbilityPayload<ExtArgs>[];
 		rolePolicies: Prisma.$RolePolicyPayload<ExtArgs>[];
 	};
@@ -1449,7 +1449,7 @@ export type $PolicyPayload<
 			/**
 			 * @displayName 생성자 ID
 			 */
-			creatorId: string | null;
+			createdById: string | null;
 			/**
 			 * @displayName 정책 식별자
 			 */
@@ -2030,8 +2030,8 @@ export interface Prisma__PolicyClient<
 		ExtArgs,
 		GlobalOmitOptions
 	>;
-	creator<T extends Prisma.Policy$creatorArgs<ExtArgs> = {}>(
-		args?: Prisma.Subset<T, Prisma.Policy$creatorArgs<ExtArgs>>,
+	createdBy<T extends Prisma.Policy$createdByArgs<ExtArgs> = {}>(
+		args?: Prisma.Subset<T, Prisma.Policy$createdByArgs<ExtArgs>>,
 	): Prisma.Prisma__UserClient<
 		runtime.Types.Result.GetResult<
 			Prisma.$UserPayload<ExtArgs>,
@@ -2112,7 +2112,7 @@ export interface PolicyFieldRefs {
 	readonly updatedAt: Prisma.FieldRef<"Policy", "DateTime">;
 	readonly removedAt: Prisma.FieldRef<"Policy", "DateTime">;
 	readonly spaceId: Prisma.FieldRef<"Policy", "String">;
-	readonly creatorId: Prisma.FieldRef<"Policy", "String">;
+	readonly createdById: Prisma.FieldRef<"Policy", "String">;
 	readonly name: Prisma.FieldRef<"Policy", "String">;
 	readonly displayName: Prisma.FieldRef<"Policy", "String">;
 	readonly description: Prisma.FieldRef<"Policy", "String">;
@@ -2572,9 +2572,9 @@ export type PolicyDeleteManyArgs<
 };
 
 /**
- * Policy.creator
+ * Policy.createdBy
  */
-export type Policy$creatorArgs<
+export type Policy$createdByArgs<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {

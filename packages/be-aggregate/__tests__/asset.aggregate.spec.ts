@@ -124,7 +124,7 @@ describe("AssetAggregate", () => {
 					extension: data.extension as string | null,
 					checksum: data.checksum as string | null,
 					metadata: data.metadata ?? null,
-					creatorId: data.creatorId as string | null,
+					createdById: data.createdById as string | null,
 					space: { id: "space-123" },
 				}) as never,
 		);
@@ -162,7 +162,7 @@ describe("AssetAggregate", () => {
 				sizeBytes: BigInt(11),
 				extension: "png",
 				checksum: expectedChecksum,
-				creatorId: "user-123",
+				createdById: "user-123",
 			}),
 		);
 		expect(result).toEqual(
@@ -211,7 +211,7 @@ describe("AssetAggregate", () => {
 					extension: data.extension as string | null,
 					checksum: data.checksum as string | null,
 					metadata: data.metadata ?? null,
-					creatorId: data.creatorId as string | null,
+					createdById: data.createdById as string | null,
 				}) as never,
 		);
 
@@ -260,7 +260,7 @@ describe("AssetAggregate", () => {
 			extension: "png",
 			checksum: "checksum",
 			metadata: null,
-			creatorId: "user-123",
+			createdById: "user-123",
 		} as never);
 		mockObjectStorageService.deleteObject.mockResolvedValue(undefined);
 		mockAssetsRepository.deleteById.mockResolvedValue({} as never);
@@ -294,7 +294,7 @@ describe("AssetAggregate", () => {
 			extension: "pdf",
 			checksum: "checksum",
 			metadata: null,
-			creatorId: "user-123",
+			createdById: "user-123",
 		} as never);
 		mockObjectStorageService.getObject.mockResolvedValue({
 			body: Buffer.from("pdf-body"),
@@ -337,7 +337,7 @@ describe("AssetAggregate", () => {
 			extension: "png",
 			checksum: "checksum",
 			metadata: null,
-			creatorId: "user-123",
+			createdById: "user-123",
 		} as never);
 		mockObjectStorageService.deleteObject.mockRejectedValue(
 			new Error("storage delete failed"),

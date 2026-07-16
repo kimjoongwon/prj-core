@@ -13,14 +13,14 @@ import type { User } from "./user.entity";
  */
 export class Policy extends AbstractEntity implements PolicyEntity {
 	spaceId!: string;
-	creatorId!: string | null;
+	createdById!: string | null;
 	name!: string;
 	displayName!: string | null;
 	description!: string | null;
 	isSystem!: boolean;
 
 	space?: Space;
-	creator?: User | null;
+	createdBy?: User | null;
 
 	@Type(() => PolicyAbility)
 	policyAbilities?: PolicyAbility[];

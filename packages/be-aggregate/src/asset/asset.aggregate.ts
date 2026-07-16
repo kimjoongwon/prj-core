@@ -124,7 +124,7 @@ export class AssetAggregate {
 	async uploadAsset(
 		dto: UploadAssetCommandInput,
 		file: UploadedAssetFile | undefined,
-		creatorId: string,
+		createdById: string,
 	) {
 		if (!file) {
 			throw new BadRequestException("업로드할 파일이 필요합니다");
@@ -173,7 +173,7 @@ export class AssetAggregate {
 			extension,
 			checksum: checksum.value,
 			metadata: null,
-			creatorId,
+			createdById,
 		});
 
 		return this.serializeAsset(asset);

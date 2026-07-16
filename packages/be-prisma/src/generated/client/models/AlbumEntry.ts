@@ -40,7 +40,7 @@ export type AlbumEntryMinAggregateOutputType = {
 	updatedAt: Date | null;
 	removedAt: Date | null;
 	spaceId: string | null;
-	creatorId: string | null;
+	createdById: string | null;
 	albumId: string | null;
 	assetId: string | null;
 	position: number | null;
@@ -53,7 +53,7 @@ export type AlbumEntryMaxAggregateOutputType = {
 	updatedAt: Date | null;
 	removedAt: Date | null;
 	spaceId: string | null;
-	creatorId: string | null;
+	createdById: string | null;
 	albumId: string | null;
 	assetId: string | null;
 	position: number | null;
@@ -66,7 +66,7 @@ export type AlbumEntryCountAggregateOutputType = {
 	updatedAt: number;
 	removedAt: number;
 	spaceId: number;
-	creatorId: number;
+	createdById: number;
 	albumId: number;
 	assetId: number;
 	position: number;
@@ -88,7 +88,7 @@ export type AlbumEntryMinAggregateInputType = {
 	updatedAt?: true;
 	removedAt?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 	albumId?: true;
 	assetId?: true;
 	position?: true;
@@ -101,7 +101,7 @@ export type AlbumEntryMaxAggregateInputType = {
 	updatedAt?: true;
 	removedAt?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 	albumId?: true;
 	assetId?: true;
 	position?: true;
@@ -114,7 +114,7 @@ export type AlbumEntryCountAggregateInputType = {
 	updatedAt?: true;
 	removedAt?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 	albumId?: true;
 	assetId?: true;
 	position?: true;
@@ -221,7 +221,7 @@ export type AlbumEntryGroupByOutputType = {
 	updatedAt: Date | null;
 	removedAt: Date | null;
 	spaceId: string;
-	creatorId: string | null;
+	createdById: string | null;
 	albumId: string;
 	assetId: string;
 	position: number;
@@ -263,13 +263,13 @@ export type AlbumEntryWhereInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFilter<"AlbumEntry"> | string;
-	creatorId?: Prisma.StringNullableFilter<"AlbumEntry"> | string | null;
+	createdById?: Prisma.StringNullableFilter<"AlbumEntry"> | string | null;
 	albumId?: Prisma.StringFilter<"AlbumEntry"> | string;
 	assetId?: Prisma.StringFilter<"AlbumEntry"> | string;
 	position?: Prisma.IntFilter<"AlbumEntry"> | number;
 	caption?: Prisma.StringNullableFilter<"AlbumEntry"> | string | null;
 	space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>;
-	creator?: Prisma.XOR<
+	createdBy?: Prisma.XOR<
 		Prisma.UserNullableScalarRelationFilter,
 		Prisma.UserWhereInput
 	> | null;
@@ -283,13 +283,13 @@ export type AlbumEntryOrderByWithRelationInput = {
 	updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	removedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrderInput | Prisma.SortOrder;
+	createdById?: Prisma.SortOrderInput | Prisma.SortOrder;
 	albumId?: Prisma.SortOrder;
 	assetId?: Prisma.SortOrder;
 	position?: Prisma.SortOrder;
 	caption?: Prisma.SortOrderInput | Prisma.SortOrder;
 	space?: Prisma.SpaceOrderByWithRelationInput;
-	creator?: Prisma.UserOrderByWithRelationInput;
+	createdBy?: Prisma.UserOrderByWithRelationInput;
 	album?: Prisma.AlbumOrderByWithRelationInput;
 	asset?: Prisma.AssetOrderByWithRelationInput;
 };
@@ -313,7 +313,7 @@ export type AlbumEntryWhereUniqueInput = Prisma.AtLeast<
 			| string
 			| null;
 		spaceId?: Prisma.StringFilter<"AlbumEntry"> | string;
-		creatorId?: Prisma.StringNullableFilter<"AlbumEntry"> | string | null;
+		createdById?: Prisma.StringNullableFilter<"AlbumEntry"> | string | null;
 		albumId?: Prisma.StringFilter<"AlbumEntry"> | string;
 		assetId?: Prisma.StringFilter<"AlbumEntry"> | string;
 		position?: Prisma.IntFilter<"AlbumEntry"> | number;
@@ -322,7 +322,7 @@ export type AlbumEntryWhereUniqueInput = Prisma.AtLeast<
 			Prisma.SpaceScalarRelationFilter,
 			Prisma.SpaceWhereInput
 		>;
-		creator?: Prisma.XOR<
+		createdBy?: Prisma.XOR<
 			Prisma.UserNullableScalarRelationFilter,
 			Prisma.UserWhereInput
 		> | null;
@@ -344,7 +344,7 @@ export type AlbumEntryOrderByWithAggregationInput = {
 	updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	removedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrderInput | Prisma.SortOrder;
+	createdById?: Prisma.SortOrderInput | Prisma.SortOrder;
 	albumId?: Prisma.SortOrder;
 	assetId?: Prisma.SortOrder;
 	position?: Prisma.SortOrder;
@@ -377,7 +377,7 @@ export type AlbumEntryScalarWhereWithAggregatesInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringWithAggregatesFilter<"AlbumEntry"> | string;
-	creatorId?:
+	createdById?:
 		| Prisma.StringNullableWithAggregatesFilter<"AlbumEntry">
 		| string
 		| null;
@@ -398,7 +398,7 @@ export type AlbumEntryCreateInput = {
 	position: number;
 	caption?: string | null;
 	space: Prisma.SpaceCreateNestedOneWithoutAlbumEntriesInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedAlbumEntriesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAlbumEntriesInput;
 	album: Prisma.AlbumCreateNestedOneWithoutEntriesInput;
 	asset: Prisma.AssetCreateNestedOneWithoutAlbumEntriesInput;
 };
@@ -409,7 +409,7 @@ export type AlbumEntryUncheckedCreateInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	albumId: string;
 	assetId: string;
 	position: number;
@@ -432,7 +432,7 @@ export type AlbumEntryUpdateInput = {
 	position?: Prisma.IntFieldUpdateOperationsInput | number;
 	caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutAlbumEntriesNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedAlbumEntriesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedAlbumEntriesNestedInput;
 	album?: Prisma.AlbumUpdateOneRequiredWithoutEntriesNestedInput;
 	asset?: Prisma.AssetUpdateOneRequiredWithoutAlbumEntriesNestedInput;
 };
@@ -451,7 +451,7 @@ export type AlbumEntryUncheckedUpdateInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	albumId?: Prisma.StringFieldUpdateOperationsInput | string;
 	assetId?: Prisma.StringFieldUpdateOperationsInput | string;
 	position?: Prisma.IntFieldUpdateOperationsInput | number;
@@ -464,7 +464,7 @@ export type AlbumEntryCreateManyInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	albumId: string;
 	assetId: string;
 	position: number;
@@ -502,7 +502,7 @@ export type AlbumEntryUncheckedUpdateManyInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	albumId?: Prisma.StringFieldUpdateOperationsInput | string;
 	assetId?: Prisma.StringFieldUpdateOperationsInput | string;
 	position?: Prisma.IntFieldUpdateOperationsInput | number;
@@ -530,7 +530,7 @@ export type AlbumEntryCountOrderByAggregateInput = {
 	updatedAt?: Prisma.SortOrder;
 	removedAt?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 	albumId?: Prisma.SortOrder;
 	assetId?: Prisma.SortOrder;
 	position?: Prisma.SortOrder;
@@ -547,7 +547,7 @@ export type AlbumEntryMaxOrderByAggregateInput = {
 	updatedAt?: Prisma.SortOrder;
 	removedAt?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 	albumId?: Prisma.SortOrder;
 	assetId?: Prisma.SortOrder;
 	position?: Prisma.SortOrder;
@@ -560,7 +560,7 @@ export type AlbumEntryMinOrderByAggregateInput = {
 	updatedAt?: Prisma.SortOrder;
 	removedAt?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 	albumId?: Prisma.SortOrder;
 	assetId?: Prisma.SortOrder;
 	position?: Prisma.SortOrder;
@@ -889,55 +889,55 @@ export type AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput = {
 		| Prisma.AlbumEntryScalarWhereInput[];
 };
 
-export type AlbumEntryCreateNestedManyWithoutCreatorInput = {
+export type AlbumEntryCreateNestedManyWithoutCreatedByInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.AlbumEntryCreateWithoutCreatorInput,
-				Prisma.AlbumEntryUncheckedCreateWithoutCreatorInput
+				Prisma.AlbumEntryCreateWithoutCreatedByInput,
+				Prisma.AlbumEntryUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.AlbumEntryCreateWithoutCreatorInput[]
-		| Prisma.AlbumEntryUncheckedCreateWithoutCreatorInput[];
+		| Prisma.AlbumEntryCreateWithoutCreatedByInput[]
+		| Prisma.AlbumEntryUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.AlbumEntryCreateOrConnectWithoutCreatorInput
-		| Prisma.AlbumEntryCreateOrConnectWithoutCreatorInput[];
-	createMany?: Prisma.AlbumEntryCreateManyCreatorInputEnvelope;
+		| Prisma.AlbumEntryCreateOrConnectWithoutCreatedByInput
+		| Prisma.AlbumEntryCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.AlbumEntryCreateManyCreatedByInputEnvelope;
 	connect?:
 		| Prisma.AlbumEntryWhereUniqueInput
 		| Prisma.AlbumEntryWhereUniqueInput[];
 };
 
-export type AlbumEntryUncheckedCreateNestedManyWithoutCreatorInput = {
+export type AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.AlbumEntryCreateWithoutCreatorInput,
-				Prisma.AlbumEntryUncheckedCreateWithoutCreatorInput
+				Prisma.AlbumEntryCreateWithoutCreatedByInput,
+				Prisma.AlbumEntryUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.AlbumEntryCreateWithoutCreatorInput[]
-		| Prisma.AlbumEntryUncheckedCreateWithoutCreatorInput[];
+		| Prisma.AlbumEntryCreateWithoutCreatedByInput[]
+		| Prisma.AlbumEntryUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.AlbumEntryCreateOrConnectWithoutCreatorInput
-		| Prisma.AlbumEntryCreateOrConnectWithoutCreatorInput[];
-	createMany?: Prisma.AlbumEntryCreateManyCreatorInputEnvelope;
+		| Prisma.AlbumEntryCreateOrConnectWithoutCreatedByInput
+		| Prisma.AlbumEntryCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.AlbumEntryCreateManyCreatedByInputEnvelope;
 	connect?:
 		| Prisma.AlbumEntryWhereUniqueInput
 		| Prisma.AlbumEntryWhereUniqueInput[];
 };
 
-export type AlbumEntryUpdateManyWithoutCreatorNestedInput = {
+export type AlbumEntryUpdateManyWithoutCreatedByNestedInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.AlbumEntryCreateWithoutCreatorInput,
-				Prisma.AlbumEntryUncheckedCreateWithoutCreatorInput
+				Prisma.AlbumEntryCreateWithoutCreatedByInput,
+				Prisma.AlbumEntryUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.AlbumEntryCreateWithoutCreatorInput[]
-		| Prisma.AlbumEntryUncheckedCreateWithoutCreatorInput[];
+		| Prisma.AlbumEntryCreateWithoutCreatedByInput[]
+		| Prisma.AlbumEntryUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.AlbumEntryCreateOrConnectWithoutCreatorInput
-		| Prisma.AlbumEntryCreateOrConnectWithoutCreatorInput[];
+		| Prisma.AlbumEntryCreateOrConnectWithoutCreatedByInput
+		| Prisma.AlbumEntryCreateOrConnectWithoutCreatedByInput[];
 	upsert?:
-		| Prisma.AlbumEntryUpsertWithWhereUniqueWithoutCreatorInput
-		| Prisma.AlbumEntryUpsertWithWhereUniqueWithoutCreatorInput[];
-	createMany?: Prisma.AlbumEntryCreateManyCreatorInputEnvelope;
+		| Prisma.AlbumEntryUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.AlbumEntryUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.AlbumEntryCreateManyCreatedByInputEnvelope;
 	set?: Prisma.AlbumEntryWhereUniqueInput | Prisma.AlbumEntryWhereUniqueInput[];
 	disconnect?:
 		| Prisma.AlbumEntryWhereUniqueInput
@@ -949,31 +949,31 @@ export type AlbumEntryUpdateManyWithoutCreatorNestedInput = {
 		| Prisma.AlbumEntryWhereUniqueInput
 		| Prisma.AlbumEntryWhereUniqueInput[];
 	update?:
-		| Prisma.AlbumEntryUpdateWithWhereUniqueWithoutCreatorInput
-		| Prisma.AlbumEntryUpdateWithWhereUniqueWithoutCreatorInput[];
+		| Prisma.AlbumEntryUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.AlbumEntryUpdateWithWhereUniqueWithoutCreatedByInput[];
 	updateMany?:
-		| Prisma.AlbumEntryUpdateManyWithWhereWithoutCreatorInput
-		| Prisma.AlbumEntryUpdateManyWithWhereWithoutCreatorInput[];
+		| Prisma.AlbumEntryUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.AlbumEntryUpdateManyWithWhereWithoutCreatedByInput[];
 	deleteMany?:
 		| Prisma.AlbumEntryScalarWhereInput
 		| Prisma.AlbumEntryScalarWhereInput[];
 };
 
-export type AlbumEntryUncheckedUpdateManyWithoutCreatorNestedInput = {
+export type AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.AlbumEntryCreateWithoutCreatorInput,
-				Prisma.AlbumEntryUncheckedCreateWithoutCreatorInput
+				Prisma.AlbumEntryCreateWithoutCreatedByInput,
+				Prisma.AlbumEntryUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.AlbumEntryCreateWithoutCreatorInput[]
-		| Prisma.AlbumEntryUncheckedCreateWithoutCreatorInput[];
+		| Prisma.AlbumEntryCreateWithoutCreatedByInput[]
+		| Prisma.AlbumEntryUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.AlbumEntryCreateOrConnectWithoutCreatorInput
-		| Prisma.AlbumEntryCreateOrConnectWithoutCreatorInput[];
+		| Prisma.AlbumEntryCreateOrConnectWithoutCreatedByInput
+		| Prisma.AlbumEntryCreateOrConnectWithoutCreatedByInput[];
 	upsert?:
-		| Prisma.AlbumEntryUpsertWithWhereUniqueWithoutCreatorInput
-		| Prisma.AlbumEntryUpsertWithWhereUniqueWithoutCreatorInput[];
-	createMany?: Prisma.AlbumEntryCreateManyCreatorInputEnvelope;
+		| Prisma.AlbumEntryUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.AlbumEntryUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.AlbumEntryCreateManyCreatedByInputEnvelope;
 	set?: Prisma.AlbumEntryWhereUniqueInput | Prisma.AlbumEntryWhereUniqueInput[];
 	disconnect?:
 		| Prisma.AlbumEntryWhereUniqueInput
@@ -985,11 +985,11 @@ export type AlbumEntryUncheckedUpdateManyWithoutCreatorNestedInput = {
 		| Prisma.AlbumEntryWhereUniqueInput
 		| Prisma.AlbumEntryWhereUniqueInput[];
 	update?:
-		| Prisma.AlbumEntryUpdateWithWhereUniqueWithoutCreatorInput
-		| Prisma.AlbumEntryUpdateWithWhereUniqueWithoutCreatorInput[];
+		| Prisma.AlbumEntryUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.AlbumEntryUpdateWithWhereUniqueWithoutCreatedByInput[];
 	updateMany?:
-		| Prisma.AlbumEntryUpdateManyWithWhereWithoutCreatorInput
-		| Prisma.AlbumEntryUpdateManyWithWhereWithoutCreatorInput[];
+		| Prisma.AlbumEntryUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.AlbumEntryUpdateManyWithWhereWithoutCreatedByInput[];
 	deleteMany?:
 		| Prisma.AlbumEntryScalarWhereInput
 		| Prisma.AlbumEntryScalarWhereInput[];
@@ -1003,7 +1003,7 @@ export type AlbumEntryCreateWithoutAlbumInput = {
 	position: number;
 	caption?: string | null;
 	space: Prisma.SpaceCreateNestedOneWithoutAlbumEntriesInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedAlbumEntriesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAlbumEntriesInput;
 	asset: Prisma.AssetCreateNestedOneWithoutAlbumEntriesInput;
 };
 
@@ -1013,7 +1013,7 @@ export type AlbumEntryUncheckedCreateWithoutAlbumInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	assetId: string;
 	position: number;
 	caption?: string | null;
@@ -1079,7 +1079,7 @@ export type AlbumEntryScalarWhereInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFilter<"AlbumEntry"> | string;
-	creatorId?: Prisma.StringNullableFilter<"AlbumEntry"> | string | null;
+	createdById?: Prisma.StringNullableFilter<"AlbumEntry"> | string | null;
 	albumId?: Prisma.StringFilter<"AlbumEntry"> | string;
 	assetId?: Prisma.StringFilter<"AlbumEntry"> | string;
 	position?: Prisma.IntFilter<"AlbumEntry"> | number;
@@ -1094,7 +1094,7 @@ export type AlbumEntryCreateWithoutAssetInput = {
 	position: number;
 	caption?: string | null;
 	space: Prisma.SpaceCreateNestedOneWithoutAlbumEntriesInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedAlbumEntriesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAlbumEntriesInput;
 	album: Prisma.AlbumCreateNestedOneWithoutEntriesInput;
 };
 
@@ -1104,7 +1104,7 @@ export type AlbumEntryUncheckedCreateWithoutAssetInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	albumId: string;
 	position: number;
 	caption?: string | null;
@@ -1160,7 +1160,7 @@ export type AlbumEntryCreateWithoutSpaceInput = {
 	removedAt?: Date | string | null;
 	position: number;
 	caption?: string | null;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedAlbumEntriesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAlbumEntriesInput;
 	album: Prisma.AlbumCreateNestedOneWithoutEntriesInput;
 	asset: Prisma.AssetCreateNestedOneWithoutAlbumEntriesInput;
 };
@@ -1170,7 +1170,7 @@ export type AlbumEntryUncheckedCreateWithoutSpaceInput = {
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
-	creatorId?: string | null;
+	createdById?: string | null;
 	albumId: string;
 	assetId: string;
 	position: number;
@@ -1220,7 +1220,7 @@ export type AlbumEntryUpdateManyWithWhereWithoutSpaceInput = {
 	>;
 };
 
-export type AlbumEntryCreateWithoutCreatorInput = {
+export type AlbumEntryCreateWithoutCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1232,7 +1232,7 @@ export type AlbumEntryCreateWithoutCreatorInput = {
 	asset: Prisma.AssetCreateNestedOneWithoutAlbumEntriesInput;
 };
 
-export type AlbumEntryUncheckedCreateWithoutCreatorInput = {
+export type AlbumEntryUncheckedCreateWithoutCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1244,46 +1244,46 @@ export type AlbumEntryUncheckedCreateWithoutCreatorInput = {
 	caption?: string | null;
 };
 
-export type AlbumEntryCreateOrConnectWithoutCreatorInput = {
+export type AlbumEntryCreateOrConnectWithoutCreatedByInput = {
 	where: Prisma.AlbumEntryWhereUniqueInput;
 	create: Prisma.XOR<
-		Prisma.AlbumEntryCreateWithoutCreatorInput,
-		Prisma.AlbumEntryUncheckedCreateWithoutCreatorInput
+		Prisma.AlbumEntryCreateWithoutCreatedByInput,
+		Prisma.AlbumEntryUncheckedCreateWithoutCreatedByInput
 	>;
 };
 
-export type AlbumEntryCreateManyCreatorInputEnvelope = {
+export type AlbumEntryCreateManyCreatedByInputEnvelope = {
 	data:
-		| Prisma.AlbumEntryCreateManyCreatorInput
-		| Prisma.AlbumEntryCreateManyCreatorInput[];
+		| Prisma.AlbumEntryCreateManyCreatedByInput
+		| Prisma.AlbumEntryCreateManyCreatedByInput[];
 	skipDuplicates?: boolean;
 };
 
-export type AlbumEntryUpsertWithWhereUniqueWithoutCreatorInput = {
+export type AlbumEntryUpsertWithWhereUniqueWithoutCreatedByInput = {
 	where: Prisma.AlbumEntryWhereUniqueInput;
 	update: Prisma.XOR<
-		Prisma.AlbumEntryUpdateWithoutCreatorInput,
-		Prisma.AlbumEntryUncheckedUpdateWithoutCreatorInput
+		Prisma.AlbumEntryUpdateWithoutCreatedByInput,
+		Prisma.AlbumEntryUncheckedUpdateWithoutCreatedByInput
 	>;
 	create: Prisma.XOR<
-		Prisma.AlbumEntryCreateWithoutCreatorInput,
-		Prisma.AlbumEntryUncheckedCreateWithoutCreatorInput
+		Prisma.AlbumEntryCreateWithoutCreatedByInput,
+		Prisma.AlbumEntryUncheckedCreateWithoutCreatedByInput
 	>;
 };
 
-export type AlbumEntryUpdateWithWhereUniqueWithoutCreatorInput = {
+export type AlbumEntryUpdateWithWhereUniqueWithoutCreatedByInput = {
 	where: Prisma.AlbumEntryWhereUniqueInput;
 	data: Prisma.XOR<
-		Prisma.AlbumEntryUpdateWithoutCreatorInput,
-		Prisma.AlbumEntryUncheckedUpdateWithoutCreatorInput
+		Prisma.AlbumEntryUpdateWithoutCreatedByInput,
+		Prisma.AlbumEntryUncheckedUpdateWithoutCreatedByInput
 	>;
 };
 
-export type AlbumEntryUpdateManyWithWhereWithoutCreatorInput = {
+export type AlbumEntryUpdateManyWithWhereWithoutCreatedByInput = {
 	where: Prisma.AlbumEntryScalarWhereInput;
 	data: Prisma.XOR<
 		Prisma.AlbumEntryUpdateManyMutationInput,
-		Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatorInput
+		Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByInput
 	>;
 };
 
@@ -1293,7 +1293,7 @@ export type AlbumEntryCreateManyAlbumInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	assetId: string;
 	position: number;
 	caption?: string | null;
@@ -1315,7 +1315,7 @@ export type AlbumEntryUpdateWithoutAlbumInput = {
 	position?: Prisma.IntFieldUpdateOperationsInput | number;
 	caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutAlbumEntriesNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedAlbumEntriesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedAlbumEntriesNestedInput;
 	asset?: Prisma.AssetUpdateOneRequiredWithoutAlbumEntriesNestedInput;
 };
 
@@ -1333,7 +1333,7 @@ export type AlbumEntryUncheckedUpdateWithoutAlbumInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	assetId?: Prisma.StringFieldUpdateOperationsInput | string;
 	position?: Prisma.IntFieldUpdateOperationsInput | number;
 	caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1353,7 +1353,7 @@ export type AlbumEntryUncheckedUpdateManyWithoutAlbumInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	assetId?: Prisma.StringFieldUpdateOperationsInput | string;
 	position?: Prisma.IntFieldUpdateOperationsInput | number;
 	caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1365,7 +1365,7 @@ export type AlbumEntryCreateManyAssetInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	albumId: string;
 	position: number;
 	caption?: string | null;
@@ -1387,7 +1387,7 @@ export type AlbumEntryUpdateWithoutAssetInput = {
 	position?: Prisma.IntFieldUpdateOperationsInput | number;
 	caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutAlbumEntriesNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedAlbumEntriesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedAlbumEntriesNestedInput;
 	album?: Prisma.AlbumUpdateOneRequiredWithoutEntriesNestedInput;
 };
 
@@ -1405,7 +1405,7 @@ export type AlbumEntryUncheckedUpdateWithoutAssetInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	albumId?: Prisma.StringFieldUpdateOperationsInput | string;
 	position?: Prisma.IntFieldUpdateOperationsInput | number;
 	caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1425,7 +1425,7 @@ export type AlbumEntryUncheckedUpdateManyWithoutAssetInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	albumId?: Prisma.StringFieldUpdateOperationsInput | string;
 	position?: Prisma.IntFieldUpdateOperationsInput | number;
 	caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1436,7 +1436,7 @@ export type AlbumEntryCreateManySpaceInput = {
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
-	creatorId?: string | null;
+	createdById?: string | null;
 	albumId: string;
 	assetId: string;
 	position: number;
@@ -1458,7 +1458,7 @@ export type AlbumEntryUpdateWithoutSpaceInput = {
 		| null;
 	position?: Prisma.IntFieldUpdateOperationsInput | number;
 	caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	creator?: Prisma.UserUpdateOneWithoutCreatedAlbumEntriesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedAlbumEntriesNestedInput;
 	album?: Prisma.AlbumUpdateOneRequiredWithoutEntriesNestedInput;
 	asset?: Prisma.AssetUpdateOneRequiredWithoutAlbumEntriesNestedInput;
 };
@@ -1476,7 +1476,7 @@ export type AlbumEntryUncheckedUpdateWithoutSpaceInput = {
 		| Date
 		| string
 		| null;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	albumId?: Prisma.StringFieldUpdateOperationsInput | string;
 	assetId?: Prisma.StringFieldUpdateOperationsInput | string;
 	position?: Prisma.IntFieldUpdateOperationsInput | number;
@@ -1496,14 +1496,14 @@ export type AlbumEntryUncheckedUpdateManyWithoutSpaceInput = {
 		| Date
 		| string
 		| null;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	albumId?: Prisma.StringFieldUpdateOperationsInput | string;
 	assetId?: Prisma.StringFieldUpdateOperationsInput | string;
 	position?: Prisma.IntFieldUpdateOperationsInput | number;
 	caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
-export type AlbumEntryCreateManyCreatorInput = {
+export type AlbumEntryCreateManyCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1515,7 +1515,7 @@ export type AlbumEntryCreateManyCreatorInput = {
 	caption?: string | null;
 };
 
-export type AlbumEntryUpdateWithoutCreatorInput = {
+export type AlbumEntryUpdateWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1535,7 +1535,7 @@ export type AlbumEntryUpdateWithoutCreatorInput = {
 	asset?: Prisma.AssetUpdateOneRequiredWithoutAlbumEntriesNestedInput;
 };
 
-export type AlbumEntryUncheckedUpdateWithoutCreatorInput = {
+export type AlbumEntryUncheckedUpdateWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1555,7 +1555,7 @@ export type AlbumEntryUncheckedUpdateWithoutCreatorInput = {
 	caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
-export type AlbumEntryUncheckedUpdateManyWithoutCreatorInput = {
+export type AlbumEntryUncheckedUpdateManyWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1585,13 +1585,13 @@ export type AlbumEntrySelect<
 		updatedAt?: boolean;
 		removedAt?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		albumId?: boolean;
 		assetId?: boolean;
 		position?: boolean;
 		caption?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.AlbumEntry$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.AlbumEntry$createdByArgs<ExtArgs>;
 		album?: boolean | Prisma.AlbumDefaultArgs<ExtArgs>;
 		asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>;
 	},
@@ -1608,13 +1608,13 @@ export type AlbumEntrySelectCreateManyAndReturn<
 		updatedAt?: boolean;
 		removedAt?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		albumId?: boolean;
 		assetId?: boolean;
 		position?: boolean;
 		caption?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.AlbumEntry$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.AlbumEntry$createdByArgs<ExtArgs>;
 		album?: boolean | Prisma.AlbumDefaultArgs<ExtArgs>;
 		asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>;
 	},
@@ -1631,13 +1631,13 @@ export type AlbumEntrySelectUpdateManyAndReturn<
 		updatedAt?: boolean;
 		removedAt?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		albumId?: boolean;
 		assetId?: boolean;
 		position?: boolean;
 		caption?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.AlbumEntry$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.AlbumEntry$createdByArgs<ExtArgs>;
 		album?: boolean | Prisma.AlbumDefaultArgs<ExtArgs>;
 		asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>;
 	},
@@ -1650,7 +1650,7 @@ export type AlbumEntrySelectScalar = {
 	updatedAt?: boolean;
 	removedAt?: boolean;
 	spaceId?: boolean;
-	creatorId?: boolean;
+	createdById?: boolean;
 	albumId?: boolean;
 	assetId?: boolean;
 	position?: boolean;
@@ -1666,7 +1666,7 @@ export type AlbumEntryOmit<
 	| "updatedAt"
 	| "removedAt"
 	| "spaceId"
-	| "creatorId"
+	| "createdById"
 	| "albumId"
 	| "assetId"
 	| "position"
@@ -1678,7 +1678,7 @@ export type AlbumEntryInclude<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.AlbumEntry$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.AlbumEntry$createdByArgs<ExtArgs>;
 	album?: boolean | Prisma.AlbumDefaultArgs<ExtArgs>;
 	asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>;
 };
@@ -1687,7 +1687,7 @@ export type AlbumEntryIncludeCreateManyAndReturn<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.AlbumEntry$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.AlbumEntry$createdByArgs<ExtArgs>;
 	album?: boolean | Prisma.AlbumDefaultArgs<ExtArgs>;
 	asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>;
 };
@@ -1696,7 +1696,7 @@ export type AlbumEntryIncludeUpdateManyAndReturn<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.AlbumEntry$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.AlbumEntry$createdByArgs<ExtArgs>;
 	album?: boolean | Prisma.AlbumDefaultArgs<ExtArgs>;
 	asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>;
 };
@@ -1708,7 +1708,7 @@ export type $AlbumEntryPayload<
 	name: "AlbumEntry";
 	objects: {
 		space: Prisma.$SpacePayload<ExtArgs>;
-		creator: Prisma.$UserPayload<ExtArgs> | null;
+		createdBy: Prisma.$UserPayload<ExtArgs> | null;
 		album: Prisma.$AlbumPayload<ExtArgs>;
 		asset: Prisma.$AssetPayload<ExtArgs>;
 	};
@@ -1722,7 +1722,7 @@ export type $AlbumEntryPayload<
 			 * @displayName 소속 Space
 			 */
 			spaceId: string;
-			creatorId: string | null;
+			createdById: string | null;
 			/**
 			 * @displayName 앨범 ID
 			 */
@@ -2303,8 +2303,8 @@ export interface Prisma__AlbumEntryClient<
 		ExtArgs,
 		GlobalOmitOptions
 	>;
-	creator<T extends Prisma.AlbumEntry$creatorArgs<ExtArgs> = {}>(
-		args?: Prisma.Subset<T, Prisma.AlbumEntry$creatorArgs<ExtArgs>>,
+	createdBy<T extends Prisma.AlbumEntry$createdByArgs<ExtArgs> = {}>(
+		args?: Prisma.Subset<T, Prisma.AlbumEntry$createdByArgs<ExtArgs>>,
 	): Prisma.Prisma__UserClient<
 		runtime.Types.Result.GetResult<
 			Prisma.$UserPayload<ExtArgs>,
@@ -2391,7 +2391,7 @@ export interface AlbumEntryFieldRefs {
 	readonly updatedAt: Prisma.FieldRef<"AlbumEntry", "DateTime">;
 	readonly removedAt: Prisma.FieldRef<"AlbumEntry", "DateTime">;
 	readonly spaceId: Prisma.FieldRef<"AlbumEntry", "String">;
-	readonly creatorId: Prisma.FieldRef<"AlbumEntry", "String">;
+	readonly createdById: Prisma.FieldRef<"AlbumEntry", "String">;
 	readonly albumId: Prisma.FieldRef<"AlbumEntry", "String">;
 	readonly assetId: Prisma.FieldRef<"AlbumEntry", "String">;
 	readonly position: Prisma.FieldRef<"AlbumEntry", "Int">;
@@ -2863,9 +2863,9 @@ export type AlbumEntryDeleteManyArgs<
 };
 
 /**
- * AlbumEntry.creator
+ * AlbumEntry.createdBy
  */
-export type AlbumEntry$creatorArgs<
+export type AlbumEntry$createdByArgs<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {

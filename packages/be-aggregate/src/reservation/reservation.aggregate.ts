@@ -181,7 +181,7 @@ export class ReservationAggregate {
 
 		const reservation = await this.repository.create({
 			spaceId: params.spaceId,
-			creatorId: params.userId,
+			createdById: params.userId,
 			userId: params.userId,
 			timelineId: params.input.timelineId,
 			sessionId: params.input.sessionId,

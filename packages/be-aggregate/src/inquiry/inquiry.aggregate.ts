@@ -161,7 +161,7 @@ export class InquiryAggregate {
 
 		const defaultThread = await this.repository.createThread({
 			inquiryId: inquiry.id,
-			createdBy: data.customerId ?? actorUserId,
+			createdById: data.customerId ?? actorUserId,
 			title: inquiry.title,
 		});
 

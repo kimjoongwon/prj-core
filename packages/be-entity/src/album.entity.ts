@@ -18,14 +18,14 @@ export class Album extends AbstractEntity implements AlbumEntity {
 	// ============================================================================
 	description!: string | null;
 	coverAssetId!: string | null;
-	creatorId!: string | null;
+	createdById!: string | null;
 
 	// ============================================================================
 	// 관계 필드 (선택적)
 	// ============================================================================
 	space?: Space;
 	coverAsset?: Asset | null;
-	creator?: User | null;
+	createdBy?: User | null;
 	entries?: AlbumEntry[];
 
 	// ============================================================================

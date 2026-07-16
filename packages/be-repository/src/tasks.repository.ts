@@ -48,7 +48,7 @@ export class TasksRepository {
 				include: {
 					exercise: true,
 					space: { select: { id: true } },
-					creator: { select: { id: true, name: true } },
+					createdBy: { select: { id: true, name: true } },
 				},
 				orderBy: { createdAt: "desc" },
 				skip: params.skip,
@@ -80,7 +80,7 @@ export class TasksRepository {
 			include: {
 				exercise: true,
 				space: { select: { id: true } },
-				creator: { select: { id: true, name: true } },
+				createdBy: { select: { id: true, name: true } },
 			},
 		});
 
@@ -111,7 +111,7 @@ export class TasksRepository {
 			include: {
 				exercise: true,
 				space: { select: { id: true } },
-				creator: { select: { id: true, name: true } },
+				createdBy: { select: { id: true, name: true } },
 			},
 		});
 
@@ -145,7 +145,7 @@ export class TasksRepository {
 			include: {
 				exercise: true,
 				space: { select: { id: true } },
-				creator: { select: { id: true, name: true } },
+				createdBy: { select: { id: true, name: true } },
 			},
 		});
 
@@ -170,7 +170,7 @@ export class TasksRepository {
 			include: {
 				exercise: true,
 				space: { select: { id: true } },
-				creator: { select: { id: true, name: true } },
+				createdBy: { select: { id: true, name: true } },
 			},
 		});
 
@@ -197,7 +197,7 @@ export class TasksRepository {
 			include: {
 				exercise: true,
 				space: { select: { id: true } },
-				creator: { select: { id: true, name: true } },
+				createdBy: { select: { id: true, name: true } },
 			},
 		});
 

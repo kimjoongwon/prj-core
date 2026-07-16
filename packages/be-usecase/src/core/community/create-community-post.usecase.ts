@@ -28,10 +28,10 @@ export class CreateCommunityPostUseCase {
 			...command,
 		});
 		return {
-			authorName: post.creator?.name ?? "회원",
+			authorName: post.createdBy?.name ?? "회원",
 			createdAt: post.createdAt,
 			id: post.id,
-			isMine: post.creator?.id === userId,
+			isMine: post.createdBy?.id === userId,
 			isPinned: false,
 			text: post.text ?? "",
 			title: post.title ?? null,

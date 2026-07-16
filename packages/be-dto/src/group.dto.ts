@@ -23,5 +23,5 @@ export class GroupDto extends AbstractDto implements Group {
 	type!: GroupTypes;
 
 	@UUIDFieldOptional({ nullable: true })
-	creatorId!: string | null;
+	createdById!: string | null;
 }

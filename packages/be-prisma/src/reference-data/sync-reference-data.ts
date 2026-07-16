@@ -77,7 +77,7 @@ async function ensureSystemTenant(db: DbClient, roles: Record<string, Role>) {
 
 async function syncSpaceCategories(
 	db: DbClient,
-	creatorId: string,
+	createdById: string,
 ): Promise<void> {
 	const categoryMap = new Map<string, { id: string }>();
 
@@ -94,7 +94,7 @@ async function syncSpaceCategories(
 			update: {
 				type: categoryData.type as CategoryTypes,
 				spaceId: SYSTEM_SPACE_ID,
-				creatorId,
+				createdById,
 				parentId,
 				removedAt: null,
 			},
@@ -102,7 +102,7 @@ async function syncSpaceCategories(
 				name: spaceCategoryEnum.name,
 				type: categoryData.type as CategoryTypes,
 				spaceId: SYSTEM_SPACE_ID,
-				creatorId,
+				createdById,
 				parentId,
 			},
 		});
@@ -128,7 +128,10 @@ async function syncSpaceCategories(
 	});
 }
 
-async function syncSpaceGroups(db: DbClient, creatorId: string): Promise<void> {
+async function syncSpaceGroups(
+	db: DbClient,
+	createdById: string,
+): Promise<void> {
 	// Group rows do not have a single natural unique key for this lookup shape,
 	// so we restore/create them and then ensure the space association exists.
 	for (const groupData of spaceGroupSeedData) {
@@ -147,7 +150,7 @@ async function syncSpaceGroups(db: DbClient, creatorId: string): Promise<void> {
 					name: spaceGroupEnum.name,
 					type: "Space",
 					spaceId: SYSTEM_SPACE_ID,
-					creatorId,
+					createdById,
 				},
 			});
 		} else if (group.removedAt) {
@@ -201,7 +204,7 @@ async function syncRoles(db: DbClient): Promise<Record<string, Role>> {
 
 async function syncRoleCategories(
 	db: DbClient,
-	creatorId: string,
+	createdById: string,
 ): Promise<void> {
 	for (const categoryData of roleCategorySeedData) {
 		const roleCategoryEnum = categoryData.roleCategoryEnum;
@@ -211,14 +214,14 @@ async function syncRoleCategories(
 			update: {
 				type: categoryData.type as CategoryTypes,
 				spaceId: SYSTEM_SPACE_ID,
-				creatorId,
+				createdById,
 				removedAt: null,
 			},
 			create: {
 				name: roleCategoryEnum.name,
 				type: categoryData.type as CategoryTypes,
 				spaceId: SYSTEM_SPACE_ID,
-				creatorId,
+				createdById,
 			},
 		});
 	}
@@ -264,7 +267,7 @@ async function syncRoleClassifications(
 
 async function syncRoleGroups(
 	db: DbClient,
-	creatorId: string,
+	createdById: string,
 ): Promise<Record<string, Group>> {
 	const groups: Record<string, Group> = {};
 
@@ -284,7 +287,7 @@ async function syncRoleGroups(
 					name: roleGroupEnum.name,
 					type: "Role",
 					spaceId: SYSTEM_SPACE_ID,
-					creatorId,
+					createdById,
 				},
 			});
 		} else if (group.removedAt) {
@@ -539,7 +542,7 @@ async function syncAbilitiesAndPolicies(
 				},
 				create: {
 					spaceId: scope.spaceId,
-					creatorId: scope.userId,
+					createdById: scope.userId,
 					name: policyName,
 					displayName: `${role.displayName ?? role.name} 기본 정책`,
 					description: `${role.displayName ?? role.name} 역할에 자동 할당되는 시스템 권한 정책입니다.`,

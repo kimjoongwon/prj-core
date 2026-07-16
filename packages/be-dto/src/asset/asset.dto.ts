@@ -59,7 +59,7 @@ export class AssetDto extends AbstractDto {
 	metadata!: Prisma.JsonValue | null;
 
 	@UUIDFieldOptional({ nullable: true, description: "생성자 ID" })
-	creatorId!: string | null;
+	createdById!: string | null;
 
 	@StringFieldOptional({
 		nullable: true,

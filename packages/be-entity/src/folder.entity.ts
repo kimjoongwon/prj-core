@@ -13,7 +13,7 @@ export class Folder extends AbstractEntity implements FolderEntity {
 	name!: string;
 	path!: string;
 	sortOrder!: number;
-	creatorId!: string | null;
+	createdById!: string | null;
 
 	// ============================================================================
 	// 관계 필드 (선택적)
@@ -21,7 +21,7 @@ export class Folder extends AbstractEntity implements FolderEntity {
 	space?: Space;
 	parent?: Folder | null;
 	children?: Folder[];
-	creator?: User | null;
+	createdBy?: User | null;
 	assets?: Asset[];
 
 	// ============================================================================

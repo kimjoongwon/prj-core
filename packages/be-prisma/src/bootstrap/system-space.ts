@@ -71,7 +71,7 @@ async function ensureSystemSpaceGroups(prisma: PrismaClient): Promise<void> {
 			await prisma.group.create({
 				data: {
 					spaceId: SYSTEM_SPACE_ID,
-					creatorId: firstTenant.userId,
+					createdById: firstTenant.userId,
 					name: groupName,
 					type: "Space",
 				},

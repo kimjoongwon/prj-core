@@ -9,10 +9,10 @@ export class Routine extends AbstractEntity implements RoutineEntity {
 	name!: string;
 	label!: string;
 	spaceId!: string;
-	creatorId!: string | null;
+	createdById!: string | null;
 
 	space?: Space;
-	creator?: User | null;
+	createdBy?: User | null;
 	programs?: Program[];
 	activities?: Activity[];
 }

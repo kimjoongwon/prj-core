@@ -7,10 +7,10 @@ import type { User } from "./user.entity";
 
 export class Task extends AbstractEntity implements TaskEntity {
 	spaceId!: string;
-	creatorId!: string | null;
+	createdById!: string | null;
 
 	space?: Space;
-	creator?: User;
+	createdBy?: User;
 	exercise?: Exercise;
 	activities?: Activity[];
 }

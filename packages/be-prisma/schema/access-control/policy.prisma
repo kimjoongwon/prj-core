@@ -19,7 +19,7 @@ model Policy {
   /// @displayName 공간 ID
   spaceId     String  @map("space_id")
   /// @displayName 생성자 ID
-  creatorId   String? @map("creator_id")
+  createdById String? @map("created_by_id")
   /// @displayName 정책 식별자
   name        String
   /// @displayName 표시명
@@ -30,7 +30,7 @@ model Policy {
   isSystem    Boolean @default(false) @map("is_system")
 
   space           Space           @relation(fields: [spaceId], references: [id], onDelete: Restrict)
-  creator         User?           @relation(fields: [creatorId], references: [id], onDelete: SetNull)
+  createdBy       User?           @relation(fields: [createdById], references: [id], onDelete: SetNull)
   policyAbilities PolicyAbility[]
   rolePolicies    RolePolicy[]
 

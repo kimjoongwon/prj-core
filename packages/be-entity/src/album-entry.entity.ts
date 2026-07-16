@@ -18,13 +18,13 @@ export class AlbumEntry extends AbstractEntity implements AlbumEntryEntity {
 	// Nullable 필드
 	// ============================================================================
 	caption!: string | null;
-	creatorId!: string | null;
+	createdById!: string | null;
 
 	// ============================================================================
 	// 관계 필드 (선택적)
 	// ============================================================================
 	space?: Space;
-	creator?: User | null;
+	createdBy?: User | null;
 	album?: Album;
 	asset?: Asset;
 

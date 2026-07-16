@@ -31,7 +31,7 @@ export class ContentsRepository {
 			include: {
 				post: true,
 				space: true,
-				creator: true,
+				createdBy: true,
 			},
 		});
 
@@ -115,7 +115,7 @@ export class ContentsRepository {
 
 		return this.txHost.tx.content.create({
 			data: {
-				creator: {
+				createdBy: {
 					connect: {
 						id: params.userId,
 					},
@@ -160,7 +160,7 @@ export class ContentsRepository {
 }
 
 const COMMUNITY_POST_INCLUDE = {
-	creator: {
+	createdBy: {
 		select: {
 			id: true,
 			name: true,

@@ -42,7 +42,7 @@ export type InquiryThreadMinAggregateOutputType = {
 	inquiryId: string | null;
 	title: string | null;
 	status: $Enums.ThreadStatus | null;
-	createdBy: string | null;
+	createdById: string | null;
 	lastMessageAt: Date | null;
 	lastMessagePreview: string | null;
 	messageCount: number | null;
@@ -56,7 +56,7 @@ export type InquiryThreadMaxAggregateOutputType = {
 	inquiryId: string | null;
 	title: string | null;
 	status: $Enums.ThreadStatus | null;
-	createdBy: string | null;
+	createdById: string | null;
 	lastMessageAt: Date | null;
 	lastMessagePreview: string | null;
 	messageCount: number | null;
@@ -70,7 +70,7 @@ export type InquiryThreadCountAggregateOutputType = {
 	inquiryId: number;
 	title: number;
 	status: number;
-	createdBy: number;
+	createdById: number;
 	lastMessageAt: number;
 	lastMessagePreview: number;
 	messageCount: number;
@@ -93,7 +93,7 @@ export type InquiryThreadMinAggregateInputType = {
 	inquiryId?: true;
 	title?: true;
 	status?: true;
-	createdBy?: true;
+	createdById?: true;
 	lastMessageAt?: true;
 	lastMessagePreview?: true;
 	messageCount?: true;
@@ -107,7 +107,7 @@ export type InquiryThreadMaxAggregateInputType = {
 	inquiryId?: true;
 	title?: true;
 	status?: true;
-	createdBy?: true;
+	createdById?: true;
 	lastMessageAt?: true;
 	lastMessagePreview?: true;
 	messageCount?: true;
@@ -121,7 +121,7 @@ export type InquiryThreadCountAggregateInputType = {
 	inquiryId?: true;
 	title?: true;
 	status?: true;
-	createdBy?: true;
+	createdById?: true;
 	lastMessageAt?: true;
 	lastMessagePreview?: true;
 	messageCount?: true;
@@ -233,7 +233,7 @@ export type InquiryThreadGroupByOutputType = {
 	inquiryId: string;
 	title: string | null;
 	status: $Enums.ThreadStatus;
-	createdBy: string;
+	createdById: string;
 	lastMessageAt: Date | null;
 	lastMessagePreview: string | null;
 	messageCount: number;
@@ -277,7 +277,7 @@ export type InquiryThreadWhereInput = {
 	inquiryId?: Prisma.StringFilter<"InquiryThread"> | string;
 	title?: Prisma.StringNullableFilter<"InquiryThread"> | string | null;
 	status?: Prisma.EnumThreadStatusFilter<"InquiryThread"> | $Enums.ThreadStatus;
-	createdBy?: Prisma.StringFilter<"InquiryThread"> | string;
+	createdById?: Prisma.StringFilter<"InquiryThread"> | string;
 	lastMessageAt?:
 		| Prisma.DateTimeNullableFilter<"InquiryThread">
 		| Date
@@ -292,7 +292,10 @@ export type InquiryThreadWhereInput = {
 		Prisma.InquiryScalarRelationFilter,
 		Prisma.InquiryWhereInput
 	>;
-	creator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
+	createdBy?: Prisma.XOR<
+		Prisma.UserScalarRelationFilter,
+		Prisma.UserWhereInput
+	>;
 	messages?: Prisma.InquiryMessageListRelationFilter;
 	participants?: Prisma.InquiryParticipantListRelationFilter;
 };
@@ -305,12 +308,12 @@ export type InquiryThreadOrderByWithRelationInput = {
 	inquiryId?: Prisma.SortOrder;
 	title?: Prisma.SortOrderInput | Prisma.SortOrder;
 	status?: Prisma.SortOrder;
-	createdBy?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 	lastMessageAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	lastMessagePreview?: Prisma.SortOrderInput | Prisma.SortOrder;
 	messageCount?: Prisma.SortOrder;
 	inquiry?: Prisma.InquiryOrderByWithRelationInput;
-	creator?: Prisma.UserOrderByWithRelationInput;
+	createdBy?: Prisma.UserOrderByWithRelationInput;
 	messages?: Prisma.InquiryMessageOrderByRelationAggregateInput;
 	participants?: Prisma.InquiryParticipantOrderByRelationAggregateInput;
 };
@@ -337,7 +340,7 @@ export type InquiryThreadWhereUniqueInput = Prisma.AtLeast<
 		status?:
 			| Prisma.EnumThreadStatusFilter<"InquiryThread">
 			| $Enums.ThreadStatus;
-		createdBy?: Prisma.StringFilter<"InquiryThread"> | string;
+		createdById?: Prisma.StringFilter<"InquiryThread"> | string;
 		lastMessageAt?:
 			| Prisma.DateTimeNullableFilter<"InquiryThread">
 			| Date
@@ -352,7 +355,7 @@ export type InquiryThreadWhereUniqueInput = Prisma.AtLeast<
 			Prisma.InquiryScalarRelationFilter,
 			Prisma.InquiryWhereInput
 		>;
-		creator?: Prisma.XOR<
+		createdBy?: Prisma.XOR<
 			Prisma.UserScalarRelationFilter,
 			Prisma.UserWhereInput
 		>;
@@ -370,7 +373,7 @@ export type InquiryThreadOrderByWithAggregationInput = {
 	inquiryId?: Prisma.SortOrder;
 	title?: Prisma.SortOrderInput | Prisma.SortOrder;
 	status?: Prisma.SortOrder;
-	createdBy?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 	lastMessageAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	lastMessagePreview?: Prisma.SortOrderInput | Prisma.SortOrder;
 	messageCount?: Prisma.SortOrder;
@@ -412,7 +415,7 @@ export type InquiryThreadScalarWhereWithAggregatesInput = {
 	status?:
 		| Prisma.EnumThreadStatusWithAggregatesFilter<"InquiryThread">
 		| $Enums.ThreadStatus;
-	createdBy?: Prisma.StringWithAggregatesFilter<"InquiryThread"> | string;
+	createdById?: Prisma.StringWithAggregatesFilter<"InquiryThread"> | string;
 	lastMessageAt?:
 		| Prisma.DateTimeNullableWithAggregatesFilter<"InquiryThread">
 		| Date
@@ -436,7 +439,7 @@ export type InquiryThreadCreateInput = {
 	lastMessagePreview?: string | null;
 	messageCount?: number;
 	inquiry: Prisma.InquiryCreateNestedOneWithoutThreadsInput;
-	creator: Prisma.UserCreateNestedOneWithoutCreatedThreadsInput;
+	createdBy: Prisma.UserCreateNestedOneWithoutCreatedThreadsInput;
 	messages?: Prisma.InquiryMessageCreateNestedManyWithoutThreadInput;
 	participants?: Prisma.InquiryParticipantCreateNestedManyWithoutThreadInput;
 };
@@ -449,7 +452,7 @@ export type InquiryThreadUncheckedCreateInput = {
 	inquiryId: string;
 	title?: string | null;
 	status?: $Enums.ThreadStatus;
-	createdBy: string;
+	createdById: string;
 	lastMessageAt?: Date | string | null;
 	lastMessagePreview?: string | null;
 	messageCount?: number;
@@ -485,7 +488,7 @@ export type InquiryThreadUpdateInput = {
 		| null;
 	messageCount?: Prisma.IntFieldUpdateOperationsInput | number;
 	inquiry?: Prisma.InquiryUpdateOneRequiredWithoutThreadsNestedInput;
-	creator?: Prisma.UserUpdateOneRequiredWithoutCreatedThreadsNestedInput;
+	createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedThreadsNestedInput;
 	messages?: Prisma.InquiryMessageUpdateManyWithoutThreadNestedInput;
 	participants?: Prisma.InquiryParticipantUpdateManyWithoutThreadNestedInput;
 };
@@ -508,7 +511,7 @@ export type InquiryThreadUncheckedUpdateInput = {
 	status?:
 		| Prisma.EnumThreadStatusFieldUpdateOperationsInput
 		| $Enums.ThreadStatus;
-	createdBy?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdById?: Prisma.StringFieldUpdateOperationsInput | string;
 	lastMessageAt?:
 		| Prisma.NullableDateTimeFieldUpdateOperationsInput
 		| Date
@@ -531,7 +534,7 @@ export type InquiryThreadCreateManyInput = {
 	inquiryId: string;
 	title?: string | null;
 	status?: $Enums.ThreadStatus;
-	createdBy: string;
+	createdById: string;
 	lastMessageAt?: Date | string | null;
 	lastMessagePreview?: string | null;
 	messageCount?: number;
@@ -584,7 +587,7 @@ export type InquiryThreadUncheckedUpdateManyInput = {
 	status?:
 		| Prisma.EnumThreadStatusFieldUpdateOperationsInput
 		| $Enums.ThreadStatus;
-	createdBy?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdById?: Prisma.StringFieldUpdateOperationsInput | string;
 	lastMessageAt?:
 		| Prisma.NullableDateTimeFieldUpdateOperationsInput
 		| Date
@@ -615,7 +618,7 @@ export type InquiryThreadCountOrderByAggregateInput = {
 	inquiryId?: Prisma.SortOrder;
 	title?: Prisma.SortOrder;
 	status?: Prisma.SortOrder;
-	createdBy?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 	lastMessageAt?: Prisma.SortOrder;
 	lastMessagePreview?: Prisma.SortOrder;
 	messageCount?: Prisma.SortOrder;
@@ -633,7 +636,7 @@ export type InquiryThreadMaxOrderByAggregateInput = {
 	inquiryId?: Prisma.SortOrder;
 	title?: Prisma.SortOrder;
 	status?: Prisma.SortOrder;
-	createdBy?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 	lastMessageAt?: Prisma.SortOrder;
 	lastMessagePreview?: Prisma.SortOrder;
 	messageCount?: Prisma.SortOrder;
@@ -647,7 +650,7 @@ export type InquiryThreadMinOrderByAggregateInput = {
 	inquiryId?: Prisma.SortOrder;
 	title?: Prisma.SortOrder;
 	status?: Prisma.SortOrder;
-	createdBy?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 	lastMessageAt?: Prisma.SortOrder;
 	lastMessagePreview?: Prisma.SortOrder;
 	messageCount?: Prisma.SortOrder;
@@ -667,55 +670,55 @@ export type InquiryThreadNullableScalarRelationFilter = {
 	isNot?: Prisma.InquiryThreadWhereInput | null;
 };
 
-export type InquiryThreadCreateNestedManyWithoutCreatorInput = {
+export type InquiryThreadCreateNestedManyWithoutCreatedByInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.InquiryThreadCreateWithoutCreatorInput,
-				Prisma.InquiryThreadUncheckedCreateWithoutCreatorInput
+				Prisma.InquiryThreadCreateWithoutCreatedByInput,
+				Prisma.InquiryThreadUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.InquiryThreadCreateWithoutCreatorInput[]
-		| Prisma.InquiryThreadUncheckedCreateWithoutCreatorInput[];
+		| Prisma.InquiryThreadCreateWithoutCreatedByInput[]
+		| Prisma.InquiryThreadUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.InquiryThreadCreateOrConnectWithoutCreatorInput
-		| Prisma.InquiryThreadCreateOrConnectWithoutCreatorInput[];
-	createMany?: Prisma.InquiryThreadCreateManyCreatorInputEnvelope;
+		| Prisma.InquiryThreadCreateOrConnectWithoutCreatedByInput
+		| Prisma.InquiryThreadCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.InquiryThreadCreateManyCreatedByInputEnvelope;
 	connect?:
 		| Prisma.InquiryThreadWhereUniqueInput
 		| Prisma.InquiryThreadWhereUniqueInput[];
 };
 
-export type InquiryThreadUncheckedCreateNestedManyWithoutCreatorInput = {
+export type InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.InquiryThreadCreateWithoutCreatorInput,
-				Prisma.InquiryThreadUncheckedCreateWithoutCreatorInput
+				Prisma.InquiryThreadCreateWithoutCreatedByInput,
+				Prisma.InquiryThreadUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.InquiryThreadCreateWithoutCreatorInput[]
-		| Prisma.InquiryThreadUncheckedCreateWithoutCreatorInput[];
+		| Prisma.InquiryThreadCreateWithoutCreatedByInput[]
+		| Prisma.InquiryThreadUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.InquiryThreadCreateOrConnectWithoutCreatorInput
-		| Prisma.InquiryThreadCreateOrConnectWithoutCreatorInput[];
-	createMany?: Prisma.InquiryThreadCreateManyCreatorInputEnvelope;
+		| Prisma.InquiryThreadCreateOrConnectWithoutCreatedByInput
+		| Prisma.InquiryThreadCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.InquiryThreadCreateManyCreatedByInputEnvelope;
 	connect?:
 		| Prisma.InquiryThreadWhereUniqueInput
 		| Prisma.InquiryThreadWhereUniqueInput[];
 };
 
-export type InquiryThreadUpdateManyWithoutCreatorNestedInput = {
+export type InquiryThreadUpdateManyWithoutCreatedByNestedInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.InquiryThreadCreateWithoutCreatorInput,
-				Prisma.InquiryThreadUncheckedCreateWithoutCreatorInput
+				Prisma.InquiryThreadCreateWithoutCreatedByInput,
+				Prisma.InquiryThreadUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.InquiryThreadCreateWithoutCreatorInput[]
-		| Prisma.InquiryThreadUncheckedCreateWithoutCreatorInput[];
+		| Prisma.InquiryThreadCreateWithoutCreatedByInput[]
+		| Prisma.InquiryThreadUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.InquiryThreadCreateOrConnectWithoutCreatorInput
-		| Prisma.InquiryThreadCreateOrConnectWithoutCreatorInput[];
+		| Prisma.InquiryThreadCreateOrConnectWithoutCreatedByInput
+		| Prisma.InquiryThreadCreateOrConnectWithoutCreatedByInput[];
 	upsert?:
-		| Prisma.InquiryThreadUpsertWithWhereUniqueWithoutCreatorInput
-		| Prisma.InquiryThreadUpsertWithWhereUniqueWithoutCreatorInput[];
-	createMany?: Prisma.InquiryThreadCreateManyCreatorInputEnvelope;
+		| Prisma.InquiryThreadUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.InquiryThreadUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.InquiryThreadCreateManyCreatedByInputEnvelope;
 	set?:
 		| Prisma.InquiryThreadWhereUniqueInput
 		| Prisma.InquiryThreadWhereUniqueInput[];
@@ -729,31 +732,31 @@ export type InquiryThreadUpdateManyWithoutCreatorNestedInput = {
 		| Prisma.InquiryThreadWhereUniqueInput
 		| Prisma.InquiryThreadWhereUniqueInput[];
 	update?:
-		| Prisma.InquiryThreadUpdateWithWhereUniqueWithoutCreatorInput
-		| Prisma.InquiryThreadUpdateWithWhereUniqueWithoutCreatorInput[];
+		| Prisma.InquiryThreadUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.InquiryThreadUpdateWithWhereUniqueWithoutCreatedByInput[];
 	updateMany?:
-		| Prisma.InquiryThreadUpdateManyWithWhereWithoutCreatorInput
-		| Prisma.InquiryThreadUpdateManyWithWhereWithoutCreatorInput[];
+		| Prisma.InquiryThreadUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.InquiryThreadUpdateManyWithWhereWithoutCreatedByInput[];
 	deleteMany?:
 		| Prisma.InquiryThreadScalarWhereInput
 		| Prisma.InquiryThreadScalarWhereInput[];
 };
 
-export type InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput = {
+export type InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.InquiryThreadCreateWithoutCreatorInput,
-				Prisma.InquiryThreadUncheckedCreateWithoutCreatorInput
+				Prisma.InquiryThreadCreateWithoutCreatedByInput,
+				Prisma.InquiryThreadUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.InquiryThreadCreateWithoutCreatorInput[]
-		| Prisma.InquiryThreadUncheckedCreateWithoutCreatorInput[];
+		| Prisma.InquiryThreadCreateWithoutCreatedByInput[]
+		| Prisma.InquiryThreadUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.InquiryThreadCreateOrConnectWithoutCreatorInput
-		| Prisma.InquiryThreadCreateOrConnectWithoutCreatorInput[];
+		| Prisma.InquiryThreadCreateOrConnectWithoutCreatedByInput
+		| Prisma.InquiryThreadCreateOrConnectWithoutCreatedByInput[];
 	upsert?:
-		| Prisma.InquiryThreadUpsertWithWhereUniqueWithoutCreatorInput
-		| Prisma.InquiryThreadUpsertWithWhereUniqueWithoutCreatorInput[];
-	createMany?: Prisma.InquiryThreadCreateManyCreatorInputEnvelope;
+		| Prisma.InquiryThreadUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.InquiryThreadUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.InquiryThreadCreateManyCreatedByInputEnvelope;
 	set?:
 		| Prisma.InquiryThreadWhereUniqueInput
 		| Prisma.InquiryThreadWhereUniqueInput[];
@@ -767,11 +770,11 @@ export type InquiryThreadUncheckedUpdateManyWithoutCreatorNestedInput = {
 		| Prisma.InquiryThreadWhereUniqueInput
 		| Prisma.InquiryThreadWhereUniqueInput[];
 	update?:
-		| Prisma.InquiryThreadUpdateWithWhereUniqueWithoutCreatorInput
-		| Prisma.InquiryThreadUpdateWithWhereUniqueWithoutCreatorInput[];
+		| Prisma.InquiryThreadUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.InquiryThreadUpdateWithWhereUniqueWithoutCreatedByInput[];
 	updateMany?:
-		| Prisma.InquiryThreadUpdateManyWithWhereWithoutCreatorInput
-		| Prisma.InquiryThreadUpdateManyWithWhereWithoutCreatorInput[];
+		| Prisma.InquiryThreadUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.InquiryThreadUpdateManyWithWhereWithoutCreatedByInput[];
 	deleteMany?:
 		| Prisma.InquiryThreadScalarWhereInput
 		| Prisma.InquiryThreadScalarWhereInput[];
@@ -945,7 +948,7 @@ export type InquiryThreadUncheckedUpdateManyWithoutInquiryNestedInput = {
 		| Prisma.InquiryThreadScalarWhereInput[];
 };
 
-export type InquiryThreadCreateWithoutCreatorInput = {
+export type InquiryThreadCreateWithoutCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -960,7 +963,7 @@ export type InquiryThreadCreateWithoutCreatorInput = {
 	participants?: Prisma.InquiryParticipantCreateNestedManyWithoutThreadInput;
 };
 
-export type InquiryThreadUncheckedCreateWithoutCreatorInput = {
+export type InquiryThreadUncheckedCreateWithoutCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -975,46 +978,46 @@ export type InquiryThreadUncheckedCreateWithoutCreatorInput = {
 	participants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutThreadInput;
 };
 
-export type InquiryThreadCreateOrConnectWithoutCreatorInput = {
+export type InquiryThreadCreateOrConnectWithoutCreatedByInput = {
 	where: Prisma.InquiryThreadWhereUniqueInput;
 	create: Prisma.XOR<
-		Prisma.InquiryThreadCreateWithoutCreatorInput,
-		Prisma.InquiryThreadUncheckedCreateWithoutCreatorInput
+		Prisma.InquiryThreadCreateWithoutCreatedByInput,
+		Prisma.InquiryThreadUncheckedCreateWithoutCreatedByInput
 	>;
 };
 
-export type InquiryThreadCreateManyCreatorInputEnvelope = {
+export type InquiryThreadCreateManyCreatedByInputEnvelope = {
 	data:
-		| Prisma.InquiryThreadCreateManyCreatorInput
-		| Prisma.InquiryThreadCreateManyCreatorInput[];
+		| Prisma.InquiryThreadCreateManyCreatedByInput
+		| Prisma.InquiryThreadCreateManyCreatedByInput[];
 	skipDuplicates?: boolean;
 };
 
-export type InquiryThreadUpsertWithWhereUniqueWithoutCreatorInput = {
+export type InquiryThreadUpsertWithWhereUniqueWithoutCreatedByInput = {
 	where: Prisma.InquiryThreadWhereUniqueInput;
 	update: Prisma.XOR<
-		Prisma.InquiryThreadUpdateWithoutCreatorInput,
-		Prisma.InquiryThreadUncheckedUpdateWithoutCreatorInput
+		Prisma.InquiryThreadUpdateWithoutCreatedByInput,
+		Prisma.InquiryThreadUncheckedUpdateWithoutCreatedByInput
 	>;
 	create: Prisma.XOR<
-		Prisma.InquiryThreadCreateWithoutCreatorInput,
-		Prisma.InquiryThreadUncheckedCreateWithoutCreatorInput
+		Prisma.InquiryThreadCreateWithoutCreatedByInput,
+		Prisma.InquiryThreadUncheckedCreateWithoutCreatedByInput
 	>;
 };
 
-export type InquiryThreadUpdateWithWhereUniqueWithoutCreatorInput = {
+export type InquiryThreadUpdateWithWhereUniqueWithoutCreatedByInput = {
 	where: Prisma.InquiryThreadWhereUniqueInput;
 	data: Prisma.XOR<
-		Prisma.InquiryThreadUpdateWithoutCreatorInput,
-		Prisma.InquiryThreadUncheckedUpdateWithoutCreatorInput
+		Prisma.InquiryThreadUpdateWithoutCreatedByInput,
+		Prisma.InquiryThreadUncheckedUpdateWithoutCreatedByInput
 	>;
 };
 
-export type InquiryThreadUpdateManyWithWhereWithoutCreatorInput = {
+export type InquiryThreadUpdateManyWithWhereWithoutCreatedByInput = {
 	where: Prisma.InquiryThreadScalarWhereInput;
 	data: Prisma.XOR<
 		Prisma.InquiryThreadUpdateManyMutationInput,
-		Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatorInput
+		Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByInput
 	>;
 };
 
@@ -1041,7 +1044,7 @@ export type InquiryThreadScalarWhereInput = {
 	inquiryId?: Prisma.StringFilter<"InquiryThread"> | string;
 	title?: Prisma.StringNullableFilter<"InquiryThread"> | string | null;
 	status?: Prisma.EnumThreadStatusFilter<"InquiryThread"> | $Enums.ThreadStatus;
-	createdBy?: Prisma.StringFilter<"InquiryThread"> | string;
+	createdById?: Prisma.StringFilter<"InquiryThread"> | string;
 	lastMessageAt?:
 		| Prisma.DateTimeNullableFilter<"InquiryThread">
 		| Date
@@ -1065,7 +1068,7 @@ export type InquiryThreadCreateWithoutMessagesInput = {
 	lastMessagePreview?: string | null;
 	messageCount?: number;
 	inquiry: Prisma.InquiryCreateNestedOneWithoutThreadsInput;
-	creator: Prisma.UserCreateNestedOneWithoutCreatedThreadsInput;
+	createdBy: Prisma.UserCreateNestedOneWithoutCreatedThreadsInput;
 	participants?: Prisma.InquiryParticipantCreateNestedManyWithoutThreadInput;
 };
 
@@ -1077,7 +1080,7 @@ export type InquiryThreadUncheckedCreateWithoutMessagesInput = {
 	inquiryId: string;
 	title?: string | null;
 	status?: $Enums.ThreadStatus;
-	createdBy: string;
+	createdById: string;
 	lastMessageAt?: Date | string | null;
 	lastMessagePreview?: string | null;
 	messageCount?: number;
@@ -1140,7 +1143,7 @@ export type InquiryThreadUpdateWithoutMessagesInput = {
 		| null;
 	messageCount?: Prisma.IntFieldUpdateOperationsInput | number;
 	inquiry?: Prisma.InquiryUpdateOneRequiredWithoutThreadsNestedInput;
-	creator?: Prisma.UserUpdateOneRequiredWithoutCreatedThreadsNestedInput;
+	createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedThreadsNestedInput;
 	participants?: Prisma.InquiryParticipantUpdateManyWithoutThreadNestedInput;
 };
 
@@ -1162,7 +1165,7 @@ export type InquiryThreadUncheckedUpdateWithoutMessagesInput = {
 	status?:
 		| Prisma.EnumThreadStatusFieldUpdateOperationsInput
 		| $Enums.ThreadStatus;
-	createdBy?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdById?: Prisma.StringFieldUpdateOperationsInput | string;
 	lastMessageAt?:
 		| Prisma.NullableDateTimeFieldUpdateOperationsInput
 		| Date
@@ -1187,7 +1190,7 @@ export type InquiryThreadCreateWithoutParticipantsInput = {
 	lastMessagePreview?: string | null;
 	messageCount?: number;
 	inquiry: Prisma.InquiryCreateNestedOneWithoutThreadsInput;
-	creator: Prisma.UserCreateNestedOneWithoutCreatedThreadsInput;
+	createdBy: Prisma.UserCreateNestedOneWithoutCreatedThreadsInput;
 	messages?: Prisma.InquiryMessageCreateNestedManyWithoutThreadInput;
 };
 
@@ -1199,7 +1202,7 @@ export type InquiryThreadUncheckedCreateWithoutParticipantsInput = {
 	inquiryId: string;
 	title?: string | null;
 	status?: $Enums.ThreadStatus;
-	createdBy: string;
+	createdById: string;
 	lastMessageAt?: Date | string | null;
 	lastMessagePreview?: string | null;
 	messageCount?: number;
@@ -1262,7 +1265,7 @@ export type InquiryThreadUpdateWithoutParticipantsInput = {
 		| null;
 	messageCount?: Prisma.IntFieldUpdateOperationsInput | number;
 	inquiry?: Prisma.InquiryUpdateOneRequiredWithoutThreadsNestedInput;
-	creator?: Prisma.UserUpdateOneRequiredWithoutCreatedThreadsNestedInput;
+	createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedThreadsNestedInput;
 	messages?: Prisma.InquiryMessageUpdateManyWithoutThreadNestedInput;
 };
 
@@ -1284,7 +1287,7 @@ export type InquiryThreadUncheckedUpdateWithoutParticipantsInput = {
 	status?:
 		| Prisma.EnumThreadStatusFieldUpdateOperationsInput
 		| $Enums.ThreadStatus;
-	createdBy?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdById?: Prisma.StringFieldUpdateOperationsInput | string;
 	lastMessageAt?:
 		| Prisma.NullableDateTimeFieldUpdateOperationsInput
 		| Date
@@ -1308,7 +1311,7 @@ export type InquiryThreadCreateWithoutInquiryInput = {
 	lastMessageAt?: Date | string | null;
 	lastMessagePreview?: string | null;
 	messageCount?: number;
-	creator: Prisma.UserCreateNestedOneWithoutCreatedThreadsInput;
+	createdBy: Prisma.UserCreateNestedOneWithoutCreatedThreadsInput;
 	messages?: Prisma.InquiryMessageCreateNestedManyWithoutThreadInput;
 	participants?: Prisma.InquiryParticipantCreateNestedManyWithoutThreadInput;
 };
@@ -1320,7 +1323,7 @@ export type InquiryThreadUncheckedCreateWithoutInquiryInput = {
 	closedAt?: Date | string | null;
 	title?: string | null;
 	status?: $Enums.ThreadStatus;
-	createdBy: string;
+	createdById: string;
 	lastMessageAt?: Date | string | null;
 	lastMessagePreview?: string | null;
 	messageCount?: number;
@@ -1371,7 +1374,7 @@ export type InquiryThreadUpdateManyWithWhereWithoutInquiryInput = {
 	>;
 };
 
-export type InquiryThreadCreateManyCreatorInput = {
+export type InquiryThreadCreateManyCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1384,7 +1387,7 @@ export type InquiryThreadCreateManyCreatorInput = {
 	messageCount?: number;
 };
 
-export type InquiryThreadUpdateWithoutCreatorInput = {
+export type InquiryThreadUpdateWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1416,7 +1419,7 @@ export type InquiryThreadUpdateWithoutCreatorInput = {
 	participants?: Prisma.InquiryParticipantUpdateManyWithoutThreadNestedInput;
 };
 
-export type InquiryThreadUncheckedUpdateWithoutCreatorInput = {
+export type InquiryThreadUncheckedUpdateWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1448,7 +1451,7 @@ export type InquiryThreadUncheckedUpdateWithoutCreatorInput = {
 	participants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutThreadNestedInput;
 };
 
-export type InquiryThreadUncheckedUpdateManyWithoutCreatorInput = {
+export type InquiryThreadUncheckedUpdateManyWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1485,7 +1488,7 @@ export type InquiryThreadCreateManyInquiryInput = {
 	closedAt?: Date | string | null;
 	title?: string | null;
 	status?: $Enums.ThreadStatus;
-	createdBy: string;
+	createdById: string;
 	lastMessageAt?: Date | string | null;
 	lastMessagePreview?: string | null;
 	messageCount?: number;
@@ -1518,7 +1521,7 @@ export type InquiryThreadUpdateWithoutInquiryInput = {
 		| string
 		| null;
 	messageCount?: Prisma.IntFieldUpdateOperationsInput | number;
-	creator?: Prisma.UserUpdateOneRequiredWithoutCreatedThreadsNestedInput;
+	createdBy?: Prisma.UserUpdateOneRequiredWithoutCreatedThreadsNestedInput;
 	messages?: Prisma.InquiryMessageUpdateManyWithoutThreadNestedInput;
 	participants?: Prisma.InquiryParticipantUpdateManyWithoutThreadNestedInput;
 };
@@ -1540,7 +1543,7 @@ export type InquiryThreadUncheckedUpdateWithoutInquiryInput = {
 	status?:
 		| Prisma.EnumThreadStatusFieldUpdateOperationsInput
 		| $Enums.ThreadStatus;
-	createdBy?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdById?: Prisma.StringFieldUpdateOperationsInput | string;
 	lastMessageAt?:
 		| Prisma.NullableDateTimeFieldUpdateOperationsInput
 		| Date
@@ -1572,7 +1575,7 @@ export type InquiryThreadUncheckedUpdateManyWithoutInquiryInput = {
 	status?:
 		| Prisma.EnumThreadStatusFieldUpdateOperationsInput
 		| $Enums.ThreadStatus;
-	createdBy?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdById?: Prisma.StringFieldUpdateOperationsInput | string;
 	lastMessageAt?:
 		| Prisma.NullableDateTimeFieldUpdateOperationsInput
 		| Date
@@ -1647,12 +1650,12 @@ export type InquiryThreadSelect<
 		inquiryId?: boolean;
 		title?: boolean;
 		status?: boolean;
-		createdBy?: boolean;
+		createdById?: boolean;
 		lastMessageAt?: boolean;
 		lastMessagePreview?: boolean;
 		messageCount?: boolean;
 		inquiry?: boolean | Prisma.InquiryDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 		messages?: boolean | Prisma.InquiryThread$messagesArgs<ExtArgs>;
 		participants?: boolean | Prisma.InquiryThread$participantsArgs<ExtArgs>;
 		_count?: boolean | Prisma.InquiryThreadCountOutputTypeDefaultArgs<ExtArgs>;
@@ -1672,12 +1675,12 @@ export type InquiryThreadSelectCreateManyAndReturn<
 		inquiryId?: boolean;
 		title?: boolean;
 		status?: boolean;
-		createdBy?: boolean;
+		createdById?: boolean;
 		lastMessageAt?: boolean;
 		lastMessagePreview?: boolean;
 		messageCount?: boolean;
 		inquiry?: boolean | Prisma.InquiryDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 	},
 	ExtArgs["result"]["inquiryThread"]
 >;
@@ -1694,12 +1697,12 @@ export type InquiryThreadSelectUpdateManyAndReturn<
 		inquiryId?: boolean;
 		title?: boolean;
 		status?: boolean;
-		createdBy?: boolean;
+		createdById?: boolean;
 		lastMessageAt?: boolean;
 		lastMessagePreview?: boolean;
 		messageCount?: boolean;
 		inquiry?: boolean | Prisma.InquiryDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 	},
 	ExtArgs["result"]["inquiryThread"]
 >;
@@ -1712,7 +1715,7 @@ export type InquiryThreadSelectScalar = {
 	inquiryId?: boolean;
 	title?: boolean;
 	status?: boolean;
-	createdBy?: boolean;
+	createdById?: boolean;
 	lastMessageAt?: boolean;
 	lastMessagePreview?: boolean;
 	messageCount?: boolean;
@@ -1729,7 +1732,7 @@ export type InquiryThreadOmit<
 	| "inquiryId"
 	| "title"
 	| "status"
-	| "createdBy"
+	| "createdById"
 	| "lastMessageAt"
 	| "lastMessagePreview"
 	| "messageCount",
@@ -1740,7 +1743,7 @@ export type InquiryThreadInclude<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	inquiry?: boolean | Prisma.InquiryDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 	messages?: boolean | Prisma.InquiryThread$messagesArgs<ExtArgs>;
 	participants?: boolean | Prisma.InquiryThread$participantsArgs<ExtArgs>;
 	_count?: boolean | Prisma.InquiryThreadCountOutputTypeDefaultArgs<ExtArgs>;
@@ -1750,14 +1753,14 @@ export type InquiryThreadIncludeCreateManyAndReturn<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	inquiry?: boolean | Prisma.InquiryDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 };
 export type InquiryThreadIncludeUpdateManyAndReturn<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	inquiry?: boolean | Prisma.InquiryDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 };
 
 export type $InquiryThreadPayload<
@@ -1767,7 +1770,7 @@ export type $InquiryThreadPayload<
 	name: "InquiryThread";
 	objects: {
 		inquiry: Prisma.$InquiryPayload<ExtArgs>;
-		creator: Prisma.$UserPayload<ExtArgs>;
+		createdBy: Prisma.$UserPayload<ExtArgs>;
 		messages: Prisma.$InquiryMessagePayload<ExtArgs>[];
 		participants: Prisma.$InquiryParticipantPayload<ExtArgs>[];
 	};
@@ -1801,7 +1804,7 @@ export type $InquiryThreadPayload<
 			/**
 			 * @displayName 생성자 ID
 			 */
-			createdBy: string;
+			createdById: string;
 			/**
 			 * @displayName 마지막 메시지 일시
 			 */
@@ -2387,7 +2390,7 @@ export interface Prisma__InquiryThreadClient<
 		ExtArgs,
 		GlobalOmitOptions
 	>;
-	creator<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(
+	createdBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(
 		args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>,
 	): Prisma.Prisma__UserClient<
 		| runtime.Types.Result.GetResult<
@@ -2472,7 +2475,7 @@ export interface InquiryThreadFieldRefs {
 	readonly inquiryId: Prisma.FieldRef<"InquiryThread", "String">;
 	readonly title: Prisma.FieldRef<"InquiryThread", "String">;
 	readonly status: Prisma.FieldRef<"InquiryThread", "ThreadStatus">;
-	readonly createdBy: Prisma.FieldRef<"InquiryThread", "String">;
+	readonly createdById: Prisma.FieldRef<"InquiryThread", "String">;
 	readonly lastMessageAt: Prisma.FieldRef<"InquiryThread", "DateTime">;
 	readonly lastMessagePreview: Prisma.FieldRef<"InquiryThread", "String">;
 	readonly messageCount: Prisma.FieldRef<"InquiryThread", "Int">;

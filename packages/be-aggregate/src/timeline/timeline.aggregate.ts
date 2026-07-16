@@ -84,7 +84,7 @@ export class TimelineAggregate {
 	async createTimeline(
 		input: CreateTimelineInput,
 		spaceId: string,
-		creatorId: string,
+		createdById: string,
 	) {
 		this.logger.debug(`타임라인 생성: name=${input.name}`);
 
@@ -100,7 +100,7 @@ export class TimelineAggregate {
 			name: input.name,
 			description: input.description ?? null,
 			spaceId,
-			creatorId,
+			createdById,
 		});
 	}
 

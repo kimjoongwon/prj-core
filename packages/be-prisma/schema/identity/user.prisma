@@ -71,7 +71,7 @@ model User {
   passwordHistory              PasswordHistory[]
   authAuditLogs                AuthAuditLog[]
   emailVerifications           EmailVerification[]
-  // Creator 관계
+  // CreatedBy 관계
   createdCategories            Category[]
   createdGroups                Group[]
   createdContents              Content[]
@@ -81,17 +81,17 @@ model User {
   createdRoutines              Routine[]
   reservations                 Reservation[]         @relation("ReservationUser")
   createdPolicies              Policy[]
-  createdReservations          Reservation[]         @relation("ReservationCreator")
-  // Asset 도메인 Creator 관계
+  createdReservations          Reservation[]         @relation("ReservationCreatedBy")
+  // Asset 도메인 CreatedBy 관계
   createdAssets                Asset[]
   createdFolders               Folder[]
   createdAlbums                Album[]
-  createdAlbumEntries           AlbumEntry[]
-  createdDerivatives            Derivative[]
+  createdAlbumEntries          AlbumEntry[]
+  createdDerivatives           Derivative[]
   // Inquiry 도메인
   customerInquiries            Inquiry[]             @relation("InquiryCustomer")
   assignedInquiries            Inquiry[]             @relation("InquiryAssignee")
-  createdInquiries             Inquiry[]             @relation("InquiryCreator")
+  createdInquiries             Inquiry[]             @relation("InquiryCreatedBy")
   inquiryMessages              InquiryMessage[]
   inquiryParticipants          InquiryParticipant[]
   createdThreads               InquiryThread[]

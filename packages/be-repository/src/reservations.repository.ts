@@ -7,7 +7,7 @@ import { plainToInstance } from "class-transformer";
 
 const reservationInclude = {
 	space: true,
-	creator: true,
+	createdBy: true,
 	user: true,
 	timeline: true,
 	session: true,

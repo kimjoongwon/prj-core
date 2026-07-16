@@ -59,7 +59,7 @@ export class TimelinesRepository {
 					_count: {
 						select: { sessions: { where: { removedAt: null } } },
 					},
-					creator: { select: { id: true, name: true } },
+					createdBy: { select: { id: true, name: true } },
 				},
 				orderBy: { createdAt: "desc" },
 				skip: params.skip,
@@ -72,7 +72,7 @@ export class TimelinesRepository {
 	}
 
 	/**
-	 * ID와 spaceId로 타임라인 단건 조회 (creator, space, 세션 수 포함)
+	 * ID와 spaceId로 타임라인 단건 조회 (createdBy, space, 세션 수 포함)
 	 */
 	async findTimelineById(timelineId: string, spaceIds?: string[]) {
 		this.logger.debug(`타임라인 상세 조회: ${timelineId.slice(-8)}`);
@@ -84,7 +84,7 @@ export class TimelinesRepository {
 				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
 			},
 			include: {
-				creator: { select: { id: true, name: true } },
+				createdBy: { select: { id: true, name: true } },
 				space: { select: { id: true } },
 				_count: {
 					select: { sessions: { where: { removedAt: null } } },
@@ -100,7 +100,7 @@ export class TimelinesRepository {
 		name: string;
 		description?: string | null;
 		spaceId: string;
-		creatorId: string;
+		createdById: string;
 	}) {
 		this.logger.debug("타임라인 생성");
 

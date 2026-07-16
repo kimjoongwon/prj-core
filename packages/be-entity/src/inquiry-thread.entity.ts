@@ -23,7 +23,7 @@ export class InquiryThread
 	// ============================================================================
 	inquiryId!: string;
 	status!: ThreadStatus;
-	createdBy!: string;
+	createdById!: string;
 	messageCount!: number;
 
 	// ============================================================================
@@ -38,7 +38,7 @@ export class InquiryThread
 	// 관계 필드 (선택적)
 	// ============================================================================
 	inquiry?: Inquiry;
-	creator?: User;
+	createdBy?: User;
 	messages?: InquiryMessage[];
 	participants?: InquiryParticipant[];
 

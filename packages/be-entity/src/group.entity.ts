@@ -8,7 +8,7 @@ export class Group extends AbstractEntity implements GroupEntity {
 	label!: string | null;
 	type!: GroupTypes;
 	spaceId!: string;
-	creatorId!: string | null;
+	createdById!: string | null;
 	space?: Space;
-	creator?: User;
+	createdBy?: User;
 }

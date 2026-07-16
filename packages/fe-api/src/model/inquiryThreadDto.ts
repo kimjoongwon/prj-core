@@ -27,7 +27,7 @@ export interface InquiryThreadDto {
 	/** 스레드 상태 */
 	status: ThreadStatus;
 	/** 생성자 ID */
-	createdBy: string;
+	createdById: string;
 	/**
 	 * 마지막 메시지 일시
 	 * @nullable

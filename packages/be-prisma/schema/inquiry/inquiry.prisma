@@ -76,7 +76,7 @@ model Inquiry {
   /// @displayName 소속 공간 ID
   spaceId               String               @map("space_id")
   /// @displayName 생성자 ID
-  creatorId             String?              @map("creator_id")
+  createdById           String?              @map("created_by_id")
   /// @displayName 문의 번호
   inquiryNumber         String               @unique @map("inquiry_number")
   /// @displayName 제목
@@ -126,7 +126,7 @@ model Inquiry {
   /// @displayName 추가 메타데이터
   metadata              Json?
   space                 Space                @relation(fields: [spaceId], references: [id], onDelete: Restrict)
-  creator               User?                @relation("InquiryCreator", fields: [creatorId], references: [id], onDelete: SetNull)
+  createdBy             User?                @relation("InquiryCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
   customer              User?                @relation("InquiryCustomer", fields: [customerId], references: [id])
   assignee              User?                @relation("InquiryAssignee", fields: [assigneeId], references: [id])
   threads               InquiryThread[]

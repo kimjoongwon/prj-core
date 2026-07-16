@@ -40,19 +40,21 @@ export async function createAssetDomainData(
 	const adminUser = await prisma.user.findFirst({
 		where: { email: "admin@plate.com" },
 	});
-	const creatorEmails = [
+	const createdByEmails = [
 		...new Set(
 			[
-				...assetSeedData.map((asset) => asset.creatorEmail),
-				...albumSeedData.map((album) => album.creatorEmail),
+				...assetSeedData.map((asset) => asset.createdByEmail),
+				...albumSeedData.map((album) => album.createdByEmail),
 			].filter((email): email is string => Boolean(email)),
 		),
 	];
-	const creators = await prisma.user.findMany({
-		where: { email: { in: creatorEmails } },
+	const createdByUsers = await prisma.user.findMany({
+		where: { email: { in: createdByEmails } },
 	});
 	// Reuse email -> userId lookups while creating assets and albums.
-	const creatorByEmail = new Map(creators.map((user) => [user.email, user.id]));
+	const userIdByCreatedByEmail = new Map(
+		createdByUsers.map((user) => [user.email, user.id]),
+	);
 
 	console.log("\n[1/6] Folder 생성 중...");
 	// Folders are resolved by path so later assets can attach without additional
@@ -82,7 +84,7 @@ export async function createAssetDomainData(
 					path: folderData.path,
 					parentFolderId,
 					sortOrder: folderData.sortOrder,
-					creatorId: adminUser?.id,
+					createdById: adminUser?.id,
 				},
 			});
 			folderByPath.set(folderData.path, { id: folder.id });
@@ -131,8 +133,8 @@ export async function createAssetDomainData(
 					metadata: assetData.metadata
 						? (assetData.metadata as unknown as Prisma.InputJsonObject)
 						: undefined,
-					creatorId: assetData.creatorEmail
-						? creatorByEmail.get(assetData.creatorEmail)
+					createdById: assetData.createdByEmail
+						? userIdByCreatedByEmail.get(assetData.createdByEmail)
 						: undefined,
 				},
 			});
@@ -277,7 +279,7 @@ export async function createAssetDomainData(
 			await prisma.derivative.create({
 				data: {
 					spaceId: systemSpace.id,
-					creatorId: adminUser?.id,
+					createdById: adminUser?.id,
 					assetId: sourceAsset.id,
 					kind: derivativeData.kind as
 						| "THUMBNAIL"
@@ -335,8 +337,8 @@ export async function createAssetDomainData(
 					description: albumData.description,
 					coverAssetId,
 					sortOrder: albumData.sortOrder,
-					creatorId: albumData.creatorEmail
-						? creatorByEmail.get(albumData.creatorEmail)
+					createdById: albumData.createdByEmail
+						? userIdByCreatedByEmail.get(albumData.createdByEmail)
 						: undefined,
 				},
 			});
@@ -376,7 +378,7 @@ export async function createAssetDomainData(
 			await prisma.albumEntry.create({
 				data: {
 					spaceId: systemSpace.id,
-					creatorId: adminUser?.id,
+					createdById: adminUser?.id,
 					albumId: album.id,
 					assetId: asset.id,
 					position: entryData.position,

@@ -127,7 +127,7 @@ export class RoutinesRepository {
 		name: string;
 		label: string;
 		spaceId: string;
-		creatorId?: string;
+		createdById?: string;
 		activities?: {
 			taskId: string;
 			order: number;
@@ -143,7 +143,7 @@ export class RoutinesRepository {
 				name: data.name,
 				label: data.label,
 				spaceId: data.spaceId,
-				creatorId: data.creatorId ?? null,
+				createdById: data.createdById ?? null,
 				activities: data.activities
 					? {
 							create: data.activities.map((activity) => ({

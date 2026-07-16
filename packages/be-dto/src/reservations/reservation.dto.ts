@@ -21,7 +21,7 @@ export class ReservationDto extends AbstractDto implements ReservationModel {
 	spaceId!: string;
 
 	@UUIDFieldOptional({ nullable: true, description: "생성자 ID" })
-	creatorId!: string | null;
+	createdById!: string | null;
 
 	@UUIDField({ description: "예약 사용자 ID" })
 	userId!: string;

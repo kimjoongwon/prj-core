@@ -87,12 +87,12 @@ export class TaskAggregate {
 	async createTaskWithExercise(
 		dto: CreateTaskCommandInput,
 		spaceId: string,
-		creatorId: string,
+		createdById: string,
 	): Promise<Task> {
 		this.logger.debug(`Task 생성: exercise=${dto.name}`);
 		const task = await this.tasksRepository.create({
 			spaceId,
-			creatorId,
+			createdById,
 		});
 
 		return this.tasksRepository.createExerciseByTaskId(task.id, {

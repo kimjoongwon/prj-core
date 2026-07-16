@@ -76,7 +76,8 @@ describe("ReservationAggregate", () => {
 		expect(result.status).toBe(ReservationStatus.CONFIRMED);
 		expect(repository.create).toHaveBeenCalledWith(
 			expect.objectContaining({
-				tenantId,
+				spaceId,
+				createdById: userId,
 				userId,
 				timelineId,
 				sessionId,
@@ -255,8 +256,8 @@ function buildProgram(input: { capacity: number }): BookingProgramRecord {
 				createdAt: new Date("2026-01-01T00:00:00.000Z"),
 				updatedAt: null,
 				removedAt: null,
-				tenantId,
-				creatorId: null,
+				spaceId,
+				createdById: null,
 				name: "June",
 				description: null,
 			},
@@ -271,8 +272,8 @@ function buildReservation(input: Partial<Reservation> = {}): Reservation {
 		createdAt: new Date("2026-01-01T00:00:00.000Z"),
 		updatedAt: null,
 		removedAt: null,
-		tenantId,
-		tenant: { id: tenantId, spaceId },
+		spaceId,
+		createdById: input.createdById === undefined ? userId : input.createdById,
 		userId,
 		timelineId,
 		sessionId,

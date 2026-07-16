@@ -33,7 +33,7 @@ export type GroupMinAggregateOutputType = {
 	type: $Enums.GroupTypes | null;
 	label: string | null;
 	spaceId: string | null;
-	creatorId: string | null;
+	createdById: string | null;
 };
 
 export type GroupMaxAggregateOutputType = {
@@ -45,7 +45,7 @@ export type GroupMaxAggregateOutputType = {
 	type: $Enums.GroupTypes | null;
 	label: string | null;
 	spaceId: string | null;
-	creatorId: string | null;
+	createdById: string | null;
 };
 
 export type GroupCountAggregateOutputType = {
@@ -57,7 +57,7 @@ export type GroupCountAggregateOutputType = {
 	type: number;
 	label: number;
 	spaceId: number;
-	creatorId: number;
+	createdById: number;
 	_all: number;
 };
 
@@ -70,7 +70,7 @@ export type GroupMinAggregateInputType = {
 	type?: true;
 	label?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 };
 
 export type GroupMaxAggregateInputType = {
@@ -82,7 +82,7 @@ export type GroupMaxAggregateInputType = {
 	type?: true;
 	label?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 };
 
 export type GroupCountAggregateInputType = {
@@ -94,7 +94,7 @@ export type GroupCountAggregateInputType = {
 	type?: true;
 	label?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 	_all?: true;
 };
 
@@ -186,7 +186,7 @@ export type GroupGroupByOutputType = {
 	type: $Enums.GroupTypes;
 	label: string | null;
 	spaceId: string;
-	creatorId: string | null;
+	createdById: string | null;
 	_count: GroupCountAggregateOutputType | null;
 	_min: GroupMinAggregateOutputType | null;
 	_max: GroupMaxAggregateOutputType | null;
@@ -216,9 +216,9 @@ export type GroupWhereInput = {
 	type?: Prisma.EnumGroupTypesFilter<"Group"> | $Enums.GroupTypes;
 	label?: Prisma.StringNullableFilter<"Group"> | string | null;
 	spaceId?: Prisma.StringFilter<"Group"> | string;
-	creatorId?: Prisma.StringNullableFilter<"Group"> | string | null;
+	createdById?: Prisma.StringNullableFilter<"Group"> | string | null;
 	space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>;
-	creator?: Prisma.XOR<
+	createdBy?: Prisma.XOR<
 		Prisma.UserNullableScalarRelationFilter,
 		Prisma.UserWhereInput
 	> | null;
@@ -236,9 +236,9 @@ export type GroupOrderByWithRelationInput = {
 	type?: Prisma.SortOrder;
 	label?: Prisma.SortOrderInput | Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrderInput | Prisma.SortOrder;
+	createdById?: Prisma.SortOrderInput | Prisma.SortOrder;
 	space?: Prisma.SpaceOrderByWithRelationInput;
-	creator?: Prisma.UserOrderByWithRelationInput;
+	createdBy?: Prisma.UserOrderByWithRelationInput;
 	roleAssociations?: Prisma.RoleAssociationOrderByRelationAggregateInput;
 	spaceAssociations?: Prisma.SpaceAssociationOrderByRelationAggregateInput;
 	userAssociations?: Prisma.UserAssociationOrderByRelationAggregateInput;
@@ -257,12 +257,12 @@ export type GroupWhereUniqueInput = Prisma.AtLeast<
 		type?: Prisma.EnumGroupTypesFilter<"Group"> | $Enums.GroupTypes;
 		label?: Prisma.StringNullableFilter<"Group"> | string | null;
 		spaceId?: Prisma.StringFilter<"Group"> | string;
-		creatorId?: Prisma.StringNullableFilter<"Group"> | string | null;
+		createdById?: Prisma.StringNullableFilter<"Group"> | string | null;
 		space?: Prisma.XOR<
 			Prisma.SpaceScalarRelationFilter,
 			Prisma.SpaceWhereInput
 		>;
-		creator?: Prisma.XOR<
+		createdBy?: Prisma.XOR<
 			Prisma.UserNullableScalarRelationFilter,
 			Prisma.UserWhereInput
 		> | null;
@@ -282,7 +282,7 @@ export type GroupOrderByWithAggregationInput = {
 	type?: Prisma.SortOrder;
 	label?: Prisma.SortOrderInput | Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrderInput | Prisma.SortOrder;
+	createdById?: Prisma.SortOrderInput | Prisma.SortOrder;
 	_count?: Prisma.GroupCountOrderByAggregateInput;
 	_max?: Prisma.GroupMaxOrderByAggregateInput;
 	_min?: Prisma.GroupMinOrderByAggregateInput;
@@ -312,7 +312,7 @@ export type GroupScalarWhereWithAggregatesInput = {
 	type?: Prisma.EnumGroupTypesWithAggregatesFilter<"Group"> | $Enums.GroupTypes;
 	label?: Prisma.StringNullableWithAggregatesFilter<"Group"> | string | null;
 	spaceId?: Prisma.StringWithAggregatesFilter<"Group"> | string;
-	creatorId?:
+	createdById?:
 		| Prisma.StringNullableWithAggregatesFilter<"Group">
 		| string
 		| null;
@@ -327,7 +327,7 @@ export type GroupCreateInput = {
 	type?: $Enums.GroupTypes;
 	label?: string | null;
 	space: Prisma.SpaceCreateNestedOneWithoutGroupsInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedGroupsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedGroupsInput;
 	roleAssociations?: Prisma.RoleAssociationCreateNestedManyWithoutGroupInput;
 	spaceAssociations?: Prisma.SpaceAssociationCreateNestedManyWithoutGroupInput;
 	userAssociations?: Prisma.UserAssociationCreateNestedManyWithoutGroupInput;
@@ -342,7 +342,7 @@ export type GroupUncheckedCreateInput = {
 	type?: $Enums.GroupTypes;
 	label?: string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	roleAssociations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutGroupInput;
 	spaceAssociations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutGroupInput;
 	userAssociations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutGroupInput;
@@ -365,7 +365,7 @@ export type GroupUpdateInput = {
 	type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes;
 	label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutGroupsNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedGroupsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedGroupsNestedInput;
 	roleAssociations?: Prisma.RoleAssociationUpdateManyWithoutGroupNestedInput;
 	spaceAssociations?: Prisma.SpaceAssociationUpdateManyWithoutGroupNestedInput;
 	userAssociations?: Prisma.UserAssociationUpdateManyWithoutGroupNestedInput;
@@ -388,7 +388,7 @@ export type GroupUncheckedUpdateInput = {
 	type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes;
 	label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	roleAssociations?: Prisma.RoleAssociationUncheckedUpdateManyWithoutGroupNestedInput;
 	spaceAssociations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutGroupNestedInput;
 	userAssociations?: Prisma.UserAssociationUncheckedUpdateManyWithoutGroupNestedInput;
@@ -403,7 +403,7 @@ export type GroupCreateManyInput = {
 	type?: $Enums.GroupTypes;
 	label?: string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 };
 
 export type GroupUpdateManyMutationInput = {
@@ -441,7 +441,7 @@ export type GroupUncheckedUpdateManyInput = {
 	type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes;
 	label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
 export type GroupScalarRelationFilter = {
@@ -468,7 +468,7 @@ export type GroupCountOrderByAggregateInput = {
 	type?: Prisma.SortOrder;
 	label?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 };
 
 export type GroupMaxOrderByAggregateInput = {
@@ -480,7 +480,7 @@ export type GroupMaxOrderByAggregateInput = {
 	type?: Prisma.SortOrder;
 	label?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 };
 
 export type GroupMinOrderByAggregateInput = {
@@ -492,7 +492,7 @@ export type GroupMinOrderByAggregateInput = {
 	type?: Prisma.SortOrder;
 	label?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 };
 
 export type GroupCreateNestedOneWithoutRoleAssociationsInput = {
@@ -633,89 +633,89 @@ export type GroupUpdateOneRequiredWithoutSpaceAssociationsNestedInput = {
 	>;
 };
 
-export type GroupCreateNestedManyWithoutCreatorInput = {
+export type GroupCreateNestedManyWithoutCreatedByInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.GroupCreateWithoutCreatorInput,
-				Prisma.GroupUncheckedCreateWithoutCreatorInput
+				Prisma.GroupCreateWithoutCreatedByInput,
+				Prisma.GroupUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.GroupCreateWithoutCreatorInput[]
-		| Prisma.GroupUncheckedCreateWithoutCreatorInput[];
+		| Prisma.GroupCreateWithoutCreatedByInput[]
+		| Prisma.GroupUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.GroupCreateOrConnectWithoutCreatorInput
-		| Prisma.GroupCreateOrConnectWithoutCreatorInput[];
-	createMany?: Prisma.GroupCreateManyCreatorInputEnvelope;
+		| Prisma.GroupCreateOrConnectWithoutCreatedByInput
+		| Prisma.GroupCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.GroupCreateManyCreatedByInputEnvelope;
 	connect?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[];
 };
 
-export type GroupUncheckedCreateNestedManyWithoutCreatorInput = {
+export type GroupUncheckedCreateNestedManyWithoutCreatedByInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.GroupCreateWithoutCreatorInput,
-				Prisma.GroupUncheckedCreateWithoutCreatorInput
+				Prisma.GroupCreateWithoutCreatedByInput,
+				Prisma.GroupUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.GroupCreateWithoutCreatorInput[]
-		| Prisma.GroupUncheckedCreateWithoutCreatorInput[];
+		| Prisma.GroupCreateWithoutCreatedByInput[]
+		| Prisma.GroupUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.GroupCreateOrConnectWithoutCreatorInput
-		| Prisma.GroupCreateOrConnectWithoutCreatorInput[];
-	createMany?: Prisma.GroupCreateManyCreatorInputEnvelope;
+		| Prisma.GroupCreateOrConnectWithoutCreatedByInput
+		| Prisma.GroupCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.GroupCreateManyCreatedByInputEnvelope;
 	connect?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[];
 };
 
-export type GroupUpdateManyWithoutCreatorNestedInput = {
+export type GroupUpdateManyWithoutCreatedByNestedInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.GroupCreateWithoutCreatorInput,
-				Prisma.GroupUncheckedCreateWithoutCreatorInput
+				Prisma.GroupCreateWithoutCreatedByInput,
+				Prisma.GroupUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.GroupCreateWithoutCreatorInput[]
-		| Prisma.GroupUncheckedCreateWithoutCreatorInput[];
+		| Prisma.GroupCreateWithoutCreatedByInput[]
+		| Prisma.GroupUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.GroupCreateOrConnectWithoutCreatorInput
-		| Prisma.GroupCreateOrConnectWithoutCreatorInput[];
+		| Prisma.GroupCreateOrConnectWithoutCreatedByInput
+		| Prisma.GroupCreateOrConnectWithoutCreatedByInput[];
 	upsert?:
-		| Prisma.GroupUpsertWithWhereUniqueWithoutCreatorInput
-		| Prisma.GroupUpsertWithWhereUniqueWithoutCreatorInput[];
-	createMany?: Prisma.GroupCreateManyCreatorInputEnvelope;
+		| Prisma.GroupUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.GroupUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.GroupCreateManyCreatedByInputEnvelope;
 	set?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[];
 	disconnect?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[];
 	delete?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[];
 	connect?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[];
 	update?:
-		| Prisma.GroupUpdateWithWhereUniqueWithoutCreatorInput
-		| Prisma.GroupUpdateWithWhereUniqueWithoutCreatorInput[];
+		| Prisma.GroupUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.GroupUpdateWithWhereUniqueWithoutCreatedByInput[];
 	updateMany?:
-		| Prisma.GroupUpdateManyWithWhereWithoutCreatorInput
-		| Prisma.GroupUpdateManyWithWhereWithoutCreatorInput[];
+		| Prisma.GroupUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.GroupUpdateManyWithWhereWithoutCreatedByInput[];
 	deleteMany?: Prisma.GroupScalarWhereInput | Prisma.GroupScalarWhereInput[];
 };
 
-export type GroupUncheckedUpdateManyWithoutCreatorNestedInput = {
+export type GroupUncheckedUpdateManyWithoutCreatedByNestedInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.GroupCreateWithoutCreatorInput,
-				Prisma.GroupUncheckedCreateWithoutCreatorInput
+				Prisma.GroupCreateWithoutCreatedByInput,
+				Prisma.GroupUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.GroupCreateWithoutCreatorInput[]
-		| Prisma.GroupUncheckedCreateWithoutCreatorInput[];
+		| Prisma.GroupCreateWithoutCreatedByInput[]
+		| Prisma.GroupUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.GroupCreateOrConnectWithoutCreatorInput
-		| Prisma.GroupCreateOrConnectWithoutCreatorInput[];
+		| Prisma.GroupCreateOrConnectWithoutCreatedByInput
+		| Prisma.GroupCreateOrConnectWithoutCreatedByInput[];
 	upsert?:
-		| Prisma.GroupUpsertWithWhereUniqueWithoutCreatorInput
-		| Prisma.GroupUpsertWithWhereUniqueWithoutCreatorInput[];
-	createMany?: Prisma.GroupCreateManyCreatorInputEnvelope;
+		| Prisma.GroupUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.GroupUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.GroupCreateManyCreatedByInputEnvelope;
 	set?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[];
 	disconnect?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[];
 	delete?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[];
 	connect?: Prisma.GroupWhereUniqueInput | Prisma.GroupWhereUniqueInput[];
 	update?:
-		| Prisma.GroupUpdateWithWhereUniqueWithoutCreatorInput
-		| Prisma.GroupUpdateWithWhereUniqueWithoutCreatorInput[];
+		| Prisma.GroupUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.GroupUpdateWithWhereUniqueWithoutCreatedByInput[];
 	updateMany?:
-		| Prisma.GroupUpdateManyWithWhereWithoutCreatorInput
-		| Prisma.GroupUpdateManyWithWhereWithoutCreatorInput[];
+		| Prisma.GroupUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.GroupUpdateManyWithWhereWithoutCreatedByInput[];
 	deleteMany?: Prisma.GroupScalarWhereInput | Prisma.GroupScalarWhereInput[];
 };
 
@@ -758,7 +758,7 @@ export type GroupCreateWithoutRoleAssociationsInput = {
 	type?: $Enums.GroupTypes;
 	label?: string | null;
 	space: Prisma.SpaceCreateNestedOneWithoutGroupsInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedGroupsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedGroupsInput;
 	spaceAssociations?: Prisma.SpaceAssociationCreateNestedManyWithoutGroupInput;
 	userAssociations?: Prisma.UserAssociationCreateNestedManyWithoutGroupInput;
 };
@@ -772,7 +772,7 @@ export type GroupUncheckedCreateWithoutRoleAssociationsInput = {
 	type?: $Enums.GroupTypes;
 	label?: string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	spaceAssociations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutGroupInput;
 	userAssociations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutGroupInput;
 };
@@ -822,7 +822,7 @@ export type GroupUpdateWithoutRoleAssociationsInput = {
 	type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes;
 	label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutGroupsNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedGroupsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedGroupsNestedInput;
 	spaceAssociations?: Prisma.SpaceAssociationUpdateManyWithoutGroupNestedInput;
 	userAssociations?: Prisma.UserAssociationUpdateManyWithoutGroupNestedInput;
 };
@@ -844,7 +844,7 @@ export type GroupUncheckedUpdateWithoutRoleAssociationsInput = {
 	type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes;
 	label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	spaceAssociations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutGroupNestedInput;
 	userAssociations?: Prisma.UserAssociationUncheckedUpdateManyWithoutGroupNestedInput;
 };
@@ -857,7 +857,7 @@ export type GroupCreateWithoutSpaceInput = {
 	name: string;
 	type?: $Enums.GroupTypes;
 	label?: string | null;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedGroupsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedGroupsInput;
 	roleAssociations?: Prisma.RoleAssociationCreateNestedManyWithoutGroupInput;
 	spaceAssociations?: Prisma.SpaceAssociationCreateNestedManyWithoutGroupInput;
 	userAssociations?: Prisma.UserAssociationCreateNestedManyWithoutGroupInput;
@@ -871,7 +871,7 @@ export type GroupUncheckedCreateWithoutSpaceInput = {
 	name: string;
 	type?: $Enums.GroupTypes;
 	label?: string | null;
-	creatorId?: string | null;
+	createdById?: string | null;
 	roleAssociations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutGroupInput;
 	spaceAssociations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutGroupInput;
 	userAssociations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutGroupInput;
@@ -930,7 +930,7 @@ export type GroupScalarWhereInput = {
 	type?: Prisma.EnumGroupTypesFilter<"Group"> | $Enums.GroupTypes;
 	label?: Prisma.StringNullableFilter<"Group"> | string | null;
 	spaceId?: Prisma.StringFilter<"Group"> | string;
-	creatorId?: Prisma.StringNullableFilter<"Group"> | string | null;
+	createdById?: Prisma.StringNullableFilter<"Group"> | string | null;
 };
 
 export type GroupCreateWithoutSpaceAssociationsInput = {
@@ -942,7 +942,7 @@ export type GroupCreateWithoutSpaceAssociationsInput = {
 	type?: $Enums.GroupTypes;
 	label?: string | null;
 	space: Prisma.SpaceCreateNestedOneWithoutGroupsInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedGroupsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedGroupsInput;
 	roleAssociations?: Prisma.RoleAssociationCreateNestedManyWithoutGroupInput;
 	userAssociations?: Prisma.UserAssociationCreateNestedManyWithoutGroupInput;
 };
@@ -956,7 +956,7 @@ export type GroupUncheckedCreateWithoutSpaceAssociationsInput = {
 	type?: $Enums.GroupTypes;
 	label?: string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	roleAssociations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutGroupInput;
 	userAssociations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutGroupInput;
 };
@@ -1006,7 +1006,7 @@ export type GroupUpdateWithoutSpaceAssociationsInput = {
 	type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes;
 	label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutGroupsNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedGroupsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedGroupsNestedInput;
 	roleAssociations?: Prisma.RoleAssociationUpdateManyWithoutGroupNestedInput;
 	userAssociations?: Prisma.UserAssociationUpdateManyWithoutGroupNestedInput;
 };
@@ -1028,12 +1028,12 @@ export type GroupUncheckedUpdateWithoutSpaceAssociationsInput = {
 	type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes;
 	label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	roleAssociations?: Prisma.RoleAssociationUncheckedUpdateManyWithoutGroupNestedInput;
 	userAssociations?: Prisma.UserAssociationUncheckedUpdateManyWithoutGroupNestedInput;
 };
 
-export type GroupCreateWithoutCreatorInput = {
+export type GroupCreateWithoutCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1047,7 +1047,7 @@ export type GroupCreateWithoutCreatorInput = {
 	userAssociations?: Prisma.UserAssociationCreateNestedManyWithoutGroupInput;
 };
 
-export type GroupUncheckedCreateWithoutCreatorInput = {
+export type GroupUncheckedCreateWithoutCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1061,46 +1061,46 @@ export type GroupUncheckedCreateWithoutCreatorInput = {
 	userAssociations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutGroupInput;
 };
 
-export type GroupCreateOrConnectWithoutCreatorInput = {
+export type GroupCreateOrConnectWithoutCreatedByInput = {
 	where: Prisma.GroupWhereUniqueInput;
 	create: Prisma.XOR<
-		Prisma.GroupCreateWithoutCreatorInput,
-		Prisma.GroupUncheckedCreateWithoutCreatorInput
+		Prisma.GroupCreateWithoutCreatedByInput,
+		Prisma.GroupUncheckedCreateWithoutCreatedByInput
 	>;
 };
 
-export type GroupCreateManyCreatorInputEnvelope = {
+export type GroupCreateManyCreatedByInputEnvelope = {
 	data:
-		| Prisma.GroupCreateManyCreatorInput
-		| Prisma.GroupCreateManyCreatorInput[];
+		| Prisma.GroupCreateManyCreatedByInput
+		| Prisma.GroupCreateManyCreatedByInput[];
 	skipDuplicates?: boolean;
 };
 
-export type GroupUpsertWithWhereUniqueWithoutCreatorInput = {
+export type GroupUpsertWithWhereUniqueWithoutCreatedByInput = {
 	where: Prisma.GroupWhereUniqueInput;
 	update: Prisma.XOR<
-		Prisma.GroupUpdateWithoutCreatorInput,
-		Prisma.GroupUncheckedUpdateWithoutCreatorInput
+		Prisma.GroupUpdateWithoutCreatedByInput,
+		Prisma.GroupUncheckedUpdateWithoutCreatedByInput
 	>;
 	create: Prisma.XOR<
-		Prisma.GroupCreateWithoutCreatorInput,
-		Prisma.GroupUncheckedCreateWithoutCreatorInput
+		Prisma.GroupCreateWithoutCreatedByInput,
+		Prisma.GroupUncheckedCreateWithoutCreatedByInput
 	>;
 };
 
-export type GroupUpdateWithWhereUniqueWithoutCreatorInput = {
+export type GroupUpdateWithWhereUniqueWithoutCreatedByInput = {
 	where: Prisma.GroupWhereUniqueInput;
 	data: Prisma.XOR<
-		Prisma.GroupUpdateWithoutCreatorInput,
-		Prisma.GroupUncheckedUpdateWithoutCreatorInput
+		Prisma.GroupUpdateWithoutCreatedByInput,
+		Prisma.GroupUncheckedUpdateWithoutCreatedByInput
 	>;
 };
 
-export type GroupUpdateManyWithWhereWithoutCreatorInput = {
+export type GroupUpdateManyWithWhereWithoutCreatedByInput = {
 	where: Prisma.GroupScalarWhereInput;
 	data: Prisma.XOR<
 		Prisma.GroupUpdateManyMutationInput,
-		Prisma.GroupUncheckedUpdateManyWithoutCreatorInput
+		Prisma.GroupUncheckedUpdateManyWithoutCreatedByInput
 	>;
 };
 
@@ -1113,7 +1113,7 @@ export type GroupCreateWithoutUserAssociationsInput = {
 	type?: $Enums.GroupTypes;
 	label?: string | null;
 	space: Prisma.SpaceCreateNestedOneWithoutGroupsInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedGroupsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedGroupsInput;
 	roleAssociations?: Prisma.RoleAssociationCreateNestedManyWithoutGroupInput;
 	spaceAssociations?: Prisma.SpaceAssociationCreateNestedManyWithoutGroupInput;
 };
@@ -1127,7 +1127,7 @@ export type GroupUncheckedCreateWithoutUserAssociationsInput = {
 	type?: $Enums.GroupTypes;
 	label?: string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	roleAssociations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutGroupInput;
 	spaceAssociations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutGroupInput;
 };
@@ -1177,7 +1177,7 @@ export type GroupUpdateWithoutUserAssociationsInput = {
 	type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes;
 	label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutGroupsNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedGroupsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedGroupsNestedInput;
 	roleAssociations?: Prisma.RoleAssociationUpdateManyWithoutGroupNestedInput;
 	spaceAssociations?: Prisma.SpaceAssociationUpdateManyWithoutGroupNestedInput;
 };
@@ -1199,7 +1199,7 @@ export type GroupUncheckedUpdateWithoutUserAssociationsInput = {
 	type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes;
 	label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	roleAssociations?: Prisma.RoleAssociationUncheckedUpdateManyWithoutGroupNestedInput;
 	spaceAssociations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutGroupNestedInput;
 };
@@ -1212,7 +1212,7 @@ export type GroupCreateManySpaceInput = {
 	name: string;
 	type?: $Enums.GroupTypes;
 	label?: string | null;
-	creatorId?: string | null;
+	createdById?: string | null;
 };
 
 export type GroupUpdateWithoutSpaceInput = {
@@ -1231,7 +1231,7 @@ export type GroupUpdateWithoutSpaceInput = {
 	name?: Prisma.StringFieldUpdateOperationsInput | string;
 	type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes;
 	label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	creator?: Prisma.UserUpdateOneWithoutCreatedGroupsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedGroupsNestedInput;
 	roleAssociations?: Prisma.RoleAssociationUpdateManyWithoutGroupNestedInput;
 	spaceAssociations?: Prisma.SpaceAssociationUpdateManyWithoutGroupNestedInput;
 	userAssociations?: Prisma.UserAssociationUpdateManyWithoutGroupNestedInput;
@@ -1253,7 +1253,7 @@ export type GroupUncheckedUpdateWithoutSpaceInput = {
 	name?: Prisma.StringFieldUpdateOperationsInput | string;
 	type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes;
 	label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	roleAssociations?: Prisma.RoleAssociationUncheckedUpdateManyWithoutGroupNestedInput;
 	spaceAssociations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutGroupNestedInput;
 	userAssociations?: Prisma.UserAssociationUncheckedUpdateManyWithoutGroupNestedInput;
@@ -1275,10 +1275,10 @@ export type GroupUncheckedUpdateManyWithoutSpaceInput = {
 	name?: Prisma.StringFieldUpdateOperationsInput | string;
 	type?: Prisma.EnumGroupTypesFieldUpdateOperationsInput | $Enums.GroupTypes;
 	label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
-export type GroupCreateManyCreatorInput = {
+export type GroupCreateManyCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1289,7 +1289,7 @@ export type GroupCreateManyCreatorInput = {
 	spaceId: string;
 };
 
-export type GroupUpdateWithoutCreatorInput = {
+export type GroupUpdateWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1311,7 +1311,7 @@ export type GroupUpdateWithoutCreatorInput = {
 	userAssociations?: Prisma.UserAssociationUpdateManyWithoutGroupNestedInput;
 };
 
-export type GroupUncheckedUpdateWithoutCreatorInput = {
+export type GroupUncheckedUpdateWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1333,7 +1333,7 @@ export type GroupUncheckedUpdateWithoutCreatorInput = {
 	userAssociations?: Prisma.UserAssociationUncheckedUpdateManyWithoutGroupNestedInput;
 };
 
-export type GroupUncheckedUpdateManyWithoutCreatorInput = {
+export type GroupUncheckedUpdateManyWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1427,9 +1427,9 @@ export type GroupSelect<
 		type?: boolean;
 		label?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Group$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Group$createdByArgs<ExtArgs>;
 		roleAssociations?: boolean | Prisma.Group$roleAssociationsArgs<ExtArgs>;
 		spaceAssociations?: boolean | Prisma.Group$spaceAssociationsArgs<ExtArgs>;
 		userAssociations?: boolean | Prisma.Group$userAssociationsArgs<ExtArgs>;
@@ -1451,9 +1451,9 @@ export type GroupSelectCreateManyAndReturn<
 		type?: boolean;
 		label?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Group$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Group$createdByArgs<ExtArgs>;
 	},
 	ExtArgs["result"]["group"]
 >;
@@ -1471,9 +1471,9 @@ export type GroupSelectUpdateManyAndReturn<
 		type?: boolean;
 		label?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Group$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Group$createdByArgs<ExtArgs>;
 	},
 	ExtArgs["result"]["group"]
 >;
@@ -1487,7 +1487,7 @@ export type GroupSelectScalar = {
 	type?: boolean;
 	label?: boolean;
 	spaceId?: boolean;
-	creatorId?: boolean;
+	createdById?: boolean;
 };
 
 export type GroupOmit<
@@ -1502,7 +1502,7 @@ export type GroupOmit<
 	| "type"
 	| "label"
 	| "spaceId"
-	| "creatorId",
+	| "createdById",
 	ExtArgs["result"]["group"]
 >;
 export type GroupInclude<
@@ -1510,7 +1510,7 @@ export type GroupInclude<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Group$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Group$createdByArgs<ExtArgs>;
 	roleAssociations?: boolean | Prisma.Group$roleAssociationsArgs<ExtArgs>;
 	spaceAssociations?: boolean | Prisma.Group$spaceAssociationsArgs<ExtArgs>;
 	userAssociations?: boolean | Prisma.Group$userAssociationsArgs<ExtArgs>;
@@ -1521,14 +1521,14 @@ export type GroupIncludeCreateManyAndReturn<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Group$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Group$createdByArgs<ExtArgs>;
 };
 export type GroupIncludeUpdateManyAndReturn<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Group$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Group$createdByArgs<ExtArgs>;
 };
 
 export type $GroupPayload<
@@ -1538,7 +1538,7 @@ export type $GroupPayload<
 	name: "Group";
 	objects: {
 		space: Prisma.$SpacePayload<ExtArgs>;
-		creator: Prisma.$UserPayload<ExtArgs> | null;
+		createdBy: Prisma.$UserPayload<ExtArgs> | null;
 		roleAssociations: Prisma.$RoleAssociationPayload<ExtArgs>[];
 		spaceAssociations: Prisma.$SpaceAssociationPayload<ExtArgs>[];
 		userAssociations: Prisma.$UserAssociationPayload<ExtArgs>[];
@@ -1562,7 +1562,7 @@ export type $GroupPayload<
 			 */
 			label: string | null;
 			spaceId: string;
-			creatorId: string | null;
+			createdById: string | null;
 		},
 		ExtArgs["result"]["group"]
 	>;
@@ -2127,8 +2127,8 @@ export interface Prisma__GroupClient<
 		ExtArgs,
 		GlobalOmitOptions
 	>;
-	creator<T extends Prisma.Group$creatorArgs<ExtArgs> = {}>(
-		args?: Prisma.Subset<T, Prisma.Group$creatorArgs<ExtArgs>>,
+	createdBy<T extends Prisma.Group$createdByArgs<ExtArgs> = {}>(
+		args?: Prisma.Subset<T, Prisma.Group$createdByArgs<ExtArgs>>,
 	): Prisma.Prisma__UserClient<
 		runtime.Types.Result.GetResult<
 			Prisma.$UserPayload<ExtArgs>,
@@ -2223,7 +2223,7 @@ export interface GroupFieldRefs {
 	readonly type: Prisma.FieldRef<"Group", "GroupTypes">;
 	readonly label: Prisma.FieldRef<"Group", "String">;
 	readonly spaceId: Prisma.FieldRef<"Group", "String">;
-	readonly creatorId: Prisma.FieldRef<"Group", "String">;
+	readonly createdById: Prisma.FieldRef<"Group", "String">;
 }
 
 // Custom InputTypes
@@ -2673,9 +2673,9 @@ export type GroupDeleteManyArgs<
 };
 
 /**
- * Group.creator
+ * Group.createdBy
  */
-export type Group$creatorArgs<
+export type Group$createdByArgs<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {

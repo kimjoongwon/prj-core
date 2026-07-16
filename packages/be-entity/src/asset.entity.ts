@@ -34,14 +34,14 @@ export class Asset extends AbstractEntity implements AssetEntity {
 	extension!: string | null;
 	checksum!: string | null;
 	metadata!: Prisma.JsonValue | null;
-	creatorId!: string | null;
+	createdById!: string | null;
 
 	// ============================================================================
 	// 관계 필드 (선택적)
 	// ============================================================================
 	space?: Space;
 	folder?: Folder;
-	creator?: User | null;
+	createdBy?: User | null;
 	image?: Image | null;
 	video?: Video | null;
 	document?: Document | null;

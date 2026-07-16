@@ -29,7 +29,7 @@ export class InquiryDetailDto extends AbstractDto {
 	spaceId!: string;
 
 	@UUIDFieldOptional({ nullable: true, description: "생성자 ID" })
-	creatorId!: string | null;
+	createdById!: string | null;
 
 	@StringField({ description: "문의 번호" })
 	inquiryNumber!: string;

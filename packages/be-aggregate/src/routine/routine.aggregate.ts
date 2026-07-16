@@ -80,7 +80,7 @@ export class RoutineAggregate {
 
 	/**
 	 * 루틴 등록
-	 * creatorId = 현재 로그인 사용자 ID
+	 * createdById = 현재 로그인 사용자 ID
 	 * spaceId = 현재 Space ID
 	 */
 	async createRoutine(
@@ -110,7 +110,7 @@ export class RoutineAggregate {
 			name: dto.name,
 			label: dto.label,
 			spaceId,
-			creatorId: userId,
+			createdById: userId,
 			activities: this.normalizeRoutineActivities(dto.activities),
 		});
 	}

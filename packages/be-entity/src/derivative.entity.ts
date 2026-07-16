@@ -12,7 +12,7 @@ export class Derivative extends AbstractEntity implements DerivativeEntity {
 	// 필수 필드
 	// ============================================================================
 	spaceId!: string;
-	creatorId!: string | null;
+	createdById!: string | null;
 	assetId!: string;
 	kind!: DerivativeKind;
 	profile!: string;
@@ -31,7 +31,7 @@ export class Derivative extends AbstractEntity implements DerivativeEntity {
 	// 관계 필드 (선택적)
 	// ============================================================================
 	space?: Space;
-	creator?: User | null;
+	createdBy?: User | null;
 	asset?: Asset;
 
 	// ============================================================================

@@ -18,7 +18,7 @@ export interface TimelineDto {
 	/** @nullable */
 	removedAt: string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	name: string;
 	description?: string;
 	sessions: SessionDto[];

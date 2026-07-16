@@ -6,11 +6,11 @@ import type { User } from "./user.entity";
 
 export class Timeline extends AbstractEntity implements TimelineEntity {
 	spaceId!: string;
-	creatorId!: string | null;
+	createdById!: string | null;
 	name!: string;
 	description!: string | null;
 
 	space?: Space;
-	creator?: User;
+	createdBy?: User;
 	sessions?: Session[];
 }

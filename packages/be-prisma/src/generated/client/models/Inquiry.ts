@@ -42,7 +42,7 @@ export type InquiryMinAggregateOutputType = {
 	updatedAt: Date | null;
 	removedAt: Date | null;
 	spaceId: string | null;
-	creatorId: string | null;
+	createdById: string | null;
 	inquiryNumber: string | null;
 	title: string | null;
 	category: $Enums.InquiryCategory | null;
@@ -74,7 +74,7 @@ export type InquiryMaxAggregateOutputType = {
 	updatedAt: Date | null;
 	removedAt: Date | null;
 	spaceId: string | null;
-	creatorId: string | null;
+	createdById: string | null;
 	inquiryNumber: string | null;
 	title: string | null;
 	category: $Enums.InquiryCategory | null;
@@ -106,7 +106,7 @@ export type InquiryCountAggregateOutputType = {
 	updatedAt: number;
 	removedAt: number;
 	spaceId: number;
-	creatorId: number;
+	createdById: number;
 	inquiryNumber: number;
 	title: number;
 	category: number;
@@ -150,7 +150,7 @@ export type InquiryMinAggregateInputType = {
 	updatedAt?: true;
 	removedAt?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 	inquiryNumber?: true;
 	title?: true;
 	category?: true;
@@ -182,7 +182,7 @@ export type InquiryMaxAggregateInputType = {
 	updatedAt?: true;
 	removedAt?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 	inquiryNumber?: true;
 	title?: true;
 	category?: true;
@@ -214,7 +214,7 @@ export type InquiryCountAggregateInputType = {
 	updatedAt?: true;
 	removedAt?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 	inquiryNumber?: true;
 	title?: true;
 	category?: true;
@@ -341,7 +341,7 @@ export type InquiryGroupByOutputType = {
 	updatedAt: Date | null;
 	removedAt: Date | null;
 	spaceId: string;
-	creatorId: string | null;
+	createdById: string | null;
 	inquiryNumber: string;
 	title: string;
 	category: $Enums.InquiryCategory;
@@ -395,7 +395,7 @@ export type InquiryWhereInput = {
 	updatedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null;
 	removedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null;
 	spaceId?: Prisma.StringFilter<"Inquiry"> | string;
-	creatorId?: Prisma.StringNullableFilter<"Inquiry"> | string | null;
+	createdById?: Prisma.StringNullableFilter<"Inquiry"> | string | null;
 	inquiryNumber?: Prisma.StringFilter<"Inquiry"> | string;
 	title?: Prisma.StringFilter<"Inquiry"> | string;
 	category?:
@@ -444,7 +444,7 @@ export type InquiryWhereInput = {
 	unreadCount?: Prisma.IntFilter<"Inquiry"> | number;
 	metadata?: Prisma.JsonNullableFilter<"Inquiry">;
 	space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>;
-	creator?: Prisma.XOR<
+	createdBy?: Prisma.XOR<
 		Prisma.UserNullableScalarRelationFilter,
 		Prisma.UserWhereInput
 	> | null;
@@ -473,7 +473,7 @@ export type InquiryOrderByWithRelationInput = {
 	updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	removedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrderInput | Prisma.SortOrder;
+	createdById?: Prisma.SortOrderInput | Prisma.SortOrder;
 	inquiryNumber?: Prisma.SortOrder;
 	title?: Prisma.SortOrder;
 	category?: Prisma.SortOrder;
@@ -499,7 +499,7 @@ export type InquiryOrderByWithRelationInput = {
 	unreadCount?: Prisma.SortOrder;
 	metadata?: Prisma.SortOrderInput | Prisma.SortOrder;
 	space?: Prisma.SpaceOrderByWithRelationInput;
-	creator?: Prisma.UserOrderByWithRelationInput;
+	createdBy?: Prisma.UserOrderByWithRelationInput;
 	customer?: Prisma.UserOrderByWithRelationInput;
 	assignee?: Prisma.UserOrderByWithRelationInput;
 	threads?: Prisma.InquiryThreadOrderByRelationAggregateInput;
@@ -521,7 +521,7 @@ export type InquiryWhereUniqueInput = Prisma.AtLeast<
 		updatedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null;
 		removedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null;
 		spaceId?: Prisma.StringFilter<"Inquiry"> | string;
-		creatorId?: Prisma.StringNullableFilter<"Inquiry"> | string | null;
+		createdById?: Prisma.StringNullableFilter<"Inquiry"> | string | null;
 		title?: Prisma.StringFilter<"Inquiry"> | string;
 		category?:
 			| Prisma.EnumInquiryCategoryFilter<"Inquiry">
@@ -578,7 +578,7 @@ export type InquiryWhereUniqueInput = Prisma.AtLeast<
 			Prisma.SpaceScalarRelationFilter,
 			Prisma.SpaceWhereInput
 		>;
-		creator?: Prisma.XOR<
+		createdBy?: Prisma.XOR<
 			Prisma.UserNullableScalarRelationFilter,
 			Prisma.UserWhereInput
 		> | null;
@@ -609,7 +609,7 @@ export type InquiryOrderByWithAggregationInput = {
 	updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	removedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrderInput | Prisma.SortOrder;
+	createdById?: Prisma.SortOrderInput | Prisma.SortOrder;
 	inquiryNumber?: Prisma.SortOrder;
 	title?: Prisma.SortOrder;
 	category?: Prisma.SortOrder;
@@ -662,7 +662,7 @@ export type InquiryScalarWhereWithAggregatesInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringWithAggregatesFilter<"Inquiry"> | string;
-	creatorId?:
+	createdById?:
 		| Prisma.StringNullableWithAggregatesFilter<"Inquiry">
 		| string
 		| null;
@@ -766,7 +766,7 @@ export type InquiryCreateInput = {
 	unreadCount?: number;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space: Prisma.SpaceCreateNestedOneWithoutInquiriesInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
 	customer?: Prisma.UserCreateNestedOneWithoutCustomerInquiriesInput;
 	assignee?: Prisma.UserCreateNestedOneWithoutAssignedInquiriesInput;
 	threads?: Prisma.InquiryThreadCreateNestedManyWithoutInquiryInput;
@@ -783,7 +783,7 @@ export type InquiryUncheckedCreateInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	inquiryNumber: string;
 	title: string;
 	category: $Enums.InquiryCategory;
@@ -892,7 +892,7 @@ export type InquiryUpdateInput = {
 	unreadCount?: Prisma.IntFieldUpdateOperationsInput | number;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutInquiriesNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
 	customer?: Prisma.UserUpdateOneWithoutCustomerInquiriesNestedInput;
 	assignee?: Prisma.UserUpdateOneWithoutAssignedInquiriesNestedInput;
 	threads?: Prisma.InquiryThreadUpdateManyWithoutInquiryNestedInput;
@@ -917,7 +917,7 @@ export type InquiryUncheckedUpdateInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string;
 	title?: Prisma.StringFieldUpdateOperationsInput | string;
 	category?:
@@ -996,7 +996,7 @@ export type InquiryCreateManyInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	inquiryNumber: string;
 	title: string;
 	category: $Enums.InquiryCategory;
@@ -1114,7 +1114,7 @@ export type InquiryUncheckedUpdateManyInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string;
 	title?: Prisma.StringFieldUpdateOperationsInput | string;
 	category?:
@@ -1202,7 +1202,7 @@ export type InquiryCountOrderByAggregateInput = {
 	updatedAt?: Prisma.SortOrder;
 	removedAt?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 	inquiryNumber?: Prisma.SortOrder;
 	title?: Prisma.SortOrder;
 	category?: Prisma.SortOrder;
@@ -1240,7 +1240,7 @@ export type InquiryMaxOrderByAggregateInput = {
 	updatedAt?: Prisma.SortOrder;
 	removedAt?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 	inquiryNumber?: Prisma.SortOrder;
 	title?: Prisma.SortOrder;
 	category?: Prisma.SortOrder;
@@ -1272,7 +1272,7 @@ export type InquiryMinOrderByAggregateInput = {
 	updatedAt?: Prisma.SortOrder;
 	removedAt?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 	inquiryNumber?: Prisma.SortOrder;
 	title?: Prisma.SortOrder;
 	category?: Prisma.SortOrder;
@@ -1427,18 +1427,18 @@ export type InquiryCreateNestedManyWithoutAssigneeInput = {
 	connect?: Prisma.InquiryWhereUniqueInput | Prisma.InquiryWhereUniqueInput[];
 };
 
-export type InquiryCreateNestedManyWithoutCreatorInput = {
+export type InquiryCreateNestedManyWithoutCreatedByInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.InquiryCreateWithoutCreatorInput,
-				Prisma.InquiryUncheckedCreateWithoutCreatorInput
+				Prisma.InquiryCreateWithoutCreatedByInput,
+				Prisma.InquiryUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.InquiryCreateWithoutCreatorInput[]
-		| Prisma.InquiryUncheckedCreateWithoutCreatorInput[];
+		| Prisma.InquiryCreateWithoutCreatedByInput[]
+		| Prisma.InquiryUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.InquiryCreateOrConnectWithoutCreatorInput
-		| Prisma.InquiryCreateOrConnectWithoutCreatorInput[];
-	createMany?: Prisma.InquiryCreateManyCreatorInputEnvelope;
+		| Prisma.InquiryCreateOrConnectWithoutCreatedByInput
+		| Prisma.InquiryCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.InquiryCreateManyCreatedByInputEnvelope;
 	connect?: Prisma.InquiryWhereUniqueInput | Prisma.InquiryWhereUniqueInput[];
 };
 
@@ -1472,18 +1472,18 @@ export type InquiryUncheckedCreateNestedManyWithoutAssigneeInput = {
 	connect?: Prisma.InquiryWhereUniqueInput | Prisma.InquiryWhereUniqueInput[];
 };
 
-export type InquiryUncheckedCreateNestedManyWithoutCreatorInput = {
+export type InquiryUncheckedCreateNestedManyWithoutCreatedByInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.InquiryCreateWithoutCreatorInput,
-				Prisma.InquiryUncheckedCreateWithoutCreatorInput
+				Prisma.InquiryCreateWithoutCreatedByInput,
+				Prisma.InquiryUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.InquiryCreateWithoutCreatorInput[]
-		| Prisma.InquiryUncheckedCreateWithoutCreatorInput[];
+		| Prisma.InquiryCreateWithoutCreatedByInput[]
+		| Prisma.InquiryUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.InquiryCreateOrConnectWithoutCreatorInput
-		| Prisma.InquiryCreateOrConnectWithoutCreatorInput[];
-	createMany?: Prisma.InquiryCreateManyCreatorInputEnvelope;
+		| Prisma.InquiryCreateOrConnectWithoutCreatedByInput
+		| Prisma.InquiryCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.InquiryCreateManyCreatedByInputEnvelope;
 	connect?: Prisma.InquiryWhereUniqueInput | Prisma.InquiryWhereUniqueInput[];
 };
 
@@ -1551,21 +1551,21 @@ export type InquiryUpdateManyWithoutAssigneeNestedInput = {
 		| Prisma.InquiryScalarWhereInput[];
 };
 
-export type InquiryUpdateManyWithoutCreatorNestedInput = {
+export type InquiryUpdateManyWithoutCreatedByNestedInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.InquiryCreateWithoutCreatorInput,
-				Prisma.InquiryUncheckedCreateWithoutCreatorInput
+				Prisma.InquiryCreateWithoutCreatedByInput,
+				Prisma.InquiryUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.InquiryCreateWithoutCreatorInput[]
-		| Prisma.InquiryUncheckedCreateWithoutCreatorInput[];
+		| Prisma.InquiryCreateWithoutCreatedByInput[]
+		| Prisma.InquiryUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.InquiryCreateOrConnectWithoutCreatorInput
-		| Prisma.InquiryCreateOrConnectWithoutCreatorInput[];
+		| Prisma.InquiryCreateOrConnectWithoutCreatedByInput
+		| Prisma.InquiryCreateOrConnectWithoutCreatedByInput[];
 	upsert?:
-		| Prisma.InquiryUpsertWithWhereUniqueWithoutCreatorInput
-		| Prisma.InquiryUpsertWithWhereUniqueWithoutCreatorInput[];
-	createMany?: Prisma.InquiryCreateManyCreatorInputEnvelope;
+		| Prisma.InquiryUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.InquiryUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.InquiryCreateManyCreatedByInputEnvelope;
 	set?: Prisma.InquiryWhereUniqueInput | Prisma.InquiryWhereUniqueInput[];
 	disconnect?:
 		| Prisma.InquiryWhereUniqueInput
@@ -1573,11 +1573,11 @@ export type InquiryUpdateManyWithoutCreatorNestedInput = {
 	delete?: Prisma.InquiryWhereUniqueInput | Prisma.InquiryWhereUniqueInput[];
 	connect?: Prisma.InquiryWhereUniqueInput | Prisma.InquiryWhereUniqueInput[];
 	update?:
-		| Prisma.InquiryUpdateWithWhereUniqueWithoutCreatorInput
-		| Prisma.InquiryUpdateWithWhereUniqueWithoutCreatorInput[];
+		| Prisma.InquiryUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.InquiryUpdateWithWhereUniqueWithoutCreatedByInput[];
 	updateMany?:
-		| Prisma.InquiryUpdateManyWithWhereWithoutCreatorInput
-		| Prisma.InquiryUpdateManyWithWhereWithoutCreatorInput[];
+		| Prisma.InquiryUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.InquiryUpdateManyWithWhereWithoutCreatedByInput[];
 	deleteMany?:
 		| Prisma.InquiryScalarWhereInput
 		| Prisma.InquiryScalarWhereInput[];
@@ -1647,21 +1647,21 @@ export type InquiryUncheckedUpdateManyWithoutAssigneeNestedInput = {
 		| Prisma.InquiryScalarWhereInput[];
 };
 
-export type InquiryUncheckedUpdateManyWithoutCreatorNestedInput = {
+export type InquiryUncheckedUpdateManyWithoutCreatedByNestedInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.InquiryCreateWithoutCreatorInput,
-				Prisma.InquiryUncheckedCreateWithoutCreatorInput
+				Prisma.InquiryCreateWithoutCreatedByInput,
+				Prisma.InquiryUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.InquiryCreateWithoutCreatorInput[]
-		| Prisma.InquiryUncheckedCreateWithoutCreatorInput[];
+		| Prisma.InquiryCreateWithoutCreatedByInput[]
+		| Prisma.InquiryUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.InquiryCreateOrConnectWithoutCreatorInput
-		| Prisma.InquiryCreateOrConnectWithoutCreatorInput[];
+		| Prisma.InquiryCreateOrConnectWithoutCreatedByInput
+		| Prisma.InquiryCreateOrConnectWithoutCreatedByInput[];
 	upsert?:
-		| Prisma.InquiryUpsertWithWhereUniqueWithoutCreatorInput
-		| Prisma.InquiryUpsertWithWhereUniqueWithoutCreatorInput[];
-	createMany?: Prisma.InquiryCreateManyCreatorInputEnvelope;
+		| Prisma.InquiryUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.InquiryUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.InquiryCreateManyCreatedByInputEnvelope;
 	set?: Prisma.InquiryWhereUniqueInput | Prisma.InquiryWhereUniqueInput[];
 	disconnect?:
 		| Prisma.InquiryWhereUniqueInput
@@ -1669,11 +1669,11 @@ export type InquiryUncheckedUpdateManyWithoutCreatorNestedInput = {
 	delete?: Prisma.InquiryWhereUniqueInput | Prisma.InquiryWhereUniqueInput[];
 	connect?: Prisma.InquiryWhereUniqueInput | Prisma.InquiryWhereUniqueInput[];
 	update?:
-		| Prisma.InquiryUpdateWithWhereUniqueWithoutCreatorInput
-		| Prisma.InquiryUpdateWithWhereUniqueWithoutCreatorInput[];
+		| Prisma.InquiryUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.InquiryUpdateWithWhereUniqueWithoutCreatedByInput[];
 	updateMany?:
-		| Prisma.InquiryUpdateManyWithWhereWithoutCreatorInput
-		| Prisma.InquiryUpdateManyWithWhereWithoutCreatorInput[];
+		| Prisma.InquiryUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.InquiryUpdateManyWithWhereWithoutCreatedByInput[];
 	deleteMany?:
 		| Prisma.InquiryScalarWhereInput
 		| Prisma.InquiryScalarWhereInput[];
@@ -1886,7 +1886,7 @@ export type InquiryCreateWithoutSpaceInput = {
 	lastMessageAt?: Date | string | null;
 	unreadCount?: number;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
 	customer?: Prisma.UserCreateNestedOneWithoutCustomerInquiriesInput;
 	assignee?: Prisma.UserCreateNestedOneWithoutAssignedInquiriesInput;
 	threads?: Prisma.InquiryThreadCreateNestedManyWithoutInquiryInput;
@@ -1902,7 +1902,7 @@ export type InquiryUncheckedCreateWithoutSpaceInput = {
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
-	creatorId?: string | null;
+	createdById?: string | null;
 	inquiryNumber: string;
 	title: string;
 	category: $Enums.InquiryCategory;
@@ -1987,7 +1987,7 @@ export type InquiryScalarWhereInput = {
 	updatedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null;
 	removedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null;
 	spaceId?: Prisma.StringFilter<"Inquiry"> | string;
-	creatorId?: Prisma.StringNullableFilter<"Inquiry"> | string | null;
+	createdById?: Prisma.StringNullableFilter<"Inquiry"> | string | null;
 	inquiryNumber?: Prisma.StringFilter<"Inquiry"> | string;
 	title?: Prisma.StringFilter<"Inquiry"> | string;
 	category?:
@@ -2065,7 +2065,7 @@ export type InquiryCreateWithoutCustomerInput = {
 	unreadCount?: number;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space: Prisma.SpaceCreateNestedOneWithoutInquiriesInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
 	assignee?: Prisma.UserCreateNestedOneWithoutAssignedInquiriesInput;
 	threads?: Prisma.InquiryThreadCreateNestedManyWithoutInquiryInput;
 	messages?: Prisma.InquiryMessageCreateNestedManyWithoutInquiryInput;
@@ -2081,7 +2081,7 @@ export type InquiryUncheckedCreateWithoutCustomerInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	inquiryNumber: string;
 	title: string;
 	category: $Enums.InquiryCategory;
@@ -2156,7 +2156,7 @@ export type InquiryCreateWithoutAssigneeInput = {
 	unreadCount?: number;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space: Prisma.SpaceCreateNestedOneWithoutInquiriesInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
 	customer?: Prisma.UserCreateNestedOneWithoutCustomerInquiriesInput;
 	threads?: Prisma.InquiryThreadCreateNestedManyWithoutInquiryInput;
 	messages?: Prisma.InquiryMessageCreateNestedManyWithoutInquiryInput;
@@ -2172,7 +2172,7 @@ export type InquiryUncheckedCreateWithoutAssigneeInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	inquiryNumber: string;
 	title: string;
 	category: $Enums.InquiryCategory;
@@ -2219,7 +2219,7 @@ export type InquiryCreateManyAssigneeInputEnvelope = {
 	skipDuplicates?: boolean;
 };
 
-export type InquiryCreateWithoutCreatorInput = {
+export type InquiryCreateWithoutCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -2257,7 +2257,7 @@ export type InquiryCreateWithoutCreatorInput = {
 	aiAgentLogs?: Prisma.AIAgentLogCreateNestedManyWithoutInquiryInput;
 };
 
-export type InquiryUncheckedCreateWithoutCreatorInput = {
+export type InquiryUncheckedCreateWithoutCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -2295,18 +2295,18 @@ export type InquiryUncheckedCreateWithoutCreatorInput = {
 	aiAgentLogs?: Prisma.AIAgentLogUncheckedCreateNestedManyWithoutInquiryInput;
 };
 
-export type InquiryCreateOrConnectWithoutCreatorInput = {
+export type InquiryCreateOrConnectWithoutCreatedByInput = {
 	where: Prisma.InquiryWhereUniqueInput;
 	create: Prisma.XOR<
-		Prisma.InquiryCreateWithoutCreatorInput,
-		Prisma.InquiryUncheckedCreateWithoutCreatorInput
+		Prisma.InquiryCreateWithoutCreatedByInput,
+		Prisma.InquiryUncheckedCreateWithoutCreatedByInput
 	>;
 };
 
-export type InquiryCreateManyCreatorInputEnvelope = {
+export type InquiryCreateManyCreatedByInputEnvelope = {
 	data:
-		| Prisma.InquiryCreateManyCreatorInput
-		| Prisma.InquiryCreateManyCreatorInput[];
+		| Prisma.InquiryCreateManyCreatedByInput
+		| Prisma.InquiryCreateManyCreatedByInput[];
 	skipDuplicates?: boolean;
 };
 
@@ -2366,31 +2366,31 @@ export type InquiryUpdateManyWithWhereWithoutAssigneeInput = {
 	>;
 };
 
-export type InquiryUpsertWithWhereUniqueWithoutCreatorInput = {
+export type InquiryUpsertWithWhereUniqueWithoutCreatedByInput = {
 	where: Prisma.InquiryWhereUniqueInput;
 	update: Prisma.XOR<
-		Prisma.InquiryUpdateWithoutCreatorInput,
-		Prisma.InquiryUncheckedUpdateWithoutCreatorInput
+		Prisma.InquiryUpdateWithoutCreatedByInput,
+		Prisma.InquiryUncheckedUpdateWithoutCreatedByInput
 	>;
 	create: Prisma.XOR<
-		Prisma.InquiryCreateWithoutCreatorInput,
-		Prisma.InquiryUncheckedCreateWithoutCreatorInput
+		Prisma.InquiryCreateWithoutCreatedByInput,
+		Prisma.InquiryUncheckedCreateWithoutCreatedByInput
 	>;
 };
 
-export type InquiryUpdateWithWhereUniqueWithoutCreatorInput = {
+export type InquiryUpdateWithWhereUniqueWithoutCreatedByInput = {
 	where: Prisma.InquiryWhereUniqueInput;
 	data: Prisma.XOR<
-		Prisma.InquiryUpdateWithoutCreatorInput,
-		Prisma.InquiryUncheckedUpdateWithoutCreatorInput
+		Prisma.InquiryUpdateWithoutCreatedByInput,
+		Prisma.InquiryUncheckedUpdateWithoutCreatedByInput
 	>;
 };
 
-export type InquiryUpdateManyWithWhereWithoutCreatorInput = {
+export type InquiryUpdateManyWithWhereWithoutCreatedByInput = {
 	where: Prisma.InquiryScalarWhereInput;
 	data: Prisma.XOR<
 		Prisma.InquiryUpdateManyMutationInput,
-		Prisma.InquiryUncheckedUpdateManyWithoutCreatorInput
+		Prisma.InquiryUncheckedUpdateManyWithoutCreatedByInput
 	>;
 };
 
@@ -2422,7 +2422,7 @@ export type InquiryCreateWithoutAiAgentLogsInput = {
 	unreadCount?: number;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space: Prisma.SpaceCreateNestedOneWithoutInquiriesInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
 	customer?: Prisma.UserCreateNestedOneWithoutCustomerInquiriesInput;
 	assignee?: Prisma.UserCreateNestedOneWithoutAssignedInquiriesInput;
 	threads?: Prisma.InquiryThreadCreateNestedManyWithoutInquiryInput;
@@ -2438,7 +2438,7 @@ export type InquiryUncheckedCreateWithoutAiAgentLogsInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	inquiryNumber: string;
 	title: string;
 	category: $Enums.InquiryCategory;
@@ -2574,7 +2574,7 @@ export type InquiryUpdateWithoutAiAgentLogsInput = {
 	unreadCount?: Prisma.IntFieldUpdateOperationsInput | number;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutInquiriesNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
 	customer?: Prisma.UserUpdateOneWithoutCustomerInquiriesNestedInput;
 	assignee?: Prisma.UserUpdateOneWithoutAssignedInquiriesNestedInput;
 	threads?: Prisma.InquiryThreadUpdateManyWithoutInquiryNestedInput;
@@ -2598,7 +2598,7 @@ export type InquiryUncheckedUpdateWithoutAiAgentLogsInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string;
 	title?: Prisma.StringFieldUpdateOperationsInput | string;
 	category?:
@@ -2698,7 +2698,7 @@ export type InquiryCreateWithoutThreadsInput = {
 	unreadCount?: number;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space: Prisma.SpaceCreateNestedOneWithoutInquiriesInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
 	customer?: Prisma.UserCreateNestedOneWithoutCustomerInquiriesInput;
 	assignee?: Prisma.UserCreateNestedOneWithoutAssignedInquiriesInput;
 	messages?: Prisma.InquiryMessageCreateNestedManyWithoutInquiryInput;
@@ -2714,7 +2714,7 @@ export type InquiryUncheckedCreateWithoutThreadsInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	inquiryNumber: string;
 	title: string;
 	category: $Enums.InquiryCategory;
@@ -2850,7 +2850,7 @@ export type InquiryUpdateWithoutThreadsInput = {
 	unreadCount?: Prisma.IntFieldUpdateOperationsInput | number;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutInquiriesNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
 	customer?: Prisma.UserUpdateOneWithoutCustomerInquiriesNestedInput;
 	assignee?: Prisma.UserUpdateOneWithoutAssignedInquiriesNestedInput;
 	messages?: Prisma.InquiryMessageUpdateManyWithoutInquiryNestedInput;
@@ -2874,7 +2874,7 @@ export type InquiryUncheckedUpdateWithoutThreadsInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string;
 	title?: Prisma.StringFieldUpdateOperationsInput | string;
 	category?:
@@ -2974,7 +2974,7 @@ export type InquiryCreateWithoutMessagesInput = {
 	unreadCount?: number;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space: Prisma.SpaceCreateNestedOneWithoutInquiriesInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
 	customer?: Prisma.UserCreateNestedOneWithoutCustomerInquiriesInput;
 	assignee?: Prisma.UserCreateNestedOneWithoutAssignedInquiriesInput;
 	threads?: Prisma.InquiryThreadCreateNestedManyWithoutInquiryInput;
@@ -2990,7 +2990,7 @@ export type InquiryUncheckedCreateWithoutMessagesInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	inquiryNumber: string;
 	title: string;
 	category: $Enums.InquiryCategory;
@@ -3126,7 +3126,7 @@ export type InquiryUpdateWithoutMessagesInput = {
 	unreadCount?: Prisma.IntFieldUpdateOperationsInput | number;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutInquiriesNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
 	customer?: Prisma.UserUpdateOneWithoutCustomerInquiriesNestedInput;
 	assignee?: Prisma.UserUpdateOneWithoutAssignedInquiriesNestedInput;
 	threads?: Prisma.InquiryThreadUpdateManyWithoutInquiryNestedInput;
@@ -3150,7 +3150,7 @@ export type InquiryUncheckedUpdateWithoutMessagesInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string;
 	title?: Prisma.StringFieldUpdateOperationsInput | string;
 	category?:
@@ -3250,7 +3250,7 @@ export type InquiryCreateWithoutParticipantsInput = {
 	unreadCount?: number;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space: Prisma.SpaceCreateNestedOneWithoutInquiriesInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
 	customer?: Prisma.UserCreateNestedOneWithoutCustomerInquiriesInput;
 	assignee?: Prisma.UserCreateNestedOneWithoutAssignedInquiriesInput;
 	threads?: Prisma.InquiryThreadCreateNestedManyWithoutInquiryInput;
@@ -3266,7 +3266,7 @@ export type InquiryUncheckedCreateWithoutParticipantsInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	inquiryNumber: string;
 	title: string;
 	category: $Enums.InquiryCategory;
@@ -3402,7 +3402,7 @@ export type InquiryUpdateWithoutParticipantsInput = {
 	unreadCount?: Prisma.IntFieldUpdateOperationsInput | number;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutInquiriesNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
 	customer?: Prisma.UserUpdateOneWithoutCustomerInquiriesNestedInput;
 	assignee?: Prisma.UserUpdateOneWithoutAssignedInquiriesNestedInput;
 	threads?: Prisma.InquiryThreadUpdateManyWithoutInquiryNestedInput;
@@ -3426,7 +3426,7 @@ export type InquiryUncheckedUpdateWithoutParticipantsInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string;
 	title?: Prisma.StringFieldUpdateOperationsInput | string;
 	category?:
@@ -3526,7 +3526,7 @@ export type InquiryCreateWithoutTagsInput = {
 	unreadCount?: number;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space: Prisma.SpaceCreateNestedOneWithoutInquiriesInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
 	customer?: Prisma.UserCreateNestedOneWithoutCustomerInquiriesInput;
 	assignee?: Prisma.UserCreateNestedOneWithoutAssignedInquiriesInput;
 	threads?: Prisma.InquiryThreadCreateNestedManyWithoutInquiryInput;
@@ -3542,7 +3542,7 @@ export type InquiryUncheckedCreateWithoutTagsInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	inquiryNumber: string;
 	title: string;
 	category: $Enums.InquiryCategory;
@@ -3678,7 +3678,7 @@ export type InquiryUpdateWithoutTagsInput = {
 	unreadCount?: Prisma.IntFieldUpdateOperationsInput | number;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutInquiriesNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
 	customer?: Prisma.UserUpdateOneWithoutCustomerInquiriesNestedInput;
 	assignee?: Prisma.UserUpdateOneWithoutAssignedInquiriesNestedInput;
 	threads?: Prisma.InquiryThreadUpdateManyWithoutInquiryNestedInput;
@@ -3702,7 +3702,7 @@ export type InquiryUncheckedUpdateWithoutTagsInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string;
 	title?: Prisma.StringFieldUpdateOperationsInput | string;
 	category?:
@@ -3802,7 +3802,7 @@ export type InquiryCreateWithoutSentimentAnalysisInput = {
 	unreadCount?: number;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space: Prisma.SpaceCreateNestedOneWithoutInquiriesInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
 	customer?: Prisma.UserCreateNestedOneWithoutCustomerInquiriesInput;
 	assignee?: Prisma.UserCreateNestedOneWithoutAssignedInquiriesInput;
 	threads?: Prisma.InquiryThreadCreateNestedManyWithoutInquiryInput;
@@ -3818,7 +3818,7 @@ export type InquiryUncheckedCreateWithoutSentimentAnalysisInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	inquiryNumber: string;
 	title: string;
 	category: $Enums.InquiryCategory;
@@ -3954,7 +3954,7 @@ export type InquiryUpdateWithoutSentimentAnalysisInput = {
 	unreadCount?: Prisma.IntFieldUpdateOperationsInput | number;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutInquiriesNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
 	customer?: Prisma.UserUpdateOneWithoutCustomerInquiriesNestedInput;
 	assignee?: Prisma.UserUpdateOneWithoutAssignedInquiriesNestedInput;
 	threads?: Prisma.InquiryThreadUpdateManyWithoutInquiryNestedInput;
@@ -3978,7 +3978,7 @@ export type InquiryUncheckedUpdateWithoutSentimentAnalysisInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string;
 	title?: Prisma.StringFieldUpdateOperationsInput | string;
 	category?:
@@ -4055,7 +4055,7 @@ export type InquiryCreateManySpaceInput = {
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
-	creatorId?: string | null;
+	createdById?: string | null;
 	inquiryNumber: string;
 	title: string;
 	category: $Enums.InquiryCategory;
@@ -4157,7 +4157,7 @@ export type InquiryUpdateWithoutSpaceInput = {
 		| null;
 	unreadCount?: Prisma.IntFieldUpdateOperationsInput | number;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creator?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
 	customer?: Prisma.UserUpdateOneWithoutCustomerInquiriesNestedInput;
 	assignee?: Prisma.UserUpdateOneWithoutAssignedInquiriesNestedInput;
 	threads?: Prisma.InquiryThreadUpdateManyWithoutInquiryNestedInput;
@@ -4181,7 +4181,7 @@ export type InquiryUncheckedUpdateWithoutSpaceInput = {
 		| Date
 		| string
 		| null;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string;
 	title?: Prisma.StringFieldUpdateOperationsInput | string;
 	category?:
@@ -4267,7 +4267,7 @@ export type InquiryUncheckedUpdateManyWithoutSpaceInput = {
 		| Date
 		| string
 		| null;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string;
 	title?: Prisma.StringFieldUpdateOperationsInput | string;
 	category?:
@@ -4340,7 +4340,7 @@ export type InquiryCreateManyCustomerInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	inquiryNumber: string;
 	title: string;
 	category: $Enums.InquiryCategory;
@@ -4372,7 +4372,7 @@ export type InquiryCreateManyAssigneeInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	inquiryNumber: string;
 	title: string;
 	category: $Enums.InquiryCategory;
@@ -4398,7 +4398,7 @@ export type InquiryCreateManyAssigneeInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 };
 
-export type InquiryCreateManyCreatorInput = {
+export type InquiryCreateManyCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -4506,7 +4506,7 @@ export type InquiryUpdateWithoutCustomerInput = {
 	unreadCount?: Prisma.IntFieldUpdateOperationsInput | number;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutInquiriesNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
 	assignee?: Prisma.UserUpdateOneWithoutAssignedInquiriesNestedInput;
 	threads?: Prisma.InquiryThreadUpdateManyWithoutInquiryNestedInput;
 	messages?: Prisma.InquiryMessageUpdateManyWithoutInquiryNestedInput;
@@ -4530,7 +4530,7 @@ export type InquiryUncheckedUpdateWithoutCustomerInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string;
 	title?: Prisma.StringFieldUpdateOperationsInput | string;
 	category?:
@@ -4616,7 +4616,7 @@ export type InquiryUncheckedUpdateManyWithoutCustomerInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string;
 	title?: Prisma.StringFieldUpdateOperationsInput | string;
 	category?:
@@ -4758,7 +4758,7 @@ export type InquiryUpdateWithoutAssigneeInput = {
 	unreadCount?: Prisma.IntFieldUpdateOperationsInput | number;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutInquiriesNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
 	customer?: Prisma.UserUpdateOneWithoutCustomerInquiriesNestedInput;
 	threads?: Prisma.InquiryThreadUpdateManyWithoutInquiryNestedInput;
 	messages?: Prisma.InquiryMessageUpdateManyWithoutInquiryNestedInput;
@@ -4782,7 +4782,7 @@ export type InquiryUncheckedUpdateWithoutAssigneeInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string;
 	title?: Prisma.StringFieldUpdateOperationsInput | string;
 	category?:
@@ -4868,7 +4868,7 @@ export type InquiryUncheckedUpdateManyWithoutAssigneeInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string;
 	title?: Prisma.StringFieldUpdateOperationsInput | string;
 	category?:
@@ -4934,7 +4934,7 @@ export type InquiryUncheckedUpdateManyWithoutAssigneeInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 };
 
-export type InquiryUpdateWithoutCreatorInput = {
+export type InquiryUpdateWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -5020,7 +5020,7 @@ export type InquiryUpdateWithoutCreatorInput = {
 	aiAgentLogs?: Prisma.AIAgentLogUpdateManyWithoutInquiryNestedInput;
 };
 
-export type InquiryUncheckedUpdateWithoutCreatorInput = {
+export type InquiryUncheckedUpdateWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -5106,7 +5106,7 @@ export type InquiryUncheckedUpdateWithoutCreatorInput = {
 	aiAgentLogs?: Prisma.AIAgentLogUncheckedUpdateManyWithoutInquiryNestedInput;
 };
 
-export type InquiryUncheckedUpdateManyWithoutCreatorInput = {
+export type InquiryUncheckedUpdateManyWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -5282,7 +5282,7 @@ export type InquirySelect<
 		updatedAt?: boolean;
 		removedAt?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		inquiryNumber?: boolean;
 		title?: boolean;
 		category?: boolean;
@@ -5308,7 +5308,7 @@ export type InquirySelect<
 		unreadCount?: boolean;
 		metadata?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Inquiry$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Inquiry$createdByArgs<ExtArgs>;
 		customer?: boolean | Prisma.Inquiry$customerArgs<ExtArgs>;
 		assignee?: boolean | Prisma.Inquiry$assigneeArgs<ExtArgs>;
 		threads?: boolean | Prisma.Inquiry$threadsArgs<ExtArgs>;
@@ -5332,7 +5332,7 @@ export type InquirySelectCreateManyAndReturn<
 		updatedAt?: boolean;
 		removedAt?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		inquiryNumber?: boolean;
 		title?: boolean;
 		category?: boolean;
@@ -5358,7 +5358,7 @@ export type InquirySelectCreateManyAndReturn<
 		unreadCount?: boolean;
 		metadata?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Inquiry$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Inquiry$createdByArgs<ExtArgs>;
 		customer?: boolean | Prisma.Inquiry$customerArgs<ExtArgs>;
 		assignee?: boolean | Prisma.Inquiry$assigneeArgs<ExtArgs>;
 	},
@@ -5375,7 +5375,7 @@ export type InquirySelectUpdateManyAndReturn<
 		updatedAt?: boolean;
 		removedAt?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		inquiryNumber?: boolean;
 		title?: boolean;
 		category?: boolean;
@@ -5401,7 +5401,7 @@ export type InquirySelectUpdateManyAndReturn<
 		unreadCount?: boolean;
 		metadata?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Inquiry$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Inquiry$createdByArgs<ExtArgs>;
 		customer?: boolean | Prisma.Inquiry$customerArgs<ExtArgs>;
 		assignee?: boolean | Prisma.Inquiry$assigneeArgs<ExtArgs>;
 	},
@@ -5414,7 +5414,7 @@ export type InquirySelectScalar = {
 	updatedAt?: boolean;
 	removedAt?: boolean;
 	spaceId?: boolean;
-	creatorId?: boolean;
+	createdById?: boolean;
 	inquiryNumber?: boolean;
 	title?: boolean;
 	category?: boolean;
@@ -5450,7 +5450,7 @@ export type InquiryOmit<
 	| "updatedAt"
 	| "removedAt"
 	| "spaceId"
-	| "creatorId"
+	| "createdById"
 	| "inquiryNumber"
 	| "title"
 	| "category"
@@ -5482,7 +5482,7 @@ export type InquiryInclude<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Inquiry$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Inquiry$createdByArgs<ExtArgs>;
 	customer?: boolean | Prisma.Inquiry$customerArgs<ExtArgs>;
 	assignee?: boolean | Prisma.Inquiry$assigneeArgs<ExtArgs>;
 	threads?: boolean | Prisma.Inquiry$threadsArgs<ExtArgs>;
@@ -5498,7 +5498,7 @@ export type InquiryIncludeCreateManyAndReturn<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Inquiry$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Inquiry$createdByArgs<ExtArgs>;
 	customer?: boolean | Prisma.Inquiry$customerArgs<ExtArgs>;
 	assignee?: boolean | Prisma.Inquiry$assigneeArgs<ExtArgs>;
 };
@@ -5507,7 +5507,7 @@ export type InquiryIncludeUpdateManyAndReturn<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Inquiry$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Inquiry$createdByArgs<ExtArgs>;
 	customer?: boolean | Prisma.Inquiry$customerArgs<ExtArgs>;
 	assignee?: boolean | Prisma.Inquiry$assigneeArgs<ExtArgs>;
 };
@@ -5519,7 +5519,7 @@ export type $InquiryPayload<
 	name: "Inquiry";
 	objects: {
 		space: Prisma.$SpacePayload<ExtArgs>;
-		creator: Prisma.$UserPayload<ExtArgs> | null;
+		createdBy: Prisma.$UserPayload<ExtArgs> | null;
 		customer: Prisma.$UserPayload<ExtArgs> | null;
 		assignee: Prisma.$UserPayload<ExtArgs> | null;
 		threads: Prisma.$InquiryThreadPayload<ExtArgs>[];
@@ -5551,7 +5551,7 @@ export type $InquiryPayload<
 			/**
 			 * @displayName 생성자 ID
 			 */
-			creatorId: string | null;
+			createdById: string | null;
 			/**
 			 * @displayName 문의 번호
 			 */
@@ -6212,8 +6212,8 @@ export interface Prisma__InquiryClient<
 		ExtArgs,
 		GlobalOmitOptions
 	>;
-	creator<T extends Prisma.Inquiry$creatorArgs<ExtArgs> = {}>(
-		args?: Prisma.Subset<T, Prisma.Inquiry$creatorArgs<ExtArgs>>,
+	createdBy<T extends Prisma.Inquiry$createdByArgs<ExtArgs> = {}>(
+		args?: Prisma.Subset<T, Prisma.Inquiry$createdByArgs<ExtArgs>>,
 	): Prisma.Prisma__UserClient<
 		runtime.Types.Result.GetResult<
 			Prisma.$UserPayload<ExtArgs>,
@@ -6368,7 +6368,7 @@ export interface InquiryFieldRefs {
 	readonly updatedAt: Prisma.FieldRef<"Inquiry", "DateTime">;
 	readonly removedAt: Prisma.FieldRef<"Inquiry", "DateTime">;
 	readonly spaceId: Prisma.FieldRef<"Inquiry", "String">;
-	readonly creatorId: Prisma.FieldRef<"Inquiry", "String">;
+	readonly createdById: Prisma.FieldRef<"Inquiry", "String">;
 	readonly inquiryNumber: Prisma.FieldRef<"Inquiry", "String">;
 	readonly title: Prisma.FieldRef<"Inquiry", "String">;
 	readonly category: Prisma.FieldRef<"Inquiry", "InquiryCategory">;
@@ -6854,9 +6854,9 @@ export type InquiryDeleteManyArgs<
 };
 
 /**
- * Inquiry.creator
+ * Inquiry.createdBy
  */
-export type Inquiry$creatorArgs<
+export type Inquiry$createdByArgs<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {

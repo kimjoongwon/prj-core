@@ -15,7 +15,7 @@ export class RoutineDto extends AbstractDto implements Routine {
 	spaceId: string;
 
 	@UUIDFieldOptional({ nullable: true })
-	creatorId: string | null;
+	createdById: string | null;
 
 	@ClassField(() => ProgramDto, { isArray: true })
 	programs?: ProgramDto[];

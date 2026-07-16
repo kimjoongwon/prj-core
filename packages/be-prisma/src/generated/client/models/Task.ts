@@ -30,7 +30,7 @@ export type TaskMinAggregateOutputType = {
 	updatedAt: Date | null;
 	removedAt: Date | null;
 	spaceId: string | null;
-	creatorId: string | null;
+	createdById: string | null;
 };
 
 export type TaskMaxAggregateOutputType = {
@@ -39,7 +39,7 @@ export type TaskMaxAggregateOutputType = {
 	updatedAt: Date | null;
 	removedAt: Date | null;
 	spaceId: string | null;
-	creatorId: string | null;
+	createdById: string | null;
 };
 
 export type TaskCountAggregateOutputType = {
@@ -48,7 +48,7 @@ export type TaskCountAggregateOutputType = {
 	updatedAt: number;
 	removedAt: number;
 	spaceId: number;
-	creatorId: number;
+	createdById: number;
 	_all: number;
 };
 
@@ -58,7 +58,7 @@ export type TaskMinAggregateInputType = {
 	updatedAt?: true;
 	removedAt?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 };
 
 export type TaskMaxAggregateInputType = {
@@ -67,7 +67,7 @@ export type TaskMaxAggregateInputType = {
 	updatedAt?: true;
 	removedAt?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 };
 
 export type TaskCountAggregateInputType = {
@@ -76,7 +76,7 @@ export type TaskCountAggregateInputType = {
 	updatedAt?: true;
 	removedAt?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 	_all?: true;
 };
 
@@ -165,7 +165,7 @@ export type TaskGroupByOutputType = {
 	updatedAt: Date | null;
 	removedAt: Date | null;
 	spaceId: string;
-	creatorId: string | null;
+	createdById: string | null;
 	_count: TaskCountAggregateOutputType | null;
 	_min: TaskMinAggregateOutputType | null;
 	_max: TaskMaxAggregateOutputType | null;
@@ -192,9 +192,9 @@ export type TaskWhereInput = {
 	updatedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null;
 	removedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null;
 	spaceId?: Prisma.StringFilter<"Task"> | string;
-	creatorId?: Prisma.StringNullableFilter<"Task"> | string | null;
+	createdById?: Prisma.StringNullableFilter<"Task"> | string | null;
 	space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>;
-	creator?: Prisma.XOR<
+	createdBy?: Prisma.XOR<
 		Prisma.UserNullableScalarRelationFilter,
 		Prisma.UserWhereInput
 	> | null;
@@ -211,9 +211,9 @@ export type TaskOrderByWithRelationInput = {
 	updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	removedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrderInput | Prisma.SortOrder;
+	createdById?: Prisma.SortOrderInput | Prisma.SortOrder;
 	space?: Prisma.SpaceOrderByWithRelationInput;
-	creator?: Prisma.UserOrderByWithRelationInput;
+	createdBy?: Prisma.UserOrderByWithRelationInput;
 	activities?: Prisma.ActivityOrderByRelationAggregateInput;
 	exercise?: Prisma.ExerciseOrderByWithRelationInput;
 };
@@ -228,12 +228,12 @@ export type TaskWhereUniqueInput = Prisma.AtLeast<
 		updatedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null;
 		removedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null;
 		spaceId?: Prisma.StringFilter<"Task"> | string;
-		creatorId?: Prisma.StringNullableFilter<"Task"> | string | null;
+		createdById?: Prisma.StringNullableFilter<"Task"> | string | null;
 		space?: Prisma.XOR<
 			Prisma.SpaceScalarRelationFilter,
 			Prisma.SpaceWhereInput
 		>;
-		creator?: Prisma.XOR<
+		createdBy?: Prisma.XOR<
 			Prisma.UserNullableScalarRelationFilter,
 			Prisma.UserWhereInput
 		> | null;
@@ -252,7 +252,7 @@ export type TaskOrderByWithAggregationInput = {
 	updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	removedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrderInput | Prisma.SortOrder;
+	createdById?: Prisma.SortOrderInput | Prisma.SortOrder;
 	_count?: Prisma.TaskCountOrderByAggregateInput;
 	_max?: Prisma.TaskMaxOrderByAggregateInput;
 	_min?: Prisma.TaskMinOrderByAggregateInput;
@@ -279,7 +279,10 @@ export type TaskScalarWhereWithAggregatesInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringWithAggregatesFilter<"Task"> | string;
-	creatorId?: Prisma.StringNullableWithAggregatesFilter<"Task"> | string | null;
+	createdById?:
+		| Prisma.StringNullableWithAggregatesFilter<"Task">
+		| string
+		| null;
 };
 
 export type TaskCreateInput = {
@@ -288,7 +291,7 @@ export type TaskCreateInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	space: Prisma.SpaceCreateNestedOneWithoutTasksInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedTasksInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedTasksInput;
 	activities?: Prisma.ActivityCreateNestedManyWithoutTaskInput;
 	exercise?: Prisma.ExerciseCreateNestedOneWithoutTaskInput;
 };
@@ -299,7 +302,7 @@ export type TaskUncheckedCreateInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutTaskInput;
 	exercise?: Prisma.ExerciseUncheckedCreateNestedOneWithoutTaskInput;
 };
@@ -318,7 +321,7 @@ export type TaskUpdateInput = {
 		| string
 		| null;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutTasksNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedTasksNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedTasksNestedInput;
 	activities?: Prisma.ActivityUpdateManyWithoutTaskNestedInput;
 	exercise?: Prisma.ExerciseUpdateOneWithoutTaskNestedInput;
 };
@@ -337,7 +340,7 @@ export type TaskUncheckedUpdateInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	activities?: Prisma.ActivityUncheckedUpdateManyWithoutTaskNestedInput;
 	exercise?: Prisma.ExerciseUncheckedUpdateOneWithoutTaskNestedInput;
 };
@@ -348,7 +351,7 @@ export type TaskCreateManyInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 };
 
 export type TaskUpdateManyMutationInput = {
@@ -380,7 +383,7 @@ export type TaskUncheckedUpdateManyInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
 export type TaskListRelationFilter = {
@@ -404,7 +407,7 @@ export type TaskCountOrderByAggregateInput = {
 	updatedAt?: Prisma.SortOrder;
 	removedAt?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 };
 
 export type TaskMaxOrderByAggregateInput = {
@@ -413,7 +416,7 @@ export type TaskMaxOrderByAggregateInput = {
 	updatedAt?: Prisma.SortOrder;
 	removedAt?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 };
 
 export type TaskMinOrderByAggregateInput = {
@@ -422,7 +425,7 @@ export type TaskMinOrderByAggregateInput = {
 	updatedAt?: Prisma.SortOrder;
 	removedAt?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 };
 
 export type TaskCreateNestedManyWithoutSpaceInput = {
@@ -511,89 +514,89 @@ export type TaskUncheckedUpdateManyWithoutSpaceNestedInput = {
 	deleteMany?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[];
 };
 
-export type TaskCreateNestedManyWithoutCreatorInput = {
+export type TaskCreateNestedManyWithoutCreatedByInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.TaskCreateWithoutCreatorInput,
-				Prisma.TaskUncheckedCreateWithoutCreatorInput
+				Prisma.TaskCreateWithoutCreatedByInput,
+				Prisma.TaskUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.TaskCreateWithoutCreatorInput[]
-		| Prisma.TaskUncheckedCreateWithoutCreatorInput[];
+		| Prisma.TaskCreateWithoutCreatedByInput[]
+		| Prisma.TaskUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.TaskCreateOrConnectWithoutCreatorInput
-		| Prisma.TaskCreateOrConnectWithoutCreatorInput[];
-	createMany?: Prisma.TaskCreateManyCreatorInputEnvelope;
+		| Prisma.TaskCreateOrConnectWithoutCreatedByInput
+		| Prisma.TaskCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.TaskCreateManyCreatedByInputEnvelope;
 	connect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[];
 };
 
-export type TaskUncheckedCreateNestedManyWithoutCreatorInput = {
+export type TaskUncheckedCreateNestedManyWithoutCreatedByInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.TaskCreateWithoutCreatorInput,
-				Prisma.TaskUncheckedCreateWithoutCreatorInput
+				Prisma.TaskCreateWithoutCreatedByInput,
+				Prisma.TaskUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.TaskCreateWithoutCreatorInput[]
-		| Prisma.TaskUncheckedCreateWithoutCreatorInput[];
+		| Prisma.TaskCreateWithoutCreatedByInput[]
+		| Prisma.TaskUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.TaskCreateOrConnectWithoutCreatorInput
-		| Prisma.TaskCreateOrConnectWithoutCreatorInput[];
-	createMany?: Prisma.TaskCreateManyCreatorInputEnvelope;
+		| Prisma.TaskCreateOrConnectWithoutCreatedByInput
+		| Prisma.TaskCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.TaskCreateManyCreatedByInputEnvelope;
 	connect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[];
 };
 
-export type TaskUpdateManyWithoutCreatorNestedInput = {
+export type TaskUpdateManyWithoutCreatedByNestedInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.TaskCreateWithoutCreatorInput,
-				Prisma.TaskUncheckedCreateWithoutCreatorInput
+				Prisma.TaskCreateWithoutCreatedByInput,
+				Prisma.TaskUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.TaskCreateWithoutCreatorInput[]
-		| Prisma.TaskUncheckedCreateWithoutCreatorInput[];
+		| Prisma.TaskCreateWithoutCreatedByInput[]
+		| Prisma.TaskUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.TaskCreateOrConnectWithoutCreatorInput
-		| Prisma.TaskCreateOrConnectWithoutCreatorInput[];
+		| Prisma.TaskCreateOrConnectWithoutCreatedByInput
+		| Prisma.TaskCreateOrConnectWithoutCreatedByInput[];
 	upsert?:
-		| Prisma.TaskUpsertWithWhereUniqueWithoutCreatorInput
-		| Prisma.TaskUpsertWithWhereUniqueWithoutCreatorInput[];
-	createMany?: Prisma.TaskCreateManyCreatorInputEnvelope;
+		| Prisma.TaskUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.TaskUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.TaskCreateManyCreatedByInputEnvelope;
 	set?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[];
 	disconnect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[];
 	delete?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[];
 	connect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[];
 	update?:
-		| Prisma.TaskUpdateWithWhereUniqueWithoutCreatorInput
-		| Prisma.TaskUpdateWithWhereUniqueWithoutCreatorInput[];
+		| Prisma.TaskUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.TaskUpdateWithWhereUniqueWithoutCreatedByInput[];
 	updateMany?:
-		| Prisma.TaskUpdateManyWithWhereWithoutCreatorInput
-		| Prisma.TaskUpdateManyWithWhereWithoutCreatorInput[];
+		| Prisma.TaskUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.TaskUpdateManyWithWhereWithoutCreatedByInput[];
 	deleteMany?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[];
 };
 
-export type TaskUncheckedUpdateManyWithoutCreatorNestedInput = {
+export type TaskUncheckedUpdateManyWithoutCreatedByNestedInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.TaskCreateWithoutCreatorInput,
-				Prisma.TaskUncheckedCreateWithoutCreatorInput
+				Prisma.TaskCreateWithoutCreatedByInput,
+				Prisma.TaskUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.TaskCreateWithoutCreatorInput[]
-		| Prisma.TaskUncheckedCreateWithoutCreatorInput[];
+		| Prisma.TaskCreateWithoutCreatedByInput[]
+		| Prisma.TaskUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.TaskCreateOrConnectWithoutCreatorInput
-		| Prisma.TaskCreateOrConnectWithoutCreatorInput[];
+		| Prisma.TaskCreateOrConnectWithoutCreatedByInput
+		| Prisma.TaskCreateOrConnectWithoutCreatedByInput[];
 	upsert?:
-		| Prisma.TaskUpsertWithWhereUniqueWithoutCreatorInput
-		| Prisma.TaskUpsertWithWhereUniqueWithoutCreatorInput[];
-	createMany?: Prisma.TaskCreateManyCreatorInputEnvelope;
+		| Prisma.TaskUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.TaskUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.TaskCreateManyCreatedByInputEnvelope;
 	set?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[];
 	disconnect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[];
 	delete?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[];
 	connect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[];
 	update?:
-		| Prisma.TaskUpdateWithWhereUniqueWithoutCreatorInput
-		| Prisma.TaskUpdateWithWhereUniqueWithoutCreatorInput[];
+		| Prisma.TaskUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.TaskUpdateWithWhereUniqueWithoutCreatedByInput[];
 	updateMany?:
-		| Prisma.TaskUpdateManyWithWhereWithoutCreatorInput
-		| Prisma.TaskUpdateManyWithWhereWithoutCreatorInput[];
+		| Prisma.TaskUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.TaskUpdateManyWithWhereWithoutCreatedByInput[];
 	deleteMany?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[];
 };
 
@@ -654,7 +657,7 @@ export type TaskCreateWithoutSpaceInput = {
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedTasksInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedTasksInput;
 	activities?: Prisma.ActivityCreateNestedManyWithoutTaskInput;
 	exercise?: Prisma.ExerciseCreateNestedOneWithoutTaskInput;
 };
@@ -664,7 +667,7 @@ export type TaskUncheckedCreateWithoutSpaceInput = {
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
-	creatorId?: string | null;
+	createdById?: string | null;
 	activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutTaskInput;
 	exercise?: Prisma.ExerciseUncheckedCreateNestedOneWithoutTaskInput;
 };
@@ -719,10 +722,10 @@ export type TaskScalarWhereInput = {
 	updatedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null;
 	removedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null;
 	spaceId?: Prisma.StringFilter<"Task"> | string;
-	creatorId?: Prisma.StringNullableFilter<"Task"> | string | null;
+	createdById?: Prisma.StringNullableFilter<"Task"> | string | null;
 };
 
-export type TaskCreateWithoutCreatorInput = {
+export type TaskCreateWithoutCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -732,7 +735,7 @@ export type TaskCreateWithoutCreatorInput = {
 	exercise?: Prisma.ExerciseCreateNestedOneWithoutTaskInput;
 };
 
-export type TaskUncheckedCreateWithoutCreatorInput = {
+export type TaskUncheckedCreateWithoutCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -742,44 +745,46 @@ export type TaskUncheckedCreateWithoutCreatorInput = {
 	exercise?: Prisma.ExerciseUncheckedCreateNestedOneWithoutTaskInput;
 };
 
-export type TaskCreateOrConnectWithoutCreatorInput = {
+export type TaskCreateOrConnectWithoutCreatedByInput = {
 	where: Prisma.TaskWhereUniqueInput;
 	create: Prisma.XOR<
-		Prisma.TaskCreateWithoutCreatorInput,
-		Prisma.TaskUncheckedCreateWithoutCreatorInput
+		Prisma.TaskCreateWithoutCreatedByInput,
+		Prisma.TaskUncheckedCreateWithoutCreatedByInput
 	>;
 };
 
-export type TaskCreateManyCreatorInputEnvelope = {
-	data: Prisma.TaskCreateManyCreatorInput | Prisma.TaskCreateManyCreatorInput[];
+export type TaskCreateManyCreatedByInputEnvelope = {
+	data:
+		| Prisma.TaskCreateManyCreatedByInput
+		| Prisma.TaskCreateManyCreatedByInput[];
 	skipDuplicates?: boolean;
 };
 
-export type TaskUpsertWithWhereUniqueWithoutCreatorInput = {
+export type TaskUpsertWithWhereUniqueWithoutCreatedByInput = {
 	where: Prisma.TaskWhereUniqueInput;
 	update: Prisma.XOR<
-		Prisma.TaskUpdateWithoutCreatorInput,
-		Prisma.TaskUncheckedUpdateWithoutCreatorInput
+		Prisma.TaskUpdateWithoutCreatedByInput,
+		Prisma.TaskUncheckedUpdateWithoutCreatedByInput
 	>;
 	create: Prisma.XOR<
-		Prisma.TaskCreateWithoutCreatorInput,
-		Prisma.TaskUncheckedCreateWithoutCreatorInput
+		Prisma.TaskCreateWithoutCreatedByInput,
+		Prisma.TaskUncheckedCreateWithoutCreatedByInput
 	>;
 };
 
-export type TaskUpdateWithWhereUniqueWithoutCreatorInput = {
+export type TaskUpdateWithWhereUniqueWithoutCreatedByInput = {
 	where: Prisma.TaskWhereUniqueInput;
 	data: Prisma.XOR<
-		Prisma.TaskUpdateWithoutCreatorInput,
-		Prisma.TaskUncheckedUpdateWithoutCreatorInput
+		Prisma.TaskUpdateWithoutCreatedByInput,
+		Prisma.TaskUncheckedUpdateWithoutCreatedByInput
 	>;
 };
 
-export type TaskUpdateManyWithWhereWithoutCreatorInput = {
+export type TaskUpdateManyWithWhereWithoutCreatedByInput = {
 	where: Prisma.TaskScalarWhereInput;
 	data: Prisma.XOR<
 		Prisma.TaskUpdateManyMutationInput,
-		Prisma.TaskUncheckedUpdateManyWithoutCreatorInput
+		Prisma.TaskUncheckedUpdateManyWithoutCreatedByInput
 	>;
 };
 
@@ -789,7 +794,7 @@ export type TaskCreateWithoutActivitiesInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	space: Prisma.SpaceCreateNestedOneWithoutTasksInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedTasksInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedTasksInput;
 	exercise?: Prisma.ExerciseCreateNestedOneWithoutTaskInput;
 };
 
@@ -799,7 +804,7 @@ export type TaskUncheckedCreateWithoutActivitiesInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	exercise?: Prisma.ExerciseUncheckedCreateNestedOneWithoutTaskInput;
 };
 
@@ -845,7 +850,7 @@ export type TaskUpdateWithoutActivitiesInput = {
 		| string
 		| null;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutTasksNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedTasksNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedTasksNestedInput;
 	exercise?: Prisma.ExerciseUpdateOneWithoutTaskNestedInput;
 };
 
@@ -863,7 +868,7 @@ export type TaskUncheckedUpdateWithoutActivitiesInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	exercise?: Prisma.ExerciseUncheckedUpdateOneWithoutTaskNestedInput;
 };
 
@@ -873,7 +878,7 @@ export type TaskCreateWithoutExerciseInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	space: Prisma.SpaceCreateNestedOneWithoutTasksInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedTasksInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedTasksInput;
 	activities?: Prisma.ActivityCreateNestedManyWithoutTaskInput;
 };
 
@@ -883,7 +888,7 @@ export type TaskUncheckedCreateWithoutExerciseInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutTaskInput;
 };
 
@@ -929,7 +934,7 @@ export type TaskUpdateWithoutExerciseInput = {
 		| string
 		| null;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutTasksNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedTasksNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedTasksNestedInput;
 	activities?: Prisma.ActivityUpdateManyWithoutTaskNestedInput;
 };
 
@@ -947,7 +952,7 @@ export type TaskUncheckedUpdateWithoutExerciseInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	activities?: Prisma.ActivityUncheckedUpdateManyWithoutTaskNestedInput;
 };
 
@@ -956,7 +961,7 @@ export type TaskCreateManySpaceInput = {
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
-	creatorId?: string | null;
+	createdById?: string | null;
 };
 
 export type TaskUpdateWithoutSpaceInput = {
@@ -972,7 +977,7 @@ export type TaskUpdateWithoutSpaceInput = {
 		| Date
 		| string
 		| null;
-	creator?: Prisma.UserUpdateOneWithoutCreatedTasksNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedTasksNestedInput;
 	activities?: Prisma.ActivityUpdateManyWithoutTaskNestedInput;
 	exercise?: Prisma.ExerciseUpdateOneWithoutTaskNestedInput;
 };
@@ -990,7 +995,7 @@ export type TaskUncheckedUpdateWithoutSpaceInput = {
 		| Date
 		| string
 		| null;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	activities?: Prisma.ActivityUncheckedUpdateManyWithoutTaskNestedInput;
 	exercise?: Prisma.ExerciseUncheckedUpdateOneWithoutTaskNestedInput;
 };
@@ -1008,10 +1013,10 @@ export type TaskUncheckedUpdateManyWithoutSpaceInput = {
 		| Date
 		| string
 		| null;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
-export type TaskCreateManyCreatorInput = {
+export type TaskCreateManyCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1019,7 +1024,7 @@ export type TaskCreateManyCreatorInput = {
 	spaceId: string;
 };
 
-export type TaskUpdateWithoutCreatorInput = {
+export type TaskUpdateWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1037,7 +1042,7 @@ export type TaskUpdateWithoutCreatorInput = {
 	exercise?: Prisma.ExerciseUpdateOneWithoutTaskNestedInput;
 };
 
-export type TaskUncheckedUpdateWithoutCreatorInput = {
+export type TaskUncheckedUpdateWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1055,7 +1060,7 @@ export type TaskUncheckedUpdateWithoutCreatorInput = {
 	exercise?: Prisma.ExerciseUncheckedUpdateOneWithoutTaskNestedInput;
 };
 
-export type TaskUncheckedUpdateManyWithoutCreatorInput = {
+export type TaskUncheckedUpdateManyWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1119,9 +1124,9 @@ export type TaskSelect<
 		updatedAt?: boolean;
 		removedAt?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Task$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Task$createdByArgs<ExtArgs>;
 		activities?: boolean | Prisma.Task$activitiesArgs<ExtArgs>;
 		exercise?: boolean | Prisma.Task$exerciseArgs<ExtArgs>;
 		_count?: boolean | Prisma.TaskCountOutputTypeDefaultArgs<ExtArgs>;
@@ -1139,9 +1144,9 @@ export type TaskSelectCreateManyAndReturn<
 		updatedAt?: boolean;
 		removedAt?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Task$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Task$createdByArgs<ExtArgs>;
 	},
 	ExtArgs["result"]["task"]
 >;
@@ -1156,9 +1161,9 @@ export type TaskSelectUpdateManyAndReturn<
 		updatedAt?: boolean;
 		removedAt?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Task$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Task$createdByArgs<ExtArgs>;
 	},
 	ExtArgs["result"]["task"]
 >;
@@ -1169,14 +1174,14 @@ export type TaskSelectScalar = {
 	updatedAt?: boolean;
 	removedAt?: boolean;
 	spaceId?: boolean;
-	creatorId?: boolean;
+	createdById?: boolean;
 };
 
 export type TaskOmit<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = runtime.Types.Extensions.GetOmit<
-	"id" | "createdAt" | "updatedAt" | "removedAt" | "spaceId" | "creatorId",
+	"id" | "createdAt" | "updatedAt" | "removedAt" | "spaceId" | "createdById",
 	ExtArgs["result"]["task"]
 >;
 export type TaskInclude<
@@ -1184,7 +1189,7 @@ export type TaskInclude<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Task$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Task$createdByArgs<ExtArgs>;
 	activities?: boolean | Prisma.Task$activitiesArgs<ExtArgs>;
 	exercise?: boolean | Prisma.Task$exerciseArgs<ExtArgs>;
 	_count?: boolean | Prisma.TaskCountOutputTypeDefaultArgs<ExtArgs>;
@@ -1194,14 +1199,14 @@ export type TaskIncludeCreateManyAndReturn<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Task$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Task$createdByArgs<ExtArgs>;
 };
 export type TaskIncludeUpdateManyAndReturn<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Task$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Task$createdByArgs<ExtArgs>;
 };
 
 export type $TaskPayload<
@@ -1211,7 +1216,7 @@ export type $TaskPayload<
 	name: "Task";
 	objects: {
 		space: Prisma.$SpacePayload<ExtArgs>;
-		creator: Prisma.$UserPayload<ExtArgs> | null;
+		createdBy: Prisma.$UserPayload<ExtArgs> | null;
 		activities: Prisma.$ActivityPayload<ExtArgs>[];
 		exercise: Prisma.$ExercisePayload<ExtArgs> | null;
 	};
@@ -1222,7 +1227,7 @@ export type $TaskPayload<
 			updatedAt: Date | null;
 			removedAt: Date | null;
 			spaceId: string;
-			creatorId: string | null;
+			createdById: string | null;
 		},
 		ExtArgs["result"]["task"]
 	>;
@@ -1787,8 +1792,8 @@ export interface Prisma__TaskClient<
 		ExtArgs,
 		GlobalOmitOptions
 	>;
-	creator<T extends Prisma.Task$creatorArgs<ExtArgs> = {}>(
-		args?: Prisma.Subset<T, Prisma.Task$creatorArgs<ExtArgs>>,
+	createdBy<T extends Prisma.Task$createdByArgs<ExtArgs> = {}>(
+		args?: Prisma.Subset<T, Prisma.Task$createdByArgs<ExtArgs>>,
 	): Prisma.Prisma__UserClient<
 		runtime.Types.Result.GetResult<
 			Prisma.$UserPayload<ExtArgs>,
@@ -1871,7 +1876,7 @@ export interface TaskFieldRefs {
 	readonly updatedAt: Prisma.FieldRef<"Task", "DateTime">;
 	readonly removedAt: Prisma.FieldRef<"Task", "DateTime">;
 	readonly spaceId: Prisma.FieldRef<"Task", "String">;
-	readonly creatorId: Prisma.FieldRef<"Task", "String">;
+	readonly createdById: Prisma.FieldRef<"Task", "String">;
 }
 
 // Custom InputTypes
@@ -2321,9 +2326,9 @@ export type TaskDeleteManyArgs<
 };
 
 /**
- * Task.creator
+ * Task.createdBy
  */
-export type Task$creatorArgs<
+export type Task$createdByArgs<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {

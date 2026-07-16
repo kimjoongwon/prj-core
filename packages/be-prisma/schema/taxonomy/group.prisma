@@ -29,9 +29,9 @@ model Group {
   /// @displayName 라벨
   label             String?
   spaceId           String             @map("space_id")
-  creatorId         String?            @map("creator_id")
+  createdById       String?            @map("created_by_id")
   space             Space              @relation(fields: [spaceId], references: [id], onDelete: Restrict)
-  creator           User?              @relation(fields: [creatorId], references: [id], onDelete: SetNull)
+  createdBy         User?              @relation(fields: [createdById], references: [id], onDelete: SetNull)
   roleAssociations  RoleAssociation[]
   spaceAssociations SpaceAssociation[]
   userAssociations  UserAssociation[]

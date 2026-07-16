@@ -9,7 +9,7 @@ export class TaskDto extends AbstractDto implements TaskEntity {
 	spaceId: string;
 
 	@UUIDFieldOptional({ nullable: true })
-	creatorId: string | null;
+	createdById: string | null;
 
 	@ClassField(() => ExerciseDto)
 	exercise?: ExerciseDto;

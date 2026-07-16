@@ -39,7 +39,7 @@ export interface InquiryThreadDto {
 	 * 생성자 ID
 	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
 	 */
-	createdBy: string;
+	createdById: string;
 	/**
 	 * 마지막 메시지 일시
 	 * @nullable

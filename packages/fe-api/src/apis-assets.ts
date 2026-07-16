@@ -33,7 +33,7 @@ export interface AssetDto {
 	extension: string | null;
 	checksum: string | null;
 	metadata: unknown;
-	creatorId: string | null;
+	createdById: string | null;
 	publicUrl: string | null;
 	createdAt: string;
 	updatedAt: string;

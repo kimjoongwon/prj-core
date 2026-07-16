@@ -14,7 +14,7 @@ export class PolicyResponseDto {
 
 	@UUIDFieldOptional({ nullable: true, description: "생성자 ID" })
 	@Expose()
-	creatorId!: string | null;
+	createdById!: string | null;
 
 	@ApiProperty({
 		description: "정책 식별자",

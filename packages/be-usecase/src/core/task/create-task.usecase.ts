@@ -10,7 +10,7 @@ export class CreateTaskUseCase {
 		return this.taskService.createTaskWithExercise(
 			command,
 			command.spaceId,
-			command.creatorId,
+			command.createdById,
 		);
 	}
 }

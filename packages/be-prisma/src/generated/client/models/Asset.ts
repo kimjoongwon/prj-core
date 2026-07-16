@@ -49,7 +49,7 @@ export type AssetMinAggregateOutputType = {
 	extension: string | null;
 	sizeBytes: bigint | null;
 	checksum: string | null;
-	creatorId: string | null;
+	createdById: string | null;
 };
 
 export type AssetMaxAggregateOutputType = {
@@ -67,7 +67,7 @@ export type AssetMaxAggregateOutputType = {
 	extension: string | null;
 	sizeBytes: bigint | null;
 	checksum: string | null;
-	creatorId: string | null;
+	createdById: string | null;
 };
 
 export type AssetCountAggregateOutputType = {
@@ -86,7 +86,7 @@ export type AssetCountAggregateOutputType = {
 	sizeBytes: number;
 	checksum: number;
 	metadata: number;
-	creatorId: number;
+	createdById: number;
 	_all: number;
 };
 
@@ -113,7 +113,7 @@ export type AssetMinAggregateInputType = {
 	extension?: true;
 	sizeBytes?: true;
 	checksum?: true;
-	creatorId?: true;
+	createdById?: true;
 };
 
 export type AssetMaxAggregateInputType = {
@@ -131,7 +131,7 @@ export type AssetMaxAggregateInputType = {
 	extension?: true;
 	sizeBytes?: true;
 	checksum?: true;
-	creatorId?: true;
+	createdById?: true;
 };
 
 export type AssetCountAggregateInputType = {
@@ -150,7 +150,7 @@ export type AssetCountAggregateInputType = {
 	sizeBytes?: true;
 	checksum?: true;
 	metadata?: true;
-	creatorId?: true;
+	createdById?: true;
 	_all?: true;
 };
 
@@ -263,7 +263,7 @@ export type AssetGroupByOutputType = {
 	sizeBytes: bigint;
 	checksum: string | null;
 	metadata: runtime.JsonValue | null;
-	creatorId: string | null;
+	createdById: string | null;
 	_count: AssetCountAggregateOutputType | null;
 	_avg: AssetAvgAggregateOutputType | null;
 	_sum: AssetSumAggregateOutputType | null;
@@ -302,13 +302,13 @@ export type AssetWhereInput = {
 	sizeBytes?: Prisma.BigIntFilter<"Asset"> | bigint | number;
 	checksum?: Prisma.StringNullableFilter<"Asset"> | string | null;
 	metadata?: Prisma.JsonNullableFilter<"Asset">;
-	creatorId?: Prisma.StringNullableFilter<"Asset"> | string | null;
+	createdById?: Prisma.StringNullableFilter<"Asset"> | string | null;
 	space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>;
 	folder?: Prisma.XOR<
 		Prisma.FolderScalarRelationFilter,
 		Prisma.FolderWhereInput
 	>;
-	creator?: Prisma.XOR<
+	createdBy?: Prisma.XOR<
 		Prisma.UserNullableScalarRelationFilter,
 		Prisma.UserWhereInput
 	> | null;
@@ -345,10 +345,10 @@ export type AssetOrderByWithRelationInput = {
 	sizeBytes?: Prisma.SortOrder;
 	checksum?: Prisma.SortOrderInput | Prisma.SortOrder;
 	metadata?: Prisma.SortOrderInput | Prisma.SortOrder;
-	creatorId?: Prisma.SortOrderInput | Prisma.SortOrder;
+	createdById?: Prisma.SortOrderInput | Prisma.SortOrder;
 	space?: Prisma.SpaceOrderByWithRelationInput;
 	folder?: Prisma.FolderOrderByWithRelationInput;
-	creator?: Prisma.UserOrderByWithRelationInput;
+	createdBy?: Prisma.UserOrderByWithRelationInput;
 	image?: Prisma.ImageOrderByWithRelationInput;
 	video?: Prisma.VideoOrderByWithRelationInput;
 	document?: Prisma.DocumentOrderByWithRelationInput;
@@ -377,7 +377,7 @@ export type AssetWhereUniqueInput = Prisma.AtLeast<
 		sizeBytes?: Prisma.BigIntFilter<"Asset"> | bigint | number;
 		checksum?: Prisma.StringNullableFilter<"Asset"> | string | null;
 		metadata?: Prisma.JsonNullableFilter<"Asset">;
-		creatorId?: Prisma.StringNullableFilter<"Asset"> | string | null;
+		createdById?: Prisma.StringNullableFilter<"Asset"> | string | null;
 		space?: Prisma.XOR<
 			Prisma.SpaceScalarRelationFilter,
 			Prisma.SpaceWhereInput
@@ -386,7 +386,7 @@ export type AssetWhereUniqueInput = Prisma.AtLeast<
 			Prisma.FolderScalarRelationFilter,
 			Prisma.FolderWhereInput
 		>;
-		creator?: Prisma.XOR<
+		createdBy?: Prisma.XOR<
 			Prisma.UserNullableScalarRelationFilter,
 			Prisma.UserWhereInput
 		> | null;
@@ -425,7 +425,7 @@ export type AssetOrderByWithAggregationInput = {
 	sizeBytes?: Prisma.SortOrder;
 	checksum?: Prisma.SortOrderInput | Prisma.SortOrder;
 	metadata?: Prisma.SortOrderInput | Prisma.SortOrder;
-	creatorId?: Prisma.SortOrderInput | Prisma.SortOrder;
+	createdById?: Prisma.SortOrderInput | Prisma.SortOrder;
 	_count?: Prisma.AssetCountOrderByAggregateInput;
 	_avg?: Prisma.AssetAvgOrderByAggregateInput;
 	_max?: Prisma.AssetMaxOrderByAggregateInput;
@@ -469,7 +469,7 @@ export type AssetScalarWhereWithAggregatesInput = {
 	sizeBytes?: Prisma.BigIntWithAggregatesFilter<"Asset"> | bigint | number;
 	checksum?: Prisma.StringNullableWithAggregatesFilter<"Asset"> | string | null;
 	metadata?: Prisma.JsonNullableWithAggregatesFilter<"Asset">;
-	creatorId?:
+	createdById?:
 		| Prisma.StringNullableWithAggregatesFilter<"Asset">
 		| string
 		| null;
@@ -491,7 +491,7 @@ export type AssetCreateInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space: Prisma.SpaceCreateNestedOneWithoutAssetsInput;
 	folder: Prisma.FolderCreateNestedOneWithoutAssetsInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
 	image?: Prisma.ImageCreateNestedOneWithoutAssetInput;
 	video?: Prisma.VideoCreateNestedOneWithoutAssetInput;
 	document?: Prisma.DocumentCreateNestedOneWithoutAssetInput;
@@ -516,7 +516,7 @@ export type AssetUncheckedCreateInput = {
 	sizeBytes: bigint | number;
 	checksum?: string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: string | null;
+	createdById?: string | null;
 	image?: Prisma.ImageUncheckedCreateNestedOneWithoutAssetInput;
 	video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput;
 	document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput;
@@ -551,7 +551,7 @@ export type AssetUpdateInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutAssetsNestedInput;
 	folder?: Prisma.FolderUpdateOneRequiredWithoutAssetsNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
 	image?: Prisma.ImageUpdateOneWithoutAssetNestedInput;
 	video?: Prisma.VideoUpdateOneWithoutAssetNestedInput;
 	document?: Prisma.DocumentUpdateOneWithoutAssetNestedInput;
@@ -586,7 +586,7 @@ export type AssetUncheckedUpdateInput = {
 	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
 	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	image?: Prisma.ImageUncheckedUpdateOneWithoutAssetNestedInput;
 	video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput;
 	document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput;
@@ -611,7 +611,7 @@ export type AssetCreateManyInput = {
 	sizeBytes: bigint | number;
 	checksum?: string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: string | null;
+	createdById?: string | null;
 };
 
 export type AssetUpdateManyMutationInput = {
@@ -666,7 +666,7 @@ export type AssetUncheckedUpdateManyInput = {
 	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
 	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
 export type AssetNullableScalarRelationFilter = {
@@ -695,7 +695,7 @@ export type AssetCountOrderByAggregateInput = {
 	sizeBytes?: Prisma.SortOrder;
 	checksum?: Prisma.SortOrder;
 	metadata?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 };
 
 export type AssetAvgOrderByAggregateInput = {
@@ -717,7 +717,7 @@ export type AssetMaxOrderByAggregateInput = {
 	extension?: Prisma.SortOrder;
 	sizeBytes?: Prisma.SortOrder;
 	checksum?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 };
 
 export type AssetMinOrderByAggregateInput = {
@@ -735,7 +735,7 @@ export type AssetMinOrderByAggregateInput = {
 	extension?: Prisma.SortOrder;
 	sizeBytes?: Prisma.SortOrder;
 	checksum?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 };
 
 export type AssetSumOrderByAggregateInput = {
@@ -1098,89 +1098,89 @@ export type AssetUncheckedUpdateManyWithoutSpaceNestedInput = {
 	deleteMany?: Prisma.AssetScalarWhereInput | Prisma.AssetScalarWhereInput[];
 };
 
-export type AssetCreateNestedManyWithoutCreatorInput = {
+export type AssetCreateNestedManyWithoutCreatedByInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.AssetCreateWithoutCreatorInput,
-				Prisma.AssetUncheckedCreateWithoutCreatorInput
+				Prisma.AssetCreateWithoutCreatedByInput,
+				Prisma.AssetUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.AssetCreateWithoutCreatorInput[]
-		| Prisma.AssetUncheckedCreateWithoutCreatorInput[];
+		| Prisma.AssetCreateWithoutCreatedByInput[]
+		| Prisma.AssetUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.AssetCreateOrConnectWithoutCreatorInput
-		| Prisma.AssetCreateOrConnectWithoutCreatorInput[];
-	createMany?: Prisma.AssetCreateManyCreatorInputEnvelope;
+		| Prisma.AssetCreateOrConnectWithoutCreatedByInput
+		| Prisma.AssetCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.AssetCreateManyCreatedByInputEnvelope;
 	connect?: Prisma.AssetWhereUniqueInput | Prisma.AssetWhereUniqueInput[];
 };
 
-export type AssetUncheckedCreateNestedManyWithoutCreatorInput = {
+export type AssetUncheckedCreateNestedManyWithoutCreatedByInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.AssetCreateWithoutCreatorInput,
-				Prisma.AssetUncheckedCreateWithoutCreatorInput
+				Prisma.AssetCreateWithoutCreatedByInput,
+				Prisma.AssetUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.AssetCreateWithoutCreatorInput[]
-		| Prisma.AssetUncheckedCreateWithoutCreatorInput[];
+		| Prisma.AssetCreateWithoutCreatedByInput[]
+		| Prisma.AssetUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.AssetCreateOrConnectWithoutCreatorInput
-		| Prisma.AssetCreateOrConnectWithoutCreatorInput[];
-	createMany?: Prisma.AssetCreateManyCreatorInputEnvelope;
+		| Prisma.AssetCreateOrConnectWithoutCreatedByInput
+		| Prisma.AssetCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.AssetCreateManyCreatedByInputEnvelope;
 	connect?: Prisma.AssetWhereUniqueInput | Prisma.AssetWhereUniqueInput[];
 };
 
-export type AssetUpdateManyWithoutCreatorNestedInput = {
+export type AssetUpdateManyWithoutCreatedByNestedInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.AssetCreateWithoutCreatorInput,
-				Prisma.AssetUncheckedCreateWithoutCreatorInput
+				Prisma.AssetCreateWithoutCreatedByInput,
+				Prisma.AssetUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.AssetCreateWithoutCreatorInput[]
-		| Prisma.AssetUncheckedCreateWithoutCreatorInput[];
+		| Prisma.AssetCreateWithoutCreatedByInput[]
+		| Prisma.AssetUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.AssetCreateOrConnectWithoutCreatorInput
-		| Prisma.AssetCreateOrConnectWithoutCreatorInput[];
+		| Prisma.AssetCreateOrConnectWithoutCreatedByInput
+		| Prisma.AssetCreateOrConnectWithoutCreatedByInput[];
 	upsert?:
-		| Prisma.AssetUpsertWithWhereUniqueWithoutCreatorInput
-		| Prisma.AssetUpsertWithWhereUniqueWithoutCreatorInput[];
-	createMany?: Prisma.AssetCreateManyCreatorInputEnvelope;
+		| Prisma.AssetUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.AssetUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.AssetCreateManyCreatedByInputEnvelope;
 	set?: Prisma.AssetWhereUniqueInput | Prisma.AssetWhereUniqueInput[];
 	disconnect?: Prisma.AssetWhereUniqueInput | Prisma.AssetWhereUniqueInput[];
 	delete?: Prisma.AssetWhereUniqueInput | Prisma.AssetWhereUniqueInput[];
 	connect?: Prisma.AssetWhereUniqueInput | Prisma.AssetWhereUniqueInput[];
 	update?:
-		| Prisma.AssetUpdateWithWhereUniqueWithoutCreatorInput
-		| Prisma.AssetUpdateWithWhereUniqueWithoutCreatorInput[];
+		| Prisma.AssetUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.AssetUpdateWithWhereUniqueWithoutCreatedByInput[];
 	updateMany?:
-		| Prisma.AssetUpdateManyWithWhereWithoutCreatorInput
-		| Prisma.AssetUpdateManyWithWhereWithoutCreatorInput[];
+		| Prisma.AssetUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.AssetUpdateManyWithWhereWithoutCreatedByInput[];
 	deleteMany?: Prisma.AssetScalarWhereInput | Prisma.AssetScalarWhereInput[];
 };
 
-export type AssetUncheckedUpdateManyWithoutCreatorNestedInput = {
+export type AssetUncheckedUpdateManyWithoutCreatedByNestedInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.AssetCreateWithoutCreatorInput,
-				Prisma.AssetUncheckedCreateWithoutCreatorInput
+				Prisma.AssetCreateWithoutCreatedByInput,
+				Prisma.AssetUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.AssetCreateWithoutCreatorInput[]
-		| Prisma.AssetUncheckedCreateWithoutCreatorInput[];
+		| Prisma.AssetCreateWithoutCreatedByInput[]
+		| Prisma.AssetUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.AssetCreateOrConnectWithoutCreatorInput
-		| Prisma.AssetCreateOrConnectWithoutCreatorInput[];
+		| Prisma.AssetCreateOrConnectWithoutCreatedByInput
+		| Prisma.AssetCreateOrConnectWithoutCreatedByInput[];
 	upsert?:
-		| Prisma.AssetUpsertWithWhereUniqueWithoutCreatorInput
-		| Prisma.AssetUpsertWithWhereUniqueWithoutCreatorInput[];
-	createMany?: Prisma.AssetCreateManyCreatorInputEnvelope;
+		| Prisma.AssetUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.AssetUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.AssetCreateManyCreatedByInputEnvelope;
 	set?: Prisma.AssetWhereUniqueInput | Prisma.AssetWhereUniqueInput[];
 	disconnect?: Prisma.AssetWhereUniqueInput | Prisma.AssetWhereUniqueInput[];
 	delete?: Prisma.AssetWhereUniqueInput | Prisma.AssetWhereUniqueInput[];
 	connect?: Prisma.AssetWhereUniqueInput | Prisma.AssetWhereUniqueInput[];
 	update?:
-		| Prisma.AssetUpdateWithWhereUniqueWithoutCreatorInput
-		| Prisma.AssetUpdateWithWhereUniqueWithoutCreatorInput[];
+		| Prisma.AssetUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.AssetUpdateWithWhereUniqueWithoutCreatedByInput[];
 	updateMany?:
-		| Prisma.AssetUpdateManyWithWhereWithoutCreatorInput
-		| Prisma.AssetUpdateManyWithWhereWithoutCreatorInput[];
+		| Prisma.AssetUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.AssetUpdateManyWithWhereWithoutCreatedByInput[];
 	deleteMany?: Prisma.AssetScalarWhereInput | Prisma.AssetScalarWhereInput[];
 };
 
@@ -1200,7 +1200,7 @@ export type AssetCreateWithoutCoverOfAlbumsInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space: Prisma.SpaceCreateNestedOneWithoutAssetsInput;
 	folder: Prisma.FolderCreateNestedOneWithoutAssetsInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
 	image?: Prisma.ImageCreateNestedOneWithoutAssetInput;
 	video?: Prisma.VideoCreateNestedOneWithoutAssetInput;
 	document?: Prisma.DocumentCreateNestedOneWithoutAssetInput;
@@ -1224,7 +1224,7 @@ export type AssetUncheckedCreateWithoutCoverOfAlbumsInput = {
 	sizeBytes: bigint | number;
 	checksum?: string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: string | null;
+	createdById?: string | null;
 	image?: Prisma.ImageUncheckedCreateNestedOneWithoutAssetInput;
 	video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput;
 	document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput;
@@ -1286,7 +1286,7 @@ export type AssetUpdateWithoutCoverOfAlbumsInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutAssetsNestedInput;
 	folder?: Prisma.FolderUpdateOneRequiredWithoutAssetsNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
 	image?: Prisma.ImageUpdateOneWithoutAssetNestedInput;
 	video?: Prisma.VideoUpdateOneWithoutAssetNestedInput;
 	document?: Prisma.DocumentUpdateOneWithoutAssetNestedInput;
@@ -1320,7 +1320,7 @@ export type AssetUncheckedUpdateWithoutCoverOfAlbumsInput = {
 	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
 	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	image?: Prisma.ImageUncheckedUpdateOneWithoutAssetNestedInput;
 	video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput;
 	document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput;
@@ -1344,7 +1344,7 @@ export type AssetCreateWithoutAlbumEntriesInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space: Prisma.SpaceCreateNestedOneWithoutAssetsInput;
 	folder: Prisma.FolderCreateNestedOneWithoutAssetsInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
 	image?: Prisma.ImageCreateNestedOneWithoutAssetInput;
 	video?: Prisma.VideoCreateNestedOneWithoutAssetInput;
 	document?: Prisma.DocumentCreateNestedOneWithoutAssetInput;
@@ -1368,7 +1368,7 @@ export type AssetUncheckedCreateWithoutAlbumEntriesInput = {
 	sizeBytes: bigint | number;
 	checksum?: string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: string | null;
+	createdById?: string | null;
 	image?: Prisma.ImageUncheckedCreateNestedOneWithoutAssetInput;
 	video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput;
 	document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput;
@@ -1430,7 +1430,7 @@ export type AssetUpdateWithoutAlbumEntriesInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutAssetsNestedInput;
 	folder?: Prisma.FolderUpdateOneRequiredWithoutAssetsNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
 	image?: Prisma.ImageUpdateOneWithoutAssetNestedInput;
 	video?: Prisma.VideoUpdateOneWithoutAssetNestedInput;
 	document?: Prisma.DocumentUpdateOneWithoutAssetNestedInput;
@@ -1464,7 +1464,7 @@ export type AssetUncheckedUpdateWithoutAlbumEntriesInput = {
 	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
 	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	image?: Prisma.ImageUncheckedUpdateOneWithoutAssetNestedInput;
 	video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput;
 	document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput;
@@ -1488,7 +1488,7 @@ export type AssetCreateWithoutImageInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space: Prisma.SpaceCreateNestedOneWithoutAssetsInput;
 	folder: Prisma.FolderCreateNestedOneWithoutAssetsInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
 	video?: Prisma.VideoCreateNestedOneWithoutAssetInput;
 	document?: Prisma.DocumentCreateNestedOneWithoutAssetInput;
 	derivatives?: Prisma.DerivativeCreateNestedManyWithoutAssetInput;
@@ -1512,7 +1512,7 @@ export type AssetUncheckedCreateWithoutImageInput = {
 	sizeBytes: bigint | number;
 	checksum?: string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: string | null;
+	createdById?: string | null;
 	video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput;
 	document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput;
 	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutAssetInput;
@@ -1574,7 +1574,7 @@ export type AssetUpdateWithoutImageInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutAssetsNestedInput;
 	folder?: Prisma.FolderUpdateOneRequiredWithoutAssetsNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
 	video?: Prisma.VideoUpdateOneWithoutAssetNestedInput;
 	document?: Prisma.DocumentUpdateOneWithoutAssetNestedInput;
 	derivatives?: Prisma.DerivativeUpdateManyWithoutAssetNestedInput;
@@ -1608,7 +1608,7 @@ export type AssetUncheckedUpdateWithoutImageInput = {
 	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
 	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput;
 	document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput;
 	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutAssetNestedInput;
@@ -1632,7 +1632,7 @@ export type AssetCreateWithoutVideoInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space: Prisma.SpaceCreateNestedOneWithoutAssetsInput;
 	folder: Prisma.FolderCreateNestedOneWithoutAssetsInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
 	image?: Prisma.ImageCreateNestedOneWithoutAssetInput;
 	document?: Prisma.DocumentCreateNestedOneWithoutAssetInput;
 	derivatives?: Prisma.DerivativeCreateNestedManyWithoutAssetInput;
@@ -1656,7 +1656,7 @@ export type AssetUncheckedCreateWithoutVideoInput = {
 	sizeBytes: bigint | number;
 	checksum?: string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: string | null;
+	createdById?: string | null;
 	image?: Prisma.ImageUncheckedCreateNestedOneWithoutAssetInput;
 	document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput;
 	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutAssetInput;
@@ -1718,7 +1718,7 @@ export type AssetUpdateWithoutVideoInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutAssetsNestedInput;
 	folder?: Prisma.FolderUpdateOneRequiredWithoutAssetsNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
 	image?: Prisma.ImageUpdateOneWithoutAssetNestedInput;
 	document?: Prisma.DocumentUpdateOneWithoutAssetNestedInput;
 	derivatives?: Prisma.DerivativeUpdateManyWithoutAssetNestedInput;
@@ -1752,7 +1752,7 @@ export type AssetUncheckedUpdateWithoutVideoInput = {
 	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
 	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	image?: Prisma.ImageUncheckedUpdateOneWithoutAssetNestedInput;
 	document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput;
 	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutAssetNestedInput;
@@ -1776,7 +1776,7 @@ export type AssetCreateWithoutDocumentInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space: Prisma.SpaceCreateNestedOneWithoutAssetsInput;
 	folder: Prisma.FolderCreateNestedOneWithoutAssetsInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
 	image?: Prisma.ImageCreateNestedOneWithoutAssetInput;
 	video?: Prisma.VideoCreateNestedOneWithoutAssetInput;
 	derivatives?: Prisma.DerivativeCreateNestedManyWithoutAssetInput;
@@ -1800,7 +1800,7 @@ export type AssetUncheckedCreateWithoutDocumentInput = {
 	sizeBytes: bigint | number;
 	checksum?: string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: string | null;
+	createdById?: string | null;
 	image?: Prisma.ImageUncheckedCreateNestedOneWithoutAssetInput;
 	video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput;
 	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutAssetInput;
@@ -1862,7 +1862,7 @@ export type AssetUpdateWithoutDocumentInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutAssetsNestedInput;
 	folder?: Prisma.FolderUpdateOneRequiredWithoutAssetsNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
 	image?: Prisma.ImageUpdateOneWithoutAssetNestedInput;
 	video?: Prisma.VideoUpdateOneWithoutAssetNestedInput;
 	derivatives?: Prisma.DerivativeUpdateManyWithoutAssetNestedInput;
@@ -1896,7 +1896,7 @@ export type AssetUncheckedUpdateWithoutDocumentInput = {
 	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
 	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	image?: Prisma.ImageUncheckedUpdateOneWithoutAssetNestedInput;
 	video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput;
 	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutAssetNestedInput;
@@ -1920,7 +1920,7 @@ export type AssetCreateWithoutDerivativesInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space: Prisma.SpaceCreateNestedOneWithoutAssetsInput;
 	folder: Prisma.FolderCreateNestedOneWithoutAssetsInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
 	image?: Prisma.ImageCreateNestedOneWithoutAssetInput;
 	video?: Prisma.VideoCreateNestedOneWithoutAssetInput;
 	document?: Prisma.DocumentCreateNestedOneWithoutAssetInput;
@@ -1944,7 +1944,7 @@ export type AssetUncheckedCreateWithoutDerivativesInput = {
 	sizeBytes: bigint | number;
 	checksum?: string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: string | null;
+	createdById?: string | null;
 	image?: Prisma.ImageUncheckedCreateNestedOneWithoutAssetInput;
 	video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput;
 	document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput;
@@ -2006,7 +2006,7 @@ export type AssetUpdateWithoutDerivativesInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutAssetsNestedInput;
 	folder?: Prisma.FolderUpdateOneRequiredWithoutAssetsNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
 	image?: Prisma.ImageUpdateOneWithoutAssetNestedInput;
 	video?: Prisma.VideoUpdateOneWithoutAssetNestedInput;
 	document?: Prisma.DocumentUpdateOneWithoutAssetNestedInput;
@@ -2040,7 +2040,7 @@ export type AssetUncheckedUpdateWithoutDerivativesInput = {
 	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
 	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	image?: Prisma.ImageUncheckedUpdateOneWithoutAssetNestedInput;
 	video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput;
 	document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput;
@@ -2063,7 +2063,7 @@ export type AssetCreateWithoutFolderInput = {
 	checksum?: string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space: Prisma.SpaceCreateNestedOneWithoutAssetsInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
 	image?: Prisma.ImageCreateNestedOneWithoutAssetInput;
 	video?: Prisma.VideoCreateNestedOneWithoutAssetInput;
 	document?: Prisma.DocumentCreateNestedOneWithoutAssetInput;
@@ -2087,7 +2087,7 @@ export type AssetUncheckedCreateWithoutFolderInput = {
 	sizeBytes: bigint | number;
 	checksum?: string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: string | null;
+	createdById?: string | null;
 	image?: Prisma.ImageUncheckedCreateNestedOneWithoutAssetInput;
 	video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput;
 	document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput;
@@ -2156,7 +2156,7 @@ export type AssetScalarWhereInput = {
 	sizeBytes?: Prisma.BigIntFilter<"Asset"> | bigint | number;
 	checksum?: Prisma.StringNullableFilter<"Asset"> | string | null;
 	metadata?: Prisma.JsonNullableFilter<"Asset">;
-	creatorId?: Prisma.StringNullableFilter<"Asset"> | string | null;
+	createdById?: Prisma.StringNullableFilter<"Asset"> | string | null;
 };
 
 export type AssetCreateWithoutSpaceInput = {
@@ -2174,7 +2174,7 @@ export type AssetCreateWithoutSpaceInput = {
 	checksum?: string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	folder: Prisma.FolderCreateNestedOneWithoutAssetsInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
 	image?: Prisma.ImageCreateNestedOneWithoutAssetInput;
 	video?: Prisma.VideoCreateNestedOneWithoutAssetInput;
 	document?: Prisma.DocumentCreateNestedOneWithoutAssetInput;
@@ -2198,7 +2198,7 @@ export type AssetUncheckedCreateWithoutSpaceInput = {
 	sizeBytes: bigint | number;
 	checksum?: string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: string | null;
+	createdById?: string | null;
 	image?: Prisma.ImageUncheckedCreateNestedOneWithoutAssetInput;
 	video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput;
 	document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput;
@@ -2248,7 +2248,7 @@ export type AssetUpdateManyWithWhereWithoutSpaceInput = {
 	>;
 };
 
-export type AssetCreateWithoutCreatorInput = {
+export type AssetCreateWithoutCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -2272,7 +2272,7 @@ export type AssetCreateWithoutCreatorInput = {
 	coverOfAlbums?: Prisma.AlbumCreateNestedManyWithoutCoverAssetInput;
 };
 
-export type AssetUncheckedCreateWithoutCreatorInput = {
+export type AssetUncheckedCreateWithoutCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -2296,46 +2296,46 @@ export type AssetUncheckedCreateWithoutCreatorInput = {
 	coverOfAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCoverAssetInput;
 };
 
-export type AssetCreateOrConnectWithoutCreatorInput = {
+export type AssetCreateOrConnectWithoutCreatedByInput = {
 	where: Prisma.AssetWhereUniqueInput;
 	create: Prisma.XOR<
-		Prisma.AssetCreateWithoutCreatorInput,
-		Prisma.AssetUncheckedCreateWithoutCreatorInput
+		Prisma.AssetCreateWithoutCreatedByInput,
+		Prisma.AssetUncheckedCreateWithoutCreatedByInput
 	>;
 };
 
-export type AssetCreateManyCreatorInputEnvelope = {
+export type AssetCreateManyCreatedByInputEnvelope = {
 	data:
-		| Prisma.AssetCreateManyCreatorInput
-		| Prisma.AssetCreateManyCreatorInput[];
+		| Prisma.AssetCreateManyCreatedByInput
+		| Prisma.AssetCreateManyCreatedByInput[];
 	skipDuplicates?: boolean;
 };
 
-export type AssetUpsertWithWhereUniqueWithoutCreatorInput = {
+export type AssetUpsertWithWhereUniqueWithoutCreatedByInput = {
 	where: Prisma.AssetWhereUniqueInput;
 	update: Prisma.XOR<
-		Prisma.AssetUpdateWithoutCreatorInput,
-		Prisma.AssetUncheckedUpdateWithoutCreatorInput
+		Prisma.AssetUpdateWithoutCreatedByInput,
+		Prisma.AssetUncheckedUpdateWithoutCreatedByInput
 	>;
 	create: Prisma.XOR<
-		Prisma.AssetCreateWithoutCreatorInput,
-		Prisma.AssetUncheckedCreateWithoutCreatorInput
+		Prisma.AssetCreateWithoutCreatedByInput,
+		Prisma.AssetUncheckedCreateWithoutCreatedByInput
 	>;
 };
 
-export type AssetUpdateWithWhereUniqueWithoutCreatorInput = {
+export type AssetUpdateWithWhereUniqueWithoutCreatedByInput = {
 	where: Prisma.AssetWhereUniqueInput;
 	data: Prisma.XOR<
-		Prisma.AssetUpdateWithoutCreatorInput,
-		Prisma.AssetUncheckedUpdateWithoutCreatorInput
+		Prisma.AssetUpdateWithoutCreatedByInput,
+		Prisma.AssetUncheckedUpdateWithoutCreatedByInput
 	>;
 };
 
-export type AssetUpdateManyWithWhereWithoutCreatorInput = {
+export type AssetUpdateManyWithWhereWithoutCreatedByInput = {
 	where: Prisma.AssetScalarWhereInput;
 	data: Prisma.XOR<
 		Prisma.AssetUpdateManyMutationInput,
-		Prisma.AssetUncheckedUpdateManyWithoutCreatorInput
+		Prisma.AssetUncheckedUpdateManyWithoutCreatedByInput
 	>;
 };
 
@@ -2354,7 +2354,7 @@ export type AssetCreateManyFolderInput = {
 	sizeBytes: bigint | number;
 	checksum?: string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: string | null;
+	createdById?: string | null;
 };
 
 export type AssetUpdateWithoutFolderInput = {
@@ -2382,7 +2382,7 @@ export type AssetUpdateWithoutFolderInput = {
 	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutAssetsNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
 	image?: Prisma.ImageUpdateOneWithoutAssetNestedInput;
 	video?: Prisma.VideoUpdateOneWithoutAssetNestedInput;
 	document?: Prisma.DocumentUpdateOneWithoutAssetNestedInput;
@@ -2416,7 +2416,7 @@ export type AssetUncheckedUpdateWithoutFolderInput = {
 	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
 	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	image?: Prisma.ImageUncheckedUpdateOneWithoutAssetNestedInput;
 	video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput;
 	document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput;
@@ -2450,7 +2450,7 @@ export type AssetUncheckedUpdateManyWithoutFolderInput = {
 	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
 	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
 export type AssetCreateManySpaceInput = {
@@ -2468,7 +2468,7 @@ export type AssetCreateManySpaceInput = {
 	sizeBytes: bigint | number;
 	checksum?: string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: string | null;
+	createdById?: string | null;
 };
 
 export type AssetUpdateWithoutSpaceInput = {
@@ -2496,7 +2496,7 @@ export type AssetUpdateWithoutSpaceInput = {
 	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	folder?: Prisma.FolderUpdateOneRequiredWithoutAssetsNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
 	image?: Prisma.ImageUpdateOneWithoutAssetNestedInput;
 	video?: Prisma.VideoUpdateOneWithoutAssetNestedInput;
 	document?: Prisma.DocumentUpdateOneWithoutAssetNestedInput;
@@ -2530,7 +2530,7 @@ export type AssetUncheckedUpdateWithoutSpaceInput = {
 	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
 	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	image?: Prisma.ImageUncheckedUpdateOneWithoutAssetNestedInput;
 	video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput;
 	document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput;
@@ -2564,10 +2564,10 @@ export type AssetUncheckedUpdateManyWithoutSpaceInput = {
 	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
 	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
-export type AssetCreateManyCreatorInput = {
+export type AssetCreateManyCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -2585,7 +2585,7 @@ export type AssetCreateManyCreatorInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 };
 
-export type AssetUpdateWithoutCreatorInput = {
+export type AssetUpdateWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -2619,7 +2619,7 @@ export type AssetUpdateWithoutCreatorInput = {
 	coverOfAlbums?: Prisma.AlbumUpdateManyWithoutCoverAssetNestedInput;
 };
 
-export type AssetUncheckedUpdateWithoutCreatorInput = {
+export type AssetUncheckedUpdateWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -2653,7 +2653,7 @@ export type AssetUncheckedUpdateWithoutCreatorInput = {
 	coverOfAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCoverAssetNestedInput;
 };
 
-export type AssetUncheckedUpdateManyWithoutCreatorInput = {
+export type AssetUncheckedUpdateManyWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -2763,10 +2763,10 @@ export type AssetSelect<
 		sizeBytes?: boolean;
 		checksum?: boolean;
 		metadata?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
 		folder?: boolean | Prisma.FolderDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Asset$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Asset$createdByArgs<ExtArgs>;
 		image?: boolean | Prisma.Asset$imageArgs<ExtArgs>;
 		video?: boolean | Prisma.Asset$videoArgs<ExtArgs>;
 		document?: boolean | Prisma.Asset$documentArgs<ExtArgs>;
@@ -2798,10 +2798,10 @@ export type AssetSelectCreateManyAndReturn<
 		sizeBytes?: boolean;
 		checksum?: boolean;
 		metadata?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
 		folder?: boolean | Prisma.FolderDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Asset$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Asset$createdByArgs<ExtArgs>;
 	},
 	ExtArgs["result"]["asset"]
 >;
@@ -2826,10 +2826,10 @@ export type AssetSelectUpdateManyAndReturn<
 		sizeBytes?: boolean;
 		checksum?: boolean;
 		metadata?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
 		folder?: boolean | Prisma.FolderDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Asset$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Asset$createdByArgs<ExtArgs>;
 	},
 	ExtArgs["result"]["asset"]
 >;
@@ -2850,7 +2850,7 @@ export type AssetSelectScalar = {
 	sizeBytes?: boolean;
 	checksum?: boolean;
 	metadata?: boolean;
-	creatorId?: boolean;
+	createdById?: boolean;
 };
 
 export type AssetOmit<
@@ -2872,7 +2872,7 @@ export type AssetOmit<
 	| "sizeBytes"
 	| "checksum"
 	| "metadata"
-	| "creatorId",
+	| "createdById",
 	ExtArgs["result"]["asset"]
 >;
 export type AssetInclude<
@@ -2881,7 +2881,7 @@ export type AssetInclude<
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
 	folder?: boolean | Prisma.FolderDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Asset$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Asset$createdByArgs<ExtArgs>;
 	image?: boolean | Prisma.Asset$imageArgs<ExtArgs>;
 	video?: boolean | Prisma.Asset$videoArgs<ExtArgs>;
 	document?: boolean | Prisma.Asset$documentArgs<ExtArgs>;
@@ -2896,7 +2896,7 @@ export type AssetIncludeCreateManyAndReturn<
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
 	folder?: boolean | Prisma.FolderDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Asset$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Asset$createdByArgs<ExtArgs>;
 };
 export type AssetIncludeUpdateManyAndReturn<
 	ExtArgs extends
@@ -2904,7 +2904,7 @@ export type AssetIncludeUpdateManyAndReturn<
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
 	folder?: boolean | Prisma.FolderDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Asset$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Asset$createdByArgs<ExtArgs>;
 };
 
 export type $AssetPayload<
@@ -2915,7 +2915,7 @@ export type $AssetPayload<
 	objects: {
 		space: Prisma.$SpacePayload<ExtArgs>;
 		folder: Prisma.$FolderPayload<ExtArgs>;
-		creator: Prisma.$UserPayload<ExtArgs> | null;
+		createdBy: Prisma.$UserPayload<ExtArgs> | null;
 		image: Prisma.$ImagePayload<ExtArgs> | null;
 		video: Prisma.$VideoPayload<ExtArgs> | null;
 		document: Prisma.$DocumentPayload<ExtArgs> | null;
@@ -2976,7 +2976,7 @@ export type $AssetPayload<
 			/**
 			 * @displayName 생성자
 			 */
-			creatorId: string | null;
+			createdById: string | null;
 		},
 		ExtArgs["result"]["asset"]
 	>;
@@ -3555,8 +3555,8 @@ export interface Prisma__AssetClient<
 		ExtArgs,
 		GlobalOmitOptions
 	>;
-	creator<T extends Prisma.Asset$creatorArgs<ExtArgs> = {}>(
-		args?: Prisma.Subset<T, Prisma.Asset$creatorArgs<ExtArgs>>,
+	createdBy<T extends Prisma.Asset$createdByArgs<ExtArgs> = {}>(
+		args?: Prisma.Subset<T, Prisma.Asset$createdByArgs<ExtArgs>>,
 	): Prisma.Prisma__UserClient<
 		runtime.Types.Result.GetResult<
 			Prisma.$UserPayload<ExtArgs>,
@@ -3697,7 +3697,7 @@ export interface AssetFieldRefs {
 	readonly sizeBytes: Prisma.FieldRef<"Asset", "BigInt">;
 	readonly checksum: Prisma.FieldRef<"Asset", "String">;
 	readonly metadata: Prisma.FieldRef<"Asset", "Json">;
-	readonly creatorId: Prisma.FieldRef<"Asset", "String">;
+	readonly createdById: Prisma.FieldRef<"Asset", "String">;
 }
 
 // Custom InputTypes
@@ -4147,9 +4147,9 @@ export type AssetDeleteManyArgs<
 };
 
 /**
- * Asset.creator
+ * Asset.createdBy
  */
-export type Asset$creatorArgs<
+export type Asset$createdByArgs<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {

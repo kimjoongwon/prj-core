@@ -22,5 +22,5 @@ export interface GroupDto {
 	/** @nullable */
 	label?: string | null;
 	type: GroupTypes;
-	creatorId?: string | null;
+	createdById?: string | null;
 }

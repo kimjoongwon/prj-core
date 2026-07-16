@@ -22,7 +22,7 @@ export class InquiryThreadDto extends AbstractDto {
 	status!: ThreadStatus;
 
 	@UUIDField({ description: "생성자 ID" })
-	createdBy!: string;
+	createdById!: string;
 
 	@DateField({ nullable: true, description: "마지막 메시지 일시" })
 	lastMessageAt!: Date | null;

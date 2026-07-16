@@ -30,7 +30,7 @@ export class AlbumDto extends AbstractDto implements Album {
 	coverAssetId!: string | null;
 
 	@UUIDFieldOptional({ nullable: true, description: "생성자 ID" })
-	creatorId!: string | null;
+	createdById!: string | null;
 
 	// 관계 필드
 	@ClassField(() => AssetDto, { required: false, description: "커버 에셋" })

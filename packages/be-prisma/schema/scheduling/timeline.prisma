@@ -36,18 +36,18 @@ enum RecurringDayOfWeek {
 // @extended-by: Session
 /// @displayName 타임라인
 model Timeline {
-  id                  String           @id @default(uuid())
-  createdAt           DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt           DateTime?        @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt           DateTime?        @map("removed_at") @db.Timestamptz(6)
-  spaceId             String           @map("space_id")
-  creatorId           String?          @map("creator_id")
-  name                String
-  description         String?
-  space               Space            @relation(fields: [spaceId], references: [id], onDelete: Restrict)
-  creator             User?            @relation(fields: [creatorId], references: [id], onDelete: SetNull)
-  sessions            Session[]
-  reservations        Reservation[]
+  id           String        @id @default(uuid())
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime?     @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt    DateTime?     @map("removed_at") @db.Timestamptz(6)
+  spaceId      String        @map("space_id")
+  createdById  String?       @map("created_by_id")
+  name         String
+  description  String?
+  space        Space         @relation(fields: [spaceId], references: [id], onDelete: Restrict)
+  createdBy    User?         @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  sessions     Session[]
+  reservations Reservation[]
 
   @@index([spaceId])
   @@index([spaceId, createdAt])

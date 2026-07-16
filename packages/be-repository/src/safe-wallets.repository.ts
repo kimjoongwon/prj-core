@@ -36,7 +36,7 @@ export class SafeWalletsRepository {
 					include: { confirmations: true },
 				},
 				space: true,
-				creator: true,
+				createdBy: true,
 			},
 		});
 

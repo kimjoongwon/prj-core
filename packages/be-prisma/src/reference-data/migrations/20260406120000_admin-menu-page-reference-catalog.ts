@@ -167,7 +167,7 @@ async function ensureCurrentAdminFullAccessPolicies(
 			},
 			create: {
 				spaceId: scope.spaceId,
-				creatorId: scope.userId,
+				createdById: scope.userId,
 				name: buildSystemPolicyName(role.name),
 				displayName: `${role.displayName ?? role.name} 기본 정책`,
 				description:

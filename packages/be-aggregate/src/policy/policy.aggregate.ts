@@ -56,7 +56,7 @@ export class PolicyAggregate {
 
 	async createPolicy(dto: CreatePolicyCommandInput): Promise<Policy> {
 		const spaceId = this.requireSpaceId();
-		const creatorId = this.requireUserId();
+		const createdById = this.requireUserId();
 		this.logger.debug(`Policy 생성: name=${dto.name}, spaceId=${spaceId}`);
 
 		const existing = await this.policiesRepository.findByNameInSpace(
@@ -69,7 +69,7 @@ export class PolicyAggregate {
 
 		return this.policiesRepository.create({
 			spaceId,
-			creatorId,
+			createdById,
 			name: dto.name,
 			displayName: dto.displayName ?? null,
 			description: dto.description ?? null,

@@ -21,7 +21,7 @@ export class CreateInquiryUseCase {
 		return this.inquiryService.create(
 			{
 				spaceId,
-				creatorId: command.actorUserId,
+				createdById: command.actorUserId,
 				title: command.title,
 				category: command.category,
 				channel: command.channel,

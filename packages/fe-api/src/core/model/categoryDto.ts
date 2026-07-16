@@ -31,7 +31,7 @@ export interface CategoryDto {
 	 * @nullable
 	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
 	 */
-	creatorId?: string | null;
+	createdById?: string | null;
 	name: string;
 	type: CategoryTypes;
 	/**

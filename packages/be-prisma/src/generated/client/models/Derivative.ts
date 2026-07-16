@@ -46,7 +46,7 @@ export type DerivativeMinAggregateOutputType = {
 	updatedAt: Date | null;
 	removedAt: Date | null;
 	spaceId: string | null;
-	creatorId: string | null;
+	createdById: string | null;
 	assetId: string | null;
 	kind: $Enums.DerivativeKind | null;
 	profile: string | null;
@@ -64,7 +64,7 @@ export type DerivativeMaxAggregateOutputType = {
 	updatedAt: Date | null;
 	removedAt: Date | null;
 	spaceId: string | null;
-	creatorId: string | null;
+	createdById: string | null;
 	assetId: string | null;
 	kind: $Enums.DerivativeKind | null;
 	profile: string | null;
@@ -82,7 +82,7 @@ export type DerivativeCountAggregateOutputType = {
 	updatedAt: number;
 	removedAt: number;
 	spaceId: number;
-	creatorId: number;
+	createdById: number;
 	assetId: number;
 	kind: number;
 	profile: number;
@@ -115,7 +115,7 @@ export type DerivativeMinAggregateInputType = {
 	updatedAt?: true;
 	removedAt?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 	assetId?: true;
 	kind?: true;
 	profile?: true;
@@ -133,7 +133,7 @@ export type DerivativeMaxAggregateInputType = {
 	updatedAt?: true;
 	removedAt?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 	assetId?: true;
 	kind?: true;
 	profile?: true;
@@ -151,7 +151,7 @@ export type DerivativeCountAggregateInputType = {
 	updatedAt?: true;
 	removedAt?: true;
 	spaceId?: true;
-	creatorId?: true;
+	createdById?: true;
 	assetId?: true;
 	kind?: true;
 	profile?: true;
@@ -263,7 +263,7 @@ export type DerivativeGroupByOutputType = {
 	updatedAt: Date | null;
 	removedAt: Date | null;
 	spaceId: string;
-	creatorId: string | null;
+	createdById: string | null;
 	assetId: string;
 	kind: $Enums.DerivativeKind;
 	profile: string;
@@ -310,7 +310,7 @@ export type DerivativeWhereInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFilter<"Derivative"> | string;
-	creatorId?: Prisma.StringNullableFilter<"Derivative"> | string | null;
+	createdById?: Prisma.StringNullableFilter<"Derivative"> | string | null;
 	assetId?: Prisma.StringFilter<"Derivative"> | string;
 	kind?: Prisma.EnumDerivativeKindFilter<"Derivative"> | $Enums.DerivativeKind;
 	profile?: Prisma.StringFilter<"Derivative"> | string;
@@ -321,7 +321,7 @@ export type DerivativeWhereInput = {
 	height?: Prisma.IntNullableFilter<"Derivative"> | number | null;
 	durationMs?: Prisma.IntNullableFilter<"Derivative"> | number | null;
 	space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>;
-	creator?: Prisma.XOR<
+	createdBy?: Prisma.XOR<
 		Prisma.UserNullableScalarRelationFilter,
 		Prisma.UserWhereInput
 	> | null;
@@ -334,7 +334,7 @@ export type DerivativeOrderByWithRelationInput = {
 	updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	removedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrderInput | Prisma.SortOrder;
+	createdById?: Prisma.SortOrderInput | Prisma.SortOrder;
 	assetId?: Prisma.SortOrder;
 	kind?: Prisma.SortOrder;
 	profile?: Prisma.SortOrder;
@@ -345,7 +345,7 @@ export type DerivativeOrderByWithRelationInput = {
 	height?: Prisma.SortOrderInput | Prisma.SortOrder;
 	durationMs?: Prisma.SortOrderInput | Prisma.SortOrder;
 	space?: Prisma.SpaceOrderByWithRelationInput;
-	creator?: Prisma.UserOrderByWithRelationInput;
+	createdBy?: Prisma.UserOrderByWithRelationInput;
 	asset?: Prisma.AssetOrderByWithRelationInput;
 };
 
@@ -369,7 +369,7 @@ export type DerivativeWhereUniqueInput = Prisma.AtLeast<
 			| string
 			| null;
 		spaceId?: Prisma.StringFilter<"Derivative"> | string;
-		creatorId?: Prisma.StringNullableFilter<"Derivative"> | string | null;
+		createdById?: Prisma.StringNullableFilter<"Derivative"> | string | null;
 		assetId?: Prisma.StringFilter<"Derivative"> | string;
 		kind?:
 			| Prisma.EnumDerivativeKindFilter<"Derivative">
@@ -384,7 +384,7 @@ export type DerivativeWhereUniqueInput = Prisma.AtLeast<
 			Prisma.SpaceScalarRelationFilter,
 			Prisma.SpaceWhereInput
 		>;
-		creator?: Prisma.XOR<
+		createdBy?: Prisma.XOR<
 			Prisma.UserNullableScalarRelationFilter,
 			Prisma.UserWhereInput
 		> | null;
@@ -402,7 +402,7 @@ export type DerivativeOrderByWithAggregationInput = {
 	updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	removedAt?: Prisma.SortOrderInput | Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrderInput | Prisma.SortOrder;
+	createdById?: Prisma.SortOrderInput | Prisma.SortOrder;
 	assetId?: Prisma.SortOrder;
 	kind?: Prisma.SortOrder;
 	profile?: Prisma.SortOrder;
@@ -440,7 +440,7 @@ export type DerivativeScalarWhereWithAggregatesInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringWithAggregatesFilter<"Derivative"> | string;
-	creatorId?:
+	createdById?:
 		| Prisma.StringNullableWithAggregatesFilter<"Derivative">
 		| string
 		| null;
@@ -474,7 +474,7 @@ export type DerivativeCreateInput = {
 	height?: number | null;
 	durationMs?: number | null;
 	space: Prisma.SpaceCreateNestedOneWithoutDerivativesInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedDerivativesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedDerivativesInput;
 	asset: Prisma.AssetCreateNestedOneWithoutDerivativesInput;
 };
 
@@ -484,7 +484,7 @@ export type DerivativeUncheckedCreateInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	assetId: string;
 	kind: $Enums.DerivativeKind;
 	profile?: string;
@@ -520,7 +520,7 @@ export type DerivativeUpdateInput = {
 	height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
 	durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutDerivativesNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedDerivativesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedDerivativesNestedInput;
 	asset?: Prisma.AssetUpdateOneRequiredWithoutDerivativesNestedInput;
 };
 
@@ -538,7 +538,7 @@ export type DerivativeUncheckedUpdateInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	assetId?: Prisma.StringFieldUpdateOperationsInput | string;
 	kind?:
 		| Prisma.EnumDerivativeKindFieldUpdateOperationsInput
@@ -558,7 +558,7 @@ export type DerivativeCreateManyInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	assetId: string;
 	kind: $Enums.DerivativeKind;
 	profile?: string;
@@ -609,7 +609,7 @@ export type DerivativeUncheckedUpdateManyInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	assetId?: Prisma.StringFieldUpdateOperationsInput | string;
 	kind?:
 		| Prisma.EnumDerivativeKindFieldUpdateOperationsInput
@@ -645,7 +645,7 @@ export type DerivativeCountOrderByAggregateInput = {
 	updatedAt?: Prisma.SortOrder;
 	removedAt?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 	assetId?: Prisma.SortOrder;
 	kind?: Prisma.SortOrder;
 	profile?: Prisma.SortOrder;
@@ -670,7 +670,7 @@ export type DerivativeMaxOrderByAggregateInput = {
 	updatedAt?: Prisma.SortOrder;
 	removedAt?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 	assetId?: Prisma.SortOrder;
 	kind?: Prisma.SortOrder;
 	profile?: Prisma.SortOrder;
@@ -688,7 +688,7 @@ export type DerivativeMinOrderByAggregateInput = {
 	updatedAt?: Prisma.SortOrder;
 	removedAt?: Prisma.SortOrder;
 	spaceId?: Prisma.SortOrder;
-	creatorId?: Prisma.SortOrder;
+	createdById?: Prisma.SortOrder;
 	assetId?: Prisma.SortOrder;
 	kind?: Prisma.SortOrder;
 	profile?: Prisma.SortOrder;
@@ -923,55 +923,55 @@ export type DerivativeUncheckedUpdateManyWithoutSpaceNestedInput = {
 		| Prisma.DerivativeScalarWhereInput[];
 };
 
-export type DerivativeCreateNestedManyWithoutCreatorInput = {
+export type DerivativeCreateNestedManyWithoutCreatedByInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.DerivativeCreateWithoutCreatorInput,
-				Prisma.DerivativeUncheckedCreateWithoutCreatorInput
+				Prisma.DerivativeCreateWithoutCreatedByInput,
+				Prisma.DerivativeUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.DerivativeCreateWithoutCreatorInput[]
-		| Prisma.DerivativeUncheckedCreateWithoutCreatorInput[];
+		| Prisma.DerivativeCreateWithoutCreatedByInput[]
+		| Prisma.DerivativeUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.DerivativeCreateOrConnectWithoutCreatorInput
-		| Prisma.DerivativeCreateOrConnectWithoutCreatorInput[];
-	createMany?: Prisma.DerivativeCreateManyCreatorInputEnvelope;
+		| Prisma.DerivativeCreateOrConnectWithoutCreatedByInput
+		| Prisma.DerivativeCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.DerivativeCreateManyCreatedByInputEnvelope;
 	connect?:
 		| Prisma.DerivativeWhereUniqueInput
 		| Prisma.DerivativeWhereUniqueInput[];
 };
 
-export type DerivativeUncheckedCreateNestedManyWithoutCreatorInput = {
+export type DerivativeUncheckedCreateNestedManyWithoutCreatedByInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.DerivativeCreateWithoutCreatorInput,
-				Prisma.DerivativeUncheckedCreateWithoutCreatorInput
+				Prisma.DerivativeCreateWithoutCreatedByInput,
+				Prisma.DerivativeUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.DerivativeCreateWithoutCreatorInput[]
-		| Prisma.DerivativeUncheckedCreateWithoutCreatorInput[];
+		| Prisma.DerivativeCreateWithoutCreatedByInput[]
+		| Prisma.DerivativeUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.DerivativeCreateOrConnectWithoutCreatorInput
-		| Prisma.DerivativeCreateOrConnectWithoutCreatorInput[];
-	createMany?: Prisma.DerivativeCreateManyCreatorInputEnvelope;
+		| Prisma.DerivativeCreateOrConnectWithoutCreatedByInput
+		| Prisma.DerivativeCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.DerivativeCreateManyCreatedByInputEnvelope;
 	connect?:
 		| Prisma.DerivativeWhereUniqueInput
 		| Prisma.DerivativeWhereUniqueInput[];
 };
 
-export type DerivativeUpdateManyWithoutCreatorNestedInput = {
+export type DerivativeUpdateManyWithoutCreatedByNestedInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.DerivativeCreateWithoutCreatorInput,
-				Prisma.DerivativeUncheckedCreateWithoutCreatorInput
+				Prisma.DerivativeCreateWithoutCreatedByInput,
+				Prisma.DerivativeUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.DerivativeCreateWithoutCreatorInput[]
-		| Prisma.DerivativeUncheckedCreateWithoutCreatorInput[];
+		| Prisma.DerivativeCreateWithoutCreatedByInput[]
+		| Prisma.DerivativeUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.DerivativeCreateOrConnectWithoutCreatorInput
-		| Prisma.DerivativeCreateOrConnectWithoutCreatorInput[];
+		| Prisma.DerivativeCreateOrConnectWithoutCreatedByInput
+		| Prisma.DerivativeCreateOrConnectWithoutCreatedByInput[];
 	upsert?:
-		| Prisma.DerivativeUpsertWithWhereUniqueWithoutCreatorInput
-		| Prisma.DerivativeUpsertWithWhereUniqueWithoutCreatorInput[];
-	createMany?: Prisma.DerivativeCreateManyCreatorInputEnvelope;
+		| Prisma.DerivativeUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.DerivativeUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.DerivativeCreateManyCreatedByInputEnvelope;
 	set?: Prisma.DerivativeWhereUniqueInput | Prisma.DerivativeWhereUniqueInput[];
 	disconnect?:
 		| Prisma.DerivativeWhereUniqueInput
@@ -983,31 +983,31 @@ export type DerivativeUpdateManyWithoutCreatorNestedInput = {
 		| Prisma.DerivativeWhereUniqueInput
 		| Prisma.DerivativeWhereUniqueInput[];
 	update?:
-		| Prisma.DerivativeUpdateWithWhereUniqueWithoutCreatorInput
-		| Prisma.DerivativeUpdateWithWhereUniqueWithoutCreatorInput[];
+		| Prisma.DerivativeUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.DerivativeUpdateWithWhereUniqueWithoutCreatedByInput[];
 	updateMany?:
-		| Prisma.DerivativeUpdateManyWithWhereWithoutCreatorInput
-		| Prisma.DerivativeUpdateManyWithWhereWithoutCreatorInput[];
+		| Prisma.DerivativeUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.DerivativeUpdateManyWithWhereWithoutCreatedByInput[];
 	deleteMany?:
 		| Prisma.DerivativeScalarWhereInput
 		| Prisma.DerivativeScalarWhereInput[];
 };
 
-export type DerivativeUncheckedUpdateManyWithoutCreatorNestedInput = {
+export type DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput = {
 	create?:
 		| Prisma.XOR<
-				Prisma.DerivativeCreateWithoutCreatorInput,
-				Prisma.DerivativeUncheckedCreateWithoutCreatorInput
+				Prisma.DerivativeCreateWithoutCreatedByInput,
+				Prisma.DerivativeUncheckedCreateWithoutCreatedByInput
 		  >
-		| Prisma.DerivativeCreateWithoutCreatorInput[]
-		| Prisma.DerivativeUncheckedCreateWithoutCreatorInput[];
+		| Prisma.DerivativeCreateWithoutCreatedByInput[]
+		| Prisma.DerivativeUncheckedCreateWithoutCreatedByInput[];
 	connectOrCreate?:
-		| Prisma.DerivativeCreateOrConnectWithoutCreatorInput
-		| Prisma.DerivativeCreateOrConnectWithoutCreatorInput[];
+		| Prisma.DerivativeCreateOrConnectWithoutCreatedByInput
+		| Prisma.DerivativeCreateOrConnectWithoutCreatedByInput[];
 	upsert?:
-		| Prisma.DerivativeUpsertWithWhereUniqueWithoutCreatorInput
-		| Prisma.DerivativeUpsertWithWhereUniqueWithoutCreatorInput[];
-	createMany?: Prisma.DerivativeCreateManyCreatorInputEnvelope;
+		| Prisma.DerivativeUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.DerivativeUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.DerivativeCreateManyCreatedByInputEnvelope;
 	set?: Prisma.DerivativeWhereUniqueInput | Prisma.DerivativeWhereUniqueInput[];
 	disconnect?:
 		| Prisma.DerivativeWhereUniqueInput
@@ -1019,11 +1019,11 @@ export type DerivativeUncheckedUpdateManyWithoutCreatorNestedInput = {
 		| Prisma.DerivativeWhereUniqueInput
 		| Prisma.DerivativeWhereUniqueInput[];
 	update?:
-		| Prisma.DerivativeUpdateWithWhereUniqueWithoutCreatorInput
-		| Prisma.DerivativeUpdateWithWhereUniqueWithoutCreatorInput[];
+		| Prisma.DerivativeUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.DerivativeUpdateWithWhereUniqueWithoutCreatedByInput[];
 	updateMany?:
-		| Prisma.DerivativeUpdateManyWithWhereWithoutCreatorInput
-		| Prisma.DerivativeUpdateManyWithWhereWithoutCreatorInput[];
+		| Prisma.DerivativeUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.DerivativeUpdateManyWithWhereWithoutCreatedByInput[];
 	deleteMany?:
 		| Prisma.DerivativeScalarWhereInput
 		| Prisma.DerivativeScalarWhereInput[];
@@ -1043,7 +1043,7 @@ export type DerivativeCreateWithoutAssetInput = {
 	height?: number | null;
 	durationMs?: number | null;
 	space: Prisma.SpaceCreateNestedOneWithoutDerivativesInput;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedDerivativesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedDerivativesInput;
 };
 
 export type DerivativeUncheckedCreateWithoutAssetInput = {
@@ -1052,7 +1052,7 @@ export type DerivativeUncheckedCreateWithoutAssetInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	kind: $Enums.DerivativeKind;
 	profile?: string;
 	storageKey: string;
@@ -1123,7 +1123,7 @@ export type DerivativeScalarWhereInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFilter<"Derivative"> | string;
-	creatorId?: Prisma.StringNullableFilter<"Derivative"> | string | null;
+	createdById?: Prisma.StringNullableFilter<"Derivative"> | string | null;
 	assetId?: Prisma.StringFilter<"Derivative"> | string;
 	kind?: Prisma.EnumDerivativeKindFilter<"Derivative"> | $Enums.DerivativeKind;
 	profile?: Prisma.StringFilter<"Derivative"> | string;
@@ -1148,7 +1148,7 @@ export type DerivativeCreateWithoutSpaceInput = {
 	width?: number | null;
 	height?: number | null;
 	durationMs?: number | null;
-	creator?: Prisma.UserCreateNestedOneWithoutCreatedDerivativesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedDerivativesInput;
 	asset: Prisma.AssetCreateNestedOneWithoutDerivativesInput;
 };
 
@@ -1157,7 +1157,7 @@ export type DerivativeUncheckedCreateWithoutSpaceInput = {
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
-	creatorId?: string | null;
+	createdById?: string | null;
 	assetId: string;
 	kind: $Enums.DerivativeKind;
 	profile?: string;
@@ -1212,7 +1212,7 @@ export type DerivativeUpdateManyWithWhereWithoutSpaceInput = {
 	>;
 };
 
-export type DerivativeCreateWithoutCreatorInput = {
+export type DerivativeCreateWithoutCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1229,7 +1229,7 @@ export type DerivativeCreateWithoutCreatorInput = {
 	asset: Prisma.AssetCreateNestedOneWithoutDerivativesInput;
 };
 
-export type DerivativeUncheckedCreateWithoutCreatorInput = {
+export type DerivativeUncheckedCreateWithoutCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1246,46 +1246,46 @@ export type DerivativeUncheckedCreateWithoutCreatorInput = {
 	durationMs?: number | null;
 };
 
-export type DerivativeCreateOrConnectWithoutCreatorInput = {
+export type DerivativeCreateOrConnectWithoutCreatedByInput = {
 	where: Prisma.DerivativeWhereUniqueInput;
 	create: Prisma.XOR<
-		Prisma.DerivativeCreateWithoutCreatorInput,
-		Prisma.DerivativeUncheckedCreateWithoutCreatorInput
+		Prisma.DerivativeCreateWithoutCreatedByInput,
+		Prisma.DerivativeUncheckedCreateWithoutCreatedByInput
 	>;
 };
 
-export type DerivativeCreateManyCreatorInputEnvelope = {
+export type DerivativeCreateManyCreatedByInputEnvelope = {
 	data:
-		| Prisma.DerivativeCreateManyCreatorInput
-		| Prisma.DerivativeCreateManyCreatorInput[];
+		| Prisma.DerivativeCreateManyCreatedByInput
+		| Prisma.DerivativeCreateManyCreatedByInput[];
 	skipDuplicates?: boolean;
 };
 
-export type DerivativeUpsertWithWhereUniqueWithoutCreatorInput = {
+export type DerivativeUpsertWithWhereUniqueWithoutCreatedByInput = {
 	where: Prisma.DerivativeWhereUniqueInput;
 	update: Prisma.XOR<
-		Prisma.DerivativeUpdateWithoutCreatorInput,
-		Prisma.DerivativeUncheckedUpdateWithoutCreatorInput
+		Prisma.DerivativeUpdateWithoutCreatedByInput,
+		Prisma.DerivativeUncheckedUpdateWithoutCreatedByInput
 	>;
 	create: Prisma.XOR<
-		Prisma.DerivativeCreateWithoutCreatorInput,
-		Prisma.DerivativeUncheckedCreateWithoutCreatorInput
+		Prisma.DerivativeCreateWithoutCreatedByInput,
+		Prisma.DerivativeUncheckedCreateWithoutCreatedByInput
 	>;
 };
 
-export type DerivativeUpdateWithWhereUniqueWithoutCreatorInput = {
+export type DerivativeUpdateWithWhereUniqueWithoutCreatedByInput = {
 	where: Prisma.DerivativeWhereUniqueInput;
 	data: Prisma.XOR<
-		Prisma.DerivativeUpdateWithoutCreatorInput,
-		Prisma.DerivativeUncheckedUpdateWithoutCreatorInput
+		Prisma.DerivativeUpdateWithoutCreatedByInput,
+		Prisma.DerivativeUncheckedUpdateWithoutCreatedByInput
 	>;
 };
 
-export type DerivativeUpdateManyWithWhereWithoutCreatorInput = {
+export type DerivativeUpdateManyWithWhereWithoutCreatedByInput = {
 	where: Prisma.DerivativeScalarWhereInput;
 	data: Prisma.XOR<
 		Prisma.DerivativeUpdateManyMutationInput,
-		Prisma.DerivativeUncheckedUpdateManyWithoutCreatorInput
+		Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByInput
 	>;
 };
 
@@ -1295,7 +1295,7 @@ export type DerivativeCreateManyAssetInput = {
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	spaceId: string;
-	creatorId?: string | null;
+	createdById?: string | null;
 	kind: $Enums.DerivativeKind;
 	profile?: string;
 	storageKey: string;
@@ -1330,7 +1330,7 @@ export type DerivativeUpdateWithoutAssetInput = {
 	height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
 	durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
 	space?: Prisma.SpaceUpdateOneRequiredWithoutDerivativesNestedInput;
-	creator?: Prisma.UserUpdateOneWithoutCreatedDerivativesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedDerivativesNestedInput;
 };
 
 export type DerivativeUncheckedUpdateWithoutAssetInput = {
@@ -1347,7 +1347,7 @@ export type DerivativeUncheckedUpdateWithoutAssetInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	kind?:
 		| Prisma.EnumDerivativeKindFieldUpdateOperationsInput
 		| $Enums.DerivativeKind;
@@ -1374,7 +1374,7 @@ export type DerivativeUncheckedUpdateManyWithoutAssetInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	kind?:
 		| Prisma.EnumDerivativeKindFieldUpdateOperationsInput
 		| $Enums.DerivativeKind;
@@ -1392,7 +1392,7 @@ export type DerivativeCreateManySpaceInput = {
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
-	creatorId?: string | null;
+	createdById?: string | null;
 	assetId: string;
 	kind: $Enums.DerivativeKind;
 	profile?: string;
@@ -1427,7 +1427,7 @@ export type DerivativeUpdateWithoutSpaceInput = {
 	width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
 	height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
 	durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
-	creator?: Prisma.UserUpdateOneWithoutCreatedDerivativesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedDerivativesNestedInput;
 	asset?: Prisma.AssetUpdateOneRequiredWithoutDerivativesNestedInput;
 };
 
@@ -1444,7 +1444,7 @@ export type DerivativeUncheckedUpdateWithoutSpaceInput = {
 		| Date
 		| string
 		| null;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	assetId?: Prisma.StringFieldUpdateOperationsInput | string;
 	kind?:
 		| Prisma.EnumDerivativeKindFieldUpdateOperationsInput
@@ -1471,7 +1471,7 @@ export type DerivativeUncheckedUpdateManyWithoutSpaceInput = {
 		| Date
 		| string
 		| null;
-	creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	assetId?: Prisma.StringFieldUpdateOperationsInput | string;
 	kind?:
 		| Prisma.EnumDerivativeKindFieldUpdateOperationsInput
@@ -1485,7 +1485,7 @@ export type DerivativeUncheckedUpdateManyWithoutSpaceInput = {
 	durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
 };
 
-export type DerivativeCreateManyCreatorInput = {
+export type DerivativeCreateManyCreatedByInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1502,7 +1502,7 @@ export type DerivativeCreateManyCreatorInput = {
 	durationMs?: number | null;
 };
 
-export type DerivativeUpdateWithoutCreatorInput = {
+export type DerivativeUpdateWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1529,7 +1529,7 @@ export type DerivativeUpdateWithoutCreatorInput = {
 	asset?: Prisma.AssetUpdateOneRequiredWithoutDerivativesNestedInput;
 };
 
-export type DerivativeUncheckedUpdateWithoutCreatorInput = {
+export type DerivativeUncheckedUpdateWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1556,7 +1556,7 @@ export type DerivativeUncheckedUpdateWithoutCreatorInput = {
 	durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
 };
 
-export type DerivativeUncheckedUpdateManyWithoutCreatorInput = {
+export type DerivativeUncheckedUpdateManyWithoutCreatedByInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1593,7 +1593,7 @@ export type DerivativeSelect<
 		updatedAt?: boolean;
 		removedAt?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		assetId?: boolean;
 		kind?: boolean;
 		profile?: boolean;
@@ -1604,7 +1604,7 @@ export type DerivativeSelect<
 		height?: boolean;
 		durationMs?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Derivative$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Derivative$createdByArgs<ExtArgs>;
 		asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>;
 	},
 	ExtArgs["result"]["derivative"]
@@ -1620,7 +1620,7 @@ export type DerivativeSelectCreateManyAndReturn<
 		updatedAt?: boolean;
 		removedAt?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		assetId?: boolean;
 		kind?: boolean;
 		profile?: boolean;
@@ -1631,7 +1631,7 @@ export type DerivativeSelectCreateManyAndReturn<
 		height?: boolean;
 		durationMs?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Derivative$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Derivative$createdByArgs<ExtArgs>;
 		asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>;
 	},
 	ExtArgs["result"]["derivative"]
@@ -1647,7 +1647,7 @@ export type DerivativeSelectUpdateManyAndReturn<
 		updatedAt?: boolean;
 		removedAt?: boolean;
 		spaceId?: boolean;
-		creatorId?: boolean;
+		createdById?: boolean;
 		assetId?: boolean;
 		kind?: boolean;
 		profile?: boolean;
@@ -1658,7 +1658,7 @@ export type DerivativeSelectUpdateManyAndReturn<
 		height?: boolean;
 		durationMs?: boolean;
 		space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-		creator?: boolean | Prisma.Derivative$creatorArgs<ExtArgs>;
+		createdBy?: boolean | Prisma.Derivative$createdByArgs<ExtArgs>;
 		asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>;
 	},
 	ExtArgs["result"]["derivative"]
@@ -1670,7 +1670,7 @@ export type DerivativeSelectScalar = {
 	updatedAt?: boolean;
 	removedAt?: boolean;
 	spaceId?: boolean;
-	creatorId?: boolean;
+	createdById?: boolean;
 	assetId?: boolean;
 	kind?: boolean;
 	profile?: boolean;
@@ -1691,7 +1691,7 @@ export type DerivativeOmit<
 	| "updatedAt"
 	| "removedAt"
 	| "spaceId"
-	| "creatorId"
+	| "createdById"
 	| "assetId"
 	| "kind"
 	| "profile"
@@ -1708,7 +1708,7 @@ export type DerivativeInclude<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Derivative$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Derivative$createdByArgs<ExtArgs>;
 	asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>;
 };
 export type DerivativeIncludeCreateManyAndReturn<
@@ -1716,7 +1716,7 @@ export type DerivativeIncludeCreateManyAndReturn<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Derivative$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Derivative$createdByArgs<ExtArgs>;
 	asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>;
 };
 export type DerivativeIncludeUpdateManyAndReturn<
@@ -1724,7 +1724,7 @@ export type DerivativeIncludeUpdateManyAndReturn<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
 	space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>;
-	creator?: boolean | Prisma.Derivative$creatorArgs<ExtArgs>;
+	createdBy?: boolean | Prisma.Derivative$createdByArgs<ExtArgs>;
 	asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>;
 };
 
@@ -1735,7 +1735,7 @@ export type $DerivativePayload<
 	name: "Derivative";
 	objects: {
 		space: Prisma.$SpacePayload<ExtArgs>;
-		creator: Prisma.$UserPayload<ExtArgs> | null;
+		createdBy: Prisma.$UserPayload<ExtArgs> | null;
 		asset: Prisma.$AssetPayload<ExtArgs>;
 	};
 	scalars: runtime.Types.Extensions.GetPayloadResult<
@@ -1748,7 +1748,7 @@ export type $DerivativePayload<
 			 * @displayName 소속 Space
 			 */
 			spaceId: string;
-			creatorId: string | null;
+			createdById: string | null;
 			/**
 			 * @displayName 원본 Asset ID
 			 */
@@ -2349,8 +2349,8 @@ export interface Prisma__DerivativeClient<
 		ExtArgs,
 		GlobalOmitOptions
 	>;
-	creator<T extends Prisma.Derivative$creatorArgs<ExtArgs> = {}>(
-		args?: Prisma.Subset<T, Prisma.Derivative$creatorArgs<ExtArgs>>,
+	createdBy<T extends Prisma.Derivative$createdByArgs<ExtArgs> = {}>(
+		args?: Prisma.Subset<T, Prisma.Derivative$createdByArgs<ExtArgs>>,
 	): Prisma.Prisma__UserClient<
 		runtime.Types.Result.GetResult<
 			Prisma.$UserPayload<ExtArgs>,
@@ -2423,7 +2423,7 @@ export interface DerivativeFieldRefs {
 	readonly updatedAt: Prisma.FieldRef<"Derivative", "DateTime">;
 	readonly removedAt: Prisma.FieldRef<"Derivative", "DateTime">;
 	readonly spaceId: Prisma.FieldRef<"Derivative", "String">;
-	readonly creatorId: Prisma.FieldRef<"Derivative", "String">;
+	readonly createdById: Prisma.FieldRef<"Derivative", "String">;
 	readonly assetId: Prisma.FieldRef<"Derivative", "String">;
 	readonly kind: Prisma.FieldRef<"Derivative", "DerivativeKind">;
 	readonly profile: Prisma.FieldRef<"Derivative", "String">;
@@ -2900,9 +2900,9 @@ export type DerivativeDeleteManyArgs<
 };
 
 /**
- * Derivative.creator
+ * Derivative.createdBy
  */
-export type Derivative$creatorArgs<
+export type Derivative$createdByArgs<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {

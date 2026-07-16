@@ -12,16 +12,16 @@
 // @materialized-by: Exercise
 /// @displayName 태스크
 model Task {
-  id         String     @id @default(uuid())
-  createdAt  DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt  DateTime?  @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt  DateTime?  @map("removed_at") @db.Timestamptz(6)
-  spaceId    String     @map("space_id")
-  creatorId  String?    @map("creator_id")
-  space      Space      @relation(fields: [spaceId], references: [id], onDelete: Restrict)
-  creator    User?      @relation(fields: [creatorId], references: [id], onDelete: SetNull)
-  activities Activity[]
-  exercise   Exercise?
+  id          String     @id @default(uuid())
+  createdAt   DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime?  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime?  @map("removed_at") @db.Timestamptz(6)
+  spaceId     String     @map("space_id")
+  createdById String?    @map("created_by_id")
+  space       Space      @relation(fields: [spaceId], references: [id], onDelete: Restrict)
+  createdBy   User?      @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  activities  Activity[]
+  exercise    Exercise?
 
   @@index([spaceId])
   @@map("tasks")

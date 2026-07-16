@@ -57,7 +57,7 @@ export async function createInquiryDomainData(
 			const assignee = inquiryData.assigneeEmail
 				? userByEmail.get(inquiryData.assigneeEmail)
 				: null;
-			const creatorId = assignee?.id ?? customer?.id;
+			const createdById = assignee?.id ?? customer?.id;
 
 			const now = new Date();
 			const slaResponseDue = new Date(now.getTime() + 24 * 60 * 60 * 1000);
@@ -66,7 +66,7 @@ export async function createInquiryDomainData(
 			const inquiry = await prisma.inquiry.create({
 				data: {
 					spaceId: ground.company.spaceId,
-					creatorId,
+					createdById,
 					inquiryNumber: inquiryData.inquiryNumber,
 					title: inquiryData.title,
 					category: inquiryData.category as
@@ -142,13 +142,13 @@ export async function createInquiryDomainData(
 		const inquiryInfo = inquiryByNumber.get(threadData.inquiryNumber);
 		if (!inquiryInfo) continue;
 
-		const creator = userByEmail.get(threadData.creatorEmail);
-		if (!creator) continue;
+		const createdBy = userByEmail.get(threadData.createdByEmail);
+		if (!createdBy) continue;
 
 		const existing = await prisma.inquiryThread.findFirst({
 			where: {
 				inquiryId: inquiryInfo.id,
-				createdBy: creator.id,
+				createdById: createdBy.id,
 			},
 		});
 
@@ -158,7 +158,7 @@ export async function createInquiryDomainData(
 					inquiryId: inquiryInfo.id,
 					title: threadData.title,
 					status: threadData.status as "ACTIVE" | "RESOLVED" | "CLOSED",
-					createdBy: creator.id,
+					createdById: createdBy.id,
 				},
 			});
 

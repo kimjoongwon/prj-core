@@ -10,7 +10,7 @@ export class UploadAssetUseCase {
 		return this.assetService.uploadAsset(
 			command,
 			command.file,
-			command.creatorId,
+			command.createdById,
 		);
 	}
 }

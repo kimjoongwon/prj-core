@@ -140,21 +140,21 @@ export async function createTimelineSessionExerciseDomainData(
 	const timelineGroundNames = [
 		...new Set(timelineSeedData.map((item) => item.groundName)),
 	];
-	const creatorEmails = [
+	const createdByEmails = [
 		...new Set([
-			...timelineSeedData.map((item) => item.creatorEmail),
+			...timelineSeedData.map((item) => item.createdByEmail),
 			...sessionLoadProfileSeedData.map((item) => item.userEmail),
 		]),
 	];
 
 	// Load reusable relations once up front; the rest of the function mostly
 	// works from these in-memory maps.
-	const [grounds, creators, fallbackUser] = await Promise.all([
+	const [grounds, createdByUsers, fallbackUser] = await Promise.all([
 		prisma.ground.findMany({
 			where: { name: { in: timelineGroundNames } },
 			include: { company: true },
 		}),
-		prisma.user.findMany({ where: { email: { in: creatorEmails } } }),
+		prisma.user.findMany({ where: { email: { in: createdByEmails } } }),
 		prisma.user.findFirst({ where: { email: "admin@plate.com" } }),
 	]);
 
@@ -163,14 +163,16 @@ export async function createTimelineSessionExerciseDomainData(
 	}
 
 	const groundByName = new Map(grounds.map((ground) => [ground.name, ground]));
-	const creatorByEmail = new Map(creators.map((user) => [user.email, user]));
+	const userByCreatedByEmail = new Map(
+		createdByUsers.map((user) => [user.email, user]),
+	);
 	const loadProfileByEmail = new Map(
 		sessionLoadProfileSeedData.map((profile) => [profile.userEmail, profile]),
 	);
 
 	const timelinesById = new Map<
 		string,
-		{ id: string; groundName: string; creatorId: string | null }
+		{ id: string; groundName: string; createdById: string | null }
 	>();
 	let timelineCreated = 0;
 	let timelineUpdated = 0;
@@ -182,7 +184,7 @@ export async function createTimelineSessionExerciseDomainData(
 			continue;
 		}
 
-		const creator = creatorByEmail.get(timelineData.creatorEmail);
+		const createdBy = userByCreatedByEmail.get(timelineData.createdByEmail);
 		const spaceId = ground.company.spaceId;
 		const existingTimeline = await prisma.timeline.findUnique({
 			where: { id: timelineData.id },
@@ -194,21 +196,21 @@ export async function createTimelineSessionExerciseDomainData(
 				name: timelineData.name,
 				description: timelineData.description,
 				spaceId,
-				creatorId: creator?.id ?? null,
+				createdById: createdBy?.id ?? null,
 			},
 			create: {
 				id: timelineData.id,
 				name: timelineData.name,
 				description: timelineData.description,
 				spaceId,
-				creatorId: creator?.id,
+				createdById: createdBy?.id,
 			},
 		});
 
 		timelinesById.set(timelineData.id, {
 			id: timelineData.id,
 			groundName: timelineData.groundName,
-			creatorId: creator?.id ?? null,
+			createdById: createdBy?.id ?? null,
 		});
 
 		if (existingTimeline) {
@@ -228,11 +230,12 @@ export async function createTimelineSessionExerciseDomainData(
 		const ground = groundByName.get(groundName);
 		if (!ground) continue;
 
-		const timelineCreatorEmail = timelineSeedData.find(
+		const timelineCreatedByEmail = timelineSeedData.find(
 			(item) => item.groundName === groundName,
-		)?.creatorEmail;
-		const creatorId = timelineCreatorEmail
-			? (creatorByEmail.get(timelineCreatorEmail)?.id ?? fallbackUser.id)
+		)?.createdByEmail;
+		const createdById = timelineCreatedByEmail
+			? (userByCreatedByEmail.get(timelineCreatedByEmail)?.id ??
+				fallbackUser.id)
 			: fallbackUser.id;
 		const spaceId = ground.company.spaceId;
 
@@ -259,12 +262,12 @@ export async function createTimelineSessionExerciseDomainData(
 				where: { id: taskId },
 				update: {
 					spaceId,
-					creatorId: creatorId ?? null,
+					createdById: createdById ?? null,
 				},
 				create: {
 					id: taskId,
 					spaceId,
-					creatorId,
+					createdById,
 				},
 			});
 
@@ -338,11 +341,11 @@ export async function createTimelineSessionExerciseDomainData(
 		const taskIds = taskIdsByGround.get(groundName) ?? [];
 		if (!ground || taskIds.length < 4) continue;
 
-		const creatorEmail = timelineSeedData.find(
+		const createdByEmail = timelineSeedData.find(
 			(item) => item.groundName === groundName,
-		)?.creatorEmail;
-		const creatorId = creatorEmail
-			? (creatorByEmail.get(creatorEmail)?.id ?? fallbackUser.id)
+		)?.createdByEmail;
+		const createdById = createdByEmail
+			? (userByCreatedByEmail.get(createdByEmail)?.id ?? fallbackUser.id)
 			: fallbackUser.id;
 		const spaceId = ground.company.spaceId;
 
@@ -366,14 +369,14 @@ export async function createTimelineSessionExerciseDomainData(
 				where: { id: routineId },
 				update: {
 					spaceId,
-					creatorId: creatorId ?? null,
+					createdById: createdById ?? null,
 					name: `${template.name} 루틴 ${idx + 1}`,
 					label: `${groundName} ${template.level}`,
 				},
 				create: {
 					id: routineId,
 					spaceId,
-					creatorId,
+					createdById,
 					name: `${template.name} 루틴 ${idx + 1}`,
 					label: `${groundName} ${template.level}`,
 				},
@@ -471,7 +474,7 @@ export async function createTimelineSessionExerciseDomainData(
 		const timeline = timelinesById.get(timelineMeta.id);
 		if (!timeline) continue;
 
-		const loadProfile = loadProfileByEmail.get(timelineMeta.creatorEmail);
+		const loadProfile = loadProfileByEmail.get(timelineMeta.createdByEmail);
 		const baseCount =
 			timelineMeta.seasonTag === "recent"
 				? 24
@@ -607,7 +610,7 @@ export async function createTimelineSessionExerciseDomainData(
 					update: {
 						routineId: pickedRoutine.id,
 						sessionId,
-						instructorId: timeline.creatorId ?? fallbackUser.id,
+						instructorId: timeline.createdById ?? fallbackUser.id,
 						capacity: programCapacity,
 						name: `${template.name} ${template.phaseWeek} 프로그램`,
 						level: pickedRoutine.level,
@@ -616,7 +619,7 @@ export async function createTimelineSessionExerciseDomainData(
 						id: programId,
 						routineId: pickedRoutine.id,
 						sessionId,
-						instructorId: timeline.creatorId ?? fallbackUser.id,
+						instructorId: timeline.createdById ?? fallbackUser.id,
 						capacity: programCapacity,
 						name: `${template.name} ${template.phaseWeek} 프로그램`,
 						level: pickedRoutine.level,
