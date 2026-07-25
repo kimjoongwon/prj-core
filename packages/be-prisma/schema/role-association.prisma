@@ -1,0 +1,16 @@
+// @data-type: REFERENCE
+// @description: Role과 Group을 연결하는 그룹 링크
+/// @displayName 역할 그룹
+model RoleAssociation {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+  roleId    String    @unique @map("role_id")
+  groupId   String    @map("group_id")
+  group     Group     @relation(fields: [groupId], references: [id])
+  role      Role      @relation(fields: [roleId], references: [id])
+
+  @@unique([groupId, roleId])
+  @@map("role_associations")
+}

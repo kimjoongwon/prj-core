@@ -1323,6 +1323,7 @@ function buildMergePlan({ repoRoot, branch, baseRef, baseBranch }) {
   ).length;
   const hasSchemaChange = changedFiles.some(
     (file) =>
+      (file.startsWith("packages/be-prisma/schema/") && file.endsWith(".prisma")) ||
       file.includes("schema.prisma") ||
       file.includes("/migrations/") ||
       file.includes("/src/reference-data/definitions/") ||

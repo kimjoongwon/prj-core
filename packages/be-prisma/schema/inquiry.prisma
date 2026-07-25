@@ -1,0 +1,82 @@
+// @data-type: TRANSACTION
+// @aggregate-root: true
+// @description: 옴니채널 고객 문의를 관리하는 핵심 엔티티
+/// @displayName 문의
+model Inquiry {
+  id                    String               @id @default(uuid())
+  /// @displayName 생성 일시
+  createdAt             DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  /// @displayName 수정 일시
+  updatedAt             DateTime?            @updatedAt @map("updated_at") @db.Timestamptz(6)
+  /// @displayName 삭제 일시
+  removedAt             DateTime?            @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 소속 공간 ID
+  spaceId               String               @map("space_id")
+  /// @displayName 생성자 ID
+  createdById           String?              @map("created_by_id")
+  /// @displayName 문의 번호
+  inquiryNumber         String               @unique @map("inquiry_number")
+  /// @displayName 제목
+  title                 String
+  /// @displayName 카테고리
+  category              InquiryCategory
+  /// @displayName 채널
+  channel               InquiryChannel
+  /// @displayName 접수 유형
+  source                InquirySource        @default(ONLINE)
+  /// @displayName 상태
+  status                InquiryStatus        @default(NEW)
+  /// @displayName 우선순위
+  priority              InquiryPriority      @default(NORMAL)
+  /// @displayName 고객 ID
+  customerId            String?              @map("customer_id")
+  /// @displayName 담당자 ID
+  assigneeId            String?              @map("assignee_id")
+  /// @displayName 첫 응답 일시
+  firstResponseAt       DateTime?            @map("first_response_at") @db.Timestamptz(6)
+  /// @displayName 해결 일시
+  resolvedAt            DateTime?            @map("resolved_at") @db.Timestamptz(6)
+  /// @displayName 종료 일시
+  closedAt              DateTime?            @map("closed_at") @db.Timestamptz(6)
+  /// @displayName SLA 응답 기한
+  slaResponseDue        DateTime?            @map("sla_response_due") @db.Timestamptz(6)
+  /// @displayName SLA 해결 기한
+  slaResolveDue         DateTime?            @map("sla_resolve_due") @db.Timestamptz(6)
+  /// @displayName SLA 응답 위반 여부
+  isSlaResponseBreached Boolean              @default(false) @map("is_sla_response_breached")
+  /// @displayName SLA 해결 위반 여부
+  isSlaResolveBreached  Boolean              @default(false) @map("is_sla_resolve_breached")
+  /// @displayName 감정 유형
+  sentiment             SentimentType?
+  /// @displayName 감정 점수
+  sentimentScore        Float?               @map("sentiment_score")
+  /// @displayName AI 자동 해결 시도 여부
+  aiResolutionAttempted Boolean              @default(false) @map("ai_resolution_attempted")
+  /// @displayName AI 자동 해결 여부
+  aiResolved            Boolean              @default(false) @map("ai_resolved")
+  /// @displayName 실시간 채팅 활성화 여부
+  isRealtimeChat        Boolean              @default(false) @map("is_realtime_chat")
+  /// @displayName 마지막 메시지 일시
+  lastMessageAt         DateTime?            @map("last_message_at") @db.Timestamptz(6)
+  /// @displayName 읽지 않은 메시지 수
+  unreadCount           Int                  @default(0) @map("unread_count")
+  /// @displayName 추가 메타데이터
+  metadata              Json?
+  space                 Space                @relation(fields: [spaceId], references: [id], onDelete: Restrict)
+  createdBy             User?                @relation("InquiryCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  customer              User?                @relation("InquiryCustomer", fields: [customerId], references: [id])
+  assignee              User?                @relation("InquiryAssignee", fields: [assigneeId], references: [id])
+  threads               InquiryThread[]
+  messages              InquiryMessage[]
+  participants          InquiryParticipant[]
+  tags                  InquiryTag[]
+  sentimentAnalysis     SentimentAnalysis?
+  aiAgentLogs           AIAgentLog[]
+
+  @@index([spaceId])
+  @@index([status])
+  @@index([assigneeId])
+  @@index([customerId])
+  @@index([spaceId, status])
+  @@map("inquiries")
+}

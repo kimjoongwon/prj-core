@@ -64,8 +64,8 @@ Nest CQRS 기반 UseCase handler를 생성하는 역할입니다. Command/Query 
 - pagination처럼 여러 usecase domain이 공유하는 계약/빌더를 `packages/be-usecase/src/common`에 만들지 않습니다.
 - Handler class 이름은 `{Verb}{Domain}UseCase` 형태를 기본으로 합니다.
 - Handler는 application/usecase layer입니다. 작업 흐름 조율을 수행하고 도메인 규칙은 `@cocrepo/aggregate` AggregateRootService 또는 AggregateRootEntity에 위임합니다.
-- 여러 aggregate를 조합하는 흐름은 Prisma schema의 `@usecase-anchor: true` owner를 기준점으로 삼을 수 있습니다.
-- `@usecase-anchor: true`는 application 흐름의 기준점일 뿐 도메인 소유권이 아니므로, 다른 aggregate의 규칙이나 persistence 입력을 해당 anchor UseCase 안에 흡수하지 않습니다.
+- 여러 aggregate를 조합하는 흐름은 승인된 spec의 UseCase 인벤토리와 각 Aggregate Root 경계를 기준으로 설계합니다.
+- 다른 aggregate의 규칙이나 persistence 입력을 조합 UseCase 안에 흡수하지 않습니다.
 - CommandHandler는 transaction-critical 흐름만 직접 의존합니다. 실패해도 원 command 성공을 막지 않아야 하는 후속 작업은 EventBus로 분리합니다.
 - EventHandler는 email, audit, notification, cache invalidation, external notification 같은 side effect를 담당합니다.
 - EventHandler 안에서 CommandBus를 주입하거나 execute하지 않습니다. Event 이후 다른 UseCase/Command를 실행해야 하면 Saga로 분리합니다.
@@ -128,7 +128,7 @@ export * from "./confirm-reservation.usecase";
 - [ ] Event 후속 side effect는 `@EventsHandler`, Event → Command 흐름은 `@Saga`로 분리
 - [ ] EventHandler 안에서 CommandBus를 호출하지 않음
 - [ ] Handler가 workflow 조율만 수행하고 도메인 규칙은 Aggregate/Service/Client로 위임하는지 확인
-- [ ] cross-aggregate 흐름이면 schema의 `@usecase-anchor: true` 기준점을 확인하고, 소유권 경계를 넘는 규칙을 UseCase에 흡수하지 않았는지 확인
+- [ ] cross-aggregate 흐름이면 승인된 spec과 Aggregate Root 경계를 확인하고, 소유권 경계를 넘는 규칙을 UseCase에 흡수하지 않았는지 확인
 - [ ] Prisma 직접 호출 없음
 - [ ] DTO import 없음
 - [ ] Command input을 Aggregate/Service/Client input으로 그대로 위임하거나 필요한 경우에만 별도 mapper/input 파일에서 변환함

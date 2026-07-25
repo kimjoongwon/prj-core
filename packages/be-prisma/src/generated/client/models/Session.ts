@@ -599,16 +599,6 @@ export type SessionScalarRelationFilter = {
 	isNot?: Prisma.SessionWhereInput;
 };
 
-export type SessionListRelationFilter = {
-	every?: Prisma.SessionWhereInput;
-	some?: Prisma.SessionWhereInput;
-	none?: Prisma.SessionWhereInput;
-};
-
-export type SessionOrderByRelationAggregateInput = {
-	_count?: Prisma.SortOrder;
-};
-
 export type SessionCountOrderByAggregateInput = {
 	id?: Prisma.SortOrder;
 	createdAt?: Prisma.SortOrder;
@@ -654,6 +644,42 @@ export type SessionMinOrderByAggregateInput = {
 	description?: Prisma.SortOrder;
 };
 
+export type SessionListRelationFilter = {
+	every?: Prisma.SessionWhereInput;
+	some?: Prisma.SessionWhereInput;
+	none?: Prisma.SessionWhereInput;
+};
+
+export type SessionOrderByRelationAggregateInput = {
+	_count?: Prisma.SortOrder;
+};
+
+export type SessionCreateNestedOneWithoutProgramsInput = {
+	create?: Prisma.XOR<
+		Prisma.SessionCreateWithoutProgramsInput,
+		Prisma.SessionUncheckedCreateWithoutProgramsInput
+	>;
+	connectOrCreate?: Prisma.SessionCreateOrConnectWithoutProgramsInput;
+	connect?: Prisma.SessionWhereUniqueInput;
+};
+
+export type SessionUpdateOneRequiredWithoutProgramsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.SessionCreateWithoutProgramsInput,
+		Prisma.SessionUncheckedCreateWithoutProgramsInput
+	>;
+	connectOrCreate?: Prisma.SessionCreateOrConnectWithoutProgramsInput;
+	upsert?: Prisma.SessionUpsertWithoutProgramsInput;
+	connect?: Prisma.SessionWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.SessionUpdateToOneWithWhereWithoutProgramsInput,
+			Prisma.SessionUpdateWithoutProgramsInput
+		>,
+		Prisma.SessionUncheckedUpdateWithoutProgramsInput
+	>;
+};
+
 export type SessionCreateNestedOneWithoutReservationsInput = {
 	create?: Prisma.XOR<
 		Prisma.SessionCreateWithoutReservationsInput,
@@ -678,6 +704,18 @@ export type SessionUpdateOneRequiredWithoutReservationsNestedInput = {
 		>,
 		Prisma.SessionUncheckedUpdateWithoutReservationsInput
 	>;
+};
+
+export type EnumSessionTypesFieldUpdateOperationsInput = {
+	set?: $Enums.SessionTypes;
+};
+
+export type NullableEnumRepeatCycleTypesFieldUpdateOperationsInput = {
+	set?: $Enums.RepeatCycleTypes | null;
+};
+
+export type NullableEnumRecurringDayOfWeekFieldUpdateOperationsInput = {
+	set?: $Enums.RecurringDayOfWeek | null;
 };
 
 export type SessionCreateNestedManyWithoutTimelineInput = {
@@ -774,42 +812,144 @@ export type SessionUncheckedUpdateManyWithoutTimelineNestedInput = {
 		| Prisma.SessionScalarWhereInput[];
 };
 
-export type EnumSessionTypesFieldUpdateOperationsInput = {
-	set?: $Enums.SessionTypes;
+export type SessionCreateWithoutProgramsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	type?: $Enums.SessionTypes;
+	repeatCycleType?: $Enums.RepeatCycleTypes | null;
+	startDateTime?: Date | string | null;
+	endDateTime?: Date | string | null;
+	recurringDayOfWeek?: $Enums.RecurringDayOfWeek | null;
+	name: string;
+	description?: string | null;
+	timeline: Prisma.TimelineCreateNestedOneWithoutSessionsInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutSessionInput;
 };
 
-export type NullableEnumRepeatCycleTypesFieldUpdateOperationsInput = {
-	set?: $Enums.RepeatCycleTypes | null;
+export type SessionUncheckedCreateWithoutProgramsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	type?: $Enums.SessionTypes;
+	repeatCycleType?: $Enums.RepeatCycleTypes | null;
+	startDateTime?: Date | string | null;
+	endDateTime?: Date | string | null;
+	recurringDayOfWeek?: $Enums.RecurringDayOfWeek | null;
+	timelineId: string;
+	name: string;
+	description?: string | null;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSessionInput;
 };
 
-export type NullableEnumRecurringDayOfWeekFieldUpdateOperationsInput = {
-	set?: $Enums.RecurringDayOfWeek | null;
-};
-
-export type SessionCreateNestedOneWithoutProgramsInput = {
-	create?: Prisma.XOR<
+export type SessionCreateOrConnectWithoutProgramsInput = {
+	where: Prisma.SessionWhereUniqueInput;
+	create: Prisma.XOR<
 		Prisma.SessionCreateWithoutProgramsInput,
 		Prisma.SessionUncheckedCreateWithoutProgramsInput
 	>;
-	connectOrCreate?: Prisma.SessionCreateOrConnectWithoutProgramsInput;
-	connect?: Prisma.SessionWhereUniqueInput;
 };
 
-export type SessionUpdateOneRequiredWithoutProgramsNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.SessionCreateWithoutProgramsInput,
-		Prisma.SessionUncheckedCreateWithoutProgramsInput
-	>;
-	connectOrCreate?: Prisma.SessionCreateOrConnectWithoutProgramsInput;
-	upsert?: Prisma.SessionUpsertWithoutProgramsInput;
-	connect?: Prisma.SessionWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.SessionUpdateToOneWithWhereWithoutProgramsInput,
-			Prisma.SessionUpdateWithoutProgramsInput
-		>,
+export type SessionUpsertWithoutProgramsInput = {
+	update: Prisma.XOR<
+		Prisma.SessionUpdateWithoutProgramsInput,
 		Prisma.SessionUncheckedUpdateWithoutProgramsInput
 	>;
+	create: Prisma.XOR<
+		Prisma.SessionCreateWithoutProgramsInput,
+		Prisma.SessionUncheckedCreateWithoutProgramsInput
+	>;
+	where?: Prisma.SessionWhereInput;
+};
+
+export type SessionUpdateToOneWithWhereWithoutProgramsInput = {
+	where?: Prisma.SessionWhereInput;
+	data: Prisma.XOR<
+		Prisma.SessionUpdateWithoutProgramsInput,
+		Prisma.SessionUncheckedUpdateWithoutProgramsInput
+	>;
+};
+
+export type SessionUpdateWithoutProgramsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	type?:
+		| Prisma.EnumSessionTypesFieldUpdateOperationsInput
+		| $Enums.SessionTypes;
+	repeatCycleType?:
+		| Prisma.NullableEnumRepeatCycleTypesFieldUpdateOperationsInput
+		| $Enums.RepeatCycleTypes
+		| null;
+	startDateTime?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	endDateTime?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	recurringDayOfWeek?:
+		| Prisma.NullableEnumRecurringDayOfWeekFieldUpdateOperationsInput
+		| $Enums.RecurringDayOfWeek
+		| null;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	timeline?: Prisma.TimelineUpdateOneRequiredWithoutSessionsNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutSessionNestedInput;
+};
+
+export type SessionUncheckedUpdateWithoutProgramsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	type?:
+		| Prisma.EnumSessionTypesFieldUpdateOperationsInput
+		| $Enums.SessionTypes;
+	repeatCycleType?:
+		| Prisma.NullableEnumRepeatCycleTypesFieldUpdateOperationsInput
+		| $Enums.RepeatCycleTypes
+		| null;
+	startDateTime?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	endDateTime?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	recurringDayOfWeek?:
+		| Prisma.NullableEnumRecurringDayOfWeekFieldUpdateOperationsInput
+		| $Enums.RecurringDayOfWeek
+		| null;
+	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSessionNestedInput;
 };
 
 export type SessionCreateWithoutReservationsInput = {
@@ -1053,146 +1193,6 @@ export type SessionScalarWhereInput = {
 	timelineId?: Prisma.StringFilter<"Session"> | string;
 	name?: Prisma.StringFilter<"Session"> | string;
 	description?: Prisma.StringNullableFilter<"Session"> | string | null;
-};
-
-export type SessionCreateWithoutProgramsInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	type?: $Enums.SessionTypes;
-	repeatCycleType?: $Enums.RepeatCycleTypes | null;
-	startDateTime?: Date | string | null;
-	endDateTime?: Date | string | null;
-	recurringDayOfWeek?: $Enums.RecurringDayOfWeek | null;
-	name: string;
-	description?: string | null;
-	timeline: Prisma.TimelineCreateNestedOneWithoutSessionsInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutSessionInput;
-};
-
-export type SessionUncheckedCreateWithoutProgramsInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	type?: $Enums.SessionTypes;
-	repeatCycleType?: $Enums.RepeatCycleTypes | null;
-	startDateTime?: Date | string | null;
-	endDateTime?: Date | string | null;
-	recurringDayOfWeek?: $Enums.RecurringDayOfWeek | null;
-	timelineId: string;
-	name: string;
-	description?: string | null;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSessionInput;
-};
-
-export type SessionCreateOrConnectWithoutProgramsInput = {
-	where: Prisma.SessionWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.SessionCreateWithoutProgramsInput,
-		Prisma.SessionUncheckedCreateWithoutProgramsInput
-	>;
-};
-
-export type SessionUpsertWithoutProgramsInput = {
-	update: Prisma.XOR<
-		Prisma.SessionUpdateWithoutProgramsInput,
-		Prisma.SessionUncheckedUpdateWithoutProgramsInput
-	>;
-	create: Prisma.XOR<
-		Prisma.SessionCreateWithoutProgramsInput,
-		Prisma.SessionUncheckedCreateWithoutProgramsInput
-	>;
-	where?: Prisma.SessionWhereInput;
-};
-
-export type SessionUpdateToOneWithWhereWithoutProgramsInput = {
-	where?: Prisma.SessionWhereInput;
-	data: Prisma.XOR<
-		Prisma.SessionUpdateWithoutProgramsInput,
-		Prisma.SessionUncheckedUpdateWithoutProgramsInput
-	>;
-};
-
-export type SessionUpdateWithoutProgramsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	type?:
-		| Prisma.EnumSessionTypesFieldUpdateOperationsInput
-		| $Enums.SessionTypes;
-	repeatCycleType?:
-		| Prisma.NullableEnumRepeatCycleTypesFieldUpdateOperationsInput
-		| $Enums.RepeatCycleTypes
-		| null;
-	startDateTime?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	endDateTime?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	recurringDayOfWeek?:
-		| Prisma.NullableEnumRecurringDayOfWeekFieldUpdateOperationsInput
-		| $Enums.RecurringDayOfWeek
-		| null;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	timeline?: Prisma.TimelineUpdateOneRequiredWithoutSessionsNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutSessionNestedInput;
-};
-
-export type SessionUncheckedUpdateWithoutProgramsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	type?:
-		| Prisma.EnumSessionTypesFieldUpdateOperationsInput
-		| $Enums.SessionTypes;
-	repeatCycleType?:
-		| Prisma.NullableEnumRepeatCycleTypesFieldUpdateOperationsInput
-		| $Enums.RepeatCycleTypes
-		| null;
-	startDateTime?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	endDateTime?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	recurringDayOfWeek?:
-		| Prisma.NullableEnumRecurringDayOfWeekFieldUpdateOperationsInput
-		| $Enums.RecurringDayOfWeek
-		| null;
-	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSessionNestedInput;
 };
 
 export type SessionCreateManyTimelineInput = {

@@ -680,19 +680,14 @@ export type InquiryMessageUncheckedUpdateManyInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 };
 
-export type InquiryMessageListRelationFilter = {
-	every?: Prisma.InquiryMessageWhereInput;
-	some?: Prisma.InquiryMessageWhereInput;
-	none?: Prisma.InquiryMessageWhereInput;
-};
-
-export type InquiryMessageOrderByRelationAggregateInput = {
-	_count?: Prisma.SortOrder;
-};
-
 export type InquiryMessageNullableScalarRelationFilter = {
 	is?: Prisma.InquiryMessageWhereInput | null;
 	isNot?: Prisma.InquiryMessageWhereInput | null;
+};
+
+export type InquiryMessageScalarRelationFilter = {
+	is?: Prisma.InquiryMessageWhereInput;
+	isNot?: Prisma.InquiryMessageWhereInput;
 };
 
 export type InquiryMessageThreadIdClientMessageIdCompoundUniqueInput = {
@@ -752,119 +747,14 @@ export type InquiryMessageMinOrderByAggregateInput = {
 	isDeleted?: Prisma.SortOrder;
 };
 
-export type InquiryMessageScalarRelationFilter = {
-	is?: Prisma.InquiryMessageWhereInput;
-	isNot?: Prisma.InquiryMessageWhereInput;
+export type InquiryMessageListRelationFilter = {
+	every?: Prisma.InquiryMessageWhereInput;
+	some?: Prisma.InquiryMessageWhereInput;
+	none?: Prisma.InquiryMessageWhereInput;
 };
 
-export type InquiryMessageCreateNestedManyWithoutSenderInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.InquiryMessageCreateWithoutSenderInput,
-				Prisma.InquiryMessageUncheckedCreateWithoutSenderInput
-		  >
-		| Prisma.InquiryMessageCreateWithoutSenderInput[]
-		| Prisma.InquiryMessageUncheckedCreateWithoutSenderInput[];
-	connectOrCreate?:
-		| Prisma.InquiryMessageCreateOrConnectWithoutSenderInput
-		| Prisma.InquiryMessageCreateOrConnectWithoutSenderInput[];
-	createMany?: Prisma.InquiryMessageCreateManySenderInputEnvelope;
-	connect?:
-		| Prisma.InquiryMessageWhereUniqueInput
-		| Prisma.InquiryMessageWhereUniqueInput[];
-};
-
-export type InquiryMessageUncheckedCreateNestedManyWithoutSenderInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.InquiryMessageCreateWithoutSenderInput,
-				Prisma.InquiryMessageUncheckedCreateWithoutSenderInput
-		  >
-		| Prisma.InquiryMessageCreateWithoutSenderInput[]
-		| Prisma.InquiryMessageUncheckedCreateWithoutSenderInput[];
-	connectOrCreate?:
-		| Prisma.InquiryMessageCreateOrConnectWithoutSenderInput
-		| Prisma.InquiryMessageCreateOrConnectWithoutSenderInput[];
-	createMany?: Prisma.InquiryMessageCreateManySenderInputEnvelope;
-	connect?:
-		| Prisma.InquiryMessageWhereUniqueInput
-		| Prisma.InquiryMessageWhereUniqueInput[];
-};
-
-export type InquiryMessageUpdateManyWithoutSenderNestedInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.InquiryMessageCreateWithoutSenderInput,
-				Prisma.InquiryMessageUncheckedCreateWithoutSenderInput
-		  >
-		| Prisma.InquiryMessageCreateWithoutSenderInput[]
-		| Prisma.InquiryMessageUncheckedCreateWithoutSenderInput[];
-	connectOrCreate?:
-		| Prisma.InquiryMessageCreateOrConnectWithoutSenderInput
-		| Prisma.InquiryMessageCreateOrConnectWithoutSenderInput[];
-	upsert?:
-		| Prisma.InquiryMessageUpsertWithWhereUniqueWithoutSenderInput
-		| Prisma.InquiryMessageUpsertWithWhereUniqueWithoutSenderInput[];
-	createMany?: Prisma.InquiryMessageCreateManySenderInputEnvelope;
-	set?:
-		| Prisma.InquiryMessageWhereUniqueInput
-		| Prisma.InquiryMessageWhereUniqueInput[];
-	disconnect?:
-		| Prisma.InquiryMessageWhereUniqueInput
-		| Prisma.InquiryMessageWhereUniqueInput[];
-	delete?:
-		| Prisma.InquiryMessageWhereUniqueInput
-		| Prisma.InquiryMessageWhereUniqueInput[];
-	connect?:
-		| Prisma.InquiryMessageWhereUniqueInput
-		| Prisma.InquiryMessageWhereUniqueInput[];
-	update?:
-		| Prisma.InquiryMessageUpdateWithWhereUniqueWithoutSenderInput
-		| Prisma.InquiryMessageUpdateWithWhereUniqueWithoutSenderInput[];
-	updateMany?:
-		| Prisma.InquiryMessageUpdateManyWithWhereWithoutSenderInput
-		| Prisma.InquiryMessageUpdateManyWithWhereWithoutSenderInput[];
-	deleteMany?:
-		| Prisma.InquiryMessageScalarWhereInput
-		| Prisma.InquiryMessageScalarWhereInput[];
-};
-
-export type InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.InquiryMessageCreateWithoutSenderInput,
-				Prisma.InquiryMessageUncheckedCreateWithoutSenderInput
-		  >
-		| Prisma.InquiryMessageCreateWithoutSenderInput[]
-		| Prisma.InquiryMessageUncheckedCreateWithoutSenderInput[];
-	connectOrCreate?:
-		| Prisma.InquiryMessageCreateOrConnectWithoutSenderInput
-		| Prisma.InquiryMessageCreateOrConnectWithoutSenderInput[];
-	upsert?:
-		| Prisma.InquiryMessageUpsertWithWhereUniqueWithoutSenderInput
-		| Prisma.InquiryMessageUpsertWithWhereUniqueWithoutSenderInput[];
-	createMany?: Prisma.InquiryMessageCreateManySenderInputEnvelope;
-	set?:
-		| Prisma.InquiryMessageWhereUniqueInput
-		| Prisma.InquiryMessageWhereUniqueInput[];
-	disconnect?:
-		| Prisma.InquiryMessageWhereUniqueInput
-		| Prisma.InquiryMessageWhereUniqueInput[];
-	delete?:
-		| Prisma.InquiryMessageWhereUniqueInput
-		| Prisma.InquiryMessageWhereUniqueInput[];
-	connect?:
-		| Prisma.InquiryMessageWhereUniqueInput
-		| Prisma.InquiryMessageWhereUniqueInput[];
-	update?:
-		| Prisma.InquiryMessageUpdateWithWhereUniqueWithoutSenderInput
-		| Prisma.InquiryMessageUpdateWithWhereUniqueWithoutSenderInput[];
-	updateMany?:
-		| Prisma.InquiryMessageUpdateManyWithWhereWithoutSenderInput
-		| Prisma.InquiryMessageUpdateManyWithWhereWithoutSenderInput[];
-	deleteMany?:
-		| Prisma.InquiryMessageScalarWhereInput
-		| Prisma.InquiryMessageScalarWhereInput[];
+export type InquiryMessageOrderByRelationAggregateInput = {
+	_count?: Prisma.SortOrder;
 };
 
 export type InquiryMessageCreateNestedOneWithoutAiAgentLogInput = {
@@ -893,6 +783,40 @@ export type InquiryMessageUpdateOneWithoutAiAgentLogNestedInput = {
 		>,
 		Prisma.InquiryMessageUncheckedUpdateWithoutAiAgentLogInput
 	>;
+};
+
+export type InquiryMessageCreateNestedOneWithoutAttachmentsInput = {
+	create?: Prisma.XOR<
+		Prisma.InquiryMessageCreateWithoutAttachmentsInput,
+		Prisma.InquiryMessageUncheckedCreateWithoutAttachmentsInput
+	>;
+	connectOrCreate?: Prisma.InquiryMessageCreateOrConnectWithoutAttachmentsInput;
+	connect?: Prisma.InquiryMessageWhereUniqueInput;
+};
+
+export type InquiryMessageUpdateOneRequiredWithoutAttachmentsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.InquiryMessageCreateWithoutAttachmentsInput,
+		Prisma.InquiryMessageUncheckedCreateWithoutAttachmentsInput
+	>;
+	connectOrCreate?: Prisma.InquiryMessageCreateOrConnectWithoutAttachmentsInput;
+	upsert?: Prisma.InquiryMessageUpsertWithoutAttachmentsInput;
+	connect?: Prisma.InquiryMessageWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.InquiryMessageUpdateToOneWithWhereWithoutAttachmentsInput,
+			Prisma.InquiryMessageUpdateWithoutAttachmentsInput
+		>,
+		Prisma.InquiryMessageUncheckedUpdateWithoutAttachmentsInput
+	>;
+};
+
+export type EnumSenderTypeFieldUpdateOperationsInput = {
+	set?: $Enums.SenderType;
+};
+
+export type EnumMessageContentTypeFieldUpdateOperationsInput = {
+	set?: $Enums.MessageContentType;
 };
 
 export type InquiryMessageCreateNestedManyWithoutThreadInput = {
@@ -1003,40 +927,6 @@ export type InquiryMessageUncheckedUpdateManyWithoutThreadNestedInput = {
 	deleteMany?:
 		| Prisma.InquiryMessageScalarWhereInput
 		| Prisma.InquiryMessageScalarWhereInput[];
-};
-
-export type EnumSenderTypeFieldUpdateOperationsInput = {
-	set?: $Enums.SenderType;
-};
-
-export type EnumMessageContentTypeFieldUpdateOperationsInput = {
-	set?: $Enums.MessageContentType;
-};
-
-export type InquiryMessageCreateNestedOneWithoutAttachmentsInput = {
-	create?: Prisma.XOR<
-		Prisma.InquiryMessageCreateWithoutAttachmentsInput,
-		Prisma.InquiryMessageUncheckedCreateWithoutAttachmentsInput
-	>;
-	connectOrCreate?: Prisma.InquiryMessageCreateOrConnectWithoutAttachmentsInput;
-	connect?: Prisma.InquiryMessageWhereUniqueInput;
-};
-
-export type InquiryMessageUpdateOneRequiredWithoutAttachmentsNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.InquiryMessageCreateWithoutAttachmentsInput,
-		Prisma.InquiryMessageUncheckedCreateWithoutAttachmentsInput
-	>;
-	connectOrCreate?: Prisma.InquiryMessageCreateOrConnectWithoutAttachmentsInput;
-	upsert?: Prisma.InquiryMessageUpsertWithoutAttachmentsInput;
-	connect?: Prisma.InquiryMessageWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.InquiryMessageUpdateToOneWithWhereWithoutAttachmentsInput,
-			Prisma.InquiryMessageUpdateWithoutAttachmentsInput
-		>,
-		Prisma.InquiryMessageUncheckedUpdateWithoutAttachmentsInput
-	>;
 };
 
 export type InquiryMessageCreateNestedManyWithoutInquiryInput = {
@@ -1177,131 +1067,114 @@ export type InquiryMessageUpdateOneWithoutSentimentAnalysisNestedInput = {
 	>;
 };
 
-export type InquiryMessageCreateWithoutSenderInput = {
-	id?: string;
-	createdAt?: Date | string;
-	senderType?: $Enums.SenderType;
-	clientMessageId?: string | null;
-	content: string;
-	contentType?: $Enums.MessageContentType;
-	deliveredAt?: Date | string | null;
-	readAt?: Date | string | null;
-	editedAt?: Date | string | null;
-	isEdited?: boolean;
-	isDeleted?: boolean;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	thread: Prisma.InquiryThreadCreateNestedOneWithoutMessagesInput;
-	inquiry: Prisma.InquiryCreateNestedOneWithoutMessagesInput;
-	attachments?: Prisma.InquiryAttachmentCreateNestedManyWithoutMessageInput;
-	sentimentAnalysis?: Prisma.SentimentAnalysisCreateNestedOneWithoutMessageInput;
-	aiAgentLog?: Prisma.AIAgentLogCreateNestedOneWithoutMessageInput;
+export type InquiryMessageCreateNestedManyWithoutSenderInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.InquiryMessageCreateWithoutSenderInput,
+				Prisma.InquiryMessageUncheckedCreateWithoutSenderInput
+		  >
+		| Prisma.InquiryMessageCreateWithoutSenderInput[]
+		| Prisma.InquiryMessageUncheckedCreateWithoutSenderInput[];
+	connectOrCreate?:
+		| Prisma.InquiryMessageCreateOrConnectWithoutSenderInput
+		| Prisma.InquiryMessageCreateOrConnectWithoutSenderInput[];
+	createMany?: Prisma.InquiryMessageCreateManySenderInputEnvelope;
+	connect?:
+		| Prisma.InquiryMessageWhereUniqueInput
+		| Prisma.InquiryMessageWhereUniqueInput[];
 };
 
-export type InquiryMessageUncheckedCreateWithoutSenderInput = {
-	id?: string;
-	createdAt?: Date | string;
-	threadId: string;
-	inquiryId: string;
-	senderType?: $Enums.SenderType;
-	clientMessageId?: string | null;
-	content: string;
-	contentType?: $Enums.MessageContentType;
-	deliveredAt?: Date | string | null;
-	readAt?: Date | string | null;
-	editedAt?: Date | string | null;
-	isEdited?: boolean;
-	isDeleted?: boolean;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	attachments?: Prisma.InquiryAttachmentUncheckedCreateNestedManyWithoutMessageInput;
-	sentimentAnalysis?: Prisma.SentimentAnalysisUncheckedCreateNestedOneWithoutMessageInput;
-	aiAgentLog?: Prisma.AIAgentLogUncheckedCreateNestedOneWithoutMessageInput;
+export type InquiryMessageUncheckedCreateNestedManyWithoutSenderInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.InquiryMessageCreateWithoutSenderInput,
+				Prisma.InquiryMessageUncheckedCreateWithoutSenderInput
+		  >
+		| Prisma.InquiryMessageCreateWithoutSenderInput[]
+		| Prisma.InquiryMessageUncheckedCreateWithoutSenderInput[];
+	connectOrCreate?:
+		| Prisma.InquiryMessageCreateOrConnectWithoutSenderInput
+		| Prisma.InquiryMessageCreateOrConnectWithoutSenderInput[];
+	createMany?: Prisma.InquiryMessageCreateManySenderInputEnvelope;
+	connect?:
+		| Prisma.InquiryMessageWhereUniqueInput
+		| Prisma.InquiryMessageWhereUniqueInput[];
 };
 
-export type InquiryMessageCreateOrConnectWithoutSenderInput = {
-	where: Prisma.InquiryMessageWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.InquiryMessageCreateWithoutSenderInput,
-		Prisma.InquiryMessageUncheckedCreateWithoutSenderInput
-	>;
-};
-
-export type InquiryMessageCreateManySenderInputEnvelope = {
-	data:
-		| Prisma.InquiryMessageCreateManySenderInput
-		| Prisma.InquiryMessageCreateManySenderInput[];
-	skipDuplicates?: boolean;
-};
-
-export type InquiryMessageUpsertWithWhereUniqueWithoutSenderInput = {
-	where: Prisma.InquiryMessageWhereUniqueInput;
-	update: Prisma.XOR<
-		Prisma.InquiryMessageUpdateWithoutSenderInput,
-		Prisma.InquiryMessageUncheckedUpdateWithoutSenderInput
-	>;
-	create: Prisma.XOR<
-		Prisma.InquiryMessageCreateWithoutSenderInput,
-		Prisma.InquiryMessageUncheckedCreateWithoutSenderInput
-	>;
-};
-
-export type InquiryMessageUpdateWithWhereUniqueWithoutSenderInput = {
-	where: Prisma.InquiryMessageWhereUniqueInput;
-	data: Prisma.XOR<
-		Prisma.InquiryMessageUpdateWithoutSenderInput,
-		Prisma.InquiryMessageUncheckedUpdateWithoutSenderInput
-	>;
-};
-
-export type InquiryMessageUpdateManyWithWhereWithoutSenderInput = {
-	where: Prisma.InquiryMessageScalarWhereInput;
-	data: Prisma.XOR<
-		Prisma.InquiryMessageUpdateManyMutationInput,
-		Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderInput
-	>;
-};
-
-export type InquiryMessageScalarWhereInput = {
-	AND?:
+export type InquiryMessageUpdateManyWithoutSenderNestedInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.InquiryMessageCreateWithoutSenderInput,
+				Prisma.InquiryMessageUncheckedCreateWithoutSenderInput
+		  >
+		| Prisma.InquiryMessageCreateWithoutSenderInput[]
+		| Prisma.InquiryMessageUncheckedCreateWithoutSenderInput[];
+	connectOrCreate?:
+		| Prisma.InquiryMessageCreateOrConnectWithoutSenderInput
+		| Prisma.InquiryMessageCreateOrConnectWithoutSenderInput[];
+	upsert?:
+		| Prisma.InquiryMessageUpsertWithWhereUniqueWithoutSenderInput
+		| Prisma.InquiryMessageUpsertWithWhereUniqueWithoutSenderInput[];
+	createMany?: Prisma.InquiryMessageCreateManySenderInputEnvelope;
+	set?:
+		| Prisma.InquiryMessageWhereUniqueInput
+		| Prisma.InquiryMessageWhereUniqueInput[];
+	disconnect?:
+		| Prisma.InquiryMessageWhereUniqueInput
+		| Prisma.InquiryMessageWhereUniqueInput[];
+	delete?:
+		| Prisma.InquiryMessageWhereUniqueInput
+		| Prisma.InquiryMessageWhereUniqueInput[];
+	connect?:
+		| Prisma.InquiryMessageWhereUniqueInput
+		| Prisma.InquiryMessageWhereUniqueInput[];
+	update?:
+		| Prisma.InquiryMessageUpdateWithWhereUniqueWithoutSenderInput
+		| Prisma.InquiryMessageUpdateWithWhereUniqueWithoutSenderInput[];
+	updateMany?:
+		| Prisma.InquiryMessageUpdateManyWithWhereWithoutSenderInput
+		| Prisma.InquiryMessageUpdateManyWithWhereWithoutSenderInput[];
+	deleteMany?:
 		| Prisma.InquiryMessageScalarWhereInput
 		| Prisma.InquiryMessageScalarWhereInput[];
-	OR?: Prisma.InquiryMessageScalarWhereInput[];
-	NOT?:
+};
+
+export type InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.InquiryMessageCreateWithoutSenderInput,
+				Prisma.InquiryMessageUncheckedCreateWithoutSenderInput
+		  >
+		| Prisma.InquiryMessageCreateWithoutSenderInput[]
+		| Prisma.InquiryMessageUncheckedCreateWithoutSenderInput[];
+	connectOrCreate?:
+		| Prisma.InquiryMessageCreateOrConnectWithoutSenderInput
+		| Prisma.InquiryMessageCreateOrConnectWithoutSenderInput[];
+	upsert?:
+		| Prisma.InquiryMessageUpsertWithWhereUniqueWithoutSenderInput
+		| Prisma.InquiryMessageUpsertWithWhereUniqueWithoutSenderInput[];
+	createMany?: Prisma.InquiryMessageCreateManySenderInputEnvelope;
+	set?:
+		| Prisma.InquiryMessageWhereUniqueInput
+		| Prisma.InquiryMessageWhereUniqueInput[];
+	disconnect?:
+		| Prisma.InquiryMessageWhereUniqueInput
+		| Prisma.InquiryMessageWhereUniqueInput[];
+	delete?:
+		| Prisma.InquiryMessageWhereUniqueInput
+		| Prisma.InquiryMessageWhereUniqueInput[];
+	connect?:
+		| Prisma.InquiryMessageWhereUniqueInput
+		| Prisma.InquiryMessageWhereUniqueInput[];
+	update?:
+		| Prisma.InquiryMessageUpdateWithWhereUniqueWithoutSenderInput
+		| Prisma.InquiryMessageUpdateWithWhereUniqueWithoutSenderInput[];
+	updateMany?:
+		| Prisma.InquiryMessageUpdateManyWithWhereWithoutSenderInput
+		| Prisma.InquiryMessageUpdateManyWithWhereWithoutSenderInput[];
+	deleteMany?:
 		| Prisma.InquiryMessageScalarWhereInput
 		| Prisma.InquiryMessageScalarWhereInput[];
-	id?: Prisma.StringFilter<"InquiryMessage"> | string;
-	createdAt?: Prisma.DateTimeFilter<"InquiryMessage"> | Date | string;
-	threadId?: Prisma.StringFilter<"InquiryMessage"> | string;
-	inquiryId?: Prisma.StringFilter<"InquiryMessage"> | string;
-	senderId?: Prisma.StringNullableFilter<"InquiryMessage"> | string | null;
-	senderType?:
-		| Prisma.EnumSenderTypeFilter<"InquiryMessage">
-		| $Enums.SenderType;
-	clientMessageId?:
-		| Prisma.StringNullableFilter<"InquiryMessage">
-		| string
-		| null;
-	content?: Prisma.StringFilter<"InquiryMessage"> | string;
-	contentType?:
-		| Prisma.EnumMessageContentTypeFilter<"InquiryMessage">
-		| $Enums.MessageContentType;
-	deliveredAt?:
-		| Prisma.DateTimeNullableFilter<"InquiryMessage">
-		| Date
-		| string
-		| null;
-	readAt?:
-		| Prisma.DateTimeNullableFilter<"InquiryMessage">
-		| Date
-		| string
-		| null;
-	editedAt?:
-		| Prisma.DateTimeNullableFilter<"InquiryMessage">
-		| Date
-		| string
-		| null;
-	isEdited?: Prisma.BoolFilter<"InquiryMessage"> | boolean;
-	isDeleted?: Prisma.BoolFilter<"InquiryMessage"> | boolean;
-	metadata?: Prisma.JsonNullableFilter<"InquiryMessage">;
 };
 
 export type InquiryMessageCreateWithoutAiAgentLogInput = {
@@ -1450,89 +1323,6 @@ export type InquiryMessageUncheckedUpdateWithoutAiAgentLogInput = {
 	sentimentAnalysis?: Prisma.SentimentAnalysisUncheckedUpdateOneWithoutMessageNestedInput;
 };
 
-export type InquiryMessageCreateWithoutThreadInput = {
-	id?: string;
-	createdAt?: Date | string;
-	senderType?: $Enums.SenderType;
-	clientMessageId?: string | null;
-	content: string;
-	contentType?: $Enums.MessageContentType;
-	deliveredAt?: Date | string | null;
-	readAt?: Date | string | null;
-	editedAt?: Date | string | null;
-	isEdited?: boolean;
-	isDeleted?: boolean;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	inquiry: Prisma.InquiryCreateNestedOneWithoutMessagesInput;
-	sender?: Prisma.UserCreateNestedOneWithoutInquiryMessagesInput;
-	attachments?: Prisma.InquiryAttachmentCreateNestedManyWithoutMessageInput;
-	sentimentAnalysis?: Prisma.SentimentAnalysisCreateNestedOneWithoutMessageInput;
-	aiAgentLog?: Prisma.AIAgentLogCreateNestedOneWithoutMessageInput;
-};
-
-export type InquiryMessageUncheckedCreateWithoutThreadInput = {
-	id?: string;
-	createdAt?: Date | string;
-	inquiryId: string;
-	senderId?: string | null;
-	senderType?: $Enums.SenderType;
-	clientMessageId?: string | null;
-	content: string;
-	contentType?: $Enums.MessageContentType;
-	deliveredAt?: Date | string | null;
-	readAt?: Date | string | null;
-	editedAt?: Date | string | null;
-	isEdited?: boolean;
-	isDeleted?: boolean;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	attachments?: Prisma.InquiryAttachmentUncheckedCreateNestedManyWithoutMessageInput;
-	sentimentAnalysis?: Prisma.SentimentAnalysisUncheckedCreateNestedOneWithoutMessageInput;
-	aiAgentLog?: Prisma.AIAgentLogUncheckedCreateNestedOneWithoutMessageInput;
-};
-
-export type InquiryMessageCreateOrConnectWithoutThreadInput = {
-	where: Prisma.InquiryMessageWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.InquiryMessageCreateWithoutThreadInput,
-		Prisma.InquiryMessageUncheckedCreateWithoutThreadInput
-	>;
-};
-
-export type InquiryMessageCreateManyThreadInputEnvelope = {
-	data:
-		| Prisma.InquiryMessageCreateManyThreadInput
-		| Prisma.InquiryMessageCreateManyThreadInput[];
-	skipDuplicates?: boolean;
-};
-
-export type InquiryMessageUpsertWithWhereUniqueWithoutThreadInput = {
-	where: Prisma.InquiryMessageWhereUniqueInput;
-	update: Prisma.XOR<
-		Prisma.InquiryMessageUpdateWithoutThreadInput,
-		Prisma.InquiryMessageUncheckedUpdateWithoutThreadInput
-	>;
-	create: Prisma.XOR<
-		Prisma.InquiryMessageCreateWithoutThreadInput,
-		Prisma.InquiryMessageUncheckedCreateWithoutThreadInput
-	>;
-};
-
-export type InquiryMessageUpdateWithWhereUniqueWithoutThreadInput = {
-	where: Prisma.InquiryMessageWhereUniqueInput;
-	data: Prisma.XOR<
-		Prisma.InquiryMessageUpdateWithoutThreadInput,
-		Prisma.InquiryMessageUncheckedUpdateWithoutThreadInput
-	>;
-};
-
-export type InquiryMessageUpdateManyWithWhereWithoutThreadInput = {
-	where: Prisma.InquiryMessageScalarWhereInput;
-	data: Prisma.XOR<
-		Prisma.InquiryMessageUpdateManyMutationInput,
-		Prisma.InquiryMessageUncheckedUpdateManyWithoutThreadInput
-	>;
-};
-
 export type InquiryMessageCreateWithoutAttachmentsInput = {
 	id?: string;
 	createdAt?: Date | string;
@@ -1677,6 +1467,133 @@ export type InquiryMessageUncheckedUpdateWithoutAttachmentsInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	sentimentAnalysis?: Prisma.SentimentAnalysisUncheckedUpdateOneWithoutMessageNestedInput;
 	aiAgentLog?: Prisma.AIAgentLogUncheckedUpdateOneWithoutMessageNestedInput;
+};
+
+export type InquiryMessageCreateWithoutThreadInput = {
+	id?: string;
+	createdAt?: Date | string;
+	senderType?: $Enums.SenderType;
+	clientMessageId?: string | null;
+	content: string;
+	contentType?: $Enums.MessageContentType;
+	deliveredAt?: Date | string | null;
+	readAt?: Date | string | null;
+	editedAt?: Date | string | null;
+	isEdited?: boolean;
+	isDeleted?: boolean;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	inquiry: Prisma.InquiryCreateNestedOneWithoutMessagesInput;
+	sender?: Prisma.UserCreateNestedOneWithoutInquiryMessagesInput;
+	attachments?: Prisma.InquiryAttachmentCreateNestedManyWithoutMessageInput;
+	sentimentAnalysis?: Prisma.SentimentAnalysisCreateNestedOneWithoutMessageInput;
+	aiAgentLog?: Prisma.AIAgentLogCreateNestedOneWithoutMessageInput;
+};
+
+export type InquiryMessageUncheckedCreateWithoutThreadInput = {
+	id?: string;
+	createdAt?: Date | string;
+	inquiryId: string;
+	senderId?: string | null;
+	senderType?: $Enums.SenderType;
+	clientMessageId?: string | null;
+	content: string;
+	contentType?: $Enums.MessageContentType;
+	deliveredAt?: Date | string | null;
+	readAt?: Date | string | null;
+	editedAt?: Date | string | null;
+	isEdited?: boolean;
+	isDeleted?: boolean;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	attachments?: Prisma.InquiryAttachmentUncheckedCreateNestedManyWithoutMessageInput;
+	sentimentAnalysis?: Prisma.SentimentAnalysisUncheckedCreateNestedOneWithoutMessageInput;
+	aiAgentLog?: Prisma.AIAgentLogUncheckedCreateNestedOneWithoutMessageInput;
+};
+
+export type InquiryMessageCreateOrConnectWithoutThreadInput = {
+	where: Prisma.InquiryMessageWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.InquiryMessageCreateWithoutThreadInput,
+		Prisma.InquiryMessageUncheckedCreateWithoutThreadInput
+	>;
+};
+
+export type InquiryMessageCreateManyThreadInputEnvelope = {
+	data:
+		| Prisma.InquiryMessageCreateManyThreadInput
+		| Prisma.InquiryMessageCreateManyThreadInput[];
+	skipDuplicates?: boolean;
+};
+
+export type InquiryMessageUpsertWithWhereUniqueWithoutThreadInput = {
+	where: Prisma.InquiryMessageWhereUniqueInput;
+	update: Prisma.XOR<
+		Prisma.InquiryMessageUpdateWithoutThreadInput,
+		Prisma.InquiryMessageUncheckedUpdateWithoutThreadInput
+	>;
+	create: Prisma.XOR<
+		Prisma.InquiryMessageCreateWithoutThreadInput,
+		Prisma.InquiryMessageUncheckedCreateWithoutThreadInput
+	>;
+};
+
+export type InquiryMessageUpdateWithWhereUniqueWithoutThreadInput = {
+	where: Prisma.InquiryMessageWhereUniqueInput;
+	data: Prisma.XOR<
+		Prisma.InquiryMessageUpdateWithoutThreadInput,
+		Prisma.InquiryMessageUncheckedUpdateWithoutThreadInput
+	>;
+};
+
+export type InquiryMessageUpdateManyWithWhereWithoutThreadInput = {
+	where: Prisma.InquiryMessageScalarWhereInput;
+	data: Prisma.XOR<
+		Prisma.InquiryMessageUpdateManyMutationInput,
+		Prisma.InquiryMessageUncheckedUpdateManyWithoutThreadInput
+	>;
+};
+
+export type InquiryMessageScalarWhereInput = {
+	AND?:
+		| Prisma.InquiryMessageScalarWhereInput
+		| Prisma.InquiryMessageScalarWhereInput[];
+	OR?: Prisma.InquiryMessageScalarWhereInput[];
+	NOT?:
+		| Prisma.InquiryMessageScalarWhereInput
+		| Prisma.InquiryMessageScalarWhereInput[];
+	id?: Prisma.StringFilter<"InquiryMessage"> | string;
+	createdAt?: Prisma.DateTimeFilter<"InquiryMessage"> | Date | string;
+	threadId?: Prisma.StringFilter<"InquiryMessage"> | string;
+	inquiryId?: Prisma.StringFilter<"InquiryMessage"> | string;
+	senderId?: Prisma.StringNullableFilter<"InquiryMessage"> | string | null;
+	senderType?:
+		| Prisma.EnumSenderTypeFilter<"InquiryMessage">
+		| $Enums.SenderType;
+	clientMessageId?:
+		| Prisma.StringNullableFilter<"InquiryMessage">
+		| string
+		| null;
+	content?: Prisma.StringFilter<"InquiryMessage"> | string;
+	contentType?:
+		| Prisma.EnumMessageContentTypeFilter<"InquiryMessage">
+		| $Enums.MessageContentType;
+	deliveredAt?:
+		| Prisma.DateTimeNullableFilter<"InquiryMessage">
+		| Date
+		| string
+		| null;
+	readAt?:
+		| Prisma.DateTimeNullableFilter<"InquiryMessage">
+		| Date
+		| string
+		| null;
+	editedAt?:
+		| Prisma.DateTimeNullableFilter<"InquiryMessage">
+		| Date
+		| string
+		| null;
+	isEdited?: Prisma.BoolFilter<"InquiryMessage"> | boolean;
+	isDeleted?: Prisma.BoolFilter<"InquiryMessage"> | boolean;
+	metadata?: Prisma.JsonNullableFilter<"InquiryMessage">;
 };
 
 export type InquiryMessageCreateWithoutInquiryInput = {
@@ -1908,7 +1825,27 @@ export type InquiryMessageUncheckedUpdateWithoutSentimentAnalysisInput = {
 	aiAgentLog?: Prisma.AIAgentLogUncheckedUpdateOneWithoutMessageNestedInput;
 };
 
-export type InquiryMessageCreateManySenderInput = {
+export type InquiryMessageCreateWithoutSenderInput = {
+	id?: string;
+	createdAt?: Date | string;
+	senderType?: $Enums.SenderType;
+	clientMessageId?: string | null;
+	content: string;
+	contentType?: $Enums.MessageContentType;
+	deliveredAt?: Date | string | null;
+	readAt?: Date | string | null;
+	editedAt?: Date | string | null;
+	isEdited?: boolean;
+	isDeleted?: boolean;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	thread: Prisma.InquiryThreadCreateNestedOneWithoutMessagesInput;
+	inquiry: Prisma.InquiryCreateNestedOneWithoutMessagesInput;
+	attachments?: Prisma.InquiryAttachmentCreateNestedManyWithoutMessageInput;
+	sentimentAnalysis?: Prisma.SentimentAnalysisCreateNestedOneWithoutMessageInput;
+	aiAgentLog?: Prisma.AIAgentLogCreateNestedOneWithoutMessageInput;
+};
+
+export type InquiryMessageUncheckedCreateWithoutSenderInput = {
 	id?: string;
 	createdAt?: Date | string;
 	threadId: string;
@@ -1923,120 +1860,52 @@ export type InquiryMessageCreateManySenderInput = {
 	isEdited?: boolean;
 	isDeleted?: boolean;
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	attachments?: Prisma.InquiryAttachmentUncheckedCreateNestedManyWithoutMessageInput;
+	sentimentAnalysis?: Prisma.SentimentAnalysisUncheckedCreateNestedOneWithoutMessageInput;
+	aiAgentLog?: Prisma.AIAgentLogUncheckedCreateNestedOneWithoutMessageInput;
 };
 
-export type InquiryMessageUpdateWithoutSenderInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	senderType?:
-		| Prisma.EnumSenderTypeFieldUpdateOperationsInput
-		| $Enums.SenderType;
-	clientMessageId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	content?: Prisma.StringFieldUpdateOperationsInput | string;
-	contentType?:
-		| Prisma.EnumMessageContentTypeFieldUpdateOperationsInput
-		| $Enums.MessageContentType;
-	deliveredAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	readAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	editedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isEdited?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	thread?: Prisma.InquiryThreadUpdateOneRequiredWithoutMessagesNestedInput;
-	inquiry?: Prisma.InquiryUpdateOneRequiredWithoutMessagesNestedInput;
-	attachments?: Prisma.InquiryAttachmentUpdateManyWithoutMessageNestedInput;
-	sentimentAnalysis?: Prisma.SentimentAnalysisUpdateOneWithoutMessageNestedInput;
-	aiAgentLog?: Prisma.AIAgentLogUpdateOneWithoutMessageNestedInput;
+export type InquiryMessageCreateOrConnectWithoutSenderInput = {
+	where: Prisma.InquiryMessageWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.InquiryMessageCreateWithoutSenderInput,
+		Prisma.InquiryMessageUncheckedCreateWithoutSenderInput
+	>;
 };
 
-export type InquiryMessageUncheckedUpdateWithoutSenderInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	threadId?: Prisma.StringFieldUpdateOperationsInput | string;
-	inquiryId?: Prisma.StringFieldUpdateOperationsInput | string;
-	senderType?:
-		| Prisma.EnumSenderTypeFieldUpdateOperationsInput
-		| $Enums.SenderType;
-	clientMessageId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	content?: Prisma.StringFieldUpdateOperationsInput | string;
-	contentType?:
-		| Prisma.EnumMessageContentTypeFieldUpdateOperationsInput
-		| $Enums.MessageContentType;
-	deliveredAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	readAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	editedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isEdited?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	attachments?: Prisma.InquiryAttachmentUncheckedUpdateManyWithoutMessageNestedInput;
-	sentimentAnalysis?: Prisma.SentimentAnalysisUncheckedUpdateOneWithoutMessageNestedInput;
-	aiAgentLog?: Prisma.AIAgentLogUncheckedUpdateOneWithoutMessageNestedInput;
+export type InquiryMessageCreateManySenderInputEnvelope = {
+	data:
+		| Prisma.InquiryMessageCreateManySenderInput
+		| Prisma.InquiryMessageCreateManySenderInput[];
+	skipDuplicates?: boolean;
 };
 
-export type InquiryMessageUncheckedUpdateManyWithoutSenderInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	threadId?: Prisma.StringFieldUpdateOperationsInput | string;
-	inquiryId?: Prisma.StringFieldUpdateOperationsInput | string;
-	senderType?:
-		| Prisma.EnumSenderTypeFieldUpdateOperationsInput
-		| $Enums.SenderType;
-	clientMessageId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	content?: Prisma.StringFieldUpdateOperationsInput | string;
-	contentType?:
-		| Prisma.EnumMessageContentTypeFieldUpdateOperationsInput
-		| $Enums.MessageContentType;
-	deliveredAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	readAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	editedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isEdited?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+export type InquiryMessageUpsertWithWhereUniqueWithoutSenderInput = {
+	where: Prisma.InquiryMessageWhereUniqueInput;
+	update: Prisma.XOR<
+		Prisma.InquiryMessageUpdateWithoutSenderInput,
+		Prisma.InquiryMessageUncheckedUpdateWithoutSenderInput
+	>;
+	create: Prisma.XOR<
+		Prisma.InquiryMessageCreateWithoutSenderInput,
+		Prisma.InquiryMessageUncheckedCreateWithoutSenderInput
+	>;
+};
+
+export type InquiryMessageUpdateWithWhereUniqueWithoutSenderInput = {
+	where: Prisma.InquiryMessageWhereUniqueInput;
+	data: Prisma.XOR<
+		Prisma.InquiryMessageUpdateWithoutSenderInput,
+		Prisma.InquiryMessageUncheckedUpdateWithoutSenderInput
+	>;
+};
+
+export type InquiryMessageUpdateManyWithWhereWithoutSenderInput = {
+	where: Prisma.InquiryMessageScalarWhereInput;
+	data: Prisma.XOR<
+		Prisma.InquiryMessageUpdateManyMutationInput,
+		Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderInput
+	>;
 };
 
 export type InquiryMessageCreateManyThreadInput = {
@@ -2270,6 +2139,137 @@ export type InquiryMessageUncheckedUpdateManyWithoutInquiryInput = {
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	threadId?: Prisma.StringFieldUpdateOperationsInput | string;
 	senderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	senderType?:
+		| Prisma.EnumSenderTypeFieldUpdateOperationsInput
+		| $Enums.SenderType;
+	clientMessageId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	content?: Prisma.StringFieldUpdateOperationsInput | string;
+	contentType?:
+		| Prisma.EnumMessageContentTypeFieldUpdateOperationsInput
+		| $Enums.MessageContentType;
+	deliveredAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	readAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	editedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isEdited?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+};
+
+export type InquiryMessageCreateManySenderInput = {
+	id?: string;
+	createdAt?: Date | string;
+	threadId: string;
+	inquiryId: string;
+	senderType?: $Enums.SenderType;
+	clientMessageId?: string | null;
+	content: string;
+	contentType?: $Enums.MessageContentType;
+	deliveredAt?: Date | string | null;
+	readAt?: Date | string | null;
+	editedAt?: Date | string | null;
+	isEdited?: boolean;
+	isDeleted?: boolean;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+};
+
+export type InquiryMessageUpdateWithoutSenderInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	senderType?:
+		| Prisma.EnumSenderTypeFieldUpdateOperationsInput
+		| $Enums.SenderType;
+	clientMessageId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	content?: Prisma.StringFieldUpdateOperationsInput | string;
+	contentType?:
+		| Prisma.EnumMessageContentTypeFieldUpdateOperationsInput
+		| $Enums.MessageContentType;
+	deliveredAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	readAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	editedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isEdited?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	thread?: Prisma.InquiryThreadUpdateOneRequiredWithoutMessagesNestedInput;
+	inquiry?: Prisma.InquiryUpdateOneRequiredWithoutMessagesNestedInput;
+	attachments?: Prisma.InquiryAttachmentUpdateManyWithoutMessageNestedInput;
+	sentimentAnalysis?: Prisma.SentimentAnalysisUpdateOneWithoutMessageNestedInput;
+	aiAgentLog?: Prisma.AIAgentLogUpdateOneWithoutMessageNestedInput;
+};
+
+export type InquiryMessageUncheckedUpdateWithoutSenderInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	threadId?: Prisma.StringFieldUpdateOperationsInput | string;
+	inquiryId?: Prisma.StringFieldUpdateOperationsInput | string;
+	senderType?:
+		| Prisma.EnumSenderTypeFieldUpdateOperationsInput
+		| $Enums.SenderType;
+	clientMessageId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	content?: Prisma.StringFieldUpdateOperationsInput | string;
+	contentType?:
+		| Prisma.EnumMessageContentTypeFieldUpdateOperationsInput
+		| $Enums.MessageContentType;
+	deliveredAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	readAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	editedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isEdited?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	attachments?: Prisma.InquiryAttachmentUncheckedUpdateManyWithoutMessageNestedInput;
+	sentimentAnalysis?: Prisma.SentimentAnalysisUncheckedUpdateOneWithoutMessageNestedInput;
+	aiAgentLog?: Prisma.AIAgentLogUncheckedUpdateOneWithoutMessageNestedInput;
+};
+
+export type InquiryMessageUncheckedUpdateManyWithoutSenderInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	threadId?: Prisma.StringFieldUpdateOperationsInput | string;
+	inquiryId?: Prisma.StringFieldUpdateOperationsInput | string;
 	senderType?:
 		| Prisma.EnumSenderTypeFieldUpdateOperationsInput
 		| $Enums.SenderType;

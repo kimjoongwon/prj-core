@@ -1,0 +1,39 @@
+// @data-type: MASTER
+// @description: Asset에 종속되어 파생 리소스를 누적 관리하는 1:N 하위 모델
+/// @displayName 파생 리소스
+model Derivative {
+  id          String         @id @default(uuid())
+  createdAt   DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime?      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime?      @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 소속 Space
+  spaceId     String         @map("space_id")
+  createdById String?        @map("created_by_id")
+  /// @displayName 원본 Asset ID
+  assetId     String         @map("asset_id")
+  /// @displayName 파생 리소스 종류
+  kind        DerivativeKind
+  /// @displayName 변환 프로필명
+  profile     String         @default("default")
+  /// @displayName 스토리지 키
+  storageKey  String         @unique @map("storage_key")
+  /// @displayName MIME 타입
+  mimeType    String         @map("mime_type")
+  /// @displayName 파일 크기
+  sizeBytes   BigInt         @map("size_bytes")
+  /// @displayName 너비 (이미지/비디오)
+  width       Int?
+  /// @displayName 높이 (이미지/비디오)
+  height      Int?
+  /// @displayName 재생 시간 (비디오 트랜스코딩)
+  durationMs  Int?           @map("duration_ms")
+  space       Space          @relation(fields: [spaceId], references: [id], onDelete: Restrict)
+  createdBy   User?          @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  asset       Asset          @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  @@unique([assetId, kind, profile])
+  @@index([spaceId])
+  @@index([assetId])
+  @@index([kind])
+  @@map("derivatives")
+}

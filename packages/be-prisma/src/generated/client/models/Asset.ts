@@ -669,14 +669,14 @@ export type AssetUncheckedUpdateManyInput = {
 	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
-export type AssetNullableScalarRelationFilter = {
-	is?: Prisma.AssetWhereInput | null;
-	isNot?: Prisma.AssetWhereInput | null;
-};
-
 export type AssetScalarRelationFilter = {
 	is?: Prisma.AssetWhereInput;
 	isNot?: Prisma.AssetWhereInput;
+};
+
+export type AssetNullableScalarRelationFilter = {
+	is?: Prisma.AssetWhereInput | null;
+	isNot?: Prisma.AssetWhereInput | null;
 };
 
 export type AssetCountOrderByAggregateInput = {
@@ -752,6 +752,32 @@ export type AssetOrderByRelationAggregateInput = {
 	_count?: Prisma.SortOrder;
 };
 
+export type AssetCreateNestedOneWithoutAlbumEntriesInput = {
+	create?: Prisma.XOR<
+		Prisma.AssetCreateWithoutAlbumEntriesInput,
+		Prisma.AssetUncheckedCreateWithoutAlbumEntriesInput
+	>;
+	connectOrCreate?: Prisma.AssetCreateOrConnectWithoutAlbumEntriesInput;
+	connect?: Prisma.AssetWhereUniqueInput;
+};
+
+export type AssetUpdateOneRequiredWithoutAlbumEntriesNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.AssetCreateWithoutAlbumEntriesInput,
+		Prisma.AssetUncheckedCreateWithoutAlbumEntriesInput
+	>;
+	connectOrCreate?: Prisma.AssetCreateOrConnectWithoutAlbumEntriesInput;
+	upsert?: Prisma.AssetUpsertWithoutAlbumEntriesInput;
+	connect?: Prisma.AssetWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.AssetUpdateToOneWithWhereWithoutAlbumEntriesInput,
+			Prisma.AssetUpdateWithoutAlbumEntriesInput
+		>,
+		Prisma.AssetUncheckedUpdateWithoutAlbumEntriesInput
+	>;
+};
+
 export type AssetCreateNestedOneWithoutCoverOfAlbumsInput = {
 	create?: Prisma.XOR<
 		Prisma.AssetCreateWithoutCoverOfAlbumsInput,
@@ -780,32 +806,6 @@ export type AssetUpdateOneWithoutCoverOfAlbumsNestedInput = {
 	>;
 };
 
-export type AssetCreateNestedOneWithoutAlbumEntriesInput = {
-	create?: Prisma.XOR<
-		Prisma.AssetCreateWithoutAlbumEntriesInput,
-		Prisma.AssetUncheckedCreateWithoutAlbumEntriesInput
-	>;
-	connectOrCreate?: Prisma.AssetCreateOrConnectWithoutAlbumEntriesInput;
-	connect?: Prisma.AssetWhereUniqueInput;
-};
-
-export type AssetUpdateOneRequiredWithoutAlbumEntriesNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.AssetCreateWithoutAlbumEntriesInput,
-		Prisma.AssetUncheckedCreateWithoutAlbumEntriesInput
-	>;
-	connectOrCreate?: Prisma.AssetCreateOrConnectWithoutAlbumEntriesInput;
-	upsert?: Prisma.AssetUpsertWithoutAlbumEntriesInput;
-	connect?: Prisma.AssetWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.AssetUpdateToOneWithWhereWithoutAlbumEntriesInput,
-			Prisma.AssetUpdateWithoutAlbumEntriesInput
-		>,
-		Prisma.AssetUncheckedUpdateWithoutAlbumEntriesInput
-	>;
-};
-
 export type EnumAssetKindFieldUpdateOperationsInput = {
 	set?: $Enums.AssetKind;
 };
@@ -822,55 +822,29 @@ export type BigIntFieldUpdateOperationsInput = {
 	divide?: bigint | number;
 };
 
-export type AssetCreateNestedOneWithoutImageInput = {
+export type AssetCreateNestedOneWithoutDerivativesInput = {
 	create?: Prisma.XOR<
-		Prisma.AssetCreateWithoutImageInput,
-		Prisma.AssetUncheckedCreateWithoutImageInput
+		Prisma.AssetCreateWithoutDerivativesInput,
+		Prisma.AssetUncheckedCreateWithoutDerivativesInput
 	>;
-	connectOrCreate?: Prisma.AssetCreateOrConnectWithoutImageInput;
+	connectOrCreate?: Prisma.AssetCreateOrConnectWithoutDerivativesInput;
 	connect?: Prisma.AssetWhereUniqueInput;
 };
 
-export type AssetUpdateOneRequiredWithoutImageNestedInput = {
+export type AssetUpdateOneRequiredWithoutDerivativesNestedInput = {
 	create?: Prisma.XOR<
-		Prisma.AssetCreateWithoutImageInput,
-		Prisma.AssetUncheckedCreateWithoutImageInput
+		Prisma.AssetCreateWithoutDerivativesInput,
+		Prisma.AssetUncheckedCreateWithoutDerivativesInput
 	>;
-	connectOrCreate?: Prisma.AssetCreateOrConnectWithoutImageInput;
-	upsert?: Prisma.AssetUpsertWithoutImageInput;
+	connectOrCreate?: Prisma.AssetCreateOrConnectWithoutDerivativesInput;
+	upsert?: Prisma.AssetUpsertWithoutDerivativesInput;
 	connect?: Prisma.AssetWhereUniqueInput;
 	update?: Prisma.XOR<
 		Prisma.XOR<
-			Prisma.AssetUpdateToOneWithWhereWithoutImageInput,
-			Prisma.AssetUpdateWithoutImageInput
+			Prisma.AssetUpdateToOneWithWhereWithoutDerivativesInput,
+			Prisma.AssetUpdateWithoutDerivativesInput
 		>,
-		Prisma.AssetUncheckedUpdateWithoutImageInput
-	>;
-};
-
-export type AssetCreateNestedOneWithoutVideoInput = {
-	create?: Prisma.XOR<
-		Prisma.AssetCreateWithoutVideoInput,
-		Prisma.AssetUncheckedCreateWithoutVideoInput
-	>;
-	connectOrCreate?: Prisma.AssetCreateOrConnectWithoutVideoInput;
-	connect?: Prisma.AssetWhereUniqueInput;
-};
-
-export type AssetUpdateOneRequiredWithoutVideoNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.AssetCreateWithoutVideoInput,
-		Prisma.AssetUncheckedCreateWithoutVideoInput
-	>;
-	connectOrCreate?: Prisma.AssetCreateOrConnectWithoutVideoInput;
-	upsert?: Prisma.AssetUpsertWithoutVideoInput;
-	connect?: Prisma.AssetWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.AssetUpdateToOneWithWhereWithoutVideoInput,
-			Prisma.AssetUpdateWithoutVideoInput
-		>,
-		Prisma.AssetUncheckedUpdateWithoutVideoInput
+		Prisma.AssetUncheckedUpdateWithoutDerivativesInput
 	>;
 };
 
@@ -897,32 +871,6 @@ export type AssetUpdateOneRequiredWithoutDocumentNestedInput = {
 			Prisma.AssetUpdateWithoutDocumentInput
 		>,
 		Prisma.AssetUncheckedUpdateWithoutDocumentInput
-	>;
-};
-
-export type AssetCreateNestedOneWithoutDerivativesInput = {
-	create?: Prisma.XOR<
-		Prisma.AssetCreateWithoutDerivativesInput,
-		Prisma.AssetUncheckedCreateWithoutDerivativesInput
-	>;
-	connectOrCreate?: Prisma.AssetCreateOrConnectWithoutDerivativesInput;
-	connect?: Prisma.AssetWhereUniqueInput;
-};
-
-export type AssetUpdateOneRequiredWithoutDerivativesNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.AssetCreateWithoutDerivativesInput,
-		Prisma.AssetUncheckedCreateWithoutDerivativesInput
-	>;
-	connectOrCreate?: Prisma.AssetCreateOrConnectWithoutDerivativesInput;
-	upsert?: Prisma.AssetUpsertWithoutDerivativesInput;
-	connect?: Prisma.AssetWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.AssetUpdateToOneWithWhereWithoutDerivativesInput,
-			Prisma.AssetUpdateWithoutDerivativesInput
-		>,
-		Prisma.AssetUncheckedUpdateWithoutDerivativesInput
 	>;
 };
 
@@ -1010,6 +958,32 @@ export type AssetUncheckedUpdateManyWithoutFolderNestedInput = {
 		| Prisma.AssetUpdateManyWithWhereWithoutFolderInput
 		| Prisma.AssetUpdateManyWithWhereWithoutFolderInput[];
 	deleteMany?: Prisma.AssetScalarWhereInput | Prisma.AssetScalarWhereInput[];
+};
+
+export type AssetCreateNestedOneWithoutImageInput = {
+	create?: Prisma.XOR<
+		Prisma.AssetCreateWithoutImageInput,
+		Prisma.AssetUncheckedCreateWithoutImageInput
+	>;
+	connectOrCreate?: Prisma.AssetCreateOrConnectWithoutImageInput;
+	connect?: Prisma.AssetWhereUniqueInput;
+};
+
+export type AssetUpdateOneRequiredWithoutImageNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.AssetCreateWithoutImageInput,
+		Prisma.AssetUncheckedCreateWithoutImageInput
+	>;
+	connectOrCreate?: Prisma.AssetCreateOrConnectWithoutImageInput;
+	upsert?: Prisma.AssetUpsertWithoutImageInput;
+	connect?: Prisma.AssetWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.AssetUpdateToOneWithWhereWithoutImageInput,
+			Prisma.AssetUpdateWithoutImageInput
+		>,
+		Prisma.AssetUncheckedUpdateWithoutImageInput
+	>;
 };
 
 export type AssetCreateNestedManyWithoutSpaceInput = {
@@ -1184,148 +1158,30 @@ export type AssetUncheckedUpdateManyWithoutCreatedByNestedInput = {
 	deleteMany?: Prisma.AssetScalarWhereInput | Prisma.AssetScalarWhereInput[];
 };
 
-export type AssetCreateWithoutCoverOfAlbumsInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	kind: $Enums.AssetKind;
-	status?: $Enums.AssetStatus;
-	originalName: string;
-	storageKey: string;
-	mimeType: string;
-	extension?: string | null;
-	sizeBytes: bigint | number;
-	checksum?: string | null;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	space: Prisma.SpaceCreateNestedOneWithoutAssetsInput;
-	folder: Prisma.FolderCreateNestedOneWithoutAssetsInput;
-	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
-	image?: Prisma.ImageCreateNestedOneWithoutAssetInput;
-	video?: Prisma.VideoCreateNestedOneWithoutAssetInput;
-	document?: Prisma.DocumentCreateNestedOneWithoutAssetInput;
-	derivatives?: Prisma.DerivativeCreateNestedManyWithoutAssetInput;
-	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutAssetInput;
-};
-
-export type AssetUncheckedCreateWithoutCoverOfAlbumsInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	spaceId: string;
-	folderId: string;
-	kind: $Enums.AssetKind;
-	status?: $Enums.AssetStatus;
-	originalName: string;
-	storageKey: string;
-	mimeType: string;
-	extension?: string | null;
-	sizeBytes: bigint | number;
-	checksum?: string | null;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	createdById?: string | null;
-	image?: Prisma.ImageUncheckedCreateNestedOneWithoutAssetInput;
-	video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput;
-	document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput;
-	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutAssetInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutAssetInput;
-};
-
-export type AssetCreateOrConnectWithoutCoverOfAlbumsInput = {
-	where: Prisma.AssetWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.AssetCreateWithoutCoverOfAlbumsInput,
-		Prisma.AssetUncheckedCreateWithoutCoverOfAlbumsInput
+export type AssetCreateNestedOneWithoutVideoInput = {
+	create?: Prisma.XOR<
+		Prisma.AssetCreateWithoutVideoInput,
+		Prisma.AssetUncheckedCreateWithoutVideoInput
 	>;
+	connectOrCreate?: Prisma.AssetCreateOrConnectWithoutVideoInput;
+	connect?: Prisma.AssetWhereUniqueInput;
 };
 
-export type AssetUpsertWithoutCoverOfAlbumsInput = {
-	update: Prisma.XOR<
-		Prisma.AssetUpdateWithoutCoverOfAlbumsInput,
-		Prisma.AssetUncheckedUpdateWithoutCoverOfAlbumsInput
+export type AssetUpdateOneRequiredWithoutVideoNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.AssetCreateWithoutVideoInput,
+		Prisma.AssetUncheckedCreateWithoutVideoInput
 	>;
-	create: Prisma.XOR<
-		Prisma.AssetCreateWithoutCoverOfAlbumsInput,
-		Prisma.AssetUncheckedCreateWithoutCoverOfAlbumsInput
+	connectOrCreate?: Prisma.AssetCreateOrConnectWithoutVideoInput;
+	upsert?: Prisma.AssetUpsertWithoutVideoInput;
+	connect?: Prisma.AssetWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.AssetUpdateToOneWithWhereWithoutVideoInput,
+			Prisma.AssetUpdateWithoutVideoInput
+		>,
+		Prisma.AssetUncheckedUpdateWithoutVideoInput
 	>;
-	where?: Prisma.AssetWhereInput;
-};
-
-export type AssetUpdateToOneWithWhereWithoutCoverOfAlbumsInput = {
-	where?: Prisma.AssetWhereInput;
-	data: Prisma.XOR<
-		Prisma.AssetUpdateWithoutCoverOfAlbumsInput,
-		Prisma.AssetUncheckedUpdateWithoutCoverOfAlbumsInput
-	>;
-};
-
-export type AssetUpdateWithoutCoverOfAlbumsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind;
-	status?:
-		| Prisma.EnumAssetStatusFieldUpdateOperationsInput
-		| $Enums.AssetStatus;
-	originalName?: Prisma.StringFieldUpdateOperationsInput | string;
-	storageKey?: Prisma.StringFieldUpdateOperationsInput | string;
-	mimeType?: Prisma.StringFieldUpdateOperationsInput | string;
-	extension?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
-	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	space?: Prisma.SpaceUpdateOneRequiredWithoutAssetsNestedInput;
-	folder?: Prisma.FolderUpdateOneRequiredWithoutAssetsNestedInput;
-	createdBy?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
-	image?: Prisma.ImageUpdateOneWithoutAssetNestedInput;
-	video?: Prisma.VideoUpdateOneWithoutAssetNestedInput;
-	document?: Prisma.DocumentUpdateOneWithoutAssetNestedInput;
-	derivatives?: Prisma.DerivativeUpdateManyWithoutAssetNestedInput;
-	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutAssetNestedInput;
-};
-
-export type AssetUncheckedUpdateWithoutCoverOfAlbumsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	folderId?: Prisma.StringFieldUpdateOperationsInput | string;
-	kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind;
-	status?:
-		| Prisma.EnumAssetStatusFieldUpdateOperationsInput
-		| $Enums.AssetStatus;
-	originalName?: Prisma.StringFieldUpdateOperationsInput | string;
-	storageKey?: Prisma.StringFieldUpdateOperationsInput | string;
-	mimeType?: Prisma.StringFieldUpdateOperationsInput | string;
-	extension?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
-	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	image?: Prisma.ImageUncheckedUpdateOneWithoutAssetNestedInput;
-	video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput;
-	document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput;
-	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutAssetNestedInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutAssetNestedInput;
 };
 
 export type AssetCreateWithoutAlbumEntriesInput = {
@@ -1472,151 +1328,7 @@ export type AssetUncheckedUpdateWithoutAlbumEntriesInput = {
 	coverOfAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCoverAssetNestedInput;
 };
 
-export type AssetCreateWithoutImageInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	kind: $Enums.AssetKind;
-	status?: $Enums.AssetStatus;
-	originalName: string;
-	storageKey: string;
-	mimeType: string;
-	extension?: string | null;
-	sizeBytes: bigint | number;
-	checksum?: string | null;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	space: Prisma.SpaceCreateNestedOneWithoutAssetsInput;
-	folder: Prisma.FolderCreateNestedOneWithoutAssetsInput;
-	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
-	video?: Prisma.VideoCreateNestedOneWithoutAssetInput;
-	document?: Prisma.DocumentCreateNestedOneWithoutAssetInput;
-	derivatives?: Prisma.DerivativeCreateNestedManyWithoutAssetInput;
-	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutAssetInput;
-	coverOfAlbums?: Prisma.AlbumCreateNestedManyWithoutCoverAssetInput;
-};
-
-export type AssetUncheckedCreateWithoutImageInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	spaceId: string;
-	folderId: string;
-	kind: $Enums.AssetKind;
-	status?: $Enums.AssetStatus;
-	originalName: string;
-	storageKey: string;
-	mimeType: string;
-	extension?: string | null;
-	sizeBytes: bigint | number;
-	checksum?: string | null;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	createdById?: string | null;
-	video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput;
-	document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput;
-	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutAssetInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutAssetInput;
-	coverOfAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCoverAssetInput;
-};
-
-export type AssetCreateOrConnectWithoutImageInput = {
-	where: Prisma.AssetWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.AssetCreateWithoutImageInput,
-		Prisma.AssetUncheckedCreateWithoutImageInput
-	>;
-};
-
-export type AssetUpsertWithoutImageInput = {
-	update: Prisma.XOR<
-		Prisma.AssetUpdateWithoutImageInput,
-		Prisma.AssetUncheckedUpdateWithoutImageInput
-	>;
-	create: Prisma.XOR<
-		Prisma.AssetCreateWithoutImageInput,
-		Prisma.AssetUncheckedCreateWithoutImageInput
-	>;
-	where?: Prisma.AssetWhereInput;
-};
-
-export type AssetUpdateToOneWithWhereWithoutImageInput = {
-	where?: Prisma.AssetWhereInput;
-	data: Prisma.XOR<
-		Prisma.AssetUpdateWithoutImageInput,
-		Prisma.AssetUncheckedUpdateWithoutImageInput
-	>;
-};
-
-export type AssetUpdateWithoutImageInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind;
-	status?:
-		| Prisma.EnumAssetStatusFieldUpdateOperationsInput
-		| $Enums.AssetStatus;
-	originalName?: Prisma.StringFieldUpdateOperationsInput | string;
-	storageKey?: Prisma.StringFieldUpdateOperationsInput | string;
-	mimeType?: Prisma.StringFieldUpdateOperationsInput | string;
-	extension?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
-	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	space?: Prisma.SpaceUpdateOneRequiredWithoutAssetsNestedInput;
-	folder?: Prisma.FolderUpdateOneRequiredWithoutAssetsNestedInput;
-	createdBy?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
-	video?: Prisma.VideoUpdateOneWithoutAssetNestedInput;
-	document?: Prisma.DocumentUpdateOneWithoutAssetNestedInput;
-	derivatives?: Prisma.DerivativeUpdateManyWithoutAssetNestedInput;
-	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutAssetNestedInput;
-	coverOfAlbums?: Prisma.AlbumUpdateManyWithoutCoverAssetNestedInput;
-};
-
-export type AssetUncheckedUpdateWithoutImageInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	folderId?: Prisma.StringFieldUpdateOperationsInput | string;
-	kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind;
-	status?:
-		| Prisma.EnumAssetStatusFieldUpdateOperationsInput
-		| $Enums.AssetStatus;
-	originalName?: Prisma.StringFieldUpdateOperationsInput | string;
-	storageKey?: Prisma.StringFieldUpdateOperationsInput | string;
-	mimeType?: Prisma.StringFieldUpdateOperationsInput | string;
-	extension?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
-	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput;
-	document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput;
-	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutAssetNestedInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutAssetNestedInput;
-	coverOfAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCoverAssetNestedInput;
-};
-
-export type AssetCreateWithoutVideoInput = {
+export type AssetCreateWithoutCoverOfAlbumsInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1634,13 +1346,13 @@ export type AssetCreateWithoutVideoInput = {
 	folder: Prisma.FolderCreateNestedOneWithoutAssetsInput;
 	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
 	image?: Prisma.ImageCreateNestedOneWithoutAssetInput;
+	video?: Prisma.VideoCreateNestedOneWithoutAssetInput;
 	document?: Prisma.DocumentCreateNestedOneWithoutAssetInput;
 	derivatives?: Prisma.DerivativeCreateNestedManyWithoutAssetInput;
 	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutAssetInput;
-	coverOfAlbums?: Prisma.AlbumCreateNestedManyWithoutCoverAssetInput;
 };
 
-export type AssetUncheckedCreateWithoutVideoInput = {
+export type AssetUncheckedCreateWithoutCoverOfAlbumsInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1658,41 +1370,41 @@ export type AssetUncheckedCreateWithoutVideoInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	createdById?: string | null;
 	image?: Prisma.ImageUncheckedCreateNestedOneWithoutAssetInput;
+	video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput;
 	document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput;
 	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutAssetInput;
 	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutAssetInput;
-	coverOfAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCoverAssetInput;
 };
 
-export type AssetCreateOrConnectWithoutVideoInput = {
+export type AssetCreateOrConnectWithoutCoverOfAlbumsInput = {
 	where: Prisma.AssetWhereUniqueInput;
 	create: Prisma.XOR<
-		Prisma.AssetCreateWithoutVideoInput,
-		Prisma.AssetUncheckedCreateWithoutVideoInput
+		Prisma.AssetCreateWithoutCoverOfAlbumsInput,
+		Prisma.AssetUncheckedCreateWithoutCoverOfAlbumsInput
 	>;
 };
 
-export type AssetUpsertWithoutVideoInput = {
+export type AssetUpsertWithoutCoverOfAlbumsInput = {
 	update: Prisma.XOR<
-		Prisma.AssetUpdateWithoutVideoInput,
-		Prisma.AssetUncheckedUpdateWithoutVideoInput
+		Prisma.AssetUpdateWithoutCoverOfAlbumsInput,
+		Prisma.AssetUncheckedUpdateWithoutCoverOfAlbumsInput
 	>;
 	create: Prisma.XOR<
-		Prisma.AssetCreateWithoutVideoInput,
-		Prisma.AssetUncheckedCreateWithoutVideoInput
+		Prisma.AssetCreateWithoutCoverOfAlbumsInput,
+		Prisma.AssetUncheckedCreateWithoutCoverOfAlbumsInput
 	>;
 	where?: Prisma.AssetWhereInput;
 };
 
-export type AssetUpdateToOneWithWhereWithoutVideoInput = {
+export type AssetUpdateToOneWithWhereWithoutCoverOfAlbumsInput = {
 	where?: Prisma.AssetWhereInput;
 	data: Prisma.XOR<
-		Prisma.AssetUpdateWithoutVideoInput,
-		Prisma.AssetUncheckedUpdateWithoutVideoInput
+		Prisma.AssetUpdateWithoutCoverOfAlbumsInput,
+		Prisma.AssetUncheckedUpdateWithoutCoverOfAlbumsInput
 	>;
 };
 
-export type AssetUpdateWithoutVideoInput = {
+export type AssetUpdateWithoutCoverOfAlbumsInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1720,13 +1432,13 @@ export type AssetUpdateWithoutVideoInput = {
 	folder?: Prisma.FolderUpdateOneRequiredWithoutAssetsNestedInput;
 	createdBy?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
 	image?: Prisma.ImageUpdateOneWithoutAssetNestedInput;
+	video?: Prisma.VideoUpdateOneWithoutAssetNestedInput;
 	document?: Prisma.DocumentUpdateOneWithoutAssetNestedInput;
 	derivatives?: Prisma.DerivativeUpdateManyWithoutAssetNestedInput;
 	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutAssetNestedInput;
-	coverOfAlbums?: Prisma.AlbumUpdateManyWithoutCoverAssetNestedInput;
 };
 
-export type AssetUncheckedUpdateWithoutVideoInput = {
+export type AssetUncheckedUpdateWithoutCoverOfAlbumsInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1754,8 +1466,152 @@ export type AssetUncheckedUpdateWithoutVideoInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	image?: Prisma.ImageUncheckedUpdateOneWithoutAssetNestedInput;
+	video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput;
 	document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput;
 	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutAssetNestedInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutAssetNestedInput;
+};
+
+export type AssetCreateWithoutDerivativesInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	kind: $Enums.AssetKind;
+	status?: $Enums.AssetStatus;
+	originalName: string;
+	storageKey: string;
+	mimeType: string;
+	extension?: string | null;
+	sizeBytes: bigint | number;
+	checksum?: string | null;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	space: Prisma.SpaceCreateNestedOneWithoutAssetsInput;
+	folder: Prisma.FolderCreateNestedOneWithoutAssetsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
+	image?: Prisma.ImageCreateNestedOneWithoutAssetInput;
+	video?: Prisma.VideoCreateNestedOneWithoutAssetInput;
+	document?: Prisma.DocumentCreateNestedOneWithoutAssetInput;
+	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutAssetInput;
+	coverOfAlbums?: Prisma.AlbumCreateNestedManyWithoutCoverAssetInput;
+};
+
+export type AssetUncheckedCreateWithoutDerivativesInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	spaceId: string;
+	folderId: string;
+	kind: $Enums.AssetKind;
+	status?: $Enums.AssetStatus;
+	originalName: string;
+	storageKey: string;
+	mimeType: string;
+	extension?: string | null;
+	sizeBytes: bigint | number;
+	checksum?: string | null;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	createdById?: string | null;
+	image?: Prisma.ImageUncheckedCreateNestedOneWithoutAssetInput;
+	video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput;
+	document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutAssetInput;
+	coverOfAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCoverAssetInput;
+};
+
+export type AssetCreateOrConnectWithoutDerivativesInput = {
+	where: Prisma.AssetWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.AssetCreateWithoutDerivativesInput,
+		Prisma.AssetUncheckedCreateWithoutDerivativesInput
+	>;
+};
+
+export type AssetUpsertWithoutDerivativesInput = {
+	update: Prisma.XOR<
+		Prisma.AssetUpdateWithoutDerivativesInput,
+		Prisma.AssetUncheckedUpdateWithoutDerivativesInput
+	>;
+	create: Prisma.XOR<
+		Prisma.AssetCreateWithoutDerivativesInput,
+		Prisma.AssetUncheckedCreateWithoutDerivativesInput
+	>;
+	where?: Prisma.AssetWhereInput;
+};
+
+export type AssetUpdateToOneWithWhereWithoutDerivativesInput = {
+	where?: Prisma.AssetWhereInput;
+	data: Prisma.XOR<
+		Prisma.AssetUpdateWithoutDerivativesInput,
+		Prisma.AssetUncheckedUpdateWithoutDerivativesInput
+	>;
+};
+
+export type AssetUpdateWithoutDerivativesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind;
+	status?:
+		| Prisma.EnumAssetStatusFieldUpdateOperationsInput
+		| $Enums.AssetStatus;
+	originalName?: Prisma.StringFieldUpdateOperationsInput | string;
+	storageKey?: Prisma.StringFieldUpdateOperationsInput | string;
+	mimeType?: Prisma.StringFieldUpdateOperationsInput | string;
+	extension?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
+	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	space?: Prisma.SpaceUpdateOneRequiredWithoutAssetsNestedInput;
+	folder?: Prisma.FolderUpdateOneRequiredWithoutAssetsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
+	image?: Prisma.ImageUpdateOneWithoutAssetNestedInput;
+	video?: Prisma.VideoUpdateOneWithoutAssetNestedInput;
+	document?: Prisma.DocumentUpdateOneWithoutAssetNestedInput;
+	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutAssetNestedInput;
+	coverOfAlbums?: Prisma.AlbumUpdateManyWithoutCoverAssetNestedInput;
+};
+
+export type AssetUncheckedUpdateWithoutDerivativesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
+	folderId?: Prisma.StringFieldUpdateOperationsInput | string;
+	kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind;
+	status?:
+		| Prisma.EnumAssetStatusFieldUpdateOperationsInput
+		| $Enums.AssetStatus;
+	originalName?: Prisma.StringFieldUpdateOperationsInput | string;
+	storageKey?: Prisma.StringFieldUpdateOperationsInput | string;
+	mimeType?: Prisma.StringFieldUpdateOperationsInput | string;
+	extension?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
+	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	image?: Prisma.ImageUncheckedUpdateOneWithoutAssetNestedInput;
+	video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput;
+	document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput;
 	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutAssetNestedInput;
 	coverOfAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCoverAssetNestedInput;
 };
@@ -1904,150 +1760,6 @@ export type AssetUncheckedUpdateWithoutDocumentInput = {
 	coverOfAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCoverAssetNestedInput;
 };
 
-export type AssetCreateWithoutDerivativesInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	kind: $Enums.AssetKind;
-	status?: $Enums.AssetStatus;
-	originalName: string;
-	storageKey: string;
-	mimeType: string;
-	extension?: string | null;
-	sizeBytes: bigint | number;
-	checksum?: string | null;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	space: Prisma.SpaceCreateNestedOneWithoutAssetsInput;
-	folder: Prisma.FolderCreateNestedOneWithoutAssetsInput;
-	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
-	image?: Prisma.ImageCreateNestedOneWithoutAssetInput;
-	video?: Prisma.VideoCreateNestedOneWithoutAssetInput;
-	document?: Prisma.DocumentCreateNestedOneWithoutAssetInput;
-	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutAssetInput;
-	coverOfAlbums?: Prisma.AlbumCreateNestedManyWithoutCoverAssetInput;
-};
-
-export type AssetUncheckedCreateWithoutDerivativesInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	spaceId: string;
-	folderId: string;
-	kind: $Enums.AssetKind;
-	status?: $Enums.AssetStatus;
-	originalName: string;
-	storageKey: string;
-	mimeType: string;
-	extension?: string | null;
-	sizeBytes: bigint | number;
-	checksum?: string | null;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	createdById?: string | null;
-	image?: Prisma.ImageUncheckedCreateNestedOneWithoutAssetInput;
-	video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput;
-	document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutAssetInput;
-	coverOfAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCoverAssetInput;
-};
-
-export type AssetCreateOrConnectWithoutDerivativesInput = {
-	where: Prisma.AssetWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.AssetCreateWithoutDerivativesInput,
-		Prisma.AssetUncheckedCreateWithoutDerivativesInput
-	>;
-};
-
-export type AssetUpsertWithoutDerivativesInput = {
-	update: Prisma.XOR<
-		Prisma.AssetUpdateWithoutDerivativesInput,
-		Prisma.AssetUncheckedUpdateWithoutDerivativesInput
-	>;
-	create: Prisma.XOR<
-		Prisma.AssetCreateWithoutDerivativesInput,
-		Prisma.AssetUncheckedCreateWithoutDerivativesInput
-	>;
-	where?: Prisma.AssetWhereInput;
-};
-
-export type AssetUpdateToOneWithWhereWithoutDerivativesInput = {
-	where?: Prisma.AssetWhereInput;
-	data: Prisma.XOR<
-		Prisma.AssetUpdateWithoutDerivativesInput,
-		Prisma.AssetUncheckedUpdateWithoutDerivativesInput
-	>;
-};
-
-export type AssetUpdateWithoutDerivativesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind;
-	status?:
-		| Prisma.EnumAssetStatusFieldUpdateOperationsInput
-		| $Enums.AssetStatus;
-	originalName?: Prisma.StringFieldUpdateOperationsInput | string;
-	storageKey?: Prisma.StringFieldUpdateOperationsInput | string;
-	mimeType?: Prisma.StringFieldUpdateOperationsInput | string;
-	extension?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
-	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	space?: Prisma.SpaceUpdateOneRequiredWithoutAssetsNestedInput;
-	folder?: Prisma.FolderUpdateOneRequiredWithoutAssetsNestedInput;
-	createdBy?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
-	image?: Prisma.ImageUpdateOneWithoutAssetNestedInput;
-	video?: Prisma.VideoUpdateOneWithoutAssetNestedInput;
-	document?: Prisma.DocumentUpdateOneWithoutAssetNestedInput;
-	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutAssetNestedInput;
-	coverOfAlbums?: Prisma.AlbumUpdateManyWithoutCoverAssetNestedInput;
-};
-
-export type AssetUncheckedUpdateWithoutDerivativesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	folderId?: Prisma.StringFieldUpdateOperationsInput | string;
-	kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind;
-	status?:
-		| Prisma.EnumAssetStatusFieldUpdateOperationsInput
-		| $Enums.AssetStatus;
-	originalName?: Prisma.StringFieldUpdateOperationsInput | string;
-	storageKey?: Prisma.StringFieldUpdateOperationsInput | string;
-	mimeType?: Prisma.StringFieldUpdateOperationsInput | string;
-	extension?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
-	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	image?: Prisma.ImageUncheckedUpdateOneWithoutAssetNestedInput;
-	video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput;
-	document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutAssetNestedInput;
-	coverOfAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCoverAssetNestedInput;
-};
-
 export type AssetCreateWithoutFolderInput = {
 	id?: string;
 	createdAt?: Date | string;
@@ -2157,6 +1869,150 @@ export type AssetScalarWhereInput = {
 	checksum?: Prisma.StringNullableFilter<"Asset"> | string | null;
 	metadata?: Prisma.JsonNullableFilter<"Asset">;
 	createdById?: Prisma.StringNullableFilter<"Asset"> | string | null;
+};
+
+export type AssetCreateWithoutImageInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	kind: $Enums.AssetKind;
+	status?: $Enums.AssetStatus;
+	originalName: string;
+	storageKey: string;
+	mimeType: string;
+	extension?: string | null;
+	sizeBytes: bigint | number;
+	checksum?: string | null;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	space: Prisma.SpaceCreateNestedOneWithoutAssetsInput;
+	folder: Prisma.FolderCreateNestedOneWithoutAssetsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
+	video?: Prisma.VideoCreateNestedOneWithoutAssetInput;
+	document?: Prisma.DocumentCreateNestedOneWithoutAssetInput;
+	derivatives?: Prisma.DerivativeCreateNestedManyWithoutAssetInput;
+	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutAssetInput;
+	coverOfAlbums?: Prisma.AlbumCreateNestedManyWithoutCoverAssetInput;
+};
+
+export type AssetUncheckedCreateWithoutImageInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	spaceId: string;
+	folderId: string;
+	kind: $Enums.AssetKind;
+	status?: $Enums.AssetStatus;
+	originalName: string;
+	storageKey: string;
+	mimeType: string;
+	extension?: string | null;
+	sizeBytes: bigint | number;
+	checksum?: string | null;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	createdById?: string | null;
+	video?: Prisma.VideoUncheckedCreateNestedOneWithoutAssetInput;
+	document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput;
+	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutAssetInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutAssetInput;
+	coverOfAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCoverAssetInput;
+};
+
+export type AssetCreateOrConnectWithoutImageInput = {
+	where: Prisma.AssetWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.AssetCreateWithoutImageInput,
+		Prisma.AssetUncheckedCreateWithoutImageInput
+	>;
+};
+
+export type AssetUpsertWithoutImageInput = {
+	update: Prisma.XOR<
+		Prisma.AssetUpdateWithoutImageInput,
+		Prisma.AssetUncheckedUpdateWithoutImageInput
+	>;
+	create: Prisma.XOR<
+		Prisma.AssetCreateWithoutImageInput,
+		Prisma.AssetUncheckedCreateWithoutImageInput
+	>;
+	where?: Prisma.AssetWhereInput;
+};
+
+export type AssetUpdateToOneWithWhereWithoutImageInput = {
+	where?: Prisma.AssetWhereInput;
+	data: Prisma.XOR<
+		Prisma.AssetUpdateWithoutImageInput,
+		Prisma.AssetUncheckedUpdateWithoutImageInput
+	>;
+};
+
+export type AssetUpdateWithoutImageInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind;
+	status?:
+		| Prisma.EnumAssetStatusFieldUpdateOperationsInput
+		| $Enums.AssetStatus;
+	originalName?: Prisma.StringFieldUpdateOperationsInput | string;
+	storageKey?: Prisma.StringFieldUpdateOperationsInput | string;
+	mimeType?: Prisma.StringFieldUpdateOperationsInput | string;
+	extension?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
+	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	space?: Prisma.SpaceUpdateOneRequiredWithoutAssetsNestedInput;
+	folder?: Prisma.FolderUpdateOneRequiredWithoutAssetsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
+	video?: Prisma.VideoUpdateOneWithoutAssetNestedInput;
+	document?: Prisma.DocumentUpdateOneWithoutAssetNestedInput;
+	derivatives?: Prisma.DerivativeUpdateManyWithoutAssetNestedInput;
+	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutAssetNestedInput;
+	coverOfAlbums?: Prisma.AlbumUpdateManyWithoutCoverAssetNestedInput;
+};
+
+export type AssetUncheckedUpdateWithoutImageInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
+	folderId?: Prisma.StringFieldUpdateOperationsInput | string;
+	kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind;
+	status?:
+		| Prisma.EnumAssetStatusFieldUpdateOperationsInput
+		| $Enums.AssetStatus;
+	originalName?: Prisma.StringFieldUpdateOperationsInput | string;
+	storageKey?: Prisma.StringFieldUpdateOperationsInput | string;
+	mimeType?: Prisma.StringFieldUpdateOperationsInput | string;
+	extension?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
+	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	video?: Prisma.VideoUncheckedUpdateOneWithoutAssetNestedInput;
+	document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput;
+	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutAssetNestedInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutAssetNestedInput;
+	coverOfAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCoverAssetNestedInput;
 };
 
 export type AssetCreateWithoutSpaceInput = {
@@ -2337,6 +2193,150 @@ export type AssetUpdateManyWithWhereWithoutCreatedByInput = {
 		Prisma.AssetUpdateManyMutationInput,
 		Prisma.AssetUncheckedUpdateManyWithoutCreatedByInput
 	>;
+};
+
+export type AssetCreateWithoutVideoInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	kind: $Enums.AssetKind;
+	status?: $Enums.AssetStatus;
+	originalName: string;
+	storageKey: string;
+	mimeType: string;
+	extension?: string | null;
+	sizeBytes: bigint | number;
+	checksum?: string | null;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	space: Prisma.SpaceCreateNestedOneWithoutAssetsInput;
+	folder: Prisma.FolderCreateNestedOneWithoutAssetsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAssetsInput;
+	image?: Prisma.ImageCreateNestedOneWithoutAssetInput;
+	document?: Prisma.DocumentCreateNestedOneWithoutAssetInput;
+	derivatives?: Prisma.DerivativeCreateNestedManyWithoutAssetInput;
+	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutAssetInput;
+	coverOfAlbums?: Prisma.AlbumCreateNestedManyWithoutCoverAssetInput;
+};
+
+export type AssetUncheckedCreateWithoutVideoInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	spaceId: string;
+	folderId: string;
+	kind: $Enums.AssetKind;
+	status?: $Enums.AssetStatus;
+	originalName: string;
+	storageKey: string;
+	mimeType: string;
+	extension?: string | null;
+	sizeBytes: bigint | number;
+	checksum?: string | null;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	createdById?: string | null;
+	image?: Prisma.ImageUncheckedCreateNestedOneWithoutAssetInput;
+	document?: Prisma.DocumentUncheckedCreateNestedOneWithoutAssetInput;
+	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutAssetInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutAssetInput;
+	coverOfAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCoverAssetInput;
+};
+
+export type AssetCreateOrConnectWithoutVideoInput = {
+	where: Prisma.AssetWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.AssetCreateWithoutVideoInput,
+		Prisma.AssetUncheckedCreateWithoutVideoInput
+	>;
+};
+
+export type AssetUpsertWithoutVideoInput = {
+	update: Prisma.XOR<
+		Prisma.AssetUpdateWithoutVideoInput,
+		Prisma.AssetUncheckedUpdateWithoutVideoInput
+	>;
+	create: Prisma.XOR<
+		Prisma.AssetCreateWithoutVideoInput,
+		Prisma.AssetUncheckedCreateWithoutVideoInput
+	>;
+	where?: Prisma.AssetWhereInput;
+};
+
+export type AssetUpdateToOneWithWhereWithoutVideoInput = {
+	where?: Prisma.AssetWhereInput;
+	data: Prisma.XOR<
+		Prisma.AssetUpdateWithoutVideoInput,
+		Prisma.AssetUncheckedUpdateWithoutVideoInput
+	>;
+};
+
+export type AssetUpdateWithoutVideoInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind;
+	status?:
+		| Prisma.EnumAssetStatusFieldUpdateOperationsInput
+		| $Enums.AssetStatus;
+	originalName?: Prisma.StringFieldUpdateOperationsInput | string;
+	storageKey?: Prisma.StringFieldUpdateOperationsInput | string;
+	mimeType?: Prisma.StringFieldUpdateOperationsInput | string;
+	extension?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
+	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	space?: Prisma.SpaceUpdateOneRequiredWithoutAssetsNestedInput;
+	folder?: Prisma.FolderUpdateOneRequiredWithoutAssetsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedAssetsNestedInput;
+	image?: Prisma.ImageUpdateOneWithoutAssetNestedInput;
+	document?: Prisma.DocumentUpdateOneWithoutAssetNestedInput;
+	derivatives?: Prisma.DerivativeUpdateManyWithoutAssetNestedInput;
+	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutAssetNestedInput;
+	coverOfAlbums?: Prisma.AlbumUpdateManyWithoutCoverAssetNestedInput;
+};
+
+export type AssetUncheckedUpdateWithoutVideoInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
+	folderId?: Prisma.StringFieldUpdateOperationsInput | string;
+	kind?: Prisma.EnumAssetKindFieldUpdateOperationsInput | $Enums.AssetKind;
+	status?:
+		| Prisma.EnumAssetStatusFieldUpdateOperationsInput
+		| $Enums.AssetStatus;
+	originalName?: Prisma.StringFieldUpdateOperationsInput | string;
+	storageKey?: Prisma.StringFieldUpdateOperationsInput | string;
+	mimeType?: Prisma.StringFieldUpdateOperationsInput | string;
+	extension?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	sizeBytes?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number;
+	checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	image?: Prisma.ImageUncheckedUpdateOneWithoutAssetNestedInput;
+	document?: Prisma.DocumentUncheckedUpdateOneWithoutAssetNestedInput;
+	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutAssetNestedInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutAssetNestedInput;
+	coverOfAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCoverAssetNestedInput;
 };
 
 export type AssetCreateManyFolderInput = {

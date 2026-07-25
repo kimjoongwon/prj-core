@@ -405,5 +405,5 @@ const firstNames = ["민수", "서연", "예준", "지우", "하윤", "도윤"];
 
 ### 관련 파일
 
-- Prisma 스키마: `packages/be-prisma/prisma/schema/*.prisma`
+- Prisma 스키마: `packages/be-prisma/schema/*.prisma`
 - Enum 정의: `packages/common-enum/src/`

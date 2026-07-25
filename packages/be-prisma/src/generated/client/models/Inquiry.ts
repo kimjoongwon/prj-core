@@ -1181,16 +1181,6 @@ export type InquiryUncheckedUpdateManyInput = {
 	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
 };
 
-export type InquiryListRelationFilter = {
-	every?: Prisma.InquiryWhereInput;
-	some?: Prisma.InquiryWhereInput;
-	none?: Prisma.InquiryWhereInput;
-};
-
-export type InquiryOrderByRelationAggregateInput = {
-	_count?: Prisma.SortOrder;
-};
-
 export type InquiryScalarRelationFilter = {
 	is?: Prisma.InquiryWhereInput;
 	isNot?: Prisma.InquiryWhereInput;
@@ -1301,6 +1291,196 @@ export type InquiryMinOrderByAggregateInput = {
 export type InquirySumOrderByAggregateInput = {
 	sentimentScore?: Prisma.SortOrder;
 	unreadCount?: Prisma.SortOrder;
+};
+
+export type InquiryListRelationFilter = {
+	every?: Prisma.InquiryWhereInput;
+	some?: Prisma.InquiryWhereInput;
+	none?: Prisma.InquiryWhereInput;
+};
+
+export type InquiryOrderByRelationAggregateInput = {
+	_count?: Prisma.SortOrder;
+};
+
+export type InquiryCreateNestedOneWithoutAiAgentLogsInput = {
+	create?: Prisma.XOR<
+		Prisma.InquiryCreateWithoutAiAgentLogsInput,
+		Prisma.InquiryUncheckedCreateWithoutAiAgentLogsInput
+	>;
+	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutAiAgentLogsInput;
+	connect?: Prisma.InquiryWhereUniqueInput;
+};
+
+export type InquiryUpdateOneRequiredWithoutAiAgentLogsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.InquiryCreateWithoutAiAgentLogsInput,
+		Prisma.InquiryUncheckedCreateWithoutAiAgentLogsInput
+	>;
+	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutAiAgentLogsInput;
+	upsert?: Prisma.InquiryUpsertWithoutAiAgentLogsInput;
+	connect?: Prisma.InquiryWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.InquiryUpdateToOneWithWhereWithoutAiAgentLogsInput,
+			Prisma.InquiryUpdateWithoutAiAgentLogsInput
+		>,
+		Prisma.InquiryUncheckedUpdateWithoutAiAgentLogsInput
+	>;
+};
+
+export type InquiryCreateNestedOneWithoutMessagesInput = {
+	create?: Prisma.XOR<
+		Prisma.InquiryCreateWithoutMessagesInput,
+		Prisma.InquiryUncheckedCreateWithoutMessagesInput
+	>;
+	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutMessagesInput;
+	connect?: Prisma.InquiryWhereUniqueInput;
+};
+
+export type InquiryUpdateOneRequiredWithoutMessagesNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.InquiryCreateWithoutMessagesInput,
+		Prisma.InquiryUncheckedCreateWithoutMessagesInput
+	>;
+	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutMessagesInput;
+	upsert?: Prisma.InquiryUpsertWithoutMessagesInput;
+	connect?: Prisma.InquiryWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.InquiryUpdateToOneWithWhereWithoutMessagesInput,
+			Prisma.InquiryUpdateWithoutMessagesInput
+		>,
+		Prisma.InquiryUncheckedUpdateWithoutMessagesInput
+	>;
+};
+
+export type InquiryCreateNestedOneWithoutParticipantsInput = {
+	create?: Prisma.XOR<
+		Prisma.InquiryCreateWithoutParticipantsInput,
+		Prisma.InquiryUncheckedCreateWithoutParticipantsInput
+	>;
+	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutParticipantsInput;
+	connect?: Prisma.InquiryWhereUniqueInput;
+};
+
+export type InquiryUpdateOneRequiredWithoutParticipantsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.InquiryCreateWithoutParticipantsInput,
+		Prisma.InquiryUncheckedCreateWithoutParticipantsInput
+	>;
+	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutParticipantsInput;
+	upsert?: Prisma.InquiryUpsertWithoutParticipantsInput;
+	connect?: Prisma.InquiryWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.InquiryUpdateToOneWithWhereWithoutParticipantsInput,
+			Prisma.InquiryUpdateWithoutParticipantsInput
+		>,
+		Prisma.InquiryUncheckedUpdateWithoutParticipantsInput
+	>;
+};
+
+export type InquiryCreateNestedOneWithoutTagsInput = {
+	create?: Prisma.XOR<
+		Prisma.InquiryCreateWithoutTagsInput,
+		Prisma.InquiryUncheckedCreateWithoutTagsInput
+	>;
+	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutTagsInput;
+	connect?: Prisma.InquiryWhereUniqueInput;
+};
+
+export type InquiryUpdateOneRequiredWithoutTagsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.InquiryCreateWithoutTagsInput,
+		Prisma.InquiryUncheckedCreateWithoutTagsInput
+	>;
+	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutTagsInput;
+	upsert?: Prisma.InquiryUpsertWithoutTagsInput;
+	connect?: Prisma.InquiryWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.InquiryUpdateToOneWithWhereWithoutTagsInput,
+			Prisma.InquiryUpdateWithoutTagsInput
+		>,
+		Prisma.InquiryUncheckedUpdateWithoutTagsInput
+	>;
+};
+
+export type InquiryCreateNestedOneWithoutThreadsInput = {
+	create?: Prisma.XOR<
+		Prisma.InquiryCreateWithoutThreadsInput,
+		Prisma.InquiryUncheckedCreateWithoutThreadsInput
+	>;
+	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutThreadsInput;
+	connect?: Prisma.InquiryWhereUniqueInput;
+};
+
+export type InquiryUpdateOneRequiredWithoutThreadsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.InquiryCreateWithoutThreadsInput,
+		Prisma.InquiryUncheckedCreateWithoutThreadsInput
+	>;
+	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutThreadsInput;
+	upsert?: Prisma.InquiryUpsertWithoutThreadsInput;
+	connect?: Prisma.InquiryWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.InquiryUpdateToOneWithWhereWithoutThreadsInput,
+			Prisma.InquiryUpdateWithoutThreadsInput
+		>,
+		Prisma.InquiryUncheckedUpdateWithoutThreadsInput
+	>;
+};
+
+export type EnumInquiryCategoryFieldUpdateOperationsInput = {
+	set?: $Enums.InquiryCategory;
+};
+
+export type EnumInquiryChannelFieldUpdateOperationsInput = {
+	set?: $Enums.InquiryChannel;
+};
+
+export type EnumInquirySourceFieldUpdateOperationsInput = {
+	set?: $Enums.InquirySource;
+};
+
+export type EnumInquiryStatusFieldUpdateOperationsInput = {
+	set?: $Enums.InquiryStatus;
+};
+
+export type EnumInquiryPriorityFieldUpdateOperationsInput = {
+	set?: $Enums.InquiryPriority;
+};
+
+export type NullableEnumSentimentTypeFieldUpdateOperationsInput = {
+	set?: $Enums.SentimentType | null;
+};
+
+export type InquiryCreateNestedOneWithoutSentimentAnalysisInput = {
+	create?: Prisma.XOR<
+		Prisma.InquiryCreateWithoutSentimentAnalysisInput,
+		Prisma.InquiryUncheckedCreateWithoutSentimentAnalysisInput
+	>;
+	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutSentimentAnalysisInput;
+	connect?: Prisma.InquiryWhereUniqueInput;
+};
+
+export type InquiryUpdateOneRequiredWithoutSentimentAnalysisNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.InquiryCreateWithoutSentimentAnalysisInput,
+		Prisma.InquiryUncheckedCreateWithoutSentimentAnalysisInput
+	>;
+	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutSentimentAnalysisInput;
+	upsert?: Prisma.InquiryUpsertWithoutSentimentAnalysisInput;
+	connect?: Prisma.InquiryWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.InquiryUpdateToOneWithWhereWithoutSentimentAnalysisInput,
+			Prisma.InquiryUpdateWithoutSentimentAnalysisInput
+		>,
+		Prisma.InquiryUncheckedUpdateWithoutSentimentAnalysisInput
+	>;
 };
 
 export type InquiryCreateNestedManyWithoutSpaceInput = {
@@ -1679,721 +1859,6 @@ export type InquiryUncheckedUpdateManyWithoutCreatedByNestedInput = {
 		| Prisma.InquiryScalarWhereInput[];
 };
 
-export type InquiryCreateNestedOneWithoutAiAgentLogsInput = {
-	create?: Prisma.XOR<
-		Prisma.InquiryCreateWithoutAiAgentLogsInput,
-		Prisma.InquiryUncheckedCreateWithoutAiAgentLogsInput
-	>;
-	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutAiAgentLogsInput;
-	connect?: Prisma.InquiryWhereUniqueInput;
-};
-
-export type InquiryUpdateOneRequiredWithoutAiAgentLogsNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.InquiryCreateWithoutAiAgentLogsInput,
-		Prisma.InquiryUncheckedCreateWithoutAiAgentLogsInput
-	>;
-	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutAiAgentLogsInput;
-	upsert?: Prisma.InquiryUpsertWithoutAiAgentLogsInput;
-	connect?: Prisma.InquiryWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.InquiryUpdateToOneWithWhereWithoutAiAgentLogsInput,
-			Prisma.InquiryUpdateWithoutAiAgentLogsInput
-		>,
-		Prisma.InquiryUncheckedUpdateWithoutAiAgentLogsInput
-	>;
-};
-
-export type InquiryCreateNestedOneWithoutThreadsInput = {
-	create?: Prisma.XOR<
-		Prisma.InquiryCreateWithoutThreadsInput,
-		Prisma.InquiryUncheckedCreateWithoutThreadsInput
-	>;
-	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutThreadsInput;
-	connect?: Prisma.InquiryWhereUniqueInput;
-};
-
-export type InquiryUpdateOneRequiredWithoutThreadsNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.InquiryCreateWithoutThreadsInput,
-		Prisma.InquiryUncheckedCreateWithoutThreadsInput
-	>;
-	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutThreadsInput;
-	upsert?: Prisma.InquiryUpsertWithoutThreadsInput;
-	connect?: Prisma.InquiryWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.InquiryUpdateToOneWithWhereWithoutThreadsInput,
-			Prisma.InquiryUpdateWithoutThreadsInput
-		>,
-		Prisma.InquiryUncheckedUpdateWithoutThreadsInput
-	>;
-};
-
-export type InquiryCreateNestedOneWithoutMessagesInput = {
-	create?: Prisma.XOR<
-		Prisma.InquiryCreateWithoutMessagesInput,
-		Prisma.InquiryUncheckedCreateWithoutMessagesInput
-	>;
-	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutMessagesInput;
-	connect?: Prisma.InquiryWhereUniqueInput;
-};
-
-export type InquiryUpdateOneRequiredWithoutMessagesNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.InquiryCreateWithoutMessagesInput,
-		Prisma.InquiryUncheckedCreateWithoutMessagesInput
-	>;
-	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutMessagesInput;
-	upsert?: Prisma.InquiryUpsertWithoutMessagesInput;
-	connect?: Prisma.InquiryWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.InquiryUpdateToOneWithWhereWithoutMessagesInput,
-			Prisma.InquiryUpdateWithoutMessagesInput
-		>,
-		Prisma.InquiryUncheckedUpdateWithoutMessagesInput
-	>;
-};
-
-export type InquiryCreateNestedOneWithoutParticipantsInput = {
-	create?: Prisma.XOR<
-		Prisma.InquiryCreateWithoutParticipantsInput,
-		Prisma.InquiryUncheckedCreateWithoutParticipantsInput
-	>;
-	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutParticipantsInput;
-	connect?: Prisma.InquiryWhereUniqueInput;
-};
-
-export type InquiryUpdateOneRequiredWithoutParticipantsNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.InquiryCreateWithoutParticipantsInput,
-		Prisma.InquiryUncheckedCreateWithoutParticipantsInput
-	>;
-	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutParticipantsInput;
-	upsert?: Prisma.InquiryUpsertWithoutParticipantsInput;
-	connect?: Prisma.InquiryWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.InquiryUpdateToOneWithWhereWithoutParticipantsInput,
-			Prisma.InquiryUpdateWithoutParticipantsInput
-		>,
-		Prisma.InquiryUncheckedUpdateWithoutParticipantsInput
-	>;
-};
-
-export type EnumInquiryCategoryFieldUpdateOperationsInput = {
-	set?: $Enums.InquiryCategory;
-};
-
-export type EnumInquiryChannelFieldUpdateOperationsInput = {
-	set?: $Enums.InquiryChannel;
-};
-
-export type EnumInquirySourceFieldUpdateOperationsInput = {
-	set?: $Enums.InquirySource;
-};
-
-export type EnumInquiryStatusFieldUpdateOperationsInput = {
-	set?: $Enums.InquiryStatus;
-};
-
-export type EnumInquiryPriorityFieldUpdateOperationsInput = {
-	set?: $Enums.InquiryPriority;
-};
-
-export type NullableEnumSentimentTypeFieldUpdateOperationsInput = {
-	set?: $Enums.SentimentType | null;
-};
-
-export type InquiryCreateNestedOneWithoutTagsInput = {
-	create?: Prisma.XOR<
-		Prisma.InquiryCreateWithoutTagsInput,
-		Prisma.InquiryUncheckedCreateWithoutTagsInput
-	>;
-	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutTagsInput;
-	connect?: Prisma.InquiryWhereUniqueInput;
-};
-
-export type InquiryUpdateOneRequiredWithoutTagsNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.InquiryCreateWithoutTagsInput,
-		Prisma.InquiryUncheckedCreateWithoutTagsInput
-	>;
-	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutTagsInput;
-	upsert?: Prisma.InquiryUpsertWithoutTagsInput;
-	connect?: Prisma.InquiryWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.InquiryUpdateToOneWithWhereWithoutTagsInput,
-			Prisma.InquiryUpdateWithoutTagsInput
-		>,
-		Prisma.InquiryUncheckedUpdateWithoutTagsInput
-	>;
-};
-
-export type InquiryCreateNestedOneWithoutSentimentAnalysisInput = {
-	create?: Prisma.XOR<
-		Prisma.InquiryCreateWithoutSentimentAnalysisInput,
-		Prisma.InquiryUncheckedCreateWithoutSentimentAnalysisInput
-	>;
-	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutSentimentAnalysisInput;
-	connect?: Prisma.InquiryWhereUniqueInput;
-};
-
-export type InquiryUpdateOneRequiredWithoutSentimentAnalysisNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.InquiryCreateWithoutSentimentAnalysisInput,
-		Prisma.InquiryUncheckedCreateWithoutSentimentAnalysisInput
-	>;
-	connectOrCreate?: Prisma.InquiryCreateOrConnectWithoutSentimentAnalysisInput;
-	upsert?: Prisma.InquiryUpsertWithoutSentimentAnalysisInput;
-	connect?: Prisma.InquiryWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.InquiryUpdateToOneWithWhereWithoutSentimentAnalysisInput,
-			Prisma.InquiryUpdateWithoutSentimentAnalysisInput
-		>,
-		Prisma.InquiryUncheckedUpdateWithoutSentimentAnalysisInput
-	>;
-};
-
-export type InquiryCreateWithoutSpaceInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	inquiryNumber: string;
-	title: string;
-	category: $Enums.InquiryCategory;
-	channel: $Enums.InquiryChannel;
-	source?: $Enums.InquirySource;
-	status?: $Enums.InquiryStatus;
-	priority?: $Enums.InquiryPriority;
-	firstResponseAt?: Date | string | null;
-	resolvedAt?: Date | string | null;
-	closedAt?: Date | string | null;
-	slaResponseDue?: Date | string | null;
-	slaResolveDue?: Date | string | null;
-	isSlaResponseBreached?: boolean;
-	isSlaResolveBreached?: boolean;
-	sentiment?: $Enums.SentimentType | null;
-	sentimentScore?: number | null;
-	aiResolutionAttempted?: boolean;
-	aiResolved?: boolean;
-	isRealtimeChat?: boolean;
-	lastMessageAt?: Date | string | null;
-	unreadCount?: number;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
-	customer?: Prisma.UserCreateNestedOneWithoutCustomerInquiriesInput;
-	assignee?: Prisma.UserCreateNestedOneWithoutAssignedInquiriesInput;
-	threads?: Prisma.InquiryThreadCreateNestedManyWithoutInquiryInput;
-	messages?: Prisma.InquiryMessageCreateNestedManyWithoutInquiryInput;
-	participants?: Prisma.InquiryParticipantCreateNestedManyWithoutInquiryInput;
-	tags?: Prisma.InquiryTagCreateNestedManyWithoutInquiryInput;
-	sentimentAnalysis?: Prisma.SentimentAnalysisCreateNestedOneWithoutInquiryInput;
-	aiAgentLogs?: Prisma.AIAgentLogCreateNestedManyWithoutInquiryInput;
-};
-
-export type InquiryUncheckedCreateWithoutSpaceInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	createdById?: string | null;
-	inquiryNumber: string;
-	title: string;
-	category: $Enums.InquiryCategory;
-	channel: $Enums.InquiryChannel;
-	source?: $Enums.InquirySource;
-	status?: $Enums.InquiryStatus;
-	priority?: $Enums.InquiryPriority;
-	customerId?: string | null;
-	assigneeId?: string | null;
-	firstResponseAt?: Date | string | null;
-	resolvedAt?: Date | string | null;
-	closedAt?: Date | string | null;
-	slaResponseDue?: Date | string | null;
-	slaResolveDue?: Date | string | null;
-	isSlaResponseBreached?: boolean;
-	isSlaResolveBreached?: boolean;
-	sentiment?: $Enums.SentimentType | null;
-	sentimentScore?: number | null;
-	aiResolutionAttempted?: boolean;
-	aiResolved?: boolean;
-	isRealtimeChat?: boolean;
-	lastMessageAt?: Date | string | null;
-	unreadCount?: number;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	threads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutInquiryInput;
-	messages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutInquiryInput;
-	participants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutInquiryInput;
-	tags?: Prisma.InquiryTagUncheckedCreateNestedManyWithoutInquiryInput;
-	sentimentAnalysis?: Prisma.SentimentAnalysisUncheckedCreateNestedOneWithoutInquiryInput;
-	aiAgentLogs?: Prisma.AIAgentLogUncheckedCreateNestedManyWithoutInquiryInput;
-};
-
-export type InquiryCreateOrConnectWithoutSpaceInput = {
-	where: Prisma.InquiryWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.InquiryCreateWithoutSpaceInput,
-		Prisma.InquiryUncheckedCreateWithoutSpaceInput
-	>;
-};
-
-export type InquiryCreateManySpaceInputEnvelope = {
-	data:
-		| Prisma.InquiryCreateManySpaceInput
-		| Prisma.InquiryCreateManySpaceInput[];
-	skipDuplicates?: boolean;
-};
-
-export type InquiryUpsertWithWhereUniqueWithoutSpaceInput = {
-	where: Prisma.InquiryWhereUniqueInput;
-	update: Prisma.XOR<
-		Prisma.InquiryUpdateWithoutSpaceInput,
-		Prisma.InquiryUncheckedUpdateWithoutSpaceInput
-	>;
-	create: Prisma.XOR<
-		Prisma.InquiryCreateWithoutSpaceInput,
-		Prisma.InquiryUncheckedCreateWithoutSpaceInput
-	>;
-};
-
-export type InquiryUpdateWithWhereUniqueWithoutSpaceInput = {
-	where: Prisma.InquiryWhereUniqueInput;
-	data: Prisma.XOR<
-		Prisma.InquiryUpdateWithoutSpaceInput,
-		Prisma.InquiryUncheckedUpdateWithoutSpaceInput
-	>;
-};
-
-export type InquiryUpdateManyWithWhereWithoutSpaceInput = {
-	where: Prisma.InquiryScalarWhereInput;
-	data: Prisma.XOR<
-		Prisma.InquiryUpdateManyMutationInput,
-		Prisma.InquiryUncheckedUpdateManyWithoutSpaceInput
-	>;
-};
-
-export type InquiryScalarWhereInput = {
-	AND?: Prisma.InquiryScalarWhereInput | Prisma.InquiryScalarWhereInput[];
-	OR?: Prisma.InquiryScalarWhereInput[];
-	NOT?: Prisma.InquiryScalarWhereInput | Prisma.InquiryScalarWhereInput[];
-	id?: Prisma.StringFilter<"Inquiry"> | string;
-	createdAt?: Prisma.DateTimeFilter<"Inquiry"> | Date | string;
-	updatedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null;
-	removedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null;
-	spaceId?: Prisma.StringFilter<"Inquiry"> | string;
-	createdById?: Prisma.StringNullableFilter<"Inquiry"> | string | null;
-	inquiryNumber?: Prisma.StringFilter<"Inquiry"> | string;
-	title?: Prisma.StringFilter<"Inquiry"> | string;
-	category?:
-		| Prisma.EnumInquiryCategoryFilter<"Inquiry">
-		| $Enums.InquiryCategory;
-	channel?: Prisma.EnumInquiryChannelFilter<"Inquiry"> | $Enums.InquiryChannel;
-	source?: Prisma.EnumInquirySourceFilter<"Inquiry"> | $Enums.InquirySource;
-	status?: Prisma.EnumInquiryStatusFilter<"Inquiry"> | $Enums.InquiryStatus;
-	priority?:
-		| Prisma.EnumInquiryPriorityFilter<"Inquiry">
-		| $Enums.InquiryPriority;
-	customerId?: Prisma.StringNullableFilter<"Inquiry"> | string | null;
-	assigneeId?: Prisma.StringNullableFilter<"Inquiry"> | string | null;
-	firstResponseAt?:
-		| Prisma.DateTimeNullableFilter<"Inquiry">
-		| Date
-		| string
-		| null;
-	resolvedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null;
-	closedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null;
-	slaResponseDue?:
-		| Prisma.DateTimeNullableFilter<"Inquiry">
-		| Date
-		| string
-		| null;
-	slaResolveDue?:
-		| Prisma.DateTimeNullableFilter<"Inquiry">
-		| Date
-		| string
-		| null;
-	isSlaResponseBreached?: Prisma.BoolFilter<"Inquiry"> | boolean;
-	isSlaResolveBreached?: Prisma.BoolFilter<"Inquiry"> | boolean;
-	sentiment?:
-		| Prisma.EnumSentimentTypeNullableFilter<"Inquiry">
-		| $Enums.SentimentType
-		| null;
-	sentimentScore?: Prisma.FloatNullableFilter<"Inquiry"> | number | null;
-	aiResolutionAttempted?: Prisma.BoolFilter<"Inquiry"> | boolean;
-	aiResolved?: Prisma.BoolFilter<"Inquiry"> | boolean;
-	isRealtimeChat?: Prisma.BoolFilter<"Inquiry"> | boolean;
-	lastMessageAt?:
-		| Prisma.DateTimeNullableFilter<"Inquiry">
-		| Date
-		| string
-		| null;
-	unreadCount?: Prisma.IntFilter<"Inquiry"> | number;
-	metadata?: Prisma.JsonNullableFilter<"Inquiry">;
-};
-
-export type InquiryCreateWithoutCustomerInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	inquiryNumber: string;
-	title: string;
-	category: $Enums.InquiryCategory;
-	channel: $Enums.InquiryChannel;
-	source?: $Enums.InquirySource;
-	status?: $Enums.InquiryStatus;
-	priority?: $Enums.InquiryPriority;
-	firstResponseAt?: Date | string | null;
-	resolvedAt?: Date | string | null;
-	closedAt?: Date | string | null;
-	slaResponseDue?: Date | string | null;
-	slaResolveDue?: Date | string | null;
-	isSlaResponseBreached?: boolean;
-	isSlaResolveBreached?: boolean;
-	sentiment?: $Enums.SentimentType | null;
-	sentimentScore?: number | null;
-	aiResolutionAttempted?: boolean;
-	aiResolved?: boolean;
-	isRealtimeChat?: boolean;
-	lastMessageAt?: Date | string | null;
-	unreadCount?: number;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	space: Prisma.SpaceCreateNestedOneWithoutInquiriesInput;
-	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
-	assignee?: Prisma.UserCreateNestedOneWithoutAssignedInquiriesInput;
-	threads?: Prisma.InquiryThreadCreateNestedManyWithoutInquiryInput;
-	messages?: Prisma.InquiryMessageCreateNestedManyWithoutInquiryInput;
-	participants?: Prisma.InquiryParticipantCreateNestedManyWithoutInquiryInput;
-	tags?: Prisma.InquiryTagCreateNestedManyWithoutInquiryInput;
-	sentimentAnalysis?: Prisma.SentimentAnalysisCreateNestedOneWithoutInquiryInput;
-	aiAgentLogs?: Prisma.AIAgentLogCreateNestedManyWithoutInquiryInput;
-};
-
-export type InquiryUncheckedCreateWithoutCustomerInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	spaceId: string;
-	createdById?: string | null;
-	inquiryNumber: string;
-	title: string;
-	category: $Enums.InquiryCategory;
-	channel: $Enums.InquiryChannel;
-	source?: $Enums.InquirySource;
-	status?: $Enums.InquiryStatus;
-	priority?: $Enums.InquiryPriority;
-	assigneeId?: string | null;
-	firstResponseAt?: Date | string | null;
-	resolvedAt?: Date | string | null;
-	closedAt?: Date | string | null;
-	slaResponseDue?: Date | string | null;
-	slaResolveDue?: Date | string | null;
-	isSlaResponseBreached?: boolean;
-	isSlaResolveBreached?: boolean;
-	sentiment?: $Enums.SentimentType | null;
-	sentimentScore?: number | null;
-	aiResolutionAttempted?: boolean;
-	aiResolved?: boolean;
-	isRealtimeChat?: boolean;
-	lastMessageAt?: Date | string | null;
-	unreadCount?: number;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	threads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutInquiryInput;
-	messages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutInquiryInput;
-	participants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutInquiryInput;
-	tags?: Prisma.InquiryTagUncheckedCreateNestedManyWithoutInquiryInput;
-	sentimentAnalysis?: Prisma.SentimentAnalysisUncheckedCreateNestedOneWithoutInquiryInput;
-	aiAgentLogs?: Prisma.AIAgentLogUncheckedCreateNestedManyWithoutInquiryInput;
-};
-
-export type InquiryCreateOrConnectWithoutCustomerInput = {
-	where: Prisma.InquiryWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.InquiryCreateWithoutCustomerInput,
-		Prisma.InquiryUncheckedCreateWithoutCustomerInput
-	>;
-};
-
-export type InquiryCreateManyCustomerInputEnvelope = {
-	data:
-		| Prisma.InquiryCreateManyCustomerInput
-		| Prisma.InquiryCreateManyCustomerInput[];
-	skipDuplicates?: boolean;
-};
-
-export type InquiryCreateWithoutAssigneeInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	inquiryNumber: string;
-	title: string;
-	category: $Enums.InquiryCategory;
-	channel: $Enums.InquiryChannel;
-	source?: $Enums.InquirySource;
-	status?: $Enums.InquiryStatus;
-	priority?: $Enums.InquiryPriority;
-	firstResponseAt?: Date | string | null;
-	resolvedAt?: Date | string | null;
-	closedAt?: Date | string | null;
-	slaResponseDue?: Date | string | null;
-	slaResolveDue?: Date | string | null;
-	isSlaResponseBreached?: boolean;
-	isSlaResolveBreached?: boolean;
-	sentiment?: $Enums.SentimentType | null;
-	sentimentScore?: number | null;
-	aiResolutionAttempted?: boolean;
-	aiResolved?: boolean;
-	isRealtimeChat?: boolean;
-	lastMessageAt?: Date | string | null;
-	unreadCount?: number;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	space: Prisma.SpaceCreateNestedOneWithoutInquiriesInput;
-	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
-	customer?: Prisma.UserCreateNestedOneWithoutCustomerInquiriesInput;
-	threads?: Prisma.InquiryThreadCreateNestedManyWithoutInquiryInput;
-	messages?: Prisma.InquiryMessageCreateNestedManyWithoutInquiryInput;
-	participants?: Prisma.InquiryParticipantCreateNestedManyWithoutInquiryInput;
-	tags?: Prisma.InquiryTagCreateNestedManyWithoutInquiryInput;
-	sentimentAnalysis?: Prisma.SentimentAnalysisCreateNestedOneWithoutInquiryInput;
-	aiAgentLogs?: Prisma.AIAgentLogCreateNestedManyWithoutInquiryInput;
-};
-
-export type InquiryUncheckedCreateWithoutAssigneeInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	spaceId: string;
-	createdById?: string | null;
-	inquiryNumber: string;
-	title: string;
-	category: $Enums.InquiryCategory;
-	channel: $Enums.InquiryChannel;
-	source?: $Enums.InquirySource;
-	status?: $Enums.InquiryStatus;
-	priority?: $Enums.InquiryPriority;
-	customerId?: string | null;
-	firstResponseAt?: Date | string | null;
-	resolvedAt?: Date | string | null;
-	closedAt?: Date | string | null;
-	slaResponseDue?: Date | string | null;
-	slaResolveDue?: Date | string | null;
-	isSlaResponseBreached?: boolean;
-	isSlaResolveBreached?: boolean;
-	sentiment?: $Enums.SentimentType | null;
-	sentimentScore?: number | null;
-	aiResolutionAttempted?: boolean;
-	aiResolved?: boolean;
-	isRealtimeChat?: boolean;
-	lastMessageAt?: Date | string | null;
-	unreadCount?: number;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	threads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutInquiryInput;
-	messages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutInquiryInput;
-	participants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutInquiryInput;
-	tags?: Prisma.InquiryTagUncheckedCreateNestedManyWithoutInquiryInput;
-	sentimentAnalysis?: Prisma.SentimentAnalysisUncheckedCreateNestedOneWithoutInquiryInput;
-	aiAgentLogs?: Prisma.AIAgentLogUncheckedCreateNestedManyWithoutInquiryInput;
-};
-
-export type InquiryCreateOrConnectWithoutAssigneeInput = {
-	where: Prisma.InquiryWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.InquiryCreateWithoutAssigneeInput,
-		Prisma.InquiryUncheckedCreateWithoutAssigneeInput
-	>;
-};
-
-export type InquiryCreateManyAssigneeInputEnvelope = {
-	data:
-		| Prisma.InquiryCreateManyAssigneeInput
-		| Prisma.InquiryCreateManyAssigneeInput[];
-	skipDuplicates?: boolean;
-};
-
-export type InquiryCreateWithoutCreatedByInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	inquiryNumber: string;
-	title: string;
-	category: $Enums.InquiryCategory;
-	channel: $Enums.InquiryChannel;
-	source?: $Enums.InquirySource;
-	status?: $Enums.InquiryStatus;
-	priority?: $Enums.InquiryPriority;
-	firstResponseAt?: Date | string | null;
-	resolvedAt?: Date | string | null;
-	closedAt?: Date | string | null;
-	slaResponseDue?: Date | string | null;
-	slaResolveDue?: Date | string | null;
-	isSlaResponseBreached?: boolean;
-	isSlaResolveBreached?: boolean;
-	sentiment?: $Enums.SentimentType | null;
-	sentimentScore?: number | null;
-	aiResolutionAttempted?: boolean;
-	aiResolved?: boolean;
-	isRealtimeChat?: boolean;
-	lastMessageAt?: Date | string | null;
-	unreadCount?: number;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	space: Prisma.SpaceCreateNestedOneWithoutInquiriesInput;
-	customer?: Prisma.UserCreateNestedOneWithoutCustomerInquiriesInput;
-	assignee?: Prisma.UserCreateNestedOneWithoutAssignedInquiriesInput;
-	threads?: Prisma.InquiryThreadCreateNestedManyWithoutInquiryInput;
-	messages?: Prisma.InquiryMessageCreateNestedManyWithoutInquiryInput;
-	participants?: Prisma.InquiryParticipantCreateNestedManyWithoutInquiryInput;
-	tags?: Prisma.InquiryTagCreateNestedManyWithoutInquiryInput;
-	sentimentAnalysis?: Prisma.SentimentAnalysisCreateNestedOneWithoutInquiryInput;
-	aiAgentLogs?: Prisma.AIAgentLogCreateNestedManyWithoutInquiryInput;
-};
-
-export type InquiryUncheckedCreateWithoutCreatedByInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	spaceId: string;
-	inquiryNumber: string;
-	title: string;
-	category: $Enums.InquiryCategory;
-	channel: $Enums.InquiryChannel;
-	source?: $Enums.InquirySource;
-	status?: $Enums.InquiryStatus;
-	priority?: $Enums.InquiryPriority;
-	customerId?: string | null;
-	assigneeId?: string | null;
-	firstResponseAt?: Date | string | null;
-	resolvedAt?: Date | string | null;
-	closedAt?: Date | string | null;
-	slaResponseDue?: Date | string | null;
-	slaResolveDue?: Date | string | null;
-	isSlaResponseBreached?: boolean;
-	isSlaResolveBreached?: boolean;
-	sentiment?: $Enums.SentimentType | null;
-	sentimentScore?: number | null;
-	aiResolutionAttempted?: boolean;
-	aiResolved?: boolean;
-	isRealtimeChat?: boolean;
-	lastMessageAt?: Date | string | null;
-	unreadCount?: number;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	threads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutInquiryInput;
-	messages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutInquiryInput;
-	participants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutInquiryInput;
-	tags?: Prisma.InquiryTagUncheckedCreateNestedManyWithoutInquiryInput;
-	sentimentAnalysis?: Prisma.SentimentAnalysisUncheckedCreateNestedOneWithoutInquiryInput;
-	aiAgentLogs?: Prisma.AIAgentLogUncheckedCreateNestedManyWithoutInquiryInput;
-};
-
-export type InquiryCreateOrConnectWithoutCreatedByInput = {
-	where: Prisma.InquiryWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.InquiryCreateWithoutCreatedByInput,
-		Prisma.InquiryUncheckedCreateWithoutCreatedByInput
-	>;
-};
-
-export type InquiryCreateManyCreatedByInputEnvelope = {
-	data:
-		| Prisma.InquiryCreateManyCreatedByInput
-		| Prisma.InquiryCreateManyCreatedByInput[];
-	skipDuplicates?: boolean;
-};
-
-export type InquiryUpsertWithWhereUniqueWithoutCustomerInput = {
-	where: Prisma.InquiryWhereUniqueInput;
-	update: Prisma.XOR<
-		Prisma.InquiryUpdateWithoutCustomerInput,
-		Prisma.InquiryUncheckedUpdateWithoutCustomerInput
-	>;
-	create: Prisma.XOR<
-		Prisma.InquiryCreateWithoutCustomerInput,
-		Prisma.InquiryUncheckedCreateWithoutCustomerInput
-	>;
-};
-
-export type InquiryUpdateWithWhereUniqueWithoutCustomerInput = {
-	where: Prisma.InquiryWhereUniqueInput;
-	data: Prisma.XOR<
-		Prisma.InquiryUpdateWithoutCustomerInput,
-		Prisma.InquiryUncheckedUpdateWithoutCustomerInput
-	>;
-};
-
-export type InquiryUpdateManyWithWhereWithoutCustomerInput = {
-	where: Prisma.InquiryScalarWhereInput;
-	data: Prisma.XOR<
-		Prisma.InquiryUpdateManyMutationInput,
-		Prisma.InquiryUncheckedUpdateManyWithoutCustomerInput
-	>;
-};
-
-export type InquiryUpsertWithWhereUniqueWithoutAssigneeInput = {
-	where: Prisma.InquiryWhereUniqueInput;
-	update: Prisma.XOR<
-		Prisma.InquiryUpdateWithoutAssigneeInput,
-		Prisma.InquiryUncheckedUpdateWithoutAssigneeInput
-	>;
-	create: Prisma.XOR<
-		Prisma.InquiryCreateWithoutAssigneeInput,
-		Prisma.InquiryUncheckedCreateWithoutAssigneeInput
-	>;
-};
-
-export type InquiryUpdateWithWhereUniqueWithoutAssigneeInput = {
-	where: Prisma.InquiryWhereUniqueInput;
-	data: Prisma.XOR<
-		Prisma.InquiryUpdateWithoutAssigneeInput,
-		Prisma.InquiryUncheckedUpdateWithoutAssigneeInput
-	>;
-};
-
-export type InquiryUpdateManyWithWhereWithoutAssigneeInput = {
-	where: Prisma.InquiryScalarWhereInput;
-	data: Prisma.XOR<
-		Prisma.InquiryUpdateManyMutationInput,
-		Prisma.InquiryUncheckedUpdateManyWithoutAssigneeInput
-	>;
-};
-
-export type InquiryUpsertWithWhereUniqueWithoutCreatedByInput = {
-	where: Prisma.InquiryWhereUniqueInput;
-	update: Prisma.XOR<
-		Prisma.InquiryUpdateWithoutCreatedByInput,
-		Prisma.InquiryUncheckedUpdateWithoutCreatedByInput
-	>;
-	create: Prisma.XOR<
-		Prisma.InquiryCreateWithoutCreatedByInput,
-		Prisma.InquiryUncheckedCreateWithoutCreatedByInput
-	>;
-};
-
-export type InquiryUpdateWithWhereUniqueWithoutCreatedByInput = {
-	where: Prisma.InquiryWhereUniqueInput;
-	data: Prisma.XOR<
-		Prisma.InquiryUpdateWithoutCreatedByInput,
-		Prisma.InquiryUncheckedUpdateWithoutCreatedByInput
-	>;
-};
-
-export type InquiryUpdateManyWithWhereWithoutCreatedByInput = {
-	where: Prisma.InquiryScalarWhereInput;
-	data: Prisma.XOR<
-		Prisma.InquiryUpdateManyMutationInput,
-		Prisma.InquiryUncheckedUpdateManyWithoutCreatedByInput
-	>;
-};
-
 export type InquiryCreateWithoutAiAgentLogsInput = {
 	id?: string;
 	createdAt?: Date | string;
@@ -2668,282 +2133,6 @@ export type InquiryUncheckedUpdateWithoutAiAgentLogsInput = {
 	participants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutInquiryNestedInput;
 	tags?: Prisma.InquiryTagUncheckedUpdateManyWithoutInquiryNestedInput;
 	sentimentAnalysis?: Prisma.SentimentAnalysisUncheckedUpdateOneWithoutInquiryNestedInput;
-};
-
-export type InquiryCreateWithoutThreadsInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	inquiryNumber: string;
-	title: string;
-	category: $Enums.InquiryCategory;
-	channel: $Enums.InquiryChannel;
-	source?: $Enums.InquirySource;
-	status?: $Enums.InquiryStatus;
-	priority?: $Enums.InquiryPriority;
-	firstResponseAt?: Date | string | null;
-	resolvedAt?: Date | string | null;
-	closedAt?: Date | string | null;
-	slaResponseDue?: Date | string | null;
-	slaResolveDue?: Date | string | null;
-	isSlaResponseBreached?: boolean;
-	isSlaResolveBreached?: boolean;
-	sentiment?: $Enums.SentimentType | null;
-	sentimentScore?: number | null;
-	aiResolutionAttempted?: boolean;
-	aiResolved?: boolean;
-	isRealtimeChat?: boolean;
-	lastMessageAt?: Date | string | null;
-	unreadCount?: number;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	space: Prisma.SpaceCreateNestedOneWithoutInquiriesInput;
-	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
-	customer?: Prisma.UserCreateNestedOneWithoutCustomerInquiriesInput;
-	assignee?: Prisma.UserCreateNestedOneWithoutAssignedInquiriesInput;
-	messages?: Prisma.InquiryMessageCreateNestedManyWithoutInquiryInput;
-	participants?: Prisma.InquiryParticipantCreateNestedManyWithoutInquiryInput;
-	tags?: Prisma.InquiryTagCreateNestedManyWithoutInquiryInput;
-	sentimentAnalysis?: Prisma.SentimentAnalysisCreateNestedOneWithoutInquiryInput;
-	aiAgentLogs?: Prisma.AIAgentLogCreateNestedManyWithoutInquiryInput;
-};
-
-export type InquiryUncheckedCreateWithoutThreadsInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	spaceId: string;
-	createdById?: string | null;
-	inquiryNumber: string;
-	title: string;
-	category: $Enums.InquiryCategory;
-	channel: $Enums.InquiryChannel;
-	source?: $Enums.InquirySource;
-	status?: $Enums.InquiryStatus;
-	priority?: $Enums.InquiryPriority;
-	customerId?: string | null;
-	assigneeId?: string | null;
-	firstResponseAt?: Date | string | null;
-	resolvedAt?: Date | string | null;
-	closedAt?: Date | string | null;
-	slaResponseDue?: Date | string | null;
-	slaResolveDue?: Date | string | null;
-	isSlaResponseBreached?: boolean;
-	isSlaResolveBreached?: boolean;
-	sentiment?: $Enums.SentimentType | null;
-	sentimentScore?: number | null;
-	aiResolutionAttempted?: boolean;
-	aiResolved?: boolean;
-	isRealtimeChat?: boolean;
-	lastMessageAt?: Date | string | null;
-	unreadCount?: number;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	messages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutInquiryInput;
-	participants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutInquiryInput;
-	tags?: Prisma.InquiryTagUncheckedCreateNestedManyWithoutInquiryInput;
-	sentimentAnalysis?: Prisma.SentimentAnalysisUncheckedCreateNestedOneWithoutInquiryInput;
-	aiAgentLogs?: Prisma.AIAgentLogUncheckedCreateNestedManyWithoutInquiryInput;
-};
-
-export type InquiryCreateOrConnectWithoutThreadsInput = {
-	where: Prisma.InquiryWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.InquiryCreateWithoutThreadsInput,
-		Prisma.InquiryUncheckedCreateWithoutThreadsInput
-	>;
-};
-
-export type InquiryUpsertWithoutThreadsInput = {
-	update: Prisma.XOR<
-		Prisma.InquiryUpdateWithoutThreadsInput,
-		Prisma.InquiryUncheckedUpdateWithoutThreadsInput
-	>;
-	create: Prisma.XOR<
-		Prisma.InquiryCreateWithoutThreadsInput,
-		Prisma.InquiryUncheckedCreateWithoutThreadsInput
-	>;
-	where?: Prisma.InquiryWhereInput;
-};
-
-export type InquiryUpdateToOneWithWhereWithoutThreadsInput = {
-	where?: Prisma.InquiryWhereInput;
-	data: Prisma.XOR<
-		Prisma.InquiryUpdateWithoutThreadsInput,
-		Prisma.InquiryUncheckedUpdateWithoutThreadsInput
-	>;
-};
-
-export type InquiryUpdateWithoutThreadsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string;
-	title?: Prisma.StringFieldUpdateOperationsInput | string;
-	category?:
-		| Prisma.EnumInquiryCategoryFieldUpdateOperationsInput
-		| $Enums.InquiryCategory;
-	channel?:
-		| Prisma.EnumInquiryChannelFieldUpdateOperationsInput
-		| $Enums.InquiryChannel;
-	source?:
-		| Prisma.EnumInquirySourceFieldUpdateOperationsInput
-		| $Enums.InquirySource;
-	status?:
-		| Prisma.EnumInquiryStatusFieldUpdateOperationsInput
-		| $Enums.InquiryStatus;
-	priority?:
-		| Prisma.EnumInquiryPriorityFieldUpdateOperationsInput
-		| $Enums.InquiryPriority;
-	firstResponseAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	resolvedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	closedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	slaResponseDue?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	slaResolveDue?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isSlaResponseBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	isSlaResolveBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	sentiment?:
-		| Prisma.NullableEnumSentimentTypeFieldUpdateOperationsInput
-		| $Enums.SentimentType
-		| null;
-	sentimentScore?:
-		| Prisma.NullableFloatFieldUpdateOperationsInput
-		| number
-		| null;
-	aiResolutionAttempted?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	aiResolved?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	isRealtimeChat?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	lastMessageAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	unreadCount?: Prisma.IntFieldUpdateOperationsInput | number;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	space?: Prisma.SpaceUpdateOneRequiredWithoutInquiriesNestedInput;
-	createdBy?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
-	customer?: Prisma.UserUpdateOneWithoutCustomerInquiriesNestedInput;
-	assignee?: Prisma.UserUpdateOneWithoutAssignedInquiriesNestedInput;
-	messages?: Prisma.InquiryMessageUpdateManyWithoutInquiryNestedInput;
-	participants?: Prisma.InquiryParticipantUpdateManyWithoutInquiryNestedInput;
-	tags?: Prisma.InquiryTagUpdateManyWithoutInquiryNestedInput;
-	sentimentAnalysis?: Prisma.SentimentAnalysisUpdateOneWithoutInquiryNestedInput;
-	aiAgentLogs?: Prisma.AIAgentLogUpdateManyWithoutInquiryNestedInput;
-};
-
-export type InquiryUncheckedUpdateWithoutThreadsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string;
-	title?: Prisma.StringFieldUpdateOperationsInput | string;
-	category?:
-		| Prisma.EnumInquiryCategoryFieldUpdateOperationsInput
-		| $Enums.InquiryCategory;
-	channel?:
-		| Prisma.EnumInquiryChannelFieldUpdateOperationsInput
-		| $Enums.InquiryChannel;
-	source?:
-		| Prisma.EnumInquirySourceFieldUpdateOperationsInput
-		| $Enums.InquirySource;
-	status?:
-		| Prisma.EnumInquiryStatusFieldUpdateOperationsInput
-		| $Enums.InquiryStatus;
-	priority?:
-		| Prisma.EnumInquiryPriorityFieldUpdateOperationsInput
-		| $Enums.InquiryPriority;
-	customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	assigneeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	firstResponseAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	resolvedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	closedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	slaResponseDue?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	slaResolveDue?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isSlaResponseBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	isSlaResolveBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	sentiment?:
-		| Prisma.NullableEnumSentimentTypeFieldUpdateOperationsInput
-		| $Enums.SentimentType
-		| null;
-	sentimentScore?:
-		| Prisma.NullableFloatFieldUpdateOperationsInput
-		| number
-		| null;
-	aiResolutionAttempted?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	aiResolved?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	isRealtimeChat?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	lastMessageAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	unreadCount?: Prisma.IntFieldUpdateOperationsInput | number;
-	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
-	messages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutInquiryNestedInput;
-	participants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutInquiryNestedInput;
-	tags?: Prisma.InquiryTagUncheckedUpdateManyWithoutInquiryNestedInput;
-	sentimentAnalysis?: Prisma.SentimentAnalysisUncheckedUpdateOneWithoutInquiryNestedInput;
-	aiAgentLogs?: Prisma.AIAgentLogUncheckedUpdateManyWithoutInquiryNestedInput;
 };
 
 export type InquiryCreateWithoutMessagesInput = {
@@ -3774,6 +2963,282 @@ export type InquiryUncheckedUpdateWithoutTagsInput = {
 	aiAgentLogs?: Prisma.AIAgentLogUncheckedUpdateManyWithoutInquiryNestedInput;
 };
 
+export type InquiryCreateWithoutThreadsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	inquiryNumber: string;
+	title: string;
+	category: $Enums.InquiryCategory;
+	channel: $Enums.InquiryChannel;
+	source?: $Enums.InquirySource;
+	status?: $Enums.InquiryStatus;
+	priority?: $Enums.InquiryPriority;
+	firstResponseAt?: Date | string | null;
+	resolvedAt?: Date | string | null;
+	closedAt?: Date | string | null;
+	slaResponseDue?: Date | string | null;
+	slaResolveDue?: Date | string | null;
+	isSlaResponseBreached?: boolean;
+	isSlaResolveBreached?: boolean;
+	sentiment?: $Enums.SentimentType | null;
+	sentimentScore?: number | null;
+	aiResolutionAttempted?: boolean;
+	aiResolved?: boolean;
+	isRealtimeChat?: boolean;
+	lastMessageAt?: Date | string | null;
+	unreadCount?: number;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	space: Prisma.SpaceCreateNestedOneWithoutInquiriesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
+	customer?: Prisma.UserCreateNestedOneWithoutCustomerInquiriesInput;
+	assignee?: Prisma.UserCreateNestedOneWithoutAssignedInquiriesInput;
+	messages?: Prisma.InquiryMessageCreateNestedManyWithoutInquiryInput;
+	participants?: Prisma.InquiryParticipantCreateNestedManyWithoutInquiryInput;
+	tags?: Prisma.InquiryTagCreateNestedManyWithoutInquiryInput;
+	sentimentAnalysis?: Prisma.SentimentAnalysisCreateNestedOneWithoutInquiryInput;
+	aiAgentLogs?: Prisma.AIAgentLogCreateNestedManyWithoutInquiryInput;
+};
+
+export type InquiryUncheckedCreateWithoutThreadsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	spaceId: string;
+	createdById?: string | null;
+	inquiryNumber: string;
+	title: string;
+	category: $Enums.InquiryCategory;
+	channel: $Enums.InquiryChannel;
+	source?: $Enums.InquirySource;
+	status?: $Enums.InquiryStatus;
+	priority?: $Enums.InquiryPriority;
+	customerId?: string | null;
+	assigneeId?: string | null;
+	firstResponseAt?: Date | string | null;
+	resolvedAt?: Date | string | null;
+	closedAt?: Date | string | null;
+	slaResponseDue?: Date | string | null;
+	slaResolveDue?: Date | string | null;
+	isSlaResponseBreached?: boolean;
+	isSlaResolveBreached?: boolean;
+	sentiment?: $Enums.SentimentType | null;
+	sentimentScore?: number | null;
+	aiResolutionAttempted?: boolean;
+	aiResolved?: boolean;
+	isRealtimeChat?: boolean;
+	lastMessageAt?: Date | string | null;
+	unreadCount?: number;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	messages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutInquiryInput;
+	participants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutInquiryInput;
+	tags?: Prisma.InquiryTagUncheckedCreateNestedManyWithoutInquiryInput;
+	sentimentAnalysis?: Prisma.SentimentAnalysisUncheckedCreateNestedOneWithoutInquiryInput;
+	aiAgentLogs?: Prisma.AIAgentLogUncheckedCreateNestedManyWithoutInquiryInput;
+};
+
+export type InquiryCreateOrConnectWithoutThreadsInput = {
+	where: Prisma.InquiryWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.InquiryCreateWithoutThreadsInput,
+		Prisma.InquiryUncheckedCreateWithoutThreadsInput
+	>;
+};
+
+export type InquiryUpsertWithoutThreadsInput = {
+	update: Prisma.XOR<
+		Prisma.InquiryUpdateWithoutThreadsInput,
+		Prisma.InquiryUncheckedUpdateWithoutThreadsInput
+	>;
+	create: Prisma.XOR<
+		Prisma.InquiryCreateWithoutThreadsInput,
+		Prisma.InquiryUncheckedCreateWithoutThreadsInput
+	>;
+	where?: Prisma.InquiryWhereInput;
+};
+
+export type InquiryUpdateToOneWithWhereWithoutThreadsInput = {
+	where?: Prisma.InquiryWhereInput;
+	data: Prisma.XOR<
+		Prisma.InquiryUpdateWithoutThreadsInput,
+		Prisma.InquiryUncheckedUpdateWithoutThreadsInput
+	>;
+};
+
+export type InquiryUpdateWithoutThreadsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string;
+	title?: Prisma.StringFieldUpdateOperationsInput | string;
+	category?:
+		| Prisma.EnumInquiryCategoryFieldUpdateOperationsInput
+		| $Enums.InquiryCategory;
+	channel?:
+		| Prisma.EnumInquiryChannelFieldUpdateOperationsInput
+		| $Enums.InquiryChannel;
+	source?:
+		| Prisma.EnumInquirySourceFieldUpdateOperationsInput
+		| $Enums.InquirySource;
+	status?:
+		| Prisma.EnumInquiryStatusFieldUpdateOperationsInput
+		| $Enums.InquiryStatus;
+	priority?:
+		| Prisma.EnumInquiryPriorityFieldUpdateOperationsInput
+		| $Enums.InquiryPriority;
+	firstResponseAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	resolvedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	closedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	slaResponseDue?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	slaResolveDue?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isSlaResponseBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	isSlaResolveBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	sentiment?:
+		| Prisma.NullableEnumSentimentTypeFieldUpdateOperationsInput
+		| $Enums.SentimentType
+		| null;
+	sentimentScore?:
+		| Prisma.NullableFloatFieldUpdateOperationsInput
+		| number
+		| null;
+	aiResolutionAttempted?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	aiResolved?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	isRealtimeChat?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	lastMessageAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	unreadCount?: Prisma.IntFieldUpdateOperationsInput | number;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	space?: Prisma.SpaceUpdateOneRequiredWithoutInquiriesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedInquiriesNestedInput;
+	customer?: Prisma.UserUpdateOneWithoutCustomerInquiriesNestedInput;
+	assignee?: Prisma.UserUpdateOneWithoutAssignedInquiriesNestedInput;
+	messages?: Prisma.InquiryMessageUpdateManyWithoutInquiryNestedInput;
+	participants?: Prisma.InquiryParticipantUpdateManyWithoutInquiryNestedInput;
+	tags?: Prisma.InquiryTagUpdateManyWithoutInquiryNestedInput;
+	sentimentAnalysis?: Prisma.SentimentAnalysisUpdateOneWithoutInquiryNestedInput;
+	aiAgentLogs?: Prisma.AIAgentLogUpdateManyWithoutInquiryNestedInput;
+};
+
+export type InquiryUncheckedUpdateWithoutThreadsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string;
+	title?: Prisma.StringFieldUpdateOperationsInput | string;
+	category?:
+		| Prisma.EnumInquiryCategoryFieldUpdateOperationsInput
+		| $Enums.InquiryCategory;
+	channel?:
+		| Prisma.EnumInquiryChannelFieldUpdateOperationsInput
+		| $Enums.InquiryChannel;
+	source?:
+		| Prisma.EnumInquirySourceFieldUpdateOperationsInput
+		| $Enums.InquirySource;
+	status?:
+		| Prisma.EnumInquiryStatusFieldUpdateOperationsInput
+		| $Enums.InquiryStatus;
+	priority?:
+		| Prisma.EnumInquiryPriorityFieldUpdateOperationsInput
+		| $Enums.InquiryPriority;
+	customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	assigneeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	firstResponseAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	resolvedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	closedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	slaResponseDue?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	slaResolveDue?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isSlaResponseBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	isSlaResolveBreached?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	sentiment?:
+		| Prisma.NullableEnumSentimentTypeFieldUpdateOperationsInput
+		| $Enums.SentimentType
+		| null;
+	sentimentScore?:
+		| Prisma.NullableFloatFieldUpdateOperationsInput
+		| number
+		| null;
+	aiResolutionAttempted?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	aiResolved?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	isRealtimeChat?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	lastMessageAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	unreadCount?: Prisma.IntFieldUpdateOperationsInput | number;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	messages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutInquiryNestedInput;
+	participants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutInquiryNestedInput;
+	tags?: Prisma.InquiryTagUncheckedUpdateManyWithoutInquiryNestedInput;
+	sentimentAnalysis?: Prisma.SentimentAnalysisUncheckedUpdateOneWithoutInquiryNestedInput;
+	aiAgentLogs?: Prisma.AIAgentLogUncheckedUpdateManyWithoutInquiryNestedInput;
+};
+
 export type InquiryCreateWithoutSentimentAnalysisInput = {
 	id?: string;
 	createdAt?: Date | string;
@@ -4048,6 +3513,541 @@ export type InquiryUncheckedUpdateWithoutSentimentAnalysisInput = {
 	participants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutInquiryNestedInput;
 	tags?: Prisma.InquiryTagUncheckedUpdateManyWithoutInquiryNestedInput;
 	aiAgentLogs?: Prisma.AIAgentLogUncheckedUpdateManyWithoutInquiryNestedInput;
+};
+
+export type InquiryCreateWithoutSpaceInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	inquiryNumber: string;
+	title: string;
+	category: $Enums.InquiryCategory;
+	channel: $Enums.InquiryChannel;
+	source?: $Enums.InquirySource;
+	status?: $Enums.InquiryStatus;
+	priority?: $Enums.InquiryPriority;
+	firstResponseAt?: Date | string | null;
+	resolvedAt?: Date | string | null;
+	closedAt?: Date | string | null;
+	slaResponseDue?: Date | string | null;
+	slaResolveDue?: Date | string | null;
+	isSlaResponseBreached?: boolean;
+	isSlaResolveBreached?: boolean;
+	sentiment?: $Enums.SentimentType | null;
+	sentimentScore?: number | null;
+	aiResolutionAttempted?: boolean;
+	aiResolved?: boolean;
+	isRealtimeChat?: boolean;
+	lastMessageAt?: Date | string | null;
+	unreadCount?: number;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
+	customer?: Prisma.UserCreateNestedOneWithoutCustomerInquiriesInput;
+	assignee?: Prisma.UserCreateNestedOneWithoutAssignedInquiriesInput;
+	threads?: Prisma.InquiryThreadCreateNestedManyWithoutInquiryInput;
+	messages?: Prisma.InquiryMessageCreateNestedManyWithoutInquiryInput;
+	participants?: Prisma.InquiryParticipantCreateNestedManyWithoutInquiryInput;
+	tags?: Prisma.InquiryTagCreateNestedManyWithoutInquiryInput;
+	sentimentAnalysis?: Prisma.SentimentAnalysisCreateNestedOneWithoutInquiryInput;
+	aiAgentLogs?: Prisma.AIAgentLogCreateNestedManyWithoutInquiryInput;
+};
+
+export type InquiryUncheckedCreateWithoutSpaceInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	createdById?: string | null;
+	inquiryNumber: string;
+	title: string;
+	category: $Enums.InquiryCategory;
+	channel: $Enums.InquiryChannel;
+	source?: $Enums.InquirySource;
+	status?: $Enums.InquiryStatus;
+	priority?: $Enums.InquiryPriority;
+	customerId?: string | null;
+	assigneeId?: string | null;
+	firstResponseAt?: Date | string | null;
+	resolvedAt?: Date | string | null;
+	closedAt?: Date | string | null;
+	slaResponseDue?: Date | string | null;
+	slaResolveDue?: Date | string | null;
+	isSlaResponseBreached?: boolean;
+	isSlaResolveBreached?: boolean;
+	sentiment?: $Enums.SentimentType | null;
+	sentimentScore?: number | null;
+	aiResolutionAttempted?: boolean;
+	aiResolved?: boolean;
+	isRealtimeChat?: boolean;
+	lastMessageAt?: Date | string | null;
+	unreadCount?: number;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	threads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutInquiryInput;
+	messages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutInquiryInput;
+	participants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutInquiryInput;
+	tags?: Prisma.InquiryTagUncheckedCreateNestedManyWithoutInquiryInput;
+	sentimentAnalysis?: Prisma.SentimentAnalysisUncheckedCreateNestedOneWithoutInquiryInput;
+	aiAgentLogs?: Prisma.AIAgentLogUncheckedCreateNestedManyWithoutInquiryInput;
+};
+
+export type InquiryCreateOrConnectWithoutSpaceInput = {
+	where: Prisma.InquiryWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.InquiryCreateWithoutSpaceInput,
+		Prisma.InquiryUncheckedCreateWithoutSpaceInput
+	>;
+};
+
+export type InquiryCreateManySpaceInputEnvelope = {
+	data:
+		| Prisma.InquiryCreateManySpaceInput
+		| Prisma.InquiryCreateManySpaceInput[];
+	skipDuplicates?: boolean;
+};
+
+export type InquiryUpsertWithWhereUniqueWithoutSpaceInput = {
+	where: Prisma.InquiryWhereUniqueInput;
+	update: Prisma.XOR<
+		Prisma.InquiryUpdateWithoutSpaceInput,
+		Prisma.InquiryUncheckedUpdateWithoutSpaceInput
+	>;
+	create: Prisma.XOR<
+		Prisma.InquiryCreateWithoutSpaceInput,
+		Prisma.InquiryUncheckedCreateWithoutSpaceInput
+	>;
+};
+
+export type InquiryUpdateWithWhereUniqueWithoutSpaceInput = {
+	where: Prisma.InquiryWhereUniqueInput;
+	data: Prisma.XOR<
+		Prisma.InquiryUpdateWithoutSpaceInput,
+		Prisma.InquiryUncheckedUpdateWithoutSpaceInput
+	>;
+};
+
+export type InquiryUpdateManyWithWhereWithoutSpaceInput = {
+	where: Prisma.InquiryScalarWhereInput;
+	data: Prisma.XOR<
+		Prisma.InquiryUpdateManyMutationInput,
+		Prisma.InquiryUncheckedUpdateManyWithoutSpaceInput
+	>;
+};
+
+export type InquiryScalarWhereInput = {
+	AND?: Prisma.InquiryScalarWhereInput | Prisma.InquiryScalarWhereInput[];
+	OR?: Prisma.InquiryScalarWhereInput[];
+	NOT?: Prisma.InquiryScalarWhereInput | Prisma.InquiryScalarWhereInput[];
+	id?: Prisma.StringFilter<"Inquiry"> | string;
+	createdAt?: Prisma.DateTimeFilter<"Inquiry"> | Date | string;
+	updatedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null;
+	removedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null;
+	spaceId?: Prisma.StringFilter<"Inquiry"> | string;
+	createdById?: Prisma.StringNullableFilter<"Inquiry"> | string | null;
+	inquiryNumber?: Prisma.StringFilter<"Inquiry"> | string;
+	title?: Prisma.StringFilter<"Inquiry"> | string;
+	category?:
+		| Prisma.EnumInquiryCategoryFilter<"Inquiry">
+		| $Enums.InquiryCategory;
+	channel?: Prisma.EnumInquiryChannelFilter<"Inquiry"> | $Enums.InquiryChannel;
+	source?: Prisma.EnumInquirySourceFilter<"Inquiry"> | $Enums.InquirySource;
+	status?: Prisma.EnumInquiryStatusFilter<"Inquiry"> | $Enums.InquiryStatus;
+	priority?:
+		| Prisma.EnumInquiryPriorityFilter<"Inquiry">
+		| $Enums.InquiryPriority;
+	customerId?: Prisma.StringNullableFilter<"Inquiry"> | string | null;
+	assigneeId?: Prisma.StringNullableFilter<"Inquiry"> | string | null;
+	firstResponseAt?:
+		| Prisma.DateTimeNullableFilter<"Inquiry">
+		| Date
+		| string
+		| null;
+	resolvedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null;
+	closedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null;
+	slaResponseDue?:
+		| Prisma.DateTimeNullableFilter<"Inquiry">
+		| Date
+		| string
+		| null;
+	slaResolveDue?:
+		| Prisma.DateTimeNullableFilter<"Inquiry">
+		| Date
+		| string
+		| null;
+	isSlaResponseBreached?: Prisma.BoolFilter<"Inquiry"> | boolean;
+	isSlaResolveBreached?: Prisma.BoolFilter<"Inquiry"> | boolean;
+	sentiment?:
+		| Prisma.EnumSentimentTypeNullableFilter<"Inquiry">
+		| $Enums.SentimentType
+		| null;
+	sentimentScore?: Prisma.FloatNullableFilter<"Inquiry"> | number | null;
+	aiResolutionAttempted?: Prisma.BoolFilter<"Inquiry"> | boolean;
+	aiResolved?: Prisma.BoolFilter<"Inquiry"> | boolean;
+	isRealtimeChat?: Prisma.BoolFilter<"Inquiry"> | boolean;
+	lastMessageAt?:
+		| Prisma.DateTimeNullableFilter<"Inquiry">
+		| Date
+		| string
+		| null;
+	unreadCount?: Prisma.IntFilter<"Inquiry"> | number;
+	metadata?: Prisma.JsonNullableFilter<"Inquiry">;
+};
+
+export type InquiryCreateWithoutCustomerInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	inquiryNumber: string;
+	title: string;
+	category: $Enums.InquiryCategory;
+	channel: $Enums.InquiryChannel;
+	source?: $Enums.InquirySource;
+	status?: $Enums.InquiryStatus;
+	priority?: $Enums.InquiryPriority;
+	firstResponseAt?: Date | string | null;
+	resolvedAt?: Date | string | null;
+	closedAt?: Date | string | null;
+	slaResponseDue?: Date | string | null;
+	slaResolveDue?: Date | string | null;
+	isSlaResponseBreached?: boolean;
+	isSlaResolveBreached?: boolean;
+	sentiment?: $Enums.SentimentType | null;
+	sentimentScore?: number | null;
+	aiResolutionAttempted?: boolean;
+	aiResolved?: boolean;
+	isRealtimeChat?: boolean;
+	lastMessageAt?: Date | string | null;
+	unreadCount?: number;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	space: Prisma.SpaceCreateNestedOneWithoutInquiriesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
+	assignee?: Prisma.UserCreateNestedOneWithoutAssignedInquiriesInput;
+	threads?: Prisma.InquiryThreadCreateNestedManyWithoutInquiryInput;
+	messages?: Prisma.InquiryMessageCreateNestedManyWithoutInquiryInput;
+	participants?: Prisma.InquiryParticipantCreateNestedManyWithoutInquiryInput;
+	tags?: Prisma.InquiryTagCreateNestedManyWithoutInquiryInput;
+	sentimentAnalysis?: Prisma.SentimentAnalysisCreateNestedOneWithoutInquiryInput;
+	aiAgentLogs?: Prisma.AIAgentLogCreateNestedManyWithoutInquiryInput;
+};
+
+export type InquiryUncheckedCreateWithoutCustomerInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	spaceId: string;
+	createdById?: string | null;
+	inquiryNumber: string;
+	title: string;
+	category: $Enums.InquiryCategory;
+	channel: $Enums.InquiryChannel;
+	source?: $Enums.InquirySource;
+	status?: $Enums.InquiryStatus;
+	priority?: $Enums.InquiryPriority;
+	assigneeId?: string | null;
+	firstResponseAt?: Date | string | null;
+	resolvedAt?: Date | string | null;
+	closedAt?: Date | string | null;
+	slaResponseDue?: Date | string | null;
+	slaResolveDue?: Date | string | null;
+	isSlaResponseBreached?: boolean;
+	isSlaResolveBreached?: boolean;
+	sentiment?: $Enums.SentimentType | null;
+	sentimentScore?: number | null;
+	aiResolutionAttempted?: boolean;
+	aiResolved?: boolean;
+	isRealtimeChat?: boolean;
+	lastMessageAt?: Date | string | null;
+	unreadCount?: number;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	threads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutInquiryInput;
+	messages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutInquiryInput;
+	participants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutInquiryInput;
+	tags?: Prisma.InquiryTagUncheckedCreateNestedManyWithoutInquiryInput;
+	sentimentAnalysis?: Prisma.SentimentAnalysisUncheckedCreateNestedOneWithoutInquiryInput;
+	aiAgentLogs?: Prisma.AIAgentLogUncheckedCreateNestedManyWithoutInquiryInput;
+};
+
+export type InquiryCreateOrConnectWithoutCustomerInput = {
+	where: Prisma.InquiryWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.InquiryCreateWithoutCustomerInput,
+		Prisma.InquiryUncheckedCreateWithoutCustomerInput
+	>;
+};
+
+export type InquiryCreateManyCustomerInputEnvelope = {
+	data:
+		| Prisma.InquiryCreateManyCustomerInput
+		| Prisma.InquiryCreateManyCustomerInput[];
+	skipDuplicates?: boolean;
+};
+
+export type InquiryCreateWithoutAssigneeInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	inquiryNumber: string;
+	title: string;
+	category: $Enums.InquiryCategory;
+	channel: $Enums.InquiryChannel;
+	source?: $Enums.InquirySource;
+	status?: $Enums.InquiryStatus;
+	priority?: $Enums.InquiryPriority;
+	firstResponseAt?: Date | string | null;
+	resolvedAt?: Date | string | null;
+	closedAt?: Date | string | null;
+	slaResponseDue?: Date | string | null;
+	slaResolveDue?: Date | string | null;
+	isSlaResponseBreached?: boolean;
+	isSlaResolveBreached?: boolean;
+	sentiment?: $Enums.SentimentType | null;
+	sentimentScore?: number | null;
+	aiResolutionAttempted?: boolean;
+	aiResolved?: boolean;
+	isRealtimeChat?: boolean;
+	lastMessageAt?: Date | string | null;
+	unreadCount?: number;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	space: Prisma.SpaceCreateNestedOneWithoutInquiriesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedInquiriesInput;
+	customer?: Prisma.UserCreateNestedOneWithoutCustomerInquiriesInput;
+	threads?: Prisma.InquiryThreadCreateNestedManyWithoutInquiryInput;
+	messages?: Prisma.InquiryMessageCreateNestedManyWithoutInquiryInput;
+	participants?: Prisma.InquiryParticipantCreateNestedManyWithoutInquiryInput;
+	tags?: Prisma.InquiryTagCreateNestedManyWithoutInquiryInput;
+	sentimentAnalysis?: Prisma.SentimentAnalysisCreateNestedOneWithoutInquiryInput;
+	aiAgentLogs?: Prisma.AIAgentLogCreateNestedManyWithoutInquiryInput;
+};
+
+export type InquiryUncheckedCreateWithoutAssigneeInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	spaceId: string;
+	createdById?: string | null;
+	inquiryNumber: string;
+	title: string;
+	category: $Enums.InquiryCategory;
+	channel: $Enums.InquiryChannel;
+	source?: $Enums.InquirySource;
+	status?: $Enums.InquiryStatus;
+	priority?: $Enums.InquiryPriority;
+	customerId?: string | null;
+	firstResponseAt?: Date | string | null;
+	resolvedAt?: Date | string | null;
+	closedAt?: Date | string | null;
+	slaResponseDue?: Date | string | null;
+	slaResolveDue?: Date | string | null;
+	isSlaResponseBreached?: boolean;
+	isSlaResolveBreached?: boolean;
+	sentiment?: $Enums.SentimentType | null;
+	sentimentScore?: number | null;
+	aiResolutionAttempted?: boolean;
+	aiResolved?: boolean;
+	isRealtimeChat?: boolean;
+	lastMessageAt?: Date | string | null;
+	unreadCount?: number;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	threads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutInquiryInput;
+	messages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutInquiryInput;
+	participants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutInquiryInput;
+	tags?: Prisma.InquiryTagUncheckedCreateNestedManyWithoutInquiryInput;
+	sentimentAnalysis?: Prisma.SentimentAnalysisUncheckedCreateNestedOneWithoutInquiryInput;
+	aiAgentLogs?: Prisma.AIAgentLogUncheckedCreateNestedManyWithoutInquiryInput;
+};
+
+export type InquiryCreateOrConnectWithoutAssigneeInput = {
+	where: Prisma.InquiryWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.InquiryCreateWithoutAssigneeInput,
+		Prisma.InquiryUncheckedCreateWithoutAssigneeInput
+	>;
+};
+
+export type InquiryCreateManyAssigneeInputEnvelope = {
+	data:
+		| Prisma.InquiryCreateManyAssigneeInput
+		| Prisma.InquiryCreateManyAssigneeInput[];
+	skipDuplicates?: boolean;
+};
+
+export type InquiryCreateWithoutCreatedByInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	inquiryNumber: string;
+	title: string;
+	category: $Enums.InquiryCategory;
+	channel: $Enums.InquiryChannel;
+	source?: $Enums.InquirySource;
+	status?: $Enums.InquiryStatus;
+	priority?: $Enums.InquiryPriority;
+	firstResponseAt?: Date | string | null;
+	resolvedAt?: Date | string | null;
+	closedAt?: Date | string | null;
+	slaResponseDue?: Date | string | null;
+	slaResolveDue?: Date | string | null;
+	isSlaResponseBreached?: boolean;
+	isSlaResolveBreached?: boolean;
+	sentiment?: $Enums.SentimentType | null;
+	sentimentScore?: number | null;
+	aiResolutionAttempted?: boolean;
+	aiResolved?: boolean;
+	isRealtimeChat?: boolean;
+	lastMessageAt?: Date | string | null;
+	unreadCount?: number;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	space: Prisma.SpaceCreateNestedOneWithoutInquiriesInput;
+	customer?: Prisma.UserCreateNestedOneWithoutCustomerInquiriesInput;
+	assignee?: Prisma.UserCreateNestedOneWithoutAssignedInquiriesInput;
+	threads?: Prisma.InquiryThreadCreateNestedManyWithoutInquiryInput;
+	messages?: Prisma.InquiryMessageCreateNestedManyWithoutInquiryInput;
+	participants?: Prisma.InquiryParticipantCreateNestedManyWithoutInquiryInput;
+	tags?: Prisma.InquiryTagCreateNestedManyWithoutInquiryInput;
+	sentimentAnalysis?: Prisma.SentimentAnalysisCreateNestedOneWithoutInquiryInput;
+	aiAgentLogs?: Prisma.AIAgentLogCreateNestedManyWithoutInquiryInput;
+};
+
+export type InquiryUncheckedCreateWithoutCreatedByInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	spaceId: string;
+	inquiryNumber: string;
+	title: string;
+	category: $Enums.InquiryCategory;
+	channel: $Enums.InquiryChannel;
+	source?: $Enums.InquirySource;
+	status?: $Enums.InquiryStatus;
+	priority?: $Enums.InquiryPriority;
+	customerId?: string | null;
+	assigneeId?: string | null;
+	firstResponseAt?: Date | string | null;
+	resolvedAt?: Date | string | null;
+	closedAt?: Date | string | null;
+	slaResponseDue?: Date | string | null;
+	slaResolveDue?: Date | string | null;
+	isSlaResponseBreached?: boolean;
+	isSlaResolveBreached?: boolean;
+	sentiment?: $Enums.SentimentType | null;
+	sentimentScore?: number | null;
+	aiResolutionAttempted?: boolean;
+	aiResolved?: boolean;
+	isRealtimeChat?: boolean;
+	lastMessageAt?: Date | string | null;
+	unreadCount?: number;
+	metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue;
+	threads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutInquiryInput;
+	messages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutInquiryInput;
+	participants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutInquiryInput;
+	tags?: Prisma.InquiryTagUncheckedCreateNestedManyWithoutInquiryInput;
+	sentimentAnalysis?: Prisma.SentimentAnalysisUncheckedCreateNestedOneWithoutInquiryInput;
+	aiAgentLogs?: Prisma.AIAgentLogUncheckedCreateNestedManyWithoutInquiryInput;
+};
+
+export type InquiryCreateOrConnectWithoutCreatedByInput = {
+	where: Prisma.InquiryWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.InquiryCreateWithoutCreatedByInput,
+		Prisma.InquiryUncheckedCreateWithoutCreatedByInput
+	>;
+};
+
+export type InquiryCreateManyCreatedByInputEnvelope = {
+	data:
+		| Prisma.InquiryCreateManyCreatedByInput
+		| Prisma.InquiryCreateManyCreatedByInput[];
+	skipDuplicates?: boolean;
+};
+
+export type InquiryUpsertWithWhereUniqueWithoutCustomerInput = {
+	where: Prisma.InquiryWhereUniqueInput;
+	update: Prisma.XOR<
+		Prisma.InquiryUpdateWithoutCustomerInput,
+		Prisma.InquiryUncheckedUpdateWithoutCustomerInput
+	>;
+	create: Prisma.XOR<
+		Prisma.InquiryCreateWithoutCustomerInput,
+		Prisma.InquiryUncheckedCreateWithoutCustomerInput
+	>;
+};
+
+export type InquiryUpdateWithWhereUniqueWithoutCustomerInput = {
+	where: Prisma.InquiryWhereUniqueInput;
+	data: Prisma.XOR<
+		Prisma.InquiryUpdateWithoutCustomerInput,
+		Prisma.InquiryUncheckedUpdateWithoutCustomerInput
+	>;
+};
+
+export type InquiryUpdateManyWithWhereWithoutCustomerInput = {
+	where: Prisma.InquiryScalarWhereInput;
+	data: Prisma.XOR<
+		Prisma.InquiryUpdateManyMutationInput,
+		Prisma.InquiryUncheckedUpdateManyWithoutCustomerInput
+	>;
+};
+
+export type InquiryUpsertWithWhereUniqueWithoutAssigneeInput = {
+	where: Prisma.InquiryWhereUniqueInput;
+	update: Prisma.XOR<
+		Prisma.InquiryUpdateWithoutAssigneeInput,
+		Prisma.InquiryUncheckedUpdateWithoutAssigneeInput
+	>;
+	create: Prisma.XOR<
+		Prisma.InquiryCreateWithoutAssigneeInput,
+		Prisma.InquiryUncheckedCreateWithoutAssigneeInput
+	>;
+};
+
+export type InquiryUpdateWithWhereUniqueWithoutAssigneeInput = {
+	where: Prisma.InquiryWhereUniqueInput;
+	data: Prisma.XOR<
+		Prisma.InquiryUpdateWithoutAssigneeInput,
+		Prisma.InquiryUncheckedUpdateWithoutAssigneeInput
+	>;
+};
+
+export type InquiryUpdateManyWithWhereWithoutAssigneeInput = {
+	where: Prisma.InquiryScalarWhereInput;
+	data: Prisma.XOR<
+		Prisma.InquiryUpdateManyMutationInput,
+		Prisma.InquiryUncheckedUpdateManyWithoutAssigneeInput
+	>;
+};
+
+export type InquiryUpsertWithWhereUniqueWithoutCreatedByInput = {
+	where: Prisma.InquiryWhereUniqueInput;
+	update: Prisma.XOR<
+		Prisma.InquiryUpdateWithoutCreatedByInput,
+		Prisma.InquiryUncheckedUpdateWithoutCreatedByInput
+	>;
+	create: Prisma.XOR<
+		Prisma.InquiryCreateWithoutCreatedByInput,
+		Prisma.InquiryUncheckedCreateWithoutCreatedByInput
+	>;
+};
+
+export type InquiryUpdateWithWhereUniqueWithoutCreatedByInput = {
+	where: Prisma.InquiryWhereUniqueInput;
+	data: Prisma.XOR<
+		Prisma.InquiryUpdateWithoutCreatedByInput,
+		Prisma.InquiryUncheckedUpdateWithoutCreatedByInput
+	>;
+};
+
+export type InquiryUpdateManyWithWhereWithoutCreatedByInput = {
+	where: Prisma.InquiryScalarWhereInput;
+	data: Prisma.XOR<
+		Prisma.InquiryUpdateManyMutationInput,
+		Prisma.InquiryUncheckedUpdateManyWithoutCreatedByInput
+	>;
 };
 
 export type InquiryCreateManySpaceInput = {

@@ -4,11 +4,15 @@
     "generatedAt": "2026-01-31T16:30:00Z",
     "generator": "req-reverse-engineer",
     "sourceFiles": [
-      "packages/be-prisma/schema/access-control/role.prisma",
-      "packages/be-prisma/schema/access-control/policy.prisma",
-      "packages/be-prisma/schema/access-control/subject.prisma",
-      "packages/be-prisma/schema/access-control/action.prisma",
-      "packages/be-prisma/schema/access-control/ability.prisma",
+      "packages/be-prisma/schema/role.prisma",
+      "packages/be-prisma/schema/role-association.prisma",
+      "packages/be-prisma/schema/role-classification.prisma",
+      "packages/be-prisma/schema/policy.prisma",
+      "packages/be-prisma/schema/policy-ability.prisma",
+      "packages/be-prisma/schema/role-policy.prisma",
+      "packages/be-prisma/schema/subject.prisma",
+      "packages/be-prisma/schema/action.prisma",
+      "packages/be-prisma/schema/ability.prisma",
       "packages/be-common/src/casl/casl-ability.factory.ts",
       "packages/be-common/src/guard/roles.guard.ts",
       "packages/be-decorator/src/roles.decorator.ts",
@@ -506,7 +510,7 @@
       "description": "역할 엔티티",
       "metadata": {
         "tableName": "roles",
-        "source": "packages/be-prisma/schema/access-control/role.prisma"
+        "source": "packages/be-prisma/schema/role.prisma"
       }
     },
     {
@@ -518,7 +522,7 @@
       "description": "권한 엔티티 (CASL)",
       "metadata": {
         "tableName": "abilities",
-        "source": "packages/be-prisma/schema/access-control/ability.prisma"
+        "source": "packages/be-prisma/schema/ability.prisma"
       }
     },
     {
@@ -530,7 +534,7 @@
       "description": "권한 대상 엔티티",
       "metadata": {
         "tableName": "subjects",
-        "source": "packages/be-prisma/schema/access-control/subject.prisma"
+        "source": "packages/be-prisma/schema/subject.prisma"
       }
     },
     {
@@ -542,7 +546,7 @@
       "description": "권한 행위 엔티티",
       "metadata": {
         "tableName": "actions",
-        "source": "packages/be-prisma/schema/access-control/action.prisma"
+        "source": "packages/be-prisma/schema/action.prisma"
       }
     },
     {

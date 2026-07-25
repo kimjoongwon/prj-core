@@ -525,14 +525,9 @@ export type SafeWalletUncheckedUpdateManyInput = {
 	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
-export type SafeWalletListRelationFilter = {
-	every?: Prisma.SafeWalletWhereInput;
-	some?: Prisma.SafeWalletWhereInput;
-	none?: Prisma.SafeWalletWhereInput;
-};
-
-export type SafeWalletOrderByRelationAggregateInput = {
-	_count?: Prisma.SortOrder;
+export type SafeWalletScalarRelationFilter = {
+	is?: Prisma.SafeWalletWhereInput;
+	isNot?: Prisma.SafeWalletWhereInput;
 };
 
 export type SafeWalletCountOrderByAggregateInput = {
@@ -587,9 +582,49 @@ export type SafeWalletSumOrderByAggregateInput = {
 	nonce?: Prisma.SortOrder;
 };
 
-export type SafeWalletScalarRelationFilter = {
-	is?: Prisma.SafeWalletWhereInput;
-	isNot?: Prisma.SafeWalletWhereInput;
+export type SafeWalletListRelationFilter = {
+	every?: Prisma.SafeWalletWhereInput;
+	some?: Prisma.SafeWalletWhereInput;
+	none?: Prisma.SafeWalletWhereInput;
+};
+
+export type SafeWalletOrderByRelationAggregateInput = {
+	_count?: Prisma.SortOrder;
+};
+
+export type SafeWalletCreateNestedOneWithoutTransactionsInput = {
+	create?: Prisma.XOR<
+		Prisma.SafeWalletCreateWithoutTransactionsInput,
+		Prisma.SafeWalletUncheckedCreateWithoutTransactionsInput
+	>;
+	connectOrCreate?: Prisma.SafeWalletCreateOrConnectWithoutTransactionsInput;
+	connect?: Prisma.SafeWalletWhereUniqueInput;
+};
+
+export type SafeWalletUpdateOneRequiredWithoutTransactionsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.SafeWalletCreateWithoutTransactionsInput,
+		Prisma.SafeWalletUncheckedCreateWithoutTransactionsInput
+	>;
+	connectOrCreate?: Prisma.SafeWalletCreateOrConnectWithoutTransactionsInput;
+	upsert?: Prisma.SafeWalletUpsertWithoutTransactionsInput;
+	connect?: Prisma.SafeWalletWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.SafeWalletUpdateToOneWithWhereWithoutTransactionsInput,
+			Prisma.SafeWalletUpdateWithoutTransactionsInput
+		>,
+		Prisma.SafeWalletUncheckedUpdateWithoutTransactionsInput
+	>;
+};
+
+export type SafeWalletCreateownersInput = {
+	set: string[];
+};
+
+export type SafeWalletUpdateownersInput = {
+	set?: string[];
+	push?: string | string[];
 };
 
 export type SafeWalletCreateNestedManyWithoutSpaceInput = {
@@ -804,39 +839,104 @@ export type SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput = {
 		| Prisma.SafeWalletScalarWhereInput[];
 };
 
-export type SafeWalletCreateownersInput = {
-	set: string[];
+export type SafeWalletCreateWithoutTransactionsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	address: string;
+	chainId: number;
+	threshold?: number;
+	nonce?: number;
+	owners?: Prisma.SafeWalletCreateownersInput | string[];
+	space: Prisma.SpaceCreateNestedOneWithoutSafeWalletsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedSafeWalletsInput;
 };
 
-export type SafeWalletUpdateownersInput = {
-	set?: string[];
-	push?: string | string[];
+export type SafeWalletUncheckedCreateWithoutTransactionsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	address: string;
+	chainId: number;
+	threshold?: number;
+	nonce?: number;
+	owners?: Prisma.SafeWalletCreateownersInput | string[];
+	spaceId: string;
+	createdById?: string | null;
 };
 
-export type SafeWalletCreateNestedOneWithoutTransactionsInput = {
-	create?: Prisma.XOR<
+export type SafeWalletCreateOrConnectWithoutTransactionsInput = {
+	where: Prisma.SafeWalletWhereUniqueInput;
+	create: Prisma.XOR<
 		Prisma.SafeWalletCreateWithoutTransactionsInput,
 		Prisma.SafeWalletUncheckedCreateWithoutTransactionsInput
 	>;
-	connectOrCreate?: Prisma.SafeWalletCreateOrConnectWithoutTransactionsInput;
-	connect?: Prisma.SafeWalletWhereUniqueInput;
 };
 
-export type SafeWalletUpdateOneRequiredWithoutTransactionsNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.SafeWalletCreateWithoutTransactionsInput,
-		Prisma.SafeWalletUncheckedCreateWithoutTransactionsInput
-	>;
-	connectOrCreate?: Prisma.SafeWalletCreateOrConnectWithoutTransactionsInput;
-	upsert?: Prisma.SafeWalletUpsertWithoutTransactionsInput;
-	connect?: Prisma.SafeWalletWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.SafeWalletUpdateToOneWithWhereWithoutTransactionsInput,
-			Prisma.SafeWalletUpdateWithoutTransactionsInput
-		>,
+export type SafeWalletUpsertWithoutTransactionsInput = {
+	update: Prisma.XOR<
+		Prisma.SafeWalletUpdateWithoutTransactionsInput,
 		Prisma.SafeWalletUncheckedUpdateWithoutTransactionsInput
 	>;
+	create: Prisma.XOR<
+		Prisma.SafeWalletCreateWithoutTransactionsInput,
+		Prisma.SafeWalletUncheckedCreateWithoutTransactionsInput
+	>;
+	where?: Prisma.SafeWalletWhereInput;
+};
+
+export type SafeWalletUpdateToOneWithWhereWithoutTransactionsInput = {
+	where?: Prisma.SafeWalletWhereInput;
+	data: Prisma.XOR<
+		Prisma.SafeWalletUpdateWithoutTransactionsInput,
+		Prisma.SafeWalletUncheckedUpdateWithoutTransactionsInput
+	>;
+};
+
+export type SafeWalletUpdateWithoutTransactionsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	address?: Prisma.StringFieldUpdateOperationsInput | string;
+	chainId?: Prisma.IntFieldUpdateOperationsInput | number;
+	threshold?: Prisma.IntFieldUpdateOperationsInput | number;
+	nonce?: Prisma.IntFieldUpdateOperationsInput | number;
+	owners?: Prisma.SafeWalletUpdateownersInput | string[];
+	space?: Prisma.SpaceUpdateOneRequiredWithoutSafeWalletsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedSafeWalletsNestedInput;
+};
+
+export type SafeWalletUncheckedUpdateWithoutTransactionsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	address?: Prisma.StringFieldUpdateOperationsInput | string;
+	chainId?: Prisma.IntFieldUpdateOperationsInput | number;
+	threshold?: Prisma.IntFieldUpdateOperationsInput | number;
+	nonce?: Prisma.IntFieldUpdateOperationsInput | number;
+	owners?: Prisma.SafeWalletUpdateownersInput | string[];
+	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
 export type SafeWalletCreateWithoutSpaceInput = {
@@ -1004,106 +1104,6 @@ export type SafeWalletUpdateManyWithWhereWithoutCreatedByInput = {
 		Prisma.SafeWalletUpdateManyMutationInput,
 		Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByInput
 	>;
-};
-
-export type SafeWalletCreateWithoutTransactionsInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	address: string;
-	chainId: number;
-	threshold?: number;
-	nonce?: number;
-	owners?: Prisma.SafeWalletCreateownersInput | string[];
-	space: Prisma.SpaceCreateNestedOneWithoutSafeWalletsInput;
-	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedSafeWalletsInput;
-};
-
-export type SafeWalletUncheckedCreateWithoutTransactionsInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	address: string;
-	chainId: number;
-	threshold?: number;
-	nonce?: number;
-	owners?: Prisma.SafeWalletCreateownersInput | string[];
-	spaceId: string;
-	createdById?: string | null;
-};
-
-export type SafeWalletCreateOrConnectWithoutTransactionsInput = {
-	where: Prisma.SafeWalletWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.SafeWalletCreateWithoutTransactionsInput,
-		Prisma.SafeWalletUncheckedCreateWithoutTransactionsInput
-	>;
-};
-
-export type SafeWalletUpsertWithoutTransactionsInput = {
-	update: Prisma.XOR<
-		Prisma.SafeWalletUpdateWithoutTransactionsInput,
-		Prisma.SafeWalletUncheckedUpdateWithoutTransactionsInput
-	>;
-	create: Prisma.XOR<
-		Prisma.SafeWalletCreateWithoutTransactionsInput,
-		Prisma.SafeWalletUncheckedCreateWithoutTransactionsInput
-	>;
-	where?: Prisma.SafeWalletWhereInput;
-};
-
-export type SafeWalletUpdateToOneWithWhereWithoutTransactionsInput = {
-	where?: Prisma.SafeWalletWhereInput;
-	data: Prisma.XOR<
-		Prisma.SafeWalletUpdateWithoutTransactionsInput,
-		Prisma.SafeWalletUncheckedUpdateWithoutTransactionsInput
-	>;
-};
-
-export type SafeWalletUpdateWithoutTransactionsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	address?: Prisma.StringFieldUpdateOperationsInput | string;
-	chainId?: Prisma.IntFieldUpdateOperationsInput | number;
-	threshold?: Prisma.IntFieldUpdateOperationsInput | number;
-	nonce?: Prisma.IntFieldUpdateOperationsInput | number;
-	owners?: Prisma.SafeWalletUpdateownersInput | string[];
-	space?: Prisma.SpaceUpdateOneRequiredWithoutSafeWalletsNestedInput;
-	createdBy?: Prisma.UserUpdateOneWithoutCreatedSafeWalletsNestedInput;
-};
-
-export type SafeWalletUncheckedUpdateWithoutTransactionsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	address?: Prisma.StringFieldUpdateOperationsInput | string;
-	chainId?: Prisma.IntFieldUpdateOperationsInput | number;
-	threshold?: Prisma.IntFieldUpdateOperationsInput | number;
-	nonce?: Prisma.IntFieldUpdateOperationsInput | number;
-	owners?: Prisma.SafeWalletUpdateownersInput | string[];
-	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
 export type SafeWalletCreateManySpaceInput = {

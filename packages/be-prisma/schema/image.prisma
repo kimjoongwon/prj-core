@@ -1,0 +1,24 @@
+// @data-type: MASTER
+// @description: Asset(kind=IMAGE)에 종속되는 이미지 1:1 상세 정보
+/// @displayName 이미지 상세
+model Image {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime? @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 너비 (px)
+  width       Int
+  /// @displayName 높이 (px)
+  height      Int
+  /// @displayName 방향 (EXIF Orientation)
+  orientation Int?
+  /// @displayName 색상 공간
+  colorSpace  String?   @map("color_space")
+  /// @displayName 알파 채널 여부
+  hasAlpha    Boolean   @default(false) @map("has_alpha")
+  /// @displayName 원본 Asset ID
+  assetId     String    @unique @map("asset_id")
+  asset       Asset     @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  @@map("images")
+}

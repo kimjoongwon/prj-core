@@ -419,14 +419,9 @@ export type RoutineUncheckedUpdateManyInput = {
 	label?: Prisma.StringFieldUpdateOperationsInput | string;
 };
 
-export type RoutineListRelationFilter = {
-	every?: Prisma.RoutineWhereInput;
-	some?: Prisma.RoutineWhereInput;
-	none?: Prisma.RoutineWhereInput;
-};
-
-export type RoutineOrderByRelationAggregateInput = {
-	_count?: Prisma.SortOrder;
+export type RoutineScalarRelationFilter = {
+	is?: Prisma.RoutineWhereInput;
+	isNot?: Prisma.RoutineWhereInput;
 };
 
 export type RoutineCountOrderByAggregateInput = {
@@ -462,9 +457,66 @@ export type RoutineMinOrderByAggregateInput = {
 	label?: Prisma.SortOrder;
 };
 
-export type RoutineScalarRelationFilter = {
-	is?: Prisma.RoutineWhereInput;
-	isNot?: Prisma.RoutineWhereInput;
+export type RoutineListRelationFilter = {
+	every?: Prisma.RoutineWhereInput;
+	some?: Prisma.RoutineWhereInput;
+	none?: Prisma.RoutineWhereInput;
+};
+
+export type RoutineOrderByRelationAggregateInput = {
+	_count?: Prisma.SortOrder;
+};
+
+export type RoutineCreateNestedOneWithoutActivitiesInput = {
+	create?: Prisma.XOR<
+		Prisma.RoutineCreateWithoutActivitiesInput,
+		Prisma.RoutineUncheckedCreateWithoutActivitiesInput
+	>;
+	connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutActivitiesInput;
+	connect?: Prisma.RoutineWhereUniqueInput;
+};
+
+export type RoutineUpdateOneRequiredWithoutActivitiesNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.RoutineCreateWithoutActivitiesInput,
+		Prisma.RoutineUncheckedCreateWithoutActivitiesInput
+	>;
+	connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutActivitiesInput;
+	upsert?: Prisma.RoutineUpsertWithoutActivitiesInput;
+	connect?: Prisma.RoutineWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.RoutineUpdateToOneWithWhereWithoutActivitiesInput,
+			Prisma.RoutineUpdateWithoutActivitiesInput
+		>,
+		Prisma.RoutineUncheckedUpdateWithoutActivitiesInput
+	>;
+};
+
+export type RoutineCreateNestedOneWithoutProgramsInput = {
+	create?: Prisma.XOR<
+		Prisma.RoutineCreateWithoutProgramsInput,
+		Prisma.RoutineUncheckedCreateWithoutProgramsInput
+	>;
+	connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutProgramsInput;
+	connect?: Prisma.RoutineWhereUniqueInput;
+};
+
+export type RoutineUpdateOneRequiredWithoutProgramsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.RoutineCreateWithoutProgramsInput,
+		Prisma.RoutineUncheckedCreateWithoutProgramsInput
+	>;
+	connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutProgramsInput;
+	upsert?: Prisma.RoutineUpsertWithoutProgramsInput;
+	connect?: Prisma.RoutineWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.RoutineUpdateToOneWithWhereWithoutProgramsInput,
+			Prisma.RoutineUpdateWithoutProgramsInput
+		>,
+		Prisma.RoutineUncheckedUpdateWithoutProgramsInput
+	>;
 };
 
 export type RoutineCreateNestedManyWithoutSpaceInput = {
@@ -655,206 +707,6 @@ export type RoutineUncheckedUpdateManyWithoutCreatedByNestedInput = {
 		| Prisma.RoutineScalarWhereInput[];
 };
 
-export type RoutineCreateNestedOneWithoutActivitiesInput = {
-	create?: Prisma.XOR<
-		Prisma.RoutineCreateWithoutActivitiesInput,
-		Prisma.RoutineUncheckedCreateWithoutActivitiesInput
-	>;
-	connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutActivitiesInput;
-	connect?: Prisma.RoutineWhereUniqueInput;
-};
-
-export type RoutineUpdateOneRequiredWithoutActivitiesNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.RoutineCreateWithoutActivitiesInput,
-		Prisma.RoutineUncheckedCreateWithoutActivitiesInput
-	>;
-	connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutActivitiesInput;
-	upsert?: Prisma.RoutineUpsertWithoutActivitiesInput;
-	connect?: Prisma.RoutineWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.RoutineUpdateToOneWithWhereWithoutActivitiesInput,
-			Prisma.RoutineUpdateWithoutActivitiesInput
-		>,
-		Prisma.RoutineUncheckedUpdateWithoutActivitiesInput
-	>;
-};
-
-export type RoutineCreateNestedOneWithoutProgramsInput = {
-	create?: Prisma.XOR<
-		Prisma.RoutineCreateWithoutProgramsInput,
-		Prisma.RoutineUncheckedCreateWithoutProgramsInput
-	>;
-	connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutProgramsInput;
-	connect?: Prisma.RoutineWhereUniqueInput;
-};
-
-export type RoutineUpdateOneRequiredWithoutProgramsNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.RoutineCreateWithoutProgramsInput,
-		Prisma.RoutineUncheckedCreateWithoutProgramsInput
-	>;
-	connectOrCreate?: Prisma.RoutineCreateOrConnectWithoutProgramsInput;
-	upsert?: Prisma.RoutineUpsertWithoutProgramsInput;
-	connect?: Prisma.RoutineWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.RoutineUpdateToOneWithWhereWithoutProgramsInput,
-			Prisma.RoutineUpdateWithoutProgramsInput
-		>,
-		Prisma.RoutineUncheckedUpdateWithoutProgramsInput
-	>;
-};
-
-export type RoutineCreateWithoutSpaceInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	name: string;
-	label: string;
-	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedRoutinesInput;
-	activities?: Prisma.ActivityCreateNestedManyWithoutRoutineInput;
-	programs?: Prisma.ProgramCreateNestedManyWithoutRoutineInput;
-};
-
-export type RoutineUncheckedCreateWithoutSpaceInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	createdById?: string | null;
-	name: string;
-	label: string;
-	activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutRoutineInput;
-	programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutRoutineInput;
-};
-
-export type RoutineCreateOrConnectWithoutSpaceInput = {
-	where: Prisma.RoutineWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.RoutineCreateWithoutSpaceInput,
-		Prisma.RoutineUncheckedCreateWithoutSpaceInput
-	>;
-};
-
-export type RoutineCreateManySpaceInputEnvelope = {
-	data:
-		| Prisma.RoutineCreateManySpaceInput
-		| Prisma.RoutineCreateManySpaceInput[];
-	skipDuplicates?: boolean;
-};
-
-export type RoutineUpsertWithWhereUniqueWithoutSpaceInput = {
-	where: Prisma.RoutineWhereUniqueInput;
-	update: Prisma.XOR<
-		Prisma.RoutineUpdateWithoutSpaceInput,
-		Prisma.RoutineUncheckedUpdateWithoutSpaceInput
-	>;
-	create: Prisma.XOR<
-		Prisma.RoutineCreateWithoutSpaceInput,
-		Prisma.RoutineUncheckedCreateWithoutSpaceInput
-	>;
-};
-
-export type RoutineUpdateWithWhereUniqueWithoutSpaceInput = {
-	where: Prisma.RoutineWhereUniqueInput;
-	data: Prisma.XOR<
-		Prisma.RoutineUpdateWithoutSpaceInput,
-		Prisma.RoutineUncheckedUpdateWithoutSpaceInput
-	>;
-};
-
-export type RoutineUpdateManyWithWhereWithoutSpaceInput = {
-	where: Prisma.RoutineScalarWhereInput;
-	data: Prisma.XOR<
-		Prisma.RoutineUpdateManyMutationInput,
-		Prisma.RoutineUncheckedUpdateManyWithoutSpaceInput
-	>;
-};
-
-export type RoutineScalarWhereInput = {
-	AND?: Prisma.RoutineScalarWhereInput | Prisma.RoutineScalarWhereInput[];
-	OR?: Prisma.RoutineScalarWhereInput[];
-	NOT?: Prisma.RoutineScalarWhereInput | Prisma.RoutineScalarWhereInput[];
-	id?: Prisma.StringFilter<"Routine"> | string;
-	createdAt?: Prisma.DateTimeFilter<"Routine"> | Date | string;
-	updatedAt?: Prisma.DateTimeNullableFilter<"Routine"> | Date | string | null;
-	removedAt?: Prisma.DateTimeNullableFilter<"Routine"> | Date | string | null;
-	spaceId?: Prisma.StringFilter<"Routine"> | string;
-	createdById?: Prisma.StringNullableFilter<"Routine"> | string | null;
-	name?: Prisma.StringFilter<"Routine"> | string;
-	label?: Prisma.StringFilter<"Routine"> | string;
-};
-
-export type RoutineCreateWithoutCreatedByInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	name: string;
-	label: string;
-	space: Prisma.SpaceCreateNestedOneWithoutRoutinesInput;
-	activities?: Prisma.ActivityCreateNestedManyWithoutRoutineInput;
-	programs?: Prisma.ProgramCreateNestedManyWithoutRoutineInput;
-};
-
-export type RoutineUncheckedCreateWithoutCreatedByInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	spaceId: string;
-	name: string;
-	label: string;
-	activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutRoutineInput;
-	programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutRoutineInput;
-};
-
-export type RoutineCreateOrConnectWithoutCreatedByInput = {
-	where: Prisma.RoutineWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.RoutineCreateWithoutCreatedByInput,
-		Prisma.RoutineUncheckedCreateWithoutCreatedByInput
-	>;
-};
-
-export type RoutineCreateManyCreatedByInputEnvelope = {
-	data:
-		| Prisma.RoutineCreateManyCreatedByInput
-		| Prisma.RoutineCreateManyCreatedByInput[];
-	skipDuplicates?: boolean;
-};
-
-export type RoutineUpsertWithWhereUniqueWithoutCreatedByInput = {
-	where: Prisma.RoutineWhereUniqueInput;
-	update: Prisma.XOR<
-		Prisma.RoutineUpdateWithoutCreatedByInput,
-		Prisma.RoutineUncheckedUpdateWithoutCreatedByInput
-	>;
-	create: Prisma.XOR<
-		Prisma.RoutineCreateWithoutCreatedByInput,
-		Prisma.RoutineUncheckedCreateWithoutCreatedByInput
-	>;
-};
-
-export type RoutineUpdateWithWhereUniqueWithoutCreatedByInput = {
-	where: Prisma.RoutineWhereUniqueInput;
-	data: Prisma.XOR<
-		Prisma.RoutineUpdateWithoutCreatedByInput,
-		Prisma.RoutineUncheckedUpdateWithoutCreatedByInput
-	>;
-};
-
-export type RoutineUpdateManyWithWhereWithoutCreatedByInput = {
-	where: Prisma.RoutineScalarWhereInput;
-	data: Prisma.XOR<
-		Prisma.RoutineUpdateManyMutationInput,
-		Prisma.RoutineUncheckedUpdateManyWithoutCreatedByInput
-	>;
-};
-
 export type RoutineCreateWithoutActivitiesInput = {
 	id?: string;
 	createdAt?: Date | string;
@@ -1037,6 +889,154 @@ export type RoutineUncheckedUpdateWithoutProgramsInput = {
 	name?: Prisma.StringFieldUpdateOperationsInput | string;
 	label?: Prisma.StringFieldUpdateOperationsInput | string;
 	activities?: Prisma.ActivityUncheckedUpdateManyWithoutRoutineNestedInput;
+};
+
+export type RoutineCreateWithoutSpaceInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	name: string;
+	label: string;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedRoutinesInput;
+	activities?: Prisma.ActivityCreateNestedManyWithoutRoutineInput;
+	programs?: Prisma.ProgramCreateNestedManyWithoutRoutineInput;
+};
+
+export type RoutineUncheckedCreateWithoutSpaceInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	createdById?: string | null;
+	name: string;
+	label: string;
+	activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutRoutineInput;
+	programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutRoutineInput;
+};
+
+export type RoutineCreateOrConnectWithoutSpaceInput = {
+	where: Prisma.RoutineWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.RoutineCreateWithoutSpaceInput,
+		Prisma.RoutineUncheckedCreateWithoutSpaceInput
+	>;
+};
+
+export type RoutineCreateManySpaceInputEnvelope = {
+	data:
+		| Prisma.RoutineCreateManySpaceInput
+		| Prisma.RoutineCreateManySpaceInput[];
+	skipDuplicates?: boolean;
+};
+
+export type RoutineUpsertWithWhereUniqueWithoutSpaceInput = {
+	where: Prisma.RoutineWhereUniqueInput;
+	update: Prisma.XOR<
+		Prisma.RoutineUpdateWithoutSpaceInput,
+		Prisma.RoutineUncheckedUpdateWithoutSpaceInput
+	>;
+	create: Prisma.XOR<
+		Prisma.RoutineCreateWithoutSpaceInput,
+		Prisma.RoutineUncheckedCreateWithoutSpaceInput
+	>;
+};
+
+export type RoutineUpdateWithWhereUniqueWithoutSpaceInput = {
+	where: Prisma.RoutineWhereUniqueInput;
+	data: Prisma.XOR<
+		Prisma.RoutineUpdateWithoutSpaceInput,
+		Prisma.RoutineUncheckedUpdateWithoutSpaceInput
+	>;
+};
+
+export type RoutineUpdateManyWithWhereWithoutSpaceInput = {
+	where: Prisma.RoutineScalarWhereInput;
+	data: Prisma.XOR<
+		Prisma.RoutineUpdateManyMutationInput,
+		Prisma.RoutineUncheckedUpdateManyWithoutSpaceInput
+	>;
+};
+
+export type RoutineScalarWhereInput = {
+	AND?: Prisma.RoutineScalarWhereInput | Prisma.RoutineScalarWhereInput[];
+	OR?: Prisma.RoutineScalarWhereInput[];
+	NOT?: Prisma.RoutineScalarWhereInput | Prisma.RoutineScalarWhereInput[];
+	id?: Prisma.StringFilter<"Routine"> | string;
+	createdAt?: Prisma.DateTimeFilter<"Routine"> | Date | string;
+	updatedAt?: Prisma.DateTimeNullableFilter<"Routine"> | Date | string | null;
+	removedAt?: Prisma.DateTimeNullableFilter<"Routine"> | Date | string | null;
+	spaceId?: Prisma.StringFilter<"Routine"> | string;
+	createdById?: Prisma.StringNullableFilter<"Routine"> | string | null;
+	name?: Prisma.StringFilter<"Routine"> | string;
+	label?: Prisma.StringFilter<"Routine"> | string;
+};
+
+export type RoutineCreateWithoutCreatedByInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	name: string;
+	label: string;
+	space: Prisma.SpaceCreateNestedOneWithoutRoutinesInput;
+	activities?: Prisma.ActivityCreateNestedManyWithoutRoutineInput;
+	programs?: Prisma.ProgramCreateNestedManyWithoutRoutineInput;
+};
+
+export type RoutineUncheckedCreateWithoutCreatedByInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	spaceId: string;
+	name: string;
+	label: string;
+	activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutRoutineInput;
+	programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutRoutineInput;
+};
+
+export type RoutineCreateOrConnectWithoutCreatedByInput = {
+	where: Prisma.RoutineWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.RoutineCreateWithoutCreatedByInput,
+		Prisma.RoutineUncheckedCreateWithoutCreatedByInput
+	>;
+};
+
+export type RoutineCreateManyCreatedByInputEnvelope = {
+	data:
+		| Prisma.RoutineCreateManyCreatedByInput
+		| Prisma.RoutineCreateManyCreatedByInput[];
+	skipDuplicates?: boolean;
+};
+
+export type RoutineUpsertWithWhereUniqueWithoutCreatedByInput = {
+	where: Prisma.RoutineWhereUniqueInput;
+	update: Prisma.XOR<
+		Prisma.RoutineUpdateWithoutCreatedByInput,
+		Prisma.RoutineUncheckedUpdateWithoutCreatedByInput
+	>;
+	create: Prisma.XOR<
+		Prisma.RoutineCreateWithoutCreatedByInput,
+		Prisma.RoutineUncheckedCreateWithoutCreatedByInput
+	>;
+};
+
+export type RoutineUpdateWithWhereUniqueWithoutCreatedByInput = {
+	where: Prisma.RoutineWhereUniqueInput;
+	data: Prisma.XOR<
+		Prisma.RoutineUpdateWithoutCreatedByInput,
+		Prisma.RoutineUncheckedUpdateWithoutCreatedByInput
+	>;
+};
+
+export type RoutineUpdateManyWithWhereWithoutCreatedByInput = {
+	where: Prisma.RoutineScalarWhereInput;
+	data: Prisma.XOR<
+		Prisma.RoutineUpdateManyMutationInput,
+		Prisma.RoutineUncheckedUpdateManyWithoutCreatedByInput
+	>;
 };
 
 export type RoutineCreateManySpaceInput = {

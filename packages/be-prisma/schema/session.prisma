@@ -1,0 +1,25 @@
+// @data-type: CONFIGURATION
+// @description: Timeline에 종속되는 시간 단위 이벤트
+/// @displayName 세션
+model Session {
+  id                 String              @id @default(uuid())
+  createdAt          DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt          DateTime?           @map("removed_at") @db.Timestamptz(6)
+  type               SessionTypes        @default(ONE_TIME)
+  repeatCycleType    RepeatCycleTypes?   @map("repeat_cycle_type")
+  startDateTime      DateTime?           @map("start_date_time") @db.Timestamptz(6)
+  endDateTime        DateTime?           @map("end_date_time") @db.Timestamptz(6)
+  recurringDayOfWeek RecurringDayOfWeek? @map("recurring_day_of_week")
+  timelineId         String              @map("timeline_id")
+  name               String
+  description        String?
+  programs           Program[]
+  timeline           Timeline            @relation(fields: [timelineId], references: [id])
+  reservations       Reservation[]
+
+  @@index([timelineId, startDateTime])
+  @@index([startDateTime, endDateTime])
+  @@index([type, startDateTime])
+  @@map("sessions")
+}

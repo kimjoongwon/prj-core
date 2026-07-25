@@ -1,0 +1,33 @@
+// @data-type: REFERENCE
+// ============================================================================
+// Translation Domain - 다국어 번역
+// ============================================================================
+//
+// 시스템 전역에서 사용되는 다국어 번역 데이터를 관리합니다.
+//
+// @aggregate-root: true
+// @description: 다국어 리소스를 제공하는 전역 번역 카탈로그
+/// @displayName 번역
+model Translation {
+  /// @displayName ID
+  id           String       @id @default(cuid())
+  /// @displayName 언어 코드
+  languageCode LanguageCode @map("language_code")
+  /// @displayName 번역 키
+  key          String
+  /// @displayName 번역 텍스트
+  text         String       @db.Text
+  /// @displayName 카테고리
+  category     String
+  /// @displayName 번역 완료 여부
+  isTranslated Boolean      @default(false) @map("is_translated")
+  /// @displayName 생성일시
+  createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  /// @displayName 수정일시
+  updatedAt    DateTime?    @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([languageCode, key])
+  @@index([category, languageCode])
+  @@index([key])
+  @@map("translations")
+}

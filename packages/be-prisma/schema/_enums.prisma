@@ -1,0 +1,292 @@
+/// @displayName AI 작업 유형
+enum AIAgentAction {
+  DRAFT_GENERATION
+  AUTO_CLASSIFICATION
+  SENTIMENT_ANALYSIS
+  AUTO_RESPONSE
+  KNOWLEDGE_SEARCH
+  SUMMARIZATION
+  TRANSLATION
+}
+
+/// @displayName 에셋 타입
+enum AssetKind {
+  IMAGE
+  VIDEO
+  DOCUMENT
+}
+
+/// @displayName 에셋 상태
+enum AssetStatus {
+  UPLOADING
+  READY
+  FAILED
+}
+
+/// @displayName 첨부파일 유형
+enum AttachmentFileType {
+  IMAGE
+  VIDEO
+  AUDIO
+  DOCUMENT
+  ARCHIVE
+  OTHER
+}
+
+/// @displayName 인증 감사 결과
+enum AuthAuditResult {
+  SUCCESS
+  FAILURE
+  LOCKED
+}
+
+/// @displayName 카테고리 유형
+enum CategoryTypes {
+  Role
+  Space
+  Asset
+  User
+}
+
+/// @displayName 파생 리소스 타입
+enum DerivativeKind {
+  THUMBNAIL
+  PREVIEW
+  TRANSCODE
+  TEXT
+}
+
+/// @displayName 이메일 인증 상태
+enum EmailVerificationStatus {
+  PENDING
+  VERIFIED
+  EXPIRED
+}
+
+/// @displayName 그룹 유형
+enum GroupTypes {
+  Role
+  Space
+  Asset
+  User
+}
+
+/// @displayName 문의 카테고리
+enum InquiryCategory {
+  GENERAL
+  DELIVERY
+  REFUND
+  PRODUCT
+  ACCOUNT
+  TECHNICAL
+  COMPLAINT
+  OTHER
+}
+
+/// @displayName 문의 채널
+enum InquiryChannel {
+  WEB
+  EMAIL
+  CHAT
+  SMS
+  PHONE
+  WALK_IN
+}
+
+/// @displayName 문의 참여자 역할
+enum InquiryParticipantRole {
+  CUSTOMER
+  AGENT
+  SUPERVISOR
+  VIEWER
+}
+
+/// @displayName 문의 우선순위
+enum InquiryPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+/// @displayName 문의 접수 유형
+enum InquirySource {
+  ONLINE
+  OFFLINE
+}
+
+/// @displayName 문의 상태
+enum InquiryStatus {
+  NEW
+  OPEN
+  IN_PROGRESS
+  WAITING_CUSTOMER
+  RESOLVED
+  CLOSED
+  ESCALATED
+}
+
+/// @displayName 언어 코드
+enum LanguageCode {
+  /// @displayName 한국어
+  ko_KR
+  /// @displayName 영어
+  en_US
+  /// @displayName 중국어
+  zh_CN
+  /// @displayName 일본어
+  ja_JP
+
+  @@map("language_code")
+}
+
+/// @displayName 메시지 콘텐츠 유형
+enum MessageContentType {
+  TEXT
+  HTML
+  MARKDOWN
+  IMAGE
+  FILE
+  SYSTEM
+}
+
+/// @displayName 반복 요일
+enum RecurringDayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+/// @displayName 반복 주기 유형
+enum RepeatCycleTypes {
+  WEEKLY
+  MONTHLY
+}
+
+/// @displayName 예약 상태
+enum ReservationStatus {
+  CONFIRMED
+  WAITLISTED
+  CANCELED
+}
+
+/// @displayName 발신자 유형
+enum SenderType {
+  USER
+  AI
+  SYSTEM
+}
+
+/// @displayName 감정 유형
+enum SentimentType {
+  POSITIVE
+  NEUTRAL
+  NEGATIVE
+}
+
+/// @displayName 서비스 문서 본문 형식
+enum ServiceDocumentFormat {
+  MARKDOWN
+  HTML
+  PLAIN_TEXT
+}
+
+/// @displayName 서비스 문서 종류
+enum ServiceDocumentKind {
+  TERMS_OF_SERVICE
+  PRIVACY_POLICY
+  MARKETING_CONSENT
+  LOCATION_CONSENT
+  THIRD_PARTY_SHARING
+}
+
+/// @displayName 서비스 문서 노출 플랫폼
+enum ServiceDocumentPlatform {
+  ALL
+  WEB
+  MOBILE
+}
+
+/// @displayName 서비스 문서 상태
+enum ServiceDocumentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+/// @displayName 세션 유형
+enum SessionTypes {
+  ONE_TIME
+  ONE_TIME_RANGE
+  RECURRING
+}
+
+// ============================================================================
+// Template Domain - 메시지 템플릿 도메인
+// ============================================================================
+//
+// EMAIL, SMS, PUSH 등 다양한 채널의 메시지 템플릿을 관리합니다.
+// 템플릿은 변수(Variable)를 포함할 수 있으며, 발송 시 치환됩니다.
+//
+// 관계 구조:
+//   Template
+//     │
+//     └─── TemplateVariable (1:N)
+//
+// ============================================================================
+
+enum TemplateType {
+  EMAIL
+  SMS
+  PUSH
+}
+
+// ============================================================================
+// Tenant Access Request Domain - 테넌트 접근 신청 도메인
+// ============================================================================
+//
+// TenantAccessRequest는 사용자가 특정 Space와 Role을 요청하고,
+// 권한 있는 관리자가 승인/반려하는 워크플로우 aggregate입니다.
+//
+// 관계 구조:
+//   TenantAccessRequest
+//     │
+//     ├─── requester User
+//     ├─── reviewer User?
+//     ├─── Space
+//     ├─── requested Role
+//     ├─── previous Role?
+//     └─── applied Tenant?
+//
+// ============================================================================
+
+enum TenantAccessRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELED
+}
+
+enum TextTypes {
+  Editor
+  Input
+  Textarea
+}
+
+/// @displayName 스레드 상태
+enum ThreadStatus {
+  ACTIVE
+  RESOLVED
+  CLOSED
+}
+
+/// @displayName 화이트리스트 유형
+enum WhitelistType {
+  IP
+  EMAIL_DOMAIN
+  CORS_ORIGIN
+}

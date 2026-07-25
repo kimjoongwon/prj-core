@@ -975,31 +975,31 @@ export type UserSumOrderByAggregateInput = {
 	failedLoginAttempts?: Prisma.SortOrder;
 };
 
-export type UserCreateNestedOneWithoutCreatedPoliciesInput = {
+export type UserCreateNestedOneWithoutCreatedAlbumEntriesInput = {
 	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedPoliciesInput,
-		Prisma.UserUncheckedCreateWithoutCreatedPoliciesInput
+		Prisma.UserCreateWithoutCreatedAlbumEntriesInput,
+		Prisma.UserUncheckedCreateWithoutCreatedAlbumEntriesInput
 	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedPoliciesInput;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedAlbumEntriesInput;
 	connect?: Prisma.UserWhereUniqueInput;
 };
 
-export type UserUpdateOneWithoutCreatedPoliciesNestedInput = {
+export type UserUpdateOneWithoutCreatedAlbumEntriesNestedInput = {
 	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedPoliciesInput,
-		Prisma.UserUncheckedCreateWithoutCreatedPoliciesInput
+		Prisma.UserCreateWithoutCreatedAlbumEntriesInput,
+		Prisma.UserUncheckedCreateWithoutCreatedAlbumEntriesInput
 	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedPoliciesInput;
-	upsert?: Prisma.UserUpsertWithoutCreatedPoliciesInput;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedAlbumEntriesInput;
+	upsert?: Prisma.UserUpsertWithoutCreatedAlbumEntriesInput;
 	disconnect?: Prisma.UserWhereInput | boolean;
 	delete?: Prisma.UserWhereInput | boolean;
 	connect?: Prisma.UserWhereUniqueInput;
 	update?: Prisma.XOR<
 		Prisma.XOR<
-			Prisma.UserUpdateToOneWithWhereWithoutCreatedPoliciesInput,
-			Prisma.UserUpdateWithoutCreatedPoliciesInput
+			Prisma.UserUpdateToOneWithWhereWithoutCreatedAlbumEntriesInput,
+			Prisma.UserUpdateWithoutCreatedAlbumEntriesInput
 		>,
-		Prisma.UserUncheckedUpdateWithoutCreatedPoliciesInput
+		Prisma.UserUncheckedUpdateWithoutCreatedAlbumEntriesInput
 	>;
 };
 
@@ -1031,34 +1031,6 @@ export type UserUpdateOneWithoutCreatedAlbumsNestedInput = {
 	>;
 };
 
-export type UserCreateNestedOneWithoutCreatedAlbumEntriesInput = {
-	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedAlbumEntriesInput,
-		Prisma.UserUncheckedCreateWithoutCreatedAlbumEntriesInput
-	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedAlbumEntriesInput;
-	connect?: Prisma.UserWhereUniqueInput;
-};
-
-export type UserUpdateOneWithoutCreatedAlbumEntriesNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedAlbumEntriesInput,
-		Prisma.UserUncheckedCreateWithoutCreatedAlbumEntriesInput
-	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedAlbumEntriesInput;
-	upsert?: Prisma.UserUpsertWithoutCreatedAlbumEntriesInput;
-	disconnect?: Prisma.UserWhereInput | boolean;
-	delete?: Prisma.UserWhereInput | boolean;
-	connect?: Prisma.UserWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.UserUpdateToOneWithWhereWithoutCreatedAlbumEntriesInput,
-			Prisma.UserUpdateWithoutCreatedAlbumEntriesInput
-		>,
-		Prisma.UserUncheckedUpdateWithoutCreatedAlbumEntriesInput
-	>;
-};
-
 export type UserCreateNestedOneWithoutCreatedAssetsInput = {
 	create?: Prisma.XOR<
 		Prisma.UserCreateWithoutCreatedAssetsInput,
@@ -1084,62 +1056,6 @@ export type UserUpdateOneWithoutCreatedAssetsNestedInput = {
 			Prisma.UserUpdateWithoutCreatedAssetsInput
 		>,
 		Prisma.UserUncheckedUpdateWithoutCreatedAssetsInput
-	>;
-};
-
-export type UserCreateNestedOneWithoutCreatedDerivativesInput = {
-	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedDerivativesInput,
-		Prisma.UserUncheckedCreateWithoutCreatedDerivativesInput
-	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedDerivativesInput;
-	connect?: Prisma.UserWhereUniqueInput;
-};
-
-export type UserUpdateOneWithoutCreatedDerivativesNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedDerivativesInput,
-		Prisma.UserUncheckedCreateWithoutCreatedDerivativesInput
-	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedDerivativesInput;
-	upsert?: Prisma.UserUpsertWithoutCreatedDerivativesInput;
-	disconnect?: Prisma.UserWhereInput | boolean;
-	delete?: Prisma.UserWhereInput | boolean;
-	connect?: Prisma.UserWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.UserUpdateToOneWithWhereWithoutCreatedDerivativesInput,
-			Prisma.UserUpdateWithoutCreatedDerivativesInput
-		>,
-		Prisma.UserUncheckedUpdateWithoutCreatedDerivativesInput
-	>;
-};
-
-export type UserCreateNestedOneWithoutCreatedFoldersInput = {
-	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedFoldersInput,
-		Prisma.UserUncheckedCreateWithoutCreatedFoldersInput
-	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedFoldersInput;
-	connect?: Prisma.UserWhereUniqueInput;
-};
-
-export type UserUpdateOneWithoutCreatedFoldersNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedFoldersInput,
-		Prisma.UserUncheckedCreateWithoutCreatedFoldersInput
-	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedFoldersInput;
-	upsert?: Prisma.UserUpsertWithoutCreatedFoldersInput;
-	disconnect?: Prisma.UserWhereInput | boolean;
-	delete?: Prisma.UserWhereInput | boolean;
-	connect?: Prisma.UserWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.UserUpdateToOneWithWhereWithoutCreatedFoldersInput,
-			Prisma.UserUpdateWithoutCreatedFoldersInput
-		>,
-		Prisma.UserUncheckedUpdateWithoutCreatedFoldersInput
 	>;
 };
 
@@ -1171,57 +1087,31 @@ export type UserUpdateOneWithoutAuthAuditLogsNestedInput = {
 	>;
 };
 
-export type UserCreateNestedOneWithoutEmailVerificationsInput = {
+export type UserCreateNestedOneWithoutCreatedCategoriesInput = {
 	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutEmailVerificationsInput,
-		Prisma.UserUncheckedCreateWithoutEmailVerificationsInput
+		Prisma.UserCreateWithoutCreatedCategoriesInput,
+		Prisma.UserUncheckedCreateWithoutCreatedCategoriesInput
 	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmailVerificationsInput;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedCategoriesInput;
 	connect?: Prisma.UserWhereUniqueInput;
 };
 
-export type UserUpdateOneWithoutEmailVerificationsNestedInput = {
+export type UserUpdateOneWithoutCreatedCategoriesNestedInput = {
 	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutEmailVerificationsInput,
-		Prisma.UserUncheckedCreateWithoutEmailVerificationsInput
+		Prisma.UserCreateWithoutCreatedCategoriesInput,
+		Prisma.UserUncheckedCreateWithoutCreatedCategoriesInput
 	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmailVerificationsInput;
-	upsert?: Prisma.UserUpsertWithoutEmailVerificationsInput;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedCategoriesInput;
+	upsert?: Prisma.UserUpsertWithoutCreatedCategoriesInput;
 	disconnect?: Prisma.UserWhereInput | boolean;
 	delete?: Prisma.UserWhereInput | boolean;
 	connect?: Prisma.UserWhereUniqueInput;
 	update?: Prisma.XOR<
 		Prisma.XOR<
-			Prisma.UserUpdateToOneWithWhereWithoutEmailVerificationsInput,
-			Prisma.UserUpdateWithoutEmailVerificationsInput
+			Prisma.UserUpdateToOneWithWhereWithoutCreatedCategoriesInput,
+			Prisma.UserUpdateWithoutCreatedCategoriesInput
 		>,
-		Prisma.UserUncheckedUpdateWithoutEmailVerificationsInput
-	>;
-};
-
-export type UserCreateNestedOneWithoutPasswordHistoryInput = {
-	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutPasswordHistoryInput,
-		Prisma.UserUncheckedCreateWithoutPasswordHistoryInput
-	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutPasswordHistoryInput;
-	connect?: Prisma.UserWhereUniqueInput;
-};
-
-export type UserUpdateOneRequiredWithoutPasswordHistoryNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutPasswordHistoryInput,
-		Prisma.UserUncheckedCreateWithoutPasswordHistoryInput
-	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutPasswordHistoryInput;
-	upsert?: Prisma.UserUpsertWithoutPasswordHistoryInput;
-	connect?: Prisma.UserWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.UserUpdateToOneWithWhereWithoutPasswordHistoryInput,
-			Prisma.UserUpdateWithoutPasswordHistoryInput
-		>,
-		Prisma.UserUncheckedUpdateWithoutPasswordHistoryInput
+		Prisma.UserUncheckedUpdateWithoutCreatedCategoriesInput
 	>;
 };
 
@@ -1253,187 +1143,115 @@ export type UserUpdateOneWithoutCreatedContentsNestedInput = {
 	>;
 };
 
-export type UserCreateNestedOneWithoutTenantAccessRequestsInput = {
+export type UserCreateNestedOneWithoutCreatedDerivativesInput = {
 	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutTenantAccessRequestsInput,
-		Prisma.UserUncheckedCreateWithoutTenantAccessRequestsInput
+		Prisma.UserCreateWithoutCreatedDerivativesInput,
+		Prisma.UserUncheckedCreateWithoutCreatedDerivativesInput
 	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantAccessRequestsInput;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedDerivativesInput;
 	connect?: Prisma.UserWhereUniqueInput;
 };
 
-export type UserCreateNestedOneWithoutReviewedTenantAccessRequestsInput = {
+export type UserUpdateOneWithoutCreatedDerivativesNestedInput = {
 	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutReviewedTenantAccessRequestsInput,
-		Prisma.UserUncheckedCreateWithoutReviewedTenantAccessRequestsInput
+		Prisma.UserCreateWithoutCreatedDerivativesInput,
+		Prisma.UserUncheckedCreateWithoutCreatedDerivativesInput
 	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedTenantAccessRequestsInput;
-	connect?: Prisma.UserWhereUniqueInput;
-};
-
-export type UserUpdateOneRequiredWithoutTenantAccessRequestsNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutTenantAccessRequestsInput,
-		Prisma.UserUncheckedCreateWithoutTenantAccessRequestsInput
-	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantAccessRequestsInput;
-	upsert?: Prisma.UserUpsertWithoutTenantAccessRequestsInput;
-	connect?: Prisma.UserWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.UserUpdateToOneWithWhereWithoutTenantAccessRequestsInput,
-			Prisma.UserUpdateWithoutTenantAccessRequestsInput
-		>,
-		Prisma.UserUncheckedUpdateWithoutTenantAccessRequestsInput
-	>;
-};
-
-export type UserUpdateOneWithoutReviewedTenantAccessRequestsNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutReviewedTenantAccessRequestsInput,
-		Prisma.UserUncheckedCreateWithoutReviewedTenantAccessRequestsInput
-	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedTenantAccessRequestsInput;
-	upsert?: Prisma.UserUpsertWithoutReviewedTenantAccessRequestsInput;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedDerivativesInput;
+	upsert?: Prisma.UserUpsertWithoutCreatedDerivativesInput;
 	disconnect?: Prisma.UserWhereInput | boolean;
 	delete?: Prisma.UserWhereInput | boolean;
 	connect?: Prisma.UserWhereUniqueInput;
 	update?: Prisma.XOR<
 		Prisma.XOR<
-			Prisma.UserUpdateToOneWithWhereWithoutReviewedTenantAccessRequestsInput,
-			Prisma.UserUpdateWithoutReviewedTenantAccessRequestsInput
+			Prisma.UserUpdateToOneWithWhereWithoutCreatedDerivativesInput,
+			Prisma.UserUpdateWithoutCreatedDerivativesInput
 		>,
-		Prisma.UserUncheckedUpdateWithoutReviewedTenantAccessRequestsInput
+		Prisma.UserUncheckedUpdateWithoutCreatedDerivativesInput
 	>;
 };
 
-export type UserCreateNestedOneWithoutTenantsInput = {
+export type UserCreateNestedOneWithoutEmailVerificationsInput = {
 	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutTenantsInput,
-		Prisma.UserUncheckedCreateWithoutTenantsInput
+		Prisma.UserCreateWithoutEmailVerificationsInput,
+		Prisma.UserUncheckedCreateWithoutEmailVerificationsInput
 	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantsInput;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmailVerificationsInput;
 	connect?: Prisma.UserWhereUniqueInput;
 };
 
-export type UserUpdateOneRequiredWithoutTenantsNestedInput = {
+export type UserUpdateOneWithoutEmailVerificationsNestedInput = {
 	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutTenantsInput,
-		Prisma.UserUncheckedCreateWithoutTenantsInput
+		Prisma.UserCreateWithoutEmailVerificationsInput,
+		Prisma.UserUncheckedCreateWithoutEmailVerificationsInput
 	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantsInput;
-	upsert?: Prisma.UserUpsertWithoutTenantsInput;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmailVerificationsInput;
+	upsert?: Prisma.UserUpsertWithoutEmailVerificationsInput;
+	disconnect?: Prisma.UserWhereInput | boolean;
+	delete?: Prisma.UserWhereInput | boolean;
 	connect?: Prisma.UserWhereUniqueInput;
 	update?: Prisma.XOR<
 		Prisma.XOR<
-			Prisma.UserUpdateToOneWithWhereWithoutTenantsInput,
-			Prisma.UserUpdateWithoutTenantsInput
+			Prisma.UserUpdateToOneWithWhereWithoutEmailVerificationsInput,
+			Prisma.UserUpdateWithoutEmailVerificationsInput
 		>,
-		Prisma.UserUncheckedUpdateWithoutTenantsInput
+		Prisma.UserUncheckedUpdateWithoutEmailVerificationsInput
 	>;
 };
 
-export type UserCreateNestedOneWithoutClassificationInput = {
+export type UserCreateNestedOneWithoutCreatedFoldersInput = {
 	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutClassificationInput,
-		Prisma.UserUncheckedCreateWithoutClassificationInput
+		Prisma.UserCreateWithoutCreatedFoldersInput,
+		Prisma.UserUncheckedCreateWithoutCreatedFoldersInput
 	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutClassificationInput;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedFoldersInput;
 	connect?: Prisma.UserWhereUniqueInput;
 };
 
-export type UserUpdateOneRequiredWithoutClassificationNestedInput = {
+export type UserUpdateOneWithoutCreatedFoldersNestedInput = {
 	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutClassificationInput,
-		Prisma.UserUncheckedCreateWithoutClassificationInput
+		Prisma.UserCreateWithoutCreatedFoldersInput,
+		Prisma.UserUncheckedCreateWithoutCreatedFoldersInput
 	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutClassificationInput;
-	upsert?: Prisma.UserUpsertWithoutClassificationInput;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedFoldersInput;
+	upsert?: Prisma.UserUpsertWithoutCreatedFoldersInput;
+	disconnect?: Prisma.UserWhereInput | boolean;
+	delete?: Prisma.UserWhereInput | boolean;
 	connect?: Prisma.UserWhereUniqueInput;
 	update?: Prisma.XOR<
 		Prisma.XOR<
-			Prisma.UserUpdateToOneWithWhereWithoutClassificationInput,
-			Prisma.UserUpdateWithoutClassificationInput
+			Prisma.UserUpdateToOneWithWhereWithoutCreatedFoldersInput,
+			Prisma.UserUpdateWithoutCreatedFoldersInput
 		>,
-		Prisma.UserUncheckedUpdateWithoutClassificationInput
+		Prisma.UserUncheckedUpdateWithoutCreatedFoldersInput
 	>;
 };
 
-export type UserCreateNestedOneWithoutAssociationsInput = {
+export type UserCreateNestedOneWithoutCreatedGroupsInput = {
 	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutAssociationsInput,
-		Prisma.UserUncheckedCreateWithoutAssociationsInput
+		Prisma.UserCreateWithoutCreatedGroupsInput,
+		Prisma.UserUncheckedCreateWithoutCreatedGroupsInput
 	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssociationsInput;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedGroupsInput;
 	connect?: Prisma.UserWhereUniqueInput;
 };
 
-export type UserUpdateOneRequiredWithoutAssociationsNestedInput = {
+export type UserUpdateOneWithoutCreatedGroupsNestedInput = {
 	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutAssociationsInput,
-		Prisma.UserUncheckedCreateWithoutAssociationsInput
+		Prisma.UserCreateWithoutCreatedGroupsInput,
+		Prisma.UserUncheckedCreateWithoutCreatedGroupsInput
 	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssociationsInput;
-	upsert?: Prisma.UserUpsertWithoutAssociationsInput;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedGroupsInput;
+	upsert?: Prisma.UserUpsertWithoutCreatedGroupsInput;
+	disconnect?: Prisma.UserWhereInput | boolean;
+	delete?: Prisma.UserWhereInput | boolean;
 	connect?: Prisma.UserWhereUniqueInput;
 	update?: Prisma.XOR<
 		Prisma.XOR<
-			Prisma.UserUpdateToOneWithWhereWithoutAssociationsInput,
-			Prisma.UserUpdateWithoutAssociationsInput
+			Prisma.UserUpdateToOneWithWhereWithoutCreatedGroupsInput,
+			Prisma.UserUpdateWithoutCreatedGroupsInput
 		>,
-		Prisma.UserUncheckedUpdateWithoutAssociationsInput
-	>;
-};
-
-export type UserCreateNestedOneWithoutProfilesInput = {
-	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutProfilesInput,
-		Prisma.UserUncheckedCreateWithoutProfilesInput
-	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutProfilesInput;
-	connect?: Prisma.UserWhereUniqueInput;
-};
-
-export type UserUpdateOneRequiredWithoutProfilesNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutProfilesInput,
-		Prisma.UserUncheckedCreateWithoutProfilesInput
-	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutProfilesInput;
-	upsert?: Prisma.UserUpsertWithoutProfilesInput;
-	connect?: Prisma.UserWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.UserUpdateToOneWithWhereWithoutProfilesInput,
-			Prisma.UserUpdateWithoutProfilesInput
-		>,
-		Prisma.UserUncheckedUpdateWithoutProfilesInput
-	>;
-};
-
-export type UserCreateNestedOneWithoutCreatedThreadsInput = {
-	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedThreadsInput,
-		Prisma.UserUncheckedCreateWithoutCreatedThreadsInput
-	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedThreadsInput;
-	connect?: Prisma.UserWhereUniqueInput;
-};
-
-export type UserUpdateOneRequiredWithoutCreatedThreadsNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedThreadsInput,
-		Prisma.UserUncheckedCreateWithoutCreatedThreadsInput
-	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedThreadsInput;
-	upsert?: Prisma.UserUpsertWithoutCreatedThreadsInput;
-	connect?: Prisma.UserWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.UserUpdateToOneWithWhereWithoutCreatedThreadsInput,
-			Prisma.UserUpdateWithoutCreatedThreadsInput
-		>,
-		Prisma.UserUncheckedUpdateWithoutCreatedThreadsInput
+		Prisma.UserUncheckedUpdateWithoutCreatedGroupsInput
 	>;
 };
 
@@ -1488,6 +1306,32 @@ export type UserUpdateOneRequiredWithoutInquiryParticipantsNestedInput = {
 			Prisma.UserUpdateWithoutInquiryParticipantsInput
 		>,
 		Prisma.UserUncheckedUpdateWithoutInquiryParticipantsInput
+	>;
+};
+
+export type UserCreateNestedOneWithoutCreatedThreadsInput = {
+	create?: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedThreadsInput,
+		Prisma.UserUncheckedCreateWithoutCreatedThreadsInput
+	>;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedThreadsInput;
+	connect?: Prisma.UserWhereUniqueInput;
+};
+
+export type UserUpdateOneRequiredWithoutCreatedThreadsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedThreadsInput,
+		Prisma.UserUncheckedCreateWithoutCreatedThreadsInput
+	>;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedThreadsInput;
+	upsert?: Prisma.UserUpsertWithoutCreatedThreadsInput;
+	connect?: Prisma.UserWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.UserUpdateToOneWithWhereWithoutCreatedThreadsInput,
+			Prisma.UserUpdateWithoutCreatedThreadsInput
+		>,
+		Prisma.UserUncheckedUpdateWithoutCreatedThreadsInput
 	>;
 };
 
@@ -1575,6 +1419,86 @@ export type UserUpdateOneWithoutAssignedInquiriesNestedInput = {
 	>;
 };
 
+export type UserCreateNestedOneWithoutPasswordHistoryInput = {
+	create?: Prisma.XOR<
+		Prisma.UserCreateWithoutPasswordHistoryInput,
+		Prisma.UserUncheckedCreateWithoutPasswordHistoryInput
+	>;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutPasswordHistoryInput;
+	connect?: Prisma.UserWhereUniqueInput;
+};
+
+export type UserUpdateOneRequiredWithoutPasswordHistoryNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.UserCreateWithoutPasswordHistoryInput,
+		Prisma.UserUncheckedCreateWithoutPasswordHistoryInput
+	>;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutPasswordHistoryInput;
+	upsert?: Prisma.UserUpsertWithoutPasswordHistoryInput;
+	connect?: Prisma.UserWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.UserUpdateToOneWithWhereWithoutPasswordHistoryInput,
+			Prisma.UserUpdateWithoutPasswordHistoryInput
+		>,
+		Prisma.UserUncheckedUpdateWithoutPasswordHistoryInput
+	>;
+};
+
+export type UserCreateNestedOneWithoutCreatedPoliciesInput = {
+	create?: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedPoliciesInput,
+		Prisma.UserUncheckedCreateWithoutCreatedPoliciesInput
+	>;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedPoliciesInput;
+	connect?: Prisma.UserWhereUniqueInput;
+};
+
+export type UserUpdateOneWithoutCreatedPoliciesNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedPoliciesInput,
+		Prisma.UserUncheckedCreateWithoutCreatedPoliciesInput
+	>;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedPoliciesInput;
+	upsert?: Prisma.UserUpsertWithoutCreatedPoliciesInput;
+	disconnect?: Prisma.UserWhereInput | boolean;
+	delete?: Prisma.UserWhereInput | boolean;
+	connect?: Prisma.UserWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.UserUpdateToOneWithWhereWithoutCreatedPoliciesInput,
+			Prisma.UserUpdateWithoutCreatedPoliciesInput
+		>,
+		Prisma.UserUncheckedUpdateWithoutCreatedPoliciesInput
+	>;
+};
+
+export type UserCreateNestedOneWithoutProfilesInput = {
+	create?: Prisma.XOR<
+		Prisma.UserCreateWithoutProfilesInput,
+		Prisma.UserUncheckedCreateWithoutProfilesInput
+	>;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutProfilesInput;
+	connect?: Prisma.UserWhereUniqueInput;
+};
+
+export type UserUpdateOneRequiredWithoutProfilesNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.UserCreateWithoutProfilesInput,
+		Prisma.UserUncheckedCreateWithoutProfilesInput
+	>;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutProfilesInput;
+	upsert?: Prisma.UserUpsertWithoutProfilesInput;
+	connect?: Prisma.UserWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.UserUpdateToOneWithWhereWithoutProfilesInput,
+			Prisma.UserUpdateWithoutProfilesInput
+		>,
+		Prisma.UserUncheckedUpdateWithoutProfilesInput
+	>;
+};
+
 export type UserCreateNestedOneWithoutCreatedReservationsInput = {
 	create?: Prisma.XOR<
 		Prisma.UserCreateWithoutCreatedReservationsInput,
@@ -1657,6 +1581,34 @@ export type UserUpdateOneWithoutCreatedRoutinesNestedInput = {
 	>;
 };
 
+export type UserCreateNestedOneWithoutCreatedSafeWalletsInput = {
+	create?: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedSafeWalletsInput,
+		Prisma.UserUncheckedCreateWithoutCreatedSafeWalletsInput
+	>;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedSafeWalletsInput;
+	connect?: Prisma.UserWhereUniqueInput;
+};
+
+export type UserUpdateOneWithoutCreatedSafeWalletsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedSafeWalletsInput,
+		Prisma.UserUncheckedCreateWithoutCreatedSafeWalletsInput
+	>;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedSafeWalletsInput;
+	upsert?: Prisma.UserUpsertWithoutCreatedSafeWalletsInput;
+	disconnect?: Prisma.UserWhereInput | boolean;
+	delete?: Prisma.UserWhereInput | boolean;
+	connect?: Prisma.UserWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.UserUpdateToOneWithWhereWithoutCreatedSafeWalletsInput,
+			Prisma.UserUpdateWithoutCreatedSafeWalletsInput
+		>,
+		Prisma.UserUncheckedUpdateWithoutCreatedSafeWalletsInput
+	>;
+};
+
 export type UserCreateNestedOneWithoutCreatedTasksInput = {
 	create?: Prisma.XOR<
 		Prisma.UserCreateWithoutCreatedTasksInput,
@@ -1682,6 +1634,86 @@ export type UserUpdateOneWithoutCreatedTasksNestedInput = {
 			Prisma.UserUpdateWithoutCreatedTasksInput
 		>,
 		Prisma.UserUncheckedUpdateWithoutCreatedTasksInput
+	>;
+};
+
+export type UserCreateNestedOneWithoutTenantAccessRequestsInput = {
+	create?: Prisma.XOR<
+		Prisma.UserCreateWithoutTenantAccessRequestsInput,
+		Prisma.UserUncheckedCreateWithoutTenantAccessRequestsInput
+	>;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantAccessRequestsInput;
+	connect?: Prisma.UserWhereUniqueInput;
+};
+
+export type UserCreateNestedOneWithoutReviewedTenantAccessRequestsInput = {
+	create?: Prisma.XOR<
+		Prisma.UserCreateWithoutReviewedTenantAccessRequestsInput,
+		Prisma.UserUncheckedCreateWithoutReviewedTenantAccessRequestsInput
+	>;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedTenantAccessRequestsInput;
+	connect?: Prisma.UserWhereUniqueInput;
+};
+
+export type UserUpdateOneRequiredWithoutTenantAccessRequestsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.UserCreateWithoutTenantAccessRequestsInput,
+		Prisma.UserUncheckedCreateWithoutTenantAccessRequestsInput
+	>;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantAccessRequestsInput;
+	upsert?: Prisma.UserUpsertWithoutTenantAccessRequestsInput;
+	connect?: Prisma.UserWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.UserUpdateToOneWithWhereWithoutTenantAccessRequestsInput,
+			Prisma.UserUpdateWithoutTenantAccessRequestsInput
+		>,
+		Prisma.UserUncheckedUpdateWithoutTenantAccessRequestsInput
+	>;
+};
+
+export type UserUpdateOneWithoutReviewedTenantAccessRequestsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.UserCreateWithoutReviewedTenantAccessRequestsInput,
+		Prisma.UserUncheckedCreateWithoutReviewedTenantAccessRequestsInput
+	>;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedTenantAccessRequestsInput;
+	upsert?: Prisma.UserUpsertWithoutReviewedTenantAccessRequestsInput;
+	disconnect?: Prisma.UserWhereInput | boolean;
+	delete?: Prisma.UserWhereInput | boolean;
+	connect?: Prisma.UserWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.UserUpdateToOneWithWhereWithoutReviewedTenantAccessRequestsInput,
+			Prisma.UserUpdateWithoutReviewedTenantAccessRequestsInput
+		>,
+		Prisma.UserUncheckedUpdateWithoutReviewedTenantAccessRequestsInput
+	>;
+};
+
+export type UserCreateNestedOneWithoutTenantsInput = {
+	create?: Prisma.XOR<
+		Prisma.UserCreateWithoutTenantsInput,
+		Prisma.UserUncheckedCreateWithoutTenantsInput
+	>;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantsInput;
+	connect?: Prisma.UserWhereUniqueInput;
+};
+
+export type UserUpdateOneRequiredWithoutTenantsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.UserCreateWithoutTenantsInput,
+		Prisma.UserUncheckedCreateWithoutTenantsInput
+	>;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantsInput;
+	upsert?: Prisma.UserUpsertWithoutTenantsInput;
+	connect?: Prisma.UserWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.UserUpdateToOneWithWhereWithoutTenantsInput,
+			Prisma.UserUpdateWithoutTenantsInput
+		>,
+		Prisma.UserUncheckedUpdateWithoutTenantsInput
 	>;
 };
 
@@ -1713,91 +1745,59 @@ export type UserUpdateOneWithoutCreatedTimelinesNestedInput = {
 	>;
 };
 
-export type UserCreateNestedOneWithoutCreatedCategoriesInput = {
+export type UserCreateNestedOneWithoutAssociationsInput = {
 	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedCategoriesInput,
-		Prisma.UserUncheckedCreateWithoutCreatedCategoriesInput
+		Prisma.UserCreateWithoutAssociationsInput,
+		Prisma.UserUncheckedCreateWithoutAssociationsInput
 	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedCategoriesInput;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssociationsInput;
 	connect?: Prisma.UserWhereUniqueInput;
 };
 
-export type UserUpdateOneWithoutCreatedCategoriesNestedInput = {
+export type UserUpdateOneRequiredWithoutAssociationsNestedInput = {
 	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedCategoriesInput,
-		Prisma.UserUncheckedCreateWithoutCreatedCategoriesInput
+		Prisma.UserCreateWithoutAssociationsInput,
+		Prisma.UserUncheckedCreateWithoutAssociationsInput
 	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedCategoriesInput;
-	upsert?: Prisma.UserUpsertWithoutCreatedCategoriesInput;
-	disconnect?: Prisma.UserWhereInput | boolean;
-	delete?: Prisma.UserWhereInput | boolean;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssociationsInput;
+	upsert?: Prisma.UserUpsertWithoutAssociationsInput;
 	connect?: Prisma.UserWhereUniqueInput;
 	update?: Prisma.XOR<
 		Prisma.XOR<
-			Prisma.UserUpdateToOneWithWhereWithoutCreatedCategoriesInput,
-			Prisma.UserUpdateWithoutCreatedCategoriesInput
+			Prisma.UserUpdateToOneWithWhereWithoutAssociationsInput,
+			Prisma.UserUpdateWithoutAssociationsInput
 		>,
-		Prisma.UserUncheckedUpdateWithoutCreatedCategoriesInput
+		Prisma.UserUncheckedUpdateWithoutAssociationsInput
 	>;
 };
 
-export type UserCreateNestedOneWithoutCreatedGroupsInput = {
+export type UserCreateNestedOneWithoutClassificationInput = {
 	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedGroupsInput,
-		Prisma.UserUncheckedCreateWithoutCreatedGroupsInput
+		Prisma.UserCreateWithoutClassificationInput,
+		Prisma.UserUncheckedCreateWithoutClassificationInput
 	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedGroupsInput;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutClassificationInput;
 	connect?: Prisma.UserWhereUniqueInput;
 };
 
-export type UserUpdateOneWithoutCreatedGroupsNestedInput = {
+export type UserUpdateOneRequiredWithoutClassificationNestedInput = {
 	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedGroupsInput,
-		Prisma.UserUncheckedCreateWithoutCreatedGroupsInput
+		Prisma.UserCreateWithoutClassificationInput,
+		Prisma.UserUncheckedCreateWithoutClassificationInput
 	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedGroupsInput;
-	upsert?: Prisma.UserUpsertWithoutCreatedGroupsInput;
-	disconnect?: Prisma.UserWhereInput | boolean;
-	delete?: Prisma.UserWhereInput | boolean;
+	connectOrCreate?: Prisma.UserCreateOrConnectWithoutClassificationInput;
+	upsert?: Prisma.UserUpsertWithoutClassificationInput;
 	connect?: Prisma.UserWhereUniqueInput;
 	update?: Prisma.XOR<
 		Prisma.XOR<
-			Prisma.UserUpdateToOneWithWhereWithoutCreatedGroupsInput,
-			Prisma.UserUpdateWithoutCreatedGroupsInput
+			Prisma.UserUpdateToOneWithWhereWithoutClassificationInput,
+			Prisma.UserUpdateWithoutClassificationInput
 		>,
-		Prisma.UserUncheckedUpdateWithoutCreatedGroupsInput
+		Prisma.UserUncheckedUpdateWithoutClassificationInput
 	>;
 };
 
-export type UserCreateNestedOneWithoutCreatedSafeWalletsInput = {
-	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedSafeWalletsInput,
-		Prisma.UserUncheckedCreateWithoutCreatedSafeWalletsInput
-	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedSafeWalletsInput;
-	connect?: Prisma.UserWhereUniqueInput;
-};
-
-export type UserUpdateOneWithoutCreatedSafeWalletsNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedSafeWalletsInput,
-		Prisma.UserUncheckedCreateWithoutCreatedSafeWalletsInput
-	>;
-	connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedSafeWalletsInput;
-	upsert?: Prisma.UserUpsertWithoutCreatedSafeWalletsInput;
-	disconnect?: Prisma.UserWhereInput | boolean;
-	delete?: Prisma.UserWhereInput | boolean;
-	connect?: Prisma.UserWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.UserUpdateToOneWithWhereWithoutCreatedSafeWalletsInput,
-			Prisma.UserUpdateWithoutCreatedSafeWalletsInput
-		>,
-		Prisma.UserUncheckedUpdateWithoutCreatedSafeWalletsInput
-	>;
-};
-
-export type UserCreateWithoutCreatedPoliciesInput = {
+export type UserCreateWithoutCreatedAlbumEntriesInput = {
 	id?: string;
 	updatedAt?: Date | string | null;
 	createdAt?: Date | string;
@@ -1832,11 +1832,11 @@ export type UserCreateWithoutCreatedPoliciesInput = {
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
 	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
 	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
 	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
 	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
 	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
 	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
 	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
@@ -1846,7 +1846,7 @@ export type UserCreateWithoutCreatedPoliciesInput = {
 	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
 };
 
-export type UserUncheckedCreateWithoutCreatedPoliciesInput = {
+export type UserUncheckedCreateWithoutCreatedAlbumEntriesInput = {
 	id?: string;
 	updatedAt?: Date | string | null;
 	createdAt?: Date | string;
@@ -1881,11 +1881,11 @@ export type UserUncheckedCreateWithoutCreatedPoliciesInput = {
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
 	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
 	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
@@ -1895,35 +1895,35 @@ export type UserUncheckedCreateWithoutCreatedPoliciesInput = {
 	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
 };
 
-export type UserCreateOrConnectWithoutCreatedPoliciesInput = {
+export type UserCreateOrConnectWithoutCreatedAlbumEntriesInput = {
 	where: Prisma.UserWhereUniqueInput;
 	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedPoliciesInput,
-		Prisma.UserUncheckedCreateWithoutCreatedPoliciesInput
+		Prisma.UserCreateWithoutCreatedAlbumEntriesInput,
+		Prisma.UserUncheckedCreateWithoutCreatedAlbumEntriesInput
 	>;
 };
 
-export type UserUpsertWithoutCreatedPoliciesInput = {
+export type UserUpsertWithoutCreatedAlbumEntriesInput = {
 	update: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedPoliciesInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedPoliciesInput
+		Prisma.UserUpdateWithoutCreatedAlbumEntriesInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedAlbumEntriesInput
 	>;
 	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedPoliciesInput,
-		Prisma.UserUncheckedCreateWithoutCreatedPoliciesInput
+		Prisma.UserCreateWithoutCreatedAlbumEntriesInput,
+		Prisma.UserUncheckedCreateWithoutCreatedAlbumEntriesInput
 	>;
 	where?: Prisma.UserWhereInput;
 };
 
-export type UserUpdateToOneWithWhereWithoutCreatedPoliciesInput = {
+export type UserUpdateToOneWithWhereWithoutCreatedAlbumEntriesInput = {
 	where?: Prisma.UserWhereInput;
 	data: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedPoliciesInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedPoliciesInput
+		Prisma.UserUpdateWithoutCreatedAlbumEntriesInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedAlbumEntriesInput
 	>;
 };
 
-export type UserUpdateWithoutCreatedPoliciesInput = {
+export type UserUpdateWithoutCreatedAlbumEntriesInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	updatedAt?:
 		| Prisma.NullableDateTimeFieldUpdateOperationsInput
@@ -1981,11 +1981,11 @@ export type UserUpdateWithoutCreatedPoliciesInput = {
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
 	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
 	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
 	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
 	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
 	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
 	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
 	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
@@ -1995,7 +1995,7 @@ export type UserUpdateWithoutCreatedPoliciesInput = {
 	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
 };
 
-export type UserUncheckedUpdateWithoutCreatedPoliciesInput = {
+export type UserUncheckedUpdateWithoutCreatedAlbumEntriesInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	updatedAt?:
 		| Prisma.NullableDateTimeFieldUpdateOperationsInput
@@ -2053,11 +2053,11 @@ export type UserUncheckedUpdateWithoutCreatedPoliciesInput = {
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
 	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
 	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
@@ -2337,276 +2337,6 @@ export type UserUncheckedUpdateWithoutCreatedAlbumsInput = {
 	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
 };
 
-export type UserCreateWithoutCreatedAlbumEntriesInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserUncheckedCreateWithoutCreatedAlbumEntriesInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserCreateOrConnectWithoutCreatedAlbumEntriesInput = {
-	where: Prisma.UserWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedAlbumEntriesInput,
-		Prisma.UserUncheckedCreateWithoutCreatedAlbumEntriesInput
-	>;
-};
-
-export type UserUpsertWithoutCreatedAlbumEntriesInput = {
-	update: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedAlbumEntriesInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedAlbumEntriesInput
-	>;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedAlbumEntriesInput,
-		Prisma.UserUncheckedCreateWithoutCreatedAlbumEntriesInput
-	>;
-	where?: Prisma.UserWhereInput;
-};
-
-export type UserUpdateToOneWithWhereWithoutCreatedAlbumEntriesInput = {
-	where?: Prisma.UserWhereInput;
-	data: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedAlbumEntriesInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedAlbumEntriesInput
-	>;
-};
-
-export type UserUpdateWithoutCreatedAlbumEntriesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserUncheckedUpdateWithoutCreatedAlbumEntriesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
-};
-
 export type UserCreateWithoutCreatedAssetsInput = {
 	id?: string;
 	updatedAt?: Date | string | null;
@@ -2865,6 +2595,816 @@ export type UserUncheckedUpdateWithoutCreatedAssetsInput = {
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
 	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserCreateWithoutAuthAuditLogsInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserUncheckedCreateWithoutAuthAuditLogsInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserCreateOrConnectWithoutAuthAuditLogsInput = {
+	where: Prisma.UserWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutAuthAuditLogsInput,
+		Prisma.UserUncheckedCreateWithoutAuthAuditLogsInput
+	>;
+};
+
+export type UserUpsertWithoutAuthAuditLogsInput = {
+	update: Prisma.XOR<
+		Prisma.UserUpdateWithoutAuthAuditLogsInput,
+		Prisma.UserUncheckedUpdateWithoutAuthAuditLogsInput
+	>;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutAuthAuditLogsInput,
+		Prisma.UserUncheckedCreateWithoutAuthAuditLogsInput
+	>;
+	where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutAuthAuditLogsInput = {
+	where?: Prisma.UserWhereInput;
+	data: Prisma.XOR<
+		Prisma.UserUpdateWithoutAuthAuditLogsInput,
+		Prisma.UserUncheckedUpdateWithoutAuthAuditLogsInput
+	>;
+};
+
+export type UserUpdateWithoutAuthAuditLogsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutAuthAuditLogsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserCreateWithoutCreatedCategoriesInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
+	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserUncheckedCreateWithoutCreatedCategoriesInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
+	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserCreateOrConnectWithoutCreatedCategoriesInput = {
+	where: Prisma.UserWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedCategoriesInput,
+		Prisma.UserUncheckedCreateWithoutCreatedCategoriesInput
+	>;
+};
+
+export type UserUpsertWithoutCreatedCategoriesInput = {
+	update: Prisma.XOR<
+		Prisma.UserUpdateWithoutCreatedCategoriesInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedCategoriesInput
+	>;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedCategoriesInput,
+		Prisma.UserUncheckedCreateWithoutCreatedCategoriesInput
+	>;
+	where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutCreatedCategoriesInput = {
+	where?: Prisma.UserWhereInput;
+	data: Prisma.XOR<
+		Prisma.UserUpdateWithoutCreatedCategoriesInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedCategoriesInput
+	>;
+};
+
+export type UserUpdateWithoutCreatedCategoriesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
+	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutCreatedCategoriesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
+	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserCreateWithoutCreatedContentsInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserUncheckedCreateWithoutCreatedContentsInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserCreateOrConnectWithoutCreatedContentsInput = {
+	where: Prisma.UserWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedContentsInput,
+		Prisma.UserUncheckedCreateWithoutCreatedContentsInput
+	>;
+};
+
+export type UserUpsertWithoutCreatedContentsInput = {
+	update: Prisma.XOR<
+		Prisma.UserUpdateWithoutCreatedContentsInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedContentsInput
+	>;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedContentsInput,
+		Prisma.UserUncheckedCreateWithoutCreatedContentsInput
+	>;
+	where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutCreatedContentsInput = {
+	where?: Prisma.UserWhereInput;
+	data: Prisma.XOR<
+		Prisma.UserUpdateWithoutCreatedContentsInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedContentsInput
+	>;
+};
+
+export type UserUpdateWithoutCreatedContentsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutCreatedContentsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
@@ -3147,6 +3687,276 @@ export type UserUncheckedUpdateWithoutCreatedDerivativesInput = {
 	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
 };
 
+export type UserCreateWithoutEmailVerificationsInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserUncheckedCreateWithoutEmailVerificationsInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserCreateOrConnectWithoutEmailVerificationsInput = {
+	where: Prisma.UserWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutEmailVerificationsInput,
+		Prisma.UserUncheckedCreateWithoutEmailVerificationsInput
+	>;
+};
+
+export type UserUpsertWithoutEmailVerificationsInput = {
+	update: Prisma.XOR<
+		Prisma.UserUpdateWithoutEmailVerificationsInput,
+		Prisma.UserUncheckedUpdateWithoutEmailVerificationsInput
+	>;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutEmailVerificationsInput,
+		Prisma.UserUncheckedCreateWithoutEmailVerificationsInput
+	>;
+	where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutEmailVerificationsInput = {
+	where?: Prisma.UserWhereInput;
+	data: Prisma.XOR<
+		Prisma.UserUpdateWithoutEmailVerificationsInput,
+		Prisma.UserUncheckedUpdateWithoutEmailVerificationsInput
+	>;
+};
+
+export type UserUpdateWithoutEmailVerificationsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutEmailVerificationsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
+};
+
 export type UserCreateWithoutCreatedFoldersInput = {
 	id?: string;
 	updatedAt?: Date | string | null;
@@ -3417,277 +4227,7 @@ export type UserUncheckedUpdateWithoutCreatedFoldersInput = {
 	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
 };
 
-export type UserCreateWithoutAuthAuditLogsInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserUncheckedCreateWithoutAuthAuditLogsInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserCreateOrConnectWithoutAuthAuditLogsInput = {
-	where: Prisma.UserWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutAuthAuditLogsInput,
-		Prisma.UserUncheckedCreateWithoutAuthAuditLogsInput
-	>;
-};
-
-export type UserUpsertWithoutAuthAuditLogsInput = {
-	update: Prisma.XOR<
-		Prisma.UserUpdateWithoutAuthAuditLogsInput,
-		Prisma.UserUncheckedUpdateWithoutAuthAuditLogsInput
-	>;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutAuthAuditLogsInput,
-		Prisma.UserUncheckedCreateWithoutAuthAuditLogsInput
-	>;
-	where?: Prisma.UserWhereInput;
-};
-
-export type UserUpdateToOneWithWhereWithoutAuthAuditLogsInput = {
-	where?: Prisma.UserWhereInput;
-	data: Prisma.XOR<
-		Prisma.UserUpdateWithoutAuthAuditLogsInput,
-		Prisma.UserUncheckedUpdateWithoutAuthAuditLogsInput
-	>;
-};
-
-export type UserUpdateWithoutAuthAuditLogsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserUncheckedUpdateWithoutAuthAuditLogsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserCreateWithoutEmailVerificationsInput = {
+export type UserCreateWithoutCreatedGroupsInput = {
 	id?: string;
 	updatedAt?: Date | string | null;
 	createdAt?: Date | string;
@@ -3713,8 +4253,8 @@ export type UserCreateWithoutEmailVerificationsInput = {
 	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
@@ -3736,7 +4276,7 @@ export type UserCreateWithoutEmailVerificationsInput = {
 	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
 };
 
-export type UserUncheckedCreateWithoutEmailVerificationsInput = {
+export type UserUncheckedCreateWithoutCreatedGroupsInput = {
 	id?: string;
 	updatedAt?: Date | string | null;
 	createdAt?: Date | string;
@@ -3762,8 +4302,8 @@ export type UserUncheckedCreateWithoutEmailVerificationsInput = {
 	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
@@ -3785,35 +4325,35 @@ export type UserUncheckedCreateWithoutEmailVerificationsInput = {
 	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
 };
 
-export type UserCreateOrConnectWithoutEmailVerificationsInput = {
+export type UserCreateOrConnectWithoutCreatedGroupsInput = {
 	where: Prisma.UserWhereUniqueInput;
 	create: Prisma.XOR<
-		Prisma.UserCreateWithoutEmailVerificationsInput,
-		Prisma.UserUncheckedCreateWithoutEmailVerificationsInput
+		Prisma.UserCreateWithoutCreatedGroupsInput,
+		Prisma.UserUncheckedCreateWithoutCreatedGroupsInput
 	>;
 };
 
-export type UserUpsertWithoutEmailVerificationsInput = {
+export type UserUpsertWithoutCreatedGroupsInput = {
 	update: Prisma.XOR<
-		Prisma.UserUpdateWithoutEmailVerificationsInput,
-		Prisma.UserUncheckedUpdateWithoutEmailVerificationsInput
+		Prisma.UserUpdateWithoutCreatedGroupsInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedGroupsInput
 	>;
 	create: Prisma.XOR<
-		Prisma.UserCreateWithoutEmailVerificationsInput,
-		Prisma.UserUncheckedCreateWithoutEmailVerificationsInput
+		Prisma.UserCreateWithoutCreatedGroupsInput,
+		Prisma.UserUncheckedCreateWithoutCreatedGroupsInput
 	>;
 	where?: Prisma.UserWhereInput;
 };
 
-export type UserUpdateToOneWithWhereWithoutEmailVerificationsInput = {
+export type UserUpdateToOneWithWhereWithoutCreatedGroupsInput = {
 	where?: Prisma.UserWhereInput;
 	data: Prisma.XOR<
-		Prisma.UserUpdateWithoutEmailVerificationsInput,
-		Prisma.UserUncheckedUpdateWithoutEmailVerificationsInput
+		Prisma.UserUpdateWithoutCreatedGroupsInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedGroupsInput
 	>;
 };
 
-export type UserUpdateWithoutEmailVerificationsInput = {
+export type UserUpdateWithoutCreatedGroupsInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	updatedAt?:
 		| Prisma.NullableDateTimeFieldUpdateOperationsInput
@@ -3862,8 +4402,8 @@ export type UserUpdateWithoutEmailVerificationsInput = {
 	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
@@ -3885,7 +4425,7 @@ export type UserUpdateWithoutEmailVerificationsInput = {
 	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
 };
 
-export type UserUncheckedUpdateWithoutEmailVerificationsInput = {
+export type UserUncheckedUpdateWithoutCreatedGroupsInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	updatedAt?:
 		| Prisma.NullableDateTimeFieldUpdateOperationsInput
@@ -3934,6 +4474,277 @@ export type UserUncheckedUpdateWithoutEmailVerificationsInput = {
 	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserCreateWithoutInquiryMessagesInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
+	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserUncheckedCreateWithoutInquiryMessagesInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserCreateOrConnectWithoutInquiryMessagesInput = {
+	where: Prisma.UserWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutInquiryMessagesInput,
+		Prisma.UserUncheckedCreateWithoutInquiryMessagesInput
+	>;
+};
+
+export type UserUpsertWithoutInquiryMessagesInput = {
+	update: Prisma.XOR<
+		Prisma.UserUpdateWithoutInquiryMessagesInput,
+		Prisma.UserUncheckedUpdateWithoutInquiryMessagesInput
+	>;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutInquiryMessagesInput,
+		Prisma.UserUncheckedCreateWithoutInquiryMessagesInput
+	>;
+	where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutInquiryMessagesInput = {
+	where?: Prisma.UserWhereInput;
+	data: Prisma.XOR<
+		Prisma.UserUpdateWithoutInquiryMessagesInput,
+		Prisma.UserUncheckedUpdateWithoutInquiryMessagesInput
+	>;
+};
+
+export type UserUpdateWithoutInquiryMessagesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutInquiryMessagesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
@@ -3951,6 +4762,1355 @@ export type UserUncheckedUpdateWithoutEmailVerificationsInput = {
 	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
 	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
 	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserCreateWithoutInquiryParticipantsInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
+	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserUncheckedCreateWithoutInquiryParticipantsInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserCreateOrConnectWithoutInquiryParticipantsInput = {
+	where: Prisma.UserWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutInquiryParticipantsInput,
+		Prisma.UserUncheckedCreateWithoutInquiryParticipantsInput
+	>;
+};
+
+export type UserUpsertWithoutInquiryParticipantsInput = {
+	update: Prisma.XOR<
+		Prisma.UserUpdateWithoutInquiryParticipantsInput,
+		Prisma.UserUncheckedUpdateWithoutInquiryParticipantsInput
+	>;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutInquiryParticipantsInput,
+		Prisma.UserUncheckedCreateWithoutInquiryParticipantsInput
+	>;
+	where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutInquiryParticipantsInput = {
+	where?: Prisma.UserWhereInput;
+	data: Prisma.XOR<
+		Prisma.UserUpdateWithoutInquiryParticipantsInput,
+		Prisma.UserUncheckedUpdateWithoutInquiryParticipantsInput
+	>;
+};
+
+export type UserUpdateWithoutInquiryParticipantsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
+	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutInquiryParticipantsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserCreateWithoutCreatedThreadsInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
+};
+
+export type UserUncheckedCreateWithoutCreatedThreadsInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
+};
+
+export type UserCreateOrConnectWithoutCreatedThreadsInput = {
+	where: Prisma.UserWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedThreadsInput,
+		Prisma.UserUncheckedCreateWithoutCreatedThreadsInput
+	>;
+};
+
+export type UserUpsertWithoutCreatedThreadsInput = {
+	update: Prisma.XOR<
+		Prisma.UserUpdateWithoutCreatedThreadsInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedThreadsInput
+	>;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedThreadsInput,
+		Prisma.UserUncheckedCreateWithoutCreatedThreadsInput
+	>;
+	where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutCreatedThreadsInput = {
+	where?: Prisma.UserWhereInput;
+	data: Prisma.XOR<
+		Prisma.UserUpdateWithoutCreatedThreadsInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedThreadsInput
+	>;
+};
+
+export type UserUpdateWithoutCreatedThreadsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutCreatedThreadsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
+};
+
+export type UserCreateWithoutCreatedInquiriesInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
+	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserUncheckedCreateWithoutCreatedInquiriesInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserCreateOrConnectWithoutCreatedInquiriesInput = {
+	where: Prisma.UserWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedInquiriesInput,
+		Prisma.UserUncheckedCreateWithoutCreatedInquiriesInput
+	>;
+};
+
+export type UserCreateWithoutCustomerInquiriesInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
+	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserUncheckedCreateWithoutCustomerInquiriesInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
+	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserCreateOrConnectWithoutCustomerInquiriesInput = {
+	where: Prisma.UserWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutCustomerInquiriesInput,
+		Prisma.UserUncheckedCreateWithoutCustomerInquiriesInput
+	>;
+};
+
+export type UserCreateWithoutAssignedInquiriesInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
+	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserUncheckedCreateWithoutAssignedInquiriesInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
+	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserCreateOrConnectWithoutAssignedInquiriesInput = {
+	where: Prisma.UserWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutAssignedInquiriesInput,
+		Prisma.UserUncheckedCreateWithoutAssignedInquiriesInput
+	>;
+};
+
+export type UserUpsertWithoutCreatedInquiriesInput = {
+	update: Prisma.XOR<
+		Prisma.UserUpdateWithoutCreatedInquiriesInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedInquiriesInput
+	>;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedInquiriesInput,
+		Prisma.UserUncheckedCreateWithoutCreatedInquiriesInput
+	>;
+	where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutCreatedInquiriesInput = {
+	where?: Prisma.UserWhereInput;
+	data: Prisma.XOR<
+		Prisma.UserUpdateWithoutCreatedInquiriesInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedInquiriesInput
+	>;
+};
+
+export type UserUpdateWithoutCreatedInquiriesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutCreatedInquiriesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserUpsertWithoutCustomerInquiriesInput = {
+	update: Prisma.XOR<
+		Prisma.UserUpdateWithoutCustomerInquiriesInput,
+		Prisma.UserUncheckedUpdateWithoutCustomerInquiriesInput
+	>;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutCustomerInquiriesInput,
+		Prisma.UserUncheckedCreateWithoutCustomerInquiriesInput
+	>;
+	where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutCustomerInquiriesInput = {
+	where?: Prisma.UserWhereInput;
+	data: Prisma.XOR<
+		Prisma.UserUpdateWithoutCustomerInquiriesInput,
+		Prisma.UserUncheckedUpdateWithoutCustomerInquiriesInput
+	>;
+};
+
+export type UserUpdateWithoutCustomerInquiriesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
+	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutCustomerInquiriesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
+	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserUpsertWithoutAssignedInquiriesInput = {
+	update: Prisma.XOR<
+		Prisma.UserUpdateWithoutAssignedInquiriesInput,
+		Prisma.UserUncheckedUpdateWithoutAssignedInquiriesInput
+	>;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutAssignedInquiriesInput,
+		Prisma.UserUncheckedCreateWithoutAssignedInquiriesInput
+	>;
+	where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutAssignedInquiriesInput = {
+	where?: Prisma.UserWhereInput;
+	data: Prisma.XOR<
+		Prisma.UserUpdateWithoutAssignedInquiriesInput,
+		Prisma.UserUncheckedUpdateWithoutAssignedInquiriesInput
+	>;
+};
+
+export type UserUpdateWithoutAssignedInquiriesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
+	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutAssignedInquiriesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
 	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
 	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
 	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
@@ -4227,7 +6387,7 @@ export type UserUncheckedUpdateWithoutPasswordHistoryInput = {
 	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
 };
 
-export type UserCreateWithoutCreatedContentsInput = {
+export type UserCreateWithoutCreatedPoliciesInput = {
 	id?: string;
 	updatedAt?: Date | string | null;
 	createdAt?: Date | string;
@@ -4256,12 +6416,12 @@ export type UserCreateWithoutCreatedContentsInput = {
 	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
 	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
 	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
 	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
 	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
@@ -4276,7 +6436,7 @@ export type UserCreateWithoutCreatedContentsInput = {
 	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
 };
 
-export type UserUncheckedCreateWithoutCreatedContentsInput = {
+export type UserUncheckedCreateWithoutCreatedPoliciesInput = {
 	id?: string;
 	updatedAt?: Date | string | null;
 	createdAt?: Date | string;
@@ -4305,12 +6465,12 @@ export type UserUncheckedCreateWithoutCreatedContentsInput = {
 	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
@@ -4325,35 +6485,35 @@ export type UserUncheckedCreateWithoutCreatedContentsInput = {
 	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
 };
 
-export type UserCreateOrConnectWithoutCreatedContentsInput = {
+export type UserCreateOrConnectWithoutCreatedPoliciesInput = {
 	where: Prisma.UserWhereUniqueInput;
 	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedContentsInput,
-		Prisma.UserUncheckedCreateWithoutCreatedContentsInput
+		Prisma.UserCreateWithoutCreatedPoliciesInput,
+		Prisma.UserUncheckedCreateWithoutCreatedPoliciesInput
 	>;
 };
 
-export type UserUpsertWithoutCreatedContentsInput = {
+export type UserUpsertWithoutCreatedPoliciesInput = {
 	update: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedContentsInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedContentsInput
+		Prisma.UserUpdateWithoutCreatedPoliciesInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedPoliciesInput
 	>;
 	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedContentsInput,
-		Prisma.UserUncheckedCreateWithoutCreatedContentsInput
+		Prisma.UserCreateWithoutCreatedPoliciesInput,
+		Prisma.UserUncheckedCreateWithoutCreatedPoliciesInput
 	>;
 	where?: Prisma.UserWhereInput;
 };
 
-export type UserUpdateToOneWithWhereWithoutCreatedContentsInput = {
+export type UserUpdateToOneWithWhereWithoutCreatedPoliciesInput = {
 	where?: Prisma.UserWhereInput;
 	data: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedContentsInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedContentsInput
+		Prisma.UserUpdateWithoutCreatedPoliciesInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedPoliciesInput
 	>;
 };
 
-export type UserUpdateWithoutCreatedContentsInput = {
+export type UserUpdateWithoutCreatedPoliciesInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	updatedAt?:
 		| Prisma.NullableDateTimeFieldUpdateOperationsInput
@@ -4405,12 +6565,12 @@ export type UserUpdateWithoutCreatedContentsInput = {
 	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
 	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
 	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
 	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
 	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
@@ -4425,7 +6585,7 @@ export type UserUpdateWithoutCreatedContentsInput = {
 	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
 };
 
-export type UserUncheckedUpdateWithoutCreatedContentsInput = {
+export type UserUncheckedUpdateWithoutCreatedPoliciesInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	updatedAt?:
 		| Prisma.NullableDateTimeFieldUpdateOperationsInput
@@ -4477,8 +6637,1628 @@ export type UserUncheckedUpdateWithoutCreatedContentsInput = {
 	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
+	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserCreateWithoutProfilesInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserUncheckedCreateWithoutProfilesInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserCreateOrConnectWithoutProfilesInput = {
+	where: Prisma.UserWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutProfilesInput,
+		Prisma.UserUncheckedCreateWithoutProfilesInput
+	>;
+};
+
+export type UserUpsertWithoutProfilesInput = {
+	update: Prisma.XOR<
+		Prisma.UserUpdateWithoutProfilesInput,
+		Prisma.UserUncheckedUpdateWithoutProfilesInput
+	>;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutProfilesInput,
+		Prisma.UserUncheckedCreateWithoutProfilesInput
+	>;
+	where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutProfilesInput = {
+	where?: Prisma.UserWhereInput;
+	data: Prisma.XOR<
+		Prisma.UserUpdateWithoutProfilesInput,
+		Prisma.UserUncheckedUpdateWithoutProfilesInput
+	>;
+};
+
+export type UserUpdateWithoutProfilesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutProfilesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserCreateWithoutCreatedReservationsInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserUncheckedCreateWithoutCreatedReservationsInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserCreateOrConnectWithoutCreatedReservationsInput = {
+	where: Prisma.UserWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedReservationsInput,
+		Prisma.UserUncheckedCreateWithoutCreatedReservationsInput
+	>;
+};
+
+export type UserCreateWithoutReservationsInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
+	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserUncheckedCreateWithoutReservationsInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserCreateOrConnectWithoutReservationsInput = {
+	where: Prisma.UserWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutReservationsInput,
+		Prisma.UserUncheckedCreateWithoutReservationsInput
+	>;
+};
+
+export type UserUpsertWithoutCreatedReservationsInput = {
+	update: Prisma.XOR<
+		Prisma.UserUpdateWithoutCreatedReservationsInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedReservationsInput
+	>;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedReservationsInput,
+		Prisma.UserUncheckedCreateWithoutCreatedReservationsInput
+	>;
+	where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutCreatedReservationsInput = {
+	where?: Prisma.UserWhereInput;
+	data: Prisma.XOR<
+		Prisma.UserUpdateWithoutCreatedReservationsInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedReservationsInput
+	>;
+};
+
+export type UserUpdateWithoutCreatedReservationsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutCreatedReservationsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserUpsertWithoutReservationsInput = {
+	update: Prisma.XOR<
+		Prisma.UserUpdateWithoutReservationsInput,
+		Prisma.UserUncheckedUpdateWithoutReservationsInput
+	>;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutReservationsInput,
+		Prisma.UserUncheckedCreateWithoutReservationsInput
+	>;
+	where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutReservationsInput = {
+	where?: Prisma.UserWhereInput;
+	data: Prisma.XOR<
+		Prisma.UserUpdateWithoutReservationsInput,
+		Prisma.UserUncheckedUpdateWithoutReservationsInput
+	>;
+};
+
+export type UserUpdateWithoutReservationsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
+	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutReservationsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserCreateWithoutCreatedRoutinesInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserUncheckedCreateWithoutCreatedRoutinesInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserCreateOrConnectWithoutCreatedRoutinesInput = {
+	where: Prisma.UserWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedRoutinesInput,
+		Prisma.UserUncheckedCreateWithoutCreatedRoutinesInput
+	>;
+};
+
+export type UserUpsertWithoutCreatedRoutinesInput = {
+	update: Prisma.XOR<
+		Prisma.UserUpdateWithoutCreatedRoutinesInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedRoutinesInput
+	>;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedRoutinesInput,
+		Prisma.UserUncheckedCreateWithoutCreatedRoutinesInput
+	>;
+	where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutCreatedRoutinesInput = {
+	where?: Prisma.UserWhereInput;
+	data: Prisma.XOR<
+		Prisma.UserUpdateWithoutCreatedRoutinesInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedRoutinesInput
+	>;
+};
+
+export type UserUpdateWithoutCreatedRoutinesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutCreatedRoutinesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserCreateWithoutCreatedSafeWalletsInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserUncheckedCreateWithoutCreatedSafeWalletsInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserCreateOrConnectWithoutCreatedSafeWalletsInput = {
+	where: Prisma.UserWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedSafeWalletsInput,
+		Prisma.UserUncheckedCreateWithoutCreatedSafeWalletsInput
+	>;
+};
+
+export type UserUpsertWithoutCreatedSafeWalletsInput = {
+	update: Prisma.XOR<
+		Prisma.UserUpdateWithoutCreatedSafeWalletsInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedSafeWalletsInput
+	>;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedSafeWalletsInput,
+		Prisma.UserUncheckedCreateWithoutCreatedSafeWalletsInput
+	>;
+	where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutCreatedSafeWalletsInput = {
+	where?: Prisma.UserWhereInput;
+	data: Prisma.XOR<
+		Prisma.UserUpdateWithoutCreatedSafeWalletsInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedSafeWalletsInput
+	>;
+};
+
+export type UserUpdateWithoutCreatedSafeWalletsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutCreatedSafeWalletsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserCreateWithoutCreatedTasksInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserUncheckedCreateWithoutCreatedTasksInput = {
+	id?: string;
+	updatedAt?: Date | string | null;
+	createdAt?: Date | string;
+	removedAt?: Date | string | null;
+	phone: string;
+	name: string;
+	email: string;
+	password: string;
+	failedLoginAttempts?: number;
+	lockedUntil?: Date | string | null;
+	isPermanentlyLocked?: boolean;
+	mustChangePassword?: boolean;
+	passwordChangedAt?: Date | string | null;
+	lastLoginAt?: Date | string | null;
+	lastLoginIp?: string | null;
+	isActive?: boolean;
+	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
+	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
+	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
+	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
+	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
+	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
+	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
+	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
+	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
+	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
+};
+
+export type UserCreateOrConnectWithoutCreatedTasksInput = {
+	where: Prisma.UserWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedTasksInput,
+		Prisma.UserUncheckedCreateWithoutCreatedTasksInput
+	>;
+};
+
+export type UserUpsertWithoutCreatedTasksInput = {
+	update: Prisma.XOR<
+		Prisma.UserUpdateWithoutCreatedTasksInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedTasksInput
+	>;
+	create: Prisma.XOR<
+		Prisma.UserCreateWithoutCreatedTasksInput,
+		Prisma.UserUncheckedCreateWithoutCreatedTasksInput
+	>;
+	where?: Prisma.UserWhereInput;
+};
+
+export type UserUpdateToOneWithWhereWithoutCreatedTasksInput = {
+	where?: Prisma.UserWhereInput;
+	data: Prisma.XOR<
+		Prisma.UserUpdateWithoutCreatedTasksInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedTasksInput
+	>;
+};
+
+export type UserUpdateWithoutCreatedTasksInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
+	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
+	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
+	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
+	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
+	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
+	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
+	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
+	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
+	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
+	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
+	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
+	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
+	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
+	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
+};
+
+export type UserUncheckedUpdateWithoutCreatedTasksInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	password?: Prisma.StringFieldUpdateOperationsInput | string;
+	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
+	lockedUntil?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	passwordChangedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	currentTenantId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
+	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
+	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
+	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
+	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
+	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
+	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
@@ -5307,7 +9087,7 @@ export type UserUncheckedUpdateWithoutTenantsInput = {
 	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
 };
 
-export type UserCreateWithoutClassificationInput = {
+export type UserCreateWithoutCreatedTimelinesInput = {
 	id?: string;
 	updatedAt?: Date | string | null;
 	createdAt?: Date | string;
@@ -5329,6 +9109,7 @@ export type UserCreateWithoutClassificationInput = {
 	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
 	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
 	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
 	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
@@ -5336,7 +9117,6 @@ export type UserCreateWithoutClassificationInput = {
 	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
 	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
 	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
 	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
 	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
 	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
@@ -5356,7 +9136,7 @@ export type UserCreateWithoutClassificationInput = {
 	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
 };
 
-export type UserUncheckedCreateWithoutClassificationInput = {
+export type UserUncheckedCreateWithoutCreatedTimelinesInput = {
 	id?: string;
 	updatedAt?: Date | string | null;
 	createdAt?: Date | string;
@@ -5378,6 +9158,7 @@ export type UserUncheckedCreateWithoutClassificationInput = {
 	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
 	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
 	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
+	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
 	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
@@ -5385,7 +9166,6 @@ export type UserUncheckedCreateWithoutClassificationInput = {
 	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
 	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
@@ -5405,35 +9185,35 @@ export type UserUncheckedCreateWithoutClassificationInput = {
 	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
 };
 
-export type UserCreateOrConnectWithoutClassificationInput = {
+export type UserCreateOrConnectWithoutCreatedTimelinesInput = {
 	where: Prisma.UserWhereUniqueInput;
 	create: Prisma.XOR<
-		Prisma.UserCreateWithoutClassificationInput,
-		Prisma.UserUncheckedCreateWithoutClassificationInput
+		Prisma.UserCreateWithoutCreatedTimelinesInput,
+		Prisma.UserUncheckedCreateWithoutCreatedTimelinesInput
 	>;
 };
 
-export type UserUpsertWithoutClassificationInput = {
+export type UserUpsertWithoutCreatedTimelinesInput = {
 	update: Prisma.XOR<
-		Prisma.UserUpdateWithoutClassificationInput,
-		Prisma.UserUncheckedUpdateWithoutClassificationInput
+		Prisma.UserUpdateWithoutCreatedTimelinesInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedTimelinesInput
 	>;
 	create: Prisma.XOR<
-		Prisma.UserCreateWithoutClassificationInput,
-		Prisma.UserUncheckedCreateWithoutClassificationInput
+		Prisma.UserCreateWithoutCreatedTimelinesInput,
+		Prisma.UserUncheckedCreateWithoutCreatedTimelinesInput
 	>;
 	where?: Prisma.UserWhereInput;
 };
 
-export type UserUpdateToOneWithWhereWithoutClassificationInput = {
+export type UserUpdateToOneWithWhereWithoutCreatedTimelinesInput = {
 	where?: Prisma.UserWhereInput;
 	data: Prisma.XOR<
-		Prisma.UserUpdateWithoutClassificationInput,
-		Prisma.UserUncheckedUpdateWithoutClassificationInput
+		Prisma.UserUpdateWithoutCreatedTimelinesInput,
+		Prisma.UserUncheckedUpdateWithoutCreatedTimelinesInput
 	>;
 };
 
-export type UserUpdateWithoutClassificationInput = {
+export type UserUpdateWithoutCreatedTimelinesInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	updatedAt?:
 		| Prisma.NullableDateTimeFieldUpdateOperationsInput
@@ -5478,6 +9258,7 @@ export type UserUpdateWithoutClassificationInput = {
 	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
 	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
 	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
 	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
@@ -5485,7 +9266,6 @@ export type UserUpdateWithoutClassificationInput = {
 	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
 	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
 	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
 	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
 	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
@@ -5505,7 +9285,7 @@ export type UserUpdateWithoutClassificationInput = {
 	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
 };
 
-export type UserUncheckedUpdateWithoutClassificationInput = {
+export type UserUncheckedUpdateWithoutCreatedTimelinesInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	updatedAt?:
 		| Prisma.NullableDateTimeFieldUpdateOperationsInput
@@ -5550,6 +9330,7 @@ export type UserUncheckedUpdateWithoutClassificationInput = {
 	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
 	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
 	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
+	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
 	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
@@ -5557,7 +9338,6 @@ export type UserUncheckedUpdateWithoutClassificationInput = {
 	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
@@ -5847,7 +9627,7 @@ export type UserUncheckedUpdateWithoutAssociationsInput = {
 	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
 };
 
-export type UserCreateWithoutProfilesInput = {
+export type UserCreateWithoutClassificationInput = {
 	id?: string;
 	updatedAt?: Date | string | null;
 	createdAt?: Date | string;
@@ -5865,10 +9645,10 @@ export type UserCreateWithoutProfilesInput = {
 	lastLoginIp?: string | null;
 	isActive?: boolean;
 	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
 	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
 	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
 	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
 	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
@@ -5896,7 +9676,7 @@ export type UserCreateWithoutProfilesInput = {
 	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
 };
 
-export type UserUncheckedCreateWithoutProfilesInput = {
+export type UserUncheckedCreateWithoutClassificationInput = {
 	id?: string;
 	updatedAt?: Date | string | null;
 	createdAt?: Date | string;
@@ -5914,10 +9694,10 @@ export type UserUncheckedCreateWithoutProfilesInput = {
 	lastLoginIp?: string | null;
 	isActive?: boolean;
 	currentTenantId?: string | null;
+	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
 	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
 	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
 	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
 	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
@@ -5945,305 +9725,35 @@ export type UserUncheckedCreateWithoutProfilesInput = {
 	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
 };
 
-export type UserCreateOrConnectWithoutProfilesInput = {
+export type UserCreateOrConnectWithoutClassificationInput = {
 	where: Prisma.UserWhereUniqueInput;
 	create: Prisma.XOR<
-		Prisma.UserCreateWithoutProfilesInput,
-		Prisma.UserUncheckedCreateWithoutProfilesInput
+		Prisma.UserCreateWithoutClassificationInput,
+		Prisma.UserUncheckedCreateWithoutClassificationInput
 	>;
 };
 
-export type UserUpsertWithoutProfilesInput = {
+export type UserUpsertWithoutClassificationInput = {
 	update: Prisma.XOR<
-		Prisma.UserUpdateWithoutProfilesInput,
-		Prisma.UserUncheckedUpdateWithoutProfilesInput
+		Prisma.UserUpdateWithoutClassificationInput,
+		Prisma.UserUncheckedUpdateWithoutClassificationInput
 	>;
 	create: Prisma.XOR<
-		Prisma.UserCreateWithoutProfilesInput,
-		Prisma.UserUncheckedCreateWithoutProfilesInput
+		Prisma.UserCreateWithoutClassificationInput,
+		Prisma.UserUncheckedCreateWithoutClassificationInput
 	>;
 	where?: Prisma.UserWhereInput;
 };
 
-export type UserUpdateToOneWithWhereWithoutProfilesInput = {
+export type UserUpdateToOneWithWhereWithoutClassificationInput = {
 	where?: Prisma.UserWhereInput;
 	data: Prisma.XOR<
-		Prisma.UserUpdateWithoutProfilesInput,
-		Prisma.UserUncheckedUpdateWithoutProfilesInput
+		Prisma.UserUpdateWithoutClassificationInput,
+		Prisma.UserUncheckedUpdateWithoutClassificationInput
 	>;
 };
 
-export type UserUpdateWithoutProfilesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserUncheckedUpdateWithoutProfilesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserCreateWithoutCreatedThreadsInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
-};
-
-export type UserUncheckedCreateWithoutCreatedThreadsInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
-};
-
-export type UserCreateOrConnectWithoutCreatedThreadsInput = {
-	where: Prisma.UserWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedThreadsInput,
-		Prisma.UserUncheckedCreateWithoutCreatedThreadsInput
-	>;
-};
-
-export type UserUpsertWithoutCreatedThreadsInput = {
-	update: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedThreadsInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedThreadsInput
-	>;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedThreadsInput,
-		Prisma.UserUncheckedCreateWithoutCreatedThreadsInput
-	>;
-	where?: Prisma.UserWhereInput;
-};
-
-export type UserUpdateToOneWithWhereWithoutCreatedThreadsInput = {
-	where?: Prisma.UserWhereInput;
-	data: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedThreadsInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedThreadsInput
-	>;
-};
-
-export type UserUpdateWithoutCreatedThreadsInput = {
+export type UserUpdateWithoutClassificationInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	updatedAt?:
 		| Prisma.NullableDateTimeFieldUpdateOperationsInput
@@ -6288,7 +9798,6 @@ export type UserUpdateWithoutCreatedThreadsInput = {
 	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
 	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
 	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
 	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
@@ -6313,9 +9822,10 @@ export type UserUpdateWithoutCreatedThreadsInput = {
 	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
 	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
 	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
+	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
 };
 
-export type UserUncheckedUpdateWithoutCreatedThreadsInput = {
+export type UserUncheckedUpdateWithoutClassificationInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	updatedAt?:
 		| Prisma.NullableDateTimeFieldUpdateOperationsInput
@@ -6360,7 +9870,6 @@ export type UserUncheckedUpdateWithoutCreatedThreadsInput = {
 	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
 	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
 	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
 	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
 	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
 	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
@@ -6371,3515 +9880,6 @@ export type UserUncheckedUpdateWithoutCreatedThreadsInput = {
 	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
-};
-
-export type UserCreateWithoutInquiryMessagesInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
-	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserUncheckedCreateWithoutInquiryMessagesInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserCreateOrConnectWithoutInquiryMessagesInput = {
-	where: Prisma.UserWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutInquiryMessagesInput,
-		Prisma.UserUncheckedCreateWithoutInquiryMessagesInput
-	>;
-};
-
-export type UserUpsertWithoutInquiryMessagesInput = {
-	update: Prisma.XOR<
-		Prisma.UserUpdateWithoutInquiryMessagesInput,
-		Prisma.UserUncheckedUpdateWithoutInquiryMessagesInput
-	>;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutInquiryMessagesInput,
-		Prisma.UserUncheckedCreateWithoutInquiryMessagesInput
-	>;
-	where?: Prisma.UserWhereInput;
-};
-
-export type UserUpdateToOneWithWhereWithoutInquiryMessagesInput = {
-	where?: Prisma.UserWhereInput;
-	data: Prisma.XOR<
-		Prisma.UserUpdateWithoutInquiryMessagesInput,
-		Prisma.UserUncheckedUpdateWithoutInquiryMessagesInput
-	>;
-};
-
-export type UserUpdateWithoutInquiryMessagesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserUncheckedUpdateWithoutInquiryMessagesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserCreateWithoutInquiryParticipantsInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
-	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserUncheckedCreateWithoutInquiryParticipantsInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserCreateOrConnectWithoutInquiryParticipantsInput = {
-	where: Prisma.UserWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutInquiryParticipantsInput,
-		Prisma.UserUncheckedCreateWithoutInquiryParticipantsInput
-	>;
-};
-
-export type UserUpsertWithoutInquiryParticipantsInput = {
-	update: Prisma.XOR<
-		Prisma.UserUpdateWithoutInquiryParticipantsInput,
-		Prisma.UserUncheckedUpdateWithoutInquiryParticipantsInput
-	>;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutInquiryParticipantsInput,
-		Prisma.UserUncheckedCreateWithoutInquiryParticipantsInput
-	>;
-	where?: Prisma.UserWhereInput;
-};
-
-export type UserUpdateToOneWithWhereWithoutInquiryParticipantsInput = {
-	where?: Prisma.UserWhereInput;
-	data: Prisma.XOR<
-		Prisma.UserUpdateWithoutInquiryParticipantsInput,
-		Prisma.UserUncheckedUpdateWithoutInquiryParticipantsInput
-	>;
-};
-
-export type UserUpdateWithoutInquiryParticipantsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
-	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserUncheckedUpdateWithoutInquiryParticipantsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserCreateWithoutCreatedInquiriesInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
-	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserUncheckedCreateWithoutCreatedInquiriesInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserCreateOrConnectWithoutCreatedInquiriesInput = {
-	where: Prisma.UserWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedInquiriesInput,
-		Prisma.UserUncheckedCreateWithoutCreatedInquiriesInput
-	>;
-};
-
-export type UserCreateWithoutCustomerInquiriesInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
-	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserUncheckedCreateWithoutCustomerInquiriesInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
-	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserCreateOrConnectWithoutCustomerInquiriesInput = {
-	where: Prisma.UserWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCustomerInquiriesInput,
-		Prisma.UserUncheckedCreateWithoutCustomerInquiriesInput
-	>;
-};
-
-export type UserCreateWithoutAssignedInquiriesInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
-	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserUncheckedCreateWithoutAssignedInquiriesInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
-	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserCreateOrConnectWithoutAssignedInquiriesInput = {
-	where: Prisma.UserWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutAssignedInquiriesInput,
-		Prisma.UserUncheckedCreateWithoutAssignedInquiriesInput
-	>;
-};
-
-export type UserUpsertWithoutCreatedInquiriesInput = {
-	update: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedInquiriesInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedInquiriesInput
-	>;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedInquiriesInput,
-		Prisma.UserUncheckedCreateWithoutCreatedInquiriesInput
-	>;
-	where?: Prisma.UserWhereInput;
-};
-
-export type UserUpdateToOneWithWhereWithoutCreatedInquiriesInput = {
-	where?: Prisma.UserWhereInput;
-	data: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedInquiriesInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedInquiriesInput
-	>;
-};
-
-export type UserUpdateWithoutCreatedInquiriesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserUncheckedUpdateWithoutCreatedInquiriesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserUpsertWithoutCustomerInquiriesInput = {
-	update: Prisma.XOR<
-		Prisma.UserUpdateWithoutCustomerInquiriesInput,
-		Prisma.UserUncheckedUpdateWithoutCustomerInquiriesInput
-	>;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCustomerInquiriesInput,
-		Prisma.UserUncheckedCreateWithoutCustomerInquiriesInput
-	>;
-	where?: Prisma.UserWhereInput;
-};
-
-export type UserUpdateToOneWithWhereWithoutCustomerInquiriesInput = {
-	where?: Prisma.UserWhereInput;
-	data: Prisma.XOR<
-		Prisma.UserUpdateWithoutCustomerInquiriesInput,
-		Prisma.UserUncheckedUpdateWithoutCustomerInquiriesInput
-	>;
-};
-
-export type UserUpdateWithoutCustomerInquiriesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
-	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserUncheckedUpdateWithoutCustomerInquiriesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
-	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserUpsertWithoutAssignedInquiriesInput = {
-	update: Prisma.XOR<
-		Prisma.UserUpdateWithoutAssignedInquiriesInput,
-		Prisma.UserUncheckedUpdateWithoutAssignedInquiriesInput
-	>;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutAssignedInquiriesInput,
-		Prisma.UserUncheckedCreateWithoutAssignedInquiriesInput
-	>;
-	where?: Prisma.UserWhereInput;
-};
-
-export type UserUpdateToOneWithWhereWithoutAssignedInquiriesInput = {
-	where?: Prisma.UserWhereInput;
-	data: Prisma.XOR<
-		Prisma.UserUpdateWithoutAssignedInquiriesInput,
-		Prisma.UserUncheckedUpdateWithoutAssignedInquiriesInput
-	>;
-};
-
-export type UserUpdateWithoutAssignedInquiriesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
-	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserUncheckedUpdateWithoutAssignedInquiriesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
-	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserCreateWithoutCreatedReservationsInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserUncheckedCreateWithoutCreatedReservationsInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserCreateOrConnectWithoutCreatedReservationsInput = {
-	where: Prisma.UserWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedReservationsInput,
-		Prisma.UserUncheckedCreateWithoutCreatedReservationsInput
-	>;
-};
-
-export type UserCreateWithoutReservationsInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
-	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserUncheckedCreateWithoutReservationsInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserCreateOrConnectWithoutReservationsInput = {
-	where: Prisma.UserWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutReservationsInput,
-		Prisma.UserUncheckedCreateWithoutReservationsInput
-	>;
-};
-
-export type UserUpsertWithoutCreatedReservationsInput = {
-	update: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedReservationsInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedReservationsInput
-	>;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedReservationsInput,
-		Prisma.UserUncheckedCreateWithoutCreatedReservationsInput
-	>;
-	where?: Prisma.UserWhereInput;
-};
-
-export type UserUpdateToOneWithWhereWithoutCreatedReservationsInput = {
-	where?: Prisma.UserWhereInput;
-	data: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedReservationsInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedReservationsInput
-	>;
-};
-
-export type UserUpdateWithoutCreatedReservationsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserUncheckedUpdateWithoutCreatedReservationsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserUpsertWithoutReservationsInput = {
-	update: Prisma.XOR<
-		Prisma.UserUpdateWithoutReservationsInput,
-		Prisma.UserUncheckedUpdateWithoutReservationsInput
-	>;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutReservationsInput,
-		Prisma.UserUncheckedCreateWithoutReservationsInput
-	>;
-	where?: Prisma.UserWhereInput;
-};
-
-export type UserUpdateToOneWithWhereWithoutReservationsInput = {
-	where?: Prisma.UserWhereInput;
-	data: Prisma.XOR<
-		Prisma.UserUpdateWithoutReservationsInput,
-		Prisma.UserUncheckedUpdateWithoutReservationsInput
-	>;
-};
-
-export type UserUpdateWithoutReservationsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
-	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserUncheckedUpdateWithoutReservationsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserCreateWithoutCreatedRoutinesInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserUncheckedCreateWithoutCreatedRoutinesInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserCreateOrConnectWithoutCreatedRoutinesInput = {
-	where: Prisma.UserWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedRoutinesInput,
-		Prisma.UserUncheckedCreateWithoutCreatedRoutinesInput
-	>;
-};
-
-export type UserUpsertWithoutCreatedRoutinesInput = {
-	update: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedRoutinesInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedRoutinesInput
-	>;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedRoutinesInput,
-		Prisma.UserUncheckedCreateWithoutCreatedRoutinesInput
-	>;
-	where?: Prisma.UserWhereInput;
-};
-
-export type UserUpdateToOneWithWhereWithoutCreatedRoutinesInput = {
-	where?: Prisma.UserWhereInput;
-	data: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedRoutinesInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedRoutinesInput
-	>;
-};
-
-export type UserUpdateWithoutCreatedRoutinesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserUncheckedUpdateWithoutCreatedRoutinesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserCreateWithoutCreatedTasksInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserUncheckedCreateWithoutCreatedTasksInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserCreateOrConnectWithoutCreatedTasksInput = {
-	where: Prisma.UserWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedTasksInput,
-		Prisma.UserUncheckedCreateWithoutCreatedTasksInput
-	>;
-};
-
-export type UserUpsertWithoutCreatedTasksInput = {
-	update: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedTasksInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedTasksInput
-	>;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedTasksInput,
-		Prisma.UserUncheckedCreateWithoutCreatedTasksInput
-	>;
-	where?: Prisma.UserWhereInput;
-};
-
-export type UserUpdateToOneWithWhereWithoutCreatedTasksInput = {
-	where?: Prisma.UserWhereInput;
-	data: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedTasksInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedTasksInput
-	>;
-};
-
-export type UserUpdateWithoutCreatedTasksInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserUncheckedUpdateWithoutCreatedTasksInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserCreateWithoutCreatedTimelinesInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserUncheckedCreateWithoutCreatedTimelinesInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserCreateOrConnectWithoutCreatedTimelinesInput = {
-	where: Prisma.UserWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedTimelinesInput,
-		Prisma.UserUncheckedCreateWithoutCreatedTimelinesInput
-	>;
-};
-
-export type UserUpsertWithoutCreatedTimelinesInput = {
-	update: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedTimelinesInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedTimelinesInput
-	>;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedTimelinesInput,
-		Prisma.UserUncheckedCreateWithoutCreatedTimelinesInput
-	>;
-	where?: Prisma.UserWhereInput;
-};
-
-export type UserUpdateToOneWithWhereWithoutCreatedTimelinesInput = {
-	where?: Prisma.UserWhereInput;
-	data: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedTimelinesInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedTimelinesInput
-	>;
-};
-
-export type UserUpdateWithoutCreatedTimelinesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserUncheckedUpdateWithoutCreatedTimelinesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserCreateWithoutCreatedCategoriesInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
-	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserUncheckedCreateWithoutCreatedCategoriesInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
-	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserCreateOrConnectWithoutCreatedCategoriesInput = {
-	where: Prisma.UserWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedCategoriesInput,
-		Prisma.UserUncheckedCreateWithoutCreatedCategoriesInput
-	>;
-};
-
-export type UserUpsertWithoutCreatedCategoriesInput = {
-	update: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedCategoriesInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedCategoriesInput
-	>;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedCategoriesInput,
-		Prisma.UserUncheckedCreateWithoutCreatedCategoriesInput
-	>;
-	where?: Prisma.UserWhereInput;
-};
-
-export type UserUpdateToOneWithWhereWithoutCreatedCategoriesInput = {
-	where?: Prisma.UserWhereInput;
-	data: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedCategoriesInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedCategoriesInput
-	>;
-};
-
-export type UserUpdateWithoutCreatedCategoriesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
-	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserUncheckedUpdateWithoutCreatedCategoriesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
-	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserCreateWithoutCreatedGroupsInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserUncheckedCreateWithoutCreatedGroupsInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserCreateOrConnectWithoutCreatedGroupsInput = {
-	where: Prisma.UserWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedGroupsInput,
-		Prisma.UserUncheckedCreateWithoutCreatedGroupsInput
-	>;
-};
-
-export type UserUpsertWithoutCreatedGroupsInput = {
-	update: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedGroupsInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedGroupsInput
-	>;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedGroupsInput,
-		Prisma.UserUncheckedCreateWithoutCreatedGroupsInput
-	>;
-	where?: Prisma.UserWhereInput;
-};
-
-export type UserUpdateToOneWithWhereWithoutCreatedGroupsInput = {
-	where?: Prisma.UserWhereInput;
-	data: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedGroupsInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedGroupsInput
-	>;
-};
-
-export type UserUpdateWithoutCreatedGroupsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserUncheckedUpdateWithoutCreatedGroupsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserCreateWithoutCreatedSafeWalletsInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserUncheckedCreateWithoutCreatedSafeWalletsInput = {
-	id?: string;
-	updatedAt?: Date | string | null;
-	createdAt?: Date | string;
-	removedAt?: Date | string | null;
-	phone: string;
-	name: string;
-	email: string;
-	password: string;
-	failedLoginAttempts?: number;
-	lockedUntil?: Date | string | null;
-	isPermanentlyLocked?: boolean;
-	mustChangePassword?: boolean;
-	passwordChangedAt?: Date | string | null;
-	lastLoginAt?: Date | string | null;
-	lastLoginIp?: string | null;
-	isActive?: boolean;
-	currentTenantId?: string | null;
-	profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput;
-	classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput;
-	associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput;
-	createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput;
-	createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput;
-	createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput;
-	customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput;
-	assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput;
-	createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput;
-	inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput;
-	createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput;
-};
-
-export type UserCreateOrConnectWithoutCreatedSafeWalletsInput = {
-	where: Prisma.UserWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedSafeWalletsInput,
-		Prisma.UserUncheckedCreateWithoutCreatedSafeWalletsInput
-	>;
-};
-
-export type UserUpsertWithoutCreatedSafeWalletsInput = {
-	update: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedSafeWalletsInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedSafeWalletsInput
-	>;
-	create: Prisma.XOR<
-		Prisma.UserCreateWithoutCreatedSafeWalletsInput,
-		Prisma.UserUncheckedCreateWithoutCreatedSafeWalletsInput
-	>;
-	where?: Prisma.UserWhereInput;
-};
-
-export type UserUpdateToOneWithWhereWithoutCreatedSafeWalletsInput = {
-	where?: Prisma.UserWhereInput;
-	data: Prisma.XOR<
-		Prisma.UserUpdateWithoutCreatedSafeWalletsInput,
-		Prisma.UserUncheckedUpdateWithoutCreatedSafeWalletsInput
-	>;
-};
-
-export type UserUpdateWithoutCreatedSafeWalletsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput;
-	createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput;
-	createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput;
-	createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput;
-	createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput;
-	createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput;
-	createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput;
-	createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput;
-	createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput;
-	customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput;
-	assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput;
-	createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput;
-	inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput;
-	inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput;
-	createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput;
-};
-
-export type UserUncheckedUpdateWithoutCreatedSafeWalletsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	password?: Prisma.StringFieldUpdateOperationsInput | string;
-	failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number;
-	lockedUntil?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	passwordChangedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	currentTenantId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput;
-	reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput;
-	classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput;
-	associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput;
-	passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput;
-	authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput;
-	createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput;
-	createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput;
 	createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput;
 	createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput;

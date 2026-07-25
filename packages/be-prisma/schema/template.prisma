@@ -1,0 +1,30 @@
+// @data-type: CONFIGURATION
+// @aggregate-root: true
+// @description: 독립적으로 존재하는 메시지 템플릿 핵심 도메인 객체
+/// @displayName 메시지 템플릿
+model Template {
+  id          String             @id @default(uuid())
+  createdAt   DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime?          @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime?          @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 고유 코드
+  code        String
+  /// @displayName 템플릿 이름
+  name        String
+  /// @displayName 템플릿 유형
+  type        TemplateType
+  /// @displayName 제목
+  subject     String?
+  /// @displayName 본문
+  content     String
+  /// @displayName 설명
+  description String?
+  /// @displayName 활성 상태
+  isActive    Boolean            @default(true) @map("is_active")
+  /// @displayName 변수 목록
+  variables   TemplateVariable[]
+
+  @@index([code])
+  @@index([type])
+  @@map("templates")
+}

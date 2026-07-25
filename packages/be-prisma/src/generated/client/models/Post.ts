@@ -339,6 +339,11 @@ export type PostUncheckedUpdateManyInput = {
 	contentId?: Prisma.StringFieldUpdateOperationsInput | string;
 };
 
+export type PostNullableScalarRelationFilter = {
+	is?: Prisma.PostWhereInput | null;
+	isNot?: Prisma.PostWhereInput | null;
+};
+
 export type PostCountOrderByAggregateInput = {
 	id?: Prisma.SortOrder;
 	createdAt?: Prisma.SortOrder;
@@ -361,11 +366,6 @@ export type PostMinOrderByAggregateInput = {
 	updatedAt?: Prisma.SortOrder;
 	removedAt?: Prisma.SortOrder;
 	contentId?: Prisma.SortOrder;
-};
-
-export type PostNullableScalarRelationFilter = {
-	is?: Prisma.PostWhereInput | null;
-	isNot?: Prisma.PostWhereInput | null;
 };
 
 export type PostCreateNestedOneWithoutContentInput = {

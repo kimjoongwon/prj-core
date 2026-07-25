@@ -505,11 +505,6 @@ export type ExerciseUncheckedUpdateManyInput = {
 	name?: Prisma.StringFieldUpdateOperationsInput | string;
 };
 
-export type ExerciseNullableScalarRelationFilter = {
-	is?: Prisma.ExerciseWhereInput | null;
-	isNot?: Prisma.ExerciseWhereInput | null;
-};
-
 export type ExerciseCountOrderByAggregateInput = {
 	id?: Prisma.SortOrder;
 	createdAt?: Prisma.SortOrder;
@@ -560,6 +555,11 @@ export type ExerciseMinOrderByAggregateInput = {
 export type ExerciseSumOrderByAggregateInput = {
 	duration?: Prisma.SortOrder;
 	count?: Prisma.SortOrder;
+};
+
+export type ExerciseNullableScalarRelationFilter = {
+	is?: Prisma.ExerciseWhereInput | null;
+	isNot?: Prisma.ExerciseWhereInput | null;
 };
 
 export type ExerciseCreateNestedOneWithoutTaskInput = {

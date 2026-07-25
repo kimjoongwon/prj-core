@@ -477,6 +477,11 @@ export type TemplateUncheckedUpdateManyInput = {
 	isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean;
 };
 
+export type TemplateScalarRelationFilter = {
+	is?: Prisma.TemplateWhereInput;
+	isNot?: Prisma.TemplateWhereInput;
+};
+
 export type TemplateCountOrderByAggregateInput = {
 	id?: Prisma.SortOrder;
 	createdAt?: Prisma.SortOrder;
@@ -519,15 +524,6 @@ export type TemplateMinOrderByAggregateInput = {
 	isActive?: Prisma.SortOrder;
 };
 
-export type TemplateScalarRelationFilter = {
-	is?: Prisma.TemplateWhereInput;
-	isNot?: Prisma.TemplateWhereInput;
-};
-
-export type EnumTemplateTypeFieldUpdateOperationsInput = {
-	set?: $Enums.TemplateType;
-};
-
 export type TemplateCreateNestedOneWithoutVariablesInput = {
 	create?: Prisma.XOR<
 		Prisma.TemplateCreateWithoutVariablesInput,
@@ -552,6 +548,10 @@ export type TemplateUpdateOneRequiredWithoutVariablesNestedInput = {
 		>,
 		Prisma.TemplateUncheckedUpdateWithoutVariablesInput
 	>;
+};
+
+export type EnumTemplateTypeFieldUpdateOperationsInput = {
+	set?: $Enums.TemplateType;
 };
 
 export type TemplateCreateWithoutVariablesInput = {

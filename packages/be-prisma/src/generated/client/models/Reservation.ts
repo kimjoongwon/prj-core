@@ -869,6 +869,230 @@ export type ReservationSumOrderByAggregateInput = {
 	waitlistPosition?: Prisma.SortOrder;
 };
 
+export type ReservationCreateNestedManyWithoutProgramInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.ReservationCreateWithoutProgramInput,
+				Prisma.ReservationUncheckedCreateWithoutProgramInput
+		  >
+		| Prisma.ReservationCreateWithoutProgramInput[]
+		| Prisma.ReservationUncheckedCreateWithoutProgramInput[];
+	connectOrCreate?:
+		| Prisma.ReservationCreateOrConnectWithoutProgramInput
+		| Prisma.ReservationCreateOrConnectWithoutProgramInput[];
+	createMany?: Prisma.ReservationCreateManyProgramInputEnvelope;
+	connect?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+};
+
+export type ReservationUncheckedCreateNestedManyWithoutProgramInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.ReservationCreateWithoutProgramInput,
+				Prisma.ReservationUncheckedCreateWithoutProgramInput
+		  >
+		| Prisma.ReservationCreateWithoutProgramInput[]
+		| Prisma.ReservationUncheckedCreateWithoutProgramInput[];
+	connectOrCreate?:
+		| Prisma.ReservationCreateOrConnectWithoutProgramInput
+		| Prisma.ReservationCreateOrConnectWithoutProgramInput[];
+	createMany?: Prisma.ReservationCreateManyProgramInputEnvelope;
+	connect?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+};
+
+export type ReservationUpdateManyWithoutProgramNestedInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.ReservationCreateWithoutProgramInput,
+				Prisma.ReservationUncheckedCreateWithoutProgramInput
+		  >
+		| Prisma.ReservationCreateWithoutProgramInput[]
+		| Prisma.ReservationUncheckedCreateWithoutProgramInput[];
+	connectOrCreate?:
+		| Prisma.ReservationCreateOrConnectWithoutProgramInput
+		| Prisma.ReservationCreateOrConnectWithoutProgramInput[];
+	upsert?:
+		| Prisma.ReservationUpsertWithWhereUniqueWithoutProgramInput
+		| Prisma.ReservationUpsertWithWhereUniqueWithoutProgramInput[];
+	createMany?: Prisma.ReservationCreateManyProgramInputEnvelope;
+	set?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	disconnect?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	delete?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	connect?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	update?:
+		| Prisma.ReservationUpdateWithWhereUniqueWithoutProgramInput
+		| Prisma.ReservationUpdateWithWhereUniqueWithoutProgramInput[];
+	updateMany?:
+		| Prisma.ReservationUpdateManyWithWhereWithoutProgramInput
+		| Prisma.ReservationUpdateManyWithWhereWithoutProgramInput[];
+	deleteMany?:
+		| Prisma.ReservationScalarWhereInput
+		| Prisma.ReservationScalarWhereInput[];
+};
+
+export type ReservationUncheckedUpdateManyWithoutProgramNestedInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.ReservationCreateWithoutProgramInput,
+				Prisma.ReservationUncheckedCreateWithoutProgramInput
+		  >
+		| Prisma.ReservationCreateWithoutProgramInput[]
+		| Prisma.ReservationUncheckedCreateWithoutProgramInput[];
+	connectOrCreate?:
+		| Prisma.ReservationCreateOrConnectWithoutProgramInput
+		| Prisma.ReservationCreateOrConnectWithoutProgramInput[];
+	upsert?:
+		| Prisma.ReservationUpsertWithWhereUniqueWithoutProgramInput
+		| Prisma.ReservationUpsertWithWhereUniqueWithoutProgramInput[];
+	createMany?: Prisma.ReservationCreateManyProgramInputEnvelope;
+	set?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	disconnect?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	delete?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	connect?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	update?:
+		| Prisma.ReservationUpdateWithWhereUniqueWithoutProgramInput
+		| Prisma.ReservationUpdateWithWhereUniqueWithoutProgramInput[];
+	updateMany?:
+		| Prisma.ReservationUpdateManyWithWhereWithoutProgramInput
+		| Prisma.ReservationUpdateManyWithWhereWithoutProgramInput[];
+	deleteMany?:
+		| Prisma.ReservationScalarWhereInput
+		| Prisma.ReservationScalarWhereInput[];
+};
+
+export type EnumReservationStatusFieldUpdateOperationsInput = {
+	set?: $Enums.ReservationStatus;
+};
+
+export type ReservationCreateNestedManyWithoutSessionInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.ReservationCreateWithoutSessionInput,
+				Prisma.ReservationUncheckedCreateWithoutSessionInput
+		  >
+		| Prisma.ReservationCreateWithoutSessionInput[]
+		| Prisma.ReservationUncheckedCreateWithoutSessionInput[];
+	connectOrCreate?:
+		| Prisma.ReservationCreateOrConnectWithoutSessionInput
+		| Prisma.ReservationCreateOrConnectWithoutSessionInput[];
+	createMany?: Prisma.ReservationCreateManySessionInputEnvelope;
+	connect?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+};
+
+export type ReservationUncheckedCreateNestedManyWithoutSessionInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.ReservationCreateWithoutSessionInput,
+				Prisma.ReservationUncheckedCreateWithoutSessionInput
+		  >
+		| Prisma.ReservationCreateWithoutSessionInput[]
+		| Prisma.ReservationUncheckedCreateWithoutSessionInput[];
+	connectOrCreate?:
+		| Prisma.ReservationCreateOrConnectWithoutSessionInput
+		| Prisma.ReservationCreateOrConnectWithoutSessionInput[];
+	createMany?: Prisma.ReservationCreateManySessionInputEnvelope;
+	connect?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+};
+
+export type ReservationUpdateManyWithoutSessionNestedInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.ReservationCreateWithoutSessionInput,
+				Prisma.ReservationUncheckedCreateWithoutSessionInput
+		  >
+		| Prisma.ReservationCreateWithoutSessionInput[]
+		| Prisma.ReservationUncheckedCreateWithoutSessionInput[];
+	connectOrCreate?:
+		| Prisma.ReservationCreateOrConnectWithoutSessionInput
+		| Prisma.ReservationCreateOrConnectWithoutSessionInput[];
+	upsert?:
+		| Prisma.ReservationUpsertWithWhereUniqueWithoutSessionInput
+		| Prisma.ReservationUpsertWithWhereUniqueWithoutSessionInput[];
+	createMany?: Prisma.ReservationCreateManySessionInputEnvelope;
+	set?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	disconnect?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	delete?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	connect?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	update?:
+		| Prisma.ReservationUpdateWithWhereUniqueWithoutSessionInput
+		| Prisma.ReservationUpdateWithWhereUniqueWithoutSessionInput[];
+	updateMany?:
+		| Prisma.ReservationUpdateManyWithWhereWithoutSessionInput
+		| Prisma.ReservationUpdateManyWithWhereWithoutSessionInput[];
+	deleteMany?:
+		| Prisma.ReservationScalarWhereInput
+		| Prisma.ReservationScalarWhereInput[];
+};
+
+export type ReservationUncheckedUpdateManyWithoutSessionNestedInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.ReservationCreateWithoutSessionInput,
+				Prisma.ReservationUncheckedCreateWithoutSessionInput
+		  >
+		| Prisma.ReservationCreateWithoutSessionInput[]
+		| Prisma.ReservationUncheckedCreateWithoutSessionInput[];
+	connectOrCreate?:
+		| Prisma.ReservationCreateOrConnectWithoutSessionInput
+		| Prisma.ReservationCreateOrConnectWithoutSessionInput[];
+	upsert?:
+		| Prisma.ReservationUpsertWithWhereUniqueWithoutSessionInput
+		| Prisma.ReservationUpsertWithWhereUniqueWithoutSessionInput[];
+	createMany?: Prisma.ReservationCreateManySessionInputEnvelope;
+	set?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	disconnect?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	delete?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	connect?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	update?:
+		| Prisma.ReservationUpdateWithWhereUniqueWithoutSessionInput
+		| Prisma.ReservationUpdateWithWhereUniqueWithoutSessionInput[];
+	updateMany?:
+		| Prisma.ReservationUpdateManyWithWhereWithoutSessionInput
+		| Prisma.ReservationUpdateManyWithWhereWithoutSessionInput[];
+	deleteMany?:
+		| Prisma.ReservationScalarWhereInput
+		| Prisma.ReservationScalarWhereInput[];
+};
+
 export type ReservationCreateNestedManyWithoutSpaceInput = {
 	create?:
 		| Prisma.XOR<
@@ -974,6 +1198,116 @@ export type ReservationUncheckedUpdateManyWithoutSpaceNestedInput = {
 	updateMany?:
 		| Prisma.ReservationUpdateManyWithWhereWithoutSpaceInput
 		| Prisma.ReservationUpdateManyWithWhereWithoutSpaceInput[];
+	deleteMany?:
+		| Prisma.ReservationScalarWhereInput
+		| Prisma.ReservationScalarWhereInput[];
+};
+
+export type ReservationCreateNestedManyWithoutTimelineInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.ReservationCreateWithoutTimelineInput,
+				Prisma.ReservationUncheckedCreateWithoutTimelineInput
+		  >
+		| Prisma.ReservationCreateWithoutTimelineInput[]
+		| Prisma.ReservationUncheckedCreateWithoutTimelineInput[];
+	connectOrCreate?:
+		| Prisma.ReservationCreateOrConnectWithoutTimelineInput
+		| Prisma.ReservationCreateOrConnectWithoutTimelineInput[];
+	createMany?: Prisma.ReservationCreateManyTimelineInputEnvelope;
+	connect?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+};
+
+export type ReservationUncheckedCreateNestedManyWithoutTimelineInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.ReservationCreateWithoutTimelineInput,
+				Prisma.ReservationUncheckedCreateWithoutTimelineInput
+		  >
+		| Prisma.ReservationCreateWithoutTimelineInput[]
+		| Prisma.ReservationUncheckedCreateWithoutTimelineInput[];
+	connectOrCreate?:
+		| Prisma.ReservationCreateOrConnectWithoutTimelineInput
+		| Prisma.ReservationCreateOrConnectWithoutTimelineInput[];
+	createMany?: Prisma.ReservationCreateManyTimelineInputEnvelope;
+	connect?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+};
+
+export type ReservationUpdateManyWithoutTimelineNestedInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.ReservationCreateWithoutTimelineInput,
+				Prisma.ReservationUncheckedCreateWithoutTimelineInput
+		  >
+		| Prisma.ReservationCreateWithoutTimelineInput[]
+		| Prisma.ReservationUncheckedCreateWithoutTimelineInput[];
+	connectOrCreate?:
+		| Prisma.ReservationCreateOrConnectWithoutTimelineInput
+		| Prisma.ReservationCreateOrConnectWithoutTimelineInput[];
+	upsert?:
+		| Prisma.ReservationUpsertWithWhereUniqueWithoutTimelineInput
+		| Prisma.ReservationUpsertWithWhereUniqueWithoutTimelineInput[];
+	createMany?: Prisma.ReservationCreateManyTimelineInputEnvelope;
+	set?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	disconnect?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	delete?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	connect?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	update?:
+		| Prisma.ReservationUpdateWithWhereUniqueWithoutTimelineInput
+		| Prisma.ReservationUpdateWithWhereUniqueWithoutTimelineInput[];
+	updateMany?:
+		| Prisma.ReservationUpdateManyWithWhereWithoutTimelineInput
+		| Prisma.ReservationUpdateManyWithWhereWithoutTimelineInput[];
+	deleteMany?:
+		| Prisma.ReservationScalarWhereInput
+		| Prisma.ReservationScalarWhereInput[];
+};
+
+export type ReservationUncheckedUpdateManyWithoutTimelineNestedInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.ReservationCreateWithoutTimelineInput,
+				Prisma.ReservationUncheckedCreateWithoutTimelineInput
+		  >
+		| Prisma.ReservationCreateWithoutTimelineInput[]
+		| Prisma.ReservationUncheckedCreateWithoutTimelineInput[];
+	connectOrCreate?:
+		| Prisma.ReservationCreateOrConnectWithoutTimelineInput
+		| Prisma.ReservationCreateOrConnectWithoutTimelineInput[];
+	upsert?:
+		| Prisma.ReservationUpsertWithWhereUniqueWithoutTimelineInput
+		| Prisma.ReservationUpsertWithWhereUniqueWithoutTimelineInput[];
+	createMany?: Prisma.ReservationCreateManyTimelineInputEnvelope;
+	set?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	disconnect?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	delete?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	connect?:
+		| Prisma.ReservationWhereUniqueInput
+		| Prisma.ReservationWhereUniqueInput[];
+	update?:
+		| Prisma.ReservationUpdateWithWhereUniqueWithoutTimelineInput
+		| Prisma.ReservationUpdateWithWhereUniqueWithoutTimelineInput[];
+	updateMany?:
+		| Prisma.ReservationUpdateManyWithWhereWithoutTimelineInput
+		| Prisma.ReservationUpdateManyWithWhereWithoutTimelineInput[];
 	deleteMany?:
 		| Prisma.ReservationScalarWhereInput
 		| Prisma.ReservationScalarWhereInput[];
@@ -1199,338 +1533,216 @@ export type ReservationUncheckedUpdateManyWithoutCreatedByNestedInput = {
 		| Prisma.ReservationScalarWhereInput[];
 };
 
-export type EnumReservationStatusFieldUpdateOperationsInput = {
-	set?: $Enums.ReservationStatus;
+export type ReservationCreateWithoutProgramInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	occurrenceStartAt: Date | string;
+	status?: $Enums.ReservationStatus;
+	memo?: string | null;
+	idempotencyKey: string;
+	waitlistPosition?: number | null;
+	confirmedAt?: Date | string | null;
+	canceledAt?: Date | string | null;
+	cancelReason?: string | null;
+	space: Prisma.SpaceCreateNestedOneWithoutReservationsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput;
+	user: Prisma.UserCreateNestedOneWithoutReservationsInput;
+	timeline: Prisma.TimelineCreateNestedOneWithoutReservationsInput;
+	session: Prisma.SessionCreateNestedOneWithoutReservationsInput;
 };
 
-export type ReservationCreateNestedManyWithoutTimelineInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.ReservationCreateWithoutTimelineInput,
-				Prisma.ReservationUncheckedCreateWithoutTimelineInput
-		  >
-		| Prisma.ReservationCreateWithoutTimelineInput[]
-		| Prisma.ReservationUncheckedCreateWithoutTimelineInput[];
-	connectOrCreate?:
-		| Prisma.ReservationCreateOrConnectWithoutTimelineInput
-		| Prisma.ReservationCreateOrConnectWithoutTimelineInput[];
-	createMany?: Prisma.ReservationCreateManyTimelineInputEnvelope;
-	connect?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
+export type ReservationUncheckedCreateWithoutProgramInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	spaceId: string;
+	createdById?: string | null;
+	userId: string;
+	timelineId: string;
+	sessionId: string;
+	occurrenceStartAt: Date | string;
+	status?: $Enums.ReservationStatus;
+	memo?: string | null;
+	idempotencyKey: string;
+	waitlistPosition?: number | null;
+	confirmedAt?: Date | string | null;
+	canceledAt?: Date | string | null;
+	cancelReason?: string | null;
 };
 
-export type ReservationUncheckedCreateNestedManyWithoutTimelineInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.ReservationCreateWithoutTimelineInput,
-				Prisma.ReservationUncheckedCreateWithoutTimelineInput
-		  >
-		| Prisma.ReservationCreateWithoutTimelineInput[]
-		| Prisma.ReservationUncheckedCreateWithoutTimelineInput[];
-	connectOrCreate?:
-		| Prisma.ReservationCreateOrConnectWithoutTimelineInput
-		| Prisma.ReservationCreateOrConnectWithoutTimelineInput[];
-	createMany?: Prisma.ReservationCreateManyTimelineInputEnvelope;
-	connect?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
+export type ReservationCreateOrConnectWithoutProgramInput = {
+	where: Prisma.ReservationWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.ReservationCreateWithoutProgramInput,
+		Prisma.ReservationUncheckedCreateWithoutProgramInput
+	>;
 };
 
-export type ReservationUpdateManyWithoutTimelineNestedInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.ReservationCreateWithoutTimelineInput,
-				Prisma.ReservationUncheckedCreateWithoutTimelineInput
-		  >
-		| Prisma.ReservationCreateWithoutTimelineInput[]
-		| Prisma.ReservationUncheckedCreateWithoutTimelineInput[];
-	connectOrCreate?:
-		| Prisma.ReservationCreateOrConnectWithoutTimelineInput
-		| Prisma.ReservationCreateOrConnectWithoutTimelineInput[];
-	upsert?:
-		| Prisma.ReservationUpsertWithWhereUniqueWithoutTimelineInput
-		| Prisma.ReservationUpsertWithWhereUniqueWithoutTimelineInput[];
-	createMany?: Prisma.ReservationCreateManyTimelineInputEnvelope;
-	set?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	disconnect?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	delete?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	connect?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	update?:
-		| Prisma.ReservationUpdateWithWhereUniqueWithoutTimelineInput
-		| Prisma.ReservationUpdateWithWhereUniqueWithoutTimelineInput[];
-	updateMany?:
-		| Prisma.ReservationUpdateManyWithWhereWithoutTimelineInput
-		| Prisma.ReservationUpdateManyWithWhereWithoutTimelineInput[];
-	deleteMany?:
+export type ReservationCreateManyProgramInputEnvelope = {
+	data:
+		| Prisma.ReservationCreateManyProgramInput
+		| Prisma.ReservationCreateManyProgramInput[];
+	skipDuplicates?: boolean;
+};
+
+export type ReservationUpsertWithWhereUniqueWithoutProgramInput = {
+	where: Prisma.ReservationWhereUniqueInput;
+	update: Prisma.XOR<
+		Prisma.ReservationUpdateWithoutProgramInput,
+		Prisma.ReservationUncheckedUpdateWithoutProgramInput
+	>;
+	create: Prisma.XOR<
+		Prisma.ReservationCreateWithoutProgramInput,
+		Prisma.ReservationUncheckedCreateWithoutProgramInput
+	>;
+};
+
+export type ReservationUpdateWithWhereUniqueWithoutProgramInput = {
+	where: Prisma.ReservationWhereUniqueInput;
+	data: Prisma.XOR<
+		Prisma.ReservationUpdateWithoutProgramInput,
+		Prisma.ReservationUncheckedUpdateWithoutProgramInput
+	>;
+};
+
+export type ReservationUpdateManyWithWhereWithoutProgramInput = {
+	where: Prisma.ReservationScalarWhereInput;
+	data: Prisma.XOR<
+		Prisma.ReservationUpdateManyMutationInput,
+		Prisma.ReservationUncheckedUpdateManyWithoutProgramInput
+	>;
+};
+
+export type ReservationScalarWhereInput = {
+	AND?:
 		| Prisma.ReservationScalarWhereInput
 		| Prisma.ReservationScalarWhereInput[];
-};
-
-export type ReservationUncheckedUpdateManyWithoutTimelineNestedInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.ReservationCreateWithoutTimelineInput,
-				Prisma.ReservationUncheckedCreateWithoutTimelineInput
-		  >
-		| Prisma.ReservationCreateWithoutTimelineInput[]
-		| Prisma.ReservationUncheckedCreateWithoutTimelineInput[];
-	connectOrCreate?:
-		| Prisma.ReservationCreateOrConnectWithoutTimelineInput
-		| Prisma.ReservationCreateOrConnectWithoutTimelineInput[];
-	upsert?:
-		| Prisma.ReservationUpsertWithWhereUniqueWithoutTimelineInput
-		| Prisma.ReservationUpsertWithWhereUniqueWithoutTimelineInput[];
-	createMany?: Prisma.ReservationCreateManyTimelineInputEnvelope;
-	set?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	disconnect?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	delete?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	connect?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	update?:
-		| Prisma.ReservationUpdateWithWhereUniqueWithoutTimelineInput
-		| Prisma.ReservationUpdateWithWhereUniqueWithoutTimelineInput[];
-	updateMany?:
-		| Prisma.ReservationUpdateManyWithWhereWithoutTimelineInput
-		| Prisma.ReservationUpdateManyWithWhereWithoutTimelineInput[];
-	deleteMany?:
+	OR?: Prisma.ReservationScalarWhereInput[];
+	NOT?:
 		| Prisma.ReservationScalarWhereInput
 		| Prisma.ReservationScalarWhereInput[];
+	id?: Prisma.StringFilter<"Reservation"> | string;
+	createdAt?: Prisma.DateTimeFilter<"Reservation"> | Date | string;
+	updatedAt?:
+		| Prisma.DateTimeNullableFilter<"Reservation">
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.DateTimeNullableFilter<"Reservation">
+		| Date
+		| string
+		| null;
+	spaceId?: Prisma.StringFilter<"Reservation"> | string;
+	createdById?: Prisma.StringNullableFilter<"Reservation"> | string | null;
+	userId?: Prisma.StringFilter<"Reservation"> | string;
+	timelineId?: Prisma.StringFilter<"Reservation"> | string;
+	sessionId?: Prisma.StringFilter<"Reservation"> | string;
+	programId?: Prisma.StringFilter<"Reservation"> | string;
+	occurrenceStartAt?: Prisma.DateTimeFilter<"Reservation"> | Date | string;
+	status?:
+		| Prisma.EnumReservationStatusFilter<"Reservation">
+		| $Enums.ReservationStatus;
+	memo?: Prisma.StringNullableFilter<"Reservation"> | string | null;
+	idempotencyKey?: Prisma.StringFilter<"Reservation"> | string;
+	waitlistPosition?: Prisma.IntNullableFilter<"Reservation"> | number | null;
+	confirmedAt?:
+		| Prisma.DateTimeNullableFilter<"Reservation">
+		| Date
+		| string
+		| null;
+	canceledAt?:
+		| Prisma.DateTimeNullableFilter<"Reservation">
+		| Date
+		| string
+		| null;
+	cancelReason?: Prisma.StringNullableFilter<"Reservation"> | string | null;
 };
 
-export type ReservationCreateNestedManyWithoutSessionInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.ReservationCreateWithoutSessionInput,
-				Prisma.ReservationUncheckedCreateWithoutSessionInput
-		  >
-		| Prisma.ReservationCreateWithoutSessionInput[]
-		| Prisma.ReservationUncheckedCreateWithoutSessionInput[];
-	connectOrCreate?:
-		| Prisma.ReservationCreateOrConnectWithoutSessionInput
-		| Prisma.ReservationCreateOrConnectWithoutSessionInput[];
-	createMany?: Prisma.ReservationCreateManySessionInputEnvelope;
-	connect?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
+export type ReservationCreateWithoutSessionInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	occurrenceStartAt: Date | string;
+	status?: $Enums.ReservationStatus;
+	memo?: string | null;
+	idempotencyKey: string;
+	waitlistPosition?: number | null;
+	confirmedAt?: Date | string | null;
+	canceledAt?: Date | string | null;
+	cancelReason?: string | null;
+	space: Prisma.SpaceCreateNestedOneWithoutReservationsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput;
+	user: Prisma.UserCreateNestedOneWithoutReservationsInput;
+	timeline: Prisma.TimelineCreateNestedOneWithoutReservationsInput;
+	program: Prisma.ProgramCreateNestedOneWithoutReservationsInput;
 };
 
-export type ReservationUncheckedCreateNestedManyWithoutSessionInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.ReservationCreateWithoutSessionInput,
-				Prisma.ReservationUncheckedCreateWithoutSessionInput
-		  >
-		| Prisma.ReservationCreateWithoutSessionInput[]
-		| Prisma.ReservationUncheckedCreateWithoutSessionInput[];
-	connectOrCreate?:
-		| Prisma.ReservationCreateOrConnectWithoutSessionInput
-		| Prisma.ReservationCreateOrConnectWithoutSessionInput[];
-	createMany?: Prisma.ReservationCreateManySessionInputEnvelope;
-	connect?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
+export type ReservationUncheckedCreateWithoutSessionInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	spaceId: string;
+	createdById?: string | null;
+	userId: string;
+	timelineId: string;
+	programId: string;
+	occurrenceStartAt: Date | string;
+	status?: $Enums.ReservationStatus;
+	memo?: string | null;
+	idempotencyKey: string;
+	waitlistPosition?: number | null;
+	confirmedAt?: Date | string | null;
+	canceledAt?: Date | string | null;
+	cancelReason?: string | null;
 };
 
-export type ReservationUpdateManyWithoutSessionNestedInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.ReservationCreateWithoutSessionInput,
-				Prisma.ReservationUncheckedCreateWithoutSessionInput
-		  >
-		| Prisma.ReservationCreateWithoutSessionInput[]
-		| Prisma.ReservationUncheckedCreateWithoutSessionInput[];
-	connectOrCreate?:
-		| Prisma.ReservationCreateOrConnectWithoutSessionInput
-		| Prisma.ReservationCreateOrConnectWithoutSessionInput[];
-	upsert?:
-		| Prisma.ReservationUpsertWithWhereUniqueWithoutSessionInput
-		| Prisma.ReservationUpsertWithWhereUniqueWithoutSessionInput[];
-	createMany?: Prisma.ReservationCreateManySessionInputEnvelope;
-	set?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	disconnect?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	delete?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	connect?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	update?:
-		| Prisma.ReservationUpdateWithWhereUniqueWithoutSessionInput
-		| Prisma.ReservationUpdateWithWhereUniqueWithoutSessionInput[];
-	updateMany?:
-		| Prisma.ReservationUpdateManyWithWhereWithoutSessionInput
-		| Prisma.ReservationUpdateManyWithWhereWithoutSessionInput[];
-	deleteMany?:
-		| Prisma.ReservationScalarWhereInput
-		| Prisma.ReservationScalarWhereInput[];
+export type ReservationCreateOrConnectWithoutSessionInput = {
+	where: Prisma.ReservationWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.ReservationCreateWithoutSessionInput,
+		Prisma.ReservationUncheckedCreateWithoutSessionInput
+	>;
 };
 
-export type ReservationUncheckedUpdateManyWithoutSessionNestedInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.ReservationCreateWithoutSessionInput,
-				Prisma.ReservationUncheckedCreateWithoutSessionInput
-		  >
-		| Prisma.ReservationCreateWithoutSessionInput[]
-		| Prisma.ReservationUncheckedCreateWithoutSessionInput[];
-	connectOrCreate?:
-		| Prisma.ReservationCreateOrConnectWithoutSessionInput
-		| Prisma.ReservationCreateOrConnectWithoutSessionInput[];
-	upsert?:
-		| Prisma.ReservationUpsertWithWhereUniqueWithoutSessionInput
-		| Prisma.ReservationUpsertWithWhereUniqueWithoutSessionInput[];
-	createMany?: Prisma.ReservationCreateManySessionInputEnvelope;
-	set?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	disconnect?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	delete?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	connect?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	update?:
-		| Prisma.ReservationUpdateWithWhereUniqueWithoutSessionInput
-		| Prisma.ReservationUpdateWithWhereUniqueWithoutSessionInput[];
-	updateMany?:
-		| Prisma.ReservationUpdateManyWithWhereWithoutSessionInput
-		| Prisma.ReservationUpdateManyWithWhereWithoutSessionInput[];
-	deleteMany?:
-		| Prisma.ReservationScalarWhereInput
-		| Prisma.ReservationScalarWhereInput[];
+export type ReservationCreateManySessionInputEnvelope = {
+	data:
+		| Prisma.ReservationCreateManySessionInput
+		| Prisma.ReservationCreateManySessionInput[];
+	skipDuplicates?: boolean;
 };
 
-export type ReservationCreateNestedManyWithoutProgramInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.ReservationCreateWithoutProgramInput,
-				Prisma.ReservationUncheckedCreateWithoutProgramInput
-		  >
-		| Prisma.ReservationCreateWithoutProgramInput[]
-		| Prisma.ReservationUncheckedCreateWithoutProgramInput[];
-	connectOrCreate?:
-		| Prisma.ReservationCreateOrConnectWithoutProgramInput
-		| Prisma.ReservationCreateOrConnectWithoutProgramInput[];
-	createMany?: Prisma.ReservationCreateManyProgramInputEnvelope;
-	connect?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
+export type ReservationUpsertWithWhereUniqueWithoutSessionInput = {
+	where: Prisma.ReservationWhereUniqueInput;
+	update: Prisma.XOR<
+		Prisma.ReservationUpdateWithoutSessionInput,
+		Prisma.ReservationUncheckedUpdateWithoutSessionInput
+	>;
+	create: Prisma.XOR<
+		Prisma.ReservationCreateWithoutSessionInput,
+		Prisma.ReservationUncheckedCreateWithoutSessionInput
+	>;
 };
 
-export type ReservationUncheckedCreateNestedManyWithoutProgramInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.ReservationCreateWithoutProgramInput,
-				Prisma.ReservationUncheckedCreateWithoutProgramInput
-		  >
-		| Prisma.ReservationCreateWithoutProgramInput[]
-		| Prisma.ReservationUncheckedCreateWithoutProgramInput[];
-	connectOrCreate?:
-		| Prisma.ReservationCreateOrConnectWithoutProgramInput
-		| Prisma.ReservationCreateOrConnectWithoutProgramInput[];
-	createMany?: Prisma.ReservationCreateManyProgramInputEnvelope;
-	connect?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
+export type ReservationUpdateWithWhereUniqueWithoutSessionInput = {
+	where: Prisma.ReservationWhereUniqueInput;
+	data: Prisma.XOR<
+		Prisma.ReservationUpdateWithoutSessionInput,
+		Prisma.ReservationUncheckedUpdateWithoutSessionInput
+	>;
 };
 
-export type ReservationUpdateManyWithoutProgramNestedInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.ReservationCreateWithoutProgramInput,
-				Prisma.ReservationUncheckedCreateWithoutProgramInput
-		  >
-		| Prisma.ReservationCreateWithoutProgramInput[]
-		| Prisma.ReservationUncheckedCreateWithoutProgramInput[];
-	connectOrCreate?:
-		| Prisma.ReservationCreateOrConnectWithoutProgramInput
-		| Prisma.ReservationCreateOrConnectWithoutProgramInput[];
-	upsert?:
-		| Prisma.ReservationUpsertWithWhereUniqueWithoutProgramInput
-		| Prisma.ReservationUpsertWithWhereUniqueWithoutProgramInput[];
-	createMany?: Prisma.ReservationCreateManyProgramInputEnvelope;
-	set?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	disconnect?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	delete?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	connect?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	update?:
-		| Prisma.ReservationUpdateWithWhereUniqueWithoutProgramInput
-		| Prisma.ReservationUpdateWithWhereUniqueWithoutProgramInput[];
-	updateMany?:
-		| Prisma.ReservationUpdateManyWithWhereWithoutProgramInput
-		| Prisma.ReservationUpdateManyWithWhereWithoutProgramInput[];
-	deleteMany?:
-		| Prisma.ReservationScalarWhereInput
-		| Prisma.ReservationScalarWhereInput[];
-};
-
-export type ReservationUncheckedUpdateManyWithoutProgramNestedInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.ReservationCreateWithoutProgramInput,
-				Prisma.ReservationUncheckedCreateWithoutProgramInput
-		  >
-		| Prisma.ReservationCreateWithoutProgramInput[]
-		| Prisma.ReservationUncheckedCreateWithoutProgramInput[];
-	connectOrCreate?:
-		| Prisma.ReservationCreateOrConnectWithoutProgramInput
-		| Prisma.ReservationCreateOrConnectWithoutProgramInput[];
-	upsert?:
-		| Prisma.ReservationUpsertWithWhereUniqueWithoutProgramInput
-		| Prisma.ReservationUpsertWithWhereUniqueWithoutProgramInput[];
-	createMany?: Prisma.ReservationCreateManyProgramInputEnvelope;
-	set?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	disconnect?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	delete?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	connect?:
-		| Prisma.ReservationWhereUniqueInput
-		| Prisma.ReservationWhereUniqueInput[];
-	update?:
-		| Prisma.ReservationUpdateWithWhereUniqueWithoutProgramInput
-		| Prisma.ReservationUpdateWithWhereUniqueWithoutProgramInput[];
-	updateMany?:
-		| Prisma.ReservationUpdateManyWithWhereWithoutProgramInput
-		| Prisma.ReservationUpdateManyWithWhereWithoutProgramInput[];
-	deleteMany?:
-		| Prisma.ReservationScalarWhereInput
-		| Prisma.ReservationScalarWhereInput[];
+export type ReservationUpdateManyWithWhereWithoutSessionInput = {
+	where: Prisma.ReservationScalarWhereInput;
+	data: Prisma.XOR<
+		Prisma.ReservationUpdateManyMutationInput,
+		Prisma.ReservationUncheckedUpdateManyWithoutSessionInput
+	>;
 };
 
 export type ReservationCreateWithoutSpaceInput = {
@@ -1616,50 +1828,87 @@ export type ReservationUpdateManyWithWhereWithoutSpaceInput = {
 	>;
 };
 
-export type ReservationScalarWhereInput = {
-	AND?:
-		| Prisma.ReservationScalarWhereInput
-		| Prisma.ReservationScalarWhereInput[];
-	OR?: Prisma.ReservationScalarWhereInput[];
-	NOT?:
-		| Prisma.ReservationScalarWhereInput
-		| Prisma.ReservationScalarWhereInput[];
-	id?: Prisma.StringFilter<"Reservation"> | string;
-	createdAt?: Prisma.DateTimeFilter<"Reservation"> | Date | string;
-	updatedAt?:
-		| Prisma.DateTimeNullableFilter<"Reservation">
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.DateTimeNullableFilter<"Reservation">
-		| Date
-		| string
-		| null;
-	spaceId?: Prisma.StringFilter<"Reservation"> | string;
-	createdById?: Prisma.StringNullableFilter<"Reservation"> | string | null;
-	userId?: Prisma.StringFilter<"Reservation"> | string;
-	timelineId?: Prisma.StringFilter<"Reservation"> | string;
-	sessionId?: Prisma.StringFilter<"Reservation"> | string;
-	programId?: Prisma.StringFilter<"Reservation"> | string;
-	occurrenceStartAt?: Prisma.DateTimeFilter<"Reservation"> | Date | string;
-	status?:
-		| Prisma.EnumReservationStatusFilter<"Reservation">
-		| $Enums.ReservationStatus;
-	memo?: Prisma.StringNullableFilter<"Reservation"> | string | null;
-	idempotencyKey?: Prisma.StringFilter<"Reservation"> | string;
-	waitlistPosition?: Prisma.IntNullableFilter<"Reservation"> | number | null;
-	confirmedAt?:
-		| Prisma.DateTimeNullableFilter<"Reservation">
-		| Date
-		| string
-		| null;
-	canceledAt?:
-		| Prisma.DateTimeNullableFilter<"Reservation">
-		| Date
-		| string
-		| null;
-	cancelReason?: Prisma.StringNullableFilter<"Reservation"> | string | null;
+export type ReservationCreateWithoutTimelineInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	occurrenceStartAt: Date | string;
+	status?: $Enums.ReservationStatus;
+	memo?: string | null;
+	idempotencyKey: string;
+	waitlistPosition?: number | null;
+	confirmedAt?: Date | string | null;
+	canceledAt?: Date | string | null;
+	cancelReason?: string | null;
+	space: Prisma.SpaceCreateNestedOneWithoutReservationsInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput;
+	user: Prisma.UserCreateNestedOneWithoutReservationsInput;
+	session: Prisma.SessionCreateNestedOneWithoutReservationsInput;
+	program: Prisma.ProgramCreateNestedOneWithoutReservationsInput;
+};
+
+export type ReservationUncheckedCreateWithoutTimelineInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	spaceId: string;
+	createdById?: string | null;
+	userId: string;
+	sessionId: string;
+	programId: string;
+	occurrenceStartAt: Date | string;
+	status?: $Enums.ReservationStatus;
+	memo?: string | null;
+	idempotencyKey: string;
+	waitlistPosition?: number | null;
+	confirmedAt?: Date | string | null;
+	canceledAt?: Date | string | null;
+	cancelReason?: string | null;
+};
+
+export type ReservationCreateOrConnectWithoutTimelineInput = {
+	where: Prisma.ReservationWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.ReservationCreateWithoutTimelineInput,
+		Prisma.ReservationUncheckedCreateWithoutTimelineInput
+	>;
+};
+
+export type ReservationCreateManyTimelineInputEnvelope = {
+	data:
+		| Prisma.ReservationCreateManyTimelineInput
+		| Prisma.ReservationCreateManyTimelineInput[];
+	skipDuplicates?: boolean;
+};
+
+export type ReservationUpsertWithWhereUniqueWithoutTimelineInput = {
+	where: Prisma.ReservationWhereUniqueInput;
+	update: Prisma.XOR<
+		Prisma.ReservationUpdateWithoutTimelineInput,
+		Prisma.ReservationUncheckedUpdateWithoutTimelineInput
+	>;
+	create: Prisma.XOR<
+		Prisma.ReservationCreateWithoutTimelineInput,
+		Prisma.ReservationUncheckedCreateWithoutTimelineInput
+	>;
+};
+
+export type ReservationUpdateWithWhereUniqueWithoutTimelineInput = {
+	where: Prisma.ReservationWhereUniqueInput;
+	data: Prisma.XOR<
+		Prisma.ReservationUpdateWithoutTimelineInput,
+		Prisma.ReservationUncheckedUpdateWithoutTimelineInput
+	>;
+};
+
+export type ReservationUpdateManyWithWhereWithoutTimelineInput = {
+	where: Prisma.ReservationScalarWhereInput;
+	data: Prisma.XOR<
+		Prisma.ReservationUpdateManyMutationInput,
+		Prisma.ReservationUncheckedUpdateManyWithoutTimelineInput
+	>;
 };
 
 export type ReservationCreateWithoutUserInput = {
@@ -1828,193 +2077,7 @@ export type ReservationUpdateManyWithWhereWithoutCreatedByInput = {
 	>;
 };
 
-export type ReservationCreateWithoutTimelineInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	occurrenceStartAt: Date | string;
-	status?: $Enums.ReservationStatus;
-	memo?: string | null;
-	idempotencyKey: string;
-	waitlistPosition?: number | null;
-	confirmedAt?: Date | string | null;
-	canceledAt?: Date | string | null;
-	cancelReason?: string | null;
-	space: Prisma.SpaceCreateNestedOneWithoutReservationsInput;
-	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput;
-	user: Prisma.UserCreateNestedOneWithoutReservationsInput;
-	session: Prisma.SessionCreateNestedOneWithoutReservationsInput;
-	program: Prisma.ProgramCreateNestedOneWithoutReservationsInput;
-};
-
-export type ReservationUncheckedCreateWithoutTimelineInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	spaceId: string;
-	createdById?: string | null;
-	userId: string;
-	sessionId: string;
-	programId: string;
-	occurrenceStartAt: Date | string;
-	status?: $Enums.ReservationStatus;
-	memo?: string | null;
-	idempotencyKey: string;
-	waitlistPosition?: number | null;
-	confirmedAt?: Date | string | null;
-	canceledAt?: Date | string | null;
-	cancelReason?: string | null;
-};
-
-export type ReservationCreateOrConnectWithoutTimelineInput = {
-	where: Prisma.ReservationWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.ReservationCreateWithoutTimelineInput,
-		Prisma.ReservationUncheckedCreateWithoutTimelineInput
-	>;
-};
-
-export type ReservationCreateManyTimelineInputEnvelope = {
-	data:
-		| Prisma.ReservationCreateManyTimelineInput
-		| Prisma.ReservationCreateManyTimelineInput[];
-	skipDuplicates?: boolean;
-};
-
-export type ReservationUpsertWithWhereUniqueWithoutTimelineInput = {
-	where: Prisma.ReservationWhereUniqueInput;
-	update: Prisma.XOR<
-		Prisma.ReservationUpdateWithoutTimelineInput,
-		Prisma.ReservationUncheckedUpdateWithoutTimelineInput
-	>;
-	create: Prisma.XOR<
-		Prisma.ReservationCreateWithoutTimelineInput,
-		Prisma.ReservationUncheckedCreateWithoutTimelineInput
-	>;
-};
-
-export type ReservationUpdateWithWhereUniqueWithoutTimelineInput = {
-	where: Prisma.ReservationWhereUniqueInput;
-	data: Prisma.XOR<
-		Prisma.ReservationUpdateWithoutTimelineInput,
-		Prisma.ReservationUncheckedUpdateWithoutTimelineInput
-	>;
-};
-
-export type ReservationUpdateManyWithWhereWithoutTimelineInput = {
-	where: Prisma.ReservationScalarWhereInput;
-	data: Prisma.XOR<
-		Prisma.ReservationUpdateManyMutationInput,
-		Prisma.ReservationUncheckedUpdateManyWithoutTimelineInput
-	>;
-};
-
-export type ReservationCreateWithoutSessionInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	occurrenceStartAt: Date | string;
-	status?: $Enums.ReservationStatus;
-	memo?: string | null;
-	idempotencyKey: string;
-	waitlistPosition?: number | null;
-	confirmedAt?: Date | string | null;
-	canceledAt?: Date | string | null;
-	cancelReason?: string | null;
-	space: Prisma.SpaceCreateNestedOneWithoutReservationsInput;
-	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput;
-	user: Prisma.UserCreateNestedOneWithoutReservationsInput;
-	timeline: Prisma.TimelineCreateNestedOneWithoutReservationsInput;
-	program: Prisma.ProgramCreateNestedOneWithoutReservationsInput;
-};
-
-export type ReservationUncheckedCreateWithoutSessionInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	spaceId: string;
-	createdById?: string | null;
-	userId: string;
-	timelineId: string;
-	programId: string;
-	occurrenceStartAt: Date | string;
-	status?: $Enums.ReservationStatus;
-	memo?: string | null;
-	idempotencyKey: string;
-	waitlistPosition?: number | null;
-	confirmedAt?: Date | string | null;
-	canceledAt?: Date | string | null;
-	cancelReason?: string | null;
-};
-
-export type ReservationCreateOrConnectWithoutSessionInput = {
-	where: Prisma.ReservationWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.ReservationCreateWithoutSessionInput,
-		Prisma.ReservationUncheckedCreateWithoutSessionInput
-	>;
-};
-
-export type ReservationCreateManySessionInputEnvelope = {
-	data:
-		| Prisma.ReservationCreateManySessionInput
-		| Prisma.ReservationCreateManySessionInput[];
-	skipDuplicates?: boolean;
-};
-
-export type ReservationUpsertWithWhereUniqueWithoutSessionInput = {
-	where: Prisma.ReservationWhereUniqueInput;
-	update: Prisma.XOR<
-		Prisma.ReservationUpdateWithoutSessionInput,
-		Prisma.ReservationUncheckedUpdateWithoutSessionInput
-	>;
-	create: Prisma.XOR<
-		Prisma.ReservationCreateWithoutSessionInput,
-		Prisma.ReservationUncheckedCreateWithoutSessionInput
-	>;
-};
-
-export type ReservationUpdateWithWhereUniqueWithoutSessionInput = {
-	where: Prisma.ReservationWhereUniqueInput;
-	data: Prisma.XOR<
-		Prisma.ReservationUpdateWithoutSessionInput,
-		Prisma.ReservationUncheckedUpdateWithoutSessionInput
-	>;
-};
-
-export type ReservationUpdateManyWithWhereWithoutSessionInput = {
-	where: Prisma.ReservationScalarWhereInput;
-	data: Prisma.XOR<
-		Prisma.ReservationUpdateManyMutationInput,
-		Prisma.ReservationUncheckedUpdateManyWithoutSessionInput
-	>;
-};
-
-export type ReservationCreateWithoutProgramInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	occurrenceStartAt: Date | string;
-	status?: $Enums.ReservationStatus;
-	memo?: string | null;
-	idempotencyKey: string;
-	waitlistPosition?: number | null;
-	confirmedAt?: Date | string | null;
-	canceledAt?: Date | string | null;
-	cancelReason?: string | null;
-	space: Prisma.SpaceCreateNestedOneWithoutReservationsInput;
-	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedReservationsInput;
-	user: Prisma.UserCreateNestedOneWithoutReservationsInput;
-	timeline: Prisma.TimelineCreateNestedOneWithoutReservationsInput;
-	session: Prisma.SessionCreateNestedOneWithoutReservationsInput;
-};
-
-export type ReservationUncheckedCreateWithoutProgramInput = {
+export type ReservationCreateManyProgramInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -2034,47 +2097,288 @@ export type ReservationUncheckedCreateWithoutProgramInput = {
 	cancelReason?: string | null;
 };
 
-export type ReservationCreateOrConnectWithoutProgramInput = {
-	where: Prisma.ReservationWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.ReservationCreateWithoutProgramInput,
-		Prisma.ReservationUncheckedCreateWithoutProgramInput
-	>;
+export type ReservationUpdateWithoutProgramInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	status?:
+		| Prisma.EnumReservationStatusFieldUpdateOperationsInput
+		| $Enums.ReservationStatus;
+	memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string;
+	waitlistPosition?:
+		| Prisma.NullableIntFieldUpdateOperationsInput
+		| number
+		| null;
+	confirmedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	canceledAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	cancelReason?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	space?: Prisma.SpaceUpdateOneRequiredWithoutReservationsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput;
+	user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput;
+	timeline?: Prisma.TimelineUpdateOneRequiredWithoutReservationsNestedInput;
+	session?: Prisma.SessionUpdateOneRequiredWithoutReservationsNestedInput;
 };
 
-export type ReservationCreateManyProgramInputEnvelope = {
-	data:
-		| Prisma.ReservationCreateManyProgramInput
-		| Prisma.ReservationCreateManyProgramInput[];
-	skipDuplicates?: boolean;
+export type ReservationUncheckedUpdateWithoutProgramInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	userId?: Prisma.StringFieldUpdateOperationsInput | string;
+	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
+	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
+	occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	status?:
+		| Prisma.EnumReservationStatusFieldUpdateOperationsInput
+		| $Enums.ReservationStatus;
+	memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string;
+	waitlistPosition?:
+		| Prisma.NullableIntFieldUpdateOperationsInput
+		| number
+		| null;
+	confirmedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	canceledAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	cancelReason?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
 };
 
-export type ReservationUpsertWithWhereUniqueWithoutProgramInput = {
-	where: Prisma.ReservationWhereUniqueInput;
-	update: Prisma.XOR<
-		Prisma.ReservationUpdateWithoutProgramInput,
-		Prisma.ReservationUncheckedUpdateWithoutProgramInput
-	>;
-	create: Prisma.XOR<
-		Prisma.ReservationCreateWithoutProgramInput,
-		Prisma.ReservationUncheckedCreateWithoutProgramInput
-	>;
+export type ReservationUncheckedUpdateManyWithoutProgramInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	userId?: Prisma.StringFieldUpdateOperationsInput | string;
+	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
+	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
+	occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	status?:
+		| Prisma.EnumReservationStatusFieldUpdateOperationsInput
+		| $Enums.ReservationStatus;
+	memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string;
+	waitlistPosition?:
+		| Prisma.NullableIntFieldUpdateOperationsInput
+		| number
+		| null;
+	confirmedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	canceledAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	cancelReason?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
 };
 
-export type ReservationUpdateWithWhereUniqueWithoutProgramInput = {
-	where: Prisma.ReservationWhereUniqueInput;
-	data: Prisma.XOR<
-		Prisma.ReservationUpdateWithoutProgramInput,
-		Prisma.ReservationUncheckedUpdateWithoutProgramInput
-	>;
+export type ReservationCreateManySessionInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	spaceId: string;
+	createdById?: string | null;
+	userId: string;
+	timelineId: string;
+	programId: string;
+	occurrenceStartAt: Date | string;
+	status?: $Enums.ReservationStatus;
+	memo?: string | null;
+	idempotencyKey: string;
+	waitlistPosition?: number | null;
+	confirmedAt?: Date | string | null;
+	canceledAt?: Date | string | null;
+	cancelReason?: string | null;
 };
 
-export type ReservationUpdateManyWithWhereWithoutProgramInput = {
-	where: Prisma.ReservationScalarWhereInput;
-	data: Prisma.XOR<
-		Prisma.ReservationUpdateManyMutationInput,
-		Prisma.ReservationUncheckedUpdateManyWithoutProgramInput
-	>;
+export type ReservationUpdateWithoutSessionInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	status?:
+		| Prisma.EnumReservationStatusFieldUpdateOperationsInput
+		| $Enums.ReservationStatus;
+	memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string;
+	waitlistPosition?:
+		| Prisma.NullableIntFieldUpdateOperationsInput
+		| number
+		| null;
+	confirmedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	canceledAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	cancelReason?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	space?: Prisma.SpaceUpdateOneRequiredWithoutReservationsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput;
+	user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput;
+	timeline?: Prisma.TimelineUpdateOneRequiredWithoutReservationsNestedInput;
+	program?: Prisma.ProgramUpdateOneRequiredWithoutReservationsNestedInput;
+};
+
+export type ReservationUncheckedUpdateWithoutSessionInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	userId?: Prisma.StringFieldUpdateOperationsInput | string;
+	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
+	programId?: Prisma.StringFieldUpdateOperationsInput | string;
+	occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	status?:
+		| Prisma.EnumReservationStatusFieldUpdateOperationsInput
+		| $Enums.ReservationStatus;
+	memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string;
+	waitlistPosition?:
+		| Prisma.NullableIntFieldUpdateOperationsInput
+		| number
+		| null;
+	confirmedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	canceledAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	cancelReason?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+};
+
+export type ReservationUncheckedUpdateManyWithoutSessionInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	userId?: Prisma.StringFieldUpdateOperationsInput | string;
+	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
+	programId?: Prisma.StringFieldUpdateOperationsInput | string;
+	occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	status?:
+		| Prisma.EnumReservationStatusFieldUpdateOperationsInput
+		| $Enums.ReservationStatus;
+	memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string;
+	waitlistPosition?:
+		| Prisma.NullableIntFieldUpdateOperationsInput
+		| number
+		| null;
+	confirmedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	canceledAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	cancelReason?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
 };
 
 export type ReservationCreateManySpaceInput = {
@@ -2201,6 +2505,158 @@ export type ReservationUncheckedUpdateManyWithoutSpaceInput = {
 	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	userId?: Prisma.StringFieldUpdateOperationsInput | string;
 	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
+	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
+	programId?: Prisma.StringFieldUpdateOperationsInput | string;
+	occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	status?:
+		| Prisma.EnumReservationStatusFieldUpdateOperationsInput
+		| $Enums.ReservationStatus;
+	memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string;
+	waitlistPosition?:
+		| Prisma.NullableIntFieldUpdateOperationsInput
+		| number
+		| null;
+	confirmedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	canceledAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	cancelReason?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+};
+
+export type ReservationCreateManyTimelineInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	spaceId: string;
+	createdById?: string | null;
+	userId: string;
+	sessionId: string;
+	programId: string;
+	occurrenceStartAt: Date | string;
+	status?: $Enums.ReservationStatus;
+	memo?: string | null;
+	idempotencyKey: string;
+	waitlistPosition?: number | null;
+	confirmedAt?: Date | string | null;
+	canceledAt?: Date | string | null;
+	cancelReason?: string | null;
+};
+
+export type ReservationUpdateWithoutTimelineInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	status?:
+		| Prisma.EnumReservationStatusFieldUpdateOperationsInput
+		| $Enums.ReservationStatus;
+	memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string;
+	waitlistPosition?:
+		| Prisma.NullableIntFieldUpdateOperationsInput
+		| number
+		| null;
+	confirmedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	canceledAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	cancelReason?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	space?: Prisma.SpaceUpdateOneRequiredWithoutReservationsNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput;
+	user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput;
+	session?: Prisma.SessionUpdateOneRequiredWithoutReservationsNestedInput;
+	program?: Prisma.ProgramUpdateOneRequiredWithoutReservationsNestedInput;
+};
+
+export type ReservationUncheckedUpdateWithoutTimelineInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	userId?: Prisma.StringFieldUpdateOperationsInput | string;
+	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
+	programId?: Prisma.StringFieldUpdateOperationsInput | string;
+	occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	status?:
+		| Prisma.EnumReservationStatusFieldUpdateOperationsInput
+		| $Enums.ReservationStatus;
+	memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string;
+	waitlistPosition?:
+		| Prisma.NullableIntFieldUpdateOperationsInput
+		| number
+		| null;
+	confirmedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	canceledAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	cancelReason?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+};
+
+export type ReservationUncheckedUpdateManyWithoutTimelineInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	userId?: Prisma.StringFieldUpdateOperationsInput | string;
 	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
 	programId?: Prisma.StringFieldUpdateOperationsInput | string;
 	occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -2507,462 +2963,6 @@ export type ReservationUncheckedUpdateManyWithoutCreatedByInput = {
 	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
 	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
 	programId?: Prisma.StringFieldUpdateOperationsInput | string;
-	occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	status?:
-		| Prisma.EnumReservationStatusFieldUpdateOperationsInput
-		| $Enums.ReservationStatus;
-	memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string;
-	waitlistPosition?:
-		| Prisma.NullableIntFieldUpdateOperationsInput
-		| number
-		| null;
-	confirmedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	canceledAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	cancelReason?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-};
-
-export type ReservationCreateManyTimelineInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	spaceId: string;
-	createdById?: string | null;
-	userId: string;
-	sessionId: string;
-	programId: string;
-	occurrenceStartAt: Date | string;
-	status?: $Enums.ReservationStatus;
-	memo?: string | null;
-	idempotencyKey: string;
-	waitlistPosition?: number | null;
-	confirmedAt?: Date | string | null;
-	canceledAt?: Date | string | null;
-	cancelReason?: string | null;
-};
-
-export type ReservationUpdateWithoutTimelineInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	status?:
-		| Prisma.EnumReservationStatusFieldUpdateOperationsInput
-		| $Enums.ReservationStatus;
-	memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string;
-	waitlistPosition?:
-		| Prisma.NullableIntFieldUpdateOperationsInput
-		| number
-		| null;
-	confirmedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	canceledAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	cancelReason?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	space?: Prisma.SpaceUpdateOneRequiredWithoutReservationsNestedInput;
-	createdBy?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput;
-	user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput;
-	session?: Prisma.SessionUpdateOneRequiredWithoutReservationsNestedInput;
-	program?: Prisma.ProgramUpdateOneRequiredWithoutReservationsNestedInput;
-};
-
-export type ReservationUncheckedUpdateWithoutTimelineInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	userId?: Prisma.StringFieldUpdateOperationsInput | string;
-	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
-	programId?: Prisma.StringFieldUpdateOperationsInput | string;
-	occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	status?:
-		| Prisma.EnumReservationStatusFieldUpdateOperationsInput
-		| $Enums.ReservationStatus;
-	memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string;
-	waitlistPosition?:
-		| Prisma.NullableIntFieldUpdateOperationsInput
-		| number
-		| null;
-	confirmedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	canceledAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	cancelReason?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-};
-
-export type ReservationUncheckedUpdateManyWithoutTimelineInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	userId?: Prisma.StringFieldUpdateOperationsInput | string;
-	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
-	programId?: Prisma.StringFieldUpdateOperationsInput | string;
-	occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	status?:
-		| Prisma.EnumReservationStatusFieldUpdateOperationsInput
-		| $Enums.ReservationStatus;
-	memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string;
-	waitlistPosition?:
-		| Prisma.NullableIntFieldUpdateOperationsInput
-		| number
-		| null;
-	confirmedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	canceledAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	cancelReason?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-};
-
-export type ReservationCreateManySessionInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	spaceId: string;
-	createdById?: string | null;
-	userId: string;
-	timelineId: string;
-	programId: string;
-	occurrenceStartAt: Date | string;
-	status?: $Enums.ReservationStatus;
-	memo?: string | null;
-	idempotencyKey: string;
-	waitlistPosition?: number | null;
-	confirmedAt?: Date | string | null;
-	canceledAt?: Date | string | null;
-	cancelReason?: string | null;
-};
-
-export type ReservationUpdateWithoutSessionInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	status?:
-		| Prisma.EnumReservationStatusFieldUpdateOperationsInput
-		| $Enums.ReservationStatus;
-	memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string;
-	waitlistPosition?:
-		| Prisma.NullableIntFieldUpdateOperationsInput
-		| number
-		| null;
-	confirmedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	canceledAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	cancelReason?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	space?: Prisma.SpaceUpdateOneRequiredWithoutReservationsNestedInput;
-	createdBy?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput;
-	user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput;
-	timeline?: Prisma.TimelineUpdateOneRequiredWithoutReservationsNestedInput;
-	program?: Prisma.ProgramUpdateOneRequiredWithoutReservationsNestedInput;
-};
-
-export type ReservationUncheckedUpdateWithoutSessionInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	userId?: Prisma.StringFieldUpdateOperationsInput | string;
-	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
-	programId?: Prisma.StringFieldUpdateOperationsInput | string;
-	occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	status?:
-		| Prisma.EnumReservationStatusFieldUpdateOperationsInput
-		| $Enums.ReservationStatus;
-	memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string;
-	waitlistPosition?:
-		| Prisma.NullableIntFieldUpdateOperationsInput
-		| number
-		| null;
-	confirmedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	canceledAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	cancelReason?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-};
-
-export type ReservationUncheckedUpdateManyWithoutSessionInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	userId?: Prisma.StringFieldUpdateOperationsInput | string;
-	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
-	programId?: Prisma.StringFieldUpdateOperationsInput | string;
-	occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	status?:
-		| Prisma.EnumReservationStatusFieldUpdateOperationsInput
-		| $Enums.ReservationStatus;
-	memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string;
-	waitlistPosition?:
-		| Prisma.NullableIntFieldUpdateOperationsInput
-		| number
-		| null;
-	confirmedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	canceledAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	cancelReason?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-};
-
-export type ReservationCreateManyProgramInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	spaceId: string;
-	createdById?: string | null;
-	userId: string;
-	timelineId: string;
-	sessionId: string;
-	occurrenceStartAt: Date | string;
-	status?: $Enums.ReservationStatus;
-	memo?: string | null;
-	idempotencyKey: string;
-	waitlistPosition?: number | null;
-	confirmedAt?: Date | string | null;
-	canceledAt?: Date | string | null;
-	cancelReason?: string | null;
-};
-
-export type ReservationUpdateWithoutProgramInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	status?:
-		| Prisma.EnumReservationStatusFieldUpdateOperationsInput
-		| $Enums.ReservationStatus;
-	memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string;
-	waitlistPosition?:
-		| Prisma.NullableIntFieldUpdateOperationsInput
-		| number
-		| null;
-	confirmedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	canceledAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	cancelReason?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	space?: Prisma.SpaceUpdateOneRequiredWithoutReservationsNestedInput;
-	createdBy?: Prisma.UserUpdateOneWithoutCreatedReservationsNestedInput;
-	user?: Prisma.UserUpdateOneRequiredWithoutReservationsNestedInput;
-	timeline?: Prisma.TimelineUpdateOneRequiredWithoutReservationsNestedInput;
-	session?: Prisma.SessionUpdateOneRequiredWithoutReservationsNestedInput;
-};
-
-export type ReservationUncheckedUpdateWithoutProgramInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	userId?: Prisma.StringFieldUpdateOperationsInput | string;
-	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
-	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
-	occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	status?:
-		| Prisma.EnumReservationStatusFieldUpdateOperationsInput
-		| $Enums.ReservationStatus;
-	memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string;
-	waitlistPosition?:
-		| Prisma.NullableIntFieldUpdateOperationsInput
-		| number
-		| null;
-	confirmedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	canceledAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	cancelReason?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-};
-
-export type ReservationUncheckedUpdateManyWithoutProgramInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	userId?: Prisma.StringFieldUpdateOperationsInput | string;
-	timelineId?: Prisma.StringFieldUpdateOperationsInput | string;
-	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
 	occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	status?:
 		| Prisma.EnumReservationStatusFieldUpdateOperationsInput

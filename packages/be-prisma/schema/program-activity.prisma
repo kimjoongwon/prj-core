@@ -1,0 +1,27 @@
+// @data-type: CONFIGURATION
+// @description: Program 생성 시점의 실행 운동 계획을 보관하는 운영 스냅샷
+/// @displayName 프로그램 활동
+model ProgramActivity {
+  id                  String    @id @default(uuid())
+  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt           DateTime? @map("removed_at") @db.Timestamptz(6)
+  programId           String    @map("program_id")
+  taskId              String    @map("task_id")
+  order               Int
+  repetitions         Int
+  restTime            Int       @map("rest_time")
+  notes               String?
+  exerciseName        String    @map("exercise_name")
+  exerciseDescription String?   @map("exercise_description")
+  exerciseDuration    Int       @map("exercise_duration")
+  exerciseCount       Int       @map("exercise_count")
+  imageFileId         String?   @map("image_file_id")
+  videoFileId         String?   @map("video_file_id")
+  program             Program   @relation(fields: [programId], references: [id])
+
+  @@unique([programId, taskId])
+  @@index([programId, order])
+  @@index([taskId])
+  @@map("program_activities")
+}

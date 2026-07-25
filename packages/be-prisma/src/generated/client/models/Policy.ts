@@ -464,6 +464,11 @@ export type PolicyUncheckedUpdateManyInput = {
 	isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean;
 };
 
+export type PolicyScalarRelationFilter = {
+	is?: Prisma.PolicyWhereInput;
+	isNot?: Prisma.PolicyWhereInput;
+};
+
 export type PolicySpaceIdNameCompoundUniqueInput = {
 	spaceId: string;
 	name: string;
@@ -506,11 +511,6 @@ export type PolicyMinOrderByAggregateInput = {
 	displayName?: Prisma.SortOrder;
 	description?: Prisma.SortOrder;
 	isSystem?: Prisma.SortOrder;
-};
-
-export type PolicyScalarRelationFilter = {
-	is?: Prisma.PolicyWhereInput;
-	isNot?: Prisma.PolicyWhereInput;
 };
 
 export type PolicyListRelationFilter = {

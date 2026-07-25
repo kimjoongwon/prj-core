@@ -481,9 +481,9 @@ export type CategoryUncheckedUpdateManyInput = {
 	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
-export type CategoryScalarRelationFilter = {
-	is?: Prisma.CategoryWhereInput;
-	isNot?: Prisma.CategoryWhereInput;
+export type CategoryNullableScalarRelationFilter = {
+	is?: Prisma.CategoryWhereInput | null;
+	isNot?: Prisma.CategoryWhereInput | null;
 };
 
 export type CategoryListRelationFilter = {
@@ -494,11 +494,6 @@ export type CategoryListRelationFilter = {
 
 export type CategoryOrderByRelationAggregateInput = {
 	_count?: Prisma.SortOrder;
-};
-
-export type CategoryNullableScalarRelationFilter = {
-	is?: Prisma.CategoryWhereInput | null;
-	isNot?: Prisma.CategoryWhereInput | null;
 };
 
 export type CategoryCountOrderByAggregateInput = {
@@ -537,270 +532,9 @@ export type CategoryMinOrderByAggregateInput = {
 	createdById?: Prisma.SortOrder;
 };
 
-export type CategoryCreateNestedOneWithoutRoleClassificationsInput = {
-	create?: Prisma.XOR<
-		Prisma.CategoryCreateWithoutRoleClassificationsInput,
-		Prisma.CategoryUncheckedCreateWithoutRoleClassificationsInput
-	>;
-	connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutRoleClassificationsInput;
-	connect?: Prisma.CategoryWhereUniqueInput;
-};
-
-export type CategoryUpdateOneRequiredWithoutRoleClassificationsNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.CategoryCreateWithoutRoleClassificationsInput,
-		Prisma.CategoryUncheckedCreateWithoutRoleClassificationsInput
-	>;
-	connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutRoleClassificationsInput;
-	upsert?: Prisma.CategoryUpsertWithoutRoleClassificationsInput;
-	connect?: Prisma.CategoryWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.CategoryUpdateToOneWithWhereWithoutRoleClassificationsInput,
-			Prisma.CategoryUpdateWithoutRoleClassificationsInput
-		>,
-		Prisma.CategoryUncheckedUpdateWithoutRoleClassificationsInput
-	>;
-};
-
-export type CategoryCreateNestedManyWithoutSpaceInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.CategoryCreateWithoutSpaceInput,
-				Prisma.CategoryUncheckedCreateWithoutSpaceInput
-		  >
-		| Prisma.CategoryCreateWithoutSpaceInput[]
-		| Prisma.CategoryUncheckedCreateWithoutSpaceInput[];
-	connectOrCreate?:
-		| Prisma.CategoryCreateOrConnectWithoutSpaceInput
-		| Prisma.CategoryCreateOrConnectWithoutSpaceInput[];
-	createMany?: Prisma.CategoryCreateManySpaceInputEnvelope;
-	connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
-};
-
-export type CategoryUncheckedCreateNestedManyWithoutSpaceInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.CategoryCreateWithoutSpaceInput,
-				Prisma.CategoryUncheckedCreateWithoutSpaceInput
-		  >
-		| Prisma.CategoryCreateWithoutSpaceInput[]
-		| Prisma.CategoryUncheckedCreateWithoutSpaceInput[];
-	connectOrCreate?:
-		| Prisma.CategoryCreateOrConnectWithoutSpaceInput
-		| Prisma.CategoryCreateOrConnectWithoutSpaceInput[];
-	createMany?: Prisma.CategoryCreateManySpaceInputEnvelope;
-	connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
-};
-
-export type CategoryUpdateManyWithoutSpaceNestedInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.CategoryCreateWithoutSpaceInput,
-				Prisma.CategoryUncheckedCreateWithoutSpaceInput
-		  >
-		| Prisma.CategoryCreateWithoutSpaceInput[]
-		| Prisma.CategoryUncheckedCreateWithoutSpaceInput[];
-	connectOrCreate?:
-		| Prisma.CategoryCreateOrConnectWithoutSpaceInput
-		| Prisma.CategoryCreateOrConnectWithoutSpaceInput[];
-	upsert?:
-		| Prisma.CategoryUpsertWithWhereUniqueWithoutSpaceInput
-		| Prisma.CategoryUpsertWithWhereUniqueWithoutSpaceInput[];
-	createMany?: Prisma.CategoryCreateManySpaceInputEnvelope;
-	set?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
-	disconnect?:
-		| Prisma.CategoryWhereUniqueInput
-		| Prisma.CategoryWhereUniqueInput[];
-	delete?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
-	connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
-	update?:
-		| Prisma.CategoryUpdateWithWhereUniqueWithoutSpaceInput
-		| Prisma.CategoryUpdateWithWhereUniqueWithoutSpaceInput[];
-	updateMany?:
-		| Prisma.CategoryUpdateManyWithWhereWithoutSpaceInput
-		| Prisma.CategoryUpdateManyWithWhereWithoutSpaceInput[];
-	deleteMany?:
-		| Prisma.CategoryScalarWhereInput
-		| Prisma.CategoryScalarWhereInput[];
-};
-
-export type CategoryUncheckedUpdateManyWithoutSpaceNestedInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.CategoryCreateWithoutSpaceInput,
-				Prisma.CategoryUncheckedCreateWithoutSpaceInput
-		  >
-		| Prisma.CategoryCreateWithoutSpaceInput[]
-		| Prisma.CategoryUncheckedCreateWithoutSpaceInput[];
-	connectOrCreate?:
-		| Prisma.CategoryCreateOrConnectWithoutSpaceInput
-		| Prisma.CategoryCreateOrConnectWithoutSpaceInput[];
-	upsert?:
-		| Prisma.CategoryUpsertWithWhereUniqueWithoutSpaceInput
-		| Prisma.CategoryUpsertWithWhereUniqueWithoutSpaceInput[];
-	createMany?: Prisma.CategoryCreateManySpaceInputEnvelope;
-	set?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
-	disconnect?:
-		| Prisma.CategoryWhereUniqueInput
-		| Prisma.CategoryWhereUniqueInput[];
-	delete?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
-	connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
-	update?:
-		| Prisma.CategoryUpdateWithWhereUniqueWithoutSpaceInput
-		| Prisma.CategoryUpdateWithWhereUniqueWithoutSpaceInput[];
-	updateMany?:
-		| Prisma.CategoryUpdateManyWithWhereWithoutSpaceInput
-		| Prisma.CategoryUpdateManyWithWhereWithoutSpaceInput[];
-	deleteMany?:
-		| Prisma.CategoryScalarWhereInput
-		| Prisma.CategoryScalarWhereInput[];
-};
-
-export type CategoryCreateNestedOneWithoutSpaceClassificationsInput = {
-	create?: Prisma.XOR<
-		Prisma.CategoryCreateWithoutSpaceClassificationsInput,
-		Prisma.CategoryUncheckedCreateWithoutSpaceClassificationsInput
-	>;
-	connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutSpaceClassificationsInput;
-	connect?: Prisma.CategoryWhereUniqueInput;
-};
-
-export type CategoryUpdateOneRequiredWithoutSpaceClassificationsNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.CategoryCreateWithoutSpaceClassificationsInput,
-		Prisma.CategoryUncheckedCreateWithoutSpaceClassificationsInput
-	>;
-	connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutSpaceClassificationsInput;
-	upsert?: Prisma.CategoryUpsertWithoutSpaceClassificationsInput;
-	connect?: Prisma.CategoryWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.CategoryUpdateToOneWithWhereWithoutSpaceClassificationsInput,
-			Prisma.CategoryUpdateWithoutSpaceClassificationsInput
-		>,
-		Prisma.CategoryUncheckedUpdateWithoutSpaceClassificationsInput
-	>;
-};
-
-export type CategoryCreateNestedManyWithoutCreatedByInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.CategoryCreateWithoutCreatedByInput,
-				Prisma.CategoryUncheckedCreateWithoutCreatedByInput
-		  >
-		| Prisma.CategoryCreateWithoutCreatedByInput[]
-		| Prisma.CategoryUncheckedCreateWithoutCreatedByInput[];
-	connectOrCreate?:
-		| Prisma.CategoryCreateOrConnectWithoutCreatedByInput
-		| Prisma.CategoryCreateOrConnectWithoutCreatedByInput[];
-	createMany?: Prisma.CategoryCreateManyCreatedByInputEnvelope;
-	connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
-};
-
-export type CategoryUncheckedCreateNestedManyWithoutCreatedByInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.CategoryCreateWithoutCreatedByInput,
-				Prisma.CategoryUncheckedCreateWithoutCreatedByInput
-		  >
-		| Prisma.CategoryCreateWithoutCreatedByInput[]
-		| Prisma.CategoryUncheckedCreateWithoutCreatedByInput[];
-	connectOrCreate?:
-		| Prisma.CategoryCreateOrConnectWithoutCreatedByInput
-		| Prisma.CategoryCreateOrConnectWithoutCreatedByInput[];
-	createMany?: Prisma.CategoryCreateManyCreatedByInputEnvelope;
-	connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
-};
-
-export type CategoryUpdateManyWithoutCreatedByNestedInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.CategoryCreateWithoutCreatedByInput,
-				Prisma.CategoryUncheckedCreateWithoutCreatedByInput
-		  >
-		| Prisma.CategoryCreateWithoutCreatedByInput[]
-		| Prisma.CategoryUncheckedCreateWithoutCreatedByInput[];
-	connectOrCreate?:
-		| Prisma.CategoryCreateOrConnectWithoutCreatedByInput
-		| Prisma.CategoryCreateOrConnectWithoutCreatedByInput[];
-	upsert?:
-		| Prisma.CategoryUpsertWithWhereUniqueWithoutCreatedByInput
-		| Prisma.CategoryUpsertWithWhereUniqueWithoutCreatedByInput[];
-	createMany?: Prisma.CategoryCreateManyCreatedByInputEnvelope;
-	set?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
-	disconnect?:
-		| Prisma.CategoryWhereUniqueInput
-		| Prisma.CategoryWhereUniqueInput[];
-	delete?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
-	connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
-	update?:
-		| Prisma.CategoryUpdateWithWhereUniqueWithoutCreatedByInput
-		| Prisma.CategoryUpdateWithWhereUniqueWithoutCreatedByInput[];
-	updateMany?:
-		| Prisma.CategoryUpdateManyWithWhereWithoutCreatedByInput
-		| Prisma.CategoryUpdateManyWithWhereWithoutCreatedByInput[];
-	deleteMany?:
-		| Prisma.CategoryScalarWhereInput
-		| Prisma.CategoryScalarWhereInput[];
-};
-
-export type CategoryUncheckedUpdateManyWithoutCreatedByNestedInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.CategoryCreateWithoutCreatedByInput,
-				Prisma.CategoryUncheckedCreateWithoutCreatedByInput
-		  >
-		| Prisma.CategoryCreateWithoutCreatedByInput[]
-		| Prisma.CategoryUncheckedCreateWithoutCreatedByInput[];
-	connectOrCreate?:
-		| Prisma.CategoryCreateOrConnectWithoutCreatedByInput
-		| Prisma.CategoryCreateOrConnectWithoutCreatedByInput[];
-	upsert?:
-		| Prisma.CategoryUpsertWithWhereUniqueWithoutCreatedByInput
-		| Prisma.CategoryUpsertWithWhereUniqueWithoutCreatedByInput[];
-	createMany?: Prisma.CategoryCreateManyCreatedByInputEnvelope;
-	set?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
-	disconnect?:
-		| Prisma.CategoryWhereUniqueInput
-		| Prisma.CategoryWhereUniqueInput[];
-	delete?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
-	connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
-	update?:
-		| Prisma.CategoryUpdateWithWhereUniqueWithoutCreatedByInput
-		| Prisma.CategoryUpdateWithWhereUniqueWithoutCreatedByInput[];
-	updateMany?:
-		| Prisma.CategoryUpdateManyWithWhereWithoutCreatedByInput
-		| Prisma.CategoryUpdateManyWithWhereWithoutCreatedByInput[];
-	deleteMany?:
-		| Prisma.CategoryScalarWhereInput
-		| Prisma.CategoryScalarWhereInput[];
-};
-
-export type CategoryCreateNestedOneWithoutUserClassificationsInput = {
-	create?: Prisma.XOR<
-		Prisma.CategoryCreateWithoutUserClassificationsInput,
-		Prisma.CategoryUncheckedCreateWithoutUserClassificationsInput
-	>;
-	connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutUserClassificationsInput;
-	connect?: Prisma.CategoryWhereUniqueInput;
-};
-
-export type CategoryUpdateOneRequiredWithoutUserClassificationsNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.CategoryCreateWithoutUserClassificationsInput,
-		Prisma.CategoryUncheckedCreateWithoutUserClassificationsInput
-	>;
-	connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutUserClassificationsInput;
-	upsert?: Prisma.CategoryUpsertWithoutUserClassificationsInput;
-	connect?: Prisma.CategoryWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.CategoryUpdateToOneWithWhereWithoutUserClassificationsInput,
-			Prisma.CategoryUpdateWithoutUserClassificationsInput
-		>,
-		Prisma.CategoryUncheckedUpdateWithoutUserClassificationsInput
-	>;
+export type CategoryScalarRelationFilter = {
+	is?: Prisma.CategoryWhereInput;
+	isNot?: Prisma.CategoryWhereInput;
 };
 
 export type CategoryCreateNestedOneWithoutChildrenInput = {
@@ -929,489 +663,270 @@ export type CategoryUncheckedUpdateManyWithoutParentNestedInput = {
 		| Prisma.CategoryScalarWhereInput[];
 };
 
-export type CategoryCreateWithoutRoleClassificationsInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	name: string;
-	type?: $Enums.CategoryTypes;
-	parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput;
-	children?: Prisma.CategoryCreateNestedManyWithoutParentInput;
-	space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput;
-	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput;
-	spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput;
-	userClassifications?: Prisma.UserClassificationCreateNestedManyWithoutCategoryInput;
-};
-
-export type CategoryUncheckedCreateWithoutRoleClassificationsInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	name: string;
-	type?: $Enums.CategoryTypes;
-	parentId?: string | null;
-	spaceId: string;
-	createdById?: string | null;
-	children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput;
-	spaceClassifications?: Prisma.SpaceClassificationUncheckedCreateNestedManyWithoutCategoryInput;
-	userClassifications?: Prisma.UserClassificationUncheckedCreateNestedManyWithoutCategoryInput;
-};
-
-export type CategoryCreateOrConnectWithoutRoleClassificationsInput = {
-	where: Prisma.CategoryWhereUniqueInput;
-	create: Prisma.XOR<
+export type CategoryCreateNestedOneWithoutRoleClassificationsInput = {
+	create?: Prisma.XOR<
 		Prisma.CategoryCreateWithoutRoleClassificationsInput,
 		Prisma.CategoryUncheckedCreateWithoutRoleClassificationsInput
 	>;
+	connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutRoleClassificationsInput;
+	connect?: Prisma.CategoryWhereUniqueInput;
 };
 
-export type CategoryUpsertWithoutRoleClassificationsInput = {
-	update: Prisma.XOR<
-		Prisma.CategoryUpdateWithoutRoleClassificationsInput,
-		Prisma.CategoryUncheckedUpdateWithoutRoleClassificationsInput
-	>;
-	create: Prisma.XOR<
+export type CategoryUpdateOneRequiredWithoutRoleClassificationsNestedInput = {
+	create?: Prisma.XOR<
 		Prisma.CategoryCreateWithoutRoleClassificationsInput,
 		Prisma.CategoryUncheckedCreateWithoutRoleClassificationsInput
 	>;
-	where?: Prisma.CategoryWhereInput;
-};
-
-export type CategoryUpdateToOneWithWhereWithoutRoleClassificationsInput = {
-	where?: Prisma.CategoryWhereInput;
-	data: Prisma.XOR<
-		Prisma.CategoryUpdateWithoutRoleClassificationsInput,
+	connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutRoleClassificationsInput;
+	upsert?: Prisma.CategoryUpsertWithoutRoleClassificationsInput;
+	connect?: Prisma.CategoryWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.CategoryUpdateToOneWithWhereWithoutRoleClassificationsInput,
+			Prisma.CategoryUpdateWithoutRoleClassificationsInput
+		>,
 		Prisma.CategoryUncheckedUpdateWithoutRoleClassificationsInput
 	>;
 };
 
-export type CategoryUpdateWithoutRoleClassificationsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	type?:
-		| Prisma.EnumCategoryTypesFieldUpdateOperationsInput
-		| $Enums.CategoryTypes;
-	parent?: Prisma.CategoryUpdateOneWithoutChildrenNestedInput;
-	children?: Prisma.CategoryUpdateManyWithoutParentNestedInput;
-	space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput;
-	createdBy?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput;
-	spaceClassifications?: Prisma.SpaceClassificationUpdateManyWithoutCategoryNestedInput;
-	userClassifications?: Prisma.UserClassificationUpdateManyWithoutCategoryNestedInput;
-};
-
-export type CategoryUncheckedUpdateWithoutRoleClassificationsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	type?:
-		| Prisma.EnumCategoryTypesFieldUpdateOperationsInput
-		| $Enums.CategoryTypes;
-	parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput;
-	spaceClassifications?: Prisma.SpaceClassificationUncheckedUpdateManyWithoutCategoryNestedInput;
-	userClassifications?: Prisma.UserClassificationUncheckedUpdateManyWithoutCategoryNestedInput;
-};
-
-export type CategoryCreateWithoutSpaceInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	name: string;
-	type?: $Enums.CategoryTypes;
-	parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput;
-	children?: Prisma.CategoryCreateNestedManyWithoutParentInput;
-	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput;
-	roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput;
-	spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput;
-	userClassifications?: Prisma.UserClassificationCreateNestedManyWithoutCategoryInput;
-};
-
-export type CategoryUncheckedCreateWithoutSpaceInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	name: string;
-	type?: $Enums.CategoryTypes;
-	parentId?: string | null;
-	createdById?: string | null;
-	children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput;
-	roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput;
-	spaceClassifications?: Prisma.SpaceClassificationUncheckedCreateNestedManyWithoutCategoryInput;
-	userClassifications?: Prisma.UserClassificationUncheckedCreateNestedManyWithoutCategoryInput;
-};
-
-export type CategoryCreateOrConnectWithoutSpaceInput = {
-	where: Prisma.CategoryWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.CategoryCreateWithoutSpaceInput,
-		Prisma.CategoryUncheckedCreateWithoutSpaceInput
-	>;
-};
-
-export type CategoryCreateManySpaceInputEnvelope = {
-	data:
-		| Prisma.CategoryCreateManySpaceInput
-		| Prisma.CategoryCreateManySpaceInput[];
-	skipDuplicates?: boolean;
-};
-
-export type CategoryUpsertWithWhereUniqueWithoutSpaceInput = {
-	where: Prisma.CategoryWhereUniqueInput;
-	update: Prisma.XOR<
-		Prisma.CategoryUpdateWithoutSpaceInput,
-		Prisma.CategoryUncheckedUpdateWithoutSpaceInput
-	>;
-	create: Prisma.XOR<
-		Prisma.CategoryCreateWithoutSpaceInput,
-		Prisma.CategoryUncheckedCreateWithoutSpaceInput
-	>;
-};
-
-export type CategoryUpdateWithWhereUniqueWithoutSpaceInput = {
-	where: Prisma.CategoryWhereUniqueInput;
-	data: Prisma.XOR<
-		Prisma.CategoryUpdateWithoutSpaceInput,
-		Prisma.CategoryUncheckedUpdateWithoutSpaceInput
-	>;
-};
-
-export type CategoryUpdateManyWithWhereWithoutSpaceInput = {
-	where: Prisma.CategoryScalarWhereInput;
-	data: Prisma.XOR<
-		Prisma.CategoryUpdateManyMutationInput,
-		Prisma.CategoryUncheckedUpdateManyWithoutSpaceInput
-	>;
-};
-
-export type CategoryScalarWhereInput = {
-	AND?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[];
-	OR?: Prisma.CategoryScalarWhereInput[];
-	NOT?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[];
-	id?: Prisma.StringFilter<"Category"> | string;
-	createdAt?: Prisma.DateTimeFilter<"Category"> | Date | string;
-	updatedAt?: Prisma.DateTimeNullableFilter<"Category"> | Date | string | null;
-	removedAt?: Prisma.DateTimeNullableFilter<"Category"> | Date | string | null;
-	name?: Prisma.StringFilter<"Category"> | string;
-	type?: Prisma.EnumCategoryTypesFilter<"Category"> | $Enums.CategoryTypes;
-	parentId?: Prisma.StringNullableFilter<"Category"> | string | null;
-	spaceId?: Prisma.StringFilter<"Category"> | string;
-	createdById?: Prisma.StringNullableFilter<"Category"> | string | null;
-};
-
-export type CategoryCreateWithoutSpaceClassificationsInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	name: string;
-	type?: $Enums.CategoryTypes;
-	parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput;
-	children?: Prisma.CategoryCreateNestedManyWithoutParentInput;
-	space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput;
-	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput;
-	roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput;
-	userClassifications?: Prisma.UserClassificationCreateNestedManyWithoutCategoryInput;
-};
-
-export type CategoryUncheckedCreateWithoutSpaceClassificationsInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	name: string;
-	type?: $Enums.CategoryTypes;
-	parentId?: string | null;
-	spaceId: string;
-	createdById?: string | null;
-	children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput;
-	roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput;
-	userClassifications?: Prisma.UserClassificationUncheckedCreateNestedManyWithoutCategoryInput;
-};
-
-export type CategoryCreateOrConnectWithoutSpaceClassificationsInput = {
-	where: Prisma.CategoryWhereUniqueInput;
-	create: Prisma.XOR<
+export type CategoryCreateNestedOneWithoutSpaceClassificationsInput = {
+	create?: Prisma.XOR<
 		Prisma.CategoryCreateWithoutSpaceClassificationsInput,
 		Prisma.CategoryUncheckedCreateWithoutSpaceClassificationsInput
 	>;
+	connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutSpaceClassificationsInput;
+	connect?: Prisma.CategoryWhereUniqueInput;
 };
 
-export type CategoryUpsertWithoutSpaceClassificationsInput = {
-	update: Prisma.XOR<
-		Prisma.CategoryUpdateWithoutSpaceClassificationsInput,
-		Prisma.CategoryUncheckedUpdateWithoutSpaceClassificationsInput
-	>;
-	create: Prisma.XOR<
+export type CategoryUpdateOneRequiredWithoutSpaceClassificationsNestedInput = {
+	create?: Prisma.XOR<
 		Prisma.CategoryCreateWithoutSpaceClassificationsInput,
 		Prisma.CategoryUncheckedCreateWithoutSpaceClassificationsInput
 	>;
-	where?: Prisma.CategoryWhereInput;
-};
-
-export type CategoryUpdateToOneWithWhereWithoutSpaceClassificationsInput = {
-	where?: Prisma.CategoryWhereInput;
-	data: Prisma.XOR<
-		Prisma.CategoryUpdateWithoutSpaceClassificationsInput,
+	connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutSpaceClassificationsInput;
+	upsert?: Prisma.CategoryUpsertWithoutSpaceClassificationsInput;
+	connect?: Prisma.CategoryWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.CategoryUpdateToOneWithWhereWithoutSpaceClassificationsInput,
+			Prisma.CategoryUpdateWithoutSpaceClassificationsInput
+		>,
 		Prisma.CategoryUncheckedUpdateWithoutSpaceClassificationsInput
 	>;
 };
 
-export type CategoryUpdateWithoutSpaceClassificationsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	type?:
-		| Prisma.EnumCategoryTypesFieldUpdateOperationsInput
-		| $Enums.CategoryTypes;
-	parent?: Prisma.CategoryUpdateOneWithoutChildrenNestedInput;
-	children?: Prisma.CategoryUpdateManyWithoutParentNestedInput;
-	space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput;
-	createdBy?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput;
-	roleClassifications?: Prisma.RoleClassificationUpdateManyWithoutCategoryNestedInput;
-	userClassifications?: Prisma.UserClassificationUpdateManyWithoutCategoryNestedInput;
+export type CategoryCreateNestedManyWithoutSpaceInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.CategoryCreateWithoutSpaceInput,
+				Prisma.CategoryUncheckedCreateWithoutSpaceInput
+		  >
+		| Prisma.CategoryCreateWithoutSpaceInput[]
+		| Prisma.CategoryUncheckedCreateWithoutSpaceInput[];
+	connectOrCreate?:
+		| Prisma.CategoryCreateOrConnectWithoutSpaceInput
+		| Prisma.CategoryCreateOrConnectWithoutSpaceInput[];
+	createMany?: Prisma.CategoryCreateManySpaceInputEnvelope;
+	connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
 };
 
-export type CategoryUncheckedUpdateWithoutSpaceClassificationsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	type?:
-		| Prisma.EnumCategoryTypesFieldUpdateOperationsInput
-		| $Enums.CategoryTypes;
-	parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput;
-	roleClassifications?: Prisma.RoleClassificationUncheckedUpdateManyWithoutCategoryNestedInput;
-	userClassifications?: Prisma.UserClassificationUncheckedUpdateManyWithoutCategoryNestedInput;
+export type CategoryUncheckedCreateNestedManyWithoutSpaceInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.CategoryCreateWithoutSpaceInput,
+				Prisma.CategoryUncheckedCreateWithoutSpaceInput
+		  >
+		| Prisma.CategoryCreateWithoutSpaceInput[]
+		| Prisma.CategoryUncheckedCreateWithoutSpaceInput[];
+	connectOrCreate?:
+		| Prisma.CategoryCreateOrConnectWithoutSpaceInput
+		| Prisma.CategoryCreateOrConnectWithoutSpaceInput[];
+	createMany?: Prisma.CategoryCreateManySpaceInputEnvelope;
+	connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
 };
 
-export type CategoryCreateWithoutCreatedByInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	name: string;
-	type?: $Enums.CategoryTypes;
-	parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput;
-	children?: Prisma.CategoryCreateNestedManyWithoutParentInput;
-	space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput;
-	roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput;
-	spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput;
-	userClassifications?: Prisma.UserClassificationCreateNestedManyWithoutCategoryInput;
+export type CategoryUpdateManyWithoutSpaceNestedInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.CategoryCreateWithoutSpaceInput,
+				Prisma.CategoryUncheckedCreateWithoutSpaceInput
+		  >
+		| Prisma.CategoryCreateWithoutSpaceInput[]
+		| Prisma.CategoryUncheckedCreateWithoutSpaceInput[];
+	connectOrCreate?:
+		| Prisma.CategoryCreateOrConnectWithoutSpaceInput
+		| Prisma.CategoryCreateOrConnectWithoutSpaceInput[];
+	upsert?:
+		| Prisma.CategoryUpsertWithWhereUniqueWithoutSpaceInput
+		| Prisma.CategoryUpsertWithWhereUniqueWithoutSpaceInput[];
+	createMany?: Prisma.CategoryCreateManySpaceInputEnvelope;
+	set?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
+	disconnect?:
+		| Prisma.CategoryWhereUniqueInput
+		| Prisma.CategoryWhereUniqueInput[];
+	delete?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
+	connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
+	update?:
+		| Prisma.CategoryUpdateWithWhereUniqueWithoutSpaceInput
+		| Prisma.CategoryUpdateWithWhereUniqueWithoutSpaceInput[];
+	updateMany?:
+		| Prisma.CategoryUpdateManyWithWhereWithoutSpaceInput
+		| Prisma.CategoryUpdateManyWithWhereWithoutSpaceInput[];
+	deleteMany?:
+		| Prisma.CategoryScalarWhereInput
+		| Prisma.CategoryScalarWhereInput[];
 };
 
-export type CategoryUncheckedCreateWithoutCreatedByInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	name: string;
-	type?: $Enums.CategoryTypes;
-	parentId?: string | null;
-	spaceId: string;
-	children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput;
-	roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput;
-	spaceClassifications?: Prisma.SpaceClassificationUncheckedCreateNestedManyWithoutCategoryInput;
-	userClassifications?: Prisma.UserClassificationUncheckedCreateNestedManyWithoutCategoryInput;
+export type CategoryUncheckedUpdateManyWithoutSpaceNestedInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.CategoryCreateWithoutSpaceInput,
+				Prisma.CategoryUncheckedCreateWithoutSpaceInput
+		  >
+		| Prisma.CategoryCreateWithoutSpaceInput[]
+		| Prisma.CategoryUncheckedCreateWithoutSpaceInput[];
+	connectOrCreate?:
+		| Prisma.CategoryCreateOrConnectWithoutSpaceInput
+		| Prisma.CategoryCreateOrConnectWithoutSpaceInput[];
+	upsert?:
+		| Prisma.CategoryUpsertWithWhereUniqueWithoutSpaceInput
+		| Prisma.CategoryUpsertWithWhereUniqueWithoutSpaceInput[];
+	createMany?: Prisma.CategoryCreateManySpaceInputEnvelope;
+	set?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
+	disconnect?:
+		| Prisma.CategoryWhereUniqueInput
+		| Prisma.CategoryWhereUniqueInput[];
+	delete?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
+	connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
+	update?:
+		| Prisma.CategoryUpdateWithWhereUniqueWithoutSpaceInput
+		| Prisma.CategoryUpdateWithWhereUniqueWithoutSpaceInput[];
+	updateMany?:
+		| Prisma.CategoryUpdateManyWithWhereWithoutSpaceInput
+		| Prisma.CategoryUpdateManyWithWhereWithoutSpaceInput[];
+	deleteMany?:
+		| Prisma.CategoryScalarWhereInput
+		| Prisma.CategoryScalarWhereInput[];
 };
 
-export type CategoryCreateOrConnectWithoutCreatedByInput = {
-	where: Prisma.CategoryWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.CategoryCreateWithoutCreatedByInput,
-		Prisma.CategoryUncheckedCreateWithoutCreatedByInput
-	>;
-};
-
-export type CategoryCreateManyCreatedByInputEnvelope = {
-	data:
-		| Prisma.CategoryCreateManyCreatedByInput
-		| Prisma.CategoryCreateManyCreatedByInput[];
-	skipDuplicates?: boolean;
-};
-
-export type CategoryUpsertWithWhereUniqueWithoutCreatedByInput = {
-	where: Prisma.CategoryWhereUniqueInput;
-	update: Prisma.XOR<
-		Prisma.CategoryUpdateWithoutCreatedByInput,
-		Prisma.CategoryUncheckedUpdateWithoutCreatedByInput
-	>;
-	create: Prisma.XOR<
-		Prisma.CategoryCreateWithoutCreatedByInput,
-		Prisma.CategoryUncheckedCreateWithoutCreatedByInput
-	>;
-};
-
-export type CategoryUpdateWithWhereUniqueWithoutCreatedByInput = {
-	where: Prisma.CategoryWhereUniqueInput;
-	data: Prisma.XOR<
-		Prisma.CategoryUpdateWithoutCreatedByInput,
-		Prisma.CategoryUncheckedUpdateWithoutCreatedByInput
-	>;
-};
-
-export type CategoryUpdateManyWithWhereWithoutCreatedByInput = {
-	where: Prisma.CategoryScalarWhereInput;
-	data: Prisma.XOR<
-		Prisma.CategoryUpdateManyMutationInput,
-		Prisma.CategoryUncheckedUpdateManyWithoutCreatedByInput
-	>;
-};
-
-export type CategoryCreateWithoutUserClassificationsInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	name: string;
-	type?: $Enums.CategoryTypes;
-	parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput;
-	children?: Prisma.CategoryCreateNestedManyWithoutParentInput;
-	space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput;
-	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput;
-	roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput;
-	spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput;
-};
-
-export type CategoryUncheckedCreateWithoutUserClassificationsInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	name: string;
-	type?: $Enums.CategoryTypes;
-	parentId?: string | null;
-	spaceId: string;
-	createdById?: string | null;
-	children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput;
-	roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput;
-	spaceClassifications?: Prisma.SpaceClassificationUncheckedCreateNestedManyWithoutCategoryInput;
-};
-
-export type CategoryCreateOrConnectWithoutUserClassificationsInput = {
-	where: Prisma.CategoryWhereUniqueInput;
-	create: Prisma.XOR<
+export type CategoryCreateNestedOneWithoutUserClassificationsInput = {
+	create?: Prisma.XOR<
 		Prisma.CategoryCreateWithoutUserClassificationsInput,
 		Prisma.CategoryUncheckedCreateWithoutUserClassificationsInput
 	>;
+	connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutUserClassificationsInput;
+	connect?: Prisma.CategoryWhereUniqueInput;
 };
 
-export type CategoryUpsertWithoutUserClassificationsInput = {
-	update: Prisma.XOR<
-		Prisma.CategoryUpdateWithoutUserClassificationsInput,
-		Prisma.CategoryUncheckedUpdateWithoutUserClassificationsInput
-	>;
-	create: Prisma.XOR<
+export type CategoryUpdateOneRequiredWithoutUserClassificationsNestedInput = {
+	create?: Prisma.XOR<
 		Prisma.CategoryCreateWithoutUserClassificationsInput,
 		Prisma.CategoryUncheckedCreateWithoutUserClassificationsInput
 	>;
-	where?: Prisma.CategoryWhereInput;
-};
-
-export type CategoryUpdateToOneWithWhereWithoutUserClassificationsInput = {
-	where?: Prisma.CategoryWhereInput;
-	data: Prisma.XOR<
-		Prisma.CategoryUpdateWithoutUserClassificationsInput,
+	connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutUserClassificationsInput;
+	upsert?: Prisma.CategoryUpsertWithoutUserClassificationsInput;
+	connect?: Prisma.CategoryWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.CategoryUpdateToOneWithWhereWithoutUserClassificationsInput,
+			Prisma.CategoryUpdateWithoutUserClassificationsInput
+		>,
 		Prisma.CategoryUncheckedUpdateWithoutUserClassificationsInput
 	>;
 };
 
-export type CategoryUpdateWithoutUserClassificationsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	type?:
-		| Prisma.EnumCategoryTypesFieldUpdateOperationsInput
-		| $Enums.CategoryTypes;
-	parent?: Prisma.CategoryUpdateOneWithoutChildrenNestedInput;
-	children?: Prisma.CategoryUpdateManyWithoutParentNestedInput;
-	space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput;
-	createdBy?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput;
-	roleClassifications?: Prisma.RoleClassificationUpdateManyWithoutCategoryNestedInput;
-	spaceClassifications?: Prisma.SpaceClassificationUpdateManyWithoutCategoryNestedInput;
+export type CategoryCreateNestedManyWithoutCreatedByInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.CategoryCreateWithoutCreatedByInput,
+				Prisma.CategoryUncheckedCreateWithoutCreatedByInput
+		  >
+		| Prisma.CategoryCreateWithoutCreatedByInput[]
+		| Prisma.CategoryUncheckedCreateWithoutCreatedByInput[];
+	connectOrCreate?:
+		| Prisma.CategoryCreateOrConnectWithoutCreatedByInput
+		| Prisma.CategoryCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.CategoryCreateManyCreatedByInputEnvelope;
+	connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
 };
 
-export type CategoryUncheckedUpdateWithoutUserClassificationsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	type?:
-		| Prisma.EnumCategoryTypesFieldUpdateOperationsInput
-		| $Enums.CategoryTypes;
-	parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput;
-	roleClassifications?: Prisma.RoleClassificationUncheckedUpdateManyWithoutCategoryNestedInput;
-	spaceClassifications?: Prisma.SpaceClassificationUncheckedUpdateManyWithoutCategoryNestedInput;
+export type CategoryUncheckedCreateNestedManyWithoutCreatedByInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.CategoryCreateWithoutCreatedByInput,
+				Prisma.CategoryUncheckedCreateWithoutCreatedByInput
+		  >
+		| Prisma.CategoryCreateWithoutCreatedByInput[]
+		| Prisma.CategoryUncheckedCreateWithoutCreatedByInput[];
+	connectOrCreate?:
+		| Prisma.CategoryCreateOrConnectWithoutCreatedByInput
+		| Prisma.CategoryCreateOrConnectWithoutCreatedByInput[];
+	createMany?: Prisma.CategoryCreateManyCreatedByInputEnvelope;
+	connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
+};
+
+export type CategoryUpdateManyWithoutCreatedByNestedInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.CategoryCreateWithoutCreatedByInput,
+				Prisma.CategoryUncheckedCreateWithoutCreatedByInput
+		  >
+		| Prisma.CategoryCreateWithoutCreatedByInput[]
+		| Prisma.CategoryUncheckedCreateWithoutCreatedByInput[];
+	connectOrCreate?:
+		| Prisma.CategoryCreateOrConnectWithoutCreatedByInput
+		| Prisma.CategoryCreateOrConnectWithoutCreatedByInput[];
+	upsert?:
+		| Prisma.CategoryUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.CategoryUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.CategoryCreateManyCreatedByInputEnvelope;
+	set?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
+	disconnect?:
+		| Prisma.CategoryWhereUniqueInput
+		| Prisma.CategoryWhereUniqueInput[];
+	delete?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
+	connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
+	update?:
+		| Prisma.CategoryUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.CategoryUpdateWithWhereUniqueWithoutCreatedByInput[];
+	updateMany?:
+		| Prisma.CategoryUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.CategoryUpdateManyWithWhereWithoutCreatedByInput[];
+	deleteMany?:
+		| Prisma.CategoryScalarWhereInput
+		| Prisma.CategoryScalarWhereInput[];
+};
+
+export type CategoryUncheckedUpdateManyWithoutCreatedByNestedInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.CategoryCreateWithoutCreatedByInput,
+				Prisma.CategoryUncheckedCreateWithoutCreatedByInput
+		  >
+		| Prisma.CategoryCreateWithoutCreatedByInput[]
+		| Prisma.CategoryUncheckedCreateWithoutCreatedByInput[];
+	connectOrCreate?:
+		| Prisma.CategoryCreateOrConnectWithoutCreatedByInput
+		| Prisma.CategoryCreateOrConnectWithoutCreatedByInput[];
+	upsert?:
+		| Prisma.CategoryUpsertWithWhereUniqueWithoutCreatedByInput
+		| Prisma.CategoryUpsertWithWhereUniqueWithoutCreatedByInput[];
+	createMany?: Prisma.CategoryCreateManyCreatedByInputEnvelope;
+	set?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
+	disconnect?:
+		| Prisma.CategoryWhereUniqueInput
+		| Prisma.CategoryWhereUniqueInput[];
+	delete?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
+	connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[];
+	update?:
+		| Prisma.CategoryUpdateWithWhereUniqueWithoutCreatedByInput
+		| Prisma.CategoryUpdateWithWhereUniqueWithoutCreatedByInput[];
+	updateMany?:
+		| Prisma.CategoryUpdateManyWithWhereWithoutCreatedByInput
+		| Prisma.CategoryUpdateManyWithWhereWithoutCreatedByInput[];
+	deleteMany?:
+		| Prisma.CategoryScalarWhereInput
+		| Prisma.CategoryScalarWhereInput[];
 };
 
 export type CategoryCreateWithoutChildrenInput = {
@@ -1595,6 +1110,573 @@ export type CategoryUpdateManyWithWhereWithoutParentInput = {
 	>;
 };
 
+export type CategoryScalarWhereInput = {
+	AND?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[];
+	OR?: Prisma.CategoryScalarWhereInput[];
+	NOT?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[];
+	id?: Prisma.StringFilter<"Category"> | string;
+	createdAt?: Prisma.DateTimeFilter<"Category"> | Date | string;
+	updatedAt?: Prisma.DateTimeNullableFilter<"Category"> | Date | string | null;
+	removedAt?: Prisma.DateTimeNullableFilter<"Category"> | Date | string | null;
+	name?: Prisma.StringFilter<"Category"> | string;
+	type?: Prisma.EnumCategoryTypesFilter<"Category"> | $Enums.CategoryTypes;
+	parentId?: Prisma.StringNullableFilter<"Category"> | string | null;
+	spaceId?: Prisma.StringFilter<"Category"> | string;
+	createdById?: Prisma.StringNullableFilter<"Category"> | string | null;
+};
+
+export type CategoryCreateWithoutRoleClassificationsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	name: string;
+	type?: $Enums.CategoryTypes;
+	parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput;
+	children?: Prisma.CategoryCreateNestedManyWithoutParentInput;
+	space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput;
+	spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput;
+	userClassifications?: Prisma.UserClassificationCreateNestedManyWithoutCategoryInput;
+};
+
+export type CategoryUncheckedCreateWithoutRoleClassificationsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	name: string;
+	type?: $Enums.CategoryTypes;
+	parentId?: string | null;
+	spaceId: string;
+	createdById?: string | null;
+	children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput;
+	spaceClassifications?: Prisma.SpaceClassificationUncheckedCreateNestedManyWithoutCategoryInput;
+	userClassifications?: Prisma.UserClassificationUncheckedCreateNestedManyWithoutCategoryInput;
+};
+
+export type CategoryCreateOrConnectWithoutRoleClassificationsInput = {
+	where: Prisma.CategoryWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.CategoryCreateWithoutRoleClassificationsInput,
+		Prisma.CategoryUncheckedCreateWithoutRoleClassificationsInput
+	>;
+};
+
+export type CategoryUpsertWithoutRoleClassificationsInput = {
+	update: Prisma.XOR<
+		Prisma.CategoryUpdateWithoutRoleClassificationsInput,
+		Prisma.CategoryUncheckedUpdateWithoutRoleClassificationsInput
+	>;
+	create: Prisma.XOR<
+		Prisma.CategoryCreateWithoutRoleClassificationsInput,
+		Prisma.CategoryUncheckedCreateWithoutRoleClassificationsInput
+	>;
+	where?: Prisma.CategoryWhereInput;
+};
+
+export type CategoryUpdateToOneWithWhereWithoutRoleClassificationsInput = {
+	where?: Prisma.CategoryWhereInput;
+	data: Prisma.XOR<
+		Prisma.CategoryUpdateWithoutRoleClassificationsInput,
+		Prisma.CategoryUncheckedUpdateWithoutRoleClassificationsInput
+	>;
+};
+
+export type CategoryUpdateWithoutRoleClassificationsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	type?:
+		| Prisma.EnumCategoryTypesFieldUpdateOperationsInput
+		| $Enums.CategoryTypes;
+	parent?: Prisma.CategoryUpdateOneWithoutChildrenNestedInput;
+	children?: Prisma.CategoryUpdateManyWithoutParentNestedInput;
+	space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput;
+	spaceClassifications?: Prisma.SpaceClassificationUpdateManyWithoutCategoryNestedInput;
+	userClassifications?: Prisma.UserClassificationUpdateManyWithoutCategoryNestedInput;
+};
+
+export type CategoryUncheckedUpdateWithoutRoleClassificationsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	type?:
+		| Prisma.EnumCategoryTypesFieldUpdateOperationsInput
+		| $Enums.CategoryTypes;
+	parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput;
+	spaceClassifications?: Prisma.SpaceClassificationUncheckedUpdateManyWithoutCategoryNestedInput;
+	userClassifications?: Prisma.UserClassificationUncheckedUpdateManyWithoutCategoryNestedInput;
+};
+
+export type CategoryCreateWithoutSpaceClassificationsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	name: string;
+	type?: $Enums.CategoryTypes;
+	parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput;
+	children?: Prisma.CategoryCreateNestedManyWithoutParentInput;
+	space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput;
+	roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput;
+	userClassifications?: Prisma.UserClassificationCreateNestedManyWithoutCategoryInput;
+};
+
+export type CategoryUncheckedCreateWithoutSpaceClassificationsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	name: string;
+	type?: $Enums.CategoryTypes;
+	parentId?: string | null;
+	spaceId: string;
+	createdById?: string | null;
+	children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput;
+	roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput;
+	userClassifications?: Prisma.UserClassificationUncheckedCreateNestedManyWithoutCategoryInput;
+};
+
+export type CategoryCreateOrConnectWithoutSpaceClassificationsInput = {
+	where: Prisma.CategoryWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.CategoryCreateWithoutSpaceClassificationsInput,
+		Prisma.CategoryUncheckedCreateWithoutSpaceClassificationsInput
+	>;
+};
+
+export type CategoryUpsertWithoutSpaceClassificationsInput = {
+	update: Prisma.XOR<
+		Prisma.CategoryUpdateWithoutSpaceClassificationsInput,
+		Prisma.CategoryUncheckedUpdateWithoutSpaceClassificationsInput
+	>;
+	create: Prisma.XOR<
+		Prisma.CategoryCreateWithoutSpaceClassificationsInput,
+		Prisma.CategoryUncheckedCreateWithoutSpaceClassificationsInput
+	>;
+	where?: Prisma.CategoryWhereInput;
+};
+
+export type CategoryUpdateToOneWithWhereWithoutSpaceClassificationsInput = {
+	where?: Prisma.CategoryWhereInput;
+	data: Prisma.XOR<
+		Prisma.CategoryUpdateWithoutSpaceClassificationsInput,
+		Prisma.CategoryUncheckedUpdateWithoutSpaceClassificationsInput
+	>;
+};
+
+export type CategoryUpdateWithoutSpaceClassificationsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	type?:
+		| Prisma.EnumCategoryTypesFieldUpdateOperationsInput
+		| $Enums.CategoryTypes;
+	parent?: Prisma.CategoryUpdateOneWithoutChildrenNestedInput;
+	children?: Prisma.CategoryUpdateManyWithoutParentNestedInput;
+	space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput;
+	roleClassifications?: Prisma.RoleClassificationUpdateManyWithoutCategoryNestedInput;
+	userClassifications?: Prisma.UserClassificationUpdateManyWithoutCategoryNestedInput;
+};
+
+export type CategoryUncheckedUpdateWithoutSpaceClassificationsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	type?:
+		| Prisma.EnumCategoryTypesFieldUpdateOperationsInput
+		| $Enums.CategoryTypes;
+	parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput;
+	roleClassifications?: Prisma.RoleClassificationUncheckedUpdateManyWithoutCategoryNestedInput;
+	userClassifications?: Prisma.UserClassificationUncheckedUpdateManyWithoutCategoryNestedInput;
+};
+
+export type CategoryCreateWithoutSpaceInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	name: string;
+	type?: $Enums.CategoryTypes;
+	parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput;
+	children?: Prisma.CategoryCreateNestedManyWithoutParentInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput;
+	roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput;
+	spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput;
+	userClassifications?: Prisma.UserClassificationCreateNestedManyWithoutCategoryInput;
+};
+
+export type CategoryUncheckedCreateWithoutSpaceInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	name: string;
+	type?: $Enums.CategoryTypes;
+	parentId?: string | null;
+	createdById?: string | null;
+	children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput;
+	roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput;
+	spaceClassifications?: Prisma.SpaceClassificationUncheckedCreateNestedManyWithoutCategoryInput;
+	userClassifications?: Prisma.UserClassificationUncheckedCreateNestedManyWithoutCategoryInput;
+};
+
+export type CategoryCreateOrConnectWithoutSpaceInput = {
+	where: Prisma.CategoryWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.CategoryCreateWithoutSpaceInput,
+		Prisma.CategoryUncheckedCreateWithoutSpaceInput
+	>;
+};
+
+export type CategoryCreateManySpaceInputEnvelope = {
+	data:
+		| Prisma.CategoryCreateManySpaceInput
+		| Prisma.CategoryCreateManySpaceInput[];
+	skipDuplicates?: boolean;
+};
+
+export type CategoryUpsertWithWhereUniqueWithoutSpaceInput = {
+	where: Prisma.CategoryWhereUniqueInput;
+	update: Prisma.XOR<
+		Prisma.CategoryUpdateWithoutSpaceInput,
+		Prisma.CategoryUncheckedUpdateWithoutSpaceInput
+	>;
+	create: Prisma.XOR<
+		Prisma.CategoryCreateWithoutSpaceInput,
+		Prisma.CategoryUncheckedCreateWithoutSpaceInput
+	>;
+};
+
+export type CategoryUpdateWithWhereUniqueWithoutSpaceInput = {
+	where: Prisma.CategoryWhereUniqueInput;
+	data: Prisma.XOR<
+		Prisma.CategoryUpdateWithoutSpaceInput,
+		Prisma.CategoryUncheckedUpdateWithoutSpaceInput
+	>;
+};
+
+export type CategoryUpdateManyWithWhereWithoutSpaceInput = {
+	where: Prisma.CategoryScalarWhereInput;
+	data: Prisma.XOR<
+		Prisma.CategoryUpdateManyMutationInput,
+		Prisma.CategoryUncheckedUpdateManyWithoutSpaceInput
+	>;
+};
+
+export type CategoryCreateWithoutUserClassificationsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	name: string;
+	type?: $Enums.CategoryTypes;
+	parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput;
+	children?: Prisma.CategoryCreateNestedManyWithoutParentInput;
+	space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput;
+	createdBy?: Prisma.UserCreateNestedOneWithoutCreatedCategoriesInput;
+	roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput;
+	spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput;
+};
+
+export type CategoryUncheckedCreateWithoutUserClassificationsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	name: string;
+	type?: $Enums.CategoryTypes;
+	parentId?: string | null;
+	spaceId: string;
+	createdById?: string | null;
+	children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput;
+	roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput;
+	spaceClassifications?: Prisma.SpaceClassificationUncheckedCreateNestedManyWithoutCategoryInput;
+};
+
+export type CategoryCreateOrConnectWithoutUserClassificationsInput = {
+	where: Prisma.CategoryWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.CategoryCreateWithoutUserClassificationsInput,
+		Prisma.CategoryUncheckedCreateWithoutUserClassificationsInput
+	>;
+};
+
+export type CategoryUpsertWithoutUserClassificationsInput = {
+	update: Prisma.XOR<
+		Prisma.CategoryUpdateWithoutUserClassificationsInput,
+		Prisma.CategoryUncheckedUpdateWithoutUserClassificationsInput
+	>;
+	create: Prisma.XOR<
+		Prisma.CategoryCreateWithoutUserClassificationsInput,
+		Prisma.CategoryUncheckedCreateWithoutUserClassificationsInput
+	>;
+	where?: Prisma.CategoryWhereInput;
+};
+
+export type CategoryUpdateToOneWithWhereWithoutUserClassificationsInput = {
+	where?: Prisma.CategoryWhereInput;
+	data: Prisma.XOR<
+		Prisma.CategoryUpdateWithoutUserClassificationsInput,
+		Prisma.CategoryUncheckedUpdateWithoutUserClassificationsInput
+	>;
+};
+
+export type CategoryUpdateWithoutUserClassificationsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	type?:
+		| Prisma.EnumCategoryTypesFieldUpdateOperationsInput
+		| $Enums.CategoryTypes;
+	parent?: Prisma.CategoryUpdateOneWithoutChildrenNestedInput;
+	children?: Prisma.CategoryUpdateManyWithoutParentNestedInput;
+	space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput;
+	roleClassifications?: Prisma.RoleClassificationUpdateManyWithoutCategoryNestedInput;
+	spaceClassifications?: Prisma.SpaceClassificationUpdateManyWithoutCategoryNestedInput;
+};
+
+export type CategoryUncheckedUpdateWithoutUserClassificationsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	type?:
+		| Prisma.EnumCategoryTypesFieldUpdateOperationsInput
+		| $Enums.CategoryTypes;
+	parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput;
+	roleClassifications?: Prisma.RoleClassificationUncheckedUpdateManyWithoutCategoryNestedInput;
+	spaceClassifications?: Prisma.SpaceClassificationUncheckedUpdateManyWithoutCategoryNestedInput;
+};
+
+export type CategoryCreateWithoutCreatedByInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	name: string;
+	type?: $Enums.CategoryTypes;
+	parent?: Prisma.CategoryCreateNestedOneWithoutChildrenInput;
+	children?: Prisma.CategoryCreateNestedManyWithoutParentInput;
+	space: Prisma.SpaceCreateNestedOneWithoutCategoriesInput;
+	roleClassifications?: Prisma.RoleClassificationCreateNestedManyWithoutCategoryInput;
+	spaceClassifications?: Prisma.SpaceClassificationCreateNestedManyWithoutCategoryInput;
+	userClassifications?: Prisma.UserClassificationCreateNestedManyWithoutCategoryInput;
+};
+
+export type CategoryUncheckedCreateWithoutCreatedByInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	name: string;
+	type?: $Enums.CategoryTypes;
+	parentId?: string | null;
+	spaceId: string;
+	children?: Prisma.CategoryUncheckedCreateNestedManyWithoutParentInput;
+	roleClassifications?: Prisma.RoleClassificationUncheckedCreateNestedManyWithoutCategoryInput;
+	spaceClassifications?: Prisma.SpaceClassificationUncheckedCreateNestedManyWithoutCategoryInput;
+	userClassifications?: Prisma.UserClassificationUncheckedCreateNestedManyWithoutCategoryInput;
+};
+
+export type CategoryCreateOrConnectWithoutCreatedByInput = {
+	where: Prisma.CategoryWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.CategoryCreateWithoutCreatedByInput,
+		Prisma.CategoryUncheckedCreateWithoutCreatedByInput
+	>;
+};
+
+export type CategoryCreateManyCreatedByInputEnvelope = {
+	data:
+		| Prisma.CategoryCreateManyCreatedByInput
+		| Prisma.CategoryCreateManyCreatedByInput[];
+	skipDuplicates?: boolean;
+};
+
+export type CategoryUpsertWithWhereUniqueWithoutCreatedByInput = {
+	where: Prisma.CategoryWhereUniqueInput;
+	update: Prisma.XOR<
+		Prisma.CategoryUpdateWithoutCreatedByInput,
+		Prisma.CategoryUncheckedUpdateWithoutCreatedByInput
+	>;
+	create: Prisma.XOR<
+		Prisma.CategoryCreateWithoutCreatedByInput,
+		Prisma.CategoryUncheckedCreateWithoutCreatedByInput
+	>;
+};
+
+export type CategoryUpdateWithWhereUniqueWithoutCreatedByInput = {
+	where: Prisma.CategoryWhereUniqueInput;
+	data: Prisma.XOR<
+		Prisma.CategoryUpdateWithoutCreatedByInput,
+		Prisma.CategoryUncheckedUpdateWithoutCreatedByInput
+	>;
+};
+
+export type CategoryUpdateManyWithWhereWithoutCreatedByInput = {
+	where: Prisma.CategoryScalarWhereInput;
+	data: Prisma.XOR<
+		Prisma.CategoryUpdateManyMutationInput,
+		Prisma.CategoryUncheckedUpdateManyWithoutCreatedByInput
+	>;
+};
+
+export type CategoryCreateManyParentInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	name: string;
+	type?: $Enums.CategoryTypes;
+	spaceId: string;
+	createdById?: string | null;
+};
+
+export type CategoryUpdateWithoutParentInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	type?:
+		| Prisma.EnumCategoryTypesFieldUpdateOperationsInput
+		| $Enums.CategoryTypes;
+	children?: Prisma.CategoryUpdateManyWithoutParentNestedInput;
+	space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput;
+	createdBy?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput;
+	roleClassifications?: Prisma.RoleClassificationUpdateManyWithoutCategoryNestedInput;
+	spaceClassifications?: Prisma.SpaceClassificationUpdateManyWithoutCategoryNestedInput;
+	userClassifications?: Prisma.UserClassificationUpdateManyWithoutCategoryNestedInput;
+};
+
+export type CategoryUncheckedUpdateWithoutParentInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	type?:
+		| Prisma.EnumCategoryTypesFieldUpdateOperationsInput
+		| $Enums.CategoryTypes;
+	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput;
+	roleClassifications?: Prisma.RoleClassificationUncheckedUpdateManyWithoutCategoryNestedInput;
+	spaceClassifications?: Prisma.SpaceClassificationUncheckedUpdateManyWithoutCategoryNestedInput;
+	userClassifications?: Prisma.UserClassificationUncheckedUpdateManyWithoutCategoryNestedInput;
+};
+
+export type CategoryUncheckedUpdateManyWithoutParentInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	type?:
+		| Prisma.EnumCategoryTypesFieldUpdateOperationsInput
+		| $Enums.CategoryTypes;
+	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+};
+
 export type CategoryCreateManySpaceInput = {
 	id?: string;
 	createdAt?: Date | string;
@@ -1757,88 +1839,6 @@ export type CategoryUncheckedUpdateManyWithoutCreatedByInput = {
 		| $Enums.CategoryTypes;
 	parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-};
-
-export type CategoryCreateManyParentInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	name: string;
-	type?: $Enums.CategoryTypes;
-	spaceId: string;
-	createdById?: string | null;
-};
-
-export type CategoryUpdateWithoutParentInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	type?:
-		| Prisma.EnumCategoryTypesFieldUpdateOperationsInput
-		| $Enums.CategoryTypes;
-	children?: Prisma.CategoryUpdateManyWithoutParentNestedInput;
-	space?: Prisma.SpaceUpdateOneRequiredWithoutCategoriesNestedInput;
-	createdBy?: Prisma.UserUpdateOneWithoutCreatedCategoriesNestedInput;
-	roleClassifications?: Prisma.RoleClassificationUpdateManyWithoutCategoryNestedInput;
-	spaceClassifications?: Prisma.SpaceClassificationUpdateManyWithoutCategoryNestedInput;
-	userClassifications?: Prisma.UserClassificationUpdateManyWithoutCategoryNestedInput;
-};
-
-export type CategoryUncheckedUpdateWithoutParentInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	type?:
-		| Prisma.EnumCategoryTypesFieldUpdateOperationsInput
-		| $Enums.CategoryTypes;
-	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	children?: Prisma.CategoryUncheckedUpdateManyWithoutParentNestedInput;
-	roleClassifications?: Prisma.RoleClassificationUncheckedUpdateManyWithoutCategoryNestedInput;
-	spaceClassifications?: Prisma.SpaceClassificationUncheckedUpdateManyWithoutCategoryNestedInput;
-	userClassifications?: Prisma.UserClassificationUncheckedUpdateManyWithoutCategoryNestedInput;
-};
-
-export type CategoryUncheckedUpdateManyWithoutParentInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	type?:
-		| Prisma.EnumCategoryTypesFieldUpdateOperationsInput
-		| $Enums.CategoryTypes;
-	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
 /**

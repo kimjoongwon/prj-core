@@ -425,16 +425,6 @@ export type TemplateVariableUncheckedUpdateManyInput = {
 	templateId?: Prisma.StringFieldUpdateOperationsInput | string;
 };
 
-export type TemplateVariableListRelationFilter = {
-	every?: Prisma.TemplateVariableWhereInput;
-	some?: Prisma.TemplateVariableWhereInput;
-	none?: Prisma.TemplateVariableWhereInput;
-};
-
-export type TemplateVariableOrderByRelationAggregateInput = {
-	_count?: Prisma.SortOrder;
-};
-
 export type TemplateVariableTemplateIdNameCompoundUniqueInput = {
 	templateId: string;
 	name: string;
@@ -471,6 +461,16 @@ export type TemplateVariableMinOrderByAggregateInput = {
 	defaultValue?: Prisma.SortOrder;
 	isRequired?: Prisma.SortOrder;
 	templateId?: Prisma.SortOrder;
+};
+
+export type TemplateVariableListRelationFilter = {
+	every?: Prisma.TemplateVariableWhereInput;
+	some?: Prisma.TemplateVariableWhereInput;
+	none?: Prisma.TemplateVariableWhereInput;
+};
+
+export type TemplateVariableOrderByRelationAggregateInput = {
+	_count?: Prisma.SortOrder;
 };
 
 export type TemplateVariableCreateNestedManyWithoutTemplateInput = {

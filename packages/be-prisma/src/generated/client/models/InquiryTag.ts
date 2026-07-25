@@ -398,16 +398,6 @@ export type InquiryTagUncheckedUpdateManyInput = {
 	color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
-export type InquiryTagListRelationFilter = {
-	every?: Prisma.InquiryTagWhereInput;
-	some?: Prisma.InquiryTagWhereInput;
-	none?: Prisma.InquiryTagWhereInput;
-};
-
-export type InquiryTagOrderByRelationAggregateInput = {
-	_count?: Prisma.SortOrder;
-};
-
 export type InquiryTagInquiryIdNameCompoundUniqueInput = {
 	inquiryId: string;
 	name: string;
@@ -441,6 +431,16 @@ export type InquiryTagMinOrderByAggregateInput = {
 	inquiryId?: Prisma.SortOrder;
 	name?: Prisma.SortOrder;
 	color?: Prisma.SortOrder;
+};
+
+export type InquiryTagListRelationFilter = {
+	every?: Prisma.InquiryTagWhereInput;
+	some?: Prisma.InquiryTagWhereInput;
+	none?: Prisma.InquiryTagWhereInput;
+};
+
+export type InquiryTagOrderByRelationAggregateInput = {
+	_count?: Prisma.SortOrder;
 };
 
 export type InquiryTagCreateNestedManyWithoutInquiryInput = {

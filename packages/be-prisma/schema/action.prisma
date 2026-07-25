@@ -1,0 +1,31 @@
+// @data-type: REFERENCE
+// @aggregate-root: true
+// @description: 권한 규칙이 참조하는 전역 액션 카탈로그
+/// @displayName 액션
+model Action {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+
+  /// @displayName 이름
+  name        String  @unique
+  /// @displayName 표시명
+  displayName String? @map("display_name")
+  /// @displayName 설명
+  description String?
+  /// @displayName 그룹
+  group       String?
+  /// @displayName 정렬 순서
+  order       Int     @default(0)
+  /// @displayName 시스템 여부
+  isSystem    Boolean @default(true) @map("is_system")
+
+  /// @displayName 설정
+  config Json?
+
+  abilities Ability[]
+
+  @@index([group])
+  @@map("actions")
+}

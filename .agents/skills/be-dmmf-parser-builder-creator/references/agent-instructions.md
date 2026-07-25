@@ -19,13 +19,15 @@
 
 Prisma DMMF(Data Model Meta Format)를 파싱하여 모델/필드 정보를 추출하는 유틸리티를 생성하는 전문가입니다.
 
+이 parser가 읽는 메타데이터는 DMMF의 `documentation`에 보존된 `/// @displayName 한글명` Prisma 문서 주석입니다. 슬래시 2개(`//`)로 작성하는 모델 설계 메타데이터는 DMMF 문서 입력으로 취급하지 않습니다.
+
 ---
 
 ## 1. 언제 사용하는가?
 
 | 상황 | 설명 |
 |------|------|
-| 스키마 메타데이터 필요 | Prisma 스키마에서 모델/필드 정보를 런타임에 사용해야 할 때 |
+| Prisma 문서 정보 필요 | DMMF에 보존된 모델/필드 표시명을 런타임에 사용해야 할 때 |
 | 동기화 로직 구현 | 스키마 정보를 DB에 동기화해야 할 때 (예: Subject 테이블) |
 | 코드 생성 | 스키마 기반으로 코드를 자동 생성해야 할 때 |
 | 문서화 | 스키마 정보를 추출하여 문서를 생성할 때 |
@@ -36,8 +38,9 @@ Prisma DMMF(Data Model Meta Format)를 파싱하여 모델/필드 정보를 추�
 
 | 구분 | 항목 | 설명 |
 |------|------|------|
-| **입력** | Prisma 스키마 | `packages/be-prisma/schema/*.prisma` |
-| | 파싱 요구사항 | 추출할 정보 (모델명, 필드명, displayName 등) |
+| **입력** | Prisma DMMF | `packages/be-prisma/schema/*.prisma`에서 생성된 DMMF |
+| | Prisma 문서 주석 | `/// @displayName 한글명` |
+| | 파싱 요구사항 | 추출할 정보 (모델명, 필드명, 표시명 등) |
 | **출력** | DmmfParser 클래스 | DMMF 파싱 유틸리티 |
 | | 인터페이스 | ModelInfo, FieldInfo 등 반환 타입 |
 
@@ -118,7 +121,7 @@ Prisma DMMF(Data Model Meta Format)를 파싱하여 모델/필드 정보를 추�
 
 ```
 1. 요구사항 분석
-   - 추출할 정보 확인 (모델명, 필드명, 주석 등)
+   - 추출할 정보 확인 (모델명, 필드명, Prisma 문서 주석 등)
    ↓
 2. 인터페이스 정의
    - ModelInfo, FieldInfo 등 반환 타입 설계
@@ -224,7 +227,7 @@ export class DmmfParser {
   }
 
   /**
-   * documentation에서 @displayName 주석을 추출합니다.
+   * DMMF documentation에서 `/// @displayName` Prisma 문서 주석을 추출합니다.
    */
   private extractDisplayName(documentation: string | undefined): string | null {
     if (!documentation) {
@@ -271,7 +274,7 @@ export function getDmmfParser(): DmmfParser {
 
 | 구분 | 에이전트 | 설명 |
 |------|----------|------|
-| **선행** | prisma-annotator | 스키마에 @displayName 주석 추가 |
+| **선행** | prisma-annotator | 스키마에 `/// @displayName` Prisma 문서 주석 추가 |
 | | schema-builder | Prisma 스키마 작성 |
 | **후행** | service-builder | DmmfParser를 사용하는 동기화 Service 생성 |
 | | bootstrap-integrator | 동기화 로직을 AppModule에 통합 |
@@ -312,7 +315,7 @@ const fields = parser.parseFields();
 const userFields = parser.parseFieldsByModel("User");
 ```
 
-### @displayName 주석 형식
+### Prisma 문서 주석 형식
 
 ```prisma
 /// @displayName 사용자

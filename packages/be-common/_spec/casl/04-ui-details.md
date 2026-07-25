@@ -32,7 +32,7 @@
 | L7-FLD-017 | inverted | Boolean | default: false | can/cannot 구분 |
 | L7-FLD-018 | reason | String | optional | 거부 사유 |
 
-### Grant 엔티티 (권한 부여 - BRIDGE, 다형성)
+### Grant 엔티티 (Role/User에 Ability를 부여하는 관계, 다형성)
 
 | ID | 필드 | 타입 | 제약조건 | 설명 |
 |----|------|------|----------|------|
@@ -92,7 +92,7 @@
          │
          ▼
 ┌──────────────────────────────────────────────────────┐
-│                      Grant (BRIDGE)                   │
+│                  Grant (CONFIGURATION)               │
 ├──────────────────────────────────────────────────────┤
 │ id (PK)                                               │
 │ granteeType ("Role" | "User")  ← 다형성 FK            │

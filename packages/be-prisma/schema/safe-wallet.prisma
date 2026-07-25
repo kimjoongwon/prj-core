@@ -1,0 +1,23 @@
+// @data-type: MASTER
+// @aggregate-root: true
+// @description: Space 단위로 운영되는 Safe 멀티시그 지갑
+/// @displayName Safe 지갑
+model SafeWallet {
+  id           String            @id @default(uuid())
+  createdAt    DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime?         @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt    DateTime?         @map("removed_at") @db.Timestamptz(6)
+  address      String            @unique
+  chainId      Int               @map("chain_id")
+  threshold    Int               @default(3)
+  nonce        Int               @default(0)
+  owners       String[] // 소유자 주소 배열
+  spaceId      String            @map("space_id")
+  createdById  String?           @map("created_by_id")
+  space        Space             @relation(fields: [spaceId], references: [id], onDelete: Restrict)
+  createdBy    User?             @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  transactions SafeTransaction[]
+
+  @@index([spaceId])
+  @@map("safe_wallets")
+}

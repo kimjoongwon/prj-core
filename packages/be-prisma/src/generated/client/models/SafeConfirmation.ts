@@ -315,16 +315,6 @@ export type SafeConfirmationUncheckedUpdateManyInput = {
 	signature?: Prisma.StringFieldUpdateOperationsInput | string;
 };
 
-export type SafeConfirmationListRelationFilter = {
-	every?: Prisma.SafeConfirmationWhereInput;
-	some?: Prisma.SafeConfirmationWhereInput;
-	none?: Prisma.SafeConfirmationWhereInput;
-};
-
-export type SafeConfirmationOrderByRelationAggregateInput = {
-	_count?: Prisma.SortOrder;
-};
-
 export type SafeConfirmationSafeTransactionIdOwnerCompoundUniqueInput = {
 	safeTransactionId: string;
 	owner: string;
@@ -352,6 +342,16 @@ export type SafeConfirmationMinOrderByAggregateInput = {
 	safeTransactionId?: Prisma.SortOrder;
 	owner?: Prisma.SortOrder;
 	signature?: Prisma.SortOrder;
+};
+
+export type SafeConfirmationListRelationFilter = {
+	every?: Prisma.SafeConfirmationWhereInput;
+	some?: Prisma.SafeConfirmationWhereInput;
+	none?: Prisma.SafeConfirmationWhereInput;
+};
+
+export type SafeConfirmationOrderByRelationAggregateInput = {
+	_count?: Prisma.SortOrder;
 };
 
 export type SafeConfirmationCreateNestedManyWithoutSafeTransactionInput = {

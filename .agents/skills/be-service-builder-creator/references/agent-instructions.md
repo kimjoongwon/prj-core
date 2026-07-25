@@ -52,7 +52,7 @@ NestJS Service 레이어를 생성하는 전문가입니다.
 - aggregate root service provider는 `be-aggregate-builder`가 `@cocrepo/aggregate`에 `{Domain}AggregateRoot`로 생성한다.
 - 담당 스펙의 `Service 인벤토리`에 명시된 domain capability/method만 생성/수정하고, 행의 `재사용/신규`, `소스/대상`, `의존 요소`, 소스 담당 `agent_type`, 소비 `agent_type` 계약을 벗어나지 않는다.
 - 호출할 Repository/Integration이 `Repository 인벤토리` 또는 관련 백엔드 인벤토리에 없으면 구현하지 말고 `계약-gap`으로 보고한다.
-- 동일 aggregate root 내부의 CHILD/DETAIL/JOIN 변경은 `@cocrepo/aggregate`의 root aggregate service를 통해서만 수행한다.
+- 동일 Aggregate Root 내부의 종속 모델이나 명시적 관계 모델 변경은 `@cocrepo/aggregate`의 root aggregate service를 통해서만 수행한다.
 - Controller가 하나의 aggregate root에 대해 pass-through할 때도 service 책임 범위를 벗어나지 않는다.
 - 여러 출처의 값을 repository input이나 aggregate method input으로 매핑할 때는 `input.xxx`, `context.userId`, `aggregate.id`처럼 원천을 보존한다. 반복이 길면 `const input = commandInput`처럼 출처명 alias까지만 사용한다.
 - Service support input은 `SendEmailInput`, `PutObjectInput`처럼 capability 중심 이름을 사용하고, 메서드 인자명은 기본적으로 `input`을 사용한다.
@@ -120,7 +120,7 @@ getByEmail(email: string) {
   });
 }
 
-// Child entity를 독립 command 진입점으로 직접 수정 금지
+// Aggregate Root 내부 종속 모델을 독립 command 진입점으로 직접 수정 금지
 async updateOrderItem(itemId: string, quantity: number) {
   return this.repository.updateItemById(itemId, { quantity });
 }
@@ -266,7 +266,7 @@ export class CategoryService {
 }
 ```
 
-### Aggregate Root 내부 Child 변경
+### Aggregate Root 내부 종속 모델 변경
 
 ```typescript
 @Injectable()
@@ -296,9 +296,8 @@ export class OrderService {
 - [ ] **DTO 타입 사용 금지 확인**
 - [ ] `CreateXxxDto`, `UpdateXxxDto` 등 DTO import 없음
 - [ ] Aggregate Root 메서드와 Repository만 사용
-- [ ] 서비스가 `@schema-owner`가 아닌 모델을 대상 도메인으로 갖지 않는지 확인
+- [ ] Aggregate Root 내부 종속 모델의 쓰기 로직이 Aggregate Root를 통해 수행되는지 확인
 - [ ] 비즈니스 로직만 Service에 작성
-- [ ] Child entity 쓰기 로직이 Aggregate Root를 통해 수행되는지 확인
 - [ ] 메서드명이 도메인 목적을 표현
 - [ ] Service class와 같은 메서드 목록을 복제한 `*Port` interface/type/file/export가 없음
 - [ ] 변경 범위에 DI/config/repository/client/external protocol에 닿는 exported free function/helper가 남아 있지 않음
@@ -346,7 +345,7 @@ getMySpaceGrounds(spaceId: string)
 | 상황 | 데이터 중심 (모호함) | 목적 중심 (명확함) |
 |------|------------------------|---------------------|
 | 내 데이터 조회 | `getBySpaceId()`, `getGroundsBySpaceId()` | `getMySpaceGrounds()` |
-| root-child 조회 | `getExercisesByTaskId()` | `getTaskExercisePlan()` |
+| Aggregate Root와 종속 모델 조회 | `getExercisesByTaskId()` | `getTaskExercisePlan()` |
 | 인증용 조회 | `findByEmail()`, `getUserByEmail()` | `findUserForAuth()` |
 | 검색 | `findManyByQuery()`, `getByFilters()` | `searchProducts()`, `searchUsers()` |
 | 상세 조회 | `findByIdWithRelations()`, `getById()` | `getUserProfile()`, `getOrderDetails()` |

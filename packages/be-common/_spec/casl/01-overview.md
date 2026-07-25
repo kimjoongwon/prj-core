@@ -40,7 +40,7 @@
                     │                             │
                     ▼                             ▼
               ┌──────────────────────────────────────────┐
-              │               Grant (BRIDGE)              │
+              │            Grant (CONFIGURATION)          │
               │  Role/User에 Ability를 부여하는 중간 테이블  │
               │  granteeType: "Role" | "User"             │
               │  granteeId: roleId 또는 userId             │
@@ -56,7 +56,7 @@
 | **Subject** | REFERENCE | CASL 대상 정의 (Prisma 모델명, 커스텀 Subject) |
 | **Action** | REFERENCE | 행위 정의 (CRUD, visibility, masking 등) |
 | **Ability** | REFERENCE | 재사용 가능한 권한 정의 (Subject + Action + 조건) |
-| **Grant** | BRIDGE | Role/User에 Ability를 부여 (다형성: granteeType + granteeId) |
+| **Grant** | CONFIGURATION | Role/User에 Ability를 부여 (다형성: granteeType + granteeId) |
 
 ---
 
@@ -104,11 +104,15 @@ MEMBER (회원)
 
 | 레이어 | 파일 | 설명 |
 |--------|------|------|
-| Prisma | `packages/be-prisma/schema/access-control/subject.prisma` | Subject 모델 |
-| Prisma | `packages/be-prisma/schema/access-control/action.prisma` | Action 모델 |
-| Prisma | `packages/be-prisma/schema/access-control/ability.prisma` | Ability 모델 |
-| Prisma | `packages/be-prisma/schema/access-control/policy.prisma` | Policy, PolicyAbility, RolePolicy 모델 |
-| Prisma | `packages/be-prisma/schema/access-control/role.prisma` | Role, RoleAssociation, RoleClassification |
+| Prisma | `packages/be-prisma/schema/subject.prisma` | Subject 모델 |
+| Prisma | `packages/be-prisma/schema/action.prisma` | Action 모델 |
+| Prisma | `packages/be-prisma/schema/ability.prisma` | Ability 모델 |
+| Prisma | `packages/be-prisma/schema/policy.prisma` | Policy 모델 |
+| Prisma | `packages/be-prisma/schema/policy-ability.prisma` | PolicyAbility 모델 |
+| Prisma | `packages/be-prisma/schema/role-policy.prisma` | RolePolicy 모델 |
+| Prisma | `packages/be-prisma/schema/role.prisma` | Role 모델 |
+| Prisma | `packages/be-prisma/schema/role-association.prisma` | RoleAssociation 모델 |
+| Prisma | `packages/be-prisma/schema/role-classification.prisma` | RoleClassification 모델 |
 | Entity | `packages/be-entity/src/ability.entity.ts` | Ability 도메인 엔티티 |
 | Entity | `packages/be-entity/src/policy.entity.ts` | Policy 도메인 엔티티 |
 | Entity | `packages/be-entity/src/role.entity.ts` | Role 도메인 엔티티 |
@@ -152,7 +156,7 @@ MEMBER (회원)
 - `fields` 필드로 접근 가능한 필드 제한 가능
 
 ### 3. Grant(권한 부여) 관련
-- 다형성 Bridge: `granteeType` ("Role" | "User") + `granteeId`로 대상 식별
+- 다형성 연결 방식: `granteeType` ("Role" | "User") + `granteeId`로 대상 식별
 - Role 기반 Grant: `granteeType="Role"` (기본 권한, priority 0-9)
 - User 예외 Grant: `granteeType="User"` (예외 권한, priority 10+)
 - `priority` 값이 높을수록 우선 적용 (User Grant가 Role Grant 덮어씀)
@@ -167,4 +171,4 @@ MEMBER (회원)
 - Guard 실행 순서: JwtAuthGuard → SpaceAccessGuard → RolesGuard 등
 - X-Space-ID 헤더로 현재 Space의 Tenant를 찾아 역할 검증
 - `@SkipSpaceCheck` 데코레이터로 Space 선택 불필요한 엔드포인트 지원
-- 상세 내용은 [SpaceAccessControl 기획서](../2026-02-07-SpaceAccessControl/01-overview.md) 참조
+- 상세 내용은 [SpaceAccessControl 기획서](../space-access-control/01-overview.md) 참조

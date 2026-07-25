@@ -566,16 +566,6 @@ export type InquiryAttachmentUncheckedUpdateManyInput = {
 	isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean;
 };
 
-export type InquiryAttachmentListRelationFilter = {
-	every?: Prisma.InquiryAttachmentWhereInput;
-	some?: Prisma.InquiryAttachmentWhereInput;
-	none?: Prisma.InquiryAttachmentWhereInput;
-};
-
-export type InquiryAttachmentOrderByRelationAggregateInput = {
-	_count?: Prisma.SortOrder;
-};
-
 export type InquiryAttachmentCountOrderByAggregateInput = {
 	id?: Prisma.SortOrder;
 	createdAt?: Prisma.SortOrder;
@@ -636,6 +626,20 @@ export type InquiryAttachmentSumOrderByAggregateInput = {
 	width?: Prisma.SortOrder;
 	height?: Prisma.SortOrder;
 	duration?: Prisma.SortOrder;
+};
+
+export type InquiryAttachmentListRelationFilter = {
+	every?: Prisma.InquiryAttachmentWhereInput;
+	some?: Prisma.InquiryAttachmentWhereInput;
+	none?: Prisma.InquiryAttachmentWhereInput;
+};
+
+export type InquiryAttachmentOrderByRelationAggregateInput = {
+	_count?: Prisma.SortOrder;
+};
+
+export type EnumAttachmentFileTypeFieldUpdateOperationsInput = {
+	set?: $Enums.AttachmentFileType;
 };
 
 export type InquiryAttachmentCreateNestedManyWithoutMessageInput = {
@@ -746,10 +750,6 @@ export type InquiryAttachmentUncheckedUpdateManyWithoutMessageNestedInput = {
 	deleteMany?:
 		| Prisma.InquiryAttachmentScalarWhereInput
 		| Prisma.InquiryAttachmentScalarWhereInput[];
-};
-
-export type EnumAttachmentFileTypeFieldUpdateOperationsInput = {
-	set?: $Enums.AttachmentFileType;
 };
 
 export type InquiryAttachmentCreateWithoutMessageInput = {

@@ -1,0 +1,34 @@
+// @data-type: TRANSACTION
+// @description: InquiryMessage에 종속되는 첨부파일 1:N 하위 모델
+/// @displayName 문의 첨부파일
+model InquiryAttachment {
+  id           String             @id @default(uuid())
+  /// @displayName 생성 일시
+  createdAt    DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  /// @displayName 소속 메시지 ID
+  messageId    String             @map("message_id")
+  /// @displayName 원본 파일명
+  fileName     String             @map("file_name")
+  /// @displayName 파일 크기
+  fileSize     BigInt             @map("file_size")
+  /// @displayName MIME 타입
+  mimeType     String             @map("mime_type")
+  /// @displayName 파일 유형
+  fileType     AttachmentFileType @map("file_type")
+  /// @displayName 파일 URL
+  url          String
+  /// @displayName 썸네일 URL
+  thumbnailUrl String?            @map("thumbnail_url")
+  /// @displayName 너비
+  width        Int?
+  /// @displayName 높이
+  height       Int?
+  /// @displayName 재생 시간
+  duration     Int?
+  /// @displayName 삭제 여부
+  isDeleted    Boolean            @default(false) @map("is_deleted")
+  message      InquiryMessage     @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@index([messageId])
+  @@map("inquiry_attachments")
+}

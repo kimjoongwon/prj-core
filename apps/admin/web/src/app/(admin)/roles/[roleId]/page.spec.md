@@ -26,9 +26,9 @@
 
 | 도메인 객체 | 책임 | 주요 필드/값 | 상태/lifecycle | 정책/검증 | 소유 패키지 | 비고 |
 |-------------|------|--------------|----------------|-----------|-------------|------|
-| `Role` | 정책 할당 화면의 aggregate root | `id`, `name`, `displayName`, `description`, `isSystem`, `removedAt` | 조회 -> readOnly 표시 -> 비시스템 Role만 편집/삭제 | 시스템 Role은 삭제/수정/assignment 저장 금지 | `packages/be-prisma/schema/access-control/role.prisma`, `packages/be-aggregate/src/role/role.aggregate.ts` | route canonical root |
-| `Policy` | Role에 할당 가능한 정책 후보 | `id`, `name`, `displayName`, `description`, `isSystem`, `policyAbilities` | 목록 조회 -> 검색/필터 -> 선택/해제 | 현재 scope에서 조회 가능한 Policy만 후보 | `packages/be-prisma/schema/access-control/policy.prisma` | row 렌더링 후보 |
-| `RolePolicy` | Role과 Policy의 최종 할당 결과 | `roleId`, `policyId`, `isActive`, `priority` | baseline 조회 -> local edit -> 저장 확인 -> 전체 동기화 | 중복 `policyId` 제거, missing assignment soft remove, priority number 검증 | `packages/be-aggregate/src/policy/policy-assignment.aggregate.ts`, `packages/be-repository/src/role-policies.repository.ts` | 핵심 편집 대상 |
+| `Role` | 정책 할당 화면의 aggregate root | `id`, `name`, `displayName`, `description`, `isSystem`, `removedAt` | 조회 -> readOnly 표시 -> 비시스템 Role만 편집/삭제 | 시스템 Role은 삭제/수정/assignment 저장 금지 | `packages/be-prisma/schema/role.prisma`, `packages/be-aggregate/src/role/role.aggregate.ts` | route canonical root |
+| `Policy` | Role에 할당 가능한 정책 후보 | `id`, `name`, `displayName`, `description`, `isSystem`, `policyAbilities` | 목록 조회 -> 검색/필터 -> 선택/해제 | 현재 scope에서 조회 가능한 Policy만 후보 | `packages/be-prisma/schema/policy.prisma` | row 렌더링 후보 |
+| `RolePolicy` | Role과 Policy의 최종 할당 결과 | `roleId`, `policyId`, `isActive`, `priority` | baseline 조회 -> local edit -> 저장 확인 -> 전체 동기화 | 중복 `policyId` 제거, missing assignment soft remove, priority number 검증 | `packages/be-prisma/schema/role-policy.prisma`, `packages/be-aggregate/src/policy/policy-assignment.aggregate.ts`, `packages/be-repository/src/role-policies.repository.ts` | 핵심 편집 대상 |
 
 ## 사용자 여정
 
@@ -44,7 +44,7 @@
 
 | 그룹 | 재사용/수정/신규 | 대상 파일 | 계약 | 소스 담당 `agent_type` | 소비/Wiring `agent_type` | 검증 `agent_type` |
 |------|------------------|-----------|------|-------------------------|---------------------------|-------------------|
-| Prisma / Database | 재사용 | `packages/be-prisma/schema/access-control/role.prisma`, `packages/be-prisma/schema/access-control/policy.prisma` | `Role` root, `Policy` root, `RolePolicy` assignment join 유지 | `be-prisma-builder` | `be-repository-builder` | `be-prisma-builder` |
+| Prisma / Database | 재사용 | `packages/be-prisma/schema/role.prisma`, `packages/be-prisma/schema/policy.prisma`, `packages/be-prisma/schema/role-policy.prisma` | `Role` root, `Policy` root, `RolePolicy` assignment join 유지 | `be-prisma-builder` | `be-repository-builder` | `be-prisma-builder` |
 | Common Schema | 신규 | `packages/common-schema/src/schemas/access-control/sync-role-policies.schema.ts` | route 저장 전 `rolePolicies[].policyId/isActive/priority` 검증에 사용할 `SyncRolePoliciesSchema` | `common-schema-builder` | `fe-route-agent` | `common-schema-builder` |
 | DTO / Query DTO | 재사용 | `packages/be-dto/src/policy-assignments/*` | `SyncRolePoliciesDto`, `PolicyAssignmentResponseDto` 유지 | `be-dto-builder` | `be-controller-builder` | `be-dto-builder` |
 | Repository | 재사용 | `packages/be-repository/src/role-policies.repository.ts` | 전체 동기화와 missing assignment soft remove 유지 | `be-repository-builder` | `be-aggregate-builder` | `be-repository-builder` |

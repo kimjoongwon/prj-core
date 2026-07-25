@@ -662,16 +662,6 @@ export type ProgramActivityUncheckedUpdateManyInput = {
 	videoFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
-export type ProgramActivityListRelationFilter = {
-	every?: Prisma.ProgramActivityWhereInput;
-	some?: Prisma.ProgramActivityWhereInput;
-	none?: Prisma.ProgramActivityWhereInput;
-};
-
-export type ProgramActivityOrderByRelationAggregateInput = {
-	_count?: Prisma.SortOrder;
-};
-
 export type ProgramActivityProgramIdTaskIdCompoundUniqueInput = {
 	programId: string;
 	taskId: string;
@@ -748,6 +738,16 @@ export type ProgramActivitySumOrderByAggregateInput = {
 	restTime?: Prisma.SortOrder;
 	exerciseDuration?: Prisma.SortOrder;
 	exerciseCount?: Prisma.SortOrder;
+};
+
+export type ProgramActivityListRelationFilter = {
+	every?: Prisma.ProgramActivityWhereInput;
+	some?: Prisma.ProgramActivityWhereInput;
+	none?: Prisma.ProgramActivityWhereInput;
+};
+
+export type ProgramActivityOrderByRelationAggregateInput = {
+	_count?: Prisma.SortOrder;
 };
 
 export type ProgramActivityCreateNestedManyWithoutProgramInput = {

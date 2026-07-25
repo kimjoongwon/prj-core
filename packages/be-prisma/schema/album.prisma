@@ -1,0 +1,30 @@
+// @data-type: MASTER
+// @aggregate-root: true
+// @description: 사용자 정의 에셋 컬렉션
+/// @displayName 앨범
+model Album {
+  id           String       @id @default(uuid())
+  createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime?    @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt    DateTime?    @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 소속 Space
+  spaceId      String       @map("space_id")
+  /// @displayName 앨범명
+  name         String
+  /// @displayName 앨범 설명
+  description  String?
+  /// @displayName 커버 이미지 ID
+  coverAssetId String?      @map("cover_asset_id")
+  /// @displayName 정렬 순서
+  sortOrder    Int          @default(0) @map("sort_order")
+  /// @displayName 생성자
+  createdById  String?      @map("created_by_id")
+  space        Space        @relation(fields: [spaceId], references: [id], onDelete: Restrict)
+  coverAsset   Asset?       @relation("AlbumCover", fields: [coverAssetId], references: [id], onDelete: SetNull)
+  createdBy    User?        @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  entries      AlbumEntry[]
+
+  @@index([spaceId])
+  @@index([name])
+  @@map("albums")
+}

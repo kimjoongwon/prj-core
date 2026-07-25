@@ -425,16 +425,6 @@ export type ProfileUncheckedUpdateManyInput = {
 		| null;
 };
 
-export type ProfileListRelationFilter = {
-	every?: Prisma.ProfileWhereInput;
-	some?: Prisma.ProfileWhereInput;
-	none?: Prisma.ProfileWhereInput;
-};
-
-export type ProfileOrderByRelationAggregateInput = {
-	_count?: Prisma.SortOrder;
-};
-
 export type ProfileCountOrderByAggregateInput = {
 	id?: Prisma.SortOrder;
 	createdAt?: Prisma.SortOrder;
@@ -469,6 +459,16 @@ export type ProfileMinOrderByAggregateInput = {
 	address?: Prisma.SortOrder;
 	userId?: Prisma.SortOrder;
 	avatarFileId?: Prisma.SortOrder;
+};
+
+export type ProfileListRelationFilter = {
+	every?: Prisma.ProfileWhereInput;
+	some?: Prisma.ProfileWhereInput;
+	none?: Prisma.ProfileWhereInput;
+};
+
+export type ProfileOrderByRelationAggregateInput = {
+	_count?: Prisma.SortOrder;
 };
 
 export type ProfileCreateNestedManyWithoutUserInput = {

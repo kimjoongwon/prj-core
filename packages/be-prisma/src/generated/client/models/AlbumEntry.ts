@@ -509,16 +509,6 @@ export type AlbumEntryUncheckedUpdateManyInput = {
 	caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
-export type AlbumEntryListRelationFilter = {
-	every?: Prisma.AlbumEntryWhereInput;
-	some?: Prisma.AlbumEntryWhereInput;
-	none?: Prisma.AlbumEntryWhereInput;
-};
-
-export type AlbumEntryOrderByRelationAggregateInput = {
-	_count?: Prisma.SortOrder;
-};
-
 export type AlbumEntryAlbumIdAssetIdCompoundUniqueInput = {
 	albumId: string;
 	assetId: string;
@@ -569,6 +559,16 @@ export type AlbumEntryMinOrderByAggregateInput = {
 
 export type AlbumEntrySumOrderByAggregateInput = {
 	position?: Prisma.SortOrder;
+};
+
+export type AlbumEntryListRelationFilter = {
+	every?: Prisma.AlbumEntryWhereInput;
+	some?: Prisma.AlbumEntryWhereInput;
+	none?: Prisma.AlbumEntryWhereInput;
+};
+
+export type AlbumEntryOrderByRelationAggregateInput = {
+	_count?: Prisma.SortOrder;
 };
 
 export type AlbumEntryCreateNestedManyWithoutAlbumInput = {

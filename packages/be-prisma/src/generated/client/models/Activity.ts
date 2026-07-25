@@ -490,16 +490,6 @@ export type ActivityUncheckedUpdateManyInput = {
 	notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
-export type ActivityListRelationFilter = {
-	every?: Prisma.ActivityWhereInput;
-	some?: Prisma.ActivityWhereInput;
-	none?: Prisma.ActivityWhereInput;
-};
-
-export type ActivityOrderByRelationAggregateInput = {
-	_count?: Prisma.SortOrder;
-};
-
 export type ActivityRoutineIdTaskIdCompoundUniqueInput = {
 	routineId: string;
 	taskId: string;
@@ -554,6 +544,16 @@ export type ActivitySumOrderByAggregateInput = {
 	order?: Prisma.SortOrder;
 	repetitions?: Prisma.SortOrder;
 	restTime?: Prisma.SortOrder;
+};
+
+export type ActivityListRelationFilter = {
+	every?: Prisma.ActivityWhereInput;
+	some?: Prisma.ActivityWhereInput;
+	none?: Prisma.ActivityWhereInput;
+};
+
+export type ActivityOrderByRelationAggregateInput = {
+	_count?: Prisma.SortOrder;
 };
 
 export type ActivityCreateNestedManyWithoutRoutineInput = {

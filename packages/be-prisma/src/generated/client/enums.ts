@@ -8,6 +8,18 @@
  * 🟢 You can import this file directly.
  */
 
+export const AIAgentAction = {
+	DRAFT_GENERATION: "DRAFT_GENERATION",
+	AUTO_CLASSIFICATION: "AUTO_CLASSIFICATION",
+	SENTIMENT_ANALYSIS: "SENTIMENT_ANALYSIS",
+	AUTO_RESPONSE: "AUTO_RESPONSE",
+	KNOWLEDGE_SEARCH: "KNOWLEDGE_SEARCH",
+	SUMMARIZATION: "SUMMARIZATION",
+	TRANSLATION: "TRANSLATION",
+} as const;
+
+export type AIAgentAction = (typeof AIAgentAction)[keyof typeof AIAgentAction];
+
 export const AssetKind = {
 	IMAGE: "IMAGE",
 	VIDEO: "VIDEO",
@@ -24,15 +36,17 @@ export const AssetStatus = {
 
 export type AssetStatus = (typeof AssetStatus)[keyof typeof AssetStatus];
 
-export const DerivativeKind = {
-	THUMBNAIL: "THUMBNAIL",
-	PREVIEW: "PREVIEW",
-	TRANSCODE: "TRANSCODE",
-	TEXT: "TEXT",
+export const AttachmentFileType = {
+	IMAGE: "IMAGE",
+	VIDEO: "VIDEO",
+	AUDIO: "AUDIO",
+	DOCUMENT: "DOCUMENT",
+	ARCHIVE: "ARCHIVE",
+	OTHER: "OTHER",
 } as const;
 
-export type DerivativeKind =
-	(typeof DerivativeKind)[keyof typeof DerivativeKind];
+export type AttachmentFileType =
+	(typeof AttachmentFileType)[keyof typeof AttachmentFileType];
 
 export const AuthAuditResult = {
 	SUCCESS: "SUCCESS",
@@ -43,6 +57,25 @@ export const AuthAuditResult = {
 export type AuthAuditResult =
 	(typeof AuthAuditResult)[keyof typeof AuthAuditResult];
 
+export const CategoryTypes = {
+	Role: "Role",
+	Space: "Space",
+	Asset: "Asset",
+	User: "User",
+} as const;
+
+export type CategoryTypes = (typeof CategoryTypes)[keyof typeof CategoryTypes];
+
+export const DerivativeKind = {
+	THUMBNAIL: "THUMBNAIL",
+	PREVIEW: "PREVIEW",
+	TRANSCODE: "TRANSCODE",
+	TEXT: "TEXT",
+} as const;
+
+export type DerivativeKind =
+	(typeof DerivativeKind)[keyof typeof DerivativeKind];
+
 export const EmailVerificationStatus = {
 	PENDING: "PENDING",
 	VERIFIED: "VERIFIED",
@@ -52,21 +85,155 @@ export const EmailVerificationStatus = {
 export type EmailVerificationStatus =
 	(typeof EmailVerificationStatus)[keyof typeof EmailVerificationStatus];
 
-export const WhitelistType = {
-	IP: "IP",
-	EMAIL_DOMAIN: "EMAIL_DOMAIN",
-	CORS_ORIGIN: "CORS_ORIGIN",
+export const GroupTypes = {
+	Role: "Role",
+	Space: "Space",
+	Asset: "Asset",
+	User: "User",
 } as const;
 
-export type WhitelistType = (typeof WhitelistType)[keyof typeof WhitelistType];
+export type GroupTypes = (typeof GroupTypes)[keyof typeof GroupTypes];
 
-export const TextTypes = {
-	Editor: "Editor",
-	Input: "Input",
-	Textarea: "Textarea",
+export const InquiryCategory = {
+	GENERAL: "GENERAL",
+	DELIVERY: "DELIVERY",
+	REFUND: "REFUND",
+	PRODUCT: "PRODUCT",
+	ACCOUNT: "ACCOUNT",
+	TECHNICAL: "TECHNICAL",
+	COMPLAINT: "COMPLAINT",
+	OTHER: "OTHER",
 } as const;
 
-export type TextTypes = (typeof TextTypes)[keyof typeof TextTypes];
+export type InquiryCategory =
+	(typeof InquiryCategory)[keyof typeof InquiryCategory];
+
+export const InquiryChannel = {
+	WEB: "WEB",
+	EMAIL: "EMAIL",
+	CHAT: "CHAT",
+	SMS: "SMS",
+	PHONE: "PHONE",
+	WALK_IN: "WALK_IN",
+} as const;
+
+export type InquiryChannel =
+	(typeof InquiryChannel)[keyof typeof InquiryChannel];
+
+export const InquiryParticipantRole = {
+	CUSTOMER: "CUSTOMER",
+	AGENT: "AGENT",
+	SUPERVISOR: "SUPERVISOR",
+	VIEWER: "VIEWER",
+} as const;
+
+export type InquiryParticipantRole =
+	(typeof InquiryParticipantRole)[keyof typeof InquiryParticipantRole];
+
+export const InquiryPriority = {
+	LOW: "LOW",
+	NORMAL: "NORMAL",
+	HIGH: "HIGH",
+	URGENT: "URGENT",
+} as const;
+
+export type InquiryPriority =
+	(typeof InquiryPriority)[keyof typeof InquiryPriority];
+
+export const InquirySource = {
+	ONLINE: "ONLINE",
+	OFFLINE: "OFFLINE",
+} as const;
+
+export type InquirySource = (typeof InquirySource)[keyof typeof InquirySource];
+
+export const InquiryStatus = {
+	NEW: "NEW",
+	OPEN: "OPEN",
+	IN_PROGRESS: "IN_PROGRESS",
+	WAITING_CUSTOMER: "WAITING_CUSTOMER",
+	RESOLVED: "RESOLVED",
+	CLOSED: "CLOSED",
+	ESCALATED: "ESCALATED",
+} as const;
+
+export type InquiryStatus = (typeof InquiryStatus)[keyof typeof InquiryStatus];
+
+export const LanguageCode = {
+	ko_KR: "ko_KR",
+	en_US: "en_US",
+	zh_CN: "zh_CN",
+	ja_JP: "ja_JP",
+} as const;
+
+export type LanguageCode = (typeof LanguageCode)[keyof typeof LanguageCode];
+
+export const MessageContentType = {
+	TEXT: "TEXT",
+	HTML: "HTML",
+	MARKDOWN: "MARKDOWN",
+	IMAGE: "IMAGE",
+	FILE: "FILE",
+	SYSTEM: "SYSTEM",
+} as const;
+
+export type MessageContentType =
+	(typeof MessageContentType)[keyof typeof MessageContentType];
+
+export const RecurringDayOfWeek = {
+	MONDAY: "MONDAY",
+	TUESDAY: "TUESDAY",
+	WEDNESDAY: "WEDNESDAY",
+	THURSDAY: "THURSDAY",
+	FRIDAY: "FRIDAY",
+	SATURDAY: "SATURDAY",
+	SUNDAY: "SUNDAY",
+} as const;
+
+export type RecurringDayOfWeek =
+	(typeof RecurringDayOfWeek)[keyof typeof RecurringDayOfWeek];
+
+export const RepeatCycleTypes = {
+	WEEKLY: "WEEKLY",
+	MONTHLY: "MONTHLY",
+} as const;
+
+export type RepeatCycleTypes =
+	(typeof RepeatCycleTypes)[keyof typeof RepeatCycleTypes];
+
+export const ReservationStatus = {
+	CONFIRMED: "CONFIRMED",
+	WAITLISTED: "WAITLISTED",
+	CANCELED: "CANCELED",
+} as const;
+
+export type ReservationStatus =
+	(typeof ReservationStatus)[keyof typeof ReservationStatus];
+
+export const SenderType = {
+	USER: "USER",
+	AI: "AI",
+	SYSTEM: "SYSTEM",
+} as const;
+
+export type SenderType = (typeof SenderType)[keyof typeof SenderType];
+
+export const SentimentType = {
+	POSITIVE: "POSITIVE",
+	NEUTRAL: "NEUTRAL",
+	NEGATIVE: "NEGATIVE",
+} as const;
+
+export type SentimentType = (typeof SentimentType)[keyof typeof SentimentType];
+
+export const ServiceDocumentFormat = {
+	MARKDOWN: "MARKDOWN",
+	HTML: "HTML",
+	PLAIN_TEXT: "PLAIN_TEXT",
+} as const;
+
+export type ServiceDocumentFormat =
+	(typeof ServiceDocumentFormat)[keyof typeof ServiceDocumentFormat];
 
 export const ServiceDocumentKind = {
 	TERMS_OF_SERVICE: "TERMS_OF_SERVICE",
@@ -97,14 +264,13 @@ export const ServiceDocumentStatus = {
 export type ServiceDocumentStatus =
 	(typeof ServiceDocumentStatus)[keyof typeof ServiceDocumentStatus];
 
-export const ServiceDocumentFormat = {
-	MARKDOWN: "MARKDOWN",
-	HTML: "HTML",
-	PLAIN_TEXT: "PLAIN_TEXT",
+export const SessionTypes = {
+	ONE_TIME: "ONE_TIME",
+	ONE_TIME_RANGE: "ONE_TIME_RANGE",
+	RECURRING: "RECURRING",
 } as const;
 
-export type ServiceDocumentFormat =
-	(typeof ServiceDocumentFormat)[keyof typeof ServiceDocumentFormat];
+export type SessionTypes = (typeof SessionTypes)[keyof typeof SessionTypes];
 
 export const TemplateType = {
 	EMAIL: "EMAIL",
@@ -113,15 +279,6 @@ export const TemplateType = {
 } as const;
 
 export type TemplateType = (typeof TemplateType)[keyof typeof TemplateType];
-
-export const LanguageCode = {
-	ko_KR: "ko_KR",
-	en_US: "en_US",
-	zh_CN: "zh_CN",
-	ja_JP: "ja_JP",
-} as const;
-
-export type LanguageCode = (typeof LanguageCode)[keyof typeof LanguageCode];
 
 export const TenantAccessRequestStatus = {
 	PENDING: "PENDING",
@@ -133,35 +290,13 @@ export const TenantAccessRequestStatus = {
 export type TenantAccessRequestStatus =
 	(typeof TenantAccessRequestStatus)[keyof typeof TenantAccessRequestStatus];
 
-export const AIAgentAction = {
-	DRAFT_GENERATION: "DRAFT_GENERATION",
-	AUTO_CLASSIFICATION: "AUTO_CLASSIFICATION",
-	SENTIMENT_ANALYSIS: "SENTIMENT_ANALYSIS",
-	AUTO_RESPONSE: "AUTO_RESPONSE",
-	KNOWLEDGE_SEARCH: "KNOWLEDGE_SEARCH",
-	SUMMARIZATION: "SUMMARIZATION",
-	TRANSLATION: "TRANSLATION",
+export const TextTypes = {
+	Editor: "Editor",
+	Input: "Input",
+	Textarea: "Textarea",
 } as const;
 
-export type AIAgentAction = (typeof AIAgentAction)[keyof typeof AIAgentAction];
-
-export const InquiryParticipantRole = {
-	CUSTOMER: "CUSTOMER",
-	AGENT: "AGENT",
-	SUPERVISOR: "SUPERVISOR",
-	VIEWER: "VIEWER",
-} as const;
-
-export type InquiryParticipantRole =
-	(typeof InquiryParticipantRole)[keyof typeof InquiryParticipantRole];
-
-export const SenderType = {
-	USER: "USER",
-	AI: "AI",
-	SYSTEM: "SYSTEM",
-} as const;
-
-export type SenderType = (typeof SenderType)[keyof typeof SenderType];
+export type TextTypes = (typeof TextTypes)[keyof typeof TextTypes];
 
 export const ThreadStatus = {
 	ACTIVE: "ACTIVE",
@@ -171,145 +306,10 @@ export const ThreadStatus = {
 
 export type ThreadStatus = (typeof ThreadStatus)[keyof typeof ThreadStatus];
 
-export const MessageContentType = {
-	TEXT: "TEXT",
-	HTML: "HTML",
-	MARKDOWN: "MARKDOWN",
-	IMAGE: "IMAGE",
-	FILE: "FILE",
-	SYSTEM: "SYSTEM",
+export const WhitelistType = {
+	IP: "IP",
+	EMAIL_DOMAIN: "EMAIL_DOMAIN",
+	CORS_ORIGIN: "CORS_ORIGIN",
 } as const;
 
-export type MessageContentType =
-	(typeof MessageContentType)[keyof typeof MessageContentType];
-
-export const AttachmentFileType = {
-	IMAGE: "IMAGE",
-	VIDEO: "VIDEO",
-	AUDIO: "AUDIO",
-	DOCUMENT: "DOCUMENT",
-	ARCHIVE: "ARCHIVE",
-	OTHER: "OTHER",
-} as const;
-
-export type AttachmentFileType =
-	(typeof AttachmentFileType)[keyof typeof AttachmentFileType];
-
-export const InquiryCategory = {
-	GENERAL: "GENERAL",
-	DELIVERY: "DELIVERY",
-	REFUND: "REFUND",
-	PRODUCT: "PRODUCT",
-	ACCOUNT: "ACCOUNT",
-	TECHNICAL: "TECHNICAL",
-	COMPLAINT: "COMPLAINT",
-	OTHER: "OTHER",
-} as const;
-
-export type InquiryCategory =
-	(typeof InquiryCategory)[keyof typeof InquiryCategory];
-
-export const InquiryChannel = {
-	WEB: "WEB",
-	EMAIL: "EMAIL",
-	CHAT: "CHAT",
-	SMS: "SMS",
-	PHONE: "PHONE",
-	WALK_IN: "WALK_IN",
-} as const;
-
-export type InquiryChannel =
-	(typeof InquiryChannel)[keyof typeof InquiryChannel];
-
-export const InquiryStatus = {
-	NEW: "NEW",
-	OPEN: "OPEN",
-	IN_PROGRESS: "IN_PROGRESS",
-	WAITING_CUSTOMER: "WAITING_CUSTOMER",
-	RESOLVED: "RESOLVED",
-	CLOSED: "CLOSED",
-	ESCALATED: "ESCALATED",
-} as const;
-
-export type InquiryStatus = (typeof InquiryStatus)[keyof typeof InquiryStatus];
-
-export const InquiryPriority = {
-	LOW: "LOW",
-	NORMAL: "NORMAL",
-	HIGH: "HIGH",
-	URGENT: "URGENT",
-} as const;
-
-export type InquiryPriority =
-	(typeof InquiryPriority)[keyof typeof InquiryPriority];
-
-export const InquirySource = {
-	ONLINE: "ONLINE",
-	OFFLINE: "OFFLINE",
-} as const;
-
-export type InquirySource = (typeof InquirySource)[keyof typeof InquirySource];
-
-export const SentimentType = {
-	POSITIVE: "POSITIVE",
-	NEUTRAL: "NEUTRAL",
-	NEGATIVE: "NEGATIVE",
-} as const;
-
-export type SentimentType = (typeof SentimentType)[keyof typeof SentimentType];
-
-export const ReservationStatus = {
-	CONFIRMED: "CONFIRMED",
-	WAITLISTED: "WAITLISTED",
-	CANCELED: "CANCELED",
-} as const;
-
-export type ReservationStatus =
-	(typeof ReservationStatus)[keyof typeof ReservationStatus];
-
-export const SessionTypes = {
-	ONE_TIME: "ONE_TIME",
-	ONE_TIME_RANGE: "ONE_TIME_RANGE",
-	RECURRING: "RECURRING",
-} as const;
-
-export type SessionTypes = (typeof SessionTypes)[keyof typeof SessionTypes];
-
-export const RepeatCycleTypes = {
-	WEEKLY: "WEEKLY",
-	MONTHLY: "MONTHLY",
-} as const;
-
-export type RepeatCycleTypes =
-	(typeof RepeatCycleTypes)[keyof typeof RepeatCycleTypes];
-
-export const RecurringDayOfWeek = {
-	MONDAY: "MONDAY",
-	TUESDAY: "TUESDAY",
-	WEDNESDAY: "WEDNESDAY",
-	THURSDAY: "THURSDAY",
-	FRIDAY: "FRIDAY",
-	SATURDAY: "SATURDAY",
-	SUNDAY: "SUNDAY",
-} as const;
-
-export type RecurringDayOfWeek =
-	(typeof RecurringDayOfWeek)[keyof typeof RecurringDayOfWeek];
-
-export const CategoryTypes = {
-	Role: "Role",
-	Space: "Space",
-	Asset: "Asset",
-	User: "User",
-} as const;
-
-export type CategoryTypes = (typeof CategoryTypes)[keyof typeof CategoryTypes];
-
-export const GroupTypes = {
-	Role: "Role",
-	Space: "Space",
-	Asset: "Asset",
-	User: "User",
-} as const;
-
-export type GroupTypes = (typeof GroupTypes)[keyof typeof GroupTypes];
+export type WhitelistType = (typeof WhitelistType)[keyof typeof WhitelistType];

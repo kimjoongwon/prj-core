@@ -505,6 +505,11 @@ export type AlbumUncheckedUpdateManyInput = {
 	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
+export type AlbumScalarRelationFilter = {
+	is?: Prisma.AlbumWhereInput;
+	isNot?: Prisma.AlbumWhereInput;
+};
+
 export type AlbumCountOrderByAggregateInput = {
 	id?: Prisma.SortOrder;
 	createdAt?: Prisma.SortOrder;
@@ -550,11 +555,6 @@ export type AlbumMinOrderByAggregateInput = {
 
 export type AlbumSumOrderByAggregateInput = {
 	sortOrder?: Prisma.SortOrder;
-};
-
-export type AlbumScalarRelationFilter = {
-	is?: Prisma.AlbumWhereInput;
-	isNot?: Prisma.AlbumWhereInput;
 };
 
 export type AlbumListRelationFilter = {

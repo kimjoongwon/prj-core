@@ -425,116 +425,6 @@ export type RoleAssociationMinOrderByAggregateInput = {
 	groupId?: Prisma.SortOrder;
 };
 
-export type RoleAssociationCreateNestedManyWithoutRoleInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.RoleAssociationCreateWithoutRoleInput,
-				Prisma.RoleAssociationUncheckedCreateWithoutRoleInput
-		  >
-		| Prisma.RoleAssociationCreateWithoutRoleInput[]
-		| Prisma.RoleAssociationUncheckedCreateWithoutRoleInput[];
-	connectOrCreate?:
-		| Prisma.RoleAssociationCreateOrConnectWithoutRoleInput
-		| Prisma.RoleAssociationCreateOrConnectWithoutRoleInput[];
-	createMany?: Prisma.RoleAssociationCreateManyRoleInputEnvelope;
-	connect?:
-		| Prisma.RoleAssociationWhereUniqueInput
-		| Prisma.RoleAssociationWhereUniqueInput[];
-};
-
-export type RoleAssociationUncheckedCreateNestedManyWithoutRoleInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.RoleAssociationCreateWithoutRoleInput,
-				Prisma.RoleAssociationUncheckedCreateWithoutRoleInput
-		  >
-		| Prisma.RoleAssociationCreateWithoutRoleInput[]
-		| Prisma.RoleAssociationUncheckedCreateWithoutRoleInput[];
-	connectOrCreate?:
-		| Prisma.RoleAssociationCreateOrConnectWithoutRoleInput
-		| Prisma.RoleAssociationCreateOrConnectWithoutRoleInput[];
-	createMany?: Prisma.RoleAssociationCreateManyRoleInputEnvelope;
-	connect?:
-		| Prisma.RoleAssociationWhereUniqueInput
-		| Prisma.RoleAssociationWhereUniqueInput[];
-};
-
-export type RoleAssociationUpdateManyWithoutRoleNestedInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.RoleAssociationCreateWithoutRoleInput,
-				Prisma.RoleAssociationUncheckedCreateWithoutRoleInput
-		  >
-		| Prisma.RoleAssociationCreateWithoutRoleInput[]
-		| Prisma.RoleAssociationUncheckedCreateWithoutRoleInput[];
-	connectOrCreate?:
-		| Prisma.RoleAssociationCreateOrConnectWithoutRoleInput
-		| Prisma.RoleAssociationCreateOrConnectWithoutRoleInput[];
-	upsert?:
-		| Prisma.RoleAssociationUpsertWithWhereUniqueWithoutRoleInput
-		| Prisma.RoleAssociationUpsertWithWhereUniqueWithoutRoleInput[];
-	createMany?: Prisma.RoleAssociationCreateManyRoleInputEnvelope;
-	set?:
-		| Prisma.RoleAssociationWhereUniqueInput
-		| Prisma.RoleAssociationWhereUniqueInput[];
-	disconnect?:
-		| Prisma.RoleAssociationWhereUniqueInput
-		| Prisma.RoleAssociationWhereUniqueInput[];
-	delete?:
-		| Prisma.RoleAssociationWhereUniqueInput
-		| Prisma.RoleAssociationWhereUniqueInput[];
-	connect?:
-		| Prisma.RoleAssociationWhereUniqueInput
-		| Prisma.RoleAssociationWhereUniqueInput[];
-	update?:
-		| Prisma.RoleAssociationUpdateWithWhereUniqueWithoutRoleInput
-		| Prisma.RoleAssociationUpdateWithWhereUniqueWithoutRoleInput[];
-	updateMany?:
-		| Prisma.RoleAssociationUpdateManyWithWhereWithoutRoleInput
-		| Prisma.RoleAssociationUpdateManyWithWhereWithoutRoleInput[];
-	deleteMany?:
-		| Prisma.RoleAssociationScalarWhereInput
-		| Prisma.RoleAssociationScalarWhereInput[];
-};
-
-export type RoleAssociationUncheckedUpdateManyWithoutRoleNestedInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.RoleAssociationCreateWithoutRoleInput,
-				Prisma.RoleAssociationUncheckedCreateWithoutRoleInput
-		  >
-		| Prisma.RoleAssociationCreateWithoutRoleInput[]
-		| Prisma.RoleAssociationUncheckedCreateWithoutRoleInput[];
-	connectOrCreate?:
-		| Prisma.RoleAssociationCreateOrConnectWithoutRoleInput
-		| Prisma.RoleAssociationCreateOrConnectWithoutRoleInput[];
-	upsert?:
-		| Prisma.RoleAssociationUpsertWithWhereUniqueWithoutRoleInput
-		| Prisma.RoleAssociationUpsertWithWhereUniqueWithoutRoleInput[];
-	createMany?: Prisma.RoleAssociationCreateManyRoleInputEnvelope;
-	set?:
-		| Prisma.RoleAssociationWhereUniqueInput
-		| Prisma.RoleAssociationWhereUniqueInput[];
-	disconnect?:
-		| Prisma.RoleAssociationWhereUniqueInput
-		| Prisma.RoleAssociationWhereUniqueInput[];
-	delete?:
-		| Prisma.RoleAssociationWhereUniqueInput
-		| Prisma.RoleAssociationWhereUniqueInput[];
-	connect?:
-		| Prisma.RoleAssociationWhereUniqueInput
-		| Prisma.RoleAssociationWhereUniqueInput[];
-	update?:
-		| Prisma.RoleAssociationUpdateWithWhereUniqueWithoutRoleInput
-		| Prisma.RoleAssociationUpdateWithWhereUniqueWithoutRoleInput[];
-	updateMany?:
-		| Prisma.RoleAssociationUpdateManyWithWhereWithoutRoleInput
-		| Prisma.RoleAssociationUpdateManyWithWhereWithoutRoleInput[];
-	deleteMany?:
-		| Prisma.RoleAssociationScalarWhereInput
-		| Prisma.RoleAssociationScalarWhereInput[];
-};
-
 export type RoleAssociationCreateNestedManyWithoutGroupInput = {
 	create?:
 		| Prisma.XOR<
@@ -645,87 +535,114 @@ export type RoleAssociationUncheckedUpdateManyWithoutGroupNestedInput = {
 		| Prisma.RoleAssociationScalarWhereInput[];
 };
 
-export type RoleAssociationCreateWithoutRoleInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	group: Prisma.GroupCreateNestedOneWithoutRoleAssociationsInput;
+export type RoleAssociationCreateNestedManyWithoutRoleInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.RoleAssociationCreateWithoutRoleInput,
+				Prisma.RoleAssociationUncheckedCreateWithoutRoleInput
+		  >
+		| Prisma.RoleAssociationCreateWithoutRoleInput[]
+		| Prisma.RoleAssociationUncheckedCreateWithoutRoleInput[];
+	connectOrCreate?:
+		| Prisma.RoleAssociationCreateOrConnectWithoutRoleInput
+		| Prisma.RoleAssociationCreateOrConnectWithoutRoleInput[];
+	createMany?: Prisma.RoleAssociationCreateManyRoleInputEnvelope;
+	connect?:
+		| Prisma.RoleAssociationWhereUniqueInput
+		| Prisma.RoleAssociationWhereUniqueInput[];
 };
 
-export type RoleAssociationUncheckedCreateWithoutRoleInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	groupId: string;
+export type RoleAssociationUncheckedCreateNestedManyWithoutRoleInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.RoleAssociationCreateWithoutRoleInput,
+				Prisma.RoleAssociationUncheckedCreateWithoutRoleInput
+		  >
+		| Prisma.RoleAssociationCreateWithoutRoleInput[]
+		| Prisma.RoleAssociationUncheckedCreateWithoutRoleInput[];
+	connectOrCreate?:
+		| Prisma.RoleAssociationCreateOrConnectWithoutRoleInput
+		| Prisma.RoleAssociationCreateOrConnectWithoutRoleInput[];
+	createMany?: Prisma.RoleAssociationCreateManyRoleInputEnvelope;
+	connect?:
+		| Prisma.RoleAssociationWhereUniqueInput
+		| Prisma.RoleAssociationWhereUniqueInput[];
 };
 
-export type RoleAssociationCreateOrConnectWithoutRoleInput = {
-	where: Prisma.RoleAssociationWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.RoleAssociationCreateWithoutRoleInput,
-		Prisma.RoleAssociationUncheckedCreateWithoutRoleInput
-	>;
-};
-
-export type RoleAssociationCreateManyRoleInputEnvelope = {
-	data:
-		| Prisma.RoleAssociationCreateManyRoleInput
-		| Prisma.RoleAssociationCreateManyRoleInput[];
-	skipDuplicates?: boolean;
-};
-
-export type RoleAssociationUpsertWithWhereUniqueWithoutRoleInput = {
-	where: Prisma.RoleAssociationWhereUniqueInput;
-	update: Prisma.XOR<
-		Prisma.RoleAssociationUpdateWithoutRoleInput,
-		Prisma.RoleAssociationUncheckedUpdateWithoutRoleInput
-	>;
-	create: Prisma.XOR<
-		Prisma.RoleAssociationCreateWithoutRoleInput,
-		Prisma.RoleAssociationUncheckedCreateWithoutRoleInput
-	>;
-};
-
-export type RoleAssociationUpdateWithWhereUniqueWithoutRoleInput = {
-	where: Prisma.RoleAssociationWhereUniqueInput;
-	data: Prisma.XOR<
-		Prisma.RoleAssociationUpdateWithoutRoleInput,
-		Prisma.RoleAssociationUncheckedUpdateWithoutRoleInput
-	>;
-};
-
-export type RoleAssociationUpdateManyWithWhereWithoutRoleInput = {
-	where: Prisma.RoleAssociationScalarWhereInput;
-	data: Prisma.XOR<
-		Prisma.RoleAssociationUpdateManyMutationInput,
-		Prisma.RoleAssociationUncheckedUpdateManyWithoutRoleInput
-	>;
-};
-
-export type RoleAssociationScalarWhereInput = {
-	AND?:
+export type RoleAssociationUpdateManyWithoutRoleNestedInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.RoleAssociationCreateWithoutRoleInput,
+				Prisma.RoleAssociationUncheckedCreateWithoutRoleInput
+		  >
+		| Prisma.RoleAssociationCreateWithoutRoleInput[]
+		| Prisma.RoleAssociationUncheckedCreateWithoutRoleInput[];
+	connectOrCreate?:
+		| Prisma.RoleAssociationCreateOrConnectWithoutRoleInput
+		| Prisma.RoleAssociationCreateOrConnectWithoutRoleInput[];
+	upsert?:
+		| Prisma.RoleAssociationUpsertWithWhereUniqueWithoutRoleInput
+		| Prisma.RoleAssociationUpsertWithWhereUniqueWithoutRoleInput[];
+	createMany?: Prisma.RoleAssociationCreateManyRoleInputEnvelope;
+	set?:
+		| Prisma.RoleAssociationWhereUniqueInput
+		| Prisma.RoleAssociationWhereUniqueInput[];
+	disconnect?:
+		| Prisma.RoleAssociationWhereUniqueInput
+		| Prisma.RoleAssociationWhereUniqueInput[];
+	delete?:
+		| Prisma.RoleAssociationWhereUniqueInput
+		| Prisma.RoleAssociationWhereUniqueInput[];
+	connect?:
+		| Prisma.RoleAssociationWhereUniqueInput
+		| Prisma.RoleAssociationWhereUniqueInput[];
+	update?:
+		| Prisma.RoleAssociationUpdateWithWhereUniqueWithoutRoleInput
+		| Prisma.RoleAssociationUpdateWithWhereUniqueWithoutRoleInput[];
+	updateMany?:
+		| Prisma.RoleAssociationUpdateManyWithWhereWithoutRoleInput
+		| Prisma.RoleAssociationUpdateManyWithWhereWithoutRoleInput[];
+	deleteMany?:
 		| Prisma.RoleAssociationScalarWhereInput
 		| Prisma.RoleAssociationScalarWhereInput[];
-	OR?: Prisma.RoleAssociationScalarWhereInput[];
-	NOT?:
+};
+
+export type RoleAssociationUncheckedUpdateManyWithoutRoleNestedInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.RoleAssociationCreateWithoutRoleInput,
+				Prisma.RoleAssociationUncheckedCreateWithoutRoleInput
+		  >
+		| Prisma.RoleAssociationCreateWithoutRoleInput[]
+		| Prisma.RoleAssociationUncheckedCreateWithoutRoleInput[];
+	connectOrCreate?:
+		| Prisma.RoleAssociationCreateOrConnectWithoutRoleInput
+		| Prisma.RoleAssociationCreateOrConnectWithoutRoleInput[];
+	upsert?:
+		| Prisma.RoleAssociationUpsertWithWhereUniqueWithoutRoleInput
+		| Prisma.RoleAssociationUpsertWithWhereUniqueWithoutRoleInput[];
+	createMany?: Prisma.RoleAssociationCreateManyRoleInputEnvelope;
+	set?:
+		| Prisma.RoleAssociationWhereUniqueInput
+		| Prisma.RoleAssociationWhereUniqueInput[];
+	disconnect?:
+		| Prisma.RoleAssociationWhereUniqueInput
+		| Prisma.RoleAssociationWhereUniqueInput[];
+	delete?:
+		| Prisma.RoleAssociationWhereUniqueInput
+		| Prisma.RoleAssociationWhereUniqueInput[];
+	connect?:
+		| Prisma.RoleAssociationWhereUniqueInput
+		| Prisma.RoleAssociationWhereUniqueInput[];
+	update?:
+		| Prisma.RoleAssociationUpdateWithWhereUniqueWithoutRoleInput
+		| Prisma.RoleAssociationUpdateWithWhereUniqueWithoutRoleInput[];
+	updateMany?:
+		| Prisma.RoleAssociationUpdateManyWithWhereWithoutRoleInput
+		| Prisma.RoleAssociationUpdateManyWithWhereWithoutRoleInput[];
+	deleteMany?:
 		| Prisma.RoleAssociationScalarWhereInput
 		| Prisma.RoleAssociationScalarWhereInput[];
-	id?: Prisma.StringFilter<"RoleAssociation"> | string;
-	createdAt?: Prisma.DateTimeFilter<"RoleAssociation"> | Date | string;
-	updatedAt?:
-		| Prisma.DateTimeNullableFilter<"RoleAssociation">
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.DateTimeNullableFilter<"RoleAssociation">
-		| Date
-		| string
-		| null;
-	roleId?: Prisma.StringFilter<"RoleAssociation"> | string;
-	groupId?: Prisma.StringFilter<"RoleAssociation"> | string;
 };
 
 export type RoleAssociationCreateWithoutGroupInput = {
@@ -787,7 +704,39 @@ export type RoleAssociationUpdateManyWithWhereWithoutGroupInput = {
 	>;
 };
 
-export type RoleAssociationCreateManyRoleInput = {
+export type RoleAssociationScalarWhereInput = {
+	AND?:
+		| Prisma.RoleAssociationScalarWhereInput
+		| Prisma.RoleAssociationScalarWhereInput[];
+	OR?: Prisma.RoleAssociationScalarWhereInput[];
+	NOT?:
+		| Prisma.RoleAssociationScalarWhereInput
+		| Prisma.RoleAssociationScalarWhereInput[];
+	id?: Prisma.StringFilter<"RoleAssociation"> | string;
+	createdAt?: Prisma.DateTimeFilter<"RoleAssociation"> | Date | string;
+	updatedAt?:
+		| Prisma.DateTimeNullableFilter<"RoleAssociation">
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.DateTimeNullableFilter<"RoleAssociation">
+		| Date
+		| string
+		| null;
+	roleId?: Prisma.StringFilter<"RoleAssociation"> | string;
+	groupId?: Prisma.StringFilter<"RoleAssociation"> | string;
+};
+
+export type RoleAssociationCreateWithoutRoleInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	group: Prisma.GroupCreateNestedOneWithoutRoleAssociationsInput;
+};
+
+export type RoleAssociationUncheckedCreateWithoutRoleInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -795,52 +744,47 @@ export type RoleAssociationCreateManyRoleInput = {
 	groupId: string;
 };
 
-export type RoleAssociationUpdateWithoutRoleInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	group?: Prisma.GroupUpdateOneRequiredWithoutRoleAssociationsNestedInput;
+export type RoleAssociationCreateOrConnectWithoutRoleInput = {
+	where: Prisma.RoleAssociationWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.RoleAssociationCreateWithoutRoleInput,
+		Prisma.RoleAssociationUncheckedCreateWithoutRoleInput
+	>;
 };
 
-export type RoleAssociationUncheckedUpdateWithoutRoleInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	groupId?: Prisma.StringFieldUpdateOperationsInput | string;
+export type RoleAssociationCreateManyRoleInputEnvelope = {
+	data:
+		| Prisma.RoleAssociationCreateManyRoleInput
+		| Prisma.RoleAssociationCreateManyRoleInput[];
+	skipDuplicates?: boolean;
 };
 
-export type RoleAssociationUncheckedUpdateManyWithoutRoleInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	groupId?: Prisma.StringFieldUpdateOperationsInput | string;
+export type RoleAssociationUpsertWithWhereUniqueWithoutRoleInput = {
+	where: Prisma.RoleAssociationWhereUniqueInput;
+	update: Prisma.XOR<
+		Prisma.RoleAssociationUpdateWithoutRoleInput,
+		Prisma.RoleAssociationUncheckedUpdateWithoutRoleInput
+	>;
+	create: Prisma.XOR<
+		Prisma.RoleAssociationCreateWithoutRoleInput,
+		Prisma.RoleAssociationUncheckedCreateWithoutRoleInput
+	>;
+};
+
+export type RoleAssociationUpdateWithWhereUniqueWithoutRoleInput = {
+	where: Prisma.RoleAssociationWhereUniqueInput;
+	data: Prisma.XOR<
+		Prisma.RoleAssociationUpdateWithoutRoleInput,
+		Prisma.RoleAssociationUncheckedUpdateWithoutRoleInput
+	>;
+};
+
+export type RoleAssociationUpdateManyWithWhereWithoutRoleInput = {
+	where: Prisma.RoleAssociationScalarWhereInput;
+	data: Prisma.XOR<
+		Prisma.RoleAssociationUpdateManyMutationInput,
+		Prisma.RoleAssociationUncheckedUpdateManyWithoutRoleInput
+	>;
 };
 
 export type RoleAssociationCreateManyGroupInput = {
@@ -897,6 +841,62 @@ export type RoleAssociationUncheckedUpdateManyWithoutGroupInput = {
 		| string
 		| null;
 	roleId?: Prisma.StringFieldUpdateOperationsInput | string;
+};
+
+export type RoleAssociationCreateManyRoleInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	groupId: string;
+};
+
+export type RoleAssociationUpdateWithoutRoleInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	group?: Prisma.GroupUpdateOneRequiredWithoutRoleAssociationsNestedInput;
+};
+
+export type RoleAssociationUncheckedUpdateWithoutRoleInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	groupId?: Prisma.StringFieldUpdateOperationsInput | string;
+};
+
+export type RoleAssociationUncheckedUpdateManyWithoutRoleInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	groupId?: Prisma.StringFieldUpdateOperationsInput | string;
 };
 
 export type RoleAssociationSelect<

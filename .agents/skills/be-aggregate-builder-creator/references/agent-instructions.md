@@ -61,7 +61,7 @@ export class ReservationAggregate
 - Controller에서 직접 주입하지 않습니다. UseCase handler가 호출합니다.
 - Repository를 통해 aggregate root entity를 로드하고, entity method를 호출한 뒤 저장합니다.
 - 여러 aggregate/service/client를 조합하는 작업 흐름 조율은 UseCase에 둡니다.
-- 하나의 aggregate root 내부 도메인 규칙, child mutation entrypoint, aggregate 저장 흐름만 소유합니다.
+- 하나의 aggregate root 내부 도메인 규칙, 종속 모델 변경 진입점, aggregate 저장 흐름만 소유합니다.
 - 여러 출처의 값을 매핑할 때는 `input.xxx`, `context.userId`, `aggregate.id`처럼 소스 경로를 보존합니다.
 - aggregate root를 넘어 여러 package/domain에서 공유되는 response shape type은 `@cocrepo/type`, 순수 런타임 builder는 `@cocrepo/toolkit`에 둡니다.
 

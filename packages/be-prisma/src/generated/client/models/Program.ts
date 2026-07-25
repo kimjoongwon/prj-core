@@ -573,16 +573,6 @@ export type ProgramScalarRelationFilter = {
 	isNot?: Prisma.ProgramWhereInput;
 };
 
-export type ProgramListRelationFilter = {
-	every?: Prisma.ProgramWhereInput;
-	some?: Prisma.ProgramWhereInput;
-	none?: Prisma.ProgramWhereInput;
-};
-
-export type ProgramOrderByRelationAggregateInput = {
-	_count?: Prisma.SortOrder;
-};
-
 export type ProgramSessionIdRoutineIdCompoundUniqueInput = {
 	sessionId: string;
 	routineId: string;
@@ -639,6 +629,42 @@ export type ProgramMinOrderByAggregateInput = {
 
 export type ProgramSumOrderByAggregateInput = {
 	capacity?: Prisma.SortOrder;
+};
+
+export type ProgramListRelationFilter = {
+	every?: Prisma.ProgramWhereInput;
+	some?: Prisma.ProgramWhereInput;
+	none?: Prisma.ProgramWhereInput;
+};
+
+export type ProgramOrderByRelationAggregateInput = {
+	_count?: Prisma.SortOrder;
+};
+
+export type ProgramCreateNestedOneWithoutProgramActivitiesInput = {
+	create?: Prisma.XOR<
+		Prisma.ProgramCreateWithoutProgramActivitiesInput,
+		Prisma.ProgramUncheckedCreateWithoutProgramActivitiesInput
+	>;
+	connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutProgramActivitiesInput;
+	connect?: Prisma.ProgramWhereUniqueInput;
+};
+
+export type ProgramUpdateOneRequiredWithoutProgramActivitiesNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.ProgramCreateWithoutProgramActivitiesInput,
+		Prisma.ProgramUncheckedCreateWithoutProgramActivitiesInput
+	>;
+	connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutProgramActivitiesInput;
+	upsert?: Prisma.ProgramUpsertWithoutProgramActivitiesInput;
+	connect?: Prisma.ProgramWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.ProgramUpdateToOneWithWhereWithoutProgramActivitiesInput,
+			Prisma.ProgramUpdateWithoutProgramActivitiesInput
+		>,
+		Prisma.ProgramUncheckedUpdateWithoutProgramActivitiesInput
+	>;
 };
 
 export type ProgramCreateNestedOneWithoutReservationsInput = {
@@ -855,30 +881,124 @@ export type ProgramUncheckedUpdateManyWithoutSessionNestedInput = {
 		| Prisma.ProgramScalarWhereInput[];
 };
 
-export type ProgramCreateNestedOneWithoutProgramActivitiesInput = {
-	create?: Prisma.XOR<
-		Prisma.ProgramCreateWithoutProgramActivitiesInput,
-		Prisma.ProgramUncheckedCreateWithoutProgramActivitiesInput
-	>;
-	connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutProgramActivitiesInput;
-	connect?: Prisma.ProgramWhereUniqueInput;
+export type ProgramCreateWithoutProgramActivitiesInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	instructorId: string;
+	capacity: number;
+	name: string;
+	level?: string | null;
+	routineNameSnapshot?: string | null;
+	routineLabelSnapshot?: string | null;
+	routine: Prisma.RoutineCreateNestedOneWithoutProgramsInput;
+	session: Prisma.SessionCreateNestedOneWithoutProgramsInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutProgramInput;
 };
 
-export type ProgramUpdateOneRequiredWithoutProgramActivitiesNestedInput = {
-	create?: Prisma.XOR<
+export type ProgramUncheckedCreateWithoutProgramActivitiesInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	routineId: string;
+	sessionId: string;
+	instructorId: string;
+	capacity: number;
+	name: string;
+	level?: string | null;
+	routineNameSnapshot?: string | null;
+	routineLabelSnapshot?: string | null;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutProgramInput;
+};
+
+export type ProgramCreateOrConnectWithoutProgramActivitiesInput = {
+	where: Prisma.ProgramWhereUniqueInput;
+	create: Prisma.XOR<
 		Prisma.ProgramCreateWithoutProgramActivitiesInput,
 		Prisma.ProgramUncheckedCreateWithoutProgramActivitiesInput
 	>;
-	connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutProgramActivitiesInput;
-	upsert?: Prisma.ProgramUpsertWithoutProgramActivitiesInput;
-	connect?: Prisma.ProgramWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.ProgramUpdateToOneWithWhereWithoutProgramActivitiesInput,
-			Prisma.ProgramUpdateWithoutProgramActivitiesInput
-		>,
+};
+
+export type ProgramUpsertWithoutProgramActivitiesInput = {
+	update: Prisma.XOR<
+		Prisma.ProgramUpdateWithoutProgramActivitiesInput,
 		Prisma.ProgramUncheckedUpdateWithoutProgramActivitiesInput
 	>;
+	create: Prisma.XOR<
+		Prisma.ProgramCreateWithoutProgramActivitiesInput,
+		Prisma.ProgramUncheckedCreateWithoutProgramActivitiesInput
+	>;
+	where?: Prisma.ProgramWhereInput;
+};
+
+export type ProgramUpdateToOneWithWhereWithoutProgramActivitiesInput = {
+	where?: Prisma.ProgramWhereInput;
+	data: Prisma.XOR<
+		Prisma.ProgramUpdateWithoutProgramActivitiesInput,
+		Prisma.ProgramUncheckedUpdateWithoutProgramActivitiesInput
+	>;
+};
+
+export type ProgramUpdateWithoutProgramActivitiesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	instructorId?: Prisma.StringFieldUpdateOperationsInput | string;
+	capacity?: Prisma.IntFieldUpdateOperationsInput | number;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	routineNameSnapshot?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	routineLabelSnapshot?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	routine?: Prisma.RoutineUpdateOneRequiredWithoutProgramsNestedInput;
+	session?: Prisma.SessionUpdateOneRequiredWithoutProgramsNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutProgramNestedInput;
+};
+
+export type ProgramUncheckedUpdateWithoutProgramActivitiesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	routineId?: Prisma.StringFieldUpdateOperationsInput | string;
+	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
+	instructorId?: Prisma.StringFieldUpdateOperationsInput | string;
+	capacity?: Prisma.IntFieldUpdateOperationsInput | number;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	routineNameSnapshot?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	routineLabelSnapshot?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutProgramNestedInput;
 };
 
 export type ProgramCreateWithoutReservationsInput = {
@@ -1167,126 +1287,6 @@ export type ProgramUpdateManyWithWhereWithoutSessionInput = {
 		Prisma.ProgramUpdateManyMutationInput,
 		Prisma.ProgramUncheckedUpdateManyWithoutSessionInput
 	>;
-};
-
-export type ProgramCreateWithoutProgramActivitiesInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	instructorId: string;
-	capacity: number;
-	name: string;
-	level?: string | null;
-	routineNameSnapshot?: string | null;
-	routineLabelSnapshot?: string | null;
-	routine: Prisma.RoutineCreateNestedOneWithoutProgramsInput;
-	session: Prisma.SessionCreateNestedOneWithoutProgramsInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutProgramInput;
-};
-
-export type ProgramUncheckedCreateWithoutProgramActivitiesInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	routineId: string;
-	sessionId: string;
-	instructorId: string;
-	capacity: number;
-	name: string;
-	level?: string | null;
-	routineNameSnapshot?: string | null;
-	routineLabelSnapshot?: string | null;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutProgramInput;
-};
-
-export type ProgramCreateOrConnectWithoutProgramActivitiesInput = {
-	where: Prisma.ProgramWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.ProgramCreateWithoutProgramActivitiesInput,
-		Prisma.ProgramUncheckedCreateWithoutProgramActivitiesInput
-	>;
-};
-
-export type ProgramUpsertWithoutProgramActivitiesInput = {
-	update: Prisma.XOR<
-		Prisma.ProgramUpdateWithoutProgramActivitiesInput,
-		Prisma.ProgramUncheckedUpdateWithoutProgramActivitiesInput
-	>;
-	create: Prisma.XOR<
-		Prisma.ProgramCreateWithoutProgramActivitiesInput,
-		Prisma.ProgramUncheckedCreateWithoutProgramActivitiesInput
-	>;
-	where?: Prisma.ProgramWhereInput;
-};
-
-export type ProgramUpdateToOneWithWhereWithoutProgramActivitiesInput = {
-	where?: Prisma.ProgramWhereInput;
-	data: Prisma.XOR<
-		Prisma.ProgramUpdateWithoutProgramActivitiesInput,
-		Prisma.ProgramUncheckedUpdateWithoutProgramActivitiesInput
-	>;
-};
-
-export type ProgramUpdateWithoutProgramActivitiesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	instructorId?: Prisma.StringFieldUpdateOperationsInput | string;
-	capacity?: Prisma.IntFieldUpdateOperationsInput | number;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	routineNameSnapshot?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	routineLabelSnapshot?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	routine?: Prisma.RoutineUpdateOneRequiredWithoutProgramsNestedInput;
-	session?: Prisma.SessionUpdateOneRequiredWithoutProgramsNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutProgramNestedInput;
-};
-
-export type ProgramUncheckedUpdateWithoutProgramActivitiesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	routineId?: Prisma.StringFieldUpdateOperationsInput | string;
-	sessionId?: Prisma.StringFieldUpdateOperationsInput | string;
-	instructorId?: Prisma.StringFieldUpdateOperationsInput | string;
-	capacity?: Prisma.IntFieldUpdateOperationsInput | number;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	routineNameSnapshot?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	routineLabelSnapshot?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutProgramNestedInput;
 };
 
 export type ProgramCreateManyRoutineInput = {

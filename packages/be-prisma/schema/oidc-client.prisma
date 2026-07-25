@@ -1,0 +1,47 @@
+// @data-type: CONFIGURATION
+// @aggregate-root: true
+// @description: OIDC 클라이언트 애플리케이션을 독립 관리하는 루트
+/// @displayName OIDC 클라이언트
+model OidcClient {
+  id                      String    @id @default(uuid())
+  createdAt               DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt               DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt               DateTime? @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 클라이언트 ID
+  clientId                String    @unique @map("client_id")
+  /// @displayName 클라이언트 시크릿
+  clientSecret            String?   @map("client_secret")
+  /// @displayName 클라이언트 이름
+  name                    String
+  /// @displayName 리다이렉트 URI 목록
+  redirectUris            String[]  @map("redirect_uris")
+  /// @displayName 로그인 화면 URL
+  loginUrl                String?   @map("login_url")
+  /// @displayName 기본 복귀 URL
+  defaultReturnTo         String?   @map("default_return_to")
+  /// @displayName 허용된 Grant 타입
+  grantTypes              String[]  @default(["authorization_code"]) @map("grant_types")
+  /// @displayName 응답 타입
+  responseTypes           String[]  @default(["code"]) @map("response_types")
+  /// @displayName 토큰 엔드포인트 인증 방식
+  tokenEndpointAuthMethod String    @default("client_secret_basic") @map("token_endpoint_auth_method")
+  /// @displayName 허용된 스코프
+  scope                   String    @default("openid profile email")
+  /// @displayName 활성화 여부
+  isActive                Boolean   @default(true) @map("is_active")
+  /// @displayName First-party 클라이언트 여부
+  isFirstParty            Boolean   @default(false) @map("is_first_party")
+  /// @displayName 권한 동의 화면 생략
+  skipConsent             Boolean   @default(false) @map("skip_consent")
+  /// @displayName 로그인 화면 설정
+  loginUi                 Json?     @map("login_ui")
+  /// @displayName 로고 URI
+  logoUri                 String?   @map("logo_uri")
+  /// @displayName 정책 URI
+  policyUri               String?   @map("policy_uri")
+  /// @displayName 서비스 약관 URI
+  tosUri                  String?   @map("tos_uri")
+
+  @@index([isActive])
+  @@map("oidc_clients")
+}

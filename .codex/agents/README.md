@@ -59,7 +59,7 @@ subagent TOML은 얇은 실행 계약만 소유합니다. 상세 작업 지시�
 - [02-be-database-expert.toml](./02-be-database-expert.toml): PostgreSQL/Prisma 데이터 구조를 설계하고 성능과 제약 조건을 점검합니다.
 - [03-be-prisma-builder.toml](./03-be-prisma-builder.toml): Prisma schema를 만들거나 고치고 모델 관계를 정리합니다.
 - [04-be-prisma-annotator.toml](./04-be-prisma-annotator.toml): Prisma schema에 한글 표시 이름 주석을 붙입니다.
-- [05-be-dmmf-parser-builder.toml](./05-be-dmmf-parser-builder.toml): Prisma DMMF를 읽어 필요한 메타데이터를 꺼내는 유틸을 만듭니다.
+- [05-be-dmmf-parser-builder.toml](./05-be-dmmf-parser-builder.toml): Prisma DMMF를 읽어 `/// @displayName` 문서 정보를 꺼내는 유틸을 만듭니다.
 - [06-common-schema-builder.toml](./06-common-schema-builder.toml): 프론트엔드와 백엔드가 함께 쓰는 검증 스키마를 만듭니다.
 - [07-common-type-builder.toml](./07-common-type-builder.toml): 여러 패키지에서 함께 쓰는 TypeScript 타입을 만듭니다.
 - [08-common-toolkit-builder.toml](./08-common-toolkit-builder.toml): 여러 패키지에서 함께 쓰는 toolkit 유틸을 만듭니다.

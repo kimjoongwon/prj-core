@@ -1,0 +1,16 @@
+// @data-type: MASTER
+// @description: Space와 Category를 연결하는 분류 링크
+/// @displayName 공간 분류
+model SpaceClassification {
+  id         String    @id @default(uuid())
+  categoryId String    @map("category_id")
+  spaceId    String    @unique @map("space_id")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt  DateTime? @map("removed_at") @db.Timestamptz(6)
+  category   Category  @relation(fields: [categoryId], references: [id])
+  space      Space     @relation(fields: [spaceId], references: [id])
+
+  @@unique([categoryId, spaceId])
+  @@map("space_classifications")
+}

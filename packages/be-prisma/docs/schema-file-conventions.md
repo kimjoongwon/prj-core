@@ -1,201 +1,285 @@
-# Prisma Schema File Conventions
+# Prisma 스키마 파일 규칙: 처음 보는 사람용
 
-## 목적
+이 문서는 `packages/be-prisma/schema` 안의 `.prisma` 파일을 **어디에 두고, 어떻게 나누는지** 설명합니다.
 
-`packages/be-prisma/schema`를 도메인 폴더 기준으로 분할하고, 각 파일의 대표 모델과 실제 aggregate root를 구분하여 자동 검증합니다.
+아래 한 줄만 먼저 기억하면 됩니다.
 
-## 절대 기준
+> 하위 폴더 없이 모델 하나를 파일 하나에 두고, 모델 이름으로 파일 이름을 계산합니다.
 
-1. `_base.prisma`는 루트에 두고 `generator`/`datasource` 및 공통 메타데이터 규칙만 정의합니다.
-2. 나머지 `.prisma` 파일은 도메인 폴더(`access-control/`, `identity/`, `asset/` 등) 아래에 둡니다.
-3. 모델/enum은 단일 파일에만 선언합니다.
-4. 각 파일은 `_base.prisma`를 제외하고 `@schema-owner: true` 모델을 정확히 1개만 가집니다.
-5. `@schema-owner: true`는 해당 파일의 대표 소유 모델(anchor model)입니다.
-6. `@aggregate-root: true`는 `@schema-owner: true` 모델 중 독립적으로 관리되는 실제 aggregate root에만 선택적으로 부여합니다.
-7. `@usecase-anchor: true`는 `@schema-owner: true`와 `@aggregate-root: true`가 붙은 모델 중 application/usecase 흐름의 기준점에만 선택적으로 부여합니다.
-8. 선언 소유권은 아래 매트릭스를 따릅니다.
-9. enum은 실제 사용처가 있어야 합니다(미사용 enum 금지).
-10. 주석 표준은 `@displayName`만 허용합니다(`@DisplayName`, `@displayname` 금지).
+모델 위에 쓰는 주석의 자세한 뜻은
+[schema-metadata-guide.md](./schema-metadata-guide.md)를 봅니다.
 
-## 도메인 폴더 구조
+DB 컬럼을 실제로 추가하거나 바꾸는 순서는
+[schema-change-playbook.md](./schema-change-playbook.md)를 봅니다.
 
-| 도메인 폴더 | 설명 |
-|-------------|------|
-| `access-control/` | Subject/Action/Ability/Policy/Role |
-| `asset/` | Asset/Folder/Album |
-| `auth/` | 감사 로그, 비밀번호 이력, 정책, 화이트리스트 |
-| `content/` | Content/Template/Translation |
-| `identity/` | User/Space/Tenant |
-| `inquiry/` | Inquiry/Thread/AI 로그 |
-| `oidc/` | OIDC client/model |
-| `platform/` | 운영 메타데이터 및 배포 이력 |
-| `scheduling/` | Reservation/Timeline/Routine/Task |
-| `taxonomy/` | Category/Group |
-| `wallet/` | SafeWallet |
+## 1. Prisma 스키마가 무엇인가요?
 
-## 파일별 Schema Owner Marker
+Prisma 스키마는 데이터베이스의 설계도입니다.
 
-| 파일 | `@schema-owner: true` 모델 |
-|------|----------------------------|
-| `access-control/ability.prisma` | `Ability` |
-| `access-control/action.prisma` | `Action` |
-| `access-control/policy.prisma` | `Policy` |
-| `access-control/role.prisma` | `Role` |
-| `access-control/subject.prisma` | `Subject` |
-| `asset/album.prisma` | `Album` |
-| `asset/asset.prisma` | `Asset` |
-| `asset/folder.prisma` | `Folder` |
-| `auth/auth-audit.prisma` | `AuthAuditLog` |
-| `auth/email-verification.prisma` | `EmailVerification` |
-| `auth/password-history.prisma` | `PasswordHistory` |
-| `auth/security-policy.prisma` | `SecurityPolicy` |
-| `auth/whitelist-entry.prisma` | `WhitelistEntry` |
-| `content/content.prisma` | `Content` |
-| `content/service-document.prisma` | `ServiceDocument` |
-| `content/template.prisma` | `Template` |
-| `content/translation.prisma` | `Translation` |
-| `identity/space.prisma` | `Space` |
-| `identity/tenant.prisma` | `Tenant` |
-| `identity/tenant-access-request.prisma` | `TenantAccessRequest` |
-| `identity/user.prisma` | `User` |
-| `inquiry/inquiry-ai.prisma` | `AIAgentLog` |
-| `inquiry/inquiry-thread.prisma` | `InquiryThread` |
-| `inquiry/inquiry.prisma` | `Inquiry` |
-| `oidc/oidc-client.prisma` | `OidcClient` |
-| `oidc/oidc-model.prisma` | `OidcModel` |
-| `platform/reference-data-migration.prisma` | `ReferenceDataMigrationHistory` |
-| `scheduling/reservation.prisma` | `Reservation` |
-| `scheduling/routine.prisma` | `Routine` |
-| `scheduling/task.prisma` | `Task` |
-| `scheduling/timeline.prisma` | `Timeline` |
-| `taxonomy/category.prisma` | `Category` |
-| `taxonomy/group.prisma` | `Group` |
-| `wallet/safe.prisma` | `SafeWallet` |
+```prisma
+model User {
+  id    String @id
+  email String @unique
+}
+```
 
-## 파일별 Aggregate Root Marker
+쉽게 비유하면 다음과 같습니다.
 
-| 파일 | `@aggregate-root: true` 모델 |
-|------|------------------------------|
-| `access-control/ability.prisma` | `Ability` |
-| `access-control/action.prisma` | `Action` |
-| `access-control/policy.prisma` | `Policy` |
-| `access-control/role.prisma` | `Role` |
-| `access-control/subject.prisma` | `Subject` |
-| `asset/album.prisma` | `Album` |
-| `asset/asset.prisma` | `Asset` |
-| `asset/folder.prisma` | `Folder` |
-| `auth/email-verification.prisma` | `EmailVerification` |
-| `auth/security-policy.prisma` | `SecurityPolicy` |
-| `auth/whitelist-entry.prisma` | `WhitelistEntry` |
-| `content/content.prisma` | `Content` |
-| `content/service-document.prisma` | `ServiceDocument` |
-| `content/template.prisma` | `Template` |
-| `content/translation.prisma` | `Translation` |
-| `identity/space.prisma` | `Space` |
-| `identity/tenant.prisma` | `Tenant` |
-| `identity/tenant-access-request.prisma` | `TenantAccessRequest` |
-| `identity/user.prisma` | `User` |
-| `inquiry/inquiry.prisma` | `Inquiry` |
-| `oidc/oidc-client.prisma` | `OidcClient` |
-| `oidc/oidc-model.prisma` | `OidcModel` |
-| `platform/reference-data-migration.prisma` | `ReferenceDataMigrationHistory` |
-| `scheduling/reservation.prisma` | `Reservation` |
-| `scheduling/routine.prisma` | `Routine` |
-| `scheduling/task.prisma` | `Task` |
-| `scheduling/timeline.prisma` | `Timeline` |
-| `taxonomy/category.prisma` | `Category` |
-| `taxonomy/group.prisma` | `Group` |
-| `wallet/safe.prisma` | `SafeWallet` |
+- `model`은 표 하나의 설계도입니다.
+- 필드는 표의 열입니다.
+- DB의 실제 row는 표에 적힌 한 줄의 데이터입니다.
+- `.prisma` 파일은 설계도 한 장입니다.
 
-다음 파일들은 대표 모델은 있으나 aggregate root는 아닙니다.
+이 저장소에서는 설계도 한 장에 모델 하나만 적습니다. 업무 분류는 폴더가 아니라 모델의 `@data-type`으로 기록합니다. 따라서 모델의 업무 의미가 다시 분류되어도 파일 경로는 바뀌지 않습니다.
 
-- `auth/auth-audit.prisma`
-- `auth/password-history.prisma`
-- `inquiry/inquiry-ai.prisma`
-- `inquiry/inquiry-thread.prisma`
+## 2. 전체 구조
 
-## 파일별 UseCase Anchor Marker
+모든 `.prisma` 파일은 `schema/` 바로 아래에 있습니다. `schema/` 아래에는 하위 디렉터리를 만들지 않습니다.
 
-`@usecase-anchor: true`는 도메인 소유 범위를 넓히는 태그가 아닙니다. application/usecase 계층에서 여러 aggregate, JOIN, catalog를 조합할 때 기준점이 되는 schema owner를 표시합니다. 실제 폴더 구조는 도메인 폴더를 유지하고, usecase-anchor 기준 정돈은 아래 매트릭스와 검증 스크립트로 관리합니다.
+```text
+packages/be-prisma/schema/
+├── _base.prisma
+├── _enums.prisma
+├── ability.prisma
+├── ai-agent-log.prisma
+├── oidc-client.prisma
+├── user.prisma
+└── ...                     # 나머지 모델도 같은 규칙으로 계산
+```
 
-| 파일 | `@usecase-anchor: true` 모델 |
-|------|------------------------------|
-| `access-control/ability.prisma` | `Ability` |
-| `access-control/action.prisma` | `Action` |
-| `access-control/policy.prisma` | `Policy` |
-| `access-control/role.prisma` | `Role` |
-| `access-control/subject.prisma` | `Subject` |
-| `asset/asset.prisma` | `Asset` |
-| `asset/folder.prisma` | `Folder` |
-| `auth/email-verification.prisma` | `EmailVerification` |
-| `auth/security-policy.prisma` | `SecurityPolicy` |
-| `content/content.prisma` | `Content` |
-| `content/service-document.prisma` | `ServiceDocument` |
-| `content/template.prisma` | `Template` |
-| `content/translation.prisma` | `Translation` |
-| `identity/space.prisma` | `Space` |
-| `identity/tenant-access-request.prisma` | `TenantAccessRequest` |
-| `identity/user.prisma` | `User` |
-| `inquiry/inquiry.prisma` | `Inquiry` |
-| `oidc/oidc-client.prisma` | `OidcClient` |
-| `scheduling/reservation.prisma` | `Reservation` |
-| `scheduling/routine.prisma` | `Routine` |
-| `scheduling/task.prisma` | `Task` |
-| `scheduling/timeline.prisma` | `Timeline` |
+현재 구조의 계약은 다음과 같습니다.
 
-다음 aggregate root는 현재 usecase-anchor로 표시하지 않습니다. 기준 데이터, 내부 장부, taxonomy, wallet처럼 직접 application flow의 기준점으로 쓰이지 않는 모델입니다.
+- 모델 파일 64개
+- 예약 파일 2개: `_base.prisma`, `_enums.prisma`
+- 전체 `.prisma` 파일 66개
+- 모델 64개와 enum 32개
 
-- `asset/album.prisma`
-- `auth/whitelist-entry.prisma`
-- `identity/tenant.prisma`
-- `oidc/oidc-model.prisma`
-- `platform/reference-data-migration.prisma`
-- `taxonomy/category.prisma`
-- `taxonomy/group.prisma`
-- `wallet/safe.prisma`
+전체 모델 이름을 문서에 복사해 두지 않습니다. 실제 `schema/*.prisma` 선언이 단일 기준입니다.
 
-## 선언 소유권 매트릭스
+## 3. 모델 파일 규칙
 
-| 파일 | 소유 모델/enum |
-|------|----------------|
-| `access-control/ability.prisma` | `Ability` |
-| `access-control/action.prisma` | `Action` |
-| `access-control/policy.prisma` | `Policy`, `PolicyAbility`, `RolePolicy` |
-| `access-control/role.prisma` | `Role`, `RoleAssociation`, `RoleClassification` |
-| `access-control/subject.prisma` | `Subject` |
-| `asset/album.prisma` | `Album`, `AlbumEntry` |
-| `asset/asset.prisma` | `Asset`, `Image`, `Video`, `Document`, `Derivative`, `AssetKind`, `AssetStatus`, `DerivativeKind` |
-| `asset/folder.prisma` | `Folder` |
-| `auth/auth-audit.prisma` | `AuthAuditLog`, `AuthAuditResult` |
-| `auth/email-verification.prisma` | `EmailVerification`, `EmailVerificationStatus` |
-| `auth/password-history.prisma` | `PasswordHistory` |
-| `auth/security-policy.prisma` | `SecurityPolicy` |
-| `auth/whitelist-entry.prisma` | `WhitelistType`, `WhitelistEntry` |
-| `content/content.prisma` | `Post`, `Content`, `TextTypes` |
-| `content/service-document.prisma` | `ServiceDocument`, `ServiceDocumentKind`, `ServiceDocumentPlatform`, `ServiceDocumentStatus`, `ServiceDocumentFormat` |
-| `content/template.prisma` | `Template`, `TemplateVariable`, `TemplateType` |
-| `content/translation.prisma` | `Translation`, `LanguageCode` |
-| `identity/space.prisma` | `Space`, `Company`, `SpaceClassification`, `SpaceAssociation`, `Ground` |
-| `identity/tenant.prisma` | `Tenant` |
-| `identity/tenant-access-request.prisma` | `TenantAccessRequest`, `TenantAccessRequestStatus` |
-| `identity/user.prisma` | `User`, `UserClassification`, `UserAssociation`, `Profile` |
-| `inquiry/inquiry-ai.prisma` | `AIAgentLog`, `AIAgentAction` |
-| `inquiry/inquiry-thread.prisma` | `InquiryThread`, `InquiryMessage`, `InquiryParticipant`, `InquiryAttachment`, `InquiryParticipantRole`, `SenderType`, `ThreadStatus`, `MessageContentType`, `AttachmentFileType` |
-| `inquiry/inquiry.prisma` | `Inquiry`, `InquiryTag`, `SentimentAnalysis`, `InquiryCategory`, `InquiryChannel`, `InquiryStatus`, `InquiryPriority`, `InquirySource`, `SentimentType` |
-| `oidc/oidc-client.prisma` | `OidcClient` |
-| `oidc/oidc-model.prisma` | `OidcModel` |
-| `platform/reference-data-migration.prisma` | `ReferenceDataMigrationHistory` |
-| `scheduling/reservation.prisma` | `Reservation`, `ReservationStatus` |
-| `scheduling/routine.prisma` | `Routine`, `Activity` |
-| `scheduling/task.prisma` | `Task`, `Exercise` |
-| `scheduling/timeline.prisma` | `Timeline`, `Session`, `Program`, `SessionTypes`, `RepeatCycleTypes`, `RecurringDayOfWeek` |
-| `taxonomy/category.prisma` | `Category`, `CategoryTypes` |
-| `taxonomy/group.prisma` | `Group`, `GroupTypes` |
-| `wallet/safe.prisma` | `SafeWallet`, `SafeTransaction`, `SafeConfirmation` |
+예약 파일이 아닌 `.prisma` 파일은 아래 조건을 모두 지킵니다.
 
-## 검증 명령
+1. `schema/` 바로 아래에 있습니다.
+2. `model`을 정확히 하나 선언합니다.
+3. `enum`, `generator`, `datasource`를 선언하지 않습니다.
+4. 파일 이름은 model 이름에서 기계적으로 계산합니다.
+5. [schema-metadata-guide.md](./schema-metadata-guide.md)의 모델 메타데이터 계약을 지킵니다.
+
+메타데이터 종류와 형식, 의미와 판단 기준은 이 문서에서 다시 정의하지 않습니다.
+
+## 4. 파일 이름은 어떻게 계산하나요?
+
+model 이름은 `UpperCamelCase`로 작성합니다. 파일 이름은 다음 변환을 한 뒤 `.prisma`를 붙입니다.
+
+```ts
+name
+  .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+  .replace(/([A-Z])([A-Z][a-z])/g, "$1-$2")
+  .toLowerCase();
+```
+
+예:
+
+| model 이름        | 계산된 파일 이름          |
+| ----------------- | -------------------------- |
+| `User`            | `user.prisma`              |
+| `OidcClient`      | `oidc-client.prisma`       |
+| `AIAgentLog`      | `ai-agent-log.prisma`      |
+| `S3Asset`         | `s3-asset.prisma`           |
+| `SafeTransaction` | `safe-transaction.prisma`  |
+
+사람이 별도의 경로 표에서 파일 이름을 고르지 않습니다. 변환 함수가 유일한 경로 규칙입니다.
+
+계산된 이름이 다른 모델과 충돌하면 `schema:check`가 실패합니다. macOS처럼 대소문자를 구분하지 않는 파일 시스템도 고려하여 대소문자만 다른 이름 역시 충돌로 봅니다.
+
+## 5. 예약 파일 규칙
+
+### `_base.prisma`
+
+`_base.prisma`는 Prisma가 전체 스키마를 읽을 때 필요한 공통 설정만 소유합니다.
+
+- `generator`와 `datasource`만 선언합니다.
+- `model`과 `enum`을 선언하지 않습니다.
+- model 설계 메타데이터를 두지 않습니다.
+- 현재 generator output과 datasource 설정은 스키마 구조 정리만을 이유로 바꾸지 않습니다.
+
+### `_enums.prisma`
+
+`_enums.prisma`는 모든 Prisma enum을 한곳에서 소유합니다.
+
+- `enum`만 선언합니다.
+- `model`, `generator`, `datasource`를 선언하지 않습니다.
+- enum에는 model 설계 메타데이터를 두지 않습니다.
+- enum 선언은 enum 이름의 오름차순으로 정렬합니다.
+- enum 이름, 값과 `@map`은 DB mapping 계약이므로 임의로 바꾸지 않습니다.
+- `///` 문서 주석은 DMMF 문서 계약이므로 임의로 바꾸지 않습니다.
+- 어느 모델에서도 사용하지 않는 enum을 미리 추가하지 않습니다.
+
+예:
+
+```prisma
+enum ActivityType {
+  ARTICLE
+  VIDEO
+}
+
+enum LanguageCode {
+  EN
+  KO
+}
+```
+
+enum을 사용하는 model이 달라져도 enum 파일 경로는 `_enums.prisma`로 고정됩니다.
+
+## 6. 왜 하위 폴더를 사용하지 않나요?
+
+도메인 폴더를 사용하면 새 모델마다 “어느 폴더가 맞는가?”를 먼저 판단해야 합니다. 여러 업무 영역에서 함께 쓰는 모델은 한 폴더만 고르기 어렵고, 업무 분류가 바뀌면 파일 이동도 필요합니다.
+
+단일 폴더 구조에서는 경로가 모델 이름만으로 정해집니다.
+
+```text
+모델 이름 -> kebab-case 변환 -> schema/<이름>.prisma
+```
+
+업무 의미는 `@data-type`이 소유합니다.
+
+```text
+업무 의미 -> MASTER | REFERENCE | CONFIGURATION | TRANSACTION | EVENT
+```
+
+경로 계산과 업무 판단을 분리하면 사람은 의미만 판단하고, 위치는 도구가 검사할 수 있습니다.
+
+## 7. 새 모델을 추가하는 순서
+
+예를 들어 `NotificationRule` 모델을 추가한다고 가정합니다.
+
+### 1단계: 같은 선언이 없는지 찾습니다
 
 ```bash
-pnpm --filter=@cocrepo/prisma schema:check
+rg "model NotificationRule\\b" packages/be-prisma/schema
+```
+
+같은 model을 다른 파일에 다시 선언하지 않습니다.
+
+### 2단계: 파일 이름을 계산합니다
+
+```text
+NotificationRule -> notification-rule.prisma
+```
+
+만들 위치는 `packages/be-prisma/schema/notification-rule.prisma`입니다. 하위 폴더를 만들지 않습니다.
+
+### 3단계: 모델 하나만 선언합니다
+
+```prisma
+// @data-type: CONFIGURATION
+// @description: 알림 전달 조건과 채널 선택 규칙을 관리
+/// @displayName 알림 규칙
+model NotificationRule {
+  id String @id @default(uuid())
+}
+```
+
+같은 업무 흐름에서 쓰더라도 두 번째 model이 필요하면 두 번째 파일을 만듭니다.
+
+### 4단계: 데이터 타입을 판단합니다
+
+다섯 타입 중 하나를 고릅니다. 분류가 어렵다면 경로를 바꾸지 말고 승인된 spec이나 도메인 owner에게 의미를 확인합니다.
+
+### 5단계: 자동 검사를 실행합니다
+
+```bash
+pnpm --filter=@cocrepo/prisma run schema:check
 pnpm --filter=@cocrepo/prisma exec prisma validate
 ```
+
+## 8. 새 enum을 추가하는 순서
+
+1. 같은 enum 선언이 없는지 검색합니다.
+2. 실제 model 필드에서 바로 사용할 enum인지 확인합니다.
+3. `_enums.prisma`에서 이름 오름차순 위치에 선언합니다.
+4. enum 이름, 값과 DB mapping을 검토합니다.
+5. `schema:check`와 `prisma validate`를 실행합니다.
+
+enum마다 별도 파일이나 하위 폴더를 만들지 않습니다.
+
+## 9. `schema:check`가 검사하는 것
+
+자동 검사는 사람이 실수하기 쉬운 구조를 확인합니다.
+
+- `schema/` 아래에 하위 디렉터리가 없는가
+- `_base.prisma`와 `_enums.prisma`가 정확한 책임만 가지는가
+- 일반 파일마다 model이 정확히 하나 있는가
+- model 파일에 enum이나 공통 설정이 섞이지 않았는가
+- model 이름과 kebab-case 파일 이름이 일치하는가
+- 모델 이름과 계산된 경로가 대소문자 기준으로도 충돌하지 않는가
+- model과 enum 선언이 중복되지 않는가
+- `_enums.prisma`의 enum이 이름순이며 실제로 사용되는가
+- 모든 model이 메타데이터 가이드의 현재 자동 검사 계약을 지키는가
+
+성공하면 전체 파일·모델·enum 수와 타입별 모델 수를 출력합니다.
+
+자동 검사는 업무 의미까지 결정하지 못합니다. 메타데이터의 의미 판단은
+[schema-metadata-guide.md](./schema-metadata-guide.md)를 따르고, relation과 제약 조건이 의도한 DB 구조를 표현하는지는 사람이 확인합니다.
+
+## 10. 허용하지 않는 구조
+
+다음 구조는 만들지 않습니다.
+
+- `schema/<하위-폴더>/<파일>.prisma` 같은 중첩 경로
+- 모델 여러 개가 함께 있는 파일
+- enum이 섞인 모델 파일
+- `_enums.prisma` 밖의 enum 선언
+- 별도 수동 모델 경로 목록
+- 계약을 확장하지 않은 top-level `view` 또는 composite `type` 선언
+
+새로운 top-level 선언 종류가 필요하면 임의 파일에 넣지 않고, 예약 파일과 파일명 계산 규칙을 먼저 문서와 검증기에 추가합니다.
+
+메타데이터 종류와 형식은 [schema-metadata-guide.md](./schema-metadata-guide.md)의 현재 계약을 따르며 이 문서에서 별도 목록을 관리하지 않습니다.
+
+## 11. 자주 하는 실수
+
+### 모델 파일을 새 하위 폴더에 둠
+
+모델 이름으로 루트 파일 이름을 계산합니다. 업무 분류는 폴더가 아니라 `@data-type`에 적습니다.
+
+### 관련 모델을 같은 파일에 넣음
+
+relation으로 가까운 모델이어도 파일은 각각 하나씩 사용합니다.
+
+### enum을 사용하는 모델 옆에 선언함
+
+enum은 여러 모델이 공유할 수 있습니다. `_enums.prisma`에 이름순으로 둡니다.
+
+### 메타데이터 판단 기준을 이 문서에서 새로 만듦
+
+메타데이터의 형식과 판단 기준은 [schema-metadata-guide.md](./schema-metadata-guide.md)만 따릅니다.
+
+### 문서에 전체 모델 목록을 복사함
+
+모델 목록의 단일 기준은 실제 `.prisma` 파일입니다. 문서나 검증 코드에 전체 목록을 복제하면 나중에 서로 달라질 수 있습니다.
+
+## 12. 작업 완료 체크리스트
+
+- [ ] `schema/` 아래에 새 하위 폴더를 만들지 않았다.
+- [ ] 모델 이름에서 파일 이름을 계산했다.
+- [ ] 파일에 model이 정확히 하나 있다.
+- [ ] enum은 `_enums.prisma`에 이름순으로 추가했다.
+- [ ] 모델이 메타데이터 가이드의 현재 계약을 지킨다.
+- [ ] `schema:check`가 성공했다.
+- [ ] `prisma validate`가 성공했다.
+
+## 13. 어려운 말 빠르게 찾기
+
+| 말             | 쉬운 뜻                                                |
+| -------------- | ------------------------------------------------------ |
+| schema         | 데이터베이스 설계도                                    |
+| model          | 데이터가 들어가는 표의 설계                            |
+| field          | 표의 열                                                |
+| enum           | 미리 정해 둔 선택지 목록                               |
+| relation       | 모델과 모델의 연결                                     |
+| kebab-case     | 단어 사이를 `-`로 잇는 소문자 이름                    |
+| data type      | 메타데이터 가이드에서 정의하는 model 분류             |
+| aggregate root | 메타데이터 가이드에서 정의하는 일관성 경계 진입점      |
+| invariant      | 데이터가 바뀌어도 반드시 지켜야 하는 업무 규칙         |

@@ -102,7 +102,7 @@ model Ability {
   // 관계
   subject Subject @relation(fields: [subjectId], references: [id])
   action  Action  @relation(fields: [actionId], references: [id])
-  grants  Grant[]                          // BRIDGE를 통해 Role/User에 연결
+  grants  Grant[]                          // Grant를 통해 Role/User에 연결
 
   @@index([subjectId])
   @@index([actionId])
@@ -111,7 +111,7 @@ model Ability {
 }
 ```
 
-### Grant 모델 (BRIDGE - Role/User에 Ability 부여, 다형성)
+### Grant 모델 (Role/User에 Ability 부여, 다형성)
 
 ```prisma
 model Grant {
@@ -152,7 +152,7 @@ Subject (REFERENCE)    Action (REFERENCE)
      Subject + Action + conditions
            │
            ▼
-      Grant (BRIDGE)
+  Grant (CONFIGURATION)
       granteeType + granteeId + abilityId
            │
      ┌─────┴─────┐
@@ -335,29 +335,29 @@ private mergeAbilities(roleAbilities): AbilityWithPriority[] {
 
 | 역할명 | 상수 | 설명 |
 |--------|------|------|
-| `PLATFORM_ADMIN` | `SYSTEM_ROLES.PLATFORM_ADMIN` | 시스템 전체 관리 권한 (구 SUPER_ADMIN) |
-| `COMPANY_MANAGER` | `SYSTEM_ROLES.COMPANY_MANAGER` | 특정 Company 운영 권한 (구 ADMIN) |
-| `MEMBER` | `SYSTEM_ROLES.MEMBER` | 회원 기본 권한 (구 USER) |
+| `PLATFORM_ADMIN` | `SYSTEM_ROLES.PLATFORM_ADMIN` | 시스템 전체 관리 권한 |
+| `COMPANY_MANAGER` | `SYSTEM_ROLES.COMPANY_MANAGER` | 특정 Company 운영 권한 |
+| `MEMBER` | `SYSTEM_ROLES.MEMBER` | 회원 기본 권한 |
 
 ### Role Category (역할 카테고리)
 
 | 카테고리 | enum 값 | 설명 |
 |----------|---------|------|
-| `PLATFORM` | `RoleCategoryNames.PLATFORM` | 플랫폼 레벨 (구 ROOT) |
-| `SHARED` | `RoleCategoryNames.SHARED` | 공유 레벨 (구 COMMON) |
-| `WORKSPACE` | `RoleCategoryNames.WORKSPACE` | 워크스페이스 레벨 (구 ADMIN) |
-| `PUBLIC` | `RoleCategoryNames.PUBLIC` | 공개 레벨 (구 USER) |
-| `PROJECT` | `RoleCategoryNames.PROJECT` | 프로젝트 레벨 (구 MANAGER) |
-| `TECHNICAL` | `RoleCategoryNames.TECHNICAL` | 기술 레벨 (구 DEVELOPER) |
-| `RESTRICTED` | `RoleCategoryNames.RESTRICTED` | 제한 레벨 (구 GUEST) |
+| `PLATFORM` | `RoleCategoryNames.PLATFORM` | 플랫폼 레벨 |
+| `SHARED` | `RoleCategoryNames.SHARED` | 공유 레벨 |
+| `WORKSPACE` | `RoleCategoryNames.WORKSPACE` | 워크스페이스 레벨 |
+| `PUBLIC` | `RoleCategoryNames.PUBLIC` | 공개 레벨 |
+| `PROJECT` | `RoleCategoryNames.PROJECT` | 프로젝트 레벨 |
+| `TECHNICAL` | `RoleCategoryNames.TECHNICAL` | 기술 레벨 |
+| `RESTRICTED` | `RoleCategoryNames.RESTRICTED` | 제한 레벨 |
 
 ### Role Group (역할 그룹)
 
 | 그룹 | enum 값 | 설명 |
 |------|---------|------|
-| `TRUSTED` | `RoleGroupNames.TRUSTED` | 신뢰 그룹 (구 ROOT) |
-| `STANDARD` | `RoleGroupNames.STANDARD` | 표준 그룹 (구 NORMAL) |
-| `PREMIUM` | `RoleGroupNames.PREMIUM` | 프리미엄 그룹 (구 VIP) |
+| `TRUSTED` | `RoleGroupNames.TRUSTED` | 신뢰 그룹 |
+| `STANDARD` | `RoleGroupNames.STANDARD` | 표준 그룹 |
+| `PREMIUM` | `RoleGroupNames.PREMIUM` | 프리미엄 그룹 |
 
 ---
 

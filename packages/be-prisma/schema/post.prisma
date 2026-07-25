@@ -1,0 +1,13 @@
+// @data-type: MASTER
+// @description: Content에 발행 맥락을 부여하는 1:1 상세 모델
+/// @displayName 게시물
+model Post {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+  contentId String    @unique @map("content_id")
+  content   Content   @relation(fields: [contentId], references: [id])
+
+  @@map("posts")
+}

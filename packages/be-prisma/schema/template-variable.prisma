@@ -1,0 +1,23 @@
+// @data-type: CONFIGURATION
+// @description: Template에 종속되어 치환 변수를 관리하는 1:N 하위 모델
+/// @displayName 템플릿 변수
+model TemplateVariable {
+  id           String    @id @default(uuid())
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  /// @displayName 변수명
+  name         String
+  /// @displayName 변수 설명
+  description  String?
+  /// @displayName 기본값
+  defaultValue String?   @map("default_value")
+  /// @displayName 필수 여부
+  isRequired   Boolean   @default(false) @map("is_required")
+  /// @displayName 템플릿 ID
+  templateId   String    @map("template_id")
+  /// @displayName 템플릿
+  template     Template  @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@unique([templateId, name])
+  @@map("template_variables")
+}

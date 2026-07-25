@@ -19,6 +19,11 @@
 
 Prisma 스키마 파일에 `/// @displayName 한글명` 주석을 추가하는 전문가입니다.
 
+`/// @displayName`은 설계 메타데이터가 아니라 DMMF에 보존되는 Prisma 문서 주석입니다. 이 작업은 다른 설계 메타데이터를 새로 만들지 않습니다.
+
+메타데이터와 Prisma 문서 주석의 종류, 형식과 적용 범위는
+`packages/be-prisma/docs/schema-metadata-guide.md`가 단독으로 소유합니다. 이 skill은 그 계약을 적용하는 작업 순서만 설명합니다.
+
 ---
 
 ## 1. 언제 사용하는가?
@@ -36,82 +41,20 @@ Prisma 스키마 파일에 `/// @displayName 한글명` 주석을 추가하는 �
 
 | 구분 | 항목 | 설명 |
 |------|------|------|
-| **입력** | Prisma 스키마 파일 | `packages/be-prisma/schema/*.prisma` |
+| **입력** | Prisma 모델 스키마 파일 | `packages/be-prisma/schema/[!_]*.prisma` |
 | | 한글 매핑 정보 | 모델명/필드명 → 한글명 대응 |
 | **출력** | 주석이 추가된 스키마 | `/// @displayName 한글명` 주석 포함 |
 
 ---
 
-## 3. 핵심 규칙
+## 3. 적용 규칙
 
-### ✅ 권장
-
-1. **슬래시 3개 + 공백 형식**
-   ```prisma
-   /// @displayName 사용자
-   model User { }
-   ```
-
-2. **기존 주석 유지**
-   ```prisma
-   /// @schema-type: CONCRETE ENTITY
-   /// @description: 사용자 정보 모델
-   /// @displayName 사용자
-   model User { }
-   ```
-
-3. **비즈니스 필드에만 주석 추가**
-   ```prisma
-   model User {
-     id        String @id  // 시스템 필드 - 주석 생략 가능
-     /// @displayName 이메일
-     email     String
-     /// @displayName 전화번호
-     phone     String?
-     createdAt DateTime  // 시스템 필드 - 주석 생략 가능
-   }
-   ```
-
-4. **한글 displayName 사용**
-   ```prisma
-   /// @displayName 사용자
-   model User { }
-   ```
-
-### ❌ 금지
-
-1. **잘못된 주석 형식**
-   ```prisma
-   // ❌ 슬래시 2개
-   // @displayName 사용자
-
-   // ❌ 공백 없음
-   ///@displayName 사용자
-
-   // ✅ 올바른 형식
-   /// @displayName 사용자
-   ```
-
-2. **기존 주석 삭제**
-   ```prisma
-   // ❌ 기존 주석 삭제하고 교체
-   /// @displayName 사용자
-   model User { }
-
-   // ✅ 기존 주석 유지하고 추가
-   /// @schema-type: CONCRETE ENTITY
-   /// @displayName 사용자
-   model User { }
-   ```
-
-3. **영문 displayName**
-   ```prisma
-   // ❌ 영문 사용
-   /// @displayName User
-
-   // ✅ 한글 사용
-   /// @displayName 사용자
-   ```
+1. 작업 전에 `packages/be-prisma/docs/schema-metadata-guide.md`의 현재 계약을 읽습니다.
+2. 모든 model에는 가이드가 요구하는 한글 표시 이름을 적용합니다.
+3. enum과 업무 field에는 사람이 읽는 한글 이름이 필요할 때 적용합니다.
+4. Prisma 문서 주석은 설명 대상 model, enum 또는 field 선언의 바로 위에 둡니다.
+5. 이 작업에서는 `/// @displayName`만 추가하거나 고치고 기존 model 설계 메타데이터는 변경하지 않습니다.
+6. 형식, 대소문자와 한글 이름 규칙은 가이드의 예시를 그대로 따릅니다.
 
 ---
 
@@ -119,84 +62,41 @@ Prisma 스키마 파일에 `/// @displayName 한글명` 주석을 추가하는 �
 
 ```
 1. 스키마 파일 목록 확인
-   └── ls packages/be-prisma/schema/*.prisma
+   └── ls packages/be-prisma/schema/[!_]*.prisma
    ↓
 2. 각 파일 분석
    - 모델 목록 확인
    - 필드 목록 확인
-   - 기존 주석 여부 확인
+   - 현재 설계 메타데이터와 Prisma 문서 주석 확인
    ↓
 3. 주석 추가
-   - 모델에 /// @displayName 추가
-   - 비즈니스 필드에 /// @displayName 추가
-   - 기존 주석 유지
+   - 모든 모델에 가이드가 요구하는 Prisma 문서 주석 추가
+   - 필요한 enum과 업무 필드에 Prisma 문서 주석 추가
+   - 현재 메타데이터 계약 유지
    ↓
 4. 검증
-   - 주석 형식 확인 (/// 세 개)
+   - 메타데이터 가이드 계약 확인
    - 한글 매핑 일관성 확인
    - pnpm prisma validate 실행
 ```
 
 ---
 
-## 5. 템플릿
+## 5. 예시 사용 원칙
 
-### 모델 주석
+model header의 완전한 예시는 `packages/be-prisma/docs/schema-metadata-guide.md`만 사용합니다.
 
-```prisma
-// Before
-model User {
-  id    String @id
-  email String
-}
-
-// After
-/// @displayName 사용자
-model User {
-  id    String @id
-  email String
-}
-```
-
-### 필드 주석
-
-```prisma
-/// @displayName 사용자
-model User {
-  id                String    @id @default(uuid())
-  createdAt         DateTime  @default(now()) @map("created_at")
-  /// @displayName 이메일
-  email             String    @unique
-  /// @displayName 전화번호
-  phone             String?
-  /// @displayName 비밀번호
-  password          String?
-  /// @displayName 인증 여부
-  verified          Boolean   @default(false)
-  tenants           Tenant[]  // 관계 필드 - 주석 생략
-}
-```
-
-### 기존 주석과 함께
-
-```prisma
-/// @schema-type: CONCRETE ENTITY
-/// @description: 사용자 정보를 저장하는 모델
-/// @displayName 사용자
-model User {
-  id String @id
-}
-```
+field나 enum을 작업할 때도 같은 가이드의 위치와 형식을 적용합니다. 이 skill에 별도 템플릿을 복사해 두지 않습니다.
 
 ---
 
 ## 6. 체크리스트
 
-- [ ] 모든 스키마 파일 확인 (`packages/be-prisma/schema/*.prisma`)
-- [ ] 각 모델에 `/// @displayName` 주석 추가
-- [ ] 비즈니스 필드에 `/// @displayName` 주석 추가
-- [ ] 기존 주석 유지 확인
-- [ ] 주석 형식 검증 (`///` 세 개, 공백)
+- [ ] 모든 모델 스키마 파일 확인 (`packages/be-prisma/schema/[!_]*.prisma`)
+- [ ] 각 모델에 가이드가 요구하는 Prisma 문서 주석 적용
+- [ ] 필요한 enum과 업무 필드에 Prisma 문서 주석 적용
+- [ ] 현재 메타데이터 계약 유지 확인
+- [ ] 메타데이터 가이드의 형식과 위치 검증
 - [ ] 한글 매핑 일관성 확인
 - [ ] `pnpm prisma validate` 실행하여 스키마 유효성 확인
 
@@ -207,7 +107,7 @@ model User {
 | 구분 | 에이전트 | 설명 |
 |------|----------|------|
 | **선행** | schema-builder | Prisma 스키마 생성 |
-| **후행** | dmmf-parser-builder | @displayName 주석을 파싱하는 유틸리티 생성 |
+| **후행** | dmmf-parser-builder | `/// @displayName` Prisma 문서 주석을 파싱하는 유틸리티 생성 |
 | | service-builder | 동기화 서비스에서 displayName 활용 |
 | **관련** | database-expert | 스키마 설계 자문 |
 
@@ -218,7 +118,7 @@ model User {
 ### 대상 파일
 
 ```
-packages/be-prisma/schema/*.prisma
+packages/be-prisma/schema/[!_]*.prisma
 ```
 
 ### 한글 매핑 가이드

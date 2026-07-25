@@ -432,116 +432,6 @@ export type SpaceAssociationMinOrderByAggregateInput = {
 	groupId?: Prisma.SortOrder;
 };
 
-export type SpaceAssociationCreateNestedManyWithoutSpaceInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.SpaceAssociationCreateWithoutSpaceInput,
-				Prisma.SpaceAssociationUncheckedCreateWithoutSpaceInput
-		  >
-		| Prisma.SpaceAssociationCreateWithoutSpaceInput[]
-		| Prisma.SpaceAssociationUncheckedCreateWithoutSpaceInput[];
-	connectOrCreate?:
-		| Prisma.SpaceAssociationCreateOrConnectWithoutSpaceInput
-		| Prisma.SpaceAssociationCreateOrConnectWithoutSpaceInput[];
-	createMany?: Prisma.SpaceAssociationCreateManySpaceInputEnvelope;
-	connect?:
-		| Prisma.SpaceAssociationWhereUniqueInput
-		| Prisma.SpaceAssociationWhereUniqueInput[];
-};
-
-export type SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.SpaceAssociationCreateWithoutSpaceInput,
-				Prisma.SpaceAssociationUncheckedCreateWithoutSpaceInput
-		  >
-		| Prisma.SpaceAssociationCreateWithoutSpaceInput[]
-		| Prisma.SpaceAssociationUncheckedCreateWithoutSpaceInput[];
-	connectOrCreate?:
-		| Prisma.SpaceAssociationCreateOrConnectWithoutSpaceInput
-		| Prisma.SpaceAssociationCreateOrConnectWithoutSpaceInput[];
-	createMany?: Prisma.SpaceAssociationCreateManySpaceInputEnvelope;
-	connect?:
-		| Prisma.SpaceAssociationWhereUniqueInput
-		| Prisma.SpaceAssociationWhereUniqueInput[];
-};
-
-export type SpaceAssociationUpdateManyWithoutSpaceNestedInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.SpaceAssociationCreateWithoutSpaceInput,
-				Prisma.SpaceAssociationUncheckedCreateWithoutSpaceInput
-		  >
-		| Prisma.SpaceAssociationCreateWithoutSpaceInput[]
-		| Prisma.SpaceAssociationUncheckedCreateWithoutSpaceInput[];
-	connectOrCreate?:
-		| Prisma.SpaceAssociationCreateOrConnectWithoutSpaceInput
-		| Prisma.SpaceAssociationCreateOrConnectWithoutSpaceInput[];
-	upsert?:
-		| Prisma.SpaceAssociationUpsertWithWhereUniqueWithoutSpaceInput
-		| Prisma.SpaceAssociationUpsertWithWhereUniqueWithoutSpaceInput[];
-	createMany?: Prisma.SpaceAssociationCreateManySpaceInputEnvelope;
-	set?:
-		| Prisma.SpaceAssociationWhereUniqueInput
-		| Prisma.SpaceAssociationWhereUniqueInput[];
-	disconnect?:
-		| Prisma.SpaceAssociationWhereUniqueInput
-		| Prisma.SpaceAssociationWhereUniqueInput[];
-	delete?:
-		| Prisma.SpaceAssociationWhereUniqueInput
-		| Prisma.SpaceAssociationWhereUniqueInput[];
-	connect?:
-		| Prisma.SpaceAssociationWhereUniqueInput
-		| Prisma.SpaceAssociationWhereUniqueInput[];
-	update?:
-		| Prisma.SpaceAssociationUpdateWithWhereUniqueWithoutSpaceInput
-		| Prisma.SpaceAssociationUpdateWithWhereUniqueWithoutSpaceInput[];
-	updateMany?:
-		| Prisma.SpaceAssociationUpdateManyWithWhereWithoutSpaceInput
-		| Prisma.SpaceAssociationUpdateManyWithWhereWithoutSpaceInput[];
-	deleteMany?:
-		| Prisma.SpaceAssociationScalarWhereInput
-		| Prisma.SpaceAssociationScalarWhereInput[];
-};
-
-export type SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput = {
-	create?:
-		| Prisma.XOR<
-				Prisma.SpaceAssociationCreateWithoutSpaceInput,
-				Prisma.SpaceAssociationUncheckedCreateWithoutSpaceInput
-		  >
-		| Prisma.SpaceAssociationCreateWithoutSpaceInput[]
-		| Prisma.SpaceAssociationUncheckedCreateWithoutSpaceInput[];
-	connectOrCreate?:
-		| Prisma.SpaceAssociationCreateOrConnectWithoutSpaceInput
-		| Prisma.SpaceAssociationCreateOrConnectWithoutSpaceInput[];
-	upsert?:
-		| Prisma.SpaceAssociationUpsertWithWhereUniqueWithoutSpaceInput
-		| Prisma.SpaceAssociationUpsertWithWhereUniqueWithoutSpaceInput[];
-	createMany?: Prisma.SpaceAssociationCreateManySpaceInputEnvelope;
-	set?:
-		| Prisma.SpaceAssociationWhereUniqueInput
-		| Prisma.SpaceAssociationWhereUniqueInput[];
-	disconnect?:
-		| Prisma.SpaceAssociationWhereUniqueInput
-		| Prisma.SpaceAssociationWhereUniqueInput[];
-	delete?:
-		| Prisma.SpaceAssociationWhereUniqueInput
-		| Prisma.SpaceAssociationWhereUniqueInput[];
-	connect?:
-		| Prisma.SpaceAssociationWhereUniqueInput
-		| Prisma.SpaceAssociationWhereUniqueInput[];
-	update?:
-		| Prisma.SpaceAssociationUpdateWithWhereUniqueWithoutSpaceInput
-		| Prisma.SpaceAssociationUpdateWithWhereUniqueWithoutSpaceInput[];
-	updateMany?:
-		| Prisma.SpaceAssociationUpdateManyWithWhereWithoutSpaceInput
-		| Prisma.SpaceAssociationUpdateManyWithWhereWithoutSpaceInput[];
-	deleteMany?:
-		| Prisma.SpaceAssociationScalarWhereInput
-		| Prisma.SpaceAssociationScalarWhereInput[];
-};
-
 export type SpaceAssociationCreateNestedManyWithoutGroupInput = {
 	create?:
 		| Prisma.XOR<
@@ -652,87 +542,114 @@ export type SpaceAssociationUncheckedUpdateManyWithoutGroupNestedInput = {
 		| Prisma.SpaceAssociationScalarWhereInput[];
 };
 
-export type SpaceAssociationCreateWithoutSpaceInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	group: Prisma.GroupCreateNestedOneWithoutSpaceAssociationsInput;
+export type SpaceAssociationCreateNestedManyWithoutSpaceInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.SpaceAssociationCreateWithoutSpaceInput,
+				Prisma.SpaceAssociationUncheckedCreateWithoutSpaceInput
+		  >
+		| Prisma.SpaceAssociationCreateWithoutSpaceInput[]
+		| Prisma.SpaceAssociationUncheckedCreateWithoutSpaceInput[];
+	connectOrCreate?:
+		| Prisma.SpaceAssociationCreateOrConnectWithoutSpaceInput
+		| Prisma.SpaceAssociationCreateOrConnectWithoutSpaceInput[];
+	createMany?: Prisma.SpaceAssociationCreateManySpaceInputEnvelope;
+	connect?:
+		| Prisma.SpaceAssociationWhereUniqueInput
+		| Prisma.SpaceAssociationWhereUniqueInput[];
 };
 
-export type SpaceAssociationUncheckedCreateWithoutSpaceInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	groupId: string;
+export type SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.SpaceAssociationCreateWithoutSpaceInput,
+				Prisma.SpaceAssociationUncheckedCreateWithoutSpaceInput
+		  >
+		| Prisma.SpaceAssociationCreateWithoutSpaceInput[]
+		| Prisma.SpaceAssociationUncheckedCreateWithoutSpaceInput[];
+	connectOrCreate?:
+		| Prisma.SpaceAssociationCreateOrConnectWithoutSpaceInput
+		| Prisma.SpaceAssociationCreateOrConnectWithoutSpaceInput[];
+	createMany?: Prisma.SpaceAssociationCreateManySpaceInputEnvelope;
+	connect?:
+		| Prisma.SpaceAssociationWhereUniqueInput
+		| Prisma.SpaceAssociationWhereUniqueInput[];
 };
 
-export type SpaceAssociationCreateOrConnectWithoutSpaceInput = {
-	where: Prisma.SpaceAssociationWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.SpaceAssociationCreateWithoutSpaceInput,
-		Prisma.SpaceAssociationUncheckedCreateWithoutSpaceInput
-	>;
-};
-
-export type SpaceAssociationCreateManySpaceInputEnvelope = {
-	data:
-		| Prisma.SpaceAssociationCreateManySpaceInput
-		| Prisma.SpaceAssociationCreateManySpaceInput[];
-	skipDuplicates?: boolean;
-};
-
-export type SpaceAssociationUpsertWithWhereUniqueWithoutSpaceInput = {
-	where: Prisma.SpaceAssociationWhereUniqueInput;
-	update: Prisma.XOR<
-		Prisma.SpaceAssociationUpdateWithoutSpaceInput,
-		Prisma.SpaceAssociationUncheckedUpdateWithoutSpaceInput
-	>;
-	create: Prisma.XOR<
-		Prisma.SpaceAssociationCreateWithoutSpaceInput,
-		Prisma.SpaceAssociationUncheckedCreateWithoutSpaceInput
-	>;
-};
-
-export type SpaceAssociationUpdateWithWhereUniqueWithoutSpaceInput = {
-	where: Prisma.SpaceAssociationWhereUniqueInput;
-	data: Prisma.XOR<
-		Prisma.SpaceAssociationUpdateWithoutSpaceInput,
-		Prisma.SpaceAssociationUncheckedUpdateWithoutSpaceInput
-	>;
-};
-
-export type SpaceAssociationUpdateManyWithWhereWithoutSpaceInput = {
-	where: Prisma.SpaceAssociationScalarWhereInput;
-	data: Prisma.XOR<
-		Prisma.SpaceAssociationUpdateManyMutationInput,
-		Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceInput
-	>;
-};
-
-export type SpaceAssociationScalarWhereInput = {
-	AND?:
+export type SpaceAssociationUpdateManyWithoutSpaceNestedInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.SpaceAssociationCreateWithoutSpaceInput,
+				Prisma.SpaceAssociationUncheckedCreateWithoutSpaceInput
+		  >
+		| Prisma.SpaceAssociationCreateWithoutSpaceInput[]
+		| Prisma.SpaceAssociationUncheckedCreateWithoutSpaceInput[];
+	connectOrCreate?:
+		| Prisma.SpaceAssociationCreateOrConnectWithoutSpaceInput
+		| Prisma.SpaceAssociationCreateOrConnectWithoutSpaceInput[];
+	upsert?:
+		| Prisma.SpaceAssociationUpsertWithWhereUniqueWithoutSpaceInput
+		| Prisma.SpaceAssociationUpsertWithWhereUniqueWithoutSpaceInput[];
+	createMany?: Prisma.SpaceAssociationCreateManySpaceInputEnvelope;
+	set?:
+		| Prisma.SpaceAssociationWhereUniqueInput
+		| Prisma.SpaceAssociationWhereUniqueInput[];
+	disconnect?:
+		| Prisma.SpaceAssociationWhereUniqueInput
+		| Prisma.SpaceAssociationWhereUniqueInput[];
+	delete?:
+		| Prisma.SpaceAssociationWhereUniqueInput
+		| Prisma.SpaceAssociationWhereUniqueInput[];
+	connect?:
+		| Prisma.SpaceAssociationWhereUniqueInput
+		| Prisma.SpaceAssociationWhereUniqueInput[];
+	update?:
+		| Prisma.SpaceAssociationUpdateWithWhereUniqueWithoutSpaceInput
+		| Prisma.SpaceAssociationUpdateWithWhereUniqueWithoutSpaceInput[];
+	updateMany?:
+		| Prisma.SpaceAssociationUpdateManyWithWhereWithoutSpaceInput
+		| Prisma.SpaceAssociationUpdateManyWithWhereWithoutSpaceInput[];
+	deleteMany?:
 		| Prisma.SpaceAssociationScalarWhereInput
 		| Prisma.SpaceAssociationScalarWhereInput[];
-	OR?: Prisma.SpaceAssociationScalarWhereInput[];
-	NOT?:
+};
+
+export type SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput = {
+	create?:
+		| Prisma.XOR<
+				Prisma.SpaceAssociationCreateWithoutSpaceInput,
+				Prisma.SpaceAssociationUncheckedCreateWithoutSpaceInput
+		  >
+		| Prisma.SpaceAssociationCreateWithoutSpaceInput[]
+		| Prisma.SpaceAssociationUncheckedCreateWithoutSpaceInput[];
+	connectOrCreate?:
+		| Prisma.SpaceAssociationCreateOrConnectWithoutSpaceInput
+		| Prisma.SpaceAssociationCreateOrConnectWithoutSpaceInput[];
+	upsert?:
+		| Prisma.SpaceAssociationUpsertWithWhereUniqueWithoutSpaceInput
+		| Prisma.SpaceAssociationUpsertWithWhereUniqueWithoutSpaceInput[];
+	createMany?: Prisma.SpaceAssociationCreateManySpaceInputEnvelope;
+	set?:
+		| Prisma.SpaceAssociationWhereUniqueInput
+		| Prisma.SpaceAssociationWhereUniqueInput[];
+	disconnect?:
+		| Prisma.SpaceAssociationWhereUniqueInput
+		| Prisma.SpaceAssociationWhereUniqueInput[];
+	delete?:
+		| Prisma.SpaceAssociationWhereUniqueInput
+		| Prisma.SpaceAssociationWhereUniqueInput[];
+	connect?:
+		| Prisma.SpaceAssociationWhereUniqueInput
+		| Prisma.SpaceAssociationWhereUniqueInput[];
+	update?:
+		| Prisma.SpaceAssociationUpdateWithWhereUniqueWithoutSpaceInput
+		| Prisma.SpaceAssociationUpdateWithWhereUniqueWithoutSpaceInput[];
+	updateMany?:
+		| Prisma.SpaceAssociationUpdateManyWithWhereWithoutSpaceInput
+		| Prisma.SpaceAssociationUpdateManyWithWhereWithoutSpaceInput[];
+	deleteMany?:
 		| Prisma.SpaceAssociationScalarWhereInput
 		| Prisma.SpaceAssociationScalarWhereInput[];
-	id?: Prisma.StringFilter<"SpaceAssociation"> | string;
-	createdAt?: Prisma.DateTimeFilter<"SpaceAssociation"> | Date | string;
-	updatedAt?:
-		| Prisma.DateTimeNullableFilter<"SpaceAssociation">
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.DateTimeNullableFilter<"SpaceAssociation">
-		| Date
-		| string
-		| null;
-	spaceId?: Prisma.StringFilter<"SpaceAssociation"> | string;
-	groupId?: Prisma.StringFilter<"SpaceAssociation"> | string;
 };
 
 export type SpaceAssociationCreateWithoutGroupInput = {
@@ -794,7 +711,39 @@ export type SpaceAssociationUpdateManyWithWhereWithoutGroupInput = {
 	>;
 };
 
-export type SpaceAssociationCreateManySpaceInput = {
+export type SpaceAssociationScalarWhereInput = {
+	AND?:
+		| Prisma.SpaceAssociationScalarWhereInput
+		| Prisma.SpaceAssociationScalarWhereInput[];
+	OR?: Prisma.SpaceAssociationScalarWhereInput[];
+	NOT?:
+		| Prisma.SpaceAssociationScalarWhereInput
+		| Prisma.SpaceAssociationScalarWhereInput[];
+	id?: Prisma.StringFilter<"SpaceAssociation"> | string;
+	createdAt?: Prisma.DateTimeFilter<"SpaceAssociation"> | Date | string;
+	updatedAt?:
+		| Prisma.DateTimeNullableFilter<"SpaceAssociation">
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.DateTimeNullableFilter<"SpaceAssociation">
+		| Date
+		| string
+		| null;
+	spaceId?: Prisma.StringFilter<"SpaceAssociation"> | string;
+	groupId?: Prisma.StringFilter<"SpaceAssociation"> | string;
+};
+
+export type SpaceAssociationCreateWithoutSpaceInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	group: Prisma.GroupCreateNestedOneWithoutSpaceAssociationsInput;
+};
+
+export type SpaceAssociationUncheckedCreateWithoutSpaceInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -802,52 +751,47 @@ export type SpaceAssociationCreateManySpaceInput = {
 	groupId: string;
 };
 
-export type SpaceAssociationUpdateWithoutSpaceInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	group?: Prisma.GroupUpdateOneRequiredWithoutSpaceAssociationsNestedInput;
+export type SpaceAssociationCreateOrConnectWithoutSpaceInput = {
+	where: Prisma.SpaceAssociationWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.SpaceAssociationCreateWithoutSpaceInput,
+		Prisma.SpaceAssociationUncheckedCreateWithoutSpaceInput
+	>;
 };
 
-export type SpaceAssociationUncheckedUpdateWithoutSpaceInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	groupId?: Prisma.StringFieldUpdateOperationsInput | string;
+export type SpaceAssociationCreateManySpaceInputEnvelope = {
+	data:
+		| Prisma.SpaceAssociationCreateManySpaceInput
+		| Prisma.SpaceAssociationCreateManySpaceInput[];
+	skipDuplicates?: boolean;
 };
 
-export type SpaceAssociationUncheckedUpdateManyWithoutSpaceInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	groupId?: Prisma.StringFieldUpdateOperationsInput | string;
+export type SpaceAssociationUpsertWithWhereUniqueWithoutSpaceInput = {
+	where: Prisma.SpaceAssociationWhereUniqueInput;
+	update: Prisma.XOR<
+		Prisma.SpaceAssociationUpdateWithoutSpaceInput,
+		Prisma.SpaceAssociationUncheckedUpdateWithoutSpaceInput
+	>;
+	create: Prisma.XOR<
+		Prisma.SpaceAssociationCreateWithoutSpaceInput,
+		Prisma.SpaceAssociationUncheckedCreateWithoutSpaceInput
+	>;
+};
+
+export type SpaceAssociationUpdateWithWhereUniqueWithoutSpaceInput = {
+	where: Prisma.SpaceAssociationWhereUniqueInput;
+	data: Prisma.XOR<
+		Prisma.SpaceAssociationUpdateWithoutSpaceInput,
+		Prisma.SpaceAssociationUncheckedUpdateWithoutSpaceInput
+	>;
+};
+
+export type SpaceAssociationUpdateManyWithWhereWithoutSpaceInput = {
+	where: Prisma.SpaceAssociationScalarWhereInput;
+	data: Prisma.XOR<
+		Prisma.SpaceAssociationUpdateManyMutationInput,
+		Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceInput
+	>;
 };
 
 export type SpaceAssociationCreateManyGroupInput = {
@@ -904,6 +848,62 @@ export type SpaceAssociationUncheckedUpdateManyWithoutGroupInput = {
 		| string
 		| null;
 	spaceId?: Prisma.StringFieldUpdateOperationsInput | string;
+};
+
+export type SpaceAssociationCreateManySpaceInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	groupId: string;
+};
+
+export type SpaceAssociationUpdateWithoutSpaceInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	group?: Prisma.GroupUpdateOneRequiredWithoutSpaceAssociationsNestedInput;
+};
+
+export type SpaceAssociationUncheckedUpdateWithoutSpaceInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	groupId?: Prisma.StringFieldUpdateOperationsInput | string;
+};
+
+export type SpaceAssociationUncheckedUpdateManyWithoutSpaceInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	groupId?: Prisma.StringFieldUpdateOperationsInput | string;
 };
 
 export type SpaceAssociationSelect<

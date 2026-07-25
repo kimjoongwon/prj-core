@@ -1,0 +1,22 @@
+// @data-type: CONFIGURATION
+// @description: Policy와 Ability를 연결하는 정책 구성 링크
+/// @displayName 정책 권한
+model PolicyAbility {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+
+  /// @displayName 정책 ID
+  policyId  String @map("policy_id")
+  /// @displayName 권한 ID
+  abilityId String @map("ability_id")
+
+  policy  Policy  @relation(fields: [policyId], references: [id])
+  ability Ability @relation(fields: [abilityId], references: [id])
+
+  @@unique([policyId, abilityId])
+  @@index([policyId])
+  @@index([abilityId])
+  @@map("policy_abilities")
+}

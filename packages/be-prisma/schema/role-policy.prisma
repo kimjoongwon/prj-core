@@ -1,0 +1,27 @@
+// @data-type: CONFIGURATION
+// @description: Role과 Policy를 연결하는 역할 정책 할당
+/// @displayName 역할 정책
+model RolePolicy {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+
+  /// @displayName 역할 ID
+  roleId   String  @map("role_id")
+  /// @displayName 정책 ID
+  policyId String  @map("policy_id")
+  /// @displayName 활성화 여부
+  isActive Boolean @default(true) @map("is_active")
+  /// @displayName 우선순위
+  priority Int     @default(0)
+
+  role   Role   @relation(fields: [roleId], references: [id])
+  policy Policy @relation(fields: [policyId], references: [id])
+
+  @@unique([roleId, policyId])
+  @@index([roleId])
+  @@index([policyId])
+  @@index([isActive])
+  @@map("role_policies")
+}

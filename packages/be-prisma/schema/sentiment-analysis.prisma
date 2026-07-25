@@ -1,0 +1,33 @@
+// @data-type: TRANSACTION
+// @description: Inquiry에 종속되는 감정 분석 1:1 상세 결과
+/// @displayName 감정 분석
+model SentimentAnalysis {
+  id         String          @id @default(uuid())
+  /// @displayName 생성 일시
+  createdAt  DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  /// @displayName 수정 일시
+  updatedAt  DateTime?       @updatedAt @map("updated_at") @db.Timestamptz(6)
+  /// @displayName 소속 문의 ID
+  inquiryId  String          @unique @map("inquiry_id")
+  /// @displayName 분석 대상 메시지 ID
+  messageId  String?         @unique @map("message_id")
+  /// @displayName 감정 유형
+  sentiment  SentimentType
+  /// @displayName 감정 점수
+  score      Float
+  /// @displayName 분석 신뢰도
+  confidence Float
+  /// @displayName 세부 감정
+  emotions   Json?
+  /// @displayName 주요 키워드
+  keywords   Json?
+  /// @displayName 긴급도 점수
+  urgency    Float?
+  /// @displayName 분석 일시
+  analyzedAt DateTime        @default(now()) @map("analyzed_at") @db.Timestamptz(6)
+  inquiry    Inquiry         @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  message    InquiryMessage? @relation("SentimentAnalysisMessage", fields: [messageId], references: [id], onDelete: SetNull)
+
+  @@index([inquiryId])
+  @@map("sentiment_analyses")
+}

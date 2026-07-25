@@ -5,7 +5,13 @@ Prisma 스키마 및 데이터베이스 클라이언트를 제공하는 패키�
 > **중요**: 이 패키지는 리팩토링되어 **Prisma 전용** 패키지가 되었습니다.
 > DTO, Entity, Enum, Decorator는 별도 패키지로 분리되었습니다.
 >
+> **스키마 파일 규칙**: [docs/schema-file-conventions.md](./docs/schema-file-conventions.md)
+>
+> **스키마 메타데이터 학습 가이드**: [docs/schema-metadata-guide.md](./docs/schema-metadata-guide.md)
+>
 > **스키마 변경 가이드**: [docs/schema-change-playbook.md](./docs/schema-change-playbook.md)
+>
+> **Seed 데이터 운영 가이드**: [docs/seed-data-governance.md](./docs/seed-data-governance.md)
 
 ## 분리된 패키지
 
@@ -67,7 +73,7 @@ type UpdateUserInput = UpdateInput<User>;
 ### Development
 
 - `pnpm generate` - Generate Prisma client from multi-file schema
-- `pnpm schema:check` - Validate strict schema file ownership/conventions
+- `pnpm schema:check` - 단일 폴더, 모델당 한 파일, 파일명과 메타데이터 계약 검사
 - `pnpm build` - Build the package
 - `pnpm start:dev` - Build in watch mode
 
@@ -150,11 +156,17 @@ pnpm db:data:migrate:prod  # 프로덕션 environment reference data migration
 
 ## Multi-File Schema Architecture (Prisma Official)
 
-This project uses **Prisma's official multi-file schema support** (GA since Prisma 6.7.0) to organize models into separate domain files:
+이 패키지는 Prisma의 공식 multi-file schema 기능을 사용합니다. 파일은 도메인별 하위 폴더로 나누지 않고, `schema/` 루트에 모델당 하나씩 둡니다.
 
 ```text
 packages/be-prisma/
-├── schema/                 # Prisma multi-file schema source
+├── schema/                 # 하위 디렉터리가 없는 Prisma schema source
+│   ├── _base.prisma       # generator와 datasource
+│   ├── _enums.prisma      # 모든 enum, 이름순
+│   ├── ability.prisma     # model Ability 하나
+│   ├── ai-agent-log.prisma
+│   ├── user.prisma        # model User 하나
+│   └── ...                # model 이름에서 파일명을 계산
 ├── migrations/             # Prisma schema migration SQL
 ├── src/
 │   ├── bootstrap/
@@ -174,6 +186,7 @@ packages/be-prisma/
 ### Terminology
 
 - `reference-data`: 운영에서도 코드가 기준이어야 하는 카탈로그/계약 row
+- Prisma model 분류: [`docs/schema-metadata-guide.md`](./docs/schema-metadata-guide.md)가 정의하며 `reference-data` row 운영 정책과는 별도 판단
 - `bootstrap default`: 처음 환경을 세울 때 넣는 기본값. 보통 create-only
 - `demo data`: dev/stg 화면 확인과 샘플 시나리오용 데이터
 - `seed.ts`: bootstrap CLI 진입점
@@ -181,13 +194,31 @@ packages/be-prisma/
 
 ### How It Works
 
-Prisma automatically combines all `.prisma` files in the `schema/` directory:
+Prisma는 `schema/`의 모든 `.prisma` 파일을 자동으로 하나의 스키마처럼 읽습니다.
 
-1. **Edit any schema file**: Make changes to files in `schema/`
-2. **Generate client**: Run `pnpm generate`
-3. **Create migrations**: Run `pnpm db:migrate`
+1. model 이름을 kebab-case로 바꾼 루트 파일을 수정합니다.
+2. 새 model은 계산된 파일에 하나만 선언합니다.
+3. enum은 `_enums.prisma`에 이름순으로 추가합니다.
+4. 모든 model에 메타데이터 가이드의 모델 계약을 적용합니다.
+5. `pnpm schema:check`로 구조를 검사합니다.
+6. `pnpm generate`로 client를 생성하고, 필요하면 `pnpm db:migrate`로 migration을 만듭니다.
 
-✅ **No merge script needed** - Prisma handles it natively!
+별도 merge script는 필요하지 않습니다. Prisma가 multi-file schema를 직접 처리합니다.
+
+### 모델 메타데이터 계약
+
+메타데이터 종류와 형식, 데이터 타입, Aggregate Root, Prisma 문서 주석과 기본 속성의 구분은 [`docs/schema-metadata-guide.md`](./docs/schema-metadata-guide.md)가 단독으로 소유합니다. 모든 model 파일은 이 계약을 따릅니다.
+
+파일 이름은 아래 규칙으로만 계산합니다.
+
+```ts
+name
+  .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+  .replace(/([A-Z])([A-Z][a-z])/g, "$1-$2")
+  .toLowerCase();
+```
+
+예를 들어 `OidcClient`는 `schema/oidc-client.prisma`, `AIAgentLog`는 `schema/ai-agent-log.prisma`입니다. 전체 모델 경로 목록은 따로 관리하지 않으며 실제 schema가 단일 기준입니다.
 
 ### Configuration
 
@@ -204,8 +235,11 @@ export default defineConfig({
 
 Current schema contains:
 
-- **56 models** across 29 domain files (`_base.prisma` excluded)
-- **25 enums** for type safety
+- **66 schema files**: 64 model files + `_base.prisma` + `_enums.prisma`
+- **64 models**: one model per root file
+- **32 enums**: all declared in `_enums.prisma`
+- **96 declarations**: 64 models + 32 enums
+- **0 schema subdirectories**
 - Automatic cross-file model referencing (no imports needed)
 
 ## Environment Variables

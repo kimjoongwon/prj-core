@@ -498,11 +498,6 @@ export type CompanyUncheckedUpdateManyInput = {
 		| null;
 };
 
-export type CompanyNullableScalarRelationFilter = {
-	is?: Prisma.CompanyWhereInput | null;
-	isNot?: Prisma.CompanyWhereInput | null;
-};
-
 export type CompanyCountOrderByAggregateInput = {
 	id?: Prisma.SortOrder;
 	createdAt?: Prisma.SortOrder;
@@ -551,6 +546,37 @@ export type CompanyMinOrderByAggregateInput = {
 export type CompanyScalarRelationFilter = {
 	is?: Prisma.CompanyWhereInput;
 	isNot?: Prisma.CompanyWhereInput;
+};
+
+export type CompanyNullableScalarRelationFilter = {
+	is?: Prisma.CompanyWhereInput | null;
+	isNot?: Prisma.CompanyWhereInput | null;
+};
+
+export type CompanyCreateNestedOneWithoutGroundInput = {
+	create?: Prisma.XOR<
+		Prisma.CompanyCreateWithoutGroundInput,
+		Prisma.CompanyUncheckedCreateWithoutGroundInput
+	>;
+	connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutGroundInput;
+	connect?: Prisma.CompanyWhereUniqueInput;
+};
+
+export type CompanyUpdateOneRequiredWithoutGroundNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.CompanyCreateWithoutGroundInput,
+		Prisma.CompanyUncheckedCreateWithoutGroundInput
+	>;
+	connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutGroundInput;
+	upsert?: Prisma.CompanyUpsertWithoutGroundInput;
+	connect?: Prisma.CompanyWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.CompanyUpdateToOneWithWhereWithoutGroundInput,
+			Prisma.CompanyUpdateWithoutGroundInput
+		>,
+		Prisma.CompanyUncheckedUpdateWithoutGroundInput
+	>;
 };
 
 export type CompanyCreateNestedOneWithoutSpaceInput = {
@@ -607,142 +633,6 @@ export type CompanyUncheckedUpdateOneWithoutSpaceNestedInput = {
 		>,
 		Prisma.CompanyUncheckedUpdateWithoutSpaceInput
 	>;
-};
-
-export type CompanyCreateNestedOneWithoutGroundInput = {
-	create?: Prisma.XOR<
-		Prisma.CompanyCreateWithoutGroundInput,
-		Prisma.CompanyUncheckedCreateWithoutGroundInput
-	>;
-	connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutGroundInput;
-	connect?: Prisma.CompanyWhereUniqueInput;
-};
-
-export type CompanyUpdateOneRequiredWithoutGroundNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.CompanyCreateWithoutGroundInput,
-		Prisma.CompanyUncheckedCreateWithoutGroundInput
-	>;
-	connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutGroundInput;
-	upsert?: Prisma.CompanyUpsertWithoutGroundInput;
-	connect?: Prisma.CompanyWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.CompanyUpdateToOneWithWhereWithoutGroundInput,
-			Prisma.CompanyUpdateWithoutGroundInput
-		>,
-		Prisma.CompanyUncheckedUpdateWithoutGroundInput
-	>;
-};
-
-export type CompanyCreateWithoutSpaceInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	name: string;
-	label?: string | null;
-	address: string;
-	phone: string;
-	email: string;
-	businessNo: string;
-	logoImageFileId?: string | null;
-	ground?: Prisma.GroundCreateNestedOneWithoutCompanyInput;
-};
-
-export type CompanyUncheckedCreateWithoutSpaceInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	name: string;
-	label?: string | null;
-	address: string;
-	phone: string;
-	email: string;
-	businessNo: string;
-	logoImageFileId?: string | null;
-	ground?: Prisma.GroundUncheckedCreateNestedOneWithoutCompanyInput;
-};
-
-export type CompanyCreateOrConnectWithoutSpaceInput = {
-	where: Prisma.CompanyWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.CompanyCreateWithoutSpaceInput,
-		Prisma.CompanyUncheckedCreateWithoutSpaceInput
-	>;
-};
-
-export type CompanyUpsertWithoutSpaceInput = {
-	update: Prisma.XOR<
-		Prisma.CompanyUpdateWithoutSpaceInput,
-		Prisma.CompanyUncheckedUpdateWithoutSpaceInput
-	>;
-	create: Prisma.XOR<
-		Prisma.CompanyCreateWithoutSpaceInput,
-		Prisma.CompanyUncheckedCreateWithoutSpaceInput
-	>;
-	where?: Prisma.CompanyWhereInput;
-};
-
-export type CompanyUpdateToOneWithWhereWithoutSpaceInput = {
-	where?: Prisma.CompanyWhereInput;
-	data: Prisma.XOR<
-		Prisma.CompanyUpdateWithoutSpaceInput,
-		Prisma.CompanyUncheckedUpdateWithoutSpaceInput
-	>;
-};
-
-export type CompanyUpdateWithoutSpaceInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	address?: Prisma.StringFieldUpdateOperationsInput | string;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	businessNo?: Prisma.StringFieldUpdateOperationsInput | string;
-	logoImageFileId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	ground?: Prisma.GroundUpdateOneWithoutCompanyNestedInput;
-};
-
-export type CompanyUncheckedUpdateWithoutSpaceInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	address?: Prisma.StringFieldUpdateOperationsInput | string;
-	phone?: Prisma.StringFieldUpdateOperationsInput | string;
-	email?: Prisma.StringFieldUpdateOperationsInput | string;
-	businessNo?: Prisma.StringFieldUpdateOperationsInput | string;
-	logoImageFileId?:
-		| Prisma.NullableStringFieldUpdateOperationsInput
-		| string
-		| null;
-	ground?: Prisma.GroundUncheckedUpdateOneWithoutCompanyNestedInput;
 };
 
 export type CompanyCreateWithoutGroundInput = {
@@ -853,6 +743,116 @@ export type CompanyUncheckedUpdateWithoutGroundInput = {
 		| Prisma.NullableStringFieldUpdateOperationsInput
 		| string
 		| null;
+};
+
+export type CompanyCreateWithoutSpaceInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	name: string;
+	label?: string | null;
+	address: string;
+	phone: string;
+	email: string;
+	businessNo: string;
+	logoImageFileId?: string | null;
+	ground?: Prisma.GroundCreateNestedOneWithoutCompanyInput;
+};
+
+export type CompanyUncheckedCreateWithoutSpaceInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	name: string;
+	label?: string | null;
+	address: string;
+	phone: string;
+	email: string;
+	businessNo: string;
+	logoImageFileId?: string | null;
+	ground?: Prisma.GroundUncheckedCreateNestedOneWithoutCompanyInput;
+};
+
+export type CompanyCreateOrConnectWithoutSpaceInput = {
+	where: Prisma.CompanyWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.CompanyCreateWithoutSpaceInput,
+		Prisma.CompanyUncheckedCreateWithoutSpaceInput
+	>;
+};
+
+export type CompanyUpsertWithoutSpaceInput = {
+	update: Prisma.XOR<
+		Prisma.CompanyUpdateWithoutSpaceInput,
+		Prisma.CompanyUncheckedUpdateWithoutSpaceInput
+	>;
+	create: Prisma.XOR<
+		Prisma.CompanyCreateWithoutSpaceInput,
+		Prisma.CompanyUncheckedCreateWithoutSpaceInput
+	>;
+	where?: Prisma.CompanyWhereInput;
+};
+
+export type CompanyUpdateToOneWithWhereWithoutSpaceInput = {
+	where?: Prisma.CompanyWhereInput;
+	data: Prisma.XOR<
+		Prisma.CompanyUpdateWithoutSpaceInput,
+		Prisma.CompanyUncheckedUpdateWithoutSpaceInput
+	>;
+};
+
+export type CompanyUpdateWithoutSpaceInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	address?: Prisma.StringFieldUpdateOperationsInput | string;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	businessNo?: Prisma.StringFieldUpdateOperationsInput | string;
+	logoImageFileId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	ground?: Prisma.GroundUpdateOneWithoutCompanyNestedInput;
+};
+
+export type CompanyUncheckedUpdateWithoutSpaceInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	label?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	address?: Prisma.StringFieldUpdateOperationsInput | string;
+	phone?: Prisma.StringFieldUpdateOperationsInput | string;
+	email?: Prisma.StringFieldUpdateOperationsInput | string;
+	businessNo?: Prisma.StringFieldUpdateOperationsInput | string;
+	logoImageFileId?:
+		| Prisma.NullableStringFieldUpdateOperationsInput
+		| string
+		| null;
+	ground?: Prisma.GroundUncheckedUpdateOneWithoutCompanyNestedInput;
 };
 
 export type CompanySelect<

@@ -1,0 +1,20 @@
+// @data-type: MASTER
+// @description: User에 종속되어 프로필 정보를 관리하는 1:N 하위 모델
+/// @displayName 프로필
+model Profile {
+  id           String    @id @default(uuid())
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt    DateTime? @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 이름
+  name         String
+  /// @displayName 닉네임
+  nickname     String    @unique
+  /// @displayName 주소
+  address      String
+  userId       String    @map("user_id")
+  avatarFileId String?   @map("avatar_file_id")
+  user         User      @relation(fields: [userId], references: [id])
+
+  @@map("profiles")
+}

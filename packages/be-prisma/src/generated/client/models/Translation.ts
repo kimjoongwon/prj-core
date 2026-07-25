@@ -433,10 +433,6 @@ export type TranslationMinOrderByAggregateInput = {
 	updatedAt?: Prisma.SortOrder;
 };
 
-export type EnumLanguageCodeFieldUpdateOperationsInput = {
-	set?: $Enums.LanguageCode;
-};
-
 export type TranslationSelect<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,

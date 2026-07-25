@@ -460,6 +460,6 @@ export class Subject extends AbstractEntity implements SubjectEntity {
 
 ### 관련 파일
 
-- Prisma 스키마: `packages/be-prisma/schema/*.prisma`
+- Prisma 모델 스키마: `packages/be-prisma/schema/[!_]*.prisma`
 - 추상 Entity: `packages/be-entity/src/abstract.entity.ts`
 - Entity export: `packages/be-entity/src/index.ts`

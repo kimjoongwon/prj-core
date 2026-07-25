@@ -1,0 +1,29 @@
+// @data-type: EVENT
+// @description: 로그인 시도와 결과를 기록하는 인증 감사 로그
+/// @displayName 인증 감사 로그
+model AuthAuditLog {
+  id            String          @id @default(uuid())
+  createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  /// @displayName 이메일
+  email         String
+  /// @displayName 사용자 ID
+  userId        String?         @map("user_id")
+  /// @displayName 결과
+  result        AuthAuditResult
+  /// @displayName 실패 사유
+  failureReason String?         @map("failure_reason")
+  /// @displayName IP 주소
+  ipAddress     String          @map("ip_address")
+  /// @displayName User Agent
+  userAgent     String?         @map("user_agent")
+  /// @displayName 클라이언트 ID
+  clientId      String?         @map("client_id")
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([email])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([result])
+  @@map("auth_audit_logs")
+}

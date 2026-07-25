@@ -1,0 +1,36 @@
+// @data-type: REFERENCE
+// @aggregate-root: true
+// @description: 권한 판단에 사용하는 전역 능력 카탈로그
+/// @displayName 권한
+model Ability {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+
+  /// @displayName 이름
+  name        String  @unique
+  /// @displayName 설명
+  description String?
+
+  /// @displayName 대상 필드
+  fields     String[] @default([])
+  /// @displayName 조건
+  conditions Json?
+  /// @displayName 거부 여부
+  inverted   Boolean  @default(false)
+  /// @displayName 거부 사유
+  reason     String?
+
+  subjectId String @map("subject_id")
+  actionId  String @map("action_id")
+
+  subject         Subject         @relation(fields: [subjectId], references: [id])
+  action          Action          @relation(fields: [actionId], references: [id])
+  policyAbilities PolicyAbility[]
+
+  @@index([subjectId])
+  @@index([actionId])
+  @@index([name])
+  @@map("abilities")
+}

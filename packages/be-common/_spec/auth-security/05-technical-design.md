@@ -530,7 +530,8 @@ describe("SessionCard", () => {
 
 | 파일 | 변경 |
 |------|------|
-| `packages/be-prisma/schema/identity/user.prisma` | User 확장 + AuthAuditLog 추가 |
+| `packages/be-prisma/schema/user.prisma` | User 확장 |
+| `packages/be-prisma/schema/auth-audit-log.prisma` | AuthAuditLog 추가 |
 | `apps/core/api/src/module/oidc/direct-user.repository.ts` | 잠금 관리 메서드 추가 |
 | `apps/core/api/src/module/interaction/interaction.service.ts` | 로그인 검증 강화 |
 | `packages/be-controller/src/interaction/interaction.controller.ts` | 에러 응답 포맷 변경 |
@@ -541,7 +542,7 @@ describe("SessionCard", () => {
 
 | 파일 | 변경 |
 |------|------|
-| `packages/be-prisma/schema/identity/user.prisma` | PasswordHistory 추가 |
+| `packages/be-prisma/schema/password-history.prisma` | PasswordHistory 추가 |
 | `packages/be-common/src/utils/password-policy.ts` | 신규 |
 | `packages/be-service/src/email/email.service.ts` | 신규 |
 | `apps/core/api/src/module/password-reset/` | 신규 모듈 |

@@ -478,11 +478,6 @@ export type ContentUncheckedUpdateManyInput = {
 	createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
 };
 
-export type ContentScalarRelationFilter = {
-	is?: Prisma.ContentWhereInput;
-	isNot?: Prisma.ContentWhereInput;
-};
-
 export type ContentCountOrderByAggregateInput = {
 	id?: Prisma.SortOrder;
 	createdAt?: Prisma.SortOrder;
@@ -525,6 +520,11 @@ export type ContentMinOrderByAggregateInput = {
 	createdById?: Prisma.SortOrder;
 };
 
+export type ContentScalarRelationFilter = {
+	is?: Prisma.ContentWhereInput;
+	isNot?: Prisma.ContentWhereInput;
+};
+
 export type ContentListRelationFilter = {
 	every?: Prisma.ContentWhereInput;
 	some?: Prisma.ContentWhereInput;
@@ -533,6 +533,10 @@ export type ContentListRelationFilter = {
 
 export type ContentOrderByRelationAggregateInput = {
 	_count?: Prisma.SortOrder;
+};
+
+export type EnumTextTypesFieldUpdateOperationsInput = {
+	set?: $Enums.TextTypes;
 };
 
 export type ContentCreateNestedOneWithoutPostInput = {
@@ -559,10 +563,6 @@ export type ContentUpdateOneRequiredWithoutPostNestedInput = {
 		>,
 		Prisma.ContentUncheckedUpdateWithoutPostInput
 	>;
-};
-
-export type EnumTextTypesFieldUpdateOperationsInput = {
-	set?: $Enums.TextTypes;
 };
 
 export type ContentCreateNestedManyWithoutSpaceInput = {

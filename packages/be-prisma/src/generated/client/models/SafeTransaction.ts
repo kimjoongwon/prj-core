@@ -744,14 +744,9 @@ export type SafeTransactionUncheckedUpdateManyInput = {
 		| null;
 };
 
-export type SafeTransactionListRelationFilter = {
-	every?: Prisma.SafeTransactionWhereInput;
-	some?: Prisma.SafeTransactionWhereInput;
-	none?: Prisma.SafeTransactionWhereInput;
-};
-
-export type SafeTransactionOrderByRelationAggregateInput = {
-	_count?: Prisma.SortOrder;
+export type SafeTransactionScalarRelationFilter = {
+	is?: Prisma.SafeTransactionWhereInput;
+	isNot?: Prisma.SafeTransactionWhereInput;
 };
 
 export type SafeTransactionCountOrderByAggregateInput = {
@@ -831,9 +826,40 @@ export type SafeTransactionSumOrderByAggregateInput = {
 	confirmationsRequired?: Prisma.SortOrder;
 };
 
-export type SafeTransactionScalarRelationFilter = {
-	is?: Prisma.SafeTransactionWhereInput;
-	isNot?: Prisma.SafeTransactionWhereInput;
+export type SafeTransactionListRelationFilter = {
+	every?: Prisma.SafeTransactionWhereInput;
+	some?: Prisma.SafeTransactionWhereInput;
+	none?: Prisma.SafeTransactionWhereInput;
+};
+
+export type SafeTransactionOrderByRelationAggregateInput = {
+	_count?: Prisma.SortOrder;
+};
+
+export type SafeTransactionCreateNestedOneWithoutConfirmationsInput = {
+	create?: Prisma.XOR<
+		Prisma.SafeTransactionCreateWithoutConfirmationsInput,
+		Prisma.SafeTransactionUncheckedCreateWithoutConfirmationsInput
+	>;
+	connectOrCreate?: Prisma.SafeTransactionCreateOrConnectWithoutConfirmationsInput;
+	connect?: Prisma.SafeTransactionWhereUniqueInput;
+};
+
+export type SafeTransactionUpdateOneRequiredWithoutConfirmationsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.SafeTransactionCreateWithoutConfirmationsInput,
+		Prisma.SafeTransactionUncheckedCreateWithoutConfirmationsInput
+	>;
+	connectOrCreate?: Prisma.SafeTransactionCreateOrConnectWithoutConfirmationsInput;
+	upsert?: Prisma.SafeTransactionUpsertWithoutConfirmationsInput;
+	connect?: Prisma.SafeTransactionWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.SafeTransactionUpdateToOneWithWhereWithoutConfirmationsInput,
+			Prisma.SafeTransactionUpdateWithoutConfirmationsInput
+		>,
+		Prisma.SafeTransactionUncheckedUpdateWithoutConfirmationsInput
+	>;
 };
 
 export type SafeTransactionCreateNestedManyWithoutSafeWalletInput = {
@@ -944,160 +970,6 @@ export type SafeTransactionUncheckedUpdateManyWithoutSafeWalletNestedInput = {
 	deleteMany?:
 		| Prisma.SafeTransactionScalarWhereInput
 		| Prisma.SafeTransactionScalarWhereInput[];
-};
-
-export type SafeTransactionCreateNestedOneWithoutConfirmationsInput = {
-	create?: Prisma.XOR<
-		Prisma.SafeTransactionCreateWithoutConfirmationsInput,
-		Prisma.SafeTransactionUncheckedCreateWithoutConfirmationsInput
-	>;
-	connectOrCreate?: Prisma.SafeTransactionCreateOrConnectWithoutConfirmationsInput;
-	connect?: Prisma.SafeTransactionWhereUniqueInput;
-};
-
-export type SafeTransactionUpdateOneRequiredWithoutConfirmationsNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.SafeTransactionCreateWithoutConfirmationsInput,
-		Prisma.SafeTransactionUncheckedCreateWithoutConfirmationsInput
-	>;
-	connectOrCreate?: Prisma.SafeTransactionCreateOrConnectWithoutConfirmationsInput;
-	upsert?: Prisma.SafeTransactionUpsertWithoutConfirmationsInput;
-	connect?: Prisma.SafeTransactionWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.SafeTransactionUpdateToOneWithWhereWithoutConfirmationsInput,
-			Prisma.SafeTransactionUpdateWithoutConfirmationsInput
-		>,
-		Prisma.SafeTransactionUncheckedUpdateWithoutConfirmationsInput
-	>;
-};
-
-export type SafeTransactionCreateWithoutSafeWalletInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	safeTxHash: string;
-	to: string;
-	value?: string;
-	data?: string;
-	nonce: number;
-	operation?: number;
-	tokenAddress?: string | null;
-	tokenSymbol?: string | null;
-	tokenDecimals?: number | null;
-	confirmationsRequired: number;
-	isExecuted?: boolean;
-	executionTxHash?: string | null;
-	executedAt?: Date | string | null;
-	confirmations?: Prisma.SafeConfirmationCreateNestedManyWithoutSafeTransactionInput;
-};
-
-export type SafeTransactionUncheckedCreateWithoutSafeWalletInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	safeTxHash: string;
-	to: string;
-	value?: string;
-	data?: string;
-	nonce: number;
-	operation?: number;
-	tokenAddress?: string | null;
-	tokenSymbol?: string | null;
-	tokenDecimals?: number | null;
-	confirmationsRequired: number;
-	isExecuted?: boolean;
-	executionTxHash?: string | null;
-	executedAt?: Date | string | null;
-	confirmations?: Prisma.SafeConfirmationUncheckedCreateNestedManyWithoutSafeTransactionInput;
-};
-
-export type SafeTransactionCreateOrConnectWithoutSafeWalletInput = {
-	where: Prisma.SafeTransactionWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.SafeTransactionCreateWithoutSafeWalletInput,
-		Prisma.SafeTransactionUncheckedCreateWithoutSafeWalletInput
-	>;
-};
-
-export type SafeTransactionCreateManySafeWalletInputEnvelope = {
-	data:
-		| Prisma.SafeTransactionCreateManySafeWalletInput
-		| Prisma.SafeTransactionCreateManySafeWalletInput[];
-	skipDuplicates?: boolean;
-};
-
-export type SafeTransactionUpsertWithWhereUniqueWithoutSafeWalletInput = {
-	where: Prisma.SafeTransactionWhereUniqueInput;
-	update: Prisma.XOR<
-		Prisma.SafeTransactionUpdateWithoutSafeWalletInput,
-		Prisma.SafeTransactionUncheckedUpdateWithoutSafeWalletInput
-	>;
-	create: Prisma.XOR<
-		Prisma.SafeTransactionCreateWithoutSafeWalletInput,
-		Prisma.SafeTransactionUncheckedCreateWithoutSafeWalletInput
-	>;
-};
-
-export type SafeTransactionUpdateWithWhereUniqueWithoutSafeWalletInput = {
-	where: Prisma.SafeTransactionWhereUniqueInput;
-	data: Prisma.XOR<
-		Prisma.SafeTransactionUpdateWithoutSafeWalletInput,
-		Prisma.SafeTransactionUncheckedUpdateWithoutSafeWalletInput
-	>;
-};
-
-export type SafeTransactionUpdateManyWithWhereWithoutSafeWalletInput = {
-	where: Prisma.SafeTransactionScalarWhereInput;
-	data: Prisma.XOR<
-		Prisma.SafeTransactionUpdateManyMutationInput,
-		Prisma.SafeTransactionUncheckedUpdateManyWithoutSafeWalletInput
-	>;
-};
-
-export type SafeTransactionScalarWhereInput = {
-	AND?:
-		| Prisma.SafeTransactionScalarWhereInput
-		| Prisma.SafeTransactionScalarWhereInput[];
-	OR?: Prisma.SafeTransactionScalarWhereInput[];
-	NOT?:
-		| Prisma.SafeTransactionScalarWhereInput
-		| Prisma.SafeTransactionScalarWhereInput[];
-	id?: Prisma.StringFilter<"SafeTransaction"> | string;
-	createdAt?: Prisma.DateTimeFilter<"SafeTransaction"> | Date | string;
-	updatedAt?:
-		| Prisma.DateTimeNullableFilter<"SafeTransaction">
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.DateTimeNullableFilter<"SafeTransaction">
-		| Date
-		| string
-		| null;
-	safeTxHash?: Prisma.StringFilter<"SafeTransaction"> | string;
-	safeWalletId?: Prisma.StringFilter<"SafeTransaction"> | string;
-	to?: Prisma.StringFilter<"SafeTransaction"> | string;
-	value?: Prisma.StringFilter<"SafeTransaction"> | string;
-	data?: Prisma.StringFilter<"SafeTransaction"> | string;
-	nonce?: Prisma.IntFilter<"SafeTransaction"> | number;
-	operation?: Prisma.IntFilter<"SafeTransaction"> | number;
-	tokenAddress?: Prisma.StringNullableFilter<"SafeTransaction"> | string | null;
-	tokenSymbol?: Prisma.StringNullableFilter<"SafeTransaction"> | string | null;
-	tokenDecimals?: Prisma.IntNullableFilter<"SafeTransaction"> | number | null;
-	confirmationsRequired?: Prisma.IntFilter<"SafeTransaction"> | number;
-	isExecuted?: Prisma.BoolFilter<"SafeTransaction"> | boolean;
-	executionTxHash?:
-		| Prisma.StringNullableFilter<"SafeTransaction">
-		| string
-		| null;
-	executedAt?:
-		| Prisma.DateTimeNullableFilter<"SafeTransaction">
-		| Date
-		| string
-		| null;
 };
 
 export type SafeTransactionCreateWithoutConfirmationsInput = {
@@ -1243,6 +1115,134 @@ export type SafeTransactionUncheckedUpdateWithoutConfirmationsInput = {
 		| null;
 	executedAt?:
 		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+};
+
+export type SafeTransactionCreateWithoutSafeWalletInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	safeTxHash: string;
+	to: string;
+	value?: string;
+	data?: string;
+	nonce: number;
+	operation?: number;
+	tokenAddress?: string | null;
+	tokenSymbol?: string | null;
+	tokenDecimals?: number | null;
+	confirmationsRequired: number;
+	isExecuted?: boolean;
+	executionTxHash?: string | null;
+	executedAt?: Date | string | null;
+	confirmations?: Prisma.SafeConfirmationCreateNestedManyWithoutSafeTransactionInput;
+};
+
+export type SafeTransactionUncheckedCreateWithoutSafeWalletInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	safeTxHash: string;
+	to: string;
+	value?: string;
+	data?: string;
+	nonce: number;
+	operation?: number;
+	tokenAddress?: string | null;
+	tokenSymbol?: string | null;
+	tokenDecimals?: number | null;
+	confirmationsRequired: number;
+	isExecuted?: boolean;
+	executionTxHash?: string | null;
+	executedAt?: Date | string | null;
+	confirmations?: Prisma.SafeConfirmationUncheckedCreateNestedManyWithoutSafeTransactionInput;
+};
+
+export type SafeTransactionCreateOrConnectWithoutSafeWalletInput = {
+	where: Prisma.SafeTransactionWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.SafeTransactionCreateWithoutSafeWalletInput,
+		Prisma.SafeTransactionUncheckedCreateWithoutSafeWalletInput
+	>;
+};
+
+export type SafeTransactionCreateManySafeWalletInputEnvelope = {
+	data:
+		| Prisma.SafeTransactionCreateManySafeWalletInput
+		| Prisma.SafeTransactionCreateManySafeWalletInput[];
+	skipDuplicates?: boolean;
+};
+
+export type SafeTransactionUpsertWithWhereUniqueWithoutSafeWalletInput = {
+	where: Prisma.SafeTransactionWhereUniqueInput;
+	update: Prisma.XOR<
+		Prisma.SafeTransactionUpdateWithoutSafeWalletInput,
+		Prisma.SafeTransactionUncheckedUpdateWithoutSafeWalletInput
+	>;
+	create: Prisma.XOR<
+		Prisma.SafeTransactionCreateWithoutSafeWalletInput,
+		Prisma.SafeTransactionUncheckedCreateWithoutSafeWalletInput
+	>;
+};
+
+export type SafeTransactionUpdateWithWhereUniqueWithoutSafeWalletInput = {
+	where: Prisma.SafeTransactionWhereUniqueInput;
+	data: Prisma.XOR<
+		Prisma.SafeTransactionUpdateWithoutSafeWalletInput,
+		Prisma.SafeTransactionUncheckedUpdateWithoutSafeWalletInput
+	>;
+};
+
+export type SafeTransactionUpdateManyWithWhereWithoutSafeWalletInput = {
+	where: Prisma.SafeTransactionScalarWhereInput;
+	data: Prisma.XOR<
+		Prisma.SafeTransactionUpdateManyMutationInput,
+		Prisma.SafeTransactionUncheckedUpdateManyWithoutSafeWalletInput
+	>;
+};
+
+export type SafeTransactionScalarWhereInput = {
+	AND?:
+		| Prisma.SafeTransactionScalarWhereInput
+		| Prisma.SafeTransactionScalarWhereInput[];
+	OR?: Prisma.SafeTransactionScalarWhereInput[];
+	NOT?:
+		| Prisma.SafeTransactionScalarWhereInput
+		| Prisma.SafeTransactionScalarWhereInput[];
+	id?: Prisma.StringFilter<"SafeTransaction"> | string;
+	createdAt?: Prisma.DateTimeFilter<"SafeTransaction"> | Date | string;
+	updatedAt?:
+		| Prisma.DateTimeNullableFilter<"SafeTransaction">
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.DateTimeNullableFilter<"SafeTransaction">
+		| Date
+		| string
+		| null;
+	safeTxHash?: Prisma.StringFilter<"SafeTransaction"> | string;
+	safeWalletId?: Prisma.StringFilter<"SafeTransaction"> | string;
+	to?: Prisma.StringFilter<"SafeTransaction"> | string;
+	value?: Prisma.StringFilter<"SafeTransaction"> | string;
+	data?: Prisma.StringFilter<"SafeTransaction"> | string;
+	nonce?: Prisma.IntFilter<"SafeTransaction"> | number;
+	operation?: Prisma.IntFilter<"SafeTransaction"> | number;
+	tokenAddress?: Prisma.StringNullableFilter<"SafeTransaction"> | string | null;
+	tokenSymbol?: Prisma.StringNullableFilter<"SafeTransaction"> | string | null;
+	tokenDecimals?: Prisma.IntNullableFilter<"SafeTransaction"> | number | null;
+	confirmationsRequired?: Prisma.IntFilter<"SafeTransaction"> | number;
+	isExecuted?: Prisma.BoolFilter<"SafeTransaction"> | boolean;
+	executionTxHash?:
+		| Prisma.StringNullableFilter<"SafeTransaction">
+		| string
+		| null;
+	executedAt?:
+		| Prisma.DateTimeNullableFilter<"SafeTransaction">
 		| Date
 		| string
 		| null;

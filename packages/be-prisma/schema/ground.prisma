@@ -1,0 +1,24 @@
+// @data-type: MASTER
+// @description: Company 아래에서 서비스 시설 정보를 구체화하는 1:1 상세 모델
+/// @displayName 시설
+model Ground {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime? @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 이름
+  name        String
+  /// @displayName 라벨
+  label       String?
+  /// @displayName 주소
+  address     String
+  /// @displayName 전화번호
+  phone       String
+  /// @displayName 이메일
+  email       String
+  companyId   String    @unique @map("company_id")
+  imageFileId String?   @map("image_file_id")
+  company     Company   @relation(fields: [companyId], references: [id])
+
+  @@map("grounds")
+}

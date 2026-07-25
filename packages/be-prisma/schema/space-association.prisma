@@ -1,0 +1,16 @@
+// @data-type: MASTER
+// @description: Space와 Group을 연결하는 그룹 링크
+/// @displayName 공간 그룹
+model SpaceAssociation {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+  spaceId   String    @map("space_id")
+  groupId   String    @map("group_id")
+  group     Group     @relation(fields: [groupId], references: [id])
+  space     Space     @relation(fields: [spaceId], references: [id])
+
+  @@unique([spaceId, groupId])
+  @@map("space_associations")
+}

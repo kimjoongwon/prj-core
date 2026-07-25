@@ -533,29 +533,29 @@ export type SpaceMinOrderByAggregateInput = {
 	contentLanguageCode?: Prisma.SortOrder;
 };
 
-export type SpaceCreateNestedOneWithoutPoliciesInput = {
+export type SpaceCreateNestedOneWithoutAlbumEntriesInput = {
 	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutPoliciesInput,
-		Prisma.SpaceUncheckedCreateWithoutPoliciesInput
+		Prisma.SpaceCreateWithoutAlbumEntriesInput,
+		Prisma.SpaceUncheckedCreateWithoutAlbumEntriesInput
 	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutPoliciesInput;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutAlbumEntriesInput;
 	connect?: Prisma.SpaceWhereUniqueInput;
 };
 
-export type SpaceUpdateOneRequiredWithoutPoliciesNestedInput = {
+export type SpaceUpdateOneRequiredWithoutAlbumEntriesNestedInput = {
 	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutPoliciesInput,
-		Prisma.SpaceUncheckedCreateWithoutPoliciesInput
+		Prisma.SpaceCreateWithoutAlbumEntriesInput,
+		Prisma.SpaceUncheckedCreateWithoutAlbumEntriesInput
 	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutPoliciesInput;
-	upsert?: Prisma.SpaceUpsertWithoutPoliciesInput;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutAlbumEntriesInput;
+	upsert?: Prisma.SpaceUpsertWithoutAlbumEntriesInput;
 	connect?: Prisma.SpaceWhereUniqueInput;
 	update?: Prisma.XOR<
 		Prisma.XOR<
-			Prisma.SpaceUpdateToOneWithWhereWithoutPoliciesInput,
-			Prisma.SpaceUpdateWithoutPoliciesInput
+			Prisma.SpaceUpdateToOneWithWhereWithoutAlbumEntriesInput,
+			Prisma.SpaceUpdateWithoutAlbumEntriesInput
 		>,
-		Prisma.SpaceUncheckedUpdateWithoutPoliciesInput
+		Prisma.SpaceUncheckedUpdateWithoutAlbumEntriesInput
 	>;
 };
 
@@ -585,32 +585,6 @@ export type SpaceUpdateOneRequiredWithoutAlbumsNestedInput = {
 	>;
 };
 
-export type SpaceCreateNestedOneWithoutAlbumEntriesInput = {
-	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutAlbumEntriesInput,
-		Prisma.SpaceUncheckedCreateWithoutAlbumEntriesInput
-	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutAlbumEntriesInput;
-	connect?: Prisma.SpaceWhereUniqueInput;
-};
-
-export type SpaceUpdateOneRequiredWithoutAlbumEntriesNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutAlbumEntriesInput,
-		Prisma.SpaceUncheckedCreateWithoutAlbumEntriesInput
-	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutAlbumEntriesInput;
-	upsert?: Prisma.SpaceUpsertWithoutAlbumEntriesInput;
-	connect?: Prisma.SpaceWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.SpaceUpdateToOneWithWhereWithoutAlbumEntriesInput,
-			Prisma.SpaceUpdateWithoutAlbumEntriesInput
-		>,
-		Prisma.SpaceUncheckedUpdateWithoutAlbumEntriesInput
-	>;
-};
-
 export type SpaceCreateNestedOneWithoutAssetsInput = {
 	create?: Prisma.XOR<
 		Prisma.SpaceCreateWithoutAssetsInput,
@@ -637,107 +611,29 @@ export type SpaceUpdateOneRequiredWithoutAssetsNestedInput = {
 	>;
 };
 
-export type SpaceCreateNestedOneWithoutDerivativesInput = {
+export type SpaceCreateNestedOneWithoutCategoriesInput = {
 	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutDerivativesInput,
-		Prisma.SpaceUncheckedCreateWithoutDerivativesInput
+		Prisma.SpaceCreateWithoutCategoriesInput,
+		Prisma.SpaceUncheckedCreateWithoutCategoriesInput
 	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutDerivativesInput;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutCategoriesInput;
 	connect?: Prisma.SpaceWhereUniqueInput;
 };
 
-export type SpaceUpdateOneRequiredWithoutDerivativesNestedInput = {
+export type SpaceUpdateOneRequiredWithoutCategoriesNestedInput = {
 	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutDerivativesInput,
-		Prisma.SpaceUncheckedCreateWithoutDerivativesInput
+		Prisma.SpaceCreateWithoutCategoriesInput,
+		Prisma.SpaceUncheckedCreateWithoutCategoriesInput
 	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutDerivativesInput;
-	upsert?: Prisma.SpaceUpsertWithoutDerivativesInput;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutCategoriesInput;
+	upsert?: Prisma.SpaceUpsertWithoutCategoriesInput;
 	connect?: Prisma.SpaceWhereUniqueInput;
 	update?: Prisma.XOR<
 		Prisma.XOR<
-			Prisma.SpaceUpdateToOneWithWhereWithoutDerivativesInput,
-			Prisma.SpaceUpdateWithoutDerivativesInput
+			Prisma.SpaceUpdateToOneWithWhereWithoutCategoriesInput,
+			Prisma.SpaceUpdateWithoutCategoriesInput
 		>,
-		Prisma.SpaceUncheckedUpdateWithoutDerivativesInput
-	>;
-};
-
-export type SpaceCreateNestedOneWithoutFoldersInput = {
-	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutFoldersInput,
-		Prisma.SpaceUncheckedCreateWithoutFoldersInput
-	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutFoldersInput;
-	connect?: Prisma.SpaceWhereUniqueInput;
-};
-
-export type SpaceUpdateOneRequiredWithoutFoldersNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutFoldersInput,
-		Prisma.SpaceUncheckedCreateWithoutFoldersInput
-	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutFoldersInput;
-	upsert?: Prisma.SpaceUpsertWithoutFoldersInput;
-	connect?: Prisma.SpaceWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.SpaceUpdateToOneWithWhereWithoutFoldersInput,
-			Prisma.SpaceUpdateWithoutFoldersInput
-		>,
-		Prisma.SpaceUncheckedUpdateWithoutFoldersInput
-	>;
-};
-
-export type SpaceCreateNestedOneWithoutEmailVerificationsInput = {
-	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutEmailVerificationsInput,
-		Prisma.SpaceUncheckedCreateWithoutEmailVerificationsInput
-	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutEmailVerificationsInput;
-	connect?: Prisma.SpaceWhereUniqueInput;
-};
-
-export type SpaceUpdateOneRequiredWithoutEmailVerificationsNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutEmailVerificationsInput,
-		Prisma.SpaceUncheckedCreateWithoutEmailVerificationsInput
-	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutEmailVerificationsInput;
-	upsert?: Prisma.SpaceUpsertWithoutEmailVerificationsInput;
-	connect?: Prisma.SpaceWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.SpaceUpdateToOneWithWhereWithoutEmailVerificationsInput,
-			Prisma.SpaceUpdateWithoutEmailVerificationsInput
-		>,
-		Prisma.SpaceUncheckedUpdateWithoutEmailVerificationsInput
-	>;
-};
-
-export type SpaceCreateNestedOneWithoutContentsInput = {
-	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutContentsInput,
-		Prisma.SpaceUncheckedCreateWithoutContentsInput
-	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutContentsInput;
-	connect?: Prisma.SpaceWhereUniqueInput;
-};
-
-export type SpaceUpdateOneRequiredWithoutContentsNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutContentsInput,
-		Prisma.SpaceUncheckedCreateWithoutContentsInput
-	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutContentsInput;
-	upsert?: Prisma.SpaceUpsertWithoutContentsInput;
-	connect?: Prisma.SpaceWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.SpaceUpdateToOneWithWhereWithoutContentsInput,
-			Prisma.SpaceUpdateWithoutContentsInput
-		>,
-		Prisma.SpaceUncheckedUpdateWithoutContentsInput
+		Prisma.SpaceUncheckedUpdateWithoutCategoriesInput
 	>;
 };
 
@@ -767,107 +663,133 @@ export type SpaceUpdateOneRequiredWithoutCompanyNestedInput = {
 	>;
 };
 
-export type SpaceCreateNestedOneWithoutClassificationInput = {
+export type SpaceCreateNestedOneWithoutContentsInput = {
 	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutClassificationInput,
-		Prisma.SpaceUncheckedCreateWithoutClassificationInput
+		Prisma.SpaceCreateWithoutContentsInput,
+		Prisma.SpaceUncheckedCreateWithoutContentsInput
 	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutClassificationInput;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutContentsInput;
 	connect?: Prisma.SpaceWhereUniqueInput;
 };
 
-export type SpaceUpdateOneRequiredWithoutClassificationNestedInput = {
+export type SpaceUpdateOneRequiredWithoutContentsNestedInput = {
 	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutClassificationInput,
-		Prisma.SpaceUncheckedCreateWithoutClassificationInput
+		Prisma.SpaceCreateWithoutContentsInput,
+		Prisma.SpaceUncheckedCreateWithoutContentsInput
 	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutClassificationInput;
-	upsert?: Prisma.SpaceUpsertWithoutClassificationInput;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutContentsInput;
+	upsert?: Prisma.SpaceUpsertWithoutContentsInput;
 	connect?: Prisma.SpaceWhereUniqueInput;
 	update?: Prisma.XOR<
 		Prisma.XOR<
-			Prisma.SpaceUpdateToOneWithWhereWithoutClassificationInput,
-			Prisma.SpaceUpdateWithoutClassificationInput
+			Prisma.SpaceUpdateToOneWithWhereWithoutContentsInput,
+			Prisma.SpaceUpdateWithoutContentsInput
 		>,
-		Prisma.SpaceUncheckedUpdateWithoutClassificationInput
+		Prisma.SpaceUncheckedUpdateWithoutContentsInput
 	>;
 };
 
-export type SpaceCreateNestedOneWithoutAssociationsInput = {
+export type SpaceCreateNestedOneWithoutDerivativesInput = {
 	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutAssociationsInput,
-		Prisma.SpaceUncheckedCreateWithoutAssociationsInput
+		Prisma.SpaceCreateWithoutDerivativesInput,
+		Prisma.SpaceUncheckedCreateWithoutDerivativesInput
 	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutAssociationsInput;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutDerivativesInput;
 	connect?: Prisma.SpaceWhereUniqueInput;
 };
 
-export type SpaceUpdateOneRequiredWithoutAssociationsNestedInput = {
+export type SpaceUpdateOneRequiredWithoutDerivativesNestedInput = {
 	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutAssociationsInput,
-		Prisma.SpaceUncheckedCreateWithoutAssociationsInput
+		Prisma.SpaceCreateWithoutDerivativesInput,
+		Prisma.SpaceUncheckedCreateWithoutDerivativesInput
 	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutAssociationsInput;
-	upsert?: Prisma.SpaceUpsertWithoutAssociationsInput;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutDerivativesInput;
+	upsert?: Prisma.SpaceUpsertWithoutDerivativesInput;
 	connect?: Prisma.SpaceWhereUniqueInput;
 	update?: Prisma.XOR<
 		Prisma.XOR<
-			Prisma.SpaceUpdateToOneWithWhereWithoutAssociationsInput,
-			Prisma.SpaceUpdateWithoutAssociationsInput
+			Prisma.SpaceUpdateToOneWithWhereWithoutDerivativesInput,
+			Prisma.SpaceUpdateWithoutDerivativesInput
 		>,
-		Prisma.SpaceUncheckedUpdateWithoutAssociationsInput
+		Prisma.SpaceUncheckedUpdateWithoutDerivativesInput
 	>;
 };
 
-export type SpaceCreateNestedOneWithoutTenantAccessRequestsInput = {
+export type SpaceCreateNestedOneWithoutEmailVerificationsInput = {
 	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutTenantAccessRequestsInput,
-		Prisma.SpaceUncheckedCreateWithoutTenantAccessRequestsInput
+		Prisma.SpaceCreateWithoutEmailVerificationsInput,
+		Prisma.SpaceUncheckedCreateWithoutEmailVerificationsInput
 	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutTenantAccessRequestsInput;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutEmailVerificationsInput;
 	connect?: Prisma.SpaceWhereUniqueInput;
 };
 
-export type SpaceUpdateOneRequiredWithoutTenantAccessRequestsNestedInput = {
+export type SpaceUpdateOneRequiredWithoutEmailVerificationsNestedInput = {
 	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutTenantAccessRequestsInput,
-		Prisma.SpaceUncheckedCreateWithoutTenantAccessRequestsInput
+		Prisma.SpaceCreateWithoutEmailVerificationsInput,
+		Prisma.SpaceUncheckedCreateWithoutEmailVerificationsInput
 	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutTenantAccessRequestsInput;
-	upsert?: Prisma.SpaceUpsertWithoutTenantAccessRequestsInput;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutEmailVerificationsInput;
+	upsert?: Prisma.SpaceUpsertWithoutEmailVerificationsInput;
 	connect?: Prisma.SpaceWhereUniqueInput;
 	update?: Prisma.XOR<
 		Prisma.XOR<
-			Prisma.SpaceUpdateToOneWithWhereWithoutTenantAccessRequestsInput,
-			Prisma.SpaceUpdateWithoutTenantAccessRequestsInput
+			Prisma.SpaceUpdateToOneWithWhereWithoutEmailVerificationsInput,
+			Prisma.SpaceUpdateWithoutEmailVerificationsInput
 		>,
-		Prisma.SpaceUncheckedUpdateWithoutTenantAccessRequestsInput
+		Prisma.SpaceUncheckedUpdateWithoutEmailVerificationsInput
 	>;
 };
 
-export type SpaceCreateNestedOneWithoutTenantsInput = {
+export type SpaceCreateNestedOneWithoutFoldersInput = {
 	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutTenantsInput,
-		Prisma.SpaceUncheckedCreateWithoutTenantsInput
+		Prisma.SpaceCreateWithoutFoldersInput,
+		Prisma.SpaceUncheckedCreateWithoutFoldersInput
 	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutTenantsInput;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutFoldersInput;
 	connect?: Prisma.SpaceWhereUniqueInput;
 };
 
-export type SpaceUpdateOneRequiredWithoutTenantsNestedInput = {
+export type SpaceUpdateOneRequiredWithoutFoldersNestedInput = {
 	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutTenantsInput,
-		Prisma.SpaceUncheckedCreateWithoutTenantsInput
+		Prisma.SpaceCreateWithoutFoldersInput,
+		Prisma.SpaceUncheckedCreateWithoutFoldersInput
 	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutTenantsInput;
-	upsert?: Prisma.SpaceUpsertWithoutTenantsInput;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutFoldersInput;
+	upsert?: Prisma.SpaceUpsertWithoutFoldersInput;
 	connect?: Prisma.SpaceWhereUniqueInput;
 	update?: Prisma.XOR<
 		Prisma.XOR<
-			Prisma.SpaceUpdateToOneWithWhereWithoutTenantsInput,
-			Prisma.SpaceUpdateWithoutTenantsInput
+			Prisma.SpaceUpdateToOneWithWhereWithoutFoldersInput,
+			Prisma.SpaceUpdateWithoutFoldersInput
 		>,
-		Prisma.SpaceUncheckedUpdateWithoutTenantsInput
+		Prisma.SpaceUncheckedUpdateWithoutFoldersInput
+	>;
+};
+
+export type SpaceCreateNestedOneWithoutGroupsInput = {
+	create?: Prisma.XOR<
+		Prisma.SpaceCreateWithoutGroupsInput,
+		Prisma.SpaceUncheckedCreateWithoutGroupsInput
+	>;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutGroupsInput;
+	connect?: Prisma.SpaceWhereUniqueInput;
+};
+
+export type SpaceUpdateOneRequiredWithoutGroupsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.SpaceCreateWithoutGroupsInput,
+		Prisma.SpaceUncheckedCreateWithoutGroupsInput
+	>;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutGroupsInput;
+	upsert?: Prisma.SpaceUpsertWithoutGroupsInput;
+	connect?: Prisma.SpaceWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.SpaceUpdateToOneWithWhereWithoutGroupsInput,
+			Prisma.SpaceUpdateWithoutGroupsInput
+		>,
+		Prisma.SpaceUncheckedUpdateWithoutGroupsInput
 	>;
 };
 
@@ -894,6 +816,32 @@ export type SpaceUpdateOneRequiredWithoutInquiriesNestedInput = {
 			Prisma.SpaceUpdateWithoutInquiriesInput
 		>,
 		Prisma.SpaceUncheckedUpdateWithoutInquiriesInput
+	>;
+};
+
+export type SpaceCreateNestedOneWithoutPoliciesInput = {
+	create?: Prisma.XOR<
+		Prisma.SpaceCreateWithoutPoliciesInput,
+		Prisma.SpaceUncheckedCreateWithoutPoliciesInput
+	>;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutPoliciesInput;
+	connect?: Prisma.SpaceWhereUniqueInput;
+};
+
+export type SpaceUpdateOneRequiredWithoutPoliciesNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.SpaceCreateWithoutPoliciesInput,
+		Prisma.SpaceUncheckedCreateWithoutPoliciesInput
+	>;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutPoliciesInput;
+	upsert?: Prisma.SpaceUpsertWithoutPoliciesInput;
+	connect?: Prisma.SpaceWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.SpaceUpdateToOneWithWhereWithoutPoliciesInput,
+			Prisma.SpaceUpdateWithoutPoliciesInput
+		>,
+		Prisma.SpaceUncheckedUpdateWithoutPoliciesInput
 	>;
 };
 
@@ -949,6 +897,88 @@ export type SpaceUpdateOneRequiredWithoutRoutinesNestedInput = {
 	>;
 };
 
+export type SpaceCreateNestedOneWithoutSafeWalletsInput = {
+	create?: Prisma.XOR<
+		Prisma.SpaceCreateWithoutSafeWalletsInput,
+		Prisma.SpaceUncheckedCreateWithoutSafeWalletsInput
+	>;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutSafeWalletsInput;
+	connect?: Prisma.SpaceWhereUniqueInput;
+};
+
+export type SpaceUpdateOneRequiredWithoutSafeWalletsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.SpaceCreateWithoutSafeWalletsInput,
+		Prisma.SpaceUncheckedCreateWithoutSafeWalletsInput
+	>;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutSafeWalletsInput;
+	upsert?: Prisma.SpaceUpsertWithoutSafeWalletsInput;
+	connect?: Prisma.SpaceWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.SpaceUpdateToOneWithWhereWithoutSafeWalletsInput,
+			Prisma.SpaceUpdateWithoutSafeWalletsInput
+		>,
+		Prisma.SpaceUncheckedUpdateWithoutSafeWalletsInput
+	>;
+};
+
+export type SpaceCreateNestedOneWithoutAssociationsInput = {
+	create?: Prisma.XOR<
+		Prisma.SpaceCreateWithoutAssociationsInput,
+		Prisma.SpaceUncheckedCreateWithoutAssociationsInput
+	>;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutAssociationsInput;
+	connect?: Prisma.SpaceWhereUniqueInput;
+};
+
+export type SpaceUpdateOneRequiredWithoutAssociationsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.SpaceCreateWithoutAssociationsInput,
+		Prisma.SpaceUncheckedCreateWithoutAssociationsInput
+	>;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutAssociationsInput;
+	upsert?: Prisma.SpaceUpsertWithoutAssociationsInput;
+	connect?: Prisma.SpaceWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.SpaceUpdateToOneWithWhereWithoutAssociationsInput,
+			Prisma.SpaceUpdateWithoutAssociationsInput
+		>,
+		Prisma.SpaceUncheckedUpdateWithoutAssociationsInput
+	>;
+};
+
+export type SpaceCreateNestedOneWithoutClassificationInput = {
+	create?: Prisma.XOR<
+		Prisma.SpaceCreateWithoutClassificationInput,
+		Prisma.SpaceUncheckedCreateWithoutClassificationInput
+	>;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutClassificationInput;
+	connect?: Prisma.SpaceWhereUniqueInput;
+};
+
+export type SpaceUpdateOneRequiredWithoutClassificationNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.SpaceCreateWithoutClassificationInput,
+		Prisma.SpaceUncheckedCreateWithoutClassificationInput
+	>;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutClassificationInput;
+	upsert?: Prisma.SpaceUpsertWithoutClassificationInput;
+	connect?: Prisma.SpaceWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.SpaceUpdateToOneWithWhereWithoutClassificationInput,
+			Prisma.SpaceUpdateWithoutClassificationInput
+		>,
+		Prisma.SpaceUncheckedUpdateWithoutClassificationInput
+	>;
+};
+
+export type EnumLanguageCodeFieldUpdateOperationsInput = {
+	set?: $Enums.LanguageCode;
+};
+
 export type SpaceCreateNestedOneWithoutTasksInput = {
 	create?: Prisma.XOR<
 		Prisma.SpaceCreateWithoutTasksInput,
@@ -972,6 +1002,58 @@ export type SpaceUpdateOneRequiredWithoutTasksNestedInput = {
 			Prisma.SpaceUpdateWithoutTasksInput
 		>,
 		Prisma.SpaceUncheckedUpdateWithoutTasksInput
+	>;
+};
+
+export type SpaceCreateNestedOneWithoutTenantAccessRequestsInput = {
+	create?: Prisma.XOR<
+		Prisma.SpaceCreateWithoutTenantAccessRequestsInput,
+		Prisma.SpaceUncheckedCreateWithoutTenantAccessRequestsInput
+	>;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutTenantAccessRequestsInput;
+	connect?: Prisma.SpaceWhereUniqueInput;
+};
+
+export type SpaceUpdateOneRequiredWithoutTenantAccessRequestsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.SpaceCreateWithoutTenantAccessRequestsInput,
+		Prisma.SpaceUncheckedCreateWithoutTenantAccessRequestsInput
+	>;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutTenantAccessRequestsInput;
+	upsert?: Prisma.SpaceUpsertWithoutTenantAccessRequestsInput;
+	connect?: Prisma.SpaceWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.SpaceUpdateToOneWithWhereWithoutTenantAccessRequestsInput,
+			Prisma.SpaceUpdateWithoutTenantAccessRequestsInput
+		>,
+		Prisma.SpaceUncheckedUpdateWithoutTenantAccessRequestsInput
+	>;
+};
+
+export type SpaceCreateNestedOneWithoutTenantsInput = {
+	create?: Prisma.XOR<
+		Prisma.SpaceCreateWithoutTenantsInput,
+		Prisma.SpaceUncheckedCreateWithoutTenantsInput
+	>;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutTenantsInput;
+	connect?: Prisma.SpaceWhereUniqueInput;
+};
+
+export type SpaceUpdateOneRequiredWithoutTenantsNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.SpaceCreateWithoutTenantsInput,
+		Prisma.SpaceUncheckedCreateWithoutTenantsInput
+	>;
+	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutTenantsInput;
+	upsert?: Prisma.SpaceUpsertWithoutTenantsInput;
+	connect?: Prisma.SpaceWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.SpaceUpdateToOneWithWhereWithoutTenantsInput,
+			Prisma.SpaceUpdateWithoutTenantsInput
+		>,
+		Prisma.SpaceUncheckedUpdateWithoutTenantsInput
 	>;
 };
 
@@ -1001,85 +1083,7 @@ export type SpaceUpdateOneRequiredWithoutTimelinesNestedInput = {
 	>;
 };
 
-export type SpaceCreateNestedOneWithoutCategoriesInput = {
-	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutCategoriesInput,
-		Prisma.SpaceUncheckedCreateWithoutCategoriesInput
-	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutCategoriesInput;
-	connect?: Prisma.SpaceWhereUniqueInput;
-};
-
-export type SpaceUpdateOneRequiredWithoutCategoriesNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutCategoriesInput,
-		Prisma.SpaceUncheckedCreateWithoutCategoriesInput
-	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutCategoriesInput;
-	upsert?: Prisma.SpaceUpsertWithoutCategoriesInput;
-	connect?: Prisma.SpaceWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.SpaceUpdateToOneWithWhereWithoutCategoriesInput,
-			Prisma.SpaceUpdateWithoutCategoriesInput
-		>,
-		Prisma.SpaceUncheckedUpdateWithoutCategoriesInput
-	>;
-};
-
-export type SpaceCreateNestedOneWithoutGroupsInput = {
-	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutGroupsInput,
-		Prisma.SpaceUncheckedCreateWithoutGroupsInput
-	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutGroupsInput;
-	connect?: Prisma.SpaceWhereUniqueInput;
-};
-
-export type SpaceUpdateOneRequiredWithoutGroupsNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutGroupsInput,
-		Prisma.SpaceUncheckedCreateWithoutGroupsInput
-	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutGroupsInput;
-	upsert?: Prisma.SpaceUpsertWithoutGroupsInput;
-	connect?: Prisma.SpaceWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.SpaceUpdateToOneWithWhereWithoutGroupsInput,
-			Prisma.SpaceUpdateWithoutGroupsInput
-		>,
-		Prisma.SpaceUncheckedUpdateWithoutGroupsInput
-	>;
-};
-
-export type SpaceCreateNestedOneWithoutSafeWalletsInput = {
-	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutSafeWalletsInput,
-		Prisma.SpaceUncheckedCreateWithoutSafeWalletsInput
-	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutSafeWalletsInput;
-	connect?: Prisma.SpaceWhereUniqueInput;
-};
-
-export type SpaceUpdateOneRequiredWithoutSafeWalletsNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.SpaceCreateWithoutSafeWalletsInput,
-		Prisma.SpaceUncheckedCreateWithoutSafeWalletsInput
-	>;
-	connectOrCreate?: Prisma.SpaceCreateOrConnectWithoutSafeWalletsInput;
-	upsert?: Prisma.SpaceUpsertWithoutSafeWalletsInput;
-	connect?: Prisma.SpaceWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.SpaceUpdateToOneWithWhereWithoutSafeWalletsInput,
-			Prisma.SpaceUpdateWithoutSafeWalletsInput
-		>,
-		Prisma.SpaceUncheckedUpdateWithoutSafeWalletsInput
-	>;
-};
-
-export type SpaceCreateWithoutPoliciesInput = {
+export type SpaceCreateWithoutAlbumEntriesInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1091,6 +1095,7 @@ export type SpaceCreateWithoutPoliciesInput = {
 	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
 	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
 	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
@@ -1098,7 +1103,6 @@ export type SpaceCreateWithoutPoliciesInput = {
 	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
 	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
 	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
-	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
 	groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
@@ -1107,7 +1111,7 @@ export type SpaceCreateWithoutPoliciesInput = {
 	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
 };
 
-export type SpaceUncheckedCreateWithoutPoliciesInput = {
+export type SpaceUncheckedCreateWithoutAlbumEntriesInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1119,6 +1123,7 @@ export type SpaceUncheckedCreateWithoutPoliciesInput = {
 	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
 	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
 	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
@@ -1126,7 +1131,6 @@ export type SpaceUncheckedCreateWithoutPoliciesInput = {
 	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
 	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
 	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
 	groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput;
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
@@ -1135,35 +1139,35 @@ export type SpaceUncheckedCreateWithoutPoliciesInput = {
 	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
 };
 
-export type SpaceCreateOrConnectWithoutPoliciesInput = {
+export type SpaceCreateOrConnectWithoutAlbumEntriesInput = {
 	where: Prisma.SpaceWhereUniqueInput;
 	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutPoliciesInput,
-		Prisma.SpaceUncheckedCreateWithoutPoliciesInput
+		Prisma.SpaceCreateWithoutAlbumEntriesInput,
+		Prisma.SpaceUncheckedCreateWithoutAlbumEntriesInput
 	>;
 };
 
-export type SpaceUpsertWithoutPoliciesInput = {
+export type SpaceUpsertWithoutAlbumEntriesInput = {
 	update: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutPoliciesInput,
-		Prisma.SpaceUncheckedUpdateWithoutPoliciesInput
+		Prisma.SpaceUpdateWithoutAlbumEntriesInput,
+		Prisma.SpaceUncheckedUpdateWithoutAlbumEntriesInput
 	>;
 	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutPoliciesInput,
-		Prisma.SpaceUncheckedCreateWithoutPoliciesInput
+		Prisma.SpaceCreateWithoutAlbumEntriesInput,
+		Prisma.SpaceUncheckedCreateWithoutAlbumEntriesInput
 	>;
 	where?: Prisma.SpaceWhereInput;
 };
 
-export type SpaceUpdateToOneWithWhereWithoutPoliciesInput = {
+export type SpaceUpdateToOneWithWhereWithoutAlbumEntriesInput = {
 	where?: Prisma.SpaceWhereInput;
 	data: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutPoliciesInput,
-		Prisma.SpaceUncheckedUpdateWithoutPoliciesInput
+		Prisma.SpaceUpdateWithoutAlbumEntriesInput,
+		Prisma.SpaceUncheckedUpdateWithoutAlbumEntriesInput
 	>;
 };
 
-export type SpaceUpdateWithoutPoliciesInput = {
+export type SpaceUpdateWithoutAlbumEntriesInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1185,6 +1189,7 @@ export type SpaceUpdateWithoutPoliciesInput = {
 	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
 	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
 	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
@@ -1192,7 +1197,6 @@ export type SpaceUpdateWithoutPoliciesInput = {
 	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
 	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
 	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
-	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
 	groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
@@ -1201,7 +1205,7 @@ export type SpaceUpdateWithoutPoliciesInput = {
 	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
 };
 
-export type SpaceUncheckedUpdateWithoutPoliciesInput = {
+export type SpaceUncheckedUpdateWithoutAlbumEntriesInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1223,6 +1227,7 @@ export type SpaceUncheckedUpdateWithoutPoliciesInput = {
 	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
 	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
 	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -1230,7 +1235,6 @@ export type SpaceUncheckedUpdateWithoutPoliciesInput = {
 	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
 	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
 	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
 	groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput;
 	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -1399,166 +1403,6 @@ export type SpaceUncheckedUpdateWithoutAlbumsInput = {
 	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
 };
 
-export type SpaceCreateWithoutAlbumEntriesInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	contentLanguageCode?: $Enums.LanguageCode;
-	company?: Prisma.CompanyCreateNestedOneWithoutSpaceInput;
-	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
-	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
-	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
-	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
-	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
-	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
-	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
-	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
-	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
-	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
-	groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
-	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
-	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
-	derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput;
-	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
-};
-
-export type SpaceUncheckedCreateWithoutAlbumEntriesInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	contentLanguageCode?: $Enums.LanguageCode;
-	company?: Prisma.CompanyUncheckedCreateNestedOneWithoutSpaceInput;
-	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
-	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
-	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
-	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
-	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
-	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
-	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
-	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
-	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
-	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
-	groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
-	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
-	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
-	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput;
-	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
-};
-
-export type SpaceCreateOrConnectWithoutAlbumEntriesInput = {
-	where: Prisma.SpaceWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutAlbumEntriesInput,
-		Prisma.SpaceUncheckedCreateWithoutAlbumEntriesInput
-	>;
-};
-
-export type SpaceUpsertWithoutAlbumEntriesInput = {
-	update: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutAlbumEntriesInput,
-		Prisma.SpaceUncheckedUpdateWithoutAlbumEntriesInput
-	>;
-	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutAlbumEntriesInput,
-		Prisma.SpaceUncheckedCreateWithoutAlbumEntriesInput
-	>;
-	where?: Prisma.SpaceWhereInput;
-};
-
-export type SpaceUpdateToOneWithWhereWithoutAlbumEntriesInput = {
-	where?: Prisma.SpaceWhereInput;
-	data: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutAlbumEntriesInput,
-		Prisma.SpaceUncheckedUpdateWithoutAlbumEntriesInput
-	>;
-};
-
-export type SpaceUpdateWithoutAlbumEntriesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	contentLanguageCode?:
-		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
-		| $Enums.LanguageCode;
-	company?: Prisma.CompanyUpdateOneWithoutSpaceNestedInput;
-	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
-	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
-	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
-	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
-	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
-	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
-	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
-	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
-	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
-	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
-	groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
-	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
-	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
-	derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput;
-	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
-};
-
-export type SpaceUncheckedUpdateWithoutAlbumEntriesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	contentLanguageCode?:
-		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
-		| $Enums.LanguageCode;
-	company?: Prisma.CompanyUncheckedUpdateOneWithoutSpaceNestedInput;
-	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
-	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
-	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
-	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
-	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
-	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
-	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
-	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
-	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
-	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
-	groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
-	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
-	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
-	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput;
-	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
-};
-
 export type SpaceCreateWithoutAssetsInput = {
 	id?: string;
 	createdAt?: Date | string;
@@ -1719,7 +1563,7 @@ export type SpaceUncheckedUpdateWithoutAssetsInput = {
 	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
 };
 
-export type SpaceCreateWithoutDerivativesInput = {
+export type SpaceCreateWithoutCategoriesInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1734,7 +1578,6 @@ export type SpaceCreateWithoutDerivativesInput = {
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
-	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
 	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
 	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
 	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
@@ -1744,10 +1587,11 @@ export type SpaceCreateWithoutDerivativesInput = {
 	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput;
 	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
 };
 
-export type SpaceUncheckedCreateWithoutDerivativesInput = {
+export type SpaceUncheckedCreateWithoutCategoriesInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
@@ -1762,7 +1606,6 @@ export type SpaceUncheckedCreateWithoutDerivativesInput = {
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
-	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
 	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
 	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
 	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
@@ -1772,38 +1615,39 @@ export type SpaceUncheckedCreateWithoutDerivativesInput = {
 	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
 	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
 	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput;
 	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
 };
 
-export type SpaceCreateOrConnectWithoutDerivativesInput = {
+export type SpaceCreateOrConnectWithoutCategoriesInput = {
 	where: Prisma.SpaceWhereUniqueInput;
 	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutDerivativesInput,
-		Prisma.SpaceUncheckedCreateWithoutDerivativesInput
+		Prisma.SpaceCreateWithoutCategoriesInput,
+		Prisma.SpaceUncheckedCreateWithoutCategoriesInput
 	>;
 };
 
-export type SpaceUpsertWithoutDerivativesInput = {
+export type SpaceUpsertWithoutCategoriesInput = {
 	update: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutDerivativesInput,
-		Prisma.SpaceUncheckedUpdateWithoutDerivativesInput
+		Prisma.SpaceUpdateWithoutCategoriesInput,
+		Prisma.SpaceUncheckedUpdateWithoutCategoriesInput
 	>;
 	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutDerivativesInput,
-		Prisma.SpaceUncheckedCreateWithoutDerivativesInput
+		Prisma.SpaceCreateWithoutCategoriesInput,
+		Prisma.SpaceUncheckedCreateWithoutCategoriesInput
 	>;
 	where?: Prisma.SpaceWhereInput;
 };
 
-export type SpaceUpdateToOneWithWhereWithoutDerivativesInput = {
+export type SpaceUpdateToOneWithWhereWithoutCategoriesInput = {
 	where?: Prisma.SpaceWhereInput;
 	data: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutDerivativesInput,
-		Prisma.SpaceUncheckedUpdateWithoutDerivativesInput
+		Prisma.SpaceUpdateWithoutCategoriesInput,
+		Prisma.SpaceUncheckedUpdateWithoutCategoriesInput
 	>;
 };
 
-export type SpaceUpdateWithoutDerivativesInput = {
+export type SpaceUpdateWithoutCategoriesInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1828,7 +1672,6 @@ export type SpaceUpdateWithoutDerivativesInput = {
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
-	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
 	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
 	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
 	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
@@ -1838,10 +1681,11 @@ export type SpaceUpdateWithoutDerivativesInput = {
 	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
 	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput;
 	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
 };
 
-export type SpaceUncheckedUpdateWithoutDerivativesInput = {
+export type SpaceUncheckedUpdateWithoutCategoriesInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -1866,166 +1710,6 @@ export type SpaceUncheckedUpdateWithoutDerivativesInput = {
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
-	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
-	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
-	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
-	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
-	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
-	groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
-	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
-	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
-	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
-};
-
-export type SpaceCreateWithoutFoldersInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	contentLanguageCode?: $Enums.LanguageCode;
-	company?: Prisma.CompanyCreateNestedOneWithoutSpaceInput;
-	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
-	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
-	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
-	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
-	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
-	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
-	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
-	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
-	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
-	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
-	groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
-	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
-	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
-	derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput;
-	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
-};
-
-export type SpaceUncheckedCreateWithoutFoldersInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	contentLanguageCode?: $Enums.LanguageCode;
-	company?: Prisma.CompanyUncheckedCreateNestedOneWithoutSpaceInput;
-	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
-	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
-	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
-	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
-	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
-	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
-	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
-	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
-	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
-	groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
-	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
-	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
-	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput;
-	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
-};
-
-export type SpaceCreateOrConnectWithoutFoldersInput = {
-	where: Prisma.SpaceWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutFoldersInput,
-		Prisma.SpaceUncheckedCreateWithoutFoldersInput
-	>;
-};
-
-export type SpaceUpsertWithoutFoldersInput = {
-	update: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutFoldersInput,
-		Prisma.SpaceUncheckedUpdateWithoutFoldersInput
-	>;
-	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutFoldersInput,
-		Prisma.SpaceUncheckedCreateWithoutFoldersInput
-	>;
-	where?: Prisma.SpaceWhereInput;
-};
-
-export type SpaceUpdateToOneWithWhereWithoutFoldersInput = {
-	where?: Prisma.SpaceWhereInput;
-	data: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutFoldersInput,
-		Prisma.SpaceUncheckedUpdateWithoutFoldersInput
-	>;
-};
-
-export type SpaceUpdateWithoutFoldersInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	contentLanguageCode?:
-		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
-		| $Enums.LanguageCode;
-	company?: Prisma.CompanyUpdateOneWithoutSpaceNestedInput;
-	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
-	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
-	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
-	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
-	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
-	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
-	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
-	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
-	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
-	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
-	groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
-	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
-	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
-	derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput;
-	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
-};
-
-export type SpaceUncheckedUpdateWithoutFoldersInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	contentLanguageCode?:
-		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
-		| $Enums.LanguageCode;
-	company?: Prisma.CompanyUncheckedUpdateOneWithoutSpaceNestedInput;
-	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
-	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
-	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
-	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
-	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
 	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
 	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
 	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -2039,16 +1723,16 @@ export type SpaceUncheckedUpdateWithoutFoldersInput = {
 	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
 };
 
-export type SpaceCreateWithoutEmailVerificationsInput = {
+export type SpaceCreateWithoutCompanyInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	contentLanguageCode?: $Enums.LanguageCode;
-	company?: Prisma.CompanyCreateNestedOneWithoutSpaceInput;
 	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
 	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
 	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
 	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
 	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
@@ -2067,16 +1751,16 @@ export type SpaceCreateWithoutEmailVerificationsInput = {
 	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
 };
 
-export type SpaceUncheckedCreateWithoutEmailVerificationsInput = {
+export type SpaceUncheckedCreateWithoutCompanyInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	contentLanguageCode?: $Enums.LanguageCode;
-	company?: Prisma.CompanyUncheckedCreateNestedOneWithoutSpaceInput;
 	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
 	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
 	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
 	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
 	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
 	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
@@ -2095,35 +1779,35 @@ export type SpaceUncheckedCreateWithoutEmailVerificationsInput = {
 	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
 };
 
-export type SpaceCreateOrConnectWithoutEmailVerificationsInput = {
+export type SpaceCreateOrConnectWithoutCompanyInput = {
 	where: Prisma.SpaceWhereUniqueInput;
 	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutEmailVerificationsInput,
-		Prisma.SpaceUncheckedCreateWithoutEmailVerificationsInput
+		Prisma.SpaceCreateWithoutCompanyInput,
+		Prisma.SpaceUncheckedCreateWithoutCompanyInput
 	>;
 };
 
-export type SpaceUpsertWithoutEmailVerificationsInput = {
+export type SpaceUpsertWithoutCompanyInput = {
 	update: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutEmailVerificationsInput,
-		Prisma.SpaceUncheckedUpdateWithoutEmailVerificationsInput
+		Prisma.SpaceUpdateWithoutCompanyInput,
+		Prisma.SpaceUncheckedUpdateWithoutCompanyInput
 	>;
 	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutEmailVerificationsInput,
-		Prisma.SpaceUncheckedCreateWithoutEmailVerificationsInput
+		Prisma.SpaceCreateWithoutCompanyInput,
+		Prisma.SpaceUncheckedCreateWithoutCompanyInput
 	>;
 	where?: Prisma.SpaceWhereInput;
 };
 
-export type SpaceUpdateToOneWithWhereWithoutEmailVerificationsInput = {
+export type SpaceUpdateToOneWithWhereWithoutCompanyInput = {
 	where?: Prisma.SpaceWhereInput;
 	data: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutEmailVerificationsInput,
-		Prisma.SpaceUncheckedUpdateWithoutEmailVerificationsInput
+		Prisma.SpaceUpdateWithoutCompanyInput,
+		Prisma.SpaceUncheckedUpdateWithoutCompanyInput
 	>;
 };
 
-export type SpaceUpdateWithoutEmailVerificationsInput = {
+export type SpaceUpdateWithoutCompanyInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -2139,10 +1823,10 @@ export type SpaceUpdateWithoutEmailVerificationsInput = {
 	contentLanguageCode?:
 		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
 		| $Enums.LanguageCode;
-	company?: Prisma.CompanyUpdateOneWithoutSpaceNestedInput;
 	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
 	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
 	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
 	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
 	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
@@ -2161,7 +1845,7 @@ export type SpaceUpdateWithoutEmailVerificationsInput = {
 	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
 };
 
-export type SpaceUncheckedUpdateWithoutEmailVerificationsInput = {
+export type SpaceUncheckedUpdateWithoutCompanyInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -2177,10 +1861,10 @@ export type SpaceUncheckedUpdateWithoutEmailVerificationsInput = {
 	contentLanguageCode?:
 		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
 		| $Enums.LanguageCode;
-	company?: Prisma.CompanyUncheckedUpdateOneWithoutSpaceNestedInput;
 	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
 	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
 	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
 	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
 	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
 	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -2359,13 +2043,1453 @@ export type SpaceUncheckedUpdateWithoutContentsInput = {
 	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
 };
 
-export type SpaceCreateWithoutCompanyInput = {
+export type SpaceCreateWithoutDerivativesInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	contentLanguageCode?: $Enums.LanguageCode;
+	company?: Prisma.CompanyCreateNestedOneWithoutSpaceInput;
 	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceUncheckedCreateWithoutDerivativesInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	company?: Prisma.CompanyUncheckedCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceCreateOrConnectWithoutDerivativesInput = {
+	where: Prisma.SpaceWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutDerivativesInput,
+		Prisma.SpaceUncheckedCreateWithoutDerivativesInput
+	>;
+};
+
+export type SpaceUpsertWithoutDerivativesInput = {
+	update: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutDerivativesInput,
+		Prisma.SpaceUncheckedUpdateWithoutDerivativesInput
+	>;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutDerivativesInput,
+		Prisma.SpaceUncheckedCreateWithoutDerivativesInput
+	>;
+	where?: Prisma.SpaceWhereInput;
+};
+
+export type SpaceUpdateToOneWithWhereWithoutDerivativesInput = {
+	where?: Prisma.SpaceWhereInput;
+	data: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutDerivativesInput,
+		Prisma.SpaceUncheckedUpdateWithoutDerivativesInput
+	>;
+};
+
+export type SpaceUpdateWithoutDerivativesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	company?: Prisma.CompanyUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceUncheckedUpdateWithoutDerivativesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	company?: Prisma.CompanyUncheckedUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceCreateWithoutEmailVerificationsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	company?: Prisma.CompanyCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceUncheckedCreateWithoutEmailVerificationsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	company?: Prisma.CompanyUncheckedCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceCreateOrConnectWithoutEmailVerificationsInput = {
+	where: Prisma.SpaceWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutEmailVerificationsInput,
+		Prisma.SpaceUncheckedCreateWithoutEmailVerificationsInput
+	>;
+};
+
+export type SpaceUpsertWithoutEmailVerificationsInput = {
+	update: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutEmailVerificationsInput,
+		Prisma.SpaceUncheckedUpdateWithoutEmailVerificationsInput
+	>;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutEmailVerificationsInput,
+		Prisma.SpaceUncheckedCreateWithoutEmailVerificationsInput
+	>;
+	where?: Prisma.SpaceWhereInput;
+};
+
+export type SpaceUpdateToOneWithWhereWithoutEmailVerificationsInput = {
+	where?: Prisma.SpaceWhereInput;
+	data: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutEmailVerificationsInput,
+		Prisma.SpaceUncheckedUpdateWithoutEmailVerificationsInput
+	>;
+};
+
+export type SpaceUpdateWithoutEmailVerificationsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	company?: Prisma.CompanyUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceUncheckedUpdateWithoutEmailVerificationsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	company?: Prisma.CompanyUncheckedUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceCreateWithoutFoldersInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	company?: Prisma.CompanyCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceUncheckedCreateWithoutFoldersInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	company?: Prisma.CompanyUncheckedCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceCreateOrConnectWithoutFoldersInput = {
+	where: Prisma.SpaceWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutFoldersInput,
+		Prisma.SpaceUncheckedCreateWithoutFoldersInput
+	>;
+};
+
+export type SpaceUpsertWithoutFoldersInput = {
+	update: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutFoldersInput,
+		Prisma.SpaceUncheckedUpdateWithoutFoldersInput
+	>;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutFoldersInput,
+		Prisma.SpaceUncheckedCreateWithoutFoldersInput
+	>;
+	where?: Prisma.SpaceWhereInput;
+};
+
+export type SpaceUpdateToOneWithWhereWithoutFoldersInput = {
+	where?: Prisma.SpaceWhereInput;
+	data: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutFoldersInput,
+		Prisma.SpaceUncheckedUpdateWithoutFoldersInput
+	>;
+};
+
+export type SpaceUpdateWithoutFoldersInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	company?: Prisma.CompanyUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceUncheckedUpdateWithoutFoldersInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	company?: Prisma.CompanyUncheckedUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceCreateWithoutGroupsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	company?: Prisma.CompanyCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceUncheckedCreateWithoutGroupsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	company?: Prisma.CompanyUncheckedCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceCreateOrConnectWithoutGroupsInput = {
+	where: Prisma.SpaceWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutGroupsInput,
+		Prisma.SpaceUncheckedCreateWithoutGroupsInput
+	>;
+};
+
+export type SpaceUpsertWithoutGroupsInput = {
+	update: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutGroupsInput,
+		Prisma.SpaceUncheckedUpdateWithoutGroupsInput
+	>;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutGroupsInput,
+		Prisma.SpaceUncheckedCreateWithoutGroupsInput
+	>;
+	where?: Prisma.SpaceWhereInput;
+};
+
+export type SpaceUpdateToOneWithWhereWithoutGroupsInput = {
+	where?: Prisma.SpaceWhereInput;
+	data: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutGroupsInput,
+		Prisma.SpaceUncheckedUpdateWithoutGroupsInput
+	>;
+};
+
+export type SpaceUpdateWithoutGroupsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	company?: Prisma.CompanyUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceUncheckedUpdateWithoutGroupsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	company?: Prisma.CompanyUncheckedUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceCreateWithoutInquiriesInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	company?: Prisma.CompanyCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceUncheckedCreateWithoutInquiriesInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	company?: Prisma.CompanyUncheckedCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceCreateOrConnectWithoutInquiriesInput = {
+	where: Prisma.SpaceWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutInquiriesInput,
+		Prisma.SpaceUncheckedCreateWithoutInquiriesInput
+	>;
+};
+
+export type SpaceUpsertWithoutInquiriesInput = {
+	update: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutInquiriesInput,
+		Prisma.SpaceUncheckedUpdateWithoutInquiriesInput
+	>;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutInquiriesInput,
+		Prisma.SpaceUncheckedCreateWithoutInquiriesInput
+	>;
+	where?: Prisma.SpaceWhereInput;
+};
+
+export type SpaceUpdateToOneWithWhereWithoutInquiriesInput = {
+	where?: Prisma.SpaceWhereInput;
+	data: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutInquiriesInput,
+		Prisma.SpaceUncheckedUpdateWithoutInquiriesInput
+	>;
+};
+
+export type SpaceUpdateWithoutInquiriesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	company?: Prisma.CompanyUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceUncheckedUpdateWithoutInquiriesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	company?: Prisma.CompanyUncheckedUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceCreateWithoutPoliciesInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	company?: Prisma.CompanyCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceUncheckedCreateWithoutPoliciesInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	company?: Prisma.CompanyUncheckedCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceCreateOrConnectWithoutPoliciesInput = {
+	where: Prisma.SpaceWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutPoliciesInput,
+		Prisma.SpaceUncheckedCreateWithoutPoliciesInput
+	>;
+};
+
+export type SpaceUpsertWithoutPoliciesInput = {
+	update: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutPoliciesInput,
+		Prisma.SpaceUncheckedUpdateWithoutPoliciesInput
+	>;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutPoliciesInput,
+		Prisma.SpaceUncheckedCreateWithoutPoliciesInput
+	>;
+	where?: Prisma.SpaceWhereInput;
+};
+
+export type SpaceUpdateToOneWithWhereWithoutPoliciesInput = {
+	where?: Prisma.SpaceWhereInput;
+	data: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutPoliciesInput,
+		Prisma.SpaceUncheckedUpdateWithoutPoliciesInput
+	>;
+};
+
+export type SpaceUpdateWithoutPoliciesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	company?: Prisma.CompanyUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceUncheckedUpdateWithoutPoliciesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	company?: Prisma.CompanyUncheckedUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceCreateWithoutReservationsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	company?: Prisma.CompanyCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceUncheckedCreateWithoutReservationsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	company?: Prisma.CompanyUncheckedCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceCreateOrConnectWithoutReservationsInput = {
+	where: Prisma.SpaceWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutReservationsInput,
+		Prisma.SpaceUncheckedCreateWithoutReservationsInput
+	>;
+};
+
+export type SpaceUpsertWithoutReservationsInput = {
+	update: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutReservationsInput,
+		Prisma.SpaceUncheckedUpdateWithoutReservationsInput
+	>;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutReservationsInput,
+		Prisma.SpaceUncheckedCreateWithoutReservationsInput
+	>;
+	where?: Prisma.SpaceWhereInput;
+};
+
+export type SpaceUpdateToOneWithWhereWithoutReservationsInput = {
+	where?: Prisma.SpaceWhereInput;
+	data: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutReservationsInput,
+		Prisma.SpaceUncheckedUpdateWithoutReservationsInput
+	>;
+};
+
+export type SpaceUpdateWithoutReservationsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	company?: Prisma.CompanyUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceUncheckedUpdateWithoutReservationsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	company?: Prisma.CompanyUncheckedUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceCreateWithoutRoutinesInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	company?: Prisma.CompanyCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceUncheckedCreateWithoutRoutinesInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	company?: Prisma.CompanyUncheckedCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
+	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceCreateOrConnectWithoutRoutinesInput = {
+	where: Prisma.SpaceWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutRoutinesInput,
+		Prisma.SpaceUncheckedCreateWithoutRoutinesInput
+	>;
+};
+
+export type SpaceUpsertWithoutRoutinesInput = {
+	update: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutRoutinesInput,
+		Prisma.SpaceUncheckedUpdateWithoutRoutinesInput
+	>;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutRoutinesInput,
+		Prisma.SpaceUncheckedCreateWithoutRoutinesInput
+	>;
+	where?: Prisma.SpaceWhereInput;
+};
+
+export type SpaceUpdateToOneWithWhereWithoutRoutinesInput = {
+	where?: Prisma.SpaceWhereInput;
+	data: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutRoutinesInput,
+		Prisma.SpaceUncheckedUpdateWithoutRoutinesInput
+	>;
+};
+
+export type SpaceUpdateWithoutRoutinesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	company?: Prisma.CompanyUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceUncheckedUpdateWithoutRoutinesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	company?: Prisma.CompanyUncheckedUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
+	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceCreateWithoutSafeWalletsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	company?: Prisma.CompanyCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceUncheckedCreateWithoutSafeWalletsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	company?: Prisma.CompanyUncheckedCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
+	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
+	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
+	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
+	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
+	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
+	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
+	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
+	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
+	groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput;
+	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
+	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
+	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
+	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput;
+	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
+};
+
+export type SpaceCreateOrConnectWithoutSafeWalletsInput = {
+	where: Prisma.SpaceWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutSafeWalletsInput,
+		Prisma.SpaceUncheckedCreateWithoutSafeWalletsInput
+	>;
+};
+
+export type SpaceUpsertWithoutSafeWalletsInput = {
+	update: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutSafeWalletsInput,
+		Prisma.SpaceUncheckedUpdateWithoutSafeWalletsInput
+	>;
+	create: Prisma.XOR<
+		Prisma.SpaceCreateWithoutSafeWalletsInput,
+		Prisma.SpaceUncheckedCreateWithoutSafeWalletsInput
+	>;
+	where?: Prisma.SpaceWhereInput;
+};
+
+export type SpaceUpdateToOneWithWhereWithoutSafeWalletsInput = {
+	where?: Prisma.SpaceWhereInput;
+	data: Prisma.XOR<
+		Prisma.SpaceUpdateWithoutSafeWalletsInput,
+		Prisma.SpaceUncheckedUpdateWithoutSafeWalletsInput
+	>;
+};
+
+export type SpaceUpdateWithoutSafeWalletsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	company?: Prisma.CompanyUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceUncheckedUpdateWithoutSafeWalletsInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	contentLanguageCode?:
+		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
+		| $Enums.LanguageCode;
+	company?: Prisma.CompanyUncheckedUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
+	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
+	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
+	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
+	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
+	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
+	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
+	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
+	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
+	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
+	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
+	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
+	groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput;
+	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
+	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
+	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
+	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput;
+	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
+};
+
+export type SpaceCreateWithoutAssociationsInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	contentLanguageCode?: $Enums.LanguageCode;
+	company?: Prisma.CompanyCreateNestedOneWithoutSpaceInput;
 	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
 	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
 	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
@@ -2387,13 +3511,13 @@ export type SpaceCreateWithoutCompanyInput = {
 	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
 };
 
-export type SpaceUncheckedCreateWithoutCompanyInput = {
+export type SpaceUncheckedCreateWithoutAssociationsInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	contentLanguageCode?: $Enums.LanguageCode;
-	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
+	company?: Prisma.CompanyUncheckedCreateNestedOneWithoutSpaceInput;
 	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
 	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
 	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
@@ -2415,35 +3539,35 @@ export type SpaceUncheckedCreateWithoutCompanyInput = {
 	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
 };
 
-export type SpaceCreateOrConnectWithoutCompanyInput = {
+export type SpaceCreateOrConnectWithoutAssociationsInput = {
 	where: Prisma.SpaceWhereUniqueInput;
 	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutCompanyInput,
-		Prisma.SpaceUncheckedCreateWithoutCompanyInput
+		Prisma.SpaceCreateWithoutAssociationsInput,
+		Prisma.SpaceUncheckedCreateWithoutAssociationsInput
 	>;
 };
 
-export type SpaceUpsertWithoutCompanyInput = {
+export type SpaceUpsertWithoutAssociationsInput = {
 	update: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutCompanyInput,
-		Prisma.SpaceUncheckedUpdateWithoutCompanyInput
+		Prisma.SpaceUpdateWithoutAssociationsInput,
+		Prisma.SpaceUncheckedUpdateWithoutAssociationsInput
 	>;
 	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutCompanyInput,
-		Prisma.SpaceUncheckedCreateWithoutCompanyInput
+		Prisma.SpaceCreateWithoutAssociationsInput,
+		Prisma.SpaceUncheckedCreateWithoutAssociationsInput
 	>;
 	where?: Prisma.SpaceWhereInput;
 };
 
-export type SpaceUpdateToOneWithWhereWithoutCompanyInput = {
+export type SpaceUpdateToOneWithWhereWithoutAssociationsInput = {
 	where?: Prisma.SpaceWhereInput;
 	data: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutCompanyInput,
-		Prisma.SpaceUncheckedUpdateWithoutCompanyInput
+		Prisma.SpaceUpdateWithoutAssociationsInput,
+		Prisma.SpaceUncheckedUpdateWithoutAssociationsInput
 	>;
 };
 
-export type SpaceUpdateWithoutCompanyInput = {
+export type SpaceUpdateWithoutAssociationsInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -2459,7 +3583,7 @@ export type SpaceUpdateWithoutCompanyInput = {
 	contentLanguageCode?:
 		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
 		| $Enums.LanguageCode;
-	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
+	company?: Prisma.CompanyUpdateOneWithoutSpaceNestedInput;
 	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
 	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
 	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
@@ -2481,7 +3605,7 @@ export type SpaceUpdateWithoutCompanyInput = {
 	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
 };
 
-export type SpaceUncheckedUpdateWithoutCompanyInput = {
+export type SpaceUncheckedUpdateWithoutAssociationsInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -2497,7 +3621,7 @@ export type SpaceUncheckedUpdateWithoutCompanyInput = {
 	contentLanguageCode?:
 		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
 		| $Enums.LanguageCode;
-	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
+	company?: Prisma.CompanyUncheckedUpdateOneWithoutSpaceNestedInput;
 	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
 	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
 	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -2679,13 +3803,14 @@ export type SpaceUncheckedUpdateWithoutClassificationInput = {
 	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
 };
 
-export type SpaceCreateWithoutAssociationsInput = {
+export type SpaceCreateWithoutTasksInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	contentLanguageCode?: $Enums.LanguageCode;
 	company?: Prisma.CompanyCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
 	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
 	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
 	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
@@ -2695,7 +3820,6 @@ export type SpaceCreateWithoutAssociationsInput = {
 	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
 	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
 	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
-	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
 	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
 	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
 	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
@@ -2707,13 +3831,14 @@ export type SpaceCreateWithoutAssociationsInput = {
 	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
 };
 
-export type SpaceUncheckedCreateWithoutAssociationsInput = {
+export type SpaceUncheckedCreateWithoutTasksInput = {
 	id?: string;
 	createdAt?: Date | string;
 	updatedAt?: Date | string | null;
 	removedAt?: Date | string | null;
 	contentLanguageCode?: $Enums.LanguageCode;
 	company?: Prisma.CompanyUncheckedCreateNestedOneWithoutSpaceInput;
+	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
 	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
 	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
 	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
@@ -2723,7 +3848,6 @@ export type SpaceUncheckedCreateWithoutAssociationsInput = {
 	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
 	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
 	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
-	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
 	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
 	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
 	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
@@ -2735,35 +3859,35 @@ export type SpaceUncheckedCreateWithoutAssociationsInput = {
 	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
 };
 
-export type SpaceCreateOrConnectWithoutAssociationsInput = {
+export type SpaceCreateOrConnectWithoutTasksInput = {
 	where: Prisma.SpaceWhereUniqueInput;
 	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutAssociationsInput,
-		Prisma.SpaceUncheckedCreateWithoutAssociationsInput
+		Prisma.SpaceCreateWithoutTasksInput,
+		Prisma.SpaceUncheckedCreateWithoutTasksInput
 	>;
 };
 
-export type SpaceUpsertWithoutAssociationsInput = {
+export type SpaceUpsertWithoutTasksInput = {
 	update: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutAssociationsInput,
-		Prisma.SpaceUncheckedUpdateWithoutAssociationsInput
+		Prisma.SpaceUpdateWithoutTasksInput,
+		Prisma.SpaceUncheckedUpdateWithoutTasksInput
 	>;
 	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutAssociationsInput,
-		Prisma.SpaceUncheckedCreateWithoutAssociationsInput
+		Prisma.SpaceCreateWithoutTasksInput,
+		Prisma.SpaceUncheckedCreateWithoutTasksInput
 	>;
 	where?: Prisma.SpaceWhereInput;
 };
 
-export type SpaceUpdateToOneWithWhereWithoutAssociationsInput = {
+export type SpaceUpdateToOneWithWhereWithoutTasksInput = {
 	where?: Prisma.SpaceWhereInput;
 	data: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutAssociationsInput,
-		Prisma.SpaceUncheckedUpdateWithoutAssociationsInput
+		Prisma.SpaceUpdateWithoutTasksInput,
+		Prisma.SpaceUncheckedUpdateWithoutTasksInput
 	>;
 };
 
-export type SpaceUpdateWithoutAssociationsInput = {
+export type SpaceUpdateWithoutTasksInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -2780,6 +3904,7 @@ export type SpaceUpdateWithoutAssociationsInput = {
 		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
 		| $Enums.LanguageCode;
 	company?: Prisma.CompanyUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
 	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
 	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
 	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
@@ -2789,7 +3914,6 @@ export type SpaceUpdateWithoutAssociationsInput = {
 	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
 	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
 	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
-	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
 	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
 	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
 	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
@@ -2801,7 +3925,7 @@ export type SpaceUpdateWithoutAssociationsInput = {
 	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
 };
 
-export type SpaceUncheckedUpdateWithoutAssociationsInput = {
+export type SpaceUncheckedUpdateWithoutTasksInput = {
 	id?: Prisma.StringFieldUpdateOperationsInput | string;
 	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 	updatedAt?:
@@ -2818,6 +3942,7 @@ export type SpaceUncheckedUpdateWithoutAssociationsInput = {
 		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
 		| $Enums.LanguageCode;
 	company?: Prisma.CompanyUncheckedUpdateOneWithoutSpaceNestedInput;
+	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
 	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
 	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
 	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -2827,7 +3952,6 @@ export type SpaceUncheckedUpdateWithoutAssociationsInput = {
 	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
 	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
 	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
-	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
 	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
 	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
 	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
@@ -3159,646 +4283,6 @@ export type SpaceUncheckedUpdateWithoutTenantsInput = {
 	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
 };
 
-export type SpaceCreateWithoutInquiriesInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	contentLanguageCode?: $Enums.LanguageCode;
-	company?: Prisma.CompanyCreateNestedOneWithoutSpaceInput;
-	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
-	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
-	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
-	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
-	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
-	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
-	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
-	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
-	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
-	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
-	groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
-	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
-	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
-	derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput;
-	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
-};
-
-export type SpaceUncheckedCreateWithoutInquiriesInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	contentLanguageCode?: $Enums.LanguageCode;
-	company?: Prisma.CompanyUncheckedCreateNestedOneWithoutSpaceInput;
-	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
-	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
-	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
-	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
-	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
-	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
-	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
-	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
-	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
-	groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
-	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
-	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
-	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput;
-	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
-};
-
-export type SpaceCreateOrConnectWithoutInquiriesInput = {
-	where: Prisma.SpaceWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutInquiriesInput,
-		Prisma.SpaceUncheckedCreateWithoutInquiriesInput
-	>;
-};
-
-export type SpaceUpsertWithoutInquiriesInput = {
-	update: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutInquiriesInput,
-		Prisma.SpaceUncheckedUpdateWithoutInquiriesInput
-	>;
-	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutInquiriesInput,
-		Prisma.SpaceUncheckedCreateWithoutInquiriesInput
-	>;
-	where?: Prisma.SpaceWhereInput;
-};
-
-export type SpaceUpdateToOneWithWhereWithoutInquiriesInput = {
-	where?: Prisma.SpaceWhereInput;
-	data: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutInquiriesInput,
-		Prisma.SpaceUncheckedUpdateWithoutInquiriesInput
-	>;
-};
-
-export type SpaceUpdateWithoutInquiriesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	contentLanguageCode?:
-		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
-		| $Enums.LanguageCode;
-	company?: Prisma.CompanyUpdateOneWithoutSpaceNestedInput;
-	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
-	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
-	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
-	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
-	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
-	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
-	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
-	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
-	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
-	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
-	groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
-	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
-	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
-	derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput;
-	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
-};
-
-export type SpaceUncheckedUpdateWithoutInquiriesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	contentLanguageCode?:
-		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
-		| $Enums.LanguageCode;
-	company?: Prisma.CompanyUncheckedUpdateOneWithoutSpaceNestedInput;
-	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
-	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
-	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
-	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
-	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
-	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
-	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
-	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
-	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
-	groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
-	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
-	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
-	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput;
-	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
-};
-
-export type SpaceCreateWithoutReservationsInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	contentLanguageCode?: $Enums.LanguageCode;
-	company?: Prisma.CompanyCreateNestedOneWithoutSpaceInput;
-	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
-	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
-	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
-	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
-	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
-	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
-	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
-	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
-	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
-	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
-	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
-	groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput;
-	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
-	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
-	derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput;
-	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
-};
-
-export type SpaceUncheckedCreateWithoutReservationsInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	contentLanguageCode?: $Enums.LanguageCode;
-	company?: Prisma.CompanyUncheckedCreateNestedOneWithoutSpaceInput;
-	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
-	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
-	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
-	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
-	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
-	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
-	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
-	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
-	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
-	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
-	groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput;
-	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
-	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
-	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput;
-	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
-};
-
-export type SpaceCreateOrConnectWithoutReservationsInput = {
-	where: Prisma.SpaceWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutReservationsInput,
-		Prisma.SpaceUncheckedCreateWithoutReservationsInput
-	>;
-};
-
-export type SpaceUpsertWithoutReservationsInput = {
-	update: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutReservationsInput,
-		Prisma.SpaceUncheckedUpdateWithoutReservationsInput
-	>;
-	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutReservationsInput,
-		Prisma.SpaceUncheckedCreateWithoutReservationsInput
-	>;
-	where?: Prisma.SpaceWhereInput;
-};
-
-export type SpaceUpdateToOneWithWhereWithoutReservationsInput = {
-	where?: Prisma.SpaceWhereInput;
-	data: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutReservationsInput,
-		Prisma.SpaceUncheckedUpdateWithoutReservationsInput
-	>;
-};
-
-export type SpaceUpdateWithoutReservationsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	contentLanguageCode?:
-		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
-		| $Enums.LanguageCode;
-	company?: Prisma.CompanyUpdateOneWithoutSpaceNestedInput;
-	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
-	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
-	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
-	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
-	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
-	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
-	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
-	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
-	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
-	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
-	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
-	groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput;
-	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
-	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
-	derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput;
-	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
-};
-
-export type SpaceUncheckedUpdateWithoutReservationsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	contentLanguageCode?:
-		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
-		| $Enums.LanguageCode;
-	company?: Prisma.CompanyUncheckedUpdateOneWithoutSpaceNestedInput;
-	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
-	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
-	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
-	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
-	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
-	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
-	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
-	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
-	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
-	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
-	groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput;
-	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
-	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
-	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput;
-	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
-};
-
-export type SpaceCreateWithoutRoutinesInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	contentLanguageCode?: $Enums.LanguageCode;
-	company?: Prisma.CompanyCreateNestedOneWithoutSpaceInput;
-	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
-	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
-	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
-	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
-	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
-	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
-	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
-	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
-	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
-	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
-	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
-	groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
-	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
-	derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput;
-	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
-};
-
-export type SpaceUncheckedCreateWithoutRoutinesInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	contentLanguageCode?: $Enums.LanguageCode;
-	company?: Prisma.CompanyUncheckedCreateNestedOneWithoutSpaceInput;
-	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
-	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
-	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
-	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
-	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
-	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
-	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
-	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
-	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
-	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
-	groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
-	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
-	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput;
-	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
-};
-
-export type SpaceCreateOrConnectWithoutRoutinesInput = {
-	where: Prisma.SpaceWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutRoutinesInput,
-		Prisma.SpaceUncheckedCreateWithoutRoutinesInput
-	>;
-};
-
-export type SpaceUpsertWithoutRoutinesInput = {
-	update: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutRoutinesInput,
-		Prisma.SpaceUncheckedUpdateWithoutRoutinesInput
-	>;
-	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutRoutinesInput,
-		Prisma.SpaceUncheckedCreateWithoutRoutinesInput
-	>;
-	where?: Prisma.SpaceWhereInput;
-};
-
-export type SpaceUpdateToOneWithWhereWithoutRoutinesInput = {
-	where?: Prisma.SpaceWhereInput;
-	data: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutRoutinesInput,
-		Prisma.SpaceUncheckedUpdateWithoutRoutinesInput
-	>;
-};
-
-export type SpaceUpdateWithoutRoutinesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	contentLanguageCode?:
-		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
-		| $Enums.LanguageCode;
-	company?: Prisma.CompanyUpdateOneWithoutSpaceNestedInput;
-	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
-	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
-	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
-	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
-	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
-	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
-	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
-	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
-	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
-	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
-	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
-	groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
-	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
-	derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput;
-	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
-};
-
-export type SpaceUncheckedUpdateWithoutRoutinesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	contentLanguageCode?:
-		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
-		| $Enums.LanguageCode;
-	company?: Prisma.CompanyUncheckedUpdateOneWithoutSpaceNestedInput;
-	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
-	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
-	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
-	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
-	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
-	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
-	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
-	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
-	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
-	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
-	groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
-	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
-	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput;
-	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
-};
-
-export type SpaceCreateWithoutTasksInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	contentLanguageCode?: $Enums.LanguageCode;
-	company?: Prisma.CompanyCreateNestedOneWithoutSpaceInput;
-	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
-	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
-	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
-	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
-	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
-	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
-	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
-	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
-	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
-	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
-	groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
-	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
-	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
-	derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput;
-	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
-};
-
-export type SpaceUncheckedCreateWithoutTasksInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	contentLanguageCode?: $Enums.LanguageCode;
-	company?: Prisma.CompanyUncheckedCreateNestedOneWithoutSpaceInput;
-	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
-	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
-	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
-	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
-	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
-	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
-	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
-	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
-	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
-	groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
-	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
-	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
-	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput;
-	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
-};
-
-export type SpaceCreateOrConnectWithoutTasksInput = {
-	where: Prisma.SpaceWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutTasksInput,
-		Prisma.SpaceUncheckedCreateWithoutTasksInput
-	>;
-};
-
-export type SpaceUpsertWithoutTasksInput = {
-	update: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutTasksInput,
-		Prisma.SpaceUncheckedUpdateWithoutTasksInput
-	>;
-	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutTasksInput,
-		Prisma.SpaceUncheckedCreateWithoutTasksInput
-	>;
-	where?: Prisma.SpaceWhereInput;
-};
-
-export type SpaceUpdateToOneWithWhereWithoutTasksInput = {
-	where?: Prisma.SpaceWhereInput;
-	data: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutTasksInput,
-		Prisma.SpaceUncheckedUpdateWithoutTasksInput
-	>;
-};
-
-export type SpaceUpdateWithoutTasksInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	contentLanguageCode?:
-		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
-		| $Enums.LanguageCode;
-	company?: Prisma.CompanyUpdateOneWithoutSpaceNestedInput;
-	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
-	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
-	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
-	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
-	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
-	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
-	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
-	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
-	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
-	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
-	groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
-	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
-	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
-	derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput;
-	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
-};
-
-export type SpaceUncheckedUpdateWithoutTasksInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	contentLanguageCode?:
-		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
-		| $Enums.LanguageCode;
-	company?: Prisma.CompanyUncheckedUpdateOneWithoutSpaceNestedInput;
-	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
-	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
-	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
-	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
-	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
-	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
-	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
-	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
-	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
-	groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
-	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
-	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
-	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput;
-	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
-};
-
 export type SpaceCreateWithoutTimelinesInput = {
 	id?: string;
 	createdAt?: Date | string;
@@ -3957,486 +4441,6 @@ export type SpaceUncheckedUpdateWithoutTimelinesInput = {
 	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
 	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
 	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput;
-};
-
-export type SpaceCreateWithoutCategoriesInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	contentLanguageCode?: $Enums.LanguageCode;
-	company?: Prisma.CompanyCreateNestedOneWithoutSpaceInput;
-	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
-	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
-	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
-	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
-	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
-	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
-	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
-	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
-	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
-	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
-	groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
-	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
-	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
-	derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput;
-	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
-};
-
-export type SpaceUncheckedCreateWithoutCategoriesInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	contentLanguageCode?: $Enums.LanguageCode;
-	company?: Prisma.CompanyUncheckedCreateNestedOneWithoutSpaceInput;
-	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
-	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
-	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
-	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
-	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
-	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
-	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
-	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
-	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
-	groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
-	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
-	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
-	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput;
-	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
-};
-
-export type SpaceCreateOrConnectWithoutCategoriesInput = {
-	where: Prisma.SpaceWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutCategoriesInput,
-		Prisma.SpaceUncheckedCreateWithoutCategoriesInput
-	>;
-};
-
-export type SpaceUpsertWithoutCategoriesInput = {
-	update: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutCategoriesInput,
-		Prisma.SpaceUncheckedUpdateWithoutCategoriesInput
-	>;
-	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutCategoriesInput,
-		Prisma.SpaceUncheckedCreateWithoutCategoriesInput
-	>;
-	where?: Prisma.SpaceWhereInput;
-};
-
-export type SpaceUpdateToOneWithWhereWithoutCategoriesInput = {
-	where?: Prisma.SpaceWhereInput;
-	data: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutCategoriesInput,
-		Prisma.SpaceUncheckedUpdateWithoutCategoriesInput
-	>;
-};
-
-export type SpaceUpdateWithoutCategoriesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	contentLanguageCode?:
-		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
-		| $Enums.LanguageCode;
-	company?: Prisma.CompanyUpdateOneWithoutSpaceNestedInput;
-	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
-	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
-	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
-	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
-	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
-	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
-	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
-	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
-	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
-	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
-	groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
-	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
-	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
-	derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput;
-	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
-};
-
-export type SpaceUncheckedUpdateWithoutCategoriesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	contentLanguageCode?:
-		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
-		| $Enums.LanguageCode;
-	company?: Prisma.CompanyUncheckedUpdateOneWithoutSpaceNestedInput;
-	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
-	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
-	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
-	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
-	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
-	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
-	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
-	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
-	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
-	groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
-	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
-	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
-	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput;
-	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
-};
-
-export type SpaceCreateWithoutGroupsInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	contentLanguageCode?: $Enums.LanguageCode;
-	company?: Prisma.CompanyCreateNestedOneWithoutSpaceInput;
-	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
-	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
-	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
-	safeWallets?: Prisma.SafeWalletCreateNestedManyWithoutSpaceInput;
-	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
-	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
-	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
-	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
-	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
-	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
-	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
-	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
-	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
-	derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput;
-	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
-};
-
-export type SpaceUncheckedCreateWithoutGroupsInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	contentLanguageCode?: $Enums.LanguageCode;
-	company?: Prisma.CompanyUncheckedCreateNestedOneWithoutSpaceInput;
-	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
-	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
-	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
-	safeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutSpaceInput;
-	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
-	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
-	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
-	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
-	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
-	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
-	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
-	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
-	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput;
-	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
-};
-
-export type SpaceCreateOrConnectWithoutGroupsInput = {
-	where: Prisma.SpaceWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutGroupsInput,
-		Prisma.SpaceUncheckedCreateWithoutGroupsInput
-	>;
-};
-
-export type SpaceUpsertWithoutGroupsInput = {
-	update: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutGroupsInput,
-		Prisma.SpaceUncheckedUpdateWithoutGroupsInput
-	>;
-	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutGroupsInput,
-		Prisma.SpaceUncheckedCreateWithoutGroupsInput
-	>;
-	where?: Prisma.SpaceWhereInput;
-};
-
-export type SpaceUpdateToOneWithWhereWithoutGroupsInput = {
-	where?: Prisma.SpaceWhereInput;
-	data: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutGroupsInput,
-		Prisma.SpaceUncheckedUpdateWithoutGroupsInput
-	>;
-};
-
-export type SpaceUpdateWithoutGroupsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	contentLanguageCode?:
-		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
-		| $Enums.LanguageCode;
-	company?: Prisma.CompanyUpdateOneWithoutSpaceNestedInput;
-	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
-	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
-	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
-	safeWallets?: Prisma.SafeWalletUpdateManyWithoutSpaceNestedInput;
-	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
-	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
-	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
-	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
-	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
-	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
-	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
-	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
-	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
-	derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput;
-	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
-};
-
-export type SpaceUncheckedUpdateWithoutGroupsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	contentLanguageCode?:
-		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
-		| $Enums.LanguageCode;
-	company?: Prisma.CompanyUncheckedUpdateOneWithoutSpaceNestedInput;
-	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
-	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
-	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
-	safeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutSpaceNestedInput;
-	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
-	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
-	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
-	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
-	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
-	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
-	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
-	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
-	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput;
-	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
-};
-
-export type SpaceCreateWithoutSafeWalletsInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	contentLanguageCode?: $Enums.LanguageCode;
-	company?: Prisma.CompanyCreateNestedOneWithoutSpaceInput;
-	associations?: Prisma.SpaceAssociationCreateNestedManyWithoutSpaceInput;
-	classification?: Prisma.SpaceClassificationCreateNestedOneWithoutSpaceInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutSpaceInput;
-	emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutSpaceInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutSpaceInput;
-	policies?: Prisma.PolicyCreateNestedManyWithoutSpaceInput;
-	folders?: Prisma.FolderCreateNestedManyWithoutSpaceInput;
-	categories?: Prisma.CategoryCreateNestedManyWithoutSpaceInput;
-	contents?: Prisma.ContentCreateNestedManyWithoutSpaceInput;
-	tasks?: Prisma.TaskCreateNestedManyWithoutSpaceInput;
-	inquiries?: Prisma.InquiryCreateNestedManyWithoutSpaceInput;
-	albums?: Prisma.AlbumCreateNestedManyWithoutSpaceInput;
-	albumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutSpaceInput;
-	groups?: Prisma.GroupCreateNestedManyWithoutSpaceInput;
-	reservations?: Prisma.ReservationCreateNestedManyWithoutSpaceInput;
-	routines?: Prisma.RoutineCreateNestedManyWithoutSpaceInput;
-	assets?: Prisma.AssetCreateNestedManyWithoutSpaceInput;
-	derivatives?: Prisma.DerivativeCreateNestedManyWithoutSpaceInput;
-	timelines?: Prisma.TimelineCreateNestedManyWithoutSpaceInput;
-};
-
-export type SpaceUncheckedCreateWithoutSafeWalletsInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	contentLanguageCode?: $Enums.LanguageCode;
-	company?: Prisma.CompanyUncheckedCreateNestedOneWithoutSpaceInput;
-	associations?: Prisma.SpaceAssociationUncheckedCreateNestedManyWithoutSpaceInput;
-	classification?: Prisma.SpaceClassificationUncheckedCreateNestedOneWithoutSpaceInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutSpaceInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutSpaceInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutSpaceInput;
-	policies?: Prisma.PolicyUncheckedCreateNestedManyWithoutSpaceInput;
-	folders?: Prisma.FolderUncheckedCreateNestedManyWithoutSpaceInput;
-	categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutSpaceInput;
-	contents?: Prisma.ContentUncheckedCreateNestedManyWithoutSpaceInput;
-	tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutSpaceInput;
-	inquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutSpaceInput;
-	albums?: Prisma.AlbumUncheckedCreateNestedManyWithoutSpaceInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutSpaceInput;
-	groups?: Prisma.GroupUncheckedCreateNestedManyWithoutSpaceInput;
-	reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSpaceInput;
-	routines?: Prisma.RoutineUncheckedCreateNestedManyWithoutSpaceInput;
-	assets?: Prisma.AssetUncheckedCreateNestedManyWithoutSpaceInput;
-	derivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutSpaceInput;
-	timelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutSpaceInput;
-};
-
-export type SpaceCreateOrConnectWithoutSafeWalletsInput = {
-	where: Prisma.SpaceWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutSafeWalletsInput,
-		Prisma.SpaceUncheckedCreateWithoutSafeWalletsInput
-	>;
-};
-
-export type SpaceUpsertWithoutSafeWalletsInput = {
-	update: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutSafeWalletsInput,
-		Prisma.SpaceUncheckedUpdateWithoutSafeWalletsInput
-	>;
-	create: Prisma.XOR<
-		Prisma.SpaceCreateWithoutSafeWalletsInput,
-		Prisma.SpaceUncheckedCreateWithoutSafeWalletsInput
-	>;
-	where?: Prisma.SpaceWhereInput;
-};
-
-export type SpaceUpdateToOneWithWhereWithoutSafeWalletsInput = {
-	where?: Prisma.SpaceWhereInput;
-	data: Prisma.XOR<
-		Prisma.SpaceUpdateWithoutSafeWalletsInput,
-		Prisma.SpaceUncheckedUpdateWithoutSafeWalletsInput
-	>;
-};
-
-export type SpaceUpdateWithoutSafeWalletsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	contentLanguageCode?:
-		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
-		| $Enums.LanguageCode;
-	company?: Prisma.CompanyUpdateOneWithoutSpaceNestedInput;
-	associations?: Prisma.SpaceAssociationUpdateManyWithoutSpaceNestedInput;
-	classification?: Prisma.SpaceClassificationUpdateOneWithoutSpaceNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutSpaceNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutSpaceNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutSpaceNestedInput;
-	policies?: Prisma.PolicyUpdateManyWithoutSpaceNestedInput;
-	folders?: Prisma.FolderUpdateManyWithoutSpaceNestedInput;
-	categories?: Prisma.CategoryUpdateManyWithoutSpaceNestedInput;
-	contents?: Prisma.ContentUpdateManyWithoutSpaceNestedInput;
-	tasks?: Prisma.TaskUpdateManyWithoutSpaceNestedInput;
-	inquiries?: Prisma.InquiryUpdateManyWithoutSpaceNestedInput;
-	albums?: Prisma.AlbumUpdateManyWithoutSpaceNestedInput;
-	albumEntries?: Prisma.AlbumEntryUpdateManyWithoutSpaceNestedInput;
-	groups?: Prisma.GroupUpdateManyWithoutSpaceNestedInput;
-	reservations?: Prisma.ReservationUpdateManyWithoutSpaceNestedInput;
-	routines?: Prisma.RoutineUpdateManyWithoutSpaceNestedInput;
-	assets?: Prisma.AssetUpdateManyWithoutSpaceNestedInput;
-	derivatives?: Prisma.DerivativeUpdateManyWithoutSpaceNestedInput;
-	timelines?: Prisma.TimelineUpdateManyWithoutSpaceNestedInput;
-};
-
-export type SpaceUncheckedUpdateWithoutSafeWalletsInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	contentLanguageCode?:
-		| Prisma.EnumLanguageCodeFieldUpdateOperationsInput
-		| $Enums.LanguageCode;
-	company?: Prisma.CompanyUncheckedUpdateOneWithoutSpaceNestedInput;
-	associations?: Prisma.SpaceAssociationUncheckedUpdateManyWithoutSpaceNestedInput;
-	classification?: Prisma.SpaceClassificationUncheckedUpdateOneWithoutSpaceNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutSpaceNestedInput;
-	emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutSpaceNestedInput;
-	tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutSpaceNestedInput;
-	policies?: Prisma.PolicyUncheckedUpdateManyWithoutSpaceNestedInput;
-	folders?: Prisma.FolderUncheckedUpdateManyWithoutSpaceNestedInput;
-	categories?: Prisma.CategoryUncheckedUpdateManyWithoutSpaceNestedInput;
-	contents?: Prisma.ContentUncheckedUpdateManyWithoutSpaceNestedInput;
-	tasks?: Prisma.TaskUncheckedUpdateManyWithoutSpaceNestedInput;
-	inquiries?: Prisma.InquiryUncheckedUpdateManyWithoutSpaceNestedInput;
-	albums?: Prisma.AlbumUncheckedUpdateManyWithoutSpaceNestedInput;
-	albumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutSpaceNestedInput;
-	groups?: Prisma.GroupUncheckedUpdateManyWithoutSpaceNestedInput;
-	reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSpaceNestedInput;
-	routines?: Prisma.RoutineUncheckedUpdateManyWithoutSpaceNestedInput;
-	assets?: Prisma.AssetUncheckedUpdateManyWithoutSpaceNestedInput;
-	derivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutSpaceNestedInput;
-	timelines?: Prisma.TimelineUncheckedUpdateManyWithoutSpaceNestedInput;
 };
 
 /**

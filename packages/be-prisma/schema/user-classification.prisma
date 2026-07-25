@@ -1,0 +1,16 @@
+// @data-type: MASTER
+// @description: User와 Category를 연결하는 분류 링크
+/// @displayName 사용자 분류
+model UserClassification {
+  id         String    @id @default(uuid())
+  categoryId String    @map("category_id")
+  userId     String    @unique @map("user_id")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt  DateTime? @map("removed_at") @db.Timestamptz(6)
+  category   Category  @relation(fields: [categoryId], references: [id])
+  user       User      @relation(fields: [userId], references: [id])
+
+  @@unique([categoryId, userId])
+  @@map("user_classifications")
+}

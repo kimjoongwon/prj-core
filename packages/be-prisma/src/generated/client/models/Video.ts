@@ -643,14 +643,6 @@ export type VideoUncheckedUpdateOneWithoutAssetNestedInput = {
 	>;
 };
 
-export type NullableFloatFieldUpdateOperationsInput = {
-	set?: number | null;
-	increment?: number;
-	decrement?: number;
-	multiply?: number;
-	divide?: number;
-};
-
 export type VideoCreateWithoutAssetInput = {
 	id?: string;
 	createdAt?: Date | string;

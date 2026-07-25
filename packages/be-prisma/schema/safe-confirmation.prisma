@@ -1,0 +1,14 @@
+// @data-type: EVENT
+// @description: SafeTransaction에 종속되는 소유자 서명 데이터
+/// @displayName Safe 트랜잭션 서명
+model SafeConfirmation {
+  id                String          @id @default(uuid())
+  createdAt         DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  safeTransactionId String          @map("safe_transaction_id")
+  safeTransaction   SafeTransaction @relation(fields: [safeTransactionId], references: [id])
+  owner             String // 서명자 주소
+  signature         String // 서명 데이터
+
+  @@unique([safeTransactionId, owner])
+  @@map("safe_confirmations")
+}

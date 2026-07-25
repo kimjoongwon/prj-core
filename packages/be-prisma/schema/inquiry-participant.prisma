@@ -1,0 +1,37 @@
+// @data-type: TRANSACTION
+// @description: Inquiry에 종속되는 참여자 상태 모델
+/// @displayName 문의 참여자
+model InquiryParticipant {
+  id          String                 @id @default(uuid())
+  /// @displayName 참여 일시
+  joinedAt    DateTime               @default(now()) @map("joined_at") @db.Timestamptz(6)
+  /// @displayName 나간 일시
+  leftAt      DateTime?              @map("left_at") @db.Timestamptz(6)
+  /// @displayName 소속 문의 ID
+  inquiryId   String                 @map("inquiry_id")
+  /// @displayName 소속 스레드 ID
+  threadId    String?                @map("thread_id")
+  /// @displayName 참여자 ID
+  userId      String                 @map("user_id")
+  /// @displayName 역할
+  role        InquiryParticipantRole @default(VIEWER)
+  /// @displayName 온라인 여부
+  isOnline    Boolean                @default(false) @map("is_online")
+  /// @displayName 타이핑 중 여부
+  isTyping    Boolean                @default(false) @map("is_typing")
+  /// @displayName 마지막 접속 시간
+  lastSeenAt  DateTime?              @map("last_seen_at") @db.Timestamptz(6)
+  /// @displayName 마지막 읽은 시간
+  lastReadAt  DateTime?              @map("last_read_at") @db.Timestamptz(6)
+  /// @displayName 읽지 않은 메시지 수
+  unreadCount Int                    @default(0) @map("unread_count")
+  inquiry     Inquiry                @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  thread      InquiryThread?         @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  user        User                   @relation(fields: [userId], references: [id])
+
+  @@unique([inquiryId, threadId, userId])
+  @@index([inquiryId])
+  @@index([threadId])
+  @@index([userId])
+  @@map("inquiry_participants")
+}

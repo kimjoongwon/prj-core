@@ -1,0 +1,19 @@
+// @data-type: CONFIGURATION
+// @aggregate-root: true
+// @description: Exercise 등 1:1 상세 모델의 공통 identity와 소속 관계를 제공하는 작업 기반 모델
+/// @displayName 태스크
+model Task {
+  id          String     @id @default(uuid())
+  createdAt   DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime?  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime?  @map("removed_at") @db.Timestamptz(6)
+  spaceId     String     @map("space_id")
+  createdById String?    @map("created_by_id")
+  space       Space      @relation(fields: [spaceId], references: [id], onDelete: Restrict)
+  createdBy   User?      @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  activities  Activity[]
+  exercise    Exercise?
+
+  @@index([spaceId])
+  @@map("tasks")
+}

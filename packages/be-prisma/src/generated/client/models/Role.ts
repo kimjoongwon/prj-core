@@ -485,32 +485,6 @@ export type RoleNullableScalarRelationFilter = {
 	isNot?: Prisma.RoleWhereInput | null;
 };
 
-export type RoleCreateNestedOneWithoutRolePoliciesInput = {
-	create?: Prisma.XOR<
-		Prisma.RoleCreateWithoutRolePoliciesInput,
-		Prisma.RoleUncheckedCreateWithoutRolePoliciesInput
-	>;
-	connectOrCreate?: Prisma.RoleCreateOrConnectWithoutRolePoliciesInput;
-	connect?: Prisma.RoleWhereUniqueInput;
-};
-
-export type RoleUpdateOneRequiredWithoutRolePoliciesNestedInput = {
-	create?: Prisma.XOR<
-		Prisma.RoleCreateWithoutRolePoliciesInput,
-		Prisma.RoleUncheckedCreateWithoutRolePoliciesInput
-	>;
-	connectOrCreate?: Prisma.RoleCreateOrConnectWithoutRolePoliciesInput;
-	upsert?: Prisma.RoleUpsertWithoutRolePoliciesInput;
-	connect?: Prisma.RoleWhereUniqueInput;
-	update?: Prisma.XOR<
-		Prisma.XOR<
-			Prisma.RoleUpdateToOneWithWhereWithoutRolePoliciesInput,
-			Prisma.RoleUpdateWithoutRolePoliciesInput
-		>,
-		Prisma.RoleUncheckedUpdateWithoutRolePoliciesInput
-	>;
-};
-
 export type RoleCreateNestedOneWithoutAssociationsInput = {
 	create?: Prisma.XOR<
 		Prisma.RoleCreateWithoutAssociationsInput,
@@ -560,6 +534,32 @@ export type RoleUpdateOneRequiredWithoutClassificationNestedInput = {
 			Prisma.RoleUpdateWithoutClassificationInput
 		>,
 		Prisma.RoleUncheckedUpdateWithoutClassificationInput
+	>;
+};
+
+export type RoleCreateNestedOneWithoutRolePoliciesInput = {
+	create?: Prisma.XOR<
+		Prisma.RoleCreateWithoutRolePoliciesInput,
+		Prisma.RoleUncheckedCreateWithoutRolePoliciesInput
+	>;
+	connectOrCreate?: Prisma.RoleCreateOrConnectWithoutRolePoliciesInput;
+	connect?: Prisma.RoleWhereUniqueInput;
+};
+
+export type RoleUpdateOneRequiredWithoutRolePoliciesNestedInput = {
+	create?: Prisma.XOR<
+		Prisma.RoleCreateWithoutRolePoliciesInput,
+		Prisma.RoleUncheckedCreateWithoutRolePoliciesInput
+	>;
+	connectOrCreate?: Prisma.RoleCreateOrConnectWithoutRolePoliciesInput;
+	upsert?: Prisma.RoleUpsertWithoutRolePoliciesInput;
+	connect?: Prisma.RoleWhereUniqueInput;
+	update?: Prisma.XOR<
+		Prisma.XOR<
+			Prisma.RoleUpdateToOneWithWhereWithoutRolePoliciesInput,
+			Prisma.RoleUpdateWithoutRolePoliciesInput
+		>,
+		Prisma.RoleUncheckedUpdateWithoutRolePoliciesInput
 	>;
 };
 
@@ -642,114 +642,6 @@ export type RoleUpdateOneRequiredWithoutTenantsNestedInput = {
 		>,
 		Prisma.RoleUncheckedUpdateWithoutTenantsInput
 	>;
-};
-
-export type RoleCreateWithoutRolePoliciesInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	name: string;
-	displayName?: string | null;
-	description?: string | null;
-	isSystem?: boolean;
-	associations?: Prisma.RoleAssociationCreateNestedManyWithoutRoleInput;
-	classification?: Prisma.RoleClassificationCreateNestedOneWithoutRoleInput;
-	tenants?: Prisma.TenantCreateNestedManyWithoutRoleInput;
-	requestedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequestedRoleInput;
-	previousTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutPreviousRoleInput;
-};
-
-export type RoleUncheckedCreateWithoutRolePoliciesInput = {
-	id?: string;
-	createdAt?: Date | string;
-	updatedAt?: Date | string | null;
-	removedAt?: Date | string | null;
-	name: string;
-	displayName?: string | null;
-	description?: string | null;
-	isSystem?: boolean;
-	associations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutRoleInput;
-	classification?: Prisma.RoleClassificationUncheckedCreateNestedOneWithoutRoleInput;
-	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutRoleInput;
-	requestedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequestedRoleInput;
-	previousTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutPreviousRoleInput;
-};
-
-export type RoleCreateOrConnectWithoutRolePoliciesInput = {
-	where: Prisma.RoleWhereUniqueInput;
-	create: Prisma.XOR<
-		Prisma.RoleCreateWithoutRolePoliciesInput,
-		Prisma.RoleUncheckedCreateWithoutRolePoliciesInput
-	>;
-};
-
-export type RoleUpsertWithoutRolePoliciesInput = {
-	update: Prisma.XOR<
-		Prisma.RoleUpdateWithoutRolePoliciesInput,
-		Prisma.RoleUncheckedUpdateWithoutRolePoliciesInput
-	>;
-	create: Prisma.XOR<
-		Prisma.RoleCreateWithoutRolePoliciesInput,
-		Prisma.RoleUncheckedCreateWithoutRolePoliciesInput
-	>;
-	where?: Prisma.RoleWhereInput;
-};
-
-export type RoleUpdateToOneWithWhereWithoutRolePoliciesInput = {
-	where?: Prisma.RoleWhereInput;
-	data: Prisma.XOR<
-		Prisma.RoleUpdateWithoutRolePoliciesInput,
-		Prisma.RoleUncheckedUpdateWithoutRolePoliciesInput
-	>;
-};
-
-export type RoleUpdateWithoutRolePoliciesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	associations?: Prisma.RoleAssociationUpdateManyWithoutRoleNestedInput;
-	classification?: Prisma.RoleClassificationUpdateOneWithoutRoleNestedInput;
-	tenants?: Prisma.TenantUpdateManyWithoutRoleNestedInput;
-	requestedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequestedRoleNestedInput;
-	previousTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutPreviousRoleNestedInput;
-};
-
-export type RoleUncheckedUpdateWithoutRolePoliciesInput = {
-	id?: Prisma.StringFieldUpdateOperationsInput | string;
-	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-	updatedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	removedAt?:
-		| Prisma.NullableDateTimeFieldUpdateOperationsInput
-		| Date
-		| string
-		| null;
-	name?: Prisma.StringFieldUpdateOperationsInput | string;
-	displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
-	isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean;
-	associations?: Prisma.RoleAssociationUncheckedUpdateManyWithoutRoleNestedInput;
-	classification?: Prisma.RoleClassificationUncheckedUpdateOneWithoutRoleNestedInput;
-	tenants?: Prisma.TenantUncheckedUpdateManyWithoutRoleNestedInput;
-	requestedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequestedRoleNestedInput;
-	previousTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutPreviousRoleNestedInput;
 };
 
 export type RoleCreateWithoutAssociationsInput = {
@@ -963,6 +855,114 @@ export type RoleUncheckedUpdateWithoutClassificationInput = {
 	isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean;
 	associations?: Prisma.RoleAssociationUncheckedUpdateManyWithoutRoleNestedInput;
 	rolePolicies?: Prisma.RolePolicyUncheckedUpdateManyWithoutRoleNestedInput;
+	tenants?: Prisma.TenantUncheckedUpdateManyWithoutRoleNestedInput;
+	requestedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequestedRoleNestedInput;
+	previousTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutPreviousRoleNestedInput;
+};
+
+export type RoleCreateWithoutRolePoliciesInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	name: string;
+	displayName?: string | null;
+	description?: string | null;
+	isSystem?: boolean;
+	associations?: Prisma.RoleAssociationCreateNestedManyWithoutRoleInput;
+	classification?: Prisma.RoleClassificationCreateNestedOneWithoutRoleInput;
+	tenants?: Prisma.TenantCreateNestedManyWithoutRoleInput;
+	requestedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequestedRoleInput;
+	previousTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutPreviousRoleInput;
+};
+
+export type RoleUncheckedCreateWithoutRolePoliciesInput = {
+	id?: string;
+	createdAt?: Date | string;
+	updatedAt?: Date | string | null;
+	removedAt?: Date | string | null;
+	name: string;
+	displayName?: string | null;
+	description?: string | null;
+	isSystem?: boolean;
+	associations?: Prisma.RoleAssociationUncheckedCreateNestedManyWithoutRoleInput;
+	classification?: Prisma.RoleClassificationUncheckedCreateNestedOneWithoutRoleInput;
+	tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutRoleInput;
+	requestedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequestedRoleInput;
+	previousTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutPreviousRoleInput;
+};
+
+export type RoleCreateOrConnectWithoutRolePoliciesInput = {
+	where: Prisma.RoleWhereUniqueInput;
+	create: Prisma.XOR<
+		Prisma.RoleCreateWithoutRolePoliciesInput,
+		Prisma.RoleUncheckedCreateWithoutRolePoliciesInput
+	>;
+};
+
+export type RoleUpsertWithoutRolePoliciesInput = {
+	update: Prisma.XOR<
+		Prisma.RoleUpdateWithoutRolePoliciesInput,
+		Prisma.RoleUncheckedUpdateWithoutRolePoliciesInput
+	>;
+	create: Prisma.XOR<
+		Prisma.RoleCreateWithoutRolePoliciesInput,
+		Prisma.RoleUncheckedCreateWithoutRolePoliciesInput
+	>;
+	where?: Prisma.RoleWhereInput;
+};
+
+export type RoleUpdateToOneWithWhereWithoutRolePoliciesInput = {
+	where?: Prisma.RoleWhereInput;
+	data: Prisma.XOR<
+		Prisma.RoleUpdateWithoutRolePoliciesInput,
+		Prisma.RoleUncheckedUpdateWithoutRolePoliciesInput
+	>;
+};
+
+export type RoleUpdateWithoutRolePoliciesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	associations?: Prisma.RoleAssociationUpdateManyWithoutRoleNestedInput;
+	classification?: Prisma.RoleClassificationUpdateOneWithoutRoleNestedInput;
+	tenants?: Prisma.TenantUpdateManyWithoutRoleNestedInput;
+	requestedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequestedRoleNestedInput;
+	previousTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutPreviousRoleNestedInput;
+};
+
+export type RoleUncheckedUpdateWithoutRolePoliciesInput = {
+	id?: Prisma.StringFieldUpdateOperationsInput | string;
+	createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+	updatedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	removedAt?:
+		| Prisma.NullableDateTimeFieldUpdateOperationsInput
+		| Date
+		| string
+		| null;
+	name?: Prisma.StringFieldUpdateOperationsInput | string;
+	displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+	isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+	associations?: Prisma.RoleAssociationUncheckedUpdateManyWithoutRoleNestedInput;
+	classification?: Prisma.RoleClassificationUncheckedUpdateOneWithoutRoleNestedInput;
 	tenants?: Prisma.TenantUncheckedUpdateManyWithoutRoleNestedInput;
 	requestedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequestedRoleNestedInput;
 	previousTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutPreviousRoleNestedInput;
