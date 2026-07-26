@@ -18,6 +18,4 @@
 /**
  * 초기 폼 객체
  */
-export type IdpAccountAccessGrantFormBootstrapDtoDefaultObject = {
-	[key: string]: unknown;
-};
+export type IdpAccountAccessGrantFormBootstrapDtoDefaultObject = { [key: string]: unknown };

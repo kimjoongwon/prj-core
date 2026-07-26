@@ -17,7 +17,7 @@ export type {
 	UseAccountBootstrapReturn,
 } from "@cocrepo/type";
 
-export function resolveCurrentSpaceGroundName(
+export function resolveCurrentSpaceFitnessCenterName(
 	currentSpace: AccountBootstrapSpaceLike | null | undefined,
 	spaces: AccountBootstrapSpaceLike[],
 ) {
@@ -26,8 +26,8 @@ export function resolveCurrentSpaceGroundName(
 	}
 
 	return (
-		currentSpace.ground?.name ??
-		spaces.find((space) => space.id === currentSpace.id)?.ground?.name ??
+		currentSpace.fitnessCenter?.name ??
+		spaces.find((space) => space.id === currentSpace.id)?.fitnessCenter?.name ??
 		""
 	);
 }
@@ -53,11 +53,11 @@ export function useTenantBootstrap<
 
 		account.setAvailableSpaces(
 			spaces
-				.filter((space) => space.id && space.tenantId && space.ground)
+				.filter((space) => space.id && space.tenantId && space.fitnessCenter)
 				.map((space) => ({
 					tenantId: space.tenantId!,
 					spaceId: space.id!,
-					groundName: space.ground?.name ?? "",
+					fitnessCenterName: space.fitnessCenter?.name ?? "",
 					contentLanguageCode: space.contentLanguageCode ?? null,
 				})),
 		);
@@ -71,7 +71,7 @@ export function useTenantBootstrap<
 		if (currentSpace?.id && currentSpace.tenantId) {
 			account.setCurrentTenant(
 				currentSpace.tenantId,
-				resolveCurrentSpaceGroundName(currentSpace, spaces),
+				resolveCurrentSpaceFitnessCenterName(currentSpace, spaces),
 				currentSpace.contentLanguageCode ??
 					spaces.find((space) => space.id === currentSpace.id)
 						?.contentLanguageCode ??

@@ -14,9 +14,9 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { PreviewTemplateDtoVariables } from "./previewTemplateDtoVariables";
+import type { PreviewTemplateDtoVariables } from './previewTemplateDtoVariables';
 
 export interface PreviewTemplateDto {
-	/** 변수 키-값 맵 */
-	variables: PreviewTemplateDtoVariables;
+  /** 변수 키-값 맵 */
+  variables: PreviewTemplateDtoVariables;
 }

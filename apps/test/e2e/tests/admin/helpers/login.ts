@@ -1,3 +1,10 @@
+import {
+	type AdminNativeAuthSession,
+	type AdminPersistSpaceSelection,
+	mergeAdminPersistAccountSelection,
+	mergeAdminPersistAuthSession,
+	parseAdminPersistStorageDocument,
+} from "@cocrepo/e2e";
 import type { Page } from "@playwright/test";
 
 /** 시드 데이터 기준 System Tenant/Space (플랫폼 운영본부) */
@@ -5,7 +12,7 @@ const SYSTEM_TENANT_ID =
 	process.env.E2E_SYSTEM_TENANT_ID ?? "71ddca20-1752-466e-b4da-879ebdbe54e3";
 const SYSTEM_SPACE_ID =
 	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
-const SYSTEM_GROUND_NAME = "플랫폼 운영본부";
+const SYSTEM_FITNESS_CENTER_NAME = "플랫폼 운영본부";
 const ADMIN_DASHBOARD_PATH = "/admin/dashboard";
 const ADMIN_LOGIN_PATH = "/admin/auth/login";
 const ADMIN_LOGIN_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@plate.com";
@@ -42,96 +49,6 @@ const ADMIN_PREWARM_PATHS = [
 	"/admin/users",
 ];
 
-type AdminPersistSnapshot = {
-	tenantId: string | null;
-	spaceId: string | null;
-	groundName: string | null;
-	spaces: Array<{
-		tenantId: string;
-		spaceId: string;
-		groundName: string;
-	}>;
-	accessToken: string | null;
-	refreshToken: string | null;
-	sessionId: string | null;
-	accessTokenExpiresAt: number | null;
-	refreshTokenExpiresAt: number | null;
-};
-
-type NativeAuthSession = {
-	accessToken: string;
-	refreshToken: string;
-	sessionId: string;
-	accessTokenExpiresAt: number;
-	refreshTokenExpiresAt: number;
-};
-
-function buildAdminPersistSnapshot(
-	raw: string | null,
-	nextSpace: { tenantId: string; spaceId: string; groundName: string },
-): AdminPersistSnapshot {
-	const fallbackSnapshot: AdminPersistSnapshot = {
-		tenantId: nextSpace.tenantId,
-		spaceId: nextSpace.spaceId,
-		groundName: nextSpace.groundName,
-		spaces: [nextSpace],
-		accessToken: null,
-		refreshToken: null,
-		sessionId: null,
-		accessTokenExpiresAt: null,
-		refreshTokenExpiresAt: null,
-	};
-
-	if (!raw) {
-		return fallbackSnapshot;
-	}
-
-	try {
-		const parsed = JSON.parse(raw) as Partial<AdminPersistSnapshot>;
-		const spaces = Array.isArray(parsed.spaces)
-			? parsed.spaces.filter(
-					(
-						space,
-					): space is {
-						tenantId: string;
-						spaceId: string;
-						groundName: string;
-					} =>
-						typeof space?.tenantId === "string" &&
-						space.tenantId.length > 0 &&
-						typeof space?.spaceId === "string" &&
-						space.spaceId.length > 0 &&
-						typeof space.groundName === "string",
-				)
-			: [];
-		const hasSystemSpace = spaces.some(
-			(space) => space.tenantId === nextSpace.tenantId,
-		);
-
-		return {
-			tenantId: nextSpace.tenantId,
-			spaceId: nextSpace.spaceId,
-			groundName: nextSpace.groundName,
-			spaces: hasSystemSpace ? spaces : [nextSpace, ...spaces],
-			accessToken:
-				typeof parsed.accessToken === "string" ? parsed.accessToken : null,
-			refreshToken:
-				typeof parsed.refreshToken === "string" ? parsed.refreshToken : null,
-			sessionId: typeof parsed.sessionId === "string" ? parsed.sessionId : null,
-			accessTokenExpiresAt:
-				typeof parsed.accessTokenExpiresAt === "number"
-					? parsed.accessTokenExpiresAt
-					: null,
-			refreshTokenExpiresAt:
-				typeof parsed.refreshTokenExpiresAt === "number"
-					? parsed.refreshTokenExpiresAt
-					: null,
-		};
-	} catch {
-		return fallbackSnapshot;
-	}
-}
-
 async function ensureAdminDashboard(page: Page) {
 	if (page.url().includes("/admin/")) {
 		return;
@@ -143,92 +60,37 @@ async function ensureAdminDashboard(page: Page) {
 	});
 }
 
+/**
+ * Admin localStorage의 account section을 선택한 FitnessCenter context로 갱신합니다.
+ *
+ * @param page Admin E2E page
+ * @param nextSpace 저장할 tenant/space/FitnessCenter 선택
+ */
 export async function seedAdminPersist(
 	page: Page,
-	nextSpace: { tenantId: string; spaceId: string; groundName: string },
+	nextSpace: AdminPersistSpaceSelection,
 ) {
 	await ensureAdminDashboard(page);
+	const raw = await readAdminPersistRaw(page);
+	const document = mergeAdminPersistAccountSelection(raw, nextSpace);
+
 	await page.evaluate(
-		({ storageKey, nextSpaceValue }) => {
-			const raw = window.localStorage.getItem(storageKey);
-			const fallbackSnapshot = {
-				tenantId: nextSpaceValue.tenantId,
-				spaceId: nextSpaceValue.spaceId,
-				groundName: nextSpaceValue.groundName,
-				spaces: [nextSpaceValue],
-				accessToken: null,
-				refreshToken: null,
-				sessionId: null,
-				accessTokenExpiresAt: null,
-				refreshTokenExpiresAt: null,
-			};
-
-			try {
-				const parsed = raw ? JSON.parse(raw) : fallbackSnapshot;
-				const spaces: Array<{
-					tenantId: string;
-					spaceId: string;
-					groundName: string;
-				}> = Array.isArray(parsed?.spaces)
-					? parsed.spaces.filter(
-							(
-								space: unknown,
-							): space is {
-								tenantId: string;
-								spaceId: string;
-								groundName: string;
-							} =>
-								typeof space === "object" &&
-								space !== null &&
-								typeof (space as { tenantId?: unknown }).tenantId ===
-									"string" &&
-								typeof (space as { spaceId?: unknown }).spaceId === "string" &&
-								typeof (space as { groundName?: unknown }).groundName ===
-									"string",
-						)
-					: [];
-				const hasSystemSpace = spaces.some(
-					(space) => space.tenantId === nextSpaceValue.tenantId,
-				);
-
-				window.localStorage.setItem(
-					storageKey,
-					JSON.stringify({
-						tenantId: nextSpaceValue.tenantId,
-						spaceId: nextSpaceValue.spaceId,
-						groundName: nextSpaceValue.groundName,
-						spaces: hasSystemSpace ? spaces : [nextSpaceValue, ...spaces],
-						accessToken:
-							typeof parsed?.accessToken === "string"
-								? parsed.accessToken
-								: null,
-						refreshToken:
-							typeof parsed?.refreshToken === "string"
-								? parsed.refreshToken
-								: null,
-						sessionId:
-							typeof parsed?.sessionId === "string" ? parsed.sessionId : null,
-						accessTokenExpiresAt:
-							typeof parsed?.accessTokenExpiresAt === "number"
-								? parsed.accessTokenExpiresAt
-								: null,
-						refreshTokenExpiresAt:
-							typeof parsed?.refreshTokenExpiresAt === "number"
-								? parsed.refreshTokenExpiresAt
-								: null,
-					}),
-				);
-			} catch {
-				window.localStorage.setItem(
-					storageKey,
-					JSON.stringify(fallbackSnapshot),
-				);
-			}
+		({ storageKey, value }) => {
+			window.localStorage.setItem(storageKey, value);
 		},
-		{ storageKey: ADMIN_PERSIST_KEY, nextSpaceValue: nextSpace },
+		{
+			storageKey: ADMIN_PERSIST_KEY,
+			value: JSON.stringify(document),
+		},
 	);
 }
 
+/**
+ * Admin localStorage에서 현재 System Space를 포함한 persist 문서를 읽습니다.
+ *
+ * @param page Admin E2E page
+ * @returns 검증된 persist 문서, 없으면 null
+ */
 export async function readAdminPersist(page: Page) {
 	await ensureAdminDashboard(page);
 	await page.waitForFunction(
@@ -239,8 +101,13 @@ export async function readAdminPersist(page: Page) {
 			}
 
 			try {
-				const parsed = JSON.parse(raw) as { spaceId?: string | null };
-				return typeof parsed.spaceId === "string" && parsed.spaceId.length > 0;
+				const parsed = JSON.parse(raw) as {
+					account?: { spaceId?: string | null };
+				};
+				return (
+					typeof parsed.account?.spaceId === "string" &&
+					parsed.account.spaceId.length > 0
+				);
 			} catch {
 				return false;
 			}
@@ -249,20 +116,14 @@ export async function readAdminPersist(page: Page) {
 		{ timeout: ADMIN_PERSIST_READY_TIMEOUT },
 	);
 
-	const raw = await page.evaluate(
-		(storageKey) => window.localStorage.getItem(storageKey),
-		ADMIN_PERSIST_KEY,
-	);
+	const raw = await readAdminPersistRaw(page);
 
 	if (!raw) {
 		return null;
 	}
 
-	return buildAdminPersistSnapshot(raw, {
-		tenantId: SYSTEM_TENANT_ID,
-		spaceId: SYSTEM_SPACE_ID,
-		groundName: SYSTEM_GROUND_NAME,
-	});
+	const document = parseAdminPersistStorageDocument(raw);
+	return document.account?.spaceId === SYSTEM_SPACE_ID ? document : null;
 }
 
 /**
@@ -292,7 +153,8 @@ export async function loginToAdmin(page: Page) {
 		data?: {
 			id?: string;
 			tenantId?: string | null;
-			ground?: { name?: string };
+			contentLanguageCode?: string | null;
+			fitnessCenter?: { name?: string };
 		};
 	};
 	if (currentSpaceBody.data?.id !== SYSTEM_SPACE_ID) {
@@ -304,21 +166,24 @@ export async function loginToAdmin(page: Page) {
 		);
 	}
 
-	const currentSpaceName =
-		currentSpaceBody.data?.ground?.name ?? SYSTEM_GROUND_NAME;
-	if (currentSpaceName !== SYSTEM_GROUND_NAME) {
-		throw new Error("현재 Space 검증 후 Space 이름이 일치하지 않습니다.");
+	const currentFitnessCenterName =
+		currentSpaceBody.data?.fitnessCenter?.name ?? SYSTEM_FITNESS_CENTER_NAME;
+	if (currentFitnessCenterName !== SYSTEM_FITNESS_CENTER_NAME) {
+		throw new Error(
+			"현재 Space 검증 후 FitnessCenter 이름이 일치하지 않습니다.",
+		);
 	}
 
 	await seedAdminPersist(page, {
 		tenantId: SYSTEM_TENANT_ID,
 		spaceId: SYSTEM_SPACE_ID,
-		groundName: currentSpaceName,
+		fitnessCenterName: currentFitnessCenterName,
+		contentLanguageCode: currentSpaceBody.data?.contentLanguageCode ?? null,
 	});
 	await page.goto(ADMIN_DASHBOARD_PATH, { waitUntil: "domcontentloaded" });
 }
 
-async function requestNativeLogin(page: Page): Promise<NativeAuthSession> {
+async function requestNativeLogin(page: Page): Promise<AdminNativeAuthSession> {
 	const response = await page.request.post(NATIVE_LOGIN_URL, {
 		data: {
 			email: ADMIN_LOGIN_EMAIL,
@@ -332,7 +197,7 @@ async function requestNativeLogin(page: Page): Promise<NativeAuthSession> {
 	}
 
 	const payload = (await response.json()) as {
-		data?: Partial<NativeAuthSession>;
+		data?: Partial<AdminNativeAuthSession>;
 	};
 	const session = payload.data;
 	if (
@@ -354,24 +219,28 @@ async function requestNativeLogin(page: Page): Promise<NativeAuthSession> {
 	};
 }
 
-async function writeAdminNativeSession(page: Page, session: NativeAuthSession) {
+async function writeAdminNativeSession(
+	page: Page,
+	session: AdminNativeAuthSession,
+) {
+	const raw = await readAdminPersistRaw(page);
+	const document = mergeAdminPersistAuthSession(raw, session);
+
 	await page.evaluate(
-		({ storageKey, nativeSession }) => {
-			const raw = window.localStorage.getItem(storageKey);
-			const current = raw ? JSON.parse(raw) : {};
-			window.localStorage.setItem(
-				storageKey,
-				JSON.stringify({
-					...current,
-					accessToken: nativeSession.accessToken,
-					refreshToken: nativeSession.refreshToken,
-					sessionId: nativeSession.sessionId,
-					accessTokenExpiresAt: nativeSession.accessTokenExpiresAt,
-					refreshTokenExpiresAt: nativeSession.refreshTokenExpiresAt,
-				}),
-			);
+		({ storageKey, value }) => {
+			window.localStorage.setItem(storageKey, value);
 		},
-		{ storageKey: ADMIN_PERSIST_KEY, nativeSession: session },
+		{
+			storageKey: ADMIN_PERSIST_KEY,
+			value: JSON.stringify(document),
+		},
+	);
+}
+
+async function readAdminPersistRaw(page: Page) {
+	return page.evaluate(
+		(storageKey) => window.localStorage.getItem(storageKey),
+		ADMIN_PERSIST_KEY,
 	);
 }
 

@@ -9,6 +9,7 @@ import { systemAdminBranchManageTenantsMigration } from "./20260427030000_system
 import { systemAdminNonPlatformManageTenantsMigration } from "./20260427031000_system-admin-non-platform-manage-tenants";
 import { systemRoleDomainNamesMigration } from "./20260620120000_system-role-domain-names";
 import { companyManagerRoleNameMigration } from "./20260621120000_company-manager-role-name";
+import { fitnessCenterTerminologyMigration } from "./20260725121000_fitness-center-terminology";
 import type { ReferenceDataMigration } from "./types";
 
 export const referenceDataMigrations: ReferenceDataMigration[] = [
@@ -23,4 +24,5 @@ export const referenceDataMigrations: ReferenceDataMigration[] = [
 	systemAdminNonPlatformManageTenantsMigration,
 	systemRoleDomainNamesMigration,
 	companyManagerRoleNameMigration,
+	fitnessCenterTerminologyMigration,
 ];

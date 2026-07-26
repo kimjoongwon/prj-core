@@ -120,7 +120,7 @@ sequenceDiagram
   App->>Scope: access token / refresh token 저장
   App->>IDP: verify-token + my-spaces + current-space
   IDP-->>App: token expiry + Space scope
-  App->>Scope: spaceId / groundName 저장
+  App->>Scope: spaceId / fitnessCenterName 저장
   App->>Core: Bearer token + refresh token + space id
 ```
 
@@ -138,7 +138,7 @@ sequenceDiagram
 | 10 | IDP API | `{ data: accessToken, refreshToken, expiresAt, user }`를 반환합니다. |
 | 11 | Mobile App | `mobileApiScope`에 token을 저장합니다. |
 | 12 | Mobile App | `verify-token`, `my-spaces`, `current-space`를 다시 호출합니다. |
-| 13 | Mobile App | `spaceId`, `groundName`을 저장하고 홈으로 이동합니다. |
+| 13 | Mobile App | `spaceId`, `fitnessCenterName`을 저장하고 홈으로 이동합니다. |
 | 14 | Core API 요청 | 이후 요청에 `Authorization`, `x-refresh-token`, `x-space-id` header가 붙습니다. |
 
 ```text

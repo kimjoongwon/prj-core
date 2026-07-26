@@ -69,22 +69,25 @@ export interface UseAbilitiesReturn<TAbility = unknown> {
  * Account bootstrap이 참조하는 Space API 응답 최소 계약
  */
 export interface AccountBootstrapSpaceLike {
-	id?: string | null;
-	tenantId?: string | null;
-	contentLanguageCode?: string | null;
-	ground?: {
-		name?: string | null;
-	} | null;
+  id?: string | null;
+  tenantId?: string | null;
+  contentLanguageCode?: string | null;
+  fitnessCenter?: {
+    name?: string | null;
+    company?: {
+      name?: string | null;
+    } | null;
+  } | null;
 }
 
 /**
  * Persist 계층에 저장할 account tenant 선택 항목 계약
  */
 export interface AccountTenantSelection {
-	tenantId: string;
-	spaceId: string;
-	groundName: string;
-	contentLanguageCode?: string | null;
+  tenantId: string;
+  spaceId: string;
+  fitnessCenterName: string;
+  contentLanguageCode?: string | null;
 }
 
 /**
@@ -92,13 +95,13 @@ export interface AccountTenantSelection {
  */
 export interface AccountBootstrapLike {
 	isSelectionResolved?: boolean;
-	setAvailableSpaces: (spaces: AccountTenantSelection[]) => void;
-	setCurrentTenant: (
-		tenantId: string,
-		groundName: string,
-		contentLanguageCode?: string | null,
-		spaceId?: string | null,
-	) => void;
+  setAvailableSpaces: (spaces: AccountTenantSelection[]) => void;
+  setCurrentTenant: (
+    tenantId: string,
+    fitnessCenterName: string,
+    contentLanguageCode?: string | null,
+    spaceId?: string | null,
+  ) => void;
 	clearCurrentTenant: () => void;
 	setSelectionResolved: (resolved: boolean) => void;
 }

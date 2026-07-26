@@ -3,6 +3,7 @@ import type { PersistStorage } from "../persistence/persistStorage";
 import type { AuthSession } from "./authSession";
 
 const ACCOUNT_PERSIST_SECTION = "account";
+const ACCOUNT_TENANT_SELECTION_PERSIST_VERSION = 2 as const;
 
 /**
  * RootStore가 AccountStore를 조립할 때 제공하는 완성된 의존성입니다.
@@ -15,14 +16,15 @@ export interface AccountStoreDependencies {
 export interface AccountSpaceInfo {
 	tenantId: string;
 	spaceId: string;
-	groundName: string;
+	fitnessCenterName: string;
 	contentLanguageCode?: string | null;
 }
 
 interface PersistedAccountTenantSelection {
+	version: typeof ACCOUNT_TENANT_SELECTION_PERSIST_VERSION;
 	tenantId: string | null;
 	spaceId: string | null;
-	groundName: string | null;
+	fitnessCenterName: string | null;
 	contentLanguageCode: string | null;
 	availableSpaces: AccountSpaceInfo[];
 }
@@ -36,7 +38,7 @@ export class AccountStore {
 	currentTenantId: string | null = null;
 	selectedTenantId: string | null = null;
 	currentSpaceId: string | null = null;
-	currentGroundName: string | null = null;
+	currentFitnessCenterName: string | null = null;
 	contentLanguageCode: string | null = null;
 	availableSpaces: AccountSpaceInfo[] = [];
 	isHydrated = false;
@@ -54,6 +56,9 @@ export class AccountStore {
 		this.setupAutoSave();
 	}
 
+	/**
+	 * 브라우저 저장소에 남아 있는 account 선택 상태를 한 번 복원합니다.
+	 */
 	hydrateFromStorage(): void {
 		if (this.isHydrated) {
 			return;
@@ -64,7 +69,7 @@ export class AccountStore {
 			this.currentTenantId = persisted.tenantId;
 			this.selectedTenantId = persisted.tenantId;
 			this.currentSpaceId = persisted.spaceId;
-			this.currentGroundName = persisted.groundName;
+			this.currentFitnessCenterName = persisted.fitnessCenterName;
 			this.contentLanguageCode = persisted.contentLanguageCode ?? null;
 			this.availableSpaces = persisted.availableSpaces;
 		}
@@ -72,13 +77,19 @@ export class AccountStore {
 		this.isHydrated = true;
 	}
 
+	/**
+	 * 현재 계정이 접근 가능한 Space 목록을 갱신합니다.
+	 */
 	setAvailableSpaces(spaces: AccountSpaceInfo[]): void {
 		this.availableSpaces = spaces;
 	}
 
+	/**
+	 * 현재 tenant와 선택한 Space/FitnessCenter 정보를 동기화합니다.
+	 */
 	setCurrentTenant(
 		tenantId: string,
-		groundName: string,
+		fitnessCenterName: string,
 		contentLanguageCode?: string | null,
 		spaceId?: string | null,
 	): void {
@@ -88,29 +99,41 @@ export class AccountStore {
 			(space) => space.tenantId === tenantId,
 		);
 		this.currentSpaceId = spaceId ?? selectedSpace?.spaceId ?? null;
-		this.currentGroundName = groundName;
+		this.currentFitnessCenterName = fitnessCenterName;
 		this.contentLanguageCode =
 			contentLanguageCode === undefined
 				? (selectedSpace?.contentLanguageCode ?? null)
 				: contentLanguageCode;
 	}
 
+	/**
+	 * Space 선택 draft용 tenant를 갱신합니다.
+	 */
 	selectTenant(tenantId: string | null): void {
 		this.selectedTenantId = tenantId;
 	}
 
+	/**
+	 * 현재 확정된 tenant와 Space/FitnessCenter 선택을 초기화합니다.
+	 */
 	clearCurrentTenant(): void {
 		this.currentTenantId = null;
 		this.selectedTenantId = null;
 		this.currentSpaceId = null;
-		this.currentGroundName = null;
+		this.currentFitnessCenterName = null;
 		this.contentLanguageCode = null;
 	}
 
+	/**
+	 * Space 선택 완료 여부를 갱신합니다.
+	 */
 	setSelectionResolved(resolved: boolean): void {
 		this.isSelectionResolved = resolved;
 	}
 
+	/**
+	 * account 상태와 인증 세션을 모두 초기화합니다.
+	 */
 	clear(): void {
 		this.authSession.clear();
 		this.clearCurrentTenant();
@@ -122,14 +145,23 @@ export class AccountStore {
 
 	private readPersistedAccountTenantSelection(): PersistedAccountTenantSelection | null {
 		const data = this.persistStorage.read<unknown>(ACCOUNT_PERSIST_SECTION);
-		if (!isPersistedRecord(data)) {
+		if (data === null) {
+			return null;
+		}
+
+		if (!isPersistedAccountTenantSelection(data)) {
+			this.persistStorage.remove(ACCOUNT_PERSIST_SECTION);
 			return null;
 		}
 
 		return {
+			version: ACCOUNT_TENANT_SELECTION_PERSIST_VERSION,
 			tenantId: typeof data.tenantId === "string" ? data.tenantId : null,
 			spaceId: typeof data.spaceId === "string" ? data.spaceId : null,
-			groundName: typeof data.groundName === "string" ? data.groundName : null,
+			fitnessCenterName:
+				typeof data.fitnessCenterName === "string"
+					? data.fitnessCenterName
+					: null,
 			contentLanguageCode:
 				typeof data.contentLanguageCode === "string"
 					? data.contentLanguageCode
@@ -141,9 +173,10 @@ export class AccountStore {
 	private setupAutoSave(): void {
 		reaction(
 			() => ({
+				version: ACCOUNT_TENANT_SELECTION_PERSIST_VERSION,
 				tenantId: this.currentTenantId,
 				spaceId: this.currentSpaceId,
-				groundName: this.currentGroundName,
+				fitnessCenterName: this.currentFitnessCenterName,
 				contentLanguageCode: this.contentLanguageCode,
 				availableSpaces: this.availableSpaces,
 			}),
@@ -163,13 +196,23 @@ function isPersistedRecord(value: unknown): value is Record<string, unknown> {
 	return typeof value === "object" && value !== null;
 }
 
+function isPersistedAccountTenantSelection(
+	value: unknown,
+): value is PersistedAccountTenantSelection {
+	return (
+		isPersistedRecord(value) &&
+		value.version === ACCOUNT_TENANT_SELECTION_PERSIST_VERSION
+	);
+}
+
 function isEmptyPersistedAccountTenantSelection(
 	data: PersistedAccountTenantSelection,
 ): boolean {
 	return (
+		data.version === ACCOUNT_TENANT_SELECTION_PERSIST_VERSION &&
 		data.tenantId === null &&
 		data.spaceId === null &&
-		data.groundName === null &&
+		data.fitnessCenterName === null &&
 		data.contentLanguageCode === null &&
 		data.availableSpaces.length === 0
 	);
@@ -181,7 +224,7 @@ function normalizePersistedSpaces(spaces?: unknown): AccountSpaceInfo[] {
 				(space): space is AccountSpaceInfo =>
 					typeof space?.tenantId === "string" &&
 					typeof space?.spaceId === "string" &&
-					typeof space?.groundName === "string",
+					typeof space?.fitnessCenterName === "string",
 			)
 		: [];
 }

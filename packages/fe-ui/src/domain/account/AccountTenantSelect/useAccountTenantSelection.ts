@@ -2,7 +2,7 @@
 
 import { useSetCurrentSpace } from "@cocrepo/api/idp/auth";
 import { useApp } from "@cocrepo/store";
-import type { Option } from "@cocrepo/type";
+import type { AccountBootstrapSpaceLike, Option } from "@cocrepo/type";
 import { useCallback } from "react";
 
 /** Account Tenant 선택 orchestration 훅의 반환 계약입니다. */
@@ -11,6 +11,15 @@ export interface UseAccountTenantSelectionReturn {
 	isPending: boolean;
 	options: Option[];
 	selectTenant: (tenantId: string) => void;
+}
+
+/** Space 응답의 FitnessCenter와 Company에서 표시 이름을 결정합니다. */
+function resolveFitnessCenterName(
+	space: AccountBootstrapSpaceLike | null | undefined,
+): string | null {
+	return (
+		space?.fitnessCenter?.name ?? space?.fitnessCenter?.company?.name ?? null
+	);
 }
 
 /** Tenant 선택을 서버에 영구 저장하고 account 캐시를 확정합니다. */
@@ -31,7 +40,8 @@ export function useAccountTenantSelection(): UseAccountTenantSelectionReturn {
 				const currentSpace = response.data;
 				account.setCurrentTenant(
 					variables.tenantId,
-					currentSpace?.ground?.name ?? selectedSpace.groundName,
+					resolveFitnessCenterName(currentSpace) ??
+						selectedSpace.fitnessCenterName,
 					selectedSpace.contentLanguageCode ?? null,
 					currentSpace?.id ?? selectedSpace.spaceId,
 				);
@@ -64,7 +74,7 @@ export function useAccountTenantSelection(): UseAccountTenantSelectionReturn {
 		currentTenantId: account.selectedTenantId,
 		isPending,
 		options: account.availableSpaces.map((space) => ({
-			text: space.groundName,
+			text: space.fitnessCenterName,
 			value: space.tenantId,
 		})),
 		selectTenant,

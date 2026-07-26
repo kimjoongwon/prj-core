@@ -18,13 +18,13 @@
 /**
  * 참여자 역할
  */
-export type InquiryParticipantRole =
-	(typeof InquiryParticipantRole)[keyof typeof InquiryParticipantRole];
+export type InquiryParticipantRole = typeof InquiryParticipantRole[keyof typeof InquiryParticipantRole];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const InquiryParticipantRole = {
-	CUSTOMER: "CUSTOMER",
-	AGENT: "AGENT",
-	SUPERVISOR: "SUPERVISOR",
-	VIEWER: "VIEWER",
+  CUSTOMER: 'CUSTOMER',
+  AGENT: 'AGENT',
+  SUPERVISOR: 'SUPERVISOR',
+  VIEWER: 'VIEWER',
 } as const;

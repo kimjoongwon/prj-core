@@ -95,7 +95,7 @@ Prisma 스키마에 맞는 현실적인 시드 데이터를 생성하는 전문�
    { userEmail: "test@test.com", spaceCode: "SPACE_UNKNOWN" }
 
    // ❌ 역할과 맞지 않는 권한
-   // USER가 소속되지 않은 Space의 ground에 직접 접근
+   // USER가 소속되지 않은 Space의 fitness center에 직접 접근
    ```
 
 3. **고아 데이터 금지**
@@ -118,7 +118,7 @@ Prisma 스키마에 맞는 현실적인 시드 데이터를 생성하는 전문�
    └── 도메인에 맞는 실제 데이터 작성
    ↓
 4. 관계 매핑 정의
-   └── User-Space, Space-Ground, Task-Exercise, User-Agreement 등 매핑
+   └── User-Space, Company-FitnessCenter, Space-FitnessCenter, Task-Exercise, User-Agreement 등 매핑
    ↓
 5. Export 확인
    └── seed-data.ts 하단에 export
@@ -134,18 +134,24 @@ Prisma 스키마에 맞는 현실적인 시드 데이터를 생성하는 전문�
 ### Interface 정의
 
 ```typescript
-export interface SpaceSeedData {
+export interface CompanySeedData {
   code: string;
   name: string;
-  label: string;
   address: string;
   phone: string;
   email: string;
   businessNo: string;
-  grounds: Array<{
+  fitnessCenters: Array<{
     code: string;
     name: string;
     label: string;
+    address: string;
+    phone: string;
+    email: string;
+    space: {
+      code: string;
+      name: string;
+    };
   }>;
 }
 
@@ -175,30 +181,33 @@ export interface UserSeedData {
 ### 시드 데이터 예시
 
 ```typescript
-export const spaceSeedData: SpaceSeedData[] = [
+export const companySeedData: CompanySeedData[] = [
   {
-    code: "SPACE_GWANGHWAMUN",
-    name: "광화문 센터",
-    label: "서울 본점",
-    address: "서울시 종로구 세종대로 175 광화문D타워 B1",
-    phone: "02-1234-5678",
-    email: "gwanghwamun@corefit.co.kr",
+    code: "COMPANY_COREFIT",
+    name: "코어핏 주식회사",
+    address: "서울시 종로구 세종대로 175",
+    phone: "02-1234-0000",
+    email: "contact@corefit.co.kr",
     businessNo: "123-45-67890",
-    grounds: [
-      { code: "GROUND_MAIN_FLOOR", name: "광화문 메인 플로어", label: "메인" },
-      { code: "GROUND_RECOVERY_ZONE", name: "광화문 리커버리 존", label: "회복" },
-    ],
-  },
-  {
-    code: "SPACE_GANGNAM",
-    name: "강남 센터",
-    label: "강남 허브",
-    address: "서울시 강남구 테헤란로 152 강남파이낸스센터 B2",
-    phone: "02-2345-6789",
-    email: "gangnam@corefit.co.kr",
-    businessNo: "234-56-78901",
-    grounds: [
-      { code: "GROUND_STRENGTH_ARENA", name: "강남 스트렝스 아레나", label: "근력" },
+    fitnessCenters: [
+      {
+        code: "FITNESS_CENTER_GWANGHWAMUN",
+        name: "코어핏 광화문점",
+        label: "광화문점",
+        address: "서울시 종로구 세종대로 175 광화문D타워 B1",
+        phone: "02-1234-5678",
+        email: "gwanghwamun@corefit.co.kr",
+        space: { code: "SPACE_GWANGHWAMUN", name: "광화문 공간" },
+      },
+      {
+        code: "FITNESS_CENTER_GANGNAM",
+        name: "코어핏 강남점",
+        label: "강남점",
+        address: "서울시 강남구 테헤란로 152 강남파이낸스센터 B2",
+        phone: "02-2345-6789",
+        email: "gangnam@corefit.co.kr",
+        space: { code: "SPACE_GANGNAM", name: "강남 공간" },
+      },
     ],
   },
 ];
@@ -283,9 +292,9 @@ export const userAgreementMapping = [
 │       │                                                         │
 │       └── 모든 Space / Task 접근 가능                            │
 │                                                                 │
-│  ADMIN (이점장) ──────── Space (광화문 센터)                      │
-│                           ├── ground: 메인 플로어                │
-│                           └── ground: 리커버리 존                │
+│  Company (코어핏) ─────┬── FitnessCenter (광화문점) ── Space A  │
+│                        └── FitnessCenter (강남점) ──── Space B  │
+│  ADMIN (이점장) ─────────── Space A                              │
 │                                                                 │
 │  TASK (체지방 감량 스타터) ─┬── exercise: 에어 스쿼트            │
 │                             └── exercise: 푸시업                 │
@@ -313,7 +322,8 @@ export const userAgreementMapping = [
 - [ ] 고아 데이터(Orphan)가 없는가?
 - [ ] ADMIN은 담당 Space와 연결되어 있는가?
 - [ ] USER는 가입한 Space와 연결되어 있는가?
-- [ ] Space 아래 ground가 root 없이 독립 데이터로 남아 있지 않은가?
+- [ ] 모든 FitnessCenter가 정확히 하나의 Company와 Space에 연결되어 있는가?
+- [ ] 하나의 Space에 FitnessCenter가 둘 이상 연결되지 않았는가?
 - [ ] Task 아래 exercise가 root 없이 독립 데이터로 남아 있지 않은가?
 - [ ] 필수 약관에 대한 동의 데이터가 있는가?
 - [ ] 역할(Role)과 권한이 일치하는가?

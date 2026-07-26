@@ -16,12 +16,12 @@
  */
 
 export type GetSubjectsParams = {
-	/**
-	 * 그룹별 필터링
-	 */
-	group?: string;
-	/**
-	 * 타입별 필터링 (entity, menu, feature, ui)
-	 */
-	type?: string;
+/**
+ * 그룹별 필터링
+ */
+group?: string;
+/**
+ * 타입별 필터링 (entity, menu, feature, ui)
+ */
+type?: string;
 };

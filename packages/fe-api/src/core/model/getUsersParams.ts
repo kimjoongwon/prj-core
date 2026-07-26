@@ -14,61 +14,61 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { DeleteFilter } from "./deleteFilter";
+import type { DeleteFilter } from './deleteFilter';
 
 export type GetUsersParams = {
-	/**
-	 * @minimum 0
-	 */
-	skip?: number;
-	/**
-	 * @minimum 1
-	 * @maximum 200
-	 */
-	take?: number;
-	/**
-	 * 이름 검색
-	 */
-	name?: string;
-	/**
-	 * 이메일 검색
-	 */
-	email?: string;
-	/**
-	 * 전화번호 검색
-	 */
-	phone?: string;
-	/**
-	 * 닉네임 검색
-	 */
-	nickname?: string;
-	/**
-	 * 역할 필터 (복수 선택 가능)
-	 */
-	roles?: string[];
-	/**
-	 * 상태 필터 (active: 활성, deleted: 삭제됨)
-	 */
-	status?: DeleteFilter;
-	/**
-	 * 분류 카테고리 ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	categoryId?: string;
-	/**
-	 * 그룹 ID 목록 (복수 선택 가능)
-	 */
-	groupIds?: string[];
-	/**
-	 * 가입일 시작 (ISO8601)
-	 */
-	createdFrom?: string;
-	/**
-	 * 가입일 종료 (ISO8601)
-	 */
-	createdTo?: string;
-	/**
-	 * 복합 정렬 (JSON:API 컨벤션). 부호 없음=ASC, -prefix=DESC. 허용 필드: createdAt, name, email. 예: ?sort=name&sort=-createdAt
-	 */
-	sort?: string[];
+/**
+ * @minimum 0
+ */
+skip?: number;
+/**
+ * @minimum 1
+ * @maximum 200
+ */
+take?: number;
+/**
+ * 이름 검색
+ */
+name?: string;
+/**
+ * 이메일 검색
+ */
+email?: string;
+/**
+ * 전화번호 검색
+ */
+phone?: string;
+/**
+ * 닉네임 검색
+ */
+nickname?: string;
+/**
+ * 역할 필터 (복수 선택 가능)
+ */
+roles?: string[];
+/**
+ * 상태 필터 (active: 활성, deleted: 삭제됨)
+ */
+status?: DeleteFilter;
+/**
+ * 분류 카테고리 ID
+ * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+ */
+categoryId?: string;
+/**
+ * 그룹 ID 목록 (복수 선택 가능)
+ */
+groupIds?: string[];
+/**
+ * 가입일 시작 (ISO8601)
+ */
+createdFrom?: string;
+/**
+ * 가입일 종료 (ISO8601)
+ */
+createdTo?: string;
+/**
+ * 복합 정렬 (JSON:API 컨벤션). 부호 없음=ASC, -prefix=DESC. 허용 필드: createdAt, name, email. 예: ?sort=name&sort=-createdAt
+ */
+sort?: string[];
 };

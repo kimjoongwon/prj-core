@@ -11,7 +11,7 @@ import { ClsService } from "nestjs-cls";
  * @example
  * constructor(private readonly spaceCtx: SpaceContext) {}
  *
- * async getGrounds() {
+ * async getFitnessCenters() {
  *   return this.repository.findMany({
  *     where: this.spaceCtx.spaceFilter,
  *   });

@@ -155,7 +155,7 @@ describe("mobile community tab route", () => {
 		mobileApiScope.setSpaceInfo({
 			tenantId: "tenant-1",
       spaceId: "space-1",
-			groundName: "강남점",
+			fitnessCenterName: "강남점",
 			contentLanguageCode: "ko_KR",
 		});
 		mockUseGetCommunityPosts.mockReturnValue({

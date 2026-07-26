@@ -72,7 +72,7 @@ export interface PlanningAccount {
 export interface PlanningSpaceOption {
 	tenantId: string;
 	spaceId: string;
-	groundName: string;
+	fitnessCenterName: string;
 	tenantName?: string;
 	contentLanguageCode?: string | null;
 }
@@ -88,7 +88,7 @@ export interface PlanningContext {
 	tenantId?: string;
 	tenantName?: string;
 	spaceId?: string;
-	groundName?: string;
+	fitnessCenterName?: string;
 	spaces?: readonly PlanningSpaceOption[];
 	abilities?: readonly string[];
 	locale?: string;

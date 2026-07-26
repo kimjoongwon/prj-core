@@ -132,12 +132,12 @@
       "success": "主体查询成功"
     }
   },
-  "ground": {
+  "fitnessCenter": {
     "list": {
-      "success": "Ground列表查询成功"
+      "success": "健身中心列表查询成功"
     },
     "mySpace": {
-      "success": "我的空间Ground列表查询成功"
+      "success": "我的空间健身中心列表查询成功"
     }
   }
 }

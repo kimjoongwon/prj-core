@@ -155,10 +155,10 @@ const staticPlatformAdminAbilitySeedData: AbilitySeedData[] = [
 	},
 	{
 		roleName: "PLATFORM_ADMIN",
-		subject: "entity:Ground",
+		subject: "entity:FitnessCenter",
 		actionName: "manage",
 		inverted: false,
-		description: "시설 엔티티 전체 권한",
+		description: "피트니스센터 엔티티 전체 권한",
 	},
 	{
 		roleName: "PLATFORM_ADMIN",
@@ -205,7 +205,7 @@ export const platformAdminAbilitySeedData: AbilitySeedData[] = [
 /**
  * COMPANY_MANAGER 권한 시드 데이터
  * - 현재 admin catalog 기준 운영 메뉴 access
- * - 엔티티: User, Reservation manage / Ground read, update
+ * - 엔티티: User, Reservation manage / FitnessCenter read, update
  */
 export const companyManagerAbilitySeedData: AbilitySeedData[] = [
 	...adminCompanyManagerMenuAccessAbilitySeedData,
@@ -226,17 +226,17 @@ export const companyManagerAbilitySeedData: AbilitySeedData[] = [
 	},
 	{
 		roleName: "COMPANY_MANAGER",
-		subject: "entity:Ground",
+		subject: "entity:FitnessCenter",
 		actionName: "read",
 		inverted: false,
-		description: "시설 조회 권한",
+		description: "피트니스센터 조회 권한",
 	},
 	{
 		roleName: "COMPANY_MANAGER",
-		subject: "entity:Ground",
+		subject: "entity:FitnessCenter",
 		actionName: "update",
 		inverted: false,
-		description: "시설 수정 권한",
+		description: "피트니스센터 수정 권한",
 	},
 	{
 		roleName: "COMPANY_MANAGER",
@@ -317,13 +317,13 @@ export const memberAbilitySeedData: AbilitySeedData[] = [
 		description: "자신의 예약 수정 권한 (취소 등)",
 		conditions: { userId: "{{ user.id }}" },
 	},
-	// 시설 정보 조회
+	// 피트니스센터 정보 조회
 	{
 		roleName: "MEMBER",
-		subject: "entity:Ground",
+		subject: "entity:FitnessCenter",
 		actionName: "read",
 		inverted: false,
-		description: "시설 정보 조회 권한",
+		description: "피트니스센터 정보 조회 권한",
 	},
 	// 콘텐츠 조회
 	{
@@ -354,12 +354,12 @@ export const abilitySeedData: AbilitySeedData[] = [
  * COMPANY_MANAGER:
  * - 메뉴: 현재 admin catalog 기준 운영 메뉴 access
  * - 템플릿, low-level 권한 카탈로그 메뉴는 기본 제외
- * - 엔티티: User MANAGE, Reservation MANAGE, Ground READ/UPDATE, Content MANAGE
+ * - 엔티티: User MANAGE, Reservation MANAGE, FitnessCenter READ/UPDATE, Content MANAGE
  * - 기능: 내보내기, 알림발송 가능 / 일괄삭제 불가
  *
  * MEMBER:
  * - 엔티티: 자신의 User READ/UPDATE, 자신의 Reservation CREATE/READ/UPDATE
- * - 엔티티: Ground READ, Content READ
+ * - 엔티티: FitnessCenter READ, Content READ
  * - 메뉴/기능 접근 없음 (일반 사용자는 Admin 패널 미접근)
  */
 export const permissionSummary = {
@@ -370,10 +370,10 @@ export const permissionSummary = {
 	COMPANY_MANAGER: {
 		description: "Company 관리자",
 		permissions:
-			"현재 admin 운영 메뉴 접근, User/Reservation/Content 관리, Ground 조회/수정, 내보내기/알림발송 가능",
+			"현재 admin 운영 메뉴 접근, User/Reservation/Content 관리, FitnessCenter 조회/수정, 내보내기/알림발송 가능",
 	},
 	MEMBER: {
 		description: "회원",
-		permissions: "자신의 정보/예약만 접근, 시설/콘텐츠 조회",
+		permissions: "자신의 정보/예약만 접근, 피트니스센터/콘텐츠 조회",
 	},
 };

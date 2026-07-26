@@ -81,10 +81,11 @@ const SWAGGER_TENANT_SELECTOR_JS = `
   }
 
   function spaceLabel(space) {
-    var groundName = space && space.ground && space.ground.name;
-    var companyName = space && space.company && space.company.name;
+    var fitnessCenter = space && space.fitnessCenter;
+    var fitnessCenterName = fitnessCenter && fitnessCenter.name;
+    var companyName = fitnessCenter && fitnessCenter.company && fitnessCenter.company.name;
     var fallback = space && space.id ? space.id : 'Unknown Space';
-    return groundName || companyName || fallback;
+    return fitnessCenterName || companyName || fallback;
   }
 
   window.fetch = function(url, init) {

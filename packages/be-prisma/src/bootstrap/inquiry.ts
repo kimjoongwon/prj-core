@@ -23,16 +23,14 @@ export async function createInquiryDomainData(
 	console.log("========================================");
 
 	const users = await prisma.user.findMany();
-	const grounds = await prisma.ground.findMany({
-		include: {
-			company: true,
-		},
-	});
+	const fitnessCenters = await prisma.fitnessCenter.findMany();
 
-	// Inquiry seeds reference users/grounds by business keys, so materialize
+	// Inquiry seeds reference users/fitness centers by business keys, so materialize
 	// lookup maps once before the staged inserts below.
 	const userByEmail = new Map(users.map((user) => [user.email, user]));
-	const groundByName = new Map(grounds.map((ground) => [ground.name, ground]));
+	const fitnessCenterByName = new Map(
+		fitnessCenters.map((fitnessCenter) => [fitnessCenter.name, fitnessCenter]),
+	);
 
 	console.log("\n[1/6] Inquiry 생성 중...");
 	// Later inquiry child tables are all keyed off the inquiry number from the
@@ -47,9 +45,13 @@ export async function createInquiryDomainData(
 		});
 
 		if (!existing) {
-			const ground = groundByName.get(inquiryData.groundName);
-			if (!ground) {
-				console.warn(`  - Ground를 찾을 수 없음: ${inquiryData.groundName}`);
+			const fitnessCenter = fitnessCenterByName.get(
+				inquiryData.fitnessCenterName,
+			);
+			if (!fitnessCenter) {
+				console.warn(
+					`  - 피트니스센터를 찾을 수 없음: ${inquiryData.fitnessCenterName}`,
+				);
 				continue;
 			}
 
@@ -65,7 +67,7 @@ export async function createInquiryDomainData(
 
 			const inquiry = await prisma.inquiry.create({
 				data: {
-					spaceId: ground.company.spaceId,
+					spaceId: fitnessCenter.spaceId,
 					createdById,
 					inquiryNumber: inquiryData.inquiryNumber,
 					title: inquiryData.title,

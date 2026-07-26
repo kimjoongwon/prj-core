@@ -1,8 +1,7 @@
 import { ClassField, EnumField, UUIDFieldOptional } from "@cocrepo/decorator";
 import { LanguageCode, type Space } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
-import { CompanyDto } from "./company.dto";
-import { GroundDto } from "./ground.dto";
+import { FitnessCenterDto } from "./fitness-center.dto";
 import { SpaceAssociationDto } from "./space-association.dto";
 import { SpaceClassificationDto } from "./space-classification.dto";
 import { TenantDto } from "./tenant.dto";
@@ -39,9 +38,6 @@ export class SpaceDto extends AbstractDto implements Space {
 	})
 	spaceAssociations?: SpaceAssociationDto[];
 
-	@ClassField(() => CompanyDto, { required: false })
-	company?: CompanyDto;
-
-	@ClassField(() => GroundDto, { required: false })
-	ground?: GroundDto;
+	@ClassField(() => FitnessCenterDto, { required: false })
+	fitnessCenter?: FitnessCenterDto;
 }

@@ -7,7 +7,7 @@
 
 export interface TimelineSeedData {
 	id: string;
-	groundName: string;
+	fitnessCenterName: string;
 	createdByEmail: string;
 	name: string;
 	description: string;
@@ -18,7 +18,7 @@ export interface TimelineSeedData {
 export const timelineSeedData: TimelineSeedData[] = [
 	{
 		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f001",
-		groundName: "F45 광화문",
+		fitnessCenterName: "F45 광화문",
 		createdByEmail: "manager.gwanghwamun@f45.kr",
 		name: "2026 Q1 출근 전 모닝 리커버리",
 		description: "06:30-07:20 직장인 대상 저강도-중강도 순환 세션 운영",
@@ -26,7 +26,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 	},
 	{
 		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f002",
-		groundName: "F45 광화문",
+		fitnessCenterName: "F45 광화문",
 		createdByEmail: "manager.gwanghwamun@f45.kr",
 		name: "2025 연말 바디리셋 8주 챌린지",
 		description: "체중 감량 집중기 후 회복주를 포함한 연말 타임라인",
@@ -34,7 +34,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 	},
 	{
 		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f003",
-		groundName: "F45 강남1호",
+		fitnessCenterName: "F45 강남1호",
 		createdByEmail: "manager.gangnam@f45.kr",
 		name: "2026 상반기 런치 메타콘 블록",
 		description: "12시 직장인 수요 대응, 주 3회 메타콘 중심 운영",
@@ -42,7 +42,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 	},
 	{
 		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f004",
-		groundName: "F45 강남1호",
+		fitnessCenterName: "F45 강남1호",
 		createdByEmail: "manager.gangnam@f45.kr",
 		name: "2025 Q3 오피스 제휴 애프터워크",
 		description: "기업 제휴 회원 대상 18:40 시작 저녁 그룹 클래스 운영",
@@ -50,7 +50,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 	},
 	{
 		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f005",
-		groundName: "F45 삼성",
+		fitnessCenterName: "F45 삼성",
 		createdByEmail: "manager.gangnam@f45.kr",
 		name: "2026 신입 멤버 온보딩 사이클",
 		description: "첫 등록 회원의 기초 움직임 적응을 위한 4주 온보딩",
@@ -58,7 +58,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 	},
 	{
 		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f006",
-		groundName: "F45 삼성",
+		fitnessCenterName: "F45 삼성",
 		createdByEmail: "manager.gangnam@f45.kr",
 		name: "2025 하반기 근지구력 베이스 빌드",
 		description: "중급 회원 대상 볼륨 증대 후 디로드 1주 포함",
@@ -66,7 +66,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 	},
 	{
 		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f007",
-		groundName: "F45 잠실",
+		fitnessCenterName: "F45 잠실",
 		createdByEmail: "manager.gwanghwamun@f45.kr",
 		name: "2026 주말 패밀리 피트니스 시즌",
 		description: "토-일 오전 체험형 클래스, 초급 난이도 비중 확대",
@@ -74,7 +74,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 	},
 	{
 		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f008",
-		groundName: "F45 잠실",
+		fitnessCenterName: "F45 잠실",
 		createdByEmail: "manager.gwanghwamun@f45.kr",
 		name: "2025 여름 시즌 프로그램",
 		description: "여름방학 유입 회원 대상 주말 중심 시즌형 운영",
@@ -82,7 +82,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 	},
 	{
 		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f009",
-		groundName: "크로스핏 이태원",
+		fitnessCenterName: "크로스핏 이태원",
 		createdByEmail: "manager.itaewon@crossfit.kr",
 		name: "2026 Open 준비반",
 		description: "역도 기술 세션 + 고강도 WOD를 결합한 경쟁 대비 블록",
@@ -90,7 +90,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 	},
 	{
 		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f010",
-		groundName: "크로스핏 이태원",
+		fitnessCenterName: "크로스핏 이태원",
 		createdByEmail: "manager.itaewon@crossfit.kr",
 		name: "2025 기초 역도 적응반",
 		description: "초급 회원의 스내치/클린 기초 패턴 학습 과정",
@@ -98,7 +98,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 	},
 	{
 		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f011",
-		groundName: "크로스핏 마포",
+		fitnessCenterName: "크로스핏 마포",
 		createdByEmail: "manager.itaewon@crossfit.kr",
 		name: "2026 커뮤니티 팀 WOD 시즌",
 		description: "주말 팀 기반 세션 중심, 중급 회원 리텐션 강화",
@@ -106,7 +106,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 	},
 	{
 		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f012",
-		groundName: "크로스핏 마포",
+		fitnessCenterName: "크로스핏 마포",
 		createdByEmail: "manager.itaewon@crossfit.kr",
 		name: "2025 입문자 스케일드 트랙",
 		description: "버피/로잉 중심 기초 메타콘 적응 트랙",
@@ -114,7 +114,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 	},
 	{
 		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f013",
-		groundName: "애니타임피트니스 역삼",
+		fitnessCenterName: "애니타임피트니스 역삼",
 		createdByEmail: "manager.gangnam@f45.kr",
 		name: "2026 체지방 감량 부트캠프",
 		description: "근력과 인터벌 유산소를 병행하는 6주 감량 프로그램",
@@ -122,7 +122,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 	},
 	{
 		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f014",
-		groundName: "애니타임피트니스 신논현",
+		fitnessCenterName: "애니타임피트니스 신논현",
 		createdByEmail: "manager.gangnam@f45.kr",
 		name: "2025 하반기 근지구력 강화",
 		description: "근지구력 볼륨 증가 후 회복 세션 비율을 높인 블록",
@@ -130,7 +130,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 	},
 	{
 		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f015",
-		groundName: "스포애니 홍대",
+		fitnessCenterName: "스포애니 홍대",
 		createdByEmail: "manager.itaewon@crossfit.kr",
 		name: "2026 새벽 클래스 파일럿",
 		description: "06시대 40분 클래스 A/B 테스트 및 출석률 검증",
@@ -138,7 +138,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 	},
 	{
 		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f016",
-		groundName: "스포애니 건대",
+		fitnessCenterName: "스포애니 건대",
 		createdByEmail: "manager.itaewon@crossfit.kr",
 		name: "2025 야간 직장인 스트렝스 라인",
 		description: "20시 이후 직장인 대상 중강도 스트렝스 루틴 운영",
@@ -556,14 +556,14 @@ export const sessionTemplateSeedData: SessionTemplateSeedData[] = [
 export interface SessionLoadProfileSeedData {
 	userEmail: string;
 	tier: "HEAVY" | "MEDIUM" | "LIGHT";
-	preferredGroundNames: string[];
+	preferredFitnessCenterNames: string[];
 }
 
 export const sessionLoadProfileSeedData: SessionLoadProfileSeedData[] = [
 	{
 		userEmail: "manager.gangnam@f45.kr",
 		tier: "HEAVY",
-		preferredGroundNames: [
+		preferredFitnessCenterNames: [
 			"F45 강남1호",
 			"F45 삼성",
 			"애니타임피트니스 역삼",
@@ -573,12 +573,12 @@ export const sessionLoadProfileSeedData: SessionLoadProfileSeedData[] = [
 	{
 		userEmail: "manager.gwanghwamun@f45.kr",
 		tier: "MEDIUM",
-		preferredGroundNames: ["F45 광화문", "F45 잠실", "F45 강남1호"],
+		preferredFitnessCenterNames: ["F45 광화문", "F45 잠실", "F45 강남1호"],
 	},
 	{
 		userEmail: "manager.itaewon@crossfit.kr",
 		tier: "HEAVY",
-		preferredGroundNames: [
+		preferredFitnessCenterNames: [
 			"크로스핏 이태원",
 			"크로스핏 마포",
 			"스포애니 홍대",
@@ -588,31 +588,34 @@ export const sessionLoadProfileSeedData: SessionLoadProfileSeedData[] = [
 	{
 		userEmail: "minsu.kim92@gmail.com",
 		tier: "MEDIUM",
-		preferredGroundNames: ["F45 광화문"],
+		preferredFitnessCenterNames: ["F45 광화문"],
 	},
 	{
 		userEmail: "seoyeon_lee@naver.com",
 		tier: "LIGHT",
-		preferredGroundNames: ["F45 강남1호"],
+		preferredFitnessCenterNames: ["F45 강남1호"],
 	},
 	{
 		userEmail: "yejun.park@kakao.com",
 		tier: "HEAVY",
-		preferredGroundNames: ["크로스핏 이태원"],
+		preferredFitnessCenterNames: ["크로스핏 이태원"],
 	},
 	{
 		userEmail: "jiwoo0315@gmail.com",
 		tier: "MEDIUM",
-		preferredGroundNames: ["애니타임피트니스 역삼", "애니타임피트니스 신논현"],
+		preferredFitnessCenterNames: [
+			"애니타임피트니스 역삼",
+			"애니타임피트니스 신논현",
+		],
 	},
 	{
 		userEmail: "hayoon.jung@naver.com",
 		tier: "LIGHT",
-		preferredGroundNames: ["스포애니 홍대"],
+		preferredFitnessCenterNames: ["스포애니 홍대"],
 	},
 	{
 		userEmail: "doyoon.kang@gmail.com",
 		tier: "LIGHT",
-		preferredGroundNames: ["F45 잠실", "스포애니 건대"],
+		preferredFitnessCenterNames: ["F45 잠실", "스포애니 건대"],
 	},
 ];

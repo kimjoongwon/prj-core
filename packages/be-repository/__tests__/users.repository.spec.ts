@@ -131,6 +131,33 @@ describe("UsersRepository", () => {
 			expect(result?.tenants).toBeDefined();
 			expect(result?.profiles).toBeDefined();
 		});
+
+		it("Tenant의 Space에 FitnessCenter와 Company include를 사용해야 한다", async () => {
+			const userId = "user-test-id";
+			mockTxHost.tx.user.findUnique.mockResolvedValue(mockUserData);
+
+			await repository.findByIdWithTenantsAndProfiles(userId);
+
+			expect(mockTxHost.tx.user.findUnique).toHaveBeenCalledWith(
+				expect.objectContaining({
+					include: expect.objectContaining({
+						tenants: expect.objectContaining({
+							include: expect.objectContaining({
+								space: {
+									include: expect.objectContaining({
+										fitnessCenter: {
+											include: {
+												company: true,
+											},
+										},
+									}),
+								},
+							}),
+						}),
+					}),
+				}),
+			);
+		});
 	});
 
 	describe("findByEmailWithTenantsAndProfiles", () => {

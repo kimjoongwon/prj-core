@@ -1,4 +1,4 @@
-import { Company, Ground, Space } from "@cocrepo/entity";
+import { Company, FitnessCenter, Space } from "@cocrepo/entity";
 import {
 	CategoryTypes,
 	LanguageCode,
@@ -23,42 +23,31 @@ export class SpacesRepository {
 		this.logger = new Logger("SpacesRepository");
 	}
 
-	private toGroundWithCompany(
-		result: Prisma.GroundGetPayload<{ include: { company: true } }>,
-	): Ground {
-		const ground = plainToInstance(Ground, result);
+	private toFitnessCenterWithCompany(
+		result: Prisma.FitnessCenterGetPayload<{ include: { company: true } }>,
+	): FitnessCenter {
+		const fitnessCenter = plainToInstance(FitnessCenter, result);
 		const company = plainToInstance(Company, result.company);
-		ground.company = company;
-		ground.businessNo = result.company.businessNo;
-		ground.spaceId = result.company.spaceId;
-		ground.logoImageFileId = result.company.logoImageFileId;
-		return ground;
+		fitnessCenter.company = company;
+		company.fitnessCenters = [fitnessCenter];
+		return fitnessCenter;
 	}
 
-	private toSpaceWithCompanyGround(
+	private toSpaceWithFitnessCenter(
 		result: Prisma.SpaceGetPayload<{
-			include: { company: { include: { ground: true } } };
+			include: { fitnessCenter: { include: { company: true } } };
 		}>,
 	): Space {
 		const space = plainToInstance(Space, result);
-		if (!result.company) {
+
+		const centerRecord = result.fitnessCenter;
+		if (!centerRecord || centerRecord.removedAt !== null) {
 			return space;
 		}
 
-		const company = plainToInstance(Company, result.company);
-		space.company = company;
-
-		const companyGround = result.company.ground;
-		if (companyGround && companyGround.removedAt === null) {
-			const ground = this.toGroundWithCompany({
-				...companyGround,
-				company: result.company,
-			});
-			ground.space = space;
-			company.ground = ground;
-			space.ground = ground;
-		}
-
+		const fitnessCenter = this.toFitnessCenterWithCompany(centerRecord);
+		fitnessCenter.space = space;
+		space.fitnessCenter = fitnessCenter;
 		return space;
 	}
 
@@ -76,29 +65,29 @@ export class SpacesRepository {
 	}
 
 	/**
-	 * ID로 Space 조회 (Ground 포함)
+	 * ID로 Space 조회 (FitnessCenter 포함)
 	 */
-	async findByIdWithGround(id: string): Promise<Space | null> {
-		this.logger.debug(`ID로 Space 조회 (Ground 포함): ${id.slice(-8)}`);
+	async findByIdWithFitnessCenter(id: string): Promise<Space | null> {
+		this.logger.debug(`ID로 Space 조회 (FitnessCenter 포함): ${id.slice(-8)}`);
 
 		const result = await this.txHost.tx.space.findUnique({
 			where: { id },
 			include: {
-				company: {
+				fitnessCenter: {
 					include: {
-						ground: true,
+						company: true,
 					},
 				},
 			},
 		});
 
-		return result ? this.toSpaceWithCompanyGround(result) : null;
+		return result ? this.toSpaceWithFitnessCenter(result) : null;
 	}
 
 	/**
-	 * Ground를 포함한 Space 목록 조회
+	 * FitnessCenter를 포함한 Space 목록 조회
 	 */
-	async findManyWithGround(params?: {
+	async findManyWithFitnessCenter(params?: {
 		spaceIds?: string[];
 		skip?: number;
 		take?: number;
@@ -107,7 +96,7 @@ export class SpacesRepository {
 	}): Promise<[Space[], number]> {
 		const queryParams = params ?? {};
 		this.logger.debug(
-			`Ground 포함 Space 목록 조회: count=${queryParams.spaceIds?.length ?? "all"}, search=${queryParams.search ?? "없음"}`,
+			`FitnessCenter 포함 Space 목록 조회: count=${queryParams.spaceIds?.length ?? "all"}, search=${queryParams.search ?? "없음"}`,
 		);
 
 		const where: Prisma.SpaceWhereInput = {
@@ -116,31 +105,40 @@ export class SpacesRepository {
 			...(queryParams.contentLanguageCode
 				? { contentLanguageCode: queryParams.contentLanguageCode }
 				: {}),
-			company: {
+			fitnessCenter: {
 				is: {
 					removedAt: null,
-					ground: {
+					company: {
 						is: {
 							removedAt: null,
 						},
 					},
-					...(queryParams.search
-						? {
-								OR: [
-									{
+				},
+			},
+			...(queryParams.search
+				? {
+						OR: [
+							{
+								fitnessCenter: {
+									is: {
+										removedAt: null,
 										name: {
 											contains: queryParams.search,
 											mode: "insensitive",
 										},
-									},
-									{
-										businessNo: {
-											contains: queryParams.search,
-											mode: "insensitive",
+										company: {
+											is: {
+												removedAt: null,
+											},
 										},
 									},
-									{
-										ground: {
+								},
+							},
+							{
+								fitnessCenter: {
+									is: {
+										removedAt: null,
+										company: {
 											is: {
 												removedAt: null,
 												name: {
@@ -150,20 +148,36 @@ export class SpacesRepository {
 											},
 										},
 									},
-								],
-							}
-						: {}),
-				},
-			},
+								},
+							},
+							{
+								fitnessCenter: {
+									is: {
+										removedAt: null,
+										company: {
+											is: {
+												removedAt: null,
+												businessNo: {
+													contains: queryParams.search,
+													mode: "insensitive",
+												},
+											},
+										},
+									},
+								},
+							},
+						],
+					}
+				: {}),
 		};
 
 		const [results, total] = await Promise.all([
 			this.txHost.tx.space.findMany({
 				where,
 				include: {
-					company: {
+					fitnessCenter: {
 						include: {
-							ground: true,
+							company: true,
 						},
 					},
 				},
@@ -175,7 +189,7 @@ export class SpacesRepository {
 		]);
 
 		return [
-			results.map((result) => this.toSpaceWithCompanyGround(result)),
+			results.map((result) => this.toSpaceWithFitnessCenter(result)),
 			total,
 		];
 	}
@@ -195,26 +209,28 @@ export class SpacesRepository {
 	}
 
 	/**
-	 * Space에 종속된 Ground 조회
+	 * Space에 종속된 FitnessCenter 조회
 	 */
-	async findGroundBySpaceId(spaceId: string): Promise<Ground | null> {
-		this.logger.debug(`Space의 Ground 조회: ${spaceId.slice(-8)}`);
+	async findFitnessCenterBySpaceId(
+		spaceId: string,
+	): Promise<FitnessCenter | null> {
+		this.logger.debug(`Space의 FitnessCenter 조회: ${spaceId.slice(-8)}`);
 
-		const result = await this.txHost.tx.ground.findFirst({
-			where: {
-				removedAt: null,
-				company: {
-					spaceId,
-					removedAt: null,
-				},
-			},
+		const result = await this.txHost.tx.fitnessCenter.findUnique({
+			where: { spaceId },
 			include: {
 				company: true,
+				space: true,
 			},
-			orderBy: { createdAt: "asc" },
 		});
 
-		return result ? this.toGroundWithCompany(result) : null;
+		if (!result) {
+			return null;
+		}
+
+		const fitnessCenter = this.toFitnessCenterWithCompany(result);
+		fitnessCenter.space = plainToInstance(Space, result.space);
+		return fitnessCenter;
 	}
 
 	/**
@@ -231,34 +247,35 @@ export class SpacesRepository {
 	}
 
 	/**
-	 * Space에 Company와 Ground detail 생성
+	 * Space에 Company와 FitnessCenter detail 생성
 	 */
-	async createGroundBySpaceId(
+	async createFitnessCenterBySpaceId(
 		spaceId: string,
 		data: {
-			company: Omit<Prisma.CompanyUncheckedCreateInput, "spaceId">;
-			ground: Omit<Prisma.GroundUncheckedCreateInput, "companyId">;
+			company: Prisma.CompanyUncheckedCreateInput;
+			fitnessCenter: Omit<
+				Prisma.FitnessCenterUncheckedCreateInput,
+				"companyId" | "spaceId"
+			>;
 		},
 	): Promise<Space> {
-		this.logger.debug(`Space에 Ground 생성: ${spaceId.slice(-8)}`);
+		this.logger.debug(`Space에 FitnessCenter 생성: ${spaceId.slice(-8)}`);
 
 		const company = await this.txHost.tx.company.create({
+			data: data.company,
+		});
+
+		await this.txHost.tx.fitnessCenter.create({
 			data: {
-				...data.company,
+				...data.fitnessCenter,
+				companyId: company.id,
 				spaceId,
 			},
 		});
 
-		await this.txHost.tx.ground.create({
-			data: {
-				...data.ground,
-				companyId: company.id,
-			},
-		});
-
-		const space = await this.findByIdWithGround(spaceId);
+		const space = await this.findByIdWithFitnessCenter(spaceId);
 		if (!space) {
-			throw new Error("GROUND_CREATE_FAILED");
+			throw new Error("FITNESS_CENTER_CREATE_FAILED");
 		}
 
 		return space;
@@ -296,45 +313,33 @@ export class SpacesRepository {
 	}
 
 	/**
-	 * Space의 Company와 Ground detail 수정
+	 * Space의 FitnessCenter detail 수정
 	 */
-	async updateGroundBySpaceId(
+	async updateFitnessCenterBySpaceId(
 		spaceId: string,
 		data: {
-			company?: Prisma.CompanyUncheckedUpdateInput;
-			ground?: Prisma.GroundUncheckedUpdateInput;
+			fitnessCenter: Prisma.FitnessCenterUncheckedUpdateInput;
 		},
 	): Promise<Space> {
-		this.logger.debug(`Space의 Ground 수정: ${spaceId.slice(-8)}`);
+		this.logger.debug(`Space의 FitnessCenter 수정: ${spaceId.slice(-8)}`);
 
-		const company = await this.txHost.tx.company.update({
+		const fitnessCenter = await this.txHost.tx.fitnessCenter.findUnique({
 			where: { spaceId },
-			data: data.company ?? {},
+			select: { id: true },
 		});
 
-		if (data.ground) {
-			const ground = await this.txHost.tx.ground.findFirst({
-				where: {
-					companyId: company.id,
-					removedAt: null,
-				},
-				orderBy: { createdAt: "asc" },
-				select: { id: true },
-			});
-
-			if (!ground) {
-				throw new Error("GROUND_UPDATE_FAILED");
-			}
-
-			await this.txHost.tx.ground.update({
-				where: { id: ground.id },
-				data: data.ground,
-			});
+		if (!fitnessCenter) {
+			throw new Error("FITNESS_CENTER_UPDATE_FAILED");
 		}
 
-		const space = await this.findByIdWithGround(spaceId);
+		await this.txHost.tx.fitnessCenter.update({
+			where: { id: fitnessCenter.id },
+			data: data.fitnessCenter,
+		});
+
+		const space = await this.findByIdWithFitnessCenter(spaceId);
 		if (!space) {
-			throw new Error("GROUND_UPDATE_FAILED");
+			throw new Error("FITNESS_CENTER_UPDATE_FAILED");
 		}
 
 		return space;
@@ -446,25 +451,25 @@ export class SpacesRepository {
 	}
 
 	/**
-	 * 여러 ID로 Space 조회 (Ground 포함)
+	 * 여러 ID로 Space 조회 (FitnessCenter 포함)
 	 */
-	async findByIdsWithGround(ids: string[]): Promise<Space[]> {
+	async findByIdsWithFitnessCenter(ids: string[]): Promise<Space[]> {
 		this.logger.debug(
-			`여러 ID로 Space 조회 (Ground 포함): count=${ids.length}`,
+			`여러 ID로 Space 조회 (FitnessCenter 포함): count=${ids.length}`,
 		);
 
 		const results = await this.txHost.tx.space.findMany({
 			where: { id: { in: ids }, removedAt: null },
 			include: {
-				company: {
+				fitnessCenter: {
 					include: {
-						ground: true,
+						company: true,
 					},
 				},
 			},
 			orderBy: { createdAt: "desc" },
 		});
 
-		return results.map((result) => this.toSpaceWithCompanyGround(result));
+		return results.map((result) => this.toSpaceWithFitnessCenter(result));
 	}
 }

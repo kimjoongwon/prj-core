@@ -3144,14 +3144,14 @@ const translationDefinitions = [
 		zh_CN: "对象查询成功",
 		ja_JP: "対象取得成功",
 	}),
-	defineTranslation("시설 목록 조회 성공", "API 응답", {
-		ko_KR: "시설 목록 조회 성공",
+	defineTranslation("피트니스센터 목록 조회 성공", "API 응답", {
+		ko_KR: "피트니스센터 목록 조회 성공",
 		en_US: "Facility list retrieved successfully",
 		zh_CN: "设施列表查询成功",
 		ja_JP: "施設リスト取得成功",
 	}),
-	defineTranslation("내 공간 시설 목록 조회 성공", "API 응답", {
-		ko_KR: "내 공간 시설 목록 조회 성공",
+	defineTranslation("내 공간 피트니스센터 목록 조회 성공", "API 응답", {
+		ko_KR: "내 공간 피트니스센터 목록 조회 성공",
 		en_US: "My space facility list retrieved successfully",
 		zh_CN: "我的空间设施列表查询成功",
 		ja_JP: "自分のスペースの施設リスト取得成功",
@@ -3588,8 +3588,8 @@ export const obsoleteTranslationSeedKeys = [
 	"common.subject.list.success",
 	"common.subject.fields.success",
 	"common.subject.read.success",
-	"common.ground.list.success",
-	"common.ground.mySpace.success",
+	"common.fitnessCenter.list.success",
+	"common.fitnessCenter.mySpace.success",
 	"error.prisma.P2002",
 	"error.prisma.P2025",
 	"error.prisma.P2003",

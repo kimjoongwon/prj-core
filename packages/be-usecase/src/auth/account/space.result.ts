@@ -1,9 +1,9 @@
 import type { SpaceAggregate } from "@cocrepo/aggregate";
 
-type SpaceWithGroundResult = Awaited<
-	ReturnType<SpaceAggregate["findByIdsWithGround"]>
+type SpaceWithFitnessCenterResult = Awaited<
+	ReturnType<SpaceAggregate["findByIdsWithFitnessCenter"]>
 >[number];
 
-export type AuthSpaceResult = SpaceWithGroundResult & {
+export type AuthSpaceResult = SpaceWithFitnessCenterResult & {
 	tenantId?: string | null;
 };

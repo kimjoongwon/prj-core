@@ -14,21 +14,21 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { UserDto } from "./userDto";
+import type { UserDto } from './userDto';
 
 export interface NativeAuthResponseDto {
-	/** first-party native JWT Access Token */
-	accessToken: string;
-	/** first-party native Refresh Token */
-	refreshToken: string;
-	/** first-party native 세션 ID */
-	sessionId: string;
-	/** Access Token 만료 시간 (Unix timestamp, milliseconds) */
-	accessTokenExpiresAt: number;
-	/** Refresh Token 만료 시간 (Unix timestamp, milliseconds) */
-	refreshTokenExpiresAt: number;
-	/** 인증된 사용자 정보 */
-	user: UserDto;
-	/** 비밀번호 변경 필요 여부 */
-	mustChangePassword?: boolean;
+  /** first-party native JWT Access Token */
+  accessToken: string;
+  /** first-party native Refresh Token */
+  refreshToken: string;
+  /** first-party native 세션 ID */
+  sessionId: string;
+  /** Access Token 만료 시간 (Unix timestamp, milliseconds) */
+  accessTokenExpiresAt: number;
+  /** Refresh Token 만료 시간 (Unix timestamp, milliseconds) */
+  refreshTokenExpiresAt: number;
+  /** 인증된 사용자 정보 */
+  user: UserDto;
+  /** 비밀번호 변경 필요 여부 */
+  mustChangePassword?: boolean;
 }

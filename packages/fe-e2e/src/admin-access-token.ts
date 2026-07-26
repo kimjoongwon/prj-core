@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { readAdminPersistAccessToken } from "./admin-persist";
 import { getAdminStorageStatePath } from "./admin-storage-state-path";
 
 interface StorageState {
@@ -12,10 +13,6 @@ interface StorageState {
 			value?: string;
 		}>;
 	}>;
-}
-
-interface AdminPersistSnapshot {
-	accessToken?: unknown;
 }
 
 function readStorageState() {
@@ -33,12 +30,9 @@ function findAdminPersistAccessToken(storageState: StorageState) {
 			continue;
 		}
 
-		const parsed = JSON.parse(persistEntry.value) as AdminPersistSnapshot;
-		if (
-			typeof parsed.accessToken === "string" &&
-			parsed.accessToken.length > 0
-		) {
-			return parsed.accessToken;
+		const accessToken = readAdminPersistAccessToken(persistEntry.value);
+		if (accessToken) {
+			return accessToken;
 		}
 	}
 
@@ -50,6 +44,11 @@ function findAccessTokenCookie(storageState: StorageState) {
 		?.value;
 }
 
+/**
+ * 저장된 Admin E2E 인증 상태에서 API 요청에 사용할 access token을 읽습니다.
+ *
+ * @returns Admin native access token
+ */
 export function getAdminAccessToken() {
 	const storageState = readStorageState();
 	const accessToken =

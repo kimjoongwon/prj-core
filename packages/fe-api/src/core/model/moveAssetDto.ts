@@ -16,9 +16,9 @@
  */
 
 export interface MoveAssetDto {
-	/**
-	 * 이동할 대상 폴더 ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	targetFolderId: string;
+  /**
+   * 이동할 대상 폴더 ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  targetFolderId: string;
 }

@@ -16,11 +16,11 @@
  */
 
 export interface CreateProgramDto {
-	/** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
-	routineId: string;
-	/** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
-	instructorId: string;
-	capacity: number;
-	name: string;
-	level?: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
+  routineId: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
+  instructorId: string;
+  capacity: number;
+  name: string;
+  level?: string;
 }

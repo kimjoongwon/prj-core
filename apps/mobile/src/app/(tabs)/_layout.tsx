@@ -66,7 +66,7 @@ const findSpaceByItem = (
 ) => spaces.find((space) => space.tenantId === item.id);
 
 const getHeaderSubtitle = () =>
-	mobileApiScope.groundName || "지점 선택";
+	mobileApiScope.fitnessCenterName || "지점 선택";
 
 const MobileTabHeader = observer((props: BottomTabHeaderProps) => {
 	const queryClient = useQueryClient();

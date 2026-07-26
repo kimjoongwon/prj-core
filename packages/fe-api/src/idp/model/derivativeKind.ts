@@ -18,13 +18,13 @@
 /**
  * 파생 리소스 종류 (THUMBNAIL, PREVIEW, TRANSCODE, TEXT)
  */
-export type DerivativeKind =
-	(typeof DerivativeKind)[keyof typeof DerivativeKind];
+export type DerivativeKind = typeof DerivativeKind[keyof typeof DerivativeKind];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const DerivativeKind = {
-	THUMBNAIL: "THUMBNAIL",
-	PREVIEW: "PREVIEW",
-	TRANSCODE: "TRANSCODE",
-	TEXT: "TEXT",
+  THUMBNAIL: 'THUMBNAIL',
+  PREVIEW: 'PREVIEW',
+  TRANSCODE: 'TRANSCODE',
+  TEXT: 'TEXT',
 } as const;

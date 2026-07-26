@@ -5,7 +5,6 @@ import type { AbilityResponseDto } from "@cocrepo/api/core/abilities";
 import type { ActionDto } from "@cocrepo/api/core/actions";
 import type { InquiryDto } from "@cocrepo/api/core/inquiries";
 import type { RoleDto } from "@cocrepo/api/core/roles";
-import type { SpaceDto } from "@cocrepo/api/core/spaces";
 import type { SubjectDto } from "@cocrepo/api/core/subjects";
 import type { TaskDto } from "@cocrepo/api/core/tasks";
 import type { TimelineDto } from "@cocrepo/api/core/timelines";
@@ -101,7 +100,28 @@ function DeleteAlertActionCell({
 }
 
 type TenantWithRole = {
-	role?: RoleLike | null;
+  role?: RoleLike | null;
+};
+
+type SpaceCompanyRow = {
+  name: string;
+  label?: string | null;
+  businessNo: string;
+};
+
+type SpaceFitnessCenterRow = {
+  name: string;
+  label?: string | null;
+  address: string;
+  phone: string;
+  email: string;
+  company?: SpaceCompanyRow | null;
+};
+
+type SpaceTableRow = {
+  id: string;
+  contentLanguageCode: string;
+  fitnessCenter?: SpaceFitnessCenterRow | null;
 };
 
 function renderRoleName(value?: string | null, isSystem = false) {
@@ -869,10 +889,12 @@ export function buildTemplateTableColumns<
 	);
 }
 
-export function buildSpaceTableColumns<TRow extends SpaceDto = SpaceDto>({
-	onClickSpaceGroundName,
+export function buildSpaceTableColumns<
+  TRow extends SpaceTableRow = SpaceTableRow,
+>({
+  onClickSpaceFitnessCenterName,
 }: {
-	onClickSpaceGroundName: (spaceId: string) => void;
+  onClickSpaceFitnessCenterName: (spaceId: string) => void;
 }) {
 	const contentLanguageLabels: Record<string, string> = {
 		ko_KR: "한국어",
@@ -883,13 +905,13 @@ export function buildSpaceTableColumns<TRow extends SpaceDto = SpaceDto>({
 
 	/** Space 목록 페이지용 컬럼 조합을 생성합니다. */
 	return buildColumnsWithDefaultCreatedAt<TRow>([
-		createNameColumn<TRow>({
-			nameVariant: "clickable",
-			accessorKey: "ground.name",
-			onClickName: (row) => onClickSpaceGroundName(row.id),
-		}),
-		createLabelColumn<TRow>({
-			accessorKey: "ground.label",
+    createNameColumn<TRow>({
+      nameVariant: "clickable",
+      accessorKey: "fitnessCenter.name",
+      onClickName: (row) => onClickSpaceFitnessCenterName(row.id),
+    }),
+    createLabelColumn<TRow>({
+      accessorKey: "fitnessCenter.label",
 			size: 120,
 			align: "center",
 			cell: ({ getValue }) => (
@@ -907,19 +929,19 @@ export function buildSpaceTableColumns<TRow extends SpaceDto = SpaceDto>({
 				/>
 			),
 		}),
-		createPresetColumn<TRow>("businessNo", {
-			accessorKey: "ground.businessNo",
+    createPresetColumn<TRow>("businessNo", {
+      accessorKey: "fitnessCenter.company.businessNo",
 			size: 160,
 		}),
-		createPresetColumn<TRow>("address", {
-			accessorKey: "ground.address",
+    createPresetColumn<TRow>("address", {
+      accessorKey: "fitnessCenter.address",
 			size: 250,
 		}),
-		createPhoneColumn<TRow>({
-			accessorKey: "ground.phone",
+    createPhoneColumn<TRow>({
+      accessorKey: "fitnessCenter.phone",
 		}),
-		createEmailColumn<TRow>({
-			accessorKey: "ground.email",
+    createEmailColumn<TRow>({
+      accessorKey: "fitnessCenter.email",
 		}),
 	]);
 }

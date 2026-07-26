@@ -4,14 +4,14 @@ import { AccountTenantSelect } from "./AccountTenantSelect";
 
 const mocks = vi.hoisted(() => ({
 	account: {
-		currentGroundName: "Ground A" as string | null,
+		currentFitnessCenterName: "Fitness Center A" as string | null,
 	},
 	selection: {
 		currentTenantId: "tenant-a" as string | null,
 		isPending: false,
 		options: [
-			{ value: "tenant-a", text: "Ground A" },
-			{ value: "tenant-b", text: "Ground B" },
+			{ value: "tenant-a", text: "Fitness Center A" },
+			{ value: "tenant-b", text: "Fitness Center B" },
 		],
 		selectTenant: vi.fn(),
 	},
@@ -60,28 +60,28 @@ vi.mock("../../../input/Select/Select", () => ({
 
 describe("AccountTenantSelect", () => {
 	beforeEach(() => {
-		mocks.account.currentGroundName = "Ground A";
+		mocks.account.currentFitnessCenterName = "Fitness Center A";
 		mocks.selection.currentTenantId = "tenant-a";
 		mocks.selection.isPending = false;
 		mocks.selection.options = [
-			{ value: "tenant-a", text: "Ground A" },
-			{ value: "tenant-b", text: "Ground B" },
+			{ value: "tenant-a", text: "Fitness Center A" },
+			{ value: "tenant-b", text: "Fitness Center B" },
 		];
 		mocks.selection.selectTenant.mockReset();
 	});
 
-	it("Account 상태와 선택 훅으로 현재 tenant를 표시한다", () => {
+	it("Given 현재 피트니스센터와 선택 Option이 있을 때, When selector를 렌더링하면, Then 현재 Tenant와 피트니스센터 이름을 표시한다", () => {
 		render(<AccountTenantSelect />);
 
 		expect(screen.getByLabelText("Space 선택")).toHaveValue("tenant-a");
-		expect(screen.getByText("Ground B")).toBeInTheDocument();
+		expect(screen.getByText("Fitness Center B")).toBeInTheDocument();
 		expect(screen.getByLabelText("Space 선택")).toHaveAttribute(
 			"data-placeholder",
-			"Ground A",
+			"Fitness Center A",
 		);
 	});
 
-	it("선택 변경 시 tenantId만 전달한다", () => {
+	it("Given 선택 가능한 피트니스센터가 있을 때, When 선택을 변경하면, Then tenantId만 선택 훅에 전달한다", () => {
 		render(<AccountTenantSelect />);
 
 		fireEvent.change(screen.getByLabelText("Space 선택"), {
@@ -91,14 +91,14 @@ describe("AccountTenantSelect", () => {
 		expect(mocks.selection.selectTenant).toHaveBeenCalledWith("tenant-b");
 	});
 
-	it("mutation이 pending이면 비활성화한다", () => {
+	it("Given mutation이 pending일 때, When selector를 렌더링하면, Then selector를 비활성화한다", () => {
 		mocks.selection.isPending = true;
 		render(<AccountTenantSelect />);
 
 		expect(screen.getByLabelText("Space 선택")).toBeDisabled();
 	});
 
-	it("선택 가능한 Option이 없으면 비활성화한다", () => {
+	it("Given 선택 가능한 Option이 없을 때, When selector를 렌더링하면, Then selector를 비활성화한다", () => {
 		mocks.selection.currentTenantId = null;
 		mocks.selection.options = [];
 		render(<AccountTenantSelect />);

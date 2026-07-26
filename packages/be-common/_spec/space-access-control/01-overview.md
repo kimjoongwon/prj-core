@@ -126,8 +126,8 @@ class SpaceContext {
 SpaceCategory (ROOT, BRANCH 등)
     ↓ SpaceClassification
 Space (접근/테넌트 컨테이너)
-    ├── Company (구체화: 사업자등록번호, 법인/운영사 연락처 등) [1:1]
-    │   └── Ground (서비스 시설: 시설명, 현장 연락처, 이미지 등) [1:1]
+    ├── FitnessCenter (서비스 시설: 시설명, 현장 연락처, 이미지 등) [0..1]
+    │   └── Company (사업자등록번호, 법인/운영사 연락처 등) [N:1]
     ├── SpaceClassification → Category (분류 체계)
     ├── SpaceAssociation → Group (그룹핑)
     └── Tenant (Bridge) ←── User + Role 연결
@@ -221,7 +221,7 @@ findTreeResources() {
 | RolesController | 기본값 | - | - | - | - |
 | ActionsController | 기본값 | - | - | - | ✅ |
 | SubjectsController | 기본값 | - | - | - | ✅ |
-| GroundsController | 기본값 | - | - | - | 일부 ✅ |
+| SpacesController의 FitnessCenter endpoint | 기본값 | - | - | - | 일부 ✅ |
 | AuthController | 기본값 | - | - | ✅ (`/my-spaces`) | ✅ (login 등) |
 
 ### Service별 SpaceContext 사용
@@ -231,4 +231,4 @@ findTreeResources() {
 | UsersService | ✅ | 일부 | 목록은 SpaceContext, 상세/생성/수정/삭제는 파라미터 |
 | SpacesService | - | ✅ | Space 자체 관리라 SpaceContext 불필요 |
 | RolesService | - | ✅ | 시스템 수준 조회 |
-| SpacesService | - | ✅ | Space root는 파라미터 기반, Company/Ground detail은 `/spaces/:spaceId/ground` nested route로 처리 |
+| SpacesService | - | ✅ | Space root는 파라미터 기반, FitnessCenter detail은 `/spaces/:spaceId/fitness-center` nested route로 처리 |

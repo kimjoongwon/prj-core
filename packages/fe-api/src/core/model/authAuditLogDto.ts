@@ -14,41 +14,41 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { AuthAuditResult } from "./authAuditResult";
+import type { AuthAuditResult } from './authAuditResult';
 
 export interface AuthAuditLogDto {
-	/**
-	 * ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	id: string;
-	/** 생성일 */
-	createdAt: string;
-	/** 이메일 */
-	email: string;
-	/**
-	 * 사용자 ID
-	 * @nullable
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	userId?: string | null;
-	/** 결과 */
-	result: AuthAuditResult;
-	/**
-	 * 실패 사유
-	 * @nullable
-	 */
-	failureReason?: string | null;
-	/** IP 주소 */
-	ipAddress: string;
-	/**
-	 * User Agent
-	 * @nullable
-	 */
-	userAgent?: string | null;
-	/**
-	 * 클라이언트 ID
-	 * @nullable
-	 */
-	clientId?: string | null;
+  /**
+   * ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  id: string;
+  /** 생성일 */
+  createdAt: string;
+  /** 이메일 */
+  email: string;
+  /**
+   * 사용자 ID
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  userId?: string | null;
+  /** 결과 */
+  result: AuthAuditResult;
+  /**
+   * 실패 사유
+   * @nullable
+   */
+  failureReason?: string | null;
+  /** IP 주소 */
+  ipAddress: string;
+  /**
+   * User Agent
+   * @nullable
+   */
+  userAgent?: string | null;
+  /**
+   * 클라이언트 ID
+   * @nullable
+   */
+  clientId?: string | null;
 }

@@ -24,7 +24,7 @@ export const AccountTenantSelect = observer(function AccountTenantSelect() {
 			aria-label="Space 선택"
 			value={selection.currentTenantId}
 			onValueChange={selection.selectTenant}
-			placeholder={account.currentGroundName ?? "Space 확인 중"}
+			placeholder={account.currentFitnessCenterName ?? "Space 확인 중"}
 			options={selection.options}
 			isDisabled={selection.isPending || selection.options.length === 0}
 			classNames={accountTenantSelectClassNames}

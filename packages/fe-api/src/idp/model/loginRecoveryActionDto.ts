@@ -16,10 +16,10 @@
  */
 
 export interface LoginRecoveryActionDto {
-	/** 액션 코드 */
-	type: string;
-	/** 사용자 표시 라벨 */
-	label: string;
-	/** 이동 경로 */
-	href?: string;
+  /** 액션 코드 */
+  type: string;
+  /** 사용자 표시 라벨 */
+  label: string;
+  /** 이동 경로 */
+  href?: string;
 }

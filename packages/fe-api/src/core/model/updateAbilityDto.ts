@@ -14,23 +14,23 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { UpdateAbilityDtoConditions } from "./updateAbilityDtoConditions";
+import type { UpdateAbilityDtoConditions } from './updateAbilityDtoConditions';
 
 export interface UpdateAbilityDto {
-	/** Action ID (UUID) */
-	actionId?: string;
-	/** Subject ID (UUID) */
-	subjectId?: string;
-	/** 대상 필드 목록 (빈 배열이면 전체 필드) */
-	fields?: string[];
-	/** 권한 조건 (JSON 형식) */
-	conditions?: UpdateAbilityDtoConditions;
-	/** 거부 권한 여부 (true: cannot, false: can) */
-	inverted?: boolean;
-	/** 거부 사유 (inverted=true일 때 사용) */
-	reason?: string;
-	/** 권한 이름 */
-	name?: string;
-	/** 권한 설명 */
-	description?: string;
+  /** Action ID (UUID) */
+  actionId?: string;
+  /** Subject ID (UUID) */
+  subjectId?: string;
+  /** 대상 필드 목록 (빈 배열이면 전체 필드) */
+  fields?: string[];
+  /** 권한 조건 (JSON 형식) */
+  conditions?: UpdateAbilityDtoConditions;
+  /** 거부 권한 여부 (true: cannot, false: can) */
+  inverted?: boolean;
+  /** 거부 사유 (inverted=true일 때 사용) */
+  reason?: string;
+  /** 권한 이름 */
+  name?: string;
+  /** 권한 설명 */
+  description?: string;
 }

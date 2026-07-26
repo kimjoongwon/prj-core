@@ -1,8 +1,12 @@
 import { hash } from "bcrypt";
 
-import { groundSeedData, userGroundMapping, userSeedData } from "../demo-data";
+import {
+	fitnessCenterSeedData,
+	userFitnessCenterMapping,
+	userSeedData,
+} from "../demo-data";
 import type {
-	Ground,
+	FitnessCenter,
 	PrismaClient,
 	Role,
 	User,
@@ -15,7 +19,7 @@ import { ensureSystemAdminUsers } from "./system-admins";
 const systemSpaceGroupNames = [
 	"TEAM_TRAINING",
 	"PERSONAL_TRAINNING",
-	"GROUND",
+	"FITNESSCENTER",
 	"PILATES",
 ] as const;
 
@@ -84,7 +88,7 @@ async function ensureSystemSpaceGroups(prisma: PrismaClient): Promise<void> {
 }
 
 /**
- * system space, super admin, system ground 같은 최상위 bootstrap 자원을 준비합니다.
+ * system space, super admin, system fitness center 같은 최상위 bootstrap 자원을 준비합니다.
  *
  * 이 단계는 reference-data sync를 선행 호출해 역할/분류 체계를 확보한 뒤,
  * 새 환경을 실제로 접속 가능한 상태로 만드는 최소 계정을 세웁니다.
@@ -115,59 +119,64 @@ export async function ensureSystemBootstrap(
 
 	console.log(`System Space 준비 완료 (id=${SYSTEM_SPACE_ID})`);
 
-	// One ground in the demo dataset is treated as the canonical system ground.
-	const systemGroundData = groundSeedData.find((ground) => ground.isSystem);
-	if (systemGroundData) {
-		const systemCompany = await prisma.company.upsert({
+	// One fitness center in the demo dataset is treated as the canonical system one.
+	const systemFitnessCenterData = fitnessCenterSeedData.find(
+		(fitnessCenter) => fitnessCenter.isSystem,
+	);
+	if (systemFitnessCenterData) {
+		const systemFitnessCenter = await prisma.fitnessCenter.findUnique({
 			where: { spaceId: SYSTEM_SPACE_ID },
-			update: {
-				name: systemGroundData.name,
-				label: systemGroundData.label,
-				address: systemGroundData.address,
-				phone: systemGroundData.phone,
-				email: systemGroundData.email,
-				businessNo: systemGroundData.businessNo,
-			},
-			create: {
-				name: systemGroundData.name,
-				label: systemGroundData.label,
-				address: systemGroundData.address,
-				phone: systemGroundData.phone,
-				email: systemGroundData.email,
-				businessNo: systemGroundData.businessNo,
-				spaceId: SYSTEM_SPACE_ID,
-			},
-		});
-		const systemGround = await prisma.ground.findUnique({
-			where: {
-				companyId: systemCompany.id,
-			},
+			include: { company: true },
 		});
 
-		if (systemGround) {
-			await prisma.ground.update({
-				where: { id: systemGround.id },
+		if (systemFitnessCenter) {
+			await prisma.company.update({
+				where: { id: systemFitnessCenter.companyId },
 				data: {
-					name: systemGroundData.name,
-					label: systemGroundData.label,
-					address: systemGroundData.address,
-					phone: systemGroundData.phone,
-					email: systemGroundData.email,
+					name: systemFitnessCenterData.name,
+					label: systemFitnessCenterData.label,
+					address: systemFitnessCenterData.address,
+					phone: systemFitnessCenterData.phone,
+					email: systemFitnessCenterData.email,
+					businessNo: systemFitnessCenterData.businessNo,
+				},
+			});
+			await prisma.fitnessCenter.update({
+				where: { id: systemFitnessCenter.id },
+				data: {
+					name: systemFitnessCenterData.name,
+					label: systemFitnessCenterData.label,
+					address: systemFitnessCenterData.address,
+					phone: systemFitnessCenterData.phone,
+					email: systemFitnessCenterData.email,
 				},
 			});
 		} else {
-			await prisma.ground.create({
+			const systemCompany = await prisma.company.create({
 				data: {
-					name: systemGroundData.name,
-					label: systemGroundData.label,
-					address: systemGroundData.address,
-					phone: systemGroundData.phone,
-					email: systemGroundData.email,
+					name: systemFitnessCenterData.name,
+					label: systemFitnessCenterData.label,
+					address: systemFitnessCenterData.address,
+					phone: systemFitnessCenterData.phone,
+					email: systemFitnessCenterData.email,
+					businessNo: systemFitnessCenterData.businessNo,
+				},
+			});
+			await prisma.fitnessCenter.create({
+				data: {
+					name: systemFitnessCenterData.name,
+					label: systemFitnessCenterData.label,
+					address: systemFitnessCenterData.address,
+					phone: systemFitnessCenterData.phone,
+					email: systemFitnessCenterData.email,
 					companyId: systemCompany.id,
+					spaceId: SYSTEM_SPACE_ID,
 				},
 			});
 		}
-		console.log(`System Ground 생성 완료: ${systemGroundData.name}`);
+		console.log(
+			`System Fitness Center 생성 완료: ${systemFitnessCenterData.name}`,
+		);
 	}
 
 	await ensureSystemSpaceGroups(prisma);
@@ -179,16 +188,16 @@ export async function ensureSystemBootstrap(
 }
 
 /**
- * 일반 demo 사용자와 branch ground를 생성하고 tenant를 연결합니다.
+ * 일반 demo 사용자와 branch fitness center를 생성하고 tenant를 연결합니다.
  *
- * ground 생성이 먼저, 사용자 소속 연결이 나중인 2-pass 구조를 쓰는 이유는
- * user-ground 매핑이 이미 만들어진 ground의 spaceId를 참조해야 하기 때문입니다.
+ * fitness center 생성이 먼저, 사용자 소속 연결이 나중인 2-pass 구조를 쓰는 이유는
+ * user-fitness center 매핑이 이미 만들어진 fitness center의 spaceId를 참조해야 하기 때문입니다.
  */
-export async function createRegularUsersAndGrounds(
+export async function createRegularUsersAndFitnessCenters(
 	prisma: PrismaClient,
 	companyManagerRole: Role,
 ): Promise<void> {
-	console.log("일반 유저들과 그라운드 생성 시작...");
+	console.log("일반 유저들과 피트니스센터 생성 시작...");
 
 	// Demo user rows refer to role names, so resolve the current role catalog
 	// once before creating user/tenant memberships.
@@ -198,57 +207,42 @@ export async function createRegularUsersAndGrounds(
 		roleMap[role.name] = role;
 	}
 
-	const createdGrounds: Array<{ ground: Ground; spaceId: string }> = [];
+	const createdFitnessCenters: Array<{ fitnessCenter: FitnessCenter; spaceId: string }> = [];
 	const defaultAdminPassword = await hash("admin123!@#", 10);
 
-	// First create non-system grounds and their manager accounts. The resulting
+	// First create non-system fitness centers and their manager accounts. The resulting
 	// space ids are reused when attaching regular demo users below.
-	for (const groundData of groundSeedData) {
-		if (groundData.isSystem) {
+	for (const fitnessCenterData of fitnessCenterSeedData) {
+		if (fitnessCenterData.isSystem) {
 			continue;
 		}
 
 		try {
-			const existingGround = await prisma.ground.findFirst({
-				where: { name: groundData.name, removedAt: null },
+			const existingFitnessCenter = await prisma.fitnessCenter.findFirst({
+				where: { name: fitnessCenterData.name, removedAt: null },
 				include: { company: true },
 			});
 
-			if (!existingGround) {
-				let space = await prisma.space.findFirst({
-					where: {
-						company: {
-							ground: {
-								is: {
-									removedAt: null,
-									name: groundData.name,
-								},
-							},
-						},
-					},
+			if (!existingFitnessCenter) {
+				const space = await prisma.space.create({
+					data: {},
 				});
-
-				if (!space) {
-					space = await prisma.space.create({
-						data: {},
-					});
-				}
 
 				const adminUser = await prisma.user.upsert({
 					where: {
-						phone: groundData.phone,
+						phone: fitnessCenterData.phone,
 					},
 					update: {},
 					create: {
-						name: `${groundData.name} 관리자`,
-						phone: groundData.phone,
-						email: groundData.email,
+						name: `${fitnessCenterData.name} 관리자`,
+						phone: fitnessCenterData.phone,
+						email: fitnessCenterData.email,
 						password: defaultAdminPassword,
 						profiles: {
 							create: {
-								name: `${groundData.name} 관리자`,
-								nickname: `${groundData.name}관리자`,
-								address: groundData.address,
+								name: `${fitnessCenterData.name} 관리자`,
+								nickname: `${fitnessCenterData.name}관리자`,
+								address: fitnessCenterData.address,
 							},
 						},
 					},
@@ -274,51 +268,54 @@ export async function createRegularUsersAndGrounds(
 
 				const company = await prisma.company.create({
 					data: {
-						name: groundData.name,
-						label: groundData.label,
-						address: groundData.address,
-						phone: groundData.phone,
-						email: groundData.email,
-						businessNo: groundData.businessNo,
+						name: fitnessCenterData.name,
+						label: fitnessCenterData.label,
+						address: fitnessCenterData.address,
+						phone: fitnessCenterData.phone,
+						email: fitnessCenterData.email,
+						businessNo: fitnessCenterData.businessNo,
+					},
+				});
+				const fitnessCenter = await prisma.fitnessCenter.create({
+					data: {
+						name: fitnessCenterData.name,
+						label: fitnessCenterData.label,
+						address: fitnessCenterData.address,
+						phone: fitnessCenterData.phone,
+						email: fitnessCenterData.email,
+						companyId: company.id,
 						spaceId: space.id,
 					},
 				});
-				const ground = await prisma.ground.create({
-					data: {
-						name: groundData.name,
-						label: groundData.label,
-						address: groundData.address,
-						phone: groundData.phone,
-						email: groundData.email,
-						companyId: company.id,
-					},
-				});
 
-				createdGrounds.push({
-					ground,
+				createdFitnessCenters.push({
+					fitnessCenter,
 					spaceId: space.id,
 				});
-				console.log(`그라운드 생성 완료: ${groundData.name}`);
+				console.log(`피트니스센터 생성 완료: ${fitnessCenterData.name}`);
 			} else {
-				console.log(`그라운드 이미 존재: ${groundData.name}`);
-				createdGrounds.push({
-					ground: existingGround,
-					spaceId: existingGround.company.spaceId,
+				console.log(`피트니스센터 이미 존재: ${fitnessCenterData.name}`);
+				createdFitnessCenters.push({
+					fitnessCenter: existingFitnessCenter,
+					spaceId: existingFitnessCenter.spaceId,
 				});
 			}
 		} catch (error) {
-			console.error(`그라운드 생성 실패 (${groundData.name}):`, error);
+			console.error(
+				`피트니스센터 생성 실패 (${fitnessCenterData.name}):`,
+				error,
+			);
 		}
 	}
 
 	// Second pass: attach regular demo users to the spaces that were just
-	// created, using the explicit ground mapping table as the source of truth.
+	// created, using the explicit fitness-center mapping table as the source of truth.
 	for (const userData of userSeedData) {
 		if (userData.role === "PLATFORM_ADMIN") {
 			continue;
 		}
 
-		const userMapping = userGroundMapping.find(
+		const userMapping = userFitnessCenterMapping.find(
 			(mapping) => mapping.userEmail === userData.email,
 		);
 
@@ -338,18 +335,22 @@ export async function createRegularUsersAndGrounds(
 			}
 
 			const hashedPassword = await hash(userData.password, 10);
-			const userGrounds: Array<{ ground: Ground; spaceId: string }> = [];
+			const userFitnessCenters: Array<{
+				fitnessCenter: FitnessCenter;
+				spaceId: string;
+			}> = [];
 
-			for (const groundName of userMapping.groundNames) {
-				const groundInfo = createdGrounds.find(
-					(groundEntry) => groundEntry.ground.name === groundName,
+			for (const fitnessCenterName of userMapping.fitnessCenterNames) {
+				const fitnessCenterInfo = createdFitnessCenters.find(
+					(fitnessCenterEntry) =>
+						fitnessCenterEntry.fitnessCenter.name === fitnessCenterName,
 				);
-				if (groundInfo) {
-					userGrounds.push(groundInfo);
+				if (fitnessCenterInfo) {
+					userFitnessCenters.push(fitnessCenterInfo);
 				}
 			}
 
-			if (userGrounds.length === 0) {
+			if (userFitnessCenters.length === 0) {
 				continue;
 			}
 
@@ -363,7 +364,7 @@ export async function createRegularUsersAndGrounds(
 						create: {
 							name: userData.profile.name,
 							nickname: userData.profile.nickname,
-							address: userGrounds[0]?.ground.address ?? "",
+							address: userFitnessCenters[0]?.fitnessCenter.address ?? "",
 						},
 					},
 				},
@@ -376,11 +377,11 @@ export async function createRegularUsersAndGrounds(
 				);
 			}
 
-			for (const groundInfo of userGrounds) {
+			for (const fitnessCenterInfo of userFitnessCenters) {
 				const existingUserTenant = await prisma.tenant.findFirst({
 					where: {
 						userId: user.id,
-						spaceId: groundInfo.spaceId,
+						spaceId: fitnessCenterInfo.spaceId,
 						roleId: assignedRole.id,
 					},
 				});
@@ -389,7 +390,7 @@ export async function createRegularUsersAndGrounds(
 					await prisma.tenant.create({
 						data: {
 							userId: user.id,
-							spaceId: groundInfo.spaceId,
+							spaceId: fitnessCenterInfo.spaceId,
 							roleId: assignedRole.id,
 						},
 					});
@@ -397,28 +398,28 @@ export async function createRegularUsersAndGrounds(
 			}
 
 			console.log(
-				`유저 생성 완료: ${userData.profile.name} [${userData.role || "MEMBER"}] (그라운드 ${userGrounds.length}개 소속)`,
+				`유저 생성 완료: ${userData.profile.name} [${userData.role || "MEMBER"}] (피트니스센터 ${userFitnessCenters.length}개 소속)`,
 			);
 		} catch (error) {
 			console.error(`일반 유저 생성 실패 (${userData.profile.name}):`, error);
 		}
 	}
 
-	console.log("일반 유저들과 그라운드 생성 완료!");
+	console.log("일반 유저들과 피트니스센터 생성 완료!");
 }
 
 /**
- * system space를 제외한 모든 ground space를 BRANCH로 분류합니다.
+ * system space를 제외한 모든 fitness center space를 BRANCH로 분류합니다.
  *
- * reference-data가 ROOT 분류를 만들고, bootstrap이 실제 ground row를 만든 뒤에야
+ * reference-data가 ROOT 분류를 만들고, bootstrap이 실제 fitness center row를 만든 뒤에야
  * branch classification을 안전하게 채울 수 있습니다.
  */
-export async function classifyGroundSpacesAsBranch(
+export async function classifyFitnessCenterSpacesAsBranch(
 	prisma: PrismaClient,
 	systemSpaceId = SYSTEM_SPACE_ID,
 ): Promise<void> {
 	console.log(
-		"Company/Ground가 연결된 Space에 BRANCH SpaceClassification 할당 시작...",
+		"Company/Fitness Center가 연결된 Space에 BRANCH SpaceClassification 할당 시작...",
 	);
 
 	const branchCategory = await prisma.category.findFirst({
@@ -430,24 +431,20 @@ export async function classifyGroundSpacesAsBranch(
 		return;
 	}
 
-	const grounds = await prisma.ground.findMany({
-		include: {
-			company: true,
-		},
-	});
+	const fitnessCenters = await prisma.fitnessCenter.findMany();
 	let syncedCount = 0;
 
-	// Every non-system ground space should classify as BRANCH, while the system
+	// Every non-system fitness center space should classify as BRANCH, while the system
 	// space keeps the ROOT classification established by reference data.
-	for (const ground of grounds) {
-		if (ground.company.spaceId === systemSpaceId) {
+	for (const fitnessCenter of fitnessCenters) {
+		if (fitnessCenter.spaceId === systemSpaceId) {
 			continue;
 		}
 
 		await prisma.spaceClassification.upsert({
-			where: { spaceId: ground.company.spaceId },
+			where: { spaceId: fitnessCenter.spaceId },
 			create: {
-				spaceId: ground.company.spaceId,
+				spaceId: fitnessCenter.spaceId,
 				categoryId: branchCategory.id,
 			},
 			update: {
@@ -456,12 +453,12 @@ export async function classifyGroundSpacesAsBranch(
 		});
 		syncedCount++;
 		console.log(
-			`  - BRANCH 할당: ${ground.name} (spaceId=${ground.company.spaceId.slice(-8)})`,
+			`  - BRANCH 할당: ${fitnessCenter.name} (spaceId=${fitnessCenter.spaceId.slice(-8)})`,
 		);
 	}
 
 	console.log(
-		`Company/Ground Space BRANCH 할당 완료! (동기화: ${syncedCount}개)`,
+		`Company/Fitness Center Space BRANCH 할당 완료! (동기화: ${syncedCount}개)`,
 	);
 }
 

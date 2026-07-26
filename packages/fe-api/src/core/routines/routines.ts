@@ -14,1244 +14,715 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-
-import type {
-	DataTag,
-	DefinedInitialDataOptions,
-	DefinedUseQueryResult,
-	InfiniteData,
-	MutationFunction,
-	QueryClient,
-	QueryFunction,
-	QueryKey,
-	UndefinedInitialDataOptions,
-	UseMutationOptions,
-	UseMutationResult,
-	UseQueryOptions,
-	UseQueryResult,
-	UseSuspenseInfiniteQueryOptions,
-	UseSuspenseInfiniteQueryResult,
-	UseSuspenseQueryOptions,
-	UseSuspenseQueryResult,
-} from "@tanstack/react-query";
 import {
-	useMutation,
-	useQuery,
-	useSuspenseInfiniteQuery,
-	useSuspenseQuery,
-} from "@tanstack/react-query";
-import type { BodyType, ErrorType } from "../../libs/customAxios";
-
-import { customInstance } from "../../libs/customAxios";
+  useMutation,
+  useQuery,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery
+} from '@tanstack/react-query';
 import type {
-	CreateRoutine201AllOf,
-	CreateRoutineDto,
-	GetRoutine200AllOf,
-	GetRoutines200AllOf,
-	GetRoutinesParams,
-	UpdateRoutine200AllOf,
-	UpdateRoutineDto,
-} from ".././model";
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  InfiniteData,
+  MutationFunction,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult,
+  UseSuspenseInfiniteQueryOptions,
+  UseSuspenseInfiniteQueryResult,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult
+} from '@tanstack/react-query';
+
+import type {
+  CreateRoutine201AllOf,
+  CreateRoutineDto,
+  GetRoutine200AllOf,
+  GetRoutines200AllOf,
+  GetRoutinesParams,
+  UpdateRoutine200AllOf,
+  UpdateRoutineDto
+} from '.././model';
+
+import { customInstance } from '../../libs/customAxios';
+import type { ErrorType , BodyType } from '../../libs/customAxios';
+
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * 루틴 목록을 조회합니다. 페이지네이션, 검색, Space 범위 필터를 지원합니다.
  * @summary 루틴 목록 조회
  */
 export const getRoutines = (
-	params?: GetRoutinesParams,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    params?: GetRoutinesParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<GetRoutines200AllOf>(
-		{ url: `/api/v1/routines`, method: "GET", params, signal },
-		options,
-	);
-};
+      
+      
+      return customInstance<GetRoutines200AllOf>(
+      {url: `/api/v1/routines`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
 
-export const getGetRoutinesQueryKey = (params?: GetRoutinesParams) => {
-	return [`/api/v1/routines`, ...(params ? [params] : [])] as const;
-};
 
-export const getGetRoutinesInfiniteQueryKey = (params?: GetRoutinesParams) => {
-	return ["infinite", `/api/v1/routines`, ...(params ? [params] : [])] as const;
-};
 
-export const getGetRoutinesQueryOptions = <
-	TData = Awaited<ReturnType<typeof getRoutines>>,
-	TError = ErrorType<void>,
->(
-	params?: GetRoutinesParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
+export const getGetRoutinesQueryKey = (params?: GetRoutinesParams,) => {
+    return [
+    `/api/v1/routines`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+export const getGetRoutinesInfiniteQueryKey = (params?: GetRoutinesParams,) => {
+    return [
+    'infinite', `/api/v1/routines`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetRoutinesQueryOptions = <TData = Awaited<ReturnType<typeof getRoutines>>, TError = ErrorType<void>>(params?: GetRoutinesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey = queryOptions?.queryKey ?? getGetRoutinesQueryKey(params);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoutines>>> = ({
-		signal,
-	}) => getRoutines(params, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetRoutinesQueryKey(params);
 
-	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-		Awaited<ReturnType<typeof getRoutines>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
+  
 
-export type GetRoutinesQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getRoutines>>
->;
-export type GetRoutinesQueryError = ErrorType<void>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoutines>>> = ({ signal }) => getRoutines(params, requestOptions, signal);
 
-export function useGetRoutines<
-	TData = Awaited<ReturnType<typeof getRoutines>>,
-	TError = ErrorType<void>,
->(
-	params: undefined | GetRoutinesParams,
-	options: {
-		query: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>
-		> &
-			Pick<
-				DefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getRoutines>>,
-					TError,
-					Awaited<ReturnType<typeof getRoutines>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetRoutines<
-	TData = Awaited<ReturnType<typeof getRoutines>>,
-	TError = ErrorType<void>,
->(
-	params?: GetRoutinesParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>
-		> &
-			Pick<
-				UndefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getRoutines>>,
-					TError,
-					Awaited<ReturnType<typeof getRoutines>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetRoutines<
-	TData = Awaited<ReturnType<typeof getRoutines>>,
-	TError = ErrorType<void>,
->(
-	params?: GetRoutinesParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetRoutinesQueryResult = NonNullable<Awaited<ReturnType<typeof getRoutines>>>
+export type GetRoutinesQueryError = ErrorType<void>
+
+
+export function useGetRoutines<TData = Awaited<ReturnType<typeof getRoutines>>, TError = ErrorType<void>>(
+ params: undefined |  GetRoutinesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getRoutines>>,
+          TError,
+          Awaited<ReturnType<typeof getRoutines>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoutines<TData = Awaited<ReturnType<typeof getRoutines>>, TError = ErrorType<void>>(
+ params?: GetRoutinesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getRoutines>>,
+          TError,
+          Awaited<ReturnType<typeof getRoutines>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoutines<TData = Awaited<ReturnType<typeof getRoutines>>, TError = ErrorType<void>>(
+ params?: GetRoutinesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary 루틴 목록 조회
  */
 
-export function useGetRoutines<
-	TData = Awaited<ReturnType<typeof getRoutines>>,
-	TError = ErrorType<void>,
->(
-	params?: GetRoutinesParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetRoutinesQueryOptions(params, options);
+export function useGetRoutines<TData = Awaited<ReturnType<typeof getRoutines>>, TError = ErrorType<void>>(
+ params?: GetRoutinesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-		TData,
-		TError
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const queryOptions = getGetRoutinesQueryOptions(params,options)
 
-	query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-	return query;
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
 
 /**
  * @summary 루틴 목록 조회
  */
-export const prefetchGetRoutinesQuery = async <
-	TData = Awaited<ReturnType<typeof getRoutines>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	params?: GetRoutinesParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetRoutinesQueryOptions(params, options);
+export const prefetchGetRoutinesQuery = async <TData = Awaited<ReturnType<typeof getRoutines>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, params?: GetRoutinesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetRoutinesQueryOptions(params,options)
 
-export const getGetRoutinesSuspenseQueryOptions = <
-	TData = Awaited<ReturnType<typeof getRoutines>>,
-	TError = ErrorType<void>,
->(
-	params?: GetRoutinesParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getRoutines>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
+  await queryClient.prefetchQuery(queryOptions);
 
-	const queryKey = queryOptions?.queryKey ?? getGetRoutinesQueryKey(params);
-
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoutines>>> = ({
-		signal,
-	}) => getRoutines(params, requestOptions, signal);
-
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
-		Awaited<ReturnType<typeof getRoutines>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetRoutinesSuspenseQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getRoutines>>
->;
-export type GetRoutinesSuspenseQueryError = ErrorType<void>;
-
-export function useGetRoutinesSuspense<
-	TData = Awaited<ReturnType<typeof getRoutines>>,
-	TError = ErrorType<void>,
->(
-	params: undefined | GetRoutinesParams,
-	options: {
-		query: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getRoutines>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetRoutinesSuspense<
-	TData = Awaited<ReturnType<typeof getRoutines>>,
-	TError = ErrorType<void>,
->(
-	params?: GetRoutinesParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getRoutines>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetRoutinesSuspense<
-	TData = Awaited<ReturnType<typeof getRoutines>>,
-	TError = ErrorType<void>,
->(
-	params?: GetRoutinesParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getRoutines>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary 루틴 목록 조회
- */
-
-export function useGetRoutinesSuspense<
-	TData = Awaited<ReturnType<typeof getRoutines>>,
-	TError = ErrorType<void>,
->(
-	params?: GetRoutinesParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getRoutines>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetRoutinesSuspenseQueryOptions(params, options);
-
-	const query = useSuspenseQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
+  return queryClient;
 }
 
-export const getGetRoutinesSuspenseInfiniteQueryOptions = <
-	TData = InfiniteData<Awaited<ReturnType<typeof getRoutines>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetRoutinesParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getRoutines>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
+
+
+export const getGetRoutinesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getRoutines>>, TError = ErrorType<void>>(params?: GetRoutinesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey =
-		queryOptions?.queryKey ?? getGetRoutinesInfiniteQueryKey(params);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoutines>>> = ({
-		signal,
-	}) => getRoutines(params, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetRoutinesQueryKey(params);
 
-	return {
-		queryKey,
-		queryFn,
-		...queryOptions,
-	} as UseSuspenseInfiniteQueryOptions<
-		Awaited<ReturnType<typeof getRoutines>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
+  
 
-export type GetRoutinesSuspenseInfiniteQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getRoutines>>
->;
-export type GetRoutinesSuspenseInfiniteQueryError = ErrorType<void>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoutines>>> = ({ signal }) => getRoutines(params, requestOptions, signal);
 
-export function useGetRoutinesSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getRoutines>>>,
-	TError = ErrorType<void>,
->(
-	params: undefined | GetRoutinesParams,
-	options: {
-		query: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getRoutines>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetRoutinesSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getRoutines>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetRoutinesParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getRoutines>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetRoutinesSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getRoutines>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetRoutinesParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getRoutines>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetRoutinesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getRoutines>>>
+export type GetRoutinesSuspenseQueryError = ErrorType<void>
+
+
+export function useGetRoutinesSuspense<TData = Awaited<ReturnType<typeof getRoutines>>, TError = ErrorType<void>>(
+ params: undefined |  GetRoutinesParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoutinesSuspense<TData = Awaited<ReturnType<typeof getRoutines>>, TError = ErrorType<void>>(
+ params?: GetRoutinesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoutinesSuspense<TData = Awaited<ReturnType<typeof getRoutines>>, TError = ErrorType<void>>(
+ params?: GetRoutinesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary 루틴 목록 조회
  */
 
-export function useGetRoutinesSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getRoutines>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetRoutinesParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getRoutines>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetRoutinesSuspenseInfiniteQueryOptions(
-		params,
-		options,
-	);
+export function useGetRoutinesSuspense<TData = Awaited<ReturnType<typeof getRoutines>>, TError = ErrorType<void>>(
+ params?: GetRoutinesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useSuspenseInfiniteQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
+  const queryOptions = getGetRoutinesSuspenseQueryOptions(params,options)
 
-	query.queryKey = queryOptions.queryKey;
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-	return query;
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetRoutinesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getRoutines>>>, TError = ErrorType<void>>(params?: GetRoutinesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetRoutinesInfiniteQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoutines>>> = ({ signal }) => getRoutines(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetRoutinesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getRoutines>>>
+export type GetRoutinesSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetRoutinesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getRoutines>>>, TError = ErrorType<void>>(
+ params: undefined |  GetRoutinesParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoutinesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getRoutines>>>, TError = ErrorType<void>>(
+ params?: GetRoutinesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoutinesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getRoutines>>>, TError = ErrorType<void>>(
+ params?: GetRoutinesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 루틴 목록 조회
+ */
+
+export function useGetRoutinesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getRoutines>>>, TError = ErrorType<void>>(
+ params?: GetRoutinesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetRoutinesSuspenseInfiniteQueryOptions(params,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
 
 /**
  * @summary 루틴 목록 조회
  */
-export const prefetchGetRoutinesInfiniteQuery = async <
-	TData = Awaited<ReturnType<typeof getRoutines>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	params?: GetRoutinesParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getRoutines>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetRoutinesSuspenseInfiniteQueryOptions(
-		params,
-		options,
-	);
+export const prefetchGetRoutinesInfiniteQuery = async <TData = Awaited<ReturnType<typeof getRoutines>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, params?: GetRoutinesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoutines>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetRoutinesSuspenseInfiniteQueryOptions(params,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
 
 /**
  * 새로운 루틴을 등록합니다.
  * @summary 루틴 등록
  */
 export const createRoutine = (
-	createRoutineDto: BodyType<CreateRoutineDto>,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    createRoutineDto: BodyType<CreateRoutineDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<CreateRoutine201AllOf>(
-		{
-			url: `/api/v1/routines`,
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			data: createRoutineDto,
-			signal,
-		},
-		options,
-	);
-};
+      
+      
+      return customInstance<CreateRoutine201AllOf>(
+      {url: `/api/v1/routines`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createRoutineDto, signal
+    },
+      options);
+    }
+  
 
-export const getCreateRoutineMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof createRoutine>>,
-		TError,
-		{ data: BodyType<CreateRoutineDto> },
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof createRoutine>>,
-	TError,
-	{ data: BodyType<CreateRoutineDto> },
-	TContext
-> => {
-	const mutationKey = ["createRoutine"];
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof createRoutine>>,
-		{ data: BodyType<CreateRoutineDto> }
-	> = (props) => {
-		const { data } = props ?? {};
+export const getCreateRoutineMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRoutine>>, TError,{data: BodyType<CreateRoutineDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createRoutine>>, TError,{data: BodyType<CreateRoutineDto>}, TContext> => {
 
-		return createRoutine(data, requestOptions);
-	};
+const mutationKey = ['createRoutine'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-	return { mutationFn, ...mutationOptions };
-};
+      
 
-export type CreateRoutineMutationResult = NonNullable<
-	Awaited<ReturnType<typeof createRoutine>>
->;
-export type CreateRoutineMutationBody = BodyType<CreateRoutineDto>;
-export type CreateRoutineMutationError = ErrorType<void>;
 
-/**
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createRoutine>>, {data: BodyType<CreateRoutineDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createRoutine(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateRoutineMutationResult = NonNullable<Awaited<ReturnType<typeof createRoutine>>>
+    export type CreateRoutineMutationBody = BodyType<CreateRoutineDto>
+    export type CreateRoutineMutationError = ErrorType<void>
+
+    /**
  * @summary 루틴 등록
  */
-export const useCreateRoutine = <TError = ErrorType<void>, TContext = unknown>(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof createRoutine>>,
-			TError,
-			{ data: BodyType<CreateRoutineDto> },
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof createRoutine>>,
-	TError,
-	{ data: BodyType<CreateRoutineDto> },
-	TContext
-> => {
-	const mutationOptions = getCreateRoutineMutationOptions(options);
+export const useCreateRoutine = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRoutine>>, TError,{data: BodyType<CreateRoutineDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createRoutine>>,
+        TError,
+        {data: BodyType<CreateRoutineDto>},
+        TContext
+      > => {
 
-	return useMutation(mutationOptions, queryClient);
-};
-/**
+      const mutationOptions = getCreateRoutineMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * 루틴 상세 정보를 조회합니다. 상위 Space 공유 루틴도 조회 가능합니다.
  * @summary 루틴 상세 조회
  */
 export const getRoutine = (
-	routineId: string,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    routineId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<GetRoutine200AllOf>(
-		{ url: `/api/v1/routines/${routineId}`, method: "GET", signal },
-		options,
-	);
-};
+      
+      
+      return customInstance<GetRoutine200AllOf>(
+      {url: `/api/v1/routines/${routineId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export const getGetRoutineQueryKey = (routineId?: string) => {
-	return [`/api/v1/routines/${routineId}`] as const;
-};
 
-export const getGetRoutineInfiniteQueryKey = (routineId?: string) => {
-	return ["infinite", `/api/v1/routines/${routineId}`] as const;
-};
 
-export const getGetRoutineQueryOptions = <
-	TData = Awaited<ReturnType<typeof getRoutine>>,
-	TError = ErrorType<void>,
->(
-	routineId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
+export const getGetRoutineQueryKey = (routineId?: string,) => {
+    return [
+    `/api/v1/routines/${routineId}`
+    ] as const;
+    }
+
+export const getGetRoutineInfiniteQueryKey = (routineId?: string,) => {
+    return [
+    'infinite', `/api/v1/routines/${routineId}`
+    ] as const;
+    }
+
+    
+export const getGetRoutineQueryOptions = <TData = Awaited<ReturnType<typeof getRoutine>>, TError = ErrorType<void>>(routineId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey = queryOptions?.queryKey ?? getGetRoutineQueryKey(routineId);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoutine>>> = ({
-		signal,
-	}) => getRoutine(routineId, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetRoutineQueryKey(routineId);
 
-	return {
-		queryKey,
-		queryFn,
-		enabled: !!routineId,
-		...queryOptions,
-	} as UseQueryOptions<
-		Awaited<ReturnType<typeof getRoutine>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
+  
 
-export type GetRoutineQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getRoutine>>
->;
-export type GetRoutineQueryError = ErrorType<void>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoutine>>> = ({ signal }) => getRoutine(routineId, requestOptions, signal);
 
-export function useGetRoutine<
-	TData = Awaited<ReturnType<typeof getRoutine>>,
-	TError = ErrorType<void>,
->(
-	routineId: string,
-	options: {
-		query: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>
-		> &
-			Pick<
-				DefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getRoutine>>,
-					TError,
-					Awaited<ReturnType<typeof getRoutine>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetRoutine<
-	TData = Awaited<ReturnType<typeof getRoutine>>,
-	TError = ErrorType<void>,
->(
-	routineId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>
-		> &
-			Pick<
-				UndefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getRoutine>>,
-					TError,
-					Awaited<ReturnType<typeof getRoutine>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetRoutine<
-	TData = Awaited<ReturnType<typeof getRoutine>>,
-	TError = ErrorType<void>,
->(
-	routineId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(routineId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetRoutineQueryResult = NonNullable<Awaited<ReturnType<typeof getRoutine>>>
+export type GetRoutineQueryError = ErrorType<void>
+
+
+export function useGetRoutine<TData = Awaited<ReturnType<typeof getRoutine>>, TError = ErrorType<void>>(
+ routineId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getRoutine>>,
+          TError,
+          Awaited<ReturnType<typeof getRoutine>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoutine<TData = Awaited<ReturnType<typeof getRoutine>>, TError = ErrorType<void>>(
+ routineId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getRoutine>>,
+          TError,
+          Awaited<ReturnType<typeof getRoutine>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoutine<TData = Awaited<ReturnType<typeof getRoutine>>, TError = ErrorType<void>>(
+ routineId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary 루틴 상세 조회
  */
 
-export function useGetRoutine<
-	TData = Awaited<ReturnType<typeof getRoutine>>,
-	TError = ErrorType<void>,
->(
-	routineId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetRoutineQueryOptions(routineId, options);
+export function useGetRoutine<TData = Awaited<ReturnType<typeof getRoutine>>, TError = ErrorType<void>>(
+ routineId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-		TData,
-		TError
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const queryOptions = getGetRoutineQueryOptions(routineId,options)
 
-	query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-	return query;
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
 
 /**
  * @summary 루틴 상세 조회
  */
-export const prefetchGetRoutineQuery = async <
-	TData = Awaited<ReturnType<typeof getRoutine>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	routineId: string,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetRoutineQueryOptions(routineId, options);
+export const prefetchGetRoutineQuery = async <TData = Awaited<ReturnType<typeof getRoutine>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, routineId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetRoutineQueryOptions(routineId,options)
 
-export const getGetRoutineSuspenseQueryOptions = <
-	TData = Awaited<ReturnType<typeof getRoutine>>,
-	TError = ErrorType<void>,
->(
-	routineId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getRoutine>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
+  await queryClient.prefetchQuery(queryOptions);
 
-	const queryKey = queryOptions?.queryKey ?? getGetRoutineQueryKey(routineId);
-
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoutine>>> = ({
-		signal,
-	}) => getRoutine(routineId, requestOptions, signal);
-
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
-		Awaited<ReturnType<typeof getRoutine>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetRoutineSuspenseQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getRoutine>>
->;
-export type GetRoutineSuspenseQueryError = ErrorType<void>;
-
-export function useGetRoutineSuspense<
-	TData = Awaited<ReturnType<typeof getRoutine>>,
-	TError = ErrorType<void>,
->(
-	routineId: string,
-	options: {
-		query: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getRoutine>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetRoutineSuspense<
-	TData = Awaited<ReturnType<typeof getRoutine>>,
-	TError = ErrorType<void>,
->(
-	routineId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getRoutine>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetRoutineSuspense<
-	TData = Awaited<ReturnType<typeof getRoutine>>,
-	TError = ErrorType<void>,
->(
-	routineId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getRoutine>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary 루틴 상세 조회
- */
-
-export function useGetRoutineSuspense<
-	TData = Awaited<ReturnType<typeof getRoutine>>,
-	TError = ErrorType<void>,
->(
-	routineId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getRoutine>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetRoutineSuspenseQueryOptions(routineId, options);
-
-	const query = useSuspenseQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
+  return queryClient;
 }
 
-export const getGetRoutineSuspenseInfiniteQueryOptions = <
-	TData = InfiniteData<Awaited<ReturnType<typeof getRoutine>>>,
-	TError = ErrorType<void>,
->(
-	routineId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getRoutine>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
+
+
+export const getGetRoutineSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getRoutine>>, TError = ErrorType<void>>(routineId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey =
-		queryOptions?.queryKey ?? getGetRoutineInfiniteQueryKey(routineId);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoutine>>> = ({
-		signal,
-	}) => getRoutine(routineId, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetRoutineQueryKey(routineId);
 
-	return {
-		queryKey,
-		queryFn,
-		...queryOptions,
-	} as UseSuspenseInfiniteQueryOptions<
-		Awaited<ReturnType<typeof getRoutine>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
+  
 
-export type GetRoutineSuspenseInfiniteQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getRoutine>>
->;
-export type GetRoutineSuspenseInfiniteQueryError = ErrorType<void>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoutine>>> = ({ signal }) => getRoutine(routineId, requestOptions, signal);
 
-export function useGetRoutineSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getRoutine>>>,
-	TError = ErrorType<void>,
->(
-	routineId: string,
-	options: {
-		query: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getRoutine>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetRoutineSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getRoutine>>>,
-	TError = ErrorType<void>,
->(
-	routineId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getRoutine>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetRoutineSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getRoutine>>>,
-	TError = ErrorType<void>,
->(
-	routineId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getRoutine>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetRoutineSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getRoutine>>>
+export type GetRoutineSuspenseQueryError = ErrorType<void>
+
+
+export function useGetRoutineSuspense<TData = Awaited<ReturnType<typeof getRoutine>>, TError = ErrorType<void>>(
+ routineId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoutineSuspense<TData = Awaited<ReturnType<typeof getRoutine>>, TError = ErrorType<void>>(
+ routineId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoutineSuspense<TData = Awaited<ReturnType<typeof getRoutine>>, TError = ErrorType<void>>(
+ routineId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary 루틴 상세 조회
  */
 
-export function useGetRoutineSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getRoutine>>>,
-	TError = ErrorType<void>,
->(
-	routineId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getRoutine>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetRoutineSuspenseInfiniteQueryOptions(
-		routineId,
-		options,
-	);
+export function useGetRoutineSuspense<TData = Awaited<ReturnType<typeof getRoutine>>, TError = ErrorType<void>>(
+ routineId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useSuspenseInfiniteQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
+  const queryOptions = getGetRoutineSuspenseQueryOptions(routineId,options)
 
-	query.queryKey = queryOptions.queryKey;
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-	return query;
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetRoutineSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getRoutine>>>, TError = ErrorType<void>>(routineId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetRoutineInfiniteQueryKey(routineId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getRoutine>>> = ({ signal }) => getRoutine(routineId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetRoutineSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getRoutine>>>
+export type GetRoutineSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetRoutineSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getRoutine>>>, TError = ErrorType<void>>(
+ routineId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoutineSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getRoutine>>>, TError = ErrorType<void>>(
+ routineId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetRoutineSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getRoutine>>>, TError = ErrorType<void>>(
+ routineId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 루틴 상세 조회
+ */
+
+export function useGetRoutineSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getRoutine>>>, TError = ErrorType<void>>(
+ routineId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetRoutineSuspenseInfiniteQueryOptions(routineId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
 
 /**
  * @summary 루틴 상세 조회
  */
-export const prefetchGetRoutineInfiniteQuery = async <
-	TData = Awaited<ReturnType<typeof getRoutine>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	routineId: string,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getRoutine>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetRoutineSuspenseInfiniteQueryOptions(
-		routineId,
-		options,
-	);
+export const prefetchGetRoutineInfiniteQuery = async <TData = Awaited<ReturnType<typeof getRoutine>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, routineId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getRoutine>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetRoutineSuspenseInfiniteQueryOptions(routineId,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
 
 /**
  * 루틴 정보를 수정합니다. 현재 Space가 소유한 루틴만 수정 가능합니다.
  * @summary 루틴 수정
  */
 export const updateRoutine = (
-	routineId: string,
-	updateRoutineDto: BodyType<UpdateRoutineDto>,
-	options?: SecondParameter<typeof customInstance>,
-) => {
-	return customInstance<UpdateRoutine200AllOf>(
-		{
-			url: `/api/v1/routines/${routineId}`,
-			method: "PATCH",
-			headers: { "Content-Type": "application/json" },
-			data: updateRoutineDto,
-		},
-		options,
-	);
-};
+    routineId: string,
+    updateRoutineDto: BodyType<UpdateRoutineDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UpdateRoutine200AllOf>(
+      {url: `/api/v1/routines/${routineId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateRoutineDto
+    },
+      options);
+    }
+  
 
-export const getUpdateRoutineMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof updateRoutine>>,
-		TError,
-		{ routineId: string; data: BodyType<UpdateRoutineDto> },
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof updateRoutine>>,
-	TError,
-	{ routineId: string; data: BodyType<UpdateRoutineDto> },
-	TContext
-> => {
-	const mutationKey = ["updateRoutine"];
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof updateRoutine>>,
-		{ routineId: string; data: BodyType<UpdateRoutineDto> }
-	> = (props) => {
-		const { routineId, data } = props ?? {};
+export const getUpdateRoutineMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateRoutine>>, TError,{routineId: string;data: BodyType<UpdateRoutineDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateRoutine>>, TError,{routineId: string;data: BodyType<UpdateRoutineDto>}, TContext> => {
 
-		return updateRoutine(routineId, data, requestOptions);
-	};
+const mutationKey = ['updateRoutine'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-	return { mutationFn, ...mutationOptions };
-};
+      
 
-export type UpdateRoutineMutationResult = NonNullable<
-	Awaited<ReturnType<typeof updateRoutine>>
->;
-export type UpdateRoutineMutationBody = BodyType<UpdateRoutineDto>;
-export type UpdateRoutineMutationError = ErrorType<void>;
 
-/**
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateRoutine>>, {routineId: string;data: BodyType<UpdateRoutineDto>}> = (props) => {
+          const {routineId,data} = props ?? {};
+
+          return  updateRoutine(routineId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateRoutineMutationResult = NonNullable<Awaited<ReturnType<typeof updateRoutine>>>
+    export type UpdateRoutineMutationBody = BodyType<UpdateRoutineDto>
+    export type UpdateRoutineMutationError = ErrorType<void>
+
+    /**
  * @summary 루틴 수정
  */
-export const useUpdateRoutine = <TError = ErrorType<void>, TContext = unknown>(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof updateRoutine>>,
-			TError,
-			{ routineId: string; data: BodyType<UpdateRoutineDto> },
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof updateRoutine>>,
-	TError,
-	{ routineId: string; data: BodyType<UpdateRoutineDto> },
-	TContext
-> => {
-	const mutationOptions = getUpdateRoutineMutationOptions(options);
+export const useUpdateRoutine = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateRoutine>>, TError,{routineId: string;data: BodyType<UpdateRoutineDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateRoutine>>,
+        TError,
+        {routineId: string;data: BodyType<UpdateRoutineDto>},
+        TContext
+      > => {
 
-	return useMutation(mutationOptions, queryClient);
-};
-/**
+      const mutationOptions = getUpdateRoutineMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * 루틴을 삭제합니다. Program에서 사용 중인 루틴은 삭제할 수 없습니다.
  * @summary 루틴 삭제
  */
 export const deleteRoutine = (
-	routineId: string,
-	options?: SecondParameter<typeof customInstance>,
-) => {
-	return customInstance<unknown>(
-		{ url: `/api/v1/routines/${routineId}`, method: "DELETE" },
-		options,
-	);
-};
+    routineId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<unknown>(
+      {url: `/api/v1/routines/${routineId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
 
-export const getDeleteRoutineMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof deleteRoutine>>,
-		TError,
-		{ routineId: string },
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof deleteRoutine>>,
-	TError,
-	{ routineId: string },
-	TContext
-> => {
-	const mutationKey = ["deleteRoutine"];
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof deleteRoutine>>,
-		{ routineId: string }
-	> = (props) => {
-		const { routineId } = props ?? {};
+export const getDeleteRoutineMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteRoutine>>, TError,{routineId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteRoutine>>, TError,{routineId: string}, TContext> => {
 
-		return deleteRoutine(routineId, requestOptions);
-	};
+const mutationKey = ['deleteRoutine'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-	return { mutationFn, ...mutationOptions };
-};
+      
 
-export type DeleteRoutineMutationResult = NonNullable<
-	Awaited<ReturnType<typeof deleteRoutine>>
->;
 
-export type DeleteRoutineMutationError = ErrorType<void>;
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteRoutine>>, {routineId: string}> = (props) => {
+          const {routineId} = props ?? {};
 
-/**
+          return  deleteRoutine(routineId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteRoutineMutationResult = NonNullable<Awaited<ReturnType<typeof deleteRoutine>>>
+    
+    export type DeleteRoutineMutationError = ErrorType<void>
+
+    /**
  * @summary 루틴 삭제
  */
-export const useDeleteRoutine = <TError = ErrorType<void>, TContext = unknown>(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof deleteRoutine>>,
-			TError,
-			{ routineId: string },
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof deleteRoutine>>,
-	TError,
-	{ routineId: string },
-	TContext
-> => {
-	const mutationOptions = getDeleteRoutineMutationOptions(options);
+export const useDeleteRoutine = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteRoutine>>, TError,{routineId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteRoutine>>,
+        TError,
+        {routineId: string},
+        TContext
+      > => {
 
-	return useMutation(mutationOptions, queryClient);
-};
+      const mutationOptions = getDeleteRoutineMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    

@@ -347,7 +347,7 @@ claims: {
   "spaces": [
     {
       "spaceId": "space-uuid",
-      "groundName": "System Ground"
+      "fitnessCenterName": "System Fitness Center"
     }
   ]
 }

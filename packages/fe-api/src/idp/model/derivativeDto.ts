@@ -14,54 +14,54 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { DerivativeKind } from "./derivativeKind";
+import type { DerivativeKind } from './derivativeKind';
 
 export interface DerivativeDto {
-	/** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
-	id: string;
-	createdAt: string;
-	updatedAt: string;
-	/** @nullable */
-	removedAt: string | null;
-	/**
-	 * 소속 Space ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	spaceId: string;
-	/**
-	 * 생성자 ID
-	 * @nullable
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	createdById?: string | null;
-	/**
-	 * 원본 에셋 ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	assetId: string;
-	/** 파생 리소스 종류 (THUMBNAIL, PREVIEW, TRANSCODE, TEXT) */
-	kind: DerivativeKind;
-	/** 프로필명 (예: thumbnail-256, preview-1080p) */
-	profile: string;
-	/** 스토리지 저장 키 */
-	storageKey: string;
-	/** MIME 타입 */
-	mimeType: string;
-	/** 파일 크기 (바이트) */
-	sizeBytes: number;
-	/**
-	 * 너비 (이미지/비디오)
-	 * @nullable
-	 */
-	width?: number | null;
-	/**
-	 * 높이 (이미지/비디오)
-	 * @nullable
-	 */
-	height?: number | null;
-	/**
-	 * 재생 시간 (밀리초, 비디오)
-	 * @nullable
-	 */
-	durationMs?: number | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  removedAt: string | null;
+  /**
+   * 소속 Space ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  spaceId: string;
+  /**
+   * 생성자 ID
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  createdById?: string | null;
+  /**
+   * 원본 에셋 ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  assetId: string;
+  /** 파생 리소스 종류 (THUMBNAIL, PREVIEW, TRANSCODE, TEXT) */
+  kind: DerivativeKind;
+  /** 프로필명 (예: thumbnail-256, preview-1080p) */
+  profile: string;
+  /** 스토리지 저장 키 */
+  storageKey: string;
+  /** MIME 타입 */
+  mimeType: string;
+  /** 파일 크기 (바이트) */
+  sizeBytes: number;
+  /**
+   * 너비 (이미지/비디오)
+   * @nullable
+   */
+  width?: number | null;
+  /**
+   * 높이 (이미지/비디오)
+   * @nullable
+   */
+  height?: number | null;
+  /**
+   * 재생 시간 (밀리초, 비디오)
+   * @nullable
+   */
+  durationMs?: number | null;
 }

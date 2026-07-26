@@ -86,7 +86,7 @@ export class TestDatabase {
 				"User",
 				"Tenant",
 				"Space",
-				"Ground",
+				"FitnessCenter",
 				"Role",
 				"Category",
 				"Exercise",

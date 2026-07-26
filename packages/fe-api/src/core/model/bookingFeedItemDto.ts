@@ -14,89 +14,88 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-
-import type { BookingFeedItemDtoMyReservationStatus } from "./bookingFeedItemDtoMyReservationStatus";
-import type { ReservationAvailabilityStatus } from "./reservationAvailabilityStatus";
+import type { ReservationAvailabilityStatus } from './reservationAvailabilityStatus';
+import type { BookingFeedItemDtoMyReservationStatus } from './bookingFeedItemDtoMyReservationStatus';
 
 export interface BookingFeedItemDto {
-	/** 피드 항목 ID */
-	feedItemId: string;
-	/** 일자(YYYY-MM-DD) */
-	date: string;
-	/** 시작 시각 */
-	startsAt: string;
-	/** 종료 시각 */
-	endsAt: string;
-	/**
-	 * 타임라인 ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	timelineId: string;
-	/**
-	 * 세션 ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	sessionId: string;
-	/**
-	 * 프로그램 ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	programId: string;
-	/** 타임라인 이름 */
-	timelineName: string;
-	/** 세션 이름 */
-	sessionName: string;
-	/** 프로그램 이름 */
-	programName: string;
-	/**
-	 * 코치 이름
-	 * @nullable
-	 */
-	coachName?: string | null;
-	/**
-	 * 정원
-	 * @minimum 0
-	 */
-	capacity: number;
-	/**
-	 * 확정 예약 수
-	 * @minimum 0
-	 */
-	confirmedCount: number;
-	/**
-	 * 예약 가능 좌석 수
-	 * @minimum 0
-	 */
-	availableSeatCount: number;
-	/**
-	 * 대기 예약 수
-	 * @minimum 0
-	 */
-	waitlistCount: number;
-	/** 예약 가능 상태 */
-	availabilityStatus: ReservationAvailabilityStatus;
-	/**
-	 * 내 예약 상태
-	 * @nullable
-	 */
-	myReservationStatus?: BookingFeedItemDtoMyReservationStatus;
-	/** CTA 라벨 */
-	ctaLabel: string;
-	/**
-	 * 취소 가능 마감 시각
-	 * @nullable
-	 */
-	cancelableUntilAt: string | null;
-	/**
-	 * 난이도
-	 * @nullable
-	 */
-	level?: string | null;
-	/**
-	 * 루틴 라벨 스냅샷
-	 * @nullable
-	 */
-	routineLabelSnapshot?: string | null;
-	/** 운동 미리보기 */
-	previewExerciseNames?: string[];
+  /** 피드 항목 ID */
+  feedItemId: string;
+  /** 일자(YYYY-MM-DD) */
+  date: string;
+  /** 시작 시각 */
+  startsAt: string;
+  /** 종료 시각 */
+  endsAt: string;
+  /**
+   * 타임라인 ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  timelineId: string;
+  /**
+   * 세션 ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  sessionId: string;
+  /**
+   * 프로그램 ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  programId: string;
+  /** 타임라인 이름 */
+  timelineName: string;
+  /** 세션 이름 */
+  sessionName: string;
+  /** 프로그램 이름 */
+  programName: string;
+  /**
+   * 코치 이름
+   * @nullable
+   */
+  coachName?: string | null;
+  /**
+   * 정원
+   * @minimum 0
+   */
+  capacity: number;
+  /**
+   * 확정 예약 수
+   * @minimum 0
+   */
+  confirmedCount: number;
+  /**
+   * 예약 가능 좌석 수
+   * @minimum 0
+   */
+  availableSeatCount: number;
+  /**
+   * 대기 예약 수
+   * @minimum 0
+   */
+  waitlistCount: number;
+  /** 예약 가능 상태 */
+  availabilityStatus: ReservationAvailabilityStatus;
+  /**
+   * 내 예약 상태
+   * @nullable
+   */
+  myReservationStatus?: BookingFeedItemDtoMyReservationStatus;
+  /** CTA 라벨 */
+  ctaLabel: string;
+  /**
+   * 취소 가능 마감 시각
+   * @nullable
+   */
+  cancelableUntilAt: string | null;
+  /**
+   * 난이도
+   * @nullable
+   */
+  level?: string | null;
+  /**
+   * 루틴 라벨 스냅샷
+   * @nullable
+   */
+  routineLabelSnapshot?: string | null;
+  /** 운동 미리보기 */
+  previewExerciseNames?: string[];
 }

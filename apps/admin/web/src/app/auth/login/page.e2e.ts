@@ -60,19 +60,33 @@ test.describe("로그인 페이지 테스트 @real", () => {
 					}
 
 					const data = JSON.parse(value) as {
-						accessToken?: string;
-						refreshToken?: string;
-						sessionId?: string;
+						account?: {
+							version?: unknown;
+						};
+						authSession?: {
+							accessToken?: unknown;
+							refreshToken?: unknown;
+							sessionId?: unknown;
+						};
 					};
+					const authSession = data.authSession;
 
 					return {
-						hasAccessToken: Boolean(data.accessToken),
-						hasRefreshToken: Boolean(data.refreshToken),
-						hasSessionId: Boolean(data.sessionId),
+						accountVersion: data.account?.version ?? null,
+						hasAccessToken:
+							typeof authSession?.accessToken === "string" &&
+							authSession.accessToken.length > 0,
+						hasRefreshToken:
+							typeof authSession?.refreshToken === "string" &&
+							authSession.refreshToken.length > 0,
+						hasSessionId:
+							typeof authSession?.sessionId === "string" &&
+							authSession.sessionId.length > 0,
 					};
 				}),
 			)
 			.toEqual({
+				accountVersion: 2,
 				hasAccessToken: true,
 				hasRefreshToken: true,
 				hasSessionId: true,

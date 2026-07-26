@@ -128,7 +128,8 @@ function mapReviewDetail(
 	return {
 		id: request.id,
 		status: request.status,
-		spaceName: request.space?.ground?.name ?? request.spaceId,
+		spaceName:
+			request.space?.fitnessCenter?.name ?? request.spaceId,
 		roleName:
 			request.requestedRole?.displayName ??
 			request.requestedRole?.name ??

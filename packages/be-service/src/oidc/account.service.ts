@@ -114,13 +114,10 @@ export class AccountService {
 				roleDisplayName: t.role?.displayName,
 				isSystemRole: t.role?.isSystem,
 			})),
-			spaces: tenants?.map((t) => {
-				const primaryGround = t.space?.company?.ground;
-				return {
-					spaceId: t.spaceId,
-					groundName: primaryGround?.name,
-				};
-			}),
+			spaces: tenants?.map((t) => ({
+				spaceId: t.spaceId,
+				fitnessCenterName: t.space?.fitnessCenter?.name,
+			})),
 		};
 	}
 

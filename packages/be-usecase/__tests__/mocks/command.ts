@@ -1,3 +1,22 @@
+export class CreateSpaceCommand {
+	constructor(input: Record<string, unknown>) {
+		Object.assign(this, input);
+	}
+}
+
+export class GetSpaceFitnessCenterQuery {
+	constructor(readonly spaceId: string) {}
+}
+
+export class UpdateSpaceFitnessCenterCommand {
+	constructor(
+		readonly spaceId: string,
+		input: Record<string, unknown>,
+	) {
+		Object.assign(this, input);
+	}
+}
+
 export class NativeLoginCommand {
 	constructor(
 		readonly input: { email: string; password: string },

@@ -14,996 +14,603 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-
-import type {
-	DataTag,
-	DefinedInitialDataOptions,
-	DefinedUseQueryResult,
-	InfiniteData,
-	MutationFunction,
-	QueryClient,
-	QueryFunction,
-	QueryKey,
-	UndefinedInitialDataOptions,
-	UseMutationOptions,
-	UseMutationResult,
-	UseQueryOptions,
-	UseQueryResult,
-	UseSuspenseInfiniteQueryOptions,
-	UseSuspenseInfiniteQueryResult,
-	UseSuspenseQueryOptions,
-	UseSuspenseQueryResult,
-} from "@tanstack/react-query";
 import {
-	useMutation,
-	useQuery,
-	useSuspenseInfiniteQuery,
-	useSuspenseQuery,
-} from "@tanstack/react-query";
-import type { BodyType, ErrorType } from "../../libs/customAxios";
-
-import { customInstance } from "../../libs/customAxios";
+  useMutation,
+  useQuery,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery
+} from '@tanstack/react-query';
 import type {
-	ArchiveServiceDocument200AllOf,
-	CreateServiceDocument201AllOf,
-	CreateServiceDocumentDto,
-	GetServiceDocuments200AllOf,
-	GetServiceDocumentsParams,
-	PublishServiceDocument200AllOf,
-	UpdateServiceDocument200AllOf,
-	UpdateServiceDocumentDto,
-} from ".././model";
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  InfiniteData,
+  MutationFunction,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult,
+  UseSuspenseInfiniteQueryOptions,
+  UseSuspenseInfiniteQueryResult,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult
+} from '@tanstack/react-query';
+
+import type {
+  ArchiveServiceDocument200AllOf,
+  CreateServiceDocument201AllOf,
+  CreateServiceDocumentDto,
+  GetServiceDocuments200AllOf,
+  GetServiceDocumentsParams,
+  PublishServiceDocument200AllOf,
+  UpdateServiceDocument200AllOf,
+  UpdateServiceDocumentDto
+} from '.././model';
+
+import { customInstance } from '../../libs/customAxios';
+import type { ErrorType , BodyType } from '../../libs/customAxios';
+
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * 약관, 개인정보처리방침, 마케팅 동의 등 서비스 문서 목록을 조회합니다.
  * @summary 서비스 문서 목록 조회
  */
 export const getServiceDocuments = (
-	params?: GetServiceDocumentsParams,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    params?: GetServiceDocumentsParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<GetServiceDocuments200AllOf>(
-		{ url: `/api/v1/service-documents`, method: "GET", params, signal },
-		options,
-	);
-};
+      
+      
+      return customInstance<GetServiceDocuments200AllOf>(
+      {url: `/api/v1/service-documents`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
 
-export const getGetServiceDocumentsQueryKey = (
-	params?: GetServiceDocumentsParams,
+
+
+export const getGetServiceDocumentsQueryKey = (params?: GetServiceDocumentsParams,) => {
+    return [
+    `/api/v1/service-documents`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+export const getGetServiceDocumentsInfiniteQueryKey = (params?: GetServiceDocumentsParams,) => {
+    return [
+    'infinite', `/api/v1/service-documents`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetServiceDocumentsQueryOptions = <TData = Awaited<ReturnType<typeof getServiceDocuments>>, TError = ErrorType<void>>(params?: GetServiceDocumentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getServiceDocuments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-	return [`/api/v1/service-documents`, ...(params ? [params] : [])] as const;
-};
 
-export const getGetServiceDocumentsInfiniteQueryKey = (
-	params?: GetServiceDocumentsParams,
-) => {
-	return [
-		"infinite",
-		`/api/v1/service-documents`,
-		...(params ? [params] : []),
-	] as const;
-};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-export const getGetServiceDocumentsQueryOptions = <
-	TData = Awaited<ReturnType<typeof getServiceDocuments>>,
-	TError = ErrorType<void>,
->(
-	params?: GetServiceDocumentsParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getServiceDocuments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
+  const queryKey =  queryOptions?.queryKey ?? getGetServiceDocumentsQueryKey(params);
 
-	const queryKey =
-		queryOptions?.queryKey ?? getGetServiceDocumentsQueryKey(params);
+  
 
-	const queryFn: QueryFunction<
-		Awaited<ReturnType<typeof getServiceDocuments>>
-	> = ({ signal }) => getServiceDocuments(params, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getServiceDocuments>>> = ({ signal }) => getServiceDocuments(params, requestOptions, signal);
 
-	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-		Awaited<ReturnType<typeof getServiceDocuments>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
+      
 
-export type GetServiceDocumentsQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getServiceDocuments>>
->;
-export type GetServiceDocumentsQueryError = ErrorType<void>;
+      
 
-export function useGetServiceDocuments<
-	TData = Awaited<ReturnType<typeof getServiceDocuments>>,
-	TError = ErrorType<void>,
->(
-	params: undefined | GetServiceDocumentsParams,
-	options: {
-		query: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getServiceDocuments>>,
-				TError,
-				TData
-			>
-		> &
-			Pick<
-				DefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getServiceDocuments>>,
-					TError,
-					Awaited<ReturnType<typeof getServiceDocuments>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetServiceDocuments<
-	TData = Awaited<ReturnType<typeof getServiceDocuments>>,
-	TError = ErrorType<void>,
->(
-	params?: GetServiceDocumentsParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getServiceDocuments>>,
-				TError,
-				TData
-			>
-		> &
-			Pick<
-				UndefinedInitialDataOptions<
-					Awaited<ReturnType<typeof getServiceDocuments>>,
-					TError,
-					Awaited<ReturnType<typeof getServiceDocuments>>
-				>,
-				"initialData"
-			>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetServiceDocuments<
-	TData = Awaited<ReturnType<typeof getServiceDocuments>>,
-	TError = ErrorType<void>,
->(
-	params?: GetServiceDocumentsParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getServiceDocuments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getServiceDocuments>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetServiceDocumentsQueryResult = NonNullable<Awaited<ReturnType<typeof getServiceDocuments>>>
+export type GetServiceDocumentsQueryError = ErrorType<void>
+
+
+export function useGetServiceDocuments<TData = Awaited<ReturnType<typeof getServiceDocuments>>, TError = ErrorType<void>>(
+ params: undefined |  GetServiceDocumentsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getServiceDocuments>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getServiceDocuments>>,
+          TError,
+          Awaited<ReturnType<typeof getServiceDocuments>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetServiceDocuments<TData = Awaited<ReturnType<typeof getServiceDocuments>>, TError = ErrorType<void>>(
+ params?: GetServiceDocumentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getServiceDocuments>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getServiceDocuments>>,
+          TError,
+          Awaited<ReturnType<typeof getServiceDocuments>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetServiceDocuments<TData = Awaited<ReturnType<typeof getServiceDocuments>>, TError = ErrorType<void>>(
+ params?: GetServiceDocumentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getServiceDocuments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary 서비스 문서 목록 조회
  */
 
-export function useGetServiceDocuments<
-	TData = Awaited<ReturnType<typeof getServiceDocuments>>,
-	TError = ErrorType<void>,
->(
-	params?: GetServiceDocumentsParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getServiceDocuments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetServiceDocumentsQueryOptions(params, options);
+export function useGetServiceDocuments<TData = Awaited<ReturnType<typeof getServiceDocuments>>, TError = ErrorType<void>>(
+ params?: GetServiceDocumentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getServiceDocuments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-		TData,
-		TError
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const queryOptions = getGetServiceDocumentsQueryOptions(params,options)
 
-	query.queryKey = queryOptions.queryKey;
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-	return query;
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
 
 /**
  * @summary 서비스 문서 목록 조회
  */
-export const prefetchGetServiceDocumentsQuery = async <
-	TData = Awaited<ReturnType<typeof getServiceDocuments>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	params?: GetServiceDocumentsParams,
-	options?: {
-		query?: Partial<
-			UseQueryOptions<
-				Awaited<ReturnType<typeof getServiceDocuments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetServiceDocumentsQueryOptions(params, options);
+export const prefetchGetServiceDocumentsQuery = async <TData = Awaited<ReturnType<typeof getServiceDocuments>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, params?: GetServiceDocumentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getServiceDocuments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetServiceDocumentsQueryOptions(params,options)
 
-export const getGetServiceDocumentsSuspenseQueryOptions = <
-	TData = Awaited<ReturnType<typeof getServiceDocuments>>,
-	TError = ErrorType<void>,
->(
-	params?: GetServiceDocumentsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getServiceDocuments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
+  await queryClient.prefetchQuery(queryOptions);
 
-	const queryKey =
-		queryOptions?.queryKey ?? getGetServiceDocumentsQueryKey(params);
-
-	const queryFn: QueryFunction<
-		Awaited<ReturnType<typeof getServiceDocuments>>
-	> = ({ signal }) => getServiceDocuments(params, requestOptions, signal);
-
-	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
-		Awaited<ReturnType<typeof getServiceDocuments>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetServiceDocumentsSuspenseQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getServiceDocuments>>
->;
-export type GetServiceDocumentsSuspenseQueryError = ErrorType<void>;
-
-export function useGetServiceDocumentsSuspense<
-	TData = Awaited<ReturnType<typeof getServiceDocuments>>,
-	TError = ErrorType<void>,
->(
-	params: undefined | GetServiceDocumentsParams,
-	options: {
-		query: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getServiceDocuments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetServiceDocumentsSuspense<
-	TData = Awaited<ReturnType<typeof getServiceDocuments>>,
-	TError = ErrorType<void>,
->(
-	params?: GetServiceDocumentsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getServiceDocuments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetServiceDocumentsSuspense<
-	TData = Awaited<ReturnType<typeof getServiceDocuments>>,
-	TError = ErrorType<void>,
->(
-	params?: GetServiceDocumentsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getServiceDocuments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary 서비스 문서 목록 조회
- */
-
-export function useGetServiceDocumentsSuspense<
-	TData = Awaited<ReturnType<typeof getServiceDocuments>>,
-	TError = ErrorType<void>,
->(
-	params?: GetServiceDocumentsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseQueryOptions<
-				Awaited<ReturnType<typeof getServiceDocuments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetServiceDocumentsSuspenseQueryOptions(
-		params,
-		options,
-	);
-
-	const query = useSuspenseQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
-
-	query.queryKey = queryOptions.queryKey;
-
-	return query;
+  return queryClient;
 }
 
-export const getGetServiceDocumentsSuspenseInfiniteQueryOptions = <
-	TData = InfiniteData<Awaited<ReturnType<typeof getServiceDocuments>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetServiceDocumentsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getServiceDocuments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
+
+
+export const getGetServiceDocumentsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getServiceDocuments>>, TError = ErrorType<void>>(params?: GetServiceDocumentsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getServiceDocuments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey =
-		queryOptions?.queryKey ?? getGetServiceDocumentsInfiniteQueryKey(params);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-	const queryFn: QueryFunction<
-		Awaited<ReturnType<typeof getServiceDocuments>>
-	> = ({ signal }) => getServiceDocuments(params, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetServiceDocumentsQueryKey(params);
 
-	return {
-		queryKey,
-		queryFn,
-		...queryOptions,
-	} as UseSuspenseInfiniteQueryOptions<
-		Awaited<ReturnType<typeof getServiceDocuments>>,
-		TError,
-		TData
-	> & { queryKey: DataTag<QueryKey, TData, TError> };
-};
+  
 
-export type GetServiceDocumentsSuspenseInfiniteQueryResult = NonNullable<
-	Awaited<ReturnType<typeof getServiceDocuments>>
->;
-export type GetServiceDocumentsSuspenseInfiniteQueryError = ErrorType<void>;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getServiceDocuments>>> = ({ signal }) => getServiceDocuments(params, requestOptions, signal);
 
-export function useGetServiceDocumentsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getServiceDocuments>>>,
-	TError = ErrorType<void>,
->(
-	params: undefined | GetServiceDocumentsParams,
-	options: {
-		query: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getServiceDocuments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetServiceDocumentsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getServiceDocuments>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetServiceDocumentsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getServiceDocuments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetServiceDocumentsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getServiceDocuments>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetServiceDocumentsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getServiceDocuments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-};
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getServiceDocuments>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetServiceDocumentsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getServiceDocuments>>>
+export type GetServiceDocumentsSuspenseQueryError = ErrorType<void>
+
+
+export function useGetServiceDocumentsSuspense<TData = Awaited<ReturnType<typeof getServiceDocuments>>, TError = ErrorType<void>>(
+ params: undefined |  GetServiceDocumentsParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getServiceDocuments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetServiceDocumentsSuspense<TData = Awaited<ReturnType<typeof getServiceDocuments>>, TError = ErrorType<void>>(
+ params?: GetServiceDocumentsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getServiceDocuments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetServiceDocumentsSuspense<TData = Awaited<ReturnType<typeof getServiceDocuments>>, TError = ErrorType<void>>(
+ params?: GetServiceDocumentsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getServiceDocuments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary 서비스 문서 목록 조회
  */
 
-export function useGetServiceDocumentsSuspenseInfinite<
-	TData = InfiniteData<Awaited<ReturnType<typeof getServiceDocuments>>>,
-	TError = ErrorType<void>,
->(
-	params?: GetServiceDocumentsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getServiceDocuments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseSuspenseInfiniteQueryResult<TData, TError> & {
-	queryKey: DataTag<QueryKey, TData, TError>;
-} {
-	const queryOptions = getGetServiceDocumentsSuspenseInfiniteQueryOptions(
-		params,
-		options,
-	);
+export function useGetServiceDocumentsSuspense<TData = Awaited<ReturnType<typeof getServiceDocuments>>, TError = ErrorType<void>>(
+ params?: GetServiceDocumentsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getServiceDocuments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-	const query = useSuspenseInfiniteQuery(
-		queryOptions,
-		queryClient,
-	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
-		queryKey: DataTag<QueryKey, TData, TError>;
-	};
+  const queryOptions = getGetServiceDocumentsSuspenseQueryOptions(params,options)
 
-	query.queryKey = queryOptions.queryKey;
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-	return query;
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetServiceDocumentsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getServiceDocuments>>>, TError = ErrorType<void>>(params?: GetServiceDocumentsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getServiceDocuments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetServiceDocumentsInfiniteQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getServiceDocuments>>> = ({ signal }) => getServiceDocuments(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getServiceDocuments>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetServiceDocumentsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getServiceDocuments>>>
+export type GetServiceDocumentsSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetServiceDocumentsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getServiceDocuments>>>, TError = ErrorType<void>>(
+ params: undefined |  GetServiceDocumentsParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getServiceDocuments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetServiceDocumentsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getServiceDocuments>>>, TError = ErrorType<void>>(
+ params?: GetServiceDocumentsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getServiceDocuments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetServiceDocumentsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getServiceDocuments>>>, TError = ErrorType<void>>(
+ params?: GetServiceDocumentsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getServiceDocuments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 서비스 문서 목록 조회
+ */
+
+export function useGetServiceDocumentsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getServiceDocuments>>>, TError = ErrorType<void>>(
+ params?: GetServiceDocumentsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getServiceDocuments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetServiceDocumentsSuspenseInfiniteQueryOptions(params,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
 }
 
 /**
  * @summary 서비스 문서 목록 조회
  */
-export const prefetchGetServiceDocumentsInfiniteQuery = async <
-	TData = Awaited<ReturnType<typeof getServiceDocuments>>,
-	TError = ErrorType<void>,
->(
-	queryClient: QueryClient,
-	params?: GetServiceDocumentsParams,
-	options?: {
-		query?: Partial<
-			UseSuspenseInfiniteQueryOptions<
-				Awaited<ReturnType<typeof getServiceDocuments>>,
-				TError,
-				TData
-			>
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-): Promise<QueryClient> => {
-	const queryOptions = getGetServiceDocumentsSuspenseInfiniteQueryOptions(
-		params,
-		options,
-	);
+export const prefetchGetServiceDocumentsInfiniteQuery = async <TData = Awaited<ReturnType<typeof getServiceDocuments>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, params?: GetServiceDocumentsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getServiceDocuments>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
-	await queryClient.prefetchInfiniteQuery(queryOptions);
+  ): Promise<QueryClient> => {
 
-	return queryClient;
-};
+  const queryOptions = getGetServiceDocumentsSuspenseInfiniteQueryOptions(params,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
 
 /**
  * 새 서비스 문서 버전을 DRAFT 상태로 등록합니다.
  * @summary 서비스 문서 등록
  */
 export const createServiceDocument = (
-	createServiceDocumentDto: BodyType<CreateServiceDocumentDto>,
-	options?: SecondParameter<typeof customInstance>,
-	signal?: AbortSignal,
+    createServiceDocumentDto: BodyType<CreateServiceDocumentDto>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-	return customInstance<CreateServiceDocument201AllOf>(
-		{
-			url: `/api/v1/service-documents`,
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			data: createServiceDocumentDto,
-			signal,
-		},
-		options,
-	);
-};
+      
+      
+      return customInstance<CreateServiceDocument201AllOf>(
+      {url: `/api/v1/service-documents`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createServiceDocumentDto, signal
+    },
+      options);
+    }
+  
 
-export const getCreateServiceDocumentMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof createServiceDocument>>,
-		TError,
-		{ data: BodyType<CreateServiceDocumentDto> },
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof createServiceDocument>>,
-	TError,
-	{ data: BodyType<CreateServiceDocumentDto> },
-	TContext
-> => {
-	const mutationKey = ["createServiceDocument"];
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof createServiceDocument>>,
-		{ data: BodyType<CreateServiceDocumentDto> }
-	> = (props) => {
-		const { data } = props ?? {};
+export const getCreateServiceDocumentMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createServiceDocument>>, TError,{data: BodyType<CreateServiceDocumentDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createServiceDocument>>, TError,{data: BodyType<CreateServiceDocumentDto>}, TContext> => {
 
-		return createServiceDocument(data, requestOptions);
-	};
+const mutationKey = ['createServiceDocument'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-	return { mutationFn, ...mutationOptions };
-};
+      
 
-export type CreateServiceDocumentMutationResult = NonNullable<
-	Awaited<ReturnType<typeof createServiceDocument>>
->;
-export type CreateServiceDocumentMutationBody =
-	BodyType<CreateServiceDocumentDto>;
-export type CreateServiceDocumentMutationError = ErrorType<void>;
 
-/**
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createServiceDocument>>, {data: BodyType<CreateServiceDocumentDto>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createServiceDocument(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateServiceDocumentMutationResult = NonNullable<Awaited<ReturnType<typeof createServiceDocument>>>
+    export type CreateServiceDocumentMutationBody = BodyType<CreateServiceDocumentDto>
+    export type CreateServiceDocumentMutationError = ErrorType<void>
+
+    /**
  * @summary 서비스 문서 등록
  */
-export const useCreateServiceDocument = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof createServiceDocument>>,
-			TError,
-			{ data: BodyType<CreateServiceDocumentDto> },
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof createServiceDocument>>,
-	TError,
-	{ data: BodyType<CreateServiceDocumentDto> },
-	TContext
-> => {
-	const mutationOptions = getCreateServiceDocumentMutationOptions(options);
+export const useCreateServiceDocument = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createServiceDocument>>, TError,{data: BodyType<CreateServiceDocumentDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createServiceDocument>>,
+        TError,
+        {data: BodyType<CreateServiceDocumentDto>},
+        TContext
+      > => {
 
-	return useMutation(mutationOptions, queryClient);
-};
-/**
+      const mutationOptions = getCreateServiceDocumentMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * DRAFT 상태의 서비스 문서를 수정합니다. 게시된 문서는 새 버전으로 등록해야 합니다.
  * @summary 서비스 문서 수정
  */
 export const updateServiceDocument = (
-	serviceDocumentId: string,
-	updateServiceDocumentDto: BodyType<UpdateServiceDocumentDto>,
-	options?: SecondParameter<typeof customInstance>,
-) => {
-	return customInstance<UpdateServiceDocument200AllOf>(
-		{
-			url: `/api/v1/service-documents/${serviceDocumentId}`,
-			method: "PATCH",
-			headers: { "Content-Type": "application/json" },
-			data: updateServiceDocumentDto,
-		},
-		options,
-	);
-};
+    serviceDocumentId: string,
+    updateServiceDocumentDto: BodyType<UpdateServiceDocumentDto>,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<UpdateServiceDocument200AllOf>(
+      {url: `/api/v1/service-documents/${serviceDocumentId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateServiceDocumentDto
+    },
+      options);
+    }
+  
 
-export const getUpdateServiceDocumentMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof updateServiceDocument>>,
-		TError,
-		{ serviceDocumentId: string; data: BodyType<UpdateServiceDocumentDto> },
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof updateServiceDocument>>,
-	TError,
-	{ serviceDocumentId: string; data: BodyType<UpdateServiceDocumentDto> },
-	TContext
-> => {
-	const mutationKey = ["updateServiceDocument"];
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof updateServiceDocument>>,
-		{ serviceDocumentId: string; data: BodyType<UpdateServiceDocumentDto> }
-	> = (props) => {
-		const { serviceDocumentId, data } = props ?? {};
+export const getUpdateServiceDocumentMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateServiceDocument>>, TError,{serviceDocumentId: string;data: BodyType<UpdateServiceDocumentDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateServiceDocument>>, TError,{serviceDocumentId: string;data: BodyType<UpdateServiceDocumentDto>}, TContext> => {
 
-		return updateServiceDocument(serviceDocumentId, data, requestOptions);
-	};
+const mutationKey = ['updateServiceDocument'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-	return { mutationFn, ...mutationOptions };
-};
+      
 
-export type UpdateServiceDocumentMutationResult = NonNullable<
-	Awaited<ReturnType<typeof updateServiceDocument>>
->;
-export type UpdateServiceDocumentMutationBody =
-	BodyType<UpdateServiceDocumentDto>;
-export type UpdateServiceDocumentMutationError = ErrorType<void>;
 
-/**
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateServiceDocument>>, {serviceDocumentId: string;data: BodyType<UpdateServiceDocumentDto>}> = (props) => {
+          const {serviceDocumentId,data} = props ?? {};
+
+          return  updateServiceDocument(serviceDocumentId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateServiceDocumentMutationResult = NonNullable<Awaited<ReturnType<typeof updateServiceDocument>>>
+    export type UpdateServiceDocumentMutationBody = BodyType<UpdateServiceDocumentDto>
+    export type UpdateServiceDocumentMutationError = ErrorType<void>
+
+    /**
  * @summary 서비스 문서 수정
  */
-export const useUpdateServiceDocument = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof updateServiceDocument>>,
-			TError,
-			{ serviceDocumentId: string; data: BodyType<UpdateServiceDocumentDto> },
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof updateServiceDocument>>,
-	TError,
-	{ serviceDocumentId: string; data: BodyType<UpdateServiceDocumentDto> },
-	TContext
-> => {
-	const mutationOptions = getUpdateServiceDocumentMutationOptions(options);
+export const useUpdateServiceDocument = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateServiceDocument>>, TError,{serviceDocumentId: string;data: BodyType<UpdateServiceDocumentDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateServiceDocument>>,
+        TError,
+        {serviceDocumentId: string;data: BodyType<UpdateServiceDocumentDto>},
+        TContext
+      > => {
 
-	return useMutation(mutationOptions, queryClient);
-};
-/**
+      const mutationOptions = getUpdateServiceDocumentMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * 서비스 문서를 소프트 삭제합니다.
  * @summary 서비스 문서 삭제
  */
 export const deleteServiceDocument = (
-	serviceDocumentId: string,
-	options?: SecondParameter<typeof customInstance>,
-) => {
-	return customInstance<unknown>(
-		{ url: `/api/v1/service-documents/${serviceDocumentId}`, method: "DELETE" },
-		options,
-	);
-};
+    serviceDocumentId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<unknown>(
+      {url: `/api/v1/service-documents/${serviceDocumentId}`, method: 'DELETE'
+    },
+      options);
+    }
+  
 
-export const getDeleteServiceDocumentMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof deleteServiceDocument>>,
-		TError,
-		{ serviceDocumentId: string },
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof deleteServiceDocument>>,
-	TError,
-	{ serviceDocumentId: string },
-	TContext
-> => {
-	const mutationKey = ["deleteServiceDocument"];
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof deleteServiceDocument>>,
-		{ serviceDocumentId: string }
-	> = (props) => {
-		const { serviceDocumentId } = props ?? {};
+export const getDeleteServiceDocumentMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteServiceDocument>>, TError,{serviceDocumentId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteServiceDocument>>, TError,{serviceDocumentId: string}, TContext> => {
 
-		return deleteServiceDocument(serviceDocumentId, requestOptions);
-	};
+const mutationKey = ['deleteServiceDocument'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-	return { mutationFn, ...mutationOptions };
-};
+      
 
-export type DeleteServiceDocumentMutationResult = NonNullable<
-	Awaited<ReturnType<typeof deleteServiceDocument>>
->;
 
-export type DeleteServiceDocumentMutationError = ErrorType<void>;
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteServiceDocument>>, {serviceDocumentId: string}> = (props) => {
+          const {serviceDocumentId} = props ?? {};
 
-/**
+          return  deleteServiceDocument(serviceDocumentId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteServiceDocumentMutationResult = NonNullable<Awaited<ReturnType<typeof deleteServiceDocument>>>
+    
+    export type DeleteServiceDocumentMutationError = ErrorType<void>
+
+    /**
  * @summary 서비스 문서 삭제
  */
-export const useDeleteServiceDocument = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof deleteServiceDocument>>,
-			TError,
-			{ serviceDocumentId: string },
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof deleteServiceDocument>>,
-	TError,
-	{ serviceDocumentId: string },
-	TContext
-> => {
-	const mutationOptions = getDeleteServiceDocumentMutationOptions(options);
+export const useDeleteServiceDocument = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteServiceDocument>>, TError,{serviceDocumentId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteServiceDocument>>,
+        TError,
+        {serviceDocumentId: string},
+        TContext
+      > => {
 
-	return useMutation(mutationOptions, queryClient);
-};
-/**
+      const mutationOptions = getDeleteServiceDocumentMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * 서비스 문서를 게시하고 같은 종류/플랫폼/로케일의 기존 게시 문서는 보관합니다.
  * @summary 서비스 문서 게시
  */
 export const publishServiceDocument = (
-	serviceDocumentId: string,
-	options?: SecondParameter<typeof customInstance>,
-) => {
-	return customInstance<PublishServiceDocument200AllOf>(
-		{
-			url: `/api/v1/service-documents/${serviceDocumentId}/publish`,
-			method: "PATCH",
-		},
-		options,
-	);
-};
+    serviceDocumentId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<PublishServiceDocument200AllOf>(
+      {url: `/api/v1/service-documents/${serviceDocumentId}/publish`, method: 'PATCH'
+    },
+      options);
+    }
+  
 
-export const getPublishServiceDocumentMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof publishServiceDocument>>,
-		TError,
-		{ serviceDocumentId: string },
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof publishServiceDocument>>,
-	TError,
-	{ serviceDocumentId: string },
-	TContext
-> => {
-	const mutationKey = ["publishServiceDocument"];
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof publishServiceDocument>>,
-		{ serviceDocumentId: string }
-	> = (props) => {
-		const { serviceDocumentId } = props ?? {};
+export const getPublishServiceDocumentMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof publishServiceDocument>>, TError,{serviceDocumentId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof publishServiceDocument>>, TError,{serviceDocumentId: string}, TContext> => {
 
-		return publishServiceDocument(serviceDocumentId, requestOptions);
-	};
+const mutationKey = ['publishServiceDocument'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-	return { mutationFn, ...mutationOptions };
-};
+      
 
-export type PublishServiceDocumentMutationResult = NonNullable<
-	Awaited<ReturnType<typeof publishServiceDocument>>
->;
 
-export type PublishServiceDocumentMutationError = ErrorType<void>;
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof publishServiceDocument>>, {serviceDocumentId: string}> = (props) => {
+          const {serviceDocumentId} = props ?? {};
 
-/**
+          return  publishServiceDocument(serviceDocumentId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PublishServiceDocumentMutationResult = NonNullable<Awaited<ReturnType<typeof publishServiceDocument>>>
+    
+    export type PublishServiceDocumentMutationError = ErrorType<void>
+
+    /**
  * @summary 서비스 문서 게시
  */
-export const usePublishServiceDocument = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof publishServiceDocument>>,
-			TError,
-			{ serviceDocumentId: string },
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof publishServiceDocument>>,
-	TError,
-	{ serviceDocumentId: string },
-	TContext
-> => {
-	const mutationOptions = getPublishServiceDocumentMutationOptions(options);
+export const usePublishServiceDocument = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof publishServiceDocument>>, TError,{serviceDocumentId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof publishServiceDocument>>,
+        TError,
+        {serviceDocumentId: string},
+        TContext
+      > => {
 
-	return useMutation(mutationOptions, queryClient);
-};
-/**
+      const mutationOptions = getPublishServiceDocumentMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * 서비스 문서를 ARCHIVED 상태로 전환합니다.
  * @summary 서비스 문서 보관
  */
 export const archiveServiceDocument = (
-	serviceDocumentId: string,
-	options?: SecondParameter<typeof customInstance>,
-) => {
-	return customInstance<ArchiveServiceDocument200AllOf>(
-		{
-			url: `/api/v1/service-documents/${serviceDocumentId}/archive`,
-			method: "PATCH",
-		},
-		options,
-	);
-};
+    serviceDocumentId: string,
+ options?: SecondParameter<typeof customInstance>,) => {
+      
+      
+      return customInstance<ArchiveServiceDocument200AllOf>(
+      {url: `/api/v1/service-documents/${serviceDocumentId}/archive`, method: 'PATCH'
+    },
+      options);
+    }
+  
 
-export const getArchiveServiceDocumentMutationOptions = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(options?: {
-	mutation?: UseMutationOptions<
-		Awaited<ReturnType<typeof archiveServiceDocument>>,
-		TError,
-		{ serviceDocumentId: string },
-		TContext
-	>;
-	request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-	Awaited<ReturnType<typeof archiveServiceDocument>>,
-	TError,
-	{ serviceDocumentId: string },
-	TContext
-> => {
-	const mutationKey = ["archiveServiceDocument"];
-	const { mutation: mutationOptions, request: requestOptions } = options
-		? options.mutation &&
-			"mutationKey" in options.mutation &&
-			options.mutation.mutationKey
-			? options
-			: { ...options, mutation: { ...options.mutation, mutationKey } }
-		: { mutation: { mutationKey }, request: undefined };
 
-	const mutationFn: MutationFunction<
-		Awaited<ReturnType<typeof archiveServiceDocument>>,
-		{ serviceDocumentId: string }
-	> = (props) => {
-		const { serviceDocumentId } = props ?? {};
+export const getArchiveServiceDocumentMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof archiveServiceDocument>>, TError,{serviceDocumentId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof archiveServiceDocument>>, TError,{serviceDocumentId: string}, TContext> => {
 
-		return archiveServiceDocument(serviceDocumentId, requestOptions);
-	};
+const mutationKey = ['archiveServiceDocument'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-	return { mutationFn, ...mutationOptions };
-};
+      
 
-export type ArchiveServiceDocumentMutationResult = NonNullable<
-	Awaited<ReturnType<typeof archiveServiceDocument>>
->;
 
-export type ArchiveServiceDocumentMutationError = ErrorType<void>;
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof archiveServiceDocument>>, {serviceDocumentId: string}> = (props) => {
+          const {serviceDocumentId} = props ?? {};
 
-/**
+          return  archiveServiceDocument(serviceDocumentId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ArchiveServiceDocumentMutationResult = NonNullable<Awaited<ReturnType<typeof archiveServiceDocument>>>
+    
+    export type ArchiveServiceDocumentMutationError = ErrorType<void>
+
+    /**
  * @summary 서비스 문서 보관
  */
-export const useArchiveServiceDocument = <
-	TError = ErrorType<void>,
-	TContext = unknown,
->(
-	options?: {
-		mutation?: UseMutationOptions<
-			Awaited<ReturnType<typeof archiveServiceDocument>>,
-			TError,
-			{ serviceDocumentId: string },
-			TContext
-		>;
-		request?: SecondParameter<typeof customInstance>;
-	},
-	queryClient?: QueryClient,
-): UseMutationResult<
-	Awaited<ReturnType<typeof archiveServiceDocument>>,
-	TError,
-	{ serviceDocumentId: string },
-	TContext
-> => {
-	const mutationOptions = getArchiveServiceDocumentMutationOptions(options);
+export const useArchiveServiceDocument = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof archiveServiceDocument>>, TError,{serviceDocumentId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof archiveServiceDocument>>,
+        TError,
+        {serviceDocumentId: string},
+        TContext
+      > => {
 
-	return useMutation(mutationOptions, queryClient);
-};
+      const mutationOptions = getArchiveServiceDocumentMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    

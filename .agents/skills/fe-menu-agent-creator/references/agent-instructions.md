@@ -96,7 +96,7 @@ Admin/Dashboard 앱의 **메뉴 시스템 컴포넌트**(Sidebar, BottomTab, FAB
     └── 권한 관리
 
 ✅ 올바른 구조 (도메인별 분리)
-├── 시설          ← Ground/Space 도메인
+├── 시설          ← Space/FitnessCenter 도메인
 ├── 사용자        ← User/Profile 도메인
 └── 역할/권한     ← Role/Ability 도메인
 ```
@@ -632,7 +632,7 @@ const NavigationPanel = observer(() => {
 | 9 | sessions | 세션 | Clock | Session | 세션 관리 |
 | 10 | programs | 프로그램 | ListTodo | Program | 프로그램 관리 |
 | 11 | routines | 루틴 | Repeat | Routine | 루틴 구성 관리 |
-| 12 | grounds | 시설 | Building | Ground, Space | 시설 정보, 프로그램 정의, 장비 |
+| 12 | spaces | 시설 | Building | Space, FitnessCenter | 공간별 시설 정보, 프로그램 정의, 장비 |
 | 13 | admins | 관리자 | UserCog | Admin | 관리자 목록 및 초대 관리 |
 | 14 | roles | 역할/권한 | Shield | Role, Ability | 역할 목록 및 권한 설정 |
 
@@ -823,15 +823,15 @@ const NavigationPanel = observer(() => {
 
 ---
 
-### 시설 (grounds)
+### 시설 (spaces)
 
 > 시설 정보, 프로그램 정의, 장비/시설물 관리
 
 | 2depth | 경로 | 설명 |
 |--------|------|------|
-| 시설 정보 | /grounds | 시설 기본 정보 |
-| 프로그램 정의 | /grounds/programs | 프로그램 템플릿 |
-| 장비/시설물 | /grounds/equipment | 장비 관리 |
+| 시설 정보 | /spaces | 공간별 시설 기본 정보 |
+| 프로그램 정의 | /spaces/programs | 프로그램 템플릿 |
+| 장비/시설물 | /spaces/equipment | 장비 관리 |
 
 ---
 
@@ -893,7 +893,7 @@ const NavigationPanel = observer(() => {
 | 5 | sessions | 세션 |
 | 6 | programs | 프로그램 |
 | 7 | routines | 루틴 |
-| 8 | grounds | 시설 |
+| 8 | spaces | 시설 |
 | 9 | admins | 관리자 |
 | 10 | roles | 역할/권한 |
 

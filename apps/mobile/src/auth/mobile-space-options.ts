@@ -46,7 +46,7 @@ export const toSpaceListItemInfo = (
   address: space.address,
   id: space.tenantId,
   imageSource: createSpaceImageSource(space),
-  name: space.groundName,
+  name: space.fitnessCenterName,
 });
 
 export const toSpaceListItemInfos = (

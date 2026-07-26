@@ -218,8 +218,13 @@ class SignUpRoutePageState {
 }
 
 const createSpaceOption = (space: SpaceDto): SignUpSpaceOption => {
-	const label = space.ground?.name ?? space.id;
-	const description = space.ground?.address ?? space.ground?.label ?? undefined;
+	const label =
+		space.fitnessCenter?.name ??
+		space.id;
+	const description =
+		space.fitnessCenter?.address ??
+		space.fitnessCenter?.label ??
+		undefined;
 
 	return {
 		value: space.id,

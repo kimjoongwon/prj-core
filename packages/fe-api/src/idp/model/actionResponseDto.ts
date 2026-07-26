@@ -14,45 +14,45 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { ActionResponseDtoConfig } from "./actionResponseDtoConfig";
+import type { ActionResponseDtoConfig } from './actionResponseDtoConfig';
 
 export interface ActionResponseDto {
-	/**
-	 * Action ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	id: string;
-	/** Action 이름 (create, read, read:masked:email 등) */
-	name: string;
-	/**
-	 * 표시명
-	 * @nullable
-	 */
-	displayName?: string | null;
-	/**
-	 * 설명
-	 * @nullable
-	 */
-	description?: string | null;
-	/**
-	 * 그룹 (crud, visibility, bulk, workflow)
-	 * @nullable
-	 */
-	group?: string | null;
-	/** 정렬 순서 */
-	order: number;
-	/** 시스템 여부 (시스템 기본 Action인지) */
-	isSystem: boolean;
-	/**
-	 * Action 설정 (마스킹, 포맷팅 등)
-	 * @nullable
-	 */
-	config?: ActionResponseDtoConfig;
-	/** 생성 일시 */
-	createdAt: string;
-	/**
-	 * 수정 일시
-	 * @nullable
-	 */
-	updatedAt?: string | null;
+  /**
+   * Action ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  id: string;
+  /** Action 이름 (create, read, read:masked:email 등) */
+  name: string;
+  /**
+   * 표시명
+   * @nullable
+   */
+  displayName?: string | null;
+  /**
+   * 설명
+   * @nullable
+   */
+  description?: string | null;
+  /**
+   * 그룹 (crud, visibility, bulk, workflow)
+   * @nullable
+   */
+  group?: string | null;
+  /** 정렬 순서 */
+  order: number;
+  /** 시스템 여부 (시스템 기본 Action인지) */
+  isSystem: boolean;
+  /**
+   * Action 설정 (마스킹, 포맷팅 등)
+   * @nullable
+   */
+  config?: ActionResponseDtoConfig;
+  /** 생성 일시 */
+  createdAt: string;
+  /**
+   * 수정 일시
+   * @nullable
+   */
+  updatedAt?: string | null;
 }

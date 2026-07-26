@@ -14,7 +14,12 @@ const activeTenant = {
 };
 const currentSpace = {
 	id: "space-current-id",
-	ground: { name: "Current Ground" },
+	fitnessCenter: {
+		name: "Current Fitness Center",
+		company: {
+			name: "Current Company",
+		},
+	},
 };
 
 function createDependencies(currentTenantId: string | null = activeTenant.id) {
@@ -27,7 +32,7 @@ function createDependencies(currentTenantId: string | null = activeTenant.id) {
 		get: jest.fn().mockReturnValue(user),
 	} as unknown as ClsService;
 	const spaces = {
-		findByIdsWithGround: jest.fn().mockResolvedValue([currentSpace]),
+		findByIdsWithFitnessCenter: jest.fn().mockResolvedValue([currentSpace]),
 	} as unknown as jest.Mocked<SpaceAggregate>;
 	const users = {
 		setCurrentTenant: jest.fn().mockResolvedValue(undefined),
@@ -37,7 +42,7 @@ function createDependencies(currentTenantId: string | null = activeTenant.id) {
 }
 
 describe("current-space use cases", () => {
-	it("저장된 활성 currentTenantId의 Space를 반환한다", async () => {
+	it("Given 저장된 활성 currentTenantId When 현재 Space를 조회하면 Then fitnessCenter.company 포함 Space를 반환한다", async () => {
 		const { cls, spaces } = createDependencies();
 		const useCase = new GetCurrentSpaceUseCase(cls, spaces);
 
@@ -47,7 +52,7 @@ describe("current-space use cases", () => {
 		});
 	});
 
-	it("currentTenantId가 없거나 접근할 수 없으면 null을 반환한다", async () => {
+	it("Given currentTenantId가 없거나 접근할 수 없음 When 현재 Space를 조회하면 Then null을 반환한다", async () => {
 		const noSelection = createDependencies(null);
 		const invalidSelection = createDependencies("tenant-invalid-id");
 
@@ -64,7 +69,7 @@ describe("current-space use cases", () => {
 		).resolves.toBeNull();
 	});
 
-	it("활성 Tenant 선택을 저장하고 선택된 Space를 반환한다", async () => {
+	it("Given 활성 Tenant 선택 요청 When 현재 Space를 설정하면 Then 선택된 fitnessCenter.company 포함 Space를 반환한다", async () => {
 		const { cls, spaces, users } = createDependencies(null);
 		const useCase = new SetCurrentSpaceUseCase(cls, spaces, users);
 
@@ -79,7 +84,7 @@ describe("current-space use cases", () => {
 		);
 	});
 
-	it("소유하지 않은 Tenant는 저장하지 않는다", async () => {
+	it("Given 소유하지 않은 Tenant When 현재 Space를 설정하면 Then 저장하지 않고 거부한다", async () => {
 		const { cls, spaces, users } = createDependencies(null);
 		const useCase = new SetCurrentSpaceUseCase(cls, spaces, users);
 

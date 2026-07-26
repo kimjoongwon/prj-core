@@ -2,13 +2,11 @@ import {
 	ClassField,
 	StringField,
 	StringFieldOptional,
-	UUIDField,
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
 import type { Company as CompanyEntity } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
-import { GroundDto } from "./ground.dto";
-import { SpaceDto } from "./space.dto";
+import { FitnessCenterDto } from "./fitness-center.dto";
 
 export class CompanyDto extends AbstractDto implements CompanyEntity {
 	@StringField()
@@ -29,15 +27,13 @@ export class CompanyDto extends AbstractDto implements CompanyEntity {
 	@StringField()
 	businessNo: string;
 
-	@UUIDField()
-	spaceId: string;
-
 	@UUIDFieldOptional({ nullable: true })
 	logoImageFileId: string | null;
 
-	@ClassField(() => SpaceDto, { required: false, nullable: true })
-	space?: SpaceDto | null;
-
-	@ClassField(() => GroundDto, { required: false, nullable: true })
-	ground?: GroundDto | null;
+	@ClassField(() => FitnessCenterDto, {
+		required: false,
+		each: true,
+		isArray: true,
+	})
+	fitnessCenters?: FitnessCenterDto[];
 }

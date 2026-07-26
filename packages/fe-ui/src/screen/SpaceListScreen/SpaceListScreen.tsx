@@ -24,7 +24,7 @@ const leftInputs: InputConfig[] = [
 	{
 		type: "search",
 		id: "search",
-		placeholder: "시설명, 사업자등록번호로 검색...",
+		placeholder: "피트니스 센터명, 사업자등록번호로 검색...",
 	},
 	{
 		type: "select",
@@ -48,17 +48,20 @@ export interface SpaceListScreenQueryStates extends DataGridQueryStates {
 	contentLanguageCode: string;
 }
 export type SpaceListScreenSetQueryStates = DataGridSetQueryStates;
+
+export type SpaceListScreenSpace = SpaceDto;
+
 export interface SpaceListScreenProps {
-	spaces?: SpaceDto[];
+	spaces?: SpaceListScreenSpace[];
 	totalCount: number;
 	isLoading: boolean;
 	queryStates: SpaceListScreenQueryStates;
 	setQueryStates: SpaceListScreenSetQueryStates;
 	onClickCreateButton: () => void;
-	onClickSpaceGroundName: (spaceId: string) => void;
+	onClickSpaceFitnessCenterName: (spaceId: string) => void;
 }
 function filterRows(
-	rows: SpaceDto[],
+	rows: SpaceListScreenSpace[],
 	search?: string,
 	contentLanguageCode?: string,
 ) {
@@ -68,7 +71,11 @@ function filterRows(
 			(!contentLanguageCode ||
 				row.contentLanguageCode === contentLanguageCode) &&
 			(searchKeyword.length === 0 ||
-				[row.ground?.name, row.ground?.businessNo, row.ground?.address]
+				[
+					row.fitnessCenter?.name,
+					row.fitnessCenter?.company?.businessNo,
+					row.fitnessCenter?.company?.address,
+				]
 					.filter(Boolean)
 					.some((value) => value!.toLowerCase().includes(searchKeyword))),
 	);
@@ -78,7 +85,7 @@ function SpacesScreenFallback() {
 		<div className="space-y-5">
 			<Screen.Header
 				title="공간 목록"
-				description="시스템에 등록된 공간과 시설 detail을 관리합니다."
+				description="시스템에 등록된 공간과 피트니스 센터 정보를 관리합니다."
 			/>
 			<SectionSurface className="h-32 rounded-2xl border-border/80 bg-surface">
 				<Section>
@@ -96,7 +103,7 @@ export const SpaceListScreen = observer(
 		queryStates,
 		setQueryStates,
 		onClickCreateButton,
-		onClickSpaceGroundName,
+		onClickSpaceFitnessCenterName,
 	}: SpaceListScreenProps) => {
 		const gridState = useLocalObservable(
 			() =>
@@ -117,8 +124,8 @@ export const SpaceListScreen = observer(
 		const totalCount = queryStates.search?.trim().length
 			? filteredRows.length
 			: totalSpaceCount;
-		const columns = buildSpaceTableColumns<SpaceDto>({
-			onClickSpaceGroundName,
+		const columns = buildSpaceTableColumns<SpaceListScreenSpace>({
+			onClickSpaceFitnessCenterName,
 		});
 		if (isLoading) {
 			return <SpacesScreenFallback />;
@@ -127,7 +134,7 @@ export const SpaceListScreen = observer(
 			<div className="space-y-5">
 				<Screen.Header
 					title="공간 목록"
-					description="시스템에 등록된 공간과 시설 detail을 관리합니다."
+					description="시스템에 등록된 공간과 피트니스 센터 정보를 관리합니다."
 					actions={
 						<Button
 							color="primary"

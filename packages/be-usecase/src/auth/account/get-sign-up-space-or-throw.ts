@@ -1,6 +1,6 @@
 import { SpaceAggregate } from "@cocrepo/aggregate";
 import { BadRequestException, NotFoundException } from "@nestjs/common";
-import { PLATFORM_GROUND_NAME } from "./platform-ground-name";
+import { PLATFORM_FITNESS_CENTER_NAME } from "./platform-fitness-center-name";
 import { SYSTEM_SPACE_ID } from "./system-space-id";
 
 export async function getSignUpSpaceOrThrow(
@@ -13,8 +13,9 @@ export async function getSignUpSpaceOrThrow(
 	}
 
 	try {
-		const ground = await spacesService.getGroundBySpaceId(spaceId);
-		if (ground.name === PLATFORM_GROUND_NAME) {
+		const fitnessCenter =
+			await spacesService.getFitnessCenterBySpaceId(spaceId);
+		if (fitnessCenter.name === PLATFORM_FITNESS_CENTER_NAME) {
 			throw new BadRequestException("SIGN_UP_SPACE_NOT_FOUND");
 		}
 	} catch (error) {

@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
+import * as SecureStore from "expo-secure-store";
 import SpaceSelectRoute from "@/app/select-space";
 import { mobileApiScope } from "@/auth/mobile-api-scope";
 
@@ -91,11 +92,16 @@ jest.mock("@cocrepo/mo-ui", () => {
 const branchSpace = {
   contentLanguageCode: "ko_KR",
   createdAt: "2026-05-17T00:00:00.000Z",
-  ground: {
+  fitnessCenter: {
     address: "서울 강남구 테헤란로",
+    company: {
+      address: "서울 강남구 테헤란로",
+      logoImageFileId: "company-logo-branch",
+      name: "F45",
+    },
     createdAt: "2026-05-17T00:00:00.000Z",
     email: "gangnam@example.com",
-    id: "ground-branch",
+    id: "fitness-center-branch",
     name: "강남점",
     phone: "02-0000-0000",
     removedAt: null,
@@ -110,9 +116,9 @@ const branchSpace = {
 
 const platformSpace = {
   ...branchSpace,
-  ground: {
-    ...branchSpace.ground,
-    id: "ground-system",
+  fitnessCenter: {
+    ...branchSpace.fitnessCenter,
+    id: "fitness-center-system",
     name: "플랫폼 운영본부",
     spaceId: "61ddca20-1752-466e-b4da-879ebdbe54e3",
   },
@@ -128,6 +134,7 @@ describe("mobile select space route", () => {
     mockUseGetMySpaces.mockReset();
     mockUseLocalSearchParams.mockReset();
     mockUseLocalSearchParams.mockReturnValue({ returnTo: "/" });
+    (SecureStore.setItemAsync as jest.Mock).mockClear();
     mobileApiScope.clear();
   });
 
@@ -153,7 +160,15 @@ describe("mobile select space route", () => {
     });
     expect(mobileApiScope.tenantId).toBe("tenant-branch");
     expect(mobileApiScope.spaceId).toBe("space-branch");
-    expect(mobileApiScope.groundName).toBe("강남점");
+    expect(mobileApiScope.fitnessCenterName).toBe("강남점");
+    const persistedSelectionCall = (
+      SecureStore.setItemAsync as jest.Mock
+    ).mock.calls.find(([key]) => String(key).includes("space-selection"));
+    expect(JSON.parse(persistedSelectionCall?.[1] ?? "{}")).toMatchObject({
+      fitnessCenterName: "강남점",
+      logoImageFileId: "company-logo-branch",
+      version: 2,
+    });
     expect(mockInvalidateQueries).toHaveBeenCalled();
     expect(mockReplace).toHaveBeenCalledWith("/");
   });

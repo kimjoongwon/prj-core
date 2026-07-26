@@ -36,7 +36,7 @@ aggregate root 기준 NestJS Module과 Router wiring을 생성하는 전문가�
 - module 폴더명은 aggregate root plural 기준 (`spaces`, `tasks`, `inquiries`)
 - Controller 구현은 `packages/be-controller`가 소유한다. module 파일은 Controller class를 `@cocrepo/controller`에서 import한다.
 - module 폴더의 `index.ts`는 module/provider 같은 app wiring 산출물만 export하고 Controller를 re-export하지 않는다.
-- child resource 전용 top-level module 금지 (`grounds`, `exercises` 금지)
+- child resource 전용 top-level module 금지 (`fitness-centers`, `exercises` 금지)
 - CQRS endpoint가 있는 module은 `CqrsModule`을 import한다.
 - Controller는 `CommandBus`/`QueryBus`만 사용하도록 provider wiring을 정렬한다.
 - `@cocrepo/usecase`의 UseCase handler arrays를 providers에 등록한다.
@@ -49,7 +49,7 @@ aggregate root 기준 NestJS Module과 Router wiring을 생성하는 전문가�
 - 이전 방식 app/boundary/external provider를 신규로 등록하지 않는다.
 - top-level route는 aggregate root plural만 허용
 - 1:1 detail child는 singular nested route 사용
-  - 예: `/spaces/:spaceId/ground`
+  - 예: `/spaces/:spaceId/fitness-center`
   - 예: `/tasks/:taskId/exercise`
 - collection child는 plural nested route 사용
   - 예: `/inquiries/:inquiryId/messages`

@@ -14,38 +14,38 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { DeleteFilter } from "./deleteFilter";
+import type { DeleteFilter } from './deleteFilter';
 
 export type GetFoldersParams = {
-	/**
-	 * @minimum 0
-	 */
-	skip?: number;
-	/**
-	 * @minimum 1
-	 * @maximum 200
-	 */
-	take?: number;
-	/**
-	 * 상위 폴더 ID 필터 (null이면 루트)
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	parentFolderId?: string;
-	/**
-	 * 테넌트 ID 필터
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	spaceId?: string;
-	/**
-	 * 폴더명 검색 (부분 일치)
-	 */
-	name?: string;
-	/**
-	 * 상태 필터 (active: 활성, deleted: 삭제됨)
-	 */
-	statusFilter?: DeleteFilter;
-	/**
-	 * 복합 정렬 (JSON:API 컨벤션). 부호 없음=ASC, -prefix=DESC. 허용 필드: createdAt, name, sortOrder. 예: ?sort=sortOrder&sort=name
-	 */
-	sort?: string[];
+/**
+ * @minimum 0
+ */
+skip?: number;
+/**
+ * @minimum 1
+ * @maximum 200
+ */
+take?: number;
+/**
+ * 상위 폴더 ID 필터 (null이면 루트)
+ * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+ */
+parentFolderId?: string;
+/**
+ * 테넌트 ID 필터
+ * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+ */
+spaceId?: string;
+/**
+ * 폴더명 검색 (부분 일치)
+ */
+name?: string;
+/**
+ * 상태 필터 (active: 활성, deleted: 삭제됨)
+ */
+statusFilter?: DeleteFilter;
+/**
+ * 복합 정렬 (JSON:API 컨벤션). 부호 없음=ASC, -prefix=DESC. 허용 필드: createdAt, name, sortOrder. 예: ?sort=sortOrder&sort=name
+ */
+sort?: string[];
 };

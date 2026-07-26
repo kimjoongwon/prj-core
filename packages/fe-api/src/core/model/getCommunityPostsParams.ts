@@ -16,13 +16,13 @@
  */
 
 export type GetCommunityPostsParams = {
-	/**
-	 * @minimum 0
-	 */
-	skip?: number;
-	/**
-	 * @minimum 1
-	 * @maximum 200
-	 */
-	take?: number;
+/**
+ * @minimum 0
+ */
+skip?: number;
+/**
+ * @minimum 1
+ * @maximum 200
+ */
+take?: number;
 };

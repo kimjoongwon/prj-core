@@ -62,7 +62,7 @@ export type Actions =
  * Subject는 문자열로 정의되며 다음과 같은 형태를 가집니다:
  * - menu:members - 메뉴 접근 권한
  * - feature:export - 기능 접근 권한
- * - User, Ground - 엔티티 CRUD 권한
+ * - entity:User, entity:FitnessCenter - 엔티티 CRUD 권한
  * - api:users - API 엔드포인트 권한
  * - column:user:email - 테이블 컬럼 가시성
  * - all - 모든 권한 (PLATFORM_ADMIN용)

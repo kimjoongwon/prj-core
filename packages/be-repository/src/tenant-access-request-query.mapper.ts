@@ -1,43 +1,55 @@
 import type { ListTenantAccessRequestsForReviewQueryInput } from "@cocrepo/input";
 import type { Prisma } from "@cocrepo/prisma";
 import {
-	containsFilter,
-	createQueryOrderByBuilder,
-	dateRangeFilter,
+  containsFilter,
+  createQueryOrderByBuilder,
+  dateRangeFilter,
 } from "./query-input.mapper";
 
 export function buildTenantAccessRequestQueryWhere(
-	input: ListTenantAccessRequestsForReviewQueryInput,
-	baseWhere?: Prisma.TenantAccessRequestWhereInput,
+  input: ListTenantAccessRequestsForReviewQueryInput,
+  baseWhere?: Prisma.TenantAccessRequestWhereInput,
 ): Prisma.TenantAccessRequestWhereInput {
-	const where: Prisma.TenantAccessRequestWhereInput = {
-		...(baseWhere ?? {}),
-		...(input.spaceId ? { spaceId: input.spaceId } : {}),
-		...(input.requesterId ? { requesterId: input.requesterId } : {}),
-		...(input.status ? { status: input.status } : {}),
-	};
-	const createdAt = dateRangeFilter(input.createdFrom, input.createdTo);
+  const where: Prisma.TenantAccessRequestWhereInput = {
+    ...(baseWhere ?? {}),
+    ...(input.spaceId ? { spaceId: input.spaceId } : {}),
+    ...(input.requesterId ? { requesterId: input.requesterId } : {}),
+    ...(input.status ? { status: input.status } : {}),
+  };
+  const createdAt = dateRangeFilter(input.createdFrom, input.createdTo);
 
-	if (createdAt) {
-		where.createdAt = createdAt;
-	}
+  if (createdAt) {
+    where.createdAt = createdAt;
+  }
 
-	if (input.search) {
-		const search = containsFilter(input.search);
-		where.OR = [
-			{ requester: { name: search } },
-			{ requester: { email: search } },
-			{ space: { company: { is: { name: search } } } },
-			{ space: { company: { is: { label: search } } } },
-		];
-	}
+  if (input.search) {
+    const search = containsFilter(input.search);
+    where.OR = [
+      { requester: { name: search } },
+      { requester: { email: search } },
+      {
+        space: {
+          fitnessCenter: {
+            is: { company: { is: { name: search } } },
+          },
+        },
+      },
+      {
+        space: {
+          fitnessCenter: {
+            is: { company: { is: { label: search } } },
+          },
+        },
+      },
+    ];
+  }
 
-	return where;
+  return where;
 }
 
 export const buildTenantAccessRequestQueryOrderBy = createQueryOrderByBuilder<
-	ListTenantAccessRequestsForReviewQueryInput,
-	Prisma.TenantAccessRequestOrderByWithRelationInput
+  ListTenantAccessRequestsForReviewQueryInput,
+  Prisma.TenantAccessRequestOrderByWithRelationInput
 >({
-	allowedFields: ["createdAt", "updatedAt", "status"],
+  allowedFields: ["createdAt", "updatedAt", "status"],
 });

@@ -1,8 +1,8 @@
 import {
 	CreateSpaceCommand,
-	GetSpaceGroundQuery,
+	GetSpaceFitnessCenterQuery,
 	ListSpacesQuery,
-	UpdateSpaceGroundCommand,
+	UpdateSpaceFitnessCenterCommand,
 } from "@cocrepo/command";
 import { SpaceContext } from "@cocrepo/context";
 import {
@@ -12,13 +12,13 @@ import {
 	ResponseMessage,
 } from "@cocrepo/decorator";
 import {
-	CreateGroundDto,
-	GroundDto,
+	CreateSpaceWithFitnessCenterDto,
+	FitnessCenterDto,
 	QuerySpaceDto,
 	SpaceDto,
-	UpdateGroundDto,
+	UpdateFitnessCenterDto,
 } from "@cocrepo/dto";
-import { Ground, Space } from "@cocrepo/entity";
+import type { FitnessCenter, Space } from "@cocrepo/entity";
 import {
 	Body,
 	Controller,
@@ -34,7 +34,6 @@ import {
 } from "@nestjs/common";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
-
 @ApiTags("SPACES")
 @Controller()
 export class SpacesController {
@@ -48,12 +47,13 @@ export class SpacesController {
 	@ApiOperation({
 		operationId: "getSpaces",
 		summary: "공간 목록 조회",
-		description: "Company와 Ground detail이 있는 Space 목록을 조회합니다.",
+		description: "FitnessCenter detail이 포함된 Space 목록을 조회합니다.",
 	})
 	@ApiAuth()
 	@ApiErrors(401, 500)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("공간 목록 조회 성공")
+	@HttpCode(HttpStatus.OK)
 	async getSpaces(@Query() query: QuerySpaceDto) {
 		return this.queryBus.execute(
 			new ListSpacesQuery({
@@ -63,12 +63,12 @@ export class SpacesController {
 		);
 	}
 
-	@Get(":spaceId/ground")
+	@Get(":spaceId/fitness-center")
 	@ApiOperation({
-		operationId: "getSpaceGround",
+		operationId: "getSpaceFitnessCenter",
 		summary: "공간의 시설 detail 조회",
 		description:
-			"Space의 Company 아래에 연결된 대표 서비스 Ground detail을 조회합니다.",
+			"Space에 연결된 FitnessCenter detail을 조회합니다.",
 	})
 	@ApiAuth()
 	@ApiParam({
@@ -77,13 +77,17 @@ export class SpacesController {
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
-	@ApiResponseEntity(GroundDto, HttpStatus.OK)
+	@ApiResponseEntity(FitnessCenterDto, HttpStatus.OK)
 	@ResponseMessage("공간 시설 조회 성공")
-	async getSpaceGround(
+	@HttpCode(HttpStatus.OK)
+	async getSpaceFitnessCenter(
 		@Param("spaceId", ParseUUIDPipe) spaceId: string,
-	): Promise<Ground> {
-		this.assertSpaceAccess(spaceId);
-		return this.queryBus.execute(new GetSpaceGroundQuery(spaceId));
+	): Promise<FitnessCenter> {
+		if (!this.spaceContext.canAccessSpace(spaceId)) {
+			throw new ForbiddenException("해당 Space 리소스에 접근할 수 없습니다.");
+		}
+
+		return this.queryBus.execute(new GetSpaceFitnessCenterQuery(spaceId));
 	}
 
 	@Post()
@@ -91,26 +95,28 @@ export class SpacesController {
 	@ApiOperation({
 		operationId: "createSpace",
 		summary: "공간 생성",
-		description: "Space root와 Company/Ground detail을 함께 생성합니다.",
+		description: "Space root와 FitnessCenter detail을 함께 생성합니다.",
 	})
 	@ApiAuth()
 	@ApiBody({
-		type: CreateGroundDto,
-		description: "공간 생성에 필요한 Company/Ground detail 정보",
+		type: CreateSpaceWithFitnessCenterDto,
+		description: "공간 생성에 필요한 FitnessCenter 정보",
 	})
 	@ApiErrors(401, 409, 500)
 	@ApiResponseEntity(SpaceDto, HttpStatus.CREATED)
 	@ResponseMessage("공간 생성 성공")
-	async createSpace(@Body() dto: CreateGroundDto): Promise<Space> {
+	async createSpace(
+		@Body() dto: CreateSpaceWithFitnessCenterDto,
+	): Promise<Space> {
 		return this.commandBus.execute(new CreateSpaceCommand(dto));
 	}
 
-	@Patch(":spaceId/ground")
+	@Patch(":spaceId/fitness-center")
 	@ApiOperation({
-		operationId: "updateSpaceGround",
+		operationId: "updateSpaceFitnessCenter",
 		summary: "공간의 시설 detail 수정",
 		description:
-			"Space의 Company 아래에 연결된 대표 서비스 Ground detail을 수정합니다.",
+			"Space에 연결된 FitnessCenter detail과 Space 콘텐츠 언어를 수정합니다.",
 	})
 	@ApiAuth()
 	@ApiParam({
@@ -119,23 +125,23 @@ export class SpacesController {
 		type: String,
 	})
 	@ApiBody({
-		type: UpdateGroundDto,
-		description: "수정할 Company/Ground detail 정보",
+		type: UpdateFitnessCenterDto,
+		description: "수정할 FitnessCenter 정보와 Space 콘텐츠 언어",
 	})
 	@ApiErrors(401, 404, 500)
 	@ApiResponseEntity(SpaceDto, HttpStatus.OK)
 	@ResponseMessage("공간 시설 수정 성공")
-	async updateSpaceGround(
+	@HttpCode(HttpStatus.OK)
+	async updateSpaceFitnessCenter(
 		@Param("spaceId", ParseUUIDPipe) spaceId: string,
-		@Body() dto: UpdateGroundDto,
+		@Body() dto: UpdateFitnessCenterDto,
 	): Promise<Space> {
-		this.assertSpaceAccess(spaceId);
-		return this.commandBus.execute(new UpdateSpaceGroundCommand(spaceId, dto));
-	}
-
-	private assertSpaceAccess(spaceId: string): void {
 		if (!this.spaceContext.canAccessSpace(spaceId)) {
 			throw new ForbiddenException("해당 Space 리소스에 접근할 수 없습니다.");
 		}
+
+		return this.commandBus.execute(
+			new UpdateSpaceFitnessCenterCommand(spaceId, dto),
+		);
 	}
 }

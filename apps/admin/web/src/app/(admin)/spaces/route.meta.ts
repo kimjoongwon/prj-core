@@ -7,7 +7,7 @@ export const routeMeta = {
 		pageId: "spaces:list",
 		pageLabel: "공간 목록",
 		pathPattern: "/spaces",
-		description: "공간과 연결된 ground 목록을 관리합니다.",
+		description: "공간과 연결된 피트니스센터 목록을 관리합니다.",
 		order: 6,
 	},
 	navItem: {

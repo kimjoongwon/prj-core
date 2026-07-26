@@ -14,52 +14,51 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-
-import type { ServiceDocumentFormat } from "./serviceDocumentFormat";
-import type { ServiceDocumentKind } from "./serviceDocumentKind";
-import type { ServiceDocumentPlatform } from "./serviceDocumentPlatform";
-import type { ServiceDocumentStatus } from "./serviceDocumentStatus";
+import type { ServiceDocumentKind } from './serviceDocumentKind';
+import type { ServiceDocumentPlatform } from './serviceDocumentPlatform';
+import type { ServiceDocumentFormat } from './serviceDocumentFormat';
+import type { ServiceDocumentStatus } from './serviceDocumentStatus';
 
 export interface ServiceDocumentDto {
-	/** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
-	id: string;
-	createdAt: string;
-	updatedAt: string;
-	/** @nullable */
-	removedAt: string | null;
-	/** 문서 종류 */
-	kind: ServiceDocumentKind;
-	/** 노출 플랫폼 */
-	platform: ServiceDocumentPlatform;
-	/** 로케일 */
-	locale: string;
-	/** 제목 */
-	title: string;
-	/**
-	 * 요약
-	 * @nullable
-	 */
-	summary?: string | null;
-	/** 본문 */
-	content: string;
-	/** 본문 형식 */
-	format: ServiceDocumentFormat;
-	/** 버전 */
-	version: string;
-	/** 상태 */
-	status: ServiceDocumentStatus;
-	/** 필수 동의 여부 */
-	isRequired: boolean;
-	/** 정렬 순서 */
-	displayOrder: number;
-	/**
-	 * 효력 시작 시각
-	 * @nullable
-	 */
-	effectiveAt?: string | null;
-	/**
-	 * 게시 시각
-	 * @nullable
-	 */
-	publishedAt?: string | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  removedAt: string | null;
+  /** 문서 종류 */
+  kind: ServiceDocumentKind;
+  /** 노출 플랫폼 */
+  platform: ServiceDocumentPlatform;
+  /** 로케일 */
+  locale: string;
+  /** 제목 */
+  title: string;
+  /**
+   * 요약
+   * @nullable
+   */
+  summary?: string | null;
+  /** 본문 */
+  content: string;
+  /** 본문 형식 */
+  format: ServiceDocumentFormat;
+  /** 버전 */
+  version: string;
+  /** 상태 */
+  status: ServiceDocumentStatus;
+  /** 필수 동의 여부 */
+  isRequired: boolean;
+  /** 정렬 순서 */
+  displayOrder: number;
+  /**
+   * 효력 시작 시각
+   * @nullable
+   */
+  effectiveAt?: string | null;
+  /**
+   * 게시 시각
+   * @nullable
+   */
+  publishedAt?: string | null;
 }

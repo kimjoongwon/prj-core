@@ -1,7 +1,7 @@
 import { SpaceAggregate } from "@cocrepo/aggregate";
 import { GetSignUpSpacesQuery } from "@cocrepo/command";
 import { QueryHandler } from "@nestjs/cqrs";
-import { PLATFORM_GROUND_NAME } from "./platform-ground-name";
+import { PLATFORM_FITNESS_CENTER_NAME } from "./platform-fitness-center-name";
 import type { AuthSpaceResult } from "./space.result";
 import { SYSTEM_SPACE_ID } from "./system-space-id";
 
@@ -15,7 +15,7 @@ export class GetSignUpSpacesUseCase {
 			.filter(
 				(space) =>
 					space.id !== SYSTEM_SPACE_ID &&
-					space.ground?.name !== PLATFORM_GROUND_NAME,
+					space.fitnessCenter?.name !== PLATFORM_FITNESS_CENTER_NAME,
 			)
 			.map((space) => space);
 	}

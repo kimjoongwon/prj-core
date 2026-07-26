@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 
 import {
+	type AccountSpaceInfo,
 	AppContext,
 	browserPersistStorageAdapter,
 	RootStore,
@@ -56,21 +57,15 @@ interface StorybookRuntimeConfig {
 	currentPath: string;
 }
 
-interface SpaceOption {
-	spaceId: string;
-	tenantId: string;
-	groundName: string;
-}
-
 const DEFAULT_STALE_TIME_MS = 60 * 1000;
 const DISABLED_AUTH_REDIRECT_URL = "#storybook-auth-disabled";
 const FALLBACK_ABILITY_RULES: AbilityRule[] = [
 	{ action: "manage", subject: "all" },
 ];
-const STORYBOOK_ADMIN_SPACE: SpaceOption = {
+const STORYBOOK_ADMIN_SPACE: AccountSpaceInfo = {
 	spaceId: "storybook-space",
 	tenantId: "storybook-tenant",
-	groundName: "Storybook Space",
+	fitnessCenterName: "Storybook Fitness Center",
 };
 
 function makeQueryClient() {
@@ -185,7 +180,7 @@ const StorybookRuntimeBootstrap = observer(function StorybookRuntimeBootstrap({
 			account.setAvailableSpaces([STORYBOOK_ADMIN_SPACE]);
 			account.setCurrentTenant(
 				STORYBOOK_ADMIN_SPACE.tenantId,
-				STORYBOOK_ADMIN_SPACE.groundName,
+				STORYBOOK_ADMIN_SPACE.fitnessCenterName,
 				null,
 				STORYBOOK_ADMIN_SPACE.spaceId,
 			);

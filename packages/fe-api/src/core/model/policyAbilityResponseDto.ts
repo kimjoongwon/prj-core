@@ -14,36 +14,36 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { AbilityResponseDto } from "./abilityResponseDto";
+import type { AbilityResponseDto } from './abilityResponseDto';
 
 export interface PolicyAbilityResponseDto {
-	/**
-	 * PolicyAbility ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	id: string;
-	/**
-	 * Policy ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	policyId: string;
-	/**
-	 * Ability ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	abilityId: string;
-	/** 생성 일시 */
-	createdAt: string;
-	/**
-	 * 수정 일시
-	 * @nullable
-	 */
-	updatedAt?: string | null;
-	/**
-	 * 삭제 일시
-	 * @nullable
-	 */
-	removedAt?: string | null;
-	/** 연결된 Ability 상세 정보 */
-	ability?: AbilityResponseDto;
+  /**
+   * PolicyAbility ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  id: string;
+  /**
+   * Policy ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  policyId: string;
+  /**
+   * Ability ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  abilityId: string;
+  /** 생성 일시 */
+  createdAt: string;
+  /**
+   * 수정 일시
+   * @nullable
+   */
+  updatedAt?: string | null;
+  /**
+   * 삭제 일시
+   * @nullable
+   */
+  removedAt?: string | null;
+  /** 연결된 Ability 상세 정보 */
+  ability?: AbilityResponseDto;
 }

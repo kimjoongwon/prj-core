@@ -6,6 +6,6 @@ export class CreateSpaceDto extends OmitType(SpaceDto, [
 	...COMMON_ENTITY_FIELDS,
 	"spaceClassification",
 	"spaceAssociations",
-	"ground",
+	"fitnessCenter",
 	"tenants",
 ]) {}

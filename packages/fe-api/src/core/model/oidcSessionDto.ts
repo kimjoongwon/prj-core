@@ -16,19 +16,19 @@
  */
 
 export interface OidcSessionDto {
-	/** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
-	id: string;
-	/** 모델 키 (jti 또는 uid) */
-	key: string;
-	/** 모델 타입 (AccessToken, RefreshToken, Session 등) */
-	modelType: string;
-	/** Grant ID (토큰 폐기용) */
-	grantId?: string;
-	/** 세션 UID */
-	uid?: string;
-	/** 계정 ID */
-	accountId?: string;
-	/** @nullable */
-	expiresAt: string | null;
-	createdAt: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
+  id: string;
+  /** 모델 키 (jti 또는 uid) */
+  key: string;
+  /** 모델 타입 (AccessToken, RefreshToken, Session 등) */
+  modelType: string;
+  /** Grant ID (토큰 폐기용) */
+  grantId?: string;
+  /** 세션 UID */
+  uid?: string;
+  /** 계정 ID */
+  accountId?: string;
+  /** @nullable */
+  expiresAt: string | null;
+  createdAt: string;
 }

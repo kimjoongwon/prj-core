@@ -16,38 +16,38 @@
  */
 
 export interface IdpAccountDto {
-	/**
-	 * 사용자 ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	id: string;
-	/** 이름 */
-	name: string;
-	/** 이메일 */
-	email: string;
-	/** 활성 상태 */
-	isActive: boolean;
-	/** 로그인 실패 횟수 */
-	failedLoginAttempts: number;
-	/** 영구 잠금 여부 */
-	isPermanentlyLocked: boolean;
-	/**
-	 * 일시 잠금 해제 시간
-	 * @nullable
-	 */
-	lockedUntil?: string | null;
-	/** 비밀번호 변경 필요 여부 */
-	mustChangePassword: boolean;
-	/**
-	 * 마지막 로그인 시간
-	 * @nullable
-	 */
-	lastLoginAt?: string | null;
-	/**
-	 * 마지막 로그인 IP
-	 * @nullable
-	 */
-	lastLoginIp?: string | null;
-	/** 가입일 */
-	createdAt: string;
+  /**
+   * 사용자 ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  id: string;
+  /** 이름 */
+  name: string;
+  /** 이메일 */
+  email: string;
+  /** 활성 상태 */
+  isActive: boolean;
+  /** 로그인 실패 횟수 */
+  failedLoginAttempts: number;
+  /** 영구 잠금 여부 */
+  isPermanentlyLocked: boolean;
+  /**
+   * 일시 잠금 해제 시간
+   * @nullable
+   */
+  lockedUntil?: string | null;
+  /** 비밀번호 변경 필요 여부 */
+  mustChangePassword: boolean;
+  /**
+   * 마지막 로그인 시간
+   * @nullable
+   */
+  lastLoginAt?: string | null;
+  /**
+   * 마지막 로그인 IP
+   * @nullable
+   */
+  lastLoginIp?: string | null;
+  /** 가입일 */
+  createdAt: string;
 }

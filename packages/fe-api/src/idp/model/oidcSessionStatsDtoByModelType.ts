@@ -18,4 +18,4 @@
 /**
  * 모델 타입별 건수
  */
-export type OidcSessionStatsDtoByModelType = { [key: string]: number };
+export type OidcSessionStatsDtoByModelType = {[key: string]: number};

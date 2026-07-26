@@ -330,12 +330,12 @@ packages/be-service/src/{domain}/{domain}.service.ts
 
 ```typescript
 // 이 함수는 뭘 하는 건가요?
-getGroundsBySpaceId(spaceId: string)
-// → "Space 밑의 ground를 가져온다"... 목적이 빠져 있습니다.
+getFitnessCenterBySpaceId(spaceId: string)
+// → "Space의 fitness center를 가져온다"... 목적이 빠져 있습니다.
 
 // 이 함수는 명확합니다
-getMySpaceGrounds(spaceId: string)
-// → "내가 접근 가능한 Space의 ground 목록" - 목적이 드러납니다.
+getMySpaceFitnessCenter(spaceId: string)
+// → "내가 접근 가능한 Space의 fitness center" - 목적이 드러납니다.
 ```
 
 **핵심 질문: "함수명만 보고 5초 안에 이해되는가?"**
@@ -344,7 +344,7 @@ getMySpaceGrounds(spaceId: string)
 
 | 상황 | 데이터 중심 (모호함) | 목적 중심 (명확함) |
 |------|------------------------|---------------------|
-| 내 데이터 조회 | `getBySpaceId()`, `getGroundsBySpaceId()` | `getMySpaceGrounds()` |
+| 내 데이터 조회 | `getBySpaceId()`, `getFitnessCenterBySpaceId()` | `getMySpaceFitnessCenter()` |
 | Aggregate Root와 종속 모델 조회 | `getExercisesByTaskId()` | `getTaskExercisePlan()` |
 | 인증용 조회 | `findByEmail()`, `getUserByEmail()` | `findUserForAuth()` |
 | 검색 | `findManyByQuery()`, `getByFilters()` | `searchProducts()`, `searchUsers()` |

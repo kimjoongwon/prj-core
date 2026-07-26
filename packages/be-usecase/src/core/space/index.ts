@@ -1,16 +1,19 @@
 import { CreateSpaceUseCase } from "./create-space.usecase";
-import { GetSpaceGroundUseCase } from "./get-space-ground.usecase";
+import { GetSpaceFitnessCenterUseCase } from "./get-space-fitness-center.usecase";
 import { ListSpacesUseCase } from "./list-spaces.usecase";
-import { UpdateSpaceGroundUseCase } from "./update-space-ground.usecase";
+import { UpdateSpaceFitnessCenterUseCase } from "./update-space-fitness-center.usecase";
 
-export const SpaceQueryHandlers = [ListSpacesUseCase, GetSpaceGroundUseCase];
+export const SpaceQueryHandlers = [
+	ListSpacesUseCase,
+	GetSpaceFitnessCenterUseCase,
+];
 
 export const SpaceCommandHandlers = [
 	CreateSpaceUseCase,
-	UpdateSpaceGroundUseCase,
+	UpdateSpaceFitnessCenterUseCase,
 ];
 
 export * from "./create-space.usecase";
-export * from "./get-space-ground.usecase";
+export * from "./get-space-fitness-center.usecase";
 export * from "./list-spaces.usecase";
-export * from "./update-space-ground.usecase";
+export * from "./update-space-fitness-center.usecase";

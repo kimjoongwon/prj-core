@@ -10,9 +10,9 @@ const tenantAccessRequestInclude = {
 	reviewer: true,
 	space: {
 		include: {
-			company: {
+			fitnessCenter: {
 				include: {
-					ground: true,
+					company: true,
 				},
 			},
 		},
@@ -26,7 +26,7 @@ const tenantAccessRequestInclude = {
 			user: true,
 		},
 	},
-} satisfies Prisma.TenantAccessRequestInclude;
+} as unknown as Prisma.TenantAccessRequestInclude;
 
 @Injectable()
 export class TenantAccessRequestsRepository {
@@ -43,11 +43,6 @@ export class TenantAccessRequestsRepository {
 			include: typeof tenantAccessRequestInclude;
 		}>,
 	): TenantAccessRequest {
-		const primaryGround = result.space?.company?.ground;
-		if (primaryGround) {
-			(result.space as unknown as { ground?: unknown }).ground = primaryGround;
-		}
-
 		return plainToInstance(TenantAccessRequest, result);
 	}
 

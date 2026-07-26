@@ -14,42 +14,42 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { ThreadStatus } from "./threadStatus";
+import type { ThreadStatus } from './threadStatus';
 
 export interface InquiryThreadDto {
-	/** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
-	id: string;
-	createdAt: string;
-	updatedAt: string;
-	/** @nullable */
-	removedAt: string | null;
-	/**
-	 * 소속 문의 ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	inquiryId: string;
-	/**
-	 * 스레드 제목
-	 * @nullable
-	 */
-	title: string | null;
-	/** 스레드 상태 */
-	status: ThreadStatus;
-	/**
-	 * 생성자 ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	createdById: string;
-	/**
-	 * 마지막 메시지 일시
-	 * @nullable
-	 */
-	lastMessageAt: string | null;
-	/**
-	 * 마지막 메시지 미리보기
-	 * @nullable
-	 */
-	lastMessagePreview: string | null;
-	/** 메시지 수 */
-	messageCount: number;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  removedAt: string | null;
+  /**
+   * 소속 문의 ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  inquiryId: string;
+  /**
+   * 스레드 제목
+   * @nullable
+   */
+  title: string | null;
+  /** 스레드 상태 */
+  status: ThreadStatus;
+  /**
+   * 생성자 ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  createdById: string;
+  /**
+   * 마지막 메시지 일시
+   * @nullable
+   */
+  lastMessageAt: string | null;
+  /**
+   * 마지막 메시지 미리보기
+   * @nullable
+   */
+  lastMessagePreview: string | null;
+  /** 메시지 수 */
+  messageCount: number;
 }

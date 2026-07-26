@@ -111,7 +111,13 @@ describe("AuthSessionGate", () => {
 			id: "space-branch",
 			tenantId: "tenant-branch",
 			contentLanguageCode: "ko_KR",
-			ground: { address: "서울 강남구", name: "강남점" },
+			fitnessCenter: {
+				address: "서울 강남구",
+				company: {
+					logoImageFileId: "company-logo-branch",
+				},
+				name: "강남점",
+			},
 		};
 		(SecureStore.getItemAsync as jest.Mock).mockImplementation(
 			async (key: string) =>
@@ -119,9 +125,10 @@ describe("AuthSessionGate", () => {
 					? JSON.stringify({
 							address: "서울 강남구",
 							contentLanguageCode: "ko_KR",
-							groundName: "강남점",
+							fitnessCenterName: "강남점",
 							spaceId: "space-branch",
 							tenantId: "tenant-branch",
+							version: 2,
 						})
 					: null,
 		);
@@ -146,7 +153,7 @@ describe("AuthSessionGate", () => {
 		expect(mobileSession.authStatus).toBe("authenticated");
 		expect(mobileApiScope.tenantId).toBe("tenant-branch");
 		expect(mobileApiScope.spaceId).toBe("space-branch");
-		expect(mobileApiScope.groundName).toBe("강남점");
+		expect(mobileApiScope.fitnessCenterName).toBe("강남점");
 		expect(mobileApiScope.isSpaceSelectionResolved).toBe(true);
 		expect(mockGetCurrentSpace).toHaveBeenCalled();
 		expect(mockSetApiSessionScope).toHaveBeenCalledWith(mobileApiScope);

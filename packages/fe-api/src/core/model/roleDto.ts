@@ -14,37 +14,36 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-
-import type { RoleAssociationDto } from "./roleAssociationDto";
-import type { RoleDtoClassification } from "./roleDtoClassification";
+import type { RoleDtoClassification } from './roleDtoClassification';
+import type { RoleAssociationDto } from './roleAssociationDto';
 
 export interface RoleDto {
-	/** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
-	id: string;
-	createdAt: string;
-	updatedAt: string;
-	/** @nullable */
-	removedAt: string | null;
-	/**
-	 * 역할 식별자
-	 * @maxLength 50
-	 * @pattern ^[A-Z][A-Z0-9_]*$
-	 */
-	name: string;
-	/**
-	 * 표시명
-	 * @maxLength 50
-	 */
-	displayName?: string;
-	/**
-	 * 설명
-	 * @maxLength 200
-	 */
-	description?: string;
-	/** 시스템 역할 여부 */
-	isSystem: boolean;
-	/** @nullable */
-	classification: RoleDtoClassification;
-	/** @nullable */
-	associations: RoleAssociationDto[] | null;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  removedAt: string | null;
+  /**
+   * 역할 식별자
+   * @maxLength 50
+   * @pattern ^[A-Z][A-Z0-9_]*$
+   */
+  name: string;
+  /**
+   * 표시명
+   * @maxLength 50
+   */
+  displayName?: string;
+  /**
+   * 설명
+   * @maxLength 200
+   */
+  description?: string;
+  /** 시스템 역할 여부 */
+  isSystem: boolean;
+  /** @nullable */
+  classification: RoleDtoClassification;
+  /** @nullable */
+  associations: RoleAssociationDto[] | null;
 }

@@ -20,7 +20,9 @@ test.describe("공간 목록 페이지", () => {
 				page.getByRole("heading", { name: "공간 목록" }),
 			).toBeVisible();
 			await expect(
-				page.getByText("시스템에 등록된 공간과 시설 detail을 관리합니다."),
+				page.getByText(
+					"시스템에 등록된 공간과 피트니스 센터 정보를 관리합니다.",
+				),
 			).toBeVisible();
 		});
 
@@ -42,7 +44,7 @@ test.describe("공간 목록 페이지", () => {
 
 			// Then: 검색 필드 확인
 			await expect(
-				page.getByPlaceholder("시설명, 사업자등록번호로 검색..."),
+				page.getByPlaceholder("피트니스 센터명, 사업자등록번호로 검색..."),
 			).toBeVisible();
 		});
 	});
@@ -50,7 +52,7 @@ test.describe("공간 목록 페이지", () => {
 	// ── E2E-002: 공간 CRUD 플로우 ──
 
 	test.describe("[E2E-002] 공간 CRUD 플로우", () => {
-		test("공간 등록 → 시설 detail 조회 → 수정 → 삭제 전체 플로우", async ({
+		test("공간 등록 → 피트니스센터 상세 조회 → 수정 → 삭제 전체 플로우", async ({
 			page,
 		}) => {
 			await loginToConsole(page);
@@ -88,7 +90,9 @@ test.describe("공간 목록 페이지", () => {
 			expect(spaceId).toBeTruthy();
 
 			// When: 생성된 공간의 상세 페이지로 이동
-			await page.goto(`http://localhost:3000/admin/spaces/${spaceId}/ground`);
+			await page.goto(
+				`http://localhost:3000/admin/spaces/${spaceId}/fitness-center`,
+			);
 			await page.waitForLoadState("networkidle");
 
 			// Then: 등록한 정보 확인
@@ -103,21 +107,23 @@ test.describe("공간 목록 페이지", () => {
 
 			// When: 수정 버튼 클릭
 			await page.getByRole("button", { name: "수정" }).click();
-			await page.waitForURL(/\/spaces\/.*\/ground\/edit/, { timeout: 15000 });
+			await page.waitForURL(/\/spaces\/.*\/fitness-center\/edit/, {
+				timeout: 15000,
+			});
 			await page.waitForLoadState("networkidle");
 
 			// Then: 수정 페이지 타이틀 확인
 			await expect(
-				page.getByRole("heading", { name: "시설 정보 수정" }),
+				page.getByRole("heading", { name: "피트니스센터 정보 수정" }),
 			).toBeVisible({ timeout: 10000 });
 
 			// Then: 수정 폼 초기값 확인
-			const nameInput = page.getByLabel("시설명");
+			const nameInput = page.getByLabel("센터명");
 			await expect(nameInput).toHaveValue(TEST_NAME);
 
-			// When: 시설 detail API로 수정
+			// When: 피트니스센터 API로 수정
 			const updateResponse = await page.request.patch(
-				`${ADMIN_API_BASE_URL}/spaces/${spaceId}/ground`,
+				`${ADMIN_API_BASE_URL}/spaces/${spaceId}/fitness-center`,
 				{
 					headers: getSpaceHeaders(),
 					data: {
@@ -133,7 +139,9 @@ test.describe("공간 목록 페이지", () => {
 			expect(updateResponse.status()).toBe(200);
 
 			// Then: 상세 페이지로 돌아가 최신 데이터 확인
-			await page.goto(`http://localhost:3000/admin/spaces/${spaceId}/ground`);
+			await page.goto(
+				`http://localhost:3000/admin/spaces/${spaceId}/fitness-center`,
+			);
 			await page.waitForLoadState("networkidle");
 
 			await expect(

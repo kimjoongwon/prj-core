@@ -24,11 +24,11 @@ const AdminSpacesNewRoute = observer(() => {
 		mutation: {
 			onSuccess: (response) => {
 				toast.success("공간 등록 성공", {
-					description: "공간과 시설 detail이 성공적으로 등록되었습니다.",
+					description: "공간과 피트니스센터 정보가 성공적으로 등록되었습니다.",
 				});
 				const spaceId = response?.data?.id;
 				if (spaceId) {
-					router.push(`/spaces/${spaceId}/ground` as Route);
+					router.push(`/spaces/${spaceId}/fitness-center` as Route);
 					return;
 				}
 				router.push("/spaces" as Route);

@@ -61,7 +61,7 @@ describe("AccountStore", () => {
 		vi.useRealTimers();
 	});
 
-	it("RootStore가 조립한 AuthSession 참조를 그대로 소유한다", () => {
+	it("Given RootStore가 조립한 AuthSession 참조가 있을 때 When AccountStore를 만들면 Then 같은 참조를 그대로 소유한다", () => {
 		const persistStorage = new PersistStorage(
 			STORAGE_KEY,
 			browserPersistStorageAdapter,
@@ -75,12 +75,12 @@ describe("AccountStore", () => {
 		expect(store.authSession).toBe(authSession);
 	});
 
-	it("constructor에서는 storage를 읽지 않고 기본 account 상태를 유지한다", () => {
+	it("Given 비어 있는 storage가 있을 때 When constructor만 호출하면 Then storage를 읽지 않고 기본 account 상태를 유지한다", () => {
 		expect(storage.getItem).not.toHaveBeenCalled();
 		expect(account.currentTenantId).toBeNull();
 		expect(account.selectedTenantId).toBeNull();
 		expect(account.currentSpaceId).toBeNull();
-		expect(account.currentGroundName).toBeNull();
+		expect(account.currentFitnessCenterName).toBeNull();
 		expect(account.contentLanguageCode).toBeNull();
 		expect(account.availableSpaces).toEqual([]);
 		expect(account.authSession.accessToken).toBeNull();
@@ -88,12 +88,12 @@ describe("AccountStore", () => {
 		expect(account.isSelectionResolved).toBe(false);
 	});
 
-	it("저장된 tenant scope와 선택 가능한 Space 목록을 hydrate한다", () => {
+	it("Given version 2 account 선택이 저장돼 있을 때 When hydrateFromStorage를 호출하면 Then FitnessCenter 선택과 Space 목록을 복원한다", () => {
 		const availableSpaces: AccountSpaceInfo[] = [
 			{
 				tenantId: "tenant-a",
 				spaceId: "space-a",
-				groundName: "Ground A",
+				fitnessCenterName: "Fitness Center A",
 				contentLanguageCode: "ko_KR",
 			},
 		];
@@ -101,9 +101,10 @@ describe("AccountStore", () => {
 			STORAGE_KEY,
 			JSON.stringify({
 				account: {
+					version: 2,
 					tenantId: "tenant-a",
 					spaceId: "space-a",
-					groundName: "Ground A",
+					fitnessCenterName: "Fitness Center A",
 					contentLanguageCode: "ko_KR",
 					availableSpaces,
 				},
@@ -116,34 +117,39 @@ describe("AccountStore", () => {
 		expect(store.currentTenantId).toBe("tenant-a");
 		expect(store.selectedTenantId).toBe("tenant-a");
 		expect(store.currentSpaceId).toBe("space-a");
-		expect(store.currentGroundName).toBe("Ground A");
+		expect(store.currentFitnessCenterName).toBe("Fitness Center A");
 		expect(store.contentLanguageCode).toBe("ko_KR");
 		expect(store.availableSpaces).toEqual(availableSpaces);
 		expect(store.isHydrated).toBe(true);
 	});
 
-	it("draft 선택은 current tenant를 유지하고 selectedTenantId만 바꾼다", () => {
-		account.setCurrentTenant("tenant-a", "Ground A", "ko_KR", "space-a");
+	it("Given 현재 tenant가 확정돼 있을 때 When draft tenant만 바꾸면 Then current tenant는 유지하고 selectedTenantId만 갱신한다", () => {
+		account.setCurrentTenant(
+			"tenant-a",
+			"Fitness Center A",
+			"ko_KR",
+			"space-a",
+		);
 
 		account.selectTenant("tenant-b");
 
 		expect(account.currentTenantId).toBe("tenant-a");
 		expect(account.selectedTenantId).toBe("tenant-b");
 		expect(account.currentSpaceId).toBe("space-a");
-		expect(account.currentGroundName).toBe("Ground A");
+		expect(account.currentFitnessCenterName).toBe("Fitness Center A");
 	});
 
-	it("current tenant를 확정하면 draft 선택도 같은 tenant로 동기화한다", () => {
+	it("Given 선택 가능한 Space 목록이 있을 때 When current tenant를 확정하면 Then draft 선택도 같은 tenant와 FitnessCenter로 동기화한다", () => {
 		account.setAvailableSpaces([
 			{
 				tenantId: "tenant-b",
 				spaceId: "space-b",
-				groundName: "Ground B",
+				fitnessCenterName: "Fitness Center B",
 				contentLanguageCode: "ja_JP",
 			},
 		]);
 
-		account.setCurrentTenant("tenant-b", "Ground B");
+		account.setCurrentTenant("tenant-b", "Fitness Center B");
 
 		expect(account.currentTenantId).toBe("tenant-b");
 		expect(account.selectedTenantId).toBe("tenant-b");
@@ -151,11 +157,20 @@ describe("AccountStore", () => {
 		expect(account.contentLanguageCode).toBe("ja_JP");
 	});
 
-	it("selection resolved 상태와 clear 결과를 관리한다", () => {
+	it("Given account와 인증 세션이 채워져 있을 때 When clear를 호출하면 Then selection resolved를 유지하며 저장 상태를 비운다", () => {
 		account.setAvailableSpaces([
-			{ tenantId: "tenant-a", spaceId: "space-a", groundName: "Ground A" },
+			{
+				tenantId: "tenant-a",
+				spaceId: "space-a",
+				fitnessCenterName: "Fitness Center A",
+			},
 		]);
-		account.setCurrentTenant("tenant-a", "Ground A", null, "space-a");
+		account.setCurrentTenant(
+			"tenant-a",
+			"Fitness Center A",
+			null,
+			"space-a",
+		);
 		account.authSession.setNativeAuthSession({
 			accessToken: "access-token",
 			refreshToken: "refresh-token",
@@ -170,7 +185,7 @@ describe("AccountStore", () => {
 		expect(account.currentTenantId).toBeNull();
 		expect(account.selectedTenantId).toBeNull();
 		expect(account.currentSpaceId).toBeNull();
-		expect(account.currentGroundName).toBeNull();
+		expect(account.currentFitnessCenterName).toBeNull();
 		expect(account.availableSpaces).toEqual([]);
 		expect(account.authSession.accessToken).toBeNull();
 		expect(account.isHydrated).toBe(true);
@@ -179,25 +194,67 @@ describe("AccountStore", () => {
 		expect(storage.dump().has(STORAGE_KEY)).toBe(false);
 	});
 
-	it("tenant 변경 내용을 storage에 저장한다", () => {
+	it("Given version 없는 예전 account 선택이 저장돼 있을 때 When hydrateFromStorage를 호출하면 Then 값을 폐기하고 Space를 다시 선택하도록 기본 상태를 유지한다", () => {
+		storage.setItem(
+			STORAGE_KEY,
+			JSON.stringify({
+				account: {
+					tenantId: "tenant-a",
+					spaceId: "space-a",
+					fitnessCenterName: "Fitness Center A",
+					contentLanguageCode: "ko_KR",
+					availableSpaces: [
+						{
+							tenantId: "tenant-a",
+							spaceId: "space-a",
+							fitnessCenterName: "Fitness Center A",
+						},
+					],
+				},
+			}),
+		);
+
+		account.hydrateFromStorage();
+
+		expect(account.currentTenantId).toBeNull();
+		expect(account.selectedTenantId).toBeNull();
+		expect(account.currentSpaceId).toBeNull();
+		expect(account.currentFitnessCenterName).toBeNull();
+		expect(account.availableSpaces).toEqual([]);
+		expect(account.isHydrated).toBe(true);
+		expect(storage.removeItem).toHaveBeenCalledWith(STORAGE_KEY);
+		expect(storage.dump().has(STORAGE_KEY)).toBe(false);
+	});
+
+	it("Given 현재 tenant 선택이 있을 때 When storage에 저장하면 Then version 2 형식으로 FitnessCenter 선택을 기록한다", () => {
 		account.setAvailableSpaces([
-			{ tenantId: "tenant-a", spaceId: "space-a", groundName: "Ground A" },
+			{
+				tenantId: "tenant-a",
+				spaceId: "space-a",
+				fitnessCenterName: "Fitness Center A",
+			},
 		]);
-		account.setCurrentTenant("tenant-a", "Ground A", null, "space-a");
+		account.setCurrentTenant(
+			"tenant-a",
+			"Fitness Center A",
+			null,
+			"space-a",
+		);
 
 		const persisted = JSON.parse(
 			storage.dump().get(STORAGE_KEY) ?? "{}",
 		).account;
 
 		expect(persisted).toMatchObject({
+			version: 2,
 			tenantId: "tenant-a",
 			spaceId: "space-a",
-			groundName: "Ground A",
+			fitnessCenterName: "Fitness Center A",
 			availableSpaces: [
 				{
 					tenantId: "tenant-a",
 					spaceId: "space-a",
-					groundName: "Ground A",
+					fitnessCenterName: "Fitness Center A",
 				},
 			],
 		});

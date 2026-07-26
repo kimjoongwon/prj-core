@@ -1,12 +1,13 @@
 // @vitest-environment jsdom
 
+import type { AccountBootstrapSpaceLike } from "@cocrepo/type";
 import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useAccountTenantSelection } from "./useAccountTenantSelection";
 
 interface MutationOptions {
 	onSuccess?: (
-		response: { data?: { id?: string; ground?: { name?: string } } },
+		response: { data?: AccountBootstrapSpaceLike },
 		variables: { tenantId: string },
 	) => void;
 	onError?: () => void;
@@ -18,13 +19,13 @@ const mocks = vi.hoisted(() => ({
 			{
 				tenantId: "tenant-a",
 				spaceId: "space-a",
-				groundName: "Ground A",
+				fitnessCenterName: "Fitness Center A",
 				contentLanguageCode: "ko_KR",
 			},
 			{
 				tenantId: "tenant-b",
 				spaceId: "space-b",
-				groundName: "Ground B",
+				fitnessCenterName: "Fitness Center B",
 				contentLanguageCode: "en_US",
 			},
 		],
@@ -60,12 +61,12 @@ describe("useAccountTenantSelection", () => {
 		mocks.mutationOptions = undefined;
 	});
 
-	it("Option을 만들고 변경된 tenantId를 current-space mutation에 전달한다", () => {
+	it("Given 접근 가능한 피트니스센터가 있을 때, When 다른 Tenant를 선택하면, Then 피트니스센터 Option과 tenantId를 mutation에 전달한다", () => {
 		const { result } = renderHook(() => useAccountTenantSelection());
 
 		expect(result.current.options).toEqual([
-			{ text: "Ground A", value: "tenant-a" },
-			{ text: "Ground B", value: "tenant-b" },
+			{ text: "Fitness Center A", value: "tenant-a" },
+			{ text: "Fitness Center B", value: "tenant-b" },
 		]);
 
 		act(() => result.current.selectTenant("tenant-b"));
@@ -78,7 +79,7 @@ describe("useAccountTenantSelection", () => {
 		"",
 		"tenant-a",
 		"unknown-tenant",
-	])("유효하지 않은 tenantId %s 선택을 무시한다", (tenantId) => {
+	])("Given 선택할 수 없는 tenantId %s가 있을 때, When Tenant 선택을 요청하면, Then 요청을 무시한다", (tenantId) => {
 		const { result } = renderHook(() => useAccountTenantSelection());
 
 		act(() => result.current.selectTenant(tenantId));
@@ -87,7 +88,7 @@ describe("useAccountTenantSelection", () => {
 		expect(mocks.mutate).not.toHaveBeenCalled();
 	});
 
-	it("mutation이 pending이면 새 선택을 무시한다", () => {
+	it("Given mutation이 pending일 때, When 다른 Tenant를 선택하면, Then 새 선택을 무시한다", () => {
 		mocks.isPending = true;
 		const { result } = renderHook(() => useAccountTenantSelection());
 
@@ -98,7 +99,7 @@ describe("useAccountTenantSelection", () => {
 		expect(mocks.mutate).not.toHaveBeenCalled();
 	});
 
-	it("mutation 성공 시 서버 응답으로 current tenant를 확정한다", () => {
+	it("Given FitnessCenter와 Company 이름이 모두 있는 응답일 때, When mutation이 성공하면, Then FitnessCenter 이름으로 현재 Tenant를 확정한다", () => {
 		renderHook(() => useAccountTenantSelection());
 		const navigationErrorSpy = vi
 			.spyOn(console, "error")
@@ -111,7 +112,10 @@ describe("useAccountTenantSelection", () => {
 					{
 						data: {
 							id: "server-space-b",
-							ground: { name: "Server Ground B" },
+							fitnessCenter: {
+								name: "Server Fitness Center B",
+								company: { name: "Server Company B" },
+							},
 						},
 					},
 					{ tenantId: "tenant-b" },
@@ -123,13 +127,77 @@ describe("useAccountTenantSelection", () => {
 
 		expect(mocks.account.setCurrentTenant).toHaveBeenCalledWith(
 			"tenant-b",
-			"Server Ground B",
+			"Server Fitness Center B",
 			"en_US",
 			"server-space-b",
 		);
 	});
 
-	it("mutation 성공 시 선택 정보를 찾지 못하면 currentTenantId로 되돌린다", () => {
+	it("Given FitnessCenter 이름이 없는 응답일 때, When mutation이 성공하면, Then Company 이름으로 현재 Tenant를 확정한다", () => {
+		renderHook(() => useAccountTenantSelection());
+		const navigationErrorSpy = vi
+			.spyOn(console, "error")
+			.mockImplementation(() => {});
+
+		try {
+			// jsdom은 navigation을 구현하지 않으므로 reload 경고만 숨깁니다.
+			act(() =>
+				mocks.mutationOptions?.onSuccess?.(
+					{
+						data: {
+							id: "server-space-b",
+							fitnessCenter: {
+								company: { name: "Server Company B" },
+							},
+						},
+					},
+					{ tenantId: "tenant-b" },
+				),
+			);
+		} finally {
+			navigationErrorSpy.mockRestore();
+		}
+
+		expect(mocks.account.setCurrentTenant).toHaveBeenCalledWith(
+			"tenant-b",
+			"Server Company B",
+			"en_US",
+			"server-space-b",
+		);
+	});
+
+	it("Given 서버 응답에 표시 이름이 없을 때, When mutation이 성공하면, Then 선택 Option의 fitnessCenterName으로 현재 Tenant를 확정한다", () => {
+		renderHook(() => useAccountTenantSelection());
+		const navigationErrorSpy = vi
+			.spyOn(console, "error")
+			.mockImplementation(() => {});
+
+		try {
+			// jsdom은 navigation을 구현하지 않으므로 reload 경고만 숨깁니다.
+			act(() =>
+				mocks.mutationOptions?.onSuccess?.(
+					{
+						data: {
+							id: "server-space-b",
+							fitnessCenter: {},
+						},
+					},
+					{ tenantId: "tenant-b" },
+				),
+			);
+		} finally {
+			navigationErrorSpy.mockRestore();
+		}
+
+		expect(mocks.account.setCurrentTenant).toHaveBeenCalledWith(
+			"tenant-b",
+			"Fitness Center B",
+			"en_US",
+			"server-space-b",
+		);
+	});
+
+	it("Given 선택 정보를 찾을 수 없을 때, When mutation이 성공하면, Then 서버에서 확정된 currentTenantId로 되돌린다", () => {
 		renderHook(() => useAccountTenantSelection());
 
 		act(() =>
@@ -140,7 +208,7 @@ describe("useAccountTenantSelection", () => {
 		expect(mocks.account.setCurrentTenant).not.toHaveBeenCalled();
 	});
 
-	it("mutation 실패 시 서버에서 확정된 currentTenantId로 되돌린다", () => {
+	it("Given Tenant 선택 mutation이 실패할 때, When 오류 callback이 실행되면, Then 서버에서 확정된 currentTenantId로 되돌린다", () => {
 		renderHook(() => useAccountTenantSelection());
 
 		act(() => mocks.mutationOptions?.onError?.());

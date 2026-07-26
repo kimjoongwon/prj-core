@@ -46,7 +46,7 @@ export * from "./update-role.input";
 export * from "./update-routine.input";
 export * from "./update-service-document.input";
 export * from "./update-session.input";
-export * from "./update-space-ground.input";
+export * from "./update-space-fitness-center.input";
 export * from "./update-task-exercise.input";
 export * from "./update-template.input";
 export * from "./update-timeline.input";

@@ -16,16 +16,16 @@
  */
 
 export interface DashboardStatsDto {
-	/** 활성 세션 수 */
-	activeSessionCount: number;
-	/** 오늘 성공 건수 */
-	todaySuccessCount: number;
-	/** 오늘 실패 건수 */
-	todayFailureCount: number;
-	/** 오늘 잠금 건수 */
-	todayLockedCount: number;
-	/** 잠금 계정 수 */
-	lockedAccountCount: number;
-	/** 활성 클라이언트 수 */
-	activeClientCount: number;
+  /** 활성 세션 수 */
+  activeSessionCount: number;
+  /** 오늘 성공 건수 */
+  todaySuccessCount: number;
+  /** 오늘 실패 건수 */
+  todayFailureCount: number;
+  /** 오늘 잠금 건수 */
+  todayLockedCount: number;
+  /** 잠금 계정 수 */
+  lockedAccountCount: number;
+  /** 활성 클라이언트 수 */
+  activeClientCount: number;
 }

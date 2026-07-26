@@ -14,22 +14,21 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-
-import type { InquiryCreateUpdateFormBootstrapDtoDefaultObject } from "./inquiryCreateUpdateFormBootstrapDtoDefaultObject";
-import type { InquiryCreateUpdateFormBootstrapDtoFieldMeta } from "./inquiryCreateUpdateFormBootstrapDtoFieldMeta";
-import type { InquiryCreateUpdateFormBootstrapDtoMode } from "./inquiryCreateUpdateFormBootstrapDtoMode";
-import type { InquiryCreateUpdateFormBootstrapDtoOptions } from "./inquiryCreateUpdateFormBootstrapDtoOptions";
-import type { InquiryFormUiPathsDto } from "./inquiryFormUiPathsDto";
+import type { InquiryCreateUpdateFormBootstrapDtoMode } from './inquiryCreateUpdateFormBootstrapDtoMode';
+import type { InquiryCreateUpdateFormBootstrapDtoDefaultObject } from './inquiryCreateUpdateFormBootstrapDtoDefaultObject';
+import type { InquiryCreateUpdateFormBootstrapDtoOptions } from './inquiryCreateUpdateFormBootstrapDtoOptions';
+import type { InquiryFormUiPathsDto } from './inquiryFormUiPathsDto';
+import type { InquiryCreateUpdateFormBootstrapDtoFieldMeta } from './inquiryCreateUpdateFormBootstrapDtoFieldMeta';
 
 export interface InquiryCreateUpdateFormBootstrapDto {
-	/** 폼 모드 */
-	mode: InquiryCreateUpdateFormBootstrapDtoMode;
-	/** 초기 폼 객체 */
-	defaultObject: InquiryCreateUpdateFormBootstrapDtoDefaultObject;
-	/** 경로별 선택 옵션 */
-	options: InquiryCreateUpdateFormBootstrapDtoOptions;
-	/** UI 제어 경로 */
-	ui: InquiryFormUiPathsDto;
-	/** 경로별 필드 메타 */
-	fieldMeta: InquiryCreateUpdateFormBootstrapDtoFieldMeta;
+  /** 폼 모드 */
+  mode: InquiryCreateUpdateFormBootstrapDtoMode;
+  /** 초기 폼 객체 */
+  defaultObject: InquiryCreateUpdateFormBootstrapDtoDefaultObject;
+  /** 경로별 선택 옵션 */
+  options: InquiryCreateUpdateFormBootstrapDtoOptions;
+  /** UI 제어 경로 */
+  ui: InquiryFormUiPathsDto;
+  /** 경로별 필드 메타 */
+  fieldMeta: InquiryCreateUpdateFormBootstrapDtoFieldMeta;
 }

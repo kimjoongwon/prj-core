@@ -124,15 +124,23 @@ describe("QueryInput mapper", () => {
 				{ requester: { email: { contains: "club", mode: "insensitive" } } },
 				{
 					space: {
-						company: {
-							is: { name: { contains: "club", mode: "insensitive" } },
+						fitnessCenter: {
+							is: {
+								company: {
+									is: { name: { contains: "club", mode: "insensitive" } },
+								},
+							},
 						},
 					},
 				},
 				{
 					space: {
-						company: {
-							is: { label: { contains: "club", mode: "insensitive" } },
+						fitnessCenter: {
+							is: {
+								company: {
+									is: { label: { contains: "club", mode: "insensitive" } },
+								},
+							},
 						},
 					},
 				},

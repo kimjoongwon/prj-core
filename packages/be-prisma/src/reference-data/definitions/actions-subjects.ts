@@ -238,7 +238,12 @@ const staticSubjectSeedData: SubjectSeedData[] = [
 	// ---- 엔티티 (Prisma 모델 기반) ----
 	// DMMF에서 자동 동기화되므로 여기서는 entity: 접두사가 붙은 것들만 정의
 	{ name: "entity:User", displayName: "사용자", group: "entity", order: 1 },
-	{ name: "entity:Ground", displayName: "시설", group: "entity", order: 2 },
+	{
+		name: "entity:FitnessCenter",
+		displayName: "피트니스센터",
+		group: "entity",
+		order: 2,
+	},
 	{ name: "entity:Space", displayName: "공간", group: "entity", order: 3 },
 	{
 		name: "entity:Reservation",

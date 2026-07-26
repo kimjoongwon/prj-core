@@ -61,11 +61,11 @@ export const ADMIN_PATHS = {
 	TIMELINE_SESSIONS_DETAIL: "/timelines/[timelineId]/sessions/[sessionId]",
 	TIMELINE_SESSIONS_EDIT: "/timelines/[timelineId]/sessions/[sessionId]/edit",
 
-	// 공간 (Space Aggregate Root, Ground는 1:1 detail child)
+	// 공간 (Space Aggregate Root, FitnessCenter는 1:1 detail child)
 	SPACES: "/spaces",
 	SPACES_NEW: "/spaces/new",
-	SPACES_DETAIL: "/spaces/[spaceId]/ground",
-	SPACES_EDIT: "/spaces/[spaceId]/ground/edit",
+	SPACES_DETAIL: "/spaces/[spaceId]/fitness-center",
+	SPACES_EDIT: "/spaces/[spaceId]/fitness-center/edit",
 
 	// 작업 (Task Aggregate Root, Exercise는 1:1 detail child)
 	TASKS: "/tasks",

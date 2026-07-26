@@ -14,21 +14,20 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-
-import type { CreateSessionDtoRecurringDayOfWeek } from "./createSessionDtoRecurringDayOfWeek";
-import type { CreateSessionDtoRepeatCycleType } from "./createSessionDtoRepeatCycleType";
-import type { SessionTypes } from "./sessionTypes";
+import type { SessionTypes } from './sessionTypes';
+import type { CreateSessionDtoRepeatCycleType } from './createSessionDtoRepeatCycleType';
+import type { CreateSessionDtoRecurringDayOfWeek } from './createSessionDtoRecurringDayOfWeek';
 
 export interface CreateSessionDto {
-	type: SessionTypes;
-	/** @nullable */
-	repeatCycleType?: CreateSessionDtoRepeatCycleType;
-	startDateTime?: string;
-	endDateTime?: string;
-	/** @nullable */
-	recurringDayOfWeek?: CreateSessionDtoRecurringDayOfWeek;
-	/** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
-	timelineId: string;
-	name: string;
-	description?: string;
+  type: SessionTypes;
+  /** @nullable */
+  repeatCycleType?: CreateSessionDtoRepeatCycleType;
+  startDateTime?: string;
+  endDateTime?: string;
+  /** @nullable */
+  recurringDayOfWeek?: CreateSessionDtoRecurringDayOfWeek;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
+  timelineId: string;
+  name: string;
+  description?: string;
 }

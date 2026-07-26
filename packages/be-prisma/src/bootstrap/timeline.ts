@@ -127,7 +127,7 @@ function dateByRecencyBand(
 /**
  * timeline, session, routine, exercise 관련 데모 데이터를 일괄 생성합니다.
  *
- * 이 함수는 단순 삽입이 아니라 "ground별 catalog -> routine/activity -> session/program"
+ * 이 함수는 단순 삽입이 아니라 "fitnessCenter별 catalog -> routine/activity -> session/program"
  * 순서로 계층을 만들어 실제 운영 데이터처럼 보이는 관계를 구성합니다.
  */
 export async function createTimelineSessionExerciseDomainData(
@@ -137,8 +137,8 @@ export async function createTimelineSessionExerciseDomainData(
 	console.log("Timeline / Session / Exercise 시드 데이터 삽입 중...");
 	console.log("========================================");
 
-	const timelineGroundNames = [
-		...new Set(timelineSeedData.map((item) => item.groundName)),
+	const timelineFitnessCenterNames = [
+		...new Set(timelineSeedData.map((item) => item.fitnessCenterName)),
 	];
 	const createdByEmails = [
 		...new Set([
@@ -149,10 +149,9 @@ export async function createTimelineSessionExerciseDomainData(
 
 	// Load reusable relations once up front; the rest of the function mostly
 	// works from these in-memory maps.
-	const [grounds, createdByUsers, fallbackUser] = await Promise.all([
-		prisma.ground.findMany({
-			where: { name: { in: timelineGroundNames } },
-			include: { company: true },
+	const [fitnessCenters, createdByUsers, fallbackUser] = await Promise.all([
+		prisma.fitnessCenter.findMany({
+			where: { name: { in: timelineFitnessCenterNames } },
 		}),
 		prisma.user.findMany({ where: { email: { in: createdByEmails } } }),
 		prisma.user.findFirst({ where: { email: "admin@plate.com" } }),
@@ -162,7 +161,9 @@ export async function createTimelineSessionExerciseDomainData(
 		throw new Error("기본 시드 유저(admin@plate.com)를 찾을 수 없습니다.");
 	}
 
-	const groundByName = new Map(grounds.map((ground) => [ground.name, ground]));
+	const fitnessCenterByName = new Map(
+		fitnessCenters.map((fitnessCenter) => [fitnessCenter.name, fitnessCenter]),
+	);
 	const userByCreatedByEmail = new Map(
 		createdByUsers.map((user) => [user.email, user]),
 	);
@@ -172,20 +173,24 @@ export async function createTimelineSessionExerciseDomainData(
 
 	const timelinesById = new Map<
 		string,
-		{ id: string; groundName: string; createdById: string | null }
+		{
+			id: string;
+			fitnessCenterName: string;
+			createdById: string | null;
+		}
 	>();
 	let timelineCreated = 0;
 	let timelineUpdated = 0;
 
 	for (const timelineData of timelineSeedData) {
-		const ground = groundByName.get(timelineData.groundName);
-		if (!ground) {
-			console.warn(`  - Ground 누락으로 Timeline 스킵: ${timelineData.name}`);
+		const fitnessCenter = fitnessCenterByName.get(timelineData.fitnessCenterName);
+		if (!fitnessCenter) {
+			console.warn(`  - FitnessCenter 누락으로 Timeline 스킵: ${timelineData.name}`);
 			continue;
 		}
 
 		const createdBy = userByCreatedByEmail.get(timelineData.createdByEmail);
-		const spaceId = ground.company.spaceId;
+		const spaceId = fitnessCenter.spaceId;
 		const existingTimeline = await prisma.timeline.findUnique({
 			where: { id: timelineData.id },
 		});
@@ -209,7 +214,7 @@ export async function createTimelineSessionExerciseDomainData(
 
 		timelinesById.set(timelineData.id, {
 			id: timelineData.id,
-			groundName: timelineData.groundName,
+			fitnessCenterName: timelineData.fitnessCenterName,
 			createdById: createdBy?.id ?? null,
 		});
 
@@ -220,39 +225,44 @@ export async function createTimelineSessionExerciseDomainData(
 		}
 	}
 
-	const taskIdsByGround = new Map<string, string[]>();
+	const taskIdsByFitnessCenter = new Map<string, string[]>();
 	let taskCreated = 0;
 	let exerciseCreated = 0;
 
-	// Build a task/exercise catalog per ground first. Routines and sessions later
-	// only choose from the per-ground ids assembled here.
-	for (const groundName of timelineGroundNames) {
-		const ground = groundByName.get(groundName);
-		if (!ground) continue;
+	// Build a task/exercise catalog per fitnessCenter first. Routines and sessions later
+	// only choose from the per-fitnessCenter ids assembled here.
+	for (const fitnessCenterName of timelineFitnessCenterNames) {
+		const fitnessCenter = fitnessCenterByName.get(fitnessCenterName);
+		if (!fitnessCenter) continue;
 
 		const timelineCreatedByEmail = timelineSeedData.find(
-			(item) => item.groundName === groundName,
+			(item) => item.fitnessCenterName === fitnessCenterName,
 		)?.createdByEmail;
 		const createdById = timelineCreatedByEmail
 			? (userByCreatedByEmail.get(timelineCreatedByEmail)?.id ??
 				fallbackUser.id)
 			: fallbackUser.id;
-		const spaceId = ground.company.spaceId;
+		const spaceId = fitnessCenter.spaceId;
 
 		const selectedTaskIds: string[] = [];
 
 		for (const exerciseCatalog of exerciseCatalogSeedData) {
 			const shouldInclude =
-				hashToInt(`${groundName}:${exerciseCatalog.code}:include`, 100) <
-				(groundName.includes("F45") || groundName.includes("크로스핏")
+				hashToInt(
+					`${fitnessCenterName}:${exerciseCatalog.code}:include`,
+					100,
+				) <
+				(fitnessCenterName.includes("F45") || fitnessCenterName.includes("크로스핏")
 					? 78
 					: 62);
 
 			if (!shouldInclude) continue;
 
-			const taskId = stableUuid(`task:${groundName}:${exerciseCatalog.code}`);
+			const taskId = stableUuid(
+				`task:${fitnessCenterName}:${exerciseCatalog.code}`,
+			);
 			const exerciseId = stableUuid(
-				`exercise:${groundName}:${exerciseCatalog.code}`,
+				`exercise:${fitnessCenterName}:${exerciseCatalog.code}`,
 			);
 
 			const existingTask = await prisma.task.findUnique({
@@ -278,13 +288,19 @@ export async function createTimelineSessionExerciseDomainData(
 			const duration = Math.max(
 				30,
 				exerciseCatalog.typicalDurationSec +
-					(hashToInt(`${groundName}:${exerciseCatalog.code}:duration`, 31) -
+					(hashToInt(
+						`${fitnessCenterName}:${exerciseCatalog.code}:duration`,
+						31,
+					) -
 						15),
 			);
 			const count = Math.max(
 				1,
 				exerciseCatalog.typicalCount +
-					(hashToInt(`${groundName}:${exerciseCatalog.code}:count`, 7) - 3),
+					(hashToInt(
+						`${fitnessCenterName}:${exerciseCatalog.code}:count`,
+						7,
+					) - 3),
 			);
 			const estimatedCalories = Math.round(
 				(duration / 60) * exerciseCatalog.caloriesPerMinute,
@@ -324,10 +340,10 @@ export async function createTimelineSessionExerciseDomainData(
 			selectedTaskIds.push(taskId);
 		}
 
-		taskIdsByGround.set(groundName, selectedTaskIds);
+		taskIdsByFitnessCenter.set(fitnessCenterName, selectedTaskIds);
 	}
 
-	const routinesByGround = new Map<
+	const routinesByFitnessCenter = new Map<
 		string,
 		Array<{ id: string; level: string }>
 	>();
@@ -336,30 +352,30 @@ export async function createTimelineSessionExerciseDomainData(
 
 	// Routines are the reusable workout blueprints that session programs will
 	// attach to in the final phase.
-	for (const groundName of timelineGroundNames) {
-		const ground = groundByName.get(groundName);
-		const taskIds = taskIdsByGround.get(groundName) ?? [];
-		if (!ground || taskIds.length < 4) continue;
+	for (const fitnessCenterName of timelineFitnessCenterNames) {
+		const fitnessCenter = fitnessCenterByName.get(fitnessCenterName);
+		const taskIds = taskIdsByFitnessCenter.get(fitnessCenterName) ?? [];
+		if (!fitnessCenter || taskIds.length < 4) continue;
 
 		const createdByEmail = timelineSeedData.find(
-			(item) => item.groundName === groundName,
+			(item) => item.fitnessCenterName === fitnessCenterName,
 		)?.createdByEmail;
 		const createdById = createdByEmail
 			? (userByCreatedByEmail.get(createdByEmail)?.id ?? fallbackUser.id)
 			: fallbackUser.id;
-		const spaceId = ground.company.spaceId;
+		const spaceId = fitnessCenter.spaceId;
 
 		const routineCount = Math.min(
 			4,
 			Math.max(2, Math.floor(taskIds.length / 4)),
 		);
-		const groundRoutines: Array<{ id: string; level: string }> = [];
+		const fitnessCenterRoutines: Array<{ id: string; level: string }> = [];
 
 		for (let idx = 0; idx < routineCount; idx++) {
 			const template =
 				sessionTemplateSeedData[idx % sessionTemplateSeedData.length];
 			const routineId = stableUuid(
-				`routine:${groundName}:${template.code}:${idx}`,
+				`routine:${fitnessCenterName}:${template.code}:${idx}`,
 			);
 			const existingRoutine = await prisma.routine.findUnique({
 				where: { id: routineId },
@@ -371,14 +387,14 @@ export async function createTimelineSessionExerciseDomainData(
 					spaceId,
 					createdById: createdById ?? null,
 					name: `${template.name} 루틴 ${idx + 1}`,
-					label: `${groundName} ${template.level}`,
+					label: `${fitnessCenterName} ${template.level}`,
 				},
 				create: {
 					id: routineId,
 					spaceId,
 					createdById,
 					name: `${template.name} 루틴 ${idx + 1}`,
-					label: `${groundName} ${template.level}`,
+					label: `${fitnessCenterName} ${template.level}`,
 				},
 			});
 
@@ -449,10 +465,10 @@ export async function createTimelineSessionExerciseDomainData(
 				}
 			}
 
-			groundRoutines.push({ id: routineId, level: template.level });
+			fitnessCenterRoutines.push({ id: routineId, level: template.level });
 		}
 
-		routinesByGround.set(groundName, groundRoutines);
+		routinesByFitnessCenter.set(fitnessCenterName, fitnessCenterRoutines);
 	}
 
 	const recurringDayMap = [
@@ -469,7 +485,7 @@ export async function createTimelineSessionExerciseDomainData(
 	let programCreated = 0;
 
 	// Final phase: generate actual scheduled sessions, then connect one routine
-	// to each session as a program when routine data exists for that ground.
+	// to each session as a program when routine data exists for that fitnessCenter.
 	for (const timelineMeta of timelineSeedData) {
 		const timeline = timelinesById.get(timelineMeta.id);
 		if (!timeline) continue;
@@ -487,8 +503,8 @@ export async function createTimelineSessionExerciseDomainData(
 				: loadProfile?.tier === "LIGHT"
 					? 0.7
 					: 1;
-		const preferredFactor = loadProfile?.preferredGroundNames.includes(
-			timelineMeta.groundName,
+		const preferredFactor = loadProfile?.preferredFitnessCenterNames.includes(
+			timelineMeta.fitnessCenterName,
 		)
 			? 1.15
 			: 0.85;
@@ -497,7 +513,8 @@ export async function createTimelineSessionExerciseDomainData(
 			Math.round(baseCount * tierFactor * preferredFactor),
 		);
 
-		const groundRoutines = routinesByGround.get(timelineMeta.groundName) ?? [];
+		const fitnessCenterRoutines =
+			routinesByFitnessCenter.get(timelineMeta.fitnessCenterName) ?? [];
 
 		for (let index = 0; index < sessionCount; index++) {
 			const seasonTemplateShift =
@@ -563,7 +580,7 @@ export async function createTimelineSessionExerciseDomainData(
 					timelineId: timeline.id,
 					type: sessionType,
 					name: `${template.name} ${index + 1}`,
-					description: `${timelineMeta.groundName} ${template.focus} 세션 | ${template.phaseWeek} | 목표 RPE ${template.targetRpe} | 권장 휴식 ${template.recommendedRestSec}초`,
+					description: `${timelineMeta.fitnessCenterName} ${template.focus} 세션 | ${template.phaseWeek} | 목표 RPE ${template.targetRpe} | 권장 휴식 ${template.recommendedRestSec}초`,
 					startDateTime,
 					endDateTime,
 					repeatCycleType,
@@ -574,7 +591,7 @@ export async function createTimelineSessionExerciseDomainData(
 					timelineId: timeline.id,
 					type: sessionType,
 					name: `${template.name} ${index + 1}`,
-					description: `${timelineMeta.groundName} ${template.focus} 세션 | ${template.phaseWeek} | 목표 RPE ${template.targetRpe} | 권장 휴식 ${template.recommendedRestSec}초`,
+					description: `${timelineMeta.fitnessCenterName} ${template.focus} 세션 | ${template.phaseWeek} | 목표 RPE ${template.targetRpe} | 권장 휴식 ${template.recommendedRestSec}초`,
 					startDateTime,
 					endDateTime,
 					repeatCycleType,
@@ -586,7 +603,7 @@ export async function createTimelineSessionExerciseDomainData(
 				sessionCreated++;
 			}
 
-			if (groundRoutines.length > 0) {
+			if (fitnessCenterRoutines.length > 0) {
 				const programCapacity =
 					template.level === "고급"
 						? 14
@@ -595,8 +612,8 @@ export async function createTimelineSessionExerciseDomainData(
 							: 18;
 
 				const pickedRoutine =
-					groundRoutines[
-						hashToInt(`${sessionId}:routine`, groundRoutines.length)
+					fitnessCenterRoutines[
+						hashToInt(`${sessionId}:routine`, fitnessCenterRoutines.length)
 					];
 				const programId = stableUuid(
 					`program:${sessionId}:${pickedRoutine.id}`,

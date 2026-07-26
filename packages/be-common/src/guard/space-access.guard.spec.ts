@@ -13,10 +13,10 @@ import { SpaceAccessGuard } from "./space-access.guard";
 describe("SpaceAccessGuard", () => {
 	let guard: SpaceAccessGuard;
 	let mockReflector: jest.Mocked<Reflector>;
-	let mockClsService: { get: jest.Mock };
+	let mockClsService: { get: jest.Mock; set: jest.Mock };
 	type MockTenant = {
 		id: string;
-		spaceId: string;
+		spaceId?: string;
 		role: { name: string };
 		space?: {
 			id?: string;
@@ -30,7 +30,7 @@ describe("SpaceAccessGuard", () => {
 	type MockUser = {
 		id: string;
 		email: string;
-		tenants: MockTenant[];
+		tenants?: MockTenant[] | null;
 	};
 
 	const createMockExecutionContext = (): ExecutionContext => {
@@ -70,6 +70,7 @@ describe("SpaceAccessGuard", () => {
 
 		mockClsService = {
 			get: jest.fn(),
+			set: jest.fn(),
 		};
 
 		const module: TestingModule = await Test.createTestingModule({
@@ -151,7 +152,7 @@ describe("SpaceAccessGuard", () => {
 				const user = createMockUser();
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
-					if (key === CONTEXT_KEYS.SPACE_ID) return undefined;
+					if (key === CONTEXT_KEYS.TENANT_ID) return undefined;
 					return undefined;
 				});
 				const context = createMockExecutionContext();
@@ -169,7 +170,7 @@ describe("SpaceAccessGuard", () => {
 				const user = createMockUser();
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
-					if (key === CONTEXT_KEYS.SPACE_ID) return "space-001";
+					if (key === CONTEXT_KEYS.TENANT_ID) return "tenant-1";
 					return undefined;
 				});
 				const context = createMockExecutionContext();
@@ -179,9 +180,13 @@ describe("SpaceAccessGuard", () => {
 
 				// Then
 				expect(result).toBe(true);
+				expect(mockClsService.set).toHaveBeenCalledWith(
+					CONTEXT_KEYS.SPACE_ID,
+					"space-001",
+				);
 			});
 
-			it("tenant.space.id가 x-tenant-id와 일치하면 true를 반환해야 한다", () => {
+			it("tenant.space.id에서 Space ID를 파생하면 true를 반환해야 한다", () => {
 				// Given
 				mockReflector.getAllAndOverride.mockReturnValue(undefined);
 				const user = createMockUser({
@@ -196,7 +201,7 @@ describe("SpaceAccessGuard", () => {
 				});
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
-					if (key === CONTEXT_KEYS.SPACE_ID) return "space-001";
+					if (key === CONTEXT_KEYS.TENANT_ID) return "tenant-1";
 					return undefined;
 				});
 				const context = createMockExecutionContext();
@@ -206,6 +211,10 @@ describe("SpaceAccessGuard", () => {
 
 				// Then
 				expect(result).toBe(true);
+				expect(mockClsService.set).toHaveBeenCalledWith(
+					CONTEXT_KEYS.SPACE_ID,
+					"space-001",
+				);
 			});
 
 			it("인증 + x-tenant-id + 해당 tenant가 없으면 ForbiddenException을 던져야 한다", () => {
@@ -214,7 +223,7 @@ describe("SpaceAccessGuard", () => {
 				const user = createMockUser();
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
-					if (key === CONTEXT_KEYS.SPACE_ID) return "non-existent-space";
+					if (key === CONTEXT_KEYS.TENANT_ID) return "tenant-missing";
 					return undefined;
 				});
 				const context = createMockExecutionContext();
@@ -222,7 +231,7 @@ describe("SpaceAccessGuard", () => {
 				// When & Then
 				expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
 				expect(() => guard.canActivate(context)).toThrow(
-					"해당 Space에 대한 접근 권한이 없습니다",
+					"해당 Tenant에 대한 접근 권한이 없습니다",
 				);
 			});
 		});
@@ -234,7 +243,7 @@ describe("SpaceAccessGuard", () => {
 				const user = createMockUser({ tenants: null });
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
-					if (key === CONTEXT_KEYS.SPACE_ID) return "space-001";
+					if (key === CONTEXT_KEYS.TENANT_ID) return "tenant-1";
 					return undefined;
 				});
 				const context = createMockExecutionContext();
@@ -252,7 +261,7 @@ describe("SpaceAccessGuard", () => {
 				const user = createMockUser({ tenants: undefined });
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
-					if (key === CONTEXT_KEYS.SPACE_ID) return "space-001";
+					if (key === CONTEXT_KEYS.TENANT_ID) return "tenant-1";
 					return undefined;
 				});
 				const context = createMockExecutionContext();

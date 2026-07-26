@@ -16,10 +16,10 @@
  */
 
 export interface PageMetaDto {
-	skip: number;
-	take: number;
-	totalCount: number;
-	pageCount: number;
-	hasPreviousPage: boolean;
-	hasNextPage: boolean;
+  skip: number;
+  take: number;
+  totalCount: number;
+  pageCount: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
 }

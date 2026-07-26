@@ -1,6 +1,6 @@
 export * from "./create-action.dto";
 export * from "./create-exercise.dto";
-export * from "./create-ground.dto";
+export * from "./create-fitness-center.dto";
 export * from "./create-oidc-client.dto";
 export * from "./create-program.dto";
 export * from "./create-role.dto";
@@ -11,6 +11,7 @@ export * from "./create-session.dto";
 export * from "./create-space.dto";
 export * from "./create-space-association.dto";
 export * from "./create-space-classification.dto";
+export * from "./create-space-with-fitness-center.dto";
 export * from "./create-task.dto";
 export * from "./create-template.dto";
 export * from "./create-tenant.dto";

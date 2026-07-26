@@ -48,6 +48,8 @@ const SPACE_B_ID = "22222222-2222-4222-8222-222222222222";
 const ROOT_SCOPED_SPACE_IDS = [SPACE_B_ID, SPACE_A_ID];
 const BRANCH_SCOPED_SPACE_IDS = [SPACE_A_ID];
 const UNKNOWN_TENANT_ID = "44444444-4444-4444-8444-444444444444";
+const FITNESS_CENTER_ID = "55555555-5555-4555-8555-555555555555";
+const COMPANY_ID = "66666666-6666-4666-8666-666666666666";
 
 function createTestUser() {
 	return {
@@ -217,24 +219,37 @@ describe("Space Scope API (E2E)", () => {
 			}
 			return BRANCH_SCOPED_SPACE_IDS;
 		},
-		findManyWithGround: async (params?: Record<string, unknown>) => {
-			spacesRepoCalls.push({ type: "findManyWithGround", ...(params ?? {}) });
+		findManyWithFitnessCenter: async (params?: Record<string, unknown>) => {
+			spacesRepoCalls.push({
+				type: "findManyWithFitnessCenter",
+				...(params ?? {}),
+			});
 			return [[], 0];
 		},
-		findGroundBySpaceId: async (spaceId: string) => {
-			spacesRepoCalls.push({ type: "findGroundBySpaceId", spaceId });
+		findFitnessCenterBySpaceId: async (spaceId: string) => {
+			spacesRepoCalls.push({ type: "findFitnessCenterBySpaceId", spaceId });
 			return {
-				id: "44444444-4444-4444-8444-444444444444",
+				id: FITNESS_CENTER_ID,
 				spaceId,
-				name: `Ground ${spaceId.slice(0, 4)}`,
+				companyId: COMPANY_ID,
+				name: `FitnessCenter ${spaceId.slice(0, 4)}`,
 				label: null,
 				address: "Seoul",
 				phone: "02-1234-5678",
-				email: "scope-ground@example.com",
-				businessNo: "1234567890",
-				logoImageFileId: null,
+				email: "scope-fitness-center@example.com",
 				imageFileId: null,
 				removedAt: null,
+				company: {
+					id: COMPANY_ID,
+					name: "Scope Company",
+					label: null,
+					address: "Seoul",
+					phone: "02-1234-5678",
+					email: "scope-company@example.com",
+					businessNo: "1234567890",
+					logoImageFileId: null,
+					removedAt: null,
+				},
 			};
 		},
 	};
@@ -564,7 +579,7 @@ describe("Space Scope API (E2E)", () => {
 			scope: SpaceResourceScope.WITH_DESCENDANTS,
 		});
 		expect(spacesRepoCalls[1]).toEqual({
-			type: "findManyWithGround",
+			type: "findManyWithFitnessCenter",
 			spaceIds: BRANCH_SCOPED_SPACE_IDS,
 		});
 
@@ -582,26 +597,28 @@ describe("Space Scope API (E2E)", () => {
 			scope: SpaceResourceScope.WITH_DESCENDANTS,
 		});
 		expect(spacesRepoCalls[1]).toEqual({
-			type: "findManyWithGround",
+			type: "findManyWithFitnessCenter",
 			spaceIds: ROOT_SCOPED_SPACE_IDS,
 		});
 	});
 
-	it("비 PLATFORM_ADMIN 사용자는 다른 space의 ground 상세에 접근할 수 없고 PLATFORM_ADMIN은 접근 가능하다", async () => {
+	it("비 PLATFORM_ADMIN 사용자는 다른 space의 FitnessCenter 상세에 접근할 수 없고 PLATFORM_ADMIN은 접근 가능하다", async () => {
 		const forbiddenResponse = await request(app.getHttpServer())
-			.get(`/api/v1/spaces/${SPACE_B_ID}/ground`)
+			.get(`/api/v1/spaces/${SPACE_B_ID}/fitness-center`)
 			.set("Authorization", `Bearer ${jwtToken}`)
 			.set("x-tenant-id", TENANT_A_ID);
 
 		expect(forbiddenResponse.status).toBe(HttpStatus.FORBIDDEN);
 		expect(
-			spacesRepoCalls.some((call) => call.type === "findGroundBySpaceId"),
+			spacesRepoCalls.some(
+				(call) => call.type === "findFitnessCenterBySpaceId",
+			),
 		).toBe(false);
 
 		spacesRepoCalls.length = 0;
 
 		const allowedResponse = await request(app.getHttpServer())
-			.get(`/api/v1/spaces/${SPACE_A_ID}/ground`)
+			.get(`/api/v1/spaces/${SPACE_A_ID}/fitness-center`)
 			.set("Authorization", `Bearer ${jwtToken}`)
 			.set("x-tenant-id", TENANT_B_ID);
 
@@ -612,7 +629,7 @@ describe("Space Scope API (E2E)", () => {
 			scope: SpaceResourceScope.WITH_DESCENDANTS,
 		});
 		expect(spacesRepoCalls[1]).toEqual({
-			type: "findGroundBySpaceId",
+			type: "findFitnessCenterBySpaceId",
 			spaceId: SPACE_A_ID,
 		});
 	});

@@ -18,10 +18,11 @@
 /**
  * 문의 접수 유형
  */
-export type InquirySource = (typeof InquirySource)[keyof typeof InquirySource];
+export type InquirySource = typeof InquirySource[keyof typeof InquirySource];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const InquirySource = {
-	ONLINE: "ONLINE",
-	OFFLINE: "OFFLINE",
+  ONLINE: 'ONLINE',
+  OFFLINE: 'OFFLINE',
 } as const;

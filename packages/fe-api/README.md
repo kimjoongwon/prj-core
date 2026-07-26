@@ -131,7 +131,7 @@ pnpm clean
 - OpenAPI 스펙이 변경되면 `pnpm codegen` 또는 `pnpm build` 명령어로 API 클라이언트를 재생성하세요
 - 생성된 파일들(`src/core/*`, `src/idp/*`)은 직접 수정하지 마세요
 - 커스텀 Axios 설정이 필요한 경우 `src/libs/customAxios.ts`를 수정하세요
-- DTO/enum이 태그 배럴에 없으면 `@cocrepo/api/model/*`, `@cocrepo/api/idp-model/*`에서 직접 import 하세요
+- DTO/enum이 태그 배럴에 없으면 `@cocrepo/api/core/model` 또는 `@cocrepo/api/idp/model`에서 import 하세요
 - 환경 변수 `ORVAL_ENV`가 설정되지 않으면 localhost를 먼저 확인하고, 없으면 staging으로 fallback 합니다
 - 신규 admin/idp 페이지의 기본 조회는 `useGetXxx`/`useInfiniteQuery`입니다
 - `useGetXxxSuspense`는 route-level `loading.tsx` 또는 수동 `Suspense` boundary가 있는 예외 패턴에서만 사용하세요

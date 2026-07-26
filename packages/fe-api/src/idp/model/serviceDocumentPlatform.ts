@@ -18,12 +18,12 @@
 /**
  * 노출 플랫폼
  */
-export type ServiceDocumentPlatform =
-	(typeof ServiceDocumentPlatform)[keyof typeof ServiceDocumentPlatform];
+export type ServiceDocumentPlatform = typeof ServiceDocumentPlatform[keyof typeof ServiceDocumentPlatform];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ServiceDocumentPlatform = {
-	ALL: "ALL",
-	WEB: "WEB",
-	MOBILE: "MOBILE",
+  ALL: 'ALL',
+  WEB: 'WEB',
+  MOBILE: 'MOBILE',
 } as const;

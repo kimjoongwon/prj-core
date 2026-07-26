@@ -1,6 +1,6 @@
 // @data-type: MASTER
 // @aggregate-root: true
-// @description: Company 등 1:1 상세 모델의 공통 identity와 소속 관계를 제공하는 공간 기반 모델
+// @description: FitnessCenter 등 1:1 상세 모델의 공통 identity와 소속 관계를 제공하는 공간 기반 모델
 /// @displayName 공간
 model Space {
   id                   String                @id @default(uuid())
@@ -9,7 +9,7 @@ model Space {
   removedAt            DateTime?             @map("removed_at") @db.Timestamptz(6)
   /// @displayName 콘텐츠 언어
   contentLanguageCode  LanguageCode          @default(ko_KR) @map("content_language_code")
-  company              Company?
+  fitnessCenter        FitnessCenter?
   associations         SpaceAssociation[]
   classification       SpaceClassification?
   tenants              Tenant[]

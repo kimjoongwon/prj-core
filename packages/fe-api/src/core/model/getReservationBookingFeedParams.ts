@@ -16,39 +16,39 @@
  */
 
 export type GetReservationBookingFeedParams = {
-	/**
-	 * @minimum 0
-	 */
-	skip?: number;
-	/**
-	 * @minimum 1
-	 * @maximum 200
-	 */
-	take?: number;
-	/**
-	 * 조회 시작 일시
-	 */
-	dateFrom?: string;
-	/**
-	 * 조회 종료 일시
-	 */
-	dateTo?: string;
-	/**
-	 * 클라이언트 표시 타임존
-	 */
-	timeZone?: string;
-	/**
-	 * 타임라인 ID 필터
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	timelineId?: string;
-	/**
-	 * 프로그램 ID 필터
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	programId?: string;
-	/**
-	 * 프로그램/세션/타임라인 검색어
-	 */
-	search?: string;
+/**
+ * @minimum 0
+ */
+skip?: number;
+/**
+ * @minimum 1
+ * @maximum 200
+ */
+take?: number;
+/**
+ * 조회 시작 일시
+ */
+dateFrom?: string;
+/**
+ * 조회 종료 일시
+ */
+dateTo?: string;
+/**
+ * 클라이언트 표시 타임존
+ */
+timeZone?: string;
+/**
+ * 타임라인 ID 필터
+ * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+ */
+timelineId?: string;
+/**
+ * 프로그램 ID 필터
+ * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+ */
+programId?: string;
+/**
+ * 프로그램/세션/타임라인 검색어
+ */
+search?: string;
 };

@@ -84,10 +84,10 @@ export {
 	adminEmailVerificationsPageQueryInputs,
 	EmailVerificationListScreen,
 } from "./EmailVerificationListScreen/EmailVerificationListScreen";
+export type { FitnessCenterEditScreenProps } from "./FitnessCenterEditScreen/FitnessCenterEditScreen";
+export { FitnessCenterEditScreen } from "./FitnessCenterEditScreen/FitnessCenterEditScreen";
 export type { ForgotPasswordScreenProps } from "./ForgotPasswordScreen/ForgotPasswordScreen";
 export { ForgotPasswordScreen } from "./ForgotPasswordScreen/ForgotPasswordScreen";
-export type { GroundEditScreenProps } from "./GroundEditScreen/GroundEditScreen";
-export { GroundEditScreen } from "./GroundEditScreen/GroundEditScreen";
 export type {
 	IdentityDashboardScreenProps,
 	IdentityDashboardScreenStats,

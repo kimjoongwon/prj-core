@@ -140,9 +140,9 @@ export class OidcDirectUsersRepository {
 						role: true,
 						space: {
 							include: {
-								company: {
+								fitnessCenter: {
 									include: {
-										ground: true,
+										company: true,
 									},
 								},
 							},
@@ -150,6 +150,6 @@ export class OidcDirectUsersRepository {
 					},
 				},
 			},
-		});
+		} as never);
 	}
 }

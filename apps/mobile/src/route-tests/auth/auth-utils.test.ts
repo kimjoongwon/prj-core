@@ -1,11 +1,15 @@
 import { Platform } from "react-native";
+import * as SecureStore from "expo-secure-store";
 import {
 	buildAuthLoginUrl,
 	clearNativeAuthSession,
+	clearNativeSpaceSelection,
 	loadNativeAuthSession,
+	loadNativeSpaceSelection,
 	requestNativeLogin,
 	requestNativeTokenRefresh,
 	saveNativeAuthSession,
+	saveNativeSpaceSelection,
 } from "@/auth/_utils/auth";
 
 const mockSecureStore = new Map<string, string>();
@@ -24,6 +28,7 @@ describe("mobile auth utils", () => {
 	afterEach(() => {
 		mockSecureStore.clear();
 		jest.restoreAllMocks();
+		jest.clearAllMocks();
 	});
 
 	it("Android 환경변수 localhost auth API URL을 에뮬레이터 host로 보정해야 한다", () => {
@@ -145,5 +150,66 @@ describe("mobile auth utils", () => {
 
 		await clearNativeAuthSession();
 		await expect(loadNativeAuthSession()).resolves.toBeNull();
+	});
+
+	it("Given 피트니스센터 선택이 있을 때 When SecureStore에 저장하면 Then version 2 계약으로 복원한다", async () => {
+		const selection = {
+			address: "서울 강남구",
+			contentLanguageCode: "ko_KR",
+			fitnessCenterName: "강남점",
+			imageFileId: "fitness-center-image",
+			logoImageFileId: "company-logo",
+			spaceId: "space-branch",
+			tenantId: "tenant-branch",
+		};
+
+		await saveNativeSpaceSelection(selection);
+
+		const persistedSelection = [...mockSecureStore.entries()].find(([key]) =>
+			key.includes("space-selection"),
+		);
+		expect(JSON.parse(persistedSelection?.[1] ?? "{}")).toMatchObject({
+			...selection,
+			version: 2,
+		});
+		await expect(loadNativeSpaceSelection()).resolves.toEqual(selection);
+
+		await clearNativeSpaceSelection();
+		await expect(loadNativeSpaceSelection()).resolves.toBeNull();
+	});
+
+	it("Given version 없는 예전 선택이 있을 때 When SecureStore에서 복원하면 Then 값을 폐기한다", async () => {
+		const storageKey = "onora.mobile.native.space-selection.v1";
+		mockSecureStore.set(
+			storageKey,
+			JSON.stringify({
+				fitnessCenterName: "강남점",
+				spaceId: "space-branch",
+				tenantId: "tenant-branch",
+			}),
+		);
+
+		await expect(loadNativeSpaceSelection()).resolves.toBeNull();
+
+		expect(SecureStore.deleteItemAsync).toHaveBeenCalledWith(storageKey);
+		expect(mockSecureStore.has(storageKey)).toBe(false);
+	});
+
+	it("Given 이전 version 선택이 있을 때 When SecureStore에서 복원하면 Then 값을 폐기한다", async () => {
+		const storageKey = "onora.mobile.native.space-selection.v1";
+		mockSecureStore.set(
+			storageKey,
+			JSON.stringify({
+				fitnessCenterName: "강남점",
+				spaceId: "space-branch",
+				tenantId: "tenant-branch",
+				version: 1,
+			}),
+		);
+
+		await expect(loadNativeSpaceSelection()).resolves.toBeNull();
+
+		expect(SecureStore.deleteItemAsync).toHaveBeenCalledWith(storageKey);
+		expect(mockSecureStore.has(storageKey)).toBe(false);
 	});
 });

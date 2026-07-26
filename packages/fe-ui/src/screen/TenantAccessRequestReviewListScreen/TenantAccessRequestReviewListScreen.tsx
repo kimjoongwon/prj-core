@@ -30,7 +30,21 @@ function formatDateTime(value: string) {
 	});
 }
 function getSpaceName(request: TenantAccessRequestDto) {
-	return request.space?.ground?.name ?? request.spaceId;
+	const space = request.space as
+		| (TenantAccessRequestDto["space"] & {
+				fitnessCenter?: {
+					name?: string | null;
+					company?: {
+						name?: string | null;
+					} | null;
+				} | null;
+		  })
+		| undefined;
+	return (
+		space?.fitnessCenter?.name ??
+		space?.fitnessCenter?.company?.name ??
+		request.spaceId
+	);
 }
 function getRoleName(request: TenantAccessRequestDto) {
 	return (
@@ -108,7 +122,7 @@ export const TenantAccessRequestReviewListScreen = observer(
 			<VStack>
 				<Screen.Header
 					title="접근 승인"
-					description="Space/Role 접근 신청을 검토하고 승인 또는 반려합니다."
+					description="공간과 역할 접근 신청을 검토하고 승인 또는 반려합니다."
 				/>
 				<SectionSurface>
 					<Section>

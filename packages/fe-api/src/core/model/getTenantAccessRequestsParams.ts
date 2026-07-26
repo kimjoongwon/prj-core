@@ -14,46 +14,46 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { TenantAccessRequestStatus } from "./tenantAccessRequestStatus";
+import type { TenantAccessRequestStatus } from './tenantAccessRequestStatus';
 
 export type GetTenantAccessRequestsParams = {
-	/**
-	 * @minimum 0
-	 */
-	skip?: number;
-	/**
-	 * @minimum 1
-	 * @maximum 200
-	 */
-	take?: number;
-	/**
-	 * 검색어 (신청자 이름/이메일, 시설명)
-	 */
-	search?: string;
-	/**
-	 * 신청 상태 필터
-	 */
-	status?: TenantAccessRequestStatus;
-	/**
-	 * Space ID 필터
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	spaceId?: string;
-	/**
-	 * 신청자 ID 필터
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	requesterId?: string;
-	/**
-	 * 신청일 시작 (ISO8601)
-	 */
-	createdFrom?: string;
-	/**
-	 * 신청일 종료 (ISO8601)
-	 */
-	createdTo?: string;
-	/**
-	 * 복합 정렬 (JSON:API 컨벤션). 예: ?sort=-createdAt&sort=status
-	 */
-	sort?: string[];
+/**
+ * @minimum 0
+ */
+skip?: number;
+/**
+ * @minimum 1
+ * @maximum 200
+ */
+take?: number;
+/**
+ * 검색어 (신청자 이름/이메일, 시설명)
+ */
+search?: string;
+/**
+ * 신청 상태 필터
+ */
+status?: TenantAccessRequestStatus;
+/**
+ * Space ID 필터
+ * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+ */
+spaceId?: string;
+/**
+ * 신청자 ID 필터
+ * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+ */
+requesterId?: string;
+/**
+ * 신청일 시작 (ISO8601)
+ */
+createdFrom?: string;
+/**
+ * 신청일 종료 (ISO8601)
+ */
+createdTo?: string;
+/**
+ * 복합 정렬 (JSON:API 컨벤션). 예: ?sort=-createdAt&sort=status
+ */
+sort?: string[];
 };

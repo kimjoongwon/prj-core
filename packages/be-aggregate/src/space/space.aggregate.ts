@@ -1,7 +1,7 @@
-import { Ground, Space } from "@cocrepo/entity";
+import { Space } from "@cocrepo/entity";
 import type {
 	CreateSpaceCommandInput,
-	UpdateSpaceGroundCommandInput,
+	UpdateSpaceFitnessCenterCommandInput,
 } from "@cocrepo/input";
 import type { LanguageCode, Prisma } from "@cocrepo/prisma";
 import { SpacesRepository } from "@cocrepo/repository";
@@ -22,7 +22,7 @@ export class SpaceAggregate {
 	}
 
 	/**
-	 * Company/Ground detail이 있는 Space 목록 조회
+	 * Company/FitnessCenter detail이 있는 Space 목록 조회
 	 */
 	async listSpaces(params?: {
 		spaceIds?: string[];
@@ -31,20 +31,28 @@ export class SpaceAggregate {
 		search?: string;
 		contentLanguageCode?: LanguageCode;
 	}): Promise<{ spaces: Space[]; total: number }> {
-		const [spaces, total] = await this.repository.findManyWithGround(params);
+		const [spaces, total] =
+			await this.repository.findManyWithFitnessCenter(params);
 		return { spaces, total };
 	}
 
 	/**
-	 * Space의 Company 아래 Ground detail 조회
+	 * Space의 FitnessCenter detail 조회
 	 */
-	async getGroundBySpaceId(spaceId: string): Promise<Ground> {
-		const ground = await this.repository.findGroundBySpaceId(spaceId);
-		if (!ground) {
+	async getFitnessCenterBySpaceId(
+		spaceId: string,
+	): Promise<
+		NonNullable<
+			Awaited<ReturnType<SpacesRepository["findFitnessCenterBySpaceId"]>>
+		>
+	> {
+		const fitnessCenter =
+			await this.repository.findFitnessCenterBySpaceId(spaceId);
+		if (!fitnessCenter) {
 			throw new NotFoundException("시설 정보를 찾을 수 없습니다");
 		}
 
-		return ground;
+		return fitnessCenter;
 	}
 
 	/**
@@ -64,71 +72,63 @@ export class SpaceAggregate {
 	}
 
 	/**
-	 * Space + Company/Ground detail 생성
+	 * Space + Company/FitnessCenter detail 생성
 	 */
 	@Transactional()
-	async createSpaceWithGround(dto: CreateSpaceCommandInput): Promise<Space> {
-		this.logger.debug(`공간 생성: businessNo=${dto.businessNo}`);
+	async createSpaceWithFitnessCenter(
+		input: CreateSpaceCommandInput,
+	): Promise<Space> {
+		this.logger.debug(`공간 생성: businessNo=${input.businessNo}`);
 
 		const space = await this.repository.create({
-			contentLanguageCode: dto.contentLanguageCode,
+			contentLanguageCode: input.contentLanguageCode,
 		});
 
-		return this.repository.createGroundBySpaceId(space.id, {
+		return this.repository.createFitnessCenterBySpaceId(space.id, {
 			company: {
-				name: dto.name,
-				label: dto.label ?? null,
-				address: dto.address,
-				phone: dto.phone,
-				email: dto.email,
-				businessNo: dto.businessNo,
-				logoImageFileId: dto.logoImageFileId ?? null,
+				name: input.name,
+				label: input.label ?? null,
+				address: input.address,
+				phone: input.phone,
+				email: input.email,
+				businessNo: input.businessNo,
+				logoImageFileId: input.logoImageFileId ?? null,
 			},
-			ground: {
-				name: dto.name,
-				label: dto.label ?? null,
-				address: dto.address,
-				phone: dto.phone,
-				email: dto.email,
-				imageFileId: dto.imageFileId ?? null,
+			fitnessCenter: {
+				name: input.name,
+				label: input.label ?? null,
+				address: input.address,
+				phone: input.phone,
+				email: input.email,
+				imageFileId: input.imageFileId ?? null,
 			},
 		});
 	}
 
 	/**
-	 * Space의 Company/Ground detail 수정
+	 * Space의 FitnessCenter detail 수정
 	 */
-	async updateGroundBySpaceId(
+	async updateFitnessCenterBySpaceId(
 		spaceId: string,
-		dto: UpdateSpaceGroundCommandInput,
+		input: UpdateSpaceFitnessCenterCommandInput,
 	): Promise<Space> {
-		await this.getGroundBySpaceId(spaceId);
+		await this.getFitnessCenterBySpaceId(spaceId);
 
-		if (dto.contentLanguageCode !== undefined) {
+		if (input.contentLanguageCode !== undefined) {
 			await this.repository.updateById(spaceId, {
-				contentLanguageCode: dto.contentLanguageCode,
+				contentLanguageCode: input.contentLanguageCode,
 			});
 		}
 
-		return this.repository.updateGroundBySpaceId(spaceId, {
-			company: {
-				...(dto.name !== undefined && { name: dto.name }),
-				...(dto.label !== undefined && { label: dto.label }),
-				...(dto.address !== undefined && { address: dto.address }),
-				...(dto.phone !== undefined && { phone: dto.phone }),
-				...(dto.email !== undefined && { email: dto.email }),
-				...(dto.logoImageFileId !== undefined && {
-					logoImageFileId: dto.logoImageFileId,
-				}),
-			},
-			ground: {
-				...(dto.name !== undefined && { name: dto.name }),
-				...(dto.label !== undefined && { label: dto.label }),
-				...(dto.address !== undefined && { address: dto.address }),
-				...(dto.phone !== undefined && { phone: dto.phone }),
-				...(dto.email !== undefined && { email: dto.email }),
-				...(dto.imageFileId !== undefined && {
-					imageFileId: dto.imageFileId,
+		return this.repository.updateFitnessCenterBySpaceId(spaceId, {
+			fitnessCenter: {
+				...(input.name !== undefined && { name: input.name }),
+				...(input.label !== undefined && { label: input.label }),
+				...(input.address !== undefined && { address: input.address }),
+				...(input.phone !== undefined && { phone: input.phone }),
+				...(input.email !== undefined && { email: input.email }),
+				...(input.imageFileId !== undefined && {
+					imageFileId: input.imageFileId,
 				}),
 			},
 		});
@@ -142,9 +142,9 @@ export class SpaceAggregate {
 	}
 
 	/**
-	 * 여러 ID로 Space 조회 (Ground 포함)
+	 * 여러 ID로 Space 조회 (FitnessCenter 포함)
 	 */
-	findByIdsWithGround(ids: string[]): Promise<Space[]> {
-		return this.repository.findByIdsWithGround(ids);
+	findByIdsWithFitnessCenter(ids: string[]): Promise<Space[]> {
+		return this.repository.findByIdsWithFitnessCenter(ids);
 	}
 }

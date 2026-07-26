@@ -16,6 +16,6 @@
  */
 
 export interface InquiryFormFieldMetaDto {
-	/** 필드 라벨 */
-	label?: string;
+  /** 필드 라벨 */
+  label?: string;
 }

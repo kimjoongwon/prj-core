@@ -9,13 +9,13 @@ import {
 import type { SpaceDto } from "@cocrepo/api/idp/model";
 import { makeAutoObservable } from "mobx";
 
-export const MOBILE_PLATFORM_GROUND_NAME = "플랫폼 운영본부";
+export const MOBILE_PLATFORM_FITNESS_CENTER_NAME = "플랫폼 운영본부";
 export const MOBILE_SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
 
 export interface MobileSpaceInfo {
   tenantId: string;
   spaceId: string;
-  groundName: string;
+  fitnessCenterName: string;
   address?: string | null;
   contentLanguageCode?: string | null;
   imageFileId?: string | null;
@@ -30,21 +30,32 @@ interface MobileSessionTokens {
   sessionId?: string | null;
 }
 
-const resolveGroundName = (space: SpaceDto) => space.ground?.name ?? "";
-const resolveGroundAddress = (space: SpaceDto) =>
-  space.ground?.address ?? space.ground?.label ?? null;
+const resolveFitnessCenterName = (space: SpaceDto) =>
+  space.fitnessCenter?.name ?? "";
+const resolveFitnessCenterAddress = (space: SpaceDto) =>
+  space.fitnessCenter?.address ??
+  space.fitnessCenter?.label ??
+  space.fitnessCenter?.company?.address ??
+  space.fitnessCenter?.company?.label ??
+  null;
 
+/**
+ * 모바일 사용자가 직접 선택할 수 있는 FitnessCenter Space인지 확인합니다.
+ */
 export const isSelectableMobileSpace = (space: SpaceDto) =>
-  Boolean(space.id && space.tenantId && space.ground) &&
+  Boolean(space.id && space.tenantId && space.fitnessCenter) &&
   space.id !== MOBILE_SYSTEM_SPACE_ID &&
-  space.ground?.name !== MOBILE_PLATFORM_GROUND_NAME;
+  space.fitnessCenter?.name !== MOBILE_PLATFORM_FITNESS_CENTER_NAME;
 
+/**
+ * API Space와 FitnessCenter/company 관계를 모바일 선택 정보로 정규화합니다.
+ */
 export const toMobileSpaceInfo = (space: SpaceDto): MobileSpaceInfo => ({
-  address: resolveGroundAddress(space),
+  address: resolveFitnessCenterAddress(space),
   contentLanguageCode: space.contentLanguageCode ?? null,
-  groundName: resolveGroundName(space),
-  imageFileId: space.ground?.imageFileId ?? null,
-  logoImageFileId: space.ground?.logoImageFileId ?? null,
+  fitnessCenterName: resolveFitnessCenterName(space),
+  imageFileId: space.fitnessCenter?.imageFileId ?? null,
+  logoImageFileId: space.fitnessCenter?.company?.logoImageFileId ?? null,
   spaceId: space.id,
   tenantId: space.tenantId ?? "",
 });
@@ -52,7 +63,7 @@ export const toMobileSpaceInfo = (space: SpaceDto): MobileSpaceInfo => ({
 class MobileApiScope {
   tenantId: string | null = null;
   spaceId: string | null = null;
-  groundName: string | null = null;
+  fitnessCenterName: string | null = null;
   address: string | null = null;
   contentLanguageCode: string | null = null;
   spaces: MobileSpaceInfo[] = [];
@@ -79,11 +90,12 @@ class MobileApiScope {
     );
     this.tenantId = space.tenantId ?? existingSpace?.tenantId ?? null;
     this.spaceId = space.id;
-    this.groundName =
-      resolveGroundName(space) ||
-      existingSpace?.groundName ||
+    this.fitnessCenterName =
+      resolveFitnessCenterName(space) ||
+      existingSpace?.fitnessCenterName ||
       null;
-    this.address = resolveGroundAddress(space) ?? existingSpace?.address ?? null;
+    this.address =
+      resolveFitnessCenterAddress(space) ?? existingSpace?.address ?? null;
     this.contentLanguageCode =
       space.contentLanguageCode ??
       existingSpace?.contentLanguageCode ??
@@ -94,7 +106,7 @@ class MobileApiScope {
   setSpaceInfo(space: MobileSpaceInfo, resolved = true) {
     this.tenantId = space.tenantId;
     this.spaceId = space.spaceId;
-    this.groundName = space.groundName || null;
+    this.fitnessCenterName = space.fitnessCenterName || null;
     this.address = space.address ?? null;
     this.contentLanguageCode = space.contentLanguageCode ?? null;
     this.isSpaceSelectionResolved = resolved;
@@ -103,7 +115,7 @@ class MobileApiScope {
   clearSpace() {
     this.tenantId = null;
     this.spaceId = null;
-    this.groundName = null;
+    this.fitnessCenterName = null;
     this.address = null;
     this.contentLanguageCode = null;
     this.isSpaceSelectionResolved = true;
@@ -112,7 +124,7 @@ class MobileApiScope {
   markSpaceSelectionPending() {
     this.tenantId = null;
     this.spaceId = null;
-    this.groundName = null;
+    this.fitnessCenterName = null;
     this.address = null;
     this.contentLanguageCode = null;
     this.isSpaceSelectionResolved = false;
@@ -139,7 +151,7 @@ class MobileApiScope {
   clear() {
     this.tenantId = null;
     this.spaceId = null;
-    this.groundName = null;
+    this.fitnessCenterName = null;
     this.address = null;
     this.contentLanguageCode = null;
     this.spaces = [];

@@ -78,20 +78,24 @@ describe("useTenantBootstrap", () => {
 		});
 	});
 
-	it("my-spaces/current-space 결과를 Account에 반영하고 ready 상태를 계산한다", async () => {
+	it("Given my-spaces와 current-space가 존재할 때, When bootstrap이 실행되면, Then Account의 선택 정보를 fitness center 기준으로 반영하고 ready가 true가 된다", async () => {
 		const account = createAccountStore("tenant-bootstrap-test");
 		const spaces: AccountBootstrapSpaceLike[] = [
 			{
 				id: "space-a",
 				tenantId: "tenant-a",
 				contentLanguageCode: "ko_KR",
-				ground: { name: "Ground A" },
+				fitnessCenter: {
+					name: "Fitness Center A",
+				},
 			},
 			{
 				id: "space-b",
 				tenantId: "tenant-b",
 				contentLanguageCode: "en_US",
-				ground: { name: "Ground B" },
+				fitnessCenter: {
+					name: "Fitness Center B",
+				},
 			},
 		];
 
@@ -112,13 +116,13 @@ describe("useTenantBootstrap", () => {
 			{
 				tenantId: "tenant-a",
 				spaceId: "space-a",
-				groundName: "Ground A",
+				fitnessCenterName: "Fitness Center A",
 				contentLanguageCode: "ko_KR",
 			},
 			{
 				tenantId: "tenant-b",
 				spaceId: "space-b",
-				groundName: "Ground B",
+				fitnessCenterName: "Fitness Center B",
 				contentLanguageCode: "en_US",
 			},
 		]);
@@ -130,9 +134,9 @@ describe("useTenantBootstrap", () => {
 		);
 	});
 
-	it("current-space가 비어 있으면 현재 tenant를 초기화하고 selection은 resolved로 둔다", async () => {
+	it("Given current-space가 비어 있을 때, When bootstrap이 실행되면, Then current tenant가 초기화되고 selection은 resolved로 설정된다", async () => {
 		const account = createAccountStore("tenant-bootstrap-empty-test");
-		account.setCurrentTenant("tenant-a", "Ground A", null, "space-a");
+		account.setCurrentTenant("tenant-a", "Fitness Center A", null, "space-a");
 
 		render(
 			<AccountBootstrapProbe

@@ -1,7 +1,20 @@
 import type { Space } from "@cocrepo/entity";
 import { SpacesRepository } from "@cocrepo/repository";
+import { NotFoundException } from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
+
+jest.mock("@nestjs-cls/transactional", () => ({
+	Transactional:
+		() =>
+		(
+			_target: object,
+			_propertyKey: string | symbol,
+			descriptor: PropertyDescriptor,
+		) =>
+			descriptor,
+}));
+
 import { SpaceAggregate } from "../src/space/space.aggregate";
 
 describe("SpaceAggregate", () => {
@@ -13,6 +26,17 @@ describe("SpaceAggregate", () => {
 		createdAt: new Date("2024-01-01"),
 		updatedAt: new Date("2024-01-01"),
 		removedAt: null,
+	};
+	const mockFitnessCenter = {
+		id: "fitness-center-test-id",
+		name: "테스트 센터",
+		label: "테스트 라벨",
+		address: "서울시 강남구",
+		phone: "02-1234-5678",
+		email: "fitness@example.com",
+		companyId: "company-test-id",
+		spaceId: "space-test-id",
+		imageFileId: "image-test-id",
 	};
 
 	beforeEach(async () => {
@@ -77,6 +101,34 @@ describe("SpaceAggregate", () => {
 		});
 	});
 
+	describe("getFitnessCenterBySpaceId", () => {
+		it("Space의 피트니스 센터를 조회해야 한다", async () => {
+			// Given
+			mockRepository.findFitnessCenterBySpaceId.mockResolvedValue(
+				mockFitnessCenter as never,
+			);
+
+			// When
+			const result = await service.getFitnessCenterBySpaceId("space-test-id");
+
+			// Then
+			expect(mockRepository.findFitnessCenterBySpaceId).toHaveBeenCalledWith(
+				"space-test-id",
+			);
+			expect(result).toEqual(mockFitnessCenter);
+		});
+
+		it("피트니스 센터가 없으면 예외를 던져야 한다", async () => {
+			// Given
+			mockRepository.findFitnessCenterBySpaceId.mockResolvedValue(null);
+
+			// When / Then
+			await expect(
+				service.getFitnessCenterBySpaceId("space-test-id"),
+			).rejects.toThrow(NotFoundException);
+		});
+	});
+
 	describe("create", () => {
 		it("옵션 없이 Space를 생성해야 한다", async () => {
 			// Given
@@ -102,6 +154,150 @@ describe("SpaceAggregate", () => {
 			// Then
 			expect(mockRepository.create).toHaveBeenCalledWith(createData);
 			expect(result.id).toBe(createData.id);
+		});
+	});
+
+	describe("createSpaceWithFitnessCenter", () => {
+		it("Space와 Company, FitnessCenter를 함께 생성해야 한다", async () => {
+			// Given
+			const input = {
+				contentLanguageCode: "ko_KR",
+				name: "테스트 센터",
+				label: "테스트 라벨",
+				address: "서울시 강남구",
+				phone: "02-1234-5678",
+				email: "fitness@example.com",
+				businessNo: "123-45-67890",
+				logoImageFileId: "logo-test-id",
+				imageFileId: "image-test-id",
+			} as const;
+			mockRepository.create.mockResolvedValue(mockSpace as unknown as Space);
+			mockRepository.createFitnessCenterBySpaceId.mockResolvedValue(
+				mockSpace as unknown as Space,
+			);
+
+			// When
+			const result = await service.createSpaceWithFitnessCenter(input);
+
+			// Then
+			expect(mockRepository.create).toHaveBeenCalledWith({
+				contentLanguageCode: input.contentLanguageCode,
+			});
+			expect(mockRepository.createFitnessCenterBySpaceId).toHaveBeenCalledWith(
+				mockSpace.id,
+				{
+					company: {
+						name: input.name,
+						label: input.label,
+						address: input.address,
+						phone: input.phone,
+						email: input.email,
+						businessNo: input.businessNo,
+						logoImageFileId: input.logoImageFileId,
+					},
+					fitnessCenter: {
+						name: input.name,
+						label: input.label,
+						address: input.address,
+						phone: input.phone,
+						email: input.email,
+						imageFileId: input.imageFileId,
+					},
+				},
+			);
+			expect(result).toEqual(mockSpace);
+		});
+	});
+
+	describe("updateFitnessCenterBySpaceId", () => {
+		it("Space 언어와 FitnessCenter 필드만 수정해야 한다", async () => {
+			// Given
+			const input = {
+				contentLanguageCode: "en_US",
+				name: "업데이트 센터",
+				label: "업데이트 라벨",
+				address: "서울시 서초구",
+				phone: "02-9999-8888",
+				email: "updated@example.com",
+				imageFileId: "updated-image-id",
+			} as const;
+			mockRepository.findFitnessCenterBySpaceId.mockResolvedValue(
+				mockFitnessCenter as never,
+			);
+			mockRepository.updateById.mockResolvedValue(mockSpace as never);
+			mockRepository.updateFitnessCenterBySpaceId.mockResolvedValue(
+				mockSpace as never,
+			);
+
+			// When
+			const result = await service.updateFitnessCenterBySpaceId(
+				"space-test-id",
+				input,
+			);
+
+			// Then
+			expect(mockRepository.updateById).toHaveBeenCalledWith("space-test-id", {
+				contentLanguageCode: input.contentLanguageCode,
+			});
+			expect(mockRepository.updateFitnessCenterBySpaceId).toHaveBeenCalledWith(
+				"space-test-id",
+				{
+					fitnessCenter: {
+						name: input.name,
+						label: input.label,
+						address: input.address,
+						phone: input.phone,
+						email: input.email,
+						imageFileId: input.imageFileId,
+					},
+				},
+			);
+			expect(result).toEqual(mockSpace);
+		});
+
+		it("contentLanguageCode가 없으면 Space는 수정하지 않아야 한다", async () => {
+			// Given
+			mockRepository.findFitnessCenterBySpaceId.mockResolvedValue(
+				mockFitnessCenter as never,
+			);
+			mockRepository.updateFitnessCenterBySpaceId.mockResolvedValue(
+				mockSpace as never,
+			);
+
+			// When
+			await service.updateFitnessCenterBySpaceId("space-test-id", {
+				name: "업데이트 센터",
+			});
+
+			// Then
+			expect(mockRepository.updateById).not.toHaveBeenCalled();
+			expect(mockRepository.updateFitnessCenterBySpaceId).toHaveBeenCalledWith(
+				"space-test-id",
+				{
+					fitnessCenter: {
+						name: "업데이트 센터",
+					},
+				},
+			);
+		});
+	});
+
+	describe("findByIdsWithFitnessCenter", () => {
+		it("여러 Space를 FitnessCenter 포함으로 조회해야 한다", async () => {
+			// Given
+			const spaces = [mockSpace] as unknown as Space[];
+			mockRepository.findByIdsWithFitnessCenter.mockResolvedValue(spaces);
+
+			// When
+			const result = await service.findByIdsWithFitnessCenter([
+				"space-test-id",
+			]);
+
+			// Then
+			expect(mockRepository.findByIdsWithFitnessCenter).toHaveBeenCalledWith([
+				"space-test-id",
+			]);
+			expect(result).toEqual(spaces);
 		});
 	});
 });

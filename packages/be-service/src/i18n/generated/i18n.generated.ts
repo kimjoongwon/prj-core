@@ -139,7 +139,7 @@ export type I18nTranslations = {
                 "success": string;
             };
         };
-        "ground": {
+        "fitnessCenter": {
             "list": {
                 "success": string;
             };
@@ -238,7 +238,7 @@ export type I18nTranslations = {
             "title": string;
             "list": string;
         };
-        "grounds": {
+        "fitnessCenters": {
             "title": string;
             "info": string;
             "programs": string;

@@ -14,67 +14,66 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-
-import type { AssetDtoMetadata } from "./assetDtoMetadata";
-import type { AssetKind } from "./assetKind";
-import type { AssetStatus } from "./assetStatus";
-import type { DerivativeDto } from "./derivativeDto";
-import type { FolderDto } from "./folderDto";
+import type { AssetKind } from './assetKind';
+import type { AssetStatus } from './assetStatus';
+import type { AssetDtoMetadata } from './assetDtoMetadata';
+import type { FolderDto } from './folderDto';
+import type { DerivativeDto } from './derivativeDto';
 
 export interface AssetDto {
-	/** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
-	id: string;
-	createdAt: string;
-	updatedAt: string;
-	/** @nullable */
-	removedAt: string | null;
-	/**
-	 * 소속 Space ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	spaceId: string;
-	/**
-	 * 소속 폴더 ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	folderId: string;
-	/** 에셋 종류 (IMAGE, VIDEO, DOCUMENT) */
-	kind: AssetKind;
-	/** 에셋 상태 (UPLOADING, READY, FAILED) */
-	status: AssetStatus;
-	/** 원본 파일명 */
-	originalName: string;
-	/** 스토리지 저장 키 */
-	storageKey: string;
-	/** MIME 타입 */
-	mimeType: string;
-	/** 파일 크기 (바이트) */
-	sizeBytes: number;
-	/**
-	 * 파일 확장자
-	 * @nullable
-	 */
-	extension?: string | null;
-	/**
-	 * 체크섬 (무결성 검증용)
-	 * @nullable
-	 */
-	checksum?: string | null;
-	/** 메타데이터 (Exif, 동영상 길이 등) */
-	metadata?: AssetDtoMetadata;
-	/**
-	 * 생성자 ID
-	 * @nullable
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	createdById?: string | null;
-	/**
-	 * 공개 접근 가능한 에셋 URL
-	 * @nullable
-	 */
-	publicUrl?: string | null;
-	/** 소속 폴더 */
-	folder?: FolderDto;
-	/** 파생 리소스 목록 */
-	derivatives?: DerivativeDto[];
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  removedAt: string | null;
+  /**
+   * 소속 Space ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  spaceId: string;
+  /**
+   * 소속 폴더 ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  folderId: string;
+  /** 에셋 종류 (IMAGE, VIDEO, DOCUMENT) */
+  kind: AssetKind;
+  /** 에셋 상태 (UPLOADING, READY, FAILED) */
+  status: AssetStatus;
+  /** 원본 파일명 */
+  originalName: string;
+  /** 스토리지 저장 키 */
+  storageKey: string;
+  /** MIME 타입 */
+  mimeType: string;
+  /** 파일 크기 (바이트) */
+  sizeBytes: number;
+  /**
+   * 파일 확장자
+   * @nullable
+   */
+  extension?: string | null;
+  /**
+   * 체크섬 (무결성 검증용)
+   * @nullable
+   */
+  checksum?: string | null;
+  /** 메타데이터 (Exif, 동영상 길이 등) */
+  metadata?: AssetDtoMetadata;
+  /**
+   * 생성자 ID
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  createdById?: string | null;
+  /**
+   * 공개 접근 가능한 에셋 URL
+   * @nullable
+   */
+  publicUrl?: string | null;
+  /** 소속 폴더 */
+  folder?: FolderDto;
+  /** 파생 리소스 목록 */
+  derivatives?: DerivativeDto[];
 }

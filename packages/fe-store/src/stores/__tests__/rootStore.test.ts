@@ -62,7 +62,7 @@ function createRoot(storageAdapter: PersistStorageAdapter): RootStore {
 }
 
 describe("RootStore", () => {
-	it("constructor에서는 저장소를 읽지 않고 완성된 AppStore를 조립한다", () => {
+	it("Given 비어 있는 저장소가 있을 때 When RootStore constructor만 호출하면 Then 저장소를 읽지 않고 완성된 AppStore를 조립한다", () => {
 		const storage = createPersistStorage();
 
 		const root = createRoot(storage.storageAdapter);
@@ -79,7 +79,7 @@ describe("RootStore", () => {
 		expect(root.app.navigation).toBeDefined();
 	});
 
-	it("initialize하면 runtime binder에 동일한 참조를 한 번만 연결한다", () => {
+	it("Given runtime binder들이 있을 때 When initialize를 두 번 호출하면 Then 동일한 참조를 한 번만 연결한다", () => {
 		const root = createRoot(createPersistStorage().storageAdapter);
 		const bindSessionScopeA = vi.fn();
 		const bindSessionScopeB = vi.fn();
@@ -106,7 +106,7 @@ describe("RootStore", () => {
 		expect(bindLanguageB).toHaveBeenCalledWith(root.app.language);
 	});
 
-	it("initialize 전에 start하면 명확한 오류를 발생시킨다", () => {
+	it("Given initialize 이전 RootStore가 있을 때 When start를 호출하면 Then 명확한 오류를 발생시킨다", () => {
 		const root = createRoot(createPersistStorage().storageAdapter);
 
 		expect(() => root.start()).toThrow(
@@ -115,7 +115,7 @@ describe("RootStore", () => {
 		expect(root.isStarted).toBe(false);
 	});
 
-	it("start하면 하나의 App 문서에서 session, account, language를 복원한다", () => {
+	it("Given version 2 account 선택이 포함된 App 문서가 있을 때 When start를 호출하면 Then session, account, language를 함께 복원한다", () => {
 		const storage = createPersistStorage({
 			"root-test": {
 				authSession: {
@@ -126,9 +126,10 @@ describe("RootStore", () => {
 					refreshTokenExpiresAt: Date.now() + 120_000,
 				},
 				account: {
+					version: 2,
 					tenantId: "tenant-a",
 					spaceId: "space-a",
-					groundName: "Ground A",
+					fitnessCenterName: "Fitness Center A",
 					contentLanguageCode: "ko_KR",
 					availableSpaces: [],
 				},
@@ -147,10 +148,57 @@ describe("RootStore", () => {
 		expect(root.app.account.authSession.accessToken).toBe("access-token");
 		expect(root.app.account.currentTenantId).toBe("tenant-a");
 		expect(root.app.account.currentSpaceId).toBe("space-a");
+		expect(root.app.account.currentFitnessCenterName).toBe(
+			"Fitness Center A",
+		);
 		expect(root.app.language.languageCode).toBe("en_US");
 	});
 
-	it("저장소를 사용할 수 없어도 start를 완료하고 기본 상태를 유지한다", () => {
+	it("Given 예전 version 1 account 선택과 다른 section이 함께 저장돼 있을 때 When start를 호출하면 Then account 선택만 폐기하고 나머지 section은 유지한다", () => {
+		const storage = createPersistStorage({
+			"root-test": {
+				authSession: {
+					accessToken: "access-token",
+					refreshToken: "refresh-token",
+					sessionId: "session-id",
+					accessTokenExpiresAt: Date.now() + 60_000,
+					refreshTokenExpiresAt: Date.now() + 120_000,
+				},
+				account: {
+					version: 1,
+					tenantId: "tenant-a",
+					spaceId: "space-a",
+					fitnessCenterName: "Fitness Center A",
+					contentLanguageCode: "ko_KR",
+					availableSpaces: [],
+				},
+				language: { languageCode: "en_US" },
+			},
+		});
+		const root = createRoot(storage.storageAdapter);
+
+		root.initialize(EMPTY_RUNTIME_BINDINGS);
+		root.start();
+
+		expect(root.isStarted).toBe(true);
+		expect(root.app.account.currentTenantId).toBeNull();
+		expect(root.app.account.currentSpaceId).toBeNull();
+		expect(root.app.account.currentFitnessCenterName).toBeNull();
+		expect(root.app.account.authSession.accessToken).toBe("access-token");
+		expect(root.app.language.languageCode).toBe("en_US");
+		expect(storage.write).toHaveBeenCalledWith("root-test", {
+			authSession: {
+				accessToken: "access-token",
+				refreshToken: "refresh-token",
+				sessionId: "session-id",
+				accessTokenExpiresAt: expect.any(Number),
+				refreshTokenExpiresAt: expect.any(Number),
+			},
+			language: { languageCode: "en_US" },
+		});
+	});
+
+	it("Given 저장소를 사용할 수 없는 런타임이 있을 때 When start를 호출하면 Then 기본 상태를 유지한 채 hydrate를 완료한다", () => {
 		const storage = createPersistStorage({}, false);
 		const root = createRoot(storage.storageAdapter);
 
@@ -164,7 +212,7 @@ describe("RootStore", () => {
 		expect(root.app.language.isHydrated).toBe(true);
 	});
 
-	it("sessionScope와 platform router를 실행 중인 AppStore에 연결한다", () => {
+	it("Given initialize가 끝난 RootStore가 있을 때 When sessionScope와 platform router를 연결하면 Then 실행 중인 AppStore에 같은 상태를 반영한다", () => {
 		const root = createRoot(createPersistStorage().storageAdapter);
 		const push = vi.fn();
 		const replace = vi.fn();
@@ -172,7 +220,12 @@ describe("RootStore", () => {
 
 		root.initialize(EMPTY_RUNTIME_BINDINGS);
 		root.sessionScope.accessToken = "updated-access-token";
-		root.app.account.setCurrentTenant("tenant-a", "Ground A", null, "space-a");
+		root.app.account.setCurrentTenant(
+			"tenant-a",
+			"Fitness Center A",
+			null,
+			"space-a",
+		);
 		root.setRouter({ push, replace, back });
 		root.app.navigation.selectNavItem("dashboard");
 

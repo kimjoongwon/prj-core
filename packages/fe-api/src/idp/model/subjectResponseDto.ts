@@ -16,13 +16,13 @@
  */
 
 export interface SubjectResponseDto {
-	/** Subject 이름 (Prisma 모델명) */
-	name: string;
-	/**
-	 * Subject 표시명 (@displayName 주석)
-	 * @nullable
-	 */
-	displayName: string | null;
-	/** 필드 수 */
-	fieldCount: number;
+  /** Subject 이름 (Prisma 모델명) */
+  name: string;
+  /**
+   * Subject 표시명 (@displayName 주석)
+   * @nullable
+   */
+  displayName: string | null;
+  /** 필드 수 */
+  fieldCount: number;
 }

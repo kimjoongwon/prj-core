@@ -1,4 +1,10 @@
 import {
+	type AdminNativeAuthSession,
+	mergeAdminPersistAccountSelection,
+	mergeAdminPersistAuthSession,
+	readAdminPersistAccessToken,
+} from "./admin-persist";
+import {
 	type E2EPageLike,
 	navigateToOidcLoginForm,
 	submitOidcCredentials,
@@ -28,14 +34,6 @@ interface ConsoleLoginPageLike extends E2EPageLike {
 	): Promise<Result>;
 	request: ApiRequestLike;
 	url(): string;
-}
-
-interface NativeAuthSession {
-	accessToken: string;
-	refreshToken: string;
-	sessionId: string;
-	accessTokenExpiresAt: number;
-	refreshTokenExpiresAt: number;
 }
 
 const DEFAULT_CONSOLE_BASE_URL =
@@ -94,7 +92,7 @@ const SYSTEM_TENANT_ID =
 	process.env.E2E_SYSTEM_TENANT_ID ?? "71ddca20-1752-466e-b4da-879ebdbe54e3";
 const SYSTEM_SPACE_ID =
 	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
-const SYSTEM_GROUND_NAME = "플랫폼 운영본부";
+const SYSTEM_FITNESS_CENTER_NAME = "플랫폼 운영본부";
 
 async function seedConsolePersist(page: ConsoleLoginPageLike) {
 	const accessToken = await readConsoleAccessToken(page);
@@ -116,7 +114,8 @@ async function seedConsolePersist(page: ConsoleLoginPageLike) {
 		data?: {
 			id?: string;
 			tenantId?: string | null;
-			ground?: {
+			contentLanguageCode?: string | null;
+			fitnessCenter?: {
 				name?: string;
 			};
 		};
@@ -129,50 +128,32 @@ async function seedConsolePersist(page: ConsoleLoginPageLike) {
 		throw new Error("Selected console tenant did not match the system tenant.");
 	}
 
-	const groundName = payload.data.ground?.name ?? SYSTEM_GROUND_NAME;
-	const now = Date.now();
+	const fitnessCenterName =
+		payload.data.fitnessCenter?.name ?? SYSTEM_FITNESS_CENTER_NAME;
+	const raw = await readConsolePersist(page);
+	const document = mergeAdminPersistAccountSelection(raw, {
+		tenantId: SYSTEM_TENANT_ID,
+		spaceId: SYSTEM_SPACE_ID,
+		fitnessCenterName,
+		contentLanguageCode: payload.data.contentLanguageCode ?? null,
+	});
 
 	await page.evaluate(
-		({
-			storageKey,
-			tenantId,
-			spaceId,
-			selectedGroundName,
-			accessTokenExpiresAt,
-			refreshTokenExpiresAt,
-		}) => {
-			const raw = window.localStorage.getItem(storageKey);
-			const current = raw ? JSON.parse(raw) : {};
-			window.localStorage.setItem(
-				storageKey,
-				JSON.stringify({
-					...current,
-					tenantId,
-					spaceId,
-					groundName: selectedGroundName,
-					spaces: [{ tenantId, spaceId, groundName: selectedGroundName }],
-					accessTokenExpiresAt:
-						typeof current.accessTokenExpiresAt === "number"
-							? current.accessTokenExpiresAt
-							: accessTokenExpiresAt,
-					refreshTokenExpiresAt:
-						typeof current.refreshTokenExpiresAt === "number"
-							? current.refreshTokenExpiresAt
-							: refreshTokenExpiresAt,
-				}),
-			);
+		({ storageKey, value }) => {
+			window.localStorage.setItem(storageKey, value);
 		},
 		{
 			storageKey: CONSOLE_PERSIST_KEY,
-			tenantId: SYSTEM_TENANT_ID,
-			spaceId: SYSTEM_SPACE_ID,
-			selectedGroundName: groundName,
-			accessTokenExpiresAt: now + 60 * 60 * 1000,
-			refreshTokenExpiresAt: now + 30 * 24 * 60 * 60 * 1000,
+			value: JSON.stringify(document),
 		},
 	);
 }
 
+/**
+ * Admin console에 native 로그인하고 System FitnessCenter context를 저장합니다.
+ *
+ * @param page Admin console을 제어할 E2E page
+ */
 export async function loginToConsole(page: ConsoleLoginPageLike) {
 	for (let attempt = 1; attempt <= 3; attempt++) {
 		try {
@@ -195,6 +176,11 @@ export async function loginToConsole(page: ConsoleLoginPageLike) {
 	throw new Error("Native console login failed after retries.");
 }
 
+/**
+ * OIDC 로그인 form으로 이동합니다.
+ *
+ * @param page OIDC 화면을 제어할 E2E page
+ */
 export async function navigateToLoginForm(page: E2EPageLike) {
 	const entry = await navigateToOidcLoginForm(page, {
 		startPath: oidcLoginUrl,
@@ -206,6 +192,12 @@ export async function navigateToLoginForm(page: E2EPageLike) {
 
 export type OidcConsentNavigation = "consent" | "redirected";
 
+/**
+ * OIDC consent 화면으로 이동하거나 first-party redirect 완료를 기다립니다.
+ *
+ * @param page OIDC 화면을 제어할 E2E page
+ * @returns consent 화면 또는 redirect 완료 상태
+ */
 export async function navigateToConsentForm(
 	page: E2EPageLike,
 ): Promise<OidcConsentNavigation> {
@@ -251,7 +243,7 @@ async function waitForConsentOrFirstPartyRedirect(
 
 async function requestNativeLogin(
 	page: ConsoleLoginPageLike,
-): Promise<NativeAuthSession> {
+): Promise<AdminNativeAuthSession> {
 	const response = await page.request.post(nativeLoginApiUrl, {
 		data: {
 			email: DEFAULT_EMAIL,
@@ -264,7 +256,7 @@ async function requestNativeLogin(
 	}
 
 	const payload = (await response.json()) as {
-		data?: Partial<NativeAuthSession>;
+		data?: Partial<AdminNativeAuthSession>;
 	};
 	const session = payload.data;
 	if (
@@ -288,46 +280,37 @@ async function requestNativeLogin(
 
 async function writeConsoleNativeSession(
 	page: ConsoleLoginPageLike,
-	session: NativeAuthSession,
+	session: AdminNativeAuthSession,
 ) {
+	const raw = await readConsolePersist(page);
+	const document = mergeAdminPersistAuthSession(raw, session);
+
 	await page.evaluate(
-		({ storageKey, nativeSession }) => {
-			const raw = window.localStorage.getItem(storageKey);
-			const current = raw ? JSON.parse(raw) : {};
-			window.localStorage.setItem(
-				storageKey,
-				JSON.stringify({
-					...current,
-					accessToken: nativeSession.accessToken,
-					refreshToken: nativeSession.refreshToken,
-					sessionId: nativeSession.sessionId,
-					accessTokenExpiresAt: nativeSession.accessTokenExpiresAt,
-					refreshTokenExpiresAt: nativeSession.refreshTokenExpiresAt,
-				}),
-			);
+		({ storageKey, value }) => {
+			window.localStorage.setItem(storageKey, value);
 		},
-		{ storageKey: CONSOLE_PERSIST_KEY, nativeSession: session },
+		{
+			storageKey: CONSOLE_PERSIST_KEY,
+			value: JSON.stringify(document),
+		},
 	);
 }
 
 async function readConsoleAccessToken(page: ConsoleLoginPageLike) {
-	const accessToken = await page.evaluate((storageKey) => {
-		const raw = window.localStorage.getItem(storageKey);
-		if (!raw) {
-			return null;
-		}
-
-		try {
-			const parsed = JSON.parse(raw) as { accessToken?: unknown };
-			return typeof parsed.accessToken === "string" ? parsed.accessToken : null;
-		} catch {
-			return null;
-		}
-	}, CONSOLE_PERSIST_KEY);
+	const accessToken = readAdminPersistAccessToken(
+		await readConsolePersist(page),
+	);
 
 	if (!accessToken) {
 		throw new Error("Failed to read native access token from console persist.");
 	}
 
 	return accessToken;
+}
+
+async function readConsolePersist(page: ConsoleLoginPageLike) {
+	return page.evaluate(
+		(storageKey) => window.localStorage.getItem(storageKey),
+		CONSOLE_PERSIST_KEY,
+	);
 }

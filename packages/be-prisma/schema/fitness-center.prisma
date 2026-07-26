@@ -1,0 +1,27 @@
+// @data-type: MASTER
+// @description: Company 아래에서 Space와 1:1로 연결되는 피트니스 센터 정보를 관리
+/// @displayName 피트니스 센터
+model FitnessCenter {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime? @map("removed_at") @db.Timestamptz(6)
+  /// @displayName 이름
+  name        String
+  /// @displayName 라벨
+  label       String?
+  /// @displayName 주소
+  address     String
+  /// @displayName 전화번호
+  phone       String
+  /// @displayName 이메일
+  email       String
+  companyId   String    @map("company_id")
+  spaceId     String    @unique @map("space_id")
+  imageFileId String?   @map("image_file_id")
+  company     Company   @relation(fields: [companyId], references: [id])
+  space       Space     @relation(fields: [spaceId], references: [id])
+
+  @@index([companyId])
+  @@map("fitness_centers")
+}

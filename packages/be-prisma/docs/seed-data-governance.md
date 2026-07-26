@@ -77,7 +77,7 @@ Reference Data의 특징:
 - 최초 관리자 계정
 - system space
 - 최초 tenant 연결
-- system ground
+- system fitness center
 - 기본 보안 정책
 - 기본 메시지 템플릿
 
@@ -96,7 +96,7 @@ Bootstrap Data의 특징:
 예:
 
 - 샘플 일반 사용자
-- 샘플 ground
+- 샘플 fitness center
 - 샘플 timeline과 exercise
 - 샘플 asset
 - 샘플 inquiry
@@ -417,9 +417,9 @@ Demo/Test Data가 없으면 앱이 동작하지 않는다면 그것은 demo가 �
 | `userSeedData`의 super admin                | 최초 운영 관리자 계정은 명시적으로 만드는 편이 안전 |
 | `SYSTEM_SPACE_ID`와 system space 생성       | 최초 시스템 구조                                    |
 | system tenant 생성                          | 최초 연결 관계                                      |
-| system ground                               | 시스템 공간의 초기 시설                             |
+| system fitness center                      | 시스템 공간의 초기 시설                             |
 | `ensureSystemBootstrap`의 system group 준비 | system space 내부 초기 구조                         |
-| `classifyGroundSpacesAsBranch`              | bootstrap 공간의 후속 정리                          |
+| `classifyFitnessCenterSpacesAsBranch`       | bootstrap 공간의 후속 정리                          |
 | `createHierarchicalTenants`                 | 최초 tenant 계층 연결                               |
 | `securityPolicySeedData`                    | 운영자가 바꿀 수 있는 create-only 기본값            |
 | `templateSeedData`                          | 운영자가 바꿀 수 있는 기본 템플릿                   |
@@ -428,7 +428,7 @@ Demo/Test Data가 없으면 앱이 동작하지 않는다면 그것은 demo가 �
 
 | 현재 이름 또는 로직                       | 이유                         |
 | ----------------------------------------- | ---------------------------- |
-| `createRegularUsersAndGrounds`            | 일반 사용자와 시설 샘플      |
+| `createRegularUsersAndFitnessCenters`     | 일반 사용자와 시설 샘플      |
 | `timelineSeedData`                        | 샘플 timeline                |
 | `exerciseCatalogSeedData`                 | 샘플 task와 exercise 입력값  |
 | `sessionTemplateSeedData`                 | 샘플 session 구성            |

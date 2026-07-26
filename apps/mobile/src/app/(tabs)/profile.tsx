@@ -47,7 +47,9 @@ const ProfileTabRoute = observer(() => {
 	return (
 		<MyPageScreen
 			accountDescription="오노라 예약 알림과 계정 상태를 관리합니다."
-			currentSpaceName={mobileApiScope.groundName ?? "지점 선택 필요"}
+			currentSpaceName={
+				mobileApiScope.fitnessCenterName ?? "지점 선택 필요"
+			}
 			displayName="회원"
 			isAuthenticated={mobileSession.isAuthenticated}
 			isLogoutPending={mobileSession.isVerifying}

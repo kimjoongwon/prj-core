@@ -43,7 +43,7 @@ async function createSpaceSnapshot() {
 
 	return observer(function SpaceSnapshot() {
 		const account = useApp().account;
-		const value = `${account.currentTenantId ?? "none"}:${account.currentSpaceId ?? "none"}:${account.isSelectionResolved ? "resolved" : "pending"}`;
+		const value = `${account.currentTenantId ?? "none"}:${account.currentSpaceId ?? "none"}:${account.currentFitnessCenterName ?? "none"}:${account.isSelectionResolved ? "resolved" : "pending"}`;
 
 		return <output aria-label="storybook-admin-space">{value}</output>;
 	});
@@ -147,7 +147,7 @@ describe("StorybookRuntimeProvider", () => {
 
 		await waitFor(() => {
 			expect(screen.getByLabelText("storybook-admin-space").textContent).toBe(
-				"storybook-tenant:storybook-space:resolved",
+				"storybook-tenant:storybook-space:Storybook Fitness Center:resolved",
 			);
 		});
 		expect(screen.getByText("Admin story content")).toBeTruthy();
@@ -185,7 +185,7 @@ describe("StorybookRuntimeProvider", () => {
 
 		await waitFor(() => {
 			expect(screen.getByLabelText("storybook-admin-space").textContent).toBe(
-				"storybook-tenant:storybook-space:resolved",
+				"storybook-tenant:storybook-space:Storybook Fitness Center:resolved",
 			);
 		});
 		expect(screen.getByText("Toolbar realm story")).toBeTruthy();

@@ -14,102 +14,102 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { InquiryCategory } from "./inquiryCategory";
-import type { InquiryChannel } from "./inquiryChannel";
-import type { InquiryDetailDtoSentiment } from "./inquiryDetailDtoSentiment";
-import type { InquiryParticipantDto } from "./inquiryParticipantDto";
-import type { InquiryPriority } from "./inquiryPriority";
-import type { InquirySource } from "./inquirySource";
-import type { InquiryStatus } from "./inquiryStatus";
-import type { InquiryThreadDto } from "./inquiryThreadDto";
+import type { InquiryCategory } from './inquiryCategory';
+import type { InquiryChannel } from './inquiryChannel';
+import type { InquirySource } from './inquirySource';
+import type { InquiryStatus } from './inquiryStatus';
+import type { InquiryPriority } from './inquiryPriority';
+import type { InquiryDetailDtoSentiment } from './inquiryDetailDtoSentiment';
+import type { InquiryThreadDto } from './inquiryThreadDto';
+import type { InquiryParticipantDto } from './inquiryParticipantDto';
 
 export interface InquiryDetailDto {
-	/** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
-	id: string;
-	createdAt: string;
-	updatedAt: string;
-	/** @nullable */
-	removedAt: string | null;
-	/**
-	 * 소속 Space ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	spaceId: string;
-	/**
-	 * 생성자 ID
-	 * @nullable
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	createdById?: string | null;
-	/** 문의 번호 */
-	inquiryNumber: string;
-	/** 문의 제목 */
-	title: string;
-	/** 문의 카테리 */
-	category: InquiryCategory;
-	/** 문의 채널 */
-	channel: InquiryChannel;
-	/** 문의 접수 유형 */
-	source: InquirySource;
-	/** 문의 상태 */
-	status: InquiryStatus;
-	/** 문의 우선순위 */
-	priority: InquiryPriority;
-	/**
-	 * 고객 ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	customerId?: string;
-	/**
-	 * 담당자 ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	assigneeId?: string;
-	/** 실시간 채팅 활성화 여부 */
-	isRealtimeChat: boolean;
-	/** SLA 응답 위반 여부 */
-	isSlaResponseBreached: boolean;
-	/** SLA 해결 위반 여부 */
-	isSlaResolveBreached: boolean;
-	/**
-	 * 마지막 메시지 일시
-	 * @nullable
-	 */
-	lastMessageAt: string | null;
-	/** 읽지 않은 메시지 수 */
-	unreadCount: number;
-	/**
-	 * 첫 응답 일시
-	 * @nullable
-	 */
-	firstResponseAt: string | null;
-	/**
-	 * 해결 일시
-	 * @nullable
-	 */
-	resolvedAt: string | null;
-	/**
-	 * 종료 일시
-	 * @nullable
-	 */
-	closedAt: string | null;
-	/**
-	 * SLA 응답 기한
-	 * @nullable
-	 */
-	slaResponseDue: string | null;
-	/**
-	 * SLA 해결 기한
-	 * @nullable
-	 */
-	slaResolveDue: string | null;
-	/**
-	 * 감정 분석 결과
-	 * @nullable
-	 */
-	sentiment: InquiryDetailDtoSentiment;
-	/** 스레드 목록 */
-	threads: InquiryThreadDto[];
-	/** 참여자 목록 */
-	participants: InquiryParticipantDto[];
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  removedAt: string | null;
+  /**
+   * 소속 Space ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  spaceId: string;
+  /**
+   * 생성자 ID
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  createdById?: string | null;
+  /** 문의 번호 */
+  inquiryNumber: string;
+  /** 문의 제목 */
+  title: string;
+  /** 문의 카테리 */
+  category: InquiryCategory;
+  /** 문의 채널 */
+  channel: InquiryChannel;
+  /** 문의 접수 유형 */
+  source: InquirySource;
+  /** 문의 상태 */
+  status: InquiryStatus;
+  /** 문의 우선순위 */
+  priority: InquiryPriority;
+  /**
+   * 고객 ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  customerId?: string;
+  /**
+   * 담당자 ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  assigneeId?: string;
+  /** 실시간 채팅 활성화 여부 */
+  isRealtimeChat: boolean;
+  /** SLA 응답 위반 여부 */
+  isSlaResponseBreached: boolean;
+  /** SLA 해결 위반 여부 */
+  isSlaResolveBreached: boolean;
+  /**
+   * 마지막 메시지 일시
+   * @nullable
+   */
+  lastMessageAt: string | null;
+  /** 읽지 않은 메시지 수 */
+  unreadCount: number;
+  /**
+   * 첫 응답 일시
+   * @nullable
+   */
+  firstResponseAt: string | null;
+  /**
+   * 해결 일시
+   * @nullable
+   */
+  resolvedAt: string | null;
+  /**
+   * 종료 일시
+   * @nullable
+   */
+  closedAt: string | null;
+  /**
+   * SLA 응답 기한
+   * @nullable
+   */
+  slaResponseDue: string | null;
+  /**
+   * SLA 해결 기한
+   * @nullable
+   */
+  slaResolveDue: string | null;
+  /**
+   * 감정 분석 결과
+   * @nullable
+   */
+  sentiment: InquiryDetailDtoSentiment;
+  /** 스레드 목록 */
+  threads: InquiryThreadDto[];
+  /** 참여자 목록 */
+  participants: InquiryParticipantDto[];
 }

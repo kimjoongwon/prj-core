@@ -54,7 +54,7 @@ export class IdpAccountAggregate {
 		await this.findAccountInScope(userId);
 
 		const [spaceResult, roles] = await Promise.all([
-			this.spacesRepository.findManyWithGround({
+			this.spacesRepository.findManyWithFitnessCenter({
 				spaceIds: this.spaceContext.spaceIds,
 			}),
 			this.rolesRepository.findMany({
@@ -65,12 +65,30 @@ export class IdpAccountAggregate {
 		const [spaces] = spaceResult;
 
 		const spaceOptions = spaces.map((space) => {
-			const primaryGround = space.company?.ground ?? space.ground;
+			const fitnessCenter = (
+				space as typeof space & {
+					fitnessCenter?: {
+						name?: string | null;
+						label?: string | null;
+						address?: string | null;
+						company?: {
+							name?: string | null;
+							label?: string | null;
+							address?: string | null;
+						} | null;
+					} | null;
+				}
+			).fitnessCenter;
+			const company = fitnessCenter?.company;
 			return {
 				value: space.id,
-				label: primaryGround?.name ?? space.id,
+				label: fitnessCenter?.name ?? company?.name ?? space.id,
 				description:
-					primaryGround?.label ?? primaryGround?.address ?? undefined,
+					fitnessCenter?.label ??
+					fitnessCenter?.address ??
+					company?.label ??
+					company?.address ??
+					undefined,
 			};
 		});
 		const roleOptions = roles.map((role) => ({
@@ -202,12 +220,24 @@ export class IdpAccountAggregate {
 		});
 
 		return tenants.map((tenant) => {
-			const primaryGround = tenant.space.company?.ground;
+			const fitnessCenter = (
+				tenant.space as typeof tenant.space & {
+					fitnessCenter?: {
+						name?: string | null;
+						label?: string | null;
+						company?: {
+							name?: string | null;
+							label?: string | null;
+						} | null;
+					} | null;
+				}
+			).fitnessCenter;
+			const company = fitnessCenter?.company;
 			return {
 				tenantId: tenant.id,
 				spaceId: tenant.spaceId,
-				spaceName: primaryGround?.name ?? tenant.spaceId,
-				spaceLabel: primaryGround?.label ?? null,
+				spaceName: fitnessCenter?.name ?? company?.name ?? tenant.spaceId,
+				spaceLabel: fitnessCenter?.label ?? company?.label ?? null,
 				roleId: tenant.roleId,
 				roleName: tenant.role.name,
 				roleDisplayName: tenant.role.displayName ?? null,

@@ -80,9 +80,9 @@ export class UsersRepository {
 						},
 						space: {
 							include: {
-								company: {
+								fitnessCenter: {
 									include: {
-										ground: true,
+										company: true,
 									},
 								},
 								classification: {
@@ -107,7 +107,7 @@ export class UsersRepository {
 					include: { group: true },
 				},
 			},
-		});
+		} as never);
 
 		return result ? plainToInstance(User, result) : null;
 	}
@@ -179,9 +179,9 @@ export class UsersRepository {
 						},
 						space: {
 							include: {
-								company: {
+								fitnessCenter: {
 									include: {
-										ground: true,
+										company: true,
 									},
 								},
 								classification: {
@@ -206,7 +206,7 @@ export class UsersRepository {
 					include: { group: true },
 				},
 			},
-		});
+		} as never);
 
 		return result ? plainToInstance(User, result) : null;
 	}
@@ -473,9 +473,9 @@ export class UsersRepository {
 						role: true,
 						space: {
 							include: {
-								company: {
+								fitnessCenter: {
 									include: {
-										ground: true,
+										company: true,
 									},
 								},
 							},
@@ -494,7 +494,7 @@ export class UsersRepository {
 					},
 				},
 			},
-		});
+		} as never);
 
 		return result ? plainToInstance(User, result) : null;
 	}

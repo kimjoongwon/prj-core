@@ -71,16 +71,16 @@ export class AccessMenuPolicy implements IPolicyHandler {
  *
  * @example
  * // Controller에서 사용
- * @CheckPolicies(new ManageEntityPolicy('READ', 'User'))
+ * @CheckPolicies(new ManageEntityPolicy('READ', 'entity:User'))
  * async getUsers() { ... }
  *
- * @CheckPolicies(new ManageEntityPolicy('CREATE', 'Reservation'))
+ * @CheckPolicies(new ManageEntityPolicy('CREATE', 'entity:Reservation'))
  * async createReservation() { ... }
  */
 export class ManageEntityPolicy implements IPolicyHandler {
 	/**
 	 * @param action - 수행할 행위 (CREATE, READ, UPDATE, DELETE, MANAGE 등)
-	 * @param subject - 엔티티 Subject (예: 'User', 'Ground', 'Reservation')
+	 * @param subject - 엔티티 Subject (예: 'entity:User', 'entity:FitnessCenter', 'entity:Reservation')
 	 */
 	constructor(
 		private readonly action: Actions,
@@ -153,7 +153,7 @@ export class AccessApiPolicy implements IPolicyHandler {
  *
  * @example
  * // Controller에서 사용
- * @CheckPolicies(new CustomPolicy('APPROVE', 'Reservation'))
+ * @CheckPolicies(new CustomPolicy('APPROVE', 'entity:Reservation'))
  * async approveReservation() { ... }
  */
 export class CustomPolicy implements IPolicyHandler {

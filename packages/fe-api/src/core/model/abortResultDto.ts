@@ -16,6 +16,6 @@
  */
 
 export interface AbortResultDto {
-	/** 리다이렉트 URL */
-	redirectTo: string;
+  /** 리다이렉트 URL */
+  redirectTo: string;
 }

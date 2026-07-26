@@ -94,7 +94,7 @@ const response: ResponseEntity<UserEntity> = {
 |--------|------|
 | `TimelineEntity` | 타임라인 |
 | `SessionEntity` | 세션 |
-| `GroundEntity` | 그라운드 |
+| `FitnessCenterEntity` | 피트니스 센터 |
 
 ### 작업
 
@@ -150,7 +150,7 @@ src/
 ├── subject.entity.ts            # 주제
 ├── timeline.entity.ts           # 타임라인
 ├── session.entity.ts            # 세션
-├── ground.entity.ts             # 그라운드
+├── fitness-center.entity.ts      # 피트니스 센터
 ├── task.entity.ts               # 작업
 ├── activity.entity.ts           # 활동
 ├── action.entity.ts             # 액션

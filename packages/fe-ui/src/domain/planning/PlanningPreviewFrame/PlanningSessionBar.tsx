@@ -28,14 +28,17 @@ const spaceSelectClassNames = {
 function getFallbackSpace(
 	context: PlanningContext,
 ): PlanningSpaceOption | null {
-	if (!context.tenantId && !context.spaceId && !context.groundName) {
+	if (!context.tenantId && !context.spaceId && !context.fitnessCenterName) {
 		return null;
 	}
 
 	return {
 		tenantId: context.tenantId ?? "storybook-tenant",
 		spaceId: context.spaceId ?? "storybook-space",
-		groundName: context.groundName ?? context.spaceId ?? "Storybook Space",
+		fitnessCenterName:
+			context.fitnessCenterName ??
+			context.spaceId ??
+			"Storybook Fitness Center",
 		tenantName: context.tenantName,
 	};
 }
@@ -79,7 +82,10 @@ export function PlanningSessionBar({
 }: PlanningSessionBarProps) {
 	const spaces = useMemo(() => getPlanningSpaces(context), [context]);
 	const spaceSignature = spaces
-		.map((space) => `${space.tenantId}:${space.spaceId}:${space.groundName}`)
+		.map(
+			(space) =>
+				`${space.tenantId}:${space.spaceId}:${space.fitnessCenterName}`,
+		)
 		.join("|");
 	const [authState, setAuthState] = useState<PlanningAuthState>(() =>
 		getInitialAuthState(context),
@@ -99,7 +105,7 @@ export function PlanningSessionBar({
 		: null;
 	const spaceOptions = spaces.map((space) => ({
 		value: space.tenantId,
-		label: space.groundName,
+		label: space.fitnessCenterName,
 	}));
 	const isAuthenticated = authState === "authenticated";
 	const accountName = isAuthenticated
@@ -177,7 +183,7 @@ export function PlanningSessionBar({
 						<Select
 							aria-label="Space 선택"
 							value={spaceSelectValue}
-							placeholder={selectedSpace?.groundName ?? "Space 확인 중"}
+							placeholder={selectedSpace?.fitnessCenterName ?? "Space 확인 중"}
 							options={spaceOptions}
 							isDisabled={spaces.length === 0}
 							classNames={spaceSelectClassNames}
@@ -224,7 +230,7 @@ export function PlanningSessionBar({
 				{selectedSpace ? (
 					<span className="break-words">
 						선택: {selectedSpace.tenantName ?? selectedSpace.tenantId} /{" "}
-						{selectedSpace.groundName}
+						{selectedSpace.fitnessCenterName}
 					</span>
 				) : null}
 			</div>

@@ -132,12 +132,12 @@
       "success": "サブジェクト取得成功"
     }
   },
-  "ground": {
+  "fitnessCenter": {
     "list": {
-      "success": "Groundリスト取得成功"
+      "success": "フィットネスセンターリスト取得成功"
     },
     "mySpace": {
-      "success": "自分のスペースのGroundリスト取得成功"
+      "success": "自分のスペースのフィットネスセンターリスト取得成功"
     }
   }
 }

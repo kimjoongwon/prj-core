@@ -352,7 +352,7 @@ Form migration은 화면 컴포넌트 단위가 아니라 aggregate root와 API 
 | 2 | `RoleForm` | `errors` | `RolePayloadSchema` | create는 `name` 필수, update는 `name` 제외입니다. |
 | 2 | `PolicyForm` | 없음 | `PolicyPayloadSchema`, `SyncPolicyAbilitiesSchema` | policy 기본정보와 ability sync payload를 분리합니다. |
 | 2 | `TimelineForm` | `errors` | `TimelinePayloadSchema` | name/description 기본 검증입니다. |
-| 3 | `GroundForm` | `errors` | `GroundPayloadSchema` | 이미 state class가 있으므로 `errors -> fieldErrors`와 schema 상속을 우선 적용합니다. |
+| 3 | `FitnessCenterForm` | `errors` | `FitnessCenterPayloadSchema` | 이미 state class가 있으므로 `errors -> fieldErrors`와 schema 상속을 우선 적용합니다. |
 | 3 | `TaskExerciseForm` | `errors` | `TaskExercisePayloadSchema`, `TaskExerciseFormSchema` | `durationMin/durationSec -> duration` mapper가 필요합니다. |
 | 3 | `AbilityForm` | 없음 | `AbilityPayloadSchema`, `AbilityFormSchema` | `fields` string과 `conditions` JSON 입력을 payload로 변환합니다. |
 | 3 | `TimelineSessionForm` | `errors` | `TimelineSessionPayloadSchema`, `TimelineSessionFormSchema` | `type`별 required 조건과 date order 검증이 필요합니다. |
@@ -374,7 +374,7 @@ schema는 domain별 폴더를 만들고 barrel export를 추가합니다.
 | --- | --- | --- |
 | `auth` | `LoginSchema`, `OidcLoginPayloadSchema`, `ForgotPasswordPayloadSchema`, `ResetPasswordPayloadSchema`, `SignUpPayloadSchema`, `SignUpFormSchema` | auth Form, auth/idp DTO |
 | `access-control` | `ActionPayloadSchema`, `RolePayloadSchema`, `PolicyPayloadSchema`, `SyncPolicyAbilitiesSchema`, `SyncRolePoliciesSchema`, `AbilityPayloadSchema`, `AbilityFormSchema` | Action/Role/Policy/Ability CRUD |
-| `space` | `SpacePayloadSchema`, `GroundPayloadSchema` | Space create, Ground edit |
+| `space` | `SpacePayloadSchema`, `FitnessCenterPayloadSchema` | Space create, FitnessCenter edit |
 | `task` | `TaskExercisePayloadSchema`, `TaskExerciseFormSchema` | Task exercise create/edit |
 | `routine` | `RoutinePayloadSchema`, `RoutineFormSchema`, `RoutineActivityItemSchema` | Routine create/edit |
 | `timeline` | `TimelinePayloadSchema`, `TimelineSessionPayloadSchema`, `TimelineSessionFormSchema`, `ProgramPayloadSchema`, `ProgramFormSchema` | Timeline, Session, Program create/edit |
@@ -392,17 +392,17 @@ route는 create/edit/detail 결정을 소유합니다.
 `XXXXEditScreen`과 도메인 Form은 현재 mode를 스스로 판단하지 않습니다.
 
 ```ts
-const state = useLocalObservable(() => new GroundFormState());
+const state = useLocalObservable(() => new FitnessCenterFormState());
 
 useEffect(() => {
-	if (ground) {
-		state.restore(ground);
+	if (fitnessCenter) {
+		state.restore(fitnessCenter);
 	}
-}, [ground, state]);
+}, [fitnessCenter, state]);
 
 const onSubmit = () => {
-	const payload = toUpdateGroundPayload(state);
-	updateGround({ spaceId, data: payload });
+	const payload = toUpdateFitnessCenterPayload(state);
+	updateFitnessCenter({ spaceId, data: payload });
 };
 ```
 
@@ -525,7 +525,7 @@ LoginForm 이후 `SignUpForm`을 두 번째 slice로 진행합니다.
 | 8 | `fe-input-agent` | TextArea/Select/RadioGroup/Checkbox/Switch/StringListInput 확장 | 각 wrapper가 동일한 validation context 계약 사용 |
 | 9 | `common-schema-builder` + `be-dto-builder` | 단순 CRUD schema / DTO 정리 | Action, Role, Policy, Timeline request DTO가 schema 원천을 공유 |
 | 10 | `fe-form-agent` + `fe-route-agent` | 단순 CRUD Form migration | `errors` 직접 전달 제거, route mapper로 create/update payload 조립 |
-| 11 | `common-schema-builder` + `be-dto-builder` | mapper 필요 CRUD schema / DTO 정리 | Ground, TaskExercise, Ability, TimelineSession, Program의 `PayloadSchema`와 필요한 `FormSchema`가 분리됨 |
+| 11 | `common-schema-builder` + `be-dto-builder` | mapper 필요 CRUD schema / DTO 정리 | FitnessCenter, TaskExercise, Ability, TimelineSession, Program의 `PayloadSchema`와 필요한 `FormSchema`가 분리됨 |
 | 12 | `fe-form-agent` + `fe-route-agent` | mapper 필요 CRUD Form migration | UI-only field가 payload에서 제외되고 route mapper가 wire 변환을 소유 |
 | 13 | `common-schema-builder` + `be-dto-builder` | 복잡 Form schema / DTO 정리 | Routine, Template, OidcClient, Inquiry의 child schema와 payload schema가 분리됨 |
 | 14 | `fe-form-agent` + `fe-route-agent` | 복잡 Form migration | nested/array error가 field path 계약으로 통합되고 bootstrap meta는 schema와 분리 |

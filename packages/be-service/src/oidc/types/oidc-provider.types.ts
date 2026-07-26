@@ -11,7 +11,22 @@
 
 export interface AccountClaims {
 	sub: string;
+	roles?: AccountRoleClaim[];
+	spaces?: AccountSpaceClaim[];
 	[key: string]: unknown;
+}
+
+export interface AccountRoleClaim {
+	spaceId: string;
+	roleId: string;
+	roleName?: string;
+	roleDisplayName?: string | null;
+	isSystemRole?: boolean;
+}
+
+export interface AccountSpaceClaim {
+	spaceId: string;
+	fitnessCenterName?: string;
 }
 
 export interface ClaimsParameterMember {

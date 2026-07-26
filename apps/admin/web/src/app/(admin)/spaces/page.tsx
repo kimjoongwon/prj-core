@@ -38,8 +38,8 @@ export default observer(function SpacesPageRoute() {
 			onClickCreateButton={() => {
 				router.push("/spaces/new" as Route);
 			}}
-			onClickSpaceGroundName={(spaceId) => {
-				router.push(`/spaces/${spaceId}/ground` as Route);
+			onClickSpaceFitnessCenterName={(spaceId) => {
+				router.push(`/spaces/${spaceId}/fitness-center` as Route);
 			}}
 		/>
 	);

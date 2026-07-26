@@ -6,6 +6,6 @@
  */
 
 export * from "./asset";
-export * from "./grounds";
+export * from "./fitness-centers";
 export * from "./inquiry";
 export * from "./timeline";

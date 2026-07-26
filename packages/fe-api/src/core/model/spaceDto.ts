@@ -14,30 +14,27 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-
-import type { CompanyDto } from "./companyDto";
-import type { GroundDto } from "./groundDto";
-import type { LanguageCode } from "./languageCode";
-import type { SpaceAssociationDto } from "./spaceAssociationDto";
-import type { SpaceClassificationDto } from "./spaceClassificationDto";
+import type { LanguageCode } from './languageCode';
+import type { SpaceClassificationDto } from './spaceClassificationDto';
+import type { SpaceAssociationDto } from './spaceAssociationDto';
+import type { FitnessCenterDto } from './fitnessCenterDto';
 
 export interface SpaceDto {
-	/** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
-	id: string;
-	createdAt: string;
-	updatedAt: string;
-	/** @nullable */
-	removedAt: string | null;
-	/**
-	 * 이 Space 접근에 사용할 Tenant ID
-	 * @nullable
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	tenantId?: string | null;
-	/** 이 Space에서 작성되는 운영 리소스의 콘텐츠 언어 */
-	contentLanguageCode: LanguageCode;
-	spaceClassification?: SpaceClassificationDto;
-	spaceAssociations?: SpaceAssociationDto[];
-	company?: CompanyDto;
-	ground?: GroundDto;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  removedAt: string | null;
+  /**
+   * 이 Space 접근에 사용할 Tenant ID
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  tenantId?: string | null;
+  /** 이 Space에서 작성되는 운영 리소스의 콘텐츠 언어 */
+  contentLanguageCode: LanguageCode;
+  spaceClassification?: SpaceClassificationDto;
+  spaceAssociations?: SpaceAssociationDto[];
+  fitnessCenter?: FitnessCenterDto;
 }

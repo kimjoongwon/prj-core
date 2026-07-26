@@ -132,12 +132,12 @@
       "success": "Subject retrieved successfully"
     }
   },
-  "ground": {
+  "fitnessCenter": {
     "list": {
-      "success": "Ground list retrieved successfully"
+      "success": "Fitness center list retrieved successfully"
     },
     "mySpace": {
-      "success": "My space ground list retrieved successfully"
+      "success": "My space fitness center list retrieved successfully"
     }
   }
 }

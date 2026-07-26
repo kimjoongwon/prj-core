@@ -40,8 +40,8 @@ export const GENERATED_ADMIN_ROUTE_META_SOURCES: string[] = [
 	"apps/admin/web/src/app/(admin)/settings/auth/oidc-sessions/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/settings/auth/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/settings/auth/security-policy/route.meta.ts",
-	"apps/admin/web/src/app/(admin)/spaces/[spaceId]/ground/edit/route.meta.ts",
-	"apps/admin/web/src/app/(admin)/spaces/[spaceId]/ground/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/spaces/[spaceId]/fitness-center/edit/route.meta.ts",
+	"apps/admin/web/src/app/(admin)/spaces/[spaceId]/fitness-center/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/spaces/new/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/spaces/route.meta.ts",
 	"apps/admin/web/src/app/(admin)/subjects/[subjectId]/route.meta.ts",
@@ -357,7 +357,7 @@ export const GENERATED_ADMIN_PAGE_ACCESS_ITEMS: GeneratedAdminPageAccessItem[] =
 		"pageLabel": "공간 목록",
 		"pathPattern": "/spaces",
 		"subject": "page:spaces:list",
-		"description": "공간과 연결된 ground 목록을 관리합니다.",
+		"description": "공간과 연결된 피트니스센터 목록을 관리합니다.",
 		"menuLeafId": "spaces-list"
 	},
 	{
@@ -374,18 +374,18 @@ export const GENERATED_ADMIN_PAGE_ACCESS_ITEMS: GeneratedAdminPageAccessItem[] =
 		"groupLabel": "공간 관리",
 		"pageId": "spaces:detail",
 		"pageLabel": "공간 상세",
-		"pathPattern": "/spaces/[spaceId]/ground",
+		"pathPattern": "/spaces/[spaceId]/fitness-center",
 		"subject": "page:spaces:detail",
-		"description": "선택한 공간의 상세 정보를 확인합니다."
+		"description": "선택한 공간의 피트니스센터 상세 정보를 확인합니다."
 	},
 	{
 		"groupId": "spaces",
 		"groupLabel": "공간 관리",
 		"pageId": "spaces:edit",
 		"pageLabel": "공간 수정",
-		"pathPattern": "/spaces/[spaceId]/ground/edit",
+		"pathPattern": "/spaces/[spaceId]/fitness-center/edit",
 		"subject": "page:spaces:edit",
-		"description": "선택한 공간의 정보를 수정합니다."
+		"description": "선택한 피트니스센터 정보를 수정합니다."
 	},
 	{
 		"groupId": "timelines",

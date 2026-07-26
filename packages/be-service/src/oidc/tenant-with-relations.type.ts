@@ -7,10 +7,8 @@ export interface TenantWithRelations {
 		isSystem: boolean;
 	};
 	space?: {
-		company?: {
-			ground?: {
-				name: string;
-			} | null;
-		};
+		fitnessCenter?: {
+			name: string;
+		} | null;
 	};
 }

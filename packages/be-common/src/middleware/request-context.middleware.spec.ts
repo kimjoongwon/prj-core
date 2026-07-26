@@ -83,7 +83,7 @@ describe("RequestContextMiddleware", () => {
 				// Given
 				const user = createMockUser();
 				mockReq = {
-					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "space-001" },
+					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "tenant-1" },
 					user,
 				} as unknown as Partial<Request>;
 
@@ -124,7 +124,7 @@ describe("RequestContextMiddleware", () => {
 				// Given
 				const user = createMockUser();
 				mockReq = {
-					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "space-001" },
+					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "tenant-1" },
 					user,
 				} as unknown as Partial<Request>;
 
@@ -140,9 +140,14 @@ describe("RequestContextMiddleware", () => {
 					CONTEXT_KEYS.TENANT,
 					user.tenants[0],
 				);
+				expect(mockCls.set).toHaveBeenCalledWith(
+					CONTEXT_KEYS.TENANT_ID,
+					"tenant-1",
+				);
 			});
 
-			it("같은 spaceId에서 PLATFORM_ADMIN tenant가 있으면 해당 tenant를 우선 저장해야 한다", async () => {
+			it("x-tenant-id로 지정한 PLATFORM_ADMIN tenant를 저장해야 한다", async () => {
+				// Given
 				const user = createMockUser({
 					tenants: [
 						{
@@ -158,19 +163,24 @@ describe("RequestContextMiddleware", () => {
 					],
 				});
 				mockReq = {
-					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "space-001" },
+					headers: {
+						[REQUEST_HEADER_KEYS.TENANT_ID]: "tenant-full-access",
+					},
 					user,
 				} as unknown as Partial<Request>;
 
+				// When
 				await middleware.use(mockReq as Request, mockRes as Response, mockNext);
 
+				// Then
 				expect(mockCls.set).toHaveBeenCalledWith(
 					CONTEXT_KEYS.TENANT,
 					user.tenants[1],
 				);
 			});
 
-			it("해당 spaceId의 tenant가 removed되었으면 TENANT를 undefined로 설정해야 한다", async () => {
+			it("x-tenant-id의 tenant가 제거되었으면 TENANT를 undefined로 설정해야 한다", async () => {
+				// Given
 				const user = createMockUser({
 					tenants: [
 						{
@@ -182,12 +192,14 @@ describe("RequestContextMiddleware", () => {
 					],
 				});
 				mockReq = {
-					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "space-001" },
+					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "tenant-deleted" },
 					user,
 				} as unknown as Partial<Request>;
 
+				// When
 				await middleware.use(mockReq as Request, mockRes as Response, mockNext);
 
+				// Then
 				expect(mockCls.set).toHaveBeenCalledWith(
 					CONTEXT_KEYS.TENANT,
 					undefined,
@@ -213,7 +225,7 @@ describe("RequestContextMiddleware", () => {
 				// Given
 				const user = createMockUser();
 				mockReq = {
-					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "non-existent-space" },
+					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "tenant-missing" },
 					user,
 				} as unknown as Partial<Request>;
 
@@ -235,7 +247,7 @@ describe("RequestContextMiddleware", () => {
 					throw new Error("CLS 에러");
 				});
 				mockReq = {
-					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "space-001" },
+					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "tenant-1" },
 					user: createMockUser(),
 				} as unknown as Partial<Request>;
 

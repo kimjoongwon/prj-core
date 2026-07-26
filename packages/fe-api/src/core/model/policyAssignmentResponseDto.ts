@@ -14,47 +14,47 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { PolicyResponseDto } from "./policyResponseDto";
+import type { PolicyResponseDto } from './policyResponseDto';
 
 export interface PolicyAssignmentResponseDto {
-	/**
-	 * Policy assignment ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	id: string;
-	/**
-	 * Role ID
-	 * @nullable
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	roleId?: string | null;
-	/**
-	 * User ID
-	 * @nullable
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	userId?: string | null;
-	/**
-	 * Policy ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	policyId: string;
-	/** 활성화 여부 */
-	isActive: boolean;
-	/** 우선순위 (높을수록 우선) */
-	priority: number;
-	/** 생성 일시 */
-	createdAt: string;
-	/**
-	 * 수정 일시
-	 * @nullable
-	 */
-	updatedAt?: string | null;
-	/**
-	 * 삭제 일시
-	 * @nullable
-	 */
-	removedAt?: string | null;
-	/** 할당된 Policy 상세 정보 */
-	policy?: PolicyResponseDto;
+  /**
+   * Policy assignment ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  id: string;
+  /**
+   * Role ID
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  roleId?: string | null;
+  /**
+   * User ID
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  userId?: string | null;
+  /**
+   * Policy ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  policyId: string;
+  /** 활성화 여부 */
+  isActive: boolean;
+  /** 우선순위 (높을수록 우선) */
+  priority: number;
+  /** 생성 일시 */
+  createdAt: string;
+  /**
+   * 수정 일시
+   * @nullable
+   */
+  updatedAt?: string | null;
+  /**
+   * 삭제 일시
+   * @nullable
+   */
+  removedAt?: string | null;
+  /** 할당된 Policy 상세 정보 */
+  policy?: PolicyResponseDto;
 }

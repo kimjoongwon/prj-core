@@ -47,7 +47,7 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | GOAL-009 | ACT-001, ACT-002 | 타임라인(Timeline)을 생성/수정/삭제하여 학기나 시즌을 구조화한다 | 높음 |
 | GOAL-010 | ACT-001, ACT-002 | 타임라인 내 세션(Session)을 등록/수정/삭제하여 수업 일정을 관리한다 | 높음 |
 | GOAL-011 | ACT-001, ACT-002 | 운동 종목(Exercise)을 등록/목록 조회/상세 확인/수정/삭제하여 루틴 구성의 기반 콘텐츠를 관리한다 | 높음 |
-| GOAL-012 | ACT-001 | 시설(Ground)을 등록/목록 조회/상세 조회/수정하여 Space와 연결되는 물리적 시설을 관리한다 | 높음 |
+| GOAL-012 | ACT-001 | 피트니스센터를 등록/목록 조회/상세 조회/수정하여 Space와 연결되는 운영 시설을 관리한다 | 높음 |
 | GOAL-013 | ACT-001, ACT-002 | 세션 내 프로그램(Program)을 등록/수정/삭제하여 강사·루틴·정원을 포함한 실제 수업 클래스를 관리한다 | 높음 |
 | GOAL-014 | ACT-001, ACT-002, ACT-003 | 에셋을 목록 조회/검색/필터링하고 권한에 따라 미리보기·다운로드·삭제를 수행하여 운영 리소스를 관리한다 | 높음 |
 | GOAL-015 | ACT-001, ACT-002 | 폴더를 생성/수정/삭제하여 계층적 에셋 저장 구조를 관리한다 | 높음 |
@@ -67,7 +67,7 @@ Admin 앱은 플랫폼의 관리자 콘솔입니다. 회원, 예약, 알림, 콘
 | 도메인 | 경로 | 설명 | 구현 상태 |
 |--------|------|------|-----------|
 | 대시보드 | `/dashboard` | 주요 지표 대시보드 | 폴더 존재 |
-| 시설 (Spaces) | `/spaces` | 시설(Ground) CRUD 관리. Space를 구체화하는 물리적 시설 (이름, 주소, 사업자번호 등) | 기획 중 |
+| 시설 (Spaces) | `/spaces` | 피트니스센터 CRUD 관리. Space를 구체화하는 운영 시설 (이름, 주소, 사업자번호 등) | 기획 중 |
 | 회원 (Users) | `/users` | 회원 CRUD 관리 | 목록 구현 완료, 상세/등록/수정 TODO |
 | 이메일 인증 | `/email-verifications` | 회원가입 전 이메일 인증 요청 목록 조회와 재발송 관리. User 생성 전 데이터이므로 PLATFORM_ADMIN 전역 scope로 운영 | 구현 중 |
 | 역할 (Roles) | `/roles` | 역할 정의 및 관리 | 구현 중 |
@@ -132,22 +132,25 @@ Space
 - 폴더별 필터링
 - 검색
 
-## Company/Ground 도메인 맥락
+## Company/Fitness Center 도메인 맥락
 
-Company는 Space를 구체화하는 사업자/운영사 상세입니다. Space 자체는 접근 제어와 테넌트 소속의 기준이고, Company가 사업자번호 같은 회사 정보를 부여합니다. Ground는 Company 아래의 1:1 서비스 시설이며 시설명, 현장 연락처, 이미지처럼 서비스 운영에 가까운 의미를 가집니다.
+Company는 사업자/운영사 상세(이름/사업자번호/연락처)를 보유합니다.
+FitnessCenter는 서비스를 운영하는 시설 단위이며,
+Space와 직접 1:1로 연결됩니다. Company와 Space는 FitnessCenter를 사이에 두고 연결됩니다.
 
 ```
-Space (접근/테넌트 기준) ◄─── Company (사업자: businessNo, contact)
-                           └─── Ground (서비스 시설: name, address, image)
-  │
-  ├─── Timeline (학기/시즌)
-  ├─── Routine (커리큘럼)
-  └─── Task/Exercise (운동)
+Company (사업자: businessNo, contact)
+  └─── 1:N FitnessCenter (서비스 시설: name, address, image)
+          └─── 1:1 Space (접근/테넌트 기준)
+                  ├─── Timeline (학기/시즌)
+                  ├─── Routine (커리큘럼)
+                  └─── Task/Exercise (운동)
 ```
 
-- Space와 Company는 1:1 관계이고, Company와 Ground도 1:1 관계입니다
-- 현재 Admin의 `/spaces/[spaceId]/ground` 단수 화면은 Company의 Ground를 조회/수정합니다
-- Company/Ground 등록 시 새 Space와 Ground가 자동으로 함께 생성됩니다 (서버에서 처리)
+- Company는 1:N FitnessCenter를 가집니다.
+- FitnessCenter는 Space와 1:1로 연결됩니다.
+- Space는 단일 FitnessCenter를 가질 수 있으며 (1:0..1), Space 생성 시 FitnessCenter가 함께 생성됩니다 (서버에서 처리).
+- 현재 Admin의 `/spaces/[spaceId]/fitness-center` 단수 화면은 Space에 연결된 FitnessCenter를 조회/수정합니다.
 - PLATFORM_ADMIN 역할만 시설 등록/수정이 가능합니다 (플랫폼 관리자 전용)
 - `businessNo`(회사 사업자등록번호)는 Company의 식별자가 아니며 중복을 허용합니다
 

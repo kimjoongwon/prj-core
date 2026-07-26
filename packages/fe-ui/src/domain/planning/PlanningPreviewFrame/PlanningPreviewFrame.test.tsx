@@ -22,17 +22,17 @@ const baseScenario = {
 		role: "SPACE_MANAGER",
 		tenantId: "tenant-gangnam",
 		spaceId: "space-gangnam",
-		groundName: "강남 스페이스",
+		fitnessCenterName: "F45 강남1호",
 		spaces: [
 			{
 				tenantId: "tenant-gangnam",
 				spaceId: "space-gangnam",
-				groundName: "강남 스페이스",
+				fitnessCenterName: "F45 강남1호",
 			},
 			{
 				tenantId: "tenant-hongdae",
 				spaceId: "space-hongdae",
-				groundName: "홍대 스페이스",
+				fitnessCenterName: "스포애니 홍대",
 			},
 		],
 		abilities: ["read:user"],
@@ -55,7 +55,7 @@ const baseScenario = {
 } satisfies PlanningScenario;
 
 describe("PlanningPreviewFrame", () => {
-	it("renders the mock session bar and preview content", () => {
+	it("Given 로그인된 기획 시나리오가 있을 때, When 프레임을 렌더링하면, Then mock session과 preview 내용을 표시한다", () => {
 		render(
 			<PlanningPreviewFrame scenario={baseScenario}>
 				<div>Rendered screen</div>
@@ -68,7 +68,7 @@ describe("PlanningPreviewFrame", () => {
 		expect(screen.getByText("Rendered screen")).toBeTruthy();
 	});
 
-	it("updates the local tenant selection and notifies the story callback", async () => {
+	it("Given 여러 피트니스센터를 선택할 수 있을 때, When 다른 센터를 선택하면, Then 로컬 선택과 story callback을 갱신한다", async () => {
 		const onSpaceChange = vi.fn();
 
 		render(
@@ -80,9 +80,9 @@ describe("PlanningPreviewFrame", () => {
 			</PlanningPreviewFrame>,
 		);
 
-		fireEvent.click(screen.getByRole("button", { name: /강남 스페이스/ }));
+		fireEvent.click(screen.getByRole("button", { name: /F45 강남1호/ }));
 		fireEvent.click(
-			await screen.findByRole("option", { name: "홍대 스페이스" }),
+			await screen.findByRole("option", { name: "스포애니 홍대" }),
 		);
 
 		expect(onSpaceChange).toHaveBeenCalledWith(
@@ -91,10 +91,10 @@ describe("PlanningPreviewFrame", () => {
 				spaceId: "space-hongdae",
 			}),
 		);
-		expect(screen.getByRole("button", { name: /홍대 스페이스/ })).toBeTruthy();
+		expect(screen.getByRole("button", { name: /스포애니 홍대/ })).toBeTruthy();
 	});
 
-	it("renders notes and API request summaries without planning metadata panels", () => {
+	it("Given notes와 API 요청이 있는 시나리오일 때, When 프레임을 렌더링하면, Then 별도 metadata 패널 없이 요약을 표시한다", () => {
 		render(
 			<PlanningPreviewFrame scenario={baseScenario}>
 				<div>Rendered screen</div>

@@ -84,9 +84,13 @@ export const createTestUserDto = (
 				space: {
 					id: "space-test-id",
 					name: "Test Space",
-					ground: {
-						id: "ground-test-id",
-						name: "Test Ground",
+					fitnessCenter: {
+						id: "fitness-center-test-id",
+						name: "Test Fitness Center",
+						company: {
+							id: "company-test-id",
+							name: "Test Company",
+						},
 					},
 				},
 			},
@@ -116,9 +120,13 @@ export const createTestUserEntity = (overrides: Partial<User> = {}): User => {
 				space: {
 					id: "space-test-id",
 					name: "Test Space",
-					ground: {
-						id: "ground-test-id",
-						name: "Test Ground",
+					fitnessCenter: {
+						id: "fitness-center-test-id",
+						name: "Test Fitness Center",
+						company: {
+							id: "company-test-id",
+							name: "Test Company",
+						},
 					},
 				},
 			},

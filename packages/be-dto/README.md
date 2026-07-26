@@ -113,7 +113,7 @@ getUsers(@Query() query: QueryUserDto) {
 |--------|------|--------|--------|-------|
 | Timeline | `TimelineDto` | `CreateTimelineDto` | `UpdateTimelineDto` | `QueryTimelineDto` |
 | Session | `SessionDto` | `CreateSessionDto` | `UpdateSessionDto` | `QuerySessionDto` |
-| Ground | `GroundDto` | `CreateGroundDto` | `UpdateGroundDto` | `QueryGroundDto` |
+| FitnessCenter | `FitnessCenterDto` | `CreateFitnessCenterDto` | `UpdateFitnessCenterDto` | `QueryFitnessCenterDto` |
 
 ### 에셋
 

@@ -144,7 +144,7 @@ Create/Update 화면에서 폼을 즉시 렌더링할 수 있도록 Controller�
 - [ ] 작업 흐름 경로에서는 Controller → CommandBus/QueryBus → UseCase → Aggregate/Service/Client 흐름 유지
 - [ ] 한 controller 클래스에서 bus 외 dependency를 주입하지 않는지 확인
 - [ ] Controller 패키지의 domain 폴더는 aggregate root 기준으로 유지 (`spaces`, `tasks`)
-- [ ] `ground`, `exercise` 같은 child resource는 top-level module 예시로 만들지 않음
+- [ ] `fitness-center`, `exercise` 같은 child resource는 top-level module 예시로 만들지 않음
 - [ ] Create/Update용 Form Bootstrap 응답 계약 (`defaultObject/options/ui/fieldMeta/aiSchemas`) 적용
 - [ ] `state path` 기반 옵션/경로 규칙 검증
 - [ ] `POST /form/ai-fill` 시 fillable/권한 서버 검증

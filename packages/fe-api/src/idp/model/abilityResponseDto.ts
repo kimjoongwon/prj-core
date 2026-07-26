@@ -14,57 +14,56 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-
-import type { AbilityResponseDtoConditions } from "./abilityResponseDtoConditions";
-import type { ActionResponseDto } from "./actionResponseDto";
-import type { SubjectResponseDto } from "./subjectResponseDto";
+import type { ActionResponseDto } from './actionResponseDto';
+import type { SubjectResponseDto } from './subjectResponseDto';
+import type { AbilityResponseDtoConditions } from './abilityResponseDtoConditions';
 
 export interface AbilityResponseDto {
-	/**
-	 * Ability ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	id: string;
-	/**
-	 * Action ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	actionId: string;
-	/** Action 상세 정보 */
-	action?: ActionResponseDto;
-	/**
-	 * Subject ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	subjectId: string;
-	/** Subject 상세 정보 */
-	subject?: SubjectResponseDto;
-	/** 대상 필드 목록 */
-	fields: string[];
-	/**
-	 * 권한 조건 (JSON 형식)
-	 * @nullable
-	 */
-	conditions?: AbilityResponseDtoConditions;
-	/** 거부 권한 여부 (true: cannot, false: can) */
-	inverted: boolean;
-	/**
-	 * 거부 사유
-	 * @nullable
-	 */
-	reason?: string | null;
-	/** 권한 이름 (고유 식별자) */
-	name: string;
-	/**
-	 * 권한 설명
-	 * @nullable
-	 */
-	description?: string | null;
-	/** 생성 일시 */
-	createdAt: string;
-	/**
-	 * 수정 일시
-	 * @nullable
-	 */
-	updatedAt?: string | null;
+  /**
+   * Ability ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  id: string;
+  /**
+   * Action ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  actionId: string;
+  /** Action 상세 정보 */
+  action?: ActionResponseDto;
+  /**
+   * Subject ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  subjectId: string;
+  /** Subject 상세 정보 */
+  subject?: SubjectResponseDto;
+  /** 대상 필드 목록 */
+  fields: string[];
+  /**
+   * 권한 조건 (JSON 형식)
+   * @nullable
+   */
+  conditions?: AbilityResponseDtoConditions;
+  /** 거부 권한 여부 (true: cannot, false: can) */
+  inverted: boolean;
+  /**
+   * 거부 사유
+   * @nullable
+   */
+  reason?: string | null;
+  /** 권한 이름 (고유 식별자) */
+  name: string;
+  /**
+   * 권한 설명
+   * @nullable
+   */
+  description?: string | null;
+  /** 생성 일시 */
+  createdAt: string;
+  /**
+   * 수정 일시
+   * @nullable
+   */
+  updatedAt?: string | null;
 }

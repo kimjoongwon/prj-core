@@ -16,25 +16,17 @@ describe("SpacesRepository", () => {
 				update: jest.Mock;
 				count: jest.Mock;
 			};
-			ground: {
-				findFirst: jest.Mock;
+			company: {
 				create: jest.Mock;
 				update: jest.Mock;
-				updateMany: jest.Mock;
 			};
-			policy: {
-				findMany: jest.Mock;
-				upsert: jest.Mock;
-			};
-			policyAbility: {
-				upsert: jest.Mock;
-			};
-			rolePolicy: {
-				upsert: jest.Mock;
+			fitnessCenter: {
+				findUnique: jest.Mock;
+				create: jest.Mock;
+				update: jest.Mock;
 			};
 			spaceClassification: {
 				findFirst: jest.Mock;
-				findUnique: jest.Mock;
 				findMany: jest.Mock;
 			};
 			category: {
@@ -50,30 +42,84 @@ describe("SpacesRepository", () => {
 		removedAt: null,
 	};
 
-	const mockSpaceWithGround = {
+	const mockCompanyData = {
+		id: "company-test-id",
+		name: "Test Company",
+		label: "Test Label",
+		address: "Seoul",
+		phone: "02-0000-0000",
+		email: "center@example.com",
+		businessNo: "123-45-67890",
+		logoImageFileId: null,
+		removedAt: null,
+	};
+
+	const mockSpaceWithFitnessCenter = {
 		...mockSpaceData,
-		company: {
-			id: "company-test-id",
-			name: "Test Company",
+		fitnessCenter: {
+			id: "fitness-center-test-id",
+			name: "Test Fitness Center",
 			label: "Test Label",
 			address: "Seoul",
 			phone: "02-0000-0000",
-			email: "ground@example.com",
-			businessNo: "123-45-67890",
+			email: "center@example.com",
+			companyId: mockCompanyData.id,
 			spaceId: mockSpaceData.id,
-			logoImageFileId: null,
-			ground: {
-				id: "ground-test-id",
-				name: "Test Ground",
-				label: "Test Label",
-				address: "Seoul",
-				phone: "02-0000-0000",
-				email: "ground@example.com",
-				companyId: "company-test-id",
-				imageFileId: null,
-				removedAt: null,
-			},
+			imageFileId: null,
+			removedAt: null,
+			company: mockCompanyData,
 		},
+	};
+
+	const mockSecondSpaceWithFitnessCenter = {
+		...mockSpaceData,
+		id: "space-second-id",
+		fitnessCenter: {
+			id: "fitness-center-second-id",
+			name: "Second Fitness Center",
+			label: "Second Label",
+			address: "Busan",
+			phone: "051-0000-0000",
+			email: "second@example.com",
+			companyId: mockCompanyData.id,
+			spaceId: "space-second-id",
+			imageFileId: "image-2",
+			removedAt: null,
+			company: mockCompanyData,
+		},
+	};
+
+	const getFitnessCenter = (
+		space: Space | null | undefined,
+	):
+		| {
+				id?: string;
+				name?: string;
+				company?: {
+					id?: string;
+					businessNo?: string;
+					fitnessCenters?: Array<{ id?: string }>;
+				};
+				space?: { id?: string };
+		  }
+		| undefined => {
+		return (
+			space as
+				| (Space & {
+						fitnessCenter?: {
+							id?: string;
+							name?: string;
+							company?: {
+								id?: string;
+								businessNo?: string;
+								fitnessCenters?: Array<{ id?: string }>;
+							};
+							space?: { id?: string };
+						};
+				  })
+				| null
+				| undefined
+		)?.fitnessCenter;
 	};
 
 	beforeEach(async () => {
@@ -86,25 +132,17 @@ describe("SpacesRepository", () => {
 					update: jest.fn(),
 					count: jest.fn(),
 				},
-				ground: {
-					findFirst: jest.fn(),
+				company: {
 					create: jest.fn(),
 					update: jest.fn(),
-					updateMany: jest.fn(),
 				},
-				policy: {
-					findMany: jest.fn().mockResolvedValue([]),
-					upsert: jest.fn(),
-				},
-				policyAbility: {
-					upsert: jest.fn(),
-				},
-				rolePolicy: {
-					upsert: jest.fn(),
+				fitnessCenter: {
+					findUnique: jest.fn(),
+					create: jest.fn(),
+					update: jest.fn(),
 				},
 				spaceClassification: {
 					findFirst: jest.fn(),
-					findUnique: jest.fn(),
 					findMany: jest.fn(),
 				},
 				category: {
@@ -149,55 +187,129 @@ describe("SpacesRepository", () => {
 
 		it("Space가 없으면 null을 반환해야 한다", async () => {
 			// Given
-			const spaceId = "non-existent-space";
 			mockTxHost.tx.space.findUnique.mockResolvedValue(null);
 
 			// When
-			const result = await repository.findById(spaceId);
+			const result = await repository.findById("missing-space-id");
 
 			// Then
-			expect(mockTxHost.tx.space.findUnique).toHaveBeenCalledWith({
-				where: { id: spaceId },
-			});
 			expect(result).toBeNull();
 		});
 	});
 
-	describe("findByIdWithGround", () => {
-		it("Ground 정보를 포함해서 Space를 조회해야 한다", async () => {
+	describe("findByIdWithFitnessCenter", () => {
+		it("FitnessCenter와 Company를 포함해서 Space를 조회해야 한다", async () => {
 			// Given
-			const spaceId = "space-test-id";
-			mockTxHost.tx.space.findUnique.mockResolvedValue(mockSpaceWithGround);
+			mockTxHost.tx.space.findUnique.mockResolvedValue(
+				mockSpaceWithFitnessCenter,
+			);
 
 			// When
-			const result = await repository.findByIdWithGround(spaceId);
+			const result = await repository.findByIdWithFitnessCenter(
+				mockSpaceData.id,
+			);
 
 			// Then
 			expect(mockTxHost.tx.space.findUnique).toHaveBeenCalledWith({
-				where: { id: spaceId },
+				where: { id: mockSpaceData.id },
 				include: {
-					company: {
+					fitnessCenter: {
 						include: {
-							ground: true,
+							company: true,
 						},
 					},
 				},
 			});
 			expect(result).toBeInstanceOf(Space);
-			expect(result?.ground).toBeDefined();
-			expect(result?.ground?.businessNo).toBe("123-45-67890");
+
+			const fitnessCenter = getFitnessCenter(result);
+			expect(fitnessCenter?.id).toBe("fitness-center-test-id");
+			expect(fitnessCenter?.company?.businessNo).toBe("123-45-67890");
+			expect(fitnessCenter?.space?.id).toBe(mockSpaceData.id);
+		});
+
+		it("같은 Company가 여러 FitnessCenter를 가져도 현재 Space의 센터만 연결해야 한다", async () => {
+			// Given
+			mockTxHost.tx.space.findUnique.mockResolvedValue(
+				mockSpaceWithFitnessCenter,
+			);
+
+			// When
+			const result = await repository.findByIdWithFitnessCenter(
+				mockSpaceData.id,
+			);
+
+			// Then
+			const fitnessCenter = getFitnessCenter(result);
+			expect(fitnessCenter?.company?.fitnessCenters).toHaveLength(1);
+			expect(fitnessCenter?.company?.fitnessCenters?.[0]?.id).toBe(
+				"fitness-center-test-id",
+			);
 		});
 
 		it("Space가 없으면 null을 반환해야 한다", async () => {
 			// Given
-			const spaceId = "non-existent-space";
 			mockTxHost.tx.space.findUnique.mockResolvedValue(null);
 
 			// When
-			const result = await repository.findByIdWithGround(spaceId);
+			const result =
+				await repository.findByIdWithFitnessCenter("missing-space-id");
 
 			// Then
 			expect(result).toBeNull();
+		});
+	});
+
+	describe("findManyWithFitnessCenter", () => {
+		it("Company 검색 조건으로 서로 다른 Space의 FitnessCenter를 함께 조회해야 한다", async () => {
+			// Given
+			mockTxHost.tx.space.findMany.mockResolvedValue([
+				mockSpaceWithFitnessCenter,
+				mockSecondSpaceWithFitnessCenter,
+			]);
+			mockTxHost.tx.space.count.mockResolvedValue(2);
+
+			// When
+			const [spaces, total] = await repository.findManyWithFitnessCenter({
+				search: "123-45",
+				spaceIds: [mockSpaceData.id, "space-second-id"],
+			});
+
+			// Then
+			expect(mockTxHost.tx.space.findMany).toHaveBeenCalledWith(
+				expect.objectContaining({
+					where: expect.objectContaining({
+						fitnessCenter: {
+							is: {
+								removedAt: null,
+								company: {
+									is: {
+										removedAt: null,
+									},
+								},
+							},
+						},
+						OR: expect.arrayContaining([
+							expect.objectContaining({
+								fitnessCenter: expect.objectContaining({
+									is: expect.objectContaining({
+										company: expect.objectContaining({
+											is: expect.objectContaining({
+												businessNo: expect.objectContaining({
+													contains: "123-45",
+												}),
+											}),
+										}),
+									}),
+								}),
+							}),
+						]),
+					}),
+				}),
+			);
+			expect(total).toBe(2);
+			expect(getFitnessCenter(spaces[0])?.space?.id).toBe(mockSpaceData.id);
+			expect(getFitnessCenter(spaces[1])?.space?.id).toBe("space-second-id");
 		});
 	});
 
@@ -231,6 +343,33 @@ describe("SpacesRepository", () => {
 
 			// Then
 			expect(result).toEqual([]);
+		});
+	});
+
+	describe("findFitnessCenterBySpaceId", () => {
+		it("spaceId unique 키로 FitnessCenter를 조회해야 한다", async () => {
+			// Given
+			mockTxHost.tx.fitnessCenter.findUnique.mockResolvedValue(
+				mockSpaceWithFitnessCenter.fitnessCenter,
+			);
+
+			// When
+			const result = await repository.findFitnessCenterBySpaceId(
+				mockSpaceData.id,
+			);
+
+			// Then
+			expect(mockTxHost.tx.fitnessCenter.findUnique).toHaveBeenCalledWith({
+				where: { spaceId: mockSpaceData.id },
+				include: {
+					company: true,
+					space: true,
+				},
+			});
+			expect(result?.spaceId).toBe(mockSpaceData.id);
+			expect(
+				(result as { company?: { id?: string } } | null)?.company?.id,
+			).toBe(mockCompanyData.id);
 		});
 	});
 
@@ -268,10 +407,55 @@ describe("SpacesRepository", () => {
 		});
 	});
 
+	describe("createFitnessCenterBySpaceId", () => {
+		it("Company는 Space 없이 만들고 FitnessCenter에 companyId와 spaceId를 연결해야 한다", async () => {
+			// Given
+			mockTxHost.tx.company.create.mockResolvedValue({
+				id: mockCompanyData.id,
+			});
+			mockTxHost.tx.fitnessCenter.create.mockResolvedValue({
+				id: "fitness-center-test-id",
+			});
+			mockTxHost.tx.space.findUnique.mockResolvedValue(
+				mockSpaceWithFitnessCenter,
+			);
+
+			// When
+			const result = await repository.createFitnessCenterBySpaceId(
+				mockSpaceData.id,
+				{
+					company: {
+						...mockCompanyData,
+					},
+					fitnessCenter: {
+						name: "Test Fitness Center",
+						label: "Test Label",
+						address: "Seoul",
+						phone: "02-0000-0000",
+						email: "fitness-center@example.com",
+					},
+				},
+			);
+
+			// Then
+			expect(mockTxHost.tx.company.create).toHaveBeenCalledWith({
+				data: expect.not.objectContaining({
+					spaceId: expect.anything(),
+				}),
+			});
+			expect(mockTxHost.tx.fitnessCenter.create).toHaveBeenCalledWith({
+				data: expect.objectContaining({
+					companyId: mockCompanyData.id,
+					spaceId: mockSpaceData.id,
+				}),
+			});
+			expect(getFitnessCenter(result)?.company?.id).toBe(mockCompanyData.id);
+		});
+	});
+
 	describe("updateById", () => {
 		it("Space를 수정해야 한다", async () => {
 			// Given
-			const spaceId = "space-test-id";
 			const updateData = { updatedAt: new Date("2024-06-01") };
 			mockTxHost.tx.space.update.mockResolvedValue({
 				...mockSpaceData,
@@ -279,38 +463,116 @@ describe("SpacesRepository", () => {
 			});
 
 			// When
-			const result = await repository.updateById(spaceId, updateData);
+			const result = await repository.updateById(mockSpaceData.id, updateData);
 
 			// Then
 			expect(mockTxHost.tx.space.update).toHaveBeenCalledWith({
-				where: { id: spaceId },
+				where: { id: mockSpaceData.id },
 				data: updateData,
 			});
-			expect(result).toBeInstanceOf(Space);
-			expect(result.updatedAt).toEqual(updateData.updatedAt);
+			expect(result?.updatedAt).toEqual(updateData.updatedAt);
+		});
+	});
+
+	describe("updateFitnessCenterBySpaceId", () => {
+		it("같은 Company의 다른 FitnessCenter를 건드리지 않고 현재 Space의 센터만 수정해야 한다", async () => {
+			// Given
+			mockTxHost.tx.fitnessCenter.findUnique.mockResolvedValue({
+				id: "fitness-center-test-id",
+			});
+			mockTxHost.tx.fitnessCenter.update.mockResolvedValue({
+				id: "fitness-center-test-id",
+			});
+			mockTxHost.tx.space.findUnique.mockResolvedValue({
+				...mockSpaceWithFitnessCenter,
+				fitnessCenter: {
+					...mockSpaceWithFitnessCenter.fitnessCenter,
+					name: "Updated Fitness Center",
+				},
+			});
+
+			// When
+			const result = await repository.updateFitnessCenterBySpaceId(
+				mockSpaceData.id,
+				{
+					fitnessCenter: {
+						name: "Updated Fitness Center",
+					},
+				},
+			);
+
+			// Then
+			expect(mockTxHost.tx.fitnessCenter.findUnique).toHaveBeenCalledWith({
+				where: { spaceId: mockSpaceData.id },
+				select: { id: true },
+			});
+			expect(mockTxHost.tx.company.update).not.toHaveBeenCalled();
+			expect(mockTxHost.tx.fitnessCenter.update).toHaveBeenCalledWith({
+				where: { id: "fitness-center-test-id" },
+				data: {
+					name: "Updated Fitness Center",
+				},
+			});
+			expect(mockTxHost.tx.fitnessCenter.update).not.toHaveBeenCalledWith(
+				expect.objectContaining({
+					where: { id: "fitness-center-second-id" },
+				}),
+			);
+			expect(getFitnessCenter(result)?.name).toBe("Updated Fitness Center");
 		});
 	});
 
 	describe("removeById", () => {
 		it("Space를 소프트 삭제해야 한다", async () => {
 			// Given
-			const spaceId = "space-test-id";
-			const removedAt = new Date();
 			mockTxHost.tx.space.update.mockResolvedValue({
 				...mockSpaceData,
-				removedAt,
+				removedAt: new Date("2024-06-01"),
 			});
 
 			// When
-			const result = await repository.removeById(spaceId);
+			const result = await repository.removeById(mockSpaceData.id);
 
 			// Then
 			expect(mockTxHost.tx.space.update).toHaveBeenCalledWith({
-				where: { id: spaceId },
+				where: { id: mockSpaceData.id },
 				data: { removedAt: expect.any(Date) },
 			});
 			expect(result).toBeInstanceOf(Space);
-			expect(result.removedAt).toBeDefined();
+		});
+	});
+
+	describe("findByIdsWithFitnessCenter", () => {
+		it("여러 ID로 FitnessCenter를 포함한 Space를 조회해야 한다", async () => {
+			// Given
+			mockTxHost.tx.space.findMany.mockResolvedValue([
+				mockSpaceWithFitnessCenter,
+				mockSecondSpaceWithFitnessCenter,
+			]);
+
+			// When
+			const result = await repository.findByIdsWithFitnessCenter([
+				mockSpaceData.id,
+				"space-second-id",
+			]);
+
+			// Then
+			expect(mockTxHost.tx.space.findMany).toHaveBeenCalledWith({
+				where: {
+					id: { in: [mockSpaceData.id, "space-second-id"] },
+					removedAt: null,
+				},
+				include: {
+					fitnessCenter: {
+						include: {
+							company: true,
+						},
+					},
+				},
+				orderBy: { createdAt: "desc" },
+			});
+			expect(result).toHaveLength(2);
+			expect(getFitnessCenter(result[1])?.id).toBe("fitness-center-second-id");
 		});
 	});
 

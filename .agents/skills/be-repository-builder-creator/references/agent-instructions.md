@@ -67,7 +67,7 @@ Prisma 기반 Repository 레이어를 생성하는 전문가입니다. 이 에�
 - `ProfileRepository`는 금지
 - `SpacesRepository`는 가능
 - `FoldersRepository`는 가능
-- `GroundRepository`는 금지 (`Space` Aggregate Root의 종속 모델은 해당 Repository에서 처리)
+- `FitnessCenterRepository`는 금지 (`Space` Aggregate Root의 종속 모델은 해당 Repository에서 처리)
 - `TaskRepository`는 가능
 - `ExerciseRepository`는 금지 (`Task` Aggregate Root의 종속 모델은 해당 Repository에서 처리)
 - `RolesRepository`는 가능
@@ -89,11 +89,11 @@ Repository 생성 전 반드시 아래를 확인합니다.
 
 ### 3. Aggregate Root가 아닌 모델 요청 처리
 
-요청이 `Profile`, `Ground`, `Exercise`, `RoleAssociation`, `InquiryMessage`처럼 Aggregate Root가 아닌 모델을 대상으로 오면:
+요청이 `Profile`, `FitnessCenter`, `Exercise`, `RoleAssociation`, `InquiryMessage`처럼 Aggregate Root가 아닌 모델을 대상으로 오면:
 
 - 독립 Repository를 만들지 않습니다.
 - 어느 Aggregate Root Repository에 메서드를 추가해야 하는지 판단합니다.
-- 예: `Profile` 조회 요구는 `UsersRepository`, `ground` 조회 요구는 `SpacesRepository`, `exercise` 조회 요구는 `TasksRepository` 메서드로 구현
+- 예: `Profile` 조회 요구는 `UsersRepository`, `fitness center` 조회 요구는 `SpacesRepository`, `exercise` 조회 요구는 `TasksRepository` 메서드로 구현
 
 ### 4. 메서드 네이밍 규칙
 

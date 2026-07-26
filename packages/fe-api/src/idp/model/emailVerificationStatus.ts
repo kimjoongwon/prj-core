@@ -18,12 +18,12 @@
 /**
  * 상태
  */
-export type EmailVerificationStatus =
-	(typeof EmailVerificationStatus)[keyof typeof EmailVerificationStatus];
+export type EmailVerificationStatus = typeof EmailVerificationStatus[keyof typeof EmailVerificationStatus];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const EmailVerificationStatus = {
-	PENDING: "PENDING",
-	VERIFIED: "VERIFIED",
-	EXPIRED: "EXPIRED",
+  PENDING: 'PENDING',
+  VERIFIED: 'VERIFIED',
+  EXPIRED: 'EXPIRED',
 } as const;

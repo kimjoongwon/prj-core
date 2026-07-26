@@ -19,7 +19,7 @@ export async function getAccessibleSpacesForUser(
 	}
 
 	const tenantSpaceIds = getOrderedTenantSpaceIds(user);
-	const spaces = await spacesService.findByIdsWithGround(tenantSpaceIds);
+	const spaces = await spacesService.findByIdsWithFitnessCenter(tenantSpaceIds);
 	const spaceById = new Map(spaces.map((space) => [space.id, space]));
 	const tenantBySpaceId = new Map(
 		activeTenants.map((tenant) => [tenant.spaceId, tenant]),

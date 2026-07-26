@@ -1,6 +1,6 @@
 "use client";
 
-import type { TranslationResponseDto } from "@cocrepo/api/model/translationResponseDto";
+import type { TranslationResponseDto } from "@cocrepo/api/core/model";
 import type {
 	DataGridQueryStates,
 	DataGridSetQueryStates,

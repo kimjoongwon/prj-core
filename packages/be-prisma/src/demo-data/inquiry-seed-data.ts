@@ -36,7 +36,7 @@ export interface InquirySeedData {
 	source: InquirySource;
 	status: InquiryStatus;
 	priority: InquiryPriority;
-	groundName: string;
+	fitnessCenterName: string;
 	customerEmail: string;
 	assigneeEmail?: string;
 	sentiment?: SentimentType;
@@ -135,7 +135,7 @@ export const inquirySeedData: InquirySeedData[] = [
 		source: "ONLINE",
 		status: "NEW",
 		priority: "NORMAL",
-		groundName: "F45 광화문",
+		fitnessCenterName: "F45 광화문",
 		customerEmail: "minsu.kim92@gmail.com",
 		tags: ["배송지연"],
 	},
@@ -149,7 +149,7 @@ export const inquirySeedData: InquirySeedData[] = [
 		source: "ONLINE",
 		status: "OPEN",
 		priority: "HIGH",
-		groundName: "F45 강남1호",
+		fitnessCenterName: "F45 강남1호",
 		customerEmail: "seoyeon_lee@naver.com",
 		assigneeEmail: "manager.gangnam@f45.kr",
 		sentiment: "NEGATIVE",
@@ -167,7 +167,7 @@ export const inquirySeedData: InquirySeedData[] = [
 		source: "ONLINE",
 		status: "IN_PROGRESS",
 		priority: "NORMAL",
-		groundName: "크로스핏 이태원",
+		fitnessCenterName: "크로스핏 이태원",
 		customerEmail: "yejun.park@kakao.com",
 		assigneeEmail: "manager.itaewon@crossfit.kr",
 		sentiment: "NEGATIVE",
@@ -184,7 +184,7 @@ export const inquirySeedData: InquirySeedData[] = [
 		source: "ONLINE",
 		status: "IN_PROGRESS",
 		priority: "NORMAL",
-		groundName: "F45 광화문",
+		fitnessCenterName: "F45 광화문",
 		customerEmail: "jiwoo0315@gmail.com",
 		assigneeEmail: "manager.gwanghwamun@f45.kr",
 		aiResolutionAttempted: true,
@@ -200,7 +200,7 @@ export const inquirySeedData: InquirySeedData[] = [
 		source: "ONLINE",
 		status: "WAITING_CUSTOMER",
 		priority: "HIGH",
-		groundName: "애니타임피트니스 역삼",
+		fitnessCenterName: "애니타임피트니스 역삼",
 		customerEmail: "hayoon.jung@naver.com",
 		assigneeEmail: "manager.gangnam@f45.kr",
 		sentiment: "NEGATIVE",
@@ -218,7 +218,7 @@ export const inquirySeedData: InquirySeedData[] = [
 		source: "ONLINE",
 		status: "WAITING_CUSTOMER",
 		priority: "LOW",
-		groundName: "스포애니 홍대",
+		fitnessCenterName: "스포애니 홍대",
 		customerEmail: "doyoon.kang@gmail.com",
 		assigneeEmail: "manager.itaewon@crossfit.kr",
 		tags: ["계정문제"],
@@ -233,7 +233,7 @@ export const inquirySeedData: InquirySeedData[] = [
 		source: "ONLINE",
 		status: "RESOLVED",
 		priority: "LOW",
-		groundName: "F45 삼성",
+		fitnessCenterName: "F45 삼성",
 		customerEmail: "minsu.kim92@gmail.com",
 		assigneeEmail: "manager.gangnam@f45.kr",
 		sentiment: "POSITIVE",
@@ -253,7 +253,7 @@ export const inquirySeedData: InquirySeedData[] = [
 		source: "ONLINE",
 		status: "RESOLVED",
 		priority: "NORMAL",
-		groundName: "애니타임피트니스 신논현",
+		fitnessCenterName: "애니타임피트니스 신논현",
 		customerEmail: "seoyeon_lee@naver.com",
 		assigneeEmail: "manager.gwanghwamun@f45.kr",
 		sentiment: "NEUTRAL",
@@ -270,7 +270,7 @@ export const inquirySeedData: InquirySeedData[] = [
 		source: "ONLINE",
 		status: "CLOSED",
 		priority: "NORMAL",
-		groundName: "크로스핏 마포",
+		fitnessCenterName: "크로스핏 마포",
 		customerEmail: "yejun.park@kakao.com",
 		assigneeEmail: "manager.itaewon@crossfit.kr",
 		sentiment: "NEUTRAL",
@@ -287,7 +287,7 @@ export const inquirySeedData: InquirySeedData[] = [
 		source: "OFFLINE",
 		status: "CLOSED",
 		priority: "URGENT",
-		groundName: "스포애니 건대",
+		fitnessCenterName: "스포애니 건대",
 		customerEmail: "jiwoo0315@gmail.com",
 		assigneeEmail: "manager.itaewon@crossfit.kr",
 		sentiment: "NEGATIVE",

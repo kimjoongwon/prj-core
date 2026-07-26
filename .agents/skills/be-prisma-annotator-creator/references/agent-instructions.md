@@ -147,7 +147,7 @@ packages/be-prisma/schema/[!_]*.prisma
 | Reservation | 예약 |
 | Space | 공간 |
 | Task | 과업 |
-| Ground | Space 하위 시설 |
+| FitnessCenter | Space와 1:1로 연결되는 시설 |
 | Exercise | Task 하위 운동 |
 | Session | 세션 |
 | Invoice | 청구서 |

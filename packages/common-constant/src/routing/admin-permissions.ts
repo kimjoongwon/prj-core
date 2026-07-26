@@ -68,11 +68,11 @@ export const ADMIN_CRUD_BUNDLES: AdminCrudBundle[] = [
 		actions: CRUD_ACTIONS,
 	},
 	{
-		bundleId: "ground",
+		bundleId: "fitness-center",
 		groupLabel: "공간 관리",
-		bundleLabel: "Ground 데이터",
-		subject: "entity:Ground",
-		description: "공간 상세(Ground) 데이터를 관리합니다.",
+		bundleLabel: "피트니스센터 데이터",
+		subject: "entity:FitnessCenter",
+		description: "공간에 연결된 피트니스센터 데이터를 관리합니다.",
 		actions: CRUD_ACTIONS,
 	},
 	{

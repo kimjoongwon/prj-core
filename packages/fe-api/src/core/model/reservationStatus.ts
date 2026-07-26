@@ -18,12 +18,12 @@
 /**
  * 내 예약 상태
  */
-export type ReservationStatus =
-	(typeof ReservationStatus)[keyof typeof ReservationStatus];
+export type ReservationStatus = typeof ReservationStatus[keyof typeof ReservationStatus];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ReservationStatus = {
-	CONFIRMED: "CONFIRMED",
-	WAITLISTED: "WAITLISTED",
-	CANCELED: "CANCELED",
+  CONFIRMED: 'CONFIRMED',
+  WAITLISTED: 'WAITLISTED',
+  CANCELED: 'CANCELED',
 } as const;

@@ -16,10 +16,10 @@
  */
 
 export interface IdpAccountAccessGrantFormUiPathsDto {
-	/** 읽기 전용 경로 목록 */
-	readOnlyPaths: string[];
-	/** 숨김 경로 목록 */
-	hiddenPaths: string[];
-	/** 비활성 경로 목록 */
-	disabledPaths: string[];
+  /** 읽기 전용 경로 목록 */
+  readOnlyPaths: string[];
+  /** 숨김 경로 목록 */
+  hiddenPaths: string[];
+  /** 비활성 경로 목록 */
+  disabledPaths: string[];
 }

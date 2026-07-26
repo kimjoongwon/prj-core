@@ -62,6 +62,11 @@ const DEFAULT_AUTH_API_BASE_URL =
 const NATIVE_SESSION_STORAGE_KEY = "onora.mobile.native.session.v1";
 const NATIVE_SPACE_SELECTION_STORAGE_KEY =
 	"onora.mobile.native.space-selection.v1";
+const NATIVE_SPACE_SELECTION_PERSIST_VERSION = 2 as const;
+
+interface PersistedNativeSpaceSelection extends MobileSpaceInfo {
+	version: typeof NATIVE_SPACE_SELECTION_PERSIST_VERSION;
+}
 
 const API_ENV_KEYS = [
 	"EXPO_PUBLIC_AUTH_API_BASE_URL",
@@ -339,13 +344,45 @@ export const clearNativeAuthSession = async () => {
 	await SecureStore.deleteItemAsync(NATIVE_SESSION_STORAGE_KEY);
 };
 
-export const saveNativeSpaceSelection = async (space: MobileSpaceInfo) => {
-	await SecureStore.setItemAsync(
-		NATIVE_SPACE_SELECTION_STORAGE_KEY,
-		JSON.stringify(space),
+const isOptionalNullableString = (value: unknown) =>
+	value === undefined || value === null || typeof value === "string";
+
+const isPersistedNativeSpaceSelection = (
+	value: unknown,
+): value is PersistedNativeSpaceSelection => {
+	if (typeof value !== "object" || value === null) {
+		return false;
+	}
+
+	const selection = value as Record<string, unknown>;
+	return (
+		selection.version === NATIVE_SPACE_SELECTION_PERSIST_VERSION &&
+		typeof selection.tenantId === "string" &&
+		typeof selection.spaceId === "string" &&
+		typeof selection.fitnessCenterName === "string" &&
+		isOptionalNullableString(selection.address) &&
+		isOptionalNullableString(selection.contentLanguageCode) &&
+		isOptionalNullableString(selection.imageFileId) &&
+		isOptionalNullableString(selection.logoImageFileId)
 	);
 };
 
+/**
+ * 현재 모바일 Space/FitnessCenter 선택을 versioned SecureStore payload로 저장합니다.
+ */
+export const saveNativeSpaceSelection = async (space: MobileSpaceInfo) => {
+	await SecureStore.setItemAsync(
+		NATIVE_SPACE_SELECTION_STORAGE_KEY,
+		JSON.stringify({
+			version: NATIVE_SPACE_SELECTION_PERSIST_VERSION,
+			...space,
+		} satisfies PersistedNativeSpaceSelection),
+	);
+};
+
+/**
+ * version 2 선택만 복원하고 versionless 또는 이전 payload는 폐기합니다.
+ */
 export const loadNativeSpaceSelection =
 	async (): Promise<MobileSpaceInfo | null> => {
 		const rawSelection = await SecureStore.getItemAsync(
@@ -356,13 +393,30 @@ export const loadNativeSpaceSelection =
 		}
 
 		try {
-			return JSON.parse(rawSelection) as MobileSpaceInfo;
+			const selection = JSON.parse(rawSelection) as unknown;
+			if (!isPersistedNativeSpaceSelection(selection)) {
+				await clearNativeSpaceSelection();
+				return null;
+			}
+
+			return {
+				address: selection.address,
+				contentLanguageCode: selection.contentLanguageCode,
+				fitnessCenterName: selection.fitnessCenterName,
+				imageFileId: selection.imageFileId,
+				logoImageFileId: selection.logoImageFileId,
+				spaceId: selection.spaceId,
+				tenantId: selection.tenantId,
+			};
 		} catch {
 			await clearNativeSpaceSelection();
 			return null;
 		}
 	};
 
+/**
+ * 모바일 Space/FitnessCenter 선택 payload를 삭제합니다.
+ */
 export const clearNativeSpaceSelection = async () => {
 	await SecureStore.deleteItemAsync(NATIVE_SPACE_SELECTION_STORAGE_KEY);
 };

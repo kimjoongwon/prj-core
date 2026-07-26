@@ -14,60 +14,60 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { EmailVerificationStatus } from "./emailVerificationStatus";
+import type { EmailVerificationStatus } from './emailVerificationStatus';
 
 export interface EmailVerificationDto {
-	/**
-	 * ID
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	id: string;
-	/** 생성일 */
-	createdAt: string;
-	/**
-	 * 수정일
-	 * @nullable
-	 */
-	updatedAt?: string | null;
-	/** 이메일 */
-	email: string;
-	/** 이름 */
-	name: string;
-	/** 상태 */
-	status: EmailVerificationStatus;
-	/** 만료 시각 */
-	expiresAt: string;
-	/**
-	 * 인증 시각
-	 * @nullable
-	 */
-	verifiedAt?: string | null;
-	/**
-	 * 마지막 발송 시각
-	 * @nullable
-	 */
-	lastSentAt?: string | null;
-	/**
-	 * 발송 횟수
-	 * @minimum 0
-	 */
-	sendCount: number;
-	/**
-	 * 마지막 발송 상태
-	 * @nullable
-	 */
-	lastSendStatus?: string | null;
-	/**
-	 * 인증 완료 사용자 ID
-	 * @nullable
-	 * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-	 */
-	verifiedUserId?: string | null;
-	/** 재발송 가능 여부 */
-	canResend: boolean;
-	/**
-	 * 재발송 가능 시각
-	 * @nullable
-	 */
-	resendAvailableAt?: string | null;
+  /**
+   * ID
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  id: string;
+  /** 생성일 */
+  createdAt: string;
+  /**
+   * 수정일
+   * @nullable
+   */
+  updatedAt?: string | null;
+  /** 이메일 */
+  email: string;
+  /** 이름 */
+  name: string;
+  /** 상태 */
+  status: EmailVerificationStatus;
+  /** 만료 시각 */
+  expiresAt: string;
+  /**
+   * 인증 시각
+   * @nullable
+   */
+  verifiedAt?: string | null;
+  /**
+   * 마지막 발송 시각
+   * @nullable
+   */
+  lastSentAt?: string | null;
+  /**
+   * 발송 횟수
+   * @minimum 0
+   */
+  sendCount: number;
+  /**
+   * 마지막 발송 상태
+   * @nullable
+   */
+  lastSendStatus?: string | null;
+  /**
+   * 인증 완료 사용자 ID
+   * @nullable
+   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   */
+  verifiedUserId?: string | null;
+  /** 재발송 가능 여부 */
+  canResend: boolean;
+  /**
+   * 재발송 가능 시각
+   * @nullable
+   */
+  resendAvailableAt?: string | null;
 }

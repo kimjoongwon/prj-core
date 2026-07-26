@@ -18,8 +18,6 @@
     "./core/client": "./src/core/client.ts",
     "./idp/*": "./src/idp/*/index.ts",
     "./idp/client": "./src/idp/client.ts",
-    "./idp-model/*": "./src/idp-model/*.ts",
-    "./model/*": "./src/model/*.ts",
     "./server": "./src/server/index.ts"
   },
   "sideEffects": false,
