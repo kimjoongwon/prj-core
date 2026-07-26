@@ -1,3 +1,4 @@
+import { Prisma } from "@cocrepo/prisma";
 import type { I18nTranslationService } from "@cocrepo/service";
 import {
 	type ArgumentsHost,
@@ -84,6 +85,68 @@ describe("AllExceptionsFilter", () => {
 	});
 
 	describe("catch", () => {
+		it("P2022를 안전한 스키마 오류 응답으로 변환해야 한다", async () => {
+			const exception = new Prisma.PrismaClientKnownRequestError(
+				"The column does not exist",
+				{
+					code: "P2022",
+					clientVersion: "test",
+					meta: { column: "fitness_centers.space_id", query: "SELECT secret" },
+				},
+			);
+			const host = createMockArgumentsHost({ url: "/api/v1/auth/login" });
+
+			await filter.catch(exception, host);
+
+			const [wrappedException] = baseFilterCatchSpy.mock.calls[0];
+			expect(wrappedException.getStatus()).toBe(HttpStatus.SERVICE_UNAVAILABLE);
+			expect(wrappedException.getResponse()).toMatchObject({
+				httpStatus: HttpStatus.SERVICE_UNAVAILABLE,
+				message:
+					"서버 데이터베이스가 최신 상태가 아닙니다. 관리자에게 문의해 주세요.",
+				data: {
+					code: "P2022",
+					target: "fitness_centers.space_id",
+					retryable: false,
+				},
+			});
+			expect(JSON.stringify(wrappedException.getResponse())).not.toContain(
+				"SELECT secret",
+			);
+			expect(loggerErrorSpy).toHaveBeenCalledWith(
+				expect.objectContaining({
+					prisma: expect.objectContaining({
+						code: "P2022",
+						meta: {
+							column: "fitness_centers.space_id",
+							query: "SELECT secret",
+						},
+					}),
+				}),
+			);
+		});
+
+		it("P2002, P2003, P2025를 명시된 HTTP 상태로 변환해야 한다", async () => {
+			const cases = [
+				["P2002", HttpStatus.CONFLICT],
+				["P2003", HttpStatus.BAD_REQUEST],
+				["P2025", HttpStatus.NOT_FOUND],
+			] as const;
+
+			for (const [code, expectedStatus] of cases) {
+				baseFilterCatchSpy.mockClear();
+				await filter.catch(
+					new Prisma.PrismaClientKnownRequestError("known error", {
+						code,
+						clientVersion: "test",
+					}),
+					createMockArgumentsHost(),
+				);
+				const [wrappedException] = baseFilterCatchSpy.mock.calls[0];
+				expect(wrappedException.getStatus()).toBe(expectedStatus);
+			}
+		});
+
 		it("HttpException을 처리하고 super.catch를 호출해야 한다", () => {
 			// Given
 			const exception = new HttpException(

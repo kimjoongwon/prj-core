@@ -39,4 +39,23 @@ describe("resolveLoginErrorMessage", () => {
 	it("알 수 없는 오류는 기본 메시지를 반환합니다.", () => {
 		expect(resolveLoginErrorMessage({})).toBe("로그인에 실패했습니다.");
 	});
+
+	it("P2022는 인증 실패가 아닌 데이터베이스 준비 오류로 표시합니다.", () => {
+		expect(
+			resolveLoginErrorMessage({
+				response: {
+					data: {
+						message: "서버 데이터베이스가 최신 상태가 아닙니다.",
+						data: {
+							code: "P2022",
+							target: "fitness_centers.space_id",
+							retryable: false,
+						},
+					},
+				},
+			}),
+		).toBe(
+			"서버가 최신 상태로 준비되지 않았습니다. 잠시 후 다시 시도하거나 관리자에게 문의해 주세요.",
+		);
+	});
 });

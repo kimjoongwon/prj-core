@@ -115,6 +115,7 @@ export type {
 	AppAction,
 	AppSubject,
 } from "./ability";
+export type { ApiDatabaseError } from "./api-error";
 // ============================================
 // CASL/Permission 관련 타입
 // ============================================
