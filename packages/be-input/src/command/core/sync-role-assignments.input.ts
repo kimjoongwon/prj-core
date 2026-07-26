@@ -1,9 +1,11 @@
-export interface SyncRolePolicyInputItem {
+/** Role에 할당할 Policy와 관계 메타데이터입니다. */
+export interface SyncRoleAssignmentInputItem {
 	policyId: string;
 	isActive?: boolean;
 	priority?: number;
 }
 
-export interface SyncRolePoliciesCommandInput {
-	rolePolicies: SyncRolePolicyInputItem[];
+/** Role Assignment 전체 동기화 입력입니다. */
+export interface SyncRoleAssignmentsCommandInput {
+	assignments: SyncRoleAssignmentInputItem[];
 }

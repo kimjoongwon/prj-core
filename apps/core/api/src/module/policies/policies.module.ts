@@ -4,8 +4,8 @@ import { PoliciesController } from "@cocrepo/controller";
 import {
 	AbilitiesRepository,
 	PoliciesRepository,
-	PolicyAbilitiesRepository,
-	RolePoliciesRepository,
+	PolicyEntriesRepository,
+	RoleAssignmentsRepository,
 } from "@cocrepo/repository";
 import { PolicyCommandHandlers, PolicyQueryHandlers } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
@@ -17,9 +17,9 @@ import { CqrsModule } from "@nestjs/cqrs";
 	providers: [
 		PolicyAggregate,
 		PoliciesRepository,
-		PolicyAbilitiesRepository,
+		PolicyEntriesRepository,
 		AbilitiesRepository,
-		RolePoliciesRepository,
+		RoleAssignmentsRepository,
 		SpaceContext,
 		AuthContext,
 		...PolicyCommandHandlers,

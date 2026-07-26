@@ -1,781 +1,103 @@
 {
   "metadata": {
     "domain": "CASL (RBAC/ABAC)",
-    "generatedAt": "2026-01-31T16:30:00Z",
-    "generator": "req-reverse-engineer",
+    "updatedAt": "2026-07-26",
     "sourceFiles": [
       "packages/be-prisma/schema/role.prisma",
-      "packages/be-prisma/schema/role-association.prisma",
-      "packages/be-prisma/schema/role-classification.prisma",
+      "packages/be-prisma/schema/role-assignment.prisma",
       "packages/be-prisma/schema/policy.prisma",
-      "packages/be-prisma/schema/policy-ability.prisma",
-      "packages/be-prisma/schema/role-policy.prisma",
-      "packages/be-prisma/schema/subject.prisma",
-      "packages/be-prisma/schema/action.prisma",
+      "packages/be-prisma/schema/policy-entry.prisma",
       "packages/be-prisma/schema/ability.prisma",
-      "packages/be-common/src/casl/casl-ability.factory.ts",
-      "packages/be-common/src/guard/roles.guard.ts",
-      "packages/be-decorator/src/roles.decorator.ts",
-      "packages/be-entity/src/role.entity.ts",
-      "packages/be-entity/src/ability.entity.ts",
-      "packages/be-service/src/role/role.service.ts",
-      "apps/server/src/module/role/roles.controller.ts",
-      "apps/server/src/module/ability/abilities.controller.ts"
+      "packages/be-prisma/schema/action.prisma",
+      "packages/be-prisma/schema/subject.prisma",
+      "packages/be-common/src/casl/casl-ability.factory.ts"
     ]
-  },
-  "summary": {
-    "totalNodes": 67,
-    "byLevel": {
-      "L0": 1,
-      "L1": 3,
-      "L2": 4,
-      "L3": 5,
-      "L4": 6,
-      "L5": 13,
-      "L6": 14,
-      "L7": 4,
-      "L8": 6,
-      "L9": 11
-    },
-    "totalEdges": 85
   },
   "nodes": [
     {
-      "id": "L0-CTX-001",
-      "level": 0,
+      "id": "tenant",
       "type": "context",
-      "name": "CASL 기반 권한 관리 시스템",
-      "description": "RBAC와 ABAC를 결합한 권한 관리 시스템"
+      "name": "Tenant",
+      "description": "현재 Space에서 User가 가진 Role을 결정합니다."
     },
     {
-      "id": "L1-ACT-001",
-      "level": 1,
-      "type": "actor",
-      "name": "플랫폼 관리자",
-      "description": "시스템 전체 관리 권한 보유 (PLATFORM_ADMIN)"
-    },
-    {
-      "id": "L1-ACT-002",
-      "level": 1,
-      "type": "actor",
-      "name": "Company 관리자",
-      "description": "특정 Company 운영 권한 보유 (COMPANY_MANAGER)"
-    },
-    {
-      "id": "L1-ACT-003",
-      "level": 1,
-      "type": "actor",
-      "name": "회원",
-      "description": "본인 정보/예약 관리 및 시설/콘텐츠 조회 권한 (MEMBER)"
-    },
-    {
-      "id": "L2-GOL-001",
-      "level": 2,
-      "type": "goal",
-      "name": "역할 관리",
-      "description": "시스템 역할을 생성, 수정, 삭제하여 권한 체계 정의"
-    },
-    {
-      "id": "L2-GOL-002",
-      "level": 2,
-      "type": "goal",
-      "name": "권한 설정",
-      "description": "역할별 기본 권한 및 사용자별 예외 권한 설정"
-    },
-    {
-      "id": "L2-GOL-003",
-      "level": 2,
-      "type": "goal",
-      "name": "권한 현황 파악",
-      "description": "역할 및 권한 목록을 조회하여 현재 권한 체계 파악"
-    },
-    {
-      "id": "L2-GOL-004",
-      "level": 2,
-      "type": "goal",
-      "name": "본인 권한 확인",
-      "description": "본인에게 부여된 권한 목록 확인"
-    },
-    {
-      "id": "L3-FEA-001",
-      "level": 3,
-      "type": "feature",
-      "name": "역할 관리",
-      "description": "시스템 역할 CRUD"
-    },
-    {
-      "id": "L3-FEA-002",
-      "level": 3,
-      "type": "feature",
-      "name": "권한 관리",
-      "description": "Ability CRUD 및 조회"
-    },
-    {
-      "id": "L3-FEA-003",
-      "level": 3,
-      "type": "feature",
-      "name": "Role 권한 설정",
-      "description": "Role별 기본 권한 일괄 설정"
-    },
-    {
-      "id": "L3-FEA-004",
-      "level": 3,
-      "type": "feature",
-      "name": "User 예외 권한 설정",
-      "description": "User별 예외 권한 설정"
-    },
-    {
-      "id": "L3-FEA-005",
-      "level": 3,
-      "type": "feature",
-      "name": "본인 권한 조회",
-      "description": "로그인 사용자 권한 확인"
-    },
-    {
-      "id": "L4-SCR-001",
-      "level": 4,
-      "subLevel": "1",
-      "type": "screen",
-      "name": "역할 목록 화면",
-      "description": "전체 역할 목록 표시",
-      "metadata": { "path": "/roles", "status": "미구현" }
-    },
-    {
-      "id": "L4-SCR-002",
-      "level": 4,
-      "subLevel": "1",
-      "type": "screen",
-      "name": "역할 상세 화면",
-      "description": "역할 상세 정보 및 권한 목록",
-      "metadata": { "path": "/roles/:id", "status": "미구현" }
-    },
-    {
-      "id": "L4-SCR-003",
-      "level": 4,
-      "subLevel": "1",
-      "type": "screen",
-      "name": "역할 등록 화면",
-      "description": "새 역할 생성 폼",
-      "metadata": { "path": "/roles/new", "status": "미구현" }
-    },
-    {
-      "id": "L4-SCR-004",
-      "level": 4,
-      "subLevel": "1",
-      "type": "screen",
-      "name": "역할 수정 화면",
-      "description": "역할 정보 수정 폼",
-      "metadata": { "path": "/roles/:id/edit", "status": "미구현" }
-    },
-    {
-      "id": "L4-SCR-005",
-      "level": 4,
-      "subLevel": "1",
-      "type": "screen",
-      "name": "Role 권한 관리 화면",
-      "description": "Role별 권한 설정 화면",
-      "metadata": { "path": "/roles/:id/abilities", "status": "미구현" }
-    },
-    {
-      "id": "L4-SCR-006",
-      "level": 4,
-      "subLevel": "1",
-      "type": "screen",
-      "name": "User 예외 권한 화면",
-      "description": "User 예외 권한 설정 화면",
-      "metadata": { "path": "/users/:id/abilities", "status": "미구현" }
-    },
-    {
-      "id": "L5-ACT-001",
-      "level": 5,
-      "subLevel": "1",
-      "type": "action",
-      "name": "역할 목록 조회",
-      "description": "역할 목록을 조회하는 액션"
-    },
-    {
-      "id": "L5-ACT-002",
-      "level": 5,
-      "subLevel": "1",
-      "type": "action",
-      "name": "역할 상세 조회",
-      "description": "역할 상세 정보를 조회하는 액션"
-    },
-    {
-      "id": "L5-ACT-003",
-      "level": 5,
-      "subLevel": "1",
-      "type": "action",
-      "name": "역할 등록",
-      "description": "새 역할을 등록하는 액션"
-    },
-    {
-      "id": "L5-ACT-004",
-      "level": 5,
-      "subLevel": "1",
-      "type": "action",
-      "name": "역할 수정",
-      "description": "역할 정보를 수정하는 액션"
-    },
-    {
-      "id": "L5-ACT-005",
-      "level": 5,
-      "subLevel": "1",
-      "type": "action",
-      "name": "역할 삭제",
-      "description": "역할을 삭제하는 액션"
-    },
-    {
-      "id": "L5-ACT-006",
-      "level": 5,
-      "subLevel": "1",
-      "type": "action",
-      "name": "내 권한 조회",
-      "description": "본인 권한을 조회하는 액션"
-    },
-    {
-      "id": "L5-ACT-007",
-      "level": 5,
-      "subLevel": "1",
-      "type": "action",
-      "name": "Role별 권한 조회",
-      "description": "특정 Role의 권한을 조회하는 액션"
-    },
-    {
-      "id": "L5-ACT-008",
-      "level": 5,
-      "subLevel": "1",
-      "type": "action",
-      "name": "User별 권한 조회",
-      "description": "특정 User의 예외 권한을 조회하는 액션"
-    },
-    {
-      "id": "L5-ACT-009",
-      "level": 5,
-      "subLevel": "1",
-      "type": "action",
-      "name": "권한 생성",
-      "description": "새 권한을 생성하는 액션"
-    },
-    {
-      "id": "L5-ACT-010",
-      "level": 5,
-      "subLevel": "1",
-      "type": "action",
-      "name": "권한 수정",
-      "description": "권한을 수정하는 액션"
-    },
-    {
-      "id": "L5-ACT-011",
-      "level": 5,
-      "subLevel": "1",
-      "type": "action",
-      "name": "권한 삭제",
-      "description": "권한을 삭제하는 액션"
-    },
-    {
-      "id": "L5-ACT-012",
-      "level": 5,
-      "subLevel": "1",
-      "type": "action",
-      "name": "Role 권한 일괄 설정",
-      "description": "Role의 권한을 일괄 설정하는 액션"
-    },
-    {
-      "id": "L5-ACT-013",
-      "level": 5,
-      "subLevel": "1",
-      "type": "action",
-      "name": "User 예외 권한 일괄 설정",
-      "description": "User의 예외 권한을 일괄 설정하는 액션"
-    },
-    {
-      "id": "L6-API-001",
-      "level": 6,
-      "subLevel": "1",
-      "type": "api",
-      "name": "GET /api/v1/roles",
-      "description": "역할 목록 조회 API",
-      "metadata": {
-        "method": "GET",
-        "endpoint": "/api/v1/roles",
-        "permissions": ["ADMIN", "SUPER_ADMIN"],
-        "source": "apps/server/src/module/role/roles.controller.ts:33"
-      }
-    },
-    {
-      "id": "L6-API-002",
-      "level": 6,
-      "subLevel": "1",
-      "type": "api",
-      "name": "GET /api/v1/roles/:id",
-      "description": "역할 상세 조회 API",
-      "metadata": {
-        "method": "GET",
-        "endpoint": "/api/v1/roles/:id",
-        "pathParams": [{ "name": "id", "type": "UUID" }],
-        "permissions": ["ADMIN", "SUPER_ADMIN"],
-        "source": "apps/server/src/module/role/roles.controller.ts:50"
-      }
-    },
-    {
-      "id": "L6-API-003",
-      "level": 6,
-      "subLevel": "1",
-      "type": "api",
-      "name": "POST /api/v1/roles",
-      "description": "역할 생성 API",
-      "metadata": {
-        "method": "POST",
-        "endpoint": "/api/v1/roles",
-        "requestBody": "CreateRoleDto",
-        "permissions": ["SUPER_ADMIN"],
-        "source": "apps/server/src/module/role/roles.controller.ts:72"
-      }
-    },
-    {
-      "id": "L6-API-004",
-      "level": 6,
-      "subLevel": "1",
-      "type": "api",
-      "name": "PATCH /api/v1/roles/:id",
-      "description": "역할 수정 API",
-      "metadata": {
-        "method": "PATCH",
-        "endpoint": "/api/v1/roles/:id",
-        "pathParams": [{ "name": "id", "type": "UUID" }],
-        "requestBody": "UpdateRoleDto",
-        "permissions": ["SUPER_ADMIN"],
-        "source": "apps/server/src/module/role/roles.controller.ts:95"
-      }
-    },
-    {
-      "id": "L6-API-005",
-      "level": 6,
-      "subLevel": "1",
-      "type": "api",
-      "name": "DELETE /api/v1/roles/:id",
-      "description": "역할 삭제 API",
-      "metadata": {
-        "method": "DELETE",
-        "endpoint": "/api/v1/roles/:id",
-        "pathParams": [{ "name": "id", "type": "UUID" }],
-        "permissions": ["SUPER_ADMIN"],
-        "source": "apps/server/src/module/role/roles.controller.ts:126"
-      }
-    },
-    {
-      "id": "L6-API-006",
-      "level": 6,
-      "subLevel": "1",
-      "type": "api",
-      "name": "GET /api/v1/abilities/my",
-      "description": "내 권한 조회 API",
-      "metadata": {
-        "method": "GET",
-        "endpoint": "/api/v1/abilities/my",
-        "auth": "Bearer Token",
-        "source": "apps/server/src/module/ability/abilities.controller.ts:60"
-      }
-    },
-    {
-      "id": "L6-API-007",
-      "level": 6,
-      "subLevel": "1",
-      "type": "api",
-      "name": "GET /api/v1/abilities/roles/:roleId",
-      "description": "Role별 권한 조회 API",
-      "metadata": {
-        "method": "GET",
-        "endpoint": "/api/v1/abilities/roles/:roleId",
-        "pathParams": [{ "name": "roleId", "type": "UUID" }],
-        "auth": "Bearer Token",
-        "source": "apps/server/src/module/ability/abilities.controller.ts:88"
-      }
-    },
-    {
-      "id": "L6-API-008",
-      "level": 6,
-      "subLevel": "1",
-      "type": "api",
-      "name": "GET /api/v1/abilities/users/:userId",
-      "description": "User별 예외 권한 조회 API",
-      "metadata": {
-        "method": "GET",
-        "endpoint": "/api/v1/abilities/users/:userId",
-        "pathParams": [{ "name": "userId", "type": "UUID" }],
-        "auth": "Bearer Token",
-        "source": "apps/server/src/module/ability/abilities.controller.ts:116"
-      }
-    },
-    {
-      "id": "L6-API-009",
-      "level": 6,
-      "subLevel": "1",
-      "type": "api",
-      "name": "GET /api/v1/abilities/:id",
-      "description": "권한 상세 조회 API",
-      "metadata": {
-        "method": "GET",
-        "endpoint": "/api/v1/abilities/:id",
-        "pathParams": [{ "name": "id", "type": "UUID" }],
-        "auth": "Bearer Token",
-        "source": "apps/server/src/module/ability/abilities.controller.ts:144"
-      }
-    },
-    {
-      "id": "L6-API-010",
-      "level": 6,
-      "subLevel": "1",
-      "type": "api",
-      "name": "POST /api/v1/abilities",
-      "description": "권한 생성 API",
-      "metadata": {
-        "method": "POST",
-        "endpoint": "/api/v1/abilities",
-        "requestBody": "CreateAbilityDto",
-        "auth": "Bearer Token",
-        "source": "apps/server/src/module/ability/abilities.controller.ts:173"
-      }
-    },
-    {
-      "id": "L6-API-011",
-      "level": 6,
-      "subLevel": "1",
-      "type": "api",
-      "name": "PATCH /api/v1/abilities/:id",
-      "description": "권한 수정 API",
-      "metadata": {
-        "method": "PATCH",
-        "endpoint": "/api/v1/abilities/:id",
-        "pathParams": [{ "name": "id", "type": "UUID" }],
-        "requestBody": "UpdateAbilityDto",
-        "auth": "Bearer Token",
-        "source": "apps/server/src/module/ability/abilities.controller.ts:215"
-      }
-    },
-    {
-      "id": "L6-API-012",
-      "level": 6,
-      "subLevel": "1",
-      "type": "api",
-      "name": "DELETE /api/v1/abilities/:id",
-      "description": "권한 삭제 API",
-      "metadata": {
-        "method": "DELETE",
-        "endpoint": "/api/v1/abilities/:id",
-        "pathParams": [{ "name": "id", "type": "UUID" }],
-        "auth": "Bearer Token",
-        "source": "apps/server/src/module/ability/abilities.controller.ts:265"
-      }
-    },
-    {
-      "id": "L6-API-013",
-      "level": 6,
-      "subLevel": "1",
-      "type": "api",
-      "name": "PUT /api/v1/abilities/roles/:roleId",
-      "description": "Role 권한 일괄 설정 API",
-      "metadata": {
-        "method": "PUT",
-        "endpoint": "/api/v1/abilities/roles/:roleId",
-        "pathParams": [{ "name": "roleId", "type": "UUID" }],
-        "requestBody": "UpdateRoleAbilitiesRequestDto",
-        "auth": "Bearer Token",
-        "source": "apps/server/src/module/ability/abilities.controller.ts:295"
-      }
-    },
-    {
-      "id": "L6-API-014",
-      "level": 6,
-      "subLevel": "1",
-      "type": "api",
-      "name": "PUT /api/v1/abilities/users/:userId",
-      "description": "User 예외 권한 일괄 설정 API",
-      "metadata": {
-        "method": "PUT",
-        "endpoint": "/api/v1/abilities/users/:userId",
-        "pathParams": [{ "name": "userId", "type": "UUID" }],
-        "requestBody": "UpdateRoleAbilitiesRequestDto",
-        "auth": "Bearer Token",
-        "source": "apps/server/src/module/ability/abilities.controller.ts:338"
-      }
-    },
-    {
-      "id": "L7-ENT-001",
-      "level": 7,
-      "subLevel": "1",
-      "type": "entity",
+      "id": "role",
+      "type": "reference",
       "name": "Role",
-      "description": "역할 엔티티",
-      "metadata": {
-        "tableName": "roles",
-        "source": "packages/be-prisma/schema/role.prisma"
-      }
+      "description": "Tenant가 맡는 역할입니다."
     },
     {
-      "id": "L7-ENT-002",
-      "level": 7,
-      "subLevel": "1",
-      "type": "entity",
+      "id": "role-assignment",
+      "type": "configuration",
+      "name": "RoleAssignment",
+      "description": "Role에 Policy를 할당하고 활성 상태와 우선순위를 관리합니다."
+    },
+    {
+      "id": "policy",
+      "type": "configuration",
+      "name": "Policy",
+      "description": "현재 Space의 권한 규칙 묶음입니다."
+    },
+    {
+      "id": "policy-entry",
+      "type": "configuration",
+      "name": "PolicyEntry",
+      "description": "Policy 안에 포함되는 Ability 항목입니다."
+    },
+    {
+      "id": "ability",
+      "type": "reference",
       "name": "Ability",
-      "description": "권한 엔티티 (CASL)",
-      "metadata": {
-        "tableName": "abilities",
-        "source": "packages/be-prisma/schema/ability.prisma"
-      }
+      "description": "Action, Subject와 조건을 묶은 재사용 가능한 권한 정의입니다."
     },
     {
-      "id": "L7-ENT-003",
-      "level": 7,
-      "subLevel": "1",
-      "type": "entity",
-      "name": "Subject",
-      "description": "권한 대상 엔티티",
-      "metadata": {
-        "tableName": "subjects",
-        "source": "packages/be-prisma/schema/subject.prisma"
-      }
-    },
-    {
-      "id": "L7-ENT-004",
-      "level": 7,
-      "subLevel": "1",
-      "type": "entity",
+      "id": "action",
+      "type": "reference",
       "name": "Action",
-      "description": "권한 행위 엔티티",
-      "metadata": {
-        "tableName": "actions",
-        "source": "packages/be-prisma/schema/action.prisma"
-      }
+      "description": "수행할 행동을 정의합니다."
     },
     {
-      "id": "L8-CMP-001",
-      "level": 8,
-      "subLevel": "2",
-      "type": "component",
-      "name": "RoleTable",
-      "description": "역할 목록 테이블",
-      "metadata": {
-        "componentType": "widgets",
-        "existing": false
-      }
-    },
-    {
-      "id": "L8-CMP-002",
-      "level": 8,
-      "subLevel": "2",
-      "type": "component",
-      "name": "RoleForm",
-      "description": "역할 등록/수정 폼",
-      "metadata": {
-        "componentType": "widgets",
-        "existing": false
-      }
-    },
-    {
-      "id": "L8-CMP-003",
-      "level": 8,
-      "subLevel": "2",
-      "type": "component",
-      "name": "AbilityMatrix",
-      "description": "권한 매트릭스 (Subject x Action)",
-      "metadata": {
-        "componentType": "widgets",
-        "existing": false
-      }
-    },
-    {
-      "id": "L8-CMP-004",
-      "level": 8,
-      "subLevel": "2",
-      "type": "component",
-      "name": "AbilityEditor",
-      "description": "개별 권한 편집기",
-      "metadata": {
-        "componentType": "widgets",
-        "existing": false
-      }
-    },
-    {
-      "id": "L8-CMP-005",
-      "level": 8,
-      "subLevel": "2",
-      "type": "component",
-      "name": "ConditionEditor",
-      "description": "JSON 조건 편집기",
-      "metadata": {
-        "componentType": "inputs",
-        "existing": false
-      }
-    },
-    {
-      "id": "L8-CMP-006",
-      "level": 8,
-      "subLevel": "3",
-      "type": "component",
-      "name": "SystemBadge",
-      "description": "시스템 역할 뱃지",
-      "metadata": {
-        "componentType": "ui",
-        "existing": true,
-        "path": "packages/fe-ui/src/ui/Badge"
-      }
-    },
-    {
-      "id": "L9-LOG-001",
-      "level": 9,
-      "subLevel": "1",
-      "type": "logic",
-      "name": "RolesGuard",
-      "description": "@Roles 데코레이터 기반 역할 검사",
-      "metadata": {
-        "guardType": "authorization",
-        "source": "packages/be-common/src/guard/roles.guard.ts"
-      }
-    },
-    {
-      "id": "L9-LOG-002",
-      "level": 9,
-      "subLevel": "1",
-      "type": "logic",
-      "name": "CaslAbilityFactory",
-      "description": "CASL Ability 객체 생성",
-      "metadata": {
-        "factoryType": "ability",
-        "source": "packages/be-common/src/casl/casl-ability.factory.ts"
-      }
-    },
-    {
-      "id": "L9-LOG-003",
-      "level": 9,
-      "subLevel": "2",
-      "type": "logic",
-      "name": "권한 병합 (priority)",
-      "description": "Role/User 권한을 priority 기반으로 병합",
-      "metadata": {
-        "source": "packages/be-common/src/casl/casl-ability.factory.ts:131"
-      }
-    },
-    {
-      "id": "L9-LOG-004",
-      "level": 9,
-      "subLevel": "2",
-      "type": "logic",
-      "name": "조건 템플릿 치환",
-      "description": "${user.id} 등 템플릿 변수를 실제 값으로 치환",
-      "metadata": {
-        "source": "packages/be-common/src/casl/casl-ability.factory.ts:276"
-      }
-    },
-    {
-      "id": "L9-LOG-005",
-      "level": 9,
-      "subLevel": "2",
-      "type": "logic",
-      "name": "시스템 역할 보호",
-      "description": "isSystem=true인 역할은 수정/삭제 불가",
-      "metadata": {
-        "source": "packages/be-service/src/role/role.service.ts:78"
-      }
-    },
-    {
-      "id": "L9-LOG-006",
-      "level": 9,
-      "subLevel": "2",
-      "type": "logic",
-      "name": "연결된 테넌트 확인",
-      "description": "테넌트가 연결된 역할은 삭제 불가",
-      "metadata": {
-        "source": "packages/be-service/src/role/role.service.ts:106"
-      }
-    },
-    {
-      "id": "L9-LOG-007",
-      "level": 9,
-      "subLevel": "2",
-      "type": "logic",
-      "name": "역할 이름 중복 체크",
-      "description": "역할 이름(name)은 고유해야 함",
-      "metadata": {
-        "source": "packages/be-service/src/role/role.service.ts:52"
-      }
+      "id": "subject",
+      "type": "reference",
+      "name": "Subject",
+      "description": "행동의 대상을 정의합니다."
     }
   ],
   "edges": [
-    { "id": "e-001", "source": "L0-CTX-001", "target": "L1-ACT-001", "type": "parent" },
-    { "id": "e-002", "source": "L0-CTX-001", "target": "L1-ACT-002", "type": "parent" },
-    { "id": "e-003", "source": "L0-CTX-001", "target": "L1-ACT-003", "type": "parent" },
-    { "id": "e-004", "source": "L1-ACT-001", "target": "L2-GOL-001", "type": "parent" },
-    { "id": "e-005", "source": "L1-ACT-001", "target": "L2-GOL-002", "type": "parent" },
-    { "id": "e-006", "source": "L1-ACT-002", "target": "L2-GOL-003", "type": "parent" },
-    { "id": "e-007", "source": "L1-ACT-003", "target": "L2-GOL-004", "type": "parent" },
-    { "id": "e-008", "source": "L2-GOL-001", "target": "L3-FEA-001", "type": "parent" },
-    { "id": "e-009", "source": "L2-GOL-002", "target": "L3-FEA-002", "type": "parent" },
-    { "id": "e-010", "source": "L2-GOL-002", "target": "L3-FEA-003", "type": "parent" },
-    { "id": "e-011", "source": "L2-GOL-002", "target": "L3-FEA-004", "type": "parent" },
-    { "id": "e-012", "source": "L2-GOL-004", "target": "L3-FEA-005", "type": "parent" },
-    { "id": "e-013", "source": "L3-FEA-001", "target": "L4-SCR-001", "type": "parent" },
-    { "id": "e-014", "source": "L3-FEA-001", "target": "L4-SCR-002", "type": "parent" },
-    { "id": "e-015", "source": "L3-FEA-001", "target": "L4-SCR-003", "type": "parent" },
-    { "id": "e-016", "source": "L3-FEA-001", "target": "L4-SCR-004", "type": "parent" },
-    { "id": "e-017", "source": "L3-FEA-003", "target": "L4-SCR-005", "type": "parent" },
-    { "id": "e-018", "source": "L3-FEA-004", "target": "L4-SCR-006", "type": "parent" },
-    { "id": "e-019", "source": "L4-SCR-001", "target": "L5-ACT-001", "type": "parent" },
-    { "id": "e-020", "source": "L4-SCR-002", "target": "L5-ACT-002", "type": "parent" },
-    { "id": "e-021", "source": "L4-SCR-003", "target": "L5-ACT-003", "type": "parent" },
-    { "id": "e-022", "source": "L4-SCR-004", "target": "L5-ACT-004", "type": "parent" },
-    { "id": "e-023", "source": "L4-SCR-002", "target": "L5-ACT-005", "type": "parent" },
-    { "id": "e-024", "source": "L4-SCR-005", "target": "L5-ACT-007", "type": "parent" },
-    { "id": "e-025", "source": "L4-SCR-005", "target": "L5-ACT-012", "type": "parent" },
-    { "id": "e-026", "source": "L4-SCR-006", "target": "L5-ACT-008", "type": "parent" },
-    { "id": "e-027", "source": "L4-SCR-006", "target": "L5-ACT-013", "type": "parent" },
-    { "id": "e-028", "source": "L5-ACT-001", "target": "L6-API-001", "type": "calls", "label": "호출" },
-    { "id": "e-029", "source": "L5-ACT-002", "target": "L6-API-002", "type": "calls", "label": "호출" },
-    { "id": "e-030", "source": "L5-ACT-003", "target": "L6-API-003", "type": "calls", "label": "호출" },
-    { "id": "e-031", "source": "L5-ACT-004", "target": "L6-API-004", "type": "calls", "label": "호출" },
-    { "id": "e-032", "source": "L5-ACT-005", "target": "L6-API-005", "type": "calls", "label": "호출" },
-    { "id": "e-033", "source": "L5-ACT-006", "target": "L6-API-006", "type": "calls", "label": "호출" },
-    { "id": "e-034", "source": "L5-ACT-007", "target": "L6-API-007", "type": "calls", "label": "호출" },
-    { "id": "e-035", "source": "L5-ACT-008", "target": "L6-API-008", "type": "calls", "label": "호출" },
-    { "id": "e-036", "source": "L5-ACT-009", "target": "L6-API-010", "type": "calls", "label": "호출" },
-    { "id": "e-037", "source": "L5-ACT-010", "target": "L6-API-011", "type": "calls", "label": "호출" },
-    { "id": "e-038", "source": "L5-ACT-011", "target": "L6-API-012", "type": "calls", "label": "호출" },
-    { "id": "e-039", "source": "L5-ACT-012", "target": "L6-API-013", "type": "calls", "label": "호출" },
-    { "id": "e-040", "source": "L5-ACT-013", "target": "L6-API-014", "type": "calls", "label": "호출" },
-    { "id": "e-041", "source": "L6-API-001", "target": "L7-ENT-001", "type": "stores", "label": "조회" },
-    { "id": "e-042", "source": "L6-API-002", "target": "L7-ENT-001", "type": "stores", "label": "조회" },
-    { "id": "e-043", "source": "L6-API-003", "target": "L7-ENT-001", "type": "stores", "label": "생성" },
-    { "id": "e-044", "source": "L6-API-004", "target": "L7-ENT-001", "type": "stores", "label": "수정" },
-    { "id": "e-045", "source": "L6-API-005", "target": "L7-ENT-001", "type": "stores", "label": "삭제" },
-    { "id": "e-046", "source": "L6-API-006", "target": "L7-ENT-002", "type": "stores", "label": "조회" },
-    { "id": "e-047", "source": "L6-API-007", "target": "L7-ENT-002", "type": "stores", "label": "조회" },
-    { "id": "e-048", "source": "L6-API-008", "target": "L7-ENT-002", "type": "stores", "label": "조회" },
-    { "id": "e-049", "source": "L6-API-010", "target": "L7-ENT-002", "type": "stores", "label": "생성" },
-    { "id": "e-050", "source": "L6-API-011", "target": "L7-ENT-002", "type": "stores", "label": "수정" },
-    { "id": "e-051", "source": "L6-API-012", "target": "L7-ENT-002", "type": "stores", "label": "삭제" },
-    { "id": "e-052", "source": "L6-API-013", "target": "L7-ENT-002", "type": "stores", "label": "일괄설정" },
-    { "id": "e-053", "source": "L6-API-014", "target": "L7-ENT-002", "type": "stores", "label": "일괄설정" },
-    { "id": "e-054", "source": "L7-ENT-002", "target": "L7-ENT-001", "type": "depends", "label": "역할 참조" },
-    { "id": "e-055", "source": "L7-ENT-002", "target": "L7-ENT-003", "type": "depends", "label": "대상 참조" },
-    { "id": "e-056", "source": "L7-ENT-002", "target": "L7-ENT-004", "type": "depends", "label": "행위 참조" },
-    { "id": "e-057", "source": "L4-SCR-001", "target": "L8-CMP-001", "type": "uses", "label": "사용" },
-    { "id": "e-058", "source": "L4-SCR-003", "target": "L8-CMP-002", "type": "uses", "label": "사용" },
-    { "id": "e-059", "source": "L4-SCR-004", "target": "L8-CMP-002", "type": "uses", "label": "사용" },
-    { "id": "e-060", "source": "L4-SCR-005", "target": "L8-CMP-003", "type": "uses", "label": "사용" },
-    { "id": "e-061", "source": "L4-SCR-005", "target": "L8-CMP-004", "type": "uses", "label": "사용" },
-    { "id": "e-062", "source": "L8-CMP-004", "target": "L8-CMP-005", "type": "uses", "label": "사용" },
-    { "id": "e-063", "source": "L4-SCR-001", "target": "L8-CMP-006", "type": "uses", "label": "사용" },
-    { "id": "e-064", "source": "L6-API-001", "target": "L9-LOG-001", "type": "protected", "label": "보호" },
-    { "id": "e-065", "source": "L6-API-002", "target": "L9-LOG-001", "type": "protected", "label": "보호" },
-    { "id": "e-066", "source": "L6-API-003", "target": "L9-LOG-001", "type": "protected", "label": "보호" },
-    { "id": "e-067", "source": "L6-API-004", "target": "L9-LOG-001", "type": "protected", "label": "보호" },
-    { "id": "e-068", "source": "L6-API-005", "target": "L9-LOG-001", "type": "protected", "label": "보호" },
-    { "id": "e-069", "source": "L9-LOG-002", "target": "L9-LOG-003", "type": "parent" },
-    { "id": "e-070", "source": "L9-LOG-002", "target": "L9-LOG-004", "type": "parent" },
-    { "id": "e-071", "source": "L6-API-003", "target": "L9-LOG-007", "type": "validates", "label": "검증" },
-    { "id": "e-072", "source": "L6-API-004", "target": "L9-LOG-005", "type": "validates", "label": "검증" },
-    { "id": "e-073", "source": "L6-API-005", "target": "L9-LOG-005", "type": "validates", "label": "검증" },
-    { "id": "e-074", "source": "L6-API-005", "target": "L9-LOG-006", "type": "validates", "label": "검증" }
+    {
+      "from": "tenant",
+      "to": "role",
+      "relation": "selects"
+    },
+    {
+      "from": "role",
+      "to": "role-assignment",
+      "relation": "assignments"
+    },
+    {
+      "from": "role-assignment",
+      "to": "policy",
+      "relation": "policy"
+    },
+    {
+      "from": "policy",
+      "to": "policy-entry",
+      "relation": "entries"
+    },
+    {
+      "from": "policy-entry",
+      "to": "ability",
+      "relation": "ability"
+    },
+    {
+      "from": "ability",
+      "to": "action",
+      "relation": "action"
+    },
+    {
+      "from": "ability",
+      "to": "subject",
+      "relation": "subject"
+    }
   ]
 }

@@ -167,7 +167,7 @@ seed.ts                                bootstrap 실행 입구
 - `RoleCategory`, `RoleClassification`, `RoleGroup`, `RoleAssociation`
 - `Subject`
 - `Action`
-- `Ability`, `Grant`
+- `Ability`, `PolicyEntry`, `RoleAssignment`
 - 코드 소유 `Translation`
 - `OidcClient`
 - system space의 일부 taxonomy

@@ -1,7 +1,7 @@
 // @data-type: CONFIGURATION
-// @description: Policy와 Ability를 연결하는 정책 구성 링크
-/// @displayName 정책 권한
-model PolicyAbility {
+// @description: Policy에 포함되는 Ability 항목과 그 연결 생명주기를 관리
+/// @displayName 정책의 권한 항목
+model PolicyEntry {
   id        String    @id @default(uuid())
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
@@ -18,5 +18,5 @@ model PolicyAbility {
   @@unique([policyId, abilityId])
   @@index([policyId])
   @@index([abilityId])
-  @@map("policy_abilities")
+  @@map("policy_entries")
 }

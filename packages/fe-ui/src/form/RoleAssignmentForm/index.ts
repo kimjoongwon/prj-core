@@ -1,1 +1,1 @@
-export * from "./RolePolicyAssignmentForm";
+export * from "./RoleAssignmentForm";

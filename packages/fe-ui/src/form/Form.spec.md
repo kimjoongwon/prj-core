@@ -350,7 +350,7 @@ Form migration은 화면 컴포넌트 단위가 아니라 aggregate root와 API 
 | 1 | `SignUpForm` | `fieldErrors`, `errorMessage` | `SignUpPayloadSchema`, `SignUpFormSchema` | `confirmPassword`와 `nickname = name` mapping을 명시합니다. |
 | 2 | `ActionForm` | `errors` | `ActionPayloadSchema` | name pattern 검증을 schema로 이동합니다. |
 | 2 | `RoleForm` | `errors` | `RolePayloadSchema` | create는 `name` 필수, update는 `name` 제외입니다. |
-| 2 | `PolicyForm` | 없음 | `PolicyPayloadSchema`, `SyncPolicyAbilitiesSchema` | policy 기본정보와 ability sync payload를 분리합니다. |
+| 2 | `PolicyForm` | 없음 | `PolicyPayloadSchema`, `SyncPolicyEntriesSchema` | policy 기본정보와 ability sync payload를 분리합니다. |
 | 2 | `TimelineForm` | `errors` | `TimelinePayloadSchema` | name/description 기본 검증입니다. |
 | 3 | `FitnessCenterForm` | `errors` | `FitnessCenterPayloadSchema` | 이미 state class가 있으므로 `errors -> fieldErrors`와 schema 상속을 우선 적용합니다. |
 | 3 | `TaskExerciseForm` | `errors` | `TaskExercisePayloadSchema`, `TaskExerciseFormSchema` | `durationMin/durationSec -> duration` mapper가 필요합니다. |
@@ -361,7 +361,7 @@ Form migration은 화면 컴포넌트 단위가 아니라 aggregate root와 API 
 | 4 | `TemplateForm` | `errors`, `variableErrors` | `TemplatePayloadSchema`, `TemplateVariableItemSchema`, `TemplateFormSchema` | `formData` 구조와 payload 구조를 정렬해야 합니다. |
 | 4 | `OidcClientForm` | `errors`, `redirectUriErrors` | `OidcClientPayloadSchema`, `OidcClientFormSchema`, login UI child schema | redirect URI 배열과 login UI nested object를 분리합니다. |
 | 4 | `InquiryForm` | `errors` | `CreateInquiryPayloadSchema`, `UpdateInquiryPayloadSchema`, `InquiryFormSchema` | bootstrap meta는 schema가 아니라 서버 form bootstrap DTO에 남깁니다. |
-| 5 | `RolePolicyAssignmentForm` | 없음 | `SyncRolePoliciesSchema` | 목록 assignment 전용 payload입니다. |
+| 5 | `RoleAssignmentForm` | 없음 | `SyncRoleAssignmentsSchema` | 목록 assignment 전용 payload입니다. |
 | 5 | `VariableInputForm`, `VariableEditTable` | prop 기반 `errors` | child item schema | Template migration 중 child component로 정리합니다. |
 | 5 | `OidcConsentPanel`, `InquiryReplyForm` | submit/message state | 별도 command payload schema | 표준 edit form migration 이후 처리합니다. |
 
@@ -373,7 +373,7 @@ schema는 domain별 폴더를 만들고 barrel export를 추가합니다.
 | domain | schema 후보 | 사용처 |
 | --- | --- | --- |
 | `auth` | `LoginSchema`, `OidcLoginPayloadSchema`, `ForgotPasswordPayloadSchema`, `ResetPasswordPayloadSchema`, `SignUpPayloadSchema`, `SignUpFormSchema` | auth Form, auth/idp DTO |
-| `access-control` | `ActionPayloadSchema`, `RolePayloadSchema`, `PolicyPayloadSchema`, `SyncPolicyAbilitiesSchema`, `SyncRolePoliciesSchema`, `AbilityPayloadSchema`, `AbilityFormSchema` | Action/Role/Policy/Ability CRUD |
+| `access-control` | `ActionPayloadSchema`, `RolePayloadSchema`, `PolicyPayloadSchema`, `SyncPolicyEntriesSchema`, `SyncRoleAssignmentsSchema`, `AbilityPayloadSchema`, `AbilityFormSchema` | Action/Role/Policy/Ability CRUD |
 | `space` | `SpacePayloadSchema`, `FitnessCenterPayloadSchema` | Space create, FitnessCenter edit |
 | `task` | `TaskExercisePayloadSchema`, `TaskExerciseFormSchema` | Task exercise create/edit |
 | `routine` | `RoutinePayloadSchema`, `RoutineFormSchema`, `RoutineActivityItemSchema` | Routine create/edit |

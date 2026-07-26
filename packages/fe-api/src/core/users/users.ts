@@ -38,6 +38,7 @@ import type {
 
 import type {
   GetUserById200AllOf,
+  GetUserTenantDetail200AllOf,
   GetUsers200AllOf,
   GetUsersParams
 } from '.././model';
@@ -293,13 +294,13 @@ export const prefetchGetUsersInfiniteQuery = async <TData = Awaited<ReturnType<t
  * @summary 사용자 상세 조회
  */
 export const getUserById = (
-    id: string,
+    userId: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
       return customInstance<GetUserById200AllOf>(
-      {url: `/api/v1/users/${id}`, method: 'GET', signal
+      {url: `/api/v1/users/${userId}`, method: 'GET', signal
     },
       options);
     }
@@ -307,35 +308,35 @@ export const getUserById = (
 
 
 
-export const getGetUserByIdQueryKey = (id?: string,) => {
+export const getGetUserByIdQueryKey = (userId?: string,) => {
     return [
-    `/api/v1/users/${id}`
+    `/api/v1/users/${userId}`
     ] as const;
     }
 
-export const getGetUserByIdInfiniteQueryKey = (id?: string,) => {
+export const getGetUserByIdInfiniteQueryKey = (userId?: string,) => {
     return [
-    'infinite', `/api/v1/users/${id}`
+    'infinite', `/api/v1/users/${userId}`
     ] as const;
     }
 
     
-export const getGetUserByIdQueryOptions = <TData = Awaited<ReturnType<typeof getUserById>>, TError = ErrorType<void>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetUserByIdQueryOptions = <TData = Awaited<ReturnType<typeof getUserById>>, TError = ErrorType<void>>(userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetUserByIdQueryKey(id);
+  const queryKey =  queryOptions?.queryKey ?? getGetUserByIdQueryKey(userId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserById>>> = ({ signal }) => getUserById(id, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserById>>> = ({ signal }) => getUserById(userId, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: !!(userId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetUserByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getUserById>>>
@@ -343,7 +344,7 @@ export type GetUserByIdQueryError = ErrorType<void>
 
 
 export function useGetUserById<TData = Awaited<ReturnType<typeof getUserById>>, TError = ErrorType<void>>(
- id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>> & Pick<
+ userId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getUserById>>,
           TError,
@@ -353,7 +354,7 @@ export function useGetUserById<TData = Awaited<ReturnType<typeof getUserById>>, 
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetUserById<TData = Awaited<ReturnType<typeof getUserById>>, TError = ErrorType<void>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>> & Pick<
+ userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getUserById>>,
           TError,
@@ -363,7 +364,7 @@ export function useGetUserById<TData = Awaited<ReturnType<typeof getUserById>>, 
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetUserById<TData = Awaited<ReturnType<typeof getUserById>>, TError = ErrorType<void>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -371,11 +372,11 @@ export function useGetUserById<TData = Awaited<ReturnType<typeof getUserById>>, 
  */
 
 export function useGetUserById<TData = Awaited<ReturnType<typeof getUserById>>, TError = ErrorType<void>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetUserByIdQueryOptions(id,options)
+  const queryOptions = getGetUserByIdQueryOptions(userId,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -388,11 +389,11 @@ export function useGetUserById<TData = Awaited<ReturnType<typeof getUserById>>, 
  * @summary 사용자 상세 조회
  */
 export const prefetchGetUserByIdQuery = async <TData = Awaited<ReturnType<typeof getUserById>>, TError = ErrorType<void>>(
- queryClient: QueryClient, id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ queryClient: QueryClient, userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ): Promise<QueryClient> => {
 
-  const queryOptions = getGetUserByIdQueryOptions(id,options)
+  const queryOptions = getGetUserByIdQueryOptions(userId,options)
 
   await queryClient.prefetchQuery(queryOptions);
 
@@ -401,16 +402,16 @@ export const prefetchGetUserByIdQuery = async <TData = Awaited<ReturnType<typeof
 
 
 
-export const getGetUserByIdSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getUserById>>, TError = ErrorType<void>>(id: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetUserByIdSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getUserById>>, TError = ErrorType<void>>(userId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetUserByIdQueryKey(id);
+  const queryKey =  queryOptions?.queryKey ?? getGetUserByIdQueryKey(userId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserById>>> = ({ signal }) => getUserById(id, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserById>>> = ({ signal }) => getUserById(userId, requestOptions, signal);
 
       
 
@@ -424,15 +425,15 @@ export type GetUserByIdSuspenseQueryError = ErrorType<void>
 
 
 export function useGetUserByIdSuspense<TData = Awaited<ReturnType<typeof getUserById>>, TError = ErrorType<void>>(
- id: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ userId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetUserByIdSuspense<TData = Awaited<ReturnType<typeof getUserById>>, TError = ErrorType<void>>(
- id: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ userId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetUserByIdSuspense<TData = Awaited<ReturnType<typeof getUserById>>, TError = ErrorType<void>>(
- id: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ userId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -440,11 +441,11 @@ export function useGetUserByIdSuspense<TData = Awaited<ReturnType<typeof getUser
  */
 
 export function useGetUserByIdSuspense<TData = Awaited<ReturnType<typeof getUserById>>, TError = ErrorType<void>>(
- id: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ userId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetUserByIdSuspenseQueryOptions(id,options)
+  const queryOptions = getGetUserByIdSuspenseQueryOptions(userId,options)
 
   const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -456,16 +457,16 @@ export function useGetUserByIdSuspense<TData = Awaited<ReturnType<typeof getUser
 
 
 
-export const getGetUserByIdSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getUserById>>>, TError = ErrorType<void>>(id: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetUserByIdSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getUserById>>>, TError = ErrorType<void>>(userId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetUserByIdInfiniteQueryKey(id);
+  const queryKey =  queryOptions?.queryKey ?? getGetUserByIdInfiniteQueryKey(userId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserById>>> = ({ signal }) => getUserById(id, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserById>>> = ({ signal }) => getUserById(userId, requestOptions, signal);
 
       
 
@@ -479,15 +480,15 @@ export type GetUserByIdSuspenseInfiniteQueryError = ErrorType<void>
 
 
 export function useGetUserByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getUserById>>>, TError = ErrorType<void>>(
- id: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ userId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetUserByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getUserById>>>, TError = ErrorType<void>>(
- id: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ userId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetUserByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getUserById>>>, TError = ErrorType<void>>(
- id: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ userId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -495,11 +496,11 @@ export function useGetUserByIdSuspenseInfinite<TData = InfiniteData<Awaited<Retu
  */
 
 export function useGetUserByIdSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getUserById>>>, TError = ErrorType<void>>(
- id: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ userId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetUserByIdSuspenseInfiniteQueryOptions(id,options)
+  const queryOptions = getGetUserByIdSuspenseInfiniteQueryOptions(userId,options)
 
   const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -512,11 +513,268 @@ export function useGetUserByIdSuspenseInfinite<TData = InfiniteData<Awaited<Retu
  * @summary 사용자 상세 조회
  */
 export const prefetchGetUserByIdInfiniteQuery = async <TData = Awaited<ReturnType<typeof getUserById>>, TError = ErrorType<void>>(
- queryClient: QueryClient, id: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ queryClient: QueryClient, userId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 
   ): Promise<QueryClient> => {
 
-  const queryOptions = getGetUserByIdSuspenseInfiniteQueryOptions(id,options)
+  const queryOptions = getGetUserByIdSuspenseInfiniteQueryOptions(userId,options)
+
+  await queryClient.prefetchInfiniteQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+/**
+ * 현재 Space에서 사용자에게 속한 Tenant와 Role 정책 할당 및 권한 항목을 조회합니다.
+ * @summary 사용자 Tenant 상세 조회
+ */
+export const getUserTenantDetail = (
+    userId: string,
+    tenantId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<GetUserTenantDetail200AllOf>(
+      {url: `/api/v1/users/${userId}/tenants/${tenantId}`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetUserTenantDetailQueryKey = (userId?: string,
+    tenantId?: string,) => {
+    return [
+    `/api/v1/users/${userId}/tenants/${tenantId}`
+    ] as const;
+    }
+
+export const getGetUserTenantDetailInfiniteQueryKey = (userId?: string,
+    tenantId?: string,) => {
+    return [
+    'infinite', `/api/v1/users/${userId}/tenants/${tenantId}`
+    ] as const;
+    }
+
+
+export const getGetUserTenantDetailQueryOptions = <TData = Awaited<ReturnType<typeof getUserTenantDetail>>, TError = ErrorType<void>>(userId: string,
+    tenantId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserTenantDetail>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetUserTenantDetailQueryKey(userId,tenantId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserTenantDetail>>> = ({ signal }) => getUserTenantDetail(userId,tenantId, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(userId && tenantId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUserTenantDetail>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetUserTenantDetailQueryResult = NonNullable<Awaited<ReturnType<typeof getUserTenantDetail>>>
+export type GetUserTenantDetailQueryError = ErrorType<void>
+
+
+export function useGetUserTenantDetail<TData = Awaited<ReturnType<typeof getUserTenantDetail>>, TError = ErrorType<void>>(
+ userId: string,
+    tenantId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserTenantDetail>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getUserTenantDetail>>,
+          TError,
+          Awaited<ReturnType<typeof getUserTenantDetail>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserTenantDetail<TData = Awaited<ReturnType<typeof getUserTenantDetail>>, TError = ErrorType<void>>(
+ userId: string,
+    tenantId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserTenantDetail>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getUserTenantDetail>>,
+          TError,
+          Awaited<ReturnType<typeof getUserTenantDetail>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserTenantDetail<TData = Awaited<ReturnType<typeof getUserTenantDetail>>, TError = ErrorType<void>>(
+ userId: string,
+    tenantId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserTenantDetail>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 사용자 Tenant 상세 조회
+ */
+
+export function useGetUserTenantDetail<TData = Awaited<ReturnType<typeof getUserTenantDetail>>, TError = ErrorType<void>>(
+ userId: string,
+    tenantId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserTenantDetail>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetUserTenantDetailQueryOptions(userId,tenantId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 사용자 Tenant 상세 조회
+ */
+export const prefetchGetUserTenantDetailQuery = async <TData = Awaited<ReturnType<typeof getUserTenantDetail>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, userId: string,
+    tenantId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserTenantDetail>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetUserTenantDetailQueryOptions(userId,tenantId,options)
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+}
+
+
+
+export const getGetUserTenantDetailSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getUserTenantDetail>>, TError = ErrorType<void>>(userId: string,
+    tenantId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUserTenantDetail>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetUserTenantDetailQueryKey(userId,tenantId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserTenantDetail>>> = ({ signal }) => getUserTenantDetail(userId,tenantId, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUserTenantDetail>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetUserTenantDetailSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getUserTenantDetail>>>
+export type GetUserTenantDetailSuspenseQueryError = ErrorType<void>
+
+
+export function useGetUserTenantDetailSuspense<TData = Awaited<ReturnType<typeof getUserTenantDetail>>, TError = ErrorType<void>>(
+ userId: string,
+    tenantId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUserTenantDetail>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserTenantDetailSuspense<TData = Awaited<ReturnType<typeof getUserTenantDetail>>, TError = ErrorType<void>>(
+ userId: string,
+    tenantId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUserTenantDetail>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserTenantDetailSuspense<TData = Awaited<ReturnType<typeof getUserTenantDetail>>, TError = ErrorType<void>>(
+ userId: string,
+    tenantId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUserTenantDetail>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 사용자 Tenant 상세 조회
+ */
+
+export function useGetUserTenantDetailSuspense<TData = Awaited<ReturnType<typeof getUserTenantDetail>>, TError = ErrorType<void>>(
+ userId: string,
+    tenantId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUserTenantDetail>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetUserTenantDetailSuspenseQueryOptions(userId,tenantId,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getGetUserTenantDetailSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getUserTenantDetail>>>, TError = ErrorType<void>>(userId: string,
+    tenantId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUserTenantDetail>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetUserTenantDetailInfiniteQueryKey(userId,tenantId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserTenantDetail>>> = ({ signal }) => getUserTenantDetail(userId,tenantId, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUserTenantDetail>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetUserTenantDetailSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getUserTenantDetail>>>
+export type GetUserTenantDetailSuspenseInfiniteQueryError = ErrorType<void>
+
+
+export function useGetUserTenantDetailSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getUserTenantDetail>>>, TError = ErrorType<void>>(
+ userId: string,
+    tenantId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUserTenantDetail>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserTenantDetailSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getUserTenantDetail>>>, TError = ErrorType<void>>(
+ userId: string,
+    tenantId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUserTenantDetail>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUserTenantDetailSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getUserTenantDetail>>>, TError = ErrorType<void>>(
+ userId: string,
+    tenantId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUserTenantDetail>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 사용자 Tenant 상세 조회
+ */
+
+export function useGetUserTenantDetailSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getUserTenantDetail>>>, TError = ErrorType<void>>(
+ userId: string,
+    tenantId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUserTenantDetail>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetUserTenantDetailSuspenseInfiniteQueryOptions(userId,tenantId,options)
+
+  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+/**
+ * @summary 사용자 Tenant 상세 조회
+ */
+export const prefetchGetUserTenantDetailInfiniteQuery = async <TData = Awaited<ReturnType<typeof getUserTenantDetail>>, TError = ErrorType<void>>(
+ queryClient: QueryClient, userId: string,
+    tenantId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getUserTenantDetail>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+
+  ): Promise<QueryClient> => {
+
+  const queryOptions = getGetUserTenantDetailSuspenseInfiniteQueryOptions(userId,tenantId,options)
 
   await queryClient.prefetchInfiniteQuery(queryOptions);
 

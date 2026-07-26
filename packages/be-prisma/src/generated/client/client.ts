@@ -178,10 +178,10 @@ export type OidcModel = Prisma.OidcModelModel
  */
 export type PasswordHistory = Prisma.PasswordHistoryModel
 /**
- * Model PolicyAbility
- * @displayName 정책 권한
+ * Model PolicyEntry
+ * @displayName 정책의 권한 항목
  */
-export type PolicyAbility = Prisma.PolicyAbilityModel
+export type PolicyEntry = Prisma.PolicyEntryModel
 /**
  * Model Policy
  * @displayName 정책
@@ -218,6 +218,11 @@ export type ReferenceDataMigrationHistory = Prisma.ReferenceDataMigrationHistory
  */
 export type Reservation = Prisma.ReservationModel
 /**
+ * Model RoleAssignment
+ * @displayName 역할의 정책 할당
+ */
+export type RoleAssignment = Prisma.RoleAssignmentModel
+/**
  * Model RoleAssociation
  * @displayName 역할 그룹
  */
@@ -227,11 +232,6 @@ export type RoleAssociation = Prisma.RoleAssociationModel
  * @displayName 역할 분류
  */
 export type RoleClassification = Prisma.RoleClassificationModel
-/**
- * Model RolePolicy
- * @displayName 역할 정책
- */
-export type RolePolicy = Prisma.RolePolicyModel
 /**
  * Model Role
  * @displayName 역할

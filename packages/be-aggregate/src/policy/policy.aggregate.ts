@@ -1,6 +1,6 @@
 import { USER_ERRORS } from "@cocrepo/constant";
 import { AuthContext, SpaceContext } from "@cocrepo/context";
-import { Policy, PolicyAbility } from "@cocrepo/entity";
+import { Policy, PolicyEntry } from "@cocrepo/entity";
 import type {
 	CreatePolicyCommandInput,
 	UpdatePolicyCommandInput,
@@ -8,8 +8,8 @@ import type {
 import {
 	AbilitiesRepository,
 	PoliciesRepository,
-	PolicyAbilitiesRepository,
-	RolePoliciesRepository,
+	PolicyEntriesRepository,
+	RoleAssignmentsRepository,
 } from "@cocrepo/repository";
 import {
 	BadRequestException,
@@ -28,9 +28,9 @@ export class PolicyAggregate {
 
 	constructor(
 		private readonly policiesRepository: PoliciesRepository,
-		private readonly policyAbilitiesRepository: PolicyAbilitiesRepository,
+		private readonly policyEntriesRepository: PolicyEntriesRepository,
 		private readonly abilitiesRepository: AbilitiesRepository,
-		private readonly rolePoliciesRepository: RolePoliciesRepository,
+		private readonly roleAssignmentsRepository: RoleAssignmentsRepository,
 		private readonly spaceContext: SpaceContext,
 		private readonly authContext: AuthContext,
 	) {}
@@ -114,19 +114,19 @@ export class PolicyAggregate {
 			throw new ForbiddenException("시스템 정책은 삭제할 수 없습니다");
 		}
 
-		await this.rolePoliciesRepository.removeByPolicyId(policyId);
+		await this.roleAssignmentsRepository.removeByPolicyId(policyId);
 
 		return this.policiesRepository.removeById(policyId);
 	}
 
 	@Transactional()
-	async syncPolicyAbilities(
+	async syncPolicyEntries(
 		policyId: string,
 		abilityIds: string[],
-	): Promise<PolicyAbility[]> {
+	): Promise<PolicyEntry[]> {
 		await this.getPolicyById(policyId);
 		await this.assertAbilitiesExist(abilityIds);
-		return this.policyAbilitiesRepository.syncByPolicyId(policyId, abilityIds);
+		return this.policyEntriesRepository.syncByPolicyId(policyId, abilityIds);
 	}
 
 	private async assertAbilitiesExist(abilityIds: string[]): Promise<void> {

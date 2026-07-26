@@ -16,24 +16,17 @@
  */
 import type { PolicyResponseDto } from './policyResponseDto';
 
-export interface PolicyAssignmentResponseDto {
+export interface RoleAssignmentResponseDto {
   /**
-   * Policy assignment ID
+   * Role assignment ID
    * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
    */
   id: string;
   /**
    * Role ID
-   * @nullable
    * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
    */
-  roleId?: string | null;
-  /**
-   * User ID
-   * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
-   */
-  userId?: string | null;
+  roleId: string;
   /**
    * Policy ID
    * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$

@@ -19,7 +19,7 @@ model Role {
 
   associations                  RoleAssociation[]
   classification                RoleClassification?
-  rolePolicies                  RolePolicy[]
+  assignments                   RoleAssignment[]
   tenants                       Tenant[]
   requestedTenantAccessRequests TenantAccessRequest[] @relation("TenantAccessRequestRequestedRole")
   previousTenantAccessRequests  TenantAccessRequest[] @relation("TenantAccessRequestPreviousRole")

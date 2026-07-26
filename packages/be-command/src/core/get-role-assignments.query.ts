@@ -1,3 +1,3 @@
-export class GetRolePoliciesQuery {
+export class GetRoleAssignmentsQuery {
 	constructor(readonly roleId: string) {}
 }

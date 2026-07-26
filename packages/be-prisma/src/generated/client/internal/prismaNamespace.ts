@@ -412,7 +412,7 @@ export const ModelName = {
   OidcClient: 'OidcClient',
   OidcModel: 'OidcModel',
   PasswordHistory: 'PasswordHistory',
-  PolicyAbility: 'PolicyAbility',
+  PolicyEntry: 'PolicyEntry',
   Policy: 'Policy',
   Post: 'Post',
   Profile: 'Profile',
@@ -420,9 +420,9 @@ export const ModelName = {
   Program: 'Program',
   ReferenceDataMigrationHistory: 'ReferenceDataMigrationHistory',
   Reservation: 'Reservation',
+  RoleAssignment: 'RoleAssignment',
   RoleAssociation: 'RoleAssociation',
   RoleClassification: 'RoleClassification',
-  RolePolicy: 'RolePolicy',
   Role: 'Role',
   Routine: 'Routine',
   SafeConfirmation: 'SafeConfirmation',
@@ -463,7 +463,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "ability" | "action" | "activity" | "aIAgentLog" | "albumEntry" | "album" | "asset" | "authAuditLog" | "category" | "company" | "content" | "derivative" | "document" | "emailVerification" | "exercise" | "fitnessCenter" | "folder" | "group" | "image" | "inquiryAttachment" | "inquiryMessage" | "inquiryParticipant" | "inquiryTag" | "inquiryThread" | "inquiry" | "oidcClient" | "oidcModel" | "passwordHistory" | "policyAbility" | "policy" | "post" | "profile" | "programActivity" | "program" | "referenceDataMigrationHistory" | "reservation" | "roleAssociation" | "roleClassification" | "rolePolicy" | "role" | "routine" | "safeConfirmation" | "safeTransaction" | "safeWallet" | "securityPolicy" | "sentimentAnalysis" | "serviceDocument" | "session" | "spaceAssociation" | "spaceClassification" | "space" | "subject" | "task" | "templateVariable" | "template" | "tenantAccessRequest" | "tenant" | "timeline" | "translation" | "userAssociation" | "userClassification" | "user" | "video" | "whitelistEntry"
+    modelProps: "ability" | "action" | "activity" | "aIAgentLog" | "albumEntry" | "album" | "asset" | "authAuditLog" | "category" | "company" | "content" | "derivative" | "document" | "emailVerification" | "exercise" | "fitnessCenter" | "folder" | "group" | "image" | "inquiryAttachment" | "inquiryMessage" | "inquiryParticipant" | "inquiryTag" | "inquiryThread" | "inquiry" | "oidcClient" | "oidcModel" | "passwordHistory" | "policyEntry" | "policy" | "post" | "profile" | "programActivity" | "program" | "referenceDataMigrationHistory" | "reservation" | "roleAssignment" | "roleAssociation" | "roleClassification" | "role" | "routine" | "safeConfirmation" | "safeTransaction" | "safeWallet" | "securityPolicy" | "sentimentAnalysis" | "serviceDocument" | "session" | "spaceAssociation" | "spaceClassification" | "space" | "subject" | "task" | "templateVariable" | "template" | "tenantAccessRequest" | "tenant" | "timeline" | "translation" | "userAssociation" | "userClassification" | "user" | "video" | "whitelistEntry"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2539,77 +2539,77 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    PolicyAbility: {
-      payload: Prisma.$PolicyAbilityPayload<ExtArgs>
-      fields: Prisma.PolicyAbilityFieldRefs
+    PolicyEntry: {
+      payload: Prisma.$PolicyEntryPayload<ExtArgs>
+      fields: Prisma.PolicyEntryFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.PolicyAbilityFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyAbilityPayload> | null
+          args: Prisma.PolicyEntryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyEntryPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.PolicyAbilityFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyAbilityPayload>
+          args: Prisma.PolicyEntryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyEntryPayload>
         }
         findFirst: {
-          args: Prisma.PolicyAbilityFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyAbilityPayload> | null
+          args: Prisma.PolicyEntryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyEntryPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.PolicyAbilityFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyAbilityPayload>
+          args: Prisma.PolicyEntryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyEntryPayload>
         }
         findMany: {
-          args: Prisma.PolicyAbilityFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyAbilityPayload>[]
+          args: Prisma.PolicyEntryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyEntryPayload>[]
         }
         create: {
-          args: Prisma.PolicyAbilityCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyAbilityPayload>
+          args: Prisma.PolicyEntryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyEntryPayload>
         }
         createMany: {
-          args: Prisma.PolicyAbilityCreateManyArgs<ExtArgs>
+          args: Prisma.PolicyEntryCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.PolicyAbilityCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyAbilityPayload>[]
+          args: Prisma.PolicyEntryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyEntryPayload>[]
         }
         delete: {
-          args: Prisma.PolicyAbilityDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyAbilityPayload>
+          args: Prisma.PolicyEntryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyEntryPayload>
         }
         update: {
-          args: Prisma.PolicyAbilityUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyAbilityPayload>
+          args: Prisma.PolicyEntryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyEntryPayload>
         }
         deleteMany: {
-          args: Prisma.PolicyAbilityDeleteManyArgs<ExtArgs>
+          args: Prisma.PolicyEntryDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.PolicyAbilityUpdateManyArgs<ExtArgs>
+          args: Prisma.PolicyEntryUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.PolicyAbilityUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyAbilityPayload>[]
+          args: Prisma.PolicyEntryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyEntryPayload>[]
         }
         upsert: {
-          args: Prisma.PolicyAbilityUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyAbilityPayload>
+          args: Prisma.PolicyEntryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PolicyEntryPayload>
         }
         aggregate: {
-          args: Prisma.PolicyAbilityAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregatePolicyAbility>
+          args: Prisma.PolicyEntryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePolicyEntry>
         }
         groupBy: {
-          args: Prisma.PolicyAbilityGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.PolicyAbilityGroupByOutputType>[]
+          args: Prisma.PolicyEntryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PolicyEntryGroupByOutputType>[]
         }
         count: {
-          args: Prisma.PolicyAbilityCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.PolicyAbilityCountAggregateOutputType> | number
+          args: Prisma.PolicyEntryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PolicyEntryCountAggregateOutputType> | number
         }
       }
     }
@@ -3131,6 +3131,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    RoleAssignment: {
+      payload: Prisma.$RoleAssignmentPayload<ExtArgs>
+      fields: Prisma.RoleAssignmentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RoleAssignmentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleAssignmentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RoleAssignmentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleAssignmentPayload>
+        }
+        findFirst: {
+          args: Prisma.RoleAssignmentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleAssignmentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RoleAssignmentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleAssignmentPayload>
+        }
+        findMany: {
+          args: Prisma.RoleAssignmentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleAssignmentPayload>[]
+        }
+        create: {
+          args: Prisma.RoleAssignmentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleAssignmentPayload>
+        }
+        createMany: {
+          args: Prisma.RoleAssignmentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RoleAssignmentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleAssignmentPayload>[]
+        }
+        delete: {
+          args: Prisma.RoleAssignmentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleAssignmentPayload>
+        }
+        update: {
+          args: Prisma.RoleAssignmentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleAssignmentPayload>
+        }
+        deleteMany: {
+          args: Prisma.RoleAssignmentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RoleAssignmentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RoleAssignmentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleAssignmentPayload>[]
+        }
+        upsert: {
+          args: Prisma.RoleAssignmentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RoleAssignmentPayload>
+        }
+        aggregate: {
+          args: Prisma.RoleAssignmentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRoleAssignment>
+        }
+        groupBy: {
+          args: Prisma.RoleAssignmentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RoleAssignmentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RoleAssignmentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RoleAssignmentCountAggregateOutputType> | number
+        }
+      }
+    }
     RoleAssociation: {
       payload: Prisma.$RoleAssociationPayload<ExtArgs>
       fields: Prisma.RoleAssociationFieldRefs
@@ -3276,80 +3350,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.RoleClassificationCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.RoleClassificationCountAggregateOutputType> | number
-        }
-      }
-    }
-    RolePolicy: {
-      payload: Prisma.$RolePolicyPayload<ExtArgs>
-      fields: Prisma.RolePolicyFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.RolePolicyFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePolicyPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.RolePolicyFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePolicyPayload>
-        }
-        findFirst: {
-          args: Prisma.RolePolicyFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePolicyPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.RolePolicyFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePolicyPayload>
-        }
-        findMany: {
-          args: Prisma.RolePolicyFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePolicyPayload>[]
-        }
-        create: {
-          args: Prisma.RolePolicyCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePolicyPayload>
-        }
-        createMany: {
-          args: Prisma.RolePolicyCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.RolePolicyCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePolicyPayload>[]
-        }
-        delete: {
-          args: Prisma.RolePolicyDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePolicyPayload>
-        }
-        update: {
-          args: Prisma.RolePolicyUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePolicyPayload>
-        }
-        deleteMany: {
-          args: Prisma.RolePolicyDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.RolePolicyUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.RolePolicyUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePolicyPayload>[]
-        }
-        upsert: {
-          args: Prisma.RolePolicyUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RolePolicyPayload>
-        }
-        aggregate: {
-          args: Prisma.RolePolicyAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateRolePolicy>
-        }
-        groupBy: {
-          args: Prisma.RolePolicyGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.RolePolicyGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.RolePolicyCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.RolePolicyCountAggregateOutputType> | number
         }
       }
     }
@@ -5754,7 +5754,7 @@ export const PasswordHistoryScalarFieldEnum = {
 export type PasswordHistoryScalarFieldEnum = (typeof PasswordHistoryScalarFieldEnum)[keyof typeof PasswordHistoryScalarFieldEnum]
 
 
-export const PolicyAbilityScalarFieldEnum = {
+export const PolicyEntryScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -5763,7 +5763,7 @@ export const PolicyAbilityScalarFieldEnum = {
   abilityId: 'abilityId'
 } as const
 
-export type PolicyAbilityScalarFieldEnum = (typeof PolicyAbilityScalarFieldEnum)[keyof typeof PolicyAbilityScalarFieldEnum]
+export type PolicyEntryScalarFieldEnum = (typeof PolicyEntryScalarFieldEnum)[keyof typeof PolicyEntryScalarFieldEnum]
 
 
 export const PolicyScalarFieldEnum = {
@@ -5882,6 +5882,20 @@ export const ReservationScalarFieldEnum = {
 export type ReservationScalarFieldEnum = (typeof ReservationScalarFieldEnum)[keyof typeof ReservationScalarFieldEnum]
 
 
+export const RoleAssignmentScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  roleId: 'roleId',
+  policyId: 'policyId',
+  isActive: 'isActive',
+  priority: 'priority'
+} as const
+
+export type RoleAssignmentScalarFieldEnum = (typeof RoleAssignmentScalarFieldEnum)[keyof typeof RoleAssignmentScalarFieldEnum]
+
+
 export const RoleAssociationScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
@@ -5904,20 +5918,6 @@ export const RoleClassificationScalarFieldEnum = {
 } as const
 
 export type RoleClassificationScalarFieldEnum = (typeof RoleClassificationScalarFieldEnum)[keyof typeof RoleClassificationScalarFieldEnum]
-
-
-export const RolePolicyScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  roleId: 'roleId',
-  policyId: 'policyId',
-  isActive: 'isActive',
-  priority: 'priority'
-} as const
-
-export type RolePolicyScalarFieldEnum = (typeof RolePolicyScalarFieldEnum)[keyof typeof RolePolicyScalarFieldEnum]
 
 
 export const RoleScalarFieldEnum = {
@@ -7033,7 +7033,7 @@ export type GlobalOmitConfig = {
   oidcClient?: Prisma.OidcClientOmit
   oidcModel?: Prisma.OidcModelOmit
   passwordHistory?: Prisma.PasswordHistoryOmit
-  policyAbility?: Prisma.PolicyAbilityOmit
+  policyEntry?: Prisma.PolicyEntryOmit
   policy?: Prisma.PolicyOmit
   post?: Prisma.PostOmit
   profile?: Prisma.ProfileOmit
@@ -7041,9 +7041,9 @@ export type GlobalOmitConfig = {
   program?: Prisma.ProgramOmit
   referenceDataMigrationHistory?: Prisma.ReferenceDataMigrationHistoryOmit
   reservation?: Prisma.ReservationOmit
+  roleAssignment?: Prisma.RoleAssignmentOmit
   roleAssociation?: Prisma.RoleAssociationOmit
   roleClassification?: Prisma.RoleClassificationOmit
-  rolePolicy?: Prisma.RolePolicyOmit
   role?: Prisma.RoleOmit
   routine?: Prisma.RoutineOmit
   safeConfirmation?: Prisma.SafeConfirmationOmit

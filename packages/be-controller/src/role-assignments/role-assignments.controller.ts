@@ -1,7 +1,7 @@
 import { RolesGuard } from "@cocrepo/be-common";
 import {
-	GetRolePoliciesQuery,
-	SyncRolePoliciesCommand,
+	GetRoleAssignmentsQuery,
+	SyncRoleAssignmentsCommand,
 } from "@cocrepo/command";
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import {
@@ -11,7 +11,10 @@ import {
 	ResponseMessage,
 	Roles,
 } from "@cocrepo/decorator";
-import { PolicyAssignmentResponseDto, SyncRolePoliciesDto } from "@cocrepo/dto";
+import {
+	RoleAssignmentResponseDto,
+	SyncRoleAssignmentsDto,
+} from "@cocrepo/dto";
 import {
 	Body,
 	Controller,
@@ -26,20 +29,20 @@ import {
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 
-@ApiTags("POLICY_ASSIGNMENTS")
+@ApiTags("ROLE_ASSIGNMENTS")
 @Controller()
 @UseGuards(RolesGuard)
-export class PolicyAssignmentsController {
+export class RoleAssignmentsController {
 	constructor(
 		private readonly commandBus: CommandBus,
 		private readonly queryBus: QueryBus,
 	) {}
 
-	@Get("roles/:roleId")
+	@Get(":roleId/assignments")
 	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
-		operationId: "getRolePolicies",
-		summary: "Role Policy 목록 조회",
+		operationId: "getRoleAssignments",
+		summary: "Role 정책 할당 목록 조회",
 		description: "특정 Role에 할당된 Policy 목록을 조회합니다.",
 	})
 	@ApiAuth()
@@ -49,20 +52,20 @@ export class PolicyAssignmentsController {
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)
-	@ApiResponseEntity(PolicyAssignmentResponseDto, HttpStatus.OK, {
+	@ApiResponseEntity(RoleAssignmentResponseDto, HttpStatus.OK, {
 		isArray: true,
 	})
 	@ResponseMessage("역할 정책 할당 목록 조회 성공")
-	async getRolePolicies(@Param("roleId", ParseUUIDPipe) roleId: string) {
-		return this.queryBus.execute(new GetRolePoliciesQuery(roleId));
+	async getRoleAssignments(@Param("roleId", ParseUUIDPipe) roleId: string) {
+		return this.queryBus.execute(new GetRoleAssignmentsQuery(roleId));
 	}
 
-	@Put("roles/:roleId")
+	@Put(":roleId/assignments")
 	@HttpCode(HttpStatus.OK)
 	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
-		operationId: "syncRolePolicies",
-		summary: "Role Policy 동기화",
+		operationId: "syncRoleAssignments",
+		summary: "Role 정책 할당 동기화",
 		description:
 			"특정 Role에 할당할 Policy 목록을 전체 동기화 방식으로 반영합니다.",
 	})
@@ -73,20 +76,22 @@ export class PolicyAssignmentsController {
 		type: String,
 	})
 	@ApiBody({
-		type: SyncRolePoliciesDto,
+		type: SyncRoleAssignmentsDto,
 		description: "Role에 연결할 Policy 목록",
 	})
 	@ApiErrors(400, 401, 403, 404, 500)
-	@ApiResponseEntity(PolicyAssignmentResponseDto, HttpStatus.OK, {
+	@ApiResponseEntity(RoleAssignmentResponseDto, HttpStatus.OK, {
 		isArray: true,
 	})
 	@ResponseMessage("역할 정책 할당 동기화 성공")
-	async syncRolePolicies(
+	async syncRoleAssignments(
 		@Param("roleId", ParseUUIDPipe) roleId: string,
-		@Body() dto: SyncRolePoliciesDto,
+		@Body() dto: SyncRoleAssignmentsDto,
 	) {
 		return this.commandBus.execute(
-			new SyncRolePoliciesCommand(roleId, { rolePolicies: dto.rolePolicies }),
+			new SyncRoleAssignmentsCommand(roleId, {
+				assignments: dto.assignments,
+			}),
 		);
 	}
 }

@@ -16,9 +16,9 @@
  */
 import type { AbilityResponseDto } from './abilityResponseDto';
 
-export interface PolicyAbilityResponseDto {
+export interface PolicyEntryResponseDto {
   /**
-   * PolicyAbility ID
+   * PolicyEntry ID
    * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
    */
   id: string;

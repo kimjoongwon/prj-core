@@ -1,14 +1,14 @@
-import { PolicyAssignmentAggregate } from "@cocrepo/aggregate";
-import { GetRolePoliciesQuery } from "@cocrepo/command";
+import { RoleAssignmentAggregate } from "@cocrepo/aggregate";
+import { GetRoleAssignmentsQuery } from "@cocrepo/command";
 import { QueryHandler } from "@nestjs/cqrs";
 
-@QueryHandler(GetRolePoliciesQuery)
-export class GetRolePoliciesUseCase {
+@QueryHandler(GetRoleAssignmentsQuery)
+export class GetRoleAssignmentsUseCase {
 	constructor(
-		private readonly policyAssignmentService: PolicyAssignmentAggregate,
+		private readonly roleAssignmentService: RoleAssignmentAggregate,
 	) {}
 
-	execute(query: GetRolePoliciesQuery): Promise<unknown> {
-		return this.policyAssignmentService.getRolePolicies(query.roleId);
+	execute(query: GetRoleAssignmentsQuery): Promise<unknown> {
+		return this.roleAssignmentService.getRoleAssignments(query.roleId);
 	}
 }

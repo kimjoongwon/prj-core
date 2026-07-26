@@ -35,7 +35,7 @@ export * from "./move-asset.input";
 export * from "./preview-template-query.input";
 export * from "./reject-tenant-access-request.input";
 export * from "./send-test-template.input";
-export * from "./sync-role-policies.input";
+export * from "./sync-role-assignments.input";
 export * from "./update-ability.input";
 export * from "./update-action.input";
 export * from "./update-folder.input";

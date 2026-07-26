@@ -50,13 +50,13 @@ export type { OidcRuntimeClientData } from "./oidc-runtime-client.data";
 export { OidcRuntimeClientsRepository } from "./oidc-runtime-clients.repository";
 export { PasswordHistoriesRepository } from "./password-histories.repository";
 export { PoliciesRepository } from "./policies.repository";
-export { PolicyAbilitiesRepository } from "./policy-abilities.repository";
+export { PolicyEntriesRepository } from "./policy-entries.repository";
 export {
 	type BookingProgramRecord,
 	ReservationsRepository,
 } from "./reservations.repository";
-export type { PolicyAssignmentInput } from "./role-policies.repository";
-export { RolePoliciesRepository } from "./role-policies.repository";
+export type { RoleAssignmentInput } from "./role-assignments.repository";
+export { RoleAssignmentsRepository } from "./role-assignments.repository";
 export { RolesRepository } from "./roles.repository";
 export { RoutinesRepository } from "./routines.repository";
 export { SafeWalletsRepository } from "./safe-wallets.repository";

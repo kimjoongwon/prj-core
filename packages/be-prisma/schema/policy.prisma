@@ -23,8 +23,8 @@ model Policy {
 
   space           Space           @relation(fields: [spaceId], references: [id], onDelete: Restrict)
   createdBy       User?           @relation(fields: [createdById], references: [id], onDelete: SetNull)
-  policyAbilities PolicyAbility[]
-  rolePolicies    RolePolicy[]
+  entries         PolicyEntry[]
+  roleAssignments RoleAssignment[]
 
   @@unique([spaceId, name])
   @@index([spaceId])

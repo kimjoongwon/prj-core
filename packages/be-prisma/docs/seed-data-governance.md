@@ -54,7 +54,7 @@ DB에 저장되지만 Git 저장소의 정의가 정답이어야 하는 데이�
 - `Role`
 - `Action`
 - `Subject`
-- `Ability`, `Grant`
+- `Ability`, `PolicyEntry`, `RoleAssignment`
 - `OidcClient`
 - 코드가 소유하는 `Translation`
 - system space의 일부 taxonomy

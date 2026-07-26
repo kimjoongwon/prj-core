@@ -8,13 +8,13 @@
 
 import { Ability, AbilityBuilder } from "@casl/ability";
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import type { RolePolicy } from "@cocrepo/entity";
+import type { RoleAssignment } from "@cocrepo/entity";
 import type {
 	Ability as PrismaAbility,
 	Action as PrismaAction,
 	Subject as PrismaSubject,
 } from "@cocrepo/prisma";
-import { RolePoliciesRepository } from "@cocrepo/repository";
+import { RoleAssignmentsRepository } from "@cocrepo/repository";
 import type { ContextTenantSnapshot, ContextUserSnapshot } from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
@@ -25,10 +25,10 @@ import {
 import type { Actions, AppAbility, AppAbilityClass, Subjects } from "./types";
 
 /**
- * RolePolicy에서 추출한 Ability 데이터와 priority를 결합한 타입
+ * RoleAssignment에서 추출한 Ability 데이터와 priority를 결합한 타입
  *
  * @description
- * Prisma에서 조회한 Ability 데이터를 spread하고 RolePolicy.priority를 추가하면
+ * Prisma에서 조회한 Ability 데이터를 spread하고 RoleAssignment.priority를 추가하면
  * AbilityEntity 클래스의 메서드(isAllowed, isDenied 등)를 잃게 됩니다.
  * mergeAbilities/applyAbilityRule에서는 메서드가 필요 없으므로
  * Prisma의 데이터 타입에 관계 필드와 required priority를 추가한
@@ -74,7 +74,7 @@ export class CaslAbilityFactory {
 	private readonly logger = new Logger(CaslAbilityFactory.name);
 
 	constructor(
-		private readonly rolePoliciesRepository: RolePoliciesRepository,
+		private readonly roleAssignmentsRepository: RoleAssignmentsRepository,
 		private readonly cls: ClsService,
 	) {}
 
@@ -86,7 +86,7 @@ export class CaslAbilityFactory {
 	 *
 	 * @description
 	 * 1. x-tenant-id 헤더에서 현재 tenant를 가져와 spaceId 파생
-	 * 2. RolePolicy로 Role 기반 정책 조회 (RolePolicy → Policy → Ability)
+	 * 2. RoleAssignment로 Role 기반 정책 조회 (RoleAssignment → Policy → Ability)
 	 * 3. 권한 병합 (priority 기반)
 	 * 4. AbilityBuilder로 권한 생성
 	 * 5. conditions 파싱 (템플릿 변수 치환)
@@ -118,12 +118,12 @@ export class CaslAbilityFactory {
 			`사용자 권한 생성 시작: userId=${user.id}, roleId=${roleId}, spaceId=${spaceId}`,
 		);
 
-		const rolePolicies =
-			await this.rolePoliciesRepository.findActiveByRoleIdsInSpace(
+		const roleAssignments =
+			await this.roleAssignmentsRepository.findActiveByRoleIdsInSpace(
 				[roleId],
 				spaceId,
 			);
-		const roleAbilities = this.expandRolePolicyAbilities(rolePolicies);
+		const roleAbilities = this.expandRoleAssignmentAbilities(roleAssignments);
 		this.logger.debug(
 			`Role 기반 Ability 조회: ${roleAbilities.length}개, roleId=${roleId}`,
 		);
@@ -184,23 +184,25 @@ export class CaslAbilityFactory {
 		return mergedAbilities;
 	}
 
-	private expandRolePolicyAbilities(
-		rolePolicies: RolePolicy[],
+	private expandRoleAssignmentAbilities(
+		roleAssignments: RoleAssignment[],
 	): AbilityWithPriority[] {
-		return rolePolicies.flatMap((rolePolicy) =>
-			this.expandPolicyAbilities(rolePolicy),
+		return roleAssignments.flatMap((roleAssignment) =>
+			this.expandPolicyEntries(roleAssignment),
 		);
 	}
 
-	private expandPolicyAbilities(assignment: RolePolicy): AbilityWithPriority[] {
-		const policyAbilities = assignment.policy?.policyAbilities ?? [];
+	private expandPolicyEntries(
+		assignment: RoleAssignment,
+	): AbilityWithPriority[] {
+		const policyEntries = assignment.policy?.entries ?? [];
 
-		return policyAbilities
-			.filter((policyAbility) => policyAbility.ability)
-			.map((policyAbility) => ({
-				...(policyAbility.ability! as unknown as PrismaAbility),
-				subject: policyAbility.ability!.subject as PrismaSubject | undefined,
-				action: policyAbility.ability!.action as PrismaAction | undefined,
+		return policyEntries
+			.filter((policyEntry) => policyEntry.ability)
+			.map((policyEntry) => ({
+				...(policyEntry.ability! as unknown as PrismaAbility),
+				subject: policyEntry.ability!.subject as PrismaSubject | undefined,
+				action: policyEntry.ability!.action as PrismaAction | undefined,
 				priority: assignment.priority,
 				assignmentCreatedAt: assignment.createdAt,
 			}));

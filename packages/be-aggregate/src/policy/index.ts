@@ -1,2 +1,2 @@
 export { PolicyAggregate } from "./policy.aggregate";
-export { PolicyAssignmentAggregate } from "./policy-assignment.aggregate";
+export { RoleAssignmentAggregate } from "./role-assignment.aggregate";

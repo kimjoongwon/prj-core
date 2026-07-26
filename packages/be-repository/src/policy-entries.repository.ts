@@ -1,4 +1,4 @@
-import { PolicyAbility } from "@cocrepo/entity";
+import { PolicyEntry } from "@cocrepo/entity";
 import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
@@ -6,8 +6,8 @@ import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-pr
 import { plainToInstance } from "class-transformer";
 
 @Injectable()
-export class PolicyAbilitiesRepository {
-	private readonly logger = new Logger(PolicyAbilitiesRepository.name);
+export class PolicyEntriesRepository {
+	private readonly logger = new Logger(PolicyEntriesRepository.name);
 
 	constructor(
 		private readonly txHost: TransactionHost<
@@ -15,8 +15,8 @@ export class PolicyAbilitiesRepository {
 		>,
 	) {}
 
-	async findActiveByPolicyId(policyId: string): Promise<PolicyAbility[]> {
-		const results = await this.txHost.tx.policyAbility.findMany({
+	async findActiveByPolicyId(policyId: string): Promise<PolicyEntry[]> {
+		const results = await this.txHost.tx.policyEntry.findMany({
 			where: {
 				policyId,
 				removedAt: null,
@@ -26,15 +26,15 @@ export class PolicyAbilitiesRepository {
 			orderBy: { createdAt: "asc" },
 		});
 
-		return results.map((result) => plainToInstance(PolicyAbility, result));
+		return results.map((result) => plainToInstance(PolicyEntry, result));
 	}
 
 	async syncByPolicyId(
 		policyId: string,
 		abilityIds: string[],
-	): Promise<PolicyAbility[]> {
+	): Promise<PolicyEntry[]> {
 		this.logger.debug(
-			`PolicyAbility 동기화: policyId=${policyId.slice(-8)}, count=${abilityIds.length}`,
+			`PolicyEntry 동기화: policyId=${policyId.slice(-8)}, count=${abilityIds.length}`,
 		);
 
 		const uniqueAbilityIds = Array.from(new Set(abilityIds));
@@ -43,7 +43,7 @@ export class PolicyAbilitiesRepository {
 
 		await Promise.all(
 			uniqueAbilityIds.map((abilityId) =>
-				this.txHost.tx.policyAbility.upsert({
+				this.txHost.tx.policyEntry.upsert({
 					where: {
 						policyId_abilityId: {
 							policyId,
@@ -66,10 +66,10 @@ export class PolicyAbilitiesRepository {
 
 	async removeByAbilityId(abilityId: string): Promise<number> {
 		this.logger.debug(
-			`Ability ID로 PolicyAbility 소프트 삭제: abilityId=${abilityId.slice(-8)}`,
+			`Ability ID로 PolicyEntry 소프트 삭제: abilityId=${abilityId.slice(-8)}`,
 		);
 
-		const result = await this.txHost.tx.policyAbility.updateMany({
+		const result = await this.txHost.tx.policyEntry.updateMany({
 			where: {
 				abilityId,
 				removedAt: null,
@@ -86,7 +86,7 @@ export class PolicyAbilitiesRepository {
 		policyId: string,
 		abilityIds: string[],
 	): Promise<void> {
-		await this.txHost.tx.policyAbility.updateMany({
+		await this.txHost.tx.policyEntry.updateMany({
 			where: {
 				policyId,
 				removedAt: null,
@@ -106,6 +106,6 @@ export class PolicyAbilitiesRepository {
 					action: true,
 				},
 			},
-		} satisfies Prisma.PolicyAbilityInclude;
+		} satisfies Prisma.PolicyEntryInclude;
 	}
 }

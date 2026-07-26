@@ -1,9 +1,9 @@
-import { GetRolePoliciesUseCase } from "./get-role-policies.usecase";
-import { SyncRolePoliciesUseCase } from "./sync-role-policies.usecase";
+import { GetRoleAssignmentsUseCase } from "./get-role-assignments.usecase";
+import { SyncRoleAssignmentsUseCase } from "./sync-role-assignments.usecase";
 
-export const PolicyAssignmentQueryHandlers = [GetRolePoliciesUseCase];
+export const RoleAssignmentQueryHandlers = [GetRoleAssignmentsUseCase];
 
-export const PolicyAssignmentCommandHandlers = [SyncRolePoliciesUseCase];
+export const RoleAssignmentCommandHandlers = [SyncRoleAssignmentsUseCase];
 
-export * from "./get-role-policies.usecase";
-export * from "./sync-role-policies.usecase";
+export * from "./get-role-assignments.usecase";
+export * from "./sync-role-assignments.usecase";

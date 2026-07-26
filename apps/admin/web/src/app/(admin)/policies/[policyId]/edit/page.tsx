@@ -8,14 +8,10 @@ import {
 	getGetPolicyByIdQueryKey,
 	type PolicyResponseDto,
 	useGetPolicyById,
-	useSyncPolicyAbilities,
+	useSyncPolicyEntries,
 	useUpdatePolicy,
 } from "@cocrepo/api/core/policies";
-import {
-	Button,
-	type PolicyAbilityOption,
-	PolicyEditScreen,
-} from "@cocrepo/ui";
+import { Button, PolicyEditScreen, type PolicyEntryOption } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Save } from "lucide-react";
@@ -40,20 +36,35 @@ export default observer(function PolicyEditScreenRoute() {
 	const policy = response?.data;
 	const { data: abilitiesResponse } = useGetAbilities();
 	const abilities = (abilitiesResponse?.data ?? []).map(mapAbilityOption);
-	const { mutate: syncPolicyAbilities, isPending: isSyncingAbilities } =
-		useSyncPolicyAbilities();
+	const { mutate: syncPolicyEntries, isPending: isSyncingAbilities } =
+		useSyncPolicyEntries();
 	const { mutate: updatePolicy, isPending } = useUpdatePolicy({
 		mutation: {
 			onSuccess: () => {
-				syncPolicyAbilities(
+				syncPolicyEntries(
 					{
 						policyId,
-						data: { abilityIds: state.abilityIds },
+						data: {
+							entries: state.abilityIds.map((abilityId) => ({
+								abilityId,
+							})),
+						},
 					},
 					{
 						onSuccess: () => {
 							queryClient.invalidateQueries({
 								queryKey: getGetPolicyByIdQueryKey(policyId),
+							});
+							queryClient.invalidateQueries({
+								predicate: ({ queryKey }) => {
+									const key = String(queryKey[0]);
+									return (
+										(key.includes("/api/v1/roles/") &&
+											key.includes("/assignments")) ||
+										(key.includes("/api/v1/users/") &&
+											key.includes("/tenants/"))
+									);
+								},
 							});
 							toast.success("정책 수정 성공", {
 								description: "정책이 수정되었습니다.",
@@ -77,7 +88,7 @@ export default observer(function PolicyEditScreenRoute() {
 		state.displayName = policy.displayName || "";
 		state.description = policy.description || "";
 		state.isSystem = policy.isSystem;
-		state.abilityIds = getPolicyAbilityIds(policy);
+		state.abilityIds = getPolicyEntryIds(policy);
 		state.isHydrated = true;
 	}, [policy, state]);
 
@@ -136,7 +147,7 @@ export default observer(function PolicyEditScreenRoute() {
 	);
 });
 
-function mapAbilityOption(ability: AbilityResponseDto): PolicyAbilityOption {
+function mapAbilityOption(ability: AbilityResponseDto): PolicyEntryOption {
 	const subject =
 		ability.subject?.displayName || ability.subject?.name || "Subject";
 	const action =
@@ -148,9 +159,6 @@ function mapAbilityOption(ability: AbilityResponseDto): PolicyAbilityOption {
 	};
 }
 
-function getPolicyAbilityIds(policy?: PolicyResponseDto): string[] {
-	return (
-		policy?.policyAbilities?.map((policyAbility) => policyAbility.abilityId) ??
-		[]
-	);
+function getPolicyEntryIds(policy?: PolicyResponseDto): string[] {
+	return policy?.entries?.map((policyEntry) => policyEntry.abilityId) ?? [];
 }

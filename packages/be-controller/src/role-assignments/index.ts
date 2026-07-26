@@ -1,1 +1,1 @@
-export * from "./policy-assignments.controller";
+export * from "./role-assignments.controller";

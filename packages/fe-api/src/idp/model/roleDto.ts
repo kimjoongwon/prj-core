@@ -16,6 +16,7 @@
  */
 import type { RoleDtoClassification } from './roleDtoClassification';
 import type { RoleAssociationDto } from './roleAssociationDto';
+import type { RoleAssignmentResponseDto } from './roleAssignmentResponseDto';
 
 export interface RoleDto {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$ */
@@ -46,4 +47,6 @@ export interface RoleDto {
   classification: RoleDtoClassification;
   /** @nullable */
   associations: RoleAssociationDto[] | null;
+  /** 역할에 연결된 정책 할당 목록 */
+  assignments?: RoleAssignmentResponseDto[];
 }

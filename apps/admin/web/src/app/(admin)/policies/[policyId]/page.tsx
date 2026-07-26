@@ -11,8 +11,8 @@ import {
 } from "@cocrepo/api/core/policies";
 import {
 	Button,
-	type PolicyAbilityOption,
 	PolicyEditScreen,
+	type PolicyEntryOption,
 	type PolicyFormState,
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
@@ -101,7 +101,7 @@ export default observer(function PolicyDetailRoute() {
 	);
 });
 
-function mapAbilityOption(ability: AbilityResponseDto): PolicyAbilityOption {
+function mapAbilityOption(ability: AbilityResponseDto): PolicyEntryOption {
 	const subject =
 		ability.subject?.displayName || ability.subject?.name || "Subject";
 	const action =
@@ -119,13 +119,10 @@ function mapPolicyFormState(policy: PolicyResponseDto): PolicyFormState {
 		displayName: policy.displayName ?? "",
 		description: policy.description ?? "",
 		isSystem: policy.isSystem,
-		abilityIds: getPolicyAbilityIds(policy),
+		abilityIds: getPolicyEntryIds(policy),
 	};
 }
 
-function getPolicyAbilityIds(policy?: PolicyResponseDto): string[] {
-	return (
-		policy?.policyAbilities?.map((policyAbility) => policyAbility.abilityId) ??
-		[]
-	);
+function getPolicyEntryIds(policy?: PolicyResponseDto): string[] {
+	return policy?.entries?.map((policyEntry) => policyEntry.abilityId) ?? [];
 }

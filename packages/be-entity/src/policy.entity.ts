@@ -1,8 +1,8 @@
 import type { Policy as PolicyEntity } from "@cocrepo/prisma";
 import { Type } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
-import { PolicyAbility } from "./policy-ability.entity";
-import { RolePolicy } from "./role-policy.entity";
+import { PolicyEntry } from "./policy-entry.entity";
+import { RoleAssignment } from "./role-assignment.entity";
 import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
 
@@ -22,11 +22,11 @@ export class Policy extends AbstractEntity implements PolicyEntity {
 	space?: Space;
 	createdBy?: User | null;
 
-	@Type(() => PolicyAbility)
-	policyAbilities?: PolicyAbility[];
+	@Type(() => PolicyEntry)
+	entries?: PolicyEntry[];
 
-	@Type(() => RolePolicy)
-	rolePolicies?: RolePolicy[];
+	@Type(() => RoleAssignment)
+	roleAssignments?: RoleAssignment[];
 
 	isRemoved(): boolean {
 		return this.removedAt !== null;

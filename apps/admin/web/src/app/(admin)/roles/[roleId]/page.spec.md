@@ -8,17 +8,17 @@
 | route 파일 | `apps/admin/web/src/app/(admin)/roles/[roleId]/page.tsx` |
 | 사용자 목표 | 운영자가 Role aggregate root 기준으로 최종 Policy assignment 상태를 보고, 변경하고, 저장합니다. |
 | 운영 목표 | Role 상세 route 하나가 Role 기본 정보, 정책 할당 렌더링, API wiring, 저장 확인, 검증 계약을 단일 소유합니다. |
-| 성공 기준 | `/roles/[roleId]`에서 현재 할당/미할당/활성/우선순위/변경 요약이 보이고, 저장 전 확인 후 `syncRolePolicies`로 전체 동기화합니다. |
+| 성공 기준 | `/roles/[roleId]`에서 현재 할당/미할당/활성/우선순위/변경 요약이 보이고, 저장 전 확인 후 `syncRoleAssignments`로 전체 동기화합니다. |
 | 범위 포함 | Role 상세 화면, 정책 할당 편집, 저장 확인 modal, 삭제 modal, 권한/시스템 Role readOnly 처리, route-local state와 테스트 |
 | 범위 제외 | Policy 내부 Ability 구성 화면, Policy CRUD 자체 개편, Ability/Action/Subject CRUD 개편, 새 권한 엔진 |
-| 기존 구현 재사용 후보 | `RoleEditScreen`, `RolePolicyAssignmentForm`, `RoleForm`, `getRoleById`, `getPolicies`, `getRolePolicies`, `syncRolePolicies`, `deleteRole` |
+| 기존 구현 재사용 후보 | `RoleEditScreen`, `RoleAssignmentForm`, `RoleForm`, `getRoleById`, `getPolicies`, `getRoleAssignments`, `syncRoleAssignments`, `deleteRole` |
 | 신규 생성/정리 사유 | Screen/Feature/Form 렌더링 계약을 route가 직접 소유하도록 정리하고, 중복 기획 문서를 제거합니다. |
 
 ## 사용자 / 역할 / 권한
 
 | 사용자/역할 | 목적 | 허용 행동 | 제한/금지 | 관련 API | 비고 |
 |-------------|------|-----------|-----------|----------|------|
-| `PLATFORM_ADMIN` | Role 정책 할당 관리 | Role 조회, Policy 목록 조회, RolePolicy 조회, 비시스템 Role 정책 편집/저장, 비시스템 Role 수정/삭제 이동 | 시스템 Role 정책 저장/삭제 금지 | `getRoleById`, `getPolicies`, `getRolePolicies`, `syncRolePolicies`, `deleteRole` | primary actor |
+| `PLATFORM_ADMIN` | Role 정책 할당 관리 | Role 조회, Policy 목록 조회, RoleAssignment 조회, 비시스템 Role 정책 편집/저장, 비시스템 Role 수정/삭제 이동 | 시스템 Role 정책 저장/삭제 금지 | `getRoleById`, `getPolicies`, `getRoleAssignments`, `syncRoleAssignments`, `deleteRole` | primary actor |
 | `COMPANY_MANAGER` | Role 기본 정보 확인 | Role 상세 조회 | 정책 할당 조회/수정 API 호출 금지 | `getRoleById` | route에서 assignment section을 숨기거나 readOnly 권한 안내로 처리합니다. |
 | 시스템 Role | seed/권한 체계 보호 대상 | 조회 | 기본 정보 수정, 삭제, 정책 할당 저장 금지 | `getRoleById` | `role.isSystem=true`이면 정책 편집 CTA disabled |
 
@@ -27,33 +27,33 @@
 | 도메인 객체 | 책임 | 주요 필드/값 | 상태/lifecycle | 정책/검증 | 소유 패키지 | 비고 |
 |-------------|------|--------------|----------------|-----------|-------------|------|
 | `Role` | 정책 할당 화면의 aggregate root | `id`, `name`, `displayName`, `description`, `isSystem`, `removedAt` | 조회 -> readOnly 표시 -> 비시스템 Role만 편집/삭제 | 시스템 Role은 삭제/수정/assignment 저장 금지 | `packages/be-prisma/schema/role.prisma`, `packages/be-aggregate/src/role/role.aggregate.ts` | route canonical root |
-| `Policy` | Role에 할당 가능한 정책 후보 | `id`, `name`, `displayName`, `description`, `isSystem`, `policyAbilities` | 목록 조회 -> 검색/필터 -> 선택/해제 | 현재 scope에서 조회 가능한 Policy만 후보 | `packages/be-prisma/schema/policy.prisma` | row 렌더링 후보 |
-| `RolePolicy` | Role과 Policy의 최종 할당 결과 | `roleId`, `policyId`, `isActive`, `priority` | baseline 조회 -> local edit -> 저장 확인 -> 전체 동기화 | 중복 `policyId` 제거, missing assignment soft remove, priority number 검증 | `packages/be-prisma/schema/role-policy.prisma`, `packages/be-aggregate/src/policy/policy-assignment.aggregate.ts`, `packages/be-repository/src/role-policies.repository.ts` | 핵심 편집 대상 |
+| `Policy` | Role에 할당 가능한 정책 후보 | `id`, `name`, `displayName`, `description`, `isSystem`, `entries` | 목록 조회 -> 검색/필터 -> 선택/해제 | 현재 scope에서 조회 가능한 Policy만 후보 | `packages/be-prisma/schema/policy.prisma` | row 렌더링 후보 |
+| `RoleAssignment` | Role과 Policy의 최종 할당 결과 | `roleId`, `policyId`, `isActive`, `priority` | baseline 조회 -> local edit -> 저장 확인 -> 전체 동기화 | 중복 `policyId` 제거, missing assignment soft remove, priority number 검증 | `packages/be-prisma/schema/role-assignment.prisma`, `packages/be-aggregate/src/policy/role-assignment.aggregate.ts`, `packages/be-repository/src/role-assignments.repository.ts` | 핵심 편집 대상 |
 
 ## 사용자 여정
 
 | 여정 | 행위자 | 시작점 | 단계 | 완료 조건 | 실패/복구 | 관련 API |
 |------|--------|--------|------|-----------|-----------|----------|
 | Role 상세 확인 | `PLATFORM_ADMIN`, `COMPANY_MANAGER` | `/roles` 목록 | 상세 진입 -> Role 기본 정보 확인 -> 상태/시스템 여부 확인 | Role title, metadata, 상태가 보임 | 404면 목록 이동 CTA | `getRoleById` |
-| 정책 할당 확인 | `PLATFORM_ADMIN` | Role 상세 | 정책 할당 section 확인 -> 현재 할당 수/활성 수/priority 확인 | 후보 Policy와 assignment 상태가 한 화면에서 보임 | policy API 실패 시 section error와 재시도 | `getPolicies`, `getRolePolicies` |
+| 정책 할당 확인 | `PLATFORM_ADMIN` | Role 상세 | 정책 할당 section 확인 -> 현재 할당 수/활성 수/priority 확인 | 후보 Policy와 assignment 상태가 한 화면에서 보임 | policy API 실패 시 section error와 재시도 | `getPolicies`, `getRoleAssignments` |
 | 정책 할당 편집 | `PLATFORM_ADMIN` | 정책 할당 section | 편집 시작 -> 검색/필터 -> 선택/해제 -> active/priority 조정 -> 변경 요약 확인 | 저장 CTA가 dirty 상태에서 활성화 | 취소 시 baseline 복원 | local route state |
-| 정책 할당 저장 | `PLATFORM_ADMIN` | 저장 CTA | 저장 확인 modal -> PUT -> 재조회 -> 성공 toast | 서버 baseline과 local state가 일치 | 400/403/404는 modal 유지 또는 section error 표시 | `syncRolePolicies`, `getRolePolicies` invalidation |
-| 보호 Role 접근 | `PLATFORM_ADMIN` | 시스템 Role 상세 | 정책 할당 상태 확인 | 편집/삭제 CTA disabled | 강제 PUT 시 backend guard가 거부 | `getRoleById`, `getRolePolicies` |
+| 정책 할당 저장 | `PLATFORM_ADMIN` | 저장 CTA | 저장 확인 modal -> PUT -> 재조회 -> 성공 toast | 서버 baseline과 local state가 일치 | 400/403/404는 modal 유지 또는 section error 표시 | `syncRoleAssignments`, `getRoleAssignments` invalidation |
+| 보호 Role 접근 | `PLATFORM_ADMIN` | 시스템 Role 상세 | 정책 할당 상태 확인 | 편집/삭제 CTA disabled | 강제 PUT 시 backend guard가 거부 | `getRoleById`, `getRoleAssignments` |
 
 ## 백엔드 / API / 기반 계약
 
 | 그룹 | 재사용/수정/신규 | 대상 파일 | 계약 | 소스 담당 `agent_type` | 소비/Wiring `agent_type` | 검증 `agent_type` |
 |------|------------------|-----------|------|-------------------------|---------------------------|-------------------|
-| Prisma / Database | 재사용 | `packages/be-prisma/schema/role.prisma`, `packages/be-prisma/schema/policy.prisma`, `packages/be-prisma/schema/role-policy.prisma` | `Role` root, `Policy` root, `RolePolicy` assignment join 유지 | `be-prisma-builder` | `be-repository-builder` | `be-prisma-builder` |
-| Common Schema | 신규 | `packages/common-schema/src/schemas/access-control/sync-role-policies.schema.ts` | route 저장 전 `rolePolicies[].policyId/isActive/priority` 검증에 사용할 `SyncRolePoliciesSchema` | `common-schema-builder` | `fe-route-agent` | `common-schema-builder` |
-| DTO / Query DTO | 재사용 | `packages/be-dto/src/policy-assignments/*` | `SyncRolePoliciesDto`, `PolicyAssignmentResponseDto` 유지 | `be-dto-builder` | `be-controller-builder` | `be-dto-builder` |
-| Repository | 재사용 | `packages/be-repository/src/role-policies.repository.ts` | 전체 동기화와 missing assignment soft remove 유지 | `be-repository-builder` | `be-aggregate-builder` | `be-repository-builder` |
-| Aggregate | 수정 | `packages/be-aggregate/src/policy/policy-assignment.aggregate.ts` | `syncRolePolicies`에 시스템 Role assignment 변경 금지 guard 추가 | `be-aggregate-builder` | `be-usecase-builder` | `be-aggregate-builder` |
-| UseCase / Command | 재사용 | `packages/be-usecase/src/core/policy-assignment/*`, `packages/be-command/src/core/*role-policies*` | 조회/저장 message 유지 | `be-usecase-builder` | `be-controller-builder` | `be-usecase-builder` |
-| Controller | 재사용 | `packages/be-controller/src/policy-assignments/policy-assignments.controller.ts`, `packages/be-controller/src/roles/roles.controller.ts`, `packages/be-controller/src/policies/policies.controller.ts` | `getRoleById`, `getPolicies`, `getRolePolicies`, `syncRolePolicies`, `deleteRole` 소비 | `be-controller-builder` | `fe-route-agent` | `be-controller-builder` |
-| Codegen / API Client | 재사용 | `packages/fe-api/src/core/**` | API shape 변경이 없으면 재생성 없음 | `fe-hook-agent` | `fe-route-agent` | `fe-hook-agent` |
+| Prisma / Database | 재사용 | `packages/be-prisma/schema/role.prisma`, `packages/be-prisma/schema/policy.prisma`, `packages/be-prisma/schema/role-assignment.prisma` | `Role` root, `Policy` root, `RoleAssignment` assignment join 유지 | `be-prisma-builder` | `be-repository-builder` | `be-prisma-builder` |
+| Common Schema | 신규 | `packages/common-schema/src/schemas/access-control/sync-role-assignments.schema.ts` | route 저장 전 `assignments[].policyId/isActive/priority` 검증에 사용할 `SyncRoleAssignmentsSchema` | `common-schema-builder` | `fe-route-agent` | `common-schema-builder` |
+| DTO / Query DTO | 재사용 | `packages/be-dto/src/role-assignments/*` | `SyncRoleAssignmentsDto`, `RoleAssignmentResponseDto` 유지 | `be-dto-builder` | `be-controller-builder` | `be-dto-builder` |
+| Repository | 재사용 | `packages/be-repository/src/role-assignments.repository.ts` | 전체 동기화와 missing assignment soft remove 유지 | `be-repository-builder` | `be-aggregate-builder` | `be-repository-builder` |
+| Aggregate | 수정 | `packages/be-aggregate/src/policy/role-assignment.aggregate.ts` | `syncRoleAssignments`에 시스템 Role assignment 변경 금지 guard 추가 | `be-aggregate-builder` | `be-usecase-builder` | `be-aggregate-builder` |
+| UseCase / Command | 재사용 | `packages/be-usecase/src/core/role-assignment/*`, `packages/be-command/src/core/*role-assignments*` | 조회/저장 message 유지 | `be-usecase-builder` | `be-controller-builder` | `be-usecase-builder` |
+| Controller | 재사용 | `packages/be-controller/src/role-assignments/role-assignments.controller.ts`, `packages/be-controller/src/roles/roles.controller.ts`, `packages/be-controller/src/policies/policies.controller.ts` | `getRoleById`, `getPolicies`, `getRoleAssignments`, `syncRoleAssignments`, `deleteRole` 소비 | `be-controller-builder` | `fe-route-agent` | `be-controller-builder` |
+| Codegen / API Client | 수정 | `packages/fe-api/src/core/**` | 새 Role Assignment 경로와 DTO를 기준으로 재생성 | `fe-hook-agent` | `fe-route-agent` | `fe-hook-agent` |
 | Route / UI State | 수정 | `apps/admin/web/src/app/(admin)/roles/[roleId]/page.tsx`, 필요 시 route-local util | route가 API, modal, dirty 계산, screen/feature/form 렌더링 계약을 단일 소유 | `fe-route-agent` | `fe-form-agent`, `fe-storybook-agent` | `fe-route-agent` |
-| Form Component | 수정 가능 | `packages/fe-ui/src/form/RolePolicyAssignmentForm/*`, `packages/fe-ui/src/form/RoleForm/*` | 별도 spec 없이 이 route spec의 렌더링 계약에 맞춰 입력 leaf를 정리 | `fe-form-agent` | `fe-route-agent` | `fe-form-agent` |
+| Form Component | 수정 가능 | `packages/fe-ui/src/form/RoleAssignmentForm/*`, `packages/fe-ui/src/form/RoleForm/*` | 별도 spec 없이 이 route spec의 렌더링 계약에 맞춰 입력 leaf를 정리 | `fe-form-agent` | `fe-route-agent` | `fe-form-agent` |
 
 ## 디자인 정렬
 
@@ -71,7 +71,7 @@
 |----------|------|------|---------------------|------------|------|
 | `RoleEditScreen` | 재사용 | `packages/fe-ui/src/screen/RoleEditScreen/RoleEditScreen.tsx` | Role 상세 page shell, `title`, `description`, `actions`, `readOnly`, `isLoading`, `notFound`, `children` 주입 | `fe-route-agent` 소비 | 별도 spec 없이 이 route spec의 화면 계약을 따릅니다. |
 | `RoleForm` | 재사용 | `packages/fe-ui/src/form/RoleForm/RoleForm.tsx` | Role 기본 정보 readOnly 렌더링, name/displayName/description/isSystem 표시 | `fe-form-agent` 수정 가능 | 기본 정보 form 자체 구조는 유지합니다. |
-| `RolePolicyAssignmentForm` | 수정 | `packages/fe-ui/src/form/RolePolicyAssignmentForm/RolePolicyAssignmentForm.tsx` | Policy 후보 목록, 선택/해제, active switch, priority input, loading/empty/readOnly 표시 | `fe-form-agent` | 검색/필터/정렬/table-like density는 이 route spec 기준으로 보강합니다. |
+| `RoleAssignmentForm` | 수정 | `packages/fe-ui/src/form/RoleAssignmentForm/RoleAssignmentForm.tsx` | Policy 후보 목록, 선택/해제, active switch, priority input, loading/empty/readOnly 표시 | `fe-form-agent` | 검색/필터/정렬/table-like density는 이 route spec 기준으로 보강합니다. |
 | route page | 수정 | `apps/admin/web/src/app/(admin)/roles/[roleId]/page.tsx` | API query/mutation, permission guard, modal open/close, baseline/current assignment state, dirty summary 계산 | `fe-route-agent` | screen/feature/form 렌더링 계약의 최종 owner입니다. |
 
 ### layout / widget / input 재사용
@@ -96,9 +96,9 @@
 |------|------|
 | 신규 Screen spec | 만들지 않습니다. 화면 렌더링은 이 route/page spec이 소유합니다. |
 | 신규 Feature spec | 만들지 않습니다. 정책 할당 feature 렌더링은 이 route/page spec이 소유합니다. |
-| 신규 `RolePolicyAssignmentPanel` | 만들지 않습니다. route가 section/header/dirty summary/modal을 소유하고, `RolePolicyAssignmentForm`은 입력 leaf로 유지합니다. |
-| 신규 DataGrid | 이번 scope에서는 만들지 않습니다. table-like list를 `RolePolicyAssignmentForm` 내부 markup으로 구현합니다. 이후 공용화가 필요할 때 별도 승인합니다. |
-| 기존 `RolePolicyAssignmentForm` 수정 기준 | 검색/필터/정렬, dense row, readOnly/static row, loading/empty를 이 spec의 화면 러프에 맞춰 보강합니다. |
+| 신규 `RoleAssignmentPanel` | 만들지 않습니다. route가 section/header/dirty summary/modal을 소유하고, `RoleAssignmentForm`은 입력 leaf로 유지합니다. |
+| 신규 DataGrid | 이번 scope에서는 만들지 않습니다. table-like list를 `RoleAssignmentForm` 내부 markup으로 구현합니다. 이후 공용화가 필요할 때 별도 승인합니다. |
+| 기존 `RoleAssignmentForm` 수정 기준 | 검색/필터/정렬, dense row, readOnly/static row, loading/empty를 이 spec의 화면 러프에 맞춰 보강합니다. |
 
 ## 화면 렌더링
 
@@ -256,7 +256,7 @@ save error
 | 해제 0개                                     |
 | 수정 2개                                     |
 |                                              |
-| 저장 후 RolePolicy가 서버 기준으로 전체      |
+| 저장 후 RoleAssignment가 서버 기준으로 전체      |
 | 동기화됩니다.                                |
 +----------------------------------------------+
 |                              [취소] [저장]   |
@@ -300,8 +300,8 @@ save error
 | policy candidate query | `page.tsx` | current auth scope | `policies` | 권한 없는 사용자는 호출하지 않습니다. |
 | assignment query | `page.tsx` | `roleId` | baseline assignments | 권한 없는 사용자는 호출하지 않습니다. |
 | local assignment state | `page.tsx` 또는 route-local state file | baseline assignments | current assignments, dirty counts | route가 baseline/current 원천을 보존합니다. |
-| policy row rendering | `RolePolicyAssignmentForm` leaf | policy, assignment, readOnly | toggle/select/priority event | 렌더링 계약은 이 route spec이 소유합니다. |
-| save event | `page.tsx` | current assignments | `syncRolePolicies({ roleId, data })` | 저장 전 `SyncRolePoliciesSchema` 검증 |
+| policy row rendering | `RoleAssignmentForm` leaf | policy, assignment, readOnly | toggle/select/priority event | 렌더링 계약은 이 route spec이 소유합니다. |
+| save event | `page.tsx` | current assignments | `syncRoleAssignments({ roleId, data })` | 저장 전 `SyncRoleAssignmentsSchema` 검증 |
 | cancel event | `page.tsx` | baseline assignments | current reset, editing false | modal close 포함 |
 | delete event | `page.tsx` | roleId | `deleteRole`, 목록 이동 | 시스템 Role에서는 CTA 숨김/disabled |
 
@@ -312,11 +312,11 @@ save error
 | 단계 id | 단계 | 담당 `agent_type` | 입력 spec/파일 | 예상 산출물 | 생성/수정 예정 경로 | 소비 단계 / `agent_type` | 인계 조건 | 검증 기준 |
 |---------|------|-------------------|----------------|-------------|----------------------|---------------------------|-----------|-----------|
 | RPA-PAGE-00 | route/page spec 확정 | `orch-delivery` | 사용자 요청, 기존 route 조사 | 단일 route/page spec | `apps/admin/web/src/app/(admin)/roles/[roleId]/page.spec.md` | RPA-PAGE-01, RPA-PAGE-02, RPA-PAGE-03 / owners | 화면 러프와 산출물 경로가 route spec 안에 존재 | `rg -n "화면 렌더링|산출물 시뮬레이션" apps/admin/web/src/app/\\(admin\\)/roles/\\[roleId\\]/page.spec.md` |
-| RPA-PAGE-01 | backend guard | `be-aggregate-builder` | 이 spec, `packages/be-aggregate/src/policy/policy-assignment.aggregate.ts` | 시스템 Role assignment 변경 금지 guard/test | `packages/be-aggregate/src/policy/policy-assignment.aggregate.ts`, `packages/be-aggregate/__tests__/policy-assignment.aggregate.spec.ts` | RPA-PAGE-03 / `fe-route-agent` | sync 시 system role이면 forbidden, 조회는 허용 | aggregate unit test |
-| RPA-PAGE-02 | common schema | `common-schema-builder` | 이 spec | `SyncRolePoliciesSchema`와 export/test | `packages/common-schema/src/schemas/access-control/sync-role-policies.schema.ts`, `packages/common-schema/src/schemas/access-control/index.ts`, `packages/common-schema/src/schemas/index.ts`, `packages/common-schema/src/schemas/access-control/sync-role-policies.schema.test.ts` | RPA-PAGE-03 / `fe-route-agent` | schema export name 확정 | common-schema typecheck/test |
+| RPA-PAGE-01 | backend guard | `be-aggregate-builder` | 이 spec, `packages/be-aggregate/src/policy/role-assignment.aggregate.ts` | 시스템 Role assignment 변경 금지 guard/test | `packages/be-aggregate/src/policy/role-assignment.aggregate.ts`, `packages/be-aggregate/__tests__/policy-relationship.aggregate.spec.ts` | RPA-PAGE-03 / `fe-route-agent` | sync 시 system role이면 forbidden, 조회는 허용 | aggregate unit test |
+| RPA-PAGE-02 | common schema | `common-schema-builder` | 이 spec | `SyncRoleAssignmentsSchema`와 export/test | `packages/common-schema/src/schemas/access-control/sync-role-assignments.schema.ts`, `packages/common-schema/src/schemas/access-control/index.ts`, `packages/common-schema/src/schemas/index.ts`, `packages/common-schema/src/schemas/access-control/sync-role-assignments.schema.test.ts` | RPA-PAGE-03 / `fe-route-agent` | schema export name 확정 | common-schema typecheck/test |
 | RPA-PAGE-03 | route rendering/wiring | `fe-route-agent` | 이 spec, RPA-PAGE-01, RPA-PAGE-02 | Role detail route refactor | `apps/admin/web/src/app/(admin)/roles/[roleId]/page.tsx`, 필요 시 `apps/admin/web/src/app/(admin)/roles/[roleId]/*.ts` | RPA-PAGE-04, RPA-PAGE-06 / `fe-form-agent`, `fe-route-agent` | route가 API, modal, dirty, screen/feature/form 렌더링을 소유 | admin-web typecheck |
-| RPA-PAGE-04 | form leaf alignment | `fe-form-agent` | 이 spec, RPA-PAGE-03 | assignment input leaf 정리 | `packages/fe-ui/src/form/RolePolicyAssignmentForm/*`, `packages/fe-ui/src/form/RoleForm/*` | RPA-PAGE-05, RPA-PAGE-06 / `fe-storybook-agent`, `fe-route-agent` | 검색/필터/선택/활성/우선순위 입력 이벤트가 route 계약과 일치 | ui typecheck/unit test |
-| RPA-PAGE-05 | Storybook states | `fe-storybook-agent` | 이 spec, RPA-PAGE-04 | route 계약 기반 UI 상태 stories | `packages/fe-ui/src/form/RolePolicyAssignmentForm/*.stories.tsx` 또는 기존 story 위치 | RPA-PAGE-06 / `fe-route-agent` | loading/empty/readOnly/dirty/long text 포함 | storybook check 또는 build |
+| RPA-PAGE-04 | form leaf alignment | `fe-form-agent` | 이 spec, RPA-PAGE-03 | assignment input leaf 정리 | `packages/fe-ui/src/form/RoleAssignmentForm/*`, `packages/fe-ui/src/form/RoleForm/*` | RPA-PAGE-05, RPA-PAGE-06 / `fe-storybook-agent`, `fe-route-agent` | 검색/필터/선택/활성/우선순위 입력 이벤트가 route 계약과 일치 | ui typecheck/unit test |
+| RPA-PAGE-05 | Storybook states | `fe-storybook-agent` | 이 spec, RPA-PAGE-04 | route 계약 기반 UI 상태 stories | `packages/fe-ui/src/form/RoleAssignmentForm/*.stories.tsx` 또는 기존 story 위치 | RPA-PAGE-06 / `fe-route-agent` | loading/empty/readOnly/dirty/long text 포함 | storybook check 또는 build |
 | RPA-PAGE-06 | stale cleanup | `orch-delivery` | 완료 보고 | 중복 기획 문서 제거 확인 | none-cleanup | none-cleanup | route/page spec 외 중복 화면 spec 없음 | 금지 grep 0건 |
 
 ### 에이전트 배정 매트릭스
@@ -336,7 +336,7 @@ save error
 ```mermaid
 flowchart TD
   A["RPA-PAGE-00 orch-delivery route/page spec"] --> B["RPA-PAGE-01 be-aggregate-builder system Role guard"]
-  A --> C["RPA-PAGE-02 common-schema-builder SyncRolePoliciesSchema"]
+  A --> C["RPA-PAGE-02 common-schema-builder SyncRoleAssignmentsSchema"]
   B --> D["RPA-PAGE-03 fe-route-agent route rendering/wiring"]
   C --> D
   D --> E["RPA-PAGE-04 fe-form-agent form leaf alignment"]
@@ -363,10 +363,10 @@ flowchart TD
 
 | 테스트 대상 | 검증 항목 | 테스트 파일 | mock/stub | 작성 agent_type | 검증 agent_type | 통과 기준 |
 |-------------|-----------|-------------|-----------|------------------|------------------|-----------|
-| `SyncRolePoliciesSchema` | UUID, boolean, priority number, empty array, duplicate policy handling | `packages/common-schema/src/schemas/access-control/sync-role-policies.schema.test.ts` | none | `common-schema-builder` | `common-schema-builder` | Given-When-Then 통과 |
-| `PolicyAssignmentAggregate` | 시스템 Role sync 금지, non-system sync 허용, 조회 허용 | `packages/be-aggregate/__tests__/policy-assignment.aggregate.spec.ts` | repository mock | `be-aggregate-builder` | `be-aggregate-builder` | forbidden/pass 케이스 통과 |
+| `SyncRoleAssignmentsSchema` | UUID, boolean, priority number, empty array, duplicate policy handling | `packages/common-schema/src/schemas/access-control/sync-role-assignments.schema.test.ts` | none | `common-schema-builder` | `common-schema-builder` | Given-When-Then 통과 |
+| `RoleAssignmentAggregate` | 시스템 Role sync 금지, non-system sync 허용, 조회 허용 | `packages/be-aggregate/__tests__/policy-relationship.aggregate.spec.ts` | repository mock | `be-aggregate-builder` | `be-aggregate-builder` | forbidden/pass 케이스 통과 |
 | route dirty mapper | added/removed/updated count, baseline reset | `apps/admin/web/src/app/(admin)/roles/[roleId]/page.test.tsx` 또는 route-local util test | policy fixture | `fe-route-agent` | `fe-route-agent` | dirty summary 계산 일치 |
-| `RolePolicyAssignmentForm` | 선택/해제, active toggle, priority change, readOnly guard | `packages/fe-ui/src/form/RolePolicyAssignmentForm/RolePolicyAssignmentForm.test.tsx` | local state fixture | `fe-form-agent` | `fe-form-agent` | event와 disabled guard 통과 |
+| `RoleAssignmentForm` | 선택/해제, active toggle, priority change, readOnly guard | `packages/fe-ui/src/form/RoleAssignmentForm/RoleAssignmentForm.test.tsx` | local state fixture | `fe-form-agent` | `fe-form-agent` | event와 disabled guard 통과 |
 
 ### E2E 테스트 인벤토리
 
@@ -384,7 +384,7 @@ flowchart TD
 | admin web typecheck | `pnpm --filter=admin-web run type-check` | `fe-route-agent` | 0 errors |
 | ui typecheck | `pnpm --filter=@cocrepo/ui run type-check` | `fe-form-agent` | 0 errors |
 | common schema typecheck | `pnpm --filter=@cocrepo/common-schema run type-check` | `common-schema-builder` | 0 errors |
-| aggregate guard test | `pnpm --filter=@cocrepo/aggregate exec vitest run packages/be-aggregate/__tests__/policy-assignment.aggregate.spec.ts` | `be-aggregate-builder` | 0 failures |
+| aggregate guard test | `pnpm --filter=@cocrepo/aggregate exec jest --runInBand packages/be-aggregate/__tests__/policy-relationship.aggregate.spec.ts` | `be-aggregate-builder` | 0 failures |
 | 단일 spec 확인 | `find docs apps packages -path '*node_modules*' -prune -o -name '*Role*Policy*.spec.md' -print` | `orch-delivery` | 이 `page.spec.md` 외 중복 화면 spec 0건 |
 | legacy route spec 제거 | `find apps/admin/web/src/app -path '*roles/[roleId]*' -name '03-interactions.md' -print` | `orch-delivery` | 0건 |
 

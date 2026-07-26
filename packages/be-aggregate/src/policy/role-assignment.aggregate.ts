@@ -1,10 +1,10 @@
 import { USER_ERRORS } from "@cocrepo/constant";
 import { SpaceContext } from "@cocrepo/context";
-import { RolePolicy } from "@cocrepo/entity";
-import type { SyncRolePolicyInputItem } from "@cocrepo/input";
+import { RoleAssignment } from "@cocrepo/entity";
+import type { SyncRoleAssignmentInputItem } from "@cocrepo/input";
 import {
 	PoliciesRepository,
-	RolePoliciesRepository,
+	RoleAssignmentsRepository,
 	RolesRepository,
 } from "@cocrepo/repository";
 import {
@@ -17,41 +17,41 @@ import {
 import { Transactional } from "@nestjs-cls/transactional";
 
 @Injectable()
-export class PolicyAssignmentAggregate {
-	private readonly logger = new Logger(PolicyAssignmentAggregate.name);
+export class RoleAssignmentAggregate {
+	private readonly logger = new Logger(RoleAssignmentAggregate.name);
 
 	constructor(
 		private readonly policiesRepository: PoliciesRepository,
-		private readonly rolePoliciesRepository: RolePoliciesRepository,
+		private readonly roleAssignmentsRepository: RoleAssignmentsRepository,
 		private readonly rolesRepository: RolesRepository,
 		private readonly spaceContext: SpaceContext,
 	) {}
 
-	async getRolePolicies(roleId: string): Promise<RolePolicy[]> {
+	async getRoleAssignments(roleId: string): Promise<RoleAssignment[]> {
 		const spaceId = this.requireSpaceId();
 		await this.assertRoleExists(roleId);
-		return this.rolePoliciesRepository.findByRoleIdInSpace(roleId, spaceId);
+		return this.roleAssignmentsRepository.findByRoleIdInSpace(roleId, spaceId);
 	}
 
 	@Transactional()
-	async syncRolePolicies(
+	async syncRoleAssignments(
 		roleId: string,
-		rolePolicies: SyncRolePolicyInputItem[],
-	): Promise<RolePolicy[]> {
+		roleAssignments: SyncRoleAssignmentInputItem[],
+	): Promise<RoleAssignment[]> {
 		const spaceId = this.requireSpaceId();
 		await this.assertRoleExists(roleId);
 		await this.assertPoliciesBelongToSpace(
-			rolePolicies.map((policy) => policy.policyId),
+			roleAssignments.map((policy) => policy.policyId),
 			spaceId,
 		);
 
 		this.logger.debug(
-			`RolePolicy 동기화: roleId=${roleId.slice(-8)}, spaceId=${spaceId.slice(-8)}`,
+			`RoleAssignment 동기화: roleId=${roleId.slice(-8)}, spaceId=${spaceId.slice(-8)}`,
 		);
 
-		return this.rolePoliciesRepository.syncByRoleId(
+		return this.roleAssignmentsRepository.syncByRoleId(
 			roleId,
-			rolePolicies,
+			roleAssignments,
 			spaceId,
 		);
 	}

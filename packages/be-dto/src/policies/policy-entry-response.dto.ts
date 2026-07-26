@@ -3,8 +3,8 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 import { AbilityResponseDto } from "../abilities/ability-response.dto";
 
-export class PolicyAbilityResponseDto {
-	@UUIDField({ description: "PolicyAbility ID" })
+export class PolicyEntryResponseDto {
+	@UUIDField({ description: "PolicyEntry ID" })
 	@Expose()
 	id!: string;
 

@@ -54,11 +54,11 @@ async function removeLegacySystemPolicies(
 	}
 
 	const legacyPolicyIds = legacyPolicies.map((policy) => policy.id);
-	await db.rolePolicy.deleteMany({
+	await db.roleAssignment.deleteMany({
 		where: { policyId: { in: legacyPolicyIds } },
 	});
 	await removeLegacyPersonalPolicyRowsByPolicyIds(db, legacyPolicyIds);
-	await db.policyAbility.deleteMany({
+	await db.policyEntry.deleteMany({
 		where: { policyId: { in: legacyPolicyIds } },
 	});
 	await db.policy.deleteMany({
@@ -87,34 +87,34 @@ async function removeLegacyPersonalPolicyRowsByPolicyIds(
 	`;
 }
 
-async function transferLegacyRolePolicies(
+async function transferLegacyRoleAssignments(
 	db: ReferenceDataDbClient,
 	legacyRoleId: string,
 	canonicalRoleId: string,
 ): Promise<void> {
-	const legacyRolePolicies = await db.rolePolicy.findMany({
+	const legacyRoleAssignments = await db.roleAssignment.findMany({
 		where: { roleId: legacyRoleId },
 		select: { id: true, policyId: true },
 	});
 
-	for (const legacyRolePolicy of legacyRolePolicies) {
-		const existingCanonicalRolePolicy = await db.rolePolicy.findFirst({
+	for (const legacyRoleAssignment of legacyRoleAssignments) {
+		const existingCanonicalRoleAssignment = await db.roleAssignment.findFirst({
 			where: {
 				roleId: canonicalRoleId,
-				policyId: legacyRolePolicy.policyId,
+				policyId: legacyRoleAssignment.policyId,
 			},
 			select: { id: true },
 		});
 
-		if (existingCanonicalRolePolicy) {
-			await db.rolePolicy.delete({
-				where: { id: legacyRolePolicy.id },
+		if (existingCanonicalRoleAssignment) {
+			await db.roleAssignment.delete({
+				where: { id: legacyRoleAssignment.id },
 			});
 			continue;
 		}
 
-		await db.rolePolicy.update({
-			where: { id: legacyRolePolicy.id },
+		await db.roleAssignment.update({
+			where: { id: legacyRoleAssignment.id },
 			data: { roleId: canonicalRoleId },
 		});
 	}
@@ -138,7 +138,7 @@ async function mergeLegacyRoleIntoCanonical(
 		data: { previousRoleId: canonicalRoleId },
 	});
 
-	await transferLegacyRolePolicies(db, legacyRoleId, canonicalRoleId);
+	await transferLegacyRoleAssignments(db, legacyRoleId, canonicalRoleId);
 
 	await db.roleAssociation.deleteMany({
 		where: { roleId: legacyRoleId },

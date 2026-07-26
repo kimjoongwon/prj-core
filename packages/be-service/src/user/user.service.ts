@@ -29,6 +29,25 @@ export class UserService {
 		return this.repository.findByIdWithTenantsAndProfiles(id);
 	}
 
+	/**
+	 * 현재 Space에서 사용자에게 속한 Tenant 상세와 권한 그래프를 조회합니다.
+	 */
+	async getTenantDetailForUser(
+		userId: string,
+		tenantId: string,
+		spaceId: string,
+	) {
+		const tenant = await this.repository.findTenantDetailForUserInSpace(
+			userId,
+			tenantId,
+			spaceId,
+		);
+		if (!tenant) {
+			throw new NotFoundException("사용자의 테넌트를 찾을 수 없습니다");
+		}
+		return tenant;
+	}
+
 	/** 현재 Tenant를 영구 저장하고 인증 사용자 캐시를 무효화합니다. */
 	async setCurrentTenant(userId: string, tenantId: string): Promise<void> {
 		await this.repository.updateCurrentTenantId(userId, tenantId);

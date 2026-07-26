@@ -1,15 +1,15 @@
 import { PolicyAggregate } from "@cocrepo/aggregate";
-import { SyncPolicyAbilitiesCommand } from "@cocrepo/command";
+import { SyncPolicyEntriesCommand } from "@cocrepo/command";
 import { CommandHandler } from "@nestjs/cqrs";
 
-@CommandHandler(SyncPolicyAbilitiesCommand)
-export class SyncPolicyAbilitiesUseCase {
+@CommandHandler(SyncPolicyEntriesCommand)
+export class SyncPolicyEntriesUseCase {
 	constructor(private readonly policyService: PolicyAggregate) {}
 
-	execute(command: SyncPolicyAbilitiesCommand): Promise<unknown> {
-		return this.policyService.syncPolicyAbilities(
+	execute(command: SyncPolicyEntriesCommand): Promise<unknown> {
+		return this.policyService.syncPolicyEntries(
 			command.policyId,
-			command.abilityIds,
+			command.entries.map((entry) => entry.abilityId),
 		);
 	}
 }

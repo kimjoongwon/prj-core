@@ -1,4 +1,4 @@
-import { User } from "@cocrepo/entity";
+import { Tenant, User } from "@cocrepo/entity";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { UsersRepository } from "../src/users.repository";
@@ -13,6 +13,9 @@ describe("UsersRepository", () => {
 				findMany: jest.Mock;
 				count: jest.Mock;
 				update: jest.Mock;
+			};
+			tenant: {
+				findFirst: jest.Mock;
 			};
 		};
 	};
@@ -61,6 +64,9 @@ describe("UsersRepository", () => {
 					count: jest.fn(),
 					update: jest.fn(),
 				},
+				tenant: {
+					findFirst: jest.fn(),
+				},
 			},
 		};
 
@@ -75,6 +81,105 @@ describe("UsersRepository", () => {
 		}).compile();
 
 		repository = module.get<UsersRepository>(UsersRepository);
+	});
+
+	describe("findTenantDetailForUserInSpace", () => {
+		it("사용자·Tenant·현재 Space를 모두 조건으로 권한 그래프를 조회해야 한다", async () => {
+			const tenantData = {
+				id: "tenant-test-id",
+				userId: "user-test-id",
+				spaceId: "space-test-id",
+				roleId: "role-test-id",
+				main: true,
+				createdAt: new Date("2026-01-01"),
+				updatedAt: new Date("2026-01-01"),
+				removedAt: null,
+				space: {
+					id: "space-test-id",
+					fitnessCenter: {
+						id: "fitness-center-test-id",
+						company: { id: "company-test-id" },
+					},
+				},
+				role: {
+					id: "role-test-id",
+					assignments: [],
+				},
+			};
+			mockTxHost.tx.tenant.findFirst.mockResolvedValue(tenantData);
+
+			const result = await repository.findTenantDetailForUserInSpace(
+				"user-test-id",
+				"tenant-test-id",
+				"space-test-id",
+			);
+
+			expect(mockTxHost.tx.tenant.findFirst).toHaveBeenCalledWith({
+				where: {
+					id: "tenant-test-id",
+					userId: "user-test-id",
+					spaceId: "space-test-id",
+					removedAt: null,
+				},
+				include: {
+					space: {
+						include: {
+							fitnessCenter: {
+								include: { company: true },
+							},
+						},
+					},
+					role: {
+						include: {
+							assignments: {
+								where: {
+									removedAt: null,
+									policy: {
+										spaceId: "space-test-id",
+										removedAt: null,
+									},
+								},
+								orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
+								include: {
+									policy: {
+										include: {
+											entries: {
+												where: {
+													removedAt: null,
+													ability: { removedAt: null },
+												},
+												orderBy: { createdAt: "asc" },
+												include: {
+													ability: {
+														include: {
+															action: true,
+															subject: true,
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			});
+			expect(result).toBeInstanceOf(Tenant);
+		});
+
+		it("다른 사용자 또는 Space에 속한 Tenant면 null을 반환해야 한다", async () => {
+			mockTxHost.tx.tenant.findFirst.mockResolvedValue(null);
+
+			const result = await repository.findTenantDetailForUserInSpace(
+				"other-user-id",
+				"tenant-test-id",
+				"space-test-id",
+			);
+
+			expect(result).toBeNull();
+		});
 	});
 
 	it("리포지토리가 정의되어야 한다", () => {

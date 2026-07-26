@@ -224,8 +224,8 @@ export type PolicyWhereInput = {
   isSystem?: Prisma.BoolFilter<"Policy"> | boolean
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-  policyAbilities?: Prisma.PolicyAbilityListRelationFilter
-  rolePolicies?: Prisma.RolePolicyListRelationFilter
+  entries?: Prisma.PolicyEntryListRelationFilter
+  roleAssignments?: Prisma.RoleAssignmentListRelationFilter
 }
 
 export type PolicyOrderByWithRelationInput = {
@@ -241,8 +241,8 @@ export type PolicyOrderByWithRelationInput = {
   isSystem?: Prisma.SortOrder
   space?: Prisma.SpaceOrderByWithRelationInput
   createdBy?: Prisma.UserOrderByWithRelationInput
-  policyAbilities?: Prisma.PolicyAbilityOrderByRelationAggregateInput
-  rolePolicies?: Prisma.RolePolicyOrderByRelationAggregateInput
+  entries?: Prisma.PolicyEntryOrderByRelationAggregateInput
+  roleAssignments?: Prisma.RoleAssignmentOrderByRelationAggregateInput
 }
 
 export type PolicyWhereUniqueInput = Prisma.AtLeast<{
@@ -262,8 +262,8 @@ export type PolicyWhereUniqueInput = Prisma.AtLeast<{
   isSystem?: Prisma.BoolFilter<"Policy"> | boolean
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-  policyAbilities?: Prisma.PolicyAbilityListRelationFilter
-  rolePolicies?: Prisma.RolePolicyListRelationFilter
+  entries?: Prisma.PolicyEntryListRelationFilter
+  roleAssignments?: Prisma.RoleAssignmentListRelationFilter
 }, "id" | "spaceId_name">
 
 export type PolicyOrderByWithAggregationInput = {
@@ -309,8 +309,8 @@ export type PolicyCreateInput = {
   isSystem?: boolean
   space: Prisma.SpaceCreateNestedOneWithoutPoliciesInput
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedPoliciesInput
-  policyAbilities?: Prisma.PolicyAbilityCreateNestedManyWithoutPolicyInput
-  rolePolicies?: Prisma.RolePolicyCreateNestedManyWithoutPolicyInput
+  entries?: Prisma.PolicyEntryCreateNestedManyWithoutPolicyInput
+  roleAssignments?: Prisma.RoleAssignmentCreateNestedManyWithoutPolicyInput
 }
 
 export type PolicyUncheckedCreateInput = {
@@ -324,8 +324,8 @@ export type PolicyUncheckedCreateInput = {
   displayName?: string | null
   description?: string | null
   isSystem?: boolean
-  policyAbilities?: Prisma.PolicyAbilityUncheckedCreateNestedManyWithoutPolicyInput
-  rolePolicies?: Prisma.RolePolicyUncheckedCreateNestedManyWithoutPolicyInput
+  entries?: Prisma.PolicyEntryUncheckedCreateNestedManyWithoutPolicyInput
+  roleAssignments?: Prisma.RoleAssignmentUncheckedCreateNestedManyWithoutPolicyInput
 }
 
 export type PolicyUpdateInput = {
@@ -339,8 +339,8 @@ export type PolicyUpdateInput = {
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   space?: Prisma.SpaceUpdateOneRequiredWithoutPoliciesNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutCreatedPoliciesNestedInput
-  policyAbilities?: Prisma.PolicyAbilityUpdateManyWithoutPolicyNestedInput
-  rolePolicies?: Prisma.RolePolicyUpdateManyWithoutPolicyNestedInput
+  entries?: Prisma.PolicyEntryUpdateManyWithoutPolicyNestedInput
+  roleAssignments?: Prisma.RoleAssignmentUpdateManyWithoutPolicyNestedInput
 }
 
 export type PolicyUncheckedUpdateInput = {
@@ -354,8 +354,8 @@ export type PolicyUncheckedUpdateInput = {
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  policyAbilities?: Prisma.PolicyAbilityUncheckedUpdateManyWithoutPolicyNestedInput
-  rolePolicies?: Prisma.RolePolicyUncheckedUpdateManyWithoutPolicyNestedInput
+  entries?: Prisma.PolicyEntryUncheckedUpdateManyWithoutPolicyNestedInput
+  roleAssignments?: Prisma.RoleAssignmentUncheckedUpdateManyWithoutPolicyNestedInput
 }
 
 export type PolicyCreateManyInput = {
@@ -454,32 +454,32 @@ export type PolicyOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type PolicyCreateNestedOneWithoutPolicyAbilitiesInput = {
-  create?: Prisma.XOR<Prisma.PolicyCreateWithoutPolicyAbilitiesInput, Prisma.PolicyUncheckedCreateWithoutPolicyAbilitiesInput>
-  connectOrCreate?: Prisma.PolicyCreateOrConnectWithoutPolicyAbilitiesInput
+export type PolicyCreateNestedOneWithoutEntriesInput = {
+  create?: Prisma.XOR<Prisma.PolicyCreateWithoutEntriesInput, Prisma.PolicyUncheckedCreateWithoutEntriesInput>
+  connectOrCreate?: Prisma.PolicyCreateOrConnectWithoutEntriesInput
   connect?: Prisma.PolicyWhereUniqueInput
 }
 
-export type PolicyUpdateOneRequiredWithoutPolicyAbilitiesNestedInput = {
-  create?: Prisma.XOR<Prisma.PolicyCreateWithoutPolicyAbilitiesInput, Prisma.PolicyUncheckedCreateWithoutPolicyAbilitiesInput>
-  connectOrCreate?: Prisma.PolicyCreateOrConnectWithoutPolicyAbilitiesInput
-  upsert?: Prisma.PolicyUpsertWithoutPolicyAbilitiesInput
+export type PolicyUpdateOneRequiredWithoutEntriesNestedInput = {
+  create?: Prisma.XOR<Prisma.PolicyCreateWithoutEntriesInput, Prisma.PolicyUncheckedCreateWithoutEntriesInput>
+  connectOrCreate?: Prisma.PolicyCreateOrConnectWithoutEntriesInput
+  upsert?: Prisma.PolicyUpsertWithoutEntriesInput
   connect?: Prisma.PolicyWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.PolicyUpdateToOneWithWhereWithoutPolicyAbilitiesInput, Prisma.PolicyUpdateWithoutPolicyAbilitiesInput>, Prisma.PolicyUncheckedUpdateWithoutPolicyAbilitiesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PolicyUpdateToOneWithWhereWithoutEntriesInput, Prisma.PolicyUpdateWithoutEntriesInput>, Prisma.PolicyUncheckedUpdateWithoutEntriesInput>
 }
 
-export type PolicyCreateNestedOneWithoutRolePoliciesInput = {
-  create?: Prisma.XOR<Prisma.PolicyCreateWithoutRolePoliciesInput, Prisma.PolicyUncheckedCreateWithoutRolePoliciesInput>
-  connectOrCreate?: Prisma.PolicyCreateOrConnectWithoutRolePoliciesInput
+export type PolicyCreateNestedOneWithoutRoleAssignmentsInput = {
+  create?: Prisma.XOR<Prisma.PolicyCreateWithoutRoleAssignmentsInput, Prisma.PolicyUncheckedCreateWithoutRoleAssignmentsInput>
+  connectOrCreate?: Prisma.PolicyCreateOrConnectWithoutRoleAssignmentsInput
   connect?: Prisma.PolicyWhereUniqueInput
 }
 
-export type PolicyUpdateOneRequiredWithoutRolePoliciesNestedInput = {
-  create?: Prisma.XOR<Prisma.PolicyCreateWithoutRolePoliciesInput, Prisma.PolicyUncheckedCreateWithoutRolePoliciesInput>
-  connectOrCreate?: Prisma.PolicyCreateOrConnectWithoutRolePoliciesInput
-  upsert?: Prisma.PolicyUpsertWithoutRolePoliciesInput
+export type PolicyUpdateOneRequiredWithoutRoleAssignmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.PolicyCreateWithoutRoleAssignmentsInput, Prisma.PolicyUncheckedCreateWithoutRoleAssignmentsInput>
+  connectOrCreate?: Prisma.PolicyCreateOrConnectWithoutRoleAssignmentsInput
+  upsert?: Prisma.PolicyUpsertWithoutRoleAssignmentsInput
   connect?: Prisma.PolicyWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.PolicyUpdateToOneWithWhereWithoutRolePoliciesInput, Prisma.PolicyUpdateWithoutRolePoliciesInput>, Prisma.PolicyUncheckedUpdateWithoutRolePoliciesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PolicyUpdateToOneWithWhereWithoutRoleAssignmentsInput, Prisma.PolicyUpdateWithoutRoleAssignmentsInput>, Prisma.PolicyUncheckedUpdateWithoutRoleAssignmentsInput>
 }
 
 export type PolicyCreateNestedManyWithoutSpaceInput = {
@@ -566,7 +566,7 @@ export type PolicyUncheckedUpdateManyWithoutCreatedByNestedInput = {
   deleteMany?: Prisma.PolicyScalarWhereInput | Prisma.PolicyScalarWhereInput[]
 }
 
-export type PolicyCreateWithoutPolicyAbilitiesInput = {
+export type PolicyCreateWithoutEntriesInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -577,10 +577,10 @@ export type PolicyCreateWithoutPolicyAbilitiesInput = {
   isSystem?: boolean
   space: Prisma.SpaceCreateNestedOneWithoutPoliciesInput
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedPoliciesInput
-  rolePolicies?: Prisma.RolePolicyCreateNestedManyWithoutPolicyInput
+  roleAssignments?: Prisma.RoleAssignmentCreateNestedManyWithoutPolicyInput
 }
 
-export type PolicyUncheckedCreateWithoutPolicyAbilitiesInput = {
+export type PolicyUncheckedCreateWithoutEntriesInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -591,26 +591,26 @@ export type PolicyUncheckedCreateWithoutPolicyAbilitiesInput = {
   displayName?: string | null
   description?: string | null
   isSystem?: boolean
-  rolePolicies?: Prisma.RolePolicyUncheckedCreateNestedManyWithoutPolicyInput
+  roleAssignments?: Prisma.RoleAssignmentUncheckedCreateNestedManyWithoutPolicyInput
 }
 
-export type PolicyCreateOrConnectWithoutPolicyAbilitiesInput = {
+export type PolicyCreateOrConnectWithoutEntriesInput = {
   where: Prisma.PolicyWhereUniqueInput
-  create: Prisma.XOR<Prisma.PolicyCreateWithoutPolicyAbilitiesInput, Prisma.PolicyUncheckedCreateWithoutPolicyAbilitiesInput>
+  create: Prisma.XOR<Prisma.PolicyCreateWithoutEntriesInput, Prisma.PolicyUncheckedCreateWithoutEntriesInput>
 }
 
-export type PolicyUpsertWithoutPolicyAbilitiesInput = {
-  update: Prisma.XOR<Prisma.PolicyUpdateWithoutPolicyAbilitiesInput, Prisma.PolicyUncheckedUpdateWithoutPolicyAbilitiesInput>
-  create: Prisma.XOR<Prisma.PolicyCreateWithoutPolicyAbilitiesInput, Prisma.PolicyUncheckedCreateWithoutPolicyAbilitiesInput>
+export type PolicyUpsertWithoutEntriesInput = {
+  update: Prisma.XOR<Prisma.PolicyUpdateWithoutEntriesInput, Prisma.PolicyUncheckedUpdateWithoutEntriesInput>
+  create: Prisma.XOR<Prisma.PolicyCreateWithoutEntriesInput, Prisma.PolicyUncheckedCreateWithoutEntriesInput>
   where?: Prisma.PolicyWhereInput
 }
 
-export type PolicyUpdateToOneWithWhereWithoutPolicyAbilitiesInput = {
+export type PolicyUpdateToOneWithWhereWithoutEntriesInput = {
   where?: Prisma.PolicyWhereInput
-  data: Prisma.XOR<Prisma.PolicyUpdateWithoutPolicyAbilitiesInput, Prisma.PolicyUncheckedUpdateWithoutPolicyAbilitiesInput>
+  data: Prisma.XOR<Prisma.PolicyUpdateWithoutEntriesInput, Prisma.PolicyUncheckedUpdateWithoutEntriesInput>
 }
 
-export type PolicyUpdateWithoutPolicyAbilitiesInput = {
+export type PolicyUpdateWithoutEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -621,10 +621,10 @@ export type PolicyUpdateWithoutPolicyAbilitiesInput = {
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   space?: Prisma.SpaceUpdateOneRequiredWithoutPoliciesNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutCreatedPoliciesNestedInput
-  rolePolicies?: Prisma.RolePolicyUpdateManyWithoutPolicyNestedInput
+  roleAssignments?: Prisma.RoleAssignmentUpdateManyWithoutPolicyNestedInput
 }
 
-export type PolicyUncheckedUpdateWithoutPolicyAbilitiesInput = {
+export type PolicyUncheckedUpdateWithoutEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -635,10 +635,10 @@ export type PolicyUncheckedUpdateWithoutPolicyAbilitiesInput = {
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  rolePolicies?: Prisma.RolePolicyUncheckedUpdateManyWithoutPolicyNestedInput
+  roleAssignments?: Prisma.RoleAssignmentUncheckedUpdateManyWithoutPolicyNestedInput
 }
 
-export type PolicyCreateWithoutRolePoliciesInput = {
+export type PolicyCreateWithoutRoleAssignmentsInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -649,10 +649,10 @@ export type PolicyCreateWithoutRolePoliciesInput = {
   isSystem?: boolean
   space: Prisma.SpaceCreateNestedOneWithoutPoliciesInput
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedPoliciesInput
-  policyAbilities?: Prisma.PolicyAbilityCreateNestedManyWithoutPolicyInput
+  entries?: Prisma.PolicyEntryCreateNestedManyWithoutPolicyInput
 }
 
-export type PolicyUncheckedCreateWithoutRolePoliciesInput = {
+export type PolicyUncheckedCreateWithoutRoleAssignmentsInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -663,26 +663,26 @@ export type PolicyUncheckedCreateWithoutRolePoliciesInput = {
   displayName?: string | null
   description?: string | null
   isSystem?: boolean
-  policyAbilities?: Prisma.PolicyAbilityUncheckedCreateNestedManyWithoutPolicyInput
+  entries?: Prisma.PolicyEntryUncheckedCreateNestedManyWithoutPolicyInput
 }
 
-export type PolicyCreateOrConnectWithoutRolePoliciesInput = {
+export type PolicyCreateOrConnectWithoutRoleAssignmentsInput = {
   where: Prisma.PolicyWhereUniqueInput
-  create: Prisma.XOR<Prisma.PolicyCreateWithoutRolePoliciesInput, Prisma.PolicyUncheckedCreateWithoutRolePoliciesInput>
+  create: Prisma.XOR<Prisma.PolicyCreateWithoutRoleAssignmentsInput, Prisma.PolicyUncheckedCreateWithoutRoleAssignmentsInput>
 }
 
-export type PolicyUpsertWithoutRolePoliciesInput = {
-  update: Prisma.XOR<Prisma.PolicyUpdateWithoutRolePoliciesInput, Prisma.PolicyUncheckedUpdateWithoutRolePoliciesInput>
-  create: Prisma.XOR<Prisma.PolicyCreateWithoutRolePoliciesInput, Prisma.PolicyUncheckedCreateWithoutRolePoliciesInput>
+export type PolicyUpsertWithoutRoleAssignmentsInput = {
+  update: Prisma.XOR<Prisma.PolicyUpdateWithoutRoleAssignmentsInput, Prisma.PolicyUncheckedUpdateWithoutRoleAssignmentsInput>
+  create: Prisma.XOR<Prisma.PolicyCreateWithoutRoleAssignmentsInput, Prisma.PolicyUncheckedCreateWithoutRoleAssignmentsInput>
   where?: Prisma.PolicyWhereInput
 }
 
-export type PolicyUpdateToOneWithWhereWithoutRolePoliciesInput = {
+export type PolicyUpdateToOneWithWhereWithoutRoleAssignmentsInput = {
   where?: Prisma.PolicyWhereInput
-  data: Prisma.XOR<Prisma.PolicyUpdateWithoutRolePoliciesInput, Prisma.PolicyUncheckedUpdateWithoutRolePoliciesInput>
+  data: Prisma.XOR<Prisma.PolicyUpdateWithoutRoleAssignmentsInput, Prisma.PolicyUncheckedUpdateWithoutRoleAssignmentsInput>
 }
 
-export type PolicyUpdateWithoutRolePoliciesInput = {
+export type PolicyUpdateWithoutRoleAssignmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -693,10 +693,10 @@ export type PolicyUpdateWithoutRolePoliciesInput = {
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   space?: Prisma.SpaceUpdateOneRequiredWithoutPoliciesNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutCreatedPoliciesNestedInput
-  policyAbilities?: Prisma.PolicyAbilityUpdateManyWithoutPolicyNestedInput
+  entries?: Prisma.PolicyEntryUpdateManyWithoutPolicyNestedInput
 }
 
-export type PolicyUncheckedUpdateWithoutRolePoliciesInput = {
+export type PolicyUncheckedUpdateWithoutRoleAssignmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -707,7 +707,7 @@ export type PolicyUncheckedUpdateWithoutRolePoliciesInput = {
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  policyAbilities?: Prisma.PolicyAbilityUncheckedUpdateManyWithoutPolicyNestedInput
+  entries?: Prisma.PolicyEntryUncheckedUpdateManyWithoutPolicyNestedInput
 }
 
 export type PolicyCreateWithoutSpaceInput = {
@@ -720,8 +720,8 @@ export type PolicyCreateWithoutSpaceInput = {
   description?: string | null
   isSystem?: boolean
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedPoliciesInput
-  policyAbilities?: Prisma.PolicyAbilityCreateNestedManyWithoutPolicyInput
-  rolePolicies?: Prisma.RolePolicyCreateNestedManyWithoutPolicyInput
+  entries?: Prisma.PolicyEntryCreateNestedManyWithoutPolicyInput
+  roleAssignments?: Prisma.RoleAssignmentCreateNestedManyWithoutPolicyInput
 }
 
 export type PolicyUncheckedCreateWithoutSpaceInput = {
@@ -734,8 +734,8 @@ export type PolicyUncheckedCreateWithoutSpaceInput = {
   displayName?: string | null
   description?: string | null
   isSystem?: boolean
-  policyAbilities?: Prisma.PolicyAbilityUncheckedCreateNestedManyWithoutPolicyInput
-  rolePolicies?: Prisma.RolePolicyUncheckedCreateNestedManyWithoutPolicyInput
+  entries?: Prisma.PolicyEntryUncheckedCreateNestedManyWithoutPolicyInput
+  roleAssignments?: Prisma.RoleAssignmentUncheckedCreateNestedManyWithoutPolicyInput
 }
 
 export type PolicyCreateOrConnectWithoutSpaceInput = {
@@ -790,8 +790,8 @@ export type PolicyCreateWithoutCreatedByInput = {
   description?: string | null
   isSystem?: boolean
   space: Prisma.SpaceCreateNestedOneWithoutPoliciesInput
-  policyAbilities?: Prisma.PolicyAbilityCreateNestedManyWithoutPolicyInput
-  rolePolicies?: Prisma.RolePolicyCreateNestedManyWithoutPolicyInput
+  entries?: Prisma.PolicyEntryCreateNestedManyWithoutPolicyInput
+  roleAssignments?: Prisma.RoleAssignmentCreateNestedManyWithoutPolicyInput
 }
 
 export type PolicyUncheckedCreateWithoutCreatedByInput = {
@@ -804,8 +804,8 @@ export type PolicyUncheckedCreateWithoutCreatedByInput = {
   displayName?: string | null
   description?: string | null
   isSystem?: boolean
-  policyAbilities?: Prisma.PolicyAbilityUncheckedCreateNestedManyWithoutPolicyInput
-  rolePolicies?: Prisma.RolePolicyUncheckedCreateNestedManyWithoutPolicyInput
+  entries?: Prisma.PolicyEntryUncheckedCreateNestedManyWithoutPolicyInput
+  roleAssignments?: Prisma.RoleAssignmentUncheckedCreateNestedManyWithoutPolicyInput
 }
 
 export type PolicyCreateOrConnectWithoutCreatedByInput = {
@@ -856,8 +856,8 @@ export type PolicyUpdateWithoutSpaceInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdBy?: Prisma.UserUpdateOneWithoutCreatedPoliciesNestedInput
-  policyAbilities?: Prisma.PolicyAbilityUpdateManyWithoutPolicyNestedInput
-  rolePolicies?: Prisma.RolePolicyUpdateManyWithoutPolicyNestedInput
+  entries?: Prisma.PolicyEntryUpdateManyWithoutPolicyNestedInput
+  roleAssignments?: Prisma.RoleAssignmentUpdateManyWithoutPolicyNestedInput
 }
 
 export type PolicyUncheckedUpdateWithoutSpaceInput = {
@@ -870,8 +870,8 @@ export type PolicyUncheckedUpdateWithoutSpaceInput = {
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  policyAbilities?: Prisma.PolicyAbilityUncheckedUpdateManyWithoutPolicyNestedInput
-  rolePolicies?: Prisma.RolePolicyUncheckedUpdateManyWithoutPolicyNestedInput
+  entries?: Prisma.PolicyEntryUncheckedUpdateManyWithoutPolicyNestedInput
+  roleAssignments?: Prisma.RoleAssignmentUncheckedUpdateManyWithoutPolicyNestedInput
 }
 
 export type PolicyUncheckedUpdateManyWithoutSpaceInput = {
@@ -908,8 +908,8 @@ export type PolicyUpdateWithoutCreatedByInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   space?: Prisma.SpaceUpdateOneRequiredWithoutPoliciesNestedInput
-  policyAbilities?: Prisma.PolicyAbilityUpdateManyWithoutPolicyNestedInput
-  rolePolicies?: Prisma.RolePolicyUpdateManyWithoutPolicyNestedInput
+  entries?: Prisma.PolicyEntryUpdateManyWithoutPolicyNestedInput
+  roleAssignments?: Prisma.RoleAssignmentUpdateManyWithoutPolicyNestedInput
 }
 
 export type PolicyUncheckedUpdateWithoutCreatedByInput = {
@@ -922,8 +922,8 @@ export type PolicyUncheckedUpdateWithoutCreatedByInput = {
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  policyAbilities?: Prisma.PolicyAbilityUncheckedUpdateManyWithoutPolicyNestedInput
-  rolePolicies?: Prisma.RolePolicyUncheckedUpdateManyWithoutPolicyNestedInput
+  entries?: Prisma.PolicyEntryUncheckedUpdateManyWithoutPolicyNestedInput
+  roleAssignments?: Prisma.RoleAssignmentUncheckedUpdateManyWithoutPolicyNestedInput
 }
 
 export type PolicyUncheckedUpdateManyWithoutCreatedByInput = {
@@ -944,13 +944,13 @@ export type PolicyUncheckedUpdateManyWithoutCreatedByInput = {
  */
 
 export type PolicyCountOutputType = {
-  policyAbilities: number
-  rolePolicies: number
+  entries: number
+  roleAssignments: number
 }
 
 export type PolicyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  policyAbilities?: boolean | PolicyCountOutputTypeCountPolicyAbilitiesArgs
-  rolePolicies?: boolean | PolicyCountOutputTypeCountRolePoliciesArgs
+  entries?: boolean | PolicyCountOutputTypeCountEntriesArgs
+  roleAssignments?: boolean | PolicyCountOutputTypeCountRoleAssignmentsArgs
 }
 
 /**
@@ -966,15 +966,15 @@ export type PolicyCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exten
 /**
  * PolicyCountOutputType without action
  */
-export type PolicyCountOutputTypeCountPolicyAbilitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PolicyAbilityWhereInput
+export type PolicyCountOutputTypeCountEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PolicyEntryWhereInput
 }
 
 /**
  * PolicyCountOutputType without action
  */
-export type PolicyCountOutputTypeCountRolePoliciesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.RolePolicyWhereInput
+export type PolicyCountOutputTypeCountRoleAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RoleAssignmentWhereInput
 }
 
 
@@ -991,8 +991,8 @@ export type PolicySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   isSystem?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Policy$createdByArgs<ExtArgs>
-  policyAbilities?: boolean | Prisma.Policy$policyAbilitiesArgs<ExtArgs>
-  rolePolicies?: boolean | Prisma.Policy$rolePoliciesArgs<ExtArgs>
+  entries?: boolean | Prisma.Policy$entriesArgs<ExtArgs>
+  roleAssignments?: boolean | Prisma.Policy$roleAssignmentsArgs<ExtArgs>
   _count?: boolean | Prisma.PolicyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["policy"]>
 
@@ -1043,8 +1043,8 @@ export type PolicyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type PolicyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Policy$createdByArgs<ExtArgs>
-  policyAbilities?: boolean | Prisma.Policy$policyAbilitiesArgs<ExtArgs>
-  rolePolicies?: boolean | Prisma.Policy$rolePoliciesArgs<ExtArgs>
+  entries?: boolean | Prisma.Policy$entriesArgs<ExtArgs>
+  roleAssignments?: boolean | Prisma.Policy$roleAssignmentsArgs<ExtArgs>
   _count?: boolean | Prisma.PolicyCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PolicyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1061,8 +1061,8 @@ export type $PolicyPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     space: Prisma.$SpacePayload<ExtArgs>
     createdBy: Prisma.$UserPayload<ExtArgs> | null
-    policyAbilities: Prisma.$PolicyAbilityPayload<ExtArgs>[]
-    rolePolicies: Prisma.$RolePolicyPayload<ExtArgs>[]
+    entries: Prisma.$PolicyEntryPayload<ExtArgs>[]
+    roleAssignments: Prisma.$RoleAssignmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1489,8 +1489,8 @@ export interface Prisma__PolicyClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   space<T extends Prisma.SpaceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SpaceDefaultArgs<ExtArgs>>): Prisma.Prisma__SpaceClient<runtime.Types.Result.GetResult<Prisma.$SpacePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   createdBy<T extends Prisma.Policy$createdByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Policy$createdByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  policyAbilities<T extends Prisma.Policy$policyAbilitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Policy$policyAbilitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PolicyAbilityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  rolePolicies<T extends Prisma.Policy$rolePoliciesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Policy$rolePoliciesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RolePolicyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  entries<T extends Prisma.Policy$entriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Policy$entriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PolicyEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  roleAssignments<T extends Prisma.Policy$roleAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Policy$roleAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoleAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1945,51 +1945,51 @@ export type Policy$createdByArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * Policy.policyAbilities
+ * Policy.entries
  */
-export type Policy$policyAbilitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Policy$entriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the PolicyAbility
+   * Select specific fields to fetch from the PolicyEntry
    */
-  select?: Prisma.PolicyAbilitySelect<ExtArgs> | null
+  select?: Prisma.PolicyEntrySelect<ExtArgs> | null
   /**
-   * Omit specific fields from the PolicyAbility
+   * Omit specific fields from the PolicyEntry
    */
-  omit?: Prisma.PolicyAbilityOmit<ExtArgs> | null
+  omit?: Prisma.PolicyEntryOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.PolicyAbilityInclude<ExtArgs> | null
-  where?: Prisma.PolicyAbilityWhereInput
-  orderBy?: Prisma.PolicyAbilityOrderByWithRelationInput | Prisma.PolicyAbilityOrderByWithRelationInput[]
-  cursor?: Prisma.PolicyAbilityWhereUniqueInput
+  include?: Prisma.PolicyEntryInclude<ExtArgs> | null
+  where?: Prisma.PolicyEntryWhereInput
+  orderBy?: Prisma.PolicyEntryOrderByWithRelationInput | Prisma.PolicyEntryOrderByWithRelationInput[]
+  cursor?: Prisma.PolicyEntryWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.PolicyAbilityScalarFieldEnum | Prisma.PolicyAbilityScalarFieldEnum[]
+  distinct?: Prisma.PolicyEntryScalarFieldEnum | Prisma.PolicyEntryScalarFieldEnum[]
 }
 
 /**
- * Policy.rolePolicies
+ * Policy.roleAssignments
  */
-export type Policy$rolePoliciesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Policy$roleAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the RolePolicy
+   * Select specific fields to fetch from the RoleAssignment
    */
-  select?: Prisma.RolePolicySelect<ExtArgs> | null
+  select?: Prisma.RoleAssignmentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the RolePolicy
+   * Omit specific fields from the RoleAssignment
    */
-  omit?: Prisma.RolePolicyOmit<ExtArgs> | null
+  omit?: Prisma.RoleAssignmentOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.RolePolicyInclude<ExtArgs> | null
-  where?: Prisma.RolePolicyWhereInput
-  orderBy?: Prisma.RolePolicyOrderByWithRelationInput | Prisma.RolePolicyOrderByWithRelationInput[]
-  cursor?: Prisma.RolePolicyWhereUniqueInput
+  include?: Prisma.RoleAssignmentInclude<ExtArgs> | null
+  where?: Prisma.RoleAssignmentWhereInput
+  orderBy?: Prisma.RoleAssignmentOrderByWithRelationInput | Prisma.RoleAssignmentOrderByWithRelationInput[]
+  cursor?: Prisma.RoleAssignmentWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.RolePolicyScalarFieldEnum | Prisma.RolePolicyScalarFieldEnum[]
+  distinct?: Prisma.RoleAssignmentScalarFieldEnum | Prisma.RoleAssignmentScalarFieldEnum[]
 }
 
 /**

@@ -1,1 +1,1 @@
-export { PolicyAssignmentsModule } from "./policy-assignments.module";
+export { RoleAssignmentsModule } from "./role-assignments.module";

@@ -4,7 +4,7 @@ import {
 	DeletePolicyCommand,
 	GetPolicyByIdQuery,
 	ListPoliciesQuery,
-	SyncPolicyAbilitiesCommand,
+	SyncPolicyEntriesCommand,
 	UpdatePolicyCommand,
 } from "@cocrepo/command";
 import { SYSTEM_ROLES } from "@cocrepo/constant";
@@ -17,9 +17,9 @@ import {
 } from "@cocrepo/decorator";
 import {
 	CreatePolicyDto,
-	PolicyAbilityResponseDto,
+	PolicyEntryResponseDto,
 	PolicyResponseDto,
-	SyncPolicyAbilitiesDto,
+	SyncPolicyEntriesDto,
 	UpdatePolicyDto,
 } from "@cocrepo/dto";
 import {
@@ -152,12 +152,12 @@ export class PoliciesController {
 		return this.commandBus.execute(new DeletePolicyCommand(policyId));
 	}
 
-	@Put(":policyId/abilities")
+	@Put(":policyId/entries")
 	@HttpCode(HttpStatus.OK)
 	@Roles([SYSTEM_ROLES.PLATFORM_ADMIN])
 	@ApiOperation({
-		operationId: "syncPolicyAbilities",
-		summary: "Policy Ability 동기화",
+		operationId: "syncPolicyEntries",
+		summary: "Policy 권한 항목 동기화",
 		description:
 			"특정 Policy에 포함되는 Ability 목록을 전체 동기화 방식으로 반영합니다.",
 	})
@@ -168,20 +168,20 @@ export class PoliciesController {
 		type: String,
 	})
 	@ApiBody({
-		type: SyncPolicyAbilitiesDto,
+		type: SyncPolicyEntriesDto,
 		description: "Policy에 연결할 Ability 목록",
 	})
 	@ApiErrors(400, 401, 403, 404, 500)
-	@ApiResponseEntity(PolicyAbilityResponseDto, HttpStatus.OK, {
+	@ApiResponseEntity(PolicyEntryResponseDto, HttpStatus.OK, {
 		isArray: true,
 	})
 	@ResponseMessage("정책 권한 동기화 성공")
-	async syncPolicyAbilities(
+	async syncPolicyEntries(
 		@Param("policyId", ParseUUIDPipe) policyId: string,
-		@Body() dto: SyncPolicyAbilitiesDto,
+		@Body() dto: SyncPolicyEntriesDto,
 	) {
 		return this.commandBus.execute(
-			new SyncPolicyAbilitiesCommand(policyId, dto.abilityIds),
+			new SyncPolicyEntriesCommand(policyId, dto.entries),
 		);
 	}
 }

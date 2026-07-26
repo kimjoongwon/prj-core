@@ -28,9 +28,9 @@ async function openPlatformAdminRoleDetail(page: Page) {
 }
 
 test.describe("역할 상세 페이지", () => {
-	// ── E2E-002: Grant 배치 할당 플로우 ──
+	// ── E2E-002: Policy 할당 플로우 ──
 
-	test.describe("[E2E-002] Grant 배치 할당 플로우", () => {
+	test.describe("[E2E-002] Policy 할당 플로우", () => {
 		test("역할 상세에 기본 정보와 정책 할당 섹션이 표시되어야 한다", async ({
 			page,
 		}) => {
@@ -50,7 +50,7 @@ test.describe("역할 상세 페이지", () => {
 				page.getByRole("heading", { name: "정책 할당" }),
 			).toBeVisible();
 			await expect(
-				page.getByText("현재 Space의 RolePolicy를 관리합니다."),
+				page.getByText("현재 Space의 RoleAssignment를 관리합니다."),
 			).toBeVisible();
 		});
 

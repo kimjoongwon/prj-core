@@ -87,7 +87,7 @@ export const PolicyListScreen = observer(
 															</Chip>
 														</Table.Cell>
 														<Table.Cell>
-															{policy.policyAbilities?.length ?? 0}
+															{policy.entries?.length ?? 0}
 														</Table.Cell>
 														<Table.Cell>
 															{policy.createdAt

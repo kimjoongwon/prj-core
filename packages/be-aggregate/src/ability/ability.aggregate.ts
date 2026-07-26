@@ -1,10 +1,10 @@
 import { ABILITY_ERRORS } from "@cocrepo/constant";
-import { Ability, RolePolicy } from "@cocrepo/entity";
+import { Ability, RoleAssignment } from "@cocrepo/entity";
 import type { CreateAbilityInput, UpdateAbilityInput } from "@cocrepo/input";
 import {
 	AbilitiesRepository,
-	PolicyAbilitiesRepository,
-	RolePoliciesRepository,
+	PolicyEntriesRepository,
+	RoleAssignmentsRepository,
 } from "@cocrepo/repository";
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { Transactional } from "@nestjs-cls/transactional";
@@ -20,7 +20,7 @@ import type { AbilityWithAssignment } from "./ability-with-assignment";
  * 재사용 가능한 권한 정의(Ability)와 Policy 기반 할당을 관리합니다.
  *
  * ✅ Ability: 권한 정의만 관리 (subject + action + fields + conditions)
- * ✅ Policy: 여러 Ability를 묶고 RolePolicy가 우선순위를 관리
+ * ✅ Policy: 여러 Ability를 묶고 RoleAssignment가 우선순위를 관리
  */
 @Injectable()
 export class AbilityAggregate {
@@ -28,8 +28,8 @@ export class AbilityAggregate {
 
 	constructor(
 		private readonly abilitiesRepository: AbilitiesRepository,
-		private readonly policyAbilitiesRepository: PolicyAbilitiesRepository,
-		private readonly rolePoliciesRepository: RolePoliciesRepository,
+		private readonly policyEntriesRepository: PolicyEntriesRepository,
+		private readonly roleAssignmentsRepository: RoleAssignmentsRepository,
 	) {}
 
 	/**
@@ -66,16 +66,18 @@ export class AbilityAggregate {
 		spaceId: string,
 	): Promise<Ability[]> {
 		this.logger.debug(
-			`RolePolicy 기반 권한 병합 조회: roleIds=${roleIds.length}, spaceId=${spaceId.slice(-8)}`,
+			`RoleAssignment 기반 권한 병합 조회: roleIds=${roleIds.length}, spaceId=${spaceId.slice(-8)}`,
 		);
 
-		const rolePolicies =
-			await this.rolePoliciesRepository.findActiveByRoleIdsInSpace(
+		const roleAssignments =
+			await this.roleAssignmentsRepository.findActiveByRoleIdsInSpace(
 				roleIds,
 				spaceId,
 			);
 
-		return this.mergeAbilities(this.expandRolePolicyAbilities(rolePolicies));
+		return this.mergeAbilities(
+			this.expandRoleAssignmentAbilities(roleAssignments),
+		);
 	}
 
 	/**
@@ -83,7 +85,7 @@ export class AbilityAggregate {
 	 *
 	 * @param input - Ability 생성 데이터 (재사용 가능한 권한 정의)
 	 * @returns 생성된 Ability
-	 * @description 권한 정의만 생성합니다. Role에 할당하려면 Policy에 포함한 뒤 RolePolicy를 할당하세요.
+	 * @description 권한 정의만 생성합니다. Role에 할당하려면 Policy에 포함한 뒤 RoleAssignment를 할당하세요.
 	 */
 	async createAbility(input: CreateAbilityInput): Promise<Ability> {
 		this.logger.debug(
@@ -102,7 +104,7 @@ export class AbilityAggregate {
 	 * @param id - Ability ID
 	 * @param input - 수정 데이터
 	 * @returns 수정된 Ability
-	 * @description Ability 정의만 수정합니다. RolePolicy 메타데이터(isActive, priority)는 변경되지 않습니다.
+	 * @description Ability 정의만 수정합니다. RoleAssignment 메타데이터(isActive, priority)는 변경되지 않습니다.
 	 */
 	async updateAbility(id: string, input: UpdateAbilityInput): Promise<Ability> {
 		this.logger.debug(`권한 정의 수정: id=${id.slice(-8)}`);
@@ -116,7 +118,7 @@ export class AbilityAggregate {
 	 *
 	 * @param id - Ability ID
 	 * @returns 삭제된 Ability
-	 * @description Ability와 연결된 모든 PolicyAbility를 소프트 삭제합니다.
+	 * @description Ability와 연결된 모든 PolicyEntry를 소프트 삭제합니다.
 	 */
 	@Transactional()
 	async deleteAbility(id: string): Promise<Ability> {
@@ -125,10 +127,10 @@ export class AbilityAggregate {
 		// 1. Ability 소프트 삭제
 		const ability = await this.abilitiesRepository.removeById(id);
 
-		await this.policyAbilitiesRepository.removeByAbilityId(id);
+		await this.policyEntriesRepository.removeByAbilityId(id);
 
 		this.logger.debug(
-			`권한 및 연결된 PolicyAbility 삭제 완료: id=${id.slice(-8)}`,
+			`권한 및 연결된 PolicyEntry 삭제 완료: id=${id.slice(-8)}`,
 		);
 
 		return ability;
@@ -144,23 +146,23 @@ export class AbilityAggregate {
 		}
 	}
 
-	private expandRolePolicyAbilities(
-		rolePolicies: RolePolicy[],
+	private expandRoleAssignmentAbilities(
+		roleAssignments: RoleAssignment[],
 	): AbilityWithAssignment[] {
-		return rolePolicies.flatMap((rolePolicy) =>
-			this.expandPolicyAbilities(rolePolicy),
+		return roleAssignments.flatMap((roleAssignment) =>
+			this.expandPolicyEntries(roleAssignment),
 		);
 	}
 
-	private expandPolicyAbilities(
-		assignment: RolePolicy,
+	private expandPolicyEntries(
+		assignment: RoleAssignment,
 	): AbilityWithAssignment[] {
-		const policyAbilities = assignment.policy?.policyAbilities ?? [];
+		const policyEntries = assignment.policy?.entries ?? [];
 
-		return policyAbilities
-			.filter((policyAbility) => policyAbility.ability)
-			.map((policyAbility) => {
-				const ability = policyAbility.ability as AbilityWithAssignment;
+		return policyEntries
+			.filter((policyEntry) => policyEntry.ability)
+			.map((policyEntry) => {
+				const ability = policyEntry.ability as AbilityWithAssignment;
 				ability.priority = assignment.priority;
 				ability.assignmentCreatedAt = assignment.createdAt;
 				return ability;

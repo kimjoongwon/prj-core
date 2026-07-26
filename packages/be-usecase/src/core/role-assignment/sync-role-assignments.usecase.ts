@@ -1,17 +1,17 @@
-import { PolicyAssignmentAggregate } from "@cocrepo/aggregate";
-import { SyncRolePoliciesCommand } from "@cocrepo/command";
+import { RoleAssignmentAggregate } from "@cocrepo/aggregate";
+import { SyncRoleAssignmentsCommand } from "@cocrepo/command";
 import { CommandHandler } from "@nestjs/cqrs";
 
-@CommandHandler(SyncRolePoliciesCommand)
-export class SyncRolePoliciesUseCase {
+@CommandHandler(SyncRoleAssignmentsCommand)
+export class SyncRoleAssignmentsUseCase {
 	constructor(
-		private readonly policyAssignmentService: PolicyAssignmentAggregate,
+		private readonly roleAssignmentService: RoleAssignmentAggregate,
 	) {}
 
-	execute(command: SyncRolePoliciesCommand): Promise<unknown> {
-		return this.policyAssignmentService.syncRolePolicies(
+	execute(command: SyncRoleAssignmentsCommand): Promise<unknown> {
+		return this.roleAssignmentService.syncRoleAssignments(
 			command.roleId,
-			command.rolePolicies,
+			command.assignments,
 		);
 	}
 }

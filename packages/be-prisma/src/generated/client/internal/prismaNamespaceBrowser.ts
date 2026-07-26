@@ -79,7 +79,7 @@ export const ModelName = {
   OidcClient: 'OidcClient',
   OidcModel: 'OidcModel',
   PasswordHistory: 'PasswordHistory',
-  PolicyAbility: 'PolicyAbility',
+  PolicyEntry: 'PolicyEntry',
   Policy: 'Policy',
   Post: 'Post',
   Profile: 'Profile',
@@ -87,9 +87,9 @@ export const ModelName = {
   Program: 'Program',
   ReferenceDataMigrationHistory: 'ReferenceDataMigrationHistory',
   Reservation: 'Reservation',
+  RoleAssignment: 'RoleAssignment',
   RoleAssociation: 'RoleAssociation',
   RoleClassification: 'RoleClassification',
-  RolePolicy: 'RolePolicy',
   Role: 'Role',
   Routine: 'Routine',
   SafeConfirmation: 'SafeConfirmation',
@@ -645,7 +645,7 @@ export const PasswordHistoryScalarFieldEnum = {
 export type PasswordHistoryScalarFieldEnum = (typeof PasswordHistoryScalarFieldEnum)[keyof typeof PasswordHistoryScalarFieldEnum]
 
 
-export const PolicyAbilityScalarFieldEnum = {
+export const PolicyEntryScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -654,7 +654,7 @@ export const PolicyAbilityScalarFieldEnum = {
   abilityId: 'abilityId'
 } as const
 
-export type PolicyAbilityScalarFieldEnum = (typeof PolicyAbilityScalarFieldEnum)[keyof typeof PolicyAbilityScalarFieldEnum]
+export type PolicyEntryScalarFieldEnum = (typeof PolicyEntryScalarFieldEnum)[keyof typeof PolicyEntryScalarFieldEnum]
 
 
 export const PolicyScalarFieldEnum = {
@@ -773,6 +773,20 @@ export const ReservationScalarFieldEnum = {
 export type ReservationScalarFieldEnum = (typeof ReservationScalarFieldEnum)[keyof typeof ReservationScalarFieldEnum]
 
 
+export const RoleAssignmentScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  removedAt: 'removedAt',
+  roleId: 'roleId',
+  policyId: 'policyId',
+  isActive: 'isActive',
+  priority: 'priority'
+} as const
+
+export type RoleAssignmentScalarFieldEnum = (typeof RoleAssignmentScalarFieldEnum)[keyof typeof RoleAssignmentScalarFieldEnum]
+
+
 export const RoleAssociationScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
@@ -795,20 +809,6 @@ export const RoleClassificationScalarFieldEnum = {
 } as const
 
 export type RoleClassificationScalarFieldEnum = (typeof RoleClassificationScalarFieldEnum)[keyof typeof RoleClassificationScalarFieldEnum]
-
-
-export const RolePolicyScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  removedAt: 'removedAt',
-  roleId: 'roleId',
-  policyId: 'policyId',
-  isActive: 'isActive',
-  priority: 'priority'
-} as const
-
-export type RolePolicyScalarFieldEnum = (typeof RolePolicyScalarFieldEnum)[keyof typeof RolePolicyScalarFieldEnum]
 
 
 export const RoleScalarFieldEnum = {

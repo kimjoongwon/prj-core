@@ -5,24 +5,24 @@ import {
 	useGetPolicies,
 } from "@cocrepo/api/core/policies";
 import {
-	getGetRolePoliciesQueryKey,
-	type PolicyAssignmentResponseDto,
-	useGetRolePolicies,
-	useSyncRolePolicies,
-} from "@cocrepo/api/core/policy-assignments";
+	getGetRoleAssignmentsQueryKey,
+	type RoleAssignmentResponseDto,
+	useGetRoleAssignments,
+	useSyncRoleAssignments,
+} from "@cocrepo/api/core/role-assignments";
 import {
 	type RoleDto,
 	useDeleteRole,
 	useGetRoleById,
 } from "@cocrepo/api/core/roles";
 import {
+	type AssignablePolicy,
 	Button,
+	RoleAssignmentForm,
+	type RoleAssignmentFormState,
+	type RoleAssignmentValue,
 	RoleEditScreen,
 	type RoleFormState,
-	type RolePolicyAssignment,
-	RolePolicyAssignmentForm,
-	type RolePolicyAssignmentFormState,
-	type RolePolicyOption,
 	Section,
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
@@ -40,27 +40,23 @@ const AdminRolesRoleDetailRoute = observer(() => {
 	const router = useRouter();
 	const queryClient = useQueryClient();
 	const [isEditingPolicies, setIsEditingPolicies] = useState(false);
-	const policyAssignmentState =
-		useLocalObservable<RolePolicyAssignmentFormState>(() => ({
-			policyAssignments: [],
-		}));
+	const roleAssignmentState = useLocalObservable<RoleAssignmentFormState>(
+		() => ({
+			assignments: [],
+		}),
+	);
 	const { data: response, isLoading } = useGetRoleById(roleId);
 	const role = response?.data as RoleDto | undefined;
 	const { data: policiesResponse, isLoading: isLoadingPolicies } =
 		useGetPolicies();
-	const { data: rolePoliciesResponse, isLoading: isLoadingRolePolicies } =
-		useGetRolePolicies(roleId);
+	const { data: assignmentsResponse, isLoading: isLoadingRoleAssignments } =
+		useGetRoleAssignments(roleId);
 	const policies = (policiesResponse?.data ?? []).map(mapPolicy);
-	const policyAssignments = (rolePoliciesResponse?.data ?? []).map(
-		mapPolicyAssignment,
-	);
-	const policyAssignmentsKey = serializePolicyAssignments(policyAssignments);
+	const assignments = (assignmentsResponse?.data ?? []).map(mapRoleAssignment);
+	const assignmentsKey = serializeRoleAssignments(assignments);
 	const hasPolicyChanges =
 		isEditingPolicies &&
-		!isEqualPolicyAssignments(
-			policyAssignmentState.policyAssignments,
-			policyAssignments,
-		);
+		!isEqualRoleAssignments(roleAssignmentState.assignments, assignments);
 	const roleFormState = role ? mapRoleFormState(role) : undefined;
 	const { mutate: deleteRole, isPending: isDeleting } = useDeleteRole({
 		mutation: {
@@ -72,13 +68,18 @@ const AdminRolesRoleDetailRoute = observer(() => {
 			},
 		},
 	});
-	const { mutate: syncRolePolicies, isPending: isSavingPolicies } =
-		useSyncRolePolicies({
+	const { mutate: syncRoleAssignments, isPending: isSavingPolicies } =
+		useSyncRoleAssignments({
 			mutation: {
 				onSuccess: () => {
 					setIsEditingPolicies(false);
 					queryClient.invalidateQueries({
-						queryKey: getGetRolePoliciesQueryKey(roleId),
+						queryKey: getGetRoleAssignmentsQueryKey(roleId),
+					});
+					queryClient.invalidateQueries({
+						predicate: ({ queryKey }) =>
+							String(queryKey[0]).includes("/api/v1/users/") &&
+							String(queryKey[0]).includes("/tenants/"),
 					});
 					toast.success("정책 할당 저장", {
 						description: "역할 정책 할당이 저장되었습니다.",
@@ -90,30 +91,25 @@ const AdminRolesRoleDetailRoute = observer(() => {
 		if (isEditingPolicies) {
 			return;
 		}
-		policyAssignmentState.policyAssignments =
-			clonePolicyAssignments(policyAssignments);
-	}, [isEditingPolicies, policyAssignmentsKey, policyAssignmentState]);
+		roleAssignmentState.assignments = cloneRoleAssignments(assignments);
+	}, [isEditingPolicies, assignmentsKey, roleAssignmentState]);
 	const startPolicyEdit = () => {
-		policyAssignmentState.policyAssignments =
-			clonePolicyAssignments(policyAssignments);
+		roleAssignmentState.assignments = cloneRoleAssignments(assignments);
 		setIsEditingPolicies(true);
 	};
 	const cancelPolicyEdit = () => {
-		policyAssignmentState.policyAssignments =
-			clonePolicyAssignments(policyAssignments);
+		roleAssignmentState.assignments = cloneRoleAssignments(assignments);
 		setIsEditingPolicies(false);
 	};
-	const savePolicyAssignments = () => {
-		syncRolePolicies({
+	const saveRoleAssignments = () => {
+		syncRoleAssignments({
 			roleId,
 			data: {
-				rolePolicies: policyAssignmentState.policyAssignments.map(
-					(assignment) => ({
-						policyId: assignment.policyId,
-						isActive: assignment.isActive,
-						priority: assignment.priority,
-					}),
-				),
+				assignments: roleAssignmentState.assignments.map((assignment) => ({
+					policyId: assignment.policyId,
+					isActive: assignment.isActive,
+					priority: assignment.priority,
+				})),
 			},
 		});
 	};
@@ -205,7 +201,7 @@ const AdminRolesRoleDetailRoute = observer(() => {
 									startContent={<Save className="h-4 w-4" />}
 									isDisabled={!hasPolicyChanges}
 									isLoading={isSavingPolicies}
-									onPress={savePolicyAssignments}
+									onPress={saveRoleAssignments}
 								>
 									저장
 								</Button>
@@ -224,12 +220,12 @@ const AdminRolesRoleDetailRoute = observer(() => {
 					}
 				/>
 				<Section.Body>
-					<RolePolicyAssignmentForm
-						state={policyAssignmentState}
+					<RoleAssignmentForm
+						state={roleAssignmentState}
 						policies={policies}
-						baselinePolicyAssignments={policyAssignments}
+						baselineAssignments={assignments}
 						readOnly={!isEditingPolicies}
-						isLoading={isLoadingPolicies || isLoadingRolePolicies}
+						isLoading={isLoadingPolicies || isLoadingRoleAssignments}
 					/>
 				</Section.Body>
 			</Section>
@@ -245,32 +241,32 @@ function mapRoleFormState(role: RoleDto): RoleFormState {
 		errors: {},
 	};
 }
-function mapPolicy(policy: PolicyResponseDto): RolePolicyOption {
+function mapPolicy(policy: PolicyResponseDto): AssignablePolicy {
 	return {
 		id: policy.id,
 		name: policy.name,
 		displayName: policy.displayName,
 		description: policy.description,
 		isSystem: policy.isSystem,
-		abilityCount: policy.policyAbilities?.length ?? 0,
+		abilityCount: policy.entries?.length ?? 0,
 	};
 }
-function mapPolicyAssignment(
-	assignment: PolicyAssignmentResponseDto,
-): RolePolicyAssignment {
+function mapRoleAssignment(
+	assignment: RoleAssignmentResponseDto,
+): RoleAssignmentValue {
 	return {
 		policyId: assignment.policyId,
 		isActive: assignment.isActive,
 		priority: assignment.priority,
 	};
 }
-function clonePolicyAssignments(assignments: RolePolicyAssignment[]) {
+function cloneRoleAssignments(assignments: RoleAssignmentValue[]) {
 	return assignments.map((assignment) => ({
 		...assignment,
 	}));
 }
-function serializePolicyAssignments(assignments: RolePolicyAssignment[]) {
-	return clonePolicyAssignments(assignments)
+function serializeRoleAssignments(assignments: RoleAssignmentValue[]) {
+	return cloneRoleAssignments(assignments)
 		.sort((left, right) => left.policyId.localeCompare(right.policyId))
 		.map(
 			(assignment) =>
@@ -278,11 +274,11 @@ function serializePolicyAssignments(assignments: RolePolicyAssignment[]) {
 		)
 		.join("|");
 }
-function isEqualPolicyAssignments(
-	left: RolePolicyAssignment[],
-	right: RolePolicyAssignment[],
+function isEqualRoleAssignments(
+	left: RoleAssignmentValue[],
+	right: RoleAssignmentValue[],
 ) {
-	return serializePolicyAssignments(left) === serializePolicyAssignments(right);
+	return serializeRoleAssignments(left) === serializeRoleAssignments(right);
 }
 function formatDate(value?: string | Date | null) {
 	if (!value) {

@@ -14,6 +14,9 @@ type UsersBySpaceResult = Awaited<
 type UserStatsResult = Awaited<
 	ReturnType<UsersRepository["countStatsBySpaceIds"]>
 >;
+type TenantDetailResult = NonNullable<
+	Awaited<ReturnType<UsersRepository["findTenantDetailForUserInSpace"]>>
+>;
 
 describe("UserService", () => {
 	let service: UserService;
@@ -134,6 +137,44 @@ describe("UserService", () => {
 				mockRepository.findByIdWithTenantsAndProfiles,
 			).toHaveBeenCalledWith(userId);
 			expect(result).toBeNull();
+		});
+	});
+
+	describe("getTenantDetailForUser", () => {
+		it("사용자·Tenant·Space 범위로 Tenant 상세를 반환해야 한다", async () => {
+			const tenant = {
+				id: "tenant-test-id",
+				userId: "user-test-id",
+				spaceId: "space-test-id",
+				roleId: "role-test-id",
+				main: true,
+			};
+			mockRepository.findTenantDetailForUserInSpace.mockResolvedValue(
+				tenant as TenantDetailResult,
+			);
+
+			const result = await service.getTenantDetailForUser(
+				"user-test-id",
+				"tenant-test-id",
+				"space-test-id",
+			);
+
+			expect(
+				mockRepository.findTenantDetailForUserInSpace,
+			).toHaveBeenCalledWith("user-test-id", "tenant-test-id", "space-test-id");
+			expect(result).toEqual(tenant);
+		});
+
+		it("범위에 맞는 Tenant가 없으면 찾을 수 없음 오류를 반환해야 한다", async () => {
+			mockRepository.findTenantDetailForUserInSpace.mockResolvedValue(null);
+
+			await expect(
+				service.getTenantDetailForUser(
+					"other-user-id",
+					"tenant-test-id",
+					"space-test-id",
+				),
+			).rejects.toThrow("사용자의 테넌트를 찾을 수 없습니다");
 		});
 	});
 

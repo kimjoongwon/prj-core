@@ -26,7 +26,7 @@ Aggregate root entity classes remain in `@cocrepo/entity`.
 - `OidcSessionAggregate`
 - `InquiryAggregate`
 - `PolicyAggregate`
-- `PolicyAssignmentAggregate`
+- `RoleAssignmentAggregate`
 - `ReservationAggregate`
 - `RoleAggregate`
 - `RoutineAggregate`

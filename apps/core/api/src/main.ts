@@ -25,8 +25,8 @@ import { OidcClientsModule } from "./module/oidc-client";
 import { OidcSessionsModule } from "./module/oidc-session";
 import { PasswordResetModule } from "./module/password-reset";
 import { PoliciesModule } from "./module/policies";
-import { PolicyAssignmentsModule } from "./module/policy-assignments";
 import { ReservationsModule } from "./module/reservations";
+import { RoleAssignmentsModule } from "./module/role-assignments";
 import { RolesModule } from "./module/roles";
 import { RoutinesModule } from "./module/routines";
 import { SecurityPolicyModule } from "./module/security-policy";
@@ -286,7 +286,7 @@ const SWAGGER_MODULES = [
 	I18nCatalogModule,
 	CommunityModule,
 	PoliciesModule,
-	PolicyAssignmentsModule,
+	RoleAssignmentsModule,
 	FoldersModule,
 	TemplatesModule,
 	ServiceDocumentsModule,

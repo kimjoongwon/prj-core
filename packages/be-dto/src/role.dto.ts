@@ -6,6 +6,7 @@ import {
 } from "@cocrepo/decorator";
 import type { Role } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
+import { RoleAssignmentResponseDto } from "./role-assignments";
 import { RoleAssociationDto } from "./role-association.dto";
 import { RoleClassificationDto } from "./role-classification.dto";
 
@@ -33,4 +34,11 @@ export class RoleDto extends AbstractDto implements Role {
 
 	@ClassField(() => RoleAssociationDto, { nullable: true, isArray: true })
 	associations?: RoleAssociationDto[];
+
+	@ClassField(() => RoleAssignmentResponseDto, {
+		required: false,
+		isArray: true,
+		description: "역할에 연결된 정책 할당 목록",
+	})
+	assignments?: RoleAssignmentResponseDto[];
 }

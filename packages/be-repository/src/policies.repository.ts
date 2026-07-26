@@ -122,7 +122,7 @@ export class PoliciesRepository {
 
 	private includePolicyDetails() {
 		return {
-			policyAbilities: {
+			entries: {
 				where: { removedAt: null },
 				include: {
 					ability: {

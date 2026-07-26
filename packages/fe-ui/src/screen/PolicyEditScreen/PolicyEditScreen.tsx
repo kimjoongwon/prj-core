@@ -5,14 +5,14 @@ import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 import {
-	type PolicyAbilityOption,
+	type PolicyEntryOption,
 	PolicyForm,
 	type PolicyFormState,
 } from "../../form/PolicyForm";
 import { Button } from "../../input/Button/Button";
 
 export type {
-	PolicyAbilityOption,
+	PolicyEntryOption,
 	PolicyFormField,
 	PolicyFormState,
 } from "../../form/PolicyForm";
@@ -20,7 +20,7 @@ export interface PolicyEditScreenProps {
 	title: ReactNode;
 	description?: ReactNode;
 	state?: PolicyFormState;
-	abilities: PolicyAbilityOption[];
+	abilities: PolicyEntryOption[];
 	readOnly?: boolean;
 	isLoading?: boolean;
 	notFound?: boolean;

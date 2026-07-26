@@ -177,7 +177,7 @@ async function ensureCurrentAdminFullAccessPolicies(
 		});
 
 		for (const abilityId of abilityIds) {
-			await db.policyAbility.upsert({
+			await db.policyEntry.upsert({
 				where: {
 					policyId_abilityId: {
 						policyId: policy.id,
@@ -194,7 +194,7 @@ async function ensureCurrentAdminFullAccessPolicies(
 			});
 		}
 
-		await db.rolePolicy.upsert({
+		await db.roleAssignment.upsert({
 			where: {
 				roleId_policyId: {
 					roleId: role.id,
@@ -245,7 +245,7 @@ async function pruneLegacyAdminSubjects(
 	const legacyAbilityIds = legacyAbilities.map((ability) => ability.id);
 
 	if (legacyAbilityIds.length > 0) {
-		await db.policyAbility.updateMany({
+		await db.policyEntry.updateMany({
 			where: {
 				abilityId: { in: legacyAbilityIds },
 				removedAt: null,

@@ -4,7 +4,7 @@
 
 - **L3 Features**: 21개 기능 (Role 7, Ability 6, Action 6, Subject 2)
 - **L4 Screens**: 14개 화면
-  - Role: 목록/상세(+Grant 배치 할당)/등록/수정
+  - Role: 목록/상세(+Policy 할당)/등록/수정
   - Ability: 목록/상세/등록/수정
   - Action: 목록/상세/등록/수정
   - Subject: 목록/상세 (조회 전용)

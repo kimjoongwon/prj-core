@@ -232,7 +232,7 @@ export type AbilityWhereInput = {
   actionId?: Prisma.StringFilter<"Ability"> | string
   subject?: Prisma.XOR<Prisma.SubjectScalarRelationFilter, Prisma.SubjectWhereInput>
   action?: Prisma.XOR<Prisma.ActionScalarRelationFilter, Prisma.ActionWhereInput>
-  policyAbilities?: Prisma.PolicyAbilityListRelationFilter
+  policyEntries?: Prisma.PolicyEntryListRelationFilter
 }
 
 export type AbilityOrderByWithRelationInput = {
@@ -250,7 +250,7 @@ export type AbilityOrderByWithRelationInput = {
   actionId?: Prisma.SortOrder
   subject?: Prisma.SubjectOrderByWithRelationInput
   action?: Prisma.ActionOrderByWithRelationInput
-  policyAbilities?: Prisma.PolicyAbilityOrderByRelationAggregateInput
+  policyEntries?: Prisma.PolicyEntryOrderByRelationAggregateInput
 }
 
 export type AbilityWhereUniqueInput = Prisma.AtLeast<{
@@ -271,7 +271,7 @@ export type AbilityWhereUniqueInput = Prisma.AtLeast<{
   actionId?: Prisma.StringFilter<"Ability"> | string
   subject?: Prisma.XOR<Prisma.SubjectScalarRelationFilter, Prisma.SubjectWhereInput>
   action?: Prisma.XOR<Prisma.ActionScalarRelationFilter, Prisma.ActionWhereInput>
-  policyAbilities?: Prisma.PolicyAbilityListRelationFilter
+  policyEntries?: Prisma.PolicyEntryListRelationFilter
 }, "id" | "name">
 
 export type AbilityOrderByWithAggregationInput = {
@@ -323,7 +323,7 @@ export type AbilityCreateInput = {
   reason?: string | null
   subject: Prisma.SubjectCreateNestedOneWithoutAbilitiesInput
   action: Prisma.ActionCreateNestedOneWithoutAbilitiesInput
-  policyAbilities?: Prisma.PolicyAbilityCreateNestedManyWithoutAbilityInput
+  policyEntries?: Prisma.PolicyEntryCreateNestedManyWithoutAbilityInput
 }
 
 export type AbilityUncheckedCreateInput = {
@@ -339,7 +339,7 @@ export type AbilityUncheckedCreateInput = {
   reason?: string | null
   subjectId: string
   actionId: string
-  policyAbilities?: Prisma.PolicyAbilityUncheckedCreateNestedManyWithoutAbilityInput
+  policyEntries?: Prisma.PolicyEntryUncheckedCreateNestedManyWithoutAbilityInput
 }
 
 export type AbilityUpdateInput = {
@@ -355,7 +355,7 @@ export type AbilityUpdateInput = {
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subject?: Prisma.SubjectUpdateOneRequiredWithoutAbilitiesNestedInput
   action?: Prisma.ActionUpdateOneRequiredWithoutAbilitiesNestedInput
-  policyAbilities?: Prisma.PolicyAbilityUpdateManyWithoutAbilityNestedInput
+  policyEntries?: Prisma.PolicyEntryUpdateManyWithoutAbilityNestedInput
 }
 
 export type AbilityUncheckedUpdateInput = {
@@ -371,7 +371,7 @@ export type AbilityUncheckedUpdateInput = {
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
   actionId?: Prisma.StringFieldUpdateOperationsInput | string
-  policyAbilities?: Prisma.PolicyAbilityUncheckedUpdateManyWithoutAbilityNestedInput
+  policyEntries?: Prisma.PolicyEntryUncheckedUpdateManyWithoutAbilityNestedInput
 }
 
 export type AbilityCreateManyInput = {
@@ -552,18 +552,18 @@ export type AbilityUncheckedUpdateManyWithoutActionNestedInput = {
   deleteMany?: Prisma.AbilityScalarWhereInput | Prisma.AbilityScalarWhereInput[]
 }
 
-export type AbilityCreateNestedOneWithoutPolicyAbilitiesInput = {
-  create?: Prisma.XOR<Prisma.AbilityCreateWithoutPolicyAbilitiesInput, Prisma.AbilityUncheckedCreateWithoutPolicyAbilitiesInput>
-  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutPolicyAbilitiesInput
+export type AbilityCreateNestedOneWithoutPolicyEntriesInput = {
+  create?: Prisma.XOR<Prisma.AbilityCreateWithoutPolicyEntriesInput, Prisma.AbilityUncheckedCreateWithoutPolicyEntriesInput>
+  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutPolicyEntriesInput
   connect?: Prisma.AbilityWhereUniqueInput
 }
 
-export type AbilityUpdateOneRequiredWithoutPolicyAbilitiesNestedInput = {
-  create?: Prisma.XOR<Prisma.AbilityCreateWithoutPolicyAbilitiesInput, Prisma.AbilityUncheckedCreateWithoutPolicyAbilitiesInput>
-  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutPolicyAbilitiesInput
-  upsert?: Prisma.AbilityUpsertWithoutPolicyAbilitiesInput
+export type AbilityUpdateOneRequiredWithoutPolicyEntriesNestedInput = {
+  create?: Prisma.XOR<Prisma.AbilityCreateWithoutPolicyEntriesInput, Prisma.AbilityUncheckedCreateWithoutPolicyEntriesInput>
+  connectOrCreate?: Prisma.AbilityCreateOrConnectWithoutPolicyEntriesInput
+  upsert?: Prisma.AbilityUpsertWithoutPolicyEntriesInput
   connect?: Prisma.AbilityWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.AbilityUpdateToOneWithWhereWithoutPolicyAbilitiesInput, Prisma.AbilityUpdateWithoutPolicyAbilitiesInput>, Prisma.AbilityUncheckedUpdateWithoutPolicyAbilitiesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AbilityUpdateToOneWithWhereWithoutPolicyEntriesInput, Prisma.AbilityUpdateWithoutPolicyEntriesInput>, Prisma.AbilityUncheckedUpdateWithoutPolicyEntriesInput>
 }
 
 export type AbilityCreateNestedManyWithoutSubjectInput = {
@@ -620,7 +620,7 @@ export type AbilityCreateWithoutActionInput = {
   inverted?: boolean
   reason?: string | null
   subject: Prisma.SubjectCreateNestedOneWithoutAbilitiesInput
-  policyAbilities?: Prisma.PolicyAbilityCreateNestedManyWithoutAbilityInput
+  policyEntries?: Prisma.PolicyEntryCreateNestedManyWithoutAbilityInput
 }
 
 export type AbilityUncheckedCreateWithoutActionInput = {
@@ -635,7 +635,7 @@ export type AbilityUncheckedCreateWithoutActionInput = {
   inverted?: boolean
   reason?: string | null
   subjectId: string
-  policyAbilities?: Prisma.PolicyAbilityUncheckedCreateNestedManyWithoutAbilityInput
+  policyEntries?: Prisma.PolicyEntryUncheckedCreateNestedManyWithoutAbilityInput
 }
 
 export type AbilityCreateOrConnectWithoutActionInput = {
@@ -682,7 +682,7 @@ export type AbilityScalarWhereInput = {
   actionId?: Prisma.StringFilter<"Ability"> | string
 }
 
-export type AbilityCreateWithoutPolicyAbilitiesInput = {
+export type AbilityCreateWithoutPolicyEntriesInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -697,7 +697,7 @@ export type AbilityCreateWithoutPolicyAbilitiesInput = {
   action: Prisma.ActionCreateNestedOneWithoutAbilitiesInput
 }
 
-export type AbilityUncheckedCreateWithoutPolicyAbilitiesInput = {
+export type AbilityUncheckedCreateWithoutPolicyEntriesInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string | null
@@ -712,23 +712,23 @@ export type AbilityUncheckedCreateWithoutPolicyAbilitiesInput = {
   actionId: string
 }
 
-export type AbilityCreateOrConnectWithoutPolicyAbilitiesInput = {
+export type AbilityCreateOrConnectWithoutPolicyEntriesInput = {
   where: Prisma.AbilityWhereUniqueInput
-  create: Prisma.XOR<Prisma.AbilityCreateWithoutPolicyAbilitiesInput, Prisma.AbilityUncheckedCreateWithoutPolicyAbilitiesInput>
+  create: Prisma.XOR<Prisma.AbilityCreateWithoutPolicyEntriesInput, Prisma.AbilityUncheckedCreateWithoutPolicyEntriesInput>
 }
 
-export type AbilityUpsertWithoutPolicyAbilitiesInput = {
-  update: Prisma.XOR<Prisma.AbilityUpdateWithoutPolicyAbilitiesInput, Prisma.AbilityUncheckedUpdateWithoutPolicyAbilitiesInput>
-  create: Prisma.XOR<Prisma.AbilityCreateWithoutPolicyAbilitiesInput, Prisma.AbilityUncheckedCreateWithoutPolicyAbilitiesInput>
+export type AbilityUpsertWithoutPolicyEntriesInput = {
+  update: Prisma.XOR<Prisma.AbilityUpdateWithoutPolicyEntriesInput, Prisma.AbilityUncheckedUpdateWithoutPolicyEntriesInput>
+  create: Prisma.XOR<Prisma.AbilityCreateWithoutPolicyEntriesInput, Prisma.AbilityUncheckedCreateWithoutPolicyEntriesInput>
   where?: Prisma.AbilityWhereInput
 }
 
-export type AbilityUpdateToOneWithWhereWithoutPolicyAbilitiesInput = {
+export type AbilityUpdateToOneWithWhereWithoutPolicyEntriesInput = {
   where?: Prisma.AbilityWhereInput
-  data: Prisma.XOR<Prisma.AbilityUpdateWithoutPolicyAbilitiesInput, Prisma.AbilityUncheckedUpdateWithoutPolicyAbilitiesInput>
+  data: Prisma.XOR<Prisma.AbilityUpdateWithoutPolicyEntriesInput, Prisma.AbilityUncheckedUpdateWithoutPolicyEntriesInput>
 }
 
-export type AbilityUpdateWithoutPolicyAbilitiesInput = {
+export type AbilityUpdateWithoutPolicyEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -743,7 +743,7 @@ export type AbilityUpdateWithoutPolicyAbilitiesInput = {
   action?: Prisma.ActionUpdateOneRequiredWithoutAbilitiesNestedInput
 }
 
-export type AbilityUncheckedUpdateWithoutPolicyAbilitiesInput = {
+export type AbilityUncheckedUpdateWithoutPolicyEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -770,7 +770,7 @@ export type AbilityCreateWithoutSubjectInput = {
   inverted?: boolean
   reason?: string | null
   action: Prisma.ActionCreateNestedOneWithoutAbilitiesInput
-  policyAbilities?: Prisma.PolicyAbilityCreateNestedManyWithoutAbilityInput
+  policyEntries?: Prisma.PolicyEntryCreateNestedManyWithoutAbilityInput
 }
 
 export type AbilityUncheckedCreateWithoutSubjectInput = {
@@ -785,7 +785,7 @@ export type AbilityUncheckedCreateWithoutSubjectInput = {
   inverted?: boolean
   reason?: string | null
   actionId: string
-  policyAbilities?: Prisma.PolicyAbilityUncheckedCreateNestedManyWithoutAbilityInput
+  policyEntries?: Prisma.PolicyEntryUncheckedCreateNestedManyWithoutAbilityInput
 }
 
 export type AbilityCreateOrConnectWithoutSubjectInput = {
@@ -840,7 +840,7 @@ export type AbilityUpdateWithoutActionInput = {
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subject?: Prisma.SubjectUpdateOneRequiredWithoutAbilitiesNestedInput
-  policyAbilities?: Prisma.PolicyAbilityUpdateManyWithoutAbilityNestedInput
+  policyEntries?: Prisma.PolicyEntryUpdateManyWithoutAbilityNestedInput
 }
 
 export type AbilityUncheckedUpdateWithoutActionInput = {
@@ -855,7 +855,7 @@ export type AbilityUncheckedUpdateWithoutActionInput = {
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjectId?: Prisma.StringFieldUpdateOperationsInput | string
-  policyAbilities?: Prisma.PolicyAbilityUncheckedUpdateManyWithoutAbilityNestedInput
+  policyEntries?: Prisma.PolicyEntryUncheckedUpdateManyWithoutAbilityNestedInput
 }
 
 export type AbilityUncheckedUpdateManyWithoutActionInput = {
@@ -898,7 +898,7 @@ export type AbilityUpdateWithoutSubjectInput = {
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   action?: Prisma.ActionUpdateOneRequiredWithoutAbilitiesNestedInput
-  policyAbilities?: Prisma.PolicyAbilityUpdateManyWithoutAbilityNestedInput
+  policyEntries?: Prisma.PolicyEntryUpdateManyWithoutAbilityNestedInput
 }
 
 export type AbilityUncheckedUpdateWithoutSubjectInput = {
@@ -913,7 +913,7 @@ export type AbilityUncheckedUpdateWithoutSubjectInput = {
   inverted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   actionId?: Prisma.StringFieldUpdateOperationsInput | string
-  policyAbilities?: Prisma.PolicyAbilityUncheckedUpdateManyWithoutAbilityNestedInput
+  policyEntries?: Prisma.PolicyEntryUncheckedUpdateManyWithoutAbilityNestedInput
 }
 
 export type AbilityUncheckedUpdateManyWithoutSubjectInput = {
@@ -936,11 +936,11 @@ export type AbilityUncheckedUpdateManyWithoutSubjectInput = {
  */
 
 export type AbilityCountOutputType = {
-  policyAbilities: number
+  policyEntries: number
 }
 
 export type AbilityCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  policyAbilities?: boolean | AbilityCountOutputTypeCountPolicyAbilitiesArgs
+  policyEntries?: boolean | AbilityCountOutputTypeCountPolicyEntriesArgs
 }
 
 /**
@@ -956,8 +956,8 @@ export type AbilityCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
 /**
  * AbilityCountOutputType without action
  */
-export type AbilityCountOutputTypeCountPolicyAbilitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PolicyAbilityWhereInput
+export type AbilityCountOutputTypeCountPolicyEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PolicyEntryWhereInput
 }
 
 
@@ -976,7 +976,7 @@ export type AbilitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   actionId?: boolean
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
   action?: boolean | Prisma.ActionDefaultArgs<ExtArgs>
-  policyAbilities?: boolean | Prisma.Ability$policyAbilitiesArgs<ExtArgs>
+  policyEntries?: boolean | Prisma.Ability$policyEntriesArgs<ExtArgs>
   _count?: boolean | Prisma.AbilityCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ability"]>
 
@@ -1033,7 +1033,7 @@ export type AbilityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type AbilityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subject?: boolean | Prisma.SubjectDefaultArgs<ExtArgs>
   action?: boolean | Prisma.ActionDefaultArgs<ExtArgs>
-  policyAbilities?: boolean | Prisma.Ability$policyAbilitiesArgs<ExtArgs>
+  policyEntries?: boolean | Prisma.Ability$policyEntriesArgs<ExtArgs>
   _count?: boolean | Prisma.AbilityCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AbilityIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1050,7 +1050,7 @@ export type $AbilityPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     subject: Prisma.$SubjectPayload<ExtArgs>
     action: Prisma.$ActionPayload<ExtArgs>
-    policyAbilities: Prisma.$PolicyAbilityPayload<ExtArgs>[]
+    policyEntries: Prisma.$PolicyEntryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1479,7 +1479,7 @@ export interface Prisma__AbilityClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   subject<T extends Prisma.SubjectDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubjectDefaultArgs<ExtArgs>>): Prisma.Prisma__SubjectClient<runtime.Types.Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   action<T extends Prisma.ActionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ActionDefaultArgs<ExtArgs>>): Prisma.Prisma__ActionClient<runtime.Types.Result.GetResult<Prisma.$ActionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  policyAbilities<T extends Prisma.Ability$policyAbilitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ability$policyAbilitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PolicyAbilityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  policyEntries<T extends Prisma.Ability$policyEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ability$policyEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PolicyEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1917,27 +1917,27 @@ export type AbilityDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Ability.policyAbilities
+ * Ability.policyEntries
  */
-export type Ability$policyAbilitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Ability$policyEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the PolicyAbility
+   * Select specific fields to fetch from the PolicyEntry
    */
-  select?: Prisma.PolicyAbilitySelect<ExtArgs> | null
+  select?: Prisma.PolicyEntrySelect<ExtArgs> | null
   /**
-   * Omit specific fields from the PolicyAbility
+   * Omit specific fields from the PolicyEntry
    */
-  omit?: Prisma.PolicyAbilityOmit<ExtArgs> | null
+  omit?: Prisma.PolicyEntryOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.PolicyAbilityInclude<ExtArgs> | null
-  where?: Prisma.PolicyAbilityWhereInput
-  orderBy?: Prisma.PolicyAbilityOrderByWithRelationInput | Prisma.PolicyAbilityOrderByWithRelationInput[]
-  cursor?: Prisma.PolicyAbilityWhereUniqueInput
+  include?: Prisma.PolicyEntryInclude<ExtArgs> | null
+  where?: Prisma.PolicyEntryWhereInput
+  orderBy?: Prisma.PolicyEntryOrderByWithRelationInput | Prisma.PolicyEntryOrderByWithRelationInput[]
+  cursor?: Prisma.PolicyEntryWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.PolicyAbilityScalarFieldEnum | Prisma.PolicyAbilityScalarFieldEnum[]
+  distinct?: Prisma.PolicyEntryScalarFieldEnum | Prisma.PolicyEntryScalarFieldEnum[]
 }
 
 /**

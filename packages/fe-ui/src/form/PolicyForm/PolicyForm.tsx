@@ -13,7 +13,7 @@ export type PolicyFormField =
 	| "isSystem"
 	| "abilityIds";
 
-export interface PolicyAbilityOption {
+export interface PolicyEntryOption {
 	id: string;
 	label: string;
 	description?: string | null;
@@ -29,7 +29,7 @@ export interface PolicyFormState {
 
 export interface PolicyFormProps {
 	state: PolicyFormState;
-	abilities: PolicyAbilityOption[];
+	abilities: PolicyEntryOption[];
 	readOnly?: boolean;
 }
 

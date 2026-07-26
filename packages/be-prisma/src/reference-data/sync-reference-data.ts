@@ -551,7 +551,7 @@ async function syncAbilitiesAndPolicies(
 			});
 
 			const abilityIdList = Array.from(abilityIds);
-			await db.policyAbility.updateMany({
+			await db.policyEntry.updateMany({
 				where: {
 					policyId: policy.id,
 					removedAt: null,
@@ -561,7 +561,7 @@ async function syncAbilitiesAndPolicies(
 			});
 
 			for (const abilityId of abilityIdList) {
-				await db.policyAbility.upsert({
+				await db.policyEntry.upsert({
 					where: {
 						policyId_abilityId: {
 							policyId: policy.id,
@@ -576,7 +576,7 @@ async function syncAbilitiesAndPolicies(
 				});
 			}
 
-			await db.rolePolicy.upsert({
+			await db.roleAssignment.upsert({
 				where: {
 					roleId_policyId: {
 						roleId: role.id,

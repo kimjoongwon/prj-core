@@ -148,8 +148,8 @@ export {
 	OidcSessionListScreen,
 } from "./OidcSessionListScreen/OidcSessionListScreen";
 export type {
-	PolicyAbilityOption,
 	PolicyEditScreenProps,
+	PolicyEntryOption,
 	PolicyFormField,
 	PolicyFormState,
 } from "./PolicyEditScreen/PolicyEditScreen";
@@ -159,12 +159,12 @@ export { PolicyListScreen } from "./PolicyListScreen/PolicyListScreen";
 export type { ResetPasswordScreenProps } from "./ResetPasswordScreen/ResetPasswordScreen";
 export { ResetPasswordScreen } from "./ResetPasswordScreen/ResetPasswordScreen";
 export type {
+	AssignablePolicy,
+	RoleAssignmentFormState,
+	RoleAssignmentValue,
 	RoleEditScreenProps,
 	RoleFormField,
 	RoleFormState,
-	RolePolicyAssignment,
-	RolePolicyAssignmentFormState,
-	RolePolicyOption,
 } from "./RoleEditScreen/RoleEditScreen";
 export { RoleEditScreen } from "./RoleEditScreen/RoleEditScreen";
 export type {

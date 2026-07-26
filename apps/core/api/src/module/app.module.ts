@@ -46,10 +46,10 @@ import { OidcClientsModule } from "./oidc-client";
 import { OidcSessionsModule } from "./oidc-session";
 import { PasswordResetModule } from "./password-reset";
 import { PoliciesModule } from "./policies";
-import { PolicyAssignmentsModule } from "./policy-assignments";
 import { PrismaModule } from "./prisma.module";
 import { RedisModule } from "./redis.module";
 import { ReservationsModule } from "./reservations";
+import { RoleAssignmentsModule } from "./role-assignments";
 import { RolesModule } from "./roles";
 import { RoutinesModule } from "./routines";
 import { SecurityPolicyModule } from "./security-policy";
@@ -98,7 +98,7 @@ const devtoolsImports = enableNestDevtools
 		I18nCatalogModule,
 		CommunityModule,
 		PoliciesModule,
-		PolicyAssignmentsModule,
+		RoleAssignmentsModule,
 		FoldersModule,
 		TemplatesModule,
 		ServiceDocumentsModule,
@@ -169,8 +169,8 @@ const devtoolsImports = enableNestDevtools
 								module: PoliciesModule,
 							},
 							{
-								path: "policy-assignments",
-								module: PolicyAssignmentsModule,
+								path: "roles",
+								module: RoleAssignmentsModule,
 							},
 							{
 								path: "folders",

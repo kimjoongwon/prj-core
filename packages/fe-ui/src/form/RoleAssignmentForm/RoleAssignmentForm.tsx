@@ -6,7 +6,7 @@ import { Checkbox } from "../../input/Checkbox/Checkbox";
 import { Switch } from "../../input/Switch/Switch";
 import { TextField } from "../../input/TextField/TextField";
 
-export interface RolePolicyOption {
+export interface AssignablePolicy {
 	id: string;
 	name: string;
 	displayName?: string | null;
@@ -15,66 +15,63 @@ export interface RolePolicyOption {
 	abilityCount?: number | null;
 }
 
-export interface RolePolicyAssignment {
+export interface RoleAssignmentValue {
 	policyId: string;
 	isActive: boolean;
 	priority: number;
 }
 
-export interface RolePolicyAssignmentFormState {
-	policyAssignments: RolePolicyAssignment[];
+export interface RoleAssignmentFormState {
+	assignments: RoleAssignmentValue[];
 }
 
-export interface RolePolicyAssignmentFormProps {
-	state: RolePolicyAssignmentFormState;
-	policies: RolePolicyOption[];
-	baselinePolicyAssignments?: RolePolicyAssignment[];
+export interface RoleAssignmentFormProps {
+	state: RoleAssignmentFormState;
+	policies: AssignablePolicy[];
+	baselineAssignments?: RoleAssignmentValue[];
 	readOnly?: boolean;
 	isLoading?: boolean;
 	emptyMessage?: string;
 }
 
-function getPolicyLabel(policy: RolePolicyOption) {
+function getPolicyLabel(policy: AssignablePolicy) {
 	return policy.displayName || policy.name;
 }
 
-function setPolicyAssignments(
-	state: RolePolicyAssignmentFormState,
-	nextAssignments: RolePolicyAssignment[],
+function setAssignments(
+	state: RoleAssignmentFormState,
+	nextAssignments: RoleAssignmentValue[],
 ) {
-	state.policyAssignments = nextAssignments;
+	state.assignments = nextAssignments;
 }
 
 /**
  * Role aggregate의 Policy assignment 편집 필드 조합입니다.
  * route는 readOnly와 저장 액션만 결정하고, form은 assignment state만 수정합니다.
  */
-export const RolePolicyAssignmentForm = observer(
+export const RoleAssignmentForm = observer(
 	({
 		state,
 		policies,
-		baselinePolicyAssignments = state.policyAssignments,
+		baselineAssignments = state.assignments,
 		readOnly = false,
 		isLoading = false,
 		emptyMessage = "사용 가능한 정책이 없습니다.",
-	}: RolePolicyAssignmentFormProps) => {
+	}: RoleAssignmentFormProps) => {
 		const selectedAssignmentMap = new Map(
-			state.policyAssignments.map((assignment) => [
-				assignment.policyId,
-				assignment,
-			]),
+			state.assignments.map((assignment) => [assignment.policyId, assignment]),
 		);
-		const selectedPolicyIds = state.policyAssignments.map(
+		const selectedPolicyIds = state.assignments.map(
 			(assignment) => assignment.policyId,
 		);
 		const selectedSet = new Set(selectedPolicyIds);
 		const baselineSet = new Set(
-			baselinePolicyAssignments.map((assignment) => assignment.policyId),
+			baselineAssignments.map((assignment) => assignment.policyId),
 		);
 		const addedCount = selectedPolicyIds.filter(
 			(policyId) => !baselineSet.has(policyId),
 		).length;
-		const removedCount = baselinePolicyAssignments.filter(
+		const removedCount = baselineAssignments.filter(
 			(assignment) => !selectedSet.has(assignment.policyId),
 		).length;
 
@@ -83,30 +80,30 @@ export const RolePolicyAssignmentForm = observer(
 				return;
 			}
 			if (selectedSet.has(policyId)) {
-				setPolicyAssignments(
+				setAssignments(
 					state,
-					state.policyAssignments.filter(
+					state.assignments.filter(
 						(assignment) => assignment.policyId !== policyId,
 					),
 				);
 				return;
 			}
-			setPolicyAssignments(state, [
-				...state.policyAssignments,
+			setAssignments(state, [
+				...state.assignments,
 				{ policyId, isActive: true, priority: 0 },
 			]);
 		};
 
 		const updateAssignment = (
 			policyId: string,
-			patch: Partial<Omit<RolePolicyAssignment, "policyId">>,
+			patch: Partial<Omit<RoleAssignmentValue, "policyId">>,
 		) => {
 			if (readOnly) {
 				return;
 			}
-			setPolicyAssignments(
+			setAssignments(
 				state,
-				state.policyAssignments.map((assignment) =>
+				state.assignments.map((assignment) =>
 					assignment.policyId === policyId
 						? { ...assignment, ...patch }
 						: assignment,

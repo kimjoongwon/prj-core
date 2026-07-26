@@ -6,13 +6,9 @@ import {
 } from "@cocrepo/api/core/abilities";
 import {
 	useCreatePolicy,
-	useSyncPolicyAbilities,
+	useSyncPolicyEntries,
 } from "@cocrepo/api/core/policies";
-import {
-	Button,
-	type PolicyAbilityOption,
-	PolicyEditScreen,
-} from "@cocrepo/ui";
+import { Button, PolicyEditScreen, type PolicyEntryOption } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { ArrowLeft, Save } from "lucide-react";
 import { observer, useLocalObservable } from "mobx-react-lite";
@@ -33,8 +29,8 @@ export default observer(function PolicyCreateRoute() {
 	const showCreateSuccessToast = () => {
 		toast.success("정책 등록 성공", { description: "정책이 생성되었습니다." });
 	};
-	const { mutate: syncPolicyAbilities, isPending: isSyncingAbilities } =
-		useSyncPolicyAbilities();
+	const { mutate: syncPolicyEntries, isPending: isSyncingAbilities } =
+		useSyncPolicyEntries();
 	const { mutate: createPolicy, isPending } = useCreatePolicy({
 		mutation: {
 			onSuccess: (response) => {
@@ -50,10 +46,14 @@ export default observer(function PolicyCreateRoute() {
 					router.push(`/policies/${createdPolicy.id}` as Route);
 					return;
 				}
-				syncPolicyAbilities(
+				syncPolicyEntries(
 					{
 						policyId: createdPolicy.id,
-						data: { abilityIds: state.abilityIds },
+						data: {
+							entries: state.abilityIds.map((abilityId) => ({
+								abilityId,
+							})),
+						},
 					},
 					{
 						onSuccess: () => {
@@ -115,7 +115,7 @@ export default observer(function PolicyCreateRoute() {
 	);
 });
 
-function mapAbilityOption(ability: AbilityResponseDto): PolicyAbilityOption {
+function mapAbilityOption(ability: AbilityResponseDto): PolicyEntryOption {
 	const subject =
 		ability.subject?.displayName || ability.subject?.name || "Subject";
 	const action =

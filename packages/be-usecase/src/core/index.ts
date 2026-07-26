@@ -5,11 +5,11 @@ import { CommunityCommandHandlers, CommunityQueryHandlers } from "./community";
 import { FolderCommandHandlers, FolderQueryHandlers } from "./folder";
 import { InquiryCommandHandlers, InquiryQueryHandlers } from "./inquiry";
 import { PolicyCommandHandlers, PolicyQueryHandlers } from "./policy";
-import {
-	PolicyAssignmentCommandHandlers,
-	PolicyAssignmentQueryHandlers,
-} from "./policy-assignment";
 import { RoleCommandHandlers, RoleQueryHandlers } from "./role";
+import {
+	RoleAssignmentCommandHandlers,
+	RoleAssignmentQueryHandlers,
+} from "./role-assignment";
 import { RoutineCommandHandlers, RoutineQueryHandlers } from "./routine";
 import {
 	ServiceDocumentCommandHandlers,
@@ -38,7 +38,7 @@ export const CoreQueryHandlers = [
 	...FolderQueryHandlers,
 	...InquiryQueryHandlers,
 	...PolicyQueryHandlers,
-	...PolicyAssignmentQueryHandlers,
+	...RoleAssignmentQueryHandlers,
 	...RoleQueryHandlers,
 	...RoutineQueryHandlers,
 	...ServiceDocumentQueryHandlers,
@@ -60,7 +60,7 @@ export const CoreCommandHandlers = [
 	...FolderCommandHandlers,
 	...InquiryCommandHandlers,
 	...PolicyCommandHandlers,
-	...PolicyAssignmentCommandHandlers,
+	...RoleAssignmentCommandHandlers,
 	...RoleCommandHandlers,
 	...RoutineCommandHandlers,
 	...ServiceDocumentCommandHandlers,
@@ -86,8 +86,8 @@ export * from "./community";
 export * from "./folder";
 export * from "./inquiry";
 export * from "./policy";
-export * from "./policy-assignment";
 export * from "./role";
+export * from "./role-assignment";
 export * from "./routine";
 export * from "./service-document";
 export * from "./space";

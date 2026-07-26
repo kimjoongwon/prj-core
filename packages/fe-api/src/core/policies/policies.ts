@@ -46,8 +46,8 @@ import type {
   DeletePolicy200AllOf,
   GetPolicies200AllOf,
   GetPolicyById200AllOf,
-  SyncPolicyAbilities200AllOf,
-  SyncPolicyAbilitiesDto,
+  SyncPolicyEntries200AllOf,
+  SyncPolicyEntriesDto,
   UpdatePolicy200AllOf,
   UpdatePolicyDto
 } from '.././model';
@@ -728,29 +728,29 @@ export const useDeletePolicy = <TError = ErrorType<void>,
     }
     /**
  * 특정 Policy에 포함되는 Ability 목록을 전체 동기화 방식으로 반영합니다.
- * @summary Policy Ability 동기화
+ * @summary Policy 권한 항목 동기화
  */
-export const syncPolicyAbilities = (
+export const syncPolicyEntries = (
     policyId: string,
-    syncPolicyAbilitiesDto: BodyType<SyncPolicyAbilitiesDto>,
+    syncPolicyEntriesDto: BodyType<SyncPolicyEntriesDto>,
  options?: SecondParameter<typeof customInstance>,) => {
       
       
-      return customInstance<SyncPolicyAbilities200AllOf>(
-      {url: `/api/v1/policies/${policyId}/abilities`, method: 'PUT',
+      return customInstance<SyncPolicyEntries200AllOf>(
+      {url: `/api/v1/policies/${policyId}/entries`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
-      data: syncPolicyAbilitiesDto
+      data: syncPolicyEntriesDto
     },
       options);
     }
   
 
 
-export const getSyncPolicyAbilitiesMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncPolicyAbilities>>, TError,{policyId: string;data: BodyType<SyncPolicyAbilitiesDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof syncPolicyAbilities>>, TError,{policyId: string;data: BodyType<SyncPolicyAbilitiesDto>}, TContext> => {
+export const getSyncPolicyEntriesMutationOptions = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncPolicyEntries>>, TError,{policyId: string;data: BodyType<SyncPolicyEntriesDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof syncPolicyEntries>>, TError,{policyId: string;data: BodyType<SyncPolicyEntriesDto>}, TContext> => {
 
-const mutationKey = ['syncPolicyAbilities'];
+const mutationKey = ['syncPolicyEntries'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -760,10 +760,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof syncPolicyAbilities>>, {policyId: string;data: BodyType<SyncPolicyAbilitiesDto>}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof syncPolicyEntries>>, {policyId: string;data: BodyType<SyncPolicyEntriesDto>}> = (props) => {
           const {policyId,data} = props ?? {};
 
-          return  syncPolicyAbilities(policyId,data,requestOptions)
+          return  syncPolicyEntries(policyId,data,requestOptions)
         }
 
         
@@ -771,23 +771,23 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type SyncPolicyAbilitiesMutationResult = NonNullable<Awaited<ReturnType<typeof syncPolicyAbilities>>>
-    export type SyncPolicyAbilitiesMutationBody = BodyType<SyncPolicyAbilitiesDto>
-    export type SyncPolicyAbilitiesMutationError = ErrorType<void>
+    export type SyncPolicyEntriesMutationResult = NonNullable<Awaited<ReturnType<typeof syncPolicyEntries>>>
+    export type SyncPolicyEntriesMutationBody = BodyType<SyncPolicyEntriesDto>
+    export type SyncPolicyEntriesMutationError = ErrorType<void>
 
     /**
- * @summary Policy Ability 동기화
+ * @summary Policy 권한 항목 동기화
  */
-export const useSyncPolicyAbilities = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncPolicyAbilities>>, TError,{policyId: string;data: BodyType<SyncPolicyAbilitiesDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
+export const useSyncPolicyEntries = <TError = ErrorType<void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof syncPolicyEntries>>, TError,{policyId: string;data: BodyType<SyncPolicyEntriesDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof syncPolicyAbilities>>,
+        Awaited<ReturnType<typeof syncPolicyEntries>>,
         TError,
-        {policyId: string;data: BodyType<SyncPolicyAbilitiesDto>},
+        {policyId: string;data: BodyType<SyncPolicyEntriesDto>},
         TContext
       > => {
 
-      const mutationOptions = getSyncPolicyAbilitiesMutationOptions(options);
+      const mutationOptions = getSyncPolicyEntriesMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

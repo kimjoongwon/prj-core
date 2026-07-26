@@ -27,7 +27,7 @@ model Ability {
 
   subject         Subject         @relation(fields: [subjectId], references: [id])
   action          Action          @relation(fields: [actionId], references: [id])
-  policyAbilities PolicyAbility[]
+  policyEntries PolicyEntry[]
 
   @@index([subjectId])
   @@index([actionId])

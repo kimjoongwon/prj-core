@@ -14,12 +14,9 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
+import type { SyncRoleAssignmentItemDto } from './syncRoleAssignmentItemDto';
 
-export interface SyncRolePolicyItemDto {
-  /** Policy ID (Role에 할당할 정책) */
-  policyId: string;
-  /** 활성화 여부 */
-  isActive?: boolean;
-  /** 우선순위 (높을수록 우선) */
-  priority?: number;
+export interface SyncRoleAssignmentsDto {
+  /** Role에 연결할 Policy 목록입니다. 전체 동기화 방식으로 반영됩니다. */
+  assignments: SyncRoleAssignmentItemDto[];
 }

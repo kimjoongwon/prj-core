@@ -1,29 +1,29 @@
-import { PolicyAssignmentAggregate } from "@cocrepo/aggregate";
+import { RoleAssignmentAggregate } from "@cocrepo/aggregate";
 import { SpaceContext } from "@cocrepo/context";
-import { PolicyAssignmentsController } from "@cocrepo/controller";
+import { RoleAssignmentsController } from "@cocrepo/controller";
 import {
 	PoliciesRepository,
-	RolePoliciesRepository,
+	RoleAssignmentsRepository,
 	RolesRepository,
 } from "@cocrepo/repository";
 import {
-	PolicyAssignmentCommandHandlers,
-	PolicyAssignmentQueryHandlers,
+	RoleAssignmentCommandHandlers,
+	RoleAssignmentQueryHandlers,
 } from "@cocrepo/usecase";
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 
 @Module({
 	imports: [CqrsModule],
-	controllers: [PolicyAssignmentsController],
+	controllers: [RoleAssignmentsController],
 	providers: [
-		PolicyAssignmentAggregate,
+		RoleAssignmentAggregate,
 		PoliciesRepository,
-		RolePoliciesRepository,
+		RoleAssignmentsRepository,
 		RolesRepository,
 		SpaceContext,
-		...PolicyAssignmentCommandHandlers,
-		...PolicyAssignmentQueryHandlers,
+		...RoleAssignmentCommandHandlers,
+		...RoleAssignmentQueryHandlers,
 	],
 })
-export class PolicyAssignmentsModule {}
+export class RoleAssignmentsModule {}

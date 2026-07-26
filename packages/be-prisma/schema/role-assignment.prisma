@@ -1,7 +1,7 @@
 // @data-type: CONFIGURATION
-// @description: Role과 Policy를 연결하는 역할 정책 할당
-/// @displayName 역할 정책
-model RolePolicy {
+// @description: Role에 Policy를 할당하고 활성 상태와 우선순위를 관리
+/// @displayName 역할의 정책 할당
+model RoleAssignment {
   id        String    @id @default(uuid())
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
@@ -23,5 +23,5 @@ model RolePolicy {
   @@index([roleId])
   @@index([policyId])
   @@index([isActive])
-  @@map("role_policies")
+  @@map("role_assignments")
 }

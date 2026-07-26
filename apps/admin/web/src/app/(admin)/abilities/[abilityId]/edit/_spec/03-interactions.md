@@ -4,7 +4,7 @@
 
 - **L3 Features**: 21개 기능 (Role 7, Ability 6, Action 6, Subject 2)
 - **L4 Screens**: 14개 화면
-  - Role: 목록/상세(+Grant 배치 할당)/등록/수정
+  - Role: 목록/상세(+Policy 할당)/등록/수정
   - Ability: 목록/상세/등록/수정
   - Action: 목록/상세/등록/수정
   - Subject: 목록/상세 (조회 전용)
@@ -59,7 +59,7 @@
 | **Method** | PATCH |
 | **Endpoint** | `/api/v1/abilities/:id` |
 | **Operation ID** | `updateAbility` |
-| **설명** | 기존 Ability의 설정을 수정합니다. Grant 메타데이터(isActive, priority)는 변경되지 않습니다. |
+| **설명** | 기존 Ability의 설정을 수정합니다. Role Assignment 메타데이터(isActive, priority)는 변경되지 않습니다. |
 | **인증** | Bearer Token |
 | **권한** | 인증된 사용자 (TODO: Guard 추가 필요) |
 | **Path Params** | `id` (UUID) - Ability ID |

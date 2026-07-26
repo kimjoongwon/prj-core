@@ -1,2 +1,2 @@
-export * from "./policy-assignment-response.dto";
-export * from "./sync-role-policies.dto";
+export * from "./role-assignment-response.dto";
+export * from "./sync-role-assignments.dto";

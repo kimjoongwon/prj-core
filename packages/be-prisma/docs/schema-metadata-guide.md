@@ -681,7 +681,7 @@ Aggregate는 여러 도메인 객체를 하나의 일관성 단위로 다루는 
 // @data-type: CONFIGURATION
 // @description: Policy와 Ability를 연결하여 정책의 권한 구성을 관리
 /// @displayName 정책 권한
-model PolicyAbility {
+model PolicyEntry {
   id        String @id
   policyId  String
   abilityId String

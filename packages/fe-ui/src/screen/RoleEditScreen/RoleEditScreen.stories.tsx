@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { RolePolicyAssignmentForm } from "../../form/RolePolicyAssignmentForm";
+import { RoleAssignmentForm } from "../../form/RoleAssignmentForm";
 import { Button } from "../../input/Button/Button";
 import { RoleEditScreen } from "./RoleEditScreen";
 
@@ -30,8 +30,8 @@ const defaultState = {
 	errors: {},
 };
 
-const policyAssignmentState = {
-	policyAssignments: [
+const roleAssignmentState = {
+	assignments: [
 		{
 			policyId: "policy-user-operator",
 			isActive: true,
@@ -79,8 +79,8 @@ export const Detail: Story = {
 		readOnly: true,
 		actions: <Button variant="flat">수정</Button>,
 		children: (
-			<RolePolicyAssignmentForm
-				state={policyAssignmentState}
+			<RoleAssignmentForm
+				state={roleAssignmentState}
 				policies={policies}
 				readOnly
 			/>

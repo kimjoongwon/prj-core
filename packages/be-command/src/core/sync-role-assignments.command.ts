@@ -1,10 +1,14 @@
-import type { SyncRolePoliciesCommandInput } from "@cocrepo/input";
-export class SyncRolePoliciesCommand implements SyncRolePoliciesCommandInput {
-	readonly rolePolicies!: SyncRolePoliciesCommandInput["rolePolicies"];
+import type { SyncRoleAssignmentsCommandInput } from "@cocrepo/input";
+
+/** Role의 Policy Assignment 목록을 전체 동기화합니다. */
+export class SyncRoleAssignmentsCommand
+	implements SyncRoleAssignmentsCommandInput
+{
+	readonly assignments!: SyncRoleAssignmentsCommandInput["assignments"];
 
 	constructor(
 		readonly roleId: string,
-		input: SyncRolePoliciesCommandInput,
+		input: SyncRoleAssignmentsCommandInput,
 	) {
 		Object.assign(this, input);
 	}

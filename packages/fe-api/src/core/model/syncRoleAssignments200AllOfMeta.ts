@@ -15,7 +15,13 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface SyncPolicyAbilitiesDto {
-  /** Policy에 연결할 Ability ID 목록입니다. 전체 동기화 방식으로 반영됩니다. */
-  abilityIds: string[];
-}
+export type SyncRoleAssignments200AllOfMeta = {
+  /** 전체 항목 수 */
+  total?: number;
+  /** 현재 페이지 */
+  page?: number;
+  /** 페이지당 항목 수 */
+  limit?: number;
+  /** 전체 페이지 수 */
+  totalPages?: number;
+};

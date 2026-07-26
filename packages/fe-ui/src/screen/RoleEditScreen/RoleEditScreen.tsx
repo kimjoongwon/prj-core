@@ -7,12 +7,12 @@ import type { ReactNode } from "react";
 import { RoleForm, type RoleFormState } from "../../form/RoleForm";
 import { Button } from "../../input/Button/Button";
 
-export type { RoleFormField, RoleFormState } from "../../form/RoleForm";
 export type {
-	RolePolicyAssignment,
-	RolePolicyAssignmentFormState,
-	RolePolicyOption,
-} from "../../form/RolePolicyAssignmentForm";
+	AssignablePolicy,
+	RoleAssignmentFormState,
+	RoleAssignmentValue,
+} from "../../form/RoleAssignmentForm";
+export type { RoleFormField, RoleFormState } from "../../form/RoleForm";
 export interface RoleEditScreenProps {
 	title: ReactNode;
 	description?: ReactNode;

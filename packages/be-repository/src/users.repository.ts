@@ -1,4 +1,4 @@
-import { User } from "@cocrepo/entity";
+import { Tenant, User } from "@cocrepo/entity";
 import type { IdpAccountListInput } from "@cocrepo/input";
 import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import type { UserStats } from "@cocrepo/type";
@@ -497,6 +497,67 @@ export class UsersRepository {
 		} as never);
 
 		return result ? plainToInstance(User, result) : null;
+	}
+
+	/**
+	 * 사용자와 현재 Space에 속한 활성 Tenant 상세를 권한 그래프와 함께 조회합니다.
+	 */
+	async findTenantDetailForUserInSpace(
+		userId: string,
+		tenantId: string,
+		spaceId: string,
+	): Promise<Tenant | null> {
+		const result = await this.txHost.tx.tenant.findFirst({
+			where: {
+				id: tenantId,
+				userId,
+				spaceId,
+				removedAt: null,
+			},
+			include: {
+				space: {
+					include: {
+						fitnessCenter: {
+							include: { company: true },
+						},
+					},
+				},
+				role: {
+					include: {
+						assignments: {
+							where: {
+								removedAt: null,
+								policy: { spaceId, removedAt: null },
+							},
+							orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
+							include: {
+								policy: {
+									include: {
+										entries: {
+											where: {
+												removedAt: null,
+												ability: { removedAt: null },
+											},
+											orderBy: { createdAt: "asc" },
+											include: {
+												ability: {
+													include: {
+														action: true,
+														subject: true,
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		});
+
+		return result ? plainToInstance(Tenant, result) : null;
 	}
 
 	/**
