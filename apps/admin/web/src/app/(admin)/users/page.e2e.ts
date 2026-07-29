@@ -107,6 +107,24 @@ test.describe("이용자 목록 페이지", () => {
 			}
 			await expect(page.getByText(/총 \d+건/)).toBeVisible();
 		});
+
+		test("회원 이름을 누르면 회원 상세 페이지로 이동해야 한다", async ({
+			page,
+		}) => {
+			const firstRow = page.getByRole("rowheader").first();
+			const hasRows = await firstRow.isVisible().catch(() => false);
+			if (!hasRows) {
+				await expect(page.getByText(/총 \d+건/)).toBeVisible();
+				return;
+			}
+
+			const nameLink = firstRow.getByRole("link");
+			const href = await nameLink.getAttribute("href");
+
+			expect(href).toMatch(/^\/admin\/users\/[^/]+$/);
+			await nameLink.click();
+			await expect(page).toHaveURL(new RegExp(`${escapeRegExp(href ?? "")}$`));
+		});
 	});
 
 	test.describe("검색 기능", () => {

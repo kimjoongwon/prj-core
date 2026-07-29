@@ -21,6 +21,7 @@ import {
 	ChipCell,
 	DateTimeCell,
 	DefaultCell,
+	LinkCell,
 	NameCell,
 	PhoneCell,
 	ProfileAvatarCell,
@@ -353,7 +354,13 @@ export function buildUserListTableColumns<
 >() {
 	/** 사용자 목록 페이지용 컬럼 조합을 생성합니다. */
 	return buildColumns<TRow>(
-		createNameColumn<TRow>(),
+		createNameColumn<TRow>({
+			cell: ({ row }) => (
+				<LinkCell href={`/admin/users/${row.original.id}`}>
+					{row.original.name}
+				</LinkCell>
+			),
+		}),
 		createEmailColumn<TRow>({
 			size: 240,
 		}),
