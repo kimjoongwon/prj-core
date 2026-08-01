@@ -120,7 +120,7 @@ export class TimelineAggregate {
 		if (input.name && input.name !== timeline.name) {
 			const duplicateCount = await this.repository.countTimelinesWithName(
 				input.name,
-				timeline.spaceId,
+				timeline.space.id,
 				timelineId,
 			);
 			if (duplicateCount > 0) {
@@ -409,7 +409,7 @@ export class TimelineAggregate {
 
 		const hasRoutineChanged =
 			input.routineId !== undefined &&
-			input.routineId !== existingProgram.routineId;
+			input.routineId !== existingProgram.routine.id;
 
 		if (hasRoutineChanged && input.routineId) {
 			const duplicateCount = await this.repository.countProgramsWithRoutine(

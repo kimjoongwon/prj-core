@@ -4,8 +4,8 @@ import {
 	PhoneField,
 	StringField,
 	StringFieldOptional,
-	UUIDField,
-	UUIDFieldOptional,
+	ULIDField,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator";
 import { Transform } from "class-transformer";
 
@@ -36,12 +36,12 @@ export class CreateUserMemberDto {
 	})
 	password: string;
 
-	@UUIDField({
+	@ULIDField({
 		description: "역할 ID",
 	})
 	roleId: string;
 
-	@UUIDFieldOptional({
+	@ULIDFieldOptional({
 		description: "분류 카테고리 ID",
 	})
 	categoryId?: string;

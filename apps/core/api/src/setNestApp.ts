@@ -3,7 +3,6 @@ import {
 	DtoTransformInterceptor,
 	JwtAuthGuard,
 	ResponseEntityInterceptor,
-	RouteKeyToUuidPipe,
 	SpaceAccessGuard,
 	SpaceScopeInterceptor,
 } from "@cocrepo/be-common";
@@ -71,7 +70,6 @@ export function setNestApp<T extends INestApplication>(app: T): void {
 	// Global Pipes (데이터 검증 및 변환 - Controller 실행 전)
 	// =================================================================
 	app.useGlobalPipes(
-		new RouteKeyToUuidPipe(),
 		new ValidationPipe({
 			transform: true, // 자동 타입 변환 (string → number 등)
 			whitelist: true, // DTO에 정의되지 않은 속성 자동 제거 (보안)

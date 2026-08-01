@@ -3,14 +3,14 @@ import {
 	DateFieldOptional,
 	StringField,
 	StringFieldOptional,
-	UUIDField,
+	ULIDField,
 } from "@cocrepo/decorator";
 
 export class IdpAccountAccessGrantDto {
-	@UUIDField({ description: "테넌트 ID" })
+	@ULIDField({ description: "테넌트 ID" })
 	tenantId!: string;
 
-	@UUIDField({ description: "접근 대상 Space ID" })
+	@ULIDField({ description: "접근 대상 Space ID" })
 	spaceId!: string;
 
 	@StringField({ description: "접근 대상 Space 이름" })
@@ -22,7 +22,7 @@ export class IdpAccountAccessGrantDto {
 	})
 	spaceLabel!: string | null;
 
-	@UUIDField({ description: "부여된 Role ID" })
+	@ULIDField({ description: "부여된 Role ID" })
 	roleId!: string;
 
 	@StringField({ description: "부여된 Role 식별자" })

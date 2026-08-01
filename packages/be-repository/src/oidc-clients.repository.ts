@@ -3,7 +3,7 @@ import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
 export class OidcClientsRepository {
@@ -20,7 +20,7 @@ export class OidcClientsRepository {
 		const result = await this.txHost.tx.oidcClient.findUnique({
 			where: { id },
 		});
-		return result ? plainToInstance(OidcClient, result) : null;
+		return result ? toDomainEntity(OidcClient, result) : null;
 	}
 
 	async findByIdOrThrow(id: string): Promise<OidcClient> {
@@ -36,7 +36,7 @@ export class OidcClientsRepository {
 		const result = await this.txHost.tx.oidcClient.findUnique({
 			where: { clientId },
 		});
-		return result ? plainToInstance(OidcClient, result) : null;
+		return result ? toDomainEntity(OidcClient, result) : null;
 	}
 
 	async findMany(params: {
@@ -63,7 +63,7 @@ export class OidcClientsRepository {
 		]);
 
 		return {
-			data: data.map((item) => plainToInstance(OidcClient, item)),
+			data: data.map((item) => toDomainEntity(OidcClient, item)),
 			totalCount,
 		};
 	}
@@ -80,7 +80,7 @@ export class OidcClientsRepository {
 	): Promise<OidcClient> {
 		this.logger.debug(`생성 중: ${data.clientId}`);
 		const result = await this.txHost.tx.oidcClient.create({ data });
-		return plainToInstance(OidcClient, result);
+		return toDomainEntity(OidcClient, result);
 	}
 
 	async updateById(
@@ -92,7 +92,7 @@ export class OidcClientsRepository {
 			where: { id },
 			data,
 		});
-		return plainToInstance(OidcClient, result);
+		return toDomainEntity(OidcClient, result);
 	}
 
 	async removeById(id: string): Promise<OidcClient> {
@@ -101,6 +101,6 @@ export class OidcClientsRepository {
 			where: { id },
 			data: { removedAt: new Date(), isActive: false },
 		});
-		return plainToInstance(OidcClient, result);
+		return toDomainEntity(OidcClient, result);
 	}
 }

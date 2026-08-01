@@ -576,7 +576,8 @@ relation 개수, 파일 이름, API CRUD 유무만으로 타입을 결정하지 
 // @description: 사용자 계정의 현재 상태와 생명주기를 관리
 /// @displayName 사용자
 model User {
-  id String @id
+  id  String @unique @default(ulid()) @db.VarChar(26)
+  seq Int    @id @default(autoincrement())
 }
 ```
 
@@ -682,14 +683,15 @@ Aggregate는 여러 도메인 객체를 하나의 일관성 단위로 다루는 
 // @description: Policy와 Ability를 연결하여 정책의 권한 구성을 관리
 /// @displayName 정책 권한
 model PolicyEntry {
-  id        String @id
-  policyId  String
-  abilityId String
+  id         String @unique @default(ulid()) @db.VarChar(26)
+  seq        Int    @id @default(autoincrement())
+  policySeq  Int
+  abilitySeq Int
 
-  policy  Policy  @relation(fields: [policyId], references: [id])
-  ability Ability @relation(fields: [abilityId], references: [id])
+  policy  Policy  @relation(fields: [policySeq], references: [seq])
+  ability Ability @relation(fields: [abilitySeq], references: [seq])
 
-  @@unique([policyId, abilityId])
+  @@unique([policySeq, abilitySeq])
 }
 ```
 
@@ -710,9 +712,10 @@ model PolicyEntry {
 // @description: Inquiry에 종속되어 감정 분석 결과를 보관
 /// @displayName 감정 분석
 model SentimentAnalysis {
-  id        String  @id
-  inquiryId String  @unique
-  inquiry   Inquiry @relation(fields: [inquiryId], references: [id])
+  id         String  @unique @default(ulid()) @db.VarChar(26)
+  seq        Int     @id @default(autoincrement())
+  inquirySeq Int     @unique
+  inquiry    Inquiry @relation(fields: [inquirySeq], references: [seq])
 }
 ```
 
@@ -737,7 +740,8 @@ enum AssetKind {
 // @description: 보관되는 파일 자산의 공통 identity와 종류를 관리
 /// @displayName 자산
 model Asset {
-  id   String    @id
+  id   String    @unique @default(ulid()) @db.VarChar(26)
+  seq  Int       @id @default(autoincrement())
   kind AssetKind
 
   image    Image?

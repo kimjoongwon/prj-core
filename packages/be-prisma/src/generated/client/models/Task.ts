@@ -20,64 +20,96 @@ export type TaskModel = runtime.Types.Result.DefaultSelection<Prisma.$TaskPayloa
 
 export type AggregateTask = {
   _count: TaskCountAggregateOutputType | null
+  _avg: TaskAvgAggregateOutputType | null
+  _sum: TaskSumAggregateOutputType | null
   _min: TaskMinAggregateOutputType | null
   _max: TaskMaxAggregateOutputType | null
 }
 
+export type TaskAvgAggregateOutputType = {
+  seq: number | null
+  spaceSeq: number | null
+  createdBySeq: number | null
+}
+
+export type TaskSumAggregateOutputType = {
+  seq: number | null
+  spaceSeq: number | null
+  createdBySeq: number | null
+}
+
 export type TaskMinAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: string | null
-  createdById: string | null
+  spaceSeq: number | null
+  createdBySeq: number | null
 }
 
 export type TaskMaxAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: string | null
-  createdById: string | null
+  spaceSeq: number | null
+  createdBySeq: number | null
 }
 
 export type TaskCountAggregateOutputType = {
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
-  spaceId: number
-  createdById: number
+  spaceSeq: number
+  createdBySeq: number
   _all: number
 }
 
 
+export type TaskAvgAggregateInputType = {
+  seq?: true
+  spaceSeq?: true
+  createdBySeq?: true
+}
+
+export type TaskSumAggregateInputType = {
+  seq?: true
+  spaceSeq?: true
+  createdBySeq?: true
+}
+
 export type TaskMinAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  createdById?: true
+  spaceSeq?: true
+  createdBySeq?: true
 }
 
 export type TaskMaxAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  createdById?: true
+  spaceSeq?: true
+  createdBySeq?: true
 }
 
 export type TaskCountAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  createdById?: true
+  spaceSeq?: true
+  createdBySeq?: true
   _all?: true
 }
 
@@ -119,6 +151,18 @@ export type TaskAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: TaskAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: TaskSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: TaskMinAggregateInputType
@@ -149,18 +193,23 @@ export type TaskGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: TaskCountAggregateInputType | true
+  _avg?: TaskAvgAggregateInputType
+  _sum?: TaskSumAggregateInputType
   _min?: TaskMinAggregateInputType
   _max?: TaskMaxAggregateInputType
 }
 
 export type TaskGroupByOutputType = {
   id: string
+  seq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: string
-  createdById: string | null
+  spaceSeq: number
+  createdBySeq: number | null
   _count: TaskCountAggregateOutputType | null
+  _avg: TaskAvgAggregateOutputType | null
+  _sum: TaskSumAggregateOutputType | null
   _min: TaskMinAggregateOutputType | null
   _max: TaskMaxAggregateOutputType | null
 }
@@ -185,11 +234,12 @@ export type TaskWhereInput = {
   OR?: Prisma.TaskWhereInput[]
   NOT?: Prisma.TaskWhereInput | Prisma.TaskWhereInput[]
   id?: Prisma.StringFilter<"Task"> | string
+  seq?: Prisma.IntFilter<"Task"> | number
   createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
-  spaceId?: Prisma.StringFilter<"Task"> | string
-  createdById?: Prisma.StringNullableFilter<"Task"> | string | null
+  spaceSeq?: Prisma.IntFilter<"Task"> | number
+  createdBySeq?: Prisma.IntNullableFilter<"Task"> | number | null
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   activities?: Prisma.ActivityListRelationFilter
@@ -198,11 +248,12 @@ export type TaskWhereInput = {
 
 export type TaskOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
   space?: Prisma.SpaceOrderByWithRelationInput
   createdBy?: Prisma.UserOrderByWithRelationInput
   activities?: Prisma.ActivityOrderByRelationAggregateInput
@@ -211,30 +262,34 @@ export type TaskOrderByWithRelationInput = {
 
 export type TaskWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  seq?: number
   AND?: Prisma.TaskWhereInput | Prisma.TaskWhereInput[]
   OR?: Prisma.TaskWhereInput[]
   NOT?: Prisma.TaskWhereInput | Prisma.TaskWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
-  spaceId?: Prisma.StringFilter<"Task"> | string
-  createdById?: Prisma.StringNullableFilter<"Task"> | string | null
+  spaceSeq?: Prisma.IntFilter<"Task"> | number
+  createdBySeq?: Prisma.IntNullableFilter<"Task"> | number | null
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   activities?: Prisma.ActivityListRelationFilter
   exercise?: Prisma.XOR<Prisma.ExerciseNullableScalarRelationFilter, Prisma.ExerciseWhereInput> | null
-}, "id">
+}, "seq" | "id">
 
 export type TaskOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TaskCountOrderByAggregateInput
+  _avg?: Prisma.TaskAvgOrderByAggregateInput
   _max?: Prisma.TaskMaxOrderByAggregateInput
   _min?: Prisma.TaskMinOrderByAggregateInput
+  _sum?: Prisma.TaskSumOrderByAggregateInput
 }
 
 export type TaskScalarWhereWithAggregatesInput = {
@@ -242,11 +297,12 @@ export type TaskScalarWhereWithAggregatesInput = {
   OR?: Prisma.TaskScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TaskScalarWhereWithAggregatesInput | Prisma.TaskScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Task"> | string
+  seq?: Prisma.IntWithAggregatesFilter<"Task"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Task"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Task"> | Date | string | null
-  spaceId?: Prisma.StringWithAggregatesFilter<"Task"> | string
-  createdById?: Prisma.StringNullableWithAggregatesFilter<"Task"> | string | null
+  spaceSeq?: Prisma.IntWithAggregatesFilter<"Task"> | number
+  createdBySeq?: Prisma.IntNullableWithAggregatesFilter<"Task"> | number | null
 }
 
 export type TaskCreateInput = {
@@ -262,11 +318,12 @@ export type TaskCreateInput = {
 
 export type TaskUncheckedCreateInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: string
-  createdById?: string | null
+  spaceSeq: number
+  createdBySeq?: number | null
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutTaskInput
   exercise?: Prisma.ExerciseUncheckedCreateNestedOneWithoutTaskInput
 }
@@ -284,22 +341,24 @@ export type TaskUpdateInput = {
 
 export type TaskUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutTaskNestedInput
   exercise?: Prisma.ExerciseUncheckedUpdateOneWithoutTaskNestedInput
 }
 
 export type TaskCreateManyInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: string
-  createdById?: string | null
+  spaceSeq: number
+  createdBySeq?: number | null
 }
 
 export type TaskUpdateManyMutationInput = {
@@ -311,11 +370,12 @@ export type TaskUpdateManyMutationInput = {
 
 export type TaskUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type TaskScalarRelationFilter = {
@@ -335,29 +395,44 @@ export type TaskOrderByRelationAggregateInput = {
 
 export type TaskCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
+}
+
+export type TaskAvgOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
 }
 
 export type TaskMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
 }
 
 export type TaskMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
+}
+
+export type TaskSumOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
 }
 
 export type TaskCreateNestedOneWithoutActivitiesInput = {
@@ -484,11 +559,12 @@ export type TaskCreateWithoutActivitiesInput = {
 
 export type TaskUncheckedCreateWithoutActivitiesInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: string
-  createdById?: string | null
+  spaceSeq: number
+  createdBySeq?: number | null
   exercise?: Prisma.ExerciseUncheckedCreateNestedOneWithoutTaskInput
 }
 
@@ -520,11 +596,12 @@ export type TaskUpdateWithoutActivitiesInput = {
 
 export type TaskUncheckedUpdateWithoutActivitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   exercise?: Prisma.ExerciseUncheckedUpdateOneWithoutTaskNestedInput
 }
 
@@ -540,11 +617,12 @@ export type TaskCreateWithoutExerciseInput = {
 
 export type TaskUncheckedCreateWithoutExerciseInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: string
-  createdById?: string | null
+  spaceSeq: number
+  createdBySeq?: number | null
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutTaskInput
 }
 
@@ -576,11 +654,12 @@ export type TaskUpdateWithoutExerciseInput = {
 
 export type TaskUncheckedUpdateWithoutExerciseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutTaskNestedInput
 }
 
@@ -596,10 +675,11 @@ export type TaskCreateWithoutSpaceInput = {
 
 export type TaskUncheckedCreateWithoutSpaceInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  createdById?: string | null
+  createdBySeq?: number | null
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutTaskInput
   exercise?: Prisma.ExerciseUncheckedCreateNestedOneWithoutTaskInput
 }
@@ -635,11 +715,12 @@ export type TaskScalarWhereInput = {
   OR?: Prisma.TaskScalarWhereInput[]
   NOT?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
   id?: Prisma.StringFilter<"Task"> | string
+  seq?: Prisma.IntFilter<"Task"> | number
   createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
-  spaceId?: Prisma.StringFilter<"Task"> | string
-  createdById?: Prisma.StringNullableFilter<"Task"> | string | null
+  spaceSeq?: Prisma.IntFilter<"Task"> | number
+  createdBySeq?: Prisma.IntNullableFilter<"Task"> | number | null
 }
 
 export type TaskCreateWithoutCreatedByInput = {
@@ -654,10 +735,11 @@ export type TaskCreateWithoutCreatedByInput = {
 
 export type TaskUncheckedCreateWithoutCreatedByInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: string
+  spaceSeq: number
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutTaskInput
   exercise?: Prisma.ExerciseUncheckedCreateNestedOneWithoutTaskInput
 }
@@ -690,10 +772,11 @@ export type TaskUpdateManyWithWhereWithoutCreatedByInput = {
 
 export type TaskCreateManySpaceInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  createdById?: string | null
+  createdBySeq?: number | null
 }
 
 export type TaskUpdateWithoutSpaceInput = {
@@ -708,28 +791,31 @@ export type TaskUpdateWithoutSpaceInput = {
 
 export type TaskUncheckedUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutTaskNestedInput
   exercise?: Prisma.ExerciseUncheckedUpdateOneWithoutTaskNestedInput
 }
 
 export type TaskUncheckedUpdateManyWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type TaskCreateManyCreatedByInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: string
+  spaceSeq: number
 }
 
 export type TaskUpdateWithoutCreatedByInput = {
@@ -744,20 +830,22 @@ export type TaskUpdateWithoutCreatedByInput = {
 
 export type TaskUncheckedUpdateWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutTaskNestedInput
   exercise?: Prisma.ExerciseUncheckedUpdateOneWithoutTaskNestedInput
 }
 
 export type TaskUncheckedUpdateManyWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -793,11 +881,12 @@ export type TaskCountOutputTypeCountActivitiesArgs<ExtArgs extends runtime.Types
 
 export type TaskSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  createdById?: boolean
+  spaceSeq?: boolean
+  createdBySeq?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Task$createdByArgs<ExtArgs>
   activities?: boolean | Prisma.Task$activitiesArgs<ExtArgs>
@@ -807,36 +896,39 @@ export type TaskSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 
 export type TaskSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  createdById?: boolean
+  spaceSeq?: boolean
+  createdBySeq?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Task$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["task"]>
 
 export type TaskSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  createdById?: boolean
+  spaceSeq?: boolean
+  createdBySeq?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Task$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["task"]>
 
 export type TaskSelectScalar = {
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  createdById?: boolean
+  spaceSeq?: boolean
+  createdBySeq?: boolean
 }
 
-export type TaskOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "spaceId" | "createdById", ExtArgs["result"]["task"]>
+export type TaskOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "spaceSeq" | "createdBySeq", ExtArgs["result"]["task"]>
 export type TaskInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Task$createdByArgs<ExtArgs>
@@ -863,11 +955,12 @@ export type $TaskPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    seq: number
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    spaceId: string
-    createdById: string | null
+    spaceSeq: number
+    createdBySeq: number | null
   }, ExtArgs["result"]["task"]>
   composites: {}
 }
@@ -1296,11 +1389,12 @@ export interface Prisma__TaskClient<T, Null = never, ExtArgs extends runtime.Typ
  */
 export interface TaskFieldRefs {
   readonly id: Prisma.FieldRef<"Task", 'String'>
+  readonly seq: Prisma.FieldRef<"Task", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Task", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Task", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Task", 'DateTime'>
-  readonly spaceId: Prisma.FieldRef<"Task", 'String'>
-  readonly createdById: Prisma.FieldRef<"Task", 'String'>
+  readonly spaceSeq: Prisma.FieldRef<"Task", 'Int'>
+  readonly createdBySeq: Prisma.FieldRef<"Task", 'Int'>
 }
     
 

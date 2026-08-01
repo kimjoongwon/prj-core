@@ -1,3 +1,4 @@
+import { ParseUlidPipe } from "@cocrepo/be-common";
 import {
 	CreateSpaceCommand,
 	GetSpaceFitnessCenterQuery,
@@ -27,7 +28,6 @@ import {
 	HttpCode,
 	HttpStatus,
 	Param,
-	ParseUUIDPipe,
 	Patch,
 	Post,
 	Query,
@@ -67,13 +67,12 @@ export class SpacesController {
 	@ApiOperation({
 		operationId: "getSpaceFitnessCenter",
 		summary: "공간의 시설 detail 조회",
-		description:
-			"Space에 연결된 FitnessCenter detail을 조회합니다.",
+		description: "Space에 연결된 FitnessCenter detail을 조회합니다.",
 	})
 	@ApiAuth()
 	@ApiParam({
 		name: "spaceId",
-		description: "Space ID (UUID)",
+		description: "Space ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
@@ -81,7 +80,7 @@ export class SpacesController {
 	@ResponseMessage("공간 시설 조회 성공")
 	@HttpCode(HttpStatus.OK)
 	async getSpaceFitnessCenter(
-		@Param("spaceId", ParseUUIDPipe) spaceId: string,
+		@Param("spaceId", ParseUlidPipe) spaceId: string,
 	): Promise<FitnessCenter> {
 		if (!this.spaceContext.canAccessSpace(spaceId)) {
 			throw new ForbiddenException("해당 Space 리소스에 접근할 수 없습니다.");
@@ -121,7 +120,7 @@ export class SpacesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "spaceId",
-		description: "Space ID (UUID)",
+		description: "Space ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -133,7 +132,7 @@ export class SpacesController {
 	@ResponseMessage("공간 시설 수정 성공")
 	@HttpCode(HttpStatus.OK)
 	async updateSpaceFitnessCenter(
-		@Param("spaceId", ParseUUIDPipe) spaceId: string,
+		@Param("spaceId", ParseUlidPipe) spaceId: string,
 		@Body() dto: UpdateFitnessCenterDto,
 	): Promise<Space> {
 		if (!this.spaceContext.canAccessSpace(spaceId)) {

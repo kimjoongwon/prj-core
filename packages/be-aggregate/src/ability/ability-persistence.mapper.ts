@@ -1,15 +1,17 @@
 import type { CreateAbilityInput, UpdateAbilityInput } from "@cocrepo/input";
-import type { Prisma } from "@cocrepo/prisma";
+import type { AbilitiesRepository } from "@cocrepo/repository";
+
+type AbilityCreateData = Parameters<AbilitiesRepository["create"]>[0];
+type AbilityUpdateData = Parameters<AbilitiesRepository["updateById"]>[1];
 
 export function toAbilityCreateData(
 	input: CreateAbilityInput,
-): Prisma.AbilityUncheckedCreateInput {
+): AbilityCreateData {
 	return {
 		actionId: input.actionId,
 		subjectId: input.subjectId,
 		fields: input.fields ?? [],
-		conditions: (input.conditions ??
-			null) as Prisma.AbilityUncheckedCreateInput["conditions"],
+		conditions: (input.conditions ?? null) as AbilityCreateData["conditions"],
 		inverted: input.inverted ?? false,
 		reason: input.reason ?? null,
 		name: input.name,
@@ -19,15 +21,14 @@ export function toAbilityCreateData(
 
 export function toAbilityUpdateData(
 	input: UpdateAbilityInput,
-): Prisma.AbilityUncheckedUpdateInput {
-	const data: Prisma.AbilityUncheckedUpdateInput = {};
+): AbilityUpdateData {
+	const data: AbilityUpdateData = {};
 
 	if (input.actionId !== undefined) data.actionId = input.actionId;
 	if (input.subjectId !== undefined) data.subjectId = input.subjectId;
 	if (input.fields !== undefined) data.fields = input.fields;
 	if (input.conditions !== undefined) {
-		data.conditions =
-			input.conditions as Prisma.AbilityUncheckedUpdateInput["conditions"];
+		data.conditions = input.conditions as AbilityUpdateData["conditions"];
 	}
 	if (input.inverted !== undefined) data.inverted = input.inverted;
 	if (input.reason !== undefined) data.reason = input.reason;

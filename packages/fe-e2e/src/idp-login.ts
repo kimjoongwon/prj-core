@@ -89,9 +89,9 @@ const DEFAULT_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@plate.com";
 const DEFAULT_PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? "rkdmf12!@";
 const CONSOLE_PERSIST_KEY = "admin-persist";
 const SYSTEM_TENANT_ID =
-	process.env.E2E_SYSTEM_TENANT_ID ?? "71ddca20-1752-466e-b4da-879ebdbe54e3";
+	process.env.E2E_SYSTEM_TENANT_ID ?? "01J00000000000000000000002";
 const SYSTEM_SPACE_ID =
-	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
+	process.env.E2E_SYSTEM_SPACE_ID ?? "01J00000000000000000000001";
 const SYSTEM_FITNESS_CENTER_NAME = "플랫폼 운영본부";
 
 async function seedConsolePersist(page: ConsoleLoginPageLike) {

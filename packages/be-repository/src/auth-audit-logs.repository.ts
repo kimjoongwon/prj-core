@@ -3,7 +3,7 @@ import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
 export class AuthAuditLogsRepository {
@@ -34,12 +34,13 @@ export class AuthAuditLogsRepository {
 				orderBy: params.orderBy,
 				skip: params.skip,
 				take: params.take,
+				include: { user: true },
 			}),
 			this.txHost.tx.authAuditLog.count({ where: params.where }),
 		]);
 
 		return {
-			logs: logs.map((log) => plainToInstance(AuthAuditLog, log)),
+			logs: logs.map((log) => toDomainEntity(AuthAuditLog, log)),
 			totalCount,
 		};
 	}
@@ -60,11 +61,12 @@ export class AuthAuditLogsRepository {
 		);
 
 		const logs = await this.txHost.tx.authAuditLog.findMany({
-			where: { userId },
+			where: { user: { id: userId } },
+			include: { user: true },
 			orderBy: { createdAt: "desc" },
 			take: limit,
 		});
 
-		return logs.map((log) => plainToInstance(AuthAuditLog, log));
+		return logs.map((log) => toDomainEntity(AuthAuditLog, log));
 	}
 }

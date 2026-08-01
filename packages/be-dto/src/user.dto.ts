@@ -8,9 +8,10 @@ import {
 	PasswordField,
 	StringField,
 	StringFieldOptional,
-	UUIDField,
-	UUIDFieldOptional,
+	ULIDField,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { User } from "@cocrepo/prisma";
 import { Exclude } from "class-transformer";
 import { ProfileDto, UserClassificationDto } from ".";
@@ -18,8 +19,8 @@ import { AbstractDto } from "./abstract.dto";
 import { TenantDto } from "./tenant.dto";
 import { UserAssociationDto } from "./user-association.dto";
 
-export class UserDto extends AbstractDto implements User {
-	@UUIDField({ description: "소속 공간 ID" })
+export class UserDto extends AbstractDto implements DomainEntityModel<User> {
+	@ULIDField({ description: "소속 공간 ID" })
 	spaceId: string;
 
 	@EmailField({ description: "이메일 주소" })
@@ -59,7 +60,7 @@ export class UserDto extends AbstractDto implements User {
 	@BooleanField({ description: "활성 상태" })
 	isActive!: boolean;
 
-	@UUIDFieldOptional({
+	@ULIDFieldOptional({
 		nullable: true,
 		description: "현재 선택된 Tenant membership ID",
 	})

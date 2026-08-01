@@ -3,28 +3,29 @@
 // @description: 사용자 정의 에셋 컬렉션
 /// @displayName 앨범
 model Album {
-  id           String       @id @default(uuid())
-  createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt    DateTime?    @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt    DateTime?    @map("removed_at") @db.Timestamptz(6)
+  id            String       @unique @default(ulid()) @db.VarChar(26)
+  seq           Int          @id @default(autoincrement())
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime?    @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt     DateTime?    @map("removed_at") @db.Timestamptz(6)
   /// @displayName 소속 Space
-  spaceId      String       @map("space_id")
+  spaceSeq      Int          @map("space_seq")
   /// @displayName 앨범명
-  name         String
+  name          String
   /// @displayName 앨범 설명
-  description  String?
-  /// @displayName 커버 이미지 ID
-  coverAssetId String?      @map("cover_asset_id")
+  description   String?
+  /// @displayName 커버 이미지 내부 순번
+  coverAssetSeq Int?         @map("cover_asset_seq")
   /// @displayName 정렬 순서
-  sortOrder    Int          @default(0) @map("sort_order")
+  sortOrder     Int          @default(0) @map("sort_order")
   /// @displayName 생성자
-  createdById  String?      @map("created_by_id")
-  space        Space        @relation(fields: [spaceId], references: [id], onDelete: Restrict)
-  coverAsset   Asset?       @relation("AlbumCover", fields: [coverAssetId], references: [id], onDelete: SetNull)
-  createdBy    User?        @relation(fields: [createdById], references: [id], onDelete: SetNull)
-  entries      AlbumEntry[]
+  createdBySeq  Int?         @map("created_by_seq")
+  space         Space        @relation(fields: [spaceSeq], references: [seq], onDelete: Restrict)
+  coverAsset    Asset?       @relation("AlbumCover", fields: [coverAssetSeq], references: [seq], onDelete: SetNull)
+  createdBy     User?        @relation(fields: [createdBySeq], references: [seq], onDelete: SetNull)
+  entries       AlbumEntry[]
 
-  @@index([spaceId])
+  @@index([spaceSeq])
   @@index([name])
   @@map("albums")
 }

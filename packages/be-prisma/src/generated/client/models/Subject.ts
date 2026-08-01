@@ -27,15 +27,18 @@ export type AggregateSubject = {
 }
 
 export type SubjectAvgAggregateOutputType = {
+  seq: number | null
   order: number | null
 }
 
 export type SubjectSumAggregateOutputType = {
+  seq: number | null
   order: number | null
 }
 
 export type SubjectMinAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -49,6 +52,7 @@ export type SubjectMinAggregateOutputType = {
 
 export type SubjectMaxAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -62,6 +66,7 @@ export type SubjectMaxAggregateOutputType = {
 
 export type SubjectCountAggregateOutputType = {
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -76,15 +81,18 @@ export type SubjectCountAggregateOutputType = {
 
 
 export type SubjectAvgAggregateInputType = {
+  seq?: true
   order?: true
 }
 
 export type SubjectSumAggregateInputType = {
+  seq?: true
   order?: true
 }
 
 export type SubjectMinAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -98,6 +106,7 @@ export type SubjectMinAggregateInputType = {
 
 export type SubjectMaxAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -111,6 +120,7 @@ export type SubjectMaxAggregateInputType = {
 
 export type SubjectCountAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -211,6 +221,7 @@ export type SubjectGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type SubjectGroupByOutputType = {
   id: string
+  seq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
@@ -247,6 +258,7 @@ export type SubjectWhereInput = {
   OR?: Prisma.SubjectWhereInput[]
   NOT?: Prisma.SubjectWhereInput | Prisma.SubjectWhereInput[]
   id?: Prisma.StringFilter<"Subject"> | string
+  seq?: Prisma.IntFilter<"Subject"> | number
   createdAt?: Prisma.DateTimeFilter<"Subject"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Subject"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Subject"> | Date | string | null
@@ -261,6 +273,7 @@ export type SubjectWhereInput = {
 
 export type SubjectOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -275,6 +288,7 @@ export type SubjectOrderByWithRelationInput = {
 
 export type SubjectWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  seq?: number
   name?: string
   AND?: Prisma.SubjectWhereInput | Prisma.SubjectWhereInput[]
   OR?: Prisma.SubjectWhereInput[]
@@ -288,10 +302,11 @@ export type SubjectWhereUniqueInput = Prisma.AtLeast<{
   isSystem?: Prisma.BoolFilter<"Subject"> | boolean
   group?: Prisma.StringNullableFilter<"Subject"> | string | null
   abilities?: Prisma.AbilityListRelationFilter
-}, "id" | "name">
+}, "seq" | "id" | "name">
 
 export type SubjectOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -313,6 +328,7 @@ export type SubjectScalarWhereWithAggregatesInput = {
   OR?: Prisma.SubjectScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SubjectScalarWhereWithAggregatesInput | Prisma.SubjectScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Subject"> | string
+  seq?: Prisma.IntWithAggregatesFilter<"Subject"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Subject"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Subject"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Subject"> | Date | string | null
@@ -340,6 +356,7 @@ export type SubjectCreateInput = {
 
 export type SubjectUncheckedCreateInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -368,6 +385,7 @@ export type SubjectUpdateInput = {
 
 export type SubjectUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -382,6 +400,7 @@ export type SubjectUncheckedUpdateInput = {
 
 export type SubjectCreateManyInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -408,6 +427,7 @@ export type SubjectUpdateManyMutationInput = {
 
 export type SubjectUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -426,6 +446,7 @@ export type SubjectScalarRelationFilter = {
 
 export type SubjectCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -438,11 +459,13 @@ export type SubjectCountOrderByAggregateInput = {
 }
 
 export type SubjectAvgOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
   order?: Prisma.SortOrder
 }
 
 export type SubjectMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -456,6 +479,7 @@ export type SubjectMaxOrderByAggregateInput = {
 
 export type SubjectMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -468,6 +492,7 @@ export type SubjectMinOrderByAggregateInput = {
 }
 
 export type SubjectSumOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
   order?: Prisma.SortOrder
 }
 
@@ -500,6 +525,7 @@ export type SubjectCreateWithoutAbilitiesInput = {
 
 export type SubjectUncheckedCreateWithoutAbilitiesInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -542,6 +568,7 @@ export type SubjectUpdateWithoutAbilitiesInput = {
 
 export type SubjectUncheckedUpdateWithoutAbilitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -586,6 +613,7 @@ export type SubjectCountOutputTypeCountAbilitiesArgs<ExtArgs extends runtime.Typ
 
 export type SubjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -601,6 +629,7 @@ export type SubjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 
 export type SubjectSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -614,6 +643,7 @@ export type SubjectSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type SubjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -627,6 +657,7 @@ export type SubjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type SubjectSelectScalar = {
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -638,7 +669,7 @@ export type SubjectSelectScalar = {
   group?: boolean
 }
 
-export type SubjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "name" | "displayName" | "icon" | "order" | "isSystem" | "group", ExtArgs["result"]["subject"]>
+export type SubjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "name" | "displayName" | "icon" | "order" | "isSystem" | "group", ExtArgs["result"]["subject"]>
 export type SubjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   abilities?: boolean | Prisma.Subject$abilitiesArgs<ExtArgs>
   _count?: boolean | Prisma.SubjectCountOutputTypeDefaultArgs<ExtArgs>
@@ -653,6 +684,7 @@ export type $SubjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    seq: number
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -1105,6 +1137,7 @@ export interface Prisma__SubjectClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface SubjectFieldRefs {
   readonly id: Prisma.FieldRef<"Subject", 'String'>
+  readonly seq: Prisma.FieldRef<"Subject", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Subject", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Subject", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Subject", 'DateTime'>

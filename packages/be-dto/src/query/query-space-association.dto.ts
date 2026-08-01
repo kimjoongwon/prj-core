@@ -1,10 +1,10 @@
-import { UUIDFieldOptional } from "@cocrepo/decorator";
+import { ULIDFieldOptional } from "@cocrepo/decorator";
 import { QueryDto } from "./query.dto";
 
 export class QuerySpaceAssociationDto extends QueryDto {
-	@UUIDFieldOptional()
+	@ULIDFieldOptional()
 	spaceId?: string;
 
-	@UUIDFieldOptional()
+	@ULIDFieldOptional()
 	groupId?: string;
 }

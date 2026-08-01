@@ -1,7 +1,10 @@
 import type { TemplateVariable as TemplateVariableEntity } from "@cocrepo/prisma";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Template } from "./template.entity";
 
-export class TemplateVariable implements TemplateVariableEntity {
+export class TemplateVariable
+	implements DomainEntityModel<TemplateVariableEntity>
+{
 	// ============================================================================
 	// 기본 필드
 	// ============================================================================

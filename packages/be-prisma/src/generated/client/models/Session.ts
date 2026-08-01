@@ -20,12 +20,25 @@ export type SessionModel = runtime.Types.Result.DefaultSelection<Prisma.$Session
 
 export type AggregateSession = {
   _count: SessionCountAggregateOutputType | null
+  _avg: SessionAvgAggregateOutputType | null
+  _sum: SessionSumAggregateOutputType | null
   _min: SessionMinAggregateOutputType | null
   _max: SessionMaxAggregateOutputType | null
 }
 
+export type SessionAvgAggregateOutputType = {
+  seq: number | null
+  timelineSeq: number | null
+}
+
+export type SessionSumAggregateOutputType = {
+  seq: number | null
+  timelineSeq: number | null
+}
+
 export type SessionMinAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -34,13 +47,14 @@ export type SessionMinAggregateOutputType = {
   startDateTime: Date | null
   endDateTime: Date | null
   recurringDayOfWeek: $Enums.RecurringDayOfWeek | null
-  timelineId: string | null
+  timelineSeq: number | null
   name: string | null
   description: string | null
 }
 
 export type SessionMaxAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -49,13 +63,14 @@ export type SessionMaxAggregateOutputType = {
   startDateTime: Date | null
   endDateTime: Date | null
   recurringDayOfWeek: $Enums.RecurringDayOfWeek | null
-  timelineId: string | null
+  timelineSeq: number | null
   name: string | null
   description: string | null
 }
 
 export type SessionCountAggregateOutputType = {
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -64,15 +79,26 @@ export type SessionCountAggregateOutputType = {
   startDateTime: number
   endDateTime: number
   recurringDayOfWeek: number
-  timelineId: number
+  timelineSeq: number
   name: number
   description: number
   _all: number
 }
 
 
+export type SessionAvgAggregateInputType = {
+  seq?: true
+  timelineSeq?: true
+}
+
+export type SessionSumAggregateInputType = {
+  seq?: true
+  timelineSeq?: true
+}
+
 export type SessionMinAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -81,13 +107,14 @@ export type SessionMinAggregateInputType = {
   startDateTime?: true
   endDateTime?: true
   recurringDayOfWeek?: true
-  timelineId?: true
+  timelineSeq?: true
   name?: true
   description?: true
 }
 
 export type SessionMaxAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -96,13 +123,14 @@ export type SessionMaxAggregateInputType = {
   startDateTime?: true
   endDateTime?: true
   recurringDayOfWeek?: true
-  timelineId?: true
+  timelineSeq?: true
   name?: true
   description?: true
 }
 
 export type SessionCountAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -111,7 +139,7 @@ export type SessionCountAggregateInputType = {
   startDateTime?: true
   endDateTime?: true
   recurringDayOfWeek?: true
-  timelineId?: true
+  timelineSeq?: true
   name?: true
   description?: true
   _all?: true
@@ -155,6 +183,18 @@ export type SessionAggregateArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: SessionAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: SessionSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: SessionMinAggregateInputType
@@ -185,12 +225,15 @@ export type SessionGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   _count?: SessionCountAggregateInputType | true
+  _avg?: SessionAvgAggregateInputType
+  _sum?: SessionSumAggregateInputType
   _min?: SessionMinAggregateInputType
   _max?: SessionMaxAggregateInputType
 }
 
 export type SessionGroupByOutputType = {
   id: string
+  seq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
@@ -199,10 +242,12 @@ export type SessionGroupByOutputType = {
   startDateTime: Date | null
   endDateTime: Date | null
   recurringDayOfWeek: $Enums.RecurringDayOfWeek | null
-  timelineId: string
+  timelineSeq: number
   name: string
   description: string | null
   _count: SessionCountAggregateOutputType | null
+  _avg: SessionAvgAggregateOutputType | null
+  _sum: SessionSumAggregateOutputType | null
   _min: SessionMinAggregateOutputType | null
   _max: SessionMaxAggregateOutputType | null
 }
@@ -227,6 +272,7 @@ export type SessionWhereInput = {
   OR?: Prisma.SessionWhereInput[]
   NOT?: Prisma.SessionWhereInput | Prisma.SessionWhereInput[]
   id?: Prisma.StringFilter<"Session"> | string
+  seq?: Prisma.IntFilter<"Session"> | number
   createdAt?: Prisma.DateTimeFilter<"Session"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null
@@ -235,7 +281,7 @@ export type SessionWhereInput = {
   startDateTime?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null
   endDateTime?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null
   recurringDayOfWeek?: Prisma.EnumRecurringDayOfWeekNullableFilter<"Session"> | $Enums.RecurringDayOfWeek | null
-  timelineId?: Prisma.StringFilter<"Session"> | string
+  timelineSeq?: Prisma.IntFilter<"Session"> | number
   name?: Prisma.StringFilter<"Session"> | string
   description?: Prisma.StringNullableFilter<"Session"> | string | null
   programs?: Prisma.ProgramListRelationFilter
@@ -245,6 +291,7 @@ export type SessionWhereInput = {
 
 export type SessionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -253,7 +300,7 @@ export type SessionOrderByWithRelationInput = {
   startDateTime?: Prisma.SortOrderInput | Prisma.SortOrder
   endDateTime?: Prisma.SortOrderInput | Prisma.SortOrder
   recurringDayOfWeek?: Prisma.SortOrderInput | Prisma.SortOrder
-  timelineId?: Prisma.SortOrder
+  timelineSeq?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   programs?: Prisma.ProgramOrderByRelationAggregateInput
@@ -263,6 +310,7 @@ export type SessionOrderByWithRelationInput = {
 
 export type SessionWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  seq?: number
   AND?: Prisma.SessionWhereInput | Prisma.SessionWhereInput[]
   OR?: Prisma.SessionWhereInput[]
   NOT?: Prisma.SessionWhereInput | Prisma.SessionWhereInput[]
@@ -274,16 +322,17 @@ export type SessionWhereUniqueInput = Prisma.AtLeast<{
   startDateTime?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null
   endDateTime?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null
   recurringDayOfWeek?: Prisma.EnumRecurringDayOfWeekNullableFilter<"Session"> | $Enums.RecurringDayOfWeek | null
-  timelineId?: Prisma.StringFilter<"Session"> | string
+  timelineSeq?: Prisma.IntFilter<"Session"> | number
   name?: Prisma.StringFilter<"Session"> | string
   description?: Prisma.StringNullableFilter<"Session"> | string | null
   programs?: Prisma.ProgramListRelationFilter
   timeline?: Prisma.XOR<Prisma.TimelineScalarRelationFilter, Prisma.TimelineWhereInput>
   reservations?: Prisma.ReservationListRelationFilter
-}, "id">
+}, "seq" | "id">
 
 export type SessionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -292,12 +341,14 @@ export type SessionOrderByWithAggregationInput = {
   startDateTime?: Prisma.SortOrderInput | Prisma.SortOrder
   endDateTime?: Prisma.SortOrderInput | Prisma.SortOrder
   recurringDayOfWeek?: Prisma.SortOrderInput | Prisma.SortOrder
-  timelineId?: Prisma.SortOrder
+  timelineSeq?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.SessionCountOrderByAggregateInput
+  _avg?: Prisma.SessionAvgOrderByAggregateInput
   _max?: Prisma.SessionMaxOrderByAggregateInput
   _min?: Prisma.SessionMinOrderByAggregateInput
+  _sum?: Prisma.SessionSumOrderByAggregateInput
 }
 
 export type SessionScalarWhereWithAggregatesInput = {
@@ -305,6 +356,7 @@ export type SessionScalarWhereWithAggregatesInput = {
   OR?: Prisma.SessionScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SessionScalarWhereWithAggregatesInput | Prisma.SessionScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Session"> | string
+  seq?: Prisma.IntWithAggregatesFilter<"Session"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Session"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Session"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Session"> | Date | string | null
@@ -313,7 +365,7 @@ export type SessionScalarWhereWithAggregatesInput = {
   startDateTime?: Prisma.DateTimeNullableWithAggregatesFilter<"Session"> | Date | string | null
   endDateTime?: Prisma.DateTimeNullableWithAggregatesFilter<"Session"> | Date | string | null
   recurringDayOfWeek?: Prisma.EnumRecurringDayOfWeekNullableWithAggregatesFilter<"Session"> | $Enums.RecurringDayOfWeek | null
-  timelineId?: Prisma.StringWithAggregatesFilter<"Session"> | string
+  timelineSeq?: Prisma.IntWithAggregatesFilter<"Session"> | number
   name?: Prisma.StringWithAggregatesFilter<"Session"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Session"> | string | null
 }
@@ -337,6 +389,7 @@ export type SessionCreateInput = {
 
 export type SessionUncheckedCreateInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -345,7 +398,7 @@ export type SessionUncheckedCreateInput = {
   startDateTime?: Date | string | null
   endDateTime?: Date | string | null
   recurringDayOfWeek?: $Enums.RecurringDayOfWeek | null
-  timelineId: string
+  timelineSeq: number
   name: string
   description?: string | null
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutSessionInput
@@ -371,6 +424,7 @@ export type SessionUpdateInput = {
 
 export type SessionUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -379,7 +433,7 @@ export type SessionUncheckedUpdateInput = {
   startDateTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDateTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   recurringDayOfWeek?: Prisma.NullableEnumRecurringDayOfWeekFieldUpdateOperationsInput | $Enums.RecurringDayOfWeek | null
-  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
+  timelineSeq?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutSessionNestedInput
@@ -388,6 +442,7 @@ export type SessionUncheckedUpdateInput = {
 
 export type SessionCreateManyInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -396,7 +451,7 @@ export type SessionCreateManyInput = {
   startDateTime?: Date | string | null
   endDateTime?: Date | string | null
   recurringDayOfWeek?: $Enums.RecurringDayOfWeek | null
-  timelineId: string
+  timelineSeq: number
   name: string
   description?: string | null
 }
@@ -417,6 +472,7 @@ export type SessionUpdateManyMutationInput = {
 
 export type SessionUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -425,7 +481,7 @@ export type SessionUncheckedUpdateManyInput = {
   startDateTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDateTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   recurringDayOfWeek?: Prisma.NullableEnumRecurringDayOfWeekFieldUpdateOperationsInput | $Enums.RecurringDayOfWeek | null
-  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
+  timelineSeq?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -437,6 +493,7 @@ export type SessionScalarRelationFilter = {
 
 export type SessionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -445,13 +502,19 @@ export type SessionCountOrderByAggregateInput = {
   startDateTime?: Prisma.SortOrder
   endDateTime?: Prisma.SortOrder
   recurringDayOfWeek?: Prisma.SortOrder
-  timelineId?: Prisma.SortOrder
+  timelineSeq?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
 }
 
+export type SessionAvgOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+  timelineSeq?: Prisma.SortOrder
+}
+
 export type SessionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -460,13 +523,14 @@ export type SessionMaxOrderByAggregateInput = {
   startDateTime?: Prisma.SortOrder
   endDateTime?: Prisma.SortOrder
   recurringDayOfWeek?: Prisma.SortOrder
-  timelineId?: Prisma.SortOrder
+  timelineSeq?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
 }
 
 export type SessionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -475,9 +539,14 @@ export type SessionMinOrderByAggregateInput = {
   startDateTime?: Prisma.SortOrder
   endDateTime?: Prisma.SortOrder
   recurringDayOfWeek?: Prisma.SortOrder
-  timelineId?: Prisma.SortOrder
+  timelineSeq?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+}
+
+export type SessionSumOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+  timelineSeq?: Prisma.SortOrder
 }
 
 export type SessionListRelationFilter = {
@@ -590,6 +659,7 @@ export type SessionCreateWithoutProgramsInput = {
 
 export type SessionUncheckedCreateWithoutProgramsInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -598,7 +668,7 @@ export type SessionUncheckedCreateWithoutProgramsInput = {
   startDateTime?: Date | string | null
   endDateTime?: Date | string | null
   recurringDayOfWeek?: $Enums.RecurringDayOfWeek | null
-  timelineId: string
+  timelineSeq: number
   name: string
   description?: string | null
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutSessionInput
@@ -638,6 +708,7 @@ export type SessionUpdateWithoutProgramsInput = {
 
 export type SessionUncheckedUpdateWithoutProgramsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -646,7 +717,7 @@ export type SessionUncheckedUpdateWithoutProgramsInput = {
   startDateTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDateTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   recurringDayOfWeek?: Prisma.NullableEnumRecurringDayOfWeekFieldUpdateOperationsInput | $Enums.RecurringDayOfWeek | null
-  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
+  timelineSeq?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutSessionNestedInput
@@ -670,6 +741,7 @@ export type SessionCreateWithoutReservationsInput = {
 
 export type SessionUncheckedCreateWithoutReservationsInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -678,7 +750,7 @@ export type SessionUncheckedCreateWithoutReservationsInput = {
   startDateTime?: Date | string | null
   endDateTime?: Date | string | null
   recurringDayOfWeek?: $Enums.RecurringDayOfWeek | null
-  timelineId: string
+  timelineSeq: number
   name: string
   description?: string | null
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutSessionInput
@@ -718,6 +790,7 @@ export type SessionUpdateWithoutReservationsInput = {
 
 export type SessionUncheckedUpdateWithoutReservationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -726,7 +799,7 @@ export type SessionUncheckedUpdateWithoutReservationsInput = {
   startDateTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDateTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   recurringDayOfWeek?: Prisma.NullableEnumRecurringDayOfWeekFieldUpdateOperationsInput | $Enums.RecurringDayOfWeek | null
-  timelineId?: Prisma.StringFieldUpdateOperationsInput | string
+  timelineSeq?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutSessionNestedInput
@@ -750,6 +823,7 @@ export type SessionCreateWithoutTimelineInput = {
 
 export type SessionUncheckedCreateWithoutTimelineInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -795,6 +869,7 @@ export type SessionScalarWhereInput = {
   OR?: Prisma.SessionScalarWhereInput[]
   NOT?: Prisma.SessionScalarWhereInput | Prisma.SessionScalarWhereInput[]
   id?: Prisma.StringFilter<"Session"> | string
+  seq?: Prisma.IntFilter<"Session"> | number
   createdAt?: Prisma.DateTimeFilter<"Session"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null
@@ -803,13 +878,14 @@ export type SessionScalarWhereInput = {
   startDateTime?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null
   endDateTime?: Prisma.DateTimeNullableFilter<"Session"> | Date | string | null
   recurringDayOfWeek?: Prisma.EnumRecurringDayOfWeekNullableFilter<"Session"> | $Enums.RecurringDayOfWeek | null
-  timelineId?: Prisma.StringFilter<"Session"> | string
+  timelineSeq?: Prisma.IntFilter<"Session"> | number
   name?: Prisma.StringFilter<"Session"> | string
   description?: Prisma.StringNullableFilter<"Session"> | string | null
 }
 
 export type SessionCreateManyTimelineInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -840,6 +916,7 @@ export type SessionUpdateWithoutTimelineInput = {
 
 export type SessionUncheckedUpdateWithoutTimelineInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -856,6 +933,7 @@ export type SessionUncheckedUpdateWithoutTimelineInput = {
 
 export type SessionUncheckedUpdateManyWithoutTimelineInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -910,6 +988,7 @@ export type SessionCountOutputTypeCountReservationsArgs<ExtArgs extends runtime.
 
 export type SessionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -918,7 +997,7 @@ export type SessionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   startDateTime?: boolean
   endDateTime?: boolean
   recurringDayOfWeek?: boolean
-  timelineId?: boolean
+  timelineSeq?: boolean
   name?: boolean
   description?: boolean
   programs?: boolean | Prisma.Session$programsArgs<ExtArgs>
@@ -929,6 +1008,7 @@ export type SessionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 
 export type SessionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -937,7 +1017,7 @@ export type SessionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   startDateTime?: boolean
   endDateTime?: boolean
   recurringDayOfWeek?: boolean
-  timelineId?: boolean
+  timelineSeq?: boolean
   name?: boolean
   description?: boolean
   timeline?: boolean | Prisma.TimelineDefaultArgs<ExtArgs>
@@ -945,6 +1025,7 @@ export type SessionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type SessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -953,7 +1034,7 @@ export type SessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   startDateTime?: boolean
   endDateTime?: boolean
   recurringDayOfWeek?: boolean
-  timelineId?: boolean
+  timelineSeq?: boolean
   name?: boolean
   description?: boolean
   timeline?: boolean | Prisma.TimelineDefaultArgs<ExtArgs>
@@ -961,6 +1042,7 @@ export type SessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type SessionSelectScalar = {
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -969,12 +1051,12 @@ export type SessionSelectScalar = {
   startDateTime?: boolean
   endDateTime?: boolean
   recurringDayOfWeek?: boolean
-  timelineId?: boolean
+  timelineSeq?: boolean
   name?: boolean
   description?: boolean
 }
 
-export type SessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "type" | "repeatCycleType" | "startDateTime" | "endDateTime" | "recurringDayOfWeek" | "timelineId" | "name" | "description", ExtArgs["result"]["session"]>
+export type SessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "type" | "repeatCycleType" | "startDateTime" | "endDateTime" | "recurringDayOfWeek" | "timelineSeq" | "name" | "description", ExtArgs["result"]["session"]>
 export type SessionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   programs?: boolean | Prisma.Session$programsArgs<ExtArgs>
   timeline?: boolean | Prisma.TimelineDefaultArgs<ExtArgs>
@@ -997,6 +1079,7 @@ export type $SessionPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    seq: number
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -1005,7 +1088,7 @@ export type $SessionPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     startDateTime: Date | null
     endDateTime: Date | null
     recurringDayOfWeek: $Enums.RecurringDayOfWeek | null
-    timelineId: string
+    timelineSeq: number
     name: string
     description: string | null
   }, ExtArgs["result"]["session"]>
@@ -1435,6 +1518,7 @@ export interface Prisma__SessionClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface SessionFieldRefs {
   readonly id: Prisma.FieldRef<"Session", 'String'>
+  readonly seq: Prisma.FieldRef<"Session", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Session", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Session", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Session", 'DateTime'>
@@ -1443,7 +1527,7 @@ export interface SessionFieldRefs {
   readonly startDateTime: Prisma.FieldRef<"Session", 'DateTime'>
   readonly endDateTime: Prisma.FieldRef<"Session", 'DateTime'>
   readonly recurringDayOfWeek: Prisma.FieldRef<"Session", 'RecurringDayOfWeek'>
-  readonly timelineId: Prisma.FieldRef<"Session", 'String'>
+  readonly timelineSeq: Prisma.FieldRef<"Session", 'Int'>
   readonly name: Prisma.FieldRef<"Session", 'String'>
   readonly description: Prisma.FieldRef<"Session", 'String'>
 }

@@ -3,11 +3,12 @@ import type {
 	EmailVerificationStatus,
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { User } from "./user.entity";
 
 export class EmailVerification
 	extends AbstractEntity
-	implements EmailVerificationEntity
+	implements DomainEntityModel<EmailVerificationEntity>
 {
 	email!: string;
 	name!: string;

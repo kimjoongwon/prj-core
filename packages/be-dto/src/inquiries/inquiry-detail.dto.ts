@@ -5,8 +5,8 @@ import {
 	EnumField,
 	NumberField,
 	StringField,
-	UUIDField,
-	UUIDFieldOptional,
+	ULIDField,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator";
 import {
 	InquiryCategory,
@@ -25,10 +25,10 @@ import { SentimentResultDto } from "./sentiment-result.dto";
  * 문의 상세 응답 DTO
  */
 export class InquiryDetailDto extends AbstractDto {
-	@UUIDField({ description: "소속 Space ID" })
+	@ULIDField({ description: "소속 Space ID" })
 	spaceId!: string;
 
-	@UUIDFieldOptional({ nullable: true, description: "생성자 ID" })
+	@ULIDFieldOptional({ nullable: true, description: "생성자 ID" })
 	createdById!: string | null;
 
 	@StringField({ description: "문의 번호" })
@@ -52,10 +52,10 @@ export class InquiryDetailDto extends AbstractDto {
 	@EnumField(() => InquiryPriority, { description: "문의 우선순위" })
 	priority!: InquiryPriority;
 
-	@UUIDFieldOptional({ description: "고객 ID" })
+	@ULIDFieldOptional({ description: "고객 ID" })
 	customerId!: string | null;
 
-	@UUIDFieldOptional({ description: "담당자 ID" })
+	@ULIDFieldOptional({ description: "담당자 ID" })
 	assigneeId!: string | null;
 
 	@BooleanField({ description: "실시간 채팅 활성화 여부" })

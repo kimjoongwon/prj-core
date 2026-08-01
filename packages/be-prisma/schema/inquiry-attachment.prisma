@@ -2,11 +2,12 @@
 // @description: InquiryMessage에 종속되는 첨부파일 1:N 하위 모델
 /// @displayName 문의 첨부파일
 model InquiryAttachment {
-  id           String             @id @default(uuid())
+  id           String             @unique @default(ulid()) @db.VarChar(26)
+  seq          Int                @id @default(autoincrement())
   /// @displayName 생성 일시
   createdAt    DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
-  /// @displayName 소속 메시지 ID
-  messageId    String             @map("message_id")
+  /// @displayName 소속 메시지 내부 순번
+  messageSeq   Int                @map("message_seq")
   /// @displayName 원본 파일명
   fileName     String             @map("file_name")
   /// @displayName 파일 크기
@@ -27,8 +28,8 @@ model InquiryAttachment {
   duration     Int?
   /// @displayName 삭제 여부
   isDeleted    Boolean            @default(false) @map("is_deleted")
-  message      InquiryMessage     @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  message      InquiryMessage     @relation(fields: [messageSeq], references: [seq], onDelete: Cascade)
 
-  @@index([messageId])
+  @@index([messageSeq])
   @@map("inquiry_attachments")
 }

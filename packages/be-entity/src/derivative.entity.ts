@@ -4,10 +4,14 @@ import type {
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Asset } from "./asset.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
 
-export class Derivative extends AbstractEntity implements DerivativeEntity {
+export class Derivative
+	extends AbstractEntity
+	implements DomainEntityModel<DerivativeEntity>
+{
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================

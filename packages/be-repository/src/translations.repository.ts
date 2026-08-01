@@ -4,7 +4,7 @@ import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
 export class TranslationsRepository {
@@ -60,7 +60,7 @@ export class TranslationsRepository {
 		]);
 
 		return {
-			data: data.map((item) => plainToInstance(Translation, item)),
+			data: data.map((item) => toDomainEntity(Translation, item)),
 			totalCount,
 		};
 	}
@@ -75,7 +75,7 @@ export class TranslationsRepository {
 			where: { id },
 		});
 
-		return result ? plainToInstance(Translation, result) : null;
+		return result ? toDomainEntity(Translation, result) : null;
 	}
 
 	/**
@@ -107,7 +107,7 @@ export class TranslationsRepository {
 			},
 		});
 
-		return result ? plainToInstance(Translation, result) : null;
+		return result ? toDomainEntity(Translation, result) : null;
 	}
 
 	async findCatalogByLanguage(
@@ -144,7 +144,7 @@ export class TranslationsRepository {
 
 		const result = await this.txHost.tx.translation.create({ data });
 
-		return plainToInstance(Translation, result);
+		return toDomainEntity(Translation, result);
 	}
 
 	/**
@@ -161,7 +161,7 @@ export class TranslationsRepository {
 			data,
 		});
 
-		return plainToInstance(Translation, result);
+		return toDomainEntity(Translation, result);
 	}
 
 	/**
@@ -174,6 +174,6 @@ export class TranslationsRepository {
 			where: { id },
 		});
 
-		return plainToInstance(Translation, result);
+		return toDomainEntity(Translation, result);
 	}
 }

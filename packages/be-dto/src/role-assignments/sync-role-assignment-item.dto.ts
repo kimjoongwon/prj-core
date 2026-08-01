@@ -1,19 +1,12 @@
+import { ULIDField } from "@cocrepo/decorator";
 import { ApiProperty } from "@nestjs/swagger";
-import {
-	IsBoolean,
-	IsNotEmpty,
-	IsNumber,
-	IsOptional,
-	IsUUID,
-} from "class-validator";
+import { IsBoolean, IsNumber, IsOptional } from "class-validator";
 
 export class SyncRoleAssignmentItemDto {
-	@ApiProperty({
+	@ULIDField({
 		description: "Policy ID (Role에 할당할 정책)",
-		example: "550e8400-e29b-41d4-a716-446655440001",
+		example: "01J00000000000000000000000",
 	})
-	@IsNotEmpty({ message: "Policy ID를 입력해주세요" })
-	@IsUUID("4", { message: "유효한 UUID 형식이 아닙니다" })
 	policyId!: string;
 
 	@ApiProperty({

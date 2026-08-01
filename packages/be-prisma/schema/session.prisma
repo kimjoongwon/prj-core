@@ -2,7 +2,8 @@
 // @description: Timeline에 종속되는 시간 단위 이벤트
 /// @displayName 세션
 model Session {
-  id                 String              @id @default(uuid())
+  id                 String              @unique @default(ulid()) @db.VarChar(26)
+  seq                Int                 @id @default(autoincrement())
   createdAt          DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt          DateTime?           @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt          DateTime?           @map("removed_at") @db.Timestamptz(6)
@@ -11,14 +12,14 @@ model Session {
   startDateTime      DateTime?           @map("start_date_time") @db.Timestamptz(6)
   endDateTime        DateTime?           @map("end_date_time") @db.Timestamptz(6)
   recurringDayOfWeek RecurringDayOfWeek? @map("recurring_day_of_week")
-  timelineId         String              @map("timeline_id")
+  timelineSeq        Int                 @map("timeline_seq")
   name               String
   description        String?
   programs           Program[]
-  timeline           Timeline            @relation(fields: [timelineId], references: [id])
+  timeline           Timeline            @relation(fields: [timelineSeq], references: [seq])
   reservations       Reservation[]
 
-  @@index([timelineId, startDateTime])
+  @@index([timelineSeq, startDateTime])
   @@index([startDateTime, endDateTime])
   @@index([type, startDateTime])
   @@map("sessions")

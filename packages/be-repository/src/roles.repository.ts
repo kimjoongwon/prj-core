@@ -4,7 +4,7 @@ import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
 export class RolesRepository {
@@ -28,7 +28,7 @@ export class RolesRepository {
 			where: { id },
 		});
 
-		return result ? plainToInstance(Role, result) : null;
+		return result ? toDomainEntity(Role, result) : null;
 	}
 
 	/**
@@ -41,7 +41,7 @@ export class RolesRepository {
 			where: { name },
 		});
 
-		return result ? plainToInstance(Role, result) : null;
+		return result ? toDomainEntity(Role, result) : null;
 	}
 
 	/**
@@ -54,7 +54,7 @@ export class RolesRepository {
 			orderBy: { createdAt: "asc" },
 		});
 
-		return results.map((result) => plainToInstance(Role, result));
+		return results.map((result) => toDomainEntity(Role, result));
 	}
 
 	/**
@@ -71,7 +71,7 @@ export class RolesRepository {
 			orderBy: params?.orderBy ?? [{ createdAt: "asc" }],
 		});
 
-		return results.map((result) => plainToInstance(Role, result));
+		return results.map((result) => toDomainEntity(Role, result));
 	}
 
 	/**
@@ -84,7 +84,7 @@ export class RolesRepository {
 			data,
 		});
 
-		return plainToInstance(Role, result);
+		return toDomainEntity(Role, result);
 	}
 
 	/**
@@ -101,7 +101,7 @@ export class RolesRepository {
 			data,
 		});
 
-		return plainToInstance(Role, result);
+		return toDomainEntity(Role, result);
 	}
 
 	/**
@@ -114,7 +114,7 @@ export class RolesRepository {
 			where: { id },
 		});
 
-		return plainToInstance(Role, result);
+		return toDomainEntity(Role, result);
 	}
 
 	/**
@@ -125,7 +125,7 @@ export class RolesRepository {
 		this.logger.debug(`역할에 연결된 테넌트 수 조회: ${roleId.slice(-8)}`);
 
 		return this.txHost.tx.tenant.count({
-			where: { roleId },
+			where: { role: { id: roleId } },
 		});
 	}
 }

@@ -3,8 +3,8 @@ import {
 	NumberField,
 	NumberFieldOptional,
 	StringField,
-	UUIDField,
-	UUIDFieldOptional,
+	ULIDField,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator";
 import { DerivativeKind } from "@cocrepo/prisma";
 import { AbstractDto } from "../abstract.dto";
@@ -13,13 +13,13 @@ import { AbstractDto } from "../abstract.dto";
  * 파생 리소스 DTO
  */
 export class DerivativeDto extends AbstractDto {
-	@UUIDField({ description: "소속 Space ID" })
+	@ULIDField({ description: "소속 Space ID" })
 	spaceId!: string;
 
-	@UUIDFieldOptional({ nullable: true, description: "생성자 ID" })
+	@ULIDFieldOptional({ nullable: true, description: "생성자 ID" })
 	createdById!: string | null;
 
-	@UUIDField({ description: "원본 에셋 ID" })
+	@ULIDField({ description: "원본 에셋 ID" })
 	assetId!: string;
 
 	@EnumField(() => DerivativeKind, {

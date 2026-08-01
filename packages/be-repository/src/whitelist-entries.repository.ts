@@ -4,7 +4,7 @@ import { WhitelistValue, type WhitelistValueType } from "@cocrepo/vo";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
 export class WhitelistEntriesRepository {
@@ -25,7 +25,7 @@ export class WhitelistEntriesRepository {
 			where: { id },
 		});
 
-		return result ? plainToInstance(WhitelistEntry, result) : null;
+		return result ? toDomainEntity(WhitelistEntry, result) : null;
 	}
 
 	async findByType(type: WhitelistType): Promise<WhitelistEntry[]> {
@@ -36,7 +36,7 @@ export class WhitelistEntriesRepository {
 			orderBy: [{ type: "asc" }, { value: "asc" }],
 		});
 
-		return result.map((item) => plainToInstance(WhitelistEntry, item));
+		return result.map((item) => toDomainEntity(WhitelistEntry, item));
 	}
 
 	async findByTypeAndValue(
@@ -53,7 +53,7 @@ export class WhitelistEntriesRepository {
 			where: { type, value: whitelistValue.value },
 		});
 
-		return result ? plainToInstance(WhitelistEntry, result) : null;
+		return result ? toDomainEntity(WhitelistEntry, result) : null;
 	}
 
 	async findMany(params: {
@@ -73,7 +73,7 @@ export class WhitelistEntriesRepository {
 		]);
 
 		return {
-			entries: entries.map((entry) => plainToInstance(WhitelistEntry, entry)),
+			entries: entries.map((entry) => toDomainEntity(WhitelistEntry, entry)),
 			totalCount,
 		};
 	}
@@ -90,7 +90,7 @@ export class WhitelistEntriesRepository {
 			data: normalizedData,
 		});
 
-		return plainToInstance(WhitelistEntry, result);
+		return toDomainEntity(WhitelistEntry, result);
 	}
 
 	async updateById(
@@ -105,7 +105,7 @@ export class WhitelistEntriesRepository {
 			data: normalizedData,
 		});
 
-		return plainToInstance(WhitelistEntry, result);
+		return toDomainEntity(WhitelistEntry, result);
 	}
 
 	async deleteById(id: string): Promise<WhitelistEntry> {
@@ -115,7 +115,7 @@ export class WhitelistEntriesRepository {
 			where: { id },
 		});
 
-		return plainToInstance(WhitelistEntry, result);
+		return toDomainEntity(WhitelistEntry, result);
 	}
 
 	private normalizeCreateData(

@@ -1,4 +1,4 @@
 export { CustomValidationPipe } from "./custom-validation.pipe";
 export { FileSizeValidationPipe } from "./file-size-validation.pipe";
 export { ParseContentPipe } from "./parse-content.pipe";
-export { RouteKeyToUuidPipe } from "./route-key-to-uuid.pipe";
+export { ParseUlidPipe } from "./parse-ulid.pipe";

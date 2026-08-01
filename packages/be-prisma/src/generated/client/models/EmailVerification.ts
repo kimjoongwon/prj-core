@@ -27,15 +27,22 @@ export type AggregateEmailVerification = {
 }
 
 export type EmailVerificationAvgAggregateOutputType = {
+  seq: number | null
+  spaceSeq: number | null
   sendCount: number | null
+  verifiedUserSeq: number | null
 }
 
 export type EmailVerificationSumAggregateOutputType = {
+  seq: number | null
+  spaceSeq: number | null
   sendCount: number | null
+  verifiedUserSeq: number | null
 }
 
 export type EmailVerificationMinAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -44,7 +51,7 @@ export type EmailVerificationMinAggregateOutputType = {
   nickname: string | null
   phone: string | null
   address: string | null
-  spaceId: string | null
+  spaceSeq: number | null
   passwordHash: string | null
   tokenHash: string | null
   status: $Enums.EmailVerificationStatus | null
@@ -54,11 +61,12 @@ export type EmailVerificationMinAggregateOutputType = {
   sendCount: number | null
   lastSendStatus: string | null
   lastSendError: string | null
-  verifiedUserId: string | null
+  verifiedUserSeq: number | null
 }
 
 export type EmailVerificationMaxAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -67,7 +75,7 @@ export type EmailVerificationMaxAggregateOutputType = {
   nickname: string | null
   phone: string | null
   address: string | null
-  spaceId: string | null
+  spaceSeq: number | null
   passwordHash: string | null
   tokenHash: string | null
   status: $Enums.EmailVerificationStatus | null
@@ -77,11 +85,12 @@ export type EmailVerificationMaxAggregateOutputType = {
   sendCount: number | null
   lastSendStatus: string | null
   lastSendError: string | null
-  verifiedUserId: string | null
+  verifiedUserSeq: number | null
 }
 
 export type EmailVerificationCountAggregateOutputType = {
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -90,7 +99,7 @@ export type EmailVerificationCountAggregateOutputType = {
   nickname: number
   phone: number
   address: number
-  spaceId: number
+  spaceSeq: number
   passwordHash: number
   tokenHash: number
   status: number
@@ -100,21 +109,28 @@ export type EmailVerificationCountAggregateOutputType = {
   sendCount: number
   lastSendStatus: number
   lastSendError: number
-  verifiedUserId: number
+  verifiedUserSeq: number
   _all: number
 }
 
 
 export type EmailVerificationAvgAggregateInputType = {
+  seq?: true
+  spaceSeq?: true
   sendCount?: true
+  verifiedUserSeq?: true
 }
 
 export type EmailVerificationSumAggregateInputType = {
+  seq?: true
+  spaceSeq?: true
   sendCount?: true
+  verifiedUserSeq?: true
 }
 
 export type EmailVerificationMinAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -123,7 +139,7 @@ export type EmailVerificationMinAggregateInputType = {
   nickname?: true
   phone?: true
   address?: true
-  spaceId?: true
+  spaceSeq?: true
   passwordHash?: true
   tokenHash?: true
   status?: true
@@ -133,11 +149,12 @@ export type EmailVerificationMinAggregateInputType = {
   sendCount?: true
   lastSendStatus?: true
   lastSendError?: true
-  verifiedUserId?: true
+  verifiedUserSeq?: true
 }
 
 export type EmailVerificationMaxAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -146,7 +163,7 @@ export type EmailVerificationMaxAggregateInputType = {
   nickname?: true
   phone?: true
   address?: true
-  spaceId?: true
+  spaceSeq?: true
   passwordHash?: true
   tokenHash?: true
   status?: true
@@ -156,11 +173,12 @@ export type EmailVerificationMaxAggregateInputType = {
   sendCount?: true
   lastSendStatus?: true
   lastSendError?: true
-  verifiedUserId?: true
+  verifiedUserSeq?: true
 }
 
 export type EmailVerificationCountAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -169,7 +187,7 @@ export type EmailVerificationCountAggregateInputType = {
   nickname?: true
   phone?: true
   address?: true
-  spaceId?: true
+  spaceSeq?: true
   passwordHash?: true
   tokenHash?: true
   status?: true
@@ -179,7 +197,7 @@ export type EmailVerificationCountAggregateInputType = {
   sendCount?: true
   lastSendStatus?: true
   lastSendError?: true
-  verifiedUserId?: true
+  verifiedUserSeq?: true
   _all?: true
 }
 
@@ -271,6 +289,7 @@ export type EmailVerificationGroupByArgs<ExtArgs extends runtime.Types.Extension
 
 export type EmailVerificationGroupByOutputType = {
   id: string
+  seq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
@@ -279,7 +298,7 @@ export type EmailVerificationGroupByOutputType = {
   nickname: string
   phone: string
   address: string
-  spaceId: string
+  spaceSeq: number
   passwordHash: string
   tokenHash: string
   status: $Enums.EmailVerificationStatus
@@ -289,7 +308,7 @@ export type EmailVerificationGroupByOutputType = {
   sendCount: number
   lastSendStatus: string | null
   lastSendError: string | null
-  verifiedUserId: string | null
+  verifiedUserSeq: number | null
   _count: EmailVerificationCountAggregateOutputType | null
   _avg: EmailVerificationAvgAggregateOutputType | null
   _sum: EmailVerificationSumAggregateOutputType | null
@@ -317,6 +336,7 @@ export type EmailVerificationWhereInput = {
   OR?: Prisma.EmailVerificationWhereInput[]
   NOT?: Prisma.EmailVerificationWhereInput | Prisma.EmailVerificationWhereInput[]
   id?: Prisma.StringFilter<"EmailVerification"> | string
+  seq?: Prisma.IntFilter<"EmailVerification"> | number
   createdAt?: Prisma.DateTimeFilter<"EmailVerification"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"EmailVerification"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"EmailVerification"> | Date | string | null
@@ -325,7 +345,7 @@ export type EmailVerificationWhereInput = {
   nickname?: Prisma.StringFilter<"EmailVerification"> | string
   phone?: Prisma.StringFilter<"EmailVerification"> | string
   address?: Prisma.StringFilter<"EmailVerification"> | string
-  spaceId?: Prisma.StringFilter<"EmailVerification"> | string
+  spaceSeq?: Prisma.IntFilter<"EmailVerification"> | number
   passwordHash?: Prisma.StringFilter<"EmailVerification"> | string
   tokenHash?: Prisma.StringFilter<"EmailVerification"> | string
   status?: Prisma.EnumEmailVerificationStatusFilter<"EmailVerification"> | $Enums.EmailVerificationStatus
@@ -335,13 +355,14 @@ export type EmailVerificationWhereInput = {
   sendCount?: Prisma.IntFilter<"EmailVerification"> | number
   lastSendStatus?: Prisma.StringNullableFilter<"EmailVerification"> | string | null
   lastSendError?: Prisma.StringNullableFilter<"EmailVerification"> | string | null
-  verifiedUserId?: Prisma.StringNullableFilter<"EmailVerification"> | string | null
+  verifiedUserSeq?: Prisma.IntNullableFilter<"EmailVerification"> | number | null
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   verifiedUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type EmailVerificationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -350,7 +371,7 @@ export type EmailVerificationOrderByWithRelationInput = {
   nickname?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   tokenHash?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -360,13 +381,14 @@ export type EmailVerificationOrderByWithRelationInput = {
   sendCount?: Prisma.SortOrder
   lastSendStatus?: Prisma.SortOrderInput | Prisma.SortOrder
   lastSendError?: Prisma.SortOrderInput | Prisma.SortOrder
-  verifiedUserId?: Prisma.SortOrderInput | Prisma.SortOrder
+  verifiedUserSeq?: Prisma.SortOrderInput | Prisma.SortOrder
   space?: Prisma.SpaceOrderByWithRelationInput
   verifiedUser?: Prisma.UserOrderByWithRelationInput
 }
 
 export type EmailVerificationWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  seq?: number
   tokenHash?: string
   AND?: Prisma.EmailVerificationWhereInput | Prisma.EmailVerificationWhereInput[]
   OR?: Prisma.EmailVerificationWhereInput[]
@@ -379,7 +401,7 @@ export type EmailVerificationWhereUniqueInput = Prisma.AtLeast<{
   nickname?: Prisma.StringFilter<"EmailVerification"> | string
   phone?: Prisma.StringFilter<"EmailVerification"> | string
   address?: Prisma.StringFilter<"EmailVerification"> | string
-  spaceId?: Prisma.StringFilter<"EmailVerification"> | string
+  spaceSeq?: Prisma.IntFilter<"EmailVerification"> | number
   passwordHash?: Prisma.StringFilter<"EmailVerification"> | string
   status?: Prisma.EnumEmailVerificationStatusFilter<"EmailVerification"> | $Enums.EmailVerificationStatus
   expiresAt?: Prisma.DateTimeFilter<"EmailVerification"> | Date | string
@@ -388,13 +410,14 @@ export type EmailVerificationWhereUniqueInput = Prisma.AtLeast<{
   sendCount?: Prisma.IntFilter<"EmailVerification"> | number
   lastSendStatus?: Prisma.StringNullableFilter<"EmailVerification"> | string | null
   lastSendError?: Prisma.StringNullableFilter<"EmailVerification"> | string | null
-  verifiedUserId?: Prisma.StringNullableFilter<"EmailVerification"> | string | null
+  verifiedUserSeq?: Prisma.IntNullableFilter<"EmailVerification"> | number | null
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   verifiedUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-}, "id" | "tokenHash">
+}, "seq" | "id" | "tokenHash">
 
 export type EmailVerificationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -403,7 +426,7 @@ export type EmailVerificationOrderByWithAggregationInput = {
   nickname?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   tokenHash?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -413,7 +436,7 @@ export type EmailVerificationOrderByWithAggregationInput = {
   sendCount?: Prisma.SortOrder
   lastSendStatus?: Prisma.SortOrderInput | Prisma.SortOrder
   lastSendError?: Prisma.SortOrderInput | Prisma.SortOrder
-  verifiedUserId?: Prisma.SortOrderInput | Prisma.SortOrder
+  verifiedUserSeq?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.EmailVerificationCountOrderByAggregateInput
   _avg?: Prisma.EmailVerificationAvgOrderByAggregateInput
   _max?: Prisma.EmailVerificationMaxOrderByAggregateInput
@@ -426,6 +449,7 @@ export type EmailVerificationScalarWhereWithAggregatesInput = {
   OR?: Prisma.EmailVerificationScalarWhereWithAggregatesInput[]
   NOT?: Prisma.EmailVerificationScalarWhereWithAggregatesInput | Prisma.EmailVerificationScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"EmailVerification"> | string
+  seq?: Prisma.IntWithAggregatesFilter<"EmailVerification"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"EmailVerification"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EmailVerification"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EmailVerification"> | Date | string | null
@@ -434,7 +458,7 @@ export type EmailVerificationScalarWhereWithAggregatesInput = {
   nickname?: Prisma.StringWithAggregatesFilter<"EmailVerification"> | string
   phone?: Prisma.StringWithAggregatesFilter<"EmailVerification"> | string
   address?: Prisma.StringWithAggregatesFilter<"EmailVerification"> | string
-  spaceId?: Prisma.StringWithAggregatesFilter<"EmailVerification"> | string
+  spaceSeq?: Prisma.IntWithAggregatesFilter<"EmailVerification"> | number
   passwordHash?: Prisma.StringWithAggregatesFilter<"EmailVerification"> | string
   tokenHash?: Prisma.StringWithAggregatesFilter<"EmailVerification"> | string
   status?: Prisma.EnumEmailVerificationStatusWithAggregatesFilter<"EmailVerification"> | $Enums.EmailVerificationStatus
@@ -444,7 +468,7 @@ export type EmailVerificationScalarWhereWithAggregatesInput = {
   sendCount?: Prisma.IntWithAggregatesFilter<"EmailVerification"> | number
   lastSendStatus?: Prisma.StringNullableWithAggregatesFilter<"EmailVerification"> | string | null
   lastSendError?: Prisma.StringNullableWithAggregatesFilter<"EmailVerification"> | string | null
-  verifiedUserId?: Prisma.StringNullableWithAggregatesFilter<"EmailVerification"> | string | null
+  verifiedUserSeq?: Prisma.IntNullableWithAggregatesFilter<"EmailVerification"> | number | null
 }
 
 export type EmailVerificationCreateInput = {
@@ -472,6 +496,7 @@ export type EmailVerificationCreateInput = {
 
 export type EmailVerificationUncheckedCreateInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -480,7 +505,7 @@ export type EmailVerificationUncheckedCreateInput = {
   nickname: string
   phone: string
   address: string
-  spaceId: string
+  spaceSeq: number
   passwordHash: string
   tokenHash: string
   status?: $Enums.EmailVerificationStatus
@@ -490,7 +515,7 @@ export type EmailVerificationUncheckedCreateInput = {
   sendCount?: number
   lastSendStatus?: string | null
   lastSendError?: string | null
-  verifiedUserId?: string | null
+  verifiedUserSeq?: number | null
 }
 
 export type EmailVerificationUpdateInput = {
@@ -518,6 +543,7 @@ export type EmailVerificationUpdateInput = {
 
 export type EmailVerificationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -526,7 +552,7 @@ export type EmailVerificationUncheckedUpdateInput = {
   nickname?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumEmailVerificationStatusFieldUpdateOperationsInput | $Enums.EmailVerificationStatus
@@ -536,11 +562,12 @@ export type EmailVerificationUncheckedUpdateInput = {
   sendCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastSendStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSendError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  verifiedUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedUserSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type EmailVerificationCreateManyInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -549,7 +576,7 @@ export type EmailVerificationCreateManyInput = {
   nickname: string
   phone: string
   address: string
-  spaceId: string
+  spaceSeq: number
   passwordHash: string
   tokenHash: string
   status?: $Enums.EmailVerificationStatus
@@ -559,7 +586,7 @@ export type EmailVerificationCreateManyInput = {
   sendCount?: number
   lastSendStatus?: string | null
   lastSendError?: string | null
-  verifiedUserId?: string | null
+  verifiedUserSeq?: number | null
 }
 
 export type EmailVerificationUpdateManyMutationInput = {
@@ -585,6 +612,7 @@ export type EmailVerificationUpdateManyMutationInput = {
 
 export type EmailVerificationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -593,7 +621,7 @@ export type EmailVerificationUncheckedUpdateManyInput = {
   nickname?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumEmailVerificationStatusFieldUpdateOperationsInput | $Enums.EmailVerificationStatus
@@ -603,11 +631,12 @@ export type EmailVerificationUncheckedUpdateManyInput = {
   sendCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastSendStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSendError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  verifiedUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedUserSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type EmailVerificationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -616,7 +645,7 @@ export type EmailVerificationCountOrderByAggregateInput = {
   nickname?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   tokenHash?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -626,15 +655,19 @@ export type EmailVerificationCountOrderByAggregateInput = {
   sendCount?: Prisma.SortOrder
   lastSendStatus?: Prisma.SortOrder
   lastSendError?: Prisma.SortOrder
-  verifiedUserId?: Prisma.SortOrder
+  verifiedUserSeq?: Prisma.SortOrder
 }
 
 export type EmailVerificationAvgOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
   sendCount?: Prisma.SortOrder
+  verifiedUserSeq?: Prisma.SortOrder
 }
 
 export type EmailVerificationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -643,7 +676,7 @@ export type EmailVerificationMaxOrderByAggregateInput = {
   nickname?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   tokenHash?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -653,11 +686,12 @@ export type EmailVerificationMaxOrderByAggregateInput = {
   sendCount?: Prisma.SortOrder
   lastSendStatus?: Prisma.SortOrder
   lastSendError?: Prisma.SortOrder
-  verifiedUserId?: Prisma.SortOrder
+  verifiedUserSeq?: Prisma.SortOrder
 }
 
 export type EmailVerificationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -666,7 +700,7 @@ export type EmailVerificationMinOrderByAggregateInput = {
   nickname?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   tokenHash?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -676,11 +710,14 @@ export type EmailVerificationMinOrderByAggregateInput = {
   sendCount?: Prisma.SortOrder
   lastSendStatus?: Prisma.SortOrder
   lastSendError?: Prisma.SortOrder
-  verifiedUserId?: Prisma.SortOrder
+  verifiedUserSeq?: Prisma.SortOrder
 }
 
 export type EmailVerificationSumOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
   sendCount?: Prisma.SortOrder
+  verifiedUserSeq?: Prisma.SortOrder
 }
 
 export type EmailVerificationListRelationFilter = {
@@ -805,6 +842,7 @@ export type EmailVerificationCreateWithoutSpaceInput = {
 
 export type EmailVerificationUncheckedCreateWithoutSpaceInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -822,7 +860,7 @@ export type EmailVerificationUncheckedCreateWithoutSpaceInput = {
   sendCount?: number
   lastSendStatus?: string | null
   lastSendError?: string | null
-  verifiedUserId?: string | null
+  verifiedUserSeq?: number | null
 }
 
 export type EmailVerificationCreateOrConnectWithoutSpaceInput = {
@@ -856,6 +894,7 @@ export type EmailVerificationScalarWhereInput = {
   OR?: Prisma.EmailVerificationScalarWhereInput[]
   NOT?: Prisma.EmailVerificationScalarWhereInput | Prisma.EmailVerificationScalarWhereInput[]
   id?: Prisma.StringFilter<"EmailVerification"> | string
+  seq?: Prisma.IntFilter<"EmailVerification"> | number
   createdAt?: Prisma.DateTimeFilter<"EmailVerification"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"EmailVerification"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"EmailVerification"> | Date | string | null
@@ -864,7 +903,7 @@ export type EmailVerificationScalarWhereInput = {
   nickname?: Prisma.StringFilter<"EmailVerification"> | string
   phone?: Prisma.StringFilter<"EmailVerification"> | string
   address?: Prisma.StringFilter<"EmailVerification"> | string
-  spaceId?: Prisma.StringFilter<"EmailVerification"> | string
+  spaceSeq?: Prisma.IntFilter<"EmailVerification"> | number
   passwordHash?: Prisma.StringFilter<"EmailVerification"> | string
   tokenHash?: Prisma.StringFilter<"EmailVerification"> | string
   status?: Prisma.EnumEmailVerificationStatusFilter<"EmailVerification"> | $Enums.EmailVerificationStatus
@@ -874,7 +913,7 @@ export type EmailVerificationScalarWhereInput = {
   sendCount?: Prisma.IntFilter<"EmailVerification"> | number
   lastSendStatus?: Prisma.StringNullableFilter<"EmailVerification"> | string | null
   lastSendError?: Prisma.StringNullableFilter<"EmailVerification"> | string | null
-  verifiedUserId?: Prisma.StringNullableFilter<"EmailVerification"> | string | null
+  verifiedUserSeq?: Prisma.IntNullableFilter<"EmailVerification"> | number | null
 }
 
 export type EmailVerificationCreateWithoutVerifiedUserInput = {
@@ -901,6 +940,7 @@ export type EmailVerificationCreateWithoutVerifiedUserInput = {
 
 export type EmailVerificationUncheckedCreateWithoutVerifiedUserInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -909,7 +949,7 @@ export type EmailVerificationUncheckedCreateWithoutVerifiedUserInput = {
   nickname: string
   phone: string
   address: string
-  spaceId: string
+  spaceSeq: number
   passwordHash: string
   tokenHash: string
   status?: $Enums.EmailVerificationStatus
@@ -949,6 +989,7 @@ export type EmailVerificationUpdateManyWithWhereWithoutVerifiedUserInput = {
 
 export type EmailVerificationCreateManySpaceInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -966,7 +1007,7 @@ export type EmailVerificationCreateManySpaceInput = {
   sendCount?: number
   lastSendStatus?: string | null
   lastSendError?: string | null
-  verifiedUserId?: string | null
+  verifiedUserSeq?: number | null
 }
 
 export type EmailVerificationUpdateWithoutSpaceInput = {
@@ -993,6 +1034,7 @@ export type EmailVerificationUpdateWithoutSpaceInput = {
 
 export type EmailVerificationUncheckedUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1010,11 +1052,12 @@ export type EmailVerificationUncheckedUpdateWithoutSpaceInput = {
   sendCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastSendStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSendError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  verifiedUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedUserSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type EmailVerificationUncheckedUpdateManyWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1032,11 +1075,12 @@ export type EmailVerificationUncheckedUpdateManyWithoutSpaceInput = {
   sendCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastSendStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastSendError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  verifiedUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedUserSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type EmailVerificationCreateManyVerifiedUserInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1045,7 +1089,7 @@ export type EmailVerificationCreateManyVerifiedUserInput = {
   nickname: string
   phone: string
   address: string
-  spaceId: string
+  spaceSeq: number
   passwordHash: string
   tokenHash: string
   status?: $Enums.EmailVerificationStatus
@@ -1081,6 +1125,7 @@ export type EmailVerificationUpdateWithoutVerifiedUserInput = {
 
 export type EmailVerificationUncheckedUpdateWithoutVerifiedUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1089,7 +1134,7 @@ export type EmailVerificationUncheckedUpdateWithoutVerifiedUserInput = {
   nickname?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumEmailVerificationStatusFieldUpdateOperationsInput | $Enums.EmailVerificationStatus
@@ -1103,6 +1148,7 @@ export type EmailVerificationUncheckedUpdateWithoutVerifiedUserInput = {
 
 export type EmailVerificationUncheckedUpdateManyWithoutVerifiedUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1111,7 +1157,7 @@ export type EmailVerificationUncheckedUpdateManyWithoutVerifiedUserInput = {
   nickname?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumEmailVerificationStatusFieldUpdateOperationsInput | $Enums.EmailVerificationStatus
@@ -1127,6 +1173,7 @@ export type EmailVerificationUncheckedUpdateManyWithoutVerifiedUserInput = {
 
 export type EmailVerificationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -1135,7 +1182,7 @@ export type EmailVerificationSelect<ExtArgs extends runtime.Types.Extensions.Int
   nickname?: boolean
   phone?: boolean
   address?: boolean
-  spaceId?: boolean
+  spaceSeq?: boolean
   passwordHash?: boolean
   tokenHash?: boolean
   status?: boolean
@@ -1145,13 +1192,14 @@ export type EmailVerificationSelect<ExtArgs extends runtime.Types.Extensions.Int
   sendCount?: boolean
   lastSendStatus?: boolean
   lastSendError?: boolean
-  verifiedUserId?: boolean
+  verifiedUserSeq?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   verifiedUser?: boolean | Prisma.EmailVerification$verifiedUserArgs<ExtArgs>
 }, ExtArgs["result"]["emailVerification"]>
 
 export type EmailVerificationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -1160,7 +1208,7 @@ export type EmailVerificationSelectCreateManyAndReturn<ExtArgs extends runtime.T
   nickname?: boolean
   phone?: boolean
   address?: boolean
-  spaceId?: boolean
+  spaceSeq?: boolean
   passwordHash?: boolean
   tokenHash?: boolean
   status?: boolean
@@ -1170,13 +1218,14 @@ export type EmailVerificationSelectCreateManyAndReturn<ExtArgs extends runtime.T
   sendCount?: boolean
   lastSendStatus?: boolean
   lastSendError?: boolean
-  verifiedUserId?: boolean
+  verifiedUserSeq?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   verifiedUser?: boolean | Prisma.EmailVerification$verifiedUserArgs<ExtArgs>
 }, ExtArgs["result"]["emailVerification"]>
 
 export type EmailVerificationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -1185,7 +1234,7 @@ export type EmailVerificationSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   nickname?: boolean
   phone?: boolean
   address?: boolean
-  spaceId?: boolean
+  spaceSeq?: boolean
   passwordHash?: boolean
   tokenHash?: boolean
   status?: boolean
@@ -1195,13 +1244,14 @@ export type EmailVerificationSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   sendCount?: boolean
   lastSendStatus?: boolean
   lastSendError?: boolean
-  verifiedUserId?: boolean
+  verifiedUserSeq?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   verifiedUser?: boolean | Prisma.EmailVerification$verifiedUserArgs<ExtArgs>
 }, ExtArgs["result"]["emailVerification"]>
 
 export type EmailVerificationSelectScalar = {
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -1210,7 +1260,7 @@ export type EmailVerificationSelectScalar = {
   nickname?: boolean
   phone?: boolean
   address?: boolean
-  spaceId?: boolean
+  spaceSeq?: boolean
   passwordHash?: boolean
   tokenHash?: boolean
   status?: boolean
@@ -1220,10 +1270,10 @@ export type EmailVerificationSelectScalar = {
   sendCount?: boolean
   lastSendStatus?: boolean
   lastSendError?: boolean
-  verifiedUserId?: boolean
+  verifiedUserSeq?: boolean
 }
 
-export type EmailVerificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "email" | "name" | "nickname" | "phone" | "address" | "spaceId" | "passwordHash" | "tokenHash" | "status" | "expiresAt" | "verifiedAt" | "lastSentAt" | "sendCount" | "lastSendStatus" | "lastSendError" | "verifiedUserId", ExtArgs["result"]["emailVerification"]>
+export type EmailVerificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "email" | "name" | "nickname" | "phone" | "address" | "spaceSeq" | "passwordHash" | "tokenHash" | "status" | "expiresAt" | "verifiedAt" | "lastSentAt" | "sendCount" | "lastSendStatus" | "lastSendError" | "verifiedUserSeq", ExtArgs["result"]["emailVerification"]>
 export type EmailVerificationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   verifiedUser?: boolean | Prisma.EmailVerification$verifiedUserArgs<ExtArgs>
@@ -1245,6 +1295,7 @@ export type $EmailVerificationPayload<ExtArgs extends runtime.Types.Extensions.I
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    seq: number
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -1269,9 +1320,9 @@ export type $EmailVerificationPayload<ExtArgs extends runtime.Types.Extensions.I
      */
     address: string
     /**
-     * @displayName 가입 Space ID
+     * @displayName 가입 Space 내부 순번
      */
-    spaceId: string
+    spaceSeq: number
     /**
      * @displayName 비밀번호 해시
      */
@@ -1309,9 +1360,9 @@ export type $EmailVerificationPayload<ExtArgs extends runtime.Types.Extensions.I
      */
     lastSendError: string | null
     /**
-     * @displayName 인증 완료 사용자 ID
+     * @displayName 인증 완료 사용자 내부 순번
      */
-    verifiedUserId: string | null
+    verifiedUserSeq: number | null
   }, ExtArgs["result"]["emailVerification"]>
   composites: {}
 }
@@ -1738,6 +1789,7 @@ export interface Prisma__EmailVerificationClient<T, Null = never, ExtArgs extend
  */
 export interface EmailVerificationFieldRefs {
   readonly id: Prisma.FieldRef<"EmailVerification", 'String'>
+  readonly seq: Prisma.FieldRef<"EmailVerification", 'Int'>
   readonly createdAt: Prisma.FieldRef<"EmailVerification", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"EmailVerification", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"EmailVerification", 'DateTime'>
@@ -1746,7 +1798,7 @@ export interface EmailVerificationFieldRefs {
   readonly nickname: Prisma.FieldRef<"EmailVerification", 'String'>
   readonly phone: Prisma.FieldRef<"EmailVerification", 'String'>
   readonly address: Prisma.FieldRef<"EmailVerification", 'String'>
-  readonly spaceId: Prisma.FieldRef<"EmailVerification", 'String'>
+  readonly spaceSeq: Prisma.FieldRef<"EmailVerification", 'Int'>
   readonly passwordHash: Prisma.FieldRef<"EmailVerification", 'String'>
   readonly tokenHash: Prisma.FieldRef<"EmailVerification", 'String'>
   readonly status: Prisma.FieldRef<"EmailVerification", 'EmailVerificationStatus'>
@@ -1756,7 +1808,7 @@ export interface EmailVerificationFieldRefs {
   readonly sendCount: Prisma.FieldRef<"EmailVerification", 'Int'>
   readonly lastSendStatus: Prisma.FieldRef<"EmailVerification", 'String'>
   readonly lastSendError: Prisma.FieldRef<"EmailVerification", 'String'>
-  readonly verifiedUserId: Prisma.FieldRef<"EmailVerification", 'String'>
+  readonly verifiedUserSeq: Prisma.FieldRef<"EmailVerification", 'Int'>
 }
     
 

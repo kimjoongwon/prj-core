@@ -1,8 +1,12 @@
 import type { Document as DocumentEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Asset } from "./asset.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 
-export class Document extends AbstractEntity implements DocumentEntity {
+export class Document
+	extends AbstractEntity
+	implements DomainEntityModel<DocumentEntity>
+{
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================

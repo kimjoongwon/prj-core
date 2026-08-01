@@ -120,9 +120,9 @@ const platformSpace = {
     ...branchSpace.fitnessCenter,
     id: "fitness-center-system",
     name: "플랫폼 운영본부",
-    spaceId: "61ddca20-1752-466e-b4da-879ebdbe54e3",
+    spaceId: "01J00000000000000000000001",
   },
-  id: "61ddca20-1752-466e-b4da-879ebdbe54e3",
+  id: "01J00000000000000000000001",
   tenantId: "tenant-system",
 };
 

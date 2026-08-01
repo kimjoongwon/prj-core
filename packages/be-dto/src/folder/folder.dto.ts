@@ -2,20 +2,24 @@ import {
 	ClassField,
 	NumberField,
 	StringField,
-	UUIDField,
-	UUIDFieldOptional,
+	ULIDField,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { Folder } from "@cocrepo/prisma";
 import { AbstractDto } from "../abstract.dto";
 
 /**
  * 폴더 DTO
  */
-export class FolderDto extends AbstractDto implements Folder {
-	@UUIDField({ description: "소속 Space ID" })
+export class FolderDto
+	extends AbstractDto
+	implements DomainEntityModel<Folder>
+{
+	@ULIDField({ description: "소속 Space ID" })
 	spaceId!: string;
 
-	@UUIDFieldOptional({
+	@ULIDFieldOptional({
 		nullable: true,
 		description: "부모 폴더 ID (루트면 null)",
 	})
@@ -30,7 +34,7 @@ export class FolderDto extends AbstractDto implements Folder {
 	@NumberField({ description: "정렬 순서", int: true })
 	sortOrder!: number;
 
-	@UUIDFieldOptional({ nullable: true, description: "생성자 ID" })
+	@ULIDFieldOptional({ nullable: true, description: "생성자 ID" })
 	createdById!: string | null;
 
 	// 관계 필드

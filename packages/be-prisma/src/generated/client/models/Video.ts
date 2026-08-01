@@ -27,23 +27,28 @@ export type AggregateVideo = {
 }
 
 export type VideoAvgAggregateOutputType = {
+  seq: number | null
   width: number | null
   height: number | null
   durationMs: number | null
   frameRate: number | null
   bitrate: number | null
+  assetSeq: number | null
 }
 
 export type VideoSumAggregateOutputType = {
+  seq: number | null
   width: number | null
   height: number | null
   durationMs: number | null
   frameRate: number | null
   bitrate: number | null
+  assetSeq: number | null
 }
 
 export type VideoMinAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -54,11 +59,12 @@ export type VideoMinAggregateOutputType = {
   codec: string | null
   bitrate: number | null
   hasAudio: boolean | null
-  assetId: string | null
+  assetSeq: number | null
 }
 
 export type VideoMaxAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -69,11 +75,12 @@ export type VideoMaxAggregateOutputType = {
   codec: string | null
   bitrate: number | null
   hasAudio: boolean | null
-  assetId: string | null
+  assetSeq: number | null
 }
 
 export type VideoCountAggregateOutputType = {
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -84,29 +91,34 @@ export type VideoCountAggregateOutputType = {
   codec: number
   bitrate: number
   hasAudio: number
-  assetId: number
+  assetSeq: number
   _all: number
 }
 
 
 export type VideoAvgAggregateInputType = {
+  seq?: true
   width?: true
   height?: true
   durationMs?: true
   frameRate?: true
   bitrate?: true
+  assetSeq?: true
 }
 
 export type VideoSumAggregateInputType = {
+  seq?: true
   width?: true
   height?: true
   durationMs?: true
   frameRate?: true
   bitrate?: true
+  assetSeq?: true
 }
 
 export type VideoMinAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -117,11 +129,12 @@ export type VideoMinAggregateInputType = {
   codec?: true
   bitrate?: true
   hasAudio?: true
-  assetId?: true
+  assetSeq?: true
 }
 
 export type VideoMaxAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -132,11 +145,12 @@ export type VideoMaxAggregateInputType = {
   codec?: true
   bitrate?: true
   hasAudio?: true
-  assetId?: true
+  assetSeq?: true
 }
 
 export type VideoCountAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -147,7 +161,7 @@ export type VideoCountAggregateInputType = {
   codec?: true
   bitrate?: true
   hasAudio?: true
-  assetId?: true
+  assetSeq?: true
   _all?: true
 }
 
@@ -239,6 +253,7 @@ export type VideoGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type VideoGroupByOutputType = {
   id: string
+  seq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
@@ -249,7 +264,7 @@ export type VideoGroupByOutputType = {
   codec: string | null
   bitrate: number | null
   hasAudio: boolean
-  assetId: string
+  assetSeq: number
   _count: VideoCountAggregateOutputType | null
   _avg: VideoAvgAggregateOutputType | null
   _sum: VideoSumAggregateOutputType | null
@@ -277,6 +292,7 @@ export type VideoWhereInput = {
   OR?: Prisma.VideoWhereInput[]
   NOT?: Prisma.VideoWhereInput | Prisma.VideoWhereInput[]
   id?: Prisma.StringFilter<"Video"> | string
+  seq?: Prisma.IntFilter<"Video"> | number
   createdAt?: Prisma.DateTimeFilter<"Video"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Video"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Video"> | Date | string | null
@@ -287,12 +303,13 @@ export type VideoWhereInput = {
   codec?: Prisma.StringNullableFilter<"Video"> | string | null
   bitrate?: Prisma.IntNullableFilter<"Video"> | number | null
   hasAudio?: Prisma.BoolFilter<"Video"> | boolean
-  assetId?: Prisma.StringFilter<"Video"> | string
+  assetSeq?: Prisma.IntFilter<"Video"> | number
   asset?: Prisma.XOR<Prisma.AssetScalarRelationFilter, Prisma.AssetWhereInput>
 }
 
 export type VideoOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -303,13 +320,14 @@ export type VideoOrderByWithRelationInput = {
   codec?: Prisma.SortOrderInput | Prisma.SortOrder
   bitrate?: Prisma.SortOrderInput | Prisma.SortOrder
   hasAudio?: Prisma.SortOrder
-  assetId?: Prisma.SortOrder
+  assetSeq?: Prisma.SortOrder
   asset?: Prisma.AssetOrderByWithRelationInput
 }
 
 export type VideoWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  assetId?: string
+  seq?: number
+  assetSeq?: number
   AND?: Prisma.VideoWhereInput | Prisma.VideoWhereInput[]
   OR?: Prisma.VideoWhereInput[]
   NOT?: Prisma.VideoWhereInput | Prisma.VideoWhereInput[]
@@ -324,10 +342,11 @@ export type VideoWhereUniqueInput = Prisma.AtLeast<{
   bitrate?: Prisma.IntNullableFilter<"Video"> | number | null
   hasAudio?: Prisma.BoolFilter<"Video"> | boolean
   asset?: Prisma.XOR<Prisma.AssetScalarRelationFilter, Prisma.AssetWhereInput>
-}, "id" | "assetId">
+}, "seq" | "id" | "assetSeq">
 
 export type VideoOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -338,7 +357,7 @@ export type VideoOrderByWithAggregationInput = {
   codec?: Prisma.SortOrderInput | Prisma.SortOrder
   bitrate?: Prisma.SortOrderInput | Prisma.SortOrder
   hasAudio?: Prisma.SortOrder
-  assetId?: Prisma.SortOrder
+  assetSeq?: Prisma.SortOrder
   _count?: Prisma.VideoCountOrderByAggregateInput
   _avg?: Prisma.VideoAvgOrderByAggregateInput
   _max?: Prisma.VideoMaxOrderByAggregateInput
@@ -351,6 +370,7 @@ export type VideoScalarWhereWithAggregatesInput = {
   OR?: Prisma.VideoScalarWhereWithAggregatesInput[]
   NOT?: Prisma.VideoScalarWhereWithAggregatesInput | Prisma.VideoScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Video"> | string
+  seq?: Prisma.IntWithAggregatesFilter<"Video"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Video"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Video"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Video"> | Date | string | null
@@ -361,7 +381,7 @@ export type VideoScalarWhereWithAggregatesInput = {
   codec?: Prisma.StringNullableWithAggregatesFilter<"Video"> | string | null
   bitrate?: Prisma.IntNullableWithAggregatesFilter<"Video"> | number | null
   hasAudio?: Prisma.BoolWithAggregatesFilter<"Video"> | boolean
-  assetId?: Prisma.StringWithAggregatesFilter<"Video"> | string
+  assetSeq?: Prisma.IntWithAggregatesFilter<"Video"> | number
 }
 
 export type VideoCreateInput = {
@@ -381,6 +401,7 @@ export type VideoCreateInput = {
 
 export type VideoUncheckedCreateInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -391,7 +412,7 @@ export type VideoUncheckedCreateInput = {
   codec?: string | null
   bitrate?: number | null
   hasAudio?: boolean
-  assetId: string
+  assetSeq: number
 }
 
 export type VideoUpdateInput = {
@@ -411,6 +432,7 @@ export type VideoUpdateInput = {
 
 export type VideoUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -421,11 +443,12 @@ export type VideoUncheckedUpdateInput = {
   codec?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bitrate?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   hasAudio?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
+  assetSeq?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type VideoCreateManyInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -436,7 +459,7 @@ export type VideoCreateManyInput = {
   codec?: string | null
   bitrate?: number | null
   hasAudio?: boolean
-  assetId: string
+  assetSeq: number
 }
 
 export type VideoUpdateManyMutationInput = {
@@ -455,6 +478,7 @@ export type VideoUpdateManyMutationInput = {
 
 export type VideoUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -465,7 +489,7 @@ export type VideoUncheckedUpdateManyInput = {
   codec?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bitrate?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   hasAudio?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
+  assetSeq?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type VideoNullableScalarRelationFilter = {
@@ -475,6 +499,7 @@ export type VideoNullableScalarRelationFilter = {
 
 export type VideoCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -485,19 +510,22 @@ export type VideoCountOrderByAggregateInput = {
   codec?: Prisma.SortOrder
   bitrate?: Prisma.SortOrder
   hasAudio?: Prisma.SortOrder
-  assetId?: Prisma.SortOrder
+  assetSeq?: Prisma.SortOrder
 }
 
 export type VideoAvgOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
   durationMs?: Prisma.SortOrder
   frameRate?: Prisma.SortOrder
   bitrate?: Prisma.SortOrder
+  assetSeq?: Prisma.SortOrder
 }
 
 export type VideoMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -508,11 +536,12 @@ export type VideoMaxOrderByAggregateInput = {
   codec?: Prisma.SortOrder
   bitrate?: Prisma.SortOrder
   hasAudio?: Prisma.SortOrder
-  assetId?: Prisma.SortOrder
+  assetSeq?: Prisma.SortOrder
 }
 
 export type VideoMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -523,15 +552,17 @@ export type VideoMinOrderByAggregateInput = {
   codec?: Prisma.SortOrder
   bitrate?: Prisma.SortOrder
   hasAudio?: Prisma.SortOrder
-  assetId?: Prisma.SortOrder
+  assetSeq?: Prisma.SortOrder
 }
 
 export type VideoSumOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
   durationMs?: Prisma.SortOrder
   frameRate?: Prisma.SortOrder
   bitrate?: Prisma.SortOrder
+  assetSeq?: Prisma.SortOrder
 }
 
 export type VideoCreateNestedOneWithoutAssetInput = {
@@ -582,6 +613,7 @@ export type VideoCreateWithoutAssetInput = {
 
 export type VideoUncheckedCreateWithoutAssetInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -626,6 +658,7 @@ export type VideoUpdateWithoutAssetInput = {
 
 export type VideoUncheckedUpdateWithoutAssetInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -642,6 +675,7 @@ export type VideoUncheckedUpdateWithoutAssetInput = {
 
 export type VideoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -652,12 +686,13 @@ export type VideoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   codec?: boolean
   bitrate?: boolean
   hasAudio?: boolean
-  assetId?: boolean
+  assetSeq?: boolean
   asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["video"]>
 
 export type VideoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -668,12 +703,13 @@ export type VideoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   codec?: boolean
   bitrate?: boolean
   hasAudio?: boolean
-  assetId?: boolean
+  assetSeq?: boolean
   asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["video"]>
 
 export type VideoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -684,12 +720,13 @@ export type VideoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   codec?: boolean
   bitrate?: boolean
   hasAudio?: boolean
-  assetId?: boolean
+  assetSeq?: boolean
   asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["video"]>
 
 export type VideoSelectScalar = {
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -700,10 +737,10 @@ export type VideoSelectScalar = {
   codec?: boolean
   bitrate?: boolean
   hasAudio?: boolean
-  assetId?: boolean
+  assetSeq?: boolean
 }
 
-export type VideoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "width" | "height" | "durationMs" | "frameRate" | "codec" | "bitrate" | "hasAudio" | "assetId", ExtArgs["result"]["video"]>
+export type VideoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "width" | "height" | "durationMs" | "frameRate" | "codec" | "bitrate" | "hasAudio" | "assetSeq", ExtArgs["result"]["video"]>
 export type VideoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>
 }
@@ -721,6 +758,7 @@ export type $VideoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    seq: number
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -753,9 +791,9 @@ export type $VideoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
      */
     hasAudio: boolean
     /**
-     * @displayName 원본 Asset ID
+     * @displayName 원본 Asset 내부 순번
      */
-    assetId: string
+    assetSeq: number
   }, ExtArgs["result"]["video"]>
   composites: {}
 }
@@ -1181,6 +1219,7 @@ export interface Prisma__VideoClient<T, Null = never, ExtArgs extends runtime.Ty
  */
 export interface VideoFieldRefs {
   readonly id: Prisma.FieldRef<"Video", 'String'>
+  readonly seq: Prisma.FieldRef<"Video", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Video", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Video", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Video", 'DateTime'>
@@ -1191,7 +1230,7 @@ export interface VideoFieldRefs {
   readonly codec: Prisma.FieldRef<"Video", 'String'>
   readonly bitrate: Prisma.FieldRef<"Video", 'Int'>
   readonly hasAudio: Prisma.FieldRef<"Video", 'Boolean'>
-  readonly assetId: Prisma.FieldRef<"Video", 'String'>
+  readonly assetSeq: Prisma.FieldRef<"Video", 'Int'>
 }
     
 

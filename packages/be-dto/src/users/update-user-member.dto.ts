@@ -2,7 +2,7 @@ import {
 	EmailFieldOptional,
 	PhoneFieldOptional,
 	StringFieldOptional,
-	UUIDFieldOptional,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator";
 import { Transform } from "class-transformer";
 
@@ -28,7 +28,7 @@ export class UpdateUserMemberDto {
 	})
 	phone?: string;
 
-	@UUIDFieldOptional({
+	@ULIDFieldOptional({
 		description: "분류 카테고리 ID",
 	})
 	categoryId?: string;

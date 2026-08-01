@@ -27,23 +27,28 @@ export type AggregateExercise = {
 }
 
 export type ExerciseAvgAggregateOutputType = {
+  seq: number | null
   duration: number | null
   count: number | null
+  taskSeq: number | null
 }
 
 export type ExerciseSumAggregateOutputType = {
+  seq: number | null
   duration: number | null
   count: number | null
+  taskSeq: number | null
 }
 
 export type ExerciseMinAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
   duration: number | null
   count: number | null
-  taskId: string | null
+  taskSeq: number | null
   description: string | null
   imageFileId: string | null
   videoFileId: string | null
@@ -52,12 +57,13 @@ export type ExerciseMinAggregateOutputType = {
 
 export type ExerciseMaxAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
   duration: number | null
   count: number | null
-  taskId: string | null
+  taskSeq: number | null
   description: string | null
   imageFileId: string | null
   videoFileId: string | null
@@ -66,12 +72,13 @@ export type ExerciseMaxAggregateOutputType = {
 
 export type ExerciseCountAggregateOutputType = {
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
   duration: number
   count: number
-  taskId: number
+  taskSeq: number
   description: number
   imageFileId: number
   videoFileId: number
@@ -81,23 +88,28 @@ export type ExerciseCountAggregateOutputType = {
 
 
 export type ExerciseAvgAggregateInputType = {
+  seq?: true
   duration?: true
   count?: true
+  taskSeq?: true
 }
 
 export type ExerciseSumAggregateInputType = {
+  seq?: true
   duration?: true
   count?: true
+  taskSeq?: true
 }
 
 export type ExerciseMinAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
   duration?: true
   count?: true
-  taskId?: true
+  taskSeq?: true
   description?: true
   imageFileId?: true
   videoFileId?: true
@@ -106,12 +118,13 @@ export type ExerciseMinAggregateInputType = {
 
 export type ExerciseMaxAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
   duration?: true
   count?: true
-  taskId?: true
+  taskSeq?: true
   description?: true
   imageFileId?: true
   videoFileId?: true
@@ -120,12 +133,13 @@ export type ExerciseMaxAggregateInputType = {
 
 export type ExerciseCountAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
   duration?: true
   count?: true
-  taskId?: true
+  taskSeq?: true
   description?: true
   imageFileId?: true
   videoFileId?: true
@@ -221,12 +235,13 @@ export type ExerciseGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 
 export type ExerciseGroupByOutputType = {
   id: string
+  seq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
   duration: number
   count: number
-  taskId: string
+  taskSeq: number
   description: string | null
   imageFileId: string | null
   videoFileId: string | null
@@ -258,12 +273,13 @@ export type ExerciseWhereInput = {
   OR?: Prisma.ExerciseWhereInput[]
   NOT?: Prisma.ExerciseWhereInput | Prisma.ExerciseWhereInput[]
   id?: Prisma.StringFilter<"Exercise"> | string
+  seq?: Prisma.IntFilter<"Exercise"> | number
   createdAt?: Prisma.DateTimeFilter<"Exercise"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Exercise"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Exercise"> | Date | string | null
   duration?: Prisma.IntFilter<"Exercise"> | number
   count?: Prisma.IntFilter<"Exercise"> | number
-  taskId?: Prisma.StringFilter<"Exercise"> | string
+  taskSeq?: Prisma.IntFilter<"Exercise"> | number
   description?: Prisma.StringNullableFilter<"Exercise"> | string | null
   imageFileId?: Prisma.StringNullableFilter<"Exercise"> | string | null
   videoFileId?: Prisma.StringNullableFilter<"Exercise"> | string | null
@@ -273,12 +289,13 @@ export type ExerciseWhereInput = {
 
 export type ExerciseOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   duration?: Prisma.SortOrder
   count?: Prisma.SortOrder
-  taskId?: Prisma.SortOrder
+  taskSeq?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   imageFileId?: Prisma.SortOrderInput | Prisma.SortOrder
   videoFileId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -288,7 +305,8 @@ export type ExerciseOrderByWithRelationInput = {
 
 export type ExerciseWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  taskId?: string
+  seq?: number
+  taskSeq?: number
   AND?: Prisma.ExerciseWhereInput | Prisma.ExerciseWhereInput[]
   OR?: Prisma.ExerciseWhereInput[]
   NOT?: Prisma.ExerciseWhereInput | Prisma.ExerciseWhereInput[]
@@ -302,16 +320,17 @@ export type ExerciseWhereUniqueInput = Prisma.AtLeast<{
   videoFileId?: Prisma.StringNullableFilter<"Exercise"> | string | null
   name?: Prisma.StringFilter<"Exercise"> | string
   task?: Prisma.XOR<Prisma.TaskScalarRelationFilter, Prisma.TaskWhereInput>
-}, "id" | "taskId">
+}, "seq" | "id" | "taskSeq">
 
 export type ExerciseOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   duration?: Prisma.SortOrder
   count?: Prisma.SortOrder
-  taskId?: Prisma.SortOrder
+  taskSeq?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   imageFileId?: Prisma.SortOrderInput | Prisma.SortOrder
   videoFileId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -328,12 +347,13 @@ export type ExerciseScalarWhereWithAggregatesInput = {
   OR?: Prisma.ExerciseScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ExerciseScalarWhereWithAggregatesInput | Prisma.ExerciseScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Exercise"> | string
+  seq?: Prisma.IntWithAggregatesFilter<"Exercise"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Exercise"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Exercise"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Exercise"> | Date | string | null
   duration?: Prisma.IntWithAggregatesFilter<"Exercise"> | number
   count?: Prisma.IntWithAggregatesFilter<"Exercise"> | number
-  taskId?: Prisma.StringWithAggregatesFilter<"Exercise"> | string
+  taskSeq?: Prisma.IntWithAggregatesFilter<"Exercise"> | number
   description?: Prisma.StringNullableWithAggregatesFilter<"Exercise"> | string | null
   imageFileId?: Prisma.StringNullableWithAggregatesFilter<"Exercise"> | string | null
   videoFileId?: Prisma.StringNullableWithAggregatesFilter<"Exercise"> | string | null
@@ -356,12 +376,13 @@ export type ExerciseCreateInput = {
 
 export type ExerciseUncheckedCreateInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
   duration: number
   count: number
-  taskId: string
+  taskSeq: number
   description?: string | null
   imageFileId?: string | null
   videoFileId?: string | null
@@ -384,12 +405,13 @@ export type ExerciseUpdateInput = {
 
 export type ExerciseUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   count?: Prisma.IntFieldUpdateOperationsInput | number
-  taskId?: Prisma.StringFieldUpdateOperationsInput | string
+  taskSeq?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -398,12 +420,13 @@ export type ExerciseUncheckedUpdateInput = {
 
 export type ExerciseCreateManyInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
   duration: number
   count: number
-  taskId: string
+  taskSeq: number
   description?: string | null
   imageFileId?: string | null
   videoFileId?: string | null
@@ -425,12 +448,13 @@ export type ExerciseUpdateManyMutationInput = {
 
 export type ExerciseUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   count?: Prisma.IntFieldUpdateOperationsInput | number
-  taskId?: Prisma.StringFieldUpdateOperationsInput | string
+  taskSeq?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   videoFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -439,12 +463,13 @@ export type ExerciseUncheckedUpdateManyInput = {
 
 export type ExerciseCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
   duration?: Prisma.SortOrder
   count?: Prisma.SortOrder
-  taskId?: Prisma.SortOrder
+  taskSeq?: Prisma.SortOrder
   description?: Prisma.SortOrder
   imageFileId?: Prisma.SortOrder
   videoFileId?: Prisma.SortOrder
@@ -452,18 +477,21 @@ export type ExerciseCountOrderByAggregateInput = {
 }
 
 export type ExerciseAvgOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
   duration?: Prisma.SortOrder
   count?: Prisma.SortOrder
+  taskSeq?: Prisma.SortOrder
 }
 
 export type ExerciseMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
   duration?: Prisma.SortOrder
   count?: Prisma.SortOrder
-  taskId?: Prisma.SortOrder
+  taskSeq?: Prisma.SortOrder
   description?: Prisma.SortOrder
   imageFileId?: Prisma.SortOrder
   videoFileId?: Prisma.SortOrder
@@ -472,12 +500,13 @@ export type ExerciseMaxOrderByAggregateInput = {
 
 export type ExerciseMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
   duration?: Prisma.SortOrder
   count?: Prisma.SortOrder
-  taskId?: Prisma.SortOrder
+  taskSeq?: Prisma.SortOrder
   description?: Prisma.SortOrder
   imageFileId?: Prisma.SortOrder
   videoFileId?: Prisma.SortOrder
@@ -485,8 +514,10 @@ export type ExerciseMinOrderByAggregateInput = {
 }
 
 export type ExerciseSumOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
   duration?: Prisma.SortOrder
   count?: Prisma.SortOrder
+  taskSeq?: Prisma.SortOrder
 }
 
 export type ExerciseNullableScalarRelationFilter = {
@@ -541,6 +572,7 @@ export type ExerciseCreateWithoutTaskInput = {
 
 export type ExerciseUncheckedCreateWithoutTaskInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -583,6 +615,7 @@ export type ExerciseUpdateWithoutTaskInput = {
 
 export type ExerciseUncheckedUpdateWithoutTaskInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -598,12 +631,13 @@ export type ExerciseUncheckedUpdateWithoutTaskInput = {
 
 export type ExerciseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
   duration?: boolean
   count?: boolean
-  taskId?: boolean
+  taskSeq?: boolean
   description?: boolean
   imageFileId?: boolean
   videoFileId?: boolean
@@ -613,12 +647,13 @@ export type ExerciseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 
 export type ExerciseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
   duration?: boolean
   count?: boolean
-  taskId?: boolean
+  taskSeq?: boolean
   description?: boolean
   imageFileId?: boolean
   videoFileId?: boolean
@@ -628,12 +663,13 @@ export type ExerciseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
 
 export type ExerciseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
   duration?: boolean
   count?: boolean
-  taskId?: boolean
+  taskSeq?: boolean
   description?: boolean
   imageFileId?: boolean
   videoFileId?: boolean
@@ -643,19 +679,20 @@ export type ExerciseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 
 export type ExerciseSelectScalar = {
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
   duration?: boolean
   count?: boolean
-  taskId?: boolean
+  taskSeq?: boolean
   description?: boolean
   imageFileId?: boolean
   videoFileId?: boolean
   name?: boolean
 }
 
-export type ExerciseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "duration" | "count" | "taskId" | "description" | "imageFileId" | "videoFileId" | "name", ExtArgs["result"]["exercise"]>
+export type ExerciseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "duration" | "count" | "taskSeq" | "description" | "imageFileId" | "videoFileId" | "name", ExtArgs["result"]["exercise"]>
 export type ExerciseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   task?: boolean | Prisma.TaskDefaultArgs<ExtArgs>
 }
@@ -673,12 +710,13 @@ export type $ExercisePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    seq: number
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
     duration: number
     count: number
-    taskId: string
+    taskSeq: number
     description: string | null
     imageFileId: string | null
     videoFileId: string | null
@@ -1108,12 +1146,13 @@ export interface Prisma__ExerciseClient<T, Null = never, ExtArgs extends runtime
  */
 export interface ExerciseFieldRefs {
   readonly id: Prisma.FieldRef<"Exercise", 'String'>
+  readonly seq: Prisma.FieldRef<"Exercise", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Exercise", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Exercise", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Exercise", 'DateTime'>
   readonly duration: Prisma.FieldRef<"Exercise", 'Int'>
   readonly count: Prisma.FieldRef<"Exercise", 'Int'>
-  readonly taskId: Prisma.FieldRef<"Exercise", 'String'>
+  readonly taskSeq: Prisma.FieldRef<"Exercise", 'Int'>
   readonly description: Prisma.FieldRef<"Exercise", 'String'>
   readonly imageFileId: Prisma.FieldRef<"Exercise", 'String'>
   readonly videoFileId: Prisma.FieldRef<"Exercise", 'String'>

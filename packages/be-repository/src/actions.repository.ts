@@ -3,7 +3,7 @@ import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
 export class ActionsRepository {
@@ -28,7 +28,7 @@ export class ActionsRepository {
 			orderBy: [{ group: "asc" }, { order: "asc" }, { name: "asc" }],
 		});
 
-		return results.map((result) => plainToInstance(Action, result));
+		return results.map((result) => toDomainEntity(Action, result));
 	}
 
 	/**
@@ -45,7 +45,7 @@ export class ActionsRepository {
 			orderBy: [{ order: "asc" }, { name: "asc" }],
 		});
 
-		return results.map((result) => plainToInstance(Action, result));
+		return results.map((result) => toDomainEntity(Action, result));
 	}
 
 	/**
@@ -58,7 +58,7 @@ export class ActionsRepository {
 			where: { id },
 		});
 
-		return result ? plainToInstance(Action, result) : null;
+		return result ? toDomainEntity(Action, result) : null;
 	}
 
 	/**
@@ -71,7 +71,7 @@ export class ActionsRepository {
 			where: { name },
 		});
 
-		return result ? plainToInstance(Action, result) : null;
+		return result ? toDomainEntity(Action, result) : null;
 	}
 
 	/**
@@ -88,7 +88,7 @@ export class ActionsRepository {
 			orderBy: [{ order: "asc" }, { name: "asc" }],
 		});
 
-		return results.map((result) => plainToInstance(Action, result));
+		return results.map((result) => toDomainEntity(Action, result));
 	}
 
 	/**
@@ -101,7 +101,7 @@ export class ActionsRepository {
 			data,
 		});
 
-		return plainToInstance(Action, result);
+		return toDomainEntity(Action, result);
 	}
 
 	/**
@@ -118,7 +118,7 @@ export class ActionsRepository {
 			data,
 		});
 
-		return plainToInstance(Action, result);
+		return toDomainEntity(Action, result);
 	}
 
 	/**
@@ -132,7 +132,7 @@ export class ActionsRepository {
 			data: { removedAt: new Date() },
 		});
 
-		return plainToInstance(Action, result);
+		return toDomainEntity(Action, result);
 	}
 
 	/**
@@ -157,7 +157,7 @@ export class ActionsRepository {
 					removedAt: null,
 				},
 			});
-			results.push(plainToInstance(Action, result));
+			results.push(toDomainEntity(Action, result));
 		}
 
 		return results;

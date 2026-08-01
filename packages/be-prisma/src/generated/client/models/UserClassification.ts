@@ -20,14 +20,29 @@ export type UserClassificationModel = runtime.Types.Result.DefaultSelection<Pris
 
 export type AggregateUserClassification = {
   _count: UserClassificationCountAggregateOutputType | null
+  _avg: UserClassificationAvgAggregateOutputType | null
+  _sum: UserClassificationSumAggregateOutputType | null
   _min: UserClassificationMinAggregateOutputType | null
   _max: UserClassificationMaxAggregateOutputType | null
 }
 
+export type UserClassificationAvgAggregateOutputType = {
+  seq: number | null
+  categorySeq: number | null
+  userSeq: number | null
+}
+
+export type UserClassificationSumAggregateOutputType = {
+  seq: number | null
+  categorySeq: number | null
+  userSeq: number | null
+}
+
 export type UserClassificationMinAggregateOutputType = {
   id: string | null
-  categoryId: string | null
-  userId: string | null
+  seq: number | null
+  categorySeq: number | null
+  userSeq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -35,8 +50,9 @@ export type UserClassificationMinAggregateOutputType = {
 
 export type UserClassificationMaxAggregateOutputType = {
   id: string | null
-  categoryId: string | null
-  userId: string | null
+  seq: number | null
+  categorySeq: number | null
+  userSeq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -44,8 +60,9 @@ export type UserClassificationMaxAggregateOutputType = {
 
 export type UserClassificationCountAggregateOutputType = {
   id: number
-  categoryId: number
-  userId: number
+  seq: number
+  categorySeq: number
+  userSeq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -53,10 +70,23 @@ export type UserClassificationCountAggregateOutputType = {
 }
 
 
+export type UserClassificationAvgAggregateInputType = {
+  seq?: true
+  categorySeq?: true
+  userSeq?: true
+}
+
+export type UserClassificationSumAggregateInputType = {
+  seq?: true
+  categorySeq?: true
+  userSeq?: true
+}
+
 export type UserClassificationMinAggregateInputType = {
   id?: true
-  categoryId?: true
-  userId?: true
+  seq?: true
+  categorySeq?: true
+  userSeq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -64,8 +94,9 @@ export type UserClassificationMinAggregateInputType = {
 
 export type UserClassificationMaxAggregateInputType = {
   id?: true
-  categoryId?: true
-  userId?: true
+  seq?: true
+  categorySeq?: true
+  userSeq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -73,8 +104,9 @@ export type UserClassificationMaxAggregateInputType = {
 
 export type UserClassificationCountAggregateInputType = {
   id?: true
-  categoryId?: true
-  userId?: true
+  seq?: true
+  categorySeq?: true
+  userSeq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -119,6 +151,18 @@ export type UserClassificationAggregateArgs<ExtArgs extends runtime.Types.Extens
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: UserClassificationAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: UserClassificationSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: UserClassificationMinAggregateInputType
@@ -149,18 +193,23 @@ export type UserClassificationGroupByArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   _count?: UserClassificationCountAggregateInputType | true
+  _avg?: UserClassificationAvgAggregateInputType
+  _sum?: UserClassificationSumAggregateInputType
   _min?: UserClassificationMinAggregateInputType
   _max?: UserClassificationMaxAggregateInputType
 }
 
 export type UserClassificationGroupByOutputType = {
   id: string
-  categoryId: string
-  userId: string
+  seq: number
+  categorySeq: number
+  userSeq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
   _count: UserClassificationCountAggregateOutputType | null
+  _avg: UserClassificationAvgAggregateOutputType | null
+  _sum: UserClassificationSumAggregateOutputType | null
   _min: UserClassificationMinAggregateOutputType | null
   _max: UserClassificationMaxAggregateOutputType | null
 }
@@ -185,8 +234,9 @@ export type UserClassificationWhereInput = {
   OR?: Prisma.UserClassificationWhereInput[]
   NOT?: Prisma.UserClassificationWhereInput | Prisma.UserClassificationWhereInput[]
   id?: Prisma.StringFilter<"UserClassification"> | string
-  categoryId?: Prisma.StringFilter<"UserClassification"> | string
-  userId?: Prisma.StringFilter<"UserClassification"> | string
+  seq?: Prisma.IntFilter<"UserClassification"> | number
+  categorySeq?: Prisma.IntFilter<"UserClassification"> | number
+  userSeq?: Prisma.IntFilter<"UserClassification"> | number
   createdAt?: Prisma.DateTimeFilter<"UserClassification"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"UserClassification"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"UserClassification"> | Date | string | null
@@ -196,8 +246,9 @@ export type UserClassificationWhereInput = {
 
 export type UserClassificationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  categoryId?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  categorySeq?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -207,29 +258,33 @@ export type UserClassificationOrderByWithRelationInput = {
 
 export type UserClassificationWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  userId?: string
-  categoryId_userId?: Prisma.UserClassificationCategoryIdUserIdCompoundUniqueInput
+  seq?: number
+  userSeq?: number
+  categorySeq_userSeq?: Prisma.UserClassificationCategorySeqUserSeqCompoundUniqueInput
   AND?: Prisma.UserClassificationWhereInput | Prisma.UserClassificationWhereInput[]
   OR?: Prisma.UserClassificationWhereInput[]
   NOT?: Prisma.UserClassificationWhereInput | Prisma.UserClassificationWhereInput[]
-  categoryId?: Prisma.StringFilter<"UserClassification"> | string
+  categorySeq?: Prisma.IntFilter<"UserClassification"> | number
   createdAt?: Prisma.DateTimeFilter<"UserClassification"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"UserClassification"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"UserClassification"> | Date | string | null
   category?: Prisma.XOR<Prisma.CategoryScalarRelationFilter, Prisma.CategoryWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id" | "userId" | "categoryId_userId">
+}, "seq" | "id" | "userSeq" | "categorySeq_userSeq">
 
 export type UserClassificationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  categoryId?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  categorySeq?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserClassificationCountOrderByAggregateInput
+  _avg?: Prisma.UserClassificationAvgOrderByAggregateInput
   _max?: Prisma.UserClassificationMaxOrderByAggregateInput
   _min?: Prisma.UserClassificationMinOrderByAggregateInput
+  _sum?: Prisma.UserClassificationSumOrderByAggregateInput
 }
 
 export type UserClassificationScalarWhereWithAggregatesInput = {
@@ -237,8 +292,9 @@ export type UserClassificationScalarWhereWithAggregatesInput = {
   OR?: Prisma.UserClassificationScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserClassificationScalarWhereWithAggregatesInput | Prisma.UserClassificationScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"UserClassification"> | string
-  categoryId?: Prisma.StringWithAggregatesFilter<"UserClassification"> | string
-  userId?: Prisma.StringWithAggregatesFilter<"UserClassification"> | string
+  seq?: Prisma.IntWithAggregatesFilter<"UserClassification"> | number
+  categorySeq?: Prisma.IntWithAggregatesFilter<"UserClassification"> | number
+  userSeq?: Prisma.IntWithAggregatesFilter<"UserClassification"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"UserClassification"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"UserClassification"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"UserClassification"> | Date | string | null
@@ -255,8 +311,9 @@ export type UserClassificationCreateInput = {
 
 export type UserClassificationUncheckedCreateInput = {
   id?: string
-  categoryId: string
-  userId: string
+  seq?: number
+  categorySeq: number
+  userSeq: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -273,8 +330,9 @@ export type UserClassificationUpdateInput = {
 
 export type UserClassificationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  categorySeq?: Prisma.IntFieldUpdateOperationsInput | number
+  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -282,8 +340,9 @@ export type UserClassificationUncheckedUpdateInput = {
 
 export type UserClassificationCreateManyInput = {
   id?: string
-  categoryId: string
-  userId: string
+  seq?: number
+  categorySeq: number
+  userSeq: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -298,8 +357,9 @@ export type UserClassificationUpdateManyMutationInput = {
 
 export type UserClassificationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  categorySeq?: Prisma.IntFieldUpdateOperationsInput | number
+  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -315,24 +375,32 @@ export type UserClassificationOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type UserClassificationCategoryIdUserIdCompoundUniqueInput = {
-  categoryId: string
-  userId: string
+export type UserClassificationCategorySeqUserSeqCompoundUniqueInput = {
+  categorySeq: number
+  userSeq: number
 }
 
 export type UserClassificationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  categoryId?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  categorySeq?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
 }
 
+export type UserClassificationAvgOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+  categorySeq?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
+}
+
 export type UserClassificationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  categoryId?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  categorySeq?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -340,11 +408,18 @@ export type UserClassificationMaxOrderByAggregateInput = {
 
 export type UserClassificationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  categoryId?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
+  categorySeq?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
+}
+
+export type UserClassificationSumOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+  categorySeq?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
 }
 
 export type UserClassificationNullableScalarRelationFilter = {
@@ -436,7 +511,8 @@ export type UserClassificationCreateWithoutCategoryInput = {
 
 export type UserClassificationUncheckedCreateWithoutCategoryInput = {
   id?: string
-  userId: string
+  seq?: number
+  userSeq: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -473,8 +549,9 @@ export type UserClassificationScalarWhereInput = {
   OR?: Prisma.UserClassificationScalarWhereInput[]
   NOT?: Prisma.UserClassificationScalarWhereInput | Prisma.UserClassificationScalarWhereInput[]
   id?: Prisma.StringFilter<"UserClassification"> | string
-  categoryId?: Prisma.StringFilter<"UserClassification"> | string
-  userId?: Prisma.StringFilter<"UserClassification"> | string
+  seq?: Prisma.IntFilter<"UserClassification"> | number
+  categorySeq?: Prisma.IntFilter<"UserClassification"> | number
+  userSeq?: Prisma.IntFilter<"UserClassification"> | number
   createdAt?: Prisma.DateTimeFilter<"UserClassification"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"UserClassification"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"UserClassification"> | Date | string | null
@@ -490,7 +567,8 @@ export type UserClassificationCreateWithoutUserInput = {
 
 export type UserClassificationUncheckedCreateWithoutUserInput = {
   id?: string
-  categoryId: string
+  seq?: number
+  categorySeq: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -522,7 +600,8 @@ export type UserClassificationUpdateWithoutUserInput = {
 
 export type UserClassificationUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  categorySeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -530,7 +609,8 @@ export type UserClassificationUncheckedUpdateWithoutUserInput = {
 
 export type UserClassificationCreateManyCategoryInput = {
   id?: string
-  userId: string
+  seq?: number
+  userSeq: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -546,7 +626,8 @@ export type UserClassificationUpdateWithoutCategoryInput = {
 
 export type UserClassificationUncheckedUpdateWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -554,7 +635,8 @@ export type UserClassificationUncheckedUpdateWithoutCategoryInput = {
 
 export type UserClassificationUncheckedUpdateManyWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -564,8 +646,9 @@ export type UserClassificationUncheckedUpdateManyWithoutCategoryInput = {
 
 export type UserClassificationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  categoryId?: boolean
-  userId?: boolean
+  seq?: boolean
+  categorySeq?: boolean
+  userSeq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -575,8 +658,9 @@ export type UserClassificationSelect<ExtArgs extends runtime.Types.Extensions.In
 
 export type UserClassificationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  categoryId?: boolean
-  userId?: boolean
+  seq?: boolean
+  categorySeq?: boolean
+  userSeq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -586,8 +670,9 @@ export type UserClassificationSelectCreateManyAndReturn<ExtArgs extends runtime.
 
 export type UserClassificationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  categoryId?: boolean
-  userId?: boolean
+  seq?: boolean
+  categorySeq?: boolean
+  userSeq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -597,14 +682,15 @@ export type UserClassificationSelectUpdateManyAndReturn<ExtArgs extends runtime.
 
 export type UserClassificationSelectScalar = {
   id?: boolean
-  categoryId?: boolean
-  userId?: boolean
+  seq?: boolean
+  categorySeq?: boolean
+  userSeq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
 }
 
-export type UserClassificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "categoryId" | "userId" | "createdAt" | "updatedAt" | "removedAt", ExtArgs["result"]["userClassification"]>
+export type UserClassificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "categorySeq" | "userSeq" | "createdAt" | "updatedAt" | "removedAt", ExtArgs["result"]["userClassification"]>
 export type UserClassificationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -626,8 +712,9 @@ export type $UserClassificationPayload<ExtArgs extends runtime.Types.Extensions.
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    categoryId: string
-    userId: string
+    seq: number
+    categorySeq: number
+    userSeq: number
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -1057,8 +1144,9 @@ export interface Prisma__UserClassificationClient<T, Null = never, ExtArgs exten
  */
 export interface UserClassificationFieldRefs {
   readonly id: Prisma.FieldRef<"UserClassification", 'String'>
-  readonly categoryId: Prisma.FieldRef<"UserClassification", 'String'>
-  readonly userId: Prisma.FieldRef<"UserClassification", 'String'>
+  readonly seq: Prisma.FieldRef<"UserClassification", 'Int'>
+  readonly categorySeq: Prisma.FieldRef<"UserClassification", 'Int'>
+  readonly userSeq: Prisma.FieldRef<"UserClassification", 'Int'>
   readonly createdAt: Prisma.FieldRef<"UserClassification", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"UserClassification", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"UserClassification", 'DateTime'>

@@ -3,21 +3,25 @@ import {
 	NumberField,
 	StringField,
 	StringFieldOptional,
-	UUIDField,
+	ULIDField,
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { Exercise as ExcerciesEntity } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { TaskDto } from "./task.dto";
 
-export class ExerciseDto extends AbstractDto implements ExcerciesEntity {
+export class ExerciseDto
+	extends AbstractDto
+	implements DomainEntityModel<ExcerciesEntity>
+{
 	@NumberField()
 	duration: number;
 
 	@NumberField()
 	count: number;
 
-	@UUIDField()
+	@ULIDField()
 	taskId: string;
 
 	@StringFieldOptional()

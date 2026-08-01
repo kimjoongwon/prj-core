@@ -3,21 +3,22 @@
 // @description: 세션들을 논리적으로 그룹화하는 시간 단위 컨테이너
 /// @displayName 타임라인
 model Timeline {
-  id           String        @id @default(uuid())
+  id           String        @unique @default(ulid()) @db.VarChar(26)
+  seq          Int           @id @default(autoincrement())
   createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt    DateTime?     @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt    DateTime?     @map("removed_at") @db.Timestamptz(6)
-  spaceId      String        @map("space_id")
-  createdById  String?       @map("created_by_id")
+  spaceSeq     Int           @map("space_seq")
+  createdBySeq Int?          @map("created_by_seq")
   name         String
   description  String?
-  space        Space         @relation(fields: [spaceId], references: [id], onDelete: Restrict)
-  createdBy    User?         @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  space        Space         @relation(fields: [spaceSeq], references: [seq], onDelete: Restrict)
+  createdBy    User?         @relation(fields: [createdBySeq], references: [seq], onDelete: SetNull)
   sessions     Session[]
   reservations Reservation[]
 
-  @@index([spaceId])
-  @@index([spaceId, createdAt])
+  @@index([spaceSeq])
+  @@index([spaceSeq, createdAt])
   @@index([name])
   @@map("timelines")
 }

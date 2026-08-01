@@ -121,7 +121,7 @@ export class UserService {
 			tenants: {
 				some: {
 					...existingTenantSome,
-					spaceId: { in: scopedSpaceIds },
+					space: { id: { in: scopedSpaceIds } },
 					removedAt: null,
 				},
 			},
@@ -130,16 +130,22 @@ export class UserService {
 
 	/**
 	 * Space 내 사용자 상세 조회
-	 * 해당 Space에 접근 권한이 있는 사용자만 조회 가능합니다.
+	 * 현재 요청의 유효 Space 범위에 접근 권한이 있는 사용자만 조회 가능합니다.
+	 * PLATFORM_ADMIN처럼 유효 범위가 undefined면 Space 제한 없이 조회합니다.
+	 *
+	 * @param userId 조회할 사용자 ULID
+	 * @param spaceId 현재 선택된 Space ULID
+	 * @returns 접근 범위 안의 사용자 상세
 	 */
 	async getUserDetailForSpace(userId: string, spaceId: string) {
+		const scopedSpaceIds = this.spaceCtx.spaceIds;
 		this.logger.debug(
-			`Space 내 사용자 상세 조회: userId=${userId}, spaceId=${spaceId}`,
+			`Space 내 사용자 상세 조회: userId=${userId}, selectedSpaceId=${spaceId}, scope=${scopedSpaceIds?.join(",") ?? "all"}`,
 		);
 
-		const user = await this.repository.findByIdAndSpaceIdWithRelations(
+		const user = await this.repository.findByIdAndSpaceIdsWithRelations(
 			userId,
-			spaceId,
+			scopedSpaceIds,
 		);
 
 		if (!user) {

@@ -81,7 +81,7 @@ describe("AssetAggregate", () => {
 		const findManyInput = mockAssetsRepository.findMany.mock.calls[0][0];
 		expect(findManyInput.where).toEqual(
 			expect.objectContaining({
-				spaceId: { in: ["space-123", "space-parent"] },
+				space: { id: { in: ["space-123", "space-parent"] } },
 			}),
 		);
 	});

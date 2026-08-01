@@ -51,15 +51,15 @@ export async function createAssetDomainData(
 	const createdByUsers = await prisma.user.findMany({
 		where: { email: { in: createdByEmails } },
 	});
-	// Reuse email -> userId lookups while creating assets and albums.
-	const userIdByCreatedByEmail = new Map(
-		createdByUsers.map((user) => [user.email, user.id]),
+	// Reuse email -> internal user seq lookups while creating related rows.
+	const userSeqByCreatedByEmail = new Map(
+		createdByUsers.map((user) => [user.email, user.seq]),
 	);
 
 	console.log("\n[1/6] Folder 생성 중...");
 	// Folders are resolved by path so later assets can attach without additional
 	// hierarchical queries.
-	const folderByPath = new Map<string, { id: string }>();
+	const folderByPath = new Map<string, { id: string; seq: number }>();
 	let folderCreated = 0;
 	let folderSkipped = 0;
 
@@ -69,29 +69,29 @@ export async function createAssetDomainData(
 		});
 
 		if (!existing) {
-			let parentFolderId: string | undefined;
+			let parentFolderSeq: number | undefined;
 			if (folderData.parentFolderPath) {
 				const parentFolder = folderByPath.get(folderData.parentFolderPath);
 				if (parentFolder) {
-					parentFolderId = parentFolder.id;
+					parentFolderSeq = parentFolder.seq;
 				}
 			}
 
 			const folder = await prisma.folder.create({
 				data: {
-					spaceId: systemSpace.id,
+					spaceSeq: systemSpace.seq,
 					name: folderData.name,
 					path: folderData.path,
-					parentFolderId,
+					parentFolderSeq,
 					sortOrder: folderData.sortOrder,
-					createdById: adminUser?.id,
+					createdBySeq: adminUser?.seq,
 				},
 			});
-			folderByPath.set(folderData.path, { id: folder.id });
+			folderByPath.set(folderData.path, { id: folder.id, seq: folder.seq });
 			folderCreated++;
 			console.log(`  - Folder 생성: ${folderData.path}`);
 		} else {
-			folderByPath.set(folderData.path, { id: existing.id });
+			folderByPath.set(folderData.path, { id: existing.id, seq: existing.seq });
 			folderSkipped++;
 		}
 	}
@@ -102,7 +102,10 @@ export async function createAssetDomainData(
 	console.log("\n[2/6] Asset 생성 중...");
 	// Child tables (Image/Video/Document/Derivative/AlbumEntry) all resolve back
 	// to assets through storageKey, so cache that mapping here.
-	const assetByStorageKey = new Map<string, { id: string; kind: string }>();
+	const assetByStorageKey = new Map<
+		string,
+		{ id: string; kind: string; seq: number }
+	>();
 	let assetCreated = 0;
 	let assetSkipped = 0;
 
@@ -120,8 +123,8 @@ export async function createAssetDomainData(
 
 			const asset = await prisma.asset.create({
 				data: {
-					spaceId: systemSpace.id,
-					folderId: folder.id,
+					spaceSeq: systemSpace.seq,
+					folderSeq: folder.seq,
 					kind: assetData.kind as "IMAGE" | "VIDEO" | "DOCUMENT",
 					status: "READY",
 					originalName: assetData.originalName,
@@ -133,14 +136,15 @@ export async function createAssetDomainData(
 					metadata: assetData.metadata
 						? (assetData.metadata as unknown as Prisma.InputJsonObject)
 						: undefined,
-					createdById: assetData.createdByEmail
-						? userIdByCreatedByEmail.get(assetData.createdByEmail)
+					createdBySeq: assetData.createdByEmail
+						? userSeqByCreatedByEmail.get(assetData.createdByEmail)
 						: undefined,
 				},
 			});
 			assetByStorageKey.set(assetData.storageKey, {
 				id: asset.id,
 				kind: assetData.kind,
+				seq: asset.seq,
 			});
 			assetCreated++;
 			console.log(
@@ -150,6 +154,7 @@ export async function createAssetDomainData(
 			assetByStorageKey.set(assetData.storageKey, {
 				id: existing.id,
 				kind: existing.kind,
+				seq: existing.seq,
 			});
 			assetSkipped++;
 		}
@@ -167,13 +172,13 @@ export async function createAssetDomainData(
 		}
 
 		const existing = await prisma.image.findUnique({
-			where: { assetId: asset.id },
+			where: { assetSeq: asset.seq },
 		});
 
 		if (!existing) {
 			await prisma.image.create({
 				data: {
-					assetId: asset.id,
+					assetSeq: asset.seq,
 					width: imageData.width,
 					height: imageData.height,
 					orientation: imageData.orientation,
@@ -201,13 +206,13 @@ export async function createAssetDomainData(
 		}
 
 		const existing = await prisma.video.findUnique({
-			where: { assetId: asset.id },
+			where: { assetSeq: asset.seq },
 		});
 
 		if (!existing) {
 			await prisma.video.create({
 				data: {
-					assetId: asset.id,
+					assetSeq: asset.seq,
 					width: videoData.width,
 					height: videoData.height,
 					durationMs: videoData.durationMs,
@@ -237,13 +242,13 @@ export async function createAssetDomainData(
 		}
 
 		const existing = await prisma.document.findUnique({
-			where: { assetId: asset.id },
+			where: { assetSeq: asset.seq },
 		});
 
 		if (!existing) {
 			await prisma.document.create({
 				data: {
-					assetId: asset.id,
+					assetSeq: asset.seq,
 					pageCount: docData.pageCount,
 					wordCount: docData.wordCount,
 					author: docData.author,
@@ -278,9 +283,9 @@ export async function createAssetDomainData(
 		if (!existing) {
 			await prisma.derivative.create({
 				data: {
-					spaceId: systemSpace.id,
-					createdById: adminUser?.id,
-					assetId: sourceAsset.id,
+					spaceSeq: systemSpace.seq,
+					createdBySeq: adminUser?.seq,
+					assetSeq: sourceAsset.seq,
 					kind: derivativeData.kind as
 						| "THUMBNAIL"
 						| "PREVIEW"
@@ -309,44 +314,44 @@ export async function createAssetDomainData(
 
 	console.log("\n[7/8] Album 생성 중...");
 	// Albums are keyed by name within the system space for this bootstrap path.
-	const albumByName = new Map<string, { id: string }>();
+	const albumByName = new Map<string, { id: string; seq: number }>();
 	let albumCreated = 0;
 	let albumSkipped = 0;
 
 	for (const albumData of albumSeedData) {
-		let coverAssetId: string | undefined;
+		let coverAssetSeq: number | undefined;
 		if (albumData.coverStorageKey) {
 			const coverAsset = assetByStorageKey.get(albumData.coverStorageKey);
 			if (coverAsset) {
-				coverAssetId = coverAsset.id;
+				coverAssetSeq = coverAsset.seq;
 			}
 		}
 
 		const existing = await prisma.album.findFirst({
 			where: {
 				name: albumData.name,
-				spaceId: systemSpace.id,
+				spaceSeq: systemSpace.seq,
 			},
 		});
 
 		if (!existing) {
 			const album = await prisma.album.create({
 				data: {
-					spaceId: systemSpace.id,
+					spaceSeq: systemSpace.seq,
 					name: albumData.name,
 					description: albumData.description,
-					coverAssetId,
+					coverAssetSeq,
 					sortOrder: albumData.sortOrder,
-					createdById: albumData.createdByEmail
-						? userIdByCreatedByEmail.get(albumData.createdByEmail)
+					createdBySeq: albumData.createdByEmail
+						? userSeqByCreatedByEmail.get(albumData.createdByEmail)
 						: undefined,
 				},
 			});
-			albumByName.set(albumData.name, { id: album.id });
+			albumByName.set(albumData.name, { id: album.id, seq: album.seq });
 			albumCreated++;
 			console.log(`  - Album 생성: ${albumData.name}`);
 		} else {
-			albumByName.set(albumData.name, { id: existing.id });
+			albumByName.set(albumData.name, { id: existing.id, seq: existing.seq });
 			albumSkipped++;
 		}
 	}
@@ -369,18 +374,18 @@ export async function createAssetDomainData(
 
 		const existing = await prisma.albumEntry.findFirst({
 			where: {
-				albumId: album.id,
-				assetId: asset.id,
+				albumSeq: album.seq,
+				assetSeq: asset.seq,
 			},
 		});
 
 		if (!existing) {
 			await prisma.albumEntry.create({
 				data: {
-					spaceId: systemSpace.id,
-					createdById: adminUser?.id,
-					albumId: album.id,
-					assetId: asset.id,
+					spaceSeq: systemSpace.seq,
+					createdBySeq: adminUser?.seq,
+					albumSeq: album.seq,
+					assetSeq: asset.seq,
 					position: entryData.position,
 					caption: entryData.caption,
 				},

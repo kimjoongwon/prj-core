@@ -3,7 +3,7 @@ import {
 	EnumField,
 	NumberField,
 	StringField,
-	UUIDField,
+	ULIDField,
 } from "@cocrepo/decorator";
 import { ThreadStatus } from "@cocrepo/prisma";
 import { AbstractDto } from "../abstract.dto";
@@ -12,7 +12,7 @@ import { AbstractDto } from "../abstract.dto";
  * 문의 스레드 DTO
  */
 export class InquiryThreadDto extends AbstractDto {
-	@UUIDField({ description: "소속 문의 ID" })
+	@ULIDField({ description: "소속 문의 ID" })
 	inquiryId!: string;
 
 	@StringField({ nullable: true, description: "스레드 제목" })
@@ -21,7 +21,7 @@ export class InquiryThreadDto extends AbstractDto {
 	@EnumField(() => ThreadStatus, { description: "스레드 상태" })
 	status!: ThreadStatus;
 
-	@UUIDField({ description: "생성자 ID" })
+	@ULIDField({ description: "생성자 ID" })
 	createdById!: string;
 
 	@DateField({ nullable: true, description: "마지막 메시지 일시" })

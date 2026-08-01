@@ -2,13 +2,14 @@
 // @description: SafeWallet에 종속되는 멀티시그 트랜잭션 실행 단위
 /// @displayName Safe 트랜잭션
 model SafeTransaction {
-  id                    String             @id @default(uuid())
+  id                    String             @unique @default(ulid()) @db.VarChar(26)
+  seq                   Int                @id @default(autoincrement())
   createdAt             DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt             DateTime?          @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt             DateTime?          @map("removed_at") @db.Timestamptz(6)
   safeTxHash            String             @unique @map("safe_tx_hash")
-  safeWalletId          String             @map("safe_wallet_id")
-  safeWallet            SafeWallet         @relation(fields: [safeWalletId], references: [id])
+  safeWalletSeq         Int                @map("safe_wallet_seq")
+  safeWallet            SafeWallet         @relation(fields: [safeWalletSeq], references: [seq])
   to                    String // 수신자 주소
   value                 String             @default("0") // ETH 값 (wei)
   data                  String             @default("0x") // 트랜잭션 데이터

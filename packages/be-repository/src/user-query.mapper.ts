@@ -51,12 +51,12 @@ export function buildUserQueryWhere(
 	}
 
 	if (input.categoryId) {
-		where.classification = { categoryId: input.categoryId };
+		where.classification = { category: { id: input.categoryId } };
 	}
 
 	if (input.groupIds?.length) {
 		where.associations = {
-			some: { groupId: { in: input.groupIds }, removedAt: null },
+			some: { group: { id: { in: input.groupIds } }, removedAt: null },
 		};
 	}
 

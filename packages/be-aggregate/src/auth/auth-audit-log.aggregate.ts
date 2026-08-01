@@ -102,7 +102,7 @@ export class AuthAuditLogAggregate {
 			user: {
 				tenants: {
 					some: {
-						spaceId: { in: spaceIds },
+						space: { id: { in: spaceIds } },
 						removedAt: null,
 					},
 				},

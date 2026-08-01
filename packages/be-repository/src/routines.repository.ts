@@ -1,9 +1,9 @@
 import { Routine } from "@cocrepo/entity";
-import { LanguageCode, PrismaClient } from "@cocrepo/prisma";
+import { LanguageCode, Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
 export class RoutinesRepository {
@@ -16,8 +16,7 @@ export class RoutinesRepository {
 	) {}
 
 	/**
-	 * Space 계층 공유를 지원하는 루틴 목록 조회
-	 * spaceIds 배열로 여러 Space의 Routine을 한 번에 조회합니다.
+	 * Space 계층 공유를 지원하는 루틴 목록을 조회합니다.
 	 */
 	async findManyRoutines(params: {
 		spaceIds?: string[];
@@ -30,56 +29,39 @@ export class RoutinesRepository {
 			`루틴 목록 조회: spaceIds=${params.spaceIds?.length ?? "all"}개, search=${params.search ?? "없음"}`,
 		);
 
-		const whereCondition = {
+		const where: Prisma.RoutineWhereInput = {
 			removedAt: null,
-			...(params.spaceIds ? { spaceId: { in: params.spaceIds } } : {}),
-			...(params.contentLanguageCode
-				? { space: { contentLanguageCode: params.contentLanguageCode } }
+			...(params.spaceIds || params.contentLanguageCode
+				? {
+						space: {
+							...(params.spaceIds ? { id: { in: params.spaceIds } } : {}),
+							...(params.contentLanguageCode
+								? { contentLanguageCode: params.contentLanguageCode }
+								: {}),
+						},
+					}
 				: {}),
 			...(params.search
-				? { name: { contains: params.search, mode: "insensitive" as const } }
+				? { name: { contains: params.search, mode: "insensitive" } }
 				: {}),
 		};
 
 		const [items, total] = await Promise.all([
 			this.txHost.tx.routine.findMany({
-				where: whereCondition,
-				include: {
-					space: { select: { id: true } },
-					_count: {
-						select: {
-							activities: { where: { removedAt: null } },
-							programs: { where: { removedAt: null } },
-						},
-					},
-					activities: {
-						where: { removedAt: null },
-						include: {
-							task: {
-								include: {
-									exercise: true,
-								},
-							},
-						},
-					},
-					programs: {
-						where: { removedAt: null },
-					},
-				},
+				where,
+				include: this.includeRoutineDetails(),
 				orderBy: { createdAt: "desc" },
 				skip: params.skip,
 				take: params.take,
 			}),
-			this.txHost.tx.routine.count({
-				where: whereCondition,
-			}),
+			this.txHost.tx.routine.count({ where }),
 		]);
 
-		return [items.map((item) => plainToInstance(Routine, item)), total];
+		return [items.map((item) => toDomainEntity(Routine, item)), total];
 	}
 
 	/**
-	 * 단일 루틴 조회 (Space 계층 필터 적용)
+	 * 공개 ID로 루틴 하나를 조회합니다.
 	 */
 	async findRoutineById(
 		routineId: string,
@@ -91,37 +73,16 @@ export class RoutinesRepository {
 			where: {
 				id: routineId,
 				removedAt: null,
-				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
+				...(spaceIds ? { space: { id: { in: spaceIds } } } : {}),
 			},
-			include: {
-				space: { select: { id: true } },
-				_count: {
-					select: {
-						activities: { where: { removedAt: null } },
-						programs: { where: { removedAt: null } },
-					},
-				},
-				activities: {
-					where: { removedAt: null },
-					include: {
-						task: {
-							include: {
-								exercise: true,
-							},
-						},
-					},
-				},
-				programs: {
-					where: { removedAt: null },
-				},
-			},
+			include: this.includeRoutineDetails(),
 		});
 
-		return result ? plainToInstance(Routine, result) : null;
+		return result ? toDomainEntity(Routine, result) : null;
 	}
 
 	/**
-	 * 루틴 생성
+	 * 공개 관계 ID를 사용해 루틴과 활동을 생성합니다.
 	 */
 	async createRoutine(data: {
 		name: string;
@@ -142,12 +103,14 @@ export class RoutinesRepository {
 			data: {
 				name: data.name,
 				label: data.label,
-				spaceId: data.spaceId,
-				createdById: data.createdById ?? null,
+				space: { connect: { id: data.spaceId } },
+				...(data.createdById
+					? { createdBy: { connect: { id: data.createdById } } }
+					: {}),
 				activities: data.activities
 					? {
 							create: data.activities.map((activity) => ({
-								taskId: activity.taskId,
+								task: { connect: { id: activity.taskId } },
 								order: activity.order,
 								repetitions: activity.repetitions,
 								restTime: activity.restTime,
@@ -156,13 +119,14 @@ export class RoutinesRepository {
 						}
 					: undefined,
 			},
+			include: this.includeRoutineDetails(),
 		});
 
-		return plainToInstance(Routine, result);
+		return toDomainEntity(Routine, result);
 	}
 
 	/**
-	 * 루틴 수정
+	 * 루틴 기본 정보와 활동 목록을 갱신합니다.
 	 */
 	async updateRoutine(
 		routineId: string,
@@ -191,7 +155,7 @@ export class RoutinesRepository {
 						: {
 								deleteMany: {},
 								create: data.activities.map((activity) => ({
-									taskId: activity.taskId,
+									task: { connect: { id: activity.taskId } },
 									order: activity.order,
 									repetitions: activity.repetitions,
 									restTime: activity.restTime,
@@ -199,27 +163,26 @@ export class RoutinesRepository {
 								})),
 							},
 			},
+			include: this.includeRoutineDetails(),
 		});
 
-		return plainToInstance(Routine, result);
+		return toDomainEntity(Routine, result);
 	}
 
 	/**
-	 * 루틴 소프트 삭제
+	 * 루틴과 종속 활동을 소프트 삭제합니다.
 	 */
 	async softDeleteRoutine(routineId: string): Promise<void> {
 		this.logger.debug(`루틴 소프트 삭제: ${routineId.slice(-8)}`);
 
 		const removedAt = new Date();
-
 		await this.txHost.tx.routine.update({
 			where: { id: routineId },
 			data: { removedAt },
 		});
-
 		await this.txHost.tx.activity.updateMany({
 			where: {
-				routineId,
+				routine: { id: routineId },
 				removedAt: null,
 			},
 			data: { removedAt },
@@ -227,17 +190,49 @@ export class RoutinesRepository {
 	}
 
 	/**
-	 * 특정 루틴을 사용하는 Program 수 카운트
-	 * 삭제 가능 여부 확인에 사용됩니다.
+	 * 특정 루틴을 사용하는 Program 수를 반환합니다.
 	 */
 	async countProgramsUsingRoutine(routineId: string): Promise<number> {
 		this.logger.debug(`루틴 사용 Program 수 조회: ${routineId.slice(-8)}`);
 
 		return this.txHost.tx.program.count({
 			where: {
-				routineId,
+				routine: { id: routineId },
 				removedAt: null,
 			},
 		});
+	}
+
+	private includeRoutineDetails() {
+		return {
+			space: { select: { id: true } },
+			createdBy: { select: { id: true } },
+			_count: {
+				select: {
+					activities: { where: { removedAt: null } },
+					programs: { where: { removedAt: null } },
+				},
+			},
+			activities: {
+				where: { removedAt: null },
+				include: {
+					routine: { select: { id: true } },
+					task: {
+						include: {
+							exercise: true,
+							space: { select: { id: true } },
+							createdBy: { select: { id: true } },
+						},
+					},
+				},
+			},
+			programs: {
+				where: { removedAt: null },
+				include: {
+					routine: { select: { id: true } },
+					session: { select: { id: true } },
+				},
+			},
+		} satisfies Prisma.RoutineInclude;
 	}
 }

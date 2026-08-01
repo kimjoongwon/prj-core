@@ -3,7 +3,6 @@ import { JwtStrategy } from "@cocrepo/be-common";
 import { PRISMA_SERVICE_TOKEN, SYSTEM_ROLES } from "@cocrepo/constant";
 import { SpacesRepository } from "@cocrepo/repository";
 import { AuthCacheService, TokenStorageService } from "@cocrepo/service";
-import { toRouteKey } from "@cocrepo/toolkit";
 import {
 	type INestApplication,
 	Injectable,
@@ -18,21 +17,20 @@ import { AppModule } from "../src/module/app.module";
 import { setNestApp } from "../src/setNestApp";
 
 const TEST_JWT_SECRET = "test-jwt-secret-e2e";
-const USER_ID = "00000000-0000-4000-8000-000000000021";
-const COMPANY_MANAGER_SPACE_ID = "11111111-1111-4111-8111-111111111111";
-const PLATFORM_ADMIN_SPACE_ID = "22222222-2222-4222-8222-222222222222";
-const MEMBER_SPACE_ID = "33333333-3333-4333-8333-333333333333";
-const UNKNOWN_SPACE_ID = "55555555-5555-4555-8555-555555555555";
-const COMPANY_MANAGER_TENANT_ID = "10000000-0000-4000-8000-000000000021";
-const PLATFORM_ADMIN_TENANT_ID = "20000000-0000-4000-8000-000000000021";
-const MEMBER_TENANT_ID = "30000000-0000-4000-8000-000000000021";
-const SPACE_RESULT_ID = "66666666-6666-4666-8666-666666666666";
-const MEMBER_FITNESS_CENTER_ID = "77777777-7777-4777-8777-777777777777";
-const COMPANY_MANAGER_FITNESS_CENTER_ID =
-	"88888888-8888-4888-8888-888888888888";
-const CREATED_FITNESS_CENTER_ID = "99999999-9999-4999-8999-999999999999";
-const SHARED_COMPANY_ID = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
-const UNKNOWN_COMPANY_ID = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb";
+const USER_ID = "01J00000000000000000001021";
+const COMPANY_MANAGER_SPACE_ID = "01J00000000000000000001111";
+const PLATFORM_ADMIN_SPACE_ID = "01J00000000000000000002222";
+const MEMBER_SPACE_ID = "01J00000000000000000003333";
+const UNKNOWN_SPACE_ID = "01J00000000000000000005555";
+const COMPANY_MANAGER_TENANT_ID = "01J00000000000000000002021";
+const PLATFORM_ADMIN_TENANT_ID = "01J00000000000000000003021";
+const MEMBER_TENANT_ID = "01J00000000000000000004021";
+const SPACE_RESULT_ID = "01J00000000000000000006666";
+const MEMBER_FITNESS_CENTER_ID = "01J00000000000000000007777";
+const COMPANY_MANAGER_FITNESS_CENTER_ID = "01J00000000000000000008888";
+const CREATED_FITNESS_CENTER_ID = "01J00000000000000000009999";
+const SHARED_COMPANY_ID = "01J0000000000000000000A000";
+const UNKNOWN_COMPANY_ID = "01J0000000000000000000B000";
 const COMPANY_NAME = "CoreFit";
 const COMPANY_BUSINESS_NO = "1234567890";
 const PLATFORM_ADMIN_SCOPED_SPACE_IDS = [
@@ -327,12 +325,10 @@ describe("FitnessCenter API (E2E)", () => {
 				companyId: string;
 			};
 		}>;
-		expect(spaces.map((space) => space.id)).toEqual(
-			expectedSpaceIds.map(toRouteKey),
-		);
+		expect(spaces.map((space) => space.id)).toEqual(expectedSpaceIds);
 		expect(
 			new Set(spaces.map((space) => space.fitnessCenter.companyId)),
-		).toEqual(new Set([toRouteKey(SHARED_COMPANY_ID)]));
+		).toEqual(new Set([SHARED_COMPANY_ID]));
 		expect(new Set(spaces.map((space) => space.fitnessCenter.id)).size).toBe(2);
 		for (const space of spaces) {
 			expect(space).toHaveProperty("fitnessCenter");
@@ -349,8 +345,8 @@ describe("FitnessCenter API (E2E)", () => {
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
-		expect(response.body.data.spaceId).toBe(toRouteKey(MEMBER_SPACE_ID));
-		expect(response.body.data.companyId).toBe(toRouteKey(SHARED_COMPANY_ID));
+		expect(response.body.data.spaceId).toBe(MEMBER_SPACE_ID);
+		expect(response.body.data.companyId).toBe(SHARED_COMPANY_ID);
 		expect(spaceServiceMock.getFitnessCenterBySpaceId).toHaveBeenCalledWith(
 			MEMBER_SPACE_ID,
 		);
@@ -374,9 +370,7 @@ describe("FitnessCenter API (E2E)", () => {
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
-		expect(response.body.data.spaceId).toBe(
-			toRouteKey(COMPANY_MANAGER_SPACE_ID),
-		);
+		expect(response.body.data.spaceId).toBe(COMPANY_MANAGER_SPACE_ID);
 		expect(spaceServiceMock.getFitnessCenterBySpaceId).toHaveBeenCalledWith(
 			COMPANY_MANAGER_SPACE_ID,
 		);
@@ -422,7 +416,7 @@ describe("FitnessCenter API (E2E)", () => {
 		// Then
 		expect(response.status).toBe(201);
 		expect(response.body.httpStatus).toBe(201);
-		expect(response.body.data.id).toBe(toRouteKey(SPACE_RESULT_ID));
+		expect(response.body.data.id).toBe(SPACE_RESULT_ID);
 		expect(spaceServiceMock.createSpaceWithFitnessCenter).toHaveBeenCalledTimes(
 			1,
 		);
@@ -468,9 +462,9 @@ describe("FitnessCenter API (E2E)", () => {
 		expect(response.body.data.fitnessCenter).toMatchObject({
 			name: updateDto.name,
 			label: updateDto.label,
-			companyId: toRouteKey(SHARED_COMPANY_ID),
+			companyId: SHARED_COMPANY_ID,
 			company: {
-				id: toRouteKey(SHARED_COMPANY_ID),
+				id: SHARED_COMPANY_ID,
 				name: COMPANY_NAME,
 				businessNo: COMPANY_BUSINESS_NO,
 			},

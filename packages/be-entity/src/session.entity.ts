@@ -5,10 +5,14 @@ import type {
 	SessionTypes,
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Program } from "./program.entity";
 import type { Timeline } from "./timeline.entity";
 
-export class Session extends AbstractEntity implements SessionEntity {
+export class Session
+	extends AbstractEntity
+	implements DomainEntityModel<SessionEntity>
+{
 	type!: SessionTypes;
 	repeatCycleType!: RepeatCycleTypes | null;
 	startDateTime!: Date | null;

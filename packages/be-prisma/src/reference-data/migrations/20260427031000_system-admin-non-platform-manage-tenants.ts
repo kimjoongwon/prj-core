@@ -24,8 +24,10 @@ export const systemAdminNonPlatformManageTenantsMigration: ReferenceDataMigratio
 
 			await db.tenant.updateMany({
 				where: {
-					spaceId: {
-						not: SYSTEM_SPACE_ID,
+					space: {
+						id: {
+							not: SYSTEM_SPACE_ID,
+						},
 					},
 					removedAt: null,
 					user: {
@@ -35,7 +37,7 @@ export const systemAdminNonPlatformManageTenantsMigration: ReferenceDataMigratio
 					},
 				},
 				data: {
-					roleId: manageRole.id,
+					roleSeq: manageRole.seq,
 				},
 			});
 		},

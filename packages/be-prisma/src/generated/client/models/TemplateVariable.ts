@@ -20,76 +20,104 @@ export type TemplateVariableModel = runtime.Types.Result.DefaultSelection<Prisma
 
 export type AggregateTemplateVariable = {
   _count: TemplateVariableCountAggregateOutputType | null
+  _avg: TemplateVariableAvgAggregateOutputType | null
+  _sum: TemplateVariableSumAggregateOutputType | null
   _min: TemplateVariableMinAggregateOutputType | null
   _max: TemplateVariableMaxAggregateOutputType | null
 }
 
+export type TemplateVariableAvgAggregateOutputType = {
+  seq: number | null
+  templateSeq: number | null
+}
+
+export type TemplateVariableSumAggregateOutputType = {
+  seq: number | null
+  templateSeq: number | null
+}
+
 export type TemplateVariableMinAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   name: string | null
   description: string | null
   defaultValue: string | null
   isRequired: boolean | null
-  templateId: string | null
+  templateSeq: number | null
 }
 
 export type TemplateVariableMaxAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   name: string | null
   description: string | null
   defaultValue: string | null
   isRequired: boolean | null
-  templateId: string | null
+  templateSeq: number | null
 }
 
 export type TemplateVariableCountAggregateOutputType = {
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   name: number
   description: number
   defaultValue: number
   isRequired: number
-  templateId: number
+  templateSeq: number
   _all: number
 }
 
 
+export type TemplateVariableAvgAggregateInputType = {
+  seq?: true
+  templateSeq?: true
+}
+
+export type TemplateVariableSumAggregateInputType = {
+  seq?: true
+  templateSeq?: true
+}
+
 export type TemplateVariableMinAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   name?: true
   description?: true
   defaultValue?: true
   isRequired?: true
-  templateId?: true
+  templateSeq?: true
 }
 
 export type TemplateVariableMaxAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   name?: true
   description?: true
   defaultValue?: true
   isRequired?: true
-  templateId?: true
+  templateSeq?: true
 }
 
 export type TemplateVariableCountAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   name?: true
   description?: true
   defaultValue?: true
   isRequired?: true
-  templateId?: true
+  templateSeq?: true
   _all?: true
 }
 
@@ -131,6 +159,18 @@ export type TemplateVariableAggregateArgs<ExtArgs extends runtime.Types.Extensio
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: TemplateVariableAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: TemplateVariableSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: TemplateVariableMinAggregateInputType
@@ -161,20 +201,25 @@ export type TemplateVariableGroupByArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   _count?: TemplateVariableCountAggregateInputType | true
+  _avg?: TemplateVariableAvgAggregateInputType
+  _sum?: TemplateVariableSumAggregateInputType
   _min?: TemplateVariableMinAggregateInputType
   _max?: TemplateVariableMaxAggregateInputType
 }
 
 export type TemplateVariableGroupByOutputType = {
   id: string
+  seq: number
   createdAt: Date
   updatedAt: Date | null
   name: string
   description: string | null
   defaultValue: string | null
   isRequired: boolean
-  templateId: string
+  templateSeq: number
   _count: TemplateVariableCountAggregateOutputType | null
+  _avg: TemplateVariableAvgAggregateOutputType | null
+  _sum: TemplateVariableSumAggregateOutputType | null
   _min: TemplateVariableMinAggregateOutputType | null
   _max: TemplateVariableMaxAggregateOutputType | null
 }
@@ -199,31 +244,34 @@ export type TemplateVariableWhereInput = {
   OR?: Prisma.TemplateVariableWhereInput[]
   NOT?: Prisma.TemplateVariableWhereInput | Prisma.TemplateVariableWhereInput[]
   id?: Prisma.StringFilter<"TemplateVariable"> | string
+  seq?: Prisma.IntFilter<"TemplateVariable"> | number
   createdAt?: Prisma.DateTimeFilter<"TemplateVariable"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"TemplateVariable"> | Date | string | null
   name?: Prisma.StringFilter<"TemplateVariable"> | string
   description?: Prisma.StringNullableFilter<"TemplateVariable"> | string | null
   defaultValue?: Prisma.StringNullableFilter<"TemplateVariable"> | string | null
   isRequired?: Prisma.BoolFilter<"TemplateVariable"> | boolean
-  templateId?: Prisma.StringFilter<"TemplateVariable"> | string
+  templateSeq?: Prisma.IntFilter<"TemplateVariable"> | number
   template?: Prisma.XOR<Prisma.TemplateScalarRelationFilter, Prisma.TemplateWhereInput>
 }
 
 export type TemplateVariableOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   defaultValue?: Prisma.SortOrderInput | Prisma.SortOrder
   isRequired?: Prisma.SortOrder
-  templateId?: Prisma.SortOrder
+  templateSeq?: Prisma.SortOrder
   template?: Prisma.TemplateOrderByWithRelationInput
 }
 
 export type TemplateVariableWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  templateId_name?: Prisma.TemplateVariableTemplateIdNameCompoundUniqueInput
+  seq?: number
+  templateSeq_name?: Prisma.TemplateVariableTemplateSeqNameCompoundUniqueInput
   AND?: Prisma.TemplateVariableWhereInput | Prisma.TemplateVariableWhereInput[]
   OR?: Prisma.TemplateVariableWhereInput[]
   NOT?: Prisma.TemplateVariableWhereInput | Prisma.TemplateVariableWhereInput[]
@@ -233,22 +281,25 @@ export type TemplateVariableWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"TemplateVariable"> | string | null
   defaultValue?: Prisma.StringNullableFilter<"TemplateVariable"> | string | null
   isRequired?: Prisma.BoolFilter<"TemplateVariable"> | boolean
-  templateId?: Prisma.StringFilter<"TemplateVariable"> | string
+  templateSeq?: Prisma.IntFilter<"TemplateVariable"> | number
   template?: Prisma.XOR<Prisma.TemplateScalarRelationFilter, Prisma.TemplateWhereInput>
-}, "id" | "templateId_name">
+}, "seq" | "id" | "templateSeq_name">
 
 export type TemplateVariableOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   defaultValue?: Prisma.SortOrderInput | Prisma.SortOrder
   isRequired?: Prisma.SortOrder
-  templateId?: Prisma.SortOrder
+  templateSeq?: Prisma.SortOrder
   _count?: Prisma.TemplateVariableCountOrderByAggregateInput
+  _avg?: Prisma.TemplateVariableAvgOrderByAggregateInput
   _max?: Prisma.TemplateVariableMaxOrderByAggregateInput
   _min?: Prisma.TemplateVariableMinOrderByAggregateInput
+  _sum?: Prisma.TemplateVariableSumOrderByAggregateInput
 }
 
 export type TemplateVariableScalarWhereWithAggregatesInput = {
@@ -256,13 +307,14 @@ export type TemplateVariableScalarWhereWithAggregatesInput = {
   OR?: Prisma.TemplateVariableScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TemplateVariableScalarWhereWithAggregatesInput | Prisma.TemplateVariableScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"TemplateVariable"> | string
+  seq?: Prisma.IntWithAggregatesFilter<"TemplateVariable"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"TemplateVariable"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"TemplateVariable"> | Date | string | null
   name?: Prisma.StringWithAggregatesFilter<"TemplateVariable"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"TemplateVariable"> | string | null
   defaultValue?: Prisma.StringNullableWithAggregatesFilter<"TemplateVariable"> | string | null
   isRequired?: Prisma.BoolWithAggregatesFilter<"TemplateVariable"> | boolean
-  templateId?: Prisma.StringWithAggregatesFilter<"TemplateVariable"> | string
+  templateSeq?: Prisma.IntWithAggregatesFilter<"TemplateVariable"> | number
 }
 
 export type TemplateVariableCreateInput = {
@@ -278,13 +330,14 @@ export type TemplateVariableCreateInput = {
 
 export type TemplateVariableUncheckedCreateInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   name: string
   description?: string | null
   defaultValue?: string | null
   isRequired?: boolean
-  templateId: string
+  templateSeq: number
 }
 
 export type TemplateVariableUpdateInput = {
@@ -300,24 +353,26 @@ export type TemplateVariableUpdateInput = {
 
 export type TemplateVariableUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  templateId?: Prisma.StringFieldUpdateOperationsInput | string
+  templateSeq?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type TemplateVariableCreateManyInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   name: string
   description?: string | null
   defaultValue?: string | null
   isRequired?: boolean
-  templateId: string
+  templateSeq: number
 }
 
 export type TemplateVariableUpdateManyMutationInput = {
@@ -332,51 +387,65 @@ export type TemplateVariableUpdateManyMutationInput = {
 
 export type TemplateVariableUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   defaultValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRequired?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  templateId?: Prisma.StringFieldUpdateOperationsInput | string
+  templateSeq?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
-export type TemplateVariableTemplateIdNameCompoundUniqueInput = {
-  templateId: string
+export type TemplateVariableTemplateSeqNameCompoundUniqueInput = {
+  templateSeq: number
   name: string
 }
 
 export type TemplateVariableCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   defaultValue?: Prisma.SortOrder
   isRequired?: Prisma.SortOrder
-  templateId?: Prisma.SortOrder
+  templateSeq?: Prisma.SortOrder
+}
+
+export type TemplateVariableAvgOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+  templateSeq?: Prisma.SortOrder
 }
 
 export type TemplateVariableMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   defaultValue?: Prisma.SortOrder
   isRequired?: Prisma.SortOrder
-  templateId?: Prisma.SortOrder
+  templateSeq?: Prisma.SortOrder
 }
 
 export type TemplateVariableMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   defaultValue?: Prisma.SortOrder
   isRequired?: Prisma.SortOrder
-  templateId?: Prisma.SortOrder
+  templateSeq?: Prisma.SortOrder
+}
+
+export type TemplateVariableSumOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+  templateSeq?: Prisma.SortOrder
 }
 
 export type TemplateVariableListRelationFilter = {
@@ -443,6 +512,7 @@ export type TemplateVariableCreateWithoutTemplateInput = {
 
 export type TemplateVariableUncheckedCreateWithoutTemplateInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   name: string
@@ -482,17 +552,19 @@ export type TemplateVariableScalarWhereInput = {
   OR?: Prisma.TemplateVariableScalarWhereInput[]
   NOT?: Prisma.TemplateVariableScalarWhereInput | Prisma.TemplateVariableScalarWhereInput[]
   id?: Prisma.StringFilter<"TemplateVariable"> | string
+  seq?: Prisma.IntFilter<"TemplateVariable"> | number
   createdAt?: Prisma.DateTimeFilter<"TemplateVariable"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"TemplateVariable"> | Date | string | null
   name?: Prisma.StringFilter<"TemplateVariable"> | string
   description?: Prisma.StringNullableFilter<"TemplateVariable"> | string | null
   defaultValue?: Prisma.StringNullableFilter<"TemplateVariable"> | string | null
   isRequired?: Prisma.BoolFilter<"TemplateVariable"> | boolean
-  templateId?: Prisma.StringFilter<"TemplateVariable"> | string
+  templateSeq?: Prisma.IntFilter<"TemplateVariable"> | number
 }
 
 export type TemplateVariableCreateManyTemplateInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   name: string
@@ -513,6 +585,7 @@ export type TemplateVariableUpdateWithoutTemplateInput = {
 
 export type TemplateVariableUncheckedUpdateWithoutTemplateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -523,6 +596,7 @@ export type TemplateVariableUncheckedUpdateWithoutTemplateInput = {
 
 export type TemplateVariableUncheckedUpdateManyWithoutTemplateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -535,52 +609,56 @@ export type TemplateVariableUncheckedUpdateManyWithoutTemplateInput = {
 
 export type TemplateVariableSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   name?: boolean
   description?: boolean
   defaultValue?: boolean
   isRequired?: boolean
-  templateId?: boolean
+  templateSeq?: boolean
   template?: boolean | Prisma.TemplateDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["templateVariable"]>
 
 export type TemplateVariableSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   name?: boolean
   description?: boolean
   defaultValue?: boolean
   isRequired?: boolean
-  templateId?: boolean
+  templateSeq?: boolean
   template?: boolean | Prisma.TemplateDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["templateVariable"]>
 
 export type TemplateVariableSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   name?: boolean
   description?: boolean
   defaultValue?: boolean
   isRequired?: boolean
-  templateId?: boolean
+  templateSeq?: boolean
   template?: boolean | Prisma.TemplateDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["templateVariable"]>
 
 export type TemplateVariableSelectScalar = {
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   name?: boolean
   description?: boolean
   defaultValue?: boolean
   isRequired?: boolean
-  templateId?: boolean
+  templateSeq?: boolean
 }
 
-export type TemplateVariableOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "description" | "defaultValue" | "isRequired" | "templateId", ExtArgs["result"]["templateVariable"]>
+export type TemplateVariableOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "name" | "description" | "defaultValue" | "isRequired" | "templateSeq", ExtArgs["result"]["templateVariable"]>
 export type TemplateVariableInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   template?: boolean | Prisma.TemplateDefaultArgs<ExtArgs>
 }
@@ -601,6 +679,7 @@ export type $TemplateVariablePayload<ExtArgs extends runtime.Types.Extensions.In
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    seq: number
     createdAt: Date
     updatedAt: Date | null
     /**
@@ -620,9 +699,9 @@ export type $TemplateVariablePayload<ExtArgs extends runtime.Types.Extensions.In
      */
     isRequired: boolean
     /**
-     * @displayName 템플릿 ID
+     * @displayName 템플릿 내부 순번
      */
-    templateId: string
+    templateSeq: number
   }, ExtArgs["result"]["templateVariable"]>
   composites: {}
 }
@@ -1048,13 +1127,14 @@ export interface Prisma__TemplateVariableClient<T, Null = never, ExtArgs extends
  */
 export interface TemplateVariableFieldRefs {
   readonly id: Prisma.FieldRef<"TemplateVariable", 'String'>
+  readonly seq: Prisma.FieldRef<"TemplateVariable", 'Int'>
   readonly createdAt: Prisma.FieldRef<"TemplateVariable", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"TemplateVariable", 'DateTime'>
   readonly name: Prisma.FieldRef<"TemplateVariable", 'String'>
   readonly description: Prisma.FieldRef<"TemplateVariable", 'String'>
   readonly defaultValue: Prisma.FieldRef<"TemplateVariable", 'String'>
   readonly isRequired: Prisma.FieldRef<"TemplateVariable", 'Boolean'>
-  readonly templateId: Prisma.FieldRef<"TemplateVariable", 'String'>
+  readonly templateSeq: Prisma.FieldRef<"TemplateVariable", 'Int'>
 }
     
 

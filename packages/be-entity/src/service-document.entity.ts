@@ -6,6 +6,7 @@ import type {
 	ServiceDocumentStatus,
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 
 /**
  * ServiceDocument 엔티티
@@ -14,7 +15,7 @@ import { AbstractEntity } from "./abstract.entity";
  */
 export class ServiceDocument
 	extends AbstractEntity
-	implements ServiceDocumentEntity
+	implements DomainEntityModel<ServiceDocumentEntity>
 {
 	kind!: ServiceDocumentKind;
 	platform!: ServiceDocumentPlatform;

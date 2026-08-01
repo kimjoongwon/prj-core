@@ -1,11 +1,12 @@
 import type { FitnessCenter as FitnessCenterEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Company } from "./company.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Space } from "./space.entity";
 
 export class FitnessCenter
 	extends AbstractEntity
-	implements FitnessCenterEntity
+	implements DomainEntityModel<FitnessCenterEntity>
 {
 	name!: string;
 	label!: string | null;

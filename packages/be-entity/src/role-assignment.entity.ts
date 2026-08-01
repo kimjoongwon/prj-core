@@ -1,6 +1,7 @@
 import type { RoleAssignment as RoleAssignmentEntity } from "@cocrepo/prisma";
 import { Type } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import { Policy } from "./policy.entity";
 import type { Role } from "./role.entity";
 
@@ -11,7 +12,7 @@ import type { Role } from "./role.entity";
  */
 export class RoleAssignment
 	extends AbstractEntity
-	implements RoleAssignmentEntity
+	implements DomainEntityModel<RoleAssignmentEntity>
 {
 	roleId!: string;
 	policyId!: string;

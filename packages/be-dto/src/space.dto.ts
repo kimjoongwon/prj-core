@@ -1,4 +1,5 @@
-import { ClassField, EnumField, UUIDFieldOptional } from "@cocrepo/decorator";
+import { ClassField, EnumField, ULIDFieldOptional } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import { LanguageCode, type Space } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { FitnessCenterDto } from "./fitness-center.dto";
@@ -6,8 +7,8 @@ import { SpaceAssociationDto } from "./space-association.dto";
 import { SpaceClassificationDto } from "./space-classification.dto";
 import { TenantDto } from "./tenant.dto";
 
-export class SpaceDto extends AbstractDto implements Space {
-	@UUIDFieldOptional({
+export class SpaceDto extends AbstractDto implements DomainEntityModel<Space> {
+	@ULIDFieldOptional({
 		description: "이 Space 접근에 사용할 Tenant ID",
 		nullable: true,
 	})

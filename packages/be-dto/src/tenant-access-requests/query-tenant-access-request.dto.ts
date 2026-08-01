@@ -2,7 +2,7 @@ import {
 	DateFieldOptional,
 	EnumFieldOptional,
 	StringFieldOptional,
-	UUIDFieldOptional,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator";
 import { TenantAccessRequestStatus } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
@@ -19,12 +19,12 @@ export class QueryTenantAccessRequestDto extends QueryDto {
 	})
 	status?: TenantAccessRequestStatus;
 
-	@UUIDFieldOptional({
+	@ULIDFieldOptional({
 		description: "Space ID 필터",
 	})
 	spaceId?: string;
 
-	@UUIDFieldOptional({
+	@ULIDFieldOptional({
 		description: "신청자 ID 필터",
 	})
 	requesterId?: string;

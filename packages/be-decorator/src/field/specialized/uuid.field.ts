@@ -1,41 +1,12 @@
-import { fromRouteKey, toRouteKey } from "@cocrepo/toolkit";
 import { applyDecorators } from "@nestjs/common";
 import type { ApiPropertyOptions } from "@nestjs/swagger";
-import { Transform, Type } from "class-transformer";
+import { Type } from "class-transformer";
 import { NotEquals } from "class-validator";
 import { ApiUUIDProperty } from "../../property.decorators";
 import { ToArray } from "../../transform.decorators";
 import { IsNullable } from "../../validator.decorators";
 import type { BaseFieldOptions } from "../base/field-options.types";
 import { createOptionalField } from "../base/optional-field.factory";
-
-function serializeUuidValue(value: unknown): unknown {
-	if (value === null || value === undefined) {
-		return value;
-	}
-
-	if (Array.isArray(value)) {
-		return value.map(serializeUuidValue);
-	}
-
-	if (typeof value !== "string") {
-		return value;
-	}
-
-	return toRouteKey(value);
-}
-
-function deserializeUuidValue(value: unknown): unknown {
-	if (value === null || value === undefined) {
-		return value;
-	}
-
-	if (Array.isArray(value)) {
-		return value.map(deserializeUuidValue);
-	}
-
-	return fromRouteKey(String(value));
-}
 
 /**
  * UUID 필드 데코레이터
@@ -57,13 +28,7 @@ export function UUIDField(
 	options: Omit<ApiPropertyOptions, "type" | "format" | "isArray"> &
 		BaseFieldOptions = {},
 ): PropertyDecorator {
-	const decorators: PropertyDecorator[] = [
-		Type(() => String),
-		Transform(({ value }) => serializeUuidValue(value), { toPlainOnly: true }),
-		Transform(({ value }) => deserializeUuidValue(value), {
-			toClassOnly: true,
-		}),
-	];
+	const decorators: PropertyDecorator[] = [Type(() => String)];
 
 	// Nullable 처리
 	if (options.nullable) {

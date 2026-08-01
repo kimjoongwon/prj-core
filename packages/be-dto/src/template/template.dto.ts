@@ -4,6 +4,7 @@ import {
 	StringField,
 	StringFieldOptional,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import { type Template, TemplateType } from "@cocrepo/prisma";
 
 import { AbstractDto } from "../abstract.dto";
@@ -11,7 +12,10 @@ import { AbstractDto } from "../abstract.dto";
 /**
  * 메시지 템플릿 응답 DTO
  */
-export class TemplateDto extends AbstractDto implements Template {
+export class TemplateDto
+	extends AbstractDto
+	implements DomainEntityModel<Template>
+{
 	@StringField({ description: "고유 코드" })
 	code!: string;
 

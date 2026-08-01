@@ -5,7 +5,6 @@ import type { UserStats } from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
 import {
 	IDP_ACCOUNT_SELECT,
 	type IdpAccountRecord,
@@ -14,6 +13,7 @@ import {
 	buildIdpAccountQueryOrderBy,
 	buildIdpAccountQueryWhere,
 } from "./idp-account-query.mapper";
+import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
 export class UsersRepository {
@@ -37,7 +37,7 @@ export class UsersRepository {
 			where: { id },
 		});
 
-		return result ? plainToInstance(User, result) : null;
+		return result ? toDomainEntity(User, result) : null;
 	}
 
 	/**
@@ -109,7 +109,7 @@ export class UsersRepository {
 			},
 		} as never);
 
-		return result ? plainToInstance(User, result) : null;
+		return result ? toDomainEntity(User, result) : null;
 	}
 
 	/**
@@ -136,7 +136,7 @@ export class UsersRepository {
 			where: { email },
 		});
 
-		return result ? plainToInstance(User, result) : null;
+		return result ? toDomainEntity(User, result) : null;
 	}
 
 	/**
@@ -208,7 +208,7 @@ export class UsersRepository {
 			},
 		} as never);
 
-		return result ? plainToInstance(User, result) : null;
+		return result ? toDomainEntity(User, result) : null;
 	}
 
 	/**
@@ -316,7 +316,9 @@ export class UsersRepository {
 					tenants: {
 						where: {
 							removedAt: null,
-							...(params.spaceIds ? { spaceId: { in: params.spaceIds } } : {}),
+							...(params.spaceIds
+								? { space: { id: { in: params.spaceIds } } }
+								: {}),
 							...(params.includedRoleNames?.length
 								? {
 										role: {
@@ -326,18 +328,21 @@ export class UsersRepository {
 								: {}),
 						},
 						include: {
+							user: { select: { id: true } },
 							role: true,
 							space: true,
 						},
 					},
 					classification: {
 						include: {
+							user: { select: { id: true } },
 							category: true,
 						},
 					},
 					associations: {
 						where: { removedAt: null },
 						include: {
+							user: { select: { id: true } },
 							group: true,
 						},
 					},
@@ -350,7 +355,7 @@ export class UsersRepository {
 		]);
 
 		return {
-			users: users.map((user) => plainToInstance(User, user)),
+			users: users.map((user) => toDomainEntity(User, user)),
 			totalCount,
 		};
 	}
@@ -377,7 +382,7 @@ export class UsersRepository {
 				...(tenantsFilter ?? {}),
 				some: {
 					...existingSome,
-					spaceId: { in: spaceIds },
+					space: { id: { in: spaceIds } },
 					removedAt: null,
 				},
 			},
@@ -405,7 +410,7 @@ export class UsersRepository {
 				? {
 						tenants: {
 							some: {
-								spaceId: { in: queryParams.spaceIds },
+								space: { id: { in: queryParams.spaceIds } },
 								removedAt: null,
 							},
 						},
@@ -446,30 +451,40 @@ export class UsersRepository {
 	}
 
 	/**
-	 * ID와 Space ID로 사용자 조회 (Tenants, Profiles, Classification, Associations 포함)
+	 * ID와 접근 가능한 Space ID 범위로 사용자 조회
+	 * (Tenants, Profiles, Classification, Associations 포함)
+	 *
+	 * @param userId 조회할 사용자 ULID
+	 * @param spaceIds 접근 가능한 Space ULID 목록. undefined면 Space 제한 없음
+	 * @returns 범위 안의 사용자 또는 null
 	 */
-	async findByIdAndSpaceIdWithRelations(
+	async findByIdAndSpaceIdsWithRelations(
 		userId: string,
-		spaceId: string,
+		spaceIds?: string[],
 	): Promise<User | null> {
 		this.logger.debug(
-			`ID와 Space ID로 조회: userId=${userId.slice(-8)}, spaceId=${spaceId.slice(-8)}`,
+			`ID와 Space 범위로 조회: userId=${userId.slice(-8)}, scope=${spaceIds?.join(",") ?? "all"}`,
 		);
 
 		const result = await this.txHost.tx.user.findFirst({
 			where: {
 				id: userId,
-				tenants: {
-					some: {
-						spaceId,
-						removedAt: null,
-					},
-				},
+				...(spaceIds
+					? {
+							tenants: {
+								some: {
+									space: { id: { in: spaceIds } },
+									removedAt: null,
+								},
+							},
+						}
+					: {}),
 			},
 			include: {
 				profiles: true,
 				tenants: {
 					include: {
+						user: { select: { id: true } },
 						role: true,
 						space: {
 							include: {
@@ -484,19 +499,21 @@ export class UsersRepository {
 				},
 				classification: {
 					include: {
+						user: { select: { id: true } },
 						category: true,
 					},
 				},
 				associations: {
 					where: { removedAt: null },
 					include: {
+						user: { select: { id: true } },
 						group: true,
 					},
 				},
 			},
 		} as never);
 
-		return result ? plainToInstance(User, result) : null;
+		return result ? toDomainEntity(User, result) : null;
 	}
 
 	/**
@@ -510,11 +527,12 @@ export class UsersRepository {
 		const result = await this.txHost.tx.tenant.findFirst({
 			where: {
 				id: tenantId,
-				userId,
-				spaceId,
+				user: { id: userId },
+				space: { id: spaceId },
 				removedAt: null,
 			},
 			include: {
+				user: { select: { id: true } },
 				space: {
 					include: {
 						fitnessCenter: {
@@ -527,7 +545,7 @@ export class UsersRepository {
 						assignments: {
 							where: {
 								removedAt: null,
-								policy: { spaceId, removedAt: null },
+								policy: { space: { id: spaceId }, removedAt: null },
 							},
 							orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
 							include: {
@@ -540,6 +558,7 @@ export class UsersRepository {
 											},
 											orderBy: { createdAt: "asc" },
 											include: {
+												policy: { select: { id: true } },
 												ability: {
 													include: {
 														action: true,
@@ -557,7 +576,7 @@ export class UsersRepository {
 			},
 		});
 
-		return result ? plainToInstance(Tenant, result) : null;
+		return result ? toDomainEntity(Tenant, result) : null;
 	}
 
 	/**
@@ -603,7 +622,7 @@ export class UsersRepository {
 			data,
 		});
 
-		return plainToInstance(User, result);
+		return toDomainEntity(User, result);
 	}
 
 	/**
@@ -635,7 +654,7 @@ export class UsersRepository {
 			},
 		});
 
-		return plainToInstance(User, result);
+		return toDomainEntity(User, result);
 	}
 
 	/**
@@ -652,7 +671,7 @@ export class UsersRepository {
 			data,
 		});
 
-		return plainToInstance(User, result);
+		return toDomainEntity(User, result);
 	}
 
 	/** 사용자의 현재 Tenant 선택값을 저장합니다. */
@@ -692,14 +711,14 @@ export class UsersRepository {
 		// 분류 카테고리 업데이트
 		if (options?.categoryId !== undefined) {
 			await this.txHost.tx.userClassification.deleteMany({
-				where: { userId },
+				where: { user: { id: userId } },
 			});
 
 			if (options.categoryId) {
 				await this.txHost.tx.userClassification.create({
 					data: {
-						userId,
-						categoryId: options.categoryId,
+						user: { connect: { id: userId } },
+						category: { connect: { id: options.categoryId } },
 					},
 				});
 			}
@@ -708,13 +727,20 @@ export class UsersRepository {
 		// 그룹 연결 업데이트
 		if (options?.groupIds !== undefined) {
 			await this.txHost.tx.userAssociation.deleteMany({
-				where: { userId },
+				where: { user: { id: userId } },
 			});
 
 			if (options.groupIds.length > 0) {
-				await this.txHost.tx.userAssociation.createMany({
-					data: options.groupIds.map((groupId) => ({ userId, groupId })),
-				});
+				await Promise.all(
+					options.groupIds.map((groupId) =>
+						this.txHost.tx.userAssociation.create({
+							data: {
+								user: { connect: { id: userId } },
+								group: { connect: { id: groupId } },
+							},
+						}),
+					),
+				);
 			}
 		}
 
@@ -725,25 +751,28 @@ export class UsersRepository {
 				profiles: true,
 				tenants: {
 					include: {
+						user: { select: { id: true } },
 						role: true,
 						space: true,
 					},
 				},
 				classification: {
 					include: {
+						user: { select: { id: true } },
 						category: true,
 					},
 				},
 				associations: {
 					where: { removedAt: null },
 					include: {
+						user: { select: { id: true } },
 						group: true,
 					},
 				},
 			},
 		});
 
-		return plainToInstance(User, result);
+		return toDomainEntity(User, result);
 	}
 
 	/**
@@ -817,6 +846,6 @@ export class UsersRepository {
 			where: { id },
 		});
 
-		return plainToInstance(User, result);
+		return toDomainEntity(User, result);
 	}
 }

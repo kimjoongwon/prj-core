@@ -1,3 +1,4 @@
+import { ULIDField } from "@cocrepo/decorator";
 import { ApiProperty } from "@nestjs/swagger";
 import {
 	IsArray,
@@ -5,7 +6,6 @@ import {
 	IsNotEmpty,
 	IsOptional,
 	IsString,
-	IsUUID,
 } from "class-validator";
 
 /**
@@ -15,20 +15,16 @@ import {
  * DDD 원칙에 따라 actionId로 Action을 참조합니다.
  */
 export class CreateAbilityDto {
-	@ApiProperty({
-		description: "Action ID (UUID)",
-		example: "550e8400-e29b-41d4-a716-446655440000",
+	@ULIDField({
+		description: "Action ID (ULID)",
+		example: "01J00000000000000000000000",
 	})
-	@IsUUID("4", { message: "유효한 Action ID를 입력해주세요" })
-	@IsNotEmpty()
 	actionId!: string;
 
-	@ApiProperty({
-		description: "Subject ID (UUID)",
-		example: "550e8400-e29b-41d4-a716-446655440001",
+	@ULIDField({
+		description: "Subject ID (ULID)",
+		example: "01J00000000000000000000001",
 	})
-	@IsUUID("4", { message: "유효한 Subject ID를 입력해주세요" })
-	@IsNotEmpty()
 	subjectId!: string;
 
 	@ApiProperty({

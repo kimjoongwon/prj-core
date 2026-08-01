@@ -83,7 +83,7 @@ describe("Auth Password Policy API E2E 테스트", () => {
 
 		if (createdUserIds.length > 0) {
 			await prisma.authAuditLog.deleteMany({
-				where: { userId: { in: createdUserIds } },
+				where: { user: { id: { in: createdUserIds } } },
 			});
 			await prisma.user.deleteMany({
 				where: { id: { in: createdUserIds } },
@@ -333,7 +333,7 @@ describe("Auth Password Policy API E2E 테스트", () => {
 		const hashedPassword = await HashedPassword.fromPlain(plainPassword);
 		await prisma.passwordHistory.create({
 			data: {
-				userId,
+				user: { connect: { id: userId } },
 				passwordHash: hashedPassword.value,
 			},
 		});

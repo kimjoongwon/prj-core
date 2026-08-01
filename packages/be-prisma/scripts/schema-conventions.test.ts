@@ -35,7 +35,8 @@ const userModel = `
 // @description: 사용자 계정의 현재 상태와 생명주기를 관리
 /// @displayName 사용자
 model User {
-  id       String       @id
+  id       String       @unique @default(ulid()) @db.VarChar(26)
+  seq      Int          @id @default(autoincrement())
   status   UserStatus
   language LanguageCode
 }
@@ -46,7 +47,8 @@ const aiAgentLogModel = `
 // @description: AI 에이전트 작업 이력을 기록
 /// @displayName AI 에이전트 로그
 model AIAgentLog {
-  id String @id
+  id  String @unique @default(ulid()) @db.VarChar(26)
+  seq Int    @id @default(autoincrement())
 }
 `;
 
@@ -285,6 +287,32 @@ model User {
 			"[user.prisma] User must contain exactly 1 @description, found 0",
 			"[user.prisma] User contains invalid displayName casing",
 			"[user.prisma] User must contain at most 1 @aggregate-root, found 2",
+		]);
+	});
+
+	it("Given 공개 UUID PK 또는 id 기반 relation이 있으면 When 검증하면 Then ULID id와 seq 내부키 계약을 강제한다", () => {
+		const result = validateSchemaConventions({
+			files: createValidFiles({
+				"user.prisma": `
+// @data-type: MASTER
+// @description: 잘못된 식별자 계약
+/// @displayName 사용자
+model User {
+  id       String       @id @default(uuid())
+  status   UserStatus
+  language LanguageCode
+  profile  Profile?     @relation(fields: [profileId], references: [id])
+  profileId String?
+}
+`,
+			}),
+		});
+
+		expectErrors(result.errors, [
+			"User.id must be String @unique @default(ulid()) @db.VarChar(26)",
+			"User.seq must be Int @id @default(autoincrement())",
+			"relation fields must use the <relation>Seq naming contract",
+			"relations must reference the internal seq key",
 		]);
 	});
 

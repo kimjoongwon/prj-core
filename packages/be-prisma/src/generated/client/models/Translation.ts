@@ -20,12 +20,23 @@ export type TranslationModel = runtime.Types.Result.DefaultSelection<Prisma.$Tra
 
 export type AggregateTranslation = {
   _count: TranslationCountAggregateOutputType | null
+  _avg: TranslationAvgAggregateOutputType | null
+  _sum: TranslationSumAggregateOutputType | null
   _min: TranslationMinAggregateOutputType | null
   _max: TranslationMaxAggregateOutputType | null
 }
 
+export type TranslationAvgAggregateOutputType = {
+  seq: number | null
+}
+
+export type TranslationSumAggregateOutputType = {
+  seq: number | null
+}
+
 export type TranslationMinAggregateOutputType = {
   id: string | null
+  seq: number | null
   languageCode: $Enums.LanguageCode | null
   key: string | null
   text: string | null
@@ -37,6 +48,7 @@ export type TranslationMinAggregateOutputType = {
 
 export type TranslationMaxAggregateOutputType = {
   id: string | null
+  seq: number | null
   languageCode: $Enums.LanguageCode | null
   key: string | null
   text: string | null
@@ -48,6 +60,7 @@ export type TranslationMaxAggregateOutputType = {
 
 export type TranslationCountAggregateOutputType = {
   id: number
+  seq: number
   languageCode: number
   key: number
   text: number
@@ -59,8 +72,17 @@ export type TranslationCountAggregateOutputType = {
 }
 
 
+export type TranslationAvgAggregateInputType = {
+  seq?: true
+}
+
+export type TranslationSumAggregateInputType = {
+  seq?: true
+}
+
 export type TranslationMinAggregateInputType = {
   id?: true
+  seq?: true
   languageCode?: true
   key?: true
   text?: true
@@ -72,6 +94,7 @@ export type TranslationMinAggregateInputType = {
 
 export type TranslationMaxAggregateInputType = {
   id?: true
+  seq?: true
   languageCode?: true
   key?: true
   text?: true
@@ -83,6 +106,7 @@ export type TranslationMaxAggregateInputType = {
 
 export type TranslationCountAggregateInputType = {
   id?: true
+  seq?: true
   languageCode?: true
   key?: true
   text?: true
@@ -131,6 +155,18 @@ export type TranslationAggregateArgs<ExtArgs extends runtime.Types.Extensions.In
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: TranslationAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: TranslationSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: TranslationMinAggregateInputType
@@ -161,12 +197,15 @@ export type TranslationGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   _count?: TranslationCountAggregateInputType | true
+  _avg?: TranslationAvgAggregateInputType
+  _sum?: TranslationSumAggregateInputType
   _min?: TranslationMinAggregateInputType
   _max?: TranslationMaxAggregateInputType
 }
 
 export type TranslationGroupByOutputType = {
   id: string
+  seq: number
   languageCode: $Enums.LanguageCode
   key: string
   text: string
@@ -175,6 +214,8 @@ export type TranslationGroupByOutputType = {
   createdAt: Date
   updatedAt: Date | null
   _count: TranslationCountAggregateOutputType | null
+  _avg: TranslationAvgAggregateOutputType | null
+  _sum: TranslationSumAggregateOutputType | null
   _min: TranslationMinAggregateOutputType | null
   _max: TranslationMaxAggregateOutputType | null
 }
@@ -199,6 +240,7 @@ export type TranslationWhereInput = {
   OR?: Prisma.TranslationWhereInput[]
   NOT?: Prisma.TranslationWhereInput | Prisma.TranslationWhereInput[]
   id?: Prisma.StringFilter<"Translation"> | string
+  seq?: Prisma.IntFilter<"Translation"> | number
   languageCode?: Prisma.EnumLanguageCodeFilter<"Translation"> | $Enums.LanguageCode
   key?: Prisma.StringFilter<"Translation"> | string
   text?: Prisma.StringFilter<"Translation"> | string
@@ -210,6 +252,7 @@ export type TranslationWhereInput = {
 
 export type TranslationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   languageCode?: Prisma.SortOrder
   key?: Prisma.SortOrder
   text?: Prisma.SortOrder
@@ -221,6 +264,7 @@ export type TranslationOrderByWithRelationInput = {
 
 export type TranslationWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  seq?: number
   languageCode_key?: Prisma.TranslationLanguageCodeKeyCompoundUniqueInput
   AND?: Prisma.TranslationWhereInput | Prisma.TranslationWhereInput[]
   OR?: Prisma.TranslationWhereInput[]
@@ -232,10 +276,11 @@ export type TranslationWhereUniqueInput = Prisma.AtLeast<{
   isTranslated?: Prisma.BoolFilter<"Translation"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Translation"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Translation"> | Date | string | null
-}, "id" | "languageCode_key">
+}, "seq" | "id" | "languageCode_key">
 
 export type TranslationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   languageCode?: Prisma.SortOrder
   key?: Prisma.SortOrder
   text?: Prisma.SortOrder
@@ -244,8 +289,10 @@ export type TranslationOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TranslationCountOrderByAggregateInput
+  _avg?: Prisma.TranslationAvgOrderByAggregateInput
   _max?: Prisma.TranslationMaxOrderByAggregateInput
   _min?: Prisma.TranslationMinOrderByAggregateInput
+  _sum?: Prisma.TranslationSumOrderByAggregateInput
 }
 
 export type TranslationScalarWhereWithAggregatesInput = {
@@ -253,6 +300,7 @@ export type TranslationScalarWhereWithAggregatesInput = {
   OR?: Prisma.TranslationScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TranslationScalarWhereWithAggregatesInput | Prisma.TranslationScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Translation"> | string
+  seq?: Prisma.IntWithAggregatesFilter<"Translation"> | number
   languageCode?: Prisma.EnumLanguageCodeWithAggregatesFilter<"Translation"> | $Enums.LanguageCode
   key?: Prisma.StringWithAggregatesFilter<"Translation"> | string
   text?: Prisma.StringWithAggregatesFilter<"Translation"> | string
@@ -275,6 +323,7 @@ export type TranslationCreateInput = {
 
 export type TranslationUncheckedCreateInput = {
   id?: string
+  seq?: number
   languageCode: $Enums.LanguageCode
   key: string
   text: string
@@ -297,6 +346,7 @@ export type TranslationUpdateInput = {
 
 export type TranslationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   languageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   key?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
@@ -308,6 +358,7 @@ export type TranslationUncheckedUpdateInput = {
 
 export type TranslationCreateManyInput = {
   id?: string
+  seq?: number
   languageCode: $Enums.LanguageCode
   key: string
   text: string
@@ -330,6 +381,7 @@ export type TranslationUpdateManyMutationInput = {
 
 export type TranslationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   languageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   key?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
@@ -346,6 +398,7 @@ export type TranslationLanguageCodeKeyCompoundUniqueInput = {
 
 export type TranslationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   languageCode?: Prisma.SortOrder
   key?: Prisma.SortOrder
   text?: Prisma.SortOrder
@@ -355,8 +408,13 @@ export type TranslationCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type TranslationAvgOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+}
+
 export type TranslationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   languageCode?: Prisma.SortOrder
   key?: Prisma.SortOrder
   text?: Prisma.SortOrder
@@ -368,6 +426,7 @@ export type TranslationMaxOrderByAggregateInput = {
 
 export type TranslationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   languageCode?: Prisma.SortOrder
   key?: Prisma.SortOrder
   text?: Prisma.SortOrder
@@ -377,10 +436,15 @@ export type TranslationMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type TranslationSumOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+}
+
 
 
 export type TranslationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   languageCode?: boolean
   key?: boolean
   text?: boolean
@@ -392,6 +456,7 @@ export type TranslationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
 
 export type TranslationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   languageCode?: boolean
   key?: boolean
   text?: boolean
@@ -403,6 +468,7 @@ export type TranslationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
 
 export type TranslationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   languageCode?: boolean
   key?: boolean
   text?: boolean
@@ -414,6 +480,7 @@ export type TranslationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
 
 export type TranslationSelectScalar = {
   id?: boolean
+  seq?: boolean
   languageCode?: boolean
   key?: boolean
   text?: boolean
@@ -423,7 +490,7 @@ export type TranslationSelectScalar = {
   updatedAt?: boolean
 }
 
-export type TranslationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "languageCode" | "key" | "text" | "category" | "isTranslated" | "createdAt" | "updatedAt", ExtArgs["result"]["translation"]>
+export type TranslationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "languageCode" | "key" | "text" | "category" | "isTranslated" | "createdAt" | "updatedAt", ExtArgs["result"]["translation"]>
 
 export type $TranslationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Translation"
@@ -433,6 +500,7 @@ export type $TranslationPayload<ExtArgs extends runtime.Types.Extensions.Interna
      * @displayName ID
      */
     id: string
+    seq: number
     /**
      * @displayName 언어 코드
      */
@@ -885,6 +953,7 @@ export interface Prisma__TranslationClient<T, Null = never, ExtArgs extends runt
  */
 export interface TranslationFieldRefs {
   readonly id: Prisma.FieldRef<"Translation", 'String'>
+  readonly seq: Prisma.FieldRef<"Translation", 'Int'>
   readonly languageCode: Prisma.FieldRef<"Translation", 'LanguageCode'>
   readonly key: Prisma.FieldRef<"Translation", 'String'>
   readonly text: Prisma.FieldRef<"Translation", 'String'>

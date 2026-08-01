@@ -9,34 +9,34 @@ type TenantScopeDbClient = PrismaClient;
  * 삼기 때문에, bootstrap 경계에서만 Space -> Tenant 변환을 수행합니다.
  */
 export async function requireTenantIdForSpace(
-  db: TenantScopeDbClient,
-  spaceId: string,
-  preferredUserId?: string | null,
+	db: TenantScopeDbClient,
+	spaceId: string,
+	preferredUserId?: string | null,
 ): Promise<string> {
-  const tenant = await db.tenant.findFirst({
-    where: {
-      spaceId,
-      removedAt: null,
-      ...(preferredUserId ? { userId: preferredUserId } : {}),
-    },
-    orderBy: { createdAt: "asc" },
-  });
+	const tenant = await db.tenant.findFirst({
+		where: {
+			space: { id: spaceId },
+			removedAt: null,
+			...(preferredUserId ? { user: { id: preferredUserId } } : {}),
+		},
+		orderBy: { createdAt: "asc" },
+	});
 
-  if (tenant) {
-    return tenant.id;
-  }
+	if (tenant) {
+		return tenant.id;
+	}
 
-  const fallbackTenant = await db.tenant.findFirst({
-    where: {
-      spaceId,
-      removedAt: null,
-    },
-    orderBy: { createdAt: "asc" },
-  });
+	const fallbackTenant = await db.tenant.findFirst({
+		where: {
+			space: { id: spaceId },
+			removedAt: null,
+		},
+		orderBy: { createdAt: "asc" },
+	});
 
-  if (!fallbackTenant) {
-    throw new Error(`Space에 연결된 Tenant를 찾을 수 없습니다: ${spaceId}`);
-  }
+	if (!fallbackTenant) {
+		throw new Error(`Space에 연결된 Tenant를 찾을 수 없습니다: ${spaceId}`);
+	}
 
-  return fallbackTenant.id;
+	return fallbackTenant.id;
 }

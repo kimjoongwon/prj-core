@@ -3,7 +3,7 @@ import {
 	ClassField,
 	NumberField,
 	StringField,
-	UUIDField,
+	ULIDField,
 } from "@cocrepo/decorator";
 import { ActionDto } from "./action.dto";
 import { SubjectSummaryDto } from "./subject.dto";
@@ -12,16 +12,16 @@ import { SubjectSummaryDto } from "./subject.dto";
  * Ability 간략 DTO (목록 조회용)
  */
 export class AbilitySummaryDto {
-	@UUIDField()
+	@ULIDField()
 	id!: string;
 
 	@StringField()
 	name!: string;
 
-	@UUIDField()
+	@ULIDField()
 	actionId!: string;
 
-	@UUIDField()
+	@ULIDField()
 	subjectId!: string;
 
 	@BooleanField()

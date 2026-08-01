@@ -24,6 +24,14 @@
 |------|---------|---------|
 | 페이지 진입 | GET /api/v1/users/:id 호출 → 상세 정보 표시 (Profile, Tenant, Role, Space 포함) | 에러 메시지 (404: "사용자를 찾을 수 없습니다") |
 
+#### UserForm 계약 (1차)
+
+- `UserForm`은 회원 기본 정보 섹션에서 재사용하는 순수 UI form입니다.
+- form state 공개 계약은 `name`, `email`, `phone`, `errors`이며, route/feature가 MobX observable 객체를 주입합니다.
+- 필드는 `이름`, `이메일`, `연락처` 3개만 제공하고, 저장/취소 버튼과 API/라우터 로직은 form에 두지 않습니다.
+- `readOnly=true`면 세 필드 모두 수정할 수 없습니다.
+- 사용자가 값을 변경하면 해당 field의 `errors`만 제거하고 다른 field 오류는 유지합니다.
+
 #### 상태 전이
 
 ```
@@ -115,10 +123,13 @@
 | **Operation ID** | `getUserById` |
 | **설명** | 특정 사용자의 상세 정보를 조회합니다. Profile, Tenant, Role, Space 정보를 포함합니다. |
 | **인증** | Bearer Token |
-| **Headers** | `X-Space-ID` (필수) |
-| **Path Params** | `id` (UUID) - 사용자 ID |
+| **Headers** | `x-tenant-id` (필수) |
+| **Path Params** | `id` (ULID) - 사용자 ID |
 | **Response** | `UserDetailResponseDto` |
 | **에러** | 401 (미인증/Space 미선택), 404 (사용자 없음), 500 |
+
+- 일반 관리자는 현재 Tenant에서 계산된 유효 Space 범위의 사용자만 조회할 수 있습니다.
+- `PLATFORM_ADMIN`은 목록과 동일하게 Space 제한 없이 사용자 상세를 조회할 수 있습니다.
 
 ---
 

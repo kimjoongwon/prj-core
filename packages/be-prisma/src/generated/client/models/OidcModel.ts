@@ -20,12 +20,23 @@ export type OidcModelModel = runtime.Types.Result.DefaultSelection<Prisma.$OidcM
 
 export type AggregateOidcModel = {
   _count: OidcModelCountAggregateOutputType | null
+  _avg: OidcModelAvgAggregateOutputType | null
+  _sum: OidcModelSumAggregateOutputType | null
   _min: OidcModelMinAggregateOutputType | null
   _max: OidcModelMaxAggregateOutputType | null
 }
 
+export type OidcModelAvgAggregateOutputType = {
+  seq: number | null
+}
+
+export type OidcModelSumAggregateOutputType = {
+  seq: number | null
+}
+
 export type OidcModelMinAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   key: string | null
@@ -38,6 +49,7 @@ export type OidcModelMinAggregateOutputType = {
 
 export type OidcModelMaxAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   key: string | null
@@ -50,6 +62,7 @@ export type OidcModelMaxAggregateOutputType = {
 
 export type OidcModelCountAggregateOutputType = {
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   key: number
@@ -63,8 +76,17 @@ export type OidcModelCountAggregateOutputType = {
 }
 
 
+export type OidcModelAvgAggregateInputType = {
+  seq?: true
+}
+
+export type OidcModelSumAggregateInputType = {
+  seq?: true
+}
+
 export type OidcModelMinAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   key?: true
@@ -77,6 +99,7 @@ export type OidcModelMinAggregateInputType = {
 
 export type OidcModelMaxAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   key?: true
@@ -89,6 +112,7 @@ export type OidcModelMaxAggregateInputType = {
 
 export type OidcModelCountAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   key?: true
@@ -139,6 +163,18 @@ export type OidcModelAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: OidcModelAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: OidcModelSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: OidcModelMinAggregateInputType
@@ -169,12 +205,15 @@ export type OidcModelGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   _count?: OidcModelCountAggregateInputType | true
+  _avg?: OidcModelAvgAggregateInputType
+  _sum?: OidcModelSumAggregateInputType
   _min?: OidcModelMinAggregateInputType
   _max?: OidcModelMaxAggregateInputType
 }
 
 export type OidcModelGroupByOutputType = {
   id: string
+  seq: number
   createdAt: Date
   updatedAt: Date | null
   key: string
@@ -185,6 +224,8 @@ export type OidcModelGroupByOutputType = {
   grantId: string | null
   uid: string | null
   _count: OidcModelCountAggregateOutputType | null
+  _avg: OidcModelAvgAggregateOutputType | null
+  _sum: OidcModelSumAggregateOutputType | null
   _min: OidcModelMinAggregateOutputType | null
   _max: OidcModelMaxAggregateOutputType | null
 }
@@ -209,6 +250,7 @@ export type OidcModelWhereInput = {
   OR?: Prisma.OidcModelWhereInput[]
   NOT?: Prisma.OidcModelWhereInput | Prisma.OidcModelWhereInput[]
   id?: Prisma.StringFilter<"OidcModel"> | string
+  seq?: Prisma.IntFilter<"OidcModel"> | number
   createdAt?: Prisma.DateTimeFilter<"OidcModel"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"OidcModel"> | Date | string | null
   key?: Prisma.StringFilter<"OidcModel"> | string
@@ -222,6 +264,7 @@ export type OidcModelWhereInput = {
 
 export type OidcModelOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   key?: Prisma.SortOrder
@@ -235,6 +278,7 @@ export type OidcModelOrderByWithRelationInput = {
 
 export type OidcModelWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  seq?: number
   key?: string
   userCode?: string
   uid?: string
@@ -247,10 +291,11 @@ export type OidcModelWhereUniqueInput = Prisma.AtLeast<{
   payload?: Prisma.JsonFilter<"OidcModel">
   expiresAt?: Prisma.DateTimeNullableFilter<"OidcModel"> | Date | string | null
   grantId?: Prisma.StringNullableFilter<"OidcModel"> | string | null
-}, "id" | "key" | "userCode" | "uid">
+}, "seq" | "id" | "key" | "userCode" | "uid">
 
 export type OidcModelOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   key?: Prisma.SortOrder
@@ -261,8 +306,10 @@ export type OidcModelOrderByWithAggregationInput = {
   grantId?: Prisma.SortOrderInput | Prisma.SortOrder
   uid?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.OidcModelCountOrderByAggregateInput
+  _avg?: Prisma.OidcModelAvgOrderByAggregateInput
   _max?: Prisma.OidcModelMaxOrderByAggregateInput
   _min?: Prisma.OidcModelMinOrderByAggregateInput
+  _sum?: Prisma.OidcModelSumOrderByAggregateInput
 }
 
 export type OidcModelScalarWhereWithAggregatesInput = {
@@ -270,6 +317,7 @@ export type OidcModelScalarWhereWithAggregatesInput = {
   OR?: Prisma.OidcModelScalarWhereWithAggregatesInput[]
   NOT?: Prisma.OidcModelScalarWhereWithAggregatesInput | Prisma.OidcModelScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"OidcModel"> | string
+  seq?: Prisma.IntWithAggregatesFilter<"OidcModel"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"OidcModel"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"OidcModel"> | Date | string | null
   key?: Prisma.StringWithAggregatesFilter<"OidcModel"> | string
@@ -296,6 +344,7 @@ export type OidcModelCreateInput = {
 
 export type OidcModelUncheckedCreateInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   key: string
@@ -322,6 +371,7 @@ export type OidcModelUpdateInput = {
 
 export type OidcModelUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   key?: Prisma.StringFieldUpdateOperationsInput | string
@@ -335,6 +385,7 @@ export type OidcModelUncheckedUpdateInput = {
 
 export type OidcModelCreateManyInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   key: string
@@ -361,6 +412,7 @@ export type OidcModelUpdateManyMutationInput = {
 
 export type OidcModelUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   key?: Prisma.StringFieldUpdateOperationsInput | string
@@ -374,6 +426,7 @@ export type OidcModelUncheckedUpdateManyInput = {
 
 export type OidcModelCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   key?: Prisma.SortOrder
@@ -385,8 +438,13 @@ export type OidcModelCountOrderByAggregateInput = {
   uid?: Prisma.SortOrder
 }
 
+export type OidcModelAvgOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+}
+
 export type OidcModelMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   key?: Prisma.SortOrder
@@ -399,6 +457,7 @@ export type OidcModelMaxOrderByAggregateInput = {
 
 export type OidcModelMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   key?: Prisma.SortOrder
@@ -409,10 +468,15 @@ export type OidcModelMinOrderByAggregateInput = {
   uid?: Prisma.SortOrder
 }
 
+export type OidcModelSumOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+}
+
 
 
 export type OidcModelSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   key?: boolean
@@ -426,6 +490,7 @@ export type OidcModelSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
 
 export type OidcModelSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   key?: boolean
@@ -439,6 +504,7 @@ export type OidcModelSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
 
 export type OidcModelSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   key?: boolean
@@ -452,6 +518,7 @@ export type OidcModelSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
 
 export type OidcModelSelectScalar = {
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   key?: boolean
@@ -463,13 +530,14 @@ export type OidcModelSelectScalar = {
   uid?: boolean
 }
 
-export type OidcModelOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "key" | "modelType" | "payload" | "expiresAt" | "userCode" | "grantId" | "uid", ExtArgs["result"]["oidcModel"]>
+export type OidcModelOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "key" | "modelType" | "payload" | "expiresAt" | "userCode" | "grantId" | "uid", ExtArgs["result"]["oidcModel"]>
 
 export type $OidcModelPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "OidcModel"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    seq: number
     createdAt: Date
     updatedAt: Date | null
     /**
@@ -924,6 +992,7 @@ export interface Prisma__OidcModelClient<T, Null = never, ExtArgs extends runtim
  */
 export interface OidcModelFieldRefs {
   readonly id: Prisma.FieldRef<"OidcModel", 'String'>
+  readonly seq: Prisma.FieldRef<"OidcModel", 'Int'>
   readonly createdAt: Prisma.FieldRef<"OidcModel", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"OidcModel", 'DateTime'>
   readonly key: Prisma.FieldRef<"OidcModel", 'String'>

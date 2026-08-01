@@ -170,6 +170,7 @@ export function validateSchemaConventions(
 			errors,
 			filePath,
 			models,
+			text,
 		});
 	}
 
@@ -544,6 +545,7 @@ interface ValidateModelFileOptions {
 	errors: string[];
 	filePath: string;
 	models: DocumentedModel[];
+	text: string;
 }
 
 /**
@@ -559,6 +561,7 @@ function validateModelFile(options: ValidateModelFileOptions): void {
 		errors,
 		filePath,
 		models,
+		text,
 	} = options;
 	const baseName = filePath.split("/").at(-1) ?? filePath;
 	const modelDeclarations = declarations.filter(
@@ -617,6 +620,70 @@ function validateModelFile(options: ValidateModelFileOptions): void {
 	}
 
 	validateModelMetadata(filePath, model, modelTypeCounts, errors);
+	validateModelIdentityContract(filePath, model.name, text, errors);
+}
+
+/**
+ * 공개 ULID와 내부 seq PK/FK 계약을 검사합니다.
+ *
+ * @param filePath 검사 중인 schema 상대 경로
+ * @param modelName Prisma model 이름
+ * @param text model schema 전체
+ * @param errors 오류 누적 목록
+ */
+function validateModelIdentityContract(
+	filePath: string,
+	modelName: string,
+	text: string,
+	errors: string[],
+): void {
+	const idField = text.match(/^[ \t]*id[ \t]+([^\n]+)$/m)?.[1] ?? "";
+	const seqField = text.match(/^[ \t]*seq[ \t]+([^\n]+)$/m)?.[1] ?? "";
+
+	if (
+		!idField.startsWith("String") ||
+		!idField.includes("@unique") ||
+		!idField.includes("@default(ulid())") ||
+		!idField.includes("@db.VarChar(26)") ||
+		idField.includes("@id")
+	) {
+		errors.push(
+			`[${filePath}] ${modelName}.id must be String @unique @default(ulid()) @db.VarChar(26) and must not be the primary key`,
+		);
+	}
+
+	if (
+		!seqField.startsWith("Int") ||
+		!seqField.includes("@id") ||
+		!seqField.includes("@default(autoincrement())")
+	) {
+		errors.push(
+			`[${filePath}] ${modelName}.seq must be Int @id @default(autoincrement())`,
+		);
+	}
+
+	const relationPattern =
+		/@relation\([^\n]*fields:\s*\[([^\]]+)\][^\n]*references:\s*\[([^\]]+)\][^\n]*\)/g;
+	let relation = relationPattern.exec(text);
+	while (relation) {
+		const fields = relation[1].split(",").map((field) => field.trim());
+		const references = relation[2]
+			.split(",")
+			.map((reference) => reference.trim());
+
+		if (fields.some((field) => !field.endsWith("Seq"))) {
+			errors.push(
+				`[${filePath}] ${modelName} relation fields must use the <relation>Seq naming contract: ${fields.join(", ")}`,
+			);
+		}
+		if (references.some((reference) => reference !== "seq")) {
+			errors.push(
+				`[${filePath}] ${modelName} relations must reference the internal seq key: ${references.join(", ")}`,
+			);
+		}
+
+		relation = relationPattern.exec(text);
+	}
 }
 
 /**

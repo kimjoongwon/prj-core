@@ -36,7 +36,7 @@ async function ensureSystemAdminProfile(
 ): Promise<void> {
 	const existingProfile = await db.profile.findFirst({
 		where: {
-			userId,
+			user: { id: userId },
 			removedAt: null,
 		},
 	});
@@ -47,7 +47,7 @@ async function ensureSystemAdminProfile(
 
 	await db.profile.create({
 		data: {
-			userId,
+			user: { connect: { id: userId } },
 			name,
 			nickname,
 			address: "",
@@ -135,9 +135,9 @@ export async function ensureSystemAdminUsers(
 
 		const existingTenant = await db.tenant.findFirst({
 			where: {
-				userId: systemAdminUser.id,
-				spaceId: SYSTEM_SPACE_ID,
-				roleId: platformAdminRoleId,
+				user: { id: systemAdminUser.id },
+				space: { id: SYSTEM_SPACE_ID },
+				role: { id: platformAdminRoleId },
 				removedAt: null,
 			},
 		});
@@ -148,9 +148,9 @@ export async function ensureSystemAdminUsers(
 					...(userData.email === "admin@plate.com"
 						? { id: SYSTEM_TENANT_ID }
 						: {}),
-					userId: systemAdminUser.id,
-					spaceId: SYSTEM_SPACE_ID,
-					roleId: platformAdminRoleId,
+					user: { connect: { id: systemAdminUser.id } },
+					space: { connect: { id: SYSTEM_SPACE_ID } },
+					role: { connect: { id: platformAdminRoleId } },
 				},
 			});
 			console.log(`System admin tenant created: ${userData.email}`);

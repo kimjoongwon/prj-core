@@ -5,7 +5,7 @@ import {
 	NumberField,
 	StringField,
 	StringFieldOptional,
-	UUIDField,
+	ULIDField,
 } from "@cocrepo/decorator";
 import { ReservationStatus } from "@cocrepo/prisma";
 
@@ -24,13 +24,13 @@ export class BookingFeedItemDto {
 	@DateField({ description: "종료 시각" })
 	endsAt!: Date;
 
-	@UUIDField({ description: "타임라인 ID" })
+	@ULIDField({ description: "타임라인 ID" })
 	timelineId!: string;
 
-	@UUIDField({ description: "세션 ID" })
+	@ULIDField({ description: "세션 ID" })
 	sessionId!: string;
 
-	@UUIDField({ description: "프로그램 ID" })
+	@ULIDField({ description: "프로그램 ID" })
 	programId!: string;
 
 	@StringField({ description: "타임라인 이름" })

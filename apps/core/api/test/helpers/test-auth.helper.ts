@@ -13,19 +13,6 @@ import type { Request } from "express";
 import { ClsService } from "nestjs-cls";
 import { ExtractJwt, Strategy } from "passport-jwt";
 
-interface TestAuthTenant {
-	id: string;
-	spaceId: string;
-	role?: {
-		name?: string | null;
-		classification?: {
-			category?: {
-				name?: string | null;
-			} | null;
-		} | null;
-	} | null;
-}
-
 /**
  * 테스트 전용 JWT Strategy (HS256)
  *
@@ -146,9 +133,8 @@ export async function getTestAuth(
 		);
 	}
 
-	const tenants = user.tenants as TestAuthTenant[];
-	const tenant = tenants.find((candidate) => {
-		if (options.spaceId && candidate.spaceId !== options.spaceId) {
+	const tenant = user.tenants.find((candidate) => {
+		if (options.spaceId && candidate.space.id !== options.spaceId) {
 			return false;
 		}
 		if (roleName && candidate.role?.name !== roleName) {
@@ -178,7 +164,7 @@ export async function getTestAuth(
 	return {
 		jwtToken: token,
 		tenantId: tenant.id,
-		spaceId: tenant.spaceId,
+		spaceId: tenant.space.id,
 		userId: user.id,
 	};
 }

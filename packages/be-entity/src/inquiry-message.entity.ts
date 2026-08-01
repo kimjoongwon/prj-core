@@ -6,6 +6,7 @@ import type {
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { AIAgentLog } from "./ai-agent-log.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Inquiry } from "./inquiry.entity";
 import type { InquiryAttachment } from "./inquiry-attachment.entity";
 import type { InquiryThread } from "./inquiry-thread.entity";
@@ -20,7 +21,7 @@ import type { User } from "./user.entity";
  */
 export class InquiryMessage
 	extends AbstractEntity
-	implements InquiryMessageEntity
+	implements DomainEntityModel<InquiryMessageEntity>
 {
 	// ============================================================================
 	// 필수 필드

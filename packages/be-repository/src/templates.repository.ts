@@ -3,7 +3,7 @@ import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
 export class TemplatesRepository {
@@ -23,10 +23,12 @@ export class TemplatesRepository {
 
 		const result = await this.txHost.tx.template.findUnique({
 			where: { id },
-			include: { variables: true },
+			include: {
+				variables: { include: { template: { select: { id: true } } } },
+			},
 		});
 
-		return result ? plainToInstance(Template, result) : null;
+		return result ? toDomainEntity(Template, result) : null;
 	}
 
 	/**
@@ -48,10 +50,12 @@ export class TemplatesRepository {
 
 		const result = await this.txHost.tx.template.findFirst({
 			where: { code, removedAt: null },
-			include: { variables: true },
+			include: {
+				variables: { include: { template: { select: { id: true } } } },
+			},
 		});
 
-		return result ? plainToInstance(Template, result) : null;
+		return result ? toDomainEntity(Template, result) : null;
 	}
 
 	/**
@@ -81,7 +85,7 @@ export class TemplatesRepository {
 		]);
 
 		return {
-			data: data.map((item) => plainToInstance(Template, item)),
+			data: data.map((item) => toDomainEntity(Template, item)),
 			totalCount,
 		};
 	}
@@ -94,7 +98,7 @@ export class TemplatesRepository {
 
 		const result = await this.txHost.tx.template.create({ data });
 
-		return plainToInstance(Template, result);
+		return toDomainEntity(Template, result);
 	}
 
 	/**
@@ -118,10 +122,12 @@ export class TemplatesRepository {
 					create: variables,
 				},
 			},
-			include: { variables: true },
+			include: {
+				variables: { include: { template: { select: { id: true } } } },
+			},
 		});
 
-		return plainToInstance(Template, result);
+		return toDomainEntity(Template, result);
 	}
 
 	/**
@@ -138,7 +144,7 @@ export class TemplatesRepository {
 			data,
 		});
 
-		return plainToInstance(Template, result);
+		return toDomainEntity(Template, result);
 	}
 
 	/**
@@ -158,7 +164,7 @@ export class TemplatesRepository {
 
 		// 기존 변수 전체 삭제
 		await this.txHost.tx.templateVariable.deleteMany({
-			where: { templateId: id },
+			where: { template: { id } },
 		});
 
 		// 템플릿 업데이트 + 새 변수 생성
@@ -170,10 +176,12 @@ export class TemplatesRepository {
 					create: variables,
 				},
 			},
-			include: { variables: true },
+			include: {
+				variables: { include: { template: { select: { id: true } } } },
+			},
 		});
 
-		return plainToInstance(Template, result);
+		return toDomainEntity(Template, result);
 	}
 
 	/**
@@ -187,6 +195,6 @@ export class TemplatesRepository {
 			data: { removedAt: new Date(), isActive: false },
 		});
 
-		return plainToInstance(Template, result);
+		return toDomainEntity(Template, result);
 	}
 }

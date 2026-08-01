@@ -9,7 +9,7 @@ import { SpaceResourceScope } from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
 export class SpacesRepository {
@@ -26,8 +26,8 @@ export class SpacesRepository {
 	private toFitnessCenterWithCompany(
 		result: Prisma.FitnessCenterGetPayload<{ include: { company: true } }>,
 	): FitnessCenter {
-		const fitnessCenter = plainToInstance(FitnessCenter, result);
-		const company = plainToInstance(Company, result.company);
+		const fitnessCenter = toDomainEntity(FitnessCenter, result);
+		const company = toDomainEntity(Company, result.company);
 		fitnessCenter.company = company;
 		company.fitnessCenters = [fitnessCenter];
 		return fitnessCenter;
@@ -38,7 +38,7 @@ export class SpacesRepository {
 			include: { fitnessCenter: { include: { company: true } } };
 		}>,
 	): Space {
-		const space = plainToInstance(Space, result);
+		const space = toDomainEntity(Space, result);
 
 		const centerRecord = result.fitnessCenter;
 		if (!centerRecord || centerRecord.removedAt !== null) {
@@ -46,6 +46,7 @@ export class SpacesRepository {
 		}
 
 		const fitnessCenter = this.toFitnessCenterWithCompany(centerRecord);
+		fitnessCenter.spaceId = space.id;
 		fitnessCenter.space = space;
 		space.fitnessCenter = fitnessCenter;
 		return space;
@@ -61,7 +62,7 @@ export class SpacesRepository {
 			where: { id },
 		});
 
-		return result ? plainToInstance(Space, result) : null;
+		return result ? toDomainEntity(Space, result) : null;
 	}
 
 	/**
@@ -205,7 +206,7 @@ export class SpacesRepository {
 			orderBy: { createdAt: "desc" },
 		});
 
-		return results.map((result) => plainToInstance(Space, result));
+		return results.map((result) => toDomainEntity(Space, result));
 	}
 
 	/**
@@ -216,8 +217,8 @@ export class SpacesRepository {
 	): Promise<FitnessCenter | null> {
 		this.logger.debug(`Space의 FitnessCenter 조회: ${spaceId.slice(-8)}`);
 
-		const result = await this.txHost.tx.fitnessCenter.findUnique({
-			where: { spaceId },
+		const result = await this.txHost.tx.fitnessCenter.findFirst({
+			where: { space: { id: spaceId } },
 			include: {
 				company: true,
 				space: true,
@@ -229,7 +230,7 @@ export class SpacesRepository {
 		}
 
 		const fitnessCenter = this.toFitnessCenterWithCompany(result);
-		fitnessCenter.space = plainToInstance(Space, result.space);
+		fitnessCenter.space = toDomainEntity(Space, result.space);
 		return fitnessCenter;
 	}
 
@@ -243,7 +244,7 @@ export class SpacesRepository {
 			data: data ?? {},
 		});
 
-		return plainToInstance(Space, result);
+		return toDomainEntity(Space, result);
 	}
 
 	/**
@@ -255,7 +256,7 @@ export class SpacesRepository {
 			company: Prisma.CompanyUncheckedCreateInput;
 			fitnessCenter: Omit<
 				Prisma.FitnessCenterUncheckedCreateInput,
-				"companyId" | "spaceId"
+				"seq" | "companySeq" | "spaceSeq"
 			>;
 		},
 	): Promise<Space> {
@@ -268,8 +269,8 @@ export class SpacesRepository {
 		await this.txHost.tx.fitnessCenter.create({
 			data: {
 				...data.fitnessCenter,
-				companyId: company.id,
-				spaceId,
+				company: { connect: { id: company.id } },
+				space: { connect: { id: spaceId } },
 			},
 		});
 
@@ -295,7 +296,7 @@ export class SpacesRepository {
 			data,
 		});
 
-		return plainToInstance(Space, result);
+		return toDomainEntity(Space, result);
 	}
 
 	/**
@@ -309,7 +310,7 @@ export class SpacesRepository {
 			data: { removedAt: new Date() },
 		});
 
-		return plainToInstance(Space, result);
+		return toDomainEntity(Space, result);
 	}
 
 	/**
@@ -323,8 +324,8 @@ export class SpacesRepository {
 	): Promise<Space> {
 		this.logger.debug(`Space의 FitnessCenter 수정: ${spaceId.slice(-8)}`);
 
-		const fitnessCenter = await this.txHost.tx.fitnessCenter.findUnique({
-			where: { spaceId },
+		const fitnessCenter = await this.txHost.tx.fitnessCenter.findFirst({
+			where: { space: { id: spaceId } },
 			select: { id: true },
 		});
 
@@ -359,15 +360,14 @@ export class SpacesRepository {
 		const spaceClassification =
 			await this.txHost.tx.spaceClassification.findFirst({
 				where: {
-					spaceId,
+					space: { id: spaceId, removedAt: null },
 					removedAt: null,
-					space: { removedAt: null },
 					category: {
 						type: CategoryTypes.Space,
 						removedAt: null,
 					},
 				},
-				select: { categoryId: true },
+				select: { category: { select: { id: true } } },
 			});
 
 		if (!spaceClassification) {
@@ -381,14 +381,18 @@ export class SpacesRepository {
 			},
 			select: {
 				id: true,
-				parentId: true,
+				parent: { select: { id: true } },
 			},
 		});
+		const categoryRecords = categories.map((category) => ({
+			id: category.id,
+			parentId: category.parent?.id ?? null,
+		}));
 		const categoryById = new Map(
-			categories.map((category) => [category.id, category]),
+			categoryRecords.map((category) => [category.id, category]),
 		);
 		const childCategoryIdsByParentId = new Map<string, string[]>();
-		for (const category of categories) {
+		for (const category of categoryRecords) {
 			if (!category.parentId) {
 				continue;
 			}
@@ -399,13 +403,13 @@ export class SpacesRepository {
 			childCategoryIdsByParentId.set(category.parentId, childCategoryIds);
 		}
 
-		const categoryIds = new Set<string>([spaceClassification.categoryId]);
+		const categoryIds = new Set<string>([spaceClassification.category.id]);
 
 		if (
 			scope === SpaceResourceScope.WITH_ANCESTORS ||
 			scope === SpaceResourceScope.WITH_TREE
 		) {
-			let cursor = categoryById.get(spaceClassification.categoryId)?.parentId;
+			let cursor = categoryById.get(spaceClassification.category.id)?.parentId;
 			while (cursor) {
 				categoryIds.add(cursor);
 				cursor = categoryById.get(cursor)?.parentId;
@@ -417,7 +421,7 @@ export class SpacesRepository {
 			scope === SpaceResourceScope.WITH_TREE
 		) {
 			const pendingCategoryIds = [
-				...(childCategoryIdsByParentId.get(spaceClassification.categoryId) ??
+				...(childCategoryIdsByParentId.get(spaceClassification.category.id) ??
 					[]),
 			];
 			while (pendingCategoryIds.length > 0) {
@@ -436,16 +440,16 @@ export class SpacesRepository {
 		const classifications = await this.txHost.tx.spaceClassification.findMany({
 			where: {
 				removedAt: null,
-				categoryId: { in: [...categoryIds] },
+				category: { id: { in: [...categoryIds] } },
 				space: { removedAt: null },
 			},
-			select: { spaceId: true },
+			select: { space: { select: { id: true } } },
 		});
 
 		return [
 			...new Set([
 				spaceId,
-				...classifications.map((classification) => classification.spaceId),
+				...classifications.map((classification) => classification.space.id),
 			]),
 		];
 	}

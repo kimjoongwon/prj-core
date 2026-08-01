@@ -1,15 +1,16 @@
-import { ClassField, UUIDField } from "@cocrepo/decorator";
+import { ClassField, ULIDField } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { SpaceClassification } from "@cocrepo/prisma";
 import { AbstractDto, CategoryDto, SpaceDto } from ".";
 
 export class SpaceClassificationDto
 	extends AbstractDto
-	implements SpaceClassification
+	implements DomainEntityModel<SpaceClassification>
 {
-	@UUIDField()
+	@ULIDField()
 	spaceId: string;
 
-	@UUIDField()
+	@ULIDField()
 	categoryId: string;
 
 	@ClassField(() => CategoryDto, { required: false })

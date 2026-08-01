@@ -10,7 +10,7 @@ import type { SpaceDto } from "@cocrepo/api/idp/model";
 import { makeAutoObservable } from "mobx";
 
 export const MOBILE_PLATFORM_FITNESS_CENTER_NAME = "플랫폼 운영본부";
-export const MOBILE_SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
+export const MOBILE_SYSTEM_SPACE_ID = "01J00000000000000000000001";
 
 export interface MobileSpaceInfo {
   tenantId: string;

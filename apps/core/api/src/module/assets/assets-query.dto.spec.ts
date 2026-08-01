@@ -1,4 +1,5 @@
 import { AssetQueryDto } from "@cocrepo/dto";
+import { buildAssetQueryWhere } from "@cocrepo/repository";
 import { type ArgumentMetadata, ValidationPipe } from "@nestjs/common";
 
 describe("AssetQueryDto", () => {
@@ -20,7 +21,7 @@ describe("AssetQueryDto", () => {
 				skip: "0",
 				kind: "IMAGE",
 				status: "READY",
-				folderId: "da004091-8d08-4878-bf35-251a04608868",
+				folderId: "01J0000000000000000000D000",
 			},
 			metadata,
 		);
@@ -29,10 +30,12 @@ describe("AssetQueryDto", () => {
 		expect(query.skip).toBe(0);
 		expect(query.take).toBe(20);
 		expect(
-			query.toPrismaWhere({ spaceId: "61ddca20-1752-466e-b4da-879ebdbe54e3" }),
+			buildAssetQueryWhere(query, {
+				space: { id: "01J00000000000000000000001" },
+			}),
 		).toEqual({
-			spaceId: "61ddca20-1752-466e-b4da-879ebdbe54e3",
-			folderId: "da004091-8d08-4878-bf35-251a04608868",
+			space: { id: "01J00000000000000000000001" },
+			folder: { id: "01J0000000000000000000D000" },
 			kind: "IMAGE",
 			status: "READY",
 			removedAt: null,

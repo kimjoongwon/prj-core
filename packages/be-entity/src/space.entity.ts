@@ -1,12 +1,16 @@
 import { LanguageCode, type Space as SpaceEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { FitnessCenter } from "./fitness-center.entity";
 import type { Policy } from "./policy.entity";
 import type { SpaceAssociation } from "./space-association.entity";
 import type { SpaceClassification } from "./space-classification.entity";
 import type { Tenant } from "./tenant.entity";
 
-export class Space extends AbstractEntity implements SpaceEntity {
+export class Space
+	extends AbstractEntity
+	implements DomainEntityModel<SpaceEntity>
+{
 	contentLanguageCode: LanguageCode;
 	tenants?: Tenant[];
 	spaceClassifications?: SpaceClassification[];

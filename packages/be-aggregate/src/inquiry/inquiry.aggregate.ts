@@ -25,6 +25,10 @@ import {
 import { Transactional } from "@nestjs-cls/transactional";
 import { INQUIRY_CATEGORY_LABELS } from "./inquiry-category-labels";
 import { INQUIRY_CHANNEL_LABELS } from "./inquiry-channel-labels";
+import type {
+	CreateInquiryAggregateInput,
+	UpdateInquiryAggregateInput,
+} from "./inquiry-persistence.input";
 import { INQUIRY_PRIORITY_LABELS } from "./inquiry-priority-labels";
 import { INQUIRY_SOURCE_LABELS } from "./inquiry-source-labels";
 import { INQUIRY_STATUS_LABELS } from "./inquiry-status-labels";
@@ -145,7 +149,7 @@ export class InquiryAggregate {
 	 */
 	@Transactional()
 	async create(
-		data: Omit<Prisma.InquiryUncheckedCreateInput, "inquiryNumber">,
+		data: CreateInquiryAggregateInput,
 		actorUserId: string,
 		initialContent?: string | null,
 	): Promise<Inquiry> {
@@ -184,7 +188,7 @@ export class InquiryAggregate {
 	 */
 	async update(
 		id: string,
-		data: Prisma.InquiryUncheckedUpdateInput,
+		data: UpdateInquiryAggregateInput,
 	): Promise<Inquiry> {
 		this.logger.debug(`문의 수정: ${id.slice(-8)}`);
 
@@ -385,7 +389,7 @@ export class InquiryAggregate {
 
 		return {
 			...where,
-			spaceId: { in: spaceIds },
+			space: { id: { in: spaceIds } },
 		};
 	}
 

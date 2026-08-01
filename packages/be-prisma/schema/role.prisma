@@ -3,7 +3,8 @@
 // @description: 권한 체계를 정의하는 핵심 역할 도메인 객체
 /// @displayName 역할
 model Role {
-  id        String    @id @default(uuid())
+  id        String    @unique @default(ulid()) @db.VarChar(26)
+  seq       Int       @id @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt DateTime? @map("removed_at") @db.Timestamptz(6)

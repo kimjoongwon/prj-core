@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 const SEARCH_PLACEHOLDER = "이름, 이메일, 전화번호로 검색...";
+const USER_DETAIL_PATH_PATTERN = /^\/admin\/users\/[0-9A-HJKMNP-TV-Z]{26}$/;
 
 const escapeRegExp = (value: string) =>
 	value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -120,10 +121,17 @@ test.describe("이용자 목록 페이지", () => {
 
 			const nameLink = firstRow.getByRole("link");
 			const href = await nameLink.getAttribute("href");
+			expect(href).toMatch(USER_DETAIL_PATH_PATTERN);
 
-			expect(href).toMatch(/^\/admin\/users\/[^/]+$/);
 			await nameLink.click();
+
 			await expect(page).toHaveURL(new RegExp(`${escapeRegExp(href ?? "")}$`));
+			await expect(
+				page.getByRole("heading", { name: "회원 상세" }),
+			).toBeVisible();
+			await expect(
+				page.getByText("회원 상세 기능을 준비하고 있습니다."),
+			).toBeVisible();
 		});
 	});
 

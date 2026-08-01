@@ -3,7 +3,11 @@ import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import type {
+	PublicIdCreateInput,
+	PublicIdUpdateInput,
+} from "./public-id-input.type";
+import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
 export class AbilitiesRepository {
@@ -32,7 +36,7 @@ export class AbilitiesRepository {
 			orderBy: [{ createdAt: "desc" }],
 		});
 
-		return results.map((result) => plainToInstance(Ability, result));
+		return results.map((result) => toDomainEntity(Ability, result));
 	}
 
 	/**
@@ -49,7 +53,7 @@ export class AbilitiesRepository {
 			},
 		});
 
-		return result ? plainToInstance(Ability, result) : null;
+		return result ? toDomainEntity(Ability, result) : null;
 	}
 
 	/**
@@ -70,7 +74,7 @@ export class AbilitiesRepository {
 			orderBy: [{ createdAt: "desc" }],
 		});
 
-		return results.map((result) => plainToInstance(Ability, result));
+		return results.map((result) => toDomainEntity(Ability, result));
 	}
 
 	/**
@@ -81,7 +85,7 @@ export class AbilitiesRepository {
 
 		const results = await this.txHost.tx.ability.findMany({
 			where: {
-				subjectId,
+				subject: { id: subjectId },
 				removedAt: null,
 			},
 			include: {
@@ -91,26 +95,36 @@ export class AbilitiesRepository {
 			orderBy: [{ createdAt: "desc" }],
 		});
 
-		return results.map((result) => plainToInstance(Ability, result));
+		return results.map((result) => toDomainEntity(Ability, result));
 	}
 
 	/**
 	 * Ability 생성
 	 */
-	async create(data: Prisma.AbilityUncheckedCreateInput): Promise<Ability> {
+	async create(
+		data: PublicIdCreateInput<
+			Prisma.AbilityUncheckedCreateInput,
+			"subject" | "action"
+		>,
+	): Promise<Ability> {
 		this.logger.debug(
 			`Ability 생성: subjectId=${data.subjectId}, actionId=${data.actionId}`,
 		);
 
+		const { subjectId, actionId, ...abilityData } = data;
 		const result = await this.txHost.tx.ability.create({
-			data,
+			data: {
+				...abilityData,
+				subject: { connect: { id: subjectId } },
+				action: { connect: { id: actionId } },
+			},
 			include: {
 				subject: true,
 				action: true,
 			},
 		});
 
-		return plainToInstance(Ability, result);
+		return toDomainEntity(Ability, result);
 	}
 
 	/**
@@ -118,20 +132,32 @@ export class AbilitiesRepository {
 	 */
 	async updateById(
 		id: string,
-		data: Prisma.AbilityUncheckedUpdateInput,
+		data: PublicIdUpdateInput<
+			Prisma.AbilityUncheckedUpdateInput,
+			"subject" | "action"
+		>,
 	): Promise<Ability> {
 		this.logger.debug(`Ability 수정: id=${id.slice(-8)}`);
 
+		const { subjectId, actionId, ...abilityData } = data;
 		const result = await this.txHost.tx.ability.update({
 			where: { id },
-			data,
+			data: {
+				...abilityData,
+				...(subjectId !== undefined
+					? { subject: { connect: { id: subjectId } } }
+					: {}),
+				...(actionId !== undefined
+					? { action: { connect: { id: actionId } } }
+					: {}),
+			},
 			include: {
 				subject: true,
 				action: true,
 			},
 		});
 
-		return plainToInstance(Ability, result);
+		return toDomainEntity(Ability, result);
 	}
 
 	/**
@@ -149,7 +175,7 @@ export class AbilitiesRepository {
 			},
 		});
 
-		return plainToInstance(Ability, result);
+		return toDomainEntity(Ability, result);
 	}
 
 	/**

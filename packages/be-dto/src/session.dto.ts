@@ -5,8 +5,9 @@ import {
 	EnumFieldOptional,
 	StringField,
 	StringFieldOptional,
-	UUIDField,
+	ULIDField,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import {
 	RepeatCycleType as RepeatCycleTypeNames,
 	SessionType as SessionTypeNames,
@@ -24,7 +25,10 @@ import { AbstractDto } from "./abstract.dto";
 import { ProgramDto } from "./program.dto";
 import { TimelineDto } from "./timeline.dto";
 
-export class SessionDto extends AbstractDto implements Session {
+export class SessionDto
+	extends AbstractDto
+	implements DomainEntityModel<Session>
+{
 	@EnumField(() => PrismaSessionTypesEnum)
 	@Transform(
 		({ value }) =>
@@ -54,7 +58,7 @@ export class SessionDto extends AbstractDto implements Session {
 	@EnumFieldOptional(() => RecurringDayOfWeek, { nullable: true })
 	recurringDayOfWeek: RecurringDayOfWeek | null;
 
-	@UUIDField()
+	@ULIDField()
 	timelineId: string;
 
 	@StringField()

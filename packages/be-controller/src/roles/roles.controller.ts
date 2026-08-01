@@ -1,4 +1,4 @@
-import { RolesGuard } from "@cocrepo/be-common";
+import { ParseUlidPipe, RolesGuard } from "@cocrepo/be-common";
 import {
 	CreateRoleCommand,
 	DeleteRoleCommand,
@@ -23,7 +23,6 @@ import {
 	HttpCode,
 	HttpStatus,
 	Param,
-	ParseUUIDPipe,
 	Patch,
 	Post,
 	UseGuards,
@@ -66,13 +65,13 @@ export class RolesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "id",
-		description: "역할 ID (UUID)",
+		description: "역할 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	@ResponseMessage("역할 조회 성공")
-	async getRoleById(@Param("id", ParseUUIDPipe) id: string) {
+	async getRoleById(@Param("id", ParseUlidPipe) id: string) {
 		return this.queryBus.execute(new GetRoleByIdQuery(id));
 	}
 
@@ -111,7 +110,7 @@ export class RolesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "id",
-		description: "역할 ID (UUID)",
+		description: "역할 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -122,7 +121,7 @@ export class RolesController {
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	@ResponseMessage("역할 수정 성공")
 	async updateRole(
-		@Param("id", ParseUUIDPipe) id: string,
+		@Param("id", ParseUlidPipe) id: string,
 		@Body() dto: UpdateRoleDto,
 	) {
 		return this.commandBus.execute(new UpdateRoleCommand(id, dto));
@@ -141,13 +140,13 @@ export class RolesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "id",
-		description: "역할 ID (UUID)",
+		description: "역할 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(400, 401, 403, 404, 500)
 	@ApiResponseEntity(RoleDto, HttpStatus.OK)
 	@ResponseMessage("역할 삭제 성공")
-	async deleteRole(@Param("id", ParseUUIDPipe) id: string) {
+	async deleteRole(@Param("id", ParseUlidPipe) id: string) {
 		return this.commandBus.execute(new DeleteRoleCommand(id));
 	}
 }

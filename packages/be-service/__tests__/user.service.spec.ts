@@ -266,7 +266,7 @@ describe("UserService", () => {
 					removedAt: null,
 					tenants: {
 						some: {
-							spaceId: { in: ["space-header-id"] },
+							space: { id: { in: ["space-header-id"] } },
 							removedAt: null,
 						},
 					},
@@ -411,6 +411,55 @@ describe("UserService", () => {
 				totalCount: 1,
 				stats: statsResult,
 			});
+		});
+	});
+
+	describe("getUserDetailForSpace", () => {
+		it("일반 관리자는 유효 Space 범위 안에서 사용자 상세를 조회해야 한다", async () => {
+			mockRepository.findByIdAndSpaceIdsWithRelations.mockResolvedValue(
+				mockUser as unknown as UserWithRelations,
+			);
+
+			const result = await service.getUserDetailForSpace(
+				"user-test-id",
+				"space-test-id",
+			);
+
+			expect(
+				mockRepository.findByIdAndSpaceIdsWithRelations,
+			).toHaveBeenCalledWith("user-test-id", ["space-test-id"]);
+			expect(result).toEqual(mockUser);
+		});
+
+		it("PLATFORM_ADMIN은 Space 제한 없이 사용자 상세를 조회해야 한다", async () => {
+			mockSpaceContext = {
+				spaceId: "space-root-id",
+				spaceIds: undefined,
+			} as unknown as SpaceContext;
+			Object.defineProperty(service, "spaceCtx", {
+				value: mockSpaceContext,
+			});
+			mockRepository.findByIdAndSpaceIdsWithRelations.mockResolvedValue(
+				mockUser as unknown as UserWithRelations,
+			);
+
+			const result = await service.getUserDetailForSpace(
+				"user-test-id",
+				"space-root-id",
+			);
+
+			expect(
+				mockRepository.findByIdAndSpaceIdsWithRelations,
+			).toHaveBeenCalledWith("user-test-id", undefined);
+			expect(result).toEqual(mockUser);
+		});
+
+		it("유효 Space 범위에서 사용자를 찾지 못하면 오류를 반환해야 한다", async () => {
+			mockRepository.findByIdAndSpaceIdsWithRelations.mockResolvedValue(null);
+
+			await expect(
+				service.getUserDetailForSpace("missing-user-id", "space-test-id"),
+			).rejects.toThrow("사용자를 찾을 수 없습니다");
 		});
 	});
 });

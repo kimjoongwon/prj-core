@@ -3,7 +3,7 @@ import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
 export class SubjectsRepository {
@@ -28,7 +28,7 @@ export class SubjectsRepository {
 			orderBy: [{ group: "asc" }, { order: "asc" }],
 		});
 
-		return plainToInstance(Subject, results);
+		return toDomainEntity(Subject, results);
 	}
 
 	/**
@@ -41,7 +41,7 @@ export class SubjectsRepository {
 			where: { id },
 		});
 
-		return result ? plainToInstance(Subject, result) : null;
+		return result ? toDomainEntity(Subject, result) : null;
 	}
 
 	/**
@@ -54,7 +54,7 @@ export class SubjectsRepository {
 			where: { name, removedAt: null },
 		});
 
-		return result ? plainToInstance(Subject, result) : null;
+		return result ? toDomainEntity(Subject, result) : null;
 	}
 
 	/**
@@ -68,7 +68,7 @@ export class SubjectsRepository {
 			orderBy: { order: "asc" },
 		});
 
-		return plainToInstance(Subject, results);
+		return toDomainEntity(Subject, results);
 	}
 
 	/**
@@ -85,7 +85,7 @@ export class SubjectsRepository {
 			orderBy: { order: "asc" },
 		});
 
-		return plainToInstance(Subject, results);
+		return toDomainEntity(Subject, results);
 	}
 
 	/**
@@ -98,7 +98,7 @@ export class SubjectsRepository {
 			data,
 		});
 
-		return plainToInstance(Subject, result);
+		return toDomainEntity(Subject, result);
 	}
 
 	/**
@@ -115,7 +115,7 @@ export class SubjectsRepository {
 			data,
 		});
 
-		return plainToInstance(Subject, result);
+		return toDomainEntity(Subject, result);
 	}
 
 	/**
@@ -129,7 +129,7 @@ export class SubjectsRepository {
 			data: { removedAt: new Date() },
 		});
 
-		return plainToInstance(Subject, result);
+		return toDomainEntity(Subject, result);
 	}
 
 	/**
@@ -146,6 +146,6 @@ export class SubjectsRepository {
 			orderBy: [{ group: "asc" }, { order: "asc" }],
 		});
 
-		return plainToInstance(Subject, results);
+		return toDomainEntity(Subject, results);
 	}
 }

@@ -15,7 +15,7 @@ function onlyUnexpectedPageErrors(pageErrors: string[]) {
 }
 
 const SYSTEM_TENANT_ID = (
-	process.env.E2E_SYSTEM_TENANT_ID ?? "71ddca20-1752-466e-b4da-879ebdbe54e3"
+	process.env.E2E_SYSTEM_TENANT_ID ?? "01J00000000000000000000002"
 ).toLowerCase();
 const ADMIN_API_BASE_URL = new URL(
 	"/api/v1/",

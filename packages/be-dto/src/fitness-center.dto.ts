@@ -3,9 +3,10 @@ import {
 	EnumField,
 	StringField,
 	StringFieldOptional,
-	UUIDField,
+	ULIDField,
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import {
 	type FitnessCenter as FitnessCenterEntity,
 	LanguageCode,
@@ -18,7 +19,7 @@ import { CompanyDto } from "./company.dto";
  * Space별 피트니스센터 상세 응답에서 콘텐츠 언어를 함께 제공하는 최소 Space 정보입니다.
  */
 export class FitnessCenterSpaceDto {
-	@UUIDField()
+	@ULIDField()
 	id: string;
 
 	@EnumField(() => LanguageCode)
@@ -27,7 +28,7 @@ export class FitnessCenterSpaceDto {
 
 export class FitnessCenterDto
 	extends AbstractDto
-	implements FitnessCenterEntity
+	implements DomainEntityModel<FitnessCenterEntity>
 {
 	@StringField()
 	@Expose()
@@ -45,13 +46,13 @@ export class FitnessCenterDto
 	@StringField()
 	email: string;
 
-	@UUIDField()
+	@ULIDField()
 	companyId: string;
 
 	@UUIDFieldOptional({ nullable: true })
 	imageFileId: string | null;
 
-	@UUIDField()
+	@ULIDField()
 	spaceId: string;
 
 	@ClassField(() => CompanyDto, { required: false, nullable: true })

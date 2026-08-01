@@ -1,10 +1,14 @@
 import type { Folder as FolderEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Asset } from "./asset.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
 
-export class Folder extends AbstractEntity implements FolderEntity {
+export class Folder
+	extends AbstractEntity
+	implements DomainEntityModel<FolderEntity>
+{
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================

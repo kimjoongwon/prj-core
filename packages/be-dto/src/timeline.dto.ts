@@ -2,18 +2,22 @@ import {
 	ClassField,
 	StringField,
 	StringFieldOptional,
-	UUIDField,
-	UUIDFieldOptional,
+	ULIDField,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { Timeline } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { SessionDto } from "./session.dto";
 
-export class TimelineDto extends AbstractDto implements Timeline {
-	@UUIDField()
+export class TimelineDto
+	extends AbstractDto
+	implements DomainEntityModel<Timeline>
+{
+	@ULIDField()
 	spaceId: string;
 
-	@UUIDFieldOptional({ nullable: true })
+	@ULIDFieldOptional({ nullable: true })
 	createdById: string | null;
 
 	@StringField()

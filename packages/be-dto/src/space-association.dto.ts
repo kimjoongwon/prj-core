@@ -1,15 +1,16 @@
-import { ClassField, UUIDField } from "@cocrepo/decorator";
+import { ClassField, ULIDField } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { SpaceAssociation } from "@cocrepo/prisma";
 import { AbstractDto, GroupDto } from ".";
 
 export class SpaceAssociationDto
 	extends AbstractDto
-	implements SpaceAssociation
+	implements DomainEntityModel<SpaceAssociation>
 {
-	@UUIDField()
+	@ULIDField()
 	spaceId: string;
 
-	@UUIDField()
+	@ULIDField()
 	groupId: string;
 
 	@ClassField(() => GroupDto, { required: false, swagger: false })

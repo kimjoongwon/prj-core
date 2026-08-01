@@ -1,4 +1,4 @@
-import { RoleCategoryGuard } from "@cocrepo/be-common";
+import { ParseUlidPipe, RoleCategoryGuard } from "@cocrepo/be-common";
 import {
 	CreateActionCommand,
 	DeleteActionCommand,
@@ -30,7 +30,6 @@ import {
 	HttpCode,
 	HttpStatus,
 	Param,
-	ParseUUIDPipe,
 	Patch,
 	Post,
 	Query,
@@ -84,13 +83,13 @@ export class ActionsController {
 	})
 	@ApiParam({
 		name: "id",
-		description: "Action ID (UUID)",
+		description: "Action ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(404, 500)
 	@ApiResponseEntity(ActionDto, HttpStatus.OK)
 	@ResponseMessage("액션 조회 성공")
-	async getActionById(@Param("id", ParseUUIDPipe) id: string) {
+	async getActionById(@Param("id", ParseUlidPipe) id: string) {
 		return this.queryBus.execute(new GetActionByIdQuery(id));
 	}
 
@@ -128,7 +127,7 @@ export class ActionsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "id",
-		description: "Action ID (UUID)",
+		description: "Action ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -145,7 +144,7 @@ export class ActionsController {
 	@ApiResponseEntity(ActionDto, HttpStatus.OK)
 	@ResponseMessage("액션 수정 성공")
 	async updateAction(
-		@Param("id", ParseUUIDPipe) id: string,
+		@Param("id", ParseUlidPipe) id: string,
 		@Body() dto: UpdateActionDto,
 	) {
 		return this.commandBus.execute(new UpdateActionCommand(id, dto));
@@ -164,7 +163,7 @@ export class ActionsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "id",
-		description: "Action ID (UUID)",
+		description: "Action ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(
@@ -176,7 +175,7 @@ export class ActionsController {
 	)
 	@ApiResponseEntity(ActionDto, HttpStatus.OK)
 	@ResponseMessage("액션 삭제 성공")
-	async deleteAction(@Param("id", ParseUUIDPipe) id: string) {
+	async deleteAction(@Param("id", ParseUlidPipe) id: string) {
 		return this.commandBus.execute(new DeleteActionCommand(id));
 	}
 }

@@ -2,7 +2,7 @@ import {
 	DateFieldOptional,
 	EnumFieldOptional,
 	StringFieldOptional,
-	UUIDFieldOptional,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator";
 import { DeleteFilter } from "@cocrepo/enum";
 import { Transform } from "class-transformer";
@@ -50,7 +50,7 @@ export class QueryUsersDto extends QueryDto {
 	})
 	status?: DeleteFilter;
 
-	@UUIDFieldOptional({
+	@ULIDFieldOptional({
 		description: "분류 카테고리 ID",
 	})
 	categoryId?: string;

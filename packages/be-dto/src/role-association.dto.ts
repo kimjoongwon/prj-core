@@ -1,12 +1,16 @@
-import { ClassField, UUIDField } from "@cocrepo/decorator";
+import { ClassField, ULIDField } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { RoleAssociation } from "@cocrepo/prisma";
 import { AbstractDto, GroupDto } from ".";
 
-export class RoleAssociationDto extends AbstractDto implements RoleAssociation {
-	@UUIDField()
+export class RoleAssociationDto
+	extends AbstractDto
+	implements DomainEntityModel<RoleAssociation>
+{
+	@ULIDField()
 	roleId: string;
 
-	@UUIDField()
+	@ULIDField()
 	groupId: string;
 
 	@ClassField(() => GroupDto, { required: false, swagger: false })

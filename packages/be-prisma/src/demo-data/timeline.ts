@@ -14,10 +14,10 @@ export interface TimelineSeedData {
 	seasonTag: "recent" | "mid" | "archive";
 }
 
-// 타임라인 이름은 사람이 읽는 값이고, 실제 재실행 안정성은 고정 UUID인 `id`가 담당합니다.
+// 타임라인 이름은 사람이 읽는 값이고, 실제 재실행 안정성은 고정 ULID인 `id`가 담당합니다.
 export const timelineSeedData: TimelineSeedData[] = [
 	{
-		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f001",
+		id: "01J00000000000000000000101",
 		fitnessCenterName: "F45 광화문",
 		createdByEmail: "manager.gwanghwamun@f45.kr",
 		name: "2026 Q1 출근 전 모닝 리커버리",
@@ -25,7 +25,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 		seasonTag: "recent",
 	},
 	{
-		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f002",
+		id: "01J00000000000000000000102",
 		fitnessCenterName: "F45 광화문",
 		createdByEmail: "manager.gwanghwamun@f45.kr",
 		name: "2025 연말 바디리셋 8주 챌린지",
@@ -33,7 +33,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 		seasonTag: "mid",
 	},
 	{
-		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f003",
+		id: "01J00000000000000000000103",
 		fitnessCenterName: "F45 강남1호",
 		createdByEmail: "manager.gangnam@f45.kr",
 		name: "2026 상반기 런치 메타콘 블록",
@@ -41,7 +41,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 		seasonTag: "recent",
 	},
 	{
-		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f004",
+		id: "01J00000000000000000000104",
 		fitnessCenterName: "F45 강남1호",
 		createdByEmail: "manager.gangnam@f45.kr",
 		name: "2025 Q3 오피스 제휴 애프터워크",
@@ -49,7 +49,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 		seasonTag: "archive",
 	},
 	{
-		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f005",
+		id: "01J00000000000000000000105",
 		fitnessCenterName: "F45 삼성",
 		createdByEmail: "manager.gangnam@f45.kr",
 		name: "2026 신입 멤버 온보딩 사이클",
@@ -57,7 +57,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 		seasonTag: "recent",
 	},
 	{
-		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f006",
+		id: "01J00000000000000000000106",
 		fitnessCenterName: "F45 삼성",
 		createdByEmail: "manager.gangnam@f45.kr",
 		name: "2025 하반기 근지구력 베이스 빌드",
@@ -65,7 +65,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 		seasonTag: "mid",
 	},
 	{
-		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f007",
+		id: "01J00000000000000000000107",
 		fitnessCenterName: "F45 잠실",
 		createdByEmail: "manager.gwanghwamun@f45.kr",
 		name: "2026 주말 패밀리 피트니스 시즌",
@@ -73,7 +73,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 		seasonTag: "recent",
 	},
 	{
-		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f008",
+		id: "01J00000000000000000000108",
 		fitnessCenterName: "F45 잠실",
 		createdByEmail: "manager.gwanghwamun@f45.kr",
 		name: "2025 여름 시즌 프로그램",
@@ -81,7 +81,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 		seasonTag: "archive",
 	},
 	{
-		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f009",
+		id: "01J00000000000000000000109",
 		fitnessCenterName: "크로스핏 이태원",
 		createdByEmail: "manager.itaewon@crossfit.kr",
 		name: "2026 Open 준비반",
@@ -89,7 +89,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 		seasonTag: "recent",
 	},
 	{
-		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f010",
+		id: "01J00000000000000000000110",
 		fitnessCenterName: "크로스핏 이태원",
 		createdByEmail: "manager.itaewon@crossfit.kr",
 		name: "2025 기초 역도 적응반",
@@ -97,7 +97,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 		seasonTag: "mid",
 	},
 	{
-		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f011",
+		id: "01J00000000000000000000111",
 		fitnessCenterName: "크로스핏 마포",
 		createdByEmail: "manager.itaewon@crossfit.kr",
 		name: "2026 커뮤니티 팀 WOD 시즌",
@@ -105,7 +105,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 		seasonTag: "recent",
 	},
 	{
-		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f012",
+		id: "01J00000000000000000000112",
 		fitnessCenterName: "크로스핏 마포",
 		createdByEmail: "manager.itaewon@crossfit.kr",
 		name: "2025 입문자 스케일드 트랙",
@@ -113,7 +113,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 		seasonTag: "archive",
 	},
 	{
-		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f013",
+		id: "01J00000000000000000000113",
 		fitnessCenterName: "애니타임피트니스 역삼",
 		createdByEmail: "manager.gangnam@f45.kr",
 		name: "2026 체지방 감량 부트캠프",
@@ -121,7 +121,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 		seasonTag: "recent",
 	},
 	{
-		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f014",
+		id: "01J00000000000000000000114",
 		fitnessCenterName: "애니타임피트니스 신논현",
 		createdByEmail: "manager.gangnam@f45.kr",
 		name: "2025 하반기 근지구력 강화",
@@ -129,7 +129,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 		seasonTag: "mid",
 	},
 	{
-		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f015",
+		id: "01J00000000000000000000115",
 		fitnessCenterName: "스포애니 홍대",
 		createdByEmail: "manager.itaewon@crossfit.kr",
 		name: "2026 새벽 클래스 파일럿",
@@ -137,7 +137,7 @@ export const timelineSeedData: TimelineSeedData[] = [
 		seasonTag: "recent",
 	},
 	{
-		id: "6f3d4a4c-b130-43a9-9dd6-3ba76ef7f016",
+		id: "01J00000000000000000000116",
 		fitnessCenterName: "스포애니 건대",
 		createdByEmail: "manager.itaewon@crossfit.kr",
 		name: "2025 야간 직장인 스트렝스 라인",

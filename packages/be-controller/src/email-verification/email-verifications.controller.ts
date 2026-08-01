@@ -1,3 +1,4 @@
+import { ParseUlidPipe } from "@cocrepo/be-common";
 import {
 	GetEmailVerificationsQuery,
 	ResendEmailVerificationCommand,
@@ -22,7 +23,6 @@ import {
 	HttpCode,
 	HttpStatus,
 	Param,
-	ParseUUIDPipe,
 	Post,
 	Query,
 } from "@nestjs/common";
@@ -75,7 +75,7 @@ export class EmailVerificationsController {
 	@ApiResponseEntity(EmailVerificationDto, HttpStatus.OK)
 	@ResponseMessage("이메일 인증 메일을 재발송했습니다.")
 	resendEmailVerification(
-		@Param("emailVerificationId", ParseUUIDPipe) emailVerificationId: string,
+		@Param("emailVerificationId", ParseUlidPipe) emailVerificationId: string,
 	) {
 		return this.commandBus.execute(
 			new ResendEmailVerificationCommand(emailVerificationId),

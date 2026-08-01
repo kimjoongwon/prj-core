@@ -3,7 +3,8 @@
 // @description: 인증·세션 규칙을 제공하는 전역 보안 정책 카탈로그
 /// @displayName 보안 정책
 model SecurityPolicy {
-  id        String    @id @default(uuid())
+  id        String    @unique @default(ulid()) @db.VarChar(26)
+  seq       Int       @id @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   /// @displayName 정책 키

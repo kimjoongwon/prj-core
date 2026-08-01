@@ -2,10 +2,14 @@ import type { AlbumEntry as AlbumEntryEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Album } from "./album.entity";
 import type { Asset } from "./asset.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
 
-export class AlbumEntry extends AbstractEntity implements AlbumEntryEntity {
+export class AlbumEntry
+	extends AbstractEntity
+	implements DomainEntityModel<AlbumEntryEntity>
+{
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================

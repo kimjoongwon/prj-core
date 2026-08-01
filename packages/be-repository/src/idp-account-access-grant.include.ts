@@ -1,6 +1,8 @@
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { Prisma } from "@cocrepo/prisma";
 
 export const IDP_ACCOUNT_ACCESS_GRANT_INCLUDE = {
+	user: { select: { id: true } },
 	space: {
 		include: {
 			fitnessCenter: {
@@ -13,6 +15,13 @@ export const IDP_ACCOUNT_ACCESS_GRANT_INCLUDE = {
 	role: true,
 } as unknown as Prisma.TenantInclude;
 
-export type IdpAccountAccessGrantRecord = Prisma.TenantGetPayload<{
+type IdpAccountAccessGrantPersistenceRecord = Prisma.TenantGetPayload<{
 	include: typeof IDP_ACCOUNT_ACCESS_GRANT_INCLUDE;
 }>;
+
+export type IdpAccountAccessGrantRecord =
+	DomainEntityModel<IdpAccountAccessGrantPersistenceRecord> & {
+		userId: string;
+		spaceId: string;
+		roleId: string;
+	};

@@ -2,7 +2,7 @@ import { getAdminSpaceRequestHeaders } from "@cocrepo/e2e";
 import { expect, type Page, test } from "@playwright/test";
 
 const SYSTEM_TENANT_ID =
-	process.env.E2E_SYSTEM_TENANT_ID ?? "71ddca20-1752-466e-b4da-879ebdbe54e3";
+	process.env.E2E_SYSTEM_TENANT_ID ?? "01J00000000000000000000002";
 const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_TENANT_ID);
 
 test.describe("Subject 상세 페이지", () => {

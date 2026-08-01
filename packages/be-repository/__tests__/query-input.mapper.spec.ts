@@ -26,8 +26,8 @@ describe("QueryInput mapper", () => {
 				search: "photo",
 			}),
 		).toEqual({
-			folderId: "folder-1",
-			spaceId: "space-1",
+			folder: { id: "folder-1" },
+			space: { id: "space-1" },
 			kind: AssetKind.IMAGE,
 			status: AssetStatus.READY,
 			originalName: { contains: "photo", mode: "insensitive" },
@@ -69,10 +69,10 @@ describe("QueryInput mapper", () => {
 			}),
 		).toEqual({
 			removedAt: null,
-			classification: { categoryId: "category-1" },
+			classification: { category: { id: "category-1" } },
 			associations: {
 				some: {
-					groupId: { in: ["group-1", "group-2"] },
+					group: { id: { in: ["group-1", "group-2"] } },
 					removedAt: null,
 				},
 			},
@@ -118,7 +118,7 @@ describe("QueryInput mapper", () => {
 				spaceId: "space-1",
 			}),
 		).toEqual({
-			spaceId: "space-1",
+			space: { id: "space-1" },
 			OR: [
 				{ requester: { name: { contains: "club", mode: "insensitive" } } },
 				{ requester: { email: { contains: "club", mode: "insensitive" } } },

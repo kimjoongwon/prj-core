@@ -1,6 +1,7 @@
 import type { Policy as PolicyEntity } from "@cocrepo/prisma";
 import { Type } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import { PolicyEntry } from "./policy-entry.entity";
 import { RoleAssignment } from "./role-assignment.entity";
 import type { Space } from "./space.entity";
@@ -11,7 +12,10 @@ import type { User } from "./user.entity";
  *
  * Space별로 여러 Ability를 묶어 Role에 할당하는 권한 정책입니다.
  */
-export class Policy extends AbstractEntity implements PolicyEntity {
+export class Policy
+	extends AbstractEntity
+	implements DomainEntityModel<PolicyEntity>
+{
 	spaceId!: string;
 	createdById!: string | null;
 	name!: string;

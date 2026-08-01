@@ -4,8 +4,8 @@ import {
 	EnumField,
 	NumberField,
 	StringField,
-	UUIDField,
-	UUIDFieldOptional,
+	ULIDField,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator";
 import { InquiryParticipantRole } from "@cocrepo/prisma";
 import { AbstractDto } from "../abstract.dto";
@@ -14,13 +14,13 @@ import { AbstractDto } from "../abstract.dto";
  * 문의 참여자 DTO
  */
 export class InquiryParticipantDto extends AbstractDto {
-	@UUIDField({ description: "소속 문의 ID" })
+	@ULIDField({ description: "소속 문의 ID" })
 	inquiryId!: string;
 
-	@UUIDFieldOptional({ description: "소속 스레드 ID" })
+	@ULIDFieldOptional({ description: "소속 스레드 ID" })
 	threadId!: string | null;
 
-	@UUIDField({ description: "참여자 ID" })
+	@ULIDField({ description: "참여자 ID" })
 	userId!: string;
 
 	@StringField({ description: "참여자 이름" })

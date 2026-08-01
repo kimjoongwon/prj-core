@@ -3,9 +3,10 @@ import {
 	DateField,
 	EnumField,
 	StringFieldOptional,
-	UUIDField,
-	UUIDFieldOptional,
+	ULIDField,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { TenantAccessRequest } from "@cocrepo/prisma";
 import { TenantAccessRequestStatus } from "@cocrepo/prisma";
 import { AbstractDto } from "../../abstract.dto";
@@ -16,18 +17,18 @@ import { UserDto } from "../../user.dto";
 
 export class TenantAccessRequestDto
 	extends AbstractDto
-	implements TenantAccessRequest
+	implements DomainEntityModel<TenantAccessRequest>
 {
-	@UUIDField({ description: "신청자 ID" })
+	@ULIDField({ description: "신청자 ID" })
 	requesterId!: string;
 
-	@UUIDField({ description: "신청 대상 Space ID" })
+	@ULIDField({ description: "신청 대상 Space ID" })
 	spaceId!: string;
 
-	@UUIDField({ description: "희망 Role ID" })
+	@ULIDField({ description: "희망 Role ID" })
 	requestedRoleId!: string;
 
-	@UUIDFieldOptional({
+	@ULIDFieldOptional({
 		description: "신청 시점 기존 Role ID",
 		nullable: true,
 	})
@@ -44,7 +45,7 @@ export class TenantAccessRequestDto
 	})
 	status!: TenantAccessRequestStatus;
 
-	@UUIDFieldOptional({
+	@ULIDFieldOptional({
 		description: "검토자 ID",
 		nullable: true,
 	})
@@ -62,7 +63,7 @@ export class TenantAccessRequestDto
 	})
 	reviewedAt!: Date | null;
 
-	@UUIDFieldOptional({
+	@ULIDFieldOptional({
 		description: "승인 적용 Tenant ID",
 		nullable: true,
 	})

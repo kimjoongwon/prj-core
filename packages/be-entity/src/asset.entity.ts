@@ -9,13 +9,17 @@ import type { Album } from "./album.entity";
 import type { AlbumEntry } from "./album-entry.entity";
 import type { Derivative } from "./derivative.entity";
 import type { Document } from "./document.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Folder } from "./folder.entity";
 import type { Image } from "./image.entity";
 import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
 import type { Video } from "./video.entity";
 
-export class Asset extends AbstractEntity implements AssetEntity {
+export class Asset
+	extends AbstractEntity
+	implements DomainEntityModel<AssetEntity>
+{
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================

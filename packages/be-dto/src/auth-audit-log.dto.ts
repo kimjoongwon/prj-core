@@ -3,13 +3,14 @@ import {
 	EnumField,
 	StringField,
 	StringFieldOptional,
-	UUIDField,
-	UUIDFieldOptional,
+	ULIDField,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import { type AuthAuditLog, AuthAuditResult } from "@cocrepo/prisma";
 
-export class AuthAuditLogDto implements AuthAuditLog {
-	@UUIDField({ description: "ID" })
+export class AuthAuditLogDto implements DomainEntityModel<AuthAuditLog> {
+	@ULIDField({ description: "ID" })
 	id!: string;
 
 	@DateField({ description: "생성일" })
@@ -18,7 +19,7 @@ export class AuthAuditLogDto implements AuthAuditLog {
 	@StringField({ description: "이메일" })
 	email!: string;
 
-	@UUIDFieldOptional({ nullable: true, description: "사용자 ID" })
+	@ULIDFieldOptional({ nullable: true, description: "사용자 ID" })
 	userId!: string | null;
 
 	@EnumField(() => AuthAuditResult, { description: "결과" })

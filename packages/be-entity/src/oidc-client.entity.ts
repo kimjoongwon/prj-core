@@ -1,9 +1,12 @@
 import type { OidcClient as OidcClientEntity } from "@cocrepo/prisma";
 import type { JsonValue } from "@cocrepo/type";
-
 import { AbstractEntity } from "./abstract.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 
-export class OidcClient extends AbstractEntity implements OidcClientEntity {
+export class OidcClient
+	extends AbstractEntity
+	implements DomainEntityModel<OidcClientEntity>
+{
 	clientId!: string;
 	clientSecret!: string | null;
 	name!: string;

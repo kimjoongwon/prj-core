@@ -1,4 +1,4 @@
-import { RolesGuard } from "@cocrepo/be-common";
+import { ParseUlidPipe, RolesGuard } from "@cocrepo/be-common";
 import {
 	ArchiveServiceDocumentCommand,
 	CreateServiceDocumentCommand,
@@ -29,7 +29,6 @@ import {
 	HttpCode,
 	HttpStatus,
 	Param,
-	ParseUUIDPipe,
 	Patch,
 	Post,
 	Query,
@@ -98,7 +97,7 @@ export class ServiceDocumentsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "serviceDocumentId",
-		description: "서비스 문서 ID (UUID)",
+		description: "서비스 문서 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -109,7 +108,7 @@ export class ServiceDocumentsController {
 	@ApiResponseEntity(ServiceDocumentDto, HttpStatus.OK)
 	@ResponseMessage("서비스 문서 수정 성공")
 	updateServiceDocument(
-		@Param("serviceDocumentId", ParseUUIDPipe) serviceDocumentId: string,
+		@Param("serviceDocumentId", ParseUlidPipe) serviceDocumentId: string,
 		@Body() dto: UpdateServiceDocumentDto,
 	) {
 		return this.commandBus.execute(
@@ -130,14 +129,14 @@ export class ServiceDocumentsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "serviceDocumentId",
-		description: "서비스 문서 ID (UUID)",
+		description: "서비스 문서 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(400, 401, 403, 404, 500)
 	@ApiResponseEntity(ServiceDocumentDto, HttpStatus.OK)
 	@ResponseMessage("서비스 문서 게시 성공")
 	publishServiceDocument(
-		@Param("serviceDocumentId", ParseUUIDPipe) serviceDocumentId: string,
+		@Param("serviceDocumentId", ParseUlidPipe) serviceDocumentId: string,
 	) {
 		return this.commandBus.execute(
 			new PublishServiceDocumentCommand(serviceDocumentId),
@@ -156,14 +155,14 @@ export class ServiceDocumentsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "serviceDocumentId",
-		description: "서비스 문서 ID (UUID)",
+		description: "서비스 문서 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)
 	@ApiResponseEntity(ServiceDocumentDto, HttpStatus.OK)
 	@ResponseMessage("서비스 문서 보관 성공")
 	archiveServiceDocument(
-		@Param("serviceDocumentId", ParseUUIDPipe) serviceDocumentId: string,
+		@Param("serviceDocumentId", ParseUlidPipe) serviceDocumentId: string,
 	) {
 		return this.commandBus.execute(
 			new ArchiveServiceDocumentCommand(serviceDocumentId),
@@ -182,13 +181,13 @@ export class ServiceDocumentsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "serviceDocumentId",
-		description: "서비스 문서 ID (UUID)",
+		description: "서비스 문서 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)
 	@ResponseMessage("서비스 문서 삭제 성공")
 	async deleteServiceDocument(
-		@Param("serviceDocumentId", ParseUUIDPipe) serviceDocumentId: string,
+		@Param("serviceDocumentId", ParseUlidPipe) serviceDocumentId: string,
 	): Promise<void> {
 		await this.commandBus.execute(
 			new DeleteServiceDocumentCommand(serviceDocumentId),

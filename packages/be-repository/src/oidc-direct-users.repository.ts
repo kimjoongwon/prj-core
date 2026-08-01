@@ -109,7 +109,7 @@ export class OidcDirectUsersRepository {
 			await prisma.authAuditLog.create({
 				data: {
 					email: data.email,
-					userId: data.userId ?? null,
+					...(data.userId ? { user: { connect: { id: data.userId } } } : {}),
 					result: data.result,
 					failureReason: data.failureReason ?? null,
 					ipAddress: data.ipAddress,

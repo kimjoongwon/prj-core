@@ -3,7 +3,8 @@
 // @description: OIDC provider가 참조하는 전역 모델 저장 카탈로그
 /// @displayName OIDC 모델
 model OidcModel {
-  id        String    @id @default(uuid())
+  id        String    @unique @default(ulid()) @db.VarChar(26)
+  seq       Int       @id @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   /// @displayName 모델 키 (jti 또는 uid)

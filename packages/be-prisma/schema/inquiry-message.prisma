@@ -2,15 +2,16 @@
 // @description: InquiryThread에 종속되는 개별 메시지
 /// @displayName 문의 메시지
 model InquiryMessage {
-  id                String              @id @default(uuid())
+  id                String              @unique @default(ulid()) @db.VarChar(26)
+  seq               Int                 @id @default(autoincrement())
   /// @displayName 생성 일시
   createdAt         DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
-  /// @displayName 소속 스레드 ID
-  threadId          String              @map("thread_id")
-  /// @displayName 소속 문의 ID
-  inquiryId         String              @map("inquiry_id")
-  /// @displayName 발신자 ID
-  senderId          String?             @map("sender_id")
+  /// @displayName 소속 스레드 내부 순번
+  threadSeq         Int                 @map("thread_seq")
+  /// @displayName 소속 문의 내부 순번
+  inquirySeq        Int                 @map("inquiry_seq")
+  /// @displayName 발신자 내부 순번
+  senderSeq         Int?                @map("sender_seq")
   /// @displayName 발신자 유형
   senderType        SenderType          @default(USER)
   /// @displayName 클라이언트 메시지 ID
@@ -31,16 +32,16 @@ model InquiryMessage {
   isDeleted         Boolean             @default(false) @map("is_deleted")
   /// @displayName 추가 메타데이터
   metadata          Json?
-  thread            InquiryThread       @relation(fields: [threadId], references: [id], onDelete: Cascade)
-  inquiry           Inquiry             @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
-  sender            User?               @relation(fields: [senderId], references: [id])
+  thread            InquiryThread       @relation(fields: [threadSeq], references: [seq], onDelete: Cascade)
+  inquiry           Inquiry             @relation(fields: [inquirySeq], references: [seq], onDelete: Cascade)
+  sender            User?               @relation(fields: [senderSeq], references: [seq])
   attachments       InquiryAttachment[]
   sentimentAnalysis SentimentAnalysis?  @relation("SentimentAnalysisMessage")
   aiAgentLog        AIAgentLog?
 
-  @@unique([threadId, clientMessageId])
-  @@index([threadId])
-  @@index([inquiryId])
-  @@index([senderId])
+  @@unique([threadSeq, clientMessageId])
+  @@index([threadSeq])
+  @@index([inquirySeq])
+  @@index([senderSeq])
   @@map("inquiry_messages")
 }

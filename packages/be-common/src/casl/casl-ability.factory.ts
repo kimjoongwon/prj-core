@@ -8,12 +8,7 @@
 
 import { Ability, AbilityBuilder } from "@casl/ability";
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import type { RoleAssignment } from "@cocrepo/entity";
-import type {
-	Ability as PrismaAbility,
-	Action as PrismaAction,
-	Subject as PrismaSubject,
-} from "@cocrepo/prisma";
+import type { Ability as DomainAbility, RoleAssignment } from "@cocrepo/entity";
 import { RoleAssignmentsRepository } from "@cocrepo/repository";
 import type { ContextTenantSnapshot, ContextUserSnapshot } from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
@@ -34,11 +29,12 @@ import type { Actions, AppAbility, AppAbilityClass, Subjects } from "./types";
  * Prisma의 데이터 타입에 관계 필드와 required priority를 추가한
  * 구조적 타입을 사용합니다.
  */
-type AbilityWithPriority = PrismaAbility & {
+type AbilityWithPriority = Pick<
+	DomainAbility,
+	"id" | "conditions" | "inverted" | "subject" | "action"
+> & {
 	priority: number;
 	assignmentCreatedAt?: Date;
-	subject?: PrismaSubject;
-	action?: PrismaAction;
 };
 
 /**
@@ -200,9 +196,7 @@ export class CaslAbilityFactory {
 		return policyEntries
 			.filter((policyEntry) => policyEntry.ability)
 			.map((policyEntry) => ({
-				...(policyEntry.ability! as unknown as PrismaAbility),
-				subject: policyEntry.ability!.subject as PrismaSubject | undefined,
-				action: policyEntry.ability!.action as PrismaAction | undefined,
+				...policyEntry.ability!,
 				priority: assignment.priority,
 				assignmentCreatedAt: assignment.createdAt,
 			}));

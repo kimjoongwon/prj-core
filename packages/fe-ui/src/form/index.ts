@@ -21,5 +21,6 @@ export * from "./TemplateForm";
 export * from "./TimelineForm";
 export * from "./TimelineSessionForm";
 export * from "./TimelineSessionProgramForm";
+export * from "./UserForm";
 export * from "./VariableEditTable";
 export * from "./VariableInputForm";

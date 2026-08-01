@@ -4,8 +4,9 @@ import {
 	DateFieldOptional,
 	StringField,
 	StringFieldOptional,
-	UUIDField,
+	ULIDField,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { TemplateVariable } from "@cocrepo/prisma";
 
 /**
@@ -14,8 +15,10 @@ import type { TemplateVariable } from "@cocrepo/prisma";
  * TemplateVariable은 removedAt이 없으므로 AbstractDto를 상속하지 않고
  * id, createdAt, updatedAt을 직접 선언합니다.
  */
-export class TemplateVariableDto implements TemplateVariable {
-	@UUIDField({ description: "ID" })
+export class TemplateVariableDto
+	implements DomainEntityModel<TemplateVariable>
+{
+	@ULIDField({ description: "ID" })
 	id!: string;
 
 	@DateField({ description: "생성일" })
@@ -36,6 +39,6 @@ export class TemplateVariableDto implements TemplateVariable {
 	@BooleanField({ description: "필수 여부" })
 	isRequired!: boolean;
 
-	@UUIDField({ description: "템플릿 ID" })
+	@ULIDField({ description: "템플릿 ID" })
 	templateId!: string;
 }

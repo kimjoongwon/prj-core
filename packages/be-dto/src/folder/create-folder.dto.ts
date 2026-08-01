@@ -1,10 +1,10 @@
-import { StringField, UUIDFieldOptional } from "@cocrepo/decorator";
+import { StringField, ULIDFieldOptional } from "@cocrepo/decorator";
 
 /**
  * 폴더 생성 DTO
  */
 export class CreateFolderDto {
-	@UUIDFieldOptional({
+	@ULIDFieldOptional({
 		nullable: true,
 		description: "부모 폴더 ID (루트면 null)",
 	})

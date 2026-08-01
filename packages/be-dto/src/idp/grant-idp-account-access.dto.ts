@@ -1,9 +1,9 @@
-import { UUIDField } from "@cocrepo/decorator";
+import { ULIDField } from "@cocrepo/decorator";
 
 export class GrantIdpAccountAccessDto {
-	@UUIDField({ description: "권한을 부여할 Space ID" })
+	@ULIDField({ description: "권한을 부여할 Space ID" })
 	spaceId!: string;
 
-	@UUIDField({ description: "부여할 Role ID" })
+	@ULIDField({ description: "부여할 Role ID" })
 	roleId!: string;
 }

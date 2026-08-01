@@ -1,1 +1,1 @@
-export const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
+export const SYSTEM_SPACE_ID = "01J00000000000000000000001";

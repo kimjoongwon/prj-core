@@ -6,9 +6,11 @@ import { PolicyEntriesRepository } from "../src/policy-entries.repository";
 describe("PolicyEntriesRepository", () => {
 	let repository: PolicyEntriesRepository;
 	const policyEntry = {
+		findFirst: jest.fn(),
 		findMany: jest.fn(),
+		create: jest.fn(),
+		update: jest.fn(),
 		updateMany: jest.fn(),
-		upsert: jest.fn(),
 	};
 
 	beforeEach(async () => {
@@ -42,11 +44,12 @@ describe("PolicyEntriesRepository", () => {
 
 		expect(policyEntry.findMany).toHaveBeenCalledWith({
 			where: {
-				policyId: "policy-id",
+				policy: { id: "policy-id" },
 				removedAt: null,
 				ability: { removedAt: null },
 			},
 			include: {
+				policy: { select: { id: true } },
 				ability: {
 					include: {
 						subject: true,
@@ -61,26 +64,19 @@ describe("PolicyEntriesRepository", () => {
 
 	it("같은 Ability가 중복 입력되면 Entry 하나만 복원해야 한다", async () => {
 		policyEntry.updateMany.mockResolvedValue({ count: 0 });
-		policyEntry.upsert.mockResolvedValue({});
+		policyEntry.findFirst.mockResolvedValue(null);
+		policyEntry.create.mockResolvedValue({});
 		policyEntry.findMany.mockResolvedValue([]);
 
 		await repository.syncByPolicyId("policy-id", ["ability-id", "ability-id"]);
 
-		expect(policyEntry.upsert).toHaveBeenCalledTimes(1);
-		expect(policyEntry.upsert).toHaveBeenCalledWith({
-			where: {
-				policyId_abilityId: {
-					policyId: "policy-id",
-					abilityId: "ability-id",
-				},
-			},
-			create: {
-				policyId: "policy-id",
-				abilityId: "ability-id",
-			},
-			update: {
-				removedAt: null,
+		expect(policyEntry.create).toHaveBeenCalledTimes(1);
+		expect(policyEntry.create).toHaveBeenCalledWith({
+			data: {
+				policy: { connect: { id: "policy-id" } },
+				ability: { connect: { id: "ability-id" } },
 			},
 		});
+		expect(policyEntry.update).not.toHaveBeenCalled();
 	});
 });

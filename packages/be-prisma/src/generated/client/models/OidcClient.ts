@@ -20,12 +20,23 @@ export type OidcClientModel = runtime.Types.Result.DefaultSelection<Prisma.$Oidc
 
 export type AggregateOidcClient = {
   _count: OidcClientCountAggregateOutputType | null
+  _avg: OidcClientAvgAggregateOutputType | null
+  _sum: OidcClientSumAggregateOutputType | null
   _min: OidcClientMinAggregateOutputType | null
   _max: OidcClientMaxAggregateOutputType | null
 }
 
+export type OidcClientAvgAggregateOutputType = {
+  seq: number | null
+}
+
+export type OidcClientSumAggregateOutputType = {
+  seq: number | null
+}
+
 export type OidcClientMinAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -46,6 +57,7 @@ export type OidcClientMinAggregateOutputType = {
 
 export type OidcClientMaxAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -66,6 +78,7 @@ export type OidcClientMaxAggregateOutputType = {
 
 export type OidcClientCountAggregateOutputType = {
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -90,8 +103,17 @@ export type OidcClientCountAggregateOutputType = {
 }
 
 
+export type OidcClientAvgAggregateInputType = {
+  seq?: true
+}
+
+export type OidcClientSumAggregateInputType = {
+  seq?: true
+}
+
 export type OidcClientMinAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -112,6 +134,7 @@ export type OidcClientMinAggregateInputType = {
 
 export type OidcClientMaxAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -132,6 +155,7 @@ export type OidcClientMaxAggregateInputType = {
 
 export type OidcClientCountAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -193,6 +217,18 @@ export type OidcClientAggregateArgs<ExtArgs extends runtime.Types.Extensions.Int
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: OidcClientAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: OidcClientSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: OidcClientMinAggregateInputType
@@ -223,12 +259,15 @@ export type OidcClientGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   _count?: OidcClientCountAggregateInputType | true
+  _avg?: OidcClientAvgAggregateInputType
+  _sum?: OidcClientSumAggregateInputType
   _min?: OidcClientMinAggregateInputType
   _max?: OidcClientMaxAggregateInputType
 }
 
 export type OidcClientGroupByOutputType = {
   id: string
+  seq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
@@ -250,6 +289,8 @@ export type OidcClientGroupByOutputType = {
   policyUri: string | null
   tosUri: string | null
   _count: OidcClientCountAggregateOutputType | null
+  _avg: OidcClientAvgAggregateOutputType | null
+  _sum: OidcClientSumAggregateOutputType | null
   _min: OidcClientMinAggregateOutputType | null
   _max: OidcClientMaxAggregateOutputType | null
 }
@@ -274,6 +315,7 @@ export type OidcClientWhereInput = {
   OR?: Prisma.OidcClientWhereInput[]
   NOT?: Prisma.OidcClientWhereInput | Prisma.OidcClientWhereInput[]
   id?: Prisma.StringFilter<"OidcClient"> | string
+  seq?: Prisma.IntFilter<"OidcClient"> | number
   createdAt?: Prisma.DateTimeFilter<"OidcClient"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"OidcClient"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"OidcClient"> | Date | string | null
@@ -298,6 +340,7 @@ export type OidcClientWhereInput = {
 
 export type OidcClientOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -322,6 +365,7 @@ export type OidcClientOrderByWithRelationInput = {
 
 export type OidcClientWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  seq?: number
   clientId?: string
   AND?: Prisma.OidcClientWhereInput | Prisma.OidcClientWhereInput[]
   OR?: Prisma.OidcClientWhereInput[]
@@ -345,10 +389,11 @@ export type OidcClientWhereUniqueInput = Prisma.AtLeast<{
   logoUri?: Prisma.StringNullableFilter<"OidcClient"> | string | null
   policyUri?: Prisma.StringNullableFilter<"OidcClient"> | string | null
   tosUri?: Prisma.StringNullableFilter<"OidcClient"> | string | null
-}, "id" | "clientId">
+}, "seq" | "id" | "clientId">
 
 export type OidcClientOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -370,8 +415,10 @@ export type OidcClientOrderByWithAggregationInput = {
   policyUri?: Prisma.SortOrderInput | Prisma.SortOrder
   tosUri?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.OidcClientCountOrderByAggregateInput
+  _avg?: Prisma.OidcClientAvgOrderByAggregateInput
   _max?: Prisma.OidcClientMaxOrderByAggregateInput
   _min?: Prisma.OidcClientMinOrderByAggregateInput
+  _sum?: Prisma.OidcClientSumOrderByAggregateInput
 }
 
 export type OidcClientScalarWhereWithAggregatesInput = {
@@ -379,6 +426,7 @@ export type OidcClientScalarWhereWithAggregatesInput = {
   OR?: Prisma.OidcClientScalarWhereWithAggregatesInput[]
   NOT?: Prisma.OidcClientScalarWhereWithAggregatesInput | Prisma.OidcClientScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"OidcClient"> | string
+  seq?: Prisma.IntWithAggregatesFilter<"OidcClient"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"OidcClient"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"OidcClient"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"OidcClient"> | Date | string | null
@@ -427,6 +475,7 @@ export type OidcClientCreateInput = {
 
 export type OidcClientUncheckedCreateInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -475,6 +524,7 @@ export type OidcClientUpdateInput = {
 
 export type OidcClientUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -499,6 +549,7 @@ export type OidcClientUncheckedUpdateInput = {
 
 export type OidcClientCreateManyInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -547,6 +598,7 @@ export type OidcClientUpdateManyMutationInput = {
 
 export type OidcClientUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -571,6 +623,7 @@ export type OidcClientUncheckedUpdateManyInput = {
 
 export type OidcClientCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -593,8 +646,13 @@ export type OidcClientCountOrderByAggregateInput = {
   tosUri?: Prisma.SortOrder
 }
 
+export type OidcClientAvgOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+}
+
 export type OidcClientMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -615,6 +673,7 @@ export type OidcClientMaxOrderByAggregateInput = {
 
 export type OidcClientMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -631,6 +690,10 @@ export type OidcClientMinOrderByAggregateInput = {
   logoUri?: Prisma.SortOrder
   policyUri?: Prisma.SortOrder
   tosUri?: Prisma.SortOrder
+}
+
+export type OidcClientSumOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
 }
 
 export type OidcClientCreateredirectUrisInput = {
@@ -664,6 +727,7 @@ export type OidcClientUpdateresponseTypesInput = {
 
 export type OidcClientSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -688,6 +752,7 @@ export type OidcClientSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type OidcClientSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -712,6 +777,7 @@ export type OidcClientSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
 
 export type OidcClientSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -736,6 +802,7 @@ export type OidcClientSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
 
 export type OidcClientSelectScalar = {
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -758,13 +825,14 @@ export type OidcClientSelectScalar = {
   tosUri?: boolean
 }
 
-export type OidcClientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "clientId" | "clientSecret" | "name" | "redirectUris" | "loginUrl" | "defaultReturnTo" | "grantTypes" | "responseTypes" | "tokenEndpointAuthMethod" | "scope" | "isActive" | "isFirstParty" | "skipConsent" | "loginUi" | "logoUri" | "policyUri" | "tosUri", ExtArgs["result"]["oidcClient"]>
+export type OidcClientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "clientId" | "clientSecret" | "name" | "redirectUris" | "loginUrl" | "defaultReturnTo" | "grantTypes" | "responseTypes" | "tokenEndpointAuthMethod" | "scope" | "isActive" | "isFirstParty" | "skipConsent" | "loginUi" | "logoUri" | "policyUri" | "tosUri", ExtArgs["result"]["oidcClient"]>
 
 export type $OidcClientPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "OidcClient"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    seq: number
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -1260,6 +1328,7 @@ export interface Prisma__OidcClientClient<T, Null = never, ExtArgs extends runti
  */
 export interface OidcClientFieldRefs {
   readonly id: Prisma.FieldRef<"OidcClient", 'String'>
+  readonly seq: Prisma.FieldRef<"OidcClient", 'Int'>
   readonly createdAt: Prisma.FieldRef<"OidcClient", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"OidcClient", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"OidcClient", 'DateTime'>

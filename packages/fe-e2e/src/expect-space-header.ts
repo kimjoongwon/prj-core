@@ -1,7 +1,7 @@
 import type { E2ERouteLike } from "./e2e-route-like";
 
 const DEFAULT_SYSTEM_TENANT_ID =
-	process.env.E2E_SYSTEM_TENANT_ID ?? "71ddca20-1752-466e-b4da-879ebdbe54e3";
+	process.env.E2E_SYSTEM_TENANT_ID ?? "01J00000000000000000000002";
 
 export function expectSpaceHeader(
 	route: E2ERouteLike,

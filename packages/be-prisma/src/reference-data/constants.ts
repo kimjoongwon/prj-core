@@ -1,4 +1,4 @@
-export const SYSTEM_SPACE_ID = "61ddca20-1752-466e-b4da-879ebdbe54e3";
-export const SYSTEM_TENANT_ID = "71ddca20-1752-466e-b4da-879ebdbe54e3";
+export const SYSTEM_SPACE_ID = "01J00000000000000000000001";
+export const SYSTEM_TENANT_ID = "01J00000000000000000000002";
 
 export const REFERENCE_DATA_HISTORY_TABLE = "reference_data_migration_history";

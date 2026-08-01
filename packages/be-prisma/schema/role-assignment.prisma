@@ -2,26 +2,27 @@
 // @description: Role에 Policy를 할당하고 활성 상태와 우선순위를 관리
 /// @displayName 역할의 정책 할당
 model RoleAssignment {
-  id        String    @id @default(uuid())
+  id        String    @unique @default(ulid()) @db.VarChar(26)
+  seq       Int       @id @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
 
-  /// @displayName 역할 ID
-  roleId   String  @map("role_id")
-  /// @displayName 정책 ID
-  policyId String  @map("policy_id")
+  /// @displayName 역할 내부 순번
+  roleSeq   Int     @map("role_seq")
+  /// @displayName 정책 내부 순번
+  policySeq Int     @map("policy_seq")
   /// @displayName 활성화 여부
-  isActive Boolean @default(true) @map("is_active")
+  isActive  Boolean @default(true) @map("is_active")
   /// @displayName 우선순위
-  priority Int     @default(0)
+  priority  Int     @default(0)
 
-  role   Role   @relation(fields: [roleId], references: [id])
-  policy Policy @relation(fields: [policyId], references: [id])
+  role   Role   @relation(fields: [roleSeq], references: [seq])
+  policy Policy @relation(fields: [policySeq], references: [seq])
 
-  @@unique([roleId, policyId])
-  @@index([roleId])
-  @@index([policyId])
+  @@unique([roleSeq, policySeq])
+  @@index([roleSeq])
+  @@index([policySeq])
   @@index([isActive])
   @@map("role_assignments")
 }

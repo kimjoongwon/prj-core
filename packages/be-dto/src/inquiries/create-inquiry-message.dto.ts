@@ -1,6 +1,7 @@
 import {
 	EnumFieldOptional,
 	StringField,
+	ULIDFieldOptional,
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
 import { MessageContentType, SenderType } from "@cocrepo/prisma";
@@ -9,7 +10,7 @@ import { MessageContentType, SenderType } from "@cocrepo/prisma";
  * 문의 메시지 생성 DTO
  */
 export class CreateInquiryMessageDto {
-	@UUIDFieldOptional({
+	@ULIDFieldOptional({
 		description: "스레드 ID (미지정 시 기본 스레드)",
 	})
 	threadId?: string;

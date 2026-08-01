@@ -21,7 +21,7 @@ describe("SpacesRepository", () => {
 				update: jest.Mock;
 			};
 			fitnessCenter: {
-				findUnique: jest.Mock;
+				findFirst: jest.Mock;
 				create: jest.Mock;
 				update: jest.Mock;
 			};
@@ -68,6 +68,7 @@ describe("SpacesRepository", () => {
 			imageFileId: null,
 			removedAt: null,
 			company: mockCompanyData,
+			space: mockSpaceData,
 		},
 	};
 
@@ -86,6 +87,7 @@ describe("SpacesRepository", () => {
 			imageFileId: "image-2",
 			removedAt: null,
 			company: mockCompanyData,
+			space: { ...mockSpaceData, id: "space-second-id" },
 		},
 	};
 
@@ -137,7 +139,7 @@ describe("SpacesRepository", () => {
 					update: jest.fn(),
 				},
 				fitnessCenter: {
-					findUnique: jest.fn(),
+					findFirst: jest.fn(),
 					create: jest.fn(),
 					update: jest.fn(),
 				},
@@ -347,9 +349,9 @@ describe("SpacesRepository", () => {
 	});
 
 	describe("findFitnessCenterBySpaceId", () => {
-		it("spaceId unique 키로 FitnessCenter를 조회해야 한다", async () => {
+		it("공개 Space ID 관계로 FitnessCenter를 조회해야 한다", async () => {
 			// Given
-			mockTxHost.tx.fitnessCenter.findUnique.mockResolvedValue(
+			mockTxHost.tx.fitnessCenter.findFirst.mockResolvedValue(
 				mockSpaceWithFitnessCenter.fitnessCenter,
 			);
 
@@ -359,8 +361,8 @@ describe("SpacesRepository", () => {
 			);
 
 			// Then
-			expect(mockTxHost.tx.fitnessCenter.findUnique).toHaveBeenCalledWith({
-				where: { spaceId: mockSpaceData.id },
+			expect(mockTxHost.tx.fitnessCenter.findFirst).toHaveBeenCalledWith({
+				where: { space: { id: mockSpaceData.id } },
 				include: {
 					company: true,
 					space: true,
@@ -408,7 +410,7 @@ describe("SpacesRepository", () => {
 	});
 
 	describe("createFitnessCenterBySpaceId", () => {
-		it("Company는 Space 없이 만들고 FitnessCenter에 companyId와 spaceId를 연결해야 한다", async () => {
+		it("Company는 Space 없이 만들고 FitnessCenter에 공개 ID 관계를 연결해야 한다", async () => {
 			// Given
 			mockTxHost.tx.company.create.mockResolvedValue({
 				id: mockCompanyData.id,
@@ -445,8 +447,8 @@ describe("SpacesRepository", () => {
 			});
 			expect(mockTxHost.tx.fitnessCenter.create).toHaveBeenCalledWith({
 				data: expect.objectContaining({
-					companyId: mockCompanyData.id,
-					spaceId: mockSpaceData.id,
+					company: { connect: { id: mockCompanyData.id } },
+					space: { connect: { id: mockSpaceData.id } },
 				}),
 			});
 			expect(getFitnessCenter(result)?.company?.id).toBe(mockCompanyData.id);
@@ -477,7 +479,7 @@ describe("SpacesRepository", () => {
 	describe("updateFitnessCenterBySpaceId", () => {
 		it("같은 Company의 다른 FitnessCenter를 건드리지 않고 현재 Space의 센터만 수정해야 한다", async () => {
 			// Given
-			mockTxHost.tx.fitnessCenter.findUnique.mockResolvedValue({
+			mockTxHost.tx.fitnessCenter.findFirst.mockResolvedValue({
 				id: "fitness-center-test-id",
 			});
 			mockTxHost.tx.fitnessCenter.update.mockResolvedValue({
@@ -502,8 +504,8 @@ describe("SpacesRepository", () => {
 			);
 
 			// Then
-			expect(mockTxHost.tx.fitnessCenter.findUnique).toHaveBeenCalledWith({
-				where: { spaceId: mockSpaceData.id },
+			expect(mockTxHost.tx.fitnessCenter.findFirst).toHaveBeenCalledWith({
+				where: { space: { id: mockSpaceData.id } },
 				select: { id: true },
 			});
 			expect(mockTxHost.tx.company.update).not.toHaveBeenCalled();
@@ -580,18 +582,18 @@ describe("SpacesRepository", () => {
 		it("ROOT space는 자신과 모든 하위 category space를 반환해야 한다", async () => {
 			// Given
 			mockTxHost.tx.spaceClassification.findFirst.mockResolvedValue({
-				categoryId: "category-root",
+				category: { id: "category-root" },
 			});
 			mockTxHost.tx.category.findMany.mockResolvedValue([
-				{ id: "category-root", parentId: null },
-				{ id: "category-branch", parentId: "category-root" },
-				{ id: "category-leaf", parentId: "category-branch" },
+				{ id: "category-root", parent: null },
+				{ id: "category-branch", parent: { id: "category-root" } },
+				{ id: "category-leaf", parent: { id: "category-branch" } },
 			]);
 			mockTxHost.tx.spaceClassification.findMany.mockResolvedValue([
-				{ spaceId: "space-root" },
-				{ spaceId: "space-branch" },
-				{ spaceId: "space-leaf" },
-				{ spaceId: "space-branch" },
+				{ space: { id: "space-root" } },
+				{ space: { id: "space-branch" } },
+				{ space: { id: "space-leaf" } },
+				{ space: { id: "space-branch" } },
 			]);
 
 			// When
@@ -601,15 +603,14 @@ describe("SpacesRepository", () => {
 			// Then
 			expect(mockTxHost.tx.spaceClassification.findFirst).toHaveBeenCalledWith({
 				where: {
-					spaceId: "space-root",
+					space: { id: "space-root", removedAt: null },
 					removedAt: null,
-					space: { removedAt: null },
 					category: {
 						type: CategoryTypes.Space,
 						removedAt: null,
 					},
 				},
-				select: { categoryId: true },
+				select: { category: { select: { id: true } } },
 			});
 			expect(mockTxHost.tx.category.findMany).toHaveBeenCalledWith({
 				where: {
@@ -618,18 +619,20 @@ describe("SpacesRepository", () => {
 				},
 				select: {
 					id: true,
-					parentId: true,
+					parent: { select: { id: true } },
 				},
 			});
 			expect(mockTxHost.tx.spaceClassification.findMany).toHaveBeenCalledWith({
 				where: {
 					removedAt: null,
-					categoryId: {
-						in: ["category-root", "category-branch", "category-leaf"],
+					category: {
+						id: {
+							in: ["category-root", "category-branch", "category-leaf"],
+						},
 					},
 					space: { removedAt: null },
 				},
-				select: { spaceId: true },
+				select: { space: { select: { id: true } } },
 			});
 			expect(result).toEqual(["space-root", "space-branch", "space-leaf"]);
 		});
@@ -637,14 +640,14 @@ describe("SpacesRepository", () => {
 		it("BRANCH space의 기본 하위 scope는 자기 자신만 반환해야 한다", async () => {
 			// Given
 			mockTxHost.tx.spaceClassification.findFirst.mockResolvedValue({
-				categoryId: "category-branch",
+				category: { id: "category-branch" },
 			});
 			mockTxHost.tx.category.findMany.mockResolvedValue([
-				{ id: "category-root", parentId: null },
-				{ id: "category-branch", parentId: "category-root" },
+				{ id: "category-root", parent: null },
+				{ id: "category-branch", parent: { id: "category-root" } },
 			]);
 			mockTxHost.tx.spaceClassification.findMany.mockResolvedValue([
-				{ spaceId: "space-branch" },
+				{ space: { id: "space-branch" } },
 			]);
 
 			// When
@@ -655,7 +658,7 @@ describe("SpacesRepository", () => {
 			expect(mockTxHost.tx.spaceClassification.findMany).toHaveBeenCalledWith(
 				expect.objectContaining({
 					where: expect.objectContaining({
-						categoryId: { in: ["category-branch"] },
+						category: { id: { in: ["category-branch"] } },
 					}),
 				}),
 			);
@@ -665,15 +668,15 @@ describe("SpacesRepository", () => {
 		it("ancestor scope는 현재 space와 상위 category space를 반환해야 한다", async () => {
 			// Given
 			mockTxHost.tx.spaceClassification.findFirst.mockResolvedValue({
-				categoryId: "category-branch",
+				category: { id: "category-branch" },
 			});
 			mockTxHost.tx.category.findMany.mockResolvedValue([
-				{ id: "category-root", parentId: null },
-				{ id: "category-branch", parentId: "category-root" },
+				{ id: "category-root", parent: null },
+				{ id: "category-branch", parent: { id: "category-root" } },
 			]);
 			mockTxHost.tx.spaceClassification.findMany.mockResolvedValue([
-				{ spaceId: "space-root" },
-				{ spaceId: "space-branch" },
+				{ space: { id: "space-root" } },
+				{ space: { id: "space-branch" } },
 			]);
 
 			// When
@@ -686,7 +689,9 @@ describe("SpacesRepository", () => {
 			expect(mockTxHost.tx.spaceClassification.findMany).toHaveBeenCalledWith(
 				expect.objectContaining({
 					where: expect.objectContaining({
-						categoryId: { in: ["category-branch", "category-root"] },
+						category: {
+							id: { in: ["category-branch", "category-root"] },
+						},
 					}),
 				}),
 			);
@@ -696,18 +701,18 @@ describe("SpacesRepository", () => {
 		it("tree scope는 현재, 상위, 하위 category space를 중복 없이 반환해야 한다", async () => {
 			// Given
 			mockTxHost.tx.spaceClassification.findFirst.mockResolvedValue({
-				categoryId: "category-branch",
+				category: { id: "category-branch" },
 			});
 			mockTxHost.tx.category.findMany.mockResolvedValue([
-				{ id: "category-root", parentId: null },
-				{ id: "category-branch", parentId: "category-root" },
-				{ id: "category-leaf", parentId: "category-branch" },
+				{ id: "category-root", parent: null },
+				{ id: "category-branch", parent: { id: "category-root" } },
+				{ id: "category-leaf", parent: { id: "category-branch" } },
 			]);
 			mockTxHost.tx.spaceClassification.findMany.mockResolvedValue([
-				{ spaceId: "space-root" },
-				{ spaceId: "space-branch" },
-				{ spaceId: "space-leaf" },
-				{ spaceId: "space-root" },
+				{ space: { id: "space-root" } },
+				{ space: { id: "space-branch" } },
+				{ space: { id: "space-leaf" } },
+				{ space: { id: "space-root" } },
 			]);
 
 			// When
@@ -720,8 +725,10 @@ describe("SpacesRepository", () => {
 			expect(mockTxHost.tx.spaceClassification.findMany).toHaveBeenCalledWith(
 				expect.objectContaining({
 					where: expect.objectContaining({
-						categoryId: {
-							in: ["category-branch", "category-root", "category-leaf"],
+						category: {
+							id: {
+								in: ["category-branch", "category-root", "category-leaf"],
+							},
 						},
 					}),
 				}),

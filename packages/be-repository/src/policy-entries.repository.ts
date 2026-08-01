@@ -3,7 +3,7 @@ import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
 export class PolicyEntriesRepository {
@@ -18,7 +18,7 @@ export class PolicyEntriesRepository {
 	async findActiveByPolicyId(policyId: string): Promise<PolicyEntry[]> {
 		const results = await this.txHost.tx.policyEntry.findMany({
 			where: {
-				policyId,
+				policy: { id: policyId },
 				removedAt: null,
 				ability: { removedAt: null },
 			},
@@ -26,7 +26,7 @@ export class PolicyEntriesRepository {
 			orderBy: { createdAt: "asc" },
 		});
 
-		return results.map((result) => plainToInstance(PolicyEntry, result));
+		return results.map((result) => toDomainEntity(PolicyEntry, result));
 	}
 
 	async syncByPolicyId(
@@ -42,23 +42,30 @@ export class PolicyEntriesRepository {
 		await this.softRemoveMissing(policyId, uniqueAbilityIds);
 
 		await Promise.all(
-			uniqueAbilityIds.map((abilityId) =>
-				this.txHost.tx.policyEntry.upsert({
+			uniqueAbilityIds.map(async (abilityId) => {
+				const existing = await this.txHost.tx.policyEntry.findFirst({
 					where: {
-						policyId_abilityId: {
-							policyId,
-							abilityId,
-						},
+						policy: { id: policyId },
+						ability: { id: abilityId },
 					},
-					create: {
-						policyId,
-						abilityId,
+					select: { id: true },
+				});
+
+				if (existing) {
+					await this.txHost.tx.policyEntry.update({
+						where: { id: existing.id },
+						data: { removedAt: null },
+					});
+					return;
+				}
+
+				await this.txHost.tx.policyEntry.create({
+					data: {
+						policy: { connect: { id: policyId } },
+						ability: { connect: { id: abilityId } },
 					},
-					update: {
-						removedAt: null,
-					},
-				}),
-			),
+				});
+			}),
 		);
 
 		return this.findActiveByPolicyId(policyId);
@@ -71,7 +78,7 @@ export class PolicyEntriesRepository {
 
 		const result = await this.txHost.tx.policyEntry.updateMany({
 			where: {
-				abilityId,
+				ability: { id: abilityId },
 				removedAt: null,
 			},
 			data: {
@@ -88,9 +95,11 @@ export class PolicyEntriesRepository {
 	): Promise<void> {
 		await this.txHost.tx.policyEntry.updateMany({
 			where: {
-				policyId,
+				policy: { id: policyId },
 				removedAt: null,
-				...(abilityIds.length > 0 ? { abilityId: { notIn: abilityIds } } : {}),
+				...(abilityIds.length > 0
+					? { ability: { id: { notIn: abilityIds } } }
+					: {}),
 			},
 			data: {
 				removedAt: new Date(),
@@ -100,6 +109,7 @@ export class PolicyEntriesRepository {
 
 	private includeAbility() {
 		return {
+			policy: { select: { id: true } },
 			ability: {
 				include: {
 					subject: true,

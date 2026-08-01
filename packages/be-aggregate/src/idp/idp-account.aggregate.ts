@@ -210,10 +210,10 @@ export class IdpAccountAggregate {
 	private async getAccessGrants(userId: string) {
 		const tenants = await this.tenantsRepository.findManyWithSpaceAndRole({
 			where: {
-				userId,
+				user: { id: userId },
 				removedAt: null,
 				...(this.spaceContext.spaceIds
-					? { spaceId: { in: this.spaceContext.spaceIds } }
+					? { space: { id: { in: this.spaceContext.spaceIds } } }
 					: {}),
 			},
 			orderBy: [{ createdAt: "desc" }],

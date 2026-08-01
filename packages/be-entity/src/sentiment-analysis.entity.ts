@@ -4,6 +4,7 @@ import type {
 	SentimentType,
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Inquiry } from "./inquiry.entity";
 import type { InquiryMessage } from "./inquiry-message.entity";
 
@@ -15,7 +16,7 @@ import type { InquiryMessage } from "./inquiry-message.entity";
  */
 export class SentimentAnalysis
 	extends AbstractEntity
-	implements SentimentAnalysisEntity
+	implements DomainEntityModel<SentimentAnalysisEntity>
 {
 	// ============================================================================
 	// 필수 필드

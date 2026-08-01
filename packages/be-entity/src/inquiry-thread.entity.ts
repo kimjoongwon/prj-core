@@ -3,6 +3,7 @@ import type {
 	ThreadStatus,
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Inquiry } from "./inquiry.entity";
 import type { InquiryMessage } from "./inquiry-message.entity";
 import type { InquiryParticipant } from "./inquiry-participant.entity";
@@ -16,7 +17,7 @@ import type { User } from "./user.entity";
  */
 export class InquiryThread
 	extends AbstractEntity
-	implements InquiryThreadEntity
+	implements DomainEntityModel<InquiryThreadEntity>
 {
 	// ============================================================================
 	// 필수 필드

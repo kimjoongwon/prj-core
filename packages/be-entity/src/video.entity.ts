@@ -1,8 +1,12 @@
 import type { Video as VideoEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Asset } from "./asset.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 
-export class Video extends AbstractEntity implements VideoEntity {
+export class Video
+	extends AbstractEntity
+	implements DomainEntityModel<VideoEntity>
+{
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================

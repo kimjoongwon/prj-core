@@ -1,3 +1,4 @@
+import { ParseUlidPipe } from "@cocrepo/be-common";
 import {
 	AssignInquiryCommand,
 	CreateInquiryCommand,
@@ -46,7 +47,6 @@ import {
 	HttpCode,
 	HttpStatus,
 	Param,
-	ParseUUIDPipe,
 	Patch,
 	Post,
 	Query,
@@ -157,7 +157,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (UUID)",
+		description: "문의 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(
@@ -169,7 +169,7 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryCreateUpdateFormBootstrapDto, HttpStatus.OK)
 	@ResponseMessage("문의 수정 폼 bootstrap 조회 성공")
 	async getUpdateInquiryForm(
-		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
+		@Param("inquiryId", ParseUlidPipe) inquiryId: string,
 	): Promise<InquiryCreateUpdateFormBootstrapDto> {
 		return this.queryBus.execute(
 			new GetInquiryUpdateFormBootstrapQuery(inquiryId),
@@ -186,7 +186,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (UUID)",
+		description: "문의 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(
@@ -198,7 +198,7 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryDetailDto, HttpStatus.OK)
 	@ResponseMessage("문의 상세 조회 성공")
 	async getInquiryById(
-		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
+		@Param("inquiryId", ParseUlidPipe) inquiryId: string,
 	): Promise<Inquiry> {
 		return this.queryBus.execute(new GetInquiryByIdQuery(inquiryId));
 	}
@@ -247,7 +247,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (UUID)",
+		description: "문의 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -263,7 +263,7 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryDto, HttpStatus.OK)
 	@ResponseMessage("문의 수정 성공")
 	async updateInquiry(
-		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
+		@Param("inquiryId", ParseUlidPipe) inquiryId: string,
 		@Body() dto: UpdateInquiryDto,
 	): Promise<Inquiry> {
 		return this.commandBus.execute(new UpdateInquiryCommand(inquiryId, dto));
@@ -279,7 +279,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (UUID)",
+		description: "문의 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(
@@ -290,7 +290,7 @@ export class InquiriesController {
 	)
 	@ResponseMessage("문의 삭제 성공")
 	async deleteInquiry(
-		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
+		@Param("inquiryId", ParseUlidPipe) inquiryId: string,
 	): Promise<void> {
 		await this.commandBus.execute(new DeleteInquiryCommand(inquiryId));
 	}
@@ -305,7 +305,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (UUID)",
+		description: "문의 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -331,7 +331,7 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryDto, HttpStatus.OK)
 	@ResponseMessage("담당자 배정 성공")
 	async assignInquiry(
-		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
+		@Param("inquiryId", ParseUlidPipe) inquiryId: string,
 		@Body() body: { assigneeId: string },
 	): Promise<Inquiry> {
 		return this.commandBus.execute(
@@ -349,7 +349,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (UUID)",
+		description: "문의 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -383,7 +383,7 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryDto, HttpStatus.OK)
 	@ResponseMessage("상태 변경 성공")
 	async updateInquiryStatus(
-		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
+		@Param("inquiryId", ParseUlidPipe) inquiryId: string,
 		@Body() body: { status: InquiryStatus },
 	): Promise<Inquiry> {
 		return this.commandBus.execute(
@@ -400,7 +400,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (UUID)",
+		description: "문의 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -425,7 +425,7 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryDto, HttpStatus.OK)
 	@ResponseMessage("우선순위 변경 성공")
 	async updateInquiryPriority(
-		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
+		@Param("inquiryId", ParseUlidPipe) inquiryId: string,
 		@Body() body: { priority: InquiryPriority },
 	): Promise<Inquiry> {
 		return this.commandBus.execute(
@@ -442,7 +442,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (UUID)",
+		description: "문의 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(
@@ -457,7 +457,7 @@ export class InquiriesController {
 	})
 	@ResponseMessage("메시지 목록 조회 성공")
 	async getMessages(
-		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
+		@Param("inquiryId", ParseUlidPipe) inquiryId: string,
 		@Query() query: { skip?: number; take?: number },
 	) {
 		return this.queryBus.execute(
@@ -477,7 +477,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (UUID)",
+		description: "문의 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(
@@ -489,7 +489,7 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryParticipant, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("참여자 목록 조회 성공")
 	async getParticipants(
-		@Param("inquiryId", ParseUUIDPipe) inquiryId: string,
+		@Param("inquiryId", ParseUlidPipe) inquiryId: string,
 	): Promise<InquiryParticipant[]> {
 		return this.queryBus.execute(new GetInquiryParticipantsQuery(inquiryId));
 	}

@@ -103,7 +103,7 @@ async function ensureCurrentAdminFullAccessPolicies(
 	subjectMap: Map<string, Subject>,
 	actionMap: Map<string, Action>,
 ): Promise<void> {
-	const abilityIds = new Set<string>();
+	const abilitySeqs = new Set<number>();
 
 	for (const seed of adminFullAccessAbilitySeedData) {
 		const subject = subjectMap.get(seed.subject);
@@ -119,8 +119,8 @@ async function ensureCurrentAdminFullAccessPolicies(
 			where: { name: buildAbilityName(action, subject, seed.inverted) },
 			update: {
 				description: seed.description,
-				subjectId: subject.id,
-				actionId: action.id,
+				subjectSeq: subject.seq,
+				actionSeq: action.seq,
 				fields: [],
 				conditions: Prisma.JsonNull,
 				inverted: seed.inverted,
@@ -130,8 +130,8 @@ async function ensureCurrentAdminFullAccessPolicies(
 			create: {
 				name: buildAbilityName(action, subject, seed.inverted),
 				description: seed.description,
-				subjectId: subject.id,
-				actionId: action.id,
+				subjectSeq: subject.seq,
+				actionSeq: action.seq,
 				fields: [],
 				conditions: Prisma.JsonNull,
 				inverted: seed.inverted,
@@ -139,22 +139,22 @@ async function ensureCurrentAdminFullAccessPolicies(
 			},
 		});
 
-		abilityIds.add(ability.id);
+		abilitySeqs.add(ability.seq);
 	}
 
 	const activeTenants = await db.tenant.findMany({
 		where: { removedAt: null },
-		select: { spaceId: true, userId: true },
+		select: { spaceSeq: true, userSeq: true },
 	});
 	const policyScopes = Array.from(
-		new Map(activeTenants.map((tenant) => [tenant.spaceId, tenant])).values(),
+		new Map(activeTenants.map((tenant) => [tenant.spaceSeq, tenant])).values(),
 	);
 
 	for (const scope of policyScopes) {
 		const policy = await db.policy.upsert({
 			where: {
-				spaceId_name: {
-					spaceId: scope.spaceId,
+				spaceSeq_name: {
+					spaceSeq: scope.spaceSeq,
 					name: buildSystemPolicyName(role.name),
 				},
 			},
@@ -166,8 +166,8 @@ async function ensureCurrentAdminFullAccessPolicies(
 				removedAt: null,
 			},
 			create: {
-				spaceId: scope.spaceId,
-				createdById: scope.userId,
+				spaceSeq: scope.spaceSeq,
+				createdBySeq: scope.userSeq,
 				name: buildSystemPolicyName(role.name),
 				displayName: `${role.displayName ?? role.name} 기본 정책`,
 				description:
@@ -176,29 +176,29 @@ async function ensureCurrentAdminFullAccessPolicies(
 			},
 		});
 
-		for (const abilityId of abilityIds) {
+		for (const abilitySeq of abilitySeqs) {
 			await db.policyEntry.upsert({
 				where: {
-					policyId_abilityId: {
-						policyId: policy.id,
-						abilityId,
+					policySeq_abilitySeq: {
+						policySeq: policy.seq,
+						abilitySeq,
 					},
 				},
 				update: {
 					removedAt: null,
 				},
 				create: {
-					policyId: policy.id,
-					abilityId,
+					policySeq: policy.seq,
+					abilitySeq,
 				},
 			});
 		}
 
 		await db.roleAssignment.upsert({
 			where: {
-				roleId_policyId: {
-					roleId: role.id,
-					policyId: policy.id,
+				roleSeq_policySeq: {
+					roleSeq: role.seq,
+					policySeq: policy.seq,
 				},
 			},
 			update: {
@@ -207,8 +207,8 @@ async function ensureCurrentAdminFullAccessPolicies(
 				removedAt: null,
 			},
 			create: {
-				roleId: role.id,
-				policyId: policy.id,
+				roleSeq: role.seq,
+				policySeq: policy.seq,
 				isActive: true,
 				priority: 0,
 			},
@@ -227,7 +227,7 @@ async function pruneLegacyAdminSubjects(
 		where: {
 			name: { in: LEGACY_ADMIN_SUBJECT_NAMES },
 		},
-		select: { id: true },
+		select: { id: true, seq: true },
 	});
 
 	if (legacySubjects.length === 0) {
@@ -236,18 +236,20 @@ async function pruneLegacyAdminSubjects(
 
 	const removedAt = new Date();
 	const legacySubjectIds = legacySubjects.map((subject) => subject.id);
+	const legacySubjectSeqs = legacySubjects.map((subject) => subject.seq);
 	const legacyAbilities = await db.ability.findMany({
 		where: {
-			subjectId: { in: legacySubjectIds },
+			subjectSeq: { in: legacySubjectSeqs },
 		},
-		select: { id: true },
+		select: { id: true, seq: true },
 	});
 	const legacyAbilityIds = legacyAbilities.map((ability) => ability.id);
+	const legacyAbilitySeqs = legacyAbilities.map((ability) => ability.seq);
 
 	if (legacyAbilityIds.length > 0) {
 		await db.policyEntry.updateMany({
 			where: {
-				abilityId: { in: legacyAbilityIds },
+				abilitySeq: { in: legacyAbilitySeqs },
 				removedAt: null,
 			},
 			data: {

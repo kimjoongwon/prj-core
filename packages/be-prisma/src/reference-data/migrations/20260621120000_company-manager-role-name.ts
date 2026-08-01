@@ -16,19 +16,19 @@ const COMPANY_MANAGER_ROLE_DATA = {
  */
 async function transferRoleAssignments(
 	db: ReferenceDataDbClient,
-	legacyRoleId: string,
-	canonicalRoleId: string,
+	legacyRoleSeq: number,
+	canonicalRoleSeq: number,
 ): Promise<void> {
 	const legacyRoleAssignments = await db.roleAssignment.findMany({
-		where: { roleId: legacyRoleId },
-		select: { id: true, policyId: true },
+		where: { roleSeq: legacyRoleSeq },
+		select: { id: true, policySeq: true },
 	});
 
 	for (const legacyRoleAssignment of legacyRoleAssignments) {
 		const existingCanonicalRoleAssignment = await db.roleAssignment.findFirst({
 			where: {
-				roleId: canonicalRoleId,
-				policyId: legacyRoleAssignment.policyId,
+				roleSeq: canonicalRoleSeq,
+				policySeq: legacyRoleAssignment.policySeq,
 			},
 			select: { id: true },
 		});
@@ -42,7 +42,7 @@ async function transferRoleAssignments(
 
 		await db.roleAssignment.update({
 			where: { id: legacyRoleAssignment.id },
-			data: { roleId: canonicalRoleId },
+			data: { roleSeq: canonicalRoleSeq },
 		});
 	}
 }
@@ -53,28 +53,29 @@ async function transferRoleAssignments(
 async function mergeLegacyRoleIntoCompanyManager(
 	db: ReferenceDataDbClient,
 	legacyRoleId: string,
-	companyManagerRoleId: string,
+	legacyRoleSeq: number,
+	companyManagerRoleSeq: number,
 ): Promise<void> {
 	await db.tenant.updateMany({
-		where: { roleId: legacyRoleId },
-		data: { roleId: companyManagerRoleId },
+		where: { roleSeq: legacyRoleSeq },
+		data: { roleSeq: companyManagerRoleSeq },
 	});
 	await db.tenantAccessRequest.updateMany({
-		where: { requestedRoleId: legacyRoleId },
-		data: { requestedRoleId: companyManagerRoleId },
+		where: { requestedRoleSeq: legacyRoleSeq },
+		data: { requestedRoleSeq: companyManagerRoleSeq },
 	});
 	await db.tenantAccessRequest.updateMany({
-		where: { previousRoleId: legacyRoleId },
-		data: { previousRoleId: companyManagerRoleId },
+		where: { previousRoleSeq: legacyRoleSeq },
+		data: { previousRoleSeq: companyManagerRoleSeq },
 	});
 
-	await transferRoleAssignments(db, legacyRoleId, companyManagerRoleId);
+	await transferRoleAssignments(db, legacyRoleSeq, companyManagerRoleSeq);
 
 	await db.roleAssociation.deleteMany({
-		where: { roleId: legacyRoleId },
+		where: { roleSeq: legacyRoleSeq },
 	});
 	await db.roleClassification.deleteMany({
-		where: { roleId: legacyRoleId },
+		where: { roleSeq: legacyRoleSeq },
 	});
 	await db.role.delete({
 		where: { id: legacyRoleId },
@@ -89,19 +90,20 @@ async function removeSpaceManagerSystemPolicy(
 ): Promise<void> {
 	const legacyPolicies = await db.policy.findMany({
 		where: { name: "space-manager-system-policy" },
-		select: { id: true },
+		select: { id: true, seq: true },
 	});
 	if (legacyPolicies.length === 0) {
 		return;
 	}
 
 	const legacyPolicyIds = legacyPolicies.map((policy) => policy.id);
+	const legacyPolicySeqs = legacyPolicies.map((policy) => policy.seq);
 	await db.roleAssignment.deleteMany({
-		where: { policyId: { in: legacyPolicyIds } },
+		where: { policySeq: { in: legacyPolicySeqs } },
 	});
 	await removeLegacyPersonalPolicyRowsByPolicyIds(db, legacyPolicyIds);
 	await db.policyEntry.deleteMany({
-		where: { policyId: { in: legacyPolicyIds } },
+		where: { policySeq: { in: legacyPolicySeqs } },
 	});
 	await db.policy.deleteMany({
 		where: { id: { in: legacyPolicyIds } },
@@ -152,7 +154,8 @@ export const companyManagerRoleNameMigration: ReferenceDataMigration = {
 			await mergeLegacyRoleIntoCompanyManager(
 				db,
 				legacyRole.id,
-				companyManagerRole.id,
+				legacyRole.seq,
+				companyManagerRole.seq,
 			);
 		}
 

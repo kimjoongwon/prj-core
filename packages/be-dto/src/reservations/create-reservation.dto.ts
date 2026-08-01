@@ -2,17 +2,17 @@ import {
 	DateField,
 	StringField,
 	StringFieldOptional,
-	UUIDField,
+	ULIDField,
 } from "@cocrepo/decorator";
 
 export class CreateReservationDto {
-	@UUIDField({ description: "타임라인 ID" })
+	@ULIDField({ description: "타임라인 ID" })
 	timelineId!: string;
 
-	@UUIDField({ description: "세션 ID" })
+	@ULIDField({ description: "세션 ID" })
 	sessionId!: string;
 
-	@UUIDField({ description: "프로그램 ID" })
+	@ULIDField({ description: "프로그램 ID" })
 	programId!: string;
 
 	@DateField({ description: "예약 발생 회차 시작 시각" })

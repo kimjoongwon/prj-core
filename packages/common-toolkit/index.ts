@@ -75,14 +75,6 @@ export {
 	getUrlWithParamsAndQueryString,
 } from "./src/Path";
 export { parseAcceptLanguage } from "./src/parseAcceptLanguage";
-// Route key utilities
-export {
-	fromRouteKey,
-	isRouteKey,
-	isUuid,
-	toRouteKey,
-	tryFromRouteKey,
-} from "./src/RouteKey";
 // Tool utilities
 export {
 	createRange,
@@ -102,7 +94,6 @@ import * as HttpRequestModule from "./src/HttpRequest";
 import * as LoggerModule from "./src/Logger";
 import * as PaginationModule from "./src/Pagination";
 import * as PathModule from "./src/Path";
-import * as RouteKeyModule from "./src/RouteKey";
 import * as ToolModule from "./src/Tool";
 
 export const browser = {
@@ -161,14 +152,6 @@ export const path = {
 	getUrlWithParamsAndQueryString: PathModule.getUrlWithParamsAndQueryString,
 	convertFromPathParamsToQueryParams:
 		PathModule.convertFromPathParamsToQueryParams,
-} as const;
-
-export const routeKey = {
-	toRouteKey: RouteKeyModule.toRouteKey,
-	fromRouteKey: RouteKeyModule.fromRouteKey,
-	tryFromRouteKey: RouteKeyModule.tryFromRouteKey,
-	isUuid: RouteKeyModule.isUuid,
-	isRouteKey: RouteKeyModule.isRouteKey,
 } as const;
 
 export const pagination = {

@@ -47,19 +47,20 @@ async function removeLegacySystemPolicies(
 ): Promise<void> {
 	const legacyPolicies = await db.policy.findMany({
 		where: { name: { in: [...LEGACY_SYSTEM_POLICY_NAMES] } },
-		select: { id: true },
+		select: { id: true, seq: true },
 	});
 	if (legacyPolicies.length === 0) {
 		return;
 	}
 
 	const legacyPolicyIds = legacyPolicies.map((policy) => policy.id);
+	const legacyPolicySeqs = legacyPolicies.map((policy) => policy.seq);
 	await db.roleAssignment.deleteMany({
-		where: { policyId: { in: legacyPolicyIds } },
+		where: { policySeq: { in: legacyPolicySeqs } },
 	});
 	await removeLegacyPersonalPolicyRowsByPolicyIds(db, legacyPolicyIds);
 	await db.policyEntry.deleteMany({
-		where: { policyId: { in: legacyPolicyIds } },
+		where: { policySeq: { in: legacyPolicySeqs } },
 	});
 	await db.policy.deleteMany({
 		where: { id: { in: legacyPolicyIds } },
@@ -89,19 +90,19 @@ async function removeLegacyPersonalPolicyRowsByPolicyIds(
 
 async function transferLegacyRoleAssignments(
 	db: ReferenceDataDbClient,
-	legacyRoleId: string,
-	canonicalRoleId: string,
+	legacyRoleSeq: number,
+	canonicalRoleSeq: number,
 ): Promise<void> {
 	const legacyRoleAssignments = await db.roleAssignment.findMany({
-		where: { roleId: legacyRoleId },
-		select: { id: true, policyId: true },
+		where: { roleSeq: legacyRoleSeq },
+		select: { id: true, policySeq: true },
 	});
 
 	for (const legacyRoleAssignment of legacyRoleAssignments) {
 		const existingCanonicalRoleAssignment = await db.roleAssignment.findFirst({
 			where: {
-				roleId: canonicalRoleId,
-				policyId: legacyRoleAssignment.policyId,
+				roleSeq: canonicalRoleSeq,
+				policySeq: legacyRoleAssignment.policySeq,
 			},
 			select: { id: true },
 		});
@@ -115,7 +116,7 @@ async function transferLegacyRoleAssignments(
 
 		await db.roleAssignment.update({
 			where: { id: legacyRoleAssignment.id },
-			data: { roleId: canonicalRoleId },
+			data: { roleSeq: canonicalRoleSeq },
 		});
 	}
 }
@@ -123,28 +124,29 @@ async function transferLegacyRoleAssignments(
 async function mergeLegacyRoleIntoCanonical(
 	db: ReferenceDataDbClient,
 	legacyRoleId: string,
-	canonicalRoleId: string,
+	legacyRoleSeq: number,
+	canonicalRoleSeq: number,
 ): Promise<void> {
 	await db.tenant.updateMany({
-		where: { roleId: legacyRoleId },
-		data: { roleId: canonicalRoleId },
+		where: { roleSeq: legacyRoleSeq },
+		data: { roleSeq: canonicalRoleSeq },
 	});
 	await db.tenantAccessRequest.updateMany({
-		where: { requestedRoleId: legacyRoleId },
-		data: { requestedRoleId: canonicalRoleId },
+		where: { requestedRoleSeq: legacyRoleSeq },
+		data: { requestedRoleSeq: canonicalRoleSeq },
 	});
 	await db.tenantAccessRequest.updateMany({
-		where: { previousRoleId: legacyRoleId },
-		data: { previousRoleId: canonicalRoleId },
+		where: { previousRoleSeq: legacyRoleSeq },
+		data: { previousRoleSeq: canonicalRoleSeq },
 	});
 
-	await transferLegacyRoleAssignments(db, legacyRoleId, canonicalRoleId);
+	await transferLegacyRoleAssignments(db, legacyRoleSeq, canonicalRoleSeq);
 
 	await db.roleAssociation.deleteMany({
-		where: { roleId: legacyRoleId },
+		where: { roleSeq: legacyRoleSeq },
 	});
 	await db.roleClassification.deleteMany({
-		where: { roleId: legacyRoleId },
+		where: { roleSeq: legacyRoleSeq },
 	});
 	await db.role.delete({
 		where: { id: legacyRoleId },
@@ -177,7 +179,12 @@ export const systemRoleDomainNamesMigration: ReferenceDataMigration = {
 				continue;
 			}
 
-			await mergeLegacyRoleIntoCanonical(db, legacyRole.id, canonicalRole.id);
+			await mergeLegacyRoleIntoCanonical(
+				db,
+				legacyRole.id,
+				legacyRole.seq,
+				canonicalRole.seq,
+			);
 		}
 
 		await syncReferenceData(db);

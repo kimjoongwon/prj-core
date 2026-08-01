@@ -5,9 +5,10 @@ import {
 	NumberFieldOptional,
 	StringField,
 	StringFieldOptional,
-	UUIDField,
-	UUIDFieldOptional,
+	ULIDField,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { Reservation as ReservationModel } from "@cocrepo/prisma";
 import { ReservationStatus } from "@cocrepo/prisma";
 import { AbstractDto } from "../abstract.dto";
@@ -16,23 +17,26 @@ import { SessionDto } from "../session.dto";
 import { TimelineDto } from "../timeline.dto";
 import { UserDto } from "../user.dto";
 
-export class ReservationDto extends AbstractDto implements ReservationModel {
-	@UUIDField({ description: "Space ID" })
+export class ReservationDto
+	extends AbstractDto
+	implements DomainEntityModel<ReservationModel>
+{
+	@ULIDField({ description: "Space ID" })
 	spaceId!: string;
 
-	@UUIDFieldOptional({ nullable: true, description: "생성자 ID" })
+	@ULIDFieldOptional({ nullable: true, description: "생성자 ID" })
 	createdById!: string | null;
 
-	@UUIDField({ description: "예약 사용자 ID" })
+	@ULIDField({ description: "예약 사용자 ID" })
 	userId!: string;
 
-	@UUIDField({ description: "타임라인 ID" })
+	@ULIDField({ description: "타임라인 ID" })
 	timelineId!: string;
 
-	@UUIDField({ description: "세션 ID" })
+	@ULIDField({ description: "세션 ID" })
 	sessionId!: string;
 
-	@UUIDField({ description: "프로그램 ID" })
+	@ULIDField({ description: "프로그램 ID" })
 	programId!: string;
 
 	@DateField({ description: "예약 발생 회차 시작 시각" })

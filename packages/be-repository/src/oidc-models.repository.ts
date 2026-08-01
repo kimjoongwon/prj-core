@@ -3,7 +3,7 @@ import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
 export class OidcModelsRepository {
@@ -20,7 +20,7 @@ export class OidcModelsRepository {
 		const result = await this.txHost.tx.oidcModel.findUnique({
 			where: { key },
 		});
-		return result ? plainToInstance(OidcModel, result) : null;
+		return result ? toDomainEntity(OidcModel, result) : null;
 	}
 
 	async findByKeyOrThrow(key: string): Promise<OidcModel> {
@@ -50,7 +50,7 @@ export class OidcModelsRepository {
 		]);
 
 		return {
-			data: data.map((item) => plainToInstance(OidcModel, item)),
+			data: data.map((item) => toDomainEntity(OidcModel, item)),
 			totalCount,
 		};
 	}
@@ -60,7 +60,7 @@ export class OidcModelsRepository {
 		const results = await this.txHost.tx.oidcModel.findMany({
 			where: { grantId },
 		});
-		return results.map((item) => plainToInstance(OidcModel, item));
+		return results.map((item) => toDomainEntity(OidcModel, item));
 	}
 
 	async deleteByKey(key: string): Promise<void> {

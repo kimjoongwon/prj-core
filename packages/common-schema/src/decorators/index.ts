@@ -10,4 +10,5 @@ export * from "./password.decorator";
 export * from "./phone.decorator";
 // 기본 타입
 export * from "./string.decorator";
+export * from "./ulid.decorator";
 export * from "./uuid.decorator";

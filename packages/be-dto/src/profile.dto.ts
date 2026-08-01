@@ -1,9 +1,13 @@
 import { ClassField, StringField, UUIDField } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import { User } from "@cocrepo/entity";
 import type { Profile } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 
-export class ProfileDto extends AbstractDto implements Profile {
+export class ProfileDto
+	extends AbstractDto
+	implements DomainEntityModel<Profile>
+{
 	@UUIDField({ nullable: true })
 	avatarFileId: string | null;
 

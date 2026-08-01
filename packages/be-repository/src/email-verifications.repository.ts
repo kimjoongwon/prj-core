@@ -3,7 +3,11 @@ import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import type {
+	PublicIdCreateInput,
+	PublicIdUpdateInput,
+} from "./public-id-input.type";
+import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
 export class EmailVerificationsRepository {
@@ -18,9 +22,10 @@ export class EmailVerificationsRepository {
 	async findById(id: string): Promise<EmailVerification | null> {
 		const result = await this.txHost.tx.emailVerification.findUnique({
 			where: { id },
+			include: { space: true, verifiedUser: true },
 		});
 
-		return result ? plainToInstance(EmailVerification, result) : null;
+		return result ? toDomainEntity(EmailVerification, result) : null;
 	}
 
 	async findLatestByEmail(email: string): Promise<EmailVerification | null> {
@@ -32,17 +37,19 @@ export class EmailVerificationsRepository {
 				removedAt: null,
 			},
 			orderBy: { createdAt: "desc" },
+			include: { space: true, verifiedUser: true },
 		});
 
-		return result ? plainToInstance(EmailVerification, result) : null;
+		return result ? toDomainEntity(EmailVerification, result) : null;
 	}
 
 	async findByTokenHash(tokenHash: string): Promise<EmailVerification | null> {
 		const result = await this.txHost.tx.emailVerification.findUnique({
 			where: { tokenHash },
+			include: { space: true, verifiedUser: true },
 		});
 
-		return result ? plainToInstance(EmailVerification, result) : null;
+		return result ? toDomainEntity(EmailVerification, result) : null;
 	}
 
 	async findMany(params: {
@@ -59,32 +66,63 @@ export class EmailVerificationsRepository {
 				orderBy: params.orderBy,
 				skip: params.skip,
 				take: params.take,
+				include: { space: true, verifiedUser: true },
 			}),
 			this.txHost.tx.emailVerification.count({ where: params.where }),
 		]);
 
 		return {
-			items: items.map((item) => plainToInstance(EmailVerification, item)),
+			items: items.map((item) => toDomainEntity(EmailVerification, item)),
 			totalCount,
 		};
 	}
 
 	async create(
-		data: Prisma.EmailVerificationUncheckedCreateInput,
+		data: PublicIdCreateInput<
+			Prisma.EmailVerificationUncheckedCreateInput,
+			"space",
+			"verifiedUser"
+		>,
 	): Promise<EmailVerification> {
-		const result = await this.txHost.tx.emailVerification.create({ data });
-		return plainToInstance(EmailVerification, result);
+		const { spaceId, verifiedUserId, ...verificationData } = data;
+		const result = await this.txHost.tx.emailVerification.create({
+			data: {
+				...verificationData,
+				space: { connect: { id: spaceId } },
+				...(verifiedUserId
+					? { verifiedUser: { connect: { id: verifiedUserId } } }
+					: {}),
+			},
+			include: { space: true, verifiedUser: true },
+		});
+		return toDomainEntity(EmailVerification, result);
 	}
 
 	async updateById(
 		id: string,
-		data: Prisma.EmailVerificationUncheckedUpdateInput,
+		data: PublicIdUpdateInput<
+			Prisma.EmailVerificationUncheckedUpdateInput,
+			"space",
+			"verifiedUser"
+		>,
 	): Promise<EmailVerification> {
+		const { spaceId, verifiedUserId, ...verificationData } = data;
 		const result = await this.txHost.tx.emailVerification.update({
 			where: { id },
-			data,
+			data: {
+				...verificationData,
+				...(spaceId !== undefined
+					? { space: { connect: { id: spaceId } } }
+					: {}),
+				...(verifiedUserId !== undefined
+					? verifiedUserId === null
+						? { verifiedUser: { disconnect: true } }
+						: { verifiedUser: { connect: { id: verifiedUserId } } }
+					: {}),
+			},
+			include: { space: true, verifiedUser: true },
 		});
 
-		return plainToInstance(EmailVerification, result);
+		return toDomainEntity(EmailVerification, result);
 	}
 }

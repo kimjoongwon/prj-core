@@ -22,8 +22,8 @@ export const ApiTenantHeader = (options: ApiTenantHeaderOptions = {}) =>
 			"현재 요청에서 사용할 Tenant ID입니다. 서버는 이 Tenant에서 Space를 파생하고 Space category scope로 리소스를 필터링합니다.",
 		schema: {
 			type: "string",
-			format: "uuid",
-			example: "123e4567-e89b-12d3-a456-426614174000",
+			pattern: "^[0-9A-HJKMNP-TV-Z]{26}$",
+			example: "01J00000000000000000000002",
 		},
 	});
 

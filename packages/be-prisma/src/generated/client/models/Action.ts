@@ -27,15 +27,18 @@ export type AggregateAction = {
 }
 
 export type ActionAvgAggregateOutputType = {
+  seq: number | null
   order: number | null
 }
 
 export type ActionSumAggregateOutputType = {
+  seq: number | null
   order: number | null
 }
 
 export type ActionMinAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -49,6 +52,7 @@ export type ActionMinAggregateOutputType = {
 
 export type ActionMaxAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -62,6 +66,7 @@ export type ActionMaxAggregateOutputType = {
 
 export type ActionCountAggregateOutputType = {
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -77,15 +82,18 @@ export type ActionCountAggregateOutputType = {
 
 
 export type ActionAvgAggregateInputType = {
+  seq?: true
   order?: true
 }
 
 export type ActionSumAggregateInputType = {
+  seq?: true
   order?: true
 }
 
 export type ActionMinAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -99,6 +107,7 @@ export type ActionMinAggregateInputType = {
 
 export type ActionMaxAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -112,6 +121,7 @@ export type ActionMaxAggregateInputType = {
 
 export type ActionCountAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -213,6 +223,7 @@ export type ActionGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 
 export type ActionGroupByOutputType = {
   id: string
+  seq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
@@ -250,6 +261,7 @@ export type ActionWhereInput = {
   OR?: Prisma.ActionWhereInput[]
   NOT?: Prisma.ActionWhereInput | Prisma.ActionWhereInput[]
   id?: Prisma.StringFilter<"Action"> | string
+  seq?: Prisma.IntFilter<"Action"> | number
   createdAt?: Prisma.DateTimeFilter<"Action"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Action"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Action"> | Date | string | null
@@ -265,6 +277,7 @@ export type ActionWhereInput = {
 
 export type ActionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -280,6 +293,7 @@ export type ActionOrderByWithRelationInput = {
 
 export type ActionWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  seq?: number
   name?: string
   AND?: Prisma.ActionWhereInput | Prisma.ActionWhereInput[]
   OR?: Prisma.ActionWhereInput[]
@@ -294,10 +308,11 @@ export type ActionWhereUniqueInput = Prisma.AtLeast<{
   isSystem?: Prisma.BoolFilter<"Action"> | boolean
   config?: Prisma.JsonNullableFilter<"Action">
   abilities?: Prisma.AbilityListRelationFilter
-}, "id" | "name">
+}, "seq" | "id" | "name">
 
 export type ActionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -320,6 +335,7 @@ export type ActionScalarWhereWithAggregatesInput = {
   OR?: Prisma.ActionScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ActionScalarWhereWithAggregatesInput | Prisma.ActionScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Action"> | string
+  seq?: Prisma.IntWithAggregatesFilter<"Action"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Action"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Action"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Action"> | Date | string | null
@@ -349,6 +365,7 @@ export type ActionCreateInput = {
 
 export type ActionUncheckedCreateInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -379,6 +396,7 @@ export type ActionUpdateInput = {
 
 export type ActionUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -394,6 +412,7 @@ export type ActionUncheckedUpdateInput = {
 
 export type ActionCreateManyInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -422,6 +441,7 @@ export type ActionUpdateManyMutationInput = {
 
 export type ActionUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -441,6 +461,7 @@ export type ActionScalarRelationFilter = {
 
 export type ActionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -454,11 +475,13 @@ export type ActionCountOrderByAggregateInput = {
 }
 
 export type ActionAvgOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
   order?: Prisma.SortOrder
 }
 
 export type ActionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -472,6 +495,7 @@ export type ActionMaxOrderByAggregateInput = {
 
 export type ActionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -484,6 +508,7 @@ export type ActionMinOrderByAggregateInput = {
 }
 
 export type ActionSumOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
   order?: Prisma.SortOrder
 }
 
@@ -499,14 +524,6 @@ export type ActionUpdateOneRequiredWithoutAbilitiesNestedInput = {
   upsert?: Prisma.ActionUpsertWithoutAbilitiesInput
   connect?: Prisma.ActionWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.ActionUpdateToOneWithWhereWithoutAbilitiesInput, Prisma.ActionUpdateWithoutAbilitiesInput>, Prisma.ActionUncheckedUpdateWithoutAbilitiesInput>
-}
-
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
 }
 
 export type ActionCreateWithoutAbilitiesInput = {
@@ -525,6 +542,7 @@ export type ActionCreateWithoutAbilitiesInput = {
 
 export type ActionUncheckedCreateWithoutAbilitiesInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -569,6 +587,7 @@ export type ActionUpdateWithoutAbilitiesInput = {
 
 export type ActionUncheckedUpdateWithoutAbilitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -614,6 +633,7 @@ export type ActionCountOutputTypeCountAbilitiesArgs<ExtArgs extends runtime.Type
 
 export type ActionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -630,6 +650,7 @@ export type ActionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 
 export type ActionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -644,6 +665,7 @@ export type ActionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
 
 export type ActionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -658,6 +680,7 @@ export type ActionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
 
 export type ActionSelectScalar = {
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -670,7 +693,7 @@ export type ActionSelectScalar = {
   config?: boolean
 }
 
-export type ActionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "name" | "displayName" | "description" | "group" | "order" | "isSystem" | "config", ExtArgs["result"]["action"]>
+export type ActionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "name" | "displayName" | "description" | "group" | "order" | "isSystem" | "config", ExtArgs["result"]["action"]>
 export type ActionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   abilities?: boolean | Prisma.Action$abilitiesArgs<ExtArgs>
   _count?: boolean | Prisma.ActionCountOutputTypeDefaultArgs<ExtArgs>
@@ -685,6 +708,7 @@ export type $ActionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    seq: number
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -1141,6 +1165,7 @@ export interface Prisma__ActionClient<T, Null = never, ExtArgs extends runtime.T
  */
 export interface ActionFieldRefs {
   readonly id: Prisma.FieldRef<"Action", 'String'>
+  readonly seq: Prisma.FieldRef<"Action", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Action", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Action", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Action", 'DateTime'>

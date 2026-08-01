@@ -7,13 +7,17 @@ import type {
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { AuthAuditLog } from "./auth-audit-log.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { PasswordHistory } from "./password-history.entity";
 
 /**
  * Tenant with Space relations for User entity
  * Prisma include로 가져온 관계 데이터를 위한 확장 타입
  */
-type TenantWithSpace = Tenant & {
+type TenantWithSpace = DomainEntityModel<Tenant> & {
+	spaceId: string;
+	userId: string;
+	roleId: string;
 	space?: {
 		spaceClassification?: {
 			category?: {
@@ -35,7 +39,10 @@ type UserTenantSnapshotLike = {
 	} | null;
 };
 
-export class User extends AbstractEntity implements UserEntityType {
+export class User
+	extends AbstractEntity
+	implements DomainEntityModel<UserEntityType>
+{
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================

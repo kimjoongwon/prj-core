@@ -117,11 +117,12 @@ describe("UsersRepository", () => {
 			expect(mockTxHost.tx.tenant.findFirst).toHaveBeenCalledWith({
 				where: {
 					id: "tenant-test-id",
-					userId: "user-test-id",
-					spaceId: "space-test-id",
+					user: { id: "user-test-id" },
+					space: { id: "space-test-id" },
 					removedAt: null,
 				},
 				include: {
+					user: { select: { id: true } },
 					space: {
 						include: {
 							fitnessCenter: {
@@ -135,7 +136,7 @@ describe("UsersRepository", () => {
 								where: {
 									removedAt: null,
 									policy: {
-										spaceId: "space-test-id",
+										space: { id: "space-test-id" },
 										removedAt: null,
 									},
 								},
@@ -150,6 +151,7 @@ describe("UsersRepository", () => {
 												},
 												orderBy: { createdAt: "asc" },
 												include: {
+													policy: { select: { id: true } },
 													ability: {
 														include: {
 															action: true,
@@ -184,6 +186,50 @@ describe("UsersRepository", () => {
 
 	it("리포지토리가 정의되어야 한다", () => {
 		expect(repository).toBeDefined();
+	});
+
+	describe("findByIdAndSpaceIdsWithRelations", () => {
+		it("Space 범위가 있으면 해당 Space의 활성 Tenant를 가진 사용자만 조회해야 한다", async () => {
+			mockTxHost.tx.user.findFirst.mockResolvedValue(mockUserData);
+
+			const result = await repository.findByIdAndSpaceIdsWithRelations(
+				"user-test-id",
+				["space-parent-id", "space-child-id"],
+			);
+
+			expect(mockTxHost.tx.user.findFirst).toHaveBeenCalledWith(
+				expect.objectContaining({
+					where: {
+						id: "user-test-id",
+						tenants: {
+							some: {
+								space: {
+									id: { in: ["space-parent-id", "space-child-id"] },
+								},
+								removedAt: null,
+							},
+						},
+					},
+				}),
+			);
+			expect(result).toBeInstanceOf(User);
+		});
+
+		it("Space 범위가 undefined면 사용자 ID만으로 조회해야 한다", async () => {
+			mockTxHost.tx.user.findFirst.mockResolvedValue(mockUserData);
+
+			const result = await repository.findByIdAndSpaceIdsWithRelations(
+				"user-test-id",
+				undefined,
+			);
+
+			expect(mockTxHost.tx.user.findFirst).toHaveBeenCalledWith(
+				expect.objectContaining({
+					where: { id: "user-test-id" },
+				}),
+			);
+			expect(result).toBeInstanceOf(User);
+		});
 	});
 
 	describe("findByIdWithTenantsAndProfiles", () => {
@@ -343,7 +389,7 @@ describe("UsersRepository", () => {
 				removedAt: null,
 				tenants: {
 					some: {
-						spaceId: { in: ["space-001"] },
+						space: { id: { in: ["space-001"] } },
 						removedAt: null,
 					},
 				},
@@ -355,11 +401,12 @@ describe("UsersRepository", () => {
 					tenants: expect.objectContaining({
 						where: {
 							removedAt: null,
-							spaceId: { in: ["space-001"] },
+							space: { id: { in: ["space-001"] } },
 						},
 						include: {
 							role: true,
 							space: true,
+							user: { select: { id: true } },
 						},
 					}),
 				}),
@@ -401,7 +448,7 @@ describe("UsersRepository", () => {
 						role: {
 							name: { in: ["MANAGER"] },
 						},
-						spaceId: { in: ["space-001"] },
+						space: { id: { in: ["space-001"] } },
 						removedAt: null,
 					},
 				},
@@ -449,7 +496,7 @@ describe("UsersRepository", () => {
 						],
 						tenants: {
 							some: {
-								spaceId: { in: ["space-001"] },
+								space: { id: { in: ["space-001"] } },
 								removedAt: null,
 							},
 						},
@@ -501,7 +548,7 @@ describe("UsersRepository", () => {
 						removedAt: null,
 						tenants: {
 							some: {
-								spaceId: { in: ["space-001"] },
+								space: { id: { in: ["space-001"] } },
 								removedAt: null,
 							},
 						},

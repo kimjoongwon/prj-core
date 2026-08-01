@@ -1,8 +1,12 @@
 import type { Image as ImageEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Asset } from "./asset.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 
-export class Image extends AbstractEntity implements ImageEntity {
+export class Image
+	extends AbstractEntity
+	implements DomainEntityModel<ImageEntity>
+{
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================

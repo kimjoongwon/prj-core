@@ -2,7 +2,7 @@ import {
 	BooleanFieldOptional,
 	EnumFieldOptional,
 	StringFieldOptional,
-	UUIDFieldOptional,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator";
 import {
 	InquiryCategory,
@@ -36,7 +36,7 @@ export class UpdateInquiryDto {
 	})
 	priority?: InquiryPriority;
 
-	@UUIDFieldOptional({
+	@ULIDFieldOptional({
 		description: "담당자 ID",
 	})
 	assigneeId?: string;

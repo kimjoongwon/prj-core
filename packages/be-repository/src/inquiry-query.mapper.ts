@@ -17,8 +17,8 @@ export function buildInquiryQueryWhere(
 		...(input.channel ? { channel: input.channel } : {}),
 		...(input.priority ? { priority: input.priority } : {}),
 		...(input.inquiryStatus ? { status: input.inquiryStatus } : {}),
-		...(input.assigneeId ? { assigneeId: input.assigneeId } : {}),
-		...(input.customerId ? { customerId: input.customerId } : {}),
+		...(input.assigneeId ? { assignee: { id: input.assigneeId } } : {}),
+		...(input.customerId ? { customer: { id: input.customerId } } : {}),
 	};
 	const createdAt = dateRangeFilter(input.startDate, input.endDate);
 

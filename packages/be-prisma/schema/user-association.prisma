@@ -2,14 +2,15 @@
 // @description: User와 Group을 연결하는 그룹 링크
 /// @displayName 사용자 그룹
 model UserAssociation {
-  id        String    @id @default(uuid())
+  id        String    @unique @default(ulid()) @db.VarChar(26)
+  seq       Int       @id @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
-  userId    String    @map("user_id")
-  groupId   String    @map("group_id")
-  group     Group     @relation(fields: [groupId], references: [id])
-  user      User      @relation(fields: [userId], references: [id])
+  userSeq   Int       @map("user_seq")
+  groupSeq  Int       @map("group_seq")
+  group     Group     @relation(fields: [groupSeq], references: [seq])
+  user      User      @relation(fields: [userSeq], references: [seq])
 
   @@map("user_associations")
 }

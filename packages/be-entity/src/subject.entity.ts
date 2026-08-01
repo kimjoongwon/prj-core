@@ -1,12 +1,16 @@
 import type { Subject as SubjectEntity } from "@cocrepo/prisma";
 import type { Ability } from "./ability.entity";
 import { AbstractEntity } from "./abstract.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 
 /**
  * CASL Subject 엔티티
  * 권한 대상 (entity:xxx, menu:xxx, feature:xxx, ui:xxx)
  */
-export class Subject extends AbstractEntity implements SubjectEntity {
+export class Subject
+	extends AbstractEntity
+	implements DomainEntityModel<SubjectEntity>
+{
 	name!: string;
 	displayName!: string | null;
 	icon!: string | null;

@@ -210,7 +210,7 @@ export class PasswordResetService {
 		const recentPasswords =
 			passwordPolicy.reuseLimit > 0
 				? await prisma.passwordHistory.findMany({
-						where: { userId: tokenData.userId },
+						where: { user: { id: tokenData.userId } },
 						orderBy: { createdAt: "desc" },
 						take: passwordPolicy.reuseLimit,
 						select: { passwordHash: true },
@@ -256,14 +256,14 @@ export class PasswordResetService {
 		// 5. 비밀번호 히스토리 저장
 		await prisma.passwordHistory.create({
 			data: {
-				userId: tokenData.userId,
+				user: { connect: { id: tokenData.userId } },
 				passwordHash: hashedPassword.value,
 			},
 		});
 
 		// 오래된 히스토리 정리 (현재 포함 최근 reuseLimit개만 유지)
 		const allHistory = await prisma.passwordHistory.findMany({
-			where: { userId: tokenData.userId },
+			where: { user: { id: tokenData.userId } },
 			orderBy: { createdAt: "desc" },
 			select: { id: true },
 		});

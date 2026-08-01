@@ -20,64 +20,96 @@ export type PolicyEntryModel = runtime.Types.Result.DefaultSelection<Prisma.$Pol
 
 export type AggregatePolicyEntry = {
   _count: PolicyEntryCountAggregateOutputType | null
+  _avg: PolicyEntryAvgAggregateOutputType | null
+  _sum: PolicyEntrySumAggregateOutputType | null
   _min: PolicyEntryMinAggregateOutputType | null
   _max: PolicyEntryMaxAggregateOutputType | null
 }
 
+export type PolicyEntryAvgAggregateOutputType = {
+  seq: number | null
+  policySeq: number | null
+  abilitySeq: number | null
+}
+
+export type PolicyEntrySumAggregateOutputType = {
+  seq: number | null
+  policySeq: number | null
+  abilitySeq: number | null
+}
+
 export type PolicyEntryMinAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  policyId: string | null
-  abilityId: string | null
+  policySeq: number | null
+  abilitySeq: number | null
 }
 
 export type PolicyEntryMaxAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  policyId: string | null
-  abilityId: string | null
+  policySeq: number | null
+  abilitySeq: number | null
 }
 
 export type PolicyEntryCountAggregateOutputType = {
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
-  policyId: number
-  abilityId: number
+  policySeq: number
+  abilitySeq: number
   _all: number
 }
 
 
+export type PolicyEntryAvgAggregateInputType = {
+  seq?: true
+  policySeq?: true
+  abilitySeq?: true
+}
+
+export type PolicyEntrySumAggregateInputType = {
+  seq?: true
+  policySeq?: true
+  abilitySeq?: true
+}
+
 export type PolicyEntryMinAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  policyId?: true
-  abilityId?: true
+  policySeq?: true
+  abilitySeq?: true
 }
 
 export type PolicyEntryMaxAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  policyId?: true
-  abilityId?: true
+  policySeq?: true
+  abilitySeq?: true
 }
 
 export type PolicyEntryCountAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  policyId?: true
-  abilityId?: true
+  policySeq?: true
+  abilitySeq?: true
   _all?: true
 }
 
@@ -119,6 +151,18 @@ export type PolicyEntryAggregateArgs<ExtArgs extends runtime.Types.Extensions.In
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: PolicyEntryAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: PolicyEntrySumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: PolicyEntryMinAggregateInputType
@@ -149,18 +193,23 @@ export type PolicyEntryGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   _count?: PolicyEntryCountAggregateInputType | true
+  _avg?: PolicyEntryAvgAggregateInputType
+  _sum?: PolicyEntrySumAggregateInputType
   _min?: PolicyEntryMinAggregateInputType
   _max?: PolicyEntryMaxAggregateInputType
 }
 
 export type PolicyEntryGroupByOutputType = {
   id: string
+  seq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  policyId: string
-  abilityId: string
+  policySeq: number
+  abilitySeq: number
   _count: PolicyEntryCountAggregateOutputType | null
+  _avg: PolicyEntryAvgAggregateOutputType | null
+  _sum: PolicyEntrySumAggregateOutputType | null
   _min: PolicyEntryMinAggregateOutputType | null
   _max: PolicyEntryMaxAggregateOutputType | null
 }
@@ -185,51 +234,57 @@ export type PolicyEntryWhereInput = {
   OR?: Prisma.PolicyEntryWhereInput[]
   NOT?: Prisma.PolicyEntryWhereInput | Prisma.PolicyEntryWhereInput[]
   id?: Prisma.StringFilter<"PolicyEntry"> | string
+  seq?: Prisma.IntFilter<"PolicyEntry"> | number
   createdAt?: Prisma.DateTimeFilter<"PolicyEntry"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"PolicyEntry"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"PolicyEntry"> | Date | string | null
-  policyId?: Prisma.StringFilter<"PolicyEntry"> | string
-  abilityId?: Prisma.StringFilter<"PolicyEntry"> | string
+  policySeq?: Prisma.IntFilter<"PolicyEntry"> | number
+  abilitySeq?: Prisma.IntFilter<"PolicyEntry"> | number
   policy?: Prisma.XOR<Prisma.PolicyScalarRelationFilter, Prisma.PolicyWhereInput>
   ability?: Prisma.XOR<Prisma.AbilityScalarRelationFilter, Prisma.AbilityWhereInput>
 }
 
 export type PolicyEntryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  policyId?: Prisma.SortOrder
-  abilityId?: Prisma.SortOrder
+  policySeq?: Prisma.SortOrder
+  abilitySeq?: Prisma.SortOrder
   policy?: Prisma.PolicyOrderByWithRelationInput
   ability?: Prisma.AbilityOrderByWithRelationInput
 }
 
 export type PolicyEntryWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  policyId_abilityId?: Prisma.PolicyEntryPolicyIdAbilityIdCompoundUniqueInput
+  seq?: number
+  policySeq_abilitySeq?: Prisma.PolicyEntryPolicySeqAbilitySeqCompoundUniqueInput
   AND?: Prisma.PolicyEntryWhereInput | Prisma.PolicyEntryWhereInput[]
   OR?: Prisma.PolicyEntryWhereInput[]
   NOT?: Prisma.PolicyEntryWhereInput | Prisma.PolicyEntryWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"PolicyEntry"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"PolicyEntry"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"PolicyEntry"> | Date | string | null
-  policyId?: Prisma.StringFilter<"PolicyEntry"> | string
-  abilityId?: Prisma.StringFilter<"PolicyEntry"> | string
+  policySeq?: Prisma.IntFilter<"PolicyEntry"> | number
+  abilitySeq?: Prisma.IntFilter<"PolicyEntry"> | number
   policy?: Prisma.XOR<Prisma.PolicyScalarRelationFilter, Prisma.PolicyWhereInput>
   ability?: Prisma.XOR<Prisma.AbilityScalarRelationFilter, Prisma.AbilityWhereInput>
-}, "id" | "policyId_abilityId">
+}, "seq" | "id" | "policySeq_abilitySeq">
 
 export type PolicyEntryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  policyId?: Prisma.SortOrder
-  abilityId?: Prisma.SortOrder
+  policySeq?: Prisma.SortOrder
+  abilitySeq?: Prisma.SortOrder
   _count?: Prisma.PolicyEntryCountOrderByAggregateInput
+  _avg?: Prisma.PolicyEntryAvgOrderByAggregateInput
   _max?: Prisma.PolicyEntryMaxOrderByAggregateInput
   _min?: Prisma.PolicyEntryMinOrderByAggregateInput
+  _sum?: Prisma.PolicyEntrySumOrderByAggregateInput
 }
 
 export type PolicyEntryScalarWhereWithAggregatesInput = {
@@ -237,11 +292,12 @@ export type PolicyEntryScalarWhereWithAggregatesInput = {
   OR?: Prisma.PolicyEntryScalarWhereWithAggregatesInput[]
   NOT?: Prisma.PolicyEntryScalarWhereWithAggregatesInput | Prisma.PolicyEntryScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"PolicyEntry"> | string
+  seq?: Prisma.IntWithAggregatesFilter<"PolicyEntry"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PolicyEntry"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"PolicyEntry"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"PolicyEntry"> | Date | string | null
-  policyId?: Prisma.StringWithAggregatesFilter<"PolicyEntry"> | string
-  abilityId?: Prisma.StringWithAggregatesFilter<"PolicyEntry"> | string
+  policySeq?: Prisma.IntWithAggregatesFilter<"PolicyEntry"> | number
+  abilitySeq?: Prisma.IntWithAggregatesFilter<"PolicyEntry"> | number
 }
 
 export type PolicyEntryCreateInput = {
@@ -255,11 +311,12 @@ export type PolicyEntryCreateInput = {
 
 export type PolicyEntryUncheckedCreateInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  policyId: string
-  abilityId: string
+  policySeq: number
+  abilitySeq: number
 }
 
 export type PolicyEntryUpdateInput = {
@@ -273,20 +330,22 @@ export type PolicyEntryUpdateInput = {
 
 export type PolicyEntryUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  policyId?: Prisma.StringFieldUpdateOperationsInput | string
-  abilityId?: Prisma.StringFieldUpdateOperationsInput | string
+  policySeq?: Prisma.IntFieldUpdateOperationsInput | number
+  abilitySeq?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type PolicyEntryCreateManyInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  policyId: string
-  abilityId: string
+  policySeq: number
+  abilitySeq: number
 }
 
 export type PolicyEntryUpdateManyMutationInput = {
@@ -298,11 +357,12 @@ export type PolicyEntryUpdateManyMutationInput = {
 
 export type PolicyEntryUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  policyId?: Prisma.StringFieldUpdateOperationsInput | string
-  abilityId?: Prisma.StringFieldUpdateOperationsInput | string
+  policySeq?: Prisma.IntFieldUpdateOperationsInput | number
+  abilitySeq?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type PolicyEntryListRelationFilter = {
@@ -315,36 +375,51 @@ export type PolicyEntryOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type PolicyEntryPolicyIdAbilityIdCompoundUniqueInput = {
-  policyId: string
-  abilityId: string
+export type PolicyEntryPolicySeqAbilitySeqCompoundUniqueInput = {
+  policySeq: number
+  abilitySeq: number
 }
 
 export type PolicyEntryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  policyId?: Prisma.SortOrder
-  abilityId?: Prisma.SortOrder
+  policySeq?: Prisma.SortOrder
+  abilitySeq?: Prisma.SortOrder
+}
+
+export type PolicyEntryAvgOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+  policySeq?: Prisma.SortOrder
+  abilitySeq?: Prisma.SortOrder
 }
 
 export type PolicyEntryMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  policyId?: Prisma.SortOrder
-  abilityId?: Prisma.SortOrder
+  policySeq?: Prisma.SortOrder
+  abilitySeq?: Prisma.SortOrder
 }
 
 export type PolicyEntryMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  policyId?: Prisma.SortOrder
-  abilityId?: Prisma.SortOrder
+  policySeq?: Prisma.SortOrder
+  abilitySeq?: Prisma.SortOrder
+}
+
+export type PolicyEntrySumOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+  policySeq?: Prisma.SortOrder
+  abilitySeq?: Prisma.SortOrder
 }
 
 export type PolicyEntryCreateNestedManyWithoutAbilityInput = {
@@ -441,10 +516,11 @@ export type PolicyEntryCreateWithoutAbilityInput = {
 
 export type PolicyEntryUncheckedCreateWithoutAbilityInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  policyId: string
+  policySeq: number
 }
 
 export type PolicyEntryCreateOrConnectWithoutAbilityInput = {
@@ -478,11 +554,12 @@ export type PolicyEntryScalarWhereInput = {
   OR?: Prisma.PolicyEntryScalarWhereInput[]
   NOT?: Prisma.PolicyEntryScalarWhereInput | Prisma.PolicyEntryScalarWhereInput[]
   id?: Prisma.StringFilter<"PolicyEntry"> | string
+  seq?: Prisma.IntFilter<"PolicyEntry"> | number
   createdAt?: Prisma.DateTimeFilter<"PolicyEntry"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"PolicyEntry"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"PolicyEntry"> | Date | string | null
-  policyId?: Prisma.StringFilter<"PolicyEntry"> | string
-  abilityId?: Prisma.StringFilter<"PolicyEntry"> | string
+  policySeq?: Prisma.IntFilter<"PolicyEntry"> | number
+  abilitySeq?: Prisma.IntFilter<"PolicyEntry"> | number
 }
 
 export type PolicyEntryCreateWithoutPolicyInput = {
@@ -495,10 +572,11 @@ export type PolicyEntryCreateWithoutPolicyInput = {
 
 export type PolicyEntryUncheckedCreateWithoutPolicyInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  abilityId: string
+  abilitySeq: number
 }
 
 export type PolicyEntryCreateOrConnectWithoutPolicyInput = {
@@ -529,10 +607,11 @@ export type PolicyEntryUpdateManyWithWhereWithoutPolicyInput = {
 
 export type PolicyEntryCreateManyAbilityInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  policyId: string
+  policySeq: number
 }
 
 export type PolicyEntryUpdateWithoutAbilityInput = {
@@ -545,26 +624,29 @@ export type PolicyEntryUpdateWithoutAbilityInput = {
 
 export type PolicyEntryUncheckedUpdateWithoutAbilityInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  policyId?: Prisma.StringFieldUpdateOperationsInput | string
+  policySeq?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type PolicyEntryUncheckedUpdateManyWithoutAbilityInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  policyId?: Prisma.StringFieldUpdateOperationsInput | string
+  policySeq?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type PolicyEntryCreateManyPolicyInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  abilityId: string
+  abilitySeq: number
 }
 
 export type PolicyEntryUpdateWithoutPolicyInput = {
@@ -577,65 +659,71 @@ export type PolicyEntryUpdateWithoutPolicyInput = {
 
 export type PolicyEntryUncheckedUpdateWithoutPolicyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  abilityId?: Prisma.StringFieldUpdateOperationsInput | string
+  abilitySeq?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type PolicyEntryUncheckedUpdateManyWithoutPolicyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  abilityId?: Prisma.StringFieldUpdateOperationsInput | string
+  abilitySeq?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
 
 export type PolicyEntrySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  policyId?: boolean
-  abilityId?: boolean
+  policySeq?: boolean
+  abilitySeq?: boolean
   policy?: boolean | Prisma.PolicyDefaultArgs<ExtArgs>
   ability?: boolean | Prisma.AbilityDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["policyEntry"]>
 
 export type PolicyEntrySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  policyId?: boolean
-  abilityId?: boolean
+  policySeq?: boolean
+  abilitySeq?: boolean
   policy?: boolean | Prisma.PolicyDefaultArgs<ExtArgs>
   ability?: boolean | Prisma.AbilityDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["policyEntry"]>
 
 export type PolicyEntrySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  policyId?: boolean
-  abilityId?: boolean
+  policySeq?: boolean
+  abilitySeq?: boolean
   policy?: boolean | Prisma.PolicyDefaultArgs<ExtArgs>
   ability?: boolean | Prisma.AbilityDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["policyEntry"]>
 
 export type PolicyEntrySelectScalar = {
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  policyId?: boolean
-  abilityId?: boolean
+  policySeq?: boolean
+  abilitySeq?: boolean
 }
 
-export type PolicyEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "policyId" | "abilityId", ExtArgs["result"]["policyEntry"]>
+export type PolicyEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "policySeq" | "abilitySeq", ExtArgs["result"]["policyEntry"]>
 export type PolicyEntryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   policy?: boolean | Prisma.PolicyDefaultArgs<ExtArgs>
   ability?: boolean | Prisma.AbilityDefaultArgs<ExtArgs>
@@ -657,17 +745,18 @@ export type $PolicyEntryPayload<ExtArgs extends runtime.Types.Extensions.Interna
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    seq: number
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
     /**
-     * @displayName 정책 ID
+     * @displayName 정책 내부 순번
      */
-    policyId: string
+    policySeq: number
     /**
-     * @displayName 권한 ID
+     * @displayName 권한 내부 순번
      */
-    abilityId: string
+    abilitySeq: number
   }, ExtArgs["result"]["policyEntry"]>
   composites: {}
 }
@@ -1094,11 +1183,12 @@ export interface Prisma__PolicyEntryClient<T, Null = never, ExtArgs extends runt
  */
 export interface PolicyEntryFieldRefs {
   readonly id: Prisma.FieldRef<"PolicyEntry", 'String'>
+  readonly seq: Prisma.FieldRef<"PolicyEntry", 'Int'>
   readonly createdAt: Prisma.FieldRef<"PolicyEntry", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"PolicyEntry", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"PolicyEntry", 'DateTime'>
-  readonly policyId: Prisma.FieldRef<"PolicyEntry", 'String'>
-  readonly abilityId: Prisma.FieldRef<"PolicyEntry", 'String'>
+  readonly policySeq: Prisma.FieldRef<"PolicyEntry", 'Int'>
+  readonly abilitySeq: Prisma.FieldRef<"PolicyEntry", 'Int'>
 }
     
 

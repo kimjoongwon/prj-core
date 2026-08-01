@@ -4,8 +4,9 @@ import {
 	NumberField,
 	StringField,
 	StringFieldOptional,
-	UUIDField,
+	ULIDField,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { Ability, Prisma } from "@cocrepo/prisma";
 import { AbstractDto } from "../abstract.dto";
 import { ActionDto } from "../action.dto";
@@ -16,9 +17,12 @@ import { SubjectSummaryDto } from "../subject.dto";
  * 재사용 가능한 권한 정의
  * - Role 연결은 Policy/RoleAssignment 테이블에서 관리
  */
-export class AbilityDto extends AbstractDto implements Ability {
+export class AbilityDto
+	extends AbstractDto
+	implements DomainEntityModel<Ability>
+{
 	// CASL 필수 필드
-	@UUIDField()
+	@ULIDField()
 	actionId!: string;
 
 	fields!: string[];
@@ -32,7 +36,7 @@ export class AbilityDto extends AbstractDto implements Ability {
 	reason!: string | null;
 
 	// 연결 대상
-	@UUIDField()
+	@ULIDField()
 	subjectId!: string;
 
 	// 메타데이터

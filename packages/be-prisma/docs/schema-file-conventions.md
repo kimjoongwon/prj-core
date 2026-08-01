@@ -18,7 +18,8 @@ Prisma 스키마는 데이터베이스의 설계도입니다.
 
 ```prisma
 model User {
-  id    String @id
+  id    String @unique @default(ulid()) @db.VarChar(26)
+  seq   Int    @id @default(autoincrement())
   email String @unique
 }
 ```
@@ -65,6 +66,13 @@ packages/be-prisma/schema/
 3. `enum`, `generator`, `datasource`를 선언하지 않습니다.
 4. 파일 이름은 model 이름에서 기계적으로 계산합니다.
 5. [schema-metadata-guide.md](./schema-metadata-guide.md)의 모델 메타데이터 계약을 지킵니다.
+
+모든 model의 식별자 계약은 같습니다.
+
+- `id`: 외부 공개용 ULID, `String @unique @default(ulid()) @db.VarChar(26)`
+- `seq`: 내부 PK/FK join용 숫자, `Int @id @default(autoincrement())`
+- relation scalar: `<relation>Seq` 이름과 `references: [seq]` 사용
+- API와 URL에는 `seq`를 노출하지 않고 `id`만 사용
 
 메타데이터 종류와 형식, 의미와 판단 기준은 이 문서에서 다시 정의하지 않습니다.
 
@@ -177,7 +185,8 @@ NotificationRule -> notification-rule.prisma
 // @description: 알림 전달 조건과 채널 선택 규칙을 관리
 /// @displayName 알림 규칙
 model NotificationRule {
-  id String @id @default(uuid())
+  id  String @unique @default(ulid()) @db.VarChar(26)
+  seq Int    @id @default(autoincrement())
 }
 ```
 

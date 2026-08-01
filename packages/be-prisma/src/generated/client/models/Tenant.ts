@@ -20,70 +20,106 @@ export type TenantModel = runtime.Types.Result.DefaultSelection<Prisma.$TenantPa
 
 export type AggregateTenant = {
   _count: TenantCountAggregateOutputType | null
+  _avg: TenantAvgAggregateOutputType | null
+  _sum: TenantSumAggregateOutputType | null
   _min: TenantMinAggregateOutputType | null
   _max: TenantMaxAggregateOutputType | null
 }
 
+export type TenantAvgAggregateOutputType = {
+  seq: number | null
+  userSeq: number | null
+  spaceSeq: number | null
+  roleSeq: number | null
+}
+
+export type TenantSumAggregateOutputType = {
+  seq: number | null
+  userSeq: number | null
+  spaceSeq: number | null
+  roleSeq: number | null
+}
+
 export type TenantMinAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  userId: string | null
-  spaceId: string | null
-  roleId: string | null
+  userSeq: number | null
+  spaceSeq: number | null
+  roleSeq: number | null
 }
 
 export type TenantMaxAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  userId: string | null
-  spaceId: string | null
-  roleId: string | null
+  userSeq: number | null
+  spaceSeq: number | null
+  roleSeq: number | null
 }
 
 export type TenantCountAggregateOutputType = {
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
-  userId: number
-  spaceId: number
-  roleId: number
+  userSeq: number
+  spaceSeq: number
+  roleSeq: number
   _all: number
 }
 
 
+export type TenantAvgAggregateInputType = {
+  seq?: true
+  userSeq?: true
+  spaceSeq?: true
+  roleSeq?: true
+}
+
+export type TenantSumAggregateInputType = {
+  seq?: true
+  userSeq?: true
+  spaceSeq?: true
+  roleSeq?: true
+}
+
 export type TenantMinAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  userId?: true
-  spaceId?: true
-  roleId?: true
+  userSeq?: true
+  spaceSeq?: true
+  roleSeq?: true
 }
 
 export type TenantMaxAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  userId?: true
-  spaceId?: true
-  roleId?: true
+  userSeq?: true
+  spaceSeq?: true
+  roleSeq?: true
 }
 
 export type TenantCountAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  userId?: true
-  spaceId?: true
-  roleId?: true
+  userSeq?: true
+  spaceSeq?: true
+  roleSeq?: true
   _all?: true
 }
 
@@ -125,6 +161,18 @@ export type TenantAggregateArgs<ExtArgs extends runtime.Types.Extensions.Interna
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: TenantAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: TenantSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: TenantMinAggregateInputType
@@ -155,19 +203,24 @@ export type TenantGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   _count?: TenantCountAggregateInputType | true
+  _avg?: TenantAvgAggregateInputType
+  _sum?: TenantSumAggregateInputType
   _min?: TenantMinAggregateInputType
   _max?: TenantMaxAggregateInputType
 }
 
 export type TenantGroupByOutputType = {
   id: string
+  seq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  userId: string
-  spaceId: string
-  roleId: string
+  userSeq: number
+  spaceSeq: number
+  roleSeq: number
   _count: TenantCountAggregateOutputType | null
+  _avg: TenantAvgAggregateOutputType | null
+  _sum: TenantSumAggregateOutputType | null
   _min: TenantMinAggregateOutputType | null
   _max: TenantMaxAggregateOutputType | null
 }
@@ -192,12 +245,13 @@ export type TenantWhereInput = {
   OR?: Prisma.TenantWhereInput[]
   NOT?: Prisma.TenantWhereInput | Prisma.TenantWhereInput[]
   id?: Prisma.StringFilter<"Tenant"> | string
+  seq?: Prisma.IntFilter<"Tenant"> | number
   createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
-  userId?: Prisma.StringFilter<"Tenant"> | string
-  spaceId?: Prisma.StringFilter<"Tenant"> | string
-  roleId?: Prisma.StringFilter<"Tenant"> | string
+  userSeq?: Prisma.IntFilter<"Tenant"> | number
+  spaceSeq?: Prisma.IntFilter<"Tenant"> | number
+  roleSeq?: Prisma.IntFilter<"Tenant"> | number
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -206,12 +260,13 @@ export type TenantWhereInput = {
 
 export type TenantOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  roleId?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  roleSeq?: Prisma.SortOrder
   role?: Prisma.RoleOrderByWithRelationInput
   space?: Prisma.SpaceOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
@@ -220,33 +275,37 @@ export type TenantOrderByWithRelationInput = {
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  userId_spaceId?: Prisma.TenantUserIdSpaceIdCompoundUniqueInput
+  seq?: number
+  userSeq_spaceSeq?: Prisma.TenantUserSeqSpaceSeqCompoundUniqueInput
   AND?: Prisma.TenantWhereInput | Prisma.TenantWhereInput[]
   OR?: Prisma.TenantWhereInput[]
   NOT?: Prisma.TenantWhereInput | Prisma.TenantWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
-  userId?: Prisma.StringFilter<"Tenant"> | string
-  spaceId?: Prisma.StringFilter<"Tenant"> | string
-  roleId?: Prisma.StringFilter<"Tenant"> | string
+  userSeq?: Prisma.IntFilter<"Tenant"> | number
+  spaceSeq?: Prisma.IntFilter<"Tenant"> | number
+  roleSeq?: Prisma.IntFilter<"Tenant"> | number
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   accessRequests?: Prisma.TenantAccessRequestListRelationFilter
-}, "id" | "userId_spaceId">
+}, "seq" | "id" | "userSeq_spaceSeq">
 
 export type TenantOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  roleId?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  roleSeq?: Prisma.SortOrder
   _count?: Prisma.TenantCountOrderByAggregateInput
+  _avg?: Prisma.TenantAvgOrderByAggregateInput
   _max?: Prisma.TenantMaxOrderByAggregateInput
   _min?: Prisma.TenantMinOrderByAggregateInput
+  _sum?: Prisma.TenantSumOrderByAggregateInput
 }
 
 export type TenantScalarWhereWithAggregatesInput = {
@@ -254,12 +313,13 @@ export type TenantScalarWhereWithAggregatesInput = {
   OR?: Prisma.TenantScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TenantScalarWhereWithAggregatesInput | Prisma.TenantScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
+  seq?: Prisma.IntWithAggregatesFilter<"Tenant"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Tenant"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Tenant"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Tenant"> | Date | string | null
-  userId?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
-  spaceId?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
-  roleId?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
+  userSeq?: Prisma.IntWithAggregatesFilter<"Tenant"> | number
+  spaceSeq?: Prisma.IntWithAggregatesFilter<"Tenant"> | number
+  roleSeq?: Prisma.IntWithAggregatesFilter<"Tenant"> | number
 }
 
 export type TenantCreateInput = {
@@ -275,12 +335,13 @@ export type TenantCreateInput = {
 
 export type TenantUncheckedCreateInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  userId: string
-  spaceId: string
-  roleId: string
+  userSeq: number
+  spaceSeq: number
+  roleSeq: number
   accessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutAppliedTenantInput
 }
 
@@ -297,23 +358,25 @@ export type TenantUpdateInput = {
 
 export type TenantUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  roleSeq?: Prisma.IntFieldUpdateOperationsInput | number
   accessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutAppliedTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  userId: string
-  spaceId: string
-  roleId: string
+  userSeq: number
+  spaceSeq: number
+  roleSeq: number
 }
 
 export type TenantUpdateManyMutationInput = {
@@ -325,12 +388,13 @@ export type TenantUpdateManyMutationInput = {
 
 export type TenantUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  roleSeq?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type TenantListRelationFilter = {
@@ -348,39 +412,56 @@ export type TenantNullableScalarRelationFilter = {
   isNot?: Prisma.TenantWhereInput | null
 }
 
-export type TenantUserIdSpaceIdCompoundUniqueInput = {
-  userId: string
-  spaceId: string
+export type TenantUserSeqSpaceSeqCompoundUniqueInput = {
+  userSeq: number
+  spaceSeq: number
 }
 
 export type TenantCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  roleId?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  roleSeq?: Prisma.SortOrder
+}
+
+export type TenantAvgOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  roleSeq?: Prisma.SortOrder
 }
 
 export type TenantMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  roleId?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  roleSeq?: Prisma.SortOrder
 }
 
 export type TenantMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  roleId?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  roleSeq?: Prisma.SortOrder
+}
+
+export type TenantSumOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+  userSeq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  roleSeq?: Prisma.SortOrder
 }
 
 export type TenantCreateNestedManyWithoutRoleInput = {
@@ -537,11 +618,12 @@ export type TenantCreateWithoutRoleInput = {
 
 export type TenantUncheckedCreateWithoutRoleInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  userId: string
-  spaceId: string
+  userSeq: number
+  spaceSeq: number
   accessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutAppliedTenantInput
 }
 
@@ -576,12 +658,13 @@ export type TenantScalarWhereInput = {
   OR?: Prisma.TenantScalarWhereInput[]
   NOT?: Prisma.TenantScalarWhereInput | Prisma.TenantScalarWhereInput[]
   id?: Prisma.StringFilter<"Tenant"> | string
+  seq?: Prisma.IntFilter<"Tenant"> | number
   createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
-  userId?: Prisma.StringFilter<"Tenant"> | string
-  spaceId?: Prisma.StringFilter<"Tenant"> | string
-  roleId?: Prisma.StringFilter<"Tenant"> | string
+  userSeq?: Prisma.IntFilter<"Tenant"> | number
+  spaceSeq?: Prisma.IntFilter<"Tenant"> | number
+  roleSeq?: Prisma.IntFilter<"Tenant"> | number
 }
 
 export type TenantCreateWithoutSpaceInput = {
@@ -596,11 +679,12 @@ export type TenantCreateWithoutSpaceInput = {
 
 export type TenantUncheckedCreateWithoutSpaceInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  userId: string
-  roleId: string
+  userSeq: number
+  roleSeq: number
   accessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutAppliedTenantInput
 }
 
@@ -642,12 +726,13 @@ export type TenantCreateWithoutAccessRequestsInput = {
 
 export type TenantUncheckedCreateWithoutAccessRequestsInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  userId: string
-  spaceId: string
-  roleId: string
+  userSeq: number
+  spaceSeq: number
+  roleSeq: number
 }
 
 export type TenantCreateOrConnectWithoutAccessRequestsInput = {
@@ -678,12 +763,13 @@ export type TenantUpdateWithoutAccessRequestsInput = {
 
 export type TenantUncheckedUpdateWithoutAccessRequestsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  roleSeq?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type TenantCreateWithoutUserInput = {
@@ -698,11 +784,12 @@ export type TenantCreateWithoutUserInput = {
 
 export type TenantUncheckedCreateWithoutUserInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: string
-  roleId: string
+  spaceSeq: number
+  roleSeq: number
   accessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutAppliedTenantInput
 }
 
@@ -734,11 +821,12 @@ export type TenantUpdateManyWithWhereWithoutUserInput = {
 
 export type TenantCreateManyRoleInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  userId: string
-  spaceId: string
+  userSeq: number
+  spaceSeq: number
 }
 
 export type TenantUpdateWithoutRoleInput = {
@@ -753,30 +841,33 @@ export type TenantUpdateWithoutRoleInput = {
 
 export type TenantUncheckedUpdateWithoutRoleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   accessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutAppliedTenantNestedInput
 }
 
 export type TenantUncheckedUpdateManyWithoutRoleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type TenantCreateManySpaceInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  userId: string
-  roleId: string
+  userSeq: number
+  roleSeq: number
 }
 
 export type TenantUpdateWithoutSpaceInput = {
@@ -791,30 +882,33 @@ export type TenantUpdateWithoutSpaceInput = {
 
 export type TenantUncheckedUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  roleSeq?: Prisma.IntFieldUpdateOperationsInput | number
   accessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutAppliedTenantNestedInput
 }
 
 export type TenantUncheckedUpdateManyWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  roleSeq?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type TenantCreateManyUserInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: string
-  roleId: string
+  spaceSeq: number
+  roleSeq: number
 }
 
 export type TenantUpdateWithoutUserInput = {
@@ -829,21 +923,23 @@ export type TenantUpdateWithoutUserInput = {
 
 export type TenantUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  roleSeq?: Prisma.IntFieldUpdateOperationsInput | number
   accessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutAppliedTenantNestedInput
 }
 
 export type TenantUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  roleSeq?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -879,12 +975,13 @@ export type TenantCountOutputTypeCountAccessRequestsArgs<ExtArgs extends runtime
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  userId?: boolean
-  spaceId?: boolean
-  roleId?: boolean
+  userSeq?: boolean
+  spaceSeq?: boolean
+  roleSeq?: boolean
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -894,12 +991,13 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 
 export type TenantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  userId?: boolean
-  spaceId?: boolean
-  roleId?: boolean
+  userSeq?: boolean
+  spaceSeq?: boolean
+  roleSeq?: boolean
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -907,12 +1005,13 @@ export type TenantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
 
 export type TenantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  userId?: boolean
-  spaceId?: boolean
-  roleId?: boolean
+  userSeq?: boolean
+  spaceSeq?: boolean
+  roleSeq?: boolean
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -920,15 +1019,16 @@ export type TenantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
 
 export type TenantSelectScalar = {
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  userId?: boolean
-  spaceId?: boolean
-  roleId?: boolean
+  userSeq?: boolean
+  spaceSeq?: boolean
+  roleSeq?: boolean
 }
 
-export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "userId" | "spaceId" | "roleId", ExtArgs["result"]["tenant"]>
+export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "userSeq" | "spaceSeq" | "roleSeq", ExtArgs["result"]["tenant"]>
 export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
@@ -957,12 +1057,13 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    seq: number
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    userId: string
-    spaceId: string
-    roleId: string
+    userSeq: number
+    spaceSeq: number
+    roleSeq: number
   }, ExtArgs["result"]["tenant"]>
   composites: {}
 }
@@ -1391,12 +1492,13 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
  */
 export interface TenantFieldRefs {
   readonly id: Prisma.FieldRef<"Tenant", 'String'>
+  readonly seq: Prisma.FieldRef<"Tenant", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Tenant", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Tenant", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Tenant", 'DateTime'>
-  readonly userId: Prisma.FieldRef<"Tenant", 'String'>
-  readonly spaceId: Prisma.FieldRef<"Tenant", 'String'>
-  readonly roleId: Prisma.FieldRef<"Tenant", 'String'>
+  readonly userSeq: Prisma.FieldRef<"Tenant", 'Int'>
+  readonly spaceSeq: Prisma.FieldRef<"Tenant", 'Int'>
+  readonly roleSeq: Prisma.FieldRef<"Tenant", 'Int'>
 }
     
 

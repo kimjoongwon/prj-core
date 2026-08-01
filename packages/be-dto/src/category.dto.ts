@@ -2,17 +2,21 @@ import {
 	ClassField,
 	EnumField,
 	StringField,
-	UUIDField,
-	UUIDFieldOptional,
+	ULIDField,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import { type Category, CategoryTypes } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 
-export class CategoryDto extends AbstractDto implements Category {
-	@UUIDField()
+export class CategoryDto
+	extends AbstractDto
+	implements DomainEntityModel<Category>
+{
+	@ULIDField()
 	spaceId: string;
 
-	@UUIDFieldOptional({ nullable: true })
+	@ULIDFieldOptional({ nullable: true })
 	createdById: string | null;
 
 	@StringField({ default: "" })
@@ -21,7 +25,7 @@ export class CategoryDto extends AbstractDto implements Category {
 	@EnumField(() => CategoryTypes, { default: CategoryTypes.Role })
 	type: CategoryTypes;
 
-	@UUIDField({ nullable: true, default: null })
+	@ULIDField({ nullable: true, default: null })
 	parentId: string | null;
 
 	@ClassField(() => CategoryDto, { required: false })

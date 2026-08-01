@@ -4,11 +4,15 @@ import {
 	StringFieldOptional,
 	UUIDFieldOptional,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { Company as CompanyEntity } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { FitnessCenterDto } from "./fitness-center.dto";
 
-export class CompanyDto extends AbstractDto implements CompanyEntity {
+export class CompanyDto
+	extends AbstractDto
+	implements DomainEntityModel<CompanyEntity>
+{
 	@StringField()
 	name: string;
 

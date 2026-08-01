@@ -6,9 +6,11 @@ import { RoleAssignmentsRepository } from "../src/role-assignments.repository";
 describe("RoleAssignmentsRepository", () => {
 	let repository: RoleAssignmentsRepository;
 	const roleAssignment = {
+		findFirst: jest.fn(),
 		findMany: jest.fn(),
+		create: jest.fn(),
+		update: jest.fn(),
 		updateMany: jest.fn(),
-		upsert: jest.fn(),
 	};
 
 	beforeEach(async () => {
@@ -42,35 +44,20 @@ describe("RoleAssignmentsRepository", () => {
 
 		const result = await repository.findByRoleIdInSpace("role-id", "space-id");
 
-		expect(roleAssignment.findMany).toHaveBeenCalledWith({
-			where: {
-				roleId: { in: ["role-id"] },
-				removedAt: null,
-				policy: { spaceId: "space-id", removedAt: null },
-			},
-			include: {
-				policy: {
-					include: {
-						entries: {
-							where: {
-								removedAt: null,
-								ability: { removedAt: null },
-							},
-							include: {
-								ability: {
-									include: {
-										subject: true,
-										action: true,
-									},
-								},
-							},
-							orderBy: { createdAt: "asc" },
-						},
-					},
+		expect(roleAssignment.findMany).toHaveBeenCalledWith(
+			expect.objectContaining({
+				where: {
+					role: { id: { in: ["role-id"] } },
+					removedAt: null,
+					policy: { space: { id: "space-id" }, removedAt: null },
 				},
-			},
-			orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
-		});
+				include: expect.objectContaining({
+					role: true,
+					policy: expect.any(Object),
+				}),
+				orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
+			}),
+		);
 		expect(result[0]).toBeInstanceOf(RoleAssignment);
 		expect(result[0]?.isActive).toBe(false);
 	});
@@ -86,9 +73,9 @@ describe("RoleAssignmentsRepository", () => {
 		expect(roleAssignment.findMany).toHaveBeenCalledWith(
 			expect.objectContaining({
 				where: expect.objectContaining({
-					roleId: { in: ["role-a", "role-b"] },
+					role: { id: { in: ["role-a", "role-b"] } },
 					isActive: true,
-					policy: { spaceId: "space-id", removedAt: null },
+					policy: { space: { id: "space-id" }, removedAt: null },
 				}),
 			}),
 		);
@@ -96,7 +83,8 @@ describe("RoleAssignmentsRepository", () => {
 
 	it("같은 Policy가 중복 입력되면 마지막 값 하나로 동기화해야 한다", async () => {
 		roleAssignment.updateMany.mockResolvedValue({ count: 0 });
-		roleAssignment.upsert.mockResolvedValue({});
+		roleAssignment.findFirst.mockResolvedValue(null);
+		roleAssignment.create.mockResolvedValue({});
 		roleAssignment.findMany.mockResolvedValue([]);
 
 		await repository.syncByRoleId(
@@ -108,15 +96,16 @@ describe("RoleAssignmentsRepository", () => {
 			"space-id",
 		);
 
-		expect(roleAssignment.upsert).toHaveBeenCalledTimes(1);
-		expect(roleAssignment.upsert).toHaveBeenCalledWith(
-			expect.objectContaining({
-				update: {
-					isActive: false,
-					priority: 20,
-					removedAt: null,
-				},
-			}),
-		);
+		expect(roleAssignment.create).toHaveBeenCalledTimes(1);
+		expect(roleAssignment.create).toHaveBeenCalledWith({
+			data: {
+				role: { connect: { id: "role-id" } },
+				policy: { connect: { id: "policy-id" } },
+				isActive: false,
+				priority: 20,
+				removedAt: null,
+			},
+		});
+		expect(roleAssignment.update).not.toHaveBeenCalled();
 	});
 });

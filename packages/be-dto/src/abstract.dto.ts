@@ -1,7 +1,7 @@
-import { DateField, UUIDField } from "@cocrepo/decorator";
+import { DateField, ULIDField } from "@cocrepo/decorator";
 
 export class AbstractDto {
-	@UUIDField()
+	@ULIDField()
 	id!: string;
 
 	@DateField()

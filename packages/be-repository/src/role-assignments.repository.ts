@@ -3,7 +3,7 @@ import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import { toDomainEntity } from "./to-domain-entity";
 
 export interface RoleAssignmentInput {
 	policyId: string;
@@ -31,7 +31,7 @@ export class RoleAssignmentsRepository {
 			orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
 		});
 
-		return results.map((result) => plainToInstance(RoleAssignment, result));
+		return results.map((result) => toDomainEntity(RoleAssignment, result));
 	}
 
 	async findActiveByRoleIdsInSpace(
@@ -49,7 +49,7 @@ export class RoleAssignmentsRepository {
 			orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
 		});
 
-		return results.map((result) => plainToInstance(RoleAssignment, result));
+		return results.map((result) => toDomainEntity(RoleAssignment, result));
 	}
 
 	async syncByRoleId(
@@ -67,50 +67,59 @@ export class RoleAssignmentsRepository {
 		await this.softRemoveMissing(roleId, policyIds, spaceId);
 
 		await Promise.all(
-			uniqueItems.map((item) =>
-				this.txHost.tx.roleAssignment.upsert({
+			uniqueItems.map(async (item) => {
+				const existing = await this.txHost.tx.roleAssignment.findFirst({
 					where: {
-						roleId_policyId: {
-							roleId,
-							policyId: item.policyId,
-						},
+						role: { id: roleId },
+						policy: { id: item.policyId },
 					},
-					create: {
-						roleId,
-						policyId: item.policyId,
-						isActive: item.isActive ?? true,
-						priority: item.priority ?? 0,
+					select: { id: true },
+				});
+				const assignmentData = {
+					isActive: item.isActive ?? true,
+					priority: item.priority ?? 0,
+					removedAt: null,
+				};
+
+				if (existing) {
+					await this.txHost.tx.roleAssignment.update({
+						where: { id: existing.id },
+						data: assignmentData,
+					});
+					return;
+				}
+
+				await this.txHost.tx.roleAssignment.create({
+					data: {
+						...assignmentData,
+						role: { connect: { id: roleId } },
+						policy: { connect: { id: item.policyId } },
 					},
-					update: {
-						isActive: item.isActive ?? true,
-						priority: item.priority ?? 0,
-						removedAt: null,
-					},
-				}),
-			),
+				});
+			}),
 		);
 
 		const synced = await this.txHost.tx.roleAssignment.findMany({
 			where: {
-				roleId,
-				policyId: { in: policyIds },
-				removedAt: null,
+				role: { id: roleId },
 				policy: {
-					spaceId,
+					id: { in: policyIds },
+					space: { id: spaceId },
 					removedAt: null,
 				},
+				removedAt: null,
 			},
 			include: this.includePolicyEntries(),
 			orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
 		});
 
-		return synced.map((result) => plainToInstance(RoleAssignment, result));
+		return synced.map((result) => toDomainEntity(RoleAssignment, result));
 	}
 
 	async removeByPolicyId(policyId: string): Promise<number> {
 		const result = await this.txHost.tx.roleAssignment.updateMany({
 			where: {
-				policyId,
+				policy: { id: policyId },
 				removedAt: null,
 			},
 			data: {
@@ -123,10 +132,10 @@ export class RoleAssignmentsRepository {
 
 	private buildRoleAssignmentWhere(roleIds: string[], spaceId: string) {
 		return {
-			roleId: { in: roleIds },
+			role: { id: { in: roleIds } },
 			removedAt: null,
 			policy: {
-				spaceId,
+				space: { id: spaceId },
 				removedAt: null,
 			},
 		} satisfies Prisma.RoleAssignmentWhereInput;
@@ -139,13 +148,15 @@ export class RoleAssignmentsRepository {
 	): Promise<void> {
 		await this.txHost.tx.roleAssignment.updateMany({
 			where: {
-				roleId,
+				role: { id: roleId },
 				removedAt: null,
 				policy: {
-					spaceId,
+					space: { id: spaceId },
 					removedAt: null,
 				},
-				...(policyIds.length > 0 ? { policyId: { notIn: policyIds } } : {}),
+				...(policyIds.length > 0
+					? { policy: { id: { notIn: policyIds }, space: { id: spaceId } } }
+					: {}),
 			},
 			data: {
 				removedAt: new Date(),
@@ -163,14 +174,18 @@ export class RoleAssignmentsRepository {
 
 	private includePolicyEntries() {
 		return {
+			role: true,
 			policy: {
 				include: {
+					space: true,
+					createdBy: true,
 					entries: {
 						where: {
 							removedAt: null,
 							ability: { removedAt: null },
 						},
 						include: {
+							policy: { select: { id: true } },
 							ability: {
 								include: {
 									subject: true,

@@ -3,31 +3,32 @@
 // @description: 여러 Ability를 묶어 Role에 할당되는 공간별 권한 정책 묶음
 /// @displayName 정책
 model Policy {
-  id        String    @id @default(uuid())
+  id        String    @unique @default(ulid()) @db.VarChar(26)
+  seq       Int       @id @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
 
-  /// @displayName 공간 ID
-  spaceId     String  @map("space_id")
-  /// @displayName 생성자 ID
-  createdById String? @map("created_by_id")
+  /// @displayName 공간 내부 순번
+  spaceSeq     Int     @map("space_seq")
+  /// @displayName 생성자 내부 순번
+  createdBySeq Int?    @map("created_by_seq")
   /// @displayName 정책 식별자
-  name        String
+  name         String
   /// @displayName 표시명
-  displayName String? @map("display_name")
+  displayName  String? @map("display_name")
   /// @displayName 설명
-  description String?
+  description  String?
   /// @displayName 시스템 정책 여부
-  isSystem    Boolean @default(false) @map("is_system")
+  isSystem     Boolean @default(false) @map("is_system")
 
-  space           Space           @relation(fields: [spaceId], references: [id], onDelete: Restrict)
-  createdBy       User?           @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  space           Space            @relation(fields: [spaceSeq], references: [seq], onDelete: Restrict)
+  createdBy       User?            @relation(fields: [createdBySeq], references: [seq], onDelete: SetNull)
   entries         PolicyEntry[]
   roleAssignments RoleAssignment[]
 
-  @@unique([spaceId, name])
-  @@index([spaceId])
+  @@unique([spaceSeq, name])
+  @@index([spaceSeq])
   @@index([isSystem])
   @@map("policies")
 }

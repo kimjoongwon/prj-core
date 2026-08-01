@@ -7,7 +7,7 @@ import { REFERENCE_DATA_HISTORY_TABLE } from "./constants";
 import { referenceDataMigrations } from "./migrations";
 
 interface AppliedMigrationRow {
-	id: string;
+	migration_key: string;
 	checksum: string;
 	description: string;
 	applied_at: Date;
@@ -38,7 +38,9 @@ async function ensureHistoryTable(prisma: PrismaClient): Promise<void> {
 	// older/dev databases can bootstrap the runner without manual repair.
 	await prisma.$executeRawUnsafe(`
 		CREATE TABLE IF NOT EXISTS ${REFERENCE_DATA_HISTORY_TABLE} (
-			id TEXT PRIMARY KEY,
+			seq SERIAL PRIMARY KEY,
+			id VARCHAR(26) NOT NULL UNIQUE,
+			migration_key TEXT NOT NULL UNIQUE,
 			checksum TEXT NOT NULL,
 			description TEXT NOT NULL,
 			applied_at TIMESTAMPTZ(6) NOT NULL DEFAULT NOW()
@@ -56,13 +58,13 @@ async function readAppliedMigrations(
 ): Promise<Map<string, AppliedMigrationRow>> {
 	const rows = await prisma.$queryRaw<AppliedMigrationRow[]>(
 		Prisma.raw(`
-			SELECT id, checksum, description, applied_at
+			SELECT migration_key, checksum, description, applied_at
 			FROM ${REFERENCE_DATA_HISTORY_TABLE}
-			ORDER BY id ASC
+			ORDER BY migration_key ASC
 		`),
 	);
 
-	return new Map(rows.map((row) => [row.id, row]));
+	return new Map(rows.map((row) => [row.migration_key, row]));
 }
 
 /**
@@ -141,15 +143,13 @@ export async function runReferenceDataMigrations(): Promise<void> {
 
 					// 본문이 성공한 직후에만 history를 남긴다.
 					// 이후 실행에서는 이 row를 보고 skip 여부를 판단한다.
-					await tx.$executeRawUnsafe(
-						`
-								INSERT INTO ${REFERENCE_DATA_HISTORY_TABLE} (id, checksum, description, applied_at)
-							VALUES ($1, $2, $3, NOW())
-						`,
-						migration.id,
-						checksum,
-						migration.description,
-					);
+					await tx.referenceDataMigrationHistory.create({
+						data: {
+							migrationKey: migration.id,
+							checksum,
+							description: migration.description,
+						},
+					});
 				},
 				{
 					// 대기 시간과 총 실행 시간을 분리해서 둔다.

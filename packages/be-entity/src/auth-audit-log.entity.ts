@@ -2,8 +2,9 @@ import type {
 	AuthAuditLog as AuthAuditLogEntity,
 	AuthAuditResult,
 } from "@cocrepo/prisma";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 
-export class AuthAuditLog implements AuthAuditLogEntity {
+export class AuthAuditLog implements DomainEntityModel<AuthAuditLogEntity> {
 	// ============================================================================
 	// 기본 필드
 	// ============================================================================

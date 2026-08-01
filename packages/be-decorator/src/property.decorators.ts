@@ -65,7 +65,7 @@ export function ApiUUIDProperty(
 	return ApiProperty({
 		type: each ? [String] : "string",
 		pattern:
-			"^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$",
+			"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
 		isArray: each,
 		...propertyOptions,
 	});
@@ -76,6 +76,32 @@ export function ApiUUIDPropertyOptional(
 		Partial<{ each: boolean }> = {},
 ): PropertyDecorator {
 	return ApiUUIDProperty({ required: false, ...options });
+}
+
+/**
+ * ULID 문자열을 Swagger 스키마로 문서화합니다.
+ */
+export function ApiULIDProperty(
+	options: ApiPropertyOptions & Partial<{ each: boolean }> = {},
+): PropertyDecorator {
+	const { each, ...propertyOptions } = options;
+
+	return ApiProperty({
+		type: each ? [String] : "string",
+		pattern: "^[0-9A-HJKMNP-TV-Z]{26}$",
+		isArray: each,
+		...propertyOptions,
+	});
+}
+
+/**
+ * 선택적 ULID 문자열을 Swagger 스키마로 문서화합니다.
+ */
+export function ApiULIDPropertyOptional(
+	options: Omit<ApiPropertyOptions, "type" | "format" | "required"> &
+		Partial<{ each: boolean }> = {},
+): PropertyDecorator {
+	return ApiULIDProperty({ required: false, ...options });
 }
 
 export function ApiEnumProperty<TEnum>(

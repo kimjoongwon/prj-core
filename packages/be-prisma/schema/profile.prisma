@@ -2,7 +2,8 @@
 // @description: User에 종속되어 프로필 정보를 관리하는 1:N 하위 모델
 /// @displayName 프로필
 model Profile {
-  id           String    @id @default(uuid())
+  id           String    @unique @default(ulid()) @db.VarChar(26)
+  seq          Int       @id @default(autoincrement())
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt    DateTime? @map("removed_at") @db.Timestamptz(6)
@@ -12,9 +13,9 @@ model Profile {
   nickname     String    @unique
   /// @displayName 주소
   address      String
-  userId       String    @map("user_id")
+  userSeq      Int       @map("user_seq")
   avatarFileId String?   @map("avatar_file_id")
-  user         User      @relation(fields: [userId], references: [id])
+  user         User      @relation(fields: [userSeq], references: [seq])
 
   @@map("profiles")
 }

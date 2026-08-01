@@ -332,11 +332,6 @@ export type {
 } from "./TimelineSessionProgramEditScreen/TimelineSessionProgramEditScreen";
 export { TimelineSessionProgramEditScreen } from "./TimelineSessionProgramEditScreen/TimelineSessionProgramEditScreen";
 export type {
-	UserDetailScreenProps,
-	UserDetailScreenUser,
-} from "./UserDetailScreen/UserDetailScreen";
-export { UserDetailScreen } from "./UserDetailScreen/UserDetailScreen";
-export type {
 	UserListScreenProps,
 	UserListScreenQueryStates,
 	UserListScreenSetQueryStates,

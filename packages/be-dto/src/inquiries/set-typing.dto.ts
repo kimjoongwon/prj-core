@@ -1,4 +1,4 @@
-import { BooleanFieldOptional, UUIDFieldOptional } from "@cocrepo/decorator";
+import { BooleanFieldOptional, ULIDFieldOptional } from "@cocrepo/decorator";
 
 /**
  * 타이핑 상태 설정 DTO
@@ -9,7 +9,7 @@ export class SetTypingDto {
 	})
 	isTyping?: boolean;
 
-	@UUIDFieldOptional({
+	@ULIDFieldOptional({
 		description: "타이핑 중인 스레드 ID",
 	})
 	threadId?: string;

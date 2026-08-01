@@ -1,7 +1,8 @@
 import type { OidcModel as OidcModelEntity } from "@cocrepo/prisma";
 import type { JsonValue } from "@cocrepo/type";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 
-export class OidcModel implements OidcModelEntity {
+export class OidcModel implements DomainEntityModel<OidcModelEntity> {
 	id!: string;
 	createdAt!: Date;
 	updatedAt!: Date | null;

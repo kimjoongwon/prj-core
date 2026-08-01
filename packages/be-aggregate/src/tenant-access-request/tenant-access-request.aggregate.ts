@@ -141,7 +141,7 @@ export class TenantAccessRequestAggregate {
 		}
 
 		return {
-			AND: [where, { spaceId: { in: scope.managedSpaceIds } }],
+			AND: [where, { space: { id: { in: scope.managedSpaceIds } } }],
 		};
 	}
 

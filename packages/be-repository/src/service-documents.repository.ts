@@ -3,7 +3,7 @@ import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
 export class ServiceDocumentsRepository {
@@ -22,7 +22,7 @@ export class ServiceDocumentsRepository {
 			where: { id, removedAt: null },
 		});
 
-		return result ? plainToInstance(ServiceDocument, result) : null;
+		return result ? toDomainEntity(ServiceDocument, result) : null;
 	}
 
 	async findByIdOrThrow(id: string): Promise<ServiceDocument> {
@@ -49,7 +49,7 @@ export class ServiceDocumentsRepository {
 			},
 		});
 
-		return result ? plainToInstance(ServiceDocument, result) : null;
+		return result ? toDomainEntity(ServiceDocument, result) : null;
 	}
 
 	async findMany(params: {
@@ -74,7 +74,7 @@ export class ServiceDocumentsRepository {
 		]);
 
 		return {
-			data: data.map((item) => plainToInstance(ServiceDocument, item)),
+			data: data.map((item) => toDomainEntity(ServiceDocument, item)),
 			totalCount,
 		};
 	}
@@ -84,7 +84,7 @@ export class ServiceDocumentsRepository {
 	): Promise<ServiceDocument> {
 		const result = await this.txHost.tx.serviceDocument.create({ data });
 
-		return plainToInstance(ServiceDocument, result);
+		return toDomainEntity(ServiceDocument, result);
 	}
 
 	async updateById(
@@ -96,7 +96,7 @@ export class ServiceDocumentsRepository {
 			data,
 		});
 
-		return plainToInstance(ServiceDocument, result);
+		return toDomainEntity(ServiceDocument, result);
 	}
 
 	async publishById(id: string): Promise<ServiceDocument> {
@@ -120,7 +120,7 @@ export class ServiceDocumentsRepository {
 			data: { status: "PUBLISHED", publishedAt },
 		});
 
-		return plainToInstance(ServiceDocument, result);
+		return toDomainEntity(ServiceDocument, result);
 	}
 
 	async archiveById(id: string): Promise<ServiceDocument> {
@@ -129,7 +129,7 @@ export class ServiceDocumentsRepository {
 			data: { status: "ARCHIVED" },
 		});
 
-		return plainToInstance(ServiceDocument, result);
+		return toDomainEntity(ServiceDocument, result);
 	}
 
 	async removeById(id: string): Promise<ServiceDocument> {
@@ -138,6 +138,6 @@ export class ServiceDocumentsRepository {
 			data: { removedAt: new Date(), status: "ARCHIVED" },
 		});
 
-		return plainToInstance(ServiceDocument, result);
+		return toDomainEntity(ServiceDocument, result);
 	}
 }

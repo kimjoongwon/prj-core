@@ -1,11 +1,11 @@
 import {
 	NumberFieldOptional,
 	StringFieldOptional,
-	UUIDField,
+	ULIDField,
 } from "@cocrepo/decorator";
 
 export class CreateRoutineActivityItemDto {
-	@UUIDField()
+	@ULIDField()
 	taskId: string;
 
 	@NumberFieldOptional()

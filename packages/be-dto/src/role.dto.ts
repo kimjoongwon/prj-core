@@ -4,13 +4,14 @@ import {
 	StringField,
 	StringFieldOptional,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { Role } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { RoleAssignmentResponseDto } from "./role-assignments";
 import { RoleAssociationDto } from "./role-association.dto";
 import { RoleClassificationDto } from "./role-classification.dto";
 
-export class RoleDto extends AbstractDto implements Role {
+export class RoleDto extends AbstractDto implements DomainEntityModel<Role> {
 	@StringField({
 		description: "역할 식별자",
 		maxLength: 50,

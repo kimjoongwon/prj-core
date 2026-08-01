@@ -3,6 +3,7 @@ import type {
 	TenantAccessRequestStatus,
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Role } from "./role.entity";
 import type { Space } from "./space.entity";
 import type { Tenant } from "./tenant.entity";
@@ -10,7 +11,7 @@ import type { User } from "./user.entity";
 
 export class TenantAccessRequest
 	extends AbstractEntity
-	implements TenantAccessRequestEntity
+	implements DomainEntityModel<TenantAccessRequestEntity>
 {
 	requesterId!: string;
 	spaceId!: string;

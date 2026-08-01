@@ -5,14 +5,14 @@ import {
 	NumberField,
 	StringField,
 	StringFieldOptional,
-	UUIDField,
+	ULIDField,
 } from "@cocrepo/decorator";
 
 /**
  * IDP 계정 정보 DTO (보안 필드 포함)
  */
 export class IdpAccountDto {
-	@UUIDField({ description: "사용자 ID" })
+	@ULIDField({ description: "사용자 ID" })
 	id!: string;
 
 	@StringField({ description: "이름" })

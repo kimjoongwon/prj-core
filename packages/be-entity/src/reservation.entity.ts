@@ -3,6 +3,7 @@ import {
 	ReservationStatus,
 } from "@cocrepo/prisma";
 import { AbstractAggregateEntity } from "./abstract-aggregate.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Program } from "./program.entity";
 import type { Session } from "./session.entity";
 import type { Space } from "./space.entity";
@@ -11,7 +12,7 @@ import type { User } from "./user.entity";
 
 export class Reservation
 	extends AbstractAggregateEntity
-	implements ReservationEntity
+	implements DomainEntityModel<ReservationEntity>
 {
 	spaceId!: string;
 	createdById!: string | null;

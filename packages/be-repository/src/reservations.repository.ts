@@ -1,9 +1,13 @@
-import { Reservation } from "@cocrepo/entity";
+import { type DomainData, Reservation } from "@cocrepo/entity";
 import { Prisma, PrismaClient, ReservationStatus } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import type {
+	PublicIdCreateInput,
+	PublicIdUpdateInput,
+} from "./public-id-input.type";
+import { toDomainData, toDomainEntity } from "./to-domain-entity";
 
 const reservationInclude = {
 	space: true,
@@ -15,9 +19,15 @@ const reservationInclude = {
 } satisfies Prisma.ReservationInclude;
 
 const bookingProgramInclude = {
+	routine: { select: { id: true } },
 	session: {
 		include: {
-			timeline: true,
+			timeline: {
+				include: {
+					space: { select: { id: true } },
+					createdBy: { select: { id: true } },
+				},
+			},
 		},
 	},
 	programActivities: {
@@ -30,9 +40,10 @@ const bookingProgramInclude = {
 	},
 } satisfies Prisma.ProgramInclude;
 
-export type BookingProgramRecord = Prisma.ProgramGetPayload<{
+type BookingProgramPersistenceRecord = Prisma.ProgramGetPayload<{
 	include: typeof bookingProgramInclude;
 }>;
+export type BookingProgramRecord = DomainData<BookingProgramPersistenceRecord>;
 
 @Injectable()
 export class ReservationsRepository {
@@ -50,12 +61,15 @@ export class ReservationsRepository {
 	): Promise<Reservation | null> {
 		this.logger.debug(`예약 멱등성 조회: user=${userId.slice(-8)}`);
 
-		const result = await this.txHost.tx.reservation.findUnique({
-			where: { userId_idempotencyKey: { userId, idempotencyKey } },
+		const result = await this.txHost.tx.reservation.findFirst({
+			where: {
+				user: { id: userId },
+				idempotencyKey,
+			},
 			include: reservationInclude,
 		});
 
-		return result ? plainToInstance(Reservation, result) : null;
+		return result ? toDomainEntity(Reservation, result) : null;
 	}
 
 	async findByIdForUser(params: {
@@ -66,14 +80,14 @@ export class ReservationsRepository {
 		const result = await this.txHost.tx.reservation.findFirst({
 			where: {
 				id: params.reservationId,
-				userId: params.userId,
-				spaceId: params.spaceId,
+				user: { id: params.userId },
+				space: { id: params.spaceId },
 				removedAt: null,
 			},
 			include: reservationInclude,
 		});
 
-		return result ? plainToInstance(Reservation, result) : null;
+		return result ? toDomainEntity(Reservation, result) : null;
 	}
 
 	async findActiveDuplicate(params: {
@@ -83,8 +97,8 @@ export class ReservationsRepository {
 	}): Promise<Reservation | null> {
 		const result = await this.txHost.tx.reservation.findFirst({
 			where: {
-				userId: params.userId,
-				programId: params.programId,
+				user: { id: params.userId },
+				program: { id: params.programId },
 				occurrenceStartAt: params.occurrenceStartAt,
 				status: {
 					in: [ReservationStatus.CONFIRMED, ReservationStatus.WAITLISTED],
@@ -94,7 +108,7 @@ export class ReservationsRepository {
 			include: reservationInclude,
 		});
 
-		return result ? plainToInstance(Reservation, result) : null;
+		return result ? toDomainEntity(Reservation, result) : null;
 	}
 
 	async findBookingProgram(params: {
@@ -103,24 +117,23 @@ export class ReservationsRepository {
 		sessionId: string;
 		programId: string;
 	}): Promise<BookingProgramRecord | null> {
-		return this.txHost.tx.program.findFirst({
+		const result = await this.txHost.tx.program.findFirst({
 			where: {
 				id: params.programId,
-				sessionId: params.sessionId,
-				removedAt: null,
 				session: {
 					id: params.sessionId,
-					timelineId: params.timelineId,
-					removedAt: null,
 					timeline: {
 						id: params.timelineId,
-						spaceId: params.spaceId,
+						space: { id: params.spaceId },
 						removedAt: null,
 					},
+					removedAt: null,
 				},
+				removedAt: null,
 			},
 			include: bookingProgramInclude,
 		});
+		return result ? toDomainData(result) : null;
 	}
 
 	async findBookingPrograms(params: {
@@ -133,7 +146,7 @@ export class ReservationsRepository {
 		skip?: number;
 		take?: number;
 	}): Promise<BookingProgramRecord[]> {
-		return this.txHost.tx.program.findMany({
+		const results = await this.txHost.tx.program.findMany({
 			where: {
 				...(params.programId ? { id: params.programId } : {}),
 				...(params.search
@@ -158,9 +171,9 @@ export class ReservationsRepository {
 				removedAt: null,
 				session: {
 					removedAt: null,
-					...(params.timelineId ? { timelineId: params.timelineId } : {}),
 					timeline: {
-						spaceId: params.spaceId,
+						...(params.timelineId ? { id: params.timelineId } : {}),
+						space: { id: params.spaceId },
 						removedAt: null,
 					},
 					OR: [
@@ -182,6 +195,7 @@ export class ReservationsRepository {
 			skip: params.skip,
 			take: params.take,
 		});
+		return toDomainData(results);
 	}
 
 	async findCoachNames(instructorIds: string[]): Promise<Map<string, string>> {
@@ -210,18 +224,19 @@ export class ReservationsRepository {
 
 		const result = await this.txHost.tx.reservation.findMany({
 			where: {
-				spaceId: params.spaceId,
-				programId: { in: params.programIds },
+				space: { id: params.spaceId },
+				program: { id: { in: params.programIds } },
 				occurrenceStartAt: {
 					gte: params.from,
 					lte: params.to,
 				},
 				removedAt: null,
 			},
+			include: reservationInclude,
 			orderBy: [{ occurrenceStartAt: "asc" }, { createdAt: "asc" }],
 		});
 
-		return result.map((item) => plainToInstance(Reservation, item));
+		return result.map((item) => toDomainEntity(Reservation, item));
 	}
 
 	async findMine(params: {
@@ -234,8 +249,8 @@ export class ReservationsRepository {
 		take?: number;
 	}): Promise<{ items: Reservation[]; totalCount: number }> {
 		const where: Prisma.ReservationWhereInput = {
-			spaceId: params.spaceId,
-			userId: params.userId,
+			space: { id: params.spaceId },
+			user: { id: params.userId },
 			removedAt: null,
 			...(params.status ? { status: params.status } : {}),
 			...(params.from || params.to
@@ -260,7 +275,7 @@ export class ReservationsRepository {
 		]);
 
 		return {
-			items: items.map((item) => plainToInstance(Reservation, item)),
+			items: items.map((item) => toDomainEntity(Reservation, item)),
 			totalCount,
 		};
 	}
@@ -272,7 +287,7 @@ export class ReservationsRepository {
 	}): Promise<number> {
 		return this.txHost.tx.reservation.count({
 			where: {
-				programId: params.programId,
+				program: { id: params.programId },
 				occurrenceStartAt: params.occurrenceStartAt,
 				status: params.status,
 				removedAt: null,
@@ -286,7 +301,7 @@ export class ReservationsRepository {
 	}): Promise<number> {
 		const aggregate = await this.txHost.tx.reservation.aggregate({
 			where: {
-				programId: params.programId,
+				program: { id: params.programId },
 				occurrenceStartAt: params.occurrenceStartAt,
 				status: ReservationStatus.WAITLISTED,
 				removedAt: null,
@@ -298,27 +313,81 @@ export class ReservationsRepository {
 	}
 
 	async create(
-		data: Prisma.ReservationUncheckedCreateInput,
+		data: PublicIdCreateInput<
+			Prisma.ReservationUncheckedCreateInput,
+			"space" | "user" | "timeline" | "session" | "program",
+			"createdBy"
+		>,
 	): Promise<Reservation> {
+		const {
+			spaceId,
+			createdById,
+			userId,
+			timelineId,
+			sessionId,
+			programId,
+			...reservationData
+		} = data;
 		const result = await this.txHost.tx.reservation.create({
-			data,
+			data: {
+				...reservationData,
+				space: { connect: { id: spaceId } },
+				user: { connect: { id: userId } },
+				timeline: { connect: { id: timelineId } },
+				session: { connect: { id: sessionId } },
+				program: { connect: { id: programId } },
+				...(createdById ? { createdBy: { connect: { id: createdById } } } : {}),
+			},
 			include: reservationInclude,
 		});
 
-		return plainToInstance(Reservation, result);
+		return toDomainEntity(Reservation, result);
 	}
 
 	async updateById(
 		id: string,
-		data: Prisma.ReservationUncheckedUpdateInput,
+		data: PublicIdUpdateInput<
+			Prisma.ReservationUncheckedUpdateInput,
+			"space" | "user" | "timeline" | "session" | "program",
+			"createdBy"
+		>,
 	): Promise<Reservation> {
+		const {
+			spaceId,
+			createdById,
+			userId,
+			timelineId,
+			sessionId,
+			programId,
+			...reservationData
+		} = data;
 		const result = await this.txHost.tx.reservation.update({
 			where: { id },
-			data,
+			data: {
+				...reservationData,
+				...(spaceId !== undefined
+					? { space: { connect: { id: spaceId } } }
+					: {}),
+				...(userId !== undefined ? { user: { connect: { id: userId } } } : {}),
+				...(timelineId !== undefined
+					? { timeline: { connect: { id: timelineId } } }
+					: {}),
+				...(sessionId !== undefined
+					? { session: { connect: { id: sessionId } } }
+					: {}),
+				...(programId !== undefined
+					? { program: { connect: { id: programId } } }
+					: {}),
+				...(createdById !== undefined
+					? createdById === null
+						? { createdBy: { disconnect: true } }
+						: { createdBy: { connect: { id: createdById } } }
+					: {}),
+			},
 			include: reservationInclude,
 		});
 
-		return plainToInstance(Reservation, result);
+		return toDomainEntity(Reservation, result);
 	}
 
 	async save(reservation: Reservation): Promise<Reservation> {
@@ -335,7 +404,7 @@ export class ReservationsRepository {
 			include: reservationInclude,
 		});
 
-		return plainToInstance(Reservation, result);
+		return toDomainEntity(Reservation, result);
 	}
 
 	async findNextWaitlisted(params: {
@@ -344,7 +413,7 @@ export class ReservationsRepository {
 	}): Promise<Reservation | null> {
 		const result = await this.txHost.tx.reservation.findFirst({
 			where: {
-				programId: params.programId,
+				program: { id: params.programId },
 				occurrenceStartAt: params.occurrenceStartAt,
 				status: ReservationStatus.WAITLISTED,
 				removedAt: null,
@@ -353,6 +422,6 @@ export class ReservationsRepository {
 			include: reservationInclude,
 		});
 
-		return result ? plainToInstance(Reservation, result) : null;
+		return result ? toDomainEntity(Reservation, result) : null;
 	}
 }

@@ -1,8 +1,12 @@
 import type { Template as TemplateEntity, TemplateType } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { TemplateVariable } from "./template-variable.entity";
 
-export class Template extends AbstractEntity implements TemplateEntity {
+export class Template
+	extends AbstractEntity
+	implements DomainEntityModel<TemplateEntity>
+{
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================

@@ -1,4 +1,4 @@
-import { RolesGuard } from "@cocrepo/be-common";
+import { ParseUlidPipe, RolesGuard } from "@cocrepo/be-common";
 import {
 	GetRoleAssignmentsQuery,
 	SyncRoleAssignmentsCommand,
@@ -22,7 +22,6 @@ import {
 	HttpCode,
 	HttpStatus,
 	Param,
-	ParseUUIDPipe,
 	Put,
 	UseGuards,
 } from "@nestjs/common";
@@ -48,7 +47,7 @@ export class RoleAssignmentsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "roleId",
-		description: "Role ID (UUID)",
+		description: "Role ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)
@@ -56,7 +55,7 @@ export class RoleAssignmentsController {
 		isArray: true,
 	})
 	@ResponseMessage("역할 정책 할당 목록 조회 성공")
-	async getRoleAssignments(@Param("roleId", ParseUUIDPipe) roleId: string) {
+	async getRoleAssignments(@Param("roleId", ParseUlidPipe) roleId: string) {
 		return this.queryBus.execute(new GetRoleAssignmentsQuery(roleId));
 	}
 
@@ -72,7 +71,7 @@ export class RoleAssignmentsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "roleId",
-		description: "Role ID (UUID)",
+		description: "Role ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -85,7 +84,7 @@ export class RoleAssignmentsController {
 	})
 	@ResponseMessage("역할 정책 할당 동기화 성공")
 	async syncRoleAssignments(
-		@Param("roleId", ParseUUIDPipe) roleId: string,
+		@Param("roleId", ParseUlidPipe) roleId: string,
 		@Body() dto: SyncRoleAssignmentsDto,
 	) {
 		return this.commandBus.execute(

@@ -13,9 +13,12 @@ export function buildFolderQueryWhere(
 	return {
 		...(baseWhere ?? {}),
 		...(input.parentFolderId !== undefined
-			? { parentFolderId: input.parentFolderId }
+			? {
+					parent:
+						input.parentFolderId === null ? null : { id: input.parentFolderId },
+				}
 			: {}),
-		...(input.spaceId ? { spaceId: input.spaceId } : {}),
+		...(input.spaceId ? { space: { id: input.spaceId } } : {}),
 		...(input.name ? { name: containsFilter(input.name) } : {}),
 		removedAt: removedAtFilter(input.statusFilter === "deleted"),
 	};

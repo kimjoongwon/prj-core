@@ -15,7 +15,11 @@ import {
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import type {
+	PublicIdCreateInput,
+	PublicIdUpdateInput,
+} from "./public-id-input.type";
+import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
 export class InquiriesRepository {
@@ -41,9 +45,10 @@ export class InquiriesRepository {
 
 		const result = await this.txHost.tx.inquiry.findUnique({
 			where: { id },
+			include: this.includeInquiryRelations(),
 		});
 
-		return result ? plainToInstance(Inquiry, result) : null;
+		return result ? toDomainEntity(Inquiry, result) : null;
 	}
 
 	/**
@@ -58,25 +63,41 @@ export class InquiriesRepository {
 		const result = await this.txHost.tx.inquiry.findFirst({
 			where: {
 				id,
-				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
+				...(spaceIds ? { space: { id: { in: spaceIds } } } : {}),
 			},
 			include: {
+				...this.includeInquiryRelations(),
 				threads: {
 					orderBy: { createdAt: "desc" },
+					include: {
+						inquiry: { select: { id: true } },
+						createdBy: true,
+					},
 				},
 				messages: {
 					take: 50,
 					orderBy: { createdAt: "desc" },
+					include: {
+						thread: { select: { id: true } },
+						inquiry: { select: { id: true } },
+						sender: true,
+					},
 				},
-				participants: true,
+				participants: {
+					include: {
+						inquiry: { select: { id: true } },
+						thread: { select: { id: true } },
+						user: true,
+					},
+				},
 				customer: true,
 				assignee: true,
-				tags: true,
+				tags: { include: { inquiry: { select: { id: true } } } },
 				sentimentAnalysis: true,
 			},
 		});
 
-		return result ? plainToInstance(Inquiry, result) : null;
+		return result ? toDomainEntity(Inquiry, result) : null;
 	}
 
 	/**
@@ -87,9 +108,10 @@ export class InquiriesRepository {
 
 		const result = await this.txHost.tx.inquiry.findUnique({
 			where: { inquiryNumber },
+			include: this.includeInquiryRelations(),
 		});
 
-		return result ? plainToInstance(Inquiry, result) : null;
+		return result ? toDomainEntity(Inquiry, result) : null;
 	}
 
 	/**
@@ -110,20 +132,22 @@ export class InquiriesRepository {
 				skip: params.skip,
 				take: params.take,
 				include: {
+					space: true,
+					createdBy: true,
 					customer: {
 						select: { id: true, name: true, email: true },
 					},
 					assignee: {
 						select: { id: true, name: true, email: true },
 					},
-					tags: true,
+					tags: { include: { inquiry: { select: { id: true } } } },
 				},
 			}),
 			this.txHost.tx.inquiry.count({ where: params.where }),
 		]);
 
 		return {
-			items: items.map((item) => plainToInstance(Inquiry, item)),
+			items: items.map((item) => toDomainEntity(Inquiry, item)),
 			totalCount,
 		};
 	}
@@ -131,29 +155,53 @@ export class InquiriesRepository {
 	/**
 	 * 생성
 	 */
-	async create(data: Prisma.InquiryUncheckedCreateInput): Promise<Inquiry> {
+	async create(
+		data: PublicIdCreateInput<
+			Prisma.InquiryUncheckedCreateInput,
+			"space",
+			"createdBy" | "customer" | "assignee"
+		>,
+	): Promise<Inquiry> {
 		this.logger.debug("문의 생성 중...");
 
+		const { spaceId, createdById, customerId, assigneeId, ...inquiryData } =
+			data;
 		const result = await this.txHost.tx.inquiry.create({
-			data,
+			data: {
+				...inquiryData,
+				space: { connect: { id: spaceId } },
+				...(createdById ? { createdBy: { connect: { id: createdById } } } : {}),
+				...(customerId ? { customer: { connect: { id: customerId } } } : {}),
+				...(assigneeId ? { assignee: { connect: { id: assigneeId } } } : {}),
+			},
+			include: this.includeInquiryRelations(),
 		});
 
-		return plainToInstance(Inquiry, result);
+		return toDomainEntity(Inquiry, result);
 	}
 
 	/**
 	 * 문의의 기본 스레드 생성
 	 */
 	async createThread(
-		data: Prisma.InquiryThreadUncheckedCreateInput,
+		data: PublicIdCreateInput<
+			Prisma.InquiryThreadUncheckedCreateInput,
+			"inquiry" | "createdBy"
+		>,
 	): Promise<InquiryThread> {
 		this.logger.debug(`문의 스레드 생성: ${data.inquiryId.slice(-8)}`);
 
+		const { inquiryId, createdById, ...threadData } = data;
 		const result = await this.txHost.tx.inquiryThread.create({
-			data,
+			data: {
+				...threadData,
+				inquiry: { connect: { id: inquiryId } },
+				createdBy: { connect: { id: createdById } },
+			},
+			include: { inquiry: true, createdBy: true },
 		});
 
-		return plainToInstance(InquiryThread, result);
+		return toDomainEntity(InquiryThread, result);
 	}
 
 	/**
@@ -166,12 +214,13 @@ export class InquiriesRepository {
 
 		const result = await this.txHost.tx.inquiryThread.findFirst({
 			where: {
-				inquiryId,
+				inquiry: { id: inquiryId },
 			},
+			include: { inquiry: true, createdBy: true },
 			orderBy: { createdAt: "asc" },
 		});
 
-		return result ? plainToInstance(InquiryThread, result) : null;
+		return result ? toDomainEntity(InquiryThread, result) : null;
 	}
 
 	/**
@@ -182,9 +231,10 @@ export class InquiriesRepository {
 
 		const result = await this.txHost.tx.inquiryThread.findUnique({
 			where: { id },
+			include: { inquiry: true, createdBy: true },
 		});
 
-		return result ? plainToInstance(InquiryThread, result) : null;
+		return result ? toDomainEntity(InquiryThread, result) : null;
 	}
 
 	/**
@@ -198,7 +248,7 @@ export class InquiriesRepository {
 		this.logger.debug(`문의별 메시지 조회: ${params.inquiryId.slice(-8)}`);
 
 		const where: Prisma.InquiryMessageWhereInput = {
-			inquiryId: params.inquiryId,
+			inquiry: { id: params.inquiryId },
 			isDeleted: false,
 		};
 
@@ -215,6 +265,7 @@ export class InquiriesRepository {
 					thread: {
 						select: { id: true, title: true },
 					},
+					inquiry: { select: { id: true } },
 					attachments: {
 						where: { isDeleted: false },
 					},
@@ -224,7 +275,7 @@ export class InquiriesRepository {
 		]);
 
 		return {
-			items: items.map((item) => plainToInstance(InquiryMessage, item)),
+			items: items.map((item) => toDomainEntity(InquiryMessage, item)),
 			totalCount,
 		};
 	}
@@ -238,7 +289,7 @@ export class InquiriesRepository {
 	): Promise<boolean> {
 		const count = await this.txHost.tx.inquiryMessage.count({
 			where: {
-				threadId,
+				thread: { id: threadId },
 				clientMessageId,
 			},
 		});
@@ -250,12 +301,22 @@ export class InquiriesRepository {
 	 * 메시지 생성
 	 */
 	async createMessage(
-		data: Prisma.InquiryMessageUncheckedCreateInput,
+		data: PublicIdCreateInput<
+			Prisma.InquiryMessageUncheckedCreateInput,
+			"thread" | "inquiry",
+			"sender"
+		>,
 	): Promise<InquiryMessage> {
 		this.logger.debug(`메시지 생성: ${data.inquiryId.slice(-8)}`);
 
+		const { threadId, inquiryId, senderId, ...messageData } = data;
 		const result = await this.txHost.tx.inquiryMessage.create({
-			data,
+			data: {
+				...messageData,
+				thread: { connect: { id: threadId } },
+				inquiry: { connect: { id: inquiryId } },
+				...(senderId ? { sender: { connect: { id: senderId } } } : {}),
+			},
 			include: {
 				sender: {
 					select: { id: true, name: true, email: true },
@@ -263,10 +324,11 @@ export class InquiriesRepository {
 				thread: {
 					select: { id: true, title: true },
 				},
+				inquiry: { select: { id: true } },
 			},
 		});
 
-		return plainToInstance(InquiryMessage, result);
+		return toDomainEntity(InquiryMessage, result);
 	}
 
 	/**
@@ -285,9 +347,10 @@ export class InquiriesRepository {
 				lastMessagePreview: preview.slice(0, 100),
 				messageCount: { increment: 1 },
 			},
+			include: { inquiry: true, createdBy: true },
 		});
 
-		return plainToInstance(InquiryThread, result);
+		return toDomainEntity(InquiryThread, result);
 	}
 
 	/**
@@ -300,17 +363,19 @@ export class InquiriesRepository {
 
 		const results = await this.txHost.tx.inquiryParticipant.findMany({
 			where: {
-				inquiryId,
+				inquiry: { id: inquiryId },
 				leftAt: null,
 			},
 			include: {
+				inquiry: { select: { id: true } },
+				thread: { select: { id: true } },
 				user: {
 					select: { id: true, name: true, email: true },
 				},
 			},
 		});
 
-		return results.map((result) => plainToInstance(InquiryParticipant, result));
+		return results.map((result) => toDomainEntity(InquiryParticipant, result));
 	}
 
 	async incrementParticipantUnreadByInquiryId(
@@ -319,9 +384,9 @@ export class InquiriesRepository {
 	): Promise<number> {
 		const result = await this.txHost.tx.inquiryParticipant.updateMany({
 			where: {
-				inquiryId,
+				inquiry: { id: inquiryId },
 				leftAt: null,
-				...(excludeUserId ? { userId: { not: excludeUserId } } : {}),
+				...(excludeUserId ? { user: { id: { not: excludeUserId } } } : {}),
 			},
 			data: {
 				unreadCount: { increment: 1 },
@@ -336,16 +401,43 @@ export class InquiriesRepository {
 	 */
 	async updateById(
 		id: string,
-		data: Prisma.InquiryUncheckedUpdateInput,
+		data: PublicIdUpdateInput<
+			Prisma.InquiryUncheckedUpdateInput,
+			"space",
+			"createdBy" | "customer" | "assignee"
+		>,
 	): Promise<Inquiry> {
 		this.logger.debug(`업데이트 중: ${id.slice(-8)}`);
 
+		const { spaceId, createdById, customerId, assigneeId, ...inquiryData } =
+			data;
 		const result = await this.txHost.tx.inquiry.update({
 			where: { id },
-			data,
+			data: {
+				...inquiryData,
+				...(spaceId !== undefined
+					? { space: { connect: { id: spaceId } } }
+					: {}),
+				...(createdById !== undefined
+					? createdById === null
+						? { createdBy: { disconnect: true } }
+						: { createdBy: { connect: { id: createdById } } }
+					: {}),
+				...(customerId !== undefined
+					? customerId === null
+						? { customer: { disconnect: true } }
+						: { customer: { connect: { id: customerId } } }
+					: {}),
+				...(assigneeId !== undefined
+					? assigneeId === null
+						? { assignee: { disconnect: true } }
+						: { assignee: { connect: { id: assigneeId } } }
+					: {}),
+			},
+			include: this.includeInquiryRelations(),
 		});
 
-		return plainToInstance(Inquiry, result);
+		return toDomainEntity(Inquiry, result);
 	}
 
 	/**
@@ -357,9 +449,10 @@ export class InquiriesRepository {
 		const result = await this.txHost.tx.inquiry.update({
 			where: { id },
 			data: { removedAt: new Date() },
+			include: this.includeInquiryRelations(),
 		});
 
-		return plainToInstance(Inquiry, result);
+		return toDomainEntity(Inquiry, result);
 	}
 
 	// ============================================================================
@@ -377,12 +470,13 @@ export class InquiriesRepository {
 		const result = await this.txHost.tx.inquiry.update({
 			where: { id },
 			data: {
-				assigneeId,
+				assignee: { connect: { id: assigneeId } },
 				status: "OPEN",
 			},
+			include: this.includeInquiryRelations(),
 		});
 
-		return plainToInstance(Inquiry, result);
+		return toDomainEntity(Inquiry, result);
 	}
 
 	/**
@@ -398,7 +492,7 @@ export class InquiriesRepository {
 		this.logger.debug(`담당자별 문의 조회: ${params.assigneeId.slice(-8)}`);
 
 		const baseWhere: Prisma.InquiryWhereInput = {
-			assigneeId: params.assigneeId,
+			assignee: { id: params.assigneeId },
 			removedAt: null,
 			...params.where,
 		};
@@ -413,17 +507,20 @@ export class InquiriesRepository {
 				skip: params.skip,
 				take: params.take,
 				include: {
+					space: true,
+					createdBy: true,
+					assignee: true,
 					customer: {
 						select: { id: true, name: true, email: true },
 					},
-					tags: true,
+					tags: { include: { inquiry: { select: { id: true } } } },
 				},
 			}),
 			this.txHost.tx.inquiry.count({ where: baseWhere }),
 		]);
 
 		return {
-			items: items.map((item) => plainToInstance(Inquiry, item)),
+			items: items.map((item) => toDomainEntity(Inquiry, item)),
 			totalCount,
 		};
 	}
@@ -445,7 +542,7 @@ export class InquiriesRepository {
 		this.logger.debug(`고객별 문의 조회: ${params.customerId.slice(-8)}`);
 
 		const baseWhere: Prisma.InquiryWhereInput = {
-			customerId: params.customerId,
+			customer: { id: params.customerId },
 			removedAt: null,
 			...params.where,
 		};
@@ -457,6 +554,9 @@ export class InquiriesRepository {
 				skip: params.skip,
 				take: params.take,
 				include: {
+					space: true,
+					createdBy: true,
+					customer: true,
 					assignee: {
 						select: { id: true, name: true, email: true },
 					},
@@ -467,7 +567,7 @@ export class InquiriesRepository {
 		]);
 
 		return {
-			items: items.map((item) => plainToInstance(Inquiry, item)),
+			items: items.map((item) => toDomainEntity(Inquiry, item)),
 			totalCount,
 		};
 	}
@@ -494,9 +594,10 @@ export class InquiriesRepository {
 		const result = await this.txHost.tx.inquiry.update({
 			where: { id },
 			data: updateData,
+			include: this.includeInquiryRelations(),
 		});
 
-		return plainToInstance(Inquiry, result);
+		return toDomainEntity(Inquiry, result);
 	}
 
 	/**
@@ -511,9 +612,10 @@ export class InquiriesRepository {
 		const result = await this.txHost.tx.inquiry.update({
 			where: { id },
 			data: { priority },
+			include: this.includeInquiryRelations(),
 		});
 
-		return plainToInstance(Inquiry, result);
+		return toDomainEntity(Inquiry, result);
 	}
 
 	// ============================================================================
@@ -546,7 +648,7 @@ export class InquiriesRepository {
 		};
 
 		if (params?.spaceId) {
-			where.spaceId = params.spaceId;
+			where.space = { id: params.spaceId };
 		}
 
 		const [items, totalCount] = await Promise.all([
@@ -556,6 +658,8 @@ export class InquiriesRepository {
 				skip: params?.skip,
 				take: params?.take,
 				include: {
+					space: true,
+					createdBy: true,
 					customer: {
 						select: { id: true, name: true, email: true },
 					},
@@ -568,7 +672,7 @@ export class InquiriesRepository {
 		]);
 
 		return {
-			items: items.map((item) => plainToInstance(Inquiry, item)),
+			items: items.map((item) => toDomainEntity(Inquiry, item)),
 			totalCount,
 		};
 	}
@@ -593,7 +697,7 @@ export class InquiriesRepository {
 		const results = await this.txHost.tx.inquiry.groupBy({
 			by: ["status"],
 			where: {
-				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
+				...(spaceIds ? { space: { id: { in: spaceIds } } } : {}),
 				removedAt: null,
 			},
 			_count: {
@@ -623,7 +727,7 @@ export class InquiriesRepository {
 		const results = await this.txHost.tx.inquiry.groupBy({
 			by: ["category"],
 			where: {
-				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
+				...(spaceIds ? { space: { id: { in: spaceIds } } } : {}),
 				removedAt: null,
 			},
 			_count: {
@@ -651,7 +755,7 @@ export class InquiriesRepository {
 
 		const now = new Date();
 		const baseWhere: Prisma.InquiryWhereInput = {
-			...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
+			...(spaceIds ? { space: { id: { in: spaceIds } } } : {}),
 			removedAt: null,
 			resolvedAt: null,
 		};
@@ -696,9 +800,10 @@ export class InquiriesRepository {
 		const result = await this.txHost.tx.inquiry.update({
 			where: { id },
 			data: { sentiment, sentimentScore },
+			include: this.includeInquiryRelations(),
 		});
 
-		return plainToInstance(Inquiry, result);
+		return toDomainEntity(Inquiry, result);
 	}
 
 	// ============================================================================
@@ -714,9 +819,10 @@ export class InquiriesRepository {
 		const result = await this.txHost.tx.inquiry.update({
 			where: { id },
 			data: { unreadCount: 0 },
+			include: this.includeInquiryRelations(),
 		});
 
-		return plainToInstance(Inquiry, result);
+		return toDomainEntity(Inquiry, result);
 	}
 
 	/**
@@ -730,9 +836,10 @@ export class InquiriesRepository {
 			data: {
 				unreadCount: { increment: 1 },
 			},
+			include: this.includeInquiryRelations(),
 		});
 
-		return plainToInstance(Inquiry, result);
+		return toDomainEntity(Inquiry, result);
 	}
 
 	/**
@@ -747,9 +854,10 @@ export class InquiriesRepository {
 				lastMessageAt: new Date(),
 				unreadCount: { increment: 1 },
 			},
+			include: this.includeInquiryRelations(),
 		});
 
-		return plainToInstance(Inquiry, result);
+		return toDomainEntity(Inquiry, result);
 	}
 
 	// ============================================================================
@@ -767,8 +875,18 @@ export class InquiriesRepository {
 			data: {
 				firstResponseAt: new Date(),
 			},
+			include: this.includeInquiryRelations(),
 		});
 
-		return plainToInstance(Inquiry, result);
+		return toDomainEntity(Inquiry, result);
+	}
+
+	private includeInquiryRelations() {
+		return {
+			space: true,
+			createdBy: true,
+			customer: true,
+			assignee: true,
+		} satisfies Prisma.InquiryInclude;
 	}
 }

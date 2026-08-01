@@ -27,19 +27,24 @@ export type AggregateImage = {
 }
 
 export type ImageAvgAggregateOutputType = {
+  seq: number | null
   width: number | null
   height: number | null
   orientation: number | null
+  assetSeq: number | null
 }
 
 export type ImageSumAggregateOutputType = {
+  seq: number | null
   width: number | null
   height: number | null
   orientation: number | null
+  assetSeq: number | null
 }
 
 export type ImageMinAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -48,11 +53,12 @@ export type ImageMinAggregateOutputType = {
   orientation: number | null
   colorSpace: string | null
   hasAlpha: boolean | null
-  assetId: string | null
+  assetSeq: number | null
 }
 
 export type ImageMaxAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -61,11 +67,12 @@ export type ImageMaxAggregateOutputType = {
   orientation: number | null
   colorSpace: string | null
   hasAlpha: boolean | null
-  assetId: string | null
+  assetSeq: number | null
 }
 
 export type ImageCountAggregateOutputType = {
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -74,25 +81,30 @@ export type ImageCountAggregateOutputType = {
   orientation: number
   colorSpace: number
   hasAlpha: number
-  assetId: number
+  assetSeq: number
   _all: number
 }
 
 
 export type ImageAvgAggregateInputType = {
+  seq?: true
   width?: true
   height?: true
   orientation?: true
+  assetSeq?: true
 }
 
 export type ImageSumAggregateInputType = {
+  seq?: true
   width?: true
   height?: true
   orientation?: true
+  assetSeq?: true
 }
 
 export type ImageMinAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -101,11 +113,12 @@ export type ImageMinAggregateInputType = {
   orientation?: true
   colorSpace?: true
   hasAlpha?: true
-  assetId?: true
+  assetSeq?: true
 }
 
 export type ImageMaxAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -114,11 +127,12 @@ export type ImageMaxAggregateInputType = {
   orientation?: true
   colorSpace?: true
   hasAlpha?: true
-  assetId?: true
+  assetSeq?: true
 }
 
 export type ImageCountAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -127,7 +141,7 @@ export type ImageCountAggregateInputType = {
   orientation?: true
   colorSpace?: true
   hasAlpha?: true
-  assetId?: true
+  assetSeq?: true
   _all?: true
 }
 
@@ -219,6 +233,7 @@ export type ImageGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type ImageGroupByOutputType = {
   id: string
+  seq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
@@ -227,7 +242,7 @@ export type ImageGroupByOutputType = {
   orientation: number | null
   colorSpace: string | null
   hasAlpha: boolean
-  assetId: string
+  assetSeq: number
   _count: ImageCountAggregateOutputType | null
   _avg: ImageAvgAggregateOutputType | null
   _sum: ImageSumAggregateOutputType | null
@@ -255,6 +270,7 @@ export type ImageWhereInput = {
   OR?: Prisma.ImageWhereInput[]
   NOT?: Prisma.ImageWhereInput | Prisma.ImageWhereInput[]
   id?: Prisma.StringFilter<"Image"> | string
+  seq?: Prisma.IntFilter<"Image"> | number
   createdAt?: Prisma.DateTimeFilter<"Image"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Image"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Image"> | Date | string | null
@@ -263,12 +279,13 @@ export type ImageWhereInput = {
   orientation?: Prisma.IntNullableFilter<"Image"> | number | null
   colorSpace?: Prisma.StringNullableFilter<"Image"> | string | null
   hasAlpha?: Prisma.BoolFilter<"Image"> | boolean
-  assetId?: Prisma.StringFilter<"Image"> | string
+  assetSeq?: Prisma.IntFilter<"Image"> | number
   asset?: Prisma.XOR<Prisma.AssetScalarRelationFilter, Prisma.AssetWhereInput>
 }
 
 export type ImageOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -277,13 +294,14 @@ export type ImageOrderByWithRelationInput = {
   orientation?: Prisma.SortOrderInput | Prisma.SortOrder
   colorSpace?: Prisma.SortOrderInput | Prisma.SortOrder
   hasAlpha?: Prisma.SortOrder
-  assetId?: Prisma.SortOrder
+  assetSeq?: Prisma.SortOrder
   asset?: Prisma.AssetOrderByWithRelationInput
 }
 
 export type ImageWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  assetId?: string
+  seq?: number
+  assetSeq?: number
   AND?: Prisma.ImageWhereInput | Prisma.ImageWhereInput[]
   OR?: Prisma.ImageWhereInput[]
   NOT?: Prisma.ImageWhereInput | Prisma.ImageWhereInput[]
@@ -296,10 +314,11 @@ export type ImageWhereUniqueInput = Prisma.AtLeast<{
   colorSpace?: Prisma.StringNullableFilter<"Image"> | string | null
   hasAlpha?: Prisma.BoolFilter<"Image"> | boolean
   asset?: Prisma.XOR<Prisma.AssetScalarRelationFilter, Prisma.AssetWhereInput>
-}, "id" | "assetId">
+}, "seq" | "id" | "assetSeq">
 
 export type ImageOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -308,7 +327,7 @@ export type ImageOrderByWithAggregationInput = {
   orientation?: Prisma.SortOrderInput | Prisma.SortOrder
   colorSpace?: Prisma.SortOrderInput | Prisma.SortOrder
   hasAlpha?: Prisma.SortOrder
-  assetId?: Prisma.SortOrder
+  assetSeq?: Prisma.SortOrder
   _count?: Prisma.ImageCountOrderByAggregateInput
   _avg?: Prisma.ImageAvgOrderByAggregateInput
   _max?: Prisma.ImageMaxOrderByAggregateInput
@@ -321,6 +340,7 @@ export type ImageScalarWhereWithAggregatesInput = {
   OR?: Prisma.ImageScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ImageScalarWhereWithAggregatesInput | Prisma.ImageScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Image"> | string
+  seq?: Prisma.IntWithAggregatesFilter<"Image"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Image"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Image"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Image"> | Date | string | null
@@ -329,7 +349,7 @@ export type ImageScalarWhereWithAggregatesInput = {
   orientation?: Prisma.IntNullableWithAggregatesFilter<"Image"> | number | null
   colorSpace?: Prisma.StringNullableWithAggregatesFilter<"Image"> | string | null
   hasAlpha?: Prisma.BoolWithAggregatesFilter<"Image"> | boolean
-  assetId?: Prisma.StringWithAggregatesFilter<"Image"> | string
+  assetSeq?: Prisma.IntWithAggregatesFilter<"Image"> | number
 }
 
 export type ImageCreateInput = {
@@ -347,6 +367,7 @@ export type ImageCreateInput = {
 
 export type ImageUncheckedCreateInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -355,7 +376,7 @@ export type ImageUncheckedCreateInput = {
   orientation?: number | null
   colorSpace?: string | null
   hasAlpha?: boolean
-  assetId: string
+  assetSeq: number
 }
 
 export type ImageUpdateInput = {
@@ -373,6 +394,7 @@ export type ImageUpdateInput = {
 
 export type ImageUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -381,11 +403,12 @@ export type ImageUncheckedUpdateInput = {
   orientation?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   colorSpace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasAlpha?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
+  assetSeq?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ImageCreateManyInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -394,7 +417,7 @@ export type ImageCreateManyInput = {
   orientation?: number | null
   colorSpace?: string | null
   hasAlpha?: boolean
-  assetId: string
+  assetSeq: number
 }
 
 export type ImageUpdateManyMutationInput = {
@@ -411,6 +434,7 @@ export type ImageUpdateManyMutationInput = {
 
 export type ImageUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -419,7 +443,7 @@ export type ImageUncheckedUpdateManyInput = {
   orientation?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   colorSpace?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hasAlpha?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  assetId?: Prisma.StringFieldUpdateOperationsInput | string
+  assetSeq?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ImageNullableScalarRelationFilter = {
@@ -429,6 +453,7 @@ export type ImageNullableScalarRelationFilter = {
 
 export type ImageCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -437,17 +462,20 @@ export type ImageCountOrderByAggregateInput = {
   orientation?: Prisma.SortOrder
   colorSpace?: Prisma.SortOrder
   hasAlpha?: Prisma.SortOrder
-  assetId?: Prisma.SortOrder
+  assetSeq?: Prisma.SortOrder
 }
 
 export type ImageAvgOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
   orientation?: Prisma.SortOrder
+  assetSeq?: Prisma.SortOrder
 }
 
 export type ImageMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -456,11 +484,12 @@ export type ImageMaxOrderByAggregateInput = {
   orientation?: Prisma.SortOrder
   colorSpace?: Prisma.SortOrder
   hasAlpha?: Prisma.SortOrder
-  assetId?: Prisma.SortOrder
+  assetSeq?: Prisma.SortOrder
 }
 
 export type ImageMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -469,13 +498,15 @@ export type ImageMinOrderByAggregateInput = {
   orientation?: Prisma.SortOrder
   colorSpace?: Prisma.SortOrder
   hasAlpha?: Prisma.SortOrder
-  assetId?: Prisma.SortOrder
+  assetSeq?: Prisma.SortOrder
 }
 
 export type ImageSumOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
   orientation?: Prisma.SortOrder
+  assetSeq?: Prisma.SortOrder
 }
 
 export type ImageCreateNestedOneWithoutAssetInput = {
@@ -524,6 +555,7 @@ export type ImageCreateWithoutAssetInput = {
 
 export type ImageUncheckedCreateWithoutAssetInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -564,6 +596,7 @@ export type ImageUpdateWithoutAssetInput = {
 
 export type ImageUncheckedUpdateWithoutAssetInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -578,6 +611,7 @@ export type ImageUncheckedUpdateWithoutAssetInput = {
 
 export type ImageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -586,12 +620,13 @@ export type ImageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   orientation?: boolean
   colorSpace?: boolean
   hasAlpha?: boolean
-  assetId?: boolean
+  assetSeq?: boolean
   asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["image"]>
 
 export type ImageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -600,12 +635,13 @@ export type ImageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   orientation?: boolean
   colorSpace?: boolean
   hasAlpha?: boolean
-  assetId?: boolean
+  assetSeq?: boolean
   asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["image"]>
 
 export type ImageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -614,12 +650,13 @@ export type ImageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   orientation?: boolean
   colorSpace?: boolean
   hasAlpha?: boolean
-  assetId?: boolean
+  assetSeq?: boolean
   asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["image"]>
 
 export type ImageSelectScalar = {
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -628,10 +665,10 @@ export type ImageSelectScalar = {
   orientation?: boolean
   colorSpace?: boolean
   hasAlpha?: boolean
-  assetId?: boolean
+  assetSeq?: boolean
 }
 
-export type ImageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "width" | "height" | "orientation" | "colorSpace" | "hasAlpha" | "assetId", ExtArgs["result"]["image"]>
+export type ImageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "width" | "height" | "orientation" | "colorSpace" | "hasAlpha" | "assetSeq", ExtArgs["result"]["image"]>
 export type ImageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>
 }
@@ -649,6 +686,7 @@ export type $ImagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    seq: number
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -673,9 +711,9 @@ export type $ImagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
      */
     hasAlpha: boolean
     /**
-     * @displayName 원본 Asset ID
+     * @displayName 원본 Asset 내부 순번
      */
-    assetId: string
+    assetSeq: number
   }, ExtArgs["result"]["image"]>
   composites: {}
 }
@@ -1101,6 +1139,7 @@ export interface Prisma__ImageClient<T, Null = never, ExtArgs extends runtime.Ty
  */
 export interface ImageFieldRefs {
   readonly id: Prisma.FieldRef<"Image", 'String'>
+  readonly seq: Prisma.FieldRef<"Image", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Image", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Image", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Image", 'DateTime'>
@@ -1109,7 +1148,7 @@ export interface ImageFieldRefs {
   readonly orientation: Prisma.FieldRef<"Image", 'Int'>
   readonly colorSpace: Prisma.FieldRef<"Image", 'String'>
   readonly hasAlpha: Prisma.FieldRef<"Image", 'Boolean'>
-  readonly assetId: Prisma.FieldRef<"Image", 'String'>
+  readonly assetSeq: Prisma.FieldRef<"Image", 'Int'>
 }
     
 

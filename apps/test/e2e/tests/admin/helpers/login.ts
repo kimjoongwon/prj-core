@@ -9,9 +9,9 @@ import type { Page } from "@playwright/test";
 
 /** 시드 데이터 기준 System Tenant/Space (플랫폼 운영본부) */
 const SYSTEM_TENANT_ID =
-	process.env.E2E_SYSTEM_TENANT_ID ?? "71ddca20-1752-466e-b4da-879ebdbe54e3";
+	process.env.E2E_SYSTEM_TENANT_ID ?? "01J00000000000000000000002";
 const SYSTEM_SPACE_ID =
-	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
+	process.env.E2E_SYSTEM_SPACE_ID ?? "01J00000000000000000000001";
 const SYSTEM_FITNESS_CENTER_NAME = "플랫폼 운영본부";
 const ADMIN_DASHBOARD_PATH = "/admin/dashboard";
 const ADMIN_LOGIN_PATH = "/admin/auth/login";

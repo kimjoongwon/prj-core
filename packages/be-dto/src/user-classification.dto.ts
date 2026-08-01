@@ -1,15 +1,15 @@
-import { ClassField, UUIDFieldOptional } from "@cocrepo/decorator";
-import type { UserClassification } from "@cocrepo/entity";
+import { ClassField, ULIDFieldOptional } from "@cocrepo/decorator";
+import type { DomainEntityModel, UserClassification } from "@cocrepo/entity";
 import { AbstractDto, CategoryDto, UserDto } from ".";
 
 export class UserClassificationDto
 	extends AbstractDto
-	implements UserClassification
+	implements DomainEntityModel<UserClassification>
 {
-	@UUIDFieldOptional()
+	@ULIDFieldOptional()
 	categoryId: string;
 
-	@UUIDFieldOptional()
+	@ULIDFieldOptional()
 	userId: string;
 
 	@ClassField(() => UserDto, { required: false })

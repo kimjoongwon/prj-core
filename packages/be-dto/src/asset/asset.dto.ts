@@ -4,8 +4,8 @@ import {
 	NumberField,
 	StringField,
 	StringFieldOptional,
-	UUIDField,
-	UUIDFieldOptional,
+	ULIDField,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator";
 import { AssetKind, AssetStatus, type Prisma } from "@cocrepo/prisma";
 import { AbstractDto } from "../abstract.dto";
@@ -15,10 +15,10 @@ import { FolderDto } from "../folder/folder.dto";
  * 에셋 DTO
  */
 export class AssetDto extends AbstractDto {
-	@UUIDField({ description: "소속 Space ID" })
+	@ULIDField({ description: "소속 Space ID" })
 	spaceId!: string;
 
-	@UUIDField({ description: "소속 폴더 ID" })
+	@ULIDField({ description: "소속 폴더 ID" })
 	folderId!: string;
 
 	@EnumField(() => AssetKind, {
@@ -58,7 +58,7 @@ export class AssetDto extends AbstractDto {
 	})
 	metadata!: Prisma.JsonValue | null;
 
-	@UUIDFieldOptional({ nullable: true, description: "생성자 ID" })
+	@ULIDFieldOptional({ nullable: true, description: "생성자 ID" })
 	createdById!: string | null;
 
 	@StringFieldOptional({

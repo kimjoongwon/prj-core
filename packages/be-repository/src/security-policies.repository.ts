@@ -3,7 +3,7 @@ import { type Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
 export class SecurityPoliciesRepository {
@@ -23,7 +23,7 @@ export class SecurityPoliciesRepository {
 		const result = await this.txHost.tx.securityPolicy.findUnique({
 			where: { key },
 		});
-		return result ? plainToInstance(SecurityPolicy, result) : null;
+		return result ? toDomainEntity(SecurityPolicy, result) : null;
 	}
 
 	/**
@@ -38,7 +38,7 @@ export class SecurityPoliciesRepository {
 			where: { key },
 			data,
 		});
-		return plainToInstance(SecurityPolicy, result);
+		return toDomainEntity(SecurityPolicy, result);
 	}
 
 	/**
@@ -49,6 +49,6 @@ export class SecurityPoliciesRepository {
 	): Promise<SecurityPolicy> {
 		this.logger.debug(`보안 정책 생성: ${data.key}`);
 		const result = await this.txHost.tx.securityPolicy.create({ data });
-		return plainToInstance(SecurityPolicy, result);
+		return toDomainEntity(SecurityPolicy, result);
 	}
 }

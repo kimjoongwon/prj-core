@@ -3,25 +3,26 @@
 // @description: 사용자 생성 콘텐츠
 /// @displayName 콘텐츠
 model Content {
-  id          String    @id @default(uuid())
-  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt   DateTime? @map("removed_at") @db.Timestamptz(6)
+  id           String    @unique @default(ulid()) @db.VarChar(26)
+  seq          Int       @id @default(autoincrement())
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt    DateTime? @map("removed_at") @db.Timestamptz(6)
   /// @displayName 제목
-  title       String?
+  title        String?
   /// @displayName 설명
-  description String?
+  description  String?
   /// @displayName 유형
-  type        TextTypes @default(Editor)
+  type         TextTypes @default(Editor)
   /// @displayName 본문
-  text        String?   @db.VarChar(1000)
-  fileId      String?   @map("file_id")
-  spaceId     String    @map("space_id")
-  createdById String?   @map("created_by_id")
-  space       Space     @relation(fields: [spaceId], references: [id], onDelete: Restrict)
-  createdBy   User?     @relation(fields: [createdById], references: [id], onDelete: SetNull)
-  post        Post?
+  text         String?   @db.VarChar(1000)
+  fileId       String?   @map("file_id")
+  spaceSeq     Int       @map("space_seq")
+  createdBySeq Int?      @map("created_by_seq")
+  space        Space     @relation(fields: [spaceSeq], references: [seq], onDelete: Restrict)
+  createdBy    User?     @relation(fields: [createdBySeq], references: [seq], onDelete: SetNull)
+  post         Post?
 
-  @@index([spaceId])
+  @@index([spaceSeq])
   @@map("contents")
 }

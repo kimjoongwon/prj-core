@@ -27,15 +27,18 @@ export type AggregateUser = {
 }
 
 export type UserAvgAggregateOutputType = {
+  seq: number | null
   failedLoginAttempts: number | null
 }
 
 export type UserSumAggregateOutputType = {
+  seq: number | null
   failedLoginAttempts: number | null
 }
 
 export type UserMinAggregateOutputType = {
   id: string | null
+  seq: number | null
   updatedAt: Date | null
   createdAt: Date | null
   removedAt: Date | null
@@ -56,6 +59,7 @@ export type UserMinAggregateOutputType = {
 
 export type UserMaxAggregateOutputType = {
   id: string | null
+  seq: number | null
   updatedAt: Date | null
   createdAt: Date | null
   removedAt: Date | null
@@ -76,6 +80,7 @@ export type UserMaxAggregateOutputType = {
 
 export type UserCountAggregateOutputType = {
   id: number
+  seq: number
   updatedAt: number
   createdAt: number
   removedAt: number
@@ -97,15 +102,18 @@ export type UserCountAggregateOutputType = {
 
 
 export type UserAvgAggregateInputType = {
+  seq?: true
   failedLoginAttempts?: true
 }
 
 export type UserSumAggregateInputType = {
+  seq?: true
   failedLoginAttempts?: true
 }
 
 export type UserMinAggregateInputType = {
   id?: true
+  seq?: true
   updatedAt?: true
   createdAt?: true
   removedAt?: true
@@ -126,6 +134,7 @@ export type UserMinAggregateInputType = {
 
 export type UserMaxAggregateInputType = {
   id?: true
+  seq?: true
   updatedAt?: true
   createdAt?: true
   removedAt?: true
@@ -146,6 +155,7 @@ export type UserMaxAggregateInputType = {
 
 export type UserCountAggregateInputType = {
   id?: true
+  seq?: true
   updatedAt?: true
   createdAt?: true
   removedAt?: true
@@ -253,6 +263,7 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 
 export type UserGroupByOutputType = {
   id: string
+  seq: number
   updatedAt: Date | null
   createdAt: Date
   removedAt: Date | null
@@ -296,6 +307,7 @@ export type UserWhereInput = {
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   id?: Prisma.StringFilter<"User"> | string
+  seq?: Prisma.IntFilter<"User"> | number
   updatedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   removedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -346,6 +358,7 @@ export type UserWhereInput = {
 
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -396,6 +409,7 @@ export type UserOrderByWithRelationInput = {
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  seq?: number
   phone?: string
   name?: string
   email?: string
@@ -445,10 +459,11 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   inquiryMessages?: Prisma.InquiryMessageListRelationFilter
   inquiryParticipants?: Prisma.InquiryParticipantListRelationFilter
   createdThreads?: Prisma.InquiryThreadListRelationFilter
-}, "id" | "phone" | "name" | "email">
+}, "seq" | "id" | "phone" | "name" | "email">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -477,6 +492,7 @@ export type UserScalarWhereWithAggregatesInput = {
   OR?: Prisma.UserScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"User"> | string
+  seq?: Prisma.IntWithAggregatesFilter<"User"> | number
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
@@ -547,6 +563,7 @@ export type UserCreateInput = {
 
 export type UserUncheckedCreateInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -647,6 +664,7 @@ export type UserUpdateInput = {
 
 export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -697,6 +715,7 @@ export type UserUncheckedUpdateInput = {
 
 export type UserCreateManyInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -737,6 +756,7 @@ export type UserUpdateManyMutationInput = {
 
 export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -767,6 +787,7 @@ export type UserScalarRelationFilter = {
 
 export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -786,11 +807,13 @@ export type UserCountOrderByAggregateInput = {
 }
 
 export type UserAvgOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
   failedLoginAttempts?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -811,6 +834,7 @@ export type UserMaxOrderByAggregateInput = {
 
 export type UserMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -830,6 +854,7 @@ export type UserMinOrderByAggregateInput = {
 }
 
 export type UserSumOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
   failedLoginAttempts?: Prisma.SortOrder
 }
 
@@ -1346,6 +1371,7 @@ export type UserCreateWithoutCreatedAlbumEntriesInput = {
 
 export type UserUncheckedCreateWithoutCreatedAlbumEntriesInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -1460,6 +1486,7 @@ export type UserUpdateWithoutCreatedAlbumEntriesInput = {
 
 export type UserUncheckedUpdateWithoutCreatedAlbumEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1558,6 +1585,7 @@ export type UserCreateWithoutCreatedAlbumsInput = {
 
 export type UserUncheckedCreateWithoutCreatedAlbumsInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -1672,6 +1700,7 @@ export type UserUpdateWithoutCreatedAlbumsInput = {
 
 export type UserUncheckedUpdateWithoutCreatedAlbumsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1770,6 +1799,7 @@ export type UserCreateWithoutCreatedAssetsInput = {
 
 export type UserUncheckedCreateWithoutCreatedAssetsInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -1884,6 +1914,7 @@ export type UserUpdateWithoutCreatedAssetsInput = {
 
 export type UserUncheckedUpdateWithoutCreatedAssetsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1982,6 +2013,7 @@ export type UserCreateWithoutAuthAuditLogsInput = {
 
 export type UserUncheckedCreateWithoutAuthAuditLogsInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -2096,6 +2128,7 @@ export type UserUpdateWithoutAuthAuditLogsInput = {
 
 export type UserUncheckedUpdateWithoutAuthAuditLogsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2194,6 +2227,7 @@ export type UserCreateWithoutCreatedCategoriesInput = {
 
 export type UserUncheckedCreateWithoutCreatedCategoriesInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -2308,6 +2342,7 @@ export type UserUpdateWithoutCreatedCategoriesInput = {
 
 export type UserUncheckedUpdateWithoutCreatedCategoriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2406,6 +2441,7 @@ export type UserCreateWithoutCreatedContentsInput = {
 
 export type UserUncheckedCreateWithoutCreatedContentsInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -2520,6 +2556,7 @@ export type UserUpdateWithoutCreatedContentsInput = {
 
 export type UserUncheckedUpdateWithoutCreatedContentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2618,6 +2655,7 @@ export type UserCreateWithoutCreatedDerivativesInput = {
 
 export type UserUncheckedCreateWithoutCreatedDerivativesInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -2732,6 +2770,7 @@ export type UserUpdateWithoutCreatedDerivativesInput = {
 
 export type UserUncheckedUpdateWithoutCreatedDerivativesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2830,6 +2869,7 @@ export type UserCreateWithoutEmailVerificationsInput = {
 
 export type UserUncheckedCreateWithoutEmailVerificationsInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -2944,6 +2984,7 @@ export type UserUpdateWithoutEmailVerificationsInput = {
 
 export type UserUncheckedUpdateWithoutEmailVerificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3042,6 +3083,7 @@ export type UserCreateWithoutCreatedFoldersInput = {
 
 export type UserUncheckedCreateWithoutCreatedFoldersInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -3156,6 +3198,7 @@ export type UserUpdateWithoutCreatedFoldersInput = {
 
 export type UserUncheckedUpdateWithoutCreatedFoldersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3254,6 +3297,7 @@ export type UserCreateWithoutCreatedGroupsInput = {
 
 export type UserUncheckedCreateWithoutCreatedGroupsInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -3368,6 +3412,7 @@ export type UserUpdateWithoutCreatedGroupsInput = {
 
 export type UserUncheckedUpdateWithoutCreatedGroupsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3466,6 +3511,7 @@ export type UserCreateWithoutInquiryMessagesInput = {
 
 export type UserUncheckedCreateWithoutInquiryMessagesInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -3580,6 +3626,7 @@ export type UserUpdateWithoutInquiryMessagesInput = {
 
 export type UserUncheckedUpdateWithoutInquiryMessagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3678,6 +3725,7 @@ export type UserCreateWithoutInquiryParticipantsInput = {
 
 export type UserUncheckedCreateWithoutInquiryParticipantsInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -3792,6 +3840,7 @@ export type UserUpdateWithoutInquiryParticipantsInput = {
 
 export type UserUncheckedUpdateWithoutInquiryParticipantsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3890,6 +3939,7 @@ export type UserCreateWithoutCreatedThreadsInput = {
 
 export type UserUncheckedCreateWithoutCreatedThreadsInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -4004,6 +4054,7 @@ export type UserUpdateWithoutCreatedThreadsInput = {
 
 export type UserUncheckedUpdateWithoutCreatedThreadsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4102,6 +4153,7 @@ export type UserCreateWithoutCreatedInquiriesInput = {
 
 export type UserUncheckedCreateWithoutCreatedInquiriesInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -4205,6 +4257,7 @@ export type UserCreateWithoutCustomerInquiriesInput = {
 
 export type UserUncheckedCreateWithoutCustomerInquiriesInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -4308,6 +4361,7 @@ export type UserCreateWithoutAssignedInquiriesInput = {
 
 export type UserUncheckedCreateWithoutAssignedInquiriesInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -4422,6 +4476,7 @@ export type UserUpdateWithoutCreatedInquiriesInput = {
 
 export type UserUncheckedUpdateWithoutCreatedInquiriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4531,6 +4586,7 @@ export type UserUpdateWithoutCustomerInquiriesInput = {
 
 export type UserUncheckedUpdateWithoutCustomerInquiriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4640,6 +4696,7 @@ export type UserUpdateWithoutAssignedInquiriesInput = {
 
 export type UserUncheckedUpdateWithoutAssignedInquiriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4738,6 +4795,7 @@ export type UserCreateWithoutPasswordHistoryInput = {
 
 export type UserUncheckedCreateWithoutPasswordHistoryInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -4852,6 +4910,7 @@ export type UserUpdateWithoutPasswordHistoryInput = {
 
 export type UserUncheckedUpdateWithoutPasswordHistoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4950,6 +5009,7 @@ export type UserCreateWithoutCreatedPoliciesInput = {
 
 export type UserUncheckedCreateWithoutCreatedPoliciesInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -5064,6 +5124,7 @@ export type UserUpdateWithoutCreatedPoliciesInput = {
 
 export type UserUncheckedUpdateWithoutCreatedPoliciesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5162,6 +5223,7 @@ export type UserCreateWithoutProfilesInput = {
 
 export type UserUncheckedCreateWithoutProfilesInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -5276,6 +5338,7 @@ export type UserUpdateWithoutProfilesInput = {
 
 export type UserUncheckedUpdateWithoutProfilesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5374,6 +5437,7 @@ export type UserCreateWithoutCreatedReservationsInput = {
 
 export type UserUncheckedCreateWithoutCreatedReservationsInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -5477,6 +5541,7 @@ export type UserCreateWithoutReservationsInput = {
 
 export type UserUncheckedCreateWithoutReservationsInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -5591,6 +5656,7 @@ export type UserUpdateWithoutCreatedReservationsInput = {
 
 export type UserUncheckedUpdateWithoutCreatedReservationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5700,6 +5766,7 @@ export type UserUpdateWithoutReservationsInput = {
 
 export type UserUncheckedUpdateWithoutReservationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5798,6 +5865,7 @@ export type UserCreateWithoutCreatedRoutinesInput = {
 
 export type UserUncheckedCreateWithoutCreatedRoutinesInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -5912,6 +5980,7 @@ export type UserUpdateWithoutCreatedRoutinesInput = {
 
 export type UserUncheckedUpdateWithoutCreatedRoutinesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6010,6 +6079,7 @@ export type UserCreateWithoutCreatedSafeWalletsInput = {
 
 export type UserUncheckedCreateWithoutCreatedSafeWalletsInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -6124,6 +6194,7 @@ export type UserUpdateWithoutCreatedSafeWalletsInput = {
 
 export type UserUncheckedUpdateWithoutCreatedSafeWalletsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6222,6 +6293,7 @@ export type UserCreateWithoutCreatedTasksInput = {
 
 export type UserUncheckedCreateWithoutCreatedTasksInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -6336,6 +6408,7 @@ export type UserUpdateWithoutCreatedTasksInput = {
 
 export type UserUncheckedUpdateWithoutCreatedTasksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6434,6 +6507,7 @@ export type UserCreateWithoutTenantAccessRequestsInput = {
 
 export type UserUncheckedCreateWithoutTenantAccessRequestsInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -6537,6 +6611,7 @@ export type UserCreateWithoutReviewedTenantAccessRequestsInput = {
 
 export type UserUncheckedCreateWithoutReviewedTenantAccessRequestsInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -6651,6 +6726,7 @@ export type UserUpdateWithoutTenantAccessRequestsInput = {
 
 export type UserUncheckedUpdateWithoutTenantAccessRequestsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6760,6 +6836,7 @@ export type UserUpdateWithoutReviewedTenantAccessRequestsInput = {
 
 export type UserUncheckedUpdateWithoutReviewedTenantAccessRequestsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6858,6 +6935,7 @@ export type UserCreateWithoutTenantsInput = {
 
 export type UserUncheckedCreateWithoutTenantsInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -6972,6 +7050,7 @@ export type UserUpdateWithoutTenantsInput = {
 
 export type UserUncheckedUpdateWithoutTenantsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7070,6 +7149,7 @@ export type UserCreateWithoutCreatedTimelinesInput = {
 
 export type UserUncheckedCreateWithoutCreatedTimelinesInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -7184,6 +7264,7 @@ export type UserUpdateWithoutCreatedTimelinesInput = {
 
 export type UserUncheckedUpdateWithoutCreatedTimelinesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7282,6 +7363,7 @@ export type UserCreateWithoutAssociationsInput = {
 
 export type UserUncheckedCreateWithoutAssociationsInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -7396,6 +7478,7 @@ export type UserUpdateWithoutAssociationsInput = {
 
 export type UserUncheckedUpdateWithoutAssociationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7494,6 +7577,7 @@ export type UserCreateWithoutClassificationInput = {
 
 export type UserUncheckedCreateWithoutClassificationInput = {
   id?: string
+  seq?: number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -7608,6 +7692,7 @@ export type UserUpdateWithoutClassificationInput = {
 
 export type UserUncheckedUpdateWithoutClassificationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7940,6 +8025,7 @@ export type UserCountOutputTypeCountCreatedThreadsArgs<ExtArgs extends runtime.T
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   updatedAt?: boolean
   createdAt?: boolean
   removedAt?: boolean
@@ -7991,6 +8077,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   updatedAt?: boolean
   createdAt?: boolean
   removedAt?: boolean
@@ -8011,6 +8098,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   updatedAt?: boolean
   createdAt?: boolean
   removedAt?: boolean
@@ -8031,6 +8119,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 
 export type UserSelectScalar = {
   id?: boolean
+  seq?: boolean
   updatedAt?: boolean
   createdAt?: boolean
   removedAt?: boolean
@@ -8049,7 +8138,7 @@ export type UserSelectScalar = {
   currentTenantId?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "updatedAt" | "createdAt" | "removedAt" | "phone" | "name" | "email" | "password" | "failedLoginAttempts" | "lockedUntil" | "isPermanentlyLocked" | "mustChangePassword" | "passwordChangedAt" | "lastLoginAt" | "lastLoginIp" | "isActive" | "currentTenantId", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "updatedAt" | "createdAt" | "removedAt" | "phone" | "name" | "email" | "password" | "failedLoginAttempts" | "lockedUntil" | "isPermanentlyLocked" | "mustChangePassword" | "passwordChangedAt" | "lastLoginAt" | "lastLoginIp" | "isActive" | "currentTenantId", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   profiles?: boolean | Prisma.User$profilesArgs<ExtArgs>
   tenants?: boolean | Prisma.User$tenantsArgs<ExtArgs>
@@ -8122,6 +8211,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    seq: number
     updatedAt: Date | null
     createdAt: Date
     removedAt: Date | null
@@ -8631,6 +8721,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
  */
 export interface UserFieldRefs {
   readonly id: Prisma.FieldRef<"User", 'String'>
+  readonly seq: Prisma.FieldRef<"User", 'Int'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"User", 'DateTime'>

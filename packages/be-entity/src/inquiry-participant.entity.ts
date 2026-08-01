@@ -3,6 +3,7 @@ import type {
 	InquiryParticipantRole,
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Inquiry } from "./inquiry.entity";
 import type { InquiryThread } from "./inquiry-thread.entity";
 import type { User } from "./user.entity";
@@ -15,7 +16,7 @@ import type { User } from "./user.entity";
  */
 export class InquiryParticipant
 	extends AbstractEntity
-	implements InquiryParticipantEntity
+	implements DomainEntityModel<InquiryParticipantEntity>
 {
 	// ============================================================================
 	// 필수 필드

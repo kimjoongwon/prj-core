@@ -3,7 +3,8 @@
 // @description: 사용자·공간·역할을 묶는 그룹 루트
 /// @displayName 그룹
 model Group {
-  id                String             @id @default(uuid())
+  id                String             @unique @default(ulid()) @db.VarChar(26)
+  seq               Int                @id @default(autoincrement())
   createdAt         DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt         DateTime?          @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt         DateTime?          @map("removed_at") @db.Timestamptz(6)
@@ -13,14 +14,14 @@ model Group {
   type              GroupTypes         @default(User)
   /// @displayName 라벨
   label             String?
-  spaceId           String             @map("space_id")
-  createdById       String?            @map("created_by_id")
-  space             Space              @relation(fields: [spaceId], references: [id], onDelete: Restrict)
-  createdBy         User?              @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  spaceSeq          Int                @map("space_seq")
+  createdBySeq      Int?               @map("created_by_seq")
+  space             Space              @relation(fields: [spaceSeq], references: [seq], onDelete: Restrict)
+  createdBy         User?              @relation(fields: [createdBySeq], references: [seq], onDelete: SetNull)
   roleAssociations  RoleAssociation[]
   spaceAssociations SpaceAssociation[]
   userAssociations  UserAssociation[]
 
-  @@index([spaceId])
+  @@index([spaceSeq])
   @@map("groups")
 }

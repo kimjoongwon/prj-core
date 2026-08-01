@@ -1,4 +1,4 @@
-import { UUIDField } from "@cocrepo/decorator";
+import { ULIDField } from "@cocrepo/decorator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 
@@ -12,7 +12,7 @@ import { ActionConfigDto } from "../action-config.dto";
  * DDD 원칙에 따라 Action은 행위의 완전한 정의를 가집니다.
  */
 export class ActionResponseDto {
-	@UUIDField({ description: "Action ID" })
+	@ULIDField({ description: "Action ID" })
 	@Expose()
 	id!: string;
 

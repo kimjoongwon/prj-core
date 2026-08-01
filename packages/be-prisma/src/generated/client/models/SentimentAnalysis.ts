@@ -27,12 +27,18 @@ export type AggregateSentimentAnalysis = {
 }
 
 export type SentimentAnalysisAvgAggregateOutputType = {
+  seq: number | null
+  inquirySeq: number | null
+  messageSeq: number | null
   score: number | null
   confidence: number | null
   urgency: number | null
 }
 
 export type SentimentAnalysisSumAggregateOutputType = {
+  seq: number | null
+  inquirySeq: number | null
+  messageSeq: number | null
   score: number | null
   confidence: number | null
   urgency: number | null
@@ -40,10 +46,11 @@ export type SentimentAnalysisSumAggregateOutputType = {
 
 export type SentimentAnalysisMinAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
-  inquiryId: string | null
-  messageId: string | null
+  inquirySeq: number | null
+  messageSeq: number | null
   sentiment: $Enums.SentimentType | null
   score: number | null
   confidence: number | null
@@ -53,10 +60,11 @@ export type SentimentAnalysisMinAggregateOutputType = {
 
 export type SentimentAnalysisMaxAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
-  inquiryId: string | null
-  messageId: string | null
+  inquirySeq: number | null
+  messageSeq: number | null
   sentiment: $Enums.SentimentType | null
   score: number | null
   confidence: number | null
@@ -66,10 +74,11 @@ export type SentimentAnalysisMaxAggregateOutputType = {
 
 export type SentimentAnalysisCountAggregateOutputType = {
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
-  inquiryId: number
-  messageId: number
+  inquirySeq: number
+  messageSeq: number
   sentiment: number
   score: number
   confidence: number
@@ -82,12 +91,18 @@ export type SentimentAnalysisCountAggregateOutputType = {
 
 
 export type SentimentAnalysisAvgAggregateInputType = {
+  seq?: true
+  inquirySeq?: true
+  messageSeq?: true
   score?: true
   confidence?: true
   urgency?: true
 }
 
 export type SentimentAnalysisSumAggregateInputType = {
+  seq?: true
+  inquirySeq?: true
+  messageSeq?: true
   score?: true
   confidence?: true
   urgency?: true
@@ -95,10 +110,11 @@ export type SentimentAnalysisSumAggregateInputType = {
 
 export type SentimentAnalysisMinAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
-  inquiryId?: true
-  messageId?: true
+  inquirySeq?: true
+  messageSeq?: true
   sentiment?: true
   score?: true
   confidence?: true
@@ -108,10 +124,11 @@ export type SentimentAnalysisMinAggregateInputType = {
 
 export type SentimentAnalysisMaxAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
-  inquiryId?: true
-  messageId?: true
+  inquirySeq?: true
+  messageSeq?: true
   sentiment?: true
   score?: true
   confidence?: true
@@ -121,10 +138,11 @@ export type SentimentAnalysisMaxAggregateInputType = {
 
 export type SentimentAnalysisCountAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
-  inquiryId?: true
-  messageId?: true
+  inquirySeq?: true
+  messageSeq?: true
   sentiment?: true
   score?: true
   confidence?: true
@@ -223,10 +241,11 @@ export type SentimentAnalysisGroupByArgs<ExtArgs extends runtime.Types.Extension
 
 export type SentimentAnalysisGroupByOutputType = {
   id: string
+  seq: number
   createdAt: Date
   updatedAt: Date | null
-  inquiryId: string
-  messageId: string | null
+  inquirySeq: number
+  messageSeq: number | null
   sentiment: $Enums.SentimentType
   score: number
   confidence: number
@@ -261,10 +280,11 @@ export type SentimentAnalysisWhereInput = {
   OR?: Prisma.SentimentAnalysisWhereInput[]
   NOT?: Prisma.SentimentAnalysisWhereInput | Prisma.SentimentAnalysisWhereInput[]
   id?: Prisma.StringFilter<"SentimentAnalysis"> | string
+  seq?: Prisma.IntFilter<"SentimentAnalysis"> | number
   createdAt?: Prisma.DateTimeFilter<"SentimentAnalysis"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"SentimentAnalysis"> | Date | string | null
-  inquiryId?: Prisma.StringFilter<"SentimentAnalysis"> | string
-  messageId?: Prisma.StringNullableFilter<"SentimentAnalysis"> | string | null
+  inquirySeq?: Prisma.IntFilter<"SentimentAnalysis"> | number
+  messageSeq?: Prisma.IntNullableFilter<"SentimentAnalysis"> | number | null
   sentiment?: Prisma.EnumSentimentTypeFilter<"SentimentAnalysis"> | $Enums.SentimentType
   score?: Prisma.FloatFilter<"SentimentAnalysis"> | number
   confidence?: Prisma.FloatFilter<"SentimentAnalysis"> | number
@@ -278,10 +298,11 @@ export type SentimentAnalysisWhereInput = {
 
 export type SentimentAnalysisOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  inquiryId?: Prisma.SortOrder
-  messageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  inquirySeq?: Prisma.SortOrder
+  messageSeq?: Prisma.SortOrderInput | Prisma.SortOrder
   sentiment?: Prisma.SortOrder
   score?: Prisma.SortOrder
   confidence?: Prisma.SortOrder
@@ -295,8 +316,9 @@ export type SentimentAnalysisOrderByWithRelationInput = {
 
 export type SentimentAnalysisWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  inquiryId?: string
-  messageId?: string
+  seq?: number
+  inquirySeq?: number
+  messageSeq?: number
   AND?: Prisma.SentimentAnalysisWhereInput | Prisma.SentimentAnalysisWhereInput[]
   OR?: Prisma.SentimentAnalysisWhereInput[]
   NOT?: Prisma.SentimentAnalysisWhereInput | Prisma.SentimentAnalysisWhereInput[]
@@ -311,14 +333,15 @@ export type SentimentAnalysisWhereUniqueInput = Prisma.AtLeast<{
   analyzedAt?: Prisma.DateTimeFilter<"SentimentAnalysis"> | Date | string
   inquiry?: Prisma.XOR<Prisma.InquiryScalarRelationFilter, Prisma.InquiryWhereInput>
   message?: Prisma.XOR<Prisma.InquiryMessageNullableScalarRelationFilter, Prisma.InquiryMessageWhereInput> | null
-}, "id" | "inquiryId" | "messageId">
+}, "seq" | "id" | "inquirySeq" | "messageSeq">
 
 export type SentimentAnalysisOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  inquiryId?: Prisma.SortOrder
-  messageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  inquirySeq?: Prisma.SortOrder
+  messageSeq?: Prisma.SortOrderInput | Prisma.SortOrder
   sentiment?: Prisma.SortOrder
   score?: Prisma.SortOrder
   confidence?: Prisma.SortOrder
@@ -338,10 +361,11 @@ export type SentimentAnalysisScalarWhereWithAggregatesInput = {
   OR?: Prisma.SentimentAnalysisScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SentimentAnalysisScalarWhereWithAggregatesInput | Prisma.SentimentAnalysisScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"SentimentAnalysis"> | string
+  seq?: Prisma.IntWithAggregatesFilter<"SentimentAnalysis"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SentimentAnalysis"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"SentimentAnalysis"> | Date | string | null
-  inquiryId?: Prisma.StringWithAggregatesFilter<"SentimentAnalysis"> | string
-  messageId?: Prisma.StringNullableWithAggregatesFilter<"SentimentAnalysis"> | string | null
+  inquirySeq?: Prisma.IntWithAggregatesFilter<"SentimentAnalysis"> | number
+  messageSeq?: Prisma.IntNullableWithAggregatesFilter<"SentimentAnalysis"> | number | null
   sentiment?: Prisma.EnumSentimentTypeWithAggregatesFilter<"SentimentAnalysis"> | $Enums.SentimentType
   score?: Prisma.FloatWithAggregatesFilter<"SentimentAnalysis"> | number
   confidence?: Prisma.FloatWithAggregatesFilter<"SentimentAnalysis"> | number
@@ -368,10 +392,11 @@ export type SentimentAnalysisCreateInput = {
 
 export type SentimentAnalysisUncheckedCreateInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
-  inquiryId: string
-  messageId?: string | null
+  inquirySeq: number
+  messageSeq?: number | null
   sentiment: $Enums.SentimentType
   score: number
   confidence: number
@@ -398,10 +423,11 @@ export type SentimentAnalysisUpdateInput = {
 
 export type SentimentAnalysisUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
-  messageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inquirySeq?: Prisma.IntFieldUpdateOperationsInput | number
+  messageSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   sentiment?: Prisma.EnumSentimentTypeFieldUpdateOperationsInput | $Enums.SentimentType
   score?: Prisma.FloatFieldUpdateOperationsInput | number
   confidence?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -413,10 +439,11 @@ export type SentimentAnalysisUncheckedUpdateInput = {
 
 export type SentimentAnalysisCreateManyInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
-  inquiryId: string
-  messageId?: string | null
+  inquirySeq: number
+  messageSeq?: number | null
   sentiment: $Enums.SentimentType
   score: number
   confidence: number
@@ -441,10 +468,11 @@ export type SentimentAnalysisUpdateManyMutationInput = {
 
 export type SentimentAnalysisUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
-  messageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inquirySeq?: Prisma.IntFieldUpdateOperationsInput | number
+  messageSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   sentiment?: Prisma.EnumSentimentTypeFieldUpdateOperationsInput | $Enums.SentimentType
   score?: Prisma.FloatFieldUpdateOperationsInput | number
   confidence?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -461,10 +489,11 @@ export type SentimentAnalysisNullableScalarRelationFilter = {
 
 export type SentimentAnalysisCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  inquiryId?: Prisma.SortOrder
-  messageId?: Prisma.SortOrder
+  inquirySeq?: Prisma.SortOrder
+  messageSeq?: Prisma.SortOrder
   sentiment?: Prisma.SortOrder
   score?: Prisma.SortOrder
   confidence?: Prisma.SortOrder
@@ -475,6 +504,9 @@ export type SentimentAnalysisCountOrderByAggregateInput = {
 }
 
 export type SentimentAnalysisAvgOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+  inquirySeq?: Prisma.SortOrder
+  messageSeq?: Prisma.SortOrder
   score?: Prisma.SortOrder
   confidence?: Prisma.SortOrder
   urgency?: Prisma.SortOrder
@@ -482,10 +514,11 @@ export type SentimentAnalysisAvgOrderByAggregateInput = {
 
 export type SentimentAnalysisMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  inquiryId?: Prisma.SortOrder
-  messageId?: Prisma.SortOrder
+  inquirySeq?: Prisma.SortOrder
+  messageSeq?: Prisma.SortOrder
   sentiment?: Prisma.SortOrder
   score?: Prisma.SortOrder
   confidence?: Prisma.SortOrder
@@ -495,10 +528,11 @@ export type SentimentAnalysisMaxOrderByAggregateInput = {
 
 export type SentimentAnalysisMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  inquiryId?: Prisma.SortOrder
-  messageId?: Prisma.SortOrder
+  inquirySeq?: Prisma.SortOrder
+  messageSeq?: Prisma.SortOrder
   sentiment?: Prisma.SortOrder
   score?: Prisma.SortOrder
   confidence?: Prisma.SortOrder
@@ -507,6 +541,9 @@ export type SentimentAnalysisMinOrderByAggregateInput = {
 }
 
 export type SentimentAnalysisSumOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+  inquirySeq?: Prisma.SortOrder
+  messageSeq?: Prisma.SortOrder
   score?: Prisma.SortOrder
   confidence?: Prisma.SortOrder
   urgency?: Prisma.SortOrder
@@ -604,9 +641,10 @@ export type SentimentAnalysisCreateWithoutMessageInput = {
 
 export type SentimentAnalysisUncheckedCreateWithoutMessageInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
-  inquiryId: string
+  inquirySeq: number
   sentiment: $Enums.SentimentType
   score: number
   confidence: number
@@ -648,9 +686,10 @@ export type SentimentAnalysisUpdateWithoutMessageInput = {
 
 export type SentimentAnalysisUncheckedUpdateWithoutMessageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  inquirySeq?: Prisma.IntFieldUpdateOperationsInput | number
   sentiment?: Prisma.EnumSentimentTypeFieldUpdateOperationsInput | $Enums.SentimentType
   score?: Prisma.FloatFieldUpdateOperationsInput | number
   confidence?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -676,9 +715,10 @@ export type SentimentAnalysisCreateWithoutInquiryInput = {
 
 export type SentimentAnalysisUncheckedCreateWithoutInquiryInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
-  messageId?: string | null
+  messageSeq?: number | null
   sentiment: $Enums.SentimentType
   score: number
   confidence: number
@@ -720,9 +760,10 @@ export type SentimentAnalysisUpdateWithoutInquiryInput = {
 
 export type SentimentAnalysisUncheckedUpdateWithoutInquiryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  messageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  messageSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   sentiment?: Prisma.EnumSentimentTypeFieldUpdateOperationsInput | $Enums.SentimentType
   score?: Prisma.FloatFieldUpdateOperationsInput | number
   confidence?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -736,10 +777,11 @@ export type SentimentAnalysisUncheckedUpdateWithoutInquiryInput = {
 
 export type SentimentAnalysisSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  inquiryId?: boolean
-  messageId?: boolean
+  inquirySeq?: boolean
+  messageSeq?: boolean
   sentiment?: boolean
   score?: boolean
   confidence?: boolean
@@ -753,10 +795,11 @@ export type SentimentAnalysisSelect<ExtArgs extends runtime.Types.Extensions.Int
 
 export type SentimentAnalysisSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  inquiryId?: boolean
-  messageId?: boolean
+  inquirySeq?: boolean
+  messageSeq?: boolean
   sentiment?: boolean
   score?: boolean
   confidence?: boolean
@@ -770,10 +813,11 @@ export type SentimentAnalysisSelectCreateManyAndReturn<ExtArgs extends runtime.T
 
 export type SentimentAnalysisSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  inquiryId?: boolean
-  messageId?: boolean
+  inquirySeq?: boolean
+  messageSeq?: boolean
   sentiment?: boolean
   score?: boolean
   confidence?: boolean
@@ -787,10 +831,11 @@ export type SentimentAnalysisSelectUpdateManyAndReturn<ExtArgs extends runtime.T
 
 export type SentimentAnalysisSelectScalar = {
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  inquiryId?: boolean
-  messageId?: boolean
+  inquirySeq?: boolean
+  messageSeq?: boolean
   sentiment?: boolean
   score?: boolean
   confidence?: boolean
@@ -800,7 +845,7 @@ export type SentimentAnalysisSelectScalar = {
   analyzedAt?: boolean
 }
 
-export type SentimentAnalysisOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "inquiryId" | "messageId" | "sentiment" | "score" | "confidence" | "emotions" | "keywords" | "urgency" | "analyzedAt", ExtArgs["result"]["sentimentAnalysis"]>
+export type SentimentAnalysisOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "inquirySeq" | "messageSeq" | "sentiment" | "score" | "confidence" | "emotions" | "keywords" | "urgency" | "analyzedAt", ExtArgs["result"]["sentimentAnalysis"]>
 export type SentimentAnalysisInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   inquiry?: boolean | Prisma.InquiryDefaultArgs<ExtArgs>
   message?: boolean | Prisma.SentimentAnalysis$messageArgs<ExtArgs>
@@ -822,6 +867,7 @@ export type $SentimentAnalysisPayload<ExtArgs extends runtime.Types.Extensions.I
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    seq: number
     /**
      * @displayName 생성 일시
      */
@@ -831,13 +877,13 @@ export type $SentimentAnalysisPayload<ExtArgs extends runtime.Types.Extensions.I
      */
     updatedAt: Date | null
     /**
-     * @displayName 소속 문의 ID
+     * @displayName 소속 문의 내부 순번
      */
-    inquiryId: string
+    inquirySeq: number
     /**
-     * @displayName 분석 대상 메시지 ID
+     * @displayName 분석 대상 메시지 내부 순번
      */
-    messageId: string | null
+    messageSeq: number | null
     /**
      * @displayName 감정 유형
      */
@@ -1292,10 +1338,11 @@ export interface Prisma__SentimentAnalysisClient<T, Null = never, ExtArgs extend
  */
 export interface SentimentAnalysisFieldRefs {
   readonly id: Prisma.FieldRef<"SentimentAnalysis", 'String'>
+  readonly seq: Prisma.FieldRef<"SentimentAnalysis", 'Int'>
   readonly createdAt: Prisma.FieldRef<"SentimentAnalysis", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"SentimentAnalysis", 'DateTime'>
-  readonly inquiryId: Prisma.FieldRef<"SentimentAnalysis", 'String'>
-  readonly messageId: Prisma.FieldRef<"SentimentAnalysis", 'String'>
+  readonly inquirySeq: Prisma.FieldRef<"SentimentAnalysis", 'Int'>
+  readonly messageSeq: Prisma.FieldRef<"SentimentAnalysis", 'Int'>
   readonly sentiment: Prisma.FieldRef<"SentimentAnalysis", 'SentimentType'>
   readonly score: Prisma.FieldRef<"SentimentAnalysis", 'Float'>
   readonly confidence: Prisma.FieldRef<"SentimentAnalysis", 'Float'>

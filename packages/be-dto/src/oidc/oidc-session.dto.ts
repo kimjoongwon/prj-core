@@ -2,11 +2,11 @@ import {
 	DateField,
 	StringField,
 	StringFieldOptional,
-	UUIDField,
+	ULIDField,
 } from "@cocrepo/decorator";
 
 export class OidcSessionDto {
-	@UUIDField()
+	@ULIDField()
 	id: string;
 
 	@StringField({ description: "모델 키 (jti 또는 uid)" })

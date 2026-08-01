@@ -1,18 +1,18 @@
-import { UUIDField } from "@cocrepo/decorator";
+import { ULIDField } from "@cocrepo/decorator";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 import { PolicyResponseDto } from "../policies/policy-response.dto";
 
 export class RoleAssignmentResponseDto {
-	@UUIDField({ description: "Role assignment ID" })
+	@ULIDField({ description: "Role assignment ID" })
 	@Expose()
 	id!: string;
 
-	@UUIDField({ description: "Role ID" })
+	@ULIDField({ description: "Role ID" })
 	@Expose()
 	roleId!: string;
 
-	@UUIDField({ description: "Policy ID" })
+	@ULIDField({ description: "Policy ID" })
 	@Expose()
 	policyId!: string;
 

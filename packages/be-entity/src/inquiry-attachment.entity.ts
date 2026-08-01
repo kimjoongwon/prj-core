@@ -3,6 +3,7 @@ import type {
 	InquiryAttachment as InquiryAttachmentEntity,
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { InquiryMessage } from "./inquiry-message.entity";
 
 /**
@@ -13,7 +14,7 @@ import type { InquiryMessage } from "./inquiry-message.entity";
  */
 export class InquiryAttachment
 	extends AbstractEntity
-	implements InquiryAttachmentEntity
+	implements DomainEntityModel<InquiryAttachmentEntity>
 {
 	// ============================================================================
 	// 필수 필드

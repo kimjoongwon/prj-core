@@ -3,7 +3,8 @@
 // @description: 분류 체계를 독립적으로 관리하는 카테고리 루트
 /// @displayName 카테고리
 model Category {
-  id                   String                @id @default(uuid())
+  id                   String                @unique @default(ulid()) @db.VarChar(26)
+  seq                  Int                   @id @default(autoincrement())
   createdAt            DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt            DateTime?             @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt            DateTime?             @map("removed_at") @db.Timestamptz(6)
@@ -11,17 +12,17 @@ model Category {
   name                 String                @unique
   /// @displayName 유형
   type                 CategoryTypes         @default(User)
-  parentId             String?               @map("parent_id")
-  spaceId              String                @map("space_id")
-  createdById          String?               @map("created_by_id")
-  parent               Category?             @relation("CategoryToCategory", fields: [parentId], references: [id])
+  parentSeq            Int?                  @map("parent_seq")
+  spaceSeq             Int                   @map("space_seq")
+  createdBySeq         Int?                  @map("created_by_seq")
+  parent               Category?             @relation("CategoryToCategory", fields: [parentSeq], references: [seq])
   children             Category[]            @relation("CategoryToCategory")
-  space                Space                 @relation(fields: [spaceId], references: [id], onDelete: Restrict)
-  createdBy            User?                 @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  space                Space                 @relation(fields: [spaceSeq], references: [seq], onDelete: Restrict)
+  createdBy            User?                 @relation(fields: [createdBySeq], references: [seq], onDelete: SetNull)
   roleClassifications  RoleClassification[]
   spaceClassifications SpaceClassification[]
   userClassifications  UserClassification[]
 
-  @@index([spaceId])
+  @@index([spaceSeq])
   @@map("categories")
 }

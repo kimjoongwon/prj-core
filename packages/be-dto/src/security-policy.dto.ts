@@ -4,15 +4,16 @@ import {
 	DateFieldOptional,
 	NumberField,
 	StringField,
-	UUIDField,
+	ULIDField,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { SecurityPolicy } from "@cocrepo/prisma";
 
 /**
  * 보안 정책 응답 DTO
  */
-export class SecurityPolicyDto implements SecurityPolicy {
-	@UUIDField({ description: "ID" })
+export class SecurityPolicyDto implements DomainEntityModel<SecurityPolicy> {
+	@ULIDField({ description: "ID" })
 	id!: string;
 
 	@DateField({ description: "생성일" })

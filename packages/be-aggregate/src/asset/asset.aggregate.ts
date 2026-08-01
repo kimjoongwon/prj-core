@@ -44,7 +44,9 @@ export class AssetAggregate {
 		const where = this.applySpaceScope(
 			buildAssetQueryWhere(
 				query,
-				spaceIds === undefined ? undefined : { spaceId: { in: spaceIds } },
+				spaceIds === undefined
+					? undefined
+					: { space: { id: { in: spaceIds } } },
 			),
 			spaceIds,
 		);
@@ -212,7 +214,7 @@ export class AssetAggregate {
 
 		return {
 			...where,
-			spaceId: { in: spaceIds },
+			space: { id: { in: spaceIds } },
 		};
 	}
 

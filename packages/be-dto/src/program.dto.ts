@@ -4,22 +4,26 @@ import {
 	NumberFieldOptional,
 	StringField,
 	StringFieldOptional,
-	UUIDField,
+	ULIDField,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { Program as ProgramEntity } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { ProgramActivityDto } from "./program-activity.dto";
 import { RoutineDto } from "./routine.dto";
 import { SessionDto } from "./session.dto";
 
-export class ProgramDto extends AbstractDto implements ProgramEntity {
-	@UUIDField()
+export class ProgramDto
+	extends AbstractDto
+	implements DomainEntityModel<ProgramEntity>
+{
+	@ULIDField()
 	routineId: string;
 
-	@UUIDField()
+	@ULIDField()
 	sessionId: string;
 
-	@UUIDField()
+	@ULIDField()
 	instructorId: string;
 
 	@NumberField()

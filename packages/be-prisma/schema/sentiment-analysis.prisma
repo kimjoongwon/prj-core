@@ -2,15 +2,16 @@
 // @description: Inquiry에 종속되는 감정 분석 1:1 상세 결과
 /// @displayName 감정 분석
 model SentimentAnalysis {
-  id         String          @id @default(uuid())
+  id         String          @unique @default(ulid()) @db.VarChar(26)
+  seq        Int             @id @default(autoincrement())
   /// @displayName 생성 일시
   createdAt  DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
   /// @displayName 수정 일시
   updatedAt  DateTime?       @updatedAt @map("updated_at") @db.Timestamptz(6)
-  /// @displayName 소속 문의 ID
-  inquiryId  String          @unique @map("inquiry_id")
-  /// @displayName 분석 대상 메시지 ID
-  messageId  String?         @unique @map("message_id")
+  /// @displayName 소속 문의 내부 순번
+  inquirySeq Int             @unique @map("inquiry_seq")
+  /// @displayName 분석 대상 메시지 내부 순번
+  messageSeq Int?            @unique @map("message_seq")
   /// @displayName 감정 유형
   sentiment  SentimentType
   /// @displayName 감정 점수
@@ -25,9 +26,9 @@ model SentimentAnalysis {
   urgency    Float?
   /// @displayName 분석 일시
   analyzedAt DateTime        @default(now()) @map("analyzed_at") @db.Timestamptz(6)
-  inquiry    Inquiry         @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
-  message    InquiryMessage? @relation("SentimentAnalysisMessage", fields: [messageId], references: [id], onDelete: SetNull)
+  inquiry    Inquiry         @relation(fields: [inquirySeq], references: [seq], onDelete: Cascade)
+  message    InquiryMessage? @relation("SentimentAnalysisMessage", fields: [messageSeq], references: [seq], onDelete: SetNull)
 
-  @@index([inquiryId])
+  @@index([inquirySeq])
   @@map("sentiment_analyses")
 }

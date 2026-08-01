@@ -3,7 +3,8 @@
 // @description: 권한 판단에 사용하는 전역 능력 카탈로그
 /// @displayName 권한
 model Ability {
-  id        String    @id @default(uuid())
+  id        String    @unique @default(ulid()) @db.VarChar(26)
+  seq       Int       @id @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
@@ -22,15 +23,15 @@ model Ability {
   /// @displayName 거부 사유
   reason     String?
 
-  subjectId String @map("subject_id")
-  actionId  String @map("action_id")
+  subjectSeq Int @map("subject_seq")
+  actionSeq  Int @map("action_seq")
 
-  subject         Subject         @relation(fields: [subjectId], references: [id])
-  action          Action          @relation(fields: [actionId], references: [id])
+  subject       Subject       @relation(fields: [subjectSeq], references: [seq])
+  action        Action        @relation(fields: [actionSeq], references: [seq])
   policyEntries PolicyEntry[]
 
-  @@index([subjectId])
-  @@index([actionId])
+  @@index([subjectSeq])
+  @@index([actionSeq])
   @@index([name])
   @@map("abilities")
 }

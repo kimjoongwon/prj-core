@@ -3,7 +3,8 @@
 // @description: 서비스에서 사용자에게 노출하는 약관/동의 문서의 버전 단위 관리 객체
 /// @displayName 서비스 문서
 model ServiceDocument {
-  id        String    @id @default(uuid())
+  id        String    @unique @default(ulid()) @db.VarChar(26)
+  seq       Int       @id @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt DateTime? @map("removed_at") @db.Timestamptz(6)

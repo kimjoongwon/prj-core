@@ -1,15 +1,16 @@
-import { ClassField, UUIDField } from "@cocrepo/decorator";
+import { ClassField, ULIDField } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { RoleClassification } from "@cocrepo/prisma";
 import { AbstractDto, CategoryDto, RoleDto } from ".";
 
 export class RoleClassificationDto
 	extends AbstractDto
-	implements RoleClassification
+	implements DomainEntityModel<RoleClassification>
 {
-	@UUIDField()
+	@ULIDField()
 	roleId: string;
 
-	@UUIDField()
+	@ULIDField()
 	categoryId: string;
 
 	@ClassField(() => CategoryDto, { required: false })

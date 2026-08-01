@@ -2,7 +2,7 @@ import {
 	BooleanField,
 	NumberField,
 	StringField,
-	UUIDField,
+	ULIDField,
 } from "@cocrepo/decorator";
 import { AbstractDto } from "../abstract.dto";
 
@@ -10,7 +10,7 @@ import { AbstractDto } from "../abstract.dto";
  * 메시지 첨부파일 DTO
  */
 export class InquiryAttachmentDto extends AbstractDto {
-	@UUIDField({ description: "소속 메시지 ID" })
+	@ULIDField({ description: "소속 메시지 ID" })
 	messageId!: string;
 
 	@StringField({ description: "원본 파일명" })

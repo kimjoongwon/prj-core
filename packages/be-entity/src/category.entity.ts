@@ -3,10 +3,14 @@ import type {
 	CategoryTypes,
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
 
-export class Category extends AbstractEntity implements CategoryEntity {
+export class Category
+	extends AbstractEntity
+	implements DomainEntityModel<CategoryEntity>
+{
 	name!: string;
 	type!: CategoryTypes;
 	spaceId!: string;

@@ -4,6 +4,7 @@ import type {
 	Prisma,
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Inquiry } from "./inquiry.entity";
 import type { InquiryMessage } from "./inquiry-message.entity";
 
@@ -13,7 +14,10 @@ import type { InquiryMessage } from "./inquiry-message.entity";
  * AI 초안 생성, 자동 분류, 감정 분석, 자동 응답 등
  * AI 기능 사용 내역을 추적하여 AI 성능 모니터링 및 감사 로그를 제공합니다.
  */
-export class AIAgentLog extends AbstractEntity implements AIAgentLogEntity {
+export class AIAgentLog
+	extends AbstractEntity
+	implements DomainEntityModel<AIAgentLogEntity>
+{
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================

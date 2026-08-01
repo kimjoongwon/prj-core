@@ -10,7 +10,8 @@
 /// @displayName 번역
 model Translation {
   /// @displayName ID
-  id           String       @id @default(cuid())
+  id           String       @unique @default(ulid()) @db.VarChar(26)
+  seq          Int          @id @default(autoincrement())
   /// @displayName 언어 코드
   languageCode LanguageCode @map("language_code")
   /// @displayName 번역 키

@@ -1,27 +1,10 @@
-"use client";
+import { UnderConstruction } from "@cocrepo/ui";
 
-import { useGetUserById } from "@cocrepo/api/core/users";
-import { UserDetailScreen, type UserDetailScreenUser } from "@cocrepo/ui";
-import { observer } from "mobx-react-lite";
-import type { Route } from "next";
-import { useParams, useRouter } from "next/navigation";
-
-export default observer(function UserDetailScreenRoute() {
-	const { userId } = useParams<{ userId: string }>();
-	const router = useRouter();
-	const { data: userResponse, isLoading } = useGetUserById(userId);
-	const user = userResponse?.data as UserDetailScreenUser | undefined;
-
-	const onClickBackButton = () => {
-		router.push("/users" as Route);
-	};
-
+export default function UserDetailPage() {
 	return (
-		<UserDetailScreen
-			userId={userId}
-			user={user}
-			isLoading={isLoading}
-			onClickBackButton={onClickBackButton}
+		<UnderConstruction
+			description="회원 상세 기능을 준비하고 있습니다."
+			title="회원 상세"
 		/>
 	);
-});
+}

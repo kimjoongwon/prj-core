@@ -9,6 +9,7 @@ vi.mock("../sync-reference-data", () => ({
 
 interface MutableSubject {
 	id: string;
+	seq: number;
 	name: string;
 	displayName: string;
 	isSystem: boolean;
@@ -29,7 +30,7 @@ interface MutableTemplate {
 
 interface MutableTemplateVariable {
 	id: string;
-	templateId: string;
+	templateSeq: number;
 	name: string;
 	defaultValue: string | null;
 }
@@ -38,6 +39,7 @@ function createMigrationDb() {
 	const subjects: MutableSubject[] = [
 		{
 			id: "subject-stable-id",
+			seq: 1,
 			name: "entity:Ground",
 			displayName: "시설",
 			isSystem: true,
@@ -47,8 +49,9 @@ function createMigrationDb() {
 	const abilities = [
 		{
 			id: "ability-stable-id",
+			seq: 1,
 			name: "Can 조회 시설",
-			subjectId: "subject-stable-id",
+			subjectSeq: 1,
 			inverted: false,
 			removedAt: null as Date | null,
 			action: { displayName: "조회" },
@@ -76,13 +79,13 @@ function createMigrationDb() {
 	const variables: MutableTemplateVariable[] = [
 		{
 			id: "variable-name-id",
-			templateId: "template-stable-id",
+			templateSeq: 1,
 			name: "groundName",
 			defaultValue: "{{groundName}}",
 		},
 		{
 			id: "variable-phone-id",
-			templateId: "template-stable-id",
+			templateSeq: 1,
 			name: "groundPhone",
 			defaultValue: null,
 		},
@@ -95,10 +98,11 @@ function createMigrationDb() {
 					subjects.find((subject) => subject.name === name) ?? null,
 				),
 			),
-			findUniqueOrThrow: vi.fn(({ where: { id, name } }) => {
+			findUniqueOrThrow: vi.fn(({ where: { id, name, seq } }) => {
 				const subject = subjects.find(
 					(candidate) =>
 						(id === undefined || candidate.id === id) &&
+						(seq === undefined || candidate.seq === seq) &&
 						(name === undefined || candidate.name === name),
 				);
 				if (!subject) {
@@ -116,9 +120,9 @@ function createMigrationDb() {
 			}),
 		},
 		ability: {
-			findMany: vi.fn(({ where: { subjectId } }) =>
+			findMany: vi.fn(({ where: { subjectSeq } }) =>
 				Promise.resolve(
-					abilities.filter((ability) => ability.subjectId === subjectId),
+					abilities.filter((ability) => ability.subjectSeq === subjectSeq),
 				),
 			),
 			findFirst: vi.fn(({ where: { name, id } }) =>
@@ -187,12 +191,12 @@ function createMigrationDb() {
 					),
 				),
 			),
-			findUnique: vi.fn(({ where: { templateId_name } }) =>
+			findUnique: vi.fn(({ where: { templateSeq_name } }) =>
 				Promise.resolve(
 					variables.find(
 						(variable) =>
-							variable.templateId === templateId_name.templateId &&
-							variable.name === templateId_name.name,
+							variable.templateSeq === templateSeq_name.templateSeq &&
+							variable.name === templateSeq_name.name,
 					) ?? null,
 				),
 			),
@@ -235,7 +239,7 @@ describe("fitness center terminology reference-data migration", () => {
 			expect.objectContaining({
 				id: "ability-stable-id",
 				name: "Can 조회 피트니스센터",
-				subjectId: "subject-stable-id",
+				subjectSeq: 1,
 			}),
 		]);
 		expect(state.translations).toEqual([
@@ -275,6 +279,7 @@ describe("fitness center terminology reference-data migration", () => {
 		const state = createMigrationDb();
 		state.subjects.push({
 			id: "canonical-subject-id",
+			seq: 2,
 			name: "entity:FitnessCenter",
 			displayName: "피트니스센터",
 			isSystem: true,

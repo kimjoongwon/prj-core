@@ -3,7 +3,8 @@ import { LanguageCode, Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import type { PublicIdCreateInput } from "./public-id-input.type";
+import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
 export class TasksRepository {
@@ -28,9 +29,15 @@ export class TasksRepository {
 
 		const where: Prisma.TaskWhereInput = {
 			removedAt: null,
-			...(params.spaceIds ? { spaceId: { in: params.spaceIds } } : {}),
-			...(params.contentLanguageCode
-				? { space: { contentLanguageCode: params.contentLanguageCode } }
+			...(params.spaceIds || params.contentLanguageCode
+				? {
+						space: {
+							...(params.spaceIds ? { id: { in: params.spaceIds } } : {}),
+							...(params.contentLanguageCode
+								? { contentLanguageCode: params.contentLanguageCode }
+								: {}),
+						},
+					}
 				: {}),
 			exercise: {
 				is: {
@@ -57,7 +64,7 @@ export class TasksRepository {
 			this.txHost.tx.task.count({ where }),
 		]);
 
-		return [items.map((item) => plainToInstance(Task, item)), total];
+		return [items.map((item) => toDomainEntity(Task, item)), total];
 	}
 
 	async findTaskById(
@@ -70,7 +77,7 @@ export class TasksRepository {
 			where: {
 				id: taskId,
 				removedAt: null,
-				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
+				...(spaceIds ? { space: { id: { in: spaceIds } } } : {}),
 				exercise: {
 					is: {
 						removedAt: null,
@@ -84,7 +91,7 @@ export class TasksRepository {
 			},
 		});
 
-		return result ? plainToInstance(Task, result) : null;
+		return result ? toDomainEntity(Task, result) : null;
 	}
 
 	async findTasksByIds(
@@ -101,7 +108,7 @@ export class TasksRepository {
 			where: {
 				id: { in: taskIds },
 				removedAt: null,
-				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
+				...(spaceIds ? { space: { id: { in: spaceIds } } } : {}),
 				exercise: {
 					is: {
 						removedAt: null,
@@ -115,7 +122,7 @@ export class TasksRepository {
 			},
 		});
 
-		return results.map((result) => plainToInstance(Task, result));
+		return results.map((result) => toDomainEntity(Task, result));
 	}
 
 	async findTaskRoutines(taskId: string): Promise<Routine[]> {
@@ -127,21 +134,32 @@ export class TasksRepository {
 				activities: {
 					some: {
 						removedAt: null,
-						taskId,
+						task: { id: taskId },
 					},
 				},
 			},
 			orderBy: { createdAt: "desc" },
 		});
 
-		return results.map((result) => plainToInstance(Routine, result));
+		return results.map((result) => toDomainEntity(Routine, result));
 	}
 
-	async create(data: Prisma.TaskUncheckedCreateInput): Promise<Task> {
+	async create(
+		data: PublicIdCreateInput<
+			Prisma.TaskUncheckedCreateInput,
+			"space",
+			"createdBy"
+		>,
+	): Promise<Task> {
 		this.logger.debug("Task 생성");
 
+		const { spaceId, createdById, ...taskData } = data;
 		const result = await this.txHost.tx.task.create({
-			data,
+			data: {
+				...taskData,
+				space: { connect: { id: spaceId } },
+				...(createdById ? { createdBy: { connect: { id: createdById } } } : {}),
+			},
 			include: {
 				exercise: true,
 				space: { select: { id: true } },
@@ -149,19 +167,19 @@ export class TasksRepository {
 			},
 		});
 
-		return plainToInstance(Task, result);
+		return toDomainEntity(Task, result);
 	}
 
 	async createExerciseByTaskId(
 		taskId: string,
-		data: Omit<Prisma.ExerciseUncheckedCreateInput, "taskId">,
+		data: Omit<Prisma.ExerciseUncheckedCreateInput, "seq" | "taskSeq">,
 	): Promise<Task> {
 		this.logger.debug(`Task에 Exercise 생성: ${taskId.slice(-8)}`);
 
 		await this.txHost.tx.exercise.create({
 			data: {
 				...data,
-				taskId,
+				task: { connect: { id: taskId } },
 			},
 		});
 
@@ -178,7 +196,7 @@ export class TasksRepository {
 			throw new Error("TASK_NOT_FOUND");
 		}
 
-		return plainToInstance(Task, task);
+		return toDomainEntity(Task, task);
 	}
 
 	async updateExerciseByTaskId(
@@ -187,8 +205,16 @@ export class TasksRepository {
 	): Promise<Task> {
 		this.logger.debug(`Task의 Exercise 수정: ${taskId.slice(-8)}`);
 
+		const exercise = await this.txHost.tx.exercise.findFirst({
+			where: { task: { id: taskId } },
+			select: { id: true },
+		});
+		if (!exercise) {
+			throw new Error("EXERCISE_NOT_FOUND");
+		}
+
 		await this.txHost.tx.exercise.update({
-			where: { taskId },
+			where: { id: exercise.id },
 			data,
 		});
 
@@ -205,7 +231,7 @@ export class TasksRepository {
 			throw new Error("TASK_NOT_FOUND");
 		}
 
-		return plainToInstance(Task, task);
+		return toDomainEntity(Task, task);
 	}
 
 	async softDeleteTaskById(taskId: string): Promise<void> {
@@ -220,8 +246,16 @@ export class TasksRepository {
 	async softDeleteExerciseByTaskId(taskId: string): Promise<void> {
 		this.logger.debug(`Exercise 소프트 삭제: ${taskId.slice(-8)}`);
 
+		const exercise = await this.txHost.tx.exercise.findFirst({
+			where: { task: { id: taskId } },
+			select: { id: true },
+		});
+		if (!exercise) {
+			return;
+		}
+
 		await this.txHost.tx.exercise.update({
-			where: { taskId },
+			where: { id: exercise.id },
 			data: { removedAt: new Date() },
 		});
 	}
@@ -231,7 +265,7 @@ export class TasksRepository {
 
 		return this.txHost.tx.activity.count({
 			where: {
-				taskId,
+				task: { id: taskId },
 				removedAt: null,
 				routine: {
 					removedAt: null,

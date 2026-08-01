@@ -1,10 +1,14 @@
-import { ClassField, StringField, UUIDFieldOptional } from "@cocrepo/decorator";
+import { ClassField, StringField, ULIDFieldOptional } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { Routine } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { ActivityDto } from "./activity.dto";
 import { ProgramDto } from "./program.dto";
 
-export class RoutineDto extends AbstractDto implements Routine {
+export class RoutineDto
+	extends AbstractDto
+	implements DomainEntityModel<Routine>
+{
 	@StringField()
 	name: string;
 
@@ -14,7 +18,7 @@ export class RoutineDto extends AbstractDto implements Routine {
 	@StringField()
 	spaceId: string;
 
-	@UUIDFieldOptional({ nullable: true })
+	@ULIDFieldOptional({ nullable: true })
 	createdById: string | null;
 
 	@ClassField(() => ProgramDto, { isArray: true })

@@ -2,15 +2,16 @@
 // @description: Space와 Category를 연결하는 분류 링크
 /// @displayName 공간 분류
 model SpaceClassification {
-  id         String    @id @default(uuid())
-  categoryId String    @map("category_id")
-  spaceId    String    @unique @map("space_id")
-  createdAt  DateTime  @default(now()) @map("created_at")
-  updatedAt  DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt  DateTime? @map("removed_at") @db.Timestamptz(6)
-  category   Category  @relation(fields: [categoryId], references: [id])
-  space      Space     @relation(fields: [spaceId], references: [id])
+  id          String    @unique @default(ulid()) @db.VarChar(26)
+  seq         Int       @id @default(autoincrement())
+  categorySeq Int       @map("category_seq")
+  spaceSeq    Int       @unique @map("space_seq")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt   DateTime? @map("removed_at") @db.Timestamptz(6)
+  category    Category  @relation(fields: [categorySeq], references: [seq])
+  space       Space     @relation(fields: [spaceSeq], references: [seq])
 
-  @@unique([categoryId, spaceId])
+  @@unique([categorySeq, spaceSeq])
   @@map("space_classifications")
 }

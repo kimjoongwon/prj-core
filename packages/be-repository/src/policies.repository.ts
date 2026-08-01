@@ -3,7 +3,11 @@ import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import type {
+	PublicIdCreateInput,
+	PublicIdUpdateInput,
+} from "./public-id-input.type";
+import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
 export class PoliciesRepository {
@@ -20,14 +24,14 @@ export class PoliciesRepository {
 
 		const results = await this.txHost.tx.policy.findMany({
 			where: {
-				spaceId,
+				space: { id: spaceId },
 				removedAt: null,
 			},
 			include: this.includePolicyDetails(),
 			orderBy: [{ isSystem: "desc" }, { name: "asc" }],
 		});
 
-		return results.map((result) => plainToInstance(Policy, result));
+		return results.map((result) => toDomainEntity(Policy, result));
 	}
 
 	async findByIdInSpace(id: string, spaceId: string): Promise<Policy | null> {
@@ -38,13 +42,13 @@ export class PoliciesRepository {
 		const result = await this.txHost.tx.policy.findFirst({
 			where: {
 				id,
-				spaceId,
+				space: { id: spaceId },
 				removedAt: null,
 			},
 			include: this.includePolicyDetails(),
 		});
 
-		return result ? plainToInstance(Policy, result) : null;
+		return result ? toDomainEntity(Policy, result) : null;
 	}
 
 	async findByNameInSpace(
@@ -53,13 +57,14 @@ export class PoliciesRepository {
 	): Promise<Policy | null> {
 		const result = await this.txHost.tx.policy.findFirst({
 			where: {
-				spaceId,
+				space: { id: spaceId },
 				name,
 				removedAt: null,
 			},
+			include: this.includePolicyDetails(),
 		});
 
-		return result ? plainToInstance(Policy, result) : null;
+		return result ? toDomainEntity(Policy, result) : null;
 	}
 
 	async findActivePolicyIdsInSpace(
@@ -71,7 +76,7 @@ export class PoliciesRepository {
 		const results = await this.txHost.tx.policy.findMany({
 			where: {
 				id: { in: policyIds },
-				spaceId,
+				space: { id: spaceId },
 				removedAt: null,
 			},
 			select: { id: true },
@@ -80,32 +85,58 @@ export class PoliciesRepository {
 		return results.map((policy) => policy.id);
 	}
 
-	async create(data: Prisma.PolicyUncheckedCreateInput): Promise<Policy> {
+	async create(
+		data: PublicIdCreateInput<
+			Prisma.PolicyUncheckedCreateInput,
+			"space",
+			"createdBy"
+		>,
+	): Promise<Policy> {
 		this.logger.debug(
 			`Policy 생성: spaceId=${data.spaceId.slice(-8)}, name=${data.name}`,
 		);
 
+		const { spaceId, createdById, ...policyData } = data;
 		const result = await this.txHost.tx.policy.create({
-			data,
+			data: {
+				...policyData,
+				space: { connect: { id: spaceId } },
+				...(createdById ? { createdBy: { connect: { id: createdById } } } : {}),
+			},
 			include: this.includePolicyDetails(),
 		});
 
-		return plainToInstance(Policy, result);
+		return toDomainEntity(Policy, result);
 	}
 
 	async updateById(
 		id: string,
-		data: Prisma.PolicyUncheckedUpdateInput,
+		data: PublicIdUpdateInput<
+			Prisma.PolicyUncheckedUpdateInput,
+			"space",
+			"createdBy"
+		>,
 	): Promise<Policy> {
 		this.logger.debug(`Policy 수정: id=${id.slice(-8)}`);
 
+		const { spaceId, createdById, ...policyData } = data;
 		const result = await this.txHost.tx.policy.update({
 			where: { id },
-			data,
+			data: {
+				...policyData,
+				...(spaceId !== undefined
+					? { space: { connect: { id: spaceId } } }
+					: {}),
+				...(createdById !== undefined
+					? createdById === null
+						? { createdBy: { disconnect: true } }
+						: { createdBy: { connect: { id: createdById } } }
+					: {}),
+			},
 			include: this.includePolicyDetails(),
 		});
 
-		return plainToInstance(Policy, result);
+		return toDomainEntity(Policy, result);
 	}
 
 	async removeById(id: string): Promise<Policy> {
@@ -117,14 +148,17 @@ export class PoliciesRepository {
 			include: this.includePolicyDetails(),
 		});
 
-		return plainToInstance(Policy, result);
+		return toDomainEntity(Policy, result);
 	}
 
 	private includePolicyDetails() {
 		return {
+			space: true,
+			createdBy: true,
 			entries: {
 				where: { removedAt: null },
 				include: {
+					policy: { select: { id: true } },
 					ability: {
 						include: {
 							subject: true,

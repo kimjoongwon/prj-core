@@ -1,4 +1,4 @@
-import { BooleanFieldOptional, UUIDFieldOptional } from "@cocrepo/decorator";
+import { BooleanFieldOptional, ULIDFieldOptional } from "@cocrepo/decorator";
 
 /**
  * 문의 참여자 상태 업데이트 DTO
@@ -14,7 +14,7 @@ export class UpdateInquiryParticipantDto {
 	})
 	isTyping?: boolean;
 
-	@UUIDFieldOptional({
+	@ULIDFieldOptional({
 		description: "타이핑 중인 스레드 ID",
 	})
 	threadId?: string;

@@ -30,6 +30,7 @@ export const systemAdminBranchManageTenantsMigration: ReferenceDataMigration = {
 			},
 			select: {
 				id: true,
+				seq: true,
 			},
 		});
 
@@ -46,6 +47,7 @@ export const systemAdminBranchManageTenantsMigration: ReferenceDataMigration = {
 			},
 			select: {
 				id: true,
+				seq: true,
 			},
 		});
 
@@ -53,28 +55,30 @@ export const systemAdminBranchManageTenantsMigration: ReferenceDataMigration = {
 			for (const space of branchSpaces) {
 				const existingTenants = await db.tenant.findMany({
 					where: {
-						userId: user.id,
-						spaceId: space.id,
+						userSeq: user.seq,
+						spaceSeq: space.seq,
 						removedAt: null,
 					},
 					select: {
 						id: true,
-						roleId: true,
+						roleSeq: true,
 					},
 				});
 
 				if (existingTenants.length === 0) {
 					await db.tenant.create({
 						data: {
-							userId: user.id,
-							spaceId: space.id,
-							roleId: manageRole.id,
+							userSeq: user.seq,
+							spaceSeq: space.seq,
+							roleSeq: manageRole.seq,
 						},
 					});
 					continue;
 				}
 
-				if (existingTenants.some((tenant) => tenant.roleId !== manageRole.id)) {
+				if (
+					existingTenants.some((tenant) => tenant.roleSeq !== manageRole.seq)
+				) {
 					await db.tenant.updateMany({
 						where: {
 							id: {
@@ -82,7 +86,7 @@ export const systemAdminBranchManageTenantsMigration: ReferenceDataMigration = {
 							},
 						},
 						data: {
-							roleId: manageRole.id,
+							roleSeq: manageRole.seq,
 						},
 					});
 				}

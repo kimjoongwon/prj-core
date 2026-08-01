@@ -4,9 +4,9 @@ import { expect, type Locator, type Page, test } from "@playwright/test";
 const API_BASE_URL = "http://localhost:3000/api/v1";
 const TEST_VIDEO_FILE_ID = "11111111-1111-4111-8111-111111111111";
 const SYSTEM_TENANT_ID =
-	process.env.E2E_SYSTEM_TENANT_ID ?? "71ddca20-1752-466e-b4da-879ebdbe54e3";
+	process.env.E2E_SYSTEM_TENANT_ID ?? "01J00000000000000000000002";
 const SYSTEM_SPACE_ID =
-	process.env.E2E_SYSTEM_SPACE_ID ?? "61ddca20-1752-466e-b4da-879ebdbe54e3";
+	process.env.E2E_SYSTEM_SPACE_ID ?? "01J00000000000000000000001";
 const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_TENANT_ID);
 
 interface IdOnlyDto {

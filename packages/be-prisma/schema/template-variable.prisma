@@ -2,7 +2,8 @@
 // @description: Template에 종속되어 치환 변수를 관리하는 1:N 하위 모델
 /// @displayName 템플릿 변수
 model TemplateVariable {
-  id           String    @id @default(uuid())
+  id           String    @unique @default(ulid()) @db.VarChar(26)
+  seq          Int       @id @default(autoincrement())
   createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt    DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   /// @displayName 변수명
@@ -13,11 +14,11 @@ model TemplateVariable {
   defaultValue String?   @map("default_value")
   /// @displayName 필수 여부
   isRequired   Boolean   @default(false) @map("is_required")
-  /// @displayName 템플릿 ID
-  templateId   String    @map("template_id")
+  /// @displayName 템플릿 내부 순번
+  templateSeq  Int       @map("template_seq")
   /// @displayName 템플릿
-  template     Template  @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  template     Template  @relation(fields: [templateSeq], references: [seq], onDelete: Cascade)
 
-  @@unique([templateId, name])
+  @@unique([templateSeq, name])
   @@map("template_variables")
 }

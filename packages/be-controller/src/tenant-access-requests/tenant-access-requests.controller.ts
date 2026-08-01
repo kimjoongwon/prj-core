@@ -1,3 +1,4 @@
+import { ParseUlidPipe } from "@cocrepo/be-common";
 import {
 	ApproveTenantAccessRequestCommand,
 	GetTenantAccessRequestForReviewQuery,
@@ -27,7 +28,6 @@ import {
 	HttpCode,
 	HttpStatus,
 	Param,
-	ParseUUIDPipe,
 	Post,
 	Query,
 	UnauthorizedException,
@@ -79,7 +79,7 @@ export class TenantAccessRequestsController {
 	@ApiAuth({ tenantHeader: false })
 	@ApiParam({
 		name: "tenantAccessRequestId",
-		description: "테넌트 접근 신청 ID (UUID)",
+		description: "테넌트 접근 신청 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(
@@ -91,7 +91,7 @@ export class TenantAccessRequestsController {
 	@ApiResponseEntity(TenantAccessRequestDto, HttpStatus.OK)
 	@ResponseMessage("테넌트 접근 신청 상세 조회 성공")
 	getRequest(
-		@Param("tenantAccessRequestId", ParseUUIDPipe)
+		@Param("tenantAccessRequestId", ParseUlidPipe)
 		tenantAccessRequestId: string,
 	): Promise<TenantAccessRequest> {
 		const reviewerId = this.getAuthenticatedUserId();
@@ -114,7 +114,7 @@ export class TenantAccessRequestsController {
 	@ApiAuth({ tenantHeader: false })
 	@ApiParam({
 		name: "tenantAccessRequestId",
-		description: "테넌트 접근 신청 ID (UUID)",
+		description: "테넌트 접근 신청 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -135,7 +135,7 @@ export class TenantAccessRequestsController {
 	@ApiResponseEntity(TenantAccessRequestDto, HttpStatus.OK)
 	@ResponseMessage("테넌트 접근 신청 승인 성공")
 	approve(
-		@Param("tenantAccessRequestId", ParseUUIDPipe)
+		@Param("tenantAccessRequestId", ParseUlidPipe)
 		tenantAccessRequestId: string,
 		@Body() dto: ReviewTenantAccessRequestDto,
 	): Promise<TenantAccessRequest> {
@@ -160,7 +160,7 @@ export class TenantAccessRequestsController {
 	@ApiAuth({ tenantHeader: false })
 	@ApiParam({
 		name: "tenantAccessRequestId",
-		description: "테넌트 접근 신청 ID (UUID)",
+		description: "테넌트 접근 신청 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -176,7 +176,7 @@ export class TenantAccessRequestsController {
 	@ApiResponseEntity(TenantAccessRequestDto, HttpStatus.OK)
 	@ResponseMessage("테넌트 접근 신청 반려 성공")
 	reject(
-		@Param("tenantAccessRequestId", ParseUUIDPipe)
+		@Param("tenantAccessRequestId", ParseUlidPipe)
 		tenantAccessRequestId: string,
 		@Body() dto: ReviewTenantAccessRequestDto,
 	): Promise<TenantAccessRequest> {

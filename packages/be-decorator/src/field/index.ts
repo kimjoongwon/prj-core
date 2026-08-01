@@ -29,6 +29,7 @@ export * from "./specialized/email.field";
 export * from "./specialized/password.field";
 export * from "./specialized/phone.field";
 export * from "./specialized/tmpkey.field";
+export * from "./specialized/ulid.field";
 export * from "./specialized/url.field";
 export * from "./specialized/uuid.field";
 

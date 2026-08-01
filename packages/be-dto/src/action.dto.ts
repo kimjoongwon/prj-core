@@ -4,6 +4,7 @@ import {
 	StringField,
 	StringFieldOptional,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { Action, Prisma } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 
@@ -15,7 +16,10 @@ import { AbstractDto } from "./abstract.dto";
  * - 목록 조회: exclude: ['config', 'description', 'order', 'isSystem']
  * - 상세 조회: exclude 없음 (전체 필드 반환)
  */
-export class ActionDto extends AbstractDto implements Action {
+export class ActionDto
+	extends AbstractDto
+	implements DomainEntityModel<Action>
+{
 	@StringField()
 	name!: string;
 

@@ -1,3 +1,4 @@
+import { ParseUlidPipe } from "@cocrepo/be-common";
 import {
 	CreateOidcClientCommand,
 	DeleteOidcClientCommand,
@@ -30,7 +31,6 @@ import {
 	HttpCode,
 	HttpStatus,
 	Param,
-	ParseUUIDPipe,
 	Patch,
 	Post,
 	Query,
@@ -75,14 +75,14 @@ export class OidcClientsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "oidcClientId",
-		description: "OIDC 클라이언트 ID (UUID)",
+		description: "OIDC 클라이언트 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
 	@ApiResponseEntity(OidcClientDto, HttpStatus.OK)
 	@ResponseMessage("OIDC 클라이언트 상세 조회 성공")
 	async getOidcClient(
-		@Param("oidcClientId", ParseUUIDPipe) oidcClientId: string,
+		@Param("oidcClientId", ParseUlidPipe) oidcClientId: string,
 	) {
 		return this.queryBus.execute(new GetOidcClientQuery(oidcClientId));
 	}
@@ -117,7 +117,7 @@ export class OidcClientsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "oidcClientId",
-		description: "OIDC 클라이언트 ID (UUID)",
+		description: "OIDC 클라이언트 ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -128,7 +128,7 @@ export class OidcClientsController {
 	@ApiResponseEntity(OidcClientDto, HttpStatus.OK)
 	@ResponseMessage("OIDC 클라이언트 수정 성공")
 	async updateOidcClient(
-		@Param("oidcClientId", ParseUUIDPipe) oidcClientId: string,
+		@Param("oidcClientId", ParseUlidPipe) oidcClientId: string,
 		@Body() dto: UpdateOidcClientDto,
 	) {
 		return this.commandBus.execute(
@@ -146,13 +146,13 @@ export class OidcClientsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "oidcClientId",
-		description: "OIDC 클라이언트 ID (UUID)",
+		description: "OIDC 클라이언트 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
 	@ResponseMessage("OIDC 클라이언트 삭제 성공")
 	async deleteOidcClient(
-		@Param("oidcClientId", ParseUUIDPipe) oidcClientId: string,
+		@Param("oidcClientId", ParseUlidPipe) oidcClientId: string,
 	): Promise<void> {
 		await this.commandBus.execute(new DeleteOidcClientCommand(oidcClientId));
 	}
@@ -166,14 +166,14 @@ export class OidcClientsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "oidcClientId",
-		description: "OIDC 클라이언트 ID (UUID)",
+		description: "OIDC 클라이언트 ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
 	@ApiResponseEntity(OidcClientDto, HttpStatus.OK)
 	@ResponseMessage("OIDC 클라이언트 상태 변경 성공")
 	async toggleActiveOidcClient(
-		@Param("oidcClientId", ParseUUIDPipe) oidcClientId: string,
+		@Param("oidcClientId", ParseUlidPipe) oidcClientId: string,
 	) {
 		return this.commandBus.execute(
 			new ToggleActiveOidcClientCommand(oidcClientId),

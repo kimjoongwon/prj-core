@@ -1,7 +1,7 @@
 import {
 	EnumFieldOptional,
 	StringFieldOptional,
-	UUIDFieldOptional,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator";
 import { DeleteFilter } from "@cocrepo/enum";
 import { Transform } from "class-transformer";
@@ -18,10 +18,10 @@ import { QueryDto } from "../query/query.dto";
  * - statusFilter -> removedAt 필터
  */
 export class FolderQueryDto extends QueryDto {
-	@UUIDFieldOptional({ description: "상위 폴더 ID 필터 (null이면 루트)" })
+	@ULIDFieldOptional({ description: "상위 폴더 ID 필터 (null이면 루트)" })
 	parentFolderId?: string;
 
-	@UUIDFieldOptional({ description: "테넌트 ID 필터" })
+	@ULIDFieldOptional({ description: "테넌트 ID 필터" })
 	spaceId?: string;
 
 	@StringFieldOptional({ description: "폴더명 검색 (부분 일치)" })

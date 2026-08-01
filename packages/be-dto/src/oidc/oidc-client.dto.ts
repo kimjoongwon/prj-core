@@ -3,13 +3,17 @@ import {
 	StringField,
 	StringFieldOptional,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { OidcClient, Prisma } from "@cocrepo/prisma";
 import { ApiPropertyOptional } from "@nestjs/swagger";
 import { IsObject, IsOptional } from "class-validator";
 
 import { AbstractDto } from "../abstract.dto";
 
-export class OidcClientDto extends AbstractDto implements OidcClient {
+export class OidcClientDto
+	extends AbstractDto
+	implements DomainEntityModel<OidcClient>
+{
 	@StringField({
 		description: "클라이언트 식별자",
 		maxLength: 64,

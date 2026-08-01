@@ -3,14 +3,15 @@
 // @description: 미디어 리소스의 공통 identity와 메타데이터를 제공하는 CTI 부모 테이블
 /// @displayName 에셋
 model Asset {
-  id            String       @id @default(uuid())
+  id            String       @unique @default(ulid()) @db.VarChar(26)
+  seq           Int          @id @default(autoincrement())
   createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt     DateTime?    @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt     DateTime?    @map("removed_at") @db.Timestamptz(6)
   /// @displayName 소속 Space
-  spaceId       String       @map("space_id")
+  spaceSeq      Int          @map("space_seq")
   /// @displayName 소속 폴더
-  folderId      String       @map("folder_id")
+  folderSeq     Int          @map("folder_seq")
   /// @displayName 에셋 타입
   kind          AssetKind
   /// @displayName 업로드 상태
@@ -30,10 +31,10 @@ model Asset {
   /// @displayName 추가 메타데이터
   metadata      Json?
   /// @displayName 생성자
-  createdById   String?      @map("created_by_id")
-  space         Space        @relation(fields: [spaceId], references: [id], onDelete: Restrict)
-  folder        Folder       @relation(fields: [folderId], references: [id])
-  createdBy     User?        @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdBySeq  Int?         @map("created_by_seq")
+  space         Space        @relation(fields: [spaceSeq], references: [seq], onDelete: Restrict)
+  folder        Folder       @relation(fields: [folderSeq], references: [seq])
+  createdBy     User?        @relation(fields: [createdBySeq], references: [seq], onDelete: SetNull)
   image         Image?
   video         Video?
   document      Document?
@@ -41,8 +42,8 @@ model Asset {
   albumEntries  AlbumEntry[]
   coverOfAlbums Album[]      @relation("AlbumCover")
 
-  @@index([spaceId])
-  @@index([folderId])
+  @@index([spaceSeq])
+  @@index([folderSeq])
   @@index([kind])
   @@index([status])
   @@map("assets")

@@ -3,11 +3,11 @@ import {
 	DateField,
 	StringField,
 	StringFieldOptional,
-	UUIDField,
+	ULIDField,
 } from "@cocrepo/decorator";
 
 export class CommunityPostDto {
-	@UUIDField({ description: "커뮤니티 게시글 ID" })
+	@ULIDField({ description: "커뮤니티 게시글 ID" })
 	id!: string;
 
 	@StringFieldOptional({

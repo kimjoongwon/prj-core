@@ -1,10 +1,10 @@
-import { UUIDField } from "@cocrepo/decorator";
+import { ULIDField } from "@cocrepo/decorator";
 import { Expose } from "class-transformer";
 
 export class SetCurrentSpaceDto {
-	@UUIDField({
+	@ULIDField({
 		description: "현재 선택할 Tenant ID",
-		example: "123e4567-e89b-12d3-a456-426614174000",
+		example: "01J00000000000000000000000",
 	})
 	@Expose()
 	tenantId: string;

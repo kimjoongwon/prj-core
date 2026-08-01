@@ -2,17 +2,18 @@
 // @description: Inquiry에 종속되는 참여자 상태 모델
 /// @displayName 문의 참여자
 model InquiryParticipant {
-  id          String                 @id @default(uuid())
+  id          String                 @unique @default(ulid()) @db.VarChar(26)
+  seq         Int                    @id @default(autoincrement())
   /// @displayName 참여 일시
   joinedAt    DateTime               @default(now()) @map("joined_at") @db.Timestamptz(6)
   /// @displayName 나간 일시
   leftAt      DateTime?              @map("left_at") @db.Timestamptz(6)
-  /// @displayName 소속 문의 ID
-  inquiryId   String                 @map("inquiry_id")
-  /// @displayName 소속 스레드 ID
-  threadId    String?                @map("thread_id")
-  /// @displayName 참여자 ID
-  userId      String                 @map("user_id")
+  /// @displayName 소속 문의 내부 순번
+  inquirySeq  Int                    @map("inquiry_seq")
+  /// @displayName 소속 스레드 내부 순번
+  threadSeq   Int?                   @map("thread_seq")
+  /// @displayName 참여자 내부 순번
+  userSeq     Int                    @map("user_seq")
   /// @displayName 역할
   role        InquiryParticipantRole @default(VIEWER)
   /// @displayName 온라인 여부
@@ -25,13 +26,13 @@ model InquiryParticipant {
   lastReadAt  DateTime?              @map("last_read_at") @db.Timestamptz(6)
   /// @displayName 읽지 않은 메시지 수
   unreadCount Int                    @default(0) @map("unread_count")
-  inquiry     Inquiry                @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
-  thread      InquiryThread?         @relation(fields: [threadId], references: [id], onDelete: Cascade)
-  user        User                   @relation(fields: [userId], references: [id])
+  inquiry     Inquiry                @relation(fields: [inquirySeq], references: [seq], onDelete: Cascade)
+  thread      InquiryThread?         @relation(fields: [threadSeq], references: [seq], onDelete: Cascade)
+  user        User                   @relation(fields: [userSeq], references: [seq])
 
-  @@unique([inquiryId, threadId, userId])
-  @@index([inquiryId])
-  @@index([threadId])
-  @@index([userId])
+  @@unique([inquirySeq, threadSeq, userSeq])
+  @@index([inquirySeq])
+  @@index([threadSeq])
+  @@index([userSeq])
   @@map("inquiry_participants")
 }

@@ -3,7 +3,11 @@ import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { plainToInstance } from "class-transformer";
+import type {
+	PublicIdCreateInput,
+	PublicIdUpdateInput,
+} from "./public-id-input.type";
+import { toDomainEntity } from "./to-domain-entity";
 
 const tenantAccessRequestInclude = {
 	requester: true,
@@ -43,7 +47,7 @@ export class TenantAccessRequestsRepository {
 			include: typeof tenantAccessRequestInclude;
 		}>,
 	): TenantAccessRequest {
-		return plainToInstance(TenantAccessRequest, result);
+		return toDomainEntity(TenantAccessRequest, result);
 	}
 
 	async findById(id: string): Promise<TenantAccessRequest | null> {
@@ -51,9 +55,10 @@ export class TenantAccessRequestsRepository {
 
 		const result = await this.txHost.tx.tenantAccessRequest.findUnique({
 			where: { id },
+			include: tenantAccessRequestInclude,
 		});
 
-		return result ? plainToInstance(TenantAccessRequest, result) : null;
+		return result ? this.toTenantAccessRequest(result) : null;
 	}
 
 	async findByIdWithRelations(id: string): Promise<TenantAccessRequest | null> {
@@ -77,15 +82,15 @@ export class TenantAccessRequestsRepository {
 
 		const result = await this.txHost.tx.tenantAccessRequest.findFirst({
 			where: {
-				requesterId,
-				spaceId,
+				requester: { id: requesterId },
+				space: { id: spaceId },
 				status: "PENDING",
 				removedAt: null,
 			},
 			include: tenantAccessRequestInclude,
 		});
 
-		return result ? plainToInstance(TenantAccessRequest, result) : null;
+		return result ? toDomainEntity(TenantAccessRequest, result) : null;
 	}
 
 	async findMany(params: {
@@ -116,14 +121,39 @@ export class TenantAccessRequestsRepository {
 	}
 
 	async create(
-		data: Prisma.TenantAccessRequestUncheckedCreateInput,
+		data: PublicIdCreateInput<
+			Prisma.TenantAccessRequestUncheckedCreateInput,
+			"requester" | "space" | "requestedRole",
+			"previousRole" | "reviewer" | "appliedTenant"
+		>,
 	): Promise<TenantAccessRequest> {
 		this.logger.debug(
 			`테넌트 접근 신청 생성: requester=${data.requesterId.slice(-8)}, space=${data.spaceId.slice(-8)}`,
 		);
 
+		const {
+			requesterId,
+			spaceId,
+			requestedRoleId,
+			previousRoleId,
+			reviewerId,
+			appliedTenantId,
+			...requestData
+		} = data;
 		const result = await this.txHost.tx.tenantAccessRequest.create({
-			data,
+			data: {
+				...requestData,
+				requester: { connect: { id: requesterId } },
+				space: { connect: { id: spaceId } },
+				requestedRole: { connect: { id: requestedRoleId } },
+				...(previousRoleId
+					? { previousRole: { connect: { id: previousRoleId } } }
+					: {}),
+				...(reviewerId ? { reviewer: { connect: { id: reviewerId } } } : {}),
+				...(appliedTenantId
+					? { appliedTenant: { connect: { id: appliedTenantId } } }
+					: {}),
+			},
 			include: tenantAccessRequestInclude,
 		});
 
@@ -132,13 +162,52 @@ export class TenantAccessRequestsRepository {
 
 	async updateById(
 		id: string,
-		data: Prisma.TenantAccessRequestUncheckedUpdateInput,
+		data: PublicIdUpdateInput<
+			Prisma.TenantAccessRequestUncheckedUpdateInput,
+			"requester" | "space" | "requestedRole",
+			"previousRole" | "reviewer" | "appliedTenant"
+		>,
 	): Promise<TenantAccessRequest> {
 		this.logger.debug(`테넌트 접근 신청 수정: ${id.slice(-8)}`);
 
+		const {
+			requesterId,
+			spaceId,
+			requestedRoleId,
+			previousRoleId,
+			reviewerId,
+			appliedTenantId,
+			...requestData
+		} = data;
 		const result = await this.txHost.tx.tenantAccessRequest.update({
 			where: { id },
-			data,
+			data: {
+				...requestData,
+				...(requesterId !== undefined
+					? { requester: { connect: { id: requesterId } } }
+					: {}),
+				...(spaceId !== undefined
+					? { space: { connect: { id: spaceId } } }
+					: {}),
+				...(requestedRoleId !== undefined
+					? { requestedRole: { connect: { id: requestedRoleId } } }
+					: {}),
+				...(previousRoleId !== undefined
+					? previousRoleId === null
+						? { previousRole: { disconnect: true } }
+						: { previousRole: { connect: { id: previousRoleId } } }
+					: {}),
+				...(reviewerId !== undefined
+					? reviewerId === null
+						? { reviewer: { disconnect: true } }
+						: { reviewer: { connect: { id: reviewerId } } }
+					: {}),
+				...(appliedTenantId !== undefined
+					? appliedTenantId === null
+						? { appliedTenant: { disconnect: true } }
+						: { appliedTenant: { connect: { id: appliedTenantId } } }
+					: {}),
+			},
 			include: tenantAccessRequestInclude,
 		});
 

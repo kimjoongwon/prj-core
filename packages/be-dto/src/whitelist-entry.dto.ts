@@ -5,15 +5,16 @@ import {
 	EnumField,
 	StringField,
 	StringFieldOptional,
-	UUIDField,
+	ULIDField,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import { type WhitelistEntry, WhitelistType } from "@cocrepo/prisma";
 
 /**
  * 화이트리스트 항목 응답 DTO
  */
-export class WhitelistEntryDto implements WhitelistEntry {
-	@UUIDField({ description: "ID" })
+export class WhitelistEntryDto implements DomainEntityModel<WhitelistEntry> {
+	@ULIDField({ description: "ID" })
 	id!: string;
 
 	@DateField({ description: "생성일" })

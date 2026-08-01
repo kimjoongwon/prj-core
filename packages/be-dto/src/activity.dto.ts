@@ -2,18 +2,22 @@ import {
 	ClassField,
 	NumberField,
 	StringFieldOptional,
-	UUIDField,
+	ULIDField,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { Activity as ActivityEntity } from "@cocrepo/prisma";
 import { AbstractDto } from "./abstract.dto";
 import { RoutineDto } from "./routine.dto";
 import { TaskDto } from "./task.dto";
 
-export class ActivityDto extends AbstractDto implements ActivityEntity {
-	@UUIDField()
+export class ActivityDto
+	extends AbstractDto
+	implements DomainEntityModel<ActivityEntity>
+{
+	@ULIDField()
 	routineId: string;
 
-	@UUIDField()
+	@ULIDField()
 	taskId: string;
 
 	@NumberField()

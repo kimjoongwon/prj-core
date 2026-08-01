@@ -15,8 +15,8 @@ export class SignUpPayloadDto extends SignUpSchema {
 	nickname: string;
 
 	@ApiProperty({
-		example: "550e8400-e29b-41d4-a716-446655440000",
-		description: "스페이스 ID (UUID)",
+		example: "01J00000000000000000000000",
+		description: "스페이스 ID (ULID)",
 	})
 	spaceId: string;
 

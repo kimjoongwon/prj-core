@@ -3,7 +3,8 @@
 // @description: FitnessCenter 등 1:1 상세 모델의 공통 identity와 소속 관계를 제공하는 공간 기반 모델
 /// @displayName 공간
 model Space {
-  id                   String                @id @default(uuid())
+  id                   String                @unique @default(ulid()) @db.VarChar(26)
+  seq                  Int                   @id @default(autoincrement())
   createdAt            DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt            DateTime?             @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt            DateTime?             @map("removed_at") @db.Timestamptz(6)

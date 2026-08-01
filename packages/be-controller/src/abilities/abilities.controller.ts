@@ -1,3 +1,4 @@
+import { ParseUlidPipe } from "@cocrepo/be-common";
 import {
 	CreateAbilityCommand,
 	DeleteAbilityCommand,
@@ -26,7 +27,6 @@ import {
 	Get,
 	HttpStatus,
 	Param,
-	ParseUUIDPipe,
 	Patch,
 	Post,
 } from "@nestjs/common";
@@ -96,7 +96,7 @@ export class AbilitiesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "id",
-		description: "Ability ID (UUID)",
+		description: "Ability ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(
@@ -107,7 +107,7 @@ export class AbilitiesController {
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK)
 	@ResponseMessage("권한 조회 성공")
 	async getAbilityById(
-		@Param("id", ParseUUIDPipe) id: string,
+		@Param("id", ParseUlidPipe) id: string,
 	): Promise<Ability> {
 		return this.queryBus.execute(new GetAbilityByIdQuery(id));
 	}
@@ -153,7 +153,7 @@ export class AbilitiesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "id",
-		description: "Ability ID (UUID)",
+		description: "Ability ID (ULID)",
 		type: String,
 	})
 	@ApiBody({
@@ -169,7 +169,7 @@ export class AbilitiesController {
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK)
 	@ResponseMessage("권한 정의 수정 성공")
 	async updateAbility(
-		@Param("id", ParseUUIDPipe) id: string,
+		@Param("id", ParseUlidPipe) id: string,
 		@Body() dto: UpdateAbilityDto,
 	): Promise<Ability> {
 		return this.commandBus.execute(new UpdateAbilityCommand(id, dto));
@@ -188,7 +188,7 @@ export class AbilitiesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "id",
-		description: "Ability ID (UUID)",
+		description: "Ability ID (ULID)",
 		type: String,
 	})
 	@ApiErrors(
@@ -200,7 +200,7 @@ export class AbilitiesController {
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK)
 	@ResponseMessage("권한 삭제 성공")
 	async deleteAbility(
-		@Param("id", ParseUUIDPipe) id: string,
+		@Param("id", ParseUlidPipe) id: string,
 	): Promise<Ability> {
 		return this.commandBus.execute(new DeleteAbilityCommand(id));
 	}

@@ -1,4 +1,4 @@
-import { UUIDField } from "@cocrepo/decorator";
+import { ULIDField } from "@cocrepo/decorator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 import { ActionResponseDto } from "./action-response.dto";
@@ -12,11 +12,11 @@ import { SubjectResponseDto } from "./subject-response.dto";
  * 마스킹 등의 설정은 Action.config에서 가져옵니다.
  */
 export class AbilityResponseDto {
-	@UUIDField({ description: "Ability ID" })
+	@ULIDField({ description: "Ability ID" })
 	@Expose()
 	id!: string;
 
-	@UUIDField({ description: "Action ID" })
+	@ULIDField({ description: "Action ID" })
 	@Expose()
 	actionId!: string;
 
@@ -29,7 +29,7 @@ export class AbilityResponseDto {
 	@Type(() => ActionResponseDto)
 	action?: ActionResponseDto;
 
-	@UUIDField({ description: "Subject ID" })
+	@ULIDField({ description: "Subject ID" })
 	@Expose()
 	subjectId!: string;
 

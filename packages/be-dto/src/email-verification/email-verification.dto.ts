@@ -6,13 +6,13 @@ import {
 	NumberField,
 	StringField,
 	StringFieldOptional,
-	UUIDField,
-	UUIDFieldOptional,
+	ULIDField,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator";
 import { EmailVerificationStatus } from "@cocrepo/prisma";
 
 export class EmailVerificationDto {
-	@UUIDField({ description: "ID" })
+	@ULIDField({ description: "ID" })
 	id!: string;
 
 	@DateField({ description: "생성일" })
@@ -45,7 +45,7 @@ export class EmailVerificationDto {
 	@StringFieldOptional({ nullable: true, description: "마지막 발송 상태" })
 	lastSendStatus!: string | null;
 
-	@UUIDFieldOptional({ nullable: true, description: "인증 완료 사용자 ID" })
+	@ULIDFieldOptional({ nullable: true, description: "인증 완료 사용자 ID" })
 	verifiedUserId!: string | null;
 
 	@BooleanField({ description: "재발송 가능 여부" })

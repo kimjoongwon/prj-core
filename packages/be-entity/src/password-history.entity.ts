@@ -1,6 +1,9 @@
 import type { PasswordHistory as PasswordHistoryEntity } from "@cocrepo/prisma";
+import type { DomainEntityModel } from "./domain-entity-model.type";
 
-export class PasswordHistory implements PasswordHistoryEntity {
+export class PasswordHistory
+	implements DomainEntityModel<PasswordHistoryEntity>
+{
 	// ============================================================================
 	// 기본 필드
 	// ============================================================================

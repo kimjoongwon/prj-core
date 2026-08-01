@@ -20,74 +20,106 @@ export type RoutineModel = runtime.Types.Result.DefaultSelection<Prisma.$Routine
 
 export type AggregateRoutine = {
   _count: RoutineCountAggregateOutputType | null
+  _avg: RoutineAvgAggregateOutputType | null
+  _sum: RoutineSumAggregateOutputType | null
   _min: RoutineMinAggregateOutputType | null
   _max: RoutineMaxAggregateOutputType | null
 }
 
+export type RoutineAvgAggregateOutputType = {
+  seq: number | null
+  spaceSeq: number | null
+  createdBySeq: number | null
+}
+
+export type RoutineSumAggregateOutputType = {
+  seq: number | null
+  spaceSeq: number | null
+  createdBySeq: number | null
+}
+
 export type RoutineMinAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: string | null
-  createdById: string | null
+  spaceSeq: number | null
+  createdBySeq: number | null
   name: string | null
   label: string | null
 }
 
 export type RoutineMaxAggregateOutputType = {
   id: string | null
+  seq: number | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: string | null
-  createdById: string | null
+  spaceSeq: number | null
+  createdBySeq: number | null
   name: string | null
   label: string | null
 }
 
 export type RoutineCountAggregateOutputType = {
   id: number
+  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
-  spaceId: number
-  createdById: number
+  spaceSeq: number
+  createdBySeq: number
   name: number
   label: number
   _all: number
 }
 
 
+export type RoutineAvgAggregateInputType = {
+  seq?: true
+  spaceSeq?: true
+  createdBySeq?: true
+}
+
+export type RoutineSumAggregateInputType = {
+  seq?: true
+  spaceSeq?: true
+  createdBySeq?: true
+}
+
 export type RoutineMinAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  createdById?: true
+  spaceSeq?: true
+  createdBySeq?: true
   name?: true
   label?: true
 }
 
 export type RoutineMaxAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  createdById?: true
+  spaceSeq?: true
+  createdBySeq?: true
   name?: true
   label?: true
 }
 
 export type RoutineCountAggregateInputType = {
   id?: true
+  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceId?: true
-  createdById?: true
+  spaceSeq?: true
+  createdBySeq?: true
   name?: true
   label?: true
   _all?: true
@@ -131,6 +163,18 @@ export type RoutineAggregateArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: RoutineAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: RoutineSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: RoutineMinAggregateInputType
@@ -161,20 +205,25 @@ export type RoutineGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   _count?: RoutineCountAggregateInputType | true
+  _avg?: RoutineAvgAggregateInputType
+  _sum?: RoutineSumAggregateInputType
   _min?: RoutineMinAggregateInputType
   _max?: RoutineMaxAggregateInputType
 }
 
 export type RoutineGroupByOutputType = {
   id: string
+  seq: number
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  spaceId: string
-  createdById: string | null
+  spaceSeq: number
+  createdBySeq: number | null
   name: string
   label: string
   _count: RoutineCountAggregateOutputType | null
+  _avg: RoutineAvgAggregateOutputType | null
+  _sum: RoutineSumAggregateOutputType | null
   _min: RoutineMinAggregateOutputType | null
   _max: RoutineMaxAggregateOutputType | null
 }
@@ -199,11 +248,12 @@ export type RoutineWhereInput = {
   OR?: Prisma.RoutineWhereInput[]
   NOT?: Prisma.RoutineWhereInput | Prisma.RoutineWhereInput[]
   id?: Prisma.StringFilter<"Routine"> | string
+  seq?: Prisma.IntFilter<"Routine"> | number
   createdAt?: Prisma.DateTimeFilter<"Routine"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Routine"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Routine"> | Date | string | null
-  spaceId?: Prisma.StringFilter<"Routine"> | string
-  createdById?: Prisma.StringNullableFilter<"Routine"> | string | null
+  spaceSeq?: Prisma.IntFilter<"Routine"> | number
+  createdBySeq?: Prisma.IntNullableFilter<"Routine"> | number | null
   name?: Prisma.StringFilter<"Routine"> | string
   label?: Prisma.StringFilter<"Routine"> | string
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
@@ -214,11 +264,12 @@ export type RoutineWhereInput = {
 
 export type RoutineOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   label?: Prisma.SortOrder
   space?: Prisma.SpaceOrderByWithRelationInput
@@ -229,34 +280,38 @@ export type RoutineOrderByWithRelationInput = {
 
 export type RoutineWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  seq?: number
   AND?: Prisma.RoutineWhereInput | Prisma.RoutineWhereInput[]
   OR?: Prisma.RoutineWhereInput[]
   NOT?: Prisma.RoutineWhereInput | Prisma.RoutineWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"Routine"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Routine"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Routine"> | Date | string | null
-  spaceId?: Prisma.StringFilter<"Routine"> | string
-  createdById?: Prisma.StringNullableFilter<"Routine"> | string | null
+  spaceSeq?: Prisma.IntFilter<"Routine"> | number
+  createdBySeq?: Prisma.IntNullableFilter<"Routine"> | number | null
   name?: Prisma.StringFilter<"Routine"> | string
   label?: Prisma.StringFilter<"Routine"> | string
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   activities?: Prisma.ActivityListRelationFilter
   programs?: Prisma.ProgramListRelationFilter
-}, "id">
+}, "seq" | "id">
 
 export type RoutineOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   label?: Prisma.SortOrder
   _count?: Prisma.RoutineCountOrderByAggregateInput
+  _avg?: Prisma.RoutineAvgOrderByAggregateInput
   _max?: Prisma.RoutineMaxOrderByAggregateInput
   _min?: Prisma.RoutineMinOrderByAggregateInput
+  _sum?: Prisma.RoutineSumOrderByAggregateInput
 }
 
 export type RoutineScalarWhereWithAggregatesInput = {
@@ -264,11 +319,12 @@ export type RoutineScalarWhereWithAggregatesInput = {
   OR?: Prisma.RoutineScalarWhereWithAggregatesInput[]
   NOT?: Prisma.RoutineScalarWhereWithAggregatesInput | Prisma.RoutineScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Routine"> | string
+  seq?: Prisma.IntWithAggregatesFilter<"Routine"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Routine"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Routine"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Routine"> | Date | string | null
-  spaceId?: Prisma.StringWithAggregatesFilter<"Routine"> | string
-  createdById?: Prisma.StringNullableWithAggregatesFilter<"Routine"> | string | null
+  spaceSeq?: Prisma.IntWithAggregatesFilter<"Routine"> | number
+  createdBySeq?: Prisma.IntNullableWithAggregatesFilter<"Routine"> | number | null
   name?: Prisma.StringWithAggregatesFilter<"Routine"> | string
   label?: Prisma.StringWithAggregatesFilter<"Routine"> | string
 }
@@ -288,11 +344,12 @@ export type RoutineCreateInput = {
 
 export type RoutineUncheckedCreateInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: string
-  createdById?: string | null
+  spaceSeq: number
+  createdBySeq?: number | null
   name: string
   label: string
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutRoutineInput
@@ -314,11 +371,12 @@ export type RoutineUpdateInput = {
 
 export type RoutineUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutRoutineNestedInput
@@ -327,11 +385,12 @@ export type RoutineUncheckedUpdateInput = {
 
 export type RoutineCreateManyInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: string
-  createdById?: string | null
+  spaceSeq: number
+  createdBySeq?: number | null
   name: string
   label: string
 }
@@ -347,11 +406,12 @@ export type RoutineUpdateManyMutationInput = {
 
 export type RoutineUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -363,35 +423,50 @@ export type RoutineScalarRelationFilter = {
 
 export type RoutineCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
   name?: Prisma.SortOrder
   label?: Prisma.SortOrder
 }
 
+export type RoutineAvgOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
+}
+
 export type RoutineMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
   name?: Prisma.SortOrder
   label?: Prisma.SortOrder
 }
 
 export type RoutineMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceId?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
   name?: Prisma.SortOrder
   label?: Prisma.SortOrder
+}
+
+export type RoutineSumOrderByAggregateInput = {
+  seq?: Prisma.SortOrder
+  spaceSeq?: Prisma.SortOrder
+  createdBySeq?: Prisma.SortOrder
 }
 
 export type RoutineListRelationFilter = {
@@ -530,11 +605,12 @@ export type RoutineCreateWithoutActivitiesInput = {
 
 export type RoutineUncheckedCreateWithoutActivitiesInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: string
-  createdById?: string | null
+  spaceSeq: number
+  createdBySeq?: number | null
   name: string
   label: string
   programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutRoutineInput
@@ -570,11 +646,12 @@ export type RoutineUpdateWithoutActivitiesInput = {
 
 export type RoutineUncheckedUpdateWithoutActivitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
   programs?: Prisma.ProgramUncheckedUpdateManyWithoutRoutineNestedInput
@@ -594,11 +671,12 @@ export type RoutineCreateWithoutProgramsInput = {
 
 export type RoutineUncheckedCreateWithoutProgramsInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: string
-  createdById?: string | null
+  spaceSeq: number
+  createdBySeq?: number | null
   name: string
   label: string
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutRoutineInput
@@ -634,11 +712,12 @@ export type RoutineUpdateWithoutProgramsInput = {
 
 export type RoutineUncheckedUpdateWithoutProgramsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
-  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutRoutineNestedInput
@@ -658,10 +737,11 @@ export type RoutineCreateWithoutSpaceInput = {
 
 export type RoutineUncheckedCreateWithoutSpaceInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  createdById?: string | null
+  createdBySeq?: number | null
   name: string
   label: string
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutRoutineInput
@@ -699,11 +779,12 @@ export type RoutineScalarWhereInput = {
   OR?: Prisma.RoutineScalarWhereInput[]
   NOT?: Prisma.RoutineScalarWhereInput | Prisma.RoutineScalarWhereInput[]
   id?: Prisma.StringFilter<"Routine"> | string
+  seq?: Prisma.IntFilter<"Routine"> | number
   createdAt?: Prisma.DateTimeFilter<"Routine"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Routine"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Routine"> | Date | string | null
-  spaceId?: Prisma.StringFilter<"Routine"> | string
-  createdById?: Prisma.StringNullableFilter<"Routine"> | string | null
+  spaceSeq?: Prisma.IntFilter<"Routine"> | number
+  createdBySeq?: Prisma.IntNullableFilter<"Routine"> | number | null
   name?: Prisma.StringFilter<"Routine"> | string
   label?: Prisma.StringFilter<"Routine"> | string
 }
@@ -722,10 +803,11 @@ export type RoutineCreateWithoutCreatedByInput = {
 
 export type RoutineUncheckedCreateWithoutCreatedByInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: string
+  spaceSeq: number
   name: string
   label: string
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutRoutineInput
@@ -760,10 +842,11 @@ export type RoutineUpdateManyWithWhereWithoutCreatedByInput = {
 
 export type RoutineCreateManySpaceInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  createdById?: string | null
+  createdBySeq?: number | null
   name: string
   label: string
 }
@@ -782,10 +865,11 @@ export type RoutineUpdateWithoutSpaceInput = {
 
 export type RoutineUncheckedUpdateWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutRoutineNestedInput
@@ -794,20 +878,22 @@ export type RoutineUncheckedUpdateWithoutSpaceInput = {
 
 export type RoutineUncheckedUpdateManyWithoutSpaceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type RoutineCreateManyCreatedByInput = {
   id?: string
+  seq?: number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceId: string
+  spaceSeq: number
   name: string
   label: string
 }
@@ -826,10 +912,11 @@ export type RoutineUpdateWithoutCreatedByInput = {
 
 export type RoutineUncheckedUpdateWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutRoutineNestedInput
@@ -838,10 +925,11 @@ export type RoutineUncheckedUpdateWithoutCreatedByInput = {
 
 export type RoutineUncheckedUpdateManyWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  seq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceId?: Prisma.StringFieldUpdateOperationsInput | string
+  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -888,11 +976,12 @@ export type RoutineCountOutputTypeCountProgramsArgs<ExtArgs extends runtime.Type
 
 export type RoutineSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  createdById?: boolean
+  spaceSeq?: boolean
+  createdBySeq?: boolean
   name?: boolean
   label?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
@@ -904,11 +993,12 @@ export type RoutineSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 
 export type RoutineSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  createdById?: boolean
+  spaceSeq?: boolean
+  createdBySeq?: boolean
   name?: boolean
   label?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
@@ -917,11 +1007,12 @@ export type RoutineSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type RoutineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  createdById?: boolean
+  spaceSeq?: boolean
+  createdBySeq?: boolean
   name?: boolean
   label?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
@@ -930,16 +1021,17 @@ export type RoutineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 
 export type RoutineSelectScalar = {
   id?: boolean
+  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceId?: boolean
-  createdById?: boolean
+  spaceSeq?: boolean
+  createdBySeq?: boolean
   name?: boolean
   label?: boolean
 }
 
-export type RoutineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "removedAt" | "spaceId" | "createdById" | "name" | "label", ExtArgs["result"]["routine"]>
+export type RoutineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "spaceSeq" | "createdBySeq" | "name" | "label", ExtArgs["result"]["routine"]>
 export type RoutineInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Routine$createdByArgs<ExtArgs>
@@ -966,11 +1058,12 @@ export type $RoutinePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    seq: number
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    spaceId: string
-    createdById: string | null
+    spaceSeq: number
+    createdBySeq: number | null
     name: string
     label: string
   }, ExtArgs["result"]["routine"]>
@@ -1401,11 +1494,12 @@ export interface Prisma__RoutineClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface RoutineFieldRefs {
   readonly id: Prisma.FieldRef<"Routine", 'String'>
+  readonly seq: Prisma.FieldRef<"Routine", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Routine", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Routine", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Routine", 'DateTime'>
-  readonly spaceId: Prisma.FieldRef<"Routine", 'String'>
-  readonly createdById: Prisma.FieldRef<"Routine", 'String'>
+  readonly spaceSeq: Prisma.FieldRef<"Routine", 'Int'>
+  readonly createdBySeq: Prisma.FieldRef<"Routine", 'Int'>
   readonly name: Prisma.FieldRef<"Routine", 'String'>
   readonly label: Prisma.FieldRef<"Routine", 'String'>
 }

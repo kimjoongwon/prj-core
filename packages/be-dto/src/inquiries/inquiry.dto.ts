@@ -4,9 +4,10 @@ import {
 	EnumField,
 	NumberField,
 	StringField,
-	UUIDField,
-	UUIDFieldOptional,
+	ULIDField,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator";
+import type { DomainEntityModel } from "@cocrepo/entity";
 import type { Inquiry } from "@cocrepo/prisma";
 import {
 	InquiryCategory,
@@ -21,11 +22,14 @@ import { AbstractDto } from "../abstract.dto";
 /**
  * 문의 응답 DTO
  */
-export class InquiryDto extends AbstractDto implements Partial<Inquiry> {
-	@UUIDField({ description: "소속 Space ID" })
+export class InquiryDto
+	extends AbstractDto
+	implements Partial<DomainEntityModel<Inquiry>>
+{
+	@ULIDField({ description: "소속 Space ID" })
 	spaceId!: string;
 
-	@UUIDFieldOptional({ nullable: true, description: "생성자 ID" })
+	@ULIDFieldOptional({ nullable: true, description: "생성자 ID" })
 	createdById!: string | null;
 
 	@StringField({ description: "문의 번호" })
@@ -49,10 +53,10 @@ export class InquiryDto extends AbstractDto implements Partial<Inquiry> {
 	@EnumField(() => InquiryPriority, { description: "문의 우선순위" })
 	priority!: InquiryPriority;
 
-	@UUIDFieldOptional({ description: "고객 ID" })
+	@ULIDFieldOptional({ description: "고객 ID" })
 	customerId!: string | null;
 
-	@UUIDFieldOptional({ description: "담당자 ID" })
+	@ULIDFieldOptional({ description: "담당자 ID" })
 	assigneeId!: string | null;
 
 	@BooleanField({ description: "실시간 채팅 활성화 여부" })

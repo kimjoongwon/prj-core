@@ -90,11 +90,11 @@ async function migrateLegacySubject(db: ReferenceDataDbClient) {
 
 async function migrateFitnessCenterAbilityNames(
 	db: ReferenceDataDbClient,
-	fitnessCenterSubjectId: string,
+	fitnessCenterSubjectSeq: number,
 ): Promise<void> {
 	const abilities = await db.ability.findMany({
 		where: {
-			subjectId: fitnessCenterSubjectId,
+			subjectSeq: fitnessCenterSubjectSeq,
 		},
 		include: {
 			action: true,
@@ -102,7 +102,7 @@ async function migrateFitnessCenterAbilityNames(
 	});
 
 	const subject = await db.subject.findUniqueOrThrow({
-		where: { id: fitnessCenterSubjectId },
+		where: { seq: fitnessCenterSubjectSeq },
 	});
 
 	for (const ability of abilities) {
@@ -134,7 +134,7 @@ async function migrateFitnessCenterAbilityNames(
 			where: { id: ability.id },
 			data: {
 				name: expectedName,
-				subjectId: fitnessCenterSubjectId,
+				subjectSeq: fitnessCenterSubjectSeq,
 				removedAt: null,
 			},
 		});
@@ -217,7 +217,7 @@ async function migrateLegacyTemplateTokens(
 				in: LEGACY_TEMPLATE_TOKEN_PAIRS.map(([legacyToken]) => legacyToken),
 			},
 		},
-		orderBy: [{ templateId: "asc" }, { name: "asc" }],
+		orderBy: [{ templateSeq: "asc" }, { name: "asc" }],
 	});
 
 	for (const variable of variables) {
@@ -231,8 +231,8 @@ async function migrateLegacyTemplateTokens(
 		const [, canonicalToken] = tokenPair;
 		const collision = await db.templateVariable.findUnique({
 			where: {
-				templateId_name: {
-					templateId: variable.templateId,
+				templateSeq_name: {
+					templateSeq: variable.templateSeq,
 					name: canonicalToken,
 				},
 			},
@@ -241,7 +241,7 @@ async function migrateLegacyTemplateTokens(
 
 		if (collision && collision.id !== variable.id) {
 			throw new Error(
-				`Cannot migrate template variable: both legacy and canonical rows exist (${variable.name}, ${canonicalToken}, template=${variable.templateId}). Resolve manually.`,
+				`Cannot migrate template variable: both legacy and canonical rows exist (${variable.name}, ${canonicalToken}, templateSeq=${variable.templateSeq}). Resolve manually.`,
 			);
 		}
 
@@ -265,7 +265,7 @@ export const fitnessCenterTerminologyMigration: ReferenceDataMigration = {
 	async up(db) {
 		const subject = await migrateLegacySubject(db);
 		if (subject) {
-			await migrateFitnessCenterAbilityNames(db, subject.id);
+			await migrateFitnessCenterAbilityNames(db, subject.seq);
 		}
 
 		await migrateLegacyTranslationKeys(db);

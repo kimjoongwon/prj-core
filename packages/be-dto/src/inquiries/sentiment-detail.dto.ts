@@ -2,8 +2,8 @@ import {
 	DateField,
 	EnumField,
 	NumberField,
-	UUIDField,
-	UUIDFieldOptional,
+	ULIDField,
+	ULIDFieldOptional,
 } from "@cocrepo/decorator";
 import { SentimentType } from "@cocrepo/prisma";
 import { AbstractDto } from "../abstract.dto";
@@ -12,10 +12,10 @@ import { AbstractDto } from "../abstract.dto";
  * 감정 분석 상세 DTO
  */
 export class SentimentDetailDto extends AbstractDto {
-	@UUIDField({ description: "소속 문의 ID" })
+	@ULIDField({ description: "소속 문의 ID" })
 	inquiryId!: string;
 
-	@UUIDFieldOptional({ description: "분석 대상 메시지 ID" })
+	@ULIDFieldOptional({ description: "분석 대상 메시지 ID" })
 	messageId!: string | null;
 
 	@EnumField(() => SentimentType, { description: "감정 유형" })

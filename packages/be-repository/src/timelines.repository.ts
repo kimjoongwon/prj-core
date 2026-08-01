@@ -2,6 +2,11 @@ import { LanguageCode, Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
+import type {
+	PublicIdCreateInput,
+	PublicIdUpdateInput,
+} from "./public-id-input.type";
+import { toDomainData } from "./to-domain-entity";
 
 function omitProgramActivities<T extends { programActivities: unknown }>(
 	program: T,
@@ -42,9 +47,15 @@ export class TimelinesRepository {
 		);
 
 		const where: Prisma.TimelineWhereInput = {
-			...(params.spaceIds ? { spaceId: { in: params.spaceIds } } : {}),
-			...(params.contentLanguageCode
-				? { space: { contentLanguageCode: params.contentLanguageCode } }
+			...(params.spaceIds || params.contentLanguageCode
+				? {
+						space: {
+							...(params.spaceIds ? { id: { in: params.spaceIds } } : {}),
+							...(params.contentLanguageCode
+								? { contentLanguageCode: params.contentLanguageCode }
+								: {}),
+						},
+					}
 				: {}),
 			removedAt: null,
 			...(params.search
@@ -60,6 +71,7 @@ export class TimelinesRepository {
 						select: { sessions: { where: { removedAt: null } } },
 					},
 					createdBy: { select: { id: true, name: true } },
+					space: { select: { id: true } },
 				},
 				orderBy: { createdAt: "desc" },
 				skip: params.skip,
@@ -68,7 +80,7 @@ export class TimelinesRepository {
 			this.txHost.tx.timeline.count({ where }),
 		]);
 
-		return [timelines, total] as const;
+		return [toDomainData(timelines), total] as const;
 	}
 
 	/**
@@ -77,11 +89,11 @@ export class TimelinesRepository {
 	async findTimelineById(timelineId: string, spaceIds?: string[]) {
 		this.logger.debug(`타임라인 상세 조회: ${timelineId.slice(-8)}`);
 
-		return this.txHost.tx.timeline.findFirst({
+		const timeline = await this.txHost.tx.timeline.findFirst({
 			where: {
 				id: timelineId,
 				removedAt: null,
-				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
+				...(spaceIds ? { space: { id: { in: spaceIds } } } : {}),
 			},
 			include: {
 				createdBy: { select: { id: true, name: true } },
@@ -91,6 +103,8 @@ export class TimelinesRepository {
 				},
 			},
 		});
+
+		return timeline ? toDomainData(timeline) : null;
 	}
 
 	/**
@@ -104,7 +118,20 @@ export class TimelinesRepository {
 	}) {
 		this.logger.debug("타임라인 생성");
 
-		return this.txHost.tx.timeline.create({ data });
+		const timeline = await this.txHost.tx.timeline.create({
+			data: {
+				name: data.name,
+				description: data.description,
+				space: { connect: { id: data.spaceId } },
+				createdBy: { connect: { id: data.createdById } },
+			},
+			include: {
+				space: { select: { id: true } },
+				createdBy: { select: { id: true, name: true } },
+			},
+		});
+
+		return toDomainData(timeline);
 	}
 
 	/**
@@ -116,10 +143,12 @@ export class TimelinesRepository {
 	) {
 		this.logger.debug(`타임라인 수정: ${timelineId.slice(-8)}`);
 
-		return this.txHost.tx.timeline.update({
+		const timeline = await this.txHost.tx.timeline.update({
 			where: { id: timelineId },
 			data,
 		});
+
+		return toDomainData(timeline);
 	}
 
 	/**
@@ -145,7 +174,7 @@ export class TimelinesRepository {
 		return this.txHost.tx.timeline.count({
 			where: {
 				name,
-				spaceId,
+				space: { id: spaceId },
 				removedAt: null,
 				...(excludeId ? { id: { not: excludeId } } : {}),
 			},
@@ -166,7 +195,7 @@ export class TimelinesRepository {
 		this.logger.debug(`세션 목록 조회: timelineId=${timelineId.slice(-8)}`);
 
 		const where: Prisma.SessionWhereInput = {
-			timelineId,
+			timeline: { id: timelineId },
 			removedAt: null,
 			...(params.search
 				? { name: { contains: params.search, mode: "insensitive" } }
@@ -177,6 +206,7 @@ export class TimelinesRepository {
 			this.txHost.tx.session.findMany({
 				where,
 				include: {
+					timeline: { select: { id: true } },
 					_count: {
 						select: { programs: { where: { removedAt: null } } },
 					},
@@ -188,7 +218,7 @@ export class TimelinesRepository {
 			this.txHost.tx.session.count({ where }),
 		]);
 
-		return [sessions, total] as const;
+		return [toDomainData(sessions), total] as const;
 	}
 
 	/**
@@ -197,8 +227,12 @@ export class TimelinesRepository {
 	async findSessionById(timelineId: string, sessionId: string) {
 		this.logger.debug(`세션 상세 조회: ${sessionId.slice(-8)}`);
 
-		return this.txHost.tx.session.findFirst({
-			where: { id: sessionId, timelineId, removedAt: null },
+		const session = await this.txHost.tx.session.findFirst({
+			where: {
+				id: sessionId,
+				timeline: { id: timelineId },
+				removedAt: null,
+			},
 			include: {
 				timeline: { select: { id: true, name: true } },
 				_count: {
@@ -206,15 +240,28 @@ export class TimelinesRepository {
 				},
 			},
 		});
+
+		return session ? toDomainData(session) : null;
 	}
 
 	/**
 	 * 세션 생성
 	 */
-	async createSession(data: Prisma.SessionUncheckedCreateInput) {
+	async createSession(
+		data: PublicIdCreateInput<Prisma.SessionUncheckedCreateInput, "timeline">,
+	) {
 		this.logger.debug("세션 생성");
 
-		return this.txHost.tx.session.create({ data });
+		const { timelineId, ...sessionData } = data;
+		const session = await this.txHost.tx.session.create({
+			data: {
+				...sessionData,
+				timeline: { connect: { id: timelineId } },
+			},
+			include: { timeline: { select: { id: true } } },
+		});
+
+		return toDomainData(session);
 	}
 
 	/**
@@ -222,14 +269,23 @@ export class TimelinesRepository {
 	 */
 	async updateSession(
 		sessionId: string,
-		data: Prisma.SessionUncheckedUpdateInput,
+		data: PublicIdUpdateInput<Prisma.SessionUncheckedUpdateInput, "timeline">,
 	) {
 		this.logger.debug(`세션 수정: ${sessionId.slice(-8)}`);
 
-		return this.txHost.tx.session.update({
+		const { timelineId, ...sessionData } = data;
+		const session = await this.txHost.tx.session.update({
 			where: { id: sessionId },
-			data,
+			data: {
+				...sessionData,
+				...(timelineId !== undefined
+					? { timeline: { connect: { id: timelineId } } }
+					: {}),
+			},
+			include: { timeline: { select: { id: true } } },
 		});
+
+		return toDomainData(session);
 	}
 
 	/**
@@ -258,7 +314,7 @@ export class TimelinesRepository {
 		this.logger.debug(`프로그램 목록 조회: sessionId=${sessionId.slice(-8)}`);
 
 		const where: Prisma.ProgramWhereInput = {
-			sessionId,
+			session: { id: sessionId },
 			removedAt: null,
 		};
 
@@ -284,20 +340,19 @@ export class TimelinesRepository {
 			this.txHost.tx.program.count({ where }),
 		]);
 
-		return [
-			programs.map((program) => {
-				const programRecord = omitProgramActivities(program);
-				const programActivities = program.programActivities;
-				return {
-					...programRecord,
-					activityCount: programActivities.length,
-					previewExerciseNames: programActivities
-						.slice(0, 3)
-						.map((activity) => activity.exerciseName),
-				};
-			}),
-			total,
-		] as const;
+		const records = programs.map((program) => {
+			const programRecord = omitProgramActivities(program);
+			const programActivities = program.programActivities;
+			return {
+				...programRecord,
+				activityCount: programActivities.length,
+				previewExerciseNames: programActivities
+					.slice(0, 3)
+					.map((activity) => activity.exerciseName),
+			};
+		});
+
+		return [toDomainData(records), total] as const;
 	}
 
 	/**
@@ -308,7 +363,11 @@ export class TimelinesRepository {
 
 		return this.txHost.tx.program
 			.findFirst({
-				where: { id: programId, sessionId, removedAt: null },
+				where: {
+					id: programId,
+					session: { id: sessionId },
+					removedAt: null,
+				},
 				include: {
 					programActivities: {
 						where: { removedAt: null },
@@ -331,14 +390,14 @@ export class TimelinesRepository {
 
 				const programRecord = omitProgramActivities(program);
 				const programActivities = program.programActivities;
-				return {
+				return toDomainData({
 					...programRecord,
 					activityCount: programActivities.length,
 					previewExerciseNames: programActivities
 						.slice(0, 3)
 						.map((activity) => activity.exerciseName),
 					executionPlan: programActivities,
-				};
+				});
 			});
 	}
 
@@ -357,7 +416,24 @@ export class TimelinesRepository {
 	}) {
 		this.logger.debug("프로그램 생성");
 
-		return this.txHost.tx.program.create({ data });
+		const program = await this.txHost.tx.program.create({
+			data: {
+				name: data.name,
+				routine: { connect: { id: data.routineId } },
+				session: { connect: { id: data.sessionId } },
+				instructorId: data.instructorId,
+				capacity: data.capacity,
+				level: data.level,
+				routineNameSnapshot: data.routineNameSnapshot,
+				routineLabelSnapshot: data.routineLabelSnapshot,
+			},
+			include: {
+				routine: { select: { id: true } },
+				session: { select: { id: true } },
+			},
+		});
+
+		return toDomainData(program);
 	}
 
 	/**
@@ -377,10 +453,22 @@ export class TimelinesRepository {
 	) {
 		this.logger.debug(`프로그램 수정: ${programId.slice(-8)}`);
 
-		return this.txHost.tx.program.update({
+		const { routineId, ...programData } = data;
+		const program = await this.txHost.tx.program.update({
 			where: { id: programId },
-			data,
+			data: {
+				...programData,
+				...(routineId !== undefined
+					? { routine: { connect: { id: routineId } } }
+					: {}),
+			},
+			include: {
+				routine: { select: { id: true } },
+				session: { select: { id: true } },
+			},
 		});
+
+		return toDomainData(program);
 	}
 
 	/**
@@ -397,7 +485,7 @@ export class TimelinesRepository {
 		});
 		await this.txHost.tx.programActivity.updateMany({
 			where: {
-				programId,
+				program: { id: programId },
 				removedAt: null,
 			},
 			data: { removedAt },
@@ -424,9 +512,13 @@ export class TimelinesRepository {
 			return;
 		}
 
+		const program = await this.txHost.tx.program.findUniqueOrThrow({
+			where: { id: programId },
+			select: { seq: true },
+		});
 		await this.txHost.tx.programActivity.createMany({
 			data: activities.map((activity) => ({
-				programId,
+				programSeq: program.seq,
 				taskId: activity.taskId,
 				order: activity.order,
 				repetitions: activity.repetitions,
@@ -459,7 +551,7 @@ export class TimelinesRepository {
 		}[],
 	): Promise<void> {
 		await this.txHost.tx.programActivity.deleteMany({
-			where: { programId },
+			where: { program: { id: programId } },
 		});
 		await this.createProgramActivities(programId, activities);
 	}
@@ -474,8 +566,8 @@ export class TimelinesRepository {
 	): Promise<number> {
 		return this.txHost.tx.program.count({
 			where: {
-				sessionId,
-				routineId,
+				session: { id: sessionId },
+				routine: { id: routineId },
 				removedAt: null,
 				...(excludeId ? { id: { not: excludeId } } : {}),
 			},

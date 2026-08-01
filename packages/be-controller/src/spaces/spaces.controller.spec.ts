@@ -79,7 +79,8 @@ describe("SpacesController", () => {
 		expect(queryBus.execute).toHaveBeenCalledWith(
 			expect.any(GetSpaceFitnessCenterQuery),
 		);
-		const message = queryBus.execute.mock.calls[0]?.[0] as GetSpaceFitnessCenterQuery;
+		const message = queryBus.execute.mock
+			.calls[0]?.[0] as GetSpaceFitnessCenterQuery;
 		expect(message.spaceId).toBe("space-a");
 		expect(result).toEqual({ id: "fitness-center-id" });
 	});
@@ -146,8 +147,8 @@ describe("SpacesController", () => {
 		expect(commandBus.execute).toHaveBeenCalledWith(
 			expect.any(UpdateSpaceFitnessCenterCommand),
 		);
-		const message =
-			commandBus.execute.mock.calls[0]?.[0] as UpdateSpaceFitnessCenterCommand;
+		const message = commandBus.execute.mock
+			.calls[0]?.[0] as UpdateSpaceFitnessCenterCommand;
 		expect(message.spaceId).toBe("space-a");
 		expect(message.name).toBe(dto.name);
 		expect(message.contentLanguageCode).toBe(dto.contentLanguageCode);
