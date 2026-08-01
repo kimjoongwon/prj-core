@@ -10,11 +10,466 @@ description: "이 skill은 `be-entity-builder` 역할로 일할 때 사용합니
 ## 작업 흐름
 
 1. `.codex/agents/09-be-entity-builder.toml`에서 사용자 요청, 승인된 스펙, 소유 범위를 확인합니다.
-2. 소스 변경 전에 `references/agent-instructions.md`를 읽습니다. 자세한 작업 규칙은 그 파일에 있습니다.
+2. 이 문서의 상세 작업 규칙을 확인합니다.
 3. 배정된 대상에 맞는 섹션만 적용합니다. 프론트엔드 작업은 파일 경로로 Web/React Native 대상을 먼저 구분합니다.
 4. 맡은 범위 안에서만 작업합니다. 다른 하위 에이전트의 파일이나 순서가 필요하면 멈추고 인계가 필요하다고 보고합니다.
 5. 스펙이나 세부 규칙이 요구한 검증을 가능한 만큼 실행하고, 결과와 남은 위험을 짧게 정리합니다.
 
-## 참고 문서
+## 상세 작업 규칙
 
-- `references/agent-instructions.md`: 실제 작업 순서와 세부 규칙입니다.
+## 재사용 우선 점검 (필수)
+
+- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
+- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
+- 동일 책임의 중복 구현을 금지합니다.
+
+
+# Entity 빌더
+
+도메인 지향 Entity 클래스를 생성하는 전문가입니다.
+
+---
+
+## 언제 사용하는가?
+
+| 상황 | 사용 여부 | 설명 |
+|------|----------|------|
+| Prisma 스키마 생성 후 Entity 클래스 필요 | ✅ 사용 | Entity 클래스 생성 |
+| 도메인 메서드 추가 | ✅ 사용 | 비즈니스 로직 캡슐화 |
+| Prisma 스키마 생성 | ❌ 미사용 | schema-builder 사용 |
+| DTO 생성 | ❌ 미사용 | dto-builder 사용 |
+| Repository 생성 | ❌ 미사용 | repository-builder 사용 |
+
+### 병렬 실행 컨텍스트 (Critical)
+
+**이 역할은 담당 스펙의 `병렬: true` 단계로 지정된 경우에만 `orch-delivery`가 병렬 호출할 수 있습니다。**
+
+```
+orch-delivery (Delivery Orchestrator)
+    │
+    ├── Task: be-entity-builder (Asset)      ┐
+    ├── Task: be-entity-builder (AssetVideo) ├─ 병렬 실행
+    └── Task: be-entity-builder (AssetImage) ┘
+```
+
+**병렬 실행 시 주의사항:**
+- 각 Entity는 독립적인 파일(`{entity}.entity.ts`)에 생성됨
+- `index.ts` export는 fan-in 후 단일 writer가 머지
+- 부모 Entity가 필요한 경우, 의존성 순서대로 실행됨 (Level 0 → Level 1)
+
+---
+
+## 입력/출력
+
+| 구분 | 항목 | 설명 |
+|------|------|------|
+| **입력** | Prisma 모델 | `@cocrepo/prisma`에서 생성된 persistence model/type |
+| | 도메인 로직 요구사항 | 필요한 비즈니스 메서드 |
+| **출력** | Entity 클래스 | `packages/be-entity/src/{entity}.entity.ts` |
+| | index.ts 업데이트 | export 추가 |
+
+---
+
+## 핵심 규칙
+
+- Entity class는 class당 하나의 파일을 가집니다.
+- Entity class 파일에는 top-level helper/mapper/type/interface를 함께 두지 않습니다.
+- rehydrate input, factory input, mapper/helper가 필요하면 가까운 별도 파일로 분리합니다.
+
+### Persistence / Domain 구분
+
+- Prisma generated type은 `persistence model/entity`로 취급합니다.
+- `packages/be-entity/src/*.entity.ts`는 `domain-facing entity`를 구현합니다.
+- 실제 domain entity 여부는 도메인 메서드, 상태 전이, 불변식 보유 여부로 판단합니다.
+- Prisma 타입을 그대로 상속하지 말고 `implements` 또는 shape 기반 구현을 사용합니다.
+- 값 객체/enum/관계 필드처럼 도메인 해석이 필요한 필드만 명시적으로 변환합니다.
+
+### ✅ 권장
+
+```typescript
+// AbstractEntity 상속
+export class User extends AbstractEntity implements UserEntity {
+  // 추가 필드만 정의
+}
+
+// Prisma 모델 타입 구현
+import type { User as UserEntity } from "@cocrepo/prisma";
+export class User extends AbstractEntity implements UserEntity {
+  // Prisma 모델의 모든 필드를 구현
+}
+
+// 필수 필드: ! 사용
+name!: string;
+
+// nullable 필드: | null 타입 추가
+parentId!: string | null;
+
+// 관계 필드: ? 사용
+parent?: Category;
+children?: Category[];
+
+// 도메인 메서드 포함
+isActive(): boolean {
+  return this.removedAt === null;
+}
+```
+
+### ❌ 금지
+
+```typescript
+// AbstractEntity 상속 없음
+export class User {
+  id!: string;
+  createdAt!: Date;
+  // 기본 필드 중복 선언
+}
+
+// Prisma 타입 미구현
+export class User {
+  // implements 없음
+}
+
+// Prisma 타입 상속 금지
+export class User extends UserEntity {
+  // persistence model에 domain이 종속됨
+}
+
+// 비동기 메서드 (Service에서 처리)
+async fetchRelated(): Promise<Related[]> {
+  // 외부 의존성 호출
+}
+```
+
+---
+
+## 프로세스
+
+### 0단계: 소유 계약 확인
+
+Read `app.context.md` 또는 관련 route `page.spec.md`의 Entity 계약 섹션을 확인합니다.
+백엔드 entity 전용 `*.spec.md`는 생성하거나 갱신하지 않습니다.
+
+### 1단계: Prisma 타입 확인
+
+```typescript
+import type { User as UserEntity } from "@cocrepo/prisma";
+```
+
+> 이 타입은 persistence model 기준입니다. Entity 클래스는 이 shape를 참고하되, 도메인 메서드와 관계 필드를 함께 정의합니다.
+
+### 2단계: Entity 클래스 작성
+
+```typescript
+export class User extends AbstractEntity implements UserEntity {
+  // 필수 필드
+  // nullable 필드
+  // 관계 필드
+  // 도메인 메서드
+}
+```
+
+### 3단계: index.ts 등록
+
+```typescript
+// packages/be-entity/src/index.ts
+export * from "./{entity}.entity";
+```
+
+### 4단계: Entity 계약 반영 확인
+
+Entity 구현 중 계약 불일치가 발견되면 `app.context.md` 또는 관련 route `page.spec.md`의 Entity 계약 섹션 갱신 필요성을 보고합니다.
+백엔드 entity 전용 spec 파일은 만들지 않습니다.
+
+---
+
+## 템플릿
+
+### 기본 템플릿
+
+```typescript
+import type {
+  {Entity} as {Entity}Entity,
+  // 필요한 enum 타입들
+} from "@cocrepo/prisma";
+import { AbstractEntity } from "./abstract.entity";
+// 관계 Entity import (type only)
+import type { Space } from "./space.entity";
+import type { User } from "./user.entity";
+
+export class {Entity} extends AbstractEntity implements {Entity}Entity {
+  // ============================================================================
+  // 필수 필드
+  // ============================================================================
+  name!: string;
+  spaceId!: string;
+
+  // ============================================================================
+  // Nullable 필드
+  // ============================================================================
+  description!: string | null;
+  parentId!: string | null;
+
+  // ============================================================================
+  // 관계 필드 (선택적)
+  // ============================================================================
+  space?: Space;
+  creator?: User;
+  parent?: {Entity};
+  children?: {Entity}[];
+
+  // ============================================================================
+  // 도메인 메서드
+  // ============================================================================
+
+  /**
+   * [메서드 설명]
+   */
+  someBusinessMethod(): SomeType {
+    // 비즈니스 로직 구현
+  }
+}
+```
+
+### 기본 Entity (관계 없음)
+
+```typescript
+import type { File as FileEntity, FileTypes } from "@cocrepo/prisma";
+import { AbstractEntity } from "./abstract.entity";
+
+export class File extends AbstractEntity implements FileEntity {
+  name!: string;
+  path!: string;
+  type!: FileTypes;
+  size!: number;
+  mimeType!: string;
+  spaceId!: string;
+
+  /**
+   * 파일 확장자를 반환합니다
+   */
+  getExtension(): string {
+    return this.name.split(".").pop() || "";
+  }
+
+  /**
+   * 이미지 파일인지 확인합니다
+   */
+  isImage(): boolean {
+    return this.mimeType.startsWith("image/");
+  }
+}
+```
+
+### 자기 참조 관계 Entity
+
+```typescript
+import type { Category as CategoryEntity, CategoryTypes } from "@cocrepo/prisma";
+import { AbstractEntity } from "./abstract.entity";
+import type { Space } from "./space.entity";
+import type { User } from "./user.entity";
+
+export class Category extends AbstractEntity implements CategoryEntity {
+  name!: string;
+  type!: CategoryTypes;
+  parentId!: string | null;
+  spaceId!: string;
+  creatorId!: string | null;
+
+  parent?: Category;
+  children?: Category[];
+  space?: Space;
+  creator?: User;
+
+  /**
+   * 현재 카테고리부터 루트까지 모든 상위 카테고리 이름을 추출합니다
+   */
+  getAllParentNames(): string[] {
+    const names: string[] = [];
+    let current: Category | undefined = this;
+
+    while (current) {
+      if (current.name) {
+        names.push(current.name);
+      }
+      current = current.parent;
+    }
+
+    return names;
+  }
+
+  /**
+   * 옵션 형태로 변환합니다 (Select 컴포넌트용)
+   */
+  toOption() {
+    return {
+      key: this.id,
+      value: this.id,
+      text: this.name,
+    };
+  }
+}
+```
+
+### 다중 관계 Entity
+
+```typescript
+import type {
+  User as UserEntity,
+  Profile,
+  Space,
+  Tenant,
+} from "@cocrepo/prisma";
+import { AbstractEntity } from "./abstract.entity";
+
+export class User extends AbstractEntity implements UserEntity {
+  name!: string;
+  email!: string;
+  phone!: string;
+  password!: string;
+  selectedSpaceId: string | null = null;
+
+  // 다중 관계
+  selectedSpace?: Space | null;
+  profiles?: Profile[];
+  tenants?: Tenant[];
+
+  /**
+   * 사용자의 현재 선택된 Space에 해당하는 테넌트를 반환합니다
+   */
+  getCurrentTenant(): Tenant | undefined {
+    if (!this.selectedSpaceId || !this.tenants) return undefined;
+    return this.tenants.find(
+      (tenant) => tenant.spaceId === this.selectedSpaceId,
+    );
+  }
+
+  /**
+   * 사용자가 특정 테넌트에 속해 있는지 확인합니다
+   */
+  hasTenantAccess(tenantId: string): boolean {
+    if (!this.tenants) return false;
+    return this.tenants.some((tenant) => tenant.id === tenantId);
+  }
+
+  /**
+   * 사용자가 활성 상태인지 확인합니다
+   */
+  isActive(): boolean {
+    return this.removedAt === null;
+  }
+}
+```
+
+---
+
+## 체크리스트
+
+- [ ] AbstractEntity 상속
+- [ ] Prisma 모델 타입 implements
+- [ ] Prisma generated type을 `extends` 하지 않음
+- [ ] 필수 필드에 `!` 사용
+- [ ] 관계 필드에 `?` 사용
+- [ ] nullable 필드에 `| null` 타입 추가
+- [ ] 도메인 메서드에 JSDoc 주석 추가
+- [ ] index.ts에 export 추가
+- [ ] Entity 계약 생성/업데이트
+
+---
+
+## 연관 에이전트
+
+| 구분 | 에이전트 | 설명 |
+|------|---------|------|
+| **선행** | schema-builder | Prisma 스키마 생성 |
+| **후행** | dto-builder | DTO 클래스 생성 |
+| | repository-builder | Repository 레이어 생성 |
+| **관련** | - | - |
+
+---
+
+## 프로젝트별 참고사항
+
+### 파일 위치
+
+```
+packages/be-entity/src/{entity}.entity.ts
+```
+
+### 도메인 메서드 가이드
+
+#### 권장 메서드 패턴
+
+| 패턴 | 설명 | 예시 |
+|------|------|------|
+| `is{Condition}()` | 상태 확인 | `isActive()`, `isExpired()` |
+| `has{Something}()` | 존재 확인 | `hasTenantAccess()`, `hasChildren()` |
+| `get{Property}()` | 계산된 값 반환 | `getCurrentTenant()`, `getFullName()` |
+| `get{Property}Color()` | UI 색상 variant 반환 | `getGroupColor()`, `getStatusColor()` |
+| `get{Property}Label()` | 한글 라벨 반환 | `getGroupLabel()`, `getStatusLabel()` |
+| `to{Format}()` | 형식 변환 | `toOption()`, `toSummary()` |
+| `getAll{Items}()` | 재귀적 조회 | `getAllParentNames()`, `getAllChildren()` |
+
+#### UI 관련 도메인 메서드 예시
+
+UI에서 반복적으로 사용되는 색상/라벨 매핑 로직은 Entity 메서드로 캡슐화합니다:
+
+```typescript
+// Subject Entity 예시
+export class Subject extends AbstractEntity implements SubjectEntity {
+  group!: string | null;
+
+  /**
+   * 그룹별 색상 (HeroUI variant)
+   */
+  getGroupColor(): "primary" | "secondary" | "success" | "warning" | "default" {
+    switch (this.group) {
+      case "entity":
+        return "primary";
+      case "menu":
+        return "secondary";
+      case "feature":
+        return "success";
+      case "ui":
+        return "warning";
+      default:
+        return "default";
+    }
+  }
+
+  /**
+   * 그룹별 한글 라벨
+   */
+  getGroupLabel(): string {
+    switch (this.group) {
+      case "entity":
+        return "엔티티";
+      case "menu":
+        return "메뉴";
+      case "feature":
+        return "기능";
+      case "ui":
+        return "UI 요소";
+      default:
+        return "기타";
+    }
+  }
+}
+```
+
+**장점:**
+- 컴포넌트에서 중복 함수 제거
+- 일관된 색상/라벨 유지
+- 변경 시 한 곳에서만 수정
+
+#### 주의사항
+
+- 외부 의존성 없이 순수하게 구현
+- 비동기 메서드는 지양 (필요시 Service에서 처리)
+- 복잡한 비즈니스 로직은 Service로 분리
+
+### 관련 파일
+
+- Prisma 모델 스키마: `packages/be-prisma/schema/[!_]*.prisma`
+- 추상 Entity: `packages/be-entity/src/abstract.entity.ts`
+- Entity export: `packages/be-entity/src/index.ts`

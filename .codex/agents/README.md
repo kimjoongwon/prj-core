@@ -10,7 +10,7 @@
 4. 이 인덱스
 
 `*.toml.guide.md` 보조 문서는 생성하지 않습니다.
-subagent TOML은 얇은 실행 계약만 소유합니다. 상세 작업 지시는 repo 범위 skill인 `.agents/skills/*-creator/SKILL.md`와 해당 skill의 `references/agent-instructions.md`에 둡니다.
+subagent TOML은 얇은 실행 계약만 소유합니다. 상세 작업 지시는 repo 범위 skill인 `.agents/skills/*-creator/SKILL.md`가 단일 소유합니다.
 [.codex/config.toml](../config.toml)은 subagent 등록표를 소유하지 않고, 문서화된 전역 subagent 설정만 둡니다.
 
 ## 번호 규칙
@@ -46,7 +46,7 @@ subagent TOML은 얇은 실행 계약만 소유합니다. 상세 작업 지시�
 
 - 공통 subagent 실행, 보고, 차단 계약은 루트 `AGENTS.md`가 소유합니다.
 - 각 subagent TOML은 정체성, 필수 skill, 기준 문서, 소유 범위, 플랫폼/도메인 라우팅만 소유합니다.
-- 상세 구현 절차와 기술별 규칙은 각 `.agents/skills/*-creator/SKILL.md`와 해당 `references/agent-instructions.md`가 소유합니다.
+- 상세 구현 절차와 기술별 규칙은 각 `.agents/skills/*-creator/SKILL.md`가 소유합니다.
 - 서비스 딜리버리 spec, route/page spec, Screen/Feature 기획 스펙의 생성/실행 규칙은 `01-orch-delivery.toml`과 `orch-delivery-creator` skill이 소유합니다.
 - 이 README는 active subagent 색인과 모델 티어 기준만 소유하며 실행 규칙을 복제하지 않습니다.
 
