@@ -9,8 +9,8 @@
 `DataGrid`는 목록 화면에서 사용하는 표준 데이터 테이블 컴포넌트입니다.
 컬럼, 필터, 정렬, 페이지네이션, 선택 상태를 하나의 계약으로 렌더링합니다.
 
-`DataGrid`는 handler props를 직접 받지 않습니다.
-상호작용 결과는 `DataGridState` class에 반영합니다.
+조회·컬럼·선택 상호작용은 `DataGridState`에 반영합니다.
+행 클릭과 이동처럼 상위 데이터 구조가 결정해야 하는 결과만 config callback으로 전달합니다.
 서버에는 class instance를 저장하지 않고 `toJSON()`으로 만든 snapshot만 영구 저장합니다.
 
 ## 기능
@@ -24,6 +24,10 @@
 | 컬럼 크기 | 사용자 state의 `columns.sizing`을 기준으로 컬럼 너비를 적용합니다. |
 | 컬럼 너비 조절 | header 오른쪽 resize handle drag로 `columns.sizing`을 갱신합니다. |
 | row grouping | `query.groupBy` 컬럼 기준으로 같은 값을 가진 row를 그룹 row 아래에 묶고 expand/collapse 할 수 있습니다. |
+| 실제 계층 행 | `getSubRows`가 반환한 실제 자식 행을 펼치고 접습니다. `setGrouping`으로 만든 가상 그룹 행과 섞지 않습니다. |
+| 인라인 편집 | `columns[].editable` 셀을 클릭하면 편집 UI로 전환하고 값을 `state.changes`에 즉시 반영합니다. |
+| 행 이동 | 이동 가능한 계층 행을 위아래로 정렬하고 가로 이동량으로 부모를 변경한 뒤 `onRowMove`에 결과를 전달합니다. |
+| 변경 추적 | 생성·수정·삭제 내역을 원본 행 변경 없이 배열 snapshot으로 관리합니다. |
 | row group panel | AG Grid `rowGroupPanelShow`처럼 grouping 가능한 컬럼을 추가, 제거, 순서 변경하고 `groupBy` query string에 반영하는 상단 panel을 표시할 수 있습니다. |
 | group pagination | `groupBy` query가 있으면 백엔드는 group 단위로 페이지네이션하고, DataGrid에는 선택된 group의 leaf row만 flat 배열로 전달합니다. |
 | 정렬 | 사용자 state의 `query.sort`를 기준으로 정렬 상태를 표시하고 변경합니다. |
@@ -42,12 +46,19 @@
 | `rowGroupPanelShow` | `"never"`, `"always"`, `"onlyWhenGrouping"` 중 하나입니다. AG Grid Row Group Panel처럼 grouping control 표시 여부를 정합니다. |
 | `columns[].rowGroup` | 해당 컬럼을 기본 grouping 기준으로 사용합니다. |
 | `columns[].enableRowGroup` | 해당 컬럼을 Row Group Panel에서 grouping 기준으로 선택할 수 있게 합니다. |
+| `getSubRows` | 실제 부모·자식 행의 자식 배열을 반환합니다. |
+| `columns[].rowExpander` | 계층 들여쓰기, 펼침 버튼, 이동 핸들을 표시할 컬럼입니다. |
+| `columns[].editable` | 일반 cell과 별도로 클릭 편집 시 사용할 renderer를 선언합니다. |
+| `onRowMove` | 이동된 행, 새 부모, 새 index, 최종 형제 순서를 상위 상태에 전달합니다. |
 
 ### group response 계약
 
-`DataGrid`의 `rows`는 항상 leaf row 배열만 받습니다.
+일반 목록과 `groupBy` 목록의 `rows`는 leaf row 배열을 받습니다.
 백엔드는 group row tree를 내려주지 않고, `groupBy` query가 있을 때 선택된 group에 속한 leaf row를 flat 배열로 반환합니다.
 DataGrid는 `query.groupBy` 값을 기준으로 받은 leaf row를 클라이언트에서 그룹으로 묶어 표시합니다.
+
+카테고리처럼 실제 행 자체가 부모가 되는 경우에는 `groupBy`를 사용하지 않습니다.
+상위에서 중첩 행을 만들고 `getSubRows`로 연결하며, 빈 부모 행과 각 행의 id를 그대로 유지합니다.
 
 `groupBy`가 없는 경우 `skip`/`take`는 일반 row 단위입니다.
 `groupBy`가 있는 경우 `skip`/`take`는 첫 번째 group level의 group 단위입니다.
@@ -83,6 +94,7 @@ DataGrid는 `query.groupBy` 값을 기준으로 받은 leaf row를 클라이언�
 | 대상 | 역할 |
 | --- | --- |
 | `DataGridState.ts` | `DataGridState`, `DataGridColumnsState`, `DataGridQueryState`, `DataGridFilterState`, `DataGridFilterRule`, `DataGridPaginationState`, `DataGridSelectionState` class를 정의합니다. 불필요한 접미사가 붙은 이름은 사용하지 않습니다. |
+| `DataGridChangesState.ts` | 저장 전 생성·수정·삭제 내역을 관리하고 렌더링용 행과 저장용 snapshot을 반환합니다. |
 | `DataGridQueryString.ts` | `nuqs`를 사용해 `sort`, `groupBy`, filter key, `skip`, `take`를 URL query string과 동기화합니다. |
 | `DataGridToolbar/DataGridToolbar.tsx` | 상단 toolbar view입니다. 좌/우 input과 컬럼 설정 진입점을 렌더링합니다. |
 | `DataGridGroupPanel/DataGridGroupPanel.tsx` | AG Grid Row Group Panel처럼 grouping 가능한 컬럼을 추가, 제거, 순서 변경하는 compact panel입니다. |
@@ -113,7 +125,7 @@ DataGrid는 `query.groupBy` 값을 기준으로 받은 leaf row를 클라이언�
 | `display/data-display` 하위 DataGrid | DataGrid 책임이 분산됩니다. |
 | 새 Button/Input/Select/Pagination primitive | 이미 `@cocrepo/ui` primitive가 있습니다. |
 | 도메인 전용 cell | `data-grid/cell/**`은 DataGrid/Table 공용 표시 단위만 소유합니다. 도메인 column builder는 공용 Cell을 조합만 합니다. |
-| 외부 handler props | DataGrid 상호작용은 내부 state와 `nuqs` 동기화로 처리합니다. |
+| `hierarchy` 도메인 config | DataGrid는 `childrenField`, `parentField`, `orderField` 같은 도메인 필드명을 알지 않습니다. |
 
 ## Column 통합 계약
 
@@ -174,6 +186,22 @@ query string에 쓰는 값은 API 조회에 필요한 값만 포함합니다.
 class는 메서드와 observable 상태를 가질 수 있지만, 서버에는 `toJSON()` 결과만 저장합니다.
 snapshot에는 함수, ReactNode, row 객체, `Set`, transient click event를 포함하지 않습니다.
 `restore(snapshot)`은 서버 snapshot을 class state로 복원할 때만 사용합니다.
+
+`changes`는 저장 전 행 변경만 담당합니다. `created`, `updated`, `deleted`는 모두 배열이며 `toJSON()`에 `Set`이나 이벤트 객체를 포함하지 않습니다.
+
+```ts
+state.changes.toJSON();
+// {
+//   created: TData[],
+//   updated: Array<{ id: DataGridRowKey; changes: Partial<TData> }>,
+//   deleted: DataGridRowKey[],
+// }
+```
+
+- 새 행 수정은 `created` 행 자체를 갱신하고 `updated`에 중복 기록하지 않습니다.
+- 기존 행을 원래 값으로 되돌리면 해당 수정 필드를 제거합니다.
+- 새 행 삭제는 `created`에서 제거하고, 기존 행 삭제만 `deleted`에 id를 남깁니다.
+- 이동 결과의 `parentId`, `sortOrder` 반영과 중첩 rows 재구성은 `onRowMove`를 받은 상위 상태가 담당합니다.
 
 ```ts
 export class DataGridState {

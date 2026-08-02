@@ -8,6 +8,7 @@ export {
 	getDataGridRowKey,
 	type Key,
 } from "./DataGrid";
+export { DataGridChangesState } from "./DataGridChangesState";
 export type { DataGridStateOptions } from "./DataGridState";
 export {
 	DataGridColumnsState,

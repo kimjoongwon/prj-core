@@ -8,7 +8,9 @@ import {
 } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
+import { InputCell } from "./cell/InputCell";
 import { DataGrid, getDataGridRowKey, type Key } from "./DataGrid";
+import { DataGridChangesState } from "./DataGridChangesState";
 import { DataGridColumnsState } from "./DataGridState";
 
 vi.mock("../feedback/Skeleton/Skeleton", () => ({
@@ -156,6 +158,7 @@ function createDataGridState(
 			selectedKeys,
 			setSelectedKeys,
 		},
+		changes: new DataGridChangesState(),
 	} satisfies DataGridState;
 }
 
@@ -693,5 +696,190 @@ describe("DataGrid", () => {
 		fireEvent.click(screen.getByRole("button", { name: "Next" }));
 
 		expect(state.query.setValues).toHaveBeenCalledWith({ skip: 10 });
+	});
+
+	it("Given 실제 자식 행이 있을 때 When 부모를 펼치면 Then getSubRows 계층을 표시한다", () => {
+		interface CategoryRow {
+			id: string;
+			name: string;
+			children: CategoryRow[];
+		}
+
+		const categoryRows: CategoryRow[] = [
+			{
+				id: "clothing",
+				name: "의류",
+				children: [
+					{
+						id: "tops",
+						name: "상의",
+						children: [],
+					},
+				],
+			},
+		];
+
+		render(
+			<DataGrid
+				config={{
+					entity: "Category",
+					getSubRows: (row) => row.children,
+					columns: [
+						{
+							field: "name",
+							label: "이름",
+							rowExpander: true,
+						},
+					],
+				}}
+				state={createDataGridState()}
+				rows={categoryRows}
+				totalCount={2}
+			/>,
+		);
+
+		expect(screen.getByText("의류")).toBeInTheDocument();
+		expect(screen.queryByText("상의")).not.toBeInTheDocument();
+
+		fireEvent.click(
+			screen.getByRole("button", { name: "의류 하위 행 펼치기" }),
+		);
+
+		expect(screen.getByText("상의")).toBeInTheDocument();
+	});
+
+	it("Given 이동 가능한 행 When 키보드로 순서를 바꾸면 Then 새 형제 순서를 전달한다", async () => {
+		interface CategoryRow {
+			id: string;
+			name: string;
+			children: CategoryRow[];
+		}
+
+		const categoryRows: CategoryRow[] = [
+			{ id: "clothing", name: "의류", children: [] },
+			{ id: "beauty", name: "뷰티", children: [] },
+		];
+		const handleRowMove = vi.fn();
+
+		render(
+			<DataGrid
+				config={{
+					entity: "Category",
+					getSubRows: (row) => row.children,
+					onRowMove: handleRowMove,
+					columns: [
+						{
+							field: "name",
+							label: "이름",
+							rowExpander: true,
+						},
+					],
+				}}
+				state={createDataGridState()}
+				rows={categoryRows}
+				totalCount={categoryRows.length}
+			/>,
+		);
+
+		const moveButton = screen.getByRole("button", { name: "뷰티 행 이동" });
+		act(() => {
+			moveButton.focus();
+			fireEvent.keyDown(moveButton, { key: " ", code: "Space" });
+		});
+		await act(async () => {
+			await new Promise((resolve) => setTimeout(resolve, 0));
+		});
+		act(() => {
+			fireEvent.keyDown(document, { key: "ArrowUp", code: "ArrowUp" });
+			fireEvent.keyDown(document, { key: " ", code: "Space" });
+		});
+
+		await waitFor(() => {
+			expect(handleRowMove).toHaveBeenCalledWith({
+				row: categoryRows[1],
+				parent: null,
+				index: 0,
+				siblings: [categoryRows[1], categoryRows[0]],
+			});
+		});
+	});
+
+	it("Given editable 이름 셀 When 값을 입력하면 Then 즉시 변경을 기록하고 Escape로 취소한다", () => {
+		const state = createDataGridState();
+		const editableConfig: DataGridConfig<DataGridTestRow> = {
+			...baseConfig,
+			columns: [
+				{
+					field: "name",
+					label: "이름",
+					editable: {
+						render: ({ value, onValueChange, onFinish, onCancel }) => (
+							<InputCell
+								aria-label="이름 입력"
+								value={String(value ?? "")}
+								onValueChange={onValueChange}
+								onFinish={onFinish}
+								onCancel={onCancel}
+							/>
+						),
+					},
+				},
+				...baseConfig.columns.slice(1),
+			],
+		};
+
+		render(
+			<DataGrid
+				config={editableConfig}
+				state={state}
+				rows={rows}
+				totalCount={rows.length}
+			/>,
+		);
+
+		fireEvent.click(screen.getAllByRole("cell", { name: "이름 편집" })[0]);
+		const input = screen.getByRole("textbox", { name: "이름 입력" });
+		fireEvent.change(input, { target: { value: "Augusta Ada" } });
+
+		expect(state.changes.toJSON<DataGridTestRow>().updated).toEqual([
+			{
+				id: "user-1",
+				changes: { name: "Augusta Ada" },
+			},
+		]);
+
+		fireEvent.keyDown(input, { key: "Escape" });
+
+		expect(state.changes.toJSON<DataGridTestRow>().updated).toEqual([]);
+		expect(screen.getByText("Ada Lovelace")).toBeInTheDocument();
+	});
+
+	it("Given 변경 상태 When 행을 추가하거나 삭제하면 Then 표에 즉시 반영한다", () => {
+		const state = createDataGridState();
+
+		render(
+			<DataGrid
+				config={baseConfig}
+				state={state}
+				rows={rows}
+				totalCount={rows.length}
+			/>,
+		);
+
+		act(() => {
+			state.changes.addRow({
+				id: "user-temporary",
+				name: "New User",
+				email: "new@example.com",
+				age: 20,
+				status: "활성",
+			});
+		});
+		expect(screen.getByText("New User")).toBeInTheDocument();
+
+		act(() => {
+			state.changes.deleteRow("user-1");
+		});
+		expect(screen.queryByText("Ada Lovelace")).not.toBeInTheDocument();
 	});
 });

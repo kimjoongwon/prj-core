@@ -271,16 +271,23 @@ export type {
 // 테이블 관련 타입
 // ============================================
 export type {
+	DataGridChangesSnapshot,
+	DataGridChangesState,
 	DataGridColumnConfig,
 	DataGridColumnsState,
 	DataGridColumnsStateSnapshot,
 	DataGridConfig,
+	DataGridEditCellContext,
+	DataGridEditableConfig,
 	DataGridQueryState,
 	DataGridQueryStates,
+	DataGridRowData,
 	DataGridRowKey,
+	DataGridRowMoveEvent,
 	DataGridSelectionState,
 	DataGridSetQueryStates,
 	DataGridState,
+	DataGridUpdatedRow,
 	DropdownItem,
 	InputConfig,
 	InputHandlers,

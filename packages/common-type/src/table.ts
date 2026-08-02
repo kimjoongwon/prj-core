@@ -8,6 +8,49 @@ import type { ComponentType, ReactNode } from "react";
 export type DataGridQueryStates = Record<string, unknown>;
 export type DataGridRowKey = string | number;
 
+/** DataGrid가 렌더링하고 변경을 추적할 수 있는 최소 행 계약입니다. */
+export interface DataGridRowData {
+	id: DataGridRowKey;
+}
+
+/** 기존 행 하나에 누적된 필드 변경입니다. */
+export interface DataGridUpdatedRow<TData extends DataGridRowData> {
+	id: DataGridRowKey;
+	changes: Partial<TData>;
+}
+
+/** 저장 요청으로 변환할 생성·수정·삭제 배열입니다. */
+export interface DataGridChangesSnapshot<TData extends DataGridRowData> {
+	created: TData[];
+	updated: DataGridUpdatedRow<TData>[];
+	deleted: DataGridRowKey[];
+}
+
+/** DataGrid가 원본 행을 바꾸지 않고 생성·수정·삭제 내역을 보관하는 계약입니다. */
+export interface DataGridChangesState {
+	created: DataGridRowData[];
+	updated: Array<{
+		id: DataGridRowKey;
+		changes: Record<string, unknown>;
+	}>;
+	deleted: DataGridRowKey[];
+
+	addRow: <TData extends DataGridRowData>(row: TData) => void;
+	setValue: <TData extends DataGridRowData, TField extends keyof TData>(
+		row: TData,
+		field: TField,
+		value: TData[TField],
+	) => void;
+	clearValue: (rowId: DataGridRowKey, field: string) => void;
+	deleteRow: (rowId: DataGridRowKey) => void;
+	restoreRow: (rowId: DataGridRowKey) => void;
+	clear: () => void;
+	isDeleted: (rowId: DataGridRowKey) => boolean;
+	getRow: <TData extends DataGridRowData>(row: TData) => TData;
+	getCreatedRows: <TData extends DataGridRowData>() => TData[];
+	toJSON: <TData extends DataGridRowData>() => DataGridChangesSnapshot<TData>;
+}
+
 export type DataGridSetQueryStates = (
 	values: Record<string, unknown | null>,
 	options?: { history?: "push" | "replace" },
@@ -83,6 +126,32 @@ export interface DataGridState {
 
 	/** row selection 같은 grid interaction 상태 */
 	selection?: DataGridSelectionState;
+
+	/** 저장 전 행 생성·수정·삭제 내역 */
+	changes?: DataGridChangesState;
+}
+
+/** 편집 renderer가 현재 행과 값을 읽고 완료 또는 취소하는 데 필요한 값입니다. */
+export interface DataGridEditCellContext<TData, TValue = unknown> {
+	row: TData;
+	value: TValue;
+	onValueChange: (value: TValue) => void;
+	onFinish: () => void;
+	onCancel: () => void;
+}
+
+/** 일반 cell과 분리된 클릭 편집 renderer 계약입니다. */
+export interface DataGridEditableConfig<TData, TValue = unknown> {
+	render: (context: DataGridEditCellContext<TData, TValue>) => ReactNode;
+	isEnabled?: (row: TData) => boolean;
+}
+
+/** 행 이동 후 상위 데이터가 적용할 부모와 형제 순서입니다. */
+export interface DataGridRowMoveEvent<TData> {
+	row: TData;
+	parent: TData | null;
+	index: number;
+	siblings: TData[];
 }
 
 /**
@@ -113,6 +182,12 @@ export interface DataGridConfig<T> {
 
 	/** 행 클릭 핸들러 */
 	onRowClick?: (row: T) => void;
+
+	/** 실제 부모·자식 행을 TanStack Table sub row로 연결 */
+	getSubRows?: (row: T, index: number) => T[] | undefined;
+
+	/** 드래그가 끝난 뒤 새 부모와 형제 순서를 전달 */
+	onRowMove?: (event: DataGridRowMoveEvent<T>) => void;
 
 	/** 빈 상태 메시지 */
 	emptyMessage?: string;
@@ -154,6 +229,12 @@ export interface DataGridColumnConfig<TData, TValue = unknown>
 
 	/** header 아래 floating filter row에 `headerInput`을 노출할지 여부 */
 	floatingFilter?: boolean;
+
+	/** 계층 행의 펼침 버튼과 들여쓰기를 표시할 컬럼 */
+	rowExpander?: boolean;
+
+	/** 셀 클릭 시 사용할 인라인 편집 렌더러 */
+	editable?: DataGridEditableConfig<TData, TValue>;
 }
 
 // ============================================
@@ -312,7 +393,6 @@ export interface ResponsiveConfig<T> {
 // ============================================
 
 declare module "@tanstack/react-table" {
-	// biome-ignore lint/correctness/noUnusedVariables: TanStack module augmentation must keep upstream generic names.
 	interface ColumnMeta<TData extends RowData, TValue> {
 		/** 필수 컬럼 여부 */
 		isRequired?: boolean;
@@ -330,5 +410,9 @@ declare module "@tanstack/react-table" {
 		headerInput?: InputConfig;
 		/** header 아래 floating filter row 표시 여부 */
 		floatingFilter?: boolean;
+		/** 계층 행 펼침과 들여쓰기 표시 여부 */
+		rowExpander?: boolean;
+		/** 셀 인라인 편집 계약 */
+		editable?: DataGridEditableConfig<TData, TValue>;
 	}
 }

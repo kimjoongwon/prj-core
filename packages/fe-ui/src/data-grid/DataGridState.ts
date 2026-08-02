@@ -1,4 +1,5 @@
 import type {
+	DataGridChangesState as DataGridChangesStateContract,
 	DataGridColumnsState as DataGridColumnsStateContract,
 	DataGridColumnsStateSnapshot,
 	DataGridQueryState as DataGridQueryStateContract,
@@ -8,6 +9,7 @@ import type {
 	DataGridState as DataGridStateContract,
 } from "@cocrepo/type";
 import { makeAutoObservable } from "mobx";
+import { DataGridChangesState } from "./DataGridChangesState";
 
 const objectPrototype = Object.prototype;
 
@@ -16,6 +18,7 @@ export interface DataGridStateOptions {
 	setQueryStates: DataGridSetQueryStates;
 	columns?: Partial<DataGridColumnsStateSnapshot>;
 	selection?: DataGridSelectionStateContract;
+	changes?: DataGridChangesStateContract;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -185,16 +188,19 @@ export class DataGridState implements DataGridStateContract {
 	columns: DataGridColumnsState;
 	query: DataGridQueryState;
 	selection?: DataGridSelectionStateContract;
+	changes: DataGridChangesStateContract;
 
 	constructor({
 		columns,
 		queryStates,
 		setQueryStates,
 		selection,
+		changes,
 	}: DataGridStateOptions) {
 		this.columns = new DataGridColumnsState(columns);
 		this.query = new DataGridQueryState(queryStates, setQueryStates);
 		this.selection = selection;
+		this.changes = changes ?? new DataGridChangesState();
 
 		makeAutoObservable(this, {}, { autoBind: true });
 	}

@@ -119,6 +119,8 @@ function toColumnDef<TData, TValue = unknown>(
 		isSortable,
 		rowGroup,
 		enableRowGroup,
+		rowExpander,
+		editable,
 		...columnDefProps
 	} = config;
 	const accessorKey =
@@ -145,6 +147,8 @@ function toColumnDef<TData, TValue = unknown>(
 			isSortable: isSortable ?? columnDefProps.enableSorting === true,
 			rowGroup,
 			enableRowGroup,
+			rowExpander,
+			editable,
 			label,
 			...("meta" in columnDefProps ? columnDefProps.meta : {}),
 		},

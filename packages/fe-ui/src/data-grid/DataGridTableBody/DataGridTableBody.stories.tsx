@@ -1,5 +1,6 @@
 import type { DataGridConfig } from "@cocrepo/type";
 import type { Meta, StoryObj } from "@storybook/react";
+import { DataGridState } from "../DataGridState";
 import { DataGridTableBody } from "./index";
 
 interface StoryRow {
@@ -11,6 +12,13 @@ const config: DataGridConfig<StoryRow> = {
 	columns: [],
 	emptyMessage: "행이 없습니다.",
 };
+const state = new DataGridState({
+	queryStates: {
+		skip: 0,
+		take: 10,
+	},
+	setQueryStates: async () => new URLSearchParams(),
+});
 const t = (key: string) => key;
 
 const meta = {
@@ -20,6 +28,7 @@ const meta = {
 	tags: ["autodocs"],
 	args: {
 		config: config as never,
+		state,
 		rows: [],
 		selectedKeySet: new Set<string>(),
 		selectionMode: "multiple",

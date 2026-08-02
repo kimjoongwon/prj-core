@@ -1,11 +1,18 @@
 "use client";
 
-import type { DataGridConfig } from "@cocrepo/type";
+import type { DataGridConfig, DataGridState } from "@cocrepo/type";
+import {
+	SortableContext,
+	useSortable,
+	verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { flexRender, type Row } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
-import type { KeyboardEvent } from "react";
+import { type CSSProperties, type KeyboardEvent, useState } from "react";
 import { type Translate, translateNode } from "../../i18n";
 import { DataGridEmptyRow } from "../DataGridEmptyRow";
+import { DataGridHierarchyCell } from "../DataGridHierarchyCell/DataGridHierarchyCell";
 import { DataGridSelectionCell } from "../DataGridSelectionCell";
 import { joinClassNames } from "../internal/classNames";
 import { getColumnAlignClassName } from "../internal/columnConfig";
@@ -23,13 +30,23 @@ const CLICKABLE_ROW_CLASS_NAME =
 const DEFAULT_ROW_HOVER_CLASS_NAME =
 	"hover:bg-[#f8fafc] dark:hover:bg-white/[0.03]";
 
+interface DataGridEditingCell {
+	rowId: string;
+	columnId: string;
+	initialValue: unknown;
+}
+
 export interface DataGridTableBodyProps<T extends { id: Key }> {
 	config: DataGridConfig<T>;
+	state: DataGridState;
 	rows: DataGridBodyRow<T>[];
 	selectedKeySet: Set<string>;
 	selectionMode: DataGridSelectionMode;
 	tableColumnCount: number;
 	t: Translate;
+	isRowMoveEnabled?: boolean;
+	activeRowId?: string | null;
+	projectedDepth?: number | null;
 	onRowSelectionChange: (rowKey: string, isSelected: boolean) => void;
 }
 
@@ -127,81 +144,251 @@ function DataGridGroupRow<T extends { id: Key }>({
 	);
 }
 
+interface DataGridDataRowProps<T extends { id: Key }> {
+	config: DataGridConfig<T>;
+	state: DataGridState;
+	row: Row<T>;
+	isSelected: boolean;
+	selectionMode: DataGridSelectionMode;
+	isRowMoveEnabled: boolean;
+	activeRowId?: string | null;
+	projectedDepth?: number | null;
+	editingCell: DataGridEditingCell | null;
+	onEditingCellChange: (editingCell: DataGridEditingCell | null) => void;
+	onRowSelectionChange: (rowKey: string, isSelected: boolean) => void;
+}
+
+function DataGridDataRow<T extends { id: Key }>({
+	config,
+	state,
+	row,
+	isSelected,
+	selectionMode,
+	isRowMoveEnabled,
+	activeRowId,
+	projectedDepth,
+	editingCell,
+	onEditingCellChange,
+	onRowSelectionChange,
+}: DataGridDataRowProps<T>) {
+	const {
+		attributes,
+		listeners,
+		setNodeRef,
+		transform,
+		transition,
+		isDragging,
+	} = useSortable({
+		id: row.id,
+		disabled: !isRowMoveEnabled,
+	});
+	const rowStyle: CSSProperties = {
+		transform: CSS.Transform.toString(transform),
+		transition,
+		opacity: isDragging ? 0.55 : 1,
+		position: isDragging ? "relative" : undefined,
+		zIndex: isDragging ? 1 : undefined,
+	};
+
+	return (
+		<tr
+			ref={setNodeRef}
+			aria-selected={selectionMode ? isSelected : undefined}
+			className={joinClassNames(
+				"h-10 transition-colors",
+				isSelected && "bg-[#eef6ff] dark:bg-sky-500/15",
+				config.onRowClick
+					? CLICKABLE_ROW_CLASS_NAME
+					: DEFAULT_ROW_HOVER_CLASS_NAME,
+			)}
+			style={rowStyle}
+			{...getRowInteractionProps(config, row)}
+		>
+			{selectionMode ? (
+				<DataGridSelectionCell
+					entity={config.entity}
+					isSelected={isSelected}
+					rowKey={row.id}
+					selectionMode={selectionMode}
+					onSelectionChange={onRowSelectionChange}
+				/>
+			) : null}
+			{row.getVisibleCells().map((cell) => {
+				const alignClassName = getColumnAlignClassName(cell.column.columnDef);
+				const editable = cell.column.columnDef.meta?.editable;
+				const isEditable = Boolean(
+					state.changes &&
+						editable &&
+						(editable.isEnabled?.(row.original) ?? true),
+				);
+				const isEditing =
+					isEditable &&
+					editingCell?.rowId === row.id &&
+					editingCell.columnId === cell.column.id;
+				const startEditing = () => {
+					if (!isEditable) {
+						return;
+					}
+
+					onEditingCellChange({
+						rowId: row.id,
+						columnId: cell.column.id,
+						initialValue: cell.getValue(),
+					});
+				};
+				const field = cell.column.id as keyof T;
+				const content =
+					isEditing && editable
+						? editable.render({
+								row: row.original,
+								value: cell.getValue(),
+								onValueChange: (value) => {
+									state.changes?.setValue(
+										row.original,
+										field,
+										value as T[keyof T],
+									);
+								},
+								onFinish: () => onEditingCellChange(null),
+								onCancel: () => {
+									state.changes?.setValue(
+										row.original,
+										field,
+										editingCell.initialValue as T[keyof T],
+									);
+									onEditingCellChange(null);
+								},
+							})
+						: flexRender(cell.column.columnDef.cell, cell.getContext());
+				const renderedContent = cell.column.columnDef.meta?.rowExpander ? (
+					<DataGridHierarchyCell
+						rowLabel={String(cell.getValue() ?? row.original.id)}
+						depth={
+							activeRowId === row.id && projectedDepth != null
+								? projectedDepth
+								: row.depth
+						}
+						canExpand={row.getCanExpand()}
+						isExpanded={row.getIsExpanded()}
+						onToggle={row.getToggleExpandedHandler()}
+						dragHandle={
+							isRowMoveEnabled ? { attributes, listeners } : undefined
+						}
+					>
+						{content}
+					</DataGridHierarchyCell>
+				) : (
+					content
+				);
+
+				return (
+					<td
+						key={cell.id}
+						aria-label={
+							isEditable
+								? `${String(cell.column.columnDef.meta?.label ?? cell.column.id)} 편집`
+								: undefined
+						}
+						className={joinClassNames(
+							DATA_CELL_CLASS_NAME,
+							alignClassName,
+							isEditable && !isEditing && "cursor-text",
+						)}
+						style={getColumnWidthStyle(cell.column.columnDef)}
+						tabIndex={isEditable && !isEditing ? 0 : undefined}
+						onClick={
+							isEditable && !isEditing
+								? (event) => {
+										event.stopPropagation();
+										startEditing();
+									}
+								: undefined
+						}
+						onKeyDown={
+							isEditable && !isEditing
+								? (event) => {
+										if (event.key === "Enter" || event.key === " ") {
+											event.preventDefault();
+											event.stopPropagation();
+											startEditing();
+										}
+									}
+								: undefined
+						}
+					>
+						{renderedContent}
+					</td>
+				);
+			})}
+		</tr>
+	);
+}
+
 export function DataGridTableBodyView<T extends { id: Key }>({
 	config,
+	state,
 	rows,
 	selectedKeySet,
 	selectionMode,
 	tableColumnCount,
 	t,
+	isRowMoveEnabled = false,
+	activeRowId,
+	projectedDepth,
 	onRowSelectionChange,
 }: DataGridTableBodyProps<T>) {
-	return (
-		<tbody>
-			{rows.length === 0 ? (
-				<DataGridEmptyRow
-					colSpan={tableColumnCount}
-					emptyMessage={config.emptyMessage}
-				/>
-			) : (
-				rows.map((row) => {
-					const isSelected = selectedKeySet.has(row.id);
+	const [editingCell, setEditingCell] = useState<DataGridEditingCell | null>(
+		null,
+	);
+	const sortableRowIds = rows
+		.filter((row) => !row.getIsGrouped())
+		.map((row) => row.id);
 
-					if (row.getIsGrouped()) {
+	return (
+		<SortableContext
+			items={sortableRowIds}
+			strategy={verticalListSortingStrategy}
+		>
+			<tbody>
+				{rows.length === 0 ? (
+					<DataGridEmptyRow
+						colSpan={tableColumnCount}
+						emptyMessage={config.emptyMessage}
+					/>
+				) : (
+					rows.map((row) => {
+						const isSelected = selectedKeySet.has(row.id);
+
+						if (row.getIsGrouped()) {
+							return (
+								<DataGridGroupRow
+									key={row.id}
+									row={row}
+									tableColumnCount={tableColumnCount}
+									t={t}
+								/>
+							);
+						}
+
 						return (
-							<DataGridGroupRow
+							<DataGridDataRow
 								key={row.id}
+								config={config}
+								state={state}
 								row={row}
-								tableColumnCount={tableColumnCount}
-								t={t}
+								isSelected={isSelected}
+								selectionMode={selectionMode}
+								isRowMoveEnabled={isRowMoveEnabled}
+								activeRowId={activeRowId}
+								projectedDepth={projectedDepth}
+								editingCell={editingCell}
+								onEditingCellChange={setEditingCell}
+								onRowSelectionChange={onRowSelectionChange}
 							/>
 						);
-					}
-
-					return (
-						<tr
-							key={row.id}
-							aria-selected={selectionMode ? isSelected : undefined}
-							className={joinClassNames(
-								"h-10 transition-colors",
-								isSelected && "bg-[#eef6ff] dark:bg-sky-500/15",
-								config.onRowClick
-									? CLICKABLE_ROW_CLASS_NAME
-									: DEFAULT_ROW_HOVER_CLASS_NAME,
-							)}
-							{...getRowInteractionProps(config, row)}
-						>
-							{selectionMode ? (
-								<DataGridSelectionCell
-									entity={config.entity}
-									isSelected={isSelected}
-									rowKey={row.id}
-									selectionMode={selectionMode}
-									onSelectionChange={onRowSelectionChange}
-								/>
-							) : null}
-							{row.getVisibleCells().map((cell) => {
-								const alignClassName = getColumnAlignClassName(
-									cell.column.columnDef,
-								);
-
-								return (
-									<td
-										key={cell.id}
-										className={joinClassNames(
-											DATA_CELL_CLASS_NAME,
-											alignClassName,
-										)}
-										style={getColumnWidthStyle(cell.column.columnDef)}
-									>
-										{flexRender(cell.column.columnDef.cell, cell.getContext())}
-									</td>
-								);
-							})}
-						</tr>
-					);
-				})
-			)}
-		</tbody>
+					})
+				)}
+			</tbody>
+		</SortableContext>
 	);
 }

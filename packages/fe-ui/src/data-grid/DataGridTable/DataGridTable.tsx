@@ -21,6 +21,9 @@ export interface DataGridTableProps<T extends { id: Key }> {
 	sortValues: string[];
 	state: DataGridState;
 	t: Translate;
+	isRowMoveEnabled?: boolean;
+	activeRowId?: string | null;
+	projectedDepth?: number | null;
 	onRowSelectionChange: (rowKey: string, isSelected: boolean) => void;
 	onSortChange: (
 		columnId: string,
@@ -40,6 +43,9 @@ export function DataGridTableView<T extends { id: Key }>({
 	sortValues,
 	state,
 	t,
+	isRowMoveEnabled,
+	activeRowId,
+	projectedDepth,
 	onRowSelectionChange,
 	onSortChange,
 	onVisibleSelectionChange,
@@ -67,11 +73,15 @@ export function DataGridTableView<T extends { id: Key }>({
 						/>
 						<DataGridTableBody
 							config={config}
+							state={state}
 							rows={rows}
 							selectedKeySet={selectedKeySet}
 							selectionMode={selectionMode}
 							tableColumnCount={tableColumnCount}
 							t={t}
+							isRowMoveEnabled={isRowMoveEnabled}
+							activeRowId={activeRowId}
+							projectedDepth={projectedDepth}
 							onRowSelectionChange={onRowSelectionChange}
 						/>
 					</table>

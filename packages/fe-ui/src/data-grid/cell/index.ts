@@ -4,6 +4,7 @@ export * from "./ChipCell";
 export * from "./DateTimeCell/DateTimeCell";
 export * from "./DefaultCell/DefaultCell";
 export * from "./ExpiryCell/ExpiryCell";
+export * from "./InputCell";
 export * from "./LinkCell";
 export * from "./NameCell/NameCell";
 export * from "./PhoneCell/PhoneCell";
