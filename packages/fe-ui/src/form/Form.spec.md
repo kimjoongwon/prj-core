@@ -23,6 +23,7 @@ input wrapper는 이미 가지고 있는 `state`와 `path`를 기준으로 해�
 | input wrapper 검증 | `Name/index.tsx`에서 MobX binding과 validation binding을 수행하고 `Name/Name.tsx`는 pure 컴포넌트로 유지합니다. |
 | submit 전 전체 검증 | submit capture 단계에서 schema 전체 검증을 실행하고 실패 시 native submit 전파를 막습니다. |
 | timing별 field 검증 | onChange, onBlur, onFocus 단계에서 path 단위 검증을 실행할 수 있습니다. |
+| 입력 변경 오류 정리 | 값을 변경하면 해당 path의 기존 오류를 공통 Form에서 제거합니다. |
 | readOnly 일괄 잠금 | detail mode는 route가 `readOnly`로 결정하고, Form은 하위 field를 일괄 잠급니다. |
 
 ## FE/BE 공통 Schema 계약
@@ -234,12 +235,13 @@ export function validateSchemaToFieldErrorsSync<T extends object>(
 1. `"use client"`를 선언합니다.
 2. `@heroui/react`의 `Form`을 감싼 pure wrapper가 아니라 validation context provider를 포함한 공통 컨테이너를 만듭니다.
 3. `state.fieldErrors`가 없으면 개발 계약 위반으로 보고 검증을 수행하지 않습니다.
-4. `validateField(path, value, timing)`은 timing이 `validationTimings`에 포함된 경우에만 실행합니다.
-5. field 검증 성공 시 `fieldErrors[path]`를 제거합니다.
-6. field 검증 실패 시 첫 번째 메시지를 `fieldErrors[path]`에 저장합니다.
-7. `validateAll()`은 schema 전체 검증을 실행하고 모든 field error를 갱신합니다.
-8. `onSubmitCapture`에서 `validateAll()`이 실패하면 `event.preventDefault()`와 `event.stopPropagation()`을 호출합니다.
-9. `readOnly=true`이면 validation은 표시만 유지하고 field event validation은 실행하지 않습니다.
+4. `onChange`가 들어오면 timing 설정과 관계없이 해당 `fieldErrors[path]`를 먼저 제거합니다.
+5. `validateField(path, value, timing)`은 timing이 `validationTimings`에 포함된 경우 schema 검증을 실행합니다.
+6. field 검증 성공 시 `fieldErrors[path]`를 제거합니다.
+7. field 검증 실패 시 첫 번째 메시지를 `fieldErrors[path]`에 저장합니다.
+8. `validateAll()`은 schema 전체 검증을 실행하고 모든 field error를 갱신합니다.
+9. `onSubmitCapture`에서 `validateAll()`이 실패하면 `event.preventDefault()`와 `event.stopPropagation()`을 호출합니다.
+10. `readOnly=true`이면 validation은 표시만 유지하고 field event validation은 실행하지 않습니다.
 
 상위에서 넘긴 `onSubmitCapture`가 있으면 Form 내부 검증 성공 후 호출합니다.
 검증 실패 시 상위 submit handler는 호출하지 않습니다.

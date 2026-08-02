@@ -94,8 +94,38 @@ function getPathValue(source: unknown, path: string): unknown {
 	}, source);
 }
 
-function getConstraintMessages(constraints?: Record<string, string>): string[] {
-	const messages = constraints ? Object.values(constraints) : [];
+/**
+ * 검증 context 값을 `{{variable}}` 형식의 메시지 변수에 치환합니다.
+ *
+ * @param template 치환할 검증 메시지 템플릿
+ * @param values constraint에 등록된 메시지 변수
+ * @returns 등록된 변수가 치환된 검증 메시지
+ */
+function interpolateValidationMessage(
+	template: string,
+	values?: object,
+): string {
+	if (!values) {
+		return template;
+	}
+
+	const messageValues = values as Record<string, unknown>;
+
+	return template.replace(/\{\{(\w+)\}\}/g, (placeholder, key: string) => {
+		const value = messageValues[key];
+		return value === undefined ? placeholder : String(value);
+	});
+}
+
+function getConstraintMessages(
+	constraints?: Record<string, string>,
+	contexts?: ValidationError["contexts"],
+): string[] {
+	const messages = constraints
+		? Object.entries(constraints).map(([constraint, message]) =>
+				interpolateValidationMessage(message, contexts?.[constraint]),
+			)
+		: [];
 
 	return messages.sort((left, right) => {
 		if (left === VALIDATION_MESSAGES.REQUIRED) {
@@ -119,7 +149,7 @@ function toFieldErrors(
 		const path = parentPath
 			? `${parentPath}.${error.property}`
 			: error.property;
-		const messages = getConstraintMessages(error.constraints);
+		const messages = getConstraintMessages(error.constraints, error.contexts);
 		const children = error.children?.length
 			? toFieldErrors(error.children, path)
 			: [];
@@ -251,7 +281,10 @@ export async function validateField<T extends object>(
 	if (fieldError) {
 		return {
 			field: String(field),
-			messages: getConstraintMessages(fieldError.constraints),
+			messages: getConstraintMessages(
+				fieldError.constraints,
+				fieldError.contexts,
+			),
 		};
 	}
 

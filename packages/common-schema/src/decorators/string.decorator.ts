@@ -71,6 +71,7 @@ export function String(
 		MinLength(minLength, {
 			each,
 			message: VALIDATION_MESSAGES.MIN_LENGTH,
+			context: { min: minLength },
 		}),
 	);
 

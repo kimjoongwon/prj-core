@@ -10,7 +10,8 @@ const meta = {
 		layout: "centered",
 		docs: {
 			description: {
-				component: "UserForm component with name, email, and phone fields.",
+				component:
+					"UserForm component with name, email, phone, and password fields.",
 			},
 		},
 	},
@@ -24,13 +25,17 @@ class UserFormStoryState implements UserFormState {
 	name: string;
 	email: string;
 	phone: string;
-	errors: UserFormState["errors"];
+	password: string;
+	fieldErrors: UserFormState["fieldErrors"];
+	errorMessage: UserFormState["errorMessage"];
 
 	constructor(state: UserFormState) {
 		this.name = state.name;
 		this.email = state.email;
 		this.phone = state.phone;
-		this.errors = { ...state.errors };
+		this.password = state.password;
+		this.fieldErrors = { ...state.fieldErrors };
+		this.errorMessage = state.errorMessage;
 		makeAutoObservable(this, {}, { autoBind: true });
 	}
 }
@@ -51,7 +56,9 @@ export const Editable: Story = {
 			name: "김온유",
 			email: "onyu@example.com",
 			phone: "010-1234-5678",
-			errors: {},
+			password: "password123",
+			fieldErrors: {},
+			errorMessage: null,
 		},
 	},
 	render: renderUserForm,
@@ -70,7 +77,9 @@ export const ReadOnly: Story = {
 			name: "김온유",
 			email: "readonly@example.com",
 			phone: "010-9999-8888",
-			errors: {},
+			password: "readonly1234",
+			fieldErrors: {},
+			errorMessage: null,
 		},
 		readOnly: true,
 	},

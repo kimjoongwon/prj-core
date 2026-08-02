@@ -22,6 +22,7 @@
   "scripts": {
     "build": "tsc --build && tsc -p tsconfig.esm.json && node scripts/write-esm-package-json.mjs",
     "start:dev": "tsc --build --watch",
+    "test": "vitest run --passWithNoTests",
     "type-check": "tsc --noEmit",
     "type-check:prod": "tsc --noEmit",
     "format": "biome check --write .",
@@ -38,7 +39,8 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "keywords": [
     "validation",

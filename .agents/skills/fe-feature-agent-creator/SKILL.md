@@ -160,37 +160,6 @@ fe-route-agent가 page 파일 안에 lower-layer JSX를 직접 넣어야만 화�
 - 브라우저 전용 상태는 상위 provider/effect에서 hydrate한 뒤 observer로 반영합니다.
 - React Aria/HeroUI `id` mismatch가 보이면 해당 Feature 자체보다 앞선 형제 슬롯의 서버/클라이언트 조건 분기를 먼저 확인합니다.
 
-### AiForm Feature 계약 (Critical)
-
-Create/Update 페이지에서 재사용할 표준 `AiForm` Feature를 우선 구현 대상으로 취급합니다.
-
-- 위치: `packages/fe-ui/src/feature/AiForm/`
-- 역할:
-  - 폼 상단에서 AI 채움 UX 제공
-  - 스키마 선택(`aiSchemas`)
-  - 필드 체크박스 선택(`fieldMeta[path].ai.fillable`)
-  - `채우기` 버튼으로 AI patch 요청
-- 입력 데이터:
-  - `formState`, `fieldMeta`, `aiSchemas`, `uiPaths`, `options`
-- 동작 규칙:
-  - `fillable=false`, `hidden/readOnly/disabled` 경로는 선택 불가
-  - 선택된 path만 AI 요청으로 전달
-  - 응답 patch는 허용 path만 적용
-  - 적용 후 검증(schema) 재실행
-
-```ts
-interface AiFormProps<TForm> {
-  formState: TForm;
-  fieldMeta: Record<string, { ai: { fillable: boolean; defaultChecked?: boolean; reason?: string } }>;
-  aiSchemas: Array<{ key: string; label: string; paths: string[] }>;
-  ui: { readOnlyPaths: string[]; hiddenPaths: string[]; disabledPaths: string[] };
-  onFill: (input: { schemaKey: string; selectedPaths: string[]; currentObject: TForm; userPrompt?: string }) => Promise<{ patches: Array<{ path: string; value: unknown }> }>;
-  applyPatch: (patches: Array<{ path: string; value: unknown }>) => void;
-}
-```
-
----
-
 ### 4. 프로세스
 
 ### 4.1 필요한 Widget/UI 확인

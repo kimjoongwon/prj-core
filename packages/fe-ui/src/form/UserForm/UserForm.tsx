@@ -1,22 +1,23 @@
 "use client";
 
+import { UserSchema } from "@cocrepo/schema";
+import type { FormSchemaStateContract } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { TextField } from "../../input/TextField";
-
-export type UserFormField = "name" | "email" | "phone";
+import { Form } from "../Form";
 
 /**
- * 회원 기본 정보 form이 직접 바인딩하는 상태 계약입니다.
+ * UserForm이 바인딩하는 User 입력 상태입니다.
  */
-export interface UserFormState {
+export interface UserFormState extends FormSchemaStateContract<UserSchema> {
 	name: string;
 	email: string;
 	phone: string;
-	errors: Partial<Record<UserFormField, string>>;
+	password: string;
 }
 
 /**
- * 회원 상세/수정 화면이 재사용하는 순수 UI form props입니다.
+ * UserForm에 외부 상태와 읽기 전용 여부를 전달합니다.
  */
 export interface UserFormProps {
 	state: UserFormState;
@@ -24,30 +25,24 @@ export interface UserFormProps {
 }
 
 /**
- * User aggregate의 기본 정보 필드 조합입니다.
- * route가 편집 가능 여부를 정하고, form은 전달받은 state/path만 바인딩합니다.
+ * User 모델의 이름, 이메일, 전화번호, 비밀번호 입력 필드를 제공합니다.
  */
 export const UserForm = observer(
 	({ state, readOnly = false }: UserFormProps) => {
-		const clearFieldError = (field: UserFormField) => {
-			if (state.errors[field]) {
-				delete state.errors[field];
-			}
-		};
-
 		return (
-			<div className="space-y-6">
+			<Form
+				aria-label="회원 정보"
+				className="flex flex-col gap-6"
+				state={state}
+				schema={UserSchema}
+				readOnly={readOnly}
+			>
 				<TextField
 					label="이름"
 					placeholder="홍길동"
 					state={state}
 					path="name"
-					isReadOnly={readOnly}
-					isDisabled={readOnly}
-					isInvalid={Boolean(state.errors.name)}
-					errorMessage={state.errors.name}
-					isRequired
-					onValueChange={() => clearFieldError("name")}
+					autoComplete="name"
 				/>
 				<TextField
 					label="이메일"
@@ -55,26 +50,27 @@ export const UserForm = observer(
 					state={state}
 					path="email"
 					type="email"
-					isReadOnly={readOnly}
-					isDisabled={readOnly}
-					isInvalid={Boolean(state.errors.email)}
-					errorMessage={state.errors.email}
-					isRequired
-					onValueChange={() => clearFieldError("email")}
+					autoComplete="email"
 				/>
 				<TextField
-					label="연락처"
+					label="전화번호"
 					placeholder="010-1234-5678"
 					state={state}
 					path="phone"
 					type="tel"
-					isReadOnly={readOnly}
-					isDisabled={readOnly}
-					isInvalid={Boolean(state.errors.phone)}
-					errorMessage={state.errors.phone}
-					onValueChange={() => clearFieldError("phone")}
+					autoComplete="tel"
 				/>
-			</div>
+				{readOnly ? null : (
+					<TextField
+						label="비밀번호"
+						placeholder="비밀번호를 입력하세요"
+						state={state}
+						path="password"
+						type="password"
+						autoComplete="new-password"
+					/>
+				)}
+			</Form>
 		);
 	},
 );

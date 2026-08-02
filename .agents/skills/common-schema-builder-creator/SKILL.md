@@ -1,566 +1,142 @@
 ---
 name: "common-schema-builder-creator"
-description: "이 skill은 `common-schema-builder` 역할로 일할 때 사용합니다. 프론트엔드와 백엔드가 함께 쓰는 검증 스키마를 만드는 방법을 쉽게 안내합니다."
+description: "이 skill은 `common-schema-builder` 역할로 일할 때 사용합니다. Form이 사용할 공용 검증 schema를 만듭니다."
 ---
 
 # common-schema-builder-creator
 
-`common-schema-builder`로 작업할 때 이 skill을 읽습니다.
+공용 schema를 만들거나 검증할 때 이 규칙을 사용합니다.
 
-## 작업 흐름
+## Form 작업에서 받은 인계
 
-1. `.codex/agents/06-common-schema-builder.toml`에서 사용자 요청, 승인된 스펙, 소유 범위를 확인합니다.
-2. 이 문서의 상세 작업 규칙을 확인합니다.
-3. 배정된 대상에 맞는 섹션만 적용합니다. 프론트엔드 작업은 파일 경로로 Web/React Native 대상을 먼저 구분합니다.
-4. 맡은 범위 안에서만 작업합니다. 다른 하위 에이전트의 파일이나 순서가 필요하면 멈추고 인계가 필요하다고 보고합니다.
-5. 스펙이나 세부 규칙이 요구한 검증을 가능한 만큼 실행하고, 결과와 남은 위험을 짧게 정리합니다.
+`fe-form-agent`가 schema 생성을 요청하면 아래 정보를 받습니다.
 
-## 상세 작업 규칙
+- Form 이름
+- Prisma 모델 이름과 파일 경로
+- 만들 schema 이름
+- Form이 사용하는 필드
+- 검증 규칙의 근거
+- handoff key
 
-## 재사용 우선 점검 (필수)
+필수 정보가 빠졌다면 추측해서 만들지 않고 누락된 내용을 보고합니다.
 
-- 작업을 시작하기 전에 반드시 기존 코드, 컴포넌트, 유틸, 스펙, 테스트를 먼저 검색합니다.
-- 신규 생성 전에 기존 구현을 그대로 재사용하거나, 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
-- 재사용 후보가 있으면 우선 채택하고, 신규 생성이 필요한 경우에는 재사용 불가 사유와 최소 변경 범위를 명확히 기록합니다.
-- 동일 책임의 중복 구현을 금지합니다.
+예시:
 
+```markdown
+handoff key: UserSchema-for-UserForm
 
-# 공용 schema 빌더
+- Form: UserForm
+- Prisma 모델: User
+- Prisma 파일: packages/be-prisma/schema/user.prisma
+- 필요한 schema: UserSchema
+- Form 필드: name, email, phone, password
+```
 
-당신은 프론트엔드와 백엔드에서 공유하는 검증 스키마를 설계하고 생성하는 전문가입니다. `@cocrepo/schema` 패키지를 사용하여 일관된 검증 규칙을 제공합니다.
+## schema 만드는 순서
 
----
+### 1. 기존 schema를 찾습니다
 
-## 언제 사용하는가?
+```bash
+rg -n "class XXXXSchema\\b" packages/common-schema/src --glob '*.ts'
+```
 
-| 상황 | 사용 여부 | 설명 |
-|------|----------|------|
-| 새로운 도메인 스키마 필요 | ✅ 사용 | class-validator 기반 스키마 생성 |
-| 검증 규칙 재사용 | ✅ 사용 | 공통 데코레이터 조합 |
-| DTO 기반 클래스 생성 | ✅ 사용 | 백엔드 DTO의 베이스 클래스 |
-| Prisma 스키마 생성 | ❌ 미사용 | be-prisma-builder 사용 |
-| Entity 클래스 생성 | ❌ 미사용 | entity-builder 사용 |
+- 같은 schema가 있으면 새로 만들지 않고 필드와 검증 규칙을 확인합니다.
+- 필요한 필드가 빠졌다면 기존 schema를 보완합니다.
 
----
+### 2. 필드 소유권을 확인합니다
 
-## 입력/출력
+Prisma 파일의 `model XXXX { ... }`를 읽고 요청받은 필드가 그 모델의 직접 필드인지 확인합니다.
 
-| 구분 | 항목 | 설명 |
-|------|------|------|
-| **입력** | 스키마명 | 생성할 스키마 이름 |
-| | 도메인 설명 | 비즈니스 컨텍스트 |
-| | 필드 목록 | 필드명, 타입, 검증 규칙 |
-| **출력** | 스키마 클래스 파일 | `packages/common-schema/src/schemas/{domain}/{name}.schema.ts` |
-| | 스키마 기획서 파일 | 관련 route `page.spec.md` 또는 담당 스펙의 검증 계약 섹션 |
-| | 인덱스 파일 업데이트 | `packages/common-schema/src/schemas/{domain}/index.ts` |
+- 다른 모델의 필드는 넣지 않습니다.
+- `id`, `seq`, 생성일, 수정일과 내부 조인 필드는 넣지 않습니다.
+- 최종 Create/Update DTO의 다른 Form 필드를 섞지 않습니다.
+- 최종 DTO는 여러 Form schema를 합쳐 사용할 수 있지만, 한 schema가 DTO 전체를 소유하지 않습니다.
 
----
+### 3. 검증 규칙을 정합니다
 
-## 핵심 규칙
+먼저 같은 필드에 이미 사용 중인 공용 검증 규칙을 찾습니다. 규칙이 없다면 Prisma의 타입과 필수 여부, 필드 주석, 승인된 요구사항을 확인합니다.
 
-### 🚨 역할 경계 (Critical)
+길이 제한이나 형식처럼 Prisma만으로 알 수 없는 규칙은 임의로 만들지 않습니다. 근거가 없으면 필요한 규칙을 보고합니다.
 
-- `common-schema-builder`는 **검증 규칙(검증)만** 설계합니다.
-- 아래 항목은 **절대** 이 에이전트의 출력 범위가 아닙니다:
-  - `defaultObject`
-  - `options`
-  - `readOnlyPaths` / `hiddenPaths` / `disabledPaths`
-  - `fieldMeta` / `aiSchemas`
-- 위 항목은 Create/Update 화면의 런타임 폼 메타이며, `be-controller-builder`가 응답으로 제공합니다.
+| 값 | 데코레이터 |
+|---|---|
+| 일반 문자열 | `@String()` 또는 `@StringOptional()` |
+| 이메일 | `@Email()` 또는 `@EmailOptional()` |
+| 전화번호 | `@Phone()` 또는 `@PhoneOptional()` |
+| 비밀번호 | `@Password()` |
+| 숫자 | `@Number()` 또는 `@NumberOptional()` |
+| Boolean | `@Boolean()` 또는 `@BooleanOptional()` |
+| enum | `@Enum()` |
+| 날짜 | `@Date()` |
+| ULID | `@ULID()` 또는 `@ULIDOptional()` |
 
-### ✅ 권장
+공용 데코레이터는 `packages/common-schema/src/decorators`에서 확인하고 재사용합니다. `class-validator` 데코레이터를 schema에서 직접 조합하지 않습니다.
 
-```typescript
-// 1. 기존 데코레이터 재사용
-import { String, Email, Password } from "../../decorators";
+### 4. schema와 export를 만듭니다
 
-export class LoginSchema {
+모델 schema는 모델 이름의 도메인 폴더에 둡니다.
+
+```text
+packages/common-schema/src/schemas/<domain>/<name>.schema.ts
+```
+
+예:
+
+- `UserSchema` → `schemas/user/user.schema.ts`
+- `UserClassificationSchema` → `schemas/user-classification/user-classification.schema.ts`
+
+schema 파일과 같은 폴더의 `index.ts`, 상위 `schemas/index.ts`에서 공개 export 합니다.
+
+```ts
+import { Email, Password, Phone, String } from "../../decorators";
+
+/** User 모델의 공용 입력 검증 규칙입니다. */
+export class UserSchema {
+  @String({ minLength: 2, maxLength: 50 })
+  name: string;
+
   @Email()
   email: string;
 
-  @Password({ minLength: 8 })
+  @Phone()
+  phone: string;
+
+  @Password()
   password: string;
 }
-
-// 2. DTO에서 확장
-// packages/be-dto/src/auth/login.dto.ts
-import { LoginSchema } from "@cocrepo/schema";
-import { IsBoolean, IsOptional } from "class-validator";
-
-export class LoginDto extends LoginSchema {
-  @IsBoolean()
-  @IsOptional()
-  remember?: boolean;
-}
-
-// 3. 검증 메시지 상수 사용
-import { VALIDATION_MESSAGES } from "@cocrepo/schema";
 ```
 
-### ❌ 금지
+## 역할 범위
 
-```typescript
-// 직접 class-validator 데코레이터 사용 (공통 데코레이터 사용 권장)
-import { IsEmail, IsString } from "class-validator";
+`common-schema-builder`는 입력값 검증 규칙만 맡습니다. 아래 항목은 만들지 않습니다.
 
-export class LoginSchema {
-  @IsEmail()
-  email: string;  // ❌ @Email() 데코레이터 사용 권장
-}
-```
+- Form 컴포넌트와 state
+- API DTO와 API 호출
+- Prisma 모델
+- input 종류, label, options, 기본값
+- 화면의 숨김, 읽기 전용, 비활성화 규칙
+
+## 검증
+
+- schema를 만들거나 고치면 단위 테스트도 함께 작성합니다.
+- 올바른 값이 통과하는지 확인합니다.
+- 잘못된 값이 각 필드에서 실패하는지 확인합니다.
+- trim, 소문자 변환, 전화번호 정리 같은 변환 결과를 확인합니다.
+- schema를 상속하는 기존 schema가 있다면 상속된 검증이 유지되는지 확인합니다.
+- `@cocrepo/schema` 타입 검사, 빌드, 정적 검사를 실행합니다.
+
+## 완료 보고
+
+완료하면 schema를 기다리던 Form 작업으로 다시 인계합니다.
 
 ```markdown
-# 폼 렌더링 메타를 schema에서 정의하려고 시도 (금지)
-- defaultObject, options, uiPaths, aiSchemas
+next subagent: fe-form-agent
+handoff key: XXXXSchema-for-XXXXForm
+
+- 생성 또는 수정한 schema 경로
+- 공개 import 이름
+- schema 필드와 검증 규칙
+- 실행한 검증과 결과
 ```
 
----
-
-## 아키텍처
-
-### 패키지 구조
-
-```
-packages/common-schema/
-├── src/
-│   ├── constants/
-│   │   └── validation-messages.ts   # 검증 메시지 상수
-│   ├── decorators/
-│   │   ├── apply.ts                 # 데코레이터 조합 유틸리티
-│   │   ├── string.decorator.ts      # 문자열 검증
-│   │   ├── number.decorator.ts      # 숫자 검증
-│   │   ├── email.decorator.ts       # 이메일 검증
-│   │   ├── password.decorator.ts    # 비밀번호 검증
-│   │   ├── phone.decorator.ts       # 전화번호 검증
-│   │   ├── boolean.decorator.ts     # 불리언 검증
-│   │   ├── date.decorator.ts        # 날짜 검증
-│   │   ├── enum.decorator.ts        # Enum 검증
-│   │   ├── uuid.decorator.ts        # UUID 검증
-│   │   └── index.ts                 # 데코레이터 export
-│   ├── schemas/
-│   │   ├── auth/
-│   │   │   ├── login.schema.ts
-│   │   │   ├── sign-up.schema.ts
-│   │   │   └── index.ts
-│   │   └── index.ts
-│   ├── utils/
-│   │   ├── validate.ts              # 검증 유틸리티
-│   │   └── index.ts
-│   └── index.ts                     # 전체 export
-└── package.json
-```
-
-### DTO 확장 패턴
-
-```
-┌───────────────────────────────────────────────────────────────┐
-│                    @cocrepo/schema                             │
-│  (공통 검증 스키마 - 프론트엔드/백엔드 공유)                    │
-├───────────────────────────────────────────────────────────────┤
-│  LoginSchema, SignUpSchema, UserSchema, ...                   │
-└───────────────────────────────────────────────────────────────┘
-                              │
-                              │ extends
-                              ▼
-┌───────────────────────────────────────────────────────────────┐
-│                      @cocrepo/dto                              │
-│  (백엔드 전용 DTO - 추가 필드/변환 포함)                       │
-├───────────────────────────────────────────────────────────────┤
-│  LoginDto extends LoginSchema { remember?: boolean }          │
-│  CreateUserDto extends UserSchema { spaceId: string }         │
-└───────────────────────────────────────────────────────────────┘
-```
-
----
-
-## 데코레이터 목록
-
-### 문자열 관련
-
-| 데코레이터 | 설명 | 옵션 |
-|-----------|------|------|
-| `@String()` | 기본 문자열 | `minLength`, `maxLength`, `trim`, `toLowerCase`, `toUpperCase` |
-| `@StringOptional()` | 선택적 문자열 | 동일 |
-| `@Email()` | 이메일 형식 | `required` |
-| `@Password()` | 비밀번호 | `minLength`, `requireUppercase`, `requireNumber`, `requireSpecialChar` |
-| `@Phone()` | 전화번호 | `required`, `region` |
-
-### 숫자 관련
-
-| 데코레이터 | 설명 | 옵션 |
-|-----------|------|------|
-| `@Number()` | 기본 숫자 | `min`, `max`, `int` |
-| `@NumberOptional()` | 선택적 숫자 | 동일 |
-
-### 기타
-
-| 데코레이터 | 설명 | 옵션 |
-|-----------|------|------|
-| `@Boolean()` | 불리언 | `required` |
-| `@BooleanOptional()` | 선택적 불리언 | - |
-| `@Date()` | 날짜 | `min`, `max`, `format` |
-| `@Enum()` | Enum | `enum`, `required` |
-| `@Uuid()` | UUID | `version`, `required` |
-
----
-
-## 프로세스
-
-### 1단계: 요청 분석
-
-```markdown
-[SchemaName] 스키마를 만들어주세요.
-
-**도메인:** [도메인명]
-**필드:**
-- email: string (이메일, 필수)
-- name: string (2~50자, 필수)
-- age?: number (0~150, 선택)
-```
-
-### 2단계: 데코레이터 선택
-
-각 필드에 적절한 데코레이터를 선택합니다:
-
-1. **타입 검증**: `@String()`, `@Number()`, `@Boolean()` 등
-2. **형식 검증**: `@Email()`, `@Phone()`, `@Uuid()` 등
-3. **범위 검증**: `minLength`, `maxLength`, `min`, `max`
-4. **필수 여부**: `required` 또는 `Optional` 버전 사용
-
-### 3단계: 스키마 작성
-
-```typescript
-// packages/common-schema/src/schemas/[domain]/[name].schema.ts
-import { String, Email, Number, StringOptional, NumberOptional } from "../../decorators";
-
-/**
- * [도메인명] 스키마
- *
- * 프론트엔드/백엔드 공유 검증 규칙
- */
-export class [SchemaName] {
-  @Email()
-  email: string;
-
-  @String({ minLength: 2, maxLength: 50 })
-  name: string;
-
-  @NumberOptional({ min: 0, max: 150 })
-  age?: number;
-}
-```
-
-### 4단계: Route Delivery Spec의 Common Schema 계약 갱신
-
-```markdown
-<!-- Common Schema Contract: 서비스 딜리버리 스펙의 백엔드 / API / 기반 계약과 라우트 딜리버리 스펙의 백엔드 / API Slice에 반영 -->
-### 공통 Schema 인벤토리
-
-#### 목적
-- 프론트엔드/백엔드 공용 검증 규칙 정의
-
-#### 필드 규칙
-| 필드 | 타입 | 검증 규칙 |
-|------|------|----------|
-| email | string | @Email() |
-
-#### 사용처
-- 프론트엔드 폼 검증
-- 백엔드 DTO 상속
-```
-
-### 5단계: 인덱스 업데이트
-
-```typescript
-// packages/common-schema/src/schemas/[domain]/index.ts
-export * from "./[name].schema";
-```
-
----
-
-## 템플릿
-
-### 기본 스키마
-
-```typescript
-import { String, StringOptional } from "../../decorators";
-
-/**
- * [도메인명] 스키마
- *
- * 프론트엔드/백엔드 공유 검증 규칙
- */
-export class [SchemaName] {
-  @String({ minLength: 2, maxLength: 100 })
-  name: string;
-
-  @StringOptional({ maxLength: 500 })
-  description?: string;
-}
-```
-
-### 복합 스키마 (여러 필드 타입)
-
-```typescript
-import {
-  String,
-  StringOptional,
-  Email,
-  Phone,
-  Number,
-  NumberOptional,
-  Boolean,
-  BooleanOptional,
-  Enum,
-  Uuid,
-  Date,
-} from "../../decorators";
-import { UserStatus } from "@cocrepo/enum";
-
-/**
- * 사용자 생성 스키마
- *
- * 프론트엔드/백엔드 공유 검증 규칙
- */
-export class CreateUserSchema {
-  @Email()
-  email: string;
-
-  @String({ minLength: 2, maxLength: 50 })
-  name: string;
-
-  @Phone({ required: false })
-  phone?: string;
-
-  @Number({ min: 0, max: 150 })
-  age: number;
-
-  @NumberOptional()
-  score?: number;
-
-  @Boolean()
-  isActive: boolean;
-
-  @BooleanOptional()
-  marketingConsent?: boolean;
-
-  @Enum({ enum: UserStatus, required: false })
-  status?: UserStatus;
-
-  @Uuid({ required: false })
-  teamId?: string;
-
-  @Date({ required: false })
-  joinedAt?: Date;
-}
-```
-
-### 중첩 객체 스키마
-
-```typescript
-import { String, ValidateNested } from "../../decorators";
-import { Type } from "class-transformer";
-
-/**
- * 주소 스키마
- */
-export class AddressSchema {
-  @String({ maxLength: 200 })
-  street: string;
-
-  @String({ maxLength: 100 })
-  city: string;
-
-  @String({ minLength: 5, maxLength: 10 })
-  zipCode: string;
-}
-
-/**
- * 사용자 스키마 (중첩 포함)
- */
-export class UserWithAddressSchema {
-  @String({ minLength: 2, maxLength: 50 })
-  name: string;
-
-  @ValidateNested()
-  @Type(() => AddressSchema)
-  address: AddressSchema;
-}
-```
-
-### 배열 스키마
-
-```typescript
-import { String, Email, Uuid } from "../../decorators";
-
-/**
- * 이메일 일괄 발송 스키마
- */
-export class BulkEmailSchema {
-  @Email({ each: true })
-  recipients: string[];
-
-  @String({ minLength: 1, maxLength: 200 })
-  subject: string;
-
-  @String({ minLength: 1 })
-  content: string;
-}
-```
-
----
-
-## DTO 확장 예시
-
-### 백엔드 DTO에서 스키마 상속
-
-```typescript
-// packages/be-dto/src/auth/login.dto.ts
-import { LoginSchema } from "@cocrepo/schema";
-import { IsBoolean, IsOptional, IsString } from "class-validator";
-import { ApiProperty } from "@nestjs/swagger";
-
-/**
- * 로그인 요청 DTO
- *
- * LoginSchema를 확장하여 백엔드 전용 필드 추가
- */
-export class LoginDto extends LoginSchema {
-  @ApiProperty({ description: "로그인 유지 여부", required: false })
-  @IsBoolean()
-  @IsOptional()
-  remember?: boolean;
-
-  @ApiProperty({ description: "디바이스 정보", required: false })
-  @IsString()
-  @IsOptional()
-  deviceId?: string;
-}
-```
-
-### 프론트엔드에서 검증 메시지 활용
-
-```typescript
-// apps/admin/web/src/components/auth/LoginForm.tsx
-import { VALIDATION_MESSAGES } from "@cocrepo/schema";
-
-const validateEmail = (value: string) => {
-  if (!value) return VALIDATION_MESSAGES.REQUIRED;
-  if (!emailRegex.test(value)) return VALIDATION_MESSAGES.EMAIL_FORMAT;
-  return null;
-};
-```
-
----
-
-## 검증 메시지 상수
-
-```typescript
-// packages/common-schema/src/constants/validation-messages.ts
-export const VALIDATION_MESSAGES = {
-  REQUIRED: "필수 입력 항목입니다",
-  STRING_TYPE: "문자열을 입력해주세요",
-  NUMBER_TYPE: "숫자를 입력해주세요",
-  MIN_LENGTH: "최소 {minLength}자 이상 입력해주세요",
-  MAX_LENGTH: "최대 {maxLength}자까지 입력 가능합니다",
-  EMAIL_FORMAT: "올바른 이메일 형식을 입력해주세요",
-  PASSWORD_MIN_LENGTH: "비밀번호는 최소 {minLength}자 이상이어야 합니다",
-  PASSWORD_UPPERCASE: "대문자를 최소 1개 포함해주세요",
-  PASSWORD_NUMBER: "숫자를 최소 1개 포함해주세요",
-  PASSWORD_SPECIAL_CHAR: "특수문자를 최소 1개 포함해주세요",
-  PHONE_FORMAT: "올바른 전화번호 형식을 입력해주세요",
-  UUID_FORMAT: "올바른 UUID 형식이 아닙니다",
-  ENUM_INVALID: "유효하지 않은 값입니다",
-  DATE_FORMAT: "올바른 날짜 형식을 입력해주세요",
-  MIN_VALUE: "{min} 이상의 값을 입력해주세요",
-  MAX_VALUE: "{max} 이하의 값을 입력해주세요",
-};
-```
-
----
-
-## 체크리스트
-
-- [ ] 기존 데코레이터를 재사용했는가?
-- [ ] 검증 메시지 상수를 사용했는가?
-- [ ] JSDoc 주석이 추가되었는가?
-- [ ] 검증 계약가 route `page.spec.md` 또는 담당 스펙에 반영되었는가?
-- [ ] 인덱스 파일이 업데이트되었는가?
-- [ ] 불필요한 중복 검증이 없는가?
-- [ ] DTO 확장이 가능한 구조인가?
-
----
-
-## 연관 에이전트
-
-| 구분 | 에이전트 | 설명 |
-|------|---------|------|
-| **후행** | dto-builder | DTO 클래스 생성 (스키마 상속) |
-| **관련** | be-prisma-builder | Prisma 스키마 생성 |
-| | entity-builder | Entity 클래스 생성 |
-
----
-
-## 프로젝트별 참고사항
-
-### 패키지명
-
-```
-@cocrepo/schema
-```
-
-### 파일 위치
-
-```
-packages/common-schema/src/schemas/{domain}/{name}.schema.ts
-```
-
-### 기존 스키마
-
-- `auth/login.schema.ts` - 로그인
-- `auth/sign-up.schema.ts` - 회원가입
-
-### 새 도메인 추가 시
-
-1. `packages/common-schema/src/schemas/{domain}/` 폴더 생성
-2. 스키마 파일 작성
-3. `index.ts` export 추가
-4. 상위 `schemas/index.ts`에 도메인 export 추가
-
----
-
-## 출력 형식
-
-### 생성 완료 리포트
-
-```markdown
-## 스키마 생성 완료
-
-### [SchemaName]
-
-**도메인:** [domain]
-
-**생성된 파일:**
-- `packages/common-schema/src/schemas/[domain]/[name].schema.ts`
-- route `page.spec.md` 또는 담당 스펙의 Validation Contract 섹션
-- `packages/common-schema/src/schemas/[domain]/index.ts` (업데이트)
-
-**필드:**
-| 이름 | 타입 | 검증 규칙 |
-|------|------|----------|
-| email | string | @Email() |
-| name | string | @String({ minLength: 2, maxLength: 50 }) |
-
-**DTO 확장 예시:**
-\`\`\`typescript
-import { [SchemaName] } from "@cocrepo/schema";
-
-export class [DtoName] extends [SchemaName] {
-  // 추가 필드
-}
-\`\`\`
-
-**다음 단계:**
-1. `pnpm --filter=@cocrepo/schema build` 실행
-2. dto-builder로 DTO 클래스 생성
-```
+`fe-form-agent`는 같은 handoff key를 확인한 뒤 `FormSchemaStateContract<XXXXSchema>`와 `<Form schema={XXXXSchema}>`를 연결합니다.
