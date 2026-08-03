@@ -13,7 +13,7 @@ module.exports = {
 		"^@cocrepo/dto$": "<rootDir>/../be-dto/dist",
 		"^@cocrepo/toolkit$": "<rootDir>/../common-toolkit/dist",
 		"^@cocrepo/constant$": "<rootDir>/../common-constant/dist",
-		"^@cocrepo/type$": "<rootDir>/../common-type/dist",
+		"^@cocrepo/type$": "<rootDir>/../common-type/index.ts",
 		"^@cocrepo/decorator$": "<rootDir>/../be-decorator/dist",
 		"^@cocrepo/service$": "<rootDir>/../be-service/dist",
 	},

@@ -25,7 +25,7 @@ export interface UpdateFitnessCenterDto {
   email?: string;
   /**
    * @nullable
-   * @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|[A-Za-z0-9_-]{22})$
+   * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
    */
   imageFileId?: string | null;
   contentLanguageCode?: LanguageCode;

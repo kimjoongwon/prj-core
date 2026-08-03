@@ -1,45 +1,15 @@
-import { readFileSync } from "node:fs";
 import { readAdminPersistAccessToken } from "./admin-persist";
-import { getAdminStorageStatePath } from "./admin-storage-state-path";
+import {
+	type AdminStorageState,
+	findAdminPersistRaw,
+	readAdminStorageState,
+} from "./admin-storage-state";
 
-interface StorageState {
-	cookies?: Array<{
-		name?: string;
-		value?: string;
-	}>;
-	origins?: Array<{
-		localStorage?: Array<{
-			name?: string;
-			value?: string;
-		}>;
-	}>;
+function findAdminPersistAccessToken(storageState: AdminStorageState) {
+	return readAdminPersistAccessToken(findAdminPersistRaw(storageState) ?? null);
 }
 
-function readStorageState() {
-	const raw = readFileSync(getAdminStorageStatePath(), "utf8");
-
-	return JSON.parse(raw) as StorageState;
-}
-
-function findAdminPersistAccessToken(storageState: StorageState) {
-	for (const origin of storageState.origins ?? []) {
-		const persistEntry = origin.localStorage?.find(
-			(entry) => entry.name === "admin-persist",
-		);
-		if (!persistEntry?.value) {
-			continue;
-		}
-
-		const accessToken = readAdminPersistAccessToken(persistEntry.value);
-		if (accessToken) {
-			return accessToken;
-		}
-	}
-
-	return undefined;
-}
-
-function findAccessTokenCookie(storageState: StorageState) {
+function findAccessTokenCookie(storageState: AdminStorageState) {
 	return storageState.cookies?.find((cookie) => cookie.name === "accessToken")
 		?.value;
 }
@@ -50,7 +20,7 @@ function findAccessTokenCookie(storageState: StorageState) {
  * @returns Admin native access token
  */
 export function getAdminAccessToken() {
-	const storageState = readStorageState();
+	const storageState = readAdminStorageState();
 	const accessToken =
 		findAdminPersistAccessToken(storageState) ??
 		findAccessTokenCookie(storageState);

@@ -1,7 +1,7 @@
 import {
 	StringField,
 	StringFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 
 export class CreatePolicyDto {
 	@StringField()

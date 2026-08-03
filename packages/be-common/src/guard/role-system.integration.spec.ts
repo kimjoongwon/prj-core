@@ -151,12 +151,12 @@ describe("Role 시스템 통합 테스트", () => {
 			category?: MockRoleCategory,
 			associations?: MockRoleAssociation[],
 		) => ({
-			id: "user-test-id",
+			id: 101n,
 			email: "test@example.com",
 			tenants: [
 				{
-					id: "tenant-1",
-					spaceId: "space-001",
+					id: 201n,
+					spaceId: 301n,
 					role: {
 						name: roleName,
 						classification: category ? { category } : undefined,
@@ -171,8 +171,8 @@ describe("Role 시스템 통합 테스트", () => {
 			category?: MockRoleCategory,
 			associations?: MockRoleAssociation[],
 		) => ({
-			id: "tenant-1",
-			spaceId: "space-001",
+			id: 201n,
+			spaceId: 301n,
 			role: {
 				name: roleName,
 				classification: category ? { category } : undefined,
@@ -180,11 +180,7 @@ describe("Role 시스템 통합 테스트", () => {
 			},
 		});
 
-		const setupCls = (
-			user: unknown,
-			tenant: unknown,
-			spaceId = "space-001",
-		) => {
+		const setupCls = (user: unknown, tenant: unknown, spaceId = 301n) => {
 			mockClsService.get.mockImplementation((key: string) => {
 				if (key === CONTEXT_KEYS.AUTH_USER) return user;
 				if (key === CONTEXT_KEYS.TENANT) return tenant;

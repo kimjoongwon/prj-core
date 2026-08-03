@@ -48,8 +48,8 @@ export class TenantAccessRequestAggregate {
 	}
 
 	async findForReview(params: {
-		tenantAccessRequestId: string;
-		reviewerId: string;
+		tenantAccessRequestId: bigint;
+		reviewerId: bigint;
 	}): Promise<TenantAccessRequest> {
 		const request = await this.getById(params.tenantAccessRequestId);
 		await this.assertCanReview({
@@ -62,8 +62,8 @@ export class TenantAccessRequestAggregate {
 
 	@Transactional()
 	async approve(params: {
-		tenantAccessRequestId: string;
-		reviewerId: string;
+		tenantAccessRequestId: bigint;
+		reviewerId: bigint;
 		reviewComment?: string | null;
 	}): Promise<TenantAccessRequest> {
 		const request = await this.getById(params.tenantAccessRequestId);
@@ -91,8 +91,8 @@ export class TenantAccessRequestAggregate {
 
 	@Transactional()
 	async reject(params: {
-		tenantAccessRequestId: string;
-		reviewerId: string;
+		tenantAccessRequestId: bigint;
+		reviewerId: bigint;
 		reviewComment?: string | null;
 	}): Promise<TenantAccessRequest> {
 		const request = await this.getById(params.tenantAccessRequestId);
@@ -111,7 +111,7 @@ export class TenantAccessRequestAggregate {
 		});
 	}
 
-	private async getById(id: string): Promise<TenantAccessRequest> {
+	private async getById(id: bigint): Promise<TenantAccessRequest> {
 		const request = await this.repository.findByIdWithRelations(id);
 		if (!request) {
 			throw new NotFoundException("테넌트 접근 신청을 찾을 수 없습니다");
@@ -147,7 +147,7 @@ export class TenantAccessRequestAggregate {
 
 	private async assertCanReview(params: {
 		request: TenantAccessRequest;
-		reviewerId: string;
+		reviewerId: bigint;
 		action: "read" | "approve" | "reject";
 	}): Promise<void> {
 		const scope = await this.getReviewerScope(params.reviewerId);
@@ -169,7 +169,7 @@ export class TenantAccessRequestAggregate {
 		}
 	}
 
-	private async getReviewerScope(reviewerId: string): Promise<ReviewerScope> {
+	private async getReviewerScope(reviewerId: bigint): Promise<ReviewerScope> {
 		const reviewer =
 			await this.usersRepository.findByIdWithTenantsAndProfiles(reviewerId);
 		if (!reviewer) {
@@ -187,7 +187,10 @@ export class TenantAccessRequestAggregate {
 			managedSpaceIds: activeTenants
 				.filter((tenant) => tenant.role?.name === SYSTEM_ROLES.COMPANY_MANAGER)
 				.map((tenant) => tenant.spaceId)
-				.filter((spaceId): spaceId is string => Boolean(spaceId)),
+				.filter(
+					(spaceId): spaceId is bigint =>
+						spaceId !== undefined && spaceId !== null,
+				),
 		};
 	}
 }

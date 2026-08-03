@@ -1,5 +1,6 @@
 import {
 	AllExceptionsFilter,
+	BigIntResponseInterceptor,
 	DtoTransformInterceptor,
 	JwtAuthGuard,
 	ResponseEntityInterceptor,
@@ -92,10 +93,11 @@ export function setNestApp<T extends INestApplication>(app: T): void {
 
 	// =================================================================
 	// Global Interceptors - Response 처리는 역순!
-	// Request: 1→2→3→4 | Response: 4→3→2→1
+	// Request: 0→1→2→3→4 | Response: 4→3→2→1→0
 	// RequestContextInterceptor 제거 → Middleware로 이동
 	// =================================================================
 	app.useGlobalInterceptors(
+		app.get(BigIntResponseInterceptor), // 0 (Response: 최종 bigint → decimal string)
 		app.get(SpaceScopeInterceptor), // 1 (Request: 데코레이터 기반 EFFECTIVE_SPACE_IDS 계산)
 		app.get(ResponseEntityInterceptor), // 2 (Response: 래핑)
 		new ClassSerializerInterceptor(app.get(Reflector), {

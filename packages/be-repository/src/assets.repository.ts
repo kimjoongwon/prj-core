@@ -4,9 +4,9 @@ import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import type {
-	PublicIdCreateInput,
-	PublicIdUpdateInput,
-} from "./public-id-input.type";
+	AutoIdentityCreateInput,
+	AutoIdentityUpdateInput,
+} from "./auto-identity-input.type";
 import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
@@ -21,8 +21,8 @@ export class AssetsRepository {
 		this.logger = new Logger("AssetsRepository");
 	}
 
-	async findById(id: string): Promise<Asset | null> {
-		this.logger.debug(`ID로 조회: ${id.slice(-8)}`);
+	async findById(id: bigint): Promise<Asset | null> {
+		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.asset.findUnique({
 			where: { id },
@@ -32,8 +32,8 @@ export class AssetsRepository {
 		return result ? toDomainEntity(Asset, result) : null;
 	}
 
-	async findByIdWithRelations(id: string): Promise<Asset | null> {
-		this.logger.debug(`관계 포함 조회: ${id.slice(-8)}`);
+	async findByIdWithRelations(id: bigint): Promise<Asset | null> {
+		this.logger.debug(`관계 포함 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.asset.findUnique({
 			where: { id },
@@ -61,11 +61,11 @@ export class AssetsRepository {
 		return result ? toDomainEntity(Asset, result) : null;
 	}
 
-	async findByFolderId(folderId: string): Promise<Asset[]> {
-		this.logger.debug(`폴더별 에셋 조회: ${folderId.slice(-8)}`);
+	async findByFolderId(folderId: bigint): Promise<Asset[]> {
+		this.logger.debug(`폴더별 에셋 조회: ${folderId.toString()}`);
 
 		const result = await this.txHost.tx.asset.findMany({
-			where: { folder: { id: folderId } },
+			where: { folderId },
 			include: { space: true, folder: true, createdBy: true },
 			orderBy: [{ createdAt: "desc" }],
 		});
@@ -101,22 +101,11 @@ export class AssetsRepository {
 	}
 
 	async create(
-		data: PublicIdCreateInput<
-			Prisma.AssetUncheckedCreateInput,
-			"space" | "folder",
-			"createdBy"
-		>,
+		data: AutoIdentityCreateInput<Prisma.AssetUncheckedCreateInput, "assetId">,
 	): Promise<Asset> {
 		this.logger.debug(`에셋 생성: ${data.storageKey}`);
-
-		const { spaceId, folderId, createdById, ...assetData } = data;
 		const result = await this.txHost.tx.asset.create({
-			data: {
-				...assetData,
-				space: { connect: { id: spaceId } },
-				folder: { connect: { id: folderId } },
-				...(createdById ? { createdBy: { connect: { id: createdById } } } : {}),
-			},
+			data,
 			include: { space: true, folder: true, createdBy: true },
 		});
 
@@ -124,40 +113,21 @@ export class AssetsRepository {
 	}
 
 	async updateById(
-		id: string,
-		data: PublicIdUpdateInput<
-			Prisma.AssetUncheckedUpdateInput,
-			"space" | "folder",
-			"createdBy"
-		>,
+		id: bigint,
+		data: AutoIdentityUpdateInput<Prisma.AssetUncheckedUpdateInput, "assetId">,
 	): Promise<Asset> {
-		this.logger.debug(`에셋 수정: ${id.slice(-8)}`);
-
-		const { spaceId, folderId, createdById, ...assetData } = data;
+		this.logger.debug(`에셋 수정: ${id.toString()}`);
 		const result = await this.txHost.tx.asset.update({
 			where: { id },
-			data: {
-				...assetData,
-				...(spaceId !== undefined
-					? { space: { connect: { id: spaceId } } }
-					: {}),
-				...(folderId !== undefined
-					? { folder: { connect: { id: folderId } } }
-					: {}),
-				...(createdById !== undefined
-					? createdById === null
-						? { createdBy: { disconnect: true } }
-						: { createdBy: { connect: { id: createdById } } }
-					: {}),
-			},
+			data,
 			include: { space: true, folder: true, createdBy: true },
 		});
 
 		return toDomainEntity(Asset, result);
 	}
 
-	async deleteById(id: string): Promise<Asset> {
-		this.logger.debug(`에셋 삭제: ${id.slice(-8)}`);
+	async deleteById(id: bigint): Promise<Asset> {
+		this.logger.debug(`에셋 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.asset.delete({
 			where: { id },

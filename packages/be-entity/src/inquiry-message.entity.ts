@@ -1,12 +1,6 @@
-import type {
-	InquiryMessage as InquiryMessageEntity,
-	MessageContentType,
-	Prisma,
-	SenderType,
-} from "@cocrepo/prisma";
+import type { MessageContentType, Prisma, SenderType } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { AIAgentLog } from "./ai-agent-log.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Inquiry } from "./inquiry.entity";
 import type { InquiryAttachment } from "./inquiry-attachment.entity";
 import type { InquiryThread } from "./inquiry-thread.entity";
@@ -19,15 +13,15 @@ import type { User } from "./user.entity";
  * 실시간 채팅 지원을 위해 메시지 상태(전달, 읽음) 추적,
  * 타이핑 표시, AI/시스템 메시지 구분 등의 기능을 제공합니다.
  */
-export class InquiryMessage
-	extends AbstractEntity
-	implements DomainEntityModel<InquiryMessageEntity>
-{
+export class InquiryMessage extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	inquiryMessageId!: string;
+
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	threadId!: string;
-	inquiryId!: string;
+	threadId!: bigint;
+	inquiryId!: bigint;
 	senderType!: SenderType;
 	content!: string;
 	contentType!: MessageContentType;
@@ -37,7 +31,7 @@ export class InquiryMessage
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	senderId!: string | null;
+	senderId!: bigint | null;
 	clientMessageId!: string | null;
 	deliveredAt!: Date | null;
 	readAt!: Date | null;

@@ -1,19 +1,17 @@
-import type { Image as ImageEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Asset } from "./asset.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 
-export class Image
-	extends AbstractEntity
-	implements DomainEntityModel<ImageEntity>
-{
+export class Image extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	imageId!: string;
+
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 	width!: number;
 	height!: number;
 	hasAlpha!: boolean;
-	assetId!: string;
+	assetId!: bigint;
 
 	// ============================================================================
 	// Nullable 필드

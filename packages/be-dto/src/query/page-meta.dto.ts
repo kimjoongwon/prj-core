@@ -1,4 +1,4 @@
-import { BooleanField, NumberField } from "@cocrepo/decorator";
+import { BooleanField, NumberField } from "@cocrepo/decorator/field";
 
 export class PageMetaDto {
 	@NumberField()

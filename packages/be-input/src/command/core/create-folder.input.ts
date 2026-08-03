@@ -1,4 +1,4 @@
 export interface CreateFolderCommandInput {
-	parentFolderId?: string | null;
+	parentFolderId?: bigint | null;
 	name: string;
 }

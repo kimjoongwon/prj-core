@@ -1,4 +1,4 @@
-import { DateField, StringField } from "@cocrepo/decorator";
+import { DateField, StringField } from "@cocrepo/decorator/field";
 
 export class EmailVerificationRequestedDto {
 	@StringField({ description: "인증 요청 이메일" })

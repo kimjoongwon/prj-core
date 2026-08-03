@@ -4,7 +4,7 @@ import {
 	EnumFieldOptional,
 	NumberFieldOptional,
 	StringFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import { ServiceDocumentFormat } from "@cocrepo/prisma";
 
 /**

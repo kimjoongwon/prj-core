@@ -1,4 +1,4 @@
-import { ParseUlidPipe, RolesGuard } from "@cocrepo/be-common";
+import { ParseBigIntIdPipe, RolesGuard } from "@cocrepo/be-common";
 import {
 	CreateRoutineCommand,
 	DeleteRoutineCommand,
@@ -78,7 +78,7 @@ export class RoutinesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "routineId",
-		description: "루틴 ID (ULID)",
+		description: "루틴 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(
@@ -89,7 +89,7 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	@ResponseMessage("루틴 상세 조회 성공")
 	async getRoutine(
-		@Param("routineId", ParseUlidPipe) routineId: string,
+		@Param("routineId", ParseBigIntIdPipe) routineId: bigint,
 	): Promise<Routine> {
 		return this.queryBus.execute(new GetRoutineByIdQuery(routineId));
 	}
@@ -139,7 +139,7 @@ export class RoutinesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "routineId",
-		description: "루틴 ID (ULID)",
+		description: "루틴 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiBody({
@@ -155,7 +155,7 @@ export class RoutinesController {
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK)
 	@ResponseMessage("루틴 수정 성공")
 	async updateRoutine(
-		@Param("routineId", ParseUlidPipe) routineId: string,
+		@Param("routineId", ParseBigIntIdPipe) routineId: bigint,
 		@Body() dto: UpdateRoutineDto,
 	): Promise<Routine> {
 		return this.commandBus.execute(new UpdateRoutineCommand(routineId, dto));
@@ -178,7 +178,7 @@ export class RoutinesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "routineId",
-		description: "루틴 ID (ULID)",
+		description: "루틴 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(
@@ -190,7 +190,7 @@ export class RoutinesController {
 	)
 	@ResponseMessage("루틴 삭제 성공")
 	async deleteRoutine(
-		@Param("routineId", ParseUlidPipe) routineId: string,
+		@Param("routineId", ParseBigIntIdPipe) routineId: bigint,
 	): Promise<void> {
 		await this.commandBus.execute(new DeleteRoutineCommand(routineId));
 	}

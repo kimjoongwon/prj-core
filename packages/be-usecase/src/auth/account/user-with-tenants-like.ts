@@ -1,7 +1,8 @@
 import type { SpaceTenantLike } from "./space-tenant-like";
 
 export type UserWithTenantsLike = {
-	id: string;
-	currentTenantId?: string | null;
+	id: bigint;
+	userId?: string;
+	currentTenantId?: bigint | null;
 	tenants?: SpaceTenantLike[];
 };

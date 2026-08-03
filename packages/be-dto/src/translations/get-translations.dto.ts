@@ -1,5 +1,5 @@
 import { LanguageCode } from "@cocrepo/constant";
-import { ToBoolean } from "@cocrepo/decorator";
+import { ToBoolean } from "@cocrepo/decorator/transform";
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import {

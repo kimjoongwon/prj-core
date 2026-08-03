@@ -21,13 +21,13 @@ describe("TenantAccessRequestAggregate", () => {
 	let tenantsRepository: jest.Mocked<TenantsRepository>;
 	let usersRepository: jest.Mocked<UsersRepository>;
 
-	const managedSpaceId = "11111111-1111-4111-8111-111111111111";
-	const otherSpaceId = "22222222-2222-4222-8222-222222222222";
-	const requesterId = "33333333-3333-4333-8333-333333333333";
-	const reviewerId = "44444444-4444-4444-8444-444444444444";
-	const requestId = "55555555-5555-4555-8555-555555555555";
-	const memberRoleId = "66666666-6666-4666-8666-666666666666";
-	const platformAdminRoleId = "77777777-7777-4777-8777-777777777777";
+	const managedSpaceId = 111n;
+	const otherSpaceId = 222n;
+	const requesterId = 333n;
+	const reviewerId = 444n;
+	const requestId = 555n;
+	const memberRoleId = 666n;
+	const platformAdminRoleId = 777n;
 
 	beforeEach(() => {
 		repository = {
@@ -62,7 +62,7 @@ describe("TenantAccessRequestAggregate", () => {
 			}),
 		);
 		tenantsRepository.upsertByUserIdAndSpaceId.mockResolvedValue({
-			id: "tenant-applied-id",
+			id: 888n,
 		} as unknown as Tenant);
 		repository.updateById.mockResolvedValue(
 			buildRequest({ status: "APPROVED" }),
@@ -85,7 +85,7 @@ describe("TenantAccessRequestAggregate", () => {
 				status: "APPROVED",
 				reviewerId,
 				reviewComment: "승인합니다.",
-				appliedTenantId: "tenant-applied-id",
+				appliedTenantId: 888n,
 			}),
 		);
 	});
@@ -194,7 +194,7 @@ describe("TenantAccessRequestAggregate", () => {
 			}),
 		);
 		tenantsRepository.upsertByUserIdAndSpaceId.mockResolvedValue({
-			id: "tenant-applied-id",
+			id: 999n,
 		} as unknown as Tenant);
 		repository.updateById.mockResolvedValue(
 			buildRequest({ status: "APPROVED" }),
@@ -240,7 +240,7 @@ describe("TenantAccessRequestAggregate", () => {
 		Awaited<ReturnType<UsersRepository["findByIdWithTenantsAndProfiles"]>>
 	>;
 
-	function buildReviewer(params: { roleName: string; spaceId: string }) {
+	function buildReviewer(params: { roleName: string; spaceId: bigint }) {
 		return {
 			id: reviewerId,
 			tenants: [

@@ -97,8 +97,8 @@ export class ReservationAggregate {
 	}
 
 	async getMine(params: {
-		spaceId: string;
-		userId: string;
+		spaceId: bigint;
+		userId: bigint;
 		from?: Date;
 		to?: Date;
 		status?: ReservationStatus;
@@ -110,8 +110,8 @@ export class ReservationAggregate {
 
 	@Transactional()
 	async create(params: {
-		spaceId: string;
-		userId: string;
+		spaceId: bigint;
+		userId: bigint;
 		input: CreateReservationInput;
 	}): Promise<Reservation> {
 		const createResult = await this.createWithResult(params);
@@ -120,12 +120,12 @@ export class ReservationAggregate {
 
 	@Transactional()
 	async createWithResult(params: {
-		spaceId: string;
-		userId: string;
+		spaceId: bigint;
+		userId: bigint;
 		input: CreateReservationInput;
 	}) {
 		this.logger.debug(
-			`예약 생성 요청: user=${params.userId.slice(-8)}, program=${params.input.programId.slice(-8)}`,
+			`예약 생성 요청: user=${params.userId}, program=${params.input.programId}`,
 		);
 
 		await this.assertUserCanBookSpace(params.userId, params.spaceId);
@@ -206,9 +206,9 @@ export class ReservationAggregate {
 
 	@Transactional()
 	async cancel(params: {
-		spaceId: string;
-		userId: string;
-		reservationId: string;
+		spaceId: bigint;
+		userId: bigint;
+		reservationId: bigint;
 		cancelReason?: string | null;
 		now?: Date;
 	}): Promise<Reservation> {
@@ -249,8 +249,8 @@ export class ReservationAggregate {
 	}
 
 	private async assertUserCanBookSpace(
-		userId: string,
-		spaceId: string,
+		userId: bigint,
+		spaceId: bigint,
 	): Promise<void> {
 		const tenant = await this.tenantsRepository.findActiveByUserIdAndSpaceId(
 			userId,
@@ -262,7 +262,7 @@ export class ReservationAggregate {
 	}
 
 	private async promoteWaitlistIfPossible(params: {
-		programId: string;
+		programId: bigint;
 		occurrenceStartAt: Date;
 		now: Date;
 	}): Promise<void> {
@@ -440,7 +440,7 @@ export class ReservationAggregate {
 		startsAt: Date;
 		endsAt: Date;
 		reservations: Reservation[];
-		userId: string;
+		userId: bigint;
 		coachName: string | null;
 	}) {
 		const confirmedCount = params.reservations.filter(
@@ -550,7 +550,7 @@ export class ReservationAggregate {
 		);
 	}
 
-	private buildOccurrenceKey(programId: string, startsAt: Date): string {
+	private buildOccurrenceKey(programId: bigint, startsAt: Date): string {
 		return `${programId}:${startsAt.toISOString()}`;
 	}
 }

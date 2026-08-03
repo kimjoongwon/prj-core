@@ -38,19 +38,19 @@ test.describe("역할 상세 페이지", () => {
 			await openPlatformAdminRoleDetail(page);
 
 			await expect(
-				page.getByRole("heading", { name: /역할 상세: 플랫폼 관리자/ }),
+				page.getByRole("heading", { name: "Role 상세", exact: true }),
 			).toBeVisible();
 			await expect(
-				page.getByRole("heading", { name: "기본 정보" }),
+				page.getByRole("heading", { name: "추가 정보" }),
 			).toBeVisible();
 			await expect(
-				page.getByText("PLATFORM_ADMIN", { exact: true }),
-			).toBeVisible();
+				page.getByRole("textbox", { name: /역할 식별자/ }),
+			).toHaveValue("PLATFORM_ADMIN");
 			await expect(
 				page.getByRole("heading", { name: "정책 할당" }),
 			).toBeVisible();
 			await expect(
-				page.getByText("현재 Space의 RoleAssignment를 관리합니다."),
+				page.getByText("현재 Role에 연결된 Policy assignment를 관리합니다."),
 			).toBeVisible();
 		});
 
@@ -76,8 +76,7 @@ test.describe("역할 상세 페이지", () => {
 			// Then: 수정/삭제 버튼이 노출되어야 함
 			await expect(page.getByRole("button", { name: "수정" })).toBeVisible();
 
-			// Then: 삭제 버튼이 없음
-			await expect(page.getByRole("button", { name: "삭제" })).toHaveCount(0);
+			await expect(page.getByRole("button", { name: "삭제" })).toBeVisible();
 		});
 	});
 });

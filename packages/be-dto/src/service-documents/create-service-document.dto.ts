@@ -6,7 +6,7 @@ import {
 	NumberFieldOptional,
 	StringField,
 	StringFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import {
 	ServiceDocumentFormat,
 	ServiceDocumentKind,

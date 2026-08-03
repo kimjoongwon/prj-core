@@ -5,7 +5,7 @@ import {
 	NumberField,
 	StringField,
 	StringFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import type { DomainEntityModel } from "@cocrepo/entity";
 import {
 	type ServiceDocument,
@@ -14,6 +14,7 @@ import {
 	ServiceDocumentPlatform,
 	ServiceDocumentStatus,
 } from "@cocrepo/prisma";
+import { Exclude } from "class-transformer";
 
 import { AbstractDto } from "../abstract.dto";
 
@@ -22,8 +23,12 @@ import { AbstractDto } from "../abstract.dto";
  */
 export class ServiceDocumentDto
 	extends AbstractDto
-	implements DomainEntityModel<ServiceDocument>
+	implements DomainEntityModel<ServiceDocument, "serviceDocumentId">
 {
+	@Exclude()
+	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
+	private readonly serviceDocumentId?: never;
+
 	@EnumField(() => ServiceDocumentKind, { description: "문서 종류" })
 	kind!: ServiceDocumentKind;
 

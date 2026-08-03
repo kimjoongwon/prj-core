@@ -1,13 +1,15 @@
-export interface ReservationCreatedEventParams {
-	reservationId: string;
-	userId: string;
-	spaceId: string;
-	timelineId: string;
-	sessionId: string;
-	programId: string;
-	occurredAt: Date;
-}
+import type { ReservationCreatedEventPayload } from "./reservation-created.payload";
 
+/**
+ * ReservationCreated event.
+ */
 export class ReservationCreatedEvent {
-	constructor(readonly params: ReservationCreatedEventParams) {}
+	/**
+	 * CQRS 이벤트 페이로드.
+	 */
+	readonly payload: ReservationCreatedEventPayload;
+
+	constructor(payload: ReservationCreatedEventPayload) {
+		this.payload = payload;
+	}
 }

@@ -22,11 +22,11 @@ export * from "./primitives/date.field";
 // ============================================================================
 export * from "./primitives/number.field";
 export * from "./primitives/string.field";
+export * from "./specialized/bigint-id.field";
 // ============================================================================
 // Specialized
 // ============================================================================
 export * from "./specialized/email.field";
-export * from "./specialized/password.field";
 export * from "./specialized/phone.field";
 export * from "./specialized/tmpkey.field";
 export * from "./specialized/ulid.field";

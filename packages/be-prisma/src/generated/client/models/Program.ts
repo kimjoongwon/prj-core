@@ -27,28 +27,30 @@ export type AggregateProgram = {
 }
 
 export type ProgramAvgAggregateOutputType = {
-  seq: number | null
-  routineSeq: number | null
-  sessionSeq: number | null
+  id: number | null
+  routineId: number | null
+  sessionId: number | null
+  instructorId: number | null
   capacity: number | null
 }
 
 export type ProgramSumAggregateOutputType = {
-  seq: number | null
-  routineSeq: number | null
-  sessionSeq: number | null
+  id: bigint | null
+  routineId: bigint | null
+  sessionId: bigint | null
+  instructorId: bigint | null
   capacity: number | null
 }
 
 export type ProgramMinAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  programId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  routineSeq: number | null
-  sessionSeq: number | null
-  instructorId: string | null
+  routineId: bigint | null
+  sessionId: bigint | null
+  instructorId: bigint | null
   capacity: number | null
   name: string | null
   level: string | null
@@ -57,14 +59,14 @@ export type ProgramMinAggregateOutputType = {
 }
 
 export type ProgramMaxAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  programId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  routineSeq: number | null
-  sessionSeq: number | null
-  instructorId: string | null
+  routineId: bigint | null
+  sessionId: bigint | null
+  instructorId: bigint | null
   capacity: number | null
   name: string | null
   level: string | null
@@ -73,13 +75,13 @@ export type ProgramMaxAggregateOutputType = {
 }
 
 export type ProgramCountAggregateOutputType = {
+  programId: number
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
-  routineSeq: number
-  sessionSeq: number
+  routineId: number
+  sessionId: number
   instructorId: number
   capacity: number
   name: number
@@ -91,27 +93,29 @@ export type ProgramCountAggregateOutputType = {
 
 
 export type ProgramAvgAggregateInputType = {
-  seq?: true
-  routineSeq?: true
-  sessionSeq?: true
+  id?: true
+  routineId?: true
+  sessionId?: true
+  instructorId?: true
   capacity?: true
 }
 
 export type ProgramSumAggregateInputType = {
-  seq?: true
-  routineSeq?: true
-  sessionSeq?: true
+  id?: true
+  routineId?: true
+  sessionId?: true
+  instructorId?: true
   capacity?: true
 }
 
 export type ProgramMinAggregateInputType = {
+  programId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  routineSeq?: true
-  sessionSeq?: true
+  routineId?: true
+  sessionId?: true
   instructorId?: true
   capacity?: true
   name?: true
@@ -121,13 +125,13 @@ export type ProgramMinAggregateInputType = {
 }
 
 export type ProgramMaxAggregateInputType = {
+  programId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  routineSeq?: true
-  sessionSeq?: true
+  routineId?: true
+  sessionId?: true
   instructorId?: true
   capacity?: true
   name?: true
@@ -137,13 +141,13 @@ export type ProgramMaxAggregateInputType = {
 }
 
 export type ProgramCountAggregateInputType = {
+  programId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  routineSeq?: true
-  sessionSeq?: true
+  routineId?: true
+  sessionId?: true
   instructorId?: true
   capacity?: true
   name?: true
@@ -240,14 +244,14 @@ export type ProgramGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 export type ProgramGroupByOutputType = {
-  id: string
-  seq: number
+  programId: string
+  id: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  routineSeq: number
-  sessionSeq: number
-  instructorId: string
+  routineId: bigint
+  sessionId: bigint
+  instructorId: bigint
   capacity: number
   name: string
   level: string | null
@@ -279,14 +283,14 @@ export type ProgramWhereInput = {
   AND?: Prisma.ProgramWhereInput | Prisma.ProgramWhereInput[]
   OR?: Prisma.ProgramWhereInput[]
   NOT?: Prisma.ProgramWhereInput | Prisma.ProgramWhereInput[]
-  id?: Prisma.StringFilter<"Program"> | string
-  seq?: Prisma.IntFilter<"Program"> | number
+  programId?: Prisma.StringFilter<"Program"> | string
+  id?: Prisma.BigIntFilter<"Program"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Program"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
-  routineSeq?: Prisma.IntFilter<"Program"> | number
-  sessionSeq?: Prisma.IntFilter<"Program"> | number
-  instructorId?: Prisma.StringFilter<"Program"> | string
+  routineId?: Prisma.BigIntFilter<"Program"> | bigint | number
+  sessionId?: Prisma.BigIntFilter<"Program"> | bigint | number
+  instructorId?: Prisma.BigIntFilter<"Program"> | bigint | number
   capacity?: Prisma.IntFilter<"Program"> | number
   name?: Prisma.StringFilter<"Program"> | string
   level?: Prisma.StringNullableFilter<"Program"> | string | null
@@ -294,18 +298,19 @@ export type ProgramWhereInput = {
   routineLabelSnapshot?: Prisma.StringNullableFilter<"Program"> | string | null
   routine?: Prisma.XOR<Prisma.RoutineScalarRelationFilter, Prisma.RoutineWhereInput>
   session?: Prisma.XOR<Prisma.SessionScalarRelationFilter, Prisma.SessionWhereInput>
+  instructor?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   programActivities?: Prisma.ProgramActivityListRelationFilter
   reservations?: Prisma.ReservationListRelationFilter
 }
 
 export type ProgramOrderByWithRelationInput = {
+  programId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  routineSeq?: Prisma.SortOrder
-  sessionSeq?: Prisma.SortOrder
+  routineId?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrder
   instructorId?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -314,23 +319,24 @@ export type ProgramOrderByWithRelationInput = {
   routineLabelSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   routine?: Prisma.RoutineOrderByWithRelationInput
   session?: Prisma.SessionOrderByWithRelationInput
+  instructor?: Prisma.UserOrderByWithRelationInput
   programActivities?: Prisma.ProgramActivityOrderByRelationAggregateInput
   reservations?: Prisma.ReservationOrderByRelationAggregateInput
 }
 
 export type ProgramWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  seq?: number
-  sessionSeq_routineSeq?: Prisma.ProgramSessionSeqRoutineSeqCompoundUniqueInput
+  programId?: string
+  id?: bigint | number
+  sessionId_routineId?: Prisma.ProgramSessionIdRoutineIdCompoundUniqueInput
   AND?: Prisma.ProgramWhereInput | Prisma.ProgramWhereInput[]
   OR?: Prisma.ProgramWhereInput[]
   NOT?: Prisma.ProgramWhereInput | Prisma.ProgramWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"Program"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
-  routineSeq?: Prisma.IntFilter<"Program"> | number
-  sessionSeq?: Prisma.IntFilter<"Program"> | number
-  instructorId?: Prisma.StringFilter<"Program"> | string
+  routineId?: Prisma.BigIntFilter<"Program"> | bigint | number
+  sessionId?: Prisma.BigIntFilter<"Program"> | bigint | number
+  instructorId?: Prisma.BigIntFilter<"Program"> | bigint | number
   capacity?: Prisma.IntFilter<"Program"> | number
   name?: Prisma.StringFilter<"Program"> | string
   level?: Prisma.StringNullableFilter<"Program"> | string | null
@@ -338,18 +344,19 @@ export type ProgramWhereUniqueInput = Prisma.AtLeast<{
   routineLabelSnapshot?: Prisma.StringNullableFilter<"Program"> | string | null
   routine?: Prisma.XOR<Prisma.RoutineScalarRelationFilter, Prisma.RoutineWhereInput>
   session?: Prisma.XOR<Prisma.SessionScalarRelationFilter, Prisma.SessionWhereInput>
+  instructor?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   programActivities?: Prisma.ProgramActivityListRelationFilter
   reservations?: Prisma.ReservationListRelationFilter
-}, "seq" | "id" | "sessionSeq_routineSeq">
+}, "id" | "programId" | "sessionId_routineId">
 
 export type ProgramOrderByWithAggregationInput = {
+  programId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  routineSeq?: Prisma.SortOrder
-  sessionSeq?: Prisma.SortOrder
+  routineId?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrder
   instructorId?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -367,14 +374,14 @@ export type ProgramScalarWhereWithAggregatesInput = {
   AND?: Prisma.ProgramScalarWhereWithAggregatesInput | Prisma.ProgramScalarWhereWithAggregatesInput[]
   OR?: Prisma.ProgramScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ProgramScalarWhereWithAggregatesInput | Prisma.ProgramScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"Program"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"Program"> | number
+  programId?: Prisma.StringWithAggregatesFilter<"Program"> | string
+  id?: Prisma.BigIntWithAggregatesFilter<"Program"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Program"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Program"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Program"> | Date | string | null
-  routineSeq?: Prisma.IntWithAggregatesFilter<"Program"> | number
-  sessionSeq?: Prisma.IntWithAggregatesFilter<"Program"> | number
-  instructorId?: Prisma.StringWithAggregatesFilter<"Program"> | string
+  routineId?: Prisma.BigIntWithAggregatesFilter<"Program"> | bigint | number
+  sessionId?: Prisma.BigIntWithAggregatesFilter<"Program"> | bigint | number
+  instructorId?: Prisma.BigIntWithAggregatesFilter<"Program"> | bigint | number
   capacity?: Prisma.IntWithAggregatesFilter<"Program"> | number
   name?: Prisma.StringWithAggregatesFilter<"Program"> | string
   level?: Prisma.StringNullableWithAggregatesFilter<"Program"> | string | null
@@ -383,11 +390,11 @@ export type ProgramScalarWhereWithAggregatesInput = {
 }
 
 export type ProgramCreateInput = {
-  id?: string
+  programId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  instructorId: string
   capacity: number
   name: string
   level?: string | null
@@ -395,19 +402,20 @@ export type ProgramCreateInput = {
   routineLabelSnapshot?: string | null
   routine: Prisma.RoutineCreateNestedOneWithoutProgramsInput
   session: Prisma.SessionCreateNestedOneWithoutProgramsInput
+  instructor: Prisma.UserCreateNestedOneWithoutInstructedProgramsInput
   programActivities?: Prisma.ProgramActivityCreateNestedManyWithoutProgramInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramUncheckedCreateInput = {
-  id?: string
-  seq?: number
+  programId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  routineSeq: number
-  sessionSeq: number
-  instructorId: string
+  routineId: bigint | number
+  sessionId: bigint | number
+  instructorId: bigint | number
   capacity: number
   name: string
   level?: string | null
@@ -418,11 +426,11 @@ export type ProgramUncheckedCreateInput = {
 }
 
 export type ProgramUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  programId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -430,19 +438,20 @@ export type ProgramUpdateInput = {
   routineLabelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routine?: Prisma.RoutineUpdateOneRequiredWithoutProgramsNestedInput
   session?: Prisma.SessionUpdateOneRequiredWithoutProgramsNestedInput
+  instructor?: Prisma.UserUpdateOneRequiredWithoutInstructedProgramsNestedInput
   programActivities?: Prisma.ProgramActivityUpdateManyWithoutProgramNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  programId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  routineSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  sessionSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
+  routineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sessionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  instructorId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -453,14 +462,14 @@ export type ProgramUncheckedUpdateInput = {
 }
 
 export type ProgramCreateManyInput = {
-  id?: string
-  seq?: number
+  programId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  routineSeq: number
-  sessionSeq: number
-  instructorId: string
+  routineId: bigint | number
+  sessionId: bigint | number
+  instructorId: bigint | number
   capacity: number
   name: string
   level?: string | null
@@ -469,11 +478,11 @@ export type ProgramCreateManyInput = {
 }
 
 export type ProgramUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  programId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -482,14 +491,14 @@ export type ProgramUpdateManyMutationInput = {
 }
 
 export type ProgramUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  programId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  routineSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  sessionSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
+  routineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sessionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  instructorId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -502,19 +511,19 @@ export type ProgramScalarRelationFilter = {
   isNot?: Prisma.ProgramWhereInput
 }
 
-export type ProgramSessionSeqRoutineSeqCompoundUniqueInput = {
-  sessionSeq: number
-  routineSeq: number
+export type ProgramSessionIdRoutineIdCompoundUniqueInput = {
+  sessionId: bigint | number
+  routineId: bigint | number
 }
 
 export type ProgramCountOrderByAggregateInput = {
+  programId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  routineSeq?: Prisma.SortOrder
-  sessionSeq?: Prisma.SortOrder
+  routineId?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrder
   instructorId?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -524,20 +533,21 @@ export type ProgramCountOrderByAggregateInput = {
 }
 
 export type ProgramAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  routineSeq?: Prisma.SortOrder
-  sessionSeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  routineId?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrder
+  instructorId?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
 }
 
 export type ProgramMaxOrderByAggregateInput = {
+  programId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  routineSeq?: Prisma.SortOrder
-  sessionSeq?: Prisma.SortOrder
+  routineId?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrder
   instructorId?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -547,13 +557,13 @@ export type ProgramMaxOrderByAggregateInput = {
 }
 
 export type ProgramMinOrderByAggregateInput = {
+  programId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  routineSeq?: Prisma.SortOrder
-  sessionSeq?: Prisma.SortOrder
+  routineId?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrder
   instructorId?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -563,9 +573,10 @@ export type ProgramMinOrderByAggregateInput = {
 }
 
 export type ProgramSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  routineSeq?: Prisma.SortOrder
-  sessionSeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  routineId?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrder
+  instructorId?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
 }
 
@@ -691,12 +702,54 @@ export type ProgramUncheckedUpdateManyWithoutSessionNestedInput = {
   deleteMany?: Prisma.ProgramScalarWhereInput | Prisma.ProgramScalarWhereInput[]
 }
 
+export type ProgramCreateNestedManyWithoutInstructorInput = {
+  create?: Prisma.XOR<Prisma.ProgramCreateWithoutInstructorInput, Prisma.ProgramUncheckedCreateWithoutInstructorInput> | Prisma.ProgramCreateWithoutInstructorInput[] | Prisma.ProgramUncheckedCreateWithoutInstructorInput[]
+  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutInstructorInput | Prisma.ProgramCreateOrConnectWithoutInstructorInput[]
+  createMany?: Prisma.ProgramCreateManyInstructorInputEnvelope
+  connect?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
+}
+
+export type ProgramUncheckedCreateNestedManyWithoutInstructorInput = {
+  create?: Prisma.XOR<Prisma.ProgramCreateWithoutInstructorInput, Prisma.ProgramUncheckedCreateWithoutInstructorInput> | Prisma.ProgramCreateWithoutInstructorInput[] | Prisma.ProgramUncheckedCreateWithoutInstructorInput[]
+  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutInstructorInput | Prisma.ProgramCreateOrConnectWithoutInstructorInput[]
+  createMany?: Prisma.ProgramCreateManyInstructorInputEnvelope
+  connect?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
+}
+
+export type ProgramUpdateManyWithoutInstructorNestedInput = {
+  create?: Prisma.XOR<Prisma.ProgramCreateWithoutInstructorInput, Prisma.ProgramUncheckedCreateWithoutInstructorInput> | Prisma.ProgramCreateWithoutInstructorInput[] | Prisma.ProgramUncheckedCreateWithoutInstructorInput[]
+  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutInstructorInput | Prisma.ProgramCreateOrConnectWithoutInstructorInput[]
+  upsert?: Prisma.ProgramUpsertWithWhereUniqueWithoutInstructorInput | Prisma.ProgramUpsertWithWhereUniqueWithoutInstructorInput[]
+  createMany?: Prisma.ProgramCreateManyInstructorInputEnvelope
+  set?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
+  disconnect?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
+  delete?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
+  connect?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
+  update?: Prisma.ProgramUpdateWithWhereUniqueWithoutInstructorInput | Prisma.ProgramUpdateWithWhereUniqueWithoutInstructorInput[]
+  updateMany?: Prisma.ProgramUpdateManyWithWhereWithoutInstructorInput | Prisma.ProgramUpdateManyWithWhereWithoutInstructorInput[]
+  deleteMany?: Prisma.ProgramScalarWhereInput | Prisma.ProgramScalarWhereInput[]
+}
+
+export type ProgramUncheckedUpdateManyWithoutInstructorNestedInput = {
+  create?: Prisma.XOR<Prisma.ProgramCreateWithoutInstructorInput, Prisma.ProgramUncheckedCreateWithoutInstructorInput> | Prisma.ProgramCreateWithoutInstructorInput[] | Prisma.ProgramUncheckedCreateWithoutInstructorInput[]
+  connectOrCreate?: Prisma.ProgramCreateOrConnectWithoutInstructorInput | Prisma.ProgramCreateOrConnectWithoutInstructorInput[]
+  upsert?: Prisma.ProgramUpsertWithWhereUniqueWithoutInstructorInput | Prisma.ProgramUpsertWithWhereUniqueWithoutInstructorInput[]
+  createMany?: Prisma.ProgramCreateManyInstructorInputEnvelope
+  set?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
+  disconnect?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
+  delete?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
+  connect?: Prisma.ProgramWhereUniqueInput | Prisma.ProgramWhereUniqueInput[]
+  update?: Prisma.ProgramUpdateWithWhereUniqueWithoutInstructorInput | Prisma.ProgramUpdateWithWhereUniqueWithoutInstructorInput[]
+  updateMany?: Prisma.ProgramUpdateManyWithWhereWithoutInstructorInput | Prisma.ProgramUpdateManyWithWhereWithoutInstructorInput[]
+  deleteMany?: Prisma.ProgramScalarWhereInput | Prisma.ProgramScalarWhereInput[]
+}
+
 export type ProgramCreateWithoutProgramActivitiesInput = {
-  id?: string
+  programId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  instructorId: string
   capacity: number
   name: string
   level?: string | null
@@ -704,18 +757,19 @@ export type ProgramCreateWithoutProgramActivitiesInput = {
   routineLabelSnapshot?: string | null
   routine: Prisma.RoutineCreateNestedOneWithoutProgramsInput
   session: Prisma.SessionCreateNestedOneWithoutProgramsInput
+  instructor: Prisma.UserCreateNestedOneWithoutInstructedProgramsInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramUncheckedCreateWithoutProgramActivitiesInput = {
-  id?: string
-  seq?: number
+  programId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  routineSeq: number
-  sessionSeq: number
-  instructorId: string
+  routineId: bigint | number
+  sessionId: bigint | number
+  instructorId: bigint | number
   capacity: number
   name: string
   level?: string | null
@@ -741,11 +795,11 @@ export type ProgramUpdateToOneWithWhereWithoutProgramActivitiesInput = {
 }
 
 export type ProgramUpdateWithoutProgramActivitiesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  programId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -753,18 +807,19 @@ export type ProgramUpdateWithoutProgramActivitiesInput = {
   routineLabelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routine?: Prisma.RoutineUpdateOneRequiredWithoutProgramsNestedInput
   session?: Prisma.SessionUpdateOneRequiredWithoutProgramsNestedInput
+  instructor?: Prisma.UserUpdateOneRequiredWithoutInstructedProgramsNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateWithoutProgramActivitiesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  programId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  routineSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  sessionSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
+  routineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sessionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  instructorId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -774,11 +829,11 @@ export type ProgramUncheckedUpdateWithoutProgramActivitiesInput = {
 }
 
 export type ProgramCreateWithoutReservationsInput = {
-  id?: string
+  programId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  instructorId: string
   capacity: number
   name: string
   level?: string | null
@@ -786,18 +841,19 @@ export type ProgramCreateWithoutReservationsInput = {
   routineLabelSnapshot?: string | null
   routine: Prisma.RoutineCreateNestedOneWithoutProgramsInput
   session: Prisma.SessionCreateNestedOneWithoutProgramsInput
+  instructor: Prisma.UserCreateNestedOneWithoutInstructedProgramsInput
   programActivities?: Prisma.ProgramActivityCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramUncheckedCreateWithoutReservationsInput = {
-  id?: string
-  seq?: number
+  programId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  routineSeq: number
-  sessionSeq: number
-  instructorId: string
+  routineId: bigint | number
+  sessionId: bigint | number
+  instructorId: bigint | number
   capacity: number
   name: string
   level?: string | null
@@ -823,11 +879,11 @@ export type ProgramUpdateToOneWithWhereWithoutReservationsInput = {
 }
 
 export type ProgramUpdateWithoutReservationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  programId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -835,18 +891,19 @@ export type ProgramUpdateWithoutReservationsInput = {
   routineLabelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routine?: Prisma.RoutineUpdateOneRequiredWithoutProgramsNestedInput
   session?: Prisma.SessionUpdateOneRequiredWithoutProgramsNestedInput
+  instructor?: Prisma.UserUpdateOneRequiredWithoutInstructedProgramsNestedInput
   programActivities?: Prisma.ProgramActivityUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateWithoutReservationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  programId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  routineSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  sessionSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
+  routineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sessionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  instructorId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -856,29 +913,30 @@ export type ProgramUncheckedUpdateWithoutReservationsInput = {
 }
 
 export type ProgramCreateWithoutRoutineInput = {
-  id?: string
+  programId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  instructorId: string
   capacity: number
   name: string
   level?: string | null
   routineNameSnapshot?: string | null
   routineLabelSnapshot?: string | null
   session: Prisma.SessionCreateNestedOneWithoutProgramsInput
+  instructor: Prisma.UserCreateNestedOneWithoutInstructedProgramsInput
   programActivities?: Prisma.ProgramActivityCreateNestedManyWithoutProgramInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramUncheckedCreateWithoutRoutineInput = {
-  id?: string
-  seq?: number
+  programId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  sessionSeq: number
-  instructorId: string
+  sessionId: bigint | number
+  instructorId: bigint | number
   capacity: number
   name: string
   level?: string | null
@@ -918,14 +976,14 @@ export type ProgramScalarWhereInput = {
   AND?: Prisma.ProgramScalarWhereInput | Prisma.ProgramScalarWhereInput[]
   OR?: Prisma.ProgramScalarWhereInput[]
   NOT?: Prisma.ProgramScalarWhereInput | Prisma.ProgramScalarWhereInput[]
-  id?: Prisma.StringFilter<"Program"> | string
-  seq?: Prisma.IntFilter<"Program"> | number
+  programId?: Prisma.StringFilter<"Program"> | string
+  id?: Prisma.BigIntFilter<"Program"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Program"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
-  routineSeq?: Prisma.IntFilter<"Program"> | number
-  sessionSeq?: Prisma.IntFilter<"Program"> | number
-  instructorId?: Prisma.StringFilter<"Program"> | string
+  routineId?: Prisma.BigIntFilter<"Program"> | bigint | number
+  sessionId?: Prisma.BigIntFilter<"Program"> | bigint | number
+  instructorId?: Prisma.BigIntFilter<"Program"> | bigint | number
   capacity?: Prisma.IntFilter<"Program"> | number
   name?: Prisma.StringFilter<"Program"> | string
   level?: Prisma.StringNullableFilter<"Program"> | string | null
@@ -934,29 +992,30 @@ export type ProgramScalarWhereInput = {
 }
 
 export type ProgramCreateWithoutSessionInput = {
-  id?: string
+  programId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  instructorId: string
   capacity: number
   name: string
   level?: string | null
   routineNameSnapshot?: string | null
   routineLabelSnapshot?: string | null
   routine: Prisma.RoutineCreateNestedOneWithoutProgramsInput
+  instructor: Prisma.UserCreateNestedOneWithoutInstructedProgramsInput
   programActivities?: Prisma.ProgramActivityCreateNestedManyWithoutProgramInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutProgramInput
 }
 
 export type ProgramUncheckedCreateWithoutSessionInput = {
-  id?: string
-  seq?: number
+  programId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  routineSeq: number
-  instructorId: string
+  routineId: bigint | number
+  instructorId: bigint | number
   capacity: number
   name: string
   level?: string | null
@@ -992,14 +1051,74 @@ export type ProgramUpdateManyWithWhereWithoutSessionInput = {
   data: Prisma.XOR<Prisma.ProgramUpdateManyMutationInput, Prisma.ProgramUncheckedUpdateManyWithoutSessionInput>
 }
 
-export type ProgramCreateManyRoutineInput = {
-  id?: string
-  seq?: number
+export type ProgramCreateWithoutInstructorInput = {
+  programId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  sessionSeq: number
-  instructorId: string
+  capacity: number
+  name: string
+  level?: string | null
+  routineNameSnapshot?: string | null
+  routineLabelSnapshot?: string | null
+  routine: Prisma.RoutineCreateNestedOneWithoutProgramsInput
+  session: Prisma.SessionCreateNestedOneWithoutProgramsInput
+  programActivities?: Prisma.ProgramActivityCreateNestedManyWithoutProgramInput
+  reservations?: Prisma.ReservationCreateNestedManyWithoutProgramInput
+}
+
+export type ProgramUncheckedCreateWithoutInstructorInput = {
+  programId?: string
+  id?: bigint | number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  routineId: bigint | number
+  sessionId: bigint | number
+  capacity: number
+  name: string
+  level?: string | null
+  routineNameSnapshot?: string | null
+  routineLabelSnapshot?: string | null
+  programActivities?: Prisma.ProgramActivityUncheckedCreateNestedManyWithoutProgramInput
+  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutProgramInput
+}
+
+export type ProgramCreateOrConnectWithoutInstructorInput = {
+  where: Prisma.ProgramWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProgramCreateWithoutInstructorInput, Prisma.ProgramUncheckedCreateWithoutInstructorInput>
+}
+
+export type ProgramCreateManyInstructorInputEnvelope = {
+  data: Prisma.ProgramCreateManyInstructorInput | Prisma.ProgramCreateManyInstructorInput[]
+  skipDuplicates?: boolean
+}
+
+export type ProgramUpsertWithWhereUniqueWithoutInstructorInput = {
+  where: Prisma.ProgramWhereUniqueInput
+  update: Prisma.XOR<Prisma.ProgramUpdateWithoutInstructorInput, Prisma.ProgramUncheckedUpdateWithoutInstructorInput>
+  create: Prisma.XOR<Prisma.ProgramCreateWithoutInstructorInput, Prisma.ProgramUncheckedCreateWithoutInstructorInput>
+}
+
+export type ProgramUpdateWithWhereUniqueWithoutInstructorInput = {
+  where: Prisma.ProgramWhereUniqueInput
+  data: Prisma.XOR<Prisma.ProgramUpdateWithoutInstructorInput, Prisma.ProgramUncheckedUpdateWithoutInstructorInput>
+}
+
+export type ProgramUpdateManyWithWhereWithoutInstructorInput = {
+  where: Prisma.ProgramScalarWhereInput
+  data: Prisma.XOR<Prisma.ProgramUpdateManyMutationInput, Prisma.ProgramUncheckedUpdateManyWithoutInstructorInput>
+}
+
+export type ProgramCreateManyRoutineInput = {
+  programId?: string
+  id?: bigint | number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  sessionId: bigint | number
+  instructorId: bigint | number
   capacity: number
   name: string
   level?: string | null
@@ -1008,29 +1127,30 @@ export type ProgramCreateManyRoutineInput = {
 }
 
 export type ProgramUpdateWithoutRoutineInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  programId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routineNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routineLabelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   session?: Prisma.SessionUpdateOneRequiredWithoutProgramsNestedInput
+  instructor?: Prisma.UserUpdateOneRequiredWithoutInstructedProgramsNestedInput
   programActivities?: Prisma.ProgramActivityUpdateManyWithoutProgramNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateWithoutRoutineInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  programId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  sessionSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  instructorId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1041,13 +1161,13 @@ export type ProgramUncheckedUpdateWithoutRoutineInput = {
 }
 
 export type ProgramUncheckedUpdateManyWithoutRoutineInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  programId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  sessionSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  instructorId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1056,13 +1176,13 @@ export type ProgramUncheckedUpdateManyWithoutRoutineInput = {
 }
 
 export type ProgramCreateManySessionInput = {
-  id?: string
-  seq?: number
+  programId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  routineSeq: number
-  instructorId: string
+  routineId: bigint | number
+  instructorId: bigint | number
   capacity: number
   name: string
   level?: string | null
@@ -1071,29 +1191,30 @@ export type ProgramCreateManySessionInput = {
 }
 
 export type ProgramUpdateWithoutSessionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  programId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routineNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routineLabelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   routine?: Prisma.RoutineUpdateOneRequiredWithoutProgramsNestedInput
+  instructor?: Prisma.UserUpdateOneRequiredWithoutInstructedProgramsNestedInput
   programActivities?: Prisma.ProgramActivityUpdateManyWithoutProgramNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutProgramNestedInput
 }
 
 export type ProgramUncheckedUpdateWithoutSessionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  programId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  routineSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
+  routineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  instructorId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1104,13 +1225,77 @@ export type ProgramUncheckedUpdateWithoutSessionInput = {
 }
 
 export type ProgramUncheckedUpdateManyWithoutSessionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  programId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  routineSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  instructorId?: Prisma.StringFieldUpdateOperationsInput | string
+  routineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  instructorId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineLabelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type ProgramCreateManyInstructorInput = {
+  programId?: string
+  id?: bigint | number
+  createdAt?: Date | string
+  updatedAt?: Date | string | null
+  removedAt?: Date | string | null
+  routineId: bigint | number
+  sessionId: bigint | number
+  capacity: number
+  name: string
+  level?: string | null
+  routineNameSnapshot?: string | null
+  routineLabelSnapshot?: string | null
+}
+
+export type ProgramUpdateWithoutInstructorInput = {
+  programId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineLabelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routine?: Prisma.RoutineUpdateOneRequiredWithoutProgramsNestedInput
+  session?: Prisma.SessionUpdateOneRequiredWithoutProgramsNestedInput
+  programActivities?: Prisma.ProgramActivityUpdateManyWithoutProgramNestedInput
+  reservations?: Prisma.ReservationUpdateManyWithoutProgramNestedInput
+}
+
+export type ProgramUncheckedUpdateWithoutInstructorInput = {
+  programId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  routineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sessionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routineLabelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  programActivities?: Prisma.ProgramActivityUncheckedUpdateManyWithoutProgramNestedInput
+  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutProgramNestedInput
+}
+
+export type ProgramUncheckedUpdateManyWithoutInstructorInput = {
+  programId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  routineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sessionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1159,13 +1344,13 @@ export type ProgramCountOutputTypeCountReservationsArgs<ExtArgs extends runtime.
 
 
 export type ProgramSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  programId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  routineSeq?: boolean
-  sessionSeq?: boolean
+  routineId?: boolean
+  sessionId?: boolean
   instructorId?: boolean
   capacity?: boolean
   name?: boolean
@@ -1174,19 +1359,20 @@ export type ProgramSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   routineLabelSnapshot?: boolean
   routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
+  instructor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   programActivities?: boolean | Prisma.Program$programActivitiesArgs<ExtArgs>
   reservations?: boolean | Prisma.Program$reservationsArgs<ExtArgs>
   _count?: boolean | Prisma.ProgramCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["program"]>
 
 export type ProgramSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  programId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  routineSeq?: boolean
-  sessionSeq?: boolean
+  routineId?: boolean
+  sessionId?: boolean
   instructorId?: boolean
   capacity?: boolean
   name?: boolean
@@ -1195,16 +1381,17 @@ export type ProgramSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   routineLabelSnapshot?: boolean
   routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
+  instructor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["program"]>
 
 export type ProgramSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  programId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  routineSeq?: boolean
-  sessionSeq?: boolean
+  routineId?: boolean
+  sessionId?: boolean
   instructorId?: boolean
   capacity?: boolean
   name?: boolean
@@ -1213,16 +1400,17 @@ export type ProgramSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   routineLabelSnapshot?: boolean
   routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
+  instructor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["program"]>
 
 export type ProgramSelectScalar = {
+  programId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  routineSeq?: boolean
-  sessionSeq?: boolean
+  routineId?: boolean
+  sessionId?: boolean
   instructorId?: boolean
   capacity?: boolean
   name?: boolean
@@ -1231,10 +1419,11 @@ export type ProgramSelectScalar = {
   routineLabelSnapshot?: boolean
 }
 
-export type ProgramOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "routineSeq" | "sessionSeq" | "instructorId" | "capacity" | "name" | "level" | "routineNameSnapshot" | "routineLabelSnapshot", ExtArgs["result"]["program"]>
+export type ProgramOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"programId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "routineId" | "sessionId" | "instructorId" | "capacity" | "name" | "level" | "routineNameSnapshot" | "routineLabelSnapshot", ExtArgs["result"]["program"]>
 export type ProgramInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
+  instructor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   programActivities?: boolean | Prisma.Program$programActivitiesArgs<ExtArgs>
   reservations?: boolean | Prisma.Program$reservationsArgs<ExtArgs>
   _count?: boolean | Prisma.ProgramCountOutputTypeDefaultArgs<ExtArgs>
@@ -1242,10 +1431,12 @@ export type ProgramInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type ProgramIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
+  instructor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type ProgramIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   routine?: boolean | Prisma.RoutineDefaultArgs<ExtArgs>
   session?: boolean | Prisma.SessionDefaultArgs<ExtArgs>
+  instructor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $ProgramPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1253,18 +1444,19 @@ export type $ProgramPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     routine: Prisma.$RoutinePayload<ExtArgs>
     session: Prisma.$SessionPayload<ExtArgs>
+    instructor: Prisma.$UserPayload<ExtArgs>
     programActivities: Prisma.$ProgramActivityPayload<ExtArgs>[]
     reservations: Prisma.$ReservationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    seq: number
+    programId: string
+    id: bigint
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    routineSeq: number
-    sessionSeq: number
-    instructorId: string
+    routineId: bigint
+    sessionId: bigint
+    instructorId: bigint
     capacity: number
     name: string
     level: string | null
@@ -1353,8 +1545,8 @@ export interface ProgramDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * // Get first 10 Programs
    * const programs = await prisma.program.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const programWithIdOnly = await prisma.program.findMany({ select: { id: true } })
+   * // Only select the `programId`
+   * const programWithProgramIdOnly = await prisma.program.findMany({ select: { programId: true } })
    * 
    */
   findMany<T extends ProgramFindManyArgs>(args?: Prisma.SelectSubset<T, ProgramFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1398,9 +1590,9 @@ export interface ProgramDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    *   ]
    * })
    * 
-   * // Create many Programs and only return the `id`
-   * const programWithIdOnly = await prisma.program.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many Programs and only return the `programId`
+   * const programWithProgramIdOnly = await prisma.program.createManyAndReturn({
+   *   select: { programId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1489,9 +1681,9 @@ export interface ProgramDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    *   ]
    * })
    * 
-   * // Update zero or more Programs and only return the `id`
-   * const programWithIdOnly = await prisma.program.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more Programs and only return the `programId`
+   * const programWithProgramIdOnly = await prisma.program.updateManyAndReturn({
+   *   select: { programId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1666,6 +1858,7 @@ export interface Prisma__ProgramClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   routine<T extends Prisma.RoutineDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RoutineDefaultArgs<ExtArgs>>): Prisma.Prisma__RoutineClient<runtime.Types.Result.GetResult<Prisma.$RoutinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   session<T extends Prisma.SessionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SessionDefaultArgs<ExtArgs>>): Prisma.Prisma__SessionClient<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  instructor<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   programActivities<T extends Prisma.Program$programActivitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Program$programActivitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgramActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reservations<T extends Prisma.Program$reservationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Program$reservationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReservationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1697,14 +1890,14 @@ export interface Prisma__ProgramClient<T, Null = never, ExtArgs extends runtime.
  * Fields of the Program model
  */
 export interface ProgramFieldRefs {
-  readonly id: Prisma.FieldRef<"Program", 'String'>
-  readonly seq: Prisma.FieldRef<"Program", 'Int'>
+  readonly programId: Prisma.FieldRef<"Program", 'String'>
+  readonly id: Prisma.FieldRef<"Program", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"Program", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Program", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Program", 'DateTime'>
-  readonly routineSeq: Prisma.FieldRef<"Program", 'Int'>
-  readonly sessionSeq: Prisma.FieldRef<"Program", 'Int'>
-  readonly instructorId: Prisma.FieldRef<"Program", 'String'>
+  readonly routineId: Prisma.FieldRef<"Program", 'BigInt'>
+  readonly sessionId: Prisma.FieldRef<"Program", 'BigInt'>
+  readonly instructorId: Prisma.FieldRef<"Program", 'BigInt'>
   readonly capacity: Prisma.FieldRef<"Program", 'Int'>
   readonly name: Prisma.FieldRef<"Program", 'String'>
   readonly level: Prisma.FieldRef<"Program", 'String'>

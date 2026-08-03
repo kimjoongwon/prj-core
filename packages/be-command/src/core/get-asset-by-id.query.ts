@@ -1,3 +1,3 @@
 export class GetAssetByIdQuery {
-	constructor(readonly assetId: string) {}
+	constructor(readonly assetId: bigint) {}
 }

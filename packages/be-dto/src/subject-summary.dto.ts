@@ -1,15 +1,15 @@
 import {
+	BigIntIdField,
 	StringField,
 	StringFieldOptional,
-	ULIDField,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 
 /**
  * Subject 간략 DTO (Ability 내 중첩용)
  */
 export class SubjectSummaryDto {
-	@ULIDField()
-	id!: string;
+	@BigIntIdField()
+	id!: bigint;
 
 	@StringField()
 	name!: string;

@@ -1,4 +1,4 @@
-import { ParseUlidPipe } from "@cocrepo/be-common";
+import { ParseBigIntIdPipe } from "@cocrepo/be-common";
 import {
 	ConfirmEmailVerificationCommand,
 	ForceResetPasswordCommand,
@@ -30,6 +30,7 @@ import {
 	ApiAuth,
 	ApiErrors,
 	ApiResponseEntity,
+	ApiTenantHeader,
 	Public,
 	ResponseMessage,
 	Roles,
@@ -51,6 +52,7 @@ import {
 	TokenRefreshResponseDto,
 	VerifyTokenResponseDto,
 } from "@cocrepo/dto";
+import { formatDatabaseId } from "@cocrepo/type";
 import {
 	BadRequestException,
 	Body,
@@ -264,6 +266,10 @@ export class AuthController {
 		type: SignUpPayloadDto,
 		description: "회원가입 정보 (이메일, 비밀번호, 사용자명 등)",
 	})
+	@ApiTenantHeader({
+		required: false,
+		description: "회원가입 시 선택한 Space의 숫자 ID 문자열입니다.",
+	})
 	@ApiErrors(
 		{ status: 400, message: AUTH_ERRORS.INVALID_SIGNUP_FORMAT },
 		{ status: 409, message: AUTH_ERRORS.EMAIL_ALREADY_EXISTS },
@@ -275,7 +281,10 @@ export class AuthController {
 		@Body() signUpDto: SignUpPayloadDto,
 		@Headers(REQUEST_HEADER_KEYS.TENANT_ID) requestedSpaceId?: string,
 	) {
-		if (requestedSpaceId && requestedSpaceId !== signUpDto.spaceId) {
+		if (
+			requestedSpaceId &&
+			requestedSpaceId !== formatDatabaseId(signUpDto.spaceId)
+		) {
 			throw new BadRequestException("SIGN_UP_SPACE_HEADER_MISMATCH");
 		}
 
@@ -452,7 +461,7 @@ export class AuthController {
 	@ApiErrors(401, 403, 404)
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	@ResponseMessage("계정 잠금이 해제되었습니다.")
-	async unlockAccount(@Param("userId", ParseUlidPipe) userId: string) {
+	async unlockAccount(@Param("userId", ParseBigIntIdPipe) userId: bigint) {
 		return this.commandBus.execute(new UnlockAccountCommand(userId));
 	}
 
@@ -471,7 +480,7 @@ export class AuthController {
 	@ApiErrors(401, 403, 404)
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	@ResponseMessage("임시 비밀번호가 이메일로 발송되었습니다.")
-	async forceResetPassword(@Param("userId", ParseUlidPipe) userId: string) {
+	async forceResetPassword(@Param("userId", ParseBigIntIdPipe) userId: bigint) {
 		return this.commandBus.execute(new ForceResetPasswordCommand(userId));
 	}
 
@@ -490,7 +499,9 @@ export class AuthController {
 	@ApiErrors(401, 403, 404)
 	@ApiResponseEntity(Boolean, HttpStatus.OK)
 	@ResponseMessage("사용자의 모든 세션이 무효화되었습니다.")
-	async invalidateUserSessions(@Param("userId", ParseUlidPipe) userId: string) {
+	async invalidateUserSessions(
+		@Param("userId", ParseBigIntIdPipe) userId: bigint,
+	) {
 		return this.commandBus.execute(new InvalidateUserSessionsCommand(userId));
 	}
 }

@@ -154,16 +154,26 @@ describe("Role 시스템 E2E 테스트", () => {
 			}
 		});
 
-		it("인증 + 잘못된 x-tenant-id로 접근 시 403을 반환해야 한다", async () => {
+		it("인증 + 유효하지 않은 숫자 x-tenant-id로 접근 시 400을 반환해야 한다", async () => {
 			if (!jwtToken) return;
 
 			const response = await request(app.getHttpServer())
 				.get("/api/v1/test-guards/roles/member")
 				.set("Authorization", `Bearer ${jwtToken}`)
-				.set("x-tenant-id", "00000000-0000-0000-0000-000000000000");
+				.set("x-tenant-id", "01");
 
-			// SpaceAccessGuard가 전역이면 403, 아니면 RolesGuard에서 403
-			expect([403]).toContain(response.status);
+			expect(response.status).toBe(400);
+		});
+
+		it("인증 + 접근 권한이 없는 숫자 x-tenant-id로 접근 시 403을 반환해야 한다", async () => {
+			if (!jwtToken) return;
+
+			const response = await request(app.getHttpServer())
+				.get("/api/v1/test-guards/roles/member")
+				.set("Authorization", `Bearer ${jwtToken}`)
+				.set("x-tenant-id", "9223372036854775807");
+
+			expect(response.status).toBe(403);
 		});
 	});
 

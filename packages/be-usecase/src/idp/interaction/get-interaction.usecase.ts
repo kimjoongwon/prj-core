@@ -14,9 +14,13 @@ export class GetInteractionUseCase {
 			query.req,
 			query.res,
 		);
-		const client = await this.interactionService.findClient(
-			interaction.params.client_id as string,
-		);
+		const clientId =
+			typeof interaction.params.client_id === "string"
+				? interaction.params.client_id
+				: undefined;
+		const client = clientId
+			? await this.interactionService.findClient(clientId)
+			: undefined;
 
 		return {
 			type: interaction.prompt.name,

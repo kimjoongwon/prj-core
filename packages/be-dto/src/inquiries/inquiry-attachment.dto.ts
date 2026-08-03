@@ -1,17 +1,17 @@
 import {
+	BigIntIdField,
 	BooleanField,
 	NumberField,
 	StringField,
-	ULIDField,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import { AbstractDto } from "../abstract.dto";
 
 /**
  * 메시지 첨부파일 DTO
  */
 export class InquiryAttachmentDto extends AbstractDto {
-	@ULIDField({ description: "소속 메시지 ID" })
-	messageId!: string;
+	@BigIntIdField({ description: "소속 메시지 ID" })
+	messageId!: bigint;
 
 	@StringField({ description: "원본 파일명" })
 	fileName!: string;

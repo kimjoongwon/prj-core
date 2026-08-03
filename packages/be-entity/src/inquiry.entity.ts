@@ -1,7 +1,6 @@
 import type {
 	InquiryCategory,
 	InquiryChannel,
-	Inquiry as InquiryEntity,
 	InquiryPriority,
 	InquirySource,
 	InquiryStatus,
@@ -10,7 +9,6 @@ import type {
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { AIAgentLog } from "./ai-agent-log.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { InquiryMessage } from "./inquiry-message.entity";
 import type { InquiryParticipant } from "./inquiry-participant.entity";
 import type { InquiryTag } from "./inquiry-tag.entity";
@@ -25,15 +23,15 @@ import type { User } from "./user.entity";
  * 문의 접수, 상태 관리, 담당자 배정, SLA 추적, 실시간 채팅 지원 등의 기능을 제공합니다.
  * Space 기반 멀티테넌시를 지원합니다.
  */
-export class Inquiry
-	extends AbstractEntity
-	implements DomainEntityModel<InquiryEntity>
-{
+export class Inquiry extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	inquiryId!: string;
+
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	spaceId!: string;
-	createdById!: string | null;
+	spaceId!: bigint;
+	createdById!: bigint | null;
 	inquiryNumber!: string;
 	title!: string;
 	category!: InquiryCategory;
@@ -51,8 +49,8 @@ export class Inquiry
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	customerId!: string | null;
-	assigneeId!: string | null;
+	customerId!: bigint | null;
+	assigneeId!: bigint | null;
 	firstResponseAt!: Date | null;
 	resolvedAt!: Date | null;
 	closedAt!: Date | null;
@@ -161,7 +159,7 @@ export class Inquiry
 	/**
 	 * 담당자 배정
 	 */
-	assignTo(userId: string): void {
+	assignTo(userId: bigint): void {
 		this.assigneeId = userId;
 		if (this.isNew()) {
 			this.status = "OPEN";

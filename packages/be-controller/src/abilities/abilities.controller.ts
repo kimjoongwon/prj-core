@@ -1,4 +1,4 @@
-import { ParseUlidPipe } from "@cocrepo/be-common";
+import { ParseBigIntIdPipe } from "@cocrepo/be-common";
 import {
 	CreateAbilityCommand,
 	DeleteAbilityCommand,
@@ -96,7 +96,7 @@ export class AbilitiesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "id",
-		description: "Ability ID (ULID)",
+		description: "Ability ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(
@@ -107,7 +107,7 @@ export class AbilitiesController {
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK)
 	@ResponseMessage("권한 조회 성공")
 	async getAbilityById(
-		@Param("id", ParseUlidPipe) id: string,
+		@Param("id", ParseBigIntIdPipe) id: bigint,
 	): Promise<Ability> {
 		return this.queryBus.execute(new GetAbilityByIdQuery(id));
 	}
@@ -153,7 +153,7 @@ export class AbilitiesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "id",
-		description: "Ability ID (ULID)",
+		description: "Ability ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiBody({
@@ -169,7 +169,7 @@ export class AbilitiesController {
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK)
 	@ResponseMessage("권한 정의 수정 성공")
 	async updateAbility(
-		@Param("id", ParseUlidPipe) id: string,
+		@Param("id", ParseBigIntIdPipe) id: bigint,
 		@Body() dto: UpdateAbilityDto,
 	): Promise<Ability> {
 		return this.commandBus.execute(new UpdateAbilityCommand(id, dto));
@@ -188,7 +188,7 @@ export class AbilitiesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "id",
-		description: "Ability ID (ULID)",
+		description: "Ability ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(
@@ -200,7 +200,7 @@ export class AbilitiesController {
 	@ApiResponseEntity(AbilityResponseDto, HttpStatus.OK)
 	@ResponseMessage("권한 삭제 성공")
 	async deleteAbility(
-		@Param("id", ParseUlidPipe) id: string,
+		@Param("id", ParseBigIntIdPipe) id: bigint,
 	): Promise<Ability> {
 		return this.commandBus.execute(new DeleteAbilityCommand(id));
 	}

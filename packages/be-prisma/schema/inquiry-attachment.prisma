@@ -2,34 +2,34 @@
 // @description: InquiryMessage에 종속되는 첨부파일 1:N 하위 모델
 /// @displayName 문의 첨부파일
 model InquiryAttachment {
-  id           String             @unique @default(ulid()) @db.VarChar(26)
-  seq          Int                @id @default(autoincrement())
+  inquiryAttachmentId String             @unique @default(ulid()) @map("inquiry_attachment_id") @db.Char(26)
+  id                  BigInt             @id @default(autoincrement())
   /// @displayName 생성 일시
-  createdAt    DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  createdAt           DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
   /// @displayName 소속 메시지 내부 순번
-  messageSeq   Int                @map("message_seq")
+  messageId           BigInt             @map("message_id")
   /// @displayName 원본 파일명
-  fileName     String             @map("file_name")
+  fileName            String             @map("file_name")
   /// @displayName 파일 크기
-  fileSize     BigInt             @map("file_size")
+  fileSize            BigInt             @map("file_size")
   /// @displayName MIME 타입
-  mimeType     String             @map("mime_type")
+  mimeType            String             @map("mime_type")
   /// @displayName 파일 유형
-  fileType     AttachmentFileType @map("file_type")
+  fileType            AttachmentFileType @map("file_type")
   /// @displayName 파일 URL
-  url          String
+  url                 String
   /// @displayName 썸네일 URL
-  thumbnailUrl String?            @map("thumbnail_url")
+  thumbnailUrl        String?            @map("thumbnail_url")
   /// @displayName 너비
-  width        Int?
+  width               Int?
   /// @displayName 높이
-  height       Int?
+  height              Int?
   /// @displayName 재생 시간
-  duration     Int?
+  duration            Int?
   /// @displayName 삭제 여부
-  isDeleted    Boolean            @default(false) @map("is_deleted")
-  message      InquiryMessage     @relation(fields: [messageSeq], references: [seq], onDelete: Cascade)
+  isDeleted           Boolean            @default(false) @map("is_deleted")
+  message             InquiryMessage     @relation(fields: [messageId], references: [id], onDelete: Cascade)
 
-  @@index([messageSeq])
+  @@index([messageId])
   @@map("inquiry_attachments")
 }

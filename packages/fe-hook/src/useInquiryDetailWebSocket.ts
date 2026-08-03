@@ -3,6 +3,7 @@
 import { createLogger } from "@cocrepo/toolkit";
 import { type InquiryMessage, type InquiryParticipant } from "@cocrepo/type";
 import { useEffect, useRef, useState } from "react";
+import { isWireId } from "./wire-id";
 
 const logger = createLogger("[useInquiryDetailWebSocket]");
 const LOCAL_WEB_SOCKET_URL = "ws://localhost:4000";
@@ -217,12 +218,16 @@ export function useInquiryDetailWebSocket(
 				}
 				case "inquiry:typing:start": {
 					const { userId } = data as { userId: string };
-					currentState.setTyping(userId, true);
+					if (isWireId(userId)) {
+						currentState.setTyping(userId, true);
+					}
 					break;
 				}
 				case "inquiry:typing:stop": {
 					const { userId } = data as { userId: string };
-					currentState.setTyping(userId, false);
+					if (isWireId(userId)) {
+						currentState.setTyping(userId, false);
+					}
 					break;
 				}
 				case "inquiry:participant:joined":
@@ -230,17 +235,23 @@ export function useInquiryDetailWebSocket(
 					break;
 				case "inquiry:participant:left": {
 					const { userId } = data as { userId: string };
-					currentState.removeParticipant(userId);
+					if (isWireId(userId)) {
+						currentState.removeParticipant(userId);
+					}
 					break;
 				}
 				case "inquiry:participant:online": {
 					const { userId } = data as { userId: string };
-					currentState.updateParticipant(userId, { isOnline: true });
+					if (isWireId(userId)) {
+						currentState.updateParticipant(userId, { isOnline: true });
+					}
 					break;
 				}
 				case "inquiry:participant:offline": {
 					const { userId } = data as { userId: string };
-					currentState.updateParticipant(userId, { isOnline: false });
+					if (isWireId(userId)) {
+						currentState.updateParticipant(userId, { isOnline: false });
+					}
 					break;
 				}
 				case "inquiry:status:changed":

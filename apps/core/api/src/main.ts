@@ -40,6 +40,7 @@ import { TimelinesModule } from "./module/timelines";
 import { TranslationsModule } from "./module/translations";
 import { UsersModule } from "./module/users";
 import { setNestApp } from "./setNestApp";
+import { applyBigIntIdOpenApiContract } from "./swagger/bigint-id.openapi";
 
 /**
  * Swagger UI Tenant/Space 선택 플러그인
@@ -406,6 +407,7 @@ async function bootstrap() {
 		...options,
 		include: SWAGGER_MODULES,
 	});
+	applyBigIntIdOpenApiContract(document);
 
 	const port = process.env.APP_PORT || 3006;
 

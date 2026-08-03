@@ -1,15 +1,12 @@
-import type {
-	AuthAuditLog as AuthAuditLogEntity,
-	AuthAuditResult,
-} from "@cocrepo/prisma";
-import type { DomainEntityModel } from "./domain-entity-model.type";
+import { AuthAuditResult } from "@cocrepo/prisma";
+import { AbstractEntity } from "./abstract.entity";
 
-export class AuthAuditLog implements DomainEntityModel<AuthAuditLogEntity> {
-	// ============================================================================
-	// 기본 필드
-	// ============================================================================
-	id!: string;
-	createdAt!: Date;
+/**
+ * 인증 감사 로그 엔티티
+ */
+export class AuthAuditLog extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	authAuditLogId!: string;
 
 	// ============================================================================
 	// 필수 필드
@@ -21,7 +18,7 @@ export class AuthAuditLog implements DomainEntityModel<AuthAuditLogEntity> {
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	userId!: string | null;
+	userId!: bigint | null;
 	failureReason!: string | null;
 	userAgent!: string | null;
 	clientId!: string | null;

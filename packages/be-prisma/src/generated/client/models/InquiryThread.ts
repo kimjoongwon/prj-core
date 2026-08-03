@@ -27,59 +27,59 @@ export type AggregateInquiryThread = {
 }
 
 export type InquiryThreadAvgAggregateOutputType = {
-  seq: number | null
-  inquirySeq: number | null
-  createdBySeq: number | null
+  id: number | null
+  inquiryId: number | null
+  createdById: number | null
   messageCount: number | null
 }
 
 export type InquiryThreadSumAggregateOutputType = {
-  seq: number | null
-  inquirySeq: number | null
-  createdBySeq: number | null
+  id: bigint | null
+  inquiryId: bigint | null
+  createdById: bigint | null
   messageCount: number | null
 }
 
 export type InquiryThreadMinAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  inquiryThreadId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   closedAt: Date | null
-  inquirySeq: number | null
+  inquiryId: bigint | null
   title: string | null
   status: $Enums.ThreadStatus | null
-  createdBySeq: number | null
+  createdById: bigint | null
   lastMessageAt: Date | null
   lastMessagePreview: string | null
   messageCount: number | null
 }
 
 export type InquiryThreadMaxAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  inquiryThreadId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   closedAt: Date | null
-  inquirySeq: number | null
+  inquiryId: bigint | null
   title: string | null
   status: $Enums.ThreadStatus | null
-  createdBySeq: number | null
+  createdById: bigint | null
   lastMessageAt: Date | null
   lastMessagePreview: string | null
   messageCount: number | null
 }
 
 export type InquiryThreadCountAggregateOutputType = {
+  inquiryThreadId: number
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   closedAt: number
-  inquirySeq: number
+  inquiryId: number
   title: number
   status: number
-  createdBySeq: number
+  createdById: number
   lastMessageAt: number
   lastMessagePreview: number
   messageCount: number
@@ -88,59 +88,59 @@ export type InquiryThreadCountAggregateOutputType = {
 
 
 export type InquiryThreadAvgAggregateInputType = {
-  seq?: true
-  inquirySeq?: true
-  createdBySeq?: true
+  id?: true
+  inquiryId?: true
+  createdById?: true
   messageCount?: true
 }
 
 export type InquiryThreadSumAggregateInputType = {
-  seq?: true
-  inquirySeq?: true
-  createdBySeq?: true
+  id?: true
+  inquiryId?: true
+  createdById?: true
   messageCount?: true
 }
 
 export type InquiryThreadMinAggregateInputType = {
+  inquiryThreadId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   closedAt?: true
-  inquirySeq?: true
+  inquiryId?: true
   title?: true
   status?: true
-  createdBySeq?: true
+  createdById?: true
   lastMessageAt?: true
   lastMessagePreview?: true
   messageCount?: true
 }
 
 export type InquiryThreadMaxAggregateInputType = {
+  inquiryThreadId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   closedAt?: true
-  inquirySeq?: true
+  inquiryId?: true
   title?: true
   status?: true
-  createdBySeq?: true
+  createdById?: true
   lastMessageAt?: true
   lastMessagePreview?: true
   messageCount?: true
 }
 
 export type InquiryThreadCountAggregateInputType = {
+  inquiryThreadId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   closedAt?: true
-  inquirySeq?: true
+  inquiryId?: true
   title?: true
   status?: true
-  createdBySeq?: true
+  createdById?: true
   lastMessageAt?: true
   lastMessagePreview?: true
   messageCount?: true
@@ -234,15 +234,15 @@ export type InquiryThreadGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 export type InquiryThreadGroupByOutputType = {
-  id: string
-  seq: number
+  inquiryThreadId: string
+  id: bigint
   createdAt: Date
   updatedAt: Date | null
   closedAt: Date | null
-  inquirySeq: number
+  inquiryId: bigint
   title: string | null
   status: $Enums.ThreadStatus
-  createdBySeq: number
+  createdById: bigint
   lastMessageAt: Date | null
   lastMessagePreview: string | null
   messageCount: number
@@ -272,15 +272,15 @@ export type InquiryThreadWhereInput = {
   AND?: Prisma.InquiryThreadWhereInput | Prisma.InquiryThreadWhereInput[]
   OR?: Prisma.InquiryThreadWhereInput[]
   NOT?: Prisma.InquiryThreadWhereInput | Prisma.InquiryThreadWhereInput[]
-  id?: Prisma.StringFilter<"InquiryThread"> | string
-  seq?: Prisma.IntFilter<"InquiryThread"> | number
+  inquiryThreadId?: Prisma.StringFilter<"InquiryThread"> | string
+  id?: Prisma.BigIntFilter<"InquiryThread"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"InquiryThread"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"InquiryThread"> | Date | string | null
   closedAt?: Prisma.DateTimeNullableFilter<"InquiryThread"> | Date | string | null
-  inquirySeq?: Prisma.IntFilter<"InquiryThread"> | number
+  inquiryId?: Prisma.BigIntFilter<"InquiryThread"> | bigint | number
   title?: Prisma.StringNullableFilter<"InquiryThread"> | string | null
   status?: Prisma.EnumThreadStatusFilter<"InquiryThread"> | $Enums.ThreadStatus
-  createdBySeq?: Prisma.IntFilter<"InquiryThread"> | number
+  createdById?: Prisma.BigIntFilter<"InquiryThread"> | bigint | number
   lastMessageAt?: Prisma.DateTimeNullableFilter<"InquiryThread"> | Date | string | null
   lastMessagePreview?: Prisma.StringNullableFilter<"InquiryThread"> | string | null
   messageCount?: Prisma.IntFilter<"InquiryThread"> | number
@@ -291,15 +291,15 @@ export type InquiryThreadWhereInput = {
 }
 
 export type InquiryThreadOrderByWithRelationInput = {
+  inquiryThreadId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   closedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  inquirySeq?: Prisma.SortOrder
+  inquiryId?: Prisma.SortOrder
   title?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   lastMessageAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastMessagePreview?: Prisma.SortOrderInput | Prisma.SortOrder
   messageCount?: Prisma.SortOrder
@@ -310,18 +310,18 @@ export type InquiryThreadOrderByWithRelationInput = {
 }
 
 export type InquiryThreadWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  seq?: number
+  inquiryThreadId?: string
+  id?: bigint | number
   AND?: Prisma.InquiryThreadWhereInput | Prisma.InquiryThreadWhereInput[]
   OR?: Prisma.InquiryThreadWhereInput[]
   NOT?: Prisma.InquiryThreadWhereInput | Prisma.InquiryThreadWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"InquiryThread"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"InquiryThread"> | Date | string | null
   closedAt?: Prisma.DateTimeNullableFilter<"InquiryThread"> | Date | string | null
-  inquirySeq?: Prisma.IntFilter<"InquiryThread"> | number
+  inquiryId?: Prisma.BigIntFilter<"InquiryThread"> | bigint | number
   title?: Prisma.StringNullableFilter<"InquiryThread"> | string | null
   status?: Prisma.EnumThreadStatusFilter<"InquiryThread"> | $Enums.ThreadStatus
-  createdBySeq?: Prisma.IntFilter<"InquiryThread"> | number
+  createdById?: Prisma.BigIntFilter<"InquiryThread"> | bigint | number
   lastMessageAt?: Prisma.DateTimeNullableFilter<"InquiryThread"> | Date | string | null
   lastMessagePreview?: Prisma.StringNullableFilter<"InquiryThread"> | string | null
   messageCount?: Prisma.IntFilter<"InquiryThread"> | number
@@ -329,18 +329,18 @@ export type InquiryThreadWhereUniqueInput = Prisma.AtLeast<{
   createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   messages?: Prisma.InquiryMessageListRelationFilter
   participants?: Prisma.InquiryParticipantListRelationFilter
-}, "seq" | "id">
+}, "id" | "inquiryThreadId">
 
 export type InquiryThreadOrderByWithAggregationInput = {
+  inquiryThreadId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   closedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  inquirySeq?: Prisma.SortOrder
+  inquiryId?: Prisma.SortOrder
   title?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   lastMessageAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastMessagePreview?: Prisma.SortOrderInput | Prisma.SortOrder
   messageCount?: Prisma.SortOrder
@@ -355,22 +355,23 @@ export type InquiryThreadScalarWhereWithAggregatesInput = {
   AND?: Prisma.InquiryThreadScalarWhereWithAggregatesInput | Prisma.InquiryThreadScalarWhereWithAggregatesInput[]
   OR?: Prisma.InquiryThreadScalarWhereWithAggregatesInput[]
   NOT?: Prisma.InquiryThreadScalarWhereWithAggregatesInput | Prisma.InquiryThreadScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"InquiryThread"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"InquiryThread"> | number
+  inquiryThreadId?: Prisma.StringWithAggregatesFilter<"InquiryThread"> | string
+  id?: Prisma.BigIntWithAggregatesFilter<"InquiryThread"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"InquiryThread"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"InquiryThread"> | Date | string | null
   closedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"InquiryThread"> | Date | string | null
-  inquirySeq?: Prisma.IntWithAggregatesFilter<"InquiryThread"> | number
+  inquiryId?: Prisma.BigIntWithAggregatesFilter<"InquiryThread"> | bigint | number
   title?: Prisma.StringNullableWithAggregatesFilter<"InquiryThread"> | string | null
   status?: Prisma.EnumThreadStatusWithAggregatesFilter<"InquiryThread"> | $Enums.ThreadStatus
-  createdBySeq?: Prisma.IntWithAggregatesFilter<"InquiryThread"> | number
+  createdById?: Prisma.BigIntWithAggregatesFilter<"InquiryThread"> | bigint | number
   lastMessageAt?: Prisma.DateTimeNullableWithAggregatesFilter<"InquiryThread"> | Date | string | null
   lastMessagePreview?: Prisma.StringNullableWithAggregatesFilter<"InquiryThread"> | string | null
   messageCount?: Prisma.IntWithAggregatesFilter<"InquiryThread"> | number
 }
 
 export type InquiryThreadCreateInput = {
-  id?: string
+  inquiryThreadId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   closedAt?: Date | string | null
@@ -386,15 +387,15 @@ export type InquiryThreadCreateInput = {
 }
 
 export type InquiryThreadUncheckedCreateInput = {
-  id?: string
-  seq?: number
+  inquiryThreadId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   closedAt?: Date | string | null
-  inquirySeq: number
+  inquiryId: bigint | number
   title?: string | null
   status?: $Enums.ThreadStatus
-  createdBySeq: number
+  createdById: bigint | number
   lastMessageAt?: Date | string | null
   lastMessagePreview?: string | null
   messageCount?: number
@@ -403,7 +404,8 @@ export type InquiryThreadUncheckedCreateInput = {
 }
 
 export type InquiryThreadUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryThreadId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -419,15 +421,15 @@ export type InquiryThreadUpdateInput = {
 }
 
 export type InquiryThreadUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryThreadId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  inquirySeq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
-  createdBySeq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastMessagePreview?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -436,22 +438,23 @@ export type InquiryThreadUncheckedUpdateInput = {
 }
 
 export type InquiryThreadCreateManyInput = {
-  id?: string
-  seq?: number
+  inquiryThreadId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   closedAt?: Date | string | null
-  inquirySeq: number
+  inquiryId: bigint | number
   title?: string | null
   status?: $Enums.ThreadStatus
-  createdBySeq: number
+  createdById: bigint | number
   lastMessageAt?: Date | string | null
   lastMessagePreview?: string | null
   messageCount?: number
 }
 
 export type InquiryThreadUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryThreadId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -463,15 +466,15 @@ export type InquiryThreadUpdateManyMutationInput = {
 }
 
 export type InquiryThreadUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryThreadId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  inquirySeq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
-  createdBySeq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastMessagePreview?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -488,61 +491,61 @@ export type InquiryThreadNullableScalarRelationFilter = {
 }
 
 export type InquiryThreadCountOrderByAggregateInput = {
+  inquiryThreadId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   closedAt?: Prisma.SortOrder
-  inquirySeq?: Prisma.SortOrder
+  inquiryId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   lastMessageAt?: Prisma.SortOrder
   lastMessagePreview?: Prisma.SortOrder
   messageCount?: Prisma.SortOrder
 }
 
 export type InquiryThreadAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  inquirySeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  inquiryId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   messageCount?: Prisma.SortOrder
 }
 
 export type InquiryThreadMaxOrderByAggregateInput = {
+  inquiryThreadId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   closedAt?: Prisma.SortOrder
-  inquirySeq?: Prisma.SortOrder
+  inquiryId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   lastMessageAt?: Prisma.SortOrder
   lastMessagePreview?: Prisma.SortOrder
   messageCount?: Prisma.SortOrder
 }
 
 export type InquiryThreadMinOrderByAggregateInput = {
+  inquiryThreadId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   closedAt?: Prisma.SortOrder
-  inquirySeq?: Prisma.SortOrder
+  inquiryId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   lastMessageAt?: Prisma.SortOrder
   lastMessagePreview?: Prisma.SortOrder
   messageCount?: Prisma.SortOrder
 }
 
 export type InquiryThreadSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  inquirySeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  inquiryId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   messageCount?: Prisma.SortOrder
 }
 
@@ -675,7 +678,8 @@ export type InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput = {
 }
 
 export type InquiryThreadCreateWithoutMessagesInput = {
-  id?: string
+  inquiryThreadId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   closedAt?: Date | string | null
@@ -690,15 +694,15 @@ export type InquiryThreadCreateWithoutMessagesInput = {
 }
 
 export type InquiryThreadUncheckedCreateWithoutMessagesInput = {
-  id?: string
-  seq?: number
+  inquiryThreadId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   closedAt?: Date | string | null
-  inquirySeq: number
+  inquiryId: bigint | number
   title?: string | null
   status?: $Enums.ThreadStatus
-  createdBySeq: number
+  createdById: bigint | number
   lastMessageAt?: Date | string | null
   lastMessagePreview?: string | null
   messageCount?: number
@@ -722,7 +726,8 @@ export type InquiryThreadUpdateToOneWithWhereWithoutMessagesInput = {
 }
 
 export type InquiryThreadUpdateWithoutMessagesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryThreadId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -737,15 +742,15 @@ export type InquiryThreadUpdateWithoutMessagesInput = {
 }
 
 export type InquiryThreadUncheckedUpdateWithoutMessagesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryThreadId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  inquirySeq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
-  createdBySeq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastMessagePreview?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -753,7 +758,8 @@ export type InquiryThreadUncheckedUpdateWithoutMessagesInput = {
 }
 
 export type InquiryThreadCreateWithoutParticipantsInput = {
-  id?: string
+  inquiryThreadId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   closedAt?: Date | string | null
@@ -768,15 +774,15 @@ export type InquiryThreadCreateWithoutParticipantsInput = {
 }
 
 export type InquiryThreadUncheckedCreateWithoutParticipantsInput = {
-  id?: string
-  seq?: number
+  inquiryThreadId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   closedAt?: Date | string | null
-  inquirySeq: number
+  inquiryId: bigint | number
   title?: string | null
   status?: $Enums.ThreadStatus
-  createdBySeq: number
+  createdById: bigint | number
   lastMessageAt?: Date | string | null
   lastMessagePreview?: string | null
   messageCount?: number
@@ -800,7 +806,8 @@ export type InquiryThreadUpdateToOneWithWhereWithoutParticipantsInput = {
 }
 
 export type InquiryThreadUpdateWithoutParticipantsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryThreadId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -815,15 +822,15 @@ export type InquiryThreadUpdateWithoutParticipantsInput = {
 }
 
 export type InquiryThreadUncheckedUpdateWithoutParticipantsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryThreadId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  inquirySeq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
-  createdBySeq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastMessagePreview?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -831,7 +838,8 @@ export type InquiryThreadUncheckedUpdateWithoutParticipantsInput = {
 }
 
 export type InquiryThreadCreateWithoutInquiryInput = {
-  id?: string
+  inquiryThreadId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   closedAt?: Date | string | null
@@ -846,14 +854,14 @@ export type InquiryThreadCreateWithoutInquiryInput = {
 }
 
 export type InquiryThreadUncheckedCreateWithoutInquiryInput = {
-  id?: string
-  seq?: number
+  inquiryThreadId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   closedAt?: Date | string | null
   title?: string | null
   status?: $Enums.ThreadStatus
-  createdBySeq: number
+  createdById: bigint | number
   lastMessageAt?: Date | string | null
   lastMessagePreview?: string | null
   messageCount?: number
@@ -891,22 +899,23 @@ export type InquiryThreadScalarWhereInput = {
   AND?: Prisma.InquiryThreadScalarWhereInput | Prisma.InquiryThreadScalarWhereInput[]
   OR?: Prisma.InquiryThreadScalarWhereInput[]
   NOT?: Prisma.InquiryThreadScalarWhereInput | Prisma.InquiryThreadScalarWhereInput[]
-  id?: Prisma.StringFilter<"InquiryThread"> | string
-  seq?: Prisma.IntFilter<"InquiryThread"> | number
+  inquiryThreadId?: Prisma.StringFilter<"InquiryThread"> | string
+  id?: Prisma.BigIntFilter<"InquiryThread"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"InquiryThread"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"InquiryThread"> | Date | string | null
   closedAt?: Prisma.DateTimeNullableFilter<"InquiryThread"> | Date | string | null
-  inquirySeq?: Prisma.IntFilter<"InquiryThread"> | number
+  inquiryId?: Prisma.BigIntFilter<"InquiryThread"> | bigint | number
   title?: Prisma.StringNullableFilter<"InquiryThread"> | string | null
   status?: Prisma.EnumThreadStatusFilter<"InquiryThread"> | $Enums.ThreadStatus
-  createdBySeq?: Prisma.IntFilter<"InquiryThread"> | number
+  createdById?: Prisma.BigIntFilter<"InquiryThread"> | bigint | number
   lastMessageAt?: Prisma.DateTimeNullableFilter<"InquiryThread"> | Date | string | null
   lastMessagePreview?: Prisma.StringNullableFilter<"InquiryThread"> | string | null
   messageCount?: Prisma.IntFilter<"InquiryThread"> | number
 }
 
 export type InquiryThreadCreateWithoutCreatedByInput = {
-  id?: string
+  inquiryThreadId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   closedAt?: Date | string | null
@@ -921,12 +930,12 @@ export type InquiryThreadCreateWithoutCreatedByInput = {
 }
 
 export type InquiryThreadUncheckedCreateWithoutCreatedByInput = {
-  id?: string
-  seq?: number
+  inquiryThreadId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   closedAt?: Date | string | null
-  inquirySeq: number
+  inquiryId: bigint | number
   title?: string | null
   status?: $Enums.ThreadStatus
   lastMessageAt?: Date | string | null
@@ -963,21 +972,22 @@ export type InquiryThreadUpdateManyWithWhereWithoutCreatedByInput = {
 }
 
 export type InquiryThreadCreateManyInquiryInput = {
-  id?: string
-  seq?: number
+  inquiryThreadId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   closedAt?: Date | string | null
   title?: string | null
   status?: $Enums.ThreadStatus
-  createdBySeq: number
+  createdById: bigint | number
   lastMessageAt?: Date | string | null
   lastMessagePreview?: string | null
   messageCount?: number
 }
 
 export type InquiryThreadUpdateWithoutInquiryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryThreadId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -992,14 +1002,14 @@ export type InquiryThreadUpdateWithoutInquiryInput = {
 }
 
 export type InquiryThreadUncheckedUpdateWithoutInquiryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryThreadId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
-  createdBySeq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastMessagePreview?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1008,26 +1018,26 @@ export type InquiryThreadUncheckedUpdateWithoutInquiryInput = {
 }
 
 export type InquiryThreadUncheckedUpdateManyWithoutInquiryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryThreadId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
-  createdBySeq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastMessagePreview?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type InquiryThreadCreateManyCreatedByInput = {
-  id?: string
-  seq?: number
+  inquiryThreadId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   closedAt?: Date | string | null
-  inquirySeq: number
+  inquiryId: bigint | number
   title?: string | null
   status?: $Enums.ThreadStatus
   lastMessageAt?: Date | string | null
@@ -1036,7 +1046,8 @@ export type InquiryThreadCreateManyCreatedByInput = {
 }
 
 export type InquiryThreadUpdateWithoutCreatedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryThreadId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1051,12 +1062,12 @@ export type InquiryThreadUpdateWithoutCreatedByInput = {
 }
 
 export type InquiryThreadUncheckedUpdateWithoutCreatedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryThreadId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  inquirySeq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1067,12 +1078,12 @@ export type InquiryThreadUncheckedUpdateWithoutCreatedByInput = {
 }
 
 export type InquiryThreadUncheckedUpdateManyWithoutCreatedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryThreadId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  inquirySeq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1121,15 +1132,15 @@ export type InquiryThreadCountOutputTypeCountParticipantsArgs<ExtArgs extends ru
 
 
 export type InquiryThreadSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  inquiryThreadId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   closedAt?: boolean
-  inquirySeq?: boolean
+  inquiryId?: boolean
   title?: boolean
   status?: boolean
-  createdBySeq?: boolean
+  createdById?: boolean
   lastMessageAt?: boolean
   lastMessagePreview?: boolean
   messageCount?: boolean
@@ -1141,15 +1152,15 @@ export type InquiryThreadSelect<ExtArgs extends runtime.Types.Extensions.Interna
 }, ExtArgs["result"]["inquiryThread"]>
 
 export type InquiryThreadSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  inquiryThreadId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   closedAt?: boolean
-  inquirySeq?: boolean
+  inquiryId?: boolean
   title?: boolean
   status?: boolean
-  createdBySeq?: boolean
+  createdById?: boolean
   lastMessageAt?: boolean
   lastMessagePreview?: boolean
   messageCount?: boolean
@@ -1158,15 +1169,15 @@ export type InquiryThreadSelectCreateManyAndReturn<ExtArgs extends runtime.Types
 }, ExtArgs["result"]["inquiryThread"]>
 
 export type InquiryThreadSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  inquiryThreadId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   closedAt?: boolean
-  inquirySeq?: boolean
+  inquiryId?: boolean
   title?: boolean
   status?: boolean
-  createdBySeq?: boolean
+  createdById?: boolean
   lastMessageAt?: boolean
   lastMessagePreview?: boolean
   messageCount?: boolean
@@ -1175,21 +1186,21 @@ export type InquiryThreadSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
 }, ExtArgs["result"]["inquiryThread"]>
 
 export type InquiryThreadSelectScalar = {
+  inquiryThreadId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   closedAt?: boolean
-  inquirySeq?: boolean
+  inquiryId?: boolean
   title?: boolean
   status?: boolean
-  createdBySeq?: boolean
+  createdById?: boolean
   lastMessageAt?: boolean
   lastMessagePreview?: boolean
   messageCount?: boolean
 }
 
-export type InquiryThreadOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "closedAt" | "inquirySeq" | "title" | "status" | "createdBySeq" | "lastMessageAt" | "lastMessagePreview" | "messageCount", ExtArgs["result"]["inquiryThread"]>
+export type InquiryThreadOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"inquiryThreadId" | "id" | "createdAt" | "updatedAt" | "closedAt" | "inquiryId" | "title" | "status" | "createdById" | "lastMessageAt" | "lastMessagePreview" | "messageCount", ExtArgs["result"]["inquiryThread"]>
 export type InquiryThreadInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   inquiry?: boolean | Prisma.InquiryDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1215,8 +1226,8 @@ export type $InquiryThreadPayload<ExtArgs extends runtime.Types.Extensions.Inter
     participants: Prisma.$InquiryParticipantPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    seq: number
+    inquiryThreadId: string
+    id: bigint
     /**
      * @displayName 생성 일시
      */
@@ -1232,7 +1243,7 @@ export type $InquiryThreadPayload<ExtArgs extends runtime.Types.Extensions.Inter
     /**
      * @displayName 소속 문의 내부 순번
      */
-    inquirySeq: number
+    inquiryId: bigint
     /**
      * @displayName 제목
      */
@@ -1244,7 +1255,7 @@ export type $InquiryThreadPayload<ExtArgs extends runtime.Types.Extensions.Inter
     /**
      * @displayName 생성자 내부 순번
      */
-    createdBySeq: number
+    createdById: bigint
     /**
      * @displayName 마지막 메시지 일시
      */
@@ -1340,8 +1351,8 @@ export interface InquiryThreadDelegate<ExtArgs extends runtime.Types.Extensions.
    * // Get first 10 InquiryThreads
    * const inquiryThreads = await prisma.inquiryThread.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const inquiryThreadWithIdOnly = await prisma.inquiryThread.findMany({ select: { id: true } })
+   * // Only select the `inquiryThreadId`
+   * const inquiryThreadWithInquiryThreadIdOnly = await prisma.inquiryThread.findMany({ select: { inquiryThreadId: true } })
    * 
    */
   findMany<T extends InquiryThreadFindManyArgs>(args?: Prisma.SelectSubset<T, InquiryThreadFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InquiryThreadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1385,9 +1396,9 @@ export interface InquiryThreadDelegate<ExtArgs extends runtime.Types.Extensions.
    *   ]
    * })
    * 
-   * // Create many InquiryThreads and only return the `id`
-   * const inquiryThreadWithIdOnly = await prisma.inquiryThread.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many InquiryThreads and only return the `inquiryThreadId`
+   * const inquiryThreadWithInquiryThreadIdOnly = await prisma.inquiryThread.createManyAndReturn({
+   *   select: { inquiryThreadId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1476,9 +1487,9 @@ export interface InquiryThreadDelegate<ExtArgs extends runtime.Types.Extensions.
    *   ]
    * })
    * 
-   * // Update zero or more InquiryThreads and only return the `id`
-   * const inquiryThreadWithIdOnly = await prisma.inquiryThread.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more InquiryThreads and only return the `inquiryThreadId`
+   * const inquiryThreadWithInquiryThreadIdOnly = await prisma.inquiryThread.updateManyAndReturn({
+   *   select: { inquiryThreadId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1684,15 +1695,15 @@ export interface Prisma__InquiryThreadClient<T, Null = never, ExtArgs extends ru
  * Fields of the InquiryThread model
  */
 export interface InquiryThreadFieldRefs {
-  readonly id: Prisma.FieldRef<"InquiryThread", 'String'>
-  readonly seq: Prisma.FieldRef<"InquiryThread", 'Int'>
+  readonly inquiryThreadId: Prisma.FieldRef<"InquiryThread", 'String'>
+  readonly id: Prisma.FieldRef<"InquiryThread", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"InquiryThread", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"InquiryThread", 'DateTime'>
   readonly closedAt: Prisma.FieldRef<"InquiryThread", 'DateTime'>
-  readonly inquirySeq: Prisma.FieldRef<"InquiryThread", 'Int'>
+  readonly inquiryId: Prisma.FieldRef<"InquiryThread", 'BigInt'>
   readonly title: Prisma.FieldRef<"InquiryThread", 'String'>
   readonly status: Prisma.FieldRef<"InquiryThread", 'ThreadStatus'>
-  readonly createdBySeq: Prisma.FieldRef<"InquiryThread", 'Int'>
+  readonly createdById: Prisma.FieldRef<"InquiryThread", 'BigInt'>
   readonly lastMessageAt: Prisma.FieldRef<"InquiryThread", 'DateTime'>
   readonly lastMessagePreview: Prisma.FieldRef<"InquiryThread", 'String'>
   readonly messageCount: Prisma.FieldRef<"InquiryThread", 'Int'>

@@ -1,11 +1,16 @@
-import type { OidcModel as OidcModelEntity } from "@cocrepo/prisma";
 import type { JsonValue } from "@cocrepo/type";
-import type { DomainEntityModel } from "./domain-entity-model.type";
+import { AbstractEntity } from "./abstract.entity";
 
-export class OidcModel implements DomainEntityModel<OidcModelEntity> {
-	id!: string;
-	createdAt!: Date;
-	updatedAt!: Date | null;
+/**
+ * OIDC 모델 엔티티
+ */
+export class OidcModel extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	oidcModelId!: string;
+
+	// ============================================================================
+	// 필수 필드
+	// ============================================================================
 	key!: string;
 	modelType!: string;
 	payload!: JsonValue;
@@ -13,6 +18,10 @@ export class OidcModel implements DomainEntityModel<OidcModelEntity> {
 	userCode!: string | null;
 	grantId!: string | null;
 	uid!: string | null;
+
+	// ============================================================================
+	// 도메인 메서드
+	// ============================================================================
 
 	isExpired(): boolean {
 		if (!this.expiresAt) return false;

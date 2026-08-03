@@ -4,6 +4,7 @@ import { useGetMyAbilities } from "@cocrepo/api/core/abilities";
 import { useApp } from "@cocrepo/store";
 import { usePathname } from "next/navigation";
 import { useAbilities } from "./useAbilities";
+import { isWireId } from "./wire-id";
 
 export interface UseAbilityBootstrapOptions {
 	/**
@@ -21,16 +22,21 @@ export function useAbilityBootstrap(options: UseAbilityBootstrapOptions = {}) {
 	const pathname = usePathname();
 	const app = useApp();
 	const account = app.account;
+	const currentTenantId = isWireId(account.currentTenantId)
+		? account.currentTenantId
+		: null;
 	const isDisabled = pathname?.startsWith(skipPathPrefix) === true;
 	const canLoadAbilities =
 		!isDisabled &&
 		account.isHydrated &&
 		account.isSelectionResolved &&
-		Boolean(account.currentTenantId);
+		currentTenantId !== null;
 	const query = useGetMyAbilities({
 		query: {
 			enabled: canLoadAbilities,
-			queryKey: ["/api/v1/abilities/my", account.currentTenantId],
+			queryKey: ["/api/v1/abilities/my"].concat(
+				currentTenantId ? [currentTenantId] : [],
+			),
 			staleTime: 1000 * 60 * 5,
 			gcTime: 1000 * 60 * 10,
 		},

@@ -17,7 +17,7 @@ export class SpaceAggregate {
 	/**
 	 * ID로 Space 조회
 	 */
-	getById(id: string): Promise<Space | null> {
+	getById(id: bigint): Promise<Space | null> {
 		return this.repository.findById(id);
 	}
 
@@ -25,7 +25,7 @@ export class SpaceAggregate {
 	 * Company/FitnessCenter detail이 있는 Space 목록 조회
 	 */
 	async listSpaces(params?: {
-		spaceIds?: string[];
+		spaceIds?: bigint[];
 		skip?: number;
 		take?: number;
 		search?: string;
@@ -40,7 +40,7 @@ export class SpaceAggregate {
 	 * Space의 FitnessCenter detail 조회
 	 */
 	async getFitnessCenterBySpaceId(
-		spaceId: string,
+		spaceId: bigint,
 	): Promise<
 		NonNullable<
 			Awaited<ReturnType<SpacesRepository["findFitnessCenterBySpaceId"]>>
@@ -109,7 +109,7 @@ export class SpaceAggregate {
 	 * Space의 FitnessCenter detail 수정
 	 */
 	async updateFitnessCenterBySpaceId(
-		spaceId: string,
+		spaceId: bigint,
 		input: UpdateSpaceFitnessCenterCommandInput,
 	): Promise<Space> {
 		await this.getFitnessCenterBySpaceId(spaceId);
@@ -137,14 +137,14 @@ export class SpaceAggregate {
 	/**
 	 * SpaceCategory 위계 기반 접근 가능한 Space ID 배열 조회
 	 */
-	getAccessibleSpaceIds(spaceId: string): Promise<string[]> {
+	getAccessibleSpaceIds(spaceId: bigint): Promise<bigint[]> {
 		return this.repository.findSpaceIdsByCategoryHierarchy(spaceId);
 	}
 
 	/**
 	 * 여러 ID로 Space 조회 (FitnessCenter 포함)
 	 */
-	findByIdsWithFitnessCenter(ids: string[]): Promise<Space[]> {
+	findByIdsWithFitnessCenter(ids: bigint[]): Promise<Space[]> {
 		return this.repository.findByIdsWithFitnessCenter(ids);
 	}
 }

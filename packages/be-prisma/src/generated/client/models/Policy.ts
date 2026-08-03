@@ -27,51 +27,51 @@ export type AggregatePolicy = {
 }
 
 export type PolicyAvgAggregateOutputType = {
-  seq: number | null
-  spaceSeq: number | null
-  createdBySeq: number | null
+  id: number | null
+  spaceId: number | null
+  createdById: number | null
 }
 
 export type PolicySumAggregateOutputType = {
-  seq: number | null
-  spaceSeq: number | null
-  createdBySeq: number | null
+  id: bigint | null
+  spaceId: bigint | null
+  createdById: bigint | null
 }
 
 export type PolicyMinAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  policyId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceSeq: number | null
-  createdBySeq: number | null
+  spaceId: bigint | null
+  createdById: bigint | null
   name: string | null
   displayName: string | null
   description: string | null
 }
 
 export type PolicyMaxAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  policyId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceSeq: number | null
-  createdBySeq: number | null
+  spaceId: bigint | null
+  createdById: bigint | null
   name: string | null
   displayName: string | null
   description: string | null
 }
 
 export type PolicyCountAggregateOutputType = {
+  policyId: number
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
-  spaceSeq: number
-  createdBySeq: number
+  spaceId: number
+  createdById: number
   name: number
   displayName: number
   description: number
@@ -80,51 +80,51 @@ export type PolicyCountAggregateOutputType = {
 
 
 export type PolicyAvgAggregateInputType = {
-  seq?: true
-  spaceSeq?: true
-  createdBySeq?: true
+  id?: true
+  spaceId?: true
+  createdById?: true
 }
 
 export type PolicySumAggregateInputType = {
-  seq?: true
-  spaceSeq?: true
-  createdBySeq?: true
+  id?: true
+  spaceId?: true
+  createdById?: true
 }
 
 export type PolicyMinAggregateInputType = {
+  policyId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceSeq?: true
-  createdBySeq?: true
+  spaceId?: true
+  createdById?: true
   name?: true
   displayName?: true
   description?: true
 }
 
 export type PolicyMaxAggregateInputType = {
+  policyId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceSeq?: true
-  createdBySeq?: true
+  spaceId?: true
+  createdById?: true
   name?: true
   displayName?: true
   description?: true
 }
 
 export type PolicyCountAggregateInputType = {
+  policyId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceSeq?: true
-  createdBySeq?: true
+  spaceId?: true
+  createdById?: true
   name?: true
   displayName?: true
   description?: true
@@ -218,13 +218,13 @@ export type PolicyGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 }
 
 export type PolicyGroupByOutputType = {
-  id: string
-  seq: number
+  policyId: string
+  id: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  spaceSeq: number
-  createdBySeq: number | null
+  spaceId: bigint
+  createdById: bigint | null
   name: string
   displayName: string | null
   description: string | null
@@ -254,13 +254,13 @@ export type PolicyWhereInput = {
   AND?: Prisma.PolicyWhereInput | Prisma.PolicyWhereInput[]
   OR?: Prisma.PolicyWhereInput[]
   NOT?: Prisma.PolicyWhereInput | Prisma.PolicyWhereInput[]
-  id?: Prisma.StringFilter<"Policy"> | string
-  seq?: Prisma.IntFilter<"Policy"> | number
+  policyId?: Prisma.StringFilter<"Policy"> | string
+  id?: Prisma.BigIntFilter<"Policy"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Policy"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Policy"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Policy"> | Date | string | null
-  spaceSeq?: Prisma.IntFilter<"Policy"> | number
-  createdBySeq?: Prisma.IntNullableFilter<"Policy"> | number | null
+  spaceId?: Prisma.BigIntFilter<"Policy"> | bigint | number
+  createdById?: Prisma.BigIntNullableFilter<"Policy"> | bigint | number | null
   name?: Prisma.StringFilter<"Policy"> | string
   displayName?: Prisma.StringNullableFilter<"Policy"> | string | null
   description?: Prisma.StringNullableFilter<"Policy"> | string | null
@@ -271,13 +271,13 @@ export type PolicyWhereInput = {
 }
 
 export type PolicyOrderByWithRelationInput = {
+  policyId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   displayName?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -288,17 +288,17 @@ export type PolicyOrderByWithRelationInput = {
 }
 
 export type PolicyWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  seq?: number
-  spaceSeq_name?: Prisma.PolicySpaceSeqNameCompoundUniqueInput
+  policyId?: string
+  id?: bigint | number
+  spaceId_name?: Prisma.PolicySpaceIdNameCompoundUniqueInput
   AND?: Prisma.PolicyWhereInput | Prisma.PolicyWhereInput[]
   OR?: Prisma.PolicyWhereInput[]
   NOT?: Prisma.PolicyWhereInput | Prisma.PolicyWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"Policy"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Policy"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Policy"> | Date | string | null
-  spaceSeq?: Prisma.IntFilter<"Policy"> | number
-  createdBySeq?: Prisma.IntNullableFilter<"Policy"> | number | null
+  spaceId?: Prisma.BigIntFilter<"Policy"> | bigint | number
+  createdById?: Prisma.BigIntNullableFilter<"Policy"> | bigint | number | null
   name?: Prisma.StringFilter<"Policy"> | string
   displayName?: Prisma.StringNullableFilter<"Policy"> | string | null
   description?: Prisma.StringNullableFilter<"Policy"> | string | null
@@ -306,16 +306,16 @@ export type PolicyWhereUniqueInput = Prisma.AtLeast<{
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   entries?: Prisma.PolicyEntryListRelationFilter
   roleAssignments?: Prisma.RoleAssignmentListRelationFilter
-}, "seq" | "id" | "spaceSeq_name">
+}, "id" | "policyId" | "spaceId_name">
 
 export type PolicyOrderByWithAggregationInput = {
+  policyId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   displayName?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -330,20 +330,21 @@ export type PolicyScalarWhereWithAggregatesInput = {
   AND?: Prisma.PolicyScalarWhereWithAggregatesInput | Prisma.PolicyScalarWhereWithAggregatesInput[]
   OR?: Prisma.PolicyScalarWhereWithAggregatesInput[]
   NOT?: Prisma.PolicyScalarWhereWithAggregatesInput | Prisma.PolicyScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"Policy"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"Policy"> | number
+  policyId?: Prisma.StringWithAggregatesFilter<"Policy"> | string
+  id?: Prisma.BigIntWithAggregatesFilter<"Policy"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Policy"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Policy"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Policy"> | Date | string | null
-  spaceSeq?: Prisma.IntWithAggregatesFilter<"Policy"> | number
-  createdBySeq?: Prisma.IntNullableWithAggregatesFilter<"Policy"> | number | null
+  spaceId?: Prisma.BigIntWithAggregatesFilter<"Policy"> | bigint | number
+  createdById?: Prisma.BigIntNullableWithAggregatesFilter<"Policy"> | bigint | number | null
   name?: Prisma.StringWithAggregatesFilter<"Policy"> | string
   displayName?: Prisma.StringNullableWithAggregatesFilter<"Policy"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Policy"> | string | null
 }
 
 export type PolicyCreateInput = {
-  id?: string
+  policyId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -357,13 +358,13 @@ export type PolicyCreateInput = {
 }
 
 export type PolicyUncheckedCreateInput = {
-  id?: string
-  seq?: number
+  policyId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
+  spaceId: bigint | number
+  createdById?: bigint | number | null
   name: string
   displayName?: string | null
   description?: string | null
@@ -372,7 +373,8 @@ export type PolicyUncheckedCreateInput = {
 }
 
 export type PolicyUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  policyId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -386,13 +388,13 @@ export type PolicyUpdateInput = {
 }
 
 export type PolicyUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  policyId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -401,20 +403,21 @@ export type PolicyUncheckedUpdateInput = {
 }
 
 export type PolicyCreateManyInput = {
-  id?: string
-  seq?: number
+  policyId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
+  spaceId: bigint | number
+  createdById?: bigint | number | null
   name: string
   displayName?: string | null
   description?: string | null
 }
 
 export type PolicyUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  policyId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -424,13 +427,13 @@ export type PolicyUpdateManyMutationInput = {
 }
 
 export type PolicyUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  policyId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -441,60 +444,60 @@ export type PolicyScalarRelationFilter = {
   isNot?: Prisma.PolicyWhereInput
 }
 
-export type PolicySpaceSeqNameCompoundUniqueInput = {
-  spaceSeq: number
+export type PolicySpaceIdNameCompoundUniqueInput = {
+  spaceId: bigint | number
   name: string
 }
 
 export type PolicyCountOrderByAggregateInput = {
+  policyId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   name?: Prisma.SortOrder
   displayName?: Prisma.SortOrder
   description?: Prisma.SortOrder
 }
 
 export type PolicyAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
 }
 
 export type PolicyMaxOrderByAggregateInput = {
+  policyId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   name?: Prisma.SortOrder
   displayName?: Prisma.SortOrder
   description?: Prisma.SortOrder
 }
 
 export type PolicyMinOrderByAggregateInput = {
+  policyId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   name?: Prisma.SortOrder
   displayName?: Prisma.SortOrder
   description?: Prisma.SortOrder
 }
 
 export type PolicySumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
 }
 
 export type PolicyListRelationFilter = {
@@ -620,7 +623,8 @@ export type PolicyUncheckedUpdateManyWithoutCreatedByNestedInput = {
 }
 
 export type PolicyCreateWithoutEntriesInput = {
-  id?: string
+  policyId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -633,13 +637,13 @@ export type PolicyCreateWithoutEntriesInput = {
 }
 
 export type PolicyUncheckedCreateWithoutEntriesInput = {
-  id?: string
-  seq?: number
+  policyId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
+  spaceId: bigint | number
+  createdById?: bigint | number | null
   name: string
   displayName?: string | null
   description?: string | null
@@ -663,7 +667,8 @@ export type PolicyUpdateToOneWithWhereWithoutEntriesInput = {
 }
 
 export type PolicyUpdateWithoutEntriesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  policyId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -676,13 +681,13 @@ export type PolicyUpdateWithoutEntriesInput = {
 }
 
 export type PolicyUncheckedUpdateWithoutEntriesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  policyId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -690,7 +695,8 @@ export type PolicyUncheckedUpdateWithoutEntriesInput = {
 }
 
 export type PolicyCreateWithoutRoleAssignmentsInput = {
-  id?: string
+  policyId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -703,13 +709,13 @@ export type PolicyCreateWithoutRoleAssignmentsInput = {
 }
 
 export type PolicyUncheckedCreateWithoutRoleAssignmentsInput = {
-  id?: string
-  seq?: number
+  policyId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
+  spaceId: bigint | number
+  createdById?: bigint | number | null
   name: string
   displayName?: string | null
   description?: string | null
@@ -733,7 +739,8 @@ export type PolicyUpdateToOneWithWhereWithoutRoleAssignmentsInput = {
 }
 
 export type PolicyUpdateWithoutRoleAssignmentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  policyId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -746,13 +753,13 @@ export type PolicyUpdateWithoutRoleAssignmentsInput = {
 }
 
 export type PolicyUncheckedUpdateWithoutRoleAssignmentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  policyId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -760,7 +767,8 @@ export type PolicyUncheckedUpdateWithoutRoleAssignmentsInput = {
 }
 
 export type PolicyCreateWithoutSpaceInput = {
-  id?: string
+  policyId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -773,12 +781,12 @@ export type PolicyCreateWithoutSpaceInput = {
 }
 
 export type PolicyUncheckedCreateWithoutSpaceInput = {
-  id?: string
-  seq?: number
+  policyId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  createdBySeq?: number | null
+  createdById?: bigint | number | null
   name: string
   displayName?: string | null
   description?: string | null
@@ -816,20 +824,21 @@ export type PolicyScalarWhereInput = {
   AND?: Prisma.PolicyScalarWhereInput | Prisma.PolicyScalarWhereInput[]
   OR?: Prisma.PolicyScalarWhereInput[]
   NOT?: Prisma.PolicyScalarWhereInput | Prisma.PolicyScalarWhereInput[]
-  id?: Prisma.StringFilter<"Policy"> | string
-  seq?: Prisma.IntFilter<"Policy"> | number
+  policyId?: Prisma.StringFilter<"Policy"> | string
+  id?: Prisma.BigIntFilter<"Policy"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Policy"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Policy"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Policy"> | Date | string | null
-  spaceSeq?: Prisma.IntFilter<"Policy"> | number
-  createdBySeq?: Prisma.IntNullableFilter<"Policy"> | number | null
+  spaceId?: Prisma.BigIntFilter<"Policy"> | bigint | number
+  createdById?: Prisma.BigIntNullableFilter<"Policy"> | bigint | number | null
   name?: Prisma.StringFilter<"Policy"> | string
   displayName?: Prisma.StringNullableFilter<"Policy"> | string | null
   description?: Prisma.StringNullableFilter<"Policy"> | string | null
 }
 
 export type PolicyCreateWithoutCreatedByInput = {
-  id?: string
+  policyId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -842,12 +851,12 @@ export type PolicyCreateWithoutCreatedByInput = {
 }
 
 export type PolicyUncheckedCreateWithoutCreatedByInput = {
-  id?: string
-  seq?: number
+  policyId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
+  spaceId: bigint | number
   name: string
   displayName?: string | null
   description?: string | null
@@ -882,19 +891,20 @@ export type PolicyUpdateManyWithWhereWithoutCreatedByInput = {
 }
 
 export type PolicyCreateManySpaceInput = {
-  id?: string
-  seq?: number
+  policyId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  createdBySeq?: number | null
+  createdById?: bigint | number | null
   name: string
   displayName?: string | null
   description?: string | null
 }
 
 export type PolicyUpdateWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  policyId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -907,12 +917,12 @@ export type PolicyUpdateWithoutSpaceInput = {
 }
 
 export type PolicyUncheckedUpdateWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  policyId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -921,31 +931,32 @@ export type PolicyUncheckedUpdateWithoutSpaceInput = {
 }
 
 export type PolicyUncheckedUpdateManyWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  policyId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PolicyCreateManyCreatedByInput = {
-  id?: string
-  seq?: number
+  policyId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
+  spaceId: bigint | number
   name: string
   displayName?: string | null
   description?: string | null
 }
 
 export type PolicyUpdateWithoutCreatedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  policyId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -958,12 +969,12 @@ export type PolicyUpdateWithoutCreatedByInput = {
 }
 
 export type PolicyUncheckedUpdateWithoutCreatedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  policyId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -972,12 +983,12 @@ export type PolicyUncheckedUpdateWithoutCreatedByInput = {
 }
 
 export type PolicyUncheckedUpdateManyWithoutCreatedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  policyId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1024,13 +1035,13 @@ export type PolicyCountOutputTypeCountRoleAssignmentsArgs<ExtArgs extends runtim
 
 
 export type PolicySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  policyId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceSeq?: boolean
-  createdBySeq?: boolean
+  spaceId?: boolean
+  createdById?: boolean
   name?: boolean
   displayName?: boolean
   description?: boolean
@@ -1042,13 +1053,13 @@ export type PolicySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 }, ExtArgs["result"]["policy"]>
 
 export type PolicySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  policyId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceSeq?: boolean
-  createdBySeq?: boolean
+  spaceId?: boolean
+  createdById?: boolean
   name?: boolean
   displayName?: boolean
   description?: boolean
@@ -1057,13 +1068,13 @@ export type PolicySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
 }, ExtArgs["result"]["policy"]>
 
 export type PolicySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  policyId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceSeq?: boolean
-  createdBySeq?: boolean
+  spaceId?: boolean
+  createdById?: boolean
   name?: boolean
   displayName?: boolean
   description?: boolean
@@ -1072,19 +1083,19 @@ export type PolicySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
 }, ExtArgs["result"]["policy"]>
 
 export type PolicySelectScalar = {
+  policyId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceSeq?: boolean
-  createdBySeq?: boolean
+  spaceId?: boolean
+  createdById?: boolean
   name?: boolean
   displayName?: boolean
   description?: boolean
 }
 
-export type PolicyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "spaceSeq" | "createdBySeq" | "name" | "displayName" | "description", ExtArgs["result"]["policy"]>
+export type PolicyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"policyId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "spaceId" | "createdById" | "name" | "displayName" | "description", ExtArgs["result"]["policy"]>
 export type PolicyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Policy$createdByArgs<ExtArgs>
@@ -1110,19 +1121,19 @@ export type $PolicyPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     roleAssignments: Prisma.$RoleAssignmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    seq: number
+    policyId: string
+    id: bigint
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
     /**
      * @displayName 공간 내부 순번
      */
-    spaceSeq: number
+    spaceId: bigint
     /**
      * @displayName 생성자 내부 순번
      */
-    createdBySeq: number | null
+    createdById: bigint | null
     /**
      * @displayName 정책 식별자
      */
@@ -1218,8 +1229,8 @@ export interface PolicyDelegate<ExtArgs extends runtime.Types.Extensions.Interna
    * // Get first 10 Policies
    * const policies = await prisma.policy.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const policyWithIdOnly = await prisma.policy.findMany({ select: { id: true } })
+   * // Only select the `policyId`
+   * const policyWithPolicyIdOnly = await prisma.policy.findMany({ select: { policyId: true } })
    * 
    */
   findMany<T extends PolicyFindManyArgs>(args?: Prisma.SelectSubset<T, PolicyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PolicyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1263,9 +1274,9 @@ export interface PolicyDelegate<ExtArgs extends runtime.Types.Extensions.Interna
    *   ]
    * })
    * 
-   * // Create many Policies and only return the `id`
-   * const policyWithIdOnly = await prisma.policy.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many Policies and only return the `policyId`
+   * const policyWithPolicyIdOnly = await prisma.policy.createManyAndReturn({
+   *   select: { policyId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1354,9 +1365,9 @@ export interface PolicyDelegate<ExtArgs extends runtime.Types.Extensions.Interna
    *   ]
    * })
    * 
-   * // Update zero or more Policies and only return the `id`
-   * const policyWithIdOnly = await prisma.policy.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more Policies and only return the `policyId`
+   * const policyWithPolicyIdOnly = await prisma.policy.updateManyAndReturn({
+   *   select: { policyId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1562,13 +1573,13 @@ export interface Prisma__PolicyClient<T, Null = never, ExtArgs extends runtime.T
  * Fields of the Policy model
  */
 export interface PolicyFieldRefs {
-  readonly id: Prisma.FieldRef<"Policy", 'String'>
-  readonly seq: Prisma.FieldRef<"Policy", 'Int'>
+  readonly policyId: Prisma.FieldRef<"Policy", 'String'>
+  readonly id: Prisma.FieldRef<"Policy", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"Policy", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Policy", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Policy", 'DateTime'>
-  readonly spaceSeq: Prisma.FieldRef<"Policy", 'Int'>
-  readonly createdBySeq: Prisma.FieldRef<"Policy", 'Int'>
+  readonly spaceId: Prisma.FieldRef<"Policy", 'BigInt'>
+  readonly createdById: Prisma.FieldRef<"Policy", 'BigInt'>
   readonly name: Prisma.FieldRef<"Policy", 'String'>
   readonly displayName: Prisma.FieldRef<"Policy", 'String'>
   readonly description: Prisma.FieldRef<"Policy", 'String'>

@@ -3,7 +3,7 @@ export class MoveAssetCommand implements MoveAssetCommandInput {
 	readonly targetFolderId!: MoveAssetCommandInput["targetFolderId"];
 
 	constructor(
-		readonly assetId: string,
+		readonly assetId: bigint,
 		input: MoveAssetCommandInput,
 	) {
 		Object.assign(this, input);

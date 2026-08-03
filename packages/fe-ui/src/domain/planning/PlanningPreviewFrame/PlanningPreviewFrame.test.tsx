@@ -7,31 +7,31 @@ const baseScenario = {
 	id: "planning-preview.test",
 	title: "사용자 상세 기획",
 	description: "기획 검수용 프레임입니다.",
-	routePath: "/users/storybook-user",
+	routePath: "/users/301",
 	owner: "admin-web / fe-ui",
 	status: "ready-for-review",
 	context: {
 		realm: "admin",
 		authState: "authenticated",
 		account: {
-			id: "planner",
+			id: "501",
 			name: "기획 담당자",
 			email: "planner@example.com",
 			role: "SPACE_MANAGER",
 		},
 		role: "SPACE_MANAGER",
-		tenantId: "tenant-gangnam",
-		spaceId: "space-gangnam",
+		tenantId: "101",
+		spaceId: "201",
 		fitnessCenterName: "F45 강남1호",
 		spaces: [
 			{
-				tenantId: "tenant-gangnam",
-				spaceId: "space-gangnam",
+				tenantId: "101",
+				spaceId: "201",
 				fitnessCenterName: "F45 강남1호",
 			},
 			{
-				tenantId: "tenant-hongdae",
-				spaceId: "space-hongdae",
+				tenantId: "102",
+				spaceId: "202",
 				fitnessCenterName: "스포애니 홍대",
 			},
 		],
@@ -45,7 +45,7 @@ const baseScenario = {
 		requests: [
 			{
 				method: "GET",
-				path: "/admin/users/storybook-user",
+				path: "/admin/users/301",
 				status: 200,
 				description: "사용자 상세 정보를 반환합니다.",
 			},
@@ -87,8 +87,8 @@ describe("PlanningPreviewFrame", () => {
 
 		expect(onSpaceChange).toHaveBeenCalledWith(
 			expect.objectContaining({
-				tenantId: "tenant-hongdae",
-				spaceId: "space-hongdae",
+				tenantId: "102",
+				spaceId: "202",
 			}),
 		);
 		expect(screen.getByRole("button", { name: /스포애니 홍대/ })).toBeTruthy();
@@ -104,7 +104,7 @@ describe("PlanningPreviewFrame", () => {
 		expect(
 			screen.getByText("개인 Policy 할당 제거 이후 정보 구조를 검토합니다."),
 		).toBeTruthy();
-		expect(screen.getByText("GET /admin/users/storybook-user")).toBeTruthy();
+		expect(screen.getByText("GET /admin/users/301")).toBeTruthy();
 		expect(screen.getByText("status 200")).toBeTruthy();
 		expect(screen.queryByRole("heading", { name: "Planning" })).toBeNull();
 		expect(screen.queryByRole("heading", { name: "Context" })).toBeNull();

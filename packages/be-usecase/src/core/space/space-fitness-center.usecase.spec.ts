@@ -32,7 +32,9 @@ describe("space fitness-center use cases", () => {
 			},
 		};
 		spaces.createSpaceWithFitnessCenter.mockResolvedValue(
-			createdSpace as never,
+			createdSpace as unknown as Awaited<
+				ReturnType<SpaceAggregate["createSpaceWithFitnessCenter"]>
+			>,
 		);
 		const command = new CreateSpaceCommand({
 			contentLanguageCode: "ko_KR",
@@ -62,13 +64,18 @@ describe("space fitness-center use cases", () => {
 				businessNo: "123-45-67890",
 			},
 		};
-		spaces.getFitnessCenterBySpaceId.mockResolvedValue(fitnessCenter as never);
+		spaces.getFitnessCenterBySpaceId.mockResolvedValue(
+			fitnessCenter as unknown as Awaited<
+				ReturnType<SpaceAggregate["getFitnessCenterBySpaceId"]>
+			>,
+		);
 		const useCase = new GetSpaceFitnessCenterUseCase(spaces);
+		const spaceId = 101n;
 
 		await expect(
-			useCase.execute(new GetSpaceFitnessCenterQuery("space-id")),
+			useCase.execute(new GetSpaceFitnessCenterQuery(spaceId)),
 		).resolves.toBe(fitnessCenter);
-		expect(spaces.getFitnessCenterBySpaceId).toHaveBeenCalledWith("space-id");
+		expect(spaces.getFitnessCenterBySpaceId).toHaveBeenCalledWith(spaceId);
 	});
 
 	it("Given FitnessCenter 수정 command When 실행하면 Then Company 공통 필드 없이 FitnessCenter 변경만 aggregate에 위임한다", async () => {
@@ -85,9 +92,12 @@ describe("space fitness-center use cases", () => {
 			},
 		};
 		spaces.updateFitnessCenterBySpaceId.mockResolvedValue(
-			updatedSpace as never,
+			updatedSpace as unknown as Awaited<
+				ReturnType<SpaceAggregate["updateFitnessCenterBySpaceId"]>
+			>,
 		);
-		const command = new UpdateSpaceFitnessCenterCommand("space-id", {
+		const spaceId = 101n;
+		const command = new UpdateSpaceFitnessCenterCommand(spaceId, {
 			contentLanguageCode: "en_US",
 			name: "수정 피트니스",
 			label: "리뉴얼",
@@ -100,7 +110,7 @@ describe("space fitness-center use cases", () => {
 
 		await expect(useCase.execute(command)).resolves.toBe(updatedSpace);
 		expect(spaces.updateFitnessCenterBySpaceId).toHaveBeenCalledWith(
-			"space-id",
+			spaceId,
 			command,
 		);
 		expect(command).not.toHaveProperty("businessNo");

@@ -1,3 +1,3 @@
 export class DeletePolicyCommand {
-	constructor(readonly policyId: string) {}
+	constructor(readonly policyId: bigint) {}
 }

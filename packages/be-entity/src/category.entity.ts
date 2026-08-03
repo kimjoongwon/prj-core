@@ -1,21 +1,17 @@
-import type {
-	Category as CategoryEntity,
-	CategoryTypes,
-} from "@cocrepo/prisma";
+import type { CategoryTypes } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
 
-export class Category
-	extends AbstractEntity
-	implements DomainEntityModel<CategoryEntity>
-{
+export class Category extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	categoryId!: string;
+
 	name!: string;
 	type!: CategoryTypes;
-	spaceId!: string;
-	parentId!: string | null;
-	createdById!: string | null;
+	spaceId!: bigint;
+	parentId!: bigint | null;
+	createdById!: bigint | null;
 
 	parent?: Category;
 	children?: Category[];

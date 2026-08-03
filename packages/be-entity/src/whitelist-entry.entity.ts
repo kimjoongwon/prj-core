@@ -1,24 +1,17 @@
-import type {
-	WhitelistEntry as WhitelistEntryModel,
-	WhitelistType,
-} from "@cocrepo/prisma";
-import type { DomainEntityModel } from "./domain-entity-model.type";
+import type { WhitelistType } from "@cocrepo/prisma";
+import { AbstractEntity } from "./abstract.entity";
 
 /**
  * 화이트리스트 항목 엔티티
  *
  * IP, 이메일 도메인, CORS Origin 화이트리스트를 관리합니다.
  */
-export class WhitelistEntry implements DomainEntityModel<WhitelistEntryModel> {
-	// ============================================================================
-	// 기본 필드
-	// ============================================================================
-	id!: string;
-	createdAt!: Date;
-	updatedAt!: Date | null;
+export class WhitelistEntry extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	whitelistEntryId!: string;
 
 	// ============================================================================
-	// 필수 필드
+	// 기본 필드
 	// ============================================================================
 	type!: WhitelistType;
 	value!: string;

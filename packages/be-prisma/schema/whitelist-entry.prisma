@@ -3,18 +3,18 @@
 // @description: 인증 정책이 참조하는 화이트리스트 카탈로그
 /// @displayName 화이트리스트 항목
 model WhitelistEntry {
-  id          String        @unique @default(ulid()) @db.VarChar(26)
-  seq         Int           @id @default(autoincrement())
-  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime?     @updatedAt @map("updated_at") @db.Timestamptz(6)
+  whitelistEntryId String        @unique @default(ulid()) @map("whitelist_entry_id") @db.Char(26)
+  id               BigInt        @id @default(autoincrement())
+  createdAt        DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime?     @updatedAt @map("updated_at") @db.Timestamptz(6)
   /// @displayName 유형
-  type        WhitelistType
+  type             WhitelistType
   /// @displayName 값
-  value       String
+  value            String
   /// @displayName 설명
-  description String?
+  description      String?
   /// @displayName 활성 여부
-  isActive    Boolean       @default(true) @map("is_active")
+  isActive         Boolean       @default(true) @map("is_active")
 
   @@unique([type, value])
   @@index([type])

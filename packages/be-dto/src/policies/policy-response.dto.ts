@@ -1,20 +1,20 @@
-import { ULIDField, ULIDFieldOptional } from "@cocrepo/decorator";
+import { BigIntIdField, BigIntIdFieldOptional } from "@cocrepo/decorator/field";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 import { PolicyEntryResponseDto } from "./policy-entry-response.dto";
 
 export class PolicyResponseDto {
-	@ULIDField({ description: "Policy ID" })
+	@BigIntIdField({ description: "Policy ID" })
 	@Expose()
-	id!: string;
+	id!: bigint;
 
-	@ULIDField({ description: "Space ID" })
+	@BigIntIdField({ description: "Space ID" })
 	@Expose()
-	spaceId!: string;
+	spaceId!: bigint;
 
-	@ULIDFieldOptional({ nullable: true, description: "생성자 ID" })
+	@BigIntIdFieldOptional({ nullable: true, description: "생성자 ID" })
 	@Expose()
-	createdById!: string | null;
+	createdById!: bigint | null;
 
 	@ApiProperty({
 		description: "정책 식별자",

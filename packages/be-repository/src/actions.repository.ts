@@ -51,8 +51,8 @@ export class ActionsRepository {
 	/**
 	 * ID로 Action 조회
 	 */
-	async findById(id: string): Promise<Action | null> {
-		this.logger.debug(`ID로 Action 조회: ${id.slice(-8)}`);
+	async findById(id: bigint): Promise<Action | null> {
+		this.logger.debug(`ID로 Action 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.action.findUnique({
 			where: { id },
@@ -108,10 +108,10 @@ export class ActionsRepository {
 	 * Action 수정
 	 */
 	async updateById(
-		id: string,
+		id: bigint,
 		data: Prisma.ActionUncheckedUpdateInput,
 	): Promise<Action> {
-		this.logger.debug(`Action 수정: id=${id.slice(-8)}`);
+		this.logger.debug(`Action 수정: id=${id.toString()}`);
 
 		const result = await this.txHost.tx.action.update({
 			where: { id },
@@ -124,8 +124,8 @@ export class ActionsRepository {
 	/**
 	 * Action 소프트 삭제
 	 */
-	async removeById(id: string): Promise<Action> {
-		this.logger.debug(`Action 소프트 삭제: id=${id.slice(-8)}`);
+	async removeById(id: bigint): Promise<Action> {
+		this.logger.debug(`Action 소프트 삭제: id=${id.toString()}`);
 
 		const result = await this.txHost.tx.action.update({
 			where: { id },

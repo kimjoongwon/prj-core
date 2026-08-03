@@ -4,9 +4,9 @@ import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import type {
-	PublicIdCreateInput,
-	PublicIdUpdateInput,
-} from "./public-id-input.type";
+	AutoIdentityCreateInput,
+	AutoIdentityUpdateInput,
+} from "./auto-identity-input.type";
 import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
@@ -21,8 +21,8 @@ export class AlbumsRepository {
 		this.logger = new Logger("AlbumsRepository");
 	}
 
-	async findById(id: string): Promise<Album | null> {
-		this.logger.debug(`ID로 조회: ${id.slice(-8)}`);
+	async findById(id: bigint): Promise<Album | null> {
+		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.album.findUnique({
 			where: { id },
@@ -32,11 +32,11 @@ export class AlbumsRepository {
 		return result ? toDomainEntity(Album, result) : null;
 	}
 
-	async findByIdWithEntries(id: string): Promise<Album | null> {
-		this.logger.debug(`항목 포함 조회: ${id.slice(-8)}`);
+	async findByAlbumIdWithEntries(id: string): Promise<Album | null> {
+		this.logger.debug(`항목 포함 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.album.findUnique({
-			where: { id },
+			where: { albumId: id },
 			include: {
 				entries: {
 					orderBy: { position: "asc" },
@@ -56,11 +56,11 @@ export class AlbumsRepository {
 		return result ? toDomainEntity(Album, result) : null;
 	}
 
-	async findBySpaceId(spaceId: string): Promise<Album[]> {
-		this.logger.debug(`Space별 앨범 조회: ${spaceId.slice(-8)}`);
+	async findBySpaceId(spaceId: bigint): Promise<Album[]> {
+		this.logger.debug(`Space별 앨범 조회: ${spaceId.toString()}`);
 
 		const result = await this.txHost.tx.album.findMany({
-			where: { space: { id: spaceId } },
+			where: { spaceId },
 			include: { space: true, coverAsset: true, createdBy: true },
 			orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
 		});
@@ -92,24 +92,11 @@ export class AlbumsRepository {
 	}
 
 	async create(
-		data: PublicIdCreateInput<
-			Prisma.AlbumUncheckedCreateInput,
-			"space",
-			"coverAsset" | "createdBy"
-		>,
+		data: AutoIdentityCreateInput<Prisma.AlbumUncheckedCreateInput, "albumId">,
 	): Promise<Album> {
 		this.logger.debug(`앨범 생성: ${data.name}`);
-
-		const { spaceId, coverAssetId, createdById, ...albumData } = data;
 		const result = await this.txHost.tx.album.create({
-			data: {
-				...albumData,
-				space: { connect: { id: spaceId } },
-				...(coverAssetId
-					? { coverAsset: { connect: { id: coverAssetId } } }
-					: {}),
-				...(createdById ? { createdBy: { connect: { id: createdById } } } : {}),
-			},
+			data,
 			include: { space: true, coverAsset: true, createdBy: true },
 		});
 
@@ -117,42 +104,21 @@ export class AlbumsRepository {
 	}
 
 	async updateById(
-		id: string,
-		data: PublicIdUpdateInput<
-			Prisma.AlbumUncheckedUpdateInput,
-			"space",
-			"coverAsset" | "createdBy"
-		>,
+		id: bigint,
+		data: AutoIdentityUpdateInput<Prisma.AlbumUncheckedUpdateInput, "albumId">,
 	): Promise<Album> {
-		this.logger.debug(`앨범 수정: ${id.slice(-8)}`);
-
-		const { spaceId, coverAssetId, createdById, ...albumData } = data;
+		this.logger.debug(`앨범 수정: ${id.toString()}`);
 		const result = await this.txHost.tx.album.update({
 			where: { id },
-			data: {
-				...albumData,
-				...(spaceId !== undefined
-					? { space: { connect: { id: spaceId } } }
-					: {}),
-				...(coverAssetId !== undefined
-					? coverAssetId === null
-						? { coverAsset: { disconnect: true } }
-						: { coverAsset: { connect: { id: coverAssetId } } }
-					: {}),
-				...(createdById !== undefined
-					? createdById === null
-						? { createdBy: { disconnect: true } }
-						: { createdBy: { connect: { id: createdById } } }
-					: {}),
-			},
+			data,
 			include: { space: true, coverAsset: true, createdBy: true },
 		});
 
 		return toDomainEntity(Album, result);
 	}
 
-	async removeById(id: string): Promise<Album> {
-		this.logger.debug(`앨범 삭제: ${id.slice(-8)}`);
+	async removeById(id: bigint): Promise<Album> {
+		this.logger.debug(`앨범 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.album.delete({
 			where: { id },
@@ -162,9 +128,9 @@ export class AlbumsRepository {
 		return toDomainEntity(Album, result);
 	}
 
-	async countBySpaceId(spaceId: string): Promise<number> {
+	async countBySpaceId(spaceId: bigint): Promise<number> {
 		return this.txHost.tx.album.count({
-			where: { space: { id: spaceId } },
+			where: { spaceId },
 		});
 	}
 }

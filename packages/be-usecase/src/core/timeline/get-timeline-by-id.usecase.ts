@@ -20,8 +20,8 @@ export class GetTimelineByIdUseCase {
 		);
 	}
 
-	private requireTimelineSpaceId(): string {
-		const spaceId = this.spaceContext.spaceId;
+	private requireTimelineSpaceId(): bigint {
+		const spaceId = this.spaceContext.tenant?.spaceId;
 		if (!spaceId) {
 			throw new UnauthorizedException(TIMELINE_ERRORS.INVALID_DATA);
 		}

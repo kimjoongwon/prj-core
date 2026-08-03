@@ -1,13 +1,11 @@
 import {
+	BigIntIdField,
+	BigIntIdFieldOptional,
 	EmailField,
-	PasswordField,
 	PhoneField,
 	StringField,
-	StringFieldOptional,
-	ULIDField,
-	ULIDFieldOptional,
-} from "@cocrepo/decorator";
-import { Transform } from "class-transformer";
+} from "@cocrepo/decorator/field";
+import { PasswordField } from "@cocrepo/decorator/field/password";
 
 /**
  * 회원 등록용 DTO
@@ -36,22 +34,19 @@ export class CreateUserMemberDto {
 	})
 	password: string;
 
-	@ULIDField({
+	@BigIntIdField({
 		description: "역할 ID",
 	})
-	roleId: string;
+	roleId: bigint;
 
-	@ULIDFieldOptional({
+	@BigIntIdFieldOptional({
 		description: "분류 카테고리 ID",
 	})
-	categoryId?: string;
+	categoryId?: bigint;
 
-	@StringFieldOptional({
+	@BigIntIdFieldOptional({
 		each: true,
 		description: "그룹 ID 목록",
 	})
-	@Transform(({ value }) =>
-		Array.isArray(value) ? value : value ? [value] : [],
-	)
-	groupIds?: string[];
+	groupIds?: bigint[];
 }

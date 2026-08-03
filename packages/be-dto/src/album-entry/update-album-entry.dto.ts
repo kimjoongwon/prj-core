@@ -1,4 +1,4 @@
-import { StringFieldOptional } from "@cocrepo/decorator";
+import { StringFieldOptional } from "@cocrepo/decorator/field";
 
 /**
  * 앨범 엔트리 수정 DTO (캡션 등)

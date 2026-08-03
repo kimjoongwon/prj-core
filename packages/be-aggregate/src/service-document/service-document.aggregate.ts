@@ -42,7 +42,7 @@ export class ServiceDocumentAggregate {
 		});
 	}
 
-	async getServiceDocumentById(id: string): Promise<ServiceDocument> {
+	async getServiceDocumentById(id: bigint): Promise<ServiceDocument> {
 		const document = await this.repository.findById(id);
 		if (!document) {
 			throw new NotFoundException("서비스 문서를 찾을 수 없습니다");
@@ -88,7 +88,7 @@ export class ServiceDocumentAggregate {
 	}
 
 	async update(
-		id: string,
+		id: bigint,
 		dto: UpdateServiceDocumentCommandInput,
 	): Promise<ServiceDocument> {
 		const document = await this.getServiceDocumentById(id);
@@ -106,7 +106,7 @@ export class ServiceDocumentAggregate {
 		return this.repository.updateById(id, data);
 	}
 
-	async publish(id: string): Promise<ServiceDocument> {
+	async publish(id: bigint): Promise<ServiceDocument> {
 		const document = await this.getServiceDocumentById(id);
 		if (!document.content.trim()) {
 			throw new BadRequestException(
@@ -117,12 +117,12 @@ export class ServiceDocumentAggregate {
 		return this.repository.publishById(id);
 	}
 
-	async archive(id: string): Promise<ServiceDocument> {
+	async archive(id: bigint): Promise<ServiceDocument> {
 		await this.getServiceDocumentById(id);
 		return this.repository.archiveById(id);
 	}
 
-	async remove(id: string): Promise<ServiceDocument> {
+	async remove(id: bigint): Promise<ServiceDocument> {
 		await this.getServiceDocumentById(id);
 		return this.repository.removeById(id);
 	}

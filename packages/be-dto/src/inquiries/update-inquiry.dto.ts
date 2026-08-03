@@ -1,9 +1,9 @@
 import {
+	BigIntIdFieldOptional,
 	BooleanFieldOptional,
 	EnumFieldOptional,
 	StringFieldOptional,
-	ULIDFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import {
 	InquiryCategory,
 	InquiryPriority,
@@ -36,10 +36,10 @@ export class UpdateInquiryDto {
 	})
 	priority?: InquiryPriority;
 
-	@ULIDFieldOptional({
+	@BigIntIdFieldOptional({
 		description: "담당자 ID",
 	})
-	assigneeId?: string;
+	assigneeId?: bigint;
 
 	@BooleanFieldOptional({
 		description: "실시간 채팅 활성화 여부",

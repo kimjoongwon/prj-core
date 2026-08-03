@@ -1,18 +1,12 @@
-import type { PasswordHistory as PasswordHistoryEntity } from "@cocrepo/prisma";
-import type { DomainEntityModel } from "./domain-entity-model.type";
+import { AbstractEntity } from "./abstract.entity";
 
-export class PasswordHistory
-	implements DomainEntityModel<PasswordHistoryEntity>
-{
-	// ============================================================================
-	// 기본 필드
-	// ============================================================================
-	id!: string;
-	createdAt!: Date;
+export class PasswordHistory extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	passwordHistoryId!: string;
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	userId!: string;
+	userId!: bigint;
 	passwordHash!: string;
 }

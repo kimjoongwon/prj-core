@@ -1,4 +1,7 @@
-import { BooleanFieldOptional, ULIDFieldOptional } from "@cocrepo/decorator";
+import {
+	BigIntIdFieldOptional,
+	BooleanFieldOptional,
+} from "@cocrepo/decorator/field";
 
 /**
  * 문의 참여자 상태 업데이트 DTO
@@ -14,8 +17,8 @@ export class UpdateInquiryParticipantDto {
 	})
 	isTyping?: boolean;
 
-	@ULIDFieldOptional({
+	@BigIntIdFieldOptional({
 		description: "타이핑 중인 스레드 ID",
 	})
-	threadId?: string;
+	threadId?: bigint;
 }

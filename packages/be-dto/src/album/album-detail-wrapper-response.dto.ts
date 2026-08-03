@@ -1,4 +1,4 @@
-import { ClassField } from "@cocrepo/decorator";
+import { ClassField } from "@cocrepo/decorator/field";
 
 import { AlbumDetailResponseDto } from "./album-detail-response.dto";
 

@@ -1,4 +1,4 @@
-import { ULIDField } from "@cocrepo/decorator";
+import { BigIntIdField } from "@cocrepo/decorator/field";
 import { ApiProperty } from "@nestjs/swagger";
 import {
 	IsArray,
@@ -15,17 +15,17 @@ import {
  * DDD 원칙에 따라 actionId로 Action을 참조합니다.
  */
 export class CreateAbilityDto {
-	@ULIDField({
-		description: "Action ID (ULID)",
-		example: "01J00000000000000000000000",
+	@BigIntIdField({
+		description: "Action ID",
+		example: "1",
 	})
-	actionId!: string;
+	actionId!: bigint;
 
-	@ULIDField({
-		description: "Subject ID (ULID)",
-		example: "01J00000000000000000000001",
+	@BigIntIdField({
+		description: "Subject ID",
+		example: "1",
 	})
-	subjectId!: string;
+	subjectId!: bigint;
 
 	@ApiProperty({
 		description: "대상 필드 목록 (빈 배열이면 전체 필드)",

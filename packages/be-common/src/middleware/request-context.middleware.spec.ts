@@ -1,4 +1,5 @@
 import { CONTEXT_KEYS, REQUEST_HEADER_KEYS } from "@cocrepo/constant";
+import { BadRequestException } from "@nestjs/common";
 import type { NextFunction, Request, Response } from "express";
 import type { ClsService } from "nestjs-cls";
 
@@ -17,12 +18,13 @@ describe("RequestContextMiddleware", () => {
 	let mockNext: jest.MockedFunction<NextFunction>;
 
 	const createMockUser = (overrides: Record<string, unknown> = {}) => ({
-		id: "user-1",
+		id: 101n,
 		email: "test@example.com",
 		tenants: [
 			{
-				id: "tenant-1",
-				spaceId: "space-001",
+				id: 201n,
+				spaceId: 301n,
+				roleId: 401n,
 				role: {
 					name: "MEMBER",
 					classification: {
@@ -83,7 +85,7 @@ describe("RequestContextMiddleware", () => {
 				// Given
 				const user = createMockUser();
 				mockReq = {
-					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "tenant-1" },
+					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "201" },
 					user,
 				} as unknown as Partial<Request>;
 
@@ -92,10 +94,7 @@ describe("RequestContextMiddleware", () => {
 
 				// Then
 				expect(mockCls.set).toHaveBeenCalledWith(CONTEXT_KEYS.AUTH_USER, user);
-				expect(mockCls.set).toHaveBeenCalledWith(
-					CONTEXT_KEYS.USER_ID,
-					"user-1",
-				);
+				expect(mockCls.set).toHaveBeenCalledWith(CONTEXT_KEYS.USER_ID, 101n);
 				expect(mockNext).toHaveBeenCalled();
 			});
 		});
@@ -124,7 +123,7 @@ describe("RequestContextMiddleware", () => {
 				// Given
 				const user = createMockUser();
 				mockReq = {
-					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "tenant-1" },
+					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "201" },
 					user,
 				} as unknown as Partial<Request>;
 
@@ -132,18 +131,12 @@ describe("RequestContextMiddleware", () => {
 				await middleware.use(mockReq as Request, mockRes as Response, mockNext);
 
 				// Then
-				expect(mockCls.set).toHaveBeenCalledWith(
-					CONTEXT_KEYS.SPACE_ID,
-					"space-001",
-				);
+				expect(mockCls.set).toHaveBeenCalledWith(CONTEXT_KEYS.SPACE_ID, 301n);
 				expect(mockCls.set).toHaveBeenCalledWith(
 					CONTEXT_KEYS.TENANT,
 					user.tenants[0],
 				);
-				expect(mockCls.set).toHaveBeenCalledWith(
-					CONTEXT_KEYS.TENANT_ID,
-					"tenant-1",
-				);
+				expect(mockCls.set).toHaveBeenCalledWith(CONTEXT_KEYS.TENANT_ID, 201n);
 			});
 
 			it("x-tenant-id로 지정한 PLATFORM_ADMIN tenant를 저장해야 한다", async () => {
@@ -151,20 +144,22 @@ describe("RequestContextMiddleware", () => {
 				const user = createMockUser({
 					tenants: [
 						{
-							id: "tenant-view",
-							spaceId: "space-001",
+							id: 202n,
+							spaceId: 301n,
+							roleId: 402n,
 							role: { name: "MEMBER" },
 						},
 						{
-							id: "tenant-full-access",
-							spaceId: "space-001",
+							id: 203n,
+							spaceId: 301n,
+							roleId: 403n,
 							role: { name: "PLATFORM_ADMIN" },
 						},
 					],
 				});
 				mockReq = {
 					headers: {
-						[REQUEST_HEADER_KEYS.TENANT_ID]: "tenant-full-access",
+						[REQUEST_HEADER_KEYS.TENANT_ID]: "203",
 					},
 					user,
 				} as unknown as Partial<Request>;
@@ -184,15 +179,16 @@ describe("RequestContextMiddleware", () => {
 				const user = createMockUser({
 					tenants: [
 						{
-							id: "tenant-deleted",
-							spaceId: "space-001",
+							id: 204n,
+							spaceId: 301n,
+							roleId: 404n,
 							role: { name: "PLATFORM_ADMIN" },
 							removedAt: new Date(),
 						},
 					],
 				});
 				mockReq = {
-					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "tenant-deleted" },
+					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "204" },
 					user,
 				} as unknown as Partial<Request>;
 
@@ -225,7 +221,7 @@ describe("RequestContextMiddleware", () => {
 				// Given
 				const user = createMockUser();
 				mockReq = {
-					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "tenant-missing" },
+					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "999" },
 					user,
 				} as unknown as Partial<Request>;
 
@@ -241,13 +237,35 @@ describe("RequestContextMiddleware", () => {
 		});
 
 		describe("에러 처리", () => {
+			it.each([
+				"0",
+				"0201",
+				"-1",
+				"tenant-1",
+				"9223372036854775808",
+			])("x-tenant-id가 canonical decimal ID가 아니면 400으로 거부해야 한다: %s", (invalidTenantId) => {
+				// Given
+				mockReq = {
+					headers: {
+						[REQUEST_HEADER_KEYS.TENANT_ID]: invalidTenantId,
+					},
+					user: createMockUser(),
+				} as unknown as Partial<Request>;
+
+				// When & Then
+				expect(() =>
+					middleware.use(mockReq as Request, mockRes as Response, mockNext),
+				).toThrow(BadRequestException);
+				expect(mockNext).not.toHaveBeenCalled();
+			});
+
 			it("setRequestContext에서 예외가 발생해도 next()를 호출해야 한다", async () => {
 				// Given - cls.set에서 에러 발생 시뮬레이션
 				mockCls.set.mockImplementationOnce(() => {
 					throw new Error("CLS 에러");
 				});
 				mockReq = {
-					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "tenant-1" },
+					headers: { [REQUEST_HEADER_KEYS.TENANT_ID]: "201" },
 					user: createMockUser(),
 				} as unknown as Partial<Request>;
 

@@ -2,19 +2,19 @@
 // @description: Task에 종속되는 1:1 운동 상세 모델
 /// @displayName 운동
 model Exercise {
-  id          String    @unique @default(ulid()) @db.VarChar(26)
-  seq         Int       @id @default(autoincrement())
+  exerciseId  String    @unique @default(ulid()) @map("exercise_id") @db.Char(26)
+  id          BigInt    @id @default(autoincrement())
   createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt   DateTime? @map("removed_at") @db.Timestamptz(6)
   duration    Int
   count       Int
-  taskSeq     Int       @unique @map("task_seq")
+  taskId      BigInt    @unique @map("task_id")
   description String?
   imageFileId String?   @map("image_file_id")
   videoFileId String?   @map("video_file_id")
   name        String
-  task        Task      @relation(fields: [taskSeq], references: [seq])
+  task        Task      @relation(fields: [taskId], references: [id])
 
   @@index([name])
   @@map("exercises")

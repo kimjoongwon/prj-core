@@ -13,7 +13,7 @@ export class DeleteTimelineUseCase {
 	) {}
 
 	execute(command: DeleteTimelineCommand): Promise<void> {
-		const spaceId = this.spaceContext.spaceId;
+		const spaceId = this.spaceContext.tenant?.spaceId;
 		if (!spaceId) {
 			throw new UnauthorizedException(TIMELINE_ERRORS.INVALID_DATA);
 		}

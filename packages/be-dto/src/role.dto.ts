@@ -2,15 +2,23 @@ import {
 	ClassField,
 	StringField,
 	StringFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import type { DomainEntityModel } from "@cocrepo/entity";
 import type { Role } from "@cocrepo/prisma";
+import { Exclude } from "class-transformer";
 import { AbstractDto } from "./abstract.dto";
 import { RoleAssignmentResponseDto } from "./role-assignments";
 import { RoleAssociationDto } from "./role-association.dto";
 import { RoleClassificationDto } from "./role-classification.dto";
 
-export class RoleDto extends AbstractDto implements DomainEntityModel<Role> {
+export class RoleDto
+	extends AbstractDto
+	implements DomainEntityModel<Role, "roleId">
+{
+	@Exclude()
+	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
+	private readonly roleId?: never;
+
 	@StringField({
 		description: "역할 식별자",
 		maxLength: 50,

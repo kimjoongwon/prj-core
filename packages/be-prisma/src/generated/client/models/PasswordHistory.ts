@@ -27,72 +27,72 @@ export type AggregatePasswordHistory = {
 }
 
 export type PasswordHistoryAvgAggregateOutputType = {
-  seq: number | null
-  userSeq: number | null
+  id: number | null
+  userId: number | null
 }
 
 export type PasswordHistorySumAggregateOutputType = {
-  seq: number | null
-  userSeq: number | null
+  id: bigint | null
+  userId: bigint | null
 }
 
 export type PasswordHistoryMinAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  passwordHistoryId: string | null
+  id: bigint | null
   createdAt: Date | null
-  userSeq: number | null
+  userId: bigint | null
   passwordHash: string | null
 }
 
 export type PasswordHistoryMaxAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  passwordHistoryId: string | null
+  id: bigint | null
   createdAt: Date | null
-  userSeq: number | null
+  userId: bigint | null
   passwordHash: string | null
 }
 
 export type PasswordHistoryCountAggregateOutputType = {
+  passwordHistoryId: number
   id: number
-  seq: number
   createdAt: number
-  userSeq: number
+  userId: number
   passwordHash: number
   _all: number
 }
 
 
 export type PasswordHistoryAvgAggregateInputType = {
-  seq?: true
-  userSeq?: true
+  id?: true
+  userId?: true
 }
 
 export type PasswordHistorySumAggregateInputType = {
-  seq?: true
-  userSeq?: true
+  id?: true
+  userId?: true
 }
 
 export type PasswordHistoryMinAggregateInputType = {
+  passwordHistoryId?: true
   id?: true
-  seq?: true
   createdAt?: true
-  userSeq?: true
+  userId?: true
   passwordHash?: true
 }
 
 export type PasswordHistoryMaxAggregateInputType = {
+  passwordHistoryId?: true
   id?: true
-  seq?: true
   createdAt?: true
-  userSeq?: true
+  userId?: true
   passwordHash?: true
 }
 
 export type PasswordHistoryCountAggregateInputType = {
+  passwordHistoryId?: true
   id?: true
-  seq?: true
   createdAt?: true
-  userSeq?: true
+  userId?: true
   passwordHash?: true
   _all?: true
 }
@@ -184,10 +184,10 @@ export type PasswordHistoryGroupByArgs<ExtArgs extends runtime.Types.Extensions.
 }
 
 export type PasswordHistoryGroupByOutputType = {
-  id: string
-  seq: number
+  passwordHistoryId: string
+  id: bigint
   createdAt: Date
-  userSeq: number
+  userId: bigint
   passwordHash: string
   _count: PasswordHistoryCountAggregateOutputType | null
   _avg: PasswordHistoryAvgAggregateOutputType | null
@@ -215,40 +215,40 @@ export type PasswordHistoryWhereInput = {
   AND?: Prisma.PasswordHistoryWhereInput | Prisma.PasswordHistoryWhereInput[]
   OR?: Prisma.PasswordHistoryWhereInput[]
   NOT?: Prisma.PasswordHistoryWhereInput | Prisma.PasswordHistoryWhereInput[]
-  id?: Prisma.StringFilter<"PasswordHistory"> | string
-  seq?: Prisma.IntFilter<"PasswordHistory"> | number
+  passwordHistoryId?: Prisma.StringFilter<"PasswordHistory"> | string
+  id?: Prisma.BigIntFilter<"PasswordHistory"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"PasswordHistory"> | Date | string
-  userSeq?: Prisma.IntFilter<"PasswordHistory"> | number
+  userId?: Prisma.BigIntFilter<"PasswordHistory"> | bigint | number
   passwordHash?: Prisma.StringFilter<"PasswordHistory"> | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type PasswordHistoryOrderByWithRelationInput = {
+  passwordHistoryId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  userSeq?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
 }
 
 export type PasswordHistoryWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  seq?: number
+  passwordHistoryId?: string
+  id?: bigint | number
   AND?: Prisma.PasswordHistoryWhereInput | Prisma.PasswordHistoryWhereInput[]
   OR?: Prisma.PasswordHistoryWhereInput[]
   NOT?: Prisma.PasswordHistoryWhereInput | Prisma.PasswordHistoryWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"PasswordHistory"> | Date | string
-  userSeq?: Prisma.IntFilter<"PasswordHistory"> | number
+  userId?: Prisma.BigIntFilter<"PasswordHistory"> | bigint | number
   passwordHash?: Prisma.StringFilter<"PasswordHistory"> | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "seq" | "id">
+}, "id" | "passwordHistoryId">
 
 export type PasswordHistoryOrderByWithAggregationInput = {
+  passwordHistoryId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  userSeq?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   _count?: Prisma.PasswordHistoryCountOrderByAggregateInput
   _avg?: Prisma.PasswordHistoryAvgOrderByAggregateInput
@@ -261,97 +261,100 @@ export type PasswordHistoryScalarWhereWithAggregatesInput = {
   AND?: Prisma.PasswordHistoryScalarWhereWithAggregatesInput | Prisma.PasswordHistoryScalarWhereWithAggregatesInput[]
   OR?: Prisma.PasswordHistoryScalarWhereWithAggregatesInput[]
   NOT?: Prisma.PasswordHistoryScalarWhereWithAggregatesInput | Prisma.PasswordHistoryScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"PasswordHistory"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"PasswordHistory"> | number
+  passwordHistoryId?: Prisma.StringWithAggregatesFilter<"PasswordHistory"> | string
+  id?: Prisma.BigIntWithAggregatesFilter<"PasswordHistory"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PasswordHistory"> | Date | string
-  userSeq?: Prisma.IntWithAggregatesFilter<"PasswordHistory"> | number
+  userId?: Prisma.BigIntWithAggregatesFilter<"PasswordHistory"> | bigint | number
   passwordHash?: Prisma.StringWithAggregatesFilter<"PasswordHistory"> | string
 }
 
 export type PasswordHistoryCreateInput = {
-  id?: string
+  passwordHistoryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   passwordHash: string
   user: Prisma.UserCreateNestedOneWithoutPasswordHistoryInput
 }
 
 export type PasswordHistoryUncheckedCreateInput = {
-  id?: string
-  seq?: number
+  passwordHistoryId?: string
+  id?: bigint | number
   createdAt?: Date | string
-  userSeq: number
+  userId: bigint | number
   passwordHash: string
 }
 
 export type PasswordHistoryUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHistoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   user?: Prisma.UserUpdateOneRequiredWithoutPasswordHistoryNestedInput
 }
 
 export type PasswordHistoryUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  passwordHistoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type PasswordHistoryCreateManyInput = {
-  id?: string
-  seq?: number
+  passwordHistoryId?: string
+  id?: bigint | number
   createdAt?: Date | string
-  userSeq: number
+  userId: bigint | number
   passwordHash: string
 }
 
 export type PasswordHistoryUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHistoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type PasswordHistoryUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  passwordHistoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type PasswordHistoryCountOrderByAggregateInput = {
+  passwordHistoryId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  userSeq?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
 }
 
 export type PasswordHistoryAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  userSeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
 }
 
 export type PasswordHistoryMaxOrderByAggregateInput = {
+  passwordHistoryId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  userSeq?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
 }
 
 export type PasswordHistoryMinOrderByAggregateInput = {
+  passwordHistoryId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  userSeq?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
 }
 
 export type PasswordHistorySumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  userSeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
 }
 
 export type PasswordHistoryListRelationFilter = {
@@ -407,14 +410,15 @@ export type PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput = {
 }
 
 export type PasswordHistoryCreateWithoutUserInput = {
-  id?: string
+  passwordHistoryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   passwordHash: string
 }
 
 export type PasswordHistoryUncheckedCreateWithoutUserInput = {
-  id?: string
-  seq?: number
+  passwordHistoryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   passwordHash: string
 }
@@ -449,36 +453,37 @@ export type PasswordHistoryScalarWhereInput = {
   AND?: Prisma.PasswordHistoryScalarWhereInput | Prisma.PasswordHistoryScalarWhereInput[]
   OR?: Prisma.PasswordHistoryScalarWhereInput[]
   NOT?: Prisma.PasswordHistoryScalarWhereInput | Prisma.PasswordHistoryScalarWhereInput[]
-  id?: Prisma.StringFilter<"PasswordHistory"> | string
-  seq?: Prisma.IntFilter<"PasswordHistory"> | number
+  passwordHistoryId?: Prisma.StringFilter<"PasswordHistory"> | string
+  id?: Prisma.BigIntFilter<"PasswordHistory"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"PasswordHistory"> | Date | string
-  userSeq?: Prisma.IntFilter<"PasswordHistory"> | number
+  userId?: Prisma.BigIntFilter<"PasswordHistory"> | bigint | number
   passwordHash?: Prisma.StringFilter<"PasswordHistory"> | string
 }
 
 export type PasswordHistoryCreateManyUserInput = {
-  id?: string
-  seq?: number
+  passwordHistoryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   passwordHash: string
 }
 
 export type PasswordHistoryUpdateWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHistoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type PasswordHistoryUncheckedUpdateWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  passwordHistoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type PasswordHistoryUncheckedUpdateManyWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  passwordHistoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -486,41 +491,41 @@ export type PasswordHistoryUncheckedUpdateManyWithoutUserInput = {
 
 
 export type PasswordHistorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  passwordHistoryId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
-  userSeq?: boolean
+  userId?: boolean
   passwordHash?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["passwordHistory"]>
 
 export type PasswordHistorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  passwordHistoryId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
-  userSeq?: boolean
+  userId?: boolean
   passwordHash?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["passwordHistory"]>
 
 export type PasswordHistorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  passwordHistoryId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
-  userSeq?: boolean
+  userId?: boolean
   passwordHash?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["passwordHistory"]>
 
 export type PasswordHistorySelectScalar = {
+  passwordHistoryId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
-  userSeq?: boolean
+  userId?: boolean
   passwordHash?: boolean
 }
 
-export type PasswordHistoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "userSeq" | "passwordHash", ExtArgs["result"]["passwordHistory"]>
+export type PasswordHistoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"passwordHistoryId" | "id" | "createdAt" | "userId" | "passwordHash", ExtArgs["result"]["passwordHistory"]>
 export type PasswordHistoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -537,13 +542,13 @@ export type $PasswordHistoryPayload<ExtArgs extends runtime.Types.Extensions.Int
     user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    seq: number
+    passwordHistoryId: string
+    id: bigint
     createdAt: Date
     /**
      * @displayName 사용자 내부 순번
      */
-    userSeq: number
+    userId: bigint
     /**
      * @displayName 비밀번호 해시
      */
@@ -631,8 +636,8 @@ export interface PasswordHistoryDelegate<ExtArgs extends runtime.Types.Extension
    * // Get first 10 PasswordHistories
    * const passwordHistories = await prisma.passwordHistory.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const passwordHistoryWithIdOnly = await prisma.passwordHistory.findMany({ select: { id: true } })
+   * // Only select the `passwordHistoryId`
+   * const passwordHistoryWithPasswordHistoryIdOnly = await prisma.passwordHistory.findMany({ select: { passwordHistoryId: true } })
    * 
    */
   findMany<T extends PasswordHistoryFindManyArgs>(args?: Prisma.SelectSubset<T, PasswordHistoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -676,9 +681,9 @@ export interface PasswordHistoryDelegate<ExtArgs extends runtime.Types.Extension
    *   ]
    * })
    * 
-   * // Create many PasswordHistories and only return the `id`
-   * const passwordHistoryWithIdOnly = await prisma.passwordHistory.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many PasswordHistories and only return the `passwordHistoryId`
+   * const passwordHistoryWithPasswordHistoryIdOnly = await prisma.passwordHistory.createManyAndReturn({
+   *   select: { passwordHistoryId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -767,9 +772,9 @@ export interface PasswordHistoryDelegate<ExtArgs extends runtime.Types.Extension
    *   ]
    * })
    * 
-   * // Update zero or more PasswordHistories and only return the `id`
-   * const passwordHistoryWithIdOnly = await prisma.passwordHistory.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more PasswordHistories and only return the `passwordHistoryId`
+   * const passwordHistoryWithPasswordHistoryIdOnly = await prisma.passwordHistory.updateManyAndReturn({
+   *   select: { passwordHistoryId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -972,10 +977,10 @@ export interface Prisma__PasswordHistoryClient<T, Null = never, ExtArgs extends 
  * Fields of the PasswordHistory model
  */
 export interface PasswordHistoryFieldRefs {
-  readonly id: Prisma.FieldRef<"PasswordHistory", 'String'>
-  readonly seq: Prisma.FieldRef<"PasswordHistory", 'Int'>
+  readonly passwordHistoryId: Prisma.FieldRef<"PasswordHistory", 'String'>
+  readonly id: Prisma.FieldRef<"PasswordHistory", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"PasswordHistory", 'DateTime'>
-  readonly userSeq: Prisma.FieldRef<"PasswordHistory", 'Int'>
+  readonly userId: Prisma.FieldRef<"PasswordHistory", 'BigInt'>
   readonly passwordHash: Prisma.FieldRef<"PasswordHistory", 'String'>
 }
     

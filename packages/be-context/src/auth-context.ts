@@ -1,6 +1,10 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { User } from "@cocrepo/entity";
-import type { ContextTenantSnapshot, ContextUserSnapshot } from "@cocrepo/type";
+import type {
+	ContextTenantSnapshot,
+	ContextUserSnapshot,
+	DatabaseId,
+} from "@cocrepo/type";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
 
@@ -44,13 +48,13 @@ export class AuthContext {
 	}
 
 	/** 현재 Tenant ID */
-	get tenantId(): string | undefined {
-		return this.cls.get<string>(CONTEXT_KEYS.TENANT_ID);
+	get tenantId(): DatabaseId | undefined {
+		return this.cls.get<DatabaseId>(CONTEXT_KEYS.TENANT_ID);
 	}
 
 	/** 현재 Tenant에서 파생된 Space ID */
-	get spaceId(): string | undefined {
-		return this.cls.get<string>(CONTEXT_KEYS.SPACE_ID);
+	get spaceId(): DatabaseId | undefined {
+		return this.cls.get<DatabaseId>(CONTEXT_KEYS.SPACE_ID);
 	}
 
 	// ═══════════════════════════════════════════════════════════
@@ -75,12 +79,12 @@ export class AuthContext {
 	}
 
 	/** 접근 가능한 Space IDs */
-	get accessibleSpaceIds(): string[] | undefined {
+	get accessibleSpaceIds(): DatabaseId[] | undefined {
 		return this.user?.accessibleSpaceIds;
 	}
 
 	/** 특정 Space 접근 권한 */
-	canAccessSpace(spaceId: string): boolean {
+	canAccessSpace(spaceId: DatabaseId): boolean {
 		return this.user?.canAccessSpace(spaceId) ?? false;
 	}
 

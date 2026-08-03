@@ -1,3 +1,3 @@
 export class DeleteActionCommand {
-	constructor(readonly actionId: string) {}
+	constructor(readonly actionId: bigint) {}
 }

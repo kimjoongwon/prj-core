@@ -2,27 +2,27 @@
 // @description: Company 아래에서 Space와 1:1로 연결되는 피트니스 센터 정보를 관리
 /// @displayName 피트니스 센터
 model FitnessCenter {
-  id          String    @unique @default(ulid()) @db.VarChar(26)
-  seq         Int       @id @default(autoincrement())
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt   DateTime? @map("removed_at") @db.Timestamptz(6)
+  fitnessCenterId String    @unique @default(ulid()) @map("fitness_center_id") @db.Char(26)
+  id              BigInt    @id @default(autoincrement())
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt       DateTime? @map("removed_at") @db.Timestamptz(6)
   /// @displayName 이름
-  name        String
+  name            String
   /// @displayName 라벨
-  label       String?
+  label           String?
   /// @displayName 주소
-  address     String
+  address         String
   /// @displayName 전화번호
-  phone       String
+  phone           String
   /// @displayName 이메일
-  email       String
-  companySeq  Int       @map("company_seq")
-  spaceSeq    Int       @unique @map("space_seq")
-  imageFileId String?   @map("image_file_id")
-  company     Company   @relation(fields: [companySeq], references: [seq])
-  space       Space     @relation(fields: [spaceSeq], references: [seq])
+  email           String
+  companyId       BigInt    @map("company_id")
+  spaceId         BigInt    @unique @map("space_id")
+  imageFileId     String?   @map("image_file_id")
+  company         Company   @relation(fields: [companyId], references: [id])
+  space           Space     @relation(fields: [spaceId], references: [id])
 
-  @@index([companySeq])
+  @@index([companyId])
   @@map("fitness_centers")
 }

@@ -1,3 +1,4 @@
+import { type DecimalId, isDecimalId } from "@cocrepo/type";
 import { makeAutoObservable, reaction } from "mobx";
 import type { PersistStorage } from "../persistence/persistStorage";
 import type { AuthSession } from "./authSession";
@@ -14,16 +15,16 @@ export interface AccountStoreDependencies {
 }
 
 export interface AccountSpaceInfo {
-	tenantId: string;
-	spaceId: string;
+	tenantId: DecimalId;
+	spaceId: DecimalId;
 	fitnessCenterName: string;
 	contentLanguageCode?: string | null;
 }
 
 interface PersistedAccountTenantSelection {
 	version: typeof ACCOUNT_TENANT_SELECTION_PERSIST_VERSION;
-	tenantId: string | null;
-	spaceId: string | null;
+	tenantId: DecimalId | null;
+	spaceId: DecimalId | null;
 	fitnessCenterName: string | null;
 	contentLanguageCode: string | null;
 	availableSpaces: AccountSpaceInfo[];
@@ -35,9 +36,9 @@ interface PersistedAccountTenantSelection {
 export class AccountStore {
 	readonly authSession: AuthSession;
 	private readonly persistStorage: PersistStorage;
-	currentTenantId: string | null = null;
-	selectedTenantId: string | null = null;
-	currentSpaceId: string | null = null;
+	currentTenantId: DecimalId | null = null;
+	selectedTenantId: DecimalId | null = null;
+	currentSpaceId: DecimalId | null = null;
 	currentFitnessCenterName: string | null = null;
 	contentLanguageCode: string | null = null;
 	availableSpaces: AccountSpaceInfo[] = [];
@@ -81,17 +82,17 @@ export class AccountStore {
 	 * 현재 계정이 접근 가능한 Space 목록을 갱신합니다.
 	 */
 	setAvailableSpaces(spaces: AccountSpaceInfo[]): void {
-		this.availableSpaces = spaces;
+		this.availableSpaces = normalizeAccountSpaces(spaces);
 	}
 
 	/**
 	 * 현재 tenant와 선택한 Space/FitnessCenter 정보를 동기화합니다.
 	 */
 	setCurrentTenant(
-		tenantId: string,
+		tenantId: DecimalId,
 		fitnessCenterName: string,
 		contentLanguageCode?: string | null,
-		spaceId?: string | null,
+		spaceId?: DecimalId | null,
 	): void {
 		this.currentTenantId = tenantId;
 		this.selectedTenantId = tenantId;
@@ -109,7 +110,7 @@ export class AccountStore {
 	/**
 	 * Space 선택 draft용 tenant를 갱신합니다.
 	 */
-	selectTenant(tenantId: string | null): void {
+	selectTenant(tenantId: DecimalId | null): void {
 		this.selectedTenantId = tenantId;
 	}
 
@@ -156,17 +157,19 @@ export class AccountStore {
 
 		return {
 			version: ACCOUNT_TENANT_SELECTION_PERSIST_VERSION,
-			tenantId: typeof data.tenantId === "string" ? data.tenantId : null,
-			spaceId: typeof data.spaceId === "string" ? data.spaceId : null,
+			tenantId: normalizePersistedTenantId(data),
+			spaceId: normalizePersistedSpaceId(data),
 			fitnessCenterName:
+				normalizePersistedTenantId(data) !== null &&
 				typeof data.fitnessCenterName === "string"
 					? data.fitnessCenterName
 					: null,
 			contentLanguageCode:
+				normalizePersistedTenantId(data) !== null &&
 				typeof data.contentLanguageCode === "string"
 					? data.contentLanguageCode
 					: null,
-			availableSpaces: normalizePersistedSpaces(data.availableSpaces),
+			availableSpaces: normalizeAccountSpaces(data.availableSpaces),
 		};
 	}
 
@@ -218,13 +221,56 @@ function isEmptyPersistedAccountTenantSelection(
 	);
 }
 
-function normalizePersistedSpaces(spaces?: unknown): AccountSpaceInfo[] {
-	return Array.isArray(spaces)
-		? spaces.filter(
-				(space): space is AccountSpaceInfo =>
-					typeof space?.tenantId === "string" &&
-					typeof space?.spaceId === "string" &&
-					typeof space?.fitnessCenterName === "string",
-			)
-		: [];
+function normalizePersistedTenantId(data: {
+	tenantId: unknown;
+}): DecimalId | null {
+	return normalizeDecimalId(data.tenantId);
+}
+
+function normalizePersistedSpaceId(data: {
+	tenantId: unknown;
+	spaceId: unknown;
+}): DecimalId | null {
+	const tenantId = normalizePersistedTenantId(data);
+	if (tenantId === null) {
+		return null;
+	}
+
+	return normalizeDecimalId(data.spaceId);
+}
+
+function normalizeDecimalId(value: unknown): DecimalId | null {
+	return isDecimalId(value) ? value : null;
+}
+
+function normalizeAccountSpaces(spaces: Iterable<unknown>): AccountSpaceInfo[] {
+	const normalizedSpaces: AccountSpaceInfo[] = [];
+
+	for (const space of spaces) {
+		if (!isPersistedRecord(space)) {
+			continue;
+		}
+
+		const tenantId = normalizeDecimalId(space.tenantId);
+		const spaceId = normalizeDecimalId(space.spaceId);
+		if (
+			tenantId === null ||
+			spaceId === null ||
+			typeof space.fitnessCenterName !== "string"
+		) {
+			continue;
+		}
+
+		normalizedSpaces.push({
+			tenantId,
+			spaceId,
+			fitnessCenterName: space.fitnessCenterName,
+			contentLanguageCode:
+				typeof space.contentLanguageCode === "string"
+					? space.contentLanguageCode
+					: null,
+		});
+	}
+
+	return normalizedSpaces;
 }

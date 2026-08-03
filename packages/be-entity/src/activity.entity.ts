@@ -1,15 +1,13 @@
-import type { Activity as ActivityEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Routine } from "./routine.entity";
 import type { Task } from "./task.entity";
 
-export class Activity
-	extends AbstractEntity
-	implements DomainEntityModel<ActivityEntity>
-{
-	routineId!: string;
-	taskId!: string;
+export class Activity extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	activityId!: string;
+
+	routineId!: bigint;
+	taskId!: bigint;
 	order!: number;
 	repetitions!: number;
 	restTime!: number;

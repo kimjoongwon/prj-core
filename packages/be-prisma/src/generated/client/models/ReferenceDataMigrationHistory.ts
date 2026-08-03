@@ -27,16 +27,16 @@ export type AggregateReferenceDataMigrationHistory = {
 }
 
 export type ReferenceDataMigrationHistoryAvgAggregateOutputType = {
-  seq: number | null
+  id: number | null
 }
 
 export type ReferenceDataMigrationHistorySumAggregateOutputType = {
-  seq: number | null
+  id: bigint | null
 }
 
 export type ReferenceDataMigrationHistoryMinAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  referenceDataMigrationHistoryId: string | null
+  id: bigint | null
   migrationKey: string | null
   checksum: string | null
   description: string | null
@@ -44,8 +44,8 @@ export type ReferenceDataMigrationHistoryMinAggregateOutputType = {
 }
 
 export type ReferenceDataMigrationHistoryMaxAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  referenceDataMigrationHistoryId: string | null
+  id: bigint | null
   migrationKey: string | null
   checksum: string | null
   description: string | null
@@ -53,8 +53,8 @@ export type ReferenceDataMigrationHistoryMaxAggregateOutputType = {
 }
 
 export type ReferenceDataMigrationHistoryCountAggregateOutputType = {
+  referenceDataMigrationHistoryId: number
   id: number
-  seq: number
   migrationKey: number
   checksum: number
   description: number
@@ -64,16 +64,16 @@ export type ReferenceDataMigrationHistoryCountAggregateOutputType = {
 
 
 export type ReferenceDataMigrationHistoryAvgAggregateInputType = {
-  seq?: true
+  id?: true
 }
 
 export type ReferenceDataMigrationHistorySumAggregateInputType = {
-  seq?: true
+  id?: true
 }
 
 export type ReferenceDataMigrationHistoryMinAggregateInputType = {
+  referenceDataMigrationHistoryId?: true
   id?: true
-  seq?: true
   migrationKey?: true
   checksum?: true
   description?: true
@@ -81,8 +81,8 @@ export type ReferenceDataMigrationHistoryMinAggregateInputType = {
 }
 
 export type ReferenceDataMigrationHistoryMaxAggregateInputType = {
+  referenceDataMigrationHistoryId?: true
   id?: true
-  seq?: true
   migrationKey?: true
   checksum?: true
   description?: true
@@ -90,8 +90,8 @@ export type ReferenceDataMigrationHistoryMaxAggregateInputType = {
 }
 
 export type ReferenceDataMigrationHistoryCountAggregateInputType = {
+  referenceDataMigrationHistoryId?: true
   id?: true
-  seq?: true
   migrationKey?: true
   checksum?: true
   description?: true
@@ -186,8 +186,8 @@ export type ReferenceDataMigrationHistoryGroupByArgs<ExtArgs extends runtime.Typ
 }
 
 export type ReferenceDataMigrationHistoryGroupByOutputType = {
-  id: string
-  seq: number
+  referenceDataMigrationHistoryId: string
+  id: bigint
   migrationKey: string
   checksum: string
   description: string
@@ -218,8 +218,8 @@ export type ReferenceDataMigrationHistoryWhereInput = {
   AND?: Prisma.ReferenceDataMigrationHistoryWhereInput | Prisma.ReferenceDataMigrationHistoryWhereInput[]
   OR?: Prisma.ReferenceDataMigrationHistoryWhereInput[]
   NOT?: Prisma.ReferenceDataMigrationHistoryWhereInput | Prisma.ReferenceDataMigrationHistoryWhereInput[]
-  id?: Prisma.StringFilter<"ReferenceDataMigrationHistory"> | string
-  seq?: Prisma.IntFilter<"ReferenceDataMigrationHistory"> | number
+  referenceDataMigrationHistoryId?: Prisma.StringFilter<"ReferenceDataMigrationHistory"> | string
+  id?: Prisma.BigIntFilter<"ReferenceDataMigrationHistory"> | bigint | number
   migrationKey?: Prisma.StringFilter<"ReferenceDataMigrationHistory"> | string
   checksum?: Prisma.StringFilter<"ReferenceDataMigrationHistory"> | string
   description?: Prisma.StringFilter<"ReferenceDataMigrationHistory"> | string
@@ -227,8 +227,8 @@ export type ReferenceDataMigrationHistoryWhereInput = {
 }
 
 export type ReferenceDataMigrationHistoryOrderByWithRelationInput = {
+  referenceDataMigrationHistoryId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   migrationKey?: Prisma.SortOrder
   checksum?: Prisma.SortOrder
   description?: Prisma.SortOrder
@@ -236,8 +236,8 @@ export type ReferenceDataMigrationHistoryOrderByWithRelationInput = {
 }
 
 export type ReferenceDataMigrationHistoryWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  seq?: number
+  referenceDataMigrationHistoryId?: string
+  id?: bigint | number
   migrationKey?: string
   AND?: Prisma.ReferenceDataMigrationHistoryWhereInput | Prisma.ReferenceDataMigrationHistoryWhereInput[]
   OR?: Prisma.ReferenceDataMigrationHistoryWhereInput[]
@@ -245,11 +245,11 @@ export type ReferenceDataMigrationHistoryWhereUniqueInput = Prisma.AtLeast<{
   checksum?: Prisma.StringFilter<"ReferenceDataMigrationHistory"> | string
   description?: Prisma.StringFilter<"ReferenceDataMigrationHistory"> | string
   appliedAt?: Prisma.DateTimeFilter<"ReferenceDataMigrationHistory"> | Date | string
-}, "seq" | "id" | "migrationKey">
+}, "id" | "referenceDataMigrationHistoryId" | "migrationKey">
 
 export type ReferenceDataMigrationHistoryOrderByWithAggregationInput = {
+  referenceDataMigrationHistoryId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   migrationKey?: Prisma.SortOrder
   checksum?: Prisma.SortOrder
   description?: Prisma.SortOrder
@@ -265,8 +265,8 @@ export type ReferenceDataMigrationHistoryScalarWhereWithAggregatesInput = {
   AND?: Prisma.ReferenceDataMigrationHistoryScalarWhereWithAggregatesInput | Prisma.ReferenceDataMigrationHistoryScalarWhereWithAggregatesInput[]
   OR?: Prisma.ReferenceDataMigrationHistoryScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ReferenceDataMigrationHistoryScalarWhereWithAggregatesInput | Prisma.ReferenceDataMigrationHistoryScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"ReferenceDataMigrationHistory"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"ReferenceDataMigrationHistory"> | number
+  referenceDataMigrationHistoryId?: Prisma.StringWithAggregatesFilter<"ReferenceDataMigrationHistory"> | string
+  id?: Prisma.BigIntWithAggregatesFilter<"ReferenceDataMigrationHistory"> | bigint | number
   migrationKey?: Prisma.StringWithAggregatesFilter<"ReferenceDataMigrationHistory"> | string
   checksum?: Prisma.StringWithAggregatesFilter<"ReferenceDataMigrationHistory"> | string
   description?: Prisma.StringWithAggregatesFilter<"ReferenceDataMigrationHistory"> | string
@@ -274,7 +274,8 @@ export type ReferenceDataMigrationHistoryScalarWhereWithAggregatesInput = {
 }
 
 export type ReferenceDataMigrationHistoryCreateInput = {
-  id?: string
+  referenceDataMigrationHistoryId?: string
+  id?: bigint | number
   migrationKey: string
   checksum: string
   description: string
@@ -282,8 +283,8 @@ export type ReferenceDataMigrationHistoryCreateInput = {
 }
 
 export type ReferenceDataMigrationHistoryUncheckedCreateInput = {
-  id?: string
-  seq?: number
+  referenceDataMigrationHistoryId?: string
+  id?: bigint | number
   migrationKey: string
   checksum: string
   description: string
@@ -291,7 +292,8 @@ export type ReferenceDataMigrationHistoryUncheckedCreateInput = {
 }
 
 export type ReferenceDataMigrationHistoryUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  referenceDataMigrationHistoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   migrationKey?: Prisma.StringFieldUpdateOperationsInput | string
   checksum?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
@@ -299,8 +301,8 @@ export type ReferenceDataMigrationHistoryUpdateInput = {
 }
 
 export type ReferenceDataMigrationHistoryUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  referenceDataMigrationHistoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   migrationKey?: Prisma.StringFieldUpdateOperationsInput | string
   checksum?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
@@ -308,8 +310,8 @@ export type ReferenceDataMigrationHistoryUncheckedUpdateInput = {
 }
 
 export type ReferenceDataMigrationHistoryCreateManyInput = {
-  id?: string
-  seq?: number
+  referenceDataMigrationHistoryId?: string
+  id?: bigint | number
   migrationKey: string
   checksum: string
   description: string
@@ -317,7 +319,8 @@ export type ReferenceDataMigrationHistoryCreateManyInput = {
 }
 
 export type ReferenceDataMigrationHistoryUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  referenceDataMigrationHistoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   migrationKey?: Prisma.StringFieldUpdateOperationsInput | string
   checksum?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
@@ -325,8 +328,8 @@ export type ReferenceDataMigrationHistoryUpdateManyMutationInput = {
 }
 
 export type ReferenceDataMigrationHistoryUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  referenceDataMigrationHistoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   migrationKey?: Prisma.StringFieldUpdateOperationsInput | string
   checksum?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
@@ -334,8 +337,8 @@ export type ReferenceDataMigrationHistoryUncheckedUpdateManyInput = {
 }
 
 export type ReferenceDataMigrationHistoryCountOrderByAggregateInput = {
+  referenceDataMigrationHistoryId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   migrationKey?: Prisma.SortOrder
   checksum?: Prisma.SortOrder
   description?: Prisma.SortOrder
@@ -343,12 +346,12 @@ export type ReferenceDataMigrationHistoryCountOrderByAggregateInput = {
 }
 
 export type ReferenceDataMigrationHistoryAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
 }
 
 export type ReferenceDataMigrationHistoryMaxOrderByAggregateInput = {
+  referenceDataMigrationHistoryId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   migrationKey?: Prisma.SortOrder
   checksum?: Prisma.SortOrder
   description?: Prisma.SortOrder
@@ -356,8 +359,8 @@ export type ReferenceDataMigrationHistoryMaxOrderByAggregateInput = {
 }
 
 export type ReferenceDataMigrationHistoryMinOrderByAggregateInput = {
+  referenceDataMigrationHistoryId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   migrationKey?: Prisma.SortOrder
   checksum?: Prisma.SortOrder
   description?: Prisma.SortOrder
@@ -365,14 +368,14 @@ export type ReferenceDataMigrationHistoryMinOrderByAggregateInput = {
 }
 
 export type ReferenceDataMigrationHistorySumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
 }
 
 
 
 export type ReferenceDataMigrationHistorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  referenceDataMigrationHistoryId?: boolean
   id?: boolean
-  seq?: boolean
   migrationKey?: boolean
   checksum?: boolean
   description?: boolean
@@ -380,8 +383,8 @@ export type ReferenceDataMigrationHistorySelect<ExtArgs extends runtime.Types.Ex
 }, ExtArgs["result"]["referenceDataMigrationHistory"]>
 
 export type ReferenceDataMigrationHistorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  referenceDataMigrationHistoryId?: boolean
   id?: boolean
-  seq?: boolean
   migrationKey?: boolean
   checksum?: boolean
   description?: boolean
@@ -389,8 +392,8 @@ export type ReferenceDataMigrationHistorySelectCreateManyAndReturn<ExtArgs exten
 }, ExtArgs["result"]["referenceDataMigrationHistory"]>
 
 export type ReferenceDataMigrationHistorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  referenceDataMigrationHistoryId?: boolean
   id?: boolean
-  seq?: boolean
   migrationKey?: boolean
   checksum?: boolean
   description?: boolean
@@ -398,22 +401,22 @@ export type ReferenceDataMigrationHistorySelectUpdateManyAndReturn<ExtArgs exten
 }, ExtArgs["result"]["referenceDataMigrationHistory"]>
 
 export type ReferenceDataMigrationHistorySelectScalar = {
+  referenceDataMigrationHistoryId?: boolean
   id?: boolean
-  seq?: boolean
   migrationKey?: boolean
   checksum?: boolean
   description?: boolean
   appliedAt?: boolean
 }
 
-export type ReferenceDataMigrationHistoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "migrationKey" | "checksum" | "description" | "appliedAt", ExtArgs["result"]["referenceDataMigrationHistory"]>
+export type ReferenceDataMigrationHistoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"referenceDataMigrationHistoryId" | "id" | "migrationKey" | "checksum" | "description" | "appliedAt", ExtArgs["result"]["referenceDataMigrationHistory"]>
 
 export type $ReferenceDataMigrationHistoryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ReferenceDataMigrationHistory"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    seq: number
+    referenceDataMigrationHistoryId: string
+    id: bigint
     migrationKey: string
     checksum: string
     description: string
@@ -501,8 +504,8 @@ export interface ReferenceDataMigrationHistoryDelegate<ExtArgs extends runtime.T
    * // Get first 10 ReferenceDataMigrationHistories
    * const referenceDataMigrationHistories = await prisma.referenceDataMigrationHistory.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const referenceDataMigrationHistoryWithIdOnly = await prisma.referenceDataMigrationHistory.findMany({ select: { id: true } })
+   * // Only select the `referenceDataMigrationHistoryId`
+   * const referenceDataMigrationHistoryWithReferenceDataMigrationHistoryIdOnly = await prisma.referenceDataMigrationHistory.findMany({ select: { referenceDataMigrationHistoryId: true } })
    * 
    */
   findMany<T extends ReferenceDataMigrationHistoryFindManyArgs>(args?: Prisma.SelectSubset<T, ReferenceDataMigrationHistoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReferenceDataMigrationHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -546,9 +549,9 @@ export interface ReferenceDataMigrationHistoryDelegate<ExtArgs extends runtime.T
    *   ]
    * })
    * 
-   * // Create many ReferenceDataMigrationHistories and only return the `id`
-   * const referenceDataMigrationHistoryWithIdOnly = await prisma.referenceDataMigrationHistory.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many ReferenceDataMigrationHistories and only return the `referenceDataMigrationHistoryId`
+   * const referenceDataMigrationHistoryWithReferenceDataMigrationHistoryIdOnly = await prisma.referenceDataMigrationHistory.createManyAndReturn({
+   *   select: { referenceDataMigrationHistoryId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -637,9 +640,9 @@ export interface ReferenceDataMigrationHistoryDelegate<ExtArgs extends runtime.T
    *   ]
    * })
    * 
-   * // Update zero or more ReferenceDataMigrationHistories and only return the `id`
-   * const referenceDataMigrationHistoryWithIdOnly = await prisma.referenceDataMigrationHistory.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more ReferenceDataMigrationHistories and only return the `referenceDataMigrationHistoryId`
+   * const referenceDataMigrationHistoryWithReferenceDataMigrationHistoryIdOnly = await prisma.referenceDataMigrationHistory.updateManyAndReturn({
+   *   select: { referenceDataMigrationHistoryId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -841,8 +844,8 @@ export interface Prisma__ReferenceDataMigrationHistoryClient<T, Null = never, Ex
  * Fields of the ReferenceDataMigrationHistory model
  */
 export interface ReferenceDataMigrationHistoryFieldRefs {
-  readonly id: Prisma.FieldRef<"ReferenceDataMigrationHistory", 'String'>
-  readonly seq: Prisma.FieldRef<"ReferenceDataMigrationHistory", 'Int'>
+  readonly referenceDataMigrationHistoryId: Prisma.FieldRef<"ReferenceDataMigrationHistory", 'String'>
+  readonly id: Prisma.FieldRef<"ReferenceDataMigrationHistory", 'BigInt'>
   readonly migrationKey: Prisma.FieldRef<"ReferenceDataMigrationHistory", 'String'>
   readonly checksum: Prisma.FieldRef<"ReferenceDataMigrationHistory", 'String'>
   readonly description: Prisma.FieldRef<"ReferenceDataMigrationHistory", 'String'>

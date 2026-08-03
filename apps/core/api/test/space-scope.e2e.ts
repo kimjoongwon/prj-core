@@ -13,6 +13,7 @@ import { SpaceCategoryName } from "@cocrepo/enum";
 import {
 	SpacesRepository,
 	TasksRepository,
+	TenantsRepository,
 	UsersRepository,
 } from "@cocrepo/repository";
 import {
@@ -40,16 +41,17 @@ import { AppModule } from "../src/module/app.module";
 import { setNestApp } from "../src/setNestApp";
 
 const TEST_JWT_SECRET = "test-jwt-secret-e2e";
-const USER_ID = "01J00000000000000000001001";
-const TENANT_A_ID = "01J00000000000000000002001";
-const TENANT_B_ID = "01J00000000000000000003001";
-const SPACE_A_ID = "01J00000000000000000001111";
-const SPACE_B_ID = "01J00000000000000000002222";
+const USER_ULID = "01J00000000000000000001001";
+const USER_ID = 1001n;
+const TENANT_A_ID = 2001n;
+const TENANT_B_ID = 3001n;
+const SPACE_A_ID = 1111n;
+const SPACE_B_ID = 2222n;
 const ROOT_SCOPED_SPACE_IDS = [SPACE_B_ID, SPACE_A_ID];
 const BRANCH_SCOPED_SPACE_IDS = [SPACE_A_ID];
-const UNKNOWN_TENANT_ID = "01J00000000000000000004444";
-const FITNESS_CENTER_ID = "01J00000000000000000005555";
-const COMPANY_ID = "01J00000000000000000006666";
+const UNKNOWN_TENANT_ID = 4444n;
+const FITNESS_CENTER_ID = 5555n;
+const COMPANY_ID = 6666n;
 
 function createTestUser() {
 	return {
@@ -94,8 +96,8 @@ class ScopeTestJwtStrategy extends PassportStrategy(Strategy) {
 		});
 	}
 
-	async validate(payload: { user: ReturnType<typeof createTestUser> }) {
-		return payload.user;
+	async validate(_payload: { sub: string }) {
+		return createTestUser();
 	}
 }
 
@@ -199,7 +201,7 @@ describe("Space Scope API (E2E)", () => {
 
 	const spacesRepositoryMock = {
 		findSpaceIdsByCategoryHierarchy: async (
-			spaceId: string,
+			spaceId: bigint,
 			scope: SpaceResourceScope = SpaceResourceScope.WITH_DESCENDANTS,
 		) => {
 			spacesRepoCalls.push({
@@ -226,13 +228,13 @@ describe("Space Scope API (E2E)", () => {
 			});
 			return [[], 0];
 		},
-		findFitnessCenterBySpaceId: async (spaceId: string) => {
+		findFitnessCenterBySpaceId: async (spaceId: bigint) => {
 			spacesRepoCalls.push({ type: "findFitnessCenterBySpaceId", spaceId });
 			return {
 				id: FITNESS_CENTER_ID,
 				spaceId,
 				companyId: COMPANY_ID,
-				name: `FitnessCenter ${spaceId.slice(0, 4)}`,
+				name: `FitnessCenter ${spaceId.toString()}`,
 				label: null,
 				address: "Seoul",
 				phone: "02-1234-5678",
@@ -257,8 +259,7 @@ describe("Space Scope API (E2E)", () => {
 	beforeAll(async () => {
 		const jwtService = new JwtService({ secret: TEST_JWT_SECRET });
 		jwtToken = jwtService.sign({
-			sub: USER_ID,
-			user: createTestUser(),
+			sub: USER_ULID,
 		});
 
 		const moduleBuilder = Test.createTestingModule({
@@ -281,6 +282,10 @@ describe("Space Scope API (E2E)", () => {
 				{
 					provide: TasksRepository,
 					useValue: tasksRepositoryMock,
+				},
+				{
+					provide: TenantsRepository,
+					useValue: {},
 				},
 				{
 					provide: SpacesRepository,
@@ -380,17 +385,13 @@ describe("Space Scope API (E2E)", () => {
 			expect(findTenantHeader(operation)).toBeUndefined();
 		});
 
-		it("Given current-space 조회 API When OpenAPI 문서를 만들면 Then x-tenant-id header가 선택값으로 노출된다", () => {
+		it("Given 저장된 current-space 조회 API When OpenAPI 문서를 만들면 Then x-tenant-id header를 노출하지 않는다", () => {
 			const operation = getSwaggerOperation(
 				"/api/v1/auth/current-space",
 				"get",
 			);
 
-			expect(findTenantHeader(operation)).toMatchObject({
-				name: "x-tenant-id",
-				in: "header",
-				required: false,
-			});
+			expect(findTenantHeader(operation)).toBeUndefined();
 		});
 
 		it("Given Space scope 데코레이터 When OpenAPI 문서를 만들면 Then scope vendor extension을 노출한다", () => {
@@ -416,12 +417,12 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_A_ID);
+			.set("x-tenant-id", TENANT_A_ID.toString());
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(response.body.data).toEqual({
-			spaceId: SPACE_A_ID,
-			spaceIds: BRANCH_SCOPED_SPACE_IDS,
+			spaceId: SPACE_A_ID.toString(),
+			spaceIds: BRANCH_SCOPED_SPACE_IDS.map(String),
 			tenantRole: SYSTEM_ROLES.COMPANY_MANAGER,
 		});
 		expect(spacesRepoCalls[0]).toEqual({
@@ -435,12 +436,12 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_B_ID);
+			.set("x-tenant-id", TENANT_B_ID.toString());
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(response.body.data).toEqual({
-			spaceId: SPACE_B_ID,
-			spaceIds: ROOT_SCOPED_SPACE_IDS,
+			spaceId: SPACE_B_ID.toString(),
+			spaceIds: ROOT_SCOPED_SPACE_IDS.map(String),
 			tenantRole: SYSTEM_ROLES.PLATFORM_ADMIN,
 		});
 		expect(spacesRepoCalls[0]).toEqual({
@@ -454,12 +455,12 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context/ancestors")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_A_ID);
+			.set("x-tenant-id", TENANT_A_ID.toString());
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(response.body.data).toEqual({
-			spaceId: SPACE_A_ID,
-			spaceIds: [SPACE_A_ID, SPACE_B_ID],
+			spaceId: SPACE_A_ID.toString(),
+			spaceIds: [SPACE_A_ID.toString(), SPACE_B_ID.toString()],
 			tenantRole: SYSTEM_ROLES.COMPANY_MANAGER,
 		});
 		expect(spacesRepoCalls[0]).toEqual({
@@ -473,12 +474,12 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context/tree")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_A_ID);
+			.set("x-tenant-id", TENANT_A_ID.toString());
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(response.body.data).toEqual({
-			spaceId: SPACE_A_ID,
-			spaceIds: [SPACE_A_ID, SPACE_B_ID],
+			spaceId: SPACE_A_ID.toString(),
+			spaceIds: [SPACE_A_ID.toString(), SPACE_B_ID.toString()],
 			tenantRole: SYSTEM_ROLES.COMPANY_MANAGER,
 		});
 		expect(spacesRepoCalls[0]).toEqual({
@@ -492,7 +493,7 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/users")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_A_ID);
+			.set("x-tenant-id", TENANT_A_ID.toString());
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(usersRepoCalls[0]).toMatchObject({
@@ -501,7 +502,7 @@ describe("Space Scope API (E2E)", () => {
 			where: {
 				tenants: {
 					some: {
-						spaceId: { in: BRANCH_SCOPED_SPACE_IDS },
+						space: { id: { in: BRANCH_SCOPED_SPACE_IDS } },
 						removedAt: null,
 					},
 				},
@@ -517,7 +518,7 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/users")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_B_ID);
+			.set("x-tenant-id", TENANT_B_ID.toString());
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(usersRepoCalls[0]).toMatchObject({
@@ -526,7 +527,7 @@ describe("Space Scope API (E2E)", () => {
 			where: {
 				tenants: {
 					some: {
-						spaceId: { in: ROOT_SCOPED_SPACE_IDS },
+						space: { id: { in: ROOT_SCOPED_SPACE_IDS } },
 						removedAt: null,
 					},
 				},
@@ -543,7 +544,7 @@ describe("Space Scope API (E2E)", () => {
 			.get("/api/v1/test-space-scope/tasks")
 			.query({ spaceScope: SpaceScope.INCLUDE_ANCESTORS })
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_A_ID);
+			.set("x-tenant-id", TENANT_A_ID.toString());
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(tasksRepoCalls[0]).toMatchObject({
@@ -557,7 +558,7 @@ describe("Space Scope API (E2E)", () => {
 			.get("/api/v1/test-space-scope/tasks")
 			.query({ spaceScope: SpaceScope.INCLUDE_ANCESTORS })
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_B_ID);
+			.set("x-tenant-id", TENANT_B_ID.toString());
 
 		expect(response.status).toBe(HttpStatus.OK);
 		expect(tasksRepoCalls[0]).toMatchObject({
@@ -570,7 +571,7 @@ describe("Space Scope API (E2E)", () => {
 		const limitedResponse = await request(app.getHttpServer())
 			.get("/api/v1/spaces")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_A_ID);
+			.set("x-tenant-id", TENANT_A_ID.toString());
 
 		expect(limitedResponse.status).toBe(HttpStatus.OK);
 		expect(spacesRepoCalls[0]).toEqual({
@@ -588,7 +589,7 @@ describe("Space Scope API (E2E)", () => {
 		const fullResponse = await request(app.getHttpServer())
 			.get("/api/v1/spaces")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_B_ID);
+			.set("x-tenant-id", TENANT_B_ID.toString());
 
 		expect(fullResponse.status).toBe(HttpStatus.OK);
 		expect(spacesRepoCalls[0]).toEqual({
@@ -604,9 +605,9 @@ describe("Space Scope API (E2E)", () => {
 
 	it("비 PLATFORM_ADMIN 사용자는 다른 space의 FitnessCenter 상세에 접근할 수 없고 PLATFORM_ADMIN은 접근 가능하다", async () => {
 		const forbiddenResponse = await request(app.getHttpServer())
-			.get(`/api/v1/spaces/${SPACE_B_ID}/fitness-center`)
+			.get(`/api/v1/spaces/${SPACE_B_ID.toString()}/fitness-center`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_A_ID);
+			.set("x-tenant-id", TENANT_A_ID.toString());
 
 		expect(forbiddenResponse.status).toBe(HttpStatus.FORBIDDEN);
 		expect(
@@ -618,9 +619,9 @@ describe("Space Scope API (E2E)", () => {
 		spacesRepoCalls.length = 0;
 
 		const allowedResponse = await request(app.getHttpServer())
-			.get(`/api/v1/spaces/${SPACE_A_ID}/fitness-center`)
+			.get(`/api/v1/spaces/${SPACE_A_ID.toString()}/fitness-center`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", TENANT_B_ID);
+			.set("x-tenant-id", TENANT_B_ID.toString());
 
 		expect(allowedResponse.status).toBe(HttpStatus.OK);
 		expect(spacesRepoCalls[0]).toEqual({
@@ -638,7 +639,7 @@ describe("Space Scope API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/test-space-scope/context")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", UNKNOWN_TENANT_ID);
+			.set("x-tenant-id", UNKNOWN_TENANT_ID.toString());
 
 		expect(response.status).toBe(HttpStatus.FORBIDDEN);
 	});

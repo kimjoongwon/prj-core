@@ -6,7 +6,7 @@ import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-pr
 import { toDomainEntity } from "./to-domain-entity";
 
 export interface RoleAssignmentInput {
-	policyId: string;
+	policyId: bigint;
 	isActive?: boolean;
 	priority?: number;
 }
@@ -22,8 +22,8 @@ export class RoleAssignmentsRepository {
 	) {}
 
 	async findByRoleIdInSpace(
-		roleId: string,
-		spaceId: string,
+		roleId: bigint,
+		spaceId: bigint,
 	): Promise<RoleAssignment[]> {
 		const results = await this.txHost.tx.roleAssignment.findMany({
 			where: this.buildRoleAssignmentWhere([roleId], spaceId),
@@ -35,8 +35,8 @@ export class RoleAssignmentsRepository {
 	}
 
 	async findActiveByRoleIdsInSpace(
-		roleIds: string[],
-		spaceId: string,
+		roleIds: bigint[],
+		spaceId: bigint,
 	): Promise<RoleAssignment[]> {
 		if (roleIds.length === 0) return [];
 
@@ -53,12 +53,12 @@ export class RoleAssignmentsRepository {
 	}
 
 	async syncByRoleId(
-		roleId: string,
+		roleId: bigint,
 		items: RoleAssignmentInput[],
-		spaceId: string,
+		spaceId: bigint,
 	): Promise<RoleAssignment[]> {
 		this.logger.debug(
-			`RoleAssignment 동기화: roleId=${roleId.slice(-8)}, count=${items.length}`,
+			`RoleAssignment 동기화: roleId=${roleId.toString()}, count=${items.length}`,
 		);
 
 		const uniqueItems = this.dedupeByPolicyId(items);
@@ -70,8 +70,8 @@ export class RoleAssignmentsRepository {
 			uniqueItems.map(async (item) => {
 				const existing = await this.txHost.tx.roleAssignment.findFirst({
 					where: {
-						role: { id: roleId },
-						policy: { id: item.policyId },
+						roleId,
+						policyId: item.policyId,
 					},
 					select: { id: true },
 				});
@@ -92,8 +92,8 @@ export class RoleAssignmentsRepository {
 				await this.txHost.tx.roleAssignment.create({
 					data: {
 						...assignmentData,
-						role: { connect: { id: roleId } },
-						policy: { connect: { id: item.policyId } },
+						roleId,
+						policyId: item.policyId,
 					},
 				});
 			}),
@@ -101,7 +101,7 @@ export class RoleAssignmentsRepository {
 
 		const synced = await this.txHost.tx.roleAssignment.findMany({
 			where: {
-				role: { id: roleId },
+				roleId,
 				policy: {
 					id: { in: policyIds },
 					space: { id: spaceId },
@@ -116,10 +116,10 @@ export class RoleAssignmentsRepository {
 		return synced.map((result) => toDomainEntity(RoleAssignment, result));
 	}
 
-	async removeByPolicyId(policyId: string): Promise<number> {
+	async removeByPolicyId(policyId: bigint): Promise<number> {
 		const result = await this.txHost.tx.roleAssignment.updateMany({
 			where: {
-				policy: { id: policyId },
+				policyId,
 				removedAt: null,
 			},
 			data: {
@@ -130,9 +130,9 @@ export class RoleAssignmentsRepository {
 		return result.count;
 	}
 
-	private buildRoleAssignmentWhere(roleIds: string[], spaceId: string) {
+	private buildRoleAssignmentWhere(roleIds: bigint[], spaceId: bigint) {
 		return {
-			role: { id: { in: roleIds } },
+			roleId: { in: roleIds },
 			removedAt: null,
 			policy: {
 				space: { id: spaceId },
@@ -142,20 +142,22 @@ export class RoleAssignmentsRepository {
 	}
 
 	private async softRemoveMissing(
-		roleId: string,
-		policyIds: string[],
-		spaceId: string,
+		roleId: bigint,
+		policyIds: bigint[],
+		spaceId: bigint,
 	): Promise<void> {
 		await this.txHost.tx.roleAssignment.updateMany({
 			where: {
-				role: { id: roleId },
+				roleId,
 				removedAt: null,
 				policy: {
 					space: { id: spaceId },
 					removedAt: null,
 				},
 				...(policyIds.length > 0
-					? { policy: { id: { notIn: policyIds }, space: { id: spaceId } } }
+					? {
+							policy: { id: { notIn: policyIds }, space: { id: spaceId } },
+						}
 					: {}),
 			},
 			data: {

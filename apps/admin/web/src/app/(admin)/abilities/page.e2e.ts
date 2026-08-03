@@ -22,7 +22,7 @@ async function gotoAbilitiesPage(page: Page) {
 async function gotoAbilityCreatePage(page: Page) {
 	await page.goto("./abilities/new", { waitUntil: "domcontentloaded" });
 	await expect(
-		page.getByRole("heading", { name: "권한 등록", exact: true }),
+		page.getByRole("heading", { name: "Ability 등록", exact: true }),
 	).toBeVisible({
 		timeout: ROUTE_READY_TIMEOUT,
 	});
@@ -56,7 +56,9 @@ test.describe("권한 목록 페이지", () => {
 
 			// Then: 총 건수 표시
 			await expect(page.getByText("총")).toBeVisible();
-			await expect(page.getByRole("grid")).toBeVisible();
+			await expect(
+				page.getByRole("table", { name: "데이터 테이블" }),
+			).toBeVisible();
 		});
 
 		test("요약 카드가 표시되어야 한다", async ({ page }) => {
@@ -80,7 +82,7 @@ test.describe("권한 목록 페이지", () => {
 
 			// Then: 페이지 타이틀 확인
 			await expect(
-				page.getByRole("heading", { name: "권한 등록" }),
+				page.getByRole("heading", { name: "Ability 등록" }),
 			).toBeVisible();
 
 			// Then: CASL 정보 섹션의 Subject/Action 드롭다운 확인
@@ -147,7 +149,9 @@ test.describe("권한 목록 페이지", () => {
 
 			// Then: 첫 페이지 기본 결과가 다시 표시됨
 			await expect(page.getByText("검색: 접근")).not.toBeVisible();
-			await expect(page.getByRole("grid")).toBeVisible();
+			await expect(
+				page.getByRole("table", { name: "데이터 테이블" }),
+			).toBeVisible();
 		});
 
 		test("query 페이지네이션에 따라 표시 row가 바뀌어야 한다", async ({
@@ -161,7 +165,7 @@ test.describe("권한 목록 페이지", () => {
 				timeout: ROUTE_READY_TIMEOUT,
 			});
 			const firstPageRow = await page
-				.getByRole("grid")
+				.getByRole("table", { name: "데이터 테이블" })
 				.getByRole("row")
 				.nth(1)
 				.innerText();
@@ -174,7 +178,7 @@ test.describe("권한 목록 페이지", () => {
 				timeout: ROUTE_READY_TIMEOUT,
 			});
 			const secondPageRow = await page
-				.getByRole("grid")
+				.getByRole("table", { name: "데이터 테이블" })
 				.getByRole("row")
 				.nth(1)
 				.innerText();

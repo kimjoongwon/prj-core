@@ -48,8 +48,8 @@ describe("PolicyAggregate", () => {
 					provide: RoleAssignmentsRepository,
 					useValue: roleAssignmentsRepository,
 				},
-				{ provide: SpaceContext, useValue: { spaceId: "space-11" } },
-				{ provide: AuthContext, useValue: { user: { id: "user-22" } } },
+				{ provide: SpaceContext, useValue: { spaceId: 11n } },
+				{ provide: AuthContext, useValue: { user: { id: 22n } } },
 			],
 		}).compile();
 
@@ -73,8 +73,8 @@ describe("PolicyAggregate", () => {
 			};
 			policiesRepository.findByNameInSpace.mockResolvedValue(null);
 			policiesRepository.create.mockResolvedValue({
-				id: "policy-1",
-				spaceId: "space-11",
+				id: 1n,
+				spaceId: 11n,
 				name: input.name,
 			} as unknown as Policy);
 
@@ -83,8 +83,8 @@ describe("PolicyAggregate", () => {
 
 			// Then
 			expect(policiesRepository.create).toHaveBeenCalledWith({
-				spaceId: "space-11",
-				createdById: "user-22",
+				spaceId: 11n,
+				createdById: 22n,
 				name: input.name,
 				displayName: input.displayName,
 				description: input.description,
@@ -95,19 +95,19 @@ describe("PolicyAggregate", () => {
 	describe("updatePolicy", () => {
 		it("정책을 업데이트해야 한다", async () => {
 			// Given
-			const policyId = "policy-1";
+			const policyId = 1n;
 			const input = {
 				displayName: "수정된 정책",
 				description: "수정된 설명",
 			};
 			policiesRepository.findByIdInSpace.mockResolvedValue({
 				id: policyId,
-				spaceId: "space-11",
+				spaceId: 11n,
 				name: "custom-policy",
 			} as unknown as Policy);
 			policiesRepository.updateById.mockResolvedValue({
 				id: policyId,
-				spaceId: "space-11",
+				spaceId: 11n,
 				name: "custom-policy",
 				displayName: input.displayName,
 				description: input.description,
@@ -127,15 +127,15 @@ describe("PolicyAggregate", () => {
 	describe("deletePolicy", () => {
 		it("정책을 삭제해야 한다", async () => {
 			// Given
-			const policyId = "policy-1";
+			const policyId = 1n;
 			policiesRepository.findByIdInSpace.mockResolvedValue({
 				id: policyId,
-				spaceId: "space-11",
+				spaceId: 11n,
 				name: "system-policy",
 			} as unknown as Policy);
 			policiesRepository.removeById.mockResolvedValue({
 				id: policyId,
-				spaceId: "space-11",
+				spaceId: 11n,
 				name: "system-policy",
 			} as unknown as Policy);
 

@@ -10,22 +10,22 @@
 /// @displayName 번역
 model Translation {
   /// @displayName ID
-  id           String       @unique @default(ulid()) @db.VarChar(26)
-  seq          Int          @id @default(autoincrement())
+  translationId String       @unique @default(ulid()) @map("translation_id") @db.Char(26)
+  id            BigInt       @id @default(autoincrement())
   /// @displayName 언어 코드
-  languageCode LanguageCode @map("language_code")
+  languageCode  LanguageCode @map("language_code")
   /// @displayName 번역 키
-  key          String
+  key           String
   /// @displayName 번역 텍스트
-  text         String       @db.Text
+  text          String       @db.Text
   /// @displayName 카테고리
-  category     String
+  category      String
   /// @displayName 번역 완료 여부
-  isTranslated Boolean      @default(false) @map("is_translated")
+  isTranslated  Boolean      @default(false) @map("is_translated")
   /// @displayName 생성일시
-  createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
   /// @displayName 수정일시
-  updatedAt    DateTime?    @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedAt     DateTime?    @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@unique([languageCode, key])
   @@index([category, languageCode])

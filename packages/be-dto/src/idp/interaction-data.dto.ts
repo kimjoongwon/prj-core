@@ -1,4 +1,4 @@
-import { BooleanField, StringField } from "@cocrepo/decorator";
+import { BooleanField, StringField } from "@cocrepo/decorator/field";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 import { InteractionClientDto } from "./interaction-client.dto";

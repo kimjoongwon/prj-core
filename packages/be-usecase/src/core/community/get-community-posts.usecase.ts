@@ -30,12 +30,12 @@ export class GetCommunityPostsUseCase {
 		};
 	}
 
-	private requireCommunityContext(): { spaceId: string; userId: string } {
-		const spaceId = this.spaceContext.spaceId;
+	private requireCommunityContext(): { spaceId: bigint; userId: bigint } {
+		const spaceId = this.spaceContext.tenant?.spaceId;
 		if (!spaceId) {
 			throw new UnauthorizedException(COMMON_ERRORS.SPACE_NOT_SELECTED);
 		}
-		const userId = this.authContext.user?.id;
+		const userId = this.authContext.userDto?.id;
 		if (!userId) {
 			throw new UnauthorizedException(COMMON_ERRORS.USER_NOT_FOUND);
 		}
@@ -51,7 +51,7 @@ export class GetCommunityPostsUseCase {
 			authorName: record.createdBy?.name ?? "회원",
 			createdAt: record.createdAt,
 			id: record.id,
-			isMine: record.createdBy?.id === this.authContext.user?.id,
+			isMine: record.createdBy?.id === this.authContext.userDto?.id,
 			isPinned: false,
 			text: record.text ?? "",
 			title: record.title ?? null,

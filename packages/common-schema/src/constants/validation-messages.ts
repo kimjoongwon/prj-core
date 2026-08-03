@@ -44,6 +44,7 @@ export const VALIDATION_MESSAGES = {
 	URL_FORMAT: "유효한 URL을 입력해주세요",
 	UUID_FORMAT: "유효한 UUID를 입력해주세요",
 	ULID_FORMAT: "유효한 ULID를 입력해주세요",
+	DECIMAL_ID_FORMAT: "유효한 숫자 ID를 입력해주세요",
 
 	// 비밀번호
 	PASSWORD_MIN_LENGTH: "최소 {{min}}자 이상 입력해주세요",

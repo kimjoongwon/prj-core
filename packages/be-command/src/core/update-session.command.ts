@@ -9,8 +9,8 @@ export class UpdateSessionCommand implements UpdateSessionCommandInput {
 	readonly description?: UpdateSessionCommandInput["description"];
 
 	constructor(
-		readonly timelineId: string,
-		readonly sessionId: string,
+		readonly timelineId: bigint,
+		readonly sessionId: bigint,
 		input: UpdateSessionCommandInput,
 	) {
 		Object.assign(this, input);

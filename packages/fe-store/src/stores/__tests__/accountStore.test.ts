@@ -1,5 +1,6 @@
 /// <reference types="vitest/globals" />
 
+import type { DecimalId } from "@cocrepo/type";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { type AccountSpaceInfo, AccountStore } from "../account/accountStore";
 import { AuthSession } from "../account/authSession";
@@ -10,6 +11,10 @@ import {
 
 const STORAGE_KEY = "tenant-test";
 const NOW = new Date("2026-05-31T00:00:00.000Z").getTime();
+const TENANT_A = "101" as DecimalId;
+const TENANT_B = "102" as DecimalId;
+const SPACE_A = "201" as DecimalId;
+const SPACE_B = "202" as DecimalId;
 
 function createStorageMock() {
 	const store = new Map<string, string>();
@@ -91,8 +96,8 @@ describe("AccountStore", () => {
 	it("Given version 2 account 선택이 저장돼 있을 때 When hydrateFromStorage를 호출하면 Then FitnessCenter 선택과 Space 목록을 복원한다", () => {
 		const availableSpaces: AccountSpaceInfo[] = [
 			{
-				tenantId: "tenant-a",
-				spaceId: "space-a",
+				tenantId: TENANT_A,
+				spaceId: SPACE_A,
 				fitnessCenterName: "Fitness Center A",
 				contentLanguageCode: "ko_KR",
 			},
@@ -102,8 +107,8 @@ describe("AccountStore", () => {
 			JSON.stringify({
 				account: {
 					version: 2,
-					tenantId: "tenant-a",
-					spaceId: "space-a",
+					tenantId: TENANT_A,
+					spaceId: SPACE_A,
 					fitnessCenterName: "Fitness Center A",
 					contentLanguageCode: "ko_KR",
 					availableSpaces,
@@ -114,9 +119,9 @@ describe("AccountStore", () => {
 		const store = createAccountStore();
 		store.hydrateFromStorage();
 
-		expect(store.currentTenantId).toBe("tenant-a");
-		expect(store.selectedTenantId).toBe("tenant-a");
-		expect(store.currentSpaceId).toBe("space-a");
+		expect(store.currentTenantId).toBe(TENANT_A);
+		expect(store.selectedTenantId).toBe(TENANT_A);
+		expect(store.currentSpaceId).toBe(SPACE_A);
 		expect(store.currentFitnessCenterName).toBe("Fitness Center A");
 		expect(store.contentLanguageCode).toBe("ko_KR");
 		expect(store.availableSpaces).toEqual(availableSpaces);
@@ -124,53 +129,43 @@ describe("AccountStore", () => {
 	});
 
 	it("Given 현재 tenant가 확정돼 있을 때 When draft tenant만 바꾸면 Then current tenant는 유지하고 selectedTenantId만 갱신한다", () => {
-		account.setCurrentTenant(
-			"tenant-a",
-			"Fitness Center A",
-			"ko_KR",
-			"space-a",
-		);
+		account.setCurrentTenant(TENANT_A, "Fitness Center A", "ko_KR", SPACE_A);
 
-		account.selectTenant("tenant-b");
+		account.selectTenant(TENANT_B);
 
-		expect(account.currentTenantId).toBe("tenant-a");
-		expect(account.selectedTenantId).toBe("tenant-b");
-		expect(account.currentSpaceId).toBe("space-a");
+		expect(account.currentTenantId).toBe(TENANT_A);
+		expect(account.selectedTenantId).toBe(TENANT_B);
+		expect(account.currentSpaceId).toBe(SPACE_A);
 		expect(account.currentFitnessCenterName).toBe("Fitness Center A");
 	});
 
 	it("Given 선택 가능한 Space 목록이 있을 때 When current tenant를 확정하면 Then draft 선택도 같은 tenant와 FitnessCenter로 동기화한다", () => {
 		account.setAvailableSpaces([
 			{
-				tenantId: "tenant-b",
-				spaceId: "space-b",
+				tenantId: TENANT_B,
+				spaceId: SPACE_B,
 				fitnessCenterName: "Fitness Center B",
 				contentLanguageCode: "ja_JP",
 			},
 		]);
 
-		account.setCurrentTenant("tenant-b", "Fitness Center B");
+		account.setCurrentTenant(TENANT_B, "Fitness Center B");
 
-		expect(account.currentTenantId).toBe("tenant-b");
-		expect(account.selectedTenantId).toBe("tenant-b");
-		expect(account.currentSpaceId).toBe("space-b");
+		expect(account.currentTenantId).toBe(TENANT_B);
+		expect(account.selectedTenantId).toBe(TENANT_B);
+		expect(account.currentSpaceId).toBe(SPACE_B);
 		expect(account.contentLanguageCode).toBe("ja_JP");
 	});
 
 	it("Given account와 인증 세션이 채워져 있을 때 When clear를 호출하면 Then selection resolved를 유지하며 저장 상태를 비운다", () => {
 		account.setAvailableSpaces([
 			{
-				tenantId: "tenant-a",
-				spaceId: "space-a",
+				tenantId: TENANT_A,
+				spaceId: SPACE_A,
 				fitnessCenterName: "Fitness Center A",
 			},
 		]);
-		account.setCurrentTenant(
-			"tenant-a",
-			"Fitness Center A",
-			null,
-			"space-a",
-		);
+		account.setCurrentTenant(TENANT_A, "Fitness Center A", null, SPACE_A);
 		account.authSession.setNativeAuthSession({
 			accessToken: "access-token",
 			refreshToken: "refresh-token",
@@ -199,14 +194,14 @@ describe("AccountStore", () => {
 			STORAGE_KEY,
 			JSON.stringify({
 				account: {
-					tenantId: "tenant-a",
-					spaceId: "space-a",
+					tenantId: TENANT_A,
+					spaceId: SPACE_A,
 					fitnessCenterName: "Fitness Center A",
 					contentLanguageCode: "ko_KR",
 					availableSpaces: [
 						{
-							tenantId: "tenant-a",
-							spaceId: "space-a",
+							tenantId: TENANT_A,
+							spaceId: SPACE_A,
 							fitnessCenterName: "Fitness Center A",
 						},
 					],
@@ -226,20 +221,57 @@ describe("AccountStore", () => {
 		expect(storage.dump().has(STORAGE_KEY)).toBe(false);
 	});
 
+	it("Given version 2 account 선택에 ULID 같은 잘못된 식별자가 저장돼 있을 때 When hydrateFromStorage를 호출하면 Then 현재 선택은 폐기하고 유효한 Space 목록만 남긴다", () => {
+		const validAvailableSpace: AccountSpaceInfo = {
+			tenantId: TENANT_A,
+			spaceId: SPACE_A,
+			fitnessCenterName: "Fitness Center A",
+			contentLanguageCode: "ko_KR",
+		};
+		storage.setItem(
+			STORAGE_KEY,
+			JSON.stringify({
+				account: {
+					version: 2,
+					tenantId: "01J7G2V0ULIDLIKEVALUE",
+					spaceId: "space-ulid-value",
+					fitnessCenterName: "Fitness Center A",
+					contentLanguageCode: "ko_KR",
+					availableSpaces: [
+						validAvailableSpace,
+						{
+							tenantId: "tenant-ulid-value",
+							spaceId: SPACE_B,
+							fitnessCenterName: "Broken Space",
+						},
+					],
+				},
+			}),
+		);
+
+		account.hydrateFromStorage();
+
+		expect(account.currentTenantId).toBeNull();
+		expect(account.selectedTenantId).toBeNull();
+		expect(account.currentSpaceId).toBeNull();
+		expect(account.currentFitnessCenterName).toBeNull();
+		expect(account.contentLanguageCode).toBeNull();
+		expect(account.availableSpaces).toEqual([validAvailableSpace]);
+		expect(storage.dump().get(STORAGE_KEY)).toContain(
+			`"tenantId":"${TENANT_A}"`,
+		);
+		expect(storage.dump().get(STORAGE_KEY)).not.toContain("ULIDLIKEVALUE");
+	});
+
 	it("Given 현재 tenant 선택이 있을 때 When storage에 저장하면 Then version 2 형식으로 FitnessCenter 선택을 기록한다", () => {
 		account.setAvailableSpaces([
 			{
-				tenantId: "tenant-a",
-				spaceId: "space-a",
+				tenantId: TENANT_A,
+				spaceId: SPACE_A,
 				fitnessCenterName: "Fitness Center A",
 			},
 		]);
-		account.setCurrentTenant(
-			"tenant-a",
-			"Fitness Center A",
-			null,
-			"space-a",
-		);
+		account.setCurrentTenant(TENANT_A, "Fitness Center A", null, SPACE_A);
 
 		const persisted = JSON.parse(
 			storage.dump().get(STORAGE_KEY) ?? "{}",
@@ -247,13 +279,13 @@ describe("AccountStore", () => {
 
 		expect(persisted).toMatchObject({
 			version: 2,
-			tenantId: "tenant-a",
-			spaceId: "space-a",
+			tenantId: TENANT_A,
+			spaceId: SPACE_A,
 			fitnessCenterName: "Fitness Center A",
 			availableSpaces: [
 				{
-					tenantId: "tenant-a",
-					spaceId: "space-a",
+					tenantId: TENANT_A,
+					spaceId: SPACE_A,
 					fitnessCenterName: "Fitness Center A",
 				},
 			],

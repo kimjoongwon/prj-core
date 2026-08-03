@@ -2,6 +2,7 @@ import { TaskAggregate } from "@cocrepo/aggregate";
 import { JwtStrategy } from "@cocrepo/be-common";
 import { PRISMA_SERVICE_TOKEN, SYSTEM_ROLES } from "@cocrepo/constant";
 import { SpaceScope } from "@cocrepo/dto";
+import { SpacesRepository } from "@cocrepo/repository";
 import { AuthCacheService, TokenStorageService } from "@cocrepo/service";
 import { INestApplication, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
@@ -13,17 +14,18 @@ import { AppModule } from "../src/module/app.module";
 import { setNestApp } from "../src/setNestApp";
 
 const TEST_JWT_SECRET = "test-jwt-secret-e2e";
-const USER_ID = "01J00000000000000000001011";
-const COMPANY_MANAGER_SPACE_ID = "01J00000000000000000001111";
-const PLATFORM_ADMIN_SPACE_ID = "01J00000000000000000002222";
-const MEMBER_SPACE_ID = "01J00000000000000000003333";
-const UNKNOWN_TENANT_ID = "01J00000000000000000004444";
-const COMPANY_MANAGER_TENANT_ID = "01J00000000000000000002011";
-const PLATFORM_ADMIN_TENANT_ID = "01J00000000000000000003011";
-const MEMBER_TENANT_ID = "01J00000000000000000004011";
-const TASK_ID = "01J0000000000000000000A000";
-const EXERCISE_ID = "01J0000000000000000000B000";
-const ROUTINE_ID = "01J0000000000000000000C000";
+const USER_ULID = "01J00000000000000000001011";
+const USER_ID = 1011n;
+const COMPANY_MANAGER_SPACE_ID = 1111n;
+const PLATFORM_ADMIN_SPACE_ID = 2222n;
+const MEMBER_SPACE_ID = 3333n;
+const UNKNOWN_TENANT_ID = 4444n;
+const COMPANY_MANAGER_TENANT_ID = 2011n;
+const PLATFORM_ADMIN_TENANT_ID = 3011n;
+const MEMBER_TENANT_ID = 4011n;
+const TASK_ID = 10000n;
+const EXERCISE_ID = 11000n;
+const ROUTINE_ID = 12000n;
 
 function createTestUser() {
 	return {
@@ -59,8 +61,8 @@ class TasksTestJwtStrategy extends PassportStrategy(Strategy) {
 		});
 	}
 
-	async validate(payload: { user: ReturnType<typeof createTestUser> }) {
-		return payload.user;
+	async validate(_payload: { sub: string }) {
+		return createTestUser();
 	}
 }
 
@@ -80,8 +82,7 @@ describe("Tasks API (E2E)", () => {
 	beforeAll(async () => {
 		const jwtService = new JwtService({ secret: TEST_JWT_SECRET });
 		jwtToken = jwtService.sign({
-			sub: USER_ID,
-			user: createTestUser(),
+			sub: USER_ULID,
 		});
 
 		const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -101,6 +102,10 @@ describe("Tasks API (E2E)", () => {
 			})
 			.overrideProvider(TaskAggregate)
 			.useValue(taskServiceMock)
+			.overrideProvider(SpacesRepository)
+			.useValue({
+				findSpaceIdsByCategoryHierarchy: async (spaceId: bigint) => [spaceId],
+			})
 			.compile();
 
 		app = moduleFixture.createNestApplication();
@@ -178,7 +183,7 @@ describe("Tasks API (E2E)", () => {
 				spaceScope: SpaceScope.INCLUDE_ANCESTORS,
 			})
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", COMPANY_MANAGER_TENANT_ID);
+			.set("x-tenant-id", COMPANY_MANAGER_TENANT_ID.toString());
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
@@ -200,13 +205,13 @@ describe("Tasks API (E2E)", () => {
 
 	it("Task exercise 상세 조회 시 현재 spaceId를 함께 사용해야 한다", async () => {
 		const response = await request(app.getHttpServer())
-			.get(`/api/v1/tasks/${TASK_ID}/exercise`)
+			.get(`/api/v1/tasks/${TASK_ID.toString()}/exercise`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", COMPANY_MANAGER_TENANT_ID);
+			.set("x-tenant-id", COMPANY_MANAGER_TENANT_ID.toString());
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
-		expect(response.body.data.id).toBe(EXERCISE_ID);
+		expect(response.body.data.id).toBe(EXERCISE_ID.toString());
 		expect(taskServiceMock.getExerciseByTaskId).toHaveBeenCalledWith(
 			TASK_ID,
 			COMPANY_MANAGER_SPACE_ID,
@@ -216,9 +221,9 @@ describe("Tasks API (E2E)", () => {
 
 	it("Task routines 조회 시 현재 spaceId를 함께 사용해야 한다", async () => {
 		const response = await request(app.getHttpServer())
-			.get(`/api/v1/tasks/${TASK_ID}/routines`)
+			.get(`/api/v1/tasks/${TASK_ID.toString()}/routines`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", COMPANY_MANAGER_TENANT_ID);
+			.set("x-tenant-id", COMPANY_MANAGER_TENANT_ID.toString());
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
@@ -240,14 +245,18 @@ describe("Tasks API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.post("/api/v1/tasks")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", COMPANY_MANAGER_TENANT_ID)
+			.set("x-tenant-id", COMPANY_MANAGER_TENANT_ID.toString())
 			.send(createDto);
 
 		expect(response.status).toBe(201);
 		expect(response.body.httpStatus).toBe(201);
-		expect(response.body.data.id).toBe(TASK_ID);
+		expect(response.body.data.id).toBe(TASK_ID.toString());
 		expect(taskServiceMock.createTaskWithExercise).toHaveBeenCalledWith(
-			createDto,
+			expect.objectContaining({
+				...createDto,
+				spaceId: COMPANY_MANAGER_SPACE_ID,
+				createdById: USER_ID,
+			}),
 			COMPANY_MANAGER_SPACE_ID,
 			USER_ID,
 		);
@@ -257,7 +266,7 @@ describe("Tasks API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.post("/api/v1/tasks")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", MEMBER_TENANT_ID)
+			.set("x-tenant-id", MEMBER_TENANT_ID.toString())
 			.send({
 				name: "Blocked task",
 				duration: 20,
@@ -276,26 +285,30 @@ describe("Tasks API (E2E)", () => {
 		};
 
 		const response = await request(app.getHttpServer())
-			.patch(`/api/v1/tasks/${TASK_ID}/exercise`)
+			.patch(`/api/v1/tasks/${TASK_ID.toString()}/exercise`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", COMPANY_MANAGER_TENANT_ID)
+			.set("x-tenant-id", COMPANY_MANAGER_TENANT_ID.toString())
 			.send(updateDto);
 
 		expect(response.status).toBe(200);
 		expect(response.body.httpStatus).toBe(200);
-		expect(response.body.data.id).toBe(TASK_ID);
+		expect(response.body.data.id).toBe(TASK_ID.toString());
 		expect(taskServiceMock.updateTaskExercise).toHaveBeenCalledWith(
 			TASK_ID,
-			updateDto,
+			expect.objectContaining({
+				...updateDto,
+				taskId: TASK_ID,
+				spaceId: COMPANY_MANAGER_SPACE_ID,
+			}),
 			COMPANY_MANAGER_SPACE_ID,
 		);
 	});
 
 	it("Task 삭제 시 204를 반환해야 한다", async () => {
 		const response = await request(app.getHttpServer())
-			.delete(`/api/v1/tasks/${TASK_ID}`)
+			.delete(`/api/v1/tasks/${TASK_ID.toString()}`)
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", COMPANY_MANAGER_TENANT_ID);
+			.set("x-tenant-id", COMPANY_MANAGER_TENANT_ID.toString());
 
 		expect(response.status).toBe(204);
 		expect(response.body).toEqual({});
@@ -309,17 +322,17 @@ describe("Tasks API (E2E)", () => {
 		const response = await request(app.getHttpServer())
 			.get("/api/v1/tasks")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", UNKNOWN_TENANT_ID);
+			.set("x-tenant-id", UNKNOWN_TENANT_ID.toString());
 
 		expect(response.status).toBe(403);
 		expect(taskServiceMock.findTasks).not.toHaveBeenCalled();
 	});
 
-	it("유효하지 않은 UUID taskId는 400을 반환해야 한다", async () => {
+	it("유효하지 않은 숫자 taskId 문자열은 400을 반환해야 한다", async () => {
 		const response = await request(app.getHttpServer())
-			.get("/api/v1/tasks/not-a-valid-uuid/exercise")
+			.get("/api/v1/tasks/01/exercise")
 			.set("Authorization", `Bearer ${jwtToken}`)
-			.set("x-tenant-id", COMPANY_MANAGER_TENANT_ID);
+			.set("x-tenant-id", COMPANY_MANAGER_TENANT_ID.toString());
 
 		expect(response.status).toBe(400);
 		expect(taskServiceMock.getExerciseByTaskId).not.toHaveBeenCalled();

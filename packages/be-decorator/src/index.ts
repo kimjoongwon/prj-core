@@ -8,6 +8,7 @@ export * from "./constants/metadata.constants";
 // Constants
 export * from "./constants/validation-messages";
 export * from "./field";
+export * from "./field/specialized/password.field";
 // Property decorators
 export * from "./property.decorators";
 export * from "./public.decorator";

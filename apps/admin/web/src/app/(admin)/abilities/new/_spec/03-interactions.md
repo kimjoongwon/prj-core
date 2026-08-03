@@ -134,7 +134,7 @@
 | **Operation ID** | `getSubjectFields` |
 | **설명** | Subject의 DMMF 기반 필드 목록을 조회합니다. entity 그룹만 필드 반환, 그 외는 빈 배열. |
 | **인증** | 불필요 (`@Public()`) |
-| **Path Params** | `id` (UUID) - Subject ID |
+| **Path Params** | `id` (decimal string) - Subject ID |
 | **Response** | `SubjectFieldDto[]` |
 | **에러** | 404 (Subject 없음), 500 |
 

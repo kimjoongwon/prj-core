@@ -1,9 +1,5 @@
-import type {
-	AttachmentFileType,
-	InquiryAttachment as InquiryAttachmentEntity,
-} from "@cocrepo/prisma";
+import type { AttachmentFileType } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { InquiryMessage } from "./inquiry-message.entity";
 
 /**
@@ -12,14 +8,14 @@ import type { InquiryMessage } from "./inquiry-message.entity";
  * 이미지, 문서, 동영상 등 다양한 파일 형식을 지원하며,
  * 실시간 채팅에서 파일 업로드/다운로드를 처리합니다.
  */
-export class InquiryAttachment
-	extends AbstractEntity
-	implements DomainEntityModel<InquiryAttachmentEntity>
-{
+export class InquiryAttachment extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	inquiryAttachmentId!: string;
+
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	messageId!: string;
+	messageId!: bigint;
 	fileName!: string;
 	fileSize!: bigint;
 	mimeType!: string;

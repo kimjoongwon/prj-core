@@ -27,39 +27,39 @@ export type AggregateReservation = {
 }
 
 export type ReservationAvgAggregateOutputType = {
-  seq: number | null
-  spaceSeq: number | null
-  createdBySeq: number | null
-  userSeq: number | null
-  timelineSeq: number | null
-  sessionSeq: number | null
-  programSeq: number | null
+  id: number | null
+  spaceId: number | null
+  createdById: number | null
+  userId: number | null
+  timelineId: number | null
+  sessionId: number | null
+  programId: number | null
   waitlistPosition: number | null
 }
 
 export type ReservationSumAggregateOutputType = {
-  seq: number | null
-  spaceSeq: number | null
-  createdBySeq: number | null
-  userSeq: number | null
-  timelineSeq: number | null
-  sessionSeq: number | null
-  programSeq: number | null
+  id: bigint | null
+  spaceId: bigint | null
+  createdById: bigint | null
+  userId: bigint | null
+  timelineId: bigint | null
+  sessionId: bigint | null
+  programId: bigint | null
   waitlistPosition: number | null
 }
 
 export type ReservationMinAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  reservationId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceSeq: number | null
-  createdBySeq: number | null
-  userSeq: number | null
-  timelineSeq: number | null
-  sessionSeq: number | null
-  programSeq: number | null
+  spaceId: bigint | null
+  createdById: bigint | null
+  userId: bigint | null
+  timelineId: bigint | null
+  sessionId: bigint | null
+  programId: bigint | null
   occurrenceStartAt: Date | null
   status: $Enums.ReservationStatus | null
   memo: string | null
@@ -71,17 +71,17 @@ export type ReservationMinAggregateOutputType = {
 }
 
 export type ReservationMaxAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  reservationId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceSeq: number | null
-  createdBySeq: number | null
-  userSeq: number | null
-  timelineSeq: number | null
-  sessionSeq: number | null
-  programSeq: number | null
+  spaceId: bigint | null
+  createdById: bigint | null
+  userId: bigint | null
+  timelineId: bigint | null
+  sessionId: bigint | null
+  programId: bigint | null
   occurrenceStartAt: Date | null
   status: $Enums.ReservationStatus | null
   memo: string | null
@@ -93,17 +93,17 @@ export type ReservationMaxAggregateOutputType = {
 }
 
 export type ReservationCountAggregateOutputType = {
+  reservationId: number
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
-  spaceSeq: number
-  createdBySeq: number
-  userSeq: number
-  timelineSeq: number
-  sessionSeq: number
-  programSeq: number
+  spaceId: number
+  createdById: number
+  userId: number
+  timelineId: number
+  sessionId: number
+  programId: number
   occurrenceStartAt: number
   status: number
   memo: number
@@ -117,39 +117,39 @@ export type ReservationCountAggregateOutputType = {
 
 
 export type ReservationAvgAggregateInputType = {
-  seq?: true
-  spaceSeq?: true
-  createdBySeq?: true
-  userSeq?: true
-  timelineSeq?: true
-  sessionSeq?: true
-  programSeq?: true
+  id?: true
+  spaceId?: true
+  createdById?: true
+  userId?: true
+  timelineId?: true
+  sessionId?: true
+  programId?: true
   waitlistPosition?: true
 }
 
 export type ReservationSumAggregateInputType = {
-  seq?: true
-  spaceSeq?: true
-  createdBySeq?: true
-  userSeq?: true
-  timelineSeq?: true
-  sessionSeq?: true
-  programSeq?: true
+  id?: true
+  spaceId?: true
+  createdById?: true
+  userId?: true
+  timelineId?: true
+  sessionId?: true
+  programId?: true
   waitlistPosition?: true
 }
 
 export type ReservationMinAggregateInputType = {
+  reservationId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceSeq?: true
-  createdBySeq?: true
-  userSeq?: true
-  timelineSeq?: true
-  sessionSeq?: true
-  programSeq?: true
+  spaceId?: true
+  createdById?: true
+  userId?: true
+  timelineId?: true
+  sessionId?: true
+  programId?: true
   occurrenceStartAt?: true
   status?: true
   memo?: true
@@ -161,17 +161,17 @@ export type ReservationMinAggregateInputType = {
 }
 
 export type ReservationMaxAggregateInputType = {
+  reservationId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceSeq?: true
-  createdBySeq?: true
-  userSeq?: true
-  timelineSeq?: true
-  sessionSeq?: true
-  programSeq?: true
+  spaceId?: true
+  createdById?: true
+  userId?: true
+  timelineId?: true
+  sessionId?: true
+  programId?: true
   occurrenceStartAt?: true
   status?: true
   memo?: true
@@ -183,17 +183,17 @@ export type ReservationMaxAggregateInputType = {
 }
 
 export type ReservationCountAggregateInputType = {
+  reservationId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceSeq?: true
-  createdBySeq?: true
-  userSeq?: true
-  timelineSeq?: true
-  sessionSeq?: true
-  programSeq?: true
+  spaceId?: true
+  createdById?: true
+  userId?: true
+  timelineId?: true
+  sessionId?: true
+  programId?: true
   occurrenceStartAt?: true
   status?: true
   memo?: true
@@ -292,17 +292,17 @@ export type ReservationGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 export type ReservationGroupByOutputType = {
-  id: string
-  seq: number
+  reservationId: string
+  id: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  spaceSeq: number
-  createdBySeq: number | null
-  userSeq: number
-  timelineSeq: number
-  sessionSeq: number
-  programSeq: number
+  spaceId: bigint
+  createdById: bigint | null
+  userId: bigint
+  timelineId: bigint
+  sessionId: bigint
+  programId: bigint
   occurrenceStartAt: Date
   status: $Enums.ReservationStatus
   memo: string | null
@@ -337,17 +337,17 @@ export type ReservationWhereInput = {
   AND?: Prisma.ReservationWhereInput | Prisma.ReservationWhereInput[]
   OR?: Prisma.ReservationWhereInput[]
   NOT?: Prisma.ReservationWhereInput | Prisma.ReservationWhereInput[]
-  id?: Prisma.StringFilter<"Reservation"> | string
-  seq?: Prisma.IntFilter<"Reservation"> | number
+  reservationId?: Prisma.StringFilter<"Reservation"> | string
+  id?: Prisma.BigIntFilter<"Reservation"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Reservation"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Reservation"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Reservation"> | Date | string | null
-  spaceSeq?: Prisma.IntFilter<"Reservation"> | number
-  createdBySeq?: Prisma.IntNullableFilter<"Reservation"> | number | null
-  userSeq?: Prisma.IntFilter<"Reservation"> | number
-  timelineSeq?: Prisma.IntFilter<"Reservation"> | number
-  sessionSeq?: Prisma.IntFilter<"Reservation"> | number
-  programSeq?: Prisma.IntFilter<"Reservation"> | number
+  spaceId?: Prisma.BigIntFilter<"Reservation"> | bigint | number
+  createdById?: Prisma.BigIntNullableFilter<"Reservation"> | bigint | number | null
+  userId?: Prisma.BigIntFilter<"Reservation"> | bigint | number
+  timelineId?: Prisma.BigIntFilter<"Reservation"> | bigint | number
+  sessionId?: Prisma.BigIntFilter<"Reservation"> | bigint | number
+  programId?: Prisma.BigIntFilter<"Reservation"> | bigint | number
   occurrenceStartAt?: Prisma.DateTimeFilter<"Reservation"> | Date | string
   status?: Prisma.EnumReservationStatusFilter<"Reservation"> | $Enums.ReservationStatus
   memo?: Prisma.StringNullableFilter<"Reservation"> | string | null
@@ -365,17 +365,17 @@ export type ReservationWhereInput = {
 }
 
 export type ReservationOrderByWithRelationInput = {
+  reservationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
-  userSeq?: Prisma.SortOrder
-  timelineSeq?: Prisma.SortOrder
-  sessionSeq?: Prisma.SortOrder
-  programSeq?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  userId?: Prisma.SortOrder
+  timelineId?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrder
+  programId?: Prisma.SortOrder
   occurrenceStartAt?: Prisma.SortOrder
   status?: Prisma.SortOrder
   memo?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -393,21 +393,21 @@ export type ReservationOrderByWithRelationInput = {
 }
 
 export type ReservationWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  seq?: number
-  userSeq_idempotencyKey?: Prisma.ReservationUserSeqIdempotencyKeyCompoundUniqueInput
+  reservationId?: string
+  id?: bigint | number
+  userId_idempotencyKey?: Prisma.ReservationUserIdIdempotencyKeyCompoundUniqueInput
   AND?: Prisma.ReservationWhereInput | Prisma.ReservationWhereInput[]
   OR?: Prisma.ReservationWhereInput[]
   NOT?: Prisma.ReservationWhereInput | Prisma.ReservationWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"Reservation"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Reservation"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Reservation"> | Date | string | null
-  spaceSeq?: Prisma.IntFilter<"Reservation"> | number
-  createdBySeq?: Prisma.IntNullableFilter<"Reservation"> | number | null
-  userSeq?: Prisma.IntFilter<"Reservation"> | number
-  timelineSeq?: Prisma.IntFilter<"Reservation"> | number
-  sessionSeq?: Prisma.IntFilter<"Reservation"> | number
-  programSeq?: Prisma.IntFilter<"Reservation"> | number
+  spaceId?: Prisma.BigIntFilter<"Reservation"> | bigint | number
+  createdById?: Prisma.BigIntNullableFilter<"Reservation"> | bigint | number | null
+  userId?: Prisma.BigIntFilter<"Reservation"> | bigint | number
+  timelineId?: Prisma.BigIntFilter<"Reservation"> | bigint | number
+  sessionId?: Prisma.BigIntFilter<"Reservation"> | bigint | number
+  programId?: Prisma.BigIntFilter<"Reservation"> | bigint | number
   occurrenceStartAt?: Prisma.DateTimeFilter<"Reservation"> | Date | string
   status?: Prisma.EnumReservationStatusFilter<"Reservation"> | $Enums.ReservationStatus
   memo?: Prisma.StringNullableFilter<"Reservation"> | string | null
@@ -422,20 +422,20 @@ export type ReservationWhereUniqueInput = Prisma.AtLeast<{
   timeline?: Prisma.XOR<Prisma.TimelineScalarRelationFilter, Prisma.TimelineWhereInput>
   session?: Prisma.XOR<Prisma.SessionScalarRelationFilter, Prisma.SessionWhereInput>
   program?: Prisma.XOR<Prisma.ProgramScalarRelationFilter, Prisma.ProgramWhereInput>
-}, "seq" | "id" | "userSeq_idempotencyKey">
+}, "id" | "reservationId" | "userId_idempotencyKey">
 
 export type ReservationOrderByWithAggregationInput = {
+  reservationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
-  userSeq?: Prisma.SortOrder
-  timelineSeq?: Prisma.SortOrder
-  sessionSeq?: Prisma.SortOrder
-  programSeq?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  userId?: Prisma.SortOrder
+  timelineId?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrder
+  programId?: Prisma.SortOrder
   occurrenceStartAt?: Prisma.SortOrder
   status?: Prisma.SortOrder
   memo?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -455,17 +455,17 @@ export type ReservationScalarWhereWithAggregatesInput = {
   AND?: Prisma.ReservationScalarWhereWithAggregatesInput | Prisma.ReservationScalarWhereWithAggregatesInput[]
   OR?: Prisma.ReservationScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ReservationScalarWhereWithAggregatesInput | Prisma.ReservationScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"Reservation"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"Reservation"> | number
+  reservationId?: Prisma.StringWithAggregatesFilter<"Reservation"> | string
+  id?: Prisma.BigIntWithAggregatesFilter<"Reservation"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Reservation"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Reservation"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Reservation"> | Date | string | null
-  spaceSeq?: Prisma.IntWithAggregatesFilter<"Reservation"> | number
-  createdBySeq?: Prisma.IntNullableWithAggregatesFilter<"Reservation"> | number | null
-  userSeq?: Prisma.IntWithAggregatesFilter<"Reservation"> | number
-  timelineSeq?: Prisma.IntWithAggregatesFilter<"Reservation"> | number
-  sessionSeq?: Prisma.IntWithAggregatesFilter<"Reservation"> | number
-  programSeq?: Prisma.IntWithAggregatesFilter<"Reservation"> | number
+  spaceId?: Prisma.BigIntWithAggregatesFilter<"Reservation"> | bigint | number
+  createdById?: Prisma.BigIntNullableWithAggregatesFilter<"Reservation"> | bigint | number | null
+  userId?: Prisma.BigIntWithAggregatesFilter<"Reservation"> | bigint | number
+  timelineId?: Prisma.BigIntWithAggregatesFilter<"Reservation"> | bigint | number
+  sessionId?: Prisma.BigIntWithAggregatesFilter<"Reservation"> | bigint | number
+  programId?: Prisma.BigIntWithAggregatesFilter<"Reservation"> | bigint | number
   occurrenceStartAt?: Prisma.DateTimeWithAggregatesFilter<"Reservation"> | Date | string
   status?: Prisma.EnumReservationStatusWithAggregatesFilter<"Reservation"> | $Enums.ReservationStatus
   memo?: Prisma.StringNullableWithAggregatesFilter<"Reservation"> | string | null
@@ -477,7 +477,8 @@ export type ReservationScalarWhereWithAggregatesInput = {
 }
 
 export type ReservationCreateInput = {
-  id?: string
+  reservationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -498,17 +499,17 @@ export type ReservationCreateInput = {
 }
 
 export type ReservationUncheckedCreateInput = {
-  id?: string
-  seq?: number
+  reservationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
-  userSeq: number
-  timelineSeq: number
-  sessionSeq: number
-  programSeq: number
+  spaceId: bigint | number
+  createdById?: bigint | number | null
+  userId: bigint | number
+  timelineId: bigint | number
+  sessionId: bigint | number
+  programId: bigint | number
   occurrenceStartAt: Date | string
   status?: $Enums.ReservationStatus
   memo?: string | null
@@ -520,7 +521,8 @@ export type ReservationUncheckedCreateInput = {
 }
 
 export type ReservationUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -541,17 +543,17 @@ export type ReservationUpdateInput = {
 }
 
 export type ReservationUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  timelineSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  sessionSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  programSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  timelineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sessionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  programId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
   memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -563,17 +565,17 @@ export type ReservationUncheckedUpdateInput = {
 }
 
 export type ReservationCreateManyInput = {
-  id?: string
-  seq?: number
+  reservationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
-  userSeq: number
-  timelineSeq: number
-  sessionSeq: number
-  programSeq: number
+  spaceId: bigint | number
+  createdById?: bigint | number | null
+  userId: bigint | number
+  timelineId: bigint | number
+  sessionId: bigint | number
+  programId: bigint | number
   occurrenceStartAt: Date | string
   status?: $Enums.ReservationStatus
   memo?: string | null
@@ -585,7 +587,8 @@ export type ReservationCreateManyInput = {
 }
 
 export type ReservationUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -600,17 +603,17 @@ export type ReservationUpdateManyMutationInput = {
 }
 
 export type ReservationUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  timelineSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  sessionSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  programSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  timelineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sessionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  programId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
   memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -631,23 +634,23 @@ export type ReservationOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type ReservationUserSeqIdempotencyKeyCompoundUniqueInput = {
-  userSeq: number
+export type ReservationUserIdIdempotencyKeyCompoundUniqueInput = {
+  userId: bigint | number
   idempotencyKey: string
 }
 
 export type ReservationCountOrderByAggregateInput = {
+  reservationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
-  userSeq?: Prisma.SortOrder
-  timelineSeq?: Prisma.SortOrder
-  sessionSeq?: Prisma.SortOrder
-  programSeq?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
+  timelineId?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrder
+  programId?: Prisma.SortOrder
   occurrenceStartAt?: Prisma.SortOrder
   status?: Prisma.SortOrder
   memo?: Prisma.SortOrder
@@ -659,28 +662,28 @@ export type ReservationCountOrderByAggregateInput = {
 }
 
 export type ReservationAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
-  userSeq?: Prisma.SortOrder
-  timelineSeq?: Prisma.SortOrder
-  sessionSeq?: Prisma.SortOrder
-  programSeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
+  timelineId?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrder
+  programId?: Prisma.SortOrder
   waitlistPosition?: Prisma.SortOrder
 }
 
 export type ReservationMaxOrderByAggregateInput = {
+  reservationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
-  userSeq?: Prisma.SortOrder
-  timelineSeq?: Prisma.SortOrder
-  sessionSeq?: Prisma.SortOrder
-  programSeq?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
+  timelineId?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrder
+  programId?: Prisma.SortOrder
   occurrenceStartAt?: Prisma.SortOrder
   status?: Prisma.SortOrder
   memo?: Prisma.SortOrder
@@ -692,17 +695,17 @@ export type ReservationMaxOrderByAggregateInput = {
 }
 
 export type ReservationMinOrderByAggregateInput = {
+  reservationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
-  userSeq?: Prisma.SortOrder
-  timelineSeq?: Prisma.SortOrder
-  sessionSeq?: Prisma.SortOrder
-  programSeq?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
+  timelineId?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrder
+  programId?: Prisma.SortOrder
   occurrenceStartAt?: Prisma.SortOrder
   status?: Prisma.SortOrder
   memo?: Prisma.SortOrder
@@ -714,13 +717,13 @@ export type ReservationMinOrderByAggregateInput = {
 }
 
 export type ReservationSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
-  userSeq?: Prisma.SortOrder
-  timelineSeq?: Prisma.SortOrder
-  sessionSeq?: Prisma.SortOrder
-  programSeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
+  timelineId?: Prisma.SortOrder
+  sessionId?: Prisma.SortOrder
+  programId?: Prisma.SortOrder
   waitlistPosition?: Prisma.SortOrder
 }
 
@@ -981,7 +984,8 @@ export type ReservationUncheckedUpdateManyWithoutCreatedByNestedInput = {
 }
 
 export type ReservationCreateWithoutProgramInput = {
-  id?: string
+  reservationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1001,16 +1005,16 @@ export type ReservationCreateWithoutProgramInput = {
 }
 
 export type ReservationUncheckedCreateWithoutProgramInput = {
-  id?: string
-  seq?: number
+  reservationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
-  userSeq: number
-  timelineSeq: number
-  sessionSeq: number
+  spaceId: bigint | number
+  createdById?: bigint | number | null
+  userId: bigint | number
+  timelineId: bigint | number
+  sessionId: bigint | number
   occurrenceStartAt: Date | string
   status?: $Enums.ReservationStatus
   memo?: string | null
@@ -1051,17 +1055,17 @@ export type ReservationScalarWhereInput = {
   AND?: Prisma.ReservationScalarWhereInput | Prisma.ReservationScalarWhereInput[]
   OR?: Prisma.ReservationScalarWhereInput[]
   NOT?: Prisma.ReservationScalarWhereInput | Prisma.ReservationScalarWhereInput[]
-  id?: Prisma.StringFilter<"Reservation"> | string
-  seq?: Prisma.IntFilter<"Reservation"> | number
+  reservationId?: Prisma.StringFilter<"Reservation"> | string
+  id?: Prisma.BigIntFilter<"Reservation"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Reservation"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Reservation"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Reservation"> | Date | string | null
-  spaceSeq?: Prisma.IntFilter<"Reservation"> | number
-  createdBySeq?: Prisma.IntNullableFilter<"Reservation"> | number | null
-  userSeq?: Prisma.IntFilter<"Reservation"> | number
-  timelineSeq?: Prisma.IntFilter<"Reservation"> | number
-  sessionSeq?: Prisma.IntFilter<"Reservation"> | number
-  programSeq?: Prisma.IntFilter<"Reservation"> | number
+  spaceId?: Prisma.BigIntFilter<"Reservation"> | bigint | number
+  createdById?: Prisma.BigIntNullableFilter<"Reservation"> | bigint | number | null
+  userId?: Prisma.BigIntFilter<"Reservation"> | bigint | number
+  timelineId?: Prisma.BigIntFilter<"Reservation"> | bigint | number
+  sessionId?: Prisma.BigIntFilter<"Reservation"> | bigint | number
+  programId?: Prisma.BigIntFilter<"Reservation"> | bigint | number
   occurrenceStartAt?: Prisma.DateTimeFilter<"Reservation"> | Date | string
   status?: Prisma.EnumReservationStatusFilter<"Reservation"> | $Enums.ReservationStatus
   memo?: Prisma.StringNullableFilter<"Reservation"> | string | null
@@ -1073,7 +1077,8 @@ export type ReservationScalarWhereInput = {
 }
 
 export type ReservationCreateWithoutSessionInput = {
-  id?: string
+  reservationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1093,16 +1098,16 @@ export type ReservationCreateWithoutSessionInput = {
 }
 
 export type ReservationUncheckedCreateWithoutSessionInput = {
-  id?: string
-  seq?: number
+  reservationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
-  userSeq: number
-  timelineSeq: number
-  programSeq: number
+  spaceId: bigint | number
+  createdById?: bigint | number | null
+  userId: bigint | number
+  timelineId: bigint | number
+  programId: bigint | number
   occurrenceStartAt: Date | string
   status?: $Enums.ReservationStatus
   memo?: string | null
@@ -1140,7 +1145,8 @@ export type ReservationUpdateManyWithWhereWithoutSessionInput = {
 }
 
 export type ReservationCreateWithoutSpaceInput = {
-  id?: string
+  reservationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1160,16 +1166,16 @@ export type ReservationCreateWithoutSpaceInput = {
 }
 
 export type ReservationUncheckedCreateWithoutSpaceInput = {
-  id?: string
-  seq?: number
+  reservationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  createdBySeq?: number | null
-  userSeq: number
-  timelineSeq: number
-  sessionSeq: number
-  programSeq: number
+  createdById?: bigint | number | null
+  userId: bigint | number
+  timelineId: bigint | number
+  sessionId: bigint | number
+  programId: bigint | number
   occurrenceStartAt: Date | string
   status?: $Enums.ReservationStatus
   memo?: string | null
@@ -1207,7 +1213,8 @@ export type ReservationUpdateManyWithWhereWithoutSpaceInput = {
 }
 
 export type ReservationCreateWithoutTimelineInput = {
-  id?: string
+  reservationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1227,16 +1234,16 @@ export type ReservationCreateWithoutTimelineInput = {
 }
 
 export type ReservationUncheckedCreateWithoutTimelineInput = {
-  id?: string
-  seq?: number
+  reservationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
-  userSeq: number
-  sessionSeq: number
-  programSeq: number
+  spaceId: bigint | number
+  createdById?: bigint | number | null
+  userId: bigint | number
+  sessionId: bigint | number
+  programId: bigint | number
   occurrenceStartAt: Date | string
   status?: $Enums.ReservationStatus
   memo?: string | null
@@ -1274,7 +1281,8 @@ export type ReservationUpdateManyWithWhereWithoutTimelineInput = {
 }
 
 export type ReservationCreateWithoutUserInput = {
-  id?: string
+  reservationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1294,16 +1302,16 @@ export type ReservationCreateWithoutUserInput = {
 }
 
 export type ReservationUncheckedCreateWithoutUserInput = {
-  id?: string
-  seq?: number
+  reservationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
-  timelineSeq: number
-  sessionSeq: number
-  programSeq: number
+  spaceId: bigint | number
+  createdById?: bigint | number | null
+  timelineId: bigint | number
+  sessionId: bigint | number
+  programId: bigint | number
   occurrenceStartAt: Date | string
   status?: $Enums.ReservationStatus
   memo?: string | null
@@ -1325,7 +1333,8 @@ export type ReservationCreateManyUserInputEnvelope = {
 }
 
 export type ReservationCreateWithoutCreatedByInput = {
-  id?: string
+  reservationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1345,16 +1354,16 @@ export type ReservationCreateWithoutCreatedByInput = {
 }
 
 export type ReservationUncheckedCreateWithoutCreatedByInput = {
-  id?: string
-  seq?: number
+  reservationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  userSeq: number
-  timelineSeq: number
-  sessionSeq: number
-  programSeq: number
+  spaceId: bigint | number
+  userId: bigint | number
+  timelineId: bigint | number
+  sessionId: bigint | number
+  programId: bigint | number
   occurrenceStartAt: Date | string
   status?: $Enums.ReservationStatus
   memo?: string | null
@@ -1408,16 +1417,16 @@ export type ReservationUpdateManyWithWhereWithoutCreatedByInput = {
 }
 
 export type ReservationCreateManyProgramInput = {
-  id?: string
-  seq?: number
+  reservationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
-  userSeq: number
-  timelineSeq: number
-  sessionSeq: number
+  spaceId: bigint | number
+  createdById?: bigint | number | null
+  userId: bigint | number
+  timelineId: bigint | number
+  sessionId: bigint | number
   occurrenceStartAt: Date | string
   status?: $Enums.ReservationStatus
   memo?: string | null
@@ -1429,7 +1438,8 @@ export type ReservationCreateManyProgramInput = {
 }
 
 export type ReservationUpdateWithoutProgramInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1449,16 +1459,16 @@ export type ReservationUpdateWithoutProgramInput = {
 }
 
 export type ReservationUncheckedUpdateWithoutProgramInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  timelineSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  sessionSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  timelineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sessionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
   memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1470,16 +1480,16 @@ export type ReservationUncheckedUpdateWithoutProgramInput = {
 }
 
 export type ReservationUncheckedUpdateManyWithoutProgramInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  timelineSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  sessionSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  timelineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sessionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
   memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1491,16 +1501,16 @@ export type ReservationUncheckedUpdateManyWithoutProgramInput = {
 }
 
 export type ReservationCreateManySessionInput = {
-  id?: string
-  seq?: number
+  reservationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
-  userSeq: number
-  timelineSeq: number
-  programSeq: number
+  spaceId: bigint | number
+  createdById?: bigint | number | null
+  userId: bigint | number
+  timelineId: bigint | number
+  programId: bigint | number
   occurrenceStartAt: Date | string
   status?: $Enums.ReservationStatus
   memo?: string | null
@@ -1512,7 +1522,8 @@ export type ReservationCreateManySessionInput = {
 }
 
 export type ReservationUpdateWithoutSessionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1532,16 +1543,16 @@ export type ReservationUpdateWithoutSessionInput = {
 }
 
 export type ReservationUncheckedUpdateWithoutSessionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  timelineSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  programSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  timelineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  programId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
   memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1553,16 +1564,16 @@ export type ReservationUncheckedUpdateWithoutSessionInput = {
 }
 
 export type ReservationUncheckedUpdateManyWithoutSessionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  timelineSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  programSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  timelineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  programId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
   memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1574,16 +1585,16 @@ export type ReservationUncheckedUpdateManyWithoutSessionInput = {
 }
 
 export type ReservationCreateManySpaceInput = {
-  id?: string
-  seq?: number
+  reservationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  createdBySeq?: number | null
-  userSeq: number
-  timelineSeq: number
-  sessionSeq: number
-  programSeq: number
+  createdById?: bigint | number | null
+  userId: bigint | number
+  timelineId: bigint | number
+  sessionId: bigint | number
+  programId: bigint | number
   occurrenceStartAt: Date | string
   status?: $Enums.ReservationStatus
   memo?: string | null
@@ -1595,7 +1606,8 @@ export type ReservationCreateManySpaceInput = {
 }
 
 export type ReservationUpdateWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1615,16 +1627,16 @@ export type ReservationUpdateWithoutSpaceInput = {
 }
 
 export type ReservationUncheckedUpdateWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  timelineSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  sessionSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  programSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  timelineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sessionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  programId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
   memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1636,16 +1648,16 @@ export type ReservationUncheckedUpdateWithoutSpaceInput = {
 }
 
 export type ReservationUncheckedUpdateManyWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  timelineSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  sessionSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  programSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  timelineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sessionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  programId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
   memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1657,16 +1669,16 @@ export type ReservationUncheckedUpdateManyWithoutSpaceInput = {
 }
 
 export type ReservationCreateManyTimelineInput = {
-  id?: string
-  seq?: number
+  reservationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
-  userSeq: number
-  sessionSeq: number
-  programSeq: number
+  spaceId: bigint | number
+  createdById?: bigint | number | null
+  userId: bigint | number
+  sessionId: bigint | number
+  programId: bigint | number
   occurrenceStartAt: Date | string
   status?: $Enums.ReservationStatus
   memo?: string | null
@@ -1678,7 +1690,8 @@ export type ReservationCreateManyTimelineInput = {
 }
 
 export type ReservationUpdateWithoutTimelineInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1698,16 +1711,16 @@ export type ReservationUpdateWithoutTimelineInput = {
 }
 
 export type ReservationUncheckedUpdateWithoutTimelineInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  sessionSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  programSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sessionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  programId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
   memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1719,16 +1732,16 @@ export type ReservationUncheckedUpdateWithoutTimelineInput = {
 }
 
 export type ReservationUncheckedUpdateManyWithoutTimelineInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  sessionSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  programSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sessionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  programId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
   memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1740,16 +1753,16 @@ export type ReservationUncheckedUpdateManyWithoutTimelineInput = {
 }
 
 export type ReservationCreateManyUserInput = {
-  id?: string
-  seq?: number
+  reservationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
-  timelineSeq: number
-  sessionSeq: number
-  programSeq: number
+  spaceId: bigint | number
+  createdById?: bigint | number | null
+  timelineId: bigint | number
+  sessionId: bigint | number
+  programId: bigint | number
   occurrenceStartAt: Date | string
   status?: $Enums.ReservationStatus
   memo?: string | null
@@ -1761,16 +1774,16 @@ export type ReservationCreateManyUserInput = {
 }
 
 export type ReservationCreateManyCreatedByInput = {
-  id?: string
-  seq?: number
+  reservationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  userSeq: number
-  timelineSeq: number
-  sessionSeq: number
-  programSeq: number
+  spaceId: bigint | number
+  userId: bigint | number
+  timelineId: bigint | number
+  sessionId: bigint | number
+  programId: bigint | number
   occurrenceStartAt: Date | string
   status?: $Enums.ReservationStatus
   memo?: string | null
@@ -1782,7 +1795,8 @@ export type ReservationCreateManyCreatedByInput = {
 }
 
 export type ReservationUpdateWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1802,16 +1816,16 @@ export type ReservationUpdateWithoutUserInput = {
 }
 
 export type ReservationUncheckedUpdateWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  timelineSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  sessionSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  programSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  timelineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sessionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  programId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
   memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1823,16 +1837,16 @@ export type ReservationUncheckedUpdateWithoutUserInput = {
 }
 
 export type ReservationUncheckedUpdateManyWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  timelineSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  sessionSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  programSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  timelineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sessionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  programId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
   memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1844,7 +1858,8 @@ export type ReservationUncheckedUpdateManyWithoutUserInput = {
 }
 
 export type ReservationUpdateWithoutCreatedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1864,16 +1879,16 @@ export type ReservationUpdateWithoutCreatedByInput = {
 }
 
 export type ReservationUncheckedUpdateWithoutCreatedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  timelineSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  sessionSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  programSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  timelineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sessionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  programId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
   memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1885,16 +1900,16 @@ export type ReservationUncheckedUpdateWithoutCreatedByInput = {
 }
 
 export type ReservationUncheckedUpdateManyWithoutCreatedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  reservationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  userSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  timelineSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  sessionSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  programSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  timelineId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  sessionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  programId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   occurrenceStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumReservationStatusFieldUpdateOperationsInput | $Enums.ReservationStatus
   memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1908,17 +1923,17 @@ export type ReservationUncheckedUpdateManyWithoutCreatedByInput = {
 
 
 export type ReservationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  reservationId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceSeq?: boolean
-  createdBySeq?: boolean
-  userSeq?: boolean
-  timelineSeq?: boolean
-  sessionSeq?: boolean
-  programSeq?: boolean
+  spaceId?: boolean
+  createdById?: boolean
+  userId?: boolean
+  timelineId?: boolean
+  sessionId?: boolean
+  programId?: boolean
   occurrenceStartAt?: boolean
   status?: boolean
   memo?: boolean
@@ -1936,17 +1951,17 @@ export type ReservationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
 }, ExtArgs["result"]["reservation"]>
 
 export type ReservationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  reservationId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceSeq?: boolean
-  createdBySeq?: boolean
-  userSeq?: boolean
-  timelineSeq?: boolean
-  sessionSeq?: boolean
-  programSeq?: boolean
+  spaceId?: boolean
+  createdById?: boolean
+  userId?: boolean
+  timelineId?: boolean
+  sessionId?: boolean
+  programId?: boolean
   occurrenceStartAt?: boolean
   status?: boolean
   memo?: boolean
@@ -1964,17 +1979,17 @@ export type ReservationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
 }, ExtArgs["result"]["reservation"]>
 
 export type ReservationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  reservationId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceSeq?: boolean
-  createdBySeq?: boolean
-  userSeq?: boolean
-  timelineSeq?: boolean
-  sessionSeq?: boolean
-  programSeq?: boolean
+  spaceId?: boolean
+  createdById?: boolean
+  userId?: boolean
+  timelineId?: boolean
+  sessionId?: boolean
+  programId?: boolean
   occurrenceStartAt?: boolean
   status?: boolean
   memo?: boolean
@@ -1992,17 +2007,17 @@ export type ReservationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
 }, ExtArgs["result"]["reservation"]>
 
 export type ReservationSelectScalar = {
+  reservationId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceSeq?: boolean
-  createdBySeq?: boolean
-  userSeq?: boolean
-  timelineSeq?: boolean
-  sessionSeq?: boolean
-  programSeq?: boolean
+  spaceId?: boolean
+  createdById?: boolean
+  userId?: boolean
+  timelineId?: boolean
+  sessionId?: boolean
+  programId?: boolean
   occurrenceStartAt?: boolean
   status?: boolean
   memo?: boolean
@@ -2013,7 +2028,7 @@ export type ReservationSelectScalar = {
   cancelReason?: boolean
 }
 
-export type ReservationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "spaceSeq" | "createdBySeq" | "userSeq" | "timelineSeq" | "sessionSeq" | "programSeq" | "occurrenceStartAt" | "status" | "memo" | "idempotencyKey" | "waitlistPosition" | "confirmedAt" | "canceledAt" | "cancelReason", ExtArgs["result"]["reservation"]>
+export type ReservationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"reservationId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "spaceId" | "createdById" | "userId" | "timelineId" | "sessionId" | "programId" | "occurrenceStartAt" | "status" | "memo" | "idempotencyKey" | "waitlistPosition" | "confirmedAt" | "canceledAt" | "cancelReason", ExtArgs["result"]["reservation"]>
 export type ReservationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Reservation$createdByArgs<ExtArgs>
@@ -2050,17 +2065,17 @@ export type $ReservationPayload<ExtArgs extends runtime.Types.Extensions.Interna
     program: Prisma.$ProgramPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    seq: number
+    reservationId: string
+    id: bigint
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    spaceSeq: number
-    createdBySeq: number | null
-    userSeq: number
-    timelineSeq: number
-    sessionSeq: number
-    programSeq: number
+    spaceId: bigint
+    createdById: bigint | null
+    userId: bigint
+    timelineId: bigint
+    sessionId: bigint
+    programId: bigint
     occurrenceStartAt: Date
     status: $Enums.ReservationStatus
     memo: string | null
@@ -2152,8 +2167,8 @@ export interface ReservationDelegate<ExtArgs extends runtime.Types.Extensions.In
    * // Get first 10 Reservations
    * const reservations = await prisma.reservation.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const reservationWithIdOnly = await prisma.reservation.findMany({ select: { id: true } })
+   * // Only select the `reservationId`
+   * const reservationWithReservationIdOnly = await prisma.reservation.findMany({ select: { reservationId: true } })
    * 
    */
   findMany<T extends ReservationFindManyArgs>(args?: Prisma.SelectSubset<T, ReservationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReservationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -2197,9 +2212,9 @@ export interface ReservationDelegate<ExtArgs extends runtime.Types.Extensions.In
    *   ]
    * })
    * 
-   * // Create many Reservations and only return the `id`
-   * const reservationWithIdOnly = await prisma.reservation.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many Reservations and only return the `reservationId`
+   * const reservationWithReservationIdOnly = await prisma.reservation.createManyAndReturn({
+   *   select: { reservationId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -2288,9 +2303,9 @@ export interface ReservationDelegate<ExtArgs extends runtime.Types.Extensions.In
    *   ]
    * })
    * 
-   * // Update zero or more Reservations and only return the `id`
-   * const reservationWithIdOnly = await prisma.reservation.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more Reservations and only return the `reservationId`
+   * const reservationWithReservationIdOnly = await prisma.reservation.updateManyAndReturn({
+   *   select: { reservationId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -2498,17 +2513,17 @@ export interface Prisma__ReservationClient<T, Null = never, ExtArgs extends runt
  * Fields of the Reservation model
  */
 export interface ReservationFieldRefs {
-  readonly id: Prisma.FieldRef<"Reservation", 'String'>
-  readonly seq: Prisma.FieldRef<"Reservation", 'Int'>
+  readonly reservationId: Prisma.FieldRef<"Reservation", 'String'>
+  readonly id: Prisma.FieldRef<"Reservation", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"Reservation", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Reservation", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Reservation", 'DateTime'>
-  readonly spaceSeq: Prisma.FieldRef<"Reservation", 'Int'>
-  readonly createdBySeq: Prisma.FieldRef<"Reservation", 'Int'>
-  readonly userSeq: Prisma.FieldRef<"Reservation", 'Int'>
-  readonly timelineSeq: Prisma.FieldRef<"Reservation", 'Int'>
-  readonly sessionSeq: Prisma.FieldRef<"Reservation", 'Int'>
-  readonly programSeq: Prisma.FieldRef<"Reservation", 'Int'>
+  readonly spaceId: Prisma.FieldRef<"Reservation", 'BigInt'>
+  readonly createdById: Prisma.FieldRef<"Reservation", 'BigInt'>
+  readonly userId: Prisma.FieldRef<"Reservation", 'BigInt'>
+  readonly timelineId: Prisma.FieldRef<"Reservation", 'BigInt'>
+  readonly sessionId: Prisma.FieldRef<"Reservation", 'BigInt'>
+  readonly programId: Prisma.FieldRef<"Reservation", 'BigInt'>
   readonly occurrenceStartAt: Prisma.FieldRef<"Reservation", 'DateTime'>
   readonly status: Prisma.FieldRef<"Reservation", 'ReservationStatus'>
   readonly memo: Prisma.FieldRef<"Reservation", 'String'>

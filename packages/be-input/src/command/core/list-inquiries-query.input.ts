@@ -12,9 +12,9 @@ export interface ListInquiriesQueryInput {
 	channel?: InquiryChannel;
 	priority?: InquiryPriority;
 	inquiryStatus?: InquiryStatus;
-	customerId?: string;
-	assigneeId?: string;
-	spaceIds?: string[];
+	customerId?: bigint;
+	assigneeId?: bigint;
+	spaceIds?: bigint[];
 	startDate?: Date;
 	endDate?: Date;
 	sort?: string[];

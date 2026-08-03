@@ -27,18 +27,18 @@ export type AggregateServiceDocument = {
 }
 
 export type ServiceDocumentAvgAggregateOutputType = {
-  seq: number | null
+  id: number | null
   displayOrder: number | null
 }
 
 export type ServiceDocumentSumAggregateOutputType = {
-  seq: number | null
+  id: bigint | null
   displayOrder: number | null
 }
 
 export type ServiceDocumentMinAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  serviceDocumentId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -58,8 +58,8 @@ export type ServiceDocumentMinAggregateOutputType = {
 }
 
 export type ServiceDocumentMaxAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  serviceDocumentId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -79,8 +79,8 @@ export type ServiceDocumentMaxAggregateOutputType = {
 }
 
 export type ServiceDocumentCountAggregateOutputType = {
+  serviceDocumentId: number
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -102,18 +102,18 @@ export type ServiceDocumentCountAggregateOutputType = {
 
 
 export type ServiceDocumentAvgAggregateInputType = {
-  seq?: true
+  id?: true
   displayOrder?: true
 }
 
 export type ServiceDocumentSumAggregateInputType = {
-  seq?: true
+  id?: true
   displayOrder?: true
 }
 
 export type ServiceDocumentMinAggregateInputType = {
+  serviceDocumentId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -133,8 +133,8 @@ export type ServiceDocumentMinAggregateInputType = {
 }
 
 export type ServiceDocumentMaxAggregateInputType = {
+  serviceDocumentId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -154,8 +154,8 @@ export type ServiceDocumentMaxAggregateInputType = {
 }
 
 export type ServiceDocumentCountAggregateInputType = {
+  serviceDocumentId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -262,8 +262,8 @@ export type ServiceDocumentGroupByArgs<ExtArgs extends runtime.Types.Extensions.
 }
 
 export type ServiceDocumentGroupByOutputType = {
-  id: string
-  seq: number
+  serviceDocumentId: string
+  id: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
@@ -306,8 +306,8 @@ export type ServiceDocumentWhereInput = {
   AND?: Prisma.ServiceDocumentWhereInput | Prisma.ServiceDocumentWhereInput[]
   OR?: Prisma.ServiceDocumentWhereInput[]
   NOT?: Prisma.ServiceDocumentWhereInput | Prisma.ServiceDocumentWhereInput[]
-  id?: Prisma.StringFilter<"ServiceDocument"> | string
-  seq?: Prisma.IntFilter<"ServiceDocument"> | number
+  serviceDocumentId?: Prisma.StringFilter<"ServiceDocument"> | string
+  id?: Prisma.BigIntFilter<"ServiceDocument"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"ServiceDocument"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"ServiceDocument"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"ServiceDocument"> | Date | string | null
@@ -327,8 +327,8 @@ export type ServiceDocumentWhereInput = {
 }
 
 export type ServiceDocumentOrderByWithRelationInput = {
+  serviceDocumentId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -348,8 +348,8 @@ export type ServiceDocumentOrderByWithRelationInput = {
 }
 
 export type ServiceDocumentWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  seq?: number
+  serviceDocumentId?: string
+  id?: bigint | number
   kind_platform_locale_version?: Prisma.ServiceDocumentKindPlatformLocaleVersionCompoundUniqueInput
   AND?: Prisma.ServiceDocumentWhereInput | Prisma.ServiceDocumentWhereInput[]
   OR?: Prisma.ServiceDocumentWhereInput[]
@@ -370,11 +370,11 @@ export type ServiceDocumentWhereUniqueInput = Prisma.AtLeast<{
   displayOrder?: Prisma.IntFilter<"ServiceDocument"> | number
   effectiveAt?: Prisma.DateTimeNullableFilter<"ServiceDocument"> | Date | string | null
   publishedAt?: Prisma.DateTimeNullableFilter<"ServiceDocument"> | Date | string | null
-}, "seq" | "id" | "kind_platform_locale_version">
+}, "id" | "serviceDocumentId" | "kind_platform_locale_version">
 
 export type ServiceDocumentOrderByWithAggregationInput = {
+  serviceDocumentId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -402,8 +402,8 @@ export type ServiceDocumentScalarWhereWithAggregatesInput = {
   AND?: Prisma.ServiceDocumentScalarWhereWithAggregatesInput | Prisma.ServiceDocumentScalarWhereWithAggregatesInput[]
   OR?: Prisma.ServiceDocumentScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ServiceDocumentScalarWhereWithAggregatesInput | Prisma.ServiceDocumentScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"ServiceDocument"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"ServiceDocument"> | number
+  serviceDocumentId?: Prisma.StringWithAggregatesFilter<"ServiceDocument"> | string
+  id?: Prisma.BigIntWithAggregatesFilter<"ServiceDocument"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ServiceDocument"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ServiceDocument"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ServiceDocument"> | Date | string | null
@@ -423,7 +423,8 @@ export type ServiceDocumentScalarWhereWithAggregatesInput = {
 }
 
 export type ServiceDocumentCreateInput = {
-  id?: string
+  serviceDocumentId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -443,8 +444,8 @@ export type ServiceDocumentCreateInput = {
 }
 
 export type ServiceDocumentUncheckedCreateInput = {
-  id?: string
-  seq?: number
+  serviceDocumentId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -464,7 +465,8 @@ export type ServiceDocumentUncheckedCreateInput = {
 }
 
 export type ServiceDocumentUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceDocumentId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -484,8 +486,8 @@ export type ServiceDocumentUpdateInput = {
 }
 
 export type ServiceDocumentUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  serviceDocumentId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -505,8 +507,8 @@ export type ServiceDocumentUncheckedUpdateInput = {
 }
 
 export type ServiceDocumentCreateManyInput = {
-  id?: string
-  seq?: number
+  serviceDocumentId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -526,7 +528,8 @@ export type ServiceDocumentCreateManyInput = {
 }
 
 export type ServiceDocumentUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceDocumentId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -546,8 +549,8 @@ export type ServiceDocumentUpdateManyMutationInput = {
 }
 
 export type ServiceDocumentUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  serviceDocumentId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -574,8 +577,8 @@ export type ServiceDocumentKindPlatformLocaleVersionCompoundUniqueInput = {
 }
 
 export type ServiceDocumentCountOrderByAggregateInput = {
+  serviceDocumentId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -595,13 +598,13 @@ export type ServiceDocumentCountOrderByAggregateInput = {
 }
 
 export type ServiceDocumentAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
   displayOrder?: Prisma.SortOrder
 }
 
 export type ServiceDocumentMaxOrderByAggregateInput = {
+  serviceDocumentId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -621,8 +624,8 @@ export type ServiceDocumentMaxOrderByAggregateInput = {
 }
 
 export type ServiceDocumentMinOrderByAggregateInput = {
+  serviceDocumentId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -642,7 +645,7 @@ export type ServiceDocumentMinOrderByAggregateInput = {
 }
 
 export type ServiceDocumentSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
   displayOrder?: Prisma.SortOrder
 }
 
@@ -665,8 +668,8 @@ export type EnumServiceDocumentStatusFieldUpdateOperationsInput = {
 
 
 export type ServiceDocumentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  serviceDocumentId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -686,8 +689,8 @@ export type ServiceDocumentSelect<ExtArgs extends runtime.Types.Extensions.Inter
 }, ExtArgs["result"]["serviceDocument"]>
 
 export type ServiceDocumentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  serviceDocumentId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -707,8 +710,8 @@ export type ServiceDocumentSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
 }, ExtArgs["result"]["serviceDocument"]>
 
 export type ServiceDocumentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  serviceDocumentId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -728,8 +731,8 @@ export type ServiceDocumentSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
 }, ExtArgs["result"]["serviceDocument"]>
 
 export type ServiceDocumentSelectScalar = {
+  serviceDocumentId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -748,14 +751,14 @@ export type ServiceDocumentSelectScalar = {
   publishedAt?: boolean
 }
 
-export type ServiceDocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "kind" | "platform" | "locale" | "title" | "summary" | "content" | "format" | "version" | "status" | "isRequired" | "displayOrder" | "effectiveAt" | "publishedAt", ExtArgs["result"]["serviceDocument"]>
+export type ServiceDocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"serviceDocumentId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "kind" | "platform" | "locale" | "title" | "summary" | "content" | "format" | "version" | "status" | "isRequired" | "displayOrder" | "effectiveAt" | "publishedAt", ExtArgs["result"]["serviceDocument"]>
 
 export type $ServiceDocumentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ServiceDocument"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    seq: number
+    serviceDocumentId: string
+    id: bigint
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -894,8 +897,8 @@ export interface ServiceDocumentDelegate<ExtArgs extends runtime.Types.Extension
    * // Get first 10 ServiceDocuments
    * const serviceDocuments = await prisma.serviceDocument.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const serviceDocumentWithIdOnly = await prisma.serviceDocument.findMany({ select: { id: true } })
+   * // Only select the `serviceDocumentId`
+   * const serviceDocumentWithServiceDocumentIdOnly = await prisma.serviceDocument.findMany({ select: { serviceDocumentId: true } })
    * 
    */
   findMany<T extends ServiceDocumentFindManyArgs>(args?: Prisma.SelectSubset<T, ServiceDocumentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ServiceDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -939,9 +942,9 @@ export interface ServiceDocumentDelegate<ExtArgs extends runtime.Types.Extension
    *   ]
    * })
    * 
-   * // Create many ServiceDocuments and only return the `id`
-   * const serviceDocumentWithIdOnly = await prisma.serviceDocument.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many ServiceDocuments and only return the `serviceDocumentId`
+   * const serviceDocumentWithServiceDocumentIdOnly = await prisma.serviceDocument.createManyAndReturn({
+   *   select: { serviceDocumentId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1030,9 +1033,9 @@ export interface ServiceDocumentDelegate<ExtArgs extends runtime.Types.Extension
    *   ]
    * })
    * 
-   * // Update zero or more ServiceDocuments and only return the `id`
-   * const serviceDocumentWithIdOnly = await prisma.serviceDocument.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more ServiceDocuments and only return the `serviceDocumentId`
+   * const serviceDocumentWithServiceDocumentIdOnly = await prisma.serviceDocument.updateManyAndReturn({
+   *   select: { serviceDocumentId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1234,8 +1237,8 @@ export interface Prisma__ServiceDocumentClient<T, Null = never, ExtArgs extends 
  * Fields of the ServiceDocument model
  */
 export interface ServiceDocumentFieldRefs {
-  readonly id: Prisma.FieldRef<"ServiceDocument", 'String'>
-  readonly seq: Prisma.FieldRef<"ServiceDocument", 'Int'>
+  readonly serviceDocumentId: Prisma.FieldRef<"ServiceDocument", 'String'>
+  readonly id: Prisma.FieldRef<"ServiceDocument", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"ServiceDocument", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ServiceDocument", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"ServiceDocument", 'DateTime'>

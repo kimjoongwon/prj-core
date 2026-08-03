@@ -1,4 +1,4 @@
-import { StringField } from "@cocrepo/decorator";
+import { StringField } from "@cocrepo/decorator/field";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class NativeTokenRefreshPayloadDto {

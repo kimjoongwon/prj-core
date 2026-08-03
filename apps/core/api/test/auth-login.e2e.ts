@@ -1,6 +1,7 @@
 import { MOBILE_NATIVE_CLIENT_ID } from "@cocrepo/constant";
 import { AuthCacheService, TokenStorageService } from "@cocrepo/service";
 import { INestApplication } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
 import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
 import { AppModule } from "../src/module/app.module";
@@ -23,6 +24,7 @@ describe("Auth Login API E2E 테스트", () => {
 	let app: INestApplication;
 	let tokenStorageService: TokenStorageService;
 	let authCacheService: AuthCacheService;
+	let jwtService: JwtService;
 	const createdSessions: Array<{ userId: string; sessionId: string }> = [];
 
 	const adminEmail = process.env.E2E_ADMIN_EMAIL ?? "admin@plate.com";
@@ -39,6 +41,7 @@ describe("Auth Login API E2E 테스트", () => {
 
 		tokenStorageService = app.get(TokenStorageService);
 		authCacheService = app.get(AuthCacheService);
+		jwtService = app.get(JwtService);
 	}, 60000);
 
 	afterAll(async () => {
@@ -94,12 +97,16 @@ describe("Auth Login API E2E 테스트", () => {
 
 			const data = response.body.data as NativeLoginResponseData;
 			expect(data.accessToken.split(".")).toHaveLength(3);
+			const tokenPayload = jwtService.decode(data.accessToken) as {
+				sub?: string;
+			};
+			expect(tokenPayload.sub).toMatch(/^[0-9A-HJKMNP-TV-Z]{26}$/);
 			expect(data.user.password).toBeUndefined();
 			expect(data.accessTokenExpiresAt).toBeGreaterThan(Date.now());
 			expect(data.refreshTokenExpiresAt).toBeGreaterThan(Date.now());
 
 			createdSessions.push({
-				userId: data.user.id,
+				userId: tokenPayload.sub!,
 				sessionId: data.sessionId,
 			});
 
@@ -108,7 +115,7 @@ describe("Auth Login API E2E 테스트", () => {
 			);
 			expect(storedSession).toEqual(
 				expect.objectContaining({
-					userId: data.user.id,
+					userId: tokenPayload.sub,
 					sessionId: data.sessionId,
 					session: expect.objectContaining({
 						refreshToken: data.refreshToken,

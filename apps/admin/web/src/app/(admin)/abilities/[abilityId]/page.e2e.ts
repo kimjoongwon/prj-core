@@ -23,21 +23,24 @@ test.describe("권한 상세 페이지", () => {
 		await gotoAbilitiesPage(page);
 
 		// When: 첫 번째 목록 행을 클릭
-		const firstRow = page.getByRole("grid").getByRole("row").nth(1);
+		const firstRow = page
+			.getByRole("table", { name: "데이터 테이블" })
+			.getByRole("row")
+			.nth(1);
 		await expect(firstRow).toBeVisible({
 			timeout: ROUTE_READY_TIMEOUT,
 		});
 		await Promise.all([
-			page.waitForURL(/\/abilities\/[^/]+$/, {
+			page.waitForURL(/\/abilities\/[1-9]\d*$/, {
 				timeout: ROUTE_READY_TIMEOUT,
 			}),
 			firstRow.click(),
 		]);
 
 		// Then: 상세 페이지 URL 확인
-		await expect(page).toHaveURL(/\/abilities\//);
+		await expect(page).toHaveURL(/\/abilities\/[1-9]\d*$/);
 		await expect(
-			page.getByRole("heading", { name: "권한 상세" }),
+			page.getByRole("heading", { name: "Ability 상세" }),
 		).toBeVisible();
 	});
 });

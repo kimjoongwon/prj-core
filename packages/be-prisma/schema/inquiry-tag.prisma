@@ -2,23 +2,23 @@
 // @description: Inquiry에 종속되는 태그 컬렉션
 /// @displayName 문의 태그
 model InquiryTag {
-  id         String    @unique @default(ulid()) @db.VarChar(26)
-  seq        Int       @id @default(autoincrement())
+  inquiryTagId String    @unique @default(ulid()) @map("inquiry_tag_id") @db.Char(26)
+  id           BigInt    @id @default(autoincrement())
   /// @displayName 생성 일시
-  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   /// @displayName 수정 일시
-  updatedAt  DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedAt    DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   /// @displayName 삭제 일시
-  removedAt  DateTime? @map("removed_at") @db.Timestamptz(6)
+  removedAt    DateTime? @map("removed_at") @db.Timestamptz(6)
   /// @displayName 소속 문의 내부 순번
-  inquirySeq Int       @map("inquiry_seq")
+  inquiryId    BigInt    @map("inquiry_id")
   /// @displayName 태그명
-  name       String
+  name         String
   /// @displayName 색상
-  color      String?
-  inquiry    Inquiry   @relation(fields: [inquirySeq], references: [seq], onDelete: Cascade)
+  color        String?
+  inquiry      Inquiry   @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
 
-  @@unique([inquirySeq, name])
-  @@index([inquirySeq])
+  @@unique([inquiryId, name])
+  @@index([inquiryId])
   @@map("inquiry_tags")
 }

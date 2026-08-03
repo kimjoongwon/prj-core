@@ -1,6 +1,10 @@
 import { CONTEXT_KEYS, type SystemRoleName } from "@cocrepo/constant";
 import { ROLES_KEY } from "@cocrepo/decorator";
-import type { ContextTenantSnapshot, ContextUserSnapshot } from "@cocrepo/type";
+import type {
+	ContextTenantSnapshot,
+	ContextUserSnapshot,
+	DatabaseId,
+} from "@cocrepo/type";
 import {
 	type CanActivate,
 	type ExecutionContext,
@@ -45,7 +49,7 @@ export class RolesGuard implements CanActivate {
 		const tenant = this.cls.get<ContextTenantSnapshot | undefined>(
 			CONTEXT_KEYS.TENANT,
 		);
-		const spaceId = this.cls.get<string | undefined>(CONTEXT_KEYS.SPACE_ID);
+		const spaceId = this.cls.get<DatabaseId | undefined>(CONTEXT_KEYS.SPACE_ID);
 
 		if (!tenant) {
 			throw new ForbiddenException("해당 Space에 대한 테넌트가 없습니다.");

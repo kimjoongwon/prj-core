@@ -1,4 +1,4 @@
-import { ParseUlidPipe, RolesGuard } from "@cocrepo/be-common";
+import { ParseBigIntIdPipe, RolesGuard } from "@cocrepo/be-common";
 import {
 	CreateTemplateCommand,
 	DeleteTemplateCommand,
@@ -80,13 +80,15 @@ export class TemplatesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "templateId",
-		description: "템플릿 ID (ULID)",
+		description: "템플릿 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)
 	@ApiResponseEntity(TemplateDto, HttpStatus.OK)
 	@ResponseMessage("템플릿 조회 성공")
-	async getTemplate(@Param("templateId", ParseUlidPipe) templateId: string) {
+	async getTemplate(
+		@Param("templateId", ParseBigIntIdPipe) templateId: bigint,
+	) {
 		return this.queryBus.execute(new GetTemplateByIdQuery(templateId));
 	}
 
@@ -124,7 +126,7 @@ export class TemplatesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "templateId",
-		description: "템플릿 ID (ULID)",
+		description: "템플릿 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiBody({
@@ -135,7 +137,7 @@ export class TemplatesController {
 	@ApiResponseEntity(TemplateDto, HttpStatus.OK)
 	@ResponseMessage("템플릿 수정 성공")
 	async updateTemplate(
-		@Param("templateId", ParseUlidPipe) templateId: string,
+		@Param("templateId", ParseBigIntIdPipe) templateId: bigint,
 		@Body() dto: UpdateTemplateDto,
 	) {
 		return this.commandBus.execute(new UpdateTemplateCommand(templateId, dto));
@@ -153,13 +155,13 @@ export class TemplatesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "templateId",
-		description: "템플릿 ID (ULID)",
+		description: "템플릿 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)
 	@ResponseMessage("템플릿 삭제 성공")
 	async deleteTemplate(
-		@Param("templateId", ParseUlidPipe) templateId: string,
+		@Param("templateId", ParseBigIntIdPipe) templateId: bigint,
 	): Promise<void> {
 		await this.commandBus.execute(new DeleteTemplateCommand(templateId));
 	}
@@ -177,14 +179,14 @@ export class TemplatesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "templateId",
-		description: "템플릿 ID (ULID)",
+		description: "템플릿 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)
 	@ApiResponseEntity(TemplateDto, HttpStatus.OK)
 	@ResponseMessage("템플릿 상태 변경 성공")
 	async toggleTemplateStatus(
-		@Param("templateId", ParseUlidPipe) templateId: string,
+		@Param("templateId", ParseBigIntIdPipe) templateId: bigint,
 	) {
 		return this.commandBus.execute(new ToggleTemplateStatusCommand(templateId));
 	}
@@ -202,7 +204,7 @@ export class TemplatesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "templateId",
-		description: "템플릿 ID (ULID)",
+		description: "템플릿 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiBody({
@@ -212,7 +214,7 @@ export class TemplatesController {
 	@ApiErrors(401, 403, 404, 500)
 	@ResponseMessage("템플릿 미리보기 성공")
 	async previewTemplate(
-		@Param("templateId", ParseUlidPipe) templateId: string,
+		@Param("templateId", ParseBigIntIdPipe) templateId: bigint,
 		@Body() dto: PreviewTemplateDto,
 	) {
 		return this.queryBus.execute(new PreviewTemplateQuery(templateId, dto));
@@ -231,7 +233,7 @@ export class TemplatesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "templateId",
-		description: "템플릿 ID (ULID)",
+		description: "템플릿 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiBody({
@@ -241,7 +243,7 @@ export class TemplatesController {
 	@ApiErrors(400, 401, 403, 404, 500)
 	@ResponseMessage("테스트 발송 성공")
 	async sendTestTemplate(
-		@Param("templateId", ParseUlidPipe) templateId: string,
+		@Param("templateId", ParseBigIntIdPipe) templateId: bigint,
 		@Body() dto: SendTestTemplateDto,
 	) {
 		return this.commandBus.execute(

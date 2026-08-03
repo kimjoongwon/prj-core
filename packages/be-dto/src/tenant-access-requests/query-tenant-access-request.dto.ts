@@ -1,9 +1,9 @@
 import {
+	BigIntIdFieldOptional,
 	DateFieldOptional,
 	EnumFieldOptional,
 	StringFieldOptional,
-	ULIDFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import { TenantAccessRequestStatus } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
 import { QueryDto } from "../query/query.dto";
@@ -19,15 +19,15 @@ export class QueryTenantAccessRequestDto extends QueryDto {
 	})
 	status?: TenantAccessRequestStatus;
 
-	@ULIDFieldOptional({
+	@BigIntIdFieldOptional({
 		description: "Space ID 필터",
 	})
-	spaceId?: string;
+	spaceId?: bigint;
 
-	@ULIDFieldOptional({
+	@BigIntIdFieldOptional({
 		description: "신청자 ID 필터",
 	})
-	requesterId?: string;
+	requesterId?: bigint;
 
 	@DateFieldOptional({
 		description: "신청일 시작 (ISO8601)",

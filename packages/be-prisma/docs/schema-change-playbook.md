@@ -503,6 +503,12 @@ reference-data sync와 새 data migration으로 값을 맞춥니다.
 
 삭제와 이름 변경은 추가보다 위험합니다. 예전 앱이 아직 그 필드를 사용할 수 있기 때문입니다.
 
+### 식별자 계약을 전체 전환할 때
+
+모든 모델의 내부 PK/FK 식별자 계약을 한 번에 바꾸는 작업은 일반 필드 이름 변경보다 영향 범위가 큽니다. 이 경우에도 기준 계약은 [schema-file-conventions.md](./schema-file-conventions.md)의 식별자 규칙을 따릅니다.
+
+승인된 전체 baseline 전환 지시가 있을 때만 기존 schema migration SQL을 현재 schema 기준의 단일 baseline으로 교체합니다. 일반 운영 변경에서는 이미 실행됐을 수 있는 migration을 고치지 않고 새 migration을 추가합니다.
+
 ### 안전한 삭제 순서
 
 ```text

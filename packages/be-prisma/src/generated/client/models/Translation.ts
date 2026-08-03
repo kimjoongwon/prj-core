@@ -27,16 +27,16 @@ export type AggregateTranslation = {
 }
 
 export type TranslationAvgAggregateOutputType = {
-  seq: number | null
+  id: number | null
 }
 
 export type TranslationSumAggregateOutputType = {
-  seq: number | null
+  id: bigint | null
 }
 
 export type TranslationMinAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  translationId: string | null
+  id: bigint | null
   languageCode: $Enums.LanguageCode | null
   key: string | null
   text: string | null
@@ -47,8 +47,8 @@ export type TranslationMinAggregateOutputType = {
 }
 
 export type TranslationMaxAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  translationId: string | null
+  id: bigint | null
   languageCode: $Enums.LanguageCode | null
   key: string | null
   text: string | null
@@ -59,8 +59,8 @@ export type TranslationMaxAggregateOutputType = {
 }
 
 export type TranslationCountAggregateOutputType = {
+  translationId: number
   id: number
-  seq: number
   languageCode: number
   key: number
   text: number
@@ -73,16 +73,16 @@ export type TranslationCountAggregateOutputType = {
 
 
 export type TranslationAvgAggregateInputType = {
-  seq?: true
+  id?: true
 }
 
 export type TranslationSumAggregateInputType = {
-  seq?: true
+  id?: true
 }
 
 export type TranslationMinAggregateInputType = {
+  translationId?: true
   id?: true
-  seq?: true
   languageCode?: true
   key?: true
   text?: true
@@ -93,8 +93,8 @@ export type TranslationMinAggregateInputType = {
 }
 
 export type TranslationMaxAggregateInputType = {
+  translationId?: true
   id?: true
-  seq?: true
   languageCode?: true
   key?: true
   text?: true
@@ -105,8 +105,8 @@ export type TranslationMaxAggregateInputType = {
 }
 
 export type TranslationCountAggregateInputType = {
+  translationId?: true
   id?: true
-  seq?: true
   languageCode?: true
   key?: true
   text?: true
@@ -204,8 +204,8 @@ export type TranslationGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 export type TranslationGroupByOutputType = {
-  id: string
-  seq: number
+  translationId: string
+  id: bigint
   languageCode: $Enums.LanguageCode
   key: string
   text: string
@@ -239,8 +239,8 @@ export type TranslationWhereInput = {
   AND?: Prisma.TranslationWhereInput | Prisma.TranslationWhereInput[]
   OR?: Prisma.TranslationWhereInput[]
   NOT?: Prisma.TranslationWhereInput | Prisma.TranslationWhereInput[]
-  id?: Prisma.StringFilter<"Translation"> | string
-  seq?: Prisma.IntFilter<"Translation"> | number
+  translationId?: Prisma.StringFilter<"Translation"> | string
+  id?: Prisma.BigIntFilter<"Translation"> | bigint | number
   languageCode?: Prisma.EnumLanguageCodeFilter<"Translation"> | $Enums.LanguageCode
   key?: Prisma.StringFilter<"Translation"> | string
   text?: Prisma.StringFilter<"Translation"> | string
@@ -251,8 +251,8 @@ export type TranslationWhereInput = {
 }
 
 export type TranslationOrderByWithRelationInput = {
+  translationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   languageCode?: Prisma.SortOrder
   key?: Prisma.SortOrder
   text?: Prisma.SortOrder
@@ -263,8 +263,8 @@ export type TranslationOrderByWithRelationInput = {
 }
 
 export type TranslationWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  seq?: number
+  translationId?: string
+  id?: bigint | number
   languageCode_key?: Prisma.TranslationLanguageCodeKeyCompoundUniqueInput
   AND?: Prisma.TranslationWhereInput | Prisma.TranslationWhereInput[]
   OR?: Prisma.TranslationWhereInput[]
@@ -276,11 +276,11 @@ export type TranslationWhereUniqueInput = Prisma.AtLeast<{
   isTranslated?: Prisma.BoolFilter<"Translation"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Translation"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Translation"> | Date | string | null
-}, "seq" | "id" | "languageCode_key">
+}, "id" | "translationId" | "languageCode_key">
 
 export type TranslationOrderByWithAggregationInput = {
+  translationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   languageCode?: Prisma.SortOrder
   key?: Prisma.SortOrder
   text?: Prisma.SortOrder
@@ -299,8 +299,8 @@ export type TranslationScalarWhereWithAggregatesInput = {
   AND?: Prisma.TranslationScalarWhereWithAggregatesInput | Prisma.TranslationScalarWhereWithAggregatesInput[]
   OR?: Prisma.TranslationScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TranslationScalarWhereWithAggregatesInput | Prisma.TranslationScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"Translation"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"Translation"> | number
+  translationId?: Prisma.StringWithAggregatesFilter<"Translation"> | string
+  id?: Prisma.BigIntWithAggregatesFilter<"Translation"> | bigint | number
   languageCode?: Prisma.EnumLanguageCodeWithAggregatesFilter<"Translation"> | $Enums.LanguageCode
   key?: Prisma.StringWithAggregatesFilter<"Translation"> | string
   text?: Prisma.StringWithAggregatesFilter<"Translation"> | string
@@ -311,7 +311,8 @@ export type TranslationScalarWhereWithAggregatesInput = {
 }
 
 export type TranslationCreateInput = {
-  id?: string
+  translationId?: string
+  id?: bigint | number
   languageCode: $Enums.LanguageCode
   key: string
   text: string
@@ -322,8 +323,8 @@ export type TranslationCreateInput = {
 }
 
 export type TranslationUncheckedCreateInput = {
-  id?: string
-  seq?: number
+  translationId?: string
+  id?: bigint | number
   languageCode: $Enums.LanguageCode
   key: string
   text: string
@@ -334,7 +335,8 @@ export type TranslationUncheckedCreateInput = {
 }
 
 export type TranslationUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  translationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   languageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   key?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
@@ -345,8 +347,8 @@ export type TranslationUpdateInput = {
 }
 
 export type TranslationUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  translationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   languageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   key?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
@@ -357,8 +359,8 @@ export type TranslationUncheckedUpdateInput = {
 }
 
 export type TranslationCreateManyInput = {
-  id?: string
-  seq?: number
+  translationId?: string
+  id?: bigint | number
   languageCode: $Enums.LanguageCode
   key: string
   text: string
@@ -369,7 +371,8 @@ export type TranslationCreateManyInput = {
 }
 
 export type TranslationUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  translationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   languageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   key?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
@@ -380,8 +383,8 @@ export type TranslationUpdateManyMutationInput = {
 }
 
 export type TranslationUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  translationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   languageCode?: Prisma.EnumLanguageCodeFieldUpdateOperationsInput | $Enums.LanguageCode
   key?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
@@ -397,8 +400,8 @@ export type TranslationLanguageCodeKeyCompoundUniqueInput = {
 }
 
 export type TranslationCountOrderByAggregateInput = {
+  translationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   languageCode?: Prisma.SortOrder
   key?: Prisma.SortOrder
   text?: Prisma.SortOrder
@@ -409,12 +412,12 @@ export type TranslationCountOrderByAggregateInput = {
 }
 
 export type TranslationAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
 }
 
 export type TranslationMaxOrderByAggregateInput = {
+  translationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   languageCode?: Prisma.SortOrder
   key?: Prisma.SortOrder
   text?: Prisma.SortOrder
@@ -425,8 +428,8 @@ export type TranslationMaxOrderByAggregateInput = {
 }
 
 export type TranslationMinOrderByAggregateInput = {
+  translationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   languageCode?: Prisma.SortOrder
   key?: Prisma.SortOrder
   text?: Prisma.SortOrder
@@ -437,14 +440,14 @@ export type TranslationMinOrderByAggregateInput = {
 }
 
 export type TranslationSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
 }
 
 
 
 export type TranslationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  translationId?: boolean
   id?: boolean
-  seq?: boolean
   languageCode?: boolean
   key?: boolean
   text?: boolean
@@ -455,8 +458,8 @@ export type TranslationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
 }, ExtArgs["result"]["translation"]>
 
 export type TranslationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  translationId?: boolean
   id?: boolean
-  seq?: boolean
   languageCode?: boolean
   key?: boolean
   text?: boolean
@@ -467,8 +470,8 @@ export type TranslationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
 }, ExtArgs["result"]["translation"]>
 
 export type TranslationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  translationId?: boolean
   id?: boolean
-  seq?: boolean
   languageCode?: boolean
   key?: boolean
   text?: boolean
@@ -479,8 +482,8 @@ export type TranslationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
 }, ExtArgs["result"]["translation"]>
 
 export type TranslationSelectScalar = {
+  translationId?: boolean
   id?: boolean
-  seq?: boolean
   languageCode?: boolean
   key?: boolean
   text?: boolean
@@ -490,7 +493,7 @@ export type TranslationSelectScalar = {
   updatedAt?: boolean
 }
 
-export type TranslationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "languageCode" | "key" | "text" | "category" | "isTranslated" | "createdAt" | "updatedAt", ExtArgs["result"]["translation"]>
+export type TranslationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"translationId" | "id" | "languageCode" | "key" | "text" | "category" | "isTranslated" | "createdAt" | "updatedAt", ExtArgs["result"]["translation"]>
 
 export type $TranslationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Translation"
@@ -499,8 +502,8 @@ export type $TranslationPayload<ExtArgs extends runtime.Types.Extensions.Interna
     /**
      * @displayName ID
      */
-    id: string
-    seq: number
+    translationId: string
+    id: bigint
     /**
      * @displayName 언어 코드
      */
@@ -612,8 +615,8 @@ export interface TranslationDelegate<ExtArgs extends runtime.Types.Extensions.In
    * // Get first 10 Translations
    * const translations = await prisma.translation.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const translationWithIdOnly = await prisma.translation.findMany({ select: { id: true } })
+   * // Only select the `translationId`
+   * const translationWithTranslationIdOnly = await prisma.translation.findMany({ select: { translationId: true } })
    * 
    */
   findMany<T extends TranslationFindManyArgs>(args?: Prisma.SelectSubset<T, TranslationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -657,9 +660,9 @@ export interface TranslationDelegate<ExtArgs extends runtime.Types.Extensions.In
    *   ]
    * })
    * 
-   * // Create many Translations and only return the `id`
-   * const translationWithIdOnly = await prisma.translation.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many Translations and only return the `translationId`
+   * const translationWithTranslationIdOnly = await prisma.translation.createManyAndReturn({
+   *   select: { translationId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -748,9 +751,9 @@ export interface TranslationDelegate<ExtArgs extends runtime.Types.Extensions.In
    *   ]
    * })
    * 
-   * // Update zero or more Translations and only return the `id`
-   * const translationWithIdOnly = await prisma.translation.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more Translations and only return the `translationId`
+   * const translationWithTranslationIdOnly = await prisma.translation.updateManyAndReturn({
+   *   select: { translationId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -952,8 +955,8 @@ export interface Prisma__TranslationClient<T, Null = never, ExtArgs extends runt
  * Fields of the Translation model
  */
 export interface TranslationFieldRefs {
-  readonly id: Prisma.FieldRef<"Translation", 'String'>
-  readonly seq: Prisma.FieldRef<"Translation", 'Int'>
+  readonly translationId: Prisma.FieldRef<"Translation", 'String'>
+  readonly id: Prisma.FieldRef<"Translation", 'BigInt'>
   readonly languageCode: Prisma.FieldRef<"Translation", 'LanguageCode'>
   readonly key: Prisma.FieldRef<"Translation", 'String'>
   readonly text: Prisma.FieldRef<"Translation", 'String'>

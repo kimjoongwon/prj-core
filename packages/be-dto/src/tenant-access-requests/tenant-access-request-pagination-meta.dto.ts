@@ -1,4 +1,4 @@
-import { NumberField } from "@cocrepo/decorator";
+import { NumberField } from "@cocrepo/decorator/field";
 
 export class TenantAccessRequestPaginationMetaDto {
 	@NumberField({ description: "전체 신청 수" })

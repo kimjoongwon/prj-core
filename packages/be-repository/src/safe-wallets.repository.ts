@@ -1,18 +1,24 @@
 import type { DomainData } from "@cocrepo/entity";
-import { Prisma, PrismaClient, SafeWallet } from "@cocrepo/prisma";
+import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import type {
-	PublicIdCreateInput,
-	PublicIdUpdateInput,
-} from "./public-id-input.type";
+	AutoIdentityCreateInput,
+	AutoIdentityUpdateInput,
+} from "./auto-identity-input.type";
 import { toDomainData } from "./to-domain-entity";
 
-type SafeWalletRecord = DomainData<SafeWallet> & {
-	spaceId: string;
-	createdById: string | null;
-};
+const safeWalletInclude = {
+	space: true,
+	createdBy: true,
+} satisfies Prisma.SafeWalletInclude;
+
+type SafeWalletPersistenceRecord = Prisma.SafeWalletGetPayload<{
+	include: typeof safeWalletInclude;
+}>;
+
+type SafeWalletRecord = DomainData<SafeWalletPersistenceRecord>;
 
 @Injectable()
 export class SafeWalletsRepository {
@@ -26,33 +32,32 @@ export class SafeWalletsRepository {
 		this.logger = new Logger("SafeWalletsRepository");
 	}
 
-	async findById(id: string): Promise<SafeWalletRecord | null> {
-		this.logger.debug(`ID로 조회: ${id.slice(-8)}`);
+	async findById(id: bigint): Promise<SafeWalletRecord | null> {
+		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.safeWallet.findUnique({
 			where: { id },
-			include: { space: true, createdBy: true },
+			include: safeWalletInclude,
 		});
 
-		return result ? (toDomainData(result) as SafeWalletRecord) : null;
+		return result ? toDomainData(result) : null;
 	}
 
 	async findByIdWithTransactions(id: string): Promise<SafeWalletRecord | null> {
-		this.logger.debug(`트랜잭션 포함 조회: ${id.slice(-8)}`);
+		this.logger.debug(`트랜잭션 포함 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.safeWallet.findUnique({
-			where: { id },
+			where: { safeWalletId: id },
 			include: {
 				transactions: {
 					orderBy: [{ createdAt: "desc" }],
 					include: { confirmations: true },
 				},
-				space: true,
-				createdBy: true,
+				...safeWalletInclude,
 			},
 		});
 
-		return result ? (toDomainData(result) as SafeWalletRecord) : null;
+		return result ? toDomainData(result) : null;
 	}
 
 	async findByAddress(address: string): Promise<SafeWalletRecord | null> {
@@ -66,16 +71,16 @@ export class SafeWalletsRepository {
 		return result ? (toDomainData(result) as SafeWalletRecord) : null;
 	}
 
-	async findBySpaceId(spaceId: string): Promise<SafeWalletRecord[]> {
-		this.logger.debug(`Space별 지갑 조회: ${spaceId.slice(-8)}`);
+	async findBySpaceId(spaceId: bigint): Promise<SafeWalletRecord[]> {
+		this.logger.debug(`Space별 지갑 조회: ${spaceId.toString()}`);
 
 		const results = await this.txHost.tx.safeWallet.findMany({
-			where: { space: { id: spaceId }, removedAt: null },
-			include: { space: true, createdBy: true },
+			where: { spaceId, removedAt: null },
+			include: safeWalletInclude,
 			orderBy: [{ createdAt: "desc" }],
 		});
 
-		return toDomainData(results) as SafeWalletRecord[];
+		return results.map((result) => toDomainData(result));
 	}
 
 	async findMany(params: {
@@ -90,77 +95,57 @@ export class SafeWalletsRepository {
 				orderBy: params.orderBy ?? [{ createdAt: "desc" }],
 				skip: params.skip,
 				take: params.take,
-				include: { space: true, createdBy: true },
+				include: safeWalletInclude,
 			}),
 			this.txHost.tx.safeWallet.count({ where: params.where }),
 		]);
 
 		return {
-			wallets: toDomainData(wallets) as SafeWalletRecord[],
+			wallets: wallets.map((wallet) => toDomainData(wallet)),
 			totalCount,
 		};
 	}
 
 	async create(
-		data: PublicIdCreateInput<
+		data: AutoIdentityCreateInput<
 			Prisma.SafeWalletUncheckedCreateInput,
-			"space",
-			"createdBy"
+			"safeWalletId"
 		>,
 	): Promise<SafeWalletRecord> {
 		this.logger.debug(`지갑 생성: ${data.address}`);
-
-		const { spaceId, createdById, ...walletData } = data;
 		const result = await this.txHost.tx.safeWallet.create({
-			data: {
-				...walletData,
-				space: { connect: { id: spaceId } },
-				...(createdById ? { createdBy: { connect: { id: createdById } } } : {}),
-			},
-			include: { space: true, createdBy: true },
+			data,
+			include: safeWalletInclude,
 		});
 
-		return toDomainData(result) as SafeWalletRecord;
+		return toDomainData(result);
 	}
 
 	async updateById(
-		id: string,
-		data: PublicIdUpdateInput<
+		id: bigint,
+		data: AutoIdentityUpdateInput<
 			Prisma.SafeWalletUncheckedUpdateInput,
-			"space",
-			"createdBy"
+			"safeWalletId"
 		>,
 	): Promise<SafeWalletRecord> {
-		this.logger.debug(`지갑 수정: ${id.slice(-8)}`);
-
-		const { spaceId, createdById, ...walletData } = data;
+		this.logger.debug(`지갑 수정: ${id.toString()}`);
 		const result = await this.txHost.tx.safeWallet.update({
 			where: { id },
-			data: {
-				...walletData,
-				...(spaceId !== undefined
-					? { space: { connect: { id: spaceId } } }
-					: {}),
-				...(createdById !== undefined
-					? createdById === null
-						? { createdBy: { disconnect: true } }
-						: { createdBy: { connect: { id: createdById } } }
-					: {}),
-			},
-			include: { space: true, createdBy: true },
+			data,
+			include: safeWalletInclude,
 		});
 
-		return toDomainData(result) as SafeWalletRecord;
+		return toDomainData(result);
 	}
 
-	async removeById(id: string): Promise<SafeWalletRecord> {
-		this.logger.debug(`지갑 삭제: ${id.slice(-8)}`);
+	async removeById(id: bigint): Promise<SafeWalletRecord> {
+		this.logger.debug(`지갑 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.safeWallet.delete({
 			where: { id },
-			include: { space: true, createdBy: true },
+			include: safeWalletInclude,
 		});
 
-		return toDomainData(result) as SafeWalletRecord;
+		return toDomainData(result);
 	}
 }

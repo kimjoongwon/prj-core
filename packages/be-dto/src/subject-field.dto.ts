@@ -2,7 +2,7 @@ import {
 	BooleanField,
 	StringField,
 	StringFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 
 /**
  * Subject 필드 정보 DTO (DMMF 기반)

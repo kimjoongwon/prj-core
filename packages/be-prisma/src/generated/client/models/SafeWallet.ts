@@ -27,26 +27,26 @@ export type AggregateSafeWallet = {
 }
 
 export type SafeWalletAvgAggregateOutputType = {
-  seq: number | null
+  id: number | null
   chainId: number | null
   threshold: number | null
   nonce: number | null
-  spaceSeq: number | null
-  createdBySeq: number | null
+  spaceId: number | null
+  createdById: number | null
 }
 
 export type SafeWalletSumAggregateOutputType = {
-  seq: number | null
+  id: bigint | null
   chainId: number | null
   threshold: number | null
   nonce: number | null
-  spaceSeq: number | null
-  createdBySeq: number | null
+  spaceId: bigint | null
+  createdById: bigint | null
 }
 
 export type SafeWalletMinAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  safeWalletId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -54,13 +54,13 @@ export type SafeWalletMinAggregateOutputType = {
   chainId: number | null
   threshold: number | null
   nonce: number | null
-  spaceSeq: number | null
-  createdBySeq: number | null
+  spaceId: bigint | null
+  createdById: bigint | null
 }
 
 export type SafeWalletMaxAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  safeWalletId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -68,13 +68,13 @@ export type SafeWalletMaxAggregateOutputType = {
   chainId: number | null
   threshold: number | null
   nonce: number | null
-  spaceSeq: number | null
-  createdBySeq: number | null
+  spaceId: bigint | null
+  createdById: bigint | null
 }
 
 export type SafeWalletCountAggregateOutputType = {
+  safeWalletId: number
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -83,33 +83,33 @@ export type SafeWalletCountAggregateOutputType = {
   threshold: number
   nonce: number
   owners: number
-  spaceSeq: number
-  createdBySeq: number
+  spaceId: number
+  createdById: number
   _all: number
 }
 
 
 export type SafeWalletAvgAggregateInputType = {
-  seq?: true
+  id?: true
   chainId?: true
   threshold?: true
   nonce?: true
-  spaceSeq?: true
-  createdBySeq?: true
+  spaceId?: true
+  createdById?: true
 }
 
 export type SafeWalletSumAggregateInputType = {
-  seq?: true
+  id?: true
   chainId?: true
   threshold?: true
   nonce?: true
-  spaceSeq?: true
-  createdBySeq?: true
+  spaceId?: true
+  createdById?: true
 }
 
 export type SafeWalletMinAggregateInputType = {
+  safeWalletId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -117,13 +117,13 @@ export type SafeWalletMinAggregateInputType = {
   chainId?: true
   threshold?: true
   nonce?: true
-  spaceSeq?: true
-  createdBySeq?: true
+  spaceId?: true
+  createdById?: true
 }
 
 export type SafeWalletMaxAggregateInputType = {
+  safeWalletId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -131,13 +131,13 @@ export type SafeWalletMaxAggregateInputType = {
   chainId?: true
   threshold?: true
   nonce?: true
-  spaceSeq?: true
-  createdBySeq?: true
+  spaceId?: true
+  createdById?: true
 }
 
 export type SafeWalletCountAggregateInputType = {
+  safeWalletId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -146,8 +146,8 @@ export type SafeWalletCountAggregateInputType = {
   threshold?: true
   nonce?: true
   owners?: true
-  spaceSeq?: true
-  createdBySeq?: true
+  spaceId?: true
+  createdById?: true
   _all?: true
 }
 
@@ -238,8 +238,8 @@ export type SafeWalletGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 export type SafeWalletGroupByOutputType = {
-  id: string
-  seq: number
+  safeWalletId: string
+  id: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
@@ -248,8 +248,8 @@ export type SafeWalletGroupByOutputType = {
   threshold: number
   nonce: number
   owners: string[]
-  spaceSeq: number
-  createdBySeq: number | null
+  spaceId: bigint
+  createdById: bigint | null
   _count: SafeWalletCountAggregateOutputType | null
   _avg: SafeWalletAvgAggregateOutputType | null
   _sum: SafeWalletSumAggregateOutputType | null
@@ -276,8 +276,8 @@ export type SafeWalletWhereInput = {
   AND?: Prisma.SafeWalletWhereInput | Prisma.SafeWalletWhereInput[]
   OR?: Prisma.SafeWalletWhereInput[]
   NOT?: Prisma.SafeWalletWhereInput | Prisma.SafeWalletWhereInput[]
-  id?: Prisma.StringFilter<"SafeWallet"> | string
-  seq?: Prisma.IntFilter<"SafeWallet"> | number
+  safeWalletId?: Prisma.StringFilter<"SafeWallet"> | string
+  id?: Prisma.BigIntFilter<"SafeWallet"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"SafeWallet"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"SafeWallet"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"SafeWallet"> | Date | string | null
@@ -286,16 +286,16 @@ export type SafeWalletWhereInput = {
   threshold?: Prisma.IntFilter<"SafeWallet"> | number
   nonce?: Prisma.IntFilter<"SafeWallet"> | number
   owners?: Prisma.StringNullableListFilter<"SafeWallet">
-  spaceSeq?: Prisma.IntFilter<"SafeWallet"> | number
-  createdBySeq?: Prisma.IntNullableFilter<"SafeWallet"> | number | null
+  spaceId?: Prisma.BigIntFilter<"SafeWallet"> | bigint | number
+  createdById?: Prisma.BigIntNullableFilter<"SafeWallet"> | bigint | number | null
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   transactions?: Prisma.SafeTransactionListRelationFilter
 }
 
 export type SafeWalletOrderByWithRelationInput = {
+  safeWalletId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -304,16 +304,16 @@ export type SafeWalletOrderByWithRelationInput = {
   threshold?: Prisma.SortOrder
   nonce?: Prisma.SortOrder
   owners?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   space?: Prisma.SpaceOrderByWithRelationInput
   createdBy?: Prisma.UserOrderByWithRelationInput
   transactions?: Prisma.SafeTransactionOrderByRelationAggregateInput
 }
 
 export type SafeWalletWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  seq?: number
+  safeWalletId?: string
+  id?: bigint | number
   address?: string
   AND?: Prisma.SafeWalletWhereInput | Prisma.SafeWalletWhereInput[]
   OR?: Prisma.SafeWalletWhereInput[]
@@ -325,16 +325,16 @@ export type SafeWalletWhereUniqueInput = Prisma.AtLeast<{
   threshold?: Prisma.IntFilter<"SafeWallet"> | number
   nonce?: Prisma.IntFilter<"SafeWallet"> | number
   owners?: Prisma.StringNullableListFilter<"SafeWallet">
-  spaceSeq?: Prisma.IntFilter<"SafeWallet"> | number
-  createdBySeq?: Prisma.IntNullableFilter<"SafeWallet"> | number | null
+  spaceId?: Prisma.BigIntFilter<"SafeWallet"> | bigint | number
+  createdById?: Prisma.BigIntNullableFilter<"SafeWallet"> | bigint | number | null
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   transactions?: Prisma.SafeTransactionListRelationFilter
-}, "seq" | "id" | "address">
+}, "id" | "safeWalletId" | "address">
 
 export type SafeWalletOrderByWithAggregationInput = {
+  safeWalletId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -343,8 +343,8 @@ export type SafeWalletOrderByWithAggregationInput = {
   threshold?: Prisma.SortOrder
   nonce?: Prisma.SortOrder
   owners?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.SafeWalletCountOrderByAggregateInput
   _avg?: Prisma.SafeWalletAvgOrderByAggregateInput
   _max?: Prisma.SafeWalletMaxOrderByAggregateInput
@@ -356,8 +356,8 @@ export type SafeWalletScalarWhereWithAggregatesInput = {
   AND?: Prisma.SafeWalletScalarWhereWithAggregatesInput | Prisma.SafeWalletScalarWhereWithAggregatesInput[]
   OR?: Prisma.SafeWalletScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SafeWalletScalarWhereWithAggregatesInput | Prisma.SafeWalletScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"SafeWallet"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"SafeWallet"> | number
+  safeWalletId?: Prisma.StringWithAggregatesFilter<"SafeWallet"> | string
+  id?: Prisma.BigIntWithAggregatesFilter<"SafeWallet"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SafeWallet"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"SafeWallet"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"SafeWallet"> | Date | string | null
@@ -366,12 +366,13 @@ export type SafeWalletScalarWhereWithAggregatesInput = {
   threshold?: Prisma.IntWithAggregatesFilter<"SafeWallet"> | number
   nonce?: Prisma.IntWithAggregatesFilter<"SafeWallet"> | number
   owners?: Prisma.StringNullableListFilter<"SafeWallet">
-  spaceSeq?: Prisma.IntWithAggregatesFilter<"SafeWallet"> | number
-  createdBySeq?: Prisma.IntNullableWithAggregatesFilter<"SafeWallet"> | number | null
+  spaceId?: Prisma.BigIntWithAggregatesFilter<"SafeWallet"> | bigint | number
+  createdById?: Prisma.BigIntNullableWithAggregatesFilter<"SafeWallet"> | bigint | number | null
 }
 
 export type SafeWalletCreateInput = {
-  id?: string
+  safeWalletId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -386,8 +387,8 @@ export type SafeWalletCreateInput = {
 }
 
 export type SafeWalletUncheckedCreateInput = {
-  id?: string
-  seq?: number
+  safeWalletId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -396,13 +397,14 @@ export type SafeWalletUncheckedCreateInput = {
   threshold?: number
   nonce?: number
   owners?: Prisma.SafeWalletCreateownersInput | string[]
-  spaceSeq: number
-  createdBySeq?: number | null
+  spaceId: bigint | number
+  createdById?: bigint | number | null
   transactions?: Prisma.SafeTransactionUncheckedCreateNestedManyWithoutSafeWalletInput
 }
 
 export type SafeWalletUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  safeWalletId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -417,8 +419,8 @@ export type SafeWalletUpdateInput = {
 }
 
 export type SafeWalletUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  safeWalletId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -427,14 +429,14 @@ export type SafeWalletUncheckedUpdateInput = {
   threshold?: Prisma.IntFieldUpdateOperationsInput | number
   nonce?: Prisma.IntFieldUpdateOperationsInput | number
   owners?: Prisma.SafeWalletUpdateownersInput | string[]
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   transactions?: Prisma.SafeTransactionUncheckedUpdateManyWithoutSafeWalletNestedInput
 }
 
 export type SafeWalletCreateManyInput = {
-  id?: string
-  seq?: number
+  safeWalletId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -443,12 +445,13 @@ export type SafeWalletCreateManyInput = {
   threshold?: number
   nonce?: number
   owners?: Prisma.SafeWalletCreateownersInput | string[]
-  spaceSeq: number
-  createdBySeq?: number | null
+  spaceId: bigint | number
+  createdById?: bigint | number | null
 }
 
 export type SafeWalletUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  safeWalletId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -460,8 +463,8 @@ export type SafeWalletUpdateManyMutationInput = {
 }
 
 export type SafeWalletUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  safeWalletId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -470,8 +473,8 @@ export type SafeWalletUncheckedUpdateManyInput = {
   threshold?: Prisma.IntFieldUpdateOperationsInput | number
   nonce?: Prisma.IntFieldUpdateOperationsInput | number
   owners?: Prisma.SafeWalletUpdateownersInput | string[]
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type SafeWalletScalarRelationFilter = {
@@ -480,8 +483,8 @@ export type SafeWalletScalarRelationFilter = {
 }
 
 export type SafeWalletCountOrderByAggregateInput = {
+  safeWalletId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -490,22 +493,22 @@ export type SafeWalletCountOrderByAggregateInput = {
   threshold?: Prisma.SortOrder
   nonce?: Prisma.SortOrder
   owners?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
 }
 
 export type SafeWalletAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
   chainId?: Prisma.SortOrder
   threshold?: Prisma.SortOrder
   nonce?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
 }
 
 export type SafeWalletMaxOrderByAggregateInput = {
+  safeWalletId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -513,13 +516,13 @@ export type SafeWalletMaxOrderByAggregateInput = {
   chainId?: Prisma.SortOrder
   threshold?: Prisma.SortOrder
   nonce?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
 }
 
 export type SafeWalletMinOrderByAggregateInput = {
+  safeWalletId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -527,17 +530,17 @@ export type SafeWalletMinOrderByAggregateInput = {
   chainId?: Prisma.SortOrder
   threshold?: Prisma.SortOrder
   nonce?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
 }
 
 export type SafeWalletSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
   chainId?: Prisma.SortOrder
   threshold?: Prisma.SortOrder
   nonce?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
 }
 
 export type SafeWalletListRelationFilter = {
@@ -658,7 +661,8 @@ export type SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput = {
 }
 
 export type SafeWalletCreateWithoutTransactionsInput = {
-  id?: string
+  safeWalletId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -672,8 +676,8 @@ export type SafeWalletCreateWithoutTransactionsInput = {
 }
 
 export type SafeWalletUncheckedCreateWithoutTransactionsInput = {
-  id?: string
-  seq?: number
+  safeWalletId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -682,8 +686,8 @@ export type SafeWalletUncheckedCreateWithoutTransactionsInput = {
   threshold?: number
   nonce?: number
   owners?: Prisma.SafeWalletCreateownersInput | string[]
-  spaceSeq: number
-  createdBySeq?: number | null
+  spaceId: bigint | number
+  createdById?: bigint | number | null
 }
 
 export type SafeWalletCreateOrConnectWithoutTransactionsInput = {
@@ -703,7 +707,8 @@ export type SafeWalletUpdateToOneWithWhereWithoutTransactionsInput = {
 }
 
 export type SafeWalletUpdateWithoutTransactionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  safeWalletId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -717,8 +722,8 @@ export type SafeWalletUpdateWithoutTransactionsInput = {
 }
 
 export type SafeWalletUncheckedUpdateWithoutTransactionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  safeWalletId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -727,12 +732,13 @@ export type SafeWalletUncheckedUpdateWithoutTransactionsInput = {
   threshold?: Prisma.IntFieldUpdateOperationsInput | number
   nonce?: Prisma.IntFieldUpdateOperationsInput | number
   owners?: Prisma.SafeWalletUpdateownersInput | string[]
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type SafeWalletCreateWithoutSpaceInput = {
-  id?: string
+  safeWalletId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -746,8 +752,8 @@ export type SafeWalletCreateWithoutSpaceInput = {
 }
 
 export type SafeWalletUncheckedCreateWithoutSpaceInput = {
-  id?: string
-  seq?: number
+  safeWalletId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -756,7 +762,7 @@ export type SafeWalletUncheckedCreateWithoutSpaceInput = {
   threshold?: number
   nonce?: number
   owners?: Prisma.SafeWalletCreateownersInput | string[]
-  createdBySeq?: number | null
+  createdById?: bigint | number | null
   transactions?: Prisma.SafeTransactionUncheckedCreateNestedManyWithoutSafeWalletInput
 }
 
@@ -790,8 +796,8 @@ export type SafeWalletScalarWhereInput = {
   AND?: Prisma.SafeWalletScalarWhereInput | Prisma.SafeWalletScalarWhereInput[]
   OR?: Prisma.SafeWalletScalarWhereInput[]
   NOT?: Prisma.SafeWalletScalarWhereInput | Prisma.SafeWalletScalarWhereInput[]
-  id?: Prisma.StringFilter<"SafeWallet"> | string
-  seq?: Prisma.IntFilter<"SafeWallet"> | number
+  safeWalletId?: Prisma.StringFilter<"SafeWallet"> | string
+  id?: Prisma.BigIntFilter<"SafeWallet"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"SafeWallet"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"SafeWallet"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"SafeWallet"> | Date | string | null
@@ -800,12 +806,13 @@ export type SafeWalletScalarWhereInput = {
   threshold?: Prisma.IntFilter<"SafeWallet"> | number
   nonce?: Prisma.IntFilter<"SafeWallet"> | number
   owners?: Prisma.StringNullableListFilter<"SafeWallet">
-  spaceSeq?: Prisma.IntFilter<"SafeWallet"> | number
-  createdBySeq?: Prisma.IntNullableFilter<"SafeWallet"> | number | null
+  spaceId?: Prisma.BigIntFilter<"SafeWallet"> | bigint | number
+  createdById?: Prisma.BigIntNullableFilter<"SafeWallet"> | bigint | number | null
 }
 
 export type SafeWalletCreateWithoutCreatedByInput = {
-  id?: string
+  safeWalletId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -819,8 +826,8 @@ export type SafeWalletCreateWithoutCreatedByInput = {
 }
 
 export type SafeWalletUncheckedCreateWithoutCreatedByInput = {
-  id?: string
-  seq?: number
+  safeWalletId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -829,7 +836,7 @@ export type SafeWalletUncheckedCreateWithoutCreatedByInput = {
   threshold?: number
   nonce?: number
   owners?: Prisma.SafeWalletCreateownersInput | string[]
-  spaceSeq: number
+  spaceId: bigint | number
   transactions?: Prisma.SafeTransactionUncheckedCreateNestedManyWithoutSafeWalletInput
 }
 
@@ -860,8 +867,8 @@ export type SafeWalletUpdateManyWithWhereWithoutCreatedByInput = {
 }
 
 export type SafeWalletCreateManySpaceInput = {
-  id?: string
-  seq?: number
+  safeWalletId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -870,11 +877,12 @@ export type SafeWalletCreateManySpaceInput = {
   threshold?: number
   nonce?: number
   owners?: Prisma.SafeWalletCreateownersInput | string[]
-  createdBySeq?: number | null
+  createdById?: bigint | number | null
 }
 
 export type SafeWalletUpdateWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  safeWalletId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -888,8 +896,8 @@ export type SafeWalletUpdateWithoutSpaceInput = {
 }
 
 export type SafeWalletUncheckedUpdateWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  safeWalletId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -898,13 +906,13 @@ export type SafeWalletUncheckedUpdateWithoutSpaceInput = {
   threshold?: Prisma.IntFieldUpdateOperationsInput | number
   nonce?: Prisma.IntFieldUpdateOperationsInput | number
   owners?: Prisma.SafeWalletUpdateownersInput | string[]
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   transactions?: Prisma.SafeTransactionUncheckedUpdateManyWithoutSafeWalletNestedInput
 }
 
 export type SafeWalletUncheckedUpdateManyWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  safeWalletId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -913,12 +921,12 @@ export type SafeWalletUncheckedUpdateManyWithoutSpaceInput = {
   threshold?: Prisma.IntFieldUpdateOperationsInput | number
   nonce?: Prisma.IntFieldUpdateOperationsInput | number
   owners?: Prisma.SafeWalletUpdateownersInput | string[]
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type SafeWalletCreateManyCreatedByInput = {
-  id?: string
-  seq?: number
+  safeWalletId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -927,11 +935,12 @@ export type SafeWalletCreateManyCreatedByInput = {
   threshold?: number
   nonce?: number
   owners?: Prisma.SafeWalletCreateownersInput | string[]
-  spaceSeq: number
+  spaceId: bigint | number
 }
 
 export type SafeWalletUpdateWithoutCreatedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  safeWalletId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -945,8 +954,8 @@ export type SafeWalletUpdateWithoutCreatedByInput = {
 }
 
 export type SafeWalletUncheckedUpdateWithoutCreatedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  safeWalletId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -955,13 +964,13 @@ export type SafeWalletUncheckedUpdateWithoutCreatedByInput = {
   threshold?: Prisma.IntFieldUpdateOperationsInput | number
   nonce?: Prisma.IntFieldUpdateOperationsInput | number
   owners?: Prisma.SafeWalletUpdateownersInput | string[]
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   transactions?: Prisma.SafeTransactionUncheckedUpdateManyWithoutSafeWalletNestedInput
 }
 
 export type SafeWalletUncheckedUpdateManyWithoutCreatedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  safeWalletId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -970,7 +979,7 @@ export type SafeWalletUncheckedUpdateManyWithoutCreatedByInput = {
   threshold?: Prisma.IntFieldUpdateOperationsInput | number
   nonce?: Prisma.IntFieldUpdateOperationsInput | number
   owners?: Prisma.SafeWalletUpdateownersInput | string[]
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 
@@ -1005,8 +1014,8 @@ export type SafeWalletCountOutputTypeCountTransactionsArgs<ExtArgs extends runti
 
 
 export type SafeWalletSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  safeWalletId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -1015,8 +1024,8 @@ export type SafeWalletSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   threshold?: boolean
   nonce?: boolean
   owners?: boolean
-  spaceSeq?: boolean
-  createdBySeq?: boolean
+  spaceId?: boolean
+  createdById?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.SafeWallet$createdByArgs<ExtArgs>
   transactions?: boolean | Prisma.SafeWallet$transactionsArgs<ExtArgs>
@@ -1024,8 +1033,8 @@ export type SafeWalletSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
 }, ExtArgs["result"]["safeWallet"]>
 
 export type SafeWalletSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  safeWalletId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -1034,15 +1043,15 @@ export type SafeWalletSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   threshold?: boolean
   nonce?: boolean
   owners?: boolean
-  spaceSeq?: boolean
-  createdBySeq?: boolean
+  spaceId?: boolean
+  createdById?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.SafeWallet$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["safeWallet"]>
 
 export type SafeWalletSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  safeWalletId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -1051,15 +1060,15 @@ export type SafeWalletSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   threshold?: boolean
   nonce?: boolean
   owners?: boolean
-  spaceSeq?: boolean
-  createdBySeq?: boolean
+  spaceId?: boolean
+  createdById?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.SafeWallet$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["safeWallet"]>
 
 export type SafeWalletSelectScalar = {
+  safeWalletId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -1068,11 +1077,11 @@ export type SafeWalletSelectScalar = {
   threshold?: boolean
   nonce?: boolean
   owners?: boolean
-  spaceSeq?: boolean
-  createdBySeq?: boolean
+  spaceId?: boolean
+  createdById?: boolean
 }
 
-export type SafeWalletOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "address" | "chainId" | "threshold" | "nonce" | "owners" | "spaceSeq" | "createdBySeq", ExtArgs["result"]["safeWallet"]>
+export type SafeWalletOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"safeWalletId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "address" | "chainId" | "threshold" | "nonce" | "owners" | "spaceId" | "createdById", ExtArgs["result"]["safeWallet"]>
 export type SafeWalletInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.SafeWallet$createdByArgs<ExtArgs>
@@ -1096,8 +1105,8 @@ export type $SafeWalletPayload<ExtArgs extends runtime.Types.Extensions.Internal
     transactions: Prisma.$SafeTransactionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    seq: number
+    safeWalletId: string
+    id: bigint
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -1106,8 +1115,8 @@ export type $SafeWalletPayload<ExtArgs extends runtime.Types.Extensions.Internal
     threshold: number
     nonce: number
     owners: string[]
-    spaceSeq: number
-    createdBySeq: number | null
+    spaceId: bigint
+    createdById: bigint | null
   }, ExtArgs["result"]["safeWallet"]>
   composites: {}
 }
@@ -1191,8 +1200,8 @@ export interface SafeWalletDelegate<ExtArgs extends runtime.Types.Extensions.Int
    * // Get first 10 SafeWallets
    * const safeWallets = await prisma.safeWallet.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const safeWalletWithIdOnly = await prisma.safeWallet.findMany({ select: { id: true } })
+   * // Only select the `safeWalletId`
+   * const safeWalletWithSafeWalletIdOnly = await prisma.safeWallet.findMany({ select: { safeWalletId: true } })
    * 
    */
   findMany<T extends SafeWalletFindManyArgs>(args?: Prisma.SelectSubset<T, SafeWalletFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SafeWalletPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1236,9 +1245,9 @@ export interface SafeWalletDelegate<ExtArgs extends runtime.Types.Extensions.Int
    *   ]
    * })
    * 
-   * // Create many SafeWallets and only return the `id`
-   * const safeWalletWithIdOnly = await prisma.safeWallet.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many SafeWallets and only return the `safeWalletId`
+   * const safeWalletWithSafeWalletIdOnly = await prisma.safeWallet.createManyAndReturn({
+   *   select: { safeWalletId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1327,9 +1336,9 @@ export interface SafeWalletDelegate<ExtArgs extends runtime.Types.Extensions.Int
    *   ]
    * })
    * 
-   * // Update zero or more SafeWallets and only return the `id`
-   * const safeWalletWithIdOnly = await prisma.safeWallet.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more SafeWallets and only return the `safeWalletId`
+   * const safeWalletWithSafeWalletIdOnly = await prisma.safeWallet.updateManyAndReturn({
+   *   select: { safeWalletId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1534,8 +1543,8 @@ export interface Prisma__SafeWalletClient<T, Null = never, ExtArgs extends runti
  * Fields of the SafeWallet model
  */
 export interface SafeWalletFieldRefs {
-  readonly id: Prisma.FieldRef<"SafeWallet", 'String'>
-  readonly seq: Prisma.FieldRef<"SafeWallet", 'Int'>
+  readonly safeWalletId: Prisma.FieldRef<"SafeWallet", 'String'>
+  readonly id: Prisma.FieldRef<"SafeWallet", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"SafeWallet", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"SafeWallet", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"SafeWallet", 'DateTime'>
@@ -1544,8 +1553,8 @@ export interface SafeWalletFieldRefs {
   readonly threshold: Prisma.FieldRef<"SafeWallet", 'Int'>
   readonly nonce: Prisma.FieldRef<"SafeWallet", 'Int'>
   readonly owners: Prisma.FieldRef<"SafeWallet", 'String[]'>
-  readonly spaceSeq: Prisma.FieldRef<"SafeWallet", 'Int'>
-  readonly createdBySeq: Prisma.FieldRef<"SafeWallet", 'Int'>
+  readonly spaceId: Prisma.FieldRef<"SafeWallet", 'BigInt'>
+  readonly createdById: Prisma.FieldRef<"SafeWallet", 'BigInt'>
 }
     
 

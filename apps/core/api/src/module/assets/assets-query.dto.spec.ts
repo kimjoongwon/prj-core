@@ -21,7 +21,7 @@ describe("AssetQueryDto", () => {
 				skip: "0",
 				kind: "IMAGE",
 				status: "READY",
-				folderId: "01J0000000000000000000D000",
+				folderId: "201",
 			},
 			metadata,
 		);
@@ -31,11 +31,11 @@ describe("AssetQueryDto", () => {
 		expect(query.take).toBe(20);
 		expect(
 			buildAssetQueryWhere(query, {
-				space: { id: "01J00000000000000000000001" },
+				space: { id: 101n },
 			}),
 		).toEqual({
-			space: { id: "01J00000000000000000000001" },
-			folder: { id: "01J0000000000000000000D000" },
+			space: { id: 101n },
+			folderId: 201n,
 			kind: "IMAGE",
 			status: "READY",
 			removedAt: null,

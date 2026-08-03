@@ -1,9 +1,13 @@
 import {
 	type AdminNativeAuthSession,
+	type AdminPersistSpaceSelection,
 	mergeAdminPersistAccountSelection,
 	mergeAdminPersistAuthSession,
-	readAdminPersistAccessToken,
 } from "./admin-persist";
+import {
+	type AdminSpaceApiRequestLike,
+	bootstrapAdminSpaceSelection,
+} from "./admin-space-bootstrap";
 import {
 	type E2EPageLike,
 	navigateToOidcLoginForm,
@@ -11,28 +15,12 @@ import {
 	waitForOidcConsentForm,
 } from "./oidc-login";
 
-interface ApiResponseLike {
-	status(): number;
-	json(): Promise<unknown>;
-}
-
-interface ApiRequestLike {
-	get(url: string): Promise<ApiResponseLike>;
-	post(
-		url: string,
-		options?: {
-			data?: unknown;
-			headers?: Record<string, string>;
-		},
-	): Promise<ApiResponseLike>;
-}
-
 interface ConsoleLoginPageLike extends E2EPageLike {
 	evaluate<Result, Arg>(
 		pageFunction: (arg: Arg) => Result,
 		arg: Arg,
 	): Promise<Result>;
-	request: ApiRequestLike;
+	request: AdminSpaceApiRequestLike;
 	url(): string;
 }
 
@@ -88,55 +76,13 @@ const CONSENT_TIMEOUT_MS = 30000;
 const DEFAULT_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@plate.com";
 const DEFAULT_PASSWORD = process.env.E2E_ADMIN_PASSWORD ?? "rkdmf12!@";
 const CONSOLE_PERSIST_KEY = "admin-persist";
-const SYSTEM_TENANT_ID =
-	process.env.E2E_SYSTEM_TENANT_ID ?? "01J00000000000000000000002";
-const SYSTEM_SPACE_ID =
-	process.env.E2E_SYSTEM_SPACE_ID ?? "01J00000000000000000000001";
-const SYSTEM_FITNESS_CENTER_NAME = "플랫폼 운영본부";
 
-async function seedConsolePersist(page: ConsoleLoginPageLike) {
-	const accessToken = await readConsoleAccessToken(page);
-	const response = await page.request.post(
-		buildApiUrl("/api/v1/auth/current-space"),
-		{
-			data: { tenantId: SYSTEM_TENANT_ID },
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
-		},
-	);
-
-	if (response.status() !== 200) {
-		throw new Error(`Failed to select console space: ${response.status()}`);
-	}
-
-	const payload = (await response.json()) as {
-		data?: {
-			id?: string;
-			tenantId?: string | null;
-			contentLanguageCode?: string | null;
-			fitnessCenter?: {
-				name?: string;
-			};
-		};
-	};
-
-	if (payload.data?.id !== SYSTEM_SPACE_ID) {
-		throw new Error("Selected console space did not match the system space.");
-	}
-	if (payload.data?.tenantId !== SYSTEM_TENANT_ID) {
-		throw new Error("Selected console tenant did not match the system tenant.");
-	}
-
-	const fitnessCenterName =
-		payload.data.fitnessCenter?.name ?? SYSTEM_FITNESS_CENTER_NAME;
+async function seedConsolePersist(
+	page: ConsoleLoginPageLike,
+	selection: AdminPersistSpaceSelection,
+) {
 	const raw = await readConsolePersist(page);
-	const document = mergeAdminPersistAccountSelection(raw, {
-		tenantId: SYSTEM_TENANT_ID,
-		spaceId: SYSTEM_SPACE_ID,
-		fitnessCenterName,
-		contentLanguageCode: payload.data.contentLanguageCode ?? null,
-	});
+	const document = mergeAdminPersistAccountSelection(raw, selection);
 
 	await page.evaluate(
 		({ storageKey, value }) => {
@@ -153,18 +99,25 @@ async function seedConsolePersist(page: ConsoleLoginPageLike) {
  * Admin console에 native 로그인하고 System FitnessCenter context를 저장합니다.
  *
  * @param page Admin console을 제어할 E2E page
+ * @returns API bootstrap과 current-space 선택 응답에서 얻은 tenant/space 선택값
  */
-export async function loginToConsole(page: ConsoleLoginPageLike) {
+export async function loginToConsole(
+	page: ConsoleLoginPageLike,
+): Promise<AdminPersistSpaceSelection> {
 	for (let attempt = 1; attempt <= 3; attempt++) {
 		try {
 			await page.goto(nativeLoginUrl, { waitUntil: "domcontentloaded" });
 			const session = await requestNativeLogin(page);
 			await writeConsoleNativeSession(page, session);
-			await seedConsolePersist(page);
+			const selection = await bootstrapAdminSpaceSelection(page.request, {
+				apiBaseUrl,
+				accessToken: session.accessToken,
+			});
+			await seedConsolePersist(page, selection);
 			await page.goto(dashboardUrl, {
 				waitUntil: "domcontentloaded",
 			});
-			return;
+			return selection;
 		} catch (error) {
 			if (attempt === 3) {
 				throw error;
@@ -294,18 +247,6 @@ async function writeConsoleNativeSession(
 			value: JSON.stringify(document),
 		},
 	);
-}
-
-async function readConsoleAccessToken(page: ConsoleLoginPageLike) {
-	const accessToken = readAdminPersistAccessToken(
-		await readConsolePersist(page),
-	);
-
-	if (!accessToken) {
-		throw new Error("Failed to read native access token from console persist.");
-	}
-
-	return accessToken;
 }
 
 async function readConsolePersist(page: ConsoleLoginPageLike) {

@@ -22,7 +22,7 @@ describe("action use cases", () => {
 	it("Given Action 생성 command When 실행하면 Then 생성 입력을 aggregate에 위임한다", async () => {
 		const actions = createActionAggregate();
 		const createdAction = {
-			id: "action-101",
+			id: 101n,
 			name: "action.create",
 		};
 		actions.createAction.mockResolvedValue(
@@ -54,7 +54,7 @@ describe("action use cases", () => {
 	it("Given Action 수정 command When 실행하면 Then 사전 조회 없이 변경만 aggregate에 위임한다", async () => {
 		const actions = createActionAggregate();
 		const updatedAction = {
-			id: "action-101",
+			id: 101n,
 			name: "action.update",
 		};
 		actions.updateAction.mockResolvedValue(
@@ -62,7 +62,7 @@ describe("action use cases", () => {
 				ReturnType<ActionAggregate["updateAction"]>
 			>,
 		);
-		const actionId = "action-101";
+		const actionId = 101n;
 		const command = new UpdateActionCommand(actionId, {
 			name: "action.update",
 			config: { method: "PATCH" },
@@ -80,7 +80,7 @@ describe("action use cases", () => {
 	it("Given Action 삭제 command When 실행하면 Then 사전 조회 없이 삭제를 aggregate에 위임한다", async () => {
 		const actions = createActionAggregate();
 		const deletedAction = {
-			id: "action-101",
+			id: 101n,
 			name: "action.delete",
 		};
 		actions.deleteAction.mockResolvedValue(
@@ -88,7 +88,7 @@ describe("action use cases", () => {
 				ReturnType<ActionAggregate["deleteAction"]>
 			>,
 		);
-		const actionId = "action-101";
+		const actionId = 101n;
 		const useCase = new DeleteActionUseCase(actions);
 
 		await expect(

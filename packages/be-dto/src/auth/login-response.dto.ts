@@ -1,4 +1,4 @@
-import { ClassField, NumberField, StringField } from "@cocrepo/decorator";
+import { ClassField, NumberField, StringField } from "@cocrepo/decorator/field";
 import { ApiProperty } from "@nestjs/swagger";
 import { UserDto } from "../user.dto";
 

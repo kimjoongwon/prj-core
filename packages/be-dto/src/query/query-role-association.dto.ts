@@ -1,10 +1,10 @@
-import { ULIDFieldOptional } from "@cocrepo/decorator";
+import { BigIntIdFieldOptional } from "@cocrepo/decorator/field";
 import { QueryDto } from "./query.dto";
 
 export class QueryRoleAssociationDto extends QueryDto {
-	@ULIDFieldOptional()
-	roleId?: string;
+	@BigIntIdFieldOptional()
+	roleId?: bigint;
 
-	@ULIDFieldOptional()
-	groupId?: string;
+	@BigIntIdFieldOptional()
+	groupId?: bigint;
 }

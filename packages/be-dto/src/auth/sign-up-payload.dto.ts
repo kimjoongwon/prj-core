@@ -1,50 +1,60 @@
-import { SignUpSchema } from "@cocrepo/schema";
-import { ApiProperty } from "@nestjs/swagger";
+import {
+	BigIntIdField,
+	EmailField,
+	PhoneField,
+	StringField,
+} from "@cocrepo/decorator/field";
+import { PasswordField } from "@cocrepo/decorator/field/password";
 
 /**
  * 회원가입 요청 DTO
  *
- * @cocrepo/schema의 SignUpSchema를 확장하여
- * Swagger 문서화 메타데이터를 추가합니다.
+ * 공유 SignUpSchema의 wire 검증과 같은 규칙을 사용하며 숫자 ID는 bigint로 변환합니다.
  */
-export class SignUpPayloadDto extends SignUpSchema {
-	@ApiProperty({
+export class SignUpPayloadDto {
+	@StringField({
+		minLength: 2,
+		maxLength: 50,
 		example: "홍길동",
 		description: "닉네임 (2-50자)",
 	})
 	nickname: string;
 
-	@ApiProperty({
-		example: "01J00000000000000000000000",
-		description: "스페이스 ID (ULID)",
+	@BigIntIdField({
+		example: "1",
+		description: "스페이스 ID",
 	})
-	spaceId: string;
+	spaceId: bigint;
 
-	@ApiProperty({
+	@EmailField({
 		example: "user@example.com",
 		description: "이메일",
 	})
 	email: string;
 
-	@ApiProperty({
+	@StringField({
+		minLength: 2,
+		maxLength: 50,
 		example: "홍길동",
 		description: "이름 (2-50자)",
 	})
 	name: string;
 
-	@ApiProperty({
+	@PhoneField({
 		example: "010-1234-5678",
 		description: "전화번호",
 	})
 	phone: string;
 
-	@ApiProperty({
+	@StringField({
+		minLength: 2,
+		maxLength: 255,
 		example: "서울특별시 강남구 테헤란로 123",
 		description: "주소 (2-255자)",
 	})
 	address: string;
 
-	@ApiProperty({
+	@PasswordField({
 		example: "Password123!",
 		description: "비밀번호 (10자 이상, 72자 이하)",
 	})

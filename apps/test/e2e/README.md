@@ -50,7 +50,7 @@ pnpm --filter=test-e2e test:storybook:prod
 - `db:e2e:reset`은 현재 Prisma schema를 `db push --force-reset`으로 반영한 뒤 `PRISMA_SEED_PROFILE=e2e` seed를 실행합니다.
 - `E2E_DATABASE_URL` 또는 `TEST_DATABASE_URL`은 DB 이름에 `e2e` 또는 `test`를 포함해야 합니다.
 - 이름 규칙을 만족하지 않는 DB는 reset을 거부합니다. 정말 일회성 disposable DB라면 `ALLOW_E2E_DB_RESET=1`을 명시합니다.
-- seeded real DB 계약은 `admin@plate.com`, System Space, `admin-web` OIDC client, 핵심 role seed 존재를 검증합니다.
+- seeded real DB 계약은 `admin@plate.com`, System Space, `admin-web` OIDC client, 핵심 role seed 존재를 검증합니다. System Tenant/Space의 실제 ID는 로그인 후 API 응답에서 동적으로 확인합니다.
 
 ## Admin full-stack 정책
 
@@ -87,7 +87,15 @@ pnpm --filter=test-e2e test:storybook:prod
 
 - Admin native 로그인 화면 진입
 - 시드 관리자 계정 입력
-- System Space current-space 검증 및 admin-persist 보정
+- `my-spaces` 응답에서 System Space의 canonical decimal tenant/space ID 확인
+- `current-space` 선택 응답 검증 및 admin-persist 보정
+- 실제 `{ tenantId, spaceId, fitnessCenterName, contentLanguageCode }` 반환
+
+### `getAdminSpaceRequestHeaders(tenantId?)`
+
+- 인자를 생략하면 Admin setup storage state에 저장된 동적 tenant 선택값 사용
+- 인자를 전달하면 로그인/bootstrap API 응답에서 얻은 canonical decimal ID만 사용
+- 인증 header와 `x-tenant-id`를 함께 생성
 
 ### `runOidcLoginFlow(page, options)`
 
@@ -111,7 +119,7 @@ pnpm --filter=test-e2e test:storybook:prod
 ## 앱별 래퍼
 
 - Admin: `apps/test/e2e/tests/admin/helpers/login.ts`
-  - `loginToAdmin(page)`를 통해 로그인 + Space(localStorage) 보정을 수행합니다.
+  - `loginToAdmin(page)`를 통해 로그인 + 동적 Space(localStorage) 보정을 수행하고 선택값을 반환합니다.
 - 통합 인증 콘솔:
   - `admin/web`의 이동된 인증 설정 e2e 테스트에서 `@cocrepo/e2e`의 `loginToConsole`을 직접 import해 사용합니다.
   - OIDC flow e2e 테스트에서는 OIDC 전용 helper를 직접 import해 사용합니다.
@@ -120,8 +128,9 @@ pnpm --filter=test-e2e test:storybook:prod
 
 - `E2E_ADMIN_EMAIL`: 로그인 계정 이메일 (기본값 `admin@plate.com`)
 - `E2E_ADMIN_PASSWORD`: 로그인 계정 비밀번호 (기본값 `rkdmf12!@`)
-- `E2E_SYSTEM_SPACE_ID`: Admin 로그인 후 고정할 Space ID
 - `E2E_ENV`: `local|prod` 실행 환경 선택
 - `E2E_ADMIN_BASE_URL`: Admin Web base URL
 - `E2E_STORYBOOK_BASE_URL`: Storybook base URL
 - `E2E_CORE_API_BASE_URL`: Core API base URL
+
+Tenant/Space ID 환경 변수는 사용하지 않습니다. 해당 ID는 환경마다 달라질 수 있으므로 native 로그인 후 `my-spaces`/`current-space` API 응답에서 동적으로 얻어 header, query, route에 전달합니다.

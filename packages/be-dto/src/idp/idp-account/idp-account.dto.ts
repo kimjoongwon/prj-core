@@ -1,19 +1,19 @@
 import {
+	BigIntIdField,
 	BooleanField,
 	DateField,
 	DateFieldOptional,
 	NumberField,
 	StringField,
 	StringFieldOptional,
-	ULIDField,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 
 /**
  * IDP 계정 정보 DTO (보안 필드 포함)
  */
 export class IdpAccountDto {
-	@ULIDField({ description: "사용자 ID" })
-	id!: string;
+	@BigIntIdField({ description: "사용자 ID" })
+	id!: bigint;
 
 	@StringField({ description: "이름" })
 	name!: string;

@@ -1,17 +1,24 @@
 import {
+	BigIntIdField,
+	BigIntIdFieldOptional,
 	DateField,
 	EnumField,
 	StringField,
 	StringFieldOptional,
-	ULIDField,
-	ULIDFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import type { DomainEntityModel } from "@cocrepo/entity";
 import { type AuthAuditLog, AuthAuditResult } from "@cocrepo/prisma";
+import { Exclude } from "class-transformer";
 
-export class AuthAuditLogDto implements DomainEntityModel<AuthAuditLog> {
-	@ULIDField({ description: "ID" })
-	id!: string;
+export class AuthAuditLogDto
+	implements DomainEntityModel<AuthAuditLog, "authAuditLogId">
+{
+	@Exclude()
+	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
+	private readonly authAuditLogId?: never;
+
+	@BigIntIdField({ description: "ID" })
+	id!: bigint;
 
 	@DateField({ description: "생성일" })
 	createdAt!: Date;
@@ -19,8 +26,8 @@ export class AuthAuditLogDto implements DomainEntityModel<AuthAuditLog> {
 	@StringField({ description: "이메일" })
 	email!: string;
 
-	@ULIDFieldOptional({ nullable: true, description: "사용자 ID" })
-	userId!: string | null;
+	@BigIntIdFieldOptional({ nullable: true, description: "사용자 ID" })
+	userId!: bigint | null;
 
 	@EnumField(() => AuthAuditResult, { description: "결과" })
 	result!: AuthAuditResult;

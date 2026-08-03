@@ -17,6 +17,21 @@
       "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
       "default": "./dist/index.js"
+    },
+    "./field": {
+      "types": "./dist/field/index.d.ts",
+      "require": "./dist/field/index.js",
+      "default": "./dist/field/index.js"
+    },
+    "./field/password": {
+      "types": "./dist/field/specialized/password.field.d.ts",
+      "require": "./dist/field/specialized/password.field.js",
+      "default": "./dist/field/specialized/password.field.js"
+    },
+    "./transform": {
+      "types": "./dist/transform.decorators.d.ts",
+      "require": "./dist/transform.decorators.js",
+      "default": "./dist/transform.decorators.js"
     }
   },
   "scripts": {
@@ -35,7 +50,8 @@
     "@cocrepo/enum": "workspace:*",
     "@cocrepo/prisma": "workspace:*",
     "@cocrepo/schema": "workspace:*",
-    "@cocrepo/toolkit": "workspace:*",
+    "@cocrepo/type": "workspace:*",
+    "es-toolkit": "^1.26.1",
     "libphonenumber-js": "^1.12.10"
   },
   "peerDependencies": {

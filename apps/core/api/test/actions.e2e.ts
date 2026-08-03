@@ -70,9 +70,9 @@ describe("Actions API E2E 테스트", () => {
 	});
 
 	describe("GET /api/v1/actions/:id", () => {
-		it("Given 존재하지 않는 UUID가 있을 때 When 액션 단건을 조회하면 Then 404를 반환해야 한다", async () => {
+		it("Given 존재하지 않는 숫자 ID가 있을 때 When 액션 단건을 조회하면 Then 404를 반환해야 한다", async () => {
 			// Given
-			const nonExistentActionId = "00000000-0000-0000-0000-000000000099";
+			const nonExistentActionId = "9223372036854775807";
 
 			// When
 			const response = await request(app.getHttpServer()).get(

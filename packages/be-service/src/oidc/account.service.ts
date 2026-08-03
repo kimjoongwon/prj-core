@@ -1,4 +1,4 @@
-import { OidcDirectUsersRepository } from "@cocrepo/repository";
+import { UsersRepository } from "@cocrepo/repository";
 import { Injectable, Logger } from "@nestjs/common";
 import { RedisService } from "../redis/redis.service";
 import {
@@ -7,6 +7,18 @@ import {
 } from "./account-cache.constants";
 import type { TenantWithRelations } from "./tenant-with-relations.type";
 import type { Account, AccountClaims, FindAccount } from "./types";
+
+type OidcClaimTenant = TenantWithRelations & {
+	role: NonNullable<TenantWithRelations["role"]>;
+	space: NonNullable<TenantWithRelations["space"]>;
+};
+
+/** OIDC claim에 필요한 모델 ULID relation이 모두 로드됐는지 확인합니다. */
+function hasOidcClaimIds(
+	tenant: TenantWithRelations,
+): tenant is OidcClaimTenant {
+	return Boolean(tenant.space?.spaceId && tenant.role?.roleId);
+}
 
 /**
  * OIDC Account Service
@@ -19,7 +31,7 @@ export class AccountService {
 	private readonly logger = new Logger(AccountService.name);
 
 	constructor(
-		private readonly directUserRepository: OidcDirectUsersRepository,
+		private readonly usersRepository: UsersRepository,
 		private readonly redisService: RedisService,
 	) {}
 
@@ -65,7 +77,8 @@ export class AccountService {
 
 		// 캐시 미스 - DB 조회
 		this.logger.debug(`Account cache miss: ${userId}`);
-		const user = await this.directUserRepository.findByIdWithTenants(userId);
+		const user =
+			await this.usersRepository.findByUserIdWithTenantsAndProfiles(userId);
 
 		if (!user) {
 			this.logger.debug(`User not found: ${userId}`);
@@ -87,7 +100,8 @@ export class AccountService {
 	 * 사용자 정보로부터 전체 claims 빌드
 	 */
 	private buildFullClaims(user: {
-		id: string;
+		id: bigint;
+		userId: string;
 		name: string;
 		email: string;
 		phone: string;
@@ -95,10 +109,12 @@ export class AccountService {
 		updatedAt: Date | null;
 		tenants?: unknown[];
 	}): AccountClaims {
-		const tenants = user.tenants as unknown as TenantWithRelations[];
+		const tenants = (user.tenants as unknown as TenantWithRelations[]).filter(
+			hasOidcClaimIds,
+		);
 
 		return {
-			sub: user.id,
+			sub: user.userId,
 			name: user.name,
 			updated_at: user.updatedAt
 				? Math.floor(user.updatedAt.getTime() / 1000)
@@ -108,13 +124,13 @@ export class AccountService {
 			phone_number: user.phone,
 			phone_number_verified: true,
 			roles: tenants?.map((t) => ({
-				spaceId: t.spaceId,
-				roleId: t.roleId,
+				spaceId: t.space.spaceId,
+				roleId: t.role.roleId,
 				roleName: t.role?.name,
 				roleDisplayName: t.role?.displayName,
 			})),
 			spaces: tenants?.map((t) => ({
-				spaceId: t.spaceId,
+				spaceId: t.space.spaceId,
 				fitnessCenterName: t.space?.fitnessCenter?.name,
 			})),
 		};

@@ -1,39 +1,25 @@
 /**
- * Prisma 모델에서 데이터베이스 내부 조인용 순번 필드를 제외한 도메인 계약입니다.
+ * Prisma 모델과 backend DTO 인스턴스가 공유하는 내부 값 계약입니다.
  *
- * 공개 식별자는 ULID `id`를 유지하고, `seq`와 관계용 `*Seq`는 Repository 경계 안에서만
- * 사용하도록 제한합니다.
+ * 숫자 ID는 backend 내부에서 `bigint`를 유지하고, REST JSON 직렬화는
+ * `BigIntIdField`가 담당합니다. 모델별 integration ULID는 두 번째 제네릭으로
+ * 명시하여 일반 REST DTO 계약에서 제외합니다.
  */
-export type DomainEntityModel<T> = Omit<
+export type DomainEntityModel<T, ExcludedKeys extends keyof T = never> = Omit<
 	T,
-	Extract<keyof T, "seq" | `${string}Seq`>
+	ExcludedKeys
 >;
 
-type PublicRelationIds<T> = {
-	[Key in keyof T as Key extends `${infer Relation}Seq`
-		? Relation extends keyof T
-			? `${Relation}Id`
-			: never
-		: never]: Key extends `${infer Relation}Seq`
-		? Relation extends keyof T
-			? null extends T[Relation]
-				? string | null
-				: string
-			: never
-		: never;
-};
-
 /**
- * Prisma projection의 모든 중첩 단계에서 내부 순번 필드를 제거한 공개 데이터 타입입니다.
+ * Prisma projection 값을 도메인 내부/Repository 계층에서 그대로 전달합니다.
+ * (BigInt와 현재 필드 이름을 그대로 유지하며 별도 키 변환 없음)
  */
 export type DomainData<T> = T extends Date
 	? T
-	: T extends readonly (infer Item)[]
-		? DomainData<Item>[]
-		: T extends object
-			? {
-					[Key in keyof T as Key extends "seq" | `${string}Seq`
-						? never
-						: Key]: DomainData<T[Key]>;
-				} & PublicRelationIds<T>
-			: T;
+	: T extends (infer U)[]
+		? DomainData<U>[]
+		: T extends ReadonlyArray<infer U>
+			? ReadonlyArray<DomainData<U>>
+			: T extends object
+				? { [K in keyof T]: DomainData<T[K]> }
+				: T;

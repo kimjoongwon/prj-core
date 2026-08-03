@@ -1,8 +1,8 @@
 import {
+	BigIntIdFieldOptional,
 	DateFieldOptional,
 	StringFieldOptional,
-	ULIDFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import { QueryDto } from "../query/query.dto";
 
 export class QueryBookingFeedDto extends QueryDto {
@@ -18,11 +18,11 @@ export class QueryBookingFeedDto extends QueryDto {
 	})
 	timeZone?: string;
 
-	@ULIDFieldOptional({ description: "타임라인 ID 필터" })
-	timelineId?: string;
+	@BigIntIdFieldOptional({ description: "타임라인 ID 필터" })
+	timelineId?: bigint;
 
-	@ULIDFieldOptional({ description: "프로그램 ID 필터" })
-	programId?: string;
+	@BigIntIdFieldOptional({ description: "프로그램 ID 필터" })
+	programId?: bigint;
 
 	@StringFieldOptional({ description: "프로그램/세션/타임라인 검색어" })
 	search?: string;

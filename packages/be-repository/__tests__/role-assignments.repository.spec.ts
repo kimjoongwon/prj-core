@@ -30,9 +30,9 @@ describe("RoleAssignmentsRepository", () => {
 	it("Role의 활성·비활성 Assignment를 현재 Space의 Policy로 제한해 반환해야 한다", async () => {
 		roleAssignment.findMany.mockResolvedValue([
 			{
-				id: "assignment-id",
-				roleId: "role-id",
-				policyId: "policy-id",
+				id: 1n,
+				roleId: 10n,
+				policyId: 20n,
 				isActive: false,
 				priority: 10,
 				createdAt: new Date(),
@@ -42,14 +42,14 @@ describe("RoleAssignmentsRepository", () => {
 			},
 		]);
 
-		const result = await repository.findByRoleIdInSpace("role-id", "space-id");
+		const result = await repository.findByRoleIdInSpace(10n, 30n);
 
 		expect(roleAssignment.findMany).toHaveBeenCalledWith(
 			expect.objectContaining({
 				where: {
-					role: { id: { in: ["role-id"] } },
+					roleId: { in: [10n] },
 					removedAt: null,
-					policy: { space: { id: "space-id" }, removedAt: null },
+					policy: { space: { id: 30n }, removedAt: null },
 				},
 				include: expect.objectContaining({
 					role: true,
@@ -65,17 +65,14 @@ describe("RoleAssignmentsRepository", () => {
 	it("CASL 계산용 조회는 활성 Assignment만 포함해야 한다", async () => {
 		roleAssignment.findMany.mockResolvedValue([]);
 
-		await repository.findActiveByRoleIdsInSpace(
-			["role-a", "role-b"],
-			"space-id",
-		);
+		await repository.findActiveByRoleIdsInSpace([10n, 11n], 30n);
 
 		expect(roleAssignment.findMany).toHaveBeenCalledWith(
 			expect.objectContaining({
 				where: expect.objectContaining({
-					role: { id: { in: ["role-a", "role-b"] } },
+					roleId: { in: [10n, 11n] },
 					isActive: true,
-					policy: { space: { id: "space-id" }, removedAt: null },
+					policy: { space: { id: 30n }, removedAt: null },
 				}),
 			}),
 		);
@@ -88,19 +85,19 @@ describe("RoleAssignmentsRepository", () => {
 		roleAssignment.findMany.mockResolvedValue([]);
 
 		await repository.syncByRoleId(
-			"role-id",
+			10n,
 			[
-				{ policyId: "policy-id", isActive: true, priority: 1 },
-				{ policyId: "policy-id", isActive: false, priority: 20 },
+				{ policyId: 20n, isActive: true, priority: 1 },
+				{ policyId: 20n, isActive: false, priority: 20 },
 			],
-			"space-id",
+			30n,
 		);
 
 		expect(roleAssignment.create).toHaveBeenCalledTimes(1);
 		expect(roleAssignment.create).toHaveBeenCalledWith({
 			data: {
-				role: { connect: { id: "role-id" } },
-				policy: { connect: { id: "policy-id" } },
+				roleId: 10n,
+				policyId: 20n,
 				isActive: false,
 				priority: 20,
 				removedAt: null,

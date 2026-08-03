@@ -73,7 +73,7 @@ export class CreateActionCommand {
 
 export class UpdateActionCommand {
 	constructor(
-		readonly actionId: string,
+		readonly actionId: bigint,
 		input: Record<string, unknown>,
 	) {
 		Object.assign(this, input);
@@ -81,5 +81,5 @@ export class UpdateActionCommand {
 }
 
 export class DeleteActionCommand {
-	constructor(readonly actionId: string) {}
+	constructor(readonly actionId: bigint) {}
 }

@@ -1,12 +1,10 @@
-import type { Video as VideoEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Asset } from "./asset.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 
-export class Video
-	extends AbstractEntity
-	implements DomainEntityModel<VideoEntity>
-{
+export class Video extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	videoId!: string;
+
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
@@ -14,7 +12,7 @@ export class Video
 	height!: number;
 	durationMs!: number;
 	hasAudio!: boolean;
-	assetId!: string;
+	assetId!: bigint;
 
 	// ============================================================================
 	// Nullable 필드

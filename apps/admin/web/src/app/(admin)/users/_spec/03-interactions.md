@@ -140,7 +140,7 @@
 | search | string | X | - | 통합 검색어 (이름, 이메일, 전화번호) |
 | roles | string[] | X | - | 역할 필터 (복수) |
 | status | enum | X | - | 상태 필터 (active, inactive, removed) |
-| categoryId | uuid | X | - | 분류 카테고리 ID |
+| categoryId | decimal string | X | - | 분류 카테고리 숫자 ID |
 | groupIds | string[] | X | - | 그룹 ID 목록 (복수) |
 | createdFrom | date | X | - | 가입일 시작 |
 | createdTo | date | X | - | 가입일 종료 |
@@ -167,7 +167,6 @@ interface Response {
 ```typescript
 interface UserDto {
   id: string;
-  seq: number;
   name: string;
   email: string;
   phone: string;

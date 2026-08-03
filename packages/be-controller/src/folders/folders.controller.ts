@@ -1,4 +1,4 @@
-import { ParseUlidPipe, RolesGuard } from "@cocrepo/be-common";
+import { ParseBigIntIdPipe, RolesGuard } from "@cocrepo/be-common";
 import {
 	CreateFolderCommand,
 	DeleteFolderCommand,
@@ -114,7 +114,7 @@ export class FoldersController {
 	@ApiResponseEntity(FolderDto, HttpStatus.OK)
 	@ResponseMessage("폴더 수정 성공")
 	async updateFolder(
-		@Param("folderId", ParseUlidPipe) folderId: string,
+		@Param("folderId", ParseBigIntIdPipe) folderId: bigint,
 		@Body() dto: UpdateFolderDto,
 	): Promise<Folder> {
 		return this.commandBus.execute(new UpdateFolderCommand(folderId, dto));
@@ -134,7 +134,7 @@ export class FoldersController {
 	@ApiErrors(400, 401, 403, 404, 500)
 	@ResponseMessage("폴더 삭제 성공")
 	async deleteFolder(
-		@Param("folderId", ParseUlidPipe) folderId: string,
+		@Param("folderId", ParseBigIntIdPipe) folderId: bigint,
 	): Promise<void> {
 		await this.commandBus.execute(new DeleteFolderCommand(folderId));
 	}

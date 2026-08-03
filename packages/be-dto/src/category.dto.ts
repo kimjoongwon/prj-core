@@ -1,23 +1,28 @@
 import {
+	BigIntIdField,
+	BigIntIdFieldOptional,
 	ClassField,
 	EnumField,
 	StringField,
-	ULIDField,
-	ULIDFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import type { DomainEntityModel } from "@cocrepo/entity";
 import { type Category, CategoryTypes } from "@cocrepo/prisma";
+import { Exclude } from "class-transformer";
 import { AbstractDto } from "./abstract.dto";
 
 export class CategoryDto
 	extends AbstractDto
-	implements DomainEntityModel<Category>
+	implements DomainEntityModel<Category, "categoryId">
 {
-	@ULIDField()
-	spaceId: string;
+	@Exclude()
+	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
+	private readonly categoryId?: never;
 
-	@ULIDFieldOptional({ nullable: true })
-	createdById: string | null;
+	@BigIntIdField()
+	spaceId: bigint;
+
+	@BigIntIdFieldOptional({ nullable: true })
+	createdById: bigint | null;
 
 	@StringField({ default: "" })
 	name: string;
@@ -25,8 +30,8 @@ export class CategoryDto
 	@EnumField(() => CategoryTypes, { default: CategoryTypes.Role })
 	type: CategoryTypes;
 
-	@ULIDField({ nullable: true, default: null })
-	parentId: string | null;
+	@BigIntIdField({ nullable: true, default: null })
+	parentId: bigint | null;
 
 	@ClassField(() => CategoryDto, { required: false })
 	parent?: CategoryDto;

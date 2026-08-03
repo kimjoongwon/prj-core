@@ -1,13 +1,14 @@
 import {
+	BigIntIdField,
 	ClassField,
 	NumberField,
 	NumberFieldOptional,
 	StringField,
 	StringFieldOptional,
-	ULIDField,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import type { DomainEntityModel } from "@cocrepo/entity";
 import type { Program as ProgramEntity } from "@cocrepo/prisma";
+import { Exclude } from "class-transformer";
 import { AbstractDto } from "./abstract.dto";
 import { ProgramActivityDto } from "./program-activity.dto";
 import { RoutineDto } from "./routine.dto";
@@ -15,16 +16,20 @@ import { SessionDto } from "./session.dto";
 
 export class ProgramDto
 	extends AbstractDto
-	implements DomainEntityModel<ProgramEntity>
+	implements DomainEntityModel<ProgramEntity, "programId">
 {
-	@ULIDField()
-	routineId: string;
+	@Exclude()
+	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
+	private readonly programId?: never;
 
-	@ULIDField()
-	sessionId: string;
+	@BigIntIdField()
+	routineId: bigint;
 
-	@ULIDField()
-	instructorId: string;
+	@BigIntIdField()
+	sessionId: bigint;
+
+	@BigIntIdField()
+	instructorId: bigint;
 
 	@NumberField()
 	capacity: number;

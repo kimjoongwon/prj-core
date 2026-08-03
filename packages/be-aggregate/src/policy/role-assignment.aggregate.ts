@@ -27,7 +27,7 @@ export class RoleAssignmentAggregate {
 		private readonly spaceContext: SpaceContext,
 	) {}
 
-	async getRoleAssignments(roleId: string): Promise<RoleAssignment[]> {
+	async getRoleAssignments(roleId: bigint): Promise<RoleAssignment[]> {
 		const spaceId = this.requireSpaceId();
 		await this.assertRoleExists(roleId);
 		return this.roleAssignmentsRepository.findByRoleIdInSpace(roleId, spaceId);
@@ -35,7 +35,7 @@ export class RoleAssignmentAggregate {
 
 	@Transactional()
 	async syncRoleAssignments(
-		roleId: string,
+		roleId: bigint,
 		roleAssignments: SyncRoleAssignmentInputItem[],
 	): Promise<RoleAssignment[]> {
 		const spaceId = this.requireSpaceId();
@@ -46,7 +46,7 @@ export class RoleAssignmentAggregate {
 		);
 
 		this.logger.debug(
-			`RoleAssignment 동기화: roleId=${roleId.slice(-8)}, spaceId=${spaceId.slice(-8)}`,
+			`RoleAssignment 동기화: roleId=${roleId}, spaceId=${spaceId}`,
 		);
 
 		return this.roleAssignmentsRepository.syncByRoleId(
@@ -56,7 +56,7 @@ export class RoleAssignmentAggregate {
 		);
 	}
 
-	private async assertRoleExists(roleId: string): Promise<void> {
+	private async assertRoleExists(roleId: bigint): Promise<void> {
 		const role = await this.rolesRepository.findById(roleId);
 		if (!role) {
 			throw new NotFoundException("역할을 찾을 수 없습니다");
@@ -64,8 +64,8 @@ export class RoleAssignmentAggregate {
 	}
 
 	private async assertPoliciesBelongToSpace(
-		policyIds: string[],
-		spaceId: string,
+		policyIds: bigint[],
+		spaceId: bigint,
 	): Promise<void> {
 		const uniquePolicyIds = Array.from(new Set(policyIds));
 		if (uniquePolicyIds.length === 0) return;
@@ -85,7 +85,7 @@ export class RoleAssignmentAggregate {
 		}
 	}
 
-	private requireSpaceId(): string {
+	private requireSpaceId(): bigint {
 		const spaceId = this.spaceContext.spaceId;
 		if (!spaceId) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);

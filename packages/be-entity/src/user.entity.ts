@@ -1,23 +1,16 @@
 import { SpaceCategoryName } from "@cocrepo/enum";
-import type {
-	Profile,
-	Tenant,
-	UserAssociation,
-	User as UserEntityType,
-} from "@cocrepo/prisma";
+import type { Profile, UserAssociation } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { AuthAuditLog } from "./auth-audit-log.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { PasswordHistory } from "./password-history.entity";
 
 /**
  * Tenant with Space relations for User entity
  * Prisma include로 가져온 관계 데이터를 위한 확장 타입
  */
-type TenantWithSpace = DomainEntityModel<Tenant> & {
-	spaceId: string;
-	userId: string;
-	roleId: string;
+type TenantWithSpace = {
+	id: bigint;
+	spaceId?: bigint | null;
 	space?: {
 		spaceClassification?: {
 			category?: {
@@ -28,8 +21,8 @@ type TenantWithSpace = DomainEntityModel<Tenant> & {
 };
 
 type UserTenantSnapshotLike = {
-	id: string;
-	spaceId?: string | null;
+	id: bigint;
+	spaceId?: bigint | null;
 	space?: {
 		spaceClassification?: {
 			category?: {
@@ -39,10 +32,10 @@ type UserTenantSnapshotLike = {
 	} | null;
 };
 
-export class User
-	extends AbstractEntity
-	implements DomainEntityModel<UserEntityType>
-{
+export class User extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	userId!: string;
+
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
@@ -62,7 +55,7 @@ export class User
 	passwordChangedAt!: Date | null;
 	lastLoginAt!: Date | null;
 	lastLoginIp!: string | null;
-	currentTenantId!: string | null;
+	currentTenantId!: bigint | null;
 
 	// ============================================================================
 	// 관계 필드 (선택적)
@@ -80,7 +73,7 @@ export class User
 	/**
 	 * 사용자가 특정 테넌트에 속해 있는지 확인합니다
 	 */
-	hasTenantAccess(tenantId: string): boolean {
+	hasTenantAccess(tenantId: bigint): boolean {
 		if (!this.tenants) return false;
 		return this.tenants.some((tenant) => tenant.id === tenantId);
 	}
@@ -111,7 +104,7 @@ export class User
 	/**
 	 * DTO로부터 Entity 생성 (팩토리)
 	 */
-	static fromDto<T extends { id: string; tenants?: UserTenantSnapshotLike[] }>(
+	static fromDto<T extends { id: bigint; tenants?: UserTenantSnapshotLike[] }>(
 		dto: T,
 	): User {
 		const user = new User();
@@ -136,15 +129,19 @@ export class User
 	 * - 슈퍼매니저: undefined (전체 조회)
 	 * - 일반: tenants의 spaceIds
 	 */
-	get accessibleSpaceIds(): string[] | undefined {
+	get accessibleSpaceIds(): bigint[] | undefined {
 		if (this.isSuperManager()) return undefined;
-		return this.tenants?.map((t) => t.spaceId).filter(Boolean) ?? [];
+		return (
+			this.tenants
+				?.map((t) => t.spaceId)
+				.filter((spaceId): spaceId is bigint => spaceId != null) ?? []
+		);
 	}
 
 	/**
 	 * 특정 Space에 접근 권한이 있는지 확인
 	 */
-	canAccessSpace(spaceId: string): boolean {
+	canAccessSpace(spaceId: bigint): boolean {
 		if (this.isSuperManager()) return true;
 		return this.tenants?.some((t) => t.spaceId === spaceId) ?? false;
 	}

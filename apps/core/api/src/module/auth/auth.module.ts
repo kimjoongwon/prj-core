@@ -18,6 +18,7 @@ import {
 	RolesRepository,
 	SpacesRepository,
 	TemplatesRepository,
+	TenantsRepository,
 	UsersRepository,
 } from "@cocrepo/repository";
 import {
@@ -52,6 +53,7 @@ import { OidcClientsModule } from "../oidc-client/oidc-clients.module";
 		JwtStrategy,
 		UserService,
 		UsersRepository,
+		TenantsRepository,
 		RoleAggregate,
 		RolesRepository,
 		SpaceAggregate,

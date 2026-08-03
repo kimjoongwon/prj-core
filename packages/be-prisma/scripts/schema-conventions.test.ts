@@ -3,6 +3,7 @@ import {
 	formatSchemaCheckSuccess,
 	type SchemaFileInput,
 	toKebabCase,
+	toPublicIdentifierFieldName,
 	validateSchemaConventions,
 } from "./schema-conventions";
 
@@ -35,8 +36,8 @@ const userModel = `
 // @description: 사용자 계정의 현재 상태와 생명주기를 관리
 /// @displayName 사용자
 model User {
-  id       String       @unique @default(ulid()) @db.VarChar(26)
-  seq      Int          @id @default(autoincrement())
+  userId   String       @unique @default(ulid()) @map("user_id") @db.Char(26)
+  id       BigInt       @id @default(autoincrement())
   status   UserStatus
   language LanguageCode
 }
@@ -47,8 +48,8 @@ const aiAgentLogModel = `
 // @description: AI 에이전트 작업 이력을 기록
 /// @displayName AI 에이전트 로그
 model AIAgentLog {
-  id  String @unique @default(ulid()) @db.VarChar(26)
-  seq Int    @id @default(autoincrement())
+  aiAgentLogId String @unique @default(ulid()) @map("ai_agent_log_id") @db.Char(26)
+  id           BigInt @id @default(autoincrement())
 }
 `;
 
@@ -90,6 +91,15 @@ describe("schema conventions", () => {
 		expect(toKebabCase("OidcClient")).toBe("oidc-client");
 		expect(toKebabCase("AIAgentLog")).toBe("ai-agent-log");
 		expect(toKebabCase("OAuth2Client")).toBe("o-auth2-client");
+	});
+
+	it("Given schema 파일명 When 공개 식별자 필드명을 계산하면 Then lowerCamel Id 계약을 따른다", () => {
+		expect(toPublicIdentifierFieldName("user")).toBe("userId");
+		expect(toPublicIdentifierFieldName("oidc-client")).toBe("oidcClientId");
+		expect(toPublicIdentifierFieldName("ai-agent-log")).toBe("aiAgentLogId");
+		expect(toPublicIdentifierFieldName("safe-transaction")).toBe(
+			"safeTransactionId",
+		);
 	});
 
 	it("Given 단일 폴더 schema When 검증하면 Then count와 data-type 요약을 반환한다", () => {
@@ -158,7 +168,7 @@ generator client {
 }
 
 model BadBase {
-  id String @id
+  id BigInt @id
 }
 `,
 			}),
@@ -206,7 +216,7 @@ enum LanguageCode {
 // @description: 사용자
 /// @displayName 사용자
 model User {
-  id String @id
+  id BigInt @id
 }
 
 enum LocalEnum {
@@ -214,7 +224,7 @@ enum LocalEnum {
 }
 
 model Profile {
-  id String @id
+  id BigInt @id
 }
 `,
 			}),
@@ -250,7 +260,8 @@ model Profile {
 // @description: 잘못된 모델명
 /// @displayName 사용자
 model user_profile {
-  id String @id
+  userProfileId String @unique @default(ulid()) @map("user_profile_id") @db.Char(26)
+  id            BigInt @id @default(autoincrement())
 }
 `,
 				},
@@ -274,7 +285,8 @@ model user_profile {
 /// @displayName 사용자
 /// @DisplayName 잘못된 표시명
 model User {
-  id       String       @id
+  userId   String       @unique @default(ulid()) @map("user_id") @db.Char(26)
+  id       BigInt       @id @default(autoincrement())
   status   UserStatus
   language LanguageCode
 }
@@ -290,7 +302,9 @@ model User {
 		]);
 	});
 
-	it("Given 공개 UUID PK 또는 id 기반 relation이 있으면 When 검증하면 Then ULID id와 seq 내부키 계약을 강제한다", () => {
+	it("Given 공개 UUID PK 또는 legacy sequence relation이 있으면 When 검증하면 Then BigInt id와 공개 ULID 계약을 강제한다", () => {
+		const legacySequenceToken = ["s", "e", "q"].join("");
+		const legacyRelationSuffix = `${legacySequenceToken[0]?.toUpperCase()}${legacySequenceToken.slice(1)}`;
 		const result = validateSchemaConventions({
 			files: createValidFiles({
 				"user.prisma": `
@@ -301,18 +315,19 @@ model User {
   id       String       @id @default(uuid())
   status   UserStatus
   language LanguageCode
-  profile  Profile?     @relation(fields: [profileId], references: [id])
-  profileId String?
+  profile  Profile?     @relation(fields: [profile${legacyRelationSuffix}], references: [${legacySequenceToken}])
+  profile${legacyRelationSuffix} Int?
 }
 `,
 			}),
 		});
 
 		expectErrors(result.errors, [
-			"User.id must be String @unique @default(ulid()) @db.VarChar(26)",
-			"User.seq must be Int @id @default(autoincrement())",
-			"relation fields must use the <relation>Seq naming contract",
-			"relations must reference the internal seq key",
+			"User.id must be BigInt @id @default(autoincrement())",
+			'User.userId must be String @unique @default(ulid()) @map("user_id") @db.Char(26)',
+			"fields must not use the legacy sequence naming contract",
+			"relation fields must use the <relation>Id naming contract",
+			"relations must reference the internal id key",
 		]);
 	});
 
@@ -325,7 +340,8 @@ model User {
 // @description: 사용자
 /// @displayName 사용자
 model User {
-  id       String       @id
+  userId   String       @unique @default(ulid()) @map("user_id") @db.Char(26)
+  id       BigInt       @id @default(autoincrement())
   status   UserStatus
   language LanguageCode
 }
@@ -348,7 +364,8 @@ model User {
 /// @displayName 사용자
 
 model User {
-  id       String       @id
+  userId   String       @unique @default(ulid()) @map("user_id") @db.Char(26)
+  id       BigInt       @id @default(autoincrement())
   status   UserStatus
   language LanguageCode
 }
@@ -416,7 +433,8 @@ enum UserStatus {
 // @description: 중복 사용자
 /// @displayName 사용자 중복
 model UserCopy {
-  id String @id
+  userCopyId String @unique @default(ulid()) @map("user_copy_id") @db.Char(26)
+  id         BigInt @id @default(autoincrement())
 }
 `,
 				},

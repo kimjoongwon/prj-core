@@ -18,7 +18,7 @@ export class ContentAggregate {
 	listCommunityPosts(
 		input: CommunityPostListInput,
 	): Promise<{ items: CommunityPostRecord[]; totalCount: number }> {
-		this.logger.debug(`커뮤니티 게시글 목록 조회: ${input.spaceId.slice(-8)}`);
+		this.logger.debug(`커뮤니티 게시글 목록 조회: ${input.spaceId}`);
 
 		return this.repository.findCommunityPostsBySpaceId({
 			skip: input.skip,

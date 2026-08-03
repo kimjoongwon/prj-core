@@ -1,8 +1,8 @@
 import {
+	BigIntIdFieldOptional,
 	EnumFieldOptional,
 	StringFieldOptional,
-	ULIDFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import { DeleteFilter } from "@cocrepo/enum";
 import { Transform } from "class-transformer";
 import { QueryDto } from "../query/query.dto";
@@ -18,8 +18,8 @@ import { QueryDto } from "../query/query.dto";
  * - statusFilter -> removedAt 필터
  */
 export class AlbumQueryDto extends QueryDto {
-	@ULIDFieldOptional({ description: "테넌트 ID 필터" })
-	spaceId?: string;
+	@BigIntIdFieldOptional({ description: "테넌트 ID 필터" })
+	spaceId?: bigint;
 
 	@StringFieldOptional({ description: "앨범명 검색 (부분 일치)" })
 	name?: string;

@@ -1,7 +1,15 @@
 import { CONTEXT_KEYS, REQUEST_HEADER_KEYS } from "@cocrepo/constant";
 import { parseAcceptLanguage } from "@cocrepo/toolkit";
-import type { ContextUserSnapshot } from "@cocrepo/type";
-import { Injectable, type NestMiddleware } from "@nestjs/common";
+import {
+	type ContextUserSnapshot,
+	type DatabaseId,
+	parseDecimalId,
+} from "@cocrepo/type";
+import {
+	BadRequestException,
+	Injectable,
+	type NestMiddleware,
+} from "@nestjs/common";
 import type { NextFunction, Request, Response } from "express";
 import { ClsService } from "nestjs-cls";
 import { AppLogger } from "../util/app-logger.util";
@@ -29,6 +37,10 @@ export class RequestContextMiddleware implements NestMiddleware {
 		try {
 			this.setRequestContext(req);
 		} catch (error) {
+			if (error instanceof BadRequestException) {
+				throw error;
+			}
+
 			this.logger.error(
 				`Request 컨텍스트 설정 실패: ${error instanceof Error ? error?.message : String(error)}`,
 			);
@@ -65,11 +77,8 @@ export class RequestContextMiddleware implements NestMiddleware {
 		this.cls.set(CONTEXT_KEYS.LANGUAGE, language);
 
 		// Tenant ID 설정 (x-tenant-id 헤더)
-		const tenantId = this.readRequestHeader(
-			request,
-			REQUEST_HEADER_KEYS.TENANT_ID,
-		);
-		this.cls.set(CONTEXT_KEYS.TENANT_ID, tenantId || undefined);
+		const tenantId = this.parseTenantIdHeader(request);
+		this.cls.set(CONTEXT_KEYS.TENANT_ID, tenantId);
 
 		// Tenant 설정 및 Space ID 파생
 		const tenant = resolveCurrentTenantById(user?.tenants, tenantId);
@@ -79,15 +88,48 @@ export class RequestContextMiddleware implements NestMiddleware {
 
 		if (user && tenant) {
 			this.logger.dev("Request 컨텍스트 설정 완료", {
-				userId: user.id.slice(-8),
-				requestedTenantId: tenantId?.slice(-8),
-				tenantId: tenant.id.slice(-8),
-				spaceId: spaceId?.slice(-8),
+				userId: user.id.toString().slice(-8),
+				requestedTenantId: tenantId?.toString().slice(-8),
+				tenantId: tenant.id.toString().slice(-8),
+				spaceId: spaceId?.toString().slice(-8),
 				language,
 			});
 		}
 	}
 
+	/**
+	 * x-tenant-id wire 값을 검증하고 런타임 DatabaseId로 변환합니다.
+	 *
+	 * @param request 현재 HTTP 요청
+	 * @returns 헤더가 없으면 undefined, 유효하면 bigint tenant ID
+	 * @throws BadRequestException 헤더가 canonical decimal ID가 아닌 경우
+	 */
+	private parseTenantIdHeader(request: Request): DatabaseId | undefined {
+		const headerValue = this.readRequestHeader(
+			request,
+			REQUEST_HEADER_KEYS.TENANT_ID,
+		);
+		if (headerValue === undefined) {
+			return undefined;
+		}
+
+		const tenantId = parseDecimalId(headerValue);
+		if (tenantId === null) {
+			throw new BadRequestException(
+				"x-tenant-id 헤더는 canonical positive bigint ID 문자열이어야 합니다.",
+			);
+		}
+
+		return tenantId;
+	}
+
+	/**
+	 * Express 헤더 값을 첫 번째 문자열 값으로 정규화합니다.
+	 *
+	 * @param request 현재 HTTP 요청
+	 * @param headerName 읽을 헤더 이름
+	 * @returns 문자열 헤더 값 또는 undefined
+	 */
 	private readRequestHeader(
 		request: Request,
 		headerName: string,

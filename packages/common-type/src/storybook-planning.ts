@@ -1,3 +1,5 @@
+import type { DecimalId } from "./database-id";
+
 /**
  * Storybook planning runtime target.
  */
@@ -60,7 +62,7 @@ export interface PlanningApiScenario<THandler = unknown> {
  * Mock account shown in a planning review session.
  */
 export interface PlanningAccount {
-	id?: string;
+	id?: DecimalId;
 	name: string;
 	email?: string;
 	role?: string;
@@ -70,8 +72,8 @@ export interface PlanningAccount {
  * Selectable tenant and space shown in a planning review session.
  */
 export interface PlanningSpaceOption {
-	tenantId: string;
-	spaceId: string;
+	tenantId: DecimalId;
+	spaceId: DecimalId;
 	fitnessCenterName: string;
 	tenantName?: string;
 	contentLanguageCode?: string | null;
@@ -85,9 +87,9 @@ export interface PlanningContext {
 	authState?: PlanningAuthState;
 	account?: PlanningAccount;
 	role?: string;
-	tenantId?: string;
+	tenantId?: DecimalId;
 	tenantName?: string;
-	spaceId?: string;
+	spaceId?: DecimalId;
 	fitnessCenterName?: string;
 	spaces?: readonly PlanningSpaceOption[];
 	abilities?: readonly string[];

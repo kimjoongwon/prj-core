@@ -1,22 +1,20 @@
 import type {
-	ServiceDocument as ServiceDocumentEntity,
 	ServiceDocumentFormat,
 	ServiceDocumentKind,
 	ServiceDocumentPlatform,
 	ServiceDocumentStatus,
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 
 /**
  * ServiceDocument 엔티티
  *
  * 모바일과 web 서비스에 노출되는 약관/동의 문서의 버전 단위 객체입니다.
  */
-export class ServiceDocument
-	extends AbstractEntity
-	implements DomainEntityModel<ServiceDocumentEntity>
-{
+export class ServiceDocument extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	serviceDocumentId!: string;
+
 	kind!: ServiceDocumentKind;
 	platform!: ServiceDocumentPlatform;
 	locale!: string;

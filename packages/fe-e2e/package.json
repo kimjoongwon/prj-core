@@ -34,6 +34,9 @@
     "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
   },
   "license": "ISC",
+  "dependencies": {
+    "@cocrepo/type": "workspace:^"
+  },
   "devDependencies": {
     "@types/node": "catalog:",
     "typescript": "catalog:",

@@ -43,7 +43,7 @@ export class FolderAggregate {
 			spaceIds,
 		);
 
-		this.logger.debug(`폴더 목록 조회: space=${spaceId.slice(-8)}`);
+		this.logger.debug(`폴더 목록 조회: space=${spaceId}`);
 
 		const folderResult = await this.foldersRepository.findMany({
 			where,
@@ -60,7 +60,7 @@ export class FolderAggregate {
 
 	async createFolder(
 		input: CreateFolderInput,
-		createdById: string,
+		createdById: bigint,
 	): Promise<Folder> {
 		const spaceId = this.getRequiredSpaceId();
 		const folder = new Folder();
@@ -106,7 +106,7 @@ export class FolderAggregate {
 				: 0;
 
 		this.logger.debug(
-			`폴더 생성: space=${spaceId.slice(-8)}, parent=${folder.parentFolderId?.slice(-8) ?? "root"}, name=${folder.name}`,
+			`폴더 생성: space=${spaceId}, parent=${folder.parentFolderId ?? "root"}, name=${folder.name}`,
 		);
 
 		return this.foldersRepository.create({
@@ -120,7 +120,7 @@ export class FolderAggregate {
 	}
 
 	async updateFolder(
-		folderId: string,
+		folderId: bigint,
 		input: UpdateFolderInput,
 	): Promise<Folder> {
 		const spaceId = this.getRequiredSpaceId();
@@ -226,7 +226,7 @@ export class FolderAggregate {
 		return updatedFolder;
 	}
 
-	async deleteFolder(folderId: string): Promise<void> {
+	async deleteFolder(folderId: bigint): Promise<void> {
 		const folder = await this.foldersRepository.findByIdWithChildren(folderId);
 		const spaceId = this.getRequiredSpaceId();
 
@@ -245,7 +245,7 @@ export class FolderAggregate {
 		await this.foldersRepository.removeById(folderId);
 	}
 
-	private getRequiredSpaceId(): string {
+	private getRequiredSpaceId(): bigint {
 		const spaceId = this.spaceContext.spaceId;
 		if (!spaceId) {
 			throw new BadRequestException(
@@ -258,7 +258,7 @@ export class FolderAggregate {
 
 	private applySpaceScope(
 		where: Prisma.FolderWhereInput,
-		spaceIds?: string[],
+		spaceIds?: bigint[],
 	): Prisma.FolderWhereInput {
 		if (spaceIds === undefined) {
 			return where;

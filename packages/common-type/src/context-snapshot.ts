@@ -1,56 +1,58 @@
+import type { DatabaseId } from "./database-id";
+
 export interface ContextCategorySnapshot {
-  name?: string | null;
+	name?: string | null;
 }
 
 export interface ContextClassificationSnapshot {
-  category?: ContextCategorySnapshot | null;
+	category?: ContextCategorySnapshot | null;
 }
 
 export interface ContextAssociationSnapshot {
-  group?: {
-    name?: string | null;
-  } | null;
+	group?: {
+		name?: string | null;
+	} | null;
 }
 
 export interface ContextRoleSnapshot {
-  id: string;
-  name?: string | null;
-  classification?: ContextClassificationSnapshot | null;
-  associations?: ContextAssociationSnapshot[];
+	id: DatabaseId;
+	name?: string | null;
+	classification?: ContextClassificationSnapshot | null;
+	associations?: ContextAssociationSnapshot[];
 }
 
 export interface ContextFitnessCenterSnapshot {
-  company?: unknown;
+	company?: unknown;
 }
 
 export interface ContextSpaceSnapshot {
-  id: string;
-  classification?: ContextClassificationSnapshot | null;
-  spaceClassification?: ContextClassificationSnapshot | null;
-  spaceClassifications?: ContextClassificationSnapshot[] | null;
-  fitnessCenter?: ContextFitnessCenterSnapshot | null;
+	id: DatabaseId;
+	classification?: ContextClassificationSnapshot | null;
+	spaceClassification?: ContextClassificationSnapshot | null;
+	spaceClassifications?: ContextClassificationSnapshot[] | null;
+	fitnessCenter?: ContextFitnessCenterSnapshot | null;
 }
 
 export interface ContextTenantSnapshot {
-  id: string;
-  roleId: string;
-  userId?: string;
-  spaceId: string;
-  removedAt?: Date | null;
-  role?: ContextRoleSnapshot | null;
-  space?: ContextSpaceSnapshot | null;
+	id: DatabaseId;
+	roleId: DatabaseId;
+	userId?: DatabaseId;
+	spaceId: DatabaseId;
+	removedAt?: Date | null;
+	role?: ContextRoleSnapshot | null;
+	space?: ContextSpaceSnapshot | null;
 }
 
 export interface ContextUserSnapshot {
-  id: string;
-  currentTenantId?: string | null;
-  spaceId?: string;
-  email?: string;
-  name?: string;
-  phone?: string;
-  removedAt?: Date | null;
-  tenants?: ContextTenantSnapshot[];
-  profiles?: unknown[];
-  associations?: ContextAssociationSnapshot[];
-  classification?: ContextClassificationSnapshot | null;
+	id: DatabaseId;
+	currentTenantId?: DatabaseId | null;
+	spaceId?: DatabaseId;
+	email?: string;
+	name?: string;
+	phone?: string;
+	removedAt?: Date | null;
+	tenants?: ContextTenantSnapshot[];
+	profiles?: unknown[];
+	associations?: ContextAssociationSnapshot[];
+	classification?: ContextClassificationSnapshot | null;
 }

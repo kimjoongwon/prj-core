@@ -1,4 +1,4 @@
-import { ClassField } from "@cocrepo/decorator";
+import { ClassField } from "@cocrepo/decorator/field";
 import { RouteDto } from "./route.dto";
 
 export class AppBuilderDto {

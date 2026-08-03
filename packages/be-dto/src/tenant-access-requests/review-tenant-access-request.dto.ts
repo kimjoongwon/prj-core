@@ -1,4 +1,4 @@
-import { StringFieldOptional } from "@cocrepo/decorator";
+import { StringFieldOptional } from "@cocrepo/decorator/field";
 
 export class ReviewTenantAccessRequestDto {
 	@StringFieldOptional({

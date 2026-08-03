@@ -27,38 +27,38 @@ export type AggregateSafeConfirmation = {
 }
 
 export type SafeConfirmationAvgAggregateOutputType = {
-  seq: number | null
-  safeTransactionSeq: number | null
+  id: number | null
+  safeTransactionId: number | null
 }
 
 export type SafeConfirmationSumAggregateOutputType = {
-  seq: number | null
-  safeTransactionSeq: number | null
+  id: bigint | null
+  safeTransactionId: bigint | null
 }
 
 export type SafeConfirmationMinAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  safeConfirmationId: string | null
+  id: bigint | null
   createdAt: Date | null
-  safeTransactionSeq: number | null
+  safeTransactionId: bigint | null
   owner: string | null
   signature: string | null
 }
 
 export type SafeConfirmationMaxAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  safeConfirmationId: string | null
+  id: bigint | null
   createdAt: Date | null
-  safeTransactionSeq: number | null
+  safeTransactionId: bigint | null
   owner: string | null
   signature: string | null
 }
 
 export type SafeConfirmationCountAggregateOutputType = {
+  safeConfirmationId: number
   id: number
-  seq: number
   createdAt: number
-  safeTransactionSeq: number
+  safeTransactionId: number
   owner: number
   signature: number
   _all: number
@@ -66,38 +66,38 @@ export type SafeConfirmationCountAggregateOutputType = {
 
 
 export type SafeConfirmationAvgAggregateInputType = {
-  seq?: true
-  safeTransactionSeq?: true
+  id?: true
+  safeTransactionId?: true
 }
 
 export type SafeConfirmationSumAggregateInputType = {
-  seq?: true
-  safeTransactionSeq?: true
+  id?: true
+  safeTransactionId?: true
 }
 
 export type SafeConfirmationMinAggregateInputType = {
+  safeConfirmationId?: true
   id?: true
-  seq?: true
   createdAt?: true
-  safeTransactionSeq?: true
+  safeTransactionId?: true
   owner?: true
   signature?: true
 }
 
 export type SafeConfirmationMaxAggregateInputType = {
+  safeConfirmationId?: true
   id?: true
-  seq?: true
   createdAt?: true
-  safeTransactionSeq?: true
+  safeTransactionId?: true
   owner?: true
   signature?: true
 }
 
 export type SafeConfirmationCountAggregateInputType = {
+  safeConfirmationId?: true
   id?: true
-  seq?: true
   createdAt?: true
-  safeTransactionSeq?: true
+  safeTransactionId?: true
   owner?: true
   signature?: true
   _all?: true
@@ -190,10 +190,10 @@ export type SafeConfirmationGroupByArgs<ExtArgs extends runtime.Types.Extensions
 }
 
 export type SafeConfirmationGroupByOutputType = {
-  id: string
-  seq: number
+  safeConfirmationId: string
+  id: bigint
   createdAt: Date
-  safeTransactionSeq: number
+  safeTransactionId: bigint
   owner: string
   signature: string
   _count: SafeConfirmationCountAggregateOutputType | null
@@ -222,44 +222,44 @@ export type SafeConfirmationWhereInput = {
   AND?: Prisma.SafeConfirmationWhereInput | Prisma.SafeConfirmationWhereInput[]
   OR?: Prisma.SafeConfirmationWhereInput[]
   NOT?: Prisma.SafeConfirmationWhereInput | Prisma.SafeConfirmationWhereInput[]
-  id?: Prisma.StringFilter<"SafeConfirmation"> | string
-  seq?: Prisma.IntFilter<"SafeConfirmation"> | number
+  safeConfirmationId?: Prisma.StringFilter<"SafeConfirmation"> | string
+  id?: Prisma.BigIntFilter<"SafeConfirmation"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"SafeConfirmation"> | Date | string
-  safeTransactionSeq?: Prisma.IntFilter<"SafeConfirmation"> | number
+  safeTransactionId?: Prisma.BigIntFilter<"SafeConfirmation"> | bigint | number
   owner?: Prisma.StringFilter<"SafeConfirmation"> | string
   signature?: Prisma.StringFilter<"SafeConfirmation"> | string
   safeTransaction?: Prisma.XOR<Prisma.SafeTransactionScalarRelationFilter, Prisma.SafeTransactionWhereInput>
 }
 
 export type SafeConfirmationOrderByWithRelationInput = {
+  safeConfirmationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  safeTransactionSeq?: Prisma.SortOrder
+  safeTransactionId?: Prisma.SortOrder
   owner?: Prisma.SortOrder
   signature?: Prisma.SortOrder
   safeTransaction?: Prisma.SafeTransactionOrderByWithRelationInput
 }
 
 export type SafeConfirmationWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  seq?: number
-  safeTransactionSeq_owner?: Prisma.SafeConfirmationSafeTransactionSeqOwnerCompoundUniqueInput
+  safeConfirmationId?: string
+  id?: bigint | number
+  safeTransactionId_owner?: Prisma.SafeConfirmationSafeTransactionIdOwnerCompoundUniqueInput
   AND?: Prisma.SafeConfirmationWhereInput | Prisma.SafeConfirmationWhereInput[]
   OR?: Prisma.SafeConfirmationWhereInput[]
   NOT?: Prisma.SafeConfirmationWhereInput | Prisma.SafeConfirmationWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"SafeConfirmation"> | Date | string
-  safeTransactionSeq?: Prisma.IntFilter<"SafeConfirmation"> | number
+  safeTransactionId?: Prisma.BigIntFilter<"SafeConfirmation"> | bigint | number
   owner?: Prisma.StringFilter<"SafeConfirmation"> | string
   signature?: Prisma.StringFilter<"SafeConfirmation"> | string
   safeTransaction?: Prisma.XOR<Prisma.SafeTransactionScalarRelationFilter, Prisma.SafeTransactionWhereInput>
-}, "seq" | "id" | "safeTransactionSeq_owner">
+}, "id" | "safeConfirmationId" | "safeTransactionId_owner">
 
 export type SafeConfirmationOrderByWithAggregationInput = {
+  safeConfirmationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  safeTransactionSeq?: Prisma.SortOrder
+  safeTransactionId?: Prisma.SortOrder
   owner?: Prisma.SortOrder
   signature?: Prisma.SortOrder
   _count?: Prisma.SafeConfirmationCountOrderByAggregateInput
@@ -273,16 +273,17 @@ export type SafeConfirmationScalarWhereWithAggregatesInput = {
   AND?: Prisma.SafeConfirmationScalarWhereWithAggregatesInput | Prisma.SafeConfirmationScalarWhereWithAggregatesInput[]
   OR?: Prisma.SafeConfirmationScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SafeConfirmationScalarWhereWithAggregatesInput | Prisma.SafeConfirmationScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"SafeConfirmation"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"SafeConfirmation"> | number
+  safeConfirmationId?: Prisma.StringWithAggregatesFilter<"SafeConfirmation"> | string
+  id?: Prisma.BigIntWithAggregatesFilter<"SafeConfirmation"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SafeConfirmation"> | Date | string
-  safeTransactionSeq?: Prisma.IntWithAggregatesFilter<"SafeConfirmation"> | number
+  safeTransactionId?: Prisma.BigIntWithAggregatesFilter<"SafeConfirmation"> | bigint | number
   owner?: Prisma.StringWithAggregatesFilter<"SafeConfirmation"> | string
   signature?: Prisma.StringWithAggregatesFilter<"SafeConfirmation"> | string
 }
 
 export type SafeConfirmationCreateInput = {
-  id?: string
+  safeConfirmationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   owner: string
   signature: string
@@ -290,16 +291,17 @@ export type SafeConfirmationCreateInput = {
 }
 
 export type SafeConfirmationUncheckedCreateInput = {
-  id?: string
-  seq?: number
+  safeConfirmationId?: string
+  id?: bigint | number
   createdAt?: Date | string
-  safeTransactionSeq: number
+  safeTransactionId: bigint | number
   owner: string
   signature: string
 }
 
 export type SafeConfirmationUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  safeConfirmationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.StringFieldUpdateOperationsInput | string
   signature?: Prisma.StringFieldUpdateOperationsInput | string
@@ -307,79 +309,80 @@ export type SafeConfirmationUpdateInput = {
 }
 
 export type SafeConfirmationUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  safeConfirmationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  safeTransactionSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  safeTransactionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   owner?: Prisma.StringFieldUpdateOperationsInput | string
   signature?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type SafeConfirmationCreateManyInput = {
-  id?: string
-  seq?: number
+  safeConfirmationId?: string
+  id?: bigint | number
   createdAt?: Date | string
-  safeTransactionSeq: number
+  safeTransactionId: bigint | number
   owner: string
   signature: string
 }
 
 export type SafeConfirmationUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  safeConfirmationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.StringFieldUpdateOperationsInput | string
   signature?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type SafeConfirmationUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  safeConfirmationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  safeTransactionSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  safeTransactionId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   owner?: Prisma.StringFieldUpdateOperationsInput | string
   signature?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
-export type SafeConfirmationSafeTransactionSeqOwnerCompoundUniqueInput = {
-  safeTransactionSeq: number
+export type SafeConfirmationSafeTransactionIdOwnerCompoundUniqueInput = {
+  safeTransactionId: bigint | number
   owner: string
 }
 
 export type SafeConfirmationCountOrderByAggregateInput = {
+  safeConfirmationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  safeTransactionSeq?: Prisma.SortOrder
+  safeTransactionId?: Prisma.SortOrder
   owner?: Prisma.SortOrder
   signature?: Prisma.SortOrder
 }
 
 export type SafeConfirmationAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  safeTransactionSeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  safeTransactionId?: Prisma.SortOrder
 }
 
 export type SafeConfirmationMaxOrderByAggregateInput = {
+  safeConfirmationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  safeTransactionSeq?: Prisma.SortOrder
+  safeTransactionId?: Prisma.SortOrder
   owner?: Prisma.SortOrder
   signature?: Prisma.SortOrder
 }
 
 export type SafeConfirmationMinOrderByAggregateInput = {
+  safeConfirmationId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  safeTransactionSeq?: Prisma.SortOrder
+  safeTransactionId?: Prisma.SortOrder
   owner?: Prisma.SortOrder
   signature?: Prisma.SortOrder
 }
 
 export type SafeConfirmationSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  safeTransactionSeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  safeTransactionId?: Prisma.SortOrder
 }
 
 export type SafeConfirmationListRelationFilter = {
@@ -435,15 +438,16 @@ export type SafeConfirmationUncheckedUpdateManyWithoutSafeTransactionNestedInput
 }
 
 export type SafeConfirmationCreateWithoutSafeTransactionInput = {
-  id?: string
+  safeConfirmationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   owner: string
   signature: string
 }
 
 export type SafeConfirmationUncheckedCreateWithoutSafeTransactionInput = {
-  id?: string
-  seq?: number
+  safeConfirmationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   owner: string
   signature: string
@@ -479,40 +483,41 @@ export type SafeConfirmationScalarWhereInput = {
   AND?: Prisma.SafeConfirmationScalarWhereInput | Prisma.SafeConfirmationScalarWhereInput[]
   OR?: Prisma.SafeConfirmationScalarWhereInput[]
   NOT?: Prisma.SafeConfirmationScalarWhereInput | Prisma.SafeConfirmationScalarWhereInput[]
-  id?: Prisma.StringFilter<"SafeConfirmation"> | string
-  seq?: Prisma.IntFilter<"SafeConfirmation"> | number
+  safeConfirmationId?: Prisma.StringFilter<"SafeConfirmation"> | string
+  id?: Prisma.BigIntFilter<"SafeConfirmation"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"SafeConfirmation"> | Date | string
-  safeTransactionSeq?: Prisma.IntFilter<"SafeConfirmation"> | number
+  safeTransactionId?: Prisma.BigIntFilter<"SafeConfirmation"> | bigint | number
   owner?: Prisma.StringFilter<"SafeConfirmation"> | string
   signature?: Prisma.StringFilter<"SafeConfirmation"> | string
 }
 
 export type SafeConfirmationCreateManySafeTransactionInput = {
-  id?: string
-  seq?: number
+  safeConfirmationId?: string
+  id?: bigint | number
   createdAt?: Date | string
   owner: string
   signature: string
 }
 
 export type SafeConfirmationUpdateWithoutSafeTransactionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  safeConfirmationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.StringFieldUpdateOperationsInput | string
   signature?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type SafeConfirmationUncheckedUpdateWithoutSafeTransactionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  safeConfirmationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.StringFieldUpdateOperationsInput | string
   signature?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type SafeConfirmationUncheckedUpdateManyWithoutSafeTransactionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  safeConfirmationId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.StringFieldUpdateOperationsInput | string
   signature?: Prisma.StringFieldUpdateOperationsInput | string
@@ -521,45 +526,45 @@ export type SafeConfirmationUncheckedUpdateManyWithoutSafeTransactionInput = {
 
 
 export type SafeConfirmationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  safeConfirmationId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
-  safeTransactionSeq?: boolean
+  safeTransactionId?: boolean
   owner?: boolean
   signature?: boolean
   safeTransaction?: boolean | Prisma.SafeTransactionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["safeConfirmation"]>
 
 export type SafeConfirmationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  safeConfirmationId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
-  safeTransactionSeq?: boolean
+  safeTransactionId?: boolean
   owner?: boolean
   signature?: boolean
   safeTransaction?: boolean | Prisma.SafeTransactionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["safeConfirmation"]>
 
 export type SafeConfirmationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  safeConfirmationId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
-  safeTransactionSeq?: boolean
+  safeTransactionId?: boolean
   owner?: boolean
   signature?: boolean
   safeTransaction?: boolean | Prisma.SafeTransactionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["safeConfirmation"]>
 
 export type SafeConfirmationSelectScalar = {
+  safeConfirmationId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
-  safeTransactionSeq?: boolean
+  safeTransactionId?: boolean
   owner?: boolean
   signature?: boolean
 }
 
-export type SafeConfirmationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "safeTransactionSeq" | "owner" | "signature", ExtArgs["result"]["safeConfirmation"]>
+export type SafeConfirmationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"safeConfirmationId" | "id" | "createdAt" | "safeTransactionId" | "owner" | "signature", ExtArgs["result"]["safeConfirmation"]>
 export type SafeConfirmationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   safeTransaction?: boolean | Prisma.SafeTransactionDefaultArgs<ExtArgs>
 }
@@ -576,10 +581,10 @@ export type $SafeConfirmationPayload<ExtArgs extends runtime.Types.Extensions.In
     safeTransaction: Prisma.$SafeTransactionPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    seq: number
+    safeConfirmationId: string
+    id: bigint
     createdAt: Date
-    safeTransactionSeq: number
+    safeTransactionId: bigint
     owner: string
     signature: string
   }, ExtArgs["result"]["safeConfirmation"]>
@@ -665,8 +670,8 @@ export interface SafeConfirmationDelegate<ExtArgs extends runtime.Types.Extensio
    * // Get first 10 SafeConfirmations
    * const safeConfirmations = await prisma.safeConfirmation.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const safeConfirmationWithIdOnly = await prisma.safeConfirmation.findMany({ select: { id: true } })
+   * // Only select the `safeConfirmationId`
+   * const safeConfirmationWithSafeConfirmationIdOnly = await prisma.safeConfirmation.findMany({ select: { safeConfirmationId: true } })
    * 
    */
   findMany<T extends SafeConfirmationFindManyArgs>(args?: Prisma.SelectSubset<T, SafeConfirmationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SafeConfirmationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -710,9 +715,9 @@ export interface SafeConfirmationDelegate<ExtArgs extends runtime.Types.Extensio
    *   ]
    * })
    * 
-   * // Create many SafeConfirmations and only return the `id`
-   * const safeConfirmationWithIdOnly = await prisma.safeConfirmation.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many SafeConfirmations and only return the `safeConfirmationId`
+   * const safeConfirmationWithSafeConfirmationIdOnly = await prisma.safeConfirmation.createManyAndReturn({
+   *   select: { safeConfirmationId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -801,9 +806,9 @@ export interface SafeConfirmationDelegate<ExtArgs extends runtime.Types.Extensio
    *   ]
    * })
    * 
-   * // Update zero or more SafeConfirmations and only return the `id`
-   * const safeConfirmationWithIdOnly = await prisma.safeConfirmation.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more SafeConfirmations and only return the `safeConfirmationId`
+   * const safeConfirmationWithSafeConfirmationIdOnly = await prisma.safeConfirmation.updateManyAndReturn({
+   *   select: { safeConfirmationId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1006,10 +1011,10 @@ export interface Prisma__SafeConfirmationClient<T, Null = never, ExtArgs extends
  * Fields of the SafeConfirmation model
  */
 export interface SafeConfirmationFieldRefs {
-  readonly id: Prisma.FieldRef<"SafeConfirmation", 'String'>
-  readonly seq: Prisma.FieldRef<"SafeConfirmation", 'Int'>
+  readonly safeConfirmationId: Prisma.FieldRef<"SafeConfirmation", 'String'>
+  readonly id: Prisma.FieldRef<"SafeConfirmation", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"SafeConfirmation", 'DateTime'>
-  readonly safeTransactionSeq: Prisma.FieldRef<"SafeConfirmation", 'Int'>
+  readonly safeTransactionId: Prisma.FieldRef<"SafeConfirmation", 'BigInt'>
   readonly owner: Prisma.FieldRef<"SafeConfirmation", 'String'>
   readonly signature: Prisma.FieldRef<"SafeConfirmation", 'String'>
 }

@@ -1,9 +1,5 @@
-import type {
-	InquiryThread as InquiryThreadEntity,
-	ThreadStatus,
-} from "@cocrepo/prisma";
+import type { ThreadStatus } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Inquiry } from "./inquiry.entity";
 import type { InquiryMessage } from "./inquiry-message.entity";
 import type { InquiryParticipant } from "./inquiry-participant.entity";
@@ -15,16 +11,16 @@ import type { User } from "./user.entity";
  * 하나의 문의에 여러 스레드가 존재할 수 있으며,
  * 각 스레드는 독립적인 대화 흐름을 가집니다.
  */
-export class InquiryThread
-	extends AbstractEntity
-	implements DomainEntityModel<InquiryThreadEntity>
-{
+export class InquiryThread extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	inquiryThreadId!: string;
+
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	inquiryId!: string;
+	inquiryId!: bigint;
 	status!: ThreadStatus;
-	createdById!: string;
+	createdById!: bigint;
 	messageCount!: number;
 
 	// ============================================================================

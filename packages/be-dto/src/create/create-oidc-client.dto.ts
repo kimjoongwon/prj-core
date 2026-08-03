@@ -1,4 +1,4 @@
-import { BooleanFieldOptional } from "@cocrepo/decorator";
+import { BooleanFieldOptional } from "@cocrepo/decorator/field";
 import { OmitType } from "@nestjs/swagger";
 
 import { COMMON_ENTITY_FIELDS } from "../constant";

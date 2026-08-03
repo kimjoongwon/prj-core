@@ -1,4 +1,4 @@
-import { ParseUlidPipe, RolesGuard } from "@cocrepo/be-common";
+import { ParseBigIntIdPipe, RolesGuard } from "@cocrepo/be-common";
 import {
 	CreateTaskCommand,
 	DeleteTaskCommand,
@@ -68,6 +68,7 @@ export class TasksController {
 		if (!spaceId) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
 		}
+
 		const spaceScope = query.spaceScope ?? SpaceScope.CURRENT;
 
 		return this.queryBus.execute(
@@ -88,13 +89,13 @@ export class TasksController {
 	@ApiAuth()
 	@ApiParam({
 		name: "taskId",
-		description: "Task ID (ULID)",
+		description: "Task ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
 	@ApiResponseEntity(ExerciseDto, HttpStatus.OK)
 	@ResponseMessage("Task Exercise 조회 성공")
-	async getTaskExercise(@Param("taskId", ParseUlidPipe) taskId: string) {
+	async getTaskExercise(@Param("taskId", ParseBigIntIdPipe) taskId: bigint) {
 		const spaceId = this.spaceContext.spaceId;
 		if (!spaceId) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
@@ -112,14 +113,14 @@ export class TasksController {
 	@ApiAuth()
 	@ApiParam({
 		name: "taskId",
-		description: "Task ID (ULID)",
+		description: "Task ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(401, 404, 500)
 	@ApiResponseEntity(RoutineDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("Task 연관 루틴 조회 성공")
 	async getTaskRoutines(
-		@Param("taskId", ParseUlidPipe) taskId: string,
+		@Param("taskId", ParseBigIntIdPipe) taskId: bigint,
 	): Promise<Routine[]> {
 		const spaceId = this.spaceContext.spaceId;
 		if (!spaceId) {
@@ -171,7 +172,7 @@ export class TasksController {
 	@ApiAuth()
 	@ApiParam({
 		name: "taskId",
-		description: "Task ID (ULID)",
+		description: "Task ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiBody({
@@ -182,7 +183,7 @@ export class TasksController {
 	@ApiResponseEntity(TaskDto, HttpStatus.OK)
 	@ResponseMessage("Task Exercise 수정 성공")
 	async updateTaskExercise(
-		@Param("taskId", ParseUlidPipe) taskId: string,
+		@Param("taskId", ParseBigIntIdPipe) taskId: bigint,
 		@Body() dto: UpdateExerciseDto,
 	): Promise<Task> {
 		const spaceId = this.spaceContext.spaceId;
@@ -207,13 +208,13 @@ export class TasksController {
 	@ApiAuth()
 	@ApiParam({
 		name: "taskId",
-		description: "Task ID (ULID)",
+		description: "Task ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(401, 403, 404, 500)
 	@ResponseMessage("Task 삭제 성공")
 	async deleteTask(
-		@Param("taskId", ParseUlidPipe) taskId: string,
+		@Param("taskId", ParseBigIntIdPipe) taskId: bigint,
 	): Promise<void> {
 		const spaceId = this.spaceContext.spaceId;
 		if (!spaceId) {

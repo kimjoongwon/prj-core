@@ -40,7 +40,13 @@ export class RefreshNativeMobileSessionUseCase {
 			throw new UnauthorizedException("리프레시 토큰이 유효하지 않습니다");
 		}
 
-		const user = await this.usersService.getByIdWithTenants(lookup.userId);
+		const user = await (
+			this.usersService as UserService & {
+				findByUserIdWithTenants: (
+					userId: string,
+				) => ReturnType<UserService["getByIdWithTenants"]>;
+			}
+		).findByUserIdWithTenants(lookup.userId);
 		if (!user) {
 			throw new UnauthorizedException("사용자를 찾을 수 없습니다");
 		}

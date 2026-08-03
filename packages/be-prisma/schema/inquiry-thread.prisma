@@ -2,8 +2,8 @@
 // @description: Inquiry에 종속되는 대화 스레드
 /// @displayName 문의 스레드
 model InquiryThread {
-  id                 String               @unique @default(ulid()) @db.VarChar(26)
-  seq                Int                  @id @default(autoincrement())
+  inquiryThreadId    String               @unique @default(ulid()) @map("inquiry_thread_id") @db.Char(26)
+  id                 BigInt               @id @default(autoincrement())
   /// @displayName 생성 일시
   createdAt          DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
   /// @displayName 수정 일시
@@ -11,25 +11,25 @@ model InquiryThread {
   /// @displayName 종료 일시
   closedAt           DateTime?            @map("closed_at") @db.Timestamptz(6)
   /// @displayName 소속 문의 내부 순번
-  inquirySeq         Int                  @map("inquiry_seq")
+  inquiryId          BigInt               @map("inquiry_id")
   /// @displayName 제목
   title              String?
   /// @displayName 상태
   status             ThreadStatus         @default(ACTIVE)
   /// @displayName 생성자 내부 순번
-  createdBySeq       Int                  @map("created_by_seq")
+  createdById        BigInt               @map("created_by_id")
   /// @displayName 마지막 메시지 일시
   lastMessageAt      DateTime?            @map("last_message_at") @db.Timestamptz(6)
   /// @displayName 마지막 메시지 미리보기
   lastMessagePreview String?              @map("last_message_preview") @db.Char(100)
   /// @displayName 메시지 수
   messageCount       Int                  @default(0) @map("message_count")
-  inquiry            Inquiry              @relation(fields: [inquirySeq], references: [seq], onDelete: Cascade)
-  createdBy          User                 @relation(fields: [createdBySeq], references: [seq])
+  inquiry            Inquiry              @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  createdBy          User                 @relation(fields: [createdById], references: [id])
   messages           InquiryMessage[]
   participants       InquiryParticipant[]
 
-  @@index([inquirySeq])
+  @@index([inquiryId])
   @@index([status])
   @@map("inquiry_threads")
 }

@@ -8,6 +8,7 @@ import { JwtService } from "@nestjs/jwt";
 import type { SignOptions } from "jsonwebtoken";
 import { decodeAccessToken } from "../oidc/decode-access-token";
 import { parseExpiresInToMilliseconds } from "../oidc/parse-expires-in-to-milliseconds";
+import { serializeAuthCacheUser } from "../serialize-auth-cache-user";
 import type { NativeAuthResult } from "./native-auth.result";
 import { NATIVE_TOKEN_ISSUER_SUFFIX } from "./native-token-issuer-suffix";
 
@@ -28,6 +29,10 @@ export async function buildNativeAuthResponse(params: {
 	if (!authConfig?.secret) {
 		throw new Error("JWT secret is not defined in the configuration.");
 	}
+	if (!params.user.userId) {
+		throw new UnauthorizedException("사용자 공개 식별자를 찾을 수 없습니다");
+	}
+
 	const oidcConfig = params.configService.get<{ issuer?: string }>("oidc");
 	const accessToken = params.jwtService.sign(
 		{
@@ -38,7 +43,7 @@ export async function buildNativeAuthResponse(params: {
 			audience: MOBILE_NATIVE_CLIENT_ID,
 			expiresIn: authConfig.expires as SignOptions["expiresIn"],
 			issuer: `${oidcConfig?.issuer || "http://localhost:3000"}${NATIVE_TOKEN_ISSUER_SUFFIX}`,
-			subject: params.user.id,
+			subject: params.user.userId,
 		},
 	);
 	const accessTokenVo = AccessToken.create(accessToken);
@@ -49,8 +54,8 @@ export async function buildNativeAuthResponse(params: {
 	const remainingSeconds = expSeconds - Math.floor(Date.now() / 1000);
 	if (remainingSeconds > 0) {
 		await params.authCacheService.set(
-			params.user.id,
-			JSON.stringify(params.user),
+			params.user.userId,
+			serializeAuthCacheUser(params.user),
 			remainingSeconds,
 		);
 	}

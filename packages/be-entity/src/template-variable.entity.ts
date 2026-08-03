@@ -1,43 +1,26 @@
-import type { TemplateVariable as TemplateVariableEntity } from "@cocrepo/prisma";
-import type { DomainEntityModel } from "./domain-entity-model.type";
+import { AbstractEntity } from "./abstract.entity";
 import type { Template } from "./template.entity";
 
-export class TemplateVariable
-	implements DomainEntityModel<TemplateVariableEntity>
-{
-	// ============================================================================
-	// 기본 필드
-	// ============================================================================
-
-	id!: string;
-	createdAt!: Date;
-	updatedAt!: Date | null;
+export class TemplateVariable extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	templateVariableId!: string;
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-
-	/** 변수명 */
 	name!: string;
-	/** 필수 여부 */
 	isRequired!: boolean;
-	/** 템플릿 ID */
-	templateId!: string;
+	templateId!: bigint;
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-
-	/** 변수 설명 */
 	description!: string | null;
-	/** 기본값 */
 	defaultValue!: string | null;
 
 	// ============================================================================
 	// 관계 필드 (선택적)
 	// ============================================================================
-
-	/** 소속 템플릿 */
 	template?: Template;
 
 	// ============================================================================

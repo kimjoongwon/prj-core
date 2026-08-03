@@ -3,12 +3,12 @@
 // @description: 운영 기준 데이터 migration 실행 이력을 기록하는 전역 카탈로그
 /// @displayName 기준 데이터 migration 이력
 model ReferenceDataMigrationHistory {
-  id           String   @unique @default(ulid()) @db.VarChar(26)
-  seq          Int      @id @default(autoincrement())
-  migrationKey String   @unique @map("migration_key")
-  checksum     String
-  description  String
-  appliedAt    DateTime @default(now()) @map("applied_at") @db.Timestamptz(6)
+  referenceDataMigrationHistoryId String   @unique @default(ulid()) @map("reference_data_migration_history_id") @db.Char(26)
+  id                              BigInt   @id @default(autoincrement())
+  migrationKey                    String   @unique @map("migration_key")
+  checksum                        String
+  description                     String
+  appliedAt                       DateTime @default(now()) @map("applied_at") @db.Timestamptz(6)
 
   @@map("reference_data_migration_history")
 }

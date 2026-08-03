@@ -1,6 +1,4 @@
-import type { InquiryTag as InquiryTagEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Inquiry } from "./inquiry.entity";
 
 /**
@@ -8,14 +6,14 @@ import type { Inquiry } from "./inquiry.entity";
  *
  * 문의에 태그를 부여하여 분류 및 검색에 활용합니다.
  */
-export class InquiryTag
-	extends AbstractEntity
-	implements DomainEntityModel<InquiryTagEntity>
-{
+export class InquiryTag extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	inquiryTagId!: string;
+
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	inquiryId!: string;
+	inquiryId!: bigint;
 	name!: string;
 
 	// ============================================================================

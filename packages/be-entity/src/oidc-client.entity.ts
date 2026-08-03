@@ -1,12 +1,10 @@
-import type { OidcClient as OidcClientEntity } from "@cocrepo/prisma";
 import type { JsonValue } from "@cocrepo/type";
 import { AbstractEntity } from "./abstract.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 
-export class OidcClient
-	extends AbstractEntity
-	implements DomainEntityModel<OidcClientEntity>
-{
+export class OidcClient extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	oidcClientId!: string;
+
 	clientId!: string;
 	clientSecret!: string | null;
 	name!: string;

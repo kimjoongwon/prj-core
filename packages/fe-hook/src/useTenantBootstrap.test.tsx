@@ -6,6 +6,7 @@ import {
 	browserPersistStorageAdapter,
 	PersistStorage,
 } from "@cocrepo/store";
+import { DATABASE_ID_MAX } from "@cocrepo/type";
 import { render, screen, waitFor } from "@testing-library/react";
 import { observer } from "mobx-react-lite";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -13,6 +14,10 @@ import {
 	type AccountBootstrapSpaceLike,
 	useTenantBootstrap,
 } from "./useTenantBootstrap";
+import { isWireId } from "./wire-id";
+
+const asId = (value: string): NonNullable<AccountBootstrapSpaceLike["id"]> =>
+	value as NonNullable<AccountBootstrapSpaceLike["id"]>;
 
 function createStorageMock() {
 	const store = new Map<string, string>();
@@ -82,16 +87,16 @@ describe("useTenantBootstrap", () => {
 		const account = createAccountStore("tenant-bootstrap-test");
 		const spaces: AccountBootstrapSpaceLike[] = [
 			{
-				id: "space-a",
-				tenantId: "tenant-a",
+				id: asId("100"),
+				tenantId: asId("1"),
 				contentLanguageCode: "ko_KR",
 				fitnessCenter: {
 					name: "Fitness Center A",
 				},
 			},
 			{
-				id: "space-b",
-				tenantId: "tenant-b",
+				id: asId("101"),
+				tenantId: asId("2"),
 				contentLanguageCode: "en_US",
 				fitnessCenter: {
 					name: "Fitness Center B",
@@ -114,21 +119,21 @@ describe("useTenantBootstrap", () => {
 
 		expect(account.availableSpaces).toEqual([
 			{
-				tenantId: "tenant-a",
-				spaceId: "space-a",
+				tenantId: "1",
+				spaceId: "100",
 				fitnessCenterName: "Fitness Center A",
 				contentLanguageCode: "ko_KR",
 			},
 			{
-				tenantId: "tenant-b",
-				spaceId: "space-b",
+				tenantId: "2",
+				spaceId: "101",
 				fitnessCenterName: "Fitness Center B",
 				contentLanguageCode: "en_US",
 			},
 		]);
-		expect(account.currentTenantId).toBe("tenant-b");
-		expect(account.selectedTenantId).toBe("tenant-b");
-		expect(account.currentSpaceId).toBe("space-b");
+		expect(String(account.currentTenantId)).toBe("2");
+		expect(String(account.selectedTenantId)).toBe("2");
+		expect(String(account.currentSpaceId)).toBe("101");
 		expect(screen.getByLabelText("account-bootstrap-ready").textContent).toBe(
 			"true",
 		);
@@ -136,7 +141,7 @@ describe("useTenantBootstrap", () => {
 
 	it("Given current-space가 비어 있을 때, When bootstrap이 실행되면, Then current tenant가 초기화되고 selection은 resolved로 설정된다", async () => {
 		const account = createAccountStore("tenant-bootstrap-empty-test");
-		account.setCurrentTenant("tenant-a", "Fitness Center A", null, "space-a");
+		account.setCurrentTenant(asId("1"), "Fitness Center A", null, asId("100"));
 
 		render(
 			<AccountBootstrapProbe
@@ -154,5 +159,31 @@ describe("useTenantBootstrap", () => {
 		expect(account.currentTenantId).toBeNull();
 		expect(account.selectedTenantId).toBeNull();
 		expect(account.currentSpaceId).toBeNull();
+	});
+});
+
+describe("isWireId", () => {
+	const maxId = String(DATABASE_ID_MAX);
+
+	const validCases = ["1", maxId];
+	const invalidCases = [
+		"0",
+		"-1",
+		"01",
+		"1.2",
+		"1e3",
+		"01ARZ3NDEKTSV4RRFFQ69G5FAV",
+	];
+
+	it.each(
+		validCases,
+	)("Given `%s`, When isWireId를 검사하면, Then true가 반환된다", (value) => {
+		expect(isWireId(value)).toBe(true);
+	});
+
+	it.each(
+		invalidCases,
+	)("Given `%s`, When isWireId를 검사하면, Then false가 반환된다", (value) => {
+		expect(isWireId(value)).toBe(false);
 	});
 });

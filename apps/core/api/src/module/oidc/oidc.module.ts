@@ -3,6 +3,7 @@ import {
 	OidcDirectPrismaProvider,
 	OidcDirectUsersRepository,
 	OidcRuntimeClientsRepository,
+	UsersRepository,
 } from "@cocrepo/repository";
 import {
 	AccountService,
@@ -29,6 +30,7 @@ import { CqrsModule } from "@nestjs/cqrs";
 		RedisOidcAdapterFactory,
 		OidcRuntimeClientsRepository,
 		OidcDirectUsersRepository,
+		UsersRepository,
 	],
 	exports: [
 		OidcProviderService,

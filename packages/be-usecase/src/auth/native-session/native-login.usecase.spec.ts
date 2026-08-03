@@ -1,6 +1,8 @@
 import { NativeLoginCommand } from "@cocrepo/command";
 import { MOBILE_NATIVE_CLIENT_ID } from "@cocrepo/constant";
 import { HttpException, HttpStatus } from "@nestjs/common";
+import type { Request } from "express";
+import { serializeAuthCacheUser } from "../serialize-auth-cache-user";
 import { NativeLoginUseCase } from "./native-login.usecase";
 
 function createJwt(payload: Record<string, unknown>): string {
@@ -22,7 +24,17 @@ function createRequest() {
 		socket: {
 			remoteAddress: "10.0.0.2",
 		},
-	} as never;
+	};
+}
+
+function createNativeLoginCommand(input: {
+	email: string;
+	password: string;
+}): NativeLoginCommand {
+	return Object.assign(
+		new NativeLoginCommand(input, createRequest() as unknown as Request),
+		input,
+	);
 }
 
 async function expectHttpException(
@@ -43,12 +55,13 @@ async function expectHttpException(
 
 function createUseCase() {
 	const user = {
-		id: "user-1",
+		id: 101n,
+		userId: "01J00000000000000000001001",
 		email: "user@example.com",
 		name: "사용자",
 	};
 	const usersService = {
-		getByIdWithTenants: jest.fn().mockResolvedValue(user),
+		findByUserIdWithTenants: jest.fn().mockResolvedValue(user),
 	};
 	const tokenStorageService = {
 		generateSessionId: jest
@@ -62,7 +75,7 @@ function createUseCase() {
 	const jwtService = {
 		sign: jest.fn(() =>
 			createJwt({
-				sub: user.id,
+				sub: user.userId,
 				exp: Math.floor(Date.now() / 1000) + 3600,
 			}),
 		),
@@ -82,12 +95,24 @@ function createUseCase() {
 		validateUser: jest.fn(),
 	};
 	const useCase = new NativeLoginUseCase(
-		usersService as never,
-		tokenStorageService as never,
-		authCacheService as never,
-		jwtService as never,
-		configService as never,
-		interactionLoginService as never,
+		usersService as unknown as ConstructorParameters<
+			typeof NativeLoginUseCase
+		>[0],
+		tokenStorageService as unknown as ConstructorParameters<
+			typeof NativeLoginUseCase
+		>[1],
+		authCacheService as unknown as ConstructorParameters<
+			typeof NativeLoginUseCase
+		>[2],
+		jwtService as unknown as ConstructorParameters<
+			typeof NativeLoginUseCase
+		>[3],
+		configService as unknown as ConstructorParameters<
+			typeof NativeLoginUseCase
+		>[4],
+		interactionLoginService as unknown as ConstructorParameters<
+			typeof NativeLoginUseCase
+		>[5],
 	);
 
 	return {
@@ -114,15 +139,15 @@ describe("NativeLoginUseCase", () => {
 		} = createUseCase();
 		interactionLoginService.validateUser.mockResolvedValue({
 			success: true,
-			userId: user.id,
+			userId: user.userId,
 			mustChangePassword: true,
 		});
 
 		const result = await useCase.execute(
-			new NativeLoginCommand(
-				{ email: "user@example.com", password: "password" },
-				createRequest(),
-			),
+			createNativeLoginCommand({
+				email: "user@example.com",
+				password: "password",
+			}),
 		);
 
 		expect(interactionLoginService.validateUser).toHaveBeenCalledWith(
@@ -133,7 +158,7 @@ describe("NativeLoginUseCase", () => {
 			MOBILE_NATIVE_CLIENT_ID,
 		);
 		expect(tokenStorageService.saveSession).toHaveBeenCalledWith(
-			user.id,
+			user.userId,
 			`${MOBILE_NATIVE_CLIENT_ID}.0123456789abcdef0123456789abcdef`,
 			expect.any(String),
 			{
@@ -147,12 +172,12 @@ describe("NativeLoginUseCase", () => {
 			expect.objectContaining({
 				audience: MOBILE_NATIVE_CLIENT_ID,
 				issuer: "https://idp.example.com/native",
-				subject: user.id,
+				subject: user.userId,
 			}),
 		);
 		expect(authCacheService.set).toHaveBeenCalledWith(
-			user.id,
-			JSON.stringify(user),
+			user.userId,
+			serializeAuthCacheUser(user),
 			expect.any(Number),
 		);
 		expect(result).toMatchObject({
@@ -173,10 +198,10 @@ describe("NativeLoginUseCase", () => {
 
 		await expectHttpException(
 			useCase.execute(
-				new NativeLoginCommand(
-					{ email: "user@example.com", password: "wrong" },
-					createRequest(),
-				),
+				createNativeLoginCommand({
+					email: "user@example.com",
+					password: "wrong",
+				}),
 			),
 			HttpStatus.UNAUTHORIZED,
 			{
@@ -184,7 +209,7 @@ describe("NativeLoginUseCase", () => {
 				remainingAttempts: 2,
 			},
 		);
-		expect(usersService.getByIdWithTenants).not.toHaveBeenCalled();
+		expect(usersService.findByUserIdWithTenants).not.toHaveBeenCalled();
 	});
 
 	it("Given 잠긴 계정 When native 로그인하면 Then 403 실패 응답을 던진다", async () => {
@@ -197,10 +222,10 @@ describe("NativeLoginUseCase", () => {
 
 		await expectHttpException(
 			useCase.execute(
-				new NativeLoginCommand(
-					{ email: "user@example.com", password: "wrong" },
-					createRequest(),
-				),
+				createNativeLoginCommand({
+					email: "user@example.com",
+					password: "wrong",
+				}),
 			),
 			HttpStatus.FORBIDDEN,
 			{

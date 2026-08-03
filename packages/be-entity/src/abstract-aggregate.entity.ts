@@ -6,7 +6,7 @@ export abstract class AbstractAggregateEntity<DTO = unknown, O = never>
 	extends AggregateRoot
 	implements BaseEntityFields
 {
-	id!: string;
+	id!: bigint;
 	createdAt!: Date;
 	updatedAt!: Date | null;
 	removedAt!: Date | null;

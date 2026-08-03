@@ -8,9 +8,9 @@ import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import type {
-	PublicIdCreateInput,
-	PublicIdUpdateInput,
-} from "./public-id-input.type";
+	AutoIdentityCreateInput,
+	AutoIdentityUpdateInput,
+} from "./auto-identity-input.type";
 import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
@@ -25,8 +25,8 @@ export class InquiryThreadsRepository {
 		this.logger = new Logger("InquiryThreadsRepository");
 	}
 
-	async findById(id: string): Promise<InquiryThread | null> {
-		this.logger.debug(`ID로 조회: ${id.slice(-8)}`);
+	async findById(id: bigint): Promise<InquiryThread | null> {
+		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.inquiryThread.findUnique({
 			where: { id },
@@ -39,10 +39,10 @@ export class InquiryThreadsRepository {
 	async findByIdWithMessagesAndParticipants(
 		id: string,
 	): Promise<InquiryThread | null> {
-		this.logger.debug(`메시지/참여자 포함 조회: ${id.slice(-8)}`);
+		this.logger.debug(`메시지/참여자 포함 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.inquiryThread.findUnique({
-			where: { id },
+			where: { inquiryThreadId: id },
 			include: {
 				messages: {
 					orderBy: { createdAt: "asc" },
@@ -71,7 +71,7 @@ export class InquiryThreadsRepository {
 		this.logger.debug(`문의별 스레드 조회: ${inquiryId.slice(-8)}`);
 
 		const result = await this.txHost.tx.inquiryThread.findMany({
-			where: { inquiry: { id: inquiryId } },
+			where: { inquiry: { inquiryId } },
 			include: { inquiry: true, createdBy: true },
 			orderBy: [{ createdAt: "asc" }],
 		});
@@ -83,7 +83,7 @@ export class InquiryThreadsRepository {
 		this.logger.debug(`스레드 메시지 조회: ${threadId.slice(-8)}`);
 
 		const result = await this.txHost.tx.inquiryMessage.findMany({
-			where: { thread: { id: threadId } },
+			where: { thread: { inquiryThreadId: threadId } },
 			include: {
 				thread: { select: { id: true } },
 				inquiry: { select: { id: true } },
@@ -101,7 +101,7 @@ export class InquiryThreadsRepository {
 		this.logger.debug(`스레드 참여자 조회: ${threadId.slice(-8)}`);
 
 		const result = await this.txHost.tx.inquiryParticipant.findMany({
-			where: { thread: { id: threadId } },
+			where: { thread: { inquiryThreadId: threadId } },
 			include: {
 				inquiry: { select: { id: true } },
 				thread: { select: { id: true } },
@@ -137,20 +137,14 @@ export class InquiryThreadsRepository {
 	}
 
 	async create(
-		data: PublicIdCreateInput<
+		data: AutoIdentityCreateInput<
 			Prisma.InquiryThreadUncheckedCreateInput,
-			"inquiry" | "createdBy"
+			"inquiryThreadId"
 		>,
 	): Promise<InquiryThread> {
-		this.logger.debug(`생성: 문의 ${data.inquiryId.slice(-8)}`);
-
-		const { inquiryId, createdById, ...threadData } = data;
+		this.logger.debug(`생성: 문의 ${data.inquiryId.toString()}`);
 		const result = await this.txHost.tx.inquiryThread.create({
-			data: {
-				...threadData,
-				inquiry: { connect: { id: inquiryId } },
-				createdBy: { connect: { id: createdById } },
-			},
+			data,
 			include: { inquiry: true, createdBy: true },
 		});
 
@@ -158,34 +152,24 @@ export class InquiryThreadsRepository {
 	}
 
 	async updateById(
-		id: string,
-		data: PublicIdUpdateInput<
+		id: bigint,
+		data: AutoIdentityUpdateInput<
 			Prisma.InquiryThreadUncheckedUpdateInput,
-			"inquiry" | "createdBy"
+			"inquiryThreadId"
 		>,
 	): Promise<InquiryThread> {
-		this.logger.debug(`수정: ${id.slice(-8)}`);
-
-		const { inquiryId, createdById, ...threadData } = data;
+		this.logger.debug(`수정: ${id.toString()}`);
 		const result = await this.txHost.tx.inquiryThread.update({
 			where: { id },
-			data: {
-				...threadData,
-				...(inquiryId !== undefined
-					? { inquiry: { connect: { id: inquiryId } } }
-					: {}),
-				...(createdById !== undefined
-					? { createdBy: { connect: { id: createdById } } }
-					: {}),
-			},
+			data,
 			include: { inquiry: true, createdBy: true },
 		});
 
 		return toDomainEntity(InquiryThread, result);
 	}
 
-	async removeById(id: string): Promise<InquiryThread> {
-		this.logger.debug(`삭제: ${id.slice(-8)}`);
+	async removeById(id: bigint): Promise<InquiryThread> {
+		this.logger.debug(`삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.inquiryThread.delete({
 			where: { id },

@@ -1,5 +1,6 @@
 export interface OidcAuthUserData {
-	id: string;
+	id: bigint;
+	userId: string;
 	email: string;
 	password: string;
 	failedLoginAttempts: number;

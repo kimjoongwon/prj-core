@@ -2,22 +2,22 @@
 // @description: Policy에 포함되는 Ability 항목과 그 연결 생명주기를 관리
 /// @displayName 정책의 권한 항목
 model PolicyEntry {
-  id        String    @unique @default(ulid()) @db.VarChar(26)
-  seq       Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  removedAt DateTime? @map("removed_at") @db.Timestamptz(6)
+  policyEntryId String    @unique @default(ulid()) @map("policy_entry_id") @db.Char(26)
+  id            BigInt    @id @default(autoincrement())
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  removedAt     DateTime? @map("removed_at") @db.Timestamptz(6)
 
   /// @displayName 정책 내부 순번
-  policySeq  Int @map("policy_seq")
+  policyId  BigInt @map("policy_id")
   /// @displayName 권한 내부 순번
-  abilitySeq Int @map("ability_seq")
+  abilityId BigInt @map("ability_id")
 
-  policy  Policy  @relation(fields: [policySeq], references: [seq])
-  ability Ability @relation(fields: [abilitySeq], references: [seq])
+  policy  Policy  @relation(fields: [policyId], references: [id])
+  ability Ability @relation(fields: [abilityId], references: [id])
 
-  @@unique([policySeq, abilitySeq])
-  @@index([policySeq])
-  @@index([abilitySeq])
+  @@unique([policyId, abilityId])
+  @@index([policyId])
+  @@index([abilityId])
   @@map("policy_entries")
 }

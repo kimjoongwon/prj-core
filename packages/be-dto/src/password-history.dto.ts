@@ -1,20 +1,17 @@
-import { ResponseExcludedField } from "@cocrepo/constant";
-import { DateField, StringField, ULIDField } from "@cocrepo/decorator";
+import { BigIntIdField, DateField } from "@cocrepo/decorator/field";
 import type { DomainEntityModel } from "@cocrepo/entity";
 import type { PasswordHistory } from "@cocrepo/prisma";
-import { Exclude } from "class-transformer";
 
-export class PasswordHistoryDto implements DomainEntityModel<PasswordHistory> {
-	@ULIDField({ description: "ID" })
-	id!: string;
+export class PasswordHistoryDto
+	implements
+		DomainEntityModel<PasswordHistory, "passwordHistoryId" | "passwordHash">
+{
+	@BigIntIdField({ description: "ID" })
+	id!: bigint;
 
 	@DateField({ description: "생성일" })
 	createdAt!: Date;
 
-	@ULIDField({ description: "사용자 ID" })
-	userId!: string;
-
-	@Exclude()
-	@StringField({ description: ResponseExcludedField })
-	passwordHash!: string;
+	@BigIntIdField({ description: "사용자 ID" })
+	userId!: bigint;
 }

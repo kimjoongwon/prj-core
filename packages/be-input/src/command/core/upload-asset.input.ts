@@ -1,3 +1,3 @@
 export interface UploadAssetCommandInput {
-	folderId: string;
+	folderId: bigint;
 }

@@ -1,4 +1,4 @@
-import { BooleanField, StringFieldOptional } from "@cocrepo/decorator";
+import { BooleanField, StringFieldOptional } from "@cocrepo/decorator/field";
 
 /**
  * GET /api/reset-password/:token 응답

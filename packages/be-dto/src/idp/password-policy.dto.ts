@@ -1,4 +1,4 @@
-import { BooleanField, NumberField } from "@cocrepo/decorator";
+import { BooleanField, NumberField } from "@cocrepo/decorator/field";
 
 /**
  * GET /api/password-policy 응답

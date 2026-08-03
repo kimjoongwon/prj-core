@@ -1,11 +1,16 @@
-import { getAdminSpaceRequestHeaders } from "@cocrepo/e2e";
+import { getAdminSpaceRequestHeaders, loginToConsole } from "@cocrepo/e2e";
 import { expect, type Page, test } from "@playwright/test";
+
+let ADMIN_TENANT_ID = "";
+
+test.beforeEach(async ({ page }) => {
+	const context = await loginToConsole(page);
+	ADMIN_TENANT_ID = context.tenantId;
+});
 
 const ADMIN_API_BASE_URL = "http://localhost:3000/api/v1";
 const TEST_VIDEO_FILE_ID = "11111111-1111-4111-8111-111111111111";
-const SYSTEM_TENANT_ID =
-	process.env.E2E_SYSTEM_TENANT_ID ?? "01J00000000000000000000002";
-const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_TENANT_ID);
+const getSpaceHeaders = () => getAdminSpaceRequestHeaders(ADMIN_TENANT_ID);
 
 async function gotoRoutineList(page: Page) {
 	await page.goto("./routines", { waitUntil: "domcontentloaded" });
@@ -103,6 +108,7 @@ test.describe("루틴 목록 페이지", () => {
 			};
 			createdTaskId = createTaskResponseBody.data?.id;
 			expect(createdTaskId).toBeTruthy();
+			expect(createdTaskId).toMatch(/^[1-9]\d*$/);
 
 			// Given: 루틴 등록 페이지로 이동
 			await page.goto("./routines/new", { waitUntil: "domcontentloaded" });
@@ -147,10 +153,11 @@ test.describe("루틴 목록 페이지", () => {
 			};
 			const createdRoutineId = createRoutineBody.data?.id;
 			expect(createdRoutineId).toBeTruthy();
+			expect(createdRoutineId).toMatch(/^[1-9]\d*$/);
 
 			// Then: 상세 페이지로 이동 확인
 			await page
-				.waitForURL(/\/routines\/[^/]+$/, { timeout: 5000 })
+				.waitForURL(/\/routines\/[1-9]\d*$/, { timeout: 5000 })
 				.catch(async () => {
 					await page.goto(
 						`http://localhost:3000/admin/routines/${createdRoutineId}`,
@@ -165,7 +172,9 @@ test.describe("루틴 목록 페이지", () => {
 			await expect(
 				page.getByRole("heading", { name: TEST_NAME, exact: true }),
 			).toBeVisible({ timeout: 10000 });
-			await expect(page.getByText(TEST_LABEL, { exact: true })).toBeVisible();
+			await expect(
+				page.getByRole("textbox", { name: /단축 라벨/ }),
+			).toHaveValue(TEST_LABEL);
 
 			// ── 수정 플로우 ──
 
@@ -206,7 +215,7 @@ test.describe("루틴 목록 페이지", () => {
 					resp.url().includes(`/api/v1/routines/${createdRoutineId}`) &&
 					resp.request().method() === "GET",
 			);
-			await page.waitForURL(/\/routines\/[^/]+$/, { timeout: 15000 });
+			await page.waitForURL(/\/routines\/[1-9]\d*$/, { timeout: 15000 });
 			await updatedRoutineDetailResponse;
 			await page.waitForLoadState("networkidle");
 

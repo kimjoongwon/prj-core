@@ -14,11 +14,11 @@ export class CreateCommunityPostUseCase {
 	) {}
 
 	async execute(command: CreateCommunityPostCommand): Promise<unknown> {
-		const spaceId = this.spaceContext.spaceId;
+		const spaceId = this.spaceContext.tenant?.spaceId;
 		if (!spaceId) {
 			throw new UnauthorizedException(COMMON_ERRORS.SPACE_NOT_SELECTED);
 		}
-		const userId = this.authContext.user?.id;
+		const userId = this.authContext.userDto?.id;
 		if (!userId) {
 			throw new UnauthorizedException(COMMON_ERRORS.USER_NOT_FOUND);
 		}

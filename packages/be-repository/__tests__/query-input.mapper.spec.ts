@@ -19,15 +19,15 @@ describe("QueryInput mapper", () => {
 	it("검색 문자열과 ID 필터를 Prisma where로 변환한다", () => {
 		expect(
 			buildAssetQueryWhere({
-				folderId: "folder-1",
-				spaceId: "space-1",
+				folderId: 1n,
+				spaceId: 2n,
 				kind: AssetKind.IMAGE,
 				status: AssetStatus.READY,
 				search: "photo",
 			}),
 		).toEqual({
-			folder: { id: "folder-1" },
-			space: { id: "space-1" },
+			folderId: 1n,
+			spaceId: 2n,
 			kind: AssetKind.IMAGE,
 			status: AssetStatus.READY,
 			originalName: { contains: "photo", mode: "insensitive" },
@@ -63,16 +63,16 @@ describe("QueryInput mapper", () => {
 	it("*Id와 *Ids 필터를 관계 조건으로 변환한다", () => {
 		expect(
 			buildUserQueryWhere({
-				categoryId: "category-1",
-				groupIds: ["group-1", "group-2"],
+				categoryId: 101n,
+				groupIds: [201n, 202n],
 				roles: ["admin", "operator"],
 			}),
 		).toEqual({
 			removedAt: null,
-			classification: { category: { id: "category-1" } },
+			classification: { categoryId: 101n },
 			associations: {
 				some: {
-					group: { id: { in: ["group-1", "group-2"] } },
+					groupId: { in: [201n, 202n] },
 					removedAt: null,
 				},
 			},
@@ -113,12 +113,12 @@ describe("QueryInput mapper", () => {
 
 		expect(
 			buildTenantAccessRequestQueryWhere({
-				reviewerId: "reviewer-1",
+				reviewerId: 1n,
 				search: "club",
-				spaceId: "space-1",
+				spaceId: 2n,
 			}),
 		).toEqual({
-			space: { id: "space-1" },
+			space: { id: 2n },
 			OR: [
 				{ requester: { name: { contains: "club", mode: "insensitive" } } },
 				{ requester: { email: { contains: "club", mode: "insensitive" } } },

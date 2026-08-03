@@ -1,13 +1,13 @@
 import {
+	BigIntIdField,
+	BigIntIdFieldOptional,
 	BooleanField,
 	ClassField,
 	DateField,
 	EnumField,
 	NumberField,
 	StringField,
-	ULIDField,
-	ULIDFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import {
 	InquiryCategory,
 	InquiryChannel,
@@ -25,11 +25,11 @@ import { SentimentResultDto } from "./sentiment-result.dto";
  * 문의 상세 응답 DTO
  */
 export class InquiryDetailDto extends AbstractDto {
-	@ULIDField({ description: "소속 Space ID" })
-	spaceId!: string;
+	@BigIntIdField({ description: "소속 Space ID" })
+	spaceId!: bigint;
 
-	@ULIDFieldOptional({ nullable: true, description: "생성자 ID" })
-	createdById!: string | null;
+	@BigIntIdFieldOptional({ nullable: true, description: "생성자 ID" })
+	createdById!: bigint | null;
 
 	@StringField({ description: "문의 번호" })
 	inquiryNumber!: string;
@@ -52,11 +52,11 @@ export class InquiryDetailDto extends AbstractDto {
 	@EnumField(() => InquiryPriority, { description: "문의 우선순위" })
 	priority!: InquiryPriority;
 
-	@ULIDFieldOptional({ description: "고객 ID" })
-	customerId!: string | null;
+	@BigIntIdFieldOptional({ description: "고객 ID" })
+	customerId!: bigint | null;
 
-	@ULIDFieldOptional({ description: "담당자 ID" })
-	assigneeId!: string | null;
+	@BigIntIdFieldOptional({ description: "담당자 ID" })
+	assigneeId!: bigint | null;
 
 	@BooleanField({ description: "실시간 채팅 활성화 여부" })
 	isRealtimeChat!: boolean;

@@ -21,6 +21,7 @@ import type {
 } from "@cocrepo/type";
 import { useQueryClient } from "@tanstack/react-query";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
+import { isWireId } from "./wire-id";
 
 export interface AssetBrowserFolder {
 	id: string;
@@ -143,7 +144,7 @@ export function useAssetBrowser({
 		folderId: selectedFolderId,
 	};
 	const isSpaceReady = account.isHydrated && account.isSelectionResolved;
-	const hasSelectedSpace = Boolean(account.currentTenantId);
+	const hasSelectedSpace = isWireId(account.currentTenantId);
 	const isQueryEnabled = isSpaceReady && hasSelectedSpace && enabled;
 
 	const { data: assetsResponse, isLoading: isLoadingAssets } = useGetAssets(

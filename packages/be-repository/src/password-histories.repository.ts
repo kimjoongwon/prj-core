@@ -3,7 +3,7 @@ import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import type { PublicIdCreateInput } from "./public-id-input.type";
+import type { AutoIdentityCreateInput } from "./auto-identity-input.type";
 import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
@@ -18,8 +18,8 @@ export class PasswordHistoriesRepository {
 		this.logger = new Logger("PasswordHistoriesRepository");
 	}
 
-	async findById(id: string): Promise<PasswordHistory | null> {
-		this.logger.debug(`ID로 조회: ${id.slice(-8)}`);
+	async findById(id: bigint): Promise<PasswordHistory | null> {
+		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.passwordHistory.findUnique({
 			where: { id },
@@ -29,11 +29,11 @@ export class PasswordHistoriesRepository {
 		return result ? toDomainEntity(PasswordHistory, result) : null;
 	}
 
-	async findByUserId(userId: string): Promise<PasswordHistory[]> {
-		this.logger.debug(`사용자별 이력 조회: ${userId.slice(-8)}`);
+	async findByUserId(userId: bigint): Promise<PasswordHistory[]> {
+		this.logger.debug(`사용자별 이력 조회: ${userId.toString()}`);
 
 		const result = await this.txHost.tx.passwordHistory.findMany({
-			where: { user: { id: userId } },
+			where: { userId },
 			include: { user: true },
 			orderBy: [{ createdAt: "desc" }],
 		});
@@ -41,11 +41,11 @@ export class PasswordHistoriesRepository {
 		return result.map((item) => toDomainEntity(PasswordHistory, item));
 	}
 
-	async findLatestByUserId(userId: string): Promise<PasswordHistory | null> {
-		this.logger.debug(`최신 이력 조회: ${userId.slice(-8)}`);
+	async findLatestByUserId(userId: bigint): Promise<PasswordHistory | null> {
+		this.logger.debug(`최신 이력 조회: ${userId.toString()}`);
 
 		const result = await this.txHost.tx.passwordHistory.findFirst({
-			where: { user: { id: userId } },
+			where: { userId },
 			include: { user: true },
 			orderBy: [{ createdAt: "desc" }],
 		});
@@ -77,27 +77,22 @@ export class PasswordHistoriesRepository {
 	}
 
 	async create(
-		data: PublicIdCreateInput<
+		data: AutoIdentityCreateInput<
 			Prisma.PasswordHistoryUncheckedCreateInput,
-			"user"
+			"passwordHistoryId"
 		>,
 	): Promise<PasswordHistory> {
-		this.logger.debug(`생성: ${data.userId.slice(-8)}`);
-
-		const { userId, ...historyData } = data;
+		this.logger.debug(`생성: ${data.userId.toString()}`);
 		const result = await this.txHost.tx.passwordHistory.create({
-			data: {
-				...historyData,
-				user: { connect: { id: userId } },
-			},
+			data,
 			include: { user: true },
 		});
 
 		return toDomainEntity(PasswordHistory, result);
 	}
 
-	async deleteById(id: string): Promise<PasswordHistory> {
-		this.logger.debug(`ID 삭제: ${id.slice(-8)}`);
+	async deleteById(id: bigint): Promise<PasswordHistory> {
+		this.logger.debug(`ID 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.passwordHistory.delete({
 			where: { id },
@@ -107,11 +102,11 @@ export class PasswordHistoriesRepository {
 		return toDomainEntity(PasswordHistory, result);
 	}
 
-	async deleteByUserId(userId: string): Promise<{ count: number }> {
-		this.logger.debug(`사용자별 이력 전체 삭제: ${userId.slice(-8)}`);
+	async deleteByUserId(userId: bigint): Promise<{ count: number }> {
+		this.logger.debug(`사용자별 이력 전체 삭제: ${userId.toString()}`);
 
 		const result = await this.txHost.tx.passwordHistory.deleteMany({
-			where: { user: { id: userId } },
+			where: { userId },
 		});
 
 		return result;

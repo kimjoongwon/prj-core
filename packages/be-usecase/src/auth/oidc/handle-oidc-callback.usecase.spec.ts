@@ -50,14 +50,18 @@ function createHttp() {
 }
 
 function createUseCase() {
-	const user = { id: "user-1", email: "user@example.com" };
+	const user = {
+		id: 101n,
+		userId: "01J00000000000000000001001",
+		email: "user@example.com",
+	};
 	const oidcClientService = {
 		getByClientId: jest.fn().mockResolvedValue(createClient()),
 	};
 	const oidcClient = {
 		exchangeCodeForTokens: jest.fn().mockResolvedValue({
 			access_token: createJwt({
-				sub: user.id,
+				sub: user.userId,
 				exp: Math.floor(Date.now() / 1000) + 3600,
 			}),
 			refresh_token: "refresh-token",
@@ -78,19 +82,31 @@ function createUseCase() {
 		set: jest.fn().mockResolvedValue(undefined),
 	};
 	const usersService = {
-		getByIdWithTenants: jest.fn().mockResolvedValue(user),
+		findByUserIdWithTenants: jest.fn().mockResolvedValue(user),
 	};
 	const tokenService = {
 		setAccessTokenCookie: jest.fn(),
 		setRefreshTokenCookie: jest.fn(),
 	};
 	const useCase = new HandleOidcCallbackUseCase(
-		oidcClientService as never,
-		oidcClient as never,
-		tokenStorageService as never,
-		authCacheService as never,
-		usersService as never,
-		tokenService as never,
+		oidcClientService as unknown as ConstructorParameters<
+			typeof HandleOidcCallbackUseCase
+		>[0],
+		oidcClient as unknown as ConstructorParameters<
+			typeof HandleOidcCallbackUseCase
+		>[1],
+		tokenStorageService as unknown as ConstructorParameters<
+			typeof HandleOidcCallbackUseCase
+		>[2],
+		authCacheService as unknown as ConstructorParameters<
+			typeof HandleOidcCallbackUseCase
+		>[3],
+		usersService as unknown as ConstructorParameters<
+			typeof HandleOidcCallbackUseCase
+		>[4],
+		tokenService as unknown as ConstructorParameters<
+			typeof HandleOidcCallbackUseCase
+		>[5],
 	);
 
 	return {
@@ -182,9 +198,11 @@ describe("HandleOidcCallbackUseCase", () => {
 			"verifier",
 			expect.objectContaining({ clientId: "admin-web" }),
 		);
-		expect(usersService.getByIdWithTenants).toHaveBeenCalledWith(user.id);
+		expect(usersService.findByUserIdWithTenants).toHaveBeenCalledWith(
+			user.userId,
+		);
 		expect(tokenStorageService.saveSession).toHaveBeenCalledWith(
-			user.id,
+			user.userId,
 			"admin-web.0123456789abcdef0123456789abcdef",
 			"refresh-token",
 			{

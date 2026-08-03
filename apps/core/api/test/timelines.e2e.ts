@@ -32,6 +32,7 @@ describe("Timelines API (E2E)", () => {
 	let app: INestApplication;
 	let jwtToken: string;
 	let tenantId: string;
+	let spaceId: string;
 	let userId: string;
 
 	// 테스트 중 생성된 리소스 ID를 추적하여 정리
@@ -52,6 +53,7 @@ describe("Timelines API (E2E)", () => {
 			const auth = await getTestAuth(app);
 			jwtToken = auth.jwtToken;
 			tenantId = auth.tenantId;
+			spaceId = auth.spaceId;
 			userId = auth.userId;
 		} catch (error) {
 			console.warn(`테스트 인증 설정 실패: ${error}`);
@@ -201,7 +203,7 @@ describe("Timelines API (E2E)", () => {
 				expect(response.body.data.name).toBe(createDto.name);
 				expect(response.body.data.description).toBe(createDto.description);
 				expect(response.body.data.id).toBeDefined();
-				expect(response.body.data.tenantId).toBe(tenantId);
+				expect(response.body.data.spaceId).toBe(spaceId);
 
 				// 후속 테스트용 ID 저장 및 정리 목록에 추가
 				testTimelineId = response.body.data.id;
@@ -225,7 +227,7 @@ describe("Timelines API (E2E)", () => {
 				expect(response.body.httpStatus).toBe(200);
 				expect(response.body.data.id).toBe(testTimelineId);
 				expect(response.body.data.name).toBeDefined();
-				expect(response.body.data.tenantId).toBe(tenantId);
+				expect(response.body.data.spaceId).toBe(spaceId);
 			});
 		});
 
@@ -596,7 +598,7 @@ describe("Timelines API (E2E)", () => {
 			it("인증 없이 타임라인 상세 조회 시 401을 반환해야 한다", async () => {
 				// When
 				const response = await request(app.getHttpServer()).get(
-					"/api/v1/timelines/00000000-0000-0000-0000-000000000099",
+					"/api/v1/timelines/1",
 				);
 
 				// Then
@@ -616,7 +618,7 @@ describe("Timelines API (E2E)", () => {
 			it("인증 없이 타임라인 수정 시 401을 반환해야 한다", async () => {
 				// When
 				const response = await request(app.getHttpServer())
-					.patch("/api/v1/timelines/00000000-0000-0000-0000-000000000099")
+					.patch("/api/v1/timelines/1")
 					.send({ name: "수정" });
 
 				// Then
@@ -626,7 +628,7 @@ describe("Timelines API (E2E)", () => {
 			it("인증 없이 타임라인 삭제 시 401을 반환해야 한다", async () => {
 				// When
 				const response = await request(app.getHttpServer()).delete(
-					"/api/v1/timelines/00000000-0000-0000-0000-000000000099",
+					"/api/v1/timelines/1",
 				);
 
 				// Then
@@ -638,7 +640,7 @@ describe("Timelines API (E2E)", () => {
 			it("인증 없이 세션 목록 조회 시 401을 반환해야 한다", async () => {
 				// When
 				const response = await request(app.getHttpServer()).get(
-					"/api/v1/timelines/00000000-0000-0000-0000-000000000099/sessions",
+					"/api/v1/timelines/1/sessions",
 				);
 
 				// Then
@@ -648,9 +650,7 @@ describe("Timelines API (E2E)", () => {
 			it("인증 없이 세션 등록 시 401을 반환해야 한다", async () => {
 				// When
 				const response = await request(app.getHttpServer())
-					.post(
-						"/api/v1/timelines/00000000-0000-0000-0000-000000000099/sessions",
-					)
+					.post("/api/v1/timelines/1/sessions")
 					.send({ name: "test", type: "ONE_TIME" });
 
 				// Then
@@ -662,7 +662,7 @@ describe("Timelines API (E2E)", () => {
 			it("인증 없이 프로그램 목록 조회 시 401을 반환해야 한다", async () => {
 				// When
 				const response = await request(app.getHttpServer()).get(
-					"/api/v1/timelines/00000000-0000-0000-0000-000000000099/sessions/00000000-0000-0000-0000-000000000099/programs",
+					"/api/v1/timelines/1/sessions/1/programs",
 				);
 
 				// Then
@@ -672,9 +672,7 @@ describe("Timelines API (E2E)", () => {
 			it("인증 없이 프로그램 등록 시 401을 반환해야 한다", async () => {
 				// When
 				const response = await request(app.getHttpServer())
-					.post(
-						"/api/v1/timelines/00000000-0000-0000-0000-000000000099/sessions/00000000-0000-0000-0000-000000000099/programs",
-					)
+					.post("/api/v1/timelines/1/sessions/1/programs")
 					.send({ name: "test" });
 
 				// Then
@@ -718,13 +716,13 @@ describe("Timelines API (E2E)", () => {
 				expect(response.status).toBe(400);
 			});
 
-			it("유효하지 않은 UUID로 타임라인 상세 조회 시 400을 반환해야 한다", async () => {
+			it("유효하지 않은 숫자 ID 문자열로 타임라인 상세 조회 시 400을 반환해야 한다", async () => {
 				// Given
 				if (!jwtToken || !tenantId) return;
 
 				// When
 				const response = await request(app.getHttpServer())
-					.get("/api/v1/timelines/not-a-valid-uuid")
+					.get("/api/v1/timelines/01")
 					.set("Authorization", `Bearer ${jwtToken}`)
 					.set("x-tenant-id", tenantId);
 
@@ -732,13 +730,13 @@ describe("Timelines API (E2E)", () => {
 				expect(response.status).toBe(400);
 			});
 
-			it("유효하지 않은 UUID로 세션 목록 조회 시 400을 반환해야 한다", async () => {
+			it("유효하지 않은 숫자 ID 문자열로 세션 목록 조회 시 400을 반환해야 한다", async () => {
 				// Given
 				if (!jwtToken || !tenantId) return;
 
 				// When
 				const response = await request(app.getHttpServer())
-					.get("/api/v1/timelines/not-a-uuid/sessions")
+					.get("/api/v1/timelines/0/sessions")
 					.set("Authorization", `Bearer ${jwtToken}`)
 					.set("x-tenant-id", tenantId);
 
@@ -752,7 +750,7 @@ describe("Timelines API (E2E)", () => {
 				// Given
 				if (!jwtToken || !tenantId) return;
 
-				const nonExistentId = "00000000-0000-0000-0000-000000000099";
+				const nonExistentId = "9223372036854775807";
 
 				// When
 				const response = await request(app.getHttpServer())
@@ -768,7 +766,7 @@ describe("Timelines API (E2E)", () => {
 				// Given
 				if (!jwtToken || !tenantId) return;
 
-				const nonExistentId = "00000000-0000-0000-0000-000000000099";
+				const nonExistentId = "9223372036854775807";
 
 				// When
 				const response = await request(app.getHttpServer())
@@ -785,7 +783,7 @@ describe("Timelines API (E2E)", () => {
 				// Given
 				if (!jwtToken || !tenantId) return;
 
-				const nonExistentId = "00000000-0000-0000-0000-000000000099";
+				const nonExistentId = "9223372036854775807";
 
 				// When
 				const response = await request(app.getHttpServer())
@@ -801,7 +799,7 @@ describe("Timelines API (E2E)", () => {
 				// Given
 				if (!jwtToken || !tenantId) return;
 
-				const nonExistentId = "00000000-0000-0000-0000-000000000099";
+				const nonExistentId = "9223372036854775807";
 
 				// When
 				const response = await request(app.getHttpServer())
@@ -828,7 +826,7 @@ describe("Timelines API (E2E)", () => {
 				const tempTimelineId = timelineRes.body.data.id;
 				createdTimelineIds.push(tempTimelineId);
 
-				const nonExistentSessionId = "00000000-0000-0000-0000-000000000099";
+				const nonExistentSessionId = "9223372036854775807";
 
 				// When
 				const response = await request(app.getHttpServer())

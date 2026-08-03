@@ -1,9 +1,14 @@
 import { hash } from "bcrypt";
 import type { Prisma, PrismaClient, User } from "../generated/client/client";
-import { SYSTEM_SPACE_ID, SYSTEM_TENANT_ID } from "../reference-data/constants";
+import {
+	SYSTEM_SPACE_ULID,
+	SYSTEM_TENANT_ULID,
+} from "../reference-data/constants";
 import { systemAdminSeedData } from "./data/system-users";
 
 type SystemAdminDbClient = PrismaClient | Prisma.TransactionClient;
+
+type DbId = bigint;
 
 function resolveSystemAdminSeeds(targetEmails?: readonly string[]) {
 	if (!targetEmails || targetEmails.length === 0) {
@@ -30,7 +35,7 @@ function resolveSystemAdminSeeds(targetEmails?: readonly string[]) {
 
 async function ensureSystemAdminProfile(
 	db: SystemAdminDbClient,
-	userId: string,
+	userId: DbId,
 	name: string,
 	nickname: string,
 ): Promise<void> {
@@ -57,7 +62,7 @@ async function ensureSystemAdminProfile(
 
 export async function ensureSystemAdminUsers(
 	db: SystemAdminDbClient,
-	platformAdminRoleId: string,
+	platformAdminRoleId: DbId,
 	options?: {
 		emails?: readonly string[];
 	},
@@ -136,7 +141,7 @@ export async function ensureSystemAdminUsers(
 		const existingTenant = await db.tenant.findFirst({
 			where: {
 				user: { id: systemAdminUser.id },
-				space: { id: SYSTEM_SPACE_ID },
+				space: { spaceId: SYSTEM_SPACE_ULID },
 				role: { id: platformAdminRoleId },
 				removedAt: null,
 			},
@@ -146,10 +151,10 @@ export async function ensureSystemAdminUsers(
 			await db.tenant.create({
 				data: {
 					...(userData.email === "admin@plate.com"
-						? { id: SYSTEM_TENANT_ID }
+						? { tenantId: SYSTEM_TENANT_ULID }
 						: {}),
 					user: { connect: { id: systemAdminUser.id } },
-					space: { connect: { id: SYSTEM_SPACE_ID } },
+					space: { connect: { spaceId: SYSTEM_SPACE_ULID } },
 					role: { connect: { id: platformAdminRoleId } },
 				},
 			});

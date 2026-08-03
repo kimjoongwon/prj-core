@@ -1,20 +1,18 @@
-import type { FitnessCenter as FitnessCenterEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Company } from "./company.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Space } from "./space.entity";
 
-export class FitnessCenter
-	extends AbstractEntity
-	implements DomainEntityModel<FitnessCenterEntity>
-{
+export class FitnessCenter extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	fitnessCenterId!: string;
+
 	name!: string;
 	label!: string | null;
 	address!: string;
 	phone!: string;
 	email!: string;
-	companyId!: string;
-	spaceId!: string;
+	companyId!: bigint;
+	spaceId!: bigint;
 	imageFileId!: string | null;
 
 	company?: Company;

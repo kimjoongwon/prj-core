@@ -1,11 +1,11 @@
 import {
+	BigIntIdField,
+	BigIntIdFieldOptional,
 	EnumField,
 	NumberField,
 	NumberFieldOptional,
 	StringField,
-	ULIDField,
-	ULIDFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import { DerivativeKind } from "@cocrepo/prisma";
 import { AbstractDto } from "../abstract.dto";
 
@@ -13,14 +13,14 @@ import { AbstractDto } from "../abstract.dto";
  * 파생 리소스 DTO
  */
 export class DerivativeDto extends AbstractDto {
-	@ULIDField({ description: "소속 Space ID" })
-	spaceId!: string;
+	@BigIntIdField({ description: "소속 Space ID" })
+	spaceId!: bigint;
 
-	@ULIDFieldOptional({ nullable: true, description: "생성자 ID" })
-	createdById!: string | null;
+	@BigIntIdFieldOptional({ nullable: true, description: "생성자 ID" })
+	createdById!: bigint | null;
 
-	@ULIDField({ description: "원본 에셋 ID" })
-	assetId!: string;
+	@BigIntIdField({ description: "원본 에셋 ID" })
+	assetId!: bigint;
 
 	@EnumField(() => DerivativeKind, {
 		description: "파생 리소스 종류 (THUMBNAIL, PREVIEW, TRANSCODE, TEXT)",

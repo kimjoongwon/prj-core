@@ -2,13 +2,13 @@
 // @description: Program 생성 시점의 실행 운동 계획을 보관하는 운영 스냅샷
 /// @displayName 프로그램 활동
 model ProgramActivity {
-  id                  String    @unique @default(ulid()) @db.VarChar(26)
-  seq                 Int       @id @default(autoincrement())
+  programActivityId   String    @unique @default(ulid()) @map("program_activity_id") @db.Char(26)
+  id                  BigInt    @id @default(autoincrement())
   createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt           DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt           DateTime? @map("removed_at") @db.Timestamptz(6)
-  programSeq          Int       @map("program_seq")
-  taskId              String    @map("task_id")
+  programId           BigInt    @map("program_id")
+  taskId              BigInt    @map("task_id")
   order               Int
   repetitions         Int
   restTime            Int       @map("rest_time")
@@ -19,10 +19,10 @@ model ProgramActivity {
   exerciseCount       Int       @map("exercise_count")
   imageFileId         String?   @map("image_file_id")
   videoFileId         String?   @map("video_file_id")
-  program             Program   @relation(fields: [programSeq], references: [seq])
+  program             Program   @relation(fields: [programId], references: [id])
 
-  @@unique([programSeq, taskId])
-  @@index([programSeq, order])
+  @@unique([programId, taskId])
+  @@index([programId, order])
   @@index([taskId])
   @@map("program_activities")
 }

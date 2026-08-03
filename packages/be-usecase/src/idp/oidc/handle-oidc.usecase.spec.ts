@@ -9,7 +9,11 @@ function createUseCase(callback = jest.fn().mockResolvedValue(undefined)) {
 	const oidcProviderService = {
 		getProvider: jest.fn(() => provider),
 	};
-	const useCase = new HandleOidcUseCase(oidcProviderService as never);
+	const useCase = new HandleOidcUseCase(
+		oidcProviderService as unknown as ConstructorParameters<
+			typeof HandleOidcUseCase
+		>[0],
+	);
 	return { callback, oidcProviderService, provider, useCase };
 }
 

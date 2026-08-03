@@ -289,20 +289,34 @@ export class PasswordResetService {
 
 	private async saveResetToken(
 		hashedToken: string,
-		data: { userId: string; email: string },
+		data: { userId: bigint; email: string },
 	): Promise<void> {
 		const key = `${RESET_TOKEN_PREFIX}${hashedToken}`;
-		await this.redisService.set(key, JSON.stringify(data), TOKEN_TTL_SECONDS);
+		await this.redisService.set(
+			key,
+			JSON.stringify({
+				userId: data.userId.toString(),
+				email: data.email,
+			}),
+			TOKEN_TTL_SECONDS,
+		);
 	}
 
 	private async getResetToken(
 		hashedToken: string,
-	): Promise<{ userId: string; email: string } | null> {
+	): Promise<{ userId: bigint; email: string } | null> {
 		const key = `${RESET_TOKEN_PREFIX}${hashedToken}`;
 		const data = await this.redisService.get(key);
 		if (!data) return null;
 		try {
-			return JSON.parse(data);
+			const parsed = JSON.parse(data) as {
+				userId: string | number;
+				email: string;
+			};
+			return {
+				userId: BigInt(parsed.userId),
+				email: parsed.email,
+			};
 		} catch {
 			return null;
 		}

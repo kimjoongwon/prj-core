@@ -30,9 +30,9 @@ describe("PolicyEntriesRepository", () => {
 	it("삭제되지 않은 Entry와 Ability를 생성 순서로 반환해야 한다", async () => {
 		policyEntry.findMany.mockResolvedValue([
 			{
-				id: "entry-id",
-				policyId: "policy-id",
-				abilityId: "ability-id",
+				id: 1n,
+				policyId: 10n,
+				abilityId: 20n,
 				createdAt: new Date(),
 				updatedAt: new Date(),
 				removedAt: null,
@@ -40,11 +40,11 @@ describe("PolicyEntriesRepository", () => {
 			},
 		]);
 
-		const result = await repository.findActiveByPolicyId("policy-id");
+		const result = await repository.findActiveByPolicyId(10n);
 
 		expect(policyEntry.findMany).toHaveBeenCalledWith({
 			where: {
-				policy: { id: "policy-id" },
+				policyId: 10n,
 				removedAt: null,
 				ability: { removedAt: null },
 			},
@@ -68,13 +68,13 @@ describe("PolicyEntriesRepository", () => {
 		policyEntry.create.mockResolvedValue({});
 		policyEntry.findMany.mockResolvedValue([]);
 
-		await repository.syncByPolicyId("policy-id", ["ability-id", "ability-id"]);
+		await repository.syncByPolicyId(10n, [20n, 20n]);
 
 		expect(policyEntry.create).toHaveBeenCalledTimes(1);
 		expect(policyEntry.create).toHaveBeenCalledWith({
 			data: {
-				policy: { connect: { id: "policy-id" } },
-				ability: { connect: { id: "ability-id" } },
+				policyId: 10n,
+				abilityId: 20n,
 			},
 		});
 		expect(policyEntry.update).not.toHaveBeenCalled();

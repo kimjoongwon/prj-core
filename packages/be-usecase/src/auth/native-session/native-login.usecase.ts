@@ -48,9 +48,14 @@ export class NativeLoginUseCase {
 			throw new HttpException(buildLoginErrorResponse(result), statusCode);
 		}
 
-		const user = await this.usersService.getByIdWithTenants(result.userId!);
+		const user = await this.usersService.findByUserIdWithTenants(
+			result.userId!,
+		);
 		if (!user) {
 			throw new UnauthorizedException("사용자를 찾을 수 없습니다");
+		}
+		if (!user.userId) {
+			throw new UnauthorizedException("사용자 공개 식별자를 찾을 수 없습니다");
 		}
 
 		const sessionId = SessionId.create(
@@ -59,7 +64,7 @@ export class NativeLoginUseCase {
 		).value;
 		const refreshToken = NativeRefreshToken.generate().value;
 		await this.tokenStorageService.saveSession(
-			user.id,
+			user.userId,
 			sessionId,
 			refreshToken,
 			{

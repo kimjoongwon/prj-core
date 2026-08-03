@@ -30,12 +30,12 @@ describe("RoleGroupGuard", () => {
 	};
 
 	const createMockUser = (overrides: Record<string, unknown> = {}) => ({
-		id: "user-test-id",
+		id: 101n,
 		email: "test@example.com",
 		tenants: [
 			{
-				id: "tenant-1",
-				spaceId: "space-001",
+				id: 201n,
+				spaceId: 301n,
 				role: {
 					name: "MEMBER",
 					associations: [
@@ -52,8 +52,8 @@ describe("RoleGroupGuard", () => {
 	});
 
 	const createMockTenant = (overrides: Record<string, unknown> = {}) => ({
-		id: "tenant-1",
-		spaceId: "space-001",
+		id: 201n,
+		spaceId: 301n,
 		role: {
 			name: "MEMBER",
 			associations: [
@@ -190,7 +190,7 @@ describe("RoleGroupGuard", () => {
 				// Given
 				mockReflector.get.mockReturnValue(["일반"]);
 				const user = createMockUser({
-					tenants: [{ id: "tenant-1", spaceId: "space-001", role: null }],
+					tenants: [{ id: 201n, spaceId: 301n, role: null }],
 				});
 				const tenant = createMockTenant({ role: null });
 				mockClsService.get.mockImplementation((key: string) => {
@@ -215,16 +215,16 @@ describe("RoleGroupGuard", () => {
 				const user = createMockUser({
 					tenants: [
 						{
-							id: "tenant-1",
-							spaceId: "space-001",
+							id: 201n,
+							spaceId: 301n,
 							role: {
 								name: "MEMBER",
 								associations: [{ group: { name: "일반" } }],
 							},
 						},
 						{
-							id: "tenant-2",
-							spaceId: "space-002",
+							id: 202n,
+							spaceId: 302n,
 							role: {
 								name: "COMPANY_MANAGER",
 								associations: [{ group: { name: "관리자" } }],
@@ -233,8 +233,8 @@ describe("RoleGroupGuard", () => {
 					],
 				});
 				const tenant = createMockTenant({
-					id: "tenant-2",
-					spaceId: "space-002",
+					id: 202n,
+					spaceId: 302n,
 					role: {
 						name: "COMPANY_MANAGER",
 						associations: [{ group: { name: "관리자" } }],
@@ -243,7 +243,7 @@ describe("RoleGroupGuard", () => {
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
 					if (key === CONTEXT_KEYS.TENANT) return tenant;
-					if (key === CONTEXT_KEYS.SPACE_ID) return "space-002";
+					if (key === CONTEXT_KEYS.SPACE_ID) return 302n;
 					return undefined;
 				});
 				const context = createMockExecutionContext();

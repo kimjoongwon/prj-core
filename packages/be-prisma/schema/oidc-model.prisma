@@ -3,24 +3,24 @@
 // @description: OIDC provider가 참조하는 전역 모델 저장 카탈로그
 /// @displayName OIDC 모델
 model OidcModel {
-  id        String    @unique @default(ulid()) @db.VarChar(26)
-  seq       Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  oidcModelId String    @unique @default(ulid()) @map("oidc_model_id") @db.Char(26)
+  id          BigInt    @id @default(autoincrement())
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   /// @displayName 모델 키 (jti 또는 uid)
-  key       String    @unique
+  key         String    @unique
   /// @displayName 모델 타입
-  modelType String    @map("model_type")
+  modelType   String    @map("model_type")
   /// @displayName 페이로드 (JSON)
-  payload   Json
+  payload     Json
   /// @displayName 만료 시간
-  expiresAt DateTime? @map("expires_at") @db.Timestamptz(6)
+  expiresAt   DateTime? @map("expires_at") @db.Timestamptz(6)
   /// @displayName 사용자 코드 (DeviceCode용)
-  userCode  String?   @unique @map("user_code")
+  userCode    String?   @unique @map("user_code")
   /// @displayName Grant ID (토큰 취소용)
-  grantId   String?   @map("grant_id")
+  grantId     String?   @map("grant_id")
   /// @displayName 세션 UID
-  uid       String?   @unique
+  uid         String?   @unique
 
   @@index([modelType])
   @@index([grantId])

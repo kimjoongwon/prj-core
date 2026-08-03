@@ -9,8 +9,18 @@ export class ReservationCreatedLogHandler
 	private readonly logger = new Logger(ReservationCreatedLogHandler.name);
 
 	handle(event: ReservationCreatedEvent): void {
+		const payload = (
+			event as ReservationCreatedEvent & {
+				payload: {
+					reservationId: string;
+					userId: string;
+					spaceId: string;
+				};
+			}
+		).payload;
+
 		this.logger.debug(
-			`Reservation created: reservationId=${event.params.reservationId}, userId=${event.params.userId}, spaceId=${event.params.spaceId}`,
+			`Reservation created: reservationId=${payload.reservationId}, userId=${payload.userId}, spaceId=${payload.spaceId}`,
 		);
 	}
 }

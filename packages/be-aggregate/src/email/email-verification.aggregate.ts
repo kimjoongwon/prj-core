@@ -79,7 +79,7 @@ export class EmailVerificationAggregate {
 		};
 	}
 
-	async resend(id: string) {
+	async resend(id: bigint) {
 		const existing = await this.repository.findById(id);
 		if (!existing || existing.removedAt) {
 			throw new BadRequestException(EMAIL_VERIFICATION_ERROR.INVALID_TOKEN);
@@ -148,7 +148,7 @@ export class EmailVerificationAggregate {
 		return verification;
 	}
 
-	async markVerified(id: string, userId: string) {
+	async markVerified(id: bigint, userId: bigint) {
 		return this.repository.updateById(id, {
 			status: "VERIFIED",
 			verifiedAt: new Date(),
@@ -157,7 +157,7 @@ export class EmailVerificationAggregate {
 	}
 
 	toDto(verification: {
-		id: string;
+		id: bigint;
 		createdAt: Date;
 		updatedAt: Date | null;
 		email: string;
@@ -168,7 +168,7 @@ export class EmailVerificationAggregate {
 		lastSentAt: Date | null;
 		sendCount: number;
 		lastSendStatus: string | null;
-		verifiedUserId: string | null;
+		verifiedUserId: bigint | null;
 	}) {
 		const resendAvailableAt = this.getResendAvailableAt(
 			verification.lastSentAt,
@@ -195,7 +195,7 @@ export class EmailVerificationAggregate {
 	}
 
 	private async sendAndRecord(
-		verificationId: string,
+		verificationId: bigint,
 		email: string,
 		rawToken: string,
 	): Promise<void> {

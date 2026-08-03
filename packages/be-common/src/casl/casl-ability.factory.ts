@@ -10,7 +10,11 @@ import { Ability, AbilityBuilder } from "@casl/ability";
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import type { Ability as DomainAbility, RoleAssignment } from "@cocrepo/entity";
 import { RoleAssignmentsRepository } from "@cocrepo/repository";
-import type { ContextTenantSnapshot, ContextUserSnapshot } from "@cocrepo/type";
+import type {
+	ContextTenantSnapshot,
+	ContextUserSnapshot,
+	DatabaseId,
+} from "@cocrepo/type";
 import { Injectable, Logger } from "@nestjs/common";
 import { ClsService } from "nestjs-cls";
 import {
@@ -65,6 +69,9 @@ const ALLOWED_TEMPLATE_VARIABLES = [
  */
 const TEMPLATE_VARIABLE_PATTERN = /\$\{([^}]+)\}/g;
 
+/** 템플릿 변수 하나만으로 구성된 조건 문자열을 판별합니다. */
+const EXACT_TEMPLATE_VARIABLE_PATTERN = /^\$\{([^}]+)\}$/;
+
 @Injectable()
 export class CaslAbilityFactory {
 	private readonly logger = new Logger(CaslAbilityFactory.name);
@@ -94,13 +101,13 @@ export class CaslAbilityFactory {
 		);
 
 		// x-tenant-id 헤더에서 현재 tenant를 가져와서 spaceId 파생
-		const tenantId = this.cls.get<string>(CONTEXT_KEYS.TENANT_ID);
+		const tenantId = this.cls.get<DatabaseId>(CONTEXT_KEYS.TENANT_ID);
 		const currentTenant =
 			this.cls.get<ContextTenantSnapshot | undefined>(CONTEXT_KEYS.TENANT) ??
 			resolveCurrentTenantById(user.tenants, tenantId);
 		const spaceId = currentTenant
 			? resolveTenantSpaceId(currentTenant)
-			: this.cls.get<string | undefined>(CONTEXT_KEYS.SPACE_ID);
+			: this.cls.get<DatabaseId | undefined>(CONTEXT_KEYS.SPACE_ID);
 
 		if (!tenantId || !spaceId || !currentTenant?.role) {
 			this.logger.warn(
@@ -349,19 +356,81 @@ export class CaslAbilityFactory {
 		}
 
 		try {
-			// 조건을 문자열로 변환 후 템플릿 변수 치환
-			const conditionsString = JSON.stringify(conditions);
-			const parsedString = this.replaceTemplateVariables(
-				conditionsString,
-				userContext,
-			);
-			return JSON.parse(parsedString);
+			return this.replaceConditionValue(conditions, userContext) as Record<
+				string,
+				unknown
+			>;
 		} catch (error) {
 			this.logger.error(
 				`조건 파싱 중 오류 발생: ${error instanceof Error ? error.message : "알 수 없는 오류"}`,
 			);
 			return undefined;
 		}
+	}
+
+	/**
+	 * 조건 트리를 순회하며 템플릿 값을 원래 런타임 타입으로 치환합니다.
+	 *
+	 * @param value 현재 조건 값
+	 * @param context 템플릿 변수 컨텍스트
+	 * @returns bigint를 포함한 런타임 조건 값
+	 */
+	private replaceConditionValue(
+		value: unknown,
+		context: Record<string, unknown>,
+	): unknown {
+		if (Array.isArray(value)) {
+			return value.map((item) => this.replaceConditionValue(item, context));
+		}
+
+		if (value && typeof value === "object") {
+			return Object.fromEntries(
+				Object.entries(value).map(([key, childValue]) => [
+					key,
+					this.replaceConditionValue(childValue, context),
+				]),
+			);
+		}
+
+		if (typeof value !== "string") {
+			return value;
+		}
+
+		const exactMatch = EXACT_TEMPLATE_VARIABLE_PATTERN.exec(value);
+		if (exactMatch) {
+			return this.resolveTemplateVariable(exactMatch[1], context);
+		}
+
+		return this.replaceTemplateVariables(value, context);
+	}
+
+	/**
+	 * 허용된 템플릿 변수 값을 컨텍스트에서 조회합니다.
+	 *
+	 * @param path 조회할 변수 경로
+	 * @param context 템플릿 변수 컨텍스트
+	 * @returns 조회한 값, 미허용 또는 누락 값이면 빈 문자열
+	 */
+	private resolveTemplateVariable(
+		path: string,
+		context: Record<string, unknown>,
+	): unknown {
+		if (
+			!ALLOWED_TEMPLATE_VARIABLES.includes(
+				path as (typeof ALLOWED_TEMPLATE_VARIABLES)[number],
+			)
+		) {
+			this.logger.warn(`허용되지 않은 템플릿 변수: ${path}`);
+			return "";
+		}
+
+		const value = this.getValueByPath(context, path);
+		if (value === undefined || value === null) {
+			this.logger.warn(`템플릿 변수 값이 없습니다: ${path}`);
+			return "";
+		}
+
+		return value;
 	}
 
 	/**
@@ -383,29 +452,7 @@ export class CaslAbilityFactory {
 		return template.replace(
 			TEMPLATE_VARIABLE_PATTERN,
 			(_match, path: string) => {
-				// 보안 검증: 허용된 변수인지 확인
-				if (
-					!ALLOWED_TEMPLATE_VARIABLES.includes(
-						path as (typeof ALLOWED_TEMPLATE_VARIABLES)[number],
-					)
-				) {
-					this.logger.warn(`허용되지 않은 템플릿 변수: ${path}`);
-					return '""'; // 빈 문자열로 치환 (JSON 호환)
-				}
-
-				// 경로를 따라 값 추출 (예: user.id -> context.user.id)
-				const value = this.getValueByPath(context, path);
-
-				if (value === undefined || value === null) {
-					this.logger.warn(`템플릿 변수 값이 없습니다: ${path}`);
-					return '""';
-				}
-
-				// 문자열이면 따옴표로 감싸서 반환 (JSON 호환)
-				if (typeof value === "string") {
-					return `"${value}"`;
-				}
-
+				const value = this.resolveTemplateVariable(path, context);
 				return String(value);
 			},
 		);

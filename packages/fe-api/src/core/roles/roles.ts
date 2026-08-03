@@ -724,4 +724,3 @@ export const useDeleteRole = <TError = ErrorType<void>,
 
       return useMutation(mutationOptions, queryClient);
     }
-    

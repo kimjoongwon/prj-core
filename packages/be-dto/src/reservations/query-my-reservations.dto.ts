@@ -1,4 +1,4 @@
-import { DateFieldOptional, EnumFieldOptional } from "@cocrepo/decorator";
+import { DateFieldOptional, EnumFieldOptional } from "@cocrepo/decorator/field";
 import { ReservationStatus } from "@cocrepo/prisma";
 import { QueryDto } from "../query/query.dto";
 

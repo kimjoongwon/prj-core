@@ -1,6 +1,6 @@
 export interface SignUpCommandInput {
 	nickname: string;
-	spaceId: string;
+	spaceId: bigint;
 	email: string;
 	name: string;
 	phone: string;

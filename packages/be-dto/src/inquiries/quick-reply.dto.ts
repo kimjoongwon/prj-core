@@ -1,4 +1,4 @@
-import { NumberField, StringField } from "@cocrepo/decorator";
+import { NumberField, StringField } from "@cocrepo/decorator/field";
 
 /**
  * 빠른 답변 옵션 DTO

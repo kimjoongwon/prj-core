@@ -15,20 +15,28 @@ export class OidcClientsRepository {
 		>,
 	) {}
 
-	async findById(id: string): Promise<OidcClient | null> {
-		this.logger.debug(`ID로 조회: ${id.slice(-8)}`);
+	async findById(id: bigint): Promise<OidcClient | null> {
+		this.logger.debug(`ID로 조회: ${id.toString()}`);
 		const result = await this.txHost.tx.oidcClient.findUnique({
 			where: { id },
 		});
 		return result ? toDomainEntity(OidcClient, result) : null;
 	}
 
-	async findByIdOrThrow(id: string): Promise<OidcClient> {
+	async findByIdOrThrow(id: bigint): Promise<OidcClient> {
 		const result = await this.findById(id);
 		if (!result) {
-			throw new Error(`OidcClient not found: ${id}`);
+			throw new Error(`OidcClient not found: ${id.toString()}`);
 		}
 		return result;
+	}
+
+	/** OIDC integration 경계에서 모델별 ULID로 조회합니다. */
+	async findByOidcClientId(oidcClientId: string): Promise<OidcClient | null> {
+		const result = await this.txHost.tx.oidcClient.findUnique({
+			where: { oidcClientId },
+		});
+		return result ? toDomainEntity(OidcClient, result) : null;
 	}
 
 	async findByClientId(clientId: string): Promise<OidcClient | null> {
@@ -84,10 +92,10 @@ export class OidcClientsRepository {
 	}
 
 	async updateById(
-		id: string,
+		id: bigint,
 		data: Prisma.OidcClientUncheckedUpdateInput,
 	): Promise<OidcClient> {
-		this.logger.debug(`업데이트 중: ${id.slice(-8)}`);
+		this.logger.debug(`업데이트 중: ${id.toString()}`);
 		const result = await this.txHost.tx.oidcClient.update({
 			where: { id },
 			data,
@@ -95,8 +103,8 @@ export class OidcClientsRepository {
 		return toDomainEntity(OidcClient, result);
 	}
 
-	async removeById(id: string): Promise<OidcClient> {
-		this.logger.debug(`소프트 삭제: ${id.slice(-8)}`);
+	async removeById(id: bigint): Promise<OidcClient> {
+		this.logger.debug(`소프트 삭제: ${id.toString()}`);
 		const result = await this.txHost.tx.oidcClient.update({
 			where: { id },
 			data: { removedAt: new Date(), isActive: false },

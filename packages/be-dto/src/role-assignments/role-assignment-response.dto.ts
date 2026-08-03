@@ -1,20 +1,20 @@
-import { ULIDField } from "@cocrepo/decorator";
+import { BigIntIdField } from "@cocrepo/decorator/field";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 import { PolicyResponseDto } from "../policies/policy-response.dto";
 
 export class RoleAssignmentResponseDto {
-	@ULIDField({ description: "Role assignment ID" })
+	@BigIntIdField({ description: "Role assignment ID" })
 	@Expose()
-	id!: string;
+	id!: bigint;
 
-	@ULIDField({ description: "Role ID" })
+	@BigIntIdField({ description: "Role ID" })
 	@Expose()
-	roleId!: string;
+	roleId!: bigint;
 
-	@ULIDField({ description: "Policy ID" })
+	@BigIntIdField({ description: "Policy ID" })
 	@Expose()
-	policyId!: string;
+	policyId!: bigint;
 
 	@ApiProperty({
 		description: "활성화 여부",

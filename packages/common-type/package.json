@@ -11,6 +11,16 @@
       "import": "./index.ts",
       "default": "./index.ts"
     },
+    "./database-id": {
+      "types": "./src/database-id.ts",
+      "import": "./src/database-id.ts",
+      "default": "./src/database-id.ts"
+    },
+    "./bigint-json": {
+      "types": "./src/bigint-json.ts",
+      "import": "./src/bigint-json.ts",
+      "default": "./src/bigint-json.ts"
+    },
     "./package.json": "./package.json"
   },
   "main": "./index.ts",
@@ -27,6 +37,7 @@
     "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
     "format": "biome check --write .",
     "type-check": "tsc --noEmit",
+    "test": "vitest run",
     "type-check:prod": "tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules",
     "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
@@ -38,6 +49,7 @@
     "@tanstack/react-table": "^8.21.3",
     "@types/react": "catalog:",
     "react": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

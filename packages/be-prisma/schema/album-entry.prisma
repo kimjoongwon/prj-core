@@ -2,30 +2,30 @@
 // @description: Album과 Asset을 연결하고 앨범 내 배치 정보를 보관하는 운영 조인 모델
 /// @displayName 앨범 엔트리
 model AlbumEntry {
-  id           String    @unique @default(ulid()) @db.VarChar(26)
-  seq          Int       @id @default(autoincrement())
+  albumEntryId String    @unique @default(ulid()) @map("album_entry_id") @db.Char(26)
+  id           BigInt    @id @default(autoincrement())
   createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt    DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt    DateTime? @map("removed_at") @db.Timestamptz(6)
   /// @displayName 소속 Space
-  spaceSeq     Int       @map("space_seq")
-  createdBySeq Int?      @map("created_by_seq")
+  spaceId      BigInt    @map("space_id")
+  createdById  BigInt?   @map("created_by_id")
   /// @displayName 앨범 내부 순번
-  albumSeq     Int       @map("album_seq")
+  albumId      BigInt    @map("album_id")
   /// @displayName 에셋 내부 순번
-  assetSeq     Int       @map("asset_seq")
+  assetId      BigInt    @map("asset_id")
   /// @displayName 앨범 내 순서
   position     Int
   /// @displayName 캡션
   caption      String?
-  space        Space     @relation(fields: [spaceSeq], references: [seq], onDelete: Restrict)
-  createdBy    User?     @relation(fields: [createdBySeq], references: [seq], onDelete: SetNull)
-  album        Album     @relation(fields: [albumSeq], references: [seq], onDelete: Cascade)
-  asset        Asset     @relation(fields: [assetSeq], references: [seq], onDelete: Cascade)
+  space        Space     @relation(fields: [spaceId], references: [id], onDelete: Restrict)
+  createdBy    User?     @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  album        Album     @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  asset        Asset     @relation(fields: [assetId], references: [id], onDelete: Cascade)
 
-  @@unique([albumSeq, assetSeq])
-  @@index([spaceSeq])
-  @@index([albumSeq])
-  @@index([assetSeq])
+  @@unique([albumId, assetId])
+  @@index([spaceId])
+  @@index([albumId])
+  @@index([assetId])
   @@map("album_entries")
 }

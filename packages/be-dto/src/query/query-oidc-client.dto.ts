@@ -1,4 +1,7 @@
-import { BooleanFieldOptional, StringFieldOptional } from "@cocrepo/decorator";
+import {
+	BooleanFieldOptional,
+	StringFieldOptional,
+} from "@cocrepo/decorator/field";
 import { Transform } from "class-transformer";
 
 import { QueryDto } from "./query.dto";

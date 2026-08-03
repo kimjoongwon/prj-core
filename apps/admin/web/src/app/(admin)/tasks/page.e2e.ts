@@ -1,10 +1,15 @@
-import { getAdminSpaceRequestHeaders } from "@cocrepo/e2e";
+import { getAdminSpaceRequestHeaders, loginToConsole } from "@cocrepo/e2e";
 import { expect, test } from "@playwright/test";
 
+let ADMIN_TENANT_ID = "";
+
+test.beforeEach(async ({ page }) => {
+	const context = await loginToConsole(page);
+	ADMIN_TENANT_ID = context.tenantId;
+});
+
 const ADMIN_API_BASE_URL = "http://localhost:3000/api/v1";
-const SYSTEM_TENANT_ID =
-	process.env.E2E_SYSTEM_TENANT_ID ?? "01J00000000000000000000002";
-const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_TENANT_ID);
+const getSpaceHeaders = () => getAdminSpaceRequestHeaders(ADMIN_TENANT_ID);
 const TEST_VIDEO_FILE_ID = "11111111-1111-4111-8111-111111111111";
 
 test.describe("태스크 목록 페이지", () => {

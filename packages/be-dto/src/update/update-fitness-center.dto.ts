@@ -2,7 +2,7 @@ import {
 	EnumFieldOptional,
 	StringFieldOptional,
 	UUIDFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import { LanguageCode } from "@cocrepo/prisma";
 
 export class UpdateFitnessCenterDto {

@@ -1,20 +1,27 @@
 import {
+	BigIntIdField,
 	BooleanField,
 	DateField,
 	DateFieldOptional,
 	NumberField,
 	StringField,
-	ULIDField,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import type { DomainEntityModel } from "@cocrepo/entity";
 import type { SecurityPolicy } from "@cocrepo/prisma";
+import { Exclude } from "class-transformer";
 
 /**
  * 보안 정책 응답 DTO
  */
-export class SecurityPolicyDto implements DomainEntityModel<SecurityPolicy> {
-	@ULIDField({ description: "ID" })
-	id!: string;
+export class SecurityPolicyDto
+	implements DomainEntityModel<SecurityPolicy, "securityPolicyId">
+{
+	@Exclude()
+	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
+	private readonly securityPolicyId?: never;
+
+	@BigIntIdField({ description: "ID" })
+	id!: bigint;
 
 	@DateField({ description: "생성일" })
 	createdAt!: Date;

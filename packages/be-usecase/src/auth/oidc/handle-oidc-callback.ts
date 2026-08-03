@@ -10,6 +10,7 @@ import { resolveHttpClientIp, resolveHttpUserAgent } from "@cocrepo/toolkit";
 import { SessionId } from "@cocrepo/vo";
 import { UnauthorizedException } from "@nestjs/common";
 import type { Request, Response } from "express";
+import { serializeAuthCacheUser } from "../serialize-auth-cache-user";
 import { decodeAccessToken } from "./decode-access-token";
 import { decodeOidcStateContext } from "./decode-oidc-state-context";
 import type { OidcCallbackResult } from "./oidc-callback.result";
@@ -53,7 +54,13 @@ export async function handleOidcCallback(params: {
 		toProtocolClientConfig(client),
 	);
 	const payload = decodeAccessToken(tokenResponse.access_token);
-	const user = await params.usersService.getByIdWithTenants(payload.sub);
+	const user = await (
+		params.usersService as UserService & {
+			findByUserIdWithTenants: (
+				userId: string,
+			) => ReturnType<UserService["getByIdWithTenants"]>;
+		}
+	).findByUserIdWithTenants(payload.sub);
 
 	if (!user) {
 		throw new UnauthorizedException("사용자를 찾을 수 없습니다");
@@ -64,7 +71,7 @@ export async function handleOidcCallback(params: {
 	if (remainingSeconds > 0) {
 		await params.authCacheService.set(
 			payload.sub,
-			JSON.stringify(user),
+			serializeAuthCacheUser(user),
 			remainingSeconds,
 		);
 	}

@@ -1,4 +1,4 @@
-import { NumberFieldOptional } from "@cocrepo/decorator";
+import { NumberFieldOptional } from "@cocrepo/decorator/field";
 import { PageMetaDto } from "./page-meta.dto";
 
 /**

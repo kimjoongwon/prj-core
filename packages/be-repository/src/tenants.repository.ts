@@ -3,14 +3,14 @@ import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
+import type {
+	AutoIdentityCreateInput,
+	AutoIdentityUpdateInput,
+} from "./auto-identity-input.type";
 import {
 	IDP_ACCOUNT_ACCESS_GRANT_INCLUDE,
 	type IdpAccountAccessGrantRecord,
 } from "./idp-account-access-grant.include";
-import type {
-	PublicIdCreateInput,
-	PublicIdUpdateInput,
-} from "./public-id-input.type";
 import { toDomainData, toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
@@ -25,8 +25,8 @@ export class TenantsRepository {
 		this.logger = new Logger("TenantsRepository");
 	}
 
-	async findById(id: string): Promise<Tenant | null> {
-		this.logger.debug(`ID로 조회: ${id.slice(-8)}`);
+	async findById(id: bigint): Promise<Tenant | null> {
+		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.tenant.findUnique({
 			where: { id },
@@ -36,8 +36,8 @@ export class TenantsRepository {
 		return result ? toDomainEntity(Tenant, result) : null;
 	}
 
-	async findByIdWithRelations(id: string): Promise<Tenant | null> {
-		this.logger.debug(`관계 포함 조회: ${id.slice(-8)}`);
+	async findByIdWithRelations(id: bigint): Promise<Tenant | null> {
+		this.logger.debug(`관계 포함 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.tenant.findUnique({
 			where: { id },
@@ -51,11 +51,11 @@ export class TenantsRepository {
 		return result ? toDomainEntity(Tenant, result) : null;
 	}
 
-	async findByUserId(userId: string): Promise<Tenant[]> {
-		this.logger.debug(`사용자별 테넌트 조회: ${userId.slice(-8)}`);
+	async findByUserId(userId: bigint): Promise<Tenant[]> {
+		this.logger.debug(`사용자별 테넌트 조회: ${userId.toString()}`);
 
 		const result = await this.txHost.tx.tenant.findMany({
-			where: { user: { id: userId } },
+			where: { userId },
 			include: { user: true, space: true, role: true },
 			orderBy: [{ createdAt: "desc" }],
 		});
@@ -63,11 +63,11 @@ export class TenantsRepository {
 		return result.map((item) => toDomainEntity(Tenant, item));
 	}
 
-	async findBySpaceId(spaceId: string): Promise<Tenant[]> {
-		this.logger.debug(`Space별 테넌트 조회: ${spaceId.slice(-8)}`);
+	async findBySpaceId(spaceId: bigint): Promise<Tenant[]> {
+		this.logger.debug(`Space별 테넌트 조회: ${spaceId.toString()}`);
 
 		const result = await this.txHost.tx.tenant.findMany({
-			where: { space: { id: spaceId } },
+			where: { spaceId },
 			include: { user: true, space: true, role: true },
 			orderBy: [{ createdAt: "desc" }],
 		});
@@ -76,15 +76,15 @@ export class TenantsRepository {
 	}
 
 	async findByUserIdAndSpaceId(
-		userId: string,
-		spaceId: string,
+		userId: bigint,
+		spaceId: bigint,
 	): Promise<Tenant | null> {
 		this.logger.debug(
-			`사용자+Space 결합 조회: ${userId.slice(-8)}/${spaceId.slice(-8)}`,
+			`사용자+Space 결합 조회: ${userId.toString()}/${spaceId.toString()}`,
 		);
 
 		const result = await this.txHost.tx.tenant.findFirst({
-			where: { user: { id: userId }, space: { id: spaceId } },
+			where: { userId, spaceId },
 			include: { user: true, space: true, role: true },
 		});
 
@@ -92,17 +92,17 @@ export class TenantsRepository {
 	}
 
 	async findActiveByUserIdAndSpaceId(
-		userId: string,
-		spaceId: string,
+		userId: bigint,
+		spaceId: bigint,
 	): Promise<Tenant | null> {
 		this.logger.debug(
-			`활성 사용자+Space 테넌트 조회: ${userId.slice(-8)}/${spaceId.slice(-8)}`,
+			`활성 사용자+Space 테넌트 조회: ${userId.toString()}/${spaceId.toString()}`,
 		);
 
 		const result = await this.txHost.tx.tenant.findFirst({
 			where: {
-				user: { id: userId },
-				space: { id: spaceId },
+				userId,
+				spaceId,
 				removedAt: null,
 			},
 			include: { role: true, space: true, user: true },
@@ -149,27 +149,20 @@ export class TenantsRepository {
 			orderBy: params.orderBy ?? [{ createdAt: "desc" }],
 		});
 
-		return toDomainData(results) as IdpAccountAccessGrantRecord[];
+		return results.map((item) => toDomainData(item));
 	}
 
 	async create(
-		data: PublicIdCreateInput<
+		data: AutoIdentityCreateInput<
 			Prisma.TenantUncheckedCreateInput,
-			"user" | "space" | "role"
+			"tenantId"
 		>,
 	): Promise<Tenant> {
 		this.logger.debug(
-			`테넌트 생성: user=${data.userId.slice(-8)}, space=${data.spaceId.slice(-8)}`,
+			`테넌트 생성: user=${data.userId.toString()}, space=${data.spaceId.toString()}`,
 		);
-
-		const { userId, spaceId, roleId, ...tenantData } = data;
 		const result = await this.txHost.tx.tenant.create({
-			data: {
-				...tenantData,
-				user: { connect: { id: userId } },
-				space: { connect: { id: spaceId } },
-				role: { connect: { id: roleId } },
-			},
+			data,
 			include: { user: true, space: true, role: true },
 		});
 
@@ -177,25 +170,16 @@ export class TenantsRepository {
 	}
 
 	async updateById(
-		id: string,
-		data: PublicIdUpdateInput<
+		id: bigint,
+		data: AutoIdentityUpdateInput<
 			Prisma.TenantUncheckedUpdateInput,
-			"user" | "space" | "role"
+			"tenantId"
 		>,
 	): Promise<Tenant> {
-		this.logger.debug(`테넌트 수정: ${id.slice(-8)}`);
-
-		const { userId, spaceId, roleId, ...tenantData } = data;
+		this.logger.debug(`테넌트 수정: ${id.toString()}`);
 		const result = await this.txHost.tx.tenant.update({
 			where: { id },
-			data: {
-				...tenantData,
-				...(userId !== undefined ? { user: { connect: { id: userId } } } : {}),
-				...(spaceId !== undefined
-					? { space: { connect: { id: spaceId } } }
-					: {}),
-				...(roleId !== undefined ? { role: { connect: { id: roleId } } } : {}),
-			},
+			data,
 			include: { user: true, space: true, role: true },
 		});
 
@@ -203,18 +187,18 @@ export class TenantsRepository {
 	}
 
 	async upsertByUserIdAndSpaceId(data: {
-		userId: string;
-		spaceId: string;
-		roleId: string;
+		userId: bigint;
+		spaceId: bigint;
+		roleId: bigint;
 	}): Promise<Tenant> {
 		this.logger.debug(
-			`테넌트 upsert: user=${data.userId.slice(-8)}, space=${data.spaceId.slice(-8)}`,
+			`테넌트 upsert: user=${data.userId.toString()}, space=${data.spaceId.toString()}`,
 		);
 
 		const existing = await this.txHost.tx.tenant.findFirst({
 			where: {
-				user: { id: data.userId },
-				space: { id: data.spaceId },
+				userId: data.userId,
+				spaceId: data.spaceId,
 			},
 			select: { id: true },
 		});
@@ -222,16 +206,16 @@ export class TenantsRepository {
 			? await this.txHost.tx.tenant.update({
 					where: { id: existing.id },
 					data: {
-						role: { connect: { id: data.roleId } },
+						roleId: data.roleId,
 						removedAt: null,
 					},
 					include: { user: true, space: true, role: true },
 				})
 			: await this.txHost.tx.tenant.create({
 					data: {
-						user: { connect: { id: data.userId } },
-						space: { connect: { id: data.spaceId } },
-						role: { connect: { id: data.roleId } },
+						userId: data.userId,
+						spaceId: data.spaceId,
+						roleId: data.roleId,
 					},
 					include: { user: true, space: true, role: true },
 				});
@@ -239,8 +223,8 @@ export class TenantsRepository {
 		return toDomainEntity(Tenant, result);
 	}
 
-	async deleteById(id: string): Promise<Tenant> {
-		this.logger.debug(`테넌트 삭제: ${id.slice(-8)}`);
+	async deleteById(id: bigint): Promise<Tenant> {
+		this.logger.debug(`테넌트 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.tenant.delete({
 			where: { id },

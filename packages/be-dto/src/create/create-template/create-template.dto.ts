@@ -1,4 +1,4 @@
-import { ClassField } from "@cocrepo/decorator";
+import { ClassField } from "@cocrepo/decorator/field";
 import { OmitType } from "@nestjs/swagger";
 import { COMMON_ENTITY_FIELDS } from "../../constant";
 import { TemplateDto } from "../../template/template.dto";

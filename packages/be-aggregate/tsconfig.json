@@ -1,7 +1,11 @@
 {
   "extends": "@cocrepo/tsconfig/nestjs-package.json",
   "compilerOptions": {
+    "baseUrl": ".",
     "outDir": "./dist",
+    "paths": {
+      "@cocrepo/input": ["../be-input/src/index.ts"]
+    },
     "rootDir": "./src",
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },

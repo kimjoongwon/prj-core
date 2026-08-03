@@ -30,7 +30,7 @@ describe("SubjectAggregate", () => {
 		(service as unknown as { cachedFieldsByModel: Map<string, unknown[]> })
 			.cachedFieldsByModel = new Map([["User", []]]);
 		const subject = {
-			id: "subject-1",
+			id: 1n,
 			name: "entity:User",
 			displayName: "사용자",
 			icon: "user",
@@ -47,7 +47,7 @@ describe("SubjectAggregate", () => {
 
 		// Then
 		expect(result).toEqual({
-			id: "subject-1",
+			id: 1n,
 			name: "entity:User",
 			displayName: "사용자",
 			icon: "user",

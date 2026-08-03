@@ -15,12 +15,12 @@ import {
 import { BadRequestException, ConflictException } from "@nestjs/common";
 import { ReservationAggregate } from "../src/reservation/reservation.aggregate";
 
-const spaceId = "11111111-1111-4111-8111-111111111111";
-const tenantId = "66666666-6666-4666-8666-666666666666";
-const userId = "22222222-2222-4222-8222-222222222222";
-const timelineId = "33333333-3333-4333-8333-333333333333";
-const sessionId = "44444444-4444-4444-8444-444444444444";
-const programId = "55555555-5555-4555-8555-555555555555";
+const spaceId = 101n;
+const tenantId = 606n;
+const userId = 202n;
+const timelineId = 303n;
+const sessionId = 404n;
+const programId = 505n;
 const occurrenceStartAt = new Date("2026-06-01T10:00:00.000Z");
 
 describe("ReservationAggregate", () => {
@@ -48,7 +48,7 @@ describe("ReservationAggregate", () => {
 		service = new ReservationAggregate(repository, tenantsRepository);
 		tenantsRepository.findActiveByUserIdAndSpaceId.mockResolvedValue({
 			id: tenantId,
-		} as Awaited<
+		} as unknown as Awaited<
 			ReturnType<TenantsRepository["findActiveByUserIdAndSpaceId"]>
 		>);
 		repository.findByUserAndIdempotencyKey.mockResolvedValue(null);
@@ -150,7 +150,7 @@ describe("ReservationAggregate", () => {
 			status: ReservationStatus.CONFIRMED,
 		});
 		const nextWaitlisted = buildReservation({
-			id: "66666666-6666-4666-8666-666666666666",
+			id: 666n,
 			status: ReservationStatus.WAITLISTED,
 			waitlistPosition: 1,
 		});
@@ -205,7 +205,7 @@ describe("ReservationAggregate", () => {
 			service.cancel({
 				spaceId,
 				userId,
-				reservationId: "77777777-7777-4777-8777-777777777777",
+				reservationId: 777n,
 				now: new Date("2026-06-01T08:00:00.000Z"),
 			}),
 		).rejects.toThrow(BadRequestException);
@@ -230,9 +230,9 @@ function buildProgram(input: { capacity: number }): BookingProgramRecord {
 		createdAt: new Date("2026-01-01T00:00:00.000Z"),
 		updatedAt: null,
 		removedAt: null,
-		routineId: "88888888-8888-4888-8888-888888888888",
+		routineId: 808n,
 		sessionId,
-		instructorId: "99999999-9999-4999-8999-999999999999",
+		instructorId: 909n,
 		capacity: input.capacity,
 		name: "Morning Flow",
 		level: "BEGINNER",
@@ -266,9 +266,9 @@ function buildProgram(input: { capacity: number }): BookingProgramRecord {
 	} as unknown as BookingProgramRecord;
 }
 
-function buildReservation(input: Partial<Reservation> = {}): Reservation {
+function buildReservation(input: Record<string, unknown> = {}): Reservation {
 	return Object.assign(new Reservation(), {
-		id: input.id ?? "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+		id: input.id ?? 1111n,
 		createdAt: new Date("2026-01-01T00:00:00.000Z"),
 		updatedAt: null,
 		removedAt: null,

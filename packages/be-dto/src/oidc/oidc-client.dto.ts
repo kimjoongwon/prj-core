@@ -2,18 +2,23 @@ import {
 	BooleanField,
 	StringField,
 	StringFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import type { DomainEntityModel } from "@cocrepo/entity";
 import type { OidcClient, Prisma } from "@cocrepo/prisma";
 import { ApiPropertyOptional } from "@nestjs/swagger";
+import { Exclude } from "class-transformer";
 import { IsObject, IsOptional } from "class-validator";
 
 import { AbstractDto } from "../abstract.dto";
 
 export class OidcClientDto
 	extends AbstractDto
-	implements DomainEntityModel<OidcClient>
+	implements DomainEntityModel<OidcClient, "oidcClientId">
 {
+	@Exclude()
+	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
+	private readonly oidcClientId?: never;
+
 	@StringField({
 		description: "클라이언트 식별자",
 		maxLength: 64,

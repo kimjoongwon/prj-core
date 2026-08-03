@@ -65,8 +65,8 @@ export class ActionAggregate {
 	 * @returns Action
 	 * @throws NotFoundException
 	 */
-	async getActionById(id: string): Promise<Action> {
-		this.logger.debug(`ID로 Action 조회: id=${id.slice(-8)}`);
+	async getActionById(id: bigint): Promise<Action> {
+		this.logger.debug(`ID로 Action 조회: id=${id}`);
 
 		const action = await this.repository.findById(id);
 		if (!action) {
@@ -124,10 +124,10 @@ export class ActionAggregate {
 	 * @returns 수정된 Action
 	 */
 	async updateAction(
-		id: string,
+		id: bigint,
 		data: Prisma.ActionUncheckedUpdateInput,
 	): Promise<Action> {
-		this.logger.debug(`Action 수정: id=${id.slice(-8)}`);
+		this.logger.debug(`Action 수정: id=${id}`);
 
 		// 존재 여부 확인
 		await this.getActionById(id);
@@ -141,8 +141,8 @@ export class ActionAggregate {
 	 * @param id - Action ID
 	 * @returns 삭제된 Action
 	 */
-	async deleteAction(id: string): Promise<Action> {
-		this.logger.debug(`Action 삭제: id=${id.slice(-8)}`);
+	async deleteAction(id: bigint): Promise<Action> {
+		this.logger.debug(`Action 삭제: id=${id}`);
 
 		// 존재 여부 확인
 		await this.getActionById(id);

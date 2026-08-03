@@ -1,4 +1,6 @@
 import {
+	BigIntIdField,
+	BigIntIdFieldOptional,
 	BooleanField,
 	DateField,
 	DateFieldOptional,
@@ -6,14 +8,12 @@ import {
 	NumberField,
 	StringField,
 	StringFieldOptional,
-	ULIDField,
-	ULIDFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import { EmailVerificationStatus } from "@cocrepo/prisma";
 
 export class EmailVerificationDto {
-	@ULIDField({ description: "ID" })
-	id!: string;
+	@BigIntIdField({ description: "ID" })
+	id!: bigint;
 
 	@DateField({ description: "생성일" })
 	createdAt!: Date;
@@ -45,8 +45,8 @@ export class EmailVerificationDto {
 	@StringFieldOptional({ nullable: true, description: "마지막 발송 상태" })
 	lastSendStatus!: string | null;
 
-	@ULIDFieldOptional({ nullable: true, description: "인증 완료 사용자 ID" })
-	verifiedUserId!: string | null;
+	@BigIntIdFieldOptional({ nullable: true, description: "인증 완료 사용자 ID" })
+	verifiedUserId!: bigint | null;
 
 	@BooleanField({ description: "재발송 가능 여부" })
 	canResend!: boolean;

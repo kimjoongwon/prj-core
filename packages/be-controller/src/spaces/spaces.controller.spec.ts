@@ -72,16 +72,16 @@ describe("SpacesController", () => {
 		queryBus.execute.mockResolvedValue({ id: "fitness-center-id" });
 
 		// When
-		const result = await controller.getSpaceFitnessCenter("space-a");
+		const result = await controller.getSpaceFitnessCenter(1n);
 
 		// Then
-		expect(spaceContext.canAccessSpace).toHaveBeenCalledWith("space-a");
+		expect(spaceContext.canAccessSpace).toHaveBeenCalledWith(1n);
 		expect(queryBus.execute).toHaveBeenCalledWith(
 			expect.any(GetSpaceFitnessCenterQuery),
 		);
 		const message = queryBus.execute.mock
 			.calls[0]?.[0] as GetSpaceFitnessCenterQuery;
-		expect(message.spaceId).toBe("space-a");
+		expect(message.spaceId).toBe(1n);
 		expect(result).toEqual({ id: "fitness-center-id" });
 	});
 
@@ -90,7 +90,7 @@ describe("SpacesController", () => {
 		spaceContext.canAccessSpace.mockReturnValue(false);
 
 		// When & Then
-		await expect(controller.getSpaceFitnessCenter("space-x")).rejects.toThrow(
+		await expect(controller.getSpaceFitnessCenter(9n)).rejects.toThrow(
 			ForbiddenException,
 		);
 		expect(queryBus.execute).not.toHaveBeenCalled();
@@ -140,16 +140,16 @@ describe("SpacesController", () => {
 		commandBus.execute.mockResolvedValue({ id: "space-updated" });
 
 		// When
-		const result = await controller.updateSpaceFitnessCenter("space-a", dto);
+		const result = await controller.updateSpaceFitnessCenter(1n, dto);
 
 		// Then
-		expect(spaceContext.canAccessSpace).toHaveBeenCalledWith("space-a");
+		expect(spaceContext.canAccessSpace).toHaveBeenCalledWith(1n);
 		expect(commandBus.execute).toHaveBeenCalledWith(
 			expect.any(UpdateSpaceFitnessCenterCommand),
 		);
 		const message = commandBus.execute.mock
 			.calls[0]?.[0] as UpdateSpaceFitnessCenterCommand;
-		expect(message.spaceId).toBe("space-a");
+		expect(message.spaceId).toBe(1n);
 		expect(message.name).toBe(dto.name);
 		expect(message.contentLanguageCode).toBe(dto.contentLanguageCode);
 		expect(message.imageFileId).toBe(dto.imageFileId);
@@ -162,7 +162,7 @@ describe("SpacesController", () => {
 
 		// When & Then
 		await expect(
-			controller.updateSpaceFitnessCenter("space-x", {
+			controller.updateSpaceFitnessCenter(9n, {
 				contentLanguageCode: "ko_KR" as never,
 			}),
 		).rejects.toThrow(ForbiddenException);

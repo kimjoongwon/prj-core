@@ -1,11 +1,6 @@
-import type {
-	Ability as AbilityEntity,
-	Prisma,
-	Subject,
-} from "@cocrepo/prisma";
+import type { Prisma, Subject } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Action } from "./action.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { PolicyEntry } from "./policy-entry.entity";
 
 /**
@@ -18,10 +13,10 @@ import type { PolicyEntry } from "./policy-entry.entity";
  * DDD 원칙에 따라 Ability는 Subject + Action + fields + conditions 조합으로 권한을 정의합니다.
  * 마스킹 등의 설정은 Action.config에서 가져옵니다.
  */
-export class Ability
-	extends AbstractEntity
-	implements DomainEntityModel<AbilityEntity>
-{
+export class Ability extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	abilityId!: string;
+
 	// 메타데이터
 	/** 권한 이름 (재사용 가능한 고유 이름) */
 	name!: string;
@@ -40,9 +35,9 @@ export class Ability
 
 	// 연결 대상
 	/** Subject ID (권한 대상) */
-	subjectId!: string;
+	subjectId!: bigint;
 	/** Action ID (행위 정의) */
-	actionId!: string;
+	actionId!: bigint;
 
 	// RoleAssignment에서 조회할 때 설정되는 필드 (optional)
 	/** 우선순위 (Policy assignment priority 값) */

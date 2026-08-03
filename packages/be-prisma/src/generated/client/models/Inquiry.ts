@@ -27,33 +27,33 @@ export type AggregateInquiry = {
 }
 
 export type InquiryAvgAggregateOutputType = {
-  seq: number | null
-  spaceSeq: number | null
-  createdBySeq: number | null
-  customerSeq: number | null
-  assigneeSeq: number | null
+  id: number | null
+  spaceId: number | null
+  createdById: number | null
+  customerId: number | null
+  assigneeId: number | null
   sentimentScore: number | null
   unreadCount: number | null
 }
 
 export type InquirySumAggregateOutputType = {
-  seq: number | null
-  spaceSeq: number | null
-  createdBySeq: number | null
-  customerSeq: number | null
-  assigneeSeq: number | null
+  id: bigint | null
+  spaceId: bigint | null
+  createdById: bigint | null
+  customerId: bigint | null
+  assigneeId: bigint | null
   sentimentScore: number | null
   unreadCount: number | null
 }
 
 export type InquiryMinAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  inquiryId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceSeq: number | null
-  createdBySeq: number | null
+  spaceId: bigint | null
+  createdById: bigint | null
   inquiryNumber: string | null
   title: string | null
   category: $Enums.InquiryCategory | null
@@ -61,8 +61,8 @@ export type InquiryMinAggregateOutputType = {
   source: $Enums.InquirySource | null
   status: $Enums.InquiryStatus | null
   priority: $Enums.InquiryPriority | null
-  customerSeq: number | null
-  assigneeSeq: number | null
+  customerId: bigint | null
+  assigneeId: bigint | null
   firstResponseAt: Date | null
   resolvedAt: Date | null
   closedAt: Date | null
@@ -80,13 +80,13 @@ export type InquiryMinAggregateOutputType = {
 }
 
 export type InquiryMaxAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  inquiryId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  spaceSeq: number | null
-  createdBySeq: number | null
+  spaceId: bigint | null
+  createdById: bigint | null
   inquiryNumber: string | null
   title: string | null
   category: $Enums.InquiryCategory | null
@@ -94,8 +94,8 @@ export type InquiryMaxAggregateOutputType = {
   source: $Enums.InquirySource | null
   status: $Enums.InquiryStatus | null
   priority: $Enums.InquiryPriority | null
-  customerSeq: number | null
-  assigneeSeq: number | null
+  customerId: bigint | null
+  assigneeId: bigint | null
   firstResponseAt: Date | null
   resolvedAt: Date | null
   closedAt: Date | null
@@ -113,13 +113,13 @@ export type InquiryMaxAggregateOutputType = {
 }
 
 export type InquiryCountAggregateOutputType = {
+  inquiryId: number
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
-  spaceSeq: number
-  createdBySeq: number
+  spaceId: number
+  createdById: number
   inquiryNumber: number
   title: number
   category: number
@@ -127,8 +127,8 @@ export type InquiryCountAggregateOutputType = {
   source: number
   status: number
   priority: number
-  customerSeq: number
-  assigneeSeq: number
+  customerId: number
+  assigneeId: number
   firstResponseAt: number
   resolvedAt: number
   closedAt: number
@@ -149,33 +149,33 @@ export type InquiryCountAggregateOutputType = {
 
 
 export type InquiryAvgAggregateInputType = {
-  seq?: true
-  spaceSeq?: true
-  createdBySeq?: true
-  customerSeq?: true
-  assigneeSeq?: true
+  id?: true
+  spaceId?: true
+  createdById?: true
+  customerId?: true
+  assigneeId?: true
   sentimentScore?: true
   unreadCount?: true
 }
 
 export type InquirySumAggregateInputType = {
-  seq?: true
-  spaceSeq?: true
-  createdBySeq?: true
-  customerSeq?: true
-  assigneeSeq?: true
+  id?: true
+  spaceId?: true
+  createdById?: true
+  customerId?: true
+  assigneeId?: true
   sentimentScore?: true
   unreadCount?: true
 }
 
 export type InquiryMinAggregateInputType = {
+  inquiryId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceSeq?: true
-  createdBySeq?: true
+  spaceId?: true
+  createdById?: true
   inquiryNumber?: true
   title?: true
   category?: true
@@ -183,8 +183,8 @@ export type InquiryMinAggregateInputType = {
   source?: true
   status?: true
   priority?: true
-  customerSeq?: true
-  assigneeSeq?: true
+  customerId?: true
+  assigneeId?: true
   firstResponseAt?: true
   resolvedAt?: true
   closedAt?: true
@@ -202,13 +202,13 @@ export type InquiryMinAggregateInputType = {
 }
 
 export type InquiryMaxAggregateInputType = {
+  inquiryId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceSeq?: true
-  createdBySeq?: true
+  spaceId?: true
+  createdById?: true
   inquiryNumber?: true
   title?: true
   category?: true
@@ -216,8 +216,8 @@ export type InquiryMaxAggregateInputType = {
   source?: true
   status?: true
   priority?: true
-  customerSeq?: true
-  assigneeSeq?: true
+  customerId?: true
+  assigneeId?: true
   firstResponseAt?: true
   resolvedAt?: true
   closedAt?: true
@@ -235,13 +235,13 @@ export type InquiryMaxAggregateInputType = {
 }
 
 export type InquiryCountAggregateInputType = {
+  inquiryId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  spaceSeq?: true
-  createdBySeq?: true
+  spaceId?: true
+  createdById?: true
   inquiryNumber?: true
   title?: true
   category?: true
@@ -249,8 +249,8 @@ export type InquiryCountAggregateInputType = {
   source?: true
   status?: true
   priority?: true
-  customerSeq?: true
-  assigneeSeq?: true
+  customerId?: true
+  assigneeId?: true
   firstResponseAt?: true
   resolvedAt?: true
   closedAt?: true
@@ -356,13 +356,13 @@ export type InquiryGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 export type InquiryGroupByOutputType = {
-  id: string
-  seq: number
+  inquiryId: string
+  id: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  spaceSeq: number
-  createdBySeq: number | null
+  spaceId: bigint
+  createdById: bigint | null
   inquiryNumber: string
   title: string
   category: $Enums.InquiryCategory
@@ -370,8 +370,8 @@ export type InquiryGroupByOutputType = {
   source: $Enums.InquirySource
   status: $Enums.InquiryStatus
   priority: $Enums.InquiryPriority
-  customerSeq: number | null
-  assigneeSeq: number | null
+  customerId: bigint | null
+  assigneeId: bigint | null
   firstResponseAt: Date | null
   resolvedAt: Date | null
   closedAt: Date | null
@@ -413,13 +413,13 @@ export type InquiryWhereInput = {
   AND?: Prisma.InquiryWhereInput | Prisma.InquiryWhereInput[]
   OR?: Prisma.InquiryWhereInput[]
   NOT?: Prisma.InquiryWhereInput | Prisma.InquiryWhereInput[]
-  id?: Prisma.StringFilter<"Inquiry"> | string
-  seq?: Prisma.IntFilter<"Inquiry"> | number
+  inquiryId?: Prisma.StringFilter<"Inquiry"> | string
+  id?: Prisma.BigIntFilter<"Inquiry"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Inquiry"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null
-  spaceSeq?: Prisma.IntFilter<"Inquiry"> | number
-  createdBySeq?: Prisma.IntNullableFilter<"Inquiry"> | number | null
+  spaceId?: Prisma.BigIntFilter<"Inquiry"> | bigint | number
+  createdById?: Prisma.BigIntNullableFilter<"Inquiry"> | bigint | number | null
   inquiryNumber?: Prisma.StringFilter<"Inquiry"> | string
   title?: Prisma.StringFilter<"Inquiry"> | string
   category?: Prisma.EnumInquiryCategoryFilter<"Inquiry"> | $Enums.InquiryCategory
@@ -427,8 +427,8 @@ export type InquiryWhereInput = {
   source?: Prisma.EnumInquirySourceFilter<"Inquiry"> | $Enums.InquirySource
   status?: Prisma.EnumInquiryStatusFilter<"Inquiry"> | $Enums.InquiryStatus
   priority?: Prisma.EnumInquiryPriorityFilter<"Inquiry"> | $Enums.InquiryPriority
-  customerSeq?: Prisma.IntNullableFilter<"Inquiry"> | number | null
-  assigneeSeq?: Prisma.IntNullableFilter<"Inquiry"> | number | null
+  customerId?: Prisma.BigIntNullableFilter<"Inquiry"> | bigint | number | null
+  assigneeId?: Prisma.BigIntNullableFilter<"Inquiry"> | bigint | number | null
   firstResponseAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null
   resolvedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null
   closedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null
@@ -457,13 +457,13 @@ export type InquiryWhereInput = {
 }
 
 export type InquiryOrderByWithRelationInput = {
+  inquiryId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   inquiryNumber?: Prisma.SortOrder
   title?: Prisma.SortOrder
   category?: Prisma.SortOrder
@@ -471,8 +471,8 @@ export type InquiryOrderByWithRelationInput = {
   source?: Prisma.SortOrder
   status?: Prisma.SortOrder
   priority?: Prisma.SortOrder
-  customerSeq?: Prisma.SortOrderInput | Prisma.SortOrder
-  assigneeSeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  customerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  assigneeId?: Prisma.SortOrderInput | Prisma.SortOrder
   firstResponseAt?: Prisma.SortOrderInput | Prisma.SortOrder
   resolvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   closedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -501,8 +501,8 @@ export type InquiryOrderByWithRelationInput = {
 }
 
 export type InquiryWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  seq?: number
+  inquiryId?: string
+  id?: bigint | number
   inquiryNumber?: string
   AND?: Prisma.InquiryWhereInput | Prisma.InquiryWhereInput[]
   OR?: Prisma.InquiryWhereInput[]
@@ -510,16 +510,16 @@ export type InquiryWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Inquiry"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null
-  spaceSeq?: Prisma.IntFilter<"Inquiry"> | number
-  createdBySeq?: Prisma.IntNullableFilter<"Inquiry"> | number | null
+  spaceId?: Prisma.BigIntFilter<"Inquiry"> | bigint | number
+  createdById?: Prisma.BigIntNullableFilter<"Inquiry"> | bigint | number | null
   title?: Prisma.StringFilter<"Inquiry"> | string
   category?: Prisma.EnumInquiryCategoryFilter<"Inquiry"> | $Enums.InquiryCategory
   channel?: Prisma.EnumInquiryChannelFilter<"Inquiry"> | $Enums.InquiryChannel
   source?: Prisma.EnumInquirySourceFilter<"Inquiry"> | $Enums.InquirySource
   status?: Prisma.EnumInquiryStatusFilter<"Inquiry"> | $Enums.InquiryStatus
   priority?: Prisma.EnumInquiryPriorityFilter<"Inquiry"> | $Enums.InquiryPriority
-  customerSeq?: Prisma.IntNullableFilter<"Inquiry"> | number | null
-  assigneeSeq?: Prisma.IntNullableFilter<"Inquiry"> | number | null
+  customerId?: Prisma.BigIntNullableFilter<"Inquiry"> | bigint | number | null
+  assigneeId?: Prisma.BigIntNullableFilter<"Inquiry"> | bigint | number | null
   firstResponseAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null
   resolvedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null
   closedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null
@@ -545,16 +545,16 @@ export type InquiryWhereUniqueInput = Prisma.AtLeast<{
   tags?: Prisma.InquiryTagListRelationFilter
   sentimentAnalysis?: Prisma.XOR<Prisma.SentimentAnalysisNullableScalarRelationFilter, Prisma.SentimentAnalysisWhereInput> | null
   aiAgentLogs?: Prisma.AIAgentLogListRelationFilter
-}, "seq" | "id" | "inquiryNumber">
+}, "id" | "inquiryId" | "inquiryNumber">
 
 export type InquiryOrderByWithAggregationInput = {
+  inquiryId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   inquiryNumber?: Prisma.SortOrder
   title?: Prisma.SortOrder
   category?: Prisma.SortOrder
@@ -562,8 +562,8 @@ export type InquiryOrderByWithAggregationInput = {
   source?: Prisma.SortOrder
   status?: Prisma.SortOrder
   priority?: Prisma.SortOrder
-  customerSeq?: Prisma.SortOrderInput | Prisma.SortOrder
-  assigneeSeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  customerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  assigneeId?: Prisma.SortOrderInput | Prisma.SortOrder
   firstResponseAt?: Prisma.SortOrderInput | Prisma.SortOrder
   resolvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   closedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -590,13 +590,13 @@ export type InquiryScalarWhereWithAggregatesInput = {
   AND?: Prisma.InquiryScalarWhereWithAggregatesInput | Prisma.InquiryScalarWhereWithAggregatesInput[]
   OR?: Prisma.InquiryScalarWhereWithAggregatesInput[]
   NOT?: Prisma.InquiryScalarWhereWithAggregatesInput | Prisma.InquiryScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"Inquiry"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"Inquiry"> | number
+  inquiryId?: Prisma.StringWithAggregatesFilter<"Inquiry"> | string
+  id?: Prisma.BigIntWithAggregatesFilter<"Inquiry"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Inquiry"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Inquiry"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Inquiry"> | Date | string | null
-  spaceSeq?: Prisma.IntWithAggregatesFilter<"Inquiry"> | number
-  createdBySeq?: Prisma.IntNullableWithAggregatesFilter<"Inquiry"> | number | null
+  spaceId?: Prisma.BigIntWithAggregatesFilter<"Inquiry"> | bigint | number
+  createdById?: Prisma.BigIntNullableWithAggregatesFilter<"Inquiry"> | bigint | number | null
   inquiryNumber?: Prisma.StringWithAggregatesFilter<"Inquiry"> | string
   title?: Prisma.StringWithAggregatesFilter<"Inquiry"> | string
   category?: Prisma.EnumInquiryCategoryWithAggregatesFilter<"Inquiry"> | $Enums.InquiryCategory
@@ -604,8 +604,8 @@ export type InquiryScalarWhereWithAggregatesInput = {
   source?: Prisma.EnumInquirySourceWithAggregatesFilter<"Inquiry"> | $Enums.InquirySource
   status?: Prisma.EnumInquiryStatusWithAggregatesFilter<"Inquiry"> | $Enums.InquiryStatus
   priority?: Prisma.EnumInquiryPriorityWithAggregatesFilter<"Inquiry"> | $Enums.InquiryPriority
-  customerSeq?: Prisma.IntNullableWithAggregatesFilter<"Inquiry"> | number | null
-  assigneeSeq?: Prisma.IntNullableWithAggregatesFilter<"Inquiry"> | number | null
+  customerId?: Prisma.BigIntNullableWithAggregatesFilter<"Inquiry"> | bigint | number | null
+  assigneeId?: Prisma.BigIntNullableWithAggregatesFilter<"Inquiry"> | bigint | number | null
   firstResponseAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Inquiry"> | Date | string | null
   resolvedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Inquiry"> | Date | string | null
   closedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Inquiry"> | Date | string | null
@@ -624,7 +624,8 @@ export type InquiryScalarWhereWithAggregatesInput = {
 }
 
 export type InquiryCreateInput = {
-  id?: string
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -663,13 +664,13 @@ export type InquiryCreateInput = {
 }
 
 export type InquiryUncheckedCreateInput = {
-  id?: string
-  seq?: number
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
+  spaceId: bigint | number
+  createdById?: bigint | number | null
   inquiryNumber: string
   title: string
   category: $Enums.InquiryCategory
@@ -677,8 +678,8 @@ export type InquiryUncheckedCreateInput = {
   source?: $Enums.InquirySource
   status?: $Enums.InquiryStatus
   priority?: $Enums.InquiryPriority
-  customerSeq?: number | null
-  assigneeSeq?: number | null
+  customerId?: bigint | number | null
+  assigneeId?: bigint | number | null
   firstResponseAt?: Date | string | null
   resolvedAt?: Date | string | null
   closedAt?: Date | string | null
@@ -703,7 +704,8 @@ export type InquiryUncheckedCreateInput = {
 }
 
 export type InquiryUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -742,13 +744,13 @@ export type InquiryUpdateInput = {
 }
 
 export type InquiryUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumInquiryCategoryFieldUpdateOperationsInput | $Enums.InquiryCategory
@@ -756,8 +758,8 @@ export type InquiryUncheckedUpdateInput = {
   source?: Prisma.EnumInquirySourceFieldUpdateOperationsInput | $Enums.InquirySource
   status?: Prisma.EnumInquiryStatusFieldUpdateOperationsInput | $Enums.InquiryStatus
   priority?: Prisma.EnumInquiryPriorityFieldUpdateOperationsInput | $Enums.InquiryPriority
-  customerSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  assigneeSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  customerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  assigneeId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   firstResponseAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -782,13 +784,13 @@ export type InquiryUncheckedUpdateInput = {
 }
 
 export type InquiryCreateManyInput = {
-  id?: string
-  seq?: number
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
+  spaceId: bigint | number
+  createdById?: bigint | number | null
   inquiryNumber: string
   title: string
   category: $Enums.InquiryCategory
@@ -796,8 +798,8 @@ export type InquiryCreateManyInput = {
   source?: $Enums.InquirySource
   status?: $Enums.InquiryStatus
   priority?: $Enums.InquiryPriority
-  customerSeq?: number | null
-  assigneeSeq?: number | null
+  customerId?: bigint | number | null
+  assigneeId?: bigint | number | null
   firstResponseAt?: Date | string | null
   resolvedAt?: Date | string | null
   closedAt?: Date | string | null
@@ -816,7 +818,8 @@ export type InquiryCreateManyInput = {
 }
 
 export type InquiryUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -845,13 +848,13 @@ export type InquiryUpdateManyMutationInput = {
 }
 
 export type InquiryUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumInquiryCategoryFieldUpdateOperationsInput | $Enums.InquiryCategory
@@ -859,8 +862,8 @@ export type InquiryUncheckedUpdateManyInput = {
   source?: Prisma.EnumInquirySourceFieldUpdateOperationsInput | $Enums.InquirySource
   status?: Prisma.EnumInquiryStatusFieldUpdateOperationsInput | $Enums.InquiryStatus
   priority?: Prisma.EnumInquiryPriorityFieldUpdateOperationsInput | $Enums.InquiryPriority
-  customerSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  assigneeSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  customerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  assigneeId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   firstResponseAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -884,13 +887,13 @@ export type InquiryScalarRelationFilter = {
 }
 
 export type InquiryCountOrderByAggregateInput = {
+  inquiryId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   inquiryNumber?: Prisma.SortOrder
   title?: Prisma.SortOrder
   category?: Prisma.SortOrder
@@ -898,8 +901,8 @@ export type InquiryCountOrderByAggregateInput = {
   source?: Prisma.SortOrder
   status?: Prisma.SortOrder
   priority?: Prisma.SortOrder
-  customerSeq?: Prisma.SortOrder
-  assigneeSeq?: Prisma.SortOrder
+  customerId?: Prisma.SortOrder
+  assigneeId?: Prisma.SortOrder
   firstResponseAt?: Prisma.SortOrder
   resolvedAt?: Prisma.SortOrder
   closedAt?: Prisma.SortOrder
@@ -918,23 +921,23 @@ export type InquiryCountOrderByAggregateInput = {
 }
 
 export type InquiryAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
-  customerSeq?: Prisma.SortOrder
-  assigneeSeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  customerId?: Prisma.SortOrder
+  assigneeId?: Prisma.SortOrder
   sentimentScore?: Prisma.SortOrder
   unreadCount?: Prisma.SortOrder
 }
 
 export type InquiryMaxOrderByAggregateInput = {
+  inquiryId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   inquiryNumber?: Prisma.SortOrder
   title?: Prisma.SortOrder
   category?: Prisma.SortOrder
@@ -942,8 +945,8 @@ export type InquiryMaxOrderByAggregateInput = {
   source?: Prisma.SortOrder
   status?: Prisma.SortOrder
   priority?: Prisma.SortOrder
-  customerSeq?: Prisma.SortOrder
-  assigneeSeq?: Prisma.SortOrder
+  customerId?: Prisma.SortOrder
+  assigneeId?: Prisma.SortOrder
   firstResponseAt?: Prisma.SortOrder
   resolvedAt?: Prisma.SortOrder
   closedAt?: Prisma.SortOrder
@@ -961,13 +964,13 @@ export type InquiryMaxOrderByAggregateInput = {
 }
 
 export type InquiryMinOrderByAggregateInput = {
+  inquiryId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
   inquiryNumber?: Prisma.SortOrder
   title?: Prisma.SortOrder
   category?: Prisma.SortOrder
@@ -975,8 +978,8 @@ export type InquiryMinOrderByAggregateInput = {
   source?: Prisma.SortOrder
   status?: Prisma.SortOrder
   priority?: Prisma.SortOrder
-  customerSeq?: Prisma.SortOrder
-  assigneeSeq?: Prisma.SortOrder
+  customerId?: Prisma.SortOrder
+  assigneeId?: Prisma.SortOrder
   firstResponseAt?: Prisma.SortOrder
   resolvedAt?: Prisma.SortOrder
   closedAt?: Prisma.SortOrder
@@ -994,11 +997,11 @@ export type InquiryMinOrderByAggregateInput = {
 }
 
 export type InquirySumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  spaceSeq?: Prisma.SortOrder
-  createdBySeq?: Prisma.SortOrder
-  customerSeq?: Prisma.SortOrder
-  assigneeSeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  spaceId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  customerId?: Prisma.SortOrder
+  assigneeId?: Prisma.SortOrder
   sentimentScore?: Prisma.SortOrder
   unreadCount?: Prisma.SortOrder
 }
@@ -1290,7 +1293,8 @@ export type InquiryUncheckedUpdateManyWithoutCreatedByNestedInput = {
 }
 
 export type InquiryCreateWithoutAiAgentLogsInput = {
-  id?: string
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1328,13 +1332,13 @@ export type InquiryCreateWithoutAiAgentLogsInput = {
 }
 
 export type InquiryUncheckedCreateWithoutAiAgentLogsInput = {
-  id?: string
-  seq?: number
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
+  spaceId: bigint | number
+  createdById?: bigint | number | null
   inquiryNumber: string
   title: string
   category: $Enums.InquiryCategory
@@ -1342,8 +1346,8 @@ export type InquiryUncheckedCreateWithoutAiAgentLogsInput = {
   source?: $Enums.InquirySource
   status?: $Enums.InquiryStatus
   priority?: $Enums.InquiryPriority
-  customerSeq?: number | null
-  assigneeSeq?: number | null
+  customerId?: bigint | number | null
+  assigneeId?: bigint | number | null
   firstResponseAt?: Date | string | null
   resolvedAt?: Date | string | null
   closedAt?: Date | string | null
@@ -1383,7 +1387,8 @@ export type InquiryUpdateToOneWithWhereWithoutAiAgentLogsInput = {
 }
 
 export type InquiryUpdateWithoutAiAgentLogsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1421,13 +1426,13 @@ export type InquiryUpdateWithoutAiAgentLogsInput = {
 }
 
 export type InquiryUncheckedUpdateWithoutAiAgentLogsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumInquiryCategoryFieldUpdateOperationsInput | $Enums.InquiryCategory
@@ -1435,8 +1440,8 @@ export type InquiryUncheckedUpdateWithoutAiAgentLogsInput = {
   source?: Prisma.EnumInquirySourceFieldUpdateOperationsInput | $Enums.InquirySource
   status?: Prisma.EnumInquiryStatusFieldUpdateOperationsInput | $Enums.InquiryStatus
   priority?: Prisma.EnumInquiryPriorityFieldUpdateOperationsInput | $Enums.InquiryPriority
-  customerSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  assigneeSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  customerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  assigneeId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   firstResponseAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1460,7 +1465,8 @@ export type InquiryUncheckedUpdateWithoutAiAgentLogsInput = {
 }
 
 export type InquiryCreateWithoutMessagesInput = {
-  id?: string
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1498,13 +1504,13 @@ export type InquiryCreateWithoutMessagesInput = {
 }
 
 export type InquiryUncheckedCreateWithoutMessagesInput = {
-  id?: string
-  seq?: number
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
+  spaceId: bigint | number
+  createdById?: bigint | number | null
   inquiryNumber: string
   title: string
   category: $Enums.InquiryCategory
@@ -1512,8 +1518,8 @@ export type InquiryUncheckedCreateWithoutMessagesInput = {
   source?: $Enums.InquirySource
   status?: $Enums.InquiryStatus
   priority?: $Enums.InquiryPriority
-  customerSeq?: number | null
-  assigneeSeq?: number | null
+  customerId?: bigint | number | null
+  assigneeId?: bigint | number | null
   firstResponseAt?: Date | string | null
   resolvedAt?: Date | string | null
   closedAt?: Date | string | null
@@ -1553,7 +1559,8 @@ export type InquiryUpdateToOneWithWhereWithoutMessagesInput = {
 }
 
 export type InquiryUpdateWithoutMessagesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1591,13 +1598,13 @@ export type InquiryUpdateWithoutMessagesInput = {
 }
 
 export type InquiryUncheckedUpdateWithoutMessagesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumInquiryCategoryFieldUpdateOperationsInput | $Enums.InquiryCategory
@@ -1605,8 +1612,8 @@ export type InquiryUncheckedUpdateWithoutMessagesInput = {
   source?: Prisma.EnumInquirySourceFieldUpdateOperationsInput | $Enums.InquirySource
   status?: Prisma.EnumInquiryStatusFieldUpdateOperationsInput | $Enums.InquiryStatus
   priority?: Prisma.EnumInquiryPriorityFieldUpdateOperationsInput | $Enums.InquiryPriority
-  customerSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  assigneeSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  customerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  assigneeId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   firstResponseAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1630,7 +1637,8 @@ export type InquiryUncheckedUpdateWithoutMessagesInput = {
 }
 
 export type InquiryCreateWithoutParticipantsInput = {
-  id?: string
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1668,13 +1676,13 @@ export type InquiryCreateWithoutParticipantsInput = {
 }
 
 export type InquiryUncheckedCreateWithoutParticipantsInput = {
-  id?: string
-  seq?: number
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
+  spaceId: bigint | number
+  createdById?: bigint | number | null
   inquiryNumber: string
   title: string
   category: $Enums.InquiryCategory
@@ -1682,8 +1690,8 @@ export type InquiryUncheckedCreateWithoutParticipantsInput = {
   source?: $Enums.InquirySource
   status?: $Enums.InquiryStatus
   priority?: $Enums.InquiryPriority
-  customerSeq?: number | null
-  assigneeSeq?: number | null
+  customerId?: bigint | number | null
+  assigneeId?: bigint | number | null
   firstResponseAt?: Date | string | null
   resolvedAt?: Date | string | null
   closedAt?: Date | string | null
@@ -1723,7 +1731,8 @@ export type InquiryUpdateToOneWithWhereWithoutParticipantsInput = {
 }
 
 export type InquiryUpdateWithoutParticipantsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1761,13 +1770,13 @@ export type InquiryUpdateWithoutParticipantsInput = {
 }
 
 export type InquiryUncheckedUpdateWithoutParticipantsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumInquiryCategoryFieldUpdateOperationsInput | $Enums.InquiryCategory
@@ -1775,8 +1784,8 @@ export type InquiryUncheckedUpdateWithoutParticipantsInput = {
   source?: Prisma.EnumInquirySourceFieldUpdateOperationsInput | $Enums.InquirySource
   status?: Prisma.EnumInquiryStatusFieldUpdateOperationsInput | $Enums.InquiryStatus
   priority?: Prisma.EnumInquiryPriorityFieldUpdateOperationsInput | $Enums.InquiryPriority
-  customerSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  assigneeSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  customerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  assigneeId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   firstResponseAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1800,7 +1809,8 @@ export type InquiryUncheckedUpdateWithoutParticipantsInput = {
 }
 
 export type InquiryCreateWithoutTagsInput = {
-  id?: string
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -1838,13 +1848,13 @@ export type InquiryCreateWithoutTagsInput = {
 }
 
 export type InquiryUncheckedCreateWithoutTagsInput = {
-  id?: string
-  seq?: number
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
+  spaceId: bigint | number
+  createdById?: bigint | number | null
   inquiryNumber: string
   title: string
   category: $Enums.InquiryCategory
@@ -1852,8 +1862,8 @@ export type InquiryUncheckedCreateWithoutTagsInput = {
   source?: $Enums.InquirySource
   status?: $Enums.InquiryStatus
   priority?: $Enums.InquiryPriority
-  customerSeq?: number | null
-  assigneeSeq?: number | null
+  customerId?: bigint | number | null
+  assigneeId?: bigint | number | null
   firstResponseAt?: Date | string | null
   resolvedAt?: Date | string | null
   closedAt?: Date | string | null
@@ -1893,7 +1903,8 @@ export type InquiryUpdateToOneWithWhereWithoutTagsInput = {
 }
 
 export type InquiryUpdateWithoutTagsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1931,13 +1942,13 @@ export type InquiryUpdateWithoutTagsInput = {
 }
 
 export type InquiryUncheckedUpdateWithoutTagsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumInquiryCategoryFieldUpdateOperationsInput | $Enums.InquiryCategory
@@ -1945,8 +1956,8 @@ export type InquiryUncheckedUpdateWithoutTagsInput = {
   source?: Prisma.EnumInquirySourceFieldUpdateOperationsInput | $Enums.InquirySource
   status?: Prisma.EnumInquiryStatusFieldUpdateOperationsInput | $Enums.InquiryStatus
   priority?: Prisma.EnumInquiryPriorityFieldUpdateOperationsInput | $Enums.InquiryPriority
-  customerSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  assigneeSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  customerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  assigneeId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   firstResponseAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1970,7 +1981,8 @@ export type InquiryUncheckedUpdateWithoutTagsInput = {
 }
 
 export type InquiryCreateWithoutThreadsInput = {
-  id?: string
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -2008,13 +2020,13 @@ export type InquiryCreateWithoutThreadsInput = {
 }
 
 export type InquiryUncheckedCreateWithoutThreadsInput = {
-  id?: string
-  seq?: number
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
+  spaceId: bigint | number
+  createdById?: bigint | number | null
   inquiryNumber: string
   title: string
   category: $Enums.InquiryCategory
@@ -2022,8 +2034,8 @@ export type InquiryUncheckedCreateWithoutThreadsInput = {
   source?: $Enums.InquirySource
   status?: $Enums.InquiryStatus
   priority?: $Enums.InquiryPriority
-  customerSeq?: number | null
-  assigneeSeq?: number | null
+  customerId?: bigint | number | null
+  assigneeId?: bigint | number | null
   firstResponseAt?: Date | string | null
   resolvedAt?: Date | string | null
   closedAt?: Date | string | null
@@ -2063,7 +2075,8 @@ export type InquiryUpdateToOneWithWhereWithoutThreadsInput = {
 }
 
 export type InquiryUpdateWithoutThreadsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2101,13 +2114,13 @@ export type InquiryUpdateWithoutThreadsInput = {
 }
 
 export type InquiryUncheckedUpdateWithoutThreadsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumInquiryCategoryFieldUpdateOperationsInput | $Enums.InquiryCategory
@@ -2115,8 +2128,8 @@ export type InquiryUncheckedUpdateWithoutThreadsInput = {
   source?: Prisma.EnumInquirySourceFieldUpdateOperationsInput | $Enums.InquirySource
   status?: Prisma.EnumInquiryStatusFieldUpdateOperationsInput | $Enums.InquiryStatus
   priority?: Prisma.EnumInquiryPriorityFieldUpdateOperationsInput | $Enums.InquiryPriority
-  customerSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  assigneeSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  customerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  assigneeId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   firstResponseAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2140,7 +2153,8 @@ export type InquiryUncheckedUpdateWithoutThreadsInput = {
 }
 
 export type InquiryCreateWithoutSentimentAnalysisInput = {
-  id?: string
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -2178,13 +2192,13 @@ export type InquiryCreateWithoutSentimentAnalysisInput = {
 }
 
 export type InquiryUncheckedCreateWithoutSentimentAnalysisInput = {
-  id?: string
-  seq?: number
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
+  spaceId: bigint | number
+  createdById?: bigint | number | null
   inquiryNumber: string
   title: string
   category: $Enums.InquiryCategory
@@ -2192,8 +2206,8 @@ export type InquiryUncheckedCreateWithoutSentimentAnalysisInput = {
   source?: $Enums.InquirySource
   status?: $Enums.InquiryStatus
   priority?: $Enums.InquiryPriority
-  customerSeq?: number | null
-  assigneeSeq?: number | null
+  customerId?: bigint | number | null
+  assigneeId?: bigint | number | null
   firstResponseAt?: Date | string | null
   resolvedAt?: Date | string | null
   closedAt?: Date | string | null
@@ -2233,7 +2247,8 @@ export type InquiryUpdateToOneWithWhereWithoutSentimentAnalysisInput = {
 }
 
 export type InquiryUpdateWithoutSentimentAnalysisInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2271,13 +2286,13 @@ export type InquiryUpdateWithoutSentimentAnalysisInput = {
 }
 
 export type InquiryUncheckedUpdateWithoutSentimentAnalysisInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumInquiryCategoryFieldUpdateOperationsInput | $Enums.InquiryCategory
@@ -2285,8 +2300,8 @@ export type InquiryUncheckedUpdateWithoutSentimentAnalysisInput = {
   source?: Prisma.EnumInquirySourceFieldUpdateOperationsInput | $Enums.InquirySource
   status?: Prisma.EnumInquiryStatusFieldUpdateOperationsInput | $Enums.InquiryStatus
   priority?: Prisma.EnumInquiryPriorityFieldUpdateOperationsInput | $Enums.InquiryPriority
-  customerSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  assigneeSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  customerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  assigneeId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   firstResponseAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2310,7 +2325,8 @@ export type InquiryUncheckedUpdateWithoutSentimentAnalysisInput = {
 }
 
 export type InquiryCreateWithoutSpaceInput = {
-  id?: string
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -2348,12 +2364,12 @@ export type InquiryCreateWithoutSpaceInput = {
 }
 
 export type InquiryUncheckedCreateWithoutSpaceInput = {
-  id?: string
-  seq?: number
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  createdBySeq?: number | null
+  createdById?: bigint | number | null
   inquiryNumber: string
   title: string
   category: $Enums.InquiryCategory
@@ -2361,8 +2377,8 @@ export type InquiryUncheckedCreateWithoutSpaceInput = {
   source?: $Enums.InquirySource
   status?: $Enums.InquiryStatus
   priority?: $Enums.InquiryPriority
-  customerSeq?: number | null
-  assigneeSeq?: number | null
+  customerId?: bigint | number | null
+  assigneeId?: bigint | number | null
   firstResponseAt?: Date | string | null
   resolvedAt?: Date | string | null
   closedAt?: Date | string | null
@@ -2416,13 +2432,13 @@ export type InquiryScalarWhereInput = {
   AND?: Prisma.InquiryScalarWhereInput | Prisma.InquiryScalarWhereInput[]
   OR?: Prisma.InquiryScalarWhereInput[]
   NOT?: Prisma.InquiryScalarWhereInput | Prisma.InquiryScalarWhereInput[]
-  id?: Prisma.StringFilter<"Inquiry"> | string
-  seq?: Prisma.IntFilter<"Inquiry"> | number
+  inquiryId?: Prisma.StringFilter<"Inquiry"> | string
+  id?: Prisma.BigIntFilter<"Inquiry"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Inquiry"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null
-  spaceSeq?: Prisma.IntFilter<"Inquiry"> | number
-  createdBySeq?: Prisma.IntNullableFilter<"Inquiry"> | number | null
+  spaceId?: Prisma.BigIntFilter<"Inquiry"> | bigint | number
+  createdById?: Prisma.BigIntNullableFilter<"Inquiry"> | bigint | number | null
   inquiryNumber?: Prisma.StringFilter<"Inquiry"> | string
   title?: Prisma.StringFilter<"Inquiry"> | string
   category?: Prisma.EnumInquiryCategoryFilter<"Inquiry"> | $Enums.InquiryCategory
@@ -2430,8 +2446,8 @@ export type InquiryScalarWhereInput = {
   source?: Prisma.EnumInquirySourceFilter<"Inquiry"> | $Enums.InquirySource
   status?: Prisma.EnumInquiryStatusFilter<"Inquiry"> | $Enums.InquiryStatus
   priority?: Prisma.EnumInquiryPriorityFilter<"Inquiry"> | $Enums.InquiryPriority
-  customerSeq?: Prisma.IntNullableFilter<"Inquiry"> | number | null
-  assigneeSeq?: Prisma.IntNullableFilter<"Inquiry"> | number | null
+  customerId?: Prisma.BigIntNullableFilter<"Inquiry"> | bigint | number | null
+  assigneeId?: Prisma.BigIntNullableFilter<"Inquiry"> | bigint | number | null
   firstResponseAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null
   resolvedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null
   closedAt?: Prisma.DateTimeNullableFilter<"Inquiry"> | Date | string | null
@@ -2450,7 +2466,8 @@ export type InquiryScalarWhereInput = {
 }
 
 export type InquiryCreateWithoutCustomerInput = {
-  id?: string
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -2488,13 +2505,13 @@ export type InquiryCreateWithoutCustomerInput = {
 }
 
 export type InquiryUncheckedCreateWithoutCustomerInput = {
-  id?: string
-  seq?: number
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
+  spaceId: bigint | number
+  createdById?: bigint | number | null
   inquiryNumber: string
   title: string
   category: $Enums.InquiryCategory
@@ -2502,7 +2519,7 @@ export type InquiryUncheckedCreateWithoutCustomerInput = {
   source?: $Enums.InquirySource
   status?: $Enums.InquiryStatus
   priority?: $Enums.InquiryPriority
-  assigneeSeq?: number | null
+  assigneeId?: bigint | number | null
   firstResponseAt?: Date | string | null
   resolvedAt?: Date | string | null
   closedAt?: Date | string | null
@@ -2537,7 +2554,8 @@ export type InquiryCreateManyCustomerInputEnvelope = {
 }
 
 export type InquiryCreateWithoutAssigneeInput = {
-  id?: string
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -2575,13 +2593,13 @@ export type InquiryCreateWithoutAssigneeInput = {
 }
 
 export type InquiryUncheckedCreateWithoutAssigneeInput = {
-  id?: string
-  seq?: number
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
+  spaceId: bigint | number
+  createdById?: bigint | number | null
   inquiryNumber: string
   title: string
   category: $Enums.InquiryCategory
@@ -2589,7 +2607,7 @@ export type InquiryUncheckedCreateWithoutAssigneeInput = {
   source?: $Enums.InquirySource
   status?: $Enums.InquiryStatus
   priority?: $Enums.InquiryPriority
-  customerSeq?: number | null
+  customerId?: bigint | number | null
   firstResponseAt?: Date | string | null
   resolvedAt?: Date | string | null
   closedAt?: Date | string | null
@@ -2624,7 +2642,8 @@ export type InquiryCreateManyAssigneeInputEnvelope = {
 }
 
 export type InquiryCreateWithoutCreatedByInput = {
-  id?: string
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -2662,12 +2681,12 @@ export type InquiryCreateWithoutCreatedByInput = {
 }
 
 export type InquiryUncheckedCreateWithoutCreatedByInput = {
-  id?: string
-  seq?: number
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
+  spaceId: bigint | number
   inquiryNumber: string
   title: string
   category: $Enums.InquiryCategory
@@ -2675,8 +2694,8 @@ export type InquiryUncheckedCreateWithoutCreatedByInput = {
   source?: $Enums.InquirySource
   status?: $Enums.InquiryStatus
   priority?: $Enums.InquiryPriority
-  customerSeq?: number | null
-  assigneeSeq?: number | null
+  customerId?: bigint | number | null
+  assigneeId?: bigint | number | null
   firstResponseAt?: Date | string | null
   resolvedAt?: Date | string | null
   closedAt?: Date | string | null
@@ -2759,12 +2778,12 @@ export type InquiryUpdateManyWithWhereWithoutCreatedByInput = {
 }
 
 export type InquiryCreateManySpaceInput = {
-  id?: string
-  seq?: number
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  createdBySeq?: number | null
+  createdById?: bigint | number | null
   inquiryNumber: string
   title: string
   category: $Enums.InquiryCategory
@@ -2772,8 +2791,8 @@ export type InquiryCreateManySpaceInput = {
   source?: $Enums.InquirySource
   status?: $Enums.InquiryStatus
   priority?: $Enums.InquiryPriority
-  customerSeq?: number | null
-  assigneeSeq?: number | null
+  customerId?: bigint | number | null
+  assigneeId?: bigint | number | null
   firstResponseAt?: Date | string | null
   resolvedAt?: Date | string | null
   closedAt?: Date | string | null
@@ -2792,7 +2811,8 @@ export type InquiryCreateManySpaceInput = {
 }
 
 export type InquiryUpdateWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2830,12 +2850,12 @@ export type InquiryUpdateWithoutSpaceInput = {
 }
 
 export type InquiryUncheckedUpdateWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumInquiryCategoryFieldUpdateOperationsInput | $Enums.InquiryCategory
@@ -2843,8 +2863,8 @@ export type InquiryUncheckedUpdateWithoutSpaceInput = {
   source?: Prisma.EnumInquirySourceFieldUpdateOperationsInput | $Enums.InquirySource
   status?: Prisma.EnumInquiryStatusFieldUpdateOperationsInput | $Enums.InquiryStatus
   priority?: Prisma.EnumInquiryPriorityFieldUpdateOperationsInput | $Enums.InquiryPriority
-  customerSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  assigneeSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  customerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  assigneeId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   firstResponseAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2869,12 +2889,12 @@ export type InquiryUncheckedUpdateWithoutSpaceInput = {
 }
 
 export type InquiryUncheckedUpdateManyWithoutSpaceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumInquiryCategoryFieldUpdateOperationsInput | $Enums.InquiryCategory
@@ -2882,8 +2902,8 @@ export type InquiryUncheckedUpdateManyWithoutSpaceInput = {
   source?: Prisma.EnumInquirySourceFieldUpdateOperationsInput | $Enums.InquirySource
   status?: Prisma.EnumInquiryStatusFieldUpdateOperationsInput | $Enums.InquiryStatus
   priority?: Prisma.EnumInquiryPriorityFieldUpdateOperationsInput | $Enums.InquiryPriority
-  customerSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  assigneeSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  customerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  assigneeId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   firstResponseAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2902,13 +2922,13 @@ export type InquiryUncheckedUpdateManyWithoutSpaceInput = {
 }
 
 export type InquiryCreateManyCustomerInput = {
-  id?: string
-  seq?: number
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
+  spaceId: bigint | number
+  createdById?: bigint | number | null
   inquiryNumber: string
   title: string
   category: $Enums.InquiryCategory
@@ -2916,7 +2936,7 @@ export type InquiryCreateManyCustomerInput = {
   source?: $Enums.InquirySource
   status?: $Enums.InquiryStatus
   priority?: $Enums.InquiryPriority
-  assigneeSeq?: number | null
+  assigneeId?: bigint | number | null
   firstResponseAt?: Date | string | null
   resolvedAt?: Date | string | null
   closedAt?: Date | string | null
@@ -2935,13 +2955,13 @@ export type InquiryCreateManyCustomerInput = {
 }
 
 export type InquiryCreateManyAssigneeInput = {
-  id?: string
-  seq?: number
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
-  createdBySeq?: number | null
+  spaceId: bigint | number
+  createdById?: bigint | number | null
   inquiryNumber: string
   title: string
   category: $Enums.InquiryCategory
@@ -2949,7 +2969,7 @@ export type InquiryCreateManyAssigneeInput = {
   source?: $Enums.InquirySource
   status?: $Enums.InquiryStatus
   priority?: $Enums.InquiryPriority
-  customerSeq?: number | null
+  customerId?: bigint | number | null
   firstResponseAt?: Date | string | null
   resolvedAt?: Date | string | null
   closedAt?: Date | string | null
@@ -2968,12 +2988,12 @@ export type InquiryCreateManyAssigneeInput = {
 }
 
 export type InquiryCreateManyCreatedByInput = {
-  id?: string
-  seq?: number
+  inquiryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  spaceSeq: number
+  spaceId: bigint | number
   inquiryNumber: string
   title: string
   category: $Enums.InquiryCategory
@@ -2981,8 +3001,8 @@ export type InquiryCreateManyCreatedByInput = {
   source?: $Enums.InquirySource
   status?: $Enums.InquiryStatus
   priority?: $Enums.InquiryPriority
-  customerSeq?: number | null
-  assigneeSeq?: number | null
+  customerId?: bigint | number | null
+  assigneeId?: bigint | number | null
   firstResponseAt?: Date | string | null
   resolvedAt?: Date | string | null
   closedAt?: Date | string | null
@@ -3001,7 +3021,8 @@ export type InquiryCreateManyCreatedByInput = {
 }
 
 export type InquiryUpdateWithoutCustomerInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3039,13 +3060,13 @@ export type InquiryUpdateWithoutCustomerInput = {
 }
 
 export type InquiryUncheckedUpdateWithoutCustomerInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumInquiryCategoryFieldUpdateOperationsInput | $Enums.InquiryCategory
@@ -3053,7 +3074,7 @@ export type InquiryUncheckedUpdateWithoutCustomerInput = {
   source?: Prisma.EnumInquirySourceFieldUpdateOperationsInput | $Enums.InquirySource
   status?: Prisma.EnumInquiryStatusFieldUpdateOperationsInput | $Enums.InquiryStatus
   priority?: Prisma.EnumInquiryPriorityFieldUpdateOperationsInput | $Enums.InquiryPriority
-  assigneeSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  assigneeId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   firstResponseAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3078,13 +3099,13 @@ export type InquiryUncheckedUpdateWithoutCustomerInput = {
 }
 
 export type InquiryUncheckedUpdateManyWithoutCustomerInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumInquiryCategoryFieldUpdateOperationsInput | $Enums.InquiryCategory
@@ -3092,7 +3113,7 @@ export type InquiryUncheckedUpdateManyWithoutCustomerInput = {
   source?: Prisma.EnumInquirySourceFieldUpdateOperationsInput | $Enums.InquirySource
   status?: Prisma.EnumInquiryStatusFieldUpdateOperationsInput | $Enums.InquiryStatus
   priority?: Prisma.EnumInquiryPriorityFieldUpdateOperationsInput | $Enums.InquiryPriority
-  assigneeSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  assigneeId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   firstResponseAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3111,7 +3132,8 @@ export type InquiryUncheckedUpdateManyWithoutCustomerInput = {
 }
 
 export type InquiryUpdateWithoutAssigneeInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3149,13 +3171,13 @@ export type InquiryUpdateWithoutAssigneeInput = {
 }
 
 export type InquiryUncheckedUpdateWithoutAssigneeInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumInquiryCategoryFieldUpdateOperationsInput | $Enums.InquiryCategory
@@ -3163,7 +3185,7 @@ export type InquiryUncheckedUpdateWithoutAssigneeInput = {
   source?: Prisma.EnumInquirySourceFieldUpdateOperationsInput | $Enums.InquirySource
   status?: Prisma.EnumInquiryStatusFieldUpdateOperationsInput | $Enums.InquiryStatus
   priority?: Prisma.EnumInquiryPriorityFieldUpdateOperationsInput | $Enums.InquiryPriority
-  customerSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  customerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   firstResponseAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3188,13 +3210,13 @@ export type InquiryUncheckedUpdateWithoutAssigneeInput = {
 }
 
 export type InquiryUncheckedUpdateManyWithoutAssigneeInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
-  createdBySeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  createdById?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumInquiryCategoryFieldUpdateOperationsInput | $Enums.InquiryCategory
@@ -3202,7 +3224,7 @@ export type InquiryUncheckedUpdateManyWithoutAssigneeInput = {
   source?: Prisma.EnumInquirySourceFieldUpdateOperationsInput | $Enums.InquirySource
   status?: Prisma.EnumInquiryStatusFieldUpdateOperationsInput | $Enums.InquiryStatus
   priority?: Prisma.EnumInquiryPriorityFieldUpdateOperationsInput | $Enums.InquiryPriority
-  customerSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  customerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   firstResponseAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3221,7 +3243,8 @@ export type InquiryUncheckedUpdateManyWithoutAssigneeInput = {
 }
 
 export type InquiryUpdateWithoutCreatedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3259,12 +3282,12 @@ export type InquiryUpdateWithoutCreatedByInput = {
 }
 
 export type InquiryUncheckedUpdateWithoutCreatedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumInquiryCategoryFieldUpdateOperationsInput | $Enums.InquiryCategory
@@ -3272,8 +3295,8 @@ export type InquiryUncheckedUpdateWithoutCreatedByInput = {
   source?: Prisma.EnumInquirySourceFieldUpdateOperationsInput | $Enums.InquirySource
   status?: Prisma.EnumInquiryStatusFieldUpdateOperationsInput | $Enums.InquiryStatus
   priority?: Prisma.EnumInquiryPriorityFieldUpdateOperationsInput | $Enums.InquiryPriority
-  customerSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  assigneeSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  customerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  assigneeId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   firstResponseAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3298,12 +3321,12 @@ export type InquiryUncheckedUpdateWithoutCreatedByInput = {
 }
 
 export type InquiryUncheckedUpdateManyWithoutCreatedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  spaceSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  spaceId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   inquiryNumber?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumInquiryCategoryFieldUpdateOperationsInput | $Enums.InquiryCategory
@@ -3311,8 +3334,8 @@ export type InquiryUncheckedUpdateManyWithoutCreatedByInput = {
   source?: Prisma.EnumInquirySourceFieldUpdateOperationsInput | $Enums.InquirySource
   status?: Prisma.EnumInquiryStatusFieldUpdateOperationsInput | $Enums.InquiryStatus
   priority?: Prisma.EnumInquiryPriorityFieldUpdateOperationsInput | $Enums.InquiryPriority
-  customerSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  assigneeSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  customerId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  assigneeId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   firstResponseAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3398,13 +3421,13 @@ export type InquiryCountOutputTypeCountAiAgentLogsArgs<ExtArgs extends runtime.T
 
 
 export type InquirySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  inquiryId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceSeq?: boolean
-  createdBySeq?: boolean
+  spaceId?: boolean
+  createdById?: boolean
   inquiryNumber?: boolean
   title?: boolean
   category?: boolean
@@ -3412,8 +3435,8 @@ export type InquirySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   source?: boolean
   status?: boolean
   priority?: boolean
-  customerSeq?: boolean
-  assigneeSeq?: boolean
+  customerId?: boolean
+  assigneeId?: boolean
   firstResponseAt?: boolean
   resolvedAt?: boolean
   closedAt?: boolean
@@ -3443,13 +3466,13 @@ export type InquirySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 }, ExtArgs["result"]["inquiry"]>
 
 export type InquirySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  inquiryId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceSeq?: boolean
-  createdBySeq?: boolean
+  spaceId?: boolean
+  createdById?: boolean
   inquiryNumber?: boolean
   title?: boolean
   category?: boolean
@@ -3457,8 +3480,8 @@ export type InquirySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   source?: boolean
   status?: boolean
   priority?: boolean
-  customerSeq?: boolean
-  assigneeSeq?: boolean
+  customerId?: boolean
+  assigneeId?: boolean
   firstResponseAt?: boolean
   resolvedAt?: boolean
   closedAt?: boolean
@@ -3481,13 +3504,13 @@ export type InquirySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 }, ExtArgs["result"]["inquiry"]>
 
 export type InquirySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  inquiryId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceSeq?: boolean
-  createdBySeq?: boolean
+  spaceId?: boolean
+  createdById?: boolean
   inquiryNumber?: boolean
   title?: boolean
   category?: boolean
@@ -3495,8 +3518,8 @@ export type InquirySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   source?: boolean
   status?: boolean
   priority?: boolean
-  customerSeq?: boolean
-  assigneeSeq?: boolean
+  customerId?: boolean
+  assigneeId?: boolean
   firstResponseAt?: boolean
   resolvedAt?: boolean
   closedAt?: boolean
@@ -3519,13 +3542,13 @@ export type InquirySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 }, ExtArgs["result"]["inquiry"]>
 
 export type InquirySelectScalar = {
+  inquiryId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  spaceSeq?: boolean
-  createdBySeq?: boolean
+  spaceId?: boolean
+  createdById?: boolean
   inquiryNumber?: boolean
   title?: boolean
   category?: boolean
@@ -3533,8 +3556,8 @@ export type InquirySelectScalar = {
   source?: boolean
   status?: boolean
   priority?: boolean
-  customerSeq?: boolean
-  assigneeSeq?: boolean
+  customerId?: boolean
+  assigneeId?: boolean
   firstResponseAt?: boolean
   resolvedAt?: boolean
   closedAt?: boolean
@@ -3552,7 +3575,7 @@ export type InquirySelectScalar = {
   metadata?: boolean
 }
 
-export type InquiryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "spaceSeq" | "createdBySeq" | "inquiryNumber" | "title" | "category" | "channel" | "source" | "status" | "priority" | "customerSeq" | "assigneeSeq" | "firstResponseAt" | "resolvedAt" | "closedAt" | "slaResponseDue" | "slaResolveDue" | "isSlaResponseBreached" | "isSlaResolveBreached" | "sentiment" | "sentimentScore" | "aiResolutionAttempted" | "aiResolved" | "isRealtimeChat" | "lastMessageAt" | "unreadCount" | "metadata", ExtArgs["result"]["inquiry"]>
+export type InquiryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"inquiryId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "spaceId" | "createdById" | "inquiryNumber" | "title" | "category" | "channel" | "source" | "status" | "priority" | "customerId" | "assigneeId" | "firstResponseAt" | "resolvedAt" | "closedAt" | "slaResponseDue" | "slaResolveDue" | "isSlaResponseBreached" | "isSlaResolveBreached" | "sentiment" | "sentimentScore" | "aiResolutionAttempted" | "aiResolved" | "isRealtimeChat" | "lastMessageAt" | "unreadCount" | "metadata", ExtArgs["result"]["inquiry"]>
 export type InquiryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Inquiry$createdByArgs<ExtArgs>
@@ -3594,8 +3617,8 @@ export type $InquiryPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     aiAgentLogs: Prisma.$AIAgentLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    seq: number
+    inquiryId: string
+    id: bigint
     /**
      * @displayName 생성 일시
      */
@@ -3611,11 +3634,11 @@ export type $InquiryPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     /**
      * @displayName 소속 공간 내부 순번
      */
-    spaceSeq: number
+    spaceId: bigint
     /**
      * @displayName 생성자 내부 순번
      */
-    createdBySeq: number | null
+    createdById: bigint | null
     /**
      * @displayName 문의 번호
      */
@@ -3647,11 +3670,11 @@ export type $InquiryPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     /**
      * @displayName 고객 내부 순번
      */
-    customerSeq: number | null
+    customerId: bigint | null
     /**
      * @displayName 담당자 내부 순번
      */
-    assigneeSeq: number | null
+    assigneeId: bigint | null
     /**
      * @displayName 첫 응답 일시
      */
@@ -3795,8 +3818,8 @@ export interface InquiryDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * // Get first 10 Inquiries
    * const inquiries = await prisma.inquiry.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const inquiryWithIdOnly = await prisma.inquiry.findMany({ select: { id: true } })
+   * // Only select the `inquiryId`
+   * const inquiryWithInquiryIdOnly = await prisma.inquiry.findMany({ select: { inquiryId: true } })
    * 
    */
   findMany<T extends InquiryFindManyArgs>(args?: Prisma.SelectSubset<T, InquiryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InquiryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -3840,9 +3863,9 @@ export interface InquiryDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    *   ]
    * })
    * 
-   * // Create many Inquiries and only return the `id`
-   * const inquiryWithIdOnly = await prisma.inquiry.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many Inquiries and only return the `inquiryId`
+   * const inquiryWithInquiryIdOnly = await prisma.inquiry.createManyAndReturn({
+   *   select: { inquiryId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -3931,9 +3954,9 @@ export interface InquiryDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    *   ]
    * })
    * 
-   * // Update zero or more Inquiries and only return the `id`
-   * const inquiryWithIdOnly = await prisma.inquiry.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more Inquiries and only return the `inquiryId`
+   * const inquiryWithInquiryIdOnly = await prisma.inquiry.updateManyAndReturn({
+   *   select: { inquiryId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -4145,13 +4168,13 @@ export interface Prisma__InquiryClient<T, Null = never, ExtArgs extends runtime.
  * Fields of the Inquiry model
  */
 export interface InquiryFieldRefs {
-  readonly id: Prisma.FieldRef<"Inquiry", 'String'>
-  readonly seq: Prisma.FieldRef<"Inquiry", 'Int'>
+  readonly inquiryId: Prisma.FieldRef<"Inquiry", 'String'>
+  readonly id: Prisma.FieldRef<"Inquiry", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"Inquiry", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Inquiry", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Inquiry", 'DateTime'>
-  readonly spaceSeq: Prisma.FieldRef<"Inquiry", 'Int'>
-  readonly createdBySeq: Prisma.FieldRef<"Inquiry", 'Int'>
+  readonly spaceId: Prisma.FieldRef<"Inquiry", 'BigInt'>
+  readonly createdById: Prisma.FieldRef<"Inquiry", 'BigInt'>
   readonly inquiryNumber: Prisma.FieldRef<"Inquiry", 'String'>
   readonly title: Prisma.FieldRef<"Inquiry", 'String'>
   readonly category: Prisma.FieldRef<"Inquiry", 'InquiryCategory'>
@@ -4159,8 +4182,8 @@ export interface InquiryFieldRefs {
   readonly source: Prisma.FieldRef<"Inquiry", 'InquirySource'>
   readonly status: Prisma.FieldRef<"Inquiry", 'InquiryStatus'>
   readonly priority: Prisma.FieldRef<"Inquiry", 'InquiryPriority'>
-  readonly customerSeq: Prisma.FieldRef<"Inquiry", 'Int'>
-  readonly assigneeSeq: Prisma.FieldRef<"Inquiry", 'Int'>
+  readonly customerId: Prisma.FieldRef<"Inquiry", 'BigInt'>
+  readonly assigneeId: Prisma.FieldRef<"Inquiry", 'BigInt'>
   readonly firstResponseAt: Prisma.FieldRef<"Inquiry", 'DateTime'>
   readonly resolvedAt: Prisma.FieldRef<"Inquiry", 'DateTime'>
   readonly closedAt: Prisma.FieldRef<"Inquiry", 'DateTime'>

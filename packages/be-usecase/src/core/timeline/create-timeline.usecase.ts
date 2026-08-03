@@ -14,11 +14,11 @@ export class CreateTimelineUseCase {
 	) {}
 
 	execute(command: CreateTimelineCommand): Promise<unknown> {
-		const spaceId = this.spaceContext.spaceId;
+		const spaceId = this.spaceContext.tenant?.spaceId;
 		if (!spaceId) {
 			throw new UnauthorizedException(TIMELINE_ERRORS.INVALID_DATA);
 		}
-		const userId = this.authContext.user?.id;
+		const userId = this.authContext.userDto?.id;
 		if (!userId) {
 			throw new UnauthorizedException(TIMELINE_ERRORS.NOT_FOUND);
 		}

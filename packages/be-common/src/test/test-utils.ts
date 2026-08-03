@@ -1,6 +1,6 @@
 import { User } from "@cocrepo/entity";
 import { PrismaService } from "@cocrepo/service";
-import type { ContextUserSnapshot } from "@cocrepo/type";
+import type { ContextUserSnapshot, DatabaseId } from "@cocrepo/type";
 import type { Provider, Type } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
@@ -19,16 +19,16 @@ export const resetMockPrismaService = (prisma: MockedPrismaService): void => {
 };
 
 export interface TestUserData {
-	id: string;
+	id: DatabaseId;
 	name: string;
 	phone: string;
 	password: string;
 	email: string;
-	spaceId: string;
+	spaceId: DatabaseId;
 	tenants?: Array<{
-		id: string;
-		spaceId: string;
-		roleId: string;
+		id: DatabaseId;
+		spaceId: DatabaseId;
+		roleId: DatabaseId;
 	}>;
 	profiles?: Array<{
 		name: string;
@@ -40,17 +40,17 @@ export const createTestUser = (
 	overrides: Partial<TestUserData> = {},
 ): TestUserData => {
 	return {
-		id: "user-test-id",
+		id: 101n,
 		name: "test@example.com",
 		phone: "010-1234-5678",
 		password: "$2b$10$hashedPassword",
 		email: "test@example.com",
-		spaceId: "space-test-id",
+		spaceId: 301n,
 		tenants: [
 			{
-				id: "tenant-test-id",
-				spaceId: "space-test-id",
-				roleId: "role-test-id",
+				id: 201n,
+				spaceId: 301n,
+				roleId: 401n,
 			},
 		],
 		profiles: [
@@ -67,8 +67,8 @@ export const createTestUserDto = (
 	overrides: Partial<ContextUserSnapshot> = {},
 ): ContextUserSnapshot => {
 	return {
-		id: "user-test-id",
-		spaceId: "space-test-id",
+		id: 101n,
+		spaceId: 301n,
 		email: "test@example.com",
 		name: "Test User",
 		phone: "010-1234-5678",
@@ -77,18 +77,18 @@ export const createTestUserDto = (
 		updatedAt: new Date("2024-01-01"),
 		tenants: [
 			{
-				id: "tenant-test-id",
+				id: 201n,
 				name: "Test Tenant",
-				spaceId: "space-test-id",
-				roleId: "role-test-id",
+				spaceId: 301n,
+				roleId: 401n,
 				space: {
-					id: "space-test-id",
+					id: 301n,
 					name: "Test Space",
 					fitnessCenter: {
-						id: "fitness-center-test-id",
+						id: 501n,
 						name: "Test Fitness Center",
 						company: {
-							id: "company-test-id",
+							id: 601n,
 							name: "Test Company",
 						},
 					},
@@ -102,8 +102,8 @@ export const createTestUserDto = (
 export const createTestUserEntity = (overrides: Partial<User> = {}): User => {
 	const user = new User();
 	Object.assign(user, {
-		id: "user-test-id",
-		spaceId: "space-test-id",
+		id: 101n,
+		spaceId: 301n,
 		email: "test@example.com",
 		name: "Test User",
 		phone: "010-1234-5678",
@@ -113,18 +113,18 @@ export const createTestUserEntity = (overrides: Partial<User> = {}): User => {
 		removedAt: null,
 		tenants: [
 			{
-				id: "tenant-test-id",
+				id: 201n,
 				name: "Test Tenant",
-				spaceId: "space-test-id",
-				roleId: "role-test-id",
+				spaceId: 301n,
+				roleId: 401n,
 				space: {
-					id: "space-test-id",
+					id: 301n,
 					name: "Test Space",
 					fitnessCenter: {
-						id: "fitness-center-test-id",
+						id: 501n,
 						name: "Test Fitness Center",
 						company: {
-							id: "company-test-id",
+							id: 601n,
 							name: "Test Company",
 						},
 					},

@@ -1,4 +1,4 @@
-import { StringField, StringFieldOptional } from "@cocrepo/decorator";
+import { StringField, StringFieldOptional } from "@cocrepo/decorator/field";
 import { CommunityPostSchema } from "@cocrepo/schema";
 
 export class CreateCommunityPostPayloadDto extends CommunityPostSchema {

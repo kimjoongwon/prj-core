@@ -1,13 +1,13 @@
 import {
+	BigIntIdField,
+	BigIntIdFieldOptional,
 	BooleanField,
 	ClassField,
 	DateField,
 	EnumField,
 	StringField,
-	ULIDField,
-	ULIDFieldOptional,
 	UUIDFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import { MessageContentType, SenderType } from "@cocrepo/prisma";
 import { AbstractDto } from "../abstract.dto";
 
@@ -17,14 +17,14 @@ import { InquiryAttachmentDto } from "./inquiry-attachment.dto";
  * 문의 메시지 응답 DTO
  */
 export class InquiryMessageDto extends AbstractDto {
-	@ULIDField({ description: "소속 스레드 ID" })
-	threadId!: string;
+	@BigIntIdField({ description: "소속 스레드 ID" })
+	threadId!: bigint;
 
-	@ULIDField({ description: "소속 문의 ID" })
-	inquiryId!: string;
+	@BigIntIdField({ description: "소속 문의 ID" })
+	inquiryId!: bigint;
 
-	@ULIDFieldOptional({ description: "발신자 ID" })
-	senderId!: string | null;
+	@BigIntIdFieldOptional({ description: "발신자 ID" })
+	senderId!: bigint | null;
 
 	@StringField({ description: "발신자 이름" })
 	senderName!: string;

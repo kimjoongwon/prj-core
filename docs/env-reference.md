@@ -37,7 +37,6 @@
 | --- | --- | --- |
 | Build / Dev | `NODE_ENV`, `ANALYZE`, `CORE_API_INTERNAL_URL` | `NODE_ENV`: Next.js 실행 모드. `ANALYZE`: bundle analyzer 활성화 여부. `CORE_API_INTERNAL_URL`: 개발 프록시에서 core-api로 넘길 내부 대상 URL. Auth/OIDC/IDP 경로도 이 대상 URL로 프록시됩니다. |
 | Public Runtime | `NEXT_PUBLIC_WS_URL` | `NEXT_PUBLIC_WS_URL`: 브라우저에서 사용할 WebSocket base URL. |
-| Test | `E2E_SYSTEM_SPACE_ID` | E2E 테스트에서 고정 시스템 스페이스를 참조할 때 사용하는 fixture id입니다. |
 
 ## apps/tool/storybook
 

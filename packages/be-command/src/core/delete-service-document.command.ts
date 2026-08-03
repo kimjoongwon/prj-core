@@ -1,3 +1,3 @@
 export class DeleteServiceDocumentCommand {
-	constructor(readonly serviceDocumentId: string) {}
+	constructor(readonly serviceDocumentId: bigint) {}
 }

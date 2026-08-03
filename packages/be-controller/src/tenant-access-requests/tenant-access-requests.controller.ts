@@ -1,4 +1,4 @@
-import { ParseUlidPipe } from "@cocrepo/be-common";
+import { ParseBigIntIdPipe } from "@cocrepo/be-common";
 import {
 	ApproveTenantAccessRequestCommand,
 	GetTenantAccessRequestForReviewQuery,
@@ -60,11 +60,16 @@ export class TenantAccessRequestsController {
 	})
 	@ResponseMessage("테넌트 접근 신청 승인 목록 조회 성공")
 	getRequests(@Query() query: QueryTenantAccessRequestDto) {
-		const reviewerId = this.getAuthenticatedUserId();
+		this.authContext.assertAuthenticated();
+		const userId = this.authContext.user?.id;
+		if (!userId) {
+			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
+		}
+
 		return this.queryBus.execute(
 			new ListTenantAccessRequestsForReviewQuery({
 				...query,
-				reviewerId,
+				reviewerId: userId,
 			}),
 		);
 	}
@@ -79,7 +84,7 @@ export class TenantAccessRequestsController {
 	@ApiAuth({ tenantHeader: false })
 	@ApiParam({
 		name: "tenantAccessRequestId",
-		description: "테넌트 접근 신청 ID (ULID)",
+		description: "테넌트 접근 신청 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(
@@ -91,15 +96,17 @@ export class TenantAccessRequestsController {
 	@ApiResponseEntity(TenantAccessRequestDto, HttpStatus.OK)
 	@ResponseMessage("테넌트 접근 신청 상세 조회 성공")
 	getRequest(
-		@Param("tenantAccessRequestId", ParseUlidPipe)
-		tenantAccessRequestId: string,
+		@Param("tenantAccessRequestId", ParseBigIntIdPipe)
+		tenantAccessRequestId: bigint,
 	): Promise<TenantAccessRequest> {
-		const reviewerId = this.getAuthenticatedUserId();
+		this.authContext.assertAuthenticated();
+		const userId = this.authContext.user?.id;
+		if (!userId) {
+			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
+		}
+
 		return this.queryBus.execute(
-			new GetTenantAccessRequestForReviewQuery(
-				tenantAccessRequestId,
-				reviewerId,
-			),
+			new GetTenantAccessRequestForReviewQuery(tenantAccessRequestId, userId),
 		);
 	}
 
@@ -114,7 +121,7 @@ export class TenantAccessRequestsController {
 	@ApiAuth({ tenantHeader: false })
 	@ApiParam({
 		name: "tenantAccessRequestId",
-		description: "테넌트 접근 신청 ID (ULID)",
+		description: "테넌트 접근 신청 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiBody({
@@ -135,17 +142,18 @@ export class TenantAccessRequestsController {
 	@ApiResponseEntity(TenantAccessRequestDto, HttpStatus.OK)
 	@ResponseMessage("테넌트 접근 신청 승인 성공")
 	approve(
-		@Param("tenantAccessRequestId", ParseUlidPipe)
-		tenantAccessRequestId: string,
+		@Param("tenantAccessRequestId", ParseBigIntIdPipe)
+		tenantAccessRequestId: bigint,
 		@Body() dto: ReviewTenantAccessRequestDto,
 	): Promise<TenantAccessRequest> {
-		const reviewerId = this.getAuthenticatedUserId();
+		this.authContext.assertAuthenticated();
+		const userId = this.authContext.user?.id;
+		if (!userId) {
+			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
+		}
+
 		return this.commandBus.execute(
-			new ApproveTenantAccessRequestCommand(
-				tenantAccessRequestId,
-				reviewerId,
-				dto,
-			),
+			new ApproveTenantAccessRequestCommand(tenantAccessRequestId, userId, dto),
 		);
 	}
 
@@ -160,7 +168,7 @@ export class TenantAccessRequestsController {
 	@ApiAuth({ tenantHeader: false })
 	@ApiParam({
 		name: "tenantAccessRequestId",
-		description: "테넌트 접근 신청 ID (ULID)",
+		description: "테넌트 접근 신청 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiBody({
@@ -176,26 +184,18 @@ export class TenantAccessRequestsController {
 	@ApiResponseEntity(TenantAccessRequestDto, HttpStatus.OK)
 	@ResponseMessage("테넌트 접근 신청 반려 성공")
 	reject(
-		@Param("tenantAccessRequestId", ParseUlidPipe)
-		tenantAccessRequestId: string,
+		@Param("tenantAccessRequestId", ParseBigIntIdPipe)
+		tenantAccessRequestId: bigint,
 		@Body() dto: ReviewTenantAccessRequestDto,
 	): Promise<TenantAccessRequest> {
-		const reviewerId = this.getAuthenticatedUserId();
-		return this.commandBus.execute(
-			new RejectTenantAccessRequestCommand(
-				tenantAccessRequestId,
-				reviewerId,
-				dto,
-			),
-		);
-	}
-
-	private getAuthenticatedUserId(): string {
 		this.authContext.assertAuthenticated();
 		const userId = this.authContext.user?.id;
 		if (!userId) {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);
 		}
-		return userId;
+
+		return this.commandBus.execute(
+			new RejectTenantAccessRequestCommand(tenantAccessRequestId, userId, dto),
+		);
 	}
 }

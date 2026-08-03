@@ -6,7 +6,8 @@ describe("OidcClientAggregate", () => {
 	type UpdateInput = Parameters<OidcClientAggregate["update"]>[1];
 
 	const buildClient = (overrides: Partial<CreateInput> = {}) => ({
-		id: "client-id",
+		id: 101n,
+		oidcClientId: "01J00000000000000000000001",
 		clientId: "partner-web",
 		clientSecret: "secret",
 		name: "Partner Web",
@@ -34,9 +35,9 @@ describe("OidcClientAggregate", () => {
 
 	const buildRepository = () => ({
 		findByClientId: jest.fn(),
-		findById: jest.fn(),
+		findByOidcClientId: jest.fn(),
 		create: jest.fn(async (input: Partial<CreateInput>) => buildClient(input)),
-		updateById: jest.fn(async (_id: string, input: Partial<UpdateInput>) =>
+		updateById: jest.fn(async (_id: bigint, input: Partial<UpdateInput>) =>
 			buildClient(input),
 		),
 	});
@@ -87,13 +88,13 @@ describe("OidcClientAggregate", () => {
 
 	it("기존 consent 생략 클라이언트를 third-party로 낮추는 수정은 거부된다", async () => {
 		const repository = buildRepository();
-		repository.findById.mockResolvedValue(
+		repository.findByOidcClientId.mockResolvedValue(
 			buildClient({ isFirstParty: true, skipConsent: true }),
 		);
 		const service = new OidcClientAggregate(repository as never);
 
 		await expect(
-			service.update("client-id", {
+			service.update("01J00000000000000000000001", {
 				isFirstParty: false,
 			} satisfies UpdateInput),
 		).rejects.toBeInstanceOf(BadRequestException);

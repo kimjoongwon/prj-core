@@ -39,7 +39,7 @@ export class PolicyAggregate {
 		return this.policiesRepository.findManyBySpaceId(spaceId);
 	}
 
-	async getPolicyById(policyId: string): Promise<Policy> {
+	async getPolicyById(policyId: bigint): Promise<Policy> {
 		const spaceId = this.requireSpaceId();
 		const policy = await this.policiesRepository.findByIdInSpace(
 			policyId,
@@ -76,7 +76,7 @@ export class PolicyAggregate {
 	}
 
 	async updatePolicy(
-		policyId: string,
+		policyId: bigint,
 		dto: UpdatePolicyCommandInput,
 	): Promise<Policy> {
 		const policy = await this.getPolicyById(policyId);
@@ -105,7 +105,7 @@ export class PolicyAggregate {
 	}
 
 	@Transactional()
-	async deletePolicy(policyId: string): Promise<Policy> {
+	async deletePolicy(policyId: bigint): Promise<Policy> {
 		await this.getPolicyById(policyId);
 
 		await this.roleAssignmentsRepository.removeByPolicyId(policyId);
@@ -115,15 +115,15 @@ export class PolicyAggregate {
 
 	@Transactional()
 	async syncPolicyEntries(
-		policyId: string,
-		abilityIds: string[],
+		policyId: bigint,
+		abilityIds: bigint[],
 	): Promise<PolicyEntry[]> {
 		await this.getPolicyById(policyId);
 		await this.assertAbilitiesExist(abilityIds);
 		return this.policyEntriesRepository.syncByPolicyId(policyId, abilityIds);
 	}
 
-	private async assertAbilitiesExist(abilityIds: string[]): Promise<void> {
+	private async assertAbilitiesExist(abilityIds: bigint[]): Promise<void> {
 		const uniqueAbilityIds = Array.from(new Set(abilityIds));
 		if (uniqueAbilityIds.length === 0) return;
 
@@ -139,7 +139,7 @@ export class PolicyAggregate {
 		}
 	}
 
-	private requireSpaceId(): string {
+	private requireSpaceId(): bigint {
 		const spaceId = this.spaceContext.spaceId;
 		if (!spaceId) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
@@ -147,7 +147,7 @@ export class PolicyAggregate {
 		return spaceId;
 	}
 
-	private requireUserId(): string {
+	private requireUserId(): bigint {
 		const userId = this.authContext.user?.id;
 		if (!userId) {
 			throw new UnauthorizedException(USER_ERRORS.USER_NOT_FOUND);

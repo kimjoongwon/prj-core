@@ -27,79 +27,79 @@ export type AggregatePost = {
 }
 
 export type PostAvgAggregateOutputType = {
-  seq: number | null
-  contentSeq: number | null
+  id: number | null
+  contentId: number | null
 }
 
 export type PostSumAggregateOutputType = {
-  seq: number | null
-  contentSeq: number | null
+  id: bigint | null
+  contentId: bigint | null
 }
 
 export type PostMinAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  postId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  contentSeq: number | null
+  contentId: bigint | null
 }
 
 export type PostMaxAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  postId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  contentSeq: number | null
+  contentId: bigint | null
 }
 
 export type PostCountAggregateOutputType = {
+  postId: number
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
-  contentSeq: number
+  contentId: number
   _all: number
 }
 
 
 export type PostAvgAggregateInputType = {
-  seq?: true
-  contentSeq?: true
+  id?: true
+  contentId?: true
 }
 
 export type PostSumAggregateInputType = {
-  seq?: true
-  contentSeq?: true
+  id?: true
+  contentId?: true
 }
 
 export type PostMinAggregateInputType = {
+  postId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  contentSeq?: true
+  contentId?: true
 }
 
 export type PostMaxAggregateInputType = {
+  postId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  contentSeq?: true
+  contentId?: true
 }
 
 export type PostCountAggregateInputType = {
+  postId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  contentSeq?: true
+  contentId?: true
   _all?: true
 }
 
@@ -190,12 +190,12 @@ export type PostGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 }
 
 export type PostGroupByOutputType = {
-  id: string
-  seq: number
+  postId: string
+  id: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  contentSeq: number
+  contentId: bigint
   _count: PostCountAggregateOutputType | null
   _avg: PostAvgAggregateOutputType | null
   _sum: PostSumAggregateOutputType | null
@@ -222,29 +222,29 @@ export type PostWhereInput = {
   AND?: Prisma.PostWhereInput | Prisma.PostWhereInput[]
   OR?: Prisma.PostWhereInput[]
   NOT?: Prisma.PostWhereInput | Prisma.PostWhereInput[]
-  id?: Prisma.StringFilter<"Post"> | string
-  seq?: Prisma.IntFilter<"Post"> | number
+  postId?: Prisma.StringFilter<"Post"> | string
+  id?: Prisma.BigIntFilter<"Post"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
-  contentSeq?: Prisma.IntFilter<"Post"> | number
+  contentId?: Prisma.BigIntFilter<"Post"> | bigint | number
   content?: Prisma.XOR<Prisma.ContentScalarRelationFilter, Prisma.ContentWhereInput>
 }
 
 export type PostOrderByWithRelationInput = {
+  postId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  contentSeq?: Prisma.SortOrder
+  contentId?: Prisma.SortOrder
   content?: Prisma.ContentOrderByWithRelationInput
 }
 
 export type PostWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  seq?: number
-  contentSeq?: number
+  postId?: string
+  id?: bigint | number
+  contentId?: bigint | number
   AND?: Prisma.PostWhereInput | Prisma.PostWhereInput[]
   OR?: Prisma.PostWhereInput[]
   NOT?: Prisma.PostWhereInput | Prisma.PostWhereInput[]
@@ -252,15 +252,15 @@ export type PostWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
   content?: Prisma.XOR<Prisma.ContentScalarRelationFilter, Prisma.ContentWhereInput>
-}, "seq" | "id" | "contentSeq">
+}, "id" | "postId" | "contentId">
 
 export type PostOrderByWithAggregationInput = {
+  postId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  contentSeq?: Prisma.SortOrder
+  contentId?: Prisma.SortOrder
   _count?: Prisma.PostCountOrderByAggregateInput
   _avg?: Prisma.PostAvgOrderByAggregateInput
   _max?: Prisma.PostMaxOrderByAggregateInput
@@ -272,16 +272,17 @@ export type PostScalarWhereWithAggregatesInput = {
   AND?: Prisma.PostScalarWhereWithAggregatesInput | Prisma.PostScalarWhereWithAggregatesInput[]
   OR?: Prisma.PostScalarWhereWithAggregatesInput[]
   NOT?: Prisma.PostScalarWhereWithAggregatesInput | Prisma.PostScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"Post"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"Post"> | number
+  postId?: Prisma.StringWithAggregatesFilter<"Post"> | string
+  id?: Prisma.BigIntWithAggregatesFilter<"Post"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Post"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Post"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Post"> | Date | string | null
-  contentSeq?: Prisma.IntWithAggregatesFilter<"Post"> | number
+  contentId?: Prisma.BigIntWithAggregatesFilter<"Post"> | bigint | number
 }
 
 export type PostCreateInput = {
-  id?: string
+  postId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -289,16 +290,17 @@ export type PostCreateInput = {
 }
 
 export type PostUncheckedCreateInput = {
-  id?: string
-  seq?: number
+  postId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  contentSeq: number
+  contentId: bigint | number
 }
 
 export type PostUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  postId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -306,37 +308,38 @@ export type PostUpdateInput = {
 }
 
 export type PostUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  postId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  contentSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  contentId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 export type PostCreateManyInput = {
-  id?: string
-  seq?: number
+  postId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  contentSeq: number
+  contentId: bigint | number
 }
 
 export type PostUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  postId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type PostUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  postId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  contentSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  contentId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 export type PostNullableScalarRelationFilter = {
@@ -345,40 +348,40 @@ export type PostNullableScalarRelationFilter = {
 }
 
 export type PostCountOrderByAggregateInput = {
+  postId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  contentSeq?: Prisma.SortOrder
+  contentId?: Prisma.SortOrder
 }
 
 export type PostAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  contentSeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  contentId?: Prisma.SortOrder
 }
 
 export type PostMaxOrderByAggregateInput = {
+  postId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  contentSeq?: Prisma.SortOrder
+  contentId?: Prisma.SortOrder
 }
 
 export type PostMinOrderByAggregateInput = {
+  postId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  contentSeq?: Prisma.SortOrder
+  contentId?: Prisma.SortOrder
 }
 
 export type PostSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  contentSeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  contentId?: Prisma.SortOrder
 }
 
 export type PostCreateNestedOneWithoutContentInput = {
@@ -414,15 +417,16 @@ export type PostUncheckedUpdateOneWithoutContentNestedInput = {
 }
 
 export type PostCreateWithoutContentInput = {
-  id?: string
+  postId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
 }
 
 export type PostUncheckedCreateWithoutContentInput = {
-  id?: string
-  seq?: number
+  postId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -445,15 +449,16 @@ export type PostUpdateToOneWithWhereWithoutContentInput = {
 }
 
 export type PostUpdateWithoutContentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  postId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type PostUncheckedUpdateWithoutContentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  postId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -462,45 +467,45 @@ export type PostUncheckedUpdateWithoutContentInput = {
 
 
 export type PostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  postId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  contentSeq?: boolean
+  contentId?: boolean
   content?: boolean | Prisma.ContentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["post"]>
 
 export type PostSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  postId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  contentSeq?: boolean
+  contentId?: boolean
   content?: boolean | Prisma.ContentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["post"]>
 
 export type PostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  postId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  contentSeq?: boolean
+  contentId?: boolean
   content?: boolean | Prisma.ContentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["post"]>
 
 export type PostSelectScalar = {
+  postId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  contentSeq?: boolean
+  contentId?: boolean
 }
 
-export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "contentSeq", ExtArgs["result"]["post"]>
+export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"postId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "contentId", ExtArgs["result"]["post"]>
 export type PostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   content?: boolean | Prisma.ContentDefaultArgs<ExtArgs>
 }
@@ -517,12 +522,12 @@ export type $PostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     content: Prisma.$ContentPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    seq: number
+    postId: string
+    id: bigint
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
-    contentSeq: number
+    contentId: bigint
   }, ExtArgs["result"]["post"]>
   composites: {}
 }
@@ -606,8 +611,8 @@ export interface PostDelegate<ExtArgs extends runtime.Types.Extensions.InternalA
    * // Get first 10 Posts
    * const posts = await prisma.post.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const postWithIdOnly = await prisma.post.findMany({ select: { id: true } })
+   * // Only select the `postId`
+   * const postWithPostIdOnly = await prisma.post.findMany({ select: { postId: true } })
    * 
    */
   findMany<T extends PostFindManyArgs>(args?: Prisma.SelectSubset<T, PostFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -651,9 +656,9 @@ export interface PostDelegate<ExtArgs extends runtime.Types.Extensions.InternalA
    *   ]
    * })
    * 
-   * // Create many Posts and only return the `id`
-   * const postWithIdOnly = await prisma.post.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many Posts and only return the `postId`
+   * const postWithPostIdOnly = await prisma.post.createManyAndReturn({
+   *   select: { postId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -742,9 +747,9 @@ export interface PostDelegate<ExtArgs extends runtime.Types.Extensions.InternalA
    *   ]
    * })
    * 
-   * // Update zero or more Posts and only return the `id`
-   * const postWithIdOnly = await prisma.post.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more Posts and only return the `postId`
+   * const postWithPostIdOnly = await prisma.post.updateManyAndReturn({
+   *   select: { postId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -947,12 +952,12 @@ export interface Prisma__PostClient<T, Null = never, ExtArgs extends runtime.Typ
  * Fields of the Post model
  */
 export interface PostFieldRefs {
-  readonly id: Prisma.FieldRef<"Post", 'String'>
-  readonly seq: Prisma.FieldRef<"Post", 'Int'>
+  readonly postId: Prisma.FieldRef<"Post", 'String'>
+  readonly id: Prisma.FieldRef<"Post", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"Post", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Post", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Post", 'DateTime'>
-  readonly contentSeq: Prisma.FieldRef<"Post", 'Int'>
+  readonly contentId: Prisma.FieldRef<"Post", 'BigInt'>
 }
     
 

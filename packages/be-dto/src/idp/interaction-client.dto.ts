@@ -1,4 +1,4 @@
-import { StringField, StringFieldOptional } from "@cocrepo/decorator";
+import { StringField, StringFieldOptional } from "@cocrepo/decorator/field";
 import type { Prisma } from "@cocrepo/prisma";
 import { ApiPropertyOptional } from "@nestjs/swagger";
 

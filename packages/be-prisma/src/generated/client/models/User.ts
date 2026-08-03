@@ -27,18 +27,20 @@ export type AggregateUser = {
 }
 
 export type UserAvgAggregateOutputType = {
-  seq: number | null
+  id: number | null
   failedLoginAttempts: number | null
+  currentTenantId: number | null
 }
 
 export type UserSumAggregateOutputType = {
-  seq: number | null
+  id: bigint | null
   failedLoginAttempts: number | null
+  currentTenantId: bigint | null
 }
 
 export type UserMinAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  userId: string | null
+  id: bigint | null
   updatedAt: Date | null
   createdAt: Date | null
   removedAt: Date | null
@@ -54,12 +56,12 @@ export type UserMinAggregateOutputType = {
   lastLoginAt: Date | null
   lastLoginIp: string | null
   isActive: boolean | null
-  currentTenantId: string | null
+  currentTenantId: bigint | null
 }
 
 export type UserMaxAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  userId: string | null
+  id: bigint | null
   updatedAt: Date | null
   createdAt: Date | null
   removedAt: Date | null
@@ -75,12 +77,12 @@ export type UserMaxAggregateOutputType = {
   lastLoginAt: Date | null
   lastLoginIp: string | null
   isActive: boolean | null
-  currentTenantId: string | null
+  currentTenantId: bigint | null
 }
 
 export type UserCountAggregateOutputType = {
+  userId: number
   id: number
-  seq: number
   updatedAt: number
   createdAt: number
   removedAt: number
@@ -102,18 +104,20 @@ export type UserCountAggregateOutputType = {
 
 
 export type UserAvgAggregateInputType = {
-  seq?: true
+  id?: true
   failedLoginAttempts?: true
+  currentTenantId?: true
 }
 
 export type UserSumAggregateInputType = {
-  seq?: true
+  id?: true
   failedLoginAttempts?: true
+  currentTenantId?: true
 }
 
 export type UserMinAggregateInputType = {
+  userId?: true
   id?: true
-  seq?: true
   updatedAt?: true
   createdAt?: true
   removedAt?: true
@@ -133,8 +137,8 @@ export type UserMinAggregateInputType = {
 }
 
 export type UserMaxAggregateInputType = {
+  userId?: true
   id?: true
-  seq?: true
   updatedAt?: true
   createdAt?: true
   removedAt?: true
@@ -154,8 +158,8 @@ export type UserMaxAggregateInputType = {
 }
 
 export type UserCountAggregateInputType = {
+  userId?: true
   id?: true
-  seq?: true
   updatedAt?: true
   createdAt?: true
   removedAt?: true
@@ -262,8 +266,8 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 }
 
 export type UserGroupByOutputType = {
-  id: string
-  seq: number
+  userId: string
+  id: bigint
   updatedAt: Date | null
   createdAt: Date
   removedAt: Date | null
@@ -279,7 +283,7 @@ export type UserGroupByOutputType = {
   lastLoginAt: Date | null
   lastLoginIp: string | null
   isActive: boolean
-  currentTenantId: string | null
+  currentTenantId: bigint | null
   _count: UserCountAggregateOutputType | null
   _avg: UserAvgAggregateOutputType | null
   _sum: UserSumAggregateOutputType | null
@@ -306,8 +310,8 @@ export type UserWhereInput = {
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
-  id?: Prisma.StringFilter<"User"> | string
-  seq?: Prisma.IntFilter<"User"> | number
+  userId?: Prisma.StringFilter<"User"> | string
+  id?: Prisma.BigIntFilter<"User"> | bigint | number
   updatedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   removedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -323,7 +327,8 @@ export type UserWhereInput = {
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   lastLoginIp?: Prisma.StringNullableFilter<"User"> | string | null
   isActive?: Prisma.BoolFilter<"User"> | boolean
-  currentTenantId?: Prisma.StringNullableFilter<"User"> | string | null
+  currentTenantId?: Prisma.BigIntNullableFilter<"User"> | bigint | number | null
+  currentTenant?: Prisma.XOR<Prisma.TenantNullableScalarRelationFilter, Prisma.TenantWhereInput> | null
   profiles?: Prisma.ProfileListRelationFilter
   tenants?: Prisma.TenantListRelationFilter
   tenantAccessRequests?: Prisma.TenantAccessRequestListRelationFilter
@@ -340,6 +345,7 @@ export type UserWhereInput = {
   createdTasks?: Prisma.TaskListRelationFilter
   createdSafeWallets?: Prisma.SafeWalletListRelationFilter
   createdRoutines?: Prisma.RoutineListRelationFilter
+  instructedPrograms?: Prisma.ProgramListRelationFilter
   reservations?: Prisma.ReservationListRelationFilter
   createdPolicies?: Prisma.PolicyListRelationFilter
   createdReservations?: Prisma.ReservationListRelationFilter
@@ -357,8 +363,8 @@ export type UserWhereInput = {
 }
 
 export type UserOrderByWithRelationInput = {
+  userId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -375,6 +381,7 @@ export type UserOrderByWithRelationInput = {
   lastLoginIp?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   currentTenantId?: Prisma.SortOrderInput | Prisma.SortOrder
+  currentTenant?: Prisma.TenantOrderByWithRelationInput
   profiles?: Prisma.ProfileOrderByRelationAggregateInput
   tenants?: Prisma.TenantOrderByRelationAggregateInput
   tenantAccessRequests?: Prisma.TenantAccessRequestOrderByRelationAggregateInput
@@ -391,6 +398,7 @@ export type UserOrderByWithRelationInput = {
   createdTasks?: Prisma.TaskOrderByRelationAggregateInput
   createdSafeWallets?: Prisma.SafeWalletOrderByRelationAggregateInput
   createdRoutines?: Prisma.RoutineOrderByRelationAggregateInput
+  instructedPrograms?: Prisma.ProgramOrderByRelationAggregateInput
   reservations?: Prisma.ReservationOrderByRelationAggregateInput
   createdPolicies?: Prisma.PolicyOrderByRelationAggregateInput
   createdReservations?: Prisma.ReservationOrderByRelationAggregateInput
@@ -408,8 +416,8 @@ export type UserOrderByWithRelationInput = {
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   phone?: string
   name?: string
   email?: string
@@ -428,7 +436,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   lastLoginIp?: Prisma.StringNullableFilter<"User"> | string | null
   isActive?: Prisma.BoolFilter<"User"> | boolean
-  currentTenantId?: Prisma.StringNullableFilter<"User"> | string | null
+  currentTenantId?: Prisma.BigIntNullableFilter<"User"> | bigint | number | null
+  currentTenant?: Prisma.XOR<Prisma.TenantNullableScalarRelationFilter, Prisma.TenantWhereInput> | null
   profiles?: Prisma.ProfileListRelationFilter
   tenants?: Prisma.TenantListRelationFilter
   tenantAccessRequests?: Prisma.TenantAccessRequestListRelationFilter
@@ -445,6 +454,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdTasks?: Prisma.TaskListRelationFilter
   createdSafeWallets?: Prisma.SafeWalletListRelationFilter
   createdRoutines?: Prisma.RoutineListRelationFilter
+  instructedPrograms?: Prisma.ProgramListRelationFilter
   reservations?: Prisma.ReservationListRelationFilter
   createdPolicies?: Prisma.PolicyListRelationFilter
   createdReservations?: Prisma.ReservationListRelationFilter
@@ -459,11 +469,11 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   inquiryMessages?: Prisma.InquiryMessageListRelationFilter
   inquiryParticipants?: Prisma.InquiryParticipantListRelationFilter
   createdThreads?: Prisma.InquiryThreadListRelationFilter
-}, "seq" | "id" | "phone" | "name" | "email">
+}, "id" | "userId" | "phone" | "name" | "email">
 
 export type UserOrderByWithAggregationInput = {
+  userId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -491,8 +501,8 @@ export type UserScalarWhereWithAggregatesInput = {
   AND?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   OR?: Prisma.UserScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"User"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"User"> | number
+  userId?: Prisma.StringWithAggregatesFilter<"User"> | string
+  id?: Prisma.BigIntWithAggregatesFilter<"User"> | bigint | number
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
@@ -508,11 +518,12 @@ export type UserScalarWhereWithAggregatesInput = {
   lastLoginAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   lastLoginIp?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
-  currentTenantId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  currentTenantId?: Prisma.BigIntNullableWithAggregatesFilter<"User"> | bigint | number | null
 }
 
 export type UserCreateInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -528,7 +539,7 @@ export type UserCreateInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -545,6 +556,7 @@ export type UserCreateInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -562,8 +574,8 @@ export type UserCreateInput = {
 }
 
 export type UserUncheckedCreateInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -579,7 +591,7 @@ export type UserUncheckedCreateInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -596,6 +608,7 @@ export type UserUncheckedCreateInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -613,7 +626,8 @@ export type UserUncheckedCreateInput = {
 }
 
 export type UserUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -629,7 +643,7 @@ export type UserUpdateInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -646,6 +660,7 @@ export type UserUpdateInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -663,8 +678,8 @@ export type UserUpdateInput = {
 }
 
 export type UserUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -680,7 +695,7 @@ export type UserUncheckedUpdateInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -697,6 +712,7 @@ export type UserUncheckedUpdateInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -714,8 +730,8 @@ export type UserUncheckedUpdateInput = {
 }
 
 export type UserCreateManyInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -731,11 +747,12 @@ export type UserCreateManyInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
 }
 
 export type UserUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -751,12 +768,11 @@ export type UserUpdateManyMutationInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -772,7 +788,7 @@ export type UserUncheckedUpdateManyInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type UserNullableScalarRelationFilter = {
@@ -785,9 +801,19 @@ export type UserScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput
 }
 
+export type UserListRelationFilter = {
+  every?: Prisma.UserWhereInput
+  some?: Prisma.UserWhereInput
+  none?: Prisma.UserWhereInput
+}
+
+export type UserOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type UserCountOrderByAggregateInput = {
+  userId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -807,13 +833,14 @@ export type UserCountOrderByAggregateInput = {
 }
 
 export type UserAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
   failedLoginAttempts?: Prisma.SortOrder
+  currentTenantId?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
+  userId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -833,8 +860,8 @@ export type UserMaxOrderByAggregateInput = {
 }
 
 export type UserMinOrderByAggregateInput = {
+  userId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -854,8 +881,9 @@ export type UserMinOrderByAggregateInput = {
 }
 
 export type UserSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
   failedLoginAttempts?: Prisma.SortOrder
+  currentTenantId?: Prisma.SortOrder
 }
 
 export type UserCreateNestedOneWithoutCreatedAlbumEntriesInput = {
@@ -1154,6 +1182,20 @@ export type UserUpdateOneRequiredWithoutProfilesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProfilesInput, Prisma.UserUpdateWithoutProfilesInput>, Prisma.UserUncheckedUpdateWithoutProfilesInput>
 }
 
+export type UserCreateNestedOneWithoutInstructedProgramsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInstructedProgramsInput, Prisma.UserUncheckedCreateWithoutInstructedProgramsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInstructedProgramsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutInstructedProgramsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInstructedProgramsInput, Prisma.UserUncheckedCreateWithoutInstructedProgramsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInstructedProgramsInput
+  upsert?: Prisma.UserUpsertWithoutInstructedProgramsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInstructedProgramsInput, Prisma.UserUpdateWithoutInstructedProgramsInput>, Prisma.UserUncheckedUpdateWithoutInstructedProgramsInput>
+}
+
 export type UserCreateNestedOneWithoutCreatedReservationsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedReservationsInput, Prisma.UserUncheckedCreateWithoutCreatedReservationsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedReservationsInput
@@ -1268,12 +1310,54 @@ export type UserCreateNestedOneWithoutTenantsInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
+export type UserCreateNestedManyWithoutCurrentTenantInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCurrentTenantInput, Prisma.UserUncheckedCreateWithoutCurrentTenantInput> | Prisma.UserCreateWithoutCurrentTenantInput[] | Prisma.UserUncheckedCreateWithoutCurrentTenantInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCurrentTenantInput | Prisma.UserCreateOrConnectWithoutCurrentTenantInput[]
+  createMany?: Prisma.UserCreateManyCurrentTenantInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUncheckedCreateNestedManyWithoutCurrentTenantInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCurrentTenantInput, Prisma.UserUncheckedCreateWithoutCurrentTenantInput> | Prisma.UserCreateWithoutCurrentTenantInput[] | Prisma.UserUncheckedCreateWithoutCurrentTenantInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCurrentTenantInput | Prisma.UserCreateOrConnectWithoutCurrentTenantInput[]
+  createMany?: Prisma.UserCreateManyCurrentTenantInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
 export type UserUpdateOneRequiredWithoutTenantsNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutTenantsInput, Prisma.UserUncheckedCreateWithoutTenantsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantsInput
   upsert?: Prisma.UserUpsertWithoutTenantsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTenantsInput, Prisma.UserUpdateWithoutTenantsInput>, Prisma.UserUncheckedUpdateWithoutTenantsInput>
+}
+
+export type UserUpdateManyWithoutCurrentTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCurrentTenantInput, Prisma.UserUncheckedCreateWithoutCurrentTenantInput> | Prisma.UserCreateWithoutCurrentTenantInput[] | Prisma.UserUncheckedCreateWithoutCurrentTenantInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCurrentTenantInput | Prisma.UserCreateOrConnectWithoutCurrentTenantInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutCurrentTenantInput | Prisma.UserUpsertWithWhereUniqueWithoutCurrentTenantInput[]
+  createMany?: Prisma.UserCreateManyCurrentTenantInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutCurrentTenantInput | Prisma.UserUpdateWithWhereUniqueWithoutCurrentTenantInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutCurrentTenantInput | Prisma.UserUpdateManyWithWhereWithoutCurrentTenantInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUncheckedUpdateManyWithoutCurrentTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCurrentTenantInput, Prisma.UserUncheckedCreateWithoutCurrentTenantInput> | Prisma.UserCreateWithoutCurrentTenantInput[] | Prisma.UserUncheckedCreateWithoutCurrentTenantInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCurrentTenantInput | Prisma.UserCreateOrConnectWithoutCurrentTenantInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutCurrentTenantInput | Prisma.UserUpsertWithWhereUniqueWithoutCurrentTenantInput[]
+  createMany?: Prisma.UserCreateManyCurrentTenantInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutCurrentTenantInput | Prisma.UserUpdateWithWhereUniqueWithoutCurrentTenantInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutCurrentTenantInput | Prisma.UserUpdateManyWithWhereWithoutCurrentTenantInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
 }
 
 export type UserCreateNestedOneWithoutCreatedTimelinesInput = {
@@ -1321,7 +1405,8 @@ export type UserUpdateOneRequiredWithoutClassificationNestedInput = {
 }
 
 export type UserCreateWithoutCreatedAlbumEntriesInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -1337,7 +1422,7 @@ export type UserCreateWithoutCreatedAlbumEntriesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -1354,6 +1439,7 @@ export type UserCreateWithoutCreatedAlbumEntriesInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -1370,8 +1456,8 @@ export type UserCreateWithoutCreatedAlbumEntriesInput = {
 }
 
 export type UserUncheckedCreateWithoutCreatedAlbumEntriesInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -1387,7 +1473,7 @@ export type UserUncheckedCreateWithoutCreatedAlbumEntriesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -1404,6 +1490,7 @@ export type UserUncheckedCreateWithoutCreatedAlbumEntriesInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1436,7 +1523,8 @@ export type UserUpdateToOneWithWhereWithoutCreatedAlbumEntriesInput = {
 }
 
 export type UserUpdateWithoutCreatedAlbumEntriesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1452,7 +1540,7 @@ export type UserUpdateWithoutCreatedAlbumEntriesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -1469,6 +1557,7 @@ export type UserUpdateWithoutCreatedAlbumEntriesInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -1485,8 +1574,8 @@ export type UserUpdateWithoutCreatedAlbumEntriesInput = {
 }
 
 export type UserUncheckedUpdateWithoutCreatedAlbumEntriesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1502,7 +1591,7 @@ export type UserUncheckedUpdateWithoutCreatedAlbumEntriesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -1519,6 +1608,7 @@ export type UserUncheckedUpdateWithoutCreatedAlbumEntriesInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1535,7 +1625,8 @@ export type UserUncheckedUpdateWithoutCreatedAlbumEntriesInput = {
 }
 
 export type UserCreateWithoutCreatedAlbumsInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -1551,7 +1642,7 @@ export type UserCreateWithoutCreatedAlbumsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -1568,6 +1659,7 @@ export type UserCreateWithoutCreatedAlbumsInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -1584,8 +1676,8 @@ export type UserCreateWithoutCreatedAlbumsInput = {
 }
 
 export type UserUncheckedCreateWithoutCreatedAlbumsInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -1601,7 +1693,7 @@ export type UserUncheckedCreateWithoutCreatedAlbumsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -1618,6 +1710,7 @@ export type UserUncheckedCreateWithoutCreatedAlbumsInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1650,7 +1743,8 @@ export type UserUpdateToOneWithWhereWithoutCreatedAlbumsInput = {
 }
 
 export type UserUpdateWithoutCreatedAlbumsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1666,7 +1760,7 @@ export type UserUpdateWithoutCreatedAlbumsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -1683,6 +1777,7 @@ export type UserUpdateWithoutCreatedAlbumsInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -1699,8 +1794,8 @@ export type UserUpdateWithoutCreatedAlbumsInput = {
 }
 
 export type UserUncheckedUpdateWithoutCreatedAlbumsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1716,7 +1811,7 @@ export type UserUncheckedUpdateWithoutCreatedAlbumsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -1733,6 +1828,7 @@ export type UserUncheckedUpdateWithoutCreatedAlbumsInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1749,7 +1845,8 @@ export type UserUncheckedUpdateWithoutCreatedAlbumsInput = {
 }
 
 export type UserCreateWithoutCreatedAssetsInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -1765,7 +1862,7 @@ export type UserCreateWithoutCreatedAssetsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -1782,6 +1879,7 @@ export type UserCreateWithoutCreatedAssetsInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -1798,8 +1896,8 @@ export type UserCreateWithoutCreatedAssetsInput = {
 }
 
 export type UserUncheckedCreateWithoutCreatedAssetsInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -1815,7 +1913,7 @@ export type UserUncheckedCreateWithoutCreatedAssetsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -1832,6 +1930,7 @@ export type UserUncheckedCreateWithoutCreatedAssetsInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1864,7 +1963,8 @@ export type UserUpdateToOneWithWhereWithoutCreatedAssetsInput = {
 }
 
 export type UserUpdateWithoutCreatedAssetsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1880,7 +1980,7 @@ export type UserUpdateWithoutCreatedAssetsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -1897,6 +1997,7 @@ export type UserUpdateWithoutCreatedAssetsInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -1913,8 +2014,8 @@ export type UserUpdateWithoutCreatedAssetsInput = {
 }
 
 export type UserUncheckedUpdateWithoutCreatedAssetsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1930,7 +2031,7 @@ export type UserUncheckedUpdateWithoutCreatedAssetsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -1947,6 +2048,7 @@ export type UserUncheckedUpdateWithoutCreatedAssetsInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1963,7 +2065,8 @@ export type UserUncheckedUpdateWithoutCreatedAssetsInput = {
 }
 
 export type UserCreateWithoutAuthAuditLogsInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -1979,7 +2082,7 @@ export type UserCreateWithoutAuthAuditLogsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -1995,6 +2098,7 @@ export type UserCreateWithoutAuthAuditLogsInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -2012,8 +2116,8 @@ export type UserCreateWithoutAuthAuditLogsInput = {
 }
 
 export type UserUncheckedCreateWithoutAuthAuditLogsInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -2029,7 +2133,7 @@ export type UserUncheckedCreateWithoutAuthAuditLogsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -2045,6 +2149,7 @@ export type UserUncheckedCreateWithoutAuthAuditLogsInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -2078,7 +2183,8 @@ export type UserUpdateToOneWithWhereWithoutAuthAuditLogsInput = {
 }
 
 export type UserUpdateWithoutAuthAuditLogsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2094,7 +2200,7 @@ export type UserUpdateWithoutAuthAuditLogsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -2110,6 +2216,7 @@ export type UserUpdateWithoutAuthAuditLogsInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -2127,8 +2234,8 @@ export type UserUpdateWithoutAuthAuditLogsInput = {
 }
 
 export type UserUncheckedUpdateWithoutAuthAuditLogsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2144,7 +2251,7 @@ export type UserUncheckedUpdateWithoutAuthAuditLogsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -2160,6 +2267,7 @@ export type UserUncheckedUpdateWithoutAuthAuditLogsInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -2177,7 +2285,8 @@ export type UserUncheckedUpdateWithoutAuthAuditLogsInput = {
 }
 
 export type UserCreateWithoutCreatedCategoriesInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -2193,7 +2302,7 @@ export type UserCreateWithoutCreatedCategoriesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -2209,6 +2318,7 @@ export type UserCreateWithoutCreatedCategoriesInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -2226,8 +2336,8 @@ export type UserCreateWithoutCreatedCategoriesInput = {
 }
 
 export type UserUncheckedCreateWithoutCreatedCategoriesInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -2243,7 +2353,7 @@ export type UserUncheckedCreateWithoutCreatedCategoriesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -2259,6 +2369,7 @@ export type UserUncheckedCreateWithoutCreatedCategoriesInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -2292,7 +2403,8 @@ export type UserUpdateToOneWithWhereWithoutCreatedCategoriesInput = {
 }
 
 export type UserUpdateWithoutCreatedCategoriesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2308,7 +2420,7 @@ export type UserUpdateWithoutCreatedCategoriesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -2324,6 +2436,7 @@ export type UserUpdateWithoutCreatedCategoriesInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -2341,8 +2454,8 @@ export type UserUpdateWithoutCreatedCategoriesInput = {
 }
 
 export type UserUncheckedUpdateWithoutCreatedCategoriesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2358,7 +2471,7 @@ export type UserUncheckedUpdateWithoutCreatedCategoriesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -2374,6 +2487,7 @@ export type UserUncheckedUpdateWithoutCreatedCategoriesInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -2391,7 +2505,8 @@ export type UserUncheckedUpdateWithoutCreatedCategoriesInput = {
 }
 
 export type UserCreateWithoutCreatedContentsInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -2407,7 +2522,7 @@ export type UserCreateWithoutCreatedContentsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -2423,6 +2538,7 @@ export type UserCreateWithoutCreatedContentsInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -2440,8 +2556,8 @@ export type UserCreateWithoutCreatedContentsInput = {
 }
 
 export type UserUncheckedCreateWithoutCreatedContentsInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -2457,7 +2573,7 @@ export type UserUncheckedCreateWithoutCreatedContentsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -2473,6 +2589,7 @@ export type UserUncheckedCreateWithoutCreatedContentsInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -2506,7 +2623,8 @@ export type UserUpdateToOneWithWhereWithoutCreatedContentsInput = {
 }
 
 export type UserUpdateWithoutCreatedContentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2522,7 +2640,7 @@ export type UserUpdateWithoutCreatedContentsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -2538,6 +2656,7 @@ export type UserUpdateWithoutCreatedContentsInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -2555,8 +2674,8 @@ export type UserUpdateWithoutCreatedContentsInput = {
 }
 
 export type UserUncheckedUpdateWithoutCreatedContentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2572,7 +2691,7 @@ export type UserUncheckedUpdateWithoutCreatedContentsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -2588,6 +2707,7 @@ export type UserUncheckedUpdateWithoutCreatedContentsInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -2605,7 +2725,8 @@ export type UserUncheckedUpdateWithoutCreatedContentsInput = {
 }
 
 export type UserCreateWithoutCreatedDerivativesInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -2621,7 +2742,7 @@ export type UserCreateWithoutCreatedDerivativesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -2638,6 +2759,7 @@ export type UserCreateWithoutCreatedDerivativesInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -2654,8 +2776,8 @@ export type UserCreateWithoutCreatedDerivativesInput = {
 }
 
 export type UserUncheckedCreateWithoutCreatedDerivativesInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -2671,7 +2793,7 @@ export type UserUncheckedCreateWithoutCreatedDerivativesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -2688,6 +2810,7 @@ export type UserUncheckedCreateWithoutCreatedDerivativesInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -2720,7 +2843,8 @@ export type UserUpdateToOneWithWhereWithoutCreatedDerivativesInput = {
 }
 
 export type UserUpdateWithoutCreatedDerivativesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2736,7 +2860,7 @@ export type UserUpdateWithoutCreatedDerivativesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -2753,6 +2877,7 @@ export type UserUpdateWithoutCreatedDerivativesInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -2769,8 +2894,8 @@ export type UserUpdateWithoutCreatedDerivativesInput = {
 }
 
 export type UserUncheckedUpdateWithoutCreatedDerivativesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2786,7 +2911,7 @@ export type UserUncheckedUpdateWithoutCreatedDerivativesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -2803,6 +2928,7 @@ export type UserUncheckedUpdateWithoutCreatedDerivativesInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -2819,7 +2945,8 @@ export type UserUncheckedUpdateWithoutCreatedDerivativesInput = {
 }
 
 export type UserCreateWithoutEmailVerificationsInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -2835,7 +2962,7 @@ export type UserCreateWithoutEmailVerificationsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -2851,6 +2978,7 @@ export type UserCreateWithoutEmailVerificationsInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -2868,8 +2996,8 @@ export type UserCreateWithoutEmailVerificationsInput = {
 }
 
 export type UserUncheckedCreateWithoutEmailVerificationsInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -2885,7 +3013,7 @@ export type UserUncheckedCreateWithoutEmailVerificationsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -2901,6 +3029,7 @@ export type UserUncheckedCreateWithoutEmailVerificationsInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -2934,7 +3063,8 @@ export type UserUpdateToOneWithWhereWithoutEmailVerificationsInput = {
 }
 
 export type UserUpdateWithoutEmailVerificationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2950,7 +3080,7 @@ export type UserUpdateWithoutEmailVerificationsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -2966,6 +3096,7 @@ export type UserUpdateWithoutEmailVerificationsInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -2983,8 +3114,8 @@ export type UserUpdateWithoutEmailVerificationsInput = {
 }
 
 export type UserUncheckedUpdateWithoutEmailVerificationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3000,7 +3131,7 @@ export type UserUncheckedUpdateWithoutEmailVerificationsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -3016,6 +3147,7 @@ export type UserUncheckedUpdateWithoutEmailVerificationsInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -3033,7 +3165,8 @@ export type UserUncheckedUpdateWithoutEmailVerificationsInput = {
 }
 
 export type UserCreateWithoutCreatedFoldersInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -3049,7 +3182,7 @@ export type UserCreateWithoutCreatedFoldersInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -3066,6 +3199,7 @@ export type UserCreateWithoutCreatedFoldersInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -3082,8 +3216,8 @@ export type UserCreateWithoutCreatedFoldersInput = {
 }
 
 export type UserUncheckedCreateWithoutCreatedFoldersInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -3099,7 +3233,7 @@ export type UserUncheckedCreateWithoutCreatedFoldersInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -3116,6 +3250,7 @@ export type UserUncheckedCreateWithoutCreatedFoldersInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -3148,7 +3283,8 @@ export type UserUpdateToOneWithWhereWithoutCreatedFoldersInput = {
 }
 
 export type UserUpdateWithoutCreatedFoldersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3164,7 +3300,7 @@ export type UserUpdateWithoutCreatedFoldersInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -3181,6 +3317,7 @@ export type UserUpdateWithoutCreatedFoldersInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -3197,8 +3334,8 @@ export type UserUpdateWithoutCreatedFoldersInput = {
 }
 
 export type UserUncheckedUpdateWithoutCreatedFoldersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3214,7 +3351,7 @@ export type UserUncheckedUpdateWithoutCreatedFoldersInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -3231,6 +3368,7 @@ export type UserUncheckedUpdateWithoutCreatedFoldersInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -3247,7 +3385,8 @@ export type UserUncheckedUpdateWithoutCreatedFoldersInput = {
 }
 
 export type UserCreateWithoutCreatedGroupsInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -3263,7 +3402,7 @@ export type UserCreateWithoutCreatedGroupsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -3279,6 +3418,7 @@ export type UserCreateWithoutCreatedGroupsInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -3296,8 +3436,8 @@ export type UserCreateWithoutCreatedGroupsInput = {
 }
 
 export type UserUncheckedCreateWithoutCreatedGroupsInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -3313,7 +3453,7 @@ export type UserUncheckedCreateWithoutCreatedGroupsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -3329,6 +3469,7 @@ export type UserUncheckedCreateWithoutCreatedGroupsInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -3362,7 +3503,8 @@ export type UserUpdateToOneWithWhereWithoutCreatedGroupsInput = {
 }
 
 export type UserUpdateWithoutCreatedGroupsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3378,7 +3520,7 @@ export type UserUpdateWithoutCreatedGroupsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -3394,6 +3536,7 @@ export type UserUpdateWithoutCreatedGroupsInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -3411,8 +3554,8 @@ export type UserUpdateWithoutCreatedGroupsInput = {
 }
 
 export type UserUncheckedUpdateWithoutCreatedGroupsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3428,7 +3571,7 @@ export type UserUncheckedUpdateWithoutCreatedGroupsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -3444,6 +3587,7 @@ export type UserUncheckedUpdateWithoutCreatedGroupsInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -3461,7 +3605,8 @@ export type UserUncheckedUpdateWithoutCreatedGroupsInput = {
 }
 
 export type UserCreateWithoutInquiryMessagesInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -3477,7 +3622,7 @@ export type UserCreateWithoutInquiryMessagesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -3494,6 +3639,7 @@ export type UserCreateWithoutInquiryMessagesInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -3510,8 +3656,8 @@ export type UserCreateWithoutInquiryMessagesInput = {
 }
 
 export type UserUncheckedCreateWithoutInquiryMessagesInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -3527,7 +3673,7 @@ export type UserUncheckedCreateWithoutInquiryMessagesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -3544,6 +3690,7 @@ export type UserUncheckedCreateWithoutInquiryMessagesInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -3576,7 +3723,8 @@ export type UserUpdateToOneWithWhereWithoutInquiryMessagesInput = {
 }
 
 export type UserUpdateWithoutInquiryMessagesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3592,7 +3740,7 @@ export type UserUpdateWithoutInquiryMessagesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -3609,6 +3757,7 @@ export type UserUpdateWithoutInquiryMessagesInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -3625,8 +3774,8 @@ export type UserUpdateWithoutInquiryMessagesInput = {
 }
 
 export type UserUncheckedUpdateWithoutInquiryMessagesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3642,7 +3791,7 @@ export type UserUncheckedUpdateWithoutInquiryMessagesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -3659,6 +3808,7 @@ export type UserUncheckedUpdateWithoutInquiryMessagesInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -3675,7 +3825,8 @@ export type UserUncheckedUpdateWithoutInquiryMessagesInput = {
 }
 
 export type UserCreateWithoutInquiryParticipantsInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -3691,7 +3842,7 @@ export type UserCreateWithoutInquiryParticipantsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -3708,6 +3859,7 @@ export type UserCreateWithoutInquiryParticipantsInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -3724,8 +3876,8 @@ export type UserCreateWithoutInquiryParticipantsInput = {
 }
 
 export type UserUncheckedCreateWithoutInquiryParticipantsInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -3741,7 +3893,7 @@ export type UserUncheckedCreateWithoutInquiryParticipantsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -3758,6 +3910,7 @@ export type UserUncheckedCreateWithoutInquiryParticipantsInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -3790,7 +3943,8 @@ export type UserUpdateToOneWithWhereWithoutInquiryParticipantsInput = {
 }
 
 export type UserUpdateWithoutInquiryParticipantsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3806,7 +3960,7 @@ export type UserUpdateWithoutInquiryParticipantsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -3823,6 +3977,7 @@ export type UserUpdateWithoutInquiryParticipantsInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -3839,8 +3994,8 @@ export type UserUpdateWithoutInquiryParticipantsInput = {
 }
 
 export type UserUncheckedUpdateWithoutInquiryParticipantsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3856,7 +4011,7 @@ export type UserUncheckedUpdateWithoutInquiryParticipantsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -3873,6 +4028,7 @@ export type UserUncheckedUpdateWithoutInquiryParticipantsInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -3889,7 +4045,8 @@ export type UserUncheckedUpdateWithoutInquiryParticipantsInput = {
 }
 
 export type UserCreateWithoutCreatedThreadsInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -3905,7 +4062,7 @@ export type UserCreateWithoutCreatedThreadsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -3922,6 +4079,7 @@ export type UserCreateWithoutCreatedThreadsInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -3938,8 +4096,8 @@ export type UserCreateWithoutCreatedThreadsInput = {
 }
 
 export type UserUncheckedCreateWithoutCreatedThreadsInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -3955,7 +4113,7 @@ export type UserUncheckedCreateWithoutCreatedThreadsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -3972,6 +4130,7 @@ export type UserUncheckedCreateWithoutCreatedThreadsInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -4004,7 +4163,8 @@ export type UserUpdateToOneWithWhereWithoutCreatedThreadsInput = {
 }
 
 export type UserUpdateWithoutCreatedThreadsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4020,7 +4180,7 @@ export type UserUpdateWithoutCreatedThreadsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -4037,6 +4197,7 @@ export type UserUpdateWithoutCreatedThreadsInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -4053,8 +4214,8 @@ export type UserUpdateWithoutCreatedThreadsInput = {
 }
 
 export type UserUncheckedUpdateWithoutCreatedThreadsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4070,7 +4231,7 @@ export type UserUncheckedUpdateWithoutCreatedThreadsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -4087,6 +4248,7 @@ export type UserUncheckedUpdateWithoutCreatedThreadsInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -4103,7 +4265,8 @@ export type UserUncheckedUpdateWithoutCreatedThreadsInput = {
 }
 
 export type UserCreateWithoutCreatedInquiriesInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -4119,7 +4282,7 @@ export type UserCreateWithoutCreatedInquiriesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -4136,6 +4299,7 @@ export type UserCreateWithoutCreatedInquiriesInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -4152,8 +4316,8 @@ export type UserCreateWithoutCreatedInquiriesInput = {
 }
 
 export type UserUncheckedCreateWithoutCreatedInquiriesInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -4169,7 +4333,7 @@ export type UserUncheckedCreateWithoutCreatedInquiriesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -4186,6 +4350,7 @@ export type UserUncheckedCreateWithoutCreatedInquiriesInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -4207,7 +4372,8 @@ export type UserCreateOrConnectWithoutCreatedInquiriesInput = {
 }
 
 export type UserCreateWithoutCustomerInquiriesInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -4223,7 +4389,7 @@ export type UserCreateWithoutCustomerInquiriesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -4240,6 +4406,7 @@ export type UserCreateWithoutCustomerInquiriesInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -4256,8 +4423,8 @@ export type UserCreateWithoutCustomerInquiriesInput = {
 }
 
 export type UserUncheckedCreateWithoutCustomerInquiriesInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -4273,7 +4440,7 @@ export type UserUncheckedCreateWithoutCustomerInquiriesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -4290,6 +4457,7 @@ export type UserUncheckedCreateWithoutCustomerInquiriesInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -4311,7 +4479,8 @@ export type UserCreateOrConnectWithoutCustomerInquiriesInput = {
 }
 
 export type UserCreateWithoutAssignedInquiriesInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -4327,7 +4496,7 @@ export type UserCreateWithoutAssignedInquiriesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -4344,6 +4513,7 @@ export type UserCreateWithoutAssignedInquiriesInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -4360,8 +4530,8 @@ export type UserCreateWithoutAssignedInquiriesInput = {
 }
 
 export type UserUncheckedCreateWithoutAssignedInquiriesInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -4377,7 +4547,7 @@ export type UserUncheckedCreateWithoutAssignedInquiriesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -4394,6 +4564,7 @@ export type UserUncheckedCreateWithoutAssignedInquiriesInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -4426,7 +4597,8 @@ export type UserUpdateToOneWithWhereWithoutCreatedInquiriesInput = {
 }
 
 export type UserUpdateWithoutCreatedInquiriesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4442,7 +4614,7 @@ export type UserUpdateWithoutCreatedInquiriesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -4459,6 +4631,7 @@ export type UserUpdateWithoutCreatedInquiriesInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -4475,8 +4648,8 @@ export type UserUpdateWithoutCreatedInquiriesInput = {
 }
 
 export type UserUncheckedUpdateWithoutCreatedInquiriesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4492,7 +4665,7 @@ export type UserUncheckedUpdateWithoutCreatedInquiriesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -4509,6 +4682,7 @@ export type UserUncheckedUpdateWithoutCreatedInquiriesInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -4536,7 +4710,8 @@ export type UserUpdateToOneWithWhereWithoutCustomerInquiriesInput = {
 }
 
 export type UserUpdateWithoutCustomerInquiriesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4552,7 +4727,7 @@ export type UserUpdateWithoutCustomerInquiriesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -4569,6 +4744,7 @@ export type UserUpdateWithoutCustomerInquiriesInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -4585,8 +4761,8 @@ export type UserUpdateWithoutCustomerInquiriesInput = {
 }
 
 export type UserUncheckedUpdateWithoutCustomerInquiriesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4602,7 +4778,7 @@ export type UserUncheckedUpdateWithoutCustomerInquiriesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -4619,6 +4795,7 @@ export type UserUncheckedUpdateWithoutCustomerInquiriesInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -4646,7 +4823,8 @@ export type UserUpdateToOneWithWhereWithoutAssignedInquiriesInput = {
 }
 
 export type UserUpdateWithoutAssignedInquiriesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4662,7 +4840,7 @@ export type UserUpdateWithoutAssignedInquiriesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -4679,6 +4857,7 @@ export type UserUpdateWithoutAssignedInquiriesInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -4695,8 +4874,8 @@ export type UserUpdateWithoutAssignedInquiriesInput = {
 }
 
 export type UserUncheckedUpdateWithoutAssignedInquiriesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4712,7 +4891,7 @@ export type UserUncheckedUpdateWithoutAssignedInquiriesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -4729,6 +4908,7 @@ export type UserUncheckedUpdateWithoutAssignedInquiriesInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -4745,7 +4925,8 @@ export type UserUncheckedUpdateWithoutAssignedInquiriesInput = {
 }
 
 export type UserCreateWithoutPasswordHistoryInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -4761,7 +4942,7 @@ export type UserCreateWithoutPasswordHistoryInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -4777,6 +4958,7 @@ export type UserCreateWithoutPasswordHistoryInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -4794,8 +4976,8 @@ export type UserCreateWithoutPasswordHistoryInput = {
 }
 
 export type UserUncheckedCreateWithoutPasswordHistoryInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -4811,7 +4993,7 @@ export type UserUncheckedCreateWithoutPasswordHistoryInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -4827,6 +5009,7 @@ export type UserUncheckedCreateWithoutPasswordHistoryInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -4860,7 +5043,8 @@ export type UserUpdateToOneWithWhereWithoutPasswordHistoryInput = {
 }
 
 export type UserUpdateWithoutPasswordHistoryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4876,7 +5060,7 @@ export type UserUpdateWithoutPasswordHistoryInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -4892,6 +5076,7 @@ export type UserUpdateWithoutPasswordHistoryInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -4909,8 +5094,8 @@ export type UserUpdateWithoutPasswordHistoryInput = {
 }
 
 export type UserUncheckedUpdateWithoutPasswordHistoryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4926,7 +5111,7 @@ export type UserUncheckedUpdateWithoutPasswordHistoryInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -4942,6 +5127,7 @@ export type UserUncheckedUpdateWithoutPasswordHistoryInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -4959,7 +5145,8 @@ export type UserUncheckedUpdateWithoutPasswordHistoryInput = {
 }
 
 export type UserCreateWithoutCreatedPoliciesInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -4975,7 +5162,7 @@ export type UserCreateWithoutCreatedPoliciesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -4992,6 +5179,7 @@ export type UserCreateWithoutCreatedPoliciesInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
   createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput
@@ -5008,8 +5196,8 @@ export type UserCreateWithoutCreatedPoliciesInput = {
 }
 
 export type UserUncheckedCreateWithoutCreatedPoliciesInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -5025,7 +5213,7 @@ export type UserUncheckedCreateWithoutCreatedPoliciesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -5042,6 +5230,7 @@ export type UserUncheckedCreateWithoutCreatedPoliciesInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
   createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput
@@ -5074,7 +5263,8 @@ export type UserUpdateToOneWithWhereWithoutCreatedPoliciesInput = {
 }
 
 export type UserUpdateWithoutCreatedPoliciesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5090,7 +5280,7 @@ export type UserUpdateWithoutCreatedPoliciesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -5107,6 +5297,7 @@ export type UserUpdateWithoutCreatedPoliciesInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
   createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput
@@ -5123,8 +5314,8 @@ export type UserUpdateWithoutCreatedPoliciesInput = {
 }
 
 export type UserUncheckedUpdateWithoutCreatedPoliciesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5140,7 +5331,7 @@ export type UserUncheckedUpdateWithoutCreatedPoliciesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -5157,6 +5348,7 @@ export type UserUncheckedUpdateWithoutCreatedPoliciesInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
   createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -5173,7 +5365,8 @@ export type UserUncheckedUpdateWithoutCreatedPoliciesInput = {
 }
 
 export type UserCreateWithoutProfilesInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -5189,7 +5382,7 @@ export type UserCreateWithoutProfilesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
   reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
@@ -5205,6 +5398,7 @@ export type UserCreateWithoutProfilesInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -5222,8 +5416,8 @@ export type UserCreateWithoutProfilesInput = {
 }
 
 export type UserUncheckedCreateWithoutProfilesInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -5239,7 +5433,7 @@ export type UserUncheckedCreateWithoutProfilesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
   reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
@@ -5255,6 +5449,7 @@ export type UserUncheckedCreateWithoutProfilesInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -5288,7 +5483,8 @@ export type UserUpdateToOneWithWhereWithoutProfilesInput = {
 }
 
 export type UserUpdateWithoutProfilesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5304,7 +5500,228 @@ export type UserUpdateWithoutProfilesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
+  tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
+  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
+  classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
+  associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
+  passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput
+  createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput
+  createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput
+  createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
+  createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
+  createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
+  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
+  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
+  reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
+  createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
+  createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
+  createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput
+  createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput
+  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput
+  createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput
+  createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput
+  customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput
+  assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput
+  createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput
+  inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
+  inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
+  createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutProfilesInput = {
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
+  classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
+  associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
+  passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput
+  createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
+  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
+  createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput
+  customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput
+  assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput
+  createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput
+  inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
+  inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
+  createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutInstructedProgramsInput = {
+  userId?: string
+  id?: bigint | number
+  updatedAt?: Date | string | null
+  createdAt?: Date | string
+  removedAt?: Date | string | null
+  phone: string
+  name: string
+  email: string
+  password: string
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  isPermanentlyLocked?: boolean
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  lastLoginIp?: string | null
+  isActive?: boolean
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
+  profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
+  tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
+  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
+  classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
+  associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
+  passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput
+  createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput
+  createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput
+  createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
+  createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
+  createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
+  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
+  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
+  createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
+  createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
+  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput
+  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput
+  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput
+  createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput
+  createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput
+  customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput
+  assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput
+  createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput
+  inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
+  inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
+  createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutInstructedProgramsInput = {
+  userId?: string
+  id?: bigint | number
+  updatedAt?: Date | string | null
+  createdAt?: Date | string
+  removedAt?: Date | string | null
+  phone: string
+  name: string
+  email: string
+  password: string
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  isPermanentlyLocked?: boolean
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  lastLoginIp?: string | null
+  isActive?: boolean
+  currentTenantId?: bigint | number | null
+  profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
+  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
+  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
+  classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
+  associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
+  passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput
+  createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput
+  createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
+  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
+  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
+  createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
+  createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput
+  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput
+  customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput
+  assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput
+  createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput
+  inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
+  inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
+  createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutInstructedProgramsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInstructedProgramsInput, Prisma.UserUncheckedCreateWithoutInstructedProgramsInput>
+}
+
+export type UserUpsertWithoutInstructedProgramsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInstructedProgramsInput, Prisma.UserUncheckedUpdateWithoutInstructedProgramsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInstructedProgramsInput, Prisma.UserUncheckedCreateWithoutInstructedProgramsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutInstructedProgramsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInstructedProgramsInput, Prisma.UserUncheckedUpdateWithoutInstructedProgramsInput>
+}
+
+export type UserUpdateWithoutInstructedProgramsInput = {
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
+  profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
   reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
@@ -5336,9 +5753,9 @@ export type UserUpdateWithoutProfilesInput = {
   createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput
 }
 
-export type UserUncheckedUpdateWithoutProfilesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+export type UserUncheckedUpdateWithoutInstructedProgramsInput = {
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5354,7 +5771,8 @@ export type UserUncheckedUpdateWithoutProfilesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
   reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
@@ -5387,7 +5805,8 @@ export type UserUncheckedUpdateWithoutProfilesInput = {
 }
 
 export type UserCreateWithoutCreatedReservationsInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -5403,7 +5822,7 @@ export type UserCreateWithoutCreatedReservationsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -5420,6 +5839,7 @@ export type UserCreateWithoutCreatedReservationsInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput
@@ -5436,8 +5856,8 @@ export type UserCreateWithoutCreatedReservationsInput = {
 }
 
 export type UserUncheckedCreateWithoutCreatedReservationsInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -5453,7 +5873,7 @@ export type UserUncheckedCreateWithoutCreatedReservationsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -5470,6 +5890,7 @@ export type UserUncheckedCreateWithoutCreatedReservationsInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput
@@ -5491,7 +5912,8 @@ export type UserCreateOrConnectWithoutCreatedReservationsInput = {
 }
 
 export type UserCreateWithoutReservationsInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -5507,7 +5929,7 @@ export type UserCreateWithoutReservationsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -5524,6 +5946,7 @@ export type UserCreateWithoutReservationsInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
   createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput
@@ -5540,8 +5963,8 @@ export type UserCreateWithoutReservationsInput = {
 }
 
 export type UserUncheckedCreateWithoutReservationsInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -5557,7 +5980,7 @@ export type UserUncheckedCreateWithoutReservationsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -5574,6 +5997,7 @@ export type UserUncheckedCreateWithoutReservationsInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
   createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput
@@ -5606,7 +6030,8 @@ export type UserUpdateToOneWithWhereWithoutCreatedReservationsInput = {
 }
 
 export type UserUpdateWithoutCreatedReservationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5622,7 +6047,7 @@ export type UserUpdateWithoutCreatedReservationsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -5639,6 +6064,7 @@ export type UserUpdateWithoutCreatedReservationsInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput
@@ -5655,8 +6081,8 @@ export type UserUpdateWithoutCreatedReservationsInput = {
 }
 
 export type UserUncheckedUpdateWithoutCreatedReservationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5672,7 +6098,7 @@ export type UserUncheckedUpdateWithoutCreatedReservationsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -5689,6 +6115,7 @@ export type UserUncheckedUpdateWithoutCreatedReservationsInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -5716,7 +6143,8 @@ export type UserUpdateToOneWithWhereWithoutReservationsInput = {
 }
 
 export type UserUpdateWithoutReservationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5732,7 +6160,7 @@ export type UserUpdateWithoutReservationsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -5749,6 +6177,7 @@ export type UserUpdateWithoutReservationsInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
   createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput
@@ -5765,8 +6194,8 @@ export type UserUpdateWithoutReservationsInput = {
 }
 
 export type UserUncheckedUpdateWithoutReservationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5782,7 +6211,7 @@ export type UserUncheckedUpdateWithoutReservationsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -5799,6 +6228,7 @@ export type UserUncheckedUpdateWithoutReservationsInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
   createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -5815,7 +6245,8 @@ export type UserUncheckedUpdateWithoutReservationsInput = {
 }
 
 export type UserCreateWithoutCreatedRoutinesInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -5831,7 +6262,7 @@ export type UserCreateWithoutCreatedRoutinesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -5847,6 +6278,7 @@ export type UserCreateWithoutCreatedRoutinesInput = {
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -5864,8 +6296,8 @@ export type UserCreateWithoutCreatedRoutinesInput = {
 }
 
 export type UserUncheckedCreateWithoutCreatedRoutinesInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -5881,7 +6313,7 @@ export type UserUncheckedCreateWithoutCreatedRoutinesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -5897,6 +6329,7 @@ export type UserUncheckedCreateWithoutCreatedRoutinesInput = {
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -5930,7 +6363,8 @@ export type UserUpdateToOneWithWhereWithoutCreatedRoutinesInput = {
 }
 
 export type UserUpdateWithoutCreatedRoutinesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5946,7 +6380,7 @@ export type UserUpdateWithoutCreatedRoutinesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -5962,6 +6396,7 @@ export type UserUpdateWithoutCreatedRoutinesInput = {
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -5979,8 +6414,8 @@ export type UserUpdateWithoutCreatedRoutinesInput = {
 }
 
 export type UserUncheckedUpdateWithoutCreatedRoutinesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5996,7 +6431,7 @@ export type UserUncheckedUpdateWithoutCreatedRoutinesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -6012,6 +6447,7 @@ export type UserUncheckedUpdateWithoutCreatedRoutinesInput = {
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -6029,7 +6465,8 @@ export type UserUncheckedUpdateWithoutCreatedRoutinesInput = {
 }
 
 export type UserCreateWithoutCreatedSafeWalletsInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -6045,7 +6482,7 @@ export type UserCreateWithoutCreatedSafeWalletsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -6061,6 +6498,7 @@ export type UserCreateWithoutCreatedSafeWalletsInput = {
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -6078,8 +6516,8 @@ export type UserCreateWithoutCreatedSafeWalletsInput = {
 }
 
 export type UserUncheckedCreateWithoutCreatedSafeWalletsInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -6095,7 +6533,7 @@ export type UserUncheckedCreateWithoutCreatedSafeWalletsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -6111,6 +6549,7 @@ export type UserUncheckedCreateWithoutCreatedSafeWalletsInput = {
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -6144,7 +6583,8 @@ export type UserUpdateToOneWithWhereWithoutCreatedSafeWalletsInput = {
 }
 
 export type UserUpdateWithoutCreatedSafeWalletsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6160,7 +6600,7 @@ export type UserUpdateWithoutCreatedSafeWalletsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -6176,6 +6616,7 @@ export type UserUpdateWithoutCreatedSafeWalletsInput = {
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -6193,8 +6634,8 @@ export type UserUpdateWithoutCreatedSafeWalletsInput = {
 }
 
 export type UserUncheckedUpdateWithoutCreatedSafeWalletsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6210,7 +6651,7 @@ export type UserUncheckedUpdateWithoutCreatedSafeWalletsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -6226,6 +6667,7 @@ export type UserUncheckedUpdateWithoutCreatedSafeWalletsInput = {
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -6243,7 +6685,8 @@ export type UserUncheckedUpdateWithoutCreatedSafeWalletsInput = {
 }
 
 export type UserCreateWithoutCreatedTasksInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -6259,7 +6702,7 @@ export type UserCreateWithoutCreatedTasksInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -6275,6 +6718,7 @@ export type UserCreateWithoutCreatedTasksInput = {
   createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -6292,8 +6736,8 @@ export type UserCreateWithoutCreatedTasksInput = {
 }
 
 export type UserUncheckedCreateWithoutCreatedTasksInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -6309,7 +6753,7 @@ export type UserUncheckedCreateWithoutCreatedTasksInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -6325,6 +6769,7 @@ export type UserUncheckedCreateWithoutCreatedTasksInput = {
   createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -6358,7 +6803,8 @@ export type UserUpdateToOneWithWhereWithoutCreatedTasksInput = {
 }
 
 export type UserUpdateWithoutCreatedTasksInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6374,7 +6820,7 @@ export type UserUpdateWithoutCreatedTasksInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -6390,6 +6836,7 @@ export type UserUpdateWithoutCreatedTasksInput = {
   createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -6407,8 +6854,8 @@ export type UserUpdateWithoutCreatedTasksInput = {
 }
 
 export type UserUncheckedUpdateWithoutCreatedTasksInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6424,7 +6871,7 @@ export type UserUncheckedUpdateWithoutCreatedTasksInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -6440,6 +6887,7 @@ export type UserUncheckedUpdateWithoutCreatedTasksInput = {
   createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -6457,7 +6905,8 @@ export type UserUncheckedUpdateWithoutCreatedTasksInput = {
 }
 
 export type UserCreateWithoutTenantAccessRequestsInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -6473,7 +6922,7 @@ export type UserCreateWithoutTenantAccessRequestsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
@@ -6489,6 +6938,7 @@ export type UserCreateWithoutTenantAccessRequestsInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -6506,8 +6956,8 @@ export type UserCreateWithoutTenantAccessRequestsInput = {
 }
 
 export type UserUncheckedCreateWithoutTenantAccessRequestsInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -6523,7 +6973,7 @@ export type UserUncheckedCreateWithoutTenantAccessRequestsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
@@ -6539,6 +6989,7 @@ export type UserUncheckedCreateWithoutTenantAccessRequestsInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -6561,7 +7012,8 @@ export type UserCreateOrConnectWithoutTenantAccessRequestsInput = {
 }
 
 export type UserCreateWithoutReviewedTenantAccessRequestsInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -6577,7 +7029,7 @@ export type UserCreateWithoutReviewedTenantAccessRequestsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -6593,6 +7045,7 @@ export type UserCreateWithoutReviewedTenantAccessRequestsInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -6610,8 +7063,8 @@ export type UserCreateWithoutReviewedTenantAccessRequestsInput = {
 }
 
 export type UserUncheckedCreateWithoutReviewedTenantAccessRequestsInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -6627,7 +7080,7 @@ export type UserUncheckedCreateWithoutReviewedTenantAccessRequestsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -6643,6 +7096,7 @@ export type UserUncheckedCreateWithoutReviewedTenantAccessRequestsInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -6676,7 +7130,8 @@ export type UserUpdateToOneWithWhereWithoutTenantAccessRequestsInput = {
 }
 
 export type UserUpdateWithoutTenantAccessRequestsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6692,7 +7147,7 @@ export type UserUpdateWithoutTenantAccessRequestsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
@@ -6708,6 +7163,7 @@ export type UserUpdateWithoutTenantAccessRequestsInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -6725,8 +7181,8 @@ export type UserUpdateWithoutTenantAccessRequestsInput = {
 }
 
 export type UserUncheckedUpdateWithoutTenantAccessRequestsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6742,7 +7198,7 @@ export type UserUncheckedUpdateWithoutTenantAccessRequestsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
@@ -6758,6 +7214,7 @@ export type UserUncheckedUpdateWithoutTenantAccessRequestsInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -6786,7 +7243,8 @@ export type UserUpdateToOneWithWhereWithoutReviewedTenantAccessRequestsInput = {
 }
 
 export type UserUpdateWithoutReviewedTenantAccessRequestsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6802,7 +7260,7 @@ export type UserUpdateWithoutReviewedTenantAccessRequestsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -6818,6 +7276,7 @@ export type UserUpdateWithoutReviewedTenantAccessRequestsInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -6835,8 +7294,8 @@ export type UserUpdateWithoutReviewedTenantAccessRequestsInput = {
 }
 
 export type UserUncheckedUpdateWithoutReviewedTenantAccessRequestsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6852,7 +7311,7 @@ export type UserUncheckedUpdateWithoutReviewedTenantAccessRequestsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -6868,6 +7327,7 @@ export type UserUncheckedUpdateWithoutReviewedTenantAccessRequestsInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -6885,7 +7345,8 @@ export type UserUncheckedUpdateWithoutReviewedTenantAccessRequestsInput = {
 }
 
 export type UserCreateWithoutTenantsInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -6901,7 +7362,7 @@ export type UserCreateWithoutTenantsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
   reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
@@ -6917,6 +7378,7 @@ export type UserCreateWithoutTenantsInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -6934,8 +7396,8 @@ export type UserCreateWithoutTenantsInput = {
 }
 
 export type UserUncheckedCreateWithoutTenantsInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -6951,7 +7413,7 @@ export type UserUncheckedCreateWithoutTenantsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
   reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
@@ -6967,6 +7429,7 @@ export type UserUncheckedCreateWithoutTenantsInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -6988,6 +7451,118 @@ export type UserCreateOrConnectWithoutTenantsInput = {
   create: Prisma.XOR<Prisma.UserCreateWithoutTenantsInput, Prisma.UserUncheckedCreateWithoutTenantsInput>
 }
 
+export type UserCreateWithoutCurrentTenantInput = {
+  userId?: string
+  id?: bigint | number
+  updatedAt?: Date | string | null
+  createdAt?: Date | string
+  removedAt?: Date | string | null
+  phone: string
+  name: string
+  email: string
+  password: string
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  isPermanentlyLocked?: boolean
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  lastLoginIp?: string | null
+  isActive?: boolean
+  profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
+  tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
+  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutReviewerInput
+  classification?: Prisma.UserClassificationCreateNestedOneWithoutUserInput
+  associations?: Prisma.UserAssociationCreateNestedManyWithoutUserInput
+  passwordHistory?: Prisma.PasswordHistoryCreateNestedManyWithoutUserInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  emailVerifications?: Prisma.EmailVerificationCreateNestedManyWithoutVerifiedUserInput
+  createdCategories?: Prisma.CategoryCreateNestedManyWithoutCreatedByInput
+  createdGroups?: Prisma.GroupCreateNestedManyWithoutCreatedByInput
+  createdContents?: Prisma.ContentCreateNestedManyWithoutCreatedByInput
+  createdTimelines?: Prisma.TimelineCreateNestedManyWithoutCreatedByInput
+  createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
+  createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
+  createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
+  reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
+  createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
+  createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
+  createdAssets?: Prisma.AssetCreateNestedManyWithoutCreatedByInput
+  createdFolders?: Prisma.FolderCreateNestedManyWithoutCreatedByInput
+  createdAlbums?: Prisma.AlbumCreateNestedManyWithoutCreatedByInput
+  createdAlbumEntries?: Prisma.AlbumEntryCreateNestedManyWithoutCreatedByInput
+  createdDerivatives?: Prisma.DerivativeCreateNestedManyWithoutCreatedByInput
+  customerInquiries?: Prisma.InquiryCreateNestedManyWithoutCustomerInput
+  assignedInquiries?: Prisma.InquiryCreateNestedManyWithoutAssigneeInput
+  createdInquiries?: Prisma.InquiryCreateNestedManyWithoutCreatedByInput
+  inquiryMessages?: Prisma.InquiryMessageCreateNestedManyWithoutSenderInput
+  inquiryParticipants?: Prisma.InquiryParticipantCreateNestedManyWithoutUserInput
+  createdThreads?: Prisma.InquiryThreadCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutCurrentTenantInput = {
+  userId?: string
+  id?: bigint | number
+  updatedAt?: Date | string | null
+  createdAt?: Date | string
+  removedAt?: Date | string | null
+  phone: string
+  name: string
+  email: string
+  password: string
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  isPermanentlyLocked?: boolean
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  lastLoginIp?: string | null
+  isActive?: boolean
+  profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
+  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
+  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutReviewerInput
+  classification?: Prisma.UserClassificationUncheckedCreateNestedOneWithoutUserInput
+  associations?: Prisma.UserAssociationUncheckedCreateNestedManyWithoutUserInput
+  passwordHistory?: Prisma.PasswordHistoryUncheckedCreateNestedManyWithoutUserInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedCreateNestedManyWithoutVerifiedUserInput
+  createdCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutCreatedByInput
+  createdGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContents?: Prisma.ContentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTimelines?: Prisma.TimelineUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
+  createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
+  createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
+  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
+  createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
+  createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatedByInput
+  createdFolders?: Prisma.FolderUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAlbums?: Prisma.AlbumUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAlbumEntries?: Prisma.AlbumEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDerivatives?: Prisma.DerivativeUncheckedCreateNestedManyWithoutCreatedByInput
+  customerInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCustomerInput
+  assignedInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutAssigneeInput
+  createdInquiries?: Prisma.InquiryUncheckedCreateNestedManyWithoutCreatedByInput
+  inquiryMessages?: Prisma.InquiryMessageUncheckedCreateNestedManyWithoutSenderInput
+  inquiryParticipants?: Prisma.InquiryParticipantUncheckedCreateNestedManyWithoutUserInput
+  createdThreads?: Prisma.InquiryThreadUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutCurrentTenantInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCurrentTenantInput, Prisma.UserUncheckedCreateWithoutCurrentTenantInput>
+}
+
+export type UserCreateManyCurrentTenantInputEnvelope = {
+  data: Prisma.UserCreateManyCurrentTenantInput | Prisma.UserCreateManyCurrentTenantInput[]
+  skipDuplicates?: boolean
+}
+
 export type UserUpsertWithoutTenantsInput = {
   update: Prisma.XOR<Prisma.UserUpdateWithoutTenantsInput, Prisma.UserUncheckedUpdateWithoutTenantsInput>
   create: Prisma.XOR<Prisma.UserCreateWithoutTenantsInput, Prisma.UserUncheckedCreateWithoutTenantsInput>
@@ -7000,7 +7575,8 @@ export type UserUpdateToOneWithWhereWithoutTenantsInput = {
 }
 
 export type UserUpdateWithoutTenantsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7016,7 +7592,7 @@ export type UserUpdateWithoutTenantsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
   reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
@@ -7032,6 +7608,7 @@ export type UserUpdateWithoutTenantsInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -7049,8 +7626,8 @@ export type UserUpdateWithoutTenantsInput = {
 }
 
 export type UserUncheckedUpdateWithoutTenantsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7066,7 +7643,7 @@ export type UserUncheckedUpdateWithoutTenantsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
   reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
@@ -7082,6 +7659,7 @@ export type UserUncheckedUpdateWithoutTenantsInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -7098,8 +7676,49 @@ export type UserUncheckedUpdateWithoutTenantsInput = {
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
+export type UserUpsertWithWhereUniqueWithoutCurrentTenantInput = {
+  where: Prisma.UserWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCurrentTenantInput, Prisma.UserUncheckedUpdateWithoutCurrentTenantInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCurrentTenantInput, Prisma.UserUncheckedCreateWithoutCurrentTenantInput>
+}
+
+export type UserUpdateWithWhereUniqueWithoutCurrentTenantInput = {
+  where: Prisma.UserWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCurrentTenantInput, Prisma.UserUncheckedUpdateWithoutCurrentTenantInput>
+}
+
+export type UserUpdateManyWithWhereWithoutCurrentTenantInput = {
+  where: Prisma.UserScalarWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutCurrentTenantInput>
+}
+
+export type UserScalarWhereInput = {
+  AND?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  OR?: Prisma.UserScalarWhereInput[]
+  NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  userId?: Prisma.StringFilter<"User"> | string
+  id?: Prisma.BigIntFilter<"User"> | bigint | number
+  updatedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  removedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  phone?: Prisma.StringFilter<"User"> | string
+  name?: Prisma.StringFilter<"User"> | string
+  email?: Prisma.StringFilter<"User"> | string
+  password?: Prisma.StringFilter<"User"> | string
+  failedLoginAttempts?: Prisma.IntFilter<"User"> | number
+  lockedUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  isPermanentlyLocked?: Prisma.BoolFilter<"User"> | boolean
+  mustChangePassword?: Prisma.BoolFilter<"User"> | boolean
+  passwordChangedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  lastLoginIp?: Prisma.StringNullableFilter<"User"> | string | null
+  isActive?: Prisma.BoolFilter<"User"> | boolean
+  currentTenantId?: Prisma.BigIntNullableFilter<"User"> | bigint | number | null
+}
+
 export type UserCreateWithoutCreatedTimelinesInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -7115,7 +7734,7 @@ export type UserCreateWithoutCreatedTimelinesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -7131,6 +7750,7 @@ export type UserCreateWithoutCreatedTimelinesInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -7148,8 +7768,8 @@ export type UserCreateWithoutCreatedTimelinesInput = {
 }
 
 export type UserUncheckedCreateWithoutCreatedTimelinesInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -7165,7 +7785,7 @@ export type UserUncheckedCreateWithoutCreatedTimelinesInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -7181,6 +7801,7 @@ export type UserUncheckedCreateWithoutCreatedTimelinesInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -7214,7 +7835,8 @@ export type UserUpdateToOneWithWhereWithoutCreatedTimelinesInput = {
 }
 
 export type UserUpdateWithoutCreatedTimelinesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7230,7 +7852,7 @@ export type UserUpdateWithoutCreatedTimelinesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -7246,6 +7868,7 @@ export type UserUpdateWithoutCreatedTimelinesInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -7263,8 +7886,8 @@ export type UserUpdateWithoutCreatedTimelinesInput = {
 }
 
 export type UserUncheckedUpdateWithoutCreatedTimelinesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7280,7 +7903,7 @@ export type UserUncheckedUpdateWithoutCreatedTimelinesInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -7296,6 +7919,7 @@ export type UserUncheckedUpdateWithoutCreatedTimelinesInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -7313,7 +7937,8 @@ export type UserUncheckedUpdateWithoutCreatedTimelinesInput = {
 }
 
 export type UserCreateWithoutAssociationsInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -7329,7 +7954,7 @@ export type UserCreateWithoutAssociationsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -7345,6 +7970,7 @@ export type UserCreateWithoutAssociationsInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -7362,8 +7988,8 @@ export type UserCreateWithoutAssociationsInput = {
 }
 
 export type UserUncheckedCreateWithoutAssociationsInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -7379,7 +8005,7 @@ export type UserUncheckedCreateWithoutAssociationsInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -7395,6 +8021,7 @@ export type UserUncheckedCreateWithoutAssociationsInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -7428,7 +8055,8 @@ export type UserUpdateToOneWithWhereWithoutAssociationsInput = {
 }
 
 export type UserUpdateWithoutAssociationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7444,7 +8072,7 @@ export type UserUpdateWithoutAssociationsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -7460,6 +8088,7 @@ export type UserUpdateWithoutAssociationsInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -7477,8 +8106,8 @@ export type UserUpdateWithoutAssociationsInput = {
 }
 
 export type UserUncheckedUpdateWithoutAssociationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7494,7 +8123,7 @@ export type UserUncheckedUpdateWithoutAssociationsInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -7510,6 +8139,7 @@ export type UserUncheckedUpdateWithoutAssociationsInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -7527,7 +8157,8 @@ export type UserUncheckedUpdateWithoutAssociationsInput = {
 }
 
 export type UserCreateWithoutClassificationInput = {
-  id?: string
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -7543,7 +8174,7 @@ export type UserCreateWithoutClassificationInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenant?: Prisma.TenantCreateNestedOneWithoutCurrentUsersInput
   profiles?: Prisma.ProfileCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestCreateNestedManyWithoutRequesterInput
@@ -7559,6 +8190,7 @@ export type UserCreateWithoutClassificationInput = {
   createdTasks?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationCreateNestedManyWithoutCreatedByInput
@@ -7576,8 +8208,8 @@ export type UserCreateWithoutClassificationInput = {
 }
 
 export type UserUncheckedCreateWithoutClassificationInput = {
-  id?: string
-  seq?: number
+  userId?: string
+  id?: bigint | number
   updatedAt?: Date | string | null
   createdAt?: Date | string
   removedAt?: Date | string | null
@@ -7593,7 +8225,7 @@ export type UserUncheckedCreateWithoutClassificationInput = {
   lastLoginAt?: Date | string | null
   lastLoginIp?: string | null
   isActive?: boolean
-  currentTenantId?: string | null
+  currentTenantId?: bigint | number | null
   profiles?: Prisma.ProfileUncheckedCreateNestedManyWithoutUserInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutUserInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -7609,6 +8241,7 @@ export type UserUncheckedCreateWithoutClassificationInput = {
   createdTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedCreateNestedManyWithoutCreatedByInput
   createdRoutines?: Prisma.RoutineUncheckedCreateNestedManyWithoutCreatedByInput
+  instructedPrograms?: Prisma.ProgramUncheckedCreateNestedManyWithoutInstructorInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   createdPolicies?: Prisma.PolicyUncheckedCreateNestedManyWithoutCreatedByInput
   createdReservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutCreatedByInput
@@ -7642,7 +8275,8 @@ export type UserUpdateToOneWithWhereWithoutClassificationInput = {
 }
 
 export type UserUpdateWithoutClassificationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7658,7 +8292,7 @@ export type UserUpdateWithoutClassificationInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenant?: Prisma.TenantUpdateOneWithoutCurrentUsersNestedInput
   profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
@@ -7674,6 +8308,7 @@ export type UserUpdateWithoutClassificationInput = {
   createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
@@ -7691,8 +8326,8 @@ export type UserUpdateWithoutClassificationInput = {
 }
 
 export type UserUncheckedUpdateWithoutClassificationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7708,7 +8343,7 @@ export type UserUncheckedUpdateWithoutClassificationInput = {
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  currentTenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentTenantId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
   tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -7724,6 +8359,7 @@ export type UserUncheckedUpdateWithoutClassificationInput = {
   createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
   createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
   createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -7738,6 +8374,148 @@ export type UserUncheckedUpdateWithoutClassificationInput = {
   inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
   inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
   createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateManyCurrentTenantInput = {
+  userId?: string
+  id?: bigint | number
+  updatedAt?: Date | string | null
+  createdAt?: Date | string
+  removedAt?: Date | string | null
+  phone: string
+  name: string
+  email: string
+  password: string
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  isPermanentlyLocked?: boolean
+  mustChangePassword?: boolean
+  passwordChangedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  lastLoginIp?: string | null
+  isActive?: boolean
+}
+
+export type UserUpdateWithoutCurrentTenantInput = {
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profiles?: Prisma.ProfileUpdateManyWithoutUserNestedInput
+  tenants?: Prisma.TenantUpdateManyWithoutUserNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutRequesterNestedInput
+  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUpdateManyWithoutReviewerNestedInput
+  classification?: Prisma.UserClassificationUpdateOneWithoutUserNestedInput
+  associations?: Prisma.UserAssociationUpdateManyWithoutUserNestedInput
+  passwordHistory?: Prisma.PasswordHistoryUpdateManyWithoutUserNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  emailVerifications?: Prisma.EmailVerificationUpdateManyWithoutVerifiedUserNestedInput
+  createdCategories?: Prisma.CategoryUpdateManyWithoutCreatedByNestedInput
+  createdGroups?: Prisma.GroupUpdateManyWithoutCreatedByNestedInput
+  createdContents?: Prisma.ContentUpdateManyWithoutCreatedByNestedInput
+  createdTimelines?: Prisma.TimelineUpdateManyWithoutCreatedByNestedInput
+  createdTasks?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
+  createdSafeWallets?: Prisma.SafeWalletUpdateManyWithoutCreatedByNestedInput
+  createdRoutines?: Prisma.RoutineUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUpdateManyWithoutInstructorNestedInput
+  reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
+  createdPolicies?: Prisma.PolicyUpdateManyWithoutCreatedByNestedInput
+  createdReservations?: Prisma.ReservationUpdateManyWithoutCreatedByNestedInput
+  createdAssets?: Prisma.AssetUpdateManyWithoutCreatedByNestedInput
+  createdFolders?: Prisma.FolderUpdateManyWithoutCreatedByNestedInput
+  createdAlbums?: Prisma.AlbumUpdateManyWithoutCreatedByNestedInput
+  createdAlbumEntries?: Prisma.AlbumEntryUpdateManyWithoutCreatedByNestedInput
+  createdDerivatives?: Prisma.DerivativeUpdateManyWithoutCreatedByNestedInput
+  customerInquiries?: Prisma.InquiryUpdateManyWithoutCustomerNestedInput
+  assignedInquiries?: Prisma.InquiryUpdateManyWithoutAssigneeNestedInput
+  createdInquiries?: Prisma.InquiryUpdateManyWithoutCreatedByNestedInput
+  inquiryMessages?: Prisma.InquiryMessageUpdateManyWithoutSenderNestedInput
+  inquiryParticipants?: Prisma.InquiryParticipantUpdateManyWithoutUserNestedInput
+  createdThreads?: Prisma.InquiryThreadUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCurrentTenantInput = {
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  profiles?: Prisma.ProfileUncheckedUpdateManyWithoutUserNestedInput
+  tenants?: Prisma.TenantUncheckedUpdateManyWithoutUserNestedInput
+  tenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  reviewedTenantAccessRequests?: Prisma.TenantAccessRequestUncheckedUpdateManyWithoutReviewerNestedInput
+  classification?: Prisma.UserClassificationUncheckedUpdateOneWithoutUserNestedInput
+  associations?: Prisma.UserAssociationUncheckedUpdateManyWithoutUserNestedInput
+  passwordHistory?: Prisma.PasswordHistoryUncheckedUpdateManyWithoutUserNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  emailVerifications?: Prisma.EmailVerificationUncheckedUpdateManyWithoutVerifiedUserNestedInput
+  createdCategories?: Prisma.CategoryUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdGroups?: Prisma.GroupUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContents?: Prisma.ContentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTimelines?: Prisma.TimelineUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTasks?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdSafeWallets?: Prisma.SafeWalletUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdRoutines?: Prisma.RoutineUncheckedUpdateManyWithoutCreatedByNestedInput
+  instructedPrograms?: Prisma.ProgramUncheckedUpdateManyWithoutInstructorNestedInput
+  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
+  createdPolicies?: Prisma.PolicyUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdReservations?: Prisma.ReservationUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAssets?: Prisma.AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdFolders?: Prisma.FolderUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAlbums?: Prisma.AlbumUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAlbumEntries?: Prisma.AlbumEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDerivatives?: Prisma.DerivativeUncheckedUpdateManyWithoutCreatedByNestedInput
+  customerInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCustomerNestedInput
+  assignedInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutAssigneeNestedInput
+  createdInquiries?: Prisma.InquiryUncheckedUpdateManyWithoutCreatedByNestedInput
+  inquiryMessages?: Prisma.InquiryMessageUncheckedUpdateManyWithoutSenderNestedInput
+  inquiryParticipants?: Prisma.InquiryParticipantUncheckedUpdateManyWithoutUserNestedInput
+  createdThreads?: Prisma.InquiryThreadUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateManyWithoutCurrentTenantInput = {
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPermanentlyLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginIp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -7761,6 +8539,7 @@ export type UserCountOutputType = {
   createdTasks: number
   createdSafeWallets: number
   createdRoutines: number
+  instructedPrograms: number
   reservations: number
   createdPolicies: number
   createdReservations: number
@@ -7793,6 +8572,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   createdTasks?: boolean | UserCountOutputTypeCountCreatedTasksArgs
   createdSafeWallets?: boolean | UserCountOutputTypeCountCreatedSafeWalletsArgs
   createdRoutines?: boolean | UserCountOutputTypeCountCreatedRoutinesArgs
+  instructedPrograms?: boolean | UserCountOutputTypeCountInstructedProgramsArgs
   reservations?: boolean | UserCountOutputTypeCountReservationsArgs
   createdPolicies?: boolean | UserCountOutputTypeCountCreatedPoliciesArgs
   createdReservations?: boolean | UserCountOutputTypeCountCreatedReservationsArgs
@@ -7927,6 +8707,13 @@ export type UserCountOutputTypeCountCreatedRoutinesArgs<ExtArgs extends runtime.
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountInstructedProgramsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProgramWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountReservationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ReservationWhereInput
 }
@@ -8024,8 +8811,8 @@ export type UserCountOutputTypeCountCreatedThreadsArgs<ExtArgs extends runtime.T
 
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  userId?: boolean
   id?: boolean
-  seq?: boolean
   updatedAt?: boolean
   createdAt?: boolean
   removedAt?: boolean
@@ -8042,6 +8829,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   lastLoginIp?: boolean
   isActive?: boolean
   currentTenantId?: boolean
+  currentTenant?: boolean | Prisma.User$currentTenantArgs<ExtArgs>
   profiles?: boolean | Prisma.User$profilesArgs<ExtArgs>
   tenants?: boolean | Prisma.User$tenantsArgs<ExtArgs>
   tenantAccessRequests?: boolean | Prisma.User$tenantAccessRequestsArgs<ExtArgs>
@@ -8058,6 +8846,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdTasks?: boolean | Prisma.User$createdTasksArgs<ExtArgs>
   createdSafeWallets?: boolean | Prisma.User$createdSafeWalletsArgs<ExtArgs>
   createdRoutines?: boolean | Prisma.User$createdRoutinesArgs<ExtArgs>
+  instructedPrograms?: boolean | Prisma.User$instructedProgramsArgs<ExtArgs>
   reservations?: boolean | Prisma.User$reservationsArgs<ExtArgs>
   createdPolicies?: boolean | Prisma.User$createdPoliciesArgs<ExtArgs>
   createdReservations?: boolean | Prisma.User$createdReservationsArgs<ExtArgs>
@@ -8076,8 +8865,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  userId?: boolean
   id?: boolean
-  seq?: boolean
   updatedAt?: boolean
   createdAt?: boolean
   removedAt?: boolean
@@ -8094,11 +8883,12 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   lastLoginIp?: boolean
   isActive?: boolean
   currentTenantId?: boolean
+  currentTenant?: boolean | Prisma.User$currentTenantArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  userId?: boolean
   id?: boolean
-  seq?: boolean
   updatedAt?: boolean
   createdAt?: boolean
   removedAt?: boolean
@@ -8115,11 +8905,12 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   lastLoginIp?: boolean
   isActive?: boolean
   currentTenantId?: boolean
+  currentTenant?: boolean | Prisma.User$currentTenantArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
+  userId?: boolean
   id?: boolean
-  seq?: boolean
   updatedAt?: boolean
   createdAt?: boolean
   removedAt?: boolean
@@ -8138,8 +8929,9 @@ export type UserSelectScalar = {
   currentTenantId?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "updatedAt" | "createdAt" | "removedAt" | "phone" | "name" | "email" | "password" | "failedLoginAttempts" | "lockedUntil" | "isPermanentlyLocked" | "mustChangePassword" | "passwordChangedAt" | "lastLoginAt" | "lastLoginIp" | "isActive" | "currentTenantId", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"userId" | "id" | "updatedAt" | "createdAt" | "removedAt" | "phone" | "name" | "email" | "password" | "failedLoginAttempts" | "lockedUntil" | "isPermanentlyLocked" | "mustChangePassword" | "passwordChangedAt" | "lastLoginAt" | "lastLoginIp" | "isActive" | "currentTenantId", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  currentTenant?: boolean | Prisma.User$currentTenantArgs<ExtArgs>
   profiles?: boolean | Prisma.User$profilesArgs<ExtArgs>
   tenants?: boolean | Prisma.User$tenantsArgs<ExtArgs>
   tenantAccessRequests?: boolean | Prisma.User$tenantAccessRequestsArgs<ExtArgs>
@@ -8156,6 +8948,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   createdTasks?: boolean | Prisma.User$createdTasksArgs<ExtArgs>
   createdSafeWallets?: boolean | Prisma.User$createdSafeWalletsArgs<ExtArgs>
   createdRoutines?: boolean | Prisma.User$createdRoutinesArgs<ExtArgs>
+  instructedPrograms?: boolean | Prisma.User$instructedProgramsArgs<ExtArgs>
   reservations?: boolean | Prisma.User$reservationsArgs<ExtArgs>
   createdPolicies?: boolean | Prisma.User$createdPoliciesArgs<ExtArgs>
   createdReservations?: boolean | Prisma.User$createdReservationsArgs<ExtArgs>
@@ -8172,12 +8965,17 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   createdThreads?: boolean | Prisma.User$createdThreadsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  currentTenant?: boolean | Prisma.User$currentTenantArgs<ExtArgs>
+}
+export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  currentTenant?: boolean | Prisma.User$currentTenantArgs<ExtArgs>
+}
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
+    currentTenant: Prisma.$TenantPayload<ExtArgs> | null
     profiles: Prisma.$ProfilePayload<ExtArgs>[]
     tenants: Prisma.$TenantPayload<ExtArgs>[]
     tenantAccessRequests: Prisma.$TenantAccessRequestPayload<ExtArgs>[]
@@ -8194,6 +8992,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     createdTasks: Prisma.$TaskPayload<ExtArgs>[]
     createdSafeWallets: Prisma.$SafeWalletPayload<ExtArgs>[]
     createdRoutines: Prisma.$RoutinePayload<ExtArgs>[]
+    instructedPrograms: Prisma.$ProgramPayload<ExtArgs>[]
     reservations: Prisma.$ReservationPayload<ExtArgs>[]
     createdPolicies: Prisma.$PolicyPayload<ExtArgs>[]
     createdReservations: Prisma.$ReservationPayload<ExtArgs>[]
@@ -8210,8 +9009,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     createdThreads: Prisma.$InquiryThreadPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    seq: number
+    userId: string
+    id: bigint
     updatedAt: Date | null
     createdAt: Date
     removedAt: Date | null
@@ -8266,7 +9065,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     /**
      * @displayName 현재 테넌트 ID
      */
-    currentTenantId: string | null
+    currentTenantId: bigint | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -8350,8 +9149,8 @@ export interface UserDelegate<ExtArgs extends runtime.Types.Extensions.InternalA
    * // Get first 10 Users
    * const users = await prisma.user.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const userWithIdOnly = await prisma.user.findMany({ select: { id: true } })
+   * // Only select the `userId`
+   * const userWithUserIdOnly = await prisma.user.findMany({ select: { userId: true } })
    * 
    */
   findMany<T extends UserFindManyArgs>(args?: Prisma.SelectSubset<T, UserFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -8395,9 +9194,9 @@ export interface UserDelegate<ExtArgs extends runtime.Types.Extensions.InternalA
    *   ]
    * })
    * 
-   * // Create many Users and only return the `id`
-   * const userWithIdOnly = await prisma.user.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many Users and only return the `userId`
+   * const userWithUserIdOnly = await prisma.user.createManyAndReturn({
+   *   select: { userId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -8486,9 +9285,9 @@ export interface UserDelegate<ExtArgs extends runtime.Types.Extensions.InternalA
    *   ]
    * })
    * 
-   * // Update zero or more Users and only return the `id`
-   * const userWithIdOnly = await prisma.user.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more Users and only return the `userId`
+   * const userWithUserIdOnly = await prisma.user.updateManyAndReturn({
+   *   select: { userId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -8661,6 +9460,7 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  currentTenant<T extends Prisma.User$currentTenantArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$currentTenantArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   profiles<T extends Prisma.User$profilesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$profilesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tenants<T extends Prisma.User$tenantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$tenantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tenantAccessRequests<T extends Prisma.User$tenantAccessRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$tenantAccessRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantAccessRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -8677,6 +9477,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   createdTasks<T extends Prisma.User$createdTasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdTasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdSafeWallets<T extends Prisma.User$createdSafeWalletsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdSafeWalletsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SafeWalletPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdRoutines<T extends Prisma.User$createdRoutinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdRoutinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoutinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  instructedPrograms<T extends Prisma.User$instructedProgramsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$instructedProgramsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reservations<T extends Prisma.User$reservationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reservationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReservationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdPolicies<T extends Prisma.User$createdPoliciesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdPoliciesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PolicyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdReservations<T extends Prisma.User$createdReservationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdReservationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReservationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -8720,8 +9521,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
  * Fields of the User model
  */
 export interface UserFieldRefs {
-  readonly id: Prisma.FieldRef<"User", 'String'>
-  readonly seq: Prisma.FieldRef<"User", 'Int'>
+  readonly userId: Prisma.FieldRef<"User", 'String'>
+  readonly id: Prisma.FieldRef<"User", 'BigInt'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"User", 'DateTime'>
@@ -8737,7 +9538,7 @@ export interface UserFieldRefs {
   readonly lastLoginAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly lastLoginIp: Prisma.FieldRef<"User", 'String'>
   readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
-  readonly currentTenantId: Prisma.FieldRef<"User", 'String'>
+  readonly currentTenantId: Prisma.FieldRef<"User", 'BigInt'>
 }
     
 
@@ -8987,6 +9788,10 @@ export type UserCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    */
   data: Prisma.UserCreateManyInput | Prisma.UserCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -9057,6 +9862,10 @@ export type UserUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many Users to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -9123,6 +9932,25 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Users to delete.
    */
   limit?: number
+}
+
+/**
+ * User.currentTenant
+ */
+export type User$currentTenantArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Tenant
+   */
+  select?: Prisma.TenantSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Tenant
+   */
+  omit?: Prisma.TenantOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TenantInclude<ExtArgs> | null
+  where?: Prisma.TenantWhereInput
 }
 
 /**
@@ -9502,6 +10330,30 @@ export type User$createdRoutinesArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.RoutineScalarFieldEnum | Prisma.RoutineScalarFieldEnum[]
+}
+
+/**
+ * User.instructedPrograms
+ */
+export type User$instructedProgramsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Program
+   */
+  select?: Prisma.ProgramSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Program
+   */
+  omit?: Prisma.ProgramOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProgramInclude<ExtArgs> | null
+  where?: Prisma.ProgramWhereInput
+  orderBy?: Prisma.ProgramOrderByWithRelationInput | Prisma.ProgramOrderByWithRelationInput[]
+  cursor?: Prisma.ProgramWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProgramScalarFieldEnum | Prisma.ProgramScalarFieldEnum[]
 }
 
 /**

@@ -18,6 +18,7 @@ describe("Routines API (E2E)", () => {
 	let app: INestApplication;
 	let jwtToken: string;
 	let tenantId: string;
+	let spaceId: string;
 
 	// 테스트 중 생성된 Routine ID를 추적하여 정리
 	const createdRoutineIds: string[] = [];
@@ -36,6 +37,7 @@ describe("Routines API (E2E)", () => {
 			const auth = await getTestAuth(app);
 			jwtToken = auth.jwtToken;
 			tenantId = auth.tenantId;
+			spaceId = auth.spaceId;
 		} catch (error) {
 			console.warn(`테스트 인증 설정 실패: ${error}`);
 		}
@@ -141,7 +143,7 @@ describe("Routines API (E2E)", () => {
 				expect(response.body.data).toBeDefined();
 				expect(response.body.data.name).toBe(createDto.name);
 				expect(response.body.data.label).toBe(createDto.label);
-				expect(response.body.data.tenantId).toBe(tenantId);
+				expect(response.body.data.spaceId).toBe(spaceId);
 				expect(response.body.data.id).toBeDefined();
 
 				// 후속 테스트용 ID 저장 및 정리 목록에 추가
@@ -166,7 +168,7 @@ describe("Routines API (E2E)", () => {
 				expect(response.body.httpStatus).toBe(200);
 				expect(response.body.data.id).toBe(testRoutineId);
 				expect(response.body.data.name).toBeDefined();
-				expect(response.body.data.tenantId).toBeDefined();
+				expect(response.body.data.spaceId).toBe(spaceId);
 			});
 		});
 
@@ -251,7 +253,7 @@ describe("Routines API (E2E)", () => {
 			it("인증 없이 상세 조회 시 401을 반환해야 한다", async () => {
 				// When
 				const response = await request(app.getHttpServer()).get(
-					"/api/v1/routines/00000000-0000-0000-0000-000000000099",
+					"/api/v1/routines/1",
 				);
 
 				// Then
@@ -271,7 +273,7 @@ describe("Routines API (E2E)", () => {
 			it("인증 없이 수정 시 401을 반환해야 한다", async () => {
 				// When
 				const response = await request(app.getHttpServer())
-					.patch("/api/v1/routines/00000000-0000-0000-0000-000000000099")
+					.patch("/api/v1/routines/1")
 					.send({ name: "수정" });
 
 				// Then
@@ -281,7 +283,7 @@ describe("Routines API (E2E)", () => {
 			it("인증 없이 삭제 시 401을 반환해야 한다", async () => {
 				// When
 				const response = await request(app.getHttpServer()).delete(
-					"/api/v1/routines/00000000-0000-0000-0000-000000000099",
+					"/api/v1/routines/1",
 				);
 
 				// Then
@@ -325,13 +327,13 @@ describe("Routines API (E2E)", () => {
 				expect(response.status).toBe(400);
 			});
 
-			it("유효하지 않은 UUID로 상세 조회 시 400을 반환해야 한다", async () => {
+			it("유효하지 않은 숫자 ID 문자열로 상세 조회 시 400을 반환해야 한다", async () => {
 				// Given
 				if (!jwtToken || !tenantId) return;
 
 				// When
 				const response = await request(app.getHttpServer())
-					.get("/api/v1/routines/not-a-valid-uuid")
+					.get("/api/v1/routines/01")
 					.set("Authorization", `Bearer ${jwtToken}`)
 					.set("x-tenant-id", tenantId);
 
@@ -345,7 +347,7 @@ describe("Routines API (E2E)", () => {
 				// Given
 				if (!jwtToken || !tenantId) return;
 
-				const nonExistentId = "00000000-0000-0000-0000-000000000099";
+				const nonExistentId = "9223372036854775807";
 
 				// When
 				const response = await request(app.getHttpServer())
@@ -361,7 +363,7 @@ describe("Routines API (E2E)", () => {
 				// Given
 				if (!jwtToken || !tenantId) return;
 
-				const nonExistentId = "00000000-0000-0000-0000-000000000099";
+				const nonExistentId = "9223372036854775807";
 
 				// When
 				const response = await request(app.getHttpServer())
@@ -378,7 +380,7 @@ describe("Routines API (E2E)", () => {
 				// Given
 				if (!jwtToken || !tenantId) return;
 
-				const nonExistentId = "00000000-0000-0000-0000-000000000099";
+				const nonExistentId = "9223372036854775807";
 
 				// When
 				const response = await request(app.getHttpServer())

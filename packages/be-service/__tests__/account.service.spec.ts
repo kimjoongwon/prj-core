@@ -1,17 +1,17 @@
-import { OidcDirectUsersRepository } from "@cocrepo/repository";
+import { UsersRepository } from "@cocrepo/repository";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { AccountService } from "../src/oidc/account.service";
 import { RedisService } from "../src/redis/redis.service";
 
 describe("AccountService", () => {
 	let service: AccountService;
-	let directUserRepository: jest.Mocked<OidcDirectUsersRepository>;
+	let usersRepository: jest.Mocked<UsersRepository>;
 	let redisService: jest.Mocked<RedisService>;
 
 	beforeEach(async () => {
-		directUserRepository = {
-			findByIdWithTenants: jest.fn(),
-		} as unknown as jest.Mocked<OidcDirectUsersRepository>;
+		usersRepository = {
+			findByUserIdWithTenantsAndProfiles: jest.fn(),
+		} as unknown as jest.Mocked<UsersRepository>;
 		redisService = {
 			get: jest.fn(),
 			set: jest.fn(),
@@ -21,8 +21,8 @@ describe("AccountService", () => {
 			providers: [
 				AccountService,
 				{
-					provide: OidcDirectUsersRepository,
-					useValue: directUserRepository,
+					provide: UsersRepository,
+					useValue: usersRepository,
 				},
 				{
 					provide: RedisService,
@@ -35,8 +35,9 @@ describe("AccountService", () => {
 	});
 
 	it("roles scope claims에 fitnessCenterName을 포함한다", async () => {
-		directUserRepository.findByIdWithTenants.mockResolvedValue({
-			id: "user-1",
+		usersRepository.findByUserIdWithTenantsAndProfiles.mockResolvedValue({
+			id: 1n,
+			userId: "user-1",
 			name: "Tester",
 			email: "tester@example.com",
 			phone: "010-1234-5678",
@@ -44,13 +45,15 @@ describe("AccountService", () => {
 			updatedAt: new Date("2026-01-02T00:00:00.000Z"),
 			tenants: [
 				{
-					spaceId: "space-1",
-					roleId: "role-1",
+					spaceId: 11n,
+					roleId: 12n,
 					role: {
+						roleId: "01J00000000000000000000012",
 						name: "MEMBER",
 						displayName: "회원",
 					},
 					space: {
+						spaceId: "01J00000000000000000000011",
 						fitnessCenter: {
 							name: "System Fitness Center",
 						},
@@ -58,7 +61,7 @@ describe("AccountService", () => {
 				},
 			],
 		} as unknown as Awaited<
-			ReturnType<OidcDirectUsersRepository["findByIdWithTenants"]>
+			ReturnType<UsersRepository["findByUserIdWithTenantsAndProfiles"]>
 		>);
 
 		const account = await service.findAccount({}, "user-1");
@@ -68,15 +71,15 @@ describe("AccountService", () => {
 			sub: "user-1",
 			roles: [
 				{
-					spaceId: "space-1",
-					roleId: "role-1",
+					spaceId: "01J00000000000000000000011",
+					roleId: "01J00000000000000000000012",
 					roleName: "MEMBER",
 					roleDisplayName: "회원",
 				},
 			],
 			spaces: [
 				{
-					spaceId: "space-1",
+					spaceId: "01J00000000000000000000011",
 					fitnessCenterName: "System Fitness Center",
 				},
 			],
@@ -87,5 +90,4 @@ describe("AccountService", () => {
 			300,
 		);
 	});
-
 });

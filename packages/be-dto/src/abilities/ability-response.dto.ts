@@ -1,4 +1,4 @@
-import { ULIDField } from "@cocrepo/decorator";
+import { BigIntIdField } from "@cocrepo/decorator/field";
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 import { ActionResponseDto } from "./action-response.dto";
@@ -12,13 +12,13 @@ import { SubjectResponseDto } from "./subject-response.dto";
  * 마스킹 등의 설정은 Action.config에서 가져옵니다.
  */
 export class AbilityResponseDto {
-	@ULIDField({ description: "Ability ID" })
+	@BigIntIdField({ description: "Ability ID" })
 	@Expose()
-	id!: string;
+	id!: bigint;
 
-	@ULIDField({ description: "Action ID" })
+	@BigIntIdField({ description: "Action ID" })
 	@Expose()
-	actionId!: string;
+	actionId!: bigint;
 
 	@ApiProperty({
 		description: "Action 상세 정보",
@@ -29,9 +29,9 @@ export class AbilityResponseDto {
 	@Type(() => ActionResponseDto)
 	action?: ActionResponseDto;
 
-	@ULIDField({ description: "Subject ID" })
+	@BigIntIdField({ description: "Subject ID" })
 	@Expose()
-	subjectId!: string;
+	subjectId!: bigint;
 
 	@ApiProperty({
 		description: "Subject 상세 정보",

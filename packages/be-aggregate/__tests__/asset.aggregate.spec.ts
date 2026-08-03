@@ -6,6 +6,13 @@ import { ObjectStorageService } from "@cocrepo/service";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { AssetAggregate } from "../src/asset/asset.aggregate";
 
+const tenantId = 100n;
+const spaceId = 101n;
+const parentSpaceId = 102n;
+const folderId = 201n;
+const assetId = 301n;
+const userId = 401n;
+
 describe("AssetAggregate", () => {
 	let service: AssetAggregate;
 	let mockAssetsRepository: jest.Mocked<AssetsRepository>;
@@ -34,9 +41,9 @@ describe("AssetAggregate", () => {
 		} as jest.Mocked<ObjectStorageService>;
 
 		mockSpaceContext = {
-			tenantId: "tenant-123",
-			spaceId: "space-123",
-		} as SpaceContext;
+			tenantId,
+			spaceId,
+		} as unknown as SpaceContext;
 
 		const module: TestingModule = await Test.createTestingModule({
 			providers: [
@@ -67,9 +74,9 @@ describe("AssetAggregate", () => {
 	});
 
 	it("일반 권한 목록 조회는 접근 가능한 spaceIds로 에셋을 제한해야 한다", async () => {
-		(mockSpaceContext as SpaceContext & { spaceIds: string[] }).spaceIds = [
-			"space-123",
-			"space-parent",
+		(mockSpaceContext as unknown as { spaceIds: bigint[] }).spaceIds = [
+			spaceId,
+			parentSpaceId,
 		];
 		mockAssetsRepository.findMany.mockResolvedValue({
 			assets: [],
@@ -81,7 +88,7 @@ describe("AssetAggregate", () => {
 		const findManyInput = mockAssetsRepository.findMany.mock.calls[0][0];
 		expect(findManyInput.where).toEqual(
 			expect.objectContaining({
-				space: { id: { in: ["space-123", "space-parent"] } },
+				space: { id: { in: [spaceId, parentSpaceId] } },
 			}),
 		);
 	});
@@ -98,8 +105,8 @@ describe("AssetAggregate", () => {
 			.digest("hex");
 
 		mockFoldersRepository.findById.mockResolvedValue({
-			id: "folder-123",
-			spaceId: "space-123",
+			id: folderId,
+			spaceId,
 			removedAt: null,
 		} as never);
 		mockObjectStorageService.putObject.mockResolvedValue({
@@ -109,7 +116,7 @@ describe("AssetAggregate", () => {
 		mockAssetsRepository.create.mockImplementation(
 			async (data) =>
 				({
-					id: "asset-123",
+					id: assetId,
 					createdAt: new Date(),
 					updatedAt: new Date(),
 					removedAt: null,
@@ -124,16 +131,13 @@ describe("AssetAggregate", () => {
 					extension: data.extension as string | null,
 					checksum: data.checksum as string | null,
 					metadata: data.metadata ?? null,
-					createdById: data.createdById as string | null,
-					space: { id: "space-123" },
+					createdById:
+						data.createdById == null ? null : BigInt(data.createdById),
+					space: { id: spaceId },
 				}) as never,
 		);
 
-		const result = await service.uploadAsset(
-			{ folderId: "folder-123" },
-			file,
-			"user-123",
-		);
+		const result = await service.uploadAsset({ folderId }, file, userId);
 
 		expect(mockObjectStorageService.putObject).toHaveBeenCalledTimes(1);
 		const putObjectInput = mockObjectStorageService.putObject.mock.calls[0][0];
@@ -147,13 +151,11 @@ describe("AssetAggregate", () => {
 				},
 			}),
 		);
-		expect(putObjectInput.key).toMatch(
-			/^spaces\/space-123\/assets\/image\/.+\.png$/,
-		);
+		expect(putObjectInput.key).toMatch(/^spaces\/101\/assets\/image\/.+\.png$/);
 		expect(mockAssetsRepository.create).toHaveBeenCalledWith(
 			expect.objectContaining({
-				spaceId: "space-123",
-				folderId: "folder-123",
+				spaceId,
+				folderId,
 				kind: AssetKind.IMAGE,
 				status: AssetStatus.READY,
 				originalName: "photo.png",
@@ -162,7 +164,7 @@ describe("AssetAggregate", () => {
 				sizeBytes: BigInt(11),
 				extension: "png",
 				checksum: expectedChecksum,
-				createdById: "user-123",
+				createdById: userId,
 			}),
 		);
 		expect(result).toEqual(
@@ -185,8 +187,8 @@ describe("AssetAggregate", () => {
 		};
 
 		mockFoldersRepository.findById.mockResolvedValue({
-			id: "folder-123",
-			spaceId: "space-123",
+			id: folderId,
+			spaceId,
 			removedAt: null,
 		} as never);
 		mockObjectStorageService.putObject.mockResolvedValue({
@@ -196,7 +198,7 @@ describe("AssetAggregate", () => {
 		mockAssetsRepository.create.mockImplementation(
 			async (data) =>
 				({
-					id: "asset-123",
+					id: assetId,
 					createdAt: new Date(),
 					updatedAt: new Date(),
 					removedAt: null,
@@ -211,15 +213,12 @@ describe("AssetAggregate", () => {
 					extension: data.extension as string | null,
 					checksum: data.checksum as string | null,
 					metadata: data.metadata ?? null,
-					createdById: data.createdById as string | null,
+					createdById:
+						data.createdById == null ? null : BigInt(data.createdById),
 				}) as never,
 		);
 
-		const result = await service.uploadAsset(
-			{ folderId: "folder-123" },
-			file,
-			"user-123",
-		);
+		const result = await service.uploadAsset({ folderId }, file, userId);
 
 		expect(mockObjectStorageService.putObject).toHaveBeenCalledWith(
 			expect.objectContaining({
@@ -244,13 +243,14 @@ describe("AssetAggregate", () => {
 
 	it("삭제 시 object storage 삭제 후 DB 삭제를 수행해야 한다", async () => {
 		mockAssetsRepository.findByIdWithRelations.mockResolvedValue({
-			id: "asset-123",
+			id: assetId,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			removedAt: null,
-			tenantId: "tenant-123",
-			tenant: { id: "tenant-123", spaceId: "space-123" },
-			folderId: "folder-123",
+			tenantId,
+			tenant: { id: tenantId, spaceId },
+			spaceId,
+			folderId,
 			kind: AssetKind.IMAGE,
 			status: AssetStatus.READY,
 			originalName: "photo.png",
@@ -260,17 +260,17 @@ describe("AssetAggregate", () => {
 			extension: "png",
 			checksum: "checksum",
 			metadata: null,
-			createdById: "user-123",
+			createdById: userId,
 		} as never);
 		mockObjectStorageService.deleteObject.mockResolvedValue(undefined);
 		mockAssetsRepository.deleteById.mockResolvedValue({} as never);
 
-		await service.deleteAsset("asset-123");
+		await service.deleteAsset(assetId);
 
 		expect(mockObjectStorageService.deleteObject).toHaveBeenCalledWith(
 			"spaces/space-123/assets/image/file.png",
 		);
-		expect(mockAssetsRepository.deleteById).toHaveBeenCalledWith("asset-123");
+		expect(mockAssetsRepository.deleteById).toHaveBeenCalledWith(assetId);
 		expect(
 			mockObjectStorageService.deleteObject.mock.invocationCallOrder[0],
 		).toBeLessThan(mockAssetsRepository.deleteById.mock.invocationCallOrder[0]);
@@ -278,13 +278,14 @@ describe("AssetAggregate", () => {
 
 	it("상세 원본 조회 시 현재 space의 object content를 반환해야 한다", async () => {
 		mockAssetsRepository.findByIdWithRelations.mockResolvedValue({
-			id: "asset-123",
+			id: assetId,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			removedAt: null,
-			tenantId: "tenant-123",
-			tenant: { id: "tenant-123", spaceId: "space-123" },
-			folderId: "folder-123",
+			tenantId,
+			tenant: { id: tenantId, spaceId },
+			spaceId,
+			folderId,
 			kind: AssetKind.DOCUMENT,
 			status: AssetStatus.READY,
 			originalName: "guide.pdf",
@@ -294,7 +295,7 @@ describe("AssetAggregate", () => {
 			extension: "pdf",
 			checksum: "checksum",
 			metadata: null,
-			createdById: "user-123",
+			createdById: userId,
 		} as never);
 		mockObjectStorageService.getObject.mockResolvedValue({
 			body: Buffer.from("pdf-body"),
@@ -304,7 +305,7 @@ describe("AssetAggregate", () => {
 			lastModified: new Date("2026-04-05T06:00:00.000Z"),
 		});
 
-		const result = await service.getAssetContent("asset-123");
+		const result = await service.getAssetContent(assetId);
 
 		expect(mockObjectStorageService.getObject).toHaveBeenCalledWith(
 			"spaces/space-123/assets/document/file.pdf",
@@ -321,13 +322,14 @@ describe("AssetAggregate", () => {
 
 	it("object storage 삭제가 실패하면 DB 삭제를 중단해야 한다", async () => {
 		mockAssetsRepository.findByIdWithRelations.mockResolvedValue({
-			id: "asset-123",
+			id: assetId,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			removedAt: null,
-			tenantId: "tenant-123",
-			tenant: { id: "tenant-123", spaceId: "space-123" },
-			folderId: "folder-123",
+			tenantId,
+			tenant: { id: tenantId, spaceId },
+			spaceId,
+			folderId,
 			kind: AssetKind.IMAGE,
 			status: AssetStatus.READY,
 			originalName: "photo.png",
@@ -337,13 +339,13 @@ describe("AssetAggregate", () => {
 			extension: "png",
 			checksum: "checksum",
 			metadata: null,
-			createdById: "user-123",
+			createdById: userId,
 		} as never);
 		mockObjectStorageService.deleteObject.mockRejectedValue(
 			new Error("storage delete failed"),
 		);
 
-		await expect(service.deleteAsset("asset-123")).rejects.toThrow(
+		await expect(service.deleteAsset(assetId)).rejects.toThrow(
 			"storage delete failed",
 		);
 		expect(mockAssetsRepository.deleteById).not.toHaveBeenCalled();

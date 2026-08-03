@@ -1,4 +1,4 @@
-import { ParseUlidPipe, RoleCategoryGuard } from "@cocrepo/be-common";
+import { ParseBigIntIdPipe, RoleCategoryGuard } from "@cocrepo/be-common";
 import {
 	CreateActionCommand,
 	DeleteActionCommand,
@@ -83,13 +83,13 @@ export class ActionsController {
 	})
 	@ApiParam({
 		name: "id",
-		description: "Action ID (ULID)",
+		description: "Action ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(404, 500)
 	@ApiResponseEntity(ActionDto, HttpStatus.OK)
 	@ResponseMessage("액션 조회 성공")
-	async getActionById(@Param("id", ParseUlidPipe) id: string) {
+	async getActionById(@Param("id", ParseBigIntIdPipe) id: bigint) {
 		return this.queryBus.execute(new GetActionByIdQuery(id));
 	}
 
@@ -126,7 +126,7 @@ export class ActionsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "id",
-		description: "Action ID (ULID)",
+		description: "Action ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiBody({
@@ -143,7 +143,7 @@ export class ActionsController {
 	@ApiResponseEntity(ActionDto, HttpStatus.OK)
 	@ResponseMessage("액션 수정 성공")
 	async updateAction(
-		@Param("id", ParseUlidPipe) id: string,
+		@Param("id", ParseBigIntIdPipe) id: bigint,
 		@Body() dto: UpdateActionDto,
 	) {
 		return this.commandBus.execute(new UpdateActionCommand(id, dto));
@@ -161,7 +161,7 @@ export class ActionsController {
 	@ApiAuth()
 	@ApiParam({
 		name: "id",
-		description: "Action ID (ULID)",
+		description: "Action ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(
@@ -173,7 +173,7 @@ export class ActionsController {
 	)
 	@ApiResponseEntity(ActionDto, HttpStatus.OK)
 	@ResponseMessage("액션 삭제 성공")
-	async deleteAction(@Param("id", ParseUlidPipe) id: string) {
+	async deleteAction(@Param("id", ParseBigIntIdPipe) id: bigint) {
 		return this.commandBus.execute(new DeleteActionCommand(id));
 	}
 }

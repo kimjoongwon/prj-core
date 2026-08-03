@@ -4,9 +4,9 @@ import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import type {
-	PublicIdCreateInput,
-	PublicIdUpdateInput,
-} from "./public-id-input.type";
+	AutoIdentityCreateInput,
+	AutoIdentityUpdateInput,
+} from "./auto-identity-input.type";
 import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
@@ -19,7 +19,7 @@ export class EmailVerificationsRepository {
 		>,
 	) {}
 
-	async findById(id: string): Promise<EmailVerification | null> {
+	async findById(id: bigint): Promise<EmailVerification | null> {
 		const result = await this.txHost.tx.emailVerification.findUnique({
 			where: { id },
 			include: { space: true, verifiedUser: true },
@@ -78,48 +78,28 @@ export class EmailVerificationsRepository {
 	}
 
 	async create(
-		data: PublicIdCreateInput<
+		data: AutoIdentityCreateInput<
 			Prisma.EmailVerificationUncheckedCreateInput,
-			"space",
-			"verifiedUser"
+			"emailVerificationId"
 		>,
 	): Promise<EmailVerification> {
-		const { spaceId, verifiedUserId, ...verificationData } = data;
 		const result = await this.txHost.tx.emailVerification.create({
-			data: {
-				...verificationData,
-				space: { connect: { id: spaceId } },
-				...(verifiedUserId
-					? { verifiedUser: { connect: { id: verifiedUserId } } }
-					: {}),
-			},
+			data,
 			include: { space: true, verifiedUser: true },
 		});
 		return toDomainEntity(EmailVerification, result);
 	}
 
 	async updateById(
-		id: string,
-		data: PublicIdUpdateInput<
+		id: bigint,
+		data: AutoIdentityUpdateInput<
 			Prisma.EmailVerificationUncheckedUpdateInput,
-			"space",
-			"verifiedUser"
+			"emailVerificationId"
 		>,
 	): Promise<EmailVerification> {
-		const { spaceId, verifiedUserId, ...verificationData } = data;
 		const result = await this.txHost.tx.emailVerification.update({
 			where: { id },
-			data: {
-				...verificationData,
-				...(spaceId !== undefined
-					? { space: { connect: { id: spaceId } } }
-					: {}),
-				...(verifiedUserId !== undefined
-					? verifiedUserId === null
-						? { verifiedUser: { disconnect: true } }
-						: { verifiedUser: { connect: { id: verifiedUserId } } }
-					: {}),
-			},
+			data,
 			include: { space: true, verifiedUser: true },
 		});
 

@@ -27,21 +27,21 @@ export type AggregateAuthAuditLog = {
 }
 
 export type AuthAuditLogAvgAggregateOutputType = {
-  seq: number | null
-  userSeq: number | null
+  id: number | null
+  userId: number | null
 }
 
 export type AuthAuditLogSumAggregateOutputType = {
-  seq: number | null
-  userSeq: number | null
+  id: bigint | null
+  userId: bigint | null
 }
 
 export type AuthAuditLogMinAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  authAuditLogId: string | null
+  id: bigint | null
   createdAt: Date | null
   email: string | null
-  userSeq: number | null
+  userId: bigint | null
   result: $Enums.AuthAuditResult | null
   failureReason: string | null
   ipAddress: string | null
@@ -50,11 +50,11 @@ export type AuthAuditLogMinAggregateOutputType = {
 }
 
 export type AuthAuditLogMaxAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  authAuditLogId: string | null
+  id: bigint | null
   createdAt: Date | null
   email: string | null
-  userSeq: number | null
+  userId: bigint | null
   result: $Enums.AuthAuditResult | null
   failureReason: string | null
   ipAddress: string | null
@@ -63,11 +63,11 @@ export type AuthAuditLogMaxAggregateOutputType = {
 }
 
 export type AuthAuditLogCountAggregateOutputType = {
+  authAuditLogId: number
   id: number
-  seq: number
   createdAt: number
   email: number
-  userSeq: number
+  userId: number
   result: number
   failureReason: number
   ipAddress: number
@@ -78,21 +78,21 @@ export type AuthAuditLogCountAggregateOutputType = {
 
 
 export type AuthAuditLogAvgAggregateInputType = {
-  seq?: true
-  userSeq?: true
+  id?: true
+  userId?: true
 }
 
 export type AuthAuditLogSumAggregateInputType = {
-  seq?: true
-  userSeq?: true
+  id?: true
+  userId?: true
 }
 
 export type AuthAuditLogMinAggregateInputType = {
+  authAuditLogId?: true
   id?: true
-  seq?: true
   createdAt?: true
   email?: true
-  userSeq?: true
+  userId?: true
   result?: true
   failureReason?: true
   ipAddress?: true
@@ -101,11 +101,11 @@ export type AuthAuditLogMinAggregateInputType = {
 }
 
 export type AuthAuditLogMaxAggregateInputType = {
+  authAuditLogId?: true
   id?: true
-  seq?: true
   createdAt?: true
   email?: true
-  userSeq?: true
+  userId?: true
   result?: true
   failureReason?: true
   ipAddress?: true
@@ -114,11 +114,11 @@ export type AuthAuditLogMaxAggregateInputType = {
 }
 
 export type AuthAuditLogCountAggregateInputType = {
+  authAuditLogId?: true
   id?: true
-  seq?: true
   createdAt?: true
   email?: true
-  userSeq?: true
+  userId?: true
   result?: true
   failureReason?: true
   ipAddress?: true
@@ -214,11 +214,11 @@ export type AuthAuditLogGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 export type AuthAuditLogGroupByOutputType = {
-  id: string
-  seq: number
+  authAuditLogId: string
+  id: bigint
   createdAt: Date
   email: string
-  userSeq: number | null
+  userId: bigint | null
   result: $Enums.AuthAuditResult
   failureReason: string | null
   ipAddress: string
@@ -250,11 +250,11 @@ export type AuthAuditLogWhereInput = {
   AND?: Prisma.AuthAuditLogWhereInput | Prisma.AuthAuditLogWhereInput[]
   OR?: Prisma.AuthAuditLogWhereInput[]
   NOT?: Prisma.AuthAuditLogWhereInput | Prisma.AuthAuditLogWhereInput[]
-  id?: Prisma.StringFilter<"AuthAuditLog"> | string
-  seq?: Prisma.IntFilter<"AuthAuditLog"> | number
+  authAuditLogId?: Prisma.StringFilter<"AuthAuditLog"> | string
+  id?: Prisma.BigIntFilter<"AuthAuditLog"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"AuthAuditLog"> | Date | string
   email?: Prisma.StringFilter<"AuthAuditLog"> | string
-  userSeq?: Prisma.IntNullableFilter<"AuthAuditLog"> | number | null
+  userId?: Prisma.BigIntNullableFilter<"AuthAuditLog"> | bigint | number | null
   result?: Prisma.EnumAuthAuditResultFilter<"AuthAuditLog"> | $Enums.AuthAuditResult
   failureReason?: Prisma.StringNullableFilter<"AuthAuditLog"> | string | null
   ipAddress?: Prisma.StringFilter<"AuthAuditLog"> | string
@@ -264,11 +264,11 @@ export type AuthAuditLogWhereInput = {
 }
 
 export type AuthAuditLogOrderByWithRelationInput = {
+  authAuditLogId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  userSeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   result?: Prisma.SortOrder
   failureReason?: Prisma.SortOrderInput | Prisma.SortOrder
   ipAddress?: Prisma.SortOrder
@@ -278,28 +278,28 @@ export type AuthAuditLogOrderByWithRelationInput = {
 }
 
 export type AuthAuditLogWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  seq?: number
+  authAuditLogId?: string
+  id?: bigint | number
   AND?: Prisma.AuthAuditLogWhereInput | Prisma.AuthAuditLogWhereInput[]
   OR?: Prisma.AuthAuditLogWhereInput[]
   NOT?: Prisma.AuthAuditLogWhereInput | Prisma.AuthAuditLogWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"AuthAuditLog"> | Date | string
   email?: Prisma.StringFilter<"AuthAuditLog"> | string
-  userSeq?: Prisma.IntNullableFilter<"AuthAuditLog"> | number | null
+  userId?: Prisma.BigIntNullableFilter<"AuthAuditLog"> | bigint | number | null
   result?: Prisma.EnumAuthAuditResultFilter<"AuthAuditLog"> | $Enums.AuthAuditResult
   failureReason?: Prisma.StringNullableFilter<"AuthAuditLog"> | string | null
   ipAddress?: Prisma.StringFilter<"AuthAuditLog"> | string
   userAgent?: Prisma.StringNullableFilter<"AuthAuditLog"> | string | null
   clientId?: Prisma.StringNullableFilter<"AuthAuditLog"> | string | null
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-}, "seq" | "id">
+}, "id" | "authAuditLogId">
 
 export type AuthAuditLogOrderByWithAggregationInput = {
+  authAuditLogId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  userSeq?: Prisma.SortOrderInput | Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   result?: Prisma.SortOrder
   failureReason?: Prisma.SortOrderInput | Prisma.SortOrder
   ipAddress?: Prisma.SortOrder
@@ -316,11 +316,11 @@ export type AuthAuditLogScalarWhereWithAggregatesInput = {
   AND?: Prisma.AuthAuditLogScalarWhereWithAggregatesInput | Prisma.AuthAuditLogScalarWhereWithAggregatesInput[]
   OR?: Prisma.AuthAuditLogScalarWhereWithAggregatesInput[]
   NOT?: Prisma.AuthAuditLogScalarWhereWithAggregatesInput | Prisma.AuthAuditLogScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"AuthAuditLog"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"AuthAuditLog"> | number
+  authAuditLogId?: Prisma.StringWithAggregatesFilter<"AuthAuditLog"> | string
+  id?: Prisma.BigIntWithAggregatesFilter<"AuthAuditLog"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AuthAuditLog"> | Date | string
   email?: Prisma.StringWithAggregatesFilter<"AuthAuditLog"> | string
-  userSeq?: Prisma.IntNullableWithAggregatesFilter<"AuthAuditLog"> | number | null
+  userId?: Prisma.BigIntNullableWithAggregatesFilter<"AuthAuditLog"> | bigint | number | null
   result?: Prisma.EnumAuthAuditResultWithAggregatesFilter<"AuthAuditLog"> | $Enums.AuthAuditResult
   failureReason?: Prisma.StringNullableWithAggregatesFilter<"AuthAuditLog"> | string | null
   ipAddress?: Prisma.StringWithAggregatesFilter<"AuthAuditLog"> | string
@@ -329,7 +329,8 @@ export type AuthAuditLogScalarWhereWithAggregatesInput = {
 }
 
 export type AuthAuditLogCreateInput = {
-  id?: string
+  authAuditLogId?: string
+  id?: bigint | number
   createdAt?: Date | string
   email: string
   result: $Enums.AuthAuditResult
@@ -341,11 +342,11 @@ export type AuthAuditLogCreateInput = {
 }
 
 export type AuthAuditLogUncheckedCreateInput = {
-  id?: string
-  seq?: number
+  authAuditLogId?: string
+  id?: bigint | number
   createdAt?: Date | string
   email: string
-  userSeq?: number | null
+  userId?: bigint | number | null
   result: $Enums.AuthAuditResult
   failureReason?: string | null
   ipAddress: string
@@ -354,7 +355,8 @@ export type AuthAuditLogUncheckedCreateInput = {
 }
 
 export type AuthAuditLogUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  authAuditLogId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   result?: Prisma.EnumAuthAuditResultFieldUpdateOperationsInput | $Enums.AuthAuditResult
@@ -366,11 +368,11 @@ export type AuthAuditLogUpdateInput = {
 }
 
 export type AuthAuditLogUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  authAuditLogId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  userSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  userId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   result?: Prisma.EnumAuthAuditResultFieldUpdateOperationsInput | $Enums.AuthAuditResult
   failureReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ipAddress?: Prisma.StringFieldUpdateOperationsInput | string
@@ -379,11 +381,11 @@ export type AuthAuditLogUncheckedUpdateInput = {
 }
 
 export type AuthAuditLogCreateManyInput = {
-  id?: string
-  seq?: number
+  authAuditLogId?: string
+  id?: bigint | number
   createdAt?: Date | string
   email: string
-  userSeq?: number | null
+  userId?: bigint | number | null
   result: $Enums.AuthAuditResult
   failureReason?: string | null
   ipAddress: string
@@ -392,7 +394,8 @@ export type AuthAuditLogCreateManyInput = {
 }
 
 export type AuthAuditLogUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  authAuditLogId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   result?: Prisma.EnumAuthAuditResultFieldUpdateOperationsInput | $Enums.AuthAuditResult
@@ -403,11 +406,11 @@ export type AuthAuditLogUpdateManyMutationInput = {
 }
 
 export type AuthAuditLogUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  authAuditLogId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  userSeq?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  userId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   result?: Prisma.EnumAuthAuditResultFieldUpdateOperationsInput | $Enums.AuthAuditResult
   failureReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ipAddress?: Prisma.StringFieldUpdateOperationsInput | string
@@ -416,11 +419,11 @@ export type AuthAuditLogUncheckedUpdateManyInput = {
 }
 
 export type AuthAuditLogCountOrderByAggregateInput = {
+  authAuditLogId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  userSeq?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   result?: Prisma.SortOrder
   failureReason?: Prisma.SortOrder
   ipAddress?: Prisma.SortOrder
@@ -429,16 +432,16 @@ export type AuthAuditLogCountOrderByAggregateInput = {
 }
 
 export type AuthAuditLogAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  userSeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
 }
 
 export type AuthAuditLogMaxOrderByAggregateInput = {
+  authAuditLogId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  userSeq?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   result?: Prisma.SortOrder
   failureReason?: Prisma.SortOrder
   ipAddress?: Prisma.SortOrder
@@ -447,11 +450,11 @@ export type AuthAuditLogMaxOrderByAggregateInput = {
 }
 
 export type AuthAuditLogMinOrderByAggregateInput = {
+  authAuditLogId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  userSeq?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   result?: Prisma.SortOrder
   failureReason?: Prisma.SortOrder
   ipAddress?: Prisma.SortOrder
@@ -460,8 +463,8 @@ export type AuthAuditLogMinOrderByAggregateInput = {
 }
 
 export type AuthAuditLogSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  userSeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
 }
 
 export type AuthAuditLogListRelationFilter = {
@@ -521,7 +524,8 @@ export type AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput = {
 }
 
 export type AuthAuditLogCreateWithoutUserInput = {
-  id?: string
+  authAuditLogId?: string
+  id?: bigint | number
   createdAt?: Date | string
   email: string
   result: $Enums.AuthAuditResult
@@ -532,8 +536,8 @@ export type AuthAuditLogCreateWithoutUserInput = {
 }
 
 export type AuthAuditLogUncheckedCreateWithoutUserInput = {
-  id?: string
-  seq?: number
+  authAuditLogId?: string
+  id?: bigint | number
   createdAt?: Date | string
   email: string
   result: $Enums.AuthAuditResult
@@ -573,11 +577,11 @@ export type AuthAuditLogScalarWhereInput = {
   AND?: Prisma.AuthAuditLogScalarWhereInput | Prisma.AuthAuditLogScalarWhereInput[]
   OR?: Prisma.AuthAuditLogScalarWhereInput[]
   NOT?: Prisma.AuthAuditLogScalarWhereInput | Prisma.AuthAuditLogScalarWhereInput[]
-  id?: Prisma.StringFilter<"AuthAuditLog"> | string
-  seq?: Prisma.IntFilter<"AuthAuditLog"> | number
+  authAuditLogId?: Prisma.StringFilter<"AuthAuditLog"> | string
+  id?: Prisma.BigIntFilter<"AuthAuditLog"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"AuthAuditLog"> | Date | string
   email?: Prisma.StringFilter<"AuthAuditLog"> | string
-  userSeq?: Prisma.IntNullableFilter<"AuthAuditLog"> | number | null
+  userId?: Prisma.BigIntNullableFilter<"AuthAuditLog"> | bigint | number | null
   result?: Prisma.EnumAuthAuditResultFilter<"AuthAuditLog"> | $Enums.AuthAuditResult
   failureReason?: Prisma.StringNullableFilter<"AuthAuditLog"> | string | null
   ipAddress?: Prisma.StringFilter<"AuthAuditLog"> | string
@@ -586,8 +590,8 @@ export type AuthAuditLogScalarWhereInput = {
 }
 
 export type AuthAuditLogCreateManyUserInput = {
-  id?: string
-  seq?: number
+  authAuditLogId?: string
+  id?: bigint | number
   createdAt?: Date | string
   email: string
   result: $Enums.AuthAuditResult
@@ -598,7 +602,8 @@ export type AuthAuditLogCreateManyUserInput = {
 }
 
 export type AuthAuditLogUpdateWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  authAuditLogId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   result?: Prisma.EnumAuthAuditResultFieldUpdateOperationsInput | $Enums.AuthAuditResult
@@ -609,8 +614,8 @@ export type AuthAuditLogUpdateWithoutUserInput = {
 }
 
 export type AuthAuditLogUncheckedUpdateWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  authAuditLogId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   result?: Prisma.EnumAuthAuditResultFieldUpdateOperationsInput | $Enums.AuthAuditResult
@@ -621,8 +626,8 @@ export type AuthAuditLogUncheckedUpdateWithoutUserInput = {
 }
 
 export type AuthAuditLogUncheckedUpdateManyWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  authAuditLogId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   result?: Prisma.EnumAuthAuditResultFieldUpdateOperationsInput | $Enums.AuthAuditResult
@@ -635,11 +640,11 @@ export type AuthAuditLogUncheckedUpdateManyWithoutUserInput = {
 
 
 export type AuthAuditLogSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  authAuditLogId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   email?: boolean
-  userSeq?: boolean
+  userId?: boolean
   result?: boolean
   failureReason?: boolean
   ipAddress?: boolean
@@ -649,11 +654,11 @@ export type AuthAuditLogSelect<ExtArgs extends runtime.Types.Extensions.Internal
 }, ExtArgs["result"]["authAuditLog"]>
 
 export type AuthAuditLogSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  authAuditLogId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   email?: boolean
-  userSeq?: boolean
+  userId?: boolean
   result?: boolean
   failureReason?: boolean
   ipAddress?: boolean
@@ -663,11 +668,11 @@ export type AuthAuditLogSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
 }, ExtArgs["result"]["authAuditLog"]>
 
 export type AuthAuditLogSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  authAuditLogId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   email?: boolean
-  userSeq?: boolean
+  userId?: boolean
   result?: boolean
   failureReason?: boolean
   ipAddress?: boolean
@@ -677,11 +682,11 @@ export type AuthAuditLogSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
 }, ExtArgs["result"]["authAuditLog"]>
 
 export type AuthAuditLogSelectScalar = {
+  authAuditLogId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   email?: boolean
-  userSeq?: boolean
+  userId?: boolean
   result?: boolean
   failureReason?: boolean
   ipAddress?: boolean
@@ -689,7 +694,7 @@ export type AuthAuditLogSelectScalar = {
   clientId?: boolean
 }
 
-export type AuthAuditLogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "email" | "userSeq" | "result" | "failureReason" | "ipAddress" | "userAgent" | "clientId", ExtArgs["result"]["authAuditLog"]>
+export type AuthAuditLogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"authAuditLogId" | "id" | "createdAt" | "email" | "userId" | "result" | "failureReason" | "ipAddress" | "userAgent" | "clientId", ExtArgs["result"]["authAuditLog"]>
 export type AuthAuditLogInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.AuthAuditLog$userArgs<ExtArgs>
 }
@@ -706,8 +711,8 @@ export type $AuthAuditLogPayload<ExtArgs extends runtime.Types.Extensions.Intern
     user: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    seq: number
+    authAuditLogId: string
+    id: bigint
     createdAt: Date
     /**
      * @displayName 이메일
@@ -716,7 +721,7 @@ export type $AuthAuditLogPayload<ExtArgs extends runtime.Types.Extensions.Intern
     /**
      * @displayName 사용자 내부 순번
      */
-    userSeq: number | null
+    userId: bigint | null
     /**
      * @displayName 결과
      */
@@ -820,8 +825,8 @@ export interface AuthAuditLogDelegate<ExtArgs extends runtime.Types.Extensions.I
    * // Get first 10 AuthAuditLogs
    * const authAuditLogs = await prisma.authAuditLog.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const authAuditLogWithIdOnly = await prisma.authAuditLog.findMany({ select: { id: true } })
+   * // Only select the `authAuditLogId`
+   * const authAuditLogWithAuthAuditLogIdOnly = await prisma.authAuditLog.findMany({ select: { authAuditLogId: true } })
    * 
    */
   findMany<T extends AuthAuditLogFindManyArgs>(args?: Prisma.SelectSubset<T, AuthAuditLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthAuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -865,9 +870,9 @@ export interface AuthAuditLogDelegate<ExtArgs extends runtime.Types.Extensions.I
    *   ]
    * })
    * 
-   * // Create many AuthAuditLogs and only return the `id`
-   * const authAuditLogWithIdOnly = await prisma.authAuditLog.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many AuthAuditLogs and only return the `authAuditLogId`
+   * const authAuditLogWithAuthAuditLogIdOnly = await prisma.authAuditLog.createManyAndReturn({
+   *   select: { authAuditLogId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -956,9 +961,9 @@ export interface AuthAuditLogDelegate<ExtArgs extends runtime.Types.Extensions.I
    *   ]
    * })
    * 
-   * // Update zero or more AuthAuditLogs and only return the `id`
-   * const authAuditLogWithIdOnly = await prisma.authAuditLog.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more AuthAuditLogs and only return the `authAuditLogId`
+   * const authAuditLogWithAuthAuditLogIdOnly = await prisma.authAuditLog.updateManyAndReturn({
+   *   select: { authAuditLogId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1161,11 +1166,11 @@ export interface Prisma__AuthAuditLogClient<T, Null = never, ExtArgs extends run
  * Fields of the AuthAuditLog model
  */
 export interface AuthAuditLogFieldRefs {
-  readonly id: Prisma.FieldRef<"AuthAuditLog", 'String'>
-  readonly seq: Prisma.FieldRef<"AuthAuditLog", 'Int'>
+  readonly authAuditLogId: Prisma.FieldRef<"AuthAuditLog", 'String'>
+  readonly id: Prisma.FieldRef<"AuthAuditLog", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"AuthAuditLog", 'DateTime'>
   readonly email: Prisma.FieldRef<"AuthAuditLog", 'String'>
-  readonly userSeq: Prisma.FieldRef<"AuthAuditLog", 'Int'>
+  readonly userId: Prisma.FieldRef<"AuthAuditLog", 'BigInt'>
   readonly result: Prisma.FieldRef<"AuthAuditLog", 'AuthAuditResult'>
   readonly failureReason: Prisma.FieldRef<"AuthAuditLog", 'String'>
   readonly ipAddress: Prisma.FieldRef<"AuthAuditLog", 'String'>

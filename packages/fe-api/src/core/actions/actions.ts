@@ -726,4 +726,3 @@ export const useDeleteAction = <TError = ErrorType<void>,
 
       return useMutation(mutationOptions, queryClient);
     }
-    

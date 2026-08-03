@@ -11,7 +11,7 @@ import { ClassTransformOptions, plainToInstance } from "class-transformer";
 export class AbstractEntity<DTO = unknown, O = never>
 	implements BaseEntityFields
 {
-	id!: string;
+	id!: bigint;
 	createdAt!: Date;
 	updatedAt!: Date | null;
 	removedAt!: Date | null;

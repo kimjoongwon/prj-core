@@ -1,8 +1,8 @@
-import { DateField, ULIDField } from "@cocrepo/decorator";
+import { BigIntIdField, DateField } from "@cocrepo/decorator/field";
 
 export class AbstractDto {
-	@ULIDField()
-	id!: string;
+	@BigIntIdField()
+	id!: bigint;
 
 	@DateField()
 	createdAt!: Date;

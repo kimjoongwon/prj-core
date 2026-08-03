@@ -1,23 +1,21 @@
-import type { Folder as FolderEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Asset } from "./asset.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
 
-export class Folder
-	extends AbstractEntity
-	implements DomainEntityModel<FolderEntity>
-{
+export class Folder extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	folderId!: string;
+
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	spaceId!: string;
-	parentFolderId!: string | null;
+	spaceId!: bigint;
+	parentFolderId!: bigint | null;
 	name!: string;
 	path!: string;
 	sortOrder!: number;
-	createdById!: string | null;
+	createdById!: bigint | null;
 
 	// ============================================================================
 	// 관계 필드 (선택적)
@@ -50,7 +48,7 @@ export class Folder
 	/**
 	 * 특정 폴더의 하위 폴더인지 확인합니다
 	 */
-	isDescendantOf(folderId: string): boolean {
+	isDescendantOf(folderId: bigint): boolean {
 		if (!this.parentFolderId) return false;
 		if (this.parentFolderId === folderId) return true;
 		// parent가 로드되어 있으면 재귀적으로 확인

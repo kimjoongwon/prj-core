@@ -45,31 +45,31 @@ describe("PersistStorage", () => {
 	it("App 문서를 한 번만 읽고 section별 값을 반환한다", () => {
 		storage.setItem(
 			STORAGE_KEY,
-			JSON.stringify({ account: { tenantId: "tenant-a" }, language: "en_US" }),
+			JSON.stringify({ account: { tenantId: "101" }, language: "en_US" }),
 		);
 
-		expect(persistStorage.read("account")).toEqual({ tenantId: "tenant-a" });
+		expect(persistStorage.read("account")).toEqual({ tenantId: "101" });
 		expect(persistStorage.read("language")).toBe("en_US");
 		expect(storage.getItem).toHaveBeenCalledTimes(1);
 	});
 
 	it("하나의 App 문서에 section 값을 저장하고 다시 읽는다", () => {
 		persistStorage.write("account", {
-			tenantId: "tenant-a",
-			spaceId: "space-a",
+			tenantId: "101",
+			spaceId: "201",
 		});
 
 		expect(storage.dump().get(STORAGE_KEY)).toBe(
 			JSON.stringify({
 				account: {
-					tenantId: "tenant-a",
-					spaceId: "space-a",
+					tenantId: "101",
+					spaceId: "201",
 				},
 			}),
 		);
 		expect(
 			persistStorage.read<{ tenantId: string; spaceId: string }>("account"),
-		).toEqual({ tenantId: "tenant-a", spaceId: "space-a" });
+		).toEqual({ tenantId: "101", spaceId: "201" });
 	});
 
 	it("section의 plain string 값을 그대로 읽는다", () => {
@@ -79,7 +79,7 @@ describe("PersistStorage", () => {
 	});
 
 	it("section 제거 시 다른 값은 보존하고 빈 문서는 제거한다", () => {
-		persistStorage.write("account", { tenantId: "tenant-a" });
+		persistStorage.write("account", { tenantId: "101" });
 		persistStorage.write("language", "ko_KR");
 
 		persistStorage.remove("account");

@@ -1,4 +1,4 @@
-import { NumberField } from "@cocrepo/decorator";
+import { NumberField } from "@cocrepo/decorator/field";
 
 export class DashboardStatsDto {
 	@NumberField({ description: "활성 세션 수" })

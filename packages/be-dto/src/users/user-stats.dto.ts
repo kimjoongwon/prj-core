@@ -1,4 +1,4 @@
-import { NumberField } from "@cocrepo/decorator";
+import { NumberField } from "@cocrepo/decorator/field";
 
 /**
  * 사용자 목록 통계 정보

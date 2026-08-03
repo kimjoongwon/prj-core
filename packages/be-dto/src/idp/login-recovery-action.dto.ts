@@ -1,4 +1,4 @@
-import { StringField, StringFieldOptional } from "@cocrepo/decorator";
+import { StringField, StringFieldOptional } from "@cocrepo/decorator/field";
 
 /**
  * 로그인 실패 후 사용 가능한 복구 액션

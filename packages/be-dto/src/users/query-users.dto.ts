@@ -1,9 +1,9 @@
 import {
+	BigIntIdFieldOptional,
 	DateFieldOptional,
 	EnumFieldOptional,
 	StringFieldOptional,
-	ULIDFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import { DeleteFilter } from "@cocrepo/enum";
 import { Transform } from "class-transformer";
 import { QueryDto } from "../query/query.dto";
@@ -50,17 +50,16 @@ export class QueryUsersDto extends QueryDto {
 	})
 	status?: DeleteFilter;
 
-	@ULIDFieldOptional({
+	@BigIntIdFieldOptional({
 		description: "분류 카테고리 ID",
 	})
-	categoryId?: string;
+	categoryId?: bigint;
 
-	@StringFieldOptional({
+	@BigIntIdFieldOptional({
 		each: true,
 		description: "그룹 ID 목록 (복수 선택 가능)",
 	})
-	@Transform(({ value }) => (Array.isArray(value) ? value : [value]))
-	groupIds?: string[];
+	groupIds?: bigint[];
 
 	@DateFieldOptional({
 		description: "가입일 시작 (ISO8601)",

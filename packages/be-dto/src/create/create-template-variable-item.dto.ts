@@ -2,7 +2,7 @@ import {
 	BooleanFieldOptional,
 	StringField,
 	StringFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 
 /**
  * 템플릿 변수 생성 아이템 DTO

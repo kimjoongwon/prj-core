@@ -1,4 +1,4 @@
-import { NumberField } from "@cocrepo/decorator";
+import { NumberField } from "@cocrepo/decorator/field";
 
 /**
  * 앨범 목록 메타 정보 DTO

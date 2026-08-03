@@ -1,10 +1,9 @@
 import {
+	BigIntIdFieldOptional,
 	EmailFieldOptional,
 	PhoneFieldOptional,
 	StringFieldOptional,
-	ULIDFieldOptional,
-} from "@cocrepo/decorator";
-import { Transform } from "class-transformer";
+} from "@cocrepo/decorator/field";
 
 /**
  * 회원 수정용 DTO
@@ -28,17 +27,14 @@ export class UpdateUserMemberDto {
 	})
 	phone?: string;
 
-	@ULIDFieldOptional({
+	@BigIntIdFieldOptional({
 		description: "분류 카테고리 ID",
 	})
-	categoryId?: string;
+	categoryId?: bigint;
 
-	@StringFieldOptional({
+	@BigIntIdFieldOptional({
 		each: true,
 		description: "그룹 ID 목록",
 	})
-	@Transform(({ value }) =>
-		Array.isArray(value) ? value : value ? [value] : undefined,
-	)
-	groupIds?: string[];
+	groupIds?: bigint[];
 }

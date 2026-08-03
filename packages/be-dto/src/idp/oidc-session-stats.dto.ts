@@ -1,4 +1,4 @@
-import { NumberField } from "@cocrepo/decorator";
+import { NumberField } from "@cocrepo/decorator/field";
 import { ApiProperty } from "@nestjs/swagger";
 
 /**

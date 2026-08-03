@@ -55,8 +55,8 @@ export class SpacesRepository {
 	/**
 	 * ID로 Space 조회
 	 */
-	async findById(id: string): Promise<Space | null> {
-		this.logger.debug(`ID로 Space 조회: ${id.slice(-8)}`);
+	async findById(id: bigint): Promise<Space | null> {
+		this.logger.debug(`ID로 Space 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.space.findUnique({
 			where: { id },
@@ -69,10 +69,10 @@ export class SpacesRepository {
 	 * ID로 Space 조회 (FitnessCenter 포함)
 	 */
 	async findByIdWithFitnessCenter(id: string): Promise<Space | null> {
-		this.logger.debug(`ID로 Space 조회 (FitnessCenter 포함): ${id.slice(-8)}`);
+		this.logger.debug(`ID로 Space 조회 (FitnessCenter 포함): ${id.toString()}`);
 
 		const result = await this.txHost.tx.space.findUnique({
-			where: { id },
+			where: { spaceId: id },
 			include: {
 				fitnessCenter: {
 					include: {
@@ -89,7 +89,7 @@ export class SpacesRepository {
 	 * FitnessCenter를 포함한 Space 목록 조회
 	 */
 	async findManyWithFitnessCenter(params?: {
-		spaceIds?: string[];
+		spaceIds?: bigint[];
 		skip?: number;
 		take?: number;
 		search?: string;
@@ -213,12 +213,12 @@ export class SpacesRepository {
 	 * Space에 종속된 FitnessCenter 조회
 	 */
 	async findFitnessCenterBySpaceId(
-		spaceId: string,
+		spaceId: bigint,
 	): Promise<FitnessCenter | null> {
-		this.logger.debug(`Space의 FitnessCenter 조회: ${spaceId.slice(-8)}`);
+		this.logger.debug(`Space의 FitnessCenter 조회: ${spaceId.toString()}`);
 
 		const result = await this.txHost.tx.fitnessCenter.findFirst({
-			where: { space: { id: spaceId } },
+			where: { spaceId },
 			include: {
 				company: true,
 				space: true,
@@ -251,16 +251,16 @@ export class SpacesRepository {
 	 * Space에 Company와 FitnessCenter detail 생성
 	 */
 	async createFitnessCenterBySpaceId(
-		spaceId: string,
+		spaceId: bigint,
 		data: {
 			company: Prisma.CompanyUncheckedCreateInput;
 			fitnessCenter: Omit<
 				Prisma.FitnessCenterUncheckedCreateInput,
-				"seq" | "companySeq" | "spaceSeq"
+				"id" | "fitnessCenterId" | "companyId" | "spaceId"
 			>;
 		},
 	): Promise<Space> {
-		this.logger.debug(`Space에 FitnessCenter 생성: ${spaceId.slice(-8)}`);
+		this.logger.debug(`Space에 FitnessCenter 생성: ${spaceId.toString()}`);
 
 		const company = await this.txHost.tx.company.create({
 			data: data.company,
@@ -269,12 +269,12 @@ export class SpacesRepository {
 		await this.txHost.tx.fitnessCenter.create({
 			data: {
 				...data.fitnessCenter,
-				company: { connect: { id: company.id } },
-				space: { connect: { id: spaceId } },
+				companyId: company.id,
+				spaceId,
 			},
 		});
 
-		const space = await this.findByIdWithFitnessCenter(spaceId);
+		const space = await this.findById(spaceId);
 		if (!space) {
 			throw new Error("FITNESS_CENTER_CREATE_FAILED");
 		}
@@ -286,10 +286,10 @@ export class SpacesRepository {
 	 * Space 수정
 	 */
 	async updateById(
-		id: string,
+		id: bigint,
 		data: Prisma.SpaceUncheckedUpdateInput,
 	): Promise<Space> {
-		this.logger.debug(`Space 수정: ${id.slice(-8)}`);
+		this.logger.debug(`Space 수정: ${id.toString()}`);
 
 		const result = await this.txHost.tx.space.update({
 			where: { id },
@@ -302,8 +302,8 @@ export class SpacesRepository {
 	/**
 	 * Space 소프트 삭제
 	 */
-	async removeById(id: string): Promise<Space> {
-		this.logger.debug(`Space 소프트 삭제: ${id.slice(-8)}`);
+	async removeById(id: bigint): Promise<Space> {
+		this.logger.debug(`Space 소프트 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.space.update({
 			where: { id },
@@ -317,15 +317,15 @@ export class SpacesRepository {
 	 * Space의 FitnessCenter detail 수정
 	 */
 	async updateFitnessCenterBySpaceId(
-		spaceId: string,
+		spaceId: bigint,
 		data: {
 			fitnessCenter: Prisma.FitnessCenterUncheckedUpdateInput;
 		},
 	): Promise<Space> {
-		this.logger.debug(`Space의 FitnessCenter 수정: ${spaceId.slice(-8)}`);
+		this.logger.debug(`Space의 FitnessCenter 수정: ${spaceId.toString()}`);
 
 		const fitnessCenter = await this.txHost.tx.fitnessCenter.findFirst({
-			where: { space: { id: spaceId } },
+			where: { spaceId },
 			select: { id: true },
 		});
 
@@ -338,7 +338,7 @@ export class SpacesRepository {
 			data: data.fitnessCenter,
 		});
 
-		const space = await this.findByIdWithFitnessCenter(spaceId);
+		const space = await this.findById(spaceId);
 		if (!space) {
 			throw new Error("FITNESS_CENTER_UPDATE_FAILED");
 		}
@@ -350,11 +350,11 @@ export class SpacesRepository {
 	 * Space Category 위계 기반 Space ID 배열을 조회합니다.
 	 */
 	async findSpaceIdsByCategoryHierarchy(
-		spaceId: string,
+		spaceId: bigint,
 		scope: SpaceResourceScope = SpaceResourceScope.WITH_DESCENDANTS,
-	): Promise<string[]> {
+	): Promise<bigint[]> {
 		this.logger.debug(
-			`카테고리 위계 기반 Space ID 조회: spaceId=${spaceId.slice(-8)}, scope=${scope}`,
+			`카테고리 위계 기반 Space ID 조회: spaceId=${spaceId.toString()}, scope=${scope}`,
 		);
 
 		const spaceClassification =
@@ -391,7 +391,7 @@ export class SpacesRepository {
 		const categoryById = new Map(
 			categoryRecords.map((category) => [category.id, category]),
 		);
-		const childCategoryIdsByParentId = new Map<string, string[]>();
+		const childCategoryIdsByParentId = new Map<bigint, bigint[]>();
 		for (const category of categoryRecords) {
 			if (!category.parentId) {
 				continue;
@@ -403,7 +403,7 @@ export class SpacesRepository {
 			childCategoryIdsByParentId.set(category.parentId, childCategoryIds);
 		}
 
-		const categoryIds = new Set<string>([spaceClassification.category.id]);
+		const categoryIds = new Set<bigint>([spaceClassification.category.id]);
 
 		if (
 			scope === SpaceResourceScope.WITH_ANCESTORS ||
@@ -443,13 +443,13 @@ export class SpacesRepository {
 				category: { id: { in: [...categoryIds] } },
 				space: { removedAt: null },
 			},
-			select: { space: { select: { id: true } } },
+			select: { spaceId: true },
 		});
 
 		return [
 			...new Set([
 				spaceId,
-				...classifications.map((classification) => classification.space.id),
+				...classifications.map((classification) => classification.spaceId),
 			]),
 		];
 	}
@@ -457,7 +457,7 @@ export class SpacesRepository {
 	/**
 	 * 여러 ID로 Space 조회 (FitnessCenter 포함)
 	 */
-	async findByIdsWithFitnessCenter(ids: string[]): Promise<Space[]> {
+	async findByIdsWithFitnessCenter(ids: bigint[]): Promise<Space[]> {
 		this.logger.debug(
 			`여러 ID로 Space 조회 (FitnessCenter 포함): count=${ids.length}`,
 		);

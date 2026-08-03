@@ -43,7 +43,13 @@ export class RefreshTokenWithIdpUseCase {
 			toProtocolClientConfig(client),
 		);
 		const payload = decodeAccessToken(tokenResponse.access_token);
-		const user = await this.usersService.getByIdWithTenants(payload.sub);
+		const user = await (
+			this.usersService as UserService & {
+				findByUserIdWithTenants: (
+					userId: string,
+				) => ReturnType<UserService["getByIdWithTenants"]>;
+			}
+		).findByUserIdWithTenants(payload.sub);
 
 		if (!user) {
 			throw new UnauthorizedException("사용자를 찾을 수 없습니다");

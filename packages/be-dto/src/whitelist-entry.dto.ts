@@ -1,21 +1,28 @@
 import {
+	BigIntIdField,
 	BooleanField,
 	DateField,
 	DateFieldOptional,
 	EnumField,
 	StringField,
 	StringFieldOptional,
-	ULIDField,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import type { DomainEntityModel } from "@cocrepo/entity";
 import { type WhitelistEntry, WhitelistType } from "@cocrepo/prisma";
+import { Exclude } from "class-transformer";
 
 /**
  * 화이트리스트 항목 응답 DTO
  */
-export class WhitelistEntryDto implements DomainEntityModel<WhitelistEntry> {
-	@ULIDField({ description: "ID" })
-	id!: string;
+export class WhitelistEntryDto
+	implements DomainEntityModel<WhitelistEntry, "whitelistEntryId">
+{
+	@Exclude()
+	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
+	private readonly whitelistEntryId?: never;
+
+	@BigIntIdField({ description: "ID" })
+	id!: bigint;
 
 	@DateField({ description: "생성일" })
 	createdAt!: Date;

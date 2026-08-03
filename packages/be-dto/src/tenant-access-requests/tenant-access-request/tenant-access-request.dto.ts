@@ -1,14 +1,15 @@
 import {
+	BigIntIdField,
+	BigIntIdFieldOptional,
 	ClassField,
 	DateField,
 	EnumField,
 	StringFieldOptional,
-	ULIDField,
-	ULIDFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import type { DomainEntityModel } from "@cocrepo/entity";
 import type { TenantAccessRequest } from "@cocrepo/prisma";
 import { TenantAccessRequestStatus } from "@cocrepo/prisma";
+import { Exclude } from "class-transformer";
 import { AbstractDto } from "../../abstract.dto";
 import { RoleDto } from "../../role.dto";
 import { SpaceDto } from "../../space.dto";
@@ -17,22 +18,26 @@ import { UserDto } from "../../user.dto";
 
 export class TenantAccessRequestDto
 	extends AbstractDto
-	implements DomainEntityModel<TenantAccessRequest>
+	implements DomainEntityModel<TenantAccessRequest, "tenantAccessRequestId">
 {
-	@ULIDField({ description: "신청자 ID" })
-	requesterId!: string;
+	@Exclude()
+	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
+	private readonly tenantAccessRequestId?: never;
 
-	@ULIDField({ description: "신청 대상 Space ID" })
-	spaceId!: string;
+	@BigIntIdField({ description: "신청자 ID" })
+	requesterId!: bigint;
 
-	@ULIDField({ description: "희망 Role ID" })
-	requestedRoleId!: string;
+	@BigIntIdField({ description: "신청 대상 Space ID" })
+	spaceId!: bigint;
 
-	@ULIDFieldOptional({
+	@BigIntIdField({ description: "희망 Role ID" })
+	requestedRoleId!: bigint;
+
+	@BigIntIdFieldOptional({
 		description: "신청 시점 기존 Role ID",
 		nullable: true,
 	})
-	previousRoleId!: string | null;
+	previousRoleId!: bigint | null;
 
 	@StringFieldOptional({
 		description: "신청 사유",
@@ -45,11 +50,11 @@ export class TenantAccessRequestDto
 	})
 	status!: TenantAccessRequestStatus;
 
-	@ULIDFieldOptional({
+	@BigIntIdFieldOptional({
 		description: "검토자 ID",
 		nullable: true,
 	})
-	reviewerId!: string | null;
+	reviewerId!: bigint | null;
 
 	@StringFieldOptional({
 		description: "검토 코멘트",
@@ -63,11 +68,11 @@ export class TenantAccessRequestDto
 	})
 	reviewedAt!: Date | null;
 
-	@ULIDFieldOptional({
+	@BigIntIdFieldOptional({
 		description: "승인 적용 Tenant ID",
 		nullable: true,
 	})
-	appliedTenantId!: string | null;
+	appliedTenantId!: bigint | null;
 
 	@ClassField(() => UserDto, { required: false })
 	requester?: UserDto;

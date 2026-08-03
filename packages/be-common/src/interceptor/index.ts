@@ -1,3 +1,7 @@
+export {
+	BigIntResponseInterceptor,
+	serializeResponseBigInts,
+} from "./bigint-response.interceptor";
 export { DtoTransformInterceptor } from "./dto-transform.interceptor";
 export {
 	ApplyMasking,

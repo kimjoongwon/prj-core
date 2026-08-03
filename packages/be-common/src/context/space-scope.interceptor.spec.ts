@@ -43,7 +43,7 @@ describe("SpaceScopeInterceptor", () => {
 		mockSpacesRepository = {
 			findSpaceIdsByCategoryHierarchy: jest
 				.fn()
-				.mockResolvedValue(["space-1", "space-child"]),
+				.mockResolvedValue([301n, 302n]),
 		};
 		next = {
 			handle: jest.fn(() => of("ok")),
@@ -59,10 +59,10 @@ describe("SpaceScopeInterceptor", () => {
 	it("데코레이터가 없으면 현재 Space와 하위 Space scope를 사용해야 한다", async () => {
 		mockCls.get.mockImplementation((key: string) => {
 			if (key === CONTEXT_KEYS.TENANT) {
-				return { id: "tenant-1", spaceId: "space-1" };
+				return { id: 201n, spaceId: 301n };
 			}
-			if (key === CONTEXT_KEYS.TENANT_ID) return "tenant-1";
-			if (key === CONTEXT_KEYS.SPACE_ID) return "space-1";
+			if (key === CONTEXT_KEYS.TENANT_ID) return 201n;
+			if (key === CONTEXT_KEYS.SPACE_ID) return 301n;
 			return undefined;
 		});
 
@@ -70,10 +70,10 @@ describe("SpaceScopeInterceptor", () => {
 
 		expect(
 			mockSpacesRepository.findSpaceIdsByCategoryHierarchy,
-		).toHaveBeenCalledWith("space-1", SpaceResourceScope.WITH_DESCENDANTS);
+		).toHaveBeenCalledWith(301n, SpaceResourceScope.WITH_DESCENDANTS);
 		expect(mockCls.set).toHaveBeenCalledWith(CONTEXT_KEYS.EFFECTIVE_SPACE_IDS, [
-			"space-1",
-			"space-child",
+			301n,
+			302n,
 		]);
 		expect(next.handle).toHaveBeenCalled();
 	});
@@ -85,10 +85,10 @@ describe("SpaceScopeInterceptor", () => {
 		});
 		mockCls.get.mockImplementation((key: string) => {
 			if (key === CONTEXT_KEYS.TENANT) {
-				return { id: "tenant-1", spaceId: "space-1" };
+				return { id: 201n, spaceId: 301n };
 			}
-			if (key === CONTEXT_KEYS.TENANT_ID) return "tenant-1";
-			if (key === CONTEXT_KEYS.SPACE_ID) return "space-1";
+			if (key === CONTEXT_KEYS.TENANT_ID) return 201n;
+			if (key === CONTEXT_KEYS.SPACE_ID) return 301n;
 			return undefined;
 		});
 
@@ -96,10 +96,10 @@ describe("SpaceScopeInterceptor", () => {
 
 		expect(
 			mockSpacesRepository.findSpaceIdsByCategoryHierarchy,
-		).toHaveBeenCalledWith("space-1", SpaceResourceScope.WITH_ANCESTORS);
+		).toHaveBeenCalledWith(301n, SpaceResourceScope.WITH_ANCESTORS);
 		expect(mockCls.set).toHaveBeenCalledWith(CONTEXT_KEYS.EFFECTIVE_SPACE_IDS, [
-			"space-1",
-			"space-child",
+			301n,
+			302n,
 		]);
 		expect(next.handle).toHaveBeenCalled();
 	});
@@ -111,10 +111,10 @@ describe("SpaceScopeInterceptor", () => {
 		});
 		mockCls.get.mockImplementation((key: string) => {
 			if (key === CONTEXT_KEYS.TENANT) {
-				return { id: "tenant-1", spaceId: "space-1" };
+				return { id: 201n, spaceId: 301n };
 			}
-			if (key === CONTEXT_KEYS.TENANT_ID) return "tenant-1";
-			if (key === CONTEXT_KEYS.SPACE_ID) return "space-1";
+			if (key === CONTEXT_KEYS.TENANT_ID) return 201n;
+			if (key === CONTEXT_KEYS.SPACE_ID) return 301n;
 			return undefined;
 		});
 
@@ -122,10 +122,10 @@ describe("SpaceScopeInterceptor", () => {
 
 		expect(
 			mockSpacesRepository.findSpaceIdsByCategoryHierarchy,
-		).toHaveBeenCalledWith("space-1", SpaceResourceScope.WITH_TREE);
+		).toHaveBeenCalledWith(301n, SpaceResourceScope.WITH_TREE);
 		expect(mockCls.set).toHaveBeenCalledWith(CONTEXT_KEYS.EFFECTIVE_SPACE_IDS, [
-			"space-1",
-			"space-child",
+			301n,
+			302n,
 		]);
 		expect(next.handle).toHaveBeenCalled();
 	});
@@ -134,13 +134,13 @@ describe("SpaceScopeInterceptor", () => {
 		mockCls.get.mockImplementation((key: string) => {
 			if (key === CONTEXT_KEYS.TENANT) {
 				return {
-					id: "tenant-1",
-					spaceId: "space-1",
+					id: 201n,
+					spaceId: 301n,
 					role: { name: "PLATFORM_ADMIN" },
 				};
 			}
-			if (key === CONTEXT_KEYS.TENANT_ID) return "tenant-1";
-			if (key === CONTEXT_KEYS.SPACE_ID) return "space-1";
+			if (key === CONTEXT_KEYS.TENANT_ID) return 201n;
+			if (key === CONTEXT_KEYS.SPACE_ID) return 301n;
 			return undefined;
 		});
 
@@ -148,10 +148,10 @@ describe("SpaceScopeInterceptor", () => {
 
 		expect(
 			mockSpacesRepository.findSpaceIdsByCategoryHierarchy,
-		).toHaveBeenCalledWith("space-1", SpaceResourceScope.WITH_DESCENDANTS);
+		).toHaveBeenCalledWith(301n, SpaceResourceScope.WITH_DESCENDANTS);
 		expect(mockCls.set).toHaveBeenCalledWith(CONTEXT_KEYS.EFFECTIVE_SPACE_IDS, [
-			"space-1",
-			"space-child",
+			301n,
+			302n,
 		]);
 	});
 
@@ -159,13 +159,13 @@ describe("SpaceScopeInterceptor", () => {
 		mockCls.get.mockImplementation((key: string) => {
 			if (key === CONTEXT_KEYS.TENANT) {
 				return {
-					id: "tenant-1",
+					id: 201n,
 					spaceId: undefined,
-					space: { id: "space-from-tenant" },
+					space: { id: 303n },
 				};
 			}
-			if (key === CONTEXT_KEYS.TENANT_ID) return "tenant-1";
-			if (key === CONTEXT_KEYS.SPACE_ID) return "space-from-cls";
+			if (key === CONTEXT_KEYS.TENANT_ID) return 201n;
+			if (key === CONTEXT_KEYS.SPACE_ID) return 304n;
 			return undefined;
 		});
 
@@ -173,10 +173,7 @@ describe("SpaceScopeInterceptor", () => {
 
 		expect(
 			mockSpacesRepository.findSpaceIdsByCategoryHierarchy,
-		).toHaveBeenCalledWith(
-			"space-from-tenant",
-			SpaceResourceScope.WITH_DESCENDANTS,
-		);
+		).toHaveBeenCalledWith(303n, SpaceResourceScope.WITH_DESCENDANTS);
 	});
 
 	it("보호 라우트에서 x-tenant-id가 없으면 BadRequestException을 던져야 한다", async () => {
@@ -189,8 +186,8 @@ describe("SpaceScopeInterceptor", () => {
 
 	it("보호 라우트에서 x-tenant-id에 매칭되는 tenant가 없으면 ForbiddenException을 던져야 한다", async () => {
 		mockCls.get.mockImplementation((key: string) => {
-			if (key === CONTEXT_KEYS.TENANT_ID) return "tenant-1";
-			if (key === CONTEXT_KEYS.SPACE_ID) return "space-1";
+			if (key === CONTEXT_KEYS.TENANT_ID) return 201n;
+			if (key === CONTEXT_KEYS.SPACE_ID) return 301n;
 			return undefined;
 		});
 
@@ -206,7 +203,7 @@ describe("SpaceScopeInterceptor", () => {
 			return undefined;
 		});
 		mockCls.get.mockImplementation((key: string) => {
-			if (key === CONTEXT_KEYS.SPACE_ID) return "space-1";
+			if (key === CONTEXT_KEYS.SPACE_ID) return 301n;
 			return undefined;
 		});
 
@@ -214,10 +211,10 @@ describe("SpaceScopeInterceptor", () => {
 
 		expect(
 			mockSpacesRepository.findSpaceIdsByCategoryHierarchy,
-		).toHaveBeenCalledWith("space-1", SpaceResourceScope.WITH_DESCENDANTS);
+		).toHaveBeenCalledWith(301n, SpaceResourceScope.WITH_DESCENDANTS);
 		expect(mockCls.set).toHaveBeenCalledWith(CONTEXT_KEYS.EFFECTIVE_SPACE_IDS, [
-			"space-1",
-			"space-child",
+			301n,
+			302n,
 		]);
 		expect(next.handle).toHaveBeenCalled();
 	});

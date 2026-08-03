@@ -22,7 +22,7 @@ export class RoleAggregate {
 	/**
 	 * ID로 역할 조회
 	 */
-	getById(id: string): Promise<Role | null> {
+	getById(id: bigint): Promise<Role | null> {
 		return this.repository.findById(id);
 	}
 
@@ -66,8 +66,8 @@ export class RoleAggregate {
 	 * 역할 수정
 	 * - name은 수정 불가 (UpdateRoleDto에서 제외됨)
 	 */
-	async update(id: string, dto: UpdateRoleCommandInput): Promise<Role> {
-		this.logger.debug(`역할 수정 시도: ${id.slice(-8)}`);
+	async update(id: bigint, dto: UpdateRoleCommandInput): Promise<Role> {
+		this.logger.debug(`역할 수정 시도: ${id}`);
 
 		const role = await this.repository.findById(id);
 		if (!role) {
@@ -84,8 +84,8 @@ export class RoleAggregate {
 	 * 역할 삭제
 	 * - 연결된 테넌트가 있으면 삭제 불가
 	 */
-	async delete(id: string): Promise<Role> {
-		this.logger.debug(`역할 삭제 시도: ${id.slice(-8)}`);
+	async delete(id: bigint): Promise<Role> {
+		this.logger.debug(`역할 삭제 시도: ${id}`);
 
 		const role = await this.repository.findById(id);
 		if (!role) {

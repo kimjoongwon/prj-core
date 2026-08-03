@@ -1,12 +1,12 @@
 import {
+	BigIntIdField,
 	NumberFieldOptional,
 	StringFieldOptional,
-	ULIDField,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 
 export class CreateRoutineActivityItemDto {
-	@ULIDField()
-	taskId: string;
+	@BigIntIdField()
+	taskId: bigint;
 
 	@NumberFieldOptional()
 	order?: number;

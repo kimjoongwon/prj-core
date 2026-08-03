@@ -1,10 +1,10 @@
 import {
+	BigIntIdFieldOptional,
 	EnumField,
 	EnumFieldOptional,
 	StringField,
 	StringFieldOptional,
-	ULIDFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import {
 	InquiryCategory,
 	InquiryChannel,
@@ -43,15 +43,15 @@ export class CreateInquiryDto {
 	})
 	priority?: InquiryPriority;
 
-	@ULIDFieldOptional({
+	@BigIntIdFieldOptional({
 		description: "고객 ID",
 	})
-	customerId?: string;
+	customerId?: bigint;
 
-	@ULIDFieldOptional({
+	@BigIntIdFieldOptional({
 		description: "담당자 ID",
 	})
-	assigneeId?: string;
+	assigneeId?: bigint;
 
 	@StringFieldOptional({
 		description: "문의 내용 (첫 메시지)",

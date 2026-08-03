@@ -1,4 +1,4 @@
-import { StringField, StringFieldOptional } from "@cocrepo/decorator";
+import { StringField, StringFieldOptional } from "@cocrepo/decorator/field";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class NativeLogoutPayloadDto {

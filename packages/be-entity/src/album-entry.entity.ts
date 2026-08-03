@@ -1,28 +1,26 @@
-import type { AlbumEntry as AlbumEntryEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Album } from "./album.entity";
 import type { Asset } from "./asset.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
 
-export class AlbumEntry
-	extends AbstractEntity
-	implements DomainEntityModel<AlbumEntryEntity>
-{
+export class AlbumEntry extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	albumEntryId!: string;
+
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	spaceId!: string;
-	albumId!: string;
-	assetId!: string;
+	spaceId!: bigint;
+	albumId!: bigint;
+	assetId!: bigint;
 	position!: number;
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
 	caption!: string | null;
-	createdById!: string | null;
+	createdById!: bigint | null;
 
 	// ============================================================================
 	// 관계 필드 (선택적)

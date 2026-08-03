@@ -1,4 +1,4 @@
-import { ClassField } from "@cocrepo/decorator";
+import { ClassField } from "@cocrepo/decorator/field";
 import { IdpAccountDto } from "./idp-account/idp-account.dto";
 import { IdpAccountAccessGrantDto } from "./idp-account-access-grant.dto";
 

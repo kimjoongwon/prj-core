@@ -17,6 +17,7 @@ export class UpdateOidcClientCommand implements UpdateOidcClientCommandInput {
 	readonly tosUri?: UpdateOidcClientCommandInput["tosUri"];
 
 	constructor(
+		/** OIDC client identifier from external IdP protocol. */
 		readonly oidcClientId: string,
 		input: UpdateOidcClientCommandInput,
 	) {

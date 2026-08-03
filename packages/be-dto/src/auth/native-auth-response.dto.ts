@@ -3,7 +3,7 @@ import {
 	ClassField,
 	NumberField,
 	StringField,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import { ApiProperty } from "@nestjs/swagger";
 import { UserDto } from "../user.dto";
 

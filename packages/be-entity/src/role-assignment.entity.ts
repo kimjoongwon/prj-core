@@ -1,7 +1,5 @@
-import type { RoleAssignment as RoleAssignmentEntity } from "@cocrepo/prisma";
 import { Type } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import { Policy } from "./policy.entity";
 import type { Role } from "./role.entity";
 
@@ -10,12 +8,12 @@ import type { Role } from "./role.entity";
  *
  * Role에 Space별 Policy를 할당합니다.
  */
-export class RoleAssignment
-	extends AbstractEntity
-	implements DomainEntityModel<RoleAssignmentEntity>
-{
-	roleId!: string;
-	policyId!: string;
+export class RoleAssignment extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	roleAssignmentId!: string;
+
+	roleId!: bigint;
+	policyId!: bigint;
 	isActive!: boolean;
 	priority!: number;
 

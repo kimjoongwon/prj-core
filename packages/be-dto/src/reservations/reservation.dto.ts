@@ -1,16 +1,17 @@
 import {
+	BigIntIdField,
+	BigIntIdFieldOptional,
 	ClassField,
 	DateField,
 	EnumField,
 	NumberFieldOptional,
 	StringField,
 	StringFieldOptional,
-	ULIDField,
-	ULIDFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import type { DomainEntityModel } from "@cocrepo/entity";
 import type { Reservation as ReservationModel } from "@cocrepo/prisma";
 import { ReservationStatus } from "@cocrepo/prisma";
+import { Exclude } from "class-transformer";
 import { AbstractDto } from "../abstract.dto";
 import { ProgramDto } from "../program.dto";
 import { SessionDto } from "../session.dto";
@@ -19,25 +20,29 @@ import { UserDto } from "../user.dto";
 
 export class ReservationDto
 	extends AbstractDto
-	implements DomainEntityModel<ReservationModel>
+	implements DomainEntityModel<ReservationModel, "reservationId">
 {
-	@ULIDField({ description: "Space ID" })
-	spaceId!: string;
+	@Exclude()
+	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
+	private readonly reservationId?: never;
 
-	@ULIDFieldOptional({ nullable: true, description: "생성자 ID" })
-	createdById!: string | null;
+	@BigIntIdField({ description: "Space ID" })
+	spaceId!: bigint;
 
-	@ULIDField({ description: "예약 사용자 ID" })
-	userId!: string;
+	@BigIntIdFieldOptional({ nullable: true, description: "생성자 ID" })
+	createdById!: bigint | null;
 
-	@ULIDField({ description: "타임라인 ID" })
-	timelineId!: string;
+	@BigIntIdField({ description: "예약 사용자 ID" })
+	userId!: bigint;
 
-	@ULIDField({ description: "세션 ID" })
-	sessionId!: string;
+	@BigIntIdField({ description: "타임라인 ID" })
+	timelineId!: bigint;
 
-	@ULIDField({ description: "프로그램 ID" })
-	programId!: string;
+	@BigIntIdField({ description: "세션 ID" })
+	sessionId!: bigint;
+
+	@BigIntIdField({ description: "프로그램 ID" })
+	programId!: bigint;
 
 	@DateField({ description: "예약 발생 회차 시작 시각" })
 	occurrenceStartAt!: Date;

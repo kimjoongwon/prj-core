@@ -31,12 +31,12 @@ describe("RolesGuard", () => {
 	};
 
 	const createMockUser = (overrides: Record<string, unknown> = {}) => ({
-		id: "user-test-id",
+		id: 101n,
 		email: "test@example.com",
 		tenants: [
 			{
-				id: "tenant-1",
-				spaceId: "space-001",
+				id: 201n,
+				spaceId: 301n,
 				role: {
 					name: SYSTEM_ROLES.MEMBER,
 				},
@@ -46,8 +46,8 @@ describe("RolesGuard", () => {
 	});
 
 	const createMockTenant = (overrides: Record<string, unknown> = {}) => ({
-		id: "tenant-1",
-		spaceId: "space-001",
+		id: 201n,
+		spaceId: 301n,
 		role: {
 			name: SYSTEM_ROLES.MEMBER,
 		},
@@ -163,9 +163,9 @@ describe("RolesGuard", () => {
 				// Given
 				mockReflector.get.mockReturnValue([SYSTEM_ROLES.MEMBER]);
 				const user = createMockUser({
-					tenants: [{ id: "tenant-1", role: {} }],
+					tenants: [{ id: 201n, role: {} }],
 				});
-				const tenant = { id: "tenant-1", role: {} };
+				const tenant = { id: 201n, role: {} };
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
 					if (key === CONTEXT_KEYS.TENANT) return tenant;
@@ -184,9 +184,9 @@ describe("RolesGuard", () => {
 				// Given
 				mockReflector.get.mockReturnValue([SYSTEM_ROLES.MEMBER]);
 				const user = createMockUser({
-					tenants: [{ id: "tenant-1", role: null }],
+					tenants: [{ id: 201n, role: null }],
 				});
-				const tenant = { id: "tenant-1", role: null };
+				const tenant = { id: 201n, role: null };
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
 					if (key === CONTEXT_KEYS.TENANT) return tenant;
@@ -227,26 +227,26 @@ describe("RolesGuard", () => {
 				const user = createMockUser({
 					tenants: [
 						{
-							id: "tenant-1",
-							spaceId: "space-001",
+							id: 201n,
+							spaceId: 301n,
 							role: { name: SYSTEM_ROLES.MEMBER },
 						},
 						{
-							id: "tenant-2",
-							spaceId: "space-002",
+							id: 202n,
+							spaceId: 302n,
 							role: { name: SYSTEM_ROLES.COMPANY_MANAGER },
 						},
 					],
 				});
 				const tenant = createMockTenant({
-					id: "tenant-2",
-					spaceId: "space-002",
+					id: 202n,
+					spaceId: 302n,
 					role: { name: SYSTEM_ROLES.COMPANY_MANAGER },
 				});
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
 					if (key === CONTEXT_KEYS.TENANT) return tenant;
-					if (key === CONTEXT_KEYS.SPACE_ID) return "space-002";
+					if (key === CONTEXT_KEYS.SPACE_ID) return 302n;
 					return undefined;
 				});
 				const context = createMockExecutionContext();
@@ -326,7 +326,7 @@ describe("RolesGuard", () => {
 				const user = createMockUser({
 					tenants: [
 						{
-							id: "tenant-1",
+							id: 201n,
 							main: true,
 							role: { name: SYSTEM_ROLES.COMPANY_MANAGER },
 						},
@@ -355,7 +355,7 @@ describe("RolesGuard", () => {
 				const user = createMockUser({
 					tenants: [
 						{
-							id: "tenant-1",
+							id: 201n,
 							main: true,
 							role: { name: SYSTEM_ROLES.PLATFORM_ADMIN },
 						},

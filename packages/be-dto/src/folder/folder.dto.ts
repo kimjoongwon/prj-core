@@ -1,12 +1,13 @@
 import {
+	BigIntIdField,
+	BigIntIdFieldOptional,
 	ClassField,
 	NumberField,
 	StringField,
-	ULIDField,
-	ULIDFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import type { DomainEntityModel } from "@cocrepo/entity";
 import type { Folder } from "@cocrepo/prisma";
+import { Exclude } from "class-transformer";
 import { AbstractDto } from "../abstract.dto";
 
 /**
@@ -14,16 +15,20 @@ import { AbstractDto } from "../abstract.dto";
  */
 export class FolderDto
 	extends AbstractDto
-	implements DomainEntityModel<Folder>
+	implements DomainEntityModel<Folder, "folderId">
 {
-	@ULIDField({ description: "소속 Space ID" })
-	spaceId!: string;
+	@Exclude()
+	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
+	private readonly folderId?: never;
 
-	@ULIDFieldOptional({
+	@BigIntIdField({ description: "소속 Space ID" })
+	spaceId!: bigint;
+
+	@BigIntIdFieldOptional({
 		nullable: true,
 		description: "부모 폴더 ID (루트면 null)",
 	})
-	parentFolderId!: string | null;
+	parentFolderId!: bigint | null;
 
 	@StringField({ description: "폴더명" })
 	name!: string;
@@ -34,8 +39,8 @@ export class FolderDto
 	@NumberField({ description: "정렬 순서", int: true })
 	sortOrder!: number;
 
-	@ULIDFieldOptional({ nullable: true, description: "생성자 ID" })
-	createdById!: string | null;
+	@BigIntIdFieldOptional({ nullable: true, description: "생성자 ID" })
+	createdById!: bigint | null;
 
 	// 관계 필드
 	@ClassField(() => FolderDto, { required: false, description: "부모 폴더" })

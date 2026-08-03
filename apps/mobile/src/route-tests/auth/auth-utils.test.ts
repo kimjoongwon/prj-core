@@ -159,8 +159,8 @@ describe("mobile auth utils", () => {
 			fitnessCenterName: "강남점",
 			imageFileId: "fitness-center-image",
 			logoImageFileId: "company-logo",
-			spaceId: "space-branch",
-			tenantId: "tenant-branch",
+			spaceId: "101",
+			tenantId: "201",
 		};
 
 		await saveNativeSpaceSelection(selection);
@@ -184,8 +184,8 @@ describe("mobile auth utils", () => {
 			storageKey,
 			JSON.stringify({
 				fitnessCenterName: "강남점",
-				spaceId: "space-branch",
-				tenantId: "tenant-branch",
+				spaceId: "101",
+				tenantId: "201",
 			}),
 		);
 
@@ -201,8 +201,8 @@ describe("mobile auth utils", () => {
 			storageKey,
 			JSON.stringify({
 				fitnessCenterName: "강남점",
-				spaceId: "space-branch",
-				tenantId: "tenant-branch",
+				spaceId: "101",
+				tenantId: "201",
 				version: 1,
 			}),
 		);

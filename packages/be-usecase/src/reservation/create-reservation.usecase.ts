@@ -3,6 +3,7 @@ import { CreateReservationCommand } from "@cocrepo/command";
 import { ReservationCreatedEvent } from "@cocrepo/event";
 import { CommandHandler, EventBus } from "@nestjs/cqrs";
 import { ReservationUseCaseContext } from "./reservation-context";
+import { toReservationCreatedEventPayload } from "./reservation-created-event-payload.mapper";
 
 @CommandHandler(CreateReservationCommand)
 export class CreateReservationUseCase {
@@ -31,15 +32,12 @@ export class CreateReservationUseCase {
 
 		if (createResult.created) {
 			this.eventBus.publish(
-				new ReservationCreatedEvent({
-					reservationId: createResult.reservation.id,
-					spaceId: context.spaceId,
-					userId: context.userId,
-					programId: input.programId,
-					sessionId: input.sessionId,
-					timelineId: input.timelineId,
-					occurredAt: new Date(),
-				}),
+				new ReservationCreatedEvent(
+					toReservationCreatedEventPayload({
+						reservation: createResult.reservation,
+						occurredAt: new Date(),
+					}),
+				),
 			);
 		}
 

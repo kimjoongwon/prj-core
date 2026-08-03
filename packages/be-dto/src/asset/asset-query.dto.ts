@@ -1,8 +1,8 @@
 import {
+	BigIntIdFieldOptional,
 	EnumFieldOptional,
 	StringFieldOptional,
-	ULIDFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import { DeleteFilter } from "@cocrepo/enum";
 import { AssetKind, AssetStatus } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
@@ -20,11 +20,11 @@ import { QueryDto } from "../query/query.dto";
  * - statusFilter -> removedAt 필터
  */
 export class AssetQueryDto extends QueryDto {
-	@ULIDFieldOptional({ description: "폴더 ID 필터" })
-	folderId?: string;
+	@BigIntIdFieldOptional({ description: "폴더 ID 필터" })
+	folderId?: bigint;
 
-	@ULIDFieldOptional({ description: "테넌트 ID 필터" })
-	spaceId?: string;
+	@BigIntIdFieldOptional({ description: "테넌트 ID 필터" })
+	spaceId?: bigint;
 
 	@EnumFieldOptional(() => AssetKind, { description: "에셋 타입 필터" })
 	kind?: AssetKind;

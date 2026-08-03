@@ -39,7 +39,7 @@ export class AssetAggregate {
 
 	async getAssets(query: GetAssetsQueryInput) {
 		const spaceId = this.getCurrentSpaceId();
-		this.logger.debug(`에셋 목록 조회: space=${spaceId.slice(-8)}`);
+		this.logger.debug(`에셋 목록 조회: space=${spaceId}`);
 		const spaceIds = this.spaceContext.spaceIds;
 		const where = this.applySpaceScope(
 			buildAssetQueryWhere(
@@ -64,12 +64,12 @@ export class AssetAggregate {
 		};
 	}
 
-	async getAssetById(assetId: string) {
+	async getAssetById(assetId: bigint) {
 		const asset = await this.getCurrentSpaceAsset(assetId);
 		return this.serializeAsset(asset);
 	}
 
-	async getAssetContent(assetId: string) {
+	async getAssetContent(assetId: bigint) {
 		const asset = await this.getCurrentSpaceAsset(assetId);
 		const object = await this.objectStorageService.getObject(asset.storageKey);
 
@@ -83,7 +83,7 @@ export class AssetAggregate {
 		};
 	}
 
-	async moveAsset(assetId: string, dto: MoveAssetCommandInput) {
+	async moveAsset(assetId: bigint, dto: MoveAssetCommandInput) {
 		const currentSpaceId = this.getCurrentSpaceId();
 		const asset = await this.getCurrentSpaceAsset(assetId);
 		const targetFolder = await this.foldersRepository.findById(
@@ -109,7 +109,7 @@ export class AssetAggregate {
 		return this.serializeAsset(movedAsset);
 	}
 
-	async deleteAsset(assetId: string): Promise<void> {
+	async deleteAsset(assetId: bigint): Promise<void> {
 		const asset = await this.getCurrentSpaceAsset(assetId);
 
 		if (
@@ -126,7 +126,7 @@ export class AssetAggregate {
 	async uploadAsset(
 		dto: UploadAssetCommandInput,
 		file: UploadedAssetFile | undefined,
-		createdById: string,
+		createdById: bigint,
 	) {
 		if (!file) {
 			throw new BadRequestException("업로드할 파일이 필요합니다");
@@ -181,7 +181,7 @@ export class AssetAggregate {
 		return this.serializeAsset(asset);
 	}
 
-	private getCurrentSpaceId(): string {
+	private getCurrentSpaceId(): bigint {
 		const spaceId = this.spaceContext.spaceId;
 
 		if (!spaceId) {
@@ -193,7 +193,7 @@ export class AssetAggregate {
 		return spaceId;
 	}
 
-	private async getCurrentSpaceAsset(assetId: string): Promise<Asset> {
+	private async getCurrentSpaceAsset(assetId: bigint): Promise<Asset> {
 		const asset = await this.assetsRepository.findByIdWithRelations(assetId);
 		this.getCurrentSpaceId();
 
@@ -206,7 +206,7 @@ export class AssetAggregate {
 
 	private applySpaceScope(
 		where: Prisma.AssetWhereInput,
-		spaceIds?: string[],
+		spaceIds?: bigint[],
 	): Prisma.AssetWhereInput {
 		if (spaceIds === undefined) {
 			return where;
@@ -218,7 +218,7 @@ export class AssetAggregate {
 		};
 	}
 
-	private canReadSpace(spaceId: string): boolean {
+	private canReadSpace(spaceId: bigint): boolean {
 		const spaceIds = this.spaceContext.spaceIds;
 		return spaceIds === undefined || spaceIds.includes(spaceId);
 	}
@@ -249,7 +249,7 @@ export class AssetAggregate {
 	}
 
 	private buildStorageKey(
-		spaceId: string,
+		spaceId: bigint,
 		kind: AssetKind,
 		extension: string | null,
 	): StorageKey {

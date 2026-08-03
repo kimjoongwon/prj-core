@@ -101,16 +101,16 @@ const branchSpace = {
     },
     createdAt: "2026-05-17T00:00:00.000Z",
     email: "gangnam@example.com",
-    id: "fitness-center-branch",
+    id: "301",
     name: "강남점",
     phone: "02-0000-0000",
     removedAt: null,
-    spaceId: "space-branch",
+    spaceId: "101",
     updatedAt: "2026-05-17T00:00:00.000Z",
   },
-  id: "space-branch",
+  id: "101",
   removedAt: null,
-  tenantId: "tenant-branch",
+  tenantId: "201",
   updatedAt: "2026-05-17T00:00:00.000Z",
 };
 
@@ -118,12 +118,12 @@ const platformSpace = {
   ...branchSpace,
   fitnessCenter: {
     ...branchSpace.fitnessCenter,
-    id: "fitness-center-system",
+    id: "302",
     name: "플랫폼 운영본부",
-    spaceId: "01J00000000000000000000001",
+    spaceId: "102",
   },
-  id: "01J00000000000000000000001",
-  tenantId: "tenant-system",
+  id: "102",
+  tenantId: "202",
 };
 
 describe("mobile select space route", () => {
@@ -153,13 +153,13 @@ describe("mobile select space route", () => {
     expect(screen.getByText("강남점:서울 강남구 테헤란로")).toBeTruthy();
     expect(screen.queryByText(/플랫폼 운영본부/)).toBeNull();
 
-    fireEvent.press(screen.getByLabelText("space-tenant-branch"));
+    fireEvent.press(screen.getByLabelText("space-201"));
 
     await waitFor(() => {
-      expect(mockMutateAsync).toHaveBeenCalledWith({ tenantId: "tenant-branch" });
+      expect(mockMutateAsync).toHaveBeenCalledWith({ tenantId: "201" });
     });
-    expect(mobileApiScope.tenantId).toBe("tenant-branch");
-    expect(mobileApiScope.spaceId).toBe("space-branch");
+    expect(mobileApiScope.tenantId).toBe("201");
+    expect(mobileApiScope.spaceId).toBe("101");
     expect(mobileApiScope.fitnessCenterName).toBe("강남점");
     const persistedSelectionCall = (
       SecureStore.setItemAsync as jest.Mock

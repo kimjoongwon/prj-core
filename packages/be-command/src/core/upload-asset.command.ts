@@ -5,7 +5,7 @@ export class UploadAssetCommand implements UploadAssetCommandInput {
 	constructor(
 		input: UploadAssetCommandInput,
 		readonly file: Express.Multer.File | undefined,
-		readonly createdById: string,
+		readonly createdById: bigint,
 	) {
 		Object.assign(this, input);
 	}

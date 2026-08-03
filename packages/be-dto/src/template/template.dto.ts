@@ -3,9 +3,10 @@ import {
 	EnumField,
 	StringField,
 	StringFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import type { DomainEntityModel } from "@cocrepo/entity";
 import { type Template, TemplateType } from "@cocrepo/prisma";
+import { Exclude } from "class-transformer";
 
 import { AbstractDto } from "../abstract.dto";
 
@@ -14,8 +15,12 @@ import { AbstractDto } from "../abstract.dto";
  */
 export class TemplateDto
 	extends AbstractDto
-	implements DomainEntityModel<Template>
+	implements DomainEntityModel<Template, "templateId">
 {
+	@Exclude()
+	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
+	private readonly templateId?: never;
+
 	@StringField({ description: "고유 코드" })
 	code!: string;
 

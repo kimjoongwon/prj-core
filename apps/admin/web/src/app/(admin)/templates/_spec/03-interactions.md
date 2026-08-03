@@ -152,7 +152,7 @@
 **Path Parameters**:
 | 파라미터 | 타입 | 필수 | 설명 |
 |---------|------|:----:|------|
-| templateId | string (UUID) | O | 템플릿 ID |
+| templateId | string (decimal string) | O | 템플릿 ID |
 
 **동작**: isActive 값을 반전 (true -> false, false -> true)
 

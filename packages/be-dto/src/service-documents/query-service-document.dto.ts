@@ -2,7 +2,7 @@ import {
 	BooleanFieldOptional,
 	EnumFieldOptional,
 	StringFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import {
 	ServiceDocumentKind,
 	ServiceDocumentPlatform,

@@ -2,6 +2,7 @@ export * from "./create-reservation.usecase";
 export * from "./get-my-reservations.usecase";
 export * from "./get-reservation-booking-feed.usecase";
 export * from "./reservation-context";
+export * from "./reservation-created-event-payload.mapper";
 export * from "./reservation-created-log.event-handler";
 
 import { CreateReservationUseCase } from "./create-reservation.usecase";

@@ -2,7 +2,7 @@ import {
 	DateFieldOptional,
 	EnumFieldOptional,
 	StringFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import { AuthAuditResult } from "@cocrepo/prisma";
 import { QueryDto } from "./query.dto";
 

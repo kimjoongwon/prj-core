@@ -1,4 +1,4 @@
-import { NumberField, StringField } from "@cocrepo/decorator";
+import { NumberField, StringField } from "@cocrepo/decorator/field";
 
 export class LoginTrendItemDto {
 	@StringField({ description: "날짜 (YYYY-MM-DD)" })

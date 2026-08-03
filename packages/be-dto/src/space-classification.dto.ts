@@ -1,17 +1,24 @@
-import { ClassField, ULIDField } from "@cocrepo/decorator";
+import { BigIntIdField, ClassField } from "@cocrepo/decorator/field";
 import type { DomainEntityModel } from "@cocrepo/entity";
 import type { SpaceClassification } from "@cocrepo/prisma";
-import { AbstractDto, CategoryDto, SpaceDto } from ".";
+import { Exclude } from "class-transformer";
+import { AbstractDto } from "./abstract.dto";
+import { CategoryDto } from "./category.dto";
+import { SpaceDto } from "./space.dto";
 
 export class SpaceClassificationDto
 	extends AbstractDto
-	implements DomainEntityModel<SpaceClassification>
+	implements DomainEntityModel<SpaceClassification, "spaceClassificationId">
 {
-	@ULIDField()
-	spaceId: string;
+	@Exclude()
+	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
+	private readonly spaceClassificationId?: never;
 
-	@ULIDField()
-	categoryId: string;
+	@BigIntIdField()
+	spaceId: bigint;
+
+	@BigIntIdField()
+	categoryId: bigint;
 
 	@ClassField(() => CategoryDto, { required: false })
 	category?: CategoryDto;

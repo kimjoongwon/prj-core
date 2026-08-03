@@ -27,16 +27,16 @@ export type AggregateWhitelistEntry = {
 }
 
 export type WhitelistEntryAvgAggregateOutputType = {
-  seq: number | null
+  id: number | null
 }
 
 export type WhitelistEntrySumAggregateOutputType = {
-  seq: number | null
+  id: bigint | null
 }
 
 export type WhitelistEntryMinAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  whitelistEntryId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   type: $Enums.WhitelistType | null
@@ -46,8 +46,8 @@ export type WhitelistEntryMinAggregateOutputType = {
 }
 
 export type WhitelistEntryMaxAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  whitelistEntryId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   type: $Enums.WhitelistType | null
@@ -57,8 +57,8 @@ export type WhitelistEntryMaxAggregateOutputType = {
 }
 
 export type WhitelistEntryCountAggregateOutputType = {
+  whitelistEntryId: number
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   type: number
@@ -70,16 +70,16 @@ export type WhitelistEntryCountAggregateOutputType = {
 
 
 export type WhitelistEntryAvgAggregateInputType = {
-  seq?: true
+  id?: true
 }
 
 export type WhitelistEntrySumAggregateInputType = {
-  seq?: true
+  id?: true
 }
 
 export type WhitelistEntryMinAggregateInputType = {
+  whitelistEntryId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   type?: true
@@ -89,8 +89,8 @@ export type WhitelistEntryMinAggregateInputType = {
 }
 
 export type WhitelistEntryMaxAggregateInputType = {
+  whitelistEntryId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   type?: true
@@ -100,8 +100,8 @@ export type WhitelistEntryMaxAggregateInputType = {
 }
 
 export type WhitelistEntryCountAggregateInputType = {
+  whitelistEntryId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   type?: true
@@ -198,8 +198,8 @@ export type WhitelistEntryGroupByArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 export type WhitelistEntryGroupByOutputType = {
-  id: string
-  seq: number
+  whitelistEntryId: string
+  id: bigint
   createdAt: Date
   updatedAt: Date | null
   type: $Enums.WhitelistType
@@ -232,8 +232,8 @@ export type WhitelistEntryWhereInput = {
   AND?: Prisma.WhitelistEntryWhereInput | Prisma.WhitelistEntryWhereInput[]
   OR?: Prisma.WhitelistEntryWhereInput[]
   NOT?: Prisma.WhitelistEntryWhereInput | Prisma.WhitelistEntryWhereInput[]
-  id?: Prisma.StringFilter<"WhitelistEntry"> | string
-  seq?: Prisma.IntFilter<"WhitelistEntry"> | number
+  whitelistEntryId?: Prisma.StringFilter<"WhitelistEntry"> | string
+  id?: Prisma.BigIntFilter<"WhitelistEntry"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"WhitelistEntry"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"WhitelistEntry"> | Date | string | null
   type?: Prisma.EnumWhitelistTypeFilter<"WhitelistEntry"> | $Enums.WhitelistType
@@ -243,8 +243,8 @@ export type WhitelistEntryWhereInput = {
 }
 
 export type WhitelistEntryOrderByWithRelationInput = {
+  whitelistEntryId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
@@ -254,8 +254,8 @@ export type WhitelistEntryOrderByWithRelationInput = {
 }
 
 export type WhitelistEntryWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  seq?: number
+  whitelistEntryId?: string
+  id?: bigint | number
   type_value?: Prisma.WhitelistEntryTypeValueCompoundUniqueInput
   AND?: Prisma.WhitelistEntryWhereInput | Prisma.WhitelistEntryWhereInput[]
   OR?: Prisma.WhitelistEntryWhereInput[]
@@ -266,11 +266,11 @@ export type WhitelistEntryWhereUniqueInput = Prisma.AtLeast<{
   value?: Prisma.StringFilter<"WhitelistEntry"> | string
   description?: Prisma.StringNullableFilter<"WhitelistEntry"> | string | null
   isActive?: Prisma.BoolFilter<"WhitelistEntry"> | boolean
-}, "seq" | "id" | "type_value">
+}, "id" | "whitelistEntryId" | "type_value">
 
 export type WhitelistEntryOrderByWithAggregationInput = {
+  whitelistEntryId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
@@ -288,8 +288,8 @@ export type WhitelistEntryScalarWhereWithAggregatesInput = {
   AND?: Prisma.WhitelistEntryScalarWhereWithAggregatesInput | Prisma.WhitelistEntryScalarWhereWithAggregatesInput[]
   OR?: Prisma.WhitelistEntryScalarWhereWithAggregatesInput[]
   NOT?: Prisma.WhitelistEntryScalarWhereWithAggregatesInput | Prisma.WhitelistEntryScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"WhitelistEntry"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"WhitelistEntry"> | number
+  whitelistEntryId?: Prisma.StringWithAggregatesFilter<"WhitelistEntry"> | string
+  id?: Prisma.BigIntWithAggregatesFilter<"WhitelistEntry"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"WhitelistEntry"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"WhitelistEntry"> | Date | string | null
   type?: Prisma.EnumWhitelistTypeWithAggregatesFilter<"WhitelistEntry"> | $Enums.WhitelistType
@@ -299,7 +299,8 @@ export type WhitelistEntryScalarWhereWithAggregatesInput = {
 }
 
 export type WhitelistEntryCreateInput = {
-  id?: string
+  whitelistEntryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   type: $Enums.WhitelistType
@@ -309,8 +310,8 @@ export type WhitelistEntryCreateInput = {
 }
 
 export type WhitelistEntryUncheckedCreateInput = {
-  id?: string
-  seq?: number
+  whitelistEntryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   type: $Enums.WhitelistType
@@ -320,7 +321,8 @@ export type WhitelistEntryUncheckedCreateInput = {
 }
 
 export type WhitelistEntryUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  whitelistEntryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   type?: Prisma.EnumWhitelistTypeFieldUpdateOperationsInput | $Enums.WhitelistType
@@ -330,8 +332,8 @@ export type WhitelistEntryUpdateInput = {
 }
 
 export type WhitelistEntryUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  whitelistEntryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   type?: Prisma.EnumWhitelistTypeFieldUpdateOperationsInput | $Enums.WhitelistType
@@ -341,8 +343,8 @@ export type WhitelistEntryUncheckedUpdateInput = {
 }
 
 export type WhitelistEntryCreateManyInput = {
-  id?: string
-  seq?: number
+  whitelistEntryId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   type: $Enums.WhitelistType
@@ -352,7 +354,8 @@ export type WhitelistEntryCreateManyInput = {
 }
 
 export type WhitelistEntryUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  whitelistEntryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   type?: Prisma.EnumWhitelistTypeFieldUpdateOperationsInput | $Enums.WhitelistType
@@ -362,8 +365,8 @@ export type WhitelistEntryUpdateManyMutationInput = {
 }
 
 export type WhitelistEntryUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  whitelistEntryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   type?: Prisma.EnumWhitelistTypeFieldUpdateOperationsInput | $Enums.WhitelistType
@@ -378,8 +381,8 @@ export type WhitelistEntryTypeValueCompoundUniqueInput = {
 }
 
 export type WhitelistEntryCountOrderByAggregateInput = {
+  whitelistEntryId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   type?: Prisma.SortOrder
@@ -389,12 +392,12 @@ export type WhitelistEntryCountOrderByAggregateInput = {
 }
 
 export type WhitelistEntryAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
 }
 
 export type WhitelistEntryMaxOrderByAggregateInput = {
+  whitelistEntryId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   type?: Prisma.SortOrder
@@ -404,8 +407,8 @@ export type WhitelistEntryMaxOrderByAggregateInput = {
 }
 
 export type WhitelistEntryMinOrderByAggregateInput = {
+  whitelistEntryId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   type?: Prisma.SortOrder
@@ -415,7 +418,7 @@ export type WhitelistEntryMinOrderByAggregateInput = {
 }
 
 export type WhitelistEntrySumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
 }
 
 export type EnumWhitelistTypeFieldUpdateOperationsInput = {
@@ -425,8 +428,8 @@ export type EnumWhitelistTypeFieldUpdateOperationsInput = {
 
 
 export type WhitelistEntrySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  whitelistEntryId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   type?: boolean
@@ -436,8 +439,8 @@ export type WhitelistEntrySelect<ExtArgs extends runtime.Types.Extensions.Intern
 }, ExtArgs["result"]["whitelistEntry"]>
 
 export type WhitelistEntrySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  whitelistEntryId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   type?: boolean
@@ -447,8 +450,8 @@ export type WhitelistEntrySelectCreateManyAndReturn<ExtArgs extends runtime.Type
 }, ExtArgs["result"]["whitelistEntry"]>
 
 export type WhitelistEntrySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  whitelistEntryId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   type?: boolean
@@ -458,8 +461,8 @@ export type WhitelistEntrySelectUpdateManyAndReturn<ExtArgs extends runtime.Type
 }, ExtArgs["result"]["whitelistEntry"]>
 
 export type WhitelistEntrySelectScalar = {
+  whitelistEntryId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   type?: boolean
@@ -468,14 +471,14 @@ export type WhitelistEntrySelectScalar = {
   isActive?: boolean
 }
 
-export type WhitelistEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "type" | "value" | "description" | "isActive", ExtArgs["result"]["whitelistEntry"]>
+export type WhitelistEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"whitelistEntryId" | "id" | "createdAt" | "updatedAt" | "type" | "value" | "description" | "isActive", ExtArgs["result"]["whitelistEntry"]>
 
 export type $WhitelistEntryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "WhitelistEntry"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    seq: number
+    whitelistEntryId: string
+    id: bigint
     createdAt: Date
     updatedAt: Date | null
     /**
@@ -577,8 +580,8 @@ export interface WhitelistEntryDelegate<ExtArgs extends runtime.Types.Extensions
    * // Get first 10 WhitelistEntries
    * const whitelistEntries = await prisma.whitelistEntry.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const whitelistEntryWithIdOnly = await prisma.whitelistEntry.findMany({ select: { id: true } })
+   * // Only select the `whitelistEntryId`
+   * const whitelistEntryWithWhitelistEntryIdOnly = await prisma.whitelistEntry.findMany({ select: { whitelistEntryId: true } })
    * 
    */
   findMany<T extends WhitelistEntryFindManyArgs>(args?: Prisma.SelectSubset<T, WhitelistEntryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WhitelistEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -622,9 +625,9 @@ export interface WhitelistEntryDelegate<ExtArgs extends runtime.Types.Extensions
    *   ]
    * })
    * 
-   * // Create many WhitelistEntries and only return the `id`
-   * const whitelistEntryWithIdOnly = await prisma.whitelistEntry.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many WhitelistEntries and only return the `whitelistEntryId`
+   * const whitelistEntryWithWhitelistEntryIdOnly = await prisma.whitelistEntry.createManyAndReturn({
+   *   select: { whitelistEntryId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -713,9 +716,9 @@ export interface WhitelistEntryDelegate<ExtArgs extends runtime.Types.Extensions
    *   ]
    * })
    * 
-   * // Update zero or more WhitelistEntries and only return the `id`
-   * const whitelistEntryWithIdOnly = await prisma.whitelistEntry.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more WhitelistEntries and only return the `whitelistEntryId`
+   * const whitelistEntryWithWhitelistEntryIdOnly = await prisma.whitelistEntry.updateManyAndReturn({
+   *   select: { whitelistEntryId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -917,8 +920,8 @@ export interface Prisma__WhitelistEntryClient<T, Null = never, ExtArgs extends r
  * Fields of the WhitelistEntry model
  */
 export interface WhitelistEntryFieldRefs {
-  readonly id: Prisma.FieldRef<"WhitelistEntry", 'String'>
-  readonly seq: Prisma.FieldRef<"WhitelistEntry", 'Int'>
+  readonly whitelistEntryId: Prisma.FieldRef<"WhitelistEntry", 'String'>
+  readonly id: Prisma.FieldRef<"WhitelistEntry", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"WhitelistEntry", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"WhitelistEntry", 'DateTime'>
   readonly type: Prisma.FieldRef<"WhitelistEntry", 'WhitelistType'>

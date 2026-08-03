@@ -1,3 +1,4 @@
+import { DECIMAL_ID_PATTERN_SOURCE } from "@cocrepo/type/database-id";
 import type { ApiPropertyOptions } from "@nestjs/swagger";
 import { ApiProperty } from "@nestjs/swagger";
 import { plainToClass } from "class-transformer";
@@ -102,6 +103,32 @@ export function ApiULIDPropertyOptional(
 		Partial<{ each: boolean }> = {},
 ): PropertyDecorator {
 	return ApiULIDProperty({ required: false, ...options });
+}
+
+/**
+ * canonical decimal bigint ID 문자열을 Swagger 스키마로 문서화합니다.
+ */
+export function ApiBigIntIdProperty(
+	options: ApiPropertyOptions & Partial<{ each: boolean }> = {},
+): PropertyDecorator {
+	const { each, ...propertyOptions } = options;
+
+	return ApiProperty({
+		type: "string",
+		pattern: DECIMAL_ID_PATTERN_SOURCE,
+		isArray: each,
+		...propertyOptions,
+	});
+}
+
+/**
+ * 선택적 canonical decimal bigint ID 문자열을 Swagger 스키마로 문서화합니다.
+ */
+export function ApiBigIntIdPropertyOptional(
+	options: Omit<ApiPropertyOptions, "type" | "format" | "required"> &
+		Partial<{ each: boolean }> = {},
+): PropertyDecorator {
+	return ApiBigIntIdProperty({ required: false, ...options });
 }
 
 export function ApiEnumProperty<TEnum>(

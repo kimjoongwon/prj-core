@@ -1,4 +1,5 @@
 import { REQUEST_HEADER_KEYS, Token } from "@cocrepo/constant";
+import { DECIMAL_ID_PATTERN_SOURCE } from "@cocrepo/type/database-id";
 import { applyDecorators } from "@nestjs/common";
 import { ApiCookieAuth, ApiHeader, ApiSecurity } from "@nestjs/swagger";
 
@@ -22,8 +23,8 @@ export const ApiTenantHeader = (options: ApiTenantHeaderOptions = {}) =>
 			"현재 요청에서 사용할 Tenant ID입니다. 서버는 이 Tenant에서 Space를 파생하고 Space category scope로 리소스를 필터링합니다.",
 		schema: {
 			type: "string",
-			pattern: "^[0-9A-HJKMNP-TV-Z]{26}$",
-			example: "01J00000000000000000000002",
+			pattern: DECIMAL_ID_PATTERN_SOURCE,
+			example: "1",
 		},
 	});
 

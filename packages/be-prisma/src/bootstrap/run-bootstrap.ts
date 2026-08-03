@@ -1,5 +1,5 @@
 import type { PrismaClient } from "../generated/client/client";
-import { SYSTEM_SPACE_ID } from "../reference-data/constants";
+import { SYSTEM_SPACE_ULID } from "../reference-data/constants";
 import { syncReferenceData } from "../reference-data/sync-reference-data";
 import { createAssetDomainData } from "./asset";
 import { ensureSecurityPolicyDefaults } from "./defaults";
@@ -30,8 +30,8 @@ export async function runBootstrap(prisma: PrismaClient): Promise<void> {
 		prisma,
 		systemBootstrap.companyManagerRole,
 	);
-	await classifyFitnessCenterSpacesAsBranch(prisma, SYSTEM_SPACE_ID);
-	await createHierarchicalTenants(prisma, SYSTEM_SPACE_ID);
+	await classifyFitnessCenterSpacesAsBranch(prisma, SYSTEM_SPACE_ULID);
+	await createHierarchicalTenants(prisma, SYSTEM_SPACE_ULID);
 	await syncReferenceData(prisma);
 	await createTimelineSessionExerciseDomainData(prisma);
 	await ensureSecurityPolicyDefaults(prisma);

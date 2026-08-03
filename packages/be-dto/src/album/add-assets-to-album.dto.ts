@@ -1,4 +1,4 @@
-import { StringField } from "@cocrepo/decorator";
+import { StringField } from "@cocrepo/decorator/field";
 import { Transform } from "class-transformer";
 
 /**

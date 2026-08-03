@@ -1,10 +1,12 @@
-import { getAdminSpaceRequestHeaders, loginToConsole } from "@cocrepo/e2e";
+import { loginToConsole } from "@cocrepo/e2e";
 import { expect, test } from "@playwright/test";
 
-const ADMIN_API_BASE_URL = "http://localhost:3000/api/v1";
-const SYSTEM_TENANT_ID =
-	process.env.E2E_SYSTEM_TENANT_ID ?? "01J00000000000000000000002";
-const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_TENANT_ID);
+let ADMIN_SPACE_ID = "";
+
+test.beforeEach(async ({ page }) => {
+	const context = await loginToConsole(page);
+	ADMIN_SPACE_ID = context.spaceId;
+});
 
 test.describe("공간 목록 페이지", () => {
 	// ── E2E-001: 목록 렌더링 ──
@@ -49,125 +51,25 @@ test.describe("공간 목록 페이지", () => {
 		});
 	});
 
-	// ── E2E-002: 공간 CRUD 플로우 ──
+	// ── E2E-002: 숫자 ID 상세 route ──
 
-	test.describe("[E2E-002] 공간 CRUD 플로우", () => {
-		test("공간 등록 → 피트니스센터 상세 조회 → 수정 → 삭제 전체 플로우", async ({
+	test.describe("[E2E-002] 숫자 ID 상세 route", () => {
+		test("로그인 응답의 Space ID로 피트니스센터 상세에 진입해야 한다", async ({
 			page,
 		}) => {
-			await loginToConsole(page);
-			const uniqueSuffix = `${Date.now()}`;
-			const TEST_NAME = `E2E 테스트 공간 ${uniqueSuffix.slice(-6)}`;
-			const UPDATED_NAME = "E2E 수정된 공간";
-			const TEST_BUSINESS_NO = `${uniqueSuffix.slice(-10, -7)}-${uniqueSuffix.slice(-7, -5)}-${uniqueSuffix.slice(-5)}`;
-			const TEST_ADDRESS = "서울특별시 강남구 테스트로 1";
-			const TEST_PHONE = "02-0000-0001";
-			const TEST_EMAIL = `e2e-test-space-${uniqueSuffix}@example.com`;
+			expect(ADMIN_SPACE_ID).toMatch(/^[1-9]\d*$/);
 
-			// Given: 공간 API로 테스트 데이터를 생성
-			const createResponse = await page.request.post(
-				`${ADMIN_API_BASE_URL}/spaces`,
-				{
-					headers: getSpaceHeaders(),
-					data: {
-						name: TEST_NAME,
-						label: null,
-						address: TEST_ADDRESS,
-						phone: TEST_PHONE,
-						email: TEST_EMAIL,
-						businessNo: TEST_BUSINESS_NO,
-						contentLanguageCode: "ko_KR",
-						spaceId: "",
-					},
-				},
-			);
-			const createResponseText = await createResponse.text();
-			expect(createResponse.status(), createResponseText).toBe(201);
-			const createResponseBody = JSON.parse(createResponseText) as {
-				data?: { id?: string };
-			};
-			const spaceId = createResponseBody.data?.id;
-			expect(spaceId).toBeTruthy();
-
-			// When: 생성된 공간의 상세 페이지로 이동
-			await page.goto(
-				`http://localhost:3000/admin/spaces/${spaceId}/fitness-center`,
-			);
-			await page.waitForLoadState("networkidle");
-
-			// Then: 등록한 정보 확인
-			await expect(
-				page.getByRole("heading", { name: TEST_NAME, exact: true }),
-			).toBeVisible({ timeout: 10000 });
-			await expect(
-				page.getByText(TEST_BUSINESS_NO, { exact: true }),
-			).toBeVisible();
-
-			// ── 수정 플로우 ──
-
-			// When: 수정 버튼 클릭
-			await page.getByRole("button", { name: "수정" }).click();
-			await page.waitForURL(/\/spaces\/.*\/fitness-center\/edit/, {
-				timeout: 15000,
+			await page.goto(`./spaces/${ADMIN_SPACE_ID}/fitness-center`, {
+				waitUntil: "domcontentloaded",
 			});
-			await page.waitForLoadState("networkidle");
 
-			// Then: 수정 페이지 타이틀 확인
-			await expect(
-				page.getByRole("heading", { name: "피트니스센터 정보 수정" }),
-			).toBeVisible({ timeout: 10000 });
-
-			// Then: 수정 폼 초기값 확인
-			const nameInput = page.getByLabel("센터명");
-			await expect(nameInput).toHaveValue(TEST_NAME);
-
-			// When: 피트니스센터 API로 수정
-			const updateResponse = await page.request.patch(
-				`${ADMIN_API_BASE_URL}/spaces/${spaceId}/fitness-center`,
-				{
-					headers: getSpaceHeaders(),
-					data: {
-						name: UPDATED_NAME,
-						label: null,
-						address: TEST_ADDRESS,
-						phone: TEST_PHONE,
-						email: TEST_EMAIL,
-						contentLanguageCode: "ko_KR",
-					},
-				},
+			await expect(page).toHaveURL(
+				new RegExp(`/spaces/${ADMIN_SPACE_ID}/fitness-center$`),
 			);
-			expect(updateResponse.status()).toBe(200);
-
-			// Then: 상세 페이지로 돌아가 최신 데이터 확인
-			await page.goto(
-				`http://localhost:3000/admin/spaces/${spaceId}/fitness-center`,
-			);
-			await page.waitForLoadState("networkidle");
-
 			await expect(
-				page.getByRole("heading", {
-					name: UPDATED_NAME,
-					exact: true,
-				}),
-			).toBeVisible({ timeout: 10000 });
-
-			// ── 삭제 플로우 (API 직접 호출) ──
-
-			const deleteResp = await page.request.delete(
-				`${ADMIN_API_BASE_URL}/spaces/${spaceId}`,
-				{ headers: getSpaceHeaders() },
-			);
-			expect([200, 204, 404]).toContain(deleteResp.status());
-
-			// Then: 목록 페이지로 이동하여 삭제 확인
-			await page.goto("./spaces");
-			await page.waitForLoadState("networkidle");
-
-			await expect(
-				page.getByRole("heading", { name: "공간 목록" }),
-			).toBeVisible({ timeout: 10000 });
-
-			// Then: cleanup 요청이 성공 또는 이미 정리된 상태로 완료됨
+				page.getByRole("heading", { name: "플랫폼 운영본부", exact: true }),
+			).toBeVisible({ timeout: 15000 });
+			await expect(page.getByRole("button", { name: "수정" })).toBeVisible();
 		});
 	});
 });

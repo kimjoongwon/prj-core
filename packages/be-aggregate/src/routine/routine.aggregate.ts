@@ -59,10 +59,10 @@ export class RoutineAggregate {
 	 * spaceScope 기본값은 INCLUDE_ANCESTORS (상위 Space 공유 자원 접근 허용)
 	 */
 	async findRoutineById(
-		routineId: string,
+		routineId: bigint,
 		spaceScope: SpaceScope = SpaceScope.INCLUDE_ANCESTORS,
 	): Promise<Routine> {
-		this.logger.debug(`루틴 단건 조회: ${routineId.slice(-8)}`);
+		this.logger.debug(`루틴 단건 조회: ${routineId}`);
 
 		const spaceIds = this.resolveReadableSpaceIds(spaceScope);
 
@@ -88,14 +88,14 @@ export class RoutineAggregate {
 			name: string;
 			label: string;
 			activities?: {
-				taskId: string;
+				taskId: bigint;
 				order?: number;
 				repetitions?: number;
 				restTime?: number;
 				notes?: string;
 			}[];
 		},
-		userId: string,
+		userId: bigint,
 	): Promise<Routine> {
 		this.logger.debug(`루틴 등록: name=${dto.name}`);
 
@@ -120,12 +120,12 @@ export class RoutineAggregate {
 	 * 현재 Space가 소유한 루틴(routine.spaceId === currentSpaceId)만 수정 가능합니다.
 	 */
 	async updateRoutine(
-		routineId: string,
+		routineId: bigint,
 		dto: {
 			name?: string;
 			label?: string;
 			activities?: {
-				taskId: string;
+				taskId: bigint;
 				order?: number;
 				repetitions?: number;
 				restTime?: number;
@@ -133,7 +133,7 @@ export class RoutineAggregate {
 			}[];
 		},
 	): Promise<Routine> {
-		this.logger.debug(`루틴 수정: ${routineId.slice(-8)}`);
+		this.logger.debug(`루틴 수정: ${routineId}`);
 
 		const spaceId = this.spaceContext.spaceId;
 		const routine = await this.findRoutineById(
@@ -157,14 +157,14 @@ export class RoutineAggregate {
 
 	private async validateRoutineActivityTasks(
 		activities?: {
-			taskId: string;
+			taskId: bigint;
 		}[],
 	): Promise<void> {
 		if (!activities) {
 			return;
 		}
 
-		const taskIds = new Set<string>();
+		const taskIds = new Set<bigint>();
 		for (const activity of activities) {
 			if (taskIds.has(activity.taskId)) {
 				throw new ConflictException(
@@ -195,7 +195,7 @@ export class RoutineAggregate {
 
 	private resolveReadableSpaceIds(
 		spaceScope: SpaceScope,
-	): string[] | undefined {
+	): bigint[] | undefined {
 		if (this.spaceContext.spaceIds === undefined) {
 			return undefined;
 		}
@@ -209,7 +209,7 @@ export class RoutineAggregate {
 
 	private normalizeRoutineActivities(
 		activities?: {
-			taskId: string;
+			taskId: bigint;
 			order?: number;
 			repetitions?: number;
 			restTime?: number;
@@ -217,7 +217,7 @@ export class RoutineAggregate {
 		}[],
 	):
 		| {
-				taskId: string;
+				taskId: bigint;
 				order: number;
 				repetitions: number;
 				restTime: number;
@@ -242,8 +242,8 @@ export class RoutineAggregate {
 	 * - 현재 Space가 소유한 루틴만 삭제 가능
 	 * - Program에서 사용 중인 루틴은 삭제 불가
 	 */
-	async removeRoutine(routineId: string): Promise<void> {
-		this.logger.debug(`루틴 삭제: ${routineId.slice(-8)}`);
+	async removeRoutine(routineId: bigint): Promise<void> {
+		this.logger.debug(`루틴 삭제: ${routineId}`);
 
 		const spaceId = this.spaceContext.spaceId;
 		const routine = await this.findRoutineById(

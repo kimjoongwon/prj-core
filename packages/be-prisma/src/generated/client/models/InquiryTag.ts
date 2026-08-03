@@ -27,44 +27,44 @@ export type AggregateInquiryTag = {
 }
 
 export type InquiryTagAvgAggregateOutputType = {
-  seq: number | null
-  inquirySeq: number | null
+  id: number | null
+  inquiryId: number | null
 }
 
 export type InquiryTagSumAggregateOutputType = {
-  seq: number | null
-  inquirySeq: number | null
+  id: bigint | null
+  inquiryId: bigint | null
 }
 
 export type InquiryTagMinAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  inquiryTagId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  inquirySeq: number | null
+  inquiryId: bigint | null
   name: string | null
   color: string | null
 }
 
 export type InquiryTagMaxAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  inquiryTagId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
-  inquirySeq: number | null
+  inquiryId: bigint | null
   name: string | null
   color: string | null
 }
 
 export type InquiryTagCountAggregateOutputType = {
+  inquiryTagId: number
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
-  inquirySeq: number
+  inquiryId: number
   name: number
   color: number
   _all: number
@@ -72,44 +72,44 @@ export type InquiryTagCountAggregateOutputType = {
 
 
 export type InquiryTagAvgAggregateInputType = {
-  seq?: true
-  inquirySeq?: true
+  id?: true
+  inquiryId?: true
 }
 
 export type InquiryTagSumAggregateInputType = {
-  seq?: true
-  inquirySeq?: true
+  id?: true
+  inquiryId?: true
 }
 
 export type InquiryTagMinAggregateInputType = {
+  inquiryTagId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  inquirySeq?: true
+  inquiryId?: true
   name?: true
   color?: true
 }
 
 export type InquiryTagMaxAggregateInputType = {
+  inquiryTagId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  inquirySeq?: true
+  inquiryId?: true
   name?: true
   color?: true
 }
 
 export type InquiryTagCountAggregateInputType = {
+  inquiryTagId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
-  inquirySeq?: true
+  inquiryId?: true
   name?: true
   color?: true
   _all?: true
@@ -202,12 +202,12 @@ export type InquiryTagGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 export type InquiryTagGroupByOutputType = {
-  id: string
-  seq: number
+  inquiryTagId: string
+  id: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
-  inquirySeq: number
+  inquiryId: bigint
   name: string
   color: string | null
   _count: InquiryTagCountAggregateOutputType | null
@@ -236,52 +236,52 @@ export type InquiryTagWhereInput = {
   AND?: Prisma.InquiryTagWhereInput | Prisma.InquiryTagWhereInput[]
   OR?: Prisma.InquiryTagWhereInput[]
   NOT?: Prisma.InquiryTagWhereInput | Prisma.InquiryTagWhereInput[]
-  id?: Prisma.StringFilter<"InquiryTag"> | string
-  seq?: Prisma.IntFilter<"InquiryTag"> | number
+  inquiryTagId?: Prisma.StringFilter<"InquiryTag"> | string
+  id?: Prisma.BigIntFilter<"InquiryTag"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"InquiryTag"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"InquiryTag"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"InquiryTag"> | Date | string | null
-  inquirySeq?: Prisma.IntFilter<"InquiryTag"> | number
+  inquiryId?: Prisma.BigIntFilter<"InquiryTag"> | bigint | number
   name?: Prisma.StringFilter<"InquiryTag"> | string
   color?: Prisma.StringNullableFilter<"InquiryTag"> | string | null
   inquiry?: Prisma.XOR<Prisma.InquiryScalarRelationFilter, Prisma.InquiryWhereInput>
 }
 
 export type InquiryTagOrderByWithRelationInput = {
+  inquiryTagId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  inquirySeq?: Prisma.SortOrder
+  inquiryId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   color?: Prisma.SortOrderInput | Prisma.SortOrder
   inquiry?: Prisma.InquiryOrderByWithRelationInput
 }
 
 export type InquiryTagWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  seq?: number
-  inquirySeq_name?: Prisma.InquiryTagInquirySeqNameCompoundUniqueInput
+  inquiryTagId?: string
+  id?: bigint | number
+  inquiryId_name?: Prisma.InquiryTagInquiryIdNameCompoundUniqueInput
   AND?: Prisma.InquiryTagWhereInput | Prisma.InquiryTagWhereInput[]
   OR?: Prisma.InquiryTagWhereInput[]
   NOT?: Prisma.InquiryTagWhereInput | Prisma.InquiryTagWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"InquiryTag"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"InquiryTag"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"InquiryTag"> | Date | string | null
-  inquirySeq?: Prisma.IntFilter<"InquiryTag"> | number
+  inquiryId?: Prisma.BigIntFilter<"InquiryTag"> | bigint | number
   name?: Prisma.StringFilter<"InquiryTag"> | string
   color?: Prisma.StringNullableFilter<"InquiryTag"> | string | null
   inquiry?: Prisma.XOR<Prisma.InquiryScalarRelationFilter, Prisma.InquiryWhereInput>
-}, "seq" | "id" | "inquirySeq_name">
+}, "id" | "inquiryTagId" | "inquiryId_name">
 
 export type InquiryTagOrderByWithAggregationInput = {
+  inquiryTagId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  inquirySeq?: Prisma.SortOrder
+  inquiryId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   color?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.InquiryTagCountOrderByAggregateInput
@@ -295,18 +295,19 @@ export type InquiryTagScalarWhereWithAggregatesInput = {
   AND?: Prisma.InquiryTagScalarWhereWithAggregatesInput | Prisma.InquiryTagScalarWhereWithAggregatesInput[]
   OR?: Prisma.InquiryTagScalarWhereWithAggregatesInput[]
   NOT?: Prisma.InquiryTagScalarWhereWithAggregatesInput | Prisma.InquiryTagScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"InquiryTag"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"InquiryTag"> | number
+  inquiryTagId?: Prisma.StringWithAggregatesFilter<"InquiryTag"> | string
+  id?: Prisma.BigIntWithAggregatesFilter<"InquiryTag"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"InquiryTag"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"InquiryTag"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"InquiryTag"> | Date | string | null
-  inquirySeq?: Prisma.IntWithAggregatesFilter<"InquiryTag"> | number
+  inquiryId?: Prisma.BigIntWithAggregatesFilter<"InquiryTag"> | bigint | number
   name?: Prisma.StringWithAggregatesFilter<"InquiryTag"> | string
   color?: Prisma.StringNullableWithAggregatesFilter<"InquiryTag"> | string | null
 }
 
 export type InquiryTagCreateInput = {
-  id?: string
+  inquiryTagId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -316,18 +317,19 @@ export type InquiryTagCreateInput = {
 }
 
 export type InquiryTagUncheckedCreateInput = {
-  id?: string
-  seq?: number
+  inquiryTagId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  inquirySeq: number
+  inquiryId: bigint | number
   name: string
   color?: string | null
 }
 
 export type InquiryTagUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryTagId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -337,29 +339,30 @@ export type InquiryTagUpdateInput = {
 }
 
 export type InquiryTagUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryTagId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  inquirySeq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type InquiryTagCreateManyInput = {
-  id?: string
-  seq?: number
+  inquiryTagId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
-  inquirySeq: number
+  inquiryId: bigint | number
   name: string
   color?: string | null
 }
 
 export type InquiryTagUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryTagId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -368,62 +371,62 @@ export type InquiryTagUpdateManyMutationInput = {
 }
 
 export type InquiryTagUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryTagId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  inquirySeq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type InquiryTagInquirySeqNameCompoundUniqueInput = {
-  inquirySeq: number
+export type InquiryTagInquiryIdNameCompoundUniqueInput = {
+  inquiryId: bigint | number
   name: string
 }
 
 export type InquiryTagCountOrderByAggregateInput = {
+  inquiryTagId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  inquirySeq?: Prisma.SortOrder
+  inquiryId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   color?: Prisma.SortOrder
 }
 
 export type InquiryTagAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  inquirySeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  inquiryId?: Prisma.SortOrder
 }
 
 export type InquiryTagMaxOrderByAggregateInput = {
+  inquiryTagId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  inquirySeq?: Prisma.SortOrder
+  inquiryId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   color?: Prisma.SortOrder
 }
 
 export type InquiryTagMinOrderByAggregateInput = {
+  inquiryTagId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
-  inquirySeq?: Prisma.SortOrder
+  inquiryId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   color?: Prisma.SortOrder
 }
 
 export type InquiryTagSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  inquirySeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  inquiryId?: Prisma.SortOrder
 }
 
 export type InquiryTagListRelationFilter = {
@@ -479,7 +482,8 @@ export type InquiryTagUncheckedUpdateManyWithoutInquiryNestedInput = {
 }
 
 export type InquiryTagCreateWithoutInquiryInput = {
-  id?: string
+  inquiryTagId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -488,8 +492,8 @@ export type InquiryTagCreateWithoutInquiryInput = {
 }
 
 export type InquiryTagUncheckedCreateWithoutInquiryInput = {
-  id?: string
-  seq?: number
+  inquiryTagId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -527,19 +531,19 @@ export type InquiryTagScalarWhereInput = {
   AND?: Prisma.InquiryTagScalarWhereInput | Prisma.InquiryTagScalarWhereInput[]
   OR?: Prisma.InquiryTagScalarWhereInput[]
   NOT?: Prisma.InquiryTagScalarWhereInput | Prisma.InquiryTagScalarWhereInput[]
-  id?: Prisma.StringFilter<"InquiryTag"> | string
-  seq?: Prisma.IntFilter<"InquiryTag"> | number
+  inquiryTagId?: Prisma.StringFilter<"InquiryTag"> | string
+  id?: Prisma.BigIntFilter<"InquiryTag"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"InquiryTag"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"InquiryTag"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"InquiryTag"> | Date | string | null
-  inquirySeq?: Prisma.IntFilter<"InquiryTag"> | number
+  inquiryId?: Prisma.BigIntFilter<"InquiryTag"> | bigint | number
   name?: Prisma.StringFilter<"InquiryTag"> | string
   color?: Prisma.StringNullableFilter<"InquiryTag"> | string | null
 }
 
 export type InquiryTagCreateManyInquiryInput = {
-  id?: string
-  seq?: number
+  inquiryTagId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -548,7 +552,8 @@ export type InquiryTagCreateManyInquiryInput = {
 }
 
 export type InquiryTagUpdateWithoutInquiryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryTagId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -557,8 +562,8 @@ export type InquiryTagUpdateWithoutInquiryInput = {
 }
 
 export type InquiryTagUncheckedUpdateWithoutInquiryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryTagId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -567,8 +572,8 @@ export type InquiryTagUncheckedUpdateWithoutInquiryInput = {
 }
 
 export type InquiryTagUncheckedUpdateManyWithoutInquiryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryTagId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -579,53 +584,53 @@ export type InquiryTagUncheckedUpdateManyWithoutInquiryInput = {
 
 
 export type InquiryTagSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  inquiryTagId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  inquirySeq?: boolean
+  inquiryId?: boolean
   name?: boolean
   color?: boolean
   inquiry?: boolean | Prisma.InquiryDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["inquiryTag"]>
 
 export type InquiryTagSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  inquiryTagId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  inquirySeq?: boolean
+  inquiryId?: boolean
   name?: boolean
   color?: boolean
   inquiry?: boolean | Prisma.InquiryDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["inquiryTag"]>
 
 export type InquiryTagSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  inquiryTagId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  inquirySeq?: boolean
+  inquiryId?: boolean
   name?: boolean
   color?: boolean
   inquiry?: boolean | Prisma.InquiryDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["inquiryTag"]>
 
 export type InquiryTagSelectScalar = {
+  inquiryTagId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
-  inquirySeq?: boolean
+  inquiryId?: boolean
   name?: boolean
   color?: boolean
 }
 
-export type InquiryTagOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "inquirySeq" | "name" | "color", ExtArgs["result"]["inquiryTag"]>
+export type InquiryTagOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"inquiryTagId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "inquiryId" | "name" | "color", ExtArgs["result"]["inquiryTag"]>
 export type InquiryTagInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   inquiry?: boolean | Prisma.InquiryDefaultArgs<ExtArgs>
 }
@@ -642,8 +647,8 @@ export type $InquiryTagPayload<ExtArgs extends runtime.Types.Extensions.Internal
     inquiry: Prisma.$InquiryPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    seq: number
+    inquiryTagId: string
+    id: bigint
     /**
      * @displayName 생성 일시
      */
@@ -659,7 +664,7 @@ export type $InquiryTagPayload<ExtArgs extends runtime.Types.Extensions.Internal
     /**
      * @displayName 소속 문의 내부 순번
      */
-    inquirySeq: number
+    inquiryId: bigint
     /**
      * @displayName 태그명
      */
@@ -751,8 +756,8 @@ export interface InquiryTagDelegate<ExtArgs extends runtime.Types.Extensions.Int
    * // Get first 10 InquiryTags
    * const inquiryTags = await prisma.inquiryTag.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const inquiryTagWithIdOnly = await prisma.inquiryTag.findMany({ select: { id: true } })
+   * // Only select the `inquiryTagId`
+   * const inquiryTagWithInquiryTagIdOnly = await prisma.inquiryTag.findMany({ select: { inquiryTagId: true } })
    * 
    */
   findMany<T extends InquiryTagFindManyArgs>(args?: Prisma.SelectSubset<T, InquiryTagFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InquiryTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -796,9 +801,9 @@ export interface InquiryTagDelegate<ExtArgs extends runtime.Types.Extensions.Int
    *   ]
    * })
    * 
-   * // Create many InquiryTags and only return the `id`
-   * const inquiryTagWithIdOnly = await prisma.inquiryTag.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many InquiryTags and only return the `inquiryTagId`
+   * const inquiryTagWithInquiryTagIdOnly = await prisma.inquiryTag.createManyAndReturn({
+   *   select: { inquiryTagId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -887,9 +892,9 @@ export interface InquiryTagDelegate<ExtArgs extends runtime.Types.Extensions.Int
    *   ]
    * })
    * 
-   * // Update zero or more InquiryTags and only return the `id`
-   * const inquiryTagWithIdOnly = await prisma.inquiryTag.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more InquiryTags and only return the `inquiryTagId`
+   * const inquiryTagWithInquiryTagIdOnly = await prisma.inquiryTag.updateManyAndReturn({
+   *   select: { inquiryTagId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1092,12 +1097,12 @@ export interface Prisma__InquiryTagClient<T, Null = never, ExtArgs extends runti
  * Fields of the InquiryTag model
  */
 export interface InquiryTagFieldRefs {
-  readonly id: Prisma.FieldRef<"InquiryTag", 'String'>
-  readonly seq: Prisma.FieldRef<"InquiryTag", 'Int'>
+  readonly inquiryTagId: Prisma.FieldRef<"InquiryTag", 'String'>
+  readonly id: Prisma.FieldRef<"InquiryTag", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"InquiryTag", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"InquiryTag", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"InquiryTag", 'DateTime'>
-  readonly inquirySeq: Prisma.FieldRef<"InquiryTag", 'Int'>
+  readonly inquiryId: Prisma.FieldRef<"InquiryTag", 'BigInt'>
   readonly name: Prisma.FieldRef<"InquiryTag", 'String'>
   readonly color: Prisma.FieldRef<"InquiryTag", 'String'>
 }

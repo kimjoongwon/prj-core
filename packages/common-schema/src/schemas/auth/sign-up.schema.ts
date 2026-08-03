@@ -1,5 +1,5 @@
 import { DEFAULT_SCHEMA_PASSWORD_MIN_LENGTH } from "../../constants";
-import { Email, Password, Phone, String, ULID } from "../../decorators";
+import { DecimalId, Email, Password, Phone, String } from "../../decorators";
 
 /**
  * 회원가입 스키마
@@ -20,7 +20,7 @@ export class SignUpSchema {
 	@String({ minLength: 2, maxLength: 50 })
 	nickname: string;
 
-	@ULID()
+	@DecimalId()
 	spaceId: string;
 
 	@Email()

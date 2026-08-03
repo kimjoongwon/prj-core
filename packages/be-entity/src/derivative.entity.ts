@@ -1,23 +1,19 @@
-import type {
-	Derivative as DerivativeEntity,
-	DerivativeKind,
-} from "@cocrepo/prisma";
+import type { DerivativeKind } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Asset } from "./asset.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
 
-export class Derivative
-	extends AbstractEntity
-	implements DomainEntityModel<DerivativeEntity>
-{
+export class Derivative extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	derivativeId!: string;
+
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	spaceId!: string;
-	createdById!: string | null;
-	assetId!: string;
+	spaceId!: bigint;
+	createdById!: bigint | null;
+	assetId!: bigint;
 	kind!: DerivativeKind;
 	profile!: string;
 	storageKey!: string;

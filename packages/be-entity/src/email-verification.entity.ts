@@ -1,21 +1,17 @@
-import type {
-	EmailVerification as EmailVerificationEntity,
-	EmailVerificationStatus,
-} from "@cocrepo/prisma";
+import type { EmailVerificationStatus } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { User } from "./user.entity";
 
-export class EmailVerification
-	extends AbstractEntity
-	implements DomainEntityModel<EmailVerificationEntity>
-{
+export class EmailVerification extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	emailVerificationId!: string;
+
 	email!: string;
 	name!: string;
 	nickname!: string;
 	phone!: string;
 	address!: string;
-	spaceId!: string;
+	spaceId!: bigint;
 	passwordHash!: string;
 	tokenHash!: string;
 	status!: EmailVerificationStatus;
@@ -25,6 +21,6 @@ export class EmailVerification
 	sendCount!: number;
 	lastSendStatus!: string | null;
 	lastSendError!: string | null;
-	verifiedUserId!: string | null;
+	verifiedUserId!: bigint | null;
 	verifiedUser?: User | null;
 }

@@ -7,10 +7,10 @@ import {
   setIdpSessionScope,
 } from "@cocrepo/api/idp/client";
 import type { SpaceDto } from "@cocrepo/api/idp/model";
+import { isDecimalId } from "@cocrepo/type";
 import { makeAutoObservable } from "mobx";
 
 export const MOBILE_PLATFORM_FITNESS_CENTER_NAME = "플랫폼 운영본부";
-export const MOBILE_SYSTEM_SPACE_ID = "01J00000000000000000000001";
 
 export interface MobileSpaceInfo {
   tenantId: string;
@@ -39,12 +39,22 @@ const resolveFitnessCenterAddress = (space: SpaceDto) =>
   space.fitnessCenter?.company?.label ??
   null;
 
+/** API 응답의 숫자 ID가 canonical decimal string인지 확인합니다. */
+const requireDecimalId = (value: unknown, fieldName: string): string => {
+  if (!isDecimalId(value)) {
+    throw new TypeError(`${fieldName} must be a canonical decimal ID`);
+  }
+
+  return value;
+};
+
 /**
  * 모바일 사용자가 직접 선택할 수 있는 FitnessCenter Space인지 확인합니다.
  */
 export const isSelectableMobileSpace = (space: SpaceDto) =>
-  Boolean(space.id && space.tenantId && space.fitnessCenter) &&
-  space.id !== MOBILE_SYSTEM_SPACE_ID &&
+  isDecimalId(space.id) &&
+  isDecimalId(space.tenantId) &&
+  Boolean(space.fitnessCenter) &&
   space.fitnessCenter?.name !== MOBILE_PLATFORM_FITNESS_CENTER_NAME;
 
 /**
@@ -56,8 +66,8 @@ export const toMobileSpaceInfo = (space: SpaceDto): MobileSpaceInfo => ({
   fitnessCenterName: resolveFitnessCenterName(space),
   imageFileId: space.fitnessCenter?.imageFileId ?? null,
   logoImageFileId: space.fitnessCenter?.company?.logoImageFileId ?? null,
-  spaceId: space.id,
-  tenantId: space.tenantId ?? "",
+  spaceId: requireDecimalId(space.id, "space.id"),
+  tenantId: requireDecimalId(space.tenantId, "space.tenantId"),
 });
 
 class MobileApiScope {
@@ -88,8 +98,11 @@ class MobileApiScope {
     const existingSpace = this.spaces.find(
       (item) => item.tenantId === space.tenantId,
     );
-    this.tenantId = space.tenantId ?? existingSpace?.tenantId ?? null;
-    this.spaceId = space.id;
+    this.tenantId = requireDecimalId(
+      space.tenantId ?? existingSpace?.tenantId,
+      "space.tenantId",
+    );
+    this.spaceId = requireDecimalId(space.id, "space.id");
     this.fitnessCenterName =
       resolveFitnessCenterName(space) ||
       existingSpace?.fitnessCenterName ||

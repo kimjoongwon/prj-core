@@ -3,7 +3,7 @@ import { Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import type { PublicIdCreateInput } from "./public-id-input.type";
+import type { AutoIdentityCreateInput } from "./auto-identity-input.type";
 import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
@@ -18,8 +18,8 @@ export class AIAgentLogsRepository {
 		this.logger = new Logger("AIAgentLogsRepository");
 	}
 
-	async findById(id: string): Promise<AIAgentLog | null> {
-		this.logger.debug(`ID로 조회: ${id.slice(-8)}`);
+	async findById(id: bigint): Promise<AIAgentLog | null> {
+		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.aIAgentLog.findUnique({
 			where: { id },
@@ -29,11 +29,11 @@ export class AIAgentLogsRepository {
 		return result ? toDomainEntity(AIAgentLog, result) : null;
 	}
 
-	async findByInquiryId(inquiryId: string): Promise<AIAgentLog[]> {
-		this.logger.debug(`문의별 AI 로그 조회: ${inquiryId.slice(-8)}`);
+	async findByInquiryId(inquiryId: bigint): Promise<AIAgentLog[]> {
+		this.logger.debug(`문의별 AI 로그 조회: ${inquiryId.toString()}`);
 
 		const results = await this.txHost.tx.aIAgentLog.findMany({
-			where: { inquiry: { id: inquiryId } },
+			where: { inquiryId },
 			include: { inquiry: true, message: true },
 			orderBy: [{ createdAt: "desc" }],
 		});
@@ -41,11 +41,11 @@ export class AIAgentLogsRepository {
 		return results.map((item) => toDomainEntity(AIAgentLog, item));
 	}
 
-	async findByMessageId(messageId: string): Promise<AIAgentLog | null> {
+	async findByMessageId(messageId: bigint): Promise<AIAgentLog | null> {
 		this.logger.debug(`메시지별 AI 로그 조회: ${messageId}`);
 
 		const result = await this.txHost.tx.aIAgentLog.findFirst({
-			where: { message: { id: messageId } },
+			where: { messageId },
 			include: { inquiry: true, message: true },
 		});
 
@@ -76,29 +76,22 @@ export class AIAgentLogsRepository {
 	}
 
 	async create(
-		data: PublicIdCreateInput<
+		data: AutoIdentityCreateInput<
 			Prisma.AIAgentLogUncheckedCreateInput,
-			"inquiry",
-			"message"
+			"aiAgentLogId"
 		>,
 	): Promise<AIAgentLog> {
-		this.logger.debug(`로그 생성: ${data.inquiryId.slice(-8)}`);
-
-		const { inquiryId, messageId, ...logData } = data;
+		this.logger.debug(`로그 생성: ${data.inquiryId.toString()}`);
 		const result = await this.txHost.tx.aIAgentLog.create({
-			data: {
-				...logData,
-				inquiry: { connect: { id: inquiryId } },
-				...(messageId ? { message: { connect: { id: messageId } } } : {}),
-			},
+			data,
 			include: { inquiry: true, message: true },
 		});
 
 		return toDomainEntity(AIAgentLog, result);
 	}
 
-	async deleteById(id: string): Promise<AIAgentLog> {
-		this.logger.debug(`로그 삭제: ${id.slice(-8)}`);
+	async deleteById(id: bigint): Promise<AIAgentLog> {
+		this.logger.debug(`로그 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.aIAgentLog.delete({
 			where: { id },
@@ -108,9 +101,9 @@ export class AIAgentLogsRepository {
 		return toDomainEntity(AIAgentLog, result);
 	}
 
-	async countByInquiryId(inquiryId: string): Promise<number> {
+	async countByInquiryId(inquiryId: bigint): Promise<number> {
 		return this.txHost.tx.aIAgentLog.count({
-			where: { inquiry: { id: inquiryId } },
+			where: { inquiryId },
 		});
 	}
 }

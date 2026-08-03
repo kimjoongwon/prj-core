@@ -1,4 +1,8 @@
-import { EnumField, StringField, UUIDFieldOptional } from "@cocrepo/decorator";
+import {
+	EnumField,
+	StringField,
+	UUIDFieldOptional,
+} from "@cocrepo/decorator/field";
 import { LanguageCode } from "@cocrepo/prisma";
 import { OmitType } from "@nestjs/swagger";
 import { COMMON_ENTITY_FIELDS } from "../constant";

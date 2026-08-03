@@ -1,13 +1,13 @@
 import {
+	BigIntIdField,
 	DateField,
 	StringField,
 	StringFieldOptional,
-	ULIDField,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 
 export class OidcSessionDto {
-	@ULIDField()
-	id: string;
+	@BigIntIdField()
+	id: bigint;
 
 	@StringField({ description: "모델 키 (jti 또는 uid)" })
 	key: string;

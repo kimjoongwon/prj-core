@@ -15,11 +15,11 @@ describe("SpaceAccessGuard", () => {
 	let mockReflector: jest.Mocked<Reflector>;
 	let mockClsService: { get: jest.Mock; set: jest.Mock };
 	type MockTenant = {
-		id: string;
-		spaceId?: string;
+		id: bigint;
+		spaceId?: bigint;
 		role: { name: string };
 		space?: {
-			id?: string;
+			id?: bigint;
 			classification?: {
 				category?: {
 					name?: string;
@@ -28,7 +28,7 @@ describe("SpaceAccessGuard", () => {
 		};
 	};
 	type MockUser = {
-		id: string;
+		id: bigint;
 		email: string;
 		tenants?: MockTenant[] | null;
 	};
@@ -49,12 +49,12 @@ describe("SpaceAccessGuard", () => {
 	};
 
 	const createMockUser = (overrides: Partial<MockUser> = {}): MockUser => ({
-		id: "user-test-id",
+		id: 101n,
 		email: "test@example.com",
 		tenants: [
 			{
-				id: "tenant-1",
-				spaceId: "space-001",
+				id: 201n,
+				spaceId: 301n,
 				role: { name: "MEMBER" },
 			},
 		],
@@ -170,7 +170,7 @@ describe("SpaceAccessGuard", () => {
 				const user = createMockUser();
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
-					if (key === CONTEXT_KEYS.TENANT_ID) return "tenant-1";
+					if (key === CONTEXT_KEYS.TENANT_ID) return 201n;
 					return undefined;
 				});
 				const context = createMockExecutionContext();
@@ -182,7 +182,7 @@ describe("SpaceAccessGuard", () => {
 				expect(result).toBe(true);
 				expect(mockClsService.set).toHaveBeenCalledWith(
 					CONTEXT_KEYS.SPACE_ID,
-					"space-001",
+					301n,
 				);
 			});
 
@@ -192,16 +192,16 @@ describe("SpaceAccessGuard", () => {
 				const user = createMockUser({
 					tenants: [
 						{
-							id: "tenant-1",
+							id: 201n,
 							spaceId: undefined,
-							space: { id: "space-001" },
+							space: { id: 301n },
 							role: { name: "MEMBER" },
 						},
 					],
 				});
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
-					if (key === CONTEXT_KEYS.TENANT_ID) return "tenant-1";
+					if (key === CONTEXT_KEYS.TENANT_ID) return 201n;
 					return undefined;
 				});
 				const context = createMockExecutionContext();
@@ -213,7 +213,7 @@ describe("SpaceAccessGuard", () => {
 				expect(result).toBe(true);
 				expect(mockClsService.set).toHaveBeenCalledWith(
 					CONTEXT_KEYS.SPACE_ID,
-					"space-001",
+					301n,
 				);
 			});
 
@@ -223,7 +223,7 @@ describe("SpaceAccessGuard", () => {
 				const user = createMockUser();
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
-					if (key === CONTEXT_KEYS.TENANT_ID) return "tenant-missing";
+					if (key === CONTEXT_KEYS.TENANT_ID) return 999n;
 					return undefined;
 				});
 				const context = createMockExecutionContext();
@@ -243,7 +243,7 @@ describe("SpaceAccessGuard", () => {
 				const user = createMockUser({ tenants: null });
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
-					if (key === CONTEXT_KEYS.TENANT_ID) return "tenant-1";
+					if (key === CONTEXT_KEYS.TENANT_ID) return 201n;
 					return undefined;
 				});
 				const context = createMockExecutionContext();
@@ -261,7 +261,7 @@ describe("SpaceAccessGuard", () => {
 				const user = createMockUser({ tenants: undefined });
 				mockClsService.get.mockImplementation((key: string) => {
 					if (key === CONTEXT_KEYS.AUTH_USER) return user;
-					if (key === CONTEXT_KEYS.TENANT_ID) return "tenant-1";
+					if (key === CONTEXT_KEYS.TENANT_ID) return 201n;
 					return undefined;
 				});
 				const context = createMockExecutionContext();

@@ -2,7 +2,7 @@ import {
 	DateFieldOptional,
 	EnumFieldOptional,
 	StringFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import { EmailVerificationStatus } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
 import { QueryDto } from "./query.dto";

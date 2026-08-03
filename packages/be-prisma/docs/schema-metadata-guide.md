@@ -173,7 +173,8 @@ EVENT
 `User` row 하나를 쉬운 값으로 적으면 다음과 같습니다.
 
 ```text
-id = "user-minji"
+id = 1
+userId = "user-minji"
 name = "민지"
 email = "minji@example.com"
 isActive = true
@@ -195,7 +196,8 @@ lastLoginAt = "2026-07-25 10:00"
 [실제 `Asset` schema 보기](../schema/asset.prisma)
 
 ```text
-id = "asset-001"
+id = 1
+assetId = "asset-001"
 originalName = "운동사진.jpg"
 kind = IMAGE
 status = UPLOADING
@@ -574,8 +576,8 @@ relation 개수, 파일 이름, API CRUD 유무만으로 타입을 결정하지 
 // @description: 사용자 계정의 현재 상태와 생명주기를 관리
 /// @displayName 사용자
 model User {
-  id  String @unique @default(ulid()) @db.VarChar(26)
-  seq Int    @id @default(autoincrement())
+  userId String @unique @default(ulid()) @map("user_id") @db.Char(26)
+  id     BigInt @id @default(autoincrement())
 }
 ```
 
@@ -681,15 +683,15 @@ Aggregate는 여러 도메인 객체를 하나의 일관성 단위로 다루는 
 // @description: Policy와 Ability를 연결하여 정책의 권한 구성을 관리
 /// @displayName 정책 권한
 model PolicyEntry {
-  id         String @unique @default(ulid()) @db.VarChar(26)
-  seq        Int    @id @default(autoincrement())
-  policySeq  Int
-  abilitySeq Int
+  policyEntryId String @unique @default(ulid()) @map("policy_entry_id") @db.Char(26)
+  id            BigInt @id @default(autoincrement())
+  policyId      BigInt @map("policy_id")
+  abilityId     BigInt @map("ability_id")
 
-  policy  Policy  @relation(fields: [policySeq], references: [seq])
-  ability Ability @relation(fields: [abilitySeq], references: [seq])
+  policy  Policy  @relation(fields: [policyId], references: [id])
+  ability Ability @relation(fields: [abilityId], references: [id])
 
-  @@unique([policySeq, abilitySeq])
+  @@unique([policyId, abilityId])
 }
 ```
 
@@ -710,10 +712,10 @@ model PolicyEntry {
 // @description: Inquiry에 종속되어 감정 분석 결과를 보관
 /// @displayName 감정 분석
 model SentimentAnalysis {
-  id         String  @unique @default(ulid()) @db.VarChar(26)
-  seq        Int     @id @default(autoincrement())
-  inquirySeq Int     @unique
-  inquiry    Inquiry @relation(fields: [inquirySeq], references: [seq])
+  sentimentAnalysisId String  @unique @default(ulid()) @map("sentiment_analysis_id") @db.Char(26)
+  id                  BigInt  @id @default(autoincrement())
+  inquiryId           BigInt  @unique @map("inquiry_id")
+  inquiry             Inquiry @relation(fields: [inquiryId], references: [id])
 }
 ```
 
@@ -738,9 +740,9 @@ enum AssetKind {
 // @description: 보관되는 파일 자산의 공통 identity와 종류를 관리
 /// @displayName 자산
 model Asset {
-  id   String    @unique @default(ulid()) @db.VarChar(26)
-  seq  Int       @id @default(autoincrement())
-  kind AssetKind
+  assetId String    @unique @default(ulid()) @map("asset_id") @db.Char(26)
+  id      BigInt    @id @default(autoincrement())
+  kind    AssetKind
 
   image    Image?
   video    Video?

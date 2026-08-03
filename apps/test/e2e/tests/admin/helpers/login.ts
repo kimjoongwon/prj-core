@@ -1,18 +1,13 @@
 import {
 	type AdminNativeAuthSession,
 	type AdminPersistSpaceSelection,
+	bootstrapAdminSpaceSelection,
 	mergeAdminPersistAccountSelection,
 	mergeAdminPersistAuthSession,
 	parseAdminPersistStorageDocument,
 } from "@cocrepo/e2e";
 import type { Page } from "@playwright/test";
 
-/** 시드 데이터 기준 System Tenant/Space (플랫폼 운영본부) */
-const SYSTEM_TENANT_ID =
-	process.env.E2E_SYSTEM_TENANT_ID ?? "01J00000000000000000000002";
-const SYSTEM_SPACE_ID =
-	process.env.E2E_SYSTEM_SPACE_ID ?? "01J00000000000000000000001";
-const SYSTEM_FITNESS_CENTER_NAME = "플랫폼 운영본부";
 const ADMIN_DASHBOARD_PATH = "/admin/dashboard";
 const ADMIN_LOGIN_PATH = "/admin/auth/login";
 const ADMIN_LOGIN_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@plate.com";
@@ -24,10 +19,6 @@ const ADMIN_API_BASE_URL =
 	process.env.E2E_CORE_API_BASE_URL ??
 	new URL(process.env.E2E_ADMIN_BASE_URL ?? "http://localhost:3000/admin/")
 		.origin;
-const CURRENT_SPACE_URL = new URL(
-	"/api/v1/auth/current-space",
-	ADMIN_API_BASE_URL,
-).toString();
 const NATIVE_LOGIN_URL = new URL(
 	"/api/v1/auth/login",
 	ADMIN_API_BASE_URL,
@@ -86,12 +77,16 @@ export async function seedAdminPersist(
 }
 
 /**
- * Admin localStorage에서 현재 System Space를 포함한 persist 문서를 읽습니다.
+ * Admin localStorage에서 bootstrap 결과와 일치하는 persist 문서를 읽습니다.
  *
  * @param page Admin E2E page
+ * @param expectedSelection 로그인 bootstrap에서 얻은 tenant/space 선택값
  * @returns 검증된 persist 문서, 없으면 null
  */
-export async function readAdminPersist(page: Page) {
+export async function readAdminPersist(
+	page: Page,
+	expectedSelection: AdminPersistSpaceSelection,
+) {
 	await ensureAdminDashboard(page);
 	await page.waitForFunction(
 		(storageKey) => {
@@ -123,7 +118,10 @@ export async function readAdminPersist(page: Page) {
 	}
 
 	const document = parseAdminPersistStorageDocument(raw);
-	return document.account?.spaceId === SYSTEM_SPACE_ID ? document : null;
+	return document.account?.tenantId === expectedSelection.tenantId &&
+		document.account.spaceId === expectedSelection.spaceId
+		? document
+		: null;
 }
 
 /**
@@ -131,56 +129,24 @@ export async function readAdminPersist(page: Page) {
  *
  * 1. /admin/auth/login에서 시드 데이터의 PLATFORM_ADMIN 계정으로 로그인
  * 2. native access/refresh token을 admin-persist에 저장
- * 3. current-space API로 System Space 선택 가능 여부를 확인
- * 4. Admin 대시보드로 리다이렉트
- * 5. space의 Space 정보를 보정하되 native token은 유지
+ * 3. my-spaces bootstrap 응답에서 대상 Space를 찾고 current-space로 선택
+ * 4. Space 선택 정보를 보정하되 native token은 유지
+ * 5. Admin 대시보드로 리다이렉트
+ *
+ * @param page Admin E2E page
+ * @returns API 응답에서 동적으로 얻은 tenant/space 선택값
  */
 export async function loginToAdmin(page: Page) {
 	await page.goto(ADMIN_LOGIN_PATH, { waitUntil: "domcontentloaded" });
 	const session = await requestNativeLogin(page);
 	await writeAdminNativeSession(page, session);
-	const currentSpaceResponse = await page.request.post(CURRENT_SPACE_URL, {
-		data: { tenantId: SYSTEM_TENANT_ID },
-		headers: {
-			Authorization: `Bearer ${session.accessToken}`,
-		},
+	const selection = await bootstrapAdminSpaceSelection(page.request, {
+		apiBaseUrl: ADMIN_API_BASE_URL,
+		accessToken: session.accessToken,
 	});
-	if (!currentSpaceResponse.ok()) {
-		throw new Error("현재 Space 검증 API 호출에 실패했습니다.");
-	}
-
-	const currentSpaceBody = (await currentSpaceResponse.json()) as {
-		data?: {
-			id?: string;
-			tenantId?: string | null;
-			contentLanguageCode?: string | null;
-			fitnessCenter?: { name?: string };
-		};
-	};
-	if (currentSpaceBody.data?.id !== SYSTEM_SPACE_ID) {
-		throw new Error("현재 Space 검증 결과가 기대한 Space와 일치하지 않습니다.");
-	}
-	if (currentSpaceBody.data?.tenantId !== SYSTEM_TENANT_ID) {
-		throw new Error(
-			"현재 Tenant 검증 결과가 기대한 Tenant와 일치하지 않습니다.",
-		);
-	}
-
-	const currentFitnessCenterName =
-		currentSpaceBody.data?.fitnessCenter?.name ?? SYSTEM_FITNESS_CENTER_NAME;
-	if (currentFitnessCenterName !== SYSTEM_FITNESS_CENTER_NAME) {
-		throw new Error(
-			"현재 Space 검증 후 FitnessCenter 이름이 일치하지 않습니다.",
-		);
-	}
-
-	await seedAdminPersist(page, {
-		tenantId: SYSTEM_TENANT_ID,
-		spaceId: SYSTEM_SPACE_ID,
-		fitnessCenterName: currentFitnessCenterName,
-		contentLanguageCode: currentSpaceBody.data?.contentLanguageCode ?? null,
-	});
+	await seedAdminPersist(page, selection);
 	await page.goto(ADMIN_DASHBOARD_PATH, { waitUntil: "domcontentloaded" });
+	return selection;
 }
 
 async function requestNativeLogin(page: Page): Promise<AdminNativeAuthSession> {

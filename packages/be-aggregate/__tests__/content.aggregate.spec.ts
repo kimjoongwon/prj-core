@@ -9,8 +9,8 @@ import { ContentsRepository } from "@cocrepo/repository";
 import { BadRequestException } from "@nestjs/common";
 import { ContentAggregate } from "../src/content/content.aggregate";
 
-const spaceId = "11111111-1111-4111-8111-111111111111";
-const userId = "22222222-2222-4222-8222-222222222222";
+const spaceId = 101n;
+const userId = 202n;
 
 describe("ContentAggregate", () => {
 	let repository: jest.Mocked<ContentsRepository>;

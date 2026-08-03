@@ -415,7 +415,7 @@ Demo/Test Data가 없으면 앱이 동작하지 않는다면 그것은 demo가 �
 | 현재 이름 또는 로직                         | 이유                                                |
 | ------------------------------------------- | --------------------------------------------------- |
 | `userSeedData`의 super admin                | 최초 운영 관리자 계정은 명시적으로 만드는 편이 안전 |
-| `SYSTEM_SPACE_ID`와 system space 생성       | 최초 시스템 구조                                    |
+| `SYSTEM_SPACE_ULID`와 system space 생성     | 최초 시스템 구조                                    |
 | system tenant 생성                          | 최초 연결 관계                                      |
 | system fitness center                      | 시스템 공간의 초기 시설                             |
 | `ensureSystemBootstrap`의 system group 준비 | system space 내부 초기 구조                         |

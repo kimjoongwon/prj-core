@@ -1,4 +1,4 @@
-import { ParseUlidPipe } from "@cocrepo/be-common";
+import { ParseBigIntIdPipe } from "@cocrepo/be-common";
 import {
 	GetSubjectByIdQuery,
 	GetSubjectFieldsQuery,
@@ -57,12 +57,12 @@ export class SubjectsController {
 	})
 	@ApiParam({
 		name: "id",
-		description: "Subject ID (ULID)",
+		description: "Subject ID (canonical decimal BIGINT string)",
 	})
 	@ApiErrors(404, 500)
 	@ApiResponseEntity(SubjectFieldDto, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("대상 필드 목록 조회 성공")
-	async getSubjectFields(@Param("id", ParseUlidPipe) id: string) {
+	async getSubjectFields(@Param("id", ParseBigIntIdPipe) id: bigint) {
 		return this.queryBus.execute(new GetSubjectFieldsQuery(id));
 	}
 
@@ -75,12 +75,12 @@ export class SubjectsController {
 	})
 	@ApiParam({
 		name: "id",
-		description: "Subject ID (ULID)",
+		description: "Subject ID (canonical decimal BIGINT string)",
 	})
 	@ApiErrors(404, 500)
 	@ApiResponseEntity(SubjectDto, HttpStatus.OK)
 	@ResponseMessage("대상 조회 성공")
-	async getSubjectById(@Param("id", ParseUlidPipe) id: string) {
+	async getSubjectById(@Param("id", ParseBigIntIdPipe) id: bigint) {
 		return this.queryBus.execute(new GetSubjectByIdQuery(id));
 	}
 }

@@ -1,4 +1,4 @@
-import { StringField } from "@cocrepo/decorator";
+import { StringField } from "@cocrepo/decorator/field";
 
 /**
  * POST /api/forgot-password 응답

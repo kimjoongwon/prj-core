@@ -2,6 +2,7 @@
 
 import {
 	AuthMiddleware,
+	BigIntResponseInterceptor,
 	DtoTransformInterceptor,
 	JwtStrategy,
 	LoggerMiddleware,
@@ -257,6 +258,7 @@ const devtoolsImports = enableNestDevtools
 		SpaceAccessGuard,
 		// Interceptors (setNestApp에서 순서대로 등록됨)
 		SpacesRepository,
+		BigIntResponseInterceptor,
 		SpaceScopeInterceptor,
 		DtoTransformInterceptor,
 		ResponseEntityInterceptor,

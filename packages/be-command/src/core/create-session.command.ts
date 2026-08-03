@@ -9,7 +9,7 @@ export class CreateSessionCommand implements CreateSessionCommandInput {
 	readonly recurringDayOfWeek!: CreateSessionCommandInput["recurringDayOfWeek"];
 	readonly timelineId!: CreateSessionCommandInput["timelineId"];
 
-	constructor(timelineId: string, input: CreateSessionCommandInput) {
+	constructor(timelineId: bigint, input: CreateSessionCommandInput) {
 		Object.assign(this, input);
 		this.timelineId = timelineId;
 	}

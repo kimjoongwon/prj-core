@@ -2,7 +2,7 @@
 
 import { useSetCurrentSpace } from "@cocrepo/api/idp/auth";
 import { useApp } from "@cocrepo/store";
-import type { AccountBootstrapSpaceLike, Option } from "@cocrepo/type";
+import { isDecimalId, type Option } from "@cocrepo/type";
 import { useCallback } from "react";
 
 /** Account Tenant 선택 orchestration 훅의 반환 계약입니다. */
@@ -15,7 +15,15 @@ export interface UseAccountTenantSelectionReturn {
 
 /** Space 응답의 FitnessCenter와 Company에서 표시 이름을 결정합니다. */
 function resolveFitnessCenterName(
-	space: AccountBootstrapSpaceLike | null | undefined,
+	space:
+		| {
+				fitnessCenter?: {
+					name?: string | null;
+					company?: { name?: string | null } | null;
+				} | null;
+		  }
+		| null
+		| undefined,
 ): string | null {
 	return (
 		space?.fitnessCenter?.name ?? space?.fitnessCenter?.company?.name ?? null
@@ -29,6 +37,11 @@ export function useAccountTenantSelection(): UseAccountTenantSelectionReturn {
 	const { mutate, isPending } = useSetCurrentSpace({
 		mutation: {
 			onSuccess: (response, variables) => {
+				if (!isDecimalId(variables.tenantId)) {
+					account.selectTenant(account.currentTenantId);
+					return;
+				}
+
 				const selectedSpace = account.availableSpaces.find(
 					(space) => space.tenantId === variables.tenantId,
 				);
@@ -38,12 +51,15 @@ export function useAccountTenantSelection(): UseAccountTenantSelectionReturn {
 				}
 
 				const currentSpace = response.data;
+				const currentSpaceId = isDecimalId(currentSpace?.id)
+					? currentSpace.id
+					: selectedSpace.spaceId;
 				account.setCurrentTenant(
 					variables.tenantId,
 					resolveFitnessCenterName(currentSpace) ??
 						selectedSpace.fitnessCenterName,
 					selectedSpace.contentLanguageCode ?? null,
-					currentSpace?.id ?? selectedSpace.spaceId,
+					currentSpaceId,
 				);
 				window.location.reload();
 			},
@@ -57,7 +73,7 @@ export function useAccountTenantSelection(): UseAccountTenantSelectionReturn {
 		(tenantId: string) => {
 			if (
 				isPending ||
-				!tenantId ||
+				!isDecimalId(tenantId) ||
 				tenantId === account.currentTenantId ||
 				!account.availableSpaces.some((space) => space.tenantId === tenantId)
 			) {

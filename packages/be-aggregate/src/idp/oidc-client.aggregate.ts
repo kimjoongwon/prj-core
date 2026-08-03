@@ -39,10 +39,10 @@ export class OidcClientAggregate {
 		});
 	}
 
-	async getById(id: string): Promise<OidcClient> {
-		this.logger.debug(`OIDC 클라이언트 상세 조회: ${id.slice(-8)}`);
+	async getByOidcClientId(oidcClientId: string): Promise<OidcClient> {
+		this.logger.debug(`OIDC 클라이언트 상세 조회: ${oidcClientId}`);
 
-		const client = await this.repository.findById(id);
+		const client = await this.repository.findByOidcClientId(oidcClientId);
 		if (!client) {
 			throw new NotFoundException("OIDC 클라이언트를 찾을 수 없습니다");
 		}
@@ -122,9 +122,9 @@ export class OidcClientAggregate {
 			tosUri?: string | null;
 		},
 	): Promise<OidcClient> {
-		this.logger.debug(`OIDC 클라이언트 수정: ${id.slice(-8)}`);
+		this.logger.debug(`OIDC 클라이언트 수정: ${id}`);
 
-		const existing = await this.repository.findById(id);
+		const existing = await this.repository.findByOidcClientId(id);
 		if (!existing) {
 			throw new NotFoundException("OIDC 클라이언트를 찾을 수 없습니다");
 		}
@@ -142,7 +142,7 @@ export class OidcClientAggregate {
 			loginUi: this.toPrismaNullableJson(params.loginUi),
 		};
 
-		return this.repository.updateById(id, updateData);
+		return this.repository.updateById(existing.id, updateData);
 	}
 
 	async getByClientId(clientId: string): Promise<OidcClient> {
@@ -183,25 +183,25 @@ export class OidcClientAggregate {
 	}
 
 	async remove(id: string): Promise<void> {
-		this.logger.debug(`OIDC 클라이언트 삭제: ${id.slice(-8)}`);
+		this.logger.debug(`OIDC 클라이언트 삭제: ${id}`);
 
-		const existing = await this.repository.findById(id);
+		const existing = await this.repository.findByOidcClientId(id);
 		if (!existing) {
 			throw new NotFoundException("OIDC 클라이언트를 찾을 수 없습니다");
 		}
 
-		await this.repository.removeById(id);
+		await this.repository.removeById(existing.id);
 	}
 
 	async toggleActive(id: string): Promise<OidcClient> {
-		this.logger.debug(`OIDC 클라이언트 활성 토글: ${id.slice(-8)}`);
+		this.logger.debug(`OIDC 클라이언트 활성 토글: ${id}`);
 
-		const existing = await this.repository.findById(id);
+		const existing = await this.repository.findByOidcClientId(id);
 		if (!existing) {
 			throw new NotFoundException("OIDC 클라이언트를 찾을 수 없습니다");
 		}
 
-		return this.repository.updateById(id, {
+		return this.repository.updateById(existing.id, {
 			isActive: !existing.isActive,
 		});
 	}

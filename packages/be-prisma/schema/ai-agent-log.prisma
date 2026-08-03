@@ -2,14 +2,14 @@
 // @description: AI 문의 처리 시도와 결과를 추적하는 실행 로그
 /// @displayName AI 에이전트 로그
 model AIAgentLog {
-  id             String          @unique @default(ulid()) @db.VarChar(26)
-  seq            Int             @id @default(autoincrement())
+  aiAgentLogId   String          @unique @default(ulid()) @map("ai_agent_log_id") @db.Char(26)
+  id             BigInt          @id @default(autoincrement())
   /// @displayName 생성 일시
   createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
   /// @displayName 소속 문의 내부 순번
-  inquirySeq     Int             @map("inquiry_seq")
+  inquiryId      BigInt          @map("inquiry_id")
   /// @displayName 관련 메시지 내부 순번
-  messageSeq     Int?            @unique @map("message_seq")
+  messageId      BigInt?         @unique @map("message_id")
   /// @displayName AI 작업 유형
   action         AIAgentAction
   /// @displayName 입력 데이터
@@ -30,10 +30,10 @@ model AIAgentLog {
   tokenCount     Int?            @map("token_count")
   /// @displayName 에러 메시지
   errorMessage   String?         @map("error_message")
-  inquiry        Inquiry         @relation(fields: [inquirySeq], references: [seq], onDelete: Cascade)
-  message        InquiryMessage? @relation(fields: [messageSeq], references: [seq], onDelete: SetNull)
+  inquiry        Inquiry         @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  message        InquiryMessage? @relation(fields: [messageId], references: [id], onDelete: SetNull)
 
-  @@index([inquirySeq])
+  @@index([inquiryId])
   @@index([action])
   @@map("ai_agent_logs")
 }

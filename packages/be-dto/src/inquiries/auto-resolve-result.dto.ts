@@ -1,4 +1,8 @@
-import { BooleanField, NumberField, StringField } from "@cocrepo/decorator";
+import {
+	BooleanField,
+	NumberField,
+	StringField,
+} from "@cocrepo/decorator/field";
 
 /**
  * 자동 해결 결과 DTO

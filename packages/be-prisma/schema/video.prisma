@@ -2,8 +2,8 @@
 // @description: Asset(kind=VIDEO)에 종속되는 비디오 1:1 상세 정보
 /// @displayName 비디오 상세
 model Video {
-  id         String    @unique @default(ulid()) @db.VarChar(26)
-  seq        Int       @id @default(autoincrement())
+  videoId    String    @unique @default(ulid()) @map("video_id") @db.Char(26)
+  id         BigInt    @id @default(autoincrement())
   createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt  DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt  DateTime? @map("removed_at") @db.Timestamptz(6)
@@ -22,8 +22,8 @@ model Video {
   /// @displayName 오디오 포함 여부
   hasAudio   Boolean   @default(false) @map("has_audio")
   /// @displayName 원본 Asset 내부 순번
-  assetSeq   Int       @unique @map("asset_seq")
-  asset      Asset     @relation(fields: [assetSeq], references: [seq], onDelete: Cascade)
+  assetId    BigInt    @unique @map("asset_id")
+  asset      Asset     @relation(fields: [assetId], references: [id], onDelete: Cascade)
 
   @@map("videos")
 }

@@ -18,10 +18,12 @@ import {
 } from "@cocrepo/api/core/inquiries";
 import { ADMIN_PATHS } from "@cocrepo/constant";
 import { useInquiryDetailWebSocket } from "@cocrepo/hook";
-import type {
-	FormOptionItem,
-	InquiryMessage,
-	InquiryParticipant,
+import {
+	type FormOptionItem,
+	type InquiryMessage,
+	type InquiryParticipant,
+	isDecimalId,
+	requireDecimalId,
 } from "@cocrepo/type";
 import {
 	InquiryEditScreen,
@@ -61,11 +63,11 @@ const normalizeFormOptions = (
 
 const mapMessageToStore = (message: InquiryMessageDto): InquiryMessage => {
 	return {
-		id: message.id,
-		threadId: message.threadId,
-		inquiryId: message.inquiryId,
+		id: requireDecimalId(message.id, "message.id"),
+		threadId: requireDecimalId(message.threadId, "message.threadId"),
+		inquiryId: requireDecimalId(message.inquiryId, "message.inquiryId"),
 		senderType: message.senderType,
-		senderId: message.senderName || message.senderId || null,
+		senderId: isDecimalId(message.senderId) ? message.senderId : null,
 		content: message.content,
 		contentType: message.contentType,
 		isEdited: message.isEdited,
@@ -80,13 +82,21 @@ const mapMessageToStore = (message: InquiryMessageDto): InquiryMessage => {
 const mapParticipantToStore = (
 	participant: InquiryParticipantDto | Record<string, unknown>,
 	inquiryId: string,
-): InquiryParticipant => {
+): InquiryParticipant | null => {
 	const data = participant as Record<string, unknown>;
+	if (
+		!isDecimalId(data.id) ||
+		!isDecimalId(inquiryId) ||
+		!isDecimalId(data.userId)
+	) {
+		return null;
+	}
+
 	return {
-		id: (data.id as string) ?? crypto.randomUUID(),
+		id: data.id,
 		inquiryId,
-		threadId: (data.threadId as string | null) ?? null,
-		userId: (data.userId as string) ?? "unknown-user",
+		threadId: isDecimalId(data.threadId) ? data.threadId : null,
+		userId: data.userId,
 		role: ((data.role as string) ?? "AGENT") as
 			| "CUSTOMER"
 			| "AGENT"
@@ -102,7 +112,10 @@ const mapParticipantToStore = (
 };
 
 export default observer(function InquiryReadOnlyRoute() {
-	const inquiryId = useParams<{ inquiryId: string }>().inquiryId;
+	const inquiryId = requireDecimalId(
+		useParams<{ inquiryId: string }>().inquiryId,
+		"inquiryId",
+	);
 	const router = useRouter();
 	const inquiryState = useLocalObservable(() => ({
 		currentInquiryId: null as string | null,
@@ -255,9 +268,11 @@ export default observer(function InquiryReadOnlyRoute() {
 			| undefined) ??
 		(inquiry?.participants as Array<Record<string, unknown>> | undefined) ??
 		[];
-	const participants = participantRows.map((participant) =>
-		mapParticipantToStore(participant, inquiryId),
-	);
+	const participants = participantRows
+		.map((participant) => mapParticipantToStore(participant, inquiryId))
+		.filter(
+			(participant): participant is InquiryParticipant => participant !== null,
+		);
 
 	const ws = useInquiryDetailWebSocket({
 		inquiryId,

@@ -115,7 +115,7 @@ interface CreateTemplateVariableDto {
 **TemplateDto**:
 ```typescript
 interface TemplateDto {
-  id: string;                    // UUID
+  id: string;                    // decimal string
   code: string;                  // 고유 코드 (예: WELCOME_EMAIL)
   name: string;                  // 템플릿 이름
   type: "EMAIL" | "SMS" | "PUSH"; // 유형

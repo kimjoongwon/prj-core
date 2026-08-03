@@ -7,7 +7,7 @@ export class CreateProgramCommand implements CreateProgramCommandInput {
 	readonly level!: CreateProgramCommandInput["level"];
 
 	constructor(
-		readonly sessionId: string,
+		readonly sessionId: bigint,
 		input: CreateProgramCommandInput,
 	) {
 		Object.assign(this, input);

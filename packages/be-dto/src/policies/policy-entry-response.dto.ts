@@ -1,20 +1,20 @@
-import { ULIDField } from "@cocrepo/decorator";
+import { BigIntIdField } from "@cocrepo/decorator/field";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 import { AbilityResponseDto } from "../abilities/ability-response.dto";
 
 export class PolicyEntryResponseDto {
-	@ULIDField({ description: "PolicyEntry ID" })
+	@BigIntIdField({ description: "PolicyEntry ID" })
 	@Expose()
-	id!: string;
+	id!: bigint;
 
-	@ULIDField({ description: "Policy ID" })
+	@BigIntIdField({ description: "Policy ID" })
 	@Expose()
-	policyId!: string;
+	policyId!: bigint;
 
-	@ULIDField({ description: "Ability ID" })
+	@BigIntIdField({ description: "Ability ID" })
 	@Expose()
-	abilityId!: string;
+	abilityId!: bigint;
 
 	@ApiProperty({
 		description: "생성 일시",

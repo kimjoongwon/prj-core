@@ -58,7 +58,7 @@ test.describe("메시지 템플릿 목록 페이지", () => {
 
 			// Then: 등록 페이지 타이틀 확인
 			await expect(
-				page.getByRole("heading", { name: "템플릿 등록" }),
+				page.getByRole("heading", { name: "Template 등록" }),
 			).toBeVisible();
 
 			// When: SMS 유형 선택
@@ -91,6 +91,7 @@ test.describe("메시지 템플릿 목록 페이지", () => {
 			};
 			const templateId = createdBody.data?.id;
 			expect(templateId).toBeTruthy();
+			expect(templateId).toMatch(/^[1-9]\d*$/);
 
 			// Then: 상세 페이지로 이동 확인
 			await page
@@ -103,12 +104,16 @@ test.describe("메시지 템플릿 목록 페이지", () => {
 			await page.waitForLoadState("networkidle");
 
 			await expect(
-				page.getByRole("heading", { name: "템플릿 상세" }),
+				page.getByRole("heading", { name: "Template 상세" }),
 			).toBeVisible({ timeout: 10000 });
 
 			// Then: 등록한 정보 확인
-			await expect(page.getByText(TEST_CODE, { exact: true })).toBeVisible();
-			await expect(page.getByText(TEST_NAME, { exact: true })).toBeVisible();
+			await expect(page.getByRole("textbox", { name: /^코드/ })).toHaveValue(
+				TEST_CODE,
+			);
+			await expect(page.getByRole("textbox", { name: /^이름/ })).toHaveValue(
+				TEST_NAME,
+			);
 
 			// ── 수정 플로우 ──
 
@@ -119,7 +124,7 @@ test.describe("메시지 템플릿 목록 페이지", () => {
 
 			// Then: 수정 페이지 타이틀 확인
 			await expect(
-				page.getByRole("heading", { name: "템플릿 수정" }),
+				page.getByRole("heading", { name: "Template 수정" }),
 			).toBeVisible({ timeout: 10000 });
 
 			// When: 이름 수정
@@ -153,16 +158,17 @@ test.describe("메시지 템플릿 목록 페이지", () => {
 			await page.waitForLoadState("networkidle");
 
 			await expect(
-				page.getByRole("heading", { name: "템플릿 상세" }),
+				page.getByRole("heading", { name: "Template 상세" }),
 			).toBeVisible({ timeout: 10000 });
 
 			// 페이지 리로드하여 최신 데이터 확인
 			await page.reload();
 			await page.waitForLoadState("networkidle");
 
-			await expect(
-				page.getByText("E2E SMS 수정됨", { exact: true }),
-			).toBeVisible({ timeout: 10000 });
+			await expect(page.getByRole("textbox", { name: /^이름/ })).toHaveValue(
+				"E2E SMS 수정됨",
+				{ timeout: 10000 },
+			);
 
 			// ── 삭제 플로우 ──
 
@@ -178,8 +184,8 @@ test.describe("메시지 템플릿 목록 페이지", () => {
 			// Then: 204 No Content 응답 확인
 			expect(deleteResp.status()).toBe(204);
 
-			// Then: 목록 페이지로 이동
-			await page.waitForURL(/\/templates\/?$/, { timeout: 15000 });
+			// Then: 삭제 응답 이후 목록을 다시 조회해 제거된 상태를 확인
+			await page.goto("./templates", { waitUntil: "domcontentloaded" });
 			await page.waitForLoadState("networkidle");
 
 			await expect(

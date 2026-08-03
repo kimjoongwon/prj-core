@@ -29,7 +29,8 @@ interface CreatedSession {
 }
 
 interface TestUser {
-	id: string;
+	id: bigint;
+	userId: string;
 	email: string;
 }
 
@@ -42,7 +43,7 @@ describe("Auth Password Policy API E2E 테스트", () => {
 		ReturnType<PrismaService["securityPolicy"]["findUnique"]>
 	>;
 	let userSequence = 0;
-	const createdUserIds: string[] = [];
+	const createdUserIds: bigint[] = [];
 	const createdSessionIds: CreatedSession[] = [];
 	const createdResetTokenKeys: string[] = [];
 
@@ -254,14 +255,14 @@ describe("Auth Password Policy API E2E 테스트", () => {
 					refreshToken: expect.any(String),
 					sessionId: expect.any(String),
 					user: expect.objectContaining({
-						id: user.id,
+						id: user.id.toString(),
 						email: user.email,
 					}),
 				}),
 			);
 
 			createdSessionIds.push({
-				userId: user.id,
+				userId: user.userId,
 				sessionId: loginResponse.body.data.sessionId,
 			});
 		});
@@ -318,6 +319,7 @@ describe("Auth Password Policy API E2E 테스트", () => {
 			},
 			select: {
 				id: true,
+				userId: true,
 				email: true,
 			},
 		});
@@ -326,7 +328,7 @@ describe("Auth Password Policy API E2E 테스트", () => {
 	}
 
 	async function createPasswordHistory(
-		userId: string,
+		userId: bigint,
 		password: string,
 	): Promise<void> {
 		const plainPassword = PlainPassword.create(password);
@@ -344,7 +346,7 @@ describe("Auth Password Policy API E2E 테스트", () => {
 		const key = `${RESET_TOKEN_PREFIX}${token.toHash()}`;
 		await redisService.set(
 			key,
-			JSON.stringify({ userId: user.id, email: user.email }),
+			JSON.stringify({ userId: user.id.toString(), email: user.email }),
 			RESET_TOKEN_TTL_SECONDS,
 		);
 		createdResetTokenKeys.push(key);

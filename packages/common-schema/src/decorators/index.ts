@@ -2,6 +2,7 @@
 export * from "./apply";
 export * from "./boolean.decorator";
 export * from "./date.decorator";
+export * from "./decimal-id.decorator";
 // 특수 타입
 export * from "./email.decorator";
 export * from "./enum.decorator";

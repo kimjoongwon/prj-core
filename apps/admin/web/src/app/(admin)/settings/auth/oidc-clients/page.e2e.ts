@@ -17,7 +17,9 @@ test.describe("OIDC 클라이언트 목록 페이지", () => {
 		await expect(
 			page.getByText("시스템에 등록된 OIDC 클라이언트를 관리합니다"),
 		).toBeVisible();
-		await expect(page.getByText("클라이언트 등록")).toBeVisible();
+		await expect(
+			page.getByRole("button", { name: "클라이언트 등록" }),
+		).toBeVisible();
 	});
 
 	test("데이터 그리드가 렌더링되어야 한다", async ({ page }) => {
@@ -54,7 +56,9 @@ test.describe("OIDC 클라이언트 등록 페이지", () => {
 		await page.waitForLoadState("networkidle");
 
 		// Then: 등록 페이지 확인
-		await expect(page.getByText("클라이언트 등록")).toBeVisible();
+		await expect(
+			page.getByRole("heading", { name: "OIDC Client 등록" }),
+		).toBeVisible();
 		await expect(page.getByText("First-party 클라이언트")).toBeVisible();
 		await expect(page.getByText("권한 동의 화면 생략")).toBeVisible();
 	});

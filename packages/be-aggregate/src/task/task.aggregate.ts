@@ -27,7 +27,7 @@ export class TaskAggregate {
 	) {}
 
 	async findTasks(params: {
-		spaceId: string;
+		spaceId: bigint;
 		spaceScope: SpaceScope;
 		skip: number;
 		take: number;
@@ -51,8 +51,8 @@ export class TaskAggregate {
 	}
 
 	async findTaskById(
-		taskId: string,
-		spaceId: string,
+		taskId: bigint,
+		spaceId: bigint,
 		spaceScope: SpaceScope = SpaceScope.INCLUDE_ANCESTORS,
 	): Promise<Task> {
 		const spaceIds = this.resolveReadableSpaceIds(spaceScope, spaceId);
@@ -66,8 +66,8 @@ export class TaskAggregate {
 	}
 
 	async getExerciseByTaskId(
-		taskId: string,
-		spaceId: string,
+		taskId: bigint,
+		spaceId: bigint,
 		spaceScope: SpaceScope = SpaceScope.INCLUDE_ANCESTORS,
 	): Promise<Exercise> {
 		const task = await this.findTaskById(taskId, spaceId, spaceScope);
@@ -78,7 +78,7 @@ export class TaskAggregate {
 		return task.exercise;
 	}
 
-	async findTaskRoutines(taskId: string, spaceId: string): Promise<Routine[]> {
+	async findTaskRoutines(taskId: bigint, spaceId: bigint): Promise<Routine[]> {
 		await this.findTaskById(taskId, spaceId, SpaceScope.INCLUDE_ANCESTORS);
 		return this.tasksRepository.findTaskRoutines(taskId);
 	}
@@ -86,8 +86,8 @@ export class TaskAggregate {
 	@Transactional()
 	async createTaskWithExercise(
 		dto: CreateTaskCommandInput,
-		spaceId: string,
-		createdById: string,
+		spaceId: bigint,
+		createdById: bigint,
 	): Promise<Task> {
 		this.logger.debug(`Task 생성: exercise=${dto.name}`);
 		const task = await this.tasksRepository.create({
@@ -106,9 +106,9 @@ export class TaskAggregate {
 	}
 
 	async updateTaskExercise(
-		taskId: string,
+		taskId: bigint,
 		dto: UpdateTaskExerciseCommandInput,
-		spaceId: string,
+		spaceId: bigint,
 	): Promise<Task> {
 		const task = await this.findTaskById(
 			taskId,
@@ -131,7 +131,7 @@ export class TaskAggregate {
 	}
 
 	@Transactional()
-	async deleteTask(taskId: string, spaceId: string): Promise<void> {
+	async deleteTask(taskId: bigint, spaceId: bigint): Promise<void> {
 		const task = await this.findTaskById(
 			taskId,
 			spaceId,
@@ -154,8 +154,8 @@ export class TaskAggregate {
 
 	private resolveReadableSpaceIds(
 		spaceScope: SpaceScope,
-		spaceId: string,
-	): string[] | undefined {
+		spaceId: bigint,
+	): bigint[] | undefined {
 		if (this.spaceContext.spaceIds === undefined) {
 			return undefined;
 		}

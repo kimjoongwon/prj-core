@@ -27,8 +27,8 @@ export type AggregateInquiryAttachment = {
 }
 
 export type InquiryAttachmentAvgAggregateOutputType = {
-  seq: number | null
-  messageSeq: number | null
+  id: number | null
+  messageId: number | null
   fileSize: number | null
   width: number | null
   height: number | null
@@ -36,8 +36,8 @@ export type InquiryAttachmentAvgAggregateOutputType = {
 }
 
 export type InquiryAttachmentSumAggregateOutputType = {
-  seq: number | null
-  messageSeq: number | null
+  id: bigint | null
+  messageId: bigint | null
   fileSize: bigint | null
   width: number | null
   height: number | null
@@ -45,10 +45,10 @@ export type InquiryAttachmentSumAggregateOutputType = {
 }
 
 export type InquiryAttachmentMinAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  inquiryAttachmentId: string | null
+  id: bigint | null
   createdAt: Date | null
-  messageSeq: number | null
+  messageId: bigint | null
   fileName: string | null
   fileSize: bigint | null
   mimeType: string | null
@@ -62,10 +62,10 @@ export type InquiryAttachmentMinAggregateOutputType = {
 }
 
 export type InquiryAttachmentMaxAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  inquiryAttachmentId: string | null
+  id: bigint | null
   createdAt: Date | null
-  messageSeq: number | null
+  messageId: bigint | null
   fileName: string | null
   fileSize: bigint | null
   mimeType: string | null
@@ -79,10 +79,10 @@ export type InquiryAttachmentMaxAggregateOutputType = {
 }
 
 export type InquiryAttachmentCountAggregateOutputType = {
+  inquiryAttachmentId: number
   id: number
-  seq: number
   createdAt: number
-  messageSeq: number
+  messageId: number
   fileName: number
   fileSize: number
   mimeType: number
@@ -98,8 +98,8 @@ export type InquiryAttachmentCountAggregateOutputType = {
 
 
 export type InquiryAttachmentAvgAggregateInputType = {
-  seq?: true
-  messageSeq?: true
+  id?: true
+  messageId?: true
   fileSize?: true
   width?: true
   height?: true
@@ -107,8 +107,8 @@ export type InquiryAttachmentAvgAggregateInputType = {
 }
 
 export type InquiryAttachmentSumAggregateInputType = {
-  seq?: true
-  messageSeq?: true
+  id?: true
+  messageId?: true
   fileSize?: true
   width?: true
   height?: true
@@ -116,10 +116,10 @@ export type InquiryAttachmentSumAggregateInputType = {
 }
 
 export type InquiryAttachmentMinAggregateInputType = {
+  inquiryAttachmentId?: true
   id?: true
-  seq?: true
   createdAt?: true
-  messageSeq?: true
+  messageId?: true
   fileName?: true
   fileSize?: true
   mimeType?: true
@@ -133,10 +133,10 @@ export type InquiryAttachmentMinAggregateInputType = {
 }
 
 export type InquiryAttachmentMaxAggregateInputType = {
+  inquiryAttachmentId?: true
   id?: true
-  seq?: true
   createdAt?: true
-  messageSeq?: true
+  messageId?: true
   fileName?: true
   fileSize?: true
   mimeType?: true
@@ -150,10 +150,10 @@ export type InquiryAttachmentMaxAggregateInputType = {
 }
 
 export type InquiryAttachmentCountAggregateInputType = {
+  inquiryAttachmentId?: true
   id?: true
-  seq?: true
   createdAt?: true
-  messageSeq?: true
+  messageId?: true
   fileName?: true
   fileSize?: true
   mimeType?: true
@@ -254,10 +254,10 @@ export type InquiryAttachmentGroupByArgs<ExtArgs extends runtime.Types.Extension
 }
 
 export type InquiryAttachmentGroupByOutputType = {
-  id: string
-  seq: number
+  inquiryAttachmentId: string
+  id: bigint
   createdAt: Date
-  messageSeq: number
+  messageId: bigint
   fileName: string
   fileSize: bigint
   mimeType: string
@@ -294,10 +294,10 @@ export type InquiryAttachmentWhereInput = {
   AND?: Prisma.InquiryAttachmentWhereInput | Prisma.InquiryAttachmentWhereInput[]
   OR?: Prisma.InquiryAttachmentWhereInput[]
   NOT?: Prisma.InquiryAttachmentWhereInput | Prisma.InquiryAttachmentWhereInput[]
-  id?: Prisma.StringFilter<"InquiryAttachment"> | string
-  seq?: Prisma.IntFilter<"InquiryAttachment"> | number
+  inquiryAttachmentId?: Prisma.StringFilter<"InquiryAttachment"> | string
+  id?: Prisma.BigIntFilter<"InquiryAttachment"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"InquiryAttachment"> | Date | string
-  messageSeq?: Prisma.IntFilter<"InquiryAttachment"> | number
+  messageId?: Prisma.BigIntFilter<"InquiryAttachment"> | bigint | number
   fileName?: Prisma.StringFilter<"InquiryAttachment"> | string
   fileSize?: Prisma.BigIntFilter<"InquiryAttachment"> | bigint | number
   mimeType?: Prisma.StringFilter<"InquiryAttachment"> | string
@@ -312,10 +312,10 @@ export type InquiryAttachmentWhereInput = {
 }
 
 export type InquiryAttachmentOrderByWithRelationInput = {
+  inquiryAttachmentId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  messageSeq?: Prisma.SortOrder
+  messageId?: Prisma.SortOrder
   fileName?: Prisma.SortOrder
   fileSize?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
@@ -330,13 +330,13 @@ export type InquiryAttachmentOrderByWithRelationInput = {
 }
 
 export type InquiryAttachmentWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  seq?: number
+  inquiryAttachmentId?: string
+  id?: bigint | number
   AND?: Prisma.InquiryAttachmentWhereInput | Prisma.InquiryAttachmentWhereInput[]
   OR?: Prisma.InquiryAttachmentWhereInput[]
   NOT?: Prisma.InquiryAttachmentWhereInput | Prisma.InquiryAttachmentWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"InquiryAttachment"> | Date | string
-  messageSeq?: Prisma.IntFilter<"InquiryAttachment"> | number
+  messageId?: Prisma.BigIntFilter<"InquiryAttachment"> | bigint | number
   fileName?: Prisma.StringFilter<"InquiryAttachment"> | string
   fileSize?: Prisma.BigIntFilter<"InquiryAttachment"> | bigint | number
   mimeType?: Prisma.StringFilter<"InquiryAttachment"> | string
@@ -348,13 +348,13 @@ export type InquiryAttachmentWhereUniqueInput = Prisma.AtLeast<{
   duration?: Prisma.IntNullableFilter<"InquiryAttachment"> | number | null
   isDeleted?: Prisma.BoolFilter<"InquiryAttachment"> | boolean
   message?: Prisma.XOR<Prisma.InquiryMessageScalarRelationFilter, Prisma.InquiryMessageWhereInput>
-}, "seq" | "id">
+}, "id" | "inquiryAttachmentId">
 
 export type InquiryAttachmentOrderByWithAggregationInput = {
+  inquiryAttachmentId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  messageSeq?: Prisma.SortOrder
+  messageId?: Prisma.SortOrder
   fileName?: Prisma.SortOrder
   fileSize?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
@@ -376,10 +376,10 @@ export type InquiryAttachmentScalarWhereWithAggregatesInput = {
   AND?: Prisma.InquiryAttachmentScalarWhereWithAggregatesInput | Prisma.InquiryAttachmentScalarWhereWithAggregatesInput[]
   OR?: Prisma.InquiryAttachmentScalarWhereWithAggregatesInput[]
   NOT?: Prisma.InquiryAttachmentScalarWhereWithAggregatesInput | Prisma.InquiryAttachmentScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"InquiryAttachment"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"InquiryAttachment"> | number
+  inquiryAttachmentId?: Prisma.StringWithAggregatesFilter<"InquiryAttachment"> | string
+  id?: Prisma.BigIntWithAggregatesFilter<"InquiryAttachment"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"InquiryAttachment"> | Date | string
-  messageSeq?: Prisma.IntWithAggregatesFilter<"InquiryAttachment"> | number
+  messageId?: Prisma.BigIntWithAggregatesFilter<"InquiryAttachment"> | bigint | number
   fileName?: Prisma.StringWithAggregatesFilter<"InquiryAttachment"> | string
   fileSize?: Prisma.BigIntWithAggregatesFilter<"InquiryAttachment"> | bigint | number
   mimeType?: Prisma.StringWithAggregatesFilter<"InquiryAttachment"> | string
@@ -393,7 +393,8 @@ export type InquiryAttachmentScalarWhereWithAggregatesInput = {
 }
 
 export type InquiryAttachmentCreateInput = {
-  id?: string
+  inquiryAttachmentId?: string
+  id?: bigint | number
   createdAt?: Date | string
   fileName: string
   fileSize: bigint | number
@@ -409,10 +410,10 @@ export type InquiryAttachmentCreateInput = {
 }
 
 export type InquiryAttachmentUncheckedCreateInput = {
-  id?: string
-  seq?: number
+  inquiryAttachmentId?: string
+  id?: bigint | number
   createdAt?: Date | string
-  messageSeq: number
+  messageId: bigint | number
   fileName: string
   fileSize: bigint | number
   mimeType: string
@@ -426,7 +427,8 @@ export type InquiryAttachmentUncheckedCreateInput = {
 }
 
 export type InquiryAttachmentUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryAttachmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileSize?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -442,10 +444,10 @@ export type InquiryAttachmentUpdateInput = {
 }
 
 export type InquiryAttachmentUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryAttachmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  messageSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  messageId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileSize?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -459,10 +461,10 @@ export type InquiryAttachmentUncheckedUpdateInput = {
 }
 
 export type InquiryAttachmentCreateManyInput = {
-  id?: string
-  seq?: number
+  inquiryAttachmentId?: string
+  id?: bigint | number
   createdAt?: Date | string
-  messageSeq: number
+  messageId: bigint | number
   fileName: string
   fileSize: bigint | number
   mimeType: string
@@ -476,7 +478,8 @@ export type InquiryAttachmentCreateManyInput = {
 }
 
 export type InquiryAttachmentUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryAttachmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileSize?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -491,10 +494,10 @@ export type InquiryAttachmentUpdateManyMutationInput = {
 }
 
 export type InquiryAttachmentUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryAttachmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  messageSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  messageId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileSize?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -508,10 +511,10 @@ export type InquiryAttachmentUncheckedUpdateManyInput = {
 }
 
 export type InquiryAttachmentCountOrderByAggregateInput = {
+  inquiryAttachmentId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  messageSeq?: Prisma.SortOrder
+  messageId?: Prisma.SortOrder
   fileName?: Prisma.SortOrder
   fileSize?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
@@ -525,8 +528,8 @@ export type InquiryAttachmentCountOrderByAggregateInput = {
 }
 
 export type InquiryAttachmentAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  messageSeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  messageId?: Prisma.SortOrder
   fileSize?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
@@ -534,10 +537,10 @@ export type InquiryAttachmentAvgOrderByAggregateInput = {
 }
 
 export type InquiryAttachmentMaxOrderByAggregateInput = {
+  inquiryAttachmentId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  messageSeq?: Prisma.SortOrder
+  messageId?: Prisma.SortOrder
   fileName?: Prisma.SortOrder
   fileSize?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
@@ -551,10 +554,10 @@ export type InquiryAttachmentMaxOrderByAggregateInput = {
 }
 
 export type InquiryAttachmentMinOrderByAggregateInput = {
+  inquiryAttachmentId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  messageSeq?: Prisma.SortOrder
+  messageId?: Prisma.SortOrder
   fileName?: Prisma.SortOrder
   fileSize?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
@@ -568,8 +571,8 @@ export type InquiryAttachmentMinOrderByAggregateInput = {
 }
 
 export type InquiryAttachmentSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
-  messageSeq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  messageId?: Prisma.SortOrder
   fileSize?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
@@ -633,7 +636,8 @@ export type InquiryAttachmentUncheckedUpdateManyWithoutMessageNestedInput = {
 }
 
 export type InquiryAttachmentCreateWithoutMessageInput = {
-  id?: string
+  inquiryAttachmentId?: string
+  id?: bigint | number
   createdAt?: Date | string
   fileName: string
   fileSize: bigint | number
@@ -648,8 +652,8 @@ export type InquiryAttachmentCreateWithoutMessageInput = {
 }
 
 export type InquiryAttachmentUncheckedCreateWithoutMessageInput = {
-  id?: string
-  seq?: number
+  inquiryAttachmentId?: string
+  id?: bigint | number
   createdAt?: Date | string
   fileName: string
   fileSize: bigint | number
@@ -693,10 +697,10 @@ export type InquiryAttachmentScalarWhereInput = {
   AND?: Prisma.InquiryAttachmentScalarWhereInput | Prisma.InquiryAttachmentScalarWhereInput[]
   OR?: Prisma.InquiryAttachmentScalarWhereInput[]
   NOT?: Prisma.InquiryAttachmentScalarWhereInput | Prisma.InquiryAttachmentScalarWhereInput[]
-  id?: Prisma.StringFilter<"InquiryAttachment"> | string
-  seq?: Prisma.IntFilter<"InquiryAttachment"> | number
+  inquiryAttachmentId?: Prisma.StringFilter<"InquiryAttachment"> | string
+  id?: Prisma.BigIntFilter<"InquiryAttachment"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"InquiryAttachment"> | Date | string
-  messageSeq?: Prisma.IntFilter<"InquiryAttachment"> | number
+  messageId?: Prisma.BigIntFilter<"InquiryAttachment"> | bigint | number
   fileName?: Prisma.StringFilter<"InquiryAttachment"> | string
   fileSize?: Prisma.BigIntFilter<"InquiryAttachment"> | bigint | number
   mimeType?: Prisma.StringFilter<"InquiryAttachment"> | string
@@ -710,8 +714,8 @@ export type InquiryAttachmentScalarWhereInput = {
 }
 
 export type InquiryAttachmentCreateManyMessageInput = {
-  id?: string
-  seq?: number
+  inquiryAttachmentId?: string
+  id?: bigint | number
   createdAt?: Date | string
   fileName: string
   fileSize: bigint | number
@@ -726,7 +730,8 @@ export type InquiryAttachmentCreateManyMessageInput = {
 }
 
 export type InquiryAttachmentUpdateWithoutMessageInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inquiryAttachmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileSize?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -741,8 +746,8 @@ export type InquiryAttachmentUpdateWithoutMessageInput = {
 }
 
 export type InquiryAttachmentUncheckedUpdateWithoutMessageInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryAttachmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileSize?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -757,8 +762,8 @@ export type InquiryAttachmentUncheckedUpdateWithoutMessageInput = {
 }
 
 export type InquiryAttachmentUncheckedUpdateManyWithoutMessageInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  inquiryAttachmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fileName?: Prisma.StringFieldUpdateOperationsInput | string
   fileSize?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -775,10 +780,10 @@ export type InquiryAttachmentUncheckedUpdateManyWithoutMessageInput = {
 
 
 export type InquiryAttachmentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  inquiryAttachmentId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
-  messageSeq?: boolean
+  messageId?: boolean
   fileName?: boolean
   fileSize?: boolean
   mimeType?: boolean
@@ -793,10 +798,10 @@ export type InquiryAttachmentSelect<ExtArgs extends runtime.Types.Extensions.Int
 }, ExtArgs["result"]["inquiryAttachment"]>
 
 export type InquiryAttachmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  inquiryAttachmentId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
-  messageSeq?: boolean
+  messageId?: boolean
   fileName?: boolean
   fileSize?: boolean
   mimeType?: boolean
@@ -811,10 +816,10 @@ export type InquiryAttachmentSelectCreateManyAndReturn<ExtArgs extends runtime.T
 }, ExtArgs["result"]["inquiryAttachment"]>
 
 export type InquiryAttachmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  inquiryAttachmentId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
-  messageSeq?: boolean
+  messageId?: boolean
   fileName?: boolean
   fileSize?: boolean
   mimeType?: boolean
@@ -829,10 +834,10 @@ export type InquiryAttachmentSelectUpdateManyAndReturn<ExtArgs extends runtime.T
 }, ExtArgs["result"]["inquiryAttachment"]>
 
 export type InquiryAttachmentSelectScalar = {
+  inquiryAttachmentId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
-  messageSeq?: boolean
+  messageId?: boolean
   fileName?: boolean
   fileSize?: boolean
   mimeType?: boolean
@@ -845,7 +850,7 @@ export type InquiryAttachmentSelectScalar = {
   isDeleted?: boolean
 }
 
-export type InquiryAttachmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "messageSeq" | "fileName" | "fileSize" | "mimeType" | "fileType" | "url" | "thumbnailUrl" | "width" | "height" | "duration" | "isDeleted", ExtArgs["result"]["inquiryAttachment"]>
+export type InquiryAttachmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"inquiryAttachmentId" | "id" | "createdAt" | "messageId" | "fileName" | "fileSize" | "mimeType" | "fileType" | "url" | "thumbnailUrl" | "width" | "height" | "duration" | "isDeleted", ExtArgs["result"]["inquiryAttachment"]>
 export type InquiryAttachmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   message?: boolean | Prisma.InquiryMessageDefaultArgs<ExtArgs>
 }
@@ -862,8 +867,8 @@ export type $InquiryAttachmentPayload<ExtArgs extends runtime.Types.Extensions.I
     message: Prisma.$InquiryMessagePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    seq: number
+    inquiryAttachmentId: string
+    id: bigint
     /**
      * @displayName 생성 일시
      */
@@ -871,7 +876,7 @@ export type $InquiryAttachmentPayload<ExtArgs extends runtime.Types.Extensions.I
     /**
      * @displayName 소속 메시지 내부 순번
      */
-    messageSeq: number
+    messageId: bigint
     /**
      * @displayName 원본 파일명
      */
@@ -995,8 +1000,8 @@ export interface InquiryAttachmentDelegate<ExtArgs extends runtime.Types.Extensi
    * // Get first 10 InquiryAttachments
    * const inquiryAttachments = await prisma.inquiryAttachment.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const inquiryAttachmentWithIdOnly = await prisma.inquiryAttachment.findMany({ select: { id: true } })
+   * // Only select the `inquiryAttachmentId`
+   * const inquiryAttachmentWithInquiryAttachmentIdOnly = await prisma.inquiryAttachment.findMany({ select: { inquiryAttachmentId: true } })
    * 
    */
   findMany<T extends InquiryAttachmentFindManyArgs>(args?: Prisma.SelectSubset<T, InquiryAttachmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InquiryAttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1040,9 +1045,9 @@ export interface InquiryAttachmentDelegate<ExtArgs extends runtime.Types.Extensi
    *   ]
    * })
    * 
-   * // Create many InquiryAttachments and only return the `id`
-   * const inquiryAttachmentWithIdOnly = await prisma.inquiryAttachment.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many InquiryAttachments and only return the `inquiryAttachmentId`
+   * const inquiryAttachmentWithInquiryAttachmentIdOnly = await prisma.inquiryAttachment.createManyAndReturn({
+   *   select: { inquiryAttachmentId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1131,9 +1136,9 @@ export interface InquiryAttachmentDelegate<ExtArgs extends runtime.Types.Extensi
    *   ]
    * })
    * 
-   * // Update zero or more InquiryAttachments and only return the `id`
-   * const inquiryAttachmentWithIdOnly = await prisma.inquiryAttachment.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more InquiryAttachments and only return the `inquiryAttachmentId`
+   * const inquiryAttachmentWithInquiryAttachmentIdOnly = await prisma.inquiryAttachment.updateManyAndReturn({
+   *   select: { inquiryAttachmentId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1336,10 +1341,10 @@ export interface Prisma__InquiryAttachmentClient<T, Null = never, ExtArgs extend
  * Fields of the InquiryAttachment model
  */
 export interface InquiryAttachmentFieldRefs {
-  readonly id: Prisma.FieldRef<"InquiryAttachment", 'String'>
-  readonly seq: Prisma.FieldRef<"InquiryAttachment", 'Int'>
+  readonly inquiryAttachmentId: Prisma.FieldRef<"InquiryAttachment", 'String'>
+  readonly id: Prisma.FieldRef<"InquiryAttachment", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"InquiryAttachment", 'DateTime'>
-  readonly messageSeq: Prisma.FieldRef<"InquiryAttachment", 'Int'>
+  readonly messageId: Prisma.FieldRef<"InquiryAttachment", 'BigInt'>
   readonly fileName: Prisma.FieldRef<"InquiryAttachment", 'String'>
   readonly fileSize: Prisma.FieldRef<"InquiryAttachment", 'BigInt'>
   readonly mimeType: Prisma.FieldRef<"InquiryAttachment", 'String'>

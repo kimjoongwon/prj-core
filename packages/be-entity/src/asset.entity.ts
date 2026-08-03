@@ -1,30 +1,24 @@
-import type {
-	Asset as AssetEntity,
-	AssetKind,
-	AssetStatus,
-	Prisma,
-} from "@cocrepo/prisma";
+import type { AssetKind, AssetStatus, Prisma } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Album } from "./album.entity";
 import type { AlbumEntry } from "./album-entry.entity";
 import type { Derivative } from "./derivative.entity";
 import type { Document } from "./document.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Folder } from "./folder.entity";
 import type { Image } from "./image.entity";
 import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
 import type { Video } from "./video.entity";
 
-export class Asset
-	extends AbstractEntity
-	implements DomainEntityModel<AssetEntity>
-{
+export class Asset extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	assetId!: string;
+
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	spaceId!: string;
-	folderId!: string;
+	spaceId!: bigint;
+	folderId!: bigint;
 	kind!: AssetKind;
 	status!: AssetStatus;
 	originalName!: string;
@@ -38,7 +32,7 @@ export class Asset
 	extension!: string | null;
 	checksum!: string | null;
 	metadata!: Prisma.JsonValue | null;
-	createdById!: string | null;
+	createdById!: bigint | null;
 
 	// ============================================================================
 	// 관계 필드 (선택적)

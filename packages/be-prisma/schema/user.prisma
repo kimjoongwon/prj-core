@@ -3,8 +3,8 @@
 // @description: 독립적으로 존재하는 핵심 사용자 도메인 객체
 /// @displayName 사용자
 model User {
-  id                           String                @unique @default(ulid()) @db.VarChar(26)
-  seq                          Int                   @id @default(autoincrement())
+  userId                       String                @unique @default(ulid()) @map("user_id") @db.Char(26)
+  id                           BigInt                @id @default(autoincrement())
   updatedAt                    DateTime?             @updatedAt @map("updated_at") @db.Timestamptz(6)
   createdAt                    DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
   removedAt                    DateTime?             @map("removed_at") @db.Timestamptz(6)
@@ -33,9 +33,10 @@ model User {
   /// @displayName 활성 상태
   isActive                     Boolean               @default(true) @map("is_active")
   /// @displayName 현재 테넌트 ID
-  currentTenantId              String?               @map("current_tenant_id")
+  currentTenantId              BigInt?               @map("current_tenant_id")
+  currentTenant                Tenant?               @relation("UserCurrentTenant", fields: [currentTenantId], references: [id], onDelete: SetNull)
   profiles                     Profile[]
-  tenants                      Tenant[]
+  tenants                      Tenant[]              @relation("TenantUser")
   tenantAccessRequests         TenantAccessRequest[] @relation("TenantAccessRequestRequester")
   reviewedTenantAccessRequests TenantAccessRequest[] @relation("TenantAccessRequestReviewer")
   classification               UserClassification?
@@ -51,6 +52,7 @@ model User {
   createdTasks                 Task[]
   createdSafeWallets           SafeWallet[]
   createdRoutines              Routine[]
+  instructedPrograms           Program[]             @relation("ProgramInstructor")
   reservations                 Reservation[]         @relation("ReservationUser")
   createdPolicies              Policy[]
   createdReservations          Reservation[]         @relation("ReservationCreatedBy")
@@ -68,5 +70,6 @@ model User {
   inquiryParticipants          InquiryParticipant[]
   createdThreads               InquiryThread[]
 
+  @@index([currentTenantId])
   @@map("users")
 }

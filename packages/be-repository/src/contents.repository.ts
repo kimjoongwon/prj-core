@@ -1,18 +1,24 @@
 import type { DomainData } from "@cocrepo/entity";
-import { Content, Prisma, PrismaClient, TextTypes } from "@cocrepo/prisma";
+import { Prisma, PrismaClient, TextTypes } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import type {
-	PublicIdCreateInput,
-	PublicIdUpdateInput,
-} from "./public-id-input.type";
+	AutoIdentityCreateInput,
+	AutoIdentityUpdateInput,
+} from "./auto-identity-input.type";
 import { toDomainData } from "./to-domain-entity";
 
-type ContentRecord = DomainData<Content> & {
-	spaceId: string;
-	createdById: string | null;
-};
+const contentInclude = {
+	space: true,
+	createdBy: true,
+} satisfies Prisma.ContentInclude;
+
+type ContentPersistenceRecord = Prisma.ContentGetPayload<{
+	include: typeof contentInclude;
+}>;
+
+type ContentRecord = DomainData<ContentPersistenceRecord>;
 
 @Injectable()
 export class ContentsRepository {
@@ -26,56 +32,55 @@ export class ContentsRepository {
 		this.logger = new Logger("ContentsRepository");
 	}
 
-	async findById(id: string): Promise<ContentRecord | null> {
-		this.logger.debug(`ID로 조회: ${id.slice(-8)}`);
+	async findById(id: bigint): Promise<ContentRecord | null> {
+		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.content.findUnique({
 			where: { id },
-			include: { space: true, createdBy: true },
+			include: contentInclude,
 		});
 
-		return result ? (toDomainData(result) as ContentRecord) : null;
+		return result ? toDomainData(result) : null;
 	}
 
 	async findByIdWithPost(id: string): Promise<ContentRecord | null> {
-		this.logger.debug(`게시글 포함 조회: ${id.slice(-8)}`);
+		this.logger.debug(`게시글 포함 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.content.findUnique({
-			where: { id },
+			where: { contentId: id },
 			include: {
 				post: true,
-				space: true,
-				createdBy: true,
+				...contentInclude,
 			},
 		});
 
-		return result ? (toDomainData(result) as ContentRecord) : null;
+		return result ? toDomainData(result) : null;
 	}
 
-	async findBySpaceId(spaceId: string): Promise<ContentRecord[]> {
-		this.logger.debug(`Space별 콘텐츠 조회: ${spaceId.slice(-8)}`);
+	async findBySpaceId(spaceId: bigint): Promise<ContentRecord[]> {
+		this.logger.debug(`Space별 콘텐츠 조회: ${spaceId.toString()}`);
 
 		const results = await this.txHost.tx.content.findMany({
-			where: { space: { id: spaceId } },
-			include: { space: true, createdBy: true },
+			where: { spaceId },
+			include: contentInclude,
 			orderBy: [{ createdAt: "desc" }],
 		});
 
-		return toDomainData(results) as ContentRecord[];
+		return results.map((result) => toDomainData(result));
 	}
 
-	async findBySpaceIdWithoutRemoved(spaceId: string): Promise<ContentRecord[]> {
+	async findBySpaceIdWithoutRemoved(spaceId: bigint): Promise<ContentRecord[]> {
 		this.logger.debug(
-			`삭제되지 않은 Space별 콘텐츠 조회: ${spaceId.slice(-8)}`,
+			`삭제되지 않은 Space별 콘텐츠 조회: ${spaceId.toString()}`,
 		);
 
 		const results = await this.txHost.tx.content.findMany({
-			where: { space: { id: spaceId }, removedAt: null },
-			include: { space: true, createdBy: true },
+			where: { spaceId, removedAt: null },
+			include: contentInclude,
 			orderBy: [{ createdAt: "desc" }],
 		});
 
-		return toDomainData(results) as ContentRecord[];
+		return results.map((result) => toDomainData(result));
 	}
 
 	async findMany(params: {
@@ -90,25 +95,25 @@ export class ContentsRepository {
 				orderBy: params.orderBy ?? [{ createdAt: "desc" }],
 				skip: params.skip,
 				take: params.take,
-				include: { space: true, createdBy: true },
+				include: contentInclude,
 			}),
 			this.txHost.tx.content.count({ where: params.where }),
 		]);
 
 		return {
-			items: toDomainData(items) as ContentRecord[],
+			items: items.map((item) => toDomainData(item)),
 			totalCount,
 		};
 	}
 
 	async findCommunityPostsBySpaceId(params: {
 		skip?: number;
-		spaceId: string;
+		spaceId: bigint;
 		take?: number;
 	}): Promise<{ items: CommunityPostRecord[]; totalCount: number }> {
 		const where: Prisma.ContentWhereInput = {
 			removedAt: null,
-			space: { id: params.spaceId },
+			spaceId: params.spaceId,
 			post: {
 				is: {
 					removedAt: null,
@@ -127,30 +132,26 @@ export class ContentsRepository {
 		]);
 
 		return {
-			items: toDomainData(items) as CommunityPostRecord[],
+			items: items.map((item) => toDomainData(item)),
 			totalCount,
 		};
 	}
 
 	async createCommunityPost(params: {
-		spaceId: string;
+		spaceId: bigint;
 		text: string;
 		title?: string | null;
-		userId: string;
+		userId: bigint;
 	}): Promise<CommunityPostRecord> {
 		this.logger.debug("커뮤니티 게시글 생성");
 
 		const result = await this.txHost.tx.content.create({
 			data: {
-				createdBy: {
-					connect: {
-						id: params.userId,
-					},
-				},
+				createdById: params.userId,
 				post: {
 					create: {},
 				},
-				space: { connect: { id: params.spaceId } },
+				spaceId: params.spaceId,
 				text: params.text,
 				title: params.title ?? null,
 				type: TextTypes.Textarea,
@@ -162,66 +163,46 @@ export class ContentsRepository {
 	}
 
 	async create(
-		data: PublicIdCreateInput<
+		data: AutoIdentityCreateInput<
 			Prisma.ContentUncheckedCreateInput,
-			"space",
-			"createdBy"
+			"contentId"
 		>,
 	): Promise<ContentRecord> {
 		this.logger.debug("콘텐츠 생성");
-
-		const { spaceId, createdById, ...contentData } = data;
 		const result = await this.txHost.tx.content.create({
-			data: {
-				...contentData,
-				space: { connect: { id: spaceId } },
-				...(createdById ? { createdBy: { connect: { id: createdById } } } : {}),
-			},
-			include: { space: true, createdBy: true },
+			data,
+			include: contentInclude,
 		});
 
-		return toDomainData(result) as ContentRecord;
+		return toDomainData(result);
 	}
 
 	async updateById(
-		id: string,
-		data: PublicIdUpdateInput<
+		id: bigint,
+		data: AutoIdentityUpdateInput<
 			Prisma.ContentUncheckedUpdateInput,
-			"space",
-			"createdBy"
+			"contentId"
 		>,
 	): Promise<ContentRecord> {
-		this.logger.debug(`콘텐츠 수정: ${id.slice(-8)}`);
-
-		const { spaceId, createdById, ...contentData } = data;
+		this.logger.debug(`콘텐츠 수정: ${id.toString()}`);
 		const result = await this.txHost.tx.content.update({
 			where: { id },
-			data: {
-				...contentData,
-				...(spaceId !== undefined
-					? { space: { connect: { id: spaceId } } }
-					: {}),
-				...(createdById !== undefined
-					? createdById === null
-						? { createdBy: { disconnect: true } }
-						: { createdBy: { connect: { id: createdById } } }
-					: {}),
-			},
-			include: { space: true, createdBy: true },
+			data,
+			include: contentInclude,
 		});
 
-		return toDomainData(result) as ContentRecord;
+		return toDomainData(result);
 	}
 
-	async removeById(id: string): Promise<ContentRecord> {
-		this.logger.debug(`콘텐츠 삭제: ${id.slice(-8)}`);
+	async removeById(id: bigint): Promise<ContentRecord> {
+		this.logger.debug(`콘텐츠 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.content.delete({
 			where: { id },
-			include: { space: true, createdBy: true },
+			include: contentInclude,
 		});
 
-		return toDomainData(result) as ContentRecord;
+		return toDomainData(result);
 	}
 }
 
@@ -240,7 +221,4 @@ type CommunityPostPersistenceRecord = Prisma.ContentGetPayload<{
 	include: typeof COMMUNITY_POST_INCLUDE;
 }>;
 
-export type CommunityPostRecord = DomainData<CommunityPostPersistenceRecord> & {
-	spaceId: string;
-	createdById: string | null;
-};
+export type CommunityPostRecord = DomainData<CommunityPostPersistenceRecord>;

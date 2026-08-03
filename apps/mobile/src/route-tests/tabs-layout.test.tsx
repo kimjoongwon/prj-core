@@ -181,8 +181,8 @@ describe("mobile expo tabs layout", () => {
     mobileApiScope.setSpaceInfo({
       address: "서울 강남구",
       fitnessCenterName: "강남점",
-      spaceId: "space-branch",
-      tenantId: "tenant-branch",
+      spaceId: "101",
+      tenantId: "201",
     });
   });
 

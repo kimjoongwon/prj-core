@@ -1,6 +1,6 @@
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import { SpaceCategoryName } from "@cocrepo/enum";
-import type { ContextTenantSnapshot } from "@cocrepo/type";
+import type { ContextTenantSnapshot, DatabaseId } from "@cocrepo/type";
 
 type TenantWithSpaceCategory = ContextTenantSnapshot & {
 	space?: {
@@ -36,7 +36,7 @@ function resolveTenantSpaceCategoryName(
 
 export function resolveTenantSpaceId(
 	tenant: ContextTenantSnapshot,
-): string | undefined {
+): DatabaseId | undefined {
 	return tenant.space?.id ?? tenant.spaceId ?? undefined;
 }
 
@@ -52,7 +52,7 @@ export function isRootSpaceCategory(tenant: ContextTenantSnapshot): boolean {
  */
 export function resolveCurrentTenantById(
 	tenants: ContextTenantSnapshot[] | null | undefined,
-	tenantId?: string,
+	tenantId?: DatabaseId,
 ): ContextTenantSnapshot | undefined {
 	if (!tenants?.length) {
 		return undefined;

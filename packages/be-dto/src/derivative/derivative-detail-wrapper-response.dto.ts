@@ -1,4 +1,4 @@
-import { ClassField } from "@cocrepo/decorator";
+import { ClassField } from "@cocrepo/decorator/field";
 
 import { DerivativeDetailResponseDto } from "./derivative-detail-response.dto";
 

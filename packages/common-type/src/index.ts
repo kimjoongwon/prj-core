@@ -1,3 +1,5 @@
+import type { DatabaseId } from "./database-id";
+
 // ============================================
 // Entity 관련 타입
 // ============================================
@@ -16,11 +18,31 @@ export type Constructor<
  * 모든 엔티티가 가지는 공통 필드 인터페이스
  */
 export interface BaseEntityFields {
-	id: string;
+	id: DatabaseId;
 	createdAt: Date;
 	updatedAt: Date | null;
 	removedAt: Date | null;
 }
+
+export { parseBigIntJson, stringifyBigIntJson } from "./bigint-json";
+export type { DatabaseId, DecimalId } from "./database-id";
+export {
+	DATABASE_ID_MAX,
+	DATABASE_ID_MIN,
+	DECIMAL_ID_PATTERN,
+	DECIMAL_ID_PATTERN_SOURCE,
+	formatDatabaseId,
+	isDecimalId,
+	parseDecimalId,
+	requireDecimalId,
+} from "./database-id";
+export type { IntegrationUlid } from "./integration-ulid";
+export {
+	INTEGRATION_ULID_PATTERN,
+	INTEGRATION_ULID_PATTERN_SOURCE,
+	isIntegrationUlid,
+	parseIntegrationUlid,
+} from "./integration-ulid";
 
 // ============================================
 // Core type utilities
@@ -115,7 +137,6 @@ export type {
 	AppAction,
 	AppSubject,
 } from "./ability";
-export type { ApiDatabaseError } from "./api-error";
 // ============================================
 // CASL/Permission 관련 타입
 // ============================================
@@ -129,6 +150,7 @@ export type {
 	ActionMaskingConfig,
 	ActionTransformConfig,
 } from "./action-config";
+export type { ApiDatabaseError } from "./api-error";
 // ============================================
 // App 상태 계약 타입
 // ============================================
@@ -277,8 +299,8 @@ export type {
 	DataGridColumnsState,
 	DataGridColumnsStateSnapshot,
 	DataGridConfig,
-	DataGridEditCellContext,
 	DataGridEditableConfig,
+	DataGridEditCellContext,
 	DataGridQueryState,
 	DataGridQueryStates,
 	DataGridRowData,

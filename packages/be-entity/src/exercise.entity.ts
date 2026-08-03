@@ -1,15 +1,13 @@
-import type { Exercise as ExerciseEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Task } from "./task.entity";
 
-export class Exercise
-	extends AbstractEntity
-	implements DomainEntityModel<ExerciseEntity>
-{
+export class Exercise extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	exerciseId!: string;
+
 	duration!: number;
 	count!: number;
-	taskId!: string;
+	taskId!: bigint;
 	description!: string | null;
 	imageFileId!: string | null;
 	videoFileId!: string | null;

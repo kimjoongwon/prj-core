@@ -35,7 +35,7 @@
 
 | 여정 | 행위자 | 시작점 | 단계 | 완료 조건 | 실패/복구 | 관련 API |
 |------|--------|--------|------|-----------|-----------|----------|
-| Role 상세 확인 | `PLATFORM_ADMIN`, `COMPANY_MANAGER` | `/roles` 목록 | 상세 진입 -> Role 기본 정보 확인 -> 상태/시스템 여부 확인 | Role title, metadata, 상태가 보임 | 404면 목록 이동 CTA | `getRoleById` |
+| Role 상세 확인 | `PLATFORM_ADMIN`, `COMPANY_MANAGER` | `/roles` 목록 | 상세 진입 -> Role 기본 정보 확인 -> 상태 확인 | Role title, metadata, 상태가 보임 | 404면 목록 이동 CTA | `getRoleById` |
 | 정책 할당 확인 | `PLATFORM_ADMIN` | Role 상세 | 정책 할당 section 확인 -> 현재 할당 수/활성 수/priority 확인 | 후보 Policy와 assignment 상태가 한 화면에서 보임 | policy API 실패 시 section error와 재시도 | `getPolicies`, `getRoleAssignments` |
 | 정책 할당 편집 | `PLATFORM_ADMIN` | 정책 할당 section | 편집 시작 -> 검색/필터 -> 선택/해제 -> active/priority 조정 -> 변경 요약 확인 | 저장 CTA가 dirty 상태에서 활성화 | 취소 시 baseline 복원 | local route state |
 | 정책 할당 저장 | `PLATFORM_ADMIN` | 저장 CTA | 저장 확인 modal -> PUT -> 재조회 -> 성공 toast | 서버 baseline과 local state가 일치 | 400/403/404는 modal 유지 또는 section error 표시 | `syncRoleAssignments`, `getRoleAssignments` invalidation |
@@ -58,7 +58,7 @@
 
 ## 디자인 정렬
 
-- 정보 위계: Role 식별 정보 -> 시스템/삭제 상태 -> 정책 할당 요약 -> 정책 후보 목록 -> 변경 요약/저장 순서로 읽힙니다.
+- 정보 위계: Role 식별 정보 -> 삭제 상태 -> 정책 할당 요약 -> 정책 후보 목록 -> 변경 요약/저장 순서로 읽힙니다.
 - Navigation: `/roles/[roleId]`가 Role Policy assignment의 canonical route입니다. Policy 이름은 `/policies/[policyId]`로 이동하되, Policy 생성/수정 form을 이 route 안에 중첩하지 않습니다.
 - Platform density: Admin desktop 화면이므로 table/list density를 우선합니다. 카드형 반복보다 한 줄에서 policy name, ability count, assigned, active, priority를 스캔할 수 있어야 합니다.
 - Visual safety: 저장 전 변경 건수와 위험 문구를 modal과 sticky summary에 반복 노출합니다. `primary`는 저장, `warning`은 해제/변경, `danger`는 삭제에만 사용합니다.
@@ -85,7 +85,7 @@
 | `Button` | 재사용 | `packages/fe-ui/src/input/Button/Button.tsx` | 목록/수정/삭제/정책 편집/취소/저장 | lucide icon을 `startContent`로 전달 | icon 없는 긴 설명 버튼 금지 |
 | `AlertDialog` | 우선 재사용 | `packages/fe-ui/src/feedback/AlertDialog/AlertDialog.tsx` | Role 삭제, 정책 저장 확인 | `Heading`, `Body`, `Footer`, confirm button 조합 | 변경 summary가 복잡해도 custom widget을 만들지 않고 AlertDialog slot으로 표현 |
 | `Modal` | 조건부 재사용 | `@heroui/react` | 복잡한 저장 summary modal | AlertDialog로 표현이 어려운 경우만 사용 | route-local modal state는 `useOverlayState` |
-| `Chip` | 재사용 | `packages/fe-ui/src/data-display/Chip/Chip.tsx` | Role/system/status, assigned/active/dirty count | 색상 역할: primary/success/warning/default | summary와 row 상태 표시 |
+| `Chip` | 재사용 | `packages/fe-ui/src/data-display/Chip/Chip.tsx` | Role/status, assigned/active/dirty count | 색상 역할: primary/success/warning/default | summary와 row 상태 표시 |
 | `TextField` | 재사용 | `packages/fe-ui/src/input/TextField/TextField.tsx` | 검색 입력, priority number input | 검색은 route-local state, priority는 assignment state 수정 | priority input width 고정 |
 | `Checkbox` | 재사용 | `packages/fe-ui/src/input/Checkbox/Checkbox.tsx` | Policy row 선택/해제 | readOnly에서는 숨김 | row 전체 layout이 흔들리지 않게 고정 영역 유지 |
 | `Switch` | 재사용 | `packages/fe-ui/src/input/Switch/Switch.tsx` | assignment active toggle | 선택된 policy row에서만 enabled | readOnly에서는 static text로 대체 가능 |
@@ -123,21 +123,21 @@
 | 현재 Role에 연결된 Policy assignment를 관리합니다.                 [정책 편집] |
 +--------------------------------------------------------------------------------+
 | 검색 [ 정책명, 설명 검색                                           ]  정렬 [우선순위 v] |
-| 필터 [전체] [할당됨] [미할당] [활성] [비활성] [시스템]                          |
+| 필터 [전체] [할당됨] [미할당] [활성] [비활성]                                  |
 +--------------------------------------------------------------------------------+
 | 상태      Policy                         Ability   활성 상태      우선순위       |
 |--------------------------------------------------------------------------------|
 | 할당됨    사용자 관리                    12        활성          10             |
-|           사용자를 조회하고 기본 정보를 수정합니다.               [시스템]       |
+|           사용자를 조회하고 기본 정보를 수정합니다.                              |
 |--------------------------------------------------------------------------------|
 | 할당됨    예약 운영                       8        활성           20             |
-|           예약 생성, 변경, 취소를 운영합니다.                    [공간]         |
+|           예약 생성, 변경, 취소를 운영합니다.                                   |
 |--------------------------------------------------------------------------------|
 | 미할당    운영 리포트                     5        -              -             |
-|           운영 지표와 처리 상태를 확인합니다.                    [공간]         |
+|           운영 지표와 처리 상태를 확인합니다.                                   |
 |--------------------------------------------------------------------------------|
 | 할당됨    보안 설정                       4        비활성         90             |
-|           인증 정책과 세션 정책을 관리합니다.                    [시스템]       |
+|           인증 정책과 세션 정책을 관리합니다.                                   |
 +--------------------------------------------------------------------------------+
 ```
 
@@ -156,21 +156,21 @@
 | 현재 Role에 연결된 Policy assignment를 관리합니다.             [취소] [저장]    |
 +--------------------------------------------------------------------------------+
 | 검색 [ 예약                                               ]  정렬 [우선순위 v]  |
-| 필터 [전체] [할당됨] [미할당] [활성] [비활성] [시스템]                          |
+| 필터 [전체] [할당됨] [미할당] [활성] [비활성]                                  |
 +--------------------------------------------------------------------------------+
 | 선택   Policy                         Ability   Active          Priority        |
 |--------------------------------------------------------------------------------|
 | [x]    사용자 관리                    12        (on) 활성       [10       ]     |
-|        사용자를 조회하고 기본 정보를 수정합니다.                 [시스템]       |
+|        사용자를 조회하고 기본 정보를 수정합니다.                                |
 |--------------------------------------------------------------------------------|
 | [x]    예약 운영                       8        (on) 활성       [20       ]     |
-|        예약 생성, 변경, 취소를 운영합니다.                      [공간]         |
+|        예약 생성, 변경, 취소를 운영합니다.                                     |
 |--------------------------------------------------------------------------------|
 | [x]    예약 감사                       3        (on) 활성       [30       ]     |
-|        예약 변경 이력을 조회합니다.                              [공간] [추가] |
+|        예약 변경 이력을 조회합니다.                                    [추가] |
 |--------------------------------------------------------------------------------|
 | [ ]    운영 리포트                     5        disabled         -              |
-|        운영 지표와 처리 상태를 확인합니다.                      [공간]         |
+|        운영 지표와 처리 상태를 확인합니다.                                     |
 +--------------------------------------------------------------------------------+
 | 변경 요약: 추가 1개 | 해제 0개 | 수정 2개                         [저장 확인] |
 +--------------------------------------------------------------------------------+
@@ -271,7 +271,6 @@ save error
 | loading policies | Policy Assignment body loading | 편집 CTA disabled |
 | empty policies | "사용 가능한 정책이 없습니다." | 저장 disabled |
 | permission denied | Role 기본 정보만 표시, assignment section 숨김 또는 권한 안내 | assignment API 호출 금지 |
-| readOnly system role | 정책 목록은 표시, 편집/삭제 CTA disabled | PUT/DELETE 호출 금지 |
 | editing clean | 취소 표시, 저장 disabled | baseline 복원 가능 |
 | editing dirty | 변경 summary 표시, 저장 enabled | 저장 확인 modal open |
 | saving | 저장 modal button loading | 성공 시 modal close, editing false, query invalidation |
@@ -281,7 +280,7 @@ save error
 
 | 계약 | 소유 위치 | 입력 | 출력/이벤트 | 비고 |
 |------|-----------|------|-------------|------|
-| route param | `page.tsx` | `roleId` | API path param | UUID 검증은 route/schema에서 보강 가능 |
+| route param | `page.tsx` | `roleId` | API path param | decimal string 검증은 route/schema에서 보강 가능 |
 | role query | `page.tsx` | `roleId` | `role`, `isLoading`, `notFound` | `getRoleById` |
 | policy candidate query | `page.tsx` | current auth scope | `policies` | 권한 없는 사용자는 호출하지 않습니다. |
 | assignment query | `page.tsx` | `roleId` | baseline assignments | 권한 없는 사용자는 호출하지 않습니다. |
@@ -340,6 +339,7 @@ flowchart TD
   D --> E
   B --> F["SYS-IS-REMOVE-05 be-repository-builder"]
   E --> G["SYS-IS-REMOVE-06 be-usecase-builder + be-service-builder"]
+  F --> G
   D --> G
   G --> H["SYS-IS-REMOVE-07 be-controller-builder"]
   H --> I["SYS-IS-REMOVE-08 fe-hook-agent codegen"]
@@ -350,7 +350,6 @@ flowchart TD
   K --> M
   L --> M
   B --> M
-  F --> G
 ```
 
 ### 단계 순서 표
@@ -393,6 +392,11 @@ flowchart TD
 
 | 검증 항목 | 명령 | 검증 agent_type | 통과 기준 |
 |-----------|------|------------------|-----------|
+| Prisma schema/generate | `pnpm --filter=@cocrepo/prisma run schema:check && pnpm --filter=@cocrepo/prisma run generate` | `be-prisma-builder` | 0 errors |
+| backend contracts typecheck | `pnpm --filter=@cocrepo/entity run type-check && pnpm --filter=@cocrepo/dto run type-check && pnpm --filter=@cocrepo/input run type-check && pnpm --filter=@cocrepo/command run type-check` | backend contract owners | 0 errors |
+| backend behavior typecheck | `pnpm --filter=@cocrepo/aggregate run type-check && pnpm --filter=@cocrepo/repository run type-check && pnpm --filter=@cocrepo/usecase run type-check && pnpm --filter=@cocrepo/service run type-check && pnpm --filter=@cocrepo/controller run type-check` | backend behavior owners | 0 errors |
+| core api typecheck | `pnpm --filter=core-api run type-check` | `be-controller-builder` | 0 errors |
+| fe-api typecheck | `pnpm --filter=@cocrepo/api run type-check` | `fe-hook-agent` | 0 errors |
 | admin web typecheck | `pnpm --filter=admin-web run type-check` | `fe-route-agent` | 0 errors |
 | ui typecheck | `pnpm --filter=@cocrepo/ui run type-check` | `fe-form-agent` | 0 errors |
 | target `isSystem` 금지 grep | `rg -n "\\bisSystem\\b|is_system|isSystemRole|시스템 여부|시스템 Role|시스템 Action|시스템 Policy|시스템 Subject" packages/be-prisma/schema packages/be-prisma/migrations packages/be-prisma/src/reference-data packages/be-prisma/src/generated packages/be-prisma/docs packages/be-entity/src packages/be-dto/src packages/be-input/src packages/be-command/src packages/be-aggregate/src packages/be-repository/src packages/be-usecase/src packages/be-controller/src packages/be-service/src packages/be-common/_spec packages/fe-api/src packages/fe-ui/src apps/admin/web/src/app/\\(admin\\) apps/core/api/test docs --glob '!packages/be-prisma/src/demo-data/fitness-centers.ts' --glob '!packages/be-prisma/src/bootstrap/system-space.ts' --glob '!packages/fe-ui/src/design-system/provider/DesignSystemProvider.tsx' --glob '!apps/admin/web/src/app/(admin)/roles/[roleId]/page.spec.md'` | `orch-delivery` | 0건 |
@@ -419,6 +423,23 @@ flowchart TD
 
 - spec acceptance: `Action`/`Policy`/`Role`/`Subject`의 `isSystem` 제거 실행 계약은 이 `page.spec.md` 하나만 소유합니다.
 - route acceptance: `/roles/[roleId]`는 Role aggregate root 기준으로 Role 기본 정보와 Policy assignment를 같은 화면에서 렌더링합니다.
-- UI acceptance: 현재 할당 수, 활성/비활성 수, 추가/해제/수정 수, 저장 전 확인이 명확히 보입니다.
-- permission acceptance: 권한 없는 사용자는 assignment API를 호출하지 않고, 시스템 Role은 mutation CTA가 disabled/hidden 됩니다.
-- cleanup acceptance: 이 route/page spec 외에 같은 화면 계약을 소유하는 중복 기획 문서가 남지 않습니다.
+- UI acceptance: 현재 할당 수, 활성/비활성 수, 추가/해제/수정 수, 저장 전 확인이 명확히 보이고 시스템 여부 toggle/filter/badge는 보이지 않습니다.
+- permission acceptance: 권한 없는 사용자는 assignment API를 호출하지 않고, `isSystem` 값이 아닌 기존 auth/role/scope guard로 mutation이 제한됩니다.
+- cleanup acceptance: 대상 scope에서 `isSystem`/`is_system`/`isSystemRole` 참조가 제거되고, FitnessCenter demo/bootstrap과 theme provider의 동명 필드는 유지됩니다.
+
+## 식별자 계약 리팩터링
+
+- 디자인 정렬: `no UI design impact`. Role 정보 위계, assignment form, modal 흐름은 유지합니다.
+- `[roleId]`, `policyId`, `abilityId`는 DB `BIGINT id`의 양수 십진 문자열이며 backend 내부에서만 `bigint`로 변환합니다.
+- `roleId`, `policyId`, `abilityId` ULID는 integration event/서비스 계약에서만 사용하고 일반 REST DTO에서는 제외합니다.
+
+| 단계 id | 담당 `agent_type` | 예상 산출물 | 생성/수정 예정 경로 | 소비 단계 | 검증 기준 |
+|---|---|---|---|---|---|
+| ID-BE | `be-controller-builder` | decimal route/payload 계약 | role/policy/ability backend | ID-CODEGEN | invalid ID 400 |
+| ID-CODEGEN | `common-type-builder` | string API client | `packages/fe-api/src/**` | ID-WEB | ID type `string` |
+| ID-WEB | `fe-route-agent` | role route/form ID 전환 | 이 route와 관련 UI | none-final | role unit/E2E 통과 |
+
+| 검증 항목 | 명령 | 검증 `agent_type` | 통과 기준 |
+|---|---|---|---|
+| ULID route 검증 금지 | `rg 'ParseUlidPipe' packages/be-controller/src` | `be-controller-builder` | protocol/integration endpoint만 남음 |
+| legacy seq 금지 | `rg '\b[A-Za-z]+Seq\b|_seq' packages apps` | 각 변경 owner | 0건 |

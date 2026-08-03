@@ -1,13 +1,14 @@
 import {
+	BigIntIdField,
 	BooleanField,
 	DateField,
 	DateFieldOptional,
 	StringField,
 	StringFieldOptional,
-	ULIDField,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import type { DomainEntityModel } from "@cocrepo/entity";
 import type { TemplateVariable } from "@cocrepo/prisma";
+import { Exclude } from "class-transformer";
 
 /**
  * 템플릿 변수 응답 DTO
@@ -16,10 +17,14 @@ import type { TemplateVariable } from "@cocrepo/prisma";
  * id, createdAt, updatedAt을 직접 선언합니다.
  */
 export class TemplateVariableDto
-	implements DomainEntityModel<TemplateVariable>
+	implements DomainEntityModel<TemplateVariable, "templateVariableId">
 {
-	@ULIDField({ description: "ID" })
-	id!: string;
+	@Exclude()
+	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
+	private readonly templateVariableId?: never;
+
+	@BigIntIdField({ description: "ID" })
+	id!: bigint;
 
 	@DateField({ description: "생성일" })
 	createdAt!: Date;
@@ -39,6 +44,6 @@ export class TemplateVariableDto
 	@BooleanField({ description: "필수 여부" })
 	isRequired!: boolean;
 
-	@ULIDField({ description: "템플릿 ID" })
-	templateId!: string;
+	@BigIntIdField({ description: "템플릿 ID" })
+	templateId!: bigint;
 }

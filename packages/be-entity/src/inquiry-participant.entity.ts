@@ -1,9 +1,5 @@
-import type {
-	InquiryParticipant as InquiryParticipantEntity,
-	InquiryParticipantRole,
-} from "@cocrepo/prisma";
+import type { InquiryParticipantRole } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Inquiry } from "./inquiry.entity";
 import type { InquiryThread } from "./inquiry-thread.entity";
 import type { User } from "./user.entity";
@@ -14,15 +10,15 @@ import type { User } from "./user.entity";
  * 온라인/오프라인 상태, 타이핑 여부, 마지막 접속 시간 등을 추적하여
  * 실시간 채팅 경험을 제공합니다.
  */
-export class InquiryParticipant
-	extends AbstractEntity
-	implements DomainEntityModel<InquiryParticipantEntity>
-{
+export class InquiryParticipant extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	inquiryParticipantId!: string;
+
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	inquiryId!: string;
-	userId!: string;
+	inquiryId!: bigint;
+	userId!: bigint;
 	role!: InquiryParticipantRole;
 	isOnline!: boolean;
 	isTyping!: boolean;
@@ -32,7 +28,7 @@ export class InquiryParticipant
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	threadId!: string | null;
+	threadId!: bigint | null;
 	lastSeenAt!: Date | null;
 	lastReadAt!: Date | null;
 	leftAt!: Date | null;

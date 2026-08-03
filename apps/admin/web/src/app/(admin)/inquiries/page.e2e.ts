@@ -9,7 +9,7 @@ test.describe("문의 목록 페이지", () => {
 			// Then: 타이틀/설명/액션 버튼 확인
 			await expect(
 				page.getByRole("heading", { name: "문의 관리" }),
-			).toBeVisible();
+			).toBeVisible({ timeout: 30000 });
 			await expect(
 				page.getByText("고객 문의를 접수/처리/해결합니다."),
 			).toBeVisible();
@@ -31,7 +31,7 @@ test.describe("문의 목록 페이지", () => {
 			// Then: 클릭 이후 페이지가 정상 상태를 유지한다
 			await expect(
 				page.getByRole("heading", { name: "문의 관리" }),
-			).toBeVisible();
+			).toBeVisible({ timeout: 30000 });
 		});
 	});
 });

@@ -1,3 +1,3 @@
 export class DeleteTranslationCommand {
-	constructor(readonly translationId: string) {}
+	constructor(readonly translationId: bigint) {}
 }

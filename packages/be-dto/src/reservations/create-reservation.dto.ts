@@ -1,19 +1,19 @@
 import {
+	BigIntIdField,
 	DateField,
 	StringField,
 	StringFieldOptional,
-	ULIDField,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 
 export class CreateReservationDto {
-	@ULIDField({ description: "타임라인 ID" })
-	timelineId!: string;
+	@BigIntIdField({ description: "타임라인 ID" })
+	timelineId!: bigint;
 
-	@ULIDField({ description: "세션 ID" })
-	sessionId!: string;
+	@BigIntIdField({ description: "세션 ID" })
+	sessionId!: bigint;
 
-	@ULIDField({ description: "프로그램 ID" })
-	programId!: string;
+	@BigIntIdField({ description: "프로그램 ID" })
+	programId!: bigint;
 
 	@DateField({ description: "예약 발생 회차 시작 시각" })
 	occurrenceStartAt!: Date;

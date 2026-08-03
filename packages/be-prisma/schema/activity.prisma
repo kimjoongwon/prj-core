@@ -2,21 +2,21 @@
 // @description: Routine과 Task를 연결하고 실행 메타데이터를 보관하는 운영 조인 모델
 /// @displayName 활동
 model Activity {
-  id          String    @unique @default(ulid()) @db.VarChar(26)
-  seq         Int       @id @default(autoincrement())
+  activityId  String    @unique @default(ulid()) @map("activity_id") @db.Char(26)
+  id          BigInt    @id @default(autoincrement())
   createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt   DateTime? @map("removed_at") @db.Timestamptz(6)
-  routineSeq  Int       @map("routine_seq")
-  taskSeq     Int       @map("task_seq")
+  routineId   BigInt    @map("routine_id")
+  taskId      BigInt    @map("task_id")
   order       Int
   repetitions Int       @default(1)
   restTime    Int       @default(0) @map("rest_time")
   notes       String?
-  routine     Routine   @relation(fields: [routineSeq], references: [seq])
-  task        Task      @relation(fields: [taskSeq], references: [seq])
+  routine     Routine   @relation(fields: [routineId], references: [id])
+  task        Task      @relation(fields: [taskId], references: [id])
 
-  @@unique([routineSeq, taskSeq])
-  @@index([routineSeq, order])
+  @@unique([routineId, taskId])
+  @@index([routineId, order])
   @@map("activities")
 }

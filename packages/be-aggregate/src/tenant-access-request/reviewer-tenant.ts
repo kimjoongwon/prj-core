@@ -1,5 +1,5 @@
 export type ReviewerTenant = {
 	removedAt?: Date | null;
-	spaceId?: string | null;
+	spaceId?: bigint | null;
 	role?: { name?: string | null } | null;
 };

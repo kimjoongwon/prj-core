@@ -1,12 +1,12 @@
 import {
+	BigIntIdField,
+	BigIntIdFieldOptional,
 	BooleanField,
 	DateField,
 	EnumField,
 	NumberField,
 	StringField,
-	ULIDField,
-	ULIDFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import { InquiryParticipantRole } from "@cocrepo/prisma";
 import { AbstractDto } from "../abstract.dto";
 
@@ -14,14 +14,14 @@ import { AbstractDto } from "../abstract.dto";
  * 문의 참여자 DTO
  */
 export class InquiryParticipantDto extends AbstractDto {
-	@ULIDField({ description: "소속 문의 ID" })
-	inquiryId!: string;
+	@BigIntIdField({ description: "소속 문의 ID" })
+	inquiryId!: bigint;
 
-	@ULIDFieldOptional({ description: "소속 스레드 ID" })
-	threadId!: string | null;
+	@BigIntIdFieldOptional({ description: "소속 스레드 ID" })
+	threadId!: bigint | null;
 
-	@ULIDField({ description: "참여자 ID" })
-	userId!: string;
+	@BigIntIdField({ description: "참여자 ID" })
+	userId!: bigint;
 
 	@StringField({ description: "참여자 이름" })
 	userName!: string;

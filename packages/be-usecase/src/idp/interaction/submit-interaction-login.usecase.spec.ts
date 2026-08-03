@@ -1,4 +1,5 @@
 import { SubmitInteractionLoginCommand } from "@cocrepo/command";
+import type { Request, Response } from "express";
 import { SubmitInteractionLoginUseCase } from "./submit-interaction-login.usecase";
 
 function createRequest() {
@@ -8,12 +9,12 @@ function createRequest() {
 			"user-agent": "browser/2.0",
 		},
 		socket: {},
-	} as never;
+	} as unknown as Request;
 }
 
 function createUseCase() {
 	const req = createRequest();
-	const res = {} as never;
+	const res = {} as unknown as Response;
 	const interactionService = {
 		completeLogin: jest
 			.fn()
@@ -28,9 +29,15 @@ function createUseCase() {
 		),
 	};
 	const useCase = new SubmitInteractionLoginUseCase(
-		interactionService as never,
-		interactionLoginService as never,
-		oidcRedirectUrlService as never,
+		interactionService as unknown as ConstructorParameters<
+			typeof SubmitInteractionLoginUseCase
+		>[0],
+		interactionLoginService as unknown as ConstructorParameters<
+			typeof SubmitInteractionLoginUseCase
+		>[1],
+		oidcRedirectUrlService as unknown as ConstructorParameters<
+			typeof SubmitInteractionLoginUseCase
+		>[2],
 	);
 
 	return {
@@ -41,6 +48,21 @@ function createUseCase() {
 		res,
 		useCase,
 	};
+}
+
+function createSubmitInteractionLoginCommand(
+	input: {
+		email: string;
+		password: string;
+		remember?: boolean;
+	},
+	req: Request,
+	res: Response,
+): SubmitInteractionLoginCommand {
+	return Object.assign(
+		new SubmitInteractionLoginCommand(input, req, res),
+		input,
+	);
 }
 
 describe("SubmitInteractionLoginUseCase", () => {
@@ -60,7 +82,7 @@ describe("SubmitInteractionLoginUseCase", () => {
 		});
 
 		const result = await useCase.execute(
-			new SubmitInteractionLoginCommand(
+			createSubmitInteractionLoginCommand(
 				{ email: "user@example.com", password: "password", remember: true },
 				req,
 				res,
@@ -101,7 +123,7 @@ describe("SubmitInteractionLoginUseCase", () => {
 		});
 
 		const result = await useCase.execute(
-			new SubmitInteractionLoginCommand(
+			createSubmitInteractionLoginCommand(
 				{ email: "user@example.com", password: "wrong" },
 				req,
 				res,
@@ -126,7 +148,7 @@ describe("SubmitInteractionLoginUseCase", () => {
 		});
 
 		const result = await useCase.execute(
-			new SubmitInteractionLoginCommand(
+			createSubmitInteractionLoginCommand(
 				{ email: "user@example.com", password: "wrong" },
 				req,
 				res,
@@ -162,7 +184,7 @@ describe("SubmitInteractionLoginUseCase", () => {
 		);
 
 		const result = await useCase.execute(
-			new SubmitInteractionLoginCommand(
+			createSubmitInteractionLoginCommand(
 				{ email: "user@example.com", password: "password" },
 				req,
 				res,

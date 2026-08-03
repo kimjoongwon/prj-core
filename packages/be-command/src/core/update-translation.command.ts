@@ -5,7 +5,7 @@ export class UpdateTranslationCommand implements UpdateTranslationCommandInput {
 	readonly isTranslated?: UpdateTranslationCommandInput["isTranslated"];
 
 	constructor(
-		readonly translationId: string,
+		readonly translationId: bigint,
 		input: UpdateTranslationCommandInput,
 	) {
 		Object.assign(this, input);

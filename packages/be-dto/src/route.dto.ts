@@ -1,4 +1,4 @@
-import { ClassField, StringField } from "@cocrepo/decorator";
+import { ClassField, StringField } from "@cocrepo/decorator/field";
 
 export class RouteDto {
 	@StringField()

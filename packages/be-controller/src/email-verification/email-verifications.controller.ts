@@ -1,4 +1,4 @@
-import { ParseUlidPipe } from "@cocrepo/be-common";
+import { ParseBigIntIdPipe } from "@cocrepo/be-common";
 import {
 	GetEmailVerificationsQuery,
 	ResendEmailVerificationCommand,
@@ -67,7 +67,7 @@ export class EmailVerificationsController {
 	})
 	@ApiParam({
 		name: "emailVerificationId",
-		description: "이메일 인증 ID",
+		description: "이메일 인증 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiAuth()
@@ -75,7 +75,8 @@ export class EmailVerificationsController {
 	@ApiResponseEntity(EmailVerificationDto, HttpStatus.OK)
 	@ResponseMessage("이메일 인증 메일을 재발송했습니다.")
 	resendEmailVerification(
-		@Param("emailVerificationId", ParseUlidPipe) emailVerificationId: string,
+		@Param("emailVerificationId", ParseBigIntIdPipe)
+		emailVerificationId: bigint,
 	) {
 		return this.commandBus.execute(
 			new ResendEmailVerificationCommand(emailVerificationId),

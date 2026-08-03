@@ -45,7 +45,7 @@
 | **설명** | ID로 특정 Ability를 상세 조회합니다. Subject, Action 정보를 포함합니다. |
 | **인증** | Bearer Token |
 | **권한** | 인증된 모든 사용자 |
-| **Path Params** | `id` (UUID) - Ability ID |
+| **Path Params** | `id` (decimal string) - Ability ID |
 | **Response** | `AbilityResponseDto` |
 | **에러** | 401, 404 (Ability 없음), 500 |
 
@@ -62,7 +62,7 @@
 | **설명** | 기존 Ability의 설정을 수정합니다. Role Assignment 메타데이터(isActive, priority)는 변경되지 않습니다. |
 | **인증** | Bearer Token |
 | **권한** | 인증된 사용자 (TODO: Guard 추가 필요) |
-| **Path Params** | `id` (UUID) - Ability ID |
+| **Path Params** | `id` (decimal string) - Ability ID |
 | **Response** | `AbilityResponseDto` |
 | **에러** | 400, 401, 404, 500 |
 

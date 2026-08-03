@@ -1,5 +1,6 @@
 import { CONTEXT_KEYS, PRISMA_SERVICE_TOKEN } from "@cocrepo/constant";
 import type { PrismaService } from "@cocrepo/service";
+import { formatDatabaseId } from "@cocrepo/type/database-id";
 import {
 	type INestApplication,
 	Inject,
@@ -47,7 +48,7 @@ export class TestJwtStrategy extends PassportStrategy(Strategy) {
 
 	async validate(payload: { sub: string }) {
 		const user = await this.prisma.user.findFirst({
-			where: { id: payload.sub, removedAt: null },
+			where: { userId: payload.sub, removedAt: null },
 			include: {
 				tenants: {
 					include: { space: true },
@@ -134,7 +135,10 @@ export async function getTestAuth(
 	}
 
 	const tenant = user.tenants.find((candidate) => {
-		if (options.spaceId && candidate.space.id !== options.spaceId) {
+		if (
+			options.spaceId &&
+			formatDatabaseId(candidate.space.id) !== options.spaceId
+		) {
 			return false;
 		}
 		if (roleName && candidate.role?.name !== roleName) {
@@ -157,14 +161,14 @@ export async function getTestAuth(
 
 	// HS256 JWT 토큰 생성 (TestJwtStrategy가 검증 가능)
 	const token = jwtService.sign(
-		{ sub: user.id },
+		{ sub: user.userId },
 		issuer ? { issuer } : undefined,
 	);
 
 	return {
 		jwtToken: token,
-		tenantId: tenant.id,
-		spaceId: tenant.space.id,
-		userId: user.id,
+		tenantId: formatDatabaseId(tenant.id),
+		spaceId: formatDatabaseId(tenant.space.id),
+		userId: formatDatabaseId(user.id),
 	};
 }

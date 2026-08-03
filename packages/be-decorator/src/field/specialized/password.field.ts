@@ -1,7 +1,7 @@
 import {
 	DEFAULT_PASSWORD_MAX_LENGTH,
 	DEFAULT_PASSWORD_MIN_LENGTH,
-} from "@cocrepo/constant";
+} from "@cocrepo/constant/auth/password-rules";
 import { applyDecorators } from "@nestjs/common";
 import type { ApiPropertyOptions } from "@nestjs/swagger";
 import { IsPassword } from "../../validator.decorators";

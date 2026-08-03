@@ -18,6 +18,11 @@
       "import": "./src/index.ts",
       "default": "./src/index.ts"
     },
+    "./auth/password-rules": {
+      "types": "./dist/auth/password-rules.d.ts",
+      "require": "./dist/auth/password-rules.js",
+      "default": "./dist/auth/password-rules.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {

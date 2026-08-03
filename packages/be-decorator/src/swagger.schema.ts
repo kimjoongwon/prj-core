@@ -1,4 +1,3 @@
-import { castArray, mapValues } from "@cocrepo/toolkit";
 import { applyDecorators, type Type, UseInterceptors } from "@nestjs/common";
 import { FileFieldsInterceptor } from "@nestjs/platform-express";
 import {
@@ -11,6 +10,7 @@ import type {
 	ReferenceObject,
 	SchemaObject,
 } from "@nestjs/swagger/dist/interfaces/open-api-spec.interface";
+import { castArray, mapValues } from "es-toolkit/compat";
 
 // Many type from lodash - T | readonly T[]
 type Many<T> = T | readonly T[];

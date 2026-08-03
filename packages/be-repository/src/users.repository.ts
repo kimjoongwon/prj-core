@@ -30,8 +30,8 @@ export class UsersRepository {
 	/**
 	 * ID로 조회 (기본 정보만)
 	 */
-	async findById(id: string): Promise<User | null> {
-		this.logger.debug(`ID로 조회: ${id.slice(-8)}`);
+	async findById(id: bigint): Promise<User | null> {
+		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.user.findUnique({
 			where: { id },
@@ -41,10 +41,10 @@ export class UsersRepository {
 	}
 
 	/**
-	 * ID로 사용자 조회 (Tenants, Profiles 포함)
+	 * 내부 숫자 ID로 사용자 조회 (Tenants, Profiles 포함)
 	 */
-	async findByIdWithTenantsAndProfiles(id: string): Promise<User | null> {
-		this.logger.debug(`ID로 사용자 조회: ${id.slice(-8)}`);
+	async findByIdWithTenantsAndProfiles(id: bigint): Promise<User | null> {
+		this.logger.debug(`ID로 사용자 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.user.findUnique({
 			where: { id },
@@ -113,16 +113,35 @@ export class UsersRepository {
 	}
 
 	/**
+	 * 인증·OIDC 연동 경계에서 모델 ULID로 사용자와 권한 그래프를 조회합니다.
+	 */
+	async findByUserIdWithTenantsAndProfiles(
+		userId: string,
+	): Promise<User | null> {
+		this.logger.debug(`사용자 ULID로 조회: ${userId}`);
+
+		const user = await this.txHost.tx.user.findUnique({
+			where: { userId },
+			select: { id: true },
+		});
+
+		return user ? this.findByIdWithTenantsAndProfiles(user.id) : null;
+	}
+
+	/**
 	 * 이메일로 조회 (id, email, password만 select)
 	 */
-	async findByEmailSelectCredentials(
-		email: string,
-	): Promise<{ id: string; email: string; password: string } | null> {
+	async findByEmailSelectCredentials(email: string): Promise<{
+		id: bigint;
+		userId: string;
+		email: string;
+		password: string;
+	} | null> {
 		this.logger.debug(`인증용 이메일 조회: ${email}`);
 
 		return this.txHost.tx.user.findUnique({
 			where: { email },
-			select: { id: true, email: true, password: true },
+			select: { id: true, userId: true, email: true, password: true },
 		});
 	}
 
@@ -216,7 +235,7 @@ export class UsersRepository {
 	 */
 	async findManyIdpAccounts(params: {
 		input: IdpAccountListInput;
-		spaceIds?: string[];
+		spaceIds?: bigint[];
 	}): Promise<{ data: IdpAccountRecord[]; totalCount: number }> {
 		this.logger.debug(
 			`IDP 계정 목록 조회: spaceIds=${params.spaceIds?.length ?? "all"}개`,
@@ -248,10 +267,10 @@ export class UsersRepository {
 	 * IDP 계정 상세 projection 조회.
 	 */
 	async findIdpAccountById(params: {
-		userId: string;
-		spaceIds?: string[];
+		userId: bigint;
+		spaceIds?: bigint[];
 	}): Promise<IdpAccountRecord | null> {
-		this.logger.debug(`IDP 계정 조회: ${params.userId.slice(-8)}`);
+		this.logger.debug(`IDP 계정 조회: ${params.userId}`);
 
 		return this.txHost.tx.user.findFirst({
 			where: this.applySpaceScopeToUserWhere(
@@ -266,11 +285,11 @@ export class UsersRepository {
 	 * IDP 계정 projection 수정.
 	 */
 	async updateIdpAccountById(params: {
-		userId: string;
+		userId: bigint;
 		data: Prisma.UserUncheckedUpdateInput;
-		spaceIds?: string[];
+		spaceIds?: bigint[];
 	}): Promise<IdpAccountRecord | null> {
-		this.logger.debug(`IDP 계정 수정: ${params.userId.slice(-8)}`);
+		this.logger.debug(`IDP 계정 수정: ${params.userId}`);
 
 		const account = await this.findIdpAccountById({
 			userId: params.userId,
@@ -296,7 +315,7 @@ export class UsersRepository {
 		orderBy: Prisma.UserOrderByWithRelationInput[];
 		skip: number;
 		take: number;
-		spaceIds?: string[];
+		spaceIds?: bigint[];
 		includedRoleNames?: string[];
 	}): Promise<{ users: User[]; totalCount: number }> {
 		this.logger.debug(
@@ -362,7 +381,7 @@ export class UsersRepository {
 
 	private applySpaceScopeToUserWhere(
 		where: Prisma.UserWhereInput,
-		spaceIds?: string[],
+		spaceIds?: bigint[],
 	): Prisma.UserWhereInput {
 		if (spaceIds === undefined) {
 			return where;
@@ -393,7 +412,7 @@ export class UsersRepository {
 	 * 접근 가능한 Space ID 목록으로 회원 통계 조회
 	 */
 	async countStatsBySpaceIds(params?: {
-		spaceIds?: string[];
+		spaceIds?: bigint[];
 	}): Promise<UserStats> {
 		const queryParams = params ?? {};
 		this.logger.debug(
@@ -460,7 +479,7 @@ export class UsersRepository {
 	 */
 	async findByIdAndSpaceIdsWithRelations(
 		userId: string,
-		spaceIds?: string[],
+		spaceIds?: bigint[],
 	): Promise<User | null> {
 		this.logger.debug(
 			`ID와 Space 범위로 조회: userId=${userId.slice(-8)}, scope=${spaceIds?.join(",") ?? "all"}`,
@@ -468,7 +487,7 @@ export class UsersRepository {
 
 		const result = await this.txHost.tx.user.findFirst({
 			where: {
-				id: userId,
+				userId,
 				...(spaceIds
 					? {
 							tenants: {
@@ -526,9 +545,9 @@ export class UsersRepository {
 	): Promise<Tenant | null> {
 		const result = await this.txHost.tx.tenant.findFirst({
 			where: {
-				id: tenantId,
-				user: { id: userId },
-				space: { id: spaceId },
+				tenantId,
+				user: { userId },
+				space: { spaceId },
 				removedAt: null,
 			},
 			include: {
@@ -545,7 +564,7 @@ export class UsersRepository {
 						assignments: {
 							where: {
 								removedAt: null,
-								policy: { space: { id: spaceId }, removedAt: null },
+								policy: { space: { spaceId }, removedAt: null },
 							},
 							orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
 							include: {
@@ -661,10 +680,10 @@ export class UsersRepository {
 	 * 업데이트
 	 */
 	async updateById(
-		id: string,
+		id: bigint,
 		data: Prisma.UserUncheckedUpdateInput,
 	): Promise<User> {
-		this.logger.debug(`업데이트 중: ${id.slice(-8)}`);
+		this.logger.debug(`업데이트 중: ${id.toString()}`);
 
 		const result = await this.txHost.tx.user.update({
 			where: { id },
@@ -676,10 +695,10 @@ export class UsersRepository {
 
 	/** 사용자의 현재 Tenant 선택값을 저장합니다. */
 	async updateCurrentTenantId(
-		userId: string,
-		currentTenantId: string,
+		userId: bigint,
+		currentTenantId: bigint | null,
 	): Promise<void> {
-		this.logger.debug(`현재 Tenant 저장: userId=${userId.slice(-8)}`);
+		this.logger.debug(`현재 Tenant 저장: userId=${userId.toString()}`);
 
 		await this.txHost.tx.user.update({
 			where: { id: userId },
@@ -691,14 +710,14 @@ export class UsersRepository {
 	 * 관계 포함 업데이트 (Classification, Associations)
 	 */
 	async updateByIdWithRelations(
-		userId: string,
+		userId: bigint,
 		data: Prisma.UserUncheckedUpdateInput,
 		options?: {
-			categoryId?: string | null;
-			groupIds?: string[];
+			categoryId?: bigint | null;
+			groupIds?: bigint[];
 		},
 	): Promise<User> {
-		this.logger.debug(`관계 포함 업데이트: userId=${userId.slice(-8)}`);
+		this.logger.debug(`관계 포함 업데이트: userId=${userId.toString()}`);
 
 		// 기본 정보 업데이트
 		if (Object.keys(data).length > 0) {
@@ -711,14 +730,14 @@ export class UsersRepository {
 		// 분류 카테고리 업데이트
 		if (options?.categoryId !== undefined) {
 			await this.txHost.tx.userClassification.deleteMany({
-				where: { user: { id: userId } },
+				where: { userId },
 			});
 
 			if (options.categoryId) {
 				await this.txHost.tx.userClassification.create({
 					data: {
-						user: { connect: { id: userId } },
-						category: { connect: { id: options.categoryId } },
+						userId,
+						categoryId: options.categoryId,
 					},
 				});
 			}
@@ -727,7 +746,7 @@ export class UsersRepository {
 		// 그룹 연결 업데이트
 		if (options?.groupIds !== undefined) {
 			await this.txHost.tx.userAssociation.deleteMany({
-				where: { user: { id: userId } },
+				where: { userId },
 			});
 
 			if (options.groupIds.length > 0) {
@@ -735,8 +754,8 @@ export class UsersRepository {
 					options.groupIds.map((groupId) =>
 						this.txHost.tx.userAssociation.create({
 							data: {
-								user: { connect: { id: userId } },
-								group: { connect: { id: groupId } },
+								userId,
+								groupId,
 							},
 						}),
 					),
@@ -779,10 +798,10 @@ export class UsersRepository {
 	 * 비밀번호 업데이트 (관련 필드 함께)
 	 */
 	async updatePassword(id: string, hashedPassword: string): Promise<void> {
-		this.logger.debug(`비밀번호 업데이트: ${id.slice(-8)}`);
+		this.logger.debug(`비밀번호 업데이트: ${id.toString()}`);
 
 		await this.txHost.tx.user.update({
-			where: { id },
+			where: { userId: id },
 			data: {
 				password: hashedPassword,
 				passwordChangedAt: new Date(),
@@ -798,10 +817,10 @@ export class UsersRepository {
 	 * 계정 잠금 해제 (failedLoginAttempts 초기화, lockedUntil null, isPermanentlyLocked false)
 	 */
 	async unlockAccount(id: string): Promise<void> {
-		this.logger.debug(`계정 잠금 해제: ${id.slice(-8)}`);
+		this.logger.debug(`계정 잠금 해제: ${id.toString()}`);
 
 		await this.txHost.tx.user.update({
-			where: { id },
+			where: { userId: id },
 			data: {
 				failedLoginAttempts: 0,
 				lockedUntil: null,
@@ -821,10 +840,10 @@ export class UsersRepository {
 		lastLoginAt: Date | null;
 		email: string;
 	} | null> {
-		this.logger.debug(`보안 정보 조회: ${id.slice(-8)}`);
+		this.logger.debug(`보안 정보 조회: ${id.toString()}`);
 
 		return this.txHost.tx.user.findUnique({
-			where: { id, removedAt: null },
+			where: { userId: id, removedAt: null },
 			select: {
 				failedLoginAttempts: true,
 				lockedUntil: true,
@@ -839,8 +858,8 @@ export class UsersRepository {
 	/**
 	 * 물리 삭제
 	 */
-	async deleteById(id: string): Promise<User> {
-		this.logger.debug(`삭제 중: ${id.slice(-8)}`);
+	async deleteById(id: bigint): Promise<User> {
+		this.logger.debug(`삭제 중: ${id.toString()}`);
 
 		const result = await this.txHost.tx.user.delete({
 			where: { id },

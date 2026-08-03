@@ -7,6 +7,7 @@ import {
 	type AssetBrowserNotify,
 	useAssetBrowser,
 } from "./useAssetBrowser";
+import { isWireId } from "./wire-id";
 
 type TaskAssetSlot = "image" | "video" | null;
 
@@ -62,10 +63,18 @@ export function useTaskExerciseAssetBrowser({
 					: undefined,
 		forcedStatus: "READY",
 		onDeleteAssetSuccess: (assetId) => {
-			if (assetId === imageFileId) {
+			if (
+				isWireId(imageFileId) &&
+				isWireId(assetId) &&
+				assetId === imageFileId
+			) {
 				onChangeImageFileId("");
 			}
-			if (assetId === videoFileId) {
+			if (
+				isWireId(videoFileId) &&
+				isWireId(assetId) &&
+				assetId === videoFileId
+			) {
 				onChangeVideoFileId("");
 			}
 		},

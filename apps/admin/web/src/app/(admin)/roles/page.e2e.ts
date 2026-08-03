@@ -1,13 +1,18 @@
-import { getAdminSpaceRequestHeaders } from "@cocrepo/e2e";
+import { getAdminSpaceRequestHeaders, loginToConsole } from "@cocrepo/e2e";
 import { expect, type Page, test } from "@playwright/test";
+
+let ADMIN_TENANT_ID = "";
+
+test.beforeEach(async ({ page }) => {
+	const context = await loginToConsole(page);
+	ADMIN_TENANT_ID = context.tenantId;
+});
 
 const ADMIN_API_BASE_URL = new URL(
 	"/api/v1",
 	process.env.E2E_CORE_API_BASE_URL ?? "http://localhost:3000/",
 ).toString();
-const SYSTEM_TENANT_ID =
-	process.env.E2E_SYSTEM_TENANT_ID ?? "01J00000000000000000000002";
-const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_TENANT_ID);
+const getSpaceHeaders = () => getAdminSpaceRequestHeaders(ADMIN_TENANT_ID);
 const roleListHeading = (page: Page) =>
 	page.getByRole("heading", { name: "역할 목록", exact: true });
 
@@ -90,6 +95,7 @@ test.describe("역할 목록 페이지", () => {
 			};
 			const roleId = createResponseBody.data?.id;
 			expect(roleId).toBeTruthy();
+			expect(roleId).toMatch(/^[1-9]\d*$/);
 
 			// When: 역할 목록 페이지로 이동
 			await gotoRoleListPage(page);
@@ -114,12 +120,14 @@ test.describe("역할 목록 페이지", () => {
 
 			// Then: 상세 페이지 확인
 			await expect(
-				page.getByRole("heading", { name: "역할 상세" }),
+				page.getByRole("heading", { name: "Role 상세" }),
 			).toBeVisible({ timeout: 10000 });
-			await expect(page.getByText(TEST_ROLE_NAME)).toBeVisible();
 			await expect(
-				page.getByText(INITIAL_DISPLAY_NAME, { exact: true }),
-			).toBeVisible();
+				page.getByRole("textbox", { name: /역할 식별자/ }),
+			).toHaveValue(TEST_ROLE_NAME);
+			await expect(page.getByRole("textbox", { name: /표시명/ })).toHaveValue(
+				INITIAL_DISPLAY_NAME,
+			);
 
 			// When: 수정 버튼 클릭 (client-side navigation)
 			await page.getByRole("button", { name: "수정" }).click();
@@ -128,7 +136,7 @@ test.describe("역할 목록 페이지", () => {
 
 			// Then: 수정 페이지 확인
 			await expect(
-				page.getByRole("heading", { name: "역할 수정" }),
+				page.getByRole("heading", { name: "Role 수정" }),
 			).toBeVisible({ timeout: 10000 });
 
 			// Then: 수정 화면의 초기값 확인
@@ -151,13 +159,14 @@ test.describe("역할 목록 페이지", () => {
 			await page.goto(`./roles/${roleId}`, { waitUntil: "domcontentloaded" });
 			await page.waitForLoadState("networkidle");
 			await expect(
-				page.getByRole("heading", { name: "역할 상세" }),
+				page.getByRole("heading", { name: "Role 상세" }),
 			).toBeVisible({ timeout: 10000 });
 
 			// Then: 수정된 값 확인
-			await expect(
-				page.getByText(UPDATED_DISPLAY_NAME, { exact: true }),
-			).toBeVisible({ timeout: 10000 });
+			await expect(page.getByRole("textbox", { name: /표시명/ })).toHaveValue(
+				UPDATED_DISPLAY_NAME,
+				{ timeout: 10000 },
+			);
 
 			// When: 삭제 버튼 클릭
 			await page.getByRole("button", { name: "삭제" }).click();

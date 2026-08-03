@@ -27,22 +27,22 @@ export type AggregateDocument = {
 }
 
 export type DocumentAvgAggregateOutputType = {
-  seq: number | null
+  id: number | null
   pageCount: number | null
   wordCount: number | null
-  assetSeq: number | null
+  assetId: number | null
 }
 
 export type DocumentSumAggregateOutputType = {
-  seq: number | null
+  id: bigint | null
   pageCount: number | null
   wordCount: number | null
-  assetSeq: number | null
+  assetId: bigint | null
 }
 
 export type DocumentMinAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  documentId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -52,12 +52,12 @@ export type DocumentMinAggregateOutputType = {
   title: string | null
   subject: string | null
   keywords: string | null
-  assetSeq: number | null
+  assetId: bigint | null
 }
 
 export type DocumentMaxAggregateOutputType = {
-  id: string | null
-  seq: number | null
+  documentId: string | null
+  id: bigint | null
   createdAt: Date | null
   updatedAt: Date | null
   removedAt: Date | null
@@ -67,12 +67,12 @@ export type DocumentMaxAggregateOutputType = {
   title: string | null
   subject: string | null
   keywords: string | null
-  assetSeq: number | null
+  assetId: bigint | null
 }
 
 export type DocumentCountAggregateOutputType = {
+  documentId: number
   id: number
-  seq: number
   createdAt: number
   updatedAt: number
   removedAt: number
@@ -82,28 +82,28 @@ export type DocumentCountAggregateOutputType = {
   title: number
   subject: number
   keywords: number
-  assetSeq: number
+  assetId: number
   _all: number
 }
 
 
 export type DocumentAvgAggregateInputType = {
-  seq?: true
+  id?: true
   pageCount?: true
   wordCount?: true
-  assetSeq?: true
+  assetId?: true
 }
 
 export type DocumentSumAggregateInputType = {
-  seq?: true
+  id?: true
   pageCount?: true
   wordCount?: true
-  assetSeq?: true
+  assetId?: true
 }
 
 export type DocumentMinAggregateInputType = {
+  documentId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -113,12 +113,12 @@ export type DocumentMinAggregateInputType = {
   title?: true
   subject?: true
   keywords?: true
-  assetSeq?: true
+  assetId?: true
 }
 
 export type DocumentMaxAggregateInputType = {
+  documentId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -128,12 +128,12 @@ export type DocumentMaxAggregateInputType = {
   title?: true
   subject?: true
   keywords?: true
-  assetSeq?: true
+  assetId?: true
 }
 
 export type DocumentCountAggregateInputType = {
+  documentId?: true
   id?: true
-  seq?: true
   createdAt?: true
   updatedAt?: true
   removedAt?: true
@@ -143,7 +143,7 @@ export type DocumentCountAggregateInputType = {
   title?: true
   subject?: true
   keywords?: true
-  assetSeq?: true
+  assetId?: true
   _all?: true
 }
 
@@ -234,8 +234,8 @@ export type DocumentGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 export type DocumentGroupByOutputType = {
-  id: string
-  seq: number
+  documentId: string
+  id: bigint
   createdAt: Date
   updatedAt: Date | null
   removedAt: Date | null
@@ -245,7 +245,7 @@ export type DocumentGroupByOutputType = {
   title: string | null
   subject: string | null
   keywords: string | null
-  assetSeq: number
+  assetId: bigint
   _count: DocumentCountAggregateOutputType | null
   _avg: DocumentAvgAggregateOutputType | null
   _sum: DocumentSumAggregateOutputType | null
@@ -272,8 +272,8 @@ export type DocumentWhereInput = {
   AND?: Prisma.DocumentWhereInput | Prisma.DocumentWhereInput[]
   OR?: Prisma.DocumentWhereInput[]
   NOT?: Prisma.DocumentWhereInput | Prisma.DocumentWhereInput[]
-  id?: Prisma.StringFilter<"Document"> | string
-  seq?: Prisma.IntFilter<"Document"> | number
+  documentId?: Prisma.StringFilter<"Document"> | string
+  id?: Prisma.BigIntFilter<"Document"> | bigint | number
   createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   updatedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
@@ -283,13 +283,13 @@ export type DocumentWhereInput = {
   title?: Prisma.StringNullableFilter<"Document"> | string | null
   subject?: Prisma.StringNullableFilter<"Document"> | string | null
   keywords?: Prisma.StringNullableFilter<"Document"> | string | null
-  assetSeq?: Prisma.IntFilter<"Document"> | number
+  assetId?: Prisma.BigIntFilter<"Document"> | bigint | number
   asset?: Prisma.XOR<Prisma.AssetScalarRelationFilter, Prisma.AssetWhereInput>
 }
 
 export type DocumentOrderByWithRelationInput = {
+  documentId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -299,14 +299,14 @@ export type DocumentOrderByWithRelationInput = {
   title?: Prisma.SortOrderInput | Prisma.SortOrder
   subject?: Prisma.SortOrderInput | Prisma.SortOrder
   keywords?: Prisma.SortOrderInput | Prisma.SortOrder
-  assetSeq?: Prisma.SortOrder
+  assetId?: Prisma.SortOrder
   asset?: Prisma.AssetOrderByWithRelationInput
 }
 
 export type DocumentWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  seq?: number
-  assetSeq?: number
+  documentId?: string
+  id?: bigint | number
+  assetId?: bigint | number
   AND?: Prisma.DocumentWhereInput | Prisma.DocumentWhereInput[]
   OR?: Prisma.DocumentWhereInput[]
   NOT?: Prisma.DocumentWhereInput | Prisma.DocumentWhereInput[]
@@ -320,11 +320,11 @@ export type DocumentWhereUniqueInput = Prisma.AtLeast<{
   subject?: Prisma.StringNullableFilter<"Document"> | string | null
   keywords?: Prisma.StringNullableFilter<"Document"> | string | null
   asset?: Prisma.XOR<Prisma.AssetScalarRelationFilter, Prisma.AssetWhereInput>
-}, "seq" | "id" | "assetSeq">
+}, "id" | "documentId" | "assetId">
 
 export type DocumentOrderByWithAggregationInput = {
+  documentId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   removedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -334,7 +334,7 @@ export type DocumentOrderByWithAggregationInput = {
   title?: Prisma.SortOrderInput | Prisma.SortOrder
   subject?: Prisma.SortOrderInput | Prisma.SortOrder
   keywords?: Prisma.SortOrderInput | Prisma.SortOrder
-  assetSeq?: Prisma.SortOrder
+  assetId?: Prisma.SortOrder
   _count?: Prisma.DocumentCountOrderByAggregateInput
   _avg?: Prisma.DocumentAvgOrderByAggregateInput
   _max?: Prisma.DocumentMaxOrderByAggregateInput
@@ -346,8 +346,8 @@ export type DocumentScalarWhereWithAggregatesInput = {
   AND?: Prisma.DocumentScalarWhereWithAggregatesInput | Prisma.DocumentScalarWhereWithAggregatesInput[]
   OR?: Prisma.DocumentScalarWhereWithAggregatesInput[]
   NOT?: Prisma.DocumentScalarWhereWithAggregatesInput | Prisma.DocumentScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"Document"> | string
-  seq?: Prisma.IntWithAggregatesFilter<"Document"> | number
+  documentId?: Prisma.StringWithAggregatesFilter<"Document"> | string
+  id?: Prisma.BigIntWithAggregatesFilter<"Document"> | bigint | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Document"> | Date | string
   updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Document"> | Date | string | null
   removedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Document"> | Date | string | null
@@ -357,11 +357,12 @@ export type DocumentScalarWhereWithAggregatesInput = {
   title?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
   subject?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
   keywords?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
-  assetSeq?: Prisma.IntWithAggregatesFilter<"Document"> | number
+  assetId?: Prisma.BigIntWithAggregatesFilter<"Document"> | bigint | number
 }
 
 export type DocumentCreateInput = {
-  id?: string
+  documentId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -375,8 +376,8 @@ export type DocumentCreateInput = {
 }
 
 export type DocumentUncheckedCreateInput = {
-  id?: string
-  seq?: number
+  documentId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -386,11 +387,12 @@ export type DocumentUncheckedCreateInput = {
   title?: string | null
   subject?: string | null
   keywords?: string | null
-  assetSeq: number
+  assetId: bigint | number
 }
 
 export type DocumentUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  documentId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -404,8 +406,8 @@ export type DocumentUpdateInput = {
 }
 
 export type DocumentUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  documentId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -415,12 +417,12 @@ export type DocumentUncheckedUpdateInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   keywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  assetSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  assetId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 export type DocumentCreateManyInput = {
-  id?: string
-  seq?: number
+  documentId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -430,11 +432,12 @@ export type DocumentCreateManyInput = {
   title?: string | null
   subject?: string | null
   keywords?: string | null
-  assetSeq: number
+  assetId: bigint | number
 }
 
 export type DocumentUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  documentId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -447,8 +450,8 @@ export type DocumentUpdateManyMutationInput = {
 }
 
 export type DocumentUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  documentId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -458,7 +461,7 @@ export type DocumentUncheckedUpdateManyInput = {
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   keywords?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  assetSeq?: Prisma.IntFieldUpdateOperationsInput | number
+  assetId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
 }
 
 export type DocumentNullableScalarRelationFilter = {
@@ -467,8 +470,8 @@ export type DocumentNullableScalarRelationFilter = {
 }
 
 export type DocumentCountOrderByAggregateInput = {
+  documentId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -478,19 +481,19 @@ export type DocumentCountOrderByAggregateInput = {
   title?: Prisma.SortOrder
   subject?: Prisma.SortOrder
   keywords?: Prisma.SortOrder
-  assetSeq?: Prisma.SortOrder
+  assetId?: Prisma.SortOrder
 }
 
 export type DocumentAvgOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
   pageCount?: Prisma.SortOrder
   wordCount?: Prisma.SortOrder
-  assetSeq?: Prisma.SortOrder
+  assetId?: Prisma.SortOrder
 }
 
 export type DocumentMaxOrderByAggregateInput = {
+  documentId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -500,12 +503,12 @@ export type DocumentMaxOrderByAggregateInput = {
   title?: Prisma.SortOrder
   subject?: Prisma.SortOrder
   keywords?: Prisma.SortOrder
-  assetSeq?: Prisma.SortOrder
+  assetId?: Prisma.SortOrder
 }
 
 export type DocumentMinOrderByAggregateInput = {
+  documentId?: Prisma.SortOrder
   id?: Prisma.SortOrder
-  seq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   removedAt?: Prisma.SortOrder
@@ -515,14 +518,14 @@ export type DocumentMinOrderByAggregateInput = {
   title?: Prisma.SortOrder
   subject?: Prisma.SortOrder
   keywords?: Prisma.SortOrder
-  assetSeq?: Prisma.SortOrder
+  assetId?: Prisma.SortOrder
 }
 
 export type DocumentSumOrderByAggregateInput = {
-  seq?: Prisma.SortOrder
+  id?: Prisma.SortOrder
   pageCount?: Prisma.SortOrder
   wordCount?: Prisma.SortOrder
-  assetSeq?: Prisma.SortOrder
+  assetId?: Prisma.SortOrder
 }
 
 export type DocumentCreateNestedOneWithoutAssetInput = {
@@ -558,7 +561,8 @@ export type DocumentUncheckedUpdateOneWithoutAssetNestedInput = {
 }
 
 export type DocumentCreateWithoutAssetInput = {
-  id?: string
+  documentId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -571,8 +575,8 @@ export type DocumentCreateWithoutAssetInput = {
 }
 
 export type DocumentUncheckedCreateWithoutAssetInput = {
-  id?: string
-  seq?: number
+  documentId?: string
+  id?: bigint | number
   createdAt?: Date | string
   updatedAt?: Date | string | null
   removedAt?: Date | string | null
@@ -601,7 +605,8 @@ export type DocumentUpdateToOneWithWhereWithoutAssetInput = {
 }
 
 export type DocumentUpdateWithoutAssetInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  documentId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -614,8 +619,8 @@ export type DocumentUpdateWithoutAssetInput = {
 }
 
 export type DocumentUncheckedUpdateWithoutAssetInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  seq?: Prisma.IntFieldUpdateOperationsInput | number
+  documentId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   removedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -630,8 +635,8 @@ export type DocumentUncheckedUpdateWithoutAssetInput = {
 
 
 export type DocumentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  documentId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -641,13 +646,13 @@ export type DocumentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   title?: boolean
   subject?: boolean
   keywords?: boolean
-  assetSeq?: boolean
+  assetId?: boolean
   asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["document"]>
 
 export type DocumentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  documentId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -657,13 +662,13 @@ export type DocumentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   title?: boolean
   subject?: boolean
   keywords?: boolean
-  assetSeq?: boolean
+  assetId?: boolean
   asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["document"]>
 
 export type DocumentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  documentId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -673,13 +678,13 @@ export type DocumentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   title?: boolean
   subject?: boolean
   keywords?: boolean
-  assetSeq?: boolean
+  assetId?: boolean
   asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["document"]>
 
 export type DocumentSelectScalar = {
+  documentId?: boolean
   id?: boolean
-  seq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   removedAt?: boolean
@@ -689,10 +694,10 @@ export type DocumentSelectScalar = {
   title?: boolean
   subject?: boolean
   keywords?: boolean
-  assetSeq?: boolean
+  assetId?: boolean
 }
 
-export type DocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "pageCount" | "wordCount" | "author" | "title" | "subject" | "keywords" | "assetSeq", ExtArgs["result"]["document"]>
+export type DocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"documentId" | "id" | "createdAt" | "updatedAt" | "removedAt" | "pageCount" | "wordCount" | "author" | "title" | "subject" | "keywords" | "assetId", ExtArgs["result"]["document"]>
 export type DocumentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   asset?: boolean | Prisma.AssetDefaultArgs<ExtArgs>
 }
@@ -709,8 +714,8 @@ export type $DocumentPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     asset: Prisma.$AssetPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    seq: number
+    documentId: string
+    id: bigint
     createdAt: Date
     updatedAt: Date | null
     removedAt: Date | null
@@ -741,7 +746,7 @@ export type $DocumentPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     /**
      * @displayName 원본 Asset 내부 순번
      */
-    assetSeq: number
+    assetId: bigint
   }, ExtArgs["result"]["document"]>
   composites: {}
 }
@@ -825,8 +830,8 @@ export interface DocumentDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * // Get first 10 Documents
    * const documents = await prisma.document.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const documentWithIdOnly = await prisma.document.findMany({ select: { id: true } })
+   * // Only select the `documentId`
+   * const documentWithDocumentIdOnly = await prisma.document.findMany({ select: { documentId: true } })
    * 
    */
   findMany<T extends DocumentFindManyArgs>(args?: Prisma.SelectSubset<T, DocumentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -870,9 +875,9 @@ export interface DocumentDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    *   ]
    * })
    * 
-   * // Create many Documents and only return the `id`
-   * const documentWithIdOnly = await prisma.document.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many Documents and only return the `documentId`
+   * const documentWithDocumentIdOnly = await prisma.document.createManyAndReturn({
+   *   select: { documentId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -961,9 +966,9 @@ export interface DocumentDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    *   ]
    * })
    * 
-   * // Update zero or more Documents and only return the `id`
-   * const documentWithIdOnly = await prisma.document.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more Documents and only return the `documentId`
+   * const documentWithDocumentIdOnly = await prisma.document.updateManyAndReturn({
+   *   select: { documentId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1166,8 +1171,8 @@ export interface Prisma__DocumentClient<T, Null = never, ExtArgs extends runtime
  * Fields of the Document model
  */
 export interface DocumentFieldRefs {
-  readonly id: Prisma.FieldRef<"Document", 'String'>
-  readonly seq: Prisma.FieldRef<"Document", 'Int'>
+  readonly documentId: Prisma.FieldRef<"Document", 'String'>
+  readonly id: Prisma.FieldRef<"Document", 'BigInt'>
   readonly createdAt: Prisma.FieldRef<"Document", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Document", 'DateTime'>
   readonly removedAt: Prisma.FieldRef<"Document", 'DateTime'>
@@ -1177,7 +1182,7 @@ export interface DocumentFieldRefs {
   readonly title: Prisma.FieldRef<"Document", 'String'>
   readonly subject: Prisma.FieldRef<"Document", 'String'>
   readonly keywords: Prisma.FieldRef<"Document", 'String'>
-  readonly assetSeq: Prisma.FieldRef<"Document", 'Int'>
+  readonly assetId: Prisma.FieldRef<"Document", 'BigInt'>
 }
     
 

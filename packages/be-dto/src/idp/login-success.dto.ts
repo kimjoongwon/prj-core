@@ -1,4 +1,4 @@
-import { BooleanFieldOptional, StringField } from "@cocrepo/decorator";
+import { BooleanFieldOptional, StringField } from "@cocrepo/decorator/field";
 
 /**
  * POST /api/interaction/:uid/login 성공 응답

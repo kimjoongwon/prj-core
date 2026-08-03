@@ -1,25 +1,21 @@
-import {
-	type Reservation as ReservationEntity,
-	ReservationStatus,
-} from "@cocrepo/prisma";
+import { ReservationStatus } from "@cocrepo/prisma";
 import { AbstractAggregateEntity } from "./abstract-aggregate.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Program } from "./program.entity";
 import type { Session } from "./session.entity";
 import type { Space } from "./space.entity";
 import type { Timeline } from "./timeline.entity";
 import type { User } from "./user.entity";
 
-export class Reservation
-	extends AbstractAggregateEntity
-	implements DomainEntityModel<ReservationEntity>
-{
-	spaceId!: string;
-	createdById!: string | null;
-	userId!: string;
-	timelineId!: string;
-	sessionId!: string;
-	programId!: string;
+export class Reservation extends AbstractAggregateEntity {
+	/** 공개 식별자 ULID */
+	reservationId!: string;
+
+	spaceId!: bigint;
+	createdById!: bigint | null;
+	userId!: bigint;
+	timelineId!: bigint;
+	sessionId!: bigint;
+	programId!: bigint;
 	occurrenceStartAt!: Date;
 	status!: ReservationStatus;
 	memo!: string | null;

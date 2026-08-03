@@ -153,7 +153,7 @@ describe("JwtAuthGuard", () => {
 			mockReflector.getAllAndOverride.mockReturnValue(false);
 			mockClsService.get.mockReturnValue("valid-token");
 			mockTokenStorageService.isBlacklisted.mockResolvedValue(false);
-			const user = { id: "user-1", email: "test@example.com" };
+			const user = { id: 101n, email: "test@example.com" };
 			const context = createMockExecutionContext({ user });
 
 			// When
@@ -180,7 +180,7 @@ describe("JwtAuthGuard", () => {
 			// Given
 			mockReflector.getAllAndOverride.mockReturnValue(false);
 			mockClsService.get.mockReturnValue(undefined);
-			const user = { id: "user-1", email: "test@example.com" };
+			const user = { id: 101n, email: "test@example.com" };
 			const context = createMockExecutionContext({ user });
 
 			// When
@@ -196,7 +196,7 @@ describe("JwtAuthGuard", () => {
 			mockReflector.getAllAndOverride.mockReturnValue(false);
 			mockClsService.get.mockReturnValue("valid-token");
 			mockTokenStorageService.isBlacklisted.mockResolvedValue(false);
-			const user = { id: "user-1", email: "test@example.com" };
+			const user = { id: 101n, email: "test@example.com" };
 			const context = createMockExecutionContext({ user });
 
 			// When

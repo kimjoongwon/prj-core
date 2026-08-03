@@ -1,5 +1,6 @@
-import { castArray, isNil } from "@cocrepo/toolkit";
+import { formatDatabaseId, parseDecimalId } from "@cocrepo/type/database-id";
 import { Transform } from "class-transformer";
+import { castArray, isNil } from "es-toolkit/compat";
 import { parsePhoneNumber } from "libphonenumber-js";
 
 export function ToBoolean(): PropertyDecorator {
@@ -105,6 +106,58 @@ export function ToUpperCase(): PropertyDecorator {
 		{
 			toClassOnly: true,
 		},
+	);
+}
+
+/**
+ * bigint ID 값을 DTO edge에서 bigint와 decimal 문자열로 양방향 변환합니다.
+ */
+export function BigIntIdSerializer(): PropertyDecorator {
+	return Transform(
+		(params) => {
+			const { value } = params;
+
+			if (Array.isArray(value)) {
+				return value.map((item) => {
+					if (typeof item !== "string") {
+						return item;
+					}
+
+					return parseDecimalId(item) ?? item;
+				});
+			}
+
+			if (typeof value !== "string") {
+				return value;
+			}
+
+			return parseDecimalId(value) ?? value;
+		},
+		{ toClassOnly: true },
+	);
+}
+
+/**
+ * bigint ID 값을 wire protocol용 decimal 문자열로 직렬화합니다.
+ */
+export function BigIntIdPlainSerializer(): PropertyDecorator {
+	return Transform(
+		(params) => {
+			const { value } = params;
+
+			if (Array.isArray(value)) {
+				return value.map((item) =>
+					typeof item === "bigint" ? formatDatabaseId(item) : item,
+				);
+			}
+
+			if (typeof value === "bigint") {
+				return formatDatabaseId(value);
+			}
+
+			return value;
+		},
+		{ toPlainOnly: true },
 	);
 }
 

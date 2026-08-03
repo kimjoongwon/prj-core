@@ -1,9 +1,25 @@
+import { type DecimalId, isDecimalId } from "@cocrepo/type";
 import { describe, expect, it } from "vitest";
 import {
 	mergeAdminPersistAccountSelection,
 	mergeAdminPersistAuthSession,
+	parseAdminPersistStorageDocument,
 	readAdminPersistAccessToken,
+	readAdminPersistSpaceSelection,
 } from "./admin-persist";
+
+function decimalIdFixture(value: string): DecimalId {
+	if (!isDecimalId(value)) {
+		throw new Error(`Invalid decimal ID fixture: ${value}`);
+	}
+
+	return value;
+}
+
+const oldTenantId = decimalIdFixture("101");
+const oldSpaceId = decimalIdFixture("201");
+const newTenantId = decimalIdFixture("102");
+const newSpaceId = decimalIdFixture("202");
 
 const nativeSession = {
 	accessToken: "access-token",
@@ -38,14 +54,14 @@ describe("admin persist contract", () => {
 		const raw = JSON.stringify({
 			account: {
 				version: 2,
-				tenantId: "tenant-old",
-				spaceId: "space-old",
+				tenantId: oldTenantId,
+				spaceId: oldSpaceId,
 				fitnessCenterName: "Old Fitness Center",
 				contentLanguageCode: "en_US",
 				availableSpaces: [
 					{
-						tenantId: "tenant-old",
-						spaceId: "space-old",
+						tenantId: oldTenantId,
+						spaceId: oldSpaceId,
 						fitnessCenterName: "Old Fitness Center",
 						contentLanguageCode: "en_US",
 					},
@@ -55,28 +71,28 @@ describe("admin persist contract", () => {
 		});
 
 		const document = mergeAdminPersistAccountSelection(raw, {
-			tenantId: "tenant-new",
-			spaceId: "space-new",
+			tenantId: newTenantId,
+			spaceId: newSpaceId,
 			fitnessCenterName: "New Fitness Center",
 			contentLanguageCode: "ko_KR",
 		});
 
 		expect(document.account).toEqual({
 			version: 2,
-			tenantId: "tenant-new",
-			spaceId: "space-new",
+			tenantId: newTenantId,
+			spaceId: newSpaceId,
 			fitnessCenterName: "New Fitness Center",
 			contentLanguageCode: "ko_KR",
 			availableSpaces: [
 				{
-					tenantId: "tenant-new",
-					spaceId: "space-new",
+					tenantId: newTenantId,
+					spaceId: newSpaceId,
 					fitnessCenterName: "New Fitness Center",
 					contentLanguageCode: "ko_KR",
 				},
 				{
-					tenantId: "tenant-old",
-					spaceId: "space-old",
+					tenantId: oldTenantId,
+					spaceId: oldSpaceId,
 					fitnessCenterName: "Old Fitness Center",
 					contentLanguageCode: "en_US",
 				},
@@ -88,32 +104,62 @@ describe("admin persist contract", () => {
 	it("Given 이전 account section일 때 When 선택을 갱신하면 Then 호환 alias 없이 version 2로 교체한다", () => {
 		const raw = JSON.stringify({
 			account: {
-				tenantId: "tenant-legacy",
-				spaceId: "space-legacy",
+				tenantId: oldTenantId,
+				spaceId: oldSpaceId,
 				legacyName: "Legacy Name",
 				spaces: [],
 			},
 		});
 
 		const document = mergeAdminPersistAccountSelection(raw, {
-			tenantId: "tenant-current",
-			spaceId: "space-current",
+			tenantId: newTenantId,
+			spaceId: newSpaceId,
 			fitnessCenterName: "Current Fitness Center",
 		});
 
 		expect(document.account).toEqual({
 			version: 2,
-			tenantId: "tenant-current",
-			spaceId: "space-current",
+			tenantId: newTenantId,
+			spaceId: newSpaceId,
 			fitnessCenterName: "Current Fitness Center",
 			contentLanguageCode: null,
 			availableSpaces: [
 				{
-					tenantId: "tenant-current",
-					spaceId: "space-current",
+					tenantId: newTenantId,
+					spaceId: newSpaceId,
 					fitnessCenterName: "Current Fitness Center",
 				},
 			],
 		});
+	});
+
+	it("Given 비정상 decimal ID fixture가 있을 때 When persist를 읽으면 Then 공용 validator 기준으로 선택값에서 제외한다", () => {
+		const invalidDecimalIdFixture = "01";
+		expect(isDecimalId(invalidDecimalIdFixture)).toBe(false);
+
+		const raw = JSON.stringify({
+			account: {
+				version: 2,
+				tenantId: invalidDecimalIdFixture,
+				spaceId: newSpaceId,
+				fitnessCenterName: "Invalid Fitness Center",
+				contentLanguageCode: "ko_KR",
+				availableSpaces: [
+					{
+						tenantId: invalidDecimalIdFixture,
+						spaceId: newSpaceId,
+						fitnessCenterName: "Invalid Fitness Center",
+					},
+				],
+			},
+		});
+
+		const document = parseAdminPersistStorageDocument(raw);
+		expect(document.account).toMatchObject({
+			tenantId: null,
+			spaceId: newSpaceId,
+			availableSpaces: [],
+		});
+		expect(readAdminPersistSpaceSelection(raw)).toBeUndefined();
 	});
 });

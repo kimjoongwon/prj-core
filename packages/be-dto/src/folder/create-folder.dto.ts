@@ -1,14 +1,14 @@
-import { StringField, ULIDFieldOptional } from "@cocrepo/decorator";
+import { BigIntIdFieldOptional, StringField } from "@cocrepo/decorator/field";
 
 /**
  * 폴더 생성 DTO
  */
 export class CreateFolderDto {
-	@ULIDFieldOptional({
+	@BigIntIdFieldOptional({
 		nullable: true,
 		description: "부모 폴더 ID (루트면 null)",
 	})
-	parentFolderId?: string | null;
+	parentFolderId?: bigint | null;
 
 	@StringField({
 		description: "폴더명",

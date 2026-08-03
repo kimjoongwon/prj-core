@@ -3,8 +3,8 @@
 // @description: 권한 규칙이 참조하는 전역 리소스 주체 카탈로그
 /// @displayName Subject
 model Subject {
-  id        String    @unique @default(ulid()) @db.VarChar(26)
-  seq       Int       @id @default(autoincrement())
+  subjectId String    @unique @default(ulid()) @map("subject_id") @db.Char(26)
+  id        BigInt    @id @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt DateTime? @map("removed_at") @db.Timestamptz(6)

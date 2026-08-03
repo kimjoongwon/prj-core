@@ -4,9 +4,9 @@ import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import type {
-	PublicIdCreateInput,
-	PublicIdUpdateInput,
-} from "./public-id-input.type";
+	AutoIdentityCreateInput,
+	AutoIdentityUpdateInput,
+} from "./auto-identity-input.type";
 import { toDomainEntity } from "./to-domain-entity";
 
 const tenantAccessRequestInclude = {
@@ -50,8 +50,8 @@ export class TenantAccessRequestsRepository {
 		return toDomainEntity(TenantAccessRequest, result);
 	}
 
-	async findById(id: string): Promise<TenantAccessRequest | null> {
-		this.logger.debug(`테넌트 접근 신청 조회: ${id.slice(-8)}`);
+	async findById(id: bigint): Promise<TenantAccessRequest | null> {
+		this.logger.debug(`테넌트 접근 신청 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.tenantAccessRequest.findUnique({
 			where: { id },
@@ -61,8 +61,8 @@ export class TenantAccessRequestsRepository {
 		return result ? this.toTenantAccessRequest(result) : null;
 	}
 
-	async findByIdWithRelations(id: string): Promise<TenantAccessRequest | null> {
-		this.logger.debug(`테넌트 접근 신청 상세 조회: ${id.slice(-8)}`);
+	async findByIdWithRelations(id: bigint): Promise<TenantAccessRequest | null> {
+		this.logger.debug(`테넌트 접근 신청 상세 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.tenantAccessRequest.findUnique({
 			where: { id },
@@ -70,27 +70,6 @@ export class TenantAccessRequestsRepository {
 		});
 
 		return result ? this.toTenantAccessRequest(result) : null;
-	}
-
-	async findPendingByRequesterAndSpace(
-		requesterId: string,
-		spaceId: string,
-	): Promise<TenantAccessRequest | null> {
-		this.logger.debug(
-			`PENDING 신청 조회: requester=${requesterId.slice(-8)}, space=${spaceId.slice(-8)}`,
-		);
-
-		const result = await this.txHost.tx.tenantAccessRequest.findFirst({
-			where: {
-				requester: { id: requesterId },
-				space: { id: spaceId },
-				status: "PENDING",
-				removedAt: null,
-			},
-			include: tenantAccessRequestInclude,
-		});
-
-		return result ? toDomainEntity(TenantAccessRequest, result) : null;
 	}
 
 	async findMany(params: {
@@ -121,39 +100,16 @@ export class TenantAccessRequestsRepository {
 	}
 
 	async create(
-		data: PublicIdCreateInput<
+		data: AutoIdentityCreateInput<
 			Prisma.TenantAccessRequestUncheckedCreateInput,
-			"requester" | "space" | "requestedRole",
-			"previousRole" | "reviewer" | "appliedTenant"
+			"tenantAccessRequestId"
 		>,
 	): Promise<TenantAccessRequest> {
 		this.logger.debug(
-			`테넌트 접근 신청 생성: requester=${data.requesterId.slice(-8)}, space=${data.spaceId.slice(-8)}`,
+			`테넌트 접근 신청 생성: requester=${data.requesterId.toString()}, space=${data.spaceId.toString()}`,
 		);
-
-		const {
-			requesterId,
-			spaceId,
-			requestedRoleId,
-			previousRoleId,
-			reviewerId,
-			appliedTenantId,
-			...requestData
-		} = data;
 		const result = await this.txHost.tx.tenantAccessRequest.create({
-			data: {
-				...requestData,
-				requester: { connect: { id: requesterId } },
-				space: { connect: { id: spaceId } },
-				requestedRole: { connect: { id: requestedRoleId } },
-				...(previousRoleId
-					? { previousRole: { connect: { id: previousRoleId } } }
-					: {}),
-				...(reviewerId ? { reviewer: { connect: { id: reviewerId } } } : {}),
-				...(appliedTenantId
-					? { appliedTenant: { connect: { id: appliedTenantId } } }
-					: {}),
-			},
+			data,
 			include: tenantAccessRequestInclude,
 		});
 
@@ -161,53 +117,16 @@ export class TenantAccessRequestsRepository {
 	}
 
 	async updateById(
-		id: string,
-		data: PublicIdUpdateInput<
+		id: bigint,
+		data: AutoIdentityUpdateInput<
 			Prisma.TenantAccessRequestUncheckedUpdateInput,
-			"requester" | "space" | "requestedRole",
-			"previousRole" | "reviewer" | "appliedTenant"
+			"tenantAccessRequestId"
 		>,
 	): Promise<TenantAccessRequest> {
-		this.logger.debug(`테넌트 접근 신청 수정: ${id.slice(-8)}`);
-
-		const {
-			requesterId,
-			spaceId,
-			requestedRoleId,
-			previousRoleId,
-			reviewerId,
-			appliedTenantId,
-			...requestData
-		} = data;
+		this.logger.debug(`테넌트 접근 신청 수정: ${id.toString()}`);
 		const result = await this.txHost.tx.tenantAccessRequest.update({
 			where: { id },
-			data: {
-				...requestData,
-				...(requesterId !== undefined
-					? { requester: { connect: { id: requesterId } } }
-					: {}),
-				...(spaceId !== undefined
-					? { space: { connect: { id: spaceId } } }
-					: {}),
-				...(requestedRoleId !== undefined
-					? { requestedRole: { connect: { id: requestedRoleId } } }
-					: {}),
-				...(previousRoleId !== undefined
-					? previousRoleId === null
-						? { previousRole: { disconnect: true } }
-						: { previousRole: { connect: { id: previousRoleId } } }
-					: {}),
-				...(reviewerId !== undefined
-					? reviewerId === null
-						? { reviewer: { disconnect: true } }
-						: { reviewer: { connect: { id: reviewerId } } }
-					: {}),
-				...(appliedTenantId !== undefined
-					? appliedTenantId === null
-						? { appliedTenant: { disconnect: true } }
-						: { appliedTenant: { connect: { id: appliedTenantId } } }
-					: {}),
-			},
+			data,
 			include: tenantAccessRequestInclude,
 		});
 

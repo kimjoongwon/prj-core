@@ -1,6 +1,6 @@
 export class DeleteProgramCommand {
 	constructor(
-		readonly sessionId: string,
-		readonly programId: string,
+		readonly sessionId: bigint,
+		readonly programId: bigint,
 	) {}
 }

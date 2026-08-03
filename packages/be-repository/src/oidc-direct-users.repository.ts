@@ -30,6 +30,7 @@ export class OidcDirectUsersRepository {
 			where: { email },
 			select: {
 				id: true,
+				userId: true,
 				email: true,
 				password: true,
 				failedLoginAttempts: true,
@@ -45,7 +46,7 @@ export class OidcDirectUsersRepository {
 	 * 로그인 실패 처리 (실패 횟수 증가 + 잠금 설정)
 	 */
 	async updateLoginFailure(
-		userId: string,
+		userId: bigint,
 		failedAttempts: number,
 		lockData?: { lockedUntil?: Date; isPermanentlyLocked?: boolean },
 	): Promise<void> {
@@ -65,7 +66,7 @@ export class OidcDirectUsersRepository {
 	/**
 	 * 로그인 성공 처리 (실패 횟수 리셋 + 마지막 로그인 정보 업데이트)
 	 */
-	async updateLoginSuccess(userId: string, ipAddress: string): Promise<void> {
+	async updateLoginSuccess(userId: bigint, ipAddress: string): Promise<void> {
 		const prisma = await this.directPrismaProvider.getClient();
 		await prisma.user.update({
 			where: { id: userId },
@@ -81,7 +82,7 @@ export class OidcDirectUsersRepository {
 	/**
 	 * 잠금 자동 해제 (일시 잠금 시간 경과 후)
 	 */
-	async clearLock(userId: string): Promise<void> {
+	async clearLock(userId: bigint): Promise<void> {
 		const prisma = await this.directPrismaProvider.getClient();
 		await prisma.user.update({
 			where: { id: userId },
@@ -97,7 +98,7 @@ export class OidcDirectUsersRepository {
 	 */
 	async createAuditLog(data: {
 		email: string;
-		userId?: string;
+		userId?: bigint;
 		result: AuthAuditResult;
 		failureReason?: string;
 		ipAddress: string;
@@ -109,7 +110,7 @@ export class OidcDirectUsersRepository {
 			await prisma.authAuditLog.create({
 				data: {
 					email: data.email,
-					...(data.userId ? { user: { connect: { id: data.userId } } } : {}),
+					...(data.userId ? { userId: data.userId } : {}),
 					result: data.result,
 					failureReason: data.failureReason ?? null,
 					ipAddress: data.ipAddress,
@@ -128,8 +129,8 @@ export class OidcDirectUsersRepository {
 	 * ID로 사용자 조회 (Tenants 포함)
 	 * AccountService의 claims 빌드에 사용합니다.
 	 */
-	async findByIdWithTenants(id: string) {
-		this.logger.debug(`ID로 사용자 조회: ${id.slice(-8)}`);
+	async findByIdWithTenants(id: bigint) {
+		this.logger.debug(`ID로 사용자 조회: ${id.toString()}`);
 
 		const prisma = await this.directPrismaProvider.getClient();
 		return prisma.user.findUnique({

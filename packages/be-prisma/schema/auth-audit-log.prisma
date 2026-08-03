@@ -2,28 +2,28 @@
 // @description: 로그인 시도와 결과를 기록하는 인증 감사 로그
 /// @displayName 인증 감사 로그
 model AuthAuditLog {
-  id            String          @unique @default(ulid()) @db.VarChar(26)
-  seq           Int             @id @default(autoincrement())
-  createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  authAuditLogId String          @unique @default(ulid()) @map("auth_audit_log_id") @db.Char(26)
+  id             BigInt          @id @default(autoincrement())
+  createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
   /// @displayName 이메일
-  email         String
+  email          String
   /// @displayName 사용자 내부 순번
-  userSeq       Int?            @map("user_seq")
+  userId         BigInt?         @map("user_id")
   /// @displayName 결과
-  result        AuthAuditResult
+  result         AuthAuditResult
   /// @displayName 실패 사유
-  failureReason String?         @map("failure_reason")
+  failureReason  String?         @map("failure_reason")
   /// @displayName IP 주소
-  ipAddress     String          @map("ip_address")
+  ipAddress      String          @map("ip_address")
   /// @displayName User Agent
-  userAgent     String?         @map("user_agent")
+  userAgent      String?         @map("user_agent")
   /// @displayName 클라이언트 ID
-  clientId      String?         @map("client_id")
+  clientId       String?         @map("client_id")
 
-  user User? @relation(fields: [userSeq], references: [seq])
+  user User? @relation(fields: [userId], references: [id])
 
   @@index([email])
-  @@index([userSeq])
+  @@index([userId])
   @@index([createdAt])
   @@index([result])
   @@map("auth_audit_logs")

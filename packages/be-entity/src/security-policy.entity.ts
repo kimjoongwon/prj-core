@@ -1,5 +1,4 @@
-import type { SecurityPolicy as SecurityPolicyModel } from "@cocrepo/prisma";
-import type { DomainEntityModel } from "./domain-entity-model.type";
+import { AbstractEntity } from "./abstract.entity";
 
 /**
  * 보안 정책 엔티티
@@ -7,13 +6,13 @@ import type { DomainEntityModel } from "./domain-entity-model.type";
  * 시스템 전역 보안 정책을 나타냅니다. (싱글턴)
  * 비밀번호, 잠금, 세션 정책을 포함합니다.
  */
-export class SecurityPolicy implements DomainEntityModel<SecurityPolicyModel> {
+export class SecurityPolicy extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	securityPolicyId!: string;
+
 	// ============================================================================
 	// 기본 필드
 	// ============================================================================
-	id!: string;
-	createdAt!: Date;
-	updatedAt!: Date | null;
 	key!: string;
 
 	// ============================================================================

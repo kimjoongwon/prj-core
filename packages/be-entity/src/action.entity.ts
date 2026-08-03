@@ -1,4 +1,4 @@
-import type { Action as ActionEntity, Prisma } from "@cocrepo/prisma";
+import type { Prisma } from "@cocrepo/prisma";
 import type {
 	ActionConfig,
 	ActionFormatConfig,
@@ -7,7 +7,6 @@ import type {
 } from "@cocrepo/type";
 import type { Ability } from "./ability.entity";
 import { AbstractEntity } from "./abstract.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 
 // @cocrepo/type에서 타입 재export (하위 호환성)
 export type {
@@ -30,10 +29,10 @@ export type {
  * // 마스킹 Action
  * { name: 'read:masked:email', group: 'visibility', config: { type: 'masking', preset: 'PRESET_EMAIL' } }
  */
-export class Action
-	extends AbstractEntity
-	implements DomainEntityModel<ActionEntity>
-{
+export class Action extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	actionId!: string;
+
 	/** Action 이름 ('create', 'read', 'read:masked:email' 등) */
 	name!: string;
 	/** 표시명 */

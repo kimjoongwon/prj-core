@@ -88,8 +88,9 @@ test.describe("이메일 인증 관리 페이지", () => {
 	test("상태 필터 선택 시 URL에 status 파라미터가 추가되어야 한다", async ({
 		page,
 	}) => {
-		await page.getByLabel("상태").click();
-		await page.getByRole("option", { name: "대기" }).click();
+		await page
+			.getByRole("combobox", { name: "status" })
+			.selectOption("PENDING");
 
 		await expect(page).toHaveURL(/status=PENDING/);
 	});

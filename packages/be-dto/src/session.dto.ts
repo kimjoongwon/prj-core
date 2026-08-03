@@ -1,12 +1,12 @@
 import {
+	BigIntIdField,
 	ClassField,
 	DateFieldOptional,
 	EnumField,
 	EnumFieldOptional,
 	StringField,
 	StringFieldOptional,
-	ULIDField,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import type { DomainEntityModel } from "@cocrepo/entity";
 import {
 	RepeatCycleType as RepeatCycleTypeNames,
@@ -20,15 +20,19 @@ import {
 	RecurringDayOfWeek,
 	type Session,
 } from "@cocrepo/prisma";
-import { Transform } from "class-transformer";
+import { Exclude, Transform } from "class-transformer";
 import { AbstractDto } from "./abstract.dto";
 import { ProgramDto } from "./program.dto";
 import { TimelineDto } from "./timeline.dto";
 
 export class SessionDto
 	extends AbstractDto
-	implements DomainEntityModel<Session>
+	implements DomainEntityModel<Session, "sessionId">
 {
+	@Exclude()
+	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
+	private readonly sessionId?: never;
+
 	@EnumField(() => PrismaSessionTypesEnum)
 	@Transform(
 		({ value }) =>
@@ -58,8 +62,8 @@ export class SessionDto
 	@EnumFieldOptional(() => RecurringDayOfWeek, { nullable: true })
 	recurringDayOfWeek: RecurringDayOfWeek | null;
 
-	@ULIDField()
-	timelineId: string;
+	@BigIntIdField()
+	timelineId: bigint;
 
 	@StringField()
 	name: string;

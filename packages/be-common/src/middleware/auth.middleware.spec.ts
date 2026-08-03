@@ -51,7 +51,7 @@ describe("AuthMiddleware", () => {
 
 		it("유효한 사용자가 있으면 request.user를 설정해야 한다", () => {
 			// Given
-			const mockUser = { id: "user-1", email: "test@example.com" };
+			const mockUser = { id: 101n, email: "test@example.com" };
 			(passport.authenticate as jest.Mock).mockImplementation(
 				(
 					_strategy: string,

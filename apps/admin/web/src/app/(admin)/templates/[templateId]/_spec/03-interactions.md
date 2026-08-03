@@ -259,7 +259,7 @@
 **Path Parameters**:
 | 파라미터 | 타입 | 필수 | 설명 |
 |---------|------|:----:|------|
-| templateId | string (UUID) | O | 템플릿 ID |
+| templateId | string (decimal string) | O | 템플릿 ID |
 
 **Response** (200 OK):
 ```typescript
@@ -273,7 +273,7 @@
 **TemplateDto**:
 ```typescript
 interface TemplateDto {
-  id: string;                    // UUID
+  id: string;                    // decimal string
   code: string;                  // 고유 코드 (예: WELCOME_EMAIL)
   name: string;                  // 템플릿 이름
   type: "EMAIL" | "SMS" | "PUSH"; // 유형
@@ -290,7 +290,7 @@ interface TemplateDto {
 **TemplateVariableDto**:
 ```typescript
 interface TemplateVariableDto {
-  id: string;                    // UUID
+  id: string;                    // decimal string
   name: string;                  // 변수명 (예: userName)
   description: string | null;    // 한글 설명
   defaultValue: string | null;   // 기본값
@@ -320,7 +320,7 @@ interface TemplateVariableDto {
 **Path Parameters**:
 | 파라미터 | 타입 | 필수 | 설명 |
 |---------|------|:----:|------|
-| templateId | string (UUID) | O | 템플릿 ID |
+| templateId | string (decimal string) | O | 템플릿 ID |
 
 **동작**: removedAt 설정 (소프트 삭제), 관련 TemplateVariable도 cascade 삭제
 
@@ -348,7 +348,7 @@ interface TemplateVariableDto {
 **Path Parameters**:
 | 파라미터 | 타입 | 필수 | 설명 |
 |---------|------|:----:|------|
-| templateId | string (UUID) | O | 템플릿 ID |
+| templateId | string (decimal string) | O | 템플릿 ID |
 
 **동작**: isActive 값을 반전 (true -> false, false -> true)
 
@@ -383,7 +383,7 @@ interface TemplateVariableDto {
 **Path Parameters**:
 | 파라미터 | 타입 | 필수 | 설명 |
 |---------|------|:----:|------|
-| templateId | string (UUID) | O | 템플릿 ID |
+| templateId | string (decimal string) | O | 템플릿 ID |
 
 **Request Body**:
 ```typescript
@@ -428,7 +428,7 @@ interface PreviewTemplateDto {
 **Path Parameters**:
 | 파라미터 | 타입 | 필수 | 설명 |
 |---------|------|:----:|------|
-| templateId | string (UUID) | O | 템플릿 ID |
+| templateId | string (decimal string) | O | 템플릿 ID |
 
 **Request Body**:
 ```typescript

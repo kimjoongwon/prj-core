@@ -4,7 +4,7 @@ export class SendTestTemplateCommand implements SendTestTemplateCommandInput {
 	readonly variables!: SendTestTemplateCommandInput["variables"];
 
 	constructor(
-		readonly templateId: string,
+		readonly templateId: bigint,
 		input: SendTestTemplateCommandInput,
 	) {
 		Object.assign(this, input);

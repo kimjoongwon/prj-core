@@ -2,27 +2,28 @@
 // @description: Session과 Routine을 연결하고 운영 속성을 보관하는 운영 조인 모델
 /// @displayName 프로그램
 model Program {
-  id                   String            @unique @default(ulid()) @db.VarChar(26)
-  seq                  Int               @id @default(autoincrement())
+  programId            String            @unique @default(ulid()) @map("program_id") @db.Char(26)
+  id                   BigInt            @id @default(autoincrement())
   createdAt            DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt            DateTime?         @updatedAt @map("updated_at") @db.Timestamptz(6)
   removedAt            DateTime?         @map("removed_at") @db.Timestamptz(6)
-  routineSeq           Int               @map("routine_seq")
-  sessionSeq           Int               @map("session_seq")
-  instructorId         String            @map("instructor_id")
+  routineId            BigInt            @map("routine_id")
+  sessionId            BigInt            @map("session_id")
+  instructorId         BigInt            @map("instructor_id")
   capacity             Int
   name                 String
   level                String?
   routineNameSnapshot  String?           @map("routine_name_snapshot")
   routineLabelSnapshot String?           @map("routine_label_snapshot")
-  routine              Routine           @relation(fields: [routineSeq], references: [seq])
-  session              Session           @relation(fields: [sessionSeq], references: [seq])
+  routine              Routine           @relation(fields: [routineId], references: [id])
+  session              Session           @relation(fields: [sessionId], references: [id])
+  instructor           User              @relation("ProgramInstructor", fields: [instructorId], references: [id])
   programActivities    ProgramActivity[]
   reservations         Reservation[]
 
-  @@unique([sessionSeq, routineSeq])
-  @@index([sessionSeq])
-  @@index([routineSeq])
+  @@unique([sessionId, routineId])
+  @@index([sessionId])
+  @@index([routineId])
   @@index([instructorId])
   @@map("programs")
 }

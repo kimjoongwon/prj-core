@@ -188,7 +188,7 @@ export class InteractionLoginService {
 
 		return {
 			success: true,
-			userId: user.id,
+			userId: user.userId,
 			mustChangePassword: user.mustChangePassword,
 		};
 	}
@@ -198,7 +198,7 @@ export class InteractionLoginService {
 	 * 잠금 임계값은 SecurityPolicy DB에서 조회합니다.
 	 */
 	private async handleLoginFailure(
-		userId: string,
+		userId: bigint,
 		_email: string,
 		currentAttempts: number,
 		auditBase: {

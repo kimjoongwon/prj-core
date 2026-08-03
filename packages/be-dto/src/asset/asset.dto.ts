@@ -1,12 +1,12 @@
 import {
+	BigIntIdField,
+	BigIntIdFieldOptional,
 	ClassField,
 	EnumField,
 	NumberField,
 	StringField,
 	StringFieldOptional,
-	ULIDField,
-	ULIDFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import { AssetKind, AssetStatus, type Prisma } from "@cocrepo/prisma";
 import { AbstractDto } from "../abstract.dto";
 import { FolderDto } from "../folder/folder.dto";
@@ -15,11 +15,11 @@ import { FolderDto } from "../folder/folder.dto";
  * 에셋 DTO
  */
 export class AssetDto extends AbstractDto {
-	@ULIDField({ description: "소속 Space ID" })
-	spaceId!: string;
+	@BigIntIdField({ description: "소속 Space ID" })
+	spaceId!: bigint;
 
-	@ULIDField({ description: "소속 폴더 ID" })
-	folderId!: string;
+	@BigIntIdField({ description: "소속 폴더 ID" })
+	folderId!: bigint;
 
 	@EnumField(() => AssetKind, {
 		description: "에셋 종류 (IMAGE, VIDEO, DOCUMENT)",
@@ -58,8 +58,8 @@ export class AssetDto extends AbstractDto {
 	})
 	metadata!: Prisma.JsonValue | null;
 
-	@ULIDFieldOptional({ nullable: true, description: "생성자 ID" })
-	createdById!: string | null;
+	@BigIntIdFieldOptional({ nullable: true, description: "생성자 ID" })
+	createdById!: bigint | null;
 
 	@StringFieldOptional({
 		nullable: true,

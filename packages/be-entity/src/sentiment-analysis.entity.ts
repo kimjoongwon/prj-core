@@ -1,10 +1,5 @@
-import type {
-	Prisma,
-	SentimentAnalysis as SentimentAnalysisEntity,
-	SentimentType,
-} from "@cocrepo/prisma";
+import type { Prisma, SentimentType } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Inquiry } from "./inquiry.entity";
 import type { InquiryMessage } from "./inquiry-message.entity";
 
@@ -14,14 +9,14 @@ import type { InquiryMessage } from "./inquiry-message.entity";
  * AI 기반 감정 분석을 통해 고객의 감정 상태(긍정, 중립, 부정)와
  * 신뢰도를 추적합니다. 실시간 채팅에서 메시지별 감정 변화를 모니터링합니다.
  */
-export class SentimentAnalysis
-	extends AbstractEntity
-	implements DomainEntityModel<SentimentAnalysisEntity>
-{
+export class SentimentAnalysis extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	sentimentAnalysisId!: string;
+
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	inquiryId!: string;
+	inquiryId!: bigint;
 	sentiment!: SentimentType;
 	score!: number;
 	confidence!: number;
@@ -30,7 +25,7 @@ export class SentimentAnalysis
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	messageId!: string | null;
+	messageId!: bigint | null;
 	emotions!: Prisma.JsonValue | null;
 	keywords!: Prisma.JsonValue | null;
 	urgency!: number | null;

@@ -1,12 +1,10 @@
-import type { Company as CompanyEntity } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { FitnessCenter } from "./fitness-center.entity";
 
-export class Company
-	extends AbstractEntity
-	implements DomainEntityModel<CompanyEntity>
-{
+export class Company extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	companyId!: string;
+
 	name!: string;
 	label!: string | null;
 	address!: string;

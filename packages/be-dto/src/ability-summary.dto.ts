@@ -1,10 +1,10 @@
 import {
+	BigIntIdField,
 	BooleanField,
 	ClassField,
 	NumberField,
 	StringField,
-	ULIDField,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import { ActionDto } from "./action.dto";
 import { SubjectSummaryDto } from "./subject.dto";
 
@@ -12,17 +12,17 @@ import { SubjectSummaryDto } from "./subject.dto";
  * Ability 간략 DTO (목록 조회용)
  */
 export class AbilitySummaryDto {
-	@ULIDField()
-	id!: string;
+	@BigIntIdField()
+	id!: bigint;
 
 	@StringField()
 	name!: string;
 
-	@ULIDField()
-	actionId!: string;
+	@BigIntIdField()
+	actionId!: bigint;
 
-	@ULIDField()
-	subjectId!: string;
+	@BigIntIdField()
+	subjectId!: bigint;
 
 	@BooleanField()
 	inverted!: boolean;

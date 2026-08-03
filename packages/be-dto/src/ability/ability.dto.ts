@@ -1,13 +1,14 @@
 import {
+	BigIntIdField,
 	BooleanField,
 	ClassField,
 	NumberField,
 	StringField,
 	StringFieldOptional,
-	ULIDField,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import type { DomainEntityModel } from "@cocrepo/entity";
 import type { Ability, Prisma } from "@cocrepo/prisma";
+import { Exclude } from "class-transformer";
 import { AbstractDto } from "../abstract.dto";
 import { ActionDto } from "../action.dto";
 import { SubjectSummaryDto } from "../subject.dto";
@@ -19,11 +20,15 @@ import { SubjectSummaryDto } from "../subject.dto";
  */
 export class AbilityDto
 	extends AbstractDto
-	implements DomainEntityModel<Ability>
+	implements DomainEntityModel<Ability, "abilityId">
 {
+	@Exclude()
+	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
+	private readonly abilityId?: never;
+
 	// CASL 필수 필드
-	@ULIDField()
-	actionId!: string;
+	@BigIntIdField()
+	actionId!: bigint;
 
 	fields!: string[];
 
@@ -36,8 +41,8 @@ export class AbilityDto
 	reason!: string | null;
 
 	// 연결 대상
-	@ULIDField()
-	subjectId!: string;
+	@BigIntIdField()
+	subjectId!: bigint;
 
 	// 메타데이터
 	@StringField()

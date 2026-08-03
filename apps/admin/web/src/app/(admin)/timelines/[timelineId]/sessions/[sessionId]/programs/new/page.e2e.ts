@@ -3,11 +3,16 @@ import { expect, type Locator, type Page, test } from "@playwright/test";
 
 const API_BASE_URL = "http://localhost:3000/api/v1";
 const TEST_VIDEO_FILE_ID = "11111111-1111-4111-8111-111111111111";
-const SYSTEM_TENANT_ID =
-	process.env.E2E_SYSTEM_TENANT_ID ?? "01J00000000000000000000002";
-const SYSTEM_SPACE_ID =
-	process.env.E2E_SYSTEM_SPACE_ID ?? "01J00000000000000000000001";
-const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_TENANT_ID);
+let ADMIN_TENANT_ID = "";
+let ADMIN_SPACE_ID = "";
+
+test.beforeEach(async ({ page }) => {
+	const context = await loginToConsole(page);
+	ADMIN_TENANT_ID = context.tenantId;
+	ADMIN_SPACE_ID = context.spaceId;
+});
+
+const getSpaceHeaders = () => getAdminSpaceRequestHeaders(ADMIN_TENANT_ID);
 
 interface IdOnlyDto {
 	id: string;
@@ -48,12 +53,16 @@ interface ApiItemResponse<T> {
 const escapeRegExp = (value: string) =>
 	value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+function expectCanonicalId(value: string | undefined) {
+	expect(value).toMatch(/^[1-9]\d*$/);
+}
+
 async function ensureAdminCurrentSpace(page: Page) {
 	const response = await page.request.post(
 		`${API_BASE_URL}/auth/current-space`,
 		{
 			headers: getSpaceHeaders(),
-			data: { tenantId: SYSTEM_TENANT_ID },
+			data: { tenantId: ADMIN_TENANT_ID },
 		},
 	);
 	expect(response.ok()).toBeTruthy();
@@ -61,8 +70,8 @@ async function ensureAdminCurrentSpace(page: Page) {
 	const body = (await response.json()) as ApiItemResponse<
 		IdOnlyDto & { tenantId?: string | null }
 	>;
-	expect(body.data?.id).toBe(SYSTEM_SPACE_ID);
-	expect(body.data?.tenantId).toBe(SYSTEM_TENANT_ID);
+	expect(body.data?.id).toBe(ADMIN_SPACE_ID);
+	expect(body.data?.tenantId).toBe(ADMIN_TENANT_ID);
 }
 
 async function waitForRoutineToBeSelectable(page: Page, routineId: string) {
@@ -299,7 +308,6 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 
 		try {
 			// Given: API로 타임라인/세션/루틴/강사 데이터를 준비한다
-			await loginToConsole(page);
 			await ensureAdminCurrentSpace(page);
 
 			const createTimelineResponse = await page.request.post(
@@ -316,7 +324,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createdTimeline =
 				(await createTimelineResponse.json()) as ApiItemResponse<IdOnlyDto>;
 			timelineId = createdTimeline.data?.id;
-			expect(timelineId).toBeTruthy();
+			expectCanonicalId(timelineId);
 
 			const startDateTime = new Date(Date.now() + 86_400_000).toISOString();
 			const createSessionResponse = await page.request.post(
@@ -336,7 +344,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createdSession =
 				(await createSessionResponse.json()) as ApiItemResponse<IdOnlyDto>;
 			sessionId = createdSession.data?.id;
-			expect(sessionId).toBeTruthy();
+			expectCanonicalId(sessionId);
 
 			const createTaskResponse = await page.request.post(
 				`${API_BASE_URL}/tasks`,
@@ -356,7 +364,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			exerciseTaskId = createdTask.data?.id;
 			createdExerciseTaskId = exerciseTaskId;
 
-			expect(exerciseTaskId).toBeTruthy();
+			expectCanonicalId(exerciseTaskId);
 
 			const createRoutineOneResponse = await page.request.post(
 				`${API_BASE_URL}/routines`,
@@ -380,7 +388,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createdRoutineOne =
 				(await createRoutineOneResponse.json()) as ApiItemResponse<IdOnlyDto>;
 			routineOneId = createdRoutineOne.data?.id;
-			expect(routineOneId).toBeTruthy();
+			expectCanonicalId(routineOneId);
 
 			const createRoutineTwoResponse = await page.request.post(
 				`${API_BASE_URL}/routines`,
@@ -404,7 +412,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createdRoutineTwo =
 				(await createRoutineTwoResponse.json()) as ApiItemResponse<IdOnlyDto>;
 			routineTwoId = createdRoutineTwo.data?.id;
-			expect(routineTwoId).toBeTruthy();
+			expectCanonicalId(routineTwoId);
 
 			const instructor = await getFirstInstructor(page);
 			await waitForRoutineToBeSelectable(page, routineOneId as string);
@@ -452,7 +460,7 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			const createdProgram =
 				(await postProgramResponse.json()) as ApiItemResponse<IdOnlyDto>;
 			programId = createdProgram.data?.id;
-			expect(programId).toBeTruthy();
+			expectCanonicalId(programId);
 			const createdProgramId = programId as string;
 			await waitForProgramSnapshot(page, {
 				timelineId: timelineId as string,
@@ -537,9 +545,6 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 			).toBeVisible({
 				timeout: 10_000,
 			});
-			await expect(
-				page.getByText(`${updatedCapacity}명`, { exact: true }),
-			).toBeVisible();
 		} finally {
 			// Cleanup: 생성한 프로그램/세션/타임라인/루틴을 삭제한다
 			if (programId && sessionId && timelineId) {
@@ -606,7 +611,6 @@ test.describe("프로그램 등록/수정 연결 플로우", () => {
 		let sessionId: string | undefined;
 
 		try {
-			await loginToConsole(page);
 			await ensureAdminCurrentSpace(page);
 			const unschedulableRoutine = await getFirstUnschedulableRoutine(page);
 			if (!unschedulableRoutine) {

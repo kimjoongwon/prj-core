@@ -3,7 +3,7 @@ import { LanguageCode, Prisma, PrismaClient } from "@cocrepo/prisma";
 import { Injectable, Logger } from "@nestjs/common";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import type { PublicIdCreateInput } from "./public-id-input.type";
+import type { AutoIdentityCreateInput } from "./auto-identity-input.type";
 import { toDomainEntity } from "./to-domain-entity";
 
 @Injectable()
@@ -17,7 +17,7 @@ export class TasksRepository {
 	) {}
 
 	async findManyTasks(params: {
-		spaceIds?: string[];
+		spaceIds?: bigint[];
 		skip: number;
 		take: number;
 		search?: string;
@@ -68,16 +68,16 @@ export class TasksRepository {
 	}
 
 	async findTaskById(
-		taskId: string,
-		spaceIds?: string[],
+		taskId: bigint,
+		spaceIds?: bigint[],
 	): Promise<Task | null> {
-		this.logger.debug(`Task 단건 조회: ${taskId.slice(-8)}`);
+		this.logger.debug(`Task 단건 조회: ${taskId}`);
 
 		const result = await this.txHost.tx.task.findFirst({
 			where: {
 				id: taskId,
 				removedAt: null,
-				...(spaceIds ? { space: { id: { in: spaceIds } } } : {}),
+				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
 				exercise: {
 					is: {
 						removedAt: null,
@@ -95,8 +95,8 @@ export class TasksRepository {
 	}
 
 	async findTasksByIds(
-		taskIds: string[],
-		spaceIds?: string[],
+		taskIds: bigint[],
+		spaceIds?: bigint[],
 	): Promise<Task[]> {
 		if (taskIds.length === 0) {
 			return [];
@@ -108,7 +108,7 @@ export class TasksRepository {
 			where: {
 				id: { in: taskIds },
 				removedAt: null,
-				...(spaceIds ? { space: { id: { in: spaceIds } } } : {}),
+				...(spaceIds ? { spaceId: { in: spaceIds } } : {}),
 				exercise: {
 					is: {
 						removedAt: null,
@@ -125,8 +125,8 @@ export class TasksRepository {
 		return results.map((result) => toDomainEntity(Task, result));
 	}
 
-	async findTaskRoutines(taskId: string): Promise<Routine[]> {
-		this.logger.debug(`Task 연관 루틴 조회: ${taskId.slice(-8)}`);
+	async findTaskRoutines(taskId: bigint): Promise<Routine[]> {
+		this.logger.debug(`Task 연관 루틴 조회: ${taskId}`);
 
 		const results = await this.txHost.tx.routine.findMany({
 			where: {
@@ -134,7 +134,7 @@ export class TasksRepository {
 				activities: {
 					some: {
 						removedAt: null,
-						task: { id: taskId },
+						taskId,
 					},
 				},
 			},
@@ -145,21 +145,11 @@ export class TasksRepository {
 	}
 
 	async create(
-		data: PublicIdCreateInput<
-			Prisma.TaskUncheckedCreateInput,
-			"space",
-			"createdBy"
-		>,
+		data: AutoIdentityCreateInput<Prisma.TaskUncheckedCreateInput, "taskId">,
 	): Promise<Task> {
 		this.logger.debug("Task 생성");
-
-		const { spaceId, createdById, ...taskData } = data;
 		const result = await this.txHost.tx.task.create({
-			data: {
-				...taskData,
-				space: { connect: { id: spaceId } },
-				...(createdById ? { createdBy: { connect: { id: createdById } } } : {}),
-			},
+			data,
 			include: {
 				exercise: true,
 				space: { select: { id: true } },
@@ -171,15 +161,21 @@ export class TasksRepository {
 	}
 
 	async createExerciseByTaskId(
-		taskId: string,
-		data: Omit<Prisma.ExerciseUncheckedCreateInput, "seq" | "taskSeq">,
+		taskId: bigint,
+		data: Omit<
+			AutoIdentityCreateInput<
+				Prisma.ExerciseUncheckedCreateInput,
+				"exerciseId"
+			>,
+			"taskId"
+		>,
 	): Promise<Task> {
-		this.logger.debug(`Task에 Exercise 생성: ${taskId.slice(-8)}`);
+		this.logger.debug(`Task에 Exercise 생성: ${taskId.toString()}`);
 
 		await this.txHost.tx.exercise.create({
 			data: {
 				...data,
-				task: { connect: { id: taskId } },
+				taskId,
 			},
 		});
 
@@ -200,13 +196,13 @@ export class TasksRepository {
 	}
 
 	async updateExerciseByTaskId(
-		taskId: string,
+		taskId: bigint,
 		data: Prisma.ExerciseUncheckedUpdateInput,
 	): Promise<Task> {
-		this.logger.debug(`Task의 Exercise 수정: ${taskId.slice(-8)}`);
+		this.logger.debug(`Task의 Exercise 수정: ${taskId}`);
 
 		const exercise = await this.txHost.tx.exercise.findFirst({
-			where: { task: { id: taskId } },
+			where: { taskId },
 			select: { id: true },
 		});
 		if (!exercise) {
@@ -234,8 +230,8 @@ export class TasksRepository {
 		return toDomainEntity(Task, task);
 	}
 
-	async softDeleteTaskById(taskId: string): Promise<void> {
-		this.logger.debug(`Task 소프트 삭제: ${taskId.slice(-8)}`);
+	async softDeleteTaskById(taskId: bigint): Promise<void> {
+		this.logger.debug(`Task 소프트 삭제: ${taskId}`);
 
 		await this.txHost.tx.task.update({
 			where: { id: taskId },
@@ -243,11 +239,11 @@ export class TasksRepository {
 		});
 	}
 
-	async softDeleteExerciseByTaskId(taskId: string): Promise<void> {
-		this.logger.debug(`Exercise 소프트 삭제: ${taskId.slice(-8)}`);
+	async softDeleteExerciseByTaskId(taskId: bigint): Promise<void> {
+		this.logger.debug(`Exercise 소프트 삭제: ${taskId}`);
 
 		const exercise = await this.txHost.tx.exercise.findFirst({
-			where: { task: { id: taskId } },
+			where: { taskId },
 			select: { id: true },
 		});
 		if (!exercise) {
@@ -260,12 +256,12 @@ export class TasksRepository {
 		});
 	}
 
-	async countActivitiesUsingTask(taskId: string): Promise<number> {
-		this.logger.debug(`Task 사용 Activity 수 조회: ${taskId.slice(-8)}`);
+	async countActivitiesUsingTask(taskId: bigint): Promise<number> {
+		this.logger.debug(`Task 사용 Activity 수 조회: ${taskId}`);
 
 		return this.txHost.tx.activity.count({
 			where: {
-				task: { id: taskId },
+				taskId,
 				removedAt: null,
 				routine: {
 					removedAt: null,

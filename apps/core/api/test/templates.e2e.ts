@@ -133,7 +133,7 @@ describe("Templates API E2E 테스트", () => {
 			// Given
 			if (!jwtToken || !tenantId) return;
 
-			const nonExistentTemplateId = "00000000-0000-0000-0000-000000000099";
+			const nonExistentTemplateId = "9223372036854775807";
 
 			// When
 			const response = await request(app.getHttpServer())

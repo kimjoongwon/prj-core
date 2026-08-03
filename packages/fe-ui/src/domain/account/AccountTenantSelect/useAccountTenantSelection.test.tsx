@@ -17,20 +17,20 @@ const mocks = vi.hoisted(() => ({
 	account: {
 		availableSpaces: [
 			{
-				tenantId: "tenant-a",
-				spaceId: "space-a",
+				tenantId: "101",
+				spaceId: "201",
 				fitnessCenterName: "Fitness Center A",
 				contentLanguageCode: "ko_KR",
 			},
 			{
-				tenantId: "tenant-b",
-				spaceId: "space-b",
+				tenantId: "102",
+				spaceId: "202",
 				fitnessCenterName: "Fitness Center B",
 				contentLanguageCode: "en_US",
 			},
 		],
-		currentTenantId: "tenant-a" as string | null,
-		selectedTenantId: "tenant-a" as string | null,
+		currentTenantId: "101" as string | null,
+		selectedTenantId: "101" as string | null,
 		selectTenant: vi.fn(),
 		setCurrentTenant: vi.fn(),
 	},
@@ -55,8 +55,8 @@ describe("useAccountTenantSelection", () => {
 		mocks.mutate.mockReset();
 		mocks.account.selectTenant.mockReset();
 		mocks.account.setCurrentTenant.mockReset();
-		mocks.account.currentTenantId = "tenant-a";
-		mocks.account.selectedTenantId = "tenant-a";
+		mocks.account.currentTenantId = "101";
+		mocks.account.selectedTenantId = "101";
 		mocks.isPending = false;
 		mocks.mutationOptions = undefined;
 	});
@@ -65,20 +65,21 @@ describe("useAccountTenantSelection", () => {
 		const { result } = renderHook(() => useAccountTenantSelection());
 
 		expect(result.current.options).toEqual([
-			{ text: "Fitness Center A", value: "tenant-a" },
-			{ text: "Fitness Center B", value: "tenant-b" },
+			{ text: "Fitness Center A", value: "101" },
+			{ text: "Fitness Center B", value: "102" },
 		]);
 
-		act(() => result.current.selectTenant("tenant-b"));
+		act(() => result.current.selectTenant("102"));
 
-		expect(mocks.account.selectTenant).toHaveBeenCalledWith("tenant-b");
-		expect(mocks.mutate).toHaveBeenCalledWith({ tenantId: "tenant-b" });
+		expect(mocks.account.selectTenant).toHaveBeenCalledWith("102");
+		expect(mocks.mutate).toHaveBeenCalledWith({ tenantId: "102" });
 	});
 
 	it.each([
 		"",
-		"tenant-a",
-		"unknown-tenant",
+		"101",
+		"999",
+		"not-an-id",
 	])("Given 선택할 수 없는 tenantId %s가 있을 때, When Tenant 선택을 요청하면, Then 요청을 무시한다", (tenantId) => {
 		const { result } = renderHook(() => useAccountTenantSelection());
 
@@ -92,7 +93,7 @@ describe("useAccountTenantSelection", () => {
 		mocks.isPending = true;
 		const { result } = renderHook(() => useAccountTenantSelection());
 
-		act(() => result.current.selectTenant("tenant-b"));
+		act(() => result.current.selectTenant("102"));
 
 		expect(result.current.isPending).toBe(true);
 		expect(mocks.account.selectTenant).not.toHaveBeenCalled();
@@ -111,14 +112,14 @@ describe("useAccountTenantSelection", () => {
 				mocks.mutationOptions?.onSuccess?.(
 					{
 						data: {
-							id: "server-space-b",
+							id: "302",
 							fitnessCenter: {
 								name: "Server Fitness Center B",
 								company: { name: "Server Company B" },
 							},
 						},
 					},
-					{ tenantId: "tenant-b" },
+					{ tenantId: "102" },
 				),
 			);
 		} finally {
@@ -126,10 +127,10 @@ describe("useAccountTenantSelection", () => {
 		}
 
 		expect(mocks.account.setCurrentTenant).toHaveBeenCalledWith(
-			"tenant-b",
+			"102",
 			"Server Fitness Center B",
 			"en_US",
-			"server-space-b",
+			"302",
 		);
 	});
 
@@ -145,13 +146,13 @@ describe("useAccountTenantSelection", () => {
 				mocks.mutationOptions?.onSuccess?.(
 					{
 						data: {
-							id: "server-space-b",
+							id: "302",
 							fitnessCenter: {
 								company: { name: "Server Company B" },
 							},
 						},
 					},
-					{ tenantId: "tenant-b" },
+					{ tenantId: "102" },
 				),
 			);
 		} finally {
@@ -159,10 +160,10 @@ describe("useAccountTenantSelection", () => {
 		}
 
 		expect(mocks.account.setCurrentTenant).toHaveBeenCalledWith(
-			"tenant-b",
+			"102",
 			"Server Company B",
 			"en_US",
-			"server-space-b",
+			"302",
 		);
 	});
 
@@ -178,11 +179,11 @@ describe("useAccountTenantSelection", () => {
 				mocks.mutationOptions?.onSuccess?.(
 					{
 						data: {
-							id: "server-space-b",
+							id: "302",
 							fitnessCenter: {},
 						},
 					},
-					{ tenantId: "tenant-b" },
+					{ tenantId: "102" },
 				),
 			);
 		} finally {
@@ -190,21 +191,19 @@ describe("useAccountTenantSelection", () => {
 		}
 
 		expect(mocks.account.setCurrentTenant).toHaveBeenCalledWith(
-			"tenant-b",
+			"102",
 			"Fitness Center B",
 			"en_US",
-			"server-space-b",
+			"302",
 		);
 	});
 
 	it("Given 선택 정보를 찾을 수 없을 때, When mutation이 성공하면, Then 서버에서 확정된 currentTenantId로 되돌린다", () => {
 		renderHook(() => useAccountTenantSelection());
 
-		act(() =>
-			mocks.mutationOptions?.onSuccess?.({}, { tenantId: "unknown-tenant" }),
-		);
+		act(() => mocks.mutationOptions?.onSuccess?.({}, { tenantId: "999" }));
 
-		expect(mocks.account.selectTenant).toHaveBeenCalledWith("tenant-a");
+		expect(mocks.account.selectTenant).toHaveBeenCalledWith("101");
 		expect(mocks.account.setCurrentTenant).not.toHaveBeenCalled();
 	});
 
@@ -213,6 +212,6 @@ describe("useAccountTenantSelection", () => {
 
 		act(() => mocks.mutationOptions?.onError?.());
 
-		expect(mocks.account.selectTenant).toHaveBeenCalledWith("tenant-a");
+		expect(mocks.account.selectTenant).toHaveBeenCalledWith("101");
 	});
 });

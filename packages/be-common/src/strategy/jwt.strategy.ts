@@ -3,6 +3,10 @@ import { User } from "@cocrepo/entity";
 import { AuthCacheService, UserService } from "@cocrepo/service";
 import type { AuthConfig } from "@cocrepo/type";
 import {
+	parseBigIntJson,
+	stringifyBigIntJson,
+} from "@cocrepo/type/bigint-json";
+import {
 	Global,
 	Injectable,
 	Logger,
@@ -116,12 +120,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		const cached = await this.authCacheService.get(userId);
 		if (cached) {
 			this.logger.debug(`JWT 검증 - 캐시 히트: ${userId}`);
-			return plainToInstance(User, JSON.parse(cached));
+			return plainToInstance(User, parseBigIntJson(cached));
 		}
 
 		// 2. 캐시 미스 → DB 조회
 		this.logger.debug(`JWT 검증 - DB 조회: ${userId}`);
-		const user = await this.usersService.getByIdWithTenants(userId);
+		const user = await this.usersService.findByUserIdWithTenants(userId);
 
 		if (!user) {
 			this.logger.warn(`사용자를 찾을 수 없음: ${userId}`);
@@ -133,7 +137,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		const remainingSeconds = payload.exp - nowSeconds;
 		await this.authCacheService.set(
 			userId,
-			JSON.stringify(user),
+			stringifyBigIntJson(user),
 			remainingSeconds,
 		);
 

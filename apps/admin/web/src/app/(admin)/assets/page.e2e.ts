@@ -14,14 +14,18 @@ function onlyUnexpectedPageErrors(pageErrors: string[]) {
 	);
 }
 
-const SYSTEM_TENANT_ID = (
-	process.env.E2E_SYSTEM_TENANT_ID ?? "01J00000000000000000000002"
-).toLowerCase();
+let ADMIN_TENANT_ID = "";
+
+test.beforeEach(async ({ page }) => {
+	const context = await loginToConsole(page);
+	ADMIN_TENANT_ID = context.tenantId.toLowerCase();
+});
+
 const ADMIN_API_BASE_URL = new URL(
 	"/api/v1/",
 	process.env.E2E_CORE_API_BASE_URL ?? "http://localhost:3000/",
 ).toString();
-const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_TENANT_ID);
+const getSpaceHeaders = () => getAdminSpaceRequestHeaders(ADMIN_TENANT_ID);
 
 type FolderListResponse = {
 	data?: Array<{
@@ -46,7 +50,6 @@ test.describe("에셋 목록 페이지", () => {
 		test("한글 파일명의 실제 multipart 업로드가 201로 완료되고 목록에서 바로 조회되어야 한다", async ({
 			page,
 		}) => {
-			await loginToConsole(page);
 			const pageErrors = capturePageErrors(page);
 			const uploadFileName = `한글-업로드-${Date.now()}.png`;
 			let uploadedAssetId: string | null = null;

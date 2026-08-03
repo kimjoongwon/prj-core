@@ -1,17 +1,23 @@
-import { ClassField, ULIDField } from "@cocrepo/decorator";
+import { BigIntIdField, ClassField } from "@cocrepo/decorator/field";
 import type { DomainEntityModel } from "@cocrepo/entity";
 import type { SpaceAssociation } from "@cocrepo/prisma";
-import { AbstractDto, GroupDto } from ".";
+import { Exclude } from "class-transformer";
+import { AbstractDto } from "./abstract.dto";
+import { GroupDto } from "./group.dto";
 
 export class SpaceAssociationDto
 	extends AbstractDto
-	implements DomainEntityModel<SpaceAssociation>
+	implements DomainEntityModel<SpaceAssociation, "spaceAssociationId">
 {
-	@ULIDField()
-	spaceId: string;
+	@Exclude()
+	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
+	private readonly spaceAssociationId?: never;
 
-	@ULIDField()
-	groupId: string;
+	@BigIntIdField()
+	spaceId: bigint;
+
+	@BigIntIdField()
+	groupId: bigint;
 
 	@ClassField(() => GroupDto, { required: false, swagger: false })
 	group?: GroupDto;

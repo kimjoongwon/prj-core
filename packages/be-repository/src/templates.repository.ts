@@ -18,8 +18,8 @@ export class TemplatesRepository {
 	/**
 	 * ID로 조회 (variables 포함)
 	 */
-	async findById(id: string): Promise<Template | null> {
-		this.logger.debug(`ID로 조회: ${id.slice(-8)}`);
+	async findById(id: bigint): Promise<Template | null> {
+		this.logger.debug(`ID로 조회: ${id.toString()}`);
 
 		const result = await this.txHost.tx.template.findUnique({
 			where: { id },
@@ -34,10 +34,10 @@ export class TemplatesRepository {
 	/**
 	 * ID로 조회 (없으면 에러)
 	 */
-	async findByIdOrThrow(id: string): Promise<Template> {
+	async findByIdOrThrow(id: bigint): Promise<Template> {
 		const result = await this.findById(id);
 		if (!result) {
-			throw new Error(`Template not found: ${id}`);
+			throw new Error(`Template not found: ${id.toString()}`);
 		}
 		return result;
 	}
@@ -134,10 +134,10 @@ export class TemplatesRepository {
 	 * ID로 업데이트
 	 */
 	async updateById(
-		id: string,
+		id: bigint,
 		data: Prisma.TemplateUncheckedUpdateInput,
 	): Promise<Template> {
-		this.logger.debug(`업데이트 중: ${id.slice(-8)}`);
+		this.logger.debug(`업데이트 중: ${id.toString()}`);
 
 		const result = await this.txHost.tx.template.update({
 			where: { id },
@@ -151,7 +151,7 @@ export class TemplatesRepository {
 	 * Template 업데이트 + 변수 전체 교체 (기존 삭제 → 새로 생성)
 	 */
 	async updateWithVariables(
-		id: string,
+		id: bigint,
 		templateData: Prisma.TemplateUncheckedUpdateInput,
 		variables: Array<{
 			name: string;
@@ -160,11 +160,11 @@ export class TemplatesRepository {
 			isRequired?: boolean;
 		}>,
 	): Promise<Template> {
-		this.logger.debug(`변수 포함 업데이트 중: ${id.slice(-8)}`);
+		this.logger.debug(`변수 포함 업데이트 중: ${id.toString()}`);
 
 		// 기존 변수 전체 삭제
 		await this.txHost.tx.templateVariable.deleteMany({
-			where: { template: { id } },
+			where: { templateId: id },
 		});
 
 		// 템플릿 업데이트 + 새 변수 생성
@@ -187,8 +187,8 @@ export class TemplatesRepository {
 	/**
 	 * 소프트 삭제 (removedAt 설정 + isActive 비활성화)
 	 */
-	async removeById(id: string): Promise<Template> {
-		this.logger.debug(`소프트 삭제: ${id.slice(-8)}`);
+	async removeById(id: bigint): Promise<Template> {
+		this.logger.debug(`소프트 삭제: ${id.toString()}`);
 
 		const result = await this.txHost.tx.template.update({
 			where: { id },

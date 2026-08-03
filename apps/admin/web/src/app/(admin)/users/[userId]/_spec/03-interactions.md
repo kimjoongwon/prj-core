@@ -124,7 +124,7 @@
 | **설명** | 특정 사용자의 상세 정보를 조회합니다. Profile, Tenant, Role, Space 정보를 포함합니다. |
 | **인증** | Bearer Token |
 | **Headers** | `x-tenant-id` (필수) |
-| **Path Params** | `id` (ULID) - 사용자 ID |
+| **Path Params** | `id` (decimal string) - 사용자 ID |
 | **Response** | `UserDetailResponseDto` |
 | **에러** | 401 (미인증/Space 미선택), 404 (사용자 없음), 500 |
 
@@ -144,7 +144,7 @@
 | **설명** | 사용자를 소프트 삭제합니다. 자신의 계정은 삭제할 수 없습니다. |
 | **인증** | Bearer Token |
 | **Headers** | `X-Space-ID` (필수) |
-| **Path Params** | `id` (UUID) - 사용자 ID |
+| **Path Params** | `id` (decimal string) - 사용자 ID |
 | **Status Code** | 204 No Content |
 | **에러** | 400 (자기 계정 삭제 시도), 401, 404, 500 |
 

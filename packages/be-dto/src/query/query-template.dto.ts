@@ -2,7 +2,7 @@ import {
 	BooleanFieldOptional,
 	EnumFieldOptional,
 	StringFieldOptional,
-} from "@cocrepo/decorator";
+} from "@cocrepo/decorator/field";
 import { TemplateType } from "@cocrepo/prisma";
 
 import { QueryDto } from "./query.dto";

@@ -2,37 +2,37 @@
 // @description: Inquiry에 종속되는 참여자 상태 모델
 /// @displayName 문의 참여자
 model InquiryParticipant {
-  id          String                 @unique @default(ulid()) @db.VarChar(26)
-  seq         Int                    @id @default(autoincrement())
+  inquiryParticipantId String                 @unique @default(ulid()) @map("inquiry_participant_id") @db.Char(26)
+  id                   BigInt                 @id @default(autoincrement())
   /// @displayName 참여 일시
-  joinedAt    DateTime               @default(now()) @map("joined_at") @db.Timestamptz(6)
+  joinedAt             DateTime               @default(now()) @map("joined_at") @db.Timestamptz(6)
   /// @displayName 나간 일시
-  leftAt      DateTime?              @map("left_at") @db.Timestamptz(6)
+  leftAt               DateTime?              @map("left_at") @db.Timestamptz(6)
   /// @displayName 소속 문의 내부 순번
-  inquirySeq  Int                    @map("inquiry_seq")
+  inquiryId            BigInt                 @map("inquiry_id")
   /// @displayName 소속 스레드 내부 순번
-  threadSeq   Int?                   @map("thread_seq")
+  threadId             BigInt?                @map("thread_id")
   /// @displayName 참여자 내부 순번
-  userSeq     Int                    @map("user_seq")
+  userId               BigInt                 @map("user_id")
   /// @displayName 역할
-  role        InquiryParticipantRole @default(VIEWER)
+  role                 InquiryParticipantRole @default(VIEWER)
   /// @displayName 온라인 여부
-  isOnline    Boolean                @default(false) @map("is_online")
+  isOnline             Boolean                @default(false) @map("is_online")
   /// @displayName 타이핑 중 여부
-  isTyping    Boolean                @default(false) @map("is_typing")
+  isTyping             Boolean                @default(false) @map("is_typing")
   /// @displayName 마지막 접속 시간
-  lastSeenAt  DateTime?              @map("last_seen_at") @db.Timestamptz(6)
+  lastSeenAt           DateTime?              @map("last_seen_at") @db.Timestamptz(6)
   /// @displayName 마지막 읽은 시간
-  lastReadAt  DateTime?              @map("last_read_at") @db.Timestamptz(6)
+  lastReadAt           DateTime?              @map("last_read_at") @db.Timestamptz(6)
   /// @displayName 읽지 않은 메시지 수
-  unreadCount Int                    @default(0) @map("unread_count")
-  inquiry     Inquiry                @relation(fields: [inquirySeq], references: [seq], onDelete: Cascade)
-  thread      InquiryThread?         @relation(fields: [threadSeq], references: [seq], onDelete: Cascade)
-  user        User                   @relation(fields: [userSeq], references: [seq])
+  unreadCount          Int                    @default(0) @map("unread_count")
+  inquiry              Inquiry                @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  thread               InquiryThread?         @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  user                 User                   @relation(fields: [userId], references: [id])
 
-  @@unique([inquirySeq, threadSeq, userSeq])
-  @@index([inquirySeq])
-  @@index([threadSeq])
-  @@index([userSeq])
+  @@unique([inquiryId, threadId, userId])
+  @@index([inquiryId])
+  @@index([threadId])
+  @@index([userId])
   @@map("inquiry_participants")
 }

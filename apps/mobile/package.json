@@ -26,6 +26,7 @@
   "dependencies": {
     "@cocrepo/api": "workspace:*",
     "@cocrepo/mo-ui": "workspace:*",
+    "@cocrepo/type": "workspace:*",
     "@expo/metro-runtime": "~55.0.10",
     "@gorhom/bottom-sheet": "catalog:",
     "@lottiefiles/dotlottie-react": "^0.13.5",

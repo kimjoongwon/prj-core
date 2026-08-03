@@ -17,9 +17,9 @@ const ADMIN_PERSIST_KEY = "admin-persist";
 setup.setTimeout(120000);
 
 setup("Admin native 로그인", async ({ page }) => {
-	await loginToAdmin(page);
+	const selection = await loginToAdmin(page);
 	await prewarmAdminRoutes(page);
-	const adminPersist = await readAdminPersist(page);
+	const adminPersist = await readAdminPersist(page, selection);
 
 	if (!adminPersist) {
 		throw new Error("admin-persist localStorage를 읽지 못했습니다.");

@@ -15,7 +15,7 @@ export class UpdateSpaceFitnessCenterCommand
 	readonly imageFileId?: UpdateSpaceFitnessCenterCommandInput["imageFileId"];
 
 	constructor(
-		readonly spaceId: string,
+		readonly spaceId: bigint,
 		input: UpdateSpaceFitnessCenterCommandInput,
 	) {
 		Object.assign(this, input);

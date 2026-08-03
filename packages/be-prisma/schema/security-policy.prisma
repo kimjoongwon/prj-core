@@ -3,12 +3,12 @@
 // @description: 인증·세션 규칙을 제공하는 전역 보안 정책 카탈로그
 /// @displayName 보안 정책
 model SecurityPolicy {
-  id        String    @unique @default(ulid()) @db.VarChar(26)
-  seq       Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  securityPolicyId String    @unique @default(ulid()) @map("security_policy_id") @db.Char(26)
+  id               BigInt    @id @default(autoincrement())
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   /// @displayName 정책 키
-  key       String    @unique
+  key              String    @unique
 
   /// @displayName 최소 비밀번호 길이
   passwordMinLength        Int     @default(10) @map("password_min_length")

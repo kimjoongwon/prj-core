@@ -1,10 +1,5 @@
-import type {
-	AIAgentAction,
-	AIAgentLog as AIAgentLogEntity,
-	Prisma,
-} from "@cocrepo/prisma";
+import type { AIAgentAction, Prisma } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Inquiry } from "./inquiry.entity";
 import type { InquiryMessage } from "./inquiry-message.entity";
 
@@ -14,20 +9,20 @@ import type { InquiryMessage } from "./inquiry-message.entity";
  * AI 초안 생성, 자동 분류, 감정 분석, 자동 응답 등
  * AI 기능 사용 내역을 추적하여 AI 성능 모니터링 및 감사 로그를 제공합니다.
  */
-export class AIAgentLog
-	extends AbstractEntity
-	implements DomainEntityModel<AIAgentLogEntity>
-{
+export class AIAgentLog extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	aiAgentLogId!: string;
+
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	inquiryId!: string;
+	inquiryId!: bigint;
 	action!: AIAgentAction;
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	messageId!: string | null;
+	messageId!: bigint | null;
 	input!: Prisma.JsonValue | null;
 	output!: Prisma.JsonValue | null;
 	confidence!: number | null;

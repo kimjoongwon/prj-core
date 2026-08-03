@@ -1,4 +1,4 @@
-import { ParseUlidPipe } from "@cocrepo/be-common";
+import { ParseBigIntIdPipe } from "@cocrepo/be-common";
 import {
 	AssignInquiryCommand,
 	CreateInquiryCommand,
@@ -157,7 +157,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (ULID)",
+		description: "문의 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(
@@ -169,7 +169,7 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryCreateUpdateFormBootstrapDto, HttpStatus.OK)
 	@ResponseMessage("문의 수정 폼 bootstrap 조회 성공")
 	async getUpdateInquiryForm(
-		@Param("inquiryId", ParseUlidPipe) inquiryId: string,
+		@Param("inquiryId", ParseBigIntIdPipe) inquiryId: bigint,
 	): Promise<InquiryCreateUpdateFormBootstrapDto> {
 		return this.queryBus.execute(
 			new GetInquiryUpdateFormBootstrapQuery(inquiryId),
@@ -186,7 +186,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (ULID)",
+		description: "문의 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(
@@ -198,7 +198,7 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryDetailDto, HttpStatus.OK)
 	@ResponseMessage("문의 상세 조회 성공")
 	async getInquiryById(
-		@Param("inquiryId", ParseUlidPipe) inquiryId: string,
+		@Param("inquiryId", ParseBigIntIdPipe) inquiryId: bigint,
 	): Promise<Inquiry> {
 		return this.queryBus.execute(new GetInquiryByIdQuery(inquiryId));
 	}
@@ -247,7 +247,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (ULID)",
+		description: "문의 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiBody({
@@ -263,7 +263,7 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryDto, HttpStatus.OK)
 	@ResponseMessage("문의 수정 성공")
 	async updateInquiry(
-		@Param("inquiryId", ParseUlidPipe) inquiryId: string,
+		@Param("inquiryId", ParseBigIntIdPipe) inquiryId: bigint,
 		@Body() dto: UpdateInquiryDto,
 	): Promise<Inquiry> {
 		return this.commandBus.execute(new UpdateInquiryCommand(inquiryId, dto));
@@ -279,7 +279,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (ULID)",
+		description: "문의 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(
@@ -290,7 +290,7 @@ export class InquiriesController {
 	)
 	@ResponseMessage("문의 삭제 성공")
 	async deleteInquiry(
-		@Param("inquiryId", ParseUlidPipe) inquiryId: string,
+		@Param("inquiryId", ParseBigIntIdPipe) inquiryId: bigint,
 	): Promise<void> {
 		await this.commandBus.execute(new DeleteInquiryCommand(inquiryId));
 	}
@@ -305,7 +305,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (ULID)",
+		description: "문의 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiBody({
@@ -314,8 +314,7 @@ export class InquiriesController {
 			properties: {
 				assigneeId: {
 					type: "string",
-					format: "uuid",
-					description: "담당자 ID",
+					description: "담당자 ID (canonical decimal BIGINT string)",
 				},
 			},
 			required: ["assigneeId"],
@@ -331,11 +330,11 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryDto, HttpStatus.OK)
 	@ResponseMessage("담당자 배정 성공")
 	async assignInquiry(
-		@Param("inquiryId", ParseUlidPipe) inquiryId: string,
-		@Body() body: { assigneeId: string },
+		@Param("inquiryId", ParseBigIntIdPipe) inquiryId: bigint,
+		@Body("assigneeId", ParseBigIntIdPipe) assigneeId: bigint,
 	): Promise<Inquiry> {
 		return this.commandBus.execute(
-			new AssignInquiryCommand(inquiryId, body.assigneeId),
+			new AssignInquiryCommand(inquiryId, assigneeId),
 		);
 	}
 
@@ -349,7 +348,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (ULID)",
+		description: "문의 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiBody({
@@ -383,7 +382,7 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryDto, HttpStatus.OK)
 	@ResponseMessage("상태 변경 성공")
 	async updateInquiryStatus(
-		@Param("inquiryId", ParseUlidPipe) inquiryId: string,
+		@Param("inquiryId", ParseBigIntIdPipe) inquiryId: bigint,
 		@Body() body: { status: InquiryStatus },
 	): Promise<Inquiry> {
 		return this.commandBus.execute(
@@ -400,7 +399,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (ULID)",
+		description: "문의 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiBody({
@@ -425,7 +424,7 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryDto, HttpStatus.OK)
 	@ResponseMessage("우선순위 변경 성공")
 	async updateInquiryPriority(
-		@Param("inquiryId", ParseUlidPipe) inquiryId: string,
+		@Param("inquiryId", ParseBigIntIdPipe) inquiryId: bigint,
 		@Body() body: { priority: InquiryPriority },
 	): Promise<Inquiry> {
 		return this.commandBus.execute(
@@ -442,7 +441,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (ULID)",
+		description: "문의 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(
@@ -457,7 +456,7 @@ export class InquiriesController {
 	})
 	@ResponseMessage("메시지 목록 조회 성공")
 	async getMessages(
-		@Param("inquiryId", ParseUlidPipe) inquiryId: string,
+		@Param("inquiryId", ParseBigIntIdPipe) inquiryId: bigint,
 		@Query() query: { skip?: number; take?: number },
 	) {
 		return this.queryBus.execute(
@@ -477,7 +476,7 @@ export class InquiriesController {
 	@ApiAuth()
 	@ApiParam({
 		name: "inquiryId",
-		description: "문의 ID (ULID)",
+		description: "문의 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(
@@ -489,7 +488,7 @@ export class InquiriesController {
 	@ApiResponseEntity(InquiryParticipant, HttpStatus.OK, { isArray: true })
 	@ResponseMessage("참여자 목록 조회 성공")
 	async getParticipants(
-		@Param("inquiryId", ParseUlidPipe) inquiryId: string,
+		@Param("inquiryId", ParseBigIntIdPipe) inquiryId: bigint,
 	): Promise<InquiryParticipant[]> {
 		return this.queryBus.execute(new GetInquiryParticipantsQuery(inquiryId));
 	}

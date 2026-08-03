@@ -7,6 +7,6 @@ export class GetOidcClientByIdUseCase {
 	constructor(private readonly oidcClientService: OidcClientAggregate) {}
 
 	execute(query: GetOidcClientQuery): Promise<unknown> {
-		return this.oidcClientService.getById(query.oidcClientId);
+		return this.oidcClientService.getByOidcClientId(query.oidcClientId);
 	}
 }

@@ -1,6 +1,6 @@
 export type SpaceTenantLike = {
-	id: string;
-	spaceId: string;
+	id: bigint;
+	spaceId: bigint;
 	removedAt?: Date | string | null;
 	role?: {
 		name?: string | null;

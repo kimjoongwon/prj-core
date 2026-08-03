@@ -5,6 +5,7 @@ import type {
 	PlanningContext,
 	PlanningSpaceOption,
 } from "@cocrepo/type";
+import { requireDecimalId } from "@cocrepo/type";
 import { LogIn, LogOut, ShieldCheck, UserRound } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Chip } from "../../../data-display/Chip/Chip";
@@ -33,8 +34,8 @@ function getFallbackSpace(
 	}
 
 	return {
-		tenantId: context.tenantId ?? "storybook-tenant",
-		spaceId: context.spaceId ?? "storybook-space",
+		tenantId: context.tenantId ?? requireDecimalId("1", "tenantId"),
+		spaceId: context.spaceId ?? requireDecimalId("1", "spaceId"),
 		fitnessCenterName:
 			context.fitnessCenterName ??
 			context.spaceId ??

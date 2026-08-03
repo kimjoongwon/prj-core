@@ -1,4 +1,4 @@
-import { ParseUlidPipe } from "@cocrepo/be-common";
+import { ParseBigIntIdPipe } from "@cocrepo/be-common";
 import {
 	GetUserDetailForSpaceQuery,
 	GetUsersBySpaceQuery,
@@ -72,7 +72,7 @@ export class UsersController {
 	@ApiAuth()
 	@ApiParam({
 		name: "userId",
-		description: "사용자 ID (ULID)",
+		description: "사용자 ID (canonical decimal BIGINT string)",
 		type: String,
 	})
 	@ApiErrors(
@@ -83,7 +83,7 @@ export class UsersController {
 	)
 	@ApiResponseEntity(UserDetailResponseDto, HttpStatus.OK)
 	@ResponseMessage("회원 상세 조회 성공")
-	async getUserById(@Param("userId", ParseUlidPipe) userId: string) {
+	async getUserById(@Param("userId", ParseBigIntIdPipe) userId: bigint) {
 		const spaceId = this.spaceContext.spaceId;
 		if (!spaceId) {
 			throw new UnauthorizedException(USER_ERRORS.SPACE_NOT_SELECTED);
@@ -102,8 +102,16 @@ export class UsersController {
 			"현재 Space에서 사용자에게 속한 Tenant와 Role 정책 할당 및 권한 항목을 조회합니다.",
 	})
 	@ApiAuth()
-	@ApiParam({ name: "userId", description: "사용자 ID (ULID)", type: String })
-	@ApiParam({ name: "tenantId", description: "Tenant ID (ULID)", type: String })
+	@ApiParam({
+		name: "userId",
+		description: "사용자 ID (canonical decimal BIGINT string)",
+		type: String,
+	})
+	@ApiParam({
+		name: "tenantId",
+		description: "Tenant ID (canonical decimal BIGINT string)",
+		type: String,
+	})
 	@ApiErrors(
 		{ status: 401, message: USER_ERRORS.SPACE_NOT_SELECTED },
 		{ status: 404, message: USER_ERRORS.USER_NOT_FOUND },
@@ -112,8 +120,8 @@ export class UsersController {
 	@ApiResponseEntity(UserTenantDetailResponseDto, HttpStatus.OK)
 	@ResponseMessage("사용자 테넌트 상세 조회 성공")
 	async getUserTenantDetail(
-		@Param("userId", ParseUlidPipe) userId: string,
-		@Param("tenantId", ParseUlidPipe) tenantId: string,
+		@Param("userId", ParseBigIntIdPipe) userId: bigint,
+		@Param("tenantId", ParseBigIntIdPipe) tenantId: bigint,
 	) {
 		const spaceId = this.spaceContext.spaceId;
 		if (!spaceId) {

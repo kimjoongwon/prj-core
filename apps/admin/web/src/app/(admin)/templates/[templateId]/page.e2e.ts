@@ -1,13 +1,18 @@
-import { getAdminSpaceRequestHeaders } from "@cocrepo/e2e";
+import { getAdminSpaceRequestHeaders, loginToConsole } from "@cocrepo/e2e";
 import { expect, test } from "@playwright/test";
 
 function buildUniqueTemplateCode() {
 	return `E2E_TOGGLE_TEMPLATE_${Date.now()}`;
 }
 
-const SYSTEM_TENANT_ID =
-	process.env.E2E_SYSTEM_TENANT_ID ?? "01J00000000000000000000002";
-const getSpaceHeaders = () => getAdminSpaceRequestHeaders(SYSTEM_TENANT_ID);
+let ADMIN_TENANT_ID = "";
+
+test.beforeEach(async ({ page }) => {
+	const context = await loginToConsole(page);
+	ADMIN_TENANT_ID = context.tenantId;
+});
+
+const getSpaceHeaders = () => getAdminSpaceRequestHeaders(ADMIN_TENANT_ID);
 
 test.describe("메시지 템플릿 상세 페이지", () => {
 	// ── E2E-001: 활성 상태 토글 ──
@@ -35,13 +40,14 @@ test.describe("메시지 템플릿 상세 페이지", () => {
 			const created = await createResp.json();
 			const templateId = created.data?.id;
 			expect(templateId).toBeTruthy();
+			expect(templateId).toMatch(/^[1-9]\d*$/);
 
 			// Given: 상세 페이지 진입
 			await page.goto(`./templates/${templateId}`);
 			await page.waitForLoadState("networkidle");
 
 			// Then: 현재 활성 상태 (기본값 true) 확인
-			const toggle = page.getByRole("switch", { name: /활성|비활성/ });
+			const toggle = page.getByRole("button", { name: "활성", exact: true });
 			await expect(toggle).toBeVisible();
 
 			// When: 토글 클릭 (PATCH 응답 대기)

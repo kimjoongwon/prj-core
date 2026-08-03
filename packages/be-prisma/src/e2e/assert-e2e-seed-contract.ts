@@ -1,12 +1,12 @@
 import type { PrismaClient } from "../generated/client/client";
-import { SYSTEM_SPACE_ID } from "../reference-data/constants";
+import { SYSTEM_SPACE_ULID } from "../reference-data/constants";
 
 export async function assertE2eSeedContract(
 	prisma: PrismaClient,
 ): Promise<void> {
 	const [systemSpace, adminUser, adminClient, roles] = await Promise.all([
 		prisma.space.findUnique({
-			where: { id: SYSTEM_SPACE_ID },
+			where: { spaceId: SYSTEM_SPACE_ULID },
 		}),
 		prisma.user.findFirst({
 			where: { email: "admin@plate.com" },
@@ -32,7 +32,7 @@ export async function assertE2eSeedContract(
 	const missingContracts: string[] = [];
 
 	if (!systemSpace) {
-		missingContracts.push(`system space (${SYSTEM_SPACE_ID})`);
+		missingContracts.push(`system space (${SYSTEM_SPACE_ULID})`);
 	}
 
 	if (!adminUser) {

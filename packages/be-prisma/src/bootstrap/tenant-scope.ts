@@ -2,6 +2,8 @@ import type { PrismaClient } from "../generated/client/client";
 
 type TenantScopeDbClient = PrismaClient;
 
+type DbId = bigint;
+
 /**
  * bootstrap 리소스 생성에 사용할 Tenant ID를 Space에서 해석합니다.
  *
@@ -10,9 +12,9 @@ type TenantScopeDbClient = PrismaClient;
  */
 export async function requireTenantIdForSpace(
 	db: TenantScopeDbClient,
-	spaceId: string,
-	preferredUserId?: string | null,
-): Promise<string> {
+	spaceId: DbId,
+	preferredUserId?: DbId | null,
+): Promise<DbId> {
 	const tenant = await db.tenant.findFirst({
 		where: {
 			space: { id: spaceId },

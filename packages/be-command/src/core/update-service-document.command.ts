@@ -11,7 +11,7 @@ export class UpdateServiceDocumentCommand
 	readonly effectiveAt?: UpdateServiceDocumentCommandInput["effectiveAt"];
 
 	constructor(
-		readonly serviceDocumentId: string,
+		readonly serviceDocumentId: bigint,
 		input: UpdateServiceDocumentCommandInput,
 	) {
 		Object.assign(this, input);

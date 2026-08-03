@@ -3,8 +3,8 @@ import type { UserWithTenantsLike } from "./user-with-tenants-like";
 
 export function getDefaultSpaceId(
 	user: UserWithTenantsLike | undefined,
-	allowedSpaceIds: Set<string>,
-): string | undefined {
+	allowedSpaceIds: Set<bigint>,
+): bigint | undefined {
 	if (!user?.tenants?.length) {
 		return undefined;
 	}

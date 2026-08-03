@@ -1,24 +1,22 @@
 import type {
 	RecurringDayOfWeek,
 	RepeatCycleTypes,
-	Session as SessionEntity,
 	SessionTypes,
 } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import type { DomainEntityModel } from "./domain-entity-model.type";
 import type { Program } from "./program.entity";
 import type { Timeline } from "./timeline.entity";
 
-export class Session
-	extends AbstractEntity
-	implements DomainEntityModel<SessionEntity>
-{
+export class Session extends AbstractEntity {
+	/** 공개 식별자 ULID */
+	sessionId!: string;
+
 	type!: SessionTypes;
 	repeatCycleType!: RepeatCycleTypes | null;
 	startDateTime!: Date | null;
 	endDateTime!: Date | null;
 	recurringDayOfWeek!: RecurringDayOfWeek | null;
-	timelineId!: string;
+	timelineId!: bigint;
 	name!: string;
 	description!: string | null;
 

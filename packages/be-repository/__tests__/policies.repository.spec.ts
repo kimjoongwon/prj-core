@@ -29,10 +29,10 @@ describe("PoliciesRepository", () => {
 	it("삭제되지 않은 Policy를 이름 오름차순으로 반환해야 한다", async () => {
 		policy.findMany.mockResolvedValue([
 			{
-				id: "policy-1",
-				spaceId: "space-10",
+				id: 1n,
+				spaceId: 10n,
 				name: "Alpha",
-				createdById: "user-20",
+				createdById: 20n,
 				createdAt: new Date(),
 				updatedAt: new Date(),
 				removedAt: null,
@@ -42,11 +42,11 @@ describe("PoliciesRepository", () => {
 			},
 		]);
 
-		const result = await repository.findManyBySpaceId("space-10");
+		const result = await repository.findManyBySpaceId(10n);
 
 		expect(policy.findMany).toHaveBeenCalledWith({
 			where: {
-				spaceId: "space-10",
+				spaceId: 10n,
 				removedAt: null,
 			},
 			include: {

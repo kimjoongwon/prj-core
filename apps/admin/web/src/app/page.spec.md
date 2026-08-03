@@ -47,3 +47,19 @@
 
 - child page는 `App`이나 전역 Modal host를 다시 만들지 않습니다.
 - Modal content는 `app.modal.open({ title, state, content })`로 요청합니다.
+
+## 식별자 계약 리팩터링
+
+- 디자인 정렬: `no UI design impact`. shell, navigation, modal 구조는 그대로 유지합니다.
+- 공통 데이터 계약: route segment와 navigation target의 `*Id`는 DB `BIGINT id`의 양수 십진 문자열이며 `number`로 변환하지 않습니다.
+- 모델별 ULID는 일반 page props와 UI API 응답에서 제외하고 integration 계약만 소유합니다.
+
+| 단계 id | 담당 `agent_type` | 예상 산출물 | 생성/수정 예정 경로 | 소비 단계 | 검증 기준 |
+|---|---|---|---|---|---|
+| ID-CODEGEN | `common-type-builder` | string ID API client | `packages/fe-api/src/**` | ID-WEB | generated ID type `string` |
+| ID-WEB | `fe-route-agent` | navigation/query ID 전환 | `apps/admin/web/src/app/**` | none-final | dynamic route E2E 통과 |
+
+| 검증 항목 | 명령 | 검증 `agent_type` | 통과 기준 |
+|---|---|---|---|
+| 숫자 변환 금지 | `rg 'Number\(.*Id|parseInt\(.*Id' apps/admin/web packages/fe-*` | `fe-route-agent` | BIGINT ID 변환 0건 |
+| legacy seq 금지 | `rg '\b(seq|[A-Za-z]+Seq)\b|_seq' packages apps` | 각 변경 owner | 식별자 계약 잔존 0건 |
