@@ -146,7 +146,7 @@ const AdminRolesRoleDetailRoute = observer(() => {
 					>
 						목록으로
 					</Button>
-					{role && !role.isSystem ? (
+					{role ? (
 						<>
 							<Button
 								variant="flat"
@@ -211,7 +211,7 @@ const AdminRolesRoleDetailRoute = observer(() => {
 								color="primary"
 								variant="flat"
 								startContent={<ShieldCheck className="h-4 w-4" />}
-								isDisabled={!role || role.isSystem}
+								isDisabled={!role}
 								onPress={startPolicyEdit}
 							>
 								정책 편집
@@ -237,7 +237,6 @@ function mapRoleFormState(role: RoleDto): RoleFormState {
 		name: role.name,
 		displayName: role.displayName || "",
 		description: role.description || "",
-		isSystem: role.isSystem,
 		errors: {},
 	};
 }
@@ -247,7 +246,6 @@ function mapPolicy(policy: PolicyResponseDto): AssignablePolicy {
 		name: policy.name,
 		displayName: policy.displayName,
 		description: policy.description,
-		isSystem: policy.isSystem,
 		abilityCount: policy.entries?.length ?? 0,
 	};
 }

@@ -49,7 +49,6 @@ describe("AccountService", () => {
 					role: {
 						name: "MEMBER",
 						displayName: "회원",
-						isSystem: false,
 					},
 					space: {
 						fitnessCenter: {
@@ -73,7 +72,6 @@ describe("AccountService", () => {
 					roleId: "role-1",
 					roleName: "MEMBER",
 					roleDisplayName: "회원",
-					isSystemRole: false,
 				},
 			],
 			spaces: [

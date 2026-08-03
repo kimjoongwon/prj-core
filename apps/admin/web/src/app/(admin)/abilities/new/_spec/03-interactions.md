@@ -103,7 +103,7 @@
 | **설명** | 모든 Action 목록을 조회합니다. group 쿼리 파라미터로 그룹별 필터링 가능. |
 | **인증** | 불필요 (`@Public()`) |
 | **Query Params** | `group` (string, optional) - crud / visibility / workflow |
-| **Response** | `ActionDto[]` (목록 조회 시 config, description, order, isSystem 제외) |
+| **Response** | `ActionDto[]` (목록 조회 시 config, description, order 제외) |
 | **에러** | 500 |
 
 ---

@@ -83,7 +83,6 @@
       "name": "PLATFORM_ADMIN",
       "displayName": "플랫폼 관리자",
       "description": "시스템의 모든 기능에 접근 가능합니다",
-      "isSystem": true,
       "classification": {
         "id": "uuid",
         "roleId": "uuid",

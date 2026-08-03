@@ -13,7 +13,6 @@ import { Eye, Pencil, Trash2 } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
 import type { MouseEvent } from "react";
-import { Chip } from "../../../data-display/Chip/Chip";
 import { Button } from "../../../input/Button/Button";
 import {
 	ActionButtonCell,
@@ -125,17 +124,8 @@ type SpaceTableRow = {
   fitnessCenter?: SpaceFitnessCenterRow | null;
 };
 
-function renderRoleName(value?: string | null, isSystem = false) {
-	return (
-		<div className="flex items-center gap-2">
-			<NameCell value={value} variant="identifier" />
-			{isSystem ? (
-				<Chip size="sm" color="warning" variant="flat">
-					시스템
-				</Chip>
-			) : null}
-		</div>
-	);
+function renderRoleName(value?: string | null) {
+	return <NameCell value={value} variant="identifier" />;
 }
 
 const INQUIRY_STATUS_CONFIG = {
@@ -234,21 +224,6 @@ export const actionOrderColumn = createPresetColumn<ActionDto>("order", {
 	align: "center",
 });
 
-/** 시스템 액션 여부를 한글 BooleanCell로 보여주는 컬럼입니다. */
-export const actionIsSystemColumn = createPresetColumn<ActionDto>("isSystem", {
-	size: 100,
-	align: "center",
-	cell: ({ getValue }) => (
-		<BooleanCell
-			value={getValue() as boolean}
-			trueLabel="시스템"
-			falseLabel="사용자"
-			trueColor="warning"
-			falseColor="default"
-		/>
-	),
-});
-
 export const actionCreatedAtColumn = createCreatedAtColumn<ActionDto>({
 	size: 150,
 });
@@ -265,7 +240,6 @@ export function buildActionTableColumns<
 		name: string;
 		displayName?: string | null;
 		group?: string | null;
-		isSystem: boolean;
 		createdAt: string | Date | null;
 		removedAt?: string | null;
 	},
@@ -293,19 +267,6 @@ export function buildActionTableColumns<
 					/>
 				);
 			},
-		}),
-		createPresetColumn<TRow>("isSystem", {
-			size: 100,
-			align: "center",
-			cell: ({ getValue }) => (
-				<BooleanCell
-					value={getValue() as boolean}
-					trueLabel="시스템"
-					falseLabel="사용자"
-					trueColor="warning"
-					falseColor="default"
-				/>
-			),
 		}),
 		createCreatedAtColumn<TRow>({
 			size: 150,
@@ -563,7 +524,7 @@ export const adminRoleNameColumn = createNameColumn<RoleDto>({
 	size: 180,
 	isRequired: true,
 	nameVariant: "identifier",
-	cell: ({ row }) => renderRoleName(row.original.name, row.original.isSystem),
+	cell: ({ row }) => renderRoleName(row.original.name),
 });
 
 export const adminRoleDisplayNameColumn = createDisplayNameColumn<RoleDto>();
@@ -594,7 +555,6 @@ export function buildAdminRoleTableColumns<
 		name: string;
 		displayName?: string | null;
 		description?: string | null;
-		isSystem: boolean;
 		createdAt: string | Date | null;
 		removedAt?: string | null;
 	},
@@ -607,8 +567,7 @@ export function buildAdminRoleTableColumns<
 				size: 180,
 				isRequired: true,
 				nameVariant: "identifier",
-				cell: ({ row }) =>
-					renderRoleName(row.original.name, row.original.isSystem),
+				cell: ({ row }) => renderRoleName(row.original.name),
 			}),
 			createDisplayNameColumn<TRow>(),
 			createDescriptionColumn<TRow>(),

@@ -21,7 +21,6 @@ export class Policy
 	name!: string;
 	displayName!: string | null;
 	description!: string | null;
-	isSystem!: boolean;
 
 	space?: Space;
 	createdBy?: User | null;

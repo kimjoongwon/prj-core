@@ -9,7 +9,6 @@ const policies = [
 		name: "USER_OPERATOR_POLICY",
 		displayName: "사용자 운영 정책",
 		description: "사용자 조회와 프로필 수정 Ability를 묶은 정책입니다.",
-		isSystem: true,
 		abilityCount: 2,
 	},
 	{
@@ -17,7 +16,6 @@ const policies = [
 		name: "AUDIT_READER_POLICY",
 		displayName: "감사 로그 조회 정책",
 		description: "감사 로그 조회 Ability를 묶은 정책입니다.",
-		isSystem: false,
 		abilityCount: 1,
 	},
 ];
@@ -26,7 +24,6 @@ const defaultState = {
 	name: "OPERATIONS_ADMIN",
 	displayName: "운영 관리자",
 	description: "문의/사용자/감사 화면 운영을 담당하는 관리자 역할입니다.",
-	isSystem: false,
 	errors: {},
 };
 

@@ -27,5 +27,4 @@ export interface SubjectDto {
   icon?: string;
   group?: string;
   order: number;
-  isSystem: boolean;
 }

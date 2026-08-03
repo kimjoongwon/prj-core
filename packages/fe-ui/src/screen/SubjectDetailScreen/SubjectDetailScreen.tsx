@@ -21,7 +21,6 @@ export interface SubjectDetailScreenSubject {
 	icon?: string | null;
 	group?: string | null;
 	order: number;
-	isSystem: boolean;
 	createdAt: string | Date | null;
 	updatedAt?: string | Date | null;
 }
@@ -109,12 +108,6 @@ function SubjectInfoSection({
 						<div>
 							<div className="mb-1 text-sm text-muted">정렬 순서</div>
 							<div className="font-medium">{subject.order}</div>
-						</div>
-						<div>
-							<div className="mb-1 text-sm text-muted">시스템</div>
-							<div>
-								<BooleanCell value={subject.isSystem} />
-							</div>
 						</div>
 						<div>
 							<div className="mb-1 text-sm text-muted">생성일</div>

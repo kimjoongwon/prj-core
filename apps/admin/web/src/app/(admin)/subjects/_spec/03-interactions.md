@@ -21,7 +21,6 @@
 |----|------|--------|------|------|
 | ROL-L5-ACT-084 | 검색어 입력 | 검색창 입력 | name, displayName 기준 필터링 | - |
 | ROL-L5-ACT-085 | 그룹 필터 선택 | 그룹 Select 변경 (entity/menu/feature/ui) | 그룹별 필터링 → GET /api/v1/subjects?group=xxx | - |
-| ROL-L5-ACT-086 | 시스템 여부 필터 | 시스템 여부 Select 변경 | 시스템/커스텀 Subject 필터링 (클라이언트 사이드) | - |
 | ROL-L5-ACT-087 | Subject 행 클릭 | DataGrid 행 클릭 | Subject 상세 화면으로 이동 | - |
 | ROL-L5-ACT-088 | 컬럼 정렬 클릭 | DataGrid 헤더 클릭 | name, displayName, order 기준 정렬 | - |
 

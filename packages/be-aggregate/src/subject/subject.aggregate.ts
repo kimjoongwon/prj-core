@@ -163,7 +163,6 @@ export class SubjectAggregate {
 			icon: subject.icon,
 			group: subject.group,
 			order: subject.order,
-			isSystem: subject.isSystem,
 			fields: this.getFieldsForSubject(subject.name),
 		};
 	}

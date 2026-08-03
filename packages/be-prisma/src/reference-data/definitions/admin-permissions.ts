@@ -9,7 +9,6 @@ interface AdminDerivedSubjectSeedData {
 	displayName: string;
 	group: "menu" | "page";
 	order: number;
-	isSystem: boolean;
 }
 
 interface AdminDerivedAbilitySeedData {
@@ -135,13 +134,12 @@ const adminMenuSubjectDisplayMap = buildAdminMenuSubjectDisplayMap();
 
 export const adminMenuSubjectSeedData: AdminDerivedSubjectSeedData[] =
 	Array.from(adminMenuSubjectDisplayMap.entries()).map(
-		([name, displayName], index) => ({
-			name,
-			displayName,
-			group: "menu",
-			order: 100 + index,
-			isSystem: true,
-		}),
+	([name, displayName], index) => ({
+		name,
+		displayName,
+		group: "menu",
+		order: 100 + index,
+	}),
 	);
 
 export const adminPageSubjectSeedData: AdminDerivedSubjectSeedData[] =
@@ -150,7 +148,6 @@ export const adminPageSubjectSeedData: AdminDerivedSubjectSeedData[] =
 		displayName: item.pageLabel,
 		group: "page",
 		order: 1000 + index,
-		isSystem: true,
 	}));
 
 const currentAdminMenuSubjectNameSet = new Set(

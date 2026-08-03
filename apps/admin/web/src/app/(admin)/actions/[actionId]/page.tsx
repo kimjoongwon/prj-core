@@ -68,7 +68,7 @@ export default observer(function ActionDetailRoute() {
 					>
 						목록으로
 					</Button>
-					{action && !action.isSystem ? (
+					{action ? (
 						<>
 							<Button
 								variant="flat"

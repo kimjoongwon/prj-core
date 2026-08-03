@@ -12,7 +12,6 @@ interface MutableSubject {
 	seq: number;
 	name: string;
 	displayName: string;
-	isSystem: boolean;
 	removedAt: Date | null;
 }
 
@@ -42,7 +41,6 @@ function createMigrationDb() {
 			seq: 1,
 			name: "entity:Ground",
 			displayName: "시설",
-			isSystem: true,
 			removedAt: null,
 		},
 	];
@@ -282,7 +280,6 @@ describe("fitness center terminology reference-data migration", () => {
 			seq: 2,
 			name: "entity:FitnessCenter",
 			displayName: "피트니스센터",
-			isSystem: true,
 			removedAt: null,
 		});
 

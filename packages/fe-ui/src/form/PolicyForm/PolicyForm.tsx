@@ -2,7 +2,6 @@
 
 import { observer } from "mobx-react-lite";
 import { Checkbox } from "../../input/Checkbox/Checkbox";
-import { Switch } from "../../input/Switch";
 import { TextArea } from "../../input/TextArea";
 import { TextField } from "../../input/TextField";
 
@@ -10,7 +9,6 @@ export type PolicyFormField =
 	| "name"
 	| "displayName"
 	| "description"
-	| "isSystem"
 	| "abilityIds";
 
 export interface PolicyEntryOption {
@@ -23,7 +21,6 @@ export interface PolicyFormState {
 	name: string;
 	displayName: string;
 	description: string;
-	isSystem: boolean;
 	abilityIds: string[];
 }
 
@@ -82,9 +79,6 @@ export const PolicyForm = observer(
 							isDisabled={readOnly}
 							minRows={2}
 						/>
-						<Switch state={state} path="isSystem" isDisabled={readOnly}>
-							시스템 정책
-						</Switch>
 					</div>
 				</section>
 				<section>

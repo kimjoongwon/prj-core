@@ -1,6 +1,10 @@
 import { SYSTEM_ROLES } from "@cocrepo/constant";
 import type { Role } from "@cocrepo/entity";
 import { RolesRepository } from "@cocrepo/repository";
+import {
+	BadRequestException,
+	NotFoundException,
+} from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
 import { RoleAggregate } from "../src/role/role.aggregate";
@@ -119,6 +123,101 @@ describe("RoleAggregate", () => {
 
 			// Then
 			expect(result).toEqual([]);
+		});
+	});
+
+	describe("create", () => {
+		it("역할을 생성해야 한다", async () => {
+			// Given
+			const input = {
+				name: "CUSTOM_ROLE",
+				displayName: "커스텀 역할",
+				description: "사용자 정의 역할",
+			};
+			mockRepository.findByName.mockResolvedValue(null);
+			mockRepository.create.mockResolvedValue({
+				id: "role-created-id",
+				name: input.name,
+				displayName: input.displayName,
+				description: input.description,
+			} as unknown as Role);
+
+			// When
+			await service.create(input as never);
+
+			// Then
+			expect(mockRepository.create).toHaveBeenCalledWith({
+				name: input.name,
+				displayName: input.displayName,
+				description: input.description,
+			});
+		});
+	});
+
+	describe("update", () => {
+		it("역할을 업데이트해야 한다", async () => {
+			// Given
+			const roleId = "role-test-id";
+			const role = { ...mockRole };
+			const input = {
+				displayName: "수정된 역할",
+				description: "수정된 설명",
+			};
+			mockRepository.findById.mockResolvedValue(role as unknown as Role);
+			mockRepository.updateById.mockResolvedValue({
+				...role,
+				...input,
+			} as unknown as Role);
+
+			// When
+			await service.update(roleId, input as never);
+
+			// Then
+			expect(mockRepository.updateById).toHaveBeenCalledWith(roleId, input);
+		});
+
+		it("존재하지 않는 역할이면 예외를 던져야 한다", async () => {
+			// Given
+			mockRepository.findById.mockResolvedValue(null);
+
+			// When / Then
+			await expect(
+				service.update(
+					"non-existent",
+					{ displayName: "없음", description: "없음" } as never,
+				),
+			).rejects.toBeInstanceOf(NotFoundException);
+		});
+	});
+
+	describe("delete", () => {
+		it("역할을 삭제해야 한다", async () => {
+			// Given
+			const roleId = "role-test-id";
+			const role = { ...mockRole };
+			mockRepository.findById.mockResolvedValue(role as unknown as Role);
+			mockRepository.countTenantsByRoleId.mockResolvedValue(0);
+			mockRepository.deleteById.mockResolvedValue(role as unknown as Role);
+
+			// When
+			await service.delete(roleId);
+
+			// Then
+			expect(mockRepository.countTenantsByRoleId).toHaveBeenCalledWith(roleId);
+			expect(mockRepository.deleteById).toHaveBeenCalledWith(roleId);
+		});
+
+		it("연결된 사용자가 있으면 삭제를 막아야 한다", async () => {
+			// Given
+			const roleId = "role-test-id";
+			mockRepository.findById.mockResolvedValue(mockRole as unknown as Role);
+			mockRepository.countTenantsByRoleId.mockResolvedValue(2);
+
+			// When / Then
+			await expect(service.delete(roleId)).rejects.toBeInstanceOf(
+				BadRequestException,
+			);
+			expect(mockRepository.deleteById).not.toHaveBeenCalled();
 		});
 	});
 });

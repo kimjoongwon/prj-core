@@ -340,8 +340,7 @@ claims: {
       "spaceId": "space-uuid",
       "roleId": "role-uuid",
       "roleName": "SUPER_ADMIN",
-      "roleDisplayName": "슈퍼 관리자",
-      "isSystemRole": true
+      "roleDisplayName": "슈퍼 관리자"
     }
   ],
   "spaces": [

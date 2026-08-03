@@ -600,7 +600,7 @@ export const prefetchGetActionByIdInfiniteQuery = async <TData = Awaited<ReturnT
 
 
 /**
- * Action 정보를 수정합니다. 관리자 전용 API이며, 시스템 Action은 수정할 수 없습니다.
+ * Action 정보를 수정합니다. 관리자 전용 API입니다.
  * @summary Action 수정
  */
 export const updateAction = (
@@ -665,7 +665,7 @@ export const useUpdateAction = <TError = ErrorType<void>,
       return useMutation(mutationOptions, queryClient);
     }
     /**
- * Action을 삭제합니다 (소프트 삭제). 관리자 전용 API이며, 시스템 Action은 삭제할 수 없습니다.
+ * Action을 삭제합니다 (소프트 삭제). 관리자 전용 API입니다.
  * @summary Action 삭제
  */
 export const deleteAction = (

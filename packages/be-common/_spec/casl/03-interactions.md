@@ -11,7 +11,7 @@
 5. 저장하면 `syncRoleAssignments`가 전체 목록을 동기화합니다.
 6. 성공 후 Role Assignment와 User Tenant 상세 query를 무효화합니다.
 
-시스템 Role은 기본 정보 수정과 삭제가 제한됩니다. Assignment 편집 가능 여부도 서버의 Role 정책을 최종 기준으로 판단합니다.
+Assignment 편집 가능 여부는 서버의 인가 정책과 공간 범위를 최종 기준으로 판단합니다.
 
 ## Policy Entry 편집
 

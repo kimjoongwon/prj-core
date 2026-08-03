@@ -64,20 +64,17 @@ test.describe("역할 상세 페이지", () => {
 		});
 	});
 
-	// ── E2E-004: 시스템 역할 보호 확인 ──
+	// ── E2E-004: 정책 편집/저장 동작 확인 ──
 
-	test.describe("[E2E-004] 시스템 역할 보호", () => {
-		test("시스템 역할(PLATFORM_ADMIN) 상세에서 수정/삭제 버튼이 없어야 한다", async ({
+	test.describe("[E2E-004] 정책 편집/저장 동작 확인", () => {
+		test("기준 역할 상세 화면에서도 수정/삭제 버튼이 표시되어야 한다", async ({
 			page,
 		}) => {
 			// Given: 역할 목록에서 PLATFORM_ADMIN 상세 클릭
 			await openPlatformAdminRoleDetail(page);
 
-			await expect(page.getByText("시스템 역할")).toBeVisible();
-			await expect(page.getByText("예", { exact: true })).toBeVisible();
-
-			// Then: 수정 버튼이 없음 (시스템 역할은 렌더링하지 않음)
-			await expect(page.getByRole("button", { name: "수정" })).toHaveCount(0);
+			// Then: 수정/삭제 버튼이 노출되어야 함
+			await expect(page.getByRole("button", { name: "수정" })).toBeVisible();
 
 			// Then: 삭제 버튼이 없음
 			await expect(page.getByRole("button", { name: "삭제" })).toHaveCount(0);

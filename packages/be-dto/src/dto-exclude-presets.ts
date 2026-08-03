@@ -17,13 +17,12 @@ export const ActionExcludePresets = {
 
 	/**
 	 * 요약 정보용 - 목록보다 더 적은 필드
-	 * 제외: config, description, order, isSystem, createdAt, updatedAt, removedAt
+	 * 제외: config, description, order, createdAt, updatedAt, removedAt
 	 */
 	SUMMARY: [
 		"config",
 		"description",
 		"order",
-		"isSystem",
 		"createdAt",
 		"updatedAt",
 		"removedAt",

@@ -14,7 +14,6 @@ import {
 import {
 	BadRequestException,
 	ConflictException,
-	ForbiddenException,
 	Injectable,
 	Logger,
 	NotFoundException,
@@ -73,7 +72,6 @@ export class PolicyAggregate {
 			name: dto.name,
 			displayName: dto.displayName ?? null,
 			description: dto.description ?? null,
-			isSystem: dto.isSystem ?? false,
 		});
 	}
 
@@ -103,16 +101,12 @@ export class PolicyAggregate {
 			...(dto.description !== undefined && {
 				description: dto.description,
 			}),
-			...(dto.isSystem !== undefined && { isSystem: dto.isSystem }),
 		});
 	}
 
 	@Transactional()
 	async deletePolicy(policyId: string): Promise<Policy> {
-		const policy = await this.getPolicyById(policyId);
-		if (policy.isSystem) {
-			throw new ForbiddenException("시스템 정책은 삭제할 수 없습니다");
-		}
+		await this.getPolicyById(policyId);
 
 		await this.roleAssignmentsRepository.removeByPolicyId(policyId);
 

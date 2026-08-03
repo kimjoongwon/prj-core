@@ -21,5 +21,4 @@ export interface UpdateActionDto {
   description?: string;
   group?: string;
   order?: number;
-  isSystem?: boolean;
 }

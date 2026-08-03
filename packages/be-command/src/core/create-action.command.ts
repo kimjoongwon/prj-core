@@ -5,7 +5,6 @@ export class CreateActionCommand implements CreateActionCommandInput {
 	readonly description!: CreateActionCommandInput["description"];
 	readonly group!: CreateActionCommandInput["group"];
 	readonly order!: CreateActionCommandInput["order"];
-	readonly isSystem!: CreateActionCommandInput["isSystem"];
 	readonly config!: CreateActionCommandInput["config"];
 
 	constructor(input: CreateActionCommandInput) {

@@ -19,8 +19,6 @@ model Action {
   group       String?
   /// @displayName 정렬 순서
   order       Int     @default(0)
-  /// @displayName 시스템 여부
-  isSystem    Boolean @default(true) @map("is_system")
 
   /// @displayName 설정
   config Json?

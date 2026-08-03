@@ -13,7 +13,6 @@ const AdminRolesNewRoute = observer(() => {
 		name: "",
 		displayName: "",
 		description: "",
-		isSystem: false,
 		errors: {
 			name: "",
 			displayName: "",

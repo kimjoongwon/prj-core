@@ -4,7 +4,6 @@ export interface TenantWithRelations {
 	role?: {
 		name: string;
 		displayName: string | null;
-		isSystem: boolean;
 	};
 	space?: {
 		fitnessCenter?: {

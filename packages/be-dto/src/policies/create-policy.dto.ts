@@ -1,5 +1,4 @@
 import {
-	BooleanFieldOptional,
 	StringField,
 	StringFieldOptional,
 } from "@cocrepo/decorator";
@@ -13,7 +12,4 @@ export class CreatePolicyDto {
 
 	@StringFieldOptional()
 	description?: string | null;
-
-	@BooleanFieldOptional()
-	isSystem?: boolean;
 }

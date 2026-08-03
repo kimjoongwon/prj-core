@@ -41,8 +41,6 @@ export interface RoleDto {
    * @maxLength 200
    */
   description?: string;
-  /** 시스템 역할 여부 */
-  isSystem: boolean;
   /** @nullable */
   classification: RoleDtoClassification;
   /** @nullable */

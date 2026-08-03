@@ -8,7 +8,6 @@ import { RolesRepository } from "@cocrepo/repository";
 import {
 	BadRequestException,
 	ConflictException,
-	ForbiddenException,
 	Injectable,
 	Logger,
 	NotFoundException,
@@ -46,7 +45,6 @@ export class RoleAggregate {
 	/**
 	 * 역할 생성
 	 * - 이름 중복 불가
-	 * - isSystem은 자동으로 false로 설정
 	 */
 	async create(dto: CreateRoleCommandInput): Promise<Role> {
 		this.logger.debug(`역할 생성 시도: name=${dto.name}`);
@@ -61,13 +59,11 @@ export class RoleAggregate {
 			name: dto.name,
 			displayName: dto.displayName,
 			description: dto.description,
-			isSystem: false, // 사용자 생성 역할은 항상 비시스템
 		});
 	}
 
 	/**
 	 * 역할 수정
-	 * - 시스템 역할 수정 불가
 	 * - name은 수정 불가 (UpdateRoleDto에서 제외됨)
 	 */
 	async update(id: string, dto: UpdateRoleCommandInput): Promise<Role> {
@@ -78,10 +74,6 @@ export class RoleAggregate {
 			throw new NotFoundException("역할을 찾을 수 없습니다");
 		}
 
-		if (role.isSystem) {
-			throw new ForbiddenException("시스템 역할은 수정할 수 없습니다");
-		}
-
 		return this.repository.updateById(id, {
 			displayName: dto.displayName,
 			description: dto.description,
@@ -90,7 +82,6 @@ export class RoleAggregate {
 
 	/**
 	 * 역할 삭제
-	 * - 시스템 역할 삭제 불가
 	 * - 연결된 테넌트가 있으면 삭제 불가
 	 */
 	async delete(id: string): Promise<Role> {
@@ -99,10 +90,6 @@ export class RoleAggregate {
 		const role = await this.repository.findById(id);
 		if (!role) {
 			throw new NotFoundException("역할을 찾을 수 없습니다");
-		}
-
-		if (role.isSystem) {
-			throw new ForbiddenException("시스템 역할은 삭제할 수 없습니다");
 		}
 
 		// 연결된 테넌트 수 확인

@@ -21,5 +21,4 @@ export interface CreateActionDto {
   description?: string;
   group?: string;
   order: number;
-  isSystem: boolean;
 }

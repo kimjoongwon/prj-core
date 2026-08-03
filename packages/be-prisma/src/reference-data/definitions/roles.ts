@@ -43,7 +43,6 @@ export interface RoleSeedData {
 	name: string;
 	displayName: string;
 	description: string;
-	isSystem: boolean;
 }
 
 // Role의 실제 식별자는 `name`이며, displayName/description은 운영 중 보정 가능한 표현값입니다.
@@ -53,20 +52,17 @@ export const roleSeedData: RoleSeedData[] = [
 		displayName: "플랫폼 관리자",
 		description:
 			"플랫폼 전체를 운영하고 모든 Space와 시스템 리소스에 접근하는 역할",
-		isSystem: true,
 	},
 	{
 		name: "COMPANY_MANAGER",
 		displayName: "Company 관리자",
 		description:
 			"특정 Company의 지점, 회원, 예약, 콘텐츠 등 운영 리소스를 관리하는 역할",
-		isSystem: true,
 	},
 	{
 		name: "MEMBER",
 		displayName: "회원",
 		description: "자신의 정보와 예약을 관리하고 시설/콘텐츠를 조회하는 역할",
-		isSystem: true,
 	},
 ];
 

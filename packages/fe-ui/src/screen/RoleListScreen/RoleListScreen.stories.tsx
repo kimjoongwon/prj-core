@@ -11,7 +11,6 @@ const defaultArgs = {
 			description: "스토리북에서 확인할 description 예시입니다.",
 			displayName: "샘플 display name 1",
 			id: "item-1",
-			isSystem: false,
 			removedAt: "2026-04-14T09:00:00.000Z",
 		},
 		{
@@ -19,7 +18,6 @@ const defaultArgs = {
 			description: "스토리북에서 확인할 description 예시입니다.",
 			displayName: "샘플 display name 1",
 			id: "item-1",
-			isSystem: false,
 			removedAt: "2026-04-14T09:00:00.000Z",
 		},
 	],

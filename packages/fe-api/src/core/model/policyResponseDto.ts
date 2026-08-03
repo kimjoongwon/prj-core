@@ -45,8 +45,6 @@ export interface PolicyResponseDto {
    * @nullable
    */
   description?: string | null;
-  /** 시스템 정책 여부 */
-  isSystem: boolean;
   /** 생성 일시 */
   createdAt: string;
   /**

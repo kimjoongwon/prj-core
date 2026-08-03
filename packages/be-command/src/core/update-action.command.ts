@@ -5,7 +5,6 @@ export class UpdateActionCommand implements UpdateActionCommandInput {
 	readonly description?: UpdateActionCommandInput["description"];
 	readonly group?: UpdateActionCommandInput["group"];
 	readonly order?: UpdateActionCommandInput["order"];
-	readonly isSystem?: UpdateActionCommandInput["isSystem"];
 	readonly config?: UpdateActionCommandInput["config"];
 
 	constructor(

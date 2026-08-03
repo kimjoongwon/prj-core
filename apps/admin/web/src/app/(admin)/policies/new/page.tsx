@@ -21,7 +21,6 @@ export default observer(function PolicyCreateRoute() {
 		name: "",
 		displayName: "",
 		description: "",
-		isSystem: false,
 		abilityIds: [] as string[],
 	}));
 	const { data: abilitiesResponse } = useGetAbilities();
@@ -79,7 +78,6 @@ export default observer(function PolicyCreateRoute() {
 				name: state.name.trim(),
 				displayName: state.displayName.trim() || undefined,
 				description: state.description.trim() || undefined,
-				isSystem: state.isSystem,
 			},
 		});
 	};

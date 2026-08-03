@@ -21,7 +21,6 @@ export interface AccountRoleClaim {
 	roleId: string;
 	roleName?: string;
 	roleDisplayName?: string | null;
-	isSystemRole?: boolean;
 }
 
 export interface AccountSpaceClaim {

@@ -15,8 +15,6 @@ model Role {
   displayName String? @map("display_name")
   /// @displayName 설명
   description String?
-  /// @displayName 시스템 역할 여부
-  isSystem    Boolean @default(false) @map("is_system")
 
   associations                  RoleAssociation[]
   classification                RoleClassification?

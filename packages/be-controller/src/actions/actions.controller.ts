@@ -121,8 +121,7 @@ export class ActionsController {
 	@ApiOperation({
 		operationId: "updateAction",
 		summary: "Action 수정",
-		description:
-			"Action 정보를 수정합니다. 관리자 전용 API이며, 시스템 Action은 수정할 수 없습니다.",
+		description: "Action 정보를 수정합니다. 관리자 전용 API입니다.",
 	})
 	@ApiAuth()
 	@ApiParam({
@@ -157,8 +156,7 @@ export class ActionsController {
 	@ApiOperation({
 		operationId: "deleteAction",
 		summary: "Action 삭제",
-		description:
-			"Action을 삭제합니다 (소프트 삭제). 관리자 전용 API이며, 시스템 Action은 삭제할 수 없습니다.",
+		description: "Action을 삭제합니다 (소프트 삭제). 관리자 전용 API입니다.",
 	})
 	@ApiAuth()
 	@ApiParam({

@@ -1,5 +1,4 @@
 import {
-	BooleanField,
 	NumberField,
 	StringField,
 	StringFieldOptional,
@@ -13,7 +12,7 @@ import { AbstractDto } from "./abstract.dto";
  * CASL Action 정의 - 행위의 완전한 정의 (마스킹 설정 포함)
  *
  * 사용 예시:
- * - 목록 조회: exclude: ['config', 'description', 'order', 'isSystem']
+ * - 목록 조회: exclude: ['config', 'description', 'order']
  * - 상세 조회: exclude 없음 (전체 필드 반환)
  */
 export class ActionDto
@@ -34,9 +33,6 @@ export class ActionDto
 
 	@NumberField()
 	order!: number;
-
-	@BooleanField()
-	isSystem!: boolean;
 
 	// JSON 필드는 타입만 정의 (별도 데코레이터 없음)
 	config!: Prisma.JsonValue | null;

@@ -26,7 +26,6 @@ export interface ActionSeedData {
 	description?: string; // 설명
 	group: "crud" | "visibility" | "bulk" | "workflow"; // 그룹
 	order?: number; // UI 정렬 순서
-	isSystem?: boolean; // 시스템 기본 Action 여부
 	config?: ActionConfigSeedData | null; // 마스킹, 포맷팅 등 설정
 }
 
@@ -42,7 +41,6 @@ export const actionSeedData: ActionSeedData[] = [
 		description: "새로운 리소스를 생성합니다",
 		group: "crud",
 		order: 0,
-		isSystem: true,
 		config: null,
 	},
 	{
@@ -51,7 +49,6 @@ export const actionSeedData: ActionSeedData[] = [
 		description: "리소스를 조회합니다",
 		group: "crud",
 		order: 1,
-		isSystem: true,
 		config: null,
 	},
 	{
@@ -60,7 +57,6 @@ export const actionSeedData: ActionSeedData[] = [
 		description: "리소스를 수정합니다",
 		group: "crud",
 		order: 2,
-		isSystem: true,
 		config: null,
 	},
 	{
@@ -69,7 +65,6 @@ export const actionSeedData: ActionSeedData[] = [
 		description: "리소스를 삭제합니다",
 		group: "crud",
 		order: 3,
-		isSystem: true,
 		config: null,
 	},
 	{
@@ -78,7 +73,6 @@ export const actionSeedData: ActionSeedData[] = [
 		description: "모든 권한을 가집니다",
 		group: "crud",
 		order: 4,
-		isSystem: true,
 		config: null,
 	},
 
@@ -89,7 +83,6 @@ export const actionSeedData: ActionSeedData[] = [
 		description: "마스킹 없이 전체 데이터를 조회합니다",
 		group: "visibility",
 		order: 10,
-		isSystem: true,
 		config: null,
 	},
 	{
@@ -98,7 +91,6 @@ export const actionSeedData: ActionSeedData[] = [
 		description: "데이터를 숨깁니다",
 		group: "visibility",
 		order: 11,
-		isSystem: true,
 		config: null,
 	},
 	{
@@ -107,7 +99,6 @@ export const actionSeedData: ActionSeedData[] = [
 		description: "이메일을 마스킹하여 조회합니다 (예: u***@domain.com)",
 		group: "visibility",
 		order: 12,
-		isSystem: true,
 		config: { type: "masking", preset: "PRESET_EMAIL" },
 	},
 	{
@@ -116,7 +107,6 @@ export const actionSeedData: ActionSeedData[] = [
 		description: "전화번호를 마스킹하여 조회합니다 (예: 010-****-5678)",
 		group: "visibility",
 		order: 13,
-		isSystem: true,
 		config: { type: "masking", preset: "PRESET_PHONE" },
 	},
 	{
@@ -125,7 +115,6 @@ export const actionSeedData: ActionSeedData[] = [
 		description: "이름을 마스킹하여 조회합니다 (예: 홍*동)",
 		group: "visibility",
 		order: 14,
-		isSystem: true,
 		config: { type: "masking", preset: "PRESET_NAME" },
 	},
 	{
@@ -134,7 +123,6 @@ export const actionSeedData: ActionSeedData[] = [
 		description: "주민번호를 마스킹하여 조회합니다 (예: 920315-*******)",
 		group: "visibility",
 		order: 15,
-		isSystem: true,
 		config: { type: "masking", preset: "PRESET_SSN" },
 	},
 	{
@@ -143,7 +131,6 @@ export const actionSeedData: ActionSeedData[] = [
 		description: "카드번호를 마스킹하여 조회합니다 (예: 1234-****-****-3456)",
 		group: "visibility",
 		order: 16,
-		isSystem: true,
 		config: { type: "masking", preset: "PRESET_CARD" },
 	},
 	{
@@ -152,7 +139,6 @@ export const actionSeedData: ActionSeedData[] = [
 		description: "계좌번호를 마스킹하여 조회합니다",
 		group: "visibility",
 		order: 17,
-		isSystem: true,
 		config: { type: "masking", preset: "PRESET_ACCOUNT" },
 	},
 
@@ -163,7 +149,6 @@ export const actionSeedData: ActionSeedData[] = [
 		description: "데이터를 내보냅니다",
 		group: "bulk",
 		order: 20,
-		isSystem: true,
 		config: null,
 	},
 	{
@@ -172,7 +157,6 @@ export const actionSeedData: ActionSeedData[] = [
 		description: "데이터를 가져옵니다",
 		group: "bulk",
 		order: 21,
-		isSystem: true,
 		config: null,
 	},
 
@@ -183,7 +167,6 @@ export const actionSeedData: ActionSeedData[] = [
 		description: "리소스에 접근합니다",
 		group: "workflow",
 		order: 30,
-		isSystem: true,
 		config: null,
 	},
 	{
@@ -192,7 +175,6 @@ export const actionSeedData: ActionSeedData[] = [
 		description: "리소스를 승인합니다",
 		group: "workflow",
 		order: 31,
-		isSystem: true,
 		config: null,
 	},
 	{
@@ -201,7 +183,6 @@ export const actionSeedData: ActionSeedData[] = [
 		description: "리소스를 반려합니다",
 		group: "workflow",
 		order: 32,
-		isSystem: true,
 		config: null,
 	},
 ];
@@ -218,7 +199,6 @@ export interface SubjectSeedData {
 	displayName: string; // 한글 표시명
 	group: "all" | "entity" | "menu" | "page" | "feature" | "ui"; // 그룹핑
 	order?: number; // UI 정렬 순서
-	isSystem?: boolean; // 시스템 생성 여부 (DMMF 기반 = true)
 }
 
 /**

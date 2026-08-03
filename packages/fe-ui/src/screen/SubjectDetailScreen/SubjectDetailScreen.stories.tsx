@@ -10,7 +10,6 @@ const defaultArgs = {
 		displayName: "샘플 display name 1",
 		group: "샘플 group 1",
 		icon: "icon-1",
-		isSystem: false,
 		order: 1,
 		updatedAt: "2026-04-14T09:00:00.000Z",
 	},

@@ -24,7 +24,6 @@ const defaultState = {
 	name: "USER_MANAGER_POLICY",
 	displayName: "사용자 관리자 정책",
 	description: "사용자 관리 화면을 사용할 수 있는 정책입니다.",
-	isSystem: false,
 	abilityIds: ["ability-user-read", "ability-user-write"],
 };
 

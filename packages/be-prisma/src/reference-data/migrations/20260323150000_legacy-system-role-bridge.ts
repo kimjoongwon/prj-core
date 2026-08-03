@@ -42,7 +42,6 @@ export const legacySystemRoleBridgeMigration: ReferenceDataMigration = {
 					displayName: bridge.displayName,
 					description:
 						"Temporary role key used only by older reference-data migrations.",
-					isSystem: true,
 				},
 			});
 		}

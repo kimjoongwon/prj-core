@@ -6,6 +6,5 @@ export interface UpdateActionCommandInput {
 	description?: string;
 	group?: string;
 	order?: number;
-	isSystem?: boolean;
 	config?: JsonValue | null;
 }

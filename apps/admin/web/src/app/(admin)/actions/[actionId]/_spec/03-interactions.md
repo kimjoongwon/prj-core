@@ -19,8 +19,8 @@
 
 | ID | 액션 | 트리거 | 결과 | 조건 |
 |----|------|--------|------|------|
-| ROL-L5-ACT-068 | 수정 버튼 클릭 | 페이지 헤더 영역 actions 영역 버튼 클릭 | 수정 화면으로 이동 | isSystem=false, RoleCategoryGuard(WORKSPACE) |
-| ROL-L5-ACT-069 | 삭제 버튼 클릭 | 페이지 헤더 영역 actions 영역 버튼 클릭 | 삭제 확인 모달 표시 | isSystem=false, RoleCategoryGuard(WORKSPACE) |
+| ROL-L5-ACT-068 | 수정 버튼 클릭 | 페이지 헤더 영역 actions 영역 버튼 클릭 | 수정 화면으로 이동 | RoleCategoryGuard(WORKSPACE) |
+| ROL-L5-ACT-069 | 삭제 버튼 클릭 | 페이지 헤더 영역 actions 영역 버튼 클릭 | 삭제 확인 모달 표시 | RoleCategoryGuard(WORKSPACE) |
 | ROL-L5-ACT-070 | 삭제 확인 | 모달에서 삭제 버튼 클릭 | DELETE /api/v1/actions/:id 호출 | - |
 | ROL-L5-ACT-071 | 삭제 취소 | 모달에서 취소 버튼 클릭 | 모달 닫기 | - |
 
@@ -29,7 +29,7 @@
 | 액션 | 성공 시 | 실패 시 |
 |------|---------|---------|
 | 페이지 진입 | GET /api/v1/actions/:id → 상세 정보 + config JSON 표시 | 에러 메시지 (404) |
-| 삭제 확인 | DELETE 호출 → "행위가 삭제되었습니다" 토스트 → 목록으로 이동 | 에러 토스트 (400: "시스템 Action은 삭제할 수 없습니다") |
+| 삭제 확인 | DELETE 호출 → "행위가 삭제되었습니다" 토스트 → 목록으로 이동 | 에러 토스트 |
 
 ---
 
@@ -85,9 +85,9 @@
 | **Method** | DELETE |
 | **Endpoint** | `/api/v1/actions/:id` |
 | **Operation ID** | `deleteAction` |
-| **설명** | Action을 소프트 삭제합니다. 시스템 Action(isSystem=true)은 삭제 불가. |
+| **설명** | Action을 소프트 삭제합니다. |
 | **인증** | Bearer Token |
 | **권한** | `@RoleCategories([WORKSPACE])` + `RoleCategoryGuard` |
 | **Path Params** | `id` (UUID) - Action ID |
 | **Response** | `ActionDto` (삭제된 Action 정보) |
-| **에러** | 400 (시스템 Action 삭제 불가), 401, 403, 404, 500 |
+| **에러** | 400 (유효성), 401, 403, 404, 500 |

@@ -1,5 +1,4 @@
 import {
-	BooleanField,
 	NumberField,
 	StringField,
 	StringFieldOptional,
@@ -30,7 +29,4 @@ export class SubjectDto
 
 	@NumberField()
 	order!: number;
-
-	@BooleanField()
-	isSystem!: boolean;
 }

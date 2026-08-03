@@ -27,8 +27,8 @@
 
 | 액션 | 성공 시 | 실패 시 |
 |------|---------|---------|
-| 페이지 진입 | GET /api/v1/actions/:id → 기존 데이터 prefill. isSystem=true이면 목록으로 리다이렉트 | 에러 메시지 (404) |
-| 저장 버튼 | PATCH 호출 → "행위가 수정되었습니다" 토스트 → 상세 화면 이동 | 에러 토스트 (400: "시스템 Action은 수정할 수 없습니다") |
+| 페이지 진입 | GET /api/v1/actions/:id → 기존 데이터 prefill. | 에러 메시지 (404) |
+| 저장 버튼 | PATCH 호출 → "행위가 수정되었습니다" 토스트 → 상세 화면 이동 | 에러 토스트 |
 
 ---
 
@@ -58,12 +58,12 @@
 | **Method** | PATCH |
 | **Endpoint** | `/api/v1/actions/:id` |
 | **Operation ID** | `updateAction` |
-| **설명** | Action 정보를 수정합니다. 시스템 Action(isSystem=true)은 수정 불가. |
+| **설명** | Action 정보를 수정합니다. |
 | **인증** | Bearer Token |
 | **권한** | `@RoleCategories([WORKSPACE])` + `RoleCategoryGuard` |
 | **Path Params** | `id` (UUID) - Action ID |
 | **Response** | `ActionDto` |
-| **에러** | 400 (시스템 Action 수정 불가 / 유효성 오류), 401, 403, 404, 500 |
+| **에러** | 400 (유효성 오류), 401, 403, 404, 500 |
 
 **Request Body** (`UpdateActionDto`, 모든 필드 optional):
 

@@ -58,13 +58,6 @@ export class ActionResponseDto {
 	order!: number;
 
 	@ApiProperty({
-		description: "시스템 여부 (시스템 기본 Action인지)",
-		example: true,
-	})
-	@Expose()
-	isSystem!: boolean;
-
-	@ApiProperty({
 		description: "Action 설정 (마스킹, 포맷팅 등)",
 		type: ActionConfigDto,
 		required: false,

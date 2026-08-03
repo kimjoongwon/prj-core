@@ -5,7 +5,6 @@ import { Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { Spinner, Table } from "@heroui/react";
 import { Edit, Eye, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
-import { Chip } from "../../data-display/Chip/Chip";
 import { Button } from "../../input/Button/Button";
 export interface PolicyListScreenProps {
 	policies?: PolicyResponseDto[];
@@ -59,13 +58,12 @@ export const PolicyListScreen = observer(
 										<Table.Content>
 											<Table.Header>
 												<Table.Column>정책</Table.Column>
-												<Table.Column>유형</Table.Column>
 												<Table.Column>Ability</Table.Column>
 												<Table.Column>생성일</Table.Column>
 												<Table.Column>작업</Table.Column>
-											</Table.Header>
-											<Table.Body>
-												{policyRows.map((policy) => (
+												</Table.Header>
+												<Table.Body>
+													{policyRows.map((policy) => (
 													<Table.Row key={policy.id}>
 														<Table.Cell>
 															<button
@@ -80,11 +78,6 @@ export const PolicyListScreen = observer(
 																	{policy.description || policy.name}
 																</p>
 															</button>
-														</Table.Cell>
-														<Table.Cell>
-															<Chip size="sm" variant="flat">
-																{policy.isSystem ? "시스템" : "공간"}
-															</Chip>
 														</Table.Cell>
 														<Table.Cell>
 															{policy.entries?.length ?? 0}

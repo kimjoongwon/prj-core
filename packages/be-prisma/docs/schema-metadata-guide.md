@@ -239,7 +239,6 @@ storageKey = "images/asset-001"
 name = "read"
 displayName = "조회"
 group = "crud"
-isSystem = true
 ```
 
 여러 권한 규칙이 각자 “보기”, “읽기”, “조회하기”처럼 다른 말을 만들지 않고 이 row를 참조합니다. 그러면 시스템 전체에서 `read`가 같은 뜻이 됩니다.
@@ -253,7 +252,6 @@ isSystem = true
 ```text
 name = "MEMBER"
 displayName = "회원"
-isSystem = true
 ```
 
 - 사용자마다 `Role` row를 새로 만드는 것이 아닙니다.

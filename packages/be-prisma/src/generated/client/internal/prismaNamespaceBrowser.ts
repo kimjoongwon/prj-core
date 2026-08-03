@@ -163,7 +163,6 @@ export const ActionScalarFieldEnum = {
   description: 'description',
   group: 'group',
   order: 'order',
-  isSystem: 'isSystem',
   config: 'config'
 } as const
 
@@ -696,8 +695,7 @@ export const PolicyScalarFieldEnum = {
   createdBySeq: 'createdBySeq',
   name: 'name',
   displayName: 'displayName',
-  description: 'description',
-  isSystem: 'isSystem'
+  description: 'description'
 } as const
 
 export type PolicyScalarFieldEnum = (typeof PolicyScalarFieldEnum)[keyof typeof PolicyScalarFieldEnum]
@@ -859,8 +857,7 @@ export const RoleScalarFieldEnum = {
   removedAt: 'removedAt',
   name: 'name',
   displayName: 'displayName',
-  description: 'description',
-  isSystem: 'isSystem'
+  description: 'description'
 } as const
 
 export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
@@ -1073,7 +1070,6 @@ export const SubjectScalarFieldEnum = {
   displayName: 'displayName',
   icon: 'icon',
   order: 'order',
-  isSystem: 'isSystem',
   group: 'group'
 } as const
 

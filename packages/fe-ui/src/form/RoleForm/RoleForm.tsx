@@ -1,17 +1,15 @@
 "use client";
 
 import { observer } from "mobx-react-lite";
-import { Switch } from "../../input/Switch";
 import { TextArea } from "../../input/TextArea";
 import { TextField } from "../../input/TextField";
 
-export type RoleFormField = "name" | "displayName" | "description" | "isSystem";
+export type RoleFormField = "name" | "displayName" | "description";
 
 export interface RoleFormState {
 	name: string;
 	displayName: string;
 	description: string;
-	isSystem: boolean;
 	errors: Partial<Record<RoleFormField, string>>;
 }
 
@@ -81,9 +79,6 @@ export const RoleForm = observer(
 					maxLength={200}
 					minRows={3}
 				/>
-				<Switch state={state} path="isSystem" isDisabled={readOnly}>
-					시스템 역할
-				</Switch>
 			</div>
 		);
 	},

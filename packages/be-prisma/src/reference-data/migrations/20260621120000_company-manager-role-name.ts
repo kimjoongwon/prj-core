@@ -7,7 +7,6 @@ const COMPANY_MANAGER_ROLE_DATA = {
 	displayName: "Company 관리자",
 	description:
 		"특정 Company의 지점, 회원, 예약, 콘텐츠 등 운영 리소스를 관리하는 역할",
-	isSystem: true,
 	removedAt: null,
 } as const;
 

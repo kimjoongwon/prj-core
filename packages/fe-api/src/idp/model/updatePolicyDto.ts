@@ -19,5 +19,4 @@ export interface UpdatePolicyDto {
   name?: string;
   displayName?: string;
   description?: string;
-  isSystem?: boolean;
 }

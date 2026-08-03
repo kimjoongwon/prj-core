@@ -34,7 +34,6 @@ export default observer(function SubjectDetailScreenRoute() {
 							icon: subject.icon,
 							group: subject.group,
 							order: subject.order,
-							isSystem: subject.isSystem,
 							createdAt: subject.createdAt,
 							updatedAt: subject.updatedAt,
 						}

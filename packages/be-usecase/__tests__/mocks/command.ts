@@ -64,3 +64,22 @@ export class SetCurrentSpaceCommand {
 		this.tenantId = input.tenantId;
 	}
 }
+
+export class CreateActionCommand {
+	constructor(input: Record<string, unknown>) {
+		Object.assign(this, input);
+	}
+}
+
+export class UpdateActionCommand {
+	constructor(
+		readonly actionId: string,
+		input: Record<string, unknown>,
+	) {
+		Object.assign(this, input);
+	}
+}
+
+export class DeleteActionCommand {
+	constructor(readonly actionId: string) {}
+}

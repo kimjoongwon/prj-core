@@ -49,7 +49,6 @@ export type PolicyMinAggregateOutputType = {
   name: string | null
   displayName: string | null
   description: string | null
-  isSystem: boolean | null
 }
 
 export type PolicyMaxAggregateOutputType = {
@@ -63,7 +62,6 @@ export type PolicyMaxAggregateOutputType = {
   name: string | null
   displayName: string | null
   description: string | null
-  isSystem: boolean | null
 }
 
 export type PolicyCountAggregateOutputType = {
@@ -77,7 +75,6 @@ export type PolicyCountAggregateOutputType = {
   name: number
   displayName: number
   description: number
-  isSystem: number
   _all: number
 }
 
@@ -105,7 +102,6 @@ export type PolicyMinAggregateInputType = {
   name?: true
   displayName?: true
   description?: true
-  isSystem?: true
 }
 
 export type PolicyMaxAggregateInputType = {
@@ -119,7 +115,6 @@ export type PolicyMaxAggregateInputType = {
   name?: true
   displayName?: true
   description?: true
-  isSystem?: true
 }
 
 export type PolicyCountAggregateInputType = {
@@ -133,7 +128,6 @@ export type PolicyCountAggregateInputType = {
   name?: true
   displayName?: true
   description?: true
-  isSystem?: true
   _all?: true
 }
 
@@ -234,7 +228,6 @@ export type PolicyGroupByOutputType = {
   name: string
   displayName: string | null
   description: string | null
-  isSystem: boolean
   _count: PolicyCountAggregateOutputType | null
   _avg: PolicyAvgAggregateOutputType | null
   _sum: PolicySumAggregateOutputType | null
@@ -271,7 +264,6 @@ export type PolicyWhereInput = {
   name?: Prisma.StringFilter<"Policy"> | string
   displayName?: Prisma.StringNullableFilter<"Policy"> | string | null
   description?: Prisma.StringNullableFilter<"Policy"> | string | null
-  isSystem?: Prisma.BoolFilter<"Policy"> | boolean
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   entries?: Prisma.PolicyEntryListRelationFilter
@@ -289,7 +281,6 @@ export type PolicyOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   displayName?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  isSystem?: Prisma.SortOrder
   space?: Prisma.SpaceOrderByWithRelationInput
   createdBy?: Prisma.UserOrderByWithRelationInput
   entries?: Prisma.PolicyEntryOrderByRelationAggregateInput
@@ -311,7 +302,6 @@ export type PolicyWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Policy"> | string
   displayName?: Prisma.StringNullableFilter<"Policy"> | string | null
   description?: Prisma.StringNullableFilter<"Policy"> | string | null
-  isSystem?: Prisma.BoolFilter<"Policy"> | boolean
   space?: Prisma.XOR<Prisma.SpaceScalarRelationFilter, Prisma.SpaceWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   entries?: Prisma.PolicyEntryListRelationFilter
@@ -329,7 +319,6 @@ export type PolicyOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   displayName?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  isSystem?: Prisma.SortOrder
   _count?: Prisma.PolicyCountOrderByAggregateInput
   _avg?: Prisma.PolicyAvgOrderByAggregateInput
   _max?: Prisma.PolicyMaxOrderByAggregateInput
@@ -351,7 +340,6 @@ export type PolicyScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Policy"> | string
   displayName?: Prisma.StringNullableWithAggregatesFilter<"Policy"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Policy"> | string | null
-  isSystem?: Prisma.BoolWithAggregatesFilter<"Policy"> | boolean
 }
 
 export type PolicyCreateInput = {
@@ -362,7 +350,6 @@ export type PolicyCreateInput = {
   name: string
   displayName?: string | null
   description?: string | null
-  isSystem?: boolean
   space: Prisma.SpaceCreateNestedOneWithoutPoliciesInput
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedPoliciesInput
   entries?: Prisma.PolicyEntryCreateNestedManyWithoutPolicyInput
@@ -380,7 +367,6 @@ export type PolicyUncheckedCreateInput = {
   name: string
   displayName?: string | null
   description?: string | null
-  isSystem?: boolean
   entries?: Prisma.PolicyEntryUncheckedCreateNestedManyWithoutPolicyInput
   roleAssignments?: Prisma.RoleAssignmentUncheckedCreateNestedManyWithoutPolicyInput
 }
@@ -393,7 +379,6 @@ export type PolicyUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   space?: Prisma.SpaceUpdateOneRequiredWithoutPoliciesNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutCreatedPoliciesNestedInput
   entries?: Prisma.PolicyEntryUpdateManyWithoutPolicyNestedInput
@@ -411,7 +396,6 @@ export type PolicyUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   entries?: Prisma.PolicyEntryUncheckedUpdateManyWithoutPolicyNestedInput
   roleAssignments?: Prisma.RoleAssignmentUncheckedUpdateManyWithoutPolicyNestedInput
 }
@@ -427,7 +411,6 @@ export type PolicyCreateManyInput = {
   name: string
   displayName?: string | null
   description?: string | null
-  isSystem?: boolean
 }
 
 export type PolicyUpdateManyMutationInput = {
@@ -438,7 +421,6 @@ export type PolicyUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type PolicyUncheckedUpdateManyInput = {
@@ -452,7 +434,6 @@ export type PolicyUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type PolicyScalarRelationFilter = {
@@ -476,7 +457,6 @@ export type PolicyCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   displayName?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  isSystem?: Prisma.SortOrder
 }
 
 export type PolicyAvgOrderByAggregateInput = {
@@ -496,7 +476,6 @@ export type PolicyMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   displayName?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  isSystem?: Prisma.SortOrder
 }
 
 export type PolicyMinOrderByAggregateInput = {
@@ -510,7 +489,6 @@ export type PolicyMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   displayName?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  isSystem?: Prisma.SortOrder
 }
 
 export type PolicySumOrderByAggregateInput = {
@@ -649,7 +627,6 @@ export type PolicyCreateWithoutEntriesInput = {
   name: string
   displayName?: string | null
   description?: string | null
-  isSystem?: boolean
   space: Prisma.SpaceCreateNestedOneWithoutPoliciesInput
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedPoliciesInput
   roleAssignments?: Prisma.RoleAssignmentCreateNestedManyWithoutPolicyInput
@@ -666,7 +643,6 @@ export type PolicyUncheckedCreateWithoutEntriesInput = {
   name: string
   displayName?: string | null
   description?: string | null
-  isSystem?: boolean
   roleAssignments?: Prisma.RoleAssignmentUncheckedCreateNestedManyWithoutPolicyInput
 }
 
@@ -694,7 +670,6 @@ export type PolicyUpdateWithoutEntriesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   space?: Prisma.SpaceUpdateOneRequiredWithoutPoliciesNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutCreatedPoliciesNestedInput
   roleAssignments?: Prisma.RoleAssignmentUpdateManyWithoutPolicyNestedInput
@@ -711,7 +686,6 @@ export type PolicyUncheckedUpdateWithoutEntriesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   roleAssignments?: Prisma.RoleAssignmentUncheckedUpdateManyWithoutPolicyNestedInput
 }
 
@@ -723,7 +697,6 @@ export type PolicyCreateWithoutRoleAssignmentsInput = {
   name: string
   displayName?: string | null
   description?: string | null
-  isSystem?: boolean
   space: Prisma.SpaceCreateNestedOneWithoutPoliciesInput
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedPoliciesInput
   entries?: Prisma.PolicyEntryCreateNestedManyWithoutPolicyInput
@@ -740,7 +713,6 @@ export type PolicyUncheckedCreateWithoutRoleAssignmentsInput = {
   name: string
   displayName?: string | null
   description?: string | null
-  isSystem?: boolean
   entries?: Prisma.PolicyEntryUncheckedCreateNestedManyWithoutPolicyInput
 }
 
@@ -768,7 +740,6 @@ export type PolicyUpdateWithoutRoleAssignmentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   space?: Prisma.SpaceUpdateOneRequiredWithoutPoliciesNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutCreatedPoliciesNestedInput
   entries?: Prisma.PolicyEntryUpdateManyWithoutPolicyNestedInput
@@ -785,7 +756,6 @@ export type PolicyUncheckedUpdateWithoutRoleAssignmentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   entries?: Prisma.PolicyEntryUncheckedUpdateManyWithoutPolicyNestedInput
 }
 
@@ -797,7 +767,6 @@ export type PolicyCreateWithoutSpaceInput = {
   name: string
   displayName?: string | null
   description?: string | null
-  isSystem?: boolean
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedPoliciesInput
   entries?: Prisma.PolicyEntryCreateNestedManyWithoutPolicyInput
   roleAssignments?: Prisma.RoleAssignmentCreateNestedManyWithoutPolicyInput
@@ -813,7 +782,6 @@ export type PolicyUncheckedCreateWithoutSpaceInput = {
   name: string
   displayName?: string | null
   description?: string | null
-  isSystem?: boolean
   entries?: Prisma.PolicyEntryUncheckedCreateNestedManyWithoutPolicyInput
   roleAssignments?: Prisma.RoleAssignmentUncheckedCreateNestedManyWithoutPolicyInput
 }
@@ -858,7 +826,6 @@ export type PolicyScalarWhereInput = {
   name?: Prisma.StringFilter<"Policy"> | string
   displayName?: Prisma.StringNullableFilter<"Policy"> | string | null
   description?: Prisma.StringNullableFilter<"Policy"> | string | null
-  isSystem?: Prisma.BoolFilter<"Policy"> | boolean
 }
 
 export type PolicyCreateWithoutCreatedByInput = {
@@ -869,7 +836,6 @@ export type PolicyCreateWithoutCreatedByInput = {
   name: string
   displayName?: string | null
   description?: string | null
-  isSystem?: boolean
   space: Prisma.SpaceCreateNestedOneWithoutPoliciesInput
   entries?: Prisma.PolicyEntryCreateNestedManyWithoutPolicyInput
   roleAssignments?: Prisma.RoleAssignmentCreateNestedManyWithoutPolicyInput
@@ -885,7 +851,6 @@ export type PolicyUncheckedCreateWithoutCreatedByInput = {
   name: string
   displayName?: string | null
   description?: string | null
-  isSystem?: boolean
   entries?: Prisma.PolicyEntryUncheckedCreateNestedManyWithoutPolicyInput
   roleAssignments?: Prisma.RoleAssignmentUncheckedCreateNestedManyWithoutPolicyInput
 }
@@ -926,7 +891,6 @@ export type PolicyCreateManySpaceInput = {
   name: string
   displayName?: string | null
   description?: string | null
-  isSystem?: boolean
 }
 
 export type PolicyUpdateWithoutSpaceInput = {
@@ -937,7 +901,6 @@ export type PolicyUpdateWithoutSpaceInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdBy?: Prisma.UserUpdateOneWithoutCreatedPoliciesNestedInput
   entries?: Prisma.PolicyEntryUpdateManyWithoutPolicyNestedInput
   roleAssignments?: Prisma.RoleAssignmentUpdateManyWithoutPolicyNestedInput
@@ -953,7 +916,6 @@ export type PolicyUncheckedUpdateWithoutSpaceInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   entries?: Prisma.PolicyEntryUncheckedUpdateManyWithoutPolicyNestedInput
   roleAssignments?: Prisma.RoleAssignmentUncheckedUpdateManyWithoutPolicyNestedInput
 }
@@ -968,7 +930,6 @@ export type PolicyUncheckedUpdateManyWithoutSpaceInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type PolicyCreateManyCreatedByInput = {
@@ -981,7 +942,6 @@ export type PolicyCreateManyCreatedByInput = {
   name: string
   displayName?: string | null
   description?: string | null
-  isSystem?: boolean
 }
 
 export type PolicyUpdateWithoutCreatedByInput = {
@@ -992,7 +952,6 @@ export type PolicyUpdateWithoutCreatedByInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   space?: Prisma.SpaceUpdateOneRequiredWithoutPoliciesNestedInput
   entries?: Prisma.PolicyEntryUpdateManyWithoutPolicyNestedInput
   roleAssignments?: Prisma.RoleAssignmentUpdateManyWithoutPolicyNestedInput
@@ -1008,7 +967,6 @@ export type PolicyUncheckedUpdateWithoutCreatedByInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   entries?: Prisma.PolicyEntryUncheckedUpdateManyWithoutPolicyNestedInput
   roleAssignments?: Prisma.RoleAssignmentUncheckedUpdateManyWithoutPolicyNestedInput
 }
@@ -1023,7 +981,6 @@ export type PolicyUncheckedUpdateManyWithoutCreatedByInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -1077,7 +1034,6 @@ export type PolicySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name?: boolean
   displayName?: boolean
   description?: boolean
-  isSystem?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Policy$createdByArgs<ExtArgs>
   entries?: boolean | Prisma.Policy$entriesArgs<ExtArgs>
@@ -1096,7 +1052,6 @@ export type PolicySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   name?: boolean
   displayName?: boolean
   description?: boolean
-  isSystem?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Policy$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["policy"]>
@@ -1112,7 +1067,6 @@ export type PolicySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   name?: boolean
   displayName?: boolean
   description?: boolean
-  isSystem?: boolean
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Policy$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["policy"]>
@@ -1128,10 +1082,9 @@ export type PolicySelectScalar = {
   name?: boolean
   displayName?: boolean
   description?: boolean
-  isSystem?: boolean
 }
 
-export type PolicyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "spaceSeq" | "createdBySeq" | "name" | "displayName" | "description" | "isSystem", ExtArgs["result"]["policy"]>
+export type PolicyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "spaceSeq" | "createdBySeq" | "name" | "displayName" | "description", ExtArgs["result"]["policy"]>
 export type PolicyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   space?: boolean | Prisma.SpaceDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Policy$createdByArgs<ExtArgs>
@@ -1182,10 +1135,6 @@ export type $PolicyPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
      * @displayName 설명
      */
     description: string | null
-    /**
-     * @displayName 시스템 정책 여부
-     */
-    isSystem: boolean
   }, ExtArgs["result"]["policy"]>
   composites: {}
 }
@@ -1623,7 +1572,6 @@ export interface PolicyFieldRefs {
   readonly name: Prisma.FieldRef<"Policy", 'String'>
   readonly displayName: Prisma.FieldRef<"Policy", 'String'>
   readonly description: Prisma.FieldRef<"Policy", 'String'>
-  readonly isSystem: Prisma.FieldRef<"Policy", 'Boolean'>
 }
     
 

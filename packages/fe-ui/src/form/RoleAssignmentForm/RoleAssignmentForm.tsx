@@ -11,7 +11,6 @@ export interface AssignablePolicy {
 	name: string;
 	displayName?: string | null;
 	description?: string | null;
-	isSystem?: boolean | null;
 	abilityCount?: number | null;
 }
 
@@ -166,9 +165,6 @@ export const RoleAssignmentForm = observer(
 													{assignment.isActive ? "활성" : "비활성"}
 												</Chip>
 											) : null}
-											<Chip size="sm" variant="flat">
-												{policy.isSystem ? "시스템" : "공간"}
-											</Chip>
 										</div>
 										<p className="mt-1 text-sm text-muted">
 											{policy.description || policy.name}

@@ -44,8 +44,6 @@ export class Action
 	group!: string | null;
 	/** 정렬 순서 */
 	order!: number;
-	/** 시스템 여부 */
-	isSystem!: boolean;
 	/** Action 설정 (마스킹, 포맷팅 등) */
 	config!: Prisma.JsonValue | null;
 

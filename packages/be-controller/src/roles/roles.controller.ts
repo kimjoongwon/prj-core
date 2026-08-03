@@ -104,8 +104,7 @@ export class RolesController {
 	@ApiOperation({
 		operationId: "updateRole",
 		summary: "역할 수정",
-		description:
-			"역할 정보를 수정합니다. PLATFORM_ADMIN 전용 API이며, 시스템 역할(PLATFORM_ADMIN, COMPANY_MANAGER, MEMBER)은 수정할 수 없습니다.",
+		description: "역할 정보를 수정합니다. PLATFORM_ADMIN 전용 API입니다.",
 	})
 	@ApiAuth()
 	@ApiParam({
@@ -135,7 +134,7 @@ export class RolesController {
 		operationId: "deleteRole",
 		summary: "역할 삭제",
 		description:
-			"역할을 삭제합니다. PLATFORM_ADMIN 전용 API이며, 시스템 역할은 삭제할 수 없고, 연결된 사용자가 있으면 삭제할 수 없습니다.",
+			"역할을 삭제합니다. PLATFORM_ADMIN 전용 API이며, 연결된 사용자가 있으면 삭제할 수 없습니다.",
 	})
 	@ApiAuth()
 	@ApiParam({

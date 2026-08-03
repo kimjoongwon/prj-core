@@ -95,7 +95,6 @@ describe("Actions API E2E 테스트", () => {
 				description: "E2E 생성 테스트",
 				group: "workflow",
 				order: 9999,
-				isSystem: false,
 				config: {
 					source: "e2e",
 				},
@@ -113,7 +112,6 @@ describe("Actions API E2E 테스트", () => {
 			expect(response.body.httpStatus).toBe(201);
 			expect(response.body.data.id).toBeDefined();
 			expect(response.body.data.name).toBe(createDto.name);
-			expect(response.body.data.isSystem).toBe(false);
 
 			createdActionIds.push(response.body.data.id);
 		});
@@ -126,7 +124,6 @@ describe("Actions API E2E 테스트", () => {
 				displayName: "이름 누락",
 				group: "crud",
 				order: 1,
-				isSystem: false,
 			};
 
 			// When
@@ -147,7 +144,6 @@ describe("Actions API E2E 테스트", () => {
 			const createDto = {
 				name: `${TEST_PREFIX}_UNAUTH_${Date.now()}`,
 				order: 1,
-				isSystem: false,
 			};
 
 			// When

@@ -189,14 +189,12 @@ async function syncRoles(db: DbClient): Promise<Record<string, Role>> {
 			update: {
 				displayName: roleData.displayName,
 				description: roleData.description,
-				isSystem: roleData.isSystem,
 				removedAt: null,
 			},
 			create: {
 				name: roleData.name,
 				displayName: roleData.displayName,
 				description: roleData.description,
-				isSystem: roleData.isSystem,
 			},
 		});
 	}
@@ -351,7 +349,6 @@ async function syncSubjects(db: DbClient): Promise<Record<string, Subject>> {
 				displayName: subjectData.displayName,
 				group: subjectData.group,
 				order: subjectData.order ?? 0,
-				isSystem: subjectData.isSystem ?? false,
 				removedAt: null,
 			},
 			create: {
@@ -359,7 +356,6 @@ async function syncSubjects(db: DbClient): Promise<Record<string, Subject>> {
 				displayName: subjectData.displayName,
 				group: subjectData.group,
 				order: subjectData.order ?? 0,
-				isSystem: subjectData.isSystem ?? false,
 			},
 		});
 	}
@@ -378,7 +374,6 @@ async function syncActions(db: DbClient): Promise<Record<string, Action>> {
 				description: actionData.description,
 				group: actionData.group,
 				order: actionData.order ?? 0,
-				isSystem: actionData.isSystem ?? true,
 				config: actionData.config
 					? (actionData.config as unknown as Prisma.InputJsonObject)
 					: Prisma.JsonNull,
@@ -390,7 +385,6 @@ async function syncActions(db: DbClient): Promise<Record<string, Action>> {
 				description: actionData.description,
 				group: actionData.group,
 				order: actionData.order ?? 0,
-				isSystem: actionData.isSystem ?? true,
 				config: actionData.config
 					? (actionData.config as unknown as Prisma.InputJsonObject)
 					: Prisma.JsonNull,
@@ -541,7 +535,6 @@ async function syncAbilitiesAndPolicies(
 				update: {
 					displayName: `${role.displayName ?? role.name} 기본 정책`,
 					description: `${role.displayName ?? role.name} 역할에 자동 할당되는 시스템 권한 정책입니다.`,
-					isSystem: true,
 					removedAt: null,
 				},
 				create: {
@@ -550,7 +543,6 @@ async function syncAbilitiesAndPolicies(
 					name: policyName,
 					displayName: `${role.displayName ?? role.name} 기본 정책`,
 					description: `${role.displayName ?? role.name} 역할에 자동 할당되는 시스템 권한 정책입니다.`,
-					isSystem: true,
 				},
 			});
 

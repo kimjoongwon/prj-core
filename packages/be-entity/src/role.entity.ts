@@ -10,6 +10,5 @@ export class Role
 	name!: string;
 	displayName!: string | null;
 	description!: string | null;
-	isSystem!: boolean;
 	assignments?: RoleAssignment[];
 }

@@ -70,4 +70,4 @@
 }
 ```
 
-**참고**: `isSystem`, `classification`, `associations`는 CreateRoleDto에서 제외됨. Group/Category 연결은 별도 API 또는 확장 필요.
+**참고**: `classification`, `associations`는 CreateRoleDto에서 제외됨. Group/Category 연결은 별도 API 또는 확장 필요.

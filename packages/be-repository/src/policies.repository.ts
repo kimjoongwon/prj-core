@@ -28,7 +28,7 @@ export class PoliciesRepository {
 				removedAt: null,
 			},
 			include: this.includePolicyDetails(),
-			orderBy: [{ isSystem: "desc" }, { name: "asc" }],
+			orderBy: [{ name: "asc" }],
 		});
 
 		return results.map((result) => toDomainEntity(Policy, result));

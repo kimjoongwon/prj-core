@@ -27,5 +27,4 @@ export interface ActionDto {
   description?: string;
   group?: string;
   order: number;
-  isSystem: boolean;
 }

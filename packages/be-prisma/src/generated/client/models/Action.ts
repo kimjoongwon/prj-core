@@ -47,7 +47,6 @@ export type ActionMinAggregateOutputType = {
   description: string | null
   group: string | null
   order: number | null
-  isSystem: boolean | null
 }
 
 export type ActionMaxAggregateOutputType = {
@@ -61,7 +60,6 @@ export type ActionMaxAggregateOutputType = {
   description: string | null
   group: string | null
   order: number | null
-  isSystem: boolean | null
 }
 
 export type ActionCountAggregateOutputType = {
@@ -75,7 +73,6 @@ export type ActionCountAggregateOutputType = {
   description: number
   group: number
   order: number
-  isSystem: number
   config: number
   _all: number
 }
@@ -102,7 +99,6 @@ export type ActionMinAggregateInputType = {
   description?: true
   group?: true
   order?: true
-  isSystem?: true
 }
 
 export type ActionMaxAggregateInputType = {
@@ -116,7 +112,6 @@ export type ActionMaxAggregateInputType = {
   description?: true
   group?: true
   order?: true
-  isSystem?: true
 }
 
 export type ActionCountAggregateInputType = {
@@ -130,7 +125,6 @@ export type ActionCountAggregateInputType = {
   description?: true
   group?: true
   order?: true
-  isSystem?: true
   config?: true
   _all?: true
 }
@@ -232,7 +226,6 @@ export type ActionGroupByOutputType = {
   description: string | null
   group: string | null
   order: number
-  isSystem: boolean
   config: runtime.JsonValue | null
   _count: ActionCountAggregateOutputType | null
   _avg: ActionAvgAggregateOutputType | null
@@ -270,7 +263,6 @@ export type ActionWhereInput = {
   description?: Prisma.StringNullableFilter<"Action"> | string | null
   group?: Prisma.StringNullableFilter<"Action"> | string | null
   order?: Prisma.IntFilter<"Action"> | number
-  isSystem?: Prisma.BoolFilter<"Action"> | boolean
   config?: Prisma.JsonNullableFilter<"Action">
   abilities?: Prisma.AbilityListRelationFilter
 }
@@ -286,7 +278,6 @@ export type ActionOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   group?: Prisma.SortOrderInput | Prisma.SortOrder
   order?: Prisma.SortOrder
-  isSystem?: Prisma.SortOrder
   config?: Prisma.SortOrderInput | Prisma.SortOrder
   abilities?: Prisma.AbilityOrderByRelationAggregateInput
 }
@@ -305,7 +296,6 @@ export type ActionWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"Action"> | string | null
   group?: Prisma.StringNullableFilter<"Action"> | string | null
   order?: Prisma.IntFilter<"Action"> | number
-  isSystem?: Prisma.BoolFilter<"Action"> | boolean
   config?: Prisma.JsonNullableFilter<"Action">
   abilities?: Prisma.AbilityListRelationFilter
 }, "seq" | "id" | "name">
@@ -321,7 +311,6 @@ export type ActionOrderByWithAggregationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   group?: Prisma.SortOrderInput | Prisma.SortOrder
   order?: Prisma.SortOrder
-  isSystem?: Prisma.SortOrder
   config?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ActionCountOrderByAggregateInput
   _avg?: Prisma.ActionAvgOrderByAggregateInput
@@ -344,7 +333,6 @@ export type ActionScalarWhereWithAggregatesInput = {
   description?: Prisma.StringNullableWithAggregatesFilter<"Action"> | string | null
   group?: Prisma.StringNullableWithAggregatesFilter<"Action"> | string | null
   order?: Prisma.IntWithAggregatesFilter<"Action"> | number
-  isSystem?: Prisma.BoolWithAggregatesFilter<"Action"> | boolean
   config?: Prisma.JsonNullableWithAggregatesFilter<"Action">
 }
 
@@ -358,7 +346,6 @@ export type ActionCreateInput = {
   description?: string | null
   group?: string | null
   order?: number
-  isSystem?: boolean
   config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   abilities?: Prisma.AbilityCreateNestedManyWithoutActionInput
 }
@@ -374,7 +361,6 @@ export type ActionUncheckedCreateInput = {
   description?: string | null
   group?: string | null
   order?: number
-  isSystem?: boolean
   config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   abilities?: Prisma.AbilityUncheckedCreateNestedManyWithoutActionInput
 }
@@ -389,7 +375,6 @@ export type ActionUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   group?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   abilities?: Prisma.AbilityUpdateManyWithoutActionNestedInput
 }
@@ -405,7 +390,6 @@ export type ActionUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   group?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   abilities?: Prisma.AbilityUncheckedUpdateManyWithoutActionNestedInput
 }
@@ -421,7 +405,6 @@ export type ActionCreateManyInput = {
   description?: string | null
   group?: string | null
   order?: number
-  isSystem?: boolean
   config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -435,7 +418,6 @@ export type ActionUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   group?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -450,7 +432,6 @@ export type ActionUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   group?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -470,7 +451,6 @@ export type ActionCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   group?: Prisma.SortOrder
   order?: Prisma.SortOrder
-  isSystem?: Prisma.SortOrder
   config?: Prisma.SortOrder
 }
 
@@ -490,7 +470,6 @@ export type ActionMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   group?: Prisma.SortOrder
   order?: Prisma.SortOrder
-  isSystem?: Prisma.SortOrder
 }
 
 export type ActionMinOrderByAggregateInput = {
@@ -504,7 +483,6 @@ export type ActionMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   group?: Prisma.SortOrder
   order?: Prisma.SortOrder
-  isSystem?: Prisma.SortOrder
 }
 
 export type ActionSumOrderByAggregateInput = {
@@ -536,7 +514,6 @@ export type ActionCreateWithoutAbilitiesInput = {
   description?: string | null
   group?: string | null
   order?: number
-  isSystem?: boolean
   config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -551,7 +528,6 @@ export type ActionUncheckedCreateWithoutAbilitiesInput = {
   description?: string | null
   group?: string | null
   order?: number
-  isSystem?: boolean
   config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -581,7 +557,6 @@ export type ActionUpdateWithoutAbilitiesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   group?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -596,7 +571,6 @@ export type ActionUncheckedUpdateWithoutAbilitiesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   group?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -642,7 +616,6 @@ export type ActionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   description?: boolean
   group?: boolean
   order?: boolean
-  isSystem?: boolean
   config?: boolean
   abilities?: boolean | Prisma.Action$abilitiesArgs<ExtArgs>
   _count?: boolean | Prisma.ActionCountOutputTypeDefaultArgs<ExtArgs>
@@ -659,7 +632,6 @@ export type ActionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   description?: boolean
   group?: boolean
   order?: boolean
-  isSystem?: boolean
   config?: boolean
 }, ExtArgs["result"]["action"]>
 
@@ -674,7 +646,6 @@ export type ActionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   description?: boolean
   group?: boolean
   order?: boolean
-  isSystem?: boolean
   config?: boolean
 }, ExtArgs["result"]["action"]>
 
@@ -689,11 +660,10 @@ export type ActionSelectScalar = {
   description?: boolean
   group?: boolean
   order?: boolean
-  isSystem?: boolean
   config?: boolean
 }
 
-export type ActionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "name" | "displayName" | "description" | "group" | "order" | "isSystem" | "config", ExtArgs["result"]["action"]>
+export type ActionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "seq" | "createdAt" | "updatedAt" | "removedAt" | "name" | "displayName" | "description" | "group" | "order" | "config", ExtArgs["result"]["action"]>
 export type ActionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   abilities?: boolean | Prisma.Action$abilitiesArgs<ExtArgs>
   _count?: boolean | Prisma.ActionCountOutputTypeDefaultArgs<ExtArgs>
@@ -732,10 +702,6 @@ export type $ActionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
      * @displayName 정렬 순서
      */
     order: number
-    /**
-     * @displayName 시스템 여부
-     */
-    isSystem: boolean
     /**
      * @displayName 설정
      */
@@ -1174,7 +1140,6 @@ export interface ActionFieldRefs {
   readonly description: Prisma.FieldRef<"Action", 'String'>
   readonly group: Prisma.FieldRef<"Action", 'String'>
   readonly order: Prisma.FieldRef<"Action", 'Int'>
-  readonly isSystem: Prisma.FieldRef<"Action", 'Boolean'>
   readonly config: Prisma.FieldRef<"Action", 'Json'>
 }
     

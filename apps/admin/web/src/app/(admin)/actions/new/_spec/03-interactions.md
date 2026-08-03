@@ -24,7 +24,6 @@
 | ROL-L5-ACT-074 | description 입력 | 설명 TextArea 입력 | 값 업데이트 | - |
 | ROL-L5-ACT-075 | group 선택 | 그룹 Select 변경 | 선택값 업데이트 | - |
 | ROL-L5-ACT-076 | order 입력 | 정렬 순서 NumberInput 변경 | 값 업데이트 | - |
-| ROL-L5-ACT-077 | isSystem 토글 | 시스템 여부 Switch 토글 | 값 업데이트 | - |
 | ROL-L5-ACT-078 | config 입력 | JSON 에디터에 설정 입력 | config JSON 업데이트 + 실시간 유효성 검사 | - |
 | ROL-L5-ACT-079 | 등록 버튼 클릭 | 등록 버튼 클릭 | POST /api/v1/actions 호출 | name 필수 |
 | ROL-L5-ACT-080 | 취소 버튼 클릭 | 취소 버튼 클릭 | 목록으로 이동 | - |
@@ -70,7 +69,6 @@
   "description": "전화번호 필드를 마스킹하여 표시합니다",
   "group": "visibility",
   "order": 11,
-  "isSystem": false,
   "config": {
     "type": "masking",
     "preset": "PRESET_PHONE"

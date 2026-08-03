@@ -16,7 +16,6 @@ export class Subject
 	icon!: string | null;
 	group!: string | null;
 	order!: number;
-	isSystem!: boolean;
 
 	abilities?: Ability[];
 

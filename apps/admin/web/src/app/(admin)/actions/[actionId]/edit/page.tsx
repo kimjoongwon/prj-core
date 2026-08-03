@@ -47,15 +47,12 @@ export default observer(function ActionEditScreenRoute() {
 		<ActionEditScreen
 			title="Action 수정"
 			description={
-				response?.data?.isSystem
-					? "시스템 Action은 수정할 수 없습니다."
-					: response?.data
-						? `${response.data.displayName || response.data.name} Action을 수정합니다.`
-						: "Action을 찾을 수 없습니다."
+				response?.data
+					? `${response.data.displayName || response.data.name} Action을 수정합니다.`
+					: "Action을 찾을 수 없습니다."
 			}
 			state={response?.data ? state : undefined}
 			isLoading={isLoading}
-			readOnly={Boolean(response?.data?.isSystem)}
 			notFound={!isLoading && !response?.data}
 			notFoundAction={
 				<Button
@@ -78,24 +75,22 @@ export default observer(function ActionEditScreenRoute() {
 					>
 						상세로 돌아가기
 					</Button>
-					{response?.data?.isSystem ? null : (
-						<Button
-							color="primary"
-							startContent={<Save className="h-4 w-4" />}
-							onPress={() => {
-								const data: UpdateActionDto = {
-									displayName: state.displayName || undefined,
-									description: state.description || undefined,
-									group: state.group || undefined,
-									order: state.order,
-								};
-								updateAction({ id: actionId, data });
-							}}
-							isLoading={isPending}
-						>
-							저장
-						</Button>
-					)}
+					<Button
+						color="primary"
+						startContent={<Save className="h-4 w-4" />}
+						onPress={() => {
+							const data: UpdateActionDto = {
+								displayName: state.displayName || undefined,
+								description: state.description || undefined,
+								group: state.group || undefined,
+								order: state.order,
+							};
+							updateAction({ id: actionId, data });
+						}}
+						isLoading={isPending}
+					>
+						저장
+					</Button>
 				</div>
 			}
 		/>

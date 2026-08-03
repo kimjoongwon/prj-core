@@ -11,7 +11,6 @@
       - 정책 이름
       - 표시명
       - 설명
-      - 시스템 정책
     Ability 선택
       - ability option list
 

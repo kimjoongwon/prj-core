@@ -36,11 +36,11 @@ test.describe("역할 목록 페이지", () => {
 			).toBeVisible();
 		});
 
-		test("시드 데이터의 시스템 역할이 표시되어야 한다", async ({ page }) => {
+		test("시드 데이터의 기본 역할이 표시되어야 한다", async ({ page }) => {
 			// Given: 역할 목록 페이지 진입
 			await gotoRoleListPage(page);
 
-			// Then: 시스템 역할 3종 확인 (exact: true로 info 텍스트의 부분 매칭 방지)
+			// Then: 기본 역할 확인 (exact: true로 info 텍스트의 부분 매칭 방지)
 			await expect(
 				page.getByText("PLATFORM_ADMIN", { exact: true }),
 			).toBeVisible();
@@ -172,21 +172,6 @@ test.describe("역할 목록 페이지", () => {
 			await expect(
 				page.getByText(TEST_ROLE_NAME, { exact: true }),
 			).not.toBeVisible();
-		});
-	});
-
-	// ── E2E-004: 시스템 역할 보호 확인 ──
-
-	test.describe("[E2E-004] 시스템 역할 보호", () => {
-		test("시스템 역할 목록에서 시스템 뱃지가 표시되어야 한다", async ({
-			page,
-		}) => {
-			// Given: 역할 목록 페이지
-			await gotoRoleListPage(page);
-
-			// Then: 시스템 뱃지 확인 (시스템 역할 3개에 대해)
-			const systemChips = page.getByText("시스템", { exact: true });
-			await expect(systemChips.first()).toBeVisible();
 		});
 	});
 

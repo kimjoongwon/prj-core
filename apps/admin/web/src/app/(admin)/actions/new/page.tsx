@@ -56,7 +56,6 @@ export default observer(function ActionNewPageRoute() {
 				description: state.description || undefined,
 				group: state.group || undefined,
 				order: state.order,
-				isSystem: false,
 			},
 		});
 	};

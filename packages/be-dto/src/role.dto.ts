@@ -1,5 +1,4 @@
 import {
-	BooleanField,
 	ClassField,
 	StringField,
 	StringFieldOptional,
@@ -26,9 +25,6 @@ export class RoleDto extends AbstractDto implements DomainEntityModel<Role> {
 
 	@StringFieldOptional({ description: "설명", maxLength: 200 })
 	description: string | null;
-
-	@BooleanField({ description: "시스템 역할 여부" })
-	isSystem: boolean;
 
 	@ClassField(() => RoleClassificationDto, { nullable: true })
 	classification?: RoleClassificationDto;

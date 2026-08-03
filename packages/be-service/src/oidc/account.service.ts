@@ -112,7 +112,6 @@ export class AccountService {
 				roleId: t.roleId,
 				roleName: t.role?.name,
 				roleDisplayName: t.role?.displayName,
-				isSystemRole: t.role?.isSystem,
 			})),
 			spaces: tenants?.map((t) => ({
 				spaceId: t.spaceId,

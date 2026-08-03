@@ -30,13 +30,12 @@
 
 | 액션 | 성공 시 | 실패 시 |
 |------|---------|---------|
-| 페이지 진입 | GET /api/v1/roles/:id → 기존 데이터 prefill. isSystem=true이면 목록으로 리다이렉트 | 에러 메시지 (404) |
+| 페이지 진입 | GET /api/v1/roles/:id → 기존 데이터 prefill. | 에러 메시지 (404) |
 | 저장 버튼 | PATCH 호출 → "역할이 수정되었습니다" 토스트 → 역할 상세 화면 이동 | 에러 토스트 |
 
 #### 제약사항
 
 - name(역할 식별자) 필드는 `readonly` 표시
-- isSystem=true인 역할은 접근 시 목록으로 리다이렉트
 
 ---
 
@@ -67,12 +66,12 @@
 | **Method** | PATCH |
 | **Endpoint** | `/api/v1/roles/:id` |
 | **Operation ID** | `updateRole` |
-| **설명** | 역할 정보를 수정합니다. displayName, description만 수정 가능. 시스템 역할은 수정 불가. |
+| **설명** | 역할 정보를 수정합니다. displayName, description만 수정 가능. |
 | **인증** | Bearer Token |
 | **권한** | `@Roles([PLATFORM_ADMIN])` |
 | **Path Params** | `id` (UUID) - 역할 ID |
 | **Response** | `RoleDto` |
-| **에러** | 400 (시스템 역할 수정 시도), 401, 403, 404, 500 |
+| **에러** | 400 (유효성 오류), 401, 403, 404, 500 |
 
 **Request Body** (`UpdateRoleDto`):
 

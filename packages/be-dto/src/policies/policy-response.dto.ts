@@ -40,13 +40,6 @@ export class PolicyResponseDto {
 	description?: string | null;
 
 	@ApiProperty({
-		description: "시스템 정책 여부",
-		example: false,
-	})
-	@Expose()
-	isSystem!: boolean;
-
-	@ApiProperty({
 		description: "생성 일시",
 		example: "2026-01-01T00:00:00.000Z",
 	})

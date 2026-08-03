@@ -118,7 +118,6 @@ function mapPolicyFormState(policy: PolicyResponseDto): PolicyFormState {
 		name: policy.name,
 		displayName: policy.displayName ?? "",
 		description: policy.description ?? "",
-		isSystem: policy.isSystem,
 		abilityIds: getPolicyEntryIds(policy),
 	};
 }

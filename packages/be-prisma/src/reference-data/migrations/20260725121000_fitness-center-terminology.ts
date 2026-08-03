@@ -67,7 +67,6 @@ async function migrateLegacySubject(db: ReferenceDataDbClient) {
 			data: {
 				name: CANONICAL_SUBJECT_NAME,
 				displayName: "피트니스센터",
-				isSystem: true,
 				removedAt: null,
 			},
 		});
@@ -77,7 +76,6 @@ async function migrateLegacySubject(db: ReferenceDataDbClient) {
 		await db.subject.update({
 			where: { id: canonicalSubject.id },
 			data: {
-				isSystem: true,
 				removedAt: null,
 			},
 		});

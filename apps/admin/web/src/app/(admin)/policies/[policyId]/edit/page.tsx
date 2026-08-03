@@ -28,7 +28,6 @@ export default observer(function PolicyEditScreenRoute() {
 		name: "",
 		displayName: "",
 		description: "",
-		isSystem: false,
 		abilityIds: [] as string[],
 		isHydrated: false,
 	}));
@@ -87,7 +86,6 @@ export default observer(function PolicyEditScreenRoute() {
 		state.name = policy.name;
 		state.displayName = policy.displayName || "";
 		state.description = policy.description || "";
-		state.isSystem = policy.isSystem;
 		state.abilityIds = getPolicyEntryIds(policy);
 		state.isHydrated = true;
 	}, [policy, state]);
@@ -99,7 +97,6 @@ export default observer(function PolicyEditScreenRoute() {
 				name: state.name.trim(),
 				displayName: state.displayName.trim() || undefined,
 				description: state.description.trim() || undefined,
-				isSystem: state.isSystem,
 			},
 		});
 	};

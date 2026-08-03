@@ -41,7 +41,6 @@ async function ensureCurrentAdminSubjects(
 				displayName: seed.displayName,
 				group: seed.group,
 				order: seed.order,
-				isSystem: seed.isSystem,
 				removedAt: null,
 			},
 			create: {
@@ -49,7 +48,6 @@ async function ensureCurrentAdminSubjects(
 				displayName: seed.displayName,
 				group: seed.group,
 				order: seed.order,
-				isSystem: seed.isSystem,
 			},
 		});
 
@@ -162,7 +160,6 @@ async function ensureCurrentAdminFullAccessPolicies(
 				displayName: `${role.displayName ?? role.name} 기본 정책`,
 				description:
 					"관리자 메뉴/화면 기준 데이터가 포함된 시스템 권한 정책입니다.",
-				isSystem: true,
 				removedAt: null,
 			},
 			create: {
@@ -172,7 +169,6 @@ async function ensureCurrentAdminFullAccessPolicies(
 				displayName: `${role.displayName ?? role.name} 기본 정책`,
 				description:
 					"관리자 메뉴/화면 기준 데이터가 포함된 시스템 권한 정책입니다.",
-				isSystem: true,
 			},
 		});
 

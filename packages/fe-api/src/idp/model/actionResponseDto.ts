@@ -41,8 +41,6 @@ export interface ActionResponseDto {
   group?: string | null;
   /** 정렬 순서 */
   order: number;
-  /** 시스템 여부 (시스템 기본 Action인지) */
-  isSystem: boolean;
   /**
    * Action 설정 (마스킹, 포맷팅 등)
    * @nullable

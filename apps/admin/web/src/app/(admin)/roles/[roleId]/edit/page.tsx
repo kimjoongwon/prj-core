@@ -25,7 +25,6 @@ const AdminRolesRoleIdEditRoute = observer(() => {
 		name: "",
 		displayName: "",
 		description: "",
-		isSystem: false,
 		errors: {
 			displayName: "",
 		},
@@ -46,7 +45,6 @@ const AdminRolesRoleIdEditRoute = observer(() => {
 		state.name = role.name;
 		state.displayName = role.displayName || "";
 		state.description = role.description || "";
-		state.isSystem = role.isSystem;
 	}, [role, state]);
 
 	const validate = () => {
@@ -76,15 +74,12 @@ const AdminRolesRoleIdEditRoute = observer(() => {
 		<RoleEditScreen
 			title="Role 수정"
 			description={
-				role?.isSystem
-					? "시스템 Role은 수정할 수 없습니다."
-					: role
-						? `${role.displayName || role.name} Role을 수정합니다.`
-						: "Role을 찾을 수 없습니다."
+				role
+					? `${role.displayName || role.name} Role을 수정합니다.`
+					: "Role을 찾을 수 없습니다."
 			}
 			state={role ? state : undefined}
 			isLoading={isLoading}
-			readOnly={Boolean(role?.isSystem)}
 			notFound={!isLoading && !role}
 			notFoundAction={
 				<Button
@@ -107,16 +102,14 @@ const AdminRolesRoleIdEditRoute = observer(() => {
 					>
 						상세로 돌아가기
 					</Button>
-					{role?.isSystem ? null : (
-						<Button
-							color="primary"
-							startContent={<Save className="h-4 w-4" />}
-							onPress={onSubmit}
-							isLoading={isPending}
-						>
-							저장
-						</Button>
-					)}
+					<Button
+						color="primary"
+						startContent={<Save className="h-4 w-4" />}
+						onPress={onSubmit}
+						isLoading={isPending}
+					>
+						저장
+					</Button>
 				</div>
 			}
 		/>

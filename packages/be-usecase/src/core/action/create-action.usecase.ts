@@ -14,7 +14,6 @@ export class CreateActionUseCase {
 			description: input.description,
 			group: input.group,
 			order: input.order,
-			isSystem: input.isSystem,
 			config: input.config,
 		});
 	}
