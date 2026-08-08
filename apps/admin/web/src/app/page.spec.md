@@ -54,10 +54,14 @@
 - 공통 데이터 계약: route segment와 navigation target의 `*Id`는 DB `BIGINT id`의 양수 십진 문자열이며 `number`로 변환하지 않습니다.
 - 모델별 ULID는 일반 page props와 UI API 응답에서 제외하고 integration 계약만 소유합니다.
 
-| 단계 id | 담당 `agent_type` | 예상 산출물 | 생성/수정 예정 경로 | 소비 단계 | 검증 기준 |
-|---|---|---|---|---|---|
-| ID-CODEGEN | `common-type-builder` | string ID API client | `packages/fe-api/src/**` | ID-WEB | generated ID type `string` |
-| ID-WEB | `fe-route-agent` | navigation/query ID 전환 | `apps/admin/web/src/app/**` | none-final | dynamic route E2E 통과 |
+## 실행 원장
+
+> 이 표의 작업 상태는 프로젝트 실행 기록이며 Codex 런타임 상태와 별도로 판정합니다.
+
+| 단계 | owner | 목표 | 입력과 근거 | 수정 범위 | 산출물 | 선행 단계 | 완료 기준 | 작업 상태 | 검증 근거 |
+|---|---|---|---|---|---|---|---|---|---|
+| ID-CODEGEN | common-type-builder | string ID API client | apps/admin/web/src/app/page.spec.md | `packages/fe-api/src/**` | string ID API client | - | generated ID type `string` | 대기 | - |
+| ID-WEB | fe-route-agent | navigation/query ID 전환 | apps/admin/web/src/app/page.spec.md | `apps/admin/web/src/app/**` | navigation/query ID 전환 | - | dynamic route E2E 통과 | 대기 | - |
 
 | 검증 항목 | 명령 | 검증 `agent_type` | 통과 기준 |
 |---|---|---|---|

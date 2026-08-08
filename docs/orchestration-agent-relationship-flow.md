@@ -1,356 +1,113 @@
-# 서비스 Delivery Spec Subagent 관계 흐름
+# Agent·Skill 실행 관계
 
-이 문서는 Codex subagent 간 관계를 서비스 딜리버리 스펙 중심으로 설명합니다.
-별도 도메인/Web/Mobile 기획 분기나 Delivery Plan 문서를 두지 않고, 서비스 딜리버리 스펙이 서비스 전체 설계와 실행 그래프를 소유합니다.
-route/page 딜리버리 스펙은 승인된 서비스 딜리버리 스펙에서 생성된 page/route 실행 slice입니다.
-Screen/Feature spec은 기획 스펙으로 남겨 시각/조합 계약을 설명하지만 실행 순서와 승인 gate는 소유하지 않습니다.
+## 목적
 
-## 핵심 모델
+이 문서는 프로젝트의 skill, custom agent, 기본 Codex와 route/page spec이 어떤 관계로 동작하는지 설명한다. 공식 Codex 기능과 프로젝트 지침을 구분한다.
 
-```mermaid
-flowchart TD
-  Request["사용자 요청"] --> Delivery["orch-delivery"]
-  Delivery --> Discovery["기획 질문"]
-  Discovery --> ServiceSpec["서비스 딜리버리 스펙"]
-  ServiceSpec --> Ask["Codex 승인 질문"]
-  Ask -->|승인| RouteSpecs["생성된 route/page 딜리버리 스펙"]
-  RouteSpecs --> Planning["기획 spec 참조"]
-  RouteSpecs --> Backend["백엔드 phase"]
-  Backend --> Codegen["API codegen phase, 필요 시"]
-  Codegen --> Web["web phase"]
-  Codegen --> Mobile["mobile phase"]
-  Backend --> Web
-  Backend --> Mobile
-  Web --> OwnerVerify["owner 검증: type/test/e2e"]
-  Mobile --> OwnerVerify
-  Backend --> OwnerVerify
-
-  OwnerVerify --> HumanReview["사람 검증: 최종 보고 / diff / 테스트"]
-  HumanReview --> Decision{"후속 작업 필요?"}
-  Decision -->|spec 갱신| ServiceSpec
-  Decision -->|phase 재실행| RouteSpecs
-  Decision -->|완료| Done["완료"]
-```
-
-## Spec 필수 항목
-
-서비스 딜리버리 스펙은 다음 항목을 소유합니다.
-
-- 서비스 목표와 성공 기준
-- 사용자/역할/권한
-- 도메인 모델과 생명주기
-- 사용자 여정
-- 필요한 모든 web/mobile page/route 목록
-- Backend/API/Foundation 계약
-- `DESIGN.md` 기반 서비스 디자인 방향
-- 생성된 route/page spec 목록
-- subagent 배정 매트릭스
-- 산출물 시뮬레이션 / 인계 계약
-- backend부터 frontend/mobile/owner 검증까지의 실행 그래프
-- 공유 파일 잠금
-- 검증/승인 기준
-- 차단/재실행 규칙
-
-생성된 route/page 딜리버리 스펙은 다음 항목을 소유합니다.
-
-- 상위 service spec
-- route/page 목표와 사용자 시나리오
-- 기획 spec 참조
-- component가 표시된 주석 화면 러프
-- 재사용/신규/계층/담당 `agent_type`이 보이는 component 인벤토리
-- route-local Hook/Toolkit/Type/Store slice
-- Storybook story 인벤토리, unit test 인벤토리, 필수 상태/검증 케이스
-- 해당 route가 소비하는 Backend/API slice
-- route-level subagent 배정 매트릭스
-- route-level 산출물 시뮬레이션 / 인계 계약
-- route-level 공유 파일 잠금
-
-## Storybook / Test 소유권
-
-공통 테스트 소유권과 별도 검증 전담 subagent 금지 규칙은 루트 `AGENTS.md`가 소유합니다.
-이 문서는 service/route spec에 어떤 표와 단계가 필요한지만 설명합니다.
-
-| 책임 | 담당 |
-|------|------|
-| Storybook 계약 작성 | `orch-delivery`가 spec의 `Storybook / 테스트 계약`에 작성 |
-| Storybook story 파일 작성 | `fe-storybook-agent` |
-| unit/E2E 계약 작성 | `orch-delivery`가 spec의 테스트 인벤토리에 작성 |
-| unit/E2E 파일 작성 | 해당 source, route, API 산출물을 소유한 subagent |
-| 1차 검증 | 테스트를 작성한 owner subagent |
-
-UI subagent가 신규/수정 UI component를 만들면 같은 step에서 unit test를 함께 작성하거나 갱신합니다.
-route, route layout, backend API 산출물을 만드는 subagent도 자기 범위의 E2E 또는 route-local 테스트를 함께 작성하거나 갱신합니다.
-Storybook 스토리가 필요하면 소스 step 다음에 `fe-storybook-agent` step을 둡니다.
-테스트 실패가 다른 ownership에서 발생하면 직접 고치지 않고 실패 로그와 필요한 owner를 최종 보고에 남깁니다.
-
-PC/Web과 Mobile 모두 같은 방식입니다.
-
-- PC/Web: `packages/fe-ui/src/**` component 소스 담당 subagent가 unit test를 작성하고, `fe-storybook-agent`가 Storybook story를 작성합니다.
-- Mobile: `packages/fe-mo-ui/src/**` component 소스 담당 subagent가 unit test를 작성하고, `fe-storybook-agent`가 Storybook story를 작성합니다.
-- route container, route layout, Store, backend-only step은 Storybook 대상이 아니며 해당 owner의 unit/E2E 검증만 spec에 남깁니다.
-
-## Delivery Subagent
-
-| subagent | 책임 |
-|------|------|
-| `orch-delivery` | 기획 질문 → 서비스 Spec → 승인 → Route/Page Spec → Screen/Feature Spec → 구현 → owner 검증을 단일 흐름으로 소유 |
-
-`orch-delivery`는 승인된 서비스 딜리버리 스펙과 연결된 route/page 딜리버리 스펙에 없는 subagent를 호출하지 않고, 허용 파일 범위 밖 파일을 수정하지 않습니다.
-
-## 산출물 시뮬레이션 / 인계 계약
-
-`orch-delivery`는 실행 전에 각 subagent step이 만들 산출물과 경로를 spec에 먼저 시뮬레이션합니다.
-직렬 다음 subagent는 이전 subagent의 대화 요약이 아니라 spec의 산출물 행과 실제 완료 보고의 경로를 입력으로 사용합니다.
-
-| 계약 항목 | 설명 |
-|-----------|------|
-| 입력 spec/파일 | 현재 step이 반드시 읽어야 하는 service/route/page/기획 스펙과 source/generated 파일 |
-| 예상 산출물 | spec, 소스, 생성 결과, Storybook story, test, config, route wiring 등 다음 step이 소비할 단위 |
-| 생성/수정 예정 경로 | 다음 subagent가 열 수 있는 구체 파일/폴더 경로와 파일명 패턴 |
-| 소비 step | 산출물을 읽어야 하는 다음 `step id`와 `agent_type` |
-| 인계 조건 | operationId, export name, generated hook name, component name, test path 같은 handoff key |
-| 검증 기준 | 산출물 존재와 계약 일치를 확인할 명령, grep, typecheck, test, codegen 기준 |
+## 공식 실행 모델
 
 ```mermaid
 flowchart TD
-  Spec["service / route/page spec"] --> Sim["orch-delivery: 산출물 시뮬레이션 행 작성"]
-  Sim --> A1["subagent A 실행"]
-  A1 --> Report["완료 보고: 실제 산출물 경로"]
-  Report --> Match{"예상 경로와 일치?"}
-  Match -->|예| A2["subagent B: spec 행을 입력으로 소비"]
-  Match -->|아니오| Update["spec 행 갱신 / 재승인 필요 여부 판단"]
-  Update --> A2
+  U["사용자"] --> R["기본 Codex"]
+  R --> S["적용된 skill"]
+  R --> A["custom agent"]
+  A --> K["worker가 적용하는 builder skill"]
+  A --> R
 ```
 
-경로가 비어 있거나 소비 step이 없는 신규/수정 step은 승인과 실행을 통과할 수 없습니다.
-cleanup/delete처럼 소비자가 없는 step은 `소비 step`에 `none-cleanup`과 사유를 남깁니다.
+- Skill은 지침, 참고 자료와 선택적 script의 묶음이다.
+- 기본 Codex 또는 custom agent가 skill을 읽고 지침을 수행한다.
+- Custom agent는 `.codex/agents/*.toml`의 `name`, `description`, `developer_instructions`로 구성한다.
+- Subagent 작업 메시지와 최종 결과는 텍스트다.
+- 메인 thread가 subagent 결과를 수집하고 최종 판단을 수행한다.
+- Custom agent와 skill의 관계는 runtime binding이 아니라 developer instruction이다.
 
-## 시각 실행 그래프
+공식 문서:
 
-spec의 `실행 그래프`는 직렬 순서와 병렬 가능 구간을 같이 보여야 합니다.
+- https://learn.chatgpt.com/docs/build-skills
+- https://learn.chatgpt.com/docs/agent-configuration/subagents
+
+공식 구현:
+
+- https://github.com/openai/codex/blob/main/codex-rs/core/src/tools/handlers/multi_agents/spawn.rs
+- https://github.com/openai/codex/blob/main/codex-rs/core/src/tools/handlers/multi_agents/wait.rs
+- https://github.com/openai/codex/blob/main/codex-rs/core/src/agent/status.rs
+
+## 프로젝트 실행 구조
 
 ```mermaid
 flowchart TD
-  Gate["S0 orch-delivery: 서비스 spec 승인"] --> RouteGen["S1 orch-delivery: 생성된 route/page spec"]
-  RouteGen --> Backend["backend 직렬 계약"]
-  subgraph BParallel["parallel: backend model 계약"]
-    Entity["be-entity-builder"]
-    VO["be-vo-builder"]
-    DTO["be-dto-builder"]
-    QueryDto["be-query-dto-builder"]
-  end
-  Backend --> Entity
-  Backend --> VO
-  Backend --> DTO
-  Backend --> QueryDto
-  Entity --> 런타임["repository → aggregate/service/client → usecase → controller package → app module"]
-  VO --> 런타임
-  DTO --> 런타임
-  QueryDto --> 런타임
-  런타임 --> Codegen["codegen, API 변경 시"]
-  Codegen --> Foundation["foundation 계약"]
-  Foundation --> Types["common-type-builder"]
-  Foundation --> Toolkit["common-toolkit-builder"]
-  Foundation --> Hook["fe-hook-agent"]
-  Foundation --> Store["fe-store-agent"]
-
-  subgraph WebParallel["parallel: web leaf subagent"]
-    DataDisplay["fe-data-display-agent"]
-    Feedback["fe-feedback-agent"]
-    Overlay["fe-overlay-agent"]
-    Layout["fe-layout-agent"]
-    Action["fe-action-agent"]
-    Input["fe-input-agent"]
-    Selection["fe-selection-agent"]
-    Navigation["fe-navigation-agent"]
-    Widget["fe-widget-agent"]
-    Feature["fe-feature-agent"]
-  end
-  Types --> DataDisplay
-  Types --> Feedback
-  Types --> Overlay
-  Types --> Layout
-  Toolkit --> Action
-  Toolkit --> Input
-  Toolkit --> Selection
-  Toolkit --> Navigation
-  Hook --> Widget
-  Store --> Feature
-  DataDisplay --> WebRoute["fe-screen-agent → fe-route-agent"]
-  Feedback --> WebRoute
-  Overlay --> WebRoute
-  Layout --> WebRoute
-  Action --> WebRoute
-  Input --> WebRoute
-  Selection --> WebRoute
-  Navigation --> WebRoute
-  Widget --> WebRoute
-  Feature --> WebRoute
-
-  subgraph MobileParallel["parallel: mobile leaf subagent"]
-    MoAction["fe-action-agent"]
-    MoInput["fe-input-agent"]
-    MoSelection["fe-selection-agent"]
-    MoWidget["fe-widget-agent"]
-    MoFeature["fe-feature-agent"]
-  end
-  Types --> MoAction
-  Types --> MoInput
-  Types --> MoSelection
-  Toolkit --> MoWidget
-  Hook --> MoFeature
-  MoAction --> MobileRoute["fe-screen-agent → fe-route-agent"]
-  MoInput --> MobileRoute
-  MoSelection --> MobileRoute
-  MoWidget --> MobileRoute
-  MoFeature --> MobileRoute
-
-  WebRoute --> Verify["owner type/test/e2e"]
-  MobileRoute --> Verify
-  런타임 --> Verify
+  U["사용자"] --> R["기본 Codex + orch-delivery skill"]
+  R --> P["승인된 route/page spec 실행 원장"]
+  R --> W1["worker A + 소유 builder skill"]
+  R --> W2["worker B + 소유 builder skill"]
+  W1 --> R
+  W2 --> R
+  R --> P
 ```
 
-그래프와 함께 `병렬 그룹 표`를 두어 병렬 step, 병렬 가능 사유, 공유 파일 잠금, 합류 step을 명시합니다.
+- `orch-delivery` custom agent는 두지 않는다.
+- 현재 기본 Codex가 `orch-delivery` skill을 적용하고 모든 worker를 직접 실행한다.
+- Worker는 자신의 단위 구현과 기본 검증을 끝내고 기본 Codex에 보고한다.
+- Worker는 다른 worker를 실행하거나 실행 순서를 결정하지 않는다.
+- 병렬 작업은 선행 단계가 완료되고 수정 범위가 겹치지 않을 때만 수행한다.
 
-## 백엔드 Phase
+## Skill 단독 실행
 
-백엔드 phase는 서비스 딜리버리 스펙의 `백엔드 / API / 기반 계약` 아래 구조별 인벤토리를 기준으로 실행합니다.
-
-| 인벤토리 | 주 담당 subagent | 소비 예시 |
-|----------|--------------|----------|
-| `Prisma / Database 인벤토리` | `be-prisma-builder` | `be-repository-builder`, `common-schema-builder`, owner test |
-| `Prisma Annotation 인벤토리` | `be-prisma-annotator` | Swagger/관리 UI 표시 계약 |
-| `Common Schema 인벤토리` | `common-schema-builder` | `be-dto-builder`, `fe-route-agent` |
-| `Entity / VO 인벤토리` | `be-entity-builder`, `be-vo-builder` | `be-service-builder`, `be-usecase-builder` |
-| `DTO / Query DTO 인벤토리` | `be-dto-builder`, `be-query-dto-builder` | `be-controller-builder`, codegen |
-| `Repository 인벤토리` | `be-repository-builder` | `be-aggregate-builder`, `be-service-builder`, read projection usecase |
-| `Aggregate 인벤토리` | `be-aggregate-builder` | `be-usecase-builder`, owner tests |
-| `Service 인벤토리` | `be-service-builder` | `be-usecase-builder` |
-| `Client 인벤토리` | `be-client-builder` | `be-usecase-builder`, `be-service-builder` |
-| `UseCase 인벤토리` | `be-usecase-builder` | `be-controller-builder` |
-| `엔드포인트 인벤토리` | `be-controller-builder` | `fe-route-agent`, owner E2E |
-| `Module / Bootstrap 인벤토리` | `be-module-builder`, `be-bootstrap-integrator` | 앱 부트스트랩 |
-| `Seed 인벤토리` | `be-seed-maker` | owner tests, local dev |
-| `Codegen / API Client 인벤토리` | command step | `fe-route-agent` |
-
-각 행는 `재사용/신규`, `소스/대상`, 소스 담당 `agent_type`, 소비 `agent_type`을 포함해야 하며, 누락된 backend element는 builder가 추측해 만들지 않습니다.
-
-```mermaid
-flowchart TD
-  Spec["서비스 딜리버리 스펙"] --> P["be-prisma-builder"]
-  P --> PA["be-prisma-annotator"]
-  PA --> S["common-schema-builder"]
-  S --> M["be-entity / be-vo / be-dto / be-query-dto"]
-  M --> R["be-repository-builder"]
-  R --> AG["be-aggregate-builder"]
-  R --> SV["be-service-builder"]
-  AG --> UC["be-usecase-builder"]
-  SV --> UC
-  UC --> C["be-controller-builder"]
-  C --> MOD["be-module-builder"]
-  MOD --> BOOT["be-bootstrap-integrator"]
-  BOOT --> SEED["be-seed-maker"]
-  SEED --> Verify["owner scoped unit/E2E 검증"]
+```text
+사용자 요청
+  -> builder skill 적용
+  -> 프로젝트 파일에서 입력 탐색
+  -> 필수 입력 사전 검사
+  -> 소유 산출물 구현
+  -> 기본 검증
+  -> Markdown 결과 보고
 ```
 
-## 기반 Phase
+경로가 명시되지 않았다는 이유만으로 멈추지 않는다. 프로젝트에서 먼저 찾고, 자신의 소유 범위에서 만들 수 있는 입력은 직접 만든다.
 
-기반 phase는 서비스 딜리버리 스펙의 `백엔드 / API / 기반 계약`과 생성된 route/page 딜리버리 스펙의 route-local slice를 기준으로 실행합니다.
+다른 owner의 필수 산출물이나 제품 결정이 없으면 구현 전에 `입력 필요`로 보고한다. 이 경우 변경 산출물은 없어야 한다.
 
-| 인벤토리 | 주 담당 subagent | 소비 예시 |
-|----------|--------------|----------|
-| `Hook 인벤토리` | `fe-hook-agent` | `fe-route-agent`, UI subagent |
-| `Toolkit 인벤토리` | `common-toolkit-builder` | backend/web/mobile/common packages |
-| `Type 인벤토리` | `common-type-builder` | backend/web/mobile/store/hook/toolkit |
-| `Store / State 인벤토리` | `fe-store-agent` 또는 route subagent | Feature, route container, screen props |
+## Worker 보고
 
-route-local hook/util/type/상태는 공용 subagent를 호출하지 않고 Web/Mobile 모두 `fe-route-agent`가 처리합니다.
-shared 기반 행이 `new` 또는 `modify`이면 `subagent 배정 매트릭스`와 `실행 그래프`에 반드시 같은 step을 둡니다.
+```markdown
+## 작업 결과
+완료 | 입력 필요 | 검증 실패
 
-## Web Phase
+## 작업 요약
+수행한 단위 작업 요약
 
-```mermaid
-flowchart TD
-  Spec["생성된 route/page 딜리버리 스펙"] --> Planning["web screen/feature planning 참조"]
-  Planning --> Leaf{"web leaf/component step 필요?"}
-  Spec --> Foundation["foundation step, 필요 시"]
-  Foundation --> Leaf
-  Leaf --> DataDisplay["fe-data-display-agent"]
-  Leaf --> Feedback["fe-feedback-agent"]
-  Leaf --> Overlay["fe-overlay-agent"]
-  Leaf --> Action["fe-action-agent"]
-  Leaf --> Input["fe-input-agent"]
-  Leaf --> Selection["fe-selection-agent"]
-  Leaf --> Navigation["fe-navigation-agent"]
-  Leaf --> Cell["fe-cell-agent"]
-  Leaf --> Columns["fe-columns-agent"]
-  Leaf --> Widget["fe-widget-agent"]
-  Leaf --> Layout["fe-layout-agent"]
-  Leaf --> Feature["fe-feature-agent"]
-  Leaf --> DataGrid["fe-data-grid-agent"]
-  Leaf --> Form["fe-form-agent"]
-  Leaf --> Menu["fe-menu-agent"]
-  Leaf --> Store["fe-store-agent, shared store 필요 시"]
-  Leaf --> Page["fe-screen-agent"]
-  Page --> RouteLayout["fe-route-layout-agent, 필요 시"]
-  RouteLayout --> Route["fe-route-agent"]
-  Page --> Route
-  Route --> Verify["owner scoped unit/E2E 검증"]
+## 변경 산출물
+생성, 수정, 삭제한 파일
+
+## 수행한 검증
+실행 명령, 결과, 확인 근거
+
+## 남은 문제
+누락 입력, 실패 원인, 필요한 결정
 ```
 
-## Mobile Phase
+이 형식은 프로젝트의 텍스트 보고 규약이며 Codex가 강제하는 구조화 출력이 아니다. Codex 런타임의 `Completed`는 agent turn이 끝났다는 뜻이며 프로젝트 작업의 `완료` 여부는 최종 보고와 실제 검증 근거로 별도 판정한다.
 
-```mermaid
-flowchart TD
-  Spec["생성된 route/page 딜리버리 스펙"] --> Planning["mobile screen/feature planning 참조"]
-  Planning --> Leaf{"mobile leaf UI step 필요?"}
-  Spec --> Foundation["foundation step, 필요 시"]
-  Foundation --> Leaf
-  Leaf --> Action["fe-action-agent"]
-  Leaf --> Input["fe-input-agent"]
-  Leaf --> Selection["fe-selection-agent"]
-  Leaf --> Navigation["fe-navigation-agent"]
-  Leaf --> DataDisplay["fe-data-display-agent"]
-  Leaf --> Feedback["fe-feedback-agent"]
-  Leaf --> Overlay["fe-overlay-agent"]
-  Leaf --> LayoutPrimitive["fe-layout-agent"]
-  Leaf --> Menu["fe-menu-agent"]
-  Leaf --> Widget["fe-widget-agent"]
-  Leaf --> Feature["fe-feature-agent"]
-  Leaf --> Screen["fe-screen-agent"]
-  Widget --> Feature
-  Feature --> Screen
-  Screen --> Layout["fe-route-layout-agent, 필요 시"]
-  Layout --> Route["fe-route-agent"]
-  Screen --> Route
-  Route --> Verify["owner scoped unit/E2E 검증"]
+## Route/Page 실행 원장
+
+```markdown
+| 단계 | owner | 목표 | 입력과 근거 | 수정 범위 | 산출물 | 선행 단계 | 완료 기준 | 작업 상태 | 검증 근거 |
+|---|---|---|---|---|---|---|---|---|---|
 ```
 
-## 실행 결과 검증
+- 원장은 실행 순서, 책임, 산출물과 검증 근거를 지속하는 프로젝트 문서다.
+- 원장은 Codex 내부 scheduler나 자동 복구 기능이 아니다.
+- 상태와 검증 근거는 실행 중 갱신한다.
+- 제품 계약이나 단계 계약을 바꾸면 사용자 재승인을 받는다.
+- 새로운 기본 Codex는 원장을 읽고 완료되지 않은 준비 단계부터 작업을 재개할 수 있다.
 
-- 실행 결과는 각 subagent의 최종 보고, 변경 diff, 테스트 결과를 사람이 검증합니다.
-- 실행 결과는 spec의 `산출물 시뮬레이션 / 인계 계약` 행과 실제 생성/수정 경로가 맞는지 확인합니다.
-- `spawn_agent`, `wait_agent`, `send_input`은 자동 라우팅 보장 기능이 아니라 부모 Codex가 필요할 때 사용하는 운영 도구입니다.
-- 부모 Codex는 다음 subagent에 승인된 spec 경로, 산출물 행 id, 실제 완료 경로를 전달합니다. 채팅 요약은 보조 맥락일 뿐 산출물 위치의 기준이 아닙니다.
-- spec 갱신, phase 재실행, agent 재배정, 차단 처리는 사람이 검증한 뒤 결정합니다.
+## 책임 경계
 
-## 운영 규칙
+- `AGENTS.md`: 모든 agent와 skill에 적용되는 공통 불변 계약
+- Builder skill: 한 종류의 산출물을 구현하고 검증하는 절차
+- Custom agent TOML: 역할 선택과 session 지침
+- `orch-delivery` skill: 승인된 여러 단위 작업을 기본 Codex가 조율하는 절차
+- Route/page spec: 제품 결정과 프로젝트 실행 원장
 
-- 서비스 딜리버리 스펙 없이 subagent를 실행하지 않습니다.
-- 서비스 딜리버리 스펙 작성과 사용자 승인 없이 route/page spec 생성 또는 subagent 실행을 하지 않습니다.
-- 생성된 route/page 딜리버리 스펙 없이 route/page leaf subagent를 실행하지 않습니다.
-- 산출물 시뮬레이션 / 인계 계약 없이 직렬 다음 subagent를 실행하지 않습니다.
-- 병렬 실행은 spec에서 `parallel: true`이고 파일 ownership이 겹치지 않는 leaf/component step에만 허용합니다.
-- 테스트 전략 전용 intermediate subagent 없이 산출물 owner subagent가 spec 기준으로 자기 범위 테스트를 구현합니다.
-- 서비스 딜리버리 스펙이 상위 실행 기준이며, 별도 Delivery Plan 문서는 만들지 않습니다.
-- Screen/Feature 기획 스펙에는 `subagent 배정 매트릭스`, `실행 그래프`, 백엔드 build order, 기반 세부 실행표를 쓰지 않습니다.
-
-## 시나리오 점검
-
-| 시나리오 | spec 판단 기준 |
-|----------|-------------------------|
-| 신규 도메인 + web 화면 | backend phase를 Prisma부터 controller/module까지 포함하고, API 변경이면 codegen 후 web leaf/page/route와 각 owner 검증 step을 배치합니다. |
-| 기존 API 변경 + web 화면 | 변경 endpoint와 Orval hook 영향을 필수 요소에 기록하고, backend/codegen/web route wiring과 owner 검증 step만 포함합니다. |
-| mobile route 추가 | mobile screen/leaf/route/native wiring과 owner 검증 step을 우선 배치하고, API 계약 gap이 있으면 backend/codegen step을 선행시킵니다. |
-| web/mobile 동시 화면 추가 | backend와 codegen은 한 번만 실행하고, web phase와 mobile phase는 파일 ownership이 분리된 step만 병렬 허용한 뒤 owner 검증 결과에서 합류합니다. |
-| shared hook/toolkit/type/store 변경 | 서비스 딜리버리 스펙의 백엔드/API/기반 계약에 행과 step을 추가하고, 필요한 생성 route/page spec에는 slice로 연결합니다. |
+수정 범위는 책임 계약이다. 실제 접근 제한이 필요하면 별도의 sandbox 설정을 사용한다.

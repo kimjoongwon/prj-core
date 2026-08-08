@@ -18,11 +18,15 @@
 - 디자인 정렬: `no UI design impact`. detail layout과 readOnly 상태는 유지합니다.
 - `[spaceId]`와 응답 관계 ID는 DB `BIGINT id`의 양수 십진 문자열이며 모델별 ULID는 일반 REST 응답에 포함하지 않습니다.
 
-| 단계 id | 담당 `agent_type` | 예상 산출물 | 생성/수정 예정 경로 | 소비 단계 | 검증 기준 |
-|---|---|---|---|---|---|
-| ID-BE | `be-controller-builder` | decimal route/response 계약 | backend ID consumer | ID-CODEGEN | invalid ID 400 |
-| ID-CODEGEN | `common-type-builder` | string API client | `packages/fe-api/src/**` | ID-WEB | ID type `string` |
-| ID-WEB | `fe-route-agent` | detail route ID 전환 | 이 route | none-final | detail E2E 통과 |
+## 실행 원장
+
+> 이 표의 작업 상태는 프로젝트 실행 기록이며 Codex 런타임 상태와 별도로 판정합니다.
+
+| 단계 | owner | 목표 | 입력과 근거 | 수정 범위 | 산출물 | 선행 단계 | 완료 기준 | 작업 상태 | 검증 근거 |
+|---|---|---|---|---|---|---|---|---|---|
+| ID-BE | be-controller-builder | decimal route/response 계약 | apps/admin/web/src/app/(admin)/spaces/[spaceId]/fitness-center/page.spec.md | backend ID consumer | decimal route/response 계약 | - | invalid ID 400 | 대기 | - |
+| ID-CODEGEN | common-type-builder | string API client | apps/admin/web/src/app/(admin)/spaces/[spaceId]/fitness-center/page.spec.md | `packages/fe-api/src/**` | string API client | - | ID type `string` | 대기 | - |
+| ID-WEB | fe-route-agent | detail route ID 전환 | apps/admin/web/src/app/(admin)/spaces/[spaceId]/fitness-center/page.spec.md | 이 route | detail route ID 전환 | - | detail E2E 통과 | 대기 | - |
 
 | 검증 항목 | 명령 | 검증 `agent_type` | 통과 기준 |
 |---|---|---|---|
