@@ -5,7 +5,7 @@ description: "이 skill은 `fe-data-grid-agent` 역할로 일할 때 사용합�
 
 # fe-data-grid-builder
 
-DataGrid/Table Column builder를 만들거나 고치면 [Column 규칙](references/columns.md)을 함께 적용합니다.
+DataGrid/Table Column builder를 만들거나 고치면 이 문서의 "Column 세부 계약" 섹션을 함께 적용합니다.
 DataGrid/Table Cell 컴포넌트를 만들거나 고치면 [Cell 규칙](references/cells.md)을 함께 적용합니다.
 
 ## 플랫폼 라우팅
@@ -98,3 +98,286 @@ DataGrid/Table Cell 컴포넌트를 만들거나 고치면 [Cell 규칙](referen
 - 이 skill에 정의된 기본 검증을 실제로 실행하고 요청의 추가 완료 기준까지 확인한다.
 - 구현 후 검증을 통과하지 못하면 변경 산출물과 실패 근거를 포함해 `검증 실패`로 보고한다.
 - 최종 메시지는 `AGENTS.md`의 Worker 최종 보고 Markdown 계약을 따른다.
+
+## DataGrid 핵심 계약
+
+### 적용 범위
+
+이 문서는 `packages/fe-ui/src/data-grid/**`의 DataGrid 본체, 상태, query 동기화, grouping, hierarchy, pagination, selection과 변경 추적 계약을 소유합니다.
+
+Column 세부 계약은 이 문서에서, Cell 세부 계약은 `references/cells.md`에서 소유합니다. 화면별 요구사항이나 도메인 정책은 이 문서에 복제하지 않고 요청, 기존 소비 코드와 해당 owner 문서를 근거로 판단합니다.
+
+### 역할과 상태 소유권
+
+- DataGrid는 columns, filter, sort, pagination, selection을 하나의 계약으로 제공하는 표준 목록 렌더러입니다.
+- query, column 상태와 selection 상호작용은 `DataGridState`가 소유합니다.
+- 외부 callback은 row click, row move처럼 상위 계층이 처리해야 하는 고수준 결과에만 사용합니다.
+- 서버에는 class instance가 아니라 `toJSON()`이 반환한 plain snapshot만 저장합니다.
+- snapshot에는 함수, `ReactNode`, row 객체, `Set`, DOM 또는 React event를 넣지 않습니다.
+- 복원은 서버 snapshot을 입력으로 사용하고 런타임 객체를 직렬화 계약으로 취급하지 않습니다.
+- selection UI는 선택 개수와 가능한 action을 표현하며 내부 row key 목록을 화면 계약으로 노출하지 않습니다.
+
+### 렌더링과 설정 계약
+
+DataGrid는 `@tanstack/react-table`을 기반으로 다음 기능을 일관되게 제공합니다.
+
+- column visibility, order, sizing과 resize
+- sort, filter와 pagination
+- selection
+- loading, empty와 dark mode
+- row group panel
+- inline edit와 변경 상태
+- 생성, 수정, 삭제 snapshot
+- row 이동
+- 가상 grouping과 실제 hierarchy
+
+공개 설정은 최소 다음 의미를 유지합니다.
+
+| 설정 | 계약 |
+|---|---|
+| `rowGroupPanelShow` | `never`, `always`, `onlyWhenGrouping`으로 group panel 노출을 제어 |
+| `columns[].rowGroup` | 초기 grouping 참여 여부 |
+| `columns[].enableRowGroup` | 사용자가 grouping에 사용할 수 있는 column 여부 |
+| `getSubRows` | 실제 parent-child hierarchy 연결 |
+| `columns[].rowExpander` | hierarchy 확장 UI를 제공하는 column |
+| `columns[].editable` | inline edit 허용 여부 |
+| `onRowMove` | 상위 계층이 row 이동 결과를 반영하는 callback |
+
+### Grouping과 hierarchy
+
+#### 가상 grouping
+
+- grouping 상태의 기준은 `query.groupBy: string[]`입니다.
+- 일반 조회와 grouped 조회 모두 backend 응답 row는 leaf row입니다.
+- backend는 group tree를 만들지 않습니다.
+- grouped 조회에서는 선택된 group에 속한 leaf row를 flat하게 반환하고 DataGrid가 client-side group을 구성합니다.
+- `groupBy`가 없으면 `skip`과 `take`는 row 기준입니다.
+- `groupBy`가 있으면 `skip`과 `take`는 첫 번째 group level 기준입니다.
+- grouped 조회의 `totalCount`는 leaf row 수가 아니라 첫 번째 level의 group 수입니다.
+- 여러 `groupBy`를 사용해도 pagination 기준은 첫 번째 group level입니다.
+
+#### 실제 hierarchy
+
+- 실제 parent-child 데이터는 상위 계층이 중첩 구조로 만들고 DataGrid에 전달합니다.
+- DataGrid는 `getSubRows`로 child row를 연결합니다.
+- 실제 hierarchy에는 `query.groupBy`를 사용하지 않습니다.
+- 가상 grouping과 실제 hierarchy를 하나의 row tree에 혼합하지 않습니다.
+- parent 식별자, `sortOrder`와 중첩 재구성 같은 도메인 규칙은 DataGrid가 추론하지 않습니다.
+
+### Query string과 저장 snapshot
+
+- 현재 조회 상태의 URL 동기화는 DataGrid가 `nuqs`를 통해 소유합니다. route가 동일 상태를 위한 별도 handler를 중복 구성하지 않습니다.
+- `query.sort`는 `string[]`입니다.
+- toolbar 검색, header filter와 data filter는 query에 반영합니다.
+- grouping은 `query.groupBy: string[]`에 반영합니다.
+- pagination은 `skip`과 `take`에 반영합니다.
+- sort, filter 또는 group 변경 시 `skip`을 `0`으로 초기화합니다.
+- visibility, order, sizing과 selection은 URL query에 넣지 않습니다.
+- URL query는 현재 조회 상태이고 `DataGridState.toJSON()`은 사용자 preference와 편집 상태를 위한 저장 snapshot입니다.
+- UI grouping snapshot이 있더라도 backend 요청의 기준은 `query.groupBy`입니다.
+
+### 변경 추적과 row 이동
+
+`DataGridState.changes`는 `created`, `updated`, `deleted` 배열을 소유합니다.
+
+- 새 row의 편집은 `created`만 갱신합니다.
+- 기존 row의 값을 원래 값으로 되돌리면 해당 변경 field를 `updated`에서 제거합니다.
+- 새 row를 삭제하면 `created`에서 제거합니다.
+- 기존 row를 삭제하면 식별자를 `deleted`에 추가합니다.
+- inline edit 결과는 callback으로 우회하지 않고 `state.changes`에 반영합니다.
+- row 이동 UI는 DataGrid가 처리할 수 있지만 `parentId`, `sortOrder`와 nested row 재구성은 `onRowMove`를 받은 상위 계층이 처리합니다.
+
+### 재사용과 경계
+
+- 기존 `DataGrid.tsx`를 확장하며 별도 `DataTable` 또는 `Table` wrapper를 만들지 않습니다.
+- row key에는 기존 `getDataGridRowKey`를 사용합니다.
+- inline input은 기존 `InputRenderer.tsx`와 data-grid input component를 우선 재사용합니다.
+- Button, Input, Select, Checkbox, Pagination, Skeleton과 EmptyState는 기존 공용 primitive를 재사용합니다.
+- 도메인 column builder는 외부에서 주입하고 공용 Cell은 `data-grid/cell/**`에서 재사용합니다.
+- DataGrid를 `display` 또는 `data-display` 계층에 중복 구현하지 않습니다.
+- DataGrid 내부에 도메인 전용 Cell이나 도메인 field를 전제로 한 hierarchy 설정을 만들지 않습니다.
+- column builder는 선언과 Cell 조합만 담당하며 실제 UI markup은 Cell이 소유합니다.
+- API, store와 route 동작은 Screen, Feature 또는 Page가 소유하고 Cell에는 값과 handler만 전달합니다.
+- export는 기존 `data-grid` 공개 경로를 유지하며 새 최상위 column 계층을 만들지 않습니다.
+
+### 기본 검증 기준
+
+구현 전 기존 DataGrid, state/type, 공개 export, 소비 코드와 관련 테스트를 확인합니다. 구현 후에는 skill 본문의 기본 검증과 함께 다음 항목을 확인합니다.
+
+- `toJSON()`과 restore가 plain snapshot 계약을 지키는지
+- sort, filter와 group 변경 시 pagination이 초기화되는지
+- 일반 조회와 grouped 조회의 `skip`, `take`, `totalCount` 의미가 구분되는지
+- grouping과 hierarchy가 혼합되지 않는지
+- 생성, 수정, 되돌리기와 삭제가 `changes` 규칙대로 반영되는지
+- column visibility, order, sizing과 selection이 URL query에 유입되지 않는지
+- 기존 primitive, Cell, input과 export 경로를 재사용하는지
+- loading, empty, selection, inline edit, row move와 dark mode 상태가 기존 UI 계약을 유지하는지
+
+## Column 세부 계약
+
+`fe-data-grid-agent`가 DataGrid/Table Column builder를 만들거나 고칠 때 적용합니다.
+
+### 플랫폼 라우팅
+
+- 이 역할은 웹 전용 agent입니다.
+- `packages/fe-mo-ui/**`, `apps/mobile/**`, Expo Router, `heroui-native`, React Native 런타임 작업은 이 역할의 실행 범위가 아닙니다.
+
+### 공통
+
+#### 공통 실행 규칙
+
+- 먼저 `플랫폼 라우팅`으로 현재 대상이 React Web, React Native, Shared 중 어디에 속하는지 확정합니다.
+- Storybook 스토리는 `fe-storybook-agent`가 맡습니다. 소스 담당 에이전트는 단위 테스트와 소스 계약만 맡고, Storybook 필요 시 spec 또는 최종 보고로 인계합니다.
+
+### 웹 규칙
+
+#### 웹 런타임 기준 (필수)
+
+- 이 섹션은 `packages/fe-ui/**`, `apps/*/web/**`, Next.js App Router `page.tsx`/`layout.tsx`/`route.meta.ts` 대상에만 적용합니다.
+- 웹 작업은 `@heroui/react` 원본 라이브러리 source와 `@cocrepo/ui` export를 먼저 확인하고, DOM/CSS/Tailwind/HeroUI React 계약을 기준으로 판단합니다.
+- Next.js server/client component 경계, SSR, hydration, browser DOM API, React Aria/HeroUI React id 안정성 규칙은 React Web 대상에서만 적용합니다.
+- 모바일 대상에서는 이 섹션의 DOM event, browser API, SSR/hydration, `@heroui/react`, `@cocrepo/ui` 규칙을 실행 규칙으로 적용하지 않습니다.
+
+#### 재사용 우선 점검 (필수)
+
+- 작업을 시작하기 전에 반드시 기존 `data-grid/columns`, `cell`, `page`, `DataGrid`, 관련 Screen/Feature 구현, owner 문서, 테스트를 먼저 검색합니다.
+- Column/cell 후보는 `@cocrepo/ui` export만 보지 말고 원본 라이브러리 `node_modules/@heroui/react/package.json` exports와 `node_modules/@heroui/react/dist/components/**` source까지 확인합니다.
+- 신규 cell/column/helper 생성 전에 기존 구현을 그대로 재사용하거나 소폭 개선 후 재사용할 수 있는지 우선 판단합니다.
+- 기존 `DataGrid`, `data-grid/columns`, `cell` 또는 `@heroui/react` Table/Chip/Button 등으로 표현 가능한 table UI를 raw `<table>`/`div`/`button` + className 조합으로 재구현하지 않습니다.
+- 동일 책임의 중복 column helper / cell / page table 구현을 금지합니다.
+
+#### FE DataGrid Column 역할
+
+당신은 `packages/fe-ui/src/data-grid/columns` 레이어를 정리하는 DataGrid 보조 규칙을 따릅니다.
+목표는 **column은 선언만 담당하고, 실제 셀 UI는 반드시 `packages/fe-ui/src/data-grid/cell`에 두는 것**입니다.
+
+---
+
+#### 1. 언제 사용하는가?
+
+| 상황 | 사용 여부 | 설명 |
+|------|:--------:|------|
+| `packages/fe-ui/src/data-grid/columns/**`에 새 컬럼 조합이 필요할 때 | ✅ | `data-grid`/`internal` 기준으로 정리 |
+| page 내부 inline table column을 `data-grid/columns` 레이어로 이동할 때 | ✅ | 공용 조합으로 승격 |
+| `data-grid/columns` 안에 직접 JSX 마크업이 들어가 있을 때 | ✅ | `cell` 추출 대상 |
+| `raw` table와 `DataGrid` 사이 경계를 정리할 때 | ✅ | 마지막 raw 소비처 제거 포함 |
+| 새로운 Cell 컴포넌트가 필요할 때 | ⚠️ | 같은 `fe-data-grid-agent` owner 안에서 `fe-data-grid-builder` 보조 규칙을 함께 적용합니다. |
+| 일반 Widget/Feature만 만들면 되는 작업 | ❌ | 다른 프론트엔드 agent 사용 |
+| page route thin container만 수정하는 작업 | ❌ | `fe-route-agent` 중심으로 진행 |
+
+---
+
+#### 2. 책임 범위
+
+#### 2.1 `data-grid/columns` 레이어
+
+- `packages/fe-ui/src/data-grid/columns/data-grid/**`
+  - `DataGridColumnConfig` 조합
+  - 도메인별 collection table column 공개 계약
+- `packages/fe-ui/src/data-grid/columns/internal/**`
+  - 공용 preset/helper/factory
+  - page가 직접 import하지 않는 내부 구현
+- `packages/fe-ui/src/data-grid/columns/index.ts`
+  - 공개 배럴
+
+#### 2.2 `cell` 레이어
+
+- `packages/fe-ui/src/data-grid/cell/**`
+  - 실제 표시 책임
+  - 값 포맷팅 / 상태 배지 / 액션 버튼 / 복합 셀 UI
+  - 소유 owner는 `fe-data-grid-agent`입니다. Column builder는 조합/소비만 기본으로 합니다.
+
+#### 2.3 필요 시 함께 수정하는 레이어
+
+- `packages/fe-ui/src/screen/**`
+  - 아직 custom `<table>`를 직접 그리고 있다면 `DataGrid` 전환
+- 대응 관련 route/Page, Screen/Feature 구현과 owner 계약
+  - 코드 변경 시 반드시 갱신
+
+---
+
+#### 3. 하드 규칙 (위반 시 실패)
+
+1. `packages/fe-ui/src/data-grid/columns/**` 안에서 직접 커스텀 셀 마크업을 만들지 않습니다.
+2. `data-grid/columns` 안에서 아래 계열 JSX를 직접 렌더링하지 않습니다.
+   - `div`, `span`, `p`, `button`
+   - `Button`, `Chip`, `Badge`, `Switch`, `Link`
+3. `data-grid/columns`는 반드시 `packages/fe-ui/src/data-grid/cell`에서 공개한 셀 컴포넌트만 조합합니다.
+4. 단순 값 표시도 가능하면 `DefaultCell`, `BooleanCell`, `DateTimeCell`, `ActionButtonCell` 같은 기존 cell을 우선 사용합니다.
+5. `raw` table 전용 columns/helper는 신규 생성하지 않습니다.
+6. `DataGrid`로 옮길 수 있는 page는 page 내부 custom `<table>`를 유지하지 않습니다.
+7. `data-grid/columns` 폴더 내부에 새 helper/factory 함수를 만들면 **한글 주석**으로 역할을 짧게 설명합니다.
+8. 컬럼 변경이 route page/Screen/Feature 계약을 바꾸면 소비 코드, 공개 export와 관련 테스트를 함께 갱신합니다. 별도 `*.spec.md` 문서는 만들지 않습니다.
+
+---
+
+#### 4. 작업 기준
+
+#### 4.1 Cell 추출 기준
+
+다음 중 하나라도 해당하면 `data-grid/columns` 안에 두지 말고 `src/data-grid/cell`로 이동합니다.
+
+- 2개 이상의 element를 조합한다
+- 색상/variant/status 매핑이 있다
+- 버튼/링크/Chip/Badge/Switch가 들어간다
+- `className`이 필요한 JSX가 나온다
+- 같은 렌더링이 여러 column/page에서 재사용될 가능성이 있다
+
+#### 4.2 `data-grid/columns`에 남아도 되는 것
+
+- `createPresetColumn(...)`
+- `createCreatedAtColumn(...)`
+- `createActionsColumn(...)`
+- `cell: ({ getValue }) => <ExistingCell ... />`
+- field / label / size / align / accessorKey 같은 선언 메타데이터
+
+#### 4.3 `raw` 제거 기준
+
+- 마지막 raw 소비자까지 `DataGrid` 또는 `collection` column 조합으로 옮길 수 있으면
+  - `data-grid/columns/raw/**` 삭제
+  - `data-grid/columns/internal/rawFactory.*` 삭제
+  - 상위 배럴 export 제거
+- 더 이상 raw가 필요 없는데 문서만 남아 있으면 관련 소비 코드와 owner 문서도 같이 정리합니다.
+
+---
+
+#### 5. 구현 절차
+
+1. `rg`로 기존 `data-grid/columns`, `cell`, `page`, `DataGrid` 사용처를 먼저 검색
+2. 이미 있는 cell/preset/helper로 해결 가능한지 우선 판단
+3. 부족한 셀은 `fe-data-grid-agent` 산출물로 요청하거나, 같은 승인 slice에서만 `packages/fe-ui/src/data-grid/cell`에 최소 범위로 추가/보강
+4. `data-grid/columns/data-grid` 또는 `data-grid/columns/internal`에서 공용 조합으로 승격
+5. page가 custom `<table>`를 직접 그리고 있으면 `DataGrid`로 전환
+6. 더 이상 쓰지 않는 `raw` export/helper/file 제거
+7. 대응 관련 route/Page, Screen/Feature 구현과 owner 계약 갱신
+8. `biome format` + 타입 체크/검색 검증 수행
+
+---
+
+#### 6. 완료 전 필수 검증
+
+```bash
+# 1) columns 안에 직접 마크업이 남아 있는지 점검
+rg -n "<(div|span|p|button)\\b|<(Button|Chip|Badge|Switch|Link)\\b" packages/fe-ui/src/data-grid/columns
+
+# 2) raw 경로가 남아 있는지 점검
+rg -n "data-grid/columns/raw|columns/raw|rawFactory|from \\\"\\./raw\\\"" packages/fe-ui apps/admin/web
+
+# 3) 변경된 columns/page/cell 타입 체크
+pnpm exec tsc -p packages/fe-ui/tsconfig.json --noEmit --pretty false
+```
+
+---
+
+#### 7. 산출물 예시
+
+- `packages/fe-ui/src/data-grid/cell/RoleNameCell/RoleNameCell.tsx`
+- `packages/fe-ui/src/data-grid/columns/data-grid/adminColumns.tsx`
+- `packages/fe-ui/src/screen/RoleListScreen/RoleListScreen.tsx`
+- `packages/fe-ui/src/data-grid/columns/index.ts`
+
+핵심은 **column 파일이 UI를 소유하지 않게 만드는 것**입니다.
+
+
+- 이 역할이 불가피하게 cell 소스를 함께 수정한 경우에는 같은 작업에서 해당 cell의 같은 위치 단위 테스트도 갱신하고, 최종 보고에 왜 `fe-data-grid-agent` 인계 없이 함께 처리했는지 적습니다.
+- columns 변경으로 연결된 cell/단위 테스트 누락과 DataGrid 계약 drift는 이 agent가 자체 검증하고, cell owner 범위가 필요하면 `fe-data-grid-agent` 인계로 보고합니다.
