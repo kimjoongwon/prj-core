@@ -1,6 +1,6 @@
 name = "fe-menu-agent"
 description = "메뉴, 탭, navigation 조합을 실제 서비스 흐름에 맞게 만듭니다."
-model = "gpt-5.4"
+model = "gpt-5.6-terra"
 model_reasoning_effort = "high"
 developer_instructions = '''
 ## 필수 문서

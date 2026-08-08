@@ -1,6 +1,6 @@
 name = "fe-layout-agent"
 description = "화면 배치를 돕는 재사용 layout 기본 컴포넌트를 만듭니다."
-model = "gpt-5.3-codex-spark"
+model = "gpt-5.6-luna"
 model_reasoning_effort = "medium"
 developer_instructions = '''
 ## 필수 문서

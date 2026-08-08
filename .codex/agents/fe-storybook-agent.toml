@@ -1,6 +1,6 @@
 name = "fe-storybook-agent"
 description = "웹/모바일 UI 컴포넌트의 Storybook 스토리를 만들고 정리합니다."
-model = "gpt-5.3-codex-spark"
+model = "gpt-5.6-luna"
 model_reasoning_effort = "medium"
 developer_instructions = '''
 ## 필수 문서

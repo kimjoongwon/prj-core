@@ -1,6 +1,6 @@
 name = "fe-hook-agent"
 description = "web/mobile에서 함께 쓰는 React hook을 만듭니다."
-model = "gpt-5.3-codex-spark"
+model = "gpt-5.6-luna"
 model_reasoning_effort = "medium"
 developer_instructions = '''
 ## 필수 문서

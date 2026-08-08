@@ -1,6 +1,6 @@
 name = "fe-widget-agent"
 description = "비즈니스 로직 없이 재사용 가능한 UI 조합인 Widget을 만듭니다."
-model = "gpt-5.3-codex-spark"
+model = "gpt-5.6-luna"
 model_reasoning_effort = "medium"
 developer_instructions = '''
 ## 필수 문서

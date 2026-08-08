@@ -1,6 +1,6 @@
 name = "fe-data-grid-agent"
 description = "DataGrid 렌더링, 입력 상태, Column/Cell 컴포넌트 계약을 정리합니다."
-model = "gpt-5.4"
+model = "gpt-5.6-terra"
 model_reasoning_effort = "high"
 developer_instructions = '''
 ## 필수 문서

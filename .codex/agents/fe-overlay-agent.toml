@@ -1,6 +1,6 @@
 name = "fe-overlay-agent"
 description = "모달, 팝오버, 툴팁 같은 떠 있는 UI를 만듭니다."
-model = "gpt-5.3-codex-spark"
+model = "gpt-5.6-luna"
 model_reasoning_effort = "medium"
 developer_instructions = '''
 ## 필수 문서

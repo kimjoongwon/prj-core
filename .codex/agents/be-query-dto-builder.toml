@@ -1,6 +1,6 @@
 name = "be-query-dto-builder"
 description = "목록 조회의 검색, 정렬, 페이지네이션 Query DTO를 만듭니다."
-model = "gpt-5.3-codex-spark"
+model = "gpt-5.6-luna"
 model_reasoning_effort = "medium"
 developer_instructions = '''
 ## 필수 문서

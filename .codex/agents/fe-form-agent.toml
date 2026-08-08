@@ -1,6 +1,6 @@
 name = "fe-form-agent"
 description = "생성/수정 화면에서 쓰는 form 조합을 만듭니다."
-model = "gpt-5.4"
+model = "gpt-5.6-terra"
 model_reasoning_effort = "high"
 developer_instructions = '''
 ## 필수 문서

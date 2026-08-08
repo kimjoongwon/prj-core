@@ -1,6 +1,6 @@
 name = "fe-store-agent"
 description = "여러 화면에서 함께 쓰는 MobX store를 만듭니다."
-model = "gpt-5.4"
+model = "gpt-5.6-terra"
 model_reasoning_effort = "high"
 developer_instructions = '''
 ## 필수 문서

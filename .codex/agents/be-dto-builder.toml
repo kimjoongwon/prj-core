@@ -1,6 +1,6 @@
 name = "be-dto-builder"
 description = "API 요청과 응답에 쓰는 DTO 클래스를 만듭니다."
-model = "gpt-5.3-codex-spark"
+model = "gpt-5.6-luna"
 model_reasoning_effort = "medium"
 developer_instructions = '''
 ## 필수 문서

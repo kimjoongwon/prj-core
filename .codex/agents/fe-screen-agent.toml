@@ -1,6 +1,6 @@
 name = "fe-screen-agent"
 description = "page가 보여줄 실제 화면 Screen을 만듭니다."
-model = "gpt-5.4"
+model = "gpt-5.6-terra"
 model_reasoning_effort = "high"
 developer_instructions = '''
 ## 필수 문서

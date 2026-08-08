@@ -1,6 +1,6 @@
 name = "fe-feature-agent"
 description = "Widget에 store나 API를 연결한 Feature를 만듭니다."
-model = "gpt-5.4"
+model = "gpt-5.6-terra"
 model_reasoning_effort = "high"
 developer_instructions = '''
 ## 필수 문서

@@ -1,6 +1,6 @@
 name = "be-entity-builder"
 description = "도메인 규칙을 담는 Entity 클래스를 만듭니다."
-model = "gpt-5.3-codex-spark"
+model = "gpt-5.6-luna"
 model_reasoning_effort = "medium"
 developer_instructions = '''
 ## 필수 문서
