@@ -130,7 +130,7 @@ DataGrid는 `query.groupBy` 값을 기준으로 받은 leaf row를 클라이언�
 ## Column 통합 계약
 
 `packages/fe-ui/src/data-grid/columns/**`은 DataGrid/Table의 column builder 계층으로 DataGrid slice에 포함합니다.
-기존 `fe-columns-agent` 역할은 `fe-data-grid-agent`의 Column 보조 규칙으로 통합합니다.
+Column과 Cell 규칙은 `fe-data-grid-agent`의 DataGrid 계약으로 통합합니다.
 
 | 항목 | 계약 |
 | --- | --- |
@@ -144,7 +144,7 @@ DataGrid는 `query.groupBy` 값을 기준으로 받은 leaf row를 클라이언�
 ## Cell 통합 계약
 
 `packages/fe-ui/src/data-grid/cell/**`은 DataGrid/Table의 셀 표시 단위로 DataGrid slice에 포함합니다.
-기존 `fe-cell-agent` 역할은 `fe-data-grid-agent`의 Cell 보조 규칙으로 통합합니다.
+Cell 규칙과 구현 책임은 `fe-data-grid-agent`가 통합 소유합니다.
 
 | 항목 | 계약 |
 | --- | --- |

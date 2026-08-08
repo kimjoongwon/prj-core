@@ -1,7 +1,7 @@
 # Backend CQRS / Boundary Reference
 
 이 문서는 현재 backend CQRS 경계와 legacy 제거 기준을 설명하는 활성 reference입니다.
-세부 구현 절차, 파일 배치, naming 규칙은 각 `.agents/skills/*-creator` skill이 소유합니다.
+세부 구현 절차, 파일 배치, naming 규칙은 각 `.agents/skills/<skill-id>/SKILL.md`가 소유합니다.
 
 ## 현재 흐름
 
