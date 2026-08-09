@@ -27,7 +27,6 @@ aggregate root 기준 NestJS Module과 Router wiring을 생성하는 전문가�
 |------|------|
 | Module 파일 | `apps/core/api/src/module/{aggregate-root}/{aggregate-root}.module.ts` |
 | Module 배럴 | `apps/core/api/src/module/{aggregate-root}/index.ts` |
-| Module 계약 | 담당 스펙 또는 route `page.spec.md`의 Module/Wiring 계약 |
 | Module 계약 summary | module wiring / provider export 요약 |
 | AppModule wiring | `apps/core/api/src/module/app.module.ts` |
 
@@ -54,8 +53,6 @@ aggregate root 기준 NestJS Module과 Router wiring을 생성하는 전문가�
 - collection child는 plural nested route 사용
   - 예: `/inquiries/:inquiryId/messages`
 - `app.module.ts`의 `RouterModule.register()`와 import 목록까지 함께 갱신
-- module 변경 시 route `page.spec.md` 또는 담당 스펙의 Module/Wiring 계약을 함께 갱신
-
 ## 체크리스트
 
 - [ ] module 폴더가 aggregate root plural 기준인지 확인
@@ -71,8 +68,27 @@ aggregate root 기준 NestJS Module과 Router wiring을 생성하는 전문가�
 - [ ] exports가 필요한 경우 UseCase/Service provider 기준인지 확인
 - [ ] `app.module.ts` import/라우팅 등록 동기화
 - [ ] child-only top-level module 삭제 여부 확인
-- [ ] route `page.spec.md` 또는 담당 스펙의 Module/Wiring 계약 동기화
+## 입력 계약
 
+### 요청에서 확인할 정보
+
+- 요청에서 이 skill이 소유하는 owner 단위 작업의 목표, 대상과 플랫폼 또는 런타임을 확인합니다.
+- 사용자가 명시한 UX, 업무 정책과 추가 완료 기준만 입력으로 사용합니다.
+
+### 저장소에서 직접 찾을 정보
+
+- 대상 package와 기존 구현, 모델, schema, 타입, 공개 export, 소비 코드와 테스트 패턴을 직접 찾습니다.
+- 경로가 없다는 이유로 멈추지 않고 이 문서의 탐색 순서와 기존 owner 산출물을 기준으로 확인합니다.
+
+### 구현 전 필수 조건
+
+- 대상과 ownership이 식별되고 이 문서의 역할별 선행 조건이 충족되어야 합니다.
+- 자신의 ownership에서 생성 가능한 입력은 직접 만들고 기존 공개 계약을 우선 재사용합니다.
+
+### 입력 필요 조건
+
+- 다른 owner의 필수 산출물 또는 저장소 근거로 결정할 수 없는 제품 결정이 없으면 구현 전에 입력 필요로 종료합니다.
+- 입력 필요에서는 파일을 변경하지 않고 누락 입력, 대상 owner와 소비 경로만 간결하게 보고합니다.
 ## 단독 실행 계약
 
 - 오케스트레이션 실행 문맥이 없어도 요청과 프로젝트 파일을 근거로 이 skill의 단위 작업을 수행한다.

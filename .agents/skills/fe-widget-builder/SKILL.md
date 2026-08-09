@@ -11,8 +11,6 @@ description: "이 skill은 `fe-widget-agent` 역할로 일할 때 사용합니�
 - 웹 대상: `packages/fe-ui/**`, `apps/*/web/**` → `공통` + `웹 규칙` 섹션만 실행 규칙으로 적용합니다.
 - 모바일 대상: `packages/fe-mo-ui/**`, `apps/mobile/**` → `공통` + `모바일 규칙` 섹션만 실행 규칙으로 적용합니다.
 - 대상과 다른 플랫폼 섹션은 참고 자료로만 읽고, 금지/허용/출력 규칙을 실행 규칙으로 적용하지 않습니다.
-- 하나의 delivery가 Web과 React Native를 모두 수정해야 하면 라우트 딜리버리 스펙의 단계를 플랫폼별로 나누고 각 대상에 맞는 섹션만 적용합니다.
-
 ## 공통
 
 ### 공통 실행 규칙
@@ -119,9 +117,7 @@ fe-widget-agent는 Page/Feature 파일이 비대해지는 것을 막는 1차 분
 - table, tab group, metric grid, flow rail, status summary, read-only detail block, repeated card/list block은 Widget 후보로 봅니다.
 - fe-route-agent나 fe-feature-agent가 `ui-composition-gap`을 보고하면 해당 시각 block을 Widget으로 먼저 분리합니다.
 - Widget은 props로 받은 값과 callback만 사용하고, API/router/store/search params를 읽지 않습니다.
-- Widget이 독립 panel/table panel로 쓰여 표면이 꼭 필요하면 local `Surface`를 사용하고, 그 사유를 담당 스펙의 lower-layer 조합 표에 남깁니다.
 - 반복 item, metric item, info 행은 `Surface`를 반복 적용하지 않고 border/divider/background/spacing으로만 구분합니다.
-- Widget 전용 spec은 신규 생성하지 않습니다. 계약은 nearest route `page.spec.md` 또는 Feature/Page 담당 스펙의 lower-layer 조합 표에 기록합니다.
 - 신규 Widget을 만들 때는 `packages/fe-ui/src/widget/index.ts`와 필요한 domain barrel을 함께 동기화합니다.
 
 ---
@@ -140,8 +136,6 @@ Page/Feature 비대화 해소용 Widget은 다음 순서로 진행합니다.
 2. 기존 Widget으로 대체 가능한지 먼저 검색합니다.
 3. 신규가 필요하면 단일 시각 responsibility 단위로 파일을 나눕니다.
 4. Widget은 route/API/store를 모르도록 props 계약만 노출합니다.
-5. Widget export 후 Feature/Page 담당 스펙의 조합 표에 반영되었는지 확인합니다.
-
 ### 4.2 네이밍 결정
 
 | 패턴 | 설명 | 예시 |
@@ -257,7 +251,6 @@ export type { StatusBadgeProps } from "./StatusBadge";
 - [ ] `packages/fe-ui/src/widget/[Name]/` 에 생성
 - [ ] 필요한 Pure UI가 없으면 `fe-data-display-agent`, `fe-feedback-agent`, `fe-overlay-agent`, 또는 관련 leaf 에이전트에 요청
 - [ ] 단일 책임 원칙 확인
-- [ ] table/card/tabs/flow rail/metric grid 같은 시각 block을 Page/Feature에서 분리한 경우 담당 스펙의 조합 표 갱신 확인
 - [ ] API/router/store/search params를 직접 읽지 않음
 - [ ] Widget 신규 전용 spec을 만들지 않음
 - [ ] 커스텀 className 사용하지 않음 (HeroUI/레이아웃 컴포넌트만)
@@ -283,7 +276,6 @@ Pure UI → Widget → Feature → Page
 
 | 에이전트 | 관계 |
 |----------|------|
-| orch-delivery | 담당 스펙 또는 관련 fe-ui Screen/Feature 스펙의 Widget 계약 섹션 기반 구현 |
 | **fe-data-display-agent / fe-feedback-agent / fe-overlay-agent** | Widget이 사용할 표시, 상태, overlay UI 컴포넌트 생성 |
 | fe-input-agent | Widget에서 사용할 leaf primitive 생성 |
 
@@ -406,8 +398,6 @@ React Native / Expo Native 기준의 재사용 가능한 순수 UI 조합 Widget
 - 스타일은 uniwind `className` 계열 prop과 `tailwind-variants` slot/variant를 우선 사용하고 `StyleSheet`/`StyleSheet.create`는 만들지 않습니다.
 - `style` 객체는 className으로 표현하기 어려운 native 동적 값에만 제한합니다.
 - Expo Web/react-native-web, DOM event, `@heroui/react`, Next.js 전제는 금지합니다.
-- Spec 정책상 모바일 widget 기획 스펙은 만들지 않습니다. 계약은 라우트 딜리버리 스펙 또는 screen 기획 스펙에 기록합니다.
-
 ### Do
 
 - 여러 screen/feature에서 재사용할 UI 조합을 Widget으로 분리합니다.
@@ -429,10 +419,29 @@ React Native / Expo Native 기준의 재사용 가능한 순수 UI 조합 Widget
 - 재사용한 기존 widget/leaf 또는 신규 widget이 필요한 이유
 - props 계약 요약
 - observer 적용 여부
-- 함께 갱신한 barrel / 담당 스펙
-
 - 단위 테스트는 rendering, props 분기, event callback, disabled guard, 대체 처리를 검증합니다.
 
+## 입력 계약
+
+### 요청에서 확인할 정보
+
+- 요청에서 이 skill이 소유하는 owner 단위 작업의 목표, 대상과 플랫폼 또는 런타임을 확인합니다.
+- 사용자가 명시한 UX, 업무 정책과 추가 완료 기준만 입력으로 사용합니다.
+
+### 저장소에서 직접 찾을 정보
+
+- 대상 package와 기존 구현, 모델, schema, 타입, 공개 export, 소비 코드와 테스트 패턴을 직접 찾습니다.
+- 경로가 없다는 이유로 멈추지 않고 이 문서의 탐색 순서와 기존 owner 산출물을 기준으로 확인합니다.
+
+### 구현 전 필수 조건
+
+- 대상과 ownership이 식별되고 이 문서의 역할별 선행 조건이 충족되어야 합니다.
+- 자신의 ownership에서 생성 가능한 입력은 직접 만들고 기존 공개 계약을 우선 재사용합니다.
+
+### 입력 필요 조건
+
+- 다른 owner의 필수 산출물 또는 저장소 근거로 결정할 수 없는 제품 결정이 없으면 구현 전에 입력 필요로 종료합니다.
+- 입력 필요에서는 파일을 변경하지 않고 누락 입력, 대상 owner와 소비 경로만 간결하게 보고합니다.
 ## 단독 실행 계약
 
 - 오케스트레이션 실행 문맥이 없어도 요청과 프로젝트 파일을 근거로 이 skill의 단위 작업을 수행한다.

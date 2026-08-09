@@ -11,8 +11,6 @@ description: "이 skill은 `fe-route-agent` 역할로 일할 때 사용합니다
 - 웹 대상: `packages/fe-ui/**`, `apps/*/web/**` → `공통` + `웹 규칙` 섹션만 실행 규칙으로 적용합니다.
 - 모바일 대상: `packages/fe-mo-ui/**`, `apps/mobile/**` → `공통` + `모바일 규칙` 섹션만 실행 규칙으로 적용합니다.
 - 대상과 다른 플랫폼 섹션은 참고 자료로만 읽고, 금지/허용/출력 규칙을 실행 규칙으로 적용하지 않습니다.
-- 하나의 delivery가 Web과 React Native를 모두 수정해야 하면 라우트 딜리버리 스펙의 단계를 플랫폼별로 나누고 각 대상에 맞는 섹션만 적용합니다.
-
 ## 공통
 
 ### 공통 실행 규칙
@@ -58,7 +56,6 @@ description: "이 skill은 `fe-route-agent` 역할로 일할 때 사용합니다
    - 금지: 화면 전체 시각 트리 직접 조립, screen-level wrapper를 앱 라우트에서 직접 설계
 3. 신규/수정 화면에서 필요한 시각 screen이 없으면 먼저 `fe-screen-agent` 범위의 `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx`를 생성/수정 대상으로 잡음
    - `fe-route-agent`가 pure screen owner를 직접 생성/수정하는 흐름은 금지
-4. 작업 시작 전에 반드시 sibling `page.spec.md`를 읽고 route/page 계약을 확인
 5. route-level `App`, `Layout`, `Page` 구조와 surface/rhythm은 app route page에서 새로 만들지 않음
    - `ScreenSurface`/`PageSurface`와 `SectionSurface + Section`은 screen 계층 owner입니다.
    - `ScreenSurface`, `PageSurface`, `SectionSurface`, `Surface`, `VStack`, `HStack`, `Spacer`, 제거된 detail/form 이전 방식 surface wrapper는 app route page에서 직접 import/use 금지
@@ -69,8 +66,6 @@ description: "이 skill은 `fe-route-agent` 역할로 일할 때 사용합니다
 7. 개발자 승인 없이 `_client.tsx`, `_prefetch.ts`, `HydrationBoundary`, `dehydrate`, 서버 `QueryClient` prefetch 패턴 사용 금지
 8. 모든 `"use client"` route page/container 컴포넌트에서 `useMemo`, `useCallback` 사용 금지
 9. route page/container에서 선언하는 핸들러 이름은 `on[Event][UI]` 패턴 강제
-10. route `page.tsx` 수정 시 대응 `page.spec.md` 업데이트 필수
-11. `page.spec.md`의 `## Route / Screen Mapping`에는 반드시 `page 역할`, `reusable 대상`, `screen component path`를 기록
 12. `screen component path`는 반드시 `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx` 패턴을 사용
 
 ---
@@ -123,16 +118,12 @@ description: "이 skill은 `fe-route-agent` 역할로 일할 때 사용합니다
 
 ### 1.5 page 상태 설계 원칙
 
-- page-local 상태와 API wiring의 상위 기준은 `orch-delivery`가 만든 서비스 딜리버리 스펙이며, 세부 실행 계약은 생성된 라우트 딜리버리 스펙입니다.
 - `fe-route-agent`는 얇은 route container에서 API hook, route/search param, mutation, invalidation, local 상태, handler wiring을 함께 담당합니다.
-- shared app 상태 생성이 필요한 경우에만 라우트 딜리버리 스펙의 `기반 계약`와 `에이전트 배정 매트릭스`에 `fe-store-agent` 단계를 별도로 기록합니다.
 - route page는 pure screen에 page 범위만 전달합니다.
   - 예: `<LoginScreen state={state.loginPage} />`
 - server data는 MobX state로 복제하지 않고 별도 props로 전달합니다.
   - 예: `<UserListScreen state={state.userListPage} users={response?.data ?? []} />`
 - route/page가 form을 사용하는 경우 submit/click 이벤트 소유권도 함께 확인합니다.
-  - child form에 이벤트 handler props를 직접 내리는 예외가 필요하면 route `page.spec.md`에 근거를 남깁니다.
-
 ---
 
 ### 2. 페이지 파일 규칙
@@ -142,10 +133,8 @@ description: "이 skill은 `fe-route-agent` 역할로 일할 때 사용합니다
 ```
 apps/<app>/src/app/<route>/
 ├── page.tsx
-├── page.spec.md
 ├── route.meta.ts (필요 시)
 ├── @slot/.../page.tsx
-├── @slot/.../page.spec.md
 └── utils/ (필요 시)
 ```
 
@@ -171,8 +160,6 @@ route-local `hooks/`, `_components/`, `components` 폴더는 만들지 않습니
 
 - `route.meta.ts`는 route page와 함께 admin route catalog, menu subject, page access subject를 연결하는 route-local 계약입니다.
 - `route.meta.ts`를 추가/수정/삭제하면 `packages/common-constant/src/routing/generated/admin-route-catalog.generated.ts` 재생성 여부와 admin menu/page access catalog 동기화를 함께 확인합니다.
-- route 제거 시 해당 `route.meta.ts`와 companion `page.spec.md` 삭제가 함께 이루어져야 하며, orphan route metadata를 남기지 않습니다.
-
 ### 2.4 named slot 콘텐츠 규칙
 
 - `@slot/default.tsx`는 `fe-route-layout-agent` 책임입니다.
@@ -187,18 +174,6 @@ route-local `hooks/`, `_components/`, `components` 폴더는 만들지 않습니
   - 왜 thin container 기본 패턴으로 충분하지 않은지
   - 어떤 서버 전용 의존성 때문에 예외가 필요한지
   - 승인 시 추가/수정될 파일 목록
-
-### 2.6 `page.spec.md` 입력 계약
-
-- `page.spec.md`에는 반드시 `## Route / Screen Mapping` 섹션이 있어야 합니다.
-- `Route / Screen Mapping`에는 최소 아래를 기록합니다.
-  - `page 역할: ...`
-  - `reusable 대상: ...`
-  - `screen component path: packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx`
-  - `SSR/prefetch 예외 승인 여부`
-- `page.spec.md`는 layout 계약을 요구하지 않으며, route skeleton은 코드와 page 구성 설명으로만 확인합니다.
-
----
 
 ### 3. import / 위치 규칙
 
@@ -239,7 +214,6 @@ route-local `hooks/`, `_components/`, `components` 폴더는 만들지 않습니
 ### 5. 구현 절차 (반드시 순서 준수)
 
 1. 대상 route page와 대응되는 `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx` 재사용 자산을 스캔
-2. `page.spec.md`를 읽고 route/page mapping을 확인
 3. 필요한 pure screen component가 이미 있는지 확인
 4. 작업 시작 보고로 아래를 공유
    - 읽은 spec 파일 목록
@@ -250,7 +224,6 @@ route-local `hooks/`, `_components/`, `components` 폴더는 만들지 않습니
    - 생성/수정 예정 파일 목록
 5. 필요한 pure screen component가 없거나 순수하지 않으면 `fe-screen-agent` 범위 수정 필요를 먼저 명시
 6. app route page에서 data/handler/redirect를 연결
-7. 대응 `page.spec.md` 수정
 8. 정적 검증/타입체크
 9. 결과를 규칙별로 보고
 
@@ -259,9 +232,6 @@ route-local `hooks/`, `_components/`, `components` 폴더는 만들지 않습니
 ### 6. 완료 전 필수 검증 명령
 
 ```bash
-# 0) route page spec 계약 존재
-rg -n '^## Route / Screen Mapping$|page 역할|reusable 대상|screen component path|SSR/prefetch 예외' [Content경로]/page.spec.md
-
 # 1) 승인 없는 예외 파일 금지
 find [Content경로] -maxdepth 1 \( -name '_client.tsx' -o -name '_prefetch.ts' \)
 
@@ -300,13 +270,8 @@ echo "$TARGET_FILES" | xargs rg -n 'from\\s+"@cocrepo/ui".*\\b(App|Layout|Page|S
 
 ### 8. Route Delivery Spec 규칙
 
-- route `page.tsx` 수정 시 같은 폴더의 `page.spec.md` 동기화
 - `_client.tsx`, `_prefetch.ts`, hook, util, e2e에는 신규 spec을 만들지 않음
-- `page.spec.md`에 `## Route / Screen Mapping` 섹션 유지
 - `Route / Screen Mapping`에 `page 역할`, `reusable 대상`, `screen component path`를 필수로 기록
-- `screen component path`는 folder-based 기획 스펙 규칙에 맞는 `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx`만 허용
-- named slot 콘텐츠도 root page와 같은 규칙으로 `page.spec.md`를 둡니다.
-- hook/util/type/상태가 route-local이면 라우트 딜리버리 스펙의 `기반 계약`에 `fe-route-agent` 담당 행으로 기록하고 별도 spec을 만들지 않습니다.
 - SSR/prefetch 예외가 승인된 경우 승인 근거와 추가 파일 목록 기록
 - route `page.tsx`만 바꾸고 spec 누락 시 실패
 
@@ -318,8 +283,6 @@ echo "$TARGET_FILES" | xargs rg -n 'from\\s+"@cocrepo/ui".*\\b(App|Layout|Page|S
 - screen 시각 composition은 `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx`가 소유
 - app route `page.tsx`는 data/handler/redirect wiring만 소유
 - SSR/prefetch 예외는 승인 전 질문
-- 완료 기준은 `규칙 위반 0 + type check 통과 + page.spec.md 동기화`
-
 ---
 
 - PC/Web screen 시각 owner는 `packages/fe-ui/src/screen/[ScreenName]/[ScreenName].tsx`이며, page 단위 테스트는 `fe-screen-agent`가 작성/갱신합니다.
@@ -354,14 +317,9 @@ const MembersListScreenContainer = observer(() => {
 });
 
 export default MembersListScreenContainer;
-```
-
-page spec의 route/page mapping이 없거나 pure screen component 없이 route page가 시각 구성을 직접 소유하고 있으면 아래 형식으로 질문 후 진행합니다.
-
-```text
+text
 BLOCKED: thin route container 구현 전 page ownership 정리 필요
 - 대상 페이지:
-- 읽은 page spec:
 - 필요한 pure screen component:
 - 누락되거나 충돌하는 계약:
 ```
@@ -386,7 +344,6 @@ BLOCKED: thin route container 구현 전 page ownership 정리 필요
 ### 재사용 우선 점검 (필수)
 
 - 작업 시작 전에 `apps/mobile/src/app/**` route 구조와 `_layout.tsx` 체인을 먼저 검색합니다.
-- 대상 route의 `index.spec.md`, 인접 `app.context.md`, 연결할 shared screen spec을 먼저 읽습니다.
 - shared screen/leaf 후보가 없다고 판단하기 전에 원본 라이브러리 `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source를 확인합니다.
 - route file에서 기존 shared screen, `CustomHeader`, `ScreenFrame`, input/feedback leaf로 표현 가능한 UI를 raw `View`/`Text`/`Pressable` 조합으로 다시 만들지 않습니다.
 
@@ -405,7 +362,6 @@ navigation/API/상태/native bridge wiring을 구현하는 역할입니다.
 
 - `apps/mobile/src/app/**/*.tsx`
 - 필요 시 `+not-found.tsx`, modal route screen 파일
-- 대응 route 담당 스펙 `apps/mobile/src/app/**/index.spec.md`
 - route-consumed hook 인벤토리 / API wiring / native bridge wiring
 
 ---
@@ -429,17 +385,13 @@ navigation/API/상태/native bridge wiring을 구현하는 역할입니다.
 - route-local UI가 필요한 경우 스타일은 uniwind `className` 계열 prop과 `tailwind-variants` slot/variant를 우선 사용하고 `StyleSheet`/`StyleSheet.create`는 만들지 않습니다.
 - `style` 객체는 navigator option object, WebView/native bridge 등 className으로 표현하기 어려운 동적 값에만 제한합니다.
 - 이벤트 핸들러는 RN 문맥에 맞게 `onPress[UI]`, `onChange[UI]` 등 직관적인 이름을 우선 사용합니다.
-- 코드를 수정하면 `index.spec.md`를 함께 갱신합니다.
-
 ---
 
 ### Do
 
 - `@cocrepo/mo-ui`에서 shared screen component를 import해 route props를 주입합니다.
-- shared screen 대상 확인에는 route `index.spec.md`의 `screen component 대상`과 실제 export를 함께 사용합니다.
 - header는 route layout/native navigator의 `CustomHeader` 소유 여부를 먼저 확인하고, screen/route 본문에서 중복 hero/header를 만들지 않습니다.
 - route param, local 상태, server data, mutation, invalidation, navigation action, native bridge를 route file에서 정리합니다.
-- 라우트 딜리버리 스펙인 `index.spec.md`에 screen component 대상, route wiring boundary, API/상태/native bridge 계약을 반영합니다.
 - hook/util/type/상태가 route-local이면 `기반 계약`에 `fe-route-agent` 담당 행으로 기록하고 별도 spec을 만들지 않습니다.
 
 ---
@@ -456,8 +408,6 @@ navigation/API/상태/native bridge wiring을 구현하는 역할입니다.
 ### 출력
 
 - route screen 코드: `apps/mobile/src/app/**/*.tsx`
-- route screen spec: `apps/mobile/src/app/**/index.spec.md`
-
 ### 보고 포맷
 
 - 수정한 route screen 경로
@@ -465,8 +415,27 @@ navigation/API/상태/native bridge wiring을 구현하는 역할입니다.
 - 재사용한 existing UI/screen 또는 route-local UI가 필요한 이유
 - navigation / local 상태 / observable 사용 여부
 - API / native bridge wiring 여부
-- 함께 갱신한 `index.spec.md`
+## 입력 계약
 
+### 요청에서 확인할 정보
+
+- 요청에서 이 skill이 소유하는 owner 단위 작업의 목표, 대상과 플랫폼 또는 런타임을 확인합니다.
+- 사용자가 명시한 UX, 업무 정책과 추가 완료 기준만 입력으로 사용합니다.
+
+### 저장소에서 직접 찾을 정보
+
+- 대상 package와 기존 구현, 모델, schema, 타입, 공개 export, 소비 코드와 테스트 패턴을 직접 찾습니다.
+- 경로가 없다는 이유로 멈추지 않고 이 문서의 탐색 순서와 기존 owner 산출물을 기준으로 확인합니다.
+
+### 구현 전 필수 조건
+
+- 대상과 ownership이 식별되고 이 문서의 역할별 선행 조건이 충족되어야 합니다.
+- 자신의 ownership에서 생성 가능한 입력은 직접 만들고 기존 공개 계약을 우선 재사용합니다.
+
+### 입력 필요 조건
+
+- 다른 owner의 필수 산출물 또는 저장소 근거로 결정할 수 없는 제품 결정이 없으면 구현 전에 입력 필요로 종료합니다.
+- 입력 필요에서는 파일을 변경하지 않고 누락 입력, 대상 owner와 소비 경로만 간결하게 보고합니다.
 ## 단독 실행 계약
 
 - 오케스트레이션 실행 문맥이 없어도 요청과 프로젝트 파일을 근거로 이 skill의 단위 작업을 수행한다.

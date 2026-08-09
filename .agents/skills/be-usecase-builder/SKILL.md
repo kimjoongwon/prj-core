@@ -39,7 +39,6 @@ Nest CQRS 기반 UseCase handler를 생성하는 역할입니다. Command/Query 
 | EventHandler | `packages/be-usecase/src/{domain}/{name}.event-handler.ts` 또는 `packages/be-usecase/src/{namespace}/{domain}/{name}.event-handler.ts` |
 | Saga | `packages/be-usecase/src/{domain}/{name}.saga.ts` 또는 `packages/be-usecase/src/{namespace}/{domain}/{name}.saga.ts` |
 | Handler array / barrel | `packages/be-usecase/src/{domain}/index.ts`, `packages/be-usecase/src/{namespace}/{domain}/index.ts`, `packages/be-usecase/src/index.ts` |
-| UseCase 계약 | 담당 스펙의 `UseCase 인벤토리` 행 |
 
 ## 핵심 규칙
 
@@ -66,7 +65,6 @@ Nest CQRS 기반 UseCase handler를 생성하는 역할입니다. Command/Query 
 - EventHandler는 email, audit, notification, cache invalidation, external notification 같은 side effect를 담당합니다.
 - EventHandler 안에서 CommandBus를 주입하거나 execute하지 않습니다. Event 이후 다른 UseCase/Command를 실행해야 하면 Saga로 분리합니다.
 - Saga는 Event → Command 변환만 담당하고 도메인 service를 직접 조합하지 않습니다.
-- Handler에서 Prisma/Repository를 직접 호출하지 않습니다. 예외가 필요한 read projection은 담당 스펙에 명시하고 repository query method를 통해 호출합니다.
 - Handler에서 DTO를 import하거나 domain service로 넘기지 않습니다. write Command 자체를 application/usecase 입력으로 취급하고, `command.input` 중첩 접근을 만들지 않습니다.
 - Query handler는 Query message를 read filter input으로 취급합니다. DTO class를 import하거나 Aggregate/Service/Client로 넘기지 않습니다.
 - Command/Query가 Aggregate/Service/Client input과 구조적으로 호환되면 메시지 객체를 그대로 위임할 수 있습니다. 여러 출처 조합, field rename, policy 보정이 필요할 때만 별도 mapper/input 파일에서 target input으로 변환합니다.
@@ -133,6 +131,27 @@ export * from "./confirm-reservation.usecase";
 - [ ] handler array와 barrel export 추가
 - [ ] Module provider 등록은 `be-module-builder` 책임으로 남김
 
+## 입력 계약
+
+### 요청에서 확인할 정보
+
+- 요청에서 이 skill이 소유하는 owner 단위 작업의 목표, 대상과 플랫폼 또는 런타임을 확인합니다.
+- 사용자가 명시한 UX, 업무 정책과 추가 완료 기준만 입력으로 사용합니다.
+
+### 저장소에서 직접 찾을 정보
+
+- 대상 package와 기존 구현, 모델, schema, 타입, 공개 export, 소비 코드와 테스트 패턴을 직접 찾습니다.
+- 경로가 없다는 이유로 멈추지 않고 이 문서의 탐색 순서와 기존 owner 산출물을 기준으로 확인합니다.
+
+### 구현 전 필수 조건
+
+- 대상과 ownership이 식별되고 이 문서의 역할별 선행 조건이 충족되어야 합니다.
+- 자신의 ownership에서 생성 가능한 입력은 직접 만들고 기존 공개 계약을 우선 재사용합니다.
+
+### 입력 필요 조건
+
+- 다른 owner의 필수 산출물 또는 저장소 근거로 결정할 수 없는 제품 결정이 없으면 구현 전에 입력 필요로 종료합니다.
+- 입력 필요에서는 파일을 변경하지 않고 누락 입력, 대상 owner와 소비 경로만 간결하게 보고합니다.
 ## 단독 실행 계약
 
 - 오케스트레이션 실행 문맥이 없어도 요청과 프로젝트 파일을 근거로 이 skill의 단위 작업을 수행한다.

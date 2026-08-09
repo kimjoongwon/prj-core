@@ -12,16 +12,16 @@
 
 | route | owner spec | 설명 |
 |------|------------|------|
-| `/` | `apps/mobile/src/app/index.spec.md` | 예약 플랫폼 홈 탭 |
-| `/(tabs)` | `apps/mobile/src/app/index.spec.md` | Expo Router 하단 탭 layout |
-| `/reservations` | `apps/mobile/src/app/index.spec.md` | 예약 탭 |
-| `/profile` | `apps/mobile/src/app/index.spec.md` | 내 정보 탭 + 로그아웃 |
+| `/` | `apps/mobile/src/app/(tabs)/index.tsx` | 예약 플랫폼 홈 탭 |
+| `/(tabs)` | `apps/mobile/src/app/(tabs)/_layout.tsx` | Expo Router 하단 탭 layout |
+| `/reservations` | `apps/mobile/src/app/(tabs)/reservations.tsx` | 예약 탭 |
+| `/profile` | `apps/mobile/src/app/(tabs)/profile.tsx` | 내 정보 탭 + 로그아웃 |
 | `/_layout` | `apps/mobile/src/app/_layout.tsx` | Expo Router root layout |
-| `/auth/login` | `apps/mobile/src/app/index.spec.md` | first-party native 로그인 진입 라우트 |
+| `/auth/login` | `apps/mobile/src/app/auth/login.tsx` | first-party native 로그인 진입 라우트 |
 
 `(tabs)` route group은 URL segment를 만들지 않으므로 실제 홈 route는 `/`이며, route owner file은 `apps/mobile/src/app/(tabs)/index.tsx`입니다.
 
-`/` 홈 예약 기능은 `apps/mobile/src/app/index.spec.md`가 route 계약을 소유합니다. 현재 계약은 실제 Reservation API의 `getReservationBookingFeed`/`createReservation` Orval hook을 기준으로 하며, visual composition은 `packages/fe-mo-ui/src/screen/ReservationHomeScreen/ReservationHomeScreen.tsx`가 소유합니다.
+`/` 홈 예약 기능은 `apps/mobile/src/app/(tabs)/index.tsx`와 이 문서의 route 계약을 기준으로 합니다. 현재 계약은 실제 Reservation API의 `getReservationBookingFeed`/`createReservation` Orval hook을 기준으로 하며, visual composition은 `packages/fe-mo-ui/src/screen/ReservationHomeScreen/ReservationHomeScreen.tsx`가 소유합니다.
 
 `/reservations` 탭은 더미 예약 데이터를 사용하지 않고 `getMyReservations` Orval hook으로 로그인 사용자의 예약/대기 목록을 가져오며, visual composition은 `packages/fe-mo-ui/src/screen/MyReservationsScreen/MyReservationsScreen.tsx`가 소유합니다.
 

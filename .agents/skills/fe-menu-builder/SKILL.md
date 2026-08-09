@@ -11,8 +11,6 @@ description: "이 skill은 `fe-menu-agent` 역할로 일할 때 사용합니다.
 - 웹 대상: `packages/fe-ui/**`, `apps/*/web/**` → `공통` + `웹 규칙` 섹션만 실행 규칙으로 적용합니다.
 - 모바일 대상: `packages/fe-mo-ui/**`, `apps/mobile/**` → `공통` + `모바일 규칙` 섹션만 실행 규칙으로 적용합니다.
 - 대상과 다른 플랫폼 섹션은 참고 자료로만 읽고, 금지/허용/출력 규칙을 실행 규칙으로 적용하지 않습니다.
-- 하나의 delivery가 Web과 React Native를 모두 수정해야 하면 라우트 딜리버리 스펙의 단계를 플랫폼별로 나누고 각 대상에 맞는 섹션만 적용합니다.
-
 ## 공통
 
 ### 공통 실행 규칙
@@ -521,7 +519,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 1. 3depth 탭은 route `layout.tsx` skeleton 안에서 한 번만 렌더링합니다.
 2. `page.tsx`가 동일 탭을 다시 렌더링하면 안 됩니다.
-3. title/description/actions가 layout skeleton에 포함될지 page 콘텐츠에 남을지는 담당 스펙 계약을 따릅니다.
 4. 활성 탭 판단이 client 상태를 필요로 하면 `PageTabs` 내부 feature/widget이 담당하고, route `layout.tsx` 자체는 서버 파일로 유지합니다.
 
 ---
@@ -907,7 +904,6 @@ const NavigationPanel = observer(() => {
 
 | 에이전트 | 관계 | 설명 |
 |----------|------|------|
-| orch-delivery | 선행 | 메뉴 경로/권한과 화면 경로 구조가 포함된 담당 스펙 참조 |
 | fe-feature-agent | 관련 | 메뉴에 연결되는 Feature 컴포넌트 참조 |
 
 - 단위 테스트는 item rendering, selected 상태, disabled guard, click/keyboard callback을 검증합니다.
@@ -982,8 +978,27 @@ React Native / Expo Native 기준의 메뉴 primitive 계약을 `packages/fe-mo-
 - 함께 갱신한 layout 배럴 경로
 
 - 단위 테스트는 item rendering, selected 상태, disabled guard, press callback을 검증합니다.
-- thin re-export/alias만 바뀌어 단위 테스트가 불필요하면 담당 스펙과 최종 보고에 사유를 남깁니다.
+## 입력 계약
 
+### 요청에서 확인할 정보
+
+- 요청에서 이 skill이 소유하는 owner 단위 작업의 목표, 대상과 플랫폼 또는 런타임을 확인합니다.
+- 사용자가 명시한 UX, 업무 정책과 추가 완료 기준만 입력으로 사용합니다.
+
+### 저장소에서 직접 찾을 정보
+
+- 대상 package와 기존 구현, 모델, schema, 타입, 공개 export, 소비 코드와 테스트 패턴을 직접 찾습니다.
+- 경로가 없다는 이유로 멈추지 않고 이 문서의 탐색 순서와 기존 owner 산출물을 기준으로 확인합니다.
+
+### 구현 전 필수 조건
+
+- 대상과 ownership이 식별되고 이 문서의 역할별 선행 조건이 충족되어야 합니다.
+- 자신의 ownership에서 생성 가능한 입력은 직접 만들고 기존 공개 계약을 우선 재사용합니다.
+
+### 입력 필요 조건
+
+- 다른 owner의 필수 산출물 또는 저장소 근거로 결정할 수 없는 제품 결정이 없으면 구현 전에 입력 필요로 종료합니다.
+- 입력 필요에서는 파일을 변경하지 않고 누락 입력, 대상 owner와 소비 경로만 간결하게 보고합니다.
 ## 단독 실행 계약
 
 - 오케스트레이션 실행 문맥이 없어도 요청과 프로젝트 파일을 근거로 이 skill의 단위 작업을 수행한다.

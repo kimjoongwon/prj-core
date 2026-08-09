@@ -28,10 +28,8 @@ NestJS Service 레이어를 생성하는 전문가입니다.
 | 구분 | 항목 | 설명 |
 |------|------|------|
 | **입력** | Repository 클래스 | `@cocrepo/repository` |
-| | Service 인벤토리 | 담당 스펙의 `백엔드 / API 계약` 아래 service 행 |
 | | 비즈니스 요구사항 | 도메인 로직 |
 | **출력** | Service 클래스 | `packages/be-service/src/{domain}/{domain}.service.ts` |
-| | Service 계약 | 담당 스펙의 `Service 인벤토리` 행 |
 | | index.ts 업데이트 | export 추가 |
 
 ---
@@ -40,7 +38,6 @@ NestJS Service 레이어를 생성하는 전문가입니다.
 
 - 서비스는 aggregate root service가 아닌 support/domain helper 단위로 구성한다.
 - aggregate root service provider는 `be-aggregate-builder`가 `@cocrepo/aggregate`에 `{Domain}AggregateRoot`로 생성한다.
-- 담당 스펙의 `Service 인벤토리`에 명시된 domain capability/method만 생성/수정하고, 행의 `재사용/신규`, `소스/대상`, `의존 요소`, 소스 담당 `agent_type`, 소비 `agent_type` 계약을 벗어나지 않는다.
 - 호출할 Repository/Integration이 `Repository 인벤토리` 또는 관련 백엔드 인벤토리에 없으면 구현하지 말고 `계약-gap`으로 보고한다.
 - 동일 Aggregate Root 내부의 종속 모델이나 명시적 관계 모델 변경은 `@cocrepo/aggregate`의 root aggregate service를 통해서만 수행한다.
 - Controller가 하나의 aggregate root에 대해 pass-through할 때도 service 책임 범위를 벗어나지 않는다.
@@ -141,7 +138,6 @@ constructor(
 - `packages/be-service/src/*.service.ts`처럼 루트에 flat Service 파일을 생성하지 않습니다.
 - 폴더형 Service(예: `xxx.service` 디렉터리 안의 `index.ts`) 생성은 금지합니다.
 - 같은 도메인 안의 보조 provider/module은 해당 domain 폴더에 함께 두되 파일별 단일 책임을 유지합니다. 예: `email/email.service.ts`, `email/email.module.ts`, `email/email-provider.ts`, `email/send-email.input.ts`.
-- 별도 Service spec은 만들지 않고 route `page.spec.md` 또는 담당 스펙의 Service 계약 섹션을 갱신
 - 배럴 export는 `packages/be-service/src/index.ts`에서 유지
 
 ---
@@ -382,6 +378,27 @@ if (!tenant?.spaceId) {
 - Repository: `packages/be-repository/src/{entity}.repository.ts`
 - Entity: `packages/be-entity/src/{entity}.ts`
 
+## 입력 계약
+
+### 요청에서 확인할 정보
+
+- 요청에서 이 skill이 소유하는 owner 단위 작업의 목표, 대상과 플랫폼 또는 런타임을 확인합니다.
+- 사용자가 명시한 UX, 업무 정책과 추가 완료 기준만 입력으로 사용합니다.
+
+### 저장소에서 직접 찾을 정보
+
+- 대상 package와 기존 구현, 모델, schema, 타입, 공개 export, 소비 코드와 테스트 패턴을 직접 찾습니다.
+- 경로가 없다는 이유로 멈추지 않고 이 문서의 탐색 순서와 기존 owner 산출물을 기준으로 확인합니다.
+
+### 구현 전 필수 조건
+
+- 대상과 ownership이 식별되고 이 문서의 역할별 선행 조건이 충족되어야 합니다.
+- 자신의 ownership에서 생성 가능한 입력은 직접 만들고 기존 공개 계약을 우선 재사용합니다.
+
+### 입력 필요 조건
+
+- 다른 owner의 필수 산출물 또는 저장소 근거로 결정할 수 없는 제품 결정이 없으면 구현 전에 입력 필요로 종료합니다.
+- 입력 필요에서는 파일을 변경하지 않고 누락 입력, 대상 owner와 소비 경로만 간결하게 보고합니다.
 ## 단독 실행 계약
 
 - 오케스트레이션 실행 문맥이 없어도 요청과 프로젝트 파일을 근거로 이 skill의 단위 작업을 수행한다.

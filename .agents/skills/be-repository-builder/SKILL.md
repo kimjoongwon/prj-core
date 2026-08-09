@@ -35,10 +35,8 @@ Prisma 기반 Repository 레이어를 생성하는 전문가입니다. 이 에�
 |------|------|------|
 | **입력** | Entity 클래스 | `@cocrepo/entity`의 Aggregate Root 모델 |
 | | Prisma schema 모델 | `@aggregate-root: true`가 붙은 모델 |
-| | Repository 인벤토리 | 담당 스펙의 `백엔드 / API 계약` 아래 repository 행 |
 | | 필요한 쿼리 패턴 | CRUD, include 조회, 집계, exists 등 |
 | **출력** | Repository 클래스 | `packages/be-repository/src/{aggregate-root}.repository.ts` |
-| | Repository 계약 | 담당 스펙의 `Repository 인벤토리` 행 |
 | | index.ts 업데이트 | export 추가 |
 
 ---
@@ -48,7 +46,6 @@ Prisma 기반 Repository 레이어를 생성하는 전문가입니다. 이 에�
 ### 1. Repository는 Aggregate Root만 만든다
 
 - 스키마 주석에 `@aggregate-root: true`가 붙은 모델만 독립 Repository 생성 대상입니다.
-- 담당 스펙의 `Repository 인벤토리`에 명시된 영속성 필요/모델/메서드만 생성/수정하고, 행의 `재사용/신규`, `소스/대상`, 소스 담당 `agent_type`, 소비 `agent_type` 계약을 벗어나지 않습니다.
 - Repository 행이 없거나 Aggregate Root가 불명확하면 구현하지 말고 `계약-gap`으로 보고합니다.
 - `@aggregate-root: true`가 없는 모델은 독립 Repository를 만들지 않습니다.
 - 종속 모델 접근은 해당 Aggregate Root Repository 안의 include/where/query 메서드로 처리합니다.
@@ -159,8 +156,6 @@ interface CreateUserParams {}
 ### 2단계: 기존 Repository 확인
 
 - 기존 `{AggregateRoot}sRepository`가 있으면 우선 그 파일에 메서드를 추가합니다.
-- 없으면 새 Repository를 생성하고 Repository 계약은 route `page.spec.md` 또는 담당 스펙에 기록합니다.
-
 ### 3단계: 종속 모델 접근 설계
 
 - Aggregate Root 내부의 종속 모델이나 명시적 관계 모델 데이터가 필요하면 해당 Aggregate Root Repository에서 `include`, `select`, relation filter로 처리합니다.
@@ -169,8 +164,6 @@ interface CreateUserParams {}
 ### 4단계: index.ts / spec 동기화
 
 - `packages/be-repository/src/index.ts` export를 갱신합니다.
-- 별도 repository spec은 만들지 않고 담당 스펙 또는 route `page.spec.md`의 Repository 계약을 갱신합니다.
-
 ---
 
 ## 예시
@@ -206,6 +199,27 @@ export class UsersRepository {
 - Prisma 타입을 직접 사용했는가?
 - index.ts와 Repository 계약을 함께 갱신했는가?
 
+## 입력 계약
+
+### 요청에서 확인할 정보
+
+- 요청에서 이 skill이 소유하는 owner 단위 작업의 목표, 대상과 플랫폼 또는 런타임을 확인합니다.
+- 사용자가 명시한 UX, 업무 정책과 추가 완료 기준만 입력으로 사용합니다.
+
+### 저장소에서 직접 찾을 정보
+
+- 대상 package와 기존 구현, 모델, schema, 타입, 공개 export, 소비 코드와 테스트 패턴을 직접 찾습니다.
+- 경로가 없다는 이유로 멈추지 않고 이 문서의 탐색 순서와 기존 owner 산출물을 기준으로 확인합니다.
+
+### 구현 전 필수 조건
+
+- 대상과 ownership이 식별되고 이 문서의 역할별 선행 조건이 충족되어야 합니다.
+- 자신의 ownership에서 생성 가능한 입력은 직접 만들고 기존 공개 계약을 우선 재사용합니다.
+
+### 입력 필요 조건
+
+- 다른 owner의 필수 산출물 또는 저장소 근거로 결정할 수 없는 제품 결정이 없으면 구현 전에 입력 필요로 종료합니다.
+- 입력 필요에서는 파일을 변경하지 않고 누락 입력, 대상 owner와 소비 경로만 간결하게 보고합니다.
 ## 단독 실행 계약
 
 - 오케스트레이션 실행 문맥이 없어도 요청과 프로젝트 파일을 근거로 이 skill의 단위 작업을 수행한다.

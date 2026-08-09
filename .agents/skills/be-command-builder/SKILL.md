@@ -36,7 +36,6 @@ Nest CQRS Command/Query message 계약을 `@cocrepo/command`에 생성하는 역
 | Command 입력/Query 보조 타입 | `packages/be-input/src/command/{domain}/{name}.input.ts` |
 | domain barrel | `packages/be-command/src/{domain}/index.ts` |
 | package barrel | `packages/be-command/src/index.ts` |
-| Command 계약 | 담당 스펙의 `Command / Query 인벤토리` 행 |
 
 ## 핵심 규칙
 
@@ -97,6 +96,27 @@ export class GetReservationQuery {
 - [ ] `@cocrepo/usecase` handler가 command/query를 import할 수 있도록 `@cocrepo/command` build/type 계약 확인
 - [ ] 이전 방식 app-local `*.cqrs.ts` message가 남지 않았는지 확인
 
+## 입력 계약
+
+### 요청에서 확인할 정보
+
+- 요청에서 이 skill이 소유하는 owner 단위 작업의 목표, 대상과 플랫폼 또는 런타임을 확인합니다.
+- 사용자가 명시한 UX, 업무 정책과 추가 완료 기준만 입력으로 사용합니다.
+
+### 저장소에서 직접 찾을 정보
+
+- 대상 package와 기존 구현, 모델, schema, 타입, 공개 export, 소비 코드와 테스트 패턴을 직접 찾습니다.
+- 경로가 없다는 이유로 멈추지 않고 이 문서의 탐색 순서와 기존 owner 산출물을 기준으로 확인합니다.
+
+### 구현 전 필수 조건
+
+- 대상과 ownership이 식별되고 이 문서의 역할별 선행 조건이 충족되어야 합니다.
+- 자신의 ownership에서 생성 가능한 입력은 직접 만들고 기존 공개 계약을 우선 재사용합니다.
+
+### 입력 필요 조건
+
+- 다른 owner의 필수 산출물 또는 저장소 근거로 결정할 수 없는 제품 결정이 없으면 구현 전에 입력 필요로 종료합니다.
+- 입력 필요에서는 파일을 변경하지 않고 누락 입력, 대상 owner와 소비 경로만 간결하게 보고합니다.
 ## 단독 실행 계약
 
 - 오케스트레이션 실행 문맥이 없어도 요청과 프로젝트 파일을 근거로 이 skill의 단위 작업을 수행한다.

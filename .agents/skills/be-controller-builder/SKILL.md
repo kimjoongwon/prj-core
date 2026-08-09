@@ -23,7 +23,6 @@ NestJS REST Controller를 생성하는 전문가
 
 | 항목 | 설명 |
 |------|------|
-| 엔드포인트 인벤토리 | 담당 스펙의 `백엔드 / API 계약` 아래 endpoint 행 |
 | CommandBus / QueryBus | `@nestjs/cqrs`의 UseCase 실행 진입점 |
 | Command / Query | `@cocrepo/command`의 request intent 객체 |
 | DTO 클래스 | `@cocrepo/dto` |
@@ -37,7 +36,6 @@ NestJS REST Controller를 생성하는 전문가
 | Controller 클래스 | `packages/be-controller/src/{aggregate-root}/{resource}.controller.ts` |
 | Controller 도메인 배럴 | `packages/be-controller/src/{aggregate-root}/index.ts` |
 | Controller 패키지 배럴 | `packages/be-controller/src/index.ts` |
-| API 계약 | route `page.spec.md`의 API 계약 섹션 |
 
 ## 사용 방법
 
@@ -48,8 +46,6 @@ NestJS REST Controller를 생성하는 전문가
 - `apps/core/api/src/module` 아래에는 Controller 구현 파일을 만들지 않는다. 앱 module은 `@cocrepo/controller`에서 Controller class를 import한다.
 - 각 endpoint는 write면 Command, read면 Query를 생성해서 bus로 실행한다.
 - Command/Query는 `@cocrepo/command`에서 import한다.
-- 담당 스펙의 `엔드포인트 인벤토리`에 명시된 endpoint만 생성/수정하고, 행의 `재사용/신규`, `소스/대상`, 소스 담당 `agent_type`, 소비/Wiring `agent_type`, `codegen` 계약을 벗어나지 않는다.
-- endpoint가 실행할 Command/Query와 UseCase handler는 담당 스펙의 각 인벤토리 행과 일치해야 한다. 누락되면 구현하지 말고 `계약-gap`으로 보고한다.
 - Controller가 Service, Repository, Client, UseCase handler를 직접 주입하지 않는다.
 - 유즈케이스 작업 흐름 조율(다수 service 조합, 조건 분기, 외부 연동 포함)은 UseCase handler로 이동한다.
 - 응답 조립/read model shaping은 Query UseCase로 이동한다.
@@ -108,8 +104,6 @@ Create/Update 화면에서 폼을 즉시 렌더링할 수 있도록 Controller�
 2. 초기 렌더링에 필요한 폼 메타(`defaultObject`, `options`, `ui`, `fieldMeta`, `aiSchemas`)를 정의합니다.
 3. `GET /form/create`, `GET /:id/form/update` 엔드포인트를 설계/구현합니다.
 4. 필요 시 `POST /form/ai-fill` endpoint를 추가하고 patch 응답 계약을 맞춥니다.
-5. Swagger와 route `page.spec.md`의 API 계약 섹션에 응답 구조를 명시합니다.
-
 ## 작성 기준
 
 - [ ] `@ApiTags()` 데코레이터 추가
@@ -138,11 +132,31 @@ Create/Update 화면에서 폼을 즉시 렌더링할 수 있도록 Controller�
 - [ ] Create/Update용 Form Bootstrap 응답 계약 (`defaultObject/options/ui/fieldMeta/aiSchemas`) 적용
 - [ ] `state path` 기반 옵션/경로 규칙 검증
 - [ ] `POST /form/ai-fill` 시 fillable/권한 서버 검증
-- [ ] route `page.spec.md` 또는 담당 스펙의 API/Module 계약 동시 갱신
 - [ ] Controller package barrel export 갱신
 
 ---
 
+## 입력 계약
+
+### 요청에서 확인할 정보
+
+- 요청에서 이 skill이 소유하는 owner 단위 작업의 목표, 대상과 플랫폼 또는 런타임을 확인합니다.
+- 사용자가 명시한 UX, 업무 정책과 추가 완료 기준만 입력으로 사용합니다.
+
+### 저장소에서 직접 찾을 정보
+
+- 대상 package와 기존 구현, 모델, schema, 타입, 공개 export, 소비 코드와 테스트 패턴을 직접 찾습니다.
+- 경로가 없다는 이유로 멈추지 않고 이 문서의 탐색 순서와 기존 owner 산출물을 기준으로 확인합니다.
+
+### 구현 전 필수 조건
+
+- 대상과 ownership이 식별되고 이 문서의 역할별 선행 조건이 충족되어야 합니다.
+- 자신의 ownership에서 생성 가능한 입력은 직접 만들고 기존 공개 계약을 우선 재사용합니다.
+
+### 입력 필요 조건
+
+- 다른 owner의 필수 산출물 또는 저장소 근거로 결정할 수 없는 제품 결정이 없으면 구현 전에 입력 필요로 종료합니다.
+- 입력 필요에서는 파일을 변경하지 않고 누락 입력, 대상 owner와 소비 경로만 간결하게 보고합니다.
 ## 단독 실행 계약
 
 - 오케스트레이션 실행 문맥이 없어도 요청과 프로젝트 파일을 근거로 이 skill의 단위 작업을 수행한다.

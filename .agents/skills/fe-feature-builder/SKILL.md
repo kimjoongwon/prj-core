@@ -11,8 +11,6 @@ description: "이 skill은 `fe-feature-agent` 역할로 일할 때 사용합니�
 - 웹 대상: `packages/fe-ui/**`, `apps/*/web/**` → `공통` + `웹 규칙` 섹션만 실행 규칙으로 적용합니다.
 - 모바일 대상: `packages/fe-mo-ui/**`, `apps/mobile/**` → `공통` + `모바일 규칙` 섹션만 실행 규칙으로 적용합니다.
 - 대상과 다른 플랫폼 섹션은 참고 자료로만 읽고, 금지/허용/출력 규칙을 실행 규칙으로 적용하지 않습니다.
-- 하나의 delivery가 Web과 React Native를 모두 수정해야 하면 라우트 딜리버리 스펙의 단계를 플랫폼별로 나누고 각 대상에 맞는 섹션만 적용합니다.
-
 ## 공통
 
 ### 공통 실행 규칙
@@ -70,7 +68,6 @@ description: "이 skill은 `fe-feature-agent` 역할로 일할 때 사용합니�
 | 항목 | 경로 |
 |------|------|
 | 메인 컴포넌트 | `packages/fe-ui/src/feature/[Name]/[Name].tsx` |
-| Feature spec | `packages/fe-ui/src/feature/[Name]/[Name].spec.md` |
 | 커스텀 훅 | 필요 시 `packages/fe-hook/src/use[Name].ts` |
 | 타입 정의 | `packages/fe-ui/src/feature/[Name]/types.ts` |
 | barrel export | `packages/fe-ui/src/feature/[Name]/index.ts` |
@@ -93,7 +90,6 @@ description: "이 skill은 `fe-feature-agent` 역할로 일할 때 사용합니�
 | **displayName 설정** | 디버깅을 위해 필수 |
 | **첫 렌더 안정성 유지** | SSR 시점과 첫 클라이언트 렌더의 DOM 구조를 동일하게 유지 |
 | **Widget 조합 소유** | Page가 직접 가질 수 없는 flow rail, metric grid, table group, tab group을 업무 feature로 조합 |
-| **Feature 기획 스펙 동기화** | Feature가 시각 composition을 소유하면 `[Name].spec.md`에 화면 러프와 조합 Widget을 기록 |
 | **One Component Per File** | Feature 파일은 exported Feature component 하나만 소유하고, private JSX subcomponent는 별도 Widget/Feature 파일로 분리 |
 | **표면 최소화** | Web Feature는 기본적으로 surface-less이며, 독립 작업 덩어리일 때만 local `Surface`를 사용 |
 
@@ -130,11 +126,7 @@ fe-route-agent가 page 파일 안에 lower-layer JSX를 직접 넣어야만 화�
 
 - Page가 `flow rail + metrics + tabs + table/form/detail`처럼 2개 이상의 재사용 UI 블록을 조합해야 하면 업무 feature를 만듭니다.
 - Feature는 해당 화면의 업무 흐름과 active 상태 기반 조합을 담당하고, 개별 시각 블록은 Widget으로 분리합니다.
-- Feature가 새 시각 composition을 소유하면 `[FeatureName].spec.md`에 `## 화면 러프`, 공개 props, 조합 Widget 목록을 기록합니다.
-- Feature 기획 스펙에는 `에이전트 배정 매트릭스`, `실행 그래프`, 백엔드 빌드 순서, 기반 세부 실행표, 승인 단계를 쓰지 않습니다. 실행 순서와 승인 기록은 라우트 딜리버리 스펙이 소유합니다.
 - Feature 파일 안에 table 행, card grid, tabs, form 섹션 같은 시각 블록이 길게 들어가면 fe-widget-agent로 먼저 분리합니다.
-- fe-route-agent가 `ui-composition-gap`을 보고하면 담당 스펙의 웹 단계에서 해당 page/domain의 Feature/Widget 단계를 보강해 처리합니다.
-
 ### SSR / Hydration 규칙
 
 - Feature는 첫 렌더 구조를 `localStorage`, `window`, `Date.now()`, `Math.random()` 결과에 의존해 바꾸지 않습니다.
@@ -366,7 +358,6 @@ export type { CommentListProps } from "./CommentList";
 - [ ] 기능 부족 시 기존 컴포넌트 업그레이드로 처리 (신규 복제 금지)
 - [ ] `packages/fe-ui/src/feature/[Name]/` 에 생성
 - [ ] 필요한 Widget이 없으면 fe-widget-agent에게 요청
-- [ ] Page에서 분리된 업무 조합이면 `[Name].spec.md`에 `## 화면 러프`와 Widget 조합 목록 기록
 - [ ] table/card/tabs/flow rail 같은 시각 블록을 Feature 파일에 직접 대량 구현하지 않음
 - [ ] Page는 이 Feature를 import해서 조합만 하면 되는 상태인지 확인
 - [ ] API 호출은 `@cocrepo/api` 사용
@@ -380,8 +371,6 @@ export type { CommentListProps } from "./CommentList";
 - [ ] index.ts에서 export
 - [ ] feature/index.ts에 barrel export 추가
 - [ ] reusable UI/Hook 이름에 `Admin`, `Management` 같은 불필요한 접두/접미를 붙이지 않음
-- [ ] 실행 순서/agent assignment가 필요하면 Feature spec이 아니라 라우트 딜리버리 스펙에 기록
-
 ---
 
 ### 7. 연관 에이전트
@@ -397,7 +386,6 @@ Pure UI → Widget → Feature → Page
 
 | 에이전트 | 관계 |
 |----------|------|
-| orch-delivery | 담당 스펙과 Feature 담당 스펙 기반 구현 |
 | fe-data-display-agent / fe-feedback-agent / fe-overlay-agent | Feature가 사용할 표시, 상태, overlay UI 컴포넌트 생성 |
 | **fe-widget-agent** | Feature가 사용할 Widget 컴포넌트 생성 |
 | **fe-store-agent** | Feature가 연결할 app 상태 생성 |
@@ -486,7 +474,6 @@ const validateForm = (email: string, password: string): string | null => {
 
 ### 재사용 우선 점검 (필수)
 
-- 작업 시작 전에 `packages/fe-mo-ui/src/feature`, 관련 widget/screen, route `index.spec.md`를 먼저 검색합니다.
 - 하위 UI 후보가 없다고 판단하기 전에 원본 라이브러리 `node_modules/heroui-native/package.json` exports와 `node_modules/heroui-native/src/components/**` source를 확인합니다.
 - 신규 생성 전에 기존 Feature를 확장해 해결할 수 있는지 우선 판단합니다.
 - route/API/native bridge 책임과 중복되는 wrapper를 만들지 않습니다.
@@ -501,7 +488,6 @@ React Native / Expo Native 기준의 reusable Feature composition을
 ### 담당 범위
 
 - `packages/fe-mo-ui/src/feature/[Name]/[Name].tsx`
-- `packages/fe-mo-ui/src/feature/[Name]/[Name].spec.md` 기획 스펙
 - `packages/fe-mo-ui/src/feature/[Name]/index.ts`
 - `packages/fe-mo-ui/src/feature/[Name]/types.ts` (필요 시)
 - `packages/fe-mo-ui/src/feature/index.ts`
@@ -518,8 +504,6 @@ React Native / Expo Native 기준의 reusable Feature composition을
 - 외부 observable 범위를 소비하면 exported component를 `observer`로 감쌉니다.
 - 스타일은 uniwind `className` 계열 prop과 `tailwind-variants` slot/variant를 우선 사용하고 `StyleSheet`/`StyleSheet.create`는 만들지 않습니다.
 - `style` 객체는 className으로 표현하기 어려운 native 동적 값에만 제한합니다.
-- 모바일 feature 기획 스펙에는 `에이전트 배정 매트릭스`, `실행 그래프`, 백엔드 빌드 순서, 기반 세부 실행표, 승인 단계를 쓰지 않습니다. 실행 순서와 route/API/native wiring은 라우트 딜리버리 스펙이 소유합니다.
-
 ### Do
 
 - 복수 screen에서 반복되는 interaction composition을 Feature로 분리합니다.
@@ -541,10 +525,29 @@ React Native / Expo Native 기준의 reusable Feature composition을
 - 재사용한 기존 feature/하위 조합 또는 신규 Feature가 필요한 이유
 - props/상태/action 계약 요약
 - route/API/native boundary 확인 결과
-- 함께 갱신한 barrel / 기획 스펙
-
 - 단위 테스트는 rendering, props/상태 분기, event callback, disabled guard, route/API boundary mock을 검증합니다.
 
+## 입력 계약
+
+### 요청에서 확인할 정보
+
+- 요청에서 이 skill이 소유하는 owner 단위 작업의 목표, 대상과 플랫폼 또는 런타임을 확인합니다.
+- 사용자가 명시한 UX, 업무 정책과 추가 완료 기준만 입력으로 사용합니다.
+
+### 저장소에서 직접 찾을 정보
+
+- 대상 package와 기존 구현, 모델, schema, 타입, 공개 export, 소비 코드와 테스트 패턴을 직접 찾습니다.
+- 경로가 없다는 이유로 멈추지 않고 이 문서의 탐색 순서와 기존 owner 산출물을 기준으로 확인합니다.
+
+### 구현 전 필수 조건
+
+- 대상과 ownership이 식별되고 이 문서의 역할별 선행 조건이 충족되어야 합니다.
+- 자신의 ownership에서 생성 가능한 입력은 직접 만들고 기존 공개 계약을 우선 재사용합니다.
+
+### 입력 필요 조건
+
+- 다른 owner의 필수 산출물 또는 저장소 근거로 결정할 수 없는 제품 결정이 없으면 구현 전에 입력 필요로 종료합니다.
+- 입력 필요에서는 파일을 변경하지 않고 누락 입력, 대상 owner와 소비 경로만 간결하게 보고합니다.
 ## 단독 실행 계약
 
 - 오케스트레이션 실행 문맥이 없어도 요청과 프로젝트 파일을 근거로 이 skill의 단위 작업을 수행한다.

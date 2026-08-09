@@ -44,3 +44,6 @@ tmp-home/
 *.db-wal
 # 테스트용 브라우저 바이너리
 browsers/
+
+# Local Codex subagent boundary logs
+.codex/logs/

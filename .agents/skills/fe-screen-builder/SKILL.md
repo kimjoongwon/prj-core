@@ -11,8 +11,6 @@ description: "이 skill은 `fe-screen-agent` 역할로 일할 때 사용합니�
 - 웹 대상: `packages/fe-ui/**`, `apps/*/web/**` → `공통` + `웹 규칙` 섹션만 실행 규칙으로 적용합니다.
 - 모바일 대상: `packages/fe-mo-ui/**`, `apps/mobile/**` → `공통` + `모바일 규칙` 섹션만 실행 규칙으로 적용합니다.
 - 대상과 다른 플랫폼 섹션은 참고 자료로만 읽고, 금지/허용/출력 규칙을 실행 규칙으로 적용하지 않습니다.
-- 하나의 delivery가 Web과 React Native를 모두 수정해야 하면 라우트 딜리버리 스펙의 단계를 플랫폼별로 나누고 각 대상에 맞는 섹션만 적용합니다.
-
 ## 공통
 
 ### 공통 실행 규칙
@@ -65,11 +63,6 @@ widget/feature/form/collection/detail 등 하위 재사용 계층을 조합해 s
 5. `packages/fe-ui/src/screen` 아래에는 단순 namespace depth를 만들지 않음
    - 금지 예: `src/screen/admin/MemberListScreen.tsx`, `src/screen/idp/LoginScreen.tsx`
    - 허용 예: `src/screen/MemberListScreen/MemberListScreen.tsx`
-6. `packages/fe-ui/src/screen`의 screen component와 기획 스펙은 반드시 동일 이름 폴더에 함께 둠
-   - 허용 예: `src/screen/AddressEmailVerifyScreen/AddressEmailVerifyScreen.tsx`
-   - 허용 예: `src/screen/AddressEmailVerifyScreen/AddressEmailVerifyScreen.spec.md`
-   - 금지 예: `src/screen/AddressEmailVerifyScreen.tsx`
-   - 금지 예: `src/screen/AddressEmailVerifyScreen.spec.md`
 7. screen component props의 이벤트 이름은 `on[Event][UI]` 패턴 강제
 8. screen component가 route layout primitive를 직접 소유하지 않음
    - 금지 예: route `Page`, local `Surface` 책임 침범
@@ -85,10 +78,6 @@ widget/feature/form/collection/detail 등 하위 재사용 계층을 조합해 s
 11. `*Client`, `*Inner`, `*Base` 같은 trivial pass-through wrapper 금지
    - 단순히 props/params를 받아 바로 하위 컴포넌트에 전달하는 중간 component를 같은 page 파일 안에 두지 않음
    - page 파일 안에서 wrapper 없이 최종 exported component가 바로 렌더 책임을 가짐
-12. Screen component 수정 시 대응 `[ScreenName].spec.md` 기획 스펙 업데이트 필수
-   - spec에는 `## 화면 러프` 섹션을 반드시 두고 Markdown text/ASCII wireframe으로 Desktop/Tablet/모바일 또는 해당 화면의 주요 responsive 상태를 그립니다.
-   - 화면 러프 없이 props/의존성 표만 남기면 실패 처리
-   - 기획 스펙에는 `에이전트 배정 매트릭스`, `실행 그래프`, 백엔드 빌드 순서, 기반 세부 실행표, 승인 단계를 쓰지 않습니다.
 13. `packages/fe-ui/src/screen/index.ts` export 동기화 필수
 14. screen 이름은 semantic app-facing 이름을 우선 사용
    - 기본 CRUD 어휘: `ListScreen`, `DetailScreen`, `CreateScreen`, `EditScreen`
@@ -152,12 +141,10 @@ widget/feature/form/collection/detail 등 하위 재사용 계층을 조합해 s
 ```
 packages/fe-ui/src/screen/[ScreenName]/
 ├── [ScreenName].tsx
-├── [ScreenName].spec.md
 ```
 
 - page는 component 전용 폴더를 필수로 사용합니다.
 - 단순 app/domain namespace 폴더는 금지합니다.
-- screen component와 기획 스펙을 `src/screen` 바로 아래에 flat하게 두는 구조는 금지합니다.
 - 폴더 이름은 route path mirror가 아니라 semantic page 이름을 그대로 사용합니다.
 
 ### 2.2 export 규칙
@@ -172,9 +159,7 @@ packages/fe-ui/src/screen/[ScreenName]/
 export const MembersListScreen = observer(() => {
   return <div />;
 });
-```
-
-```tsx
+tsx
 export const MembersListScreen = observer((props: MembersListScreenProps) => {
   return <div />;
 });
@@ -184,15 +169,10 @@ export const MembersListScreen = observer((props: MembersListScreenProps) => {
 - `const MembersListScreen = ...; export { MembersListScreen };` 같은 우회 export보다 직접 `export const`를 우선합니다.
 - `MembersListScreenClient`, `MembersListScreenInner`처럼 최종 export 직전 wrapper 이름을 만드는 패턴을 금지합니다.
 
-### 2.3 기획 스펙 문서 규칙
+### owner 계약 근거
 
-- Screen component 수정 시 같은 위치의 `[ScreenName].spec.md`를 동기화합니다.
-- page spec은 props 계약, composition, 상태별 렌더링, 테스트 관점을 중심으로 유지합니다.
-- page spec에는 `## 화면 러프` 섹션을 두고 텍스트 기반 wireframe을 포함합니다.
 - responsive 구조가 달라지는 화면은 Desktop/Tablet/모바일을 나눠 그립니다.
 - lower-layer 조합은 표로 적고, page 파일에 넣지 않은 feature/widget/form 이름을 명시합니다.
-- 이 기획 스펙은 실행 기준이 아닙니다. 실행 순서, 백엔드/API/foundation 계약, 승인 기록은 서비스 딜리버리 스펙과 nearest 생성된 라우트 딜리버리 스펙이 소유합니다.
-
 ---
 
 ### 3. 구현 규칙
@@ -229,7 +209,6 @@ export const MembersListScreen = observer((props: MembersListScreenProps) => {
 2. 대응되는 feature/widget/collection/detail/form 재사용 자산 검색
 3. 신규 lower-layer가 필요하면 page 구현 전에 feature/widget/form으로 분리할 파일을 정리
 4. page가 받아야 할 props 계약을 먼저 정리
-5. `[ScreenName].spec.md`에 텍스트 기반 `## 화면 러프`와 lower-layer 조합 계획을 먼저 작성 또는 갱신
 6. 작업 시작 보고로 아래를 공유
    - 재사용 후보
    - 새/수정 screen component 경로
@@ -261,8 +240,7 @@ rg -n 'handle[A-Z][A-Za-z0-9_]*' "$TARGET_PAGE"
 # exported screen component와 props type 외에 대문자 JSX component 선언이 있으면 실패 처리합니다.
 rg -n '^(function|const) [A-Z][A-Za-z0-9_]*|^const [A-Z][A-Za-z0-9_]* = (observer|\\(|function)' "$TARGET_PAGE"
 
-# 6) page spec 텍스트 화면 러프 필수
-rg -n '^## 화면 러프|^### Desktop|^### Tablet|^### Mobile|```text' "${TARGET_PAGE%.tsx}.spec.md"
+# owner 계약 근거
 ```
 
 ---
@@ -371,7 +349,6 @@ screen component는 page-level 시각 구성과 사용자 이벤트 위임만 �
 ### 담당 범위
 
 - `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx`
-- `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].spec.md` 기획 스펙
 - `packages/fe-mo-ui/src/screen/index.ts` export 동기화
 - 공개 타입/상태 조합은 screen props 계약로 제한
 
@@ -410,11 +387,8 @@ screen component는 page-level 시각 구성과 사용자 이벤트 위임만 �
    - JSX 노드를 `statusFeedbackNode`, `progressStepNodes` 같은 return 밖 변수에 미리 담지 않습니다.
    - 재사용 목적이 없는 작은 JSX 조각을 `StatusFeedback`, `ProgressSection` 같은 별도 컴포넌트로 빼지 않습니다.
    - `toProgramListItems`, `getStatusLabel`처럼 JSX를 반환하지 않는 data mapper/helper만 lowercase 함수로 둡니다.
-17. screen component 수정 시 대응 `[ScreenName].spec.md` 기획 스펙 업데이트가 필수입니다.
 18. `packages/fe-mo-ui/src/screen/index.ts` export 동기화가 필수입니다.
 19. screen spec은 `## 화면 스케치` 섹션과 fenced `text` wireframe을 반드시 포함합니다.
-20. screen 기획 스펙에는 `에이전트 배정 매트릭스`, `실행 그래프`, 백엔드 빌드 순서, 기반 세부 실행표, 승인 단계를 쓰지 않습니다. 실행 순서와 route/native wiring은 라우트 딜리버리 스펙이 소유합니다.
-
 ### 금지
 
 - `useGet*`, `usePost*`, `useMutation*`, `useInfiniteQuery*` 같은 data hook 직접 호출
@@ -423,7 +397,6 @@ screen component는 page-level 시각 구성과 사용자 이벤트 위임만 �
 - `window`, `document`, `cookies`, `headers` 접근
 - `React.createElement` 또는 `createElement` 기반 시각 composition
 - JSX를 반환하는 `render*` helper 함수
-- route layout/layout/테스트 파일(`_layout.tsx`, `_prefetch.ts`, `index.spec.md`)의 소유권 침범
 - route screen을 감싸는 wrapper 목적의 trivial `*Client`, `*Inner` 컴포넌트
 
 ### Do
@@ -431,8 +404,6 @@ screen component는 page-level 시각 구성과 사용자 이벤트 위임만 �
 - props 계약을 먼저 정의한 뒤 조합형 render를 구현합니다.
 - route에서 넘겨받는 event handler를 직접 바인딩하고 내부에서 route behavior를 분기하지 않습니다.
 - 상태별/반복별 UI 조각은 screen component 본문 안에서 읽히도록 JSX를 직접 배치합니다.
-- screen-level composition, 상태별 렌더링, props/event 계약을 `[ScreenName].spec.md`에 기록합니다.
-- `[ScreenName].spec.md`에는 첫 화면, 주요 ready 상태, loading/empty/error 또는 overlay/sheet 상태를 Markdown fenced `text` 화면 스케치로 그립니다.
 - `packages/fe-mo-ui/src/screen/index.ts` barrel export 누락 없이 유지합니다.
 
 ### 금지
@@ -444,7 +415,6 @@ screen component는 page-level 시각 구성과 사용자 이벤트 위임만 �
 ### 출력
 
 - 화면 컴포넌트 구현: `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].tsx`
-- 화면 컴포넌트 spec: `packages/fe-mo-ui/src/screen/[ScreenName]/[ScreenName].spec.md`
 - 공개 export 동기화: `packages/fe-mo-ui/src/screen/index.ts`
 
 ### 구현 절차
@@ -453,10 +423,7 @@ screen component는 page-level 시각 구성과 사용자 이벤트 위임만 �
 2) 화면이 공유 가능한지/route 고유인지 판단
 3) `ScreenProps` 정의
 4) `Screen` 구현 (`observer` 필요 시 적용)
-5) `[ScreenName].spec.md` 작성/갱신: `## 화면 스케치`와 fenced `text` wireframe 포함
 6) barrel 동기화
-7) route screen에서 재사용되는 경우 해당 route `index.spec.md`의 shared screen 대상을 갱신
-
 ### 보고 포맷
 
 - 생성/수정한 screen 경로
@@ -467,6 +434,27 @@ screen component는 page-level 시각 구성과 사용자 이벤트 위임만 �
 
 - 단위 테스트는 props rendering, event callback, disabled/empty/error 분기, reusable widget composition을 검증합니다.
 
+## 입력 계약
+
+### 요청에서 확인할 정보
+
+- 요청에서 이 skill이 소유하는 owner 단위 작업의 목표, 대상과 플랫폼 또는 런타임을 확인합니다.
+- 사용자가 명시한 UX, 업무 정책과 추가 완료 기준만 입력으로 사용합니다.
+
+### 저장소에서 직접 찾을 정보
+
+- 대상 package와 기존 구현, 모델, schema, 타입, 공개 export, 소비 코드와 테스트 패턴을 직접 찾습니다.
+- 경로가 없다는 이유로 멈추지 않고 이 문서의 탐색 순서와 기존 owner 산출물을 기준으로 확인합니다.
+
+### 구현 전 필수 조건
+
+- 대상과 ownership이 식별되고 이 문서의 역할별 선행 조건이 충족되어야 합니다.
+- 자신의 ownership에서 생성 가능한 입력은 직접 만들고 기존 공개 계약을 우선 재사용합니다.
+
+### 입력 필요 조건
+
+- 다른 owner의 필수 산출물 또는 저장소 근거로 결정할 수 없는 제품 결정이 없으면 구현 전에 입력 필요로 종료합니다.
+- 입력 필요에서는 파일을 변경하지 않고 누락 입력, 대상 owner와 소비 경로만 간결하게 보고합니다.
 ## 단독 실행 계약
 
 - 오케스트레이션 실행 문맥이 없어도 요청과 프로젝트 파일을 근거로 이 skill의 단위 작업을 수행한다.

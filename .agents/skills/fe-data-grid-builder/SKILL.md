@@ -68,7 +68,6 @@ DataGrid/Table Cell 컴포넌트를 만들거나 고치면 [Cell 규칙](referen
 
 ### 필수 규칙
 
-- DataGrid leaf 소스 변경만으로는 신규 전용 spec을 만들지 않습니다. 허용 대상 Page/Feature source를 함께 바꾸는 경우에만 해당 담당 스펙을 갱신합니다.
 - DataGrid 전용 Table wrapper를 새로 만들지 않습니다.
 - 행 key helper는 duplicate-safe 해야 하며 `DataGrid.tsx`와 외부 호출부에서 재사용할 수 있도록 공개합니다.
 - DataGrid 공개 컴포넌트, 상태 model, helper, 타입은 `data-grid/index.ts`에서 노출합니다.
@@ -88,6 +87,27 @@ DataGrid/Table Cell 컴포넌트를 만들거나 고치면 [Cell 규칙](referen
 
 - 단위 테스트는 행 key, column rendering, input renderer, empty/loading 분기, event callback을 검증합니다.
 
+## 입력 계약
+
+### 요청에서 확인할 정보
+
+- 요청에서 이 skill이 소유하는 owner 단위 작업의 목표, 대상과 플랫폼 또는 런타임을 확인합니다.
+- 사용자가 명시한 UX, 업무 정책과 추가 완료 기준만 입력으로 사용합니다.
+
+### 저장소에서 직접 찾을 정보
+
+- 대상 package와 기존 구현, 모델, schema, 타입, 공개 export, 소비 코드와 테스트 패턴을 직접 찾습니다.
+- 경로가 없다는 이유로 멈추지 않고 이 문서의 탐색 순서와 기존 owner 산출물을 기준으로 확인합니다.
+
+### 구현 전 필수 조건
+
+- 대상과 ownership이 식별되고 이 문서의 역할별 선행 조건이 충족되어야 합니다.
+- 자신의 ownership에서 생성 가능한 입력은 직접 만들고 기존 공개 계약을 우선 재사용합니다.
+
+### 입력 필요 조건
+
+- 다른 owner의 필수 산출물 또는 저장소 근거로 결정할 수 없는 제품 결정이 없으면 구현 전에 입력 필요로 종료합니다.
+- 입력 필요에서는 파일을 변경하지 않고 누락 입력, 대상 owner와 소비 경로만 간결하게 보고합니다.
 ## 단독 실행 계약
 
 - 오케스트레이션 실행 문맥이 없어도 요청과 프로젝트 파일을 근거로 이 skill의 단위 작업을 수행한다.
@@ -307,8 +327,6 @@ DataGrid는 `@tanstack/react-table`을 기반으로 다음 기능을 일관되�
 5. `raw` table 전용 columns/helper는 신규 생성하지 않습니다.
 6. `DataGrid`로 옮길 수 있는 page는 page 내부 custom `<table>`를 유지하지 않습니다.
 7. `data-grid/columns` 폴더 내부에 새 helper/factory 함수를 만들면 **한글 주석**으로 역할을 짧게 설명합니다.
-8. 컬럼 변경이 route page/Screen/Feature 계약을 바꾸면 소비 코드, 공개 export와 관련 테스트를 함께 갱신합니다. 별도 `*.spec.md` 문서는 만들지 않습니다.
-
 ---
 
 #### 4. 작업 기준
@@ -377,7 +395,6 @@ pnpm exec tsc -p packages/fe-ui/tsconfig.json --noEmit --pretty false
 - `packages/fe-ui/src/data-grid/columns/index.ts`
 
 핵심은 **column 파일이 UI를 소유하지 않게 만드는 것**입니다.
-
 
 - 이 역할이 불가피하게 cell 소스를 함께 수정한 경우에는 같은 작업에서 해당 cell의 같은 위치 단위 테스트도 갱신하고, 최종 보고에 왜 `fe-data-grid-agent` 인계 없이 함께 처리했는지 적습니다.
 - columns 변경으로 연결된 cell/단위 테스트 누락과 DataGrid 계약 drift는 이 agent가 자체 검증하고, cell owner 범위가 필요하면 `fe-data-grid-agent` 인계로 보고합니다.

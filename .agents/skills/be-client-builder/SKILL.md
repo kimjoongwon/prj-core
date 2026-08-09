@@ -32,7 +32,6 @@ description: "이 skill은 `be-client-builder` 역할로 일할 때 사용합니
 |------|------|
 | Client 클래스 | `packages/be-client/src/{provider}.client.ts` |
 | 배럴 export | `packages/be-client/src/index.ts` |
-| Client 계약 | 담당 스펙의 `Client 인벤토리` 행 |
 
 ## 핵심 규칙
 
@@ -41,7 +40,6 @@ description: "이 skill은 `be-client-builder` 역할로 일할 때 사용합니
 - 여러 Client 조합, 대체 처리, provider 선택은 Service 또는 UseCase가 담당합니다.
 - Client에서 도메인 상태 전이, Repository/Prisma 접근, Controller DTO 소유를 하지 않습니다.
 - 인증, timeout, retry, response normalization은 외부 API boundary 책임으로 명시합니다.
-- 신규 이전 방식 boundary 명칭을 만들지 않습니다. third-party SDK adapter가 꼭 필요하면 담당 스펙에 사유를 기록합니다.
 - 외부 API params/body/header 조립이 반복되면 출처명 alias까지만 사용합니다.
 - Client external API input은 `ProviderActionInput`처럼 외부 API 의미가 드러나는 이름을 사용하고, 메서드 인자명은 기본적으로 `input`을 사용합니다.
 - Client는 DTO, Command/Query class를 public method 입력 타입으로 받지 않습니다.
@@ -75,6 +73,27 @@ export class NaverMapClient {
 - [ ] timeout/retry/auth/error normalization 책임 명시
 - [ ] `packages/be-client/src/index.ts` export 추가
 
+## 입력 계약
+
+### 요청에서 확인할 정보
+
+- 요청에서 이 skill이 소유하는 owner 단위 작업의 목표, 대상과 플랫폼 또는 런타임을 확인합니다.
+- 사용자가 명시한 UX, 업무 정책과 추가 완료 기준만 입력으로 사용합니다.
+
+### 저장소에서 직접 찾을 정보
+
+- 대상 package와 기존 구현, 모델, schema, 타입, 공개 export, 소비 코드와 테스트 패턴을 직접 찾습니다.
+- 경로가 없다는 이유로 멈추지 않고 이 문서의 탐색 순서와 기존 owner 산출물을 기준으로 확인합니다.
+
+### 구현 전 필수 조건
+
+- 대상과 ownership이 식별되고 이 문서의 역할별 선행 조건이 충족되어야 합니다.
+- 자신의 ownership에서 생성 가능한 입력은 직접 만들고 기존 공개 계약을 우선 재사용합니다.
+
+### 입력 필요 조건
+
+- 다른 owner의 필수 산출물 또는 저장소 근거로 결정할 수 없는 제품 결정이 없으면 구현 전에 입력 필요로 종료합니다.
+- 입력 필요에서는 파일을 변경하지 않고 누락 입력, 대상 owner와 소비 경로만 간결하게 보고합니다.
 ## 단독 실행 계약
 
 - 오케스트레이션 실행 문맥이 없어도 요청과 프로젝트 파일을 근거로 이 skill의 단위 작업을 수행한다.

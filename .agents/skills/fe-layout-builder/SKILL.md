@@ -56,7 +56,6 @@ Next.js App Router의 `apps/**/layout.tsx`와 Expo Router `_layout.tsx`는 `fe-r
 | `packages/fe-ui` export 정리 | O | 배럴 export/타입 export 정리 |
 | `apps/**/layout.tsx` 작성 | X | `fe-route-layout-agent` 사용 |
 | `page.tsx` 화면 통합 | X | `fe-route-agent` 사용 |
-| 메뉴/탭 경로 계약 결정 | X | 담당 스펙과 `fe-menu-agent` 사용 |
 
 ---
 
@@ -67,7 +66,6 @@ Next.js App Router의 `apps/**/layout.tsx`와 Expo Router `_layout.tsx`는 `fe-r
 | 항목 | 필수 | 설명 |
 |------|------|------|
 | Layout 타입 | O | `Layout` |
-| 기존 소유 계약 | O | route `page.spec.md` 또는 관련 Screen/Feature 스펙의 Layout 계약 |
 | 사용 시나리오 | O | 어떤 route skeleton에서 어떤 슬롯이 필요한지 |
 | 관련 surface 규칙 | △ | `PageSurface`/`ScreenSurface`, `SectionSurface`, `Surface`와의 조합 제약 |
 
@@ -77,7 +75,6 @@ Next.js App Router의 `apps/**/layout.tsx`와 Expo Router `_layout.tsx`는 `fe-r
 |------|------|
 | Layout 컴포넌트 | `packages/fe-ui/src/layout/Layout.tsx` 또는 `packages/fe-mo-ui/src/layout/[Name]/index.tsx` |
 | 공용 타입 | 담당 layout 폴더의 같은 위치 props/type 파일 |
-| Layout 계약 | route `page.spec.md`의 Layout 계약 섹션 또는 관련 fe-ui Screen/Feature 스펙 |
 | Export 정리 | owner layout 폴더의 `index.ts`, 상위 barrel |
 
 ---
@@ -154,11 +151,9 @@ Next.js App Router의 `apps/**/layout.tsx`와 Expo Router `_layout.tsx`는 `fe-r
 
 ### 6. 구현 절차
 
-1. 기존 Layout primitive 구현과 허용 담당 스펙(route `page.spec.md` 또는 관련 Screen/Feature 스펙)을 먼저 검색합니다.
 2. route 문서가 요구하는 구조가 기존 primitive 조합으로 해결되는지 판단합니다.
 3. 신규 primitive가 필요하면 가장 작은 공통 구조만 추가합니다.
 4. props/slot 이름을 구조 의미로 정리합니다.
-5. 별도 layout spec은 만들지 않고 허용 담당 스펙과 export를 함께 갱신합니다.
 6. `@cocrepo/ui` 배럴에서 재사용 가능하게 정리합니다.
 
 ---
@@ -169,8 +164,6 @@ Next.js App Router의 `apps/**/layout.tsx`와 Expo Router `_layout.tsx`는 `fe-r
 - [ ] `apps/**/layout.tsx`를 직접 수정하지 않았는가?
 - [ ] Layout primitive가 router/store/fetch에 의존하지 않는가?
 - [ ] 구조 슬롯과 surface 책임이 섞이지 않았는가?
-- [ ] 허용 담당 스펙과 barrel export가 함께 갱신되었는가?
-
 ---
 
 ### 8. 연관 하위 에이전트
@@ -183,6 +176,27 @@ Next.js App Router의 `apps/**/layout.tsx`와 Expo Router `_layout.tsx`는 `fe-r
 
 - 단위 테스트는 slot rendering, class/variant 분기, accessibility landmark가 있으면 해당 accessibility 역할을 검증합니다.
 
+## 입력 계약
+
+### 요청에서 확인할 정보
+
+- 요청에서 이 skill이 소유하는 owner 단위 작업의 목표, 대상과 플랫폼 또는 런타임을 확인합니다.
+- 사용자가 명시한 UX, 업무 정책과 추가 완료 기준만 입력으로 사용합니다.
+
+### 저장소에서 직접 찾을 정보
+
+- 대상 package와 기존 구현, 모델, schema, 타입, 공개 export, 소비 코드와 테스트 패턴을 직접 찾습니다.
+- 경로가 없다는 이유로 멈추지 않고 이 문서의 탐색 순서와 기존 owner 산출물을 기준으로 확인합니다.
+
+### 구현 전 필수 조건
+
+- 대상과 ownership이 식별되고 이 문서의 역할별 선행 조건이 충족되어야 합니다.
+- 자신의 ownership에서 생성 가능한 입력은 직접 만들고 기존 공개 계약을 우선 재사용합니다.
+
+### 입력 필요 조건
+
+- 다른 owner의 필수 산출물 또는 저장소 근거로 결정할 수 없는 제품 결정이 없으면 구현 전에 입력 필요로 종료합니다.
+- 입력 필요에서는 파일을 변경하지 않고 누락 입력, 대상 owner와 소비 경로만 간결하게 보고합니다.
 ## 단독 실행 계약
 
 - 오케스트레이션 실행 문맥이 없어도 요청과 프로젝트 파일을 근거로 이 skill의 단위 작업을 수행한다.
