@@ -1,6 +1,6 @@
 name = "common-schema-builder"
 description = "프론트엔드와 백엔드가 함께 쓰는 검증 스키마를 만듭니다."
-model = "gpt-5.6"
+model = "gpt-5.6-sol"
 model_reasoning_effort = "xhigh"
 developer_instructions = '''
 ## 필수 문서

@@ -1,6 +1,6 @@
 name = "be-database-expert"
 description = "PostgreSQL/Prisma 데이터 구조를 설계하고 성능과 제약 조건을 점검합니다."
-model = "gpt-5.6"
+model = "gpt-5.6-sol"
 model_reasoning_effort = "xhigh"
 developer_instructions = '''
 ## 필수 문서

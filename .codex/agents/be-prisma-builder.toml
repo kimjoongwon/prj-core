@@ -1,6 +1,6 @@
 name = "be-prisma-builder"
 description = "Prisma schema를 만들거나 고치고 모델 관계를 정리합니다."
-model = "gpt-5.6"
+model = "gpt-5.6-sol"
 model_reasoning_effort = "xhigh"
 developer_instructions = '''
 ## 필수 문서
