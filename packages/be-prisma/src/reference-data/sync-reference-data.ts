@@ -7,7 +7,6 @@ import type {
 	Subject,
 } from "../generated/client/client";
 import { Prisma } from "../generated/client/client";
-import { CategoryTypes } from "../generated/client/enums";
 import { SYSTEM_SPACE_ULID } from "./constants";
 import {
 	abilitySeedData,
@@ -94,7 +93,6 @@ async function syncSpaceCategories(
 		const category = await db.category.upsert({
 			where: { name: spaceCategoryEnum.name },
 			update: {
-				type: categoryData.type as CategoryTypes,
 				spaceId: systemSpaceId,
 				createdById,
 				parentId,
@@ -102,7 +100,6 @@ async function syncSpaceCategories(
 			},
 			create: {
 				name: spaceCategoryEnum.name,
-				type: categoryData.type as CategoryTypes,
 				spaceId: systemSpaceId,
 				createdById,
 				parentId,
@@ -214,14 +211,12 @@ async function syncRoleCategories(
 		await db.category.upsert({
 			where: { name: roleCategoryEnum.name },
 			update: {
-				type: categoryData.type as CategoryTypes,
 				spaceId: systemSpaceId,
 				createdById,
 				removedAt: null,
 			},
 			create: {
 				name: roleCategoryEnum.name,
-				type: categoryData.type as CategoryTypes,
 				spaceId: systemSpaceId,
 				createdById,
 			},

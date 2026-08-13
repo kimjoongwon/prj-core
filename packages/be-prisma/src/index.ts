@@ -13,7 +13,7 @@
  * import type { User, Tenant, Space } from '@cocrepo/prisma'
  *
  * // Enum 사용
- * import { CategoryTypes, Roles } from '@cocrepo/prisma'
+ * import { Roles } from '@cocrepo/prisma'
  *
  * // Prisma 유틸리티 사용
  * import { Prisma } from '@cocrepo/prisma'

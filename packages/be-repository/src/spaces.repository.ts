@@ -1,6 +1,5 @@
 import { Company, FitnessCenter, Space } from "@cocrepo/entity";
 import {
-	CategoryTypes,
 	LanguageCode,
 	Prisma,
 	PrismaClient,
@@ -363,7 +362,6 @@ export class SpacesRepository {
 					space: { id: spaceId, removedAt: null },
 					removedAt: null,
 					category: {
-						type: CategoryTypes.Space,
 						removedAt: null,
 					},
 				},
@@ -376,8 +374,8 @@ export class SpacesRepository {
 
 		const categories = await this.txHost.tx.category.findMany({
 			where: {
-				type: CategoryTypes.Space,
 				removedAt: null,
+				spaceClassifications: { some: { removedAt: null } },
 			},
 			select: {
 				id: true,

@@ -33,7 +33,6 @@ export * from "./authAuditResult";
 export * from "./bookingFeedItemDto";
 export * from "./bookingFeedItemDtoMyReservationStatus";
 export * from "./categoryDto";
-export * from "./categoryTypes";
 export * from "./communityPostDto";
 export * from "./companyDto";
 export * from "./companyDtoSpace";

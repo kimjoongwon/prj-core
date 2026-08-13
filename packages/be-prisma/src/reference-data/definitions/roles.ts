@@ -10,7 +10,6 @@ import { RoleCategoryName, RoleGroupName } from "@cocrepo/enum";
 // Role 타입 카테고리 시드 데이터 (RoleCategoryName enum 활용)
 export interface CategorySeedData {
 	roleCategoryEnum: RoleCategoryName;
-	type: "Role" | "Space" | "Asset" | "User";
 	parentId?: string;
 }
 
@@ -18,23 +17,18 @@ export interface CategorySeedData {
 export const roleCategorySeedData: CategorySeedData[] = [
 	{
 		roleCategoryEnum: RoleCategoryName.PLATFORM,
-		type: "Role",
 	},
 	{
 		roleCategoryEnum: RoleCategoryName.SHARED,
-		type: "Role",
 	},
 	{
 		roleCategoryEnum: RoleCategoryName.PUBLIC,
-		type: "Role",
 	},
 	{
 		roleCategoryEnum: RoleCategoryName.WORKSPACE,
-		type: "Role",
 	},
 	{
 		roleCategoryEnum: RoleCategoryName.PROJECT,
-		type: "Role",
 	},
 ];
 

@@ -61,16 +61,6 @@ export const AuthAuditResult = {
 export type AuthAuditResult = (typeof AuthAuditResult)[keyof typeof AuthAuditResult]
 
 
-export const CategoryTypes = {
-  Role: 'Role',
-  Space: 'Space',
-  Asset: 'Asset',
-  User: 'User'
-} as const
-
-export type CategoryTypes = (typeof CategoryTypes)[keyof typeof CategoryTypes]
-
-
 export const DerivativeKind = {
   THUMBNAIL: 'THUMBNAIL',
   PREVIEW: 'PREVIEW',

@@ -431,7 +431,7 @@ export async function classifyFitnessCenterSpacesAsBranch(
 	);
 
 	const branchCategory = await prisma.category.findFirst({
-		where: { name: "지점", type: "Space" },
+		where: { name: "지점" },
 	});
 
 	if (!branchCategory) {

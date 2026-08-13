@@ -67,11 +67,11 @@ class SignUpDto {
 
 ```typescript
 import { EnumField, ClassField } from '@cocrepo/decorator';
-import { CategoryTypes } from '@cocrepo/enum';
+import { InquiryCategory } from '@cocrepo/enum';
 
-class CreateCategoryDto {
-  @EnumField(() => CategoryTypes, { description: '카테고리 타입' })
-  type: CategoryTypes;
+class CreateInquiryDto {
+  @EnumField(() => InquiryCategory, { description: '문의 카테고리' })
+  category: InquiryCategory;
 
   @ClassField(() => AddressDto, { description: '주소 정보' })
   address: AddressDto;

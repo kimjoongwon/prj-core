@@ -40,14 +40,6 @@ enum AuthAuditResult {
   LOCKED
 }
 
-/// @displayName 카테고리 유형
-enum CategoryTypes {
-  Role
-  Space
-  Asset
-  User
-}
-
 /// @displayName 파생 리소스 타입
 enum DerivativeKind {
   THUMBNAIL

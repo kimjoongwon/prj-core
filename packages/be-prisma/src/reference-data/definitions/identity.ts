@@ -10,16 +10,14 @@ import { SpaceCategoryName, SpaceGroupName } from "@cocrepo/enum";
 
 export interface SpaceCategorySeedData {
 	spaceCategoryEnum: SpaceCategoryName;
-	type: "Space";
 	parentCategoryCode?: string;
 }
 
 // ROOT -> BRANCH 계층은 bootstrap에서 생성하는 실제 Space 트리의 뼈대가 됩니다.
 export const spaceCategorySeedData: SpaceCategorySeedData[] = [
-	{ spaceCategoryEnum: SpaceCategoryName.ROOT, type: "Space" },
+	{ spaceCategoryEnum: SpaceCategoryName.ROOT },
 	{
 		spaceCategoryEnum: SpaceCategoryName.BRANCH,
-		type: "Space",
 		parentCategoryCode: "ROOT",
 	},
 ];

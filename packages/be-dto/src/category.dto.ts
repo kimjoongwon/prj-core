@@ -2,11 +2,10 @@ import {
 	BigIntIdField,
 	BigIntIdFieldOptional,
 	ClassField,
-	EnumField,
 	StringField,
 } from "@cocrepo/decorator/field";
 import type { DomainEntityModel } from "@cocrepo/entity";
-import { type Category, CategoryTypes } from "@cocrepo/prisma";
+import type { Category } from "@cocrepo/prisma";
 import { Exclude } from "class-transformer";
 import { AbstractDto } from "./abstract.dto";
 
@@ -26,9 +25,6 @@ export class CategoryDto
 
 	@StringField({ default: "" })
 	name: string;
-
-	@EnumField(() => CategoryTypes, { default: CategoryTypes.Role })
-	type: CategoryTypes;
 
 	@BigIntIdField({ nullable: true, default: null })
 	parentId: bigint | null;

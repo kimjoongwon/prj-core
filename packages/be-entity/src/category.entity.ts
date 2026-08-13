@@ -1,4 +1,3 @@
-import type { CategoryTypes } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
 import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
@@ -8,7 +7,6 @@ export class Category extends AbstractEntity {
 	categoryId!: string;
 
 	name!: string;
-	type!: CategoryTypes;
 	spaceId!: bigint;
 	parentId!: bigint | null;
 	createdById!: bigint | null;

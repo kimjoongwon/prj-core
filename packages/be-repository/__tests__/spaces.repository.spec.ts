@@ -1,5 +1,4 @@
 import { Space } from "@cocrepo/entity";
-import { CategoryTypes } from "@cocrepo/prisma";
 import { SpaceResourceScope } from "@cocrepo/type";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { TransactionHost } from "@nestjs-cls/transactional";
@@ -606,16 +605,15 @@ describe("SpacesRepository", () => {
 					space: { id: 100n, removedAt: null },
 					removedAt: null,
 					category: {
-						type: CategoryTypes.Space,
 						removedAt: null,
 					},
 				},
 				select: { category: { select: { id: true } } },
 			});
-			expect(mockTxHost.tx.category.findMany).toHaveBeenCalledWith({
+				expect(mockTxHost.tx.category.findMany).toHaveBeenCalledWith({
 				where: {
-					type: CategoryTypes.Space,
 					removedAt: null,
+					spaceClassifications: { some: { removedAt: null } },
 				},
 				select: {
 					id: true,

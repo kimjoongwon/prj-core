@@ -1,7 +1,6 @@
 export * from "./asset-kind.enum";
 export * from "./asset-status.enum";
 export * from "./category-names.enum";
-export * from "./category-types.enum";
 export * from "./delete-filter.enum";
 export * from "./grantee-type.enum";
 export * from "./group-names.enum";

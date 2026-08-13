@@ -415,23 +415,6 @@ export type EnumAuthAuditResultWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumAuthAuditResultFilter<$PrismaModel>
 }
 
-export type EnumCategoryTypesFilter<$PrismaModel = never> = {
-  equals?: $Enums.CategoryTypes | Prisma.EnumCategoryTypesFieldRefInput<$PrismaModel>
-  in?: $Enums.CategoryTypes[] | Prisma.ListEnumCategoryTypesFieldRefInput<$PrismaModel>
-  notIn?: $Enums.CategoryTypes[] | Prisma.ListEnumCategoryTypesFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumCategoryTypesFilter<$PrismaModel> | $Enums.CategoryTypes
-}
-
-export type EnumCategoryTypesWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.CategoryTypes | Prisma.EnumCategoryTypesFieldRefInput<$PrismaModel>
-  in?: $Enums.CategoryTypes[] | Prisma.ListEnumCategoryTypesFieldRefInput<$PrismaModel>
-  notIn?: $Enums.CategoryTypes[] | Prisma.ListEnumCategoryTypesFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumCategoryTypesWithAggregatesFilter<$PrismaModel> | $Enums.CategoryTypes
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumCategoryTypesFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumCategoryTypesFilter<$PrismaModel>
-}
-
 export type EnumTextTypesFilter<$PrismaModel = never> = {
   equals?: $Enums.TextTypes | Prisma.EnumTextTypesFieldRefInput<$PrismaModel>
   in?: $Enums.TextTypes[] | Prisma.ListEnumTextTypesFieldRefInput<$PrismaModel>
@@ -1360,23 +1343,6 @@ export type NestedEnumAuthAuditResultWithAggregatesFilter<$PrismaModel = never> 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumAuthAuditResultFilter<$PrismaModel>
   _max?: Prisma.NestedEnumAuthAuditResultFilter<$PrismaModel>
-}
-
-export type NestedEnumCategoryTypesFilter<$PrismaModel = never> = {
-  equals?: $Enums.CategoryTypes | Prisma.EnumCategoryTypesFieldRefInput<$PrismaModel>
-  in?: $Enums.CategoryTypes[] | Prisma.ListEnumCategoryTypesFieldRefInput<$PrismaModel>
-  notIn?: $Enums.CategoryTypes[] | Prisma.ListEnumCategoryTypesFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumCategoryTypesFilter<$PrismaModel> | $Enums.CategoryTypes
-}
-
-export type NestedEnumCategoryTypesWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.CategoryTypes | Prisma.EnumCategoryTypesFieldRefInput<$PrismaModel>
-  in?: $Enums.CategoryTypes[] | Prisma.ListEnumCategoryTypesFieldRefInput<$PrismaModel>
-  notIn?: $Enums.CategoryTypes[] | Prisma.ListEnumCategoryTypesFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumCategoryTypesWithAggregatesFilter<$PrismaModel> | $Enums.CategoryTypes
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumCategoryTypesFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumCategoryTypesFilter<$PrismaModel>
 }
 
 export type NestedEnumTextTypesFilter<$PrismaModel = never> = {

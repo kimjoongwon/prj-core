@@ -10,16 +10,6 @@ pnpm add @cocrepo/enum
 
 ## 제공 열거형
 
-### CategoryType
-
-카테고리 타입을 정의합니다:
-
-```typescript
-import { CategoryType } from '@cocrepo/enum';
-
-const category = CategoryType.SERVICE;
-```
-
 ### CategoryName
 
 카테고리 이름을 정의합니다:
@@ -114,7 +104,6 @@ const roleGroup = RoleGroupName.ADMIN;
 src/
 ├── base-enum.ts                 # 공통 Enum 베이스
  ├── category-names.enum.ts       # 카테고리 이름
- ├── category-types.enum.ts       # 카테고리 타입
  ├── group-names.enum.ts          # 그룹 이름
  ├── group-types.enum.ts          # 그룹 타입
  ├── recurring-day-of-week.enum.ts # 반복 요일

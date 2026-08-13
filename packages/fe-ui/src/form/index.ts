@@ -1,5 +1,6 @@
 export * from "./AbilityForm";
 export * from "./ActionForm";
+export * from "./CategoryForm";
 export * from "./FitnessCenterForm";
 export * from "./ForgotPasswordForm";
 export * from "./Form";

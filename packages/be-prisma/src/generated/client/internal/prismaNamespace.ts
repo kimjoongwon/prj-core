@@ -5396,7 +5396,6 @@ export const CategoryScalarFieldEnum = {
   updatedAt: 'updatedAt',
   removedAt: 'removedAt',
   name: 'name',
-  type: 'type',
   parentId: 'parentId',
   spaceId: 'spaceId',
   createdById: 'createdById'
@@ -6500,14 +6499,14 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-
+    
 
 
 /**
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-
+    
 
 
 /**
@@ -6577,20 +6576,6 @@ export type EnumAuthAuditResultFieldRefInput<$PrismaModel> = FieldRefInputType<$
  * Reference to a field of type 'AuthAuditResult[]'
  */
 export type ListEnumAuthAuditResultFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuthAuditResult[]'>
-    
-
-
-/**
- * Reference to a field of type 'CategoryTypes'
- */
-export type EnumCategoryTypesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CategoryTypes'>
-    
-
-
-/**
- * Reference to a field of type 'CategoryTypes[]'
- */
-export type ListEnumCategoryTypesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CategoryTypes[]'>
     
 
 
@@ -7192,3 +7177,4 @@ export type PrismaAction =
  * `PrismaClient` proxy available in interactive transactions.
  */
 export type TransactionClient = Omit<DefaultPrismaClient, runtime.ITXClientDenyList>
+
