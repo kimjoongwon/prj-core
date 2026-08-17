@@ -2,18 +2,18 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import {
-	CategoryForm,
-	type CategoryFormDataGridState,
-	type CategoryFormRow,
-} from "./CategoryForm";
+	CategoryEditor,
+	type CategoryEditorDataGridState,
+	type CategoryEditorRow,
+} from "./CategoryEditor";
 import { DataGridChangesState } from "../../data-grid/DataGridChangesState";
 import { DataGridState } from "../../data-grid/DataGridState";
 
 const meta = {
-	title: "form/CategoryForm",
-	component: CategoryForm,
+	title: "input/CategoryEditor",
+	component: CategoryEditor,
 	parameters: {
-		layout: "centered",
+		layout: "fullscreen",
 		docs: {
 			description: {
 				component:
@@ -22,44 +22,50 @@ const meta = {
 		},
 	},
 	tags: ["autodocs"],
-} satisfies Meta<typeof CategoryForm>;
+} satisfies Meta<typeof CategoryEditor>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const editableApiRows: CategoryFormRow[] = [
-	{ id: "category-role", name: "운영자 역할" },
-	{ id: "category-space", name: "공용 공간" },
-	{ id: "category-asset", name: "자산" },
+const editableApiRows: CategoryEditorRow[] = [
+	{ id: "category-role", name: "운영자 역할", parentId: null, sortOrder: 0 },
+	{ id: "category-space", name: "공용 공간", parentId: null, sortOrder: 1 },
+	{ id: "category-space-team", name: "팀 공간", parentId: "category-space", sortOrder: 0 },
+	{ id: "category-space-team-admin", name: "관리자 공간", parentId: "category-space-team", sortOrder: 0 },
+	{ id: "category-space-personal", name: "개인 공간", parentId: "category-space", sortOrder: 1 },
+	{ id: "category-asset", name: "자산", parentId: null, sortOrder: 2 },
 ];
 
-const readOnlyApiRows: CategoryFormRow[] = [
-	{ id: "category-user", name: "사용자" },
-	{ id: "category-space", name: "공용 공간" },
+const readOnlyApiRows: CategoryEditorRow[] = [
+	{ id: "category-user", name: "사용자", parentId: null, sortOrder: 0 },
+	{ id: "category-space", name: "공용 공간", parentId: null, sortOrder: 1 },
+	{ id: "category-space-team", name: "팀 공간", parentId: "category-space", sortOrder: 0 },
+	{ id: "category-space-team-admin", name: "관리자 공간", parentId: "category-space-team", sortOrder: 0 },
+	{ id: "category-space-personal", name: "개인 공간", parentId: "category-space", sortOrder: 1 },
 ];
 
-function createCategoryDataGridState(): CategoryFormDataGridState {
+function createCategoryDataGridState(): CategoryEditorDataGridState {
 	return new DataGridState({
 		queryStates: { skip: 0, take: 20 },
 		setQueryStates: async () => new URLSearchParams(),
 		changes: new DataGridChangesState(),
-	}) as CategoryFormDataGridState;
+	}) as CategoryEditorDataGridState;
 }
 
-const CategoryFormStory = observer(function CategoryFormStory({
+const CategoryEditorStory = observer(function CategoryEditorStory({
 	initialRows,
-	readOnly = false,
+	isReadOnly = false,
 }: {
-	initialRows: CategoryFormRow[];
-	readOnly?: boolean;
+	initialRows: CategoryEditorRow[];
+	isReadOnly?: boolean;
 }) {
 	// API 응답 원본은 rows에만 두고, 저장 전 변경은 dataGridState.changes에 둡니다.
-	const [rows, setRows] = useState<CategoryFormRow[]>(() => [...initialRows]);
+	const [rows, setRows] = useState<CategoryEditorRow[]>(() => [...initialRows]);
 	const [dataGridState] = useState(createCategoryDataGridState);
-	const changesSnapshot = dataGridState.changes.toJSON<CategoryFormRow>();
+	const changesSnapshot = dataGridState.changes.toJSON<CategoryEditorRow>();
 
 	const saveSnapshot = () => {
-		const snapshot = dataGridState.changes.toJSON<CategoryFormRow>();
+		const snapshot = dataGridState.changes.toJSON<CategoryEditorRow>();
 		const updatedById = new Map(
 			snapshot.updated.map((update) => [update.id, update.changes]),
 		);
@@ -76,14 +82,14 @@ const CategoryFormStory = observer(function CategoryFormStory({
 	};
 
 	return (
-		<div className="w-[640px] max-w-[calc(100vw-32px)] space-y-3">
-			<CategoryForm
+		<div className="space-y-3">
+			<CategoryEditor
 				rows={rows}
 				dataGridState={dataGridState}
 				totalCount={rows.length}
-				readOnly={readOnly}
+				isReadOnly={isReadOnly}
 			/>
-			{!readOnly && (
+			{!isReadOnly && (
 				<>
 					<button
 						type="button"
@@ -107,7 +113,7 @@ export const Editable: Story = {
 		dataGridState: createCategoryDataGridState(),
 		totalCount: editableApiRows.length,
 	},
-	render: ({ rows }) => <CategoryFormStory initialRows={rows} />,
+	render: ({ rows }) => <CategoryEditorStory initialRows={rows} />,
 	parameters: {
 		docs: {
 			description: {
@@ -123,10 +129,10 @@ export const ReadOnly: Story = {
 		rows: readOnlyApiRows,
 		dataGridState: createCategoryDataGridState(),
 		totalCount: readOnlyApiRows.length,
-		readOnly: true,
+		isReadOnly: true,
 	},
-	render: ({ rows, readOnly }) => (
-		<CategoryFormStory initialRows={rows} readOnly={readOnly} />
+	render: ({ rows, isReadOnly }) => (
+		<CategoryEditorStory initialRows={rows} isReadOnly={isReadOnly} />
 	),
 	parameters: {
 		docs: {

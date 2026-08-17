@@ -2,7 +2,8 @@
 
 import type {
 	DataGridColumnConfig,
-	DataGridState,
+	DataGridColumnsStateSnapshot,
+	DataGridQueryStates,
 	InputConfig,
 } from "@cocrepo/type";
 import { DataGridColumnSettings } from "../DataGridColumnSettings";
@@ -14,14 +15,20 @@ export interface DataGridToolbarProps<T extends { id: Key }> {
 	columns: DataGridColumnConfig<T>[];
 	leftInputs: InputConfig[];
 	rightInputs: InputConfig[];
-	state: DataGridState;
+	columnState: DataGridColumnsStateSnapshot;
+	queryValues: DataGridQueryStates;
+	onColumnChange: (columns: DataGridColumnsStateSnapshot) => void;
+	onQueryChange: (values: Record<string, unknown | null>) => void;
 }
 
 export function DataGridToolbarView<T extends { id: Key }>({
 	columns,
 	leftInputs,
 	rightInputs,
-	state,
+	columnState,
+	queryValues,
+	onColumnChange,
+	onQueryChange,
 }: DataGridToolbarProps<T>) {
 	const shouldRenderColumnSettings = columns.length > 0;
 	const shouldRenderToolbar =
@@ -37,17 +44,18 @@ export function DataGridToolbarView<T extends { id: Key }>({
 		<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-3">
 			<div className="flex flex-wrap items-center gap-2">
 				{leftInputs.map((input) => (
-					<InputRenderer key={input.id} config={input} state={state} />
+					<InputRenderer key={input.id} config={input} queryValues={queryValues} onQueryChange={onQueryChange} />
 				))}
 			</div>
 			<div className="flex items-center gap-2">
 				{rightInputs.map((input) => (
-					<InputRenderer key={input.id} config={input} state={state} />
+					<InputRenderer key={input.id} config={input} queryValues={queryValues} onQueryChange={onQueryChange} />
 				))}
 				{shouldRenderColumnSettings ? (
 					<DataGridColumnSettings
 						columns={columns}
-						state={state}
+						columnState={columnState}
+						onColumnChange={onColumnChange}
 						key={DATA_GRID_COLUMN_SETTINGS_INPUT_ID}
 					/>
 				) : null}

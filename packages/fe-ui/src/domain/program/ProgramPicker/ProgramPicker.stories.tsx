@@ -3,7 +3,7 @@ import type { PlanningScenario } from "@cocrepo/type";
 import type { Meta, StoryObj } from "@storybook/react";
 import { PlanningPreviewFrame } from "../../planning/PlanningPreviewFrame";
 import { ProgramPicker } from "./ProgramPicker";
-import { programPickerApiScenarios } from "./ProgramPicker.msw";
+import { programPickerHandlers } from "./ProgramPicker.msw";
 import { ProgramPickerState } from "./ProgramPickerState";
 
 function createModalState(kind: "routine" | "instructor" = "routine") {
@@ -51,11 +51,10 @@ const defaultScenario = {
 		locale: "ko-KR",
 		viewport: "desktop",
 	},
-	api: programPickerApiScenarios.default,
 } satisfies PlanningScenario;
 
 export const Default: Story = {
-	parameters: { planning: defaultScenario },
+	parameters: { planning: defaultScenario, msw: { handlers: programPickerHandlers } },
 	render: (args) => (
 		<PlanningPreviewFrame scenario={defaultScenario}>
 			<ProgramPicker {...args} />
@@ -65,7 +64,7 @@ export const Default: Story = {
 
 export const Instructor: Story = {
 	args: { state: createModalState("instructor") },
-	parameters: { planning: defaultScenario },
+	parameters: { planning: defaultScenario, msw: { handlers: programPickerHandlers } },
 	render: (args) => (
 		<PlanningPreviewFrame scenario={defaultScenario}>
 			<ProgramPicker {...args} />

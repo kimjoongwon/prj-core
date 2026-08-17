@@ -3,11 +3,6 @@ interface StorybookMswContextLike {
 		msw?: {
 			handlers?: readonly unknown[];
 		};
-		planning?: {
-			api?: {
-				handlers?: readonly unknown[];
-			};
-		};
 	};
 }
 
@@ -23,12 +18,7 @@ let worker: WorkerLike | undefined;
 let startPromise: Promise<void> | undefined;
 
 function getPlanningHandlers(context: StorybookMswContextLike): unknown[] {
-	const planningHandlers = context.parameters?.planning?.api?.handlers;
 	const mswHandlers = context.parameters?.msw?.handlers;
-
-	if (Array.isArray(planningHandlers) && planningHandlers.length > 0) {
-		return [...planningHandlers];
-	}
 
 	if (Array.isArray(mswHandlers) && mswHandlers.length > 0) {
 		return [...mswHandlers];

@@ -1,13 +1,14 @@
 "use client";
 
-import type { DataGridState, InputConfig } from "@cocrepo/type";
+import type { DataGridQueryStates, InputConfig } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";
 import { Button } from "../../input/Button/Button";
 
 interface ChipGroupInputProps {
 	config: InputConfig;
-	state: DataGridState;
+	queryValues: DataGridQueryStates;
+	onQueryChange: (values: Record<string, unknown | null>) => void;
 }
 
 function getSelectedValues(value: unknown) {
@@ -21,17 +22,17 @@ function getSelectedValues(value: unknown) {
 }
 
 export const ChipGroupInput = observer(
-	({ config, state }: ChipGroupInputProps) => {
+	({ config, queryValues, onQueryChange }: ChipGroupInputProps) => {
 		const t = useT();
 		const queryKey = config.props?.queryKey ?? config.id;
-		const selectedValues = getSelectedValues(state.query.values[queryKey]);
+		const selectedValues = getSelectedValues(queryValues[queryKey]);
 		const selectedSet = new Set(selectedValues);
 		const options = config.props?.options ?? [];
 		const isMultiple = Array.isArray(config.props?.defaultValue);
 
 		const handleSelect = (value: string) => {
 			if (!isMultiple) {
-				void state.query.setValues({
+				void onQueryChange({
 					[queryKey]: selectedSet.has(value) ? null : value,
 					skip: 0,
 				});
@@ -46,7 +47,7 @@ export const ChipGroupInput = observer(
 			}
 
 			const nextValues = Array.from(nextSelected);
-			void state.query.setValues({
+			void onQueryChange({
 				[queryKey]: nextValues.length > 0 ? nextValues : null,
 				skip: 0,
 			});
@@ -61,8 +62,7 @@ export const ChipGroupInput = observer(
 						<Button
 							key={option.value}
 							size="sm"
-							variant={isSelected ? "solid" : "bordered"}
-							color={isSelected ? "primary" : "default"}
+							variant={isSelected ? "primary" : "outline"}
 							onPress={() => handleSelect(option.value)}
 						>
 							{t(option.label)}

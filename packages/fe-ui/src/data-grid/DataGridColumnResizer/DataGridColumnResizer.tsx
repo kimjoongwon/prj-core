@@ -1,6 +1,5 @@
 "use client";
 
-import type { DataGridState } from "@cocrepo/type";
 import type { MouseEvent, PointerEvent } from "react";
 
 const DATA_GRID_COLUMN_MIN_WIDTH = 64;
@@ -10,7 +9,7 @@ export interface DataGridColumnResizerProps {
 	columnId: string;
 	maxSize?: number;
 	minSize?: number;
-	state: DataGridState;
+	onColumnSizingChange: (columnId: string, size: number | null) => void;
 }
 
 function clampColumnWidth(width: number, minSize: number, maxSize: number) {
@@ -38,7 +37,7 @@ export function DataGridColumnResizerView({
 	columnId,
 	maxSize = DATA_GRID_COLUMN_MAX_WIDTH,
 	minSize = DATA_GRID_COLUMN_MIN_WIDTH,
-	state,
+	onColumnSizingChange,
 }: DataGridColumnResizerProps) {
 	const handlePointerDown = (event: PointerEvent<HTMLButtonElement>) => {
 		const headerCell = event.currentTarget.closest("th");
@@ -58,7 +57,7 @@ export function DataGridColumnResizerView({
 				minSize,
 				maxSize,
 			);
-			state.columns.setColumnSizing?.(columnId, Math.round(nextWidth));
+			onColumnSizingChange(columnId, Math.round(nextWidth));
 		};
 
 		const handlePointerUp = () => {
@@ -77,7 +76,7 @@ export function DataGridColumnResizerView({
 	const handleDoubleClick = (event: MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
 		event.stopPropagation();
-		state.columns.setColumnSizing?.(columnId, null);
+		onColumnSizingChange(columnId, null);
 	};
 
 	return (

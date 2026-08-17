@@ -1,6 +1,6 @@
 "use client";
 
-import type { DataGridState, InputConfig } from "@cocrepo/type";
+import type { DataGridQueryStates, InputConfig } from "@cocrepo/type";
 import { Search } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { type KeyboardEvent, useEffect, useState } from "react";
@@ -8,15 +8,16 @@ import { useT } from "../../i18n";
 
 interface SearchInputProps {
 	config: InputConfig;
-	state: DataGridState;
+	queryValues: DataGridQueryStates;
+	onQueryChange: (values: Record<string, unknown | null>) => void;
 }
 
-export const SearchInput = observer(({ config, state }: SearchInputProps) => {
+export const SearchInput = observer(({ config, queryValues, onQueryChange }: SearchInputProps) => {
 	const t = useT();
 	const queryKey = config.props?.queryKey ?? config.id;
 	const query =
-		typeof state.query.values[queryKey] === "string"
-			? (state.query.values[queryKey] as string)
+		typeof queryValues[queryKey] === "string"
+			? (queryValues[queryKey] as string)
 			: "";
 	const [inputValue, setInputValue] = useState(query);
 
@@ -25,7 +26,7 @@ export const SearchInput = observer(({ config, state }: SearchInputProps) => {
 	}, [query]);
 
 	const commitQuery = () => {
-		void state.query.setValues({
+		void onQueryChange({
 			[queryKey]: inputValue.trim() || null,
 			skip: 0,
 		});
@@ -42,7 +43,7 @@ export const SearchInput = observer(({ config, state }: SearchInputProps) => {
 
 	const handleClear = () => {
 		setInputValue("");
-		void state.query.setValues({
+		void onQueryChange({
 			[queryKey]: null,
 			skip: 0,
 		});

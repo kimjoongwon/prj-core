@@ -11,6 +11,10 @@ interface DropdownInputProps {
 	config: InputConfig;
 }
 
+function resolveButtonVariant(variant: InputConfig["props"] extends { variant?: infer Value } ? Value : never) {
+	return variant === "solid" ? "primary" : variant === "bordered" ? "outline" : "ghost";
+}
+
 export const DropdownInput = observer(({ config }: DropdownInputProps) => {
 	const t = useT();
 	const items = config.props?.items ?? [];
@@ -19,7 +23,7 @@ export const DropdownInput = observer(({ config }: DropdownInputProps) => {
 		<Dropdown>
 			<Dropdown.Trigger>
 				<Button
-					variant={config.props?.variant ?? "flat"}
+					variant={resolveButtonVariant(config.props?.variant)}
 					endContent={<ChevronDown size={16} />}
 				>
 					{config.label ? t(config.label) : null}

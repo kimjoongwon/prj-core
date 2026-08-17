@@ -33,11 +33,11 @@ export function DataGridSortHeaderView({
 			size="sm"
 			variant="ghost"
 			className="h-auto min-h-0 min-w-0 justify-start gap-1 rounded px-0 py-0 text-[13px] font-semibold text-[#374151] hover:bg-transparent dark:text-slate-200"
-			endContent={icon}
 			onPress={onToggle}
 			aria-label={t("정렬 변경")}
 		>
 			{translateNode(label, t)}
+			{icon}
 		</Button>
 	);
 }

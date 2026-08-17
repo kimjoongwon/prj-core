@@ -1,6 +1,6 @@
 "use client";
 
-import type { DataGridState, InputConfig } from "@cocrepo/type";
+import type { DataGridQueryStates, InputConfig } from "@cocrepo/type";
 import { Popover } from "@heroui/react";
 import { ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -10,7 +10,8 @@ import { Checkbox } from "../../input/Checkbox/Checkbox";
 
 interface MultiSelectInputProps {
 	config: InputConfig;
-	state: DataGridState;
+	queryValues: DataGridQueryStates;
+	onQueryChange: (values: Record<string, unknown | null>) => void;
 }
 
 function getSelectedValues(value: unknown) {
@@ -24,10 +25,10 @@ function getSelectedValues(value: unknown) {
 }
 
 export const MultiSelectInput = observer(
-	({ config, state }: MultiSelectInputProps) => {
+	({ config, queryValues, onQueryChange }: MultiSelectInputProps) => {
 		const t = useT();
 		const queryKey = config.props?.queryKey ?? config.id;
-		const selectedValues = getSelectedValues(state.query.values[queryKey]);
+		const selectedValues = getSelectedValues(queryValues[queryKey]);
 		const selectedSet = new Set(selectedValues);
 		const options = config.props?.options ?? [];
 		const label = config.label ?? config.placeholder ?? config.id;
@@ -41,7 +42,7 @@ export const MultiSelectInput = observer(
 			}
 
 			const nextValues = Array.from(nextSelected);
-			void state.query.setValues({
+			void onQueryChange({
 				[queryKey]: nextValues.length > 0 ? nextValues : null,
 				skip: 0,
 			});
@@ -52,7 +53,7 @@ export const MultiSelectInput = observer(
 				<Popover.Trigger>
 					<Button
 						size="sm"
-						variant="bordered"
+						variant="outline"
 						endContent={<ChevronDown className="size-4" />}
 					>
 						{selectedValues.length > 0

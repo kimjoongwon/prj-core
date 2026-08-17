@@ -9,6 +9,21 @@ interface ButtonInputProps {
 	config: InputConfig;
 }
 
+function resolveButtonVariant(
+	variant: InputConfig["props"] extends { variant?: infer Value } ? Value : never,
+	color: InputConfig["props"] extends { color?: infer Value } ? Value : never,
+) {
+	if (color === "danger") {
+		return variant === "solid" ? "danger" : "danger-soft";
+	}
+
+	if (variant === "solid") {
+		return "primary";
+	}
+
+	return variant === "bordered" ? "outline" : "ghost";
+}
+
 export const ButtonInput = observer(({ config }: ButtonInputProps) => {
 	const t = useT();
 	const handleClick = () => {
@@ -17,8 +32,7 @@ export const ButtonInput = observer(({ config }: ButtonInputProps) => {
 
 	return (
 		<Button
-			variant={config.props?.variant ?? "solid"}
-			color={config.props?.color ?? "default"}
+			variant={resolveButtonVariant(config.props?.variant, config.props?.color)}
 			size={config.props?.size ?? "md"}
 			startContent={config.props?.startContent}
 			onPress={handleClick}

@@ -2,30 +2,25 @@
 
 import type { ReactElement } from "react";
 import { ThemeToggleButton } from "../../theme/ThemeToggleButton";
-import { PlanningApiRequestList } from "./PlanningApiRequestList";
-import { PlanningNotesList } from "./PlanningNotesList";
-import { PlanningPreviewField } from "./PlanningPreviewField";
 import { PlanningSessionBar } from "./PlanningSessionBar";
 import { formatPlanningStatus } from "./planningPreviewFormat";
 import type { PlanningPreviewFrameProps } from "./types";
 
 type PlanningPreviewFrameComponent = {
-	<THandler = unknown>(
-		props: PlanningPreviewFrameProps<THandler>,
-	): ReactElement;
+	(props: PlanningPreviewFrameProps): ReactElement;
 	displayName?: string;
 };
 
-export const PlanningPreviewFrame = (<THandler = unknown>({
+export const PlanningPreviewFrame = (({
 	children,
 	onSpaceChange,
 	scenario,
-}: PlanningPreviewFrameProps<THandler>) => {
-	const { api, context } = scenario;
+}: PlanningPreviewFrameProps) => {
+	const { context } = scenario;
 
 	return (
-		<div className="min-h-screen bg-background text-foreground">
-			<div className="mx-auto grid max-w-[1440px] gap-4 p-4 xl:grid-cols-[minmax(0,1fr)_360px]">
+		<div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-background text-foreground">
+			<div className="mx-auto grid min-w-0 w-full max-w-[1440px] gap-4 p-4">
 				<PlanningSessionBar context={context} onSpaceChange={onSpaceChange} />
 
 				<header className="rounded-lg border border-border bg-surface p-4 xl:col-span-2">
@@ -52,25 +47,9 @@ export const PlanningPreviewFrame = (<THandler = unknown>({
 					</div>
 				</header>
 
-				<main className="min-w-0 rounded-lg border border-border bg-surface-secondary p-3">
-					<div className="rounded-md border border-border bg-background p-4">
-						{children}
-					</div>
-				</main>
-
-				<aside className="grid content-start gap-4">
-					<section className="grid gap-3 rounded-lg border border-border bg-surface p-4">
-						<h2 className="text-sm font-semibold">API Scenario</h2>
-						<PlanningPreviewField label="mode" value={api?.mode ?? "none"} />
-						<PlanningPreviewField label="name" value={api?.name} />
-						<PlanningApiRequestList requests={api?.requests} />
-					</section>
-
-					<section className="grid gap-3 rounded-lg border border-border bg-surface p-4">
-						<h2 className="text-sm font-semibold">Notes</h2>
-						<PlanningNotesList items={scenario.notes} />
-					</section>
-				</aside>
+			<main className="w-full min-w-0 overflow-x-auto rounded-lg border border-border bg-background p-4">
+				{children}
+			</main>
 			</div>
 		</div>
 	);

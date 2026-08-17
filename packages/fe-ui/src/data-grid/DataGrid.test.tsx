@@ -9,7 +9,7 @@ import {
 import type { ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { InputCell } from "./cell/InputCell";
-import { DataGrid, getDataGridRowKey, type Key } from "./DataGrid";
+import { DataGrid } from "./DataGrid";
 import { DataGridChangesState } from "./DataGridChangesState";
 import { DataGridColumnsState } from "./DataGridState";
 
@@ -804,7 +804,7 @@ describe("DataGrid", () => {
 		});
 	});
 
-	it("Given editable 이름 셀 When 값을 입력하면 Then 즉시 변경을 기록하고 Escape로 취소한다", () => {
+	it("Given editable 이름 셀 When 값을 입력하면 Then commit 시 변경을 기록하고 Escape로 취소한다", async () => {
 		const state = createDataGridState();
 		const editableConfig: DataGridConfig<DataGridTestRow> = {
 			...baseConfig,
@@ -841,17 +841,71 @@ describe("DataGrid", () => {
 		const input = screen.getByRole("textbox", { name: "이름 입력" });
 		fireEvent.change(input, { target: { value: "Augusta Ada" } });
 
+		expect(state.changes.toJSON<DataGridTestRow>().updated).toEqual([]);
+
+		fireEvent.keyDown(input, { key: "Enter" });
+
+		await waitFor(() => {
+			expect(state.changes.toJSON<DataGridTestRow>().updated).toEqual([
+				{
+					id: "user-1",
+					changes: { name: "Augusta Ada" },
+				},
+			]);
+		});
+
+		fireEvent.click(screen.getAllByRole("cell", { name: "이름 편집" })[0]);
+		const secondInput = screen.getByRole("textbox", { name: "이름 입력" });
+		fireEvent.change(secondInput, { target: { value: "Canceled value" } });
+		fireEvent.keyDown(secondInput, { key: "Escape" });
+
 		expect(state.changes.toJSON<DataGridTestRow>().updated).toEqual([
 			{
 				id: "user-1",
 				changes: { name: "Augusta Ada" },
 			},
 		]);
+		await waitFor(() => {
+			expect(screen.getByText("Augusta Ada")).toBeInTheDocument();
+		});
+	});
 
-		fireEvent.keyDown(input, { key: "Escape" });
+	it("Given editable 셀 When validator가 오류를 반환하면 Then commit하지 않고 오류를 유지한다", async () => {
+		const state = createDataGridState();
+		const editableConfig: DataGridConfig<DataGridTestRow> = {
+			...baseConfig,
+			columns: [
+				{
+					field: "name",
+					label: "이름",
+					editable: {
+						editor: { type: "text" },
+						validate: ({ value }) =>
+							String(value).trim() ? undefined : "이름은 필수입니다.",
+					},
+				},
+				...baseConfig.columns.slice(1),
+			],
+		};
 
-		expect(state.changes.toJSON<DataGridTestRow>().updated).toEqual([]);
-		expect(screen.getByText("Ada Lovelace")).toBeInTheDocument();
+		render(
+			<DataGrid
+				config={editableConfig}
+				state={state}
+				rows={rows}
+				totalCount={rows.length}
+			/>,
+		);
+
+		fireEvent.click(screen.getAllByRole("cell", { name: "이름 편집" })[0]);
+		const input = screen.getByRole("textbox", { name: "name" });
+		fireEvent.change(input, { target: { value: "" } });
+		fireEvent.keyDown(input, { key: "Enter" });
+
+		await waitFor(() => {
+			expect(state.changes.toJSON<DataGridTestRow>().updated).toEqual([]);
+			expect(screen.getByText("이름은 필수입니다.")).toBeInTheDocument();
+		});
 	});
 
 	it("Given 변경 상태 When 행을 추가하거나 삭제하면 Then 표에 즉시 반영한다", () => {

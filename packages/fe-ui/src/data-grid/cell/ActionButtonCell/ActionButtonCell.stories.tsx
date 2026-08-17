@@ -9,7 +9,7 @@ const meta = {
 	args: {
 		children: "보기",
 		color: "primary",
-		variant: "flat",
+	variant: "ghost",
 	},
 } satisfies Meta<typeof ActionButtonCell>;
 

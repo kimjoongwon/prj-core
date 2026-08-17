@@ -1,8 +1,11 @@
-import type { DataGridConfig, DataGridRowMoveEvent } from "@cocrepo/type";
+import type {
+	DataGridConfig,
+	DataGridEditorOption,
+	DataGridRowMoveEvent,
+} from "@cocrepo/type";
 import type { Meta, StoryObj } from "@storybook/react";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import { InputCell } from "./cell/InputCell";
 import { DataGrid } from "./DataGrid";
 import { DataGridState } from "./DataGridState";
 
@@ -66,15 +69,11 @@ function createCategoryConfig({
 				...(editable
 					? {
 							editable: {
-								render: ({ value, onValueChange, onFinish, onCancel }) => (
-									<InputCell
-										aria-label="카테고리 이름 입력"
-										value={String(value ?? "")}
-										onValueChange={onValueChange}
-										onFinish={onFinish}
-										onCancel={onCancel}
-									/>
-								),
+								editor: {
+									type: "text",
+									placeholder: "카테고리 이름 입력",
+								},
+								triggers: ["click", "enter", "f2"],
 							},
 						}
 					: {}),
@@ -270,6 +269,140 @@ const ReadOnlyCategoryTreeStory = observer(
 	},
 );
 
+interface BuiltInEditorRow {
+	id: string;
+	name: string;
+	age: number;
+	status: string;
+	tags: string[];
+	active: boolean;
+	startedAt: string;
+	owner: string;
+}
+
+const builtInEditorRows: BuiltInEditorRow[] = [
+	{
+		id: "editor-1",
+		name: "Ada Lovelace",
+		age: 36,
+		status: "활성",
+		tags: ["수학", "컴퓨팅"],
+		active: true,
+		startedAt: "2026-01-15",
+		owner: "ada",
+	},
+	{
+		id: "editor-2",
+		name: "Grace Hopper",
+		age: 85,
+		status: "대기",
+		tags: ["컴파일러"],
+		active: false,
+		startedAt: "2026-02-20",
+		owner: "grace",
+	},
+];
+
+const editorOptions: DataGridEditorOption[] = [
+	{ value: "활성", label: "활성" },
+	{ value: "대기", label: "대기" },
+	{ value: "중지", label: "중지" },
+];
+
+const ownerOptions: DataGridEditorOption[] = [
+	{ value: "ada", label: "Ada Lovelace" },
+	{ value: "grace", label: "Grace Hopper" },
+];
+
+const BuiltInEditorsStory = observer(function BuiltInEditorsStory() {
+	const [rows, setRows] = useState(builtInEditorRows);
+	const [state] = useState(
+		() =>
+			new DataGridState({
+				queryStates: { skip: 0, take: 20 },
+				setQueryStates: async () => new URLSearchParams(),
+			}),
+	);
+	const config: DataGridConfig<BuiltInEditorRow> = {
+		entity: "BuiltInEditor",
+		columns: [
+			{
+				field: "name",
+				label: "이름",
+				editable: {
+					editor: { type: "text", placeholder: "이름 입력" },
+					validate: ({ value }) =>
+						String(value).trim() ? undefined : "이름은 필수입니다.",
+				},
+			},
+			{
+				field: "age",
+				label: "나이",
+				editable: { editor: { type: "number" } },
+			},
+			{
+				field: "status",
+				label: "상태",
+				editable: { editor: { type: "select", options: editorOptions } },
+			},
+			{
+				field: "tags",
+				label: "태그",
+				cell: ({ getValue }) => String((getValue() as string[]).join(", ")),
+				editable: {
+					editor: { type: "multi-select", options: ownerOptions },
+				},
+			},
+			{
+				field: "active",
+				label: "활성",
+				cell: ({ getValue }) => (getValue() ? "예" : "아니오"),
+				editable: { editor: { type: "boolean" } },
+			},
+			{
+				field: "startedAt",
+				label: "시작일",
+				editable: { editor: { type: "date" } },
+			},
+			{
+				field: "owner",
+				label: "담당자",
+				editable: { editor: { type: "autocomplete", options: ownerOptions } },
+			},
+		],
+	};
+
+	return (
+		<div className="space-y-3">
+			<DataGrid
+				config={config}
+				state={state}
+				rows={rows}
+				totalCount={rows.length}
+			/>
+			<button
+				type="button"
+				className="rounded border px-3 py-1 text-sm"
+				onClick={() => {
+					const snapshot = state.changes.toJSON<BuiltInEditorRow>();
+					setRows((currentRows) =>
+						currentRows.map((row) => ({
+							...row,
+							...(snapshot.updated.find((item) => item.id === row.id)?.changes ?? {}),
+						})),
+					);
+					state.changes.clear();
+				}}
+			>
+				변경 snapshot 적용
+			</button>
+			<pre className="rounded border border-dashed border-border p-3 text-xs whitespace-pre-wrap">
+				{JSON.stringify(state.changes.toJSON<BuiltInEditorRow>(), null, 2)}
+			</pre>
+		</div>
+	);
+});
+
 const meta = {
 	title: "data-grid/DataGridEditing",
 	parameters: { layout: "padded" },
@@ -286,4 +419,16 @@ export const EditableCategoryTree: Story = {
 
 export const ReadOnlyCategoryTree: Story = {
 	render: () => <ReadOnlyCategoryTreeStory />,
+};
+
+export const BuiltInEditors: Story = {
+	render: () => <BuiltInEditorsStory />,
+	parameters: {
+		docs: {
+			description: {
+				story:
+					"DataGrid가 제공하는 built-in text, number, select, multi-select, boolean, date, autocomplete editor와 validation을 보여줍니다. Enter는 commit, Escape는 cancel, Tab은 다음 editable cell로 이동합니다.",
+			},
+		},
+	},
 };

@@ -1,6 +1,9 @@
 "use client";
 
-import type { DataGridConfig, DataGridState } from "@cocrepo/type";
+import type {
+	DataGridConfig,
+	DataGridEditTrigger,
+} from "@cocrepo/type";
 import {
 	SortableContext,
 	useSortable,
@@ -9,11 +12,19 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { flexRender, type Row } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
-import { type CSSProperties, type KeyboardEvent, useState } from "react";
+import {
+	type CSSProperties,
+	type Dispatch,
+	type KeyboardEvent,
+	type SetStateAction,
+	useEffect,
+	useState,
+} from "react";
 import { type Translate, translateNode } from "../../i18n";
 import { DataGridEmptyRow } from "../DataGridEmptyRow";
 import { DataGridHierarchyCell } from "../DataGridHierarchyCell/DataGridHierarchyCell";
 import { DataGridSelectionCell } from "../DataGridSelectionCell";
+import { DataGridEditor } from "../editor";
 import { joinClassNames } from "../internal/classNames";
 import { getColumnAlignClassName } from "../internal/columnConfig";
 import { getColumnWidthStyle } from "../internal/columnSizing";
@@ -34,13 +45,16 @@ interface DataGridEditingCell {
 	rowId: string;
 	columnId: string;
 	initialValue: unknown;
+	draftValue: unknown;
+	errorMessage?: string;
+	isValidating: boolean;
 }
 
 export interface DataGridTableBodyProps<T extends { id: Key }> {
 	config: DataGridConfig<T>;
-	state: DataGridState;
+	onCellValueChange?: <TField extends keyof T>(row: T, field: TField, value: T[TField]) => void;
 	rows: DataGridBodyRow<T>[];
-	selectedKeySet: Set<string>;
+	selectedKeys: string[];
 	selectionMode: DataGridSelectionMode;
 	tableColumnCount: number;
 	t: Translate;
@@ -146,7 +160,7 @@ function DataGridGroupRow<T extends { id: Key }>({
 
 interface DataGridDataRowProps<T extends { id: Key }> {
 	config: DataGridConfig<T>;
-	state: DataGridState;
+	onCellValueChange?: <TField extends keyof T>(row: T, field: TField, value: T[TField]) => void;
 	row: Row<T>;
 	isSelected: boolean;
 	selectionMode: DataGridSelectionMode;
@@ -154,13 +168,18 @@ interface DataGridDataRowProps<T extends { id: Key }> {
 	activeRowId?: string | null;
 	projectedDepth?: number | null;
 	editingCell: DataGridEditingCell | null;
-	onEditingCellChange: (editingCell: DataGridEditingCell | null) => void;
+	onEditingCellChange: Dispatch<SetStateAction<DataGridEditingCell | null>>;
+	onMoveToAdjacentCell: (
+		rowId: string,
+		columnId: string,
+		direction: "next" | "previous",
+	) => void;
 	onRowSelectionChange: (rowKey: string, isSelected: boolean) => void;
 }
 
 function DataGridDataRow<T extends { id: Key }>({
 	config,
-	state,
+	onCellValueChange,
 	row,
 	isSelected,
 	selectionMode,
@@ -169,6 +188,7 @@ function DataGridDataRow<T extends { id: Key }>({
 	projectedDepth,
 	editingCell,
 	onEditingCellChange,
+	onMoveToAdjacentCell,
 	onRowSelectionChange,
 }: DataGridDataRowProps<T>) {
 	const {
@@ -189,6 +209,38 @@ function DataGridDataRow<T extends { id: Key }>({
 		position: isDragging ? "relative" : undefined,
 		zIndex: isDragging ? 1 : undefined,
 	};
+	useEffect(() => {
+		const request = config.editRequest;
+		if (request?.rowId !== row.id) {
+			return;
+		}
+
+		const cell = row
+			.getVisibleCells()
+			.find((candidate) => candidate.column.id === request.columnId);
+		const editable = cell?.column.columnDef.meta?.editable;
+		if (
+			!cell ||
+			!editable ||
+			(editable.isEnabled?.(row.original) ?? true) === false
+		) {
+			return;
+		}
+
+		onEditingCellChange({
+			rowId: row.id,
+			columnId: cell.column.id,
+			initialValue: cell.getValue(),
+			draftValue: cell.getValue(),
+			isValidating: false,
+		});
+	}, [
+		config.editRequest?.requestId,
+		config.editRequest?.rowId,
+		config.editRequest?.columnId,
+		row.id,
+		onEditingCellChange,
+	]);
 
 	return (
 		<tr
@@ -217,7 +269,7 @@ function DataGridDataRow<T extends { id: Key }>({
 				const alignClassName = getColumnAlignClassName(cell.column.columnDef);
 				const editable = cell.column.columnDef.meta?.editable;
 				const isEditable = Boolean(
-					state.changes &&
+					onCellValueChange &&
 						editable &&
 						(editable.isEnabled?.(row.original) ?? true),
 				);
@@ -225,6 +277,11 @@ function DataGridDataRow<T extends { id: Key }>({
 					isEditable &&
 					editingCell?.rowId === row.id &&
 					editingCell.columnId === cell.column.id;
+				const triggers: DataGridEditTrigger[] = editable?.triggers ?? [
+					"click",
+					"enter",
+					"f2",
+				];
 				const startEditing = () => {
 					if (!isEditable) {
 						return;
@@ -234,30 +291,96 @@ function DataGridDataRow<T extends { id: Key }>({
 						rowId: row.id,
 						columnId: cell.column.id,
 						initialValue: cell.getValue(),
+						draftValue: cell.getValue(),
+						isValidating: false,
 					});
 				};
 				const field = cell.column.id as keyof T;
+				const finishEditing = async (
+					direction?: "next" | "previous",
+				) => {
+					if (!editingCell || !editable || editingCell.isValidating) {
+						return;
+					}
+
+					const validationContext = {
+						row: row.original,
+						field: String(field),
+						value: editingCell.draftValue,
+						initialValue: editingCell.initialValue,
+					};
+					onEditingCellChange((current) =>
+						current ? { ...current, isValidating: true } : current,
+					);
+
+					const errorMessage = await editable.validate?.(validationContext);
+					if (errorMessage) {
+						onEditingCellChange((current) =>
+							current
+								? { ...current, errorMessage, isValidating: false }
+								: current,
+						);
+						return;
+					}
+
+					onCellValueChange?.(
+						row.original,
+						field,
+						editingCell.draftValue as T[keyof T],
+					);
+					await editable.onCommit?.(validationContext);
+					onEditingCellChange(null);
+					if (direction) {
+						onMoveToAdjacentCell(row.id, cell.column.id, direction);
+					}
+				};
+				const cancelEditing = async () => {
+					if (!editingCell || !editable) {
+						return;
+					}
+
+					await editable.onCancel?.({
+						row: row.original,
+						field: String(field),
+						value: editingCell.draftValue,
+						initialValue: editingCell.initialValue,
+					});
+					onEditingCellChange(null);
+				};
+				const updateDraftValue = (value: unknown) => {
+					onEditingCellChange((current) =>
+						current
+							? { ...current, draftValue: value, errorMessage: undefined }
+							: current,
+					);
+				};
 				const content =
 					isEditing && editable
-						? editable.render({
+						? editable.editor && editable.editor.type !== "custom" ? (
+								<DataGridEditor
+									config={editable.editor}
+									context={{
+										row: row.original,
+										field: String(field),
+										value: editingCell.draftValue,
+										initialValue: editingCell.initialValue,
+										errorMessage: editingCell.errorMessage,
+										isValidating: editingCell.isValidating,
+										onValueChange: updateDraftValue,
+									onFinish: (direction) => void finishEditing(direction),
+										onCancel: () => void cancelEditing(),
+									}}
+								/>
+							) : editable.render?.({
 								row: row.original,
-								value: cell.getValue(),
-								onValueChange: (value) => {
-									state.changes?.setValue(
-										row.original,
-										field,
-										value as T[keyof T],
-									);
-								},
-								onFinish: () => onEditingCellChange(null),
-								onCancel: () => {
-									state.changes?.setValue(
-										row.original,
-										field,
-										editingCell.initialValue as T[keyof T],
-									);
-									onEditingCellChange(null);
-								},
+								value: editingCell.draftValue,
+								initialValue: editingCell.initialValue,
+								field: String(field),
+								errorMessage: editingCell.errorMessage,
+								isValidating: editingCell.isValidating,
+								onValueChange: updateDraftValue,
+								onFinish: (direction) => void finishEditing(direction),
+								onCancel: () => void cancelEditing(),
 							})
 						: flexRender(cell.column.columnDef.cell, cell.getContext());
 				const renderedContent = cell.column.columnDef.meta?.rowExpander ? (
@@ -289,15 +412,26 @@ function DataGridDataRow<T extends { id: Key }>({
 								? `${String(cell.column.columnDef.meta?.label ?? cell.column.id)} 편집`
 								: undefined
 						}
+						aria-invalid={isEditing && Boolean(editingCell.errorMessage)}
 						className={joinClassNames(
 							DATA_CELL_CLASS_NAME,
+							!cell.column.columnDef.meta?.rowExpander &&
+								"overflow-hidden whitespace-nowrap text-ellipsis",
 							alignClassName,
 							isEditable && !isEditing && "cursor-text",
 						)}
 						style={getColumnWidthStyle(cell.column.columnDef)}
 						tabIndex={isEditable && !isEditing ? 0 : undefined}
 						onClick={
-							isEditable && !isEditing
+							isEditable && !isEditing && triggers.includes("click")
+								? (event) => {
+										event.stopPropagation();
+										startEditing();
+									}
+								: undefined
+					}
+						onDoubleClick={
+							isEditable && !isEditing && triggers.includes("doubleClick")
 								? (event) => {
 										event.stopPropagation();
 										startEditing();
@@ -307,7 +441,10 @@ function DataGridDataRow<T extends { id: Key }>({
 						onKeyDown={
 							isEditable && !isEditing
 								? (event) => {
-										if (event.key === "Enter" || event.key === " ") {
+									if (
+										(event.key === "Enter" && triggers.includes("enter")) ||
+										(event.key === "F2" && triggers.includes("f2"))
+									) {
 											event.preventDefault();
 											event.stopPropagation();
 											startEditing();
@@ -326,9 +463,9 @@ function DataGridDataRow<T extends { id: Key }>({
 
 export function DataGridTableBodyView<T extends { id: Key }>({
 	config,
-	state,
+	onCellValueChange,
 	rows,
-	selectedKeySet,
+	selectedKeys,
 	selectionMode,
 	tableColumnCount,
 	t,
@@ -337,12 +474,52 @@ export function DataGridTableBodyView<T extends { id: Key }>({
 	projectedDepth,
 	onRowSelectionChange,
 }: DataGridTableBodyProps<T>) {
+	const selectedKeySet = new Set(selectedKeys);
 	const [editingCell, setEditingCell] = useState<DataGridEditingCell | null>(
 		null,
 	);
 	const sortableRowIds = rows
 		.filter((row) => !row.getIsGrouped())
 		.map((row) => row.id);
+	const moveToAdjacentCell = (
+		rowId: string,
+		columnId: string,
+		direction: "next" | "previous",
+	) => {
+		const editableCells = rows.flatMap((row) =>
+			row.getIsGrouped()
+				? []
+				: row.getVisibleCells().flatMap((cell) => {
+					const editable = cell.column.columnDef.meta?.editable;
+					if (
+						!onCellValueChange ||
+						!editable ||
+						!(editable.isEnabled?.(row.original) ?? true)
+					) {
+						return [];
+					}
+
+					return [{ row, cell }];
+				}),
+		);
+		const currentIndex = editableCells.findIndex(
+			({ row, cell }) => row.id === rowId && cell.column.id === columnId,
+		);
+		const next = editableCells[
+			currentIndex + (direction === "next" ? 1 : -1)
+		];
+		if (!next) {
+			return;
+		}
+
+		setEditingCell({
+			rowId: next.row.id,
+			columnId: next.cell.column.id,
+			initialValue: next.cell.getValue(),
+			draftValue: next.cell.getValue(),
+			isValidating: false,
+		});
+	};
 
 	return (
 		<SortableContext
@@ -374,7 +551,7 @@ export function DataGridTableBodyView<T extends { id: Key }>({
 							<DataGridDataRow
 								key={row.id}
 								config={config}
-								state={state}
+								onCellValueChange={onCellValueChange}
 								row={row}
 								isSelected={isSelected}
 								selectionMode={selectionMode}
@@ -383,6 +560,7 @@ export function DataGridTableBodyView<T extends { id: Key }>({
 								projectedDepth={projectedDepth}
 								editingCell={editingCell}
 								onEditingCellChange={setEditingCell}
+								onMoveToAdjacentCell={moveToAdjacentCell}
 								onRowSelectionChange={onRowSelectionChange}
 							/>
 						);

@@ -1,12 +1,13 @@
 "use client";
 
-import type { DataGridState, InputConfig } from "@cocrepo/type";
+import type { DataGridQueryStates, InputConfig } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";
 
 interface DateRangeInputProps {
 	config: InputConfig;
-	state: DataGridState;
+	queryValues: DataGridQueryStates;
+	onQueryChange: (values: Record<string, unknown | null>) => void;
 }
 
 function getQueryValue(value: unknown) {
@@ -14,16 +15,16 @@ function getQueryValue(value: unknown) {
 }
 
 export const DateRangeInput = observer(
-	({ config, state }: DateRangeInputProps) => {
+	({ config, queryValues, onQueryChange }: DateRangeInputProps) => {
 		const t = useT();
 		const startKey = config.props?.queryKeys?.start ?? `${config.id}Start`;
 		const endKey = config.props?.queryKeys?.end ?? `${config.id}End`;
-		const startValue = getQueryValue(state.query.values[startKey]);
-		const endValue = getQueryValue(state.query.values[endKey]);
+		const startValue = getQueryValue(queryValues[startKey]);
+		const endValue = getQueryValue(queryValues[endKey]);
 
 		const handleChange = (key: string, value: string | number) => {
 			const nextValue = String(value);
-			void state.query.setValues({
+			void onQueryChange({
 				[key]: nextValue.length > 0 ? nextValue : null,
 				skip: 0,
 			});

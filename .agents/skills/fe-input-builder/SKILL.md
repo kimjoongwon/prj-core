@@ -17,6 +17,8 @@ description: "이 skill은 `fe-input-agent` 역할로 일할 때 사용합니다
 - 프로젝트 동작을 추가하지 않는 React Web field metadata/composition primitive, 예를 들어 HeroUI `Label`, `Description`, `FieldError`, `ErrorMessage`, `Fieldset`은 local `@cocrepo/ui` wrapper로 소유하지 않습니다. 필요하면 `@heroui/react`에서 직접 import합니다.
 - menu tree, side nav, bottom tab, route-layout navigation composition, overlay, data display, 피드백, layout, widget, feature, screen, route, data-grid 파일은 소유하지 않습니다.
 - 새 컴포넌트를 만들기 전에 upstream HeroUI/HeroUI Native와 기존 `@cocrepo/ui` 또는 `@cocrepo/mo-ui` leaf를 먼저 재사용합니다.
+- 입력 컴포넌트의 공통 상태 속성은 `@cocrepo/type`의 `InputStateProps`를 조합합니다. `isDisabled`, `isInvalid`, `isReadOnly`, `isRequired`를 개별 컴포넌트마다 새로 선언하지 않습니다.
+- 공통 입력 상태 계약은 HeroUI에서 타입을 파생할 수 있지만, 소비 컴포넌트는 특정 UI 라이브러리보다 프로젝트 계약인 `InputStateProps`와 `isReadOnly`를 사용합니다.
 - 소스, 같은 위치의 단위 테스트, 가까운 barrel export 변경은 같은 담당 변경 안에서 함께 처리합니다.
 - input leaf primitive에 비즈니스 로직, API 호출, route 결정, app-specific 이름을 추가하지 않습니다.
 

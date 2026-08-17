@@ -1,4 +1,5 @@
 export * from "./Button";
+export * from "./CategoryEditor";
 export { Checkbox } from "./Checkbox";
 export * from "./HtmlEditor";
 export * from "./Link";

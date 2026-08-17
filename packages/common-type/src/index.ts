@@ -229,6 +229,7 @@ export type { HttpRequestLike } from "./http-request-like";
 // 아이콘 관련 타입
 // ============================================
 export type { AppIconName } from "./icon";
+export type { InputStateProps } from "./input-state";
 // ============================================
 // Inquiry 관련 타입
 // ============================================
@@ -278,9 +279,6 @@ export { SpaceScope } from "./space-scope";
 export type {
 	PlanningAcceptance,
 	PlanningAccount,
-	PlanningApiMode,
-	PlanningApiRequest,
-	PlanningApiScenario,
 	PlanningAuthState,
 	PlanningContext,
 	PlanningRealm,
@@ -301,6 +299,14 @@ export type {
 	DataGridConfig,
 	DataGridEditableConfig,
 	DataGridEditCellContext,
+	DataGridEditTrigger,
+	DataGridEditorConfig,
+	DataGridEditorOption,
+	DataGridEditorType,
+	DataGridEditRequest,
+	DataGridEditValidationContext,
+	DataGridEditValidationResult,
+	DataGridExpandRequest,
 	DataGridQueryState,
 	DataGridQueryStates,
 	DataGridRowData,

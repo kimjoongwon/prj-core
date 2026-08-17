@@ -28,37 +28,6 @@ export type PlanningStatus =
 export type PlanningAuthState = "authenticated" | "anonymous";
 
 /**
- * Transport mode used by a Storybook planning API scenario.
- */
-export type PlanningApiMode = "msw" | "native-mock" | "none";
-
-/**
- * Stable API request description for planning review.
- */
-export interface PlanningApiRequest {
-	id?: string;
-	method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-	path: string;
-	status: number;
-	description?: string;
-	delayMs?: number;
-}
-
-/**
- * API scenario attached to a planning story.
- *
- * `handlers` is intentionally generic so web Storybook can pass MSW handlers
- * while native Storybook can pass its own mock transport handlers.
- */
-export interface PlanningApiScenario<THandler = unknown> {
-	name: string;
-	mode: PlanningApiMode;
-	description?: string;
-	requests?: readonly PlanningApiRequest[];
-	handlers?: readonly THandler[];
-}
-
-/**
  * Mock account shown in a planning review session.
  */
 export interface PlanningAccount {
@@ -108,7 +77,7 @@ export interface PlanningAcceptance {
 /**
  * Planning metadata for one executable Storybook scenario.
  */
-export interface PlanningScenario<THandler = unknown> {
+export interface PlanningScenario {
 	id: string;
 	title: string;
 	description?: string;
@@ -116,7 +85,5 @@ export interface PlanningScenario<THandler = unknown> {
 	owner?: string;
 	status?: PlanningStatus;
 	context: PlanningContext;
-	api?: PlanningApiScenario<THandler>;
 	acceptance?: readonly PlanningAcceptance[];
-	notes?: readonly string[];
 }

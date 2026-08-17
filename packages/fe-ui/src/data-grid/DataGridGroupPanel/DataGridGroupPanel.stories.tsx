@@ -1,6 +1,5 @@
 import type { DataGridColumnConfig } from "@cocrepo/type";
 import type { Meta, StoryObj } from "@storybook/react";
-import { DataGridState } from "../DataGridState";
 import { DataGridGroupPanel } from "./index";
 
 interface StoryRow {
@@ -12,12 +11,6 @@ const columns: DataGridColumnConfig<StoryRow>[] = [
 	{ field: "status", label: "상태", enableRowGroup: true },
 	{ field: "owner", label: "담당자", enableRowGroup: true },
 ];
-const state = new DataGridState({
-	queryStates: { groupBy: ["status"] },
-	setQueryStates: async () => new URLSearchParams(),
-	columns: { grouping: ["status"] },
-});
-
 const meta = {
 	title: "data-grid/DataGridGroupPanel",
 	component: DataGridGroupPanel,
@@ -27,7 +20,7 @@ const meta = {
 		columns: columns as never,
 		grouping: ["status"],
 		rowGroupPanelShow: "always",
-		state,
+		onGroupingChange: () => undefined,
 	},
 } satisfies Meta<typeof DataGridGroupPanel>;
 

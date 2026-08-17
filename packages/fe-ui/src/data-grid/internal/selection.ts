@@ -1,4 +1,4 @@
-import type { DataGridConfig, DataGridState } from "@cocrepo/type";
+import type { DataGridConfig } from "@cocrepo/type";
 import type { Key } from "./rowKeys";
 
 export type DataGridSelectionMode = "single" | "multiple" | undefined;
@@ -16,10 +16,10 @@ export function getSelectionMode<T extends { id: Key }>(
 }
 
 export function getControlledSelectedKeys<T extends { id: Key }>(
-	state: DataGridState,
+	selectedKeys: string[] | undefined,
 	config: DataGridConfig<T>,
 ) {
-	return state.selection?.selectedKeys ?? config.selection?.selectedKeys;
+	return selectedKeys ?? config.selection?.selectedKeys;
 }
 
 export function getNextRowSelectedKeys(

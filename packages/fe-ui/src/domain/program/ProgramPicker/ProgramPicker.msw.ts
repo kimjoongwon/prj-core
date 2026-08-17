@@ -1,4 +1,3 @@
-import type { PlanningApiScenario } from "@cocrepo/type";
 import { HttpResponse, http } from "msw";
 
 const routines = [
@@ -29,7 +28,7 @@ const instructors = [
 	},
 ];
 
-const programPickerHandlers = [
+export const programPickerHandlers = [
 	http.get("/api/v1/routines", () => HttpResponse.json({ data: routines })),
 	http.get("/api/v1/routines/:routineId", ({ params }) => {
 		const routine = routines.find((item) => item.id === params.routineId);
@@ -48,22 +47,6 @@ const programPickerHandlers = [
 
 export const programPickerApiScenarios = {
 	default: {
-		name: "Program 후보 정상 응답",
-		mode: "msw",
-		requests: [
-			{
-				method: "GET",
-				path: "/api/v1/routines",
-				status: 200,
-				description: "루틴 후보를 반환합니다.",
-			},
-			{
-				method: "GET",
-				path: "/api/v1/users",
-				status: 200,
-				description: "강사 후보를 반환합니다.",
-			},
-		],
 		handlers: programPickerHandlers,
 	},
-} satisfies Record<string, PlanningApiScenario>;
+} satisfies Record<string, { handlers: typeof programPickerHandlers }>;

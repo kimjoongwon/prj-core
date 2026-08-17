@@ -72,7 +72,7 @@ function DeleteAlertActionCell({
 	return (
 		<AlertDialog>
 			<AlertDialog.Trigger>
-				<ActionButtonCell color="danger" variant="light">
+				<ActionButtonCell variant="danger-soft">
 					삭제
 				</ActionButtonCell>
 			</AlertDialog.Trigger>
@@ -85,10 +85,10 @@ function DeleteAlertActionCell({
 						</AlertDialog.Header>
 						<AlertDialog.Body>{description}</AlertDialog.Body>
 						<AlertDialog.Footer>
-							<Button variant="flat" slot="close">
+							<Button variant="ghost">
 								취소
 							</Button>
-							<Button color="danger" slot="close" onPress={onConfirm}>
+							<Button variant="danger" onPress={onConfirm}>
 								삭제
 							</Button>
 						</AlertDialog.Footer>
@@ -287,7 +287,7 @@ export function buildActionTableColumns<
 			size: 100,
 			cell: ({ row }) => (
 				<ActionButtonCell
-					variant="flat"
+					variant="ghost"
 					onPress={() => {
 						options.onClickDetailButton?.(row.original);
 					}}
@@ -541,7 +541,7 @@ export const adminRoleActionsColumn = createActionsColumn<RoleDto>({
 		<ActionButtonCell
 			as={Link}
 			href={`/roles/${row.original.id}`}
-			variant="flat"
+			variant="ghost"
 		>
 			상세
 		</ActionButtonCell>
@@ -582,7 +582,7 @@ export function buildAdminRoleTableColumns<
 					<ActionButtonCell
 						as={Link}
 						href={`/roles/${row.original.id}`}
-						variant="flat"
+						variant="ghost"
 					>
 						상세
 					</ActionButtonCell>
@@ -831,7 +831,7 @@ export function buildTemplateTableColumns<
 				<ActionButtonCell
 					align="start"
 					className="justify-start p-0 font-mono text-sm"
-					variant="light"
+					variant="ghost"
 					onPress={() => onClickTemplateCode(row.original.id)}
 				>
 					{row.original.code}
@@ -1041,8 +1041,7 @@ export function buildAssetTableColumns<
 								{onClickSelectAssetButton ? (
 									<Button
 										size="sm"
-										color={isSelected ? "primary" : "default"}
-										variant={isSelected ? "solid" : "flat"}
+										variant={isSelected ? "primary" : "ghost"}
 										onPress={() => onClickSelectAssetButton(row.original)}
 									>
 										{isSelected ? "선택됨" : "선택"}
@@ -1050,8 +1049,7 @@ export function buildAssetTableColumns<
 								) : null}
 								<Button
 									size="sm"
-									color="danger"
-									variant="flat"
+									variant="danger-soft"
 									isDisabled={isRemoving}
 									onPress={() => onClickDeleteAssetButton(row.original.id)}
 								>
@@ -1066,7 +1064,7 @@ export function buildAssetTableColumns<
 							{onClickPreviewAssetButton ? (
 								<Button
 									size="sm"
-									variant="flat"
+									variant="ghost"
 									startContent={<Eye className="h-4 w-4" />}
 									onPress={() => onClickPreviewAssetButton(row.original)}
 								>
@@ -1075,8 +1073,7 @@ export function buildAssetTableColumns<
 							) : null}
 							<Button
 								size="sm"
-								variant="flat"
-								color="danger"
+								variant="danger-soft"
 								isDisabled={isRemoving}
 								onPress={() => onClickDeleteAssetButton(row.original.id)}
 							>
@@ -1383,7 +1380,7 @@ export function buildStaticTranslationTableColumns<
 					<Button
 						isIconOnly
 						size="sm"
-						variant="light"
+						variant="ghost"
 						aria-label="번역 수정"
 						onPress={() => {
 							options.onClickEditButton(row.original);
@@ -1394,8 +1391,7 @@ export function buildStaticTranslationTableColumns<
 					<Button
 						isIconOnly
 						size="sm"
-						variant="light"
-						color="danger"
+						variant="danger-soft"
 						aria-label="번역 삭제"
 						onPress={() => {
 							options.onClickDeleteButton(row.original);

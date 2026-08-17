@@ -3,7 +3,6 @@
 import type {
 	DataGridColumnConfig,
 	DataGridConfig,
-	DataGridState,
 } from "@cocrepo/type";
 import {
 	ArrowLeft,
@@ -20,7 +19,6 @@ import {
 	getColumnConfigId,
 	getRowGroupableColumnConfigs,
 } from "../internal/columnConfig";
-import { DATA_GRID_GROUP_BY_QUERY_KEY } from "../internal/grouping";
 import type { Key } from "../internal/rowKeys";
 
 type RowGroupPanelShow<T> = NonNullable<DataGridConfig<T>["rowGroupPanelShow"]>;
@@ -31,7 +29,7 @@ export interface DataGridGroupPanelProps<T extends { id: Key }> {
 	columns: DataGridColumnConfig<T>[];
 	grouping: string[];
 	rowGroupPanelShow?: DataGridConfig<T>["rowGroupPanelShow"];
-	state: DataGridState;
+	onGroupingChange: (grouping: string[]) => void;
 }
 
 function shouldRenderGroupPanel<T>(
@@ -95,38 +93,11 @@ function getDragColumnId(event: DragEvent<HTMLElement>) {
 	);
 }
 
-function commitGrouping(
-	state: DataGridState,
-	currentGrouping: string[],
-	nextGrouping: string[],
-) {
-	void state.query.setValues({
-		[DATA_GRID_GROUP_BY_QUERY_KEY]: nextGrouping,
-		skip: 0,
-	});
-
-	if (state.columns.setGrouping) {
-		state.columns.setGrouping(nextGrouping);
-		return;
-	}
-
-	for (const columnId of currentGrouping) {
-		if (!nextGrouping.includes(columnId)) {
-			state.columns.setColumnGrouping?.(columnId, false);
-		}
-	}
-	for (const columnId of nextGrouping) {
-		if (!currentGrouping.includes(columnId)) {
-			state.columns.setColumnGrouping?.(columnId, true);
-		}
-	}
-}
-
 export function DataGridGroupPanelView<T extends { id: Key }>({
 	columns,
 	grouping,
 	rowGroupPanelShow,
-	state,
+	onGroupingChange,
 }: DataGridGroupPanelProps<T>) {
 	const t = useT();
 	const groupableColumns = getRowGroupableColumnConfigs(columns);
@@ -159,25 +130,15 @@ export function DataGridGroupPanelView<T extends { id: Key }>({
 			return;
 		}
 
-		commitGrouping(
-			state,
-			grouping,
-			getGroupingWithColumn(grouping, columnId, insertIndex),
-		);
+		onGroupingChange(getGroupingWithColumn(grouping, columnId, insertIndex));
 	};
 	const handleRemoveGroup = (columnId: string) => {
-		commitGrouping(
-			state,
-			grouping,
+		onGroupingChange(
 			grouping.filter((groupColumnId) => groupColumnId !== columnId),
 		);
 	};
 	const handleMoveGroup = (columnId: string, offset: -1 | 1) => {
-		commitGrouping(
-			state,
-			grouping,
-			getMovedGrouping(grouping, columnId, offset),
-		);
+		onGroupingChange(getMovedGrouping(grouping, columnId, offset));
 	};
 
 	return (
@@ -216,7 +177,7 @@ export function DataGridGroupPanelView<T extends { id: Key }>({
 											isDisabled={index === 0}
 											isIconOnly
 											size="sm"
-											variant="light"
+											variant="ghost"
 											onPress={() => handleMoveGroup(columnId, -1)}
 										>
 											<ArrowLeft className="size-3" />
@@ -227,7 +188,7 @@ export function DataGridGroupPanelView<T extends { id: Key }>({
 											isDisabled={index === activeColumns.length - 1}
 											isIconOnly
 											size="sm"
-											variant="light"
+											variant="ghost"
 											onPress={() => handleMoveGroup(columnId, 1)}
 										>
 											<ArrowRight className="size-3" />
@@ -238,7 +199,7 @@ export function DataGridGroupPanelView<T extends { id: Key }>({
 											isDisabled={!canChangeGrouping}
 											isIconOnly
 											size="sm"
-											variant="light"
+											variant="ghost"
 											onPress={() => handleRemoveGroup(columnId)}
 										>
 											<X className="size-3" />
@@ -266,13 +227,9 @@ export function DataGridGroupPanelView<T extends { id: Key }>({
 									isDisabled={!canChangeGrouping}
 									size="sm"
 									startContent={<Plus className="size-3" />}
-									variant="bordered"
+									variant="outline"
 									onPress={() =>
-										commitGrouping(
-											state,
-											grouping,
-											getGroupingWithColumn(grouping, columnId),
-										)
+										onGroupingChange(getGroupingWithColumn(grouping, columnId))
 									}
 								>
 									{label}

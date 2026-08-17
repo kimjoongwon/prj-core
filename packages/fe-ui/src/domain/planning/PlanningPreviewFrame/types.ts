@@ -1,8 +1,8 @@
 import type { PlanningScenario, PlanningSpaceOption } from "@cocrepo/type";
 import type { PropsWithChildren } from "react";
 
-export interface PlanningPreviewFrameProps<THandler = unknown>
+export interface PlanningPreviewFrameProps
 	extends PropsWithChildren {
-	scenario: PlanningScenario<THandler>;
+	scenario: PlanningScenario;
 	onSpaceChange?: (space: PlanningSpaceOption) => void;
 }

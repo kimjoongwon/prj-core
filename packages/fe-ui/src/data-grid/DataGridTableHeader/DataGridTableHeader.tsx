@@ -1,6 +1,6 @@
 "use client";
 
-import type { DataGridState } from "@cocrepo/type";
+import type { DataGridQueryStates } from "@cocrepo/type";
 import { flexRender, type Header } from "@tanstack/react-table";
 import { type Translate, translateNode } from "../../i18n";
 import { DataGridColumnResizer } from "../DataGridColumnResizer";
@@ -33,7 +33,9 @@ export interface DataGridTableHeaderProps<T extends { id: Key }> {
 	isSomeVisibleRowsSelected: boolean;
 	selectionMode: DataGridSelectionMode;
 	sortValues: string[];
-	state: DataGridState;
+	queryValues: DataGridQueryStates;
+	onQueryChange: (values: Record<string, unknown | null>) => void;
+	onColumnSizingChange: (columnId: string, size: number | null) => void;
 	t: Translate;
 	onSortChange: (
 		columnId: string,
@@ -68,7 +70,9 @@ export function DataGridTableHeaderView<T extends { id: Key }>({
 	isSomeVisibleRowsSelected,
 	selectionMode,
 	sortValues,
-	state,
+	queryValues,
+	onQueryChange,
+	onColumnSizingChange,
 	t,
 	onSortChange,
 	onVisibleSelectionChange,
@@ -137,7 +141,7 @@ export function DataGridTableHeaderView<T extends { id: Key }>({
 								columnId={header.column.id}
 								maxSize={header.column.columnDef.maxSize}
 								minSize={header.column.columnDef.minSize}
-								state={state}
+								onColumnSizingChange={onColumnSizingChange}
 							/>
 						</th>
 					);
@@ -165,7 +169,11 @@ export function DataGridTableHeaderView<T extends { id: Key }>({
 								style={getColumnWidthStyle(header.column.columnDef)}
 							>
 								{headerInput ? (
-									<DataGridHeaderFilter config={headerInput} state={state} />
+									<DataGridHeaderFilter
+										config={headerInput}
+										queryValues={queryValues}
+										onQueryChange={onQueryChange}
+									/>
 								) : null}
 							</th>
 						);

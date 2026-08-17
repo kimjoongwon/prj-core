@@ -102,8 +102,7 @@ function AlertDialogActionCell({
 	if (isDisabled) {
 		return (
 			<ActionButtonCell
-				variant={triggerVariant}
-				color={triggerColor}
+				variant={triggerColor === "danger" ? "danger-soft" : triggerVariant === "solid" ? "primary" : triggerVariant === "bordered" ? "outline" : "ghost"}
 				startContent={startContent}
 				isDisabled
 				className={className}
@@ -118,8 +117,7 @@ function AlertDialogActionCell({
 		<AlertDialog>
 			<AlertDialog.Trigger>
 				<ActionButtonCell
-					variant={triggerVariant}
-					color={triggerColor}
+					variant={triggerColor === "danger" ? "danger-soft" : triggerVariant === "solid" ? "primary" : triggerVariant === "bordered" ? "outline" : "ghost"}
 					startContent={startContent}
 					isDisabled={isDisabled}
 					className={className}
@@ -137,10 +135,10 @@ function AlertDialogActionCell({
 						</AlertDialog.Header>
 						<AlertDialog.Body>{description}</AlertDialog.Body>
 						<AlertDialog.Footer>
-							<Button variant="flat" slot="close">
+							<Button variant="ghost">
 								취소
 							</Button>
-							<Button color={triggerColor} slot="close" onPress={onConfirm}>
+							<Button variant={triggerColor === "danger" ? "danger" : "primary"} onPress={onConfirm}>
 								{confirmLabel}
 							</Button>
 						</AlertDialog.Footer>
@@ -459,7 +457,7 @@ export function buildIdpAccountTableColumns<
 							as={HeroLink}
 							href={`/settings/auth/accounts/${account.id}`}
 							size="sm"
-							variant="light"
+							variant="ghost"
 						>
 							상세
 						</Button>

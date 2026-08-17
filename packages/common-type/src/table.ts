@@ -13,6 +13,17 @@ export interface DataGridRowData {
 	id: DataGridRowKey;
 }
 
+export interface DataGridExpandRequest {
+	rowId: DataGridRowKey;
+	requestId: number;
+}
+
+export interface DataGridEditRequest {
+	rowId: DataGridRowKey;
+	columnId: string;
+	requestId: number;
+}
+
 /** 기존 행 하나에 누적된 필드 변경입니다. */
 export interface DataGridUpdatedRow<TData extends DataGridRowData> {
 	id: DataGridRowKey;
@@ -131,19 +142,68 @@ export interface DataGridState {
 	changes?: DataGridChangesState;
 }
 
+export type DataGridEditTrigger = "click" | "doubleClick" | "enter" | "f2";
+
+export type DataGridEditorType =
+	| "text"
+	| "number"
+	| "date"
+	| "date-time"
+	| "select"
+	| "multi-select"
+	| "boolean"
+	| "autocomplete"
+	| "custom";
+
+export interface DataGridEditorOption {
+	value: string;
+	label: string;
+}
+
+export interface DataGridEditorConfig {
+	type: DataGridEditorType;
+	options?: DataGridEditorOption[];
+	placeholder?: string;
+	allowEmpty?: boolean;
+}
+
+export interface DataGridEditValidationContext<TData, TValue = unknown> {
+	row: TData;
+	field: string;
+	value: TValue;
+	initialValue: TValue;
+}
+
+export type DataGridEditValidationResult = string | null | undefined;
+
 /** 편집 renderer가 현재 행과 값을 읽고 완료 또는 취소하는 데 필요한 값입니다. */
 export interface DataGridEditCellContext<TData, TValue = unknown> {
 	row: TData;
+	field: string;
 	value: TValue;
+	initialValue: TValue;
+	errorMessage?: string;
+	isValidating: boolean;
 	onValueChange: (value: TValue) => void;
-	onFinish: () => void;
+	onFinish: (direction?: "next" | "previous") => void;
 	onCancel: () => void;
 }
 
-/** 일반 cell과 분리된 클릭 편집 renderer 계약입니다. */
+/** DataGrid가 제공하는 셀 편집 계약입니다. */
 export interface DataGridEditableConfig<TData, TValue = unknown> {
-	render: (context: DataGridEditCellContext<TData, TValue>) => ReactNode;
+	editor?: DataGridEditorConfig;
+	triggers?: DataGridEditTrigger[];
 	isEnabled?: (row: TData) => boolean;
+	validate?: (
+		context: DataGridEditValidationContext<TData, TValue>,
+	) => DataGridEditValidationResult | Promise<DataGridEditValidationResult>;
+	onCommit?: (
+		context: DataGridEditValidationContext<TData, TValue>,
+	) => void | Promise<void>;
+	onCancel?: (
+		context: DataGridEditValidationContext<TData, TValue>,
+	) => void | Promise<void>;
+	render?: (context: DataGridEditCellContext<TData, TValue>) => ReactNode;
 }
 
 /** 행 이동 후 상위 데이터가 적용할 부모와 형제 순서입니다. */
@@ -185,6 +245,12 @@ export interface DataGridConfig<T> {
 
 	/** 실제 부모·자식 행을 TanStack Table sub row로 연결 */
 	getSubRows?: (row: T, index: number) => T[] | undefined;
+
+	/** 새 하위 row 생성 후 부모 row를 자동으로 펼칩니다. */
+	expandRequest?: DataGridExpandRequest;
+
+	/** 새 row 생성 후 지정한 editable cell을 편집 상태로 시작합니다. */
+	editRequest?: DataGridEditRequest;
 
 	/** 드래그가 끝난 뒤 새 부모와 형제 순서를 전달 */
 	onRowMove?: (event: DataGridRowMoveEvent<T>) => void;

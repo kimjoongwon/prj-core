@@ -35,19 +35,6 @@ const readyScenario = {
 		locale: "ko-KR",
 		viewport: "desktop",
 	},
-	api: {
-		name: "user-detail-ready",
-		mode: "msw",
-		requests: [
-			{
-				method: "GET",
-				path: "/admin/users/301",
-				status: 200,
-				description: "사용자 상세 정보를 반환합니다.",
-			},
-		],
-	},
-	notes: ["개인 Policy 할당 제거 이후 정보 구조를 검토합니다."],
 } satisfies PlanningScenario;
 
 const loggedOutScenario = {
@@ -62,11 +49,6 @@ const loggedOutScenario = {
 		locale: "ko-KR",
 		viewport: "desktop",
 	},
-	api: {
-		name: "none",
-		mode: "none",
-	},
-	notes: ["실제 로그인으로 이동하지 않고 Storybook 안에서만 상태를 바꿉니다."],
 } satisfies PlanningScenario;
 
 const multipleSpacesScenario = {
@@ -92,7 +74,6 @@ const multipleSpacesScenario = {
 			},
 		],
 	},
-	notes: ["selector 선택은 프레임 내부 mock 상태만 바꿉니다."],
 } satisfies PlanningScenario;
 
 const minimalScenario = {
@@ -102,11 +83,6 @@ const minimalScenario = {
 		realm: "none",
 		viewport: "desktop",
 	},
-	api: {
-		name: "none",
-		mode: "none",
-	},
-	notes: [],
 } satisfies PlanningScenario;
 
 const meta = {
@@ -127,8 +103,8 @@ function PreviewCard({ title = "Preview" }: { title?: string }) {
 			<p className="text-xs font-semibold uppercase text-primary">Screen</p>
 			<h3 className="text-xl font-semibold text-foreground">{title}</h3>
 			<p className="max-w-2xl text-sm text-muted">
-				실제 screen story가 이 영역에 렌더링됩니다. 상단 mock session과 오른쪽
-				기획 패널을 함께 보며 검수합니다.
+				실제 screen story가 이 영역 전체 너비에 렌더링됩니다. 넓은 화면은
+				가로 스크롤로 확인합니다.
 			</p>
 		</div>
 	);

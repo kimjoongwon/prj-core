@@ -71,6 +71,45 @@ Worker는 상세 탐색과 명령 출력을 자신의 thread에 남기고 최종
 - 공개 산출물을 추가·이동·변경하면 해당 owner가 정한 export와 소비 import를 함께 동기화합니다.
 - 비자명한 예외와 우회는 가까운 위치에 이유를 남깁니다.
 
+## 코드 명명 규칙
+
+- 변수와 함수 이름은 값의 도메인, 역할, 필요하면 출처나 결과를 드러내야 합니다.
+- `data`, `items`, `rows`, `ids`, `value`, `result`처럼 문맥 없이는 의미가 부족한 일반 이름을 단독으로 사용하지 않습니다.
+  - 예: `deletedIds` 대신 `deletedCategoryIds`
+  - 예: `sourceIds` 대신 `originalCategoryIds`
+  - 예: `rows` 대신 `categoryRows`
+- 함수 이름은 단순한 동작보다 대상과 결과를 설명해야 합니다.
+  - 예: `sortRows` 대신 `sortCategoryRowsBySiblingOrder`
+  - 예: `getRows` 대신 `getCategoryRowsWithChanges`
+- 이름만 읽어도 해당 코드가 어떤 데이터를 대상으로 무엇을 반환하는지 추론할 수 있어야 합니다.
+- 함수 추출을 이유로 의미가 약한 이름을 만들지 않습니다. 호출 문맥과 도메인 책임이 이름에 드러나지 않으면 추출하지 않습니다.
+
+## 컴포넌트 상태와 객체지향적 명명
+
+- React 컴포넌트의 로컬 상태는 `useState`나 `useReducer`로 관리하지 않습니다.
+- 컴포넌트 파일 상단에 `[ComponentName]State` 클래스를 선언하고, 상태와 변경 동작을 클래스에 함께 둡니다.
+- 컴포넌트에서는 `useLocalObservable(() => new [ComponentName]State())`로 상태 인스턴스를 생성합니다.
+- `State`처럼 의미가 없는 일반 이름은 사용하지 않습니다.
+  - 예: `DataGridState`, `CategoryEditorState`
+- 함수와 변수는 데이터 구조보다 객체의 상태와 책임을 표현해야 합니다.
+- boolean 값은 `is`, `has`, `can`, `should`로 시작해 상태나 가능 여부를 드러냅니다.
+  - 예: `isRootCategory`, `hasChildren`, `canAddChild`
+- 함수는 대상과 행동을 함께 표현하고, 특정 객체의 책임은 해당 객체의 속성이나 메서드로 둡니다.
+  - 예: `state.addChild()`, `state.deleteCategory()`
+
+## 함수 추출과 이름 검토
+
+- 한 컴포넌트에서만 사용되는 UI 설정이나 조합은 별도 factory 함수로 추출하지 않습니다.
+- 재사용되거나 독립된 도메인 로직·검증·변환으로 테스트할 가치가 있을 때만 함수나 파일로 분리합니다.
+- 함수명은 내부 구현이 아니라 호출자가 얻는 결과와 객체의 책임을 표현해야 합니다.
+- `create`, `get`, `set`, `handle`, `process`, `next`처럼 의미가 넓은 동사는 대상과 결과가 명확할 때만 사용합니다.
+  - 예: `createNextRequestSequence` 대신 `issueRequestId`
+  - 예: `setValue` 대신 `renameCategory`
+- 함수명을 읽고 반환값의 의미와 상태 변경 여부를 추론할 수 있어야 합니다.
+- 내부 구현 용어나 자료구조 용어보다 호출자가 이해할 수 있는 업무 대상과 결과를 우선합니다.
+  - 예: `sortCategoryRowsBySiblingOrder` 대신 `sortCategoryRowsForDisplay`
+- 함수명만 읽고도 해당 함수의 역할을 설명할 수 없다면 추출과 이름을 다시 검토합니다.
+
 ## 검증과 보고
 
 - 행동을 변경하면 관련 테스트를 작성하거나 갱신하고 변경 범위에 가장 가까운 검증부터 실행합니다.

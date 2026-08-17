@@ -1,9 +1,9 @@
-import type { DataGridState } from "@cocrepo/type";
+import type { DataGridQueryStates } from "@cocrepo/type";
 
 export type DataGridSortDirection = "asc" | "desc" | null;
 
-export function getQuerySortValues(state: DataGridState) {
-	const sort = state.query.values.sort;
+export function getQuerySortValues(queryValues: DataGridQueryStates) {
+	const sort = queryValues.sort;
 	if (Array.isArray(sort)) {
 		return sort.filter((item): item is string => typeof item === "string");
 	}

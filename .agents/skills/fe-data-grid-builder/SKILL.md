@@ -49,6 +49,7 @@ DataGrid/Table Cell 컴포넌트를 만들거나 고치면 [Cell 규칙](referen
 - TanStack Table 행 model, HeroUI Table 렌더링, 정렬 헤더, loading/empty 상태, selection/action bar, pagination 연결은 `DataGrid.tsx`가 직접 소유합니다.
 - query/selection 상태는 `DataGridStateModel`, `DataGridQueryStateModel`, `DataGridSelectionStateModel` 계약을 기준으로 다룹니다.
 - 검색/필터/버튼/드롭다운 입력은 `InputRenderer.tsx`와 `data-grid/input/**` 하위 컴포넌트로 확장합니다.
+- 셀 편집기는 `data-grid/editor/**`의 built-in adapter를 우선 사용하고, column 호출부는 `editable.editor`와 lifecycle/validation 옵션만 선언합니다.
 - column builder는 Cell을 조합만 하며, 실제 셀 UI는 `data-grid/cell/**`이 소유합니다.
 - `display/data-display`는 일반 display primitive만 담당하고, DataGrid/Table 구현을 다시 만들지 않습니다.
 - screen은 `DataGrid`를 감싸는 `SectionSurface` owner를 직접 결정합니다. DataGrid가 page-level surface를 암묵적으로 만들지 않습니다.
@@ -205,13 +206,17 @@ DataGrid는 `@tanstack/react-table`을 기반으로 다음 기능을 일관되�
 - 새 row를 삭제하면 `created`에서 제거합니다.
 - 기존 row를 삭제하면 식별자를 `deleted`에 추가합니다.
 - inline edit 결과는 callback으로 우회하지 않고 `state.changes`에 반영합니다.
+- 편집 중 draft 값은 DataGrid 내부에 보관하고, validator 성공 후에만 `state.changes.setValue()`로 커밋합니다.
+- `columns[].editable`은 `text`, `number`, `date`, `date-time`, `select`, `multi-select`, `boolean`, `autocomplete`, `custom` editor type과 `click`, `doubleClick`, `enter`, `f2` trigger를 지원합니다.
+- 편집 검증은 동기·비동기 결과를 모두 허용하며 오류가 있으면 편집 상태를 유지하고 editor와 cell에 오류 접근성 상태를 전달합니다.
+- custom editor는 기존 `editable.render` 계약을 유지하되, 값 변경은 draft를 갱신하고 commit/cancel lifecycle을 DataGrid가 소유합니다.
 - row 이동 UI는 DataGrid가 처리할 수 있지만 `parentId`, `sortOrder`와 nested row 재구성은 `onRowMove`를 받은 상위 계층이 처리합니다.
 
 ### 재사용과 경계
 
 - 기존 `DataGrid.tsx`를 확장하며 별도 `DataTable` 또는 `Table` wrapper를 만들지 않습니다.
 - row key에는 기존 `getDataGridRowKey`를 사용합니다.
-- inline input은 기존 `InputRenderer.tsx`와 data-grid input component를 우선 재사용합니다.
+- cell editor는 native `input`, `select`, `datalist` 기반 adapter를 우선 사용해 Excel식 직접 편집 경험을 제공합니다. HeroUI form wrapper를 DataGrid editor의 기본 구현으로 사용하지 않습니다.
 - Button, Input, Select, Checkbox, Pagination, Skeleton과 EmptyState는 기존 공용 primitive를 재사용합니다.
 - 도메인 column builder는 외부에서 주입하고 공용 Cell은 `data-grid/cell/**`에서 재사용합니다.
 - DataGrid를 `display` 또는 `data-display` 계층에 중복 구현하지 않습니다.

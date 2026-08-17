@@ -1,27 +1,28 @@
 "use client";
 
-import type { DataGridState, InputConfig } from "@cocrepo/type";
+import type { DataGridQueryStates, InputConfig } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";
 
 interface SelectInputProps {
 	config: InputConfig;
-	state: DataGridState;
+	queryValues: DataGridQueryStates;
+	onQueryChange: (values: Record<string, unknown | null>) => void;
 }
 
-export const SelectInput = observer(({ config, state }: SelectInputProps) => {
+export const SelectInput = observer(({ config, queryValues, onQueryChange }: SelectInputProps) => {
 	const t = useT();
 	const queryKey = config.props?.queryKey ?? config.id;
 	const value =
-		typeof state.query.values[queryKey] === "string"
-			? (state.query.values[queryKey] as string)
+		typeof queryValues[queryKey] === "string"
+			? (queryValues[queryKey] as string)
 			: "";
 	const options = config.props?.options ?? [];
 	const placeholder = config.placeholder ?? config.label ?? config.id;
 
 	const handleChange = (selectedValue: string) => {
 		const selected = String(selectedValue);
-		void state.query.setValues({
+		void onQueryChange({
 			[queryKey]: selected || null,
 			skip: 0,
 		});

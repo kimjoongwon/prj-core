@@ -39,19 +39,6 @@ const baseScenario = {
 		locale: "ko-KR",
 		viewport: "desktop",
 	},
-	api: {
-		name: "user-detail-ready",
-		mode: "msw",
-		requests: [
-			{
-				method: "GET",
-				path: "/admin/users/301",
-				status: 200,
-				description: "사용자 상세 정보를 반환합니다.",
-			},
-		],
-	},
-	notes: ["개인 Policy 할당 제거 이후 정보 구조를 검토합니다."],
 } satisfies PlanningScenario;
 
 describe("PlanningPreviewFrame", () => {
@@ -94,18 +81,14 @@ describe("PlanningPreviewFrame", () => {
 		expect(screen.getByRole("button", { name: /스포애니 홍대/ })).toBeTruthy();
 	});
 
-	it("Given notes와 API 요청이 있는 시나리오일 때, When 프레임을 렌더링하면, Then 별도 metadata 패널 없이 요약을 표시한다", () => {
+	it("Given 시나리오가 있을 때, When 프레임을 렌더링하면, Then preview 영역을 표시한다", () => {
 		render(
 			<PlanningPreviewFrame scenario={baseScenario}>
 				<div>Rendered screen</div>
 			</PlanningPreviewFrame>,
 		);
 
-		expect(
-			screen.getByText("개인 Policy 할당 제거 이후 정보 구조를 검토합니다."),
-		).toBeTruthy();
-		expect(screen.getByText("GET /admin/users/301")).toBeTruthy();
-		expect(screen.getByText("status 200")).toBeTruthy();
+		expect(screen.getByText("Rendered screen")).toBeTruthy();
 		expect(screen.queryByRole("heading", { name: "Planning" })).toBeNull();
 		expect(screen.queryByRole("heading", { name: "Context" })).toBeNull();
 		expect(screen.queryByRole("heading", { name: "Acceptance" })).toBeNull();

@@ -6,13 +6,13 @@
 - Storybook은 `plate_e2e` 또는 실제 개발 DB에 직접 의존하지 않는다.
 - 실제 API, DB, 인증, 권한, transaction 검증은 E2E 테스트에서 수행한다.
 - Screen/Feature story는 기획 상태를 `PlanningScenario` 속성으로 선언한다.
-- Web Storybook은 `PlanningScenario.api.handlers`를 MSW handler로 실행한다.
-- Expo Web Storybook도 같은 `PlanningScenario` 계약을 MSW로 실행한다.
-- Native Mobile Storybook은 같은 `PlanningScenario` 계약을 native mock transport로 실행한다.
+- Web Storybook은 Story의 `parameters.msw.handlers`를 MSW handler로 실행한다.
+- Expo Web Storybook도 Story의 `parameters.msw.handlers`를 사용한다.
+- Native Mobile Storybook mock은 각 Storybook 런타임의 mock 계약을 사용한다.
 - 순수 UI component story는 props 중심으로 작성할 수 있다.
 - 기획 프레임 UI는 전역 decorator로 자동 주입하지 않고, story `render`에서 `PlanningPreviewFrame`으로 수동 래핑한다.
 - Screen story는 같은 `PlanningScenario` 객체를 `parameters.planning`과 `PlanningPreviewFrame scenario`에 함께 전달한다.
-- `PlanningPreviewFrame`의 mock 로그인과 tenant/space 선택은 실제 인증, 라우터, API, runtime store를 변경하지 않는다.
+- `PlanningPreviewFrame`의 mock 로그인과 tenant/space 선택은 실제 인증, 라우터, runtime store를 변경하지 않는다.
 
 ## 역할 분리
 

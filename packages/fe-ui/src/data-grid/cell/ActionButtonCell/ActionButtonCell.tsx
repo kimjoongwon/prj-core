@@ -25,11 +25,14 @@ export const ActionButtonCell = observer(function ActionButtonCell({
 	align = "center",
 	size = "sm",
 	children,
+	fullWidth,
 	...buttonProps
 }: ActionButtonCellProps) {
 	return (
-		<div className={`flex w-full ${ALIGN_CLASS_NAME[align]}`}>
-			<Button size={size} {...buttonProps}>
+		<div
+			className={`flex ${fullWidth === false ? "w-auto" : "w-full"} ${ALIGN_CLASS_NAME[align]}`}
+		>
+			<Button fullWidth={fullWidth} size={size} {...buttonProps}>
 				{children}
 			</Button>
 		</div>

@@ -1,6 +1,6 @@
 "use client";
 
-import type { DataGridState, InputConfig } from "@cocrepo/type";
+import type { DataGridQueryStates, InputConfig } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import {
 	ButtonInput,
@@ -14,29 +14,30 @@ import {
 
 interface InputRendererProps {
 	config: InputConfig;
-	state: DataGridState;
+	queryValues: DataGridQueryStates;
+	onQueryChange: (values: Record<string, unknown | null>) => void;
 }
 
 /**
  * InputConfig에 따라 적절한 입력 컴포넌트를 렌더링
  */
 export const InputRenderer = observer(
-	({ config, state }: InputRendererProps) => {
+	({ config, queryValues, onQueryChange }: InputRendererProps) => {
 		switch (config.type) {
 			case "search":
-				return <SearchInput config={config} state={state} />;
+				return <SearchInput config={config} queryValues={queryValues} onQueryChange={onQueryChange} />;
 			case "select":
-				return <SelectInput config={config} state={state} />;
+				return <SelectInput config={config} queryValues={queryValues} onQueryChange={onQueryChange} />;
 			case "button":
 				return <ButtonInput config={config} />;
 			case "dropdown":
 				return <DropdownInput config={config} />;
 			case "multi-select":
-				return <MultiSelectInput config={config} state={state} />;
+				return <MultiSelectInput config={config} queryValues={queryValues} onQueryChange={onQueryChange} />;
 			case "date-range":
-				return <DateRangeInput config={config} state={state} />;
+				return <DateRangeInput config={config} queryValues={queryValues} onQueryChange={onQueryChange} />;
 			case "chip-group":
-				return <ChipGroupInput config={config} state={state} />;
+				return <ChipGroupInput config={config} queryValues={queryValues} onQueryChange={onQueryChange} />;
 			case "custom":
 				if (config.props?.component) {
 					const CustomComponent = config.props.component;

@@ -47,7 +47,7 @@ export const RowActionsCell = observer(function RowActionsCell({
 					as={Link}
 					href={`${basePath}/${id}`}
 					size="sm"
-					variant="light"
+					variant="ghost"
 					isIconOnly
 					aria-label={t("상세 보기")}
 				>
@@ -59,7 +59,7 @@ export const RowActionsCell = observer(function RowActionsCell({
 					as={Link}
 					href={`${basePath}/${id}/edit`}
 					size="sm"
-					variant="light"
+					variant="ghost"
 					isIconOnly
 					isDisabled={disableEdit}
 					aria-label={t("수정")}
@@ -70,8 +70,7 @@ export const RowActionsCell = observer(function RowActionsCell({
 			{showDelete && (
 				<Button
 					size="sm"
-					variant="light"
-					color="danger"
+					variant="danger-soft"
 					isIconOnly
 					isDisabled={disableDelete}
 					onPress={onDelete}

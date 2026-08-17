@@ -2,12 +2,14 @@ import type {
 	DataGridChangesState as DataGridChangesStateContract,
 	DataGridColumnsState as DataGridColumnsStateContract,
 	DataGridColumnsStateSnapshot,
+	DataGridExpandRequest,
 	DataGridQueryState as DataGridQueryStateContract,
 	DataGridQueryStates,
 	DataGridSelectionState as DataGridSelectionStateContract,
 	DataGridSetQueryStates,
 	DataGridState as DataGridStateContract,
 } from "@cocrepo/type";
+import type { ExpandedState, Updater } from "@tanstack/react-table";
 import { makeAutoObservable } from "mobx";
 import { DataGridChangesState } from "./DataGridChangesState";
 
@@ -189,6 +191,11 @@ export class DataGridState implements DataGridStateContract {
 	query: DataGridQueryState;
 	selection?: DataGridSelectionStateContract;
 	changes: DataGridChangesStateContract;
+	expanded: ExpandedState = {};
+	selectedKeys = new Set<string>();
+	activeRowId: string | null = null;
+	overRowId: string | null = null;
+	dragOffset = 0;
 
 	constructor({
 		columns,
@@ -203,6 +210,52 @@ export class DataGridState implements DataGridStateContract {
 		this.changes = changes ?? new DataGridChangesState();
 
 		makeAutoObservable(this, {}, { autoBind: true });
+	}
+
+	applyExpansionRequest(request: DataGridExpandRequest | undefined) {
+		if (!request) {
+			return;
+		}
+
+		const expandedRows =
+			typeof this.expanded === "object" && this.expanded !== null
+				? this.expanded
+				: {};
+		this.expanded = {
+			...expandedRows,
+			[String(request.rowId)]: true,
+		};
+	}
+
+	setExpanded(nextExpanded: Updater<ExpandedState>) {
+		this.expanded =
+			typeof nextExpanded === "function"
+				? nextExpanded(this.expanded)
+				: nextExpanded;
+	}
+
+	setSelectedKeys(selectedKeys: Set<string>) {
+		this.selectedKeys = selectedKeys;
+	}
+
+	startRowMove(rowId: string) {
+		this.activeRowId = rowId;
+		this.overRowId = rowId;
+		this.dragOffset = 0;
+	}
+
+	setOverRow(rowId: string | null) {
+		this.overRowId = rowId;
+	}
+
+	setDragOffset(dragOffset: number) {
+		this.dragOffset = dragOffset;
+	}
+
+	resetRowMove() {
+		this.activeRowId = null;
+		this.overRowId = null;
+		this.dragOffset = 0;
 	}
 
 	syncQuery(

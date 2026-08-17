@@ -1,11 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { DataGridState } from "../DataGridState";
+import { Button } from "../../input/Button/Button";
 import { DataGridActionBar } from "./index";
-
-const state = new DataGridState({
-	queryStates: {},
-	setQueryStates: async () => new URLSearchParams(),
-});
 
 const meta = {
 	title: "data-grid/DataGridActionBar",
@@ -14,24 +9,13 @@ const meta = {
 	tags: ["autodocs"],
 	args: {
 		selectedCount: 3,
-		state,
-		actionBarConfig: {
-			showCount: true,
-			actions: [
-				{
-					id: "archive",
-					type: "button",
-					label: "보관",
-					props: { variant: "flat", color: "primary", size: "sm" },
-				},
-				{
-					id: "delete",
-					type: "button",
-					label: "삭제",
-					props: { variant: "flat", color: "danger", size: "sm" },
-				},
-			],
-		},
+		showCount: true,
+		actions: (
+			<>
+				<Button size="sm">보관</Button>
+				<Button size="sm">삭제</Button>
+			</>
+		),
 	},
 } satisfies Meta<typeof DataGridActionBar>;
 

@@ -75,12 +75,7 @@ function createDefaultScenario(
 			locale: "ko-KR",
 			viewport: "desktop",
 		},
-		api: {
-			name: "none",
-			mode: "none",
-		},
 		acceptance: [],
-		notes: [],
 	};
 }
 

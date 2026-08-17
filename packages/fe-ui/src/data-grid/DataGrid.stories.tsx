@@ -327,7 +327,7 @@ type StoryDataGridProps = {
 
 const meta = {
 	title: "data-grid/DataGrid",
-	component: DataGrid as ComponentType<StoryDataGridProps>,
+	component: DataGrid as unknown as ComponentType<StoryDataGridProps>,
 	args: {
 		rows,
 		totalCount: rows.length,
