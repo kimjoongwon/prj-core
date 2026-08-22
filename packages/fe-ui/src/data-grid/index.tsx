@@ -2,30 +2,51 @@
 
 import type { DataGridConfig } from "@cocrepo/type";
 import {
+	closestCenter,
+	DndContext,
+	KeyboardSensor,
+	PointerSensor,
+	useSensor,
+	useSensors,
+} from "@dnd-kit/core";
+import {
 	getCoreRowModel,
 	getExpandedRowModel,
 	getGroupedRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
 import { observer } from "mobx-react-lite";
-import type { ReactNode } from "react";
-import { DataGrid as DataGridRoot } from "./DataGrid";
-import { DataGridChangesState } from "./DataGridChangesState";
+import { DataGridActionBar } from "./DataGridActionBar";
+import { DataGridContainer } from "./DataGridContainer";
+import { DataGridGroupPanel } from "./DataGridGroupPanel";
+import { DataGridPagination } from "./DataGridPagination";
+import { DataGridToolbar } from "./DataGridToolbar";
+import { TableBody } from "./Table/TableBody";
+import { TableContainer } from "./Table/TableContainer";
+import { TableFooter } from "./Table/TableFooter";
+import { TableHeader } from "./Table/TableHeader";
+import { DataGridChangesState } from "./state/DataGridChangesState";
 import {
+	DataGridActionBarState,
 	DataGridColumnsState,
+	DataGridGroupPanelState,
+	DataGridPaginationState,
 	DataGridQueryState,
 	DataGridSelectionState,
 	DataGridState,
+	DataGridTableBodyState,
+	DataGridTableFooterState,
+	DataGridTableHeaderState,
+	DataGridTableState,
+	DataGridToolbarState,
 	type DataGridStateOptions,
-} from "./DataGridState";
+} from "./state/DataGridState";
 import {
 	getGroupingColumnIds,
 	getVisibleColumnConfigs,
 	toColumnDefs,
-} from "./internal/columnConfig";
-import { DATA_GRID_GROUP_BY_QUERY_KEY } from "./internal/grouping";
-import type { Key } from "./internal/rowKeys";
-import { getQuerySortValues, getNextSortValues } from "./internal/sorting";
+} from "./columns/columnConfig";
+import type { Key } from "./Table/rowKeys";
 
 export interface DataGridProps<T extends { id: Key }> {
 	config: DataGridConfig<T>;
@@ -35,33 +56,65 @@ export interface DataGridProps<T extends { id: Key }> {
 	isLoading?: boolean;
 }
 
-type DataGridCompound = (<T extends { id: Key }>(
-	props: DataGridProps<T>,
-) => ReactNode) &
-	Pick<
-		typeof DataGridRoot,
-		"Toolbar" | "Panel" | "Table" | "Pagination" | "ActionBar"
-	>;
+function DataGridTableContent({ state }: { state: DataGridState }) {
+	const tableColumnStateKey = JSON.stringify(state.columns.toJSON());
 
-export const DataGrid = observer(
-	<T extends { id: Key },>({
+	return (
+		<TableContainer
+			ariaLabel="데이터 테이블"
+			columnWidths={state.table.columnWidths}
+			isSelectable={state.table.isSelectable}
+		>
+			<TableHeader
+				key={`header-${tableColumnStateKey}`}
+				state={state.table.header}
+			/>
+			<TableBody key={`body-${tableColumnStateKey}`} state={state.table.body} />
+			<TableFooter state={state.table.footer} />
+		</TableContainer>
+	);
+}
+
+function DataGridRowMoveTableComposition({ state }: { state: DataGridState }) {
+	const sensors = useSensors(
+		useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+		useSensor(KeyboardSensor),
+	);
+
+	return (
+		<DndContext
+			collisionDetection={closestCenter}
+			sensors={sensors}
+			onDragEnd={({ active, over }) => {
+				if (over) {
+					state.table.body.completeRowMove(String(active.id), String(over.id));
+				}
+			}}
+		>
+			<DataGridTableContent state={state} />
+		</DndContext>
+	);
+}
+
+function DataGridTableComposition({ state }: { state: DataGridState }) {
+	return state.table.body.config.onRowMove ? (
+		<DataGridRowMoveTableComposition state={state} />
+	) : (
+		<DataGridTableContent state={state} />
+	);
+}
+
+/** 완성형 API가 표준 compound 조립과 같은 root state를 사용하도록 연결합니다. */
+const DataGridStandardComposition = observer(
+	function DataGridStandardComposition<T extends { id: Key }>({
 		config,
 		state,
 		rows,
 		totalCount,
-	}: DataGridProps<T>) => {
-		const selectedKeys = Array.from(
-			state.selection?.selectedKeys ?? state.selectedKeys,
-		);
-		const selectedKeySet = new Set(selectedKeys);
-		const renderedRows = [
-			...rows
-				.filter((row) => !state.changes.isDeleted(row.id))
-				.map((row) => state.changes.getRow(row)),
-			...state.changes
-				.getCreatedRows<T>()
-				.filter((row) => !rows.some(({ id }) => id === row.id)),
-		];
+		isLoading = false,
+	}: DataGridProps<T>) {
+		state.syncRuntime({ config, rows, totalCount, isLoading });
+		const renderedRows = state.getRenderedRows<T>(rows);
 		const grouping = getGroupingColumnIds(
 			config.columns,
 			state.columns,
@@ -73,157 +126,62 @@ export const DataGrid = observer(
 				getVisibleColumnConfigs(config.columns, state.columns),
 				state.columns,
 			),
-			state: {
-				expanded: state.expanded,
-				grouping,
-			},
+			state: { expanded: state.expanded, grouping },
 			getRowId: (row) => String(row.id),
 			getSubRows: config.getSubRows,
 			getCoreRowModel: getCoreRowModel(),
 			getExpandedRowModel: getExpandedRowModel(),
 			getGroupedRowModel: getGroupedRowModel(),
+			autoResetExpanded: false,
 			onExpandedChange: state.setExpanded,
 		});
-		const tableRows = table.getRowModel().rows;
-		const headers = table.getFlatHeaders();
-		const selectionMode =
-			config.selection?.mode === "none" ? undefined : config.selection?.mode;
-		const isAllVisibleRowsSelected =
-			tableRows.length > 0 &&
-			tableRows.every((row) => selectedKeySet.has(row.id));
-		const isSomeVisibleRowsSelected = tableRows.some((row) =>
-			selectedKeySet.has(row.id),
-		);
-		const take = Number(state.query.values.take) || 20;
-		const skip = Number(state.query.values.skip) || 0;
-
-		const setSelectedKeys = (nextSelectedKeys: string[]) => {
-			const nextSelection = new Set(nextSelectedKeys);
-			state.setSelectedKeys(nextSelection);
-			state.selection?.setSelectedKeys?.(nextSelection);
-			config.selection?.onSelectionChange?.(nextSelection);
-		};
+		state.table.setTanStackTable(table);
 
 		return (
-			<DataGridRoot>
-				<DataGridRoot.Toolbar
-					columns={config.columns}
-					leftInputs={config.leftInputs ?? []}
-					rightInputs={config.rightInputs ?? []}
-					columnState={state.columns.toJSON()}
-					queryValues={state.query.values}
-					onColumnChange={(columns) => state.columns.restore(columns)}
-					onQueryChange={(values) => {
-						void state.query.setValues(values);
-					}}
-				/>
-				<DataGridRoot.Panel
-					columns={config.columns}
-					grouping={grouping}
-					rowGroupPanelShow={config.rowGroupPanelShow}
-					onGroupingChange={(nextGrouping) => {
-						state.columns.setGrouping(nextGrouping);
-						void state.query.setValues({
-							[DATA_GRID_GROUP_BY_QUERY_KEY]: nextGrouping,
-							skip: 0,
-						});
-					}}
-				/>
-				<DataGridRoot.Table
-					ariaLabel="데이터 테이블"
-					columnWidths={table
-						.getVisibleLeafColumns()
-						.map((column) => column.getSize())}
-					isSelectable={Boolean(selectionMode)}
-				>
-					<DataGridRoot.Table.Header
-						headers={headers}
-						isAllVisibleRowsSelected={isAllVisibleRowsSelected}
-						isSomeVisibleRowsSelected={isSomeVisibleRowsSelected}
-						selectionMode={selectionMode}
-						sortValues={getQuerySortValues(state.query.values)}
-						queryValues={state.query.values}
-						onQueryChange={(values) => {
-							void state.query.setValues(values);
-						}}
-						onColumnSizingChange={(columnId, size) =>
-							state.columns.setColumnSizing(columnId, size)
-						}
-						t={(value) => value}
-						onSortChange={(columnId, direction) => {
-							void state.query.setValues({
-								sort: getNextSortValues(columnId, direction),
-								skip: 0,
-							});
-						}}
-						onVisibleSelectionChange={(isSelected) => {
-							setSelectedKeys(
-								isSelected
-									? Array.from(
-											new Set([
-												...selectedKeys,
-												...tableRows.map((row) => row.id),
-											]),
-										)
-									: selectedKeys.filter(
-											(key) => !tableRows.some((row) => row.id === key),
-										),
-							);
-						}}
-					/>
-					<DataGridRoot.Table.Body
-						config={config}
-						rows={tableRows}
-						selectedKeys={selectedKeys}
-						selectionMode={selectionMode}
-						tableColumnCount={headers.length + (selectionMode ? 1 : 0)}
-						t={(value) => value}
-						isRowMoveEnabled={false}
-						onCellValueChange={(row, field, value) =>
-							state.changes.setValue(row, field, value)
-						}
-						onRowSelectionChange={(rowKey, isSelected) => {
-							setSelectedKeys(
-								isSelected
-									? [...selectedKeys, rowKey]
-									: selectedKeys.filter((key) => key !== rowKey),
-							);
-						}}
-					/>
-				</DataGridRoot.Table>
-				<DataGridRoot.Pagination
-					currentPage={Math.floor(skip / take) + 1}
-					take={take}
-					totalCount={totalCount}
-					onPageChange={(page) => {
-						void state.query.setValues({ skip: (page - 1) * take });
-					}}
-				/>
-				<DataGridRoot.ActionBar
-					selectedCount={selectedKeys.length}
-					showCount={config.selection?.actionBar?.showCount}
-				/>
-			</DataGridRoot>
+			<DataGridContainer>
+				<DataGridToolbar state={state.toolbar} />
+				<DataGridGroupPanel state={state.groupPanel} />
+				<DataGridTableComposition state={state} />
+				<DataGridPagination state={state.pagination} />
+				<DataGridActionBar state={state.actionBar} />
+			</DataGridContainer>
 		);
 	},
-) as unknown as DataGridCompound;
+);
 
-DataGrid.Toolbar = DataGridRoot.Toolbar;
-DataGrid.Panel = DataGridRoot.Panel;
-DataGrid.Table = DataGridRoot.Table;
-DataGrid.Pagination = DataGridRoot.Pagination;
-DataGrid.ActionBar = DataGridRoot.ActionBar;
+export const DataGrid = Object.assign(DataGridStandardComposition, {
+	Container: DataGridContainer,
+	Toolbar: DataGridToolbar,
+	GroupPanel: DataGridGroupPanel,
+	Pagination: DataGridPagination,
+	ActionBar: DataGridActionBar,
+});
+
+/** DataGrid와 독립된 native table compound namespace입니다. */
+export const Table = {
+	Container: TableContainer,
+	Header: TableHeader,
+	Body: TableBody,
+	Footer: TableFooter,
+};
 
 export * from "./cell";
 export * from "./columns";
-export * from "./editor";
-export type { Key } from "./internal/rowKeys";
-export { getDataGridRowKey } from "./internal/rowKeys";
+export type { Key } from "./Table/rowKeys";
+export { getDataGridRowKey } from "./Table/rowKeys";
 export { DataGridChangesState };
 export type { DataGridStateOptions };
 export {
+	DataGridActionBarState,
 	DataGridColumnsState,
+	DataGridGroupPanelState,
+	DataGridPaginationState,
 	DataGridQueryState,
 	DataGridSelectionState,
 	DataGridState,
+	DataGridTableBodyState,
+	DataGridTableFooterState,
+	DataGridTableHeaderState,
+	DataGridTableState,
+	DataGridToolbarState,
 };

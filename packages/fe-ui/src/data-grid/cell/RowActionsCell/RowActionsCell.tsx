@@ -43,30 +43,24 @@ export const RowActionsCell = observer(function RowActionsCell({
 	return (
 		<div className="flex justify-center gap-1">
 			{showView && (
-				<Button
-					as={Link}
+				<Link
 					href={`${basePath}/${id}`}
-					size="sm"
-					variant="ghost"
-					isIconOnly
+					className="inline-flex size-8 items-center justify-center"
 					aria-label={t("상세 보기")}
 				>
 					<Eye className="h-4 w-4" />
-				</Button>
+				</Link>
 			)}
-			{showEdit && (
-				<Button
-					as={Link}
-					href={`${basePath}/${id}/edit`}
-					size="sm"
-					variant="ghost"
-					isIconOnly
-					isDisabled={disableEdit}
-					aria-label={t("수정")}
-				>
-					<Pencil className="h-4 w-4" />
-				</Button>
-			)}
+			{showEdit &&
+				(disableEdit ? (
+					<Button size="sm" variant="ghost" isIconOnly isDisabled aria-label={t("수정")}>
+						<Pencil className="h-4 w-4" />
+					</Button>
+				) : (
+					<Link href={`${basePath}/${id}/edit`} className="inline-flex size-8 items-center justify-center" aria-label={t("수정")}>
+						<Pencil className="h-4 w-4" />
+					</Link>
+				))}
 			{showDelete && (
 				<Button
 					size="sm"

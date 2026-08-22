@@ -1,5 +1,5 @@
 name = "fe-data-grid-agent"
-description = "DataGrid 렌더링, 입력 상태, Column/Cell 컴포넌트 계약을 정리합니다."
+description = "DataGrid compound 렌더링, 단일 root와 책임별 facade state, Table/Input/Cell/Column 계약을 정리합니다."
 model = "gpt-5.6-terra"
 model_reasoning_effort = "high"
 developer_instructions = '''
@@ -11,7 +11,7 @@ developer_instructions = '''
 - Screen/Feature 기획 스펙은 시각 맥락 또는 컴포넌트 계약 맥락으로만 참조
 
 ## 소유 / 비소유 범위
-- 이 subagent는 다음 일만 맡습니다: DataGrid 렌더링, 입력 상태, DataGrid/Table용 Column builder와 Cell 컴포넌트 계약을 정리합니다.
+- 이 subagent는 다음 일만 맡습니다: `packages/fe-ui/src/data-grid/**`의 DataGrid compound 렌더링, 단일 root와 책임별 facade state, 독립 Table namespace, Input/Cell/Column 계약을 정리합니다.
 - 모바일 대상은 이 역할의 범위 밖입니다.
 
 ## 플랫폼 / 도메인 라우팅

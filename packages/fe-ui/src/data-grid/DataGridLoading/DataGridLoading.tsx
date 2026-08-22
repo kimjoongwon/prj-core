@@ -1,7 +1,8 @@
 "use client";
 
 import { Skeleton } from "../../feedback/Skeleton/Skeleton";
-import { DATA_GRID_SKELETON_ROWS } from "../internal/constants";
+
+const DATA_GRID_SKELETON_ROWS = [0, 1, 2, 3, 4];
 
 export function DataGridLoadingView() {
 	return (

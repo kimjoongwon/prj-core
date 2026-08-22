@@ -29,8 +29,8 @@ import {
 	createNameColumn,
 	createPresetColumn,
 	defineColumn,
-} from "../internal/dataGridFactory";
-import { COLUMN_FIELDS } from "../internal/fieldPresets";
+} from "./dataGridFactory";
+import { COLUMN_FIELDS } from "./fieldPresets";
 
 const EMAIL_VERIFICATION_STATUS_CONFIG = {
 	PENDING: { label: "대기", color: "warning" },
@@ -103,11 +103,11 @@ function AlertDialogActionCell({
 		return (
 			<ActionButtonCell
 				variant={triggerColor === "danger" ? "danger-soft" : triggerVariant === "solid" ? "primary" : triggerVariant === "bordered" ? "outline" : "ghost"}
-				startContent={startContent}
 				isDisabled
 				className={className}
-				title={tooltip}
+				aria-label={tooltip}
 			>
+				{startContent}
 				{triggerLabel}
 			</ActionButtonCell>
 		);
@@ -118,11 +118,11 @@ function AlertDialogActionCell({
 			<AlertDialog.Trigger>
 				<ActionButtonCell
 					variant={triggerColor === "danger" ? "danger-soft" : triggerVariant === "solid" ? "primary" : triggerVariant === "bordered" ? "outline" : "ghost"}
-					startContent={startContent}
 					isDisabled={isDisabled}
 					className={className}
-					title={tooltip}
+					aria-label={tooltip}
 				>
+					{startContent}
 					{triggerLabel}
 				</ActionButtonCell>
 			</AlertDialog.Trigger>
@@ -453,14 +453,9 @@ export function buildIdpAccountTableColumns<
 								onConfirm={() => onClickUnlockAccount(account)}
 							/>
 						) : null}
-						<Button
-							as={HeroLink}
-							href={`/settings/auth/accounts/${account.id}`}
-							size="sm"
-							variant="ghost"
-						>
+						<HeroLink href={`/settings/auth/accounts/${account.id}`} className="inline-flex h-8 items-center justify-center px-3 text-sm">
 							상세
-						</Button>
+						</HeroLink>
 					</div>
 				);
 			},

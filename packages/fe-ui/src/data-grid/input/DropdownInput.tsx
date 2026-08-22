@@ -5,13 +5,13 @@ import { Dropdown } from "@heroui/react";
 import { ChevronDown } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";
-import { Button } from "../../input/Button/Button";
+import { Button, type ButtonProps } from "../../input/Button/Button";
 
 interface DropdownInputProps {
 	config: InputConfig;
 }
 
-function resolveButtonVariant(variant: InputConfig["props"] extends { variant?: infer Value } ? Value : never) {
+function resolveButtonVariant(variant: string | undefined): ButtonProps["variant"] {
 	return variant === "solid" ? "primary" : variant === "bordered" ? "outline" : "ghost";
 }
 
@@ -24,9 +24,9 @@ export const DropdownInput = observer(({ config }: DropdownInputProps) => {
 			<Dropdown.Trigger>
 				<Button
 					variant={resolveButtonVariant(config.props?.variant)}
-					endContent={<ChevronDown size={16} />}
 				>
 					{config.label ? t(config.label) : null}
+					<ChevronDown size={16} aria-hidden />
 				</Button>
 			</Dropdown.Trigger>
 			<Dropdown.Menu

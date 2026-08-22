@@ -52,8 +52,8 @@ import {
 	getAssetKindLabel,
 	getAssetStatusColor,
 	getAssetStatusLabel,
-} from "../internal/dataGridFactory";
-import { COLUMN_FIELDS } from "../internal/fieldPresets";
+} from "./dataGridFactory";
+import { COLUMN_FIELDS } from "./fieldPresets";
 
 type RoleLike = {
 	name?: string;
@@ -538,13 +538,9 @@ export const adminRoleStatusColumn = createRemovedAtStatusColumn<RoleDto>({
 export const adminRoleActionsColumn = createActionsColumn<RoleDto>({
 	size: 100,
 	cell: ({ row }) => (
-		<ActionButtonCell
-			as={Link}
-			href={`/roles/${row.original.id}`}
-			variant="ghost"
-		>
+		<Link className="inline-flex h-8 items-center justify-center px-3 text-sm" href={`/roles/${row.original.id}`}>
 			상세
-		</ActionButtonCell>
+		</Link>
 	),
 });
 
@@ -579,13 +575,9 @@ export function buildAdminRoleTableColumns<
 			createActionsColumn<TRow>({
 				size: 100,
 				cell: ({ row }) => (
-					<ActionButtonCell
-						as={Link}
-						href={`/roles/${row.original.id}`}
-						variant="ghost"
-					>
+					<Link className="inline-flex h-8 items-center justify-center px-3 text-sm" href={`/roles/${row.original.id}`}>
 						상세
-					</ActionButtonCell>
+					</Link>
 				),
 			}),
 		],
@@ -1065,9 +1057,9 @@ export function buildAssetTableColumns<
 								<Button
 									size="sm"
 									variant="ghost"
-									startContent={<Eye className="h-4 w-4" />}
 									onPress={() => onClickPreviewAssetButton(row.original)}
 								>
+									<Eye className="h-4 w-4" aria-hidden />
 									보기
 								</Button>
 							) : null}

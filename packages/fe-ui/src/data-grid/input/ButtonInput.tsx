@@ -3,16 +3,16 @@
 import type { InputConfig } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { useT } from "../../i18n";
-import { Button } from "../../input/Button/Button";
+import { Button, type ButtonProps } from "../../input/Button/Button";
 
 interface ButtonInputProps {
 	config: InputConfig;
 }
 
 function resolveButtonVariant(
-	variant: InputConfig["props"] extends { variant?: infer Value } ? Value : never,
-	color: InputConfig["props"] extends { color?: infer Value } ? Value : never,
-) {
+	variant: string | undefined,
+	color: string | undefined,
+): ButtonProps["variant"] {
 	if (color === "danger") {
 		return variant === "solid" ? "danger" : "danger-soft";
 	}
@@ -34,9 +34,9 @@ export const ButtonInput = observer(({ config }: ButtonInputProps) => {
 		<Button
 			variant={resolveButtonVariant(config.props?.variant, config.props?.color)}
 			size={config.props?.size ?? "md"}
-			startContent={config.props?.startContent}
 			onPress={handleClick}
 		>
+			{config.props?.startContent}
 			{config.label ? t(config.label) : null}
 		</Button>
 	);

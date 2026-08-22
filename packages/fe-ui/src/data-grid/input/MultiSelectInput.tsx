@@ -54,11 +54,11 @@ export const MultiSelectInput = observer(
 					<Button
 						size="sm"
 						variant="outline"
-						endContent={<ChevronDown className="size-4" />}
 					>
 						{selectedValues.length > 0
 							? `${t(label)} ${selectedValues.length}`
 							: t(label)}
+						<ChevronDown className="size-4" aria-hidden />
 					</Button>
 				</Popover.Trigger>
 				<Popover.Content placement="bottom start">

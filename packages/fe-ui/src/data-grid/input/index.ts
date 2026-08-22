@@ -1,4 +1,7 @@
 export { ButtonInput } from "./ButtonInput";
+export { ColumnFilterInput } from "./ColumnFilterInput";
+export { ColumnResizerInput } from "./ColumnResizerInput";
+export { ColumnSortInput } from "./ColumnSortInput";
 export { ChipGroupInput } from "./ChipGroupInput";
 export { DateRangeInput } from "./DateRangeInput";
 export { DropdownInput } from "./DropdownInput";

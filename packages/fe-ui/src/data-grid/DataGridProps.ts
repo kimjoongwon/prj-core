@@ -8,7 +8,7 @@ import type {
 } from "@cocrepo/type";
 import type { ExpandedState } from "@tanstack/react-table";
 import type { ReactNode } from "react";
-import type { Key } from "./internal/rowKeys";
+import type { Key } from "./Table/rowKeys";
 
 export interface DataGridTableProps<T extends { id: Key }> {
 	config: DataGridConfig<T>;

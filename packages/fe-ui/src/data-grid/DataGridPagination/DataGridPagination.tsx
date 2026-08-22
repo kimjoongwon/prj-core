@@ -2,6 +2,7 @@
 
 import { useT } from "../../i18n";
 import { Pagination } from "../../input/Pagination/Pagination";
+import type { DataGridPaginationState } from "../state/DataGridPaginationState";
 
 type DataGridPageItem =
 	| {
@@ -14,10 +15,7 @@ type DataGridPageItem =
 	  };
 
 export interface DataGridPaginationProps {
-	currentPage: number;
-	take: number;
-	totalCount: number;
-	onPageChange: (page: number) => void;
+	state: DataGridPaginationState;
 }
 
 /** 전체 건수와 페이지 크기에서 1부터 시작하는 총 페이지 수를 계산합니다. */
@@ -70,12 +68,10 @@ function getPageItems(
 
 /** DataGrid 하단의 전체 건수와 페이지 이동 컨트롤을 렌더링합니다. */
 export function DataGridPaginationView({
-	currentPage,
-	take,
-	totalCount,
-	onPageChange,
+	state,
 }: DataGridPaginationProps) {
 	const t = useT();
+	const { currentPage, take, totalCount } = state;
 	const totalPages = getTotalPages(totalCount, take);
 	const page = Math.min(Math.max(1, currentPage), totalPages);
 	const pageItems = getPageItems(page, totalPages);
@@ -96,7 +92,7 @@ export function DataGridPaginationView({
 					<Pagination.Previous
 						isDisabled={isPreviousDisabled}
 						onPress={() => {
-							onPageChange(Math.max(1, page - 1));
+							void state.changePage(Math.max(1, page - 1));
 						}}
 					>
 						<Pagination.PreviousIcon />
@@ -113,7 +109,7 @@ export function DataGridPaginationView({
 							<Pagination.Link
 								isActive={item.page === page}
 								onPress={() => {
-									onPageChange(item.page);
+									void state.changePage(item.page);
 								}}
 							>
 								{item.page}
@@ -125,7 +121,7 @@ export function DataGridPaginationView({
 					<Pagination.Next
 						isDisabled={isNextDisabled}
 						onPress={() => {
-							onPageChange(Math.min(totalPages, page + 1));
+							void state.changePage(Math.min(totalPages, page + 1));
 						}}
 					>
 						<span>Next</span>

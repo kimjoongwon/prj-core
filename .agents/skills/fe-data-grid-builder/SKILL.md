@@ -42,14 +42,16 @@ DataGrid/Table Cell 컴포넌트를 만들거나 고치면 [Cell 규칙](referen
 
 ### 책임
 
-- `DataGrid`, `InputRenderer`, `data-grid/input/**`, `DataGridState` 계열을 data-grid 축 안에서 정리합니다.
+- `DataGrid`, `Table`, `data-grid/input/**`, `data-grid/cell/**`, `DataGridState` 계열을 data-grid 축 안에서 정리합니다.
 - `data-grid/columns/**`의 DataGrid/Table Column builder와 preset/helper를 data-grid 축 안에서 정리합니다.
 - `data-grid/cell/**`의 DataGrid/Table Cell 컴포넌트를 Pure UI, Widget, Feature 계층에 맞게 정리합니다.
-- table 렌더링 계층이 중첩되지 않도록 `DataGrid.tsx` 단일 렌더러를 유지합니다.
-- TanStack Table 행 model, HeroUI Table 렌더링, 정렬 헤더, loading/empty 상태, selection/action bar, pagination 연결은 `DataGrid.tsx`가 직접 소유합니다.
-- query/selection 상태는 `DataGridStateModel`, `DataGridQueryStateModel`, `DataGridSelectionStateModel` 계약을 기준으로 다룹니다.
-- 검색/필터/버튼/드롭다운 입력은 `InputRenderer.tsx`와 `data-grid/input/**` 하위 컴포넌트로 확장합니다.
-- 셀 편집기는 `data-grid/editor/**`의 built-in adapter를 우선 사용하고, column 호출부는 `editable.editor`와 lifecycle/validation 옵션만 선언합니다.
+- 표준 렌더링은 `index.tsx`의 compound 조립을 기준으로 하며, `DataGrid.tsx`를 유지하면 같은 조립과 state를 사용하는 thin wrapper로만 둡니다.
+- TanStack Table 행 model, HeroUI Table 렌더링, 정렬 헤더, loading/empty 상태, selection/action bar, pagination 연결은 책임별 compound leaf와 facade state가 나누어 소유합니다.
+- `DataGridState`는 단일 root state이고 child state는 canonical 값을 복제하지 않는 책임별 facade입니다.
+- `DataGrid.Container`와 `Table.Container`는 state를 받지 않으며, 상태가 있는 leaf는 전체 root가 아닌 자신의 `DataGrid...State`만 받습니다.
+- `Table`은 `DataGrid.Table`이 아닌 독립 compound namespace입니다.
+- `ColumnFilterInput`, `ColumnSortInput`, `ColumnResizerInput`은 `data-grid/input/**`에 둡니다.
+- `EditorCell`, `SelectionCell`, `HierarchyCell`은 `data-grid/cell/**`에 두고 필요한 값과 handler만 받습니다.
 - column builder는 Cell을 조합만 하며, 실제 셀 UI는 `data-grid/cell/**`이 소유합니다.
 - `display/data-display`는 일반 display primitive만 담당하고, DataGrid/Table 구현을 다시 만들지 않습니다.
 - screen은 `DataGrid`를 감싸는 `SectionSurface` owner를 직접 결정합니다. DataGrid가 page-level surface를 암묵적으로 만들지 않습니다.
@@ -58,9 +60,16 @@ DataGrid/Table Cell 컴포넌트를 만들거나 고치면 [Cell 규칙](referen
 
 ### 출력 경로
 
-- `packages/fe-ui/src/data-grid/DataGrid.tsx`
-- `packages/fe-ui/src/data-grid/DataGridState.ts`
-- `packages/fe-ui/src/data-grid/InputRenderer.tsx`
+- `packages/fe-ui/src/data-grid/index.tsx`
+- `packages/fe-ui/src/data-grid/index.stories.tsx`
+- `packages/fe-ui/src/data-grid/DataGrid.tsx` (선택 사항인 thin wrapper)
+- `packages/fe-ui/src/data-grid/state/**`
+- `packages/fe-ui/src/data-grid/DataGridContainer/**`
+- `packages/fe-ui/src/data-grid/DataGridToolbar/**`
+- `packages/fe-ui/src/data-grid/DataGridGroupPanel/**`
+- `packages/fe-ui/src/data-grid/DataGridPagination/**`
+- `packages/fe-ui/src/data-grid/DataGridActionBar/**`
+- `packages/fe-ui/src/data-grid/Table/**`
 - `packages/fe-ui/src/data-grid/input/**`
 - `packages/fe-ui/src/data-grid/columns/**`
 - `packages/fe-ui/src/data-grid/cell/**`
@@ -69,15 +78,18 @@ DataGrid/Table Cell 컴포넌트를 만들거나 고치면 [Cell 규칙](referen
 
 ### 필수 규칙
 
-- DataGrid 전용 Table wrapper를 새로 만들지 않습니다.
-- 행 key helper는 duplicate-safe 해야 하며 `DataGrid.tsx`와 외부 호출부에서 재사용할 수 있도록 공개합니다.
+- `DataGrid`와 독립된 `Table.Container`, `Table.Header`, `Table.Body`, `Table.Footer` compound namespace를 사용하고 `DataGrid.Table`을 만들지 않습니다.
+- `DataGrid.Container`와 `Table.Container`에는 state prop을 추가하지 않습니다.
+- 상태가 있는 leaf에는 전체 `DataGridState` 대신 해당 책임의 facade state만 전달합니다.
+- 행 key helper는 duplicate-safe 해야 하며 compound renderer와 외부 호출부에서 재사용할 수 있도록 공개합니다.
 - DataGrid 공개 컴포넌트, 상태 model, helper, 타입은 `data-grid/index.ts`에서 노출합니다.
 - DataGrid column builder는 `data-grid/columns/index.ts`에서 노출하고, public export는 `data-grid/index.ts`를 거칩니다.
-- 삭제된 이전 방식 grid composition 계층, 이전 방식 display 하위 DataGrid/Table 경로, 별도 Table wrapper를 되살리지 않습니다.
+- 삭제된 이전 방식 grid composition 계층과 display 하위 DataGrid/Table 경로를 되살리거나 compound 조립과 별도인 Table wrapper를 만들지 않습니다.
 - `useMemo`/`useCallback`을 새로 추가하지 않고, client 컴포넌트는 `observer` 기준을 유지합니다.
 - `data-grid/cell/**`은 DataGrid/Table에서 재사용 가능한 Cell만 둡니다. 특정 도메인 전용 이름이나 도메인 API/store 연결은 만들지 않습니다.
 - `data-grid/columns/**`은 field, label, accessor, align, cell 조합 선언만 담당합니다.
 - 새 Cell이 필요하면 먼저 기존 Cell 조합 가능성을 확인하고, 불가할 때만 최소 범위로 추가합니다.
+- Storybook은 `data-grid/index.stories.tsx` 하나에서만 주요 compound 상태를 검증하고 leaf별 story 파일을 만들지 않습니다.
 
 ### 검증
 
@@ -131,7 +143,9 @@ Column 세부 계약은 이 문서에서, Cell 세부 계약은 `references/cell
 ### 역할과 상태 소유권
 
 - DataGrid는 columns, filter, sort, pagination, selection을 하나의 계약으로 제공하는 표준 목록 렌더러입니다.
-- query, column 상태와 selection 상호작용은 `DataGridState`가 소유합니다.
+- `DataGridState`가 query, columns, selection, changes의 canonical 값을 소유하는 유일한 root state입니다.
+- child state는 root 또는 root가 전달한 canonical model을 참조하는 책임별 facade이며 같은 값을 별도 field에 복제하거나 서로 동기화하지 않습니다.
+- root는 child facade를 한 번 생성하고 동일 인스턴스를 유지합니다.
 - 외부 callback은 row click, row move처럼 상위 계층이 처리해야 하는 고수준 결과에만 사용합니다.
 - 서버에는 class instance가 아니라 `toJSON()`이 반환한 plain snapshot만 저장합니다.
 - snapshot에는 함수, `ReactNode`, row 객체, `Set`, DOM 또는 React event를 넣지 않습니다.
@@ -141,6 +155,10 @@ Column 세부 계약은 이 문서에서, Cell 세부 계약은 `references/cell
 ### 렌더링과 설정 계약
 
 DataGrid는 `@tanstack/react-table`을 기반으로 다음 기능을 일관되게 제공합니다.
+
+- `DataGrid.Container`와 `Table.Container`는 layout과 markup만 담당하며 state를 받지 않습니다.
+- `DataGrid.Toolbar`, `DataGrid.GroupPanel`, `DataGrid.Pagination`, `DataGrid.ActionBar`와 `Table.Header`, `Table.Body`, `Table.Footer`는 자기 책임의 `DataGrid...State`만 받습니다.
+- `Table`은 `DataGrid`의 property가 아닌 독립 namespace이고 pagination은 `Table.Footer` 밖에 둡니다.
 
 - column visibility, order, sizing과 resize
 - sort, filter와 pagination
@@ -214,7 +232,8 @@ DataGrid는 `@tanstack/react-table`을 기반으로 다음 기능을 일관되�
 
 ### 재사용과 경계
 
-- 기존 `DataGrid.tsx`를 확장하며 별도 `DataTable` 또는 `Table` wrapper를 만들지 않습니다.
+- `index.tsx`의 표준 compound 조립을 확장하며 `DataGrid.tsx`를 유지할 때는 동일 조립을 감싸는 thin wrapper로만 사용합니다.
+- 독립 `Table` compound 외에 같은 책임의 `DataTable` 또는 별도 Table wrapper를 만들지 않습니다.
 - row key에는 기존 `getDataGridRowKey`를 사용합니다.
 - cell editor는 native `input`, `select`, `datalist` 기반 adapter를 우선 사용해 Excel식 직접 편집 경험을 제공합니다. HeroUI form wrapper를 DataGrid editor의 기본 구현으로 사용하지 않습니다.
 - Button, Input, Select, Checkbox, Pagination, Skeleton과 EmptyState는 기존 공용 primitive를 재사용합니다.
@@ -224,6 +243,7 @@ DataGrid는 `@tanstack/react-table`을 기반으로 다음 기능을 일관되�
 - column builder는 선언과 Cell 조합만 담당하며 실제 UI markup은 Cell이 소유합니다.
 - API, store와 route 동작은 Screen, Feature 또는 Page가 소유하고 Cell에는 값과 handler만 전달합니다.
 - export는 기존 `data-grid` 공개 경로를 유지하며 새 최상위 column 계층을 만들지 않습니다.
+- Storybook은 `index.stories.tsx` 하나만 사용합니다.
 
 ### 기본 검증 기준
 

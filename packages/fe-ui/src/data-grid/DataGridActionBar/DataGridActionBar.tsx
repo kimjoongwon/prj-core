@@ -2,20 +2,20 @@
 
 import type { ReactNode } from "react";
 import { useT } from "../../i18n";
-import type { Key } from "../internal/rowKeys";
+import type { DataGridActionBarState } from "../state/DataGridActionBarState";
 
-export interface DataGridActionBarProps<T extends { id: Key }> {
-	showCount?: boolean;
-	selectedCount: number;
+export interface DataGridActionBarProps {
+	state: DataGridActionBarState;
 	actions?: ReactNode;
 }
 
-export function DataGridActionBarView<T extends { id: Key }>({
-	showCount = true,
-	selectedCount,
+export function DataGridActionBarView({
+	state,
 	actions,
-}: DataGridActionBarProps<T>) {
+}: DataGridActionBarProps) {
 	const t = useT();
+	const showCount = state.showCount ?? true;
+	const selectedCount = state.selectedCount;
 
 	if (selectedCount <= 0) {
 		return null;

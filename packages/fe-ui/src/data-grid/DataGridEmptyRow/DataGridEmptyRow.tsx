@@ -2,7 +2,8 @@
 
 import { FileX } from "lucide-react";
 import { useT } from "../../i18n";
-import { DATA_GRID_EMPTY_MESSAGE } from "../internal/constants";
+
+const DATA_GRID_EMPTY_MESSAGE = "데이터가 없습니다.";
 
 export interface DataGridEmptyRowProps {
 	colSpan: number;
