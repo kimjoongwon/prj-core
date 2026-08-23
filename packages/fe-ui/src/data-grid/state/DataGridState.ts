@@ -1,5 +1,5 @@
 import type {
-	DataGridConfig,
+	DataGridTableConfig,
 	DataGridChangesState as DataGridChangesStateContract,
 	DataGridColumnsState as DataGridColumnsStateContract,
 	DataGridColumnsStateSnapshot,
@@ -12,14 +12,12 @@ import type {
 } from "@cocrepo/type";
 import type {
 	ExpandedState,
-	Table as TanStackTable,
 	Updater,
 } from "@tanstack/react-table";
-import { makeAutoObservable, observable, reaction } from "mobx";
+import { makeAutoObservable } from "mobx";
 import { DataGridChangesState } from "./DataGridChangesState";
 import {
 	getGroupingColumnIds,
-	getVisibleColumnConfigs,
 } from "../columns/columnConfig";
 import { DATA_GRID_GROUP_BY_QUERY_KEY } from "./grouping";
 import type { Key } from "../Table/rowKeys";
@@ -35,13 +33,6 @@ export interface DataGridStateOptions {
 	columns?: Partial<DataGridColumnsStateSnapshot>;
 	selection?: DataGridSelectionStateContract;
 	changes?: DataGridChangesStateContract;
-}
-
-interface DataGridRuntime<T extends { id: Key }> {
-	config: DataGridConfig<T>;
-	rows: T[];
-	totalCount: number;
-	isLoading: boolean;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -215,7 +206,6 @@ export class DataGridState implements DataGridStateContract {
 	readonly table: DataGridTableState;
 	readonly pagination: DataGridPaginationState;
 	readonly actionBar: DataGridActionBarState;
-	private runtime?: DataGridRuntime<{ id: Key }>;
 
 	constructor({
 		columns,
@@ -234,45 +224,11 @@ export class DataGridState implements DataGridStateContract {
 		this.pagination = new DataGridPaginationState(this);
 		this.actionBar = new DataGridActionBarState(this);
 
-		makeAutoObservable<this, "runtime">(
-			this,
-			{ runtime: observable.ref },
-			{ autoBind: true },
-		);
-	}
-
-	/** 표준 compound 조립이 참조할 외부 렌더 입력을 root에 한 번 연결합니다. */
-	syncRuntime<T extends { id: Key }>(runtime: DataGridRuntime<T>) {
-		if (this.hasRuntime(runtime)) {
-			return;
-		}
-
-		this.runtime = runtime as unknown as DataGridRuntime<{ id: Key }>;
-	}
-
-	hasRuntime<T extends { id: Key }>(runtime: DataGridRuntime<T>) {
-		const currentRuntime = this.runtime as
-			| DataGridRuntime<T>
-			| undefined;
-		return (
-			currentRuntime?.config === runtime.config &&
-			currentRuntime.rows === runtime.rows &&
-			currentRuntime.totalCount === runtime.totalCount &&
-			currentRuntime.isLoading === runtime.isLoading
-		);
-	}
-
-	getRuntime<T extends { id: Key }>() {
-		if (!this.runtime) {
-			throw new Error("DataGridState에는 렌더링할 config와 rows가 필요합니다.");
-		}
-
-		return this.runtime as unknown as DataGridRuntime<T>;
+		makeAutoObservable(this, {}, { autoBind: true });
 	}
 
 	/** 원본 rows와 root changes를 합친 현재 렌더링 행을 반환합니다. */
-	getRenderedRows<T extends { id: Key }>(runtimeRows?: T[]) {
-		const rows = runtimeRows ?? this.getRuntime<T>().rows;
+	getRenderedRows<T extends { id: Key }>(rows: T[]) {
 		return [
 			...rows
 				.filter((row) => !this.changes.isDeleted(row.id))
@@ -303,7 +259,6 @@ export class DataGridState implements DataGridStateContract {
 			typeof nextExpanded === "function"
 				? nextExpanded(this.expanded)
 				: nextExpanded;
-		this.table.syncExpandedState(this.expanded);
 	}
 
 	setSelectedKeys(selectedKeys: Set<string>) {
@@ -348,10 +303,6 @@ export class DataGridToolbarState {
 		makeAutoObservable(this, {}, { autoBind: true });
 	}
 
-	get config() {
-		return this.root.getRuntime().config;
-	}
-
 	get queryValues() {
 		return this.root.query.values;
 	}
@@ -375,13 +326,11 @@ export class DataGridGroupPanelState {
 		makeAutoObservable(this, {}, { autoBind: true });
 	}
 
-	get config() {
-		return this.root.getRuntime().config;
-	}
-
-	get grouping() {
+	getGrouping<T extends { id: Key }>(
+		columns: DataGridTableConfig<T>["columns"],
+	) {
 		return getGroupingColumnIds(
-			this.config.columns,
+			columns,
 			this.root.columns,
 			this.root.query.values,
 		);
@@ -389,10 +338,6 @@ export class DataGridGroupPanelState {
 
 	changeGrouping(grouping: string[]) {
 		this.root.columns.setGrouping(grouping);
-		this.root.table.getTanStackTable().setOptions((currentOptions) => ({
-			...currentOptions,
-			state: { ...currentOptions.state, grouping },
-		}));
 		return this.root.query.setValues({
 			[DATA_GRID_GROUP_BY_QUERY_KEY]: grouping,
 			skip: 0,
@@ -400,105 +345,30 @@ export class DataGridGroupPanelState {
 	}
 }
 
-/** Table namespace의 shared runtime facade입니다. */
+/** Table namespace의 책임별 facade를 보관합니다. */
 export class DataGridTableState {
 	readonly header: DataGridTableHeaderState;
 	readonly body: DataGridTableBodyState;
 	readonly footer: DataGridTableFooterState;
-	private tanStackTable?: TanStackTable<{ id: Key }>;
 
 	constructor(private readonly root: DataGridState) {
-		makeAutoObservable(
-			this,
-			{ root: false, tanStackTable: false } as never,
-			{ autoBind: true },
-		);
-		this.header = new DataGridTableHeaderState(root, this);
-		this.body = new DataGridTableBodyState(root, this);
+		makeAutoObservable(this, { root: false } as never, { autoBind: true });
+		this.header = new DataGridTableHeaderState(root);
+		this.body = new DataGridTableBodyState(root);
 		this.footer = new DataGridTableFooterState();
-
-		reaction(
-			() => [
-				this.root.changes.created,
-				this.root.changes.updated,
-				this.root.changes.deleted,
-			],
-			() => this.syncChangedRows(),
-		);
-	}
-
-	setTanStackTable<T extends { id: Key }>(table: TanStackTable<T>) {
-		this.tanStackTable = table as unknown as TanStackTable<{ id: Key }>;
-	}
-
-	getTanStackTable<T extends { id: Key }>() {
-		if (!this.tanStackTable) {
-			throw new Error("DataGrid table runtime이 아직 연결되지 않았습니다.");
-		}
-
-		return this.tanStackTable as unknown as TanStackTable<T>;
-	}
-
-	/** controlled expanded state를 runtime table에만 반영합니다. */
-	syncExpandedState(expanded: ExpandedState) {
-		this.getTanStackTable().setOptions((currentOptions) => ({
-			...currentOptions,
-			state: {
-				...currentOptions.state,
-				expanded,
-			},
-		}));
-	}
-
-	/** root changes가 바뀔 때 runtime table의 data만 최신 행으로 교체합니다. */
-	syncChangedRows() {
-		if (!this.tanStackTable) {
-			return;
-		}
-
-		this.tanStackTable.setOptions((currentOptions) => ({
-			...currentOptions,
-			data: this.root.getRenderedRows(),
-		}));
-	}
-
-	get columnWidths() {
-		return this.getTanStackTable().getVisibleLeafColumns().map((column) => column.getSize());
-	}
-
-	get isSelectable() {
-		return Boolean(this.header.selectionMode);
 	}
 }
 
 /** Table header가 sort, resize, visibility와 visible selection을 위임하는 facade입니다. */
 export class DataGridTableHeaderState {
-	constructor(
-		private readonly root: DataGridState,
-		private readonly table: DataGridTableState,
-	) {
+	constructor(private readonly root: DataGridState) {
 		makeAutoObservable(this, {}, { autoBind: true });
 	}
 
-	get headers() {
-		this.root.columns.order;
-		this.root.columns.visibility;
-		this.root.columns.sizing;
-		const visibleColumnIds = new Set(
-			getVisibleColumnConfigs(
-				this.root.getRuntime().config.columns,
-				this.root.columns,
-			).map((column) => String(column.field)),
-		);
-
-		return this.table
-			.getTanStackTable()
-			.getFlatHeaders()
-			.filter((header) => visibleColumnIds.has(header.column.id));
-	}
-
-	get selectionMode(): DataGridSelectionMode {
-		const selectionMode = this.root.getRuntime().config.selection?.mode;
+	getSelectionMode<T extends { id: Key }>(
+		config: DataGridTableConfig<T>,
+	): DataGridSelectionMode {
+		const selectionMode = config.selection?.mode;
 		return selectionMode === "none" ? undefined : selectionMode;
 	}
 
@@ -514,15 +384,14 @@ export class DataGridTableHeaderState {
 		return this.root.query.values;
 	}
 
-	get isAllVisibleRowsSelected() {
-		const tableRows = this.table.getTanStackTable().getCoreRowModel().rows;
+	isAllVisibleRowsSelected(visibleRowKeys: string[]) {
 		const selectedKeySet = new Set(this.selectedKeys);
-		return tableRows.length > 0 && tableRows.every((row) => selectedKeySet.has(row.id));
+		return visibleRowKeys.length > 0 && visibleRowKeys.every((rowKey) => selectedKeySet.has(rowKey));
 	}
 
-	get isSomeVisibleRowsSelected() {
+	isSomeVisibleRowsSelected(visibleRowKeys: string[]) {
 		const selectedKeySet = new Set(this.selectedKeys);
-		return this.table.getTanStackTable().getCoreRowModel().rows.some((row) => selectedKeySet.has(row.id));
+		return visibleRowKeys.some((rowKey) => selectedKeySet.has(rowKey));
 	}
 
 	changeQuery(values: Record<string, unknown | null>) {
@@ -540,8 +409,11 @@ export class DataGridTableHeaderState {
 		});
 	}
 
-	changeVisibleSelection(isSelected: boolean) {
-		const visibleRowKeys = this.table.getTanStackTable().getCoreRowModel().rows.map((row) => row.id);
+	changeVisibleSelection(
+		visibleRowKeys: string[],
+		isSelected: boolean,
+		onSelectionChange?: (selectedKeys: Set<string>) => void,
+	) {
 		const nextSelectedKeys = isSelected
 			? Array.from(new Set([...this.selectedKeys, ...visibleRowKeys]))
 			: this.selectedKeys.filter((key) => !visibleRowKeys.includes(key));
@@ -551,7 +423,7 @@ export class DataGridTableHeaderState {
 		} else {
 			this.root.setSelectedKeys(nextSelection);
 		}
-		this.root.getRuntime().config.selection?.onSelectionChange?.(nextSelection);
+		onSelectionChange?.(nextSelection);
 	}
 }
 
@@ -589,42 +461,12 @@ export class DataGridEditingState {
 export class DataGridTableBodyState {
 	readonly editing = new DataGridEditingState();
 
-	constructor(
-		private readonly root: DataGridState,
-		private readonly table: DataGridTableState,
-	) {
+	constructor(private readonly root: DataGridState) {
 		makeAutoObservable(this, {}, { autoBind: true });
-	}
-
-	get config() {
-		return this.root.getRuntime().config;
-	}
-
-	get rows() {
-		// TanStack row model은 facade가 직접 보관하지 않습니다. canonical root state를
-		// 의존성으로 읽어 grouping 또는 expanded 변경 시 같은 table instance에서 다시 계산합니다.
-		this.root.getRuntime();
-		this.root.columns.grouping.length;
-		this.root.columns.order;
-		this.root.columns.visibility;
-		this.root.columns.sizing;
-		this.root.expanded;
-		this.root.changes.created;
-		this.root.changes.updated;
-		this.root.changes.deleted;
-		return this.table.getTanStackTable().getRowModel().rows;
 	}
 
 	get selectedKeys() {
 		return Array.from(this.root.selection?.selectedKeys ?? this.root.selectedKeys);
-	}
-
-	get selectionMode() {
-		return this.table.header.selectionMode;
-	}
-
-	get tableColumnCount() {
-		return this.table.header.headers.length + (this.selectionMode ? 1 : 0);
 	}
 
 	changeCellValue<T extends { id: Key }, TField extends keyof T>(
@@ -635,7 +477,11 @@ export class DataGridTableBodyState {
 		this.root.changes.setValue(row, field, value);
 	}
 
-	changeRowSelection(rowKey: string, isSelected: boolean) {
+	changeRowSelection(
+		rowKey: string,
+		isSelected: boolean,
+		onSelectionChange?: (selectedKeys: Set<string>) => void,
+	) {
 		const nextSelectedKeys = isSelected
 			? [...this.selectedKeys, rowKey]
 			: this.selectedKeys.filter((key) => key !== rowKey);
@@ -645,17 +491,28 @@ export class DataGridTableBodyState {
 		} else {
 			this.root.setSelectedKeys(nextSelection);
 		}
-		this.config.selection?.onSelectionChange?.(nextSelection);
+		onSelectionChange?.(nextSelection);
 	}
 
-	completeRowMove(activeRowId: string, overRowId: string) {
-		if (!this.config.onRowMove || activeRowId === overRowId) return;
-		const bodyRows = this.rows.filter((row) => !row.getIsGrouped());
+	completeRowMove<T extends { id: Key }>(
+		rows: Array<{
+			id: string;
+			depth: number;
+			original: T;
+			getIsGrouped: () => boolean;
+			getParentRow: () => { id: string } | undefined;
+		}>,
+		activeRowId: string,
+		overRowId: string,
+		onRowMove?: DataGridTableConfig<T>["onRowMove"],
+	) {
+		if (!onRowMove || activeRowId === overRowId) return;
+		const bodyRows = rows.filter((row) => !row.getIsGrouped());
 		const moveItems = bodyRows.map((row) => ({ id: row.id, parentId: row.getParentRow()?.id ?? null, depth: row.depth, original: row.original }));
 		const activeRow = bodyRows.find((row) => row.id === activeRowId);
 		if (!activeRow) return;
 		const event = getDataGridRowMoveEvent(moveItems, activeRowId, overRowId, { depth: activeRow.depth, parentId: activeRow.getParentRow()?.id ?? null });
-		if (event) this.config.onRowMove(event);
+		if (event) onRowMove(event);
 	}
 }
 
@@ -674,10 +531,6 @@ export class DataGridPaginationState {
 
 	get skip() {
 		return Number(this.root.query.values.skip) || 0;
-	}
-
-	get totalCount() {
-		return this.root.getRuntime().totalCount;
 	}
 
 	get currentPage() {
@@ -699,7 +552,4 @@ export class DataGridActionBarState {
 		return this.root.selection?.selectedKeys?.size ?? this.root.selectedKeys.size;
 	}
 
-	get showCount() {
-		return this.root.getRuntime().config.selection?.actionBar?.showCount;
-	}
 }

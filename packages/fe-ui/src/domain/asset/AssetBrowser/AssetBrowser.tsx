@@ -209,10 +209,14 @@ function AssetsGridFallback({
 			<div className={assetsGridPanelClassName}>
 				<DataGrid
 					config={{
-						entity: "Asset",
-						columns,
-						leftInputs,
-						emptyMessage: "등록된 에셋이 없습니다.",
+						toolbar: {
+							leftInputs,
+						},
+						table: {
+							entity: "Asset",
+							columns,
+							emptyMessage: "등록된 에셋이 없습니다.",
+						},
 					}}
 					rows={[]}
 					totalCount={0}
@@ -474,10 +478,14 @@ export const AssetBrowser = observer(
 							<div className={assetsGridPanelClassName}>
 								<DataGrid
 									config={{
-										entity: "Asset",
-										columns,
-										leftInputs: visibleLeftInputs,
-										emptyMessage,
+										toolbar: {
+											leftInputs: visibleLeftInputs,
+										},
+										table: {
+											entity: "Asset",
+											columns,
+											emptyMessage,
+										},
 									}}
 									rows={assets}
 									totalCount={totalCount}

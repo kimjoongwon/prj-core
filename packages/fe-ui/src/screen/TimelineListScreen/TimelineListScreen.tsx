@@ -107,10 +107,14 @@ export const TimelineListScreen = observer(
 						<Section.Body>
 							<DataGrid
 								config={{
-									entity: "Timeline",
-									columns,
-									leftInputs,
-									emptyMessage: "등록된 타임라인이 없습니다.",
+									toolbar: {
+										leftInputs,
+									},
+									table: {
+										entity: "Timeline",
+										columns,
+										emptyMessage: "등록된 타임라인이 없습니다.",
+									},
 								}}
 								rows={timelineRows}
 								totalCount={totalCount}

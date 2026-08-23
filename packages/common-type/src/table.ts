@@ -214,49 +214,36 @@ export interface DataGridRowMoveEvent<TData> {
 	siblings: TData[];
 }
 
-/**
- * DataGrid 설정 인터페이스
- * 메타데이터 기반 선언적 DataGrid 구성
- */
-export interface DataGridConfig<T> {
-	/** 엔티티명 (컬럼 가시성 시스템 연동) */
-	entity: string;
-
-	/** 컬럼 정의 (TanStack Table ColumnDef 확장) */
-	columns: DataGridColumnConfig<T>[];
-
-	/** 상단 좌측 영역 (검색, 필터 등) */
+/** DataGrid의 상단 입력과 column settings 표시를 선언합니다. */
+export interface DataGridToolbarConfig {
 	leftInputs?: InputConfig[];
-
-	/** 상단 우측 영역 (버튼, 액션 등) */
 	rightInputs?: InputConfig[];
+}
 
-	/** AG Grid row group panel과 같은 grouping 컨트롤 표시 방식 */
-	rowGroupPanelShow?: "never" | "always" | "onlyWhenGrouping";
+/** DataGrid의 grouping panel 표시 정책을 선언합니다. */
+export interface DataGridGroupPanelConfig {
+	show?: "never" | "always" | "onlyWhenGrouping";
+}
 
-	/** 선택 설정 */
+/** 독립 Table과 DataGrid 본문이 공유하는 선언형 계약입니다. */
+export interface DataGridTableConfig<T> {
+	entity: string;
+	columns: DataGridColumnConfig<T>[];
 	selection?: SelectionConfig;
-
-	/** 모바일 대응 설정 */
 	responsive?: ResponsiveConfig<T>;
-
-	/** 행 클릭 핸들러 */
 	onRowClick?: (row: T) => void;
-
-	/** 실제 부모·자식 행을 TanStack Table sub row로 연결 */
 	getSubRows?: (row: T, index: number) => T[] | undefined;
-
-	/** 새 하위 row 생성 후 부모 row를 자동으로 펼칩니다. */
 	expandRequest?: DataGridExpandRequest;
-
-	/** 새 row 생성 후 지정한 editable cell을 편집 상태로 시작합니다. */
 	editRequest?: DataGridEditRequest;
-
-	/** 드래그가 끝난 뒤 새 부모와 형제 순서를 전달 */
 	onRowMove?: (event: DataGridRowMoveEvent<T>) => void;
-
-	/** 빈 상태 메시지 */
 	emptyMessage?: string;
+}
+
+/** ownership별 설정을 조합하는 DataGrid 최상위 선언 계약입니다. */
+export interface DataGridConfig<T> {
+	toolbar?: DataGridToolbarConfig;
+	groupPanel?: DataGridGroupPanelConfig;
+	table: DataGridTableConfig<T>;
 }
 
 // ============================================

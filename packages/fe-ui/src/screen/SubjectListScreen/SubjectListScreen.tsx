@@ -217,11 +217,15 @@ export const SubjectListScreen = observer(
 								/>
 								<DataGrid
 									config={{
-										entity: "Subject",
-										columns: subjectTableColumns,
-										leftInputs,
-										onRowClick: handleRowClick,
-										emptyMessage: "조회된 대상이 없습니다.",
+										toolbar: {
+											leftInputs,
+										},
+										table: {
+											entity: "Subject",
+											columns: subjectTableColumns,
+											onRowClick: handleRowClick,
+											emptyMessage: "조회된 대상이 없습니다.",
+										},
 									}}
 									rows={visibleSubjects}
 									totalCount={totalCount}

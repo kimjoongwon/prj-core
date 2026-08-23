@@ -2,6 +2,7 @@
 
 import type {
 	DataGridColumnConfig,
+	DataGridToolbarConfig,
 } from "@cocrepo/type";
 import { DataGridColumnSettings } from "../DataGridColumnSettings";
 import { InputRenderer } from "../InputRenderer";
@@ -10,15 +11,19 @@ import type { DataGridToolbarState } from "../state/DataGridToolbarState";
 
 const DATA_GRID_COLUMN_SETTINGS_INPUT_ID = "__data-grid-column-settings";
 
-export interface DataGridToolbarProps {
+export interface DataGridToolbarProps<T extends { id: Key }> {
 	state: DataGridToolbarState;
+	config?: DataGridToolbarConfig;
+	columns: DataGridColumnConfig<T>[];
 }
 
-export function DataGridToolbarView({ state }: DataGridToolbarProps) {
-	const config = state.config;
-	const columns = config.columns as DataGridColumnConfig<{ id: Key }>[];
-	const leftInputs = config.leftInputs ?? [];
-	const rightInputs = config.rightInputs ?? [];
+export function DataGridToolbarView<T extends { id: Key }>({
+	state,
+	config,
+	columns,
+}: DataGridToolbarProps<T>) {
+	const leftInputs = config?.leftInputs ?? [];
+	const rightInputs = config?.rightInputs ?? [];
 	const shouldRenderColumnSettings = columns.length > 0;
 	const shouldRenderToolbar =
 		leftInputs.length > 0 ||

@@ -282,13 +282,17 @@ export const InquiryListScreen = observer(
 								</div>
 								<DataGrid
 									config={{
-										entity: "Inquiry",
-										columns,
-										leftInputs,
-										onRowClick: (inquiry) => {
+										toolbar: {
+											leftInputs,
+										},
+										table: {
+											entity: "Inquiry",
+											columns,
+											onRowClick: (inquiry) => {
 											onClickInquiryRow(inquiry.id);
 										},
-										emptyMessage: "표시할 문의가 없습니다.",
+											emptyMessage: "표시할 문의가 없습니다.",
+										},
 									}}
 									rows={inquiryRows}
 									totalCount={totalCount}

@@ -1,5 +1,6 @@
 "use client";
 
+import type { DataGridTableConfig } from "@cocrepo/type";
 import { flexRender, type Header } from "@tanstack/react-table";
 import { observer } from "mobx-react-lite";
 import { type Translate, translateNode } from "../../../i18n";
@@ -23,8 +24,11 @@ const SELECTION_HEADER_CELL_CLASS_NAME =
 const SELECTION_FILTER_CELL_CLASS_NAME =
 	"w-10 border-r border-b border-[#d6dde7] px-3 py-1.5 align-top dark:border-white/10";
 
-export interface TableHeaderProps {
+export interface TableHeaderProps<T extends { id: Key }> {
 	state: DataGridTableHeaderState;
+	config: DataGridTableConfig<T>;
+	headers: Header<T, unknown>[];
+	visibleRowKeys: string[];
 }
 
 function getHeaderLabel<T extends object>(header: Header<T, unknown>) {
@@ -46,8 +50,15 @@ function getSelectionAriaChecked(
 }
 
 /** Header 전용 facade에서 정렬, filter, resize와 visible selection을 렌더링합니다. */
-export const TableHeader = observer(function TableHeader({ state }: TableHeaderProps) {
-	const headers = state.headers as Header<{ id: Key }, unknown>[];
+function TableHeaderView<T extends { id: Key }>({
+	state,
+	config,
+	headers,
+	visibleRowKeys,
+}: TableHeaderProps<T>) {
+	const selectionMode = state.getSelectionMode(config);
+	const isAllVisibleRowsSelected = state.isAllVisibleRowsSelected(visibleRowKeys);
+	const isSomeVisibleRowsSelected = state.isSomeVisibleRowsSelected(visibleRowKeys);
 	const shouldRenderHeaderFilters = headers.some((header) =>
 		getFloatingFilterInput(header),
 	);
@@ -56,17 +67,17 @@ export const TableHeader = observer(function TableHeader({ state }: TableHeaderP
 	return (
 		<thead className="bg-[#f8fafc] dark:bg-neutral-800">
 			<tr>
-				{state.selectionMode ? (
+				{selectionMode ? (
 					<th scope="col" className={SELECTION_HEADER_CELL_CLASS_NAME}>
-						{state.selectionMode === "multiple" ? (
+						{selectionMode === "multiple" ? (
 							<input
-								aria-checked={getSelectionAriaChecked(state.isAllVisibleRowsSelected, state.isSomeVisibleRowsSelected)}
+								aria-checked={getSelectionAriaChecked(isAllVisibleRowsSelected, isSomeVisibleRowsSelected)}
 								aria-label={t(DATA_GRID_SELECT_ALL_LABEL)}
-								checked={state.isAllVisibleRowsSelected}
+								checked={isAllVisibleRowsSelected}
 								className="size-3.5 rounded border-[#9ca3af] text-accent accent-current dark:border-white/20"
-								onChange={(event) => state.changeVisibleSelection(event.currentTarget.checked)}
+								onChange={(event) => state.changeVisibleSelection(visibleRowKeys, event.currentTarget.checked, config.selection?.onSelectionChange)}
 								ref={(input) => {
-									if (input) input.indeterminate = !state.isAllVisibleRowsSelected && state.isSomeVisibleRowsSelected;
+									if (input) input.indeterminate = !isAllVisibleRowsSelected && isSomeVisibleRowsSelected;
 								}}
 								type="checkbox"
 							/>
@@ -88,7 +99,7 @@ export const TableHeader = observer(function TableHeader({ state }: TableHeaderP
 			</tr>
 			{shouldRenderHeaderFilters ? (
 				<tr>
-					{state.selectionMode ? <th scope="col" className={SELECTION_FILTER_CELL_CLASS_NAME} /> : null}
+					{selectionMode ? <th scope="col" className={SELECTION_FILTER_CELL_CLASS_NAME} /> : null}
 					{headers.map((header) => {
 						const headerInput = getFloatingFilterInput(header);
 						const alignClassName = getColumnAlignClassName(header.column.columnDef);
@@ -98,4 +109,6 @@ export const TableHeader = observer(function TableHeader({ state }: TableHeaderP
 			) : null}
 		</thead>
 	);
-});
+}
+
+export const TableHeader = observer(TableHeaderView) as typeof TableHeaderView;

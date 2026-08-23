@@ -84,10 +84,14 @@ export const AccountListScreen = observer(
 						<Section.Body>
 							<DataGrid
 								config={{
-									entity: "IdpAccount",
-									columns,
-									leftInputs,
-									emptyMessage: "등록된 계정이 없습니다.",
+									toolbar: {
+										leftInputs,
+									},
+									table: {
+										entity: "IdpAccount",
+										columns,
+										emptyMessage: "등록된 계정이 없습니다.",
+									},
 								}}
 								rows={accountRows}
 								totalCount={totalCount}

@@ -93,9 +93,11 @@ export const RoleListScreen = observer(
 								<Section.Body>
 									<DataGrid
 										config={{
-											entity: "Role",
-											columns,
-											emptyMessage: "등록된 역할이 없습니다.",
+											table: {
+												entity: "Role",
+												columns,
+												emptyMessage: "등록된 역할이 없습니다.",
+											},
 										}}
 										rows={roleRows}
 										totalCount={totalCount}

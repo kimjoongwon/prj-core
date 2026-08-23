@@ -232,10 +232,14 @@ export const OidcSessionListScreen = observer(
 						<Section.Body>
 							<DataGrid
 								config={{
-									entity: "OidcSession",
-									columns,
-									leftInputs,
-									emptyMessage: "등록된 OIDC 세션/토큰이 없습니다.",
+									toolbar: {
+										leftInputs,
+									},
+									table: {
+										entity: "OidcSession",
+										columns,
+										emptyMessage: "등록된 OIDC 세션/토큰이 없습니다.",
+									},
 								}}
 								rows={sessionRows}
 								totalCount={totalCount}

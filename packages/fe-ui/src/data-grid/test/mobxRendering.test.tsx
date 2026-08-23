@@ -6,7 +6,6 @@ import { DataGridGroupPanel } from "../DataGridGroupPanel";
 import { DataGridToolbar } from "../DataGridToolbar";
 import { InputRenderer } from "../InputRenderer";
 import {
-	createDataGridTableMock,
 	createDataGridTestConfig,
 	createDataGridTestState,
 	dataGridTestRows,
@@ -15,13 +14,7 @@ import {
 describe("MobX DataGrid 렌더링", () => {
 	it("액션 바는 외부 선택 상태 변경 후 다시 렌더링 없이 표시를 갱신한다", async () => {
 		const { state, selection } = createDataGridTestState();
-		state.syncRuntime({
-			config: createDataGridTestConfig(),
-			rows: dataGridTestRows,
-			totalCount: dataGridTestRows.length,
-			isLoading: false,
-		});
-		render(<DataGridActionBar state={state.actionBar} />);
+		render(<DataGridActionBar state={state.actionBar} showCount />);
 
 		expect(screen.queryByText("1개 선택됨")).toBeNull();
 		act(() => selection.setSelectedKeys(new Set(["row-1"])));
@@ -38,10 +31,11 @@ describe("MobX DataGrid 렌더링", () => {
 	it("툴바는 query facade 변경 후 다시 렌더링 없이 검색어를 동기화한다", async () => {
 		const { state, setQueryStates } = createDataGridTestState();
 		const config = createDataGridTestConfig({
-			leftInputs: [{ id: "keyword", type: "search", label: "검색" }],
+			toolbar: {
+				leftInputs: [{ id: "keyword", type: "search", label: "검색" }],
+			},
 		});
-		state.syncRuntime({ config, rows: dataGridTestRows, totalCount: 2, isLoading: false });
-		render(<DataGridToolbar state={state.toolbar} />);
+		render(<DataGridToolbar columns={config.table.columns} config={config.toolbar} state={state.toolbar} />);
 
 		act(() => state.query.sync({ keyword: "첫 검색어" }, setQueryStates));
 		await waitFor(() => {
@@ -55,10 +49,10 @@ describe("MobX DataGrid 렌더링", () => {
 
 	it("그룹 패널은 columns facade 변경 후 다시 렌더링 없이 그룹 열을 표시한다", async () => {
 		const { state } = createDataGridTestState();
-		const config = createDataGridTestConfig({ rowGroupPanelShow: "onlyWhenGrouping" });
-		state.syncRuntime({ config, rows: dataGridTestRows, totalCount: 2, isLoading: false });
-		state.table.setTanStackTable(createDataGridTableMock() as never);
-		render(<DataGridGroupPanel state={state.groupPanel} />);
+		const config = createDataGridTestConfig({
+			groupPanel: { show: "onlyWhenGrouping" },
+		});
+		render(<DataGridGroupPanel columns={config.table.columns} config={config.groupPanel} state={state.groupPanel} />);
 
 		expect(screen.queryByLabelText("그룹 기준")).toBeNull();
 		act(() => state.columns.setGrouping(["status"]));

@@ -180,11 +180,15 @@ export const ActionListScreen = observer(
 								/>
 								<DataGrid
 									config={{
-										entity: "Action",
-										columns: actionTableColumns,
-										leftInputs,
-										onRowClick: handleActionRowClick,
-										emptyMessage: "조건에 맞는 권한 액션이 없습니다.",
+										toolbar: {
+											leftInputs,
+										},
+										table: {
+											entity: "Action",
+											columns: actionTableColumns,
+											onRowClick: handleActionRowClick,
+											emptyMessage: "조건에 맞는 권한 액션이 없습니다.",
+										},
 									}}
 									rows={visibleActions}
 									totalCount={totalCount}

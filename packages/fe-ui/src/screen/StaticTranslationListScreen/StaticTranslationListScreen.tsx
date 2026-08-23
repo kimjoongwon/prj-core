@@ -320,10 +320,14 @@ export const StaticTranslationListScreen = observer(
 						<Section.Body>
 							<DataGrid
 								config={{
-									entity: "Translation",
-									columns,
-									leftInputs,
-									emptyMessage: "등록된 정적 번역이 없습니다.",
+									toolbar: {
+										leftInputs,
+									},
+									table: {
+										entity: "Translation",
+										columns,
+										emptyMessage: "등록된 정적 번역이 없습니다.",
+									},
 								}}
 								rows={rows}
 								totalCount={totalCount}

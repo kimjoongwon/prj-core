@@ -261,16 +261,18 @@ function createStoryConfig(
 	];
 
 	return {
-		entity: "StoryUser",
-		columns,
-		rowGroupPanelShow: "always",
-		selection: {
-			mode: "multiple",
-			actionBar: { showCount: true },
+		groupPanel: { show: "always" },
+		table: {
+			entity: "StoryUser",
+			columns,
+			selection: {
+				mode: "multiple",
+				actionBar: { showCount: true },
+			},
+			getSubRows: isHierarchy ? (row) => row.children : undefined,
+			onRowMove: mode === "row-move" ? onRowMove : undefined,
+			emptyMessage: "표시할 데이터가 없습니다.",
 		},
-		getSubRows: isHierarchy ? (row) => row.children : undefined,
-		onRowMove: mode === "row-move" ? onRowMove : undefined,
-		emptyMessage: "표시할 데이터가 없습니다.",
 	};
 }
 

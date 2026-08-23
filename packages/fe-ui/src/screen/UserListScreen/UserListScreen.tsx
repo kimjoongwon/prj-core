@@ -122,10 +122,14 @@ export const UserListScreen = observer(
 								<UsersDirectoryHeader totalCount={totalCount} />
 								<DataGrid
 									config={{
-										entity: "User",
-										columns: userListTableColumns,
-										leftInputs,
-										emptyMessage: "조회된 이용자가 없습니다.",
+										toolbar: {
+											leftInputs,
+										},
+										table: {
+											entity: "User",
+											columns: userListTableColumns,
+											emptyMessage: "조회된 이용자가 없습니다.",
+										},
 									}}
 									rows={userRows}
 									totalCount={totalCount}

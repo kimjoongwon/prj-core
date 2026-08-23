@@ -128,10 +128,14 @@ export const RoutineListScreen = observer(
 						<Section.Body>
 							<DataGrid
 								config={{
-									entity: "Routine",
-									columns,
-									leftInputs,
-									emptyMessage: "등록된 루틴이 없습니다.",
+									toolbar: {
+										leftInputs,
+									},
+									table: {
+										entity: "Routine",
+										columns,
+										emptyMessage: "등록된 루틴이 없습니다.",
+									},
 								}}
 								rows={routineRows}
 								totalCount={totalCount}

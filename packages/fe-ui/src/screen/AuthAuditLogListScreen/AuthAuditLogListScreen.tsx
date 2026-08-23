@@ -167,10 +167,14 @@ export const AuthAuditLogListScreen = observer(
 						<Section.Body>
 							<DataGrid
 								config={{
-									entity: "AuthAuditLog",
-									columns: authAuditLogTableColumns,
-									leftInputs,
-									emptyMessage: "조회된 감사 로그가 없습니다.",
+									toolbar: {
+										leftInputs,
+									},
+									table: {
+										entity: "AuthAuditLog",
+										columns: authAuditLogTableColumns,
+										emptyMessage: "조회된 감사 로그가 없습니다.",
+									},
 								}}
 								rows={logRows}
 								totalCount={totalCount}

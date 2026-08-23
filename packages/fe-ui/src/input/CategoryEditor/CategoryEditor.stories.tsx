@@ -6,8 +6,7 @@ import {
 	type CategoryEditorDataGridState,
 	type CategoryEditorRow,
 } from "./CategoryEditor";
-import { DataGridChangesState } from "../../data-grid/DataGridChangesState";
-import { DataGridState } from "../../data-grid/DataGridState";
+import { DataGridChangesState, DataGridState } from "../../data-grid";
 
 const meta = {
 	title: "input/CategoryEditor",

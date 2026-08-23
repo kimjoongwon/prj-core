@@ -1,4 +1,10 @@
-import type { DataGridConfig, DataGridQueryStates } from "@cocrepo/type";
+import type {
+	DataGridConfig,
+	DataGridGroupPanelConfig,
+	DataGridQueryStates,
+	DataGridTableConfig,
+	DataGridToolbarConfig,
+} from "@cocrepo/type";
 import { vi } from "vitest";
 import { DataGridSelectionState, DataGridState } from "../state/DataGridState";
 
@@ -13,18 +19,28 @@ export const dataGridTestRows: DataGridTestRow[] = [
 	{ id: "row-2", name: "Beta", status: "inactive" },
 ];
 
+interface DataGridTestConfigOverrides {
+	toolbar?: DataGridToolbarConfig;
+	groupPanel?: DataGridGroupPanelConfig;
+	table?: Partial<DataGridTableConfig<DataGridTestRow>>;
+}
+
 export function createDataGridTestConfig(
-	overrides: Partial<DataGridConfig<DataGridTestRow>> = {},
+	overrides: DataGridTestConfigOverrides = {},
 ) {
 	return {
-		entity: "DataGridTestRow",
-		columns: [
-			{ field: "name", label: "Name", isRequired: true, isSortable: true },
-			{ field: "status", label: "Status", enableRowGroup: true },
-		],
-		selection: { mode: "multiple", actionBar: { showCount: true } },
-		emptyMessage: "No rows",
-		...overrides,
+		toolbar: overrides.toolbar,
+		groupPanel: overrides.groupPanel,
+		table: {
+			entity: "DataGridTestRow",
+			columns: [
+				{ field: "name", label: "Name", isRequired: true, isSortable: true },
+				{ field: "status", label: "Status", enableRowGroup: true },
+			],
+			selection: { mode: "multiple", actionBar: { showCount: true } },
+			emptyMessage: "No rows",
+			...overrides.table,
+		},
 	} as DataGridConfig<DataGridTestRow>;
 }
 

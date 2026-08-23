@@ -2,18 +2,20 @@
 
 import type { CategorySchema } from "@cocrepo/schema";
 import type {
-	DataGridChangesState,
 	DataGridConfig,
 	DataGridEditRequest,
 	DataGridExpandRequest,
-	DataGridState,
 	InputStateProps,
 } from "@cocrepo/type";
 import type { CellContext } from "@tanstack/react-table";
 import { ButtonGroup } from "@heroui/react";
 import { makeAutoObservable } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
-import { DataGrid } from "../../data-grid";
+import {
+	DataGrid,
+	type DataGridChangesState,
+	type DataGridState,
+} from "../../data-grid";
 import { Button } from "../Button";
 
 /** CategorySchema의 name을 편집하는 DataGrid 행입니다. */
@@ -175,8 +177,23 @@ export const CategoryEditor = observer(
 		const state = useLocalObservable(() => new State(rows, dataGridState));
 		state.setSource(rows, dataGridState);
 		const config: DataGridConfig<CategoryEditorRow> = {
-			entity: "Category",
-			columns: [
+			toolbar: {
+				rightInputs: isReadOnly
+					? []
+					: [
+							{
+								id: "add-category",
+								type: "button",
+								label: "카테고리 추가",
+								props: { size: "sm" },
+								handlers: { onClick: state.addRootCategory },
+							},
+						],
+			},
+			groupPanel: { show: "never" },
+			table: {
+				entity: "Category",
+				columns: [
 				{
 					field: "name",
 					label: "이름",
@@ -228,24 +245,11 @@ export const CategoryEditor = observer(
 								),
 							},
 						]),
-			],
-			rightInputs: isReadOnly
-				? []
-				: [
-						{
-							id: "add-category",
-							type: "button",
-							label: "카테고리 추가",
-							props: { size: "sm" },
-							handlers: {
-								onClick: state.addRootCategory,
-							},
-						},
-					],
-			getSubRows: state.getCategorySubRows,
-			expandRequest: state.expandRequest,
-			editRequest: state.editRequest,
-			rowGroupPanelShow: "never",
+				],
+				getSubRows: state.getCategorySubRows,
+				expandRequest: state.expandRequest,
+				editRequest: state.editRequest,
+			},
 		};
 
 		return (

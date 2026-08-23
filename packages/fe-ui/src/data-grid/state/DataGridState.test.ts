@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import {
-	createDataGridTableMock,
 	createDataGridTestConfig,
 	createDataGridTestState,
 	dataGridTestRows,
@@ -22,9 +21,6 @@ describe("DataGrid 상태", () => {
 
 	it("정렬과 그룹 변경을 첫 페이지 조회 상태로 전달한다", () => {
 		const { state, setQueryStates } = createDataGridTestState({ skip: 40, take: 20 });
-		const config = createDataGridTestConfig();
-		state.syncRuntime({ config, rows: dataGridTestRows, totalCount: 2, isLoading: false });
-		state.table.setTanStackTable(createDataGridTableMock() as never);
 
 		state.table.header.changeSort("name", null);
 		state.groupPanel.changeGrouping(["status"]);
@@ -36,25 +32,27 @@ describe("DataGrid 상태", () => {
 	it("외부 선택 상태를 단일 선택 원천으로 사용한다", () => {
 		const { state, selection } = createDataGridTestState();
 		const config = createDataGridTestConfig();
-		state.syncRuntime({ config, rows: dataGridTestRows, totalCount: 2, isLoading: false });
-		state.table.setTanStackTable(createDataGridTableMock() as never);
 
-		state.table.body.changeRowSelection("row-1", true);
-		state.table.header.changeVisibleSelection(true);
+		state.table.body.changeRowSelection(
+			"row-1",
+			true,
+			config.table.selection?.onSelectionChange,
+		);
+		state.table.header.changeVisibleSelection(
+			dataGridTestRows.map((row) => row.id),
+			true,
+			config.table.selection?.onSelectionChange,
+		);
 
 		expect(Array.from(selection.selectedKeys)).toEqual(["row-1", "row-2"]);
 		expect(Array.from(state.selectedKeys)).toEqual([]);
 		expect(state.actionBar.selectedCount).toBe(2);
 	});
 
-	it("확장 상태를 연결된 TanStack 테이블에 적용한다", () => {
+	it("확장 상태를 root state에 적용한다", () => {
 		const { state } = createDataGridTestState();
-		const table = createDataGridTableMock();
-		state.syncRuntime({ config: createDataGridTestConfig(), rows: dataGridTestRows, totalCount: 2, isLoading: false });
-		state.table.setTanStackTable(table as never);
 		state.setExpanded({ "row-1": true });
 
 		expect(state.expanded).toEqual({ "row-1": true });
-		expect(table.setOptions).toHaveBeenCalled();
 	});
 });

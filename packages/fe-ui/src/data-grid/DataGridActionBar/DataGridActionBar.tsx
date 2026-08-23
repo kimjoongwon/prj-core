@@ -6,15 +6,16 @@ import type { DataGridActionBarState } from "../state/DataGridActionBarState";
 
 export interface DataGridActionBarProps {
 	state: DataGridActionBarState;
+	showCount?: boolean;
 	actions?: ReactNode;
 }
 
 export function DataGridActionBarView({
 	state,
+	showCount = true,
 	actions,
 }: DataGridActionBarProps) {
 	const t = useT();
-	const showCount = state.showCount ?? true;
 	const selectedCount = state.selectedCount;
 
 	if (selectedCount <= 0) {

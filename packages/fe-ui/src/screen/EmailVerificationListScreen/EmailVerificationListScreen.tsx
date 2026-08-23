@@ -108,10 +108,14 @@ export const EmailVerificationListScreen = observer(
 						<Section.Body>
 							<DataGrid
 								config={{
-									entity: "EmailVerification",
-									columns,
-									leftInputs,
-									emptyMessage: "조회된 이메일 인증 요청이 없습니다.",
+									toolbar: {
+										leftInputs,
+									},
+									table: {
+										entity: "EmailVerification",
+										columns,
+										emptyMessage: "조회된 이메일 인증 요청이 없습니다.",
+									},
 								}}
 								rows={rows}
 								totalCount={totalCount}

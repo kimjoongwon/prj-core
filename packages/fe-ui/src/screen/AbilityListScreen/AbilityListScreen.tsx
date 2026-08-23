@@ -431,13 +431,15 @@ export const AbilityListScreen = observer(
 								</div>
 								<DataGrid
 									config={{
-										entity: "Ability",
-										columns: abilityListTableColumns,
-										onRowClick: handleAbilityRowClick,
-										emptyMessage:
+										table: {
+											entity: "Ability",
+											columns: abilityListTableColumns,
+											onRowClick: handleAbilityRowClick,
+											emptyMessage:
 											totalCount === 0
 												? "등록된 권한이 없습니다."
 												: "검색 조건에 맞는 권한이 없습니다.",
+										},
 									}}
 									rows={abilityRows}
 									totalCount={totalCount}

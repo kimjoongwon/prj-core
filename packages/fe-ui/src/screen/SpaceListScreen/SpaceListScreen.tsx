@@ -150,10 +150,14 @@ export const SpaceListScreen = observer(
 						<Section.Body>
 							<DataGrid
 								config={{
-									entity: "Space",
-									columns,
-									leftInputs,
-									emptyMessage: "등록된 공간이 없습니다.",
+									toolbar: {
+										leftInputs,
+									},
+									table: {
+										entity: "Space",
+										columns,
+										emptyMessage: "등록된 공간이 없습니다.",
+									},
 								}}
 								rows={filteredRows}
 								totalCount={totalCount}

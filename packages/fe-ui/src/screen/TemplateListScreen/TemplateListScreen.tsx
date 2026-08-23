@@ -109,10 +109,14 @@ export const TemplateListScreen = observer(
 						<Section.Body>
 							<DataGrid
 								config={{
-									entity: "Template",
-									columns,
-									leftInputs,
-									emptyMessage: "등록된 템플릿이 없습니다.",
+									toolbar: {
+										leftInputs,
+									},
+									table: {
+										entity: "Template",
+										columns,
+										emptyMessage: "등록된 템플릿이 없습니다.",
+									},
 								}}
 								rows={templateRows}
 								totalCount={totalCount}

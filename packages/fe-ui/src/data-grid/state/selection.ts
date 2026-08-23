@@ -1,10 +1,10 @@
-import type { DataGridConfig } from "@cocrepo/type";
+import type { DataGridTableConfig } from "@cocrepo/type";
 import type { Key } from "../Table/rowKeys";
 
 export type DataGridSelectionMode = "single" | "multiple" | undefined;
 
 export function getSelectionMode<T extends { id: Key }>(
-	config: DataGridConfig<T>,
+	config: DataGridTableConfig<T>,
 ): DataGridSelectionMode {
 	if (config.selection?.mode === "multiple") {
 		return "multiple";
@@ -17,7 +17,7 @@ export function getSelectionMode<T extends { id: Key }>(
 
 export function getControlledSelectedKeys<T extends { id: Key }>(
 	selectedKeys: string[] | undefined,
-	config: DataGridConfig<T>,
+	config: DataGridTableConfig<T>,
 ) {
 	return selectedKeys ?? config.selection?.selectedKeys;
 }

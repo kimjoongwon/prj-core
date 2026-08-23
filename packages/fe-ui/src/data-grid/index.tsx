@@ -1,6 +1,6 @@
 "use client";
 
-import type { DataGridConfig } from "@cocrepo/type";
+import type { DataGridConfig, DataGridTableConfig } from "@cocrepo/type";
 import {
 	closestCenter,
 	DndContext,
@@ -13,6 +13,7 @@ import {
 	getCoreRowModel,
 	getExpandedRowModel,
 	getGroupedRowModel,
+	type Table as TanStackTable,
 	useReactTable,
 } from "@tanstack/react-table";
 import { observer } from "mobx-react-lite";
@@ -56,26 +57,60 @@ export interface DataGridProps<T extends { id: Key }> {
 	isLoading?: boolean;
 }
 
-function DataGridTableContent({ state }: { state: DataGridState }) {
+function DataGridTableContent<T extends { id: Key }>({
+	config,
+	state,
+	table,
+}: {
+	config: DataGridTableConfig<T>;
+	state: DataGridState;
+	table: TanStackTable<T>;
+}) {
 	const tableColumnStateKey = JSON.stringify(state.columns.toJSON());
+	const headers = table.getFlatHeaders();
+	const rows = table.getRowModel().rows;
+	const visibleRowKeys = table.getCoreRowModel().rows.map((row) => row.id);
+	const selectionMode =
+		config.selection?.mode === "none" ? undefined : config.selection?.mode;
+	const tableColumnCount = headers.length + (selectionMode ? 1 : 0);
 
 	return (
 		<TableContainer
 			ariaLabel="데이터 테이블"
-			columnWidths={state.table.columnWidths}
-			isSelectable={state.table.isSelectable}
+			columnWidths={table
+				.getVisibleLeafColumns()
+				.map((column) => column.getSize())}
+			isSelectable={Boolean(selectionMode)}
 		>
 			<TableHeader
 				key={`header-${tableColumnStateKey}`}
 				state={state.table.header}
+				config={config}
+				headers={headers}
+				visibleRowKeys={visibleRowKeys}
 			/>
-			<TableBody key={`body-${tableColumnStateKey}`} state={state.table.body} />
+			<TableBody
+				key={`body-${tableColumnStateKey}`}
+				state={state.table.body}
+				config={config}
+				rows={rows}
+				selectionMode={selectionMode}
+				tableColumnCount={tableColumnCount}
+			/>
 			<TableFooter state={state.table.footer} />
 		</TableContainer>
 	);
 }
 
-function DataGridRowMoveTableComposition({ state }: { state: DataGridState }) {
+function DataGridRowMoveTableComposition<T extends { id: Key }>({
+	config,
+	state,
+	table,
+}: {
+	config: DataGridTableConfig<T>;
+	state: DataGridState;
+	table: TanStackTable<T>;
+}) {
 	const sensors = useSensors(
 		useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
 		useSensor(KeyboardSensor),
@@ -87,20 +122,37 @@ function DataGridRowMoveTableComposition({ state }: { state: DataGridState }) {
 			sensors={sensors}
 			onDragEnd={({ active, over }) => {
 				if (over) {
-					state.table.body.completeRowMove(String(active.id), String(over.id));
+					state.table.body.completeRowMove(
+						table.getRowModel().rows,
+						String(active.id),
+						String(over.id),
+						config.onRowMove,
+					);
 				}
 			}}
 		>
-			<DataGridTableContent state={state} />
+			<DataGridTableContent config={config} state={state} table={table} />
 		</DndContext>
 	);
 }
 
-function DataGridTableComposition({ state }: { state: DataGridState }) {
-	return state.table.body.config.onRowMove ? (
-		<DataGridRowMoveTableComposition state={state} />
+function DataGridTableComposition<T extends { id: Key }>({
+	config,
+	state,
+	table,
+}: {
+	config: DataGridTableConfig<T>;
+	state: DataGridState;
+	table: TanStackTable<T>;
+}) {
+	return config.onRowMove ? (
+		<DataGridRowMoveTableComposition
+			config={config}
+			state={state}
+			table={table}
+		/>
 	) : (
-		<DataGridTableContent state={state} />
+		<DataGridTableContent config={config} state={state} table={table} />
 	);
 }
 
@@ -111,39 +163,51 @@ const DataGridStandardComposition = observer(
 		state,
 		rows,
 		totalCount,
-		isLoading = false,
 	}: DataGridProps<T>) {
-		state.syncRuntime({ config, rows, totalCount, isLoading });
+		const tableConfig = config.table;
 		const renderedRows = state.getRenderedRows<T>(rows);
 		const grouping = getGroupingColumnIds(
-			config.columns,
+			tableConfig.columns,
 			state.columns,
 			state.query.values,
 		);
 		const table = useReactTable({
 			data: renderedRows,
 			columns: toColumnDefs(
-				getVisibleColumnConfigs(config.columns, state.columns),
+				getVisibleColumnConfigs(tableConfig.columns, state.columns),
 				state.columns,
 			),
 			state: { expanded: state.expanded, grouping },
 			getRowId: (row) => String(row.id),
-			getSubRows: config.getSubRows,
+			getSubRows: tableConfig.getSubRows,
 			getCoreRowModel: getCoreRowModel(),
 			getExpandedRowModel: getExpandedRowModel(),
 			getGroupedRowModel: getGroupedRowModel(),
 			autoResetExpanded: false,
 			onExpandedChange: state.setExpanded,
 		});
-		state.table.setTanStackTable(table);
-
 		return (
 			<DataGridContainer>
-				<DataGridToolbar state={state.toolbar} />
-				<DataGridGroupPanel state={state.groupPanel} />
-				<DataGridTableComposition state={state} />
-				<DataGridPagination state={state.pagination} />
-				<DataGridActionBar state={state.actionBar} />
+				<DataGridToolbar
+					columns={tableConfig.columns}
+					config={config.toolbar}
+					state={state.toolbar}
+				/>
+				<DataGridGroupPanel
+					columns={tableConfig.columns}
+					config={config.groupPanel}
+					state={state.groupPanel}
+				/>
+				<DataGridTableComposition
+					config={tableConfig}
+					state={state}
+					table={table}
+				/>
+				<DataGridPagination state={state.pagination} totalCount={totalCount} />
+				<DataGridActionBar
+					state={state.actionBar}
+					showCount={tableConfig.selection?.actionBar?.showCount}
+				/>
 			</DataGridContainer>
 		);
 	},

@@ -80,7 +80,8 @@ DataGrid/Table Cell 컴포넌트를 만들거나 고치면 [Cell 규칙](referen
 
 - `DataGrid`와 독립된 `Table.Container`, `Table.Header`, `Table.Body`, `Table.Footer` compound namespace를 사용하고 `DataGrid.Table`을 만들지 않습니다.
 - `DataGrid.Container`와 `Table.Container`에는 state prop을 추가하지 않습니다.
-- 상태가 있는 leaf에는 전체 `DataGridState` 대신 해당 책임의 facade state만 전달합니다.
+- 상태가 있는 leaf에는 전체 `DataGridState` 대신 해당 책임의 facade state만 `state` prop으로 전달합니다. `config`, `rows`, `totalCount`, TanStack table model, callback 같은 외부 render input은 state에 동기화하지 않고 별도 prop으로 전달합니다.
+- `DataGridConfig`는 `toolbar`, `groupPanel`, `table`의 ownership별 선언 계약입니다. standalone `Table`은 `DataGridTableConfig` 하나를 받고, Toolbar와 GroupPanel은 자기 config와 공유 `table.columns`만 받습니다.
 - 행 key helper는 duplicate-safe 해야 하며 compound renderer와 외부 호출부에서 재사용할 수 있도록 공개합니다.
 - DataGrid 공개 컴포넌트, 상태 model, helper, 타입은 `data-grid/index.ts`에서 노출합니다.
 - DataGrid column builder는 `data-grid/columns/index.ts`에서 노출하고, public export는 `data-grid/index.ts`를 거칩니다.
@@ -157,7 +158,7 @@ Column 세부 계약은 이 문서에서, Cell 세부 계약은 `references/cell
 DataGrid는 `@tanstack/react-table`을 기반으로 다음 기능을 일관되게 제공합니다.
 
 - `DataGrid.Container`와 `Table.Container`는 layout과 markup만 담당하며 state를 받지 않습니다.
-- `DataGrid.Toolbar`, `DataGrid.GroupPanel`, `DataGrid.Pagination`, `DataGrid.ActionBar`와 `Table.Header`, `Table.Body`, `Table.Footer`는 자기 책임의 `DataGrid...State`만 받습니다.
+- `DataGrid.Toolbar`, `DataGrid.GroupPanel`, `DataGrid.Pagination`, `DataGrid.ActionBar`와 `Table.Header`, `Table.Body`, `Table.Footer`는 자기 책임의 `DataGrid...State`를 `state` prop으로 받고, 화면을 그리는 외부 input은 별도 prop으로 받습니다.
 - `Table`은 `DataGrid`의 property가 아닌 독립 namespace이고 pagination은 `Table.Footer` 밖에 둡니다.
 
 - column visibility, order, sizing과 resize

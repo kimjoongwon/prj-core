@@ -2,7 +2,7 @@
 
 import type {
 	DataGridColumnConfig,
-	DataGridConfig,
+	DataGridGroupPanelConfig,
 } from "@cocrepo/type";
 import {
 	ArrowLeft,
@@ -22,20 +22,22 @@ import {
 import type { Key } from "../Table/rowKeys";
 import type { DataGridGroupPanelState } from "../state/DataGridGroupPanelState";
 
-type RowGroupPanelShow<T> = NonNullable<DataGridConfig<T>["rowGroupPanelShow"]>;
+type RowGroupPanelShow = NonNullable<DataGridGroupPanelConfig["show"]>;
 
 const GROUP_COLUMN_DATA_TYPE = "application/x-cocrepo-data-grid-column-id";
 
-export interface DataGridGroupPanelProps {
+export interface DataGridGroupPanelProps<T extends { id: Key }> {
 	state: DataGridGroupPanelState;
+	config?: DataGridGroupPanelConfig;
+	columns: DataGridColumnConfig<T>[];
 }
 
 function shouldRenderGroupPanel<T>(
-	rowGroupPanelShow: DataGridConfig<T>["rowGroupPanelShow"],
+	rowGroupPanelShow: DataGridGroupPanelConfig["show"],
 	grouping: string[],
 	groupableColumns: DataGridColumnConfig<T>[],
 ) {
-	const panelShow: RowGroupPanelShow<T> = rowGroupPanelShow ?? "never";
+	const panelShow: RowGroupPanelShow = rowGroupPanelShow ?? "never";
 
 	if (panelShow === "never" || groupableColumns.length === 0) {
 		return false;
@@ -91,12 +93,13 @@ function getDragColumnId(event: DragEvent<HTMLElement>) {
 	);
 }
 
-export function DataGridGroupPanelView({ state }: DataGridGroupPanelProps) {
-	type Row = { id: Key };
-	const config = state.config as DataGridConfig<Row>;
-	const columns = config.columns as DataGridColumnConfig<Row>[];
-	const grouping = state.grouping;
-	const rowGroupPanelShow = config.rowGroupPanelShow;
+export function DataGridGroupPanelView<T extends { id: Key }>({
+	state,
+	config,
+	columns,
+}: DataGridGroupPanelProps<T>) {
+	const grouping = state.getGrouping(columns);
+	const rowGroupPanelShow = config?.show;
 	const onGroupingChange = state.changeGrouping;
 	const t = useT();
 	const groupableColumns = getRowGroupableColumnConfigs(columns);
@@ -105,7 +108,7 @@ export function DataGridGroupPanelView({ state }: DataGridGroupPanelProps) {
 	);
 	const activeColumns = grouping
 		.map((columnId) => groupableColumnMap.get(columnId))
-		.filter((column): column is DataGridColumnConfig<Row> => Boolean(column));
+		.filter((column): column is DataGridColumnConfig<T> => Boolean(column));
 	const activeColumnIds = new Set(activeColumns.map(getColumnConfigId));
 	const inactiveColumns = groupableColumns.filter(
 		(column) => !activeColumnIds.has(getColumnConfigId(column)),

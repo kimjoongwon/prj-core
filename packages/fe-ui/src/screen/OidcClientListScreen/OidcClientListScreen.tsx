@@ -86,10 +86,14 @@ export const OidcClientListScreen = observer(
 						<Section.Body>
 							<DataGrid
 								config={{
-									entity: "OidcClient",
-									columns: oidcClientTableColumns,
-									leftInputs,
-									emptyMessage: "등록된 OIDC 클라이언트가 없습니다.",
+									toolbar: {
+										leftInputs,
+									},
+									table: {
+										entity: "OidcClient",
+										columns: oidcClientTableColumns,
+										emptyMessage: "등록된 OIDC 클라이언트가 없습니다.",
+									},
 								}}
 								rows={oidcClientRows}
 								totalCount={totalCount}

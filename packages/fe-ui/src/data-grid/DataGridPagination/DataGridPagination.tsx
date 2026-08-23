@@ -16,6 +16,7 @@ type DataGridPageItem =
 
 export interface DataGridPaginationProps {
 	state: DataGridPaginationState;
+	totalCount: number;
 }
 
 /** 전체 건수와 페이지 크기에서 1부터 시작하는 총 페이지 수를 계산합니다. */
@@ -69,9 +70,10 @@ function getPageItems(
 /** DataGrid 하단의 전체 건수와 페이지 이동 컨트롤을 렌더링합니다. */
 export function DataGridPaginationView({
 	state,
+	totalCount,
 }: DataGridPaginationProps) {
 	const t = useT();
-	const { currentPage, take, totalCount } = state;
+	const { currentPage, take } = state;
 	const totalPages = getTotalPages(totalCount, take);
 	const page = Math.min(Math.max(1, currentPage), totalPages);
 	const pageItems = getPageItems(page, totalPages);

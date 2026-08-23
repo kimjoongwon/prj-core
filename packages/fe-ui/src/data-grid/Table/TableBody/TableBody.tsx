@@ -1,8 +1,8 @@
 "use client";
 
 import type {
-	DataGridConfig,
 	DataGridEditTrigger,
+	DataGridTableConfig,
 } from "@cocrepo/type";
 import {
 	SortableContext,
@@ -43,12 +43,16 @@ const CLICKABLE_ROW_CLASS_NAME =
 const DEFAULT_ROW_HOVER_CLASS_NAME =
 	"hover:bg-[#f8fafc] dark:hover:bg-white/[0.03]";
 
-export interface TableBodyProps {
+export interface TableBodyProps<T extends { id: Key }> {
 	state: DataGridTableBodyState;
+	config: DataGridTableConfig<T>;
+	rows: DataGridBodyRow<T>[];
+	selectionMode: DataGridSelectionMode;
+	tableColumnCount: number;
 }
 
 function getRowInteractionProps<T extends { id: Key }>(
-	config: DataGridConfig<T>,
+	config: DataGridTableConfig<T>,
 	row: Row<T>,
 ) {
 	if (!config.onRowClick) {
@@ -139,7 +143,7 @@ function DataGridGroupRow<T extends { id: Key }>({
 }
 
 interface DataGridDataRowProps<T extends { id: Key }> {
-	config: DataGridConfig<T>;
+	config: DataGridTableConfig<T>;
 	onCellValueChange?: <TField extends keyof T>(row: T, field: TField, value: T[TField]) => void;
 	row: Row<T>;
 	isSelected: boolean;
@@ -445,22 +449,30 @@ function DataGridDataRow<T extends { id: Key }>(
 	);
 }
 
-export const TableBody = observer(function TableBody({ state }: TableBodyProps) {
-	type RowData = { id: Key };
-	const config = state.config as DataGridConfig<RowData>;
-	const rows = state.rows as DataGridBodyRow<RowData>[];
+function TableBodyView<T extends { id: Key }>({
+	state,
+	config,
+	rows,
+	selectionMode,
+	tableColumnCount,
+}: TableBodyProps<T>) {
+	const rowConfig = config;
+	const bodyRows = rows;
 	const selectedKeys = state.selectedKeys;
-	const selectionMode = state.selectionMode;
-	const tableColumnCount = state.tableColumnCount;
 	const t: Translate = (value) => value;
-	const isRowMoveEnabled = Boolean(config.onRowMove);
+	const isRowMoveEnabled = Boolean(rowConfig.onRowMove);
 	const activeRowId = undefined;
 	const projectedDepth = undefined;
 	const onCellValueChange = state.changeCellValue;
-	const onRowSelectionChange = state.changeRowSelection;
+	const onRowSelectionChange = (rowKey: string, isSelected: boolean) =>
+		state.changeRowSelection(
+			rowKey,
+			isSelected,
+			rowConfig.selection?.onSelectionChange,
+		);
 	const selectedKeySet = new Set(selectedKeys);
 	const editingCell = state.editing.editingCell;
-	const sortableRowIds = rows
+	const sortableRowIds = bodyRows
 		.filter((row) => !row.getIsGrouped())
 		.map((row) => row.id);
 	const moveToAdjacentCell = (
@@ -468,7 +480,7 @@ export const TableBody = observer(function TableBody({ state }: TableBodyProps) 
 		columnId: string,
 		direction: "next" | "previous",
 	) => {
-		const editableCells = rows.flatMap((row) =>
+		const editableCells = bodyRows.flatMap((row) =>
 			row.getIsGrouped()
 				? []
 				: row.getVisibleCells().flatMap((cell) => {
@@ -509,13 +521,13 @@ export const TableBody = observer(function TableBody({ state }: TableBodyProps) 
 			strategy={verticalListSortingStrategy}
 		>
 			<tbody>
-				{rows.length === 0 ? (
+				{bodyRows.length === 0 ? (
 					<DataGridEmptyRow
 						colSpan={tableColumnCount}
-						emptyMessage={config.emptyMessage}
+						emptyMessage={rowConfig.emptyMessage}
 					/>
 				) : (
-					rows.map((row) => {
+					bodyRows.map((row) => {
 						const isSelected = selectedKeySet.has(row.id);
 
 						if (row.getIsGrouped()) {
@@ -532,7 +544,7 @@ export const TableBody = observer(function TableBody({ state }: TableBodyProps) 
 						return (
 							<DataGridDataRow
 								key={row.id}
-								config={config}
+								config={rowConfig}
 								onCellValueChange={onCellValueChange}
 								row={row}
 								isSelected={isSelected}
@@ -551,4 +563,6 @@ export const TableBody = observer(function TableBody({ state }: TableBodyProps) 
 			</tbody>
 		</SortableContext>
 	);
-});
+}
+
+export const TableBody = observer(TableBodyView) as typeof TableBodyView;

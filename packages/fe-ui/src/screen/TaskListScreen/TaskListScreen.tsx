@@ -130,10 +130,14 @@ export const TaskListScreen = observer(
 						<Section.Body>
 							<DataGrid
 								config={{
-									entity: "Task",
-									columns,
-									leftInputs,
-									emptyMessage: "등록된 태스크가 없습니다.",
+									toolbar: {
+										leftInputs,
+									},
+									table: {
+										entity: "Task",
+										columns,
+										emptyMessage: "등록된 태스크가 없습니다.",
+									},
 								}}
 								rows={taskRows}
 								totalCount={totalCount}
