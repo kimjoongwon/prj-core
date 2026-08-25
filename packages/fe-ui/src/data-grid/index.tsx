@@ -20,12 +20,10 @@ import { observer } from "mobx-react-lite";
 import { DataGridActionBar } from "./DataGridActionBar";
 import { DataGridContainer } from "./DataGridContainer";
 import { DataGridGroupPanel } from "./DataGridGroupPanel";
+import { DataGridLoading } from "./DataGridLoading";
 import { DataGridPagination } from "./DataGridPagination";
 import { DataGridToolbar } from "./DataGridToolbar";
-import { TableBody } from "./Table/TableBody";
-import { TableContainer } from "./Table/TableContainer";
-import { TableFooter } from "./Table/TableFooter";
-import { TableHeader } from "./Table/TableHeader";
+import { Table, TableBody, TableContainer, TableHeader } from "./Table";
 import { DataGridChangesState } from "./state/DataGridChangesState";
 import {
 	DataGridActionBarState,
@@ -36,7 +34,6 @@ import {
 	DataGridSelectionState,
 	DataGridState,
 	DataGridTableBodyState,
-	DataGridTableFooterState,
 	DataGridTableHeaderState,
 	DataGridTableState,
 	DataGridToolbarState,
@@ -97,7 +94,6 @@ function DataGridTableContent<T extends { id: Key }>({
 				selectionMode={selectionMode}
 				tableColumnCount={tableColumnCount}
 			/>
-			<TableFooter state={state.table.footer} />
 		</TableContainer>
 	);
 }
@@ -163,6 +159,7 @@ const DataGridStandardComposition = observer(
 		state,
 		rows,
 		totalCount,
+		isLoading,
 	}: DataGridProps<T>) {
 		const tableConfig = config.table;
 		const renderedRows = state.getRenderedRows<T>(rows);
@@ -186,6 +183,15 @@ const DataGridStandardComposition = observer(
 			autoResetExpanded: false,
 			onExpandedChange: state.setExpanded,
 		});
+
+		if (isLoading) {
+			return (
+				<DataGridContainer>
+					<DataGridLoading />
+				</DataGridContainer>
+			);
+		}
+
 		return (
 			<DataGridContainer>
 				<DataGridToolbar
@@ -219,15 +225,10 @@ export const DataGrid = Object.assign(DataGridStandardComposition, {
 	GroupPanel: DataGridGroupPanel,
 	Pagination: DataGridPagination,
 	ActionBar: DataGridActionBar,
+	Loading: DataGridLoading,
 });
 
-/** DataGrid와 독립된 native table compound namespace입니다. */
-export const Table = {
-	Container: TableContainer,
-	Header: TableHeader,
-	Body: TableBody,
-	Footer: TableFooter,
-};
+export { Table };
 
 export * from "./cell";
 export * from "./columns";
@@ -244,7 +245,6 @@ export {
 	DataGridSelectionState,
 	DataGridState,
 	DataGridTableBodyState,
-	DataGridTableFooterState,
 	DataGridTableHeaderState,
 	DataGridTableState,
 	DataGridToolbarState,

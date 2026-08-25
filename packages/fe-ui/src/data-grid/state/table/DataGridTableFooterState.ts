@@ -1,1 +1,0 @@
-export { DataGridTableFooterState } from "../DataGridState";

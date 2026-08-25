@@ -4,9 +4,9 @@ import { Skeleton } from "../../feedback/Skeleton/Skeleton";
 
 const DATA_GRID_SKELETON_ROWS = [0, 1, 2, 3, 4];
 
-export function DataGridLoadingView() {
+export function DataGridLoading() {
 	return (
-		<div className="space-y-3">
+		<div aria-label="데이터 로딩 중" className="space-y-3">
 			<div className="flex gap-4 p-4 bg-surface-secondary rounded-lg">
 				<Skeleton className="w-8 h-4 rounded" />
 				<Skeleton className="w-32 h-4 rounded" />

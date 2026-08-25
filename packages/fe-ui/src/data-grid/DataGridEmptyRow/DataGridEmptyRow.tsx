@@ -10,7 +10,7 @@ export interface DataGridEmptyRowProps {
 	emptyMessage?: string;
 }
 
-export function DataGridEmptyRowView({
+export function DataGridEmptyRow({
 	colSpan,
 	emptyMessage,
 }: DataGridEmptyRowProps) {

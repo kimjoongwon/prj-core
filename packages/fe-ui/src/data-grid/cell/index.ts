@@ -1,6 +1,9 @@
 export * from "./ActionButtonCell";
+export * from "./ActionGroupCell";
 export * from "./BooleanCell/BooleanCell";
 export * from "./ChipCell";
+export * from "./ChipListCell";
+export * from "./ConfirmActionCell";
 export * from "./DateTimeCell/DateTimeCell";
 export * from "./DefaultCell/DefaultCell";
 export * from "./EditorCell";
@@ -14,4 +17,5 @@ export * from "./RowActionsCell/RowActionsCell";
 export * from "./SelectionCell";
 export * from "./HierarchyCell";
 export * from "./SwitchCell";
+export * from "./SummaryCell";
 export * from "./TimeRemainingCell";

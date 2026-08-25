@@ -1,7 +1,7 @@
 "use client";
 
 import type { DataGridQueryStates, InputConfig } from "@cocrepo/type";
-import { InputRenderer } from "../../InputRenderer";
+import { InputRenderer } from "../InputRenderer";
 
 export interface ColumnFilterInputProps {
 	config: InputConfig;
@@ -16,7 +16,11 @@ export function ColumnFilterInput({
 }: ColumnFilterInputProps) {
 	return (
 		<div className="w-full min-w-0">
-			<InputRenderer config={config} queryValues={queryValues} onQueryChange={onQueryChange} />
+			<InputRenderer
+				config={config}
+				queryValues={queryValues}
+				onQueryChange={onQueryChange}
+			/>
 		</div>
 	);
 }

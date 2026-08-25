@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 
-export interface DataGridTableProps {
+export interface TableContainerProps {
 	children: ReactNode;
 	columnWidths: number[];
 	isSelectable?: boolean;
@@ -14,7 +14,7 @@ function DataGridTableRoot({
 	columnWidths,
 	isSelectable = false,
 	ariaLabel,
-}: DataGridTableProps) {
+}: TableContainerProps) {
 	const minimumTableWidth = columnWidths.reduce(
 		(totalWidth, columnWidth) => totalWidth + columnWidth,
 		isSelectable ? 44 : 0,

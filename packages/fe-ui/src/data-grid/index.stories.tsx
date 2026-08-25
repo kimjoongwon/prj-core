@@ -9,7 +9,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { makeAutoObservable } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { ChipCell } from "./cell";
-import { DataGridLoading } from "./DataGridLoading";
 import { DataGrid, DataGridSelectionState, DataGridState } from "./index";
 
 interface StoryRow {
@@ -310,9 +309,7 @@ function filterHierarchyStoryRows(
 			return [];
 		}
 
-		return [
-			filteredChildren ? { ...row, children: filteredChildren } : row,
-		];
+		return [filteredChildren ? { ...row, children: filteredChildren } : row];
 	});
 }
 
@@ -352,18 +349,17 @@ const DataGridStory = observer(function DataGridStory({
 	const fixture = useLocalObservable(
 		() => new StoryDataGridFixture(rows, queryValues, selectedKeys),
 	);
-	const filteredRows = filterStoryRows(fixture.rows, fixture.state.query.values);
+	const filteredRows = filterStoryRows(
+		fixture.rows,
+		fixture.state.query.values,
+	);
 	const sortedRows = sortStoryRows(filteredRows, fixture.state.query.values);
 	const renderedRows =
 		mode === "hierarchy"
 			? filterHierarchyStoryRows(fixture.rows, fixture.state.query.values)
 			: mode === "row-move"
 				? rows
-			: paginateStoryRows(sortedRows, fixture.state.query.values);
-
-	if (isLoading) {
-		return <DataGridLoading />;
-	}
+				: paginateStoryRows(sortedRows, fixture.state.query.values);
 
 	return (
 		<DataGrid

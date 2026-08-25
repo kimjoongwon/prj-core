@@ -5,7 +5,7 @@ import type {
 	DataGridToolbarConfig,
 } from "@cocrepo/type";
 import { DataGridColumnSettings } from "../DataGridColumnSettings";
-import { InputRenderer } from "../InputRenderer";
+import { InputRenderer } from "../input/InputRenderer";
 import type { Key } from "../Table/rowKeys";
 import type { DataGridToolbarState } from "../state/DataGridToolbarState";
 
@@ -38,12 +38,22 @@ export function DataGridToolbarView<T extends { id: Key }>({
 		<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-3">
 			<div className="flex flex-wrap items-center gap-2">
 				{leftInputs.map((input) => (
-					<InputRenderer key={input.id} config={input} queryValues={state.queryValues} onQueryChange={state.changeQuery} />
+					<InputRenderer
+						key={input.id}
+						config={input}
+						queryValues={state.queryValues}
+						onQueryChange={state.changeQuery}
+					/>
 				))}
 			</div>
 			<div className="flex items-center gap-2">
 				{rightInputs.map((input) => (
-					<InputRenderer key={input.id} config={input} queryValues={state.queryValues} onQueryChange={state.changeQuery} />
+					<InputRenderer
+						key={input.id}
+						config={input}
+						queryValues={state.queryValues}
+						onQueryChange={state.changeQuery}
+					/>
 				))}
 				{shouldRenderColumnSettings ? (
 					<DataGridColumnSettings

@@ -1,2 +1,2 @@
 export { TableContainer } from "./TableContainer";
-export type { DataGridTableProps } from "./TableContainer";
+export type { TableContainerProps } from "./TableContainer";

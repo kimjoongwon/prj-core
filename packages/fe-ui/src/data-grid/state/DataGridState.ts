@@ -10,19 +10,18 @@ import type {
 	DataGridSetQueryStates,
 	DataGridState as DataGridStateContract,
 } from "@cocrepo/type";
-import type {
-	ExpandedState,
-	Updater,
-} from "@tanstack/react-table";
+import type { ExpandedState, Updater } from "@tanstack/react-table";
 import { makeAutoObservable } from "mobx";
 import { DataGridChangesState } from "./DataGridChangesState";
-import {
-	getGroupingColumnIds,
-} from "../columns/columnConfig";
+import { getGroupingColumnIds } from "../columns/columnConfig";
 import { DATA_GRID_GROUP_BY_QUERY_KEY } from "./grouping";
 import type { Key } from "../Table/rowKeys";
 import type { DataGridSelectionMode } from "./selection";
-import { getNextSortValues, getQuerySortValues, type DataGridSortDirection } from "./sorting";
+import {
+	getNextSortValues,
+	getQuerySortValues,
+	type DataGridSortDirection,
+} from "./sorting";
 import { getDataGridRowMoveEvent } from "../Table/TableBody/rowMove";
 
 const objectPrototype = Object.prototype;
@@ -349,13 +348,11 @@ export class DataGridGroupPanelState {
 export class DataGridTableState {
 	readonly header: DataGridTableHeaderState;
 	readonly body: DataGridTableBodyState;
-	readonly footer: DataGridTableFooterState;
 
 	constructor(private readonly root: DataGridState) {
 		makeAutoObservable(this, { root: false } as never, { autoBind: true });
 		this.header = new DataGridTableHeaderState(root);
 		this.body = new DataGridTableBodyState(root);
-		this.footer = new DataGridTableFooterState();
 	}
 }
 
@@ -373,7 +370,9 @@ export class DataGridTableHeaderState {
 	}
 
 	get selectedKeys() {
-		return Array.from(this.root.selection?.selectedKeys ?? this.root.selectedKeys);
+		return Array.from(
+			this.root.selection?.selectedKeys ?? this.root.selectedKeys,
+		);
 	}
 
 	get sortValues() {
@@ -386,7 +385,10 @@ export class DataGridTableHeaderState {
 
 	isAllVisibleRowsSelected(visibleRowKeys: string[]) {
 		const selectedKeySet = new Set(this.selectedKeys);
-		return visibleRowKeys.length > 0 && visibleRowKeys.every((rowKey) => selectedKeySet.has(rowKey));
+		return (
+			visibleRowKeys.length > 0 &&
+			visibleRowKeys.every((rowKey) => selectedKeySet.has(rowKey))
+		);
 	}
 
 	isSomeVisibleRowsSelected(visibleRowKeys: string[]) {
@@ -466,7 +468,9 @@ export class DataGridTableBodyState {
 	}
 
 	get selectedKeys() {
-		return Array.from(this.root.selection?.selectedKeys ?? this.root.selectedKeys);
+		return Array.from(
+			this.root.selection?.selectedKeys ?? this.root.selectedKeys,
+		);
 	}
 
 	changeCellValue<T extends { id: Key }, TField extends keyof T>(
@@ -508,16 +512,21 @@ export class DataGridTableBodyState {
 	) {
 		if (!onRowMove || activeRowId === overRowId) return;
 		const bodyRows = rows.filter((row) => !row.getIsGrouped());
-		const moveItems = bodyRows.map((row) => ({ id: row.id, parentId: row.getParentRow()?.id ?? null, depth: row.depth, original: row.original }));
+		const moveItems = bodyRows.map((row) => ({
+			id: row.id,
+			parentId: row.getParentRow()?.id ?? null,
+			depth: row.depth,
+			original: row.original,
+		}));
 		const activeRow = bodyRows.find((row) => row.id === activeRowId);
 		if (!activeRow) return;
-		const event = getDataGridRowMoveEvent(moveItems, activeRowId, overRowId, { depth: activeRow.depth, parentId: activeRow.getParentRow()?.id ?? null });
+		const event = getDataGridRowMoveEvent(moveItems, activeRowId, overRowId, {
+			depth: activeRow.depth,
+			parentId: activeRow.getParentRow()?.id ?? null,
+		});
 		if (event) onRowMove(event);
 	}
 }
-
-/** 실제 footer 요구가 생길 때 확장할 비어 있는 facade입니다. */
-export class DataGridTableFooterState {}
 
 /** Pagination이 query의 skip/take와 total count를 위임하는 facade입니다. */
 export class DataGridPaginationState {
@@ -549,7 +558,8 @@ export class DataGridActionBarState {
 	}
 
 	get selectedCount() {
-		return this.root.selection?.selectedKeys?.size ?? this.root.selectedKeys.size;
+		return (
+			this.root.selection?.selectedKeys?.size ?? this.root.selectedKeys.size
+		);
 	}
-
 }

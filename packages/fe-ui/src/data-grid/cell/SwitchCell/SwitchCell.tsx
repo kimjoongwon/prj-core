@@ -1,7 +1,8 @@
 "use client";
 
-import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
+import { makeAutoObservable } from "mobx";
+import { observer, useLocalObservable } from "mobx-react-lite";
+import { useEffect } from "react";
 import { Switch } from "../../../input/Switch/Switch";
 import type { SwitchProps } from "../../../input/Switch/Switch.props";
 
@@ -31,6 +32,34 @@ const ALIGN_CLASS_NAME: Record<
 	end: "justify-end",
 };
 
+class SwitchCellState {
+	optimisticSelected: boolean;
+	isLoading = false;
+
+	constructor(isSelected: boolean) {
+		this.optimisticSelected = isSelected;
+		makeAutoObservable(this, {}, { autoBind: true });
+	}
+
+	syncSelection(isSelected: boolean) {
+		this.optimisticSelected = isSelected;
+	}
+
+	async toggle(nextSelected: boolean, onToggle: SwitchCellProps["onToggle"]) {
+		const previousSelected = this.optimisticSelected;
+		this.optimisticSelected = nextSelected;
+		this.isLoading = true;
+
+		try {
+			await onToggle(nextSelected);
+		} catch {
+			this.optimisticSelected = previousSelected;
+		} finally {
+			this.isLoading = false;
+		}
+	}
+}
+
 /**
  * 테이블 셀 안에서 boolean 값을 Switch로 토글하는 범용 셀
  */
@@ -44,27 +73,15 @@ export const SwitchCell = observer(function SwitchCell({
 	unselectedLabel = "활성화",
 	...switchProps
 }: SwitchCellProps) {
-	const [optimisticSelected, setOptimisticSelected] = useState(isSelected);
-	const [isLoading, setIsLoading] = useState(false);
+	const state = useLocalObservable(() => new SwitchCellState(isSelected));
 
 	useEffect(() => {
-		setOptimisticSelected(isSelected);
-	}, [isSelected]);
+		state.syncSelection(isSelected);
+	}, [isSelected, state]);
 
 	const handleToggle = async (nextSelected: boolean) => {
-		if (isDisabled || isLoading) return;
-
-		const previousSelected = optimisticSelected;
-		setOptimisticSelected(nextSelected);
-		setIsLoading(true);
-
-		try {
-			await onToggle(nextSelected);
-		} catch {
-			setOptimisticSelected(previousSelected);
-		} finally {
-			setIsLoading(false);
-		}
+		if (isDisabled || state.isLoading) return;
+		await state.toggle(nextSelected, onToggle);
 	};
 
 	return (
@@ -72,10 +89,10 @@ export const SwitchCell = observer(function SwitchCell({
 			<Switch
 				{...switchProps}
 				size={size}
-				isSelected={optimisticSelected}
-				isDisabled={isDisabled || isLoading}
+				isSelected={state.optimisticSelected}
+				isDisabled={isDisabled || state.isLoading}
 				onValueChange={handleToggle}
-				aria-label={optimisticSelected ? selectedLabel : unselectedLabel}
+				aria-label={state.optimisticSelected ? selectedLabel : unselectedLabel}
 			/>
 		</div>
 	);

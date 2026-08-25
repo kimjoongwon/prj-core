@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import { DataGridActionBar } from "../DataGridActionBar";
 import { DataGridGroupPanel } from "../DataGridGroupPanel";
 import { DataGridToolbar } from "../DataGridToolbar";
-import { InputRenderer } from "../InputRenderer";
+import { InputRenderer } from "../input/InputRenderer";
 import {
 	createDataGridTestConfig,
 	createDataGridTestState,
@@ -35,7 +35,13 @@ describe("MobX DataGrid 렌더링", () => {
 				leftInputs: [{ id: "keyword", type: "search", label: "검색" }],
 			},
 		});
-		render(<DataGridToolbar columns={config.table.columns} config={config.toolbar} state={state.toolbar} />);
+		render(
+			<DataGridToolbar
+				columns={config.table.columns}
+				config={config.toolbar}
+				state={state.toolbar}
+			/>,
+		);
 
 		act(() => state.query.sync({ keyword: "첫 검색어" }, setQueryStates));
 		await waitFor(() => {
@@ -52,7 +58,13 @@ describe("MobX DataGrid 렌더링", () => {
 		const config = createDataGridTestConfig({
 			groupPanel: { show: "onlyWhenGrouping" },
 		});
-		render(<DataGridGroupPanel columns={config.table.columns} config={config.groupPanel} state={state.groupPanel} />);
+		render(
+			<DataGridGroupPanel
+				columns={config.table.columns}
+				config={config.groupPanel}
+				state={state.groupPanel}
+			/>,
+		);
 
 		expect(screen.queryByLabelText("그룹 기준")).toBeNull();
 		act(() => state.columns.setGrouping(["status"]));
@@ -67,17 +79,19 @@ describe("MobX DataGrid 렌더링", () => {
 		const onQueryChange = vi.fn();
 		render(
 			<InputRenderer
-				config={{
-					id: "status",
-					type: "select",
-					label: "상태",
-					props: {
-						options: [
-							{ value: "active", label: "활성" },
-							{ value: "inactive", label: "비활성" },
-						],
-					},
-				} as never}
+				config={
+					{
+						id: "status",
+						type: "select",
+						label: "상태",
+						props: {
+							options: [
+								{ value: "active", label: "활성" },
+								{ value: "inactive", label: "비활성" },
+							],
+						},
+					} as never
+				}
 				queryValues={queryValues}
 				onQueryChange={onQueryChange}
 			/>,

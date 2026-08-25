@@ -8,16 +8,13 @@ import type { RoleDto } from "@cocrepo/api/core/roles";
 import type { SubjectDto } from "@cocrepo/api/core/subjects";
 import type { TaskDto } from "@cocrepo/api/core/tasks";
 import type { TimelineDto } from "@cocrepo/api/core/timelines";
-import { AlertDialog } from "@heroui/react";
 import { Eye, Pencil, Trash2 } from "lucide-react";
-import type { Route } from "next";
-import Link from "next/link";
-import type { MouseEvent } from "react";
-import { Button } from "../../../input/Button/Button";
 import {
 	ActionButtonCell,
+	ActionGroupCell,
 	BooleanCell,
 	ChipCell,
+	ConfirmActionCell,
 	DateTimeCell,
 	DefaultCell,
 	LinkCell,
@@ -25,6 +22,7 @@ import {
 	PhoneCell,
 	ProfileAvatarCell,
 	SwitchCell,
+	SummaryCell,
 	TimeRemainingCell,
 	type TimeRemainingStatus,
 } from "../../cell";
@@ -53,75 +51,35 @@ import {
 	getAssetStatusColor,
 	getAssetStatusLabel,
 } from "./dataGridFactory";
-import { COLUMN_FIELDS } from "./fieldPresets";
 
 type RoleLike = {
 	name?: string;
 	displayName?: string;
 };
 
-function DeleteAlertActionCell({
-	title,
-	description,
-	onConfirm,
-}: {
-	title: string;
-	description: string;
-	onConfirm: () => void | Promise<void>;
-}) {
-	return (
-		<AlertDialog>
-			<AlertDialog.Trigger>
-				<ActionButtonCell variant="danger-soft">
-					삭제
-				</ActionButtonCell>
-			</AlertDialog.Trigger>
-			<AlertDialog.Backdrop>
-				<AlertDialog.Container size="sm">
-					<AlertDialog.Dialog>
-						<AlertDialog.Header>
-							<AlertDialog.Icon status="danger" />
-							<AlertDialog.Heading>{title}</AlertDialog.Heading>
-						</AlertDialog.Header>
-						<AlertDialog.Body>{description}</AlertDialog.Body>
-						<AlertDialog.Footer>
-							<Button variant="ghost">
-								취소
-							</Button>
-							<Button variant="danger" onPress={onConfirm}>
-								삭제
-							</Button>
-						</AlertDialog.Footer>
-					</AlertDialog.Dialog>
-				</AlertDialog.Container>
-			</AlertDialog.Backdrop>
-		</AlertDialog>
-	);
-}
-
 type TenantWithRole = {
-  role?: RoleLike | null;
+	role?: RoleLike | null;
 };
 
 type SpaceCompanyRow = {
-  name: string;
-  label?: string | null;
-  businessNo: string;
+	name: string;
+	label?: string | null;
+	businessNo: string;
 };
 
 type SpaceFitnessCenterRow = {
-  name: string;
-  label?: string | null;
-  address: string;
-  phone: string;
-  email: string;
-  company?: SpaceCompanyRow | null;
+	name: string;
+	label?: string | null;
+	address: string;
+	phone: string;
+	email: string;
+	company?: SpaceCompanyRow | null;
 };
 
 type SpaceTableRow = {
-  id: string;
-  contentLanguageCode: string;
-  fitnessCenter?: SpaceFitnessCenterRow | null;
+	id: string;
+	contentLanguageCode: string;
+	fitnessCenter?: SpaceFitnessCenterRow | null;
 };
 
 function renderRoleName(value?: string | null) {
@@ -194,7 +152,7 @@ function getRoleColor(roleName?: string) {
 /** 관리자 Action 목록에서 사용하는 기본 이름 컬럼입니다. */
 export const actionNameColumn = createNameColumn<ActionDto>({
 	fieldKey: "actionKey",
-	accessorKey: COLUMN_FIELDS.name,
+	accessorKey: "name",
 	size: 200,
 	isRequired: true,
 	nameVariant: "identifier",
@@ -247,7 +205,7 @@ export function buildActionTableColumns<
 	const columns = buildColumns<TRow>(
 		createNameColumn<TRow>({
 			fieldKey: "actionKey",
-			accessorKey: COLUMN_FIELDS.name,
+			accessorKey: "name",
 			size: 200,
 			isRequired: true,
 			nameVariant: "identifier",
@@ -357,14 +315,14 @@ export function buildUserListTableColumns<
 		}),
 		createCreatedAtColumn<TRow>({
 			fieldKey: "signedUpAt",
-			accessorKey: COLUMN_FIELDS.createdAt,
+			accessorKey: "createdAt",
 		}),
 	);
 }
 
 export const subjectNameColumn = createNameColumn<SubjectDto>({
 	fieldKey: "subjectKey",
-	accessorKey: COLUMN_FIELDS.name,
+	accessorKey: "name",
 	size: 220,
 	isRequired: true,
 	nameVariant: "identifier",
@@ -473,14 +431,10 @@ export function buildSubjectTableColumns<
 			size: 220,
 			isRequired: true,
 			cell: ({ row }) => (
-				<div className="flex flex-col">
-					<span className="font-medium text-foreground">
-						{getSubjectDisplayLabel(row.original)}
-					</span>
-					<span className="text-xs text-muted">
-						{getSubjectGroupLabel(row.original.group)} 권한 대상
-					</span>
-				</div>
+				<SummaryCell
+					primary={getSubjectDisplayLabel(row.original)}
+					secondary={`${getSubjectGroupLabel(row.original.group)} 권한 대상`}
+				/>
 			),
 		}),
 		createGroupColumn<TRow>({
@@ -520,7 +474,7 @@ export const subjectTableColumns = buildSubjectTableColumns<SubjectDto>();
 
 export const adminRoleNameColumn = createNameColumn<RoleDto>({
 	fieldKey: "roleKey",
-	accessorKey: COLUMN_FIELDS.name,
+	accessorKey: "name",
 	size: 180,
 	isRequired: true,
 	nameVariant: "identifier",
@@ -538,9 +492,12 @@ export const adminRoleStatusColumn = createRemovedAtStatusColumn<RoleDto>({
 export const adminRoleActionsColumn = createActionsColumn<RoleDto>({
 	size: 100,
 	cell: ({ row }) => (
-		<Link className="inline-flex h-8 items-center justify-center px-3 text-sm" href={`/roles/${row.original.id}`}>
+		<LinkCell
+			className="inline-flex h-8 items-center justify-center px-3 text-sm"
+			href={`/roles/${row.original.id}`}
+		>
 			상세
-		</Link>
+		</LinkCell>
 	),
 });
 
@@ -559,7 +516,7 @@ export function buildAdminRoleTableColumns<
 		[
 			createNameColumn<TRow>({
 				fieldKey: "roleKey",
-				accessorKey: COLUMN_FIELDS.name,
+				accessorKey: "name",
 				size: 180,
 				isRequired: true,
 				nameVariant: "identifier",
@@ -575,9 +532,12 @@ export function buildAdminRoleTableColumns<
 			createActionsColumn<TRow>({
 				size: 100,
 				cell: ({ row }) => (
-					<Link className="inline-flex h-8 items-center justify-center px-3 text-sm" href={`/roles/${row.original.id}`}>
+					<LinkCell
+						className="inline-flex h-8 items-center justify-center px-3 text-sm"
+						href={`/roles/${row.original.id}`}
+					>
 						상세
-					</Link>
+					</LinkCell>
 				),
 			}),
 		],
@@ -595,33 +555,14 @@ export function buildAbilityListTableColumns<
 		createNameColumn<TRow>({
 			label: "규칙",
 			size: 240,
-			cell: ({ row }) => {
-				const ability = row.original;
-				return (
-					<div className="flex min-w-0 flex-col gap-1">
-						<div className="flex items-center gap-2">
-							<ChipCell
-								label={ability.inverted ? "거부" : "허용"}
-								color={ability.inverted ? "danger" : "success"}
-								align="start"
-							/>
-							<DefaultCell
-								value={ability.name}
-								weight="semibold"
-								lineClamp={1}
-							/>
-						</div>
-						{ability.description ? (
-							<DefaultCell
-								value={ability.description}
-								tone="muted"
-								size="xs"
-								lineClamp={1}
-							/>
-						) : null}
-					</div>
-				);
-			},
+			cell: ({ row }) => (
+				<SummaryCell
+					primary={row.original.name}
+					secondary={row.original.description}
+					statusLabel={row.original.inverted ? "거부" : "허용"}
+					statusColor={row.original.inverted ? "danger" : "success"}
+				/>
+			),
 		}),
 		createPresetColumn<TRow>("subjectLabel", {
 			label: "대상",
@@ -739,7 +680,7 @@ export function buildTaskTableColumns<TRow extends TaskDto = TaskDto>({
 		[
 			createActionsColumn<TRow>({
 				cell: ({ row }) => (
-					<DeleteAlertActionCell
+					<ConfirmActionCell
 						title="태스크 삭제"
 						description="태스크와 연결된 운동 detail을 삭제합니다."
 						onConfirm={() => onClickDeleteButton(row.original.id)}
@@ -763,15 +704,15 @@ export function buildTimelineTableColumns<
 			createNameColumn<TRow>({
 				nameVariant: "plain",
 				cell: ({ getValue, row }) => (
-					<Link
-						href={`/timelines/${row.original.id}` as Route}
+					<LinkCell
+						href={`/timelines/${row.original.id}`}
 						className="text-accent hover:underline"
-						onClick={(event: MouseEvent<HTMLAnchorElement>) => {
+						onClick={(event) => {
 							event.stopPropagation();
 						}}
 					>
 						{getValue() as string}
-					</Link>
+					</LinkCell>
 				),
 			}),
 			createDescriptionColumn<TRow>({
@@ -788,7 +729,7 @@ export function buildTimelineTableColumns<
 		[
 			createActionsColumn<TRow>({
 				cell: ({ row }) => (
-					<DeleteAlertActionCell
+					<ConfirmActionCell
 						title="타임라인 삭제"
 						description="선택한 타임라인을 삭제합니다."
 						onConfirm={() => onClickDeleteButton(row.original.id)}
@@ -848,11 +789,11 @@ export function buildTemplateTableColumns<
 }
 
 export function buildSpaceTableColumns<
-  TRow extends SpaceTableRow = SpaceTableRow,
+	TRow extends SpaceTableRow = SpaceTableRow,
 >({
-  onClickSpaceFitnessCenterName,
+	onClickSpaceFitnessCenterName,
 }: {
-  onClickSpaceFitnessCenterName: (spaceId: string) => void;
+	onClickSpaceFitnessCenterName: (spaceId: string) => void;
 }) {
 	const contentLanguageLabels: Record<string, string> = {
 		ko_KR: "한국어",
@@ -863,13 +804,13 @@ export function buildSpaceTableColumns<
 
 	/** Space 목록 페이지용 컬럼 조합을 생성합니다. */
 	return buildColumnsWithDefaultCreatedAt<TRow>([
-    createNameColumn<TRow>({
-      nameVariant: "clickable",
-      accessorKey: "fitnessCenter.name",
-      onClickName: (row) => onClickSpaceFitnessCenterName(row.id),
-    }),
-    createLabelColumn<TRow>({
-      accessorKey: "fitnessCenter.label",
+		createNameColumn<TRow>({
+			nameVariant: "clickable",
+			accessorKey: "fitnessCenter.name",
+			onClickName: (row) => onClickSpaceFitnessCenterName(row.id),
+		}),
+		createLabelColumn<TRow>({
+			accessorKey: "fitnessCenter.label",
 			size: 120,
 			align: "center",
 			cell: ({ getValue }) => (
@@ -887,19 +828,19 @@ export function buildSpaceTableColumns<
 				/>
 			),
 		}),
-    createPresetColumn<TRow>("businessNo", {
-      accessorKey: "fitnessCenter.company.businessNo",
+		createPresetColumn<TRow>("businessNo", {
+			accessorKey: "fitnessCenter.company.businessNo",
 			size: 160,
 		}),
-    createPresetColumn<TRow>("address", {
-      accessorKey: "fitnessCenter.address",
+		createPresetColumn<TRow>("address", {
+			accessorKey: "fitnessCenter.address",
 			size: 250,
 		}),
-    createPhoneColumn<TRow>({
-      accessorKey: "fitnessCenter.phone",
+		createPhoneColumn<TRow>({
+			accessorKey: "fitnessCenter.phone",
 		}),
-    createEmailColumn<TRow>({
-      accessorKey: "fitnessCenter.email",
+		createEmailColumn<TRow>({
+			accessorKey: "fitnessCenter.email",
 		}),
 	]);
 }
@@ -934,7 +875,7 @@ export function buildRoutineTableColumns<
 		[
 			createActionsColumn<TRow>({
 				cell: ({ row }) => (
-					<DeleteAlertActionCell
+					<ConfirmActionCell
 						title="루틴 삭제"
 						description="선택한 루틴을 삭제합니다."
 						onConfirm={() => onClickDeleteButton(row.original.id)}
@@ -980,12 +921,12 @@ export function buildAssetTableColumns<
 					mode === "picker" ? (
 						<DefaultCell value={row.original.originalName} />
 					) : (
-						<Link
+						<LinkCell
 							href={`/assets/${row.original.id}`}
 							className="text-accent hover:underline"
 						>
 							{row.original.originalName}
-						</Link>
+						</LinkCell>
 					),
 			}),
 			createPresetColumn<TRow>("kind", {
@@ -1022,56 +963,52 @@ export function buildAssetTableColumns<
 		],
 		[
 			createActionsColumn<TRow>({
-				size: mode === "picker" ? 220 : 220,
+				size: 220,
 				align: "center",
 				cell: ({ row }) => {
 					if (mode === "picker") {
 						const isSelected = row.original.id === selectedAssetId;
 
 						return (
-							<div className="flex items-center justify-center gap-2">
+							<ActionGroupCell gap="md">
 								{onClickSelectAssetButton ? (
-									<Button
-										size="sm"
+									<ActionButtonCell
 										variant={isSelected ? "primary" : "ghost"}
 										onPress={() => onClickSelectAssetButton(row.original)}
 									>
 										{isSelected ? "선택됨" : "선택"}
-									</Button>
+									</ActionButtonCell>
 								) : null}
-								<Button
-									size="sm"
+								<ActionButtonCell
 									variant="danger-soft"
 									isDisabled={isRemoving}
 									onPress={() => onClickDeleteAssetButton(row.original.id)}
 								>
 									삭제
-								</Button>
-							</div>
+								</ActionButtonCell>
+							</ActionGroupCell>
 						);
 					}
 
 					return (
-						<div className="flex items-center justify-center gap-2">
+						<ActionGroupCell gap="md">
 							{onClickPreviewAssetButton ? (
-								<Button
-									size="sm"
+								<ActionButtonCell
 									variant="ghost"
 									onPress={() => onClickPreviewAssetButton(row.original)}
 								>
 									<Eye className="h-4 w-4" aria-hidden />
 									보기
-								</Button>
+								</ActionButtonCell>
 							) : null}
-							<Button
-								size="sm"
+							<ActionButtonCell
 								variant="danger-soft"
 								isDisabled={isRemoving}
 								onPress={() => onClickDeleteAssetButton(row.original.id)}
 							>
 								삭제
-							</Button>
-						</div>
+							</ActionButtonCell>
+						</ActionGroupCell>
 					);
 				},
 			}),
@@ -1209,7 +1146,7 @@ export function buildInquiryTableColumns<
 		}),
 		createCreatedAtColumn<TRow>({
 			fieldKey: "receivedAt",
-			accessorKey: COLUMN_FIELDS.createdAt,
+			accessorKey: "createdAt",
 			size: 160,
 		}),
 	);
@@ -1368,10 +1305,9 @@ export function buildStaticTranslationTableColumns<
 			label: "관리",
 			size: 120,
 			cell: ({ row }) => (
-				<div className="flex justify-center gap-1">
-					<Button
+				<ActionGroupCell>
+					<ActionButtonCell
 						isIconOnly
-						size="sm"
 						variant="ghost"
 						aria-label="번역 수정"
 						onPress={() => {
@@ -1379,10 +1315,9 @@ export function buildStaticTranslationTableColumns<
 						}}
 					>
 						<Pencil className="h-4 w-4" />
-					</Button>
-					<Button
+					</ActionButtonCell>
+					<ActionButtonCell
 						isIconOnly
-						size="sm"
 						variant="danger-soft"
 						aria-label="번역 삭제"
 						onPress={() => {
@@ -1390,8 +1325,8 @@ export function buildStaticTranslationTableColumns<
 						}}
 					>
 						<Trash2 className="h-4 w-4" />
-					</Button>
-				</div>
+					</ActionButtonCell>
+				</ActionGroupCell>
 			),
 		}),
 	);

@@ -20,6 +20,8 @@ describe("DataGrid 공용 API", () => {
 		};
 
 		expect(dataGrid.DataGrid.Container).toBeDefined();
+		expect(dataGrid.DataGrid.Loading).toBeDefined();
+		expect(table.Table.Header).toBe(table.TableHeader);
 		expect(dataGrid.Table.Header).toBe(table.TableHeader);
 		expect(dataGrid.DataGridState).toBeDefined();
 		expect(cells.SelectionCell).toBeDefined();
