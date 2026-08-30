@@ -558,7 +558,7 @@ describe("SessionCard", () => {
 | `packages/be-controller/src/auth/auth.controller.ts` | 세션/감사로그/관리 API 추가 |
 | `packages/fe-ui/src/widget/SessionCard/` | 신규 |
 | `packages/fe-ui/src/widget/SecurityInfoPanel/` | 신규 |
-| `packages/fe-ui/src/data-grid/columns/data-grid/idpColumns.tsx` | 감사 결과 ChipCell 매핑 |
+| `packages/fe-ui/src/data-grid/columns/data-grid/columns.tsx` | 감사 결과 ChipCell 매핑 |
 | `packages/fe-ui/src/cell/UserAgentCell/` | 신규 |
 | `apps/admin/web/src/app/(admin)/my-sessions/` | 신규 페이지 |
 | `apps/admin/web/src/app/(admin)/auth-audit-logs/` | 신규 페이지 |
