@@ -36,9 +36,9 @@ import {
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
-import type { ErrorType } from "../../libs/customIdpAxios";
+import type { ErrorType } from "../../libs/customAxios";
 
-import { customIdpInstance } from "../../libs/customIdpAxios";
+import { customInstance } from "../../libs/customAxios";
 import type {
 	GetIdpDashboardStats200AllOf,
 	GetIdpLoginTrend200AllOf,
@@ -51,10 +51,10 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  * @summary IDP 대시보드 통계 조회
  */
 export const getIdpDashboardStats = (
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<GetIdpDashboardStats200AllOf>(
+	return customInstance<GetIdpDashboardStats200AllOf>(
 		{ url: `/api/v1/idp/dashboard/stats`, method: "GET", signal },
 		options,
 	);
@@ -79,7 +79,7 @@ export const getGetIdpDashboardStatsQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -121,7 +121,7 @@ export function useGetIdpDashboardStats<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -147,7 +147,7 @@ export function useGetIdpDashboardStats<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -165,7 +165,7 @@ export function useGetIdpDashboardStats<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -187,7 +187,7 @@ export function useGetIdpDashboardStats<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -221,7 +221,7 @@ export const prefetchGetIdpDashboardStatsQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetIdpDashboardStatsQueryOptions(options);
@@ -242,7 +242,7 @@ export const getGetIdpDashboardStatsSuspenseQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -276,7 +276,7 @@ export function useGetIdpDashboardStatsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -294,7 +294,7 @@ export function useGetIdpDashboardStatsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -312,7 +312,7 @@ export function useGetIdpDashboardStatsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -334,7 +334,7 @@ export function useGetIdpDashboardStatsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -365,7 +365,7 @@ export const getGetIdpDashboardStatsSuspenseInfiniteQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -404,7 +404,7 @@ export function useGetIdpDashboardStatsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -422,7 +422,7 @@ export function useGetIdpDashboardStatsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -440,7 +440,7 @@ export function useGetIdpDashboardStatsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -462,7 +462,7 @@ export function useGetIdpDashboardStatsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -499,7 +499,7 @@ export const prefetchGetIdpDashboardStatsInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions =
@@ -515,10 +515,10 @@ export const prefetchGetIdpDashboardStatsInfiniteQuery = async <
  * @summary 로그인 추이 조회
  */
 export const getIdpLoginTrend = (
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<GetIdpLoginTrend200AllOf>(
+	return customInstance<GetIdpLoginTrend200AllOf>(
 		{ url: `/api/v1/idp/dashboard/login-trend`, method: "GET", signal },
 		options,
 	);
@@ -539,7 +539,7 @@ export const getGetIdpLoginTrendQueryOptions = <
 	query?: Partial<
 		UseQueryOptions<Awaited<ReturnType<typeof getIdpLoginTrend>>, TError, TData>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -581,7 +581,7 @@ export function useGetIdpLoginTrend<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -607,7 +607,7 @@ export function useGetIdpLoginTrend<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -625,7 +625,7 @@ export function useGetIdpLoginTrend<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -647,7 +647,7 @@ export function useGetIdpLoginTrend<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -681,7 +681,7 @@ export const prefetchGetIdpLoginTrendQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetIdpLoginTrendQueryOptions(options);
@@ -702,7 +702,7 @@ export const getGetIdpLoginTrendSuspenseQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -736,7 +736,7 @@ export function useGetIdpLoginTrendSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -754,7 +754,7 @@ export function useGetIdpLoginTrendSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -772,7 +772,7 @@ export function useGetIdpLoginTrendSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -794,7 +794,7 @@ export function useGetIdpLoginTrendSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -825,7 +825,7 @@ export const getGetIdpLoginTrendSuspenseInfiniteQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -864,7 +864,7 @@ export function useGetIdpLoginTrendSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -882,7 +882,7 @@ export function useGetIdpLoginTrendSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -900,7 +900,7 @@ export function useGetIdpLoginTrendSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -922,7 +922,7 @@ export function useGetIdpLoginTrendSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -958,7 +958,7 @@ export const prefetchGetIdpLoginTrendInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetIdpLoginTrendSuspenseInfiniteQueryOptions(options);

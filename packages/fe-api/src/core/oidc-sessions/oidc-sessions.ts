@@ -40,9 +40,9 @@ import {
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
-import type { ErrorType } from "../../libs/customIdpAxios";
+import type { ErrorType } from "../../libs/customAxios";
 
-import { customIdpInstance } from "../../libs/customIdpAxios";
+import { customInstance } from "../../libs/customAxios";
 import type {
 	GetOidcSessionStats200AllOf,
 	GetOidcSessions200AllOf,
@@ -57,10 +57,10 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  */
 export const getOidcSessions = (
 	params?: GetOidcSessionsParams,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<GetOidcSessions200AllOf>(
+	return customInstance<GetOidcSessions200AllOf>(
 		{ url: `/api/v1/oidc-sessions`, method: "GET", params, signal },
 		options,
 	);
@@ -93,7 +93,7 @@ export const getGetOidcSessionsQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -137,7 +137,7 @@ export function useGetOidcSessions<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -164,7 +164,7 @@ export function useGetOidcSessions<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -183,7 +183,7 @@ export function useGetOidcSessions<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -206,7 +206,7 @@ export function useGetOidcSessions<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -241,7 +241,7 @@ export const prefetchGetOidcSessionsQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetOidcSessionsQueryOptions(params, options);
@@ -264,7 +264,7 @@ export const getGetOidcSessionsSuspenseQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -300,7 +300,7 @@ export function useGetOidcSessionsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -319,7 +319,7 @@ export function useGetOidcSessionsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -338,7 +338,7 @@ export function useGetOidcSessionsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -361,7 +361,7 @@ export function useGetOidcSessionsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -394,7 +394,7 @@ export const getGetOidcSessionsSuspenseInfiniteQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -435,7 +435,7 @@ export function useGetOidcSessionsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -454,7 +454,7 @@ export function useGetOidcSessionsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -473,7 +473,7 @@ export function useGetOidcSessionsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -496,7 +496,7 @@ export function useGetOidcSessionsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -536,7 +536,7 @@ export const prefetchGetOidcSessionsInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetOidcSessionsSuspenseInfiniteQueryOptions(
@@ -554,10 +554,10 @@ export const prefetchGetOidcSessionsInfiniteQuery = async <
  * @summary OIDC 세션/토큰 통계 조회
  */
 export const getOidcSessionStats = (
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<GetOidcSessionStats200AllOf>(
+	return customInstance<GetOidcSessionStats200AllOf>(
 		{ url: `/api/v1/oidc-sessions/stats`, method: "GET", signal },
 		options,
 	);
@@ -582,7 +582,7 @@ export const getGetOidcSessionStatsQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -624,7 +624,7 @@ export function useGetOidcSessionStats<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -650,7 +650,7 @@ export function useGetOidcSessionStats<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -668,7 +668,7 @@ export function useGetOidcSessionStats<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -690,7 +690,7 @@ export function useGetOidcSessionStats<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -724,7 +724,7 @@ export const prefetchGetOidcSessionStatsQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetOidcSessionStatsQueryOptions(options);
@@ -745,7 +745,7 @@ export const getGetOidcSessionStatsSuspenseQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -779,7 +779,7 @@ export function useGetOidcSessionStatsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -797,7 +797,7 @@ export function useGetOidcSessionStatsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -815,7 +815,7 @@ export function useGetOidcSessionStatsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -837,7 +837,7 @@ export function useGetOidcSessionStatsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -868,7 +868,7 @@ export const getGetOidcSessionStatsSuspenseInfiniteQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -907,7 +907,7 @@ export function useGetOidcSessionStatsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -925,7 +925,7 @@ export function useGetOidcSessionStatsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -943,7 +943,7 @@ export function useGetOidcSessionStatsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -965,7 +965,7 @@ export function useGetOidcSessionStatsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -1002,7 +1002,7 @@ export const prefetchGetOidcSessionStatsInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions =
@@ -1019,10 +1019,10 @@ export const prefetchGetOidcSessionStatsInfiniteQuery = async <
  */
 export const revokeOidcSession = (
 	key: string,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<unknown>(
+	return customInstance<unknown>(
 		{ url: `/api/v1/oidc-sessions/${key}/revoke`, method: "POST", signal },
 		options,
 	);
@@ -1038,7 +1038,7 @@ export const getRevokeOidcSessionMutationOptions = <
 		{ key: string },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof revokeOidcSession>>,
 	TError,
@@ -1086,7 +1086,7 @@ export const useRevokeOidcSession = <
 			{ key: string },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -1104,10 +1104,10 @@ export const useRevokeOidcSession = <
  * @summary 전체 세션/토큰 일괄 폐기
  */
 export const revokeAllOidcSessions = (
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<unknown>(
+	return customInstance<unknown>(
 		{ url: `/api/v1/oidc-sessions/revoke-all`, method: "POST", signal },
 		options,
 	);
@@ -1123,7 +1123,7 @@ export const getRevokeAllOidcSessionsMutationOptions = <
 		void,
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof revokeAllOidcSessions>>,
 	TError,
@@ -1169,7 +1169,7 @@ export const useRevokeAllOidcSessions = <
 			void,
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -1188,10 +1188,10 @@ export const useRevokeAllOidcSessions = <
  */
 export const revokeOidcSessionsByGrant = (
 	grantId: string,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<unknown>(
+	return customInstance<unknown>(
 		{
 			url: `/api/v1/oidc-sessions/revoke-by-grant/${grantId}`,
 			method: "POST",
@@ -1211,7 +1211,7 @@ export const getRevokeOidcSessionsByGrantMutationOptions = <
 		{ grantId: string },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof revokeOidcSessionsByGrant>>,
 	TError,
@@ -1259,7 +1259,7 @@ export const useRevokeOidcSessionsByGrant = <
 			{ grantId: string },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<

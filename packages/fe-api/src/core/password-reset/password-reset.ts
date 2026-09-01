@@ -40,9 +40,9 @@ import {
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
-import type { BodyType, ErrorType } from "../../libs/customIdpAxios";
+import type { BodyType, ErrorType } from "../../libs/customAxios";
 
-import { customIdpInstance } from "../../libs/customIdpAxios";
+import { customInstance } from "../../libs/customAxios";
 import type {
 	ExecutePasswordResetBody,
 	ForgotPasswordResultDto,
@@ -60,10 +60,10 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  * @summary 비밀번호 정책 조회
  */
 export const getPasswordPolicy = (
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<PasswordPolicyDto>(
+	return customInstance<PasswordPolicyDto>(
 		{ url: `/api/password-policy`, method: "GET", signal },
 		options,
 	);
@@ -88,7 +88,7 @@ export const getGetPasswordPolicyQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -130,7 +130,7 @@ export function useGetPasswordPolicy<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -156,7 +156,7 @@ export function useGetPasswordPolicy<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -174,7 +174,7 @@ export function useGetPasswordPolicy<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -196,7 +196,7 @@ export function useGetPasswordPolicy<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -230,7 +230,7 @@ export const prefetchGetPasswordPolicyQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetPasswordPolicyQueryOptions(options);
@@ -251,7 +251,7 @@ export const getGetPasswordPolicySuspenseQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -285,7 +285,7 @@ export function useGetPasswordPolicySuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -303,7 +303,7 @@ export function useGetPasswordPolicySuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -321,7 +321,7 @@ export function useGetPasswordPolicySuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -343,7 +343,7 @@ export function useGetPasswordPolicySuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -374,7 +374,7 @@ export const getGetPasswordPolicySuspenseInfiniteQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -413,7 +413,7 @@ export function useGetPasswordPolicySuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -431,7 +431,7 @@ export function useGetPasswordPolicySuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -449,7 +449,7 @@ export function useGetPasswordPolicySuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -471,7 +471,7 @@ export function useGetPasswordPolicySuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -508,7 +508,7 @@ export const prefetchGetPasswordPolicyInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions =
@@ -525,10 +525,10 @@ export const prefetchGetPasswordPolicyInfiniteQuery = async <
  */
 export const requestPasswordReset = (
 	requestPasswordResetBody: BodyType<RequestPasswordResetBody>,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<ForgotPasswordResultDto>(
+	return customInstance<ForgotPasswordResultDto>(
 		{
 			url: `/api/forgot-password`,
 			method: "POST",
@@ -550,7 +550,7 @@ export const getRequestPasswordResetMutationOptions = <
 		{ data: BodyType<RequestPasswordResetBody> },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof requestPasswordReset>>,
 	TError,
@@ -599,7 +599,7 @@ export const useRequestPasswordReset = <
 			{ data: BodyType<RequestPasswordResetBody> },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -618,10 +618,10 @@ export const useRequestPasswordReset = <
  */
 export const validateResetToken = (
 	token: string,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<TokenValidationDto>(
+	return customInstance<TokenValidationDto>(
 		{ url: `/api/reset-password/${token}`, method: "GET", signal },
 		options,
 	);
@@ -648,7 +648,7 @@ export const getValidateResetTokenQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -698,7 +698,7 @@ export function useValidateResetToken<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -725,7 +725,7 @@ export function useValidateResetToken<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -744,7 +744,7 @@ export function useValidateResetToken<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -767,7 +767,7 @@ export function useValidateResetToken<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -802,7 +802,7 @@ export const prefetchValidateResetTokenQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getValidateResetTokenQueryOptions(token, options);
@@ -825,7 +825,7 @@ export const getValidateResetTokenSuspenseQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -862,7 +862,7 @@ export function useValidateResetTokenSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -881,7 +881,7 @@ export function useValidateResetTokenSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -900,7 +900,7 @@ export function useValidateResetTokenSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -923,7 +923,7 @@ export function useValidateResetTokenSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -959,7 +959,7 @@ export const getValidateResetTokenSuspenseInfiniteQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -1000,7 +1000,7 @@ export function useValidateResetTokenSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -1019,7 +1019,7 @@ export function useValidateResetTokenSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -1038,7 +1038,7 @@ export function useValidateResetTokenSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -1061,7 +1061,7 @@ export function useValidateResetTokenSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -1101,7 +1101,7 @@ export const prefetchValidateResetTokenInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getValidateResetTokenSuspenseInfiniteQueryOptions(
@@ -1121,10 +1121,10 @@ export const prefetchValidateResetTokenInfiniteQuery = async <
 export const executePasswordReset = (
 	token: string,
 	executePasswordResetBody: BodyType<ExecutePasswordResetBody>,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<ResetPasswordResultDto>(
+	return customInstance<ResetPasswordResultDto>(
 		{
 			url: `/api/reset-password/${token}`,
 			method: "POST",
@@ -1146,7 +1146,7 @@ export const getExecutePasswordResetMutationOptions = <
 		{ token: string; data: BodyType<ExecutePasswordResetBody> },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof executePasswordReset>>,
 	TError,
@@ -1196,7 +1196,7 @@ export const useExecutePasswordReset = <
 			{ token: string; data: BodyType<ExecutePasswordResetBody> },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<

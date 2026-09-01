@@ -62,11 +62,11 @@ export type GetUsersParams = {
 	/**
 	 * 가입일 시작 (ISO8601)
 	 */
-	createdFrom?: Date;
+	createdFrom?: string;
 	/**
 	 * 가입일 종료 (ISO8601)
 	 */
-	createdTo?: Date;
+	createdTo?: string;
 	/**
 	 * 복합 정렬 (JSON:API 컨벤션). 부호 없음=ASC, -prefix=DESC. 허용 필드: createdAt, name, email. 예: ?sort=name&sort=-createdAt
 	 */

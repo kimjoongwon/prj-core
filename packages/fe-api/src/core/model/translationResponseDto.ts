@@ -30,10 +30,10 @@ export interface TranslationResponseDto {
 	/** 번역 완료 여부 */
 	isTranslated: boolean;
 	/** 생성일시 */
-	createdAt: Date;
+	createdAt: string;
 	/**
 	 * 수정일시
 	 * @nullable
 	 */
-	updatedAt: Date | null;
+	updatedAt: string | null;
 }

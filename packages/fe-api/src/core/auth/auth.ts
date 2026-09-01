@@ -40,9 +40,9 @@ import {
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
-import type { BodyType, ErrorType } from "../../libs/customIdpAxios";
+import type { BodyType, ErrorType } from "../../libs/customAxios";
 
-import { customIdpInstance } from "../../libs/customIdpAxios";
+import { customInstance } from "../../libs/customAxios";
 import type {
 	ForceResetPassword200AllOf,
 	GetAuthAuditLogStats200AllOf,
@@ -77,10 +77,10 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  */
 export const login = (
 	params: LoginParams,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<void>(
+	return customInstance<void>(
 		{ url: `/api/v1/auth/oidc/login`, method: "GET", params, signal },
 		options,
 	);
@@ -107,7 +107,7 @@ export const getLoginQueryOptions = <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -145,7 +145,7 @@ export function useLogin<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -168,7 +168,7 @@ export function useLogin<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -183,7 +183,7 @@ export function useLogin<
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -202,7 +202,7 @@ export function useLogin<
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -233,7 +233,7 @@ export const prefetchLoginQuery = async <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getLoginQueryOptions(params, options);
@@ -252,7 +252,7 @@ export const getLoginSuspenseQueryOptions = <
 		query?: Partial<
 			UseSuspenseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -284,7 +284,7 @@ export function useLoginSuspense<
 		query: Partial<
 			UseSuspenseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -299,7 +299,7 @@ export function useLoginSuspense<
 		query?: Partial<
 			UseSuspenseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -314,7 +314,7 @@ export function useLoginSuspense<
 		query?: Partial<
 			UseSuspenseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -333,7 +333,7 @@ export function useLoginSuspense<
 		query?: Partial<
 			UseSuspenseQueryOptions<Awaited<ReturnType<typeof login>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -366,7 +366,7 @@ export const getLoginSuspenseInfiniteQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -406,7 +406,7 @@ export function useLoginSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -425,7 +425,7 @@ export function useLoginSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -444,7 +444,7 @@ export function useLoginSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -467,7 +467,7 @@ export function useLoginSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -504,7 +504,7 @@ export const prefetchLoginInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getLoginSuspenseInfiniteQueryOptions(params, options);
@@ -520,10 +520,10 @@ export const prefetchLoginInfiniteQuery = async <
  */
 export const oidcCallback = (
 	params: OidcCallbackParams,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<void>(
+	return customInstance<void>(
 		{ url: `/api/v1/auth/callback`, method: "GET", params, signal },
 		options,
 	);
@@ -552,7 +552,7 @@ export const getOidcCallbackQueryOptions = <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -592,7 +592,7 @@ export function useOidcCallback<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -615,7 +615,7 @@ export function useOidcCallback<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -630,7 +630,7 @@ export function useOidcCallback<
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -649,7 +649,7 @@ export function useOidcCallback<
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -680,7 +680,7 @@ export const prefetchOidcCallbackQuery = async <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof oidcCallback>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getOidcCallbackQueryOptions(params, options);
@@ -703,7 +703,7 @@ export const getOidcCallbackSuspenseQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -739,7 +739,7 @@ export function useOidcCallbackSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -758,7 +758,7 @@ export function useOidcCallbackSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -777,7 +777,7 @@ export function useOidcCallbackSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -800,7 +800,7 @@ export function useOidcCallbackSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -833,7 +833,7 @@ export const getOidcCallbackSuspenseInfiniteQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -874,7 +874,7 @@ export function useOidcCallbackSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -893,7 +893,7 @@ export function useOidcCallbackSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -912,7 +912,7 @@ export function useOidcCallbackSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -935,7 +935,7 @@ export function useOidcCallbackSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -975,7 +975,7 @@ export const prefetchOidcCallbackInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getOidcCallbackSuspenseInfiniteQueryOptions(
@@ -994,10 +994,10 @@ export const prefetchOidcCallbackInfiniteQuery = async <
  */
 export const nativeLogin = (
 	nativeLoginPayloadDto: BodyType<NativeLoginPayloadDto>,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<NativeLogin200AllOf>(
+	return customInstance<NativeLogin200AllOf>(
 		{
 			url: `/api/v1/auth/login`,
 			method: "POST",
@@ -1019,7 +1019,7 @@ export const getNativeLoginMutationOptions = <
 		{ data: BodyType<NativeLoginPayloadDto> },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof nativeLogin>>,
 	TError,
@@ -1064,7 +1064,7 @@ export const useNativeLogin = <TError = ErrorType<unknown>, TContext = unknown>(
 			{ data: BodyType<NativeLoginPayloadDto> },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -1083,10 +1083,10 @@ export const useNativeLogin = <TError = ErrorType<unknown>, TContext = unknown>(
  */
 export const nativeRefreshToken = (
 	nativeTokenRefreshPayloadDto: BodyType<NativeTokenRefreshPayloadDto>,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<NativeRefreshToken200AllOf>(
+	return customInstance<NativeRefreshToken200AllOf>(
 		{
 			url: `/api/v1/auth/native/token/refresh`,
 			method: "POST",
@@ -1108,7 +1108,7 @@ export const getNativeRefreshTokenMutationOptions = <
 		{ data: BodyType<NativeTokenRefreshPayloadDto> },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof nativeRefreshToken>>,
 	TError,
@@ -1157,7 +1157,7 @@ export const useNativeRefreshToken = <
 			{ data: BodyType<NativeTokenRefreshPayloadDto> },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -1176,10 +1176,10 @@ export const useNativeRefreshToken = <
  */
 export const nativeLogout = (
 	nativeLogoutPayloadDto: BodyType<NativeLogoutPayloadDto>,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<NativeLogout200AllOf>(
+	return customInstance<NativeLogout200AllOf>(
 		{
 			url: `/api/v1/auth/native/logout`,
 			method: "POST",
@@ -1201,7 +1201,7 @@ export const getNativeLogoutMutationOptions = <
 		{ data: BodyType<NativeLogoutPayloadDto> },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof nativeLogout>>,
 	TError,
@@ -1249,7 +1249,7 @@ export const useNativeLogout = <
 			{ data: BodyType<NativeLogoutPayloadDto> },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -1267,10 +1267,10 @@ export const useNativeLogout = <
  * @summary 토큰 재발급
  */
 export const refreshToken = (
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<RefreshToken200AllOf>(
+	return customInstance<RefreshToken200AllOf>(
 		{ url: `/api/v1/auth/token/refresh`, method: "POST", signal },
 		options,
 	);
@@ -1286,7 +1286,7 @@ export const getRefreshTokenMutationOptions = <
 		void,
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof refreshToken>>,
 	TError,
@@ -1329,7 +1329,7 @@ export const useRefreshToken = <TError = ErrorType<void>, TContext = unknown>(
 			void,
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -1347,10 +1347,10 @@ export const useRefreshToken = <TError = ErrorType<void>, TContext = unknown>(
  * @summary 회원가입 Space 목록 조회
  */
 export const getSignUpSpaces = (
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<GetSignUpSpaces200AllOf>(
+	return customInstance<GetSignUpSpaces200AllOf>(
 		{ url: `/api/v1/auth/sign-up/spaces`, method: "GET", signal },
 		options,
 	);
@@ -1371,7 +1371,7 @@ export const getGetSignUpSpacesQueryOptions = <
 	query?: Partial<
 		UseQueryOptions<Awaited<ReturnType<typeof getSignUpSpaces>>, TError, TData>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -1413,7 +1413,7 @@ export function useGetSignUpSpaces<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -1439,7 +1439,7 @@ export function useGetSignUpSpaces<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -1457,7 +1457,7 @@ export function useGetSignUpSpaces<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -1479,7 +1479,7 @@ export function useGetSignUpSpaces<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -1513,7 +1513,7 @@ export const prefetchGetSignUpSpacesQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetSignUpSpacesQueryOptions(options);
@@ -1534,7 +1534,7 @@ export const getGetSignUpSpacesSuspenseQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -1568,7 +1568,7 @@ export function useGetSignUpSpacesSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -1586,7 +1586,7 @@ export function useGetSignUpSpacesSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -1604,7 +1604,7 @@ export function useGetSignUpSpacesSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -1626,7 +1626,7 @@ export function useGetSignUpSpacesSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -1657,7 +1657,7 @@ export const getGetSignUpSpacesSuspenseInfiniteQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -1696,7 +1696,7 @@ export function useGetSignUpSpacesSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -1714,7 +1714,7 @@ export function useGetSignUpSpacesSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -1732,7 +1732,7 @@ export function useGetSignUpSpacesSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -1754,7 +1754,7 @@ export function useGetSignUpSpacesSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -1790,7 +1790,7 @@ export const prefetchGetSignUpSpacesInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetSignUpSpacesSuspenseInfiniteQueryOptions(options);
@@ -1806,10 +1806,10 @@ export const prefetchGetSignUpSpacesInfiniteQuery = async <
  */
 export const signUp = (
 	signUpPayloadDto: BodyType<SignUpPayloadDto>,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<SignUp201AllOf>(
+	return customInstance<SignUp201AllOf>(
 		{
 			url: `/api/v1/auth/sign-up`,
 			method: "POST",
@@ -1831,7 +1831,7 @@ export const getSignUpMutationOptions = <
 		{ data: BodyType<SignUpPayloadDto> },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof signUp>>,
 	TError,
@@ -1876,7 +1876,7 @@ export const useSignUp = <TError = ErrorType<void>, TContext = unknown>(
 			{ data: BodyType<SignUpPayloadDto> },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -1895,10 +1895,10 @@ export const useSignUp = <TError = ErrorType<void>, TContext = unknown>(
  */
 export const confirmEmailVerification = (
 	token: string,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<unknown>(
+	return customInstance<unknown>(
 		{
 			url: `/api/v1/auth/email-verifications/${token}/confirm`,
 			method: "GET",
@@ -1932,7 +1932,7 @@ export const getConfirmEmailVerificationQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -1982,7 +1982,7 @@ export function useConfirmEmailVerification<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -2009,7 +2009,7 @@ export function useConfirmEmailVerification<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -2028,7 +2028,7 @@ export function useConfirmEmailVerification<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -2051,7 +2051,7 @@ export function useConfirmEmailVerification<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -2086,7 +2086,7 @@ export const prefetchConfirmEmailVerificationQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getConfirmEmailVerificationQueryOptions(token, options);
@@ -2109,7 +2109,7 @@ export const getConfirmEmailVerificationSuspenseQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -2146,7 +2146,7 @@ export function useConfirmEmailVerificationSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -2165,7 +2165,7 @@ export function useConfirmEmailVerificationSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -2184,7 +2184,7 @@ export function useConfirmEmailVerificationSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -2207,7 +2207,7 @@ export function useConfirmEmailVerificationSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -2243,7 +2243,7 @@ export const getConfirmEmailVerificationSuspenseInfiniteQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -2286,7 +2286,7 @@ export function useConfirmEmailVerificationSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -2305,7 +2305,7 @@ export function useConfirmEmailVerificationSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -2324,7 +2324,7 @@ export function useConfirmEmailVerificationSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -2347,7 +2347,7 @@ export function useConfirmEmailVerificationSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -2387,7 +2387,7 @@ export const prefetchConfirmEmailVerificationInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getConfirmEmailVerificationSuspenseInfiniteQueryOptions(
@@ -2405,10 +2405,10 @@ export const prefetchConfirmEmailVerificationInfiniteQuery = async <
  * @summary 토큰 유효성 검증
  */
 export const verifyToken = (
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<VerifyToken200AllOf>(
+	return customInstance<VerifyToken200AllOf>(
 		{ url: `/api/v1/auth/verify-token`, method: "GET", signal },
 		options,
 	);
@@ -2429,7 +2429,7 @@ export const getVerifyTokenQueryOptions = <
 	query?: Partial<
 		UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -2467,7 +2467,7 @@ export function useVerifyToken<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -2489,7 +2489,7 @@ export function useVerifyToken<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -2503,7 +2503,7 @@ export function useVerifyToken<
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -2521,7 +2521,7 @@ export function useVerifyToken<
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -2551,7 +2551,7 @@ export const prefetchVerifyTokenQuery = async <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof verifyToken>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getVerifyTokenQueryOptions(options);
@@ -2572,7 +2572,7 @@ export const getVerifyTokenSuspenseQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -2606,7 +2606,7 @@ export function useVerifyTokenSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -2624,7 +2624,7 @@ export function useVerifyTokenSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -2642,7 +2642,7 @@ export function useVerifyTokenSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -2664,7 +2664,7 @@ export function useVerifyTokenSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -2695,7 +2695,7 @@ export const getVerifyTokenSuspenseInfiniteQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -2733,7 +2733,7 @@ export function useVerifyTokenSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -2751,7 +2751,7 @@ export function useVerifyTokenSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -2769,7 +2769,7 @@ export function useVerifyTokenSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -2791,7 +2791,7 @@ export function useVerifyTokenSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -2827,7 +2827,7 @@ export const prefetchVerifyTokenInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getVerifyTokenSuspenseInfiniteQueryOptions(options);
@@ -2842,10 +2842,10 @@ export const prefetchVerifyTokenInfiniteQuery = async <
  * @summary 내 Space 목록 조회
  */
 export const getMySpaces = (
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<GetMySpaces200AllOf>(
+	return customInstance<GetMySpaces200AllOf>(
 		{ url: `/api/v1/auth/my-spaces`, method: "GET", signal },
 		options,
 	);
@@ -2866,7 +2866,7 @@ export const getGetMySpacesQueryOptions = <
 	query?: Partial<
 		UseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -2904,7 +2904,7 @@ export function useGetMySpaces<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -2926,7 +2926,7 @@ export function useGetMySpaces<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -2940,7 +2940,7 @@ export function useGetMySpaces<
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -2958,7 +2958,7 @@ export function useGetMySpaces<
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -2988,7 +2988,7 @@ export const prefetchGetMySpacesQuery = async <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getMySpaces>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetMySpacesQueryOptions(options);
@@ -3009,7 +3009,7 @@ export const getGetMySpacesSuspenseQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -3043,7 +3043,7 @@ export function useGetMySpacesSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -3061,7 +3061,7 @@ export function useGetMySpacesSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -3079,7 +3079,7 @@ export function useGetMySpacesSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -3101,7 +3101,7 @@ export function useGetMySpacesSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -3132,7 +3132,7 @@ export const getGetMySpacesSuspenseInfiniteQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -3170,7 +3170,7 @@ export function useGetMySpacesSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -3188,7 +3188,7 @@ export function useGetMySpacesSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -3206,7 +3206,7 @@ export function useGetMySpacesSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -3228,7 +3228,7 @@ export function useGetMySpacesSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -3264,7 +3264,7 @@ export const prefetchGetMySpacesInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetMySpacesSuspenseInfiniteQueryOptions(options);
@@ -3279,10 +3279,10 @@ export const prefetchGetMySpacesInfiniteQuery = async <
  * @summary 현재 선택 Space 조회
  */
 export const getCurrentSpace = (
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<GetCurrentSpace200AllOf>(
+	return customInstance<GetCurrentSpace200AllOf>(
 		{ url: `/api/v1/auth/current-space`, method: "GET", signal },
 		options,
 	);
@@ -3303,7 +3303,7 @@ export const getGetCurrentSpaceQueryOptions = <
 	query?: Partial<
 		UseQueryOptions<Awaited<ReturnType<typeof getCurrentSpace>>, TError, TData>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -3345,7 +3345,7 @@ export function useGetCurrentSpace<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -3371,7 +3371,7 @@ export function useGetCurrentSpace<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -3389,7 +3389,7 @@ export function useGetCurrentSpace<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -3411,7 +3411,7 @@ export function useGetCurrentSpace<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -3445,7 +3445,7 @@ export const prefetchGetCurrentSpaceQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetCurrentSpaceQueryOptions(options);
@@ -3466,7 +3466,7 @@ export const getGetCurrentSpaceSuspenseQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -3500,7 +3500,7 @@ export function useGetCurrentSpaceSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -3518,7 +3518,7 @@ export function useGetCurrentSpaceSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -3536,7 +3536,7 @@ export function useGetCurrentSpaceSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -3558,7 +3558,7 @@ export function useGetCurrentSpaceSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -3589,7 +3589,7 @@ export const getGetCurrentSpaceSuspenseInfiniteQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -3628,7 +3628,7 @@ export function useGetCurrentSpaceSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -3646,7 +3646,7 @@ export function useGetCurrentSpaceSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -3664,7 +3664,7 @@ export function useGetCurrentSpaceSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -3686,7 +3686,7 @@ export function useGetCurrentSpaceSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -3722,7 +3722,7 @@ export const prefetchGetCurrentSpaceInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetCurrentSpaceSuspenseInfiniteQueryOptions(options);
@@ -3738,10 +3738,10 @@ export const prefetchGetCurrentSpaceInfiniteQuery = async <
  */
 export const setCurrentSpace = (
 	setCurrentSpaceDto: BodyType<SetCurrentSpaceDto>,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<SetCurrentSpace200AllOf>(
+	return customInstance<SetCurrentSpace200AllOf>(
 		{
 			url: `/api/v1/auth/current-space`,
 			method: "POST",
@@ -3763,7 +3763,7 @@ export const getSetCurrentSpaceMutationOptions = <
 		{ data: BodyType<SetCurrentSpaceDto> },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof setCurrentSpace>>,
 	TError,
@@ -3811,7 +3811,7 @@ export const useSetCurrentSpace = <
 			{ data: BodyType<SetCurrentSpaceDto> },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -3829,10 +3829,10 @@ export const useSetCurrentSpace = <
  * @summary 로그아웃
  */
 export const logout = (
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<void>(
+	return customInstance<void>(
 		{ url: `/api/v1/auth/logout`, method: "POST", signal },
 		options,
 	);
@@ -3848,7 +3848,7 @@ export const getLogoutMutationOptions = <
 		void,
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof logout>>,
 	TError,
@@ -3891,7 +3891,7 @@ export const useLogout = <TError = ErrorType<unknown>, TContext = unknown>(
 			void,
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -3910,10 +3910,10 @@ export const useLogout = <TError = ErrorType<unknown>, TContext = unknown>(
  */
 export const getAuthAuditLogs = (
 	params?: GetAuthAuditLogsParams,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<GetAuthAuditLogs200AllOf>(
+	return customInstance<GetAuthAuditLogs200AllOf>(
 		{ url: `/api/v1/auth/audit-logs`, method: "GET", params, signal },
 		options,
 	);
@@ -3948,7 +3948,7 @@ export const getGetAuthAuditLogsQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -3993,7 +3993,7 @@ export function useGetAuthAuditLogs<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -4020,7 +4020,7 @@ export function useGetAuthAuditLogs<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -4039,7 +4039,7 @@ export function useGetAuthAuditLogs<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -4062,7 +4062,7 @@ export function useGetAuthAuditLogs<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -4097,7 +4097,7 @@ export const prefetchGetAuthAuditLogsQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetAuthAuditLogsQueryOptions(params, options);
@@ -4120,7 +4120,7 @@ export const getGetAuthAuditLogsSuspenseQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -4157,7 +4157,7 @@ export function useGetAuthAuditLogsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -4176,7 +4176,7 @@ export function useGetAuthAuditLogsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -4195,7 +4195,7 @@ export function useGetAuthAuditLogsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -4218,7 +4218,7 @@ export function useGetAuthAuditLogsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -4251,7 +4251,7 @@ export const getGetAuthAuditLogsSuspenseInfiniteQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -4292,7 +4292,7 @@ export function useGetAuthAuditLogsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -4311,7 +4311,7 @@ export function useGetAuthAuditLogsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -4330,7 +4330,7 @@ export function useGetAuthAuditLogsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -4353,7 +4353,7 @@ export function useGetAuthAuditLogsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -4393,7 +4393,7 @@ export const prefetchGetAuthAuditLogsInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetAuthAuditLogsSuspenseInfiniteQueryOptions(
@@ -4411,10 +4411,10 @@ export const prefetchGetAuthAuditLogsInfiniteQuery = async <
  * @summary 감사 로그 통계 조회
  */
 export const getAuthAuditLogStats = (
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<GetAuthAuditLogStats200AllOf>(
+	return customInstance<GetAuthAuditLogStats200AllOf>(
 		{ url: `/api/v1/auth/audit-logs/stats`, method: "GET", signal },
 		options,
 	);
@@ -4439,7 +4439,7 @@ export const getGetAuthAuditLogStatsQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -4481,7 +4481,7 @@ export function useGetAuthAuditLogStats<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -4507,7 +4507,7 @@ export function useGetAuthAuditLogStats<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -4525,7 +4525,7 @@ export function useGetAuthAuditLogStats<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -4547,7 +4547,7 @@ export function useGetAuthAuditLogStats<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -4581,7 +4581,7 @@ export const prefetchGetAuthAuditLogStatsQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetAuthAuditLogStatsQueryOptions(options);
@@ -4602,7 +4602,7 @@ export const getGetAuthAuditLogStatsSuspenseQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -4636,7 +4636,7 @@ export function useGetAuthAuditLogStatsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -4654,7 +4654,7 @@ export function useGetAuthAuditLogStatsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -4672,7 +4672,7 @@ export function useGetAuthAuditLogStatsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -4694,7 +4694,7 @@ export function useGetAuthAuditLogStatsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -4725,7 +4725,7 @@ export const getGetAuthAuditLogStatsSuspenseInfiniteQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -4764,7 +4764,7 @@ export function useGetAuthAuditLogStatsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -4782,7 +4782,7 @@ export function useGetAuthAuditLogStatsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -4800,7 +4800,7 @@ export function useGetAuthAuditLogStatsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -4822,7 +4822,7 @@ export function useGetAuthAuditLogStatsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -4859,7 +4859,7 @@ export const prefetchGetAuthAuditLogStatsInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions =
@@ -4876,10 +4876,10 @@ export const prefetchGetAuthAuditLogStatsInfiniteQuery = async <
  */
 export const unlockAccount = (
 	userId: string,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<UnlockAccount200AllOf>(
+	return customInstance<UnlockAccount200AllOf>(
 		{ url: `/api/v1/auth/users/${userId}/unlock`, method: "POST", signal },
 		options,
 	);
@@ -4895,7 +4895,7 @@ export const getUnlockAccountMutationOptions = <
 		{ userId: string },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof unlockAccount>>,
 	TError,
@@ -4940,7 +4940,7 @@ export const useUnlockAccount = <TError = ErrorType<void>, TContext = unknown>(
 			{ userId: string },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -4959,10 +4959,10 @@ export const useUnlockAccount = <TError = ErrorType<void>, TContext = unknown>(
  */
 export const forceResetPassword = (
 	userId: string,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<ForceResetPassword200AllOf>(
+	return customInstance<ForceResetPassword200AllOf>(
 		{
 			url: `/api/v1/auth/users/${userId}/force-reset-password`,
 			method: "POST",
@@ -4982,7 +4982,7 @@ export const getForceResetPasswordMutationOptions = <
 		{ userId: string },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof forceResetPassword>>,
 	TError,
@@ -5030,7 +5030,7 @@ export const useForceResetPassword = <
 			{ userId: string },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -5049,10 +5049,10 @@ export const useForceResetPassword = <
  */
 export const invalidateUserSessions = (
 	userId: string,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<InvalidateUserSessions200AllOf>(
+	return customInstance<InvalidateUserSessions200AllOf>(
 		{
 			url: `/api/v1/auth/users/${userId}/invalidate-sessions`,
 			method: "POST",
@@ -5072,7 +5072,7 @@ export const getInvalidateUserSessionsMutationOptions = <
 		{ userId: string },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof invalidateUserSessions>>,
 	TError,
@@ -5120,7 +5120,7 @@ export const useInvalidateUserSessions = <
 			{ userId: string },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<

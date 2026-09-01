@@ -40,9 +40,9 @@ import {
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
-import type { ErrorType } from "../../libs/customIdpAxios";
+import type { ErrorType } from "../../libs/customAxios";
 
-import { customIdpInstance } from "../../libs/customIdpAxios";
+import { customInstance } from "../../libs/customAxios";
 import type {
 	GetEmailVerifications200AllOf,
 	GetEmailVerificationsParams,
@@ -57,10 +57,10 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  */
 export const getEmailVerifications = (
 	params?: GetEmailVerificationsParams,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<GetEmailVerifications200AllOf>(
+	return customInstance<GetEmailVerifications200AllOf>(
 		{ url: `/api/v1/idp/email-verifications`, method: "GET", params, signal },
 		options,
 	);
@@ -98,7 +98,7 @@ export const getGetEmailVerificationsQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -143,7 +143,7 @@ export function useGetEmailVerifications<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -170,7 +170,7 @@ export function useGetEmailVerifications<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -189,7 +189,7 @@ export function useGetEmailVerifications<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -212,7 +212,7 @@ export function useGetEmailVerifications<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -247,7 +247,7 @@ export const prefetchGetEmailVerificationsQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetEmailVerificationsQueryOptions(params, options);
@@ -270,7 +270,7 @@ export const getGetEmailVerificationsSuspenseQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -307,7 +307,7 @@ export function useGetEmailVerificationsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -326,7 +326,7 @@ export function useGetEmailVerificationsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -345,7 +345,7 @@ export function useGetEmailVerificationsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -368,7 +368,7 @@ export function useGetEmailVerificationsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -404,7 +404,7 @@ export const getGetEmailVerificationsSuspenseInfiniteQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -445,7 +445,7 @@ export function useGetEmailVerificationsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -464,7 +464,7 @@ export function useGetEmailVerificationsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -483,7 +483,7 @@ export function useGetEmailVerificationsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -506,7 +506,7 @@ export function useGetEmailVerificationsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -546,7 +546,7 @@ export const prefetchGetEmailVerificationsInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetEmailVerificationsSuspenseInfiniteQueryOptions(
@@ -565,10 +565,10 @@ export const prefetchGetEmailVerificationsInfiniteQuery = async <
  */
 export const resendEmailVerification = (
 	emailVerificationId: string,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<ResendEmailVerification200AllOf>(
+	return customInstance<ResendEmailVerification200AllOf>(
 		{
 			url: `/api/v1/idp/email-verifications/${emailVerificationId}/resend`,
 			method: "POST",
@@ -588,7 +588,7 @@ export const getResendEmailVerificationMutationOptions = <
 		{ emailVerificationId: string },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof resendEmailVerification>>,
 	TError,
@@ -636,7 +636,7 @@ export const useResendEmailVerification = <
 			{ emailVerificationId: string },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<

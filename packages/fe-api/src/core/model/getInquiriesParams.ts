@@ -68,11 +68,11 @@ export type GetInquiriesParams = {
 	/**
 	 * 생성일 시작 (ISO8601)
 	 */
-	startDate?: Date;
+	startDate?: string;
 	/**
 	 * 생성일 종료 (ISO8601)
 	 */
-	endDate?: Date;
+	endDate?: string;
 	/**
 	 * 복합 정렬 (JSON:API 컨벤션). 부호 없음=ASC, -prefix=DESC. 허용 필드: createdAt, updatedAt, priority, status, lastMessageAt. 예: ?sort=-createdAt&sort=priority
 	 */

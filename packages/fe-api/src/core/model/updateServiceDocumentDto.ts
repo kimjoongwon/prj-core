@@ -30,5 +30,5 @@ export interface UpdateServiceDocumentDto {
 	/** 정렬 순서 */
 	displayOrder?: number;
 	/** 효력 시작 시각 */
-	effectiveAt?: Date;
+	effectiveAt?: string;
 }

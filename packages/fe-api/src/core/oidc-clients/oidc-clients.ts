@@ -40,9 +40,9 @@ import {
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
-import type { BodyType, ErrorType } from "../../libs/customIdpAxios";
+import type { BodyType, ErrorType } from "../../libs/customAxios";
 
-import { customIdpInstance } from "../../libs/customIdpAxios";
+import { customInstance } from "../../libs/customAxios";
 import type {
 	CreateOidcClient201AllOf,
 	CreateOidcClientDto,
@@ -62,10 +62,10 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  */
 export const getOidcClients = (
 	params?: GetOidcClientsParams,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<GetOidcClients200AllOf>(
+	return customInstance<GetOidcClients200AllOf>(
 		{ url: `/api/v1/oidc-clients`, method: "GET", params, signal },
 		options,
 	);
@@ -94,7 +94,7 @@ export const getGetOidcClientsQueryOptions = <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -134,7 +134,7 @@ export function useGetOidcClients<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -157,7 +157,7 @@ export function useGetOidcClients<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -172,7 +172,7 @@ export function useGetOidcClients<
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -191,7 +191,7 @@ export function useGetOidcClients<
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -222,7 +222,7 @@ export const prefetchGetOidcClientsQuery = async <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getOidcClients>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetOidcClientsQueryOptions(params, options);
@@ -245,7 +245,7 @@ export const getGetOidcClientsSuspenseQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -281,7 +281,7 @@ export function useGetOidcClientsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -300,7 +300,7 @@ export function useGetOidcClientsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -319,7 +319,7 @@ export function useGetOidcClientsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -342,7 +342,7 @@ export function useGetOidcClientsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -375,7 +375,7 @@ export const getGetOidcClientsSuspenseInfiniteQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -416,7 +416,7 @@ export function useGetOidcClientsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -435,7 +435,7 @@ export function useGetOidcClientsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -454,7 +454,7 @@ export function useGetOidcClientsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -477,7 +477,7 @@ export function useGetOidcClientsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -517,7 +517,7 @@ export const prefetchGetOidcClientsInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetOidcClientsSuspenseInfiniteQueryOptions(
@@ -536,10 +536,10 @@ export const prefetchGetOidcClientsInfiniteQuery = async <
  */
 export const createOidcClient = (
 	createOidcClientDto: BodyType<CreateOidcClientDto>,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<CreateOidcClient201AllOf>(
+	return customInstance<CreateOidcClient201AllOf>(
 		{
 			url: `/api/v1/oidc-clients`,
 			method: "POST",
@@ -561,7 +561,7 @@ export const getCreateOidcClientMutationOptions = <
 		{ data: BodyType<CreateOidcClientDto> },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof createOidcClient>>,
 	TError,
@@ -609,7 +609,7 @@ export const useCreateOidcClient = <
 			{ data: BodyType<CreateOidcClientDto> },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -628,10 +628,10 @@ export const useCreateOidcClient = <
  */
 export const getOidcClient = (
 	oidcClientId: string,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<GetOidcClient200AllOf>(
+	return customInstance<GetOidcClient200AllOf>(
 		{ url: `/api/v1/oidc-clients/${oidcClientId}`, method: "GET", signal },
 		options,
 	);
@@ -654,7 +654,7 @@ export const getGetOidcClientQueryOptions = <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -700,7 +700,7 @@ export function useGetOidcClient<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -723,7 +723,7 @@ export function useGetOidcClient<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -738,7 +738,7 @@ export function useGetOidcClient<
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -757,7 +757,7 @@ export function useGetOidcClient<
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -788,7 +788,7 @@ export const prefetchGetOidcClientQuery = async <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getOidcClient>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetOidcClientQueryOptions(oidcClientId, options);
@@ -811,7 +811,7 @@ export const getGetOidcClientSuspenseQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -848,7 +848,7 @@ export function useGetOidcClientSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -867,7 +867,7 @@ export function useGetOidcClientSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -886,7 +886,7 @@ export function useGetOidcClientSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -909,7 +909,7 @@ export function useGetOidcClientSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -945,7 +945,7 @@ export const getGetOidcClientSuspenseInfiniteQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -986,7 +986,7 @@ export function useGetOidcClientSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -1005,7 +1005,7 @@ export function useGetOidcClientSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -1024,7 +1024,7 @@ export function useGetOidcClientSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -1047,7 +1047,7 @@ export function useGetOidcClientSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -1087,7 +1087,7 @@ export const prefetchGetOidcClientInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetOidcClientSuspenseInfiniteQueryOptions(
@@ -1107,9 +1107,9 @@ export const prefetchGetOidcClientInfiniteQuery = async <
 export const updateOidcClient = (
 	oidcClientId: string,
 	updateOidcClientDto: BodyType<UpdateOidcClientDto>,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 ) => {
-	return customIdpInstance<UpdateOidcClient200AllOf>(
+	return customInstance<UpdateOidcClient200AllOf>(
 		{
 			url: `/api/v1/oidc-clients/${oidcClientId}`,
 			method: "PATCH",
@@ -1130,7 +1130,7 @@ export const getUpdateOidcClientMutationOptions = <
 		{ oidcClientId: string; data: BodyType<UpdateOidcClientDto> },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof updateOidcClient>>,
 	TError,
@@ -1178,7 +1178,7 @@ export const useUpdateOidcClient = <
 			{ oidcClientId: string; data: BodyType<UpdateOidcClientDto> },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -1197,9 +1197,9 @@ export const useUpdateOidcClient = <
  */
 export const deleteOidcClient = (
 	oidcClientId: string,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 ) => {
-	return customIdpInstance<unknown>(
+	return customInstance<unknown>(
 		{ url: `/api/v1/oidc-clients/${oidcClientId}`, method: "DELETE" },
 		options,
 	);
@@ -1215,7 +1215,7 @@ export const getDeleteOidcClientMutationOptions = <
 		{ oidcClientId: string },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof deleteOidcClient>>,
 	TError,
@@ -1263,7 +1263,7 @@ export const useDeleteOidcClient = <
 			{ oidcClientId: string },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -1282,9 +1282,9 @@ export const useDeleteOidcClient = <
  */
 export const toggleActiveOidcClient = (
 	oidcClientId: string,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 ) => {
-	return customIdpInstance<ToggleActiveOidcClient200AllOf>(
+	return customInstance<ToggleActiveOidcClient200AllOf>(
 		{
 			url: `/api/v1/oidc-clients/${oidcClientId}/toggle-active`,
 			method: "PATCH",
@@ -1303,7 +1303,7 @@ export const getToggleActiveOidcClientMutationOptions = <
 		{ oidcClientId: string },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof toggleActiveOidcClient>>,
 	TError,
@@ -1351,7 +1351,7 @@ export const useToggleActiveOidcClient = <
 			{ oidcClientId: string },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<

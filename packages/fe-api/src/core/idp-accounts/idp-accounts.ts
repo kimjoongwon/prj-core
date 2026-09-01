@@ -40,9 +40,9 @@ import {
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
-import type { BodyType, ErrorType } from "../../libs/customIdpAxios";
+import type { BodyType, ErrorType } from "../../libs/customAxios";
 
-import { customIdpInstance } from "../../libs/customIdpAxios";
+import { customInstance } from "../../libs/customAxios";
 import type {
 	GetIdpAccount200AllOf,
 	GetIdpAccountAccessGrantForm200AllOf,
@@ -61,10 +61,10 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  */
 export const getIdpAccounts = (
 	params?: GetIdpAccountsParams,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<GetIdpAccounts200AllOf>(
+	return customInstance<GetIdpAccounts200AllOf>(
 		{ url: `/api/v1/idp/accounts`, method: "GET", params, signal },
 		options,
 	);
@@ -93,7 +93,7 @@ export const getGetIdpAccountsQueryOptions = <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getIdpAccounts>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -133,7 +133,7 @@ export function useGetIdpAccounts<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -156,7 +156,7 @@ export function useGetIdpAccounts<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -171,7 +171,7 @@ export function useGetIdpAccounts<
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getIdpAccounts>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -190,7 +190,7 @@ export function useGetIdpAccounts<
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getIdpAccounts>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -221,7 +221,7 @@ export const prefetchGetIdpAccountsQuery = async <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getIdpAccounts>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetIdpAccountsQueryOptions(params, options);
@@ -244,7 +244,7 @@ export const getGetIdpAccountsSuspenseQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -280,7 +280,7 @@ export function useGetIdpAccountsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -299,7 +299,7 @@ export function useGetIdpAccountsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -318,7 +318,7 @@ export function useGetIdpAccountsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -341,7 +341,7 @@ export function useGetIdpAccountsSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -374,7 +374,7 @@ export const getGetIdpAccountsSuspenseInfiniteQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -415,7 +415,7 @@ export function useGetIdpAccountsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -434,7 +434,7 @@ export function useGetIdpAccountsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -453,7 +453,7 @@ export function useGetIdpAccountsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -476,7 +476,7 @@ export function useGetIdpAccountsSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -516,7 +516,7 @@ export const prefetchGetIdpAccountsInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetIdpAccountsSuspenseInfiniteQueryOptions(
@@ -535,10 +535,10 @@ export const prefetchGetIdpAccountsInfiniteQuery = async <
  */
 export const getIdpAccount = (
 	userId: string,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<GetIdpAccount200AllOf>(
+	return customInstance<GetIdpAccount200AllOf>(
 		{ url: `/api/v1/idp/accounts/${userId}`, method: "GET", signal },
 		options,
 	);
@@ -561,7 +561,7 @@ export const getGetIdpAccountQueryOptions = <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getIdpAccount>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -606,7 +606,7 @@ export function useGetIdpAccount<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -629,7 +629,7 @@ export function useGetIdpAccount<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -644,7 +644,7 @@ export function useGetIdpAccount<
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getIdpAccount>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -663,7 +663,7 @@ export function useGetIdpAccount<
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getIdpAccount>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -694,7 +694,7 @@ export const prefetchGetIdpAccountQuery = async <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getIdpAccount>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetIdpAccountQueryOptions(userId, options);
@@ -717,7 +717,7 @@ export const getGetIdpAccountSuspenseQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -753,7 +753,7 @@ export function useGetIdpAccountSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -772,7 +772,7 @@ export function useGetIdpAccountSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -791,7 +791,7 @@ export function useGetIdpAccountSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -814,7 +814,7 @@ export function useGetIdpAccountSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -847,7 +847,7 @@ export const getGetIdpAccountSuspenseInfiniteQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -888,7 +888,7 @@ export function useGetIdpAccountSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -907,7 +907,7 @@ export function useGetIdpAccountSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -926,7 +926,7 @@ export function useGetIdpAccountSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -949,7 +949,7 @@ export function useGetIdpAccountSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -989,7 +989,7 @@ export const prefetchGetIdpAccountInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetIdpAccountSuspenseInfiniteQueryOptions(
@@ -1008,10 +1008,10 @@ export const prefetchGetIdpAccountInfiniteQuery = async <
  */
 export const getIdpAccountAccessGrantForm = (
 	userId: string,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<GetIdpAccountAccessGrantForm200AllOf>(
+	return customInstance<GetIdpAccountAccessGrantForm200AllOf>(
 		{
 			url: `/api/v1/idp/accounts/${userId}/access-grant-form`,
 			method: "GET",
@@ -1047,7 +1047,7 @@ export const getGetIdpAccountAccessGrantFormQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -1098,7 +1098,7 @@ export function useGetIdpAccountAccessGrantForm<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -1125,7 +1125,7 @@ export function useGetIdpAccountAccessGrantForm<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -1144,7 +1144,7 @@ export function useGetIdpAccountAccessGrantForm<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -1167,7 +1167,7 @@ export function useGetIdpAccountAccessGrantForm<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -1205,7 +1205,7 @@ export const prefetchGetIdpAccountAccessGrantFormQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetIdpAccountAccessGrantFormQueryOptions(
@@ -1231,7 +1231,7 @@ export const getGetIdpAccountAccessGrantFormSuspenseQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -1269,7 +1269,7 @@ export function useGetIdpAccountAccessGrantFormSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -1288,7 +1288,7 @@ export function useGetIdpAccountAccessGrantFormSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -1307,7 +1307,7 @@ export function useGetIdpAccountAccessGrantFormSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -1330,7 +1330,7 @@ export function useGetIdpAccountAccessGrantFormSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -1368,7 +1368,7 @@ export const getGetIdpAccountAccessGrantFormSuspenseInfiniteQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -1413,7 +1413,7 @@ export function useGetIdpAccountAccessGrantFormSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -1434,7 +1434,7 @@ export function useGetIdpAccountAccessGrantFormSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -1455,7 +1455,7 @@ export function useGetIdpAccountAccessGrantFormSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -1480,7 +1480,7 @@ export function useGetIdpAccountAccessGrantFormSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -1521,7 +1521,7 @@ export const prefetchGetIdpAccountAccessGrantFormInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions =
@@ -1542,10 +1542,10 @@ export const prefetchGetIdpAccountAccessGrantFormInfiniteQuery = async <
 export const grantIdpAccountAccess = (
 	userId: string,
 	grantIdpAccountAccessDto: BodyType<GrantIdpAccountAccessDto>,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<GrantIdpAccountAccess200AllOf>(
+	return customInstance<GrantIdpAccountAccess200AllOf>(
 		{
 			url: `/api/v1/idp/accounts/${userId}/access-grants`,
 			method: "POST",
@@ -1567,7 +1567,7 @@ export const getGrantIdpAccountAccessMutationOptions = <
 		{ userId: string; data: BodyType<GrantIdpAccountAccessDto> },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof grantIdpAccountAccess>>,
 	TError,
@@ -1616,7 +1616,7 @@ export const useGrantIdpAccountAccess = <
 			{ userId: string; data: BodyType<GrantIdpAccountAccessDto> },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -1635,9 +1635,9 @@ export const useGrantIdpAccountAccess = <
  */
 export const toggleIdpAccountActive = (
 	userId: string,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 ) => {
-	return customIdpInstance<ToggleIdpAccountActive200AllOf>(
+	return customInstance<ToggleIdpAccountActive200AllOf>(
 		{ url: `/api/v1/idp/accounts/${userId}/toggle-active`, method: "PATCH" },
 		options,
 	);
@@ -1653,7 +1653,7 @@ export const getToggleIdpAccountActiveMutationOptions = <
 		{ userId: string },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof toggleIdpAccountActive>>,
 	TError,
@@ -1701,7 +1701,7 @@ export const useToggleIdpAccountActive = <
 			{ userId: string },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -1720,10 +1720,10 @@ export const useToggleIdpAccountActive = <
  */
 export const resetIdpAccountFailedAttempts = (
 	userId: string,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<unknown>(
+	return customInstance<unknown>(
 		{
 			url: `/api/v1/idp/accounts/${userId}/reset-failed-attempts`,
 			method: "POST",
@@ -1743,7 +1743,7 @@ export const getResetIdpAccountFailedAttemptsMutationOptions = <
 		{ userId: string },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof resetIdpAccountFailedAttempts>>,
 	TError,
@@ -1791,7 +1791,7 @@ export const useResetIdpAccountFailedAttempts = <
 			{ userId: string },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<

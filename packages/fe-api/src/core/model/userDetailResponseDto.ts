@@ -21,17 +21,17 @@ import type { UserClassificationDto } from "./userClassificationDto";
 
 export interface UserDetailResponseDto {
 	/** @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$ */
-	id: bigint;
-	createdAt: Date;
+	id: number;
+	createdAt: string;
 	/** @nullable */
-	updatedAt: Date | null;
+	updatedAt: string | null;
 	/** @nullable */
-	removedAt: Date | null;
+	removedAt: string | null;
 	/**
 	 * 소속 공간 ID
 	 * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
 	 */
-	spaceId: bigint;
+	spaceId: number;
 	/** 이메일 주소 */
 	email: string;
 	/** 사용자 이름 */
@@ -44,7 +44,7 @@ export interface UserDetailResponseDto {
 	 * 잠금 해제 시각
 	 * @nullable
 	 */
-	lockedUntil: Date | null;
+	lockedUntil: string | null;
 	/** 영구 잠금 여부 */
 	isPermanentlyLocked: boolean;
 	/** 비밀번호 변경 필요 */
@@ -53,12 +53,12 @@ export interface UserDetailResponseDto {
 	 * 비밀번호 변경일
 	 * @nullable
 	 */
-	passwordChangedAt: Date | null;
+	passwordChangedAt: string | null;
 	/**
 	 * 마지막 로그인 시각
 	 * @nullable
 	 */
-	lastLoginAt: Date | null;
+	lastLoginAt: string | null;
 	/**
 	 * 마지막 로그인 IP
 	 * @nullable
@@ -71,7 +71,7 @@ export interface UserDetailResponseDto {
 	 * @nullable
 	 * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
 	 */
-	currentTenantId: bigint | null;
+	currentTenantId: number | null;
 	/** 프로필 목록 */
 	profiles?: ProfileDto[];
 	/** 테넌트 목록 */

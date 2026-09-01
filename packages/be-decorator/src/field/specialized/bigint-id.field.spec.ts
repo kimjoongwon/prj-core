@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { DECORATORS } from "@nestjs/swagger";
+import { DECORATORS } from "@nestjs/swagger/dist/constants";
 import { instanceToPlain, plainToInstance } from "class-transformer";
 import { validateSync } from "class-validator";
 import { describe, expect, it } from "vitest";

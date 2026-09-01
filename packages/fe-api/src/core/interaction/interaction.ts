@@ -40,9 +40,9 @@ import {
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
-import type { BodyType, ErrorType } from "../../libs/customIdpAxios";
+import type { BodyType, ErrorType } from "../../libs/customAxios";
 
-import { customIdpInstance } from "../../libs/customIdpAxios";
+import { customInstance } from "../../libs/customAxios";
 import type {
 	AbortResultDto,
 	ConsentResultDto,
@@ -60,10 +60,10 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  */
 export const getInteraction = (
 	uid: string,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<InteractionDataDto>(
+	return customInstance<InteractionDataDto>(
 		{ url: `/api/interaction/${uid}`, method: "GET", signal },
 		options,
 	);
@@ -86,7 +86,7 @@ export const getGetInteractionQueryOptions = <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -131,7 +131,7 @@ export function useGetInteraction<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -154,7 +154,7 @@ export function useGetInteraction<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -169,7 +169,7 @@ export function useGetInteraction<
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -188,7 +188,7 @@ export function useGetInteraction<
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -219,7 +219,7 @@ export const prefetchGetInteractionQuery = async <
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getInteraction>>, TError, TData>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetInteractionQueryOptions(uid, options);
@@ -242,7 +242,7 @@ export const getGetInteractionSuspenseQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -278,7 +278,7 @@ export function useGetInteractionSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -297,7 +297,7 @@ export function useGetInteractionSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -316,7 +316,7 @@ export function useGetInteractionSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -339,7 +339,7 @@ export function useGetInteractionSuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -372,7 +372,7 @@ export const getGetInteractionSuspenseInfiniteQueryOptions = <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
@@ -413,7 +413,7 @@ export function useGetInteractionSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -432,7 +432,7 @@ export function useGetInteractionSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -451,7 +451,7 @@ export function useGetInteractionSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -474,7 +474,7 @@ export function useGetInteractionSuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -514,7 +514,7 @@ export const prefetchGetInteractionInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetInteractionSuspenseInfiniteQueryOptions(
@@ -534,10 +534,10 @@ export const prefetchGetInteractionInfiniteQuery = async <
 export const submitLogin = (
 	uid: string,
 	oidcLoginPayloadDto: BodyType<OidcLoginPayloadDto>,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<LoginSuccessDto>(
+	return customInstance<LoginSuccessDto>(
 		{
 			url: `/api/interaction/${uid}/login`,
 			method: "POST",
@@ -559,7 +559,7 @@ export const getSubmitLoginMutationOptions = <
 		{ uid: string; data: BodyType<OidcLoginPayloadDto> },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof submitLogin>>,
 	TError,
@@ -607,7 +607,7 @@ export const useSubmitLogin = <
 			{ uid: string; data: BodyType<OidcLoginPayloadDto> },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -626,10 +626,10 @@ export const useSubmitLogin = <
  */
 export const confirmConsent = (
 	uid: string,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<ConsentResultDto>(
+	return customInstance<ConsentResultDto>(
 		{ url: `/api/interaction/${uid}/confirm`, method: "POST", signal },
 		options,
 	);
@@ -645,7 +645,7 @@ export const getConfirmConsentMutationOptions = <
 		{ uid: string },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof confirmConsent>>,
 	TError,
@@ -693,7 +693,7 @@ export const useConfirmConsent = <
 			{ uid: string },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
@@ -712,10 +712,10 @@ export const useConfirmConsent = <
  */
 export const abortInteraction = (
 	uid: string,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<AbortResultDto>(
+	return customInstance<AbortResultDto>(
 		{ url: `/api/interaction/${uid}/abort`, method: "POST", signal },
 		options,
 	);
@@ -731,7 +731,7 @@ export const getAbortInteractionMutationOptions = <
 		{ uid: string },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof abortInteraction>>,
 	TError,
@@ -779,7 +779,7 @@ export const useAbortInteraction = <
 			{ uid: string },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<

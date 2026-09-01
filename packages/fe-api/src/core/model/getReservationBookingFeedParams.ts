@@ -28,11 +28,11 @@ export type GetReservationBookingFeedParams = {
 	/**
 	 * 조회 시작 일시
 	 */
-	dateFrom?: Date;
+	dateFrom?: string;
 	/**
 	 * 조회 종료 일시
 	 */
-	dateTo?: Date;
+	dateTo?: string;
 	/**
 	 * 클라이언트 표시 타임존
 	 */

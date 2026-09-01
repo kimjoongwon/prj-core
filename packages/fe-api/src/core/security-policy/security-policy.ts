@@ -40,9 +40,9 @@ import {
 	useSuspenseInfiniteQuery,
 	useSuspenseQuery,
 } from "@tanstack/react-query";
-import type { BodyType, ErrorType } from "../../libs/customIdpAxios";
+import type { BodyType, ErrorType } from "../../libs/customAxios";
 
-import { customIdpInstance } from "../../libs/customIdpAxios";
+import { customInstance } from "../../libs/customAxios";
 import type {
 	GetSecurityPolicy200AllOf,
 	UpdateSecurityPolicy200AllOf,
@@ -56,10 +56,10 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  * @summary 보안 정책 조회
  */
 export const getSecurityPolicy = (
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) => {
-	return customIdpInstance<GetSecurityPolicy200AllOf>(
+	return customInstance<GetSecurityPolicy200AllOf>(
 		{ url: `/api/v1/idp/security-policy`, method: "GET", signal },
 		options,
 	);
@@ -84,7 +84,7 @@ export const getGetSecurityPolicyQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -126,7 +126,7 @@ export function useGetSecurityPolicy<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -152,7 +152,7 @@ export function useGetSecurityPolicy<
 				>,
 				"initialData"
 			>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -170,7 +170,7 @@ export function useGetSecurityPolicy<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -192,7 +192,7 @@ export function useGetSecurityPolicy<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -226,7 +226,7 @@ export const prefetchGetSecurityPolicyQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions = getGetSecurityPolicyQueryOptions(options);
@@ -247,7 +247,7 @@ export const getGetSecurityPolicySuspenseQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -281,7 +281,7 @@ export function useGetSecurityPolicySuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -299,7 +299,7 @@ export function useGetSecurityPolicySuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -317,7 +317,7 @@ export function useGetSecurityPolicySuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -339,7 +339,7 @@ export function useGetSecurityPolicySuspense<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseQueryResult<TData, TError> & {
@@ -370,7 +370,7 @@ export const getGetSecurityPolicySuspenseInfiniteQueryOptions = <
 			TData
 		>
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
@@ -409,7 +409,7 @@ export function useGetSecurityPolicySuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -427,7 +427,7 @@ export function useGetSecurityPolicySuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -445,7 +445,7 @@ export function useGetSecurityPolicySuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -467,7 +467,7 @@ export function useGetSecurityPolicySuspenseInfinite<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseSuspenseInfiniteQueryResult<TData, TError> & {
@@ -504,7 +504,7 @@ export const prefetchGetSecurityPolicyInfiniteQuery = async <
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 ): Promise<QueryClient> => {
 	const queryOptions =
@@ -521,9 +521,9 @@ export const prefetchGetSecurityPolicyInfiniteQuery = async <
  */
 export const updateSecurityPolicy = (
 	updateSecurityPolicyDto: BodyType<UpdateSecurityPolicyDto>,
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 ) => {
-	return customIdpInstance<UpdateSecurityPolicy200AllOf>(
+	return customInstance<UpdateSecurityPolicy200AllOf>(
 		{
 			url: `/api/v1/idp/security-policy`,
 			method: "PATCH",
@@ -544,7 +544,7 @@ export const getUpdateSecurityPolicyMutationOptions = <
 		{ data: BodyType<UpdateSecurityPolicyDto> },
 		TContext
 	>;
-	request?: SecondParameter<typeof customIdpInstance>;
+	request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
 	Awaited<ReturnType<typeof updateSecurityPolicy>>,
 	TError,
@@ -593,7 +593,7 @@ export const useUpdateSecurityPolicy = <
 			{ data: BodyType<UpdateSecurityPolicyDto> },
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<
