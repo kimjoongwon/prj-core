@@ -1,10 +1,10 @@
 import { DECIMAL_ID_PATTERN_SOURCE } from "@cocrepo/type/database-id";
-import type { OpenAPIObject } from "@nestjs/swagger";
 import type {
+	OpenAPIObject,
 	OperationObject,
 	ParameterObject,
 	ReferenceObject,
-} from "@nestjs/swagger/dist/interfaces/open-api-spec.interface";
+} from "@nestjs/swagger";
 
 const PROTOCOL_PATH_ID_NAMES = new Set(["grantId", "oidcClientId"]);
 const HTTP_OPERATION_KEYS = [

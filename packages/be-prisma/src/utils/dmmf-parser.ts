@@ -13,6 +13,23 @@ export interface FieldInfo {
 	modelName: string;
 }
 
+/**
+ * DMMF model field의 schema-first 계약 manifest입니다.
+ *
+ * `isRequired`는 property optional 여부가 아니라 Prisma nullable 여부의
+ * 반대값입니다. 따라서 `String?`는 `isRequired: false`로 표현됩니다.
+ */
+export interface FieldContractManifest {
+	modelName: string;
+	fieldName: string;
+	type: string;
+	isRequired: boolean;
+	isList: boolean;
+	isRelation: boolean;
+	isEnum: boolean;
+	dbName: string | null;
+}
+
 interface DmmfModel {
 	name: string;
 	documentation?: string;
@@ -23,7 +40,11 @@ interface DmmfField {
 	name: string;
 	documentation?: string;
 	kind: string;
+	type: string;
+	isRequired: boolean;
+	isList: boolean;
 	relationName?: string;
+	dbName?: string | null;
 }
 
 /**
@@ -179,6 +200,54 @@ export class DmmfParser {
 				displayName: this.extractDisplayName(field.documentation),
 				modelName: model.name,
 			}));
+	}
+
+	/**
+	 * 모든 model field를 DMMF 계약 manifest로 반환합니다.
+	 *
+	 * 관계 필드도 포함하며, relation/API projection/masking 정책은 추론하지
+	 * 않고 DMMF가 제공한 type, kind, required/list, dbName만 보존합니다.
+	 */
+	parseFieldContractManifest(): FieldContractManifest[] {
+		this.ensureInitialized();
+
+		return this.models.flatMap((model) =>
+			model.fields.map((field) =>
+				this.toFieldContractManifest(model.name, field),
+			),
+		);
+	}
+
+	/**
+	 * 특정 model의 모든 field를 DMMF 계약 manifest로 반환합니다.
+	 */
+	parseFieldContractManifestByModel(
+		modelName: string,
+	): FieldContractManifest[] {
+		this.ensureInitialized();
+		const model = this.models.find((candidate) => candidate.name === modelName);
+
+		return (
+			model?.fields.map((field) =>
+				this.toFieldContractManifest(model.name, field),
+			) ?? []
+		);
+	}
+
+	private toFieldContractManifest(
+		modelName: string,
+		field: DmmfField,
+	): FieldContractManifest {
+		return {
+			modelName,
+			fieldName: field.name,
+			type: field.type,
+			isRequired: field.isRequired,
+			isList: field.isList,
+			isRelation: field.kind === "object" || field.relationName !== undefined,
+			isEnum: field.kind === "enum",
+			dbName: field.dbName ?? null,
+		};
 	}
 
 	/**

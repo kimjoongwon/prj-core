@@ -543,14 +543,14 @@ export const AssetBrowser = observer(
 								</Modal.Body>
 								<Modal.Footer>
 									<Button
-										variant="flat"
+										variant="tertiary"
 										onPress={onCloseCreateFolderModal}
 										isDisabled={isCreatingFolder}
 									>
 										취소
 									</Button>
 									<Button
-										color="primary"
+										variant="primary"
 										onPress={onClickCreateFolderSubmitButton}
 										isDisabled={!newFolderName.trim()}
 									>
@@ -584,14 +584,14 @@ export const AssetBrowser = observer(
 								</Modal.Body>
 								<Modal.Footer>
 									<Button
-										variant="flat"
+										variant="tertiary"
 										onPress={onCloseRenameFolderModal}
 										isDisabled={isUpdatingFolder}
 									>
 										취소
 									</Button>
 									<Button
-										color="primary"
+										variant="primary"
 										onPress={onClickRenameFolderSubmitButton}
 										isDisabled={!renameFolderName.trim()}
 									>
@@ -607,8 +607,7 @@ export const AssetBrowser = observer(
 		const uploadAction = (
 			<div className="flex flex-col items-end gap-1">
 				<Button
-					variant="flat"
-					color="primary"
+					variant="tertiary"
 					startContent={<Upload className="h-4 w-4" />}
 					onPress={onClickUploadButton}
 					isDisabled={isUploadActionDisabled({

@@ -14,587 +14,1155 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
+
+import type {
+	DataTag,
+	DefinedInitialDataOptions,
+	DefinedUseQueryResult,
+	InfiniteData,
+	MutationFunction,
+	QueryClient,
+	QueryFunction,
+	QueryKey,
+	UndefinedInitialDataOptions,
+	UseMutationOptions,
+	UseMutationResult,
+	UseQueryOptions,
+	UseQueryResult,
+	UseSuspenseInfiniteQueryOptions,
+	UseSuspenseInfiniteQueryResult,
+	UseSuspenseQueryOptions,
+	UseSuspenseQueryResult,
+} from "@tanstack/react-query";
 import {
-  useMutation,
-  useQuery,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+	useMutation,
+	useQuery,
+	useSuspenseInfiniteQuery,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
+import type { BodyType, ErrorType } from "../../libs/customAxios";
+
+import { customInstance } from "../../libs/customAxios";
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
-  InfiniteData,
-  MutationFunction,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
-  UseSuspenseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult
-} from '@tanstack/react-query';
-
-import type {
-  CreateReservation201AllOf,
-  CreateReservationDto,
-  GetMyReservations200AllOf,
-  GetMyReservationsParams,
-  GetReservationBookingFeed200AllOf,
-  GetReservationBookingFeedParams
-} from '.././model';
-
-import { customInstance } from '../../libs/customAxios';
-import type { ErrorType , BodyType } from '../../libs/customAxios';
-
+	CreateReservation201AllOf,
+	CreateReservationDto,
+	GetMyReservations200AllOf,
+	GetMyReservationsParams,
+	GetReservationBookingFeed200AllOf,
+	GetReservationBookingFeedParams,
+} from ".././model";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
 
 /**
  * 현재 Space 기준으로 예약 가능한 프로그램 회차와 내 예약 상태를 조회합니다.
  * @summary 예약 Booking Feed 조회
  */
 export const getReservationBookingFeed = (
-    params?: GetReservationBookingFeedParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+	params?: GetReservationBookingFeedParams,
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetReservationBookingFeed200AllOf>(
-      {url: `/api/v1/reservations/booking-feed`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-  
+	return customInstance<GetReservationBookingFeed200AllOf>(
+		{ url: `/api/v1/reservations/booking-feed`, method: "GET", params, signal },
+		options,
+	);
+};
 
-
-
-export const getGetReservationBookingFeedQueryKey = (params?: GetReservationBookingFeedParams,) => {
-    return [
-    `/api/v1/reservations/booking-feed`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-export const getGetReservationBookingFeedInfiniteQueryKey = (params?: GetReservationBookingFeedParams,) => {
-    return [
-    'infinite', `/api/v1/reservations/booking-feed`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getGetReservationBookingFeedQueryOptions = <TData = Awaited<ReturnType<typeof getReservationBookingFeed>>, TError = ErrorType<void>>(params?: GetReservationBookingFeedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReservationBookingFeed>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetReservationBookingFeedQueryKey = (
+	params?: GetReservationBookingFeedParams,
 ) => {
+	return [
+		`/api/v1/reservations/booking-feed`,
+		...(params ? [params] : []),
+	] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetReservationBookingFeedQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getReservationBookingFeed>>> = ({ signal }) => getReservationBookingFeed(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getReservationBookingFeed>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetReservationBookingFeedQueryResult = NonNullable<Awaited<ReturnType<typeof getReservationBookingFeed>>>
-export type GetReservationBookingFeedQueryError = ErrorType<void>
-
-
-export function useGetReservationBookingFeed<TData = Awaited<ReturnType<typeof getReservationBookingFeed>>, TError = ErrorType<void>>(
- params: undefined |  GetReservationBookingFeedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReservationBookingFeed>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getReservationBookingFeed>>,
-          TError,
-          Awaited<ReturnType<typeof getReservationBookingFeed>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetReservationBookingFeed<TData = Awaited<ReturnType<typeof getReservationBookingFeed>>, TError = ErrorType<void>>(
- params?: GetReservationBookingFeedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReservationBookingFeed>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getReservationBookingFeed>>,
-          TError,
-          Awaited<ReturnType<typeof getReservationBookingFeed>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetReservationBookingFeed<TData = Awaited<ReturnType<typeof getReservationBookingFeed>>, TError = ErrorType<void>>(
- params?: GetReservationBookingFeedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReservationBookingFeed>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 예약 Booking Feed 조회
- */
-
-export function useGetReservationBookingFeed<TData = Awaited<ReturnType<typeof getReservationBookingFeed>>, TError = ErrorType<void>>(
- params?: GetReservationBookingFeedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReservationBookingFeed>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetReservationBookingFeedQueryOptions(params,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-/**
- * @summary 예약 Booking Feed 조회
- */
-export const prefetchGetReservationBookingFeedQuery = async <TData = Awaited<ReturnType<typeof getReservationBookingFeed>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetReservationBookingFeedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReservationBookingFeed>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetReservationBookingFeedQueryOptions(params,options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-export const getGetReservationBookingFeedSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getReservationBookingFeed>>, TError = ErrorType<void>>(params?: GetReservationBookingFeedParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getReservationBookingFeed>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetReservationBookingFeedInfiniteQueryKey = (
+	params?: GetReservationBookingFeedParams,
 ) => {
+	return [
+		"infinite",
+		`/api/v1/reservations/booking-feed`,
+		...(params ? [params] : []),
+	] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetReservationBookingFeedQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getReservationBookingFeed>>> = ({ signal }) => getReservationBookingFeed(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getReservationBookingFeed>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetReservationBookingFeedSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getReservationBookingFeed>>>
-export type GetReservationBookingFeedSuspenseQueryError = ErrorType<void>
-
-
-export function useGetReservationBookingFeedSuspense<TData = Awaited<ReturnType<typeof getReservationBookingFeed>>, TError = ErrorType<void>>(
- params: undefined |  GetReservationBookingFeedParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getReservationBookingFeed>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetReservationBookingFeedSuspense<TData = Awaited<ReturnType<typeof getReservationBookingFeed>>, TError = ErrorType<void>>(
- params?: GetReservationBookingFeedParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getReservationBookingFeed>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetReservationBookingFeedSuspense<TData = Awaited<ReturnType<typeof getReservationBookingFeed>>, TError = ErrorType<void>>(
- params?: GetReservationBookingFeedParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getReservationBookingFeed>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 예약 Booking Feed 조회
- */
-
-export function useGetReservationBookingFeedSuspense<TData = Awaited<ReturnType<typeof getReservationBookingFeed>>, TError = ErrorType<void>>(
- params?: GetReservationBookingFeedParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getReservationBookingFeed>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetReservationBookingFeedSuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const getGetReservationBookingFeedSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getReservationBookingFeed>>>, TError = ErrorType<void>>(params?: GetReservationBookingFeedParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getReservationBookingFeed>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetReservationBookingFeedQueryOptions = <
+	TData = Awaited<ReturnType<typeof getReservationBookingFeed>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetReservationBookingFeedParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getReservationBookingFeed>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetReservationBookingFeedQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetReservationBookingFeedInfiniteQueryKey(params);
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getReservationBookingFeed>>
+	> = ({ signal }) => getReservationBookingFeed(params, requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getReservationBookingFeed>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getReservationBookingFeed>>> = ({ signal }) => getReservationBookingFeed(params, requestOptions, signal);
+export type GetReservationBookingFeedQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getReservationBookingFeed>>
+>;
+export type GetReservationBookingFeedQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getReservationBookingFeed>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetReservationBookingFeedSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getReservationBookingFeed>>>
-export type GetReservationBookingFeedSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetReservationBookingFeedSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getReservationBookingFeed>>>, TError = ErrorType<void>>(
- params: undefined |  GetReservationBookingFeedParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getReservationBookingFeed>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetReservationBookingFeedSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getReservationBookingFeed>>>, TError = ErrorType<void>>(
- params?: GetReservationBookingFeedParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getReservationBookingFeed>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetReservationBookingFeedSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getReservationBookingFeed>>>, TError = ErrorType<void>>(
- params?: GetReservationBookingFeedParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getReservationBookingFeed>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetReservationBookingFeed<
+	TData = Awaited<ReturnType<typeof getReservationBookingFeed>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetReservationBookingFeedParams,
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getReservationBookingFeed>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getReservationBookingFeed>>,
+					TError,
+					Awaited<ReturnType<typeof getReservationBookingFeed>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetReservationBookingFeed<
+	TData = Awaited<ReturnType<typeof getReservationBookingFeed>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetReservationBookingFeedParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getReservationBookingFeed>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getReservationBookingFeed>>,
+					TError,
+					Awaited<ReturnType<typeof getReservationBookingFeed>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetReservationBookingFeed<
+	TData = Awaited<ReturnType<typeof getReservationBookingFeed>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetReservationBookingFeedParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getReservationBookingFeed>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 예약 Booking Feed 조회
  */
 
-export function useGetReservationBookingFeedSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getReservationBookingFeed>>>, TError = ErrorType<void>>(
- params?: GetReservationBookingFeedParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getReservationBookingFeed>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetReservationBookingFeed<
+	TData = Awaited<ReturnType<typeof getReservationBookingFeed>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetReservationBookingFeedParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getReservationBookingFeed>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetReservationBookingFeedQueryOptions(
+		params,
+		options,
+	);
 
-  const queryOptions = getGetReservationBookingFeedSuspenseInfiniteQueryOptions(params,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary 예약 Booking Feed 조회
  */
-export const prefetchGetReservationBookingFeedInfiniteQuery = async <TData = Awaited<ReturnType<typeof getReservationBookingFeed>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetReservationBookingFeedParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getReservationBookingFeed>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetReservationBookingFeedQuery = async <
+	TData = Awaited<ReturnType<typeof getReservationBookingFeed>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetReservationBookingFeedParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getReservationBookingFeed>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetReservationBookingFeedQueryOptions(
+		params,
+		options,
+	);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getGetReservationBookingFeedSuspenseInfiniteQueryOptions(params,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
+export const getGetReservationBookingFeedSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getReservationBookingFeed>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetReservationBookingFeedParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getReservationBookingFeed>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  return queryClient;
+	const queryKey =
+		queryOptions?.queryKey ?? getGetReservationBookingFeedQueryKey(params);
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getReservationBookingFeed>>
+	> = ({ signal }) => getReservationBookingFeed(params, requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getReservationBookingFeed>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetReservationBookingFeedSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getReservationBookingFeed>>
+>;
+export type GetReservationBookingFeedSuspenseQueryError = ErrorType<void>;
+
+export function useGetReservationBookingFeedSuspense<
+	TData = Awaited<ReturnType<typeof getReservationBookingFeed>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetReservationBookingFeedParams,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getReservationBookingFeed>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetReservationBookingFeedSuspense<
+	TData = Awaited<ReturnType<typeof getReservationBookingFeed>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetReservationBookingFeedParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getReservationBookingFeed>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetReservationBookingFeedSuspense<
+	TData = Awaited<ReturnType<typeof getReservationBookingFeed>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetReservationBookingFeedParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getReservationBookingFeed>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 예약 Booking Feed 조회
+ */
+
+export function useGetReservationBookingFeedSuspense<
+	TData = Awaited<ReturnType<typeof getReservationBookingFeed>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetReservationBookingFeedParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getReservationBookingFeed>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetReservationBookingFeedSuspenseQueryOptions(
+		params,
+		options,
+	);
+
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
 }
 
+export const getGetReservationBookingFeedSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getReservationBookingFeed>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetReservationBookingFeedParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getReservationBookingFeed>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
+	const queryKey =
+		queryOptions?.queryKey ??
+		getGetReservationBookingFeedInfiniteQueryKey(params);
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getReservationBookingFeed>>
+	> = ({ signal }) => getReservationBookingFeed(params, requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getReservationBookingFeed>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetReservationBookingFeedSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getReservationBookingFeed>>
+>;
+export type GetReservationBookingFeedSuspenseInfiniteQueryError =
+	ErrorType<void>;
+
+export function useGetReservationBookingFeedSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getReservationBookingFeed>>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetReservationBookingFeedParams,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getReservationBookingFeed>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetReservationBookingFeedSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getReservationBookingFeed>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetReservationBookingFeedParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getReservationBookingFeed>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetReservationBookingFeedSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getReservationBookingFeed>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetReservationBookingFeedParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getReservationBookingFeed>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 예약 Booking Feed 조회
+ */
+
+export function useGetReservationBookingFeedSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getReservationBookingFeed>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetReservationBookingFeedParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getReservationBookingFeed>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetReservationBookingFeedSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+/**
+ * @summary 예약 Booking Feed 조회
+ */
+export const prefetchGetReservationBookingFeedInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getReservationBookingFeed>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetReservationBookingFeedParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getReservationBookingFeed>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetReservationBookingFeedSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
+
+	await queryClient.prefetchInfiniteQuery(queryOptions);
+
+	return queryClient;
+};
 
 /**
  * 현재 Space와 로그인 사용자를 기준으로 프로그램 회차 예약을 생성합니다.
  * @summary 예약 생성
  */
 export const createReservation = (
-    createReservationDto: BodyType<CreateReservationDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+	createReservationDto: BodyType<CreateReservationDto>,
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<CreateReservation201AllOf>(
-      {url: `/api/v1/reservations`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createReservationDto, signal
-    },
-      options);
-    }
-  
+	return customInstance<CreateReservation201AllOf>(
+		{
+			url: `/api/v1/reservations`,
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			data: createReservationDto,
+			signal,
+		},
+		options,
+	);
+};
 
+export const getCreateReservationMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof createReservation>>,
+		TError,
+		{ data: BodyType<CreateReservationDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof createReservation>>,
+	TError,
+	{ data: BodyType<CreateReservationDto> },
+	TContext
+> => {
+	const mutationKey = ["createReservation"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
-export const getCreateReservationMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createReservation>>, TError,{data: BodyType<CreateReservationDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createReservation>>, TError,{data: BodyType<CreateReservationDto>}, TContext> => {
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof createReservation>>,
+		{ data: BodyType<CreateReservationDto> }
+	> = (props) => {
+		const { data } = props ?? {};
 
-const mutationKey = ['createReservation'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+		return createReservation(data, requestOptions);
+	};
 
-      
+	return { mutationFn, ...mutationOptions };
+};
 
+export type CreateReservationMutationResult = NonNullable<
+	Awaited<ReturnType<typeof createReservation>>
+>;
+export type CreateReservationMutationBody = BodyType<CreateReservationDto>;
+export type CreateReservationMutationError = ErrorType<void>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createReservation>>, {data: BodyType<CreateReservationDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  createReservation(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateReservationMutationResult = NonNullable<Awaited<ReturnType<typeof createReservation>>>
-    export type CreateReservationMutationBody = BodyType<CreateReservationDto>
-    export type CreateReservationMutationError = ErrorType<void>
-
-    /**
+/**
  * @summary 예약 생성
  */
-export const useCreateReservation = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createReservation>>, TError,{data: BodyType<CreateReservationDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof createReservation>>,
-        TError,
-        {data: BodyType<CreateReservationDto>},
-        TContext
-      > => {
+export const useCreateReservation = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof createReservation>>,
+			TError,
+			{ data: BodyType<CreateReservationDto> },
+			TContext
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof createReservation>>,
+	TError,
+	{ data: BodyType<CreateReservationDto> },
+	TContext
+> => {
+	const mutationOptions = getCreateReservationMutationOptions(options);
 
-      const mutationOptions = getCreateReservationMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
+	return useMutation(mutationOptions, queryClient);
+};
+/**
  * 현재 Space에서 로그인 사용자의 예약 목록을 조회합니다.
  * @summary 내 예약 목록 조회
  */
 export const getMyReservations = (
-    params?: GetMyReservationsParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+	params?: GetMyReservationsParams,
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetMyReservations200AllOf>(
-      {url: `/api/v1/reservations/me`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-  
+	return customInstance<GetMyReservations200AllOf>(
+		{ url: `/api/v1/reservations/me`, method: "GET", params, signal },
+		options,
+	);
+};
 
-
-
-export const getGetMyReservationsQueryKey = (params?: GetMyReservationsParams,) => {
-    return [
-    `/api/v1/reservations/me`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-export const getGetMyReservationsInfiniteQueryKey = (params?: GetMyReservationsParams,) => {
-    return [
-    'infinite', `/api/v1/reservations/me`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getGetMyReservationsQueryOptions = <TData = Awaited<ReturnType<typeof getMyReservations>>, TError = ErrorType<void>>(params?: GetMyReservationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyReservations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetMyReservationsQueryKey = (
+	params?: GetMyReservationsParams,
 ) => {
+	return [`/api/v1/reservations/me`, ...(params ? [params] : [])] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetMyReservationsQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyReservations>>> = ({ signal }) => getMyReservations(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMyReservations>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetMyReservationsQueryResult = NonNullable<Awaited<ReturnType<typeof getMyReservations>>>
-export type GetMyReservationsQueryError = ErrorType<void>
-
-
-export function useGetMyReservations<TData = Awaited<ReturnType<typeof getMyReservations>>, TError = ErrorType<void>>(
- params: undefined |  GetMyReservationsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyReservations>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getMyReservations>>,
-          TError,
-          Awaited<ReturnType<typeof getMyReservations>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMyReservations<TData = Awaited<ReturnType<typeof getMyReservations>>, TError = ErrorType<void>>(
- params?: GetMyReservationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyReservations>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getMyReservations>>,
-          TError,
-          Awaited<ReturnType<typeof getMyReservations>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMyReservations<TData = Awaited<ReturnType<typeof getMyReservations>>, TError = ErrorType<void>>(
- params?: GetMyReservationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyReservations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 내 예약 목록 조회
- */
-
-export function useGetMyReservations<TData = Awaited<ReturnType<typeof getMyReservations>>, TError = ErrorType<void>>(
- params?: GetMyReservationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyReservations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetMyReservationsQueryOptions(params,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-/**
- * @summary 내 예약 목록 조회
- */
-export const prefetchGetMyReservationsQuery = async <TData = Awaited<ReturnType<typeof getMyReservations>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetMyReservationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyReservations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-
-  ): Promise<QueryClient> => {
-
-  const queryOptions = getGetMyReservationsQueryOptions(params,options)
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-export const getGetMyReservationsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getMyReservations>>, TError = ErrorType<void>>(params?: GetMyReservationsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyReservations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetMyReservationsInfiniteQueryKey = (
+	params?: GetMyReservationsParams,
 ) => {
+	return [
+		"infinite",
+		`/api/v1/reservations/me`,
+		...(params ? [params] : []),
+	] as const;
+};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetMyReservationsQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyReservations>>> = ({ signal }) => getMyReservations(params, requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyReservations>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetMyReservationsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getMyReservations>>>
-export type GetMyReservationsSuspenseQueryError = ErrorType<void>
-
-
-export function useGetMyReservationsSuspense<TData = Awaited<ReturnType<typeof getMyReservations>>, TError = ErrorType<void>>(
- params: undefined |  GetMyReservationsParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyReservations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMyReservationsSuspense<TData = Awaited<ReturnType<typeof getMyReservations>>, TError = ErrorType<void>>(
- params?: GetMyReservationsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyReservations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMyReservationsSuspense<TData = Awaited<ReturnType<typeof getMyReservations>>, TError = ErrorType<void>>(
- params?: GetMyReservationsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyReservations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 내 예약 목록 조회
- */
-
-export function useGetMyReservationsSuspense<TData = Awaited<ReturnType<typeof getMyReservations>>, TError = ErrorType<void>>(
- params?: GetMyReservationsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyReservations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetMyReservationsSuspenseQueryOptions(params,options)
-
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const getGetMyReservationsSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getMyReservations>>>, TError = ErrorType<void>>(params?: GetMyReservationsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyReservations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetMyReservationsQueryOptions = <
+	TData = Awaited<ReturnType<typeof getMyReservations>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetMyReservationsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getMyReservations>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetMyReservationsQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetMyReservationsInfiniteQueryKey(params);
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getMyReservations>>
+	> = ({ signal }) => getMyReservations(params, requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getMyReservations>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyReservations>>> = ({ signal }) => getMyReservations(params, requestOptions, signal);
+export type GetMyReservationsQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getMyReservations>>
+>;
+export type GetMyReservationsQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyReservations>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetMyReservationsSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getMyReservations>>>
-export type GetMyReservationsSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetMyReservationsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMyReservations>>>, TError = ErrorType<void>>(
- params: undefined |  GetMyReservationsParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyReservations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMyReservationsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMyReservations>>>, TError = ErrorType<void>>(
- params?: GetMyReservationsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyReservations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMyReservationsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMyReservations>>>, TError = ErrorType<void>>(
- params?: GetMyReservationsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyReservations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMyReservations<
+	TData = Awaited<ReturnType<typeof getMyReservations>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetMyReservationsParams,
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getMyReservations>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getMyReservations>>,
+					TError,
+					Awaited<ReturnType<typeof getMyReservations>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyReservations<
+	TData = Awaited<ReturnType<typeof getMyReservations>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetMyReservationsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getMyReservations>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getMyReservations>>,
+					TError,
+					Awaited<ReturnType<typeof getMyReservations>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyReservations<
+	TData = Awaited<ReturnType<typeof getMyReservations>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetMyReservationsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getMyReservations>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 내 예약 목록 조회
  */
 
-export function useGetMyReservationsSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getMyReservations>>>, TError = ErrorType<void>>(
- params?: GetMyReservationsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyReservations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetMyReservations<
+	TData = Awaited<ReturnType<typeof getMyReservations>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetMyReservationsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getMyReservations>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetMyReservationsQueryOptions(params, options);
 
-  const queryOptions = getGetMyReservationsSuspenseInfiniteQueryOptions(params,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary 내 예약 목록 조회
  */
-export const prefetchGetMyReservationsInfiniteQuery = async <TData = Awaited<ReturnType<typeof getMyReservations>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetMyReservationsParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getMyReservations>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetMyReservationsQuery = async <
+	TData = Awaited<ReturnType<typeof getMyReservations>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetMyReservationsParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getMyReservations>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetMyReservationsQueryOptions(params, options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getGetMyReservationsSuspenseInfiniteQueryOptions(params,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchInfiniteQuery(queryOptions);
+export const getGetMyReservationsSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getMyReservations>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetMyReservationsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getMyReservations>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  return queryClient;
+	const queryKey =
+		queryOptions?.queryKey ?? getGetMyReservationsQueryKey(params);
+
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getMyReservations>>
+	> = ({ signal }) => getMyReservations(params, requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getMyReservations>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetMyReservationsSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getMyReservations>>
+>;
+export type GetMyReservationsSuspenseQueryError = ErrorType<void>;
+
+export function useGetMyReservationsSuspense<
+	TData = Awaited<ReturnType<typeof getMyReservations>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetMyReservationsParams,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getMyReservations>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyReservationsSuspense<
+	TData = Awaited<ReturnType<typeof getMyReservations>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetMyReservationsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getMyReservations>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyReservationsSuspense<
+	TData = Awaited<ReturnType<typeof getMyReservations>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetMyReservationsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getMyReservations>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 내 예약 목록 조회
+ */
+
+export function useGetMyReservationsSuspense<
+	TData = Awaited<ReturnType<typeof getMyReservations>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetMyReservationsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getMyReservations>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetMyReservationsSuspenseQueryOptions(
+		params,
+		options,
+	);
+
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
 }
 
+export const getGetMyReservationsSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getMyReservations>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetMyReservationsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getMyReservations>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
+	const queryKey =
+		queryOptions?.queryKey ?? getGetMyReservationsInfiniteQueryKey(params);
 
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getMyReservations>>
+	> = ({ signal }) => getMyReservations(params, requestOptions, signal);
+
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getMyReservations>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetMyReservationsSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getMyReservations>>
+>;
+export type GetMyReservationsSuspenseInfiniteQueryError = ErrorType<void>;
+
+export function useGetMyReservationsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getMyReservations>>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetMyReservationsParams,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getMyReservations>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyReservationsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getMyReservations>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetMyReservationsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getMyReservations>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyReservationsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getMyReservations>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetMyReservationsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getMyReservations>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary 내 예약 목록 조회
+ */
+
+export function useGetMyReservationsSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getMyReservations>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetMyReservationsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getMyReservations>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetMyReservationsSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
+
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+/**
+ * @summary 내 예약 목록 조회
+ */
+export const prefetchGetMyReservationsInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getMyReservations>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetMyReservationsParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getMyReservations>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetMyReservationsSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
+
+	await queryClient.prefetchInfiniteQuery(queryOptions);
+
+	return queryClient;
+};

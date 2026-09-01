@@ -17,5 +17,6 @@
 
 /**
  * 메타데이터 (Exif, 동영상 길이 등)
+ * @nullable
  */
-export type AssetDtoMetadata = { [key: string]: unknown };
+export type AssetDtoMetadata = { [key: string]: unknown } | null;

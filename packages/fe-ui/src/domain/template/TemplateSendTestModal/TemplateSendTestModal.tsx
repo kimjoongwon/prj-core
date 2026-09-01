@@ -104,14 +104,14 @@ export const TemplateSendTestModal = observer(function TemplateSendTestModal({
 
 			<div className="flex justify-end gap-2">
 				<Button
-					variant="flat"
+					variant="tertiary"
 					onPress={() => state.close()}
 					isDisabled={sendTest.status === "loading"}
 				>
 					닫기
 				</Button>
 				<Button
-					color="primary"
+					variant="primary"
 					onPress={handleSendTest}
 					isDisabled={sendTest.isSendDisabled}
 					startContent={

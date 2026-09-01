@@ -72,8 +72,9 @@ const AdminSpacesSpaceIdFitnessCenterRoute = observer(() => {
 			isSubmitPending={false}
 			actions={
 				<Button
-					color="primary"
-					variant="flat"
+
+
+					variant="tertiary"
 					startContent={<Pencil className="h-4 w-4" />}
 					onPress={onClickEditButton}
 				>

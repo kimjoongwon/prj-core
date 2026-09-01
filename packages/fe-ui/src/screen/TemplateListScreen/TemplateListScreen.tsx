@@ -42,8 +42,8 @@ export interface TemplateListScreenProps {
 	queryStates: TemplateListScreenQueryStates;
 	setQueryStates: TemplateListScreenSetQueryStates;
 	onClickCreateButton: () => void;
-	onClickTemplateCode: (templateId: string) => void;
-	onToggleTemplateStatusSwitch: (templateId: string) => Promise<void>;
+	onClickTemplateCode: (templateId: bigint) => void;
+	onToggleTemplateStatusSwitch: (templateId: bigint) => Promise<void>;
 }
 function TemplatesScreenFallback() {
 	return (
@@ -96,7 +96,7 @@ export const TemplateListScreen = observer(
 					description="시스템에 등록된 메시지 템플릿을 관리합니다."
 					actions={
 						<Button
-							color="primary"
+							variant="primary"
 							startContent={<Plus className="h-4 w-4" />}
 							onPress={onClickCreateButton}
 						>

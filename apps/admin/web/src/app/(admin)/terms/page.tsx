@@ -13,6 +13,7 @@ import {
 	usePublishServiceDocument,
 	useUpdateServiceDocument,
 } from "@cocrepo/api/core/service-documents";
+import { requireDecimalId } from "@cocrepo/type";
 import {
 	type ServiceDocumentFormDraft,
 	type ServiceDocumentFormMode,
@@ -111,13 +112,13 @@ export default observer(function TermsPageRoute() {
 		setDraft(EMPTY_DRAFT);
 	};
 
-	const onClickEditButton = (serviceDocumentId: string) => {
+	const onClickEditButton = (serviceDocumentId: bigint) => {
 		const document = response?.data?.find(
 			(item: ServiceDocumentDto) => item.id === serviceDocumentId,
 		);
 		if (!document) return;
 		setFormMode("edit");
-		setEditingDocumentId(serviceDocumentId);
+		setEditingDocumentId(serviceDocumentId.toString());
 		setDraft(toDraft(document));
 	};
 
@@ -132,7 +133,10 @@ export default observer(function TermsPageRoute() {
 		try {
 			if (formMode === "edit" && editingDocumentId) {
 				await updateMutation.mutateAsync({
-					serviceDocumentId: editingDocumentId,
+					serviceDocumentId: requireDecimalId(
+						editingDocumentId,
+						"serviceDocumentId",
+					),
 					data: toUpdatePayload(draft),
 				});
 				toast.success("문서 수정 완료", {
@@ -155,9 +159,14 @@ export default observer(function TermsPageRoute() {
 		}
 	};
 
-	const onClickPublishButton = async (serviceDocumentId: string) => {
+	const onClickPublishButton = async (serviceDocumentId: bigint) => {
 		try {
-			await publishMutation.mutateAsync({ serviceDocumentId });
+			await publishMutation.mutateAsync({
+				serviceDocumentId: requireDecimalId(
+					serviceDocumentId.toString(),
+					"serviceDocumentId",
+				),
+			});
 			await invalidateServiceDocuments(queryClient);
 			toast.success("게시 완료", {
 				description: "선택한 서비스 문서가 게시되었습니다.",
@@ -170,9 +179,14 @@ export default observer(function TermsPageRoute() {
 		}
 	};
 
-	const onClickArchiveButton = async (serviceDocumentId: string) => {
+	const onClickArchiveButton = async (serviceDocumentId: bigint) => {
 		try {
-			await archiveMutation.mutateAsync({ serviceDocumentId });
+			await archiveMutation.mutateAsync({
+				serviceDocumentId: requireDecimalId(
+					serviceDocumentId.toString(),
+					"serviceDocumentId",
+				),
+			});
 			await invalidateServiceDocuments(queryClient);
 			toast.success("보관 완료", {
 				description: "선택한 서비스 문서가 보관되었습니다.",
@@ -185,9 +199,14 @@ export default observer(function TermsPageRoute() {
 		}
 	};
 
-	const onClickDeleteButton = async (serviceDocumentId: string) => {
+	const onClickDeleteButton = async (serviceDocumentId: bigint) => {
 		try {
-			await deleteMutation.mutateAsync({ serviceDocumentId });
+			await deleteMutation.mutateAsync({
+				serviceDocumentId: requireDecimalId(
+					serviceDocumentId.toString(),
+					"serviceDocumentId",
+				),
+			});
 			await invalidateServiceDocuments(queryClient);
 			toast.success("삭제 완료", {
 				description: "선택한 서비스 문서가 삭제되었습니다.",
@@ -268,19 +287,17 @@ function toCreatePayload(
 	draft: ServiceDocumentFormDraft,
 ): CreateServiceDocumentDto {
 	return {
-		kind: draft.kind as CreateServiceDocumentDto["kind"],
-		platform: draft.platform as CreateServiceDocumentDto["platform"],
+		kind: draft.kind,
+		platform: draft.platform,
 		locale: draft.locale,
 		title: draft.title,
 		summary: draft.summary || undefined,
 		content: draft.content,
-		format: draft.format as CreateServiceDocumentDto["format"],
+		format: draft.format,
 		version: draft.version,
 		isRequired: draft.isRequired,
 		displayOrder: draft.displayOrder,
-		effectiveAt: draft.effectiveAt
-			? new Date(draft.effectiveAt).toISOString()
-			: undefined,
+		effectiveAt: draft.effectiveAt ? new Date(draft.effectiveAt) : undefined,
 	};
 }
 
@@ -291,12 +308,10 @@ function toUpdatePayload(
 		title: draft.title,
 		summary: draft.summary || undefined,
 		content: draft.content,
-		format: draft.format as UpdateServiceDocumentDto["format"],
+		format: draft.format,
 		isRequired: draft.isRequired,
 		displayOrder: draft.displayOrder,
-		effectiveAt: draft.effectiveAt
-			? new Date(draft.effectiveAt).toISOString()
-			: undefined,
+		effectiveAt: draft.effectiveAt ? new Date(draft.effectiveAt) : undefined,
 	};
 }
 
@@ -308,7 +323,9 @@ async function invalidateServiceDocuments(
 	});
 }
 
-function toDateTimeLocalValue(value?: string | null): string {
+function toDateTimeLocalValue(value?: Date | null): string {
 	if (!value) return "";
-	return value.slice(0, 16);
+	const date = new Date(value);
+	const pad = (part: number) => String(part).padStart(2, "0");
+	return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }

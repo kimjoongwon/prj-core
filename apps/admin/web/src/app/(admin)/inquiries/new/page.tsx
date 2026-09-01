@@ -1,9 +1,9 @@
 "use client";
 
 import {
-	type InquiryCategory,
-	type InquiryChannel,
-	type InquiryPriority,
+	InquiryCategory,
+	InquiryChannel,
+	InquiryPriority,
 	useCreateInquiry,
 	useGetCreateInquiryForm,
 } from "@cocrepo/api/core/inquiries";
@@ -12,7 +12,6 @@ import { ADMIN_PATHS } from "@cocrepo/constant";
 import type { FormOptionItem } from "@cocrepo/type";
 import {
 	InquiryEditScreen,
-	type InquiryEditScreenCustomerSearchResult,
 	type InquiryEditScreenFormState,
 	type InquiryEditScreenOption,
 } from "@cocrepo/ui";
@@ -24,6 +23,10 @@ import { useEffect } from "react";
 const REQUIRED_MESSAGE = "필수 항목입니다.";
 
 const normalizeFormOptionValue = (value: unknown): FormOptionItem["value"] => {
+	if (typeof value === "bigint") {
+		return String(value);
+	}
+
 	if (
 		typeof value === "string" ||
 		typeof value === "number" ||
@@ -34,6 +37,48 @@ const normalizeFormOptionValue = (value: unknown): FormOptionItem["value"] => {
 
 	return null;
 };
+
+function getInquiryCategory(value: unknown): InquiryCategory {
+	switch (value) {
+		case InquiryCategory.GENERAL:
+		case InquiryCategory.DELIVERY:
+		case InquiryCategory.REFUND:
+		case InquiryCategory.PRODUCT:
+		case InquiryCategory.ACCOUNT:
+		case InquiryCategory.TECHNICAL:
+		case InquiryCategory.COMPLAINT:
+		case InquiryCategory.OTHER:
+			return value;
+		default:
+			return InquiryCategory.GENERAL;
+	}
+}
+
+function getInquiryChannel(value: unknown): InquiryChannel {
+	switch (value) {
+		case InquiryChannel.WEB:
+		case InquiryChannel.EMAIL:
+		case InquiryChannel.CHAT:
+		case InquiryChannel.SMS:
+		case InquiryChannel.PHONE:
+		case InquiryChannel.WALK_IN:
+			return value;
+		default:
+			return InquiryChannel.WEB;
+	}
+}
+
+function getInquiryPriority(value: unknown): InquiryPriority {
+	switch (value) {
+		case InquiryPriority.LOW:
+		case InquiryPriority.NORMAL:
+		case InquiryPriority.HIGH:
+		case InquiryPriority.URGENT:
+			return value;
+		default:
+			return InquiryPriority.NORMAL;
+	}
+}
 
 const normalizeFormOptions = (
 	options?: Record<string, Array<{ value: unknown; label: string }>>,
@@ -78,11 +123,11 @@ export default observer(function InquiriesNewPageRoute() {
 		customerKeyword: "",
 		title: "",
 		content: "",
-		category: "GENERAL" as InquiryCategory,
-		channel: "WEB" as InquiryChannel,
-		priority: "NORMAL" as InquiryPriority,
-		searchResults: [] as InquiryEditScreenCustomerSearchResult[],
-		errors: {} as Record<string, string>,
+		category: InquiryCategory.GENERAL,
+		channel: InquiryChannel.WEB,
+		priority: InquiryPriority.NORMAL,
+		searchResults: [],
+		errors: {},
 		initFromBootstrap() {
 			if (!bootstrap || this.initialized) {
 				return;
@@ -96,18 +141,9 @@ export default observer(function InquiriesNewPageRoute() {
 				typeof bootstrap.defaultObject.content === "string"
 					? bootstrap.defaultObject.content
 					: "";
-			this.category =
-				typeof bootstrap.defaultObject.category === "string"
-					? (bootstrap.defaultObject.category as InquiryCategory)
-					: ("GENERAL" as InquiryCategory);
-			this.channel =
-				typeof bootstrap.defaultObject.channel === "string"
-					? (bootstrap.defaultObject.channel as InquiryChannel)
-					: ("WEB" as InquiryChannel);
-			this.priority =
-				typeof bootstrap.defaultObject.priority === "string"
-					? (bootstrap.defaultObject.priority as InquiryPriority)
-					: ("NORMAL" as InquiryPriority);
+			this.category = getInquiryCategory(bootstrap.defaultObject.category);
+			this.channel = getInquiryChannel(bootstrap.defaultObject.channel);
+			this.priority = getInquiryPriority(bootstrap.defaultObject.priority);
 			this.initialized = true;
 		},
 		validate() {
@@ -137,7 +173,7 @@ export default observer(function InquiriesNewPageRoute() {
 
 		const response = await getUsers({ name: keyword, take: 10 });
 		state.searchResults = (response?.data ?? []).map((user) => ({
-			id: user.id,
+			id: String(user.id),
 			name: user.name,
 			email: user.email,
 			phone: user.phone,
@@ -155,7 +191,7 @@ export default observer(function InquiriesNewPageRoute() {
 		try {
 			const result = await createInquiryMutation.mutateAsync({
 				data: {
-					customerId: state.customerId || undefined,
+					customerId: BigInt(state.customerId),
 					title: state.title.trim(),
 					content: state.content.trim(),
 					category: state.category,
@@ -169,7 +205,7 @@ export default observer(function InquiriesNewPageRoute() {
 				router.push(
 					ADMIN_PATHS.INQUIRIES_DETAIL.replace(
 						"[inquiryId]",
-						inquiryId,
+						String(inquiryId),
 					) as Route,
 				);
 				return;

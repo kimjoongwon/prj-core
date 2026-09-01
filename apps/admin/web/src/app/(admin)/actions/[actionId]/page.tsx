@@ -49,7 +49,7 @@ export default observer(function ActionDetailRoute() {
 			notFound={!isLoading && !action}
 			notFoundAction={
 				<Button
-					variant="flat"
+					variant="tertiary"
 					onPress={() => {
 						router.push("/actions" as Route);
 					}}
@@ -60,7 +60,7 @@ export default observer(function ActionDetailRoute() {
 			actions={
 				<div className="flex gap-2">
 					<Button
-						variant="light"
+						variant="ghost"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push("/actions" as Route);
@@ -71,8 +71,7 @@ export default observer(function ActionDetailRoute() {
 					{action ? (
 						<>
 							<Button
-								variant="flat"
-								color="primary"
+								variant="tertiary"
 								startContent={<Edit className="h-4 w-4" />}
 								onPress={() => {
 									router.push(`/actions/${actionId}/edit` as Route);
@@ -81,8 +80,7 @@ export default observer(function ActionDetailRoute() {
 								수정
 							</Button>
 							<Button
-								variant="flat"
-								color="danger"
+								variant="tertiary"
 								startContent={<Trash2 className="h-4 w-4" />}
 								isLoading={isDeleting}
 								onPress={() => {

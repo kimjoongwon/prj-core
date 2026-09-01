@@ -93,7 +93,7 @@ jest.mock("@tanstack/react-query", () => ({
   }),
 }));
 
-jest.mock("@cocrepo/api/idp/auth", () => ({
+jest.mock("@cocrepo/api/core/auth", () => ({
   useGetMySpaces: jest.fn(() => ({
     data: { data: [] },
   })),
@@ -104,7 +104,7 @@ jest.mock("@cocrepo/api/idp/auth", () => ({
 }));
 
 jest.mock("@/auth/auth-config", () => ({
-  getIdpApiBaseUrl: () => "http://localhost:3207",
+  getCoreApiBaseUrl: () => "http://localhost:3207",
 }));
 
 jest.mock("expo-router", () => {

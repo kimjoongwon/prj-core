@@ -57,7 +57,7 @@ export const TemplatePreviewModal = observer(function TemplatePreviewModal({
 				</div>
 
 				<Button
-					color="primary"
+					variant="primary"
 					onPress={handlePreview}
 					isDisabled={preview.isLoading}
 				>
@@ -116,7 +116,7 @@ export const TemplatePreviewModal = observer(function TemplatePreviewModal({
 			</div>
 
 			<div className="flex justify-end">
-				<Button variant="flat" onPress={() => state.close()}>
+				<Button variant="tertiary" onPress={() => state.close()}>
 					닫기
 				</Button>
 			</div>

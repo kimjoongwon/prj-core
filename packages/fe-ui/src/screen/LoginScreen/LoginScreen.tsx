@@ -186,7 +186,7 @@ export const LoginScreen = observer(
 									<Button
 										key="submit"
 										type="submit"
-										color="primary"
+										variant="primary"
 										className="h-12 w-full rounded-full shadow-md shadow-primary/15"
 										endContent={<ArrowRight aria-hidden className="size-4" />}
 										fullWidth

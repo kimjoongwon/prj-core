@@ -75,7 +75,7 @@ export default observer(function InquiriesPageRoute() {
 				router.push(
 					ADMIN_PATHS.INQUIRIES_DETAIL.replace(
 						"[inquiryId]",
-						inquiryId,
+						String(inquiryId),
 					) as Route,
 				);
 			}}

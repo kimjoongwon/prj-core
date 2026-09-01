@@ -1,5 +1,7 @@
 "use client";
 
+import type { RoutineDto } from "@cocrepo/api/core/routines";
+import type { ExerciseDto, TaskDto } from "@cocrepo/api/core/tasks";
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
@@ -20,19 +22,17 @@ import { Section } from "../../layout/Section/Section";
 import { VStack } from "../../rhythm";
 import { SectionSurface } from "../../surface";
 export interface ExerciseMediaAsset extends TaskExerciseMediaAsset {}
-export interface TaskExerciseEditScreenRoutine {
-	id: string;
-	name: string;
-	label?: string | null;
-	createdAt: string;
-}
-export interface TaskExerciseEditScreenMetadata {
-	taskId: string;
-	spaceId?: string | null;
-	createdAt?: string | null;
-	updatedAt?: string | null;
-	routines?: TaskExerciseEditScreenRoutine[];
-}
+export type TaskExerciseEditScreenRoutine = Pick<
+	RoutineDto,
+	"id" | "name" | "label" | "createdAt"
+>;
+export type TaskExerciseEditScreenMetadata = Pick<
+	ExerciseDto,
+	"taskId" | "createdAt" | "updatedAt"
+> &
+	Pick<TaskDto, "spaceId"> & {
+		routines?: TaskExerciseEditScreenRoutine[];
+	};
 export interface TaskExerciseEditScreenProps {
 	title?: ReactNode;
 	description?: ReactNode;
@@ -113,14 +113,14 @@ export const TaskExerciseEditScreen = observer(
 			(readOnly ? undefined : (
 				<div className="flex gap-2">
 					<Button
-						variant="flat"
+						variant="tertiary"
 						onPress={onClickCancelButton}
 						isDisabled={isSubmitPending}
 					>
 						취소
 					</Button>
 					<Button
-						color="primary"
+						variant="primary"
 						onPress={onClickSaveButton}
 						isLoading={isSubmitPending}
 					>
@@ -157,7 +157,7 @@ export const TaskExerciseEditScreen = observer(
 							<Section.Body>
 								<div className="flex flex-col items-center justify-center gap-4 p-8">
 									<p className="text-muted">운동 detail을 찾을 수 없습니다.</p>
-									<Button variant="flat" onPress={onClickCancelButton}>
+									<Button variant="tertiary" onPress={onClickCancelButton}>
 										목록으로
 									</Button>
 								</div>

@@ -92,7 +92,7 @@ export const OidcConsentPanel = observer(
 					<Button
 						type="button"
 						data-action="confirm-consent"
-						color="success"
+						variant="tertiary"
 						className="flex-1 font-semibold"
 						size="lg"
 						isLoading={state.isSubmitting}
@@ -102,7 +102,7 @@ export const OidcConsentPanel = observer(
 					<Button
 						type="button"
 						data-action="abort-interaction"
-						variant="flat"
+						variant="tertiary"
 						className="flex-1 font-semibold"
 						size="lg"
 					>

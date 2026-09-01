@@ -79,10 +79,10 @@ export interface ServiceDocumentListScreenProps {
 	onClickNewButton: () => void;
 	onClickCancelFormButton: () => void;
 	onClickSubmitButton: () => Promise<void>;
-	onClickEditButton: (serviceDocumentId: string) => void;
-	onClickPublishButton: (serviceDocumentId: string) => Promise<void>;
-	onClickArchiveButton: (serviceDocumentId: string) => Promise<void>;
-	onClickDeleteButton: (serviceDocumentId: string) => Promise<void>;
+	onClickEditButton: (serviceDocumentId: bigint) => void;
+	onClickPublishButton: (serviceDocumentId: bigint) => Promise<void>;
+	onClickArchiveButton: (serviceDocumentId: bigint) => Promise<void>;
+	onClickDeleteButton: (serviceDocumentId: bigint) => Promise<void>;
 }
 const KIND_OPTIONS: Array<{
 	value: ServiceDocumentKindValue;
@@ -210,9 +210,9 @@ function getStatusOption(status: ServiceDocumentStatusValue) {
 		STATUS_OPTIONS[0]
 	);
 }
-function formatDate(value?: string | null): string {
-	if (!value) return "-";
-	return new Date(value).toLocaleDateString("ko-KR");
+function formatDate(value?: Date | null): string {
+	if (!value || Number.isNaN(value.getTime())) return "-";
+	return value.toLocaleDateString("ko-KR");
 }
 function getFilterSelectedKey(value: string): string {
 	return value || ALL_FILTER_OPTION;
@@ -259,7 +259,7 @@ export const ServiceDocumentListScreen = observer(
 							description="모바일과 web 서비스에 노출되는 약관, 개인정보, 동의 문서를 버전별로 관리합니다."
 							actions={
 								<Button
-									color="primary"
+									variant="primary"
 									startContent={<Plus className="h-4 w-4" />}
 									onPress={onClickNewButton}
 								>
@@ -417,7 +417,7 @@ export const ServiceDocumentListScreen = observer(
 																const canPublish =
 																	document.status !== "PUBLISHED";
 																return (
-																	<Table.Row key={document.id}>
+											<Table.Row key={String(document.id)}>
 																		<Table.Cell>
 																			<VStack>
 																				<HStack alignItems="center">
@@ -460,7 +460,7 @@ export const ServiceDocumentListScreen = observer(
 																					key="edit"
 																					isIconOnly
 																					size="sm"
-																					variant="light"
+																					variant="ghost"
 																					aria-label="문서 수정"
 																					isDisabled={!canEdit}
 																					onPress={() =>
@@ -473,8 +473,9 @@ export const ServiceDocumentListScreen = observer(
 																					key="publish"
 																					isIconOnly
 																					size="sm"
-																					variant="light"
-																					color="primary"
+																					variant="ghost"
+
+
 																					aria-label="문서 게시"
 																					isDisabled={!canPublish}
 																					onPress={() =>
@@ -487,7 +488,7 @@ export const ServiceDocumentListScreen = observer(
 																					key="archive"
 																					isIconOnly
 																					size="sm"
-																					variant="light"
+																					variant="ghost"
 																					aria-label="문서 보관"
 																					onPress={() =>
 																						onClickArchiveButton(document.id)
@@ -499,8 +500,9 @@ export const ServiceDocumentListScreen = observer(
 																					key="delete"
 																					isIconOnly
 																					size="sm"
-																					variant="light"
-																					color="danger"
+																					variant="ghost"
+
+
 																					aria-label="문서 삭제"
 																					onPress={() =>
 																						onClickDeleteButton(document.id)
@@ -552,7 +554,7 @@ export const ServiceDocumentListScreen = observer(
 													key="close-form"
 													isIconOnly
 													size="sm"
-													variant="light"
+													variant="ghost"
 													aria-label="작성 취소"
 													isDisabled={isSubmitting}
 													onPress={onClickCancelFormButton}
@@ -724,7 +726,7 @@ export const ServiceDocumentListScreen = observer(
 											<HStack key="form-actions" justifyContent="end">
 												<Button
 													key="cancel"
-													variant="flat"
+													variant="tertiary"
 													isDisabled={isSubmitting}
 													onPress={onClickCancelFormButton}
 												>
@@ -732,7 +734,7 @@ export const ServiceDocumentListScreen = observer(
 												</Button>
 												<Button
 													key="submit"
-													color="primary"
+													variant="primary"
 													startContent={<Save className="h-4 w-4" />}
 													isDisabled={isSubmitting}
 													onPress={onClickSubmitButton}

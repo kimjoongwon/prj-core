@@ -34,7 +34,7 @@ export class ActivityDto
 	@NumberField()
 	restTime: number;
 
-	@StringFieldOptional()
+	@StringFieldOptional({ nullable: true })
 	notes: string | null;
 
 	@ClassField(() => RoutineDto)

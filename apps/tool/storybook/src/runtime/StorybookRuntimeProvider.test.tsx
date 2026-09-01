@@ -6,10 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const setApiSessionScopeMock = vi.fn();
 const setApiLocaleMock = vi.fn();
-const setIdpSessionScopeMock = vi.fn();
-const setIdpLocaleMock = vi.fn();
 const setLoginRedirectUrlMock = vi.fn();
-const setIdpLoginRedirectUrlMock = vi.fn();
 
 vi.mock("@cocrepo/ui", () => ({
 	DesignSystemProvider: ({ children }: PropsWithChildren) => children,
@@ -25,7 +22,7 @@ vi.mock("../../../../../packages/fe-api/src/core/client", () => ({
 	setLoginRedirectUrl: (...args: unknown[]) => setLoginRedirectUrlMock(...args),
 }));
 
-vi.mock("../../../../../packages/fe-api/src/idp/client", () => ({
+vi.mock("../../../../../packages/fe-api/src/core/client", () => ({
 	setIdpLocale: (...args: unknown[]) => setIdpLocaleMock(...args),
 	setIdpLoginRedirectUrl: (...args: unknown[]) =>
 		setIdpLoginRedirectUrlMock(...args),
@@ -71,10 +68,7 @@ beforeEach(() => {
 	vi.stubGlobal("sessionStorage", createStorageMock());
 	setApiSessionScopeMock.mockReset();
 	setApiLocaleMock.mockReset();
-	setIdpSessionScopeMock.mockReset();
-	setIdpLocaleMock.mockReset();
 	setLoginRedirectUrlMock.mockReset();
-	setIdpLoginRedirectUrlMock.mockReset();
 	localStorage.clear();
 	sessionStorage.clear();
 });
@@ -108,19 +102,14 @@ describe("StorybookRuntimeProvider", () => {
 		await waitFor(() => {
 			expect(setApiSessionScopeMock).toHaveBeenCalledTimes(1);
 		});
-		expect(setIdpSessionScopeMock).toHaveBeenCalledTimes(1);
 		expect(setApiLocaleMock).toHaveBeenCalledTimes(1);
-		expect(setIdpLocaleMock).toHaveBeenCalledTimes(1);
-		expect(setIdpSessionScopeMock).toHaveBeenCalledWith(
 			setApiSessionScopeMock.mock.calls[0]?.[0],
 		);
-		expect(setIdpLocaleMock).toHaveBeenCalledWith(
 			setApiLocaleMock.mock.calls[0]?.[0],
 		);
 		expect(setLoginRedirectUrlMock).toHaveBeenCalledWith(
 			"#storybook-auth-disabled",
 		);
-		expect(setIdpLoginRedirectUrlMock).toHaveBeenCalledWith(
 			"#storybook-auth-disabled",
 		);
 		expect(screen.getByText("Story content")).toBeTruthy();

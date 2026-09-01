@@ -34,7 +34,7 @@ import {
 	setIdpLocale,
 	setIdpLoginRedirectUrl,
 	setIdpSessionScope,
-} from "../../../../../packages/fe-api/src/idp/client";
+} from "../../../../../packages/fe-api/src/core/client";
 
 type StorybookRealm = "none" | "admin" | "idp";
 type StoryRender = () => ReactNode;
@@ -142,13 +142,12 @@ function createStorybookRootStore(runtime: StorybookRuntimeConfig): RootStore {
 	});
 
 	root.initialize({
-		sessionScopeBinders: [setApiSessionScope, setIdpSessionScope],
-		languageBinders: [setApiLocale, setIdpLocale],
+		sessionScopeBinders: [setApiSessionScope],
+		languageBinders: [setApiLocale],
 	});
 	root.setCurrentPath(runtime.currentPath);
 	root.app.accessControl.updateRules([...FALLBACK_ABILITY_RULES]);
 	setLoginRedirectUrl(DISABLED_AUTH_REDIRECT_URL);
-	setIdpLoginRedirectUrl(DISABLED_AUTH_REDIRECT_URL);
 
 	return root;
 }

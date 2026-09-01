@@ -1,4 +1,4 @@
-import { BigIntIdField, BigIntIdFieldOptional } from "@cocrepo/decorator/field";
+import { BigIntIdField } from "@cocrepo/decorator/field";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 import { PolicyEntryResponseDto } from "./policy-entry-response.dto";
@@ -12,7 +12,7 @@ export class PolicyResponseDto {
 	@Expose()
 	spaceId!: bigint;
 
-	@BigIntIdFieldOptional({ nullable: true, description: "생성자 ID" })
+	@BigIntIdField({ nullable: true, description: "생성자 ID" })
 	@Expose()
 	createdById!: bigint | null;
 
@@ -23,21 +23,21 @@ export class PolicyResponseDto {
 	@Expose()
 	name!: string;
 
-	@ApiPropertyOptional({
+	@ApiProperty({
 		description: "정책 표시명",
 		example: "워크스페이스 관리자 정책",
 		nullable: true,
 	})
 	@Expose()
-	displayName?: string | null;
+	displayName!: string | null;
 
-	@ApiPropertyOptional({
+	@ApiProperty({
 		description: "정책 설명",
 		example: "워크스페이스 관리자가 기본으로 갖는 권한 묶음입니다.",
 		nullable: true,
 	})
 	@Expose()
-	description?: string | null;
+	description!: string | null;
 
 	@ApiProperty({
 		description: "생성 일시",
@@ -46,21 +46,21 @@ export class PolicyResponseDto {
 	@Expose()
 	createdAt!: Date;
 
-	@ApiPropertyOptional({
+	@ApiProperty({
 		description: "수정 일시",
 		example: "2026-01-01T00:00:00.000Z",
 		nullable: true,
 	})
 	@Expose()
-	updatedAt?: Date | null;
+	updatedAt!: Date | null;
 
-	@ApiPropertyOptional({
+	@ApiProperty({
 		description: "삭제 일시",
 		example: "2026-01-01T00:00:00.000Z",
 		nullable: true,
 	})
 	@Expose()
-	removedAt?: Date | null;
+	removedAt!: Date | null;
 
 	@ApiPropertyOptional({
 		description: "정책에 연결된 Ability 목록",

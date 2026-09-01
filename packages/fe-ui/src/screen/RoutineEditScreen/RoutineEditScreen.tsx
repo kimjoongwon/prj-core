@@ -1,5 +1,7 @@
 "use client";
 
+import type { RoutineDto } from "@cocrepo/api/core/routines";
+import type { ProgramDto } from "@cocrepo/api/core/timelines";
 import { Spinner } from "@heroui/react";
 import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
@@ -23,14 +25,11 @@ export type {
 	RoutineFormState,
 	RoutineTaskCandidate,
 } from "../../form/RoutineForm";
-export interface RoutineEditScreenProgram {
-	id: string;
-	name: string;
-}
-export interface RoutineEditScreenMetadata {
-	createdAt?: string | null;
-	updatedAt?: string | null;
-}
+export type RoutineEditScreenProgram = Pick<ProgramDto, "id" | "name">;
+export type RoutineEditScreenMetadata = Pick<
+	RoutineDto,
+	"createdAt" | "updatedAt"
+>;
 export interface RoutineEditScreenProps {
 	title: ReactNode;
 	description?: ReactNode;
@@ -99,7 +98,7 @@ export const RoutineEditScreen = observer((props: RoutineEditScreenProps) => {
 						<Section.Body>
 							<div className="flex flex-col items-center justify-center gap-4 p-8">
 								<p className="text-muted">{notFoundMessage}</p>
-								{notFoundAction ?? <Button variant="flat">목록으로</Button>}
+								{notFoundAction ?? <Button variant="tertiary">목록으로</Button>}
 							</div>
 						</Section.Body>
 					</Section>

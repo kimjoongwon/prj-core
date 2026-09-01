@@ -33,13 +33,13 @@ export class ProgramActivityDto
 	@NumberField()
 	restTime: number;
 
-	@StringFieldOptional()
+	@StringFieldOptional({ nullable: true })
 	notes: string | null;
 
 	@StringField()
 	exerciseName: string;
 
-	@StringFieldOptional()
+	@StringFieldOptional({ nullable: true })
 	exerciseDescription: string | null;
 
 	@NumberField()
@@ -48,9 +48,9 @@ export class ProgramActivityDto
 	@NumberField()
 	exerciseCount: number;
 
-	@UUIDFieldOptional()
+	@UUIDFieldOptional({ nullable: true })
 	imageFileId: string | null;
 
-	@UUIDFieldOptional()
+	@UUIDFieldOptional({ nullable: true })
 	videoFileId: string | null;
 }

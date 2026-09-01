@@ -1,8 +1,8 @@
 import { makeAutoObservable } from "mobx";
-import { getCurrentSpace, getMySpaces, verifyToken } from "@cocrepo/api/idp/auth";
-import type { SpaceDto } from "@cocrepo/api/idp/model";
-import { setIdpBaseUrl, setIdpLoginRedirectUrl } from "@cocrepo/api/idp/client";
-import { getIdpApiBaseUrl, getLoginPath } from "./auth-config";
+import { getCurrentSpace, getMySpaces, verifyToken } from "@cocrepo/api/core/auth";
+import type { SpaceDto } from "@cocrepo/api/core/model";
+import { setApiBaseUrl, setLoginRedirectUrl } from "@cocrepo/api/core/client";
+import { getCoreApiBaseUrl, getLoginPath } from "./auth-config";
 import {
   clearNativeAuthSession,
   clearNativeSpaceSelection,
@@ -30,8 +30,8 @@ const DEFAULT_HOME_PATH = "/";
 
 const configureIdpClient = (nativeRefreshHandler?: () => Promise<void>) => {
   configureMobileApiScope(nativeRefreshHandler);
-  setIdpBaseUrl(getIdpApiBaseUrl());
-  setIdpLoginRedirectUrl(getLoginPath());
+  setApiBaseUrl(getCoreApiBaseUrl());
+  setLoginRedirectUrl(getLoginPath());
 };
 
 class MobileSession {
@@ -85,7 +85,7 @@ class MobileSession {
   async loginWithCredentials(email: string, password: string): Promise<boolean> {
     configureIdpClient(() => this.refreshNativeSession());
     const session = await requestNativeLogin({
-      apiBaseUrl: getIdpApiBaseUrl(),
+      apiBaseUrl: getCoreApiBaseUrl(),
       email,
       password,
     });
@@ -101,7 +101,7 @@ class MobileSession {
       if (sessionId) {
         await requestNativeLogout({
           accessToken: mobileApiScope.accessToken,
-          apiBaseUrl: getIdpApiBaseUrl(),
+          apiBaseUrl: getCoreApiBaseUrl(),
           refreshToken: mobileApiScope.refreshToken,
           sessionId,
         }).catch(() => false);
@@ -126,7 +126,7 @@ class MobileSession {
     }
 
     const session = await requestNativeTokenRefresh({
-      apiBaseUrl: getIdpApiBaseUrl(),
+      apiBaseUrl: getCoreApiBaseUrl(),
       refreshToken,
       sessionId,
     });
@@ -211,7 +211,7 @@ class MobileSession {
 
   private async loadAuthenticatedContext() {
     const verifyResponse = await verifyToken({
-      baseURL: getIdpApiBaseUrl(),
+      baseURL: getCoreApiBaseUrl(),
     });
     const verifiedSession = verifyResponse.data;
     if (
@@ -231,13 +231,13 @@ class MobileSession {
     }
 
     const mySpacesResponse = await getMySpaces({
-      baseURL: getIdpApiBaseUrl(),
+      baseURL: getCoreApiBaseUrl(),
     });
     const spaces = mySpacesResponse.data ?? [];
     mobileApiScope.setSpaces(spaces);
 
 	const currentSpaceResponse = await getCurrentSpace({
-		baseURL: getIdpApiBaseUrl(),
+		baseURL: getCoreApiBaseUrl(),
 	});
 	const currentSpace = currentSpaceResponse.data;
 	if (

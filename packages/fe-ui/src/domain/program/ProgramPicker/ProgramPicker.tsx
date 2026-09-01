@@ -11,7 +11,7 @@ import type { ProgramPickerState } from "./ProgramPickerState";
 import type { ProgramPickerOption } from "./types";
 
 type RoutineOptionSource = {
-	id: string;
+	id: bigint;
 	name: string;
 	label: string;
 	activities?: Array<{
@@ -27,7 +27,7 @@ const toRoutineOption = (routine: RoutineOptionSource): ProgramPickerOption => {
 	);
 
 	return {
-		id: routine.id,
+		id: String(routine.id),
 		name: routine.name,
 		subtitle: `라벨: ${routine.label || "-"} · 활동 ${
 			routine.activities?.length ?? 0
@@ -36,11 +36,11 @@ const toRoutineOption = (routine: RoutineOptionSource): ProgramPickerOption => {
 };
 
 const toInstructorOption = (instructor: {
-	id: string;
+	id: bigint;
 	name: string;
 	email?: string | null;
 }): ProgramPickerOption => ({
-	id: instructor.id,
+	id: String(instructor.id),
 	name: instructor.name,
 	subtitle: `이메일: ${instructor.email || "-"}`,
 });
@@ -159,7 +159,7 @@ export const ProgramPicker = observer(function ProgramPicker({
 				) : null}
 			</div>
 			<div className="flex justify-end">
-				<Button variant="flat" onPress={() => state.close()}>
+				<Button variant="tertiary" onPress={() => state.close()}>
 					닫기
 				</Button>
 			</div>

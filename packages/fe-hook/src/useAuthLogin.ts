@@ -1,6 +1,6 @@
 "use client";
 
-import { useNativeLogin } from "@cocrepo/api/idp/auth";
+import { useNativeLogin } from "@cocrepo/api/core/auth";
 import { useApp } from "@cocrepo/store";
 import { useLocalObservable } from "mobx-react-lite";
 import { getDefaultLoginCredentials } from "./getDefaultLoginCredentials";

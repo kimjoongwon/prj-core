@@ -44,11 +44,11 @@ export default observer(function RoutinesPageRoute() {
 				router.push("/routines/new" as Route);
 			}}
 			onClickRoutineName={(routineId) => {
-				router.push(`/routines/${routineId}` as Route);
+				router.push(`/routines/${String(routineId)}` as Route);
 			}}
 			onDeleteRoutine={async (routineId) => {
 				try {
-					await deleteMutation.mutateAsync({ routineId });
+					await deleteMutation.mutateAsync({ routineId: String(routineId) });
 					await queryClient.invalidateQueries({
 						queryKey: getGetRoutinesQueryKey(),
 					});

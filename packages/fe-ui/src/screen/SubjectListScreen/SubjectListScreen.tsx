@@ -82,7 +82,7 @@ export interface SubjectListScreenProps {
 	isLoading: boolean;
 	queryStates: SubjectListScreenQueryStates;
 	setQueryStates: SubjectListScreenSetQueryStates;
-	onClickSubject: (subjectId: string) => void;
+	onClickSubject: (subjectId: bigint) => void;
 }
 const subjectTableColumns = buildSubjectTableColumns<SubjectDto>();
 function getSubjectGroupFilterKey(group: string) {

@@ -72,7 +72,7 @@ export const SecurityPolicyFormScreen = observer(
 					description="인증 보안 정책을 관리합니다."
 					actions={
 						<Button
-							color={isSaveSuccess ? "success" : "primary"}
+							variant={isSaveSuccess ? "tertiary" : "primary"}
 							startContent={<Save className="h-4 w-4" />}
 							onPress={onSubmit}
 							isLoading={isSaving}

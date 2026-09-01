@@ -232,7 +232,7 @@ export const OidcClientForm = observer(
 									!readOnly && (
 										<Button
 											size="sm"
-											variant="flat"
+											variant="tertiary"
 											onPress={handleGenerateSecret}
 											startContent={<RefreshCw className="h-3 w-3" />}
 										>

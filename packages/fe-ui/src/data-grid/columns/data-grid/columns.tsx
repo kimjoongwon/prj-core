@@ -8,11 +8,11 @@ import type { RoleDto } from "@cocrepo/api/core/roles";
 import type { SubjectDto } from "@cocrepo/api/core/subjects";
 import type { TaskDto } from "@cocrepo/api/core/tasks";
 import type { TimelineDto } from "@cocrepo/api/core/timelines";
-import type { AuthAuditLogDto, AuthAuditResult } from "@cocrepo/api/idp/auth";
-import type { EmailVerificationDto } from "@cocrepo/api/idp/email-verifications";
-import type { IdpAccountDto } from "@cocrepo/api/idp/idp-accounts";
-import type { OidcClientDto } from "@cocrepo/api/idp/oidc-clients";
-import type { OidcSessionDto } from "@cocrepo/api/idp/oidc-sessions";
+import type { AuthAuditLogDto } from "@cocrepo/api/core/auth";
+import type { EmailVerificationDto } from "@cocrepo/api/core/email-verifications";
+import type { IdpAccountDto } from "@cocrepo/api/core/idp-accounts";
+import type { OidcClientDto } from "@cocrepo/api/core/oidc-clients";
+import type { OidcSessionDto } from "@cocrepo/api/core/oidc-sessions";
 import { Ban, Eye, Pencil, Send, Trash2 } from "lucide-react";
 import {
 	ActionButtonCell,
@@ -29,8 +29,8 @@ import {
 	PhoneCell,
 	ProfileAvatarCell,
 	RowActionsCell,
-	SwitchCell,
 	SummaryCell,
+	SwitchCell,
 	TimeRemainingCell,
 	type TimeRemainingStatus,
 } from "../../cell";
@@ -62,7 +62,7 @@ import {
 
 type RoleLike = {
 	name?: string;
-	displayName?: string;
+	displayName?: string | null;
 };
 
 type TenantWithRole = {
@@ -85,7 +85,7 @@ type SpaceFitnessCenterRow = {
 };
 
 type SpaceTableRow = {
-	id: string;
+	id: bigint;
 	contentLanguageCode: string;
 	fitnessCenter?: SpaceFitnessCenterRow | null;
 };
@@ -174,8 +174,8 @@ export const actionDisplayNameColumn = createDisplayNameColumn<ActionDto>({
 export const actionGroupColumn = createGroupColumn<ActionDto>({
 	size: 120,
 	align: "center",
-	cell: ({ getValue }) => {
-		const group = getValue() as string | undefined;
+	cell: ({ row }) => {
+		const group = row.original.group;
 		return (
 			<ChipCell
 				label={group}
@@ -202,12 +202,12 @@ export const actionRemovedAtColumn = createRemovedAtStatusColumn<ActionDto>({
 /** Action 목록 페이지용 컬럼 조합을 생성합니다. */
 export function buildActionTableColumns<
 	TRow extends {
-		id: string;
+		id: bigint;
 		name: string;
 		displayName?: string | null;
 		group?: string | null;
-		createdAt: string | Date | null;
-		removedAt?: string | null;
+		createdAt: Date | null;
+		removedAt?: Date | null;
 	},
 >(options: { onClickDetailButton?: (row: TRow) => void } = {}) {
 	const columns = buildColumns<TRow>(
@@ -224,8 +224,8 @@ export function buildActionTableColumns<
 		createGroupColumn<TRow>({
 			size: 120,
 			align: "center",
-			cell: ({ getValue }) => {
-				const group = getValue() as string | undefined;
+			cell: ({ row }) => {
+				const group = row.original.group ?? undefined;
 				return (
 					<ChipCell
 						label={getActionGroupLabel(group)}
@@ -270,12 +270,12 @@ export const actionTableColumns = buildActionTableColumns<ActionDto>();
 
 export function buildUserListTableColumns<
 	TRow extends {
-		id: string;
+		id: bigint;
 		name: string;
 		email?: string | null;
 		phone?: string | null;
-		removedAt?: string | null;
-		createdAt: string;
+		removedAt?: Date | null;
+		createdAt: Date;
 		tenants?: TenantWithRole[] | null;
 	},
 >() {
@@ -293,9 +293,9 @@ export function buildUserListTableColumns<
 		}),
 		createPhoneColumn<TRow>({
 			size: 150,
-			cell: ({ getValue }) => (
+			cell: ({ row }) => (
 				<PhoneCell
-					value={getValue() as string | null}
+					value={row.original.phone}
 					className="text-sm font-medium tabular-nums text-foreground/80"
 				/>
 			),
@@ -429,8 +429,8 @@ export function buildSubjectTableColumns<
 		name: string;
 		displayName?: string | null;
 		group?: string | null;
-		createdAt: string | Date | null;
-		removedAt?: string | null;
+		createdAt: Date | null;
+		removedAt?: Date | null;
 	},
 >() {
 	return buildColumns<TRow>(
@@ -449,8 +449,8 @@ export function buildSubjectTableColumns<
 			label: "유형",
 			size: 120,
 			align: "center",
-			cell: ({ getValue }) => {
-				const group = getValue() as string | undefined;
+			cell: ({ row }) => {
+				const group = row.original.group;
 				return (
 					<ChipCell
 						label={getSubjectGroupLabel(group)}
@@ -512,12 +512,12 @@ export const adminRoleActionsColumn = createActionsColumn<RoleDto>({
 /** 역할 목록 페이지용 컬럼 조합을 생성합니다. */
 export function buildAdminRoleTableColumns<
 	TRow extends {
-		id: string;
+		id: bigint;
 		name: string;
 		displayName?: string | null;
 		description?: string | null;
-		createdAt: string | Date | null;
-		removedAt?: string | null;
+		createdAt: Date | null;
+		removedAt?: Date | null;
 	},
 >() {
 	return buildColumnsWithDefaultCreatedAt<TRow>(
@@ -634,8 +634,8 @@ export function buildTaskTableColumns<TRow extends TaskDto = TaskDto>({
 	onClickTaskName,
 	onClickDeleteButton,
 }: {
-	onClickTaskName: (taskId: string) => void;
-	onClickDeleteButton: (taskId: string) => void;
+	onClickTaskName: (taskId: bigint) => void;
+	onClickDeleteButton: (taskId: bigint) => void;
 }) {
 	/** Task 목록 페이지용 컬럼 조합을 생성합니다. */
 	return buildColumnsWithDefaultCreatedAt<TRow>(
@@ -658,27 +658,25 @@ export function buildTaskTableColumns<TRow extends TaskDto = TaskDto>({
 					/>
 				),
 			}),
-			createPresetColumn<TRow>("duration", {
+			createPresetColumn<TRow, TRow["exercise"]["duration"]>("duration", {
 				accessorKey: "exercise.duration",
 				size: 100,
 				align: "center",
 				cell: ({ getValue }) => (
-					<DefaultCell value={formatDuration(getValue() as number)} />
+					<DefaultCell value={formatDuration(getValue())} />
 				),
 			}),
-			createPresetColumn<TRow>("count", {
+			createPresetColumn<TRow, TRow["exercise"]["count"]>("count", {
 				accessorKey: "exercise.count",
 				size: 80,
 				align: "center",
-				cell: ({ getValue }) => (
-					<DefaultCell value={`${getValue() as number}회`} />
-				),
+				cell: ({ getValue }) => <DefaultCell value={`${getValue()}회`} />,
 			}),
 			createDescriptionColumn<TRow>({
 				accessorKey: "exercise.description",
-				cell: ({ getValue }) => (
+				cell: ({ row }) => (
 					<DefaultCell
-						value={getValue() as string | undefined}
+						value={row.original.exercise.description}
 						tone="muted"
 						lineClamp={2}
 					/>
@@ -704,14 +702,14 @@ export function buildTimelineTableColumns<
 >({
 	onClickDeleteButton,
 }: {
-	onClickDeleteButton: (timelineId: string) => void;
+	onClickDeleteButton: (timelineId: bigint) => void;
 }) {
 	/** Timeline 목록 페이지용 컬럼 조합을 생성합니다. */
 	return buildColumnsWithDefaultCreatedAt<TRow>(
 		[
 			createNameColumn<TRow>({
 				nameVariant: "plain",
-				cell: ({ getValue, row }) => (
+				cell: ({ row }) => (
 					<LinkCell
 						href={`/timelines/${row.original.id}`}
 						className="text-accent hover:underline"
@@ -719,15 +717,15 @@ export function buildTimelineTableColumns<
 							event.stopPropagation();
 						}}
 					>
-						{getValue() as string}
+						{row.original.name}
 					</LinkCell>
 				),
 			}),
 			createDescriptionColumn<TRow>({
 				size: 300,
-				cell: ({ getValue }) => (
+				cell: ({ row }) => (
 					<DefaultCell
-						value={getValue() as string}
+						value={row.original.description}
 						tone="muted"
 						lineClamp={1}
 					/>
@@ -750,18 +748,18 @@ export function buildTimelineTableColumns<
 
 export function buildTemplateTableColumns<
 	TRow extends {
-		id: string;
+		id: bigint;
 		code: string;
 		name: string;
 		isActive: boolean;
-		createdAt: string | Date | null;
+		createdAt: Date | null;
 	},
 >({
 	onClickTemplateCode,
 	onToggleTemplateStatusSwitch,
 }: {
-	onClickTemplateCode: (templateId: string) => void;
-	onToggleTemplateStatusSwitch: (templateId: string) => Promise<void>;
+	onClickTemplateCode: (templateId: bigint) => void;
+	onToggleTemplateStatusSwitch: (templateId: bigint) => Promise<void>;
 }) {
 	/** Template 목록 페이지용 컬럼 조합을 생성합니다. */
 	return buildColumns<TRow>(
@@ -801,7 +799,7 @@ export function buildSpaceTableColumns<
 >({
 	onClickSpaceFitnessCenterName,
 }: {
-	onClickSpaceFitnessCenterName: (spaceId: string) => void;
+	onClickSpaceFitnessCenterName: (spaceId: bigint) => void;
 }) {
 	const contentLanguageLabels: Record<string, string> = {
 		ko_KR: "한국어",
@@ -821,11 +819,11 @@ export function buildSpaceTableColumns<
 			accessorKey: "fitnessCenter.label",
 			size: 120,
 			align: "center",
-			cell: ({ getValue }) => (
-				<ChipCell label={getValue() as string | null} color="secondary" />
+			cell: ({ row }) => (
+				<ChipCell label={row.original.fitnessCenter?.label} color="secondary" />
 			),
 		}),
-		defineColumn<TRow>({
+		defineColumn<TRow, TRow["contentLanguageCode"]>({
 			field: "contentLanguageCode",
 			label: "콘텐츠 언어",
 			size: 130,
@@ -855,17 +853,17 @@ export function buildSpaceTableColumns<
 
 export function buildRoutineTableColumns<
 	TRow extends {
-		id: string;
+		id: bigint;
 		name: string;
 		label?: string | null;
-		createdAt: string | Date | null;
+		createdAt: Date | null;
 	},
 >({
 	onClickRoutineName,
 	onClickDeleteButton,
 }: {
-	onClickRoutineName: (routineId: string) => void;
-	onClickDeleteButton: (routineId: string) => void;
+	onClickRoutineName: (routineId: bigint) => void;
+	onClickDeleteButton: (routineId: bigint) => void;
 }) {
 	/** Routine 목록 페이지용 컬럼 조합을 생성합니다. */
 	return buildColumnsWithDefaultCreatedAt<TRow>(
@@ -875,8 +873,8 @@ export function buildRoutineTableColumns<
 				onClickName: (row) => onClickRoutineName(row.id),
 			}),
 			createLabelColumn<TRow>({
-				cell: ({ getValue }) => (
-					<DefaultCell value={getValue() as string} tone="muted" />
+				cell: ({ row }) => (
+					<DefaultCell value={row.original.label} tone="muted" />
 				),
 			}),
 		],
@@ -902,7 +900,7 @@ export function buildAssetTableColumns<
 		status: AssetDto["status"];
 		mimeType: string;
 		sizeBytes: number;
-		createdAt: string;
+		createdAt: AssetDto["createdAt"];
 	},
 >({
 	isRemoving,
@@ -955,17 +953,17 @@ export function buildAssetTableColumns<
 					/>
 				),
 			}),
-			createPresetColumn<TRow>("mimeType", {
+			createPresetColumn<TRow, TRow["mimeType"]>("mimeType", {
 				size: 180,
 				cell: ({ getValue }) => (
-					<DefaultCell value={getValue() as string} mono size="xs" />
+					<DefaultCell value={getValue()} mono size="xs" />
 				),
 			}),
-			createPresetColumn<TRow>("sizeBytes", {
+			createPresetColumn<TRow, TRow["sizeBytes"]>("sizeBytes", {
 				size: 120,
 				align: "right",
 				cell: ({ getValue }) => (
-					<DefaultCell value={formatAssetBytes(getValue() as number)} />
+					<DefaultCell value={formatAssetBytes(getValue())} />
 				),
 			}),
 		],
@@ -1044,12 +1042,10 @@ export function buildInquiryTableColumns<
 				/>
 			),
 		}),
-		createPresetColumn<TRow>("title", {
+		createPresetColumn<TRow, TRow["title"]>("title", {
 			size: 260,
 			isRequired: true,
-			cell: ({ getValue }) => (
-				<DefaultCell value={getValue() as string} lineClamp={2} />
-			),
+			cell: ({ getValue }) => <DefaultCell value={getValue()} lineClamp={2} />,
 		}),
 		createStatusColumn<TRow>({
 			size: 130,
@@ -1237,40 +1233,36 @@ export function buildStaticTranslationTableColumns<
 		text: string;
 		category: string;
 		isTranslated: boolean;
-		updatedAt: string | Date | null;
+		updatedAt: Date | null;
 	},
 >(options: {
 	onClickEditButton: (translation: TRow) => void;
 	onClickDeleteButton: (translation: TRow) => void;
 }) {
 	return buildColumns<TRow>(
-		defineColumn<TRow>({
+		defineColumn<TRow, TRow["languageCode"]>({
 			field: "languageCode",
 			label: "언어",
 			size: 110,
 			align: "center",
 			cell: ({ getValue }) => (
-				<ChipCell
-					label={getStaticTranslationLanguageLabel(getValue() as string)}
-				/>
+				<ChipCell label={getStaticTranslationLanguageLabel(getValue())} />
 			),
 		}),
-		defineColumn<TRow>({
+		defineColumn<TRow, TRow["key"]>({
 			field: "key",
 			label: "번역 키",
 			size: 260,
 			isRequired: true,
-			cell: ({ getValue }) => (
-				<DefaultCell value={getValue() as string} mono truncate />
-			),
+			cell: ({ getValue }) => <DefaultCell value={getValue()} mono truncate />,
 		}),
-		defineColumn<TRow>({
+		defineColumn<TRow, TRow["category"]>({
 			field: "category",
 			label: "카테고리",
 			size: 130,
 			align: "center",
 			cell: ({ getValue }) => {
-				const category = getValue() as string;
+				const category = getValue();
 				return (
 					<ChipCell
 						label={category}
@@ -1279,23 +1271,21 @@ export function buildStaticTranslationTableColumns<
 				);
 			},
 		}),
-		defineColumn<TRow>({
+		defineColumn<TRow, TRow["text"]>({
 			field: "text",
 			label: "번역문",
 			size: 420,
 			isRequired: true,
-			cell: ({ getValue }) => (
-				<DefaultCell value={getValue() as string} lineClamp={2} />
-			),
+			cell: ({ getValue }) => <DefaultCell value={getValue()} lineClamp={2} />,
 		}),
-		defineColumn<TRow>({
+		defineColumn<TRow, TRow["isTranslated"]>({
 			field: "isTranslated",
 			label: "완료",
 			size: 100,
 			align: "center",
 			cell: ({ getValue }) => (
 				<BooleanCell
-					value={getValue() as boolean}
+					value={getValue()}
 					trueLabel="완료"
 					falseLabel="대기"
 					trueColor="success"
@@ -1303,11 +1293,11 @@ export function buildStaticTranslationTableColumns<
 				/>
 			),
 		}),
-		defineColumn<TRow>({
+		defineColumn<TRow, TRow["updatedAt"]>({
 			field: "updatedAt",
 			label: "수정일",
 			size: 150,
-			cell: ({ getValue }) => <DateTimeCell value={getValue() as string} />,
+			cell: ({ getValue }) => <DateTimeCell value={getValue()} />,
 		}),
 		createActionsColumn<TRow>({
 			label: "관리",
@@ -1409,7 +1399,7 @@ function getModelTypeConfig(modelType: string) {
 
 function getLockStatusConfig(account: {
 	isPermanentlyLocked: boolean;
-	lockedUntil?: string | null;
+	lockedUntil?: Date | null;
 }) {
 	if (account.isPermanentlyLocked) {
 		return { label: "영구잠금", color: "danger" as const };
@@ -1423,50 +1413,50 @@ function getLockStatusConfig(account: {
 }
 
 /** OIDC Client 목록에서 사용하는 clientId 컬럼입니다. */
-export const oidcClientIdColumn = createPresetColumn<OidcClientDto>(
-	"clientId",
-	{
-		size: 200,
-		isRequired: true,
-		cell: ({ getValue }) => <DefaultCell value={getValue() as string} mono />,
-	},
-);
+export const oidcClientIdColumn = createPresetColumn<
+	OidcClientDto,
+	OidcClientDto["clientId"]
+>("clientId", {
+	size: 200,
+	isRequired: true,
+	cell: ({ getValue }) => <DefaultCell value={getValue()} mono />,
+});
 
 export const oidcClientNameColumn = createPresetColumn<OidcClientDto>("name", {
 	size: 200,
 });
 
 /** OIDC Client 인증 방식을 Chip으로 표시하는 컬럼입니다. */
-export const oidcClientAuthMethodColumn = createPresetColumn<OidcClientDto>(
-	"tokenEndpointAuthMethod",
-	{
-		size: 150,
-		cell: ({ getValue }) => {
-			const config = getAuthMethodConfig(getValue() as string);
-			return <ChipCell label={config.label} color={config.color} />;
-		},
+export const oidcClientAuthMethodColumn = createPresetColumn<
+	OidcClientDto,
+	OidcClientDto["tokenEndpointAuthMethod"]
+>("tokenEndpointAuthMethod", {
+	size: 150,
+	cell: ({ getValue }) => {
+		const config = getAuthMethodConfig(getValue());
+		return <ChipCell label={config.label} color={config.color} />;
 	},
-);
+});
 
-export const oidcClientGrantTypesColumn = createPresetColumn<OidcClientDto>(
-	"grantTypes",
-	{
-		size: 200,
-		cell: ({ getValue }) => {
-			const types = getValue() as string[];
+export const oidcClientGrantTypesColumn = createPresetColumn<
+	OidcClientDto,
+	OidcClientDto["grantTypes"]
+>("grantTypes", {
+	size: 200,
+	cell: ({ getValue }) => {
+		const types = getValue();
 
-			if (!types?.length) {
-				return <DefaultCell value={null} />;
-			}
+		if (!types?.length) {
+			return <DefaultCell value={null} />;
+		}
 
-			return (
-				<ChipListCell
-					labels={types.map((type) => GRANT_TYPE_LABEL[type] ?? type)}
-				/>
-			);
-		},
+		return (
+			<ChipListCell
+				labels={types.map((type) => GRANT_TYPE_LABEL[type] ?? type)}
+			/>
+		);
 	},
-);
+});
 
 /** OIDC Client 활성 상태를 표시하는 컬럼입니다. */
 export const oidcClientIsActiveColumn = createIsActiveColumn<OidcClientDto>({
@@ -1501,7 +1491,7 @@ export const oidcClientActionsColumn = createActionsColumn<OidcClientDto>({
 /** OIDC Client 목록 페이지용 컬럼 조합을 생성합니다. */
 export function buildOidcClientTableColumns<
 	TRow extends {
-		id: string;
+		id: bigint;
 		clientId: string;
 		name: string;
 		tokenEndpointAuthMethod: string;
@@ -1509,29 +1499,32 @@ export function buildOidcClientTableColumns<
 		isFirstParty: boolean;
 		skipConsent: boolean;
 		isActive: boolean;
-		createdAt: string | Date | null;
+		createdAt: Date | null;
 	},
 >() {
 	return buildColumns<TRow>(
-		createPresetColumn<TRow>("clientId", {
+		createPresetColumn<TRow, TRow["clientId"]>("clientId", {
 			size: 200,
 			isRequired: true,
-			cell: ({ getValue }) => <DefaultCell value={getValue() as string} mono />,
+			cell: ({ getValue }) => <DefaultCell value={getValue()} mono />,
 		}),
 		createPresetColumn<TRow>("name", {
 			size: 200,
 		}),
-		createPresetColumn<TRow>("tokenEndpointAuthMethod", {
-			size: 150,
-			cell: ({ getValue }) => {
-				const config = getAuthMethodConfig(getValue() as string);
-				return <ChipCell label={config.label} color={config.color} />;
+		createPresetColumn<TRow, TRow["tokenEndpointAuthMethod"]>(
+			"tokenEndpointAuthMethod",
+			{
+				size: 150,
+				cell: ({ getValue }) => {
+					const config = getAuthMethodConfig(getValue());
+					return <ChipCell label={config.label} color={config.color} />;
+				},
 			},
-		}),
-		createPresetColumn<TRow>("grantTypes", {
+		),
+		createPresetColumn<TRow, TRow["grantTypes"]>("grantTypes", {
 			size: 200,
 			cell: ({ getValue }) => {
-				const types = getValue() as string[];
+				const types = getValue();
 
 				if (!types?.length) {
 					return <DefaultCell value={null} />;
@@ -1601,14 +1594,14 @@ export const oidcClientTableColumns =
 
 export function buildIdpAccountTableColumns<
 	TRow extends {
-		id: string;
+		id: bigint;
 		name: string;
 		email: string;
 		isActive: boolean;
 		isPermanentlyLocked: boolean;
-		lockedUntil?: string | null;
+		lockedUntil?: Date | null;
 		failedLoginAttempts: number;
-		lastLoginAt?: string | null;
+		lastLoginAt?: Date | null;
 	},
 >({ onClickUnlockAccount }: { onClickUnlockAccount: (account: TRow) => void }) {
 	/** IDP Account 목록 페이지용 컬럼 조합을 생성합니다. */
@@ -1635,26 +1628,27 @@ export function buildIdpAccountTableColumns<
 				return <ChipCell label={config.label} color={config.color} />;
 			},
 		}),
-		createPresetColumn<TRow>("failedLoginAttempts", {
-			size: 80,
-			align: "center",
-			cell: ({ getValue }) => {
-				const count = getValue() as number;
-				return (
-					<DefaultCell
-						value={count}
-						tabular
-						weight={count >= 5 ? "semibold" : "normal"}
-						className={count >= 5 ? "text-danger" : undefined}
-					/>
-				);
+		createPresetColumn<TRow, TRow["failedLoginAttempts"]>(
+			"failedLoginAttempts",
+			{
+				size: 80,
+				align: "center",
+				cell: ({ getValue }) => {
+					const count = getValue();
+					return (
+						<DefaultCell
+							value={count}
+							tabular
+							weight={count >= 5 ? "semibold" : "normal"}
+							className={count >= 5 ? "text-danger" : undefined}
+						/>
+					);
+				},
 			},
-		}),
-		createPresetColumn<TRow>("lastLoginAt", {
+		),
+		createPresetColumn<TRow, TRow["lastLoginAt"]>("lastLoginAt", {
 			size: 170,
-			cell: ({ getValue }) => (
-				<DateTimeCell value={getValue() as string | null | undefined} />
-			),
+			cell: ({ getValue }) => <DateTimeCell value={getValue()} />,
 		}),
 		createActionsColumn<TRow>({
 			size: 180,
@@ -1696,16 +1690,16 @@ export const idpAccountTableColumns =
 
 export function buildEmailVerificationTableColumns<
 	TRow extends {
-		id: string;
+		id: bigint;
 		email: string;
 		name: string;
 		status: string;
 		lastSendStatus?: string | null;
 		sendCount: number;
-		expiresAt: string | Date;
-		verifiedAt?: string | Date | null;
+		expiresAt: Date | null;
+		verifiedAt?: Date | null;
 		canResend: boolean;
-		resendAvailableAt?: string | Date | null;
+		resendAvailableAt?: Date | null;
 	},
 >({
 	onClickResendEmailVerification,
@@ -1720,56 +1714,55 @@ export function buildEmailVerificationTableColumns<
 		createNameColumn<TRow>({
 			size: 160,
 		}),
-		createPresetColumn<TRow>("status", {
+		createPresetColumn<TRow, TRow["status"]>("status", {
 			size: 120,
 			align: "center",
 			cell: ({ getValue }) => {
-				const status =
-					getValue() as keyof typeof EMAIL_VERIFICATION_STATUS_CONFIG;
-				const config = EMAIL_VERIFICATION_STATUS_CONFIG[status] ?? {
-					label: status,
-					color: "default" as const,
-				};
+				const status = getValue();
+				const config = Object.hasOwn(EMAIL_VERIFICATION_STATUS_CONFIG, status)
+					? EMAIL_VERIFICATION_STATUS_CONFIG[
+							status as keyof typeof EMAIL_VERIFICATION_STATUS_CONFIG
+						]
+					: {
+							label: status,
+							color: "default" as const,
+						};
 
 				return <ChipCell label={config.label} color={config.color} />;
 			},
 		}),
-		createPresetColumn<TRow>("lastSendStatus", {
+		createPresetColumn<TRow, TRow["lastSendStatus"]>("lastSendStatus", {
 			size: 120,
 			align: "center",
 			cell: ({ getValue }) => {
-				const status = getValue() as
-					| keyof typeof EMAIL_SEND_STATUS_CONFIG
-					| null;
+				const status = getValue();
 				if (!status) {
 					return <DefaultCell value={null} />;
 				}
-				const config = EMAIL_SEND_STATUS_CONFIG[status] ?? {
-					label: status,
-					color: "default" as const,
-				};
+				const config = Object.hasOwn(EMAIL_SEND_STATUS_CONFIG, status)
+					? EMAIL_SEND_STATUS_CONFIG[
+							status as keyof typeof EMAIL_SEND_STATUS_CONFIG
+						]
+					: {
+							label: status,
+							color: "default" as const,
+						};
 
 				return <ChipCell label={config.label} color={config.color} />;
 			},
 		}),
-		createPresetColumn<TRow>("sendCount", {
+		createPresetColumn<TRow, TRow["sendCount"]>("sendCount", {
 			size: 90,
 			align: "center",
-			cell: ({ getValue }) => (
-				<DefaultCell value={getValue() as number} tabular />
-			),
+			cell: ({ getValue }) => <DefaultCell value={getValue()} tabular />,
 		}),
-		createPresetColumn<TRow>("expiresAt", {
+		createPresetColumn<TRow, TRow["expiresAt"]>("expiresAt", {
 			size: 180,
-			cell: ({ getValue }) => (
-				<ExpiryCell expiresAt={getValue() as string | Date | null} />
-			),
+			cell: ({ getValue }) => <ExpiryCell expiresAt={getValue()} />,
 		}),
-		createPresetColumn<TRow>("verifiedAt", {
+		createPresetColumn<TRow, TRow["verifiedAt"]>("verifiedAt", {
 			size: 170,
-			cell: ({ getValue }) => (
-				<DateTimeCell value={getValue() as string | Date | null | undefined} />
-			),
+			cell: ({ getValue }) => <DateTimeCell value={getValue()} />,
 		}),
 		defineColumn<TRow>({
 			field: "actions",
@@ -1813,17 +1806,17 @@ export const authAuditLogCreatedAtColumn =
 export const authAuditLogEmailColumn = createEmailColumn<AuthAuditLogDto>();
 
 /** 인증 감사 로그 결과를 Chip으로 보여주는 컬럼입니다. */
-export const authAuditLogResultColumn = createPresetColumn<AuthAuditLogDto>(
-	"result",
-	{
-		size: 100,
-		align: "center",
-		cell: ({ getValue }) => {
-			const config = getAuditResultConfig(getValue() as AuthAuditResult);
-			return <ChipCell label={config.label} color={config.color} />;
-		},
+export const authAuditLogResultColumn = createPresetColumn<
+	AuthAuditLogDto,
+	AuthAuditLogDto["result"]
+>("result", {
+	size: 100,
+	align: "center",
+	cell: ({ getValue }) => {
+		const config = getAuditResultConfig(getValue());
+		return <ChipCell label={config.label} color={config.color} />;
 	},
-);
+});
 
 export const authAuditLogFailureReasonColumn =
 	createPresetColumn<AuthAuditLogDto>("failureReason", {
@@ -1855,7 +1848,7 @@ export const authAuditLogTableColumns = buildColumns<AuthAuditLogDto>(
 
 export function buildAuthAuditLogTableColumns<
 	TRow extends {
-		occurredAt?: string | null;
+		createdAt: Date;
 		email: string;
 		result: string;
 		failureReason?: string | null;
@@ -1871,11 +1864,11 @@ export function buildAuthAuditLogTableColumns<
 			isRequired: true,
 		}),
 		createEmailColumn<TRow>(),
-		createPresetColumn<TRow>("result", {
+		createPresetColumn<TRow, TRow["result"]>("result", {
 			size: 100,
 			align: "center",
 			cell: ({ getValue }) => {
-				const config = getAuditResultConfig(getValue() as AuthAuditResult);
+				const config = getAuditResultConfig(getValue());
 				return <ChipCell label={config.label} color={config.color} />;
 			},
 		}),
@@ -1893,12 +1886,13 @@ export function buildAuthAuditLogTableColumns<
 
 export function buildOidcSessionTableColumns<
 	TRow extends {
+		id: bigint;
 		key: string;
 		modelType: string;
 		accountId?: string;
 		grantId?: string;
-		expiresAt: string | null;
-		createdAt: string;
+		expiresAt: Date | null;
+		createdAt: Date;
 	},
 >({
 	onClickGrantId,
@@ -1910,29 +1904,29 @@ export function buildOidcSessionTableColumns<
 	/** OIDC Session 목록 페이지용 컬럼 조합을 생성합니다. */
 	return buildColumnsWithDefaultCreatedAt<TRow>(
 		[
-			createPresetColumn<TRow>("key", {
+			createPresetColumn<TRow, TRow["key"]>("key", {
 				size: 140,
 				isRequired: true,
 				/** 긴 세션 키는 앞부분만 노출하고 전체 값은 title로 보존합니다. */
 				cell: ({ getValue }) => {
-					const key = getValue() as string;
+					const key = getValue();
 					return (
 						<DefaultCell value={`${key.slice(0, 8)}...`} mono title={key} />
 					);
 				},
 			}),
-			createPresetColumn<TRow>("modelType", {
+			createPresetColumn<TRow, TRow["modelType"]>("modelType", {
 				size: 140,
 				cell: ({ getValue }) => {
-					const config = getModelTypeConfig(getValue() as string);
+					const config = getModelTypeConfig(getValue());
 					return <ChipCell label={config.label} color={config.color} />;
 				},
 			}),
-			createPresetColumn<TRow>("accountId", {
+			createPresetColumn<TRow, TRow["accountId"]>("accountId", {
 				size: 140,
 				/** accountId도 동일한 방식으로 축약 표시합니다. */
 				cell: ({ getValue }) => {
-					const accountId = getValue() as string | null;
+					const accountId = getValue();
 
 					return (
 						<DefaultCell
@@ -1943,11 +1937,11 @@ export function buildOidcSessionTableColumns<
 					);
 				},
 			}),
-			createPresetColumn<TRow>("grantId", {
+			createPresetColumn<TRow, TRow["grantId"]>("grantId", {
 				size: 140,
 				/** grantId는 클릭 액션이 있으므로 버튼 형태의 셀로 표시합니다. */
 				cell: ({ getValue }) => {
-					const grantId = getValue() as string | null;
+					const grantId = getValue();
 					if (!grantId) {
 						return <DefaultCell value={null} />;
 					}
@@ -1967,11 +1961,9 @@ export function buildOidcSessionTableColumns<
 					);
 				},
 			}),
-			createPresetColumn<TRow>("expiresAt", {
+			createPresetColumn<TRow, TRow["expiresAt"]>("expiresAt", {
 				size: 180,
-				cell: ({ getValue }) => (
-					<ExpiryCell expiresAt={getValue() as string | null} />
-				),
+				cell: ({ getValue }) => <ExpiryCell expiresAt={getValue()} />,
 			}),
 		],
 		[

@@ -1,6 +1,6 @@
 "use client";
 
-import type { AuthAuditLogDto } from "@cocrepo/api/idp/auth";
+import type { AuthAuditLogDto } from "@cocrepo/api/core/auth";
 import type {
 	DataGridQueryStates,
 	DataGridSetQueryStates,

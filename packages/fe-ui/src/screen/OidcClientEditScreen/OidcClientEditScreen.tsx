@@ -73,7 +73,7 @@ export const OidcClientEditScreen = observer(
 							<Section.Body>
 								<div className="flex flex-col items-center justify-center gap-4 p-8">
 									<p className="text-muted">{notFoundMessage}</p>
-									{notFoundAction ?? <Button variant="flat">목록으로</Button>}
+									{notFoundAction ?? <Button variant="tertiary">목록으로</Button>}
 								</div>
 							</Section.Body>
 						</Section>

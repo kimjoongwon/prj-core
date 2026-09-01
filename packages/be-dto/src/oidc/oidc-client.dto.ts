@@ -27,7 +27,7 @@ export class OidcClientDto
 	})
 	clientId: string;
 
-	@StringFieldOptional({ description: "클라이언트 시크릿" })
+	@StringFieldOptional({ nullable: true, description: "클라이언트 시크릿" })
 	clientSecret: string | null;
 
 	@StringField({ description: "클라이언트 이름", maxLength: 128 })
@@ -39,10 +39,10 @@ export class OidcClientDto
 	})
 	redirectUris: string[];
 
-	@StringFieldOptional({ description: "로그인 화면 URL" })
+	@StringFieldOptional({ nullable: true, description: "로그인 화면 URL" })
 	loginUrl: string | null;
 
-	@StringFieldOptional({ description: "인증 성공 후 기본 복귀 URL" })
+	@StringFieldOptional({ nullable: true, description: "인증 성공 후 기본 복귀 URL" })
 	defaultReturnTo: string | null;
 
 	@StringField({
@@ -85,12 +85,12 @@ export class OidcClientDto
 	@IsObject()
 	loginUi: Prisma.JsonValue | null;
 
-	@StringFieldOptional({ description: "로고 URI" })
+	@StringFieldOptional({ nullable: true, description: "로고 URI" })
 	logoUri: string | null;
 
-	@StringFieldOptional({ description: "정책 URI" })
+	@StringFieldOptional({ nullable: true, description: "정책 URI" })
 	policyUri: string | null;
 
-	@StringFieldOptional({ description: "서비스 약관 URI" })
+	@StringFieldOptional({ nullable: true, description: "서비스 약관 URI" })
 	tosUri: string | null;
 }

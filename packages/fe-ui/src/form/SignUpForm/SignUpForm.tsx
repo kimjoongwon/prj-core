@@ -132,7 +132,7 @@ export const SignUpForm = observer(
 
 							<Button
 								type="button"
-								variant="flat"
+								variant="tertiary"
 								className="w-full"
 								onPress={onClickUseAnotherEmailButton}
 							>
@@ -248,7 +248,7 @@ export const SignUpForm = observer(
 
 						<Button
 							type="submit"
-							color="primary"
+							variant="primary"
 							className="w-full font-semibold"
 							size="lg"
 							isLoading={state.isSubmitting}

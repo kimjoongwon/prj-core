@@ -11,7 +11,7 @@ const meta = {
 		children: (
 			<>
 				<AlertDialog.Trigger>
-					<Button color="danger" variant="flat">
+					<Button variant="tertiary">
 						삭제
 					</Button>
 				</AlertDialog.Trigger>
@@ -26,10 +26,10 @@ const meta = {
 								선택한 항목을 삭제합니다. 이 작업은 되돌릴 수 없습니다.
 							</AlertDialog.Body>
 							<AlertDialog.Footer>
-								<Button variant="flat" slot="close">
+								<Button variant="tertiary" slot="close">
 									취소
 								</Button>
-								<Button color="danger" slot="close">
+								<Button variant="danger" slot="close">
 									삭제
 								</Button>
 							</AlertDialog.Footer>
@@ -51,7 +51,7 @@ export const Warning: Story = {
 		children: (
 			<>
 				<AlertDialog.Trigger>
-					<Button color="warning" variant="flat">
+					<Button variant="tertiary">
 						변경 취소
 					</Button>
 				</AlertDialog.Trigger>
@@ -66,10 +66,10 @@ export const Warning: Story = {
 								저장하지 않은 변경 사항이 사라집니다.
 							</AlertDialog.Body>
 							<AlertDialog.Footer>
-								<Button variant="flat" slot="close">
+								<Button variant="tertiary" slot="close">
 									계속 편집
 								</Button>
-								<Button color="warning" slot="close">
+								<Button variant="tertiary" slot="close">
 									버리기
 								</Button>
 							</AlertDialog.Footer>

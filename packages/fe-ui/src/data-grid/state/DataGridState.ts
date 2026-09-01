@@ -1,6 +1,5 @@
 import type {
 	DataGridTableConfig,
-	DataGridChangesState as DataGridChangesStateContract,
 	DataGridColumnsState as DataGridColumnsStateContract,
 	DataGridColumnsStateSnapshot,
 	DataGridExpandRequest,
@@ -8,7 +7,6 @@ import type {
 	DataGridQueryStates,
 	DataGridSelectionState as DataGridSelectionStateContract,
 	DataGridSetQueryStates,
-	DataGridState as DataGridStateContract,
 } from "@cocrepo/type";
 import type { ExpandedState, Updater } from "@tanstack/react-table";
 import { makeAutoObservable } from "mobx";
@@ -31,7 +29,7 @@ export interface DataGridStateOptions {
 	setQueryStates: DataGridSetQueryStates;
 	columns?: Partial<DataGridColumnsStateSnapshot>;
 	selection?: DataGridSelectionStateContract;
-	changes?: DataGridChangesStateContract;
+	changes?: DataGridChangesState;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -190,11 +188,11 @@ export class DataGridQueryState implements DataGridQueryStateContract {
 	}
 }
 
-export class DataGridState implements DataGridStateContract {
+export class DataGridState {
 	columns: DataGridColumnsState;
 	query: DataGridQueryState;
 	selection?: DataGridSelectionStateContract;
-	changes: DataGridChangesStateContract;
+	changes: DataGridChangesState;
 	expanded: ExpandedState = {};
 	selectedKeys = new Set<string>();
 	activeRowId: string | null = null;

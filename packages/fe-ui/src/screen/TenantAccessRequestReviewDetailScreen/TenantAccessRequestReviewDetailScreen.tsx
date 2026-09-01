@@ -139,7 +139,7 @@ export const TenantAccessRequestReviewDetailScreen = observer(
 				description="신청 내용을 확인하고 승인 또는 반려합니다."
 				actions={
 					<Button
-						variant="flat"
+						variant="tertiary"
 						startContent={<ArrowLeft className="size-4" />}
 						onPress={onClickBackButton}
 					>
@@ -220,12 +220,13 @@ export const TenantAccessRequestReviewDetailScreen = observer(
 												</div>
 											) : null}
 											<HStack justifyContent="end" fullWidth>
-												<Button variant="flat" onPress={onClickBackButton}>
+												<Button variant="tertiary" onPress={onClickBackButton}>
 													닫기
 												</Button>
 												<Button
-													color="danger"
-													variant="flat"
+
+
+													variant="tertiary"
 													startContent={<X className="size-4" />}
 													isLoading={isRejecting}
 													isDisabled={
@@ -236,7 +237,7 @@ export const TenantAccessRequestReviewDetailScreen = observer(
 													반려
 												</Button>
 												<Button
-													color="primary"
+													variant="primary"
 													startContent={<Check className="size-4" />}
 													isLoading={isApproving}
 													isDisabled={

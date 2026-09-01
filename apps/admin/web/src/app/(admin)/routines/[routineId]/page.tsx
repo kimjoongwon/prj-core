@@ -66,11 +66,12 @@ const AdminRoutinesDetailRoute = observer(() => {
 	]
 		.sort((left, right) => left.order - right.order)
 		.map((activity) => ({
-			taskId: activity.taskId,
-			exerciseName: activity.task?.exercise?.name ?? activity.taskId.slice(-6),
+			taskId: String(activity.taskId),
+			exerciseName:
+				activity.task?.exercise?.name ?? String(activity.taskId).slice(-6),
 			isSchedulable: Boolean(activity.task?.exercise?.videoFileId),
-			imageFileId: activity.task?.exercise?.imageFileId,
-			videoFileId: activity.task?.exercise?.videoFileId,
+			imageFileId: activity.task?.exercise?.imageFileId ?? undefined,
+			videoFileId: activity.task?.exercise?.videoFileId ?? undefined,
 			imageAssetUrl: activity.task?.exercise?.imageFileId
 				? (assetMap.get(activity.task.exercise.imageFileId)?.publicUrl ??
 					undefined)
@@ -135,10 +136,14 @@ const AdminRoutinesDetailRoute = observer(() => {
 			state={routineState}
 			activities={routineActivities}
 			programs={routine?.programs ?? []}
-			metadata={{
-				createdAt: routine?.createdAt,
-				updatedAt: routine?.updatedAt,
-			}}
+			metadata={
+				routine
+					? {
+							createdAt: routine.createdAt,
+							updatedAt: routine.updatedAt,
+						}
+					: undefined
+			}
 			readOnly
 			isLoading={isLoading}
 			notFound={Boolean(errorTitle) || (!isLoading && !routine)}
@@ -147,7 +152,7 @@ const AdminRoutinesDetailRoute = observer(() => {
 				<div className="flex gap-2">
 					{error && !isNotFound ? (
 						<Button
-							variant="flat"
+							variant="tertiary"
 							onPress={() => {
 								void refetch();
 							}}
@@ -156,7 +161,7 @@ const AdminRoutinesDetailRoute = observer(() => {
 						</Button>
 					) : null}
 					<Button
-						variant="flat"
+						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push("/routines" as Route);
@@ -169,7 +174,7 @@ const AdminRoutinesDetailRoute = observer(() => {
 			actions={
 				<div className="flex flex-wrap gap-2">
 					<Button
-						variant="flat"
+						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push("/routines" as Route);
@@ -178,7 +183,7 @@ const AdminRoutinesDetailRoute = observer(() => {
 						목록으로
 					</Button>
 					<Button
-						variant="flat"
+						variant="tertiary"
 						startContent={<Edit className="h-4 w-4" />}
 						onPress={() => {
 							router.push(`/routines/${routineId}/edit` as Route);
@@ -187,8 +192,7 @@ const AdminRoutinesDetailRoute = observer(() => {
 						수정
 					</Button>
 					<Button
-						color="danger"
-						variant="flat"
+						variant="tertiary"
 						startContent={<Trash2 className="h-4 w-4" />}
 						isLoading={isDeleting}
 						onPress={onClickDeleteButton}

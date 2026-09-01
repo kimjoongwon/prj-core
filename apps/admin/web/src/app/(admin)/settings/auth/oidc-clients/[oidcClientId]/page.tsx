@@ -4,7 +4,7 @@ import {
 	useDeleteOidcClient,
 	useGetOidcClient,
 	useToggleActiveOidcClient,
-} from "@cocrepo/api/idp/oidc-clients";
+} from "@cocrepo/api/core/oidc-clients";
 import type { OidcClientLoginUi } from "@cocrepo/type";
 import {
 	Button,
@@ -47,7 +47,7 @@ export default observer(function OidcClientDetailRoute() {
 			notFound={!isLoading && !client}
 			notFoundAction={
 				<Button
-					variant="flat"
+					variant="tertiary"
 					onPress={() => {
 						router.push("/settings/auth/oidc-clients" as Route);
 					}}
@@ -58,7 +58,7 @@ export default observer(function OidcClientDetailRoute() {
 			actions={
 				<div className="flex flex-wrap gap-2">
 					<Button
-						variant="light"
+						variant="ghost"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push("/settings/auth/oidc-clients" as Route);
@@ -69,8 +69,7 @@ export default observer(function OidcClientDetailRoute() {
 					{client ? (
 						<>
 							<Button
-								variant="flat"
-								color="primary"
+								variant="tertiary"
 								startContent={<Edit className="h-4 w-4" />}
 								onPress={() => {
 									router.push(
@@ -81,8 +80,7 @@ export default observer(function OidcClientDetailRoute() {
 								수정
 							</Button>
 							<Button
-								variant="flat"
-								color={client.isActive ? "warning" : "success"}
+								variant="tertiary"
 								startContent={
 									client.isActive ? (
 										<PowerOff className="h-4 w-4" />
@@ -98,8 +96,7 @@ export default observer(function OidcClientDetailRoute() {
 								{client.isActive ? "비활성화" : "활성화"}
 							</Button>
 							<Button
-								variant="flat"
-								color="danger"
+								variant="tertiary"
 								startContent={<Trash2 className="h-4 w-4" />}
 								isLoading={isDeleting}
 								onPress={() => {

@@ -30,7 +30,7 @@ export default observer(function TenantAccessRequestsReviewPageRoute() {
 				router.push(
 					ADMIN_PATHS.TENANT_ACCESS_REQUESTS_DETAIL.replace(
 						"[tenantAccessRequestId]",
-						tenantAccessRequestId,
+						String(tenantAccessRequestId),
 					) as Route,
 				);
 			}}

@@ -290,7 +290,7 @@ function InquiryMetaPanel({
 						{isEditable && !isAddingTag ? (
 							<Button
 								size="sm"
-								variant="flat"
+								variant="tertiary"
 								startContent={<Plus className="size-3" />}
 								onPress={() => setIsAddingTag(true)}
 								className="h-6 min-w-0 px-2"
@@ -697,23 +697,21 @@ export const InquiryEditScreen = observer(
 							actions={
 								<HStack>
 									<Button
-										variant="light"
+										variant="ghost"
 										startContent={<ArrowLeft className="h-4 w-4" />}
 										onPress={onClickBackButton}
 									>
 										목록으로
 									</Button>
 									<Button
-										variant="flat"
-										color="primary"
+										variant="tertiary"
 										startContent={<Pencil className="h-4 w-4" />}
 										onPress={onClickEditButton}
 									>
 										수정
 									</Button>
 									<Button
-										variant="flat"
-										color="danger"
+										variant="tertiary"
 										startContent={<Trash2 className="h-4 w-4" />}
 										isLoading={isDeleting}
 										onPress={onClickDeleteButton}
@@ -857,7 +855,7 @@ export const InquiryEditScreen = observer(
 					description={description ?? "문의 메타 정보를 수정합니다."}
 					actions={
 						<Button
-							variant="flat"
+							variant="tertiary"
 							startContent={<ArrowLeft className="size-4" />}
 							onPress={onClickBackButton}
 							isDisabled={isSubmitting}

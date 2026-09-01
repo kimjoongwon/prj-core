@@ -153,7 +153,7 @@ export const AssetDetailScreen = observer(
 							<Section.Body>
 								<div className="flex flex-col items-center justify-center gap-4 p-8">
 									<p className="text-muted">에셋을 찾을 수 없습니다.</p>
-									<Button variant="flat" onPress={onClickBackButton}>
+									<Button variant="tertiary" onPress={onClickBackButton}>
 										목록으로
 									</Button>
 								</div>
@@ -172,7 +172,7 @@ export const AssetDetailScreen = observer(
 					actions={
 						<div className="flex gap-2">
 							<Button
-								variant="light"
+								variant="ghost"
 								startContent={<ArrowLeft className="h-4 w-4" />}
 								onPress={onClickBackButton}
 							>
@@ -180,8 +180,7 @@ export const AssetDetailScreen = observer(
 							</Button>
 							{previewUrl ? (
 								<Button
-									variant="flat"
-									color="primary"
+									variant="tertiary"
 									onPress={() => {
 										window.open(previewUrl, "_blank", "noopener,noreferrer");
 									}}
@@ -190,8 +189,7 @@ export const AssetDetailScreen = observer(
 								</Button>
 							) : null}
 							<Button
-								variant="flat"
-								color="danger"
+								variant="tertiary"
 								isLoading={isRemoving}
 								startContent={<Trash2 className="h-4 w-4" />}
 								onPress={() => {
@@ -220,7 +218,7 @@ export const AssetDetailScreen = observer(
 													}
 													actions={
 														<Button
-															variant="flat"
+															variant="tertiary"
 															startContent={<Maximize2 className="h-4 w-4" />}
 															onPress={() => {
 																setIsPreviewExpanded(true);
@@ -383,8 +381,9 @@ export const AssetDetailScreen = observer(
 											</Select>
 											<div className="flex items-end">
 												<Button
-													color="primary"
-													variant="flat"
+
+
+													variant="tertiary"
 													isLoading={isMoving}
 													startContent={<FolderInput className="h-4 w-4" />}
 													onPress={() => {

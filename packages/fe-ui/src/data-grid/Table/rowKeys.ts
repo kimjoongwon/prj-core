@@ -1,6 +1,7 @@
 import type { Row } from "@tanstack/react-table";
 
-export type Key = string | number;
+/** DTO 식별자는 bigint를 유지하고, React/TanStack 경계에서만 문자열 key로 변환합니다. */
+export type Key = string | number | bigint;
 
 export function createIdCounts<T extends { id: Key }>(rows: T[]) {
 	return rows.reduce((counts, row) => {
@@ -23,6 +24,17 @@ export function getDataGridRowKey<T extends { id: Key }>(
 	}
 
 	return `${parentId ?? "row"}:${baseId}:${index}`;
+}
+
+/**
+ * 하나의 rendered row 집합에서 재사용하는 canonical row-key adapter입니다.
+ * React와 TanStack Table이 요구하는 string key는 이 경계에서만 만듭니다.
+ */
+export function createDataGridRowKeyAdapter<T extends { id: Key }>(rows: T[]) {
+	const idCounts = createIdCounts(rows);
+
+	return (row: T, index: number, parent?: { id: string }) =>
+		getDataGridRowKey(row, index, idCounts, parent?.id);
 }
 
 export function getVisibleRowKeys<T extends { id: Key }>(tableRows: Row<T>[]) {

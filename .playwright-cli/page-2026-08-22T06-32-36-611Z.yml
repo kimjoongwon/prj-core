@@ -1,0 +1,112 @@
+- generic [ref=e6]:
+  - region "Storybook mock session" [ref=e7]:
+    - generic [ref=e8]:
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]: Mock 로그인
+          - generic [ref=e17]: none
+          - generic [ref=e18]: role -
+        - paragraph [ref=e19]: Storybook 사용자
+        - paragraph [ref=e20]: Mock session
+      - generic [ref=e21]:
+        - generic [ref=e22]:
+          - paragraph [ref=e23]: Tenant / Space
+          - generic [ref=e24]:
+            - button "Space 확인 중 Space 선택" [disabled]:
+              - generic: Space 확인 중
+            - combobox [disabled] [ref=e27]
+        - button "Mock 로그아웃" [ref=e28] [cursor=pointer]
+    - generic [ref=e29]: 실제 인증, 라우터, API 호출 없이 Storybook 안에서만 컨텍스트를 검토합니다.
+  - banner [ref=e34]:
+    - generic [ref=e35]:
+      - generic [ref=e36]:
+        - paragraph [ref=e37]: Planning Preview
+        - heading "data-grid/DataGrid / Hierarchy" [level=1] [ref=e38]
+        - paragraph [ref=e39]: Storybook 컴포넌트 기획 검수용 기본 시나리오입니다.
+      - generic [ref=e40]:
+        - generic [ref=e41]: draft
+        - button "다크 모드로 전환" [ref=e42] [cursor=pointer]: 다크 모드
+  - main [ref=e43]:
+    - button [ref=e46] [cursor=pointer]:
+      - button "컬럼 설정" [ref=e47]
+    - generic [ref=e49]:
+      - generic [ref=e50]:
+        - generic [ref=e58]: 그룹
+        - list "그룹 기준" [ref=e59]:
+          - listitem [ref=e60]: 그룹 없음
+      - generic [ref=e61]:
+        - button "이름 그룹 추가" [ref=e62] [cursor=pointer]: 이름
+        - button "상태 그룹 추가" [ref=e63] [cursor=pointer]: 상태
+    - table "데이터 테이블" [ref=e67]:
+      - rowgroup [ref=e74]:
+        - row [ref=e75]:
+          - columnheader [ref=e76]:
+            - checkbox "현재 페이지 행 전체 선택" [ref=e77]
+          - columnheader [ref=e78]:
+            - button "정렬 변경" [ref=e79] [cursor=pointer]: 이름
+            - button "name 컬럼 너비 조절" [ref=e80]
+          - columnheader [ref=e81]:
+            - text: 이메일
+            - button "email 컬럼 너비 조절" [ref=e82]
+          - columnheader [ref=e83]:
+            - text: 상태
+            - button "status 컬럼 너비 조절" [ref=e84]
+          - columnheader [ref=e85]:
+            - button "정렬 변경" [ref=e86] [cursor=pointer]: 등록일
+            - button "createdAt 컬럼 너비 조절" [ref=e87]
+        - row [ref=e88]:
+          - columnheader [ref=e89]
+          - columnheader [ref=e90]
+          - columnheader [ref=e91]:
+            - textbox "검색" [ref=e94]:
+              - /placeholder: 이메일 필터
+          - columnheader [ref=e95]:
+            - combobox "status-filter" [ref=e97]:
+              - option "전체" [selected]
+              - option "활성"
+              - option "비활성"
+          - columnheader [ref=e98]
+      - rowgroup [ref=e133]:
+        - row [ref=e134]:
+          - cell [ref=e135]:
+            - checkbox "행 선택" [ref=e136]
+          - cell "플랫폼팀 하위 행 접기 플랫폼팀" [ref=e137]:
+            - generic [ref=e138]:
+              - button "플랫폼팀 하위 행 접기" [expanded] [ref=e140] [cursor=pointer]
+              - generic [ref=e141]: 플랫폼팀
+          - cell "platform@example.com" [ref=e142]
+          - cell "활성" [ref=e143]
+          - cell "2026-04-01" [ref=e146]
+        - row [ref=e147]:
+          - cell [ref=e148]:
+            - checkbox "행 선택" [ref=e149]
+          - cell "김철수" [ref=e150]
+          - cell "kim@example.com" [ref=e155]
+          - cell "활성" [ref=e156]
+          - cell "2026-04-01" [ref=e159]
+        - row [ref=e160]:
+          - cell [ref=e161]:
+            - checkbox "행 선택" [ref=e162]
+          - cell "이영희" [ref=e163]
+          - cell "lee@example.com" [ref=e168]
+          - cell "비활성" [ref=e169]
+          - cell "2026-04-08" [ref=e172]
+        - row [ref=e173]:
+          - cell [ref=e174]:
+            - checkbox "행 선택" [ref=e175]
+          - cell "제품팀 하위 행 펼치기 제품팀" [ref=e176]:
+            - generic [ref=e177]:
+              - button "제품팀 하위 행 펼치기" [ref=e179] [cursor=pointer]
+              - generic [ref=e180]: 제품팀
+          - cell "product@example.com" [ref=e181]
+          - cell "활성" [ref=e182]
+          - cell "2026-04-16" [ref=e185]
+    - navigation "pagination" [ref=e126]:
+      - generic [ref=e127]: 총 2건
+      - list [ref=e128]:
+        - listitem [ref=e129]:
+          - button "Previous" [disabled]
+        - listitem [ref=e130]:
+          - button "1" [ref=e131] [cursor=pointer]
+        - listitem [ref=e132]:
+          - button "Next" [disabled]

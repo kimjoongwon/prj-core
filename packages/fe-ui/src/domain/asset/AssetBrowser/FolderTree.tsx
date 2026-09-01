@@ -343,8 +343,7 @@ export const FolderTree = observer(
 							<Button
 								isIconOnly
 								size="sm"
-								variant="flat"
-								color="default"
+								variant="tertiary"
 								aria-label={t("폴더 이름 변경")}
 								onPress={handleRename}
 								isDisabled={!selectedFolder || !onRename}
@@ -356,8 +355,7 @@ export const FolderTree = observer(
 							<Button
 								isIconOnly
 								size="sm"
-								variant="flat"
-								color="danger"
+								variant="tertiary"
 								aria-label={t("폴더 삭제")}
 								onPress={handleDelete}
 								isDisabled={!selectedFolder || !onDelete}
@@ -368,8 +366,7 @@ export const FolderTree = observer(
 						{showCreateButton ? (
 							<Button
 								size="sm"
-								variant="flat"
-								color="default"
+								variant="tertiary"
 								startContent={<Plus className="h-4 w-4" />}
 								onPress={handleCreate}
 								isDisabled={!onCreate}

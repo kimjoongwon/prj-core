@@ -1,5 +1,6 @@
 "use client";
 
+import type { SubjectDto, SubjectFieldDto } from "@cocrepo/api/core/subjects";
 import {
 	BooleanCell,
 	DateTimeCell,
@@ -15,22 +16,20 @@ import { observer } from "mobx-react-lite";
 import type { ReactNode } from "react";
 import { Chip } from "../../data-display/Chip/Chip";
 import { Button } from "../../input/Button/Button";
-export interface SubjectDetailScreenSubject {
-	name: string;
-	displayName?: string | null;
-	icon?: string | null;
-	group?: string | null;
-	order: number;
-	createdAt: string | Date | null;
-	updatedAt?: string | Date | null;
-}
-export interface SubjectDetailScreenField {
-	name: string;
-	displayName?: string | null;
-	type: string;
-	isRequired: boolean;
-	isRelation: boolean;
-}
+export type SubjectDetailScreenSubject = Pick<
+	SubjectDto,
+	| "name"
+	| "displayName"
+	| "icon"
+	| "group"
+	| "order"
+	| "createdAt"
+	| "updatedAt"
+>;
+export type SubjectDetailScreenField = Pick<
+	SubjectFieldDto,
+	"name" | "displayName" | "type" | "isRequired" | "isRelation"
+>;
 export interface SubjectDetailScreenProps {
 	subject?: SubjectDetailScreenSubject;
 	subjectFields: SubjectDetailScreenField[];
@@ -246,7 +245,7 @@ export const SubjectDetailScreen = observer(
 								<div className="flex flex-col items-center justify-center gap-4 p-8">
 									<p className="text-muted">Subject를 찾을 수 없습니다.</p>
 									<Button
-										variant="flat"
+										variant="tertiary"
 										startContent={<ArrowLeft className="size-4" />}
 										onPress={onClickBackButton}
 									>
@@ -265,7 +264,7 @@ export const SubjectDetailScreen = observer(
 				description="Subject의 상세 정보를 조회합니다."
 				actions={
 					<Button
-						variant="flat"
+						variant="tertiary"
 						startContent={<ArrowLeft className="size-4" />}
 						onPress={onClickBackButton}
 					>

@@ -23,13 +23,13 @@ export class SubjectDto
 	@StringField()
 	name!: string;
 
-	@StringFieldOptional()
+	@StringFieldOptional({ nullable: true })
 	displayName!: string | null;
 
-	@StringFieldOptional()
+	@StringFieldOptional({ nullable: true })
 	icon!: string | null;
 
-	@StringFieldOptional()
+	@StringFieldOptional({ nullable: true })
 	group!: string | null;
 
 	@NumberField()

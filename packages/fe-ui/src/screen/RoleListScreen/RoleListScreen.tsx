@@ -77,7 +77,7 @@ export const RoleListScreen = observer(
 					description="시스템에 등록된 역할을 관리합니다."
 					actions={
 						<Button
-							color="primary"
+							variant="primary"
 							startContent={<Plus className="h-4 w-4" />}
 							onPress={onClickCreateButton}
 						>

@@ -45,7 +45,7 @@ export default observer(function PolicyEditScreenRoute() {
 						policyId,
 						data: {
 							entries: state.abilityIds.map((abilityId) => ({
-								abilityId,
+								abilityId: BigInt(abilityId),
 							})),
 						},
 					},
@@ -111,7 +111,7 @@ export default observer(function PolicyEditScreenRoute() {
 			notFound={!isLoading && !policy}
 			notFoundAction={
 				<Button
-					variant="flat"
+					variant="tertiary"
 					onPress={() => {
 						router.push("/policies" as Route);
 					}}
@@ -122,7 +122,7 @@ export default observer(function PolicyEditScreenRoute() {
 			actions={
 				<div className="flex gap-2">
 					<Button
-						variant="flat"
+						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push(`/policies/${policyId}` as Route);
@@ -131,7 +131,7 @@ export default observer(function PolicyEditScreenRoute() {
 						상세로 돌아가기
 					</Button>
 					<Button
-						color="primary"
+						variant="primary"
 						startContent={<Save className="h-4 w-4" />}
 						isLoading={isPending || isSyncingAbilities}
 						onPress={onClickSubmitButton}
@@ -150,12 +150,14 @@ function mapAbilityOption(ability: AbilityResponseDto): PolicyEntryOption {
 	const action =
 		ability.action?.displayName || ability.action?.name || "Action";
 	return {
-		id: ability.id,
+		id: String(ability.id),
 		label: `${subject} / ${action}`,
 		description: ability.description,
 	};
 }
 
 function getPolicyEntryIds(policy?: PolicyResponseDto): string[] {
-	return policy?.entries?.map((policyEntry) => policyEntry.abilityId) ?? [];
+	return (
+		policy?.entries?.map((policyEntry) => String(policyEntry.abilityId)) ?? []
+	);
 }

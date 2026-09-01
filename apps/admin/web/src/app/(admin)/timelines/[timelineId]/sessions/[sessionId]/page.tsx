@@ -4,20 +4,16 @@ import {
 	getGetProgramsQueryKey,
 	getGetSessionsQueryKey,
 	type ProgramDto,
-	type SessionDto,
 	useDeleteProgram,
 	useDeleteSession,
 	useGetPrograms,
 	useGetSessionById,
 } from "@cocrepo/api/core/timelines";
-import { type UserDto, useGetUsers } from "@cocrepo/api/core/users";
+import { useGetUsers } from "@cocrepo/api/core/users";
 import {
 	Button,
 	TimelineSessionEditScreen,
 	type TimelineSessionFormState,
-	type TimelineSessionScreenCycleType,
-	type TimelineSessionScreenDayOfWeek,
-	type TimelineSessionScreenSessionType,
 } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -85,29 +81,38 @@ type SessionDetailPageParams = {
 	sessionId: string;
 };
 
+const toDateTimeLocalValue = (value?: Date | null) => {
+	if (!value) return "";
+	const date = new Date(value);
+	const pad = (part: number) => String(part).padStart(2, "0");
+	return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+};
+
 const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 	const { timelineId, sessionId } = useParams<SessionDetailPageParams>();
 	const router = useRouter();
 	const queryClient = useQueryClient();
 	const { data: sessionResponse, isLoading: isSessionLoading } =
 		useGetSessionById(timelineId, sessionId);
-	const session = sessionResponse?.data as SessionDto | undefined;
+	const session = sessionResponse?.data;
 	const { data: programsResponse, refetch: refetchPrograms } = useGetPrograms(
 		timelineId,
 		sessionId,
 		{ take: 20, skip: 0 },
 	);
-	const programs = (programsResponse?.data ?? []) as ProgramDto[];
+	const programs = programsResponse?.data ?? [];
 	const { data: usersResponse } = useGetUsers({
 		take: 100,
 		skip: 0,
 		status: "active",
 	});
-	const users = (usersResponse?.data ?? []) as UserDto[];
-	const instructorNameById = new Map(users.map((user) => [user.id, user.name]));
+	const users = usersResponse?.data ?? [];
+	const instructorNameById = new Map(
+		users.map((user) => [user.id.toString(), user.name]),
+	);
 	const isConnectionResolved = (program: ProgramDto) =>
 		Boolean(program.routine?.id) &&
-		instructorNameById.has(program.instructorId);
+		instructorNameById.has(program.instructorId.toString());
 	const totalPrograms = programs.length;
 	const resolvedPrograms = programs.filter((program) =>
 		isConnectionResolved(program),
@@ -172,8 +177,8 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 		);
 	};
 
-	const getInstructorName = (instructorId: string) =>
-		instructorNameById.get(instructorId) ?? "확인 필요";
+	const getInstructorName = (instructorId: bigint) =>
+		instructorNameById.get(instructorId.toString()) ?? "확인 필요";
 	const getProgramPreviewText = (program: ProgramDto) =>
 		program.previewExerciseNames && program.previewExerciseNames.length > 0
 			? program.previewExerciseNames.join(", ")
@@ -181,15 +186,12 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 	const sessionState: TimelineSessionFormState | undefined = session
 		? {
 				name: session.name,
-				type: session.type as TimelineSessionScreenSessionType,
+				type: session.type,
 				description: session.description ?? "",
-				startDateTime: session.startDateTime ?? "",
-				endDateTime: session.endDateTime ?? "",
-				recurringDayOfWeek:
-					(session.recurringDayOfWeek as TimelineSessionScreenDayOfWeek) ??
-					null,
-				repeatCycleType:
-					(session.repeatCycleType as TimelineSessionScreenCycleType) ?? "",
+				startDateTime: toDateTimeLocalValue(session.startDateTime),
+				endDateTime: toDateTimeLocalValue(session.endDateTime),
+				recurringDayOfWeek: session.recurringDayOfWeek ?? null,
+				repeatCycleType: session.repeatCycleType ?? "",
 				errors: {},
 			}
 		: undefined;
@@ -202,18 +204,22 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 			readOnly
 			isLoading={isSessionLoading}
 			notFound={!isSessionLoading && !session}
-			metadata={{
-				typeLabel: session ? getSessionTypeLabel(session.type) : undefined,
-				typeColor: session ? getSessionTypeColor(session.type) : undefined,
-				recurringDayLabel: getDayLabel(session?.recurringDayOfWeek ?? null),
-				repeatCycleLabel: getCycleLabel(session?.repeatCycleType ?? null),
-				timelineName: session?.timeline?.name,
-				timelineHref: `/timelines/${timelineId}` as Route,
-				createdAt: session?.createdAt,
-			}}
+			metadata={
+				session
+					? {
+							typeLabel: getSessionTypeLabel(session.type),
+							typeColor: getSessionTypeColor(session.type),
+							recurringDayLabel: getDayLabel(session.recurringDayOfWeek),
+							repeatCycleLabel: getCycleLabel(session.repeatCycleType),
+							timelineName: session.timeline?.name ?? null,
+							timelineHref: `/timelines/${timelineId}` as Route,
+							createdAt: session.createdAt,
+						}
+					: undefined
+			}
 			programs={programs.map((program) => ({
 				id: program.id,
-				href: `/timelines/${timelineId}/sessions/${sessionId}/programs/${program.id}` as Route,
+				href: `/timelines/${timelineId}/sessions/${sessionId}/programs/${program.id.toString()}` as Route,
 				name: program.name,
 				routineName:
 					program.routineNameSnapshot ?? program.routine?.name ?? "-",
@@ -230,15 +236,14 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 			actions={
 				<div className="flex gap-2">
 					<Button
-						variant="flat"
+						variant="tertiary"
 						startContent={<Edit className="h-4 w-4" />}
 						onPress={onClickEditButton}
 					>
 						수정
 					</Button>
 					<Button
-						color="danger"
-						variant="flat"
+						variant="tertiary"
 						startContent={<Trash2 className="h-4 w-4" />}
 						isLoading={isDeletingSession}
 						onPress={onClickDeleteSessionButton}

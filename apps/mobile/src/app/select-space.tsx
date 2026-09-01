@@ -1,6 +1,6 @@
 import { SpaceSelectScreen, type SpaceListItemInfo } from "@cocrepo/mo-ui";
-import { useGetMySpaces, useSetCurrentSpace } from "@cocrepo/api/idp/auth";
-import type { SpaceDto } from "@cocrepo/api/idp/model";
+import { useGetMySpaces, useSetCurrentSpace } from "@cocrepo/api/core/auth";
+import type { SpaceDto } from "@cocrepo/api/core/model";
 import { useQueryClient } from "@tanstack/react-query";
 import type { Href } from "expo-router";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -8,7 +8,7 @@ import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import {
   getAuthenticatedHomePath,
-  getIdpApiBaseUrl,
+  getCoreApiBaseUrl,
   resolveAuthenticatedRoutePath,
 } from "@/auth/auth-config";
 import { mobileSession } from "@/auth/mobile-session";
@@ -56,7 +56,7 @@ const SpaceSelectRoute = observer(() => {
     mobileApiScope.tenantId,
   );
   const [selectionErrorDescription, setSelectionErrorDescription] = useState("");
-  const requestOptions = { baseURL: getIdpApiBaseUrl() };
+  const requestOptions = { baseURL: getCoreApiBaseUrl() };
 
   const spacesQuery = useGetMySpaces({
     query: {

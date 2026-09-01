@@ -1,5 +1,6 @@
 "use client";
 
+import type { ProgramDto, SessionDto } from "@cocrepo/api/core/timelines";
 import { Table } from "@heroui/react";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { observer } from "mobx-react-lite";
@@ -31,19 +32,19 @@ export type {
 export type TimelineSessionScreenSessionType = TimelineSessionFormSessionType;
 export type TimelineSessionScreenCycleType = TimelineSessionFormCycleType;
 export type TimelineSessionScreenDayOfWeek = TimelineSessionFormDayOfWeek;
-export interface TimelineSessionEditScreenMetadata {
+export type TimelineSessionEditScreenMetadata = Pick<
+	SessionDto,
+	"createdAt"
+> & {
 	typeLabel?: string;
 	typeColor?: "primary" | "secondary" | "success";
 	recurringDayLabel?: string;
 	repeatCycleLabel?: string;
 	timelineName?: string | null;
 	timelineHref?: Route;
-	createdAt?: string | null;
-}
-export interface TimelineSessionProgramRow {
-	id: string;
+};
+export type TimelineSessionProgramRow = Pick<ProgramDto, "id" | "name"> & {
 	href: Route;
-	name: string;
 	routineName: string;
 	activityCountLabel: string;
 	previewText: string;
@@ -51,7 +52,7 @@ export interface TimelineSessionProgramRow {
 	isConnectionResolved: boolean;
 	capacityLabel: string;
 	levelLabel: string;
-}
+};
 export interface TimelineSessionEditScreenProps {
 	title: ReactNode;
 	description?: ReactNode;
@@ -126,7 +127,7 @@ export const TimelineSessionEditScreen = observer(
 							<Section.Body>
 								<div className="flex flex-col items-center justify-center gap-4 p-8">
 									<p className="text-muted">{notFoundMessage}</p>
-									{notFoundAction ?? <Button variant="flat">목록으로</Button>}
+									{notFoundAction ?? <Button variant="tertiary">목록으로</Button>}
 								</div>
 							</Section.Body>
 						</Section>
@@ -223,7 +224,7 @@ export const TimelineSessionEditScreen = observer(
 											actions={
 												onClickCreateProgramButton ? (
 													<Button
-														color="primary"
+														variant="primary"
 														size="sm"
 														startContent={<Plus className="h-4 w-4" />}
 														onPress={onClickCreateProgramButton}
@@ -325,7 +326,7 @@ export const TimelineSessionEditScreen = observer(
 																		{onClickEditProgramButton ? (
 																			<Button
 																				size="sm"
-																				variant="light"
+																				variant="ghost"
 																				isIconOnly
 																				onPress={() =>
 																					onClickEditProgramButton(program.id)
@@ -337,8 +338,9 @@ export const TimelineSessionEditScreen = observer(
 																		{onClickDeleteProgramButton ? (
 																			<Button
 																				size="sm"
-																				color="danger"
-																				variant="light"
+
+
+																				variant="ghost"
 																				isIconOnly
 																				onPress={() =>
 																					onClickDeleteProgramButton(program.id)

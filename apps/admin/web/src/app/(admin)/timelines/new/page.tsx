@@ -80,7 +80,7 @@ const AdminTimelinesNewRoute = observer(() => {
 			actions={
 				<div className="flex gap-2">
 					<Button
-						variant="flat"
+						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push("/timelines" as Route);
@@ -89,7 +89,7 @@ const AdminTimelinesNewRoute = observer(() => {
 						목록으로
 					</Button>
 					<Button
-						color="primary"
+						variant="primary"
 						startContent={<Save className="h-4 w-4" />}
 						isLoading={isPending}
 						isDisabled={!state.name.trim()}

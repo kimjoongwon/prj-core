@@ -15,4 +15,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface InquiryParticipant { [key: string]: unknown }
+export interface InquiryParticipant {
+	[key: string]: unknown;
+}

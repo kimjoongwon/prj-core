@@ -334,8 +334,9 @@ export function AssetPreviewDialog({
 						<Modal.Footer>
 							{previewUrl ? (
 								<Button
-									color="primary"
-									variant="flat"
+
+
+									variant="tertiary"
 									onPress={() => {
 										window.open(previewUrl, "_blank", "noopener,noreferrer");
 									}}
@@ -343,7 +344,7 @@ export function AssetPreviewDialog({
 									원본 열기
 								</Button>
 							) : null}
-							<Button variant="flat" onPress={onClose}>
+							<Button variant="tertiary" onPress={onClose}>
 								닫기
 							</Button>
 						</Modal.Footer>

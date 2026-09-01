@@ -55,7 +55,7 @@ const meta = {
 		state: defaultState,
 		candidateTasks,
 		activities,
-		actions: <Button color="primary">저장</Button>,
+		actions: <Button variant="primary">저장</Button>,
 	},
 } satisfies Meta<typeof RoutineEditScreen>;
 
@@ -86,12 +86,12 @@ export const Detail: Story = {
 		state: defaultState,
 		activities,
 		readOnly: true,
-		programs: [{ id: "program-1", name: "월요일 프로그램" }],
+		programs: [{ id: BigInt(1), name: "월요일 프로그램" }],
 		metadata: {
-			createdAt: "2026-04-01T09:00:00.000Z",
-			updatedAt: "2026-04-03T09:00:00.000Z",
+			createdAt: new Date("2026-04-01T09:00:00.000Z"),
+			updatedAt: new Date("2026-04-03T09:00:00.000Z"),
 		},
-		actions: <Button variant="flat">수정</Button>,
+		actions: <Button variant="tertiary">수정</Button>,
 	},
 };
 

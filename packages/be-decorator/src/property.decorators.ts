@@ -112,13 +112,17 @@ export function ApiBigIntIdProperty(
 	options: ApiPropertyOptions & Partial<{ each: boolean }> = {},
 ): PropertyDecorator {
 	const { each, ...propertyOptions } = options;
-
-	return ApiProperty({
+	const schemaOptions: ApiPropertyOptions & {
+		"x-runtime-type": "bigint";
+	} = {
 		type: "string",
 		pattern: DECIMAL_ID_PATTERN_SOURCE,
+		"x-runtime-type": "bigint",
 		isArray: each,
 		...propertyOptions,
-	});
+	};
+
+	return ApiProperty(schemaOptions);
 }
 
 /**

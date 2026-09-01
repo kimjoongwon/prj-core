@@ -28,10 +28,10 @@ export class RoleDto
 	})
 	name: string;
 
-	@StringFieldOptional({ description: "표시명", maxLength: 50 })
+	@StringFieldOptional({ nullable: true, description: "표시명", maxLength: 50 })
 	displayName: string | null;
 
-	@StringFieldOptional({ description: "설명", maxLength: 200 })
+	@StringFieldOptional({ nullable: true, description: "설명", maxLength: 200 })
 	description: string | null;
 
 	@ClassField(() => RoleClassificationDto, { nullable: true })

@@ -60,39 +60,48 @@ const AdminTasksTaskIdExerciseRoute = observer(() => {
 		<TaskExerciseEditScreen
 			title={exercise?.name ?? "운동 정보"}
 			description="태스크에 연결된 운동 detail입니다."
-			state={{
-				name: exercise?.name ?? "",
-				durationMin: Math.floor((exercise?.duration ?? 0) / 60),
-				durationSec: (exercise?.duration ?? 0) % 60,
-				count: exercise?.count ?? 1,
-				description: exercise?.description ?? "",
-				imageFileId: exercise?.imageFileId ?? "",
-				videoFileId: exercise?.videoFileId ?? "",
-				errors: {},
-			}}
+			state={
+				exercise
+					? {
+							name: exercise.name,
+							durationMin: Math.floor(exercise.duration / 60),
+							durationSec: exercise.duration % 60,
+							count: exercise.count,
+							description: exercise.description ?? "",
+							imageFileId: exercise.imageFileId ?? "",
+							videoFileId: exercise.videoFileId ?? "",
+							errors: {},
+						}
+					: (undefined as never)
+			}
 			readOnly
-			metadata={{
-				taskId,
-				spaceId: exercise?.task?.spaceId,
-				createdAt: exercise?.createdAt,
-				updatedAt: exercise?.updatedAt,
-				routines,
-			}}
+			metadata={
+				exercise
+					? {
+							taskId: exercise.taskId,
+							spaceId: exercise.task.spaceId,
+							createdAt: exercise.createdAt,
+							updatedAt: exercise.updatedAt,
+							routines,
+						}
+					: undefined
+			}
 			isLoading={isLoading}
 			isNotFound={!isLoading && !exercise}
 			isSubmitPending={false}
 			actions={
 				<div className="flex gap-2">
 					<Button
-						variant="flat"
+						variant="tertiary"
 						startContent={<Pencil className="size-4" />}
 						onPress={onClickEditButton}
 					>
 						수정
 					</Button>
 					<Button
-						color="danger"
-						variant="flat"
+
+
+						variant="tertiary"
 						startContent={<Trash2 className="size-4" />}
 						onPress={onClickDeleteButton}
 						isDisabled={routines.length > 0 || isDeleting}

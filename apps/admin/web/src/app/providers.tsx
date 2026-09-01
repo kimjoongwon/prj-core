@@ -3,8 +3,7 @@ import {
 	customInstance,
 	setApiNativeRefreshHandler,
 } from "@cocrepo/api/core/client";
-import { nativeRefreshToken, useVerifyToken } from "@cocrepo/api/idp/auth";
-import { setIdpNativeRefreshHandler } from "@cocrepo/api/idp/client";
+import { nativeRefreshToken, useVerifyToken } from "@cocrepo/api/core/auth";
 import { ADMIN_NAV_ITEMS, isScopeKindAccessible } from "@cocrepo/constant";
 import { useAbilityBootstrap, useTenantBootstrapFromApi } from "@cocrepo/hook";
 import { AppProvider, useApp } from "@cocrepo/store";
@@ -22,6 +21,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { NuqsAdapter as NuqsNextAdapter } from "nuqs/adapters/next/app";
 import { type ReactNode, useEffect } from "react";
 import { resolveAbilityBootstrapRules } from "./ability-bootstrap";
+import {
+	deserializeQueryCacheData,
+	serializeQueryCacheData,
+} from "./query-cache-serializer";
 
 interface ProvidersProps {
 	children: ReactNode;
@@ -45,6 +48,12 @@ const ADMIN_APP_CONFIG = {
 function makeQueryClient() {
 	return new QueryClient({
 		defaultOptions: {
+			dehydrate: {
+				serializeData: serializeQueryCacheData,
+			},
+			hydrate: {
+				deserializeData: deserializeQueryCacheData,
+			},
 			queries: {
 				// SSR 환경에서 클라이언트 즉시 refetch 방지를 위한 staleTime 설정
 				staleTime: 60 * 1000,
@@ -131,11 +140,9 @@ const NativeAuthBridge = observer(function NativeAuthBridge({
 		};
 
 		setApiNativeRefreshHandler(refreshNativeSession);
-		setIdpNativeRefreshHandler(refreshNativeSession);
 
 		return () => {
 			setApiNativeRefreshHandler(null);
-			setIdpNativeRefreshHandler(null);
 		};
 	}, [authSession]);
 

@@ -5,7 +5,7 @@ import {
 	getGetEmailVerificationsQueryKey,
 	useGetEmailVerifications,
 	useResendEmailVerification,
-} from "@cocrepo/api/idp/email-verifications";
+} from "@cocrepo/api/core/email-verifications";
 import { EmailVerificationListScreen } from "@cocrepo/ui";
 import { toast } from "@heroui/react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -60,7 +60,9 @@ export default observer(function EmailVerificationsPageRoute() {
 			queryStates={queryStates}
 			setQueryStates={setQueryStates}
 			onClickResendEmailVerificationButton={(emailVerificationId) => {
-				void resendEmailVerification({ emailVerificationId });
+				void resendEmailVerification({
+					emailVerificationId: String(emailVerificationId),
+				});
 			}}
 		/>
 	);

@@ -25,10 +25,6 @@ vi.mock("@cocrepo/api/core/client", () => ({
 	setApiSessionScope: mockSetApiSessionScope,
 }));
 
-vi.mock("@cocrepo/api/idp/client", () => ({
-	setIdpLocale: mockSetIdpLocale,
-	setIdpSessionScope: mockSetIdpSessionScope,
-}));
 
 vi.mock("@cocrepo/toolkit", () => ({
 	createLogger: () => ({
@@ -106,13 +102,9 @@ describe("AppProvider", () => {
 
 		expect(screen.getByLabelText("app-name").textContent).toBe("TEST_APP");
 		expect(mockSetApiSessionScope).toHaveBeenCalledTimes(1);
-		expect(mockSetIdpSessionScope).toHaveBeenCalledTimes(1);
-		expect(mockSetIdpSessionScope).toHaveBeenCalledWith(
 			mockSetApiSessionScope.mock.calls[0]?.[0],
 		);
 		expect(mockSetApiLocale).toHaveBeenCalledTimes(1);
-		expect(mockSetIdpLocale).toHaveBeenCalledTimes(1);
-		expect(mockSetIdpLocale).toHaveBeenCalledWith(
 			mockSetApiLocale.mock.calls[0]?.[0],
 		);
 	});

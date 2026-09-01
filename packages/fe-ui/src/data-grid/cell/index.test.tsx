@@ -68,6 +68,19 @@ describe("DataGrid 셀 컴포넌트", () => {
 		);
 	});
 
+	it("Date DTO를 안전하게 표시하고 null과 잘못된 Date를 대체한다", () => {
+		const { rerender } = render(
+			<cells.DateTimeCell value={new Date("2026-04-14T09:30:00Z")} />,
+		);
+		expect(screen.getByText("2026.04.14 18:30")).toBeInTheDocument();
+
+		rerender(<cells.DateTimeCell value={null} />);
+		expect(screen.getByText("-")).toBeInTheDocument();
+
+		rerender(<cells.DateTimeCell value={new Date("invalid")} />);
+		expect(screen.getByText("-")).toBeInTheDocument();
+	});
+
 	it("요약과 chip 목록 Cell이 표시 책임을 소유한다", () => {
 		render(
 			<>

@@ -5,6 +5,8 @@ import Axios, {
 	type AxiosRequestConfig,
 	type InternalAxiosRequestConfig,
 } from "axios";
+import { runtimeManifest } from "./runtimeManifest";
+import { transformRequestConfig, transformResponseData } from "./runtimeSchema";
 
 const DEFAULT_CORE_API_SERVER_BASE_URL =
 	(typeof process !== "undefined"
@@ -47,6 +49,13 @@ let localeRef: LocaleRef | null = null;
 
 // 401 발생 시 리다이렉트할 로그인 URL (앱별 설정 가능)
 let loginRedirectUrl = "/admin/auth/login";
+
+/**
+ * API 베이스 URL 수동 설정 (SSR/테스트 환경에서 통합 Axios 인스턴스에 사용)
+ */
+export function setApiBaseUrl(baseUrl: string) {
+	AXIOS_INSTANCE.defaults.baseURL = baseUrl;
+}
 
 /**
  * 401 토큰 만료 시 리다이렉트할 로그인 URL 설정
@@ -264,13 +273,16 @@ export const customInstance = <T>(
 	};
 	const baseURL =
 		options?.baseURL ?? config.baseURL ?? resolveServerBaseUrl(config.url);
-	const promise = AXIOS_INSTANCE({
+	const requestConfig = transformRequestConfig({
 		...config,
 		...options,
 		headers,
 		...(baseURL ? { baseURL } : {}),
 		cancelToken: source.token,
-	}).then(({ data }) => data);
+	}, runtimeManifest);
+	const promise = AXIOS_INSTANCE(requestConfig).then(({ data, status, config: responseConfig }) =>
+		transformResponseData(data, status, responseConfig.method, responseConfig.url, runtimeManifest) as T,
+	);
 
 	// @ts-expect-error
 	promise.cancel = () => {

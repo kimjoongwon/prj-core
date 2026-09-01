@@ -1,6 +1,6 @@
 "use client";
 
-import { useCreateOidcClient } from "@cocrepo/api/idp/oidc-clients";
+import { useCreateOidcClient } from "@cocrepo/api/core/oidc-clients";
 import {
 	Button,
 	buildOidcClientLoginUi,
@@ -86,7 +86,7 @@ export default observer(function OidcClientNewPageRoute() {
 			actions={
 				<div className="flex gap-2">
 					<Button
-						variant="light"
+						variant="ghost"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push("/settings/auth/oidc-clients" as Route);
@@ -95,7 +95,7 @@ export default observer(function OidcClientNewPageRoute() {
 						목록으로
 					</Button>
 					<Button
-						color="primary"
+						variant="primary"
 						startContent={<Save className="h-4 w-4" />}
 						onPress={onSubmit}
 						isLoading={isPending}

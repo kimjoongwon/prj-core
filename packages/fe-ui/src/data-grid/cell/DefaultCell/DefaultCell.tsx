@@ -5,7 +5,7 @@ import { type Translate, useT } from "../../../i18n";
 
 export interface DefaultCellProps {
 	/** 표시할 값 */
-	value?: string | number | null;
+	value?: string | number | bigint | null;
 	/** 빈 값일 때 대체 텍스트 */
 	placeholder?: string;
 	/** 모노스페이스 렌더링 여부 */

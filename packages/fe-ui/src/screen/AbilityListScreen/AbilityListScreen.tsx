@@ -31,7 +31,7 @@ import { TextField } from "../../input/TextField/TextField";
 import { Section } from "../../layout";
 import { VStack } from "../../rhythm";
 export interface AbilityListScreenOption {
-	id: string;
+	id: bigint;
 	label: string;
 }
 export interface AbilityListScreenFilters {
@@ -72,7 +72,7 @@ export interface AbilityListScreenProps {
 	onChangeActionId: (value: string) => void;
 	onChangeInverted: (value: string) => void;
 	onClickResetFiltersButton: () => void;
-	onClickAbilityRow: (abilityId: string) => void;
+	onClickAbilityRow: (abilityId: bigint) => void;
 	onClickCreateButton: () => void;
 }
 const abilityListTableColumns =
@@ -135,7 +135,7 @@ function MetricCard({
 	);
 }
 function getOptionLabel(options: AbilityListScreenOption[], optionId: string) {
-	return options.find((option) => option.id === optionId)?.label ?? "";
+	return options.find((option) => String(option.id) === optionId)?.label ?? "";
 }
 function getRuleTypeLabel(value: string) {
 	if (value === "false") {
@@ -210,8 +210,8 @@ export const AbilityListScreen = observer(
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
 		const abilityRows = abilities ?? [];
-		const subjectOptionIds = new Set(subjects.map((subject) => subject.id));
-		const actionOptionIds = new Set(actions.map((action) => action.id));
+		const subjectOptionIds = new Set(subjects.map((subject) => String(subject.id)));
+		const actionOptionIds = new Set(actions.map((action) => String(action.id)));
 		const selectedSubjectLabel = getOptionLabel(
 			subjects,
 			filters.selectedSubjectId,
@@ -247,7 +247,7 @@ export const AbilityListScreen = observer(
 					description="대상과 행동을 조합해 운영 권한 규칙을 확인합니다."
 					actions={
 						<Button
-							color="primary"
+							variant="primary"
 							startContent={<Plus className="h-4 w-4" />}
 							onPress={onClickCreateButton}
 						>
@@ -322,8 +322,8 @@ export const AbilityListScreen = observer(
 									>
 										{subjects.map((subject) => (
 											<ListBox.Item
-												key={subject.id}
-												id={subject.id}
+											key={String(subject.id)}
+											id={String(subject.id)}
 												textValue={subject.label}
 											>
 												{subject.label}
@@ -343,8 +343,8 @@ export const AbilityListScreen = observer(
 									>
 										{actions.map((action) => (
 											<ListBox.Item
-												key={action.id}
-												id={action.id}
+											key={String(action.id)}
+											id={String(action.id)}
 												textValue={action.label}
 											>
 												{action.label}
@@ -408,7 +408,7 @@ export const AbilityListScreen = observer(
 									</div>
 									<Button
 										size="sm"
-										variant="flat"
+										variant="tertiary"
 										startContent={<FilterX className="h-4 w-4" />}
 										isDisabled={!activeFilters}
 										onPress={onClickResetFiltersButton}

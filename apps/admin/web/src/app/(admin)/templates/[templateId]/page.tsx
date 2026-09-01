@@ -149,7 +149,7 @@ const AdminTemplatesTemplateIdRoute = observer(() => {
 			notFound={!isLoading && !template}
 			notFoundAction={
 				<Button
-					variant="flat"
+					variant="tertiary"
 					startContent={<ArrowLeft className="h-4 w-4" />}
 					onPress={() => {
 						router.push("/templates" as Route);
@@ -162,7 +162,7 @@ const AdminTemplatesTemplateIdRoute = observer(() => {
 				template ? (
 					<div className="flex flex-wrap gap-2">
 						<Button
-							variant="light"
+							variant="ghost"
 							startContent={<ArrowLeft className="h-4 w-4" />}
 							onPress={() => {
 								router.push("/templates" as Route);
@@ -193,8 +193,7 @@ const AdminTemplatesTemplateIdRoute = observer(() => {
 							<dd className="mt-2">
 								<Button
 									size="sm"
-									variant="flat"
-									color={template.isActive ? "success" : "default"}
+									variant="tertiary"
 									isDisabled={isToggling}
 									onPress={onClickToggleButton}
 								>

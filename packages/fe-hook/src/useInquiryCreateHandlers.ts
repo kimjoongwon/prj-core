@@ -1,6 +1,11 @@
 "use client";
 
-import { useCreateInquiry } from "@cocrepo/api/core/inquiries";
+import {
+	InquiryCategory,
+	InquiryChannel,
+	InquiryPriority,
+	useCreateInquiry,
+} from "@cocrepo/api/core/inquiries";
 
 import { ADMIN_PATHS } from "@cocrepo/constant";
 import type { InquiryCreateAIFormSuggestion } from "./useInquiryCreateAIClassification";
@@ -34,14 +39,49 @@ interface UseInquiryCreateHandlersReturn {
 	onClickSaveDraft: () => void;
 }
 
-/**
- * 문의 접수 페이지 이벤트 핸들러 훅
- *
- * @requires Orval API 훅 생성 후 아래와 같이 변경:
- * 1. useCreateInquiry 훅 호출
- * 2. mutateAsync로 API 호출
- * 3. onSuccess에서 상세 페이지로 이동
- */
+function requireInquiryCategory(value: string): InquiryCategory {
+	switch (value) {
+		case InquiryCategory.GENERAL:
+		case InquiryCategory.DELIVERY:
+		case InquiryCategory.REFUND:
+		case InquiryCategory.PRODUCT:
+		case InquiryCategory.ACCOUNT:
+		case InquiryCategory.TECHNICAL:
+		case InquiryCategory.COMPLAINT:
+		case InquiryCategory.OTHER:
+			return value;
+		default:
+			throw new Error("유효하지 않은 문의 카테고리입니다.");
+	}
+}
+
+function requireInquiryChannel(value: string): InquiryChannel {
+	switch (value) {
+		case InquiryChannel.WEB:
+		case InquiryChannel.EMAIL:
+		case InquiryChannel.CHAT:
+		case InquiryChannel.SMS:
+		case InquiryChannel.PHONE:
+		case InquiryChannel.WALK_IN:
+			return value;
+		default:
+			throw new Error("유효하지 않은 문의 채널입니다.");
+	}
+}
+
+function requireInquiryPriority(value: string): InquiryPriority {
+	switch (value) {
+		case InquiryPriority.LOW:
+		case InquiryPriority.NORMAL:
+		case InquiryPriority.HIGH:
+		case InquiryPriority.URGENT:
+			return value;
+		default:
+			throw new Error("유효하지 않은 문의 우선순위입니다.");
+	}
+}
+
+/** 문의 접수 페이지 이벤트 핸들러 훅입니다. */
 export function useInquiryCreateHandlers({
 	state,
 	router,
@@ -55,55 +95,29 @@ export function useInquiryCreateHandlers({
 		router.push(ADMIN_PATHS.INQUIRIES);
 	};
 
-	/**
-	 * 문의 접수 제출
-	 *
-	 * @requires Orval 훅 생성 후 아래와 같이 변경:
-	 * const response = await createInquiryMutation.mutateAsync({
-	 *   customerId: data.customerId,
-	 *   title: data.title,
-	 *   content: data.content,
-	 *   category: data.category,
-	 *   channel: data.channel,
-	 *   priority: data.priority,
-	 *   assigneeId: data.assigneeId,
-	 *   attachmentUrls: data.attachmentUrls,
-	 * });
-	 * router.push(`${ADMIN_PATHS.INQUIRIES_DETAIL.replace("[inquiryId]", response.id)}`);
-	 */
+	/** 문의 접수를 제출합니다. */
 	const onSubmit = async (data: InquiryCreateFormData) => {
 		state.isSubmitting = true;
 
 		try {
 			const response = await createInquiryMutation.mutateAsync({
 				data: {
-					customerId: data.customerId,
+					customerId: BigInt(data.customerId),
 					title: data.title,
 					content: data.content,
-					category: data.category as
-						| "GENERAL"
-						| "DELIVERY"
-						| "REFUND"
-						| "PRODUCT"
-						| "ACCOUNT"
-						| "TECHNICAL"
-						| "COMPLAINT"
-						| "OTHER",
-					channel: data.channel as
-						| "WEB"
-						| "EMAIL"
-						| "CHAT"
-						| "SMS"
-						| "PHONE"
-						| "WALK_IN",
-					priority: data.priority as "LOW" | "NORMAL" | "HIGH" | "URGENT",
-					assigneeId: data.assigneeId || undefined,
+					category: requireInquiryCategory(data.category),
+					channel: requireInquiryChannel(data.channel),
+					priority: requireInquiryPriority(data.priority),
+					assigneeId: data.assigneeId ? BigInt(data.assigneeId) : undefined,
 				},
 			});
 			const createdInquiryId = response?.data?.id;
 			if (createdInquiryId) {
 				router.push(
-					ADMIN_PATHS.INQUIRIES_DETAIL.replace("[inquiryId]", createdInquiryId),
+					ADMIN_PATHS.INQUIRIES_DETAIL.replace(
+						"[inquiryId]",
+						String(createdInquiryId),
+					),
 				);
 				return;
 			}

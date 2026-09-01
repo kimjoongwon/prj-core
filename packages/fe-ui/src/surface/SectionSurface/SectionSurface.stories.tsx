@@ -36,7 +36,7 @@ export const TitledSection: Story = {
 					title="기본 정보"
 					description="제목과 본문 구조는 Section이, 시각 표면은 SectionSurface가 담당합니다."
 					actions={
-						<Button size="sm" variant="flat">
+						<Button size="sm" variant="tertiary">
 							편집
 						</Button>
 					}
@@ -64,7 +64,7 @@ export const ScreenSections: Story = {
 				title="예약 관리"
 				description="Screen.Header는 screen rhythm에 두고, 각 주요 구획은 SectionSurface로 감쌉니다."
 				actions={
-					<Button color="primary" size="sm" variant="flat">
+					<Button size="sm" variant="tertiary">
 						새로고침
 					</Button>
 				}
@@ -87,7 +87,7 @@ export const ScreenSections: Story = {
 					</Section.Body>
 					<Section.Footer>
 						<div className="flex justify-end">
-							<Button size="sm" variant="flat">
+							<Button size="sm" variant="tertiary">
 								검색
 							</Button>
 						</div>

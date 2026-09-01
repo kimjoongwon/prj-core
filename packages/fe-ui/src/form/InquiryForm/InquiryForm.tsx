@@ -230,14 +230,14 @@ export const InquiryForm = observer(
 							{readOnly ? null : (
 								<div className="flex justify-end gap-2">
 									<Button
-										variant="light"
+										variant="ghost"
 										onPress={onClickCancelButton}
 										isDisabled={isSubmitting}
 									>
 										취소
 									</Button>
 									<Button
-										color="primary"
+										variant="primary"
 										onPress={onClickSubmitButton}
 										isLoading={isSubmitting}
 										isDisabled={isLoading}

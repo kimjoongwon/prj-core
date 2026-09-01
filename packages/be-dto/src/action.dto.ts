@@ -27,13 +27,13 @@ export class ActionDto
 	@StringField()
 	name!: string;
 
-	@StringFieldOptional()
+	@StringFieldOptional({ nullable: true })
 	displayName!: string | null;
 
-	@StringFieldOptional()
+	@StringFieldOptional({ nullable: true })
 	description!: string | null;
 
-	@StringFieldOptional()
+	@StringFieldOptional({ nullable: true })
 	group!: string | null;
 
 	@NumberField()

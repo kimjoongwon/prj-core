@@ -3,9 +3,9 @@ import type { ReactNode } from "react";
 
 export interface ProfileAvatarCellProps {
 	/** 이름 */
-	name?: string | null;
+	name?: string | bigint | null;
 	/** 부제목 (이메일, ID 등) */
-	subtitle?: string | null;
+	subtitle?: string | bigint | null;
 	/** 아바타 이미지 URL */
 	src?: string | null;
 	/** 아바타 아이콘 (src가 없을 때 표시) */
@@ -21,15 +21,20 @@ export const ProfileAvatarCell = ({
 	src,
 	icon,
 }: ProfileAvatarCellProps) => {
+	const displayName = name == null ? "" : String(name);
+	const displaySubtitle = subtitle == null ? "" : String(subtitle);
+
 	return (
 		<div className="flex items-center gap-3">
 			<Avatar size="sm" className="bg-accent/10 text-accent">
-				{src ? <Avatar.Image src={src} alt={name ?? ""} /> : null}
-				<Avatar.Fallback>{icon ?? name?.slice(0, 1)}</Avatar.Fallback>
+				{src ? <Avatar.Image src={src} alt={displayName} /> : null}
+				<Avatar.Fallback>{icon ?? displayName.slice(0, 1)}</Avatar.Fallback>
 			</Avatar>
 			<div>
-				<p className="font-medium">{name || "-"}</p>
-				{subtitle && <p className="text-xs text-muted">{subtitle}</p>}
+				<p className="font-medium">{displayName || "-"}</p>
+				{displaySubtitle && (
+					<p className="text-xs text-muted">{displaySubtitle}</p>
+				)}
 			</div>
 		</div>
 	);

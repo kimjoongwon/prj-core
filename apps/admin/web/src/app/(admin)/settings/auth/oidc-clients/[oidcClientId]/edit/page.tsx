@@ -3,7 +3,7 @@
 import {
 	useGetOidcClient,
 	useUpdateOidcClient,
-} from "@cocrepo/api/idp/oidc-clients";
+} from "@cocrepo/api/core/oidc-clients";
 import type { OidcClientLoginUi } from "@cocrepo/type";
 import {
 	Button,
@@ -143,7 +143,7 @@ export default observer(function OidcClientEditRoute() {
 			notFound={!isLoading && !client}
 			notFoundAction={
 				<Button
-					variant="flat"
+					variant="tertiary"
 					onPress={() => {
 						router.push("/settings/auth/oidc-clients" as Route);
 					}}
@@ -154,7 +154,7 @@ export default observer(function OidcClientEditRoute() {
 			actions={
 				<div className="flex gap-2">
 					<Button
-						variant="light"
+						variant="ghost"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push(
@@ -165,7 +165,7 @@ export default observer(function OidcClientEditRoute() {
 						상세로 돌아가기
 					</Button>
 					<Button
-						color="primary"
+						variant="primary"
 						startContent={<Save className="h-4 w-4" />}
 						onPress={onSubmit}
 						isLoading={isPending}

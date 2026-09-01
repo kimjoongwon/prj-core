@@ -28,7 +28,7 @@ export class TimelineDto
 	@StringField()
 	name: string;
 
-	@StringFieldOptional()
+	@StringFieldOptional({ nullable: true })
 	description: string | null;
 
 	@ClassField(() => SessionDto, { isArray: true })

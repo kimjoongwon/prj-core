@@ -53,10 +53,10 @@ export class SessionDto
 	)
 	repeatCycleType: PrismaRepeatCycleTypes | null;
 
-	@DateFieldOptional()
+	@DateFieldOptional({ nullable: true })
 	startDateTime: Date | null;
 
-	@DateFieldOptional()
+	@DateFieldOptional({ nullable: true })
 	endDateTime: Date | null;
 
 	@EnumFieldOptional(() => RecurringDayOfWeek, { nullable: true })
@@ -68,7 +68,7 @@ export class SessionDto
 	@StringField()
 	name: string;
 
-	@StringFieldOptional()
+	@StringFieldOptional({ nullable: true })
 	description: string | null;
 
 	@ClassField(() => ProgramDto, { isArray: true })

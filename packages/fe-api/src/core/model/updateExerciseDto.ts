@@ -16,12 +16,19 @@
  */
 
 export interface UpdateExerciseDto {
-  duration?: number;
-  count?: number;
-  description?: string;
-  /** @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$ */
-  imageFileId?: string;
-  /** @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$ */
-  videoFileId?: string;
-  name?: string;
+	duration?: number;
+	count?: number;
+	/** @nullable */
+	description?: string | null;
+	/**
+	 * @nullable
+	 * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+	 */
+	imageFileId?: string | null;
+	/**
+	 * @nullable
+	 * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+	 */
+	videoFileId?: string | null;
+	name?: string;
 }

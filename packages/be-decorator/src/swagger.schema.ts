@@ -5,11 +5,9 @@ import {
 	ApiConsumes,
 	ApiExtraModels,
 	getSchemaPath,
+	type ReferenceObject,
+	type SchemaObject,
 } from "@nestjs/swagger";
-import type {
-	ReferenceObject,
-	SchemaObject,
-} from "@nestjs/swagger/dist/interfaces/open-api-spec.interface";
 import { castArray, mapValues } from "es-toolkit/compat";
 
 // Many type from lodash - T | readonly T[]

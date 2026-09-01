@@ -55,7 +55,7 @@ export const TemplateActions = observer(
 				{/* 미리보기 */}
 				<Button
 					size="sm"
-					variant="flat"
+					variant="tertiary"
 					startContent={<Eye size={16} />}
 					onPress={onPreview}
 				>
@@ -65,7 +65,7 @@ export const TemplateActions = observer(
 				{/* 테스트 발송 */}
 				<Button
 					size="sm"
-					variant="flat"
+					variant="tertiary"
 					startContent={<Send size={16} />}
 					onPress={onSendTest}
 				>
@@ -75,8 +75,7 @@ export const TemplateActions = observer(
 				{/* 수정 */}
 				<Button
 					size="sm"
-					variant="flat"
-					color="primary"
+					variant="tertiary"
 					startContent={<Pencil size={16} />}
 					onPress={onEdit}
 				>
@@ -86,8 +85,7 @@ export const TemplateActions = observer(
 				{/* 삭제 */}
 				<Button
 					size="sm"
-					variant="flat"
-					color="danger"
+					variant="tertiary"
 					startContent={<Trash2 size={16} />}
 					onPress={onDelete}
 				>

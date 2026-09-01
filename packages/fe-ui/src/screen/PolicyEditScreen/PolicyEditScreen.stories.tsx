@@ -37,7 +37,7 @@ const meta = {
 		description: "route가 전달한 정책과 Ability 목록으로 Policy를 편집합니다.",
 		state: defaultState,
 		abilities,
-		actions: <Button color="primary">저장</Button>,
+		actions: <Button variant="primary">저장</Button>,
 	},
 } satisfies Meta<typeof PolicyEditScreen>;
 
@@ -66,7 +66,7 @@ export const Detail: Story = {
 		title: "Policy 상세",
 		description: "Policy 정보를 읽기 전용으로 확인합니다.",
 		readOnly: true,
-		actions: <Button variant="flat">수정</Button>,
+		actions: <Button variant="tertiary">수정</Button>,
 	},
 };
 

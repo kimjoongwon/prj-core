@@ -16,6 +16,7 @@
  */
 
 export interface CreateTimelineDto {
-  name: string;
-  description?: string;
+	name: string;
+	/** @nullable */
+	description?: string | null;
 }

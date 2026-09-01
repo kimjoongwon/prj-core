@@ -58,7 +58,7 @@ export interface SpaceListScreenProps {
 	queryStates: SpaceListScreenQueryStates;
 	setQueryStates: SpaceListScreenSetQueryStates;
 	onClickCreateButton: () => void;
-	onClickSpaceFitnessCenterName: (spaceId: string) => void;
+	onClickSpaceFitnessCenterName: (spaceId: bigint) => void;
 }
 function filterRows(
 	rows: SpaceListScreenSpace[],
@@ -137,7 +137,7 @@ export const SpaceListScreen = observer(
 					description="시스템에 등록된 공간과 피트니스 센터 정보를 관리합니다."
 					actions={
 						<Button
-							color="primary"
+							variant="primary"
 							startContent={<Building2 className="h-4 w-4" />}
 							onPress={onClickCreateButton}
 						>

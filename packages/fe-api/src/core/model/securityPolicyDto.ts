@@ -16,78 +16,78 @@
  */
 
 export interface SecurityPolicyDto {
-  /**
-   * ID
-   * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
-   */
-  id: string;
-  /** 생성일 */
-  createdAt: string;
-  /**
-   * 수정일
-   * @nullable
-   */
-  updatedAt?: string | null;
-  /** 정책 키 */
-  key: string;
-  /**
-   * 최소 비밀번호 길이
-   * @minimum 4
-   * @maximum 128
-   */
-  passwordMinLength: number;
-  /** 대문자 필수 */
-  passwordRequireUppercase: boolean;
-  /** 소문자 필수 */
-  passwordRequireLowercase: boolean;
-  /** 숫자 필수 */
-  passwordRequireNumber: boolean;
-  /** 특수문자 필수 */
-  passwordRequireSpecial: boolean;
-  /**
-   * 비밀번호 만료 일수 (0=무제한)
-   * @minimum 0
-   */
-  passwordExpirationDays: number;
-  /**
-   * 비밀번호 재사용 제한 횟수
-   * @minimum 0
-   */
-  passwordReuseLimit: number;
-  /**
-   * 일시 잠금 임계값
-   * @minimum 1
-   */
-  temporaryLockThreshold: number;
-  /**
-   * 일시 잠금 시간 (분)
-   * @minimum 1
-   */
-  temporaryLockDurationMin: number;
-  /**
-   * 영구 잠금 임계값
-   * @minimum 1
-   */
-  permanentLockThreshold: number;
-  /**
-   * Access Token TTL (초)
-   * @minimum 60
-   */
-  accessTokenTtlSec: number;
-  /**
-   * Refresh Token TTL (초)
-   * @minimum 60
-   */
-  refreshTokenTtlSec: number;
-  /**
-   * 세션 TTL (초)
-   * @minimum 60
-   */
-  sessionTtlSec: number;
-  /** IP 화이트리스트 활성화 */
-  ipWhitelistEnabled: boolean;
-  /** 이메일 도메인 화이트리스트 활성화 */
-  emailDomainWhitelistEnabled: boolean;
-  /** CORS Origin 화이트리스트 활성화 */
-  corsOriginWhitelistEnabled: boolean;
+	/**
+	 * ID
+	 * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
+	 */
+	id: bigint;
+	/** 생성일 */
+	createdAt: Date;
+	/**
+	 * 수정일
+	 * @nullable
+	 */
+	updatedAt?: Date | null;
+	/** 정책 키 */
+	key: string;
+	/**
+	 * 최소 비밀번호 길이
+	 * @minimum 4
+	 * @maximum 128
+	 */
+	passwordMinLength: number;
+	/** 대문자 필수 */
+	passwordRequireUppercase: boolean;
+	/** 소문자 필수 */
+	passwordRequireLowercase: boolean;
+	/** 숫자 필수 */
+	passwordRequireNumber: boolean;
+	/** 특수문자 필수 */
+	passwordRequireSpecial: boolean;
+	/**
+	 * 비밀번호 만료 일수 (0=무제한)
+	 * @minimum 0
+	 */
+	passwordExpirationDays: number;
+	/**
+	 * 비밀번호 재사용 제한 횟수
+	 * @minimum 0
+	 */
+	passwordReuseLimit: number;
+	/**
+	 * 일시 잠금 임계값
+	 * @minimum 1
+	 */
+	temporaryLockThreshold: number;
+	/**
+	 * 일시 잠금 시간 (분)
+	 * @minimum 1
+	 */
+	temporaryLockDurationMin: number;
+	/**
+	 * 영구 잠금 임계값
+	 * @minimum 1
+	 */
+	permanentLockThreshold: number;
+	/**
+	 * Access Token TTL (초)
+	 * @minimum 60
+	 */
+	accessTokenTtlSec: number;
+	/**
+	 * Refresh Token TTL (초)
+	 * @minimum 60
+	 */
+	refreshTokenTtlSec: number;
+	/**
+	 * 세션 TTL (초)
+	 * @minimum 60
+	 */
+	sessionTtlSec: number;
+	/** IP 화이트리스트 활성화 */
+	ipWhitelistEnabled: boolean;
+	/** 이메일 도메인 화이트리스트 활성화 */
+	emailDomainWhitelistEnabled: boolean;
+	/** CORS Origin 화이트리스트 활성화 */
+	corsOriginWhitelistEnabled: boolean;
 }

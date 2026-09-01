@@ -188,7 +188,7 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 			readOnly
 			isLoading={isTimelineLoading}
 			notFound={!isTimelineLoading && !timeline}
-			metadata={{ createdAt: timeline?.createdAt }}
+			metadata={timeline ? { createdAt: timeline.createdAt } : undefined}
 			sessions={sessions.map((session) => ({
 				id: session.id,
 				name: session.name,
@@ -196,7 +196,7 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 				typeColor: getSessionTypeColor(session.type),
 				programCount: getProgramCount(session),
 				isConnected: getProgramCount(session) > 0,
-				startDateTime: session.startDateTime,
+				startDateTime: session.startDateTime ?? null,
 				recurringDayLabel: getDayLabel(session.recurringDayOfWeek ?? undefined),
 				repeatCycleLabel: getCycleLabel(session.repeatCycleType ?? undefined),
 				createdAt: session.createdAt,
@@ -207,7 +207,7 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 			actions={
 				<div className="flex flex-wrap gap-2">
 					<Button
-						variant="flat"
+						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push("/timelines" as Route);
@@ -216,15 +216,16 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 						목록으로
 					</Button>
 					<Button
-						variant="flat"
+						variant="tertiary"
 						startContent={<Edit className="h-4 w-4" />}
 						onPress={onClickEditButton}
 					>
 						수정
 					</Button>
 					<Button
-						color="danger"
-						variant="flat"
+
+
+						variant="tertiary"
 						startContent={<Trash2 className="h-4 w-4" />}
 						isLoading={isDeletingTimeline}
 						onPress={onClickDeleteTimelineButton}

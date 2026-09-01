@@ -1,6 +1,6 @@
 "use client";
 
-import { useSetCurrentSpace } from "@cocrepo/api/idp/auth";
+import { useSetCurrentSpace } from "@cocrepo/api/core/auth";
 import { useApp } from "@cocrepo/store";
 import { isDecimalId, type Option } from "@cocrepo/type";
 import { useCallback } from "react";

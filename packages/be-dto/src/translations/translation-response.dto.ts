@@ -51,6 +51,7 @@ export class TranslationResponseDto {
 	@ApiProperty({
 		description: "수정일시",
 		type: Date,
+		nullable: true,
 	})
-	updatedAt!: Date;
+	updatedAt!: Date | null;
 }

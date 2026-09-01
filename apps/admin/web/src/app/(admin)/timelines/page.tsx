@@ -43,7 +43,7 @@ export default observer(function TimelinesPageRoute() {
 			}}
 			onDeleteTimeline={async (timelineId) => {
 				try {
-					await deleteMutation.mutateAsync({ timelineId });
+					await deleteMutation.mutateAsync({ timelineId: String(timelineId) });
 					await queryClient.invalidateQueries({
 						queryKey: getGetTimelinesQueryKey(),
 					});

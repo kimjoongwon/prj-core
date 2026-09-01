@@ -144,8 +144,9 @@ export const VariableEditTable = observer(
 			const deleteButton = (
 				<Button
 					isIconOnly
-					variant="light"
-					color="danger"
+					variant="ghost"
+
+
 					size="sm"
 					isDisabled={readOnly}
 					onPress={() => handleDeleteRow(index)}
@@ -252,7 +253,7 @@ export const VariableEditTable = observer(
 
 				{readOnly ? null : (
 					<Button
-						variant="light"
+						variant="ghost"
 						startContent={<Plus className="h-4 w-4" />}
 						onPress={handleAddRow}
 						size="sm"

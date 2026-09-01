@@ -25,8 +25,8 @@ export default observer(function AbilityDetailRoute() {
 		? {
 				name: ability.name,
 				description: ability.description || "",
-				subjectId: ability.subjectId,
-				actionId: ability.actionId,
+				subjectId: String(ability.subjectId),
+				actionId: String(ability.actionId),
 				fields: ability.fields.join(", "),
 				conditions: ability.conditions
 					? JSON.stringify(ability.conditions, null, 2)
@@ -38,7 +38,7 @@ export default observer(function AbilityDetailRoute() {
 	const subjects: AbilityFormOption[] = ability
 		? [
 				{
-					id: ability.subjectId,
+					id: String(ability.subjectId),
 					label: ability.subject?.displayName || ability.subject?.name || "-",
 				},
 			]
@@ -46,7 +46,7 @@ export default observer(function AbilityDetailRoute() {
 	const actions: AbilityFormOption[] = ability
 		? [
 				{
-					id: ability.actionId,
+					id: String(ability.actionId),
 					label: ability.action?.displayName || ability.action?.name || "-",
 				},
 			]
@@ -76,7 +76,7 @@ export default observer(function AbilityDetailRoute() {
 			notFound={!isLoading && !ability}
 			notFoundAction={
 				<Button
-					variant="flat"
+					variant="tertiary"
 					onPress={() => {
 						router.push("/abilities" as Route);
 					}}
@@ -87,7 +87,7 @@ export default observer(function AbilityDetailRoute() {
 			pageActions={
 				<div className="flex gap-2">
 					<Button
-						variant="flat"
+						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push("/abilities" as Route);
@@ -98,8 +98,7 @@ export default observer(function AbilityDetailRoute() {
 					{ability ? (
 						<>
 							<Button
-								color="primary"
-								variant="flat"
+								variant="tertiary"
 								startContent={<Edit className="h-4 w-4" />}
 								onPress={() => {
 									router.push(`/abilities/${abilityId}/edit` as Route);
@@ -108,8 +107,7 @@ export default observer(function AbilityDetailRoute() {
 								수정
 							</Button>
 							<Button
-								color="danger"
-								variant="flat"
+								variant="tertiary"
 								startContent={<Trash2 className="h-4 w-4" />}
 								isLoading={isDeleting}
 								onPress={() => {

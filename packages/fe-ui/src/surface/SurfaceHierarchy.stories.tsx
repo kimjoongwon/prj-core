@@ -26,7 +26,7 @@ export const AdminScreenHierarchy: Story = {
 							title="강좌 관리"
 							description="screen이 ScreenSurface, SectionSurface, layout Section을 조합합니다."
 							actions={
-								<Button color="primary" size="sm" variant="flat">
+								<Button size="sm" variant="tertiary">
 									강좌 추가
 								</Button>
 							}
@@ -102,7 +102,7 @@ export const AdminScreenHierarchy: Story = {
 													<p className="text-muted text-xs">오늘 마감</p>
 													<p className="mt-2 text-lg font-semibold">5건</p>
 												</div>
-												<Button size="sm" variant="flat">
+												<Button size="sm" variant="tertiary">
 													작업 보기
 												</Button>
 											</div>

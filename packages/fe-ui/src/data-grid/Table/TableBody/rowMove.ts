@@ -1,7 +1,8 @@
-import type { DataGridRowData, DataGridRowMoveEvent } from "@cocrepo/type";
+import type { DataGridRowMoveEvent } from "@cocrepo/type";
 import { arrayMove } from "@dnd-kit/sortable";
+import type { Key } from "../rowKeys";
 
-export interface DataGridMoveItem<TData extends DataGridRowData> {
+export interface DataGridMoveItem<TData extends { id: Key }> {
 	id: string;
 	parentId: string | null;
 	depth: number;
@@ -13,7 +14,7 @@ export interface DataGridRowMoveProjection {
 	parentId: string | null;
 }
 
-function isDescendant<TData extends DataGridRowData>(
+function isDescendant<TData extends { id: Key }>(
 	item: DataGridMoveItem<TData>,
 	parentId: string,
 	itemById: Map<string, DataGridMoveItem<TData>>,
@@ -31,7 +32,7 @@ function isDescendant<TData extends DataGridRowData>(
 }
 
 /** 드래그 중인 행의 자손을 이동 후보 목록에서 제외합니다. */
-export function removeDataGridRowDescendants<TData extends DataGridRowData>(
+export function removeDataGridRowDescendants<TData extends { id: Key }>(
 	items: DataGridMoveItem<TData>[],
 	parentId: string,
 ) {
@@ -43,7 +44,7 @@ export function removeDataGridRowDescendants<TData extends DataGridRowData>(
 }
 
 /** 세로 위치와 가로 이동량으로 행의 새 깊이와 부모를 계산합니다. */
-export function getDataGridRowMoveProjection<TData extends DataGridRowData>(
+export function getDataGridRowMoveProjection<TData extends { id: Key }>(
 	items: DataGridMoveItem<TData>[],
 	activeId: string,
 	overId: string,
@@ -90,7 +91,7 @@ export function getDataGridRowMoveProjection<TData extends DataGridRowData>(
 }
 
 /** 투영 결과를 상위 상태가 적용할 행·부모·형제 순서 이벤트로 변환합니다. */
-export function getDataGridRowMoveEvent<TData extends DataGridRowData>(
+export function getDataGridRowMoveEvent<TData extends { id: Key }>(
 	items: DataGridMoveItem<TData>[],
 	activeId: string,
 	overId: string,

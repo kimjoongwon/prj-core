@@ -56,7 +56,7 @@ export default observer(function ActionEditScreenRoute() {
 			notFound={!isLoading && !response?.data}
 			notFoundAction={
 				<Button
-					variant="flat"
+					variant="tertiary"
 					onPress={() => {
 						router.push("/actions" as Route);
 					}}
@@ -67,7 +67,7 @@ export default observer(function ActionEditScreenRoute() {
 			actions={
 				<div className="flex gap-2">
 					<Button
-						variant="light"
+						variant="ghost"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push(`/actions/${actionId}` as Route);
@@ -76,7 +76,7 @@ export default observer(function ActionEditScreenRoute() {
 						상세로 돌아가기
 					</Button>
 					<Button
-						color="primary"
+						variant="primary"
 						startContent={<Save className="h-4 w-4" />}
 						onPress={() => {
 							const data: UpdateActionDto = {

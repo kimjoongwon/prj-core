@@ -72,7 +72,7 @@ export interface ActionListScreenProps {
 	queryStates: ActionListScreenQueryStates;
 	setQueryStates: ActionListScreenSetQueryStates;
 	onClickCreateButton: () => void;
-	onClickActionRow: (actionId: string) => void;
+	onClickActionRow: (actionId: bigint) => void;
 }
 function getActionGroupFilterKey(group: string) {
 	return group || ACTION_GROUP_FILTER_ALL_KEY;
@@ -161,7 +161,7 @@ export const ActionListScreen = observer(
 					description="역할과 정책에서 허용할 동작 단위를 관리하는 권한 액션 카탈로그입니다."
 					actions={
 						<Button
-							color="primary"
+							variant="primary"
 							startContent={<Plus className="h-4 w-4" />}
 							onPress={onClickCreateButton}
 						>

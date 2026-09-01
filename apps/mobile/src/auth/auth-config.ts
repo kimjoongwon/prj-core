@@ -45,14 +45,6 @@ export const MOBILE_AUTH = {
 		"CORE_API_URL",
 		"CORE_API_INTERNAL_URL",
 	]),
-	idpApiBaseUrl: resolveMobileBaseUrl(DEFAULT_CORE_API_BASE_URL, [
-		"EXPO_PUBLIC_AUTH_API_BASE_URL",
-		"EXPO_PUBLIC_CORE_API_URL",
-		"EXPO_PUBLIC_CORE_API_INTERNAL_URL",
-		"EXPO_PUBLIC_CORE_API_BASE_URL",
-		"CORE_API_URL",
-		"CORE_API_INTERNAL_URL",
-	]),
 	loginClientId: "user-mobile",
 	authenticatedHomePath: "/",
 	loginPath: "/auth/login",
@@ -65,8 +57,6 @@ const AUTHENTICATED_ROUTE_PATHS = [
 	"/reservations",
 	"/select-space",
 ] as const;
-
-export const getIdpApiBaseUrl = () => trimTrailingSlash(MOBILE_AUTH.idpApiBaseUrl);
 
 export const getCoreApiBaseUrl = () =>
 	trimTrailingSlash(MOBILE_AUTH.coreApiBaseUrl);

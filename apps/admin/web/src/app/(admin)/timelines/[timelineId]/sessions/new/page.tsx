@@ -5,6 +5,7 @@ import {
 	useGetTimelineById,
 } from "@cocrepo/api/core/timelines";
 import { useApp } from "@cocrepo/store";
+import { requireDecimalId } from "@cocrepo/type";
 import {
 	Button,
 	TimelineSessionEditScreen,
@@ -21,6 +22,12 @@ import { useParams, useRouter } from "next/navigation";
 
 type SessionNewPageParams = {
 	timelineId: string;
+};
+
+const parseLocalDateTime = (value: string) => {
+	if (!value) return undefined;
+	const date = new Date(value);
+	return Number.isNaN(date.getTime()) ? null : date;
 };
 
 const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
@@ -54,15 +61,25 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 		if (state.type === "ONE_TIME" && !state.startDateTime) {
 			errors.startDateTime = "일시를 입력해주세요.";
 		}
+		const startDateTime = parseLocalDateTime(state.startDateTime);
+		const endDateTime = parseLocalDateTime(state.endDateTime);
+		if (state.startDateTime && !startDateTime) {
+			errors.startDateTime = "올바른 시작 일시를 입력해주세요.";
+		}
 
 		if (state.type === "ONE_TIME_RANGE") {
 			if (!state.startDateTime)
 				errors.startDateTime = "시작 일시를 입력해주세요.";
 			if (!state.endDateTime) errors.endDateTime = "종료 일시를 입력해주세요.";
+			if (state.endDateTime && !endDateTime) {
+				errors.endDateTime = "올바른 종료 일시를 입력해주세요.";
+			}
 			if (
 				state.startDateTime &&
 				state.endDateTime &&
-				state.startDateTime >= state.endDateTime
+				startDateTime &&
+				endDateTime &&
+				startDateTime >= endDateTime
 			) {
 				errors.endDateTime = "종료 일시는 시작 일시 이후여야 합니다.";
 			}
@@ -88,10 +105,12 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 				data: {
 					name: state.name.trim(),
 					type: state.type,
-					timelineId,
+					timelineId: BigInt(requireDecimalId(timelineId, "timelineId")),
 					description: state.description.trim() || undefined,
-					startDateTime: state.startDateTime || undefined,
-					endDateTime: state.endDateTime || undefined,
+					startDateTime: startDateTime ?? undefined,
+					endDateTime: state.endDateTime
+						? (endDateTime ?? undefined)
+						: undefined,
 					recurringDayOfWeek: state.recurringDayOfWeek || undefined,
 					repeatCycleType: state.repeatCycleType || undefined,
 				},
@@ -99,7 +118,7 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 			{
 				onSuccess: (response) => {
 					toast.success("등록 성공", { description: "세션이 등록되었습니다." });
-					const newId = response.data?.id;
+					const newId = response.data?.id?.toString();
 					router.push(
 						(newId
 							? `/timelines/${timelineId}/sessions/${newId}`
@@ -126,7 +145,7 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 			actions={
 				<div className="flex gap-2">
 					<Button
-						variant="flat"
+						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push(`/timelines/${timelineId}` as Route);
@@ -135,7 +154,7 @@ const AdminTimelinesTimelineIdSessionsNewRoute = observer(() => {
 						타임라인으로
 					</Button>
 					<Button
-						color="primary"
+						variant="primary"
 						startContent={<Save className="h-4 w-4" />}
 						isLoading={isPending}
 						isDisabled={!state.name.trim()}

@@ -5,7 +5,7 @@ import {
 	type LoginTrendItemDto,
 	useGetIdpDashboardStats,
 	useGetIdpLoginTrend,
-} from "@cocrepo/api/idp/idp-dashboard";
+} from "@cocrepo/api/core/idp-dashboard";
 import {
 	IdentityDashboardScreen,
 	type IdentityDashboardScreenStats,

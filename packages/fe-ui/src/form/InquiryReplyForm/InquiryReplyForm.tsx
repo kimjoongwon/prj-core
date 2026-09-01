@@ -186,7 +186,7 @@ export const InquiryReplyForm = observer(
 								<Button
 									isIconOnly
 									size="sm"
-									variant="light"
+									variant="ghost"
 									onClick={() => handleRemoveFile(index)}
 									className="h-5 w-5 min-w-5"
 								>
@@ -212,7 +212,7 @@ export const InquiryReplyForm = observer(
 									<Button
 										isIconOnly
 										size="sm"
-										variant="light"
+										variant="ghost"
 										onClick={() => handleRemoveAttachment(attachment.id)}
 										className="h-5 w-5 min-w-5"
 									>
@@ -243,7 +243,7 @@ export const InquiryReplyForm = observer(
 								<Button
 									isIconOnly
 									size="sm"
-									variant="flat"
+									variant="tertiary"
 									onClick={() => fileInputRef.current?.click()}
 									isDisabled={isLoading}
 								>
@@ -259,8 +259,7 @@ export const InquiryReplyForm = observer(
 								<Tooltip.Trigger>
 									<Button
 										size="sm"
-										variant="flat"
-										color="primary"
+										variant="tertiary"
 										startContent={<BookOpen className="size-4" />}
 										onClick={onSearchKnowledge}
 										isDisabled={isLoading}
@@ -278,7 +277,7 @@ export const InquiryReplyForm = observer(
 						<Tooltip.Trigger>
 							<Button
 								size="sm"
-								color="primary"
+								variant="primary"
 								startContent={<Send className="size-4" />}
 								onClick={handleSubmit}
 								isDisabled={!canSubmit || isLoading}

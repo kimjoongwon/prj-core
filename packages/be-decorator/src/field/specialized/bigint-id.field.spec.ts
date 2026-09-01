@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { DECORATORS } from "@nestjs/swagger/dist/constants";
+import { DECORATORS } from "@nestjs/swagger";
 import { instanceToPlain, plainToInstance } from "class-transformer";
 import { validateSync } from "class-validator";
 import { describe, expect, it } from "vitest";
@@ -83,14 +83,15 @@ describe("BigIntIdField", () => {
 		});
 	});
 
-	it("Given 필드 메타데이터 When Swagger 정보를 읽으면 Then string pattern 계약을 노출한다", () => {
+	it("Given 필드 메타데이터 When Swagger 정보를 읽으면 Then string pattern과 bigint runtime 계약을 노출한다", () => {
 		const metadata = Reflect.getMetadata(
 			DECORATORS.API_MODEL_PROPERTIES,
 			RequiredBigIntIdDto.prototype,
 			"id",
-		) as { pattern?: string; type?: string };
+		) as { pattern?: string; type?: string; "x-runtime-type"?: string };
 
 		expect(metadata.type).toBe("string");
+		expect(metadata["x-runtime-type"]).toBe("bigint");
 		expect(metadata.pattern).toMatch(/^\^\(\?:/);
 		expect(new RegExp(metadata.pattern ?? "").test("9223372036854775807")).toBe(
 			true,
@@ -99,11 +100,29 @@ describe("BigIntIdField", () => {
 			false,
 		);
 
+		const optionalMetadata = Reflect.getMetadata(
+			DECORATORS.API_MODEL_PROPERTIES,
+			OptionalBigIntIdDto.prototype,
+			"id",
+		) as { required?: boolean; "x-runtime-type"?: string };
+		expect(optionalMetadata).toMatchObject({
+			required: false,
+			"x-runtime-type": "bigint",
+		});
+
 		const arrayMetadata = Reflect.getMetadata(
 			DECORATORS.API_MODEL_PROPERTIES,
 			BigIntIdArrayDto.prototype,
 			"ids",
-		) as { isArray?: boolean; type?: string };
-		expect(arrayMetadata).toMatchObject({ type: "string", isArray: true });
+		) as {
+			isArray?: boolean;
+			type?: string;
+			"x-runtime-type"?: string;
+		};
+		expect(arrayMetadata).toMatchObject({
+			type: "string",
+			isArray: true,
+			"x-runtime-type": "bigint",
+		});
 	});
 });

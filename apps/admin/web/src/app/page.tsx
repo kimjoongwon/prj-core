@@ -1,6 +1,6 @@
 "use client";
 
-import { useVerifyToken } from "@cocrepo/api/idp/auth";
+import { useVerifyToken } from "@cocrepo/api/core/auth";
 import { SessionCheckScreen } from "@cocrepo/ui";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/navigation";

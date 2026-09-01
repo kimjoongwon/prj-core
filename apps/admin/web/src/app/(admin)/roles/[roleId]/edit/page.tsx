@@ -83,7 +83,7 @@ const AdminRolesRoleIdEditRoute = observer(() => {
 			notFound={!isLoading && !role}
 			notFoundAction={
 				<Button
-					variant="flat"
+					variant="tertiary"
 					onPress={() => {
 						router.push("/roles" as Route);
 					}}
@@ -94,7 +94,7 @@ const AdminRolesRoleIdEditRoute = observer(() => {
 			actions={
 				<div className="flex gap-2">
 					<Button
-						variant="light"
+						variant="ghost"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push(`/roles/${roleId}` as Route);
@@ -103,7 +103,7 @@ const AdminRolesRoleIdEditRoute = observer(() => {
 						상세로 돌아가기
 					</Button>
 					<Button
-						color="primary"
+						variant="primary"
 						startContent={<Save className="h-4 w-4" />}
 						onPress={onSubmit}
 						isLoading={isPending}

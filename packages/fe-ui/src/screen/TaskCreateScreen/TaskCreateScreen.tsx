@@ -143,13 +143,12 @@ const ExerciseMediaField = observer(function ExerciseMediaField({
 					<p className="mt-1 text-sm text-muted">{t(description)}</p>
 				</div>
 				<div className="flex gap-2">
-					<Button size="sm" variant="flat" onPress={onOpenPicker}>
+					<Button size="sm" variant="tertiary" onPress={onOpenPicker}>
 						{selectedAsset ? t("다시 선택") : t("에셋에서 선택")}
 					</Button>
 					<Button
 						size="sm"
-						variant="flat"
-						color="danger"
+						variant="tertiary"
 						onPress={onClear}
 						isDisabled={!selectedAsset}
 					>
@@ -226,14 +225,14 @@ export const TaskCreateScreen = observer(
 					actions={
 						<div className="flex gap-2">
 							<Button
-								variant="flat"
+								variant="tertiary"
 								onPress={onClickCancelButton}
 								isDisabled={isSubmitPending}
 							>
 								{t("취소")}
 							</Button>
 							<Button
-								color="primary"
+								variant="primary"
 								onPress={onClickSaveButton}
 								isLoading={isSubmitPending}
 							>

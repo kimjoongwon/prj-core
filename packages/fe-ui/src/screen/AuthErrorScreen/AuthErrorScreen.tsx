@@ -34,7 +34,7 @@ export const AuthErrorScreen = observer(
 				</div>
 
 				<div className="mt-6 text-center">
-					<Button variant="light" onPress={onClickBack}>
+					<Button variant="ghost" onPress={onClickBack}>
 						{t("돌아가기")}
 					</Button>
 				</div>

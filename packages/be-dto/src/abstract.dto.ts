@@ -7,9 +7,9 @@ export class AbstractDto {
 	@DateField()
 	createdAt!: Date;
 
-	@DateField()
-	updatedAt!: Date;
+	@DateField({ nullable: true })
+	updatedAt!: Date | null;
 
 	@DateField({ nullable: true })
-	removedAt!: Date;
+	removedAt!: Date | null;
 }

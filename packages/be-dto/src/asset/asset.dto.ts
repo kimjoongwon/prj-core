@@ -54,6 +54,7 @@ export class AssetDto extends AbstractDto {
 
 	@ClassField(() => Object, {
 		required: false,
+		nullable: true,
 		description: "메타데이터 (Exif, 동영상 길이 등)",
 	})
 	metadata!: Prisma.JsonValue | null;

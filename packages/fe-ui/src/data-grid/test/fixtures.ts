@@ -9,14 +9,14 @@ import { vi } from "vitest";
 import { DataGridSelectionState, DataGridState } from "../state/DataGridState";
 
 export interface DataGridTestRow {
-	id: string;
+	id: bigint;
 	name: string;
 	status: "active" | "inactive";
 }
 
 export const dataGridTestRows: DataGridTestRow[] = [
-	{ id: "row-1", name: "Alpha", status: "active" },
-	{ id: "row-2", name: "Beta", status: "inactive" },
+	{ id: BigInt(1), name: "Alpha", status: "active" },
+	{ id: BigInt(2), name: "Beta", status: "inactive" },
 ];
 
 interface DataGridTestConfigOverrides {
@@ -58,7 +58,9 @@ export function createDataGridTestState(
 	return { state, selection, setQueryStates };
 }
 
-export function createDataGridTableMock(rowIds = dataGridTestRows.map((row) => row.id)) {
+export function createDataGridTableMock(
+	rowIds = dataGridTestRows.map((row) => String(row.id)),
+) {
 	const rows = rowIds.map((id) => ({
 		id,
 		getIsGrouped: () => false,

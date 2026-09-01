@@ -1,8 +1,8 @@
 import { formatDateTime } from "@cocrepo/toolkit";
 
 interface ExpiryCellProps {
-	/** 만료 시간 (ISO 문자열 또는 Date 객체) */
-	expiresAt: string | Date | null | undefined;
+	/** 생성 DTO의 만료 시간 */
+	expiresAt: Date | null | undefined;
 }
 
 /**
@@ -28,24 +28,23 @@ const getRelativeTime = (expiresAt: Date): string => {
  *
  * @example
  * ```tsx
- * <ExpiryCell expiresAt="2026-02-10T15:30:00Z" />
+ * <ExpiryCell expiresAt={new Date("2026-02-10T15:30:00Z")} />
  * // 출력: 2026-02-10 15:30 (2h 30m 남음)
  *
  * <ExpiryCell expiresAt={null} /> // "-"
  * ```
  */
 export const ExpiryCell = ({ expiresAt }: ExpiryCellProps) => {
-	if (!expiresAt) {
+	if (!expiresAt || Number.isNaN(expiresAt.getTime())) {
 		return <p className="text-muted">-</p>;
 	}
 
-	const date = typeof expiresAt === "string" ? new Date(expiresAt) : expiresAt;
-	const relativeTime = getRelativeTime(date);
+	const relativeTime = getRelativeTime(expiresAt);
 	const isExpired = relativeTime === "만료됨";
 
 	return (
 		<div className="flex flex-col gap-0.5">
-			<span className="text-sm">{formatDateTime(expiresAt as string)}</span>
+			<span className="text-sm">{formatDateTime(expiresAt)}</span>
 			<span className={`text-xs ${isExpired ? "text-danger" : "text-success"}`}>
 				{relativeTime}
 			</span>

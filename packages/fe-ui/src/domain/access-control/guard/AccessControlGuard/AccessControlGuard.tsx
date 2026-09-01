@@ -1,6 +1,6 @@
 "use client";
 
-import { useVerifyToken } from "@cocrepo/api/idp/auth";
+import { useVerifyToken } from "@cocrepo/api/core/auth";
 import {
 	ADMIN_PATHS,
 	isScopeKindAccessible,
@@ -141,12 +141,13 @@ export const AccessControlGuard = observer(function AccessControlGuard({
 						</p>
 					</div>
 					<div className="flex gap-2">
-						<Button variant="flat" onPress={onClickBackButton}>
+						<Button variant="tertiary" onPress={onClickBackButton}>
 							{t("이전 화면")}
 						</Button>
 						<Button
-							color="primary"
-							variant="flat"
+
+
+							variant="tertiary"
 							onPress={onClickDashboardButton}
 						>
 							{t("대시보드로 이동")}

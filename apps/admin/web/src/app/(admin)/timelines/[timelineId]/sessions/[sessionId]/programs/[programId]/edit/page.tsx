@@ -6,7 +6,7 @@ import {
 	useGetProgramById,
 	useUpdateProgram,
 } from "@cocrepo/api/core/timelines";
-import { type UserDto, useGetUserById } from "@cocrepo/api/core/users";
+import { useGetUserById } from "@cocrepo/api/core/users";
 import { useApp } from "@cocrepo/store";
 import {
 	Button,
@@ -31,10 +31,11 @@ const buildRoutinePreview = (routine?: RoutineDto) =>
 	[...(routine?.activities ?? [])]
 		.sort((left, right) => left.order - right.order)
 		.map((activity) => ({
-			id: activity.id,
+			id: String(activity.id),
 			order: activity.order,
 			exerciseName:
-				activity.task?.exercise?.name ?? `Task ${activity.taskId.slice(-6)}`,
+				activity.task?.exercise?.name ??
+				`Task ${String(activity.taskId).slice(-6)}`,
 			repetitions: activity.repetitions,
 			restTime: activity.restTime,
 			notes: activity.notes,
@@ -74,30 +75,29 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 			spaceScope: "INCLUDE_ANCESTORS",
 		});
 		const { data: currentInstructorResponse } = useGetUserById(
-			program?.instructorId ?? "",
+			program?.instructorId === undefined ? "" : String(program.instructorId),
 			{ query: { enabled: !!program?.instructorId } },
 		);
 
-		let routines = (routinesResponse?.data ?? []) as RoutineDto[];
+		let routines = routinesResponse?.data ?? [];
 		if (
 			program?.routine &&
-			!routines.some((item) => item.id === program.routine.id)
+			!routines.some((item) => String(item.id) === String(program.routine.id))
 		) {
-			routines = [program.routine as RoutineDto, ...routines];
+			routines = [program.routine, ...routines];
 		}
 
-		const currentInstructor = currentInstructorResponse?.data as
-			| UserDto
-			| undefined;
+		const currentInstructor = currentInstructorResponse?.data;
 
 		useEffect(() => {
 			if (program && !state.isInitialized) {
 				state.name = program.name;
-				state.routineId = program.routineId;
-				state.instructorId = program.instructorId;
+				state.routineId = String(program.routineId);
+				state.instructorId = String(program.instructorId);
 				state.routineName =
 					program.routineNameSnapshot ?? program.routine?.name ?? "";
-				state.instructorName = currentInstructor?.name ?? program.instructorId;
+				state.instructorName =
+					currentInstructor?.name ?? String(program.instructorId);
 				state.capacity = String(program.capacity);
 				state.level = program.level ?? "";
 				state.isInitialized = true;
@@ -105,7 +105,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 			if (
 				state.isInitialized &&
 				currentInstructor &&
-				state.instructorId === currentInstructor.id
+				state.instructorId === String(currentInstructor.id)
 			) {
 				state.instructorName = currentInstructor.name;
 			}
@@ -114,7 +114,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 		const { mutate: updateProgram, isPending } = useUpdateProgram();
 
 		const selectedRoutine = routines.find(
-			(routine) => routine.id === state.routineId,
+			(routine) => String(routine.id) === state.routineId,
 		);
 		const routinePreview = buildRoutinePreview(selectedRoutine);
 		const hasUnschedulableRoutine = routinePreview.some(
@@ -142,6 +142,18 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 			if (!state.instructorId.trim()) {
 				errors.instructorId = "강사를 선택해주세요.";
 			}
+			if (
+				state.routineId.trim() &&
+				!/^[1-9]\d*$/.test(state.routineId.trim())
+			) {
+				errors.routineId = "유효한 루틴을 선택해주세요.";
+			}
+			if (
+				state.instructorId.trim() &&
+				!/^[1-9]\d*$/.test(state.instructorId.trim())
+			) {
+				errors.instructorId = "유효한 강사를 선택해주세요.";
+			}
 			const capacityNumber = Number(state.capacity);
 			if (
 				!state.capacity ||
@@ -166,8 +178,8 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 					programId,
 					data: {
 						name: state.name.trim(),
-						routineId: state.routineId.trim(),
-						instructorId: state.instructorId.trim(),
+						routineId: parsePositiveBigInt(state.routineId),
+						instructorId: parsePositiveBigInt(state.instructorId),
 						capacity: Number(state.capacity),
 						level: state.level || undefined,
 					},
@@ -212,7 +224,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 				actions={
 					<div className="flex gap-2">
 						<Button
-							variant="flat"
+							variant="tertiary"
 							startContent={<ArrowLeft className="h-4 w-4" />}
 							onPress={() => {
 								router.push(
@@ -223,7 +235,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 							상세로
 						</Button>
 						<Button
-							color="primary"
+							variant="primary"
 							startContent={<Save className="h-4 w-4" />}
 							isLoading={isPending}
 							isDisabled={
@@ -245,3 +257,11 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute =
 	});
 
 export default AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdEditRoute;
+
+function parsePositiveBigInt(value: string): bigint {
+	const trimmedValue = value.trim();
+	if (!/^[1-9]\d*$/.test(trimmedValue)) {
+		throw new Error("ID must be a positive decimal integer");
+	}
+	return BigInt(trimmedValue);
+}

@@ -58,7 +58,7 @@ export const ForgotPasswordForm = observer(
 
 							<Button
 								type="submit"
-								variant="flat"
+								variant="tertiary"
 								className="w-full mb-3"
 								isLoading={state.isSubmitting}
 							>
@@ -87,7 +87,7 @@ export const ForgotPasswordForm = observer(
 
 							<Button
 								type="submit"
-								color="primary"
+								variant="primary"
 								className="w-full font-semibold"
 								size="lg"
 								isLoading={state.isSubmitting}

@@ -2,8 +2,7 @@ import type { NativeStackHeaderProps } from "@react-navigation/native-stack";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { setLoginRedirectUrl } from "@cocrepo/api/core/client";
-import { setIdpBaseUrl, setIdpLoginRedirectUrl } from "@cocrepo/api/idp/client";
+import { setApiBaseUrl, setLoginRedirectUrl } from "@cocrepo/api/core/client";
 import { CustomHeader, DesignSystemProvider } from "@cocrepo/mo-ui";
 import type { ComponentType, PropsWithChildren } from "react";
 import { useEffect } from "react";
@@ -12,7 +11,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Uniwind } from "uniwind";
 import { AuthSessionGate } from "@/auth/AuthSessionGate";
-import { getIdpApiBaseUrl, getLoginPath } from "@/auth/auth-config";
+import { getCoreApiBaseUrl, getLoginPath } from "@/auth/auth-config";
 import { configureMobileApiScope } from "@/auth/mobile-api-scope";
 import "../global.css";
 
@@ -58,8 +57,7 @@ export default function RootLayout() {
 		Uniwind.setTheme(MOBILE_DEFAULT_THEME);
 		configureMobileApiScope();
 		setLoginRedirectUrl(getLoginPath());
-		setIdpBaseUrl(getIdpApiBaseUrl());
-		setIdpLoginRedirectUrl(getLoginPath());
+		setApiBaseUrl(getCoreApiBaseUrl());
 	}, []);
 
 	return (

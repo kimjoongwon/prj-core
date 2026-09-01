@@ -1,6 +1,6 @@
 "use client";
 
-import { useRequestPasswordReset } from "@cocrepo/api/idp/password-reset";
+import { useRequestPasswordReset } from "@cocrepo/api/core/password-reset";
 import { ForgotPasswordScreen } from "@cocrepo/ui";
 import {
 	type IReactionDisposer,

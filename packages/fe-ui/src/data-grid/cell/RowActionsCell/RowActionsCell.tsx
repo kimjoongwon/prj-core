@@ -8,7 +8,7 @@ import { Link } from "../../../input/Link/Link";
 
 export interface RowActionsCellProps {
 	/** 아이템 ID */
-	id: string;
+	id: string | bigint;
 	/** 기본 경로 (예: "/users") */
 	basePath: string;
 	/** 상세 보기 표시 여부 */

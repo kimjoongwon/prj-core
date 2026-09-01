@@ -1,8 +1,8 @@
 import { formatDateTime } from "@cocrepo/toolkit";
 
-interface DateTimeCellProps {
-	/** 날짜/시간 값 (ISO 문자열 또는 Date 객체) */
-	value: string | Date | null | undefined;
+export interface DateTimeCellProps {
+	/** 생성 DTO의 DateTime 값 */
+	value: Date | null | undefined;
 }
 
 /**
@@ -11,16 +11,16 @@ interface DateTimeCellProps {
  *
  * @example
  * ```tsx
- * <DateTimeCell value="2024-01-15T10:30:00" />
+ * <DateTimeCell value={new Date("2024-01-15T10:30:00Z")} />
  * // 출력: 2024-01-15 10:30
  *
  * <DateTimeCell value={null} /> // "-"
  * ```
  */
 export const DateTimeCell = ({ value }: DateTimeCellProps) => {
-	if (!value) {
+	if (!value || Number.isNaN(value.getTime())) {
 		return <span>-</span>;
 	}
 
-	return <span>{formatDateTime(value as string)}</span>;
+	return <span>{formatDateTime(value)}</span>;
 };

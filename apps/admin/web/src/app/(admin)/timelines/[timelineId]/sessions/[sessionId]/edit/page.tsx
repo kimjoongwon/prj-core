@@ -27,6 +27,19 @@ type SessionEditPageParams = {
 	sessionId: string;
 };
 
+const parseLocalDateTime = (value: string) => {
+	if (!value) return undefined;
+	const date = new Date(value);
+	return Number.isNaN(date.getTime()) ? null : date;
+};
+
+const toSessionDateTimeLocalValue = (value?: Date | null) => {
+	if (!value) return "";
+	const date = new Date(value);
+	const pad = (part: number) => String(part).padStart(2, "0");
+	return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+};
+
 const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 	const { timelineId, sessionId } = useParams<SessionEditPageParams>();
 	const router = useRouter();
@@ -59,12 +72,14 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 
 	useEffect(() => {
 		if (session && !state.isInitialized) {
+			const startDateTime = toSessionDateTimeLocalValue(session.startDateTime);
+			const endDateTime = toSessionDateTimeLocalValue(session.endDateTime);
 			state.name = session.name;
 			state.type = session.type as TimelineSessionScreenSessionType;
 			state.originalType = session.type as TimelineSessionScreenSessionType;
 			state.description = session.description ?? "";
-			state.startDateTime = session.startDateTime ?? "";
-			state.endDateTime = session.endDateTime ?? "";
+			state.startDateTime = startDateTime ?? "";
+			state.endDateTime = endDateTime ?? "";
 			state.recurringDayOfWeek =
 				(session.recurringDayOfWeek as TimelineSessionScreenDayOfWeek) ?? null;
 			state.repeatCycleType =
@@ -73,6 +88,14 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 			state.originalEndDateTime = state.endDateTime;
 			state.originalRecurringDayOfWeek = state.recurringDayOfWeek;
 			state.originalRepeatCycleType = state.repeatCycleType;
+			if (session.startDateTime && startDateTime === null) {
+				state.errors.startDateTime =
+					"서버에서 받은 시작 일시가 올바르지 않습니다.";
+			}
+			if (session.endDateTime && endDateTime === null) {
+				state.errors.endDateTime =
+					"서버에서 받은 종료 일시가 올바르지 않습니다.";
+			}
 			state.isInitialized = true;
 		}
 	}, [session, state]);
@@ -90,14 +113,24 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 		if (state.type === "ONE_TIME" && !state.startDateTime) {
 			errors.startDateTime = "일시를 입력해주세요.";
 		}
+		const startDateTime = parseLocalDateTime(state.startDateTime);
+		const endDateTime = parseLocalDateTime(state.endDateTime);
+		if (state.startDateTime && !startDateTime) {
+			errors.startDateTime = "올바른 시작 일시를 입력해주세요.";
+		}
 		if (state.type === "ONE_TIME_RANGE") {
 			if (!state.startDateTime)
 				errors.startDateTime = "시작 일시를 입력해주세요.";
 			if (!state.endDateTime) errors.endDateTime = "종료 일시를 입력해주세요.";
+			if (state.endDateTime && !endDateTime) {
+				errors.endDateTime = "올바른 종료 일시를 입력해주세요.";
+			}
 			if (
 				state.startDateTime &&
 				state.endDateTime &&
-				state.startDateTime >= state.endDateTime
+				startDateTime &&
+				endDateTime &&
+				startDateTime >= endDateTime
 			) {
 				errors.endDateTime = "종료 일시는 시작 일시 이후여야 합니다.";
 			}
@@ -124,8 +157,10 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 					name: state.name.trim(),
 					type: state.type,
 					description: state.description.trim() || undefined,
-					startDateTime: state.startDateTime || undefined,
-					endDateTime: state.endDateTime || undefined,
+					startDateTime: startDateTime ?? undefined,
+					endDateTime: state.endDateTime
+						? (endDateTime ?? undefined)
+						: undefined,
 					recurringDayOfWeek: state.recurringDayOfWeek || undefined,
 					repeatCycleType: state.repeatCycleType || undefined,
 				},
@@ -154,8 +189,8 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 		(state.name !== (session?.name ?? "") ||
 			state.type !== (session?.type ?? "") ||
 			state.description !== (session?.description ?? "") ||
-			state.startDateTime !== (session?.startDateTime ?? "") ||
-			state.endDateTime !== (session?.endDateTime ?? "") ||
+			state.startDateTime !== (state.originalStartDateTime ?? "") ||
+			state.endDateTime !== (state.originalEndDateTime ?? "") ||
 			state.recurringDayOfWeek !== (session?.recurringDayOfWeek ?? null) ||
 			state.repeatCycleType !== (session?.repeatCycleType ?? ""));
 
@@ -170,7 +205,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 			actions={
 				<div className="flex gap-2">
 					<Button
-						variant="flat"
+						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push(
@@ -181,7 +216,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdEditRoute = observer(() => {
 						상세로
 					</Button>
 					<Button
-						color="primary"
+						variant="primary"
 						startContent={<Save className="h-4 w-4" />}
 						isLoading={isPending}
 						isDisabled={!hasChanged || !state.name.trim()}

@@ -15,7 +15,7 @@ const defaultState = {
 
 const programs = [
 	{
-		id: "program-1",
+		id: BigInt(1),
 		href: "/timelines/timeline-1/sessions/session-1/programs/program-1" as const,
 		name: "초급 요가 프로그램",
 		routineName: "요가 루틴 A",
@@ -37,7 +37,7 @@ const meta = {
 		title: "세션 수정",
 		description: "route가 전달한 세션 상태를 편집합니다.",
 		state: defaultState,
-		actions: <Button color="primary">저장</Button>,
+		actions: <Button variant="primary">저장</Button>,
 	},
 } satisfies Meta<typeof TimelineSessionEditScreen>;
 
@@ -77,13 +77,13 @@ export const Detail: Story = {
 			repeatCycleLabel: "주간",
 			timelineName: "봄 시즌 타임라인",
 			timelineHref: "/timelines/timeline-1",
-			createdAt: "2026-04-01T09:00:00.000Z",
+			createdAt: new Date("2026-04-01T09:00:00.000Z"),
 		},
 		programs,
 		totalPrograms: 1,
 		resolvedPrograms: 1,
 		unresolvedPrograms: 0,
-		actions: <Button variant="flat">수정</Button>,
+		actions: <Button variant="tertiary">수정</Button>,
 	},
 };
 

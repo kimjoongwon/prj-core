@@ -80,20 +80,34 @@ const COLUMN_LABELS = {
 
 type PresetColumnKey = keyof typeof COLUMN_LABELS;
 
+/**
+ * 서로 다른 accessor 값 타입을 가진 컬럼을 한 배열에 담는 경계입니다.
+ * 개별 컬럼은 `DataGridColumnConfig<TData, TValue>`를 그대로 유지하고,
+ * 컬럼 모음에서만 TanStack의 heterogeneous ColumnDef 규칙을 따릅니다.
+ */
+type HeterogeneousDataGridColumnConfig<TData> = DataGridColumnConfig<
+	TData,
+	// biome-ignore lint/suspicious/noExplicitAny: TanStack heterogeneous ColumnDef 배열의 TValue 경계입니다.
+	any
+>;
+
+type HeterogeneousDataGridColumns<TData> =
+	HeterogeneousDataGridColumnConfig<TData>[];
+
 export type ColumnOverrides<TData, TValue = unknown> = Partial<
 	Omit<DataGridColumnConfig<TData, TValue>, "field">
 > & {
 	accessorKey?: keyof TData | string;
 };
 
-type NameColumnOverrides<TData> = ColumnOverrides<TData> & {
+type NameColumnOverrides<TData> = ColumnOverrides<TData, string | null> & {
 	fieldKey?: "name" | "actionKey" | "subjectKey" | "roleKey";
 	accessorKey?: keyof TData | string;
 	nameVariant?: "plain" | "identifier" | "clickable";
 	onClickName?: (row: TData) => void;
 };
 
-type CreatedAtColumnOverrides<TData> = ColumnOverrides<TData> & {
+type CreatedAtColumnOverrides<TData> = ColumnOverrides<TData, Date | null> & {
 	fieldKey?: "createdAt" | "signedUpAt" | "receivedAt" | "occurredAt";
 	accessorKey?: keyof TData | string;
 };
@@ -106,22 +120,30 @@ export function defineColumn<TData, TValue = unknown>(
 }
 
 /** 호출부에서 컬럼 순서를 명시적으로 유지하도록 tuple 형태로 묶습니다. */
-export function buildColumns<TData>(
-	...columns: DataGridColumnConfig<TData, unknown>[]
-) {
+export function buildColumns<
+	TData,
+	const TColumns extends
+		HeterogeneousDataGridColumns<TData> = HeterogeneousDataGridColumns<TData>,
+>(...columns: TColumns & HeterogeneousDataGridColumns<TData>): TColumns {
 	return columns;
 }
 
 /** 목록 화면에서 자주 쓰는 createdAt 후행 컬럼을 공통 규칙으로 붙입니다. */
-export function buildColumnsWithDefaultCreatedAt<TData>(
-	leading: DataGridColumnConfig<TData, unknown>[],
-	trailing: DataGridColumnConfig<TData, unknown>[] = [],
-) {
-	return buildColumns<TData>(
-		...leading,
-		createCreatedAtColumn<TData>(),
-		...trailing,
-	);
+export function buildColumnsWithDefaultCreatedAt<
+	TData,
+	const TLeading extends
+		HeterogeneousDataGridColumns<TData> = HeterogeneousDataGridColumns<TData>,
+	const TTrailing extends
+		HeterogeneousDataGridColumns<TData> = HeterogeneousDataGridColumns<TData>,
+>(
+	leading: TLeading,
+	trailing: TTrailing = [] as unknown as TTrailing,
+): [...TLeading, DataGridColumnConfig<TData>, ...TTrailing] {
+	return [...leading, createCreatedAtColumn<TData>(), ...trailing] as [
+		...TLeading,
+		DataGridColumnConfig<TData>,
+		...TTrailing,
+	];
 }
 
 /** preset fieldKey를 실제 DataGrid 컬럼 정의로 해석합니다. */
@@ -160,27 +182,21 @@ export function createNameColumn<TData>(
 	const resolvedCell =
 		cell ??
 		(nameVariant === "clickable"
-			? ({
-					getValue,
-					row,
-				}: {
-					getValue: () => unknown;
-					row: { original: TData };
-				}) => (
+			? ({ getValue, row }) => (
 					<NameCell
-						value={getValue() as string}
+						value={getValue()}
 						variant="clickable"
 						onPress={() => onClickName?.(row.original)}
 					/>
 				)
-			: ({ getValue }: { getValue: () => unknown }) => (
+			: ({ getValue }) => (
 					<NameCell
-						value={getValue() as string}
+						value={getValue()}
 						variant={nameVariant === "identifier" ? "identifier" : "plain"}
 					/>
 				));
 
-	return createPresetColumn<TData>(fieldKey, {
+	return createPresetColumn<TData, string | null>(fieldKey, {
 		label,
 		accessorKey,
 		size,
@@ -192,17 +208,15 @@ export function createNameColumn<TData>(
 
 /** displayName 컬럼을 DefaultCell 기본 규칙으로 생성합니다. */
 export function createDisplayNameColumn<TData>(
-	overrides: ColumnOverrides<TData> = {},
+	overrides: ColumnOverrides<TData, string | null> = {},
 ) {
 	const {
 		label = COLUMN_LABELS.displayName,
 		size = 180,
-		cell = ({ getValue }) => (
-			<DefaultCell value={getValue() as string | null} />
-		),
+		cell = ({ getValue }) => <DefaultCell value={getValue()} />,
 		...rest
 	} = overrides;
-	return createPresetColumn<TData>("displayName", {
+	return createPresetColumn<TData, string | null>("displayName", {
 		label,
 		size,
 		cell,
@@ -212,17 +226,15 @@ export function createDisplayNameColumn<TData>(
 
 /** group 컬럼을 DefaultCell 기본 규칙으로 생성합니다. */
 export function createGroupColumn<TData>(
-	overrides: ColumnOverrides<TData> = {},
+	overrides: ColumnOverrides<TData, string | null> = {},
 ) {
 	const {
 		label = COLUMN_LABELS.group,
 		size = 160,
-		cell = ({ getValue }) => (
-			<DefaultCell value={getValue() as string | null} />
-		),
+		cell = ({ getValue }) => <DefaultCell value={getValue()} />,
 		...rest
 	} = overrides;
-	return createPresetColumn<TData>("group", {
+	return createPresetColumn<TData, string | null>("group", {
 		label,
 		size,
 		cell,
@@ -232,17 +244,15 @@ export function createGroupColumn<TData>(
 
 /** label 컬럼을 DefaultCell 기본 규칙으로 생성합니다. */
 export function createLabelColumn<TData>(
-	overrides: ColumnOverrides<TData> = {},
+	overrides: ColumnOverrides<TData, string | null> = {},
 ) {
 	const {
 		label = COLUMN_LABELS.label,
 		size = 150,
-		cell = ({ getValue }) => (
-			<DefaultCell value={getValue() as string | null} />
-		),
+		cell = ({ getValue }) => <DefaultCell value={getValue()} />,
 		...rest
 	} = overrides;
-	return createPresetColumn<TData>("label", {
+	return createPresetColumn<TData, string | null>("label", {
 		label,
 		size,
 		cell,
@@ -252,17 +262,17 @@ export function createLabelColumn<TData>(
 
 /** email 컬럼을 muted + truncate 규칙으로 생성합니다. */
 export function createEmailColumn<TData>(
-	overrides: ColumnOverrides<TData> = {},
+	overrides: ColumnOverrides<TData, string | null> = {},
 ) {
 	const {
 		label = COLUMN_LABELS.email,
 		size = 200,
 		cell = ({ getValue }) => (
-			<DefaultCell value={getValue() as string | null} tone="muted" truncate />
+			<DefaultCell value={getValue()} tone="muted" truncate />
 		),
 		...rest
 	} = overrides;
-	return createPresetColumn<TData>("email", {
+	return createPresetColumn<TData, string | null>("email", {
 		label,
 		size,
 		cell,
@@ -272,15 +282,15 @@ export function createEmailColumn<TData>(
 
 /** phone 컬럼을 PhoneCell 기반으로 생성합니다. */
 export function createPhoneColumn<TData>(
-	overrides: ColumnOverrides<TData> = {},
+	overrides: ColumnOverrides<TData, string | null> = {},
 ) {
 	const {
 		label = COLUMN_LABELS.phone,
 		size = 140,
-		cell = ({ getValue }) => <PhoneCell value={getValue() as string | null} />,
+		cell = ({ getValue }) => <PhoneCell value={getValue()} />,
 		...rest
 	} = overrides;
-	return createPresetColumn<TData>("phone", {
+	return createPresetColumn<TData, string | null>("phone", {
 		label,
 		size,
 		cell,
@@ -290,21 +300,21 @@ export function createPhoneColumn<TData>(
 
 /** description 컬럼을 muted + lineClamp 규칙으로 생성합니다. */
 export function createDescriptionColumn<TData>(
-	overrides: ColumnOverrides<TData> = {},
+	overrides: ColumnOverrides<TData, string | null> = {},
 ) {
 	const {
 		label = COLUMN_LABELS.description,
 		size = 250,
 		cell = ({ getValue }) => (
 			<DefaultCell
-				value={getValue() as string | null}
+				value={getValue()}
 				tone="muted"
 				lineClamp={1}
 			/>
 		),
 		...rest
 	} = overrides;
-	return createPresetColumn<TData>("description", {
+	return createPresetColumn<TData, string | null>("description", {
 		label,
 		size,
 		cell,
@@ -321,10 +331,10 @@ export function createCreatedAtColumn<TData>(
 		accessorKey,
 		label = COLUMN_LABELS[fieldKey],
 		size = 150,
-		cell = ({ getValue }) => <DateTimeCell value={getValue() as string} />,
+		cell = ({ getValue }) => <DateTimeCell value={getValue()} />,
 		...rest
 	} = overrides;
-	return createPresetColumn<TData>(fieldKey, {
+	return createPresetColumn<TData, Date | null>(fieldKey, {
 		label,
 		accessorKey,
 		size,
@@ -335,7 +345,7 @@ export function createCreatedAtColumn<TData>(
 
 /** removedAt 존재 여부로 soft delete 상태를 표시하는 상태 컬럼을 생성합니다. */
 export function createRemovedAtStatusColumn<
-	TData extends { removedAt?: string | null },
+	TData extends { removedAt?: Date | null },
 >(overrides: ColumnOverrides<TData> = {}) {
 	const {
 		label = COLUMN_LABELS.status,

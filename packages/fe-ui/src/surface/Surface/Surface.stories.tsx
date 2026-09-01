@@ -28,7 +28,7 @@ export const FeaturePanel: Story = {
 							feature/widget 내부에서 독립 패널이 필요할 때 쓰는 표면입니다.
 						</p>
 					</div>
-					<Button size="sm" variant="flat">
+					<Button size="sm" variant="tertiary">
 						내보내기
 					</Button>
 				</div>
@@ -84,7 +84,7 @@ export const TablePanel: Story = {
 					<p className="text-sm font-semibold">최근 예약</p>
 					<p className="mt-1 text-xs text-muted">widget local table panel</p>
 				</div>
-				<Button size="sm" variant="flat">
+				<Button size="sm" variant="tertiary">
 					필터
 				</Button>
 			</div>

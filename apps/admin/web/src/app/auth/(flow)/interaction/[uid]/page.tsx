@@ -5,7 +5,7 @@ import {
 	useConfirmConsent,
 	useGetInteraction,
 	useSubmitLogin,
-} from "@cocrepo/api/idp/interaction";
+} from "@cocrepo/api/core/interaction";
 import type { OidcClientLoginUi } from "@cocrepo/type";
 import { type LoginErrorResponse, OidcInteractionScreen } from "@cocrepo/ui";
 import type { AxiosError } from "axios";

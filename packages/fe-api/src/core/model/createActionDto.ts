@@ -16,9 +16,12 @@
  */
 
 export interface CreateActionDto {
-  name: string;
-  displayName?: string;
-  description?: string;
-  group?: string;
-  order: number;
+	name: string;
+	/** @nullable */
+	displayName?: string | null;
+	/** @nullable */
+	description?: string | null;
+	/** @nullable */
+	group?: string | null;
+	order: number;
 }

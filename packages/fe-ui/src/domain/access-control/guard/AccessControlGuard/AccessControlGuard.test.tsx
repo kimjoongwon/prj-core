@@ -37,7 +37,7 @@ const mocks = vi.hoisted(() => ({
 	},
 }));
 
-vi.mock("@cocrepo/api/idp/auth", () => ({
+vi.mock("@cocrepo/api/core/auth", () => ({
 	useVerifyToken: () => ({
 		data: mocks.verifyTokenResponse,
 		isPending: mocks.isVerifyingToken,

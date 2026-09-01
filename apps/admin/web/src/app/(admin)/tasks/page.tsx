@@ -44,11 +44,11 @@ export default observer(function TasksPageRoute() {
 				router.push("/tasks/new" as Route);
 			}}
 			onClickTaskName={(taskId) => {
-				router.push(`/tasks/${taskId}/exercise` as Route);
+				router.push(`/tasks/${String(taskId)}/exercise` as Route);
 			}}
 			onDeleteTask={async (taskId) => {
 				try {
-					await deleteMutation.mutateAsync({ taskId });
+					await deleteMutation.mutateAsync({ taskId: String(taskId) });
 					await queryClient.invalidateQueries({
 						queryKey: getGetTasksQueryKey(),
 					});

@@ -4,7 +4,7 @@ import {
 	useForceResetPassword,
 	useInvalidateUserSessions,
 	useUnlockAccount,
-} from "@cocrepo/api/idp/auth";
+} from "@cocrepo/api/core/auth";
 import {
 	getGetIdpAccountAccessGrantFormQueryKey,
 	getGetIdpAccountQueryKey,
@@ -16,7 +16,7 @@ import {
 	useGrantIdpAccountAccess,
 	useResetIdpAccountFailedAttempts,
 	useToggleIdpAccountActive,
-} from "@cocrepo/api/idp/idp-accounts";
+} from "@cocrepo/api/core/idp-accounts";
 import {
 	AccountDetailScreen,
 	type AccountDetailScreenAccessGrantForm,
@@ -24,20 +24,38 @@ import {
 	type AccountDetailScreenOption,
 } from "@cocrepo/ui";
 import { useQueryClient } from "@tanstack/react-query";
-import { observer } from "mobx-react-lite";
+import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+
+class AccountDetailScreenRouteState {
+	accessGrantForm: AccountDetailScreenAccessGrantForm = {
+		spaceId: "",
+		roleId: "",
+	};
+
+	resetAccessGrantForm(bootstrap: IdpAccountAccessGrantFormBootstrapDto) {
+		this.accessGrantForm = {
+			spaceId: getDefaultString(bootstrap, "spaceId"),
+			roleId: getDefaultString(bootstrap, "roleId"),
+		};
+	}
+
+	selectAccessGrantSpace(spaceId: string) {
+		this.accessGrantForm.spaceId = spaceId;
+	}
+
+	selectAccessGrantRole(roleId: string) {
+		this.accessGrantForm.roleId = roleId;
+	}
+}
 
 export default observer(function AccountDetailScreenRoute() {
 	const userId = useParams<{ userId: string }>().userId;
 	const router = useRouter();
 	const queryClient = useQueryClient();
-	const [accessGrantForm, setAccessGrantForm] =
-		useState<AccountDetailScreenAccessGrantForm>({
-			spaceId: "",
-			roleId: "",
-		});
+	const state = useLocalObservable(() => new AccountDetailScreenRouteState());
 	const { data: response, isLoading } = useGetIdpAccount(userId);
 	const account = response?.data;
 	const { data: accessGrantFormResponse, isLoading: isAccessGrantFormLoading } =
@@ -51,11 +69,8 @@ export default observer(function AccountDetailScreenRoute() {
 			return;
 		}
 
-		setAccessGrantForm({
-			spaceId: getDefaultString(accessGrantBootstrap, "spaceId"),
-			roleId: getDefaultString(accessGrantBootstrap, "roleId"),
-		});
-	}, [accessGrantBootstrap]);
+		state.resetAccessGrantForm(accessGrantBootstrap);
+	}, [accessGrantBootstrap, state]);
 
 	const invalidateAccountDetail = () => {
 		queryClient.invalidateQueries({
@@ -106,7 +121,7 @@ export default observer(function AccountDetailScreenRoute() {
 		<AccountDetailScreen
 			account={account ? mapAccountDetail(account) : undefined}
 			isLoading={isLoading}
-			accessGrantForm={accessGrantForm}
+			accessGrantForm={state.accessGrantForm}
 			spaceOptions={spaceOptions}
 			roleOptions={roleOptions}
 			isAccessGrantFormLoading={isAccessGrantFormLoading}
@@ -126,15 +141,18 @@ export default observer(function AccountDetailScreenRoute() {
 				resetFailedAttempts({ userId });
 			}}
 			onChangeAccessGrantSpace={(spaceId) => {
-				setAccessGrantForm((current) => ({ ...current, spaceId }));
+				state.selectAccessGrantSpace(spaceId);
 			}}
 			onChangeAccessGrantRole={(roleId) => {
-				setAccessGrantForm((current) => ({ ...current, roleId }));
+				state.selectAccessGrantRole(roleId);
 			}}
 			onClickGrantAccessButton={() => {
 				grantAccess({
 					userId,
-					data: accessGrantForm,
+					data: {
+						spaceId: BigInt(state.accessGrantForm.spaceId),
+						roleId: BigInt(state.accessGrantForm.roleId),
+					},
 				});
 			}}
 			onClickUnlockAccountButton={() => {
@@ -154,27 +172,27 @@ function mapAccountDetail(
 	account: IdpAccountDetailDto,
 ): AccountDetailScreenAccount {
 	return {
-		id: account.id,
+		id: String(account.id),
 		name: account.name,
 		email: account.email,
 		isActive: account.isActive,
 		isPermanentlyLocked: account.isPermanentlyLocked,
-		lockedUntil: account.lockedUntil ?? null,
+		lockedUntil: formatLocalDateTime(account.lockedUntil),
 		failedLoginAttempts: account.failedLoginAttempts,
 		mustChangePassword: account.mustChangePassword,
-		lastLoginAt: account.lastLoginAt ?? null,
+		lastLoginAt: formatLocalDateTime(account.lastLoginAt),
 		lastLoginIp: account.lastLoginIp,
-		createdAt: account.createdAt ?? null,
+		createdAt: formatLocalDateTime(account.createdAt) ?? "",
 		accessGrants: (account.accessGrants ?? []).map((grant) => ({
-			tenantId: grant.tenantId,
-			spaceId: grant.spaceId,
+			tenantId: String(grant.tenantId),
+			spaceId: String(grant.spaceId),
 			spaceName: grant.spaceName,
 			spaceLabel: grant.spaceLabel ?? null,
-			roleId: grant.roleId,
+			roleId: String(grant.roleId),
 			roleName: grant.roleName,
 			roleDisplayName: grant.roleDisplayName ?? null,
-			grantedAt: grant.grantedAt,
-			updatedAt: grant.updatedAt ?? null,
+			grantedAt: formatLocalDateTime(grant.grantedAt) ?? "",
+			updatedAt: formatLocalDateTime(grant.updatedAt),
 		})),
 	};
 }
@@ -185,7 +203,7 @@ function mapOptions(
 ): AccountDetailScreenOption[] {
 	return (bootstrap?.options[path] ?? []).map(
 		(option: IdpAccountAccessGrantFormOptionItemDto) => ({
-			value: option.value,
+			value: String(option.value),
 			label: option.label,
 			description: option.description,
 		}),
@@ -197,5 +215,11 @@ function getDefaultString(
 	path: "spaceId" | "roleId",
 ): string {
 	const value = bootstrap.defaultObject[path];
-	return typeof value === "string" ? value : "";
+	return typeof value === "string" || typeof value === "bigint"
+		? String(value)
+		: "";
+}
+
+function formatLocalDateTime(value?: Date | null): string | null {
+	return value ? value.toLocaleString("ko-KR") : null;
 }

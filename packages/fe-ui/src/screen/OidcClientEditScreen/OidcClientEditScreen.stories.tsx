@@ -43,7 +43,7 @@ const meta = {
 		title: "OIDC Client 수정",
 		description: "route가 전달한 OIDC client state로 설정을 편집합니다.",
 		state: defaultState,
-		actions: <Button color="primary">저장</Button>,
+		actions: <Button variant="primary">저장</Button>,
 	},
 } satisfies Meta<typeof OidcClientEditScreen>;
 
@@ -72,7 +72,7 @@ export const Detail: Story = {
 		title: "OIDC Client 상세",
 		description: "OIDC Client 설정을 읽기 전용으로 확인합니다.",
 		readOnly: true,
-		actions: <Button variant="flat">수정</Button>,
+		actions: <Button variant="tertiary">수정</Button>,
 	},
 };
 

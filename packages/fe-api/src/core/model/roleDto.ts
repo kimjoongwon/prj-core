@@ -14,37 +14,41 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { RoleDtoClassification } from './roleDtoClassification';
-import type { RoleAssociationDto } from './roleAssociationDto';
-import type { RoleAssignmentResponseDto } from './roleAssignmentResponseDto';
+
+import type { RoleAssignmentResponseDto } from "./roleAssignmentResponseDto";
+import type { RoleAssociationDto } from "./roleAssociationDto";
+import type { RoleDtoClassification } from "./roleDtoClassification";
 
 export interface RoleDto {
-  /** @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$ */
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  removedAt: string | null;
-  /**
-   * 역할 식별자
-   * @maxLength 50
-   * @pattern ^[A-Z][A-Z0-9_]*$
-   */
-  name: string;
-  /**
-   * 표시명
-   * @maxLength 50
-   */
-  displayName?: string;
-  /**
-   * 설명
-   * @maxLength 200
-   */
-  description?: string;
-  /** @nullable */
-  classification: RoleDtoClassification;
-  /** @nullable */
-  associations: RoleAssociationDto[] | null;
-  /** 역할에 연결된 정책 할당 목록 */
-  assignments?: RoleAssignmentResponseDto[];
+	/** @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$ */
+	id: bigint;
+	createdAt: Date;
+	/** @nullable */
+	updatedAt: Date | null;
+	/** @nullable */
+	removedAt: Date | null;
+	/**
+	 * 역할 식별자
+	 * @maxLength 50
+	 * @pattern ^[A-Z][A-Z0-9_]*$
+	 */
+	name: string;
+	/**
+	 * 표시명
+	 * @maxLength 50
+	 * @nullable
+	 */
+	displayName?: string | null;
+	/**
+	 * 설명
+	 * @maxLength 200
+	 * @nullable
+	 */
+	description?: string | null;
+	/** @nullable */
+	classification: RoleDtoClassification;
+	/** @nullable */
+	associations: RoleAssociationDto[] | null;
+	/** 역할에 연결된 정책 할당 목록 */
+	assignments?: RoleAssignmentResponseDto[];
 }

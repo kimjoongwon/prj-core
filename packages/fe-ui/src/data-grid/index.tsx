@@ -44,7 +44,7 @@ import {
 	getVisibleColumnConfigs,
 	toColumnDefs,
 } from "./columns/columnConfig";
-import type { Key } from "./Table/rowKeys";
+import { createDataGridRowKeyAdapter, type Key } from "./Table/rowKeys";
 
 export interface DataGridProps<T extends { id: Key }> {
 	config: DataGridConfig<T>;
@@ -168,6 +168,7 @@ const DataGridStandardComposition = observer(
 			state.columns,
 			state.query.values,
 		);
+		const getRowId = createDataGridRowKeyAdapter(renderedRows);
 		const table = useReactTable({
 			data: renderedRows,
 			columns: toColumnDefs(
@@ -175,7 +176,7 @@ const DataGridStandardComposition = observer(
 				state.columns,
 			),
 			state: { expanded: state.expanded, grouping },
-			getRowId: (row) => String(row.id),
+			getRowId,
 			getSubRows: tableConfig.getSubRows,
 			getCoreRowModel: getCoreRowModel(),
 			getExpandedRowModel: getExpandedRowModel(),
@@ -233,7 +234,10 @@ export { Table };
 export * from "./cell";
 export * from "./columns";
 export type { Key } from "./Table/rowKeys";
-export { getDataGridRowKey } from "./Table/rowKeys";
+export {
+	createDataGridRowKeyAdapter,
+	getDataGridRowKey,
+} from "./Table/rowKeys";
 export { DataGridChangesState };
 export type { DataGridStateOptions };
 export {

@@ -47,10 +47,10 @@ export default observer(function PolicyCreateRoute() {
 				}
 				syncPolicyEntries(
 					{
-						policyId: createdPolicy.id,
+						policyId: String(createdPolicy.id),
 						data: {
 							entries: state.abilityIds.map((abilityId) => ({
-								abilityId,
+								abilityId: BigInt(abilityId),
 							})),
 						},
 					},
@@ -91,7 +91,7 @@ export default observer(function PolicyCreateRoute() {
 			actions={
 				<div className="flex gap-2">
 					<Button
-						variant="flat"
+						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push("/policies" as Route);
@@ -100,7 +100,7 @@ export default observer(function PolicyCreateRoute() {
 						목록으로
 					</Button>
 					<Button
-						color="primary"
+						variant="primary"
 						startContent={<Save className="h-4 w-4" />}
 						isLoading={isPending || isSyncingAbilities}
 						onPress={onClickSubmitButton}
@@ -119,7 +119,7 @@ function mapAbilityOption(ability: AbilityResponseDto): PolicyEntryOption {
 	const action =
 		ability.action?.displayName || ability.action?.name || "Action";
 	return {
-		id: ability.id,
+		id: String(ability.id),
 		label: `${subject} / ${action}`,
 		description: ability.description,
 	};

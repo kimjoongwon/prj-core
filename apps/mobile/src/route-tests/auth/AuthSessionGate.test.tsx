@@ -12,8 +12,6 @@ const mockGetCurrentSpace = jest.fn();
 const mockGetMySpaces = jest.fn();
 const mockSetApiNativeRefreshHandler = jest.fn();
 const mockSetApiSessionScope = jest.fn();
-const mockSetIdpNativeRefreshHandler = jest.fn();
-const mockSetIdpSessionScope = jest.fn();
 const mockVerifyToken = jest.fn();
 
 jest.mock("expo-router", () => ({
@@ -27,7 +25,7 @@ jest.mock("expo-splash-screen", () => ({
 	hideAsync: jest.fn(() => Promise.resolve(true)),
 }));
 
-jest.mock("@cocrepo/api/idp/auth", () => ({
+jest.mock("@cocrepo/api/core/auth", () => ({
 	getCurrentSpace: (...args: unknown[]) => mockGetCurrentSpace(...args),
 	getMySpaces: (...args: unknown[]) => mockGetMySpaces(...args),
 	logout: jest.fn(),
@@ -41,14 +39,6 @@ jest.mock("@cocrepo/api/core/client", () => ({
 		mockSetApiSessionScope(...args),
 }));
 
-jest.mock("@cocrepo/api/idp/client", () => ({
-	setIdpBaseUrl: jest.fn(),
-	setIdpLoginRedirectUrl: jest.fn(),
-	setIdpNativeRefreshHandler: (...args: unknown[]) =>
-		mockSetIdpNativeRefreshHandler(...args),
-	setIdpSessionScope: (...args: unknown[]) =>
-		mockSetIdpSessionScope(...args),
-}));
 
 jest.mock("expo-secure-store", () => ({
 	deleteItemAsync: jest.fn(async () => undefined),
@@ -73,8 +63,6 @@ describe("AuthSessionGate", () => {
 		mockGetMySpaces.mockReset();
 		mockSetApiNativeRefreshHandler.mockReset();
 		mockSetApiSessionScope.mockReset();
-		mockSetIdpNativeRefreshHandler.mockReset();
-		mockSetIdpSessionScope.mockReset();
 		mockVerifyToken.mockReset();
 		(SecureStore.getItemAsync as jest.Mock).mockImplementation(async () => null);
 		(SecureStore.setItemAsync as jest.Mock).mockClear();
@@ -157,9 +145,7 @@ describe("AuthSessionGate", () => {
 		expect(mobileApiScope.isSpaceSelectionResolved).toBe(true);
 		expect(mockGetCurrentSpace).toHaveBeenCalled();
 		expect(mockSetApiSessionScope).toHaveBeenCalledWith(mobileApiScope);
-		expect(mockSetIdpSessionScope).toHaveBeenCalledWith(mobileApiScope);
 		expect(mockSetApiNativeRefreshHandler).toHaveBeenCalled();
-		expect(mockSetIdpNativeRefreshHandler).toHaveBeenCalled();
 	});
 
 	it("인증됐지만 지점 선택이 미확정이면 지점 선택 라우트로 보낸다", async () => {

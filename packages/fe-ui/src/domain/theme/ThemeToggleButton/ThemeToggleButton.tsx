@@ -41,7 +41,7 @@ export const ThemeToggleButton = observer(function ThemeToggleButton({
 		return (
 			<Button
 				isIconOnly
-				variant="light"
+				variant="ghost"
 				size="sm"
 				radius="full"
 				aria-label={ariaLabel}
@@ -55,7 +55,7 @@ export const ThemeToggleButton = observer(function ThemeToggleButton({
 
 	return (
 		<Button
-			variant="bordered"
+			variant="outline"
 			size="sm"
 			radius="full"
 			aria-label={ariaLabel}

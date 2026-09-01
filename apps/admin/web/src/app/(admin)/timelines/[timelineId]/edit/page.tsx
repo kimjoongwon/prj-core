@@ -116,7 +116,7 @@ const AdminTimelinesTimelineIdEditRoute = observer(() => {
 			actions={
 				<div className="flex gap-2">
 					<Button
-						variant="flat"
+						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push(`/timelines/${timelineId}` as Route);
@@ -125,7 +125,7 @@ const AdminTimelinesTimelineIdEditRoute = observer(() => {
 						상세로
 					</Button>
 					<Button
-						color="primary"
+						variant="primary"
 						startContent={<Save className="h-4 w-4" />}
 						isLoading={isPending}
 						isDisabled={isSubmitDisabled}

@@ -46,7 +46,7 @@ const AdminRolesRoleDetailRoute = observer(() => {
 		}),
 	);
 	const { data: response, isLoading } = useGetRoleById(roleId);
-	const role = response?.data as RoleDto | undefined;
+	const role = response?.data;
 	const { data: policiesResponse, isLoading: isLoadingPolicies } =
 		useGetPolicies();
 	const { data: assignmentsResponse, isLoading: isLoadingRoleAssignments } =
@@ -106,7 +106,7 @@ const AdminRolesRoleDetailRoute = observer(() => {
 			roleId,
 			data: {
 				assignments: roleAssignmentState.assignments.map((assignment) => ({
-					policyId: assignment.policyId,
+					policyId: BigInt(assignment.policyId),
 					isActive: assignment.isActive,
 					priority: assignment.priority,
 				})),
@@ -127,7 +127,7 @@ const AdminRolesRoleDetailRoute = observer(() => {
 			notFound={!isLoading && !role}
 			notFoundAction={
 				<Button
-					variant="flat"
+					variant="tertiary"
 					onPress={() => {
 						router.push("/roles" as Route);
 					}}
@@ -138,7 +138,7 @@ const AdminRolesRoleDetailRoute = observer(() => {
 			actions={
 				<div className="flex flex-wrap gap-2">
 					<Button
-						variant="light"
+						variant="ghost"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push("/roles" as Route);
@@ -149,8 +149,7 @@ const AdminRolesRoleDetailRoute = observer(() => {
 					{role ? (
 						<>
 							<Button
-								variant="flat"
-								color="primary"
+								variant="tertiary"
 								startContent={<Edit className="h-4 w-4" />}
 								onPress={() => {
 									router.push(`/roles/${roleId}/edit` as Route);
@@ -159,8 +158,7 @@ const AdminRolesRoleDetailRoute = observer(() => {
 								수정
 							</Button>
 							<Button
-								variant="flat"
-								color="danger"
+								variant="tertiary"
 								startContent={<Trash2 className="h-4 w-4" />}
 								isLoading={isDeleting}
 								onPress={() => {
@@ -179,7 +177,7 @@ const AdminRolesRoleDetailRoute = observer(() => {
 			{role ? (
 				<SectionLike title="추가 정보">
 					<dl className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-						<Info label="Role ID" value={role.id} />
+						<Info label="Role ID" value={String(role.id)} />
 						<Info label="상태" value={role.removedAt ? "삭제됨" : "사용 중"} />
 						<Info label="생성일" value={formatDate(role.createdAt)} />
 						<Info label="수정일" value={formatDate(role.updatedAt)} />
@@ -193,11 +191,11 @@ const AdminRolesRoleDetailRoute = observer(() => {
 					actions={
 						isEditingPolicies ? (
 							<div className="flex gap-2">
-								<Button variant="flat" onPress={cancelPolicyEdit}>
+								<Button variant="tertiary" onPress={cancelPolicyEdit}>
 									취소
 								</Button>
 								<Button
-									color="primary"
+									variant="primary"
 									startContent={<Save className="h-4 w-4" />}
 									isDisabled={!hasPolicyChanges}
 									isLoading={isSavingPolicies}
@@ -208,8 +206,7 @@ const AdminRolesRoleDetailRoute = observer(() => {
 							</div>
 						) : (
 							<Button
-								color="primary"
-								variant="flat"
+								variant="tertiary"
 								startContent={<ShieldCheck className="h-4 w-4" />}
 								isDisabled={!role}
 								onPress={startPolicyEdit}
@@ -242,7 +239,7 @@ function mapRoleFormState(role: RoleDto): RoleFormState {
 }
 function mapPolicy(policy: PolicyResponseDto): AssignablePolicy {
 	return {
-		id: policy.id,
+		id: String(policy.id),
 		name: policy.name,
 		displayName: policy.displayName,
 		description: policy.description,
@@ -253,7 +250,7 @@ function mapRoleAssignment(
 	assignment: RoleAssignmentResponseDto,
 ): RoleAssignmentValue {
 	return {
-		policyId: assignment.policyId,
+		policyId: String(assignment.policyId),
 		isActive: assignment.isActive,
 		priority: assignment.priority,
 	};
@@ -278,7 +275,7 @@ function isEqualRoleAssignments(
 ) {
 	return serializeRoleAssignments(left) === serializeRoleAssignments(right);
 }
-function formatDate(value?: string | Date | null) {
+function formatDate(value?: Date | null) {
 	if (!value) {
 		return "-";
 	}

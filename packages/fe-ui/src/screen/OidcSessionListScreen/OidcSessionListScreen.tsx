@@ -1,6 +1,6 @@
 "use client";
 
-import type { OidcSessionDto } from "@cocrepo/api/idp/oidc-sessions";
+import type { OidcSessionDto } from "@cocrepo/api/core/oidc-sessions";
 import { MODEL_TYPE_OPTIONS } from "@cocrepo/constant";
 import type {
 	DataGridQueryStates,
@@ -155,8 +155,9 @@ export const OidcSessionListScreen = observer(
 					actions={
 						isRevokeAllDisabled ? (
 							<Button
-								color="danger"
-								variant="flat"
+
+
+								variant="tertiary"
 								startContent={<Trash2 className="h-4 w-4" />}
 								isDisabled
 								isLoading={isRevokingAll}
@@ -167,8 +168,9 @@ export const OidcSessionListScreen = observer(
 							<AlertDialog>
 								<AlertDialog.Trigger>
 									<Button
-										color="danger"
-										variant="flat"
+
+
+										variant="tertiary"
 										startContent={<Trash2 className="h-4 w-4" />}
 										isLoading={isRevokingAll}
 									>
@@ -188,11 +190,11 @@ export const OidcSessionListScreen = observer(
 												조회 가능한 모든 OIDC 세션/토큰을 폐기합니다.
 											</AlertDialog.Body>
 											<AlertDialog.Footer>
-												<Button variant="flat" slot="close">
+												<Button variant="tertiary" slot="close">
 													취소
 												</Button>
 												<Button
-													color="danger"
+													variant="danger"
 													slot="close"
 													onPress={onClickRevokeAllButton}
 												>

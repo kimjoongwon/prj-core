@@ -16,6 +16,7 @@
  */
 
 export interface UpdateTimelineDto {
-  name?: string;
-  description?: string;
+	name?: string;
+	/** @nullable */
+	description?: string | null;
 }

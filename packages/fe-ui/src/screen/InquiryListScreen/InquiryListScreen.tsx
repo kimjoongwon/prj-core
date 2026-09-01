@@ -61,7 +61,7 @@ export interface InquiryListScreenProps {
 	queryStates: InquiryListScreenQueryStates;
 	setQueryStates: InquiryListScreenSetQueryStates;
 	onClickNewInquiry: () => void;
-	onClickInquiryRow: (inquiryId: string) => void;
+	onClickInquiryRow: (inquiryId: bigint) => void;
 	onClickStatusFilter: (status: string | undefined) => void;
 }
 const metricCardColorStyles = {
@@ -251,7 +251,7 @@ export const InquiryListScreen = observer(
 					description="고객 문의를 접수/처리/해결합니다."
 					actions={
 						<Button
-							color="primary"
+							variant="primary"
 							startContent={<Plus className="size-4" />}
 							onPress={onClickNewInquiry}
 						>

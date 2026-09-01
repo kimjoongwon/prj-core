@@ -52,10 +52,10 @@ export class InquiryDetailDto extends AbstractDto {
 	@EnumField(() => InquiryPriority, { description: "문의 우선순위" })
 	priority!: InquiryPriority;
 
-	@BigIntIdFieldOptional({ description: "고객 ID" })
+	@BigIntIdFieldOptional({ nullable: true, description: "고객 ID" })
 	customerId!: bigint | null;
 
-	@BigIntIdFieldOptional({ description: "담당자 ID" })
+	@BigIntIdFieldOptional({ nullable: true, description: "담당자 ID" })
 	assigneeId!: bigint | null;
 
 	@BooleanField({ description: "실시간 채팅 활성화 여부" })

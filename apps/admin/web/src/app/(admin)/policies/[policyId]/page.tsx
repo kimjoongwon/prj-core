@@ -55,7 +55,7 @@ export default observer(function PolicyDetailRoute() {
 			notFound={!isLoading && !policy}
 			notFoundAction={
 				<Button
-					variant="flat"
+					variant="tertiary"
 					onPress={() => {
 						router.push("/policies" as Route);
 					}}
@@ -66,7 +66,7 @@ export default observer(function PolicyDetailRoute() {
 			actions={
 				<div className="flex flex-wrap gap-2">
 					<Button
-						variant="light"
+						variant="ghost"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push("/policies" as Route);
@@ -75,7 +75,7 @@ export default observer(function PolicyDetailRoute() {
 						목록으로
 					</Button>
 					<Button
-						variant="flat"
+						variant="tertiary"
 						startContent={<Edit className="h-4 w-4" />}
 						onPress={() => {
 							router.push(`/policies/${policyId}/edit` as Route);
@@ -84,8 +84,7 @@ export default observer(function PolicyDetailRoute() {
 						수정
 					</Button>
 					<Button
-						color="danger"
-						variant="flat"
+						variant="tertiary"
 						startContent={<Trash2 className="h-4 w-4" />}
 						isDisabled={!policy || isDeleting}
 						isLoading={isDeleting}
@@ -107,7 +106,7 @@ function mapAbilityOption(ability: AbilityResponseDto): PolicyEntryOption {
 	const action =
 		ability.action?.displayName || ability.action?.name || "Action";
 	return {
-		id: ability.id,
+		id: String(ability.id),
 		label: `${subject} / ${action}`,
 		description: ability.description,
 	};
@@ -123,5 +122,7 @@ function mapPolicyFormState(policy: PolicyResponseDto): PolicyFormState {
 }
 
 function getPolicyEntryIds(policy?: PolicyResponseDto): string[] {
-	return policy?.entries?.map((policyEntry) => policyEntry.abilityId) ?? [];
+	return (
+		policy?.entries?.map((policyEntry) => String(policyEntry.abilityId)) ?? []
+	);
 }

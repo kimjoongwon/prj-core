@@ -34,7 +34,7 @@ const meta = {
 		state: defaultState,
 		subjects,
 		actions,
-		pageActions: <Button color="primary">저장</Button>,
+		pageActions: <Button variant="primary">저장</Button>,
 	},
 } satisfies Meta<typeof AbilityEditScreen>;
 
@@ -64,7 +64,7 @@ export const Detail: Story = {
 		title: "Ability 상세",
 		description: "Ability 정보를 읽기 전용으로 확인합니다.",
 		readOnly: true,
-		pageActions: <Button variant="flat">수정</Button>,
+		pageActions: <Button variant="tertiary">수정</Button>,
 	},
 };
 

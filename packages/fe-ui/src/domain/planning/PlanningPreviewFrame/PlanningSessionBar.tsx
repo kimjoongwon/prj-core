@@ -207,7 +207,7 @@ export function PlanningSessionBar({
 					</div>
 					<Button
 						size="sm"
-						variant="bordered"
+						variant="outline"
 						startContent={
 							isAuthenticated ? (
 								<LogOut className="h-4 w-4" size={16} />

@@ -10,19 +10,19 @@ const defaultState = {
 
 const sessions = [
 	{
-		id: "session-1",
+		id: BigInt(1),
 		name: "오전 세션",
 		typeLabel: "일회성",
 		typeColor: "primary" as const,
 		programCount: 2,
 		isConnected: true,
-		startDateTime: "2026-04-14T09:00:00.000Z",
+		startDateTime: new Date("2026-04-14T09:00:00.000Z"),
 		recurringDayLabel: "-",
 		repeatCycleLabel: "-",
-		createdAt: "2026-04-01T09:00:00.000Z",
+		createdAt: new Date("2026-04-01T09:00:00.000Z"),
 	},
 	{
-		id: "session-2",
+		id: BigInt(2),
 		name: "오후 세션",
 		typeLabel: "정기반복",
 		typeColor: "success" as const,
@@ -31,7 +31,7 @@ const sessions = [
 		startDateTime: null,
 		recurringDayLabel: "월",
 		repeatCycleLabel: "주간",
-		createdAt: "2026-04-02T09:00:00.000Z",
+		createdAt: new Date("2026-04-02T09:00:00.000Z"),
 	},
 ];
 
@@ -44,7 +44,7 @@ const meta = {
 		title: "타임라인 수정",
 		description: "route가 전달한 상태로 타임라인을 편집합니다.",
 		state: defaultState,
-		actions: <Button color="primary">저장</Button>,
+		actions: <Button variant="primary">저장</Button>,
 	},
 } satisfies Meta<typeof TimelineEditScreen>;
 
@@ -72,12 +72,12 @@ export const Detail: Story = {
 		description: "세션 연결 상태를 함께 확인합니다.",
 		state: defaultState,
 		readOnly: true,
-		metadata: { createdAt: "2026-04-01T09:00:00.000Z" },
+		metadata: { createdAt: new Date("2026-04-01T09:00:00.000Z") },
 		sessions,
 		totalSessions: 2,
 		connectedSessions: 1,
 		unconnectedSessions: 1,
-		actions: <Button variant="flat">수정</Button>,
+		actions: <Button variant="tertiary">수정</Button>,
 	},
 };
 

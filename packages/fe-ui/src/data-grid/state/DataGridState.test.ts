@@ -34,17 +34,17 @@ describe("DataGrid 상태", () => {
 		const config = createDataGridTestConfig();
 
 		state.table.body.changeRowSelection(
-			"row-1",
+			"1",
 			true,
 			config.table.selection?.onSelectionChange,
 		);
 		state.table.header.changeVisibleSelection(
-			dataGridTestRows.map((row) => row.id),
+			dataGridTestRows.map((row) => String(row.id)),
 			true,
 			config.table.selection?.onSelectionChange,
 		);
 
-		expect(Array.from(selection.selectedKeys)).toEqual(["row-1", "row-2"]);
+		expect(Array.from(selection.selectedKeys)).toEqual(["1", "2"]);
 		expect(Array.from(state.selectedKeys)).toEqual([]);
 		expect(state.actionBar.selectedCount).toBe(2);
 	});

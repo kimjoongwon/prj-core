@@ -8,7 +8,6 @@ import { InputRenderer } from "../input/InputRenderer";
 import {
 	createDataGridTestConfig,
 	createDataGridTestState,
-	dataGridTestRows,
 } from "./fixtures";
 
 describe("MobX DataGrid 렌더링", () => {

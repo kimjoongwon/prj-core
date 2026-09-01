@@ -18,10 +18,14 @@ export interface TenantAccessRequestReviewListScreenProps {
 	totalCount: number;
 	pendingCount: number;
 	isLoading: boolean;
-	onClickRequestRow: (tenantAccessRequestId: string) => void;
+	onClickRequestRow: (tenantAccessRequestId: bigint) => void;
 }
-function formatDateTime(value: string) {
-	return new Date(value).toLocaleString("ko-KR", {
+function formatDateTime(value: Date | null) {
+	if (value === null || Number.isNaN(value.getTime())) {
+		return "-";
+	}
+
+	return value.toLocaleString("ko-KR", {
 		year: "numeric",
 		month: "2-digit",
 		day: "2-digit",
@@ -86,8 +90,8 @@ function RequestSummaryCell({
 	requesterName,
 	requesterEmail,
 }: {
-	spaceName: string;
-	roleName: string;
+	spaceName: string | bigint;
+	roleName: string | bigint;
 	requesterName?: string;
 	requesterEmail?: string;
 }) {
@@ -174,7 +178,7 @@ export const TenantAccessRequestReviewListScreen = observer(
 														</Table.Header>
 														<Table.Body>
 															{requestRows.map((request) => (
-																<Table.Row key={request.id}>
+																<Table.Row key={String(request.id)}>
 																	<Table.Cell>
 																		<RequestSummaryCell
 																			spaceName={getSpaceName(request)}
@@ -195,7 +199,7 @@ export const TenantAccessRequestReviewListScreen = observer(
 																		<div className="flex justify-end">
 																			<Button
 																				size="sm"
-																				variant="flat"
+																				variant="tertiary"
 																				startContent={
 																					<Eye className="size-4" />
 																				}

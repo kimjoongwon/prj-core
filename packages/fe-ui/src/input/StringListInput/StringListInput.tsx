@@ -47,8 +47,9 @@ export function StringListInput({
 						<Button
 							isIconOnly
 							size="sm"
-							variant="light"
-							color="danger"
+							variant="ghost"
+
+
 							onPress={() => handleRemove(index)}
 							aria-label={removeLabel}
 						>
@@ -60,7 +61,7 @@ export function StringListInput({
 			{!isReadOnly && (
 				<Button
 					size="sm"
-					variant="flat"
+					variant="tertiary"
 					startContent={<Plus className="h-4 w-4" />}
 					onPress={handleAdd}
 				>

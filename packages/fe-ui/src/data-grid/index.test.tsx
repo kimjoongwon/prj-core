@@ -63,7 +63,7 @@ describe("표준 DataGrid 조립", () => {
 		fireEvent.click(screen.getByLabelText("정렬 변경"));
 
 		await waitFor(() => {
-			expect(Array.from(selection.selectedKeys)).toEqual(["row-1"]);
+			expect(Array.from(selection.selectedKeys)).toEqual(["1"]);
 			expect(setQueryStates).toHaveBeenCalledWith({ sort: ["name"], skip: 0 });
 			expect(screen.getByText("Beta")).toBeInTheDocument();
 		});

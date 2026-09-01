@@ -26,29 +26,26 @@ export class ActionResponseDto {
 	@ApiProperty({
 		description: "표시명",
 		example: "이메일 마스킹 조회",
-		required: false,
 		nullable: true,
 	})
 	@Expose()
-	displayName?: string | null;
+	displayName!: string | null;
 
 	@ApiProperty({
 		description: "설명",
 		example: "이메일을 마스킹하여 조회합니다",
-		required: false,
 		nullable: true,
 	})
 	@Expose()
-	description?: string | null;
+	description!: string | null;
 
 	@ApiProperty({
 		description: "그룹 (crud, visibility, bulk, workflow)",
 		example: "visibility",
-		required: false,
 		nullable: true,
 	})
 	@Expose()
-	group?: string | null;
+	group!: string | null;
 
 	@ApiProperty({
 		description: "정렬 순서",
@@ -60,12 +57,11 @@ export class ActionResponseDto {
 	@ApiProperty({
 		description: "Action 설정 (마스킹, 포맷팅 등)",
 		type: ActionConfigDto,
-		required: false,
 		nullable: true,
 	})
 	@Expose()
 	@Type(() => ActionConfigDto)
-	config?: ActionConfigDto | null;
+	config!: ActionConfigDto | null;
 
 	@ApiProperty({
 		description: "생성 일시",
@@ -77,9 +73,8 @@ export class ActionResponseDto {
 	@ApiProperty({
 		description: "수정 일시",
 		example: "2025-01-01T00:00:00.000Z",
-		required: false,
 		nullable: true,
 	})
 	@Expose()
-	updatedAt?: Date | null;
+	updatedAt!: Date | null;
 }

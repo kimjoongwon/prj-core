@@ -2,7 +2,6 @@
 
 import {
 	getGetProgramsQueryKey,
-	type ProgramDto,
 	useDeleteProgram,
 	useGetProgramById,
 } from "@cocrepo/api/core/timelines";
@@ -38,7 +37,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
 			sessionId,
 			programId,
 		);
-		const program = response?.data as ProgramDto | undefined;
+		const program = response?.data;
 
 		const { mutate: deleteProgram, isPending: isDeleting } = useDeleteProgram();
 
@@ -81,7 +80,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
 		const routinePreview: TimelineSessionProgramRoutinePreviewItem[] = (
 			program?.executionPlan ?? []
 		).map((activity) => ({
-			id: activity.id,
+			id: String(activity.id),
 			order: activity.order,
 			exerciseName: activity.exerciseName,
 			repetitions: activity.repetitions,
@@ -92,11 +91,11 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
 		const programState: TimelineSessionProgramFormState | undefined = program
 			? {
 					name: program.name,
-					routineId: program.routineId,
+					routineId: String(program.routineId),
 					routineName:
 						program.routineNameSnapshot ?? program.routine?.name ?? "",
-					instructorId: program.instructorId,
-					instructorName: program.instructorId,
+					instructorId: String(program.instructorId),
+					instructorName: String(program.instructorId),
 					capacity: String(program.capacity ?? ""),
 					level: program.level ?? "",
 					errors: {},
@@ -112,31 +111,33 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
 				routinePreview={routinePreview}
 				metadata={{
 					routineHref: program?.routine?.id
-						? (`/routines/${program.routine.id}` as Route)
+						? (`/routines/${String(program.routine.id)}` as Route)
 						: undefined,
-					instructorLabel: program?.instructorId ?? null,
+					instructorLabel:
+						program?.instructorId === undefined
+							? null
+							: String(program.instructorId),
 					activityCountLabel: `${
 						program?.activityCount ?? program?.executionPlan?.length ?? 0
 					}개`,
 					sessionName: program?.session?.name ?? null,
 					sessionHref:
 						`/timelines/${timelineId}/sessions/${sessionId}` as Route,
-					createdAt: program?.createdAt,
+					createdAt: program?.createdAt?.toISOString(),
 				}}
 				isLoading={isLoading}
 				notFound={!isLoading && !program}
 				actions={
 					<div className="flex gap-2">
 						<Button
-							variant="flat"
+							variant="tertiary"
 							startContent={<Edit className="h-4 w-4" />}
 							onPress={onClickEditButton}
 						>
 							수정
 						</Button>
 						<Button
-							color="danger"
-							variant="flat"
+							variant="tertiary"
 							startContent={<Trash2 className="h-4 w-4" />}
 							isLoading={isDeleting}
 							onPress={onClickDeleteButton}

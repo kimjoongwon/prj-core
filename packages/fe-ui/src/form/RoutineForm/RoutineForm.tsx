@@ -144,8 +144,7 @@ const CandidateTaskCard = observer(
 						<div className="mt-3 flex justify-end">
 							<Button
 								size="sm"
-								variant="flat"
-								color="primary"
+								variant="tertiary"
 								onPress={() => onClickAdd(task.id)}
 							>
 								추가
@@ -215,8 +214,7 @@ const ActivityCard = observer(
 								{isEditable ? (
 									<Button
 										size="sm"
-										variant="flat"
-										color="danger"
+										variant="tertiary"
 										onPress={() => onClickRemoveActivityButton(activity.taskId)}
 									>
 										제거

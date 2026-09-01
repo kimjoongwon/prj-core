@@ -272,7 +272,7 @@ export const OidcLoginForm = observer(
 
 					<Button
 						type="submit"
-						color="primary"
+						variant="primary"
 						className="w-full font-semibold"
 						size="lg"
 						isLoading={state.isSubmitting}

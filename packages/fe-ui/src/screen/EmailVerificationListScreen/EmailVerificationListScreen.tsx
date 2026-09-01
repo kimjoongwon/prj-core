@@ -1,6 +1,6 @@
 "use client";
 
-import type { EmailVerificationDto } from "@cocrepo/api/idp/email-verifications";
+import type { EmailVerificationDto } from "@cocrepo/api/core/email-verifications";
 import type {
 	DataGridQueryStates,
 	DataGridSetQueryStates,
@@ -63,7 +63,7 @@ export interface EmailVerificationListScreenProps {
 	isLoading: boolean;
 	queryStates: EmailVerificationListScreenQueryStates;
 	setQueryStates: EmailVerificationListScreenSetQueryStates;
-	onClickResendEmailVerificationButton: (emailVerificationId: string) => void;
+	onClickResendEmailVerificationButton: (emailVerificationId: bigint) => void;
 }
 
 /**

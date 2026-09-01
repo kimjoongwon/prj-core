@@ -17,29 +17,17 @@ const meta = {
 		variant: {
 			control: "select",
 			options: [
-				"solid",
-				"bordered",
-				"light",
-				"flat",
-				"faded",
-				"shadow",
+				"primary",
+				"secondary",
+				"tertiary",
+				"danger",
+				"danger-soft",
+				"ghost",
+				"outline",
 				"ghost",
 			],
 			description: "버튼의 시각적 스타일 변형",
 			defaultValue: "solid",
-		},
-		color: {
-			control: "select",
-			options: [
-				"default",
-				"primary",
-				"secondary",
-				"success",
-				"warning",
-				"danger",
-			],
-			description: "버튼의 색상 테마",
-			defaultValue: "default",
 		},
 		size: {
 			control: "select",
@@ -102,7 +90,7 @@ export const 기본: Story = {
 export const 주요: Story = {
 	args: {
 		children: "주요 버튼",
-		color: "primary",
+		variant: "primary",
 	},
 	parameters: {
 		docs: {
@@ -116,8 +104,7 @@ export const 주요: Story = {
 export const 보조: Story = {
 	args: {
 		children: "보조 버튼",
-		color: "secondary",
-		variant: "bordered",
+		variant: "outline",
 	},
 	parameters: {
 		docs: {
@@ -131,7 +118,7 @@ export const 보조: Story = {
 export const 위험: Story = {
 	args: {
 		children: "삭제",
-		color: "danger",
+		variant: "danger",
 	},
 	parameters: {
 		docs: {
@@ -145,7 +132,7 @@ export const 위험: Story = {
 export const 성공: Story = {
 	args: {
 		children: "저장",
-		color: "success",
+		variant: "tertiary",
 	},
 	parameters: {
 		docs: {
@@ -160,7 +147,7 @@ export const 로딩: Story = {
 	args: {
 		children: "로딩 중...",
 		isLoading: true,
-		color: "primary",
+		variant: "primary",
 	},
 	parameters: {
 		docs: {
@@ -216,8 +203,7 @@ export const 큰크기: Story = {
 export const 경계선: Story = {
 	args: {
 		children: "경계선 버튼",
-		variant: "bordered",
-		color: "primary",
+		variant: "outline",
 	},
 	parameters: {
 		docs: {
@@ -232,7 +218,7 @@ export const 전체너비: Story = {
 	args: {
 		children: "전체 너비 버튼",
 		fullWidth: true,
-		color: "primary",
+		variant: "primary",
 	},
 	parameters: {
 		docs: {
@@ -247,8 +233,7 @@ export const 아이콘만: Story = {
 	args: {
 		children: "❤️",
 		isIconOnly: true,
-		color: "danger",
-		variant: "light",
+		variant: "danger-soft",
 	},
 	parameters: {
 		docs: {
@@ -262,8 +247,7 @@ export const 아이콘만: Story = {
 export const 플레이그라운드: Story = {
 	args: {
 		children: "플레이그라운드 버튼",
-		color: "primary",
-		variant: "solid",
+		variant: "primary",
 		size: "md",
 	},
 	parameters: {

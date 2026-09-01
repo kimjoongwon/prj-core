@@ -37,21 +37,21 @@ export class RoleAssignmentResponseDto {
 	@Expose()
 	createdAt!: Date;
 
-	@ApiPropertyOptional({
+	@ApiProperty({
 		description: "수정 일시",
 		example: "2026-01-01T00:00:00.000Z",
 		nullable: true,
 	})
 	@Expose()
-	updatedAt?: Date | null;
+	updatedAt!: Date | null;
 
-	@ApiPropertyOptional({
+	@ApiProperty({
 		description: "삭제 일시",
 		example: "2026-01-01T00:00:00.000Z",
 		nullable: true,
 	})
 	@Expose()
-	removedAt?: Date | null;
+	removedAt!: Date | null;
 
 	@ApiPropertyOptional({
 		description: "할당된 Policy 상세 정보",

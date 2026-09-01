@@ -40,7 +40,8 @@
     "nuqs": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "recharts": "^2.15.0"
+    "recharts": "^2.15.0",
+    "superjson": "catalog:"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^16.1.6",

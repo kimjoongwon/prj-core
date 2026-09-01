@@ -37,13 +37,13 @@ export class ProgramDto
 	@StringField()
 	name: string;
 
-	@StringFieldOptional()
+	@StringFieldOptional({ nullable: true })
 	level: string | null;
 
-	@StringFieldOptional()
+	@StringFieldOptional({ nullable: true })
 	routineNameSnapshot: string | null;
 
-	@StringFieldOptional()
+	@StringFieldOptional({ nullable: true })
 	routineLabelSnapshot: string | null;
 
 	@NumberFieldOptional({ int: true, min: 0 })

@@ -78,7 +78,7 @@ export const FitnessCenterEditScreen = observer(
 									<p className="text-muted">
 										피트니스 센터 정보를 찾을 수 없습니다.
 									</p>
-									<Button variant="flat" onPress={onClickCancelButton}>
+									<Button variant="tertiary" onPress={onClickCancelButton}>
 										목록으로
 									</Button>
 								</div>
@@ -103,11 +103,11 @@ export const FitnessCenterEditScreen = observer(
 								<FitnessCenterForm state={state} readOnly={readOnly} />
 								{readOnly ? null : (
 									<div className="flex justify-end gap-2 pt-4">
-										<Button variant="flat" onPress={onClickCancelButton}>
+										<Button variant="tertiary" onPress={onClickCancelButton}>
 											취소
 										</Button>
 										<Button
-											color="primary"
+											variant="primary"
 											onPress={onClickSaveButton}
 											isLoading={isSubmitPending}
 										>

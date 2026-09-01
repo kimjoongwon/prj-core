@@ -174,7 +174,7 @@ export const TimelineSessionProgramForm = observer(
 								}
 							/>
 							{!readOnly ? (
-								<Button variant="flat" onPress={openRoutinePicker}>
+								<Button variant="tertiary" onPress={openRoutinePicker}>
 									루틴 선택
 								</Button>
 							) : null}
@@ -193,7 +193,7 @@ export const TimelineSessionProgramForm = observer(
 								}
 							/>
 							{!readOnly ? (
-								<Button variant="flat" onPress={openInstructorPicker}>
+								<Button variant="tertiary" onPress={openInstructorPicker}>
 									강사 선택
 								</Button>
 							) : null}

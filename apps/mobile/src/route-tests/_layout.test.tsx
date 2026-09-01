@@ -23,11 +23,8 @@ type StackScreenProps = {
 	};
 };
 
-const mockSetIdpBaseUrl = jest.fn();
-const mockSetIdpLoginRedirectUrl = jest.fn();
 const mockSetLoginRedirectUrl = jest.fn();
 const mockSetApiSessionScope = jest.fn();
-const mockSetIdpSessionScope = jest.fn();
 const mockSetUniwindTheme = jest.fn();
 
 jest.mock("@cocrepo/mo-ui", () => {
@@ -78,13 +75,6 @@ jest.mock("react-native-safe-area-context", () => {
 	};
 });
 
-jest.mock("@cocrepo/api/idp/client", () => ({
-	setIdpBaseUrl: (...args: string[]) => mockSetIdpBaseUrl(...args),
-	setIdpLoginRedirectUrl: (...args: string[]) =>
-		mockSetIdpLoginRedirectUrl(...args),
-	setIdpSessionScope: (...args: unknown[]) =>
-		mockSetIdpSessionScope(...args),
-}));
 
 jest.mock("@cocrepo/api/core/client", () => ({
 	setApiSessionScope: (...args: unknown[]) =>
@@ -93,7 +83,7 @@ jest.mock("@cocrepo/api/core/client", () => ({
 }));
 
 jest.mock("@/auth/auth-config", () => ({
-	getIdpApiBaseUrl: () => "http://localhost:3207",
+	getCoreApiBaseUrl: () => "http://localhost:3207",
 	getLoginPath: () => "/auth/login",
 }));
 
@@ -173,11 +163,8 @@ jest.mock("react-native-gesture-handler", () => {
 
 describe("mobile root layout", () => {
 	beforeEach(() => {
-		mockSetIdpBaseUrl.mockReset();
-		mockSetIdpLoginRedirectUrl.mockReset();
 		mockSetLoginRedirectUrl.mockReset();
 		mockSetApiSessionScope.mockReset();
-		mockSetIdpSessionScope.mockReset();
 		mockSetUniwindTheme.mockReset();
 	});
 
@@ -186,8 +173,6 @@ describe("mobile root layout", () => {
 
 		expect(mockSetUniwindTheme).toHaveBeenCalledWith("system");
 		expect(mockSetLoginRedirectUrl).toHaveBeenCalledWith("/auth/login");
-		expect(mockSetIdpBaseUrl).toHaveBeenCalledWith("http://localhost:3207");
-		expect(mockSetIdpLoginRedirectUrl).toHaveBeenCalledWith("/auth/login");
 		expect(screen.getByLabelText("gesture-root")).toBeTruthy();
 		expect(screen.getByLabelText("safe-area-provider")).toBeTruthy();
 		expect(

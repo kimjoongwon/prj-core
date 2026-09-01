@@ -29,10 +29,10 @@ export default observer(function TenantAccessRequestReviewDetailScreenRoute() {
 		initializedRequestId: "",
 		reviewComment: "",
 		setFromRequest(request: TenantAccessRequestDto) {
-			if (this.initializedRequestId === request.id) {
+			if (this.initializedRequestId === request.id.toString()) {
 				return;
 			}
-			this.initializedRequestId = request.id;
+			this.initializedRequestId = request.id.toString();
 			this.reviewComment = request.reviewComment ?? "";
 		},
 		setReviewComment(reviewComment: string) {
@@ -126,22 +126,21 @@ function mapReviewDetail(
 	request: TenantAccessRequestDto,
 ): TenantAccessRequestReviewDetail {
 	return {
-		id: request.id,
+		id: request.id.toString(),
 		status: request.status,
-		spaceName:
-			request.space?.fitnessCenter?.name ?? request.spaceId,
+		spaceName: request.space?.fitnessCenter?.name ?? request.spaceId.toString(),
 		roleName:
 			request.requestedRole?.displayName ??
 			request.requestedRole?.name ??
-			request.requestedRoleId,
+			request.requestedRoleId.toString(),
 		previousRoleName:
 			request.previousRole?.displayName ?? request.previousRole?.name ?? null,
-		requesterName: request.requester?.name ?? request.requesterId,
+		requesterName: request.requester?.name ?? request.requesterId.toString(),
 		requesterEmail: request.requester?.email ?? "",
 		reason: request.reason,
 		reviewerName: request.reviewer?.name ?? null,
 		reviewComment: request.reviewComment,
-		createdAt: request.createdAt,
-		reviewedAt: request.reviewedAt,
+		createdAt: request.createdAt.toISOString(),
+		reviewedAt: request.reviewedAt?.toISOString() ?? null,
 	};
 }

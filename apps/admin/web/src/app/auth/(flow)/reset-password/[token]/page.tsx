@@ -6,7 +6,7 @@ import {
 	useExecutePasswordReset,
 	useGetPasswordPolicy,
 	useValidateResetToken,
-} from "@cocrepo/api/idp/password-reset";
+} from "@cocrepo/api/core/password-reset";
 import {
 	isCommonPassword,
 	PASSWORD_RULES,

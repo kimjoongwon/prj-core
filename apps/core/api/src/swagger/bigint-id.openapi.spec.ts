@@ -1,6 +1,10 @@
 import { DECIMAL_ID_PATTERN_SOURCE } from "@cocrepo/type/database-id";
-import type { OpenAPIObject } from "@nestjs/swagger";
+import type { OpenAPIObject, SchemaObject } from "@nestjs/swagger";
 import { applyBigIntIdOpenApiContract } from "./bigint-id.openapi";
+
+const bigintRuntimeSchema: SchemaObject & { "x-runtime-type": "bigint" } = {
+	"x-runtime-type": "bigint",
+};
 
 const createDocument = (): OpenAPIObject =>
 	({
@@ -11,7 +15,12 @@ const createDocument = (): OpenAPIObject =>
 				get: {
 					responses: {},
 					parameters: [
-						{ name: "userId", in: "path", required: true, schema: {} },
+						{
+							name: "userId",
+							in: "path",
+							required: true,
+							schema: bigintRuntimeSchema,
+						},
 					],
 				},
 			},
@@ -46,6 +55,7 @@ describe("applyBigIntIdOpenApiContract", () => {
 			schema: {
 				type: "string",
 				pattern: DECIMAL_ID_PATTERN_SOURCE,
+				"x-runtime-type": "bigint",
 			},
 		});
 	});

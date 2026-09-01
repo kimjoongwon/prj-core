@@ -29,13 +29,13 @@ export class ExerciseDto
 	@BigIntIdField()
 	taskId: bigint;
 
-	@StringFieldOptional()
+	@StringFieldOptional({ nullable: true })
 	description: string | null;
 
-	@UUIDFieldOptional()
+	@UUIDFieldOptional({ nullable: true })
 	imageFileId: string | null;
 
-	@UUIDFieldOptional()
+	@UUIDFieldOptional({ nullable: true })
 	videoFileId: string | null;
 
 	@StringField()

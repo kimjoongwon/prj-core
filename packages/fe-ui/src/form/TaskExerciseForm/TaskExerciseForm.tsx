@@ -145,13 +145,12 @@ const ExerciseMediaField = observer(
 					</div>
 					{isEditable ? (
 						<div className="flex gap-2">
-							<Button size="sm" variant="flat" onPress={onOpenPicker}>
+							<Button size="sm" variant="tertiary" onPress={onOpenPicker}>
 								{selectedAsset || fileId ? "다시 선택" : "에셋에서 선택"}
 							</Button>
 							<Button
 								size="sm"
-								variant="flat"
-								color="danger"
+								variant="tertiary"
 								onPress={onClear}
 								isDisabled={!selectedAsset && !fileId}
 							>

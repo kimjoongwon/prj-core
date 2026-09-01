@@ -130,7 +130,7 @@ export const OidcInteractionScreen = observer(
 						{showLoadingRecovery && props.onClickRecoveryButton ? (
 							<Button
 								className="min-h-11 w-full font-semibold sm:w-auto sm:min-w-40"
-								variant="flat"
+								variant="tertiary"
 								onPress={onClickLoadingRecoveryButton}
 							>
 								{t("다시 시도")}
@@ -156,7 +156,7 @@ export const OidcInteractionScreen = observer(
 					<div className="flex gap-3">
 						<Button
 							className="flex-1 font-semibold"
-							color="primary"
+							variant="primary"
 							onPress={props.onClickRecoveryButton}
 						>
 							{props.state.isExpiredInteraction

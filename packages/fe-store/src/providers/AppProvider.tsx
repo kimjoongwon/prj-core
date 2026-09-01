@@ -1,7 +1,6 @@
 "use client";
 
 import { setApiLocale, setApiSessionScope } from "@cocrepo/api/core/client";
-import { setIdpLocale, setIdpSessionScope } from "@cocrepo/api/idp/client";
 import type { AppProviderConfig } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { usePathname, useRouter } from "next/navigation";
@@ -37,8 +36,8 @@ export const AppProvider = observer(function AppProvider({
 		});
 
 		root.initialize({
-			sessionScopeBinders: [setApiSessionScope, setIdpSessionScope],
-			languageBinders: [setApiLocale, setIdpLocale],
+			sessionScopeBinders: [setApiSessionScope],
+			languageBinders: [setApiLocale],
 		});
 
 		rootRef.current = root;

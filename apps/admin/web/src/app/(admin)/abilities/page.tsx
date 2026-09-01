@@ -55,11 +55,11 @@ function filterAbilities(
 			return false;
 		}
 
-		if (filters.subjectId && ability.subjectId !== filters.subjectId) {
+		if (filters.subjectId && String(ability.subjectId) !== filters.subjectId) {
 			return false;
 		}
 
-		if (filters.actionId && ability.actionId !== filters.actionId) {
+		if (filters.actionId && String(ability.actionId) !== filters.actionId) {
 			return false;
 		}
 
@@ -167,7 +167,7 @@ export default observer(function AbilitiesPage() {
 				});
 			}}
 			onClickAbilityRow={(abilityId) => {
-				router.push(`/abilities/${abilityId}` as Route);
+				router.push(`/abilities/${String(abilityId)}` as Route);
 			}}
 			onClickCreateButton={() => {
 				router.push("/abilities/new" as Route);

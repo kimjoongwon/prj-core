@@ -42,7 +42,7 @@ const meta = {
 		description: "route가 전달한 프로그램 상태를 편집합니다.",
 		state: defaultState,
 		routinePreview,
-		actions: <Button color="primary">저장</Button>,
+		actions: <Button variant="primary">저장</Button>,
 	},
 } satisfies Meta<typeof TimelineSessionProgramEditScreen>;
 
@@ -83,7 +83,7 @@ export const Detail: Story = {
 			sessionHref: "/timelines/timeline-1/sessions/session-1",
 			createdAt: "2026-04-01T09:00:00.000Z",
 		},
-		actions: <Button variant="flat">수정</Button>,
+		actions: <Button variant="tertiary">수정</Button>,
 	},
 };
 

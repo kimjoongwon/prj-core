@@ -68,7 +68,7 @@ export default observer(function ActionNewPageRoute() {
 			actions={
 				<div className="flex gap-2">
 					<Button
-						variant="light"
+						variant="ghost"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push("/actions" as Route);
@@ -77,7 +77,7 @@ export default observer(function ActionNewPageRoute() {
 						목록으로
 					</Button>
 					<Button
-						color="primary"
+						variant="primary"
 						startContent={<Save className="h-4 w-4" />}
 						onPress={onSubmit}
 						isLoading={isPending}

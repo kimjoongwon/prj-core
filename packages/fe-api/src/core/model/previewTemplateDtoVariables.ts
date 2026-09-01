@@ -18,4 +18,4 @@
 /**
  * 변수 키-값 맵
  */
-export type PreviewTemplateDtoVariables = {[key: string]: string};
+export type PreviewTemplateDtoVariables = { [key: string]: string };

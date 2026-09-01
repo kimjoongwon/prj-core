@@ -17,7 +17,7 @@ export class InquiryParticipantDto extends AbstractDto {
 	@BigIntIdField({ description: "소속 문의 ID" })
 	inquiryId!: bigint;
 
-	@BigIntIdFieldOptional({ description: "소속 스레드 ID" })
+	@BigIntIdFieldOptional({ nullable: true, description: "소속 스레드 ID" })
 	threadId!: bigint | null;
 
 	@BigIntIdField({ description: "참여자 ID" })

@@ -84,7 +84,7 @@ export const ResetPasswordForm = observer(
 						</p>
 						<Link href={forgotPasswordHref}>
 							<Button
-								color="primary"
+								variant="primary"
 								className="w-full font-semibold"
 								size="lg"
 							>
@@ -110,7 +110,7 @@ export const ResetPasswordForm = observer(
 						</p>
 						<Link href={loginHref}>
 							<Button
-								color="primary"
+								variant="primary"
 								className="w-full font-semibold"
 								size="lg"
 							>
@@ -194,7 +194,7 @@ export const ResetPasswordForm = observer(
 
 							<Button
 								type="submit"
-								color="primary"
+								variant="primary"
 								className="w-full font-semibold"
 								size="lg"
 								isLoading={state.isSubmitting}

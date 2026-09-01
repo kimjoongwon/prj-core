@@ -34,7 +34,7 @@ export const ScreenOwnedHierarchy: Story = {
 						title="에셋 관리"
 						description="screen rhythm 안에서 타이틀과 SectionSurface를 배치합니다."
 						actions={
-							<Button size="sm" variant="flat" color="primary">
+							<Button size="sm" variant="tertiary">
 								업로드
 							</Button>
 						}
@@ -77,7 +77,7 @@ export const MultipleScreenSections: Story = {
 					title="문의 생성"
 					description="하나의 screen은 여러 SectionSurface를 가질 수 있습니다."
 					actions={
-						<Button size="sm" variant="flat" color="primary">
+						<Button size="sm" variant="tertiary">
 							저장
 						</Button>
 					}

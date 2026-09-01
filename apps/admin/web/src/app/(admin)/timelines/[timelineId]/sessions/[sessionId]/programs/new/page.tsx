@@ -26,10 +26,11 @@ const buildRoutinePreview = (routine?: RoutineDto) =>
 	[...(routine?.activities ?? [])]
 		.sort((left, right) => left.order - right.order)
 		.map((activity) => ({
-			id: activity.id,
+			id: String(activity.id),
 			order: activity.order,
 			exerciseName:
-				activity.task?.exercise?.name ?? `Task ${activity.taskId.slice(-6)}`,
+				activity.task?.exercise?.name ??
+				`Task ${String(activity.taskId).slice(-6)}`,
 			repetitions: activity.repetitions,
 			restTime: activity.restTime,
 			notes: activity.notes,
@@ -59,11 +60,11 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 			skip: 0,
 			spaceScope: "INCLUDE_ANCESTORS",
 		});
-		const routines = (routinesResponse?.data ?? []) as RoutineDto[];
+		const routines = routinesResponse?.data ?? [];
 		const { mutate: createProgram, isPending } = useCreateProgram();
 
 		const selectedRoutine = routines.find(
-			(routine) => routine.id === state.routineId,
+			(routine) => String(routine.id) === state.routineId,
 		);
 		const routinePreview = buildRoutinePreview(selectedRoutine);
 		const hasUnschedulableRoutine = routinePreview.some(
@@ -83,6 +84,18 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 			}
 			if (!state.instructorId.trim()) {
 				errors.instructorId = "강사를 선택해주세요.";
+			}
+			if (
+				state.routineId.trim() &&
+				!/^[1-9]\d*$/.test(state.routineId.trim())
+			) {
+				errors.routineId = "유효한 루틴을 선택해주세요.";
+			}
+			if (
+				state.instructorId.trim() &&
+				!/^[1-9]\d*$/.test(state.instructorId.trim())
+			) {
+				errors.instructorId = "유효한 강사를 선택해주세요.";
 			}
 			const capacityNumber = Number(state.capacity);
 			if (
@@ -108,8 +121,8 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 					sessionId,
 					data: {
 						name: state.name.trim(),
-						routineId: state.routineId.trim(),
-						instructorId: state.instructorId.trim(),
+						routineId: parsePositiveBigInt(state.routineId),
+						instructorId: parsePositiveBigInt(state.instructorId),
 						capacity: Number(state.capacity),
 						level: state.level || undefined,
 					},
@@ -146,7 +159,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 				actions={
 					<div className="flex gap-2">
 						<Button
-							variant="flat"
+							variant="tertiary"
 							startContent={<ArrowLeft className="h-4 w-4" />}
 							onPress={() => {
 								router.push(
@@ -157,7 +170,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 							세션으로
 						</Button>
 						<Button
-							color="primary"
+							variant="primary"
 							startContent={<Save className="h-4 w-4" />}
 							isLoading={isPending}
 							isDisabled={
@@ -179,3 +192,11 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute = observer(
 );
 
 export default AdminTimelinesTimelineIdSessionsSessionIdProgramsNewRoute;
+
+function parsePositiveBigInt(value: string): bigint {
+	const trimmedValue = value.trim();
+	if (!/^[1-9]\d*$/.test(trimmedValue)) {
+		throw new Error("ID must be a positive decimal integer");
+	}
+	return BigInt(trimmedValue);
+}

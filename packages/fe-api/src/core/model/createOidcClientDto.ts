@@ -14,52 +14,70 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateOidcClientDtoLoginUi } from './createOidcClientDtoLoginUi';
+import type { CreateOidcClientDtoLoginUi } from "./createOidcClientDtoLoginUi";
 
 export interface CreateOidcClientDto {
-  /**
-   * 클라이언트 식별자
-   * @maxLength 64
-   * @pattern ^[a-z0-9-]+$
-   */
-  clientId: string;
-  /** 클라이언트 시크릿 */
-  clientSecret?: string;
-  /**
-   * 클라이언트 이름
-   * @maxLength 128
-   */
-  name: string;
-  /** 리다이렉트 URI 목록 */
-  redirectUris: string[];
-  /** 로그인 화면 URL */
-  loginUrl?: string;
-  /** 인증 성공 후 기본 복귀 URL */
-  defaultReturnTo?: string;
-  /** 허용된 Grant 타입 */
-  grantTypes: string[];
-  /** 응답 타입 */
-  responseTypes: string[];
-  /**
-   * 토큰 엔드포인트 인증 방식
-   * @maxLength 50
-   */
-  tokenEndpointAuthMethod: string;
-  /** 허용된 스코프 */
-  scope: string;
-  /** First-party 클라이언트 여부 */
-  isFirstParty: boolean;
-  /**
-   * 로그인 화면 표시 설정
-   * @nullable
-   */
-  loginUi?: CreateOidcClientDtoLoginUi;
-  /** 로고 URI */
-  logoUri?: string;
-  /** 정책 URI */
-  policyUri?: string;
-  /** 서비스 약관 URI */
-  tosUri?: string;
-  /** 권한 동의 화면 생략 여부 */
-  skipConsent?: boolean;
+	/**
+	 * 클라이언트 식별자
+	 * @maxLength 64
+	 * @pattern ^[a-z0-9-]+$
+	 */
+	clientId: string;
+	/**
+	 * 클라이언트 시크릿
+	 * @nullable
+	 */
+	clientSecret?: string | null;
+	/**
+	 * 클라이언트 이름
+	 * @maxLength 128
+	 */
+	name: string;
+	/** 리다이렉트 URI 목록 */
+	redirectUris: string[];
+	/**
+	 * 로그인 화면 URL
+	 * @nullable
+	 */
+	loginUrl?: string | null;
+	/**
+	 * 인증 성공 후 기본 복귀 URL
+	 * @nullable
+	 */
+	defaultReturnTo?: string | null;
+	/** 허용된 Grant 타입 */
+	grantTypes: string[];
+	/** 응답 타입 */
+	responseTypes: string[];
+	/**
+	 * 토큰 엔드포인트 인증 방식
+	 * @maxLength 50
+	 */
+	tokenEndpointAuthMethod: string;
+	/** 허용된 스코프 */
+	scope: string;
+	/** First-party 클라이언트 여부 */
+	isFirstParty: boolean;
+	/**
+	 * 로그인 화면 표시 설정
+	 * @nullable
+	 */
+	loginUi?: CreateOidcClientDtoLoginUi;
+	/**
+	 * 로고 URI
+	 * @nullable
+	 */
+	logoUri?: string | null;
+	/**
+	 * 정책 URI
+	 * @nullable
+	 */
+	policyUri?: string | null;
+	/**
+	 * 서비스 약관 URI
+	 * @nullable
+	 */
+	tosUri?: string | null;
+	/** 권한 동의 화면 생략 여부 */
+	skipConsent?: boolean;
 }

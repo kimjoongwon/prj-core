@@ -37,7 +37,7 @@ export class AbilityDto
 	@BooleanField()
 	inverted!: boolean;
 
-	@StringFieldOptional()
+	@StringFieldOptional({ nullable: true })
 	reason!: string | null;
 
 	// 연결 대상
@@ -48,7 +48,7 @@ export class AbilityDto
 	@StringField()
 	name!: string; // Required unique identifier
 
-	@StringFieldOptional()
+	@StringFieldOptional({ nullable: true })
 	description!: string | null;
 
 	// 관계 (중첩 DTO)

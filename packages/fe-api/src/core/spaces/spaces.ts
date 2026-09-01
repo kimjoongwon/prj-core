@@ -14,653 +14,1195 @@
 - `@WithAncestorSpaces`/`@WithSpaceTree`가 적용된 API는 Swagger JSON의 `x-space-resource-scope` 확장 필드로 scope를 표시합니다.
  * OpenAPI spec version: 1.0.0
  */
+
+import type {
+	DataTag,
+	DefinedInitialDataOptions,
+	DefinedUseQueryResult,
+	InfiniteData,
+	MutationFunction,
+	QueryClient,
+	QueryFunction,
+	QueryKey,
+	UndefinedInitialDataOptions,
+	UseMutationOptions,
+	UseMutationResult,
+	UseQueryOptions,
+	UseQueryResult,
+	UseSuspenseInfiniteQueryOptions,
+	UseSuspenseInfiniteQueryResult,
+	UseSuspenseQueryOptions,
+	UseSuspenseQueryResult,
+} from "@tanstack/react-query";
 import {
-  useMutation,
-  useQuery,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery
-} from '@tanstack/react-query';
+	useMutation,
+	useQuery,
+	useSuspenseInfiniteQuery,
+	useSuspenseQuery,
+} from "@tanstack/react-query";
+import type { BodyType, ErrorType } from "../../libs/customAxios";
+
+import { customInstance } from "../../libs/customAxios";
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
-  InfiniteData,
-  MutationFunction,
-  QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
-  UseSuspenseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult
-} from '@tanstack/react-query';
-
-import type {
-  CreateSpace201AllOf,
-  CreateSpaceWithFitnessCenterDto,
-  GetSpaceFitnessCenter200AllOf,
-  GetSpaces200AllOf,
-  GetSpacesParams,
-  UpdateFitnessCenterDto,
-  UpdateSpaceFitnessCenter200AllOf
-} from '.././model';
-
-import { customInstance } from '../../libs/customAxios';
-import type { ErrorType , BodyType } from '../../libs/customAxios';
-
+	CreateSpace201AllOf,
+	CreateSpaceWithFitnessCenterDto,
+	GetSpaceFitnessCenter200AllOf,
+	GetSpaces200AllOf,
+	GetSpacesParams,
+	UpdateFitnessCenterDto,
+	UpdateSpaceFitnessCenter200AllOf,
+} from ".././model";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
 
 /**
  * FitnessCenter detail이 포함된 Space 목록을 조회합니다.
  * @summary 공간 목록 조회
  */
 export const getSpaces = (
-    params?: GetSpacesParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+	params?: GetSpacesParams,
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetSpaces200AllOf>(
-      {url: `/api/v1/spaces`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-  
+	return customInstance<GetSpaces200AllOf>(
+		{ url: `/api/v1/spaces`, method: "GET", params, signal },
+		options,
+	);
+};
 
+export const getGetSpacesQueryKey = (params?: GetSpacesParams) => {
+	return [`/api/v1/spaces`, ...(params ? [params] : [])] as const;
+};
 
+export const getGetSpacesInfiniteQueryKey = (params?: GetSpacesParams) => {
+	return ["infinite", `/api/v1/spaces`, ...(params ? [params] : [])] as const;
+};
 
-export const getGetSpacesQueryKey = (params?: GetSpacesParams,) => {
-    return [
-    `/api/v1/spaces`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-export const getGetSpacesInfiniteQueryKey = (params?: GetSpacesParams,) => {
-    return [
-    'infinite', `/api/v1/spaces`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getGetSpacesQueryOptions = <TData = Awaited<ReturnType<typeof getSpaces>>, TError = ErrorType<void>>(params?: GetSpacesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSpacesQueryOptions = <
+	TData = Awaited<ReturnType<typeof getSpaces>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetSpacesParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getGetSpacesQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSpacesQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpaces>>> = ({
+		signal,
+	}) => getSpaces(params, requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getSpaces>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpaces>>> = ({ signal }) => getSpaces(params, requestOptions, signal);
+export type GetSpacesQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getSpaces>>
+>;
+export type GetSpacesQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetSpacesQueryResult = NonNullable<Awaited<ReturnType<typeof getSpaces>>>
-export type GetSpacesQueryError = ErrorType<void>
-
-
-export function useGetSpaces<TData = Awaited<ReturnType<typeof getSpaces>>, TError = ErrorType<void>>(
- params: undefined |  GetSpacesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getSpaces>>,
-          TError,
-          Awaited<ReturnType<typeof getSpaces>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSpaces<TData = Awaited<ReturnType<typeof getSpaces>>, TError = ErrorType<void>>(
- params?: GetSpacesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getSpaces>>,
-          TError,
-          Awaited<ReturnType<typeof getSpaces>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSpaces<TData = Awaited<ReturnType<typeof getSpaces>>, TError = ErrorType<void>>(
- params?: GetSpacesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSpaces<
+	TData = Awaited<ReturnType<typeof getSpaces>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetSpacesParams,
+	options: {
+		query: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getSpaces>>,
+					TError,
+					Awaited<ReturnType<typeof getSpaces>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSpaces<
+	TData = Awaited<ReturnType<typeof getSpaces>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetSpacesParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getSpaces>>,
+					TError,
+					Awaited<ReturnType<typeof getSpaces>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSpaces<
+	TData = Awaited<ReturnType<typeof getSpaces>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetSpacesParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 공간 목록 조회
  */
 
-export function useGetSpaces<TData = Awaited<ReturnType<typeof getSpaces>>, TError = ErrorType<void>>(
- params?: GetSpacesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetSpaces<
+	TData = Awaited<ReturnType<typeof getSpaces>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetSpacesParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetSpacesQueryOptions(params, options);
 
-  const queryOptions = getGetSpacesQueryOptions(params,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary 공간 목록 조회
  */
-export const prefetchGetSpacesQuery = async <TData = Awaited<ReturnType<typeof getSpaces>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetSpacesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetSpacesQuery = async <
+	TData = Awaited<ReturnType<typeof getSpaces>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetSpacesParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetSpacesQueryOptions(params, options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getGetSpacesQueryOptions(params,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-export const getGetSpacesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSpaces>>, TError = ErrorType<void>>(params?: GetSpacesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSpacesSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getSpaces>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetSpacesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getGetSpacesQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSpacesQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpaces>>> = ({
+		signal,
+	}) => getSpaces(params, requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getSpaces>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpaces>>> = ({ signal }) => getSpaces(params, requestOptions, signal);
+export type GetSpacesSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getSpaces>>
+>;
+export type GetSpacesSuspenseQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetSpacesSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSpaces>>>
-export type GetSpacesSuspenseQueryError = ErrorType<void>
-
-
-export function useGetSpacesSuspense<TData = Awaited<ReturnType<typeof getSpaces>>, TError = ErrorType<void>>(
- params: undefined |  GetSpacesParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSpacesSuspense<TData = Awaited<ReturnType<typeof getSpaces>>, TError = ErrorType<void>>(
- params?: GetSpacesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSpacesSuspense<TData = Awaited<ReturnType<typeof getSpaces>>, TError = ErrorType<void>>(
- params?: GetSpacesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSpacesSuspense<
+	TData = Awaited<ReturnType<typeof getSpaces>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetSpacesParams,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSpacesSuspense<
+	TData = Awaited<ReturnType<typeof getSpaces>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetSpacesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSpacesSuspense<
+	TData = Awaited<ReturnType<typeof getSpaces>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetSpacesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 공간 목록 조회
  */
 
-export function useGetSpacesSuspense<TData = Awaited<ReturnType<typeof getSpaces>>, TError = ErrorType<void>>(
- params?: GetSpacesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetSpacesSuspense<
+	TData = Awaited<ReturnType<typeof getSpaces>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetSpacesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetSpacesSuspenseQueryOptions(params, options);
 
-  const queryOptions = getGetSpacesSuspenseQueryOptions(params,options)
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
-
-
-
-export const getGetSpacesSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSpaces>>>, TError = ErrorType<void>>(params?: GetSpacesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSpacesSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getSpaces>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetSpacesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetSpacesInfiniteQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSpacesInfiniteQueryKey(params);
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpaces>>> = ({
+		signal,
+	}) => getSpaces(params, requestOptions, signal);
 
-  
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getSpaces>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpaces>>> = ({ signal }) => getSpaces(params, requestOptions, signal);
+export type GetSpacesSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getSpaces>>
+>;
+export type GetSpacesSuspenseInfiniteQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetSpacesSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSpaces>>>
-export type GetSpacesSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetSpacesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpaces>>>, TError = ErrorType<void>>(
- params: undefined |  GetSpacesParams, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSpacesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpaces>>>, TError = ErrorType<void>>(
- params?: GetSpacesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSpacesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpaces>>>, TError = ErrorType<void>>(
- params?: GetSpacesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSpacesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSpaces>>>,
+	TError = ErrorType<void>,
+>(
+	params: undefined | GetSpacesParams,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSpacesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSpaces>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetSpacesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSpacesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSpaces>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetSpacesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 공간 목록 조회
  */
 
-export function useGetSpacesSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpaces>>>, TError = ErrorType<void>>(
- params?: GetSpacesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetSpacesSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSpaces>>>,
+	TError = ErrorType<void>,
+>(
+	params?: GetSpacesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetSpacesSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
 
-  const queryOptions = getGetSpacesSuspenseInfiniteQueryOptions(params,options)
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary 공간 목록 조회
  */
-export const prefetchGetSpacesInfiniteQuery = async <TData = Awaited<ReturnType<typeof getSpaces>>, TError = ErrorType<void>>(
- queryClient: QueryClient, params?: GetSpacesParams, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaces>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetSpacesInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getSpaces>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	params?: GetSpacesParams,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSpaces>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetSpacesSuspenseInfiniteQueryOptions(
+		params,
+		options,
+	);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
-  const queryOptions = getGetSpacesSuspenseInfiniteQueryOptions(params,options)
-
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
+	return queryClient;
+};
 
 /**
  * Space root와 FitnessCenter detail을 함께 생성합니다.
  * @summary 공간 생성
  */
 export const createSpace = (
-    createSpaceWithFitnessCenterDto: BodyType<CreateSpaceWithFitnessCenterDto>,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+	createSpaceWithFitnessCenterDto: BodyType<CreateSpaceWithFitnessCenterDto>,
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<CreateSpace201AllOf>(
-      {url: `/api/v1/spaces`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createSpaceWithFitnessCenterDto, signal
-    },
-      options);
-    }
-  
+	return customInstance<CreateSpace201AllOf>(
+		{
+			url: `/api/v1/spaces`,
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			data: createSpaceWithFitnessCenterDto,
+			signal,
+		},
+		options,
+	);
+};
 
+export const getCreateSpaceMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof createSpace>>,
+		TError,
+		{ data: BodyType<CreateSpaceWithFitnessCenterDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof createSpace>>,
+	TError,
+	{ data: BodyType<CreateSpaceWithFitnessCenterDto> },
+	TContext
+> => {
+	const mutationKey = ["createSpace"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
-export const getCreateSpaceMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSpace>>, TError,{data: BodyType<CreateSpaceWithFitnessCenterDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createSpace>>, TError,{data: BodyType<CreateSpaceWithFitnessCenterDto>}, TContext> => {
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof createSpace>>,
+		{ data: BodyType<CreateSpaceWithFitnessCenterDto> }
+	> = (props) => {
+		const { data } = props ?? {};
 
-const mutationKey = ['createSpace'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+		return createSpace(data, requestOptions);
+	};
 
-      
+	return { mutationFn, ...mutationOptions };
+};
 
+export type CreateSpaceMutationResult = NonNullable<
+	Awaited<ReturnType<typeof createSpace>>
+>;
+export type CreateSpaceMutationBody = BodyType<CreateSpaceWithFitnessCenterDto>;
+export type CreateSpaceMutationError = ErrorType<void>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createSpace>>, {data: BodyType<CreateSpaceWithFitnessCenterDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  createSpace(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateSpaceMutationResult = NonNullable<Awaited<ReturnType<typeof createSpace>>>
-    export type CreateSpaceMutationBody = BodyType<CreateSpaceWithFitnessCenterDto>
-    export type CreateSpaceMutationError = ErrorType<void>
-
-    /**
+/**
  * @summary 공간 생성
  */
-export const useCreateSpace = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSpace>>, TError,{data: BodyType<CreateSpaceWithFitnessCenterDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof createSpace>>,
-        TError,
-        {data: BodyType<CreateSpaceWithFitnessCenterDto>},
-        TContext
-      > => {
+export const useCreateSpace = <TError = ErrorType<void>, TContext = unknown>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof createSpace>>,
+			TError,
+			{ data: BodyType<CreateSpaceWithFitnessCenterDto> },
+			TContext
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof createSpace>>,
+	TError,
+	{ data: BodyType<CreateSpaceWithFitnessCenterDto> },
+	TContext
+> => {
+	const mutationOptions = getCreateSpaceMutationOptions(options);
 
-      const mutationOptions = getCreateSpaceMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
+	return useMutation(mutationOptions, queryClient);
+};
+/**
  * Space에 연결된 FitnessCenter detail을 조회합니다.
  * @summary 공간의 시설 detail 조회
  */
 export const getSpaceFitnessCenter = (
-    spaceId: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+	spaceId: string,
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal,
 ) => {
-      
-      
-      return customInstance<GetSpaceFitnessCenter200AllOf>(
-      {url: `/api/v1/spaces/${spaceId}/fitness-center`, method: 'GET', signal
-    },
-      options);
-    }
-  
+	return customInstance<GetSpaceFitnessCenter200AllOf>(
+		{ url: `/api/v1/spaces/${spaceId}/fitness-center`, method: "GET", signal },
+		options,
+	);
+};
 
+export const getGetSpaceFitnessCenterQueryKey = (spaceId?: string) => {
+	return [`/api/v1/spaces/${spaceId}/fitness-center`] as const;
+};
 
+export const getGetSpaceFitnessCenterInfiniteQueryKey = (spaceId?: string) => {
+	return ["infinite", `/api/v1/spaces/${spaceId}/fitness-center`] as const;
+};
 
-export const getGetSpaceFitnessCenterQueryKey = (spaceId?: string,) => {
-    return [
-    `/api/v1/spaces/${spaceId}/fitness-center`
-    ] as const;
-    }
-
-export const getGetSpaceFitnessCenterInfiniteQueryKey = (spaceId?: string,) => {
-    return [
-    'infinite', `/api/v1/spaces/${spaceId}/fitness-center`
-    ] as const;
-    }
-
-    
-export const getGetSpaceFitnessCenterQueryOptions = <TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError = ErrorType<void>>(spaceId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSpaceFitnessCenterQueryOptions = <
+	TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+	TError = ErrorType<void>,
+>(
+	spaceId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetSpaceFitnessCenterQueryKey(spaceId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSpaceFitnessCenterQueryKey(spaceId);
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getSpaceFitnessCenter>>
+	> = ({ signal }) => getSpaceFitnessCenter(spaceId, requestOptions, signal);
 
-  
+	return {
+		queryKey,
+		queryFn,
+		enabled: !!spaceId,
+		...queryOptions,
+	} as UseQueryOptions<
+		Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpaceFitnessCenter>>> = ({ signal }) => getSpaceFitnessCenter(spaceId, requestOptions, signal);
+export type GetSpaceFitnessCenterQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getSpaceFitnessCenter>>
+>;
+export type GetSpaceFitnessCenterQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(spaceId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetSpaceFitnessCenterQueryResult = NonNullable<Awaited<ReturnType<typeof getSpaceFitnessCenter>>>
-export type GetSpaceFitnessCenterQueryError = ErrorType<void>
-
-
-export function useGetSpaceFitnessCenter<TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError = ErrorType<void>>(
- spaceId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
-          TError,
-          Awaited<ReturnType<typeof getSpaceFitnessCenter>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSpaceFitnessCenter<TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError = ErrorType<void>>(
- spaceId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
-          TError,
-          Awaited<ReturnType<typeof getSpaceFitnessCenter>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSpaceFitnessCenter<TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError = ErrorType<void>>(
- spaceId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSpaceFitnessCenter<
+	TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+	TError = ErrorType<void>,
+>(
+	spaceId: string,
+	options: {
+		query: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+					TError,
+					Awaited<ReturnType<typeof getSpaceFitnessCenter>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSpaceFitnessCenter<
+	TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+	TError = ErrorType<void>,
+>(
+	spaceId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+				TError,
+				TData
+			>
+		> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+					TError,
+					Awaited<ReturnType<typeof getSpaceFitnessCenter>>
+				>,
+				"initialData"
+			>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSpaceFitnessCenter<
+	TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+	TError = ErrorType<void>,
+>(
+	spaceId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 공간의 시설 detail 조회
  */
 
-export function useGetSpaceFitnessCenter<TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError = ErrorType<void>>(
- spaceId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetSpaceFitnessCenter<
+	TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+	TError = ErrorType<void>,
+>(
+	spaceId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetSpaceFitnessCenterQueryOptions(spaceId, options);
 
-  const queryOptions = getGetSpaceFitnessCenterQueryOptions(spaceId,options)
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+		TData,
+		TError
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary 공간의 시설 detail 조회
  */
-export const prefetchGetSpaceFitnessCenterQuery = async <TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError = ErrorType<void>>(
- queryClient: QueryClient, spaceId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetSpaceFitnessCenterQuery = async <
+	TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	spaceId: string,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<
+				Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetSpaceFitnessCenterQueryOptions(spaceId, options);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchQuery(queryOptions);
 
-  const queryOptions = getGetSpaceFitnessCenterQueryOptions(spaceId,options)
+	return queryClient;
+};
 
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-}
-
-
-
-export const getGetSpaceFitnessCenterSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError = ErrorType<void>>(spaceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSpaceFitnessCenterSuspenseQueryOptions = <
+	TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+	TError = ErrorType<void>,
+>(
+	spaceId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetSpaceFitnessCenterQueryKey(spaceId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSpaceFitnessCenterQueryKey(spaceId);
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getSpaceFitnessCenter>>
+	> = ({ signal }) => getSpaceFitnessCenter(spaceId, requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+		Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpaceFitnessCenter>>> = ({ signal }) => getSpaceFitnessCenter(spaceId, requestOptions, signal);
+export type GetSpaceFitnessCenterSuspenseQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getSpaceFitnessCenter>>
+>;
+export type GetSpaceFitnessCenterSuspenseQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetSpaceFitnessCenterSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getSpaceFitnessCenter>>>
-export type GetSpaceFitnessCenterSuspenseQueryError = ErrorType<void>
-
-
-export function useGetSpaceFitnessCenterSuspense<TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError = ErrorType<void>>(
- spaceId: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSpaceFitnessCenterSuspense<TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError = ErrorType<void>>(
- spaceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSpaceFitnessCenterSuspense<TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError = ErrorType<void>>(
- spaceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSpaceFitnessCenterSuspense<
+	TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+	TError = ErrorType<void>,
+>(
+	spaceId: string,
+	options: {
+		query: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSpaceFitnessCenterSuspense<
+	TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+	TError = ErrorType<void>,
+>(
+	spaceId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSpaceFitnessCenterSuspense<
+	TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+	TError = ErrorType<void>,
+>(
+	spaceId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 공간의 시설 detail 조회
  */
 
-export function useGetSpaceFitnessCenterSuspense<TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError = ErrorType<void>>(
- spaceId: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetSpaceFitnessCenterSuspense<
+	TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+	TError = ErrorType<void>,
+>(
+	spaceId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseQueryOptions<
+				Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetSpaceFitnessCenterSuspenseQueryOptions(
+		spaceId,
+		options,
+	);
 
-  const queryOptions = getGetSpaceFitnessCenterSuspenseQueryOptions(spaceId,options)
+	const query = useSuspenseQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
-
-
-
-export const getGetSpaceFitnessCenterSuspenseInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getSpaceFitnessCenter>>>, TError = ErrorType<void>>(spaceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetSpaceFitnessCenterSuspenseInfiniteQueryOptions = <
+	TData = InfiniteData<Awaited<ReturnType<typeof getSpaceFitnessCenter>>>,
+	TError = ErrorType<void>,
+>(
+	spaceId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
 ) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey =
+		queryOptions?.queryKey ?? getGetSpaceFitnessCenterInfiniteQueryKey(spaceId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSpaceFitnessCenterInfiniteQueryKey(spaceId);
+	const queryFn: QueryFunction<
+		Awaited<ReturnType<typeof getSpaceFitnessCenter>>
+	> = ({ signal }) => getSpaceFitnessCenter(spaceId, requestOptions, signal);
 
-  
+	return {
+		queryKey,
+		queryFn,
+		...queryOptions,
+	} as UseSuspenseInfiniteQueryOptions<
+		Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpaceFitnessCenter>>> = ({ signal }) => getSpaceFitnessCenter(spaceId, requestOptions, signal);
+export type GetSpaceFitnessCenterSuspenseInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof getSpaceFitnessCenter>>
+>;
+export type GetSpaceFitnessCenterSuspenseInfiniteQueryError = ErrorType<void>;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetSpaceFitnessCenterSuspenseInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getSpaceFitnessCenter>>>
-export type GetSpaceFitnessCenterSuspenseInfiniteQueryError = ErrorType<void>
-
-
-export function useGetSpaceFitnessCenterSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpaceFitnessCenter>>>, TError = ErrorType<void>>(
- spaceId: string, options: { query:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSpaceFitnessCenterSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpaceFitnessCenter>>>, TError = ErrorType<void>>(
- spaceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSpaceFitnessCenterSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpaceFitnessCenter>>>, TError = ErrorType<void>>(
- spaceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSpaceFitnessCenterSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSpaceFitnessCenter>>>,
+	TError = ErrorType<void>,
+>(
+	spaceId: string,
+	options: {
+		query: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSpaceFitnessCenterSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSpaceFitnessCenter>>>,
+	TError = ErrorType<void>,
+>(
+	spaceId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSpaceFitnessCenterSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSpaceFitnessCenter>>>,
+	TError = ErrorType<void>,
+>(
+	spaceId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary 공간의 시설 detail 조회
  */
 
-export function useGetSpaceFitnessCenterSuspenseInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getSpaceFitnessCenter>>>, TError = ErrorType<void>>(
- spaceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient 
- ):  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetSpaceFitnessCenterSuspenseInfinite<
+	TData = InfiniteData<Awaited<ReturnType<typeof getSpaceFitnessCenter>>>,
+	TError = ErrorType<void>,
+>(
+	spaceId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseSuspenseInfiniteQueryResult<TData, TError> & {
+	queryKey: DataTag<QueryKey, TData, TError>;
+} {
+	const queryOptions = getGetSpaceFitnessCenterSuspenseInfiniteQueryOptions(
+		spaceId,
+		options,
+	);
 
-  const queryOptions = getGetSpaceFitnessCenterSuspenseInfiniteQueryOptions(spaceId,options)
+	const query = useSuspenseInfiniteQuery(
+		queryOptions,
+		queryClient,
+	) as UseSuspenseInfiniteQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
 
-  const query = useSuspenseInfiniteQuery(queryOptions, queryClient) as  UseSuspenseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+	query.queryKey = queryOptions.queryKey;
 
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
 /**
  * @summary 공간의 시설 detail 조회
  */
-export const prefetchGetSpaceFitnessCenterInfiniteQuery = async <TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError = ErrorType<void>>(
- queryClient: QueryClient, spaceId: string, options?: { query?:Partial<UseSuspenseInfiniteQueryOptions<Awaited<ReturnType<typeof getSpaceFitnessCenter>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const prefetchGetSpaceFitnessCenterInfiniteQuery = async <
+	TData = Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+	TError = ErrorType<void>,
+>(
+	queryClient: QueryClient,
+	spaceId: string,
+	options?: {
+		query?: Partial<
+			UseSuspenseInfiniteQueryOptions<
+				Awaited<ReturnType<typeof getSpaceFitnessCenter>>,
+				TError,
+				TData
+			>
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+): Promise<QueryClient> => {
+	const queryOptions = getGetSpaceFitnessCenterSuspenseInfiniteQueryOptions(
+		spaceId,
+		options,
+	);
 
-  ): Promise<QueryClient> => {
+	await queryClient.prefetchInfiniteQuery(queryOptions);
 
-  const queryOptions = getGetSpaceFitnessCenterSuspenseInfiniteQueryOptions(spaceId,options)
-
-  await queryClient.prefetchInfiniteQuery(queryOptions);
-
-  return queryClient;
-}
-
-
+	return queryClient;
+};
 
 /**
  * Space에 연결된 FitnessCenter detail과 Space 콘텐츠 언어를 수정합니다.
  * @summary 공간의 시설 detail 수정
  */
 export const updateSpaceFitnessCenter = (
-    spaceId: string,
-    updateFitnessCenterDto: BodyType<UpdateFitnessCenterDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<UpdateSpaceFitnessCenter200AllOf>(
-      {url: `/api/v1/spaces/${spaceId}/fitness-center`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateFitnessCenterDto
-    },
-      options);
-    }
-  
+	spaceId: string,
+	updateFitnessCenterDto: BodyType<UpdateFitnessCenterDto>,
+	options?: SecondParameter<typeof customInstance>,
+) => {
+	return customInstance<UpdateSpaceFitnessCenter200AllOf>(
+		{
+			url: `/api/v1/spaces/${spaceId}/fitness-center`,
+			method: "PATCH",
+			headers: { "Content-Type": "application/json" },
+			data: updateFitnessCenterDto,
+		},
+		options,
+	);
+};
 
+export const getUpdateSpaceFitnessCenterMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(options?: {
+	mutation?: UseMutationOptions<
+		Awaited<ReturnType<typeof updateSpaceFitnessCenter>>,
+		TError,
+		{ spaceId: string; data: BodyType<UpdateFitnessCenterDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+	Awaited<ReturnType<typeof updateSpaceFitnessCenter>>,
+	TError,
+	{ spaceId: string; data: BodyType<UpdateFitnessCenterDto> },
+	TContext
+> => {
+	const mutationKey = ["updateSpaceFitnessCenter"];
+	const { mutation: mutationOptions, request: requestOptions } = options
+		? options.mutation &&
+			"mutationKey" in options.mutation &&
+			options.mutation.mutationKey
+			? options
+			: { ...options, mutation: { ...options.mutation, mutationKey } }
+		: { mutation: { mutationKey }, request: undefined };
 
-export const getUpdateSpaceFitnessCenterMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSpaceFitnessCenter>>, TError,{spaceId: string;data: BodyType<UpdateFitnessCenterDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateSpaceFitnessCenter>>, TError,{spaceId: string;data: BodyType<UpdateFitnessCenterDto>}, TContext> => {
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof updateSpaceFitnessCenter>>,
+		{ spaceId: string; data: BodyType<UpdateFitnessCenterDto> }
+	> = (props) => {
+		const { spaceId, data } = props ?? {};
 
-const mutationKey = ['updateSpaceFitnessCenter'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+		return updateSpaceFitnessCenter(spaceId, data, requestOptions);
+	};
 
-      
+	return { mutationFn, ...mutationOptions };
+};
 
+export type UpdateSpaceFitnessCenterMutationResult = NonNullable<
+	Awaited<ReturnType<typeof updateSpaceFitnessCenter>>
+>;
+export type UpdateSpaceFitnessCenterMutationBody =
+	BodyType<UpdateFitnessCenterDto>;
+export type UpdateSpaceFitnessCenterMutationError = ErrorType<void>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateSpaceFitnessCenter>>, {spaceId: string;data: BodyType<UpdateFitnessCenterDto>}> = (props) => {
-          const {spaceId,data} = props ?? {};
-
-          return  updateSpaceFitnessCenter(spaceId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateSpaceFitnessCenterMutationResult = NonNullable<Awaited<ReturnType<typeof updateSpaceFitnessCenter>>>
-    export type UpdateSpaceFitnessCenterMutationBody = BodyType<UpdateFitnessCenterDto>
-    export type UpdateSpaceFitnessCenterMutationError = ErrorType<void>
-
-    /**
+/**
  * @summary 공간의 시설 detail 수정
  */
-export const useUpdateSpaceFitnessCenter = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSpaceFitnessCenter>>, TError,{spaceId: string;data: BodyType<UpdateFitnessCenterDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof updateSpaceFitnessCenter>>,
-        TError,
-        {spaceId: string;data: BodyType<UpdateFitnessCenterDto>},
-        TContext
-      > => {
+export const useUpdateSpaceFitnessCenter = <
+	TError = ErrorType<void>,
+	TContext = unknown,
+>(
+	options?: {
+		mutation?: UseMutationOptions<
+			Awaited<ReturnType<typeof updateSpaceFitnessCenter>>,
+			TError,
+			{ spaceId: string; data: BodyType<UpdateFitnessCenterDto> },
+			TContext
+		>;
+		request?: SecondParameter<typeof customInstance>;
+	},
+	queryClient?: QueryClient,
+): UseMutationResult<
+	Awaited<ReturnType<typeof updateSpaceFitnessCenter>>,
+	TError,
+	{ spaceId: string; data: BodyType<UpdateFitnessCenterDto> },
+	TContext
+> => {
+	const mutationOptions = getUpdateSpaceFitnessCenterMutationOptions(options);
 
-      const mutationOptions = getUpdateSpaceFitnessCenterMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    
+	return useMutation(mutationOptions, queryClient);
+};

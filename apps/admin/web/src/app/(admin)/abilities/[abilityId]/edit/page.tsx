@@ -58,8 +58,8 @@ export default observer(function AbilityEditPage() {
 		}
 		state.name = ability.name;
 		state.description = ability.description || "";
-		state.subjectId = ability.subjectId;
-		state.actionId = ability.actionId;
+		state.subjectId = String(ability.subjectId);
+		state.actionId = String(ability.actionId);
 		state.fields = ability.fields.join(", ");
 		state.conditions = ability.conditions
 			? JSON.stringify(ability.conditions, null, 2)
@@ -98,18 +98,18 @@ export default observer(function AbilityEditPage() {
 			}
 			state={ability ? state : undefined}
 			subjects={(subjectsResponse?.data ?? []).map((subject) => ({
-				id: subject.id,
+				id: String(subject.id),
 				label: `${subject.displayName || subject.name}${subject.group ? ` (${subject.group})` : ""}`,
 			}))}
 			actions={(actionsResponse?.data ?? []).map((action) => ({
-				id: action.id,
+				id: String(action.id),
 				label: `${action.displayName || action.name}${action.group ? ` (${action.group})` : ""}`,
 			}))}
 			isLoading={isLoading || isSubjectsLoading || isActionsLoading}
 			notFound={!isLoading && !ability}
 			notFoundAction={
 				<Button
-					variant="flat"
+					variant="tertiary"
 					onPress={() => {
 						router.push("/abilities" as Route);
 					}}
@@ -120,7 +120,7 @@ export default observer(function AbilityEditPage() {
 			pageActions={
 				<div className="flex gap-2">
 					<Button
-						variant="flat"
+						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push(`/abilities/${abilityId}` as Route);
@@ -129,7 +129,7 @@ export default observer(function AbilityEditPage() {
 						취소
 					</Button>
 					<Button
-						color="primary"
+						variant="primary"
 						startContent={<Save className="h-4 w-4" />}
 						onPress={onSubmit}
 						isLoading={isPending}
@@ -161,13 +161,32 @@ function toUpdateAbilityDto(
 		}
 	}
 
+	const subjectId = state.subjectId.trim()
+		? parsePositiveBigInt(state.subjectId)
+		: undefined;
+	const actionId = state.actionId.trim()
+		? parsePositiveBigInt(state.actionId)
+		: undefined;
+	if (
+		(state.subjectId.trim() && subjectId === undefined) ||
+		(state.actionId.trim() && actionId === undefined)
+	) {
+		onInvalidConditions();
+		return null;
+	}
+
 	return {
 		description: state.description.trim() || undefined,
-		subjectId: state.subjectId || undefined,
-		actionId: state.actionId || undefined,
+		subjectId,
+		actionId,
 		fields: fieldsArray,
 		conditions: conditionsObject,
 		inverted: state.inverted,
 		reason: state.inverted ? state.reason.trim() || undefined : undefined,
 	};
+}
+
+function parsePositiveBigInt(value: string): bigint | undefined {
+	const trimmedValue = value.trim();
+	return /^[1-9]\d*$/.test(trimmedValue) ? BigInt(trimmedValue) : undefined;
 }

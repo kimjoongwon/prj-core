@@ -12,82 +12,82 @@ import { ChipCell } from "./cell";
 import { DataGrid, DataGridSelectionState, DataGridState } from "./index";
 
 interface StoryRow {
-	id: string;
+	id: bigint;
 	name: string;
 	email: string;
 	status: "활성" | "비활성";
-	createdAt: string;
+	createdAt: Date;
 	children?: StoryRow[];
 }
 
 const storyRows: StoryRow[] = [
 	{
-		id: "user-001",
+		id: BigInt(1),
 		name: "김철수",
 		email: "kim@example.com",
 		status: "활성",
-		createdAt: "2026-04-01",
+		createdAt: new Date("2026-04-01T00:00:00Z"),
 	},
 	{
-		id: "user-002",
+		id: BigInt(2),
 		name: "이영희",
 		email: "lee@example.com",
 		status: "비활성",
-		createdAt: "2026-04-08",
+		createdAt: new Date("2026-04-08T00:00:00Z"),
 	},
 	{
-		id: "user-003",
+		id: BigInt(3),
 		name: "박민수",
 		email: "park@example.com",
 		status: "활성",
-		createdAt: "2026-04-16",
+		createdAt: new Date("2026-04-16T00:00:00Z"),
 	},
 	{
-		id: "user-004",
+		id: BigInt(4),
 		name: "최서윤",
 		email: "seo-yoon@example.com",
 		status: "활성",
-		createdAt: "2026-04-22",
+		createdAt: new Date("2026-04-22T00:00:00Z"),
 	},
 ];
 
 const hierarchyRows: StoryRow[] = [
 	{
-		id: "team-001",
+		id: BigInt(101),
 		name: "플랫폼팀",
 		email: "platform@example.com",
 		status: "활성",
-		createdAt: "2026-04-01",
+		createdAt: new Date("2026-04-01T00:00:00Z"),
 		children: [
 			{
-				id: "team-001-member-001",
+				id: BigInt(102),
 				name: "김철수",
 				email: "kim@example.com",
 				status: "활성",
-				createdAt: "2026-04-01",
+				createdAt: new Date("2026-04-01T00:00:00Z"),
 			},
 			{
-				id: "team-001-member-002",
+				id: BigInt(103),
 				name: "이영희",
 				email: "lee@example.com",
 				status: "비활성",
-				createdAt: "2026-04-08",
+				createdAt: new Date("2026-04-08T00:00:00Z"),
 			},
 		],
 	},
 	{
-		id: "team-002",
+		id: BigInt(201),
 		name: "제품팀",
 		email: "product@example.com",
 		status: "활성",
-		createdAt: "2026-04-16",
+		createdAt: new Date("2026-04-16T00:00:00Z"),
 		children: [
 			{
-				id: "team-002-member-001",
+				id: BigInt(202),
 				name: "박민수",
 				email: "park@example.com",
 				status: "활성",
-				createdAt: "2026-04-16",
+				createdAt: new Date("2026-04-16T00:00:00Z"),
 			},
 		],
 	},
@@ -145,7 +145,7 @@ class StoryDataGridFixture {
 		);
 	}
 
-	private removeRow(rows: StoryRow[], rowId: string): StoryRow[] {
+	private removeRow(rows: StoryRow[], rowId: bigint): StoryRow[] {
 		return rows
 			.filter((row) => row.id !== rowId)
 			.map((row) => ({
@@ -158,7 +158,7 @@ class StoryDataGridFixture {
 
 	private replaceSiblingRows(
 		rows: StoryRow[],
-		parentId: string | null,
+		parentId: bigint | null,
 		siblings: StoryRow[],
 	): StoryRow[] {
 		if (parentId === null) {

@@ -1,6 +1,6 @@
 "use client";
 
-import type { OidcClientDto } from "@cocrepo/api/idp/oidc-clients";
+import type { OidcClientDto } from "@cocrepo/api/core/oidc-clients";
 import type {
 	DataGridQueryStates,
 	DataGridSetQueryStates,
@@ -73,7 +73,7 @@ export const OidcClientListScreen = observer(
 					description="시스템에 등록된 OIDC 클라이언트를 관리합니다."
 					actions={
 						<Button
-							color="primary"
+							variant="primary"
 							startContent={<Plus className="h-4 w-4" />}
 							onPress={onClickCreateButton}
 						>

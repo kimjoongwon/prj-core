@@ -1,6 +1,7 @@
 export {
 	AXIOS_INSTANCE,
 	customInstance,
+	setApiBaseUrl,
 	setApiLocale,
 	setApiNativeRefreshHandler,
 	setApiSessionScope,

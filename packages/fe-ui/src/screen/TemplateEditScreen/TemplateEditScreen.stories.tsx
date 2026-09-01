@@ -32,7 +32,7 @@ const meta = {
 		title: "Template 수정",
 		description: "route가 전달한 Template state로 메시지 템플릿을 편집합니다.",
 		state: defaultState,
-		actions: <Button color="primary">저장</Button>,
+		actions: <Button variant="primary">저장</Button>,
 	},
 } satisfies Meta<typeof TemplateEditScreen>;
 
@@ -66,7 +66,7 @@ export const Detail: Story = {
 		title: "Template 상세",
 		description: "Template 정보를 읽기 전용으로 확인합니다.",
 		readOnly: true,
-		actions: <Button variant="flat">수정</Button>,
+		actions: <Button variant="tertiary">수정</Button>,
 	},
 };
 

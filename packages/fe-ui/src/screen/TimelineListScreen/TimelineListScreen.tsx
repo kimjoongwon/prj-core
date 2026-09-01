@@ -40,7 +40,7 @@ export interface TimelineListScreenProps {
 	queryStates: TimelineListScreenQueryStates;
 	setQueryStates: TimelineListScreenSetQueryStates;
 	onClickCreateButton: () => void;
-	onDeleteTimeline: (timelineId: string) => Promise<void>;
+	onDeleteTimeline: (timelineId: bigint) => Promise<void>;
 }
 function TimelinesScreenFallback() {
 	return (
@@ -78,7 +78,7 @@ export const TimelineListScreen = observer(
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
 		const timelineRows = timelines ?? [];
-		const onClickDeleteIcon = (timelineId: string) => {
+		const onClickDeleteIcon = (timelineId: bigint) => {
 			void onDeleteTimeline(timelineId);
 		};
 		const columns = buildTimelineTableColumns<TimelineDto>({
@@ -94,7 +94,7 @@ export const TimelineListScreen = observer(
 					description="학기/시즌 단위 타임라인을 관리합니다."
 					actions={
 						<Button
-							color="primary"
+							variant="primary"
 							startContent={<Plus className="h-4 w-4" />}
 							onPress={onClickCreateButton}
 						>

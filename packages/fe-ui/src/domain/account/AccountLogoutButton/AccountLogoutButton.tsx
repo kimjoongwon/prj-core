@@ -1,6 +1,6 @@
 "use client";
 
-import { nativeLogout } from "@cocrepo/api/idp/auth";
+import { nativeLogout } from "@cocrepo/api/core/auth";
 import { useApp } from "@cocrepo/store";
 import { Dropdown } from "@heroui/react";
 import { LogOut } from "lucide-react";

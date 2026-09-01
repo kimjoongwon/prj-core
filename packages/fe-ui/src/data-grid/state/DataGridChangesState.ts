@@ -1,10 +1,5 @@
-import type {
-	DataGridChangesSnapshot,
-	DataGridChangesState as DataGridChangesStateContract,
-	DataGridRowData,
-	DataGridRowKey,
-} from "@cocrepo/type";
 import { makeAutoObservable } from "mobx";
+import type { Key } from "../Table/rowKeys";
 
 const objectPrototype = Object.prototype;
 
@@ -13,15 +8,21 @@ function hasOwnField(value: Record<string, unknown>, field: string) {
 }
 
 /** DataGrid의 원본 행을 유지하면서 저장 전 변경 내역을 관리합니다. */
-export class DataGridChangesState implements DataGridChangesStateContract {
-	created: DataGridRowData[] = [];
+export interface DataGridChangesSnapshot<TData extends { id: Key }> {
+	created: TData[];
+	updated: Array<{ id: Key; changes: Partial<TData> }>;
+	deleted: Key[];
+}
+
+export class DataGridChangesState {
+	created: Array<{ id: Key }> = [];
 	updated: Array<{
-		id: DataGridRowKey;
+		id: Key;
 		changes: Record<string, unknown>;
 	}> = [];
-	deleted: DataGridRowKey[] = [];
+	deleted: Key[] = [];
 
-	private originalValues = new Map<DataGridRowKey, Record<string, unknown>>();
+	private originalValues = new Map<Key, Record<string, unknown>>();
 
 	constructor() {
 		makeAutoObservable<this, "originalValues">(
@@ -32,7 +33,7 @@ export class DataGridChangesState implements DataGridChangesStateContract {
 	}
 
 	/** 임시 id를 가진 새 행을 생성 내역에 추가합니다. */
-	addRow<TData extends DataGridRowData>(row: TData) {
+	addRow<TData extends { id: Key }>(row: TData) {
 		const createdIndex = this.created.findIndex(({ id }) => id === row.id);
 		const nextRow = { ...row };
 
@@ -48,7 +49,7 @@ export class DataGridChangesState implements DataGridChangesStateContract {
 	}
 
 	/** 셀 값을 즉시 반영하고 기존 행이면 수정 내역을 기록합니다. */
-	setValue<TData extends DataGridRowData, TField extends keyof TData>(
+	setValue<TData extends { id: Key }, TField extends keyof TData>(
 		row: TData,
 		field: TField,
 		value: TData[TField],
@@ -96,7 +97,7 @@ export class DataGridChangesState implements DataGridChangesStateContract {
 	}
 
 	/** 한 필드의 수정 내역만 제거합니다. */
-	clearValue(rowId: DataGridRowKey, field: string) {
+	clearValue(rowId: Key, field: string) {
 		this.updated = this.updated.flatMap((update) => {
 			if (update.id !== rowId) {
 				return [update];
@@ -120,7 +121,7 @@ export class DataGridChangesState implements DataGridChangesStateContract {
 	}
 
 	/** 새 행은 제거하고 기존 행은 삭제 내역에 추가합니다. */
-	deleteRow(rowId: DataGridRowKey) {
+	deleteRow(rowId: Key) {
 		const isCreated = this.created.some(({ id }) => id === rowId);
 
 		if (isCreated) {
@@ -134,7 +135,7 @@ export class DataGridChangesState implements DataGridChangesStateContract {
 	}
 
 	/** 기존 행의 삭제 표시를 취소합니다. */
-	restoreRow(rowId: DataGridRowKey) {
+	restoreRow(rowId: Key) {
 		this.deleted = this.deleted.filter((deletedId) => deletedId !== rowId);
 	}
 
@@ -147,12 +148,12 @@ export class DataGridChangesState implements DataGridChangesStateContract {
 	}
 
 	/** 행이 삭제 표시되었는지 반환합니다. */
-	isDeleted(rowId: DataGridRowKey) {
+	isDeleted(rowId: Key) {
 		return this.deleted.includes(rowId);
 	}
 
 	/** 원본 행에 현재 생성 또는 수정 값을 합쳐 렌더링용 행을 반환합니다. */
-	getRow<TData extends DataGridRowData>(row: TData): TData {
+	getRow<TData extends { id: Key }>(row: TData): TData {
 		const createdRow = this.created.find(({ id }) => id === row.id);
 		const update = this.updated.find(({ id }) => id === row.id);
 		if (!createdRow && !update) {
@@ -167,12 +168,12 @@ export class DataGridChangesState implements DataGridChangesStateContract {
 	}
 
 	/** 타입이 지정된 생성 행 복사본을 반환합니다. */
-	getCreatedRows<TData extends DataGridRowData>() {
+	getCreatedRows<TData extends { id: Key }>() {
 		return this.created.map((row) => ({ ...row })) as TData[];
 	}
 
 	/** API 저장에 사용할 수 있는 순수 배열 snapshot을 반환합니다. */
-	toJSON<TData extends DataGridRowData>(): DataGridChangesSnapshot<TData> {
+	toJSON<TData extends { id: Key }>(): DataGridChangesSnapshot<TData> {
 		return {
 			created: this.created.map((row) => ({ ...row })) as TData[],
 			updated: this.updated.map((update) => ({

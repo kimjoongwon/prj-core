@@ -23,7 +23,7 @@ export class InquiryMessageDto extends AbstractDto {
 	@BigIntIdField({ description: "소속 문의 ID" })
 	inquiryId!: bigint;
 
-	@BigIntIdFieldOptional({ description: "발신자 ID" })
+	@BigIntIdFieldOptional({ nullable: true, description: "발신자 ID" })
 	senderId!: bigint | null;
 
 	@StringField({ description: "발신자 이름" })
@@ -41,7 +41,7 @@ export class InquiryMessageDto extends AbstractDto {
 	@EnumField(() => MessageContentType, { description: "콘텐츠 유형" })
 	contentType!: MessageContentType;
 
-	@UUIDFieldOptional({ description: "클라이언트 메시지 ID" })
+	@UUIDFieldOptional({ nullable: true, description: "클라이언트 메시지 ID" })
 	clientMessageId!: string | null;
 
 	@BooleanField({ description: "수정 여부" })

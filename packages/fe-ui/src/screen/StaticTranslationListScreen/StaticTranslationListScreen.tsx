@@ -291,14 +291,14 @@ export const StaticTranslationListScreen = observer(
 					actions={
 						<HStack className="flex-wrap justify-end">
 							<Button
-								variant="flat"
+								variant="tertiary"
 								startContent={<RefreshCcw className="h-4 w-4" />}
 								onPress={onInvalidateAllTranslationCache}
 							>
 								전체 캐시 갱신
 							</Button>
 							<Button
-								variant="flat"
+								variant="tertiary"
 								startContent={<Languages className="h-4 w-4" />}
 								isDisabled={!selectedLanguageCode}
 								onPress={handleInvalidateLanguageCache}
@@ -306,7 +306,7 @@ export const StaticTranslationListScreen = observer(
 								언어 캐시 갱신
 							</Button>
 							<Button
-								color="primary"
+								variant="primary"
 								startContent={<Plus className="h-4 w-4" />}
 								onPress={handleOpenCreateModal}
 							>
@@ -382,11 +382,11 @@ export const StaticTranslationListScreen = observer(
 										</VStack>
 									</Modal.Body>
 									<Modal.Footer>
-										<Button variant="light" onPress={handleCloseFormModal}>
+										<Button variant="ghost" onPress={handleCloseFormModal}>
 											취소
 										</Button>
 										<Button
-											color="primary"
+											variant="primary"
 											type="submit"
 											isDisabled={isFormInvalid}
 										>

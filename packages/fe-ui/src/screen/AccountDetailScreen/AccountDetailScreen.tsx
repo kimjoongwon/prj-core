@@ -1,12 +1,6 @@
 "use client";
 
-import {
-	DateTimeCell,
-	Screen,
-	Section,
-	SectionSurface,
-	VStack,
-} from "@cocrepo/ui";
+import { Screen, Section, SectionSurface, VStack } from "@cocrepo/ui";
 import { ListBox, Separator } from "@heroui/react";
 import {
 	ArrowLeft,
@@ -33,25 +27,28 @@ export interface AccountDetailScreenAccessGrant {
 	grantedAt: string;
 	updatedAt?: string | null;
 }
+
 export interface AccountDetailScreenAccount {
 	id: string;
 	name: string;
 	email: string;
 	isActive: boolean;
+	failedLoginAttempts: number;
 	isPermanentlyLocked: boolean;
 	lockedUntil?: string | null;
-	failedLoginAttempts: number;
 	mustChangePassword: boolean;
 	lastLoginAt?: string | null;
 	lastLoginIp?: string | null;
-	createdAt: string | null;
+	createdAt: string;
 	accessGrants: AccountDetailScreenAccessGrant[];
 }
+
 export interface AccountDetailScreenOption {
 	value: string;
 	label: string;
 	description?: string;
 }
+
 export interface AccountDetailScreenAccessGrantForm {
 	spaceId: string;
 	roleId: string;
@@ -153,7 +150,7 @@ export const AccountDetailScreen = observer(
 							<Section.Body>
 								<div className="flex flex-col items-center justify-center gap-4 p-8">
 									<p className="text-muted">계정을 찾을 수 없습니다.</p>
-									<Button variant="flat" onPress={onClickBackButton}>
+									<Button variant="tertiary" onPress={onClickBackButton}>
 										목록으로
 									</Button>
 								</div>
@@ -170,7 +167,7 @@ export const AccountDetailScreen = observer(
 					description={`${account.name} (${account.email})`}
 					actions={
 						<Button
-							variant="light"
+							variant="ghost"
 							startContent={<ArrowLeft className="h-4 w-4" />}
 							onPress={onClickBackButton}
 						>
@@ -239,8 +236,7 @@ export const AccountDetailScreen = observer(
 														{isLocked && (
 															<Button
 																size="sm"
-																variant="flat"
-																color="primary"
+																variant="tertiary"
 																isLoading={isUnlocking}
 																onPress={onClickUnlockAccountButton}
 															>
@@ -251,8 +247,7 @@ export const AccountDetailScreen = observer(
 													{account.lockedUntil &&
 														!account.isPermanentlyLocked && (
 															<p className="text-xs text-muted mt-1">
-																해제 예정:{" "}
-																<DateTimeCell value={account.lockedUntil} />
+																해제 예정: {account.lockedUntil}
 															</p>
 														)}
 												</dd>
@@ -271,7 +266,7 @@ export const AccountDetailScreen = observer(
 														{account.failedLoginAttempts > 0 && (
 															<Button
 																size="sm"
-																variant="flat"
+																variant="tertiary"
 																startContent={<RotateCcw className="h-3 w-3" />}
 																isLoading={isResetting}
 																onPress={onClickResetFailedAttemptsButton}
@@ -306,7 +301,7 @@ export const AccountDetailScreen = observer(
 												</dt>
 												<dd>
 													{account.lastLoginAt ? (
-														<DateTimeCell value={account.lastLoginAt} />
+														account.lastLoginAt
 													) : (
 														<span className="text-muted">-</span>
 													)}
@@ -322,9 +317,7 @@ export const AccountDetailScreen = observer(
 											</div>
 											<div>
 												<dt className="text-sm text-muted mb-1">가입일</dt>
-												<dd>
-													<DateTimeCell value={account.createdAt} />
-												</dd>
+												<dd>{account.createdAt}</dd>
 											</div>
 										</dl>
 									</Section.Body>
@@ -335,8 +328,7 @@ export const AccountDetailScreen = observer(
 										<Separator className="mb-4" />
 										<div className="flex flex-wrap gap-3">
 											<Button
-												variant="flat"
-												color="primary"
+												variant="tertiary"
 												startContent={<LockOpen className="h-4 w-4" />}
 												isDisabled={!isLocked || isUnlocking}
 												isLoading={isUnlocking}
@@ -345,8 +337,7 @@ export const AccountDetailScreen = observer(
 												잠금 해제
 											</Button>
 											<Button
-												variant="flat"
-												color="warning"
+												variant="tertiary"
 												startContent={<KeyRound className="h-4 w-4" />}
 												isLoading={isForceResetting}
 												onPress={onClickForceResetPasswordButton}
@@ -354,8 +345,7 @@ export const AccountDetailScreen = observer(
 												비밀번호 강제 변경
 											</Button>
 											<Button
-												variant="flat"
-												color="danger"
+												variant="tertiary"
 												startContent={<LogOut className="h-4 w-4" />}
 												isLoading={isInvalidating}
 												onPress={onClickInvalidateSessionsButton}
@@ -393,7 +383,7 @@ export const AccountDetailScreen = observer(
 															</Chip>
 														</div>
 														<div className="text-sm text-muted">
-															<DateTimeCell value={grant.grantedAt} />
+															{grant.grantedAt}
 														</div>
 													</div>
 												))}
@@ -460,8 +450,7 @@ export const AccountDetailScreen = observer(
 												))}
 											</Select>
 											<Button
-												variant="flat"
-												color="primary"
+												variant="tertiary"
 												startContent={<ShieldCheck className="h-4 w-4" />}
 												isLoading={isGrantingAccess}
 												isDisabled={isGrantButtonDisabled}

@@ -12,43 +12,6 @@ const apiSpecEnvironments = {
 	production: "https://cocdev.co.kr/api-json",
 };
 
-const coreTags = [
-	"ABILITIES",
-	"ACTIONS",
-	"ASSETS",
-	"COMMUNITY",
-	"FOLDERS",
-	"I18N",
-	"INQUIRIES",
-	"POLICIES",
-	"ROLE_ASSIGNMENTS",
-	"RESERVATIONS",
-	"ROLES",
-	"ROUTINES",
-	"SERVICE_DOCUMENTS",
-	"SPACES",
-	"SUBJECTS",
-	"TASKS",
-	"TEMPLATES",
-	"TENANT_ACCESS_REQUESTS",
-	"TIMELINES",
-	"TRANSLATIONS",
-	"USERS",
-];
-
-const idpTags = [
-	"AUTH",
-	"EMAIL_VERIFICATIONS",
-	"I18N",
-	"IDP_ACCOUNTS",
-	"IDP_DASHBOARD",
-	"Interaction",
-	"OIDC_CLIENTS",
-	"OIDC_SESSIONS",
-	"Password Reset",
-	"SECURITY_POLICY",
-];
-
 /**
  * localhost 서버가 실행 중인지 확인
  * @param {string} url - 체크할 URL
@@ -153,13 +116,12 @@ const queryOptions = {
 // 비동기 설정 래퍼
 async function createConfig() {
 	const apiUrl = await getApiUrl();
-	const idpApiUrl = apiUrl;
 
 	console.log(`🚀 Orval 설정 로드됨`);
 	console.log(`   Swagger Spec: ${apiUrl}`);
 
 	return {
-		// ─── Core client from unified Swagger spec ───
+		// ─── 통합 API client from unified Swagger spec ───
 		store: {
 			// 환경에 따른 OpenAPI 스펙 URL
 			input: {
@@ -167,10 +129,6 @@ async function createConfig() {
 				validation: false, // Swagger 스키마 검증 비활성화
 				override: {
 					transformer: "./remove-tenant-header.transformer.cjs",
-				},
-				filters: {
-					mode: "include",
-					tags: coreTags,
 				},
 			},
 
@@ -197,40 +155,15 @@ async function createConfig() {
 						name: "customInstance",
 					},
 
-					// React Query 훅 생성 옵션
-					query: queryOptions,
+				// React Query 훅 생성 옵션
+				query: queryOptions,
 				},
 			},
-		},
-
-		// ─── IDP/Auth client from unified Swagger spec ───
-		idp: {
-			input: {
-				target: idpApiUrl,
-				validation: false,
-				override: {
-					transformer: "./remove-tenant-header.transformer.cjs",
-				},
-				filters: {
-					mode: "include",
-					tags: idpTags,
-				},
-			},
-
-			output: {
-				target: "src/idp/index.ts",
-				schemas: "src/idp/model",
-				client: "react-query",
-				// OpenAPI 태그별로 파일 분할하여 직접 생성
-				// 후처리 스크립트 없이 생성 결과를 그대로 사용합니다.
-				mode: "tags-split",
-
-				override: {
-					mutator: {
-						path: "./src/libs/customIdpAxios.ts",
-						name: "customIdpInstance",
-					},
-					query: queryOptions,
+			hooks: {
+				afterAllFilesWrite: {
+					command:
+						"pnpm exec biome check --write src/core src/libs/runtimeManifest.ts",
+					injectGeneratedDirsAndFiles: false,
 				},
 			},
 		},

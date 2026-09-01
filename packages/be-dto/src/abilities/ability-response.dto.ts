@@ -53,11 +53,10 @@ export class AbilityResponseDto {
 	@ApiProperty({
 		description: "권한 조건 (JSON 형식)",
 		example: { id: "${user.id}" },
-		required: false,
 		nullable: true,
 	})
 	@Expose()
-	conditions?: Record<string, unknown> | null;
+	conditions!: Record<string, unknown> | null;
 
 	@ApiProperty({
 		description: "거부 권한 여부 (true: cannot, false: can)",
@@ -69,11 +68,10 @@ export class AbilityResponseDto {
 	@ApiProperty({
 		description: "거부 사유",
 		example: "관리자만 삭제할 수 있습니다",
-		required: false,
 		nullable: true,
 	})
 	@Expose()
-	reason?: string | null;
+	reason!: string | null;
 
 	@ApiProperty({
 		description: "권한 이름 (고유 식별자)",
@@ -85,11 +83,10 @@ export class AbilityResponseDto {
 	@ApiProperty({
 		description: "권한 설명",
 		example: "사용자 이메일을 마스킹하여 조회합니다",
-		required: false,
 		nullable: true,
 	})
 	@Expose()
-	description?: string | null;
+	description!: string | null;
 
 	@ApiProperty({
 		description: "생성 일시",
@@ -101,9 +98,8 @@ export class AbilityResponseDto {
 	@ApiProperty({
 		description: "수정 일시",
 		example: "2025-01-01T00:00:00.000Z",
-		required: false,
 		nullable: true,
 	})
 	@Expose()
-	updatedAt?: Date | null;
+	updatedAt!: Date | null;
 }

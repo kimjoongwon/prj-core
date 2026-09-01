@@ -18,12 +18,11 @@
 /**
  * 에셋 종류 (IMAGE, VIDEO, DOCUMENT)
  */
-export type AssetKind = typeof AssetKind[keyof typeof AssetKind];
-
+export type AssetKind = (typeof AssetKind)[keyof typeof AssetKind];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AssetKind = {
-  IMAGE: 'IMAGE',
-  VIDEO: 'VIDEO',
-  DOCUMENT: 'DOCUMENT',
+	IMAGE: "IMAGE",
+	VIDEO: "VIDEO",
+	DOCUMENT: "DOCUMENT",
 } as const;

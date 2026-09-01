@@ -36,7 +36,7 @@ export const PolicyListScreen = observer(
 					description="역할과 사용자에 할당할 정책 기반 인가 규칙을 관리합니다."
 					actions={
 						<Button
-							color="primary"
+							variant="primary"
 							startContent={<Plus className="h-4 w-4" />}
 							onPress={onClickCreateButton}
 						>
@@ -61,15 +61,17 @@ export const PolicyListScreen = observer(
 												<Table.Column>Ability</Table.Column>
 												<Table.Column>생성일</Table.Column>
 												<Table.Column>작업</Table.Column>
-												</Table.Header>
-												<Table.Body>
-													{policyRows.map((policy) => (
+											</Table.Header>
+											<Table.Body>
+												{policyRows.map((policy) => (
 													<Table.Row key={policy.id}>
 														<Table.Cell>
 															<button
 																className="text-left"
 																type="button"
-																onClick={() => onClickPolicyRow(policy.id)}
+																onClick={() =>
+																	onClickPolicyRow(String(policy.id))
+																}
 															>
 																<p className="font-semibold">
 																	{getPolicyLabel(policy)}
@@ -94,19 +96,21 @@ export const PolicyListScreen = observer(
 																<Button
 																	isIconOnly
 																	size="sm"
-																	variant="light"
+																	variant="ghost"
 																	aria-label="상세"
-																	onPress={() => onClickPolicyRow(policy.id)}
+																	onPress={() =>
+																		onClickPolicyRow(String(policy.id))
+																	}
 																>
 																	<Eye className="h-4 w-4" />
 																</Button>
 																<Button
 																	isIconOnly
 																	size="sm"
-																	variant="light"
+																	variant="ghost"
 																	aria-label="수정"
 																	onPress={() =>
-																		onClickEditPolicyButton(policy.id)
+																		onClickEditPolicyButton(String(policy.id))
 																	}
 																>
 																	<Edit className="h-4 w-4" />
@@ -114,11 +118,10 @@ export const PolicyListScreen = observer(
 																<Button
 																	isIconOnly
 																	size="sm"
-																	color="danger"
-																	variant="light"
+																	variant="ghost"
 																	aria-label="삭제"
 																	onPress={() =>
-																		onClickDeletePolicyButton(policy.id)
+																		onClickDeletePolicyButton(String(policy.id))
 																	}
 																>
 																	<Trash2 className="h-4 w-4" />

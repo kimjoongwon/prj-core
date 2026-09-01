@@ -16,7 +16,7 @@ const mocks = vi.hoisted(() => ({
 	router: { replace: vi.fn() },
 }));
 
-vi.mock("@cocrepo/api/idp/auth", () => ({
+vi.mock("@cocrepo/api/core/auth", () => ({
 	nativeLogout: mocks.nativeLogout,
 }));
 

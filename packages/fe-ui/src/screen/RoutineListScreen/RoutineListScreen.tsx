@@ -58,8 +58,8 @@ export interface RoutineListScreenProps {
 	queryStates: RoutineListScreenQueryStates;
 	setQueryStates: RoutineListScreenSetQueryStates;
 	onClickCreateButton: () => void;
-	onClickRoutineName: (routineId: string) => void;
-	onDeleteRoutine: (routineId: string) => Promise<void>;
+	onClickRoutineName: (routineId: bigint) => void;
+	onDeleteRoutine: (routineId: bigint) => Promise<void>;
 }
 function RoutinesScreenFallback() {
 	return (
@@ -98,7 +98,7 @@ export const RoutineListScreen = observer(
 			gridState.syncQuery(queryStates, setQueryStates);
 		}, [gridState, queryStates, setQueryStates]);
 		const routineRows = routines ?? [];
-		const onClickDeleteButton = (routineId: string) => {
+		const onClickDeleteButton = (routineId: bigint) => {
 			void onDeleteRoutine(routineId);
 		};
 		const columns = buildRoutineTableColumns<RoutineDto>({
@@ -115,7 +115,7 @@ export const RoutineListScreen = observer(
 					description="운동 루틴(커리큘럼)을 관리합니다."
 					actions={
 						<Button
-							color="primary"
+							variant="primary"
 							startContent={<Plus className="h-4 w-4" />}
 							onPress={onClickCreateButton}
 						>

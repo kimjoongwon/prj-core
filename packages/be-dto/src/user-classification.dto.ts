@@ -1,4 +1,4 @@
-import { BigIntIdFieldOptional, ClassField } from "@cocrepo/decorator/field";
+import { BigIntIdField, ClassField } from "@cocrepo/decorator/field";
 import type { DomainEntityModel, UserClassification } from "@cocrepo/entity";
 import { Exclude } from "class-transformer";
 import { AbstractDto } from "./abstract.dto";
@@ -13,10 +13,10 @@ export class UserClassificationDto
 	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
 	private readonly userClassificationId?: never;
 
-	@BigIntIdFieldOptional()
+	@BigIntIdField()
 	categoryId: bigint;
 
-	@BigIntIdFieldOptional()
+	@BigIntIdField()
 	userId: bigint;
 
 	@ClassField(() => UserDto, { required: false })

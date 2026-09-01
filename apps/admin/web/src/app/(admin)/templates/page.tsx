@@ -46,11 +46,11 @@ export default observer(function TemplatesPageRoute() {
 				router.push("/templates/new" as Route);
 			}}
 			onClickTemplateCode={(templateId) => {
-				router.push(`/templates/${templateId}` as Route);
+				router.push(`/templates/${String(templateId)}` as Route);
 			}}
 			onToggleTemplateStatusSwitch={async (templateId) => {
 				try {
-					await toggleMutation.mutateAsync({ templateId });
+					await toggleMutation.mutateAsync({ templateId: String(templateId) });
 					await queryClient.invalidateQueries({
 						queryKey: getGetTemplatesQueryKey(),
 					});

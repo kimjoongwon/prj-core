@@ -4,7 +4,6 @@ import {
 	type InquiryCategory,
 	type InquiryChannel,
 	type InquiryMessageDto,
-	type InquiryParticipantDto,
 	type InquiryPriority,
 	useAssignInquiry,
 	useDeleteInquiry,
@@ -22,7 +21,6 @@ import {
 	type FormOptionItem,
 	type InquiryMessage,
 	type InquiryParticipant,
-	isDecimalId,
 	requireDecimalId,
 } from "@cocrepo/type";
 import {
@@ -34,6 +32,32 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
+
+type InquiryParticipantWire = {
+	id: string;
+	threadId: string | null;
+	userId: string;
+	role: "CUSTOMER" | "AGENT" | "SUPERVISOR" | "VIEWER";
+	isOnline: boolean;
+	isTyping: boolean;
+	unreadCount: number;
+	joinedAt: string;
+	lastSeenAt: string | null;
+	lastReadAt: string | null;
+	leftAt: string | null;
+};
+
+const isInquiryParticipantWire = (
+	value: unknown,
+): value is InquiryParticipantWire => {
+	if (typeof value !== "object" || value === null) return false;
+	return (
+		typeof Reflect.get(value, "id") === "string" &&
+		typeof Reflect.get(value, "userId") === "string" &&
+		typeof Reflect.get(value, "role") === "string" &&
+		typeof Reflect.get(value, "joinedAt") === "string"
+	);
+};
 
 const normalizeFormOptionValue = (value: unknown): FormOptionItem["value"] => {
 	if (
@@ -63,51 +87,44 @@ const normalizeFormOptions = (
 
 const mapMessageToStore = (message: InquiryMessageDto): InquiryMessage => {
 	return {
-		id: requireDecimalId(message.id, "message.id"),
-		threadId: requireDecimalId(message.threadId, "message.threadId"),
-		inquiryId: requireDecimalId(message.inquiryId, "message.inquiryId"),
+		id: message.id.toString(),
+		threadId: message.threadId.toString(),
+		inquiryId: message.inquiryId.toString(),
 		senderType: message.senderType,
-		senderId: isDecimalId(message.senderId) ? message.senderId : null,
+		senderId: message.senderId?.toString() ?? null,
 		content: message.content,
 		contentType: message.contentType,
 		isEdited: message.isEdited,
 		isDeleted: message.isDeleted,
-		deliveredAt: message.deliveredAt,
-		readAt: message.readAt,
-		editedAt: message.editedAt,
-		createdAt: message.createdAt,
+		deliveredAt: message.deliveredAt?.toISOString() ?? null,
+		readAt: message.readAt?.toISOString() ?? null,
+		editedAt: message.editedAt?.toISOString() ?? null,
+		createdAt: message.createdAt.toISOString(),
 	};
 };
 
 const mapParticipantToStore = (
-	participant: InquiryParticipantDto | Record<string, unknown>,
+	participant: InquiryParticipantWire,
 	inquiryId: string,
-): InquiryParticipant | null => {
-	const data = participant as Record<string, unknown>;
-	if (
-		!isDecimalId(data.id) ||
-		!isDecimalId(inquiryId) ||
-		!isDecimalId(data.userId)
-	) {
-		return null;
-	}
-
+): InquiryParticipant => {
 	return {
-		id: data.id,
+		id: participant.id,
 		inquiryId,
-		threadId: isDecimalId(data.threadId) ? data.threadId : null,
-		userId: data.userId,
-		role: ((data.role as string) ?? "AGENT") as
-			| "CUSTOMER"
-			| "AGENT"
-			| "SUPERVISOR",
-		isOnline: Boolean(data.isOnline),
-		isTyping: Boolean(data.isTyping),
-		unreadCount: Number(data.unreadCount ?? 0),
-		joinedAt: (data.joinedAt as string) ?? new Date().toISOString(),
-		lastSeenAt: (data.lastSeenAt as string | null) ?? null,
-		lastReadAt: (data.lastReadAt as string | null) ?? null,
-		leftAt: (data.leftAt as string | null) ?? null,
+		threadId: participant.threadId,
+		userId: participant.userId,
+		role:
+			participant.role === "CUSTOMER"
+				? "CUSTOMER"
+				: participant.role === "SUPERVISOR"
+					? "SUPERVISOR"
+					: "AGENT",
+		isOnline: participant.isOnline,
+		isTyping: participant.isTyping,
+		unreadCount: participant.unreadCount,
+		joinedAt: participant.joinedAt,
+		lastSeenAt: participant.lastSeenAt,
+		lastReadAt: participant.lastReadAt,
+		leftAt: participant.leftAt,
 	};
 };
 
@@ -262,17 +279,12 @@ export default observer(function InquiryReadOnlyRoute() {
 	const updateFormBootstrap = updateFormBootstrapResponse?.data;
 	const updateFormOptions = normalizeFormOptions(updateFormBootstrap?.options);
 	const messages = (messagesResponse?.data ?? []).map(mapMessageToStore);
-	const participantRows =
-		(participantsResponse?.data as
-			| Array<Record<string, unknown>>
-			| undefined) ??
-		(inquiry?.participants as Array<Record<string, unknown>> | undefined) ??
-		[];
-	const participants = participantRows
-		.map((participant) => mapParticipantToStore(participant, inquiryId))
-		.filter(
-			(participant): participant is InquiryParticipant => participant !== null,
-		);
+	const participantRows = (participantsResponse?.data ?? []).filter(
+		isInquiryParticipantWire,
+	);
+	const participants = participantRows.map((participant) =>
+		mapParticipantToStore(participant, inquiryId),
+	);
 
 	const ws = useInquiryDetailWebSocket({
 		inquiryId,
@@ -327,20 +339,20 @@ export default observer(function InquiryReadOnlyRoute() {
 			inquiry={
 				inquiry
 					? {
-							id: inquiry.id,
+							id: inquiry.id.toString(),
 							inquiryNumber: inquiry.inquiryNumber,
 							title: inquiry.title,
 							channel: inquiry.channel,
 							status: inquiry.status,
 							priority: inquiry.priority,
 							category: inquiry.category,
-							assigneeId: inquiry.assigneeId,
-							customerId: inquiry.customerId,
-							createdAt: inquiry.createdAt,
-							firstResponseAt: inquiry.firstResponseAt,
-							resolvedAt: inquiry.resolvedAt,
-							slaResponseDue: inquiry.slaResponseDue,
-							slaResolveDue: inquiry.slaResolveDue,
+							assigneeId: inquiry.assigneeId?.toString() ?? null,
+							customerId: inquiry.customerId?.toString() ?? null,
+							createdAt: inquiry.createdAt.toISOString(),
+							firstResponseAt: inquiry.firstResponseAt?.toISOString() ?? null,
+							resolvedAt: inquiry.resolvedAt?.toISOString() ?? null,
+							slaResponseDue: inquiry.slaResponseDue?.toISOString() ?? null,
+							slaResolveDue: inquiry.slaResolveDue?.toISOString() ?? null,
 							isSlaResponseBreached: inquiry.isSlaResponseBreached,
 							isSlaResolveBreached: inquiry.isSlaResolveBreached,
 							sentiment: inquiry.sentiment

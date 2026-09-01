@@ -51,7 +51,7 @@ const hStackVariants = cva("flex gap-2", {
  * // 기본 사용
  * <HStack>
  *   <Button>취소</Button>
- *   <Button color="primary">확인</Button>
+ *   <Button variant="primary">확인</Button>
  * </HStack>
  *
  * // 정렬과 간격 조정

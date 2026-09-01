@@ -10,8 +10,8 @@ import {
 	type SpaceListItemInfo,
 	useThemeColor,
 } from "@cocrepo/mo-ui";
-import { useGetMySpaces, useSetCurrentSpace } from "@cocrepo/api/idp/auth";
-import type { SpaceDto } from "@cocrepo/api/idp/model";
+import { useGetMySpaces, useSetCurrentSpace } from "@cocrepo/api/core/auth";
+import type { SpaceDto } from "@cocrepo/api/core/model";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
@@ -20,7 +20,7 @@ import {
 	type GestureResponderEvent,
 	type PressableProps,
 } from "react-native";
-import { getIdpApiBaseUrl } from "@/auth/auth-config";
+import { getCoreApiBaseUrl } from "@/auth/auth-config";
 import { mobileSession } from "@/auth/mobile-session";
 import { mobileApiScope } from "@/auth/mobile-api-scope";
 import {
@@ -76,7 +76,7 @@ const MobileTabHeader = observer((props: BottomTabHeaderProps) => {
 	);
 	const [selectionErrorDescription, setSelectionErrorDescription] =
 		useState("");
-	const requestOptions = { baseURL: getIdpApiBaseUrl() };
+	const requestOptions = { baseURL: getCoreApiBaseUrl() };
 	const spacesQuery = useGetMySpaces({
 		query: {
 			enabled: isSpaceSheetOpen,

@@ -139,14 +139,14 @@ export const SpaceCreateScreen = observer(
 								</Section>
 								<div className="mt-4 flex justify-end gap-2">
 									<Button
-										variant="flat"
+										variant="tertiary"
 										onPress={onClickCancelButton}
 										isDisabled={isSubmitPending}
 									>
 										취소
 									</Button>
 									<Button
-										color="primary"
+										variant="primary"
 										onPress={onClickSaveButton}
 										isLoading={isSubmitPending}
 									>

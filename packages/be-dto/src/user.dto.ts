@@ -1,13 +1,11 @@
 import {
 	BigIntIdField,
-	BigIntIdFieldOptional,
 	BooleanField,
 	ClassField,
 	DateField,
 	EmailField,
 	NumberField,
 	StringField,
-	StringFieldOptional,
 } from "@cocrepo/decorator/field";
 import type { DomainEntityModel } from "@cocrepo/entity";
 import type { User } from "@cocrepo/prisma";
@@ -60,13 +58,13 @@ export class UserDto
 	@DateField({ nullable: true, description: "마지막 로그인 시각" })
 	lastLoginAt!: Date | null;
 
-	@StringFieldOptional({ nullable: true, description: "마지막 로그인 IP" })
+	@StringField({ nullable: true, description: "마지막 로그인 IP" })
 	lastLoginIp!: string | null;
 
 	@BooleanField({ description: "활성 상태" })
 	isActive!: boolean;
 
-	@BigIntIdFieldOptional({
+	@BigIntIdField({
 		nullable: true,
 		description: "현재 선택된 Tenant membership ID",
 	})

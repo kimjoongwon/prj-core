@@ -84,18 +84,18 @@ export default observer(function AbilityNewPage() {
 			description="새로운 CASL Ability를 등록합니다."
 			state={state}
 			subjects={(subjectsResponse?.data ?? []).map((subject) => ({
-				id: subject.id,
+				id: String(subject.id),
 				label: `${subject.displayName || subject.name}${subject.group ? ` (${subject.group})` : ""}`,
 			}))}
 			actions={(actionsResponse?.data ?? []).map((action) => ({
-				id: action.id,
+				id: String(action.id),
 				label: `${action.displayName || action.name}${action.group ? ` (${action.group})` : ""}`,
 			}))}
 			isLoading={isSubjectsLoading || isActionsLoading}
 			pageActions={
 				<div className="flex gap-2">
 					<Button
-						variant="flat"
+						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push("/abilities" as Route);
@@ -104,7 +104,7 @@ export default observer(function AbilityNewPage() {
 						목록으로
 					</Button>
 					<Button
-						color="primary"
+						variant="primary"
 						startContent={<Save className="h-4 w-4" />}
 						onPress={onSubmit}
 						isLoading={isPending}
@@ -136,14 +136,26 @@ function toCreateAbilityDto(
 		}
 	}
 
+	const subjectId = parsePositiveBigInt(state.subjectId);
+	const actionId = parsePositiveBigInt(state.actionId);
+	if (subjectId === undefined || actionId === undefined) {
+		onInvalidConditions();
+		return null;
+	}
+
 	return {
 		name: state.name.trim(),
 		description: state.description.trim() || undefined,
-		subjectId: state.subjectId,
-		actionId: state.actionId,
+		subjectId,
+		actionId,
 		fields: fieldsArray,
 		conditions: conditionsObject,
 		inverted: state.inverted,
 		reason: state.inverted ? state.reason.trim() || undefined : undefined,
 	};
+}
+
+function parsePositiveBigInt(value: string): bigint | undefined {
+	const trimmedValue = value.trim();
+	return /^[1-9]\d*$/.test(trimmedValue) ? BigInt(trimmedValue) : undefined;
 }

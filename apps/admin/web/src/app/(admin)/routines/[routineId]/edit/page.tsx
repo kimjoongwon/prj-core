@@ -8,7 +8,6 @@ import {
 import {
 	type CreateRoutineActivityItemDto,
 	getGetRoutineQueryKey,
-	type RoutineDto,
 	useGetRoutine,
 	useUpdateRoutine,
 } from "@cocrepo/api/core/routines";
@@ -62,14 +61,14 @@ const AdminRoutinesEditRoute = observer(() => {
 	}));
 
 	const { data: response, isLoading } = useGetRoutine(routineId);
-	const routine = response?.data as RoutineDto | undefined;
+	const routine = response?.data;
 	const { data: tasksResponse, isLoading: isTasksLoading } = useGetTasks({
 		take: 30,
 		skip: 0,
 		search: state.exerciseQuery.trim() || undefined,
 		spaceScope: "INCLUDE_ANCESTORS",
 	});
-	const tasks = (tasksResponse?.data ?? []) as TaskDto[];
+	const tasks = tasksResponse?.data ?? [];
 	const assetIds = Array.from(
 		new Set([
 			...tasks.flatMap((task) =>
@@ -108,11 +107,12 @@ const AdminRoutinesEditRoute = observer(() => {
 		state.name = routine.name;
 		state.label = routine.label;
 		state.activities = (routine.activities ?? []).map((activity) => ({
-			taskId: activity.taskId,
-			exerciseName: activity.task?.exercise?.name ?? activity.taskId.slice(-6),
+			taskId: String(activity.taskId),
+			exerciseName:
+				activity.task?.exercise?.name ?? String(activity.taskId).slice(-6),
 			isSchedulable: Boolean(activity.task?.exercise?.videoFileId),
-			imageFileId: activity.task?.exercise?.imageFileId,
-			videoFileId: activity.task?.exercise?.videoFileId,
+			imageFileId: activity.task?.exercise?.imageFileId ?? undefined,
+			videoFileId: activity.task?.exercise?.videoFileId ?? undefined,
 			repetitions: String(activity.repetitions ?? 1),
 			restTime: String(activity.restTime ?? 0),
 			notes: activity.notes ?? "",
@@ -147,18 +147,27 @@ const AdminRoutinesEditRoute = observer(() => {
 	});
 
 	const submitRoutine = () => {
+		const routineActivities: CreateRoutineActivityItemDto[] = [];
+		for (const [index, activity] of state.activities.entries()) {
+			const taskId = parsePositiveBigInt(activity.taskId);
+			if (taskId === undefined) {
+				state.errors.activities = "유효한 운동을 선택해주세요.";
+				return;
+			}
+			routineActivities.push({
+				taskId,
+				order: index + 1,
+				repetitions: toPositiveNumberOr(activity.repetitions, 1),
+				restTime: toNonNegativeNumberOr(activity.restTime, 0),
+				notes: activity.notes.trim() || undefined,
+			});
+		}
 		updateRoutine({
 			routineId,
 			data: {
 				name: state.name.trim(),
 				label: state.label.trim(),
-				activities: state.activities.map((activity, index) => ({
-					taskId: activity.taskId,
-					order: index + 1,
-					repetitions: toPositiveNumberOr(activity.repetitions, 1),
-					restTime: toNonNegativeNumberOr(activity.restTime, 0),
-					notes: activity.notes.trim() || undefined,
-				})) as unknown as CreateRoutineActivityItemDto,
+				activities: routineActivities,
 			},
 		});
 	};
@@ -201,7 +210,7 @@ const AdminRoutinesEditRoute = observer(() => {
 			actions={
 				<div className="flex gap-2">
 					<Button
-						variant="flat"
+						variant="tertiary"
 						startContent={<ArrowLeft className="h-4 w-4" />}
 						onPress={() => {
 							router.push(`/routines/${routineId}` as Route);
@@ -210,7 +219,7 @@ const AdminRoutinesEditRoute = observer(() => {
 						상세로
 					</Button>
 					<Button
-						color="primary"
+						variant="primary"
 						startContent={<Save className="h-4 w-4" />}
 						isLoading={isPending}
 						onPress={onClickSaveButton}
@@ -235,15 +244,20 @@ function mapRoutineTaskCandidate(
 		: undefined;
 
 	return {
-		id: task.id,
+		id: String(task.id),
 		exerciseName: task.exercise.name,
 		exerciseCount: task.exercise.count || 1,
-		imageFileId: task.exercise.imageFileId,
-		videoFileId: task.exercise.videoFileId,
+		imageFileId: task.exercise.imageFileId ?? undefined,
+		videoFileId: task.exercise.videoFileId ?? undefined,
 		imageAssetUrl: imageAssetUrl ?? undefined,
 		videoAssetUrl: videoAssetUrl ?? undefined,
 		isSchedulable: Boolean(task.exercise.videoFileId),
 	};
+}
+
+function parsePositiveBigInt(value: string): bigint | undefined {
+	const trimmedValue = value.trim();
+	return /^[1-9]\d*$/.test(trimmedValue) ? BigInt(trimmedValue) : undefined;
 }
 
 function mapRoutineActivityFormItem(
