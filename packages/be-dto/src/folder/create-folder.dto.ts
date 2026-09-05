@@ -1,15 +1,13 @@
-import { BigIntIdFieldOptional, StringField } from "@cocrepo/decorator/field";
+import { StringField } from "@cocrepo/decorator/field";
+import { Folder } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 
 /**
  * 폴더 생성 DTO
  */
-export class CreateFolderDto {
-	@BigIntIdFieldOptional({
-		nullable: true,
-		description: "부모 폴더 ID (루트면 null)",
-	})
-	parentFolderId?: bigint | null;
-
+export class CreateFolderDto extends PickType(Folder, [
+	"parentFolderId",
+] as const) {
 	@StringField({
 		description: "폴더명",
 		maxLength: 100,

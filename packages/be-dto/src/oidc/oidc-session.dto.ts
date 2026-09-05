@@ -1,22 +1,12 @@
-import {
-	BigIntIdField,
-	DateField,
-	StringField,
-	StringFieldOptional,
-} from "@cocrepo/decorator/field";
+import { DateField, StringFieldOptional } from "@cocrepo/decorator/field";
+import { OidcModel } from "@cocrepo/entity";
+import { EntityResponseType } from "../mapped-types";
 
-export class OidcSessionDto {
-	@BigIntIdField()
-	id: bigint;
+export class OidcSessionDto extends EntityResponseType(OidcModel, {
+	pick: ["id", "key", "modelType", "createdAt"] as const,
 
-	@StringField({ description: "모델 키 (jti 또는 uid)" })
-	key: string;
-
-	@StringField({
-		description: "모델 타입 (AccessToken, RefreshToken, Session 등)",
-	})
-	modelType: string;
-
+	extraFields: ["grantId", "uid", "accountId", "expiresAt"],
+}) {
 	@StringFieldOptional({ description: "Grant ID (토큰 폐기용)" })
 	grantId: string | null;
 
@@ -28,7 +18,4 @@ export class OidcSessionDto {
 
 	@DateField({ nullable: true })
 	expiresAt: Date | null;
-
-	@DateField()
-	createdAt: Date;
 }

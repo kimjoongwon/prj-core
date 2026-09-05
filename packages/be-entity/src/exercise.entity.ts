@@ -1,17 +1,26 @@
+import {
+	BigIntIdField,
+	ClassField,
+	NumberField,
+	StringField,
+	StringFieldOptional,
+	UUIDFieldOptional,
+} from "@cocrepo/decorator/field";
+import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
-import type { Task } from "./task.entity";
+import { Task } from "./task.entity";
 
 export class Exercise extends AbstractEntity {
 	/** 공개 식별자 ULID */
-	exerciseId!: string;
+	@Exclude({ toPlainOnly: true }) exerciseId!: string;
 
-	duration!: number;
-	count!: number;
-	taskId!: bigint;
-	description!: string | null;
-	imageFileId!: string | null;
-	videoFileId!: string | null;
-	name!: string;
+	@NumberField() duration!: number;
+	@NumberField() count!: number;
+	@BigIntIdField() taskId!: bigint;
+	@StringFieldOptional({ nullable: true }) description!: string | null;
+	@UUIDFieldOptional({ nullable: true }) imageFileId!: string | null;
+	@UUIDFieldOptional({ nullable: true }) videoFileId!: string | null;
+	@StringField() name!: string;
 
-	task?: Task;
+	@ClassField(() => Task) task?: Task;
 }

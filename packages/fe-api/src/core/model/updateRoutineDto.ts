@@ -19,5 +19,5 @@ import type { CreateRoutineActivityItemDto } from "./createRoutineActivityItemDt
 export interface UpdateRoutineDto {
 	name?: string;
 	label?: string;
-	activities?: CreateRoutineActivityItemDto;
+	activities?: CreateRoutineActivityItemDto[];
 }

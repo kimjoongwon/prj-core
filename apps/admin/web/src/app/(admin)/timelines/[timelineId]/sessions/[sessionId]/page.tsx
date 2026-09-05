@@ -150,14 +150,14 @@ const AdminTimelinesTimelineIdSessionsSessionIdRoute = observer(() => {
 			`/timelines/${timelineId}/sessions/${sessionId}/programs/new` as Route,
 		);
 	};
-	const onClickEditProgramButton = (programId: string) => {
+	const onClickEditProgramButton = (programId: bigint) => {
 		router.push(
 			`/timelines/${timelineId}/sessions/${sessionId}/programs/${programId}/edit` as Route,
 		);
 	};
-	const onClickDeleteProgramButton = (programId: string) => {
+	const onClickDeleteProgramButton = (programId: bigint) => {
 		deleteProgram(
-			{ timelineId, sessionId, programId },
+			{ timelineId, sessionId, programId: programId.toString() },
 			{
 				onSuccess: () => {
 					toast.success("삭제 성공", {

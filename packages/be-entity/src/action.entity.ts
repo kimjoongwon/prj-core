@@ -1,11 +1,13 @@
 import type { Prisma } from "@cocrepo/prisma";
+import { NumberField, StringField, StringFieldOptional, ClassField } from "@cocrepo/decorator/field";
+import { Exclude } from "class-transformer";
 import type {
 	ActionConfig,
 	ActionFormatConfig,
 	ActionMaskingConfig,
 	ActionTransformConfig,
 } from "@cocrepo/type";
-import type { Ability } from "./ability.entity";
+import { Ability } from "./ability.entity";
 import { AbstractEntity } from "./abstract.entity";
 
 // @cocrepo/type에서 타입 재export (하위 호환성)
@@ -31,23 +33,23 @@ export type {
  */
 export class Action extends AbstractEntity {
 	/** 공개 식별자 ULID */
-	actionId!: string;
+	@Exclude({ toPlainOnly: true }) actionId!: string;
 
 	/** Action 이름 ('create', 'read', 'read:masked:email' 등) */
-	name!: string;
+	@StringField() name!: string;
 	/** 표시명 */
-	displayName!: string | null;
+	@StringFieldOptional({ nullable: true }) displayName!: string | null;
 	/** 설명 */
-	description!: string | null;
+	@StringFieldOptional({ nullable: true }) description!: string | null;
 	/** 그룹 ('crud', 'visibility', 'bulk', 'workflow') */
-	group!: string | null;
+	@StringFieldOptional({ nullable: true }) group!: string | null;
 	/** 정렬 순서 */
-	order!: number;
+	@NumberField() order!: number;
 	/** Action 설정 (마스킹, 포맷팅 등) */
 	config!: Prisma.JsonValue | null;
 
 	// 관계
-	abilities?: Ability[];
+	@ClassField(() => Ability, { required: false, each: true }) abilities?: Ability[];
 
 	/**
 	 * config에서 마스킹 프리셋 가져오기

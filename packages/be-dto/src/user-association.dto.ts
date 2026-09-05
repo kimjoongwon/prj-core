@@ -1,28 +1,24 @@
-import { BigIntIdField, ClassField } from "@cocrepo/decorator/field";
-import type { DomainEntityModel } from "@cocrepo/entity";
-import type { UserAssociation } from "@cocrepo/prisma";
-import { Exclude } from "class-transformer";
-import { AbstractDto } from "./abstract.dto";
+import { UserAssociation } from "@cocrepo/entity";
 import { GroupDto } from "./group.dto";
+import { EntityResponseType } from "./mapped-types";
 import { UserDto } from "./user.dto";
 
-export class UserAssociationDto
-	extends AbstractDto
-	implements DomainEntityModel<UserAssociation, "userAssociationId">
-{
-	@Exclude()
-	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
-	private readonly userAssociationId?: never;
-
-	@BigIntIdField()
-	userId: bigint;
-
-	@BigIntIdField()
-	groupId: bigint;
-
-	@ClassField(() => GroupDto, { required: false, swagger: false })
-	group?: GroupDto;
-
-	@ClassField(() => UserDto, { required: false, swagger: false })
-	user?: UserDto;
+export class UserAssociationDto extends EntityResponseType(UserAssociation, {
+	pick: [
+		"id",
+		"createdAt",
+		"updatedAt",
+		"removedAt",
+		"userId",
+		"groupId",
+		"group",
+		"user",
+	] as const,
+	relations: {
+		group: () => GroupDto,
+		user: () => UserDto,
+	},
+}) {
+	declare group?: GroupDto;
+	declare user?: UserDto;
 }

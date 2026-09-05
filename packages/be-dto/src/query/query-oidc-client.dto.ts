@@ -1,17 +1,17 @@
 import {
-	BooleanFieldOptional,
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
 import { Transform } from "class-transformer";
 
-import { QueryDto } from "./query.dto";
+import { EntityQueryType } from "./entity-query-type";
+import { OidcClient } from "@cocrepo/entity";
 
-export class QueryOidcClientDto extends QueryDto {
+export class QueryOidcClientDto extends EntityQueryType(OidcClient, [
+	"isActive",
+] as const) {
 	@StringFieldOptional({ description: "Client ID 또는 이름 통합 검색" })
 	readonly search?: string;
 
-	@BooleanFieldOptional({ description: "활성 상태 필터" })
-	readonly isActive?: boolean;
 
 	@StringFieldOptional({
 		each: true,

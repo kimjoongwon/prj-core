@@ -1,6 +1,5 @@
-import { OmitType, PartialType } from "@nestjs/swagger";
-
-import { CreateOidcClientDto } from "../create/create-oidc-client.dto";
+import { OidcClient } from "@cocrepo/entity";
+import { PartialType, PickType } from "@nestjs/swagger";
 
 /**
  * OIDC 클라이언트 수정 DTO
@@ -8,5 +7,21 @@ import { CreateOidcClientDto } from "../create/create-oidc-client.dto";
  * - 나머지 필드는 모두 선택적
  */
 export class UpdateOidcClientDto extends PartialType(
-	OmitType(CreateOidcClientDto, ["clientId"]),
+	PickType(OidcClient, [
+		"clientSecret",
+		"name",
+		"redirectUris",
+		"loginUrl",
+		"defaultReturnTo",
+		"grantTypes",
+		"responseTypes",
+		"tokenEndpointAuthMethod",
+		"scope",
+		"isFirstParty",
+		"loginUi",
+		"logoUri",
+		"policyUri",
+		"tosUri",
+		"skipConsent",
+	] as const),
 ) {}

@@ -1,22 +1,14 @@
-import {
-	BigIntIdField,
-	NumberFieldOptional,
-	StringFieldOptional,
-} from "@cocrepo/decorator/field";
+import { StringFieldOptional } from "@cocrepo/decorator/field";
+import { Activity } from "@cocrepo/entity";
+import { IntersectionType, PartialType, PickType } from "@nestjs/swagger";
 
-export class CreateRoutineActivityItemDto {
-	@BigIntIdField()
-	taskId: bigint;
-
-	@NumberFieldOptional()
-	order?: number;
-
-	@NumberFieldOptional()
-	repetitions?: number;
-
-	@NumberFieldOptional()
-	restTime?: number;
-
+export class CreateRoutineActivityItemDto extends IntersectionType(
+	PickType(Activity, ["taskId"] as const),
+	PartialType(
+		PickType(Activity, ["order", "repetitions", "restTime"] as const),
+		{ skipNullProperties: false },
+	),
+) {
 	@StringFieldOptional()
 	notes?: string;
 }

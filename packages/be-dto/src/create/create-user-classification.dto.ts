@@ -1,8 +1,7 @@
-import { OmitType } from "@nestjs/swagger";
-import { COMMON_ENTITY_FIELDS } from "../constant";
-import { UserClassificationDto } from "../user-classification.dto";
+import { UserClassification } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 
-export class CreateUserClassificationDto extends OmitType(
-	UserClassificationDto,
-	[...COMMON_ENTITY_FIELDS, "user", "category"],
-) {}
+export class CreateUserClassificationDto extends PickType(UserClassification, [
+	"categoryId",
+	"userId",
+] as const) {}

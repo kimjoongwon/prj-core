@@ -31,6 +31,16 @@ Controller
 - HTTP status, guard, decorator, DTO 입력 변환은 Controller 책임입니다.
 - workflow, pagination meta, read-model 조립은 UseCase handler 책임입니다.
 
+## 요청 검증
+
+`setNestApp()`의 `ApiValidationPipe`가 요청 DTO를 변환하고 검증합니다. 기본적으로 검증 메타데이터가 없는 입력 속성은 제거합니다. 역할 생성·수정 요청(`CreateRoleDto`, `UpdateRoleDto`)은 전역 검증의 최초 경계에서 알 수 없는 속성을 400으로 거부합니다. 따라서 `assignments`는 역할 쓰기 요청에 사용할 수 없으며, 생성은 `name/displayName/description`, 수정은 `displayName/description`만 받습니다. 허용된 필드의 필수·선택·null 규칙은 Entity에서 파생한 DTO 메타데이터를 따릅니다.
+
+## 문의 참여자 응답 문서
+
+`GET /api/v1/inquiries/{inquiryId}/participants`는 기존 `InquiryParticipant` 스키마명을 유지하며, 이전에 비어 있던 OpenAPI 객체에 Entity의 공개 필드 15개를 문서화합니다. 공통 ID·시각, 문의·스레드·사용자 ID, 역할, 온라인·타이핑 상태, 읽지 않은 메시지 수와 참여·접속·읽음·종료 시각을 포함합니다. `threadId`만 선택 필드이고 나머지는 필수 필드이며, null 허용 여부는 기존 상태 계약을 따릅니다. 내부 ULID와 `inquiry/thread/user` 관계는 이 스키마에 포함하지 않습니다.
+
+이 변경은 기존 응답 본문에 대한 문서와 생성 SDK 타입을 구체화합니다. ID의 wire 표현은 canonical decimal 문자열이며 `x-runtime-type: bigint`를 유지합니다. `src/swagger/inquiry-participant.openapi.spec.ts`가 실제 Controller의 스키마명·공개 필드·ID 표현과 생성 SDK의 필드 목록을 함께 검증합니다.
+
 ## UseCase Rules
 
 - `@CommandHandler()`와 `@QueryHandler()` handler를 UseCase로 봅니다.

@@ -1,11 +1,23 @@
-import type { MessageContentType, Prisma, SenderType } from "@cocrepo/prisma";
+import {
+	BigIntIdField,
+	BigIntIdFieldOptional,
+	BooleanField,
+	ClassField,
+	DateField,
+	EnumField,
+	StringField,
+	UUIDFieldOptional,
+} from "@cocrepo/decorator/field";
+
+import { MessageContentType, type Prisma, SenderType } from "@cocrepo/prisma";
+import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
-import type { AIAgentLog } from "./ai-agent-log.entity";
-import type { Inquiry } from "./inquiry.entity";
-import type { InquiryAttachment } from "./inquiry-attachment.entity";
-import type { InquiryThread } from "./inquiry-thread.entity";
-import type { SentimentAnalysis } from "./sentiment-analysis.entity";
-import type { User } from "./user.entity";
+import { AIAgentLog } from "./ai-agent-log.entity";
+import { Inquiry } from "./inquiry.entity";
+import { InquiryAttachment } from "./inquiry-attachment.entity";
+import { InquiryThread } from "./inquiry-thread.entity";
+import { SentimentAnalysis } from "./sentiment-analysis.entity";
+import { User } from "./user.entity";
 
 /**
  * 문의 스레드 내 개별 메시지를 관리하는 엔티티
@@ -15,38 +27,60 @@ import type { User } from "./user.entity";
  */
 export class InquiryMessage extends AbstractEntity {
 	/** 공개 식별자 ULID */
+	@Exclude({ toPlainOnly: true })
 	inquiryMessageId!: string;
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
+	@BigIntIdField({ description: "소속 스레드 ID" })
 	threadId!: bigint;
+	@BigIntIdField({ description: "소속 문의 ID" })
 	inquiryId!: bigint;
+	@EnumField(() => SenderType, { description: "발신자 유형" })
 	senderType!: SenderType;
+	@StringField({ description: "메시지 내용" })
 	content!: string;
+	@EnumField(() => MessageContentType, { description: "콘텐츠 유형" })
 	contentType!: MessageContentType;
+	@BooleanField({ description: "수정 여부" })
 	isEdited!: boolean;
+	@BooleanField({ description: "삭제 여부" })
 	isDeleted!: boolean;
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
+	@BigIntIdFieldOptional({ nullable: true, description: "발신자 ID" })
 	senderId!: bigint | null;
+	@UUIDFieldOptional({ nullable: true, description: "클라이언트 메시지 ID" })
 	clientMessageId!: string | null;
+	@DateField({ nullable: true, description: "전달 완료 시간" })
 	deliveredAt!: Date | null;
+	@DateField({ nullable: true, description: "읽음 확인 시간" })
 	readAt!: Date | null;
+	@DateField({ nullable: true, description: "수정 일시" })
 	editedAt!: Date | null;
 	metadata!: Prisma.JsonValue | null;
 
 	// ============================================================================
 	// 관계 필드 (선택적)
 	// ============================================================================
-	thread?: InquiryThread;
-	inquiry?: Inquiry;
+	@ClassField(() => InquiryThread, { required: false }) thread?: InquiryThread;
+	@ClassField(() => Inquiry, { required: false }) inquiry?: Inquiry;
+	@ClassField(() => User, { required: false, nullable: true })
 	sender?: User | null;
+	@ClassField(() => InquiryAttachment, {
+		isArray: true,
+		required: false,
+		description: "첨부파일 목록",
+	})
 	attachments?: InquiryAttachment[];
+	@ClassField(() => SentimentAnalysis, { required: false, each: true })
 	sentimentAnalyses?: SentimentAnalysis[];
+	@ClassField(() => SentimentAnalysis, { required: false, nullable: true })
 	sentimentAnalysis?: SentimentAnalysis | null;
+	@ClassField(() => AIAgentLog, { required: false, nullable: true })
 	aiAgentLog?: AIAgentLog | null;
 
 	// ============================================================================

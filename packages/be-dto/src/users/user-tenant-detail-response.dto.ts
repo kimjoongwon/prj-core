@@ -1,8 +1,29 @@
-import { TenantDto } from "../tenant.dto";
+import { Tenant } from "@cocrepo/entity";
+import { EntityResponseType } from "../mapped-types";
+import { RoleDto } from "../role.dto";
+import { SpaceDto } from "../space.dto";
+import { UserDto } from "../user.dto";
 
-/**
- * 사용자에게 속한 Tenant의 상세 응답입니다.
- *
- * Role의 정책 할당과 Policy의 권한 항목을 포함할 수 있습니다.
- */
-export class UserTenantDetailResponseDto extends TenantDto {}
+export class UserTenantDetailResponseDto extends EntityResponseType(Tenant, {
+	pick: [
+		"id",
+		"createdAt",
+		"updatedAt",
+		"removedAt",
+		"roleId",
+		"userId",
+		"spaceId",
+		"user",
+		"space",
+		"role",
+	] as const,
+	relations: {
+		user: () => UserDto,
+		space: () => SpaceDto,
+		role: () => RoleDto,
+	},
+}) {
+	declare user?: UserDto;
+	declare space?: SpaceDto;
+	declare role?: RoleDto;
+}

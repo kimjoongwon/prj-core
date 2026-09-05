@@ -2,15 +2,15 @@ import {
 	BooleanFieldOptional,
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
+import { User } from "@cocrepo/entity";
 import { Transform } from "class-transformer";
-import { QueryDto } from "./query.dto";
+import { EntityQueryType } from "./entity-query-type";
 
-export class QueryIdpAccountDto extends QueryDto {
+export class QueryIdpAccountDto extends EntityQueryType(User, [
+	"isActive",
+] as const) {
 	@StringFieldOptional({ description: "이름 또는 이메일 검색" })
 	readonly search?: string;
-
-	@BooleanFieldOptional({ description: "활성 상태 필터" })
-	readonly isActive?: boolean;
 
 	@BooleanFieldOptional({ description: "잠금 상태 필터" })
 	readonly isLocked?: boolean;

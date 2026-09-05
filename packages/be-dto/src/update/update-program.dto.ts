@@ -1,4 +1,12 @@
-import { PartialType } from "@nestjs/swagger";
-import { CreateProgramDto } from "../create/create-program.dto";
+import { Program } from "@cocrepo/entity";
+import { PartialType, PickType } from "@nestjs/swagger";
 
-export class UpdateProgramDto extends PartialType(CreateProgramDto) {}
+export class UpdateProgramDto extends PartialType(
+	PickType(Program, [
+		"routineId",
+		"instructorId",
+		"capacity",
+		"name",
+		"level",
+	] as const),
+) {}

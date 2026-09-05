@@ -1,53 +1,34 @@
-import { BigIntIdField } from "@cocrepo/decorator/field";
+import { Ability } from "@cocrepo/entity";
 import { ApiProperty } from "@nestjs/swagger";
-import { Expose, Type } from "class-transformer";
+import { EntityResponseType } from "../mapped-types";
 import { ActionResponseDto } from "./action-response.dto";
 import { SubjectResponseDto } from "./subject-response.dto";
 
-/**
- * Ability 응답 DTO (CASL ABAC 기반)
- *
- * @description
- * DDD 원칙에 따라 Ability는 Role + Subject + Action + fields의 연결만 담당합니다.
- * 마스킹 등의 설정은 Action.config에서 가져옵니다.
- */
-export class AbilityResponseDto {
-	@BigIntIdField({ description: "Ability ID" })
-	@Expose()
-	id!: bigint;
-
-	@BigIntIdField({ description: "Action ID" })
-	@Expose()
-	actionId!: bigint;
-
-	@ApiProperty({
-		description: "Action 상세 정보",
-		type: ActionResponseDto,
-		required: false,
-	})
-	@Expose()
-	@Type(() => ActionResponseDto)
-	action?: ActionResponseDto;
-
-	@BigIntIdField({ description: "Subject ID" })
-	@Expose()
-	subjectId!: bigint;
-
-	@ApiProperty({
-		description: "Subject 상세 정보",
-		type: SubjectResponseDto,
-		required: false,
-	})
-	@Expose()
-	@Type(() => SubjectResponseDto)
-	subject?: SubjectResponseDto;
-
+export class AbilityResponseDto extends EntityResponseType(Ability, {
+	pick: [
+		"id",
+		"actionId",
+		"action",
+		"subjectId",
+		"subject",
+		"inverted",
+		"name",
+		"createdAt",
+		"updatedAt",
+	] as const,
+	relations: {
+		action: () => ActionResponseDto,
+		subject: () => SubjectResponseDto,
+	},
+	extraFields: ["fields", "conditions", "reason", "description"],
+}) {
+	declare action?: ActionResponseDto;
+	declare subject?: SubjectResponseDto;
 	@ApiProperty({
 		description: "대상 필드 목록",
 		example: ["email", "name"],
 		type: [String],
 	})
-	@Expose()
 	fields!: string[];
 
 	@ApiProperty({
@@ -55,51 +36,19 @@ export class AbilityResponseDto {
 		example: { id: "${user.id}" },
 		nullable: true,
 	})
-	@Expose()
 	conditions!: Record<string, unknown> | null;
-
-	@ApiProperty({
-		description: "거부 권한 여부 (true: cannot, false: can)",
-		example: false,
-	})
-	@Expose()
-	inverted!: boolean;
 
 	@ApiProperty({
 		description: "거부 사유",
 		example: "관리자만 삭제할 수 있습니다",
 		nullable: true,
 	})
-	@Expose()
 	reason!: string | null;
-
-	@ApiProperty({
-		description: "권한 이름 (고유 식별자)",
-		example: "Read User Email Masked",
-	})
-	@Expose()
-	name!: string;
 
 	@ApiProperty({
 		description: "권한 설명",
 		example: "사용자 이메일을 마스킹하여 조회합니다",
 		nullable: true,
 	})
-	@Expose()
 	description!: string | null;
-
-	@ApiProperty({
-		description: "생성 일시",
-		example: "2025-01-01T00:00:00.000Z",
-	})
-	@Expose()
-	createdAt!: Date;
-
-	@ApiProperty({
-		description: "수정 일시",
-		example: "2025-01-01T00:00:00.000Z",
-		nullable: true,
-	})
-	@Expose()
-	updatedAt!: Date | null;
 }

@@ -1,31 +1,32 @@
+import type { ComponentProps } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { SubjectListScreen } from "./SubjectListScreen";
 
-const defaultArgs = {
+const defaultArgs: ComponentProps<typeof SubjectListScreen> = {
 	isLoading: false,
-	onClickSubject: (_subjectId: string) => undefined,
+	onClickSubject: () => undefined,
 	queryStates: { page: 1, take: 10, skip: 0, search: "", group: "" },
-	setQueryStates: (..._args: never[]) => Promise.resolve(new URLSearchParams()),
+	setQueryStates: () => Promise.resolve(new URLSearchParams()),
 	subjects: [
 		{
-			createdAt: "2026-04-14T09:00:00.000Z",
+			createdAt: new Date("2026-04-14T09:00:00.000Z"),
 			displayName: "사용자",
 			group: "entity",
-			id: "subject-1",
+			id: 1n,
 			name: "entity:User",
 			order: 1,
 			removedAt: null,
-			updatedAt: "2026-04-14T09:00:00.000Z",
+			updatedAt: new Date("2026-04-14T09:00:00.000Z"),
 		},
 		{
-			createdAt: "2026-04-14T09:00:00.000Z",
+			createdAt: new Date("2026-04-14T09:00:00.000Z"),
 			displayName: "대시보드",
 			group: "menu",
-			id: "subject-2",
+			id: 2n,
 			name: "menu:dashboard",
 			order: 10,
 			removedAt: null,
-			updatedAt: "2026-04-14T09:00:00.000Z",
+			updatedAt: new Date("2026-04-14T09:00:00.000Z"),
 		},
 	],
 };
@@ -43,11 +44,15 @@ const emptyStateArgs = {
 const meta = {
 	title: "screen/SubjectListScreen",
 	component: SubjectListScreen,
+	// bigint 응답 fixture는 JSON 기반 Controls 편집에서 제외합니다.
+	argTypes: {
+		subjects: { control: false },
+	},
 	parameters: {
 		layout: "fullscreen",
 	},
 	tags: ["autodocs"],
-	args: defaultArgs as never,
+	args: defaultArgs,
 } satisfies Meta<typeof SubjectListScreen>;
 
 export default meta;
@@ -57,9 +62,9 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const Loading: Story = {
-	args: loadingArgs as never,
+	args: loadingArgs,
 };
 
 export const EmptyState: Story = {
-	args: emptyStateArgs as never,
+	args: emptyStateArgs,
 };

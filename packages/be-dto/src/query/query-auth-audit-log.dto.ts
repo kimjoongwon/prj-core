@@ -1,17 +1,16 @@
 import {
 	DateFieldOptional,
-	EnumFieldOptional,
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
-import { AuthAuditResult } from "@cocrepo/prisma";
-import { QueryDto } from "./query.dto";
+import { EntityQueryType } from "./entity-query-type";
+import { AuthAuditLog } from "@cocrepo/entity";
 
-export class QueryAuthAuditLogDto extends QueryDto {
+export class QueryAuthAuditLogDto extends EntityQueryType(AuthAuditLog, [
+	"result",
+] as const) {
 	@StringFieldOptional({ description: "이메일 (부분 일치)" })
 	readonly email?: string;
 
-	@EnumFieldOptional(() => AuthAuditResult, { description: "인증 결과" })
-	readonly result?: AuthAuditResult;
 
 	@StringFieldOptional({ description: "IP 주소 (부분 일치)" })
 	readonly ipAddress?: string;

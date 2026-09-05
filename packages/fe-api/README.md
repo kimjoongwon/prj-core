@@ -81,6 +81,7 @@ function UserList() {
 - **모드**: `tags-split` - OpenAPI 태그별로 파일 분할
 - **클라이언트**: `react-query` - React Query 훅 생성
 - **커스텀 Axios**: `customInstance` 사용 (`src/libs/customAxios.ts` 단일 인스턴스)
+- **런타임 타입**: `useBigInt: true`, `useDates: true`로 생성한 `bigint`·`Date` 타입을 `customInstance`의 변환 결과와 일치시킵니다. HTTP JSON의 ID 문자열·ISO 시각 문자열 표현은 유지하며, 요청에서는 클라이언트 값을 문자열로 직렬화하고 응답에서는 해당 값으로 복원합니다.
 - **생성 방식**: Orval 산출물을 직접 사용, 후처리 스크립트 없음
 - **배럴 정책**: 태그 경로는 훅/함수와 최소 DTO/enum만 노출, 전체 모델은 재export하지 않음
 - **환경별 API URL**: `ORVAL_ENV` 또는 localhost 자동 감지 기반 선택

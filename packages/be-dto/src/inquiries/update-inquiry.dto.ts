@@ -1,19 +1,22 @@
 import {
 	BigIntIdFieldOptional,
-	BooleanFieldOptional,
-	EnumFieldOptional,
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
-import {
-	InquiryCategory,
-	InquiryPriority,
-	InquiryStatus,
-} from "@cocrepo/prisma";
+import { Inquiry } from "@cocrepo/entity";
+import { PartialType, PickType } from "@nestjs/swagger";
 
 /**
  * 문의 수정 DTO
  */
-export class UpdateInquiryDto {
+export class UpdateInquiryDto extends PartialType(
+	PickType(Inquiry, [
+		"category",
+		"status",
+		"priority",
+		"isRealtimeChat",
+	] as const),
+	{ skipNullProperties: false },
+) {
 	@StringFieldOptional({
 		minLength: 2,
 		maxLength: 200,
@@ -21,28 +24,8 @@ export class UpdateInquiryDto {
 	})
 	title?: string;
 
-	@EnumFieldOptional(() => InquiryCategory, {
-		description: "문의 카테고리",
-	})
-	category?: InquiryCategory;
-
-	@EnumFieldOptional(() => InquiryStatus, {
-		description: "문의 상태",
-	})
-	status?: InquiryStatus;
-
-	@EnumFieldOptional(() => InquiryPriority, {
-		description: "문의 우선순위",
-	})
-	priority?: InquiryPriority;
-
 	@BigIntIdFieldOptional({
 		description: "담당자 ID",
 	})
 	assigneeId?: bigint;
-
-	@BooleanFieldOptional({
-		description: "실시간 채팅 활성화 여부",
-	})
-	isRealtimeChat?: boolean;
 }

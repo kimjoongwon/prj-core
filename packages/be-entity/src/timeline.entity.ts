@@ -1,18 +1,26 @@
+import {
+	BigIntIdField,
+	BigIntIdFieldOptional,
+	ClassField,
+	StringField,
+	StringFieldOptional,
+} from "@cocrepo/decorator/field";
+import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
-import type { Session } from "./session.entity";
+import { Session } from "./session.entity";
 import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
 
 export class Timeline extends AbstractEntity {
 	/** 공개 식별자 ULID */
-	timelineId!: string;
+	@Exclude({ toPlainOnly: true }) timelineId!: string;
 
-	spaceId!: bigint;
-	createdById!: bigint | null;
-	name!: string;
-	description!: string | null;
+	@BigIntIdField() spaceId!: bigint;
+	@BigIntIdFieldOptional({ nullable: true }) createdById!: bigint | null;
+	@StringField() name!: string;
+	@StringFieldOptional({ nullable: true }) description!: string | null;
 
 	space?: Space;
 	createdBy?: User;
-	sessions?: Session[];
+	@ClassField(() => Session, { isArray: true }) sessions?: Session[];
 }

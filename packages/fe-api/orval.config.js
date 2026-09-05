@@ -147,6 +147,9 @@ async function createConfig() {
 				mode: "tags-split",
 
 				override: {
+					// customInstance가 복원하는 실제 클라이언트 값과 타입을 맞춥니다.
+					useBigInt: true,
+					useDates: true,
 					// 커스텀 Axios 인스턴스 사용 설정
 					mutator: {
 						// 커스텀 Axios 설정 파일 경로
@@ -155,8 +158,8 @@ async function createConfig() {
 						name: "customInstance",
 					},
 
-				// React Query 훅 생성 옵션
-				query: queryOptions,
+					// React Query 훅 생성 옵션
+					query: queryOptions,
 				},
 			},
 			hooks: {

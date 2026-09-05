@@ -1,5 +1,7 @@
-import type { Ability } from "./ability.entity";
+import { Ability } from "./ability.entity";
 import { AbstractEntity } from "./abstract.entity";
+import { ClassField, NumberField, StringField, StringFieldOptional } from "@cocrepo/decorator/field";
+import { Exclude } from "class-transformer";
 
 /**
  * CASL Subject 엔티티
@@ -7,15 +9,15 @@ import { AbstractEntity } from "./abstract.entity";
  */
 export class Subject extends AbstractEntity {
 	/** 공개 식별자 ULID */
-	subjectId!: string;
+	@Exclude({ toPlainOnly: true }) subjectId!: string;
 
-	name!: string;
-	displayName!: string | null;
-	icon!: string | null;
-	group!: string | null;
-	order!: number;
+	@StringField() name!: string;
+	@StringFieldOptional({ nullable: true }) displayName!: string | null;
+	@StringFieldOptional({ nullable: true }) icon!: string | null;
+	@StringFieldOptional({ nullable: true }) group!: string | null;
+	@NumberField() order!: number;
 
-	abilities?: Ability[];
+	@ClassField(() => Ability, { required: false, each: true }) abilities?: Ability[];
 
 	/**
 	 * Entity Subject인지 확인

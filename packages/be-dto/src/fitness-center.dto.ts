@@ -1,67 +1,41 @@
-import {
-	BigIntIdField,
-	ClassField,
-	EnumField,
-	StringField,
-	StringFieldOptional,
-	UUIDFieldOptional,
-} from "@cocrepo/decorator/field";
-import type { DomainEntityModel } from "@cocrepo/entity";
-import {
-	type FitnessCenter as FitnessCenterEntity,
-	LanguageCode,
-} from "@cocrepo/prisma";
-import { Exclude, Expose } from "class-transformer";
-import { AbstractDto } from "./abstract.dto";
+import { EnumField } from "@cocrepo/decorator/field";
+import { FitnessCenter, Space } from "@cocrepo/entity";
+import { LanguageCode } from "@cocrepo/prisma";
 import { CompanyDto } from "./company.dto";
+import { EntityResponseType } from "./mapped-types";
 
-/**
- * Space별 피트니스센터 상세 응답에서 콘텐츠 언어를 함께 제공하는 최소 Space 정보입니다.
- */
-export class FitnessCenterSpaceDto {
-	@BigIntIdField()
-	id: bigint;
-
+/** 콘텐츠 언어를 포함하는 공개 Space 요약입니다. */
+export class FitnessCenterSpaceDto extends EntityResponseType(Space, {
+	pick: ["id"] as const,
+	extraFields: ["contentLanguageCode"],
+}) {
+	// 이 요약의 콘텐츠 언어는 기본값을 선언하지 않는 API 계약입니다.
 	@EnumField(() => LanguageCode)
 	contentLanguageCode: LanguageCode;
 }
 
-export class FitnessCenterDto
-	extends AbstractDto
-	implements DomainEntityModel<FitnessCenterEntity, "fitnessCenterId">
-{
-	@Exclude()
-	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
-	private readonly fitnessCenterId?: never;
-
-	@StringField()
-	@Expose()
-	name: string;
-
-	@StringFieldOptional({ nullable: true })
-	label: string | null;
-
-	@StringField()
-	address: string;
-
-	@StringField()
-	phone: string;
-
-	@StringField()
-	email: string;
-
-	@BigIntIdField()
-	companyId: bigint;
-
-	@UUIDFieldOptional({ nullable: true })
-	imageFileId: string | null;
-
-	@BigIntIdField()
-	spaceId: bigint;
-
-	@ClassField(() => CompanyDto, { required: false, nullable: true })
-	company?: CompanyDto | null;
-
-	@ClassField(() => FitnessCenterSpaceDto, { required: false, nullable: true })
-	space?: FitnessCenterSpaceDto | null;
+export class FitnessCenterDto extends EntityResponseType(FitnessCenter, {
+	pick: [
+		"id",
+		"createdAt",
+		"updatedAt",
+		"removedAt",
+		"name",
+		"label",
+		"address",
+		"phone",
+		"email",
+		"companyId",
+		"imageFileId",
+		"spaceId",
+		"company",
+		"space",
+	] as const,
+	relations: {
+		company: () => CompanyDto,
+		space: () => FitnessCenterSpaceDto,
+	},
+}) {
+	declare company?: CompanyDto | null;
+	declare space?: FitnessCenterSpaceDto | null;
 }

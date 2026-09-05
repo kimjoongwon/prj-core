@@ -1,10 +1,8 @@
-import { OmitType } from "@nestjs/swagger";
-import { COMMON_ENTITY_FIELDS } from "../constant";
-import { TenantDto } from "../tenant.dto";
+import { Tenant } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 
-export class CreateTenantDto extends OmitType(TenantDto, [
-	...COMMON_ENTITY_FIELDS,
-	"space",
-	"user",
-	"role",
-]) {}
+export class CreateTenantDto extends PickType(Tenant, [
+	"roleId",
+	"userId",
+	"spaceId",
+] as const) {}

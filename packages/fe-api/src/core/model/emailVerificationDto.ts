@@ -17,18 +17,9 @@
 import type { EmailVerificationStatus } from "./emailVerificationStatus";
 
 export interface EmailVerificationDto {
-	/**
-	 * ID
-	 * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
-	 */
-	id: number;
-	/** 생성일 */
-	createdAt: string;
-	/**
-	 * 수정일
-	 * @nullable
-	 */
-	updatedAt?: string | null;
+	/** @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$ */
+	id: bigint;
+	createdAt: Date;
 	/** 이메일 */
 	email: string;
 	/** 이름 */
@@ -36,17 +27,17 @@ export interface EmailVerificationDto {
 	/** 상태 */
 	status: EmailVerificationStatus;
 	/** 만료 시각 */
-	expiresAt: string;
+	expiresAt: Date;
 	/**
 	 * 인증 시각
 	 * @nullable
 	 */
-	verifiedAt?: string | null;
+	verifiedAt?: Date | null;
 	/**
 	 * 마지막 발송 시각
 	 * @nullable
 	 */
-	lastSentAt?: string | null;
+	lastSentAt?: Date | null;
 	/**
 	 * 발송 횟수
 	 * @minimum 0
@@ -62,12 +53,17 @@ export interface EmailVerificationDto {
 	 * @nullable
 	 * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
 	 */
-	verifiedUserId?: number | null;
+	verifiedUserId?: bigint | null;
+	/**
+	 * 수정일
+	 * @nullable
+	 */
+	updatedAt?: Date | null;
 	/** 재발송 가능 여부 */
 	canResend: boolean;
 	/**
 	 * 재발송 가능 시각
 	 * @nullable
 	 */
-	resendAvailableAt?: string | null;
+	resendAvailableAt?: Date | null;
 }

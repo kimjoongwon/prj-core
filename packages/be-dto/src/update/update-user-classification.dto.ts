@@ -1,6 +1,6 @@
-import { PartialType } from "@nestjs/swagger";
-import { CreateUserClassificationDto } from "../create/create-user-classification.dto";
+import { UserClassification } from "@cocrepo/entity";
+import { PartialType, PickType } from "@nestjs/swagger";
 
 export class UpdateUserClassificationDto extends PartialType(
-	CreateUserClassificationDto,
+	PickType(UserClassification, ["categoryId", "userId"] as const),
 ) {}

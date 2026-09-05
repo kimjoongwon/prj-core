@@ -19,8 +19,6 @@ import type { ServiceDocumentFormat } from "./serviceDocumentFormat";
 export interface UpdateServiceDocumentDto {
 	/** 제목 */
 	title?: string;
-	/** 요약 */
-	summary?: string;
 	/** 본문 */
 	content?: string;
 	/** 본문 형식 */
@@ -29,6 +27,8 @@ export interface UpdateServiceDocumentDto {
 	isRequired?: boolean;
 	/** 정렬 순서 */
 	displayOrder?: number;
+	/** 요약 */
+	summary?: string;
 	/** 효력 시작 시각 */
-	effectiveAt?: string;
+	effectiveAt?: Date;
 }

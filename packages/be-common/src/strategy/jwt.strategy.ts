@@ -1,5 +1,5 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
-import { User } from "@cocrepo/entity";
+import { hydrateEntity, User } from "@cocrepo/entity";
 import { AuthCacheService, UserService } from "@cocrepo/service";
 import type { AuthConfig } from "@cocrepo/type";
 import {
@@ -14,7 +14,6 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
-import { plainToInstance } from "class-transformer";
 import { Request } from "express";
 import jwksRsa from "jwks-rsa";
 import { ClsService } from "nestjs-cls";
@@ -120,7 +119,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		const cached = await this.authCacheService.get(userId);
 		if (cached) {
 			this.logger.debug(`JWT 검증 - 캐시 히트: ${userId}`);
-			return plainToInstance(User, parseBigIntJson(cached));
+			// 내부 캐시는 API 필드 변환 없이 원본 값과 User 동작을 복원합니다.
+			return hydrateEntity(User, parseBigIntJson<Partial<User>>(cached));
 		}
 
 		// 2. 캐시 미스 → DB 조회

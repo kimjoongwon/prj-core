@@ -4,7 +4,7 @@ export class CreateProgramCommand implements CreateProgramCommandInput {
 	readonly routineId!: CreateProgramCommandInput["routineId"];
 	readonly instructorId!: CreateProgramCommandInput["instructorId"];
 	readonly capacity!: CreateProgramCommandInput["capacity"];
-	readonly level!: CreateProgramCommandInput["level"];
+	readonly level?: CreateProgramCommandInput["level"];
 
 	constructor(
 		readonly sessionId: bigint,

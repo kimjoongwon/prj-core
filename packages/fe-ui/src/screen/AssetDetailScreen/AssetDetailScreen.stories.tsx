@@ -1,10 +1,11 @@
+import type { ComponentProps } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { AssetDetailScreen } from "./AssetDetailScreen";
 
-const defaultArgs = {
+const defaultArgs: ComponentProps<typeof AssetDetailScreen> = {
 	asset: {
 		checksum: "checksum-1",
-		createdAt: "2026-04-14T09:00:00.000Z",
+		createdAt: new Date("2026-04-14T09:00:00.000Z"),
 		folderId: "folder-1",
 		id: "item-1",
 		kind: "IMAGE",
@@ -28,10 +29,10 @@ const defaultArgs = {
 	isLoading: false,
 	isMoving: false,
 	isRemoving: false,
-	onChangeTargetFolderSelection: (..._args: never[]) => undefined,
-	onClickBackButton: (..._args: never[]) => undefined,
-	onClickDeleteAssetButton: async (..._args: never[]) => undefined,
-	onClickMoveAssetButton: async (..._args: never[]) => undefined,
+	onChangeTargetFolderSelection: () => undefined,
+	onClickBackButton: () => undefined,
+	onClickDeleteAssetButton: async () => undefined,
+	onClickMoveAssetButton: async () => undefined,
 	targetFolderError: "target-folder-error-1",
 	targetFolderId: "folder-2",
 };
@@ -53,7 +54,7 @@ const meta = {
 		layout: "fullscreen",
 	},
 	tags: ["autodocs"],
-	args: defaultArgs as never,
+	args: defaultArgs,
 } satisfies Meta<typeof AssetDetailScreen>;
 
 export default meta;
@@ -63,9 +64,9 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const Loading: Story = {
-	args: loadingArgs as never,
+	args: loadingArgs,
 };
 
 export const EmptyState: Story = {
-	args: emptyStateArgs as never,
+	args: emptyStateArgs,
 };

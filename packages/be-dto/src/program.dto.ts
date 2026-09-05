@@ -1,62 +1,42 @@
 import {
-	BigIntIdField,
 	ClassField,
-	NumberField,
 	NumberFieldOptional,
-	StringField,
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
-import type { DomainEntityModel } from "@cocrepo/entity";
-import type { Program as ProgramEntity } from "@cocrepo/prisma";
-import { Exclude } from "class-transformer";
-import { AbstractDto } from "./abstract.dto";
+import { Program } from "@cocrepo/entity";
+import { EntityResponseType } from "./mapped-types";
 import { ProgramActivityDto } from "./program-activity.dto";
 import { RoutineDto } from "./routine.dto";
 import { SessionDto } from "./session.dto";
 
-export class ProgramDto
-	extends AbstractDto
-	implements DomainEntityModel<ProgramEntity, "programId">
-{
-	@Exclude()
-	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
-	private readonly programId?: never;
-
-	@BigIntIdField()
-	routineId: bigint;
-
-	@BigIntIdField()
-	sessionId: bigint;
-
-	@BigIntIdField()
-	instructorId: bigint;
-
-	@NumberField()
-	capacity: number;
-
-	@StringField()
-	name: string;
-
-	@StringFieldOptional({ nullable: true })
-	level: string | null;
-
-	@StringFieldOptional({ nullable: true })
-	routineNameSnapshot: string | null;
-
-	@StringFieldOptional({ nullable: true })
-	routineLabelSnapshot: string | null;
-
+export class ProgramDto extends EntityResponseType(Program, {
+	pick: [
+		"id",
+		"createdAt",
+		"updatedAt",
+		"removedAt",
+		"routineId",
+		"sessionId",
+		"instructorId",
+		"capacity",
+		"name",
+		"level",
+		"routineNameSnapshot",
+		"routineLabelSnapshot",
+		"routine",
+		"session",
+	] as const,
+	relations: {
+		routine: () => RoutineDto,
+		session: () => SessionDto,
+	},
+	extraFields: ["activityCount", "previewExerciseNames", "executionPlan"],
+}) {
 	@NumberFieldOptional({ int: true, min: 0 })
 	activityCount?: number;
 
 	@StringFieldOptional({ each: true })
 	previewExerciseNames?: string[];
-
-	@ClassField(() => RoutineDto)
-	routine?: RoutineDto;
-
-	@ClassField(() => SessionDto)
-	session?: SessionDto;
 
 	@ClassField(() => ProgramActivityDto, {
 		each: true,
@@ -64,4 +44,7 @@ export class ProgramDto
 		required: false,
 	})
 	executionPlan?: ProgramActivityDto[];
+
+	declare routine?: RoutineDto;
+	declare session?: SessionDto;
 }

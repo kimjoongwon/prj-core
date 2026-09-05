@@ -1,15 +1,25 @@
-import { ClassField } from "@cocrepo/decorator/field";
+import { Album } from "@cocrepo/entity";
 import { AlbumEntryDto } from "../album-entry/album-entry.dto";
-import { AlbumDto } from "./album.dto";
+import { AssetDto } from "../asset/asset.dto";
+import { EntityResponseType } from "../mapped-types/entity-response-type";
 
-/**
- * 앨범 상세 응답 DTO
- */
-export class AlbumDetailResponseDto extends AlbumDto {
-	@ClassField(() => AlbumEntryDto, {
-		isArray: true,
-		required: false,
-		description: "앨범에 포함된 에셋 목록",
-	})
-	entries?: AlbumEntryDto[];
+export class AlbumDetailResponseDto extends EntityResponseType(Album, {
+	pick: [
+		"id",
+		"createdAt",
+		"updatedAt",
+		"removedAt",
+		"spaceId",
+		"name",
+		"description",
+		"sortOrder",
+		"coverAssetId",
+		"createdById",
+		"coverAsset",
+		"entries",
+	],
+	relations: { coverAsset: () => AssetDto, entries: () => AlbumEntryDto },
+}) {
+	declare coverAsset?: AssetDto;
+	declare entries?: AlbumEntryDto[];
 }

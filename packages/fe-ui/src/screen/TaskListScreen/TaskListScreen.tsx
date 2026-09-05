@@ -1,6 +1,5 @@
 "use client";
 
-import type { TaskDto } from "@cocrepo/api/core/tasks";
 import type {
 	DataGridQueryStates,
 	DataGridSetQueryStates,
@@ -8,6 +7,7 @@ import type {
 } from "@cocrepo/type";
 import {
 	buildTaskTableColumns,
+	type TaskTableRow,
 	DataGrid,
 	DataGridState,
 	Screen,
@@ -53,7 +53,7 @@ export interface TaskListScreenQueryStates extends DataGridQueryStates {
 }
 export type TaskListScreenSetQueryStates = DataGridSetQueryStates;
 export interface TaskListScreenProps {
-	tasks?: TaskDto[];
+	tasks?: TaskTableRow[];
 	totalCount: number;
 	isLoading: boolean;
 	queryStates: TaskListScreenQueryStates;
@@ -103,7 +103,7 @@ export const TaskListScreen = observer(
 		const onClickDeleteButton = (taskId: bigint) => {
 			void onDeleteTask(taskId);
 		};
-		const columns = buildTaskTableColumns<TaskDto>({
+		const columns = buildTaskTableColumns<TaskTableRow>({
 			onClickTaskName,
 			onClickDeleteButton,
 		});

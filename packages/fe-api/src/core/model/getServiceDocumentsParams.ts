@@ -29,10 +29,6 @@ export type GetServiceDocumentsParams = {
 	 */
 	take?: number;
 	/**
-	 * 제목, 요약, 버전 통합 검색
-	 */
-	search?: string;
-	/**
 	 * 문서 종류
 	 */
 	kind?: ServiceDocumentKind;
@@ -41,15 +37,19 @@ export type GetServiceDocumentsParams = {
 	 */
 	platform?: ServiceDocumentPlatform;
 	/**
-	 * 상태
-	 */
-	status?: ServiceDocumentStatus;
-	/**
 	 * 로케일
 	 */
 	locale?: string;
 	/**
+	 * 상태
+	 */
+	status?: ServiceDocumentStatus;
+	/**
 	 * 필수 동의 여부
 	 */
 	isRequired?: boolean;
+	/**
+	 * 제목, 요약, 버전 통합 검색
+	 */
+	search?: string;
 };

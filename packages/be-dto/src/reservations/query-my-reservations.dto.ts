@@ -1,14 +1,14 @@
-import { DateFieldOptional, EnumFieldOptional } from "@cocrepo/decorator/field";
-import { ReservationStatus } from "@cocrepo/prisma";
-import { QueryDto } from "../query/query.dto";
+import { DateFieldOptional } from "@cocrepo/decorator/field";
+import { EntityQueryType } from "../query/entity-query-type";
+import { Reservation } from "@cocrepo/entity";
 
-export class QueryMyReservationsDto extends QueryDto {
+export class QueryMyReservationsDto extends EntityQueryType(Reservation, [
+	"status",
+] as const) {
 	@DateFieldOptional({ description: "조회 시작 시각" })
 	from?: Date;
 
 	@DateFieldOptional({ description: "조회 종료 시각" })
 	to?: Date;
 
-	@EnumFieldOptional(() => ReservationStatus, { description: "예약 상태" })
-	status?: ReservationStatus;
 }

@@ -1,41 +1,43 @@
-import type { TemplateType } from "@cocrepo/prisma";
+import { TemplateType } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import type { TemplateVariable } from "./template-variable.entity";
+import { BooleanField, ClassField, EnumField, StringField, StringFieldOptional } from "@cocrepo/decorator/field";
+import { Exclude } from "class-transformer";
+import { TemplateVariable } from "./template-variable.entity";
 
 export class Template extends AbstractEntity {
 	/** 공개 식별자 ULID */
-	templateId!: string;
+	@Exclude({ toPlainOnly: true }) templateId!: string;
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 
 	/** 고유 코드 */
-	code!: string;
+	@StringField({ description: "고유 코드" }) code!: string;
 	/** 템플릿 이름 */
-	name!: string;
+	@StringField({ description: "템플릿 이름" }) name!: string;
 	/** 템플릿 유형 (EMAIL, SMS, PUSH) */
-	type!: TemplateType;
+	@EnumField(() => TemplateType, { description: "템플릿 유형" }) type!: TemplateType;
 	/** 본문 */
-	content!: string;
+	@StringField({ description: "본문" }) content!: string;
 	/** 활성 상태 */
-	isActive!: boolean;
+	@BooleanField({ description: "활성 상태" }) isActive!: boolean;
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
 
 	/** 제목 */
-	subject!: string | null;
+	@StringFieldOptional({ nullable: true, description: "제목" }) subject!: string | null;
 	/** 설명 */
-	description!: string | null;
+	@StringFieldOptional({ nullable: true, description: "설명" }) description!: string | null;
 
 	// ============================================================================
 	// 관계 필드 (선택적)
 	// ============================================================================
 
 	/** 변수 목록 */
-	variables?: TemplateVariable[];
+	@ClassField(() => TemplateVariable, { required: false, each: true }) variables?: TemplateVariable[];
 
 	// ============================================================================
 	// 도메인 메서드

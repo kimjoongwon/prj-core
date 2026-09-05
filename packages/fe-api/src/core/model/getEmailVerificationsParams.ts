@@ -27,21 +27,21 @@ export type GetEmailVerificationsParams = {
 	 */
 	take?: number;
 	/**
-	 * 이메일 (부분 일치)
-	 */
-	email?: string;
-	/**
 	 * 상태
 	 */
 	status?: EmailVerificationStatus;
 	/**
+	 * 이메일 (부분 일치)
+	 */
+	email?: string;
+	/**
 	 * 시작일 (createdAt >= startDate)
 	 */
-	startDate?: string;
+	startDate?: Date;
 	/**
 	 * 종료일 (createdAt <= endDate)
 	 */
-	endDate?: string;
+	endDate?: Date;
 	/**
 	 * 복합 정렬 (JSON:API 컨벤션). 허용 필드: createdAt, email, status. 예: ?sort=email&sort=-createdAt
 	 */

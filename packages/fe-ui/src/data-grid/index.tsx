@@ -181,6 +181,8 @@ const DataGridStandardComposition = observer(
 			getCoreRowModel: getCoreRowModel(),
 			getExpandedRowModel: getExpandedRowModel(),
 			getGroupedRowModel: getGroupedRowModel(),
+			// 페이지 초기화는 Query facade가 소유하므로 행 재계산으로 내부 페이지 갱신을 예약하지 않습니다.
+			autoResetPageIndex: false,
 			autoResetExpanded: false,
 			onExpandedChange: state.setExpanded,
 		});

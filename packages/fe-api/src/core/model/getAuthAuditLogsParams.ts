@@ -27,13 +27,13 @@ export type GetAuthAuditLogsParams = {
 	 */
 	take?: number;
 	/**
+	 * 결과
+	 */
+	result?: AuthAuditResult;
+	/**
 	 * 이메일 (부분 일치)
 	 */
 	email?: string;
-	/**
-	 * 인증 결과
-	 */
-	result?: AuthAuditResult;
 	/**
 	 * IP 주소 (부분 일치)
 	 */
@@ -45,9 +45,9 @@ export type GetAuthAuditLogsParams = {
 	/**
 	 * 시작일 (createdAt >= startDate)
 	 */
-	startDate?: string;
+	startDate?: Date;
 	/**
 	 * 종료일 (createdAt <= endDate)
 	 */
-	endDate?: string;
+	endDate?: Date;
 };

@@ -1,6 +1,6 @@
-import { PartialType } from "@nestjs/swagger";
-import { CreateRoleAssociationDto } from "../create/create-role-association.dto";
+import { RoleAssociation } from "@cocrepo/entity";
+import { PartialType, PickType } from "@nestjs/swagger";
 
 export class UpdateRoleAssociationDto extends PartialType(
-	CreateRoleAssociationDto,
+	PickType(RoleAssociation, ["roleId", "groupId"] as const),
 ) {}

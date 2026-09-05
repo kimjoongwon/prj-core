@@ -31,7 +31,7 @@ export interface AssetDetailScreenAsset {
 	sizeBytes: number;
 	folderId: string;
 	publicUrl?: string | null;
-	createdAt: string;
+	createdAt: Date;
 	storageKey: string;
 	checksum?: string | null;
 }

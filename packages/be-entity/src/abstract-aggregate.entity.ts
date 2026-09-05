@@ -1,7 +1,9 @@
 import type { BaseEntityFields, Constructor } from "@cocrepo/type";
 import { AggregateRoot } from "@nestjs/cqrs";
 import { ClassTransformOptions, plainToInstance } from "class-transformer";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 
+@AbstractEntityFields()
 export abstract class AbstractAggregateEntity<DTO = unknown, O = never>
 	extends AggregateRoot
 	implements BaseEntityFields

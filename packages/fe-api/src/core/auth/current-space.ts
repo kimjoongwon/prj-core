@@ -1,3 +1,4 @@
+import { parseDecimalId } from "@cocrepo/type/database-id";
 import {
 	type QueryClient,
 	type UseMutationOptions,
@@ -7,8 +8,8 @@ import {
 	useMutation,
 	useQuery,
 } from "@tanstack/react-query";
-import type { ErrorType } from "../../libs/customIdpAxios";
-import { customIdpInstance } from "../../libs/customIdpAxios";
+import type { ErrorType } from "../../libs/customAxios";
+import { customInstance } from "../../libs/customAxios";
 import type { SpaceDto } from "../model/spaceDto";
 
 type CurrentSpaceResponse = {
@@ -22,10 +23,10 @@ type SetCurrentSpacePayload = {
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 export const getCurrentSpace = (
-	options?: SecondParameter<typeof customIdpInstance>,
+	options?: SecondParameter<typeof customInstance>,
 	signal?: AbortSignal,
 ) =>
-	customIdpInstance<CurrentSpaceResponse>(
+	customInstance<CurrentSpaceResponse>(
 		{
 			url: "/api/v1/auth/current-space",
 			method: "GET",
@@ -49,7 +50,7 @@ export function useGetCurrentSpace<
 				TData
 			>
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> {
@@ -68,17 +69,23 @@ export function useGetCurrentSpace<
 
 export const setCurrentSpace = (
 	payload: SetCurrentSpacePayload,
-	options?: SecondParameter<typeof customIdpInstance>,
-) =>
-	customIdpInstance<CurrentSpaceResponse>(
+	options?: SecondParameter<typeof customInstance>,
+) => {
+	// 기존 문자열 입력 계약을 공용 클라이언트의 bigint 요청 변환에 연결합니다.
+	const tenantId = parseDecimalId(payload.tenantId);
+	if (tenantId === null) {
+		throw new TypeError("tenantId must be a canonical positive BIGINT string");
+	}
+	return customInstance<CurrentSpaceResponse>(
 		{
 			url: "/api/v1/auth/current-space",
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			data: payload,
+			data: { ...payload, tenantId },
 		},
 		options,
 	);
+};
 
 export function useSetCurrentSpace<
 	TError = ErrorType<unknown>,
@@ -91,7 +98,7 @@ export function useSetCurrentSpace<
 			SetCurrentSpacePayload,
 			TContext
 		>;
-		request?: SecondParameter<typeof customIdpInstance>;
+		request?: SecondParameter<typeof customInstance>;
 	},
 	queryClient?: QueryClient,
 ): UseMutationResult<

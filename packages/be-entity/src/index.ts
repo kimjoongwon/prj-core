@@ -23,6 +23,7 @@ export * from "./exercise.entity";
 export * from "./fitness-center.entity";
 export * from "./folder.entity";
 export * from "./group.entity";
+export * from "./hydrate-entity";
 export * from "./image.entity";
 export * from "./inquiry.entity";
 export * from "./inquiry-attachment.entity";

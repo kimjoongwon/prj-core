@@ -1,7 +1,16 @@
-import { PartialType } from "@nestjs/swagger";
-import { CreateAlbumDto } from "./create-album.dto";
+import { Album } from "@cocrepo/entity";
+import { PartialType, PickType } from "@nestjs/swagger";
 
 /**
  * 앨범 수정 DTO
  */
-export class UpdateAlbumDto extends PartialType(CreateAlbumDto) {}
+export class UpdateAlbumDto extends PartialType(
+	PickType(Album, [
+		"spaceId",
+		"name",
+		"description",
+		"sortOrder",
+		"coverAssetId",
+		"createdById",
+	] as const),
+) {}

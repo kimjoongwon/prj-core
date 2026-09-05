@@ -32,10 +32,6 @@ export type GetInquiriesParams = {
 	 */
 	take?: number;
 	/**
-	 * 검색어 (제목, 고객명)
-	 */
-	search?: string;
-	/**
 	 * 카테고리 필터 (GENERAL, DELIVERY, REFUND, PRODUCT, ACCOUNT, TECHNICAL, COMPLAINT, OTHER)
 	 */
 	category?: InquiryCategory;
@@ -47,6 +43,10 @@ export type GetInquiriesParams = {
 	 * 우선순위 필터 (LOW, NORMAL, HIGH, URGENT)
 	 */
 	priority?: InquiryPriority;
+	/**
+	 * 검색어 (제목, 고객명)
+	 */
+	search?: string;
 	/**
 	 * 문의 상태 필터 (NEW, OPEN, IN_PROGRESS, WAITING_CUSTOMER, RESOLVED, CLOSED, ESCALATED)
 	 */
@@ -68,11 +68,11 @@ export type GetInquiriesParams = {
 	/**
 	 * 생성일 시작 (ISO8601)
 	 */
-	startDate?: string;
+	startDate?: Date;
 	/**
 	 * 생성일 종료 (ISO8601)
 	 */
-	endDate?: string;
+	endDate?: Date;
 	/**
 	 * 복합 정렬 (JSON:API 컨벤션). 부호 없음=ASC, -prefix=DESC. 허용 필드: createdAt, updatedAt, priority, status, lastMessageAt. 예: ?sort=-createdAt&sort=priority
 	 */

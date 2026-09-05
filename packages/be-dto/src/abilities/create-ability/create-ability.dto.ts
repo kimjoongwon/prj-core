@@ -1,5 +1,5 @@
-import { BigIntIdField } from "@cocrepo/decorator/field";
-import { ApiProperty } from "@nestjs/swagger";
+import { Ability } from "@cocrepo/entity";
+import { ApiProperty, PickType } from "@nestjs/swagger";
 import {
 	IsArray,
 	IsBoolean,
@@ -14,19 +14,10 @@ import {
  * @description
  * DDD 원칙에 따라 actionId로 Action을 참조합니다.
  */
-export class CreateAbilityDto {
-	@BigIntIdField({
-		description: "Action ID",
-		example: "1",
-	})
-	actionId!: bigint;
-
-	@BigIntIdField({
-		description: "Subject ID",
-		example: "1",
-	})
-	subjectId!: bigint;
-
+export class CreateAbilityDto extends PickType(Ability, [
+	"actionId",
+	"subjectId",
+] as const) {
 	@ApiProperty({
 		description: "대상 필드 목록 (빈 배열이면 전체 필드)",
 		example: ["email", "name"],

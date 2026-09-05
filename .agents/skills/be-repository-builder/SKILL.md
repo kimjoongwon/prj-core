@@ -103,11 +103,30 @@ Repository 생성 전 반드시 아래를 확인합니다.
 - 반환은 Entity로 변환합니다.
 
 ```typescript
-async create(data: Prisma.UserUncheckedCreateInput): Promise<User>
-async updateById(id: string, data: Prisma.UserUncheckedUpdateInput): Promise<User>
+async create(userInput: Prisma.UserUncheckedCreateInput): Promise<User>
+async updateById(id: bigint, userInput: Prisma.UserUncheckedUpdateInput): Promise<User>
 ```
 
 ---
+
+## 내부 Entity 복원 경계
+
+Repository는 내부 `src/to-domain-entity.ts`의 `toDomainEntity(EntityClass, persistedValue)`를
+사용합니다. 기존 단일·배열 overload를 유지하며, 구현은 `toDomainData`를 거쳐
+`@cocrepo/entity`의 공개 `hydrateEntity`를 호출합니다. 클래스가 필요 없는 조회
+projection은 `toDomainData`를 사용합니다.
+
+복원 정책과 네 권한 관계 그래프의 기준은 [Entity README](../../../packages/be-entity/README.md#내부-객체-복원)입니다.
+DB 반환의 이메일 대소문자, 저장된 비밀번호, ULID, bigint, Date를 API 변환
+데코레이터로 다시 처리하지 않습니다. `plainToInstance(Entity, record)`나
+`ignoreDecorators: true`를 복원 우회로 사용하지 않습니다. JWT 캐시는 repository를
+의존하지 않고 같은 공개 `hydrateEntity`를 직접 사용합니다.
+
+`Policy.entries`, `Policy.roleAssignments`, `PolicyEntry.ability`,
+`RoleAssignment.policy`의 기존 중첩 Entity와 공유·순환 참조를 유지합니다.
+나머지 관계를 새 규칙으로 일괄 변환하지 않으며, 조회 projection이나 이미
+복원된 관계 객체의 값은 보존합니다. 응답 공개 필드 필터링은 DTO 변환 경계가
+담당하므로 Repository에서 API 전용 DTO를 생성하지 않습니다.
 
 ## 구현 원칙
 
@@ -117,11 +136,11 @@ async updateById(id: string, data: Prisma.UserUncheckedUpdateInput): Promise<Use
 await this.txHost.tx.user.findUnique(...)
 await this.txHost.tx.user.findMany(...)
 
-findByIdWithTenantsAndProfiles(id: string)
+findByIdWithTenantsAndProfiles(id: bigint)
 findByEmailSelectCredentials(email: string)
-countBySpaceId(spaceId: string)
+countBySpaceId(spaceId: bigint)
 
-return result ? plainToInstance(User, result) : null;
+return userRecord ? toDomainEntity(User, userRecord) : null;
 ```
 
 ### ❌ 금지
@@ -171,10 +190,12 @@ interface CreateUserParams {}
 ### 올바른 패턴
 
 ```typescript
+import { toDomainEntity } from "./to-domain-entity";
+
 @Injectable()
 export class UsersRepository {
-  async findByIdWithTenantsAndProfiles(id: string): Promise<User | null> {
-    const result = await this.txHost.tx.user.findUnique({
+  async findByIdWithTenantsAndProfiles(id: bigint): Promise<User | null> {
+    const userRecord = await this.txHost.tx.user.findUnique({
       where: { id },
       include: {
         profiles: true,
@@ -182,7 +203,7 @@ export class UsersRepository {
       },
     });
 
-    return result ? plainToInstance(User, result) : null;
+    return userRecord ? toDomainEntity(User, userRecord) : null;
   }
 }
 ```
@@ -197,6 +218,8 @@ export class UsersRepository {
 - Aggregate Root가 아닌 모델의 독립 Repository를 만들지 않았는가?
 - 메서드명이 데이터 설명 중심인가?
 - Prisma 타입을 직접 사용했는가?
+- `toDomainEntity`를 통해 API 데코레이터 없이 내부 값을 복원하는가?
+- 권한 관계 네 개와 Entity 메서드·bigint·Date·비밀번호·ULID 보존을 관련 테스트에서 확인했는가?
 - index.ts와 Repository 계약을 함께 갱신했는가?
 
 ## 입력 계약

@@ -1,12 +1,8 @@
-import {
-	StringField,
-	StringFieldOptional,
-} from "@cocrepo/decorator/field";
+import { StringFieldOptional } from "@cocrepo/decorator/field";
+import { Policy } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 
-export class CreatePolicyDto {
-	@StringField()
-	name!: string;
-
+export class CreatePolicyDto extends PickType(Policy, ["name"] as const) {
 	@StringFieldOptional()
 	displayName?: string | null;
 

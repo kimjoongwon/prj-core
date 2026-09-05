@@ -1,5 +1,6 @@
 import { DECIMAL_ID_PATTERN_SOURCE } from "@cocrepo/type/database-id";
-import type { OpenAPIObject, SchemaObject } from "@nestjs/swagger";
+import type { OpenAPIObject } from "@nestjs/swagger";
+import type { SchemaObject } from "@nestjs/swagger/dist/interfaces/open-api-spec.interface";
 import { applyBigIntIdOpenApiContract } from "./bigint-id.openapi";
 
 const bigintRuntimeSchema: SchemaObject & { "x-runtime-type": "bigint" } = {

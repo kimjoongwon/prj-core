@@ -1,8 +1,7 @@
-import { OmitType } from "@nestjs/swagger";
-import { COMMON_ENTITY_FIELDS } from "../constant";
-import { RoleAssociationDto } from "../role-association.dto";
+import { RoleAssociation } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 
-export class CreateRoleAssociationDto extends OmitType(RoleAssociationDto, [
-	...COMMON_ENTITY_FIELDS,
-	"group",
-]) {}
+export class CreateRoleAssociationDto extends PickType(RoleAssociation, [
+	"roleId",
+	"groupId",
+] as const) {}

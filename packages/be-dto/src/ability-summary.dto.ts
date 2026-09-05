@@ -1,38 +1,22 @@
-import {
-	BigIntIdField,
-	BooleanField,
-	ClassField,
-	NumberField,
-	StringField,
-} from "@cocrepo/decorator/field";
+import { Ability } from "@cocrepo/entity";
 import { ActionDto } from "./action.dto";
+import { EntityResponseType } from "./mapped-types";
 import { SubjectSummaryDto } from "./subject.dto";
 
-/**
- * Ability 간략 DTO (목록 조회용)
- */
-export class AbilitySummaryDto {
-	@BigIntIdField()
-	id!: bigint;
-
-	@StringField()
-	name!: string;
-
-	@BigIntIdField()
-	actionId!: bigint;
-
-	@BigIntIdField()
-	subjectId!: bigint;
-
-	@BooleanField()
-	inverted!: boolean;
-
-	@NumberField({ required: false })
-	priority?: number; // From Policy assignment (optional)
-
-	@ClassField(() => ActionDto, { required: false })
-	action?: ActionDto;
-
-	@ClassField(() => SubjectSummaryDto, { required: false })
-	subject?: SubjectSummaryDto;
+/** 목록 조회용 권한 요약입니다. */
+export class AbilitySummaryDto extends EntityResponseType(Ability, {
+	pick: [
+		"id",
+		"name",
+		"actionId",
+		"subjectId",
+		"inverted",
+		"priority",
+		"action",
+		"subject",
+	] as const,
+	relations: { action: () => ActionDto, subject: () => SubjectSummaryDto },
+}) {
+	declare action?: ActionDto;
+	declare subject?: SubjectSummaryDto;
 }

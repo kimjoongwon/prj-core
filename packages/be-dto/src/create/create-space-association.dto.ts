@@ -1,8 +1,7 @@
-import { OmitType } from "@nestjs/swagger";
-import { COMMON_ENTITY_FIELDS } from "../constant";
-import { SpaceAssociationDto } from "../space-association.dto";
+import { SpaceAssociation } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 
-export class CreateSpaceAssociationDto extends OmitType(SpaceAssociationDto, [
-	...COMMON_ENTITY_FIELDS,
-	"group",
-]) {}
+export class CreateSpaceAssociationDto extends PickType(SpaceAssociation, [
+	"spaceId",
+	"groupId",
+] as const) {}

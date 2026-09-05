@@ -1,7 +1,8 @@
+import { ClassField } from "@cocrepo/decorator/field";
 import type { AIAgentAction, Prisma } from "@cocrepo/prisma";
 import { AbstractEntity } from "./abstract.entity";
-import type { Inquiry } from "./inquiry.entity";
-import type { InquiryMessage } from "./inquiry-message.entity";
+import { Inquiry } from "./inquiry.entity";
+import { InquiryMessage } from "./inquiry-message.entity";
 
 /**
  * AI 에이전트의 활동 로그를 기록하는 엔티티
@@ -36,7 +37,8 @@ export class AIAgentLog extends AbstractEntity {
 	// ============================================================================
 	// 관계 필드 (선택적)
 	// ============================================================================
-	inquiry?: Inquiry;
+	@ClassField(() => Inquiry, { required: false }) inquiry?: Inquiry;
+	@ClassField(() => InquiryMessage, { required: false, nullable: true })
 	message?: InquiryMessage | null;
 
 	// ============================================================================

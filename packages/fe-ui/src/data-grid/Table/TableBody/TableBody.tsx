@@ -169,7 +169,6 @@ function DataGridDataRowView<T extends { id: Key }>({
 	row,
 	isSelected,
 	selectionMode,
-	isRowMoveEnabled,
 	activeRowId,
 	projectedDepth,
 	editingCell,

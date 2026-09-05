@@ -123,7 +123,7 @@ const AdminTimelinesTimelineIdSessionsSessionIdProgramsProgramIdRoute =
 					sessionName: program?.session?.name ?? null,
 					sessionHref:
 						`/timelines/${timelineId}/sessions/${sessionId}` as Route,
-					createdAt: program?.createdAt?.toISOString(),
+					createdAt: program?.createdAt,
 				}}
 				isLoading={isLoading}
 				notFound={!isLoading && !program}

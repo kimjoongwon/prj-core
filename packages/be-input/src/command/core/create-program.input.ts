@@ -3,5 +3,5 @@ export interface CreateProgramCommandInput {
 	routineId: bigint;
 	instructorId: bigint;
 	capacity: number;
-	level: string;
+	level?: string | null;
 }

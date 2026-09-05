@@ -4,18 +4,11 @@ import {
 	EnumFieldOptional,
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
+import { Inquiry } from "@cocrepo/entity";
 import { DeleteFilter } from "@cocrepo/enum";
-import type { InquiryCategory } from "@cocrepo/prisma";
-import {
-	InquiryCategory as InquiryCategoryEnum,
-	type InquiryChannel,
-	InquiryChannel as InquiryChannelEnum,
-	type InquiryPriority,
-	InquiryPriority as InquiryPriorityEnum,
-	InquiryStatus,
-} from "@cocrepo/prisma";
+import { InquiryStatus } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
-import { QueryDto } from "../query/query.dto";
+import { EntityQueryType } from "../query/entity-query-type";
 
 /**
  * 문의 목록 조회용 Query DTO
@@ -32,7 +25,11 @@ import { QueryDto } from "../query/query.dto";
  * - inquiryStatus (문의 진행 상태)
  * - startDate/endDate -> createdAt (dateRangeFilter)
  */
-export class QueryInquiryDto extends QueryDto {
+export class QueryInquiryDto extends EntityQueryType(Inquiry, [
+	"category",
+	"channel",
+	"priority",
+] as const) {
 	// -------------------------------------------------------------------------
 	// 검색
 	// -------------------------------------------------------------------------
@@ -40,25 +37,6 @@ export class QueryInquiryDto extends QueryDto {
 		description: "검색어 (제목, 고객명)",
 	})
 	search?: string;
-
-	// -------------------------------------------------------------------------
-	// 필터 - Enum
-	// -------------------------------------------------------------------------
-	@EnumFieldOptional(() => InquiryCategoryEnum, {
-		description:
-			"카테고리 필터 (GENERAL, DELIVERY, REFUND, PRODUCT, ACCOUNT, TECHNICAL, COMPLAINT, OTHER)",
-	})
-	category?: InquiryCategory;
-
-	@EnumFieldOptional(() => InquiryChannelEnum, {
-		description: "채널 필터 (WEB, EMAIL, CHAT, SMS, PHONE, WALK_IN)",
-	})
-	channel?: InquiryChannel;
-
-	@EnumFieldOptional(() => InquiryPriorityEnum, {
-		description: "우선순위 필터 (LOW, NORMAL, HIGH, URGENT)",
-	})
-	priority?: InquiryPriority;
 
 	@EnumFieldOptional(() => InquiryStatus, {
 		description:

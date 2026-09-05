@@ -1,8 +1,7 @@
-import { OmitType } from "@nestjs/swagger";
-import { COMMON_ENTITY_FIELDS } from "../constant";
-import { SpaceClassificationDto } from "../space-classification.dto";
+import { SpaceClassification } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 
-export class CreateSpaceClassificationDto extends OmitType(
-	SpaceClassificationDto,
-	[...COMMON_ENTITY_FIELDS, "category", "space"],
+export class CreateSpaceClassificationDto extends PickType(
+	SpaceClassification,
+	["spaceId", "categoryId"] as const,
 ) {}

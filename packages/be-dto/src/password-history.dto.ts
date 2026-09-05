@@ -1,17 +1,6 @@
-import { BigIntIdField, DateField } from "@cocrepo/decorator/field";
-import type { DomainEntityModel } from "@cocrepo/entity";
-import type { PasswordHistory } from "@cocrepo/prisma";
+import { PasswordHistory } from "@cocrepo/entity";
+import { EntityResponseType } from "./mapped-types";
 
-export class PasswordHistoryDto
-	implements
-		DomainEntityModel<PasswordHistory, "passwordHistoryId" | "passwordHash">
-{
-	@BigIntIdField({ description: "ID" })
-	id!: bigint;
-
-	@DateField({ description: "생성일" })
-	createdAt!: Date;
-
-	@BigIntIdField({ description: "사용자 ID" })
-	userId!: bigint;
-}
+export class PasswordHistoryDto extends EntityResponseType(PasswordHistory, {
+	pick: ["id", "createdAt", "userId"] as const,
+}) {}

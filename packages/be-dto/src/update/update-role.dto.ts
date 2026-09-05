@@ -1,5 +1,5 @@
-import { OmitType, PartialType } from "@nestjs/swagger";
-import { CreateRoleDto } from "../create/create-role.dto";
+import { Role } from "@cocrepo/entity";
+import { PartialType, PickType } from "@nestjs/swagger";
 
 /**
  * 역할 수정 DTO
@@ -8,5 +8,5 @@ import { CreateRoleDto } from "../create/create-role.dto";
  * - name은 수정 불가
  */
 export class UpdateRoleDto extends PartialType(
-	OmitType(CreateRoleDto, ["name"]),
+	PickType(Role, ["displayName", "description"] as const),
 ) {}

@@ -1,21 +1,33 @@
-import type {
+import {
+	BigIntIdField,
+	BigIntIdFieldOptional,
+	BooleanField,
+	ClassField,
+	DateField,
+	EnumField,
+	NumberField,
+	StringField,
+} from "@cocrepo/decorator/field";
+
+import {
 	InquiryCategory,
 	InquiryChannel,
 	InquiryPriority,
 	InquirySource,
 	InquiryStatus,
-	Prisma,
+	type Prisma,
 	SentimentType,
 } from "@cocrepo/prisma";
+import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
-import type { AIAgentLog } from "./ai-agent-log.entity";
-import type { InquiryMessage } from "./inquiry-message.entity";
-import type { InquiryParticipant } from "./inquiry-participant.entity";
-import type { InquiryTag } from "./inquiry-tag.entity";
-import type { InquiryThread } from "./inquiry-thread.entity";
-import type { SentimentAnalysis } from "./sentiment-analysis.entity";
+import { AIAgentLog } from "./ai-agent-log.entity";
+import { InquiryMessage } from "./inquiry-message.entity";
+import { InquiryParticipant } from "./inquiry-participant.entity";
+import { InquiryTag } from "./inquiry-tag.entity";
+import { InquiryThread } from "./inquiry-thread.entity";
+import { SentimentAnalysis } from "./sentiment-analysis.entity";
 import type { Space } from "./space.entity";
-import type { User } from "./user.entity";
+import { User } from "./user.entity";
 
 /**
  * 옴니채널 고객 문의를 관리하는 핵심 엔티티
@@ -25,39 +37,62 @@ import type { User } from "./user.entity";
  */
 export class Inquiry extends AbstractEntity {
 	/** 공개 식별자 ULID */
-	inquiryId!: string;
+	@Exclude({ toPlainOnly: true }) inquiryId!: string;
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
+	@BigIntIdField({ description: "소속 Space ID" })
 	spaceId!: bigint;
+	@BigIntIdFieldOptional({ nullable: true, description: "생성자 ID" })
 	createdById!: bigint | null;
+	@StringField({ description: "문의 번호" })
 	inquiryNumber!: string;
+	@StringField({ description: "문의 제목" })
 	title!: string;
+	@EnumField(() => InquiryCategory, { description: "문의 카테고리" })
 	category!: InquiryCategory;
+	@EnumField(() => InquiryChannel, { description: "문의 채널" })
 	channel!: InquiryChannel;
+	@EnumField(() => InquirySource, { description: "문의 접수 유형" })
 	source!: InquirySource;
+	@EnumField(() => InquiryStatus, { description: "문의 상태" })
 	status!: InquiryStatus;
+	@EnumField(() => InquiryPriority, { description: "문의 우선순위" })
 	priority!: InquiryPriority;
+	@BooleanField({ description: "SLA 응답 위반 여부" })
 	isSlaResponseBreached!: boolean;
+	@BooleanField({ description: "SLA 해결 위반 여부" })
 	isSlaResolveBreached!: boolean;
+	@BooleanField({ description: "AI 해결 시도 여부" })
 	aiResolutionAttempted!: boolean;
-	aiResolved!: boolean;
+	@BooleanField({ description: "AI 해결 여부" }) aiResolved!: boolean;
+	@BooleanField({ description: "실시간 채팅 활성화 여부" })
 	isRealtimeChat!: boolean;
+	@NumberField({ description: "읽지 않은 메시지 수" })
 	unreadCount!: number;
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
+	@BigIntIdFieldOptional({ nullable: true, description: "고객 ID" })
 	customerId!: bigint | null;
+	@BigIntIdFieldOptional({ nullable: true, description: "담당자 ID" })
 	assigneeId!: bigint | null;
+	@DateField({ nullable: true, description: "첫 응답 일시" })
 	firstResponseAt!: Date | null;
+	@DateField({ nullable: true, description: "해결 일시" })
 	resolvedAt!: Date | null;
+	@DateField({ nullable: true, description: "종료 일시" })
 	closedAt!: Date | null;
+	@DateField({ nullable: true, description: "SLA 응답 기한" })
 	slaResponseDue!: Date | null;
+	@DateField({ nullable: true, description: "SLA 해결 기한" })
 	slaResolveDue!: Date | null;
+	@EnumField(() => SentimentType, { nullable: true, description: "감정 유형" })
 	sentiment!: SentimentType | null;
 	sentimentScore!: number | null;
+	@DateField({ nullable: true, description: "마지막 메시지 일시" })
 	lastMessageAt!: Date | null;
 	metadata!: Prisma.JsonValue | null;
 
@@ -65,14 +100,29 @@ export class Inquiry extends AbstractEntity {
 	// 관계 필드 (선택적)
 	// ============================================================================
 	space?: Space;
+	@ClassField(() => User, { required: false, nullable: true })
 	createdBy?: User | null;
+	@ClassField(() => User, { required: false, nullable: true })
 	customer?: User | null;
+	@ClassField(() => User, { required: false, nullable: true })
 	assignee?: User | null;
+	@ClassField(() => InquiryThread, {
+		isArray: true,
+		description: "스레드 목록",
+	})
 	threads?: InquiryThread[];
+	@ClassField(() => InquiryMessage, { required: false, each: true })
 	messages?: InquiryMessage[];
+	@ClassField(() => InquiryParticipant, {
+		isArray: true,
+		description: "참여자 목록",
+	})
 	participants?: InquiryParticipant[];
+	@ClassField(() => InquiryTag, { required: false, each: true })
 	tags?: InquiryTag[];
+	@ClassField(() => SentimentAnalysis, { required: false, nullable: true })
 	sentimentAnalysis?: SentimentAnalysis | null;
+	@ClassField(() => AIAgentLog, { required: false, each: true })
 	aiAgentLogs?: AIAgentLog[];
 
 	// ============================================================================

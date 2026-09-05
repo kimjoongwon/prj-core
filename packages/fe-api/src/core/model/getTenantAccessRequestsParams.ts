@@ -47,11 +47,11 @@ export type GetTenantAccessRequestsParams = {
 	/**
 	 * 신청일 시작 (ISO8601)
 	 */
-	createdFrom?: string;
+	createdFrom?: Date;
 	/**
 	 * 신청일 종료 (ISO8601)
 	 */
-	createdTo?: string;
+	createdTo?: Date;
 	/**
 	 * 복합 정렬 (JSON:API 컨벤션). 예: ?sort=-createdAt&sort=status
 	 */

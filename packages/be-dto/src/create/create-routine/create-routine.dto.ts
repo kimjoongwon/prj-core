@@ -1,18 +1,15 @@
 import { ClassField } from "@cocrepo/decorator/field";
-import { OmitType } from "@nestjs/swagger";
-import { COMMON_ENTITY_FIELDS } from "../../constant";
-import { RoutineDto } from "../../routine.dto";
+import { Routine } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 import { CreateRoutineActivityItemDto } from "../create-routine-activity-item.dto";
 
-export class CreateRoutineDto extends OmitType(RoutineDto, [
-	...COMMON_ENTITY_FIELDS,
-	"spaceId",
-	"createdById",
-	"programs",
-	"activities",
-]) {
+export class CreateRoutineDto extends PickType(Routine, [
+	"name",
+	"label",
+] as const) {
 	@ClassField(() => CreateRoutineActivityItemDto, {
 		each: true,
+		isArray: true,
 		required: false,
 	})
 	activities?: CreateRoutineActivityItemDto[];

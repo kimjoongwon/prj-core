@@ -31,6 +31,10 @@ const programs = [
 const meta = {
 	title: "screen/TimelineSessionEditScreen",
 	component: TimelineSessionEditScreen,
+	// bigint 응답 fixture는 JSON 기반 Controls 편집에서 제외합니다.
+	argTypes: {
+		programs: { control: false },
+	},
 	parameters: { layout: "fullscreen" },
 	tags: ["autodocs"],
 	args: {

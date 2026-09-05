@@ -1,12 +1,11 @@
 import {
-	BigIntIdFieldOptional,
 	EnumFieldOptional,
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
 import { DeleteFilter } from "@cocrepo/enum";
-import { AssetKind, AssetStatus } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
-import { QueryDto } from "../query/query.dto";
+import { EntityQueryType } from "../query/entity-query-type";
+import { Asset } from "@cocrepo/entity";
 
 /**
  * 에셋 목록 조회용 Query DTO
@@ -19,19 +18,12 @@ import { QueryDto } from "../query/query.dto";
  * - search -> originalName 부분 일치
  * - statusFilter -> removedAt 필터
  */
-export class AssetQueryDto extends QueryDto {
-	@BigIntIdFieldOptional({ description: "폴더 ID 필터" })
-	folderId?: bigint;
-
-	@BigIntIdFieldOptional({ description: "테넌트 ID 필터" })
-	spaceId?: bigint;
-
-	@EnumFieldOptional(() => AssetKind, { description: "에셋 타입 필터" })
-	kind?: AssetKind;
-
-	@EnumFieldOptional(() => AssetStatus, { description: "업로드 상태 필터" })
-	status?: AssetStatus;
-
+export class AssetQueryDto extends EntityQueryType(Asset, [
+	"folderId",
+	"spaceId",
+	"kind",
+	"status",
+] as const) {
 	@StringFieldOptional({ description: "파일명 검색 (부분 일치)" })
 	search?: string;
 

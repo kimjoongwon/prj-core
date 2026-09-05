@@ -1,27 +1,47 @@
+import {
+	BigIntIdField,
+	BooleanField,
+	ClassField,
+	DateField,
+	DateFieldOptional,
+	StringField,
+	StringFieldOptional,
+} from "@cocrepo/decorator/field";
+import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
-import type { Template } from "./template.entity";
+import { Template } from "./template.entity";
 
 export class TemplateVariable extends AbstractEntity {
+	@BigIntIdField({ description: "ID" })
+	declare id: bigint;
+	@DateField({ description: "생성일" })
+	declare createdAt: Date;
+	@DateFieldOptional({ nullable: true, description: "수정일" })
+	declare updatedAt: Date | null;
+
 	/** 공개 식별자 ULID */
-	templateVariableId!: string;
+	@Exclude({ toPlainOnly: true }) templateVariableId!: string;
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	name!: string;
-	isRequired!: boolean;
-	templateId!: bigint;
+	@StringField({ description: "변수명" }) name!: string;
+	@BooleanField({ description: "필수 여부" }) isRequired!: boolean;
+	@BigIntIdField({ description: "템플릿 ID" }) templateId!: bigint;
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
+	@StringFieldOptional({ nullable: true, description: "변수 설명" })
 	description!: string | null;
-	defaultValue!: string | null;
+	@StringFieldOptional({ nullable: true, description: "기본값" }) defaultValue!:
+		| string
+		| null;
 
 	// ============================================================================
 	// 관계 필드 (선택적)
 	// ============================================================================
-	template?: Template;
+	@ClassField(() => Template, { required: false }) template?: Template;
 
 	// ============================================================================
 	// 도메인 메서드

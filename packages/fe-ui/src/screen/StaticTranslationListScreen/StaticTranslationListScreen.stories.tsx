@@ -1,14 +1,14 @@
+import type { ComponentProps } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { StaticTranslationListScreen } from "./StaticTranslationListScreen";
 
-const defaultArgs = {
+const defaultArgs: ComponentProps<typeof StaticTranslationListScreen> = {
 	isLoading: false,
-	isMutating: false,
-	onCreateTranslation: (..._args: never[]) => Promise.resolve(),
-	onDeleteTranslation: (..._args: never[]) => Promise.resolve(),
-	onInvalidateAllTranslationCache: (..._args: never[]) => Promise.resolve(),
-	onInvalidateTranslationCache: (..._args: never[]) => Promise.resolve(),
-	onUpdateTranslation: (..._args: never[]) => Promise.resolve(),
+	onCreateTranslation: () => Promise.resolve(),
+	onDeleteTranslation: () => Promise.resolve(),
+	onInvalidateAllTranslationCache: () => Promise.resolve(),
+	onInvalidateTranslationCache: () => Promise.resolve(),
+	onUpdateTranslation: () => Promise.resolve(),
 	queryStates: {
 		take: 20,
 		skip: 0,
@@ -17,7 +17,7 @@ const defaultArgs = {
 		languageCode: "",
 		isTranslated: "",
 	},
-	setQueryStates: (..._args: never[]) => Promise.resolve(new URLSearchParams()),
+	setQueryStates: () => Promise.resolve(new URLSearchParams()),
 	totalCount: 3,
 	translations: [
 		{
@@ -27,8 +27,8 @@ const defaultArgs = {
 			text: "정적 번역",
 			category: "공통",
 			isTranslated: true,
-			createdAt: "2026-05-01T00:00:00.000Z",
-			updatedAt: "2026-05-01T00:00:00.000Z",
+			createdAt: new Date("2026-05-01T00:00:00.000Z"),
+			updatedAt: new Date("2026-05-01T00:00:00.000Z"),
 		},
 		{
 			id: "translation-2",
@@ -37,8 +37,8 @@ const defaultArgs = {
 			text: "Static translations",
 			category: "공통",
 			isTranslated: true,
-			createdAt: "2026-05-01T00:00:00.000Z",
-			updatedAt: "2026-05-01T00:00:00.000Z",
+			createdAt: new Date("2026-05-01T00:00:00.000Z"),
+			updatedAt: new Date("2026-05-01T00:00:00.000Z"),
 		},
 		{
 			id: "translation-3",
@@ -47,8 +47,8 @@ const defaultArgs = {
 			text: "静的翻訳",
 			category: "공통",
 			isTranslated: false,
-			createdAt: "2026-05-01T00:00:00.000Z",
-			updatedAt: "2026-05-01T00:00:00.000Z",
+			createdAt: new Date("2026-05-01T00:00:00.000Z"),
+			updatedAt: new Date("2026-05-01T00:00:00.000Z"),
 		},
 	],
 };
@@ -60,7 +60,7 @@ const meta = {
 		layout: "fullscreen",
 	},
 	tags: ["autodocs"],
-	args: defaultArgs as never,
+	args: defaultArgs,
 } satisfies Meta<typeof StaticTranslationListScreen>;
 
 export default meta;
@@ -73,7 +73,7 @@ export const Loading: Story = {
 	args: {
 		...defaultArgs,
 		isLoading: true,
-	} as never,
+	},
 };
 
 export const EmptyState: Story = {
@@ -81,5 +81,5 @@ export const EmptyState: Story = {
 		...defaultArgs,
 		totalCount: 0,
 		translations: [],
-	} as never,
+	},
 };

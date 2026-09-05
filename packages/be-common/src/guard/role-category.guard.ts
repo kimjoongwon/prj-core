@@ -1,6 +1,6 @@
 import { CONTEXT_KEYS } from "@cocrepo/constant";
 import { ROLE_CATEGORIES_KEY } from "@cocrepo/decorator";
-import { Category } from "@cocrepo/entity";
+import { Category, hydrateEntity } from "@cocrepo/entity";
 import { RoleCategoryName } from "@cocrepo/enum";
 import type {
 	ContextTenantSnapshot,
@@ -15,7 +15,6 @@ import {
 	UnauthorizedException,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { plainToInstance } from "class-transformer";
 import { isEmpty } from "lodash";
 import { ClsService } from "nestjs-cls";
 
@@ -66,9 +65,9 @@ export class RoleCategoryGuard implements CanActivate {
 		let userCategoryHierarchy: string[] = [];
 
 		if (tenant.role.classification?.category) {
-			const categoryEntity = plainToInstance(
+			const categoryEntity = hydrateEntity(
 				Category,
-				tenant.role.classification.category,
+				tenant.role.classification.category as Partial<Category>,
 			);
 
 			// Get parent names (current category + all ancestors)

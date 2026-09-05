@@ -52,6 +52,8 @@ export interface UpdateOidcClientDto {
 	scope?: string;
 	/** First-party 클라이언트 여부 */
 	isFirstParty?: boolean;
+	/** 권한 동의 화면 생략 여부 */
+	skipConsent?: boolean;
 	/**
 	 * 로그인 화면 표시 설정
 	 * @nullable
@@ -72,6 +74,4 @@ export interface UpdateOidcClientDto {
 	 * @nullable
 	 */
 	tosUri?: string | null;
-	/** 권한 동의 화면 생략 여부 */
-	skipConsent?: boolean;
 }

@@ -1,29 +1,46 @@
+import type { ComponentProps } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { OidcClientListScreen } from "./OidcClientListScreen";
 
-const defaultArgs = {
+const defaultArgs: ComponentProps<typeof OidcClientListScreen> = {
 	isLoading: false,
 	oidcClients: [
 		{
+			updatedAt: null,
+			removedAt: null,
+			name: "관리 콘솔",
+			redirectUris: ["https://example.com/callback"],
+			responseTypes: ["code"],
+			scope: "openid profile email",
+			isFirstParty: true,
+			skipConsent: false,
 			clientId: "client-1",
-			createdAt: "2026-04-14T09:00:00.000Z",
+			createdAt: new Date("2026-04-14T09:00:00.000Z"),
 			grantTypes: ["authorization_code", "refresh_token"],
-			id: "item-1",
+			id: 1n,
 			isActive: false,
 			tokenEndpointAuthMethod: "token-endpoint-auth-method-1",
 		},
 		{
+			updatedAt: null,
+			removedAt: null,
+			name: "관리 콘솔",
+			redirectUris: ["https://example.com/callback"],
+			responseTypes: ["code"],
+			scope: "openid profile email",
+			isFirstParty: true,
+			skipConsent: false,
 			clientId: "client-1",
-			createdAt: "2026-04-14T09:00:00.000Z",
+			createdAt: new Date("2026-04-14T09:00:00.000Z"),
 			grantTypes: ["authorization_code", "refresh_token"],
-			id: "item-1",
+			id: 1n,
 			isActive: false,
 			tokenEndpointAuthMethod: "token-endpoint-auth-method-1",
 		},
 	],
-	onClickCreateButton: (..._args: never[]) => undefined,
+	onClickCreateButton: () => undefined,
 	queryStates: { page: 1, take: 10, skip: 0, search: "" },
-	setQueryStates: (..._args: never[]) => undefined,
+	setQueryStates: async () => new URLSearchParams(),
 	totalCount: 12,
 };
 
@@ -41,11 +58,15 @@ const emptyStateArgs = {
 const meta = {
 	title: "screen/OidcClientListScreen",
 	component: OidcClientListScreen,
+	// bigint 응답 fixture는 JSON 기반 Controls 편집에서 제외합니다.
+	argTypes: {
+		clients: { control: false },
+	},
 	parameters: {
 		layout: "fullscreen",
 	},
 	tags: ["autodocs"],
-	args: defaultArgs as never,
+	args: defaultArgs,
 } satisfies Meta<typeof OidcClientListScreen>;
 
 export default meta;
@@ -55,9 +76,9 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const Loading: Story = {
-	args: loadingArgs as never,
+	args: loadingArgs,
 };
 
 export const EmptyState: Story = {
-	args: emptyStateArgs as never,
+	args: emptyStateArgs,
 };

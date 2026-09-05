@@ -17,40 +17,36 @@
 import type { IdpAccountAccessGrantDto } from "./idpAccountAccessGrantDto";
 
 export interface IdpAccountDetailDto {
-	/**
-	 * 사용자 ID
-	 * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
-	 */
-	id: number;
-	/** 이름 */
+	/** @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$ */
+	id: bigint;
+	createdAt: Date;
+	/** 사용자 이름 */
 	name: string;
-	/** 이메일 */
-	email: string;
-	/** 활성 상태 */
-	isActive: boolean;
 	/** 로그인 실패 횟수 */
 	failedLoginAttempts: number;
 	/** 영구 잠금 여부 */
 	isPermanentlyLocked: boolean;
+	/** 비밀번호 변경 필요 */
+	mustChangePassword: boolean;
+	/** 활성 상태 */
+	isActive: boolean;
+	/** 이메일 */
+	email: string;
 	/**
 	 * 일시 잠금 해제 시간
 	 * @nullable
 	 */
-	lockedUntil?: string | null;
-	/** 비밀번호 변경 필요 여부 */
-	mustChangePassword: boolean;
+	lockedUntil?: Date | null;
 	/**
 	 * 마지막 로그인 시간
 	 * @nullable
 	 */
-	lastLoginAt?: string | null;
+	lastLoginAt?: Date | null;
 	/**
 	 * 마지막 로그인 IP
 	 * @nullable
 	 */
 	lastLoginIp?: string | null;
-	/** 가입일 */
-	createdAt: string;
 	/** 계정에 부여된 Space/Role 접근 권한 목록 */
 	accessGrants: IdpAccountAccessGrantDto[];
 }

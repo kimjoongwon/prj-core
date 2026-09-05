@@ -1,7 +1,17 @@
-import type { Prisma, Subject } from "@cocrepo/prisma";
+import {
+	BigIntIdField,
+	BooleanField,
+	ClassField,
+	NumberField,
+	StringField,
+	StringFieldOptional,
+} from "@cocrepo/decorator/field";
+import type { Prisma } from "@cocrepo/prisma";
+import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
-import type { Action } from "./action.entity";
-import type { PolicyEntry } from "./policy-entry.entity";
+import { Action } from "./action.entity";
+import { PolicyEntry } from "./policy-entry.entity";
+import { Subject } from "./subject.entity";
 
 /**
  * Ability 엔티티 (CASL ABAC 기반)
@@ -15,37 +25,39 @@ import type { PolicyEntry } from "./policy-entry.entity";
  */
 export class Ability extends AbstractEntity {
 	/** 공개 식별자 ULID */
-	abilityId!: string;
+	@Exclude({ toPlainOnly: true }) abilityId!: string;
 
 	// 메타데이터
 	/** 권한 이름 (재사용 가능한 고유 이름) */
-	name!: string;
+	@StringField() name!: string;
 	/** 권한 설명 */
-	description!: string | null;
+	@StringFieldOptional({ nullable: true }) description!: string | null;
 
 	// CASL 필수 필드
 	/** 대상 필드 목록 (빈 배열이면 전체 필드) */
-	fields!: string[];
+	@StringField({ each: true }) fields!: string[];
 	/** 권한 조건 (JSON 형식) */
+	@ClassField(() => Object, { required: false, nullable: true })
 	conditions!: Prisma.JsonValue | null;
 	/** 거부 권한 여부 (true: cannot, false: can) */
-	inverted!: boolean;
+	@BooleanField() inverted!: boolean;
 	/** 거부 사유 (inverted=true일 때 사용) */
-	reason!: string | null;
+	@StringFieldOptional({ nullable: true }) reason!: string | null;
 
 	// 연결 대상
 	/** Subject ID (권한 대상) */
-	subjectId!: bigint;
+	@BigIntIdField() subjectId!: bigint;
 	/** Action ID (행위 정의) */
-	actionId!: bigint;
+	@BigIntIdField() actionId!: bigint;
 
 	// RoleAssignment에서 조회할 때 설정되는 필드 (optional)
 	/** 우선순위 (Policy assignment priority 값) */
-	priority?: number;
+	@NumberField({ required: false }) priority?: number;
 
 	// 관계
-	subject?: Subject;
-	action?: Action;
+	@ClassField(() => Subject, { required: false }) subject?: Subject;
+	@ClassField(() => Action, { required: false }) action?: Action;
+	@ClassField(() => PolicyEntry, { required: false, each: true })
 	policyEntries?: PolicyEntry[];
 
 	/**

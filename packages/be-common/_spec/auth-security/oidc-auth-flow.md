@@ -119,7 +119,13 @@ sequenceDiagram
             S->>S: RS256 서명 검증 (공개키)
             S->>S: issuer, exp 검증
             S->>S: payload.sub → userId 추출
-            S->>S: usersService.getByIdWithTenants(userId)
+            S->>R: AuthCacheService.get(userId)
+            alt 인증 사용자 캐시 적중
+                S->>S: parseBigIntJson → hydrateEntity(User, cachedUser)
+            else 인증 사용자 캐시 없음
+                S->>S: usersService.findByUserIdWithTenants(userId)
+                S->>R: AuthCacheService.set(userId, stringifyBigIntJson(user), JWT 남은 시간)
+            end
             S->>S: request.user에 사용자 정보 주입
             S-->>U: 200 OK + 응답 데이터
         end
@@ -134,6 +140,14 @@ sequenceDiagram
 2. **쿠키**: `req.cookies.accessToken` (Admin Web 기본)
 
 쿠키에서 추출 시 RS256 알고리즘 헤더만 허용합니다 (JWT 헤더의 `alg` 필드를 검증).
+
+### 내부 인증 객체 복원
+
+`JwtStrategy`는 인증 캐시의 tagged JSON을 `parseBigIntJson`으로 읽은 뒤 `hydrateEntity(User, cachedUser)`로 `User` 인스턴스를 복원합니다. 이 경계에서는 Entity에 선언한 API 변환·직렬화 데코레이터를 실행하지 않습니다. 이메일 대소문자, 비밀번호 해시, 공개 ULID와 중첩 bigint 식별자를 저장된 값 그대로 유지하며 `hasTenantAccess()` 등의 도메인 메서드를 사용할 수 있습니다.
+
+캐시에 직렬화된 날짜는 기존 JSON의 ISO 문자열을 유지합니다. 이 복원 과정에서 Date로 재해석하지 않으며, 캐시 미스에서는 Repository가 반환한 Date 인스턴스를 그대로 반환합니다. 캐시 키는 JWT `sub`의 공개 `userId`이고 캐시 저장 형식과 TTL 정책은 변경하지 않습니다.
+
+`RoleCategoryGuard`도 CLS의 카테고리 snapshot에 `hydrateEntity(Category, snapshot)`를 적용해 계층 조회 메서드를 사용합니다. 부모·자식 snapshot 값은 그대로 탐색하고 API 변환은 적용하지 않습니다. 응답 DTO 변환은 기존 응답 interceptor가 담당합니다.
 
 ### 관련 코드
 

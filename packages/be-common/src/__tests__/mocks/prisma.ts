@@ -1,3 +1,6 @@
+// Entity의 EnumField는 실제 enum 값을 읽으므로 DB client만 mock하고 생성 enum은 보존합니다.
+export * from "../../../../be-prisma/dist/src/generated/client/enums";
+
 export class PrismaClient {}
 
 class PrismaClientKnownRequestError extends Error {

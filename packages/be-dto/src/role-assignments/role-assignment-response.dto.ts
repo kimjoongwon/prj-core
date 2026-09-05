@@ -1,63 +1,23 @@
-import { BigIntIdField } from "@cocrepo/decorator/field";
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { Expose, Type } from "class-transformer";
+import { RoleAssignment } from "@cocrepo/entity";
+import { EntityResponseType } from "../mapped-types";
 import { PolicyResponseDto } from "../policies/policy-response.dto";
 
-export class RoleAssignmentResponseDto {
-	@BigIntIdField({ description: "Role assignment ID" })
-	@Expose()
-	id!: bigint;
-
-	@BigIntIdField({ description: "Role ID" })
-	@Expose()
-	roleId!: bigint;
-
-	@BigIntIdField({ description: "Policy ID" })
-	@Expose()
-	policyId!: bigint;
-
-	@ApiProperty({
-		description: "활성화 여부",
-		example: true,
-	})
-	@Expose()
-	isActive!: boolean;
-
-	@ApiProperty({
-		description: "우선순위 (높을수록 우선)",
-		example: 0,
-	})
-	@Expose()
-	priority!: number;
-
-	@ApiProperty({
-		description: "생성 일시",
-		example: "2026-01-01T00:00:00.000Z",
-	})
-	@Expose()
-	createdAt!: Date;
-
-	@ApiProperty({
-		description: "수정 일시",
-		example: "2026-01-01T00:00:00.000Z",
-		nullable: true,
-	})
-	@Expose()
-	updatedAt!: Date | null;
-
-	@ApiProperty({
-		description: "삭제 일시",
-		example: "2026-01-01T00:00:00.000Z",
-		nullable: true,
-	})
-	@Expose()
-	removedAt!: Date | null;
-
-	@ApiPropertyOptional({
-		description: "할당된 Policy 상세 정보",
-		type: () => PolicyResponseDto,
-	})
-	@Expose()
-	@Type(() => PolicyResponseDto)
-	policy?: PolicyResponseDto;
+export class RoleAssignmentResponseDto extends EntityResponseType(
+	RoleAssignment,
+	{
+		pick: [
+			"id",
+			"roleId",
+			"policyId",
+			"isActive",
+			"priority",
+			"createdAt",
+			"updatedAt",
+			"removedAt",
+			"policy",
+		] as const,
+		relations: { policy: () => PolicyResponseDto },
+	},
+) {
+	declare policy?: PolicyResponseDto;
 }

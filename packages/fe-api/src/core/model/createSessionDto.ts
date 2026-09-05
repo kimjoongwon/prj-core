@@ -24,13 +24,13 @@ export interface CreateSessionDto {
 	/** @nullable */
 	repeatCycleType?: CreateSessionDtoRepeatCycleType;
 	/** @nullable */
-	startDateTime?: string | null;
+	startDateTime?: Date | null;
 	/** @nullable */
-	endDateTime?: string | null;
+	endDateTime?: Date | null;
 	/** @nullable */
 	recurringDayOfWeek?: CreateSessionDtoRecurringDayOfWeek;
 	/** @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$ */
-	timelineId: number;
+	timelineId: bigint;
 	name: string;
 	/** @nullable */
 	description?: string | null;

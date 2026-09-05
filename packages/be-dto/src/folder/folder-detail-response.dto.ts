@@ -1,8 +1,24 @@
+import { Folder } from "@cocrepo/entity";
+import { EntityResponseType } from "../mapped-types/entity-response-type";
 import { FolderDto } from "./folder.dto";
 
-/**
- * 폴더 상세 응답 DTO
- */
-export class FolderDetailResponseDto extends FolderDto {
-	// FolderDto에 모든 필드가 포함됨
+export class FolderDetailResponseDto extends EntityResponseType(Folder, {
+	pick: [
+		"id",
+		"createdAt",
+		"updatedAt",
+		"removedAt",
+		"spaceId",
+		"parentFolderId",
+		"name",
+		"path",
+		"sortOrder",
+		"createdById",
+		"parent",
+		"children",
+	],
+	relations: { parent: () => FolderDto, children: () => FolderDto },
+}) {
+	declare parent?: FolderDto;
+	declare children?: FolderDto[];
 }

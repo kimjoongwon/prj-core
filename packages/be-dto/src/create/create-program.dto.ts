@@ -1,15 +1,10 @@
-import { OmitType } from "@nestjs/swagger";
-import { COMMON_ENTITY_FIELDS } from "../constant";
-import { ProgramDto } from "../program.dto";
+import { Program } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 
-export class CreateProgramDto extends OmitType(ProgramDto, [
-	...COMMON_ENTITY_FIELDS,
-	"sessionId",
-	"routineNameSnapshot",
-	"routineLabelSnapshot",
-	"activityCount",
-	"previewExerciseNames",
-	"executionPlan",
-	"routine",
-	"session",
-]) {}
+export class CreateProgramDto extends PickType(Program, [
+	"routineId",
+	"instructorId",
+	"capacity",
+	"name",
+	"level",
+] as const) {}

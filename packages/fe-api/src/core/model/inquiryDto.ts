@@ -23,23 +23,23 @@ import type { InquiryStatus } from "./inquiryStatus";
 
 export interface InquiryDto {
 	/** @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$ */
-	id: number;
-	createdAt: string;
+	id: bigint;
+	createdAt: Date;
 	/** @nullable */
-	updatedAt: string | null;
+	updatedAt: Date | null;
 	/** @nullable */
-	removedAt: string | null;
+	removedAt: Date | null;
 	/**
 	 * 소속 Space ID
 	 * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
 	 */
-	spaceId: number;
+	spaceId: bigint;
 	/**
 	 * 생성자 ID
 	 * @nullable
 	 * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
 	 */
-	createdById?: number | null;
+	createdById?: bigint | null;
 	/** 문의 번호 */
 	inquiryNumber: string;
 	/** 문의 제목 */
@@ -54,24 +54,51 @@ export interface InquiryDto {
 	status: InquiryStatus;
 	/** 문의 우선순위 */
 	priority: InquiryPriority;
+	/** SLA 응답 위반 여부 */
+	isSlaResponseBreached: boolean;
+	/** SLA 해결 위반 여부 */
+	isSlaResolveBreached: boolean;
+	/** 실시간 채팅 활성화 여부 */
+	isRealtimeChat: boolean;
+	/** 읽지 않은 메시지 수 */
+	unreadCount: number;
 	/**
 	 * 고객 ID
 	 * @nullable
 	 * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
 	 */
-	customerId?: number | null;
+	customerId?: bigint | null;
 	/**
 	 * 담당자 ID
 	 * @nullable
 	 * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
 	 */
-	assigneeId?: number | null;
-	/** 실시간 채팅 활성화 여부 */
-	isRealtimeChat: boolean;
-	/** SLA 응답 위반 여부 */
-	isSlaResponseBreached: boolean;
-	/** SLA 해결 위반 여부 */
-	isSlaResolveBreached: boolean;
+	assigneeId?: bigint | null;
+	/**
+	 * 첫 응답 일시
+	 * @nullable
+	 */
+	firstResponseAt: Date | null;
+	/**
+	 * 해결 일시
+	 * @nullable
+	 */
+	resolvedAt: Date | null;
+	/**
+	 * 종료 일시
+	 * @nullable
+	 */
+	closedAt: Date | null;
+	/**
+	 * SLA 응답 기한
+	 * @nullable
+	 */
+	slaResponseDue: Date | null;
+	/**
+	 * SLA 해결 기한
+	 * @nullable
+	 */
+	slaResolveDue: Date | null;
 	/**
 	 * 감정 유형
 	 * @nullable
@@ -81,32 +108,5 @@ export interface InquiryDto {
 	 * 마지막 메시지 일시
 	 * @nullable
 	 */
-	lastMessageAt: string | null;
-	/** 읽지 않은 메시지 수 */
-	unreadCount: number;
-	/**
-	 * 첫 응답 일시
-	 * @nullable
-	 */
-	firstResponseAt: string | null;
-	/**
-	 * 해결 일시
-	 * @nullable
-	 */
-	resolvedAt: string | null;
-	/**
-	 * 종료 일시
-	 * @nullable
-	 */
-	closedAt: string | null;
-	/**
-	 * SLA 응답 기한
-	 * @nullable
-	 */
-	slaResponseDue: string | null;
-	/**
-	 * SLA 해결 기한
-	 * @nullable
-	 */
-	slaResolveDue: string | null;
+	lastMessageAt: Date | null;
 }

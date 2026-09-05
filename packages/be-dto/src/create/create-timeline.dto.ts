@@ -1,10 +1,7 @@
-import { OmitType } from "@nestjs/swagger";
-import { COMMON_ENTITY_FIELDS } from "../constant";
-import { TimelineDto } from "../timeline.dto";
+import { Timeline } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 
-export class CreateTimelineDto extends OmitType(TimelineDto, [
-	...COMMON_ENTITY_FIELDS,
-	"spaceId",
-	"createdById",
-	"sessions",
-]) {}
+export class CreateTimelineDto extends PickType(Timeline, [
+	"name",
+	"description",
+] as const) {}

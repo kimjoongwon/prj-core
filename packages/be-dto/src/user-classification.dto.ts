@@ -1,27 +1,27 @@
-import { BigIntIdField, ClassField } from "@cocrepo/decorator/field";
-import type { DomainEntityModel, UserClassification } from "@cocrepo/entity";
-import { Exclude } from "class-transformer";
-import { AbstractDto } from "./abstract.dto";
+import { UserClassification } from "@cocrepo/entity";
 import { CategoryDto } from "./category.dto";
+import { EntityResponseType } from "./mapped-types";
 import { UserDto } from "./user.dto";
 
-export class UserClassificationDto
-	extends AbstractDto
-	implements DomainEntityModel<UserClassification, "userClassificationId">
-{
-	@Exclude()
-	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
-	private readonly userClassificationId?: never;
-
-	@BigIntIdField()
-	categoryId: bigint;
-
-	@BigIntIdField()
-	userId: bigint;
-
-	@ClassField(() => UserDto, { required: false })
-	user?: UserDto[];
-
-	@ClassField(() => CategoryDto, { required: false })
-	category?: CategoryDto;
+export class UserClassificationDto extends EntityResponseType(
+	UserClassification,
+	{
+		pick: [
+			"id",
+			"createdAt",
+			"updatedAt",
+			"removedAt",
+			"categoryId",
+			"userId",
+			"user",
+			"category",
+		] as const,
+		relations: {
+			user: () => UserDto,
+			category: () => CategoryDto,
+		},
+	},
+) {
+	declare user?: UserDto;
+	declare category?: CategoryDto;
 }

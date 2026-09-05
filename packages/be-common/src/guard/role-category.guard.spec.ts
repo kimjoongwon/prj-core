@@ -297,7 +297,7 @@ describe("RoleCategoryGuard", () => {
 				expect(result).toBe(true);
 			});
 
-			it("사용자의 상위 카테고리가 요구된 카테고리와 일치하면 true를 반환해야 한다", () => {
+			it("snapshot의 여러 단계 상위 카테고리가 요구 조건과 일치하면 허용한다", () => {
 				// Given
 				mockReflector.get.mockReturnValue([RoleCategoryName.SHARED]);
 				const tenant = createMockTenant({
@@ -306,7 +306,7 @@ describe("RoleCategoryGuard", () => {
 						classification: {
 							category: {
 								name: "공개",
-								parent: { name: "공유" },
+								parent: { name: "중간 분류", parent: { name: "공유" } },
 								children: [],
 							},
 						},
@@ -330,7 +330,7 @@ describe("RoleCategoryGuard", () => {
 				expect(result).toBe(true);
 			});
 
-			it("사용자의 하위 카테고리가 요구된 카테고리와 일치하면 true를 반환해야 한다", () => {
+			it("snapshot의 여러 단계 하위 카테고리가 요구 조건과 일치하면 허용한다", () => {
 				// Given
 				mockReflector.get.mockReturnValue([RoleCategoryName.RESTRICTED]);
 				const tenant = createMockTenant({
@@ -342,8 +342,8 @@ describe("RoleCategoryGuard", () => {
 								parent: null,
 								children: [
 									{
-										name: "제한",
-										children: [],
+										name: "중간 분류",
+										children: [{ name: "제한", children: [] }],
 									},
 								],
 							},

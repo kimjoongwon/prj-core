@@ -630,7 +630,12 @@ export function buildAbilityListTableColumns<
 	]);
 }
 
-export function buildTaskTableColumns<TRow extends TaskDto = TaskDto>({
+/** 태스크 목록에서 표시하는 필드만 사용하여 역방향 관계를 요구하지 않습니다. */
+export type TaskTableRow = Pick<TaskDto, "id" | "createdAt"> & {
+ exercise: Pick<TaskDto["exercise"], "name" | "videoFileId" | "duration" | "count" | "description">;
+};
+
+export function buildTaskTableColumns<TRow extends TaskTableRow = TaskTableRow>({
 	onClickTaskName,
 	onClickDeleteButton,
 }: {
@@ -1719,7 +1724,7 @@ export function buildEmailVerificationTableColumns<
 			align: "center",
 			cell: ({ getValue }) => {
 				const status = getValue();
-				const config = Object.hasOwn(EMAIL_VERIFICATION_STATUS_CONFIG, status)
+				const config = Object.keys(EMAIL_VERIFICATION_STATUS_CONFIG).includes(status)
 					? EMAIL_VERIFICATION_STATUS_CONFIG[
 							status as keyof typeof EMAIL_VERIFICATION_STATUS_CONFIG
 						]
@@ -1739,7 +1744,7 @@ export function buildEmailVerificationTableColumns<
 				if (!status) {
 					return <DefaultCell value={null} />;
 				}
-				const config = Object.hasOwn(EMAIL_SEND_STATUS_CONFIG, status)
+				const config = Object.keys(EMAIL_SEND_STATUS_CONFIG).includes(status)
 					? EMAIL_SEND_STATUS_CONFIG[
 							status as keyof typeof EMAIL_SEND_STATUS_CONFIG
 						]

@@ -1,4 +1,6 @@
-import { PartialType } from "@nestjs/swagger";
-import { CreateTenantDto } from "../create";
+import { Tenant } from "@cocrepo/entity";
+import { PartialType, PickType } from "@nestjs/swagger";
 
-export class UpdateTenantDto extends PartialType(CreateTenantDto) {}
+export class UpdateTenantDto extends PartialType(
+	PickType(Tenant, ["roleId", "userId", "spaceId"] as const),
+) {}

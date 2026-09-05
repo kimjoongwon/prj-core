@@ -1,9 +1,13 @@
-import { OmitType } from "@nestjs/swagger";
-import { COMMON_ENTITY_FIELDS } from "../constant";
-import { SessionDto } from "../session.dto";
+import { Session } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 
-export class CreateSessionDto extends OmitType(SessionDto, [
-	...COMMON_ENTITY_FIELDS,
-	"programs",
-	"timeline",
-]) {}
+export class CreateSessionDto extends PickType(Session, [
+	"type",
+	"repeatCycleType",
+	"startDateTime",
+	"endDateTime",
+	"recurringDayOfWeek",
+	"timelineId",
+	"name",
+	"description",
+] as const) {}

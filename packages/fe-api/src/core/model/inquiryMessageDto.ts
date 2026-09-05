@@ -21,28 +21,61 @@ import type { SenderType } from "./senderType";
 
 export interface InquiryMessageDto {
 	/** @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$ */
-	id: number;
-	createdAt: string;
+	id: bigint;
+	createdAt: Date;
 	/** @nullable */
-	updatedAt: string | null;
+	updatedAt: Date | null;
 	/** @nullable */
-	removedAt: string | null;
+	removedAt: Date | null;
 	/**
 	 * 소속 스레드 ID
 	 * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
 	 */
-	threadId: number;
+	threadId: bigint;
 	/**
 	 * 소속 문의 ID
 	 * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
 	 */
-	inquiryId: number;
+	inquiryId: bigint;
+	/** 발신자 유형 */
+	senderType: SenderType;
+	/** 메시지 내용 */
+	content: string;
+	/** 콘텐츠 유형 */
+	contentType: MessageContentType;
+	/** 수정 여부 */
+	isEdited: boolean;
+	/** 삭제 여부 */
+	isDeleted: boolean;
 	/**
 	 * 발신자 ID
 	 * @nullable
 	 * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
 	 */
-	senderId?: number | null;
+	senderId?: bigint | null;
+	/**
+	 * 클라이언트 메시지 ID
+	 * @nullable
+	 * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+	 */
+	clientMessageId?: string | null;
+	/**
+	 * 전달 완료 시간
+	 * @nullable
+	 */
+	deliveredAt: Date | null;
+	/**
+	 * 읽음 확인 시간
+	 * @nullable
+	 */
+	readAt: Date | null;
+	/**
+	 * 수정 일시
+	 * @nullable
+	 */
+	editedAt: Date | null;
+	/** 첨부파일 목록 */
+	attachments?: InquiryAttachmentDto[];
 	/** 발신자 이름 */
 	senderName: string;
 	/**
@@ -50,37 +83,4 @@ export interface InquiryMessageDto {
 	 * @nullable
 	 */
 	senderAvatar: string | null;
-	/** 발신자 유형 */
-	senderType: SenderType;
-	/** 메시지 내용 */
-	content: string;
-	/** 콘텐츠 유형 */
-	contentType: MessageContentType;
-	/**
-	 * 클라이언트 메시지 ID
-	 * @nullable
-	 * @pattern ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-	 */
-	clientMessageId?: string | null;
-	/** 수정 여부 */
-	isEdited: boolean;
-	/** 삭제 여부 */
-	isDeleted: boolean;
-	/**
-	 * 수정 일시
-	 * @nullable
-	 */
-	editedAt: string | null;
-	/**
-	 * 전달 완료 시간
-	 * @nullable
-	 */
-	deliveredAt: string | null;
-	/**
-	 * 읽음 확인 시간
-	 * @nullable
-	 */
-	readAt: string | null;
-	/** 첨부파일 목록 */
-	attachments?: InquiryAttachmentDto[];
 }

@@ -117,7 +117,7 @@ function SubjectInfoSection({
 						<div>
 							<div className="mb-1 text-sm text-muted">수정일</div>
 							<div className="font-medium">
-								<DateTimeCell value={subject.updatedAt || "-"} />
+								<DateTimeCell value={subject.updatedAt} />
 							</div>
 						</div>
 					</div>

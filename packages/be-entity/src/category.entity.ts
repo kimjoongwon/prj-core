@@ -1,19 +1,35 @@
+import {
+	BigIntIdField,
+	BigIntIdFieldOptional,
+	ClassField,
+	StringField,
+} from "@cocrepo/decorator/field";
+import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
-import type { Space } from "./space.entity";
-import type { User } from "./user.entity";
+import { Space } from "./space.entity";
+import { User } from "./user.entity";
 
 export class Category extends AbstractEntity {
 	/** 공개 식별자 ULID */
+	@Exclude({ toPlainOnly: true })
 	categoryId!: string;
 
+	@StringField({ default: "" })
 	name!: string;
+	@BigIntIdField()
 	spaceId!: bigint;
+	@BigIntIdField({ nullable: true, default: null })
 	parentId!: bigint | null;
+	@BigIntIdFieldOptional({ nullable: true })
 	createdById!: bigint | null;
 
+	@ClassField(() => Category, { required: false })
 	parent?: Category;
+	@ClassField(() => Category, { each: true, required: false })
 	children?: Category[];
+	@ClassField(() => Space, { required: false })
 	space?: Space;
+	@ClassField(() => User, { required: false })
 	createdBy?: User;
 
 	/**

@@ -1,3 +1,4 @@
+import { prepareEntityResponseType } from "@cocrepo/dto";
 import { plainToInstance } from "class-transformer";
 
 type Constructor<T = object> = new (...args: never[]) => T;
@@ -35,6 +36,7 @@ export const transformToDto = <T>(
 	data: unknown,
 	options: TransformToDtoOptions = {},
 ): T | T[] => {
+	prepareEntityResponseType(dtoClass);
 	const excludeFields = options.excludeFields ?? [];
 
 	if (options.isArray) {

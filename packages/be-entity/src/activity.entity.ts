@@ -1,18 +1,25 @@
+import {
+	BigIntIdField,
+	ClassField,
+	NumberField,
+	StringFieldOptional,
+} from "@cocrepo/decorator/field";
+import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
-import type { Routine } from "./routine.entity";
-import type { Task } from "./task.entity";
+import { Routine } from "./routine.entity";
+import { Task } from "./task.entity";
 
 export class Activity extends AbstractEntity {
 	/** 공개 식별자 ULID */
-	activityId!: string;
+	@Exclude({ toPlainOnly: true }) activityId!: string;
 
-	routineId!: bigint;
-	taskId!: bigint;
-	order!: number;
-	repetitions!: number;
-	restTime!: number;
-	notes!: string | null;
+	@BigIntIdField() routineId!: bigint;
+	@BigIntIdField() taskId!: bigint;
+	@NumberField() order!: number;
+	@NumberField() repetitions!: number;
+	@NumberField() restTime!: number;
+	@StringFieldOptional({ nullable: true }) notes!: string | null;
 
-	routine?: Routine;
-	task?: Task;
+	@ClassField(() => Routine) routine?: Routine;
+	@ClassField(() => Task) task?: Task;
 }

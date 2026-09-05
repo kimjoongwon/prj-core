@@ -1,6 +1,6 @@
-import { PartialType } from "@nestjs/swagger";
-import { CreateSpaceAssociationDto } from "../create/create-space-association.dto";
+import { SpaceAssociation } from "@cocrepo/entity";
+import { PartialType, PickType } from "@nestjs/swagger";
 
 export class UpdateSpaceAssociationDto extends PartialType(
-	CreateSpaceAssociationDto,
+	PickType(SpaceAssociation, ["spaceId", "groupId"] as const),
 ) {}

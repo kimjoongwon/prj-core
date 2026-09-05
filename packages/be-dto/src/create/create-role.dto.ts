@@ -1,6 +1,5 @@
-import { OmitType } from "@nestjs/swagger";
-import { COMMON_ENTITY_FIELDS } from "../constant";
-import { RoleDto } from "../role.dto";
+import { Role } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 
 /**
  * 역할 생성 DTO
@@ -8,8 +7,8 @@ import { RoleDto } from "../role.dto";
  * - displayName: 표시명
  * - description: 설명 (선택)
  */
-export class CreateRoleDto extends OmitType(RoleDto, [
-	...COMMON_ENTITY_FIELDS,
-	"classification",
-	"associations",
-]) {}
+export class CreateRoleDto extends PickType(Role, [
+	"name",
+	"displayName",
+	"description",
+] as const) {}

@@ -1,4 +1,13 @@
-import { PartialType } from "@nestjs/swagger";
-import { CreateExerciseDto } from "../create";
+import { Exercise } from "@cocrepo/entity";
+import { PartialType, PickType } from "@nestjs/swagger";
 
-export class UpdateExerciseDto extends PartialType(CreateExerciseDto) {}
+export class UpdateExerciseDto extends PartialType(
+	PickType(Exercise, [
+		"duration",
+		"count",
+		"description",
+		"imageFileId",
+		"videoFileId",
+		"name",
+	] as const),
+) {}

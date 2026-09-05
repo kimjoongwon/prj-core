@@ -30,7 +30,8 @@
     "@cocrepo/entity": "workspace:*",
     "@cocrepo/enum": "workspace:*",
     "@cocrepo/schema": "workspace:*",
-    "@cocrepo/toolkit": "workspace:*"
+    "@cocrepo/toolkit": "workspace:*",
+    "@nestjs/mapped-types": "^2.1.0"
   },
   "peerDependencies": {
     "@nestjs/common": "^11.1.3",

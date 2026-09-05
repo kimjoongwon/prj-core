@@ -1,5 +1,6 @@
 export * from "./page-meta.dto";
 export * from "./query.dto";
+export * from "./entity-query-type";
 export * from "./query-action.dto";
 export * from "./query-auth-audit-log.dto";
 export * from "./query-email-verification.dto";

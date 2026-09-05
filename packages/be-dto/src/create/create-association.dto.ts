@@ -1,7 +1,7 @@
-import { OmitType } from "@nestjs/swagger";
-import { COMMON_ENTITY_FIELDS } from "../constant";
-import { UserAssociationDto } from "../user-association.dto";
+import { UserAssociation } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 
-export class CreateAssociationDto extends OmitType(UserAssociationDto, [
-	...COMMON_ENTITY_FIELDS,
-]) {}
+export class CreateAssociationDto extends PickType(UserAssociation, [
+	"userId",
+	"groupId",
+] as const) {}

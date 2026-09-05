@@ -81,7 +81,7 @@ export const Detail: Story = {
 			activityCountLabel: "2개",
 			sessionName: "월요일 오전 요가",
 			sessionHref: "/timelines/timeline-1/sessions/session-1",
-			createdAt: "2026-04-01T09:00:00.000Z",
+			createdAt: new Date("2026-04-01T09:00:00.000Z"),
 		},
 		actions: <Button variant="tertiary">수정</Button>,
 	},

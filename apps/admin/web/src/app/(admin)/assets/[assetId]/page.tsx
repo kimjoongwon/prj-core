@@ -95,7 +95,8 @@ function mapAssetDetail(asset: AssetDto): AssetDetailScreenAsset {
 		sizeBytes: asset.sizeBytes,
 		folderId: asset.folderId,
 		publicUrl: asset.publicUrl,
-		createdAt: asset.createdAt,
+		// 수동 assets 클라이언트는 ISO 문자열을 반환하므로 화면 경계에서 Date로 복원합니다.
+		createdAt: new Date(asset.createdAt),
 		storageKey: asset.storageKey,
 		checksum: asset.checksum,
 	};

@@ -1,14 +1,10 @@
-import {
-	EnumFieldOptional,
-	StringFieldOptional,
-} from "@cocrepo/decorator/field";
-import { LanguageCode } from "@cocrepo/prisma";
-import { QueryDto } from "./query.dto";
+import { StringFieldOptional } from "@cocrepo/decorator/field";
+import { Space } from "@cocrepo/entity";
+import { EntityQueryType } from "./entity-query-type";
 
-export class QuerySpaceDto extends QueryDto {
+export class QuerySpaceDto extends EntityQueryType(Space, [
+	"contentLanguageCode",
+] as const) {
 	@StringFieldOptional()
 	search?: string;
-
-	@EnumFieldOptional(() => LanguageCode)
-	contentLanguageCode?: LanguageCode;
 }

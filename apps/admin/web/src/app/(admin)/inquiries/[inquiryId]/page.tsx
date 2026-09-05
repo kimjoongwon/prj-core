@@ -32,32 +32,7 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import type { Route } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
-
-type InquiryParticipantWire = {
-	id: string;
-	threadId: string | null;
-	userId: string;
-	role: "CUSTOMER" | "AGENT" | "SUPERVISOR" | "VIEWER";
-	isOnline: boolean;
-	isTyping: boolean;
-	unreadCount: number;
-	joinedAt: string;
-	lastSeenAt: string | null;
-	lastReadAt: string | null;
-	leftAt: string | null;
-};
-
-const isInquiryParticipantWire = (
-	value: unknown,
-): value is InquiryParticipantWire => {
-	if (typeof value !== "object" || value === null) return false;
-	return (
-		typeof Reflect.get(value, "id") === "string" &&
-		typeof Reflect.get(value, "userId") === "string" &&
-		typeof Reflect.get(value, "role") === "string" &&
-		typeof Reflect.get(value, "joinedAt") === "string"
-	);
-};
+import { toInquiryParticipantState } from "./utils/inquiry-participant";
 
 const normalizeFormOptionValue = (value: unknown): FormOptionItem["value"] => {
 	if (
@@ -100,31 +75,6 @@ const mapMessageToStore = (message: InquiryMessageDto): InquiryMessage => {
 		readAt: message.readAt?.toISOString() ?? null,
 		editedAt: message.editedAt?.toISOString() ?? null,
 		createdAt: message.createdAt.toISOString(),
-	};
-};
-
-const mapParticipantToStore = (
-	participant: InquiryParticipantWire,
-	inquiryId: string,
-): InquiryParticipant => {
-	return {
-		id: participant.id,
-		inquiryId,
-		threadId: participant.threadId,
-		userId: participant.userId,
-		role:
-			participant.role === "CUSTOMER"
-				? "CUSTOMER"
-				: participant.role === "SUPERVISOR"
-					? "SUPERVISOR"
-					: "AGENT",
-		isOnline: participant.isOnline,
-		isTyping: participant.isTyping,
-		unreadCount: participant.unreadCount,
-		joinedAt: participant.joinedAt,
-		lastSeenAt: participant.lastSeenAt,
-		lastReadAt: participant.lastReadAt,
-		leftAt: participant.leftAt,
 	};
 };
 
@@ -279,11 +229,8 @@ export default observer(function InquiryReadOnlyRoute() {
 	const updateFormBootstrap = updateFormBootstrapResponse?.data;
 	const updateFormOptions = normalizeFormOptions(updateFormBootstrap?.options);
 	const messages = (messagesResponse?.data ?? []).map(mapMessageToStore);
-	const participantRows = (participantsResponse?.data ?? []).filter(
-		isInquiryParticipantWire,
-	);
-	const participants = participantRows.map((participant) =>
-		mapParticipantToStore(participant, inquiryId),
+	const participants = (participantsResponse?.data ?? []).map((participant) =>
+		toInquiryParticipantState(participant, inquiryId),
 	);
 
 	const ws = useInquiryDetailWebSocket({

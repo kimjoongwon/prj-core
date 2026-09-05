@@ -1,9 +1,9 @@
-import { StringFieldOptional } from "@cocrepo/decorator/field";
+import { AlbumEntry } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 
 /**
  * 앨범 엔트리 수정 DTO (캡션 등)
  */
-export class UpdateAlbumEntryDto {
-	@StringFieldOptional({ nullable: true, description: "캡션" })
-	caption?: string | null;
-}
+export class UpdateAlbumEntryDto extends PickType(AlbumEntry, [
+	"caption",
+] as const) {}

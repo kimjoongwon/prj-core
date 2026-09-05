@@ -1,15 +1,9 @@
-import { BigIntIdField, DateField } from "@cocrepo/decorator/field";
+import { AbstractEntity } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 
-export class AbstractDto {
-	@BigIntIdField()
-	id!: bigint;
-
-	@DateField()
-	createdAt!: Date;
-
-	@DateField({ nullable: true })
-	updatedAt!: Date | null;
-
-	@DateField({ nullable: true })
-	removedAt!: Date | null;
-}
+export class AbstractDto extends PickType(AbstractEntity, [
+	"id",
+	"createdAt",
+	"updatedAt",
+	"removedAt",
+] as const) {}

@@ -1,5 +1,5 @@
-import { OmitType, PartialType } from "@nestjs/swagger";
-import { SecurityPolicyDto } from "../security-policy.dto";
+import { SecurityPolicy } from "@cocrepo/entity";
+import { PartialType, PickType } from "@nestjs/swagger";
 
 /**
  * 보안 정책 수정 DTO
@@ -7,5 +7,22 @@ import { SecurityPolicyDto } from "../security-policy.dto";
  * - 나머지 필드는 모두 선택적
  */
 export class UpdateSecurityPolicyDto extends PartialType(
-	OmitType(SecurityPolicyDto, ["id", "createdAt", "updatedAt", "key"]),
+	PickType(SecurityPolicy, [
+		"passwordMinLength",
+		"passwordRequireUppercase",
+		"passwordRequireLowercase",
+		"passwordRequireNumber",
+		"passwordRequireSpecial",
+		"passwordExpirationDays",
+		"passwordReuseLimit",
+		"temporaryLockThreshold",
+		"temporaryLockDurationMin",
+		"permanentLockThreshold",
+		"accessTokenTtlSec",
+		"refreshTokenTtlSec",
+		"sessionTtlSec",
+		"ipWhitelistEnabled",
+		"emailDomainWhitelistEnabled",
+		"corsOriginWhitelistEnabled",
+	] as const),
 ) {}

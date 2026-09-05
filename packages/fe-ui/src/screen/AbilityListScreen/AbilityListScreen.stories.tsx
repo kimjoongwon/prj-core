@@ -1,82 +1,94 @@
+import type { ComponentProps } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { AbilityListScreen } from "./AbilityListScreen";
 
-const abilityFixtures = [
+const abilityFixtures: NonNullable<ComponentProps<typeof AbilityListScreen>["abilities"]> = [
 	{
-		actionId: "action-read",
+		actionId: 1n,
 		action: {
-			createdAt: "2026-04-14T09:00:00.000Z",
+			description: null,
+			group: null,
+			config: null,
+			createdAt: new Date("2026-04-14T09:00:00.000Z"),
 			displayName: "조회",
-			id: "action-read",
+			id: 1n,
 			name: "read",
 			order: 1,
-			updatedAt: "2026-04-14T09:00:00.000Z",
+			updatedAt: new Date("2026-04-14T09:00:00.000Z"),
 		},
+		reason: null,
 		conditions: null,
-		createdAt: "2026-04-14T09:00:00.000Z",
+		createdAt: new Date("2026-04-14T09:00:00.000Z"),
 		description: "이용자 기본 정보를 확인합니다.",
 		fields: [],
-		id: "ability-read-user",
+		id: 21n,
 		inverted: false,
 		name: "Can 조회 사용자",
-		subjectId: "subject-user",
+		subjectId: 11n,
 		subject: {
 			displayName: "사용자",
 			fieldCount: 12,
 			name: "User",
 		},
-		updatedAt: "2026-04-14T09:00:00.000Z",
+		updatedAt: new Date("2026-04-14T09:00:00.000Z"),
 	},
 	{
-		actionId: "action-update",
+		actionId: 2n,
 		action: {
-			createdAt: "2026-04-14T09:00:00.000Z",
+			description: null,
+			group: null,
+			config: null,
+			createdAt: new Date("2026-04-14T09:00:00.000Z"),
 			displayName: "수정",
-			id: "action-update",
+			id: 2n,
 			name: "update",
 			order: 2,
-			updatedAt: "2026-04-14T09:00:00.000Z",
+			updatedAt: new Date("2026-04-14T09:00:00.000Z"),
 		},
+		reason: null,
 		conditions: { spaceId: "current" },
-		createdAt: "2026-04-14T09:00:00.000Z",
+		createdAt: new Date("2026-04-14T09:00:00.000Z"),
 		description: "현재 공간의 예약만 수정합니다.",
 		fields: ["name", "startedAt"],
-		id: "ability-update-reservation",
+		id: 22n,
 		inverted: false,
 		name: "Can 수정 예약",
-		subjectId: "subject-reservation",
+		subjectId: 12n,
 		subject: {
 			displayName: "예약",
 			fieldCount: 8,
 			name: "Reservation",
 		},
-		updatedAt: "2026-04-14T09:00:00.000Z",
+		updatedAt: new Date("2026-04-14T09:00:00.000Z"),
 	},
 	{
-		actionId: "action-delete",
+		actionId: 3n,
 		action: {
-			createdAt: "2026-04-14T09:00:00.000Z",
+			description: null,
+			group: null,
+			config: null,
+			createdAt: new Date("2026-04-14T09:00:00.000Z"),
 			displayName: "삭제",
-			id: "action-delete",
+			id: 3n,
 			name: "delete",
 			order: 3,
-			updatedAt: "2026-04-14T09:00:00.000Z",
+			updatedAt: new Date("2026-04-14T09:00:00.000Z"),
 		},
 		conditions: null,
-		createdAt: "2026-04-14T09:00:00.000Z",
+		createdAt: new Date("2026-04-14T09:00:00.000Z"),
 		description: "일괄 삭제는 제한합니다.",
 		fields: [],
-		id: "ability-deny-bulk-delete",
+		id: 23n,
 		inverted: true,
 		name: "Cannot 접근 일괄 삭제",
 		reason: "운영 안정성을 위해 제한",
-		subjectId: "subject-bulk-delete",
+		subjectId: 13n,
 		subject: {
 			displayName: "일괄 삭제",
 			fieldCount: 0,
 			name: "BulkDelete",
 		},
-		updatedAt: "2026-04-14T09:00:00.000Z",
+		updatedAt: new Date("2026-04-14T09:00:00.000Z"),
 	},
 ];
 
@@ -89,19 +101,19 @@ const defaultSummary = {
 	fieldScoped: 1,
 };
 
-const defaultArgs = {
+const defaultArgs: ComponentProps<typeof AbilityListScreen> = {
 	abilities: abilityFixtures,
 	actions: [
 		{
-			id: "action-read",
+			id: 97n,
 			label: "조회",
 		},
 		{
-			id: "action-update",
+			id: 101n,
 			label: "수정",
 		},
 		{
-			id: "action-delete",
+			id: 105n,
 			label: "삭제",
 		},
 	],
@@ -112,13 +124,13 @@ const defaultArgs = {
 		selectedSubjectId: "",
 	},
 	isLoading: false,
-	onChangeActionId: (..._args: never[]) => undefined,
-	onChangeInverted: (..._args: never[]) => undefined,
-	onChangeSearchTerm: (..._args: never[]) => undefined,
-	onChangeSubjectId: (..._args: never[]) => undefined,
-	onClickAbilityRow: (..._args: never[]) => undefined,
-	onClickCreateButton: (..._args: never[]) => undefined,
-	onClickResetFiltersButton: (..._args: never[]) => undefined,
+	onChangeActionId: () => undefined,
+	onChangeInverted: () => undefined,
+	onChangeSearchTerm: () => undefined,
+	onChangeSubjectId: () => undefined,
+	onClickAbilityRow: () => undefined,
+	onClickCreateButton: () => undefined,
+	onClickResetFiltersButton: () => undefined,
 	queryStates: {
 		page: 1,
 		take: 10,
@@ -128,19 +140,19 @@ const defaultArgs = {
 		actionId: "",
 		inverted: "",
 	},
-	setQueryStates: (..._args: never[]) => undefined,
+	setQueryStates: async () => new URLSearchParams(),
 	summary: defaultSummary,
 	subjects: [
 		{
-			id: "subject-user",
+			id: 136n,
 			label: "사용자",
 		},
 		{
-			id: "subject-reservation",
+			id: 140n,
 			label: "예약",
 		},
 		{
-			id: "subject-bulk-delete",
+			id: 144n,
 			label: "일괄 삭제",
 		},
 	],
@@ -157,17 +169,17 @@ const filteredArgs = {
 	abilities: [abilityFixtures[1]],
 	filters: {
 		searchTerm: "예약",
-		selectedActionId: "action-update",
+		selectedActionId: "2",
 		selectedInverted: "false",
-		selectedSubjectId: "subject-reservation",
+		selectedSubjectId: "12",
 	},
 	queryStates: {
 		page: 1,
 		take: 10,
 		skip: 0,
 		search: "예약",
-		subjectId: "subject-reservation",
-		actionId: "action-update",
+		subjectId: "12",
+		actionId: "2",
 		inverted: "false",
 	},
 	summary: {
@@ -196,11 +208,17 @@ const emptyStateArgs = {
 const meta = {
 	title: "screen/AbilityListScreen",
 	component: AbilityListScreen,
+	// bigint 응답 fixture는 JSON 기반 Controls 편집에서 제외합니다.
+	argTypes: {
+		abilities: { control: false },
+		subjects: { control: false },
+		actions: { control: false },
+	},
 	parameters: {
 		layout: "fullscreen",
 	},
 	tags: ["autodocs"],
-	args: defaultArgs as never,
+	args: defaultArgs,
 } satisfies Meta<typeof AbilityListScreen>;
 
 export default meta;
@@ -210,13 +228,13 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const Loading: Story = {
-	args: loadingArgs as never,
+	args: loadingArgs,
 };
 
 export const Filtered: Story = {
-	args: filteredArgs as never,
+	args: filteredArgs,
 };
 
 export const EmptyState: Story = {
-	args: emptyStateArgs as never,
+	args: emptyStateArgs,
 };

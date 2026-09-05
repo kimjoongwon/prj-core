@@ -1,10 +1,8 @@
-import { BigIntIdFieldOptional } from "@cocrepo/decorator/field";
-import { QueryDto } from "./query.dto";
+import { EntityQueryType } from "./entity-query-type";
+import { UserAssociation } from "@cocrepo/entity";
 
-export class QueryUserAssociationDto extends QueryDto {
-	@BigIntIdFieldOptional()
-	userId?: bigint;
-
-	@BigIntIdFieldOptional()
-	groupId?: bigint;
+export class QueryUserAssociationDto extends EntityQueryType(UserAssociation, [
+	"userId",
+	"groupId",
+] as const) {
 }

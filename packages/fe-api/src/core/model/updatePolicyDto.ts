@@ -16,6 +16,7 @@
  */
 
 export interface UpdatePolicyDto {
+	/** 정책 식별자 */
 	name?: string;
 	displayName?: string;
 	description?: string;

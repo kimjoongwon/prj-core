@@ -1,10 +1,13 @@
-import { OmitType } from "@nestjs/swagger";
-import { ActionDto } from "../action.dto";
-import { COMMON_ENTITY_FIELDS } from "../constant";
+import { Action } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 
 /**
  * Action 생성 DTO
  */
-export class CreateActionDto extends OmitType(ActionDto, [
-	...COMMON_ENTITY_FIELDS,
-]) {}
+export class CreateActionDto extends PickType(Action, [
+	"name",
+	"displayName",
+	"description",
+	"group",
+	"order",
+] as const) {}

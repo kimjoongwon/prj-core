@@ -1,47 +1,26 @@
 import {
 	BigIntIdFieldOptional,
-	EnumField,
-	EnumFieldOptional,
 	StringField,
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
-import {
-	InquiryCategory,
-	InquiryChannel,
-	InquiryPriority,
-	InquirySource,
-} from "@cocrepo/prisma";
+import { Inquiry } from "@cocrepo/entity";
+import { IntersectionType, PartialType, PickType } from "@nestjs/swagger";
 
 /**
  * 문의 생성 DTO
  */
-export class CreateInquiryDto {
+export class CreateInquiryDto extends IntersectionType(
+	PickType(Inquiry, ["category", "channel"] as const),
+	PartialType(PickType(Inquiry, ["source", "priority"] as const), {
+		skipNullProperties: false,
+	}),
+) {
 	@StringField({
 		minLength: 2,
 		maxLength: 200,
 		description: "문의 제목",
 	})
 	title: string;
-
-	@EnumField(() => InquiryCategory, {
-		description: "문의 카테고리",
-	})
-	category: InquiryCategory;
-
-	@EnumField(() => InquiryChannel, {
-		description: "문의 채널",
-	})
-	channel: InquiryChannel;
-
-	@EnumFieldOptional(() => InquirySource, {
-		description: "문의 접수 유형 (기본값: ONLINE)",
-	})
-	source?: InquirySource;
-
-	@EnumFieldOptional(() => InquiryPriority, {
-		description: "문의 우선순위 (기본값: NORMAL)",
-	})
-	priority?: InquiryPriority;
 
 	@BigIntIdFieldOptional({
 		description: "고객 ID",

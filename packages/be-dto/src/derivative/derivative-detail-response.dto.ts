@@ -1,14 +1,33 @@
-import { ClassField } from "@cocrepo/decorator/field";
-import type { AssetDto } from "../asset/asset.dto";
-import { DerivativeDto } from "./derivative.dto";
+import { NumberField } from "@cocrepo/decorator/field";
+import { Derivative } from "@cocrepo/entity";
+import { AssetDto } from "../asset/asset.dto";
+import { EntityResponseType } from "../mapped-types/entity-response-type";
 
-/**
- * 파생 리소스 상세 응답 DTO (관계 포함)
- */
-export class DerivativeDetailResponseDto extends DerivativeDto {
-	@ClassField(() => require("../asset/asset.dto").AssetDto, {
-		required: false,
-		description: "원본 에셋",
-	})
-	asset?: AssetDto;
+export class DerivativeDetailResponseDto extends EntityResponseType(
+	Derivative,
+	{
+		pick: [
+			"id",
+			"createdAt",
+			"updatedAt",
+			"removedAt",
+			"spaceId",
+			"createdById",
+			"assetId",
+			"kind",
+			"profile",
+			"storageKey",
+			"mimeType",
+			"width",
+			"height",
+			"durationMs",
+			"asset",
+		],
+		relations: { asset: () => AssetDto },
+		extraFields: ["sizeBytes"],
+	},
+) {
+	@NumberField({ description: "파일 크기 (바이트)", int: true })
+	sizeBytes!: number;
+	declare asset?: AssetDto;
 }

@@ -30,11 +30,6 @@ import {
 	setApiSessionScope,
 	setLoginRedirectUrl,
 } from "../../../../../packages/fe-api/src/core/client";
-import {
-	setIdpLocale,
-	setIdpLoginRedirectUrl,
-	setIdpSessionScope,
-} from "../../../../../packages/fe-api/src/core/client";
 
 type StorybookRealm = "none" | "admin" | "idp";
 type StoryRender = () => ReactNode;

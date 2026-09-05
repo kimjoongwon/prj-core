@@ -55,6 +55,25 @@ orch-delivery (Delivery Orchestrator)
 - Entity class 파일에는 top-level helper/mapper/type/interface를 함께 두지 않습니다.
 - rehydrate input, factory input, mapper/helper가 필요하면 가까운 별도 파일로 분리합니다.
 
+### API 메타데이터 canonical owner
+
+- Prisma scalar와 domain relation의 타입·변환·공통 validation·Swagger 메타데이터는 Entity 필드에 한 번만 선언합니다.
+- 생성·수정 DTO는 `@nestjs/swagger`의 `PickType/PartialType`으로 Entity에서 직접 허용 필드를 선택합니다. 응답은 `EntityResponseType`, 같은 의미의 Query 필터는 `EntityQueryType`을 사용합니다. 자세한 API 파생 계약은 [DTO README](../../../packages/be-dto/README.md)를 따릅니다.
+- 검색·정렬·페이지네이션, 가입·로그인 평문 비밀번호, projection·wrapper 응답처럼 API 문맥에만 존재하는 필드는 DTO가 소유합니다.
+- Entity는 DTO를 import하지 않습니다. 관계 decorator의 runtime callback은 실제 관계 Entity를 가리키며 DTO 전용 응답 shape는 DTO에서 조합합니다.
+- `@Exclude({ toPlainOnly: true })`는 persisted ULID·secret의 응답 숨김에 사용하고, 입력용 평문 비밀번호 검증(`PasswordField`)은 Entity에 이동하지 않습니다.
+- Nest Mapped Types는 Entity 생성자의 property initializer를 파생 DTO에 복사할 수 있으므로 변경 전 요청 기본값 계약을 확인합니다. `EntityQueryType`은 Entity 초기값과 선택 필드의 Swagger `default`를 복사하지 않습니다.
+- `AbstractEntity`와 `AbstractAggregateEntity`의 네 공통 필드는 내부 `AbstractEntityFields` 한 정의를 공유합니다. AggregateRoot 상속이나 도메인 메서드를 Mapped Types로 대체하지 않습니다.
+- 기존 공통 필드의 API 메타데이터가 모델별로 달라야 하면 해당 Entity에서 필요한 필드만 `declare`로 재선언하고 데코레이터를 적용합니다. 문서 정리를 이유로 runtime 기본값을 추가하지 않습니다.
+
+### 내부 객체 복원
+
+- DB·캐시의 plain object는 공개 `hydrateEntity(EntityClass, persistedValue)`로 복원합니다. `new EntityClass()`에 원본 값을 복사하여 API `Transform/Type/Exclude`를 실행하지 않습니다.
+- bigint와 Date, 이메일 대소문자, 저장된 비밀번호·ULID 및 Entity 메서드를 보존합니다. 날짜 문자열·decimal ID를 임의로 파싱하는 API 변환 함수로 사용하지 않습니다.
+- `Policy.entries → PolicyEntry`, `Policy.roleAssignments → RoleAssignment`, `PolicyEntry.ability → Ability`, `RoleAssignment.policy → Policy`의 기존 네 관계만 명시적으로 인스턴스화합니다. WeakMap으로 공유·순환 참조를 보존하며 나머지 관계는 일괄 변환하지 않습니다.
+- Repository의 `toDomainEntity`와 JWT 캐시 복원은 같은 helper를 사용합니다. API 응답은 DTO 패키지의 공통 변환 경계를 따르며 Entity가 DTO helper를 import하지 않습니다.
+- 복원 정책·실행 예시는 [Entity README](../../../packages/be-entity/README.md#내부-객체-복원)를 기준으로 유지합니다.
+
 ### Persistence / Domain 구분
 
 - Prisma generated type은 `persistence model/entity`로 취급합니다.
@@ -77,14 +96,18 @@ export class User extends AbstractEntity implements UserEntity {
   // Prisma 모델의 모든 필드를 구현
 }
 
-// 필수 필드: ! 사용
+// 공통 검증·문서 정보와 필수 필드 타입을 함께 정의
+@StringField()
 name!: string;
 
-// nullable 필드: | null 타입 추가
-parentId!: string | null;
+// nullable 숫자 관계 ID: bigint와 null 사용
+@BigIntIdFieldOptional({ nullable: true })
+parentId!: bigint | null;
 
-// 관계 필드: ? 사용
+// 관계 필드: Entity를 참조하는 지연 callback과 기존 옵션 보존
+@ClassField(() => Category, { required: false })
 parent?: Category;
+@ClassField(() => Category, { each: true, required: false })
 children?: Category[];
 
 // 도메인 메서드 포함
@@ -101,11 +124,6 @@ export class User {
   id!: string;
   createdAt!: Date;
   // 기본 필드 중복 선언
-}
-
-// Prisma 타입 미구현
-export class User {
-  // implements 없음
 }
 
 // Prisma 타입 상속 금지
@@ -153,7 +171,7 @@ export * from "./{entity}.entity";
 
 ### 4단계: Entity 계약 반영 확인
 
-백엔드 entity 전용 spec 파일은 만들지 않습니다.
+별도 설계 spec을 Entity마다 일괄 생성하지 않습니다. 기존 owner 문서와 변경된 입력·응답·복원 경계의 관련 테스트를 갱신하고, Entity 패키지 타입 검사와 소비 DTO의 순환 타입·모듈 초기화를 확인합니다.
 
 ---
 
@@ -161,193 +179,115 @@ export * from "./{entity}.entity";
 
 ### 기본 템플릿
 
+다음은 필드 선언 패턴입니다. 실제 모델의 필수 scalar와 관계를 확인해 완성하고,
+Prisma shape와 도메인 shape가 같으면 `implements`로 검사할 수 있습니다.
+관계 callback에 사용하는 클래스는 type-only import가 아닌 runtime import를 사용합니다.
+
 ```typescript
-import type {
-  {Entity} as {Entity}Entity,
-  // 필요한 enum 타입들
-} from "@cocrepo/prisma";
+import { BigIntIdField, ClassField, StringField, StringFieldOptional } from "@cocrepo/decorator/field";
+import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
-// 관계 Entity import (type only)
-import type { Space } from "./space.entity";
-import type { User } from "./user.entity";
+import { Space } from "./space.entity";
 
-export class {Entity} extends AbstractEntity implements {Entity}Entity {
-  // ============================================================================
-  // 필수 필드
-  // ============================================================================
+export class Example extends AbstractEntity {
+  @Exclude({ toPlainOnly: true })
+  exampleId!: string;
+
+  @StringField()
   name!: string;
-  spaceId!: string;
 
-  // ============================================================================
-  // Nullable 필드
-  // ============================================================================
+  @BigIntIdField()
+  spaceId!: bigint;
+
+  @StringFieldOptional({ nullable: true })
   description!: string | null;
-  parentId!: string | null;
 
-  // ============================================================================
-  // 관계 필드 (선택적)
-  // ============================================================================
+  @ClassField(() => Space, { required: false })
   space?: Space;
-  creator?: User;
-  parent?: {Entity};
-  children?: {Entity}[];
 
-  // ============================================================================
-  // 도메인 메서드
-  // ============================================================================
-
-  /**
-   * [메서드 설명]
-   */
-  someBusinessMethod(): SomeType {
-    // 비즈니스 로직 구현
+  /** 설명이 설정되어 있는지 확인합니다. */
+  hasDescription(): boolean {
+    return Boolean(this.description);
   }
 }
 ```
 
-### 기본 Entity (관계 없음)
+### 관계 없는 Entity 필드
 
-```typescript
-import type { File as FileEntity, FileTypes } from "@cocrepo/prisma";
-import { AbstractEntity } from "./abstract.entity";
-
-export class File extends AbstractEntity implements FileEntity {
-  name!: string;
-  path!: string;
-  type!: FileTypes;
-  size!: number;
-  mimeType!: string;
-  spaceId!: string;
-
-  /**
-   * 파일 확장자를 반환합니다
-   */
-  getExtension(): string {
-    return this.name.split(".").pop() || "";
-  }
-
-  /**
-   * 이미지 파일인지 확인합니다
-   */
-  isImage(): boolean {
-    return this.mimeType.startsWith("image/");
-  }
-}
-```
+`StringField`, `EnumField`, `NumberField`, `BigIntIdField` 등 기존 필드 데코레이터로
+공통 계약을 선언합니다. 원본 타입이 bigint인 값과 API에서만 number인 projection을
+구분하며, 저장된 비밀번호 해시에 `PasswordField`를 적용하지 않습니다.
+파일 미디어는 실제 `Asset/Derivative` 모델과 Entity를 확인하고 새 `File` 모델을
+문서 예시만 보고 생성하지 않습니다.
 
 ### 자기 참조 관계 Entity
 
+아래는 현재 `Category`의 관계·메서드 사용 예시입니다. scalar 선언은 위 패턴처럼
+같은 Entity에 두며, 자기 참조도 지연 callback으로 문서화합니다.
+
 ```typescript
-import type { Category as CategoryEntity, CategoryTypes } from "@cocrepo/prisma";
-import { AbstractEntity } from "./abstract.entity";
-import type { Space } from "./space.entity";
-import type { User } from "./user.entity";
+@ClassField(() => Category, { required: false })
+parent?: Category;
 
-export class Category extends AbstractEntity implements CategoryEntity {
-  name!: string;
-  type!: CategoryTypes;
-  parentId!: string | null;
-  spaceId!: string;
-  creatorId!: string | null;
+@ClassField(() => Category, { each: true, required: false })
+children?: Category[];
 
-  parent?: Category;
-  children?: Category[];
-  space?: Space;
-  creator?: User;
-
-  /**
-   * 현재 카테고리부터 루트까지 모든 상위 카테고리 이름을 추출합니다
-   */
-  getAllParentNames(): string[] {
-    const names: string[] = [];
-    let current: Category | undefined = this;
-
-    while (current) {
-      if (current.name) {
-        names.push(current.name);
-      }
-      current = current.parent;
-    }
-
-    return names;
+getAllParentNames(): string[] {
+  const categoryNames: string[] = [];
+  let currentCategory: Category | undefined = this;
+  while (currentCategory) {
+    if (currentCategory.name) categoryNames.push(currentCategory.name);
+    currentCategory = currentCategory.parent;
   }
-
-  /**
-   * 옵션 형태로 변환합니다 (Select 컴포넌트용)
-   */
-  toOption() {
-    return {
-      key: this.id,
-      value: this.id,
-      text: this.name,
-    };
-  }
+  return categoryNames;
 }
 ```
+
+`each`와 Swagger의 `isArray`는 별개 옵션입니다. 기존 API에 적용된 옵션을
+확인하고 메타데이터 이동만으로 배열 문서를 변경하지 않습니다.
 
 ### 다중 관계 Entity
 
+아래는 `User`의 공통 메타데이터 일부입니다. 실제 Entity는 나머지 persisted
+필드와 관계도 보유합니다. `spaceId` 응답 projection은 DTO에 남기고, 현재
+선택 상태는 persisted 필드인 `currentTenantId`를 기준으로 해석합니다.
+
 ```typescript
-import type {
-  User as UserEntity,
-  Profile,
-  Space,
-  Tenant,
-} from "@cocrepo/prisma";
-import { AbstractEntity } from "./abstract.entity";
+@EmailField({ description: "이메일 주소" })
+email!: string;
 
-export class User extends AbstractEntity implements UserEntity {
-  name!: string;
-  email!: string;
-  phone!: string;
-  password!: string;
-  selectedSpaceId: string | null = null;
+@Exclude({ toPlainOnly: true })
+password!: string;
 
-  // 다중 관계
-  selectedSpace?: Space | null;
-  profiles?: Profile[];
-  tenants?: Tenant[];
+@BigIntIdField({ nullable: true, description: "현재 선택된 Tenant membership ID" })
+currentTenantId!: bigint | null;
 
-  /**
-   * 사용자의 현재 선택된 Space에 해당하는 테넌트를 반환합니다
-   */
-  getCurrentTenant(): Tenant | undefined {
-    if (!this.selectedSpaceId || !this.tenants) return undefined;
-    return this.tenants.find(
-      (tenant) => tenant.spaceId === this.selectedSpaceId,
-    );
-  }
+@ClassField(() => Profile, { isArray: true, required: false, description: "프로필 목록" })
+profiles?: Profile[];
 
-  /**
-   * 사용자가 특정 테넌트에 속해 있는지 확인합니다
-   */
-  hasTenantAccess(tenantId: string): boolean {
-    if (!this.tenants) return false;
-    return this.tenants.some((tenant) => tenant.id === tenantId);
-  }
-
-  /**
-   * 사용자가 활성 상태인지 확인합니다
-   */
-  isActive(): boolean {
-    return this.removedAt === null;
-  }
-}
+@ClassField(() => Tenant, { isArray: true, required: false, description: "테넌트 목록" })
+tenants?: Tenant[];
 ```
+
+도메인 메서드는 Entity 인스턴스에서 사용합니다. DTO의 PickType 계열은 필드
+메타데이터를 재사용하며 Entity의 `hasRole` 같은 메서드를 자동 상속하지 않습니다.
 
 ---
 
 ## 체크리스트
 
-- [ ] AbstractEntity 상속
-- [ ] Prisma 모델 타입 implements
+- [ ] `AbstractEntity` 또는 기존 `AbstractAggregateEntity` 상속과 도메인 동작을 유지함
+- [ ] Prisma scalar·관계 shape를 확인하고 필요한 implements 또는 타입 검사를 적용함
 - [ ] Prisma generated type을 `extends` 하지 않음
 - [ ] 필수 필드에 `!` 사용
 - [ ] 관계 필드에 `?` 사용
 - [ ] nullable 필드에 `| null` 타입 추가
 - [ ] 도메인 메서드에 JSDoc 주석 추가
 - [ ] index.ts에 export 추가
-- [ ] Entity 계약 생성/업데이트
+- [ ] 공통 데코레이터는 Entity에만 있고 API 전용 계약은 DTO에 남아 있음
+- [ ] 관계 callback은 Entity runtime import를 사용하며 Entity→DTO 의존성이 없음
+- [ ] API 변환과 내부 hydrate 경계를 구분하고 권한 관계 네 개의 복원 동작을 보존함
+- [ ] owner 문서와 관련 입력·응답·복원 테스트를 갱신함
 
 ---
 
@@ -391,6 +331,7 @@ UI에서 반복적으로 사용되는 색상/라벨 매핑 로직은 Entity 메�
 ```typescript
 // Subject Entity 예시
 export class Subject extends AbstractEntity implements SubjectEntity {
+  @StringFieldOptional({ nullable: true })
   group!: string | null;
 
   /**
@@ -445,7 +386,9 @@ export class Subject extends AbstractEntity implements SubjectEntity {
 ### 관련 파일
 
 - Prisma 모델 스키마: `packages/be-prisma/schema/[!_]*.prisma`
-- 추상 Entity: `packages/be-entity/src/abstract.entity.ts`
+- 추상 Entity: `packages/be-entity/src/abstract.entity.ts`, `abstract-aggregate.entity.ts`
+- 공통 필드 메타데이터: `packages/be-entity/src/abstract-entity-fields.decorator.ts`
+- 내부 객체 복원: `packages/be-entity/src/hydrate-entity.ts`
 - Entity export: `packages/be-entity/src/index.ts`
 
 ## 입력 계약

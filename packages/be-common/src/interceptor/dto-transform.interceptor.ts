@@ -4,6 +4,7 @@ import {
 	DTO_IS_ARRAY_METADATA,
 	SKIP_DTO_TRANSFORM,
 } from "@cocrepo/decorator";
+import { isEntityResponseType, prepareEntityResponseType } from "@cocrepo/dto";
 import {
 	type CallHandler,
 	type ExecutionContext,
@@ -66,9 +67,16 @@ export class DtoTransformInterceptor implements NestInterceptor {
 
 		return next.handle().pipe(
 			map((value) => {
+				let hasEntityResponse = isEntityResponseType(dtoClass);
 				try {
+					hasEntityResponse =
+						prepareEntityResponseType(dtoClass) || hasEntityResponse;
 					return this.transformValue(value, dtoClass, isArray, excludeFields);
 				} catch (error) {
+					if (hasEntityResponse) {
+						// 공개 필드 변환 실패 시 원본 Entity가 응답으로 유출되면 안 됩니다.
+						throw error;
+					}
 					this.logger.error(
 						`DTO 변환 실패, 원본 반환: ${error instanceof Error ? error.message : String(error)}`,
 					);
@@ -131,7 +139,7 @@ export class DtoTransformInterceptor implements NestInterceptor {
 			return data;
 		}
 
-		// 배열 처리 - 항상 변환 시도 (Repository가 이미 plainToInstance 호출함)
+		// 배열 처리 - Repository가 복원한 Entity에도 응답 변환을 적용합니다.
 		if (isArray && Array.isArray(data)) {
 			return transformToDto(dtoClass, data, {
 				isArray: true,

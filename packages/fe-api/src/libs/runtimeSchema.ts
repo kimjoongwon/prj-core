@@ -31,7 +31,8 @@ const operationPathPattern = (operationPath: string) =>
 
 const resolveSchema = (schema: RuntimeSchema, manifest: RuntimeManifest): RuntimeSchema => {
 	if (!schema.$ref) return schema;
-	const schemaName = schema.$ref.split("/").at(-1);
+	const schemaReferenceSegments = schema.$ref.split("/");
+	const schemaName = schemaReferenceSegments[schemaReferenceSegments.length - 1];
 	const resolvedSchema = schemaName ? manifest.schemas[schemaName] : undefined;
 	if (!resolvedSchema) throw new Error(`unresolved schema reference ${schema.$ref}`);
 	return resolvedSchema;

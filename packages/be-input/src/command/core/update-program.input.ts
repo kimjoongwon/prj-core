@@ -3,5 +3,5 @@ export interface UpdateProgramCommandInput {
 	routineId?: bigint;
 	instructorId?: bigint;
 	capacity?: number;
-	level?: string;
+	level?: string | null;
 }

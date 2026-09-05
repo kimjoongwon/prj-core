@@ -1,33 +1,19 @@
 import {
-	BigIntIdFieldOptional,
 	DateFieldOptional,
-	EnumFieldOptional,
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
-import { TenantAccessRequestStatus } from "@cocrepo/prisma";
+import { TenantAccessRequest } from "@cocrepo/entity";
 import { Transform } from "class-transformer";
-import { QueryDto } from "../query/query.dto";
+import { EntityQueryType } from "../query/entity-query-type";
 
-export class QueryTenantAccessRequestDto extends QueryDto {
+export class QueryTenantAccessRequestDto extends EntityQueryType(
+	TenantAccessRequest,
+	["status", "spaceId", "requesterId"] as const,
+) {
 	@StringFieldOptional({
 		description: "검색어 (신청자 이름/이메일, 시설명)",
 	})
 	search?: string;
-
-	@EnumFieldOptional(() => TenantAccessRequestStatus, {
-		description: "신청 상태 필터",
-	})
-	status?: TenantAccessRequestStatus;
-
-	@BigIntIdFieldOptional({
-		description: "Space ID 필터",
-	})
-	spaceId?: bigint;
-
-	@BigIntIdFieldOptional({
-		description: "신청자 ID 필터",
-	})
-	requesterId?: bigint;
 
 	@DateFieldOptional({
 		description: "신청일 시작 (ISO8601)",

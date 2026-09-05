@@ -3,12 +3,14 @@ import "reflect-metadata";
 import { ReservationStatus } from "@cocrepo/prisma";
 import { instanceToPlain, plainToInstance } from "class-transformer";
 import { describe, expect, it } from "vitest";
+import { prepareEntityResponseType } from "../mapped-types";
 import { ProfileDto } from "../profile.dto";
 import { ReservationDto } from "../reservations/reservation.dto";
 import { UserDto } from "../user.dto";
 
 describe("일반 REST DTO의 integration ULID 제외와 숫자 ID 직렬화", () => {
 	it("Given user ULID와 decimal ID When DTO를 변환하면 Then 인스턴스는 bigint이고 JSON에서는 ULID가 제외된다", () => {
+		prepareEntityResponseType(UserDto);
 		const dto = plainToInstance(UserDto, {
 			userId: "01J00000000000000000000000",
 			spaceId: "1000",
@@ -41,6 +43,7 @@ describe("일반 REST DTO의 integration ULID 제외와 숫자 ID 직렬화", ()
 	});
 
 	it("Given profile ULID와 decimal user ID When DTO를 변환하면 Then userId만 숫자 ID 문자열로 직렬화된다", () => {
+		prepareEntityResponseType(ProfileDto);
 		const dto = plainToInstance(ProfileDto, {
 			profileId: "01J00000000000000000000001",
 			avatarFileId: null,
@@ -58,6 +61,7 @@ describe("일반 REST DTO의 integration ULID 제외와 숫자 ID 직렬화", ()
 	});
 
 	it("Given reservation ULID와 decimal 관계 ID When DTO를 변환하면 Then 모든 숫자 ID가 JSON 문자열로 직렬화된다", () => {
+		prepareEntityResponseType(ReservationDto);
 		const dto = plainToInstance(ReservationDto, {
 			reservationId: "01J00000000000000000000002",
 			spaceId: "700",

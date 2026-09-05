@@ -1,9 +1,19 @@
-import type { ThreadStatus } from "@cocrepo/prisma";
+import {
+	BigIntIdField,
+	ClassField,
+	DateField,
+	EnumField,
+	NumberField,
+	StringField,
+} from "@cocrepo/decorator/field";
+
+import { ThreadStatus } from "@cocrepo/prisma";
+import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
-import type { Inquiry } from "./inquiry.entity";
-import type { InquiryMessage } from "./inquiry-message.entity";
-import type { InquiryParticipant } from "./inquiry-participant.entity";
-import type { User } from "./user.entity";
+import { Inquiry } from "./inquiry.entity";
+import { InquiryMessage } from "./inquiry-message.entity";
+import { InquiryParticipant } from "./inquiry-participant.entity";
+import { User } from "./user.entity";
 
 /**
  * 문의 내 대화 스레드를 관리하는 엔티티
@@ -13,30 +23,40 @@ import type { User } from "./user.entity";
  */
 export class InquiryThread extends AbstractEntity {
 	/** 공개 식별자 ULID */
+	@Exclude({ toPlainOnly: true })
 	inquiryThreadId!: string;
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
+	@BigIntIdField({ description: "소속 문의 ID" })
 	inquiryId!: bigint;
+	@EnumField(() => ThreadStatus, { description: "스레드 상태" })
 	status!: ThreadStatus;
+	@BigIntIdField({ description: "생성자 ID" })
 	createdById!: bigint;
+	@NumberField({ description: "메시지 수" })
 	messageCount!: number;
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
+	@StringField({ nullable: true, description: "스레드 제목" })
 	title!: string | null;
+	@DateField({ nullable: true, description: "마지막 메시지 일시" })
 	lastMessageAt!: Date | null;
+	@StringField({ nullable: true, description: "마지막 메시지 미리보기" })
 	lastMessagePreview!: string | null;
 	closedAt!: Date | null;
 
 	// ============================================================================
 	// 관계 필드 (선택적)
 	// ============================================================================
-	inquiry?: Inquiry;
-	createdBy?: User;
+	@ClassField(() => Inquiry, { required: false }) inquiry?: Inquiry;
+	@ClassField(() => User, { required: false }) createdBy?: User;
+	@ClassField(() => InquiryMessage, { required: false, each: true })
 	messages?: InquiryMessage[];
+	@ClassField(() => InquiryParticipant, { required: false, each: true })
 	participants?: InquiryParticipant[];
 
 	// ============================================================================

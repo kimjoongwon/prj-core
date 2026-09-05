@@ -1,5 +1,6 @@
 import type { BaseEntityFields, Constructor } from "@cocrepo/type";
 import { ClassTransformOptions, plainToInstance } from "class-transformer";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 
 /**
  * 모든 엔티티의 기본 클래스
@@ -8,12 +9,16 @@ import { ClassTransformOptions, plainToInstance } from "class-transformer";
  * @template DTO - 변환할 DTO 타입
  * @template O - toDto 옵션 타입
  */
+@AbstractEntityFields()
 export class AbstractEntity<DTO = unknown, O = never>
 	implements BaseEntityFields
 {
 	id!: bigint;
+
 	createdAt!: Date;
+
 	updatedAt!: Date | null;
+
 	removedAt!: Date | null;
 
 	private dtoClass?: Constructor<DTO>;

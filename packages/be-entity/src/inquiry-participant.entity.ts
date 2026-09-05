@@ -1,4 +1,15 @@
-import type { InquiryParticipantRole } from "@cocrepo/prisma";
+import {
+	BigIntIdField,
+	BigIntIdFieldOptional,
+	BooleanField,
+	DateField,
+	EnumField,
+	NumberField,
+} from "@cocrepo/decorator/field";
+
+import { InquiryParticipantRole } from "@cocrepo/prisma";
+
+import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
 import type { Inquiry } from "./inquiry.entity";
 import type { InquiryThread } from "./inquiry-thread.entity";
@@ -12,25 +23,37 @@ import type { User } from "./user.entity";
  */
 export class InquiryParticipant extends AbstractEntity {
 	/** 공개 식별자 ULID */
+	@Exclude({ toPlainOnly: true })
 	inquiryParticipantId!: string;
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
+	@BigIntIdField({ description: "소속 문의 ID" })
 	inquiryId!: bigint;
+	@BigIntIdField({ description: "참여자 ID" })
 	userId!: bigint;
+	@EnumField(() => InquiryParticipantRole, { description: "참여자 역할" })
 	role!: InquiryParticipantRole;
+	@BooleanField({ description: "온라인 여부" })
 	isOnline!: boolean;
+	@BooleanField({ description: "타이핑 중 여부" })
 	isTyping!: boolean;
+	@NumberField({ description: "읽지 않은 메시지 수" })
 	unreadCount!: number;
+	@DateField({ description: "참여 일시" })
 	joinedAt!: Date;
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
+	@BigIntIdFieldOptional({ nullable: true, description: "소속 스레드 ID" })
 	threadId!: bigint | null;
+	@DateField({ nullable: true, description: "마지막 접속 시간" })
 	lastSeenAt!: Date | null;
+	@DateField({ nullable: true, description: "마지막 읽은 시간" })
 	lastReadAt!: Date | null;
+	@DateField({ nullable: true, description: "나간 일시" })
 	leftAt!: Date | null;
 
 	// ============================================================================

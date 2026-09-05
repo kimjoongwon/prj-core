@@ -27,15 +27,15 @@ export type GetMyReservationsParams = {
 	 */
 	take?: number;
 	/**
-	 * 조회 시작 시각
-	 */
-	from?: string;
-	/**
-	 * 조회 종료 시각
-	 */
-	to?: string;
-	/**
 	 * 예약 상태
 	 */
 	status?: ReservationStatus;
+	/**
+	 * 조회 시작 시각
+	 */
+	from?: Date;
+	/**
+	 * 조회 종료 시각
+	 */
+	to?: Date;
 };

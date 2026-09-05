@@ -1,4 +1,14 @@
-import type { AttachmentFileType } from "@cocrepo/prisma";
+import {
+	BigIntIdField,
+	BooleanField,
+	EnumField,
+	NumberField,
+	StringField,
+} from "@cocrepo/decorator/field";
+
+import { AttachmentFileType } from "@cocrepo/prisma";
+
+import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
 import type { InquiryMessage } from "./inquiry-message.entity";
 
@@ -10,25 +20,37 @@ import type { InquiryMessage } from "./inquiry-message.entity";
  */
 export class InquiryAttachment extends AbstractEntity {
 	/** 공개 식별자 ULID */
+	@Exclude({ toPlainOnly: true })
 	inquiryAttachmentId!: string;
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
+	@BigIntIdField({ description: "소속 메시지 ID" })
 	messageId!: bigint;
+	@StringField({ description: "원본 파일명" })
 	fileName!: string;
+	@NumberField({ description: "파일 크기" })
 	fileSize!: bigint;
+	@StringField({ description: "MIME 타입" })
 	mimeType!: string;
+	@EnumField(() => AttachmentFileType, { description: "파일 유형" })
 	fileType!: AttachmentFileType;
+	@StringField({ description: "파일 URL" })
 	url!: string;
+	@BooleanField({ description: "삭제 여부" })
 	isDeleted!: boolean;
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
+	@StringField({ nullable: true, description: "썸네일 URL" })
 	thumbnailUrl!: string | null;
+	@NumberField({ nullable: true, description: "이미지 너비" })
 	width!: number | null;
+	@NumberField({ nullable: true, description: "이미지 높이" })
 	height!: number | null;
+	@NumberField({ nullable: true, description: "재생 시간 (초)" })
 	duration!: number | null;
 
 	// ============================================================================

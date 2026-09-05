@@ -40,41 +40,30 @@ Request/Response DTO 클래스를 생성하는 전문가입니다.
 - DTO class 파일에는 top-level helper/mapper/type/interface를 함께 두지 않습니다.
 - Response item, nested DTO, helper type이 필요하면 각각 별도 DTO/type 파일로 분리하고 barrel에서 조립합니다.
 - Request DTO는 API 입출력 검증과 문서화만 소유합니다. Command, UseCase, Aggregate, Repository, Entity 변환 메서드를 갖지 않습니다.
-- Request DTO 이름은 일반 body 기준 `CreateXDto`, `UpdateXDto`, response 기준 `XResponseDto`, `XListResponseDto`를 사용합니다.
+- 새 Request DTO 이름은 일반 body 기준 `CreateXDto`, `UpdateXDto`, 응답 기준 `XResponseDto`, `XListResponseDto`를 사용합니다. 기존 `RoleDto`, `UserDto` 등 공개 이름·파일·export·Swagger 스키마명은 리팩터링에서 유지합니다.
 - Controller가 DTO를 `new XxxCommand(dto)`로 전달할 수는 있지만, DTO class가 Command를 import하거나 `toCommand()`를 갖지는 않습니다.
-- Request DTO field는 실제 API 계약과 일치해야 합니다. 현재 endpoint/usecase에서 소비하지 않는 field를 편의상 추가하지 않습니다.
+- Request DTO field는 실제 API 계약과 일치해야 합니다. 미사용 DTO도 파생 방식 정리만으로 기존 공개 필드 계약을 임의로 바꾸지 않으며, 새 필드는 endpoint/usecase 요구가 확인된 경우에만 추가합니다.
 - 필수/선택 여부는 downstream 기본값으로 감추지 말고 DTO validation과 Swagger metadata에 명확히 반영합니다.
 
 ### ✅ 권장
 
 ```typescript
-// DTO는 반드시 packages/be-dto에 위치
-import { CreateAbilityDto, AbilityResponseDto } from "@cocrepo/dto";
+import { Role } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 
-// @cocrepo/decorator 필드 데코레이터 사용
-import { StringField, EmailField, NumberField } from "@cocrepo/decorator";
-
-export class CreateUserDto {
-  @StringField({
-    minLength: 2,
-    maxLength: 50,
-    description: "사용자 이름",
-  })
-  name: string;
-
-  @EmailField({
-    description: "이메일 주소",
-  })
-  email: string;
-}
-
-// Response DTO는 ClassField로 중첩 표현
-@ClassField(() => UserDto, {
-  isArray: true,
-  description: "회원 목록",
-})
-data: UserDto[];
+// packages/be-dto/src/create/create-role.dto.ts
+export class CreateRoleDto extends PickType(Role, [
+  "name", "displayName", "description",
+] as const) {}
 ```
+
+Entity와 같은 의미의 필드는 DTO에 다시 선언하지 않습니다. API 전용 wrapper의
+`data/meta/stats`처럼 대응하는 Entity 필드가 없는 중첩 구조에는 `ClassField`를
+사용합니다. Entity가 있는 관계의 응답 타입은 아래 `EntityResponseType` 규칙을 따릅니다.
+
+API 전용 입력은 기존 필드 데코레이터를 우선 사용합니다. 강제 형 변환을 금지하는
+엄격한 boolean·문자열 검증처럼 기존 입력 의미가 다른 경우에는 해당 DTO의
+검증·Swagger 선언을 유지할 수 있습니다.
 
 ### ❌ 금지
 
@@ -83,7 +72,7 @@ data: UserDto[];
 import { CreateAbilityDto } from "./dto";
 import { AbilityResponseDto } from "../abilities/dto";
 
-// class-validator 직접 사용 금지
+// Entity 공통 검증을 DTO에서 다시 작성하지 않음
 import { IsEmail, IsString, MinLength } from "class-validator";
 
 export class CreateUserDto {
@@ -104,21 +93,47 @@ export class CreateUserDto {
 }
 ```
 
-### Query DTO → query-dto-builder 위임
+### Query DTO 소유권 인계
 
-**Query DTO(목록 조회용)는 `be-query-dto-builder` 에이전트가 전담합니다.**
+**Query DTO(목록 조회용)는 `be-query-dto-builder` owner가 전담합니다.** 다른 owner 작업이 필요하면 경로·필요 계약을 루트에 보고하며 worker가 직접 agent를 호출하지 않습니다.
 
 - API edge query parameter shape, validation, Swagger metadata
 - DeleteFilter enum, JSON:API sort wire shape
 - Prisma 변환 없이 `@cocrepo/input`의 `*QueryInput`과 같은 wire shape 유지
 
-### 스키마 상속 패턴 (공통 검증 규칙 재사용)
+### Entity에서 직접 파생하는 생성·수정 계약
+
+- `@nestjs/swagger`의 `PickType(Entity, 허용필드)`로 생성·수정 필드를 각각 명시합니다.
+- 수정 요청은 필요에 따라 `PartialType(PickType(Entity, 수정허용필드))`로 만듭니다. 기본 DTO → Create DTO → Update DTO 경유는 사용하지 않습니다.
+- 필수·선택·null 허용·기본값은 기존 API와 비교합니다. Entity 전체 필드나 도메인 메서드를 요청으로 노출하지 않습니다.
+- API 입력 의미가 다르면 공통 Pick에서 제외한 뒤 별도 입력 규칙을 조합합니다. 기존 `PartialType`의 null 허용과 `skipNullProperties: false`가 필요한 독립 선택 입력을 구분합니다.
+- 필드별 예외와 실제 검증 대상은 [요청 계약 문서](../../../packages/be-dto/request-contracts.md)를 기준으로 확인합니다.
+
+### 응답 파생과 공통 변환 경계
+
+Entity가 검증·Swagger·변환 메타데이터의 기준인 경우 응답 DTO는
+`@cocrepo/dto`의 `EntityResponseType`으로 Entity에서 직접 파생합니다.
+`CreateDto`를 응답 DTO의 기반으로 삼지 않으며, nested API 관계는 helper의
+지연 callback으로 target DTO를 지정하고 concrete DTO의 `declare` 타입으로
+표현합니다. Entity 패키지는 DTO를 import하지 않습니다.
+
+응답 객체는 `DtoTransformInterceptor`의 `transformToDto` 경계를 통과시킵니다.
+이 경계는 `prepareEntityResponseType`으로 concrete 응답 클래스와 중첩 관계의
+공개 필드 전략을 준비합니다. 직접 class-transformer를 호출하는 검증에서는
+동일한 준비 단계를 사용하며, `excludeExtraneousValues`를 테스트에만 추가해
+실제 응답 경계의 누락을 감추지 않습니다. Entity 응답의 변환 실패는 원본 Entity
+반환으로 처리하지 않습니다.
+
+Entity와 타입·의미가 다른 API 필드는 `pick`에서 제외하고 `extraFields`에 명시한
+뒤 기존 API 타입·데코레이터로 선언합니다. Entity가 없는 API 전용 관계 DTO는
+Swagger 공개 필드와 기존 `Expose` 필드를 재사용하며, Swagger에 없는 `Type`
+전용 필드는 `Expose`로 공개 여부를 명시합니다.
 
 @cocrepo/schema의 스키마를 상속받아 DTO를 작성할 수 있습니다.
 
 ```typescript
 import { LoginSchema } from "@cocrepo/schema";
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsBoolean, IsOptional } from "class-validator";
 
 // LoginSchema의 검증 규칙(@Email, @Password)을 상속받음
@@ -129,7 +144,7 @@ export class OidcLoginPayloadDto extends LoginSchema {
   @ApiProperty({ description: "비밀번호" })
   password: string;  // @Password() 검증 자동 적용
 
-  // 추가 필드만 정의
+  // 엄격한 boolean 입력을 유지하는 인증 전용 계약
   @ApiPropertyOptional({ default: false })
   @IsBoolean()
   @IsOptional()
@@ -163,11 +178,11 @@ export class OidcLoginPayloadDto extends LoginSchema {
 | Response | `packages/be-dto/src/{domain}/` | 응답 데이터 |
 | 도메인별 | `packages/be-dto/src/{domain}/` | 특정 도메인 전용 |
 
-### 2단계: 필드 데코레이터 선택
+### 2단계: Entity 공통 필드와 API 전용 필드 분류
 
-### 3단계: DTO 클래스 작성
+### 3단계: Entity 직접 파생 및 API 전용 계약 조합
 
-### 4단계: index.ts 등록
+### 4단계: export·Swagger·직렬화·입력 검증 확인
 
 ---
 
@@ -176,75 +191,31 @@ export class OidcLoginPayloadDto extends LoginSchema {
 ### Create DTO
 
 ```typescript
-import {
-  StringField,
-  EmailField,
-  PhoneField,
-  UUIDField,
-  UUIDFieldOptional,
-} from "@cocrepo/decorator";
+import { Role } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 
-/**
- * {Entity} 생성 DTO
- */
-export class Create{Entity}Dto {
-  @StringField({
-    minLength: 2,
-    maxLength: 50,
-    description: "이름",
-  })
-  name: string;
-
-  @EmailField({
-    description: "이메일 주소",
-  })
-  email: string;
-
-  @UUIDField({
-    description: "역할 ID",
-  })
-  roleId: string;
-
-  @UUIDFieldOptional({
-    description: "카테고리 ID",
-  })
-  categoryId?: string;
-}
+export class CreateRoleDto extends PickType(Role, [
+  "name", "displayName", "description",
+] as const) {}
 ```
 
 ### Update DTO
 
 ```typescript
-import {
-  StringFieldOptional,
-  EmailFieldOptional,
-  UUIDFieldOptional,
-} from "@cocrepo/decorator";
+import { Role } from "@cocrepo/entity";
+import { PartialType, PickType } from "@nestjs/swagger";
 
-/**
- * {Entity} 수정 DTO
- */
-export class Update{Entity}Dto {
-  @StringFieldOptional({
-    minLength: 2,
-    maxLength: 50,
-    description: "이름",
-  })
-  name?: string;
-
-  @EmailFieldOptional({
-    description: "이메일 주소",
-  })
-  email?: string;
-
-  @UUIDFieldOptional({
-    description: "카테고리 ID",
-  })
-  categoryId?: string;
-}
+export class UpdateRoleDto extends PartialType(
+  PickType(Role, ["displayName", "description"] as const),
+) {}
 ```
 
+Role의 `assignments`는 두 입력 모두 허용하지 않습니다. 요청 공통 규칙과 API별
+예외는 [요청 계약 문서](../../../packages/be-dto/request-contracts.md)를 따릅니다.
+
 ### Response DTO (목록)
+
+아래 클래스는 각각 별도 파일에 두는 API 전용 wrapper·집계 예시입니다. 기존 페이지 메타 DTO가 같은 계약을 제공하면 재사용합니다.
 
 ```typescript
 import { ClassField, NumberField } from "@cocrepo/decorator";
@@ -303,59 +274,43 @@ export class {Entity}ListResponseDto {
 }
 ```
 
-### Response DTO (상세)
+### Response DTO (Entity 관계)
 
 ```typescript
-import {
-  StringField,
-  EmailField,
-  DateField,
-  ClassField,
-  UUIDField,
-} from "@cocrepo/decorator";
+import { Tenant } from "@cocrepo/entity";
+import { EntityResponseType } from "./mapped-types";
+import { RoleDto } from "./role.dto";
+import { SpaceDto } from "./space.dto";
+import { UserDto } from "./user.dto";
 
-/**
- * {Entity} 상세 응답 DTO
- */
-export class {Entity}DetailResponseDto {
-  @UUIDField({ description: "ID" })
-  id: string;
-
-  @StringField({ description: "이름" })
-  name: string;
-
-  @EmailField({ description: "이메일" })
-  email: string;
-
-  @DateField({ description: "생성일" })
-  createdAt: Date;
-
-  @ClassField(() => RoleDto, {
-    description: "역할 정보",
-  })
-  role: RoleDto;
-
-  @ClassField(() => GroupDto, {
-    isArray: true,
-    description: "그룹 목록",
-  })
-  groups: GroupDto[];
+export class TenantDto extends EntityResponseType(Tenant, {
+  pick: ["id", "createdAt", "updatedAt", "removedAt", "roleId", "userId", "spaceId", "role", "space", "user"] as const,
+  relations: { role: () => RoleDto, space: () => SpaceDto, user: () => UserDto },
+}) {
+  declare role?: RoleDto;
+  declare space?: SpaceDto;
+  declare user?: UserDto;
 }
 ```
+
+helper가 관계의 필수·nullable·배열·설명 정보를 보존합니다. 관계 callback은
+중첩 대상만 교체하며, DTO의 `declare`에 데코레이터나 초기값을 다시 추가하지
+않습니다. 상호 참조 callback의 반환 타입을 helper의 반환 타입에 추론시키지 않습니다.
 
 ---
 
 ## 체크리스트
 
-- [ ] 적절한 @cocrepo/decorator 필드 데코레이터 사용
-- [ ] 모든 필드에 description 옵션 추가
-- [ ] Request DTO에 toCommand/toEntity/toPrisma 같은 변환 메서드가 없음
-- [ ] DTO field가 실제 endpoint/usecase에서 소비되는 API 계약과 일치함
-- [ ] Response DTO는 ClassField로 중첩 객체 표현
-- [ ] Optional 필드는 `?` 표시 및 Optional 데코레이터 사용
-- [ ] 배열 필드는 Transform 데코레이터 추가
-- [ ] index.ts에 export 추가
-- [ ] Query DTO가 필요하면 `be-query-dto-builder` 에이전트에 위임
+- [ ] Entity 대응 공통 필드의 검증·변환·Swagger 선언을 중복하지 않습니다.
+- [ ] 생성·수정 요청이 Entity에서 직접 파생하며 허용 필드가 각각 명시되어 있습니다.
+- [ ] 필수·선택·null·기본값·알 수 없는 필드·빈 수정 요청을 기존 계약과 비교했습니다.
+- [ ] API 전용 필드는 기존 입력 의미를 유지하는 데코레이터·스키마로 조합했습니다.
+- [ ] Request DTO에 toCommand/toEntity/toPrisma 같은 변환 메서드가 없습니다.
+- [ ] Entity 응답 관계는 지연 callback과 `declare` 타입만 갖습니다.
+- [ ] 실제 응답 경계에서 공개 필드만 남고 루트·중첩의 비밀번호·ULID·임의 속성이 제거됩니다.
+- [ ] 직접 변환하는 테스트도 `prepareEntityResponseType`을 실행합니다.
+- [ ] 기존 공개 export와 Swagger 이름을 유지하고, 변경된 OpenAPI와 SDK를 동기화할 소비 owner를 확인했습니다.
+- [ ] Query 작업이 필요하면 루트에 `be-query-dto-builder` owner와 입력·소비 경로를 보고합니다.
 
 ---
 
@@ -391,7 +346,8 @@ export class {Entity}DetailResponseDto {
 | `EmailField` | string | 이메일 형식 검증 |
 | `PasswordField` | string | 비밀번호 규칙 검증 |
 | `PhoneField` | string | 한국 휴대폰 형식 |
-| `UUIDField` | string | UUID 형식 |
+| `BigIntIdField` | bigint | 내부 숫자 ID의 decimal 문자열 입력·출력 |
+| `UUIDField` | string | 실제 UUID 필드 |
 | `UrlField` | string | URL 형식 |
 
 #### Complex (복합 타입)
@@ -409,8 +365,8 @@ export class {Entity}DetailResponseDto {
 @StringFieldOptional({ description: "닉네임 (선택)" })
 nickname?: string;
 
-@UUIDFieldOptional({ description: "카테고리 ID" })
-categoryId?: string;
+@BigIntIdFieldOptional({ description: "API 전용 연결 대상 ID" })
+categoryId?: bigint;
 ```
 
 ### 파일 위치
@@ -432,16 +388,16 @@ packages/be-dto/src/
 
 ### 배열 필드 처리
 
+`each` 검증과 Swagger의 `isArray`는 별개 옵션입니다. Entity 응답의 기존 옵션은
+helper가 그대로 재사용하므로 DTO마다 `Transform`이나 `ClassField`를 추가하지 않습니다.
+API가 단일 문자열과 배열을 모두 받던 Query·요청 입력에만 기존 정규화 변환을
+유지합니다. 변환을 일괄 추가해 누락 값이나 빈 배열의 의미를 바꾸지 않습니다.
+
 ```typescript
-// 배열 필드는 Transform 데코레이터로 변환 처리
-@StringFieldOptional({
-  each: true,
-  description: "그룹 ID 목록",
-})
-@Transform(({ value }) =>
-  Array.isArray(value) ? value : value ? [value] : [],
-)
-groupIds?: string[];
+// 기존 API가 반복 sort query parameter를 허용하는 경우의 예시입니다.
+@StringFieldOptional({ each: true, description: "정렬 조건" })
+@Transform(({ value }) => Array.isArray(value) ? value : value ? [value] : [])
+sort?: string[];
 ```
 
 ### index.ts 등록
@@ -460,6 +416,8 @@ export * from "./query-{domain}s.dto";
 
 - 필드 데코레이터: `packages/be-decorator/src/field/`
 - 기본 DTO: `packages/be-dto/src/abstract.dto.ts`
+- 응답 helper·변환 준비: `packages/be-dto/src/mapped-types/`
+- 실제 입력 계약: `packages/be-dto/request-contracts.md`
 - Entity: `packages/be-entity/src/`
 - Query DTO 관련: `be-query-dto-builder` 에이전트 참조
 

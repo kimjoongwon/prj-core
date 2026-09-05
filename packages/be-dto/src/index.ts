@@ -22,6 +22,7 @@ export * from "./group.dto";
 export * from "./i18n";
 export * from "./idp";
 export * from "./inquiries";
+export * from "./mapped-types";
 export * from "./oidc";
 export * from "./password-history.dto";
 export * from "./policies";

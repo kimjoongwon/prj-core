@@ -196,7 +196,7 @@ function renderNavigationButton(item: ProposalPageData["navigation"][number]) {
 		<Button
 			key={item.id}
 			size="sm"
-			variant="flat"
+			variant="secondary"
 			onPress={SECTION_ACTIONS[item.id]}
 			className={NAVIGATION_BUTTON_CLASS}
 		>
@@ -220,7 +220,7 @@ function ThemeToggle({
 	return (
 		<Button
 			size="sm"
-			variant="flat"
+			variant="secondary"
 			onPress={onToggleTheme}
 			aria-label={theme === "dark" ? "라이트 모드로 전환" : "다크 모드로 전환"}
 			className="border border-slate-200/80 bg-white/84 px-3 text-slate-800 shadow-sm transition-colors hover:bg-white dark:border-white/10 dark:bg-white/8 dark:text-white"
@@ -573,7 +573,7 @@ function HeroSection({
 				<div className="flex flex-wrap gap-5">
 					<Button
 						size="lg"
-						color="primary"
+						variant="primary"
 						endContent={<ArrowRight className="h-4 w-4" />}
 						onPress={primaryAction}
 					>
@@ -581,7 +581,7 @@ function HeroSection({
 					</Button>
 					<Button
 						size="lg"
-						variant="flat"
+						variant="secondary"
 						onPress={secondaryAction}
 						className="border border-slate-200 bg-white px-6 text-slate-900 shadow-sm hover:bg-slate-50 dark:border-white/12 dark:bg-white/6 dark:text-white dark:hover:bg-white/10"
 					>

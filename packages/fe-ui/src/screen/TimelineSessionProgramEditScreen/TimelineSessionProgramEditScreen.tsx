@@ -28,7 +28,7 @@ export interface TimelineSessionProgramEditScreenMetadata {
 	activityCountLabel?: string;
 	sessionName?: string | null;
 	sessionHref?: Route;
-	createdAt?: string | null;
+	createdAt?: Date | null;
 }
 export interface TimelineSessionProgramEditScreenProps {
 	title: ReactNode;

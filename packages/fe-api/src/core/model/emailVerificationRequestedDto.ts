@@ -19,5 +19,5 @@ export interface EmailVerificationRequestedDto {
 	/** 인증 요청 이메일 */
 	email: string;
 	/** 인증 링크 만료 시각 */
-	expiresAt: string;
+	expiresAt: Date;
 }

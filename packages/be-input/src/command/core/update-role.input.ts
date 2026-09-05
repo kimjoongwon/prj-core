@@ -1,4 +1,4 @@
 export interface UpdateRoleCommandInput {
-	displayName?: string;
-	description?: string;
+	displayName?: string | null;
+	description?: string | null;
 }

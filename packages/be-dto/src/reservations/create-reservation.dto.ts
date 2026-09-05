@@ -1,23 +1,13 @@
-import {
-	BigIntIdField,
-	DateField,
-	StringField,
-	StringFieldOptional,
-} from "@cocrepo/decorator/field";
+import { StringField, StringFieldOptional } from "@cocrepo/decorator/field";
+import { Reservation } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 
-export class CreateReservationDto {
-	@BigIntIdField({ description: "타임라인 ID" })
-	timelineId!: bigint;
-
-	@BigIntIdField({ description: "세션 ID" })
-	sessionId!: bigint;
-
-	@BigIntIdField({ description: "프로그램 ID" })
-	programId!: bigint;
-
-	@DateField({ description: "예약 발생 회차 시작 시각" })
-	occurrenceStartAt!: Date;
-
+export class CreateReservationDto extends PickType(Reservation, [
+	"timelineId",
+	"sessionId",
+	"programId",
+	"occurrenceStartAt",
+] as const) {
 	@StringField({
 		description: "멱등성 키",
 		minLength: 8,

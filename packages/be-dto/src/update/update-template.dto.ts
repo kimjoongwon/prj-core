@@ -1,6 +1,8 @@
-import { OmitType, PartialType } from "@nestjs/swagger";
+import { ClassField } from "@cocrepo/decorator/field";
 
-import { CreateTemplateDto } from "../create/create-template.dto";
+import { Template } from "@cocrepo/entity";
+import { PartialType, PickType } from "@nestjs/swagger";
+import { CreateTemplateVariableItemDto } from "../create/create-template-variable-item.dto";
 
 /**
  * 메시지 템플릿 수정 DTO
@@ -9,5 +11,12 @@ import { CreateTemplateDto } from "../create/create-template.dto";
  * - 나머지 필드는 모두 선택적
  */
 export class UpdateTemplateDto extends PartialType(
-	OmitType(CreateTemplateDto, ["code", "type"]),
-) {}
+	PickType(Template, ["name", "subject", "content", "description"] as const),
+) {
+	@ClassField(() => CreateTemplateVariableItemDto, {
+		each: true,
+		required: false,
+		description: "템플릿 변수 목록",
+	})
+	variables?: CreateTemplateVariableItemDto[];
+}

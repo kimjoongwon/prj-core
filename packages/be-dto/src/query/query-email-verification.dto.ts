@@ -1,18 +1,17 @@
 import {
 	DateFieldOptional,
-	EnumFieldOptional,
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
-import { EmailVerificationStatus } from "@cocrepo/prisma";
 import { Transform } from "class-transformer";
-import { QueryDto } from "./query.dto";
+import { EntityQueryType } from "./entity-query-type";
+import { EmailVerification } from "@cocrepo/entity";
 
-export class QueryEmailVerificationDto extends QueryDto {
+export class QueryEmailVerificationDto extends EntityQueryType(EmailVerification, [
+	"status",
+] as const) {
 	@StringFieldOptional({ description: "이메일 (부분 일치)" })
 	readonly email?: string;
 
-	@EnumFieldOptional(() => EmailVerificationStatus, { description: "상태" })
-	readonly status?: EmailVerificationStatus;
 
 	@DateFieldOptional({ description: "시작일 (createdAt >= startDate)" })
 	readonly startDate?: Date;

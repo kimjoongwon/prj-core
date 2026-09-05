@@ -1,11 +1,11 @@
-import {
-	BigIntIdFieldOptional,
-	DateFieldOptional,
-	StringFieldOptional,
-} from "@cocrepo/decorator/field";
-import { QueryDto } from "../query/query.dto";
+import { DateFieldOptional, StringFieldOptional } from "@cocrepo/decorator/field";
+import { EntityQueryType } from "../query/entity-query-type";
+import { Reservation } from "@cocrepo/entity";
 
-export class QueryBookingFeedDto extends QueryDto {
+export class QueryBookingFeedDto extends EntityQueryType(Reservation, [
+	"timelineId",
+	"programId",
+] as const) {
 	@DateFieldOptional({ description: "조회 시작 일시" })
 	dateFrom?: Date;
 
@@ -17,12 +17,6 @@ export class QueryBookingFeedDto extends QueryDto {
 		default: "Asia/Seoul",
 	})
 	timeZone?: string;
-
-	@BigIntIdFieldOptional({ description: "타임라인 ID 필터" })
-	timelineId?: bigint;
-
-	@BigIntIdFieldOptional({ description: "프로그램 ID 필터" })
-	programId?: bigint;
 
 	@StringFieldOptional({ description: "프로그램/세션/타임라인 검색어" })
 	search?: string;

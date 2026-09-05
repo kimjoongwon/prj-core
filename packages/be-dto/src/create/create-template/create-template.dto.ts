@@ -1,7 +1,6 @@
 import { ClassField } from "@cocrepo/decorator/field";
-import { OmitType } from "@nestjs/swagger";
-import { COMMON_ENTITY_FIELDS } from "../../constant";
-import { TemplateDto } from "../../template/template.dto";
+import { Template } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 import { CreateTemplateVariableItemDto } from "../create-template-variable-item.dto";
 
 /**
@@ -10,10 +9,14 @@ import { CreateTemplateVariableItemDto } from "../create-template-variable-item.
  * - isActive는 서버에서 true로 기본 설정
  * - variables 배열로 변수를 함께 생성
  */
-export class CreateTemplateDto extends OmitType(TemplateDto, [
-	...COMMON_ENTITY_FIELDS,
-	"isActive",
-]) {
+export class CreateTemplateDto extends PickType(Template, [
+	"code",
+	"name",
+	"type",
+	"subject",
+	"content",
+	"description",
+] as const) {
 	@ClassField(() => CreateTemplateVariableItemDto, {
 		each: true,
 		required: false,

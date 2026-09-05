@@ -78,6 +78,32 @@ class CreateInquiryDto {
 }
 ```
 
+#### ClassField 관계 옵션 재사용
+
+Entity에서 정의한 관계의 대상을 응답 DTO로 교체할 때는 `@cocrepo/decorator/field`가 공개하는 `CLASS_FIELD_OPTIONS_METADATA`와 `ClassFieldOptionsMetadata`를 사용합니다. 메타데이터는 클래스의 prototype과 필드 이름으로 조회하며 상위 클래스의 선언도 읽을 수 있습니다.
+
+```typescript
+import {
+  CLASS_FIELD_OPTIONS_METADATA,
+  ClassField,
+  type ClassFieldOptionsMetadata,
+} from '@cocrepo/decorator/field';
+
+const relationMetadata = Reflect.getMetadata(
+  CLASS_FIELD_OPTIONS_METADATA,
+  User.prototype,
+  'role',
+) as ClassFieldOptionsMetadata;
+
+ClassField(() => RoleDto, relationMetadata.fieldOptions)(UserDto.prototype, 'role');
+```
+
+- `fieldOptions`는 전달된 설명·상세 옵션을 보존하며, `required`·`nullable`·`each`·`isArray`·`swagger`의 기본값을 각각 `true`·`false`·`false`·`false`·`true`로 확정합니다.
+- `each`는 중첩 검증과 배열 변환, `isArray`는 Swagger 배열 표시에 사용됩니다. 기존 동작에 맞춰 두 옵션은 독립적이며, 배열 관계는 필요한 두 옵션을 명시합니다.
+- `apiPropertyOptions`는 기존 `ApiProperty` 호출에 전달한 옵션을 보존합니다. 생략된 옵션까지 그대로 유지해야 하는 helper는 이 객체의 `type`만 교체해 Swagger 정보를 구성합니다. `swagger: false`일 때는 `undefined`입니다.
+- 메타데이터 저장·조회는 관계 타입 콜백을 실행하지 않습니다. `apiPropertyOptions.type`도 지연 함수입니다.
+- 이 메타데이터는 `ClassField`가 소유한 옵션만 기록합니다. 별도로 붙인 검증·변환 데코레이터는 Nest Mapped Types의 메타데이터 복사로 보존해야 합니다. 반환 옵션은 공유되는 읽기 전용 계약이므로 수정하지 않습니다.
+
 ### 선택적 필드
 
 모든 필드 데코레이터는 `Optional` 접두사 버전을 제공합니다:

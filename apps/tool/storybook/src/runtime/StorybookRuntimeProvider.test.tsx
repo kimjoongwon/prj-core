@@ -22,13 +22,6 @@ vi.mock("../../../../../packages/fe-api/src/core/client", () => ({
 	setLoginRedirectUrl: (...args: unknown[]) => setLoginRedirectUrlMock(...args),
 }));
 
-vi.mock("../../../../../packages/fe-api/src/core/client", () => ({
-	setIdpLocale: (...args: unknown[]) => setIdpLocaleMock(...args),
-	setIdpLoginRedirectUrl: (...args: unknown[]) =>
-		setIdpLoginRedirectUrlMock(...args),
-	setIdpSessionScope: (...args: unknown[]) => setIdpSessionScopeMock(...args),
-}));
-
 async function loadProvider() {
 	vi.resetModules();
 	return import("./StorybookRuntimeProvider");
@@ -103,13 +96,16 @@ describe("StorybookRuntimeProvider", () => {
 			expect(setApiSessionScopeMock).toHaveBeenCalledTimes(1);
 		});
 		expect(setApiLocaleMock).toHaveBeenCalledTimes(1);
-			setApiSessionScopeMock.mock.calls[0]?.[0],
-		);
-			setApiLocaleMock.mock.calls[0]?.[0],
-		);
+		expect(setApiSessionScopeMock.mock.calls[0]?.[0]).toMatchObject({
+			accessToken: null,
+			refreshToken: null,
+			tenantId: null,
+		});
+		expect(setApiLocaleMock.mock.calls[0]?.[0]).toMatchObject({
+			languageCode: "ko_KR",
+			isHydrated: true,
+		});
 		expect(setLoginRedirectUrlMock).toHaveBeenCalledWith(
-			"#storybook-auth-disabled",
-		);
 			"#storybook-auth-disabled",
 		);
 		expect(screen.getByText("Story content")).toBeTruthy();

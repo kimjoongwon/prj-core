@@ -1,19 +1,23 @@
 import { LanguageCode } from "@cocrepo/constant";
-import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean, IsEnum, IsNotEmpty, IsString } from "class-validator";
+import { Translation } from "@cocrepo/entity";
+import { ApiProperty, PickType } from "@nestjs/swagger";
+import { IsBoolean, IsNotEmpty, IsString } from "class-validator";
 
 /**
  * 번역 생성 DTO
  */
-export class CreateTranslationDto {
+export class CreateTranslationDto extends PickType(Translation, [
+	"languageCode",
+] as const) {
+	// 기존 번역 API는 언어 코드를 별도 enum schema 없이 인라인으로 문서화합니다.
 	@ApiProperty({
 		description: "언어 코드",
+		type: String,
 		enum: LanguageCode,
+		enumName: undefined,
 		example: "ko_KR",
 	})
-	@IsEnum(LanguageCode)
-	@IsNotEmpty()
-	languageCode!: LanguageCode;
+	declare languageCode: LanguageCode;
 
 	@ApiProperty({
 		description: "번역 키 (예: 성공, 번역 목록 조회 성공)",

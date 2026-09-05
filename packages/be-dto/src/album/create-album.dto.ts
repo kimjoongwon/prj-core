@@ -1,11 +1,14 @@
-import { OmitType } from "@nestjs/swagger";
-import { COMMON_ENTITY_FIELDS } from "../constant";
-import { AlbumDto } from "./album.dto";
+import { Album } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 
 /**
  * 앨범 생성 DTO
  */
-export class CreateAlbumDto extends OmitType(AlbumDto, [
-	...COMMON_ENTITY_FIELDS,
-	"coverAsset",
+export class CreateAlbumDto extends PickType(Album, [
+	"spaceId",
+	"name",
+	"description",
+	"sortOrder",
+	"coverAssetId",
+	"createdById",
 ] as const) {}

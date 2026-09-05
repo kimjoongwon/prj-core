@@ -19,13 +19,13 @@ import type { CreateTemplateVariableItemDto } from "./createTemplateVariableItem
 export interface UpdateTemplateDto {
 	/** 템플릿 이름 */
 	name?: string;
+	/** 본문 */
+	content?: string;
 	/**
 	 * 제목
 	 * @nullable
 	 */
 	subject?: string | null;
-	/** 본문 */
-	content?: string;
 	/**
 	 * 설명
 	 * @nullable

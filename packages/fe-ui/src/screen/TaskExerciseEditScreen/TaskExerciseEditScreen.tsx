@@ -236,7 +236,7 @@ export const TaskExerciseEditScreen = observer(
 									<div>
 										<label className="text-sm text-muted">수정일</label>
 										<div className="mt-1">
-											<DateTimeCell value={metadata.updatedAt ?? "-"} />
+											<DateTimeCell value={metadata.updatedAt} />
 										</div>
 									</div>
 								</div>

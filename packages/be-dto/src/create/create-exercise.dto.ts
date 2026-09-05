@@ -1,9 +1,11 @@
-import { OmitType } from "@nestjs/swagger";
-import { COMMON_ENTITY_FIELDS } from "../constant";
-import { ExerciseDto } from "../exercise.dto";
+import { Exercise } from "@cocrepo/entity";
+import { PickType } from "@nestjs/swagger";
 
-export class CreateExerciseDto extends OmitType(ExerciseDto, [
-	...COMMON_ENTITY_FIELDS,
-	"taskId",
-	"task",
-]) {}
+export class CreateExerciseDto extends PickType(Exercise, [
+	"duration",
+	"count",
+	"description",
+	"imageFileId",
+	"videoFileId",
+	"name",
+] as const) {}

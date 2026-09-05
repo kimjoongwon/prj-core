@@ -1,37 +1,24 @@
-import {
-	BigIntIdField,
-	BigIntIdFieldOptional,
-	ClassField,
-	StringField,
-} from "@cocrepo/decorator/field";
-import type { DomainEntityModel } from "@cocrepo/entity";
-import type { Category } from "@cocrepo/prisma";
-import { Exclude } from "class-transformer";
-import { AbstractDto } from "./abstract.dto";
+import { Category } from "@cocrepo/entity";
+import { EntityResponseType } from "./mapped-types";
 
-export class CategoryDto
-	extends AbstractDto
-	implements DomainEntityModel<Category, "categoryId">
-{
-	@Exclude()
-	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
-	private readonly categoryId?: never;
-
-	@BigIntIdField()
-	spaceId: bigint;
-
-	@BigIntIdFieldOptional({ nullable: true })
-	createdById: bigint | null;
-
-	@StringField({ default: "" })
-	name: string;
-
-	@BigIntIdField({ nullable: true, default: null })
-	parentId: bigint | null;
-
-	@ClassField(() => CategoryDto, { required: false })
-	parent?: CategoryDto;
-
-	@ClassField(() => CategoryDto, { each: true, required: false })
-	children?: CategoryDto[];
+export class CategoryDto extends EntityResponseType(Category, {
+	pick: [
+		"id",
+		"createdAt",
+		"updatedAt",
+		"removedAt",
+		"spaceId",
+		"createdById",
+		"name",
+		"parentId",
+		"parent",
+		"children",
+	] as const,
+	relations: {
+		parent: () => CategoryDto,
+		children: () => CategoryDto,
+	},
+}) {
+	declare parent?: CategoryDto;
+	declare children?: CategoryDto[];
 }

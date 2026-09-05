@@ -26,6 +26,9 @@ export type GetSpacesParams = {
 	 * @maximum 200
 	 */
 	take?: number;
-	search?: string;
+	/**
+	 * 이 Space에서 작성되는 운영 리소스의 콘텐츠 언어
+	 */
 	contentLanguageCode?: LanguageCode;
+	search?: string;
 };

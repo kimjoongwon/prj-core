@@ -1,8 +1,5 @@
-import { BooleanFieldOptional } from "@cocrepo/decorator/field";
-import { OmitType } from "@nestjs/swagger";
-
-import { COMMON_ENTITY_FIELDS } from "../constant";
-import { OidcClientDto } from "../oidc/oidc-client.dto";
+import { OidcClient } from "@cocrepo/entity";
+import { IntersectionType, PartialType, PickType } from "@nestjs/swagger";
 
 /**
  * OIDC 클라이언트 생성 DTO
@@ -14,11 +11,25 @@ import { OidcClientDto } from "../oidc/oidc-client.dto";
  * - isFirstParty: 관리자 지정 first-party 여부
  * - isActive는 자동으로 true 설정
  */
-export class CreateOidcClientDto extends OmitType(OidcClientDto, [
-	...COMMON_ENTITY_FIELDS,
-	"isActive",
-	"skipConsent",
-]) {
-	@BooleanFieldOptional({ description: "권한 동의 화면 생략 여부" })
-	skipConsent?: boolean;
-}
+export class CreateOidcClientDto extends IntersectionType(
+	PickType(OidcClient, [
+		"clientId",
+		"clientSecret",
+		"name",
+		"redirectUris",
+		"loginUrl",
+		"defaultReturnTo",
+		"grantTypes",
+		"responseTypes",
+		"tokenEndpointAuthMethod",
+		"scope",
+		"isFirstParty",
+		"loginUi",
+		"logoUri",
+		"policyUri",
+		"tosUri",
+	] as const),
+	PartialType(PickType(OidcClient, ["skipConsent"] as const), {
+		skipNullProperties: false,
+	}),
+) {}

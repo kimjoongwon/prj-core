@@ -1,96 +1,28 @@
-import {
-	BooleanField,
-	StringField,
-	StringFieldOptional,
-} from "@cocrepo/decorator/field";
-import type { DomainEntityModel } from "@cocrepo/entity";
-import type { OidcClient, Prisma } from "@cocrepo/prisma";
-import { ApiPropertyOptional } from "@nestjs/swagger";
-import { Exclude } from "class-transformer";
-import { IsObject, IsOptional } from "class-validator";
+import { OidcClient } from "@cocrepo/entity";
+import { EntityResponseType } from "../mapped-types";
 
-import { AbstractDto } from "../abstract.dto";
-
-export class OidcClientDto
-	extends AbstractDto
-	implements DomainEntityModel<OidcClient, "oidcClientId">
-{
-	@Exclude()
-	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: class-transformer가 일반 REST 응답에서 이 필드를 제외하려면 선언이 필요합니다.
-	private readonly oidcClientId?: never;
-
-	@StringField({
-		description: "클라이언트 식별자",
-		maxLength: 64,
-		pattern: "^[a-z0-9-]+$",
-		message: "Client ID는 영소문자, 숫자, 하이픈만 사용 가능합니다",
-	})
-	clientId: string;
-
-	@StringFieldOptional({ nullable: true, description: "클라이언트 시크릿" })
-	clientSecret: string | null;
-
-	@StringField({ description: "클라이언트 이름", maxLength: 128 })
-	name: string;
-
-	@StringField({
-		description: "리다이렉트 URI 목록",
-		each: true,
-	})
-	redirectUris: string[];
-
-	@StringFieldOptional({ nullable: true, description: "로그인 화면 URL" })
-	loginUrl: string | null;
-
-	@StringFieldOptional({ nullable: true, description: "인증 성공 후 기본 복귀 URL" })
-	defaultReturnTo: string | null;
-
-	@StringField({
-		description: "허용된 Grant 타입",
-		each: true,
-	})
-	grantTypes: string[];
-
-	@StringField({
-		description: "응답 타입",
-		each: true,
-	})
-	responseTypes: string[];
-
-	@StringField({
-		description: "토큰 엔드포인트 인증 방식",
-		maxLength: 50,
-	})
-	tokenEndpointAuthMethod: string;
-
-	@StringField({ description: "허용된 스코프" })
-	scope: string;
-
-	@BooleanField({ description: "활성화 여부" })
-	isActive: boolean;
-
-	@BooleanField({ description: "First-party 클라이언트 여부" })
-	isFirstParty: boolean;
-
-	@BooleanField({ description: "권한 동의 화면 생략 여부" })
-	skipConsent: boolean;
-
-	@ApiPropertyOptional({
-		description: "로그인 화면 표시 설정",
-		type: "object",
-		additionalProperties: true,
-		nullable: true,
-	})
-	@IsOptional()
-	@IsObject()
-	loginUi: Prisma.JsonValue | null;
-
-	@StringFieldOptional({ nullable: true, description: "로고 URI" })
-	logoUri: string | null;
-
-	@StringFieldOptional({ nullable: true, description: "정책 URI" })
-	policyUri: string | null;
-
-	@StringFieldOptional({ nullable: true, description: "서비스 약관 URI" })
-	tosUri: string | null;
-}
+export class OidcClientDto extends EntityResponseType(OidcClient, {
+	pick: [
+		"id",
+		"createdAt",
+		"updatedAt",
+		"removedAt",
+		"clientId",
+		"clientSecret",
+		"name",
+		"redirectUris",
+		"loginUrl",
+		"defaultReturnTo",
+		"grantTypes",
+		"responseTypes",
+		"tokenEndpointAuthMethod",
+		"scope",
+		"isActive",
+		"isFirstParty",
+		"skipConsent",
+		"loginUi",
+		"logoUri",
+		"policyUri",
+		"tosUri",
+	] as const,
+}) {}

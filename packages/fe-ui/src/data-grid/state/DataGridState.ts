@@ -347,8 +347,8 @@ export class DataGridTableState {
 	readonly header: DataGridTableHeaderState;
 	readonly body: DataGridTableBodyState;
 
-	constructor(private readonly root: DataGridState) {
-		makeAutoObservable(this, { root: false } as never, { autoBind: true });
+	constructor(root: DataGridState) {
+		makeAutoObservable(this, {}, { autoBind: true });
 		this.header = new DataGridTableHeaderState(root);
 		this.body = new DataGridTableBodyState(root);
 	}

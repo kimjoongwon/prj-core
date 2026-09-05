@@ -25,13 +25,13 @@ export interface CreateTemplateDto {
 	name: string;
 	/** 템플릿 유형 */
 	type: TemplateType;
+	/** 본문 */
+	content: string;
 	/**
 	 * 제목
 	 * @nullable
 	 */
 	subject?: string | null;
-	/** 본문 */
-	content: string;
 	/**
 	 * 설명
 	 * @nullable

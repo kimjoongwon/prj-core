@@ -15,11 +15,11 @@ import {
 	type HttpServer,
 	type INestApplication,
 	Logger,
-	ValidationPipe,
 } from "@nestjs/common";
 import { BaseExceptionFilter, HttpAdapterHost, Reflector } from "@nestjs/core";
 import cookieParser from "cookie-parser";
 import { ClsService } from "nestjs-cls";
+import { ApiValidationPipe } from "./validation/api-validation.pipe";
 
 @Catch()
 class IdpAllExceptionsFilter extends BaseExceptionFilter {
@@ -70,13 +70,7 @@ export function setNestApp<T extends INestApplication>(app: T): void {
 	// =================================================================
 	// Global Pipes (데이터 검증 및 변환 - Controller 실행 전)
 	// =================================================================
-	app.useGlobalPipes(
-		new ValidationPipe({
-			transform: true, // 자동 타입 변환 (string → number 등)
-			whitelist: true, // DTO에 정의되지 않은 속성 자동 제거 (보안)
-			forbidNonWhitelisted: false, // 정의되지 않은 속성 발견 시 에러 발생 여부
-		}),
-	);
+	app.useGlobalPipes(new ApiValidationPipe());
 
 	// =================================================================
 	// Global Guards (JWT 인증 + Space 접근 제어)

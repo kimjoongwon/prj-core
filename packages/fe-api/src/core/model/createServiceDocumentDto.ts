@@ -22,24 +22,24 @@ import type { ServiceDocumentPlatform } from "./serviceDocumentPlatform";
 export interface CreateServiceDocumentDto {
 	/** 문서 종류 */
 	kind: ServiceDocumentKind;
+	/** 제목 */
+	title: string;
+	/** 본문 */
+	content: string;
+	/** 버전 */
+	version: string;
 	/** 노출 플랫폼 */
 	platform?: ServiceDocumentPlatform;
 	/** 로케일 */
 	locale?: string;
-	/** 제목 */
-	title: string;
-	/** 요약 */
-	summary?: string;
-	/** 본문 */
-	content: string;
 	/** 본문 형식 */
 	format?: ServiceDocumentFormat;
-	/** 버전 */
-	version: string;
 	/** 필수 동의 여부 */
 	isRequired?: boolean;
 	/** 정렬 순서 */
 	displayOrder?: number;
+	/** 요약 */
+	summary?: string;
 	/** 효력 시작 시각 */
-	effectiveAt?: string;
+	effectiveAt?: Date;
 }

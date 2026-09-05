@@ -27,15 +27,15 @@ export type GetTemplatesParams = {
 	 */
 	take?: number;
 	/**
-	 * 코드 또는 이름 통합 검색
-	 */
-	search?: string;
-	/**
-	 * 템플릿 유형 필터
+	 * 템플릿 유형
 	 */
 	type?: TemplateType;
 	/**
-	 * 활성 상태 필터
+	 * 활성 상태
 	 */
 	isActive?: boolean;
+	/**
+	 * 코드 또는 이름 통합 검색
+	 */
+	search?: string;
 };

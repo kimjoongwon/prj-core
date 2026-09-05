@@ -151,17 +151,17 @@ const AdminTimelinesTimelineIdRoute = observer(() => {
 	const onClickCreateSessionButton = () => {
 		router.push(`/timelines/${timelineId}/sessions/new` as Route);
 	};
-	const onClickSessionNameButton = (sessionId: string) => {
+	const onClickSessionNameButton = (sessionId: bigint) => {
 		router.push(`/timelines/${timelineId}/sessions/${sessionId}` as Route);
 	};
-	const onClickCreateProgramButton = (sessionId: string) => {
+	const onClickCreateProgramButton = (sessionId: bigint) => {
 		router.push(
 			`/timelines/${timelineId}/sessions/${sessionId}/programs/new` as Route,
 		);
 	};
-	const onClickDeleteSessionButton = (sessionId: string) => {
+	const onClickDeleteSessionButton = (sessionId: bigint) => {
 		deleteSession(
-			{ timelineId, sessionId },
+			{ timelineId, sessionId: sessionId.toString() },
 			{
 				onSuccess: () => {
 					toast.success("삭제 성공", { description: "세션이 삭제되었습니다." });

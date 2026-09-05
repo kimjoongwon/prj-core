@@ -1,14 +1,53 @@
-import type { LanguageCode } from "@cocrepo/prisma";
+import { BooleanField, EnumField, StringField } from "@cocrepo/decorator/field";
+import { LanguageCode } from "@cocrepo/prisma";
+import { ApiProperty } from "@nestjs/swagger";
 import { AbstractEntity } from "./abstract.entity";
 
 export class Translation extends AbstractEntity {
+	@ApiProperty({
+		description: "수정일시",
+		type: Date,
+		nullable: true,
+	})
+	declare updatedAt: Date | null;
+	@ApiProperty({
+		description: "생성일시",
+		type: Date,
+	})
+	declare createdAt: Date;
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
+	@EnumField(() => LanguageCode, { swagger: false })
+	@ApiProperty({
+		description: "언어 코드",
+		enum: LanguageCode,
+		example: "ko_KR",
+	})
 	languageCode!: LanguageCode;
+	@StringField({ swagger: false })
+	@ApiProperty({
+		description: "번역 키",
+		example: "성공",
+	})
 	key!: string;
+	@StringField({ swagger: false })
+	@ApiProperty({
+		description: "번역된 텍스트",
+		example: "성공",
+	})
 	text!: string;
+	@StringField({ swagger: false })
+	@ApiProperty({
+		description: "카테고리",
+		example: "공통",
+	})
 	category!: string;
+	@BooleanField({ swagger: false })
+	@ApiProperty({
+		description: "번역 완료 여부",
+		example: true,
+	})
 	isTranslated!: boolean;
 
 	// ============================================================================

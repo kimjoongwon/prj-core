@@ -17,25 +17,25 @@
 
 export interface InquiryAttachmentDto {
 	/** @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$ */
-	id: number;
-	createdAt: string;
+	id: bigint;
+	createdAt: Date;
 	/** @nullable */
-	updatedAt: string | null;
+	updatedAt: Date | null;
 	/** @nullable */
-	removedAt: string | null;
+	removedAt: Date | null;
 	/**
 	 * 소속 메시지 ID
 	 * @pattern ^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$
 	 */
-	messageId: number;
+	messageId: bigint;
 	/** 원본 파일명 */
 	fileName: string;
-	/** 파일 크기 (bytes) */
-	fileSize: number;
 	/** MIME 타입 */
 	mimeType: string;
 	/** 파일 URL */
 	url: string;
+	/** 삭제 여부 */
+	isDeleted: boolean;
 	/**
 	 * 썸네일 URL
 	 * @nullable
@@ -56,6 +56,6 @@ export interface InquiryAttachmentDto {
 	 * @nullable
 	 */
 	duration: number | null;
-	/** 삭제 여부 */
-	isDeleted: boolean;
+	/** 파일 크기 (bytes) */
+	fileSize: number;
 }
