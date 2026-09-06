@@ -32,15 +32,15 @@ export type GetInquiriesParams = {
 	 */
 	take?: number;
 	/**
-	 * 카테고리 필터 (GENERAL, DELIVERY, REFUND, PRODUCT, ACCOUNT, TECHNICAL, COMPLAINT, OTHER)
+	 * 문의 카테고리
 	 */
 	category?: InquiryCategory;
 	/**
-	 * 채널 필터 (WEB, EMAIL, CHAT, SMS, PHONE, WALK_IN)
+	 * 문의 채널
 	 */
 	channel?: InquiryChannel;
 	/**
-	 * 우선순위 필터 (LOW, NORMAL, HIGH, URGENT)
+	 * 문의 우선순위
 	 */
 	priority?: InquiryPriority;
 	/**

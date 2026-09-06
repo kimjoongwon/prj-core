@@ -17,7 +17,8 @@ export class Subject extends AbstractEntity {
 	@StringFieldOptional({ nullable: true }) group!: string | null;
 	@NumberField() order!: number;
 
-	@ClassField(() => Ability, { required: false, each: true }) abilities?: Ability[];
+	@ClassField(() => Ability, { required: false, each: true, isArray: true })
+	abilities?: Ability[];
 
 	/**
 	 * Entity Subject인지 확인

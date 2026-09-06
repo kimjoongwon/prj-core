@@ -115,9 +115,9 @@ export class User extends AbstractEntity {
 		description: "사용자 분류 정보",
 	})
 	classification?: UserClassification;
-	@ClassField(() => PasswordHistory, { required: false, each: true })
+	@ClassField(() => PasswordHistory, { required: false, each: true, isArray: true })
 	passwordHistory?: PasswordHistory[];
-	@ClassField(() => AuthAuditLog, { required: false, each: true })
+	@ClassField(() => AuthAuditLog, { required: false, each: true, isArray: true })
 	authAuditLogs?: AuthAuditLog[];
 
 	// ============================================================================

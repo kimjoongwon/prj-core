@@ -22,7 +22,10 @@ import {
 } from "react-native";
 import { getCoreApiBaseUrl } from "@/auth/auth-config";
 import { mobileSession } from "@/auth/mobile-session";
-import { mobileApiScope } from "@/auth/mobile-api-scope";
+import {
+	mobileApiScope,
+	toMobileDecimalId,
+} from "@/auth/mobile-api-scope";
 import {
 	toSelectableMobileSpaceInfos,
 	toSpaceListItemInfos,
@@ -63,7 +66,12 @@ const getTabHeaderTitle = (props: BottomTabHeaderProps) => {
 const findSpaceByItem = (
 	spaces: readonly SpaceDto[],
 	item: SpaceListItemInfo,
-) => spaces.find((space) => space.tenantId === item.id);
+) =>
+	spaces.find(
+		(space) =>
+			space.tenantId != null &&
+			toMobileDecimalId(space.tenantId, "space.tenantId") === item.id,
+	);
 
 const getHeaderSubtitle = () =>
 	mobileApiScope.fitnessCenterName || "지점 선택";

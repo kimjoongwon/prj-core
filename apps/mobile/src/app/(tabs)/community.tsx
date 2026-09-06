@@ -12,6 +12,7 @@ import type { CommunityPostDto } from "@cocrepo/api/core/model";
 import { useQueryClient } from "@tanstack/react-query";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
+import { formatDatabaseId } from "@cocrepo/type";
 import { getCoreApiBaseUrl } from "@/auth/auth-config";
 import { mobileApiScope } from "@/auth/mobile-api-scope";
 
@@ -24,10 +25,9 @@ const MS_PER_MINUTE = 60 * 1000;
 const MS_PER_HOUR = 60 * MS_PER_MINUTE;
 const MS_PER_DAY = 24 * MS_PER_HOUR;
 
-const formatCommunityCreatedAtLabel = (value: string) => {
-	const date = new Date(value);
+const formatCommunityCreatedAtLabel = (date: Date) => {
 	if (Number.isNaN(date.getTime())) {
-		return value;
+		return "날짜 미정";
 	}
 
 	const diff = Date.now() - date.getTime();
@@ -65,7 +65,7 @@ const toCommunityPostCardItem = (
 ): CommunityPostCardItem => ({
 	authorName: post.authorName,
 	createdAtLabel: formatCommunityCreatedAtLabel(post.createdAt),
-	id: post.id,
+	id: formatDatabaseId(post.id),
 	isMine: post.isMine,
 	isPinned: post.isPinned,
 	text: post.text,

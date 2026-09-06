@@ -163,4 +163,20 @@ describe("transformToDto Entity 응답 경계", () => {
 		expect(response).toHaveProperty("name", "기존 DTO");
 		expect(response).toHaveProperty("legacyExtra", "기존 일반 DTO 계약");
 	});
+
+	it("DB 관계 graph에 순환 참조가 있어도 응답 DTO 변환을 완료한다", () => {
+		class CircularRelationDto {
+			@StringField() name!: string;
+			@ClassField(() => CircularRelationDto, { required: false })
+			parent?: CircularRelationDto;
+		}
+		const relation: Record<string, unknown> = { name: "순환 관계" };
+		relation.parent = relation;
+
+		const response = transformToDto(CircularRelationDto, relation);
+
+		expect(response).toBeInstanceOf(CircularRelationDto);
+		expect(response).toHaveProperty("name", "순환 관계");
+		expect((response as CircularRelationDto).parent).toBeUndefined();
+	});
 });

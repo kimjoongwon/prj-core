@@ -9,6 +9,7 @@ import type {
   ReservationStatus,
 } from "@cocrepo/api/core/model";
 import { observer } from "mobx-react-lite";
+import { formatDatabaseId } from "@cocrepo/type";
 import { getCoreApiBaseUrl } from "@/auth/auth-config";
 import { mobileApiScope } from "@/auth/mobile-api-scope";
 
@@ -25,17 +26,15 @@ const STATUS_LABELS: Record<ReservationStatus, string> = {
 
 const pad2 = (value: number) => value.toString().padStart(2, "0");
 
-const formatReservationDate = (value: string) => {
-  const date = new Date(value);
+const formatReservationDate = (date: Date) => {
   if (Number.isNaN(date.getTime())) {
-    return value;
+    return "날짜 미정";
   }
 
   return `${date.getMonth() + 1}월 ${date.getDate()}일`;
 };
 
-const formatReservationTime = (value: string) => {
-  const date = new Date(value);
+const formatReservationTime = (date: Date) => {
   if (Number.isNaN(date.getTime())) {
     return "시간 미정";
   }
@@ -77,7 +76,7 @@ const toMyReservationCardItem = (
   reservation: ReservationDto,
 ): MyReservationCardItem => ({
   dateLabel: formatReservationDate(reservation.occurrenceStartAt),
-  id: reservation.id,
+  id: formatDatabaseId(reservation.id),
   memo: reservation.memo ?? undefined,
   metaLabel: getReservationMeta(reservation),
   statusLabel: STATUS_LABELS[reservation.status],

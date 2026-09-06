@@ -57,7 +57,7 @@ export class Ability extends AbstractEntity {
 	// 관계
 	@ClassField(() => Subject, { required: false }) subject?: Subject;
 	@ClassField(() => Action, { required: false }) action?: Action;
-	@ClassField(() => PolicyEntry, { required: false, each: true })
+	@ClassField(() => PolicyEntry, { required: false, each: true, isArray: true })
 	policyEntries?: PolicyEntry[];
 
 	/**

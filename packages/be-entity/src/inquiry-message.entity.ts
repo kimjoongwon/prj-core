@@ -76,7 +76,11 @@ export class InquiryMessage extends AbstractEntity {
 		description: "첨부파일 목록",
 	})
 	attachments?: InquiryAttachment[];
-	@ClassField(() => SentimentAnalysis, { required: false, each: true })
+	@ClassField(() => SentimentAnalysis, {
+		required: false,
+		each: true,
+		isArray: true,
+	})
 	sentimentAnalyses?: SentimentAnalysis[];
 	@ClassField(() => SentimentAnalysis, { required: false, nullable: true })
 	sentimentAnalysis?: SentimentAnalysis | null;

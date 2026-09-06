@@ -109,6 +109,11 @@ null·기본값의 세부 계약과 API 전용 예외는 [요청 계약 문서](
 계약은 Query DTO에 둡니다. Entity 메서드·초기값과 선택 필드의 Swagger `default`는
 가져오지 않습니다.
 
+선택 필터는 `PartialType(..., { skipNullProperties: false })`로 생략만 허용합니다.
+`null`은 선택된 Entity 필드의 nullable 정책에 따라 검증합니다. Entity에서는
+nullable이어도 검색 API가 null을 금지하던 관계 ID는 Query 전용 선언을 유지하고,
+`"null"`을 검색 특수값으로 받는 기존 변환도 해당 Query DTO에 둡니다.
+
 ```typescript
 import { QueryUserDto } from '@cocrepo/dto';
 import { plainToInstance } from 'class-transformer';

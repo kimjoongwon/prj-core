@@ -60,7 +60,7 @@ const meta = {
 	component: OidcClientListScreen,
 	// bigint 응답 fixture는 JSON 기반 Controls 편집에서 제외합니다.
 	argTypes: {
-		clients: { control: false },
+		oidcClients: { control: false },
 	},
 	parameters: {
 		layout: "fullscreen",

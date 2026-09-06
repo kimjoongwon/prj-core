@@ -41,11 +41,11 @@ export const transformToDto = <T>(
 
 	if (options.isArray) {
 		const items = Array.isArray(data) ? data : [];
-		return plainToInstance(dtoClass, items).map((item) =>
+		return plainToInstance(dtoClass, items, { enableCircularCheck: true }).map((item) =>
 			removeExcludedFields(item, excludeFields),
 		);
 	}
 
-	const dto = plainToInstance(dtoClass, data);
+	const dto = plainToInstance(dtoClass, data, { enableCircularCheck: true });
 	return removeExcludedFields(dto, excludeFields);
 };

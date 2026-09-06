@@ -114,7 +114,7 @@ const AdminTemplatesTemplateIdEditRoute = observer(() => {
 					description: variable.description || undefined,
 					defaultValue: variable.defaultValue || undefined,
 					isRequired: variable.isRequired,
-				})) as unknown as CreateTemplateVariableItemDto,
+				})) as CreateTemplateVariableItemDto[],
 			},
 		});
 	};

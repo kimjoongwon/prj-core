@@ -26,6 +26,6 @@ export class Program extends AbstractEntity {
 
 	@ClassField(() => Routine) routine?: Routine;
 	@ClassField(() => Session) session?: Session;
-	@ClassField(() => ProgramActivity, { required: false, each: true })
+	@ClassField(() => ProgramActivity, { required: false, each: true, isArray: true })
 	programActivities?: ProgramActivity[];
 }

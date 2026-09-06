@@ -26,13 +26,13 @@ export type GetIdpAccountsParams = {
 	 */
 	take?: number;
 	/**
+	 * 활성 상태
+	 */
+	isActive?: boolean;
+	/**
 	 * 이름 또는 이메일 검색
 	 */
 	search?: string;
-	/**
-	 * 활성 상태 필터
-	 */
-	isActive?: boolean;
 	/**
 	 * 잠금 상태 필터
 	 */

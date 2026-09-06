@@ -75,6 +75,7 @@ export class TaskAggregate {
 			throw new NotFoundException(EXERCISE_ERRORS.EXERCISE_NOT_FOUND);
 		}
 
+		task.exercise.task = task;
 		return task.exercise;
 	}
 

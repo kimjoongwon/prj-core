@@ -24,6 +24,7 @@ type StackScreenProps = {
 };
 
 const mockSetLoginRedirectUrl = jest.fn();
+const mockSetApiBaseUrl = jest.fn();
 const mockSetApiSessionScope = jest.fn();
 const mockSetUniwindTheme = jest.fn();
 
@@ -77,6 +78,7 @@ jest.mock("react-native-safe-area-context", () => {
 
 
 jest.mock("@cocrepo/api/core/client", () => ({
+	setApiBaseUrl: (...args: string[]) => mockSetApiBaseUrl(...args),
 	setApiSessionScope: (...args: unknown[]) =>
 		mockSetApiSessionScope(...args),
 	setLoginRedirectUrl: (...args: string[]) => mockSetLoginRedirectUrl(...args),

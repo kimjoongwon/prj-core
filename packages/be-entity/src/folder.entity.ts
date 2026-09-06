@@ -50,7 +50,8 @@ export class Folder extends AbstractEntity {
 	children?: Folder[];
 	@ClassField(() => User, { required: false, nullable: true })
 	createdBy?: User | null;
-	@ClassField(() => Asset, { required: false, each: true }) assets?: Asset[];
+	@ClassField(() => Asset, { required: false, each: true, isArray: true })
+	assets?: Asset[];
 
 	// ============================================================================
 	// 도메인 메서드

@@ -12,9 +12,10 @@ import { observer } from "mobx-react-lite";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
 	type AccountBootstrapSpaceLike,
+	normalizeAccountBootstrapSpaces,
 	useTenantBootstrap,
 } from "./useTenantBootstrap";
-import { isWireId } from "./wire-id";
+import { isWireId, toWireId } from "./wire-id";
 
 const asId = (value: string): NonNullable<AccountBootstrapSpaceLike["id"]> =>
 	value as NonNullable<AccountBootstrapSpaceLike["id"]>;
@@ -185,5 +186,30 @@ describe("isWireId", () => {
 		invalidCases,
 	)("Given `%s`, When isWireId를 검사하면, Then false가 반환된다", (value) => {
 		expect(isWireId(value)).toBe(false);
+	});
+
+	it("생성 SDK가 복원한 bigint ID를 wire 문자열로 정규화한다", () => {
+		expect(toWireId(BigInt("42"))).toBe("42");
+		expect(toWireId(DATABASE_ID_MAX)).toBe(String(DATABASE_ID_MAX));
+		expect(toWireId(BigInt("0"))).toBeNull();
+		expect(
+			normalizeAccountBootstrapSpaces([
+				{
+					id: BigInt("101"),
+					tenantId: BigInt("2"),
+					fitnessCenter: { name: "Fitness Center B" },
+				},
+			]),
+		).toEqual([
+			{
+				id: "101",
+				tenantId: "2",
+				contentLanguageCode: undefined,
+				fitnessCenter: {
+					name: "Fitness Center B",
+					company: undefined,
+				},
+			},
+		]);
 	});
 });

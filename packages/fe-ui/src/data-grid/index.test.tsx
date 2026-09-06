@@ -87,4 +87,75 @@ describe("표준 DataGrid 조립", () => {
 			expect(screen.queryByText("Status")).toBeNull();
 		});
 	}, 3000);
+
+	it("행이 갱신되어도 현재 페이지를 유지하고 검색을 제출하면 첫 페이지를 요청한다", async () => {
+		const { state, setQueryStates } = createDataGridTestState({
+			skip: 20,
+			take: 10,
+		});
+		const config = createDataGridTestConfig({
+			toolbar: {
+				leftInputs: [{ id: "name", type: "search", label: "이름 검색" }],
+			},
+		});
+		const { rerender } = render(
+			<DataGrid
+				config={config}
+				state={state}
+				rows={dataGridTestRows}
+				totalCount={50}
+			/>,
+		);
+
+		expect(screen.getByRole("button", { name: "3" })).toHaveAttribute(
+			"aria-current",
+			"page",
+		);
+		fireEvent.click(screen.getByRole("button", { name: "Next" }));
+		expect(setQueryStates).toHaveBeenCalledExactlyOnceWith({ skip: 30 });
+		act(() => state.syncQuery({ skip: 30, take: 10 }, setQueryStates));
+		rerender(
+			<DataGrid
+				config={config}
+				state={state}
+				rows={dataGridTestRows.map((row) => ({ ...row }))}
+				totalCount={50}
+			/>,
+		);
+
+		await waitFor(() => {
+			expect(screen.getByRole("button", { name: "4" })).toHaveAttribute(
+				"aria-current",
+				"page",
+			);
+			expect(screen.getByText("Beta")).toBeInTheDocument();
+		});
+		expect(setQueryStates).toHaveBeenCalledTimes(1);
+		fireEvent.change(screen.getByLabelText("이름 검색"), {
+			target: { value: "Alpha" },
+		});
+		fireEvent.keyDown(screen.getByLabelText("이름 검색"), { key: "Enter" });
+		expect(setQueryStates).toHaveBeenLastCalledWith({ name: "Alpha", skip: 0 });
+		act(() =>
+			state.syncQuery({ name: "Alpha", skip: 0, take: 10 }, setQueryStates),
+		);
+		rerender(
+			<DataGrid
+				config={config}
+				state={state}
+				rows={[dataGridTestRows[0]]}
+				totalCount={1}
+			/>,
+		);
+
+		await waitFor(() => {
+			expect(screen.getByRole("button", { name: "1" })).toHaveAttribute(
+				"aria-current",
+				"page",
+			);
+			expect(screen.getByText("Alpha")).toBeInTheDocument();
+			expect(screen.queryByText("Beta")).not.toBeInTheDocument();
+		});
+		expect(setQueryStates).toHaveBeenCalledTimes(2);
+	}, 3000);
 });

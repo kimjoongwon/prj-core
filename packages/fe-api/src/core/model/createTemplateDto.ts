@@ -38,5 +38,5 @@ export interface CreateTemplateDto {
 	 */
 	description?: string | null;
 	/** 템플릿 변수 목록 */
-	variables?: CreateTemplateVariableItemDto;
+	variables?: CreateTemplateVariableItemDto[];
 }

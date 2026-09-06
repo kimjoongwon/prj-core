@@ -88,16 +88,15 @@ const createBookingFeedParams = (
   const lastDate = dates[dates.length - 1] ?? firstDate;
 
   return {
-    dateFrom: startOfLocalDay(firstDate).toISOString(),
-    dateTo: endOfLocalDay(lastDate).toISOString(),
+    dateFrom: startOfLocalDay(firstDate),
+    dateTo: endOfLocalDay(lastDate),
     skip: 0,
     take: DEFAULT_TAKE,
     timeZone: TIME_ZONE,
   };
 };
 
-const formatTime = (value: string) => {
-  const date = new Date(value);
+const formatTime = (date: Date) => {
   if (Number.isNaN(date.getTime())) {
     return "--:--";
   }
@@ -105,13 +104,12 @@ const formatTime = (value: string) => {
   return `${pad2(date.getHours())}:${pad2(date.getMinutes())}`;
 };
 
-const formatTimeRange = (startsAt: string, endsAt: string) =>
+const formatTimeRange = (startsAt: Date, endsAt: Date) =>
   `${formatTime(startsAt)} - ${formatTime(endsAt)}`;
 
-const formatReservationDate = (value: string) => {
-  const date = new Date(value);
+const formatReservationDate = (date: Date) => {
   if (Number.isNaN(date.getTime())) {
-    return value;
+    return "날짜 미정";
   }
 
   return `${date.getMonth() + 1}월 ${date.getDate()}일 ${
@@ -452,7 +450,7 @@ const HomeTabRoute = observer(() => {
       }
       reservedCount={reservedCount}
       selectedDate={selectedDate}
-      selectedDateLabel={formatReservationDate(`${selectedDate}T00:00:00`)}
+      selectedDateLabel={formatReservationDate(new Date(`${selectedDate}T00:00:00`))}
       selectedFilter={selectedFilter}
     />
   );

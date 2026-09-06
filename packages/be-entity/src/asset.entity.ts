@@ -88,9 +88,9 @@ export class Asset extends AbstractEntity {
 		description: "파생 리소스 목록",
 	})
 	derivatives?: Derivative[];
-	@ClassField(() => AlbumEntry, { required: false, each: true })
+	@ClassField(() => AlbumEntry, { required: false, each: true, isArray: true })
 	albumEntries?: AlbumEntry[];
-	@ClassField(() => Album, { required: false, each: true })
+	@ClassField(() => Album, { required: false, each: true, isArray: true })
 	coverOfAlbums?: Album[];
 
 	// ============================================================================

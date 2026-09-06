@@ -10,8 +10,10 @@ const mockReplace = jest.fn();
 let mockPathname = "/";
 const mockGetCurrentSpace = jest.fn();
 const mockGetMySpaces = jest.fn();
+const mockSetApiBaseUrl = jest.fn();
 const mockSetApiNativeRefreshHandler = jest.fn();
 const mockSetApiSessionScope = jest.fn();
+const mockSetLoginRedirectUrl = jest.fn();
 const mockVerifyToken = jest.fn();
 
 jest.mock("expo-router", () => ({
@@ -33,10 +35,12 @@ jest.mock("@cocrepo/api/core/auth", () => ({
 }));
 
 jest.mock("@cocrepo/api/core/client", () => ({
+	setApiBaseUrl: (...args: unknown[]) => mockSetApiBaseUrl(...args),
 	setApiNativeRefreshHandler: (...args: unknown[]) =>
 		mockSetApiNativeRefreshHandler(...args),
 	setApiSessionScope: (...args: unknown[]) =>
 		mockSetApiSessionScope(...args),
+	setLoginRedirectUrl: (...args: unknown[]) => mockSetLoginRedirectUrl(...args),
 }));
 
 
@@ -61,8 +65,10 @@ describe("AuthSessionGate", () => {
 		mockReplace.mockReset();
 		mockGetCurrentSpace.mockReset();
 		mockGetMySpaces.mockReset();
+		mockSetApiBaseUrl.mockReset();
 		mockSetApiNativeRefreshHandler.mockReset();
 		mockSetApiSessionScope.mockReset();
+		mockSetLoginRedirectUrl.mockReset();
 		mockVerifyToken.mockReset();
 		(SecureStore.getItemAsync as jest.Mock).mockImplementation(async () => null);
 		(SecureStore.setItemAsync as jest.Mock).mockClear();
@@ -96,8 +102,8 @@ describe("AuthSessionGate", () => {
 
 	it("세션 검증 시 현재 Space를 Core API 요청 scope에 연결한다", async () => {
 		const currentSpace = {
-			id: "101",
-			tenantId: "201",
+			id: 101n,
+			tenantId: 201n,
 			contentLanguageCode: "ko_KR",
 			fitnessCenter: {
 				address: "서울 강남구",

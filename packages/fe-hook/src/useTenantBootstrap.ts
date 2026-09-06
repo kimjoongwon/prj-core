@@ -7,8 +7,8 @@ import type {
 	UseAccountBootstrapOptions,
 	UseAccountBootstrapReturn,
 } from "@cocrepo/type";
-import { useEffect } from "react";
-import { isSameWireId, isWireId } from "./wire-id";
+import { useEffect, useMemo } from "react";
+import { isSameWireId, isWireId, toWireId } from "./wire-id";
 
 type UnknownRecord = Record<string, unknown>;
 
@@ -24,16 +24,18 @@ function toAccountBootstrapSpace(
 		source.contentLanguageCode,
 	);
 	const fitnessCenter = normalizeFitnessCenter(source.fitnessCenter);
+	const id = toWireId(source.id);
+	const tenantId = toWireId(source.tenantId);
 
 	return {
-		id: isWireId(source.id) ? source.id : undefined,
-		tenantId: isWireId(source.tenantId) ? source.tenantId : undefined,
+		id: id ?? undefined,
+		tenantId: tenantId ?? undefined,
 		contentLanguageCode,
 		fitnessCenter,
 	};
 }
 
-function normalizeAccountBootstrapSpaces(
+export function normalizeAccountBootstrapSpaces(
 	spaces: unknown,
 ): AccountBootstrapSpaceLike[] {
 	if (!Array.isArray(spaces)) {
@@ -227,8 +229,14 @@ export function useTenantBootstrapFromApi() {
 				enabled: isHydrated,
 			},
 		});
-	const spaces = normalizeAccountBootstrapSpaces(mySpacesResponse?.data);
-	const currentSpace = toCurrentSpace(currentSpaceResponse?.data) ?? null;
+	const spaces = useMemo(
+		() => normalizeAccountBootstrapSpaces(mySpacesResponse?.data),
+		[mySpacesResponse?.data],
+	);
+	const currentSpace = useMemo(
+		() => toCurrentSpace(currentSpaceResponse?.data) ?? null,
+		[currentSpaceResponse?.data],
+	);
 
 	return useTenantBootstrap({
 		account,

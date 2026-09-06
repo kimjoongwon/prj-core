@@ -72,7 +72,7 @@ export class Policy extends AbstractEntity {
 		description: "정책에 연결된 Ability 목록",
 	})
 	entries?: PolicyEntry[];
-	@ClassField(() => RoleAssignment, { required: false, each: true })
+	@ClassField(() => RoleAssignment, { required: false, each: true, isArray: true })
 	roleAssignments?: RoleAssignment[];
 	isRemoved(): boolean {
 		return this.removedAt !== null;

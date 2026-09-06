@@ -49,7 +49,8 @@ export class Action extends AbstractEntity {
 	config!: Prisma.JsonValue | null;
 
 	// 관계
-	@ClassField(() => Ability, { required: false, each: true }) abilities?: Ability[];
+	@ClassField(() => Ability, { required: false, each: true, isArray: true })
+	abilities?: Ability[];
 
 	/**
 	 * config에서 마스킹 프리셋 가져오기

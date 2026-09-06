@@ -25,7 +25,7 @@ export class Category extends AbstractEntity {
 
 	@ClassField(() => Category, { required: false })
 	parent?: Category;
-	@ClassField(() => Category, { each: true, required: false })
+	@ClassField(() => Category, { each: true, isArray: true, required: false })
 	children?: Category[];
 	@ClassField(() => Space, { required: false })
 	space?: Space;

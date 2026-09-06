@@ -3,7 +3,11 @@ import {
 	setApiSessionScope,
 } from "@cocrepo/api/core/client";
 import type { SpaceDto } from "@cocrepo/api/core/model";
-import { isDecimalId } from "@cocrepo/type";
+import {
+  formatDatabaseId,
+  isDecimalId,
+  requireDecimalId,
+} from "@cocrepo/type";
 import { makeAutoObservable } from "mobx";
 
 export const MOBILE_PLATFORM_FITNESS_CENTER_NAME = "플랫폼 운영본부";
@@ -35,21 +39,38 @@ const resolveFitnessCenterAddress = (space: SpaceDto) =>
   space.fitnessCenter?.company?.label ??
   null;
 
-/** API 응답의 숫자 ID가 canonical decimal string인지 확인합니다. */
-const requireDecimalId = (value: unknown, fieldName: string): string => {
-  if (!isDecimalId(value)) {
-    throw new TypeError(`${fieldName} must be a canonical decimal ID`);
+/** SDK 런타임의 bigint ID를 모바일 상태의 canonical decimal string으로 바꿉니다. */
+export const toMobileDecimalId = (
+  value: unknown,
+  fieldName: string,
+): string =>
+  typeof value === "bigint"
+    ? formatDatabaseId(value)
+    : requireDecimalId(value, fieldName);
+
+const isMobileDatabaseId = (value: unknown) => {
+  if (isDecimalId(value)) {
+    return true;
   }
 
-  return value;
+  if (typeof value !== "bigint") {
+    return false;
+  }
+
+  try {
+    formatDatabaseId(value);
+    return true;
+  } catch {
+    return false;
+  }
 };
 
 /**
  * 모바일 사용자가 직접 선택할 수 있는 FitnessCenter Space인지 확인합니다.
  */
 export const isSelectableMobileSpace = (space: SpaceDto) =>
-  isDecimalId(space.id) &&
-  isDecimalId(space.tenantId) &&
+  isMobileDatabaseId(space.id) &&
+  isMobileDatabaseId(space.tenantId) &&
   Boolean(space.fitnessCenter) &&
   space.fitnessCenter?.name !== MOBILE_PLATFORM_FITNESS_CENTER_NAME;
 
@@ -62,8 +83,8 @@ export const toMobileSpaceInfo = (space: SpaceDto): MobileSpaceInfo => ({
   fitnessCenterName: resolveFitnessCenterName(space),
   imageFileId: space.fitnessCenter?.imageFileId ?? null,
   logoImageFileId: space.fitnessCenter?.company?.logoImageFileId ?? null,
-  spaceId: requireDecimalId(space.id, "space.id"),
-  tenantId: requireDecimalId(space.tenantId, "space.tenantId"),
+  spaceId: toMobileDecimalId(space.id, "space.id"),
+  tenantId: toMobileDecimalId(space.tenantId, "space.tenantId"),
 });
 
 class MobileApiScope {
@@ -91,14 +112,12 @@ class MobileApiScope {
   }
 
   setSpace(space: SpaceDto) {
+    const tenantId = toMobileDecimalId(space.tenantId, "space.tenantId");
     const existingSpace = this.spaces.find(
-      (item) => item.tenantId === space.tenantId,
+      (item) => item.tenantId === tenantId,
     );
-    this.tenantId = requireDecimalId(
-      space.tenantId ?? existingSpace?.tenantId,
-      "space.tenantId",
-    );
-    this.spaceId = requireDecimalId(space.id, "space.id");
+    this.tenantId = tenantId;
+    this.spaceId = toMobileDecimalId(space.id, "space.id");
     this.fitnessCenterName =
       resolveFitnessCenterName(space) ||
       existingSpace?.fitnessCenterName ||

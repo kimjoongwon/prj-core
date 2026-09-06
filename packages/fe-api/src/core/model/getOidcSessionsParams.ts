@@ -26,7 +26,7 @@ export type GetOidcSessionsParams = {
 	 */
 	take?: number;
 	/**
-	 * 모델 타입 필터 (AccessToken, RefreshToken, Session 등)
+	 * 모델 유형
 	 */
 	modelType?: string;
 	/**

@@ -37,7 +37,12 @@ export class Template extends AbstractEntity {
 	// ============================================================================
 
 	/** 변수 목록 */
-	@ClassField(() => TemplateVariable, { required: false, each: true }) variables?: TemplateVariable[];
+	@ClassField(() => TemplateVariable, {
+		required: false,
+		each: true,
+		isArray: true,
+	})
+	variables?: TemplateVariable[];
 
 	// ============================================================================
 	// 도메인 메서드

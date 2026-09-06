@@ -54,9 +54,13 @@ export class InquiryThread extends AbstractEntity {
 	// ============================================================================
 	@ClassField(() => Inquiry, { required: false }) inquiry?: Inquiry;
 	@ClassField(() => User, { required: false }) createdBy?: User;
-	@ClassField(() => InquiryMessage, { required: false, each: true })
+	@ClassField(() => InquiryMessage, { required: false, each: true, isArray: true })
 	messages?: InquiryMessage[];
-	@ClassField(() => InquiryParticipant, { required: false, each: true })
+	@ClassField(() => InquiryParticipant, {
+		required: false,
+		each: true,
+		isArray: true,
+	})
 	participants?: InquiryParticipant[];
 
 	// ============================================================================

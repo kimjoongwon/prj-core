@@ -4310,20 +4310,20 @@ export const runtimeManifest: RuntimeManifest = {
 					maximum: 200,
 					type: "number",
 				},
-				"query:search": {
+				"query:requesterId": {
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
 					type: "string",
-				},
-				"query:status": {
-					$ref: "#/components/schemas/TenantAccessRequestStatus",
 				},
 				"query:spaceId": {
 					pattern:
 						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
 					type: "string",
 				},
-				"query:requesterId": {
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+				"query:status": {
+					$ref: "#/components/schemas/TenantAccessRequestStatus",
+				},
+				"query:search": {
 					type: "string",
 				},
 				"query:createdFrom": {
@@ -5817,11 +5817,11 @@ export const runtimeManifest: RuntimeManifest = {
 					maximum: 200,
 					type: "number",
 				},
-				"query:search": {
-					type: "string",
-				},
 				"query:isActive": {
 					type: "boolean",
+				},
+				"query:search": {
+					type: "string",
 				},
 				"query:isLocked": {
 					type: "boolean",
@@ -6262,11 +6262,10 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				children: {
 					each: true,
-					allOf: [
-						{
-							$ref: "#/components/schemas/CategoryDto",
-						},
-					],
+					type: "array",
+					items: {
+						$ref: "#/components/schemas/CategoryDto",
+					},
 				},
 			},
 			required: [
@@ -8989,11 +8988,10 @@ export const runtimeManifest: RuntimeManifest = {
 				variables: {
 					each: true,
 					description: "템플릿 변수 목록",
-					allOf: [
-						{
-							$ref: "#/components/schemas/CreateTemplateVariableItemDto",
-						},
-					],
+					type: "array",
+					items: {
+						$ref: "#/components/schemas/CreateTemplateVariableItemDto",
+					},
 				},
 			},
 			required: ["code", "name", "type", "content"],
@@ -9022,11 +9020,10 @@ export const runtimeManifest: RuntimeManifest = {
 				variables: {
 					each: true,
 					description: "템플릿 변수 목록",
-					allOf: [
-						{
-							$ref: "#/components/schemas/CreateTemplateVariableItemDto",
-						},
-					],
+					type: "array",
+					items: {
+						$ref: "#/components/schemas/CreateTemplateVariableItemDto",
+					},
 				},
 			},
 		},

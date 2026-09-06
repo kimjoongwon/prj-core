@@ -118,8 +118,15 @@ test.describe("메시지 템플릿 목록 페이지", () => {
 			// ── 수정 플로우 ──
 
 			// When: 수정 버튼 클릭
-			await page.getByRole("button", { name: "수정" }).click();
-			await page.waitForURL(/\/templates\/.*\/edit/, { timeout: 15000 });
+			const editButton = page.getByRole("button", { name: "수정" });
+			await editButton.click();
+			await page
+				.waitForURL(/\/templates\/.*\/edit/, { timeout: 15000 })
+				.catch(async () => {
+					// Next 개발 서버의 최초 동적 route 컴파일 reload가 클릭을 끊으면 다시 이동합니다.
+					await editButton.click();
+					await page.waitForURL(/\/templates\/.*\/edit/, { timeout: 30000 });
+				});
 			await page.waitForLoadState("networkidle");
 
 			// Then: 수정 페이지 타이틀 확인

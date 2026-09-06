@@ -15,6 +15,7 @@ export class UpdateTemplateDto extends PartialType(
 ) {
 	@ClassField(() => CreateTemplateVariableItemDto, {
 		each: true,
+		isArray: true,
 		required: false,
 		description: "템플릿 변수 목록",
 	})

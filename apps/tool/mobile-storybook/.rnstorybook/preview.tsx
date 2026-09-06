@@ -1,5 +1,4 @@
 import { setLoginRedirectUrl } from "@cocrepo/api/core/client";
-import { setIdpLoginRedirectUrl } from "@cocrepo/api/idp/client";
 import type { HeroUINativeConfig } from "@cocrepo/mo-ui";
 import { DesignSystemProvider, PortalHost, ScreenFrame } from "@cocrepo/mo-ui";
 import type { Decorator, Preview } from "@storybook/react-native";
@@ -22,7 +21,6 @@ const STORYBOOK_THEME_BACKGROUNDS = {
 type StorybookTheme = keyof typeof STORYBOOK_THEME_BACKGROUNDS;
 
 setLoginRedirectUrl(DISABLED_AUTH_REDIRECT_URL);
-setIdpLoginRedirectUrl(DISABLED_AUTH_REDIRECT_URL);
 
 const GESTURE_ROOT_STYLE = {
 	alignSelf: "stretch",

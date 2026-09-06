@@ -19,6 +19,7 @@ export class CreateTemplateDto extends PickType(Template, [
 ] as const) {
 	@ClassField(() => CreateTemplateVariableItemDto, {
 		each: true,
+		isArray: true,
 		required: false,
 		description: "템플릿 변수 목록",
 	})

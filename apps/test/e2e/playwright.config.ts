@@ -210,7 +210,8 @@ export default defineConfig({
 	fullyParallel: true,
 	forbidOnly: !!process.env.CI,
 	retries: process.env.CI ? 2 : 0,
-	workers: process.env.CI ? 1 : 3,
+	// Admin 시나리오는 같은 시드 계정의 current-space를 갱신하므로 기본은 직렬 실행합니다.
+	workers: process.env.CI ? 1 : Number(process.env.E2E_WORKERS ?? 1),
 
 	reporter: [["html", { outputFolder: "playwright-report" }], ["list"]],
 

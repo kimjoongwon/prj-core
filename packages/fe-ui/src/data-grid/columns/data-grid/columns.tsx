@@ -502,7 +502,7 @@ export const adminRoleActionsColumn = createActionsColumn<RoleDto>({
 	cell: ({ row }) => (
 		<LinkCell
 			className="inline-flex h-8 items-center justify-center px-3 text-sm"
-			href={`/roles/${row.original.id}`}
+			href={`/admin/roles/${row.original.id}`}
 		>
 			상세
 		</LinkCell>
@@ -542,7 +542,7 @@ export function buildAdminRoleTableColumns<
 				cell: ({ row }) => (
 					<LinkCell
 						className="inline-flex h-8 items-center justify-center px-3 text-sm"
-						href={`/roles/${row.original.id}`}
+						href={`/admin/roles/${row.original.id}`}
 					>
 						상세
 					</LinkCell>

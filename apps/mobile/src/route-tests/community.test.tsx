@@ -163,8 +163,8 @@ describe("mobile community tab route", () => {
 				data: [
 					{
 						authorName: "민지 회원",
-						createdAt: "2026-05-27T09:00:00.000Z",
-						id: "community-post-1",
+						createdAt: new Date("2026-05-27T09:00:00.000Z"),
+						id: 1n,
 						isMine: true,
 						isPinned: false,
 						text: "오늘 저녁 수업 끝나고 스트레칭 같이 하실 분 계신가요?",
@@ -181,7 +181,7 @@ describe("mobile community tab route", () => {
 			isPending: false,
 			mutateAsync: jest.fn().mockResolvedValue({
 				data: {
-					id: "community-post-2",
+					id: 2n,
 				},
 			}),
 		});

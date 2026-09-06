@@ -111,18 +111,18 @@ export class Inquiry extends AbstractEntity {
 		description: "스레드 목록",
 	})
 	threads?: InquiryThread[];
-	@ClassField(() => InquiryMessage, { required: false, each: true })
+	@ClassField(() => InquiryMessage, { required: false, each: true, isArray: true })
 	messages?: InquiryMessage[];
 	@ClassField(() => InquiryParticipant, {
 		isArray: true,
 		description: "참여자 목록",
 	})
 	participants?: InquiryParticipant[];
-	@ClassField(() => InquiryTag, { required: false, each: true })
+	@ClassField(() => InquiryTag, { required: false, each: true, isArray: true })
 	tags?: InquiryTag[];
 	@ClassField(() => SentimentAnalysis, { required: false, nullable: true })
 	sentimentAnalysis?: SentimentAnalysis | null;
-	@ClassField(() => AIAgentLog, { required: false, each: true })
+	@ClassField(() => AIAgentLog, { required: false, each: true, isArray: true })
 	aiAgentLogs?: AIAgentLog[];
 
 	// ============================================================================

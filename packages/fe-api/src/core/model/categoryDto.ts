@@ -38,5 +38,5 @@ export interface CategoryDto {
 	 */
 	createdById?: bigint | null;
 	parent?: __CategoryDto;
-	children?: CategoryDto;
+	children?: CategoryDto[];
 }

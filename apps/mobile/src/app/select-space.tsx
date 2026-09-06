@@ -12,7 +12,10 @@ import {
   resolveAuthenticatedRoutePath,
 } from "@/auth/auth-config";
 import { mobileSession } from "@/auth/mobile-session";
-import { mobileApiScope } from "@/auth/mobile-api-scope";
+import {
+  mobileApiScope,
+  toMobileDecimalId,
+} from "@/auth/mobile-api-scope";
 import {
   toSelectableMobileSpaceInfos,
   toSpaceListItemInfos,
@@ -29,7 +32,12 @@ const resolveReturnTo = (params: Record<string, string | string[] | undefined>) 
 const findSpaceByItem = (
   spaces: readonly SpaceDto[],
   item: SpaceListItemInfo,
-) => spaces.find((space) => space.tenantId === item.id);
+) =>
+  spaces.find(
+    (space) =>
+      space.tenantId != null &&
+      toMobileDecimalId(space.tenantId, "space.tenantId") === item.id,
+  );
 
 const getSelectionErrorDescription = (error: unknown) => {
   const status = (error as { response?: { status?: number } })?.response?.status;
