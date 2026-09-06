@@ -369,3 +369,7 @@ ISC
 소유합니다. `RoleCategoryName`, `RoleGroupName`, `SpaceCategoryName`,
 `SpaceGroupName`과 공통 `BaseEnum`을 공개합니다. Prisma 기준 데이터는 이 패키지를
 직접 사용하고, 기존 UI 소비를 위해 `@cocrepo/enum`에서도 분류 이름을 재export합니다.
+
+### 비밀번호 규칙 진입점
+
+`@cocrepo/constant/auth/password-rules`는 ESM·브라우저 번들러에 TypeScript 소스 모듈을, CommonJS에는 컴파일된 JavaScript를 제공합니다. root export와 동일한 조건 분기를 사용하여 Schema 검증에서 CommonJS 파일을 ESM으로 잘못 해석하지 않게 합니다.

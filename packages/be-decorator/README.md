@@ -14,6 +14,23 @@ pnpm add @cocrepo/decorator
 
 DTO 및 엔티티 클래스에 사용하는 필드 정의 데코레이터입니다. Swagger 문서, 유효성 검증, 타입 변환을 통합 처리합니다.
 
+#### Schema 상속 Entity의 메타데이터
+
+공통 값 검증의 원천은 `@cocrepo/schema`입니다. 기존 `StringField` 등은 Schema의 순수 `StringValidation`과 백엔드 메타데이터를 조합하므로 API 전용 DTO 필드에서 계속 사용할 수 있습니다.
+
+Schema에서 검증을 상속한 Entity 필드는 `StringFieldMetadata`, `StringFieldOptionalMetadata`처럼 기존 이름 뒤에 `Metadata`를 붙인 API를 사용합니다. 이 API는 Swagger와 class-transformer만 등록하고 `class-validator` 규칙을 추가하지 않습니다. Optional metadata도 Swagger의 `required: false`만 지정하며 상속한 검증을 선택 입력으로 바꾸지 않습니다.
+
+```ts
+class Role extends RoleSchema {
+  @StringFieldMetadata({ description: "역할 식별자", maxLength: 50 })
+  declare name: RoleSchema["name"];
+}
+```
+
+지원 대상은 String, Number, Boolean, Date, Email, Phone, ULID, UUID, BigIntId, TmpKey, URL, Password, Enum입니다. `EnumFieldMetadata`와 `EnumFieldOptionalMetadata`는 기존과 같은 enum 콜백을 받습니다. `PasswordFieldMetadata`는 평문 입력 문서화용이며 저장된 해시에 적용하지 않습니다.
+
+`ClassField`는 관계 객체의 중첩 검증·변환과 `CLASS_FIELD_OPTIONS_METADATA`를 유지합니다. JSON scalar 등 Schema에서 이미 검증하는 필드는 `ClassFieldMetadata`로 변환과 관계 옵션만 추가할 수 있습니다. `each`와 `isArray`, nullable, 설명, 지연 타입 콜백의 기존 의미는 유지됩니다.
+
 #### 기본 타입 (Primitives)
 
 ```typescript

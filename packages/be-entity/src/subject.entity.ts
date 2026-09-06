@@ -1,21 +1,31 @@
-import { Ability } from "./ability.entity";
-import { AbstractEntity } from "./abstract.entity";
-import { ClassField, NumberField, StringField, StringFieldOptional } from "@cocrepo/decorator/field";
+import {
+	ClassField,
+	NumberFieldMetadata,
+	StringFieldMetadata,
+	StringFieldOptionalMetadata,
+} from "@cocrepo/decorator/field";
+import { SubjectSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
+import { Ability } from "./ability.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 
 /**
  * CASL Subject 엔티티
  * 권한 대상 (entity:xxx, menu:xxx, feature:xxx, ui:xxx)
  */
-export class Subject extends AbstractEntity {
+@AbstractEntityFields()
+export class Subject extends SubjectSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true }) subjectId!: string;
+	@Exclude({ toPlainOnly: true }) declare subjectId: SubjectSchema["subjectId"];
 
-	@StringField() name!: string;
-	@StringFieldOptional({ nullable: true }) displayName!: string | null;
-	@StringFieldOptional({ nullable: true }) icon!: string | null;
-	@StringFieldOptional({ nullable: true }) group!: string | null;
-	@NumberField() order!: number;
+	@StringFieldMetadata() declare name: SubjectSchema["name"];
+	@StringFieldOptionalMetadata({ nullable: true })
+	declare displayName: SubjectSchema["displayName"];
+	@StringFieldOptionalMetadata({ nullable: true })
+	declare icon: SubjectSchema["icon"];
+	@StringFieldOptionalMetadata({ nullable: true })
+	declare group: SubjectSchema["group"];
+	@NumberFieldMetadata() declare order: SubjectSchema["order"];
 
 	@ClassField(() => Ability, { required: false, each: true, isArray: true })
 	abilities?: Ability[];

@@ -1,5 +1,6 @@
 import { LoginSchema } from "@cocrepo/schema";
 import { ApiProperty } from "@nestjs/swagger";
+import { Transform } from "class-transformer";
 
 /**
  * 로그인 요청 DTO
@@ -12,6 +13,9 @@ export class LoginPayloadDto extends LoginSchema {
 		example: "ceo@f45training.co.kr",
 		description: "사용자 이메일",
 	})
+	@Transform(({ value }) =>
+		typeof value === "string" ? value.trim().toLowerCase() : value,
+	)
 	email: string;
 
 	@ApiProperty({

@@ -1,28 +1,30 @@
 import {
-	BigIntIdField,
+	BigIntIdFieldMetadata,
 	ClassField,
-	StringField,
-	UUIDField,
+	StringFieldMetadata,
+	UUIDFieldMetadata,
 } from "@cocrepo/decorator/field";
+import { ProfileSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { User } from "./user.entity";
 
-export class Profile extends AbstractEntity {
+@AbstractEntityFields()
+export class Profile extends ProfileSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	profileId!: string;
+	declare profileId: ProfileSchema["profileId"];
 
-	@UUIDField({ nullable: true })
-	avatarFileId!: string | null;
-	@StringField()
-	name!: string;
-	@StringField()
-	nickname!: string;
-	@StringField()
-	address!: string;
-	@BigIntIdField()
-	userId!: bigint;
+	@UUIDFieldMetadata({ nullable: true })
+	declare avatarFileId: ProfileSchema["avatarFileId"];
+	@StringFieldMetadata()
+	declare name: ProfileSchema["name"];
+	@StringFieldMetadata()
+	declare nickname: ProfileSchema["nickname"];
+	@StringFieldMetadata()
+	declare address: ProfileSchema["address"];
+	@BigIntIdFieldMetadata()
+	declare userId: ProfileSchema["userId"];
 	@ClassField(() => User, { required: false })
 	user?: User;
 }

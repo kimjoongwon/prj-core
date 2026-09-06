@@ -1,5 +1,3 @@
-import "reflect-metadata";
-
 import { validateSync } from "class-validator";
 import { describe, expect, it } from "vitest";
 import { DecimalId } from "./decimal-id.decorator";

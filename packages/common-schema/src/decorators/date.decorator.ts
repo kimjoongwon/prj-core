@@ -1,4 +1,3 @@
-import { Type } from "class-transformer";
 import {
 	IsDate,
 	IsNotEmpty,
@@ -21,7 +20,7 @@ export interface DateDecoratorOptions {
 /**
  * 날짜 필드 데코레이터 (순수 class-validator)
  *
- * 문자열/숫자를 Date 객체로 자동 변환
+ * 입력값을 변환하지 않고 검증합니다.
  *
  * @example
  * ```typescript
@@ -40,7 +39,6 @@ export function DateField(
 	const { required = true, minDate, maxDate } = options;
 
 	const decorators: PropertyDecorator[] = [
-		Type(() => Date),
 		IsDate({ message: VALIDATION_MESSAGES.DATE_TYPE }),
 	];
 

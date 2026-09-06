@@ -1,48 +1,50 @@
 import {
-	BigIntIdField,
-	BooleanField,
-	DateField,
-	DateFieldOptional,
-	EnumField,
-	StringField,
-	StringFieldOptional,
+	BigIntIdFieldMetadata,
+	BooleanFieldMetadata,
+	DateFieldMetadata,
+	DateFieldOptionalMetadata,
+	EnumFieldMetadata,
+	StringFieldMetadata,
+	StringFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
 import { WhitelistType } from "@cocrepo/enum";
+import { WhitelistEntrySchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 
 /**
  * 화이트리스트 항목 엔티티
  *
  * IP, 이메일 도메인, CORS Origin 화이트리스트를 관리합니다.
  */
-export class WhitelistEntry extends AbstractEntity {
-	@BigIntIdField({ description: "ID" })
+@AbstractEntityFields()
+export class WhitelistEntry extends WhitelistEntrySchema {
+	@BigIntIdFieldMetadata({ description: "ID" })
 	declare id: bigint;
-	@DateField({ description: "생성일" })
+	@DateFieldMetadata({ description: "생성일" })
 	declare createdAt: Date;
-	@DateFieldOptional({ nullable: true, description: "수정일" })
+	@DateFieldOptionalMetadata({ nullable: true, description: "수정일" })
 	declare updatedAt: Date | null;
 
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	whitelistEntryId!: string;
+	declare whitelistEntryId: WhitelistEntrySchema["whitelistEntryId"];
 
 	// ============================================================================
 	// 기본 필드
 	// ============================================================================
-	@EnumField(() => WhitelistType, { description: "유형" })
-	type!: WhitelistType;
-	@StringField({ description: "값" })
-	value!: string;
-	@BooleanField({ description: "활성 여부" })
-	isActive!: boolean;
+	@EnumFieldMetadata(() => WhitelistType, { description: "유형" })
+	declare type: WhitelistEntrySchema["type"];
+	@StringFieldMetadata({ description: "값" })
+	declare value: WhitelistEntrySchema["value"];
+	@BooleanFieldMetadata({ description: "활성 여부" })
+	declare isActive: WhitelistEntrySchema["isActive"];
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	@StringFieldOptional({ nullable: true, description: "설명" })
-	description!: string | null;
+	@StringFieldOptionalMetadata({ nullable: true, description: "설명" })
+	declare description: WhitelistEntrySchema["description"];
 
 	// ============================================================================
 	// 도메인 메서드

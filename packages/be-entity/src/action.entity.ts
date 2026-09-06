@@ -1,14 +1,19 @@
-import type { Prisma } from "@cocrepo/prisma";
-import { NumberField, StringField, StringFieldOptional, ClassField } from "@cocrepo/decorator/field";
-import { Exclude } from "class-transformer";
+import {
+	ClassField,
+	NumberFieldMetadata,
+	StringFieldMetadata,
+	StringFieldOptionalMetadata,
+} from "@cocrepo/decorator/field";
+import { ActionSchema } from "@cocrepo/schema";
 import type {
 	ActionConfig,
 	ActionFormatConfig,
 	ActionMaskingConfig,
 	ActionTransformConfig,
 } from "@cocrepo/type";
+import { Exclude } from "class-transformer";
 import { Ability } from "./ability.entity";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 
 // @cocrepo/type에서 타입 재export (하위 호환성)
 export type {
@@ -31,22 +36,26 @@ export type {
  * // 마스킹 Action
  * { name: 'read:masked:email', group: 'visibility', config: { type: 'masking', preset: 'PRESET_EMAIL' } }
  */
-export class Action extends AbstractEntity {
+@AbstractEntityFields()
+export class Action extends ActionSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true }) actionId!: string;
+	@Exclude({ toPlainOnly: true }) declare actionId: ActionSchema["actionId"];
 
 	/** Action 이름 ('create', 'read', 'read:masked:email' 등) */
-	@StringField() name!: string;
+	@StringFieldMetadata() declare name: ActionSchema["name"];
 	/** 표시명 */
-	@StringFieldOptional({ nullable: true }) displayName!: string | null;
+	@StringFieldOptionalMetadata({ nullable: true })
+	declare displayName: ActionSchema["displayName"];
 	/** 설명 */
-	@StringFieldOptional({ nullable: true }) description!: string | null;
+	@StringFieldOptionalMetadata({ nullable: true })
+	declare description: ActionSchema["description"];
 	/** 그룹 ('crud', 'visibility', 'bulk', 'workflow') */
-	@StringFieldOptional({ nullable: true }) group!: string | null;
+	@StringFieldOptionalMetadata({ nullable: true })
+	declare group: ActionSchema["group"];
 	/** 정렬 순서 */
-	@NumberField() order!: number;
+	@NumberFieldMetadata() declare order: ActionSchema["order"];
 	/** Action 설정 (마스킹, 포맷팅 등) */
-	config!: Prisma.JsonValue | null;
+	declare config: ActionSchema["config"];
 
 	// 관계
 	@ClassField(() => Ability, { required: false, each: true, isArray: true })

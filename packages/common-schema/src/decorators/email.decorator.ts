@@ -1,4 +1,3 @@
-import { Transform } from "class-transformer";
 import { IsEmail, IsNotEmpty, IsOptional } from "class-validator";
 import { VALIDATION_MESSAGES } from "../constants/validation-messages";
 import { applyDecorators } from "./apply";
@@ -11,7 +10,7 @@ export interface EmailDecoratorOptions {
 /**
  * 이메일 필드 데코레이터 (순수 class-validator)
  *
- * 자동으로 소문자 변환 및 trim 적용
+ * 입력값을 변환하지 않고 검증합니다.
  *
  * @example
  * ```typescript
@@ -26,9 +25,6 @@ export function Email(options: EmailDecoratorOptions = {}): PropertyDecorator {
 
 	const decorators: PropertyDecorator[] = [
 		IsEmail({}, { message: VALIDATION_MESSAGES.EMAIL_FORMAT }),
-		Transform(({ value }) =>
-			typeof value === "string" ? value.trim().toLowerCase() : value,
-		),
 	];
 
 	if (required) {

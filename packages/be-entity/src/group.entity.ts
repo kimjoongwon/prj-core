@@ -1,34 +1,36 @@
 import {
-	BigIntIdField,
-	BigIntIdFieldOptional,
+	BigIntIdFieldMetadata,
+	BigIntIdFieldOptionalMetadata,
 	ClassField,
-	EnumField,
-	StringField,
-	StringFieldOptional,
-	ULIDField,
+	EnumFieldMetadata,
+	StringFieldMetadata,
+	StringFieldOptionalMetadata,
+	ULIDFieldMetadata,
 } from "@cocrepo/decorator/field";
 import { GroupTypes } from "@cocrepo/enum";
+import { GroupSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Space } from "./space.entity";
 import { User } from "./user.entity";
 
-export class Group extends AbstractEntity {
+@AbstractEntityFields()
+export class Group extends GroupSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	@ULIDField()
-	groupId!: string;
+	@ULIDFieldMetadata()
+	declare groupId: GroupSchema["groupId"];
 
-	@StringField()
-	name!: string;
-	@StringFieldOptional({ nullable: true })
-	label!: string | null;
-	@EnumField(() => GroupTypes, { required: true })
-	type!: GroupTypes;
-	@BigIntIdField()
-	spaceId!: bigint;
-	@BigIntIdFieldOptional({ nullable: true })
-	createdById!: bigint | null;
+	@StringFieldMetadata()
+	declare name: GroupSchema["name"];
+	@StringFieldOptionalMetadata({ nullable: true })
+	declare label: GroupSchema["label"];
+	@EnumFieldMetadata(() => GroupTypes, { required: true })
+	declare type: GroupSchema["type"];
+	@BigIntIdFieldMetadata()
+	declare spaceId: GroupSchema["spaceId"];
+	@BigIntIdFieldOptionalMetadata({ nullable: true })
+	declare createdById: GroupSchema["createdById"];
 	@ClassField(() => Space, { required: false })
 	space?: Space;
 	@ClassField(() => User, { required: false })

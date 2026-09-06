@@ -1,18 +1,17 @@
 import {
-	BigIntIdField,
-	BigIntIdFieldOptional,
-	BooleanField,
+	BigIntIdFieldMetadata,
+	BigIntIdFieldOptionalMetadata,
+	BooleanFieldMetadata,
 	ClassField,
-	DateField,
-	EnumField,
-	StringField,
-	UUIDFieldOptional,
+	DateFieldMetadata,
+	EnumFieldMetadata,
+	StringFieldMetadata,
+	UUIDFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
-
 import { MessageContentType, SenderType } from "@cocrepo/enum";
-import { type Prisma } from "@cocrepo/prisma";
+import { InquiryMessageSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { AIAgentLog } from "./ai-agent-log.entity";
 import { Inquiry } from "./inquiry.entity";
 import { InquiryAttachment } from "./inquiry-attachment.entity";
@@ -26,43 +25,47 @@ import { User } from "./user.entity";
  * 실시간 채팅 지원을 위해 메시지 상태(전달, 읽음) 추적,
  * 타이핑 표시, AI/시스템 메시지 구분 등의 기능을 제공합니다.
  */
-export class InquiryMessage extends AbstractEntity {
+@AbstractEntityFields()
+export class InquiryMessage extends InquiryMessageSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	inquiryMessageId!: string;
+	declare inquiryMessageId: InquiryMessageSchema["inquiryMessageId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	@BigIntIdField({ description: "소속 스레드 ID" })
-	threadId!: bigint;
-	@BigIntIdField({ description: "소속 문의 ID" })
-	inquiryId!: bigint;
-	@EnumField(() => SenderType, { description: "발신자 유형" })
-	senderType!: SenderType;
-	@StringField({ description: "메시지 내용" })
-	content!: string;
-	@EnumField(() => MessageContentType, { description: "콘텐츠 유형" })
-	contentType!: MessageContentType;
-	@BooleanField({ description: "수정 여부" })
-	isEdited!: boolean;
-	@BooleanField({ description: "삭제 여부" })
-	isDeleted!: boolean;
+	@BigIntIdFieldMetadata({ description: "소속 스레드 ID" })
+	declare threadId: InquiryMessageSchema["threadId"];
+	@BigIntIdFieldMetadata({ description: "소속 문의 ID" })
+	declare inquiryId: InquiryMessageSchema["inquiryId"];
+	@EnumFieldMetadata(() => SenderType, { description: "발신자 유형" })
+	declare senderType: InquiryMessageSchema["senderType"];
+	@StringFieldMetadata({ description: "메시지 내용" })
+	declare content: InquiryMessageSchema["content"];
+	@EnumFieldMetadata(() => MessageContentType, { description: "콘텐츠 유형" })
+	declare contentType: InquiryMessageSchema["contentType"];
+	@BooleanFieldMetadata({ description: "수정 여부" })
+	declare isEdited: InquiryMessageSchema["isEdited"];
+	@BooleanFieldMetadata({ description: "삭제 여부" })
+	declare isDeleted: InquiryMessageSchema["isDeleted"];
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	@BigIntIdFieldOptional({ nullable: true, description: "발신자 ID" })
-	senderId!: bigint | null;
-	@UUIDFieldOptional({ nullable: true, description: "클라이언트 메시지 ID" })
-	clientMessageId!: string | null;
-	@DateField({ nullable: true, description: "전달 완료 시간" })
-	deliveredAt!: Date | null;
-	@DateField({ nullable: true, description: "읽음 확인 시간" })
-	readAt!: Date | null;
-	@DateField({ nullable: true, description: "수정 일시" })
-	editedAt!: Date | null;
-	metadata!: Prisma.JsonValue | null;
+	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "발신자 ID" })
+	declare senderId: InquiryMessageSchema["senderId"];
+	@UUIDFieldOptionalMetadata({
+		nullable: true,
+		description: "클라이언트 메시지 ID",
+	})
+	declare clientMessageId: InquiryMessageSchema["clientMessageId"];
+	@DateFieldMetadata({ nullable: true, description: "전달 완료 시간" })
+	declare deliveredAt: InquiryMessageSchema["deliveredAt"];
+	@DateFieldMetadata({ nullable: true, description: "읽음 확인 시간" })
+	declare readAt: InquiryMessageSchema["readAt"];
+	@DateFieldMetadata({ nullable: true, description: "수정 일시" })
+	declare editedAt: InquiryMessageSchema["editedAt"];
+	declare metadata: InquiryMessageSchema["metadata"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)

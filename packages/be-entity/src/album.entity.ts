@@ -1,43 +1,47 @@
 import {
-	BigIntIdField,
-	BigIntIdFieldOptional,
+	BigIntIdFieldMetadata,
+	BigIntIdFieldOptionalMetadata,
 	ClassField,
-	NumberField,
-	StringField,
-	StringFieldOptional,
+	NumberFieldMetadata,
+	StringFieldMetadata,
+	StringFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
-
+import { AlbumSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { AlbumEntry } from "./album-entry.entity";
 import { Asset } from "./asset.entity";
 import type { Space } from "./space.entity";
 import { User } from "./user.entity";
 
-export class Album extends AbstractEntity {
+@AbstractEntityFields()
+export class Album extends AlbumSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	albumId!: string;
+	declare albumId: AlbumSchema["albumId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	@BigIntIdField({ description: "소속 Space ID" })
-	spaceId!: bigint;
-	@StringField({ description: "앨범명" })
-	name!: string;
-	@NumberField({ description: "정렬 순서", int: true })
-	sortOrder!: number;
+	@BigIntIdFieldMetadata({ description: "소속 Space ID" })
+	declare spaceId: AlbumSchema["spaceId"];
+	@StringFieldMetadata({ description: "앨범명" })
+	declare name: AlbumSchema["name"];
+	@NumberFieldMetadata({ description: "정렬 순서", int: true })
+	declare sortOrder: AlbumSchema["sortOrder"];
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	@StringFieldOptional({ nullable: true, description: "앨범 설명" })
-	description!: string | null;
-	@BigIntIdFieldOptional({ nullable: true, description: "커버 에셋 ID" })
-	coverAssetId!: bigint | null;
-	@BigIntIdFieldOptional({ nullable: true, description: "생성자 ID" })
-	createdById!: bigint | null;
+	@StringFieldOptionalMetadata({ nullable: true, description: "앨범 설명" })
+	declare description: AlbumSchema["description"];
+	@BigIntIdFieldOptionalMetadata({
+		nullable: true,
+		description: "커버 에셋 ID",
+	})
+	declare coverAssetId: AlbumSchema["coverAssetId"];
+	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "생성자 ID" })
+	declare createdById: AlbumSchema["createdById"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)

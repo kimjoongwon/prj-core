@@ -1,5 +1,6 @@
 import { LoginSchema } from "@cocrepo/schema";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { Transform } from "class-transformer";
 import { IsBoolean, IsOptional } from "class-validator";
 
 /**
@@ -13,6 +14,9 @@ export class OidcLoginPayloadDto extends LoginSchema {
 		example: "user@example.com",
 		description: "사용자 이메일 주소",
 	})
+	@Transform(({ value }) =>
+		typeof value === "string" ? value.trim().toLowerCase() : value,
+	)
 	email: string;
 
 	@ApiProperty({

@@ -1,27 +1,29 @@
 import {
-	BigIntIdField,
-	BigIntIdFieldOptional,
+	BigIntIdFieldMetadata,
+	BigIntIdFieldOptionalMetadata,
 	ClassField,
-	StringField,
+	StringFieldMetadata,
 } from "@cocrepo/decorator/field";
+import { CategorySchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Space } from "./space.entity";
 import { User } from "./user.entity";
 
-export class Category extends AbstractEntity {
+@AbstractEntityFields()
+export class Category extends CategorySchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	categoryId!: string;
+	declare categoryId: CategorySchema["categoryId"];
 
-	@StringField({ default: "" })
-	name!: string;
-	@BigIntIdField()
-	spaceId!: bigint;
-	@BigIntIdField({ nullable: true, default: null })
-	parentId!: bigint | null;
-	@BigIntIdFieldOptional({ nullable: true })
-	createdById!: bigint | null;
+	@StringFieldMetadata({ default: "" })
+	declare name: CategorySchema["name"];
+	@BigIntIdFieldMetadata()
+	declare spaceId: CategorySchema["spaceId"];
+	@BigIntIdFieldMetadata({ nullable: true, default: null })
+	declare parentId: CategorySchema["parentId"];
+	@BigIntIdFieldOptionalMetadata({ nullable: true })
+	declare createdById: CategorySchema["createdById"];
 
 	@ClassField(() => Category, { required: false })
 	parent?: Category;

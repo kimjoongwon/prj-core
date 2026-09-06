@@ -1,55 +1,33 @@
+import { EmailValidation } from "@cocrepo/schema";
 import { applyDecorators } from "@nestjs/common";
 import { ApiProperty, type ApiPropertyOptions } from "@nestjs/swagger";
-import { IsEmail } from "class-validator";
 import type { StringFieldOptions } from "../base/field-options.types";
-import { createOptionalField } from "../base/optional-field.factory";
-import { StringField } from "../primitives/string.field";
+import {
+	createOptionalField,
+	createOptionalFieldMetadata,
+} from "../base/optional-field.factory";
+import { StringFieldMetadata } from "../primitives/string.field";
 
-/**
- * 이메일 필드 데코레이터
- *
- * 자동으로 소문자 변환 적용
- *
- * @example
- * ```typescript
- * class UserDto {
- *   @EmailField()
- *   email: string;
- *
- *   @EmailField({ nullable: true })
- *   alternativeEmail: string | null;
- * }
- * ```
- */
-export function EmailField(
+/** Schema 검증을 상속한 Entity에 Swagger와 변환만 추가합니다. */
+export function EmailFieldMetadata(
 	options: Omit<ApiPropertyOptions, "type"> & StringFieldOptions = {},
 ): PropertyDecorator {
 	const decorators: PropertyDecorator[] = [
-		IsEmail(),
-		StringField({ toLowerCase: true, ...options }),
+		StringFieldMetadata({ toLowerCase: true, ...options }),
 	];
-
-	// StringField에서 nullable 처리가 되지만, 추가 데코레이터 적용 가능
-	// (현재는 StringField에서 처리됨)
-
-	// Swagger 문서화 (StringField와 중복되지만 명시적으로 추가)
-	if (options.swagger !== false) {
+	if (options.swagger !== false)
 		decorators.push(ApiProperty({ type: String, ...options }));
-	}
-
 	return applyDecorators(...decorators);
 }
 
-/**
- * Optional 이메일 필드 데코레이터
- *
- * @example
- * ```typescript
- * class UserDto {
- *   @EmailFieldOptional()
- *   optionalEmail?: string;
- * }
- * ```
- */
+/** API 전용 필드에 공통 검증과 Swagger·변환을 함께 적용합니다. */
+export function EmailField(
+	options: Omit<ApiPropertyOptions, "type"> & StringFieldOptions = {},
+): PropertyDecorator {
+	return applyDecorators(EmailValidation(options), EmailFieldMetadata(options));
+}
+
 export const EmailFieldOptional =
 	createOptionalField<StringFieldOptions>(EmailField);
+export const EmailFieldOptionalMetadata =
+	createOptionalFieldMetadata<StringFieldOptions>(EmailFieldMetadata);

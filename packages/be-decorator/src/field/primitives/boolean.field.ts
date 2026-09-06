@@ -1,58 +1,37 @@
+import { BooleanValidation } from "@cocrepo/schema";
 import { applyDecorators } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean, NotEquals } from "class-validator";
 import { ToBoolean } from "../../transform.decorators";
-import { IsNullable } from "../../validator.decorators";
 import type {
 	BaseFieldOptions,
 	FieldDecoratorOptions,
 } from "../base/field-options.types";
-import { createOptionalField } from "../base/optional-field.factory";
+import {
+	createOptionalField,
+	createOptionalFieldMetadata,
+} from "../base/optional-field.factory";
 
-/**
- * 불리언 필드 데코레이터
- *
- * @example
- * ```typescript
- * class Dto {
- *   @BooleanField()
- *   isActive: boolean;
- *
- *   @BooleanField({ nullable: true })
- *   isVerified: boolean | null;
- * }
- * ```
- */
-export function BooleanField(
+/** Schema 검증을 상속한 Entity에 Swagger와 변환만 추가합니다. */
+export function BooleanFieldMetadata(
 	options: FieldDecoratorOptions<BaseFieldOptions> = {},
 ): PropertyDecorator {
-	const decorators: PropertyDecorator[] = [ToBoolean(), IsBoolean()];
-
-	// Nullable 처리
-	if (options.nullable) {
-		decorators.push(IsNullable());
-	} else {
-		decorators.push(NotEquals(null));
-	}
-
-	// Swagger 문서화
-	if (options.swagger !== false) {
+	const decorators: PropertyDecorator[] = [ToBoolean()];
+	if (options.swagger !== false)
 		decorators.push(ApiProperty({ type: Boolean, ...options }));
-	}
-
 	return applyDecorators(...decorators);
 }
 
-/**
- * Optional 불리언 필드 데코레이터
- *
- * @example
- * ```typescript
- * class Dto {
- *   @BooleanFieldOptional()
- *   optionalFlag?: boolean;
- * }
- * ```
- */
+/** API 전용 필드에 공통 검증과 Swagger·변환을 함께 적용합니다. */
+export function BooleanField(
+	options: FieldDecoratorOptions<BaseFieldOptions> = {},
+): PropertyDecorator {
+	return applyDecorators(
+		BooleanValidation(options),
+		BooleanFieldMetadata(options),
+	);
+}
+
 export const BooleanFieldOptional =
 	createOptionalField<BaseFieldOptions>(BooleanField);
+export const BooleanFieldOptionalMetadata =
+	createOptionalFieldMetadata<BaseFieldOptions>(BooleanFieldMetadata);

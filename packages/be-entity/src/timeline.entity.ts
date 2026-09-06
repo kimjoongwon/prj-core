@@ -1,24 +1,29 @@
 import {
-	BigIntIdField,
-	BigIntIdFieldOptional,
+	BigIntIdFieldMetadata,
+	BigIntIdFieldOptionalMetadata,
 	ClassField,
-	StringField,
-	StringFieldOptional,
+	StringFieldMetadata,
+	StringFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
+import { TimelineSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Session } from "./session.entity";
 import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
 
-export class Timeline extends AbstractEntity {
+@AbstractEntityFields()
+export class Timeline extends TimelineSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true }) timelineId!: string;
+	@Exclude({ toPlainOnly: true })
+	declare timelineId: TimelineSchema["timelineId"];
 
-	@BigIntIdField() spaceId!: bigint;
-	@BigIntIdFieldOptional({ nullable: true }) createdById!: bigint | null;
-	@StringField() name!: string;
-	@StringFieldOptional({ nullable: true }) description!: string | null;
+	@BigIntIdFieldMetadata() declare spaceId: TimelineSchema["spaceId"];
+	@BigIntIdFieldOptionalMetadata({ nullable: true })
+	declare createdById: TimelineSchema["createdById"];
+	@StringFieldMetadata() declare name: TimelineSchema["name"];
+	@StringFieldOptionalMetadata({ nullable: true })
+	declare description: TimelineSchema["description"];
 
 	space?: Space;
 	createdBy?: User;

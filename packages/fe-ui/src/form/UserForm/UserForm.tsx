@@ -1,6 +1,6 @@
 "use client";
 
-import { UserSchema } from "@cocrepo/schema";
+import { UserFormSchema } from "@cocrepo/schema";
 import type { FormSchemaStateContract } from "@cocrepo/type";
 import { observer } from "mobx-react-lite";
 import { TextField } from "../../input/TextField";
@@ -9,7 +9,7 @@ import { Form } from "../Form";
 /**
  * UserForm이 바인딩하는 User 입력 상태입니다.
  */
-export interface UserFormState extends FormSchemaStateContract<UserSchema> {
+export interface UserFormState extends FormSchemaStateContract<UserFormSchema> {
 	name: string;
 	email: string;
 	phone: string;
@@ -34,7 +34,7 @@ export const UserForm = observer(
 				aria-label="회원 정보"
 				className="flex flex-col gap-6"
 				state={state}
-				schema={UserSchema}
+				schema={UserFormSchema}
 				readOnly={readOnly}
 			>
 				<TextField

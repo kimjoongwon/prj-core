@@ -1,18 +1,20 @@
-import { BigIntIdField, ClassField } from "@cocrepo/decorator/field";
+import { BigIntIdFieldMetadata, ClassField } from "@cocrepo/decorator/field";
+import { RoleClassificationSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Category } from "./category.entity";
 import { Role } from "./role.entity";
 
-export class RoleClassification extends AbstractEntity {
+@AbstractEntityFields()
+export class RoleClassification extends RoleClassificationSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	roleClassificationId!: string;
+	declare roleClassificationId: RoleClassificationSchema["roleClassificationId"];
 
-	@BigIntIdField()
-	categoryId!: bigint;
-	@BigIntIdField()
-	roleId!: bigint;
+	@BigIntIdFieldMetadata()
+	declare categoryId: RoleClassificationSchema["categoryId"];
+	@BigIntIdFieldMetadata()
+	declare roleId: RoleClassificationSchema["roleId"];
 
 	@ClassField(() => Category, { required: false })
 	category?: Category;

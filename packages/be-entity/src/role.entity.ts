@@ -1,35 +1,45 @@
 import {
 	ClassField,
-	StringField,
-	StringFieldOptional,
-	ULIDField,
+	StringFieldMetadata,
+	StringFieldOptionalMetadata,
+	ULIDFieldMetadata,
 } from "@cocrepo/decorator/field";
+import { RoleSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { RoleAssignment } from "./role-assignment.entity";
 import { RoleAssociation } from "./role-association.entity";
 import { RoleClassification } from "./role-classification.entity";
 
-export class Role extends AbstractEntity {
+@AbstractEntityFields()
+export class Role extends RoleSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	@ULIDField()
-	roleId!: string;
+	@ULIDFieldMetadata()
+	declare roleId: RoleSchema["roleId"];
 
-	@StringField({
+	@StringFieldMetadata({
 		description: "역할 식별자",
 		maxLength: 50,
 		pattern: "^[A-Z][A-Z0-9_]*$",
 		message:
 			"역할 식별자는 영문 대문자로 시작하며, 영문 대문자, 숫자, 언더스코어만 사용 가능합니다",
 	})
-	name!: string;
+	declare name: RoleSchema["name"];
 
-	@StringFieldOptional({ nullable: true, description: "표시명", maxLength: 50 })
-	displayName!: string | null;
+	@StringFieldOptionalMetadata({
+		nullable: true,
+		description: "표시명",
+		maxLength: 50,
+	})
+	declare displayName: RoleSchema["displayName"];
 
-	@StringFieldOptional({ nullable: true, description: "설명", maxLength: 200 })
-	description!: string | null;
+	@StringFieldOptionalMetadata({
+		nullable: true,
+		description: "설명",
+		maxLength: 200,
+	})
+	declare description: RoleSchema["description"];
 
 	@ClassField(() => RoleClassification, { nullable: true })
 	classification?: RoleClassification;

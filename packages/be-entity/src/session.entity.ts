@@ -1,27 +1,31 @@
 import {
-	BigIntIdField,
+	BigIntIdFieldMetadata,
 	ClassField,
-	DateFieldOptional,
-	EnumField,
-	EnumFieldOptional,
-	StringField,
-	StringFieldOptional,
+	DateFieldOptionalMetadata,
+	EnumFieldMetadata,
+	EnumFieldOptionalMetadata,
+	StringFieldMetadata,
+	StringFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
 import {
+	RecurringDayOfWeek,
+	RepeatCycleTypes,
 	RepeatCycleTypesLabel,
+	SessionTypes,
 	SessionTypesLabel,
 } from "@cocrepo/enum";
-import { RecurringDayOfWeek, RepeatCycleTypes, SessionTypes } from "@cocrepo/enum";
+import { SessionSchema } from "@cocrepo/schema";
 import { Exclude, Transform } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Program } from "./program.entity";
 import { Timeline } from "./timeline.entity";
 
-export class Session extends AbstractEntity {
+@AbstractEntityFields()
+export class Session extends SessionSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true }) sessionId!: string;
+	@Exclude({ toPlainOnly: true }) declare sessionId: SessionSchema["sessionId"];
 
-	@EnumField(() => SessionTypes)
+	@EnumFieldMetadata(() => SessionTypes)
 	@Transform(
 		({ value }) =>
 			typeof value === "string"
@@ -29,8 +33,8 @@ export class Session extends AbstractEntity {
 				: value,
 		{ toPlainOnly: true },
 	)
-	type!: SessionTypes;
-	@EnumFieldOptional(() => RepeatCycleTypes, { nullable: true })
+	declare type: SessionSchema["type"];
+	@EnumFieldOptionalMetadata(() => RepeatCycleTypes, { nullable: true })
 	@Transform(
 		({ value }) =>
 			typeof value === "string"
@@ -38,14 +42,17 @@ export class Session extends AbstractEntity {
 				: value,
 		{ toPlainOnly: true },
 	)
-	repeatCycleType!: RepeatCycleTypes | null;
-	@DateFieldOptional({ nullable: true }) startDateTime!: Date | null;
-	@DateFieldOptional({ nullable: true }) endDateTime!: Date | null;
-	@EnumFieldOptional(() => RecurringDayOfWeek, { nullable: true })
-	recurringDayOfWeek!: RecurringDayOfWeek | null;
-	@BigIntIdField() timelineId!: bigint;
-	@StringField() name!: string;
-	@StringFieldOptional({ nullable: true }) description!: string | null;
+	declare repeatCycleType: SessionSchema["repeatCycleType"];
+	@DateFieldOptionalMetadata({ nullable: true })
+	declare startDateTime: SessionSchema["startDateTime"];
+	@DateFieldOptionalMetadata({ nullable: true })
+	declare endDateTime: SessionSchema["endDateTime"];
+	@EnumFieldOptionalMetadata(() => RecurringDayOfWeek, { nullable: true })
+	declare recurringDayOfWeek: SessionSchema["recurringDayOfWeek"];
+	@BigIntIdFieldMetadata() declare timelineId: SessionSchema["timelineId"];
+	@StringFieldMetadata() declare name: SessionSchema["name"];
+	@StringFieldOptionalMetadata({ nullable: true })
+	declare description: SessionSchema["description"];
 
 	@ClassField(() => Program, { isArray: true })
 	programs?: Program[];

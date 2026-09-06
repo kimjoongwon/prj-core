@@ -1,70 +1,72 @@
 import {
-	BigIntIdField,
-	BigIntIdFieldOptional,
+	BigIntIdFieldMetadata,
+	BigIntIdFieldOptionalMetadata,
 	ClassField,
-	DateField,
-	EnumField,
-	StringFieldOptional,
+	DateFieldMetadata,
+	EnumFieldMetadata,
+	StringFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
 import { TenantAccessRequestStatus } from "@cocrepo/enum";
+import { TenantAccessRequestSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Role } from "./role.entity";
 import { Space } from "./space.entity";
 import { Tenant } from "./tenant.entity";
 import { User } from "./user.entity";
-export class TenantAccessRequest extends AbstractEntity {
+@AbstractEntityFields()
+export class TenantAccessRequest extends TenantAccessRequestSchema {
 	@Exclude({ toPlainOnly: true })
-	tenantAccessRequestId!: string;
-	@BigIntIdField({ description: "신청자 ID" })
-	requesterId!: bigint;
+	declare tenantAccessRequestId: TenantAccessRequestSchema["tenantAccessRequestId"];
+	@BigIntIdFieldMetadata({ description: "신청자 ID" })
+	declare requesterId: TenantAccessRequestSchema["requesterId"];
 
-	@BigIntIdField({ description: "신청 대상 Space ID" })
-	spaceId!: bigint;
+	@BigIntIdFieldMetadata({ description: "신청 대상 Space ID" })
+	declare spaceId: TenantAccessRequestSchema["spaceId"];
 
-	@BigIntIdField({ description: "희망 Role ID" })
-	requestedRoleId!: bigint;
+	@BigIntIdFieldMetadata({ description: "희망 Role ID" })
+	declare requestedRoleId: TenantAccessRequestSchema["requestedRoleId"];
 
-	@BigIntIdFieldOptional({
+	@BigIntIdFieldOptionalMetadata({
 		description: "신청 시점 기존 Role ID",
 		nullable: true,
 	})
-	previousRoleId!: bigint | null;
+	declare previousRoleId: TenantAccessRequestSchema["previousRoleId"];
 
-	@StringFieldOptional({
+	@StringFieldOptionalMetadata({
 		description: "신청 사유",
 		nullable: true,
 	})
-	reason!: string | null;
+	declare reason: TenantAccessRequestSchema["reason"];
 
-	@EnumField(() => TenantAccessRequestStatus, {
+	@EnumFieldMetadata(() => TenantAccessRequestStatus, {
 		description: "신청 상태",
 	})
-	status!: TenantAccessRequestStatus;
+	declare status: TenantAccessRequestSchema["status"];
 
-	@BigIntIdFieldOptional({
+	@BigIntIdFieldOptionalMetadata({
 		description: "검토자 ID",
 		nullable: true,
 	})
-	reviewerId!: bigint | null;
+	declare reviewerId: TenantAccessRequestSchema["reviewerId"];
 
-	@StringFieldOptional({
+	@StringFieldOptionalMetadata({
 		description: "검토 코멘트",
 		nullable: true,
 	})
-	reviewComment!: string | null;
+	declare reviewComment: TenantAccessRequestSchema["reviewComment"];
 
-	@DateField({
+	@DateFieldMetadata({
 		description: "검토 시각",
 		nullable: true,
 	})
-	reviewedAt!: Date | null;
+	declare reviewedAt: TenantAccessRequestSchema["reviewedAt"];
 
-	@BigIntIdFieldOptional({
+	@BigIntIdFieldOptionalMetadata({
 		description: "승인 적용 Tenant ID",
 		nullable: true,
 	})
-	appliedTenantId!: bigint | null;
+	declare appliedTenantId: TenantAccessRequestSchema["appliedTenantId"];
 
 	@ClassField(() => User, { required: false })
 	requester?: User;

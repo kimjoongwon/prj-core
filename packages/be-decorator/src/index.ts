@@ -22,7 +22,6 @@ export * from "./swagger.schema";
 // Transform decorators
 export * from "./transform.decorators";
 // Entity decorators
-export * from "./use-dto.decorator";
 export * from "./use-entity.decorator";
 // Validator decorators
 export * from "./validator.decorators";

@@ -1,4 +1,3 @@
-import { Transform } from "class-transformer";
 import {
 	IsNotEmpty,
 	IsOptional,
@@ -16,12 +15,6 @@ export interface StringDecoratorOptions {
 	minLength?: number;
 	/** 최대 길이 */
 	maxLength?: number;
-	/** 소문자 변환 */
-	toLowerCase?: boolean;
-	/** 대문자 변환 */
-	toUpperCase?: boolean;
-	/** 공백 제거 */
-	trim?: boolean;
 	/** 배열 요소 각각에 적용 */
 	each?: boolean;
 }
@@ -43,15 +36,7 @@ export interface StringDecoratorOptions {
 export function String(
 	options: StringDecoratorOptions = {},
 ): PropertyDecorator {
-	const {
-		required = true,
-		minLength = 1,
-		maxLength,
-		toLowerCase = false,
-		toUpperCase = false,
-		trim = true,
-		each = false,
-	} = options;
+	const { required = true, minLength = 1, maxLength, each = false } = options;
 
 	const decorators: PropertyDecorator[] = [
 		IsString({ each, message: VALIDATION_MESSAGES.STRING_TYPE }),
@@ -80,20 +65,6 @@ export function String(
 			MaxLength(maxLength, {
 				each,
 				message: VALIDATION_MESSAGES.MAX_LENGTH,
-			}),
-		);
-	}
-
-	// 변환
-	if (trim || toLowerCase || toUpperCase) {
-		decorators.push(
-			Transform(({ value }) => {
-				if (typeof value !== "string") return value;
-				let result = value;
-				if (trim) result = result.trim();
-				if (toLowerCase) result = result.toLowerCase();
-				if (toUpperCase) result = result.toUpperCase();
-				return result;
 			}),
 		);
 	}

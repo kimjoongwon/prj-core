@@ -60,7 +60,9 @@ export function hydrateEntity<TEntity>(
 		Object.assign(entity, plainValue);
 		const nestedKeys = NESTED_ENTITY_KEYS[HydratedClass.name] ?? {};
 		for (const [relationKey, RelationClass] of Object.entries(nestedKeys)) {
-			const relationValue = (plainValue as Record<string, unknown>)[relationKey];
+			const relationValue = (plainValue as Record<string, unknown>)[
+				relationKey
+			];
 			if (relationValue == null) continue;
 			if (Array.isArray(relationValue)) {
 				Reflect.set(

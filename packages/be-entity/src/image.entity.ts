@@ -1,23 +1,25 @@
-import { AbstractEntity } from "./abstract.entity";
+import { ImageSchema } from "@cocrepo/schema";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import type { Asset } from "./asset.entity";
 
-export class Image extends AbstractEntity {
+@AbstractEntityFields()
+export class Image extends ImageSchema {
 	/** 공개 식별자 ULID */
-	imageId!: string;
+	declare imageId: ImageSchema["imageId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	width!: number;
-	height!: number;
-	hasAlpha!: boolean;
-	assetId!: bigint;
+	declare width: ImageSchema["width"];
+	declare height: ImageSchema["height"];
+	declare hasAlpha: ImageSchema["hasAlpha"];
+	declare assetId: ImageSchema["assetId"];
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	orientation!: number | null;
-	colorSpace!: string | null;
+	declare orientation: ImageSchema["orientation"];
+	declare colorSpace: ImageSchema["colorSpace"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)

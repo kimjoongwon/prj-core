@@ -1,18 +1,20 @@
-import { BigIntIdField, ClassField } from "@cocrepo/decorator/field";
+import { BigIntIdFieldMetadata, ClassField } from "@cocrepo/decorator/field";
+import { UserClassificationSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Category } from "./category.entity";
 import { User } from "./user.entity";
 
-export class UserClassification extends AbstractEntity {
+@AbstractEntityFields()
+export class UserClassification extends UserClassificationSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	userClassificationId!: string;
+	declare userClassificationId: UserClassificationSchema["userClassificationId"];
 
-	@BigIntIdField()
-	categoryId!: bigint;
-	@BigIntIdField()
-	userId!: bigint;
+	@BigIntIdFieldMetadata()
+	declare categoryId: UserClassificationSchema["categoryId"];
+	@BigIntIdFieldMetadata()
+	declare userId: UserClassificationSchema["userId"];
 	@ClassField(() => User, { required: false })
 	user?: User;
 	@ClassField(() => Category, { required: false })

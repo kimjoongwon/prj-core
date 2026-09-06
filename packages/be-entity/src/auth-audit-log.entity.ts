@@ -1,49 +1,51 @@
 import {
-	BigIntIdField,
-	BigIntIdFieldOptional,
-	DateField,
-	EnumField,
-	StringField,
-	StringFieldOptional,
+	BigIntIdFieldMetadata,
+	BigIntIdFieldOptionalMetadata,
+	DateFieldMetadata,
+	EnumFieldMetadata,
+	StringFieldMetadata,
+	StringFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
 import { AuthAuditResult } from "@cocrepo/enum";
+import { AuthAuditLogSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 
 /**
  * 인증 감사 로그 엔티티
  */
-export class AuthAuditLog extends AbstractEntity {
-	@BigIntIdField({ description: "ID" })
+@AbstractEntityFields()
+export class AuthAuditLog extends AuthAuditLogSchema {
+	@BigIntIdFieldMetadata({ description: "ID" })
 	declare id: bigint;
-	@DateField({ description: "생성일" })
+	@DateFieldMetadata({ description: "생성일" })
 	declare createdAt: Date;
 
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	authAuditLogId!: string;
+	declare authAuditLogId: AuthAuditLogSchema["authAuditLogId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	@StringField({ description: "이메일" })
-	email!: string;
-	@EnumField(() => AuthAuditResult, { description: "결과" })
-	result!: AuthAuditResult;
-	@StringField({ description: "IP 주소" })
-	ipAddress!: string;
+	@StringFieldMetadata({ description: "이메일" })
+	declare email: AuthAuditLogSchema["email"];
+	@EnumFieldMetadata(() => AuthAuditResult, { description: "결과" })
+	declare result: AuthAuditLogSchema["result"];
+	@StringFieldMetadata({ description: "IP 주소" })
+	declare ipAddress: AuthAuditLogSchema["ipAddress"];
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	@BigIntIdFieldOptional({ nullable: true, description: "사용자 ID" })
-	userId!: bigint | null;
-	@StringFieldOptional({ nullable: true, description: "실패 사유" })
-	failureReason!: string | null;
-	@StringFieldOptional({ nullable: true, description: "User Agent" })
-	userAgent!: string | null;
-	@StringFieldOptional({ nullable: true, description: "클라이언트 ID" })
-	clientId!: string | null;
+	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "사용자 ID" })
+	declare userId: AuthAuditLogSchema["userId"];
+	@StringFieldOptionalMetadata({ nullable: true, description: "실패 사유" })
+	declare failureReason: AuthAuditLogSchema["failureReason"];
+	@StringFieldOptionalMetadata({ nullable: true, description: "User Agent" })
+	declare userAgent: AuthAuditLogSchema["userAgent"];
+	@StringFieldOptionalMetadata({ nullable: true, description: "클라이언트 ID" })
+	declare clientId: AuthAuditLogSchema["clientId"];
 
 	// ============================================================================
 	// 도메인 메서드

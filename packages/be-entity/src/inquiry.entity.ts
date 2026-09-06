@@ -1,18 +1,24 @@
 import {
-	BigIntIdField,
-	BigIntIdFieldOptional,
-	BooleanField,
+	BigIntIdFieldMetadata,
+	BigIntIdFieldOptionalMetadata,
+	BooleanFieldMetadata,
 	ClassField,
-	DateField,
-	EnumField,
-	NumberField,
-	StringField,
+	DateFieldMetadata,
+	EnumFieldMetadata,
+	NumberFieldMetadata,
+	StringFieldMetadata,
 } from "@cocrepo/decorator/field";
-
-import { InquiryCategory, InquiryChannel, InquiryPriority, InquirySource, InquiryStatus, SentimentType } from "@cocrepo/enum";
-import { type Prisma } from "@cocrepo/prisma";
+import {
+	InquiryCategory,
+	InquiryChannel,
+	InquiryPriority,
+	InquirySource,
+	InquiryStatus,
+	SentimentType,
+} from "@cocrepo/enum";
+import { InquirySchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { AIAgentLog } from "./ai-agent-log.entity";
 import { InquiryMessage } from "./inquiry-message.entity";
 import { InquiryParticipant } from "./inquiry-participant.entity";
@@ -28,66 +34,71 @@ import { User } from "./user.entity";
  * 문의 접수, 상태 관리, 담당자 배정, SLA 추적, 실시간 채팅 지원 등의 기능을 제공합니다.
  * Space 기반 멀티테넌시를 지원합니다.
  */
-export class Inquiry extends AbstractEntity {
+@AbstractEntityFields()
+export class Inquiry extends InquirySchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true }) inquiryId!: string;
+	@Exclude({ toPlainOnly: true }) declare inquiryId: InquirySchema["inquiryId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	@BigIntIdField({ description: "소속 Space ID" })
-	spaceId!: bigint;
-	@BigIntIdFieldOptional({ nullable: true, description: "생성자 ID" })
-	createdById!: bigint | null;
-	@StringField({ description: "문의 번호" })
-	inquiryNumber!: string;
-	@StringField({ description: "문의 제목" })
-	title!: string;
-	@EnumField(() => InquiryCategory, { description: "문의 카테고리" })
-	category!: InquiryCategory;
-	@EnumField(() => InquiryChannel, { description: "문의 채널" })
-	channel!: InquiryChannel;
-	@EnumField(() => InquirySource, { description: "문의 접수 유형" })
-	source!: InquirySource;
-	@EnumField(() => InquiryStatus, { description: "문의 상태" })
-	status!: InquiryStatus;
-	@EnumField(() => InquiryPriority, { description: "문의 우선순위" })
-	priority!: InquiryPriority;
-	@BooleanField({ description: "SLA 응답 위반 여부" })
-	isSlaResponseBreached!: boolean;
-	@BooleanField({ description: "SLA 해결 위반 여부" })
-	isSlaResolveBreached!: boolean;
-	@BooleanField({ description: "AI 해결 시도 여부" })
-	aiResolutionAttempted!: boolean;
-	@BooleanField({ description: "AI 해결 여부" }) aiResolved!: boolean;
-	@BooleanField({ description: "실시간 채팅 활성화 여부" })
-	isRealtimeChat!: boolean;
-	@NumberField({ description: "읽지 않은 메시지 수" })
-	unreadCount!: number;
+	@BigIntIdFieldMetadata({ description: "소속 Space ID" })
+	declare spaceId: InquirySchema["spaceId"];
+	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "생성자 ID" })
+	declare createdById: InquirySchema["createdById"];
+	@StringFieldMetadata({ description: "문의 번호" })
+	declare inquiryNumber: InquirySchema["inquiryNumber"];
+	@StringFieldMetadata({ description: "문의 제목" })
+	declare title: InquirySchema["title"];
+	@EnumFieldMetadata(() => InquiryCategory, { description: "문의 카테고리" })
+	declare category: InquirySchema["category"];
+	@EnumFieldMetadata(() => InquiryChannel, { description: "문의 채널" })
+	declare channel: InquirySchema["channel"];
+	@EnumFieldMetadata(() => InquirySource, { description: "문의 접수 유형" })
+	declare source: InquirySchema["source"];
+	@EnumFieldMetadata(() => InquiryStatus, { description: "문의 상태" })
+	declare status: InquirySchema["status"];
+	@EnumFieldMetadata(() => InquiryPriority, { description: "문의 우선순위" })
+	declare priority: InquirySchema["priority"];
+	@BooleanFieldMetadata({ description: "SLA 응답 위반 여부" })
+	declare isSlaResponseBreached: InquirySchema["isSlaResponseBreached"];
+	@BooleanFieldMetadata({ description: "SLA 해결 위반 여부" })
+	declare isSlaResolveBreached: InquirySchema["isSlaResolveBreached"];
+	@BooleanFieldMetadata({ description: "AI 해결 시도 여부" })
+	declare aiResolutionAttempted: InquirySchema["aiResolutionAttempted"];
+	@BooleanFieldMetadata({ description: "AI 해결 여부" })
+	declare aiResolved: InquirySchema["aiResolved"];
+	@BooleanFieldMetadata({ description: "실시간 채팅 활성화 여부" })
+	declare isRealtimeChat: InquirySchema["isRealtimeChat"];
+	@NumberFieldMetadata({ description: "읽지 않은 메시지 수" })
+	declare unreadCount: InquirySchema["unreadCount"];
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	@BigIntIdFieldOptional({ nullable: true, description: "고객 ID" })
-	customerId!: bigint | null;
-	@BigIntIdFieldOptional({ nullable: true, description: "담당자 ID" })
-	assigneeId!: bigint | null;
-	@DateField({ nullable: true, description: "첫 응답 일시" })
-	firstResponseAt!: Date | null;
-	@DateField({ nullable: true, description: "해결 일시" })
-	resolvedAt!: Date | null;
-	@DateField({ nullable: true, description: "종료 일시" })
-	closedAt!: Date | null;
-	@DateField({ nullable: true, description: "SLA 응답 기한" })
-	slaResponseDue!: Date | null;
-	@DateField({ nullable: true, description: "SLA 해결 기한" })
-	slaResolveDue!: Date | null;
-	@EnumField(() => SentimentType, { nullable: true, description: "감정 유형" })
-	sentiment!: SentimentType | null;
-	sentimentScore!: number | null;
-	@DateField({ nullable: true, description: "마지막 메시지 일시" })
-	lastMessageAt!: Date | null;
-	metadata!: Prisma.JsonValue | null;
+	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "고객 ID" })
+	declare customerId: InquirySchema["customerId"];
+	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "담당자 ID" })
+	declare assigneeId: InquirySchema["assigneeId"];
+	@DateFieldMetadata({ nullable: true, description: "첫 응답 일시" })
+	declare firstResponseAt: InquirySchema["firstResponseAt"];
+	@DateFieldMetadata({ nullable: true, description: "해결 일시" })
+	declare resolvedAt: InquirySchema["resolvedAt"];
+	@DateFieldMetadata({ nullable: true, description: "종료 일시" })
+	declare closedAt: InquirySchema["closedAt"];
+	@DateFieldMetadata({ nullable: true, description: "SLA 응답 기한" })
+	declare slaResponseDue: InquirySchema["slaResponseDue"];
+	@DateFieldMetadata({ nullable: true, description: "SLA 해결 기한" })
+	declare slaResolveDue: InquirySchema["slaResolveDue"];
+	@EnumFieldMetadata(() => SentimentType, {
+		nullable: true,
+		description: "감정 유형",
+	})
+	declare sentiment: InquirySchema["sentiment"];
+	declare sentimentScore: InquirySchema["sentimentScore"];
+	@DateFieldMetadata({ nullable: true, description: "마지막 메시지 일시" })
+	declare lastMessageAt: InquirySchema["lastMessageAt"];
+	declare metadata: InquirySchema["metadata"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)
@@ -104,7 +115,11 @@ export class Inquiry extends AbstractEntity {
 		description: "스레드 목록",
 	})
 	threads?: InquiryThread[];
-	@ClassField(() => InquiryMessage, { required: false, each: true, isArray: true })
+	@ClassField(() => InquiryMessage, {
+		required: false,
+		each: true,
+		isArray: true,
+	})
 	messages?: InquiryMessage[];
 	@ClassField(() => InquiryParticipant, {
 		isArray: true,

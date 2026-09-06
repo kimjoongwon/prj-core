@@ -1,9 +1,9 @@
+import { EnumValidation } from "@cocrepo/schema";
 import { applyDecorators } from "@nestjs/common";
 import type { ApiPropertyOptions } from "@nestjs/swagger";
-import { IsEnum, NotEquals } from "class-validator";
 import { ApiEnumProperty } from "../../property.decorators";
 import { ToArray } from "../../transform.decorators";
-import { IsNullable, IsUndefinable } from "../../validator.decorators";
+import { IsUndefinable } from "../../validator.decorators";
 import type { BaseFieldOptions } from "../base/field-options.types";
 
 export const EnumFieldKey = "field:enum";
@@ -27,7 +27,7 @@ export const EnumFieldKey = "field:enum";
  * }
  * ```
  */
-export function EnumField<TEnum extends object>(
+export function EnumFieldMetadata<TEnum extends object>(
 	getEnum: () => TEnum,
 	options: Omit<ApiPropertyOptions, "type" | "enum" | "enumName" | "isArray"> &
 		BaseFieldOptions = {},
@@ -37,15 +37,7 @@ export function EnumField<TEnum extends object>(
 		(target: object, propertyKey: string | symbol) => {
 			Reflect.defineMetadata(EnumFieldKey, enumValue, target, propertyKey);
 		},
-		IsEnum(enumValue, { each: options.each }),
 	];
-
-	// Nullable 처리
-	if (options.nullable) {
-		decorators.push(IsNullable());
-	} else {
-		decorators.push(NotEquals(null));
-	}
 
 	// 배열 변환
 	if (options.each) {
@@ -60,6 +52,27 @@ export function EnumField<TEnum extends object>(
 	}
 
 	return applyDecorators(...decorators);
+}
+
+/** API 전용 enum 필드에 Schema 검증과 Swagger·변환을 함께 적용합니다. */
+export function EnumField<TEnum extends object>(
+	getEnum: () => TEnum,
+	options: Omit<ApiPropertyOptions, "type" | "enum" | "enumName" | "isArray"> &
+		BaseFieldOptions = {},
+): PropertyDecorator {
+	return applyDecorators(
+		EnumValidation(getEnum, options),
+		EnumFieldMetadata(getEnum, options),
+	);
+}
+
+/** 선택 입력의 enum 메타데이터만 등록합니다. */
+export function EnumFieldOptionalMetadata<TEnum extends object>(
+	getEnum: () => TEnum,
+	options: Omit<ApiPropertyOptions, "type" | "required" | "enum" | "enumName"> &
+		BaseFieldOptions = {},
+): PropertyDecorator {
+	return EnumFieldMetadata(getEnum, { required: false, ...options });
 }
 
 /**

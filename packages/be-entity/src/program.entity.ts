@@ -1,31 +1,40 @@
 import {
-	BigIntIdField,
+	BigIntIdFieldMetadata,
 	ClassField,
-	NumberField,
-	StringField,
-	StringFieldOptional,
+	NumberFieldMetadata,
+	StringFieldMetadata,
+	StringFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
+import { ProgramSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { ProgramActivity } from "./program-activity.entity";
 import { Routine } from "./routine.entity";
 import { Session } from "./session.entity";
 
-export class Program extends AbstractEntity {
+@AbstractEntityFields()
+export class Program extends ProgramSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true }) programId!: string;
+	@Exclude({ toPlainOnly: true }) declare programId: ProgramSchema["programId"];
 
-	@BigIntIdField() routineId!: bigint;
-	@BigIntIdField() sessionId!: bigint;
-	@BigIntIdField() instructorId!: bigint;
-	@NumberField() capacity!: number;
-	@StringField() name!: string;
-	@StringFieldOptional({ nullable: true }) level!: string | null;
-	@StringFieldOptional({ nullable: true }) routineNameSnapshot!: string | null;
-	@StringFieldOptional({ nullable: true }) routineLabelSnapshot!: string | null;
+	@BigIntIdFieldMetadata() declare routineId: ProgramSchema["routineId"];
+	@BigIntIdFieldMetadata() declare sessionId: ProgramSchema["sessionId"];
+	@BigIntIdFieldMetadata() declare instructorId: ProgramSchema["instructorId"];
+	@NumberFieldMetadata() declare capacity: ProgramSchema["capacity"];
+	@StringFieldMetadata() declare name: ProgramSchema["name"];
+	@StringFieldOptionalMetadata({ nullable: true })
+	declare level: ProgramSchema["level"];
+	@StringFieldOptionalMetadata({ nullable: true })
+	declare routineNameSnapshot: ProgramSchema["routineNameSnapshot"];
+	@StringFieldOptionalMetadata({ nullable: true })
+	declare routineLabelSnapshot: ProgramSchema["routineLabelSnapshot"];
 
 	@ClassField(() => Routine) routine?: Routine;
 	@ClassField(() => Session) session?: Session;
-	@ClassField(() => ProgramActivity, { required: false, each: true, isArray: true })
+	@ClassField(() => ProgramActivity, {
+		required: false,
+		each: true,
+		isArray: true,
+	})
 	programActivities?: ProgramActivity[];
 }

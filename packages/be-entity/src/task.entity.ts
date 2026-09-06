@@ -1,21 +1,24 @@
 import {
-	BigIntIdField,
-	BigIntIdFieldOptional,
+	BigIntIdFieldMetadata,
+	BigIntIdFieldOptionalMetadata,
 	ClassField,
 } from "@cocrepo/decorator/field";
+import { TaskSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Activity } from "./activity.entity";
 import { Exercise } from "./exercise.entity";
 import type { Space } from "./space.entity";
 import type { User } from "./user.entity";
 
-export class Task extends AbstractEntity {
+@AbstractEntityFields()
+export class Task extends TaskSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true }) taskId!: string;
+	@Exclude({ toPlainOnly: true }) declare taskId: TaskSchema["taskId"];
 
-	@BigIntIdField() spaceId!: bigint;
-	@BigIntIdFieldOptional({ nullable: true }) createdById!: bigint | null;
+	@BigIntIdFieldMetadata() declare spaceId: TaskSchema["spaceId"];
+	@BigIntIdFieldOptionalMetadata({ nullable: true })
+	declare createdById: TaskSchema["createdById"];
 
 	space?: Space;
 	createdBy?: User;

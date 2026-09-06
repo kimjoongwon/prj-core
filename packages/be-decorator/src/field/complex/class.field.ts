@@ -1,10 +1,9 @@
+import { ClassValidation } from "@cocrepo/schema";
 import { applyDecorators } from "@nestjs/common";
 import { ApiProperty, type ApiPropertyOptions } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsDefined, NotEquals, ValidateNested } from "class-validator";
 import { ToArray } from "../../transform.decorators";
-import type { Constructor } from "../../use-dto.decorator";
-import { IsNullable } from "../../validator.decorators";
+import type { Constructor } from "@cocrepo/type";
 import type { BaseFieldOptions } from "../base/field-options.types";
 
 /** ClassField에 전달할 검증·변환·Swagger 옵션입니다. */
@@ -51,7 +50,7 @@ export interface ClassFieldOptionsMetadata {
  * }
  * ```
  */
-export function ClassField<TClass extends Constructor>(
+export function ClassFieldMetadata<TClass extends Constructor>(
 	getClass: () => TClass,
 	options: ClassFieldOptions = {},
 ): PropertyDecorator {
@@ -70,22 +69,7 @@ export function ClassField<TClass extends Constructor>(
 		},
 		apiPropertyOptions,
 	};
-	const decorators: PropertyDecorator[] = [
-		Type(getClass),
-		ValidateNested({ each: options.each }),
-	];
-
-	// 필수 여부 검증
-	if (options.required !== false) {
-		decorators.push(IsDefined());
-	}
-
-	// Nullable 처리
-	if (options.nullable) {
-		decorators.push(IsNullable());
-	} else {
-		decorators.push(NotEquals(null));
-	}
+	const decorators: PropertyDecorator[] = [Type(getClass)];
 
 	// Swagger 문서화
 	if (apiPropertyOptions) {
@@ -107,4 +91,15 @@ export function ClassField<TClass extends Constructor>(
 	});
 
 	return applyDecorators(...decorators);
+}
+
+/** 관계 필드는 기존 중첩 검증과 메타데이터를 함께 소유합니다. */
+export function ClassField<TClass extends Constructor>(
+	getClass: () => TClass,
+	options: ClassFieldOptions = {},
+): PropertyDecorator {
+	return applyDecorators(
+		ClassValidation(options),
+		ClassFieldMetadata(getClass, options),
+	);
 }

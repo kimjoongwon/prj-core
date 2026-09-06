@@ -1,32 +1,34 @@
 import {
 	ClassField,
-	StringField,
-	StringFieldOptional,
-	UUIDFieldOptional,
+	StringFieldMetadata,
+	StringFieldOptionalMetadata,
+	UUIDFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
+import { CompanySchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { FitnessCenter } from "./fitness-center.entity";
 
-export class Company extends AbstractEntity {
+@AbstractEntityFields()
+export class Company extends CompanySchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	companyId!: string;
+	declare companyId: CompanySchema["companyId"];
 
-	@StringField()
-	name!: string;
-	@StringFieldOptional({ nullable: true })
-	label!: string | null;
-	@StringField()
-	address!: string;
-	@StringField()
-	phone!: string;
-	@StringField()
-	email!: string;
-	@StringField()
-	businessNo!: string;
-	@UUIDFieldOptional({ nullable: true })
-	logoImageFileId!: string | null;
+	@StringFieldMetadata()
+	declare name: CompanySchema["name"];
+	@StringFieldOptionalMetadata({ nullable: true })
+	declare label: CompanySchema["label"];
+	@StringFieldMetadata()
+	declare address: CompanySchema["address"];
+	@StringFieldMetadata()
+	declare phone: CompanySchema["phone"];
+	@StringFieldMetadata()
+	declare email: CompanySchema["email"];
+	@StringFieldMetadata()
+	declare businessNo: CompanySchema["businessNo"];
+	@UUIDFieldOptionalMetadata({ nullable: true })
+	declare logoImageFileId: CompanySchema["logoImageFileId"];
 
 	@ClassField(() => FitnessCenter, {
 		required: false,

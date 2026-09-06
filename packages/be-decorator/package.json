@@ -43,7 +43,8 @@
     "clean": "rm -rf dist && rm -rf node_modules",
     "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
     "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
-    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
+    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod",
+    "test": "vitest run"
   },
   "dependencies": {
     "@cocrepo/constant": "workspace:*",
@@ -68,6 +69,7 @@
     "@types/node": "catalog:",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

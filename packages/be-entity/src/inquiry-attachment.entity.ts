@@ -1,15 +1,14 @@
 import {
-	BigIntIdField,
-	BooleanField,
-	EnumField,
-	NumberField,
-	StringField,
+	BigIntIdFieldMetadata,
+	BooleanFieldMetadata,
+	EnumFieldMetadata,
+	NumberFieldMetadata,
+	StringFieldMetadata,
 } from "@cocrepo/decorator/field";
-
 import { AttachmentFileType } from "@cocrepo/enum";
-
+import { InquiryAttachmentSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import type { InquiryMessage } from "./inquiry-message.entity";
 
 /**
@@ -18,40 +17,41 @@ import type { InquiryMessage } from "./inquiry-message.entity";
  * 이미지, 문서, 동영상 등 다양한 파일 형식을 지원하며,
  * 실시간 채팅에서 파일 업로드/다운로드를 처리합니다.
  */
-export class InquiryAttachment extends AbstractEntity {
+@AbstractEntityFields()
+export class InquiryAttachment extends InquiryAttachmentSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	inquiryAttachmentId!: string;
+	declare inquiryAttachmentId: InquiryAttachmentSchema["inquiryAttachmentId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	@BigIntIdField({ description: "소속 메시지 ID" })
-	messageId!: bigint;
-	@StringField({ description: "원본 파일명" })
-	fileName!: string;
-	@NumberField({ description: "파일 크기" })
-	fileSize!: bigint;
-	@StringField({ description: "MIME 타입" })
-	mimeType!: string;
-	@EnumField(() => AttachmentFileType, { description: "파일 유형" })
-	fileType!: AttachmentFileType;
-	@StringField({ description: "파일 URL" })
-	url!: string;
-	@BooleanField({ description: "삭제 여부" })
-	isDeleted!: boolean;
+	@BigIntIdFieldMetadata({ description: "소속 메시지 ID" })
+	declare messageId: InquiryAttachmentSchema["messageId"];
+	@StringFieldMetadata({ description: "원본 파일명" })
+	declare fileName: InquiryAttachmentSchema["fileName"];
+	@NumberFieldMetadata({ description: "파일 크기" })
+	declare fileSize: InquiryAttachmentSchema["fileSize"];
+	@StringFieldMetadata({ description: "MIME 타입" })
+	declare mimeType: InquiryAttachmentSchema["mimeType"];
+	@EnumFieldMetadata(() => AttachmentFileType, { description: "파일 유형" })
+	declare fileType: InquiryAttachmentSchema["fileType"];
+	@StringFieldMetadata({ description: "파일 URL" })
+	declare url: InquiryAttachmentSchema["url"];
+	@BooleanFieldMetadata({ description: "삭제 여부" })
+	declare isDeleted: InquiryAttachmentSchema["isDeleted"];
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	@StringField({ nullable: true, description: "썸네일 URL" })
-	thumbnailUrl!: string | null;
-	@NumberField({ nullable: true, description: "이미지 너비" })
-	width!: number | null;
-	@NumberField({ nullable: true, description: "이미지 높이" })
-	height!: number | null;
-	@NumberField({ nullable: true, description: "재생 시간 (초)" })
-	duration!: number | null;
+	@StringFieldMetadata({ nullable: true, description: "썸네일 URL" })
+	declare thumbnailUrl: InquiryAttachmentSchema["thumbnailUrl"];
+	@NumberFieldMetadata({ nullable: true, description: "이미지 너비" })
+	declare width: InquiryAttachmentSchema["width"];
+	@NumberFieldMetadata({ nullable: true, description: "이미지 높이" })
+	declare height: InquiryAttachmentSchema["height"];
+	@NumberFieldMetadata({ nullable: true, description: "재생 시간 (초)" })
+	declare duration: InquiryAttachmentSchema["duration"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)

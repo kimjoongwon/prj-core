@@ -1,22 +1,27 @@
-import { BigIntIdField, DateField } from "@cocrepo/decorator/field";
+import {
+	BigIntIdFieldMetadata,
+	DateFieldMetadata,
+} from "@cocrepo/decorator/field";
+import { PasswordHistorySchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 
-export class PasswordHistory extends AbstractEntity {
-	@BigIntIdField({ description: "ID" })
+@AbstractEntityFields()
+export class PasswordHistory extends PasswordHistorySchema {
+	@BigIntIdFieldMetadata({ description: "ID" })
 	declare id: bigint;
-	@DateField({ description: "생성일" })
+	@DateFieldMetadata({ description: "생성일" })
 	declare createdAt: Date;
 
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	passwordHistoryId!: string;
+	declare passwordHistoryId: PasswordHistorySchema["passwordHistoryId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	@BigIntIdField({ description: "사용자 ID" })
-	userId!: bigint;
+	@BigIntIdFieldMetadata({ description: "사용자 ID" })
+	declare userId: PasswordHistorySchema["userId"];
 	@Exclude({ toPlainOnly: true })
-	passwordHash!: string;
+	declare passwordHash: PasswordHistorySchema["passwordHash"];
 }

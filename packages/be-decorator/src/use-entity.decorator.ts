@@ -1,4 +1,4 @@
-import type { Constructor } from "./use-dto.decorator";
+import type { Constructor } from "@cocrepo/type";
 
 /**
  * DTO 클래스에 Entity 클래스를 연결하는 클래스 데코레이터

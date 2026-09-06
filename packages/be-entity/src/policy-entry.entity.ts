@@ -1,21 +1,23 @@
-import { BigIntIdField, ClassField } from "@cocrepo/decorator/field";
+import { BigIntIdFieldMetadata, ClassField } from "@cocrepo/decorator/field";
+import { PolicyEntrySchema } from "@cocrepo/schema";
 import { ApiProperty } from "@nestjs/swagger";
 import { Exclude } from "class-transformer";
 import { Ability } from "./ability.entity";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import type { Policy } from "./policy.entity";
 /** Policy와 Ability를 연결하는 구성 링크입니다. */
-export class PolicyEntry extends AbstractEntity {
+@AbstractEntityFields()
+export class PolicyEntry extends PolicyEntrySchema {
 	@Exclude({ toPlainOnly: true })
-	policyEntryId!: string;
-	@BigIntIdField({ description: "PolicyEntry ID" })
+	declare policyEntryId: PolicyEntrySchema["policyEntryId"];
+	@BigIntIdFieldMetadata({ description: "PolicyEntry ID" })
 	declare id: bigint;
 
-	@BigIntIdField({ description: "Policy ID" })
-	policyId!: bigint;
+	@BigIntIdFieldMetadata({ description: "Policy ID" })
+	declare policyId: PolicyEntrySchema["policyId"];
 
-	@BigIntIdField({ description: "Ability ID" })
-	abilityId!: bigint;
+	@BigIntIdFieldMetadata({ description: "Ability ID" })
+	declare abilityId: PolicyEntrySchema["abilityId"];
 
 	@ApiProperty({
 		description: "생성 일시",

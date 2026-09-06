@@ -14,9 +14,9 @@ pnpm add @cocrepo/entity
 
 Prisma 모델과 매핑되는 TypeScript 클래스입니다. Swagger 문서화와 유효성 검증 데코레이터가 적용되어 있습니다.
 
-### 기본 Entity와 AggregateRoot의 공통 필드
+### 공통 API 메타데이터
 
-`AbstractEntity`와 `AbstractAggregateEntity`의 `id/createdAt/updatedAt/removedAt` 메타데이터는 내부 `AbstractEntityFields` 데코레이터의 한 정의를 공유합니다. 두 클래스의 기존 상속과 도메인 동작은 그대로 유지하며, 예약처럼 AggregateRoot를 상속하는 Entity도 같은 필드 메타데이터로 응답 DTO를 파생합니다.
+각 Prisma 대응 Entity는 `@cocrepo/schema`의 대응 Schema를 직접 상속합니다. Schema가 공통 검증과 persistence 타입을 소유하고, Entity는 `declare` 필드에 Swagger·Transform metadata와 관계·도메인 메서드를 추가합니다. `AbstractEntityFields`는 공통 API metadata만 등록하며 검증을 중복 등록하지 않습니다. `Reservation`도 Schema를 직접 상속하고 도메인 메서드를 유지합니다.
 
 ### 공통 API 메타데이터의 소유권
 

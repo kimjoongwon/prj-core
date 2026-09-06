@@ -1,24 +1,27 @@
 import {
-	BigIntIdField,
-	BigIntIdFieldOptional,
+	BigIntIdFieldMetadata,
+	BigIntIdFieldOptionalMetadata,
 	ClassField,
-	StringField,
+	StringFieldMetadata,
 } from "@cocrepo/decorator/field";
+import { RoutineSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Activity } from "./activity.entity";
 import { Program } from "./program.entity";
 import type { Space } from "./space.entity";
 import { User } from "./user.entity";
 
-export class Routine extends AbstractEntity {
+@AbstractEntityFields()
+export class Routine extends RoutineSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true }) routineId!: string;
+	@Exclude({ toPlainOnly: true }) declare routineId: RoutineSchema["routineId"];
 
-	@StringField() name!: string;
-	@StringField() label!: string;
-	@BigIntIdField() spaceId!: bigint;
-	@BigIntIdFieldOptional({ nullable: true }) createdById!: bigint | null;
+	@StringFieldMetadata() declare name: RoutineSchema["name"];
+	@StringFieldMetadata() declare label: RoutineSchema["label"];
+	@BigIntIdFieldMetadata() declare spaceId: RoutineSchema["spaceId"];
+	@BigIntIdFieldOptionalMetadata({ nullable: true })
+	declare createdById: RoutineSchema["createdById"];
 
 	space?: Space;
 	@ClassField(() => User, { required: false, nullable: true })

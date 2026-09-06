@@ -1,6 +1,9 @@
 "use client";
 
-import type { CategorySchema } from "@cocrepo/schema";
+import {
+	CategoryFormSchema,
+	validateFieldSync,
+} from "@cocrepo/schema";
 import type {
 	DataGridConfig,
 	DataGridEditRequest,
@@ -18,10 +21,10 @@ import {
 } from "../../data-grid";
 import { Button } from "../Button";
 
-/** CategorySchema의 name을 편집하는 DataGrid 행입니다. */
+/** CategoryFormSchema의 name을 편집하는 DataGrid 행입니다. */
 export interface CategoryEditorRow {
 	id: string;
-	name: CategorySchema["name"];
+	name: CategoryFormSchema["name"];
 	parentId: string | null;
 	sortOrder?: number;
 }
@@ -209,9 +212,11 @@ export const CategoryEditor = observer(
 									},
 									triggers: ["click", "enter", "f2"],
 									validate: ({ value }) =>
-										String(value ?? "").trim().length > 0
-											? undefined
-											: "카테고리 이름을 입력해주세요.",
+										validateFieldSync(
+											CategoryFormSchema,
+											{ name: value },
+											"name",
+										)?.messages[0],
 								},
 							}),
 				},

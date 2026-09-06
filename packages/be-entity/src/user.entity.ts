@@ -1,16 +1,17 @@
 import {
-	BigIntIdField,
-	BooleanField,
+	BigIntIdFieldMetadata,
+	BooleanFieldMetadata,
 	ClassField,
-	DateField,
-	EmailField,
-	NumberField,
-	StringField,
-	ULIDField,
+	DateFieldMetadata,
+	EmailFieldMetadata,
+	NumberFieldMetadata,
+	StringFieldMetadata,
+	ULIDFieldMetadata,
 } from "@cocrepo/decorator/field";
 import { SpaceCategoryName } from "@cocrepo/enum";
+import { UserSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { AuthAuditLog } from "./auth-audit-log.entity";
 import { PasswordHistory } from "./password-history.entity";
 import { Profile } from "./profile.entity";
@@ -46,48 +47,49 @@ type UserTenantSnapshotLike = {
 	} | null;
 };
 
-export class User extends AbstractEntity {
+@AbstractEntityFields()
+export class User extends UserSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	@ULIDField()
-	userId!: string;
+	@ULIDFieldMetadata()
+	declare userId: UserSchema["userId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	@StringField({ description: "사용자 이름" })
-	name!: string;
-	@EmailField({ description: "이메일 주소" })
-	email!: string;
-	@StringField({ description: "연락처" })
-	phone!: string;
+	@StringFieldMetadata({ description: "사용자 이름" })
+	declare name: UserSchema["name"];
+	@EmailFieldMetadata({ description: "이메일 주소" })
+	declare email: UserSchema["email"];
+	@StringFieldMetadata({ description: "연락처" })
+	declare phone: UserSchema["phone"];
 	@Exclude({ toPlainOnly: true })
-	password!: string;
-	@NumberField({ description: "로그인 실패 횟수" })
-	failedLoginAttempts!: number;
-	@BooleanField({ description: "영구 잠금 여부" })
-	isPermanentlyLocked!: boolean;
-	@BooleanField({ description: "비밀번호 변경 필요" })
-	mustChangePassword!: boolean;
-	@BooleanField({ description: "활성 상태" })
-	isActive!: boolean;
+	declare password: UserSchema["password"];
+	@NumberFieldMetadata({ description: "로그인 실패 횟수" })
+	declare failedLoginAttempts: UserSchema["failedLoginAttempts"];
+	@BooleanFieldMetadata({ description: "영구 잠금 여부" })
+	declare isPermanentlyLocked: UserSchema["isPermanentlyLocked"];
+	@BooleanFieldMetadata({ description: "비밀번호 변경 필요" })
+	declare mustChangePassword: UserSchema["mustChangePassword"];
+	@BooleanFieldMetadata({ description: "활성 상태" })
+	declare isActive: UserSchema["isActive"];
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	@DateField({ nullable: true, description: "잠금 해제 시각" })
-	lockedUntil!: Date | null;
-	@DateField({ nullable: true, description: "비밀번호 변경일" })
-	passwordChangedAt!: Date | null;
-	@DateField({ nullable: true, description: "마지막 로그인 시각" })
-	lastLoginAt!: Date | null;
-	@StringField({ nullable: true, description: "마지막 로그인 IP" })
-	lastLoginIp!: string | null;
-	@BigIntIdField({
+	@DateFieldMetadata({ nullable: true, description: "잠금 해제 시각" })
+	declare lockedUntil: UserSchema["lockedUntil"];
+	@DateFieldMetadata({ nullable: true, description: "비밀번호 변경일" })
+	declare passwordChangedAt: UserSchema["passwordChangedAt"];
+	@DateFieldMetadata({ nullable: true, description: "마지막 로그인 시각" })
+	declare lastLoginAt: UserSchema["lastLoginAt"];
+	@StringFieldMetadata({ nullable: true, description: "마지막 로그인 IP" })
+	declare lastLoginIp: UserSchema["lastLoginIp"];
+	@BigIntIdFieldMetadata({
 		nullable: true,
 		description: "현재 선택된 Tenant membership ID",
 	})
-	currentTenantId!: bigint | null;
+	declare currentTenantId: UserSchema["currentTenantId"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)
@@ -115,9 +117,17 @@ export class User extends AbstractEntity {
 		description: "사용자 분류 정보",
 	})
 	classification?: UserClassification;
-	@ClassField(() => PasswordHistory, { required: false, each: true, isArray: true })
+	@ClassField(() => PasswordHistory, {
+		required: false,
+		each: true,
+		isArray: true,
+	})
 	passwordHistory?: PasswordHistory[];
-	@ClassField(() => AuthAuditLog, { required: false, each: true, isArray: true })
+	@ClassField(() => AuthAuditLog, {
+		required: false,
+		each: true,
+		isArray: true,
+	})
 	authAuditLogs?: AuthAuditLog[];
 
 	// ============================================================================

@@ -1,36 +1,52 @@
+import {
+	BooleanFieldMetadata,
+	ClassField,
+	EnumFieldMetadata,
+	StringFieldMetadata,
+	StringFieldOptionalMetadata,
+} from "@cocrepo/decorator/field";
 import { TemplateType } from "@cocrepo/enum";
-import { AbstractEntity } from "./abstract.entity";
-import { BooleanField, ClassField, EnumField, StringField, StringFieldOptional } from "@cocrepo/decorator/field";
+import { TemplateSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { TemplateVariable } from "./template-variable.entity";
 
-export class Template extends AbstractEntity {
+@AbstractEntityFields()
+export class Template extends TemplateSchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true }) templateId!: string;
+	@Exclude({ toPlainOnly: true })
+	declare templateId: TemplateSchema["templateId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
 
 	/** 고유 코드 */
-	@StringField({ description: "고유 코드" }) code!: string;
+	@StringFieldMetadata({ description: "고유 코드" })
+	declare code: TemplateSchema["code"];
 	/** 템플릿 이름 */
-	@StringField({ description: "템플릿 이름" }) name!: string;
+	@StringFieldMetadata({ description: "템플릿 이름" })
+	declare name: TemplateSchema["name"];
 	/** 템플릿 유형 (EMAIL, SMS, PUSH) */
-	@EnumField(() => TemplateType, { description: "템플릿 유형" }) type!: TemplateType;
+	@EnumFieldMetadata(() => TemplateType, { description: "템플릿 유형" })
+	declare type: TemplateSchema["type"];
 	/** 본문 */
-	@StringField({ description: "본문" }) content!: string;
+	@StringFieldMetadata({ description: "본문" })
+	declare content: TemplateSchema["content"];
 	/** 활성 상태 */
-	@BooleanField({ description: "활성 상태" }) isActive!: boolean;
+	@BooleanFieldMetadata({ description: "활성 상태" })
+	declare isActive: TemplateSchema["isActive"];
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
 
 	/** 제목 */
-	@StringFieldOptional({ nullable: true, description: "제목" }) subject!: string | null;
+	@StringFieldOptionalMetadata({ nullable: true, description: "제목" })
+	declare subject: TemplateSchema["subject"];
 	/** 설명 */
-	@StringFieldOptional({ nullable: true, description: "설명" }) description!: string | null;
+	@StringFieldOptionalMetadata({ nullable: true, description: "설명" })
+	declare description: TemplateSchema["description"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)

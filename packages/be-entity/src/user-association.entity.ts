@@ -1,18 +1,20 @@
-import { BigIntIdField, ClassField } from "@cocrepo/decorator/field";
+import { BigIntIdFieldMetadata, ClassField } from "@cocrepo/decorator/field";
+import { UserAssociationSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Group } from "./group.entity";
 import { User } from "./user.entity";
 
-export class UserAssociation extends AbstractEntity {
+@AbstractEntityFields()
+export class UserAssociation extends UserAssociationSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	userAssociationId!: string;
+	declare userAssociationId: UserAssociationSchema["userAssociationId"];
 
-	@BigIntIdField()
-	userId!: bigint;
-	@BigIntIdField()
-	groupId!: bigint;
+	@BigIntIdFieldMetadata()
+	declare userId: UserAssociationSchema["userId"];
+	@BigIntIdFieldMetadata()
+	declare groupId: UserAssociationSchema["groupId"];
 
 	@ClassField(() => Group, { required: false, swagger: false })
 	group?: Group;

@@ -1,33 +1,37 @@
-import { BigIntIdField, ClassField } from "@cocrepo/decorator/field";
+import { BigIntIdFieldMetadata, ClassField } from "@cocrepo/decorator/field";
+import { RoleAssignmentSchema } from "@cocrepo/schema";
 import { ApiProperty } from "@nestjs/swagger";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Policy } from "./policy.entity";
 import type { Role } from "./role.entity";
 /** Role에 Space별 Policy를 할당합니다. */
-export class RoleAssignment extends AbstractEntity {
+@AbstractEntityFields()
+export class RoleAssignment extends RoleAssignmentSchema {
 	@Exclude({ toPlainOnly: true })
-	roleAssignmentId!: string;
-	@BigIntIdField({ description: "Role assignment ID" })
+	declare roleAssignmentId: RoleAssignmentSchema["roleAssignmentId"];
+	@BigIntIdFieldMetadata({ description: "Role assignment ID" })
 	declare id: bigint;
 
-	@BigIntIdField({ description: "Role ID" })
-	roleId!: bigint;
+	@BigIntIdFieldMetadata({ description: "Role ID" })
+	declare roleId: RoleAssignmentSchema["roleId"];
 
-	@BigIntIdField({ description: "Policy ID" })
-	policyId!: bigint;
+	@BigIntIdFieldMetadata({ description: "Policy ID" })
+	declare policyId: RoleAssignmentSchema["policyId"];
 
 	@ApiProperty({
+		type: Boolean,
 		description: "활성화 여부",
 		example: true,
 	})
-	isActive!: boolean;
+	declare isActive: RoleAssignmentSchema["isActive"];
 
 	@ApiProperty({
+		type: Number,
 		description: "우선순위 (높을수록 우선)",
 		example: 0,
 	})
-	priority!: number;
+	declare priority: RoleAssignmentSchema["priority"];
 
 	@ApiProperty({
 		description: "생성 일시",

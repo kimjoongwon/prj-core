@@ -1,53 +1,60 @@
 import {
-	BooleanField,
-	DateFieldOptional,
-	EnumField,
-	NumberField,
-	StringField,
-	StringFieldOptional,
+	BooleanFieldMetadata,
+	DateFieldOptionalMetadata,
+	EnumFieldMetadata,
+	NumberFieldMetadata,
+	StringFieldMetadata,
+	StringFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
-
-import { ServiceDocumentFormat, ServiceDocumentKind, ServiceDocumentPlatform, ServiceDocumentStatus } from "@cocrepo/enum";
-
+import {
+	ServiceDocumentFormat,
+	ServiceDocumentKind,
+	ServiceDocumentPlatform,
+	ServiceDocumentStatus,
+} from "@cocrepo/enum";
+import { ServiceDocumentSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 
 /**
  * ServiceDocument 엔티티
  *
  * 모바일과 web 서비스에 노출되는 약관/동의 문서의 버전 단위 객체입니다.
  */
-export class ServiceDocument extends AbstractEntity {
+@AbstractEntityFields()
+export class ServiceDocument extends ServiceDocumentSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	serviceDocumentId!: string;
+	declare serviceDocumentId: ServiceDocumentSchema["serviceDocumentId"];
 
-	@EnumField(() => ServiceDocumentKind, { description: "문서 종류" })
-	kind!: ServiceDocumentKind;
-	@EnumField(() => ServiceDocumentPlatform, { description: "노출 플랫폼" })
-	platform!: ServiceDocumentPlatform;
-	@StringField({ description: "로케일" })
-	locale!: string;
-	@StringField({ description: "제목" })
-	title!: string;
-	@StringFieldOptional({ nullable: true, description: "요약" })
-	summary!: string | null;
-	@StringField({ description: "본문" })
-	content!: string;
-	@EnumField(() => ServiceDocumentFormat, { description: "본문 형식" })
-	format!: ServiceDocumentFormat;
-	@StringField({ description: "버전" })
-	version!: string;
-	@EnumField(() => ServiceDocumentStatus, { description: "상태" })
-	status!: ServiceDocumentStatus;
-	@BooleanField({ description: "필수 동의 여부" })
-	isRequired!: boolean;
-	@NumberField({ int: true, description: "정렬 순서" })
-	displayOrder!: number;
-	@DateFieldOptional({ nullable: true, description: "효력 시작 시각" })
-	effectiveAt!: Date | null;
-	@DateFieldOptional({ nullable: true, description: "게시 시각" })
-	publishedAt!: Date | null;
+	@EnumFieldMetadata(() => ServiceDocumentKind, { description: "문서 종류" })
+	declare kind: ServiceDocumentSchema["kind"];
+	@EnumFieldMetadata(() => ServiceDocumentPlatform, {
+		description: "노출 플랫폼",
+	})
+	declare platform: ServiceDocumentSchema["platform"];
+	@StringFieldMetadata({ description: "로케일" })
+	declare locale: ServiceDocumentSchema["locale"];
+	@StringFieldMetadata({ description: "제목" })
+	declare title: ServiceDocumentSchema["title"];
+	@StringFieldOptionalMetadata({ nullable: true, description: "요약" })
+	declare summary: ServiceDocumentSchema["summary"];
+	@StringFieldMetadata({ description: "본문" })
+	declare content: ServiceDocumentSchema["content"];
+	@EnumFieldMetadata(() => ServiceDocumentFormat, { description: "본문 형식" })
+	declare format: ServiceDocumentSchema["format"];
+	@StringFieldMetadata({ description: "버전" })
+	declare version: ServiceDocumentSchema["version"];
+	@EnumFieldMetadata(() => ServiceDocumentStatus, { description: "상태" })
+	declare status: ServiceDocumentSchema["status"];
+	@BooleanFieldMetadata({ description: "필수 동의 여부" })
+	declare isRequired: ServiceDocumentSchema["isRequired"];
+	@NumberFieldMetadata({ int: true, description: "정렬 순서" })
+	declare displayOrder: ServiceDocumentSchema["displayOrder"];
+	@DateFieldOptionalMetadata({ nullable: true, description: "효력 시작 시각" })
+	declare effectiveAt: ServiceDocumentSchema["effectiveAt"];
+	@DateFieldOptionalMetadata({ nullable: true, description: "게시 시각" })
+	declare publishedAt: ServiceDocumentSchema["publishedAt"];
 
 	isPublished(): boolean {
 		return this.status === "PUBLISHED" && this.removedAt === null;

@@ -1,68 +1,71 @@
 import {
-	BigIntIdField,
-	BigIntIdFieldOptional,
+	BigIntIdFieldMetadata,
+	BigIntIdFieldOptionalMetadata,
 	ClassField,
-	EnumField,
-	NumberField,
-	NumberFieldOptional,
-	StringField,
+	EnumFieldMetadata,
+	NumberFieldMetadata,
+	NumberFieldOptionalMetadata,
+	StringFieldMetadata,
 } from "@cocrepo/decorator/field";
-
 import { DerivativeKind } from "@cocrepo/enum";
+import { DerivativeSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Asset } from "./asset.entity";
 import type { Space } from "./space.entity";
 import { User } from "./user.entity";
 
-export class Derivative extends AbstractEntity {
+@AbstractEntityFields()
+export class Derivative extends DerivativeSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	derivativeId!: string;
+	declare derivativeId: DerivativeSchema["derivativeId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	@BigIntIdField({ description: "소속 Space ID" })
-	spaceId!: bigint;
-	@BigIntIdFieldOptional({ nullable: true, description: "생성자 ID" })
-	createdById!: bigint | null;
-	@BigIntIdField({ description: "원본 에셋 ID" })
-	assetId!: bigint;
-	@EnumField(() => DerivativeKind, {
+	@BigIntIdFieldMetadata({ description: "소속 Space ID" })
+	declare spaceId: DerivativeSchema["spaceId"];
+	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "생성자 ID" })
+	declare createdById: DerivativeSchema["createdById"];
+	@BigIntIdFieldMetadata({ description: "원본 에셋 ID" })
+	declare assetId: DerivativeSchema["assetId"];
+	@EnumFieldMetadata(() => DerivativeKind, {
 		description: "파생 리소스 종류 (THUMBNAIL, PREVIEW, TRANSCODE, TEXT)",
 	})
-	kind!: DerivativeKind;
-	@StringField({ description: "프로필명 (예: thumbnail-256, preview-1080p)" })
-	profile!: string;
-	@StringField({ description: "스토리지 저장 키" })
-	storageKey!: string;
-	@StringField({ description: "MIME 타입" })
-	mimeType!: string;
-	@NumberField({ description: "파일 크기 (바이트)", int: true })
-	sizeBytes!: bigint;
+	declare kind: DerivativeSchema["kind"];
+	@StringFieldMetadata({
+		description: "프로필명 (예: thumbnail-256, preview-1080p)",
+	})
+	declare profile: DerivativeSchema["profile"];
+	@StringFieldMetadata({ description: "스토리지 저장 키" })
+	declare storageKey: DerivativeSchema["storageKey"];
+	@StringFieldMetadata({ description: "MIME 타입" })
+	declare mimeType: DerivativeSchema["mimeType"];
+	@NumberFieldMetadata({ description: "파일 크기 (바이트)", int: true })
+	declare sizeBytes: DerivativeSchema["sizeBytes"];
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	@NumberFieldOptional({
+	@NumberFieldOptionalMetadata({
 		nullable: true,
 		description: "너비 (이미지/비디오)",
 		int: true,
 	})
-	width!: number | null;
-	@NumberFieldOptional({
+	declare width: DerivativeSchema["width"];
+	@NumberFieldOptionalMetadata({
 		nullable: true,
 		description: "높이 (이미지/비디오)",
 		int: true,
 	})
-	height!: number | null;
-	@NumberFieldOptional({
+	declare height: DerivativeSchema["height"];
+	@NumberFieldOptionalMetadata({
 		nullable: true,
 		description: "재생 시간 (밀리초, 비디오)",
 		int: true,
 	})
-	durationMs!: number | null;
+	declare durationMs: DerivativeSchema["durationMs"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)

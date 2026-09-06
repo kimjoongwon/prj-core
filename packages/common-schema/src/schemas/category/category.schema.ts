@@ -1,12 +1,24 @@
-import { String } from "../../decorators";
+import type { Category as PrismaCategory } from "@cocrepo/prisma";
+import {
+	BigIntIdValidation,
+	BigIntIdValidationOptional,
+	StringValidation,
+} from "../../decorators/model-validation";
+import { AbstractSchema } from "../abstract.schema";
 
-/** Category 모델의 공용 입력 검증 규칙입니다. */
-export class CategorySchema {
-	/** Category 이름 입력값입니다. */
-	@String()
-	name: string;
+/** Category의 DB 필드 타입과 공통 검증입니다. */
+export class CategorySchema extends AbstractSchema implements PrismaCategory {
+	categoryId!: PrismaCategory["categoryId"];
 
-	/** 상위 Category id입니다. 값이 없으면 최상위 Category입니다. */
-	@String({ required: false })
-	parentId?: string | null;
+	@StringValidation()
+	name!: PrismaCategory["name"];
+
+	@BigIntIdValidation({ nullable: true })
+	parentId!: PrismaCategory["parentId"];
+
+	@BigIntIdValidation()
+	spaceId!: PrismaCategory["spaceId"];
+
+	@BigIntIdValidationOptional({ nullable: true })
+	createdById!: PrismaCategory["createdById"];
 }

@@ -1,14 +1,15 @@
 import {
-	BigIntIdField,
-	BigIntIdFieldOptional,
-	DateField,
-	EnumField,
-	NumberField,
+	BigIntIdFieldMetadata,
+	BigIntIdFieldOptionalMetadata,
+	DateFieldMetadata,
+	EnumFieldMetadata,
+	NumberFieldMetadata,
 } from "@cocrepo/decorator/field";
 import { SentimentType } from "@cocrepo/enum";
 import { type Prisma } from "@cocrepo/prisma";
+import { SentimentAnalysisSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import type { Inquiry } from "./inquiry.entity";
 import type { InquiryMessage } from "./inquiry-message.entity";
 
@@ -18,34 +19,38 @@ import type { InquiryMessage } from "./inquiry-message.entity";
  * AI 기반 감정 분석을 통해 고객의 감정 상태(긍정, 중립, 부정)와
  * 신뢰도를 추적합니다. 실시간 채팅에서 메시지별 감정 변화를 모니터링합니다.
  */
-export class SentimentAnalysis extends AbstractEntity {
+@AbstractEntityFields()
+export class SentimentAnalysis extends SentimentAnalysisSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	sentimentAnalysisId!: string;
+	declare sentimentAnalysisId: SentimentAnalysisSchema["sentimentAnalysisId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	@BigIntIdField({ description: "소속 문의 ID" })
-	inquiryId!: bigint;
-	@EnumField(() => SentimentType, { description: "감정 유형" })
-	sentiment!: SentimentType;
-	@NumberField({ description: "감정 점수 (-1.0 ~ 1.0)" })
-	score!: number;
-	@NumberField({ description: "분석 신뢰도 (0.0 ~ 1.0)" })
-	confidence!: number;
-	@DateField({ description: "분석 일시" })
-	analyzedAt!: Date;
+	@BigIntIdFieldMetadata({ description: "소속 문의 ID" })
+	declare inquiryId: SentimentAnalysisSchema["inquiryId"];
+	@EnumFieldMetadata(() => SentimentType, { description: "감정 유형" })
+	declare sentiment: SentimentAnalysisSchema["sentiment"];
+	@NumberFieldMetadata({ description: "감정 점수 (-1.0 ~ 1.0)" })
+	declare score: SentimentAnalysisSchema["score"];
+	@NumberFieldMetadata({ description: "분석 신뢰도 (0.0 ~ 1.0)" })
+	declare confidence: SentimentAnalysisSchema["confidence"];
+	@DateFieldMetadata({ description: "분석 일시" })
+	declare analyzedAt: SentimentAnalysisSchema["analyzedAt"];
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	@BigIntIdFieldOptional({ description: "분석 대상 메시지 ID" })
-	messageId!: bigint | null;
-	emotions!: Prisma.JsonValue | null;
-	keywords!: Prisma.JsonValue | null;
-	@NumberField({ nullable: true, description: "긴급도 점수 (0.0 ~ 1.0)" })
-	urgency!: number | null;
+	@BigIntIdFieldOptionalMetadata({ description: "분석 대상 메시지 ID" })
+	declare messageId: SentimentAnalysisSchema["messageId"];
+	declare emotions: SentimentAnalysisSchema["emotions"];
+	declare keywords: SentimentAnalysisSchema["keywords"];
+	@NumberFieldMetadata({
+		nullable: true,
+		description: "긴급도 점수 (0.0 ~ 1.0)",
+	})
+	declare urgency: SentimentAnalysisSchema["urgency"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)

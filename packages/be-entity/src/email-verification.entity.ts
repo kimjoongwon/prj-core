@@ -1,55 +1,69 @@
 import {
-	BigIntIdField,
-	BigIntIdFieldOptional,
+	BigIntIdFieldMetadata,
+	BigIntIdFieldOptionalMetadata,
 	ClassField,
-	DateField,
-	DateFieldOptional,
-	EnumField,
-	NumberField,
-	StringField,
-	StringFieldOptional,
+	DateFieldMetadata,
+	DateFieldOptionalMetadata,
+	EnumFieldMetadata,
+	NumberFieldMetadata,
+	StringFieldMetadata,
+	StringFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
 import { EmailVerificationStatus } from "@cocrepo/enum";
+import { EmailVerificationSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { User } from "./user.entity";
 
-export class EmailVerification extends AbstractEntity {
+@AbstractEntityFields()
+export class EmailVerification extends EmailVerificationSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	emailVerificationId!: string;
+	declare emailVerificationId: EmailVerificationSchema["emailVerificationId"];
 
-	@StringField({ description: "이메일" })
-	email!: string;
-	@StringField({ description: "이름" })
-	name!: string;
-	nickname!: string;
-	@StringField({ description: "전화번호" })
-	phone!: string;
-	@StringField({ description: "주소" })
-	address!: string;
-	@BigIntIdField({ description: "소속 Space ID" })
-	spaceId!: bigint;
+	@StringFieldMetadata({ description: "이메일" })
+	declare email: EmailVerificationSchema["email"];
+	@StringFieldMetadata({ description: "이름" })
+	declare name: EmailVerificationSchema["name"];
+	declare nickname: EmailVerificationSchema["nickname"];
+	@StringFieldMetadata({ description: "전화번호" })
+	declare phone: EmailVerificationSchema["phone"];
+	@StringFieldMetadata({ description: "주소" })
+	declare address: EmailVerificationSchema["address"];
+	@BigIntIdFieldMetadata({ description: "소속 Space ID" })
+	declare spaceId: EmailVerificationSchema["spaceId"];
 	@Exclude({ toPlainOnly: true })
-	passwordHash!: string;
+	declare passwordHash: EmailVerificationSchema["passwordHash"];
 	@Exclude({ toPlainOnly: true })
-	tokenHash!: string;
-	@EnumField(() => EmailVerificationStatus, { description: "상태" })
-	status!: EmailVerificationStatus;
-	@DateField({ description: "만료 시각" })
-	expiresAt!: Date;
-	@DateFieldOptional({ nullable: true, description: "인증 시각" })
-	verifiedAt!: Date | null;
-	@DateFieldOptional({ nullable: true, description: "마지막 발송 시각" })
-	lastSentAt!: Date | null;
-	@NumberField({ description: "발송 횟수", min: 0 })
-	sendCount!: number;
-	@StringFieldOptional({ nullable: true, description: "마지막 발송 상태" })
-	lastSendStatus!: string | null;
-	@StringFieldOptional({ nullable: true, description: "마지막 발송 오류" })
-	lastSendError!: string | null;
-	@BigIntIdFieldOptional({ nullable: true, description: "인증 완료 사용자 ID" })
-	verifiedUserId!: bigint | null;
+	declare tokenHash: EmailVerificationSchema["tokenHash"];
+	@EnumFieldMetadata(() => EmailVerificationStatus, { description: "상태" })
+	declare status: EmailVerificationSchema["status"];
+	@DateFieldMetadata({ description: "만료 시각" })
+	declare expiresAt: EmailVerificationSchema["expiresAt"];
+	@DateFieldOptionalMetadata({ nullable: true, description: "인증 시각" })
+	declare verifiedAt: EmailVerificationSchema["verifiedAt"];
+	@DateFieldOptionalMetadata({
+		nullable: true,
+		description: "마지막 발송 시각",
+	})
+	declare lastSentAt: EmailVerificationSchema["lastSentAt"];
+	@NumberFieldMetadata({ description: "발송 횟수", min: 0 })
+	declare sendCount: EmailVerificationSchema["sendCount"];
+	@StringFieldOptionalMetadata({
+		nullable: true,
+		description: "마지막 발송 상태",
+	})
+	declare lastSendStatus: EmailVerificationSchema["lastSendStatus"];
+	@StringFieldOptionalMetadata({
+		nullable: true,
+		description: "마지막 발송 오류",
+	})
+	declare lastSendError: EmailVerificationSchema["lastSendError"];
+	@BigIntIdFieldOptionalMetadata({
+		nullable: true,
+		description: "인증 완료 사용자 ID",
+	})
+	declare verifiedUserId: EmailVerificationSchema["verifiedUserId"];
 	@ClassField(() => User, { required: false, nullable: true })
 	verifiedUser?: User | null;
 }

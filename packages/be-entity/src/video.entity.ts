@@ -1,25 +1,27 @@
-import { AbstractEntity } from "./abstract.entity";
+import { VideoSchema } from "@cocrepo/schema";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import type { Asset } from "./asset.entity";
 
-export class Video extends AbstractEntity {
+@AbstractEntityFields()
+export class Video extends VideoSchema {
 	/** 공개 식별자 ULID */
-	videoId!: string;
+	declare videoId: VideoSchema["videoId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	width!: number;
-	height!: number;
-	durationMs!: number;
-	hasAudio!: boolean;
-	assetId!: bigint;
+	declare width: VideoSchema["width"];
+	declare height: VideoSchema["height"];
+	declare durationMs: VideoSchema["durationMs"];
+	declare hasAudio: VideoSchema["hasAudio"];
+	declare assetId: VideoSchema["assetId"];
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	frameRate!: number | null;
-	codec!: string | null;
-	bitrate!: number | null;
+	declare frameRate: VideoSchema["frameRate"];
+	declare codec: VideoSchema["codec"];
+	declare bitrate: VideoSchema["bitrate"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)

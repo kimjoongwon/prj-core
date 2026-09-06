@@ -17,13 +17,13 @@
 import type { TranslationResponseDtoLanguageCode } from "./translationResponseDtoLanguageCode";
 
 export interface TranslationResponseDto {
-	/** 생성일시 */
-	createdAt: Date;
 	/**
 	 * 수정일시
 	 * @nullable
 	 */
 	updatedAt: Date | null;
+	/** 생성일시 */
+	createdAt: Date;
 	/** 언어 코드 */
 	languageCode: TranslationResponseDtoLanguageCode;
 	/** 번역 키 */

@@ -1,6 +1,6 @@
 import { ClassField } from "@cocrepo/decorator/field";
-import type { AIAgentAction, Prisma } from "@cocrepo/prisma";
-import { AbstractEntity } from "./abstract.entity";
+import { AIAgentLogSchema } from "@cocrepo/schema";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Inquiry } from "./inquiry.entity";
 import { InquiryMessage } from "./inquiry-message.entity";
 
@@ -10,29 +10,30 @@ import { InquiryMessage } from "./inquiry-message.entity";
  * AI 초안 생성, 자동 분류, 감정 분석, 자동 응답 등
  * AI 기능 사용 내역을 추적하여 AI 성능 모니터링 및 감사 로그를 제공합니다.
  */
-export class AIAgentLog extends AbstractEntity {
+@AbstractEntityFields()
+export class AIAgentLog extends AIAgentLogSchema {
 	/** 공개 식별자 ULID */
-	aiAgentLogId!: string;
+	declare aiAgentLogId: AIAgentLogSchema["aiAgentLogId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	inquiryId!: bigint;
-	action!: AIAgentAction;
+	declare inquiryId: AIAgentLogSchema["inquiryId"];
+	declare action: AIAgentLogSchema["action"];
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	messageId!: bigint | null;
-	input!: Prisma.JsonValue | null;
-	output!: Prisma.JsonValue | null;
-	confidence!: number | null;
-	wasAccepted!: boolean | null;
-	wasModified!: boolean | null;
-	responseTimeMs!: number | null;
-	model!: string | null;
-	tokenCount!: number | null;
-	errorMessage!: string | null;
+	declare messageId: AIAgentLogSchema["messageId"];
+	declare input: AIAgentLogSchema["input"];
+	declare output: AIAgentLogSchema["output"];
+	declare confidence: AIAgentLogSchema["confidence"];
+	declare wasAccepted: AIAgentLogSchema["wasAccepted"];
+	declare wasModified: AIAgentLogSchema["wasModified"];
+	declare responseTimeMs: AIAgentLogSchema["responseTimeMs"];
+	declare model: AIAgentLogSchema["model"];
+	declare tokenCount: AIAgentLogSchema["tokenCount"];
+	declare errorMessage: AIAgentLogSchema["errorMessage"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)

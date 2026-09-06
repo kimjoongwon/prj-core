@@ -29,3 +29,11 @@ export function createOptionalField<T extends BaseFieldOptions>(
 		);
 	};
 }
+
+/** 선택 입력의 Swagger 표시만 적용하며 검증 조건을 추가하지 않습니다. */
+export function createOptionalFieldMetadata<T extends BaseFieldOptions>(
+	fieldDecorator: (options?: unknown) => PropertyDecorator,
+) {
+	return (options?: OptionalFieldOptions<T>): PropertyDecorator =>
+		fieldDecorator({ required: false, ...options });
+}

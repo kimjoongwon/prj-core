@@ -29,3 +29,7 @@ Prisma 대응 enum은 클래스 인스턴스가 아닌 생성된 문자열 상�
 ## 검증
 
 `pnpm --filter @cocrepo/enum type-check`, `pnpm --filter @cocrepo/enum lint`, `pnpm --filter @cocrepo/enum test`로 생성 enum 재export 동일성, 라벨의 완전성, 문의 상태 전이 계약을 검증합니다.
+
+### 런타임별 진입점
+
+ESM·브라우저 번들러는 `src/index.ts`를 사용하고 CommonJS는 빌드된 `dist/index.js`를 사용합니다. CommonJS에서 TypeScript ESM barrel의 확장자 없는 import를 직접 실행하지 않도록 `require` 조건을 명시합니다. 두 경로 모두 Prisma Client 대신 `/enums` 전용 진입점을 사용합니다.

@@ -1,16 +1,15 @@
 import {
-	BigIntIdField,
-	BigIntIdFieldOptional,
-	BooleanField,
-	DateField,
-	EnumField,
-	NumberField,
+	BigIntIdFieldMetadata,
+	BigIntIdFieldOptionalMetadata,
+	BooleanFieldMetadata,
+	DateFieldMetadata,
+	EnumFieldMetadata,
+	NumberFieldMetadata,
 } from "@cocrepo/decorator/field";
-
 import { InquiryParticipantRole } from "@cocrepo/enum";
-
+import { InquiryParticipantSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import type { Inquiry } from "./inquiry.entity";
 import type { InquiryThread } from "./inquiry-thread.entity";
 import type { User } from "./user.entity";
@@ -21,40 +20,46 @@ import type { User } from "./user.entity";
  * 온라인/오프라인 상태, 타이핑 여부, 마지막 접속 시간 등을 추적하여
  * 실시간 채팅 경험을 제공합니다.
  */
-export class InquiryParticipant extends AbstractEntity {
+@AbstractEntityFields()
+export class InquiryParticipant extends InquiryParticipantSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	inquiryParticipantId!: string;
+	declare inquiryParticipantId: InquiryParticipantSchema["inquiryParticipantId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	@BigIntIdField({ description: "소속 문의 ID" })
-	inquiryId!: bigint;
-	@BigIntIdField({ description: "참여자 ID" })
-	userId!: bigint;
-	@EnumField(() => InquiryParticipantRole, { description: "참여자 역할" })
-	role!: InquiryParticipantRole;
-	@BooleanField({ description: "온라인 여부" })
-	isOnline!: boolean;
-	@BooleanField({ description: "타이핑 중 여부" })
-	isTyping!: boolean;
-	@NumberField({ description: "읽지 않은 메시지 수" })
-	unreadCount!: number;
-	@DateField({ description: "참여 일시" })
-	joinedAt!: Date;
+	@BigIntIdFieldMetadata({ description: "소속 문의 ID" })
+	declare inquiryId: InquiryParticipantSchema["inquiryId"];
+	@BigIntIdFieldMetadata({ description: "참여자 ID" })
+	declare userId: InquiryParticipantSchema["userId"];
+	@EnumFieldMetadata(() => InquiryParticipantRole, {
+		description: "참여자 역할",
+	})
+	declare role: InquiryParticipantSchema["role"];
+	@BooleanFieldMetadata({ description: "온라인 여부" })
+	declare isOnline: InquiryParticipantSchema["isOnline"];
+	@BooleanFieldMetadata({ description: "타이핑 중 여부" })
+	declare isTyping: InquiryParticipantSchema["isTyping"];
+	@NumberFieldMetadata({ description: "읽지 않은 메시지 수" })
+	declare unreadCount: InquiryParticipantSchema["unreadCount"];
+	@DateFieldMetadata({ description: "참여 일시" })
+	declare joinedAt: InquiryParticipantSchema["joinedAt"];
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	@BigIntIdFieldOptional({ nullable: true, description: "소속 스레드 ID" })
-	threadId!: bigint | null;
-	@DateField({ nullable: true, description: "마지막 접속 시간" })
-	lastSeenAt!: Date | null;
-	@DateField({ nullable: true, description: "마지막 읽은 시간" })
-	lastReadAt!: Date | null;
-	@DateField({ nullable: true, description: "나간 일시" })
-	leftAt!: Date | null;
+	@BigIntIdFieldOptionalMetadata({
+		nullable: true,
+		description: "소속 스레드 ID",
+	})
+	declare threadId: InquiryParticipantSchema["threadId"];
+	@DateFieldMetadata({ nullable: true, description: "마지막 접속 시간" })
+	declare lastSeenAt: InquiryParticipantSchema["lastSeenAt"];
+	@DateFieldMetadata({ nullable: true, description: "마지막 읽은 시간" })
+	declare lastReadAt: InquiryParticipantSchema["lastReadAt"];
+	@DateFieldMetadata({ nullable: true, description: "나간 일시" })
+	declare leftAt: InquiryParticipantSchema["leftAt"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)

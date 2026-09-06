@@ -1,58 +1,34 @@
+import { DateValidation } from "@cocrepo/schema";
 import { applyDecorators } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsDate, NotEquals } from "class-validator";
-import { IsNullable } from "../../validator.decorators";
 import type {
 	BaseFieldOptions,
 	FieldDecoratorOptions,
 } from "../base/field-options.types";
-import { createOptionalField } from "../base/optional-field.factory";
+import {
+	createOptionalField,
+	createOptionalFieldMetadata,
+} from "../base/optional-field.factory";
 
-/**
- * 날짜 필드 데코레이터
- *
- * @example
- * ```typescript
- * class Dto {
- *   @DateField()
- *   createdAt: Date;
- *
- *   @DateField({ nullable: true })
- *   deletedAt: Date | null;
- * }
- * ```
- */
-export function DateField(
+/** Schema 검증을 상속한 Entity에 Swagger와 변환만 추가합니다. */
+export function DateFieldMetadata(
 	options: FieldDecoratorOptions<BaseFieldOptions> = {},
 ): PropertyDecorator {
-	const decorators: PropertyDecorator[] = [Type(() => Date), IsDate()];
-
-	// Nullable 처리
-	if (options.nullable) {
-		decorators.push(IsNullable());
-	} else {
-		decorators.push(NotEquals(null));
-	}
-
-	// Swagger 문서화
-	if (options.swagger !== false) {
+	const decorators: PropertyDecorator[] = [Type(() => Date)];
+	if (options.swagger !== false)
 		decorators.push(ApiProperty({ type: Date, ...options }));
-	}
-
 	return applyDecorators(...decorators);
 }
 
-/**
- * Optional 날짜 필드 데코레이터
- *
- * @example
- * ```typescript
- * class Dto {
- *   @DateFieldOptional()
- *   optionalDate?: Date;
- * }
- * ```
- */
+/** API 전용 필드에 공통 검증과 Swagger·변환을 함께 적용합니다. */
+export function DateField(
+	options: FieldDecoratorOptions<BaseFieldOptions> = {},
+): PropertyDecorator {
+	return applyDecorators(DateValidation(options), DateFieldMetadata(options));
+}
+
 export const DateFieldOptional =
 	createOptionalField<BaseFieldOptions>(DateField);
+export const DateFieldOptionalMetadata =
+	createOptionalFieldMetadata<BaseFieldOptions>(DateFieldMetadata);

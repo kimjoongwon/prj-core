@@ -1,4 +1,5 @@
-import { AbstractEntity } from "./abstract.entity";
+import { InquiryTagSchema } from "@cocrepo/schema";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import type { Inquiry } from "./inquiry.entity";
 
 /**
@@ -6,20 +7,21 @@ import type { Inquiry } from "./inquiry.entity";
  *
  * 문의에 태그를 부여하여 분류 및 검색에 활용합니다.
  */
-export class InquiryTag extends AbstractEntity {
+@AbstractEntityFields()
+export class InquiryTag extends InquiryTagSchema {
 	/** 공개 식별자 ULID */
-	inquiryTagId!: string;
+	declare inquiryTagId: InquiryTagSchema["inquiryTagId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	inquiryId!: bigint;
-	name!: string;
+	declare inquiryId: InquiryTagSchema["inquiryId"];
+	declare name: InquiryTagSchema["name"];
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	color!: string | null;
+	declare color: InquiryTagSchema["color"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)

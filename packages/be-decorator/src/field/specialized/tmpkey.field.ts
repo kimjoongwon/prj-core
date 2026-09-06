@@ -1,47 +1,32 @@
+import { TmpKeyValidation } from "@cocrepo/schema";
 import { applyDecorators } from "@nestjs/common";
 import type { ApiPropertyOptions } from "@nestjs/swagger";
-import { IsTmpKey as IsTemporaryKey } from "../../validator.decorators";
 import type { StringFieldOptions } from "../base/field-options.types";
-import { createOptionalField } from "../base/optional-field.factory";
-import { StringField } from "../primitives/string.field";
+import {
+	createOptionalField,
+	createOptionalFieldMetadata,
+} from "../base/optional-field.factory";
+import { StringFieldMetadata } from "../primitives/string.field";
 
-/**
- * 임시 키 필드 데코레이터
- *
- * 임시 키(TmpKey) 형식 검증
- *
- * @example
- * ```typescript
- * class UploadDto {
- *   @TmpKeyField()
- *   fileKey: string;
- *
- *   @TmpKeyField({ each: true })
- *   fileKeys: string[];
- * }
- * ```
- */
-export function TmpKeyField(
+/** Schema 검증을 상속한 Entity에 Swagger와 변환만 추가합니다. */
+export function TmpKeyFieldMetadata(
 	options: Omit<ApiPropertyOptions, "type"> & StringFieldOptions = {},
 ): PropertyDecorator {
-	const decorators: PropertyDecorator[] = [
-		StringField(options),
-		IsTemporaryKey({ each: options.each }),
-	];
-
+	const decorators: PropertyDecorator[] = [StringFieldMetadata(options)];
 	return applyDecorators(...decorators);
 }
 
-/**
- * Optional 임시 키 필드 데코레이터
- *
- * @example
- * ```typescript
- * class UploadDto {
- *   @TmpKeyFieldOptional()
- *   optionalKey?: string;
- * }
- * ```
- */
+/** API 전용 필드에 공통 검증과 Swagger·변환을 함께 적용합니다. */
+export function TmpKeyField(
+	options: Omit<ApiPropertyOptions, "type"> & StringFieldOptions = {},
+): PropertyDecorator {
+	return applyDecorators(
+		TmpKeyValidation(options),
+		TmpKeyFieldMetadata(options),
+	);
+}
+
 export const TmpKeyFieldOptional =
 	createOptionalField<StringFieldOptions>(TmpKeyField);
+export const TmpKeyFieldOptionalMetadata =
+	createOptionalFieldMetadata<StringFieldOptions>(TmpKeyFieldMetadata);

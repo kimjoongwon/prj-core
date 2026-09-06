@@ -1,24 +1,26 @@
-import { AbstractEntity } from "./abstract.entity";
+import { DocumentSchema } from "@cocrepo/schema";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import type { Asset } from "./asset.entity";
 
-export class Document extends AbstractEntity {
+@AbstractEntityFields()
+export class Document extends DocumentSchema {
 	/** 공개 식별자 ULID */
-	documentId!: string;
+	declare documentId: DocumentSchema["documentId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	assetId!: bigint;
+	declare assetId: DocumentSchema["assetId"];
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	pageCount!: number | null;
-	wordCount!: number | null;
-	author!: string | null;
-	title!: string | null;
-	subject!: string | null;
-	keywords!: string | null;
+	declare pageCount: DocumentSchema["pageCount"];
+	declare wordCount: DocumentSchema["wordCount"];
+	declare author: DocumentSchema["author"];
+	declare title: DocumentSchema["title"];
+	declare subject: DocumentSchema["subject"];
+	declare keywords: DocumentSchema["keywords"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)

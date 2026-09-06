@@ -1,4 +1,3 @@
-import { plainToInstance } from "class-transformer";
 import {
 	type ValidationError,
 	type ValidatorOptions,
@@ -194,11 +193,8 @@ export async function validateSchema<T extends object>(
 	schema: SchemaClass<T>,
 	data: unknown,
 ): Promise<ValidationResult<T>> {
-	// plain 객체를 스키마 인스턴스로 변환 (Transform 데코레이터 적용)
-	const instance = plainToInstance(schema, data, {
-		enableImplicitConversion: true,
-		excludeExtraneousValues: false,
-	});
+	// 원본 값과 타입을 유지한 채 검증 인스턴스를 생성합니다.
+	const instance = Object.assign(new schema(), data);
 
 	// 검증 실행
 	const errors = await validate(instance, {
@@ -229,10 +225,7 @@ export function validateSchemaSync<T extends object>(
 	schema: SchemaClass<T>,
 	data: unknown,
 ): ValidationResult<T> {
-	const instance = plainToInstance(schema, data, {
-		enableImplicitConversion: true,
-		excludeExtraneousValues: false,
-	});
+	const instance = Object.assign(new schema(), data);
 
 	const errors = validateSync(instance, {
 		...DEFAULT_VALIDATE_OPTIONS,
@@ -269,7 +262,7 @@ export async function validateField<T extends object>(
 	field: keyof T,
 	value: unknown,
 ): Promise<FieldError | null> {
-	const instance = plainToInstance(schema, { [field]: value });
+	const instance = Object.assign(new schema(), { [field]: value });
 
 	const errors = await validate(instance, {
 		...DEFAULT_VALIDATE_OPTIONS,
@@ -305,10 +298,7 @@ export function validateFieldSync<T extends object>(
 	const data: Record<string, unknown> = {};
 	setPathValue(data, path, value);
 
-	const instance = plainToInstance(schema, data, {
-		enableImplicitConversion: true,
-		excludeExtraneousValues: false,
-	});
+	const instance = Object.assign(new schema(), data);
 	const errors = validateSync(instance, {
 		...DEFAULT_VALIDATE_OPTIONS,
 		skipMissingProperties: true,

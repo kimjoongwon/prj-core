@@ -1,4 +1,3 @@
-import { Transform } from "class-transformer";
 import { IsBoolean, IsNotEmpty, IsOptional } from "class-validator";
 import { VALIDATION_MESSAGES } from "../constants/validation-messages";
 import { applyDecorators } from "./apply";
@@ -11,7 +10,7 @@ export interface BooleanDecoratorOptions {
 /**
  * 불리언 필드 데코레이터 (순수 class-validator)
  *
- * 문자열 "true"/"false"도 자동 변환
+ * 입력값을 변환하지 않고 검증합니다.
  *
  * @example
  * ```typescript
@@ -30,12 +29,6 @@ export function Boolean(
 	const { required = true } = options;
 
 	const decorators: PropertyDecorator[] = [
-		// 문자열 "true"/"false"를 불리언으로 변환
-		Transform(({ value }) => {
-			if (value === "true" || value === true) return true;
-			if (value === "false" || value === false) return false;
-			return value;
-		}),
 		IsBoolean({ message: VALIDATION_MESSAGES.BOOLEAN_TYPE }),
 	];
 

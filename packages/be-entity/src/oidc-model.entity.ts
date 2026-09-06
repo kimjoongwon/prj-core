@@ -1,32 +1,37 @@
-import type { JsonValue } from "@cocrepo/type";
-import { DateFieldOptional, StringField, StringFieldOptional } from "@cocrepo/decorator/field";
+import {
+	DateFieldOptionalMetadata,
+	StringFieldMetadata,
+	StringFieldOptionalMetadata,
+} from "@cocrepo/decorator/field";
+import { OidcModelSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 
 /**
  * OIDC 모델 엔티티
  */
-export class OidcModel extends AbstractEntity {
+@AbstractEntityFields()
+export class OidcModel extends OidcModelSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	oidcModelId!: string;
+	declare oidcModelId: OidcModelSchema["oidcModelId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	@StringField({ description: "모델 키" })
-	key!: string;
-	@StringField({ description: "모델 유형" })
-	modelType!: string;
-	payload!: JsonValue;
-	@DateFieldOptional({ nullable: true, description: "만료 시각" })
-	expiresAt!: Date | null;
-	@StringFieldOptional({ nullable: true, description: "사용자 코드" })
-	userCode!: string | null;
-	@StringFieldOptional({ nullable: true, description: "Grant ID" })
-	grantId!: string | null;
-	@StringFieldOptional({ nullable: true, description: "UID" })
-	uid!: string | null;
+	@StringFieldMetadata({ description: "모델 키" })
+	declare key: OidcModelSchema["key"];
+	@StringFieldMetadata({ description: "모델 유형" })
+	declare modelType: OidcModelSchema["modelType"];
+	declare payload: OidcModelSchema["payload"];
+	@DateFieldOptionalMetadata({ nullable: true, description: "만료 시각" })
+	declare expiresAt: OidcModelSchema["expiresAt"];
+	@StringFieldOptionalMetadata({ nullable: true, description: "사용자 코드" })
+	declare userCode: OidcModelSchema["userCode"];
+	@StringFieldOptionalMetadata({ nullable: true, description: "Grant ID" })
+	declare grantId: OidcModelSchema["grantId"];
+	@StringFieldOptionalMetadata({ nullable: true, description: "UID" })
+	declare uid: OidcModelSchema["uid"];
 
 	// ============================================================================
 	// 도메인 메서드

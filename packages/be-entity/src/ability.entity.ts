@@ -1,14 +1,15 @@
 import {
-	BigIntIdField,
-	BooleanField,
+	BigIntIdFieldMetadata,
+	BooleanFieldMetadata,
 	ClassField,
+	ClassFieldMetadata,
 	NumberField,
-	StringField,
-	StringFieldOptional,
+	StringFieldMetadata,
+	StringFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
-import type { Prisma } from "@cocrepo/prisma";
+import { AbilitySchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Action } from "./action.entity";
 import { PolicyEntry } from "./policy-entry.entity";
 import { Subject } from "./subject.entity";
@@ -23,32 +24,35 @@ import { Subject } from "./subject.entity";
  * DDD 원칙에 따라 Ability는 Subject + Action + fields + conditions 조합으로 권한을 정의합니다.
  * 마스킹 등의 설정은 Action.config에서 가져옵니다.
  */
-export class Ability extends AbstractEntity {
+@AbstractEntityFields()
+export class Ability extends AbilitySchema {
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true }) abilityId!: string;
+	@Exclude({ toPlainOnly: true }) declare abilityId: AbilitySchema["abilityId"];
 
 	// 메타데이터
 	/** 권한 이름 (재사용 가능한 고유 이름) */
-	@StringField() name!: string;
+	@StringFieldMetadata() declare name: AbilitySchema["name"];
 	/** 권한 설명 */
-	@StringFieldOptional({ nullable: true }) description!: string | null;
+	@StringFieldOptionalMetadata({ nullable: true })
+	declare description: AbilitySchema["description"];
 
 	// CASL 필수 필드
 	/** 대상 필드 목록 (빈 배열이면 전체 필드) */
-	@StringField({ each: true }) fields!: string[];
+	@StringFieldMetadata({ each: true }) declare fields: AbilitySchema["fields"];
 	/** 권한 조건 (JSON 형식) */
-	@ClassField(() => Object, { required: false, nullable: true })
-	conditions!: Prisma.JsonValue | null;
+	@ClassFieldMetadata(() => Object, { required: false, nullable: true })
+	declare conditions: AbilitySchema["conditions"];
 	/** 거부 권한 여부 (true: cannot, false: can) */
-	@BooleanField() inverted!: boolean;
+	@BooleanFieldMetadata() declare inverted: AbilitySchema["inverted"];
 	/** 거부 사유 (inverted=true일 때 사용) */
-	@StringFieldOptional({ nullable: true }) reason!: string | null;
+	@StringFieldOptionalMetadata({ nullable: true })
+	declare reason: AbilitySchema["reason"];
 
 	// 연결 대상
 	/** Subject ID (권한 대상) */
-	@BigIntIdField() subjectId!: bigint;
+	@BigIntIdFieldMetadata() declare subjectId: AbilitySchema["subjectId"];
 	/** Action ID (행위 정의) */
-	@BigIntIdField() actionId!: bigint;
+	@BigIntIdFieldMetadata() declare actionId: AbilitySchema["actionId"];
 
 	// RoleAssignment에서 조회할 때 설정되는 필드 (optional)
 	/** 우선순위 (Policy assignment priority 값) */

@@ -20,9 +20,10 @@
       "default": "./src/index.ts"
     },
     "./auth/password-rules": {
-      "types": "./dist/auth/password-rules.d.ts",
+      "types": "./src/auth/password-rules.ts",
+      "import": "./src/auth/password-rules.ts",
       "require": "./dist/auth/password-rules.js",
-      "default": "./dist/auth/password-rules.js"
+      "default": "./src/auth/password-rules.ts"
     },
     "./package.json": "./package.json"
   },

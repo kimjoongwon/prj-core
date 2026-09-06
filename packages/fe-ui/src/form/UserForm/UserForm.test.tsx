@@ -47,7 +47,7 @@ describe("UserForm", () => {
 		});
 	});
 
-	it("Given UserSchema에 맞지 않는 입력값이 있을 때 When 필드를 blur하면 Then schema 오류가 fieldErrors와 화면에 반영된다", async () => {
+	it("Given UserFormSchema에 맞지 않는 입력값이 있을 때 When 필드를 blur하면 Then schema 오류가 fieldErrors와 화면에 반영된다", async () => {
 		const state = createState({
 			name: "김",
 			email: "invalid-email",
@@ -74,6 +74,22 @@ describe("UserForm", () => {
 			screen.getByText("유효한 이메일 주소를 입력해주세요"),
 		).toBeInTheDocument();
 		expect(screen.getByText("올바른 형식이 아닙니다")).toBeInTheDocument();
+	});
+
+	it("Given 공백과 대문자를 포함한 입력값이 있을 때 When blur하면 Then 원래 값이 변환되지 않은 채 검증된다", async () => {
+		const state = createState({
+			email: "  ONYU@EXAMPLE.COM  ",
+		});
+
+		render(<UserForm state={state} />);
+		fireEvent.blur(screen.getByLabelText("이메일"));
+
+		await waitFor(() => {
+			expect(state.fieldErrors.email).toBe(
+				"유효한 이메일 주소를 입력해주세요",
+			);
+		});
+		expect(state.email).toBe("  ONYU@EXAMPLE.COM  ");
 	});
 
 	it("Given 여러 필드 오류가 있을 때 When 이름 값을 변경하면 Then 해당 필드 오류만 제거된다", async () => {

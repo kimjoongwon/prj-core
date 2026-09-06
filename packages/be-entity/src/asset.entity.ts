@@ -1,16 +1,16 @@
 import {
-	BigIntIdField,
-	BigIntIdFieldOptional,
+	BigIntIdFieldMetadata,
+	BigIntIdFieldOptionalMetadata,
 	ClassField,
-	EnumField,
-	StringField,
-	StringFieldOptional,
+	ClassFieldMetadata,
+	EnumFieldMetadata,
+	StringFieldMetadata,
+	StringFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
-
 import { AssetKind, AssetStatus } from "@cocrepo/enum";
-import { type Prisma } from "@cocrepo/prisma";
+import { AssetSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Album } from "./album.entity";
 import { AlbumEntry } from "./album-entry.entity";
 import { Derivative } from "./derivative.entity";
@@ -21,53 +21,54 @@ import type { Space } from "./space.entity";
 import { User } from "./user.entity";
 import { Video } from "./video.entity";
 
-export class Asset extends AbstractEntity {
+@AbstractEntityFields()
+export class Asset extends AssetSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	assetId!: string;
+	declare assetId: AssetSchema["assetId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	@BigIntIdField({ description: "소속 Space ID" })
-	spaceId!: bigint;
-	@BigIntIdField({ description: "소속 폴더 ID" })
-	folderId!: bigint;
-	@EnumField(() => AssetKind, {
+	@BigIntIdFieldMetadata({ description: "소속 Space ID" })
+	declare spaceId: AssetSchema["spaceId"];
+	@BigIntIdFieldMetadata({ description: "소속 폴더 ID" })
+	declare folderId: AssetSchema["folderId"];
+	@EnumFieldMetadata(() => AssetKind, {
 		description: "에셋 종류 (IMAGE, VIDEO, DOCUMENT)",
 	})
-	kind!: AssetKind;
-	@EnumField(() => AssetStatus, {
+	declare kind: AssetSchema["kind"];
+	@EnumFieldMetadata(() => AssetStatus, {
 		description: "에셋 상태 (UPLOADING, READY, FAILED)",
 	})
-	status!: AssetStatus;
-	@StringField({ description: "원본 파일명" })
-	originalName!: string;
-	@StringField({ description: "스토리지 저장 키" })
-	storageKey!: string;
-	@StringField({ description: "MIME 타입" })
-	mimeType!: string;
-	@BigIntIdField({ description: "파일 크기 (바이트)" })
-	sizeBytes!: bigint;
+	declare status: AssetSchema["status"];
+	@StringFieldMetadata({ description: "원본 파일명" })
+	declare originalName: AssetSchema["originalName"];
+	@StringFieldMetadata({ description: "스토리지 저장 키" })
+	declare storageKey: AssetSchema["storageKey"];
+	@StringFieldMetadata({ description: "MIME 타입" })
+	declare mimeType: AssetSchema["mimeType"];
+	@BigIntIdFieldMetadata({ description: "파일 크기 (바이트)" })
+	declare sizeBytes: AssetSchema["sizeBytes"];
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	@StringFieldOptional({ nullable: true, description: "파일 확장자" })
-	extension!: string | null;
-	@StringFieldOptional({
+	@StringFieldOptionalMetadata({ nullable: true, description: "파일 확장자" })
+	declare extension: AssetSchema["extension"];
+	@StringFieldOptionalMetadata({
 		nullable: true,
 		description: "체크섬 (무결성 검증용)",
 	})
-	checksum!: string | null;
-	@ClassField(() => Object, {
+	declare checksum: AssetSchema["checksum"];
+	@ClassFieldMetadata(() => Object, {
 		required: false,
 		nullable: true,
 		description: "메타데이터 (Exif, 동영상 길이 등)",
 	})
-	metadata!: Prisma.JsonValue | null;
-	@BigIntIdFieldOptional({ nullable: true, description: "생성자 ID" })
-	createdById!: bigint | null;
+	declare metadata: AssetSchema["metadata"];
+	@BigIntIdFieldOptionalMetadata({ nullable: true, description: "생성자 ID" })
+	declare createdById: AssetSchema["createdById"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)

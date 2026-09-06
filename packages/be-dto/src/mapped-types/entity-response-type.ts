@@ -9,15 +9,21 @@ import {
 	PickType,
 } from "@nestjs/swagger";
 import { Exclude, Expose, Type } from "class-transformer";
+import type { BaseEntityFields } from "@cocrepo/type";
 import {
 	ENTITY_RESPONSE_TYPE_METADATA,
 	type EntityResponseMetadata,
 } from "./entity-response.metadata";
 import { prepareEntityResponseType } from "./prepare-entity-response-type";
 
+type ResponseKey<Entity extends object> = Extract<
+	keyof Entity | keyof BaseEntityFields,
+	string
+>;
+
 export type EntityResponseTypeOptions<
 	Entity extends object,
-	Keys extends Extract<keyof Entity, string>,
+	Keys extends ResponseKey<Entity>,
 	RelationKeys extends Keys = never,
 > = {
 	pick: readonly Keys[];
@@ -29,9 +35,12 @@ export type EntityResponseTypeOptions<
 
 export type EntityResponseShape<
 	Entity extends object,
-	Keys extends keyof Entity,
+	Keys extends ResponseKey<Entity>,
 	RelationKeys extends Keys = never,
-> = Omit<Pick<Entity, Keys>, RelationKeys> &
+	ExtraKeys extends string = never,
+> = Omit<Pick<Entity, Extract<Keys, keyof Entity>>, RelationKeys> &
+	Partial<Pick<BaseEntityFields, Extract<Keys, keyof BaseEntityFields>>> &
+	Partial<Record<ExtraKeys, unknown>> &
 	Partial<Record<RelationKeys, unknown>>;
 
 /**
@@ -41,13 +50,16 @@ export type EntityResponseShape<
  */
 export function EntityResponseType<
 	Entity extends object,
-	Keys extends Extract<keyof Entity, string>,
+	Keys extends ResponseKey<Entity>,
 	RelationKeys extends Keys = never,
 >(
 	entity: Constructor<Entity>,
 	options: EntityResponseTypeOptions<Entity, Keys, RelationKeys>,
 ): Constructor<EntityResponseShape<Entity, Keys, RelationKeys>> {
-	const ResponseType = PickType(entity, options.pick);
+	const ResponseType = PickType(
+		entity,
+		options.pick as readonly (keyof Entity)[],
+	);
 	const responseRelations: Record<string, () => Constructor<object>> = {};
 	for (const [propertyKey, relationCallback] of Object.entries(
 		options.relations ?? {},

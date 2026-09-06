@@ -1,9 +1,15 @@
-import { BooleanField, EnumField, StringField } from "@cocrepo/decorator/field";
+import {
+	BooleanFieldMetadata,
+	EnumFieldMetadata,
+	StringFieldMetadata,
+} from "@cocrepo/decorator/field";
 import { LanguageCode } from "@cocrepo/enum";
+import { TranslationSchema } from "@cocrepo/schema";
 import { ApiProperty } from "@nestjs/swagger";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 
-export class Translation extends AbstractEntity {
+@AbstractEntityFields()
+export class Translation extends TranslationSchema {
 	@ApiProperty({
 		description: "수정일시",
 		type: Date,
@@ -18,37 +24,41 @@ export class Translation extends AbstractEntity {
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	@EnumField(() => LanguageCode, { swagger: false })
+	@EnumFieldMetadata(() => LanguageCode, { swagger: false })
 	@ApiProperty({
 		description: "언어 코드",
 		enum: LanguageCode,
 		example: "ko_KR",
 	})
-	languageCode!: LanguageCode;
-	@StringField({ swagger: false })
+	declare languageCode: TranslationSchema["languageCode"];
+	@StringFieldMetadata({ swagger: false })
 	@ApiProperty({
+		type: String,
 		description: "번역 키",
 		example: "성공",
 	})
-	key!: string;
-	@StringField({ swagger: false })
+	declare key: TranslationSchema["key"];
+	@StringFieldMetadata({ swagger: false })
 	@ApiProperty({
+		type: String,
 		description: "번역된 텍스트",
 		example: "성공",
 	})
-	text!: string;
-	@StringField({ swagger: false })
+	declare text: TranslationSchema["text"];
+	@StringFieldMetadata({ swagger: false })
 	@ApiProperty({
+		type: String,
 		description: "카테고리",
 		example: "공통",
 	})
-	category!: string;
-	@BooleanField({ swagger: false })
+	declare category: TranslationSchema["category"];
+	@BooleanFieldMetadata({ swagger: false })
 	@ApiProperty({
+		type: Boolean,
 		description: "번역 완료 여부",
 		example: true,
 	})
-	isTranslated!: boolean;
+	declare isTranslated: TranslationSchema["isTranslated"];
 
 	// ============================================================================
 	// 도메인 메서드

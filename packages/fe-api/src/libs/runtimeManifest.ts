@@ -6208,27 +6208,6 @@ export const runtimeManifest: RuntimeManifest = {
 		CategoryDto: {
 			type: "object",
 			properties: {
-				id: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
-				removedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
 				name: {
 					type: "string",
 					default: "",
@@ -6267,20 +6246,6 @@ export const runtimeManifest: RuntimeManifest = {
 						$ref: "#/components/schemas/CategoryDto",
 					},
 				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"name",
-				"spaceId",
-				"parentId",
-			],
-		},
-		SpaceAssociationDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -6302,6 +6267,20 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+			},
+			required: [
+				"name",
+				"spaceId",
+				"parentId",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+			],
+		},
+		SpaceAssociationDto: {
+			type: "object",
+			properties: {
 				spaceId: {
 					type: "integer",
 					pattern:
@@ -6316,19 +6295,6 @@ export const runtimeManifest: RuntimeManifest = {
 					"x-runtime-type": "bigint",
 					format: "int64",
 				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"spaceId",
-				"groupId",
-			],
-		},
-		CompanyDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -6350,6 +6316,19 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+			},
+			required: [
+				"spaceId",
+				"groupId",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+			],
+		},
+		CompanyDto: {
+			type: "object",
+			properties: {
 				name: {
 					type: "string",
 				},
@@ -6382,17 +6361,38 @@ export const runtimeManifest: RuntimeManifest = {
 						$ref: "#/components/schemas/FitnessCenterDto",
 					},
 				},
+				id: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					format: "int64",
+				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+				},
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
+				removedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
 			},
 			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
 				"name",
 				"address",
 				"phone",
 				"email",
 				"businessNo",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
 			],
 		},
 		FitnessCenterSpaceDto: {
@@ -6418,27 +6418,6 @@ export const runtimeManifest: RuntimeManifest = {
 		FitnessCenterDto: {
 			type: "object",
 			properties: {
-				id: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
-				removedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
 				name: {
 					type: "string",
 				},
@@ -6491,23 +6470,6 @@ export const runtimeManifest: RuntimeManifest = {
 						},
 					],
 				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"name",
-				"address",
-				"phone",
-				"email",
-				"companyId",
-				"spaceId",
-			],
-		},
-		SpaceDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -6529,6 +6491,23 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+			},
+			required: [
+				"name",
+				"address",
+				"phone",
+				"email",
+				"companyId",
+				"spaceId",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+			],
+		},
+		SpaceDto: {
+			type: "object",
+			properties: {
 				contentLanguageCode: {
 					description: "이 Space에서 작성되는 운영 리소스의 콘텐츠 언어",
 					default: "ko_KR",
@@ -6560,18 +6539,6 @@ export const runtimeManifest: RuntimeManifest = {
 				fitnessCenter: {
 					$ref: "#/components/schemas/FitnessCenterDto",
 				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"contentLanguageCode",
-			],
-		},
-		SpaceClassificationDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -6593,6 +6560,18 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+			},
+			required: [
+				"contentLanguageCode",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+			],
+		},
+		SpaceClassificationDto: {
+			type: "object",
+			properties: {
 				categoryId: {
 					type: "integer",
 					pattern:
@@ -6613,14 +6592,35 @@ export const runtimeManifest: RuntimeManifest = {
 				space: {
 					$ref: "#/components/schemas/SpaceDto",
 				},
+				id: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					format: "int64",
+				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+				},
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
+				removedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
 			},
 			required: [
+				"categoryId",
+				"spaceId",
 				"id",
 				"createdAt",
 				"updatedAt",
 				"removedAt",
-				"categoryId",
-				"spaceId",
 			],
 		},
 		CreateSpaceWithFitnessCenterDto: {
@@ -6721,27 +6721,6 @@ export const runtimeManifest: RuntimeManifest = {
 		RoleClassificationDto: {
 			type: "object",
 			properties: {
-				id: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
-				removedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
 				categoryId: {
 					type: "integer",
 					pattern:
@@ -6762,19 +6741,6 @@ export const runtimeManifest: RuntimeManifest = {
 				role: {
 					$ref: "#/components/schemas/RoleDto",
 				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"categoryId",
-				"roleId",
-			],
-		},
-		RoleAssociationDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -6796,6 +6762,19 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+			},
+			required: [
+				"categoryId",
+				"roleId",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+			],
+		},
+		RoleAssociationDto: {
+			type: "object",
+			properties: {
 				roleId: {
 					type: "integer",
 					pattern:
@@ -6810,14 +6789,35 @@ export const runtimeManifest: RuntimeManifest = {
 					"x-runtime-type": "bigint",
 					format: "int64",
 				},
+				id: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					format: "int64",
+				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+				},
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
+				removedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
 			},
 			required: [
+				"roleId",
+				"groupId",
 				"id",
 				"createdAt",
 				"updatedAt",
 				"removedAt",
-				"roleId",
-				"groupId",
 			],
 		},
 		SubjectResponseDto: {
@@ -6876,6 +6876,12 @@ export const runtimeManifest: RuntimeManifest = {
 		ActionResponseDto: {
 			type: "object",
 			properties: {
+				name: {
+					type: "string",
+				},
+				order: {
+					type: "number",
+				},
 				id: {
 					type: "integer",
 					pattern:
@@ -6891,12 +6897,6 @@ export const runtimeManifest: RuntimeManifest = {
 					format: "date-time",
 					type: "string",
 					nullable: true,
-				},
-				name: {
-					type: "string",
-				},
-				order: {
-					type: "number",
 				},
 				displayName: {
 					type: "string",
@@ -6927,11 +6927,11 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 			},
 			required: [
+				"name",
+				"order",
 				"id",
 				"createdAt",
 				"updatedAt",
-				"name",
-				"order",
 				"displayName",
 				"description",
 				"group",
@@ -6941,22 +6941,6 @@ export const runtimeManifest: RuntimeManifest = {
 		AbilityResponseDto: {
 			type: "object",
 			properties: {
-				id: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
 				name: {
 					type: "string",
 				},
@@ -6982,6 +6966,22 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 				action: {
 					$ref: "#/components/schemas/ActionResponseDto",
+				},
+				id: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					format: "int64",
+				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+				},
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
 				},
 				fields: {
 					description: "대상 필드 목록",
@@ -7013,13 +7013,13 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 			},
 			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
 				"name",
 				"inverted",
 				"subjectId",
 				"actionId",
+				"id",
+				"createdAt",
+				"updatedAt",
 				"fields",
 				"conditions",
 				"reason",
@@ -7037,26 +7037,6 @@ export const runtimeManifest: RuntimeManifest = {
 					description: "PolicyEntry ID",
 					format: "int64",
 				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-					description: "생성 일시",
-					example: "2026-01-01T00:00:00.000Z",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-					description: "수정 일시",
-					example: "2026-01-01T00:00:00.000Z",
-				},
-				removedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-					description: "삭제 일시",
-					example: "2026-01-01T00:00:00.000Z",
-				},
 				policyId: {
 					type: "integer",
 					pattern:
@@ -7073,6 +7053,26 @@ export const runtimeManifest: RuntimeManifest = {
 					description: "Ability ID",
 					format: "int64",
 				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+					description: "생성 일시",
+					example: "2026-01-01T00:00:00.000Z",
+				},
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					description: "수정 일시",
+					example: "2026-01-01T00:00:00.000Z",
+					nullable: true,
+				},
+				removedAt: {
+					format: "date-time",
+					type: "string",
+					description: "삭제 일시",
+					example: "2026-01-01T00:00:00.000Z",
+					nullable: true,
+				},
 				ability: {
 					description: "연결된 Ability 상세 정보",
 					allOf: [
@@ -7084,11 +7084,11 @@ export const runtimeManifest: RuntimeManifest = {
 			},
 			required: [
 				"id",
+				"policyId",
+				"abilityId",
 				"createdAt",
 				"updatedAt",
 				"removedAt",
-				"policyId",
-				"abilityId",
 			],
 		},
 		PolicyResponseDto: {
@@ -7101,26 +7101,6 @@ export const runtimeManifest: RuntimeManifest = {
 					"x-runtime-type": "bigint",
 					description: "Policy ID",
 					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-					description: "생성 일시",
-					example: "2026-01-01T00:00:00.000Z",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-					description: "수정 일시",
-					example: "2026-01-01T00:00:00.000Z",
-				},
-				removedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-					description: "삭제 일시",
-					example: "2026-01-01T00:00:00.000Z",
 				},
 				spaceId: {
 					type: "integer",
@@ -7156,6 +7136,26 @@ export const runtimeManifest: RuntimeManifest = {
 					example: "워크스페이스 관리자가 기본으로 갖는 권한 묶음입니다.",
 					nullable: true,
 				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+					description: "생성 일시",
+					example: "2026-01-01T00:00:00.000Z",
+				},
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					description: "수정 일시",
+					example: "2026-01-01T00:00:00.000Z",
+					nullable: true,
+				},
+				removedAt: {
+					format: "date-time",
+					type: "string",
+					description: "삭제 일시",
+					example: "2026-01-01T00:00:00.000Z",
+					nullable: true,
+				},
 				entries: {
 					description: "정책에 연결된 Ability 목록",
 					type: "array",
@@ -7166,14 +7166,14 @@ export const runtimeManifest: RuntimeManifest = {
 			},
 			required: [
 				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
 				"spaceId",
 				"createdById",
 				"name",
 				"displayName",
 				"description",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
 			],
 		},
 		RoleAssignmentResponseDto: {
@@ -7186,26 +7186,6 @@ export const runtimeManifest: RuntimeManifest = {
 					"x-runtime-type": "bigint",
 					description: "Role assignment ID",
 					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-					description: "생성 일시",
-					example: "2026-01-01T00:00:00.000Z",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-					description: "수정 일시",
-					example: "2026-01-01T00:00:00.000Z",
-				},
-				removedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-					description: "삭제 일시",
-					example: "2026-01-01T00:00:00.000Z",
 				},
 				roleId: {
 					type: "integer",
@@ -7233,6 +7213,26 @@ export const runtimeManifest: RuntimeManifest = {
 					description: "우선순위 (높을수록 우선)",
 					example: 0,
 				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+					description: "생성 일시",
+					example: "2026-01-01T00:00:00.000Z",
+				},
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					description: "수정 일시",
+					example: "2026-01-01T00:00:00.000Z",
+					nullable: true,
+				},
+				removedAt: {
+					format: "date-time",
+					type: "string",
+					description: "삭제 일시",
+					example: "2026-01-01T00:00:00.000Z",
+					nullable: true,
+				},
 				policy: {
 					description: "할당된 Policy 상세 정보",
 					allOf: [
@@ -7244,39 +7244,18 @@ export const runtimeManifest: RuntimeManifest = {
 			},
 			required: [
 				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
 				"roleId",
 				"policyId",
 				"isActive",
 				"priority",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
 			],
 		},
 		RoleDto: {
 			type: "object",
 			properties: {
-				id: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
-				removedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
 				name: {
 					type: "string",
 					description: "역할 식별자",
@@ -7319,20 +7298,6 @@ export const runtimeManifest: RuntimeManifest = {
 						$ref: "#/components/schemas/RoleAssignmentResponseDto",
 					},
 				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"name",
-				"classification",
-				"associations",
-			],
-		},
-		TenantDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -7354,6 +7319,20 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+			},
+			required: [
+				"name",
+				"classification",
+				"associations",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+			],
+		},
+		TenantDto: {
+			type: "object",
+			properties: {
 				spaceId: {
 					type: "integer",
 					pattern:
@@ -7384,20 +7363,6 @@ export const runtimeManifest: RuntimeManifest = {
 				role: {
 					$ref: "#/components/schemas/RoleDto",
 				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"spaceId",
-				"userId",
-				"roleId",
-			],
-		},
-		UserAssociationDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -7419,6 +7384,20 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+			},
+			required: [
+				"spaceId",
+				"userId",
+				"roleId",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+			],
+		},
+		UserAssociationDto: {
+			type: "object",
+			properties: {
 				userId: {
 					type: "integer",
 					pattern:
@@ -7433,19 +7412,6 @@ export const runtimeManifest: RuntimeManifest = {
 					"x-runtime-type": "bigint",
 					format: "int64",
 				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"userId",
-				"groupId",
-			],
-		},
-		UserClassificationDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -7467,6 +7433,19 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+			},
+			required: [
+				"userId",
+				"groupId",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+			],
+		},
+		UserClassificationDto: {
+			type: "object",
+			properties: {
 				categoryId: {
 					type: "integer",
 					pattern:
@@ -7487,19 +7466,6 @@ export const runtimeManifest: RuntimeManifest = {
 				category: {
 					$ref: "#/components/schemas/CategoryDto",
 				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"categoryId",
-				"userId",
-			],
-		},
-		UserDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -7521,6 +7487,19 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+			},
+			required: [
+				"categoryId",
+				"userId",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+			],
+		},
+		UserDto: {
+			type: "object",
+			properties: {
 				name: {
 					type: "string",
 					description: "사용자 이름",
@@ -7611,38 +7590,6 @@ export const runtimeManifest: RuntimeManifest = {
 						},
 					],
 				},
-				spaceId: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					description: "소속 공간 ID",
-					format: "int64",
-				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"name",
-				"email",
-				"phone",
-				"failedLoginAttempts",
-				"isPermanentlyLocked",
-				"mustChangePassword",
-				"isActive",
-				"lockedUntil",
-				"passwordChangedAt",
-				"lastLoginAt",
-				"lastLoginIp",
-				"currentTenantId",
-				"spaceId",
-			],
-		},
-		ProfileDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -7664,6 +7611,38 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+				spaceId: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					description: "소속 공간 ID",
+					format: "int64",
+				},
+			},
+			required: [
+				"name",
+				"email",
+				"phone",
+				"failedLoginAttempts",
+				"isPermanentlyLocked",
+				"mustChangePassword",
+				"isActive",
+				"lockedUntil",
+				"passwordChangedAt",
+				"lastLoginAt",
+				"lastLoginIp",
+				"currentTenantId",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+				"spaceId",
+			],
+		},
+		ProfileDto: {
+			type: "object",
+			properties: {
 				avatarFileId: {
 					type: "string",
 					pattern:
@@ -7689,17 +7668,38 @@ export const runtimeManifest: RuntimeManifest = {
 				user: {
 					$ref: "#/components/schemas/UserDto",
 				},
+				id: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					format: "int64",
+				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+				},
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
+				removedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
 			},
 			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
 				"avatarFileId",
 				"name",
 				"nickname",
 				"address",
 				"userId",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
 			],
 		},
 		UserPaginationMetaDto: {
@@ -7753,27 +7753,6 @@ export const runtimeManifest: RuntimeManifest = {
 		UserDetailResponseDto: {
 			type: "object",
 			properties: {
-				id: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
-				removedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
 				name: {
 					type: "string",
 					description: "사용자 이름",
@@ -7864,38 +7843,6 @@ export const runtimeManifest: RuntimeManifest = {
 						},
 					],
 				},
-				spaceId: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					description: "소속 공간 ID",
-					format: "int64",
-				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"name",
-				"email",
-				"phone",
-				"failedLoginAttempts",
-				"isPermanentlyLocked",
-				"mustChangePassword",
-				"isActive",
-				"lockedUntil",
-				"passwordChangedAt",
-				"lastLoginAt",
-				"lastLoginIp",
-				"currentTenantId",
-				"spaceId",
-			],
-		},
-		UserTenantDetailResponseDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -7917,6 +7864,38 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+				spaceId: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					description: "소속 공간 ID",
+					format: "int64",
+				},
+			},
+			required: [
+				"name",
+				"email",
+				"phone",
+				"failedLoginAttempts",
+				"isPermanentlyLocked",
+				"mustChangePassword",
+				"isActive",
+				"lockedUntil",
+				"passwordChangedAt",
+				"lastLoginAt",
+				"lastLoginIp",
+				"currentTenantId",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+				"spaceId",
+			],
+		},
+		UserTenantDetailResponseDto: {
+			type: "object",
+			properties: {
 				spaceId: {
 					type: "integer",
 					pattern:
@@ -7947,20 +7926,6 @@ export const runtimeManifest: RuntimeManifest = {
 				role: {
 					$ref: "#/components/schemas/RoleDto",
 				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"spaceId",
-				"userId",
-				"roleId",
-			],
-		},
-		ActionDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -7982,6 +7947,20 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+			},
+			required: [
+				"spaceId",
+				"userId",
+				"roleId",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+			],
+		},
+		ActionDto: {
+			type: "object",
+			properties: {
 				name: {
 					type: "string",
 				},
@@ -8000,8 +7979,29 @@ export const runtimeManifest: RuntimeManifest = {
 				order: {
 					type: "number",
 				},
+				id: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					format: "int64",
+				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+				},
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
+				removedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
 			},
-			required: ["id", "createdAt", "updatedAt", "removedAt", "name", "order"],
+			required: ["name", "order", "id", "createdAt", "updatedAt", "removedAt"],
 		},
 		CreateActionDto: {
 			type: "object",
@@ -8063,27 +8063,6 @@ export const runtimeManifest: RuntimeManifest = {
 		FolderDto: {
 			type: "object",
 			properties: {
-				id: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
-				removedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
 				spaceId: {
 					type: "integer",
 					pattern:
@@ -8138,26 +8117,6 @@ export const runtimeManifest: RuntimeManifest = {
 						$ref: "#/components/schemas/FolderDto",
 					},
 				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"spaceId",
-				"name",
-				"path",
-				"sortOrder",
-			],
-		},
-		DerivativeKind: {
-			type: "string",
-			enum: ["THUMBNAIL", "PREVIEW", "TRANSCODE", "TEXT"],
-			description: "파생 리소스 종류 (THUMBNAIL, PREVIEW, TRANSCODE, TEXT)",
-		},
-		DerivativeDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -8179,6 +8138,26 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+			},
+			required: [
+				"spaceId",
+				"name",
+				"path",
+				"sortOrder",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+			],
+		},
+		DerivativeKind: {
+			type: "string",
+			enum: ["THUMBNAIL", "PREVIEW", "TRANSCODE", "TEXT"],
+			description: "파생 리소스 종류 (THUMBNAIL, PREVIEW, TRANSCODE, TEXT)",
+		},
+		DerivativeDto: {
+			type: "object",
+			properties: {
 				spaceId: {
 					type: "integer",
 					pattern:
@@ -8242,29 +8221,6 @@ export const runtimeManifest: RuntimeManifest = {
 					description: "재생 시간 (밀리초, 비디오)",
 					int: true,
 				},
-				sizeBytes: {
-					type: "number",
-					description: "파일 크기 (바이트)",
-					int: true,
-				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"spaceId",
-				"assetId",
-				"kind",
-				"profile",
-				"storageKey",
-				"mimeType",
-				"sizeBytes",
-			],
-		},
-		AssetDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -8286,6 +8242,29 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+				sizeBytes: {
+					type: "number",
+					description: "파일 크기 (바이트)",
+					int: true,
+				},
+			},
+			required: [
+				"spaceId",
+				"assetId",
+				"kind",
+				"profile",
+				"storageKey",
+				"mimeType",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+				"sizeBytes",
+			],
+		},
+		AssetDto: {
+			type: "object",
+			properties: {
 				spaceId: {
 					type: "integer",
 					pattern:
@@ -8369,49 +8348,6 @@ export const runtimeManifest: RuntimeManifest = {
 						$ref: "#/components/schemas/DerivativeDto",
 					},
 				},
-				sizeBytes: {
-					type: "number",
-					description: "파일 크기 (바이트)",
-					int: true,
-				},
-				publicUrl: {
-					type: "string",
-					nullable: true,
-					description: "공개 접근 가능한 에셋 URL",
-				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"spaceId",
-				"folderId",
-				"kind",
-				"status",
-				"originalName",
-				"storageKey",
-				"mimeType",
-				"sizeBytes",
-			],
-		},
-		MoveAssetDto: {
-			type: "object",
-			properties: {
-				targetFolderId: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					description: "이동할 대상 폴더 ID",
-					format: "int64",
-				},
-			},
-			required: ["targetFolderId"],
-		},
-		SubjectDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -8433,6 +8369,49 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+				sizeBytes: {
+					type: "number",
+					description: "파일 크기 (바이트)",
+					int: true,
+				},
+				publicUrl: {
+					type: "string",
+					nullable: true,
+					description: "공개 접근 가능한 에셋 URL",
+				},
+			},
+			required: [
+				"spaceId",
+				"folderId",
+				"kind",
+				"status",
+				"originalName",
+				"storageKey",
+				"mimeType",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+				"sizeBytes",
+			],
+		},
+		MoveAssetDto: {
+			type: "object",
+			properties: {
+				targetFolderId: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					description: "이동할 대상 폴더 ID",
+					format: "int64",
+				},
+			},
+			required: ["targetFolderId"],
+		},
+		SubjectDto: {
+			type: "object",
+			properties: {
 				name: {
 					type: "string",
 				},
@@ -8451,8 +8430,29 @@ export const runtimeManifest: RuntimeManifest = {
 				order: {
 					type: "number",
 				},
+				id: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					format: "int64",
+				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+				},
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
+				removedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
 			},
-			required: ["id", "createdAt", "updatedAt", "removedAt", "name", "order"],
+			required: ["name", "order", "id", "createdAt", "updatedAt", "removedAt"],
 		},
 		SubjectFieldDto: {
 			type: "object",
@@ -8862,27 +8862,6 @@ export const runtimeManifest: RuntimeManifest = {
 		TemplateDto: {
 			type: "object",
 			properties: {
-				id: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
-				removedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
 				code: {
 					type: "string",
 					description: "고유 코드",
@@ -8917,17 +8896,38 @@ export const runtimeManifest: RuntimeManifest = {
 					nullable: true,
 					description: "설명",
 				},
+				id: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					format: "int64",
+				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+				},
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
+				removedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
 			},
 			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
 				"code",
 				"name",
 				"type",
 				"content",
 				"isActive",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
 			],
 		},
 		CreateTemplateVariableItemDto: {
@@ -9094,27 +9094,6 @@ export const runtimeManifest: RuntimeManifest = {
 		ServiceDocumentDto: {
 			type: "object",
 			properties: {
-				id: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
-				removedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
 				kind: {
 					description: "문서 종류",
 					allOf: [
@@ -9189,12 +9168,29 @@ export const runtimeManifest: RuntimeManifest = {
 					nullable: true,
 					description: "게시 시각",
 				},
+				id: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					format: "int64",
+				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+				},
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
+				removedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
 			},
 			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
 				"kind",
 				"platform",
 				"locale",
@@ -9205,6 +9201,10 @@ export const runtimeManifest: RuntimeManifest = {
 				"status",
 				"isRequired",
 				"displayOrder",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
 			],
 		},
 		CreateServiceDocumentDto: {
@@ -9313,16 +9313,16 @@ export const runtimeManifest: RuntimeManifest = {
 		TranslationResponseDto: {
 			type: "object",
 			properties: {
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					description: "수정일시",
+					nullable: true,
+				},
 				createdAt: {
 					format: "date-time",
 					type: "string",
 					description: "생성일시",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-					description: "수정일시",
 				},
 				languageCode: {
 					type: "string",
@@ -9357,8 +9357,8 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 			},
 			required: [
-				"createdAt",
 				"updatedAt",
+				"createdAt",
 				"languageCode",
 				"key",
 				"text",
@@ -9441,27 +9441,6 @@ export const runtimeManifest: RuntimeManifest = {
 		ExerciseDto: {
 			type: "object",
 			properties: {
-				id: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
-				removedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
 				duration: {
 					type: "number",
 				},
@@ -9497,22 +9476,6 @@ export const runtimeManifest: RuntimeManifest = {
 				task: {
 					$ref: "#/components/schemas/TaskDto",
 				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"duration",
-				"count",
-				"taskId",
-				"name",
-				"task",
-			],
-		},
-		TaskDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -9534,6 +9497,22 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+			},
+			required: [
+				"duration",
+				"count",
+				"taskId",
+				"name",
+				"task",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+			],
+		},
+		TaskDto: {
+			type: "object",
+			properties: {
 				spaceId: {
 					type: "integer",
 					pattern:
@@ -9558,20 +9537,6 @@ export const runtimeManifest: RuntimeManifest = {
 						$ref: "#/components/schemas/ActivityDto",
 					},
 				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"spaceId",
-				"exercise",
-				"activities",
-			],
-		},
-		ActivityDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -9593,6 +9558,20 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+			},
+			required: [
+				"spaceId",
+				"exercise",
+				"activities",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+			],
+		},
+		ActivityDto: {
+			type: "object",
+			properties: {
 				routineId: {
 					type: "integer",
 					pattern:
@@ -9626,24 +9605,6 @@ export const runtimeManifest: RuntimeManifest = {
 				task: {
 					$ref: "#/components/schemas/TaskDto",
 				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"routineId",
-				"taskId",
-				"order",
-				"repetitions",
-				"restTime",
-				"routine",
-				"task",
-			],
-		},
-		RoutineDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -9665,6 +9626,24 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+			},
+			required: [
+				"routineId",
+				"taskId",
+				"order",
+				"repetitions",
+				"restTime",
+				"routine",
+				"task",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+			],
+		},
+		RoutineDto: {
+			type: "object",
+			properties: {
 				name: {
 					type: "string",
 				},
@@ -9698,22 +9677,6 @@ export const runtimeManifest: RuntimeManifest = {
 						$ref: "#/components/schemas/ActivityDto",
 					},
 				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"name",
-				"label",
-				"spaceId",
-				"programs",
-				"activities",
-			],
-		},
-		ProgramActivityDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -9735,6 +9698,22 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+			},
+			required: [
+				"name",
+				"label",
+				"spaceId",
+				"programs",
+				"activities",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+			],
+		},
+		ProgramActivityDto: {
+			type: "object",
+			properties: {
 				programId: {
 					type: "integer",
 					pattern:
@@ -9787,25 +9766,6 @@ export const runtimeManifest: RuntimeManifest = {
 						"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
 					nullable: true,
 				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"programId",
-				"taskId",
-				"order",
-				"repetitions",
-				"restTime",
-				"exerciseName",
-				"exerciseDuration",
-				"exerciseCount",
-			],
-		},
-		ProgramDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -9827,6 +9787,25 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+			},
+			required: [
+				"programId",
+				"taskId",
+				"order",
+				"repetitions",
+				"restTime",
+				"exerciseName",
+				"exerciseDuration",
+				"exerciseCount",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+			],
+		},
+		ProgramDto: {
+			type: "object",
+			properties: {
 				routineId: {
 					type: "integer",
 					pattern:
@@ -9872,6 +9851,27 @@ export const runtimeManifest: RuntimeManifest = {
 				session: {
 					$ref: "#/components/schemas/SessionDto",
 				},
+				id: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					format: "int64",
+				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+				},
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
+				removedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
 				activityCount: {
 					type: "number",
 					int: true,
@@ -9894,10 +9894,6 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 			},
 			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
 				"routineId",
 				"sessionId",
 				"instructorId",
@@ -9905,32 +9901,15 @@ export const runtimeManifest: RuntimeManifest = {
 				"name",
 				"routine",
 				"session",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
 			],
 		},
 		TimelineDto: {
 			type: "object",
 			properties: {
-				id: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
-				removedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
 				spaceId: {
 					type: "integer",
 					pattern:
@@ -9959,20 +9938,6 @@ export const runtimeManifest: RuntimeManifest = {
 						$ref: "#/components/schemas/SessionDto",
 					},
 				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"spaceId",
-				"name",
-				"sessions",
-			],
-		},
-		SessionDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -9994,6 +9959,20 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+			},
+			required: [
+				"spaceId",
+				"name",
+				"sessions",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+			],
+		},
+		SessionDto: {
+			type: "object",
+			properties: {
 				type: {
 					allOf: [
 						{
@@ -10050,17 +10029,38 @@ export const runtimeManifest: RuntimeManifest = {
 				timeline: {
 					$ref: "#/components/schemas/TimelineDto",
 				},
+				id: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					format: "int64",
+				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+				},
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
+				removedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
 			},
 			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
 				"type",
 				"timelineId",
 				"name",
 				"programs",
 				"timeline",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
 			],
 		},
 		CreateTimelineDto: {
@@ -10144,27 +10144,6 @@ export const runtimeManifest: RuntimeManifest = {
 		UpdateSessionDto: {
 			type: "object",
 			properties: {
-				id: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
-				removedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
 				type: {
 					allOf: [
 						{
@@ -10209,6 +10188,27 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 				},
 				description: {
+					type: "string",
+					nullable: true,
+				},
+				id: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					format: "int64",
+				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+				},
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
+				removedAt: {
+					format: "date-time",
 					type: "string",
 					nullable: true,
 				},
@@ -10528,27 +10528,6 @@ export const runtimeManifest: RuntimeManifest = {
 		InquiryDto: {
 			type: "object",
 			properties: {
-				id: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
-				removedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
 				spaceId: {
 					type: "integer",
 					pattern:
@@ -10693,12 +10672,29 @@ export const runtimeManifest: RuntimeManifest = {
 					nullable: true,
 					description: "마지막 메시지 일시",
 				},
+				id: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					format: "int64",
+				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+				},
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
+				removedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
 			},
 			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
 				"spaceId",
 				"inquiryNumber",
 				"title",
@@ -10718,6 +10714,10 @@ export const runtimeManifest: RuntimeManifest = {
 				"slaResolveDue",
 				"sentiment",
 				"lastMessageAt",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
 			],
 		},
 		InquiryPaginationMetaDto: {
@@ -10849,27 +10849,6 @@ export const runtimeManifest: RuntimeManifest = {
 		InquiryThreadDto: {
 			type: "object",
 			properties: {
-				id: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
-				removedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
 				inquiryId: {
 					type: "integer",
 					pattern:
@@ -10914,29 +10893,6 @@ export const runtimeManifest: RuntimeManifest = {
 					nullable: true,
 					description: "마지막 메시지 미리보기",
 				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"inquiryId",
-				"status",
-				"createdById",
-				"messageCount",
-				"title",
-				"lastMessageAt",
-				"lastMessagePreview",
-			],
-		},
-		InquiryParticipantRole: {
-			type: "string",
-			enum: ["CUSTOMER", "AGENT", "SUPERVISOR", "VIEWER"],
-			description: "참여자 역할",
-		},
-		InquiryParticipantDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -10958,6 +10914,29 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+			},
+			required: [
+				"inquiryId",
+				"status",
+				"createdById",
+				"messageCount",
+				"title",
+				"lastMessageAt",
+				"lastMessagePreview",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+			],
+		},
+		InquiryParticipantRole: {
+			type: "string",
+			enum: ["CUSTOMER", "AGENT", "SUPERVISOR", "VIEWER"],
+			description: "참여자 역할",
+		},
+		InquiryParticipantDto: {
+			type: "object",
+			properties: {
 				inquiryId: {
 					type: "integer",
 					pattern:
@@ -11026,38 +11005,6 @@ export const runtimeManifest: RuntimeManifest = {
 					nullable: true,
 					description: "나간 일시",
 				},
-				userName: {
-					type: "string",
-					description: "참여자 이름",
-				},
-				userAvatar: {
-					type: "string",
-					nullable: true,
-					description: "참여자 아바타",
-				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"inquiryId",
-				"userId",
-				"role",
-				"isOnline",
-				"isTyping",
-				"unreadCount",
-				"joinedAt",
-				"lastSeenAt",
-				"lastReadAt",
-				"leftAt",
-				"userName",
-				"userAvatar",
-			],
-		},
-		SentimentResultDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -11079,6 +11026,38 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+				userName: {
+					type: "string",
+					description: "참여자 이름",
+				},
+				userAvatar: {
+					type: "string",
+					nullable: true,
+					description: "참여자 아바타",
+				},
+			},
+			required: [
+				"inquiryId",
+				"userId",
+				"role",
+				"isOnline",
+				"isTyping",
+				"unreadCount",
+				"joinedAt",
+				"lastSeenAt",
+				"lastReadAt",
+				"leftAt",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+				"userName",
+				"userAvatar",
+			],
+		},
+		SentimentResultDto: {
+			type: "object",
+			properties: {
 				inquiryId: {
 					type: "integer",
 					pattern:
@@ -11121,23 +11100,6 @@ export const runtimeManifest: RuntimeManifest = {
 					nullable: true,
 					description: "긴급도 점수 (0.0 ~ 1.0)",
 				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"inquiryId",
-				"sentiment",
-				"score",
-				"confidence",
-				"analyzedAt",
-				"urgency",
-			],
-		},
-		InquiryDetailDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -11159,6 +11121,23 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+			},
+			required: [
+				"inquiryId",
+				"sentiment",
+				"score",
+				"confidence",
+				"analyzedAt",
+				"urgency",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+			],
+		},
+		InquiryDetailDto: {
+			type: "object",
+			properties: {
 				spaceId: {
 					type: "integer",
 					pattern:
@@ -11308,6 +11287,27 @@ export const runtimeManifest: RuntimeManifest = {
 						$ref: "#/components/schemas/InquiryParticipantDto",
 					},
 				},
+				id: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					format: "int64",
+				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+				},
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
+				removedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
 				sentiment: {
 					nullable: true,
 					description: "감정 분석 결과",
@@ -11319,10 +11319,6 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 			},
 			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
 				"spaceId",
 				"inquiryNumber",
 				"title",
@@ -11343,6 +11339,10 @@ export const runtimeManifest: RuntimeManifest = {
 				"lastMessageAt",
 				"threads",
 				"participants",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
 				"sentiment",
 			],
 		},
@@ -11470,27 +11470,6 @@ export const runtimeManifest: RuntimeManifest = {
 		InquiryAttachmentDto: {
 			type: "object",
 			properties: {
-				id: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
-				removedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
 				messageId: {
 					type: "integer",
 					pattern:
@@ -11535,31 +11514,6 @@ export const runtimeManifest: RuntimeManifest = {
 					nullable: true,
 					description: "재생 시간 (초)",
 				},
-				fileSize: {
-					type: "number",
-					description: "파일 크기 (bytes)",
-				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"messageId",
-				"fileName",
-				"mimeType",
-				"url",
-				"isDeleted",
-				"thumbnailUrl",
-				"width",
-				"height",
-				"duration",
-				"fileSize",
-			],
-		},
-		InquiryMessageDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -11581,6 +11535,31 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+				fileSize: {
+					type: "number",
+					description: "파일 크기 (bytes)",
+				},
+			},
+			required: [
+				"messageId",
+				"fileName",
+				"mimeType",
+				"url",
+				"isDeleted",
+				"thumbnailUrl",
+				"width",
+				"height",
+				"duration",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+				"fileSize",
+			],
+		},
+		InquiryMessageDto: {
+			type: "object",
+			properties: {
 				threadId: {
 					type: "integer",
 					pattern:
@@ -11666,6 +11645,27 @@ export const runtimeManifest: RuntimeManifest = {
 						$ref: "#/components/schemas/InquiryAttachmentDto",
 					},
 				},
+				id: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					format: "int64",
+				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+				},
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
+				removedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
 				senderName: {
 					type: "string",
 					description: "발신자 이름",
@@ -11677,10 +11677,6 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 			},
 			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
 				"threadId",
 				"inquiryId",
 				"senderType",
@@ -11691,6 +11687,10 @@ export const runtimeManifest: RuntimeManifest = {
 				"deliveredAt",
 				"readAt",
 				"editedAt",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
 				"senderName",
 				"senderAvatar",
 			],
@@ -11720,27 +11720,6 @@ export const runtimeManifest: RuntimeManifest = {
 		InquiryParticipant: {
 			type: "object",
 			properties: {
-				id: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
-				removedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
 				inquiryId: {
 					type: "integer",
 					pattern:
@@ -11809,32 +11788,6 @@ export const runtimeManifest: RuntimeManifest = {
 					nullable: true,
 					description: "나간 일시",
 				},
-			},
-			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
-				"inquiryId",
-				"userId",
-				"role",
-				"isOnline",
-				"isTyping",
-				"unreadCount",
-				"joinedAt",
-				"lastSeenAt",
-				"lastReadAt",
-				"leftAt",
-			],
-		},
-		TenantAccessRequestStatus: {
-			type: "string",
-			enum: ["PENDING", "APPROVED", "REJECTED", "CANCELED"],
-			description: "신청 상태",
-		},
-		TenantAccessRequestDto: {
-			type: "object",
-			properties: {
 				id: {
 					type: "integer",
 					pattern:
@@ -11856,6 +11809,32 @@ export const runtimeManifest: RuntimeManifest = {
 					type: "string",
 					nullable: true,
 				},
+			},
+			required: [
+				"inquiryId",
+				"userId",
+				"role",
+				"isOnline",
+				"isTyping",
+				"unreadCount",
+				"joinedAt",
+				"lastSeenAt",
+				"lastReadAt",
+				"leftAt",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
+			],
+		},
+		TenantAccessRequestStatus: {
+			type: "string",
+			enum: ["PENDING", "APPROVED", "REJECTED", "CANCELED"],
+			description: "신청 상태",
+		},
+		TenantAccessRequestDto: {
+			type: "object",
+			properties: {
 				requesterId: {
 					type: "integer",
 					pattern:
@@ -11964,17 +11943,38 @@ export const runtimeManifest: RuntimeManifest = {
 						},
 					],
 				},
+				id: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					format: "int64",
+				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+				},
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
+				removedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
 			},
 			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
 				"requesterId",
 				"spaceId",
 				"requestedRoleId",
 				"status",
 				"reviewedAt",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
 			],
 		},
 		TenantAccessRequestPaginationMetaDto: {
@@ -12182,27 +12182,6 @@ export const runtimeManifest: RuntimeManifest = {
 		ReservationDto: {
 			type: "object",
 			properties: {
-				id: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
-				removedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
 				spaceId: {
 					type: "integer",
 					pattern:
@@ -12310,12 +12289,29 @@ export const runtimeManifest: RuntimeManifest = {
 				program: {
 					$ref: "#/components/schemas/ProgramDto",
 				},
+				id: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					format: "int64",
+				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+				},
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
+				removedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
 			},
 			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
 				"spaceId",
 				"userId",
 				"timelineId",
@@ -12326,6 +12322,10 @@ export const runtimeManifest: RuntimeManifest = {
 				"idempotencyKey",
 				"confirmedAt",
 				"canceledAt",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
 			],
 		},
 		CreateReservationDto: {
@@ -12765,27 +12765,6 @@ export const runtimeManifest: RuntimeManifest = {
 		OidcClientDto: {
 			type: "object",
 			properties: {
-				id: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-				},
-				updatedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
-				removedAt: {
-					format: "date-time",
-					type: "string",
-					nullable: true,
-				},
 				clientId: {
 					type: "string",
 					description: "클라이언트 식별자",
@@ -12879,12 +12858,29 @@ export const runtimeManifest: RuntimeManifest = {
 					nullable: true,
 					description: "서비스 약관 URI",
 				},
+				id: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					format: "int64",
+				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+				},
+				updatedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
+				removedAt: {
+					format: "date-time",
+					type: "string",
+					nullable: true,
+				},
 			},
 			required: [
-				"id",
-				"createdAt",
-				"updatedAt",
-				"removedAt",
 				"clientId",
 				"name",
 				"redirectUris",
@@ -12895,6 +12891,10 @@ export const runtimeManifest: RuntimeManifest = {
 				"isActive",
 				"isFirstParty",
 				"skipConsent",
+				"id",
+				"createdAt",
+				"updatedAt",
+				"removedAt",
 			],
 		},
 		CreateOidcClientDto: {
@@ -13366,6 +13366,14 @@ export const runtimeManifest: RuntimeManifest = {
 		OidcSessionDto: {
 			type: "object",
 			properties: {
+				key: {
+					type: "string",
+					description: "모델 키",
+				},
+				modelType: {
+					type: "string",
+					description: "모델 유형",
+				},
 				id: {
 					type: "integer",
 					pattern:
@@ -13376,14 +13384,6 @@ export const runtimeManifest: RuntimeManifest = {
 				createdAt: {
 					format: "date-time",
 					type: "string",
-				},
-				key: {
-					type: "string",
-					description: "모델 키",
-				},
-				modelType: {
-					type: "string",
-					description: "모델 유형",
 				},
 				grantId: {
 					type: "string",
@@ -13403,7 +13403,7 @@ export const runtimeManifest: RuntimeManifest = {
 					nullable: true,
 				},
 			},
-			required: ["id", "createdAt", "key", "modelType", "expiresAt"],
+			required: ["key", "modelType", "id", "createdAt", "expiresAt"],
 		},
 		OidcSessionStatsDto: {
 			type: "object",
@@ -13710,17 +13710,6 @@ export const runtimeManifest: RuntimeManifest = {
 		IdpAccountDto: {
 			type: "object",
 			properties: {
-				id: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-				},
 				name: {
 					type: "string",
 					description: "사용자 이름",
@@ -13740,6 +13729,17 @@ export const runtimeManifest: RuntimeManifest = {
 				isActive: {
 					type: "boolean",
 					description: "활성 상태",
+				},
+				id: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					format: "int64",
+				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
 				},
 				email: {
 					type: "string",
@@ -13764,13 +13764,13 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 			},
 			required: [
-				"id",
-				"createdAt",
 				"name",
 				"failedLoginAttempts",
 				"isPermanentlyLocked",
 				"mustChangePassword",
 				"isActive",
+				"id",
+				"createdAt",
 				"email",
 			],
 		},
@@ -13843,17 +13843,6 @@ export const runtimeManifest: RuntimeManifest = {
 		IdpAccountDetailDto: {
 			type: "object",
 			properties: {
-				id: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-				},
 				name: {
 					type: "string",
 					description: "사용자 이름",
@@ -13873,6 +13862,17 @@ export const runtimeManifest: RuntimeManifest = {
 				isActive: {
 					type: "boolean",
 					description: "활성 상태",
+				},
+				id: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					format: "int64",
+				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
 				},
 				email: {
 					type: "string",
@@ -13905,13 +13905,13 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 			},
 			required: [
-				"id",
-				"createdAt",
 				"name",
 				"failedLoginAttempts",
 				"isPermanentlyLocked",
 				"mustChangePassword",
 				"isActive",
+				"id",
+				"createdAt",
 				"email",
 				"accessGrants",
 			],
@@ -14043,17 +14043,6 @@ export const runtimeManifest: RuntimeManifest = {
 		EmailVerificationDto: {
 			type: "object",
 			properties: {
-				id: {
-					type: "integer",
-					pattern:
-						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
-					"x-runtime-type": "bigint",
-					format: "int64",
-				},
-				createdAt: {
-					format: "date-time",
-					type: "string",
-				},
 				email: {
 					type: "string",
 					description: "이메일",
@@ -14107,6 +14096,17 @@ export const runtimeManifest: RuntimeManifest = {
 					description: "인증 완료 사용자 ID",
 					format: "int64",
 				},
+				id: {
+					type: "integer",
+					pattern:
+						"^(?:[1-9][0-9]{0,17}|(?:[1-8][0-9]{18}|9(?:[0-1][0-9]{17}|2(?:[0-1][0-9]{16}|2(?:[0-2][0-9]{15}|3(?:[0-2][0-9]{14}|3(?:[0-6][0-9]{13}|7(?:[0-1][0-9]{12}|2(?:0(?:[0-2][0-9]{10}|3(?:[0-5][0-9]{9}|6(?:[0-7][0-9]{8}|8(?:[0-4][0-9]{7}|5(?:[0-3][0-9]{6}|4(?:[0-6][0-9]{5}|7(?:[0-6][0-9]{4}|7(?:[0-4][0-9]{3}|5(?:[0-7][0-9]{2}|8(?:0[0-7])))))))))))))))))))$",
+					"x-runtime-type": "bigint",
+					format: "int64",
+				},
+				createdAt: {
+					format: "date-time",
+					type: "string",
+				},
 				updatedAt: {
 					format: "date-time",
 					type: "string",
@@ -14125,13 +14125,13 @@ export const runtimeManifest: RuntimeManifest = {
 				},
 			},
 			required: [
-				"id",
-				"createdAt",
 				"email",
 				"name",
 				"status",
 				"expiresAt",
 				"sendCount",
+				"id",
+				"createdAt",
 				"canResend",
 			],
 		},

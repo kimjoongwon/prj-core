@@ -1,4 +1,3 @@
-import { Transform } from "class-transformer";
 import { IsNotEmpty, IsOptional, Matches } from "class-validator";
 import { VALIDATION_MESSAGES } from "../constants/validation-messages";
 import { applyDecorators } from "./apply";
@@ -17,7 +16,7 @@ const KOREA_PHONE_REGEX = /^(01[016789]|02|0[3-9]\d)-?\d{3,4}-?\d{4}$/;
 /**
  * 전화번호 필드 데코레이터 (순수 class-validator)
  *
- * 자동으로 하이픈 제거
+ * 입력값을 변환하지 않고 검증합니다.
  *
  * @example
  * ```typescript
@@ -34,10 +33,6 @@ export function Phone(options: PhoneDecoratorOptions = {}): PropertyDecorator {
 		Matches(KOREA_PHONE_REGEX, {
 			message: VALIDATION_MESSAGES.PHONE_FORMAT,
 		}),
-		// 하이픈 제거 변환
-		Transform(({ value }) =>
-			typeof value === "string" ? value.replace(/-/g, "") : value,
-		),
 	];
 
 	if (required) {

@@ -6,6 +6,7 @@ export * from "./decimal-id.decorator";
 // 특수 타입
 export * from "./email.decorator";
 export * from "./enum.decorator";
+export * from "./model-validation";
 export * from "./number.decorator";
 export * from "./password.decorator";
 export * from "./phone.decorator";

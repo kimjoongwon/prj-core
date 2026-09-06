@@ -1,18 +1,20 @@
-import { BigIntIdField, ClassField } from "@cocrepo/decorator/field";
+import { BigIntIdFieldMetadata, ClassField } from "@cocrepo/decorator/field";
+import { SpaceClassificationSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Category } from "./category.entity";
 import { Space } from "./space.entity";
 
-export class SpaceClassification extends AbstractEntity {
+@AbstractEntityFields()
+export class SpaceClassification extends SpaceClassificationSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	spaceClassificationId!: string;
+	declare spaceClassificationId: SpaceClassificationSchema["spaceClassificationId"];
 
-	@BigIntIdField()
-	categoryId!: bigint;
-	@BigIntIdField()
-	spaceId!: bigint;
+	@BigIntIdFieldMetadata()
+	declare categoryId: SpaceClassificationSchema["categoryId"];
+	@BigIntIdFieldMetadata()
+	declare spaceId: SpaceClassificationSchema["spaceId"];
 
 	@ClassField(() => Category, { required: false })
 	category?: Category;

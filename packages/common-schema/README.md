@@ -1,157 +1,53 @@
 # @cocrepo/schema
 
-프론트엔드와 백엔드에서 공유하는 검증 스키마 패키지입니다.
+Prisma 모델 타입과 공통 값 검증을 연결하는 브라우저 호환 패키지입니다. 검증은 `class-validator`만 사용하며 입력값을 변환하지 않습니다.
 
-## 특징
+## 원천과 소비 경계
 
-- **NestJS 의존성 없음**: 순수 `class-validator` + `class-transformer` 기반
-- **브라우저 호환**: 프론트엔드에서 직접 사용 가능
-- **타입 안전**: TypeScript 완벽 지원
-- **한글 에러 메시지**: 사용자 친화적인 검증 메시지
+- 모델별 `RoleSchema`, `UserSchema` 등은 Prisma 생성 모델 전체를 `implements`하고 각 필드를 `PrismaRole["name"]`처럼 참조합니다. Prisma import는 타입 전용이며 런타임 enum은 `@cocrepo/enum`에서 가져옵니다.
+- `AbstractSchema`는 공통 `id`, `createdAt`, `updatedAt`, `removedAt` 필드를 소유합니다. 조회 옵션에 따라 포함되는 관계 객체는 Schema에 넣지 않습니다.
+- 공통 검증의 원천은 모델 Schema입니다. Entity는 해당 Schema를 상속해 Swagger·Transform·관계·도메인 동작만 추가합니다. DTO는 Entity에서 필요한 필드를 선택합니다.
+- 기존 Entity에 검증이 없던 DB 필드는 타입만 선언합니다. DB 타입을 연결하는 작업 때문에 기존 API에 새로운 필수값·형식 규칙을 추가하지 않습니다.
+- `StringValidation`, `NumberValidation` 등은 기존 백엔드 Field의 값 검증 계약입니다. `String`, `Phone`, `Password` 등은 기존 입력 전용 메시지와 제약을 제공합니다. 둘 다 변환·Swagger 메타데이터를 등록하지 않습니다.
+- `class-transformer`, `reflect-metadata`, Nest 및 Prisma Client 런타임은 사용하지 않습니다. Schema 소비에 `emitDecoratorMetadata`가 필요하지 않습니다.
 
-## 설치
+## 입력 Schema 파생
 
-```bash
-pnpm add @cocrepo/schema
+```ts
+import { RoleSchema, PickSchemaType, PartialSchemaType } from "@cocrepo/schema";
+
+class CreateRoleSchema extends PickSchemaType(RoleSchema, [
+  "name", "displayName", "description",
+] as const) {}
+
+class UpdateRoleSchema extends PartialSchemaType(
+  PickSchemaType(RoleSchema, ["displayName", "description"] as const),
+) {}
 ```
 
-## 사용법
+`PickSchemaType`은 선택한 필드의 class-validator 메타데이터만 복사합니다. 원본 생성자, 기본값, 도메인 메서드를 실행하거나 상속하지 않습니다. 검증 데코레이터가 없는 필드는 타입으로만 선택됩니다. 이 helper는 일반 객체 변환 또는 응답 직렬화 도구가 아닙니다.
 
-### 프론트엔드에서 사용
+`PartialSchemaType`은 Nest `PartialType`의 기본 동작처럼 `undefined`와 `null`을 선택 입력으로 처리합니다. 개별 모델의 `*ValidationOptional`은 `undefined`만 허용하며, `null`은 `nullable: true`가 있을 때만 허용합니다. 단순히 `{required: false}`라는 옵션을 넣는 것만으로 모든 scalar 검증을 선택 입력으로 바꾸지는 않습니다. 기존 백엔드 계약과 동일하게 Optional 데코레이터를 사용합니다.
 
-```typescript
-import { LoginSchema, validateSchema } from '@cocrepo/schema';
+## Form 계약
 
-// 폼 데이터 검증
-const result = await validateSchema(LoginSchema, {
-  email: 'user@example.com',
-  password: 'password123',
+- `LoginSchema`: `UserSchema`의 `email/password` 검증에서 파생하고 로그인 평문 비밀번호 제약을 추가합니다.
+- `UserFormSchema`: `UserSchema`의 `name/email/phone/password`에서 파생하고 기존 Form의 이름 길이·전화번호·평문 비밀번호 제약을 추가합니다.
+- `CategoryFormSchema`: 모델의 `name`을 재사용하고 wire 형식인 문자열 `parentId`를 별도로 선언합니다. DB `bigint`와 문자열 입력을 같은 상속 필드로 덮어쓰지 않습니다.
+- `SignUpSchema`, `CommunityPostSchema`: 모델과 의미가 다른 입력 필드는 해당 입력 계약에 유지합니다.
+- 전체 DB 필드를 가진 모델 Schema를 생성 Form 전체 검증에 그대로 전달하지 않습니다. 필요한 입력 필드를 선택한 Schema를 전달합니다.
+
+```ts
+import { LoginSchema, validateSchemaSync } from "@cocrepo/schema";
+
+const validation = validateSchemaSync(LoginSchema, {
+  email: "user@example.com",
+  password: "password123",
 });
-
-if (result.isValid) {
-  // 검증 성공
-  console.log(result.data); // LoginSchema 인스턴스
-  await login(result.data);
-} else {
-  // 검증 실패
-  result.errors.forEach(error => {
-    console.log(`${error.field}: ${error.messages.join(', ')}`);
-  });
-}
 ```
 
-### 단일 필드 검증
+검증 helper는 `Object.assign(new Schema(), input)`으로 인스턴스를 만든 후 검증합니다. 숫자·날짜 변환, trim, 이메일 소문자 변환, 전화번호 정규화를 수행하지 않습니다. 백엔드 API 입력 정규화는 Entity 또는 DTO Transform이 소유합니다. 단일 필드 오류는 `validateField`/`validateFieldSync`, Form 오류 맵은 `validateSchemaToFieldErrorsSync`로 얻습니다.
 
-```typescript
-import { LoginSchema, validateField } from '@cocrepo/schema';
+## 검증
 
-// 이메일 필드만 검증
-const emailError = await validateField(LoginSchema, 'email', 'invalid-email');
-
-if (emailError) {
-  console.log(emailError.messages); // ['유효한 이메일 주소를 입력해주세요.']
-}
-```
-
-### 백엔드에서 사용 (NestJS DTO 확장)
-
-```typescript
-// dto/sign-up-payload.dto.ts
-import { SignUpSchema } from '@cocrepo/schema';
-import { ApiProperty } from '@nestjs/swagger';
-
-export class SignUpPayloadDto extends SignUpSchema {
-  @ApiProperty({ example: 'user@example.com', description: '이메일' })
-  email: string;
-
-  @ApiProperty({ example: 'password123', minLength: 8 })
-  password: string;
-
-  @ApiProperty({ example: '홍길동' })
-  name: string;
-}
-```
-
-> **tsconfig 설정 필요**: `useDefineForClassFields: false`, `strictPropertyInitialization: false`
-
-## 제공 데코레이터
-
-### 기본 타입
-
-| 데코레이터 | 설명 | 옵션 |
-|-----------|------|------|
-| `@String()` | 문자열 필드 | `required`, `minLength`, `maxLength`, `toLowerCase`, `toUpperCase`, `trim` |
-| `@Number()` | 숫자 필드 | `required`, `int`, `min`, `max` |
-| `@Boolean()` | 불리언 필드 | `required` |
-| `@DateField()` | 날짜 필드 | `required`, `minDate`, `maxDate` |
-| `@Enum()` | 열거형 필드 | `required`, `each` |
-
-### 특수 타입
-
-| 데코레이터 | 설명 | 옵션 |
-|-----------|------|------|
-| `@Email()` | 이메일 필드 (자동 소문자 변환) | `required` |
-| `@Password()` | 비밀번호 필드 | `minLength`, `strong` |
-| `@Phone()` | 전화번호 필드 (한국) | `required` |
-| `@UUID()` | UUID 필드 | `required`, `version`, `each` |
-
-### Optional 버전
-
-모든 데코레이터는 `Optional` 버전을 제공합니다:
-
-```typescript
-class UserSchema {
-  @Email()
-  email: string;           // 필수
-
-  @EmailOptional()
-  altEmail?: string;       // 선택
-
-  @StringOptional({ maxLength: 100 })
-  bio?: string;            // 선택
-}
-```
-
-## 제공 스키마
-
-### Auth
-
-```typescript
-import { LoginSchema, SignUpSchema } from '@cocrepo/schema';
-
-// LoginSchema 필드: email, password
-// SignUpSchema 필드: nickname, spaceId, email, name, phone, password
-```
-
-## 검증 메시지 커스터마이징
-
-```typescript
-import { VALIDATION_MESSAGES } from '@cocrepo/schema';
-
-console.log(VALIDATION_MESSAGES.REQUIRED);        // '필수 입력 항목입니다.'
-console.log(VALIDATION_MESSAGES.EMAIL_FORMAT);    // '유효한 이메일 주소를 입력해주세요.'
-console.log(VALIDATION_MESSAGES.MIN_LENGTH);      // '최소 {{min}}자 이상 입력해주세요'
-```
-
-## 아키텍처
-
-```
-@cocrepo/schema (이 패키지)
-├── 순수 class-validator 기반
-├── 브라우저/Node.js 호환
-└── 프론트엔드/백엔드 공유
-
-@cocrepo/decorator
-├── @cocrepo/schema 확장
-├── Swagger 데코레이터 추가
-└── NestJS 전용
-
-@cocrepo/dto
-├── @cocrepo/schema 스키마 extend
-├── Swagger 메타데이터
-└── NestJS 전용
-```
-
-## 라이선스
-
-ISC
+`pnpm --filter @cocrepo/schema type-check`, `build`, `lint`, `test`로 전체 Prisma 모델 구현 타입과 파생 검증, 선택·null 계약, 초기값 비유입, 평문/저장 비밀번호 분리 및 변환 없는 입력 검증을 확인합니다.

@@ -1,42 +1,47 @@
 import {
-	BigIntIdField,
-	BooleanField,
+	BigIntIdFieldMetadata,
+	BooleanFieldMetadata,
 	ClassField,
-	DateField,
-	DateFieldOptional,
-	StringField,
-	StringFieldOptional,
+	DateFieldMetadata,
+	DateFieldOptionalMetadata,
+	StringFieldMetadata,
+	StringFieldOptionalMetadata,
 } from "@cocrepo/decorator/field";
+import { TemplateVariableSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Template } from "./template.entity";
 
-export class TemplateVariable extends AbstractEntity {
-	@BigIntIdField({ description: "ID" })
+@AbstractEntityFields()
+export class TemplateVariable extends TemplateVariableSchema {
+	@BigIntIdFieldMetadata({ description: "ID" })
 	declare id: bigint;
-	@DateField({ description: "생성일" })
+	@DateFieldMetadata({ description: "생성일" })
 	declare createdAt: Date;
-	@DateFieldOptional({ nullable: true, description: "수정일" })
+	@DateFieldOptionalMetadata({ nullable: true, description: "수정일" })
 	declare updatedAt: Date | null;
 
 	/** 공개 식별자 ULID */
-	@Exclude({ toPlainOnly: true }) templateVariableId!: string;
+	@Exclude({ toPlainOnly: true })
+	declare templateVariableId: TemplateVariableSchema["templateVariableId"];
 
 	// ============================================================================
 	// 필수 필드
 	// ============================================================================
-	@StringField({ description: "변수명" }) name!: string;
-	@BooleanField({ description: "필수 여부" }) isRequired!: boolean;
-	@BigIntIdField({ description: "템플릿 ID" }) templateId!: bigint;
+	@StringFieldMetadata({ description: "변수명" })
+	declare name: TemplateVariableSchema["name"];
+	@BooleanFieldMetadata({ description: "필수 여부" })
+	declare isRequired: TemplateVariableSchema["isRequired"];
+	@BigIntIdFieldMetadata({ description: "템플릿 ID" })
+	declare templateId: TemplateVariableSchema["templateId"];
 
 	// ============================================================================
 	// Nullable 필드
 	// ============================================================================
-	@StringFieldOptional({ nullable: true, description: "변수 설명" })
-	description!: string | null;
-	@StringFieldOptional({ nullable: true, description: "기본값" }) defaultValue!:
-		| string
-		| null;
+	@StringFieldOptionalMetadata({ nullable: true, description: "변수 설명" })
+	declare description: TemplateVariableSchema["description"];
+	@StringFieldOptionalMetadata({ nullable: true, description: "기본값" })
+	declare defaultValue: TemplateVariableSchema["defaultValue"];
 
 	// ============================================================================
 	// 관계 필드 (선택적)

@@ -1,27 +1,29 @@
 import {
-	BigIntIdField,
-	BooleanField,
+	BigIntIdFieldMetadata,
+	BooleanFieldMetadata,
 	ClassField,
 } from "@cocrepo/decorator/field";
+import { TenantSchema } from "@cocrepo/schema";
 import { Exclude } from "class-transformer";
-import { AbstractEntity } from "./abstract.entity";
+import { AbstractEntityFields } from "./abstract-entity-fields.decorator";
 import { Role } from "./role.entity";
 import { Space } from "./space.entity";
 import { User } from "./user.entity";
 
-export class Tenant extends AbstractEntity {
+@AbstractEntityFields()
+export class Tenant extends TenantSchema {
 	/** 공개 식별자 ULID */
 	@Exclude({ toPlainOnly: true })
-	tenantId!: string;
+	declare tenantId: TenantSchema["tenantId"];
 
-	@BooleanField()
+	@BooleanFieldMetadata()
 	main!: boolean;
-	@BigIntIdField()
-	spaceId!: bigint;
-	@BigIntIdField()
-	userId!: bigint;
-	@BigIntIdField()
-	roleId!: bigint;
+	@BigIntIdFieldMetadata()
+	declare spaceId: TenantSchema["spaceId"];
+	@BigIntIdFieldMetadata()
+	declare userId: TenantSchema["userId"];
+	@BigIntIdFieldMetadata()
+	declare roleId: TenantSchema["roleId"];
 	@ClassField(() => Space, { required: false })
 	space?: Space;
 	@ClassField(() => User, { required: false })

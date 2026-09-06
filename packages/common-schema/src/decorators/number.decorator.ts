@@ -1,4 +1,3 @@
-import { Type } from "class-transformer";
 import {
 	IsInt,
 	IsNotEmpty,
@@ -42,7 +41,7 @@ export function Number(
 ): PropertyDecorator {
 	const { required = true, int = false, min, max, each = false } = options;
 
-	const decorators: PropertyDecorator[] = [Type(() => globalThis.Number)];
+	const decorators: PropertyDecorator[] = [];
 
 	if (int) {
 		decorators.push(IsInt({ each, message: VALIDATION_MESSAGES.NUMBER_TYPE }));
