@@ -1,16 +1,4 @@
-/**
- * 문의 우선순위 Enum
- * Prisma의 InquiryPriority와 호환됩니다.
- */
-export const InquiryPriority = {
-	LOW: "LOW",
-	NORMAL: "NORMAL",
-	HIGH: "HIGH",
-	URGENT: "URGENT",
-} as const;
-
-export type InquiryPriority =
-	(typeof InquiryPriority)[keyof typeof InquiryPriority];
+import { InquiryPriority } from "@cocrepo/prisma/enums";
 
 /**
  * 문의 우선순위 라벨

@@ -9,7 +9,7 @@ import {
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
 
-import { ReservationStatus } from "@cocrepo/prisma";
+import { ReservationStatus } from "@cocrepo/enum";
 import { Exclude } from "class-transformer";
 import { AbstractAggregateEntity } from "./abstract-aggregate.entity";
 import { Program } from "./program.entity";

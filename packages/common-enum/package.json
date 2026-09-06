@@ -28,11 +28,17 @@
     "format": "biome check --write .",
     "lint": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs",
     "lint:fix": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --fix",
-    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod"
+    "lint:prod": "node $(git rev-parse --show-toplevel)/scripts/lint-biome-workspace.mjs --prod",
+    "test": "tsx --test test/*.test.ts"
   },
   "keywords": [],
   "author": "kimjoongwon",
   "license": "ISC",
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "@cocrepo/prisma": "workspace:*",
+    "@cocrepo/constant": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "catalog:"
+  }
 }

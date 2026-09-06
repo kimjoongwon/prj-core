@@ -1,146 +1,31 @@
 # @cocrepo/enum
 
-프론트엔드와 백엔드에서 공유하는 열거형(Enum) 패키지입니다.
+프론트엔드와 백엔드가 함께 사용하는 enum 값과 표시 정보를 제공합니다.
 
-## 설치
+## 원천과 의존성
 
-```bash
-pnpm add @cocrepo/enum
+DB enum의 단일 원천은 `@cocrepo/prisma`의 Prisma schema입니다. 이 패키지는 브라우저 안전한 `@cocrepo/prisma/enums`에서 생성 enum을 그대로 재export합니다. enum 값과 타입을 직접 복제하지 않습니다. 이 경로는 Prisma Client를 불러오지 않습니다.
+
+```ts
+import { AssetKind, AssetKindLabel, InquiryStatus } from "@cocrepo/enum";
+
+const kind: AssetKind = AssetKind.IMAGE; // "IMAGE"
+const label = AssetKindLabel[kind]; // "이미지"
+const status: InquiryStatus = InquiryStatus.NEW;
 ```
 
-## 제공 열거형
+표시 정보는 `Record<Enum, string>`으로 선언하여 Prisma enum 변경 시 누락된 라벨을 타입 검사에서 발견합니다. 문의 도메인의 `*Options`, `InquiryStatusTransitions`, `getAllowedStatusOptions`는 기존 공개 계약을 유지합니다.
 
-### CategoryName
+## 클래스 API 전환
 
-카테고리 이름을 정의합니다:
+Prisma 대응 enum은 클래스 인스턴스가 아닌 생성된 문자열 상수를 제공합니다. `AssetKind`, `AssetStatus`, `GroupTypes`, `RecurringDayOfWeek`의 `.code`, `.name`, `.values()` 대신 생성 상수, `*Label`, `Object.values()`를 사용합니다. `SessionType`, `RepeatCycleType`은 Prisma 이름인 `SessionTypes`, `RepeatCycleTypes` 및 각 `*Label`로 대체합니다.
 
-```typescript
-import { CategoryName } from '@cocrepo/enum';
+이전 독립 선언의 `Image/Video/Document`, `Uploading/Ready/Failed`, `SUN/MON/...` 코드는 Prisma 값인 `IMAGE/VIDEO/DOCUMENT`, `UPLOADING/READY/FAILED`, `SUNDAY/MONDAY/...`로 통일합니다. Prisma에 없는 `RepeatCycleType.DAILY`, `YEARLY`는 제거합니다. 저장 데이터와 Prisma schema는 변경하지 않습니다.
 
-const name = CategoryName.PILATES;
-```
+## 앱 전용 값
 
-### GroupTypes
+`CategoryName`, `GroupName`, `DeleteFilter`, `GranteeType`, `SortOrder`는 Prisma schema enum이 아닌 앱 계약으로 유지합니다. reference-data 분류 값인 `RoleCategoryName`, `RoleGroupName`, `SpaceCategoryName`, `SpaceGroupName`은 `@cocrepo/constant`에서 소유하며 이 패키지가 재export합니다. 이는 Prisma reference-data가 enum 패키지를 역참조하는 의존성 순환을 방지합니다.
 
-그룹 타입을 정의합니다:
+## 검증
 
-```typescript
-import { GroupTypes } from '@cocrepo/enum';
-
-const groupType = GroupTypes.TEAM;
-```
-
-### GroupName
-
-그룹 이름을 정의합니다:
-
-```typescript
-import { GroupName } from '@cocrepo/enum';
-
-const groupName = GroupName.DEFAULT;
-```
-
-### SessionType
-
-세션 타입을 정의합니다:
-
-```typescript
-import { SessionType } from '@cocrepo/enum';
-
-const sessionType = SessionType.PRIVATE;
-// SessionType.GROUP, SessionType.OPEN 등
-```
-
-### RecurringDayOfWeek
-
-반복 일정의 요일을 정의합니다:
-
-```typescript
-import { RecurringDayOfWeek } from '@cocrepo/enum';
-
-const days = [
-  RecurringDayOfWeek.MONDAY,
-  RecurringDayOfWeek.WEDNESDAY,
-  RecurringDayOfWeek.FRIDAY,
-];
-```
-
-### RepeatCycleType
-
-반복 주기 타입을 정의합니다:
-
-```typescript
-import { RepeatCycleType } from '@cocrepo/enum';
-
-const cycle = RepeatCycleType.WEEKLY;
-// RepeatCycleType.DAILY, RepeatCycleType.MONTHLY 등
-```
-
-### RoleCategoryName
-
-역할 카테고리 이름을 정의합니다:
-
-```typescript
-import { RoleCategoryName } from '@cocrepo/enum';
-
-const roleCategory = RoleCategoryName.SYSTEM;
-```
-
-### RoleGroupName
-
-역할 그룹 이름을 정의합니다:
-
-```typescript
-import { RoleGroupName } from '@cocrepo/enum';
-
-const roleGroup = RoleGroupName.ADMIN;
-```
-
----
-
-## 파일 구조
-
-```
-src/
-├── base-enum.ts                 # 공통 Enum 베이스
- ├── category-names.enum.ts       # 카테고리 이름
- ├── group-names.enum.ts          # 그룹 이름
- ├── group-types.enum.ts          # 그룹 타입
- ├── recurring-day-of-week.enum.ts # 반복 요일
- ├── repeat-cycle-types.enum.ts   # 반복 주기
- ├── role-category-names.enum.ts  # 역할 카테고리 이름
- ├── role-group-names.enum.ts     # 역할 그룹 이름
- ├── space-category-names.enum.ts # 공간 카테고리 이름
- ├── space-group-names.enum.ts    # 공간 그룹 이름
- ├── session-types.enum.ts        # 세션 타입
- └── index.ts                     # 통합 export
-```
-
-## Enum 구현 방식
-
-이 패키지의 Enum은 공통 `BaseEnum`을 상속하는 순수 TypeScript class 방식으로 구현되어, 별도 외부 Enum 라이브러리 없이 사용합니다.
-
-```typescript
-export abstract class BaseEnum {
-  constructor(
-    protected readonly _code: string,
-    protected readonly _name: string,
-  ) {}
-
-  get code(): string {
-    return this._code;
-  }
-
-  get name(): string {
-    return this._name;
-  }
-
-  equals(code: string): boolean {
-    return this.code === code;
-  }
-}
-```
-
-## 의존성
-
-- 내부 BaseEnum 클래스 기반 구현 (`base-enum.ts`)
+`pnpm --filter @cocrepo/enum type-check`, `pnpm --filter @cocrepo/enum lint`, `pnpm --filter @cocrepo/enum test`로 생성 enum 재export 동일성, 라벨의 완전성, 문의 상태 전이 계약을 검증합니다.

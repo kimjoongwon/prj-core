@@ -9,7 +9,8 @@ import {
 	UUIDFieldOptional,
 } from "@cocrepo/decorator/field";
 
-import { MessageContentType, type Prisma, SenderType } from "@cocrepo/prisma";
+import { MessageContentType, SenderType } from "@cocrepo/enum";
+import { type Prisma } from "@cocrepo/prisma";
 import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
 import { AIAgentLog } from "./ai-agent-log.entity";

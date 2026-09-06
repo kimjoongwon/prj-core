@@ -1,4 +1,4 @@
-import { BaseEnum } from "./base-enum";
+import { BaseEnum } from "@cocrepo/constant";
 
 export class GroupName extends BaseEnum {
 	static readonly TEAM_TRAINING = new GroupName("TEAM_TRAINING", "팀 트레이닝");

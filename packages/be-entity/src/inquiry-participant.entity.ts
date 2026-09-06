@@ -7,7 +7,7 @@ import {
 	NumberField,
 } from "@cocrepo/decorator/field";
 
-import { InquiryParticipantRole } from "@cocrepo/prisma";
+import { InquiryParticipantRole } from "@cocrepo/enum";
 
 import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";

@@ -6,7 +6,7 @@ import {
 	StringField,
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
-import { AuthAuditResult } from "@cocrepo/prisma";
+import { AuthAuditResult } from "@cocrepo/enum";
 import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
 

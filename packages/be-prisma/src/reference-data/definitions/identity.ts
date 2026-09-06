@@ -1,4 +1,4 @@
-import { SpaceCategoryName, SpaceGroupName } from "@cocrepo/enum";
+import { SpaceCategoryName, SpaceGroupName } from "@cocrepo/constant";
 
 /**
  * Space 관련 기준 데이터입니다.

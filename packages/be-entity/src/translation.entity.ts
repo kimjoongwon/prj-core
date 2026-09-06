@@ -1,5 +1,5 @@
 import { BooleanField, EnumField, StringField } from "@cocrepo/decorator/field";
-import { LanguageCode } from "@cocrepo/prisma";
+import { LanguageCode } from "@cocrepo/enum";
 import { ApiProperty } from "@nestjs/swagger";
 import { AbstractEntity } from "./abstract.entity";
 

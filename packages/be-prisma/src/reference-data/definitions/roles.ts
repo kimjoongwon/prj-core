@@ -1,4 +1,4 @@
-import { RoleCategoryName, RoleGroupName } from "@cocrepo/enum";
+import { RoleCategoryName, RoleGroupName } from "@cocrepo/constant";
 
 /**
  * 역할 기준 데이터입니다.

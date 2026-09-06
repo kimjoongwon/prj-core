@@ -1,18 +1,4 @@
-/**
- * 문의 처리 상태 Enum
- * Prisma의 InquiryStatus와 호환됩니다.
- */
-export const InquiryStatus = {
-	NEW: "NEW",
-	OPEN: "OPEN",
-	IN_PROGRESS: "IN_PROGRESS",
-	WAITING_CUSTOMER: "WAITING_CUSTOMER",
-	RESOLVED: "RESOLVED",
-	CLOSED: "CLOSED",
-	ESCALATED: "ESCALATED",
-} as const;
-
-export type InquiryStatus = (typeof InquiryStatus)[keyof typeof InquiryStatus];
+import { InquiryStatus } from "@cocrepo/prisma/enums";
 
 /**
  * 문의 처리 상태 라벨

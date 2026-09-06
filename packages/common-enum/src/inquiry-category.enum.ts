@@ -1,20 +1,4 @@
-/**
- * 문의 카테고리 Enum
- * Prisma의 InquiryCategory와 호환됩니다.
- */
-export const InquiryCategory = {
-	GENERAL: "GENERAL",
-	DELIVERY: "DELIVERY",
-	REFUND: "REFUND",
-	PRODUCT: "PRODUCT",
-	ACCOUNT: "ACCOUNT",
-	TECHNICAL: "TECHNICAL",
-	COMPLAINT: "COMPLAINT",
-	OTHER: "OTHER",
-} as const;
-
-export type InquiryCategory =
-	(typeof InquiryCategory)[keyof typeof InquiryCategory];
+import { InquiryCategory } from "@cocrepo/prisma/enums";
 
 /**
  * 문의 카테고리 라벨

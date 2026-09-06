@@ -7,7 +7,7 @@ import {
 	StringField,
 } from "@cocrepo/decorator/field";
 
-import { ThreadStatus } from "@cocrepo/prisma";
+import { ThreadStatus } from "@cocrepo/enum";
 import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
 import { Inquiry } from "./inquiry.entity";

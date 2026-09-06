@@ -282,3 +282,18 @@ DIRECT_URL_PROD="postgresql://user:password@prod-host:5432/dbname?schema=public"
 - `pnpm db:pull:prod` → `DATABASE_URL_PROD`를 `DATABASE_URL`로 매핑하여 사용
 
 내부적으로 `cross-env` 패키지를 사용하여 크로스 플랫폼 호환성을 보장합니다.
+
+## 브라우저에서 사용하는 enum
+
+`@cocrepo/prisma/enums`는 Prisma가 생성한 `src/generated/client/enums.ts`의
+문자열 상수와 타입만 공개합니다. Prisma Client, DB 연결, Node 내장 모듈을 불러오지
+않습니다. 일반 공용 소비처는 한글 표시 정보를 제공하는 `@cocrepo/enum`을 사용합니다.
+
+- ESM 및 타입 소비는 생성된 TypeScript 원본을 사용합니다.
+- CommonJS 소비는 `pnpm --filter @cocrepo/prisma build`가 만든 enum 파일을 사용합니다.
+- enum 값의 기준은 `schema/_enums.prisma`이며 생성 파일을 직접 수정하지 않습니다.
+- Prisma에 없는 역할·공간 분류 기준은 `@cocrepo/constant`가 소유합니다.
+  Prisma 기준 데이터도 이 패키지를 직접 사용하여 enum 패키지와 순환 의존하지 않습니다.
+
+이 경로는 Prisma 공식 [생성 파일 안내](https://www.prisma.io/docs/orm/prisma-schema/overview/generators)의
+독립 `enums.ts` 진입점을 사용합니다.

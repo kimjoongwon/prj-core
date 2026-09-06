@@ -3,7 +3,7 @@ import {
 	ClassField,
 	EnumField,
 } from "@cocrepo/decorator/field";
-import { LanguageCode } from "@cocrepo/prisma";
+import { LanguageCode } from "@cocrepo/enum";
 import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
 import { FitnessCenter } from "./fitness-center.entity";

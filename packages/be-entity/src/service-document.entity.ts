@@ -7,12 +7,7 @@ import {
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
 
-import {
-	ServiceDocumentFormat,
-	ServiceDocumentKind,
-	ServiceDocumentPlatform,
-	ServiceDocumentStatus,
-} from "@cocrepo/prisma";
+import { ServiceDocumentFormat, ServiceDocumentKind, ServiceDocumentPlatform, ServiceDocumentStatus } from "@cocrepo/enum";
 
 import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";

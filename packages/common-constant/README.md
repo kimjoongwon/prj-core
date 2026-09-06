@@ -362,3 +362,10 @@ Follow these guidelines:
 ## License
 
 ISC
+
+## 역할·공간 분류 기준
+
+`src/reference-enum`은 Prisma enum이 아닌 역할·공간 분류의 코드와 한글 이름을
+소유합니다. `RoleCategoryName`, `RoleGroupName`, `SpaceCategoryName`,
+`SpaceGroupName`과 공통 `BaseEnum`을 공개합니다. Prisma 기준 데이터는 이 패키지를
+직접 사용하고, 기존 UI 소비를 위해 `@cocrepo/enum`에서도 분류 이름을 재export합니다.

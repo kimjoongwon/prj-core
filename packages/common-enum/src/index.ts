@@ -1,3 +1,10 @@
+export {
+	RoleCategoryName,
+	RoleGroupName,
+	SpaceCategoryName,
+	SpaceGroupName,
+} from "@cocrepo/constant";
+export * from "@cocrepo/prisma/enums";
 export * from "./asset-kind.enum";
 export * from "./asset-status.enum";
 export * from "./category-names.enum";
@@ -12,9 +19,5 @@ export * from "./inquiry-source.enum";
 export * from "./inquiry-status.enum";
 export * from "./recurring-day-of-week.enum";
 export * from "./repeat-cycle-types.enum";
-export * from "./role-category-names.enum";
-export * from "./role-group-names.enum";
 export * from "./session-types.enum";
 export * from "./sort-order.enum";
-export * from "./space-category-names.enum";
-export * from "./space-group-names.enum";

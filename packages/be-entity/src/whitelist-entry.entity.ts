@@ -7,7 +7,7 @@ import {
 	StringField,
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
-import { WhitelistType } from "@cocrepo/prisma";
+import { WhitelistType } from "@cocrepo/enum";
 import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
 

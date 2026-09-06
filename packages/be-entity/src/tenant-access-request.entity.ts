@@ -6,7 +6,7 @@ import {
 	EnumField,
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
-import { TenantAccessRequestStatus } from "@cocrepo/prisma";
+import { TenantAccessRequestStatus } from "@cocrepo/enum";
 import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
 import { Role } from "./role.entity";

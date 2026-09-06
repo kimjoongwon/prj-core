@@ -1,18 +1,4 @@
-/**
- * 문의 접수 채널 Enum
- * Prisma의 InquiryChannel과 호환됩니다.
- */
-export const InquiryChannel = {
-	WEB: "WEB",
-	EMAIL: "EMAIL",
-	CHAT: "CHAT",
-	SMS: "SMS",
-	PHONE: "PHONE",
-	WALK_IN: "WALK_IN",
-} as const;
-
-export type InquiryChannel =
-	(typeof InquiryChannel)[keyof typeof InquiryChannel];
+import { InquiryChannel } from "@cocrepo/prisma/enums";
 
 /**
  * 문의 접수 채널 라벨

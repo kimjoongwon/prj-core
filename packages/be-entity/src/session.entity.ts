@@ -8,14 +8,10 @@ import {
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
 import {
-	RepeatCycleType as RepeatCycleTypeNames,
-	SessionType as SessionTypeNames,
+	RepeatCycleTypesLabel,
+	SessionTypesLabel,
 } from "@cocrepo/enum";
-import {
-	RecurringDayOfWeek,
-	RepeatCycleTypes,
-	SessionTypes,
-} from "@cocrepo/prisma";
+import { RecurringDayOfWeek, RepeatCycleTypes, SessionTypes } from "@cocrepo/enum";
 import { Exclude, Transform } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
 import { Program } from "./program.entity";
@@ -29,7 +25,7 @@ export class Session extends AbstractEntity {
 	@Transform(
 		({ value }) =>
 			typeof value === "string"
-				? (SessionTypeNames.findName(value) ?? value)
+				? (SessionTypesLabel[value as SessionTypes] ?? value)
 				: value,
 		{ toPlainOnly: true },
 	)
@@ -38,7 +34,7 @@ export class Session extends AbstractEntity {
 	@Transform(
 		({ value }) =>
 			typeof value === "string"
-				? (RepeatCycleTypeNames.findName(value) ?? value)
+				? (RepeatCycleTypesLabel[value as RepeatCycleTypes] ?? value)
 				: value,
 		{ toPlainOnly: true },
 	)

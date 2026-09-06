@@ -6,7 +6,7 @@ import {
 	StringField,
 } from "@cocrepo/decorator/field";
 
-import { AttachmentFileType } from "@cocrepo/prisma";
+import { AttachmentFileType } from "@cocrepo/enum";
 
 import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";

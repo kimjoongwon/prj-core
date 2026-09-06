@@ -9,15 +9,8 @@ import {
 	StringField,
 } from "@cocrepo/decorator/field";
 
-import {
-	InquiryCategory,
-	InquiryChannel,
-	InquiryPriority,
-	InquirySource,
-	InquiryStatus,
-	type Prisma,
-	SentimentType,
-} from "@cocrepo/prisma";
+import { InquiryCategory, InquiryChannel, InquiryPriority, InquirySource, InquiryStatus, SentimentType } from "@cocrepo/enum";
+import { type Prisma } from "@cocrepo/prisma";
 import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
 import { AIAgentLog } from "./ai-agent-log.entity";

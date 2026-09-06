@@ -8,7 +8,7 @@ import {
 	StringField,
 } from "@cocrepo/decorator/field";
 
-import { DerivativeKind } from "@cocrepo/prisma";
+import { DerivativeKind } from "@cocrepo/enum";
 import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
 import { Asset } from "./asset.entity";

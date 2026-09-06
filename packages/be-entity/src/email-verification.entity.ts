@@ -9,7 +9,7 @@ import {
 	StringField,
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
-import { EmailVerificationStatus } from "@cocrepo/prisma";
+import { EmailVerificationStatus } from "@cocrepo/enum";
 import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
 import { User } from "./user.entity";

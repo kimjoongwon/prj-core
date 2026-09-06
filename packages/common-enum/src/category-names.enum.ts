@@ -1,4 +1,4 @@
-import { BaseEnum } from "./base-enum";
+import { BaseEnum } from "@cocrepo/constant";
 
 export class CategoryName extends BaseEnum {
 	static readonly THUMBNAIL_IMAGE = new CategoryName(

@@ -1,4 +1,4 @@
-import { TemplateType } from "@cocrepo/prisma";
+import { TemplateType } from "@cocrepo/enum";
 import { AbstractEntity } from "./abstract.entity";
 import { BooleanField, ClassField, EnumField, StringField, StringFieldOptional } from "@cocrepo/decorator/field";
 import { Exclude } from "class-transformer";

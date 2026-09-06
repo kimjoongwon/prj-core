@@ -5,7 +5,8 @@ import {
 	EnumField,
 	NumberField,
 } from "@cocrepo/decorator/field";
-import { type Prisma, SentimentType } from "@cocrepo/prisma";
+import { SentimentType } from "@cocrepo/enum";
+import { type Prisma } from "@cocrepo/prisma";
 import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
 import type { Inquiry } from "./inquiry.entity";

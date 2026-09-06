@@ -7,7 +7,7 @@ import {
 	StringFieldOptional,
 	ULIDField,
 } from "@cocrepo/decorator/field";
-import { GroupTypes } from "@cocrepo/prisma";
+import { GroupTypes } from "@cocrepo/enum";
 import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
 import { Space } from "./space.entity";

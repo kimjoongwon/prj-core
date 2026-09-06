@@ -7,7 +7,8 @@ import {
 	StringFieldOptional,
 } from "@cocrepo/decorator/field";
 
-import { AssetKind, AssetStatus, type Prisma } from "@cocrepo/prisma";
+import { AssetKind, AssetStatus } from "@cocrepo/enum";
+import { type Prisma } from "@cocrepo/prisma";
 import { Exclude } from "class-transformer";
 import { AbstractEntity } from "./abstract.entity";
 import { Album } from "./album.entity";

@@ -1,21 +1,7 @@
-import { BaseEnum } from "./base-enum";
+import type { AssetKind } from "@cocrepo/prisma/enums";
 
-export class AssetKind extends BaseEnum {
-	static readonly IMAGE = new AssetKind("Image", "이미지");
-	static readonly VIDEO = new AssetKind("Video", "비디오");
-	static readonly DOCUMENT = new AssetKind("Document", "문서");
-
-	private static readonly _values = [
-		AssetKind.IMAGE,
-		AssetKind.VIDEO,
-		AssetKind.DOCUMENT,
-	] as const;
-
-	static values(): AssetKind[] {
-		return [...AssetKind._values];
-	}
-
-	private constructor(code: string, name: string) {
-		super(code, name);
-	}
-}
+export const AssetKindLabel: Record<AssetKind, string> = {
+	IMAGE: "이미지",
+	VIDEO: "비디오",
+	DOCUMENT: "문서",
+};
