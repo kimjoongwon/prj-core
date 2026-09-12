@@ -36,7 +36,7 @@
     "lucide-react": "catalog:",
     "mobx": "catalog:",
     "mobx-react-lite": "catalog:",
-    "next": "^16.1.0",
+    "next": "^16.3.5",
     "nuqs": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",

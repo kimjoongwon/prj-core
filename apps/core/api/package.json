@@ -73,7 +73,7 @@
     "jose": "^5.10.0",
     "libphonenumber-js": "^1.12.15",
     "lodash": "^4.17.21",
-    "multer": "^2.0.2",
+    "multer": "^2.3.0",
     "mustache": "^4.2.0",
     "nestjs-cls": "^6.1.0",
     "nestjs-i18n": "^10.6.0",
